@@ -1,0 +1,147 @@
+
+DIV.calendarPopup
+{
+	position: absolute;
+	visibility: hidden;
+}
+
+TABLE.calendar
+{
+	border: solid 1px black;
+	font-family: verdana;
+	font-size: 8pt;
+	font-weight: normal;
+	background-color: #eeeeee;
+	width: 200px;
+}
+
+TD.calnav
+{
+	border: solid 1px #aaaaaa;
+	text-align: center;
+	vertical-align: top;
+}
+
+TD.calmonth
+{
+	border: solid 1px #aaaaaa;
+	background-color: white;
+	font-weight: bold;
+	text-align: center;
+	font-size: 8pt;
+	width: 100%;
+}
+
+TD.calday
+{
+	border: solid 1px #cccccc;
+	text-align: right;
+	font-size: 8pt;
+	width: 13%;
+	height: 8pt;
+	background-color: white;
+}
+
+TD.caltoday
+{
+	border: solid 1px #cccccc;
+	text-align: right;
+	font-size: 8pt;
+	width: 13%;
+	height: 8pt;
+	background-color: yellow;
+}
+
+TD.calnav A
+{
+  border-style: none;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 1px;  
+  display: block;
+  width: 100%;
+  height: 12pt;
+  width: 30pt;
+}
+
+TD.calnav A:link
+{
+
+  color: #0000aa;
+  text-decoration: none;
+}
+
+TD.calnav A:active
+{
+  color: #0000aa;
+  text-decoration: none;
+}
+
+TD.calnav A:hover
+{
+  border-style: none;
+  border-width: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 1px;  
+  color: #0000aa;
+  background-color: white;
+}
+
+TD.calnav A:visited
+{
+  color: #0000aa;
+  text-decoration: none;
+}
+
+TD.calday A
+{
+  border-style: none;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 1px;  
+  display: block;
+  width: 100%;
+  height: 8pt;
+}
+
+TD.calday A:link
+{
+
+  color: #0000aa;
+  text-decoration: none;
+}
+
+TD.calday A:active
+{
+  color: #0000aa;
+  text-decoration: none;
+}
+
+TD.calday A:hover
+{
+  border-style: none;
+  border-width: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 1px;  
+  color: #0000aa;
+  text-decoration: underline;
+}
+
+TD.calday A:visited
+{
+  color: #0000aa;
+  text-decoration: none;
+}
+
+TD.calselday
+{
+	border: solid 1px #cccccc;
+	background-color: #ddddff;
+	text-align: right;
+	font-size: 8pt;
+	width: 13%;
+	height: 8pt;	
+}
+
