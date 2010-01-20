@@ -3,7 +3,7 @@ require_once "../../include/config.inc";
 
 require_once "../datamodel/module.inc";
 require_once "../datamodel/news_item.inc";
-require_once "../datamodel/grp.inc";
+require_once "../datamodel/group.inc";
 require_once "../datamodel/publication.inc";
 require_once "../datamodel/page.inc";
 require_once "../../include/permissions.inc";
@@ -12,7 +12,7 @@ require_once "../../framework/auto_form.inc";
 $menu_item = "Modules";
 $module_id = checkNumeric($_GET["module_id"]);
 $news = get_class(new NewsItem());
-$group = get_class(new Grp());
+$group = get_class(new Group());
 $publication = get_class(new Publication());
 
 $module = new Module();
@@ -51,7 +51,7 @@ else
 $ord_by_Select = new SelectFieldRenderer($form, "ord_by", "Order by", $ord_by);
 
 
-$grpSelect = new RelatedItemSelectFieldRenderer($form, "grp_id", "Group", Grp, "ORDER BY title", "title");
+$grpSelect = new RelatedItemSelectFieldRenderer($form, "group_id", "Group", Group, "ORDER BY title", "title");
 
 
 $script .= $form->writeScript();

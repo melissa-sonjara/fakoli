@@ -24,7 +24,8 @@ ENDSTYLES;
  <html>
  <head>
   <meta name="description" content="NCUIH Knowledge Resource Center Dashboard"/>
-  <script type="text/javascript" src="/js/mootools.js"></script>
+  <script type="text/javascript" src="/js/mootools-1.2.4-core.js"></script>
+  <script type="text/javascript" src="/js/mootools-1.2.4-more.js"></script>
    <script type="text/javascript" src="/framework/functions.js"></script>
    <?echo $script?>
    <?echo $styles?>

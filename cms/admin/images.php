@@ -22,10 +22,12 @@ require_once admin_begin_page;
 
 $tabBar->writeHTML();
 
+?>
+	<div style="overflow:auto; width:100%; height: 300px; border: 1px; border-style: solid">
+<?
 if (count($images) > 0)
 {
 ?>
-	<div style="overflow:auto; width:100%; height: 300px; border: 1px; border-style: solid">
 	<table class="layout" width="100%"><tr>
  
  	
@@ -48,8 +50,7 @@ if (count($images) > 0)
     ?>
 </tr>	
 </table>
-</div>
-	<br/>
+<br/>
 <?
 }
 else
@@ -59,7 +60,10 @@ else
 	<?
 }
 ?>
+</div>
+<br/>
 <input type="button" class="button" value="Add a New Image" onclick="go('image_form.php');">
+
 <?
 require_once admin_end_page;
 ?>

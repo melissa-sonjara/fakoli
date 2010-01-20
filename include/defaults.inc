@@ -28,10 +28,10 @@
 $html_editor_extra_buttons = array(
 	
 
-	array("name"	=>	"source_picker", 
+	array("name"	=>	"image_picker",
 		  "image"	=>	"/images/photos.gif", 
 		  "tooltip"	=>	"Insert Photos", 
-		  "url"		=>	"/components/source_picker/source_picker.php", 
+		  "url"		=>	"/cms/components/image_picker/image_picker.php",
 		  "width"	=>	"500px",
 		  "height"	=>	"670px")
 	

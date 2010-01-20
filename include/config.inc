@@ -5,12 +5,12 @@
 $config = array(
 
 	"sitename"		=> "Sonjara CMS Website",
-	"homedir"		=> "/srv/www/vhosts/cms.sonjara.com",
-	"uploadbase"	=> "/srv/www/uploads/cms.sonjara.com",
+	"homedir"		=> "C:/code/cms.sonjara.com",
+	"uploadbase"	=> "C:/uploads/cms.sonjara.com",
 	"uploaddir" 	=> "documents", 			/* Directory for uploads */
 	"tmp"			=> "/tmp",					/* Scratch Directory */
 	"email_from" 	=> "andy@sonjara.com", 		/* From address for generated emails */
-    "http_host"		=> "cms.sonjara.com",		/* URL for this server */
+    "http_host"		=> "cms",		/* URL for this server */
 
     "email_contact" => "andy@sonjara.com", 		/* Email Address for contact */
     "email_name" 	=> "Andy Green", 			/* Name of contact */
@@ -18,7 +18,7 @@ $config = array(
     "trace_path"	=> "/share/cms_trace.log",	/* File path to trace output log */
     "trace_level"	=> 3,						/* Debugging trace level (0-5) */
 	
-	"admin_templates_dir"	=>	"/srv/www/vhosts/cms.sonjara.com/cms/admin/templates",
+	"admin_templates_dir"	=>	"C:/code/cms.sonjara.com/cms/admin/templates",
 
 	// Application specific settings
 	"latest_addition_count"	=>	3,

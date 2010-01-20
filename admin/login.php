@@ -26,7 +26,7 @@ if ($method == "POST")
 
 $title = "Website Administration";
 
-include_once "templates/begin_page.inc";
+include_once admin_begin_page;
 ?>
 <br><br>
 <form method="POST" action="login.php">
@@ -62,5 +62,5 @@ include_once "templates/begin_page.inc";
 </form>
 <br><br><br><br><br><br><br><br><br><br>
 <?
-include_once "templates/end_page.inc";
+include_once admin_end_page;
 ?>
