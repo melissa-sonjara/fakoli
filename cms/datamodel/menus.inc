@@ -55,11 +55,6 @@ class Menus extends DataItem
 		return $this->getRelated(Page);
 	}
 
-	/*function Users()
-	{
-		return $this->getRelatedList(SiteUser);
-	}*/
-	
 	// Constructor
 	function Menus()
 	{

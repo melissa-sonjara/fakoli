@@ -50,21 +50,6 @@ class Image extends DataItem
 						"status" 		=> String,
 						"image_rotator" => Boolean);
 	
-	// Relations
-	/*var $relations=  array(	"Organization"	=>	Organization,
-							"Publications"	=>	Publication);
-	
-	function Organization()
-	{
-		return $this->getRelated(Organization);
-	}
-	
-	function Publications($constraint = "")
-	{
-		return $this->getRelatedList(Publication, "", $constraint);
-	} */
-	
-	
 	function Image()
 	{
 		$this->table = "image";
