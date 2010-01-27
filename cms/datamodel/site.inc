@@ -36,11 +36,12 @@ require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 class Site extends DataItem
 {
 	// Fields
-	var $fields = array("site_id"		=> Number,
-						"site_name"		=> String,
-						"domain"		=> String,
-						"description"	=> Text,
-						"enabled"		=> Boolean);
+	var $fields = array("site_id"			=> Number,
+						"site_name"			=> String,
+						"domain"			=> String,
+						"description"		=> Text,
+						"default_template"	=>	String,
+						"enabled"			=> Boolean);
 	
 // Relations
 	

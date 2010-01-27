@@ -4,6 +4,7 @@ require_once "../../include/config.inc";
 require_once "../datamodel/site.inc";
 require_once "../../include/permissions.inc";
 require_once "../../framework/auto_form.inc";
+require_once "../components/field_renderers/template_select_field_renderer.inc";
 
 $menu_item = "Sites";
 
@@ -17,6 +18,7 @@ $form->required("title");
 $form->allowDelete = true;
 $redirect = "sites.php";
 $form->button("Cancel", $redirect);
+$templateSelect = new TemplateSelectFieldRenderer($form, "default_template", "Template", "templates");
 
 if ($method == "POST")
 {
