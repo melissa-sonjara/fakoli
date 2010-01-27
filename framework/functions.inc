@@ -226,6 +226,15 @@ function formatTime12($time)
 }
 
 /**
+ * Returns the current time and date in a database compatible format
+ * @return string
+ */
+function now()
+{
+	return date('Y/m/d H:i:s');
+}
+
+/**
  * Utility function to escape a string correctly for use in a Javascript client-side call.
  * 
  * @param string $str the string to make safe.
