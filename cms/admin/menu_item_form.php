@@ -6,37 +6,35 @@ require_once "../datamodel/menus.inc";
 require_once "../datamodel/page.inc";
 require_once "../../include/permissions.inc";
 require_once "../../framework/auto_form.inc";
+require_once "include/menu_tabs.inc";
 
 $menu_item = "Menu";
 
 $menu_id = checkNumeric($_GET["menu_id"]);
+$menu_item_id = checkNumeric($_GET["menu_item_id"]);
+
 $parent_id = checkNumeric($_GET["parent_id"]);
 
-$menuItem = new Menus();
-if ($menu_id)
+$menuItem = new MenuItem();
+if ($menu_item_id)
 {
-	$menuItem->load($menu_id);
+	$menuItem->load($menu_item_id);
 }
 else
 {
 	$menuItem->parent_id = $parent_id;
+	$menuItem->menu_id = $menu_id;
 }
-$form = new AutoForm($menuItem);
-$redirect = "menus.php";
 
+$tabs = menuTabs($menu_id);
+$tabs->page = "menu_items.php";
+
+$form = new AutoForm($menuItem);
 
 $form->required("title");
 //$form->allowDelete = true;
-$form->hide("parent_id");
+$form->hide("parent_id", "menu_id");
 $pageSelect = new RelatedItemSelectFieldRenderer($form, "page_id", "Page", Page, "ORDER BY page_title", "page_title", "page_id", true, true);
-
-$menuOptions = array(
-
-	krc	=>	"KRC",
-	ncuih 	=>	"NCUIH"
-);
-
-$menu_type = new SelectFieldRenderer($form, "menu_type", "Menu Type", $menuOptions); 
 
 if ($method == "POST")
 {
@@ -46,7 +44,7 @@ if ($method == "POST")
 		
 		foreach($sort_nums as $key => $sort_num)
 		{
-			$m = new Menus();
+			$m = new MenuItem();
 			$m->load($key);
 			$m->sort_order = $sort_num;
 			$m->save();
@@ -66,11 +64,11 @@ if ($method == "POST")
 	}
 }
 
-if ($menu_id)
+if ($menu_item_id)
 {
-	$title = "Edit Menu Details for {$menuItem->title}";
+	$title = "Edit Menu Item Details for {$menuItem->title}";
 	
-	$submenus = query(Menus, "WHERE parent_id=$menu_id ORDER BY sort_order");
+	$submenus = query(MenuItem, "WHERE parent_id=$menu_item_id ORDER BY sort_order");
 	if(count($submenus) > 0) {
 		$form->allowDelete = false;
 		}
@@ -84,25 +82,22 @@ if ($menu_id)
 }
 else
 {
-	 if ($parent_id ==0) {
-	
-		$title = "Add a new Menu";
-		$form->button("Cancel", $redirect);
-	 }
-	 else {
-	 	$title = "Add a Menu Item" 	;
-	 	$form->submitLabel = "Add Menu Item";
-	 	$form->button("Cancel", $redirect);
-	 }	 
+	$title = "Add a new Menu Item";
+	$form->button("Cancel", $redirect);
 }
 
 $script .= $form->writeScript();
 
 require_once admin_begin_page;
 
+$tabs->writeHTML();
+?>
+<div id="form" style="clear:left;border:solid 1px #000; padding: 4px;">
+<h4><?echo $title?></h4>
+<?
 $form->drawForm();
 
-if ($menu_id)
+if ($menu_item_id)
 {
 ?>
 <h4>Sub-items</h4>
@@ -145,6 +140,8 @@ if ($menu_id)
 <?
 	}
 }
-
+?>
+</div>
+<?
 require_once admin_end_page;
 ?>

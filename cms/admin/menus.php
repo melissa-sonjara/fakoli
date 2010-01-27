@@ -1,77 +1,54 @@
 <?php
+$page_role = "admin";
 
 require_once "../../include/config.inc";
 
-require_once "../datamodel/menus.inc";
+require_once "../../cms/datamodel/menus.inc";
+require_once "../../cms/datamodel/site.inc";
 require_once "../../include/permissions.inc";
 
-require_once "../../framework/tree.inc";
+$sites = query(Site, "ORDER BY site_name");
 
-$menu_item = "Menu";
+$menusBySite = groupedQuery(Menu, "ORDER BY name", "site_id");
 
-$title = "Manage Menu and Menu Items";
-$menu_id = checkNumeric($_GET["menu_id"]);
-$parent_id = checkNumeric($_GET["parent_id"]);
-
-$menus = query(Menus, "ORDER BY sort_order");
-
-$menuTree = new TreeControl("menu_tree");
-
-$menuTree->height = 300;
-
-
-if (count($menus) > 0)
-{
-	foreach ($menus as $m) {
-	    $menuNode = new TreeNode("menu_{$m->menu_id}", $m->title, null, false, "tree_node_closed", "tree_node_open", "menus_form.php?menu_id={$m->menu_id}&parent_id={$m->parent_id}");
-	    //$help_pageNode->leafStyle = "file_node_leaf";
-	    $tmp = Array( 
-	                       'parent' => $m->parent_id, 
-	                       'node' => $menuNode);
-	    $displays[$m->menu_id] = $tmp;
-	}	
-
-	foreach ($displays as $display) {
-		
-		if (empty($display['parent'])) {
-			$menuTree->add($display['node']);
-		}
-		else {
-			$parentNode = $displays[ $display['parent'] ]['node'];
-			if ($parentNode)
-			{
-				$parentNode->add($display['node']);
-			}
-		}
-	}
-}
-
-
-$script = $menuTree->writeScript();
-$script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
+$title = "Menus";
 
 require_once admin_begin_page;
 
+foreach($sites as $site)
+{
 ?>
-<table border="0">
- <tr>
-  <td colspan="2">
+<h3><?echo $site->site_name?> (<a href="<?echo $site->domain?>" target="_blank"><?echo $site->domain?>)</a></h3>
 <?
-$menuTree->writeHTML();
+	if (array_key_exists($site->site_id, $menusBySite))
+	{
+		$menus = $menusBySite[$site->site_id];
 ?>
-  </td>
- </tr>
- <tr>
-  <td colspan="2">&nbsp;</td>
- </tr>
- <tr>
-  <td align="left"><input type="button" class="button" value=" Add a New Menu" onclick="go('menus_form.php?parent_id=0');"></td>
-  
- </tr>
-</table>
+<dl>
 <?
+		foreach($menus as $menu)
+		{
+			
+?>
+	<dt><a href="menu_form.php?menu_id=<?echo $menu->menu_id?>"><?echo $menu->name?> (<?echo $menu->identifier?>)</a></dt>
+	<dd><?echo $menu->description?></dd>
+<?		
+		}
 
-
+?>
+</dl>
+<?
+	}
+	else
+	{
+?>
+<p><em>No menus have been defined for this site.</em></p>
+<?
+	} 
+}
+?>
+<br/>
+<a class="button" href="menu_form.php">Add a Menu</a>
+<?
 require_once admin_end_page;
-
 ?>

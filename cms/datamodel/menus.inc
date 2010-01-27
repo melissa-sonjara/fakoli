@@ -34,17 +34,54 @@
 
 require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 
-class Menus extends DataItem
+class Menu extends DataItem
 {
 	// Fields
-	var $fields = array("menu_id" 		=> Number,
+	var $fields = array("menu_id"		=>	Number,
+						"site_id"		=>	Number,
+						"name"			=>	String,
+						"identifier"	=>	String,
+						"description"	=>	Text,
+						"css_class"		=>	String);
+	
+	// Relations
+	var $relations = array(	"Site"		=>	Site,
+							"MenuItems"	=>	MenuItem);
+	
+	function Site()
+	{
+		return $this->getRelated(Site);
+	}
+	
+	function MenuItems($constraint = "")
+	{
+		return $this->getRelatedList(MenuItem, "", $constraint);
+	}
+	
+	// Constructor
+	function Menu()
+	{
+		$this->primary_key = "menu_id";
+		$this->table = "menu";
+		
+		$this->default_format = "{name}";
+		$this->pretty_class_name = "Menu";
+		$this->DataItem(func_get_args());
+	}
+}
+
+class MenuItem extends DataItem
+{
+	// Fields
+	var $fields = array("menu_item_id"	=> Number,
 						"title"			=> String,
+						"menu_id"		=> Number,
 						"parent_id" 	=> Number,
 						"page_id"   	=> Number,
 						"url"       	=> String,
 						"sort_order"	=> Number,
-						"menu_type" 	=> String,
-						"public"		=> Boolean);
+						"role"		 	=> String,
+						"published"		=> Boolean);
 	
 	// Relations
 	
@@ -56,13 +93,13 @@ class Menus extends DataItem
 	}
 
 	// Constructor
-	function Menus()
+	function MenuItem()
 	{
-		$this->primary_key = "menu_id";
-		$this->table = "menus";
+		$this->primary_key = "menu_item_id";
+		$this->table = "menu_item";
 		
 		$this->default_format = "{title}";
-		$this->pretty_class_name = "Menu";
+		$this->pretty_class_name = "Menu Item";
 		$this->DataItem(func_get_args());
 	}
 }
