@@ -225,7 +225,9 @@ table
 {
 	padding-top: 32px;
 	vertical-align: top;
-	
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
 }
 
 #content-admin h2 
