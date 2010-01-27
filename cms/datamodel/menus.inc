@@ -85,11 +85,31 @@ class MenuItem extends DataItem
 	
 	// Relations
 	
-	var $relations = array(	"Page"	=> 	Page);
+	var $relations = array(	"Page"		=> 	Page,
+							"Menu"		=>	Menu,
+							"Parent"	=>	MenuItem,
+							"Children"	=>	MenuItem);
 	
 	function Page()
 	{
 		return $this->getRelated(Page);
+	}
+	
+	function Menu()
+	{
+		return $this->getRelated(Menu);
+	}
+	
+	function Parent()
+	{
+		if (!$this->parent_id) return null;
+		
+		return $this->getRelated(MenuItem, "parent_id");
+	}
+	
+	function Children($constraint = "ORDER BY sort_order, title")
+	{
+		return query(MenuItem, "WHERE parent_id={$this->menu_item_id} $constraint");
 	}
 
 	// Constructor

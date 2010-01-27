@@ -4,6 +4,8 @@ require_once "../../include/config.inc";
 
 require_once "../datamodel/menus.inc";
 require_once "../datamodel/page.inc";
+require_once "../datamodel/site.inc";
+
 require_once "../../include/permissions.inc";
 require_once "../../framework/auto_form.inc";
 require_once "include/menu_tabs.inc";
@@ -25,6 +27,9 @@ else
 	$menuItem->parent_id = $parent_id;
 	$menuItem->menu_id = $menu_id;
 }
+
+$menu = $menuItem->Menu();
+$site = $menu->Site();
 
 $tabs = menuTabs($menu_id);
 $tabs->page = "menu_items.php";
@@ -52,14 +57,31 @@ if ($method == "POST")
 	}
 	else 
 	{
+		// Set up the page template for pages added via "or add new"
+		$pageTemplate = new Page();
+		$pageTemplate->identifier = codify(strtolower($_POST['autoform_add_page_id']));
+		$pageTemplate->author = "{$user->first_name} {$user->last_name}";
+		$pageTemplate->created_date = now();
+		$pageTemplate->site_id = $site->site_id;
+		$pageTemplate->template = $site->default_template;
+		
+		$pageSelect->templateItem = $pageTemplate;
+		
 		$form->save();
 		if ($form->deleted)
 		{
-			redirect("menus.php");
+			redirect("menu_items.php?menu_id={$menu->menu_id}");
 		}
 		else
 		{
-			redirect("?menu_id={$form->data->menu_id}&parent_id={$parent_id}");
+			if ($parent_id)
+			{
+				redirect("menu_item_form.php?menu_item_id={$parent_id}");
+			}
+			else
+			{
+				redirect("menu_items.php?menu_id={$form->data->menu_id}");
+			}
 		}
 	}
 }
@@ -68,7 +90,7 @@ if ($menu_item_id)
 {
 	$title = "Edit Menu Item Details for {$menuItem->title}";
 	
-	$submenus = query(MenuItem, "WHERE parent_id=$menu_item_id ORDER BY sort_order");
+	$submenus = $menuItem->Children();
 	if(count($submenus) > 0) {
 		$form->allowDelete = false;
 		}
@@ -76,8 +98,7 @@ if ($menu_item_id)
 		$form->allowDelete = true; 
 	}
 	
-	$form->button("Move Menu", "menu_move_form.php?menu_id=$menu_id&parent_id=$parent_id");
-	$form->button("Add Menu Item", "menus_form.php?parent_id=$menu_id");
+	$form->button("Move Menu Item", "menu_move_form.php?menu_id=$menu_id&parent_id=$parent_id");
 	$form->button("Cancel", $redirect);
 }
 else
@@ -94,7 +115,9 @@ $tabs->writeHTML();
 ?>
 <div id="form" style="clear:left;border:solid 1px #000; padding: 4px;">
 <h4><?echo $title?></h4>
+<div id="breadcrumbs"><? echo menuAdminBreadcrumbs($menuItem, $menu)?></div>
 <?
+
 $form->drawForm();
 
 if ($menu_item_id)
@@ -128,7 +151,7 @@ if ($menu_item_id)
 
 <br/>
 
-<a href="#" class="button" onclick="document.forms['menu_order_form'].submit();">Update Menu Order</a>&nbsp;&nbsp;<a href="menus_form.php?parent_id=<?echo $menu_id?>" class="button">Add a new Sub-item</a>
+<a href="#" class="button" onclick="document.forms['menu_order_form'].submit();">Update Menu Order</a>&nbsp;&nbsp;<a href="menu_item_form.php?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
 
 </form>
 <?
@@ -136,7 +159,7 @@ if ($menu_item_id)
 	else
 	{
 ?><p><i>There are no sub-items associated with this menu item.</i></p>
-<a href="menus_form.php?parent_id=<?echo $menu_id?>" class="button">Add a new Sub-item</a>
+<a href="menu_item_form.php?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
 <?
 	}
 }

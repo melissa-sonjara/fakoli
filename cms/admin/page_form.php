@@ -27,8 +27,8 @@ $form = new AutoForm($page);
 $form->alias("menu_id", "Menu");
 $form->markRequiredFields = true;
 
-$form->required("page_title","created_date");
-$form->getRenderer("archive_date")->validator->required = false;
+$form->required("page_title");
+$form->readonly("created_date");
 $form->unique("identifier", "A page on the site is already using this name. Please pick a new identifier.");
 $form->allowDelete = true;
 

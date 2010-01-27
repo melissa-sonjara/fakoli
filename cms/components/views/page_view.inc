@@ -37,6 +37,8 @@ class PageView
 			$this->page->description .= $output;
 		}
 		
+		
+		
 		// Populate template fields from the Page object.
 		
 		foreach($this->page->fields as $field => $type)
@@ -44,25 +46,38 @@ class PageView
 			$template = str_replace("{".$field."}", $this->page->$field, $template);
 		}		
 		
-		// Populate the template with the appropriate menu.
 		
-		$menu = new MenuView(new Menus());
 		
-		ob_start();
+		// Populate the template with the appropriate menu(s).
 		
-		$menu->drawView($this->page->template);
+		$menuPositions = array();
 		
-		$output = ob_get_contents();
+		preg_match_all("/\{menu:(.*?)\}/", $template, $menuPositions, PREG_SET_ORDER);
 		
-		ob_end_clean();
+		$menus = indexedQuery(Menu, "WHERE site_id={$this->page->site_id}", "identifier");
 		
-		$template = str_replace('{menu}', $output, $template);
+		foreach($menuPositions as $position)
+		{
+			$output = "";
+			
+			trace("Substituting Menu at Position {$position[0]} {$position[1]}", 3);
+						
+			if (array_key_exists($position[1], $menus))
+			{
+				$view = new MenuView($menus[$position[1]]);
+				$output = $view->drawView();				
+			}
+			
+			$template = str_replace($position[0], $output, $template);			
+		}
+		
+		
+		
+		// Populate the template with associated modules for the page at the correct positions.
 		
 		$positions = array();
 		
 		preg_match_all("/\{position:(.*?)\}/", $template, $positions, PREG_SET_ORDER);
-		
-		// Populate the template with associated modules for the page at the correct positions.
 		
 		$modules = $this->page->getModulesByPosition();
 	
@@ -87,6 +102,8 @@ class PageView
 			
 			$template = str_replace($position[0], $output, $template);
 		}
+		
+		
 		
 		// Populate global variable references
 		

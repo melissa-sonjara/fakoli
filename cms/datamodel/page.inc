@@ -41,24 +41,23 @@ class Page extends DataItem
 						"identifier"			=>	String,
 						"page_title"			=>	String,
 						"description"	 		=>	HTML,
-						"author" 				=>  String,
 						"site_id"				=>  Number,
-						"menu_id"      			=>	Number,
-						"created_date" 			=>	Date,
-						"edited_date"			=>	Timestamp,
-						"archive_date"			=>	Date,
 						"template"				=>	String,
 						"meta_tag_description"	=>	Text,
 						"meta_tag_keyword"		=>	String,
 						"php_code_file"			=>	String,
-						"role"  				=> String,
-						"published"				=> Boolean);
+						"role"  				=> 	String,
+						"published"				=> 	Boolean,
+						"created_date" 			=>	Date,
+						"edited_date"			=>	Timestamp,
+						"author" 				=>  String
+	);
 	
 	// Relations
 	
 	var $relations = array("PageModuleXrefs"	=>	PageModuleXref,
 						   "Modules"			=>	Module,
-							"Site"				=>	Site);
+						   "Site"				=>	Site);
 	
 	function PageModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
