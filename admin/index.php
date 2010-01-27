@@ -1,9 +1,13 @@
 <?php
-$page_role = "admin";
 
 require_once "../include/config.inc";
 
 require_once "../include/permissions.inc";
+
+if (!checkRole("admin"))
+{
+	redirect("login.php");
+}
 
 $title = "Site Administration";
 
