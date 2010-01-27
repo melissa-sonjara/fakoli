@@ -411,7 +411,7 @@ input
 .button
 {
 	border: solid 1px #ddd;
-	background: url(/images/button-strip.gif) top left #cccccc;
+	background: url(/cms/images/button-strip.gif) top left #cccccc;
 }
 
 a.button
@@ -511,7 +511,7 @@ a.button
 #tabs li 
 {
   float:left;
-  background:url("/images/tabs/tab_left.gif") no-repeat left top;
+  background:url("/cms/images/tabs/tab_left.gif") no-repeat left top;
   margin:0;
   padding: 0;
   padding-left: 10px;
@@ -523,7 +523,7 @@ a.button
 {
   float:left;
   display:block;
-  background:url("/images/tabs/tab_right.gif") no-repeat right top;
+  background:url("/cms/images/tabs/tab_right.gif") no-repeat right top;
   padding:3px 15px 3px 3px;
   text-decoration:none;
   font-weight:bold;
@@ -558,12 +558,12 @@ a.button
 
 #tabs .current 
 {
-  background-image:url("/images/tabs/tab_left_on.gif");
+  background-image:url("/cms/images/tabs/tab_left_on.gif");
 }
 
 #tabs .current a 
 {
-  background-image:url("/images/tabs/tab_right_on.gif");
+  background-image:url("/cms/images/tabs/tab_right_on.gif");
   color:#fff;
   padding-bottom:3px;
 }  
