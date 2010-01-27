@@ -10,6 +10,7 @@
   
 
    <script type="text/javascript" src="/js/mootools.js"></script>
+   <script type="text/javascript" src="/cms/js/sidebarmenu.js"></script>
    <script type="text/javascript" src="framework/functions.js"></script>
    {var:script}
    {var:styles}
@@ -23,7 +24,7 @@
    <tr>
     <td id="leftnav">
     
-    {menu}
+    {menu:global}
  
     {position:login}
     {position:left}
@@ -46,7 +47,11 @@
 	 </div>
      </td>
     </tr>
+    <tr>
+     <td colspan="2">  
+     	<div id="footer"><p class="footer">{position:footer}</div>
+     </td>
+    </tr>
   </table> 
-  <div id="footer"><p class="footer">{footer_utility} </div>
  </body>
 </html>
