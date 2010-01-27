@@ -19,9 +19,14 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 		$options = array();
 		
 		$path = "$home/$dir";
+		
+		trace($path, 3);
+		
 		$handle = opendir($path);
 		while(false !== ($file = readdir($handle))) 
     	{
+    		trace($file, 3);
+    		
     		if ($file != "." && 
     			$file != ".." && 
     			$file != ".svn" && 
@@ -32,7 +37,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 				
     			if (is_dir($f))
     			{
-    				$options[$l] = readFile($home, $l);	
+    				$options = array_merge($options, $this->readFiles($home, $l));	
     			}
 				else if (preg_match('/.inc$/i', $file)) 
 				{
