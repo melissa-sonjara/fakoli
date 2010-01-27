@@ -86,7 +86,11 @@ class StringFieldRenderer extends FieldRenderer
 		}
 		
 		echo "<input type='text' name='$field' value='".htmlspecialchars($this->parent->data->$field, ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
-		
+
+		if ($this->limit)
+		{
+			echo "</div>";
+		}
 		$this->_endField($field);
 	}
 	

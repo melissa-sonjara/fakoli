@@ -207,6 +207,11 @@ class AutoForm
 
 		$this->addDefaultValidators();
 		
+		foreach($this->validator->validators as $v)
+		{
+			$v->title = $this->prettifyFieldName($v->field);
+		}		
+		
 		$obj =& $this->data;
 		$script = "";				
 		foreach(array_keys($obj->fields) as $field)
@@ -579,8 +584,10 @@ class AutoForm
 		
 		if ($obj->$pk && $this->allowDelete)
 		{
+			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
+			
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete' 
-			      value='Delete this ".$obj->prettifyClassName()."'
+			      value='$deleteLabel'
 			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
 		}
 		

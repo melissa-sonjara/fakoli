@@ -54,8 +54,9 @@ class BooleanFieldRenderer extends FieldRenderer
 		{
 			echo " checked";
 		}
-		echo ">&nbsp;";
-		echo $this->parent->prettifyFieldName($field);
+		echo ">&nbsp;<label for='$field'>";
+		echo $this->_getLabel($field, false);
+		echo "</label>";
 		if ($this->parent->annotations[$field])
 		{
 			echo "<br/>{$this->parent->annotations[$field]}";

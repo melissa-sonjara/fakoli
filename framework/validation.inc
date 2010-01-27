@@ -474,6 +474,69 @@ ENDSCRIPT;
 	}
 }
 
+
+/*
+ * SelectFieldRequiredValidator
+ * 
+ * A custom required validator is needed so that When a calling scripts turns 
+ * add entry text on for the instance of the SelectFieldRenderer class, 
+ * we  will check if the user has either selected an option from the list or 
+ * entered text because the standard required validator will consider the field 
+ * not completed if the user adds entry text.
+ * 
+ * Currently, for this to work, the script must NOT set the field as
+ * required, because that would cause the ValidationEngine to include
+ * the generic RequiredValidator, which would not see text in the add
+ * entry field as meeting the required condition. The "*" can be added
+ * to the field label using the alias function. Add this validator the
+ * the script using:
+ * $form->validator->add(new SelectFieldRequiredValidator($field, $label, $empty));
+ * 
+ */
+class SelectFieldRequiredValidator extends AbstractValidator
+{
+	var $empty = "";
+	
+	function SelectFieldRequiredValidator($field, $title, $empty="")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		$script = <<<ENDSCRIPT
+		
+		if (form["{$this->field}"].style.display != "none" && form["{$this->field}"].value == "{$this->empty}"
+		&& form["{$this->field}_addEntry"].value == "{$this->empty}")
+		{
+			alert("{$this->title} is a required field. Please supply a value.");
+			return false;
+		}
+
+ENDSCRIPT;
+		
+		return $script;
+		
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if (!isset($_POST[$this->field]) && !isset($_POST["{$this->field}_addEntry"]))
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+}
+
+
 /**
  * The ValidationEngine takes an array of validator objects in its constructor,
  * and is then able to generate both client- and server-side validation for HTML forms.

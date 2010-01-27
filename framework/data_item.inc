@@ -90,14 +90,22 @@ class ExclusionFilter
 			unset($this->fields[$args[$i]]);
 		}
 	}
+	
+	function includeField($field)
+	{
+		$this->remove($field);
+	}
+	
+	function excludeField($field)
+	{
+		$this->add($field);
+	}
 }
 
 /**
  * Used to place a filter on the contents of a DataItem-derived object.
- * With an ExclusionFilter, only the specified fields (and the primary key)
+ * With an InclusionFilter, only the specified fields (and the primary key)
  * will be <b>included</b> in any subsequent queries or operations.
- * 
- * 
  */
 class InclusionFilter
 {
@@ -134,6 +142,16 @@ class InclusionFilter
 		{
 			unset($this->fields[$args[$i]]);
 		}
+	}
+
+	function includeField($field)
+	{
+		$this->add($field);
+	}
+	
+	function excludeField($field)
+	{
+		$this->remove($field);
 	}
 }
 

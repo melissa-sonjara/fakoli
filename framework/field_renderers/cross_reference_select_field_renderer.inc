@@ -49,6 +49,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $field;
 	var $label;
 	var $options;
+	var $showSelectAll;
 	
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -57,6 +58,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		$this->options = $options;
 		$this->nameField = $nameField;
 		$this->xrefClass = $xrefClass;
+		$this->showSelectAll = false;
 		
 		$this->FieldRenderer($form);
 		$form->add($this);
@@ -66,6 +68,37 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	{
 		$this->width = $width;
 		$this->height = $height;
+	}
+	
+	function renderScript($field)
+	{
+		if ($this->showSelectAll)
+		{
+?>
+<script type="text/javascript">
+
+function <?echo $this->field ?>_toggleSelectAll(link)
+{
+	var value = (link.innerHTML == "Select All");
+
+	var inputs = document.getElementsByTagName("INPUT");
+
+	for(var i = 0; i < inputs.length; ++i)
+	{
+		var input = inputs[i];
+		if (input.attributes['id'] && input.attributes['id'].value.indexOf('checkbox_<?echo $this->field?>') == 0)
+		{
+			input.checked = value;
+		}
+	}
+
+	link.innerHTML = (value) ? "Deselect All" : "Select All";
+	return false;
+}
+
+</script>
+<?
+		}
 	}
 	
 	function renderField($field = "")
@@ -85,6 +118,10 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		
 		$selected = ($obj->$pk != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->$pk}", $rc->primary_key) : array();
 		
+		if ($this->showSelectAll)
+		{
+			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+		}
 		if ($this->width && $this->height)
 		{
 			echo "<div style='width: {$this->width}px; height: {$this->height}px; border: solid 1px black; overflow: auto'>\n";
@@ -94,7 +131,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		{
 			$p = $item->$itempk;
 			
-			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' value='1'";
+			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
 			if (array_key_exists($item->$itempk, $selected))
 			{
 				echo " checked";

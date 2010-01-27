@@ -1003,6 +1003,11 @@ function ordinalSuffix($n, $sup = false)
 	if ($sup) return ($sup) ? "$n<sup>$suffix</sup>" : "$n$suffix";
 }
 
+function makeURL($uri)
+{
+	 if (!startsWith($uri, "http://")) $uri = "http://$uri";
+	 return $uri;
+}
 
 function appendToQueryString($qs, $params)
 {

@@ -41,7 +41,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class RelatedItemSelectFieldRenderer extends FieldRenderer
 {
-	var $items;
+	var $items; 
 	var $default;
 	var $field;
 	var $nameField;
@@ -52,6 +52,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $max_chars;
 	var $allowNone;
 	var $templateItem;
+	var $otherField;
+	var $onChange;
 	
 /**
  * Create drop down list of item names in one table based on the key
@@ -113,10 +115,22 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$form->override($field, $label, $this);
 	}
 	
+	function allowOther($field)
+	{
+		$this->allowAdd = false; // Cannot have 'add' and 'other' at the same time
+		$this->otherField = $field;
+	}
+	
 	function renderField($field)
 	{		
 		$this->_startField($field);
-		echo "<select name='$field'>\n";
+		echo "<select name='$field'";
+		
+		if ($this->onChange)
+		{
+			echo " onchange='{$this->onChange}(this);'";
+		}
+		echo ">\n";
 
 		foreach($this->items as $item)
 		{
@@ -144,9 +158,29 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		if ($this->allowAdd)
 		{
-			echo " or add new: <input type='text' name='autoform_add_$field' value='' size='30'>";
+			echo " or add new: <input type='text' name='autoform_add_$field' value='' size='30'/>";
 		}
+		else if ($this->otherField)
+		{
+			$otherField = $this->otherField;
 			
+			$value = $this->parent->data->$otherField;
+			$pkField = $this->parent->data->primary_key;
+			if ($this->parent->data->$pkField && 
+				$this->parent->data->filter && 
+				$this->parent->data->filter->isExcluded($this->otherField))
+			{
+				$obj = clone($this->parent->data);
+				$obj->filter = new InclusionFilter($obj->primary_key, $this->otherField);
+				$obj->select();
+				$value = $obj->$otherField;
+			}
+			else
+			{
+				$value = $this->data->$otherField;
+			}
+			echo "<span style='white-space: nowrap'> if other, please specify: <input type='text' name='{$otherField}' value='{$value}' size='30'/></span>";
+		}
 		$this->_endField($field);
 	}
 	
@@ -220,6 +254,17 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		trace("RelatedItemSelectFieldRenderer::process()", 3);
 		
 		$item = new $this->relatedClass;
+		
+		if ($this->otherField)
+		{
+			// Ensure that the 'other' field value gets written
+			if ($this->parent->data->filter)
+			{
+				$this->parent->data->filter->includeField($this->otherField);
+				$otherField = $this->otherField;
+				$this->parent->data->$otherField = isset($_POST[$otherField]) ? $_POST[$otherField] : "";
+			}
+		}
 		
 		if (!$this->allowAdd) return;
 		$valueField = $valueField ? $this->valueField : $item->primary_key;

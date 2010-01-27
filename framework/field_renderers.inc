@@ -81,6 +81,16 @@ class FieldRenderer
 	 */
 	function _printLabel($field, $colspan=1, $styles = "", $annotation = "")
 	{		
+		$label = $this->_getLabel($field);
+		
+		echo "<td colspan='$colspan'";
+		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
+		if ($styles) echo " style='$styles'";
+		echo "><label for='$field'>$label</label> $annotation</td>\n";
+	}
+
+	function _getLabel($field, $addSuffix = true)
+	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
 		if ($this->parent->markRequiredFields &&
@@ -97,12 +107,9 @@ class FieldRenderer
 	    	$label = $fn($this->parent, $field, $label);
 	    }
 	    
-		echo "<td colspan='$colspan'";
-		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
-		if ($styles) echo " style='$styles'";
-		echo "><label for='$field'>$label</label> $annotation</td>\n";
+	    return $label;
 	}
-
+	
 	/**
 	 * Internal method to generate the starting HTML for the field (including the label)
 	 *
