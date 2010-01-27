@@ -17,7 +17,8 @@ $config = array(
     
     "trace_path"	=> "/share/cms_trace.log",	/* File path to trace output log */
     "trace_level"	=> 3,						/* Debugging trace level (0-5) */
-	
+	"trace_detail"	=>	TraceDetailHigh,		/* Detail level for trace output */
+
 	"admin_templates_dir"	=>	"C:/code/cms.sonjara.com/cms/admin/templates",
 
 	// Application specific settings
