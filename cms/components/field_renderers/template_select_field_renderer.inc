@@ -7,26 +7,46 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 	{
 		global $config;
 		$path = $config["homedir"]."/".$directory;
-
-		trace("Scanning $path", 3);
-		
+	
+		$options = array("" => "");
+		$options = array_merge($options, $this->readFiles("{$config["homedir"]}/$directory", ""));
+			
+		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
+	}
+	
+	function readFiles($home, $dir)
+	{
 		$options = array();
 		
-		if ($handle = opendir($path)) 
-		{
-	    	while (false !== ($file = readdir($handle))) 
-	    	{
-	  	       	if (preg_match('/.tpl$/i', $file)) 
-	 	       	{
-	 	       		$options[$file] = prettify(str_replace(".tpl", "", $file));
-	 	       		trace("Found $file", 3);
-	 	       	}        	
-	    	}
-	
-		    closedir($handle);		
-		}
+		$path = "$home/$dir";
 		
-		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
+		trace($path, 3);
+		
+		$handle = opendir($path);
+		while(false !== ($file = readdir($handle))) 
+    	{
+    		trace($file, 3);
+    		
+    		if ($file != "." && 
+    			$file != ".." && 
+    			$file != ".svn" && 
+    			$file != "CVS")
+    		{
+				$l = ($dir != '') ? "$dir/$file" : $file;
+				
+    			if (is_dir($f))
+    			{
+    				$options = array_merge($options, $this->readFiles($home, $l));	
+    			}
+				else if (preg_match('/.tpl$/i', $file)) 
+				{
+					$options[$l] = $l;
+				}
+    		}        	
+    	}
+
+	    closedir($handle);
+	    return $options;
 	}
 }
 ?>
