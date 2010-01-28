@@ -45,7 +45,7 @@ else {
 ?>
 
 <br/>
-<a href="grp_form.php" class="button">Add a New Site</a>
+<a href="site_form.php" class="button">Add a New Site</a>
 <br/>
 <br/>
 <?
