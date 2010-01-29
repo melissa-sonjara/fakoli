@@ -27,7 +27,7 @@ $title = "Manage Menu Items for {$menu->name}";
 $displays = array();
 
 
-$rootNode = new TreeNode("menu", $menu->name);
+$rootNode = new TreeNode("menuTree", $menu->name);
 $menuTree->add($rootNode);
 
 if (count($menuItems) > 0)
