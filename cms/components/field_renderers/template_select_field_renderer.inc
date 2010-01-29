@@ -8,7 +8,7 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 		global $config;
 		$path = $config["homedir"]."/".$directory;
 	
-		$options = array("" => "");
+		$options = array();
 		$options = array_merge($options, $this->readFiles("{$config["homedir"]}/$directory", ""));
 			
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
@@ -32,6 +32,7 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
     			$file != ".svn" && 
     			$file != "CVS")
     		{
+    			$f = "$path/$file";
 				$l = ($dir != '') ? "$dir/$file" : $file;
 				
     			if (is_dir($f))
