@@ -142,7 +142,7 @@ if ($menu_item_id)
 ?>
  <tr>
   <td style="text-align: center; vertical-align: middle; width: 80px"><input type="text" style="width: 60px" name="m[<?echo $m->menu_id ?>]" value="<?echo $m->sort_order ?>"/></td>
-  <td><a href="menus_form.php?menu_id=<?echo $m->menu_id?>&parent_id=<?echo $m->parent_id?>"><?echo $m->title ?></a></td>
+  <td><a href="menu_item_form.php?menu_item_id=<?echo $m->menu_item_id?>"><?echo $m->title ?></a></td>
  </tr>
 <?
 		}
