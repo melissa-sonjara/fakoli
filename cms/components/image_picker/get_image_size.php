@@ -1,6 +1,6 @@
 <?php
-require_once "../../include/config.inc";
-require_once "../../include/permissions.inc";
+require_once "../../../include/config.inc";
+require_once "../../../include/permissions.inc";
 
 $bytes = getRemote($_GET["img"]);
 $img = imageCreateFromString($bytes);

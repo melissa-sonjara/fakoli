@@ -33,6 +33,7 @@
 
 require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../../framework/join.inc");
+require_once realpath(dirname(__FILE__)."/site.inc");
 
 class Page extends DataItem
 {
@@ -92,8 +93,28 @@ class Page extends DataItem
 	function getTemplate()
 	{
 		global $config;
+		$style = $_REQUEST["_style"];
+		$site = $this->Site();
 		
-		$template = file_get_contents("{$config['homedir']}/templates/{$this->template}");
+		$templateFile = "";
+		
+		switch($style)
+		{
+		case 'print':
+			$templateFile = $site->print_template;
+			break;
+
+		case 'popup':
+			$templatefile = $site->popup_template;
+			break;
+			
+		case 'mobile':
+			$templateFile = $site->mobile_template;
+		}
+		
+		if (!$templateFile) $templateFile = $this->template;
+		
+		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
 
 		return $template;
 	}

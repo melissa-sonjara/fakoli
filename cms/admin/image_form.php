@@ -44,10 +44,15 @@ $menu_item = "Images";
 	trace("Upload Base: {$config['homedir']}", 3);
     
 	$filename = $_FILES[$field]['name'];
+	$ext = strtolower(substr($filename, -4));
 	$filename = substr($filename, 0, -4 );
 	
-	$largeFileName = codify($filename).".jpg";
-	$smallFileName = codify($filename)."_thumb.jpg";
+	trace("Image format: $ext", 3);
+	
+	if ($ext != ".jpg" && $ext != ".png") die("Unsupported image format");
+	
+	$largeFileName = codify($filename).$ext;
+	$smallFileName = codify($filename)."_thumb$ext";
 	
 	trace("Large Image File: $largeFileName", 3);
 	trace("Small Image File: $smallFileName", 3);
@@ -72,8 +77,18 @@ $menu_item = "Images";
  
  	$thumbSize = $config['thumbnail_size'];
  	
-	$src = imagecreatefromjpeg($target);
-	$fullWidth = imagesx($src);
+ 	switch($ext)
+ 	{
+ 		case ".jpg":
+ 			$src = imagecreatefromjpeg($target);
+ 			break;
+ 			
+ 		case ".png":
+ 			$src = imagecreatefrompng($target);
+ 			break;
+ 	}
+
+ 	$fullWidth = imagesx($src);
 	$fullHeight = imagesy($src);
 	
 	if ($fullWidth > $fullHeight)
@@ -98,7 +113,18 @@ $menu_item = "Images";
 		unlink($target);
 	}
 	
-	imagejpeg($dst, $target, 85);
+	switch($ext)
+	{
+	case ".jpg":
+		
+		imagejpeg($dst, $target, 85);
+		break;
+		
+	case ".png":
+		
+		imagepng($dst, $target);
+		break;
+	}
 	imagedestroy($dst);
 	imagedestroy($src);
 	
@@ -125,6 +151,9 @@ $imageUpload->size = 60;
 
 $form->required( "title");
 $form->hide("thumbnail");
+
+$imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
+$imageTypeSelect->allowAddEntry();
 
 $redirect = "images.php";
 $form->button("Cancel", $redirect);

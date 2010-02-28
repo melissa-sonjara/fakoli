@@ -39,7 +39,7 @@ class MenuView
 			if (array_key_exists($menuItem->page_id, $this->pages))
 			{
 				$page = $this->pages[$menuItem->page_id];
-				if (!$page->published)
+				if (!$page->published || !checkRole($page->role))
 				{
 					// No link if the page is unpublished, or the user role doesn't match.
 					return null;
@@ -63,8 +63,8 @@ class MenuView
 		
 		$gmenus = regroupList($this->m->MenuItems("ORDER BY sort_order"), "parent_id");
 		
-		echo '<div class="sidebarmenu">'; // has end tag
-		echo '<ul id="sidebarmenu1">'; // has end tag
+		$css = ($this->m->css_class) ? " class='{$this->m->css_class}'" : "";
+		echo "<ul{$css}>"; // has end tag
 		foreach($gmenus[0] as $m) 
 		{
 		  
@@ -120,7 +120,6 @@ class MenuView
 		} # main foreach
 		
 		echo "</ul>"; // top level ul
-		echo "</div>";
 		
 		$out = ob_get_contents();
 		ob_end_clean();

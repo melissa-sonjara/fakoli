@@ -12,9 +12,9 @@ date: 11/09
 
 ***************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../datamodel/module.inc";
-require_once realpath(dirname(__FILE__))."/../../datamodel/news_item.inc";
-require_once realpath(dirname(__FILE__))."/../../datamodel/publication.inc";
+require_once $config['homedir']."/cms/datamodel/module.inc";
+require_once $config['homedir']."/cms/datamodel/news_item.inc";
+require_once $config['homedir']."/cms/datamodel/publication.inc";
 
 abstract class ModuleView
 {
@@ -49,27 +49,33 @@ class QueryModuleView extends ModuleView
 		$this->ModuleView($module);
 	}
 
-	function drawView()
+	function drawView($cssClass = "")
 	{
+		$cssClass = trim("module {$this->module->css_class} $cssClass");
 		
 		$title = $this->module->getTitle();
 		
 		$className= $this->module->getContent_Type();
-
+        
 		$constraint = $this->module->getConstraint();
-		if (!$constraint) $constraint = "1=1";
-
+		if (!$constraint) { 
+			$constraint = "1=1";
+		}
+		else if($constraint == "site_user_id") {
+			global $user;
+            $constraint = " site_user_id='$user->site_user_id' ";
+	    }
 		$limit=  $this->module->getNum_Items();
-
+		
 		if ($limit) $limit = "LIMIT $limit";
 		
 		$orderby= $this->module->getOrd_By();
-		
+				
 		$results = query($className, "WHERE $constraint ORDER BY $orderby DESC $limit");
 
 		ob_start();
 		
-		echo "<div class='module'>";
+		echo "<div class='$cssClass'>";
 		
     	eval($this->module->template);
     	
@@ -90,13 +96,19 @@ class CodeModuleView extends ModuleView
 		$this->ModuleView($module);
 	}
 	
-	function drawView()
+	function drawView($cssClass = "")
 	{
+		$cssClass = trim("module {$this->module->css_class} $cssClass");
+		
+		global $config;
+		global $script;
+		global $styles;
+		
 		if ($this->module->php_code_file)
 		{
 			ob_start();
-			echo "<div class='module'>";
-			include realpath(dirname(__FILE__))."/../modules/{$this->module->php_code_file}";
+			echo "<div class='$cssClass'>";
+			include $config['homedir']."/{$this->module->php_code_file}";
     		echo "</div>";
     		$output = ob_get_contents();
  			ob_end_clean();
@@ -113,9 +125,10 @@ class HTMLModuleView extends ModuleView
 		$this->ModuleView($module);
 	}
 	
-	function drawView()
+	function drawView($cssClass = "")
 	{
-		return "<div class='module'>{$this->module->template}</div>";
+		$cssClass = trim("module {$this->module->css_class} $cssClass");
+		return "<div class='$cssClass'>{$this->module->template}</div>";
 	}
 }
 ?>

@@ -68,7 +68,7 @@ class SelectFieldRenderer extends FieldRenderer
 	var $addEntryText;
 	var $onChange; // optional selection change handler
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options, $onChange="")
+	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="")
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
@@ -80,6 +80,12 @@ class SelectFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
+		}
+		
+		if ($this->options == null)
+		{
+			$opt = $form->data->distinctValues($field, true);
+			$this->options = array_combine($opt, $opt);
 		}
 	}
 	

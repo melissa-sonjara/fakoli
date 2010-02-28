@@ -299,6 +299,22 @@ class DataItem
 	}
 	
 	/**
+	 * Return an array of field names for this object filtered by any active filter.
+	 * @return array
+	 */
+	function getFieldArray()
+	{
+		$arr = array();
+		foreach($this->fields as $field => $type)
+		{
+			if ($this->filter && $this->filter->isExcluded($field)) continue;
+			$arr[] = $field;
+		}
+		
+		return $arr;
+	}
+	
+	/**
 	 * Returns true if this DataItem contains a field with the specified name
 	 * and that field is not excluded by a filter.
 	 *
@@ -488,7 +504,7 @@ class DataItem
 	
 		case Date:
 		
-			$query .= $db->quote($this->reformatToSQLDate($this->$field));
+			$query .= ($this->$field) ? $db->quote($this->reformatToSQLDate($this->$field)) : "NULL";
 			break;
 			
 		case Timestamp:
@@ -668,6 +684,50 @@ class DataItem
 	}
 		
 	/**
+	 * Retrieves the distinct values in the database for the specified field 
+	 * across the specified set of records.
+	 * @param string $field
+	 * @param boolean $sorted
+	 * @param string $constraint
+	 * @return array
+	 */
+	function distinctValues($field, $sorted = false, $constraint = "")
+	{
+		$query = "SELECT DISTINCT $field from {$this->table} $constraint";
+		
+		trace($query, 3);
+		
+		$db = $this->getConnection();
+		
+		try
+		{
+			$result = $db->prepare($query);
+			$result->execute();
+			
+			$values = array();
+			
+			while($line = $result->fetch())
+			{
+				$values[] = $line[$field];
+			}
+			
+			if ($sorted)
+			{
+				sort($values);
+			}
+					
+			unset($result);
+			
+			return $values;
+		}
+		catch(PDOException $e)
+		{
+			die ("DataItem::delete() failed - " . $e->getMessage());
+		}
+		
+	}
+	
+	/**
 	 * Automatically populate the object based on parameters in the $_GET collection.
 	 */
 	function fromGET()
@@ -701,6 +761,24 @@ class DataItem
 			{
 				$this->$field = 0;
 			}
+		}
+	}
+	
+	/**
+	 * Automatically populate the object based on parameters in either the $_GET or $_POST collection,
+	 * depending on the method used to access the page.
+	 */
+	function fromREQUEST()
+	{
+		switch($_SERVER["REQUEST_METHOD"])
+		{
+		case "POST":
+			$this->fromPOST();
+			break;
+			
+		case "GET":
+		default:
+			$this->fromGET();
 		}
 	}
 	
@@ -1003,6 +1081,7 @@ class DataItem
 		
 	function format($template = "", $separator = ", ")
 	{
+		trace(get_class($this)." Format: $template", 3);
 		if ($template == "") $template = $this->default_format;
 		
 		foreach($this->fields as $field => $type)
@@ -1013,7 +1092,7 @@ class DataItem
 		// Feature enhancement - allow drill-down through relation functions
 		
 		$matches = array();
-		preg_match_all("/\\{(\\w+).(\\w+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w_]+)\.([\\w_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 		
 		foreach($matches as $match)
 		{
@@ -1054,6 +1133,11 @@ class DataItem
 	
 	function prettifyFieldName($field)
 	{
+		if (isset($this->fieldAliases) && array_key_exists($field, $this->fieldAliases))
+		{
+			return $this->fieldAliases[$field];
+		}
+		
 		$field = preg_replace("/([a-z])([A-Z0-9])/", "$1 $2", $field);
 		$field = str_replace("_", " ", $field);
 		$field = ucwords($field);
@@ -1627,29 +1711,5 @@ function restoreHTML($text)
 	return $v;
 }
 
-class DataQuery
-{
-	var $type;
-	var $constraint;
-	var $filter;
-	var $sortBy;
-	var $sortDir;
-	var $page;
-	var $pageSize;
-	
-	function DataQuery($type, $constraint = "", $page = 1, $pageSize = 20, $sortBy = "", $sortDir = "ASC", $filter = null)
-	{
-		$this->type = $type;
-		$this->constraint = $constraint;
-		$this->page = $page;
-		$this->pageSize = $pageSize;
-		$this->sortBy = $sortBy;
-		$this->sortDir = $sortDir;
-		$this->filter = $filter;
-	}
-	
-	function toQueryString()
-	{
-	}
-}
+
 ?>

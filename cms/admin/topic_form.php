@@ -2,7 +2,7 @@
 require_once "../../include/config.inc";
 
 require_once "../datamodel/topic.inc";
-require_once "../datamodel/grp.inc";
+require_once "../datamodel/group.inc";
 require_once "../../include/permissions.inc";
 require_once "../../framework/auto_form.inc";
 
@@ -17,9 +17,9 @@ $form->allowDelete = true;
 $redirect = "topics.php";
 $form->button("Cancel", $redirect);
 
-$grps = query(Grp, "ORDER BY grp_id"); 
+$groups = query(Group, "ORDER BY group_id"); 
 
-$grpList = new CrossReferenceSelectFieldRenderer($form, "grps", "Associate Groups", $grps, "{title}", GrpTopicXref);
+$grpList = new CrossReferenceSelectFieldRenderer($form, "groups", "Associate Groups", $groups, "{title}", GroupTopicXref);
 $grpList->colspan = 2;
 $grpList->height = 120;
 

@@ -10,8 +10,8 @@ require_once "../../include/config.inc";
 require_once "../../include/permissions.inc";
 require_once "../datamodel/news_item.inc";
 
-$title = "News Items";
-$menu_item = "News Items";
+$title = "Articles";
+$menu_item = "Articles";
 
 $newsItems = query(NewsItem, "ORDER BY last_modified DESC");
 
@@ -40,11 +40,11 @@ if (count($newsItems) > 0)
 }
 else
 {
-	echo "<i>No News Items defined</i><br>";
+	echo "<i>No articles have been created yet.</i><br>";
 }
 ?>
 <br>
-<input type="button" class="button" value="  Add a News Item  " onclick="go('news_item_form.php');">
+<input type="button" class="button" value="  Add an Article  " onclick="go('news_item_form.php');">
 <?
 require_once admin_end_page;
 ?>

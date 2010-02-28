@@ -41,16 +41,25 @@ class NewsItem extends DataItem
 	var $fields = array("news_item_id"	=>	Number,
 						"title"			=>	String,
 						"image_id"		=>	Number,
+						"article_type"	=>	String,
 						"teaser"		=>	HTML,
 						"message"		=>	HTML,
-						"public"		=>	Boolean,
-						"last_modified"	=>	Timestamp);
+						"created_date"	=>	Date,
+						"archive_date"  =>  Date,
+						"last_modified"	=>	Timestamp,
+						"published"		=>	Boolean);
 
-	var $relations = array("Image" => Image);
+	var $relations = array(	"Image" => Image,
+							"Sites"	=>	Site);
 	
 	function Image()
 	{
 		return $this->getRelated(Image);
+	}
+	
+	function Sites($constraint = "")
+	{
+		return $this->crossReference(Site, NewsItemSiteXref, $constraint);
 	}
 	
 	function NewsItem()
@@ -61,8 +70,34 @@ class NewsItem extends DataItem
 		
 		$this->DataItem(func_get_args());
 	}
-	
-	
 }
 
+
+
+class NewsItemSiteXref extends DataItem
+{
+	var $fields = array("news_item_site_xref_id"	=>	Number,
+						"news_item_id"				=>	Number,
+						"site_id"					=>	Number);
+	
+	var $relations = array(	"NewsItem"	=>	NewsItem,
+							"Site"		=>	Site);
+	
+	function NewsItem()
+	{
+		return $this->getRelated(NewsItem);
+	}
+	
+	function Site()
+	{
+		return $this->getRelated(Site);
+	}
+	
+	function NewsItemSiteXref()
+	{
+		$this->table = "news_item_site_xref";
+		$this->primary_key = "news_item_site_xref_id";
+		$this->DataItem(func_get_args());
+	}
+}
 ?>

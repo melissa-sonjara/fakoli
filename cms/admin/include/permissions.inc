@@ -48,7 +48,7 @@ else
 
 if (!checkRole($page_role))
 {
-	redirect("login.php");
+	redirect("/admin/login.php");
 }
 
 ?>

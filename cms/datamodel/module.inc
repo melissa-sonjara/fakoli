@@ -36,16 +36,16 @@ require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 $mod_type = array
 (
 	NewsItem  =>	 "News Item",
-	Publication	=>	 "Publication",
+	Program 	=>	 "Program",
 	HTML => 		 "HTML" 
 );
 	
 $ord_by = array
 (
-	publication_year =>	"publication_year",
-	last_modified	 =>	"last_modified", 
-	title			 =>	"title",
-	author  		 => "author" );	
+	created_date	 =>	"created_date", 
+	name			 =>	"name",
+	last_modified => "last_modified"
+	);	
 	
 /**
  * Defines the Module class.
@@ -60,7 +60,8 @@ class Module extends DataItem
 						"query_constraint"  => String,
 						"ord_by"    		=> String,
 						"template"			=> Text,
-						"php_code_file"		=> String);
+						"php_code_file"		=> String,
+						"css_class"			=> String);
 						
 	function Module()
 	{

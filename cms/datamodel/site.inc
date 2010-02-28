@@ -40,16 +40,25 @@ class Site extends DataItem
 						"site_name"			=> String,
 						"domain"			=> String,
 						"description"		=> Text,
-						"default_template"	=>	String,
+						"default_template"	=> String,
+						"print_template"	=> String,
+						"popup_template"	=> String,
+						"mobile_template"	=> String,
 						"enabled"			=> Boolean);
 	
 // Relations
 	
-	var $relations = array("Pages"	=>	Page);
+	var $relations = array(	"Pages"		=>	Page,
+							"NewsItems"	=>	NewsItem);
 	
 	function Pages($constraint = "")
 	{
 		return $this->getRelatedList(Page, "", $constraint);
+	}
+	
+	function NewsItems($constraint = "")
+	{
+		return $this->crossReference(NewsItem, NewsItemSiteXref, $constraint);
 	}
 	
 	// Constructor

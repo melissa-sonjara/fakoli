@@ -83,8 +83,10 @@ class RequiredValidator extends AbstractValidator
 	
 	function writeClient()
 	{
+		if ($this->readOnly) return "";
+		
 		if($this->checkDisplayNone)
-			$condition = "form[\"{$this->field}\"].style.display != \"none\" && ";
+			$condition = "form[\"{$this->field}\"] != null && form[\"{$this->field}\"].style.display != \"none\" && ";
 				
 		$script = <<<ENDSCRIPT
 		
@@ -128,6 +130,8 @@ class RequiredFileValidator extends AbstractValidator
 	
 	function writeClient()
 	{
+		if ($this->readOnly) return "";
+		
 		$msg = jsSafe($this->message, true);
 		$script = <<<ENDSCRIPT
 		
@@ -176,6 +180,8 @@ class DateValidator extends AbstractValidator
 	
 	function writeClient()
 	{
+		if ($this->readOnly) return "";
+		
 		$script = "";
 		if ($this->required)
 		{
@@ -304,6 +310,8 @@ class MatchValidator extends AbstractValidator
 	function writeClient()
 	{
 		trace("MatchValidator::writeClient", 3);
+		if ($this->readOnly) return "";
+		
 		$script = <<<ENDSCRIPT
 			
 	if (form["{$this->field}"].value != form["{$this->confirm}"].value)
@@ -355,7 +363,9 @@ class PasswordValidator extends RequiredValidator
 
 	function writeClient()
 	{
-	 	$pswField = "{$this->field}_block";
+		if ($this->readOnly) return "";
+		
+		$pswField = "{$this->field}_block";
 	$script = <<<ENDSCRIPT
 	
 	var block = document.getElementById("$pswField");
@@ -394,6 +404,8 @@ class RegularExpressionValidator extends AbstractValidator
 	{
 		trace("RegularExpressionValidator::writeClient", 3);
 
+		if ($this->readOnly) return "";
+		
 		$script = <<<ENDSCRIPT
 			
 	if (!form["{$this->field}"].value.match(/{$this->regexp}/i))
@@ -446,6 +458,7 @@ class RangeValidator extends AbstractValidator
 	function writeClient()
 	{
 		trace("RegularExpressionValidator::writeClient", 3);
+		if ($this->readOnly) return "";
 		
 		$min = is_numeric($this->min) ? $this->min : "'{$this->min}'";
 		$max = is_numeric($this->max) ? $this->max : "'{$this->max}'";
@@ -505,6 +518,8 @@ class SelectFieldRequiredValidator extends AbstractValidator
 	
 	function writeClient()
 	{
+		if ($this->readOnly) return "";
+		
 		$script = <<<ENDSCRIPT
 		
 		if (form["{$this->field}"].style.display != "none" && form["{$this->field}"].value == "{$this->empty}"

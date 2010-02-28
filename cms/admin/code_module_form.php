@@ -18,14 +18,17 @@ $publication = get_class(new Publication());
 
 $module = new Module();
 
-$module->filter = new InclusionFilter("module_id", "title", "php_code_file", "content_type");
+$module->filter = new InclusionFilter("module_id", "title", "php_code_file", "content_type", "css_class");
 $module->content_type = "Code";
 
 $form = new AutoForm($module);
 $form->required("title");
 $form->hide("content_type");
+$form->alias("css_class", "CSS Class");
 
 $form->allowDelete = true;
+$redirect = "modules.php";
+$form->button("Cancel", $redirect);
 
 $form->getRenderer("template")->rows = 10;
 

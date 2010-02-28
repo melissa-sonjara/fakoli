@@ -218,6 +218,21 @@ function formatTimestamp($ts)
 }
 
 /**
+ * Returns the number of days in the specified month
+ * @param number $m the month number
+ * @param number $y the year
+ * @return number the number of days in that month
+ */
+function getMonthDays($m, $y)
+{
+	$monthDays = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+	$d = $monthDays[$m - 1];
+	if ($m == 2 && ($y % 4) == 0 && ($y % 100) != 0) $d++;
+	
+	return $d;
+}
+	
+/**
  * Format a time in 12 hour clock, no seconds
  */
 function formatTime12($time)
@@ -246,6 +261,8 @@ function jsSafe($str, $escapeEntities = false)
 	$str = preg_replace('/"/','\"',$str);
 	$str = str_replace("\r", "", $str);
 	$str = str_replace("\n", "\\n", $str);
+	$str = str_replace("&#39;", "\'", $str);
+	
 	if ($escapeEntities)
 	{
 		$str = str_replace("&", "&amp;", $str);
@@ -531,6 +548,12 @@ function firstSentence($text)
 	return ($pos) ? substr($text, 0, $pos + 1) : $text;
 }
 
+function stripHTML($text)
+{
+		$text = preg_replace("/<.*?>/", "", $text);
+		return $text;
+}
+
 /**
  * Runs a query, returns the first field in each row of the resultset as a comma-delimited list.
  * 
@@ -589,7 +612,7 @@ function parseMultiParam($collection, $param)
  * @param mixed $sel a value to compare to the $value field, 
  * to determine whether the option should be selected. 
  */
-function option($value, $text, $sel)
+function option($value, $text, $sel = "")
 {
 	echo "<option value='$value'";
 	if ($sel == $value)
@@ -608,6 +631,12 @@ function redirect($page)
 	global $_SERVER;
 	global $config;
   
+	if (!$config['prettyURLs'])
+	{
+		$page = preg_replace("/^\\/?([\\w\\d_]+?)\\?/", "/page.php?identifier=$1&", $page);
+		$page = preg_replace("/^\\/?([\\w\\d_]+)$/", "/page.php?identifier=$1", $page);
+	}
+	
 	$server = $config['http_host'];
 	if (!$server) $server="localhost:8080";
 	
@@ -1029,6 +1058,20 @@ function appendToQueryString($qs, $params)
 		$qs .= "&$params";
 	}
 	
+	if ($qs[0] != "?") $qs = "?$qs";
+	$qs = preg_replace("/&&+/", "&", $qs);
+	
 	return $qs;
+}
+
+function makeRandomString($len)
+{
+	$str = "";
+	for($i = 0; $i < $len; ++$i)
+	{
+		$str .= chr(ord('a') + rand(0, 25));
+	}
+	
+	return $str;
 }
 ?>

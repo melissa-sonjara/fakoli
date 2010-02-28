@@ -48,10 +48,12 @@ require_once realpath(dirname(__FILE__)."/data_item.inc");
 class InnerJoinResult
 {
 	var $_xmlTagName = "join";
+	var $_classes;
 	
 	function InnerJoinResult($tag = "join")
 	{
 		$this->_xmlTagName = $tag;
+		$this->_classes = array();
 	}
 	
 	function toXML($indent = 0)
@@ -68,7 +70,32 @@ class InnerJoinResult
 		$xml .=  str_repeat(" ", $indent) . "</" . $this->_xmlTagName . ">\n";
 		
 		return $xml;
-	}	
+	}
+	
+	function format($template)
+	{
+		$matches = array();
+		
+		if (count($this->_classes) == 1 && preg_match("/^[\\w_]+/"))
+		{
+			$cl = $this->_classes[0];
+			return $this->$cl->$format;
+		}
+		
+		preg_match_all("/\\{([\\w_]+)\.([^}]+)}/", $template, $matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match)
+		{
+			$class = $matches[1];
+			$subtemplate = $matches[2];
+	
+			$value = $this->$class->format($subtemplate);
+			
+			$template = str_replace($match[0], $value, $template);
+		}
+		
+		return $template;
+	}
 }
 
 /**

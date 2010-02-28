@@ -47,7 +47,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 		}
 		else
 		{
-			$src = "/images/noimage.gif";
+			$src = "/cms/images/noimage.gif";
 		}
 ?>
 <input type='text' name='<?echo $field ?>' id='<?echo $field ?>' value='<?echo $key ?>' style='display: none'>

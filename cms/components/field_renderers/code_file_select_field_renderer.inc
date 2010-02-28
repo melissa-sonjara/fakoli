@@ -25,7 +25,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 		$handle = opendir($path);
 		while(false !== ($file = readdir($handle))) 
     	{
-    		trace($file, 3);
+    		trace($file, 4);
     		
     		if ($file != "." && 
     			$file != ".." && 

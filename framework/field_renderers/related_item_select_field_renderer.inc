@@ -52,6 +52,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $max_chars;
 	var $allowNone;
 	var $templateItem;
+	var $sorted;
 	var $otherField;
 	var $onChange;
 	
@@ -108,11 +109,19 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->allowNone = $allowNone;
 		$this->max_chars = $maxChars;
 		$this->templateItem = null;
+		$this->sorted = false;
 		
 		$this->getRelatedItems();
 		
 		$this->FieldRenderer($form);
-		$form->override($field, $label, $this);
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+		}
 	}
 	
 	function allowOther($field)
@@ -132,13 +141,26 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		}
 		echo ">\n";
 
+		$vals = array();
 		foreach($this->items as $item)
 		{
 			$name = $this->formatName($item, $this->nameField);
 			$valueField = ($this->valueField != "") ? $this->valueField : $item->primary_key;
+			$value = $item->$valueField;
+			
+			$vals[$name] = $value;
+		}
+		
+		if ($this->sorted)
+		{
+			ksort($vals, SORT_LOCALE_STRING);
+		}
+		
+		foreach($vals as $name => $value)
+		{
 			//trace("valueField: $valueField", 3);
 			
-			echo "<option value='{$item->$valueField}'";
+			echo "<option value='{$value}'";
 			
 			/*
 			 * If this form is new and there is a default, then
@@ -147,10 +169,10 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			 * set selected to the field value of that record
 			 */			
 			if (($this->parent->data->$field != NULL) AND
-				($item->$valueField == $this->parent->data->$field)) 
+				($value == $this->parent->data->$field)) 
 				echo " selected";
 			elseif (($this->parent->data->$field == NULL) AND
-				($item->valueField != NULL) AND ($item->valueField == $default))
+				($value != NULL) AND ($value == $default))
 				echo " selected";
 			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
 		}
@@ -158,7 +180,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		if ($this->allowAdd)
 		{
-			echo " or add new: <input type='text' name='autoform_add_$field' value='' size='30'/>";
+			echo " or add new: <input type='text' name='autoform_add_$field' value='' size='30'>";
 		}
 		else if ($this->otherField)
 		{

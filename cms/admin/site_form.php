@@ -18,7 +18,10 @@ $form->required("title");
 $form->allowDelete = true;
 $redirect = "sites.php";
 $form->button("Cancel", $redirect);
-$templateSelect = new TemplateSelectFieldRenderer($form, "default_template", "Template", "templates");
+$templateSelect       = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "templates");
+$printTemplateSelect  = new TemplateSelectFieldRenderer($form, "print_template", "Print Template", "templates");
+$popupTemplateSelect  = new TemplateSelectFieldRenderer($form, "popup_template", "Popup Template", "templates");
+$mobileTemplateSelect = new TemplateSelectFieldRenderer($form, "mobile_template", "Mobile Template", "templates");
 
 if ($method == "POST")
 {

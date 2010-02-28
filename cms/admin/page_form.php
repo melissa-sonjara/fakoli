@@ -115,9 +115,9 @@ $form->button("Cancel", $redirect);
 
 
 $roleOptions = array(
-	"" => "All",
-	admin	=>	"Admin",
-	member 	=>	"Admin/Member"
+	""				 => "All",
+	"admin"			=>	"Admin",
+	"admin,member" 	=>	"Admin/Member"
 	
 );
 

@@ -22,6 +22,9 @@ $tabs = publicationTabs($publication_id);
 $form = new AutoForm($publication);
 $form->required("title", "publication_year", "abstract", "short_abstract", "journal_id");
 $form->allowDelete=true;
+$redirect = "publications.php";
+$form->button("Cancel", $redirect);
+
 $form->alias("pubmed_link","Link to Journal");
 
 if ($publication->pdf_file)

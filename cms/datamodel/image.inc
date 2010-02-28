@@ -48,7 +48,8 @@ class Image extends DataItem
 						"caption" 		=> String,
 						"keywords" 		=> String,
 						"status" 		=> String,
-						"image_rotator" => Boolean);
+						"image_rotator" => Boolean,
+						"image_type"	=> String);
 	
 	function Image()
 	{

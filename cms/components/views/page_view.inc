@@ -23,6 +23,14 @@ class PageView
 	
 	function drawView()
 	{
+		global $config;
+		global $method;
+		global $user;
+		global $script;
+		global $styles;
+		
+		$page = $this->page; // Pass through to code include
+		
 		$template = $this->page->getTemplate();
 		
 		// If the page has a PHP code include, execute it and insert the contents
@@ -30,7 +38,7 @@ class PageView
 		if ($this->page->php_code_file)
 		{
 			ob_start();
-			include realpath(dirname(__FILE__))."/../modules/{$this->page->php_code_file}";
+			include $config['homedir']."/{$this->page->php_code_file}";
 			$output = ob_get_contents();
 			ob_end_clean();
 			
@@ -46,7 +54,17 @@ class PageView
 			$template = str_replace("{".$field."}", $this->page->$field, $template);
 		}		
 		
+		$qs = $_SERVER['QUERY_STRING'];
+		$identifier = $_REQUEST["identifier"];
 		
+		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
+		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
+		
+		$printLink = "/{$this->page->identifier}".appendToQueryString($qs, "_style=print");
+		
+		$template = str_replace("{printIcon}", 
+			"<a href='$printLink' target='_blank'><img src='/framework/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
+			$template);
 		
 		// Populate the template with the appropriate menu(s).
 		
@@ -64,8 +82,12 @@ class PageView
 						
 			if (array_key_exists($position[1], $menus))
 			{
+				$output .= "<div id='$position[1]'>";
+				
 				$view = new MenuView($menus[$position[1]]);
-				$output = $view->drawView();				
+				$output .= $view->drawView();	
+				
+				$output .= "</div>";			
 			}
 			
 			$template = str_replace($position[0], $output, $template);			
@@ -116,6 +138,15 @@ class PageView
 			$expr = $var[0];
 			$name = $var[1];	
 			$template = str_replace($expr, $$name, $template);
+		}
+		
+		if (!$config['prettyURLs'])
+		{
+			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);
+			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)[\"']/i", "$1=$2/page.php?identifier=$3$2", $template);
+			$template = preg_replace("/go\\(([\"'])\\/?([\\w\\d_]+?)\\?/", "go($1/page.php?identifier=$2&", $template);
+			$template = preg_replace("/go\\(([\"'])\\/?([\\w\\d_]+?)[\"']/", "go($1/page.php?identifier=$2$1", $template);
+			
 		}
 		
 		return $template;

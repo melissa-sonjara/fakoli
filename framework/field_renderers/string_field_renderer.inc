@@ -66,9 +66,12 @@ class StringFieldRenderer extends FieldRenderer
 			ctrl.value = ctrl.value.substring(0, <?echo $this->limit ?>);
 			len = <?echo $this->limit ?>;
 		}
-
+		
 		var count = document.getElementById('<?echo $field ?>_length');
-		count.innerHTML = len;
+
+		// JDG 2/1/10 must check count to fix IE7 bug
+		if(count)
+			count.innerHTML = len;
 	}
 </script>
 <?
