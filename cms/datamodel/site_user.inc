@@ -46,7 +46,6 @@ class SiteUser extends DataItem
 						"first_name"	=>	String,
 						"last_name"		=>	String,
 						"role"			=>	String,
-						"clinic_id"		=>	Number,
 						"title"			=>	String,
 						"username"		=>	String,
 						"password"		=>	Password,
@@ -55,13 +54,6 @@ class SiteUser extends DataItem
 						
 	// Relations
 
-	var $relations = array(	"Clinic"	=> 	Clinic);
-	
-	function Clinic()
-	{
-		return $this->getRelated(Clinic);
-	}
-	
 	function SiteUser()
 	{
 		$this->primary_key = "user_id";
