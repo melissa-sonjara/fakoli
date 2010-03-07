@@ -66,7 +66,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
 			echo "<link href='{$this->parent->componentPath}/richtext/sonjara_richtext.css' type='text/css' rel='stylesheet'></link>\n";
 			echo "<script type='text/javascript'>\n";
-			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/');\n";
+			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/', '{$this->parent->componentPath}/richtext/');\n";
 			echo "</script>";
 			
 			HTMLFieldRenderer::$_includedRTEScript = true;

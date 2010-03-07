@@ -9,7 +9,8 @@
   <title>{page_title}</title>
   
 
-   <script type="text/javascript" src="/js/mootools.js"></script>
+   <script type="text/javascript" src="/js/mootools-core.js"></script>
+   <script type="text/javascript" src="/js/mootools-more.js"></script>
    <script type="text/javascript" src="/cms/js/sidebarmenu.js"></script>
    <script type="text/javascript" src="framework/functions.js"></script>
    {var:script}

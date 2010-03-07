@@ -144,11 +144,13 @@ var ua = navigator.userAgent.toLowerCase();
 
 var rteCSSpath = "";
 var rteImagePath = "";
+var rteRoot = "";
 
-function setRichTextEnv(cssPath, imagePath)
+function setRichTextEnv(cssPath, imagePath, root)
 {
 	rteCSSPath = cssPath;
 	rteImagePath = imagePath;
+	rteRoot = root;
 }
 
 isIE = ((ua.indexOf("msie") != -1) && (ua.indexOf("opera") == -1) && (ua.indexOf("webtv") == -1)); 
@@ -426,7 +428,7 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	function drawEditor()
 	{
 		var doc = "<div><iframe id='" + this.name + "' name='" + this.name + "' width='" + width + "' height='" + height + 
-				  "' src='blank.htm' style='border: solid 1px black'></iframe></div>";
+				  "' src='" + rteRoot + "blank.htm' style='border: solid 1px black'></iframe></div>";
 		doc += '<textarea id="' + this.clientID + '" name="' + this.clientID + '" style="display:none"></textarea>';
 		if (!this.readOnly) 
 		{
@@ -852,6 +854,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		    var doc = this.findFrame().document;
 		    var selection = doc.selection;
 		 
+		    //Workaround for bug in IE8
+		    doc.body.focus();
+		    
 		    if (!this.hasSelection)
 		    {
 		        // No insertion point - Insert at beginning of document
