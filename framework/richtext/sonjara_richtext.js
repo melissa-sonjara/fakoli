@@ -38,10 +38,8 @@ function Button(parent, name, image, tooltip, fn)
 	this.image = image;
 	this.tooltip = tooltip;
 	this.fn = fn;
-	this.toHTML = toHTML;
-	this.getImageURI = getImageURI;
 	
-	function toHTML()
+	this.toHTML = function()
 	{
 
 		var doc = "<img id='" + this.parent.getID() + "_" + this.name + 
@@ -51,26 +49,24 @@ function Button(parent, name, image, tooltip, fn)
 				  "' onclick='theEditors[\"" + this.parent.name + "\"]." + this.fn + "();'>";
 		
 		return doc;
-	}
+	};
 	
-	function getImageURI()
+	this.getImageURI = function()
 	{
 		if (this.image.substr(0, 1) == "/") return this.image;
 		if (this.image.substr(0, 7) == "http://") return this.image;
 		return this.parent.getImagePath() + this.image;
-	}
+	};
 }
 
 function Separator(parent)
 {
 	this.parent = parent;
 
-	this.toHTML = toHTML;
-	
-	function toHTML()
+	this.toHTML = function()
 	{
 		return "<img class='rteSeparator' src='" + this.parent.getImagePath() + "separator.gif' border='0' alt=''>";
-	}
+	};
 }
 
 function DropDownEntry(text, value, style, cl, def)
@@ -81,9 +77,7 @@ function DropDownEntry(text, value, style, cl, def)
 	this.cl = cl;
 	this.def = def;
 	
-	this.toHTML = toHTML;
-	
-	function toHTML()
+	this.toHTML = function()
 	{
 		var doc = "<option ";
 		if (this.cl) doc += "class='" + this.cl + "' ";
@@ -92,7 +86,7 @@ function DropDownEntry(text, value, style, cl, def)
 		doc += "value='" + this.value + "'>" + this.text + "</option>";
 		
 		return doc;
-	}
+	};
 }
 
 function DropDown(parent, title, name, fn, entries)
@@ -102,10 +96,7 @@ function DropDown(parent, title, name, fn, entries)
 	this.entries = entries;
 	this.fn = fn;
 	
-	this.toHTML = toHTML;
-	this.clearSelection = clearSelection;
-	
-	function toHTML()
+	this.toHTML = function()
 	{
 		var doc = "<select name='" + this.parent.name + "_" + this.name + 
 				  "' id='" + this.parent.name + "_" + this.name + 
@@ -120,9 +111,9 @@ function DropDown(parent, title, name, fn, entries)
 		doc += "</select>";
 		
 		return doc;
-	}
+	};
 	
-	function clearSelection()
+	this.clearSelection = function()
 	{
 	    var ctrl = document.getElementById(this.parent.name + "_" + this.name);
 	    if (ctrl == null) return;
@@ -133,7 +124,7 @@ function DropDown(parent, title, name, fn, entries)
 	    }
 	    
 	    ctrl.options[0].selected = true;
-	}
+	};
 }
 
 var isIE;
@@ -254,52 +245,6 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		this.cssFile = arguments[7];
 	}
 	
-	this.drawToolbar	  = drawToolbar;
-	this.drawEditor		  = drawEditor;
-	this.draw			  = draw;
-	this.getID		 	  = getID;
-	this.getImagePath	  = getImagePath;
-	this.enableDesignMode = enableDesignMode;
-	this.toggleHTMLSrc    = toggleHTMLSrc;
-	this.setHTML          = setHTML;
-	this.setHiddenVal	  = setHiddenVal;
-	this.stripHTML		  = stripHTML;
-	
-	this.rteCommand		      = rteCommand;
-	this.setToolbarVisibility = setToolbarVisibility;
-	
-	this.onBold			   = onBold;
-	this.onItalic		   = onItalic;
-	this.onUnderline	   = onUnderline;
-	this.onAlignLeft	   = onAlignLeft;
-	this.onAlignCenter	   = onAlignCenter;
-	this.onAlignRight	   = onAlignRight;
-	this.onJustify		   = onJustify;
-	this.onHorizontalRule  = onHorizontalRule;
-	this.onNumberedList	   = onNumberedList;
-	this.onBulletList	   = onBulletList;
-	this.onOutdent		   = onOutdent;
-	this.onIndent		   = onIndent;
-	this.onInsertLink      = onInsertLink;
-	this.onInsertImage     = onInsertImage;
-	this.onFontChange	   = onFontChange;
-	this.onStyleChange     = onStyleChange;
-	this.onGeckoKeyPress   = onGeckoKeyPress;
-	this.onClearFormatting = onClearFormatting;
-	this.cleanCloseTags    = cleanCloseTags;
-	this.findFrame		   = findFrame;
-	this.formatSelection   = formatSelection;
-	this.insertAtSelection = insertAtSelection; 
-	this.parseTag          = parseTag;
-	this.prepareForSubmit  = prepareForSubmit;
-	this.relativizeLinks   = relativizeLinks;
-	this.addToolbarButton  = addToolbarButton;
-	this.addStyle          = addStyle;
-	this.onSelectionChanged = onSelectionChanged;
-	this.toString           = toString;
-	this.clearStyleBar      = clearStyleBar;
-
-	
 	this.hasSelection = false;
 	
 	this.toolbar = [
@@ -367,7 +312,7 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 
 	theEditors[this.name] = this;
 		
-	function draw()
+	this.draw = function()
     {
         var w = this.width;
         if (this.width.indexOf("%") == -1)
@@ -396,9 +341,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		doc += "</div>";
 		//alert(doc);
 		document.write(doc);
-	}
+	};
 		
-	function drawToolbar(toolbar, toolbarName)
+	this.drawToolbar = function(toolbar, toolbarName)
 	{
 	    if (this.readOnly) return "";
 	    
@@ -414,18 +359,18 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		doc += "</div>";
 		
 		return doc;
-	}	
+	};
 
-	function setToolbarVisibility(toolbarName, state)
+	this.setToolbarVisibility = function(toolbarName, state)
 	{
 		var toolbarDiv = document.getElementById(this.name + "_" + toolbarName);
 		if (toolbarDiv)
 		{
 			toolbarDiv.style.visibility = state;
 		}
-	}
+	};
 			   		
-	function drawEditor()
+	this.drawEditor = function()
 	{
 		var doc = "<div><iframe id='" + this.name + "' name='" + this.name + "' width='" + width + "' height='" + height + 
 				  "' src='" + rteRoot + "blank.htm' style='border: solid 1px black'></iframe></div>";
@@ -439,10 +384,10 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		doc += '</div>';
 	
 		return doc;
-	}
+	};
 	
 	
-	function enableDesignMode() 
+	this.enableDesignMode = function() 
 	{
 		var frameHtml = "<html id=\"" + this.name + "\">\n";
 		frameHtml += "<head>\n";
@@ -495,12 +440,18 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 			if (!this.readOnly) 
 			{
 				oRTE.designMode = "On";
-				//this.findFrame().document.attachEvent("onkeypress", function evt_ie_keypress(event) {ieKeyPress(event, rte);});
+				//this.findFrame().document.attachEvent("onkeypress", this.evt_ie_keypress = function(event) {ieKeyPress(event, rte);});
 			}
 			
 			var name = this.name;
-			oRTE.onselectionchange = function() { selectionChangedCallback(name); }
+			var self = this;
 			
+			oRTE.onselectionchange = function() { selectionChangedCallback(name); };
+			setTimeout(function() 
+			{ 	
+				oRTE.body.onbeforepaste = function(evt) { self.ieBeforePaste(evt); };
+				oRTE.body.onpaste = function() { self.iePaste(); };
+			}, 1000);
 		} 
 		else 
 		{
@@ -541,14 +492,14 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 				}
 			}
 		}
-	}
+	};
 	
-	function findFrame()
+	this.findFrame = function()
 	{
 		return document.frames(this.name);
-	}
+	};
 	
-	function toggleHTMLSrc() 
+	this.toggleHTMLSrc = function() 
 	{
 		var oHdnField = document.getElementById(this.clientID);
 		var toolbar = document.getElementById(this.name + "_toolbar");
@@ -582,9 +533,21 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
             	
             this.setHTML(src.value);
 		}
-	}
+	};
 
-    function setHTML(html)
+	this.getEditor = function()
+	{
+		if (document.all)
+		{
+			return this.findFrame().document;
+		}
+		else
+		{
+			return document.getElementById(this.name).contentWindow.document;
+		}
+	};
+	
+    this.setHTML = function(html)
     {
 		if (document.all) 
 		{
@@ -599,9 +562,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 			var oRTE = document.getElementById(this.name).contentWindow.document;
 			oRTE.body.innerHTML = html;
 		}
-    }
+    };
     
-	function setHiddenVal() 
+	this.setHiddenVal = function() 
 	{
 		//set hidden form field value for current rte
 		var oHdnField = document.getElementById(this.clientID);
@@ -620,12 +583,12 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		//alert(oHdnField.value);
 		
 		//if there is no content (other than formatting) set value to nothing
-		if (stripHTML(oHdnField.value.replace("&nbsp;", " ")) == "" &&
+		if (this.stripHTML(oHdnField.value.replace("&nbsp;", " ")) == "" &&
 			oHdnField.value.toLowerCase().search("<hr") == -1 &&
 			oHdnField.value.toLowerCase().search("<img") == -1) oHdnField.value = "";
-	}
+	};
 
-	function stripHTML(oldString) 
+	this.stripHTML = function(oldString) 
 	{
 		//function to strip all html
 		var newString = oldString.replace(/(<([^>]+)>)/ig,"");
@@ -636,12 +599,12 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	    newString = newString.replace(/\r/g," ");
 		
 		//trim string
-		newString = trim(newString);
+		newString = this.trim(newString);
 		
 		return newString;
-	}
+	};
 		
-	function trim(inputString) 
+	this.trim = function(inputString) 
 	{
 	   	// Removes leading and trailing spaces from the passed string. Also removes
 	   	// consecutive spaces and replaces it with one space. If something besides
@@ -672,9 +635,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	    	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ") + 1, retValue.length);
 	   	}
 	   	return retValue; // Return the trimmed string back to the user
-	}
+	};
 
-	function rteCommand(command, option) 
+	this.rteCommand = function(command, option) 
 	{
 		//function to perform command
 		var oRTE;
@@ -698,87 +661,87 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	//		alert(e);
 	//		setTimeout("rteCommand('" + rte + "', '" + command + "', '" + option + "');", 10);
 		}
-	}
+	};
 
-	function onBold()
+	this.onBold = function()
 	{
 		this.rteCommand('bold', '');
-	}
+	};
 	
-	function onItalic()
+	this.onItalic = function()
 	{
 		this.rteCommand('italic', '');
-	}
+	};
 	
-	function onUnderline()
+	this.onUnderline = function()
 	{
 		this.rteCommand('underline', '');
-	}
+	};
 		
-	function onAlignLeft()
+	this.onAlignLeft = function()
 	{
 		this.rteCommand('justifyleft', '');
-	}
+	};
 	
-	function onAlignCenter()
+	this.onAlignCenter = function()
 	{
 		this.rteCommand('justifycenter', '');
-	}
+	};
 		
-	function onAlignRight()
+	this.onAlignRight = function()
 	{
 		this.rteCommand('justifyright', '');
-	}
+	};
 		
-	function onJustify()
+	this.onJustify = function()
 	{
 		this.rteCommand('justifyfull', '');
-	}
+	};
 	
-	function onHorizontalRule()
+	this.onHorizontalRule = function()
 	{
 		this.rteCommand('inserthorizontalrule', '');
-	}
+	};
 	
-	function onNumberedList()
+	this.onNumberedList = function()
 	{
 		this.rteCommand('insertorderedlist', '');
-	}
+	};
 	
-	function onBulletList()
+	this.onBulletList = function()
 	{
 		this.rteCommand('insertunorderedlist', '');
-	}
+	};
 	
-	function onOutdent()
+	this.onOutdent = function()
 	{
 		this.rteCommand('outdent', '');
-	}
+	};
 	
-	function onIndent()
+	this.onIndent = function()
 	{
 		this.rteCommand('indent', '');
-	}
+	};
 	
-	function onInsertLink()
+	this.onInsertLink = function()
 	{
 	    var url = prompt("Enter a URL: ", "");
 	    if (url)
 	    {
     	    this.formatSelection("<a href=\"" + url + "\">");
     	}
-	}
+	};
 	
-	function onInsertImage()
+	this.onInsertImage = function()
 	{
 	    var url = prompt("Enter an Image URL: ", "");
 	    if (url)
 	    {
     	    this.insertAtSelection("<img border=\"0\" src=\"" + url + "\">");
     	}
-	}
+	};
 		
-	function onFontChange()
+	this.onFontChange = function()
 	{
 		var font = document.getElementById(this.name + "_font").value;
 		var size = document.getElementById(this.name + "_fontsize").value;
@@ -790,9 +753,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		block += "'>";
 		this.formatSelection(block);
 		this.clearStyleBar();
-	}
+	};
 	
-	function onStyleChange()
+	this.onStyleChange = function()
 	{
 		var block = document.getElementById(this.name + "_style").value;
 		if (block == "") return;
@@ -800,22 +763,22 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		//this.cleanCloseTags();
 		this.formatSelection(block);
 		this.clearStyleBar();
-	}
+	};
 	
-	function clearStyleBar()
+	this.clearStyleBar = function()
 	{
 	    for(dropdown in this.stylebar)
 	    {
 	        this.stylebar[dropdown].clearSelection();
 	    }
-	}
+	};
 	    
-	function onSelectionChanged()
+	this.onSelectionChanged = function()
 	{
 	    this.hasSelection = true;
-	}
+	};
 	    
-	function formatSelection(tag)
+	this.formatSelection = function(tag)
 	{
 		if (window.getSelection)
 		{
@@ -836,9 +799,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 			html += "</" + matches[1] + ">";
 			range.pasteHTML(html);
 		}
-	}
+	};
 	
-	function insertAtSelection(tag)
+	this.insertAtSelection = function(tag)
 	{
 		if (window.getSelection)
 		{
@@ -868,9 +831,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 			    range.pasteHTML(tag);
 			}
 		}
-	}
+	};
 	
-	function parseTag(tag)
+	this.parseTag = function(tag)
 	{
 		var tagPattern = new RegExp("<(\\w+)\\s*(.*)>", "g");
 		var attrPattern = new RegExp("(\\w+)=[\"'](.*?)[\"']");
@@ -898,9 +861,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		if (content) elt.innerHTML = content[1];
 		
 		return elt;
-	}
+	};
 	
-	function cleanCloseTags()
+	this.cleanCloseTags = function()
 	{
 		var pattern = /<\/(\w*?)\s+.*?>/g;
 		
@@ -915,24 +878,24 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 			//alert(html);
 			document.getElementById(this.name).contentWindow.document.body.innerHTML = html;
 		}
-	}
+	};
 	
-	function onTextColor()
+	this.onTextColor = function()
 	{
 	
-	}
+	};
 	
-	function getID()
+	this.getID = function()
 	{
 		return this.name;
-	}
+	};
 	
-	function getImagePath()
+	this.getImagePath = function()
 	{
 		return (rteImagePath != "") ? rteImagePath : "images/";
-	}
+	};
 	
-	function onGeckoKeyPress(evt)
+	this.onGeckoKeyPress = function(evt)
 	{
 		if (evt.ctrlKey) 
 		{
@@ -943,6 +906,7 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 				case 'b': cmd = "bold"; break;
 				case 'i': cmd = "italic"; break;
 				case 'u': cmd = "underline"; break;
+				case 'v': this.onGeckoPaste(evt); return;
 			};
 	
 			if (cmd) 
@@ -954,31 +918,109 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 				evt.stopPropagation();
 			}
 	 	}		
-	}
+	};
 	
-	function onClearFormatting()
+	this.onGeckoPaste = function(evt)
+	{
+		this.insertCleaningContainer();
+		var self = this;
+		setTimeout(function() { self.cleanPaste(); }, 50);
+	};
+	
+	this.ieBeforePaste = function()
+	{
+		var oRTE = this.getEditor();
+		var cleaner = oRTE.getElementById('HTMLCleansingNode');
+		if (cleaner) cleaner.parentNode.removeChild(cleaner);
+		
+		this.insertCleaningContainer();
+	};
+	
+	this.iePaste = function()
+	{
+		var self = this;
+		setTimeout(function() { self.cleanPaste(); }, 50);
+	};
+	
+	this.cleanPaste = function()
+	{
+		var oRTE = this.getEditor();
+		var cleaner = oRTE.getElementById('HTMLCleansingNode');
+		var pure = this.cleanHTML(cleaner.innerHTML);
+		var newText = document.createElement('span');
+		newText.innerHTML = pure;
+
+		if (document.all)
+		{
+			cleaner.parentNode.removeChild(cleaner);
+			this.insertAtSelection(pure);
+		}
+		else
+		{
+			cleaner.parentNode.replaceChild(newText, cleaner);
+		}		
+	};
+	
+	this.insertCleaningContainer = function()
+	{
+		this.insertAtSelection("<div id='HTMLCleansingNode'>_</div>");
+		var oRTE = this.getEditor();
+		this.selectNodeContents(oRTE.getElementById('HTMLCleansingNode'));
+	};
+	
+	this.onClearFormatting = function()
 	{
 	    this.setHiddenVal();
 	    var oHdnField = document.getElementById(this.clientID);
-	    var text = oHdnField.value;
+	    var text = this.cleanHTML(oHdnField.value);
+	    oHdnField.value = text;
+	    this.setHTML(oHdnField.value);
+	};
 	    
-	    text = text.replace(/<\!--\s*\[if(?:.|[\n\r])*?<\!\[endif\]\s*-->/gi, "");
+	this.cleanHTML = function(text)
+	{
+		text = text.replace(/<\!--\s*\[if(?:.|[\n\r])*?<\!\[endif\]\s*-->/gi, "");
 	    text = text.replace(/<style.*?>(?:.|[\n\r])*?<\/style>/gi, "");
 	    text = text.replace(/<script.*?>(?:.|[\n\r])*?<\/script>/gi, "");
 		text = text.replace(/<link(?:.|[\n\r])*?>/gi, "");
 
-	    text = text.replace(/<(\/?(?:p|a[^>]*|h\d|ul|ol|li|br|hr)).*?>/gi, "[_*_[$1]_*_]");
+	    text = text.replace(/<(\/?(?:p|a[^>]*|h\d|ul|ol|li|br|hr|table|tbody|thead|tfoot|tr|td)).*?>/gi, "[_*_[$1]_*_]");
 	    text = text.replace(/<.*?>/gi, "");
 	    text = text.replace(/\[_\*_\[/gi, "<");
 	    text = text.replace(/\]_\*_\]/gi, ">");
 	    text = text.replace(/<p>\s*<\/p>/g, "");
-	    	    
-	    oHdnField.value = text;
-	    this.setHTML(oHdnField.value);
-	}
-	    
-	    
-	function prepareForSubmit()
+	    return text;
+	};
+	
+	this.selectNodeContents = function(node)
+	{
+		if (!node) return false;
+		
+		var oRTE = this.getEditor();
+
+		if (window.getSelection)
+		{
+			range = oRTE.createRange();
+			range.selectNodeContents(node);
+			var selection = document.getElementById(this.name).contentWindow.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+		}
+		else
+		{
+			try
+			{
+				range = oRTE.body.createTextRange();
+				range.moveToElementText(node);
+				range.select();
+			}
+			catch(e)
+			{
+			}
+		}
+	};
+	
+	this.prepareForSubmit = function()
 	{
 		var chkSrc = document.getElementById("chkSrc" + this.name);
 		if (!chkSrc.checked) 
@@ -987,9 +1029,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 		}
 		
 		this.relativizeLinks();
-	}
+	};
 	
-	function relativizeLinks()
+	this.relativizeLinks = function()
 	{
 	    // If there is a Base HREF defined, we should convert any absolute
 	    // links to that path into relative links before saving. The absolute
@@ -1013,9 +1055,9 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	        
 	        oHdnField.value = text;
 	    }
-	}
+	};
 	
-	function addToolbarButton(name, image, tooltip, url, width, height)
+	this.addToolbarButton = function(name, image, tooltip, url, width, height)
 	{
 	    var fn = "onButton" + name;
 	    url += (url.indexOf("?") > -1) ? "&" : "?";
@@ -1029,14 +1071,14 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	                };
 	
         this.toolbar.push(new Button(this, name, image, tooltip, fn));
-	}
+	};
 	
-	function addStyle(name, defn)
+	this.addStyle = function(name, defn)
 	{
 	    this.stylebar[2].entries.push(new DropDownEntry(name, defn, '', '', false));
-	}
+	};
 	
-	function toString()
+	this.toString = function()
 	{
 	    var str = "[RichTextEditor]:\nname = " + this.name + "\n" +
 	              "clientID = " + this.clientID + "\n" +
@@ -1046,7 +1088,7 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
             	  "baseHref = " + this.baseHref + "\n" +
             	  "cssFile = " + this.cssFile  + "\n" +
             	  "hasSelection = " + this.hasSelection;
-    }
+    };
 }
 
 function getOffsetLeft (el) 

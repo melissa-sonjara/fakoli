@@ -841,6 +841,8 @@ function canonicalizeURL($url)
 		$out = realpath($config['homedir'].$url);
 	}
 	
+	$out = str_replace('\\', '/', $out);
+	
 	if (!startsWith($out, $config['homedir'])) return null;
 	$out = str_replace($config['homedir'], "http://{$config['http_host']}", $out);
 	
