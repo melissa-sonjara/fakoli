@@ -529,6 +529,65 @@ class DataItem
 		return $query;			
 	}
 	
+	function formatFieldValue($field)
+	{
+		$type = $this->fields[$field];
+		
+		$val = ""; 
+		switch($type)
+		{
+		case Number:
+		
+			if ($this->$field == "" || !is_numeric($this->$field))
+			{
+				$val = "0";
+			}
+			else
+			{
+				$val = $this->$field;
+			}
+			break;
+	
+		case Currency:
+					
+			if ($this->$field == "" || !is_numeric($this->$field))
+			{
+				$val = "0";
+			}
+			else
+			{
+				$val = number_format($this->$field, 2);
+			}
+			break;
+						
+		case Date:
+		
+			if (!$this->field) return "";
+			$val = formatDateShort($this->field);
+			break;
+			
+		case Timestamp:
+			
+			$val = date("Y-m-d H:i:s");
+			break;
+			
+		case Boolean:
+			
+			$query .= ($this->$field) ? "True" : "False";
+			break;
+			
+		case String:
+		case Text:
+			
+		default:
+		
+			$val = $this->$field;
+			break;
+		}		
+
+		return $val;					
+	}
+	
 	/**
 	 * Format field for XML output
 	 */
@@ -1081,12 +1140,12 @@ class DataItem
 		
 	function format($template = "", $separator = ", ")
 	{
-		trace(get_class($this)." Format: $template", 3);
+		trace(get_class($this)." Format: $template", 4);
 		if ($template == "") $template = $this->default_format;
 		
 		foreach($this->fields as $field => $type)
 		{
-			$template = str_replace("{".$field."}", $this->$field, $template);
+			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
 		}
 
 		// Feature enhancement - allow drill-down through relation functions
@@ -1120,10 +1179,10 @@ class DataItem
 			}
 			else
 			{
-				$sub = $relations->$field;
+				$sub = $relations->formatFieldValue($field);
 			}
 			
-			trace("Replacing {$match[0]} [ $format ] with '$sub'", 3);
+			trace("Replacing {$match[0]} [ $format ] with '$sub'", 4);
 			
 			$template = str_replace($format, $sub, $template);
 		}

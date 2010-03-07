@@ -22,6 +22,11 @@ if (!$page->published && !checkRole("admin")) die("Unrecognized page '$identifie
 
 $page_role = $page->role;
 
+if (!checkRole($page->role))
+{
+	redirect("/login");
+}
+
 require_once "include/permissions.inc";
 
 $pageView = new PageView($page, "{$page->template}.tpl");

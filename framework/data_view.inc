@@ -47,6 +47,88 @@ class DataColumn
 }
 
 /**
+ * Abstract base class for footer column definitions.
+ * @author andy
+ */
+abstract class FooterColumn
+{
+	var $colspan;	///< The colspan for this column
+	var $style;		///< Any CSS styles to be applied to this column
+	
+	function FooterColumn($style = "", $colspan = 1)
+	{
+		$this->colspan = $colspan;
+		$this->style = $this->style;
+	}
+	
+	/**
+	 * Renderering function for the footer column.
+	 * @return string
+	 */
+	abstract function format();	
+}
+
+/**
+ * Text footer column definition.
+ * @author andy
+ */
+class FooterTextColumn extends FooterColumn
+{
+	var $text;	///< The text to display in this footer column
+	
+	/**
+	 * Creates a new FooterTextColumn
+	 * @param $text the text to display
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 */
+	function FooterTextColumn($text = "", $style = "", $colspan = 1)
+	{
+		$this->text = $text;
+		$this->FooterColumn($style, $colspan);
+	}
+	
+	/**
+	 * Renderering function for the footer column.
+	 * @return string
+	 */
+	function format()
+	{
+		return $this->text;
+	}
+}
+	
+/**
+ * Value footer column definition.
+ * @author andy
+ */
+class FooterValueColumn extends FooterColumn
+{
+	var $callback;	///< Callback function or object method used to calculate the value.
+	
+	/**
+	 * Creates a new FooterValueColumn
+	 * @param $callback Callback function or object method used to calculate the value for this column.
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 */
+	function FooterValueColumn($callback, $style = "", $colspan = 1)
+	{
+		$this->callback = $callback;		
+		$this->FooterColumn($style, $colspan);
+	}
+	
+	/**
+	 * Renderering function for the footer column.
+	 * @return string
+	 */
+	function format()
+	{
+		return call_user_func($this->callback);
+	}
+}
+
+/**
  * DataListView displays a list of DataItems (or InnerJoinResults) in tabular format.
  * The table is optionally sortable and filterable by column, and can be automatically
  * paginated. The full table is sent to the client and sorting, filtering and pagination
@@ -60,7 +142,8 @@ class DataColumn
  */
 class DataListView
 {
-	var $columns;		///< The column definitions for the table output.
+	var $columns;		///< The column definitions for the table.
+	var $footerColumns;	///< The footer column definitions for the table.
 	var $cssClass;		///< Optional CSS class to apply to the table
 	var $id;			///< ID of the table in the output script.
 	var $sortable;		///< Specifies whether to enable client-side sorting for this table
@@ -110,6 +193,32 @@ class DataListView
 		return $this;
 	}
 
+	/**
+	 * Adds a text column to the table footer.
+	 * @param $text the text to display
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerText($text = "", $style = "", $colspan = 1)
+	{
+		$this->footerColumns[] = new FooterTextColumn($text, $style, $colspan);
+		return $this;
+	}
+	
+	/**
+	 * Adds a value column to the table footer.
+	 * @param $callback Callback function or object method used to calculate the value for this column.
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerValue($callback, $style = "", $colspan = 1)
+	{
+		$this->footerColumns[] = new FooterValueColumn($callback, $style, $colspan);
+		return $this;
+	}
+	
 	/**
 	 * Sets the client-side ID for this DataListView. 
 	 * @param $id the ID to use. Passing in null will generate a random ID string.
@@ -286,6 +395,46 @@ class DataListView
 		  </tr>
 <?
 			}
+?>
+		</tbody>
+<?
+			if ($this->onDrawFooter) call_user_func($this->onDrawFooter);
+			
+			if (count($this->footerColumns) > 0)
+			{
+?>
+		<tfoot>
+		  <tr>		
+<?
+				foreach($this->footerColumns as $column)
+				{
+					$attrs = "";
+					$cssClass = "";
+					if ($column->style)
+					{
+						if (preg_match("/^[\\w_]*$/", $column->style))
+						{
+							$attrs .= " class='{$column->style}'";
+						}
+						else
+						{
+							$attrs .= " style='{$column->style}'";
+						}
+					}
+
+					if ($column->colspan != 1)
+					{
+						$attrs .= " colspan='{$column->colspan}'";
+					}
+					?>
+			<td<?echo $attrs?>><?echo $column->format()?></td>								
+<?
+				}
+?>
+		  </tr>
+		</tfoot>	
+<?
+			}
 ?>  		
 		</table>
 <?
@@ -339,6 +488,23 @@ class DataListView
 				++$c;
 			}
 			++$r;
+		}
+		
+		$c = 0;
+		
+		foreach($this->footerColumns as $column)
+		{
+			$val = $column->format();
+			if (preg_match("/^[\\d\\.]+$/", $val))
+			{
+				$x->writeNumber($r, $c, $val);
+			}
+			else
+			{
+				// No HTML required in Excel output
+				$x->writeText($r, $c, stripHTML($val));
+			}
+			$c += $column->colspan;
 		}
 		
 		$x->send();
