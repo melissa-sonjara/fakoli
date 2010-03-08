@@ -4,33 +4,80 @@ require_once realpath(dirname(__FILE__))."/join.inc";
 require_once realpath(dirname(__FILE__))."/excel.inc";
 
 /**
- * DataListView displays a list of DataItems (or InnerJoinResults) in tabular format.
- * The table is optionally sortable and filterable by column, and can be automatically
- * paginated. The full table is sent to the client and sorting, filtering and pagination
- * are handled at the client via Javascript.
+ * Represents a grouped collection of data within a table.
+ * @author andy
+ */
+class DataGroup
+{
+	var $parent; 	///< The parent GroupedDataListView object
+	var $title;	 	///< The text to display in the title for this data group
+	var $key;		///< The key value for this data group
+	var $expanded;	///< Boolean indicating whether this group should initially be expanded.
+	var $fixed;		///< Specifies whether this group should be fixed (i.e. exempt from expand/collapse toggling).
+	
+	/**
+	 * Creates a new DataGroup
+	 * @param $parent the parent table
+	 * @param $title The text to display in the title for this data group
+	 * @param $key The key value for this data group
+	 * @param $expanded Boolean indicating whether this group should initially be expanded.
+	 * @param $fixed Specifies whether this group should be fixed (i.e. exempt from expand/collapse toggling).
+	 */
+	function DataGroup($parent, $title, $key, $expanded = false, $fixed = false)
+	{
+		$this->parent = $parent;
+		$this->title = $title;
+		$this->key = $key;
+		$this->expanded = $expanded;
+	}
+
+	/**
+	 * Draws the data group subheading within the table.
+	 */
+	function draw()
+	{
+		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : ($this->expanded) ? "expanded" : "collapsed";
+?>
+	<tr class="<?echo $this->parent->groupClass?> <?echo $cssClass?>">
+	 <td colspan="<?echo $this->parent->columnCount?>"><?echo $this->title?></td>
+	</tr>
+<?
+	}
+}
+
+/**
+ * GroupedDataListView displays a list of DataItems (or InnerJoinResults) in tabular format
+ * grouped by a specific field.
  * 
- * DataListViews can also be rendered directly into binary Microsoft Excel format via the 
+ * Grouped tables cannot be sortable or filterable by column or paginated. However, the groups
+ * can optionally be expandable by clicking, in either a "tree" or "accordion" style. With
+ * "tree" mode, each group can be expanded or hidden independently of the others. With 
+ * "accordion" mode, only one group can be expanded at a time. With "fixed" mode, all the 
+ * groups are displayed and cannot be hidden.
+ * 
+ * GroupedDataListViews can also be rendered directly into binary Microsoft Excel format via the 
  * writeExcelFile() method.
  * 
  * @author andy
  *
  */
-class DataListView
+class GroupedDataListView
 {
 	var $columns;		///< The column definitions for the table.
 	var $footerColumns;	///< The footer column definitions for the table.
 	var $cssClass;		///< Optional CSS class to apply to the table
+	var $groupClass;	///< The CSS class to apply to the group subheading rows.
 	var $id;			///< ID of the table in the output script.
-	var $sortable;		///< Specifies whether to enable client-side sorting for this table
-	var $pageSize;		///< Specifies the number of items per page - set to zero for unpaginated
 	var $cssStyle;		///< Optional additional inline styles to apply to the table
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
-	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
-	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
+	var $onDrawFooter;	///< Callback hook that gets called after all rows have been drawn.
+	var $mode;			///< The display mode for the table.
+	var $groups;		///< The group definitions.
+	var $items;			///< The items to be displayed.
 	
 	/**
-	 * Creates a new DataListView object.
+	 * Creates a new GroupedDataListView object.
 	 * 
 	 * @param array $items the array of DataItems or InnerJoinResults to be displayed
 	 * @param string $id the client-side ID for this table
@@ -39,21 +86,49 @@ class DataListView
 	 * @param integer $pageSize Specifies the number of items per page - set to zero for unpaginated
 	 * @param boolean $filter Specifies whether to enable client-side filtering for this table. 
 	 */
-	function DataListView($items, $id, $cssClass = "list", $sortable = true, $pageSize = 0, $filter = false)
+	function GroupedDataListView($items, $id, $cssClass = "list", $groupClass = "subheading")
 	{
 		$this->items = $items;
 		$this->id = $id;
 		$this->cssClass = $cssClass;
-		$this->sortable = $sortable;
-		$this->filter = $filter;
-		$this->pageSize = $pageSize;
+		$this->groupClass = $groupClass;
 		$this->cssStyle = null;
 		$this->emptyMessage = "No matching items.";
 		$this->onStartRow = null;
-		
-		return $this;
+		$this->onDrawFooter = false;
+		$this->mode = "fixed";
 	}
 
+	/**
+	 * Adds a group to the view.
+	 * @param unknown_type $title the title text for the group.
+	 * @param unknown_type $key the key value for the group.
+	 * @param unknown_type $expanded true for expanded by default, false for collapsed by default
+	 * @return GroupDataListView returns the current instance, allowing function call chaining for the group definitions.
+	 */
+	function group($title, $key, $expanded = false, $fixed = false)
+	{
+		$this->groups[] = new DataGroup($this, $title, $key, $expanded);
+		return $this;
+	}
+	
+	/**
+	 * Add groups based on the supplied list of DataItems.
+	 * @param $groups list of DataItems
+	 * @param $format format template for the group titles
+	 * @param $field the field to use for the key (defaults to the primary key of the group items if not specified)
+	 */
+	function groupBy($groups, $format = null, $field = "")
+	{
+		if (count($groups) == 0) return;
+		if (!$field) $field = $groups[0]->primary_key;
+		
+		foreach($groups as $group)
+		{
+			$this->group($group->format($format), $group->$field);
+		} 
+	}
+	
 	/**
 	 * Adds a column definition to the DataListView.
 	 * @param $title the tilte of the column
@@ -136,43 +211,18 @@ class DataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
-		$script = 
-		"\t<script type='text/javascript' src='/js/sorting_table.js'></script>\n".
-	   	"\t<script type='text/javascript' src='/js/paginating_table.js'></script>\n".  
-		"\t<script type='text/javascript' src='/js/filtering_table.js'></script>\n";
+		$script = "<script type='text/javascript' src='/js/grouping_table.js'></script>\n";
 		
 		$constructor = "";
-		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter)
+
+		if ($this->mode != 'fixed')
 		{
-			return "";
-		}
-		
-		if ($this->pageSize > 0)
-		{
-			$constructor = "\n\t\tvar {$this->id}_paginator = new PaginatingTable('{$this->id}', '{$this->id}_paginator', {per_page: {$this->pageSize}});";
-		}
-		else
-		{
-			$constructor = "\n\t\tvar {$this->id}_paginator = false;";
+			$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";
 		}
 
-		if ($this->filter !== false)
-		{
-			$constructor .= "\n\t\tvar {$this->id}_filter = new FilteringTable('{$this->id}', '{$this->id}_filter', {column: {$this->filter}, paginator: {$this->id}_paginator});";		
-		}
-		else
-		{
-			$constructor .= "\n\t\tvar {$this->id}_filter = false;";
-		}
-
-		if ($this->sortable)
-		{
-			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter});";
-		}
-		
 		if ($constructor)
 		{
-			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
+			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n\t{";
 			$script .= $constructor;
 			$script .= "\n\t});\n\t</script>\n";
 		}
@@ -205,10 +255,10 @@ class DataListView
 			{
 				$attrs .= " style='{$this->cssStyle}'";
 			}
+			
+			$this->columnCount = count($this->columns);
 		
 ?>
-		<div style="float: right" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
-		<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div>
 		<table<?echo $attrs?>>
 		 <thead>
 		  <tr>
@@ -216,7 +266,7 @@ class DataListView
 			foreach($this->columns as $column)
 			{
 				$attrs = "";
-				$cssClass = "";
+				$cssClass = "nosort";
 				if ($column->style)
 				{
 					if (preg_match("/^[\\w_]*$/", $column->style))
@@ -227,10 +277,6 @@ class DataListView
 					{
 						$attrs .= " style='{$column->style}'";
 					}
-				}
-				if (!$column->sortable)
-				{
-					$cssClass = trim($cssClass." nosort");
 				}
 
 				if ($cssClass)
@@ -246,29 +292,37 @@ class DataListView
 		 </thead>
 		 <tbody>
 <?
-			foreach($this->items as $item)
+			foreach($this->groups as $group)
 			{
-				if ($this->onStartRow)
+				if (array_key_exists($group->key, $this->items))
 				{
-					call_user_func($this->onStartRow, $item);
-				}
+					$group->draw();
+
+					foreach($this->items[$group->key] as $item)
+					{
+						if ($this->onStartRow)
+						{
+							call_user_func($this->onStartRow, $item);
+						}
 ?>
           <tr>
 <?
-				foreach($this->columns as $column)
-				{
-					$attrs = "";
-					if ($column->style)
-					{
-						$attrs .= " style='{$column->style}'";
-					}
+						foreach($this->columns as $column)
+						{
+							$attrs = "";
+							if ($column->style)
+							{
+								$attrs .= " style='{$column->style}'";
+							}
 ?>
 		    <td><?echo $column->format($item)?></td>
 <?
-				}
+						}
 ?>
 		  </tr>
 <?
+					}
+				}
 			}
 ?>
 		</tbody>
@@ -339,32 +393,41 @@ class DataListView
 		}
 		
 		$r = 1;
-		foreach($this->items as $item)
+		foreach($this->groups as $group)
 		{
-			$c = 0;
-			if ($this->onStartRow)
+			if (array_key_exists($group->key, $this->items))
 			{
-				call_user_func($this->onStartRow, $item);
-			}
-			
-			foreach($this->columns as $column)
-			{
-				$val = $column->format($item);
-				if (preg_match("/^[\\d\\.]+$/", $val))
-				{
-					$x->writeNumber($r, $c, $val);
-				}
-				else
-				{
-					// No HTML required in Excel output
-					$x->writeText($r, $c, stripHTML($val));
-				}
+				$x->writeText($r, 0, $group->title);
+				$r++;
 				
-				++$c;
+				foreach($this->items as $item)
+				{
+					$c = 0;
+					if ($this->onStartRow)
+					{
+						call_user_func($this->onStartRow, $item);
+					}
+					
+					foreach($this->columns as $column)
+					{
+						$val = $column->format($item);
+						if (preg_match("/^[\\d\\.]+$/", $val))
+						{
+							$x->writeNumber($r, $c, $val);
+						}
+						else
+						{
+							// No HTML required in Excel output
+							$x->writeText($r, $c, stripHTML($val));
+						}
+						
+						++$c;
+					}
+					++$r;
+				}
 			}
-			++$r;
 		}
-		
+
 		$c = 0;
 		
 		foreach($this->footerColumns as $column)
