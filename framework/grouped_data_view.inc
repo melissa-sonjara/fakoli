@@ -211,7 +211,7 @@ class GroupedDataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
-		$script = "<script type='text/javascript' src='/js/grouping_table.js'></script>\n";
+		$script = "<script type='text/javascript' src='/framework/js/grouping_table.js'></script>\n";
 		
 		$constructor = "";
 

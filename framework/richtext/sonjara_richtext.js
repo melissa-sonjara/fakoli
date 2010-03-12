@@ -979,6 +979,7 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	    
 	this.cleanHTML = function(text)
 	{
+		text = text.replace(/<\!--\s*\[if.*?supportLists\s*\]-->(.*?)<\!--\[endif\]\s*-->/gi, "$1");
 		text = text.replace(/<\!--\s*\[if(?:.|[\n\r])*?<\!\[endif\]\s*-->/gi, "");
 	    text = text.replace(/<style.*?>(?:.|[\n\r])*?<\/style>/gi, "");
 	    text = text.replace(/<script.*?>(?:.|[\n\r])*?<\/script>/gi, "");
@@ -989,6 +990,7 @@ function RichTextEditor(name, clientID, html, width, height, buttons, readOnly)
 	    text = text.replace(/\[_\*_\[/gi, "<");
 	    text = text.replace(/\]_\*_\]/gi, ">");
 	    text = text.replace(/<p>\s*<\/p>/g, "");
+	    text = text.replace(/<table>/, "<table class='list'>");
 	    return text;
 	};
 	
