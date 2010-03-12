@@ -73,6 +73,7 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $addEntry;
 	var $addEntryText;
 	var $grouped;
+	var $addEntrySize= 20;
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -89,6 +90,34 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 	}
 		
+	function _startField($field, $styles = "")
+	{
+		if ($this->colspan > 1) $styles = "vertical-align: top; text-align: left;$styles";
+		echo "<tr style='vertical-align:top'>\n";
+		$this->_printLabel($field, $this->colspan, $styles, ($this->colspan > 1) ? $this->parent->annotations[$field] : "");
+		
+		if ($this->colspan > 1)
+		{
+			echo "</tr>\n";
+			echo "<tr>\n";
+		}
+		echo "<td colspan='{$this->colspan}'";
+		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
+		echo ">";
+		
+		if ($this->annotateBefore && $this->parent->annotations[$field] && $this->colspan == 1)
+		{
+			echo $this->parent->annotations[$field]."<br/>";
+		}
+	}
+	
+	function allowAddEntry($text = "or add new", $size)
+	{
+		$this->addEntry = true;
+		$this->addEntryText = $text;
+		$this->addEntrySize = $size;
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
@@ -114,13 +143,38 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 		else
 		{
-			foreach($this->options as $value => $text)
+			if(count($this->options) > 0)
 			{
-				$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
-				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='$value'$checked/>&nbsp;$text<br/>";
+				foreach($this->options as $value => $text)
+				{
+					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+					echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='$value'$checked/>&nbsp;$text<br/>";
+				}
+
+				if($this->addEntry)
+				{
+					foreach($values as $value)
+					{
+						if(!array_key_exists($value, $this->options))
+							$addEntryValue .= $value;
+					}
+				}
 			}
 		}
-
+		
+		if ($this->addEntry)
+		{
+			echo "&nbsp;{$this->addEntryText}&nbsp;";
+		}
+		
+		if ($this->addEntry)
+		{
+			echo "<input type='text' name='{$field}_addEntry' value='{$addEntryValue}' size='{$this->addEntrySize}'/>";
+		}
+		
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".count($this->options)."\">";		
+		
 		$this->_endField($field);
 	}
 	
@@ -148,7 +202,14 @@ class CheckListFieldRenderer extends FieldRenderer
 			$this->parent->data->$field = $_POST[$field];
 		}
 		
-		if (!isset($this->parent->data->$field)) $this->parent->data->$field = "";
+		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
+		
+		if ($_POST["{$field}_addEntry"])
+		{
+			if($this->parent->data->$field)
+				$this->parent->data->$field .= ",";	
+			$this->parent->data->$field .= $_POST["{$field}_addEntry"];
+		}
 	}
 	
 }

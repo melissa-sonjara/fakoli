@@ -54,6 +54,9 @@ class CurrencyFieldRenderer extends FieldRenderer
 	{
 		$value = htmlspecialchars($this->parent->data->$field, ENT_QUOTES, 'UTF-8');
 		
+		// display with commas between thousands
+		$value = number_format($value, 2);
+		
 		$this->_startField($field);
 
 		echo "$&nbsp;<input type='text' name='$field' value='{$value}' size='20'/>";
@@ -92,4 +95,12 @@ class CurrencyFieldRenderer extends FieldRenderer
 		echo ">$".number_format($this->parent->data->$field, 2)."</td>\n";		
 		echo "</tr>\n";			
 	}
+	
+	// allow user to enter commas if they wish and strip them out before saving
+	function preProcess($field)
+	{
+		$value= $_POST[$field];
+		$this->parent->data->$field = str_replace(",", "", $value);
+	}
+	
 }

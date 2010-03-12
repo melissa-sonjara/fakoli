@@ -553,6 +553,135 @@ ENDSCRIPT;
 
 
 /**
+ * RequiredTextValidator.
+ * 
+ * For fields rendered with TextFieldRenderer
+ *  
+ * Add this validator the the script using:
+ * $form->validator->add(new RequiredTextValidator($field, $label, $empty));
+ */
+class RequiredTextValidator extends RequiredValidator
+{
+	var $empty = "";
+	
+	function RequiredTextValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		$script = <<<ENDSCRIPT
+		
+		
+	if (form["{$this->field}"].value == "{$this->empty}")
+	{
+		alert("{$this->title} is a required field. Please supply a value.");
+		return false;
+	}
+ENDSCRIPT;
+
+		return $script;
+	}
+}
+
+
+
+/**
+ * RequiredCheckList Validator.
+ * 
+ * Verifies min count of checkboxes checked
+ * 
+ * Add this validator the the script using:
+ * $form->validator->add(new RequiredCheckListValidator($field, $label, $min));
+ */
+class RequiredCheckListValidator extends RequiredValidator
+{
+	var $min = "";
+	var $empty = "";
+	var $addEntry = false;
+	
+	function RequiredCheckListValidator($field, $title, $min = 1, $addEntry = true)
+	{
+		$this->min = $min;
+		$this->AbstractValidator($field, $title);
+		$this->addEntry = $addEntry;
+	}
+	
+	function writeClient()
+	{
+$script = <<<ENDSCRIPT
+		
+		var i = 1;
+		var countChecked = 0;
+		var max = form["count_{$this->field}"].value;
+		var fieldName;
+
+		for(i=1; i <= max; i++)
+		{
+			fieldName = form["{$this->field}["+i+"]"];
+			if(fieldName.checked == true)
+				countChecked += 1;
+		}
+
+	var addEntry = form["{$this->field}_addEntry"];
+	
+	if(addEntry && addEntry.value != "")
+	{
+		countChecked += 1;
+	}
+	
+	if ({$this->min} > 0 && countChecked < {$this->min})
+	{
+		alert("You must check at least {$this->min} checkboxes for {$this->title}.");
+		return false;
+	}
+		
+	
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	
+	function validate()
+	{
+		global $_POST;
+
+		$values = $_POST[$this->field];
+		
+		// convert array of checks to comma delimated string and 
+		// back again to eliminate blanks
+		if (is_array($values))
+		{
+			$valueAnswer = implode(",",  array_values($values));
+			$count = count(explode(",", $valueAnswer));
+		}
+		elseif($values)
+			$count = 1;
+		else
+			$count = 0;
+		
+		if ($this->addEntry AND isset($_POST["{$this->field}_addEntry"]))
+			$count += 1;
+			
+		if ($count < $this->min)
+		{
+			return "You must check at least {$this->min} checkboxes for {$this->title}.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
+
+
+
+/**
  * The ValidationEngine takes an array of validator objects in its constructor,
  * and is then able to generate both client- and server-side validation for HTML forms.
  * 

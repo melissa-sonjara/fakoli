@@ -143,7 +143,7 @@ function <?echo $this->parent->id?>_showPassword()
 			}
 			else
 			{
-				$this->parent->data->filer->remove($field);
+				$this->parent->data->filter->remove($field);
 			}
 		}
 		

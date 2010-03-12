@@ -67,8 +67,11 @@ class SelectFieldRenderer extends FieldRenderer
 	var $addEntry;
 	var $addEntryText;
 	var $onChange; // optional selection change handler
+	var $addEntrySize;
+	var $addEntrySeparator;
+	var	$max_chars;
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="")
+	function SelectFieldRenderer(&$form, $field, $label, $options, $onChange="", $max_chars = 80)
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
@@ -82,6 +85,7 @@ class SelectFieldRenderer extends FieldRenderer
 			$form->add($this, $field);
 		}
 		
+		$this->max_chars = $max_chars;
 		if ($this->options == null)
 		{
 			$opt = $form->data->distinctValues($field, true);
@@ -89,48 +93,65 @@ class SelectFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	function allowAddEntry($text = "or add new")
+	function allowAddEntry($text = "or add new", $size = 20, $separator = "&nbsp;")
 	{
 		$this->addEntry = true;
 		$this->addEntryText = $text;
+		$this->addEntrySize = $size;
+		$this->addEntrySeparator = $separator;
+		$this->addOtherOption();
 	}
 	
 	function renderField($field)
 	{
 		$this->_startField($field);
 		
-		//echo "<select name='$field'>\n";
-
 		if (count($this->options) > 0 || !$this->addEntry)
 		{
 			echo "<select name='$field'";
 			
 			if ($this->onChange != "")
-				//echo " onchange='$this->onChange(this)'";
-				//echo " onchange='alert(".'"changed"'.")';";
 				echo " onchange='$this->onChange(this)'";
 			
 			echo ">\n";
 			
+			/* Check if we have addEntry text coming in from the db;
+			 * othEntry is text that doesn't match the set of options
+			 * for this field
+			 * */
+			$othEntry = true;
 			foreach($this->options as $value => $name)
 			{
-				$selected = ($this->parent->data->$field == $value) ? " selected" : "";
-				
+				if($this->parent->data->$field == $value)
+				{
+					$selected = " selected";
+					$othEntry = false;
+				}
+				else
+					$selected = "";
+
+				$name = ellipsis($name, $this->max_chars);
 				echo "<option value='$value'$selected>$name</option>";
 			}
 			
+			if($othEntry)
+				$addEntryValue = $this->parent->data->$field;
+			
 			echo "</select>";
-				
-			if ($this->addEntry)
-			{
-				echo "&nbsp;{$this->addEntryText}&nbsp;";
-			}
 		}
 		
+		/*
+		 * We need to create this field whether displayed or not so that the
+		 * custom required validator, SelectFieldRequiredValidator, works for 
+		 * either case.
+		 */
+		$type = $this->addEntry ? 'text' : 'hidden';
+		
 		if ($this->addEntry)
-		{
-			echo "<input type='text' name='{$field}_addEntry' value='' size='20'/>";
-		}
+			echo "{$this->addEntrySeparator}{$this->addEntryText}{$this->addEntrySeparator}";
+			
+		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='{$this->addEntrySize}'/>";
+		
 		$this->_endField($field);
 	}
 	
@@ -181,6 +202,23 @@ class SelectFieldRenderer extends FieldRenderer
 		{
 			$this->parent->data->$field = $_POST["{$field}_addEntry"];
 		}
+	}
+	
+	/*
+	 * addOtherOption
+	 * 
+	 * If the user enables addEntryText, then add a "Other" option to the 
+	 * options array if one does not already exist. Sort by options key so 
+	 * that the blank is on top.
+	 */
+	function addOtherOption()
+	{
+		if(!array_key_exists("", $this->options))
+		{
+			$this->options[""] = "Other";
+		}
+		
+		ksort($this->options);
 	}
 	
 } // end class SelectFieldRenderer

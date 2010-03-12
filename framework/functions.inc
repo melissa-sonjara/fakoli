@@ -1048,6 +1048,38 @@ function makeURL($uri)
 	 if (!startsWith($uri, "http://")) $uri = "http://$uri";
 	 return $uri;
 }
+ 
+/**
+ * For dataitems that are rendered as 
+ * CheckListFieldRenderer, this function converts
+ * the comma-delimited list of items for display.
+ * 
+ * To do: add handling of grouped checkboxes and
+ * provide parameter for delimiter between items
+ *
+ */
+function formatCheckListItemsforView($options, $items)
+{
+	if(count($options) == 0) return;
+
+	$values = explode(",", $items);
+	
+	foreach($values as $value)
+	{
+		if(array_key_exists($value, $options))
+		{
+			$list .= $options[$value] . ", ";
+		}
+		else
+			$list .= $value . ", ";
+	}
+	
+	if(strlen($list) > 0)
+		$list = substr($list, 0, strlen($list) - 2);
+	
+	return $list;
+}
+
 
 function appendToQueryString($qs, $params)
 {
