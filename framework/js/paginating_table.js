@@ -23,7 +23,8 @@ var PaginatingTable = new Class({
     current_page: 1,
     offset_el: false,
     cutoff_el: false,
-    details: false
+    details: false,
+    link_count: 10
   },
   
   initialize: function( table, ids, options ) {
@@ -78,8 +79,8 @@ var PaginatingTable = new Class({
   	  c++;
     }
     this.paginators.each(function(paginator){
-      var as = paginator.getElements('a').removeClass('currentPage');
-      as[this.current_page].addClass('currentPage');
+    	var pagers = paginator.getElements("a.goto-page");
+    	pagers.each(function(p) { p.innerHTML = 'Page ' + (this.current_page || 1) + " of " + this.pages}.bind(this));    	
     }, this);
     if (this.options.offset_el)
       this.options.offset_el.set('text', Math.ceil( this.low_limit / ( this.options.details ? 2 : 1 ) + 1 ) );
@@ -104,15 +105,13 @@ var PaginatingTable = new Class({
         evt.stop();
         return false;
       }).injectInside( paginator );
-      for (var page=1; page <= this.pages; page++){
-        this.create_pagination_node( page, function(evt){
-          var evt = new Event( evt );
-          this.to_page( evt.target.get( 'text' ) );
-          evt.stop();
-          return false;
-        }).injectInside( paginator );
-      }
-      this.create_pagination_node( '&#187;', function(evt){
+      
+      var li = new Element('li', {'class': 'pager'} );
+      var a = new Element('a', {'href': "#", 'class': 'goto-page', 'html': 'Page ' + (this.current_page || 1) + " of " + this.pages});
+      a.injectInside(li);
+      li.injectInside(paginator);
+      
+     this.create_pagination_node( '&#187;', function(evt){
         var evt = new Event( evt );
         this.to_next_page();
         evt.stop();
