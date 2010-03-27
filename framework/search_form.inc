@@ -114,7 +114,59 @@ class SearchParameterHandler
 	function range($name, $from, $to)
 	{
 	}
+	
+	
+	/* 
+	 * Generate the constraint expression for set membership matching
+	 * paramters, matching values in a comma delimite set.
+	 * 
+	 * @param $name the name of the field
+	 * @param $set a comma delimited set of values to match
+	 * @return string a SQL expression to peform the match
+	 */
+	function member($name, $set)
+	{
+	}
+	
 
+	/* 
+	 * Generate the constraint expression for matching any
+	 * word in a group of words.
+	 * 
+	 * @param $name the name of the field
+	 * @param $value a string that may contain multiple words
+	 * @return string a SQL expression to peform the match
+	 */
+	function any($name, $value)
+	{	
+	}
+	
+	/* 
+	 * Generate the constraint expression for matching all
+	 * words in a group of words but allowing other words
+	 * in between.
+	 * 
+	 * @param $name the name of the field
+	 * @param $value a string that may contain multiple words
+	 * @return string a SQL expression to peform the match
+	 */
+	function all($name, $value)
+	{	
+	}
+	
+	/*
+	 * Generate the constraint expression for matching
+	 * the f_name and l_name fields to a given value.
+	 * 
+	 * @param $f_name the name of the first name field
+	 * @param $l_name the name of the last name field
+	 * @param $value a string that may contain multiple words
+	 * @return string a SQL expression to perform the match
+	 */
+	function fullName($f_name, $l_name, $value)
+	{
+		
+	}
 }
 
 /**
@@ -160,6 +212,18 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 		
 		return "($name >= $from AND $name <= $to)";
 	}
+	
+	/* 
+	 * Use when checking if a number is a member of a set.
+	 * For example, teachers_key in (8312, 5643, 9893) or
+	 * public in (2,4,5). Set must be comma delimited.
+	 * Set the additional parameter with setParam()
+	 */
+	function member($name, $set)
+	{
+		return "$name IN ($set)";
+	}
+	
 }
 
 /**
@@ -206,7 +270,79 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		
 		return "($name >= '$from' AND $name <= '$to')";
 	}
+	
+	function any($name, $value)
+	{
+		$value = mysql_escape_string($value);
+		$value = preg_replace("/\\s+/", " ", $value);
+		$words = explode(" ", $value);
+		
+		if (count($words) == 0) return;
+				
+		$query .= " (";
+		$first = true;
+		foreach($words as $word)
+		{
+			if (!$first) $query .= " OR ";
+			$query .= "$name LIKE '%$word%'";
+			$first = false;
+		}
+		$query .= ")";	
+		
+		return $query;
+	}
+	
+	function all($name, $value)
+	{
+		$value = mysql_escape_string($value);
+		$value = preg_replace("/\\s+/", " ", $value);
+		
+		$words = explode(" ", $value);
+			
+		if (count($words) == 0) return;
+						
+		$query .= " (";
+		$first = true;
+		foreach($words as $word)
+		{
+			if (!$first) $query .= " AND ";
+			$query .= "$name LIKE '%$word%'";
+			$first = false;
+		}
+		$query .= ")";	
+		
+		return $query;
+	}
+	
+
+	function fullName($name, $value)
+	{
+		$value = mysql_escape_string($value);
+		$value = preg_replace("/\\s+/", " ", $value);
+		$words = explode(" ", $value);
+		
+		if(count($words) < 2) return;
+		
+		$idx = 0;
+		$query = " (";
+		$first = true;
+			
+		while($idx < count($words)-1)
+		{
+			if (!$first) $query .= " OR (";
+					
+			$query .= "f_name LIKE '{$words[$idx]}%' 
+			AND l_name LIKE '{$words[$idx+1]}%'";
+
+			$idx += 1;
+			$query .= ") ";
+			$first = false;
+		}
+
+		return $query;
+	}	
 }
+
 
 /**
  * DateSearchParameterHandler is a SearchParameterHandler for date database types.
@@ -276,6 +412,7 @@ class SearchParameters
 	var $target;
 	var $params;
 	var $handlers;
+	var $joinWith = "AND"; // AND or OR
 	
 	function SearchParameters($target)
 	{
@@ -294,8 +431,8 @@ class SearchParameters
 	
 	function get($field, $mode)
 	{
-		$value = $this->params["{$field}.$mode"];
-		trace("SearchParameters::get({$field}.$mode): $value", 3);
+		$value = $this->params["{$field}:$mode"];
+		trace("SearchParameters::get({$field}:$mode): $value", 3);
 		return $value;
 	}
 	
@@ -345,8 +482,17 @@ class SearchParameters
 				}
 			}
 		}
-		
 	}
+	
+	/*
+	 * Set additional parameters that don't come from search
+	 * form input.
+	 */
+	function setParam($field, $mode, $value)
+	{
+		$this->params["{$field}:{$mode}"] = $value;
+	}
+	
 	
 	function fromGET()
 	{
@@ -376,13 +522,22 @@ class SearchParameters
 		return $qs;
 	}
 	
-	function generateConstraint()
+	/*
+	 * generateConstraint
+	 * 
+	 * @first: whether this set of clauses is the first in a group
+	 * 
+	 * @firstText: the text is this is the first clause: either
+	 * WHERE or AND ( 
+	 */
+	function generateConstraint($first = true, $firstText = "WHERE")
 	{
 		$constraint = "";
-		$first = true;
-		
+					
 		foreach($this->params as $param => $value)
 		{
+			$joinWith = (!$first) ? $this->joinWith : "";
+			 
 			if (strpos($param, ':') > 0)
 			{
 				list($field, $modifier) = explode(":", $param);
@@ -398,11 +553,23 @@ class SearchParameters
 			{
 				die("Unknown Type: {$this->target->fields[$field]} for field $field");
 			}
+
+			$clause = $this->getClause($handler, $modifier, $field, $value);			
+
+			$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
+		}
+		
+		$this->closeClause($constraint, $firstText);
+		
+		return $constraint;
+	}
+	
+	function getClause($handler, $modifier, $field, $value)
+	{
+		$clause = "";
 			
-			$clause = "";
-			
-			switch($modifier)
-			{
+		switch($modifier)
+		{
 			case "equal":
 
 				$clause = $handler->equal($field, $value);
@@ -419,7 +586,7 @@ class SearchParameters
 				break;				
 				
 			case "from":
-				
+
 				if (array_key_exists("{$field}:to", $this->params))
 				{
 					trace("date range", 3);
@@ -438,25 +605,81 @@ class SearchParameters
 				{
 					$clause = $handler->to($field, $value);
 				}
-			}
+				break;
+				
+			case "member":
+				
+				$clause = $handler->member($field, $value);
+				break;
+
+			case "any":
+				
+				$clause = $handler->any($field, $value);
+				break;				
+
+			case "all":
+				
+				$clause = $handler->all($field, $value);
+				break;
+				
+			case "fullName":
+				
+				$clause = $handler->fullName($field, $value);
+				break;
 			
-			if ($clause != "")
+		} // end case statement
+		
+		return $clause;
+	}	
+	
+/*
+ * joinClauses
+ * 
+ * @first: whether this is the first clause; if so start with "WHERE"
+ * 
+ * @clause: the statement, e.g., l_name like 'smith'
+ * 
+ * @joinWith: specify is statement is to be joined with OR or AND
+ * 
+ * @firstText: the text to output if first: WHERE or "" - clause may
+ * be first in a group "(" rather than first of all clauses.
+ */
+	static function joinClauses(&$first, $clause, $joinWith = "AND", $firstText)
+	{
+		if ($clause != "")
+		{
+			if ($first)
 			{
-				if ($first)
-				{
-					$constraint = "WHERE $clause";
-					$first = false;
-				}
-				else
-				{
-					$constraint .= " AND $clause";
-				}
+				$constraint = "{$firstText} $clause";
+				$first = false;
+			}
+			else
+			{
+				$constraint .= " $joinWith $clause";
 			}
 		}
-		
+
 		return $constraint;
 	}
+	
+	static function closeClause(&$constraint, $firstText)
+	{
+		/*
+		 * If no clauses were created, remove the
+		 * $firstText if "AND (" or "OR (".
+		 * Close out an opened group of clauses, by
+		 * adding the ")";
+		 */
+		if($constraint == "") return;
+		
+		if(strpos($firstText, "(") !== false)
+		{
+			$constraint .= ") ";
+		}
+	}
 }
+
+
 
 /**
  * SearchForm generates forms for searching based on a supplied DataItem.
@@ -467,7 +690,10 @@ class SearchForm extends AutoForm
 {
 	var $modifiers;
 	var $params;
-	
+
+	var $searchModeTypes = array("like"	=> "exact phrase match",
+						"all"	=>	"match all words in any order",
+						"any"	=>	"match any words");	
 	/**
 	 * Create a new Search Form.
 	 * @param $target the target DataItem object
@@ -593,9 +819,6 @@ class SearchForm extends AutoForm
 			$submitLabel = "Search ".pluralize($obj->prettifyClassName(true));
 		}
 		
-		//echo "<!--\n";
-		//print_r($this);
-		//echo "\n-->\n";
 		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}'>\n";
 		foreach(array_keys($this->hidden) as $hidden)
 		{
@@ -611,12 +834,7 @@ class SearchForm extends AutoForm
 			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
 				!($obj->filter && $obj->filter->isExcluded($field)))
 			{
-				$mode = $this->getMatchingMode($field);
-				$renderer = $this->getRenderer($field);
-				if ($renderer)
-				{
-					$renderer->renderSearchField($field, $mode);
-				}
+				$this->renderOneSearchField($field);
 			}
 		}
 		
@@ -636,7 +854,22 @@ class SearchForm extends AutoForm
 		
 		echo "</td></table>\n</form>\n";
 	}
-	
+
+	/*
+	 * 3/12/10, JG, make separate function from drawForm
+	 * so that inheriting classes can create a customized
+	 * form layout and call this function from its own
+	 * drawForm. 
+	 */
+	function RenderOneSearchField($field)
+	{
+		$mode = $this->getMatchingMode($field);
+		$renderer = $this->getRenderer($field);
+		if ($renderer)
+		{
+			$renderer->renderSearchField($field, $mode);
+		}
+	}
 }
 
 ?>
