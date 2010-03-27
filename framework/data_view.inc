@@ -28,6 +28,7 @@ class DataListView
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
+	var $excelFile;		///< Filename for automatic Excel export
 	
 	/**
 	 * Creates a new DataListView object.
@@ -50,6 +51,7 @@ class DataListView
 		$this->cssStyle = null;
 		$this->emptyMessage = "No matching items.";
 		$this->onStartRow = null;
+		$this->excelFile = null;
 		
 		return $this;
 	}
@@ -136,6 +138,13 @@ class DataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
+		if ($this->excelFile && $_GET["__excel"] == $this->id)
+		{
+			$this->writeExcelFile($this->excelFile);	
+		}
+		
+		if (count($this->items) == 0) return;
+		
 		$script = 
 		"\t<script type='text/javascript' src='/framework/js/sorting_table.js'></script>\n".
 	   	"\t<script type='text/javascript' src='/framework/js/paginating_table.js'></script>\n".  
@@ -213,21 +222,13 @@ class DataListView
 		 <thead>
 		  <tr>
 <?
+			$first = true;
+			
 			foreach($this->columns as $column)
 			{
 				$attrs = "";
 				$cssClass = "";
-				if ($column->style)
-				{
-					if (preg_match("/^[\\w_]*$/", $column->style))
-					{
-						$cssClass = $column->style;
-					}
-					else
-					{
-						$attrs .= " style='{$column->style}'";
-					}
-				}
+
 				if (!$column->sortable)
 				{
 					$cssClass = trim($cssClass." nosort");
@@ -238,7 +239,19 @@ class DataListView
 					$attrs .= " class='$cssClass'";
 				}
 ?>
-			<th<?echo $attrs?>><?echo $column->title?></th>
+			<th<?echo $attrs?>>
+<?
+				if ($this->excelFile && $first)
+				{
+					$qs = appendToQueryString($_SERVER['QUERY_STRING'], "__excel={$this->id}");
+?>
+		<a href='<?echo $qs?>' style="float: left"><img src="/framework/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+<?			
+				}
+				
+				$first = false;
+?>
+<?echo $column->title?></th>
 <?
 			}
 ?>
@@ -258,12 +271,23 @@ class DataListView
 				foreach($this->columns as $column)
 				{
 					$attrs = "";
-					if ($column->style)
+					$cssClass = "";
+					
+					if (preg_match("/^[\\w_]*$/", $column->style))
+					{
+						$cssClass = $column->style;
+					}
+					else
 					{
 						$attrs .= " style='{$column->style}'";
 					}
+									
+					if ($cssClass)
+					{
+						$attrs .= " class='$cssClass'";
+					}
 ?>
-		    <td><?echo $column->format($item)?></td>
+		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
 <?
 				}
 ?>

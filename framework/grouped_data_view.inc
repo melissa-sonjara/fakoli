@@ -75,6 +75,7 @@ class GroupedDataListView
 	var $mode;			///< The display mode for the table.
 	var $groups;		///< The group definitions.
 	var $items;			///< The items to be displayed.
+	var $excelFile;		///< Name of the Excel file for automatic export to excel
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -97,6 +98,7 @@ class GroupedDataListView
 		$this->onStartRow = null;
 		$this->onDrawFooter = false;
 		$this->mode = "fixed";
+		$this->excelFile = null;
 	}
 
 	/**
@@ -211,6 +213,13 @@ class GroupedDataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
+		if ($this->excelFile && $_GET["__excel"] == $this->id)
+		{
+			$this->writeExcelFile($this->excelFile);	
+		}
+				
+		if (count($this->items) == 0) return;
+		
 		$script = "<script type='text/javascript' src='/framework/js/grouping_table.js'></script>\n";
 		
 		$constructor = "";
@@ -263,6 +272,8 @@ class GroupedDataListView
 		 <thead>
 		  <tr>
 <?
+			$first = true;
+			
 			foreach($this->columns as $column)
 			{
 				$attrs = "";
@@ -284,7 +295,19 @@ class GroupedDataListView
 					$attrs .= " class='$cssClass'";
 				}
 ?>
-			<th<?echo $attrs?>><?echo $column->title?></th>
+			<th<?echo $attrs?>>
+<?
+				if ($this->excelFile && $first)
+				{
+					$qs = appendToQueryString($_SERVER['QUERY_STRING'], "__excel={$this->id}");
+?>
+		<a href='<?echo $qs?>' style="float: left"><img src="/framework/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+<?			
+				}
+				
+				$first = false;
+?>			
+<?echo $column->title?></th>
 <?
 			}
 ?>
@@ -397,10 +420,10 @@ class GroupedDataListView
 		{
 			if (array_key_exists($group->key, $this->items))
 			{
-				$x->writeText($r, 0, $group->title);
+				$x->writeText($r, 0, stripHTML($group->title));
 				$r++;
 				
-				foreach($this->items as $item)
+				foreach($this->items[$group->key] as $item)
 				{
 					$c = 0;
 					if ($this->onStartRow)
@@ -410,17 +433,24 @@ class GroupedDataListView
 					
 					foreach($this->columns as $column)
 					{
-						$val = $column->format($item);
-						if (preg_match("/^[\\d\\.]+$/", $val))
-						{
-							$x->writeNumber($r, $c, $val);
-						}
-						else
-						{
-							// No HTML required in Excel output
-							$x->writeText($r, $c, stripHTML($val));
-						}
 						
+						$val = $column->format($item);
+						
+						if ($val !== "")
+						{
+							if (preg_match("/^[\\d\\.]+$/", $val))
+							{
+								trace("($r,$c): $val (Number)", 3);
+								$x->writeNumber($r, $c, $val);
+							}
+							else
+							{
+								// No HTML required in Excel output
+								trace("($r,$c): $val (Text)", 3);
+								$x->writeText($r, $c, stripHTML($val));
+							}
+						}
+												
 						++$c;
 					}
 					++$r;
@@ -430,21 +460,24 @@ class GroupedDataListView
 
 		$c = 0;
 		
-		foreach($this->footerColumns as $column)
+		if ($this->footerColumns)
 		{
-			$val = $column->format();
-			if (preg_match("/^[\\d\\.]+$/", $val))
+			foreach($this->footerColumns as $column)
 			{
-				$x->writeNumber($r, $c, $val);
+				$val = $column->format();
+				if (preg_match("/^[\\d\\.]+$/", $val))
+				{
+					$x->writeNumber($r, $c, $val);
+				}
+				else
+				{
+					// No HTML required in Excel output
+					$x->writeText($r, $c, stripHTML($val));
+				}
+				$c += $column->colspan;
 			}
-			else
-			{
-				// No HTML required in Excel output
-				$x->writeText($r, $c, stripHTML($val));
-			}
-			$c += $column->colspan;
 		}
-		
+				
 		$x->send();
 		die();
 	}
