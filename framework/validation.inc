@@ -553,6 +553,59 @@ ENDSCRIPT;
 
 
 /**
+ * RequiredStringValidator.
+ * 
+ * For search fields, a minimum string may be required.
+ * Does not validate maximum - maximum would be enforced 
+ * during data entry using limit, not with validation.
+ * Add this validator the the script using:
+ * $form->validator->add(new RequiredStringValidator($field, $label, $min));
+ * * 
+ */
+class RequiredStringValidator extends AbstractValidator
+{
+	var $min = 0;
+
+	function RequiredStringValidator($field, $title, $min = 0)
+	{
+		$this->min = $min;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		$script = <<<ENDSCRIPT
+		
+			var ctrl = form['{$this->field}'];
+		
+		if (ctrl.value.length < {$this->min})
+		{
+			alert("Please enter at least $this->min characters for {$this->title}.");
+			return false;
+		}
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if (!isset($_POST[$this->field]))
+		{
+			return "Please enter at least {$this->min} for {$this->title}.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
+
+/**
  * RequiredTextValidator.
  * 
  * For fields rendered with TextFieldRenderer
