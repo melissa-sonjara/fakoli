@@ -56,7 +56,7 @@ abstract class FooterColumn
 	function FooterColumn($style = "", $colspan = 1)
 	{
 		$this->colspan = $colspan;
-		$this->style = $this->style;
+		$this->style = $style;
 	}
 	
 	/**
