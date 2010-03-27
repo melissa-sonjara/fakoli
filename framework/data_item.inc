@@ -327,6 +327,17 @@ class DataItem
 		if ($this->filter && $this->filter->isExcluded($field)) return false;
 		return true;
 	}
+	
+	/**
+	 * Returns true if this DataItem contains a relation with the specified name.
+	 *
+	 * @param string $relation
+	 * @return true if this relation is present and not filtered, false otherwise.
+	 */
+	function hasRelation($relation)
+	{
+		return (!array_key_exists($relation, $this->relations)) ? false : true;
+	}
 			
 	/**
 	 * Load the object with the specified primary key
@@ -562,8 +573,8 @@ class DataItem
 						
 		case Date:
 		
-			if (!$this->field) return "";
-			$val = formatDateShort($this->field);
+			if (!$this->$field) return "";
+			$val = formatDateShort($this->$field);
 			break;
 			
 		case Timestamp:
@@ -1187,6 +1198,21 @@ class DataItem
 			$template = str_replace($format, $sub, $template);
 		}
 		
+		// Simple method calls - no parameter passing
+		
+		$matches = array();
+		preg_match_all("/\\{([\\w_]+)\\(\\)\\}/", $template, $matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match)
+		{
+			$format = $match[0];
+			$method =  $match[1];
+			
+			$value = $this->$method();
+			
+			$template = str_replace($format, $value, $template);
+		}
+		
 		return $template;
 	}
 	
@@ -1740,6 +1766,7 @@ function formatItems($items, $template, $separator = "")
 	
 	foreach($items as $item)
 	{
+		if (!$item) continue;
 		if (!$first) $list .= $separator;
 		$list .= $item->format($template);
 		$first = false;
