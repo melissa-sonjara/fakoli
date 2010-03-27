@@ -56,7 +56,13 @@ var FilteringTable = new Class({
 		trs.each(function(row)
 		{
 			var tds = row.getChildren();
-			var text = tds[this.filterSelect.value].textContent;
+			var text = tds[this.filterSelect.value].textContent || tds[this.filterSelect.value].innerText;
+			if (!text)
+			{
+				row.addClass('filtered');
+				return;
+			}
+			
 			var idx = text.toLowerCase().indexOf(val);
 			if ((this.startsWith && idx == 0) || (!this.startsWith && idx >= 0))
 			{
@@ -79,7 +85,14 @@ var FilteringTable = new Class({
 		this.filterLabel.injectInside(this.filterElement);
 		
 		this.filterSelect = new Element('select', {id: this.table.id + "_filterselect"});
-		headers.each(function(h, i) { this.filterSelect.options[i] = new Element('option', {'value': i, 'html': h.textContent}); }.bind(this));
+		var self = this;
+		headers.each(function(h, i) 
+		{ 
+			var text = h.innerText || h.textContent;
+			var elt = new Element('option', {'value': i, 'html': text});
+			self.filterSelect.appendChild(elt); 
+		}
+		.bind(this));
 		
 		this.filterSelect.injectInside(this.filterElement);
 		
