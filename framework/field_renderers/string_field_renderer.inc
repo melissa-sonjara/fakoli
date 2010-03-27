@@ -117,7 +117,7 @@ class StringFieldRenderer extends FieldRenderer
 			
 			echo "<tr>\n";
 			$this->_printLabel($field);
-			echo "<td>From <input type='text' name='$field:from' value='{$from}' size='25'> to <input type='text' name='$field:to' value='{$to}' size='25'></td>\n";		
+			echo "<td>From <input type='text' id='$field' name='$field:from' value='{$from}' size='25'> to <input type='text' name='$field:to' value='{$to}' size='25'></td>\n";		
 			echo "</tr>\n";
 		}
 		else
@@ -125,7 +125,7 @@ class StringFieldRenderer extends FieldRenderer
 			$value =  htmlspecialchars($this->parent->params->get($field, $mode), ENT_QUOTES, 'UTF-8');
 			echo "<tr>\n";
 			$this->_printLabel($field);
-			echo "<td><input type='text' name='$field:$mode' value='{$value}' size='50'></td>\n";		
+			echo "<td><input type='text' id='$field' name='$field:$mode' value='{$value}' size='50'></td>\n";		
 			echo "</tr>\n";
 		}		
 	}

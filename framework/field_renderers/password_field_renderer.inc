@@ -43,6 +43,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class PasswordFieldRenderer extends FieldRenderer
 {
 	var $encryptor;
+	var $forceReset = false; // true if user logged in with a temporary token
 	
 	function PasswordFieldRenderer(&$parent)
 	{
@@ -81,11 +82,11 @@ function <?echo $this->parent->id?>_showPassword()
 			 <table border="0" cellspacing="0" cellpadding="0" id="<?echo $this->parent->id ?>_password_block" style="padding: 0px; display: <?echo $display ?>">
 			  <tr>
   				<td style="vertical-align: top; text-align: left">Enter&nbsp;</td>
-  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $this->parent->id?>_password" size="20" value=""></td>
+  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $this->parent->id?>_password" size="20" value=""/></td>
  			  </tr>
  			  <tr>
   				<td style="vertical-align: top; text-align: left">Confirm&nbsp;</td>
-  				<td><input type="password" name="<?echo $this->parent->id?>_confirm" size="20" value=""></td>
+  				<td><input type="password" name="<?echo $this->parent->id?>_confirm" size="20" value=""/></td>
  			  </tr>
  			 </table>		
 <?
@@ -97,15 +98,16 @@ function <?echo $this->parent->id?>_showPassword()
 	
 		$this->_startField($field);
 		
-		if ($this->parent->data->$pk)
+		if ($this->parent->data->$pk && !$this->forceReset)
 		{
 			echo "<a id='{$this->parent->id}_link' href='#' onclick='{$this->parent->id}_showPassword();return false;'>Click to reset password</a>\n";
 			$this->renderPasswordBlock($field, "none");
-			echo "<input type='hidden' name='{$this->parent->id}_reset_password' value=''>\n";
+			echo "<input type='hidden' name='{$this->parent->id}_reset_password' value=''/>\n";
 		}
 		else
 		{
 			$this->renderPasswordBlock($field);
+			echo "<input type='hidden' name='{$this->parent->id}_reset_password' value='1'/>\n";
 		}
 		
 		$this->_endField($field);

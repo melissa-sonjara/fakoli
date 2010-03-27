@@ -60,32 +60,33 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		{
 			$selected = ($this->parent->data->$field == $value) ? " checked" : "";
 			
-			echo "<input type='radio' name='$field' value='$value'$selected>$name</option>";
+			// JDG 3/34/10, add border: none to correct IE8 display issue
+			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected>$name</option>";
 			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
 		}
 		
 		$this->_endField($field);
 	}
 	
-	
+	/*
+	 * JDG, 3/12/10, fixed rendering style from select field
+	 * to radio button.
+	 */
 	function renderSearchField($field, $mode)
 	{
 		if ($mode != "equal") return;
 		
 		$searchValue = $this->parent->params->get($field, $mode);
-		
 		echo "<tr>\n";
 		$this->_printLabel($field);
-		echo "<td><select name='$field:$mode'><option value=''></option>\n";
+		echo "<td>\n";
 		foreach($this->options as $value => $name)
 		{
-			$selected = ($searchValue == $value) ? " selected" : "";
-			
-			echo "<option value='$value'$selected>$name</option>";
+			$selected = ($searchValue == $value) ? " checked" : "";
+			echo "<input style='border: none' type='radio' name='$field:$mode' value='$value'$selected>$name</option>";
+			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
 		}
-		echo "</select></td></tr>\n";
-		
-		echo "</select>";
+		echo "</td></tr>\n";
 	}
 	
 	

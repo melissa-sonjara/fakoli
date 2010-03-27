@@ -1,5 +1,4 @@
 <?php
-
 /**************************************************************
 
  Copyright (c) 2007,2008 Sonjara, Inc
@@ -67,11 +66,9 @@ class SelectFieldRenderer extends FieldRenderer
 	var $addEntry;
 	var $addEntryText;
 	var $onChange; // optional selection change handler
-	var $addEntrySize;
-	var $addEntrySeparator;
 	var	$max_chars;
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options, $onChange="", $max_chars = 80)
+	function SelectFieldRenderer(&$form, $field, $label, $options, $onChange="")
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
@@ -85,20 +82,17 @@ class SelectFieldRenderer extends FieldRenderer
 			$form->add($this, $field);
 		}
 		
-		$this->max_chars = $max_chars;
 		if ($this->options == null)
 		{
 			$opt = $form->data->distinctValues($field, true);
 			$this->options = array_combine($opt, $opt);
-		}
+		}		
 	}
 	
-	function allowAddEntry($text = "or add new", $size = 20, $separator = "&nbsp;")
+	function allowAddEntry($text = "or add new")
 	{
 		$this->addEntry = true;
 		$this->addEntryText = $text;
-		$this->addEntrySize = $size;
-		$this->addEntrySeparator = $separator;
 		$this->addOtherOption();
 	}
 	
@@ -129,8 +123,7 @@ class SelectFieldRenderer extends FieldRenderer
 				}
 				else
 					$selected = "";
-
-				$name = ellipsis($name, $this->max_chars);
+				
 				echo "<option value='$value'$selected>$name</option>";
 			}
 			
@@ -148,22 +141,21 @@ class SelectFieldRenderer extends FieldRenderer
 		$type = $this->addEntry ? 'text' : 'hidden';
 		
 		if ($this->addEntry)
-			echo "{$this->addEntrySeparator}{$this->addEntryText}{$this->addEntrySeparator}";
+			echo "&nbsp;{$this->addEntryText}&nbsp;";
 			
-		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='{$this->addEntrySize}'/>";
+		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='20'/>";
 		
 		$this->_endField($field);
 	}
 	
-	function renderSearchField($field, $mode)
+	function renderSearchField($field, $mode, $value = "")
 	{
 		if ($mode != "equal") return;
 		
-		$searchValue = $this->parent->params->get($field, $mode);
-		
+		$searchValue = (!$value) ? $this->parent->params->get($field, $mode) : $value;
 		echo "<tr>\n";
 		$this->_printLabel($field);
-		echo "<td><select name='$field:$mode'><option value=''></option>\n";
+		echo "<td><select id='$field' name='$field:$mode'><option value=''></option>\n";
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($searchValue == $value) ? " selected" : "";
@@ -196,9 +188,19 @@ class SelectFieldRenderer extends FieldRenderer
 	
 	function preProcess($field)
 	{
+		$found = false;
+		
+		foreach($this->options as $value => $name)
+		{
+			if($this->parent->data->$field == $value && $value != '')
+			{
+				$found = true;
+			}
+		}
+					
 		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
 		
-		if ($_POST["{$field}_addEntry"])
+		if ($_POST["{$field}_addEntry"] && !$found)
 		{
 			$this->parent->data->$field = $_POST["{$field}_addEntry"];
 		}
@@ -209,17 +211,18 @@ class SelectFieldRenderer extends FieldRenderer
 	 * 
 	 * If the user enables addEntryText, then add a "Other" option to the 
 	 * options array if one does not already exist. Sort by options key so 
-	 * that the blank is on top.
+	 * that the blank is on top. Can also add a blank option.
 	 */
-	function addOtherOption()
+	function addOtherOption($text = "Other")
 	{
 		if(!array_key_exists("", $this->options))
 		{
-			$this->options[""] = "Other";
+			$this->options[""] = $text;
 		}
 		
 		ksort($this->options);
 	}
+
 	
 } // end class SelectFieldRenderer
 
