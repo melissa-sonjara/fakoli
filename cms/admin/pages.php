@@ -6,6 +6,7 @@ require_once "../datamodel/page.inc";
 require_once "../datamodel/site.inc";
 require_once "../../include/permissions.inc";
 require_once "../../framework/tree.inc";
+require_once "../../framework/grouped_data_view.inc";
 
 $title = "Manage Pages";
 $menu_item = "Pages";
@@ -14,7 +15,18 @@ $pagesBySite = groupedQuery(Page, "ORDER BY page_title", "site_id");
 
 $sites = query(Site, "ORDER BY site_name");
 
-$pageTree = new TreeControl("page_tree");
+$pageTable = new GroupedDataListView($pagesBySite, "pages");
+$pageTable->column("Title", "<a href='page_form.php?page_id={page_id}'>{page_title}</a>", true, "width: 40%")
+		  ->column("Page Identifier", "{identifier}", true, "width: 20%")
+		  ->column("Code File", "{php_code_file}", true, "width: 40%");
+		  
+$pageTable->mode = "tree";
+$pageTable->groupBy($sites);
+$pageTable->cssStyle = "width: 100%";
+
+$script = $pageTable->writeScript();
+
+/*$pageTree = new TreeControl("page_tree");
 $pageTree->width = 500;
 $pageTree->height = 500;
 
@@ -37,28 +49,15 @@ foreach($sites as $site)
 	
 	$pageTree->add($siteNode);
 }
-
 $script = $pageTree->writeScript();
+*/
 
 require_once admin_begin_page;
-?>
-<table border="0">
- <tr>
-  <td colspan="2">
-<?
-$pageTree->writeHTML();
-?>
-  </td>
- </tr>
- <tr>
-  <td colspan="2">&nbsp;</td>
- </tr>
- <tr>
-  <td align="left"><input type="button" class="button" value=" Add a New Page" onclick="go('page_form.php');"></td>
-  
- </tr>
-</table>
 
+$pageTable->drawView();
+?>
+<br/><br/>
+<input type="button" class="button" value=" Add a New Page" onclick="go('page_form.php');">
 <?
 require_once admin_end_page;
 ?>

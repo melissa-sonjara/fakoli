@@ -4,57 +4,39 @@ require_once "../../include/config.inc";
 
 require_once "../datamodel/module.inc";
 require_once "../../include/permissions.inc";
+require_once "../../framework/data_view.inc";
 
 $menu_item = "Modules";
 
 $title = "Manage Modules";
 
-$modules = query(Module);
+$modules = query(Module, "ORDER BY title");
 
 $count = 0;
 
+function getModuleType($module)
+{
+	return prettify($module->content_type);
+}
+
+$table = new DataListView($modules, "modules");
+$table->column("Title", "<a href='module_form.php?module_id={module_id}'>{title}</a>", true, 'width: 40%')
+	  ->column("Type", getModuleType, true, 'width: 10%')
+	  ->column("Code File", "{php_code_file}", true, "width: 50%");
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 20;
+$table->emptyMessage = "No Modules have been added.";
+
+$script = $table->writeScript();
+
 require_once admin_begin_page;
 
-if (count($modules) > 0)
-{
-?>
-	
-	<table class="list" width="100%">
- <tr>
-  <th>Title</th>
-  <th>Module Type</th>
-  
-   
-  	 </tr>
- 	
-	<?
-	
-	foreach($modules as $module)
-	{
-		?>
-		
-		<tr><td>
-	  	<a href="<?echo $module->getAdminForm()?>?module_id=<?echo $module->module_id ?>"><?echo $module->title ?></a>
-	    </td>
-		<td><?echo prettify($module->content_type) ?></td>
-		</tr>	
-		
-<?			
-    }
-    ?>
+$table->drawView();
 
-</table>
+?>
 <br/>
-
-<?
-}
-else
-{
-	?>
-	<p><i>No Modules have been added.</i></p>
-	<?
-}
-?>
+<br/>
 <input type="button" class="button" value="Add a Code Module" onclick="go('code_module_form.php');">&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="button" class="button" value="Add a Query Module" onclick="go('query_module_form.php');">&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="button" class="button" value="Add a HTML Module" onclick="go('html_module_form.php');">
