@@ -391,21 +391,24 @@ class DataListView
 		
 		$c = 0;
 		
-		foreach($this->footerColumns as $column)
+		if ($this->footerColumns)
 		{
-			$val = $column->format();
-			if (preg_match("/^[\\d\\.]+$/", $val))
+			foreach($this->footerColumns as $column)
 			{
-				$x->writeNumber($r, $c, $val);
+				$val = $column->format();
+				if (preg_match("/^[\\d\\.]+$/", $val))
+				{
+					$x->writeNumber($r, $c, $val);
+				}
+				else
+				{
+					// No HTML required in Excel output
+					$x->writeText($r, $c, stripHTML($val));
+				}
+				$c += $column->colspan;
 			}
-			else
-			{
-				// No HTML required in Excel output
-				$x->writeText($r, $c, stripHTML($val));
-			}
-			$c += $column->colspan;
 		}
-		
+				
 		$x->send();
 		die();
 	}
