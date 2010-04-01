@@ -1,0 +1,181 @@
+@CHARSET "ISO-8859-1";
+
+table.list
+{
+	background-color: #ffffff;
+	border: solid 1px #666;
+	border-collapse: collapse;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	vertical-align:top;
+}
+
+table.list b
+{
+	
+	color:  #2b388f;
+	font-weight: bold;
+}
+
+
+table.list th
+{
+	background-color: transparent;
+	color: #000;
+	font-weight: bold;
+	text-align: center;
+	padding: 4px;
+}
+
+table.list td
+{
+	padding: 4px;
+	border: solid 1px #666;
+}
+
+
+table.list tr.alt
+{
+	background-color: #f3f3f3;
+}
+
+table.small
+{
+	font-size: 8pt;
+}
+
+table.list td.subheading
+{
+	padding: 4px;
+	border: solid 1px #666;
+	background-color: #eee;
+	font-weight: bold;
+	font-style: oblique;
+}
+
+
+.sortable th
+{
+	background: url(/cms/images/bg.gif) right center no-repeat transparent;
+	cursor: pointer;
+	border: solid 1px #666;
+	
+}
+
+.sortable th.nosort
+{
+	background-image: none;
+	background-color: transparent;
+}
+
+.sortable th.forward_sort
+{
+	background: url(/cms/images/asc-white.gif) right center no-repeat #393683;
+	color: #fff;
+}
+
+.sortable th.reverse_sort
+{
+	background: url(/cms/images/desc-white.gif) right center no-repeat #393683;
+	color: #fff;
+}
+
+.sortable tr.alt
+{
+	background-color: #F0F0F6;
+}
+
+
+.filter
+{
+	padding: 6px;
+}
+
+.filter input
+{
+	margin-left: 2px;
+}	
+
+tr.filtered td,
+tr.filtered a,
+tr.filtered a:link,
+tr.filtered a.hover
+{
+	color: #ddd;
+}
+
+tr.subheading
+{
+	background-color: #ddd;
+}
+
+tr.subheading td
+{
+	font-weight: bold;
+	cursor: pointer;
+	padding-left: 20px;
+}
+
+.paginator
+{
+	width: 30%;
+}
+.paginator ul
+{
+	display: block;
+	float: right;
+}
+
+.paginator li
+{
+	list-style: none;
+	float: left;
+	margin-left: 10px;
+}
+
+.paginator a,
+.paginator a:link
+{
+	text-decoration: none !important;
+	display: inline-block;
+	border: none !important;
+	color: #666 !important;
+	padding: 2px;
+}
+
+.paginator a:hover,
+.paginator a:active
+{
+	color: #000 !important;
+	text-decoration: none !important;
+}
+
+table.list thead tr,
+table.list tfoot tr
+{
+	background: url(/images/table-header.png) bottom left repeat-x #ddd;
+}
+
+table.list tfoot td
+{
+	font-weight: bold;
+}
+
+tr.expanded td
+{
+	background: url(/cms/images/open.gif) left center no-repeat transparent;
+	padding-left: 20px;
+}
+
+tr.collapsed td
+{
+	background: url(/cms/images/closed.gif) left center no-repeat transparent;
+	padding-left: 20px;
+}
+
+td.icon
+{
+	text-align: center;
+	font-size: 8pt;
+}

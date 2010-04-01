@@ -61,14 +61,25 @@ class Module extends DataItem
 						"ord_by"    		=> String,
 						"template"			=> Text,
 						"php_code_file"		=> String,
-						"css_class"			=> String);
+						"menu_id"			=> Number,
+						"menu_parameters"	=> String,
+						"css_class"			=> String,
+						"global"			=> Boolean,
+						"global_position"	=> String);
 						
+	var $relations = array("Menu"	=>	Menu);
+	
 	function Module()
 	{
 		$this->table = "module";
 		$this->primary_key = "module_id";
 		$this->default_format = "{title}";
 		$this->DataItem(func_get_args());
+	}
+	
+	function Menu()
+	{
+		return $this->getRelated(Menu);
 	}
 	
 	function getTitle()
@@ -117,6 +128,9 @@ class Module extends DataItem
 	{
 		switch($this->content_type)
 		{
+		case "Menu":
+			return "menu_module_form.php";
+							
 		case "Code":
 			return "code_module_form.php";
 			

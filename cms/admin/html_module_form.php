@@ -23,7 +23,7 @@ $form = new AutoForm($module);
 $form->override("template", $label = "HTML", new HTMLFieldRenderer($form));
 
 $form->required("title");
-$form->hide("content_type","ord_by","query_constraint","num_items", "php_code_file");
+$form->hide("content_type","ord_by","query_constraint","num_items", "php_code_file", "menu_id", "menu_parameters");
 $form->alias("css_class", "CSS Class");
 $form->allowDelete = true;
 $redirect = "modules.php";

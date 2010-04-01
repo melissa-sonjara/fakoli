@@ -82,7 +82,23 @@ class Page extends DataItem
 		$join->add(PageModuleXref);
 		
 		$result = $join->groupedQuery("WHERE page_id={$this->page_id} $constraint", "PageModuleXref.position");
-		return extractGroupedJoinResults(Module, $result);
+		$modules = extractGroupedJoinResults(Module, $result);
+		
+		// Merge in global modules
+		$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+		foreach($globals as $position => $modulesAtPosition)
+		{
+			if (array_key_exists($position, $modules))
+			{
+				$modules[$position] = removeDuplicates(array_merge($modulesAtPosition, $modules[$position]));
+			}
+			else
+			{
+				$modules[$position] = $modulesAtPosition;
+			}
+		}
+		
+		return $modules;
 	}
 	
 	

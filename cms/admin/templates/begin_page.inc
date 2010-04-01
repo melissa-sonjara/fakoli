@@ -1,16 +1,17 @@
 <?
 require_once realpath(dirname(__FILE__)."/../templates/tabs.inc");
  ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
  <html>
  <head>
   <meta name="description" content="Sonjara CMS Administrative Site">
-  <link href="../../default.css" rel="stylesheet">
-  <link href="../../css/tree.css" rel="stylesheet"></link>
+  <link href="/default.css" rel="stylesheet"/>
+  <link href="/css/tree.css" rel="stylesheet"/>
+  <link href="/cms/css/tables.css" rel="stylesheet"/>
    <script type="text/javascript" src="/framework/functions.js"></script>
 
-   <script type="text/javascript" src="/js/mootools-1.2.4-core.js"></script>
-   <script type="text/javascript" src="/js/mootools-1.2.4-more.js"></script>
-   <script type="text/javascript" src="/js/menu_accordion.js"></script>
+   <script type="text/javascript" src="/framework/js/mootools-1.2.4-core.js"></script>
+   <script type="text/javascript" src="/framework/js/mootools-1.2.4-more.js"></script>
   <?echo $script?>
   <title><? echo $title?></title>
  </head>

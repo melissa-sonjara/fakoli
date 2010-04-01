@@ -30,6 +30,8 @@ abstract class ModuleView
 	{
 		switch($module->content_type)
 		{
+		case "Menu":
+			return new MenuModuleView($module);				
 		case "Code":
 			return new CodeModuleView($module);
 		case "HTML":
@@ -129,6 +131,40 @@ class HTMLModuleView extends ModuleView
 	{
 		$cssClass = trim("module {$this->module->css_class} $cssClass");
 		return "<div class='$cssClass'>{$this->module->template}</div>";
+	}
+}
+
+class MenuModuleView extends ModuleView
+{
+	function MenuModuleView($module)
+	{
+		$this->ModuleView($module);
+	}
+	
+	function drawView($cssClass = "")
+	{
+		$cssClass = trim("module {$this->module->css_class} $cssClass");
+		$menu = $this->module->Menu();
+		
+		$params = explode(",", $this->module->menu_parameters);
+
+		$qs = "";
+		$x = "?";
+		
+		foreach($params as $param)
+		{
+			if ($_GET[$param]) 
+			{
+				$qs .= $x . $param . "=" . $_GET[$param];
+				$x = "&";
+			}			
+		}
+		
+		trace("QUERYSTRING: $qs", 3);
+		
+		$menuView = new MenuView($menu);
+		$menuView->queryString = $qs;
+		return "<div class='$cssClass'>".$menuView->drawView()."</div>";
 	}
 }
 ?>

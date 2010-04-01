@@ -20,7 +20,7 @@ function getModuleType($module)
 }
 
 $table = new DataListView($modules, "modules");
-$table->column("Title", "<a href='module_form.php?module_id={module_id}'>{title}</a>", true, 'width: 40%')
+$table->column("Title", "<a href='{getAdminForm()}?module_id={module_id}'>{title}</a>", true, 'width: 40%')
 	  ->column("Type", getModuleType, true, 'width: 10%')
 	  ->column("Code File", "{php_code_file}", true, "width: 50%");
 $table->sortable = true;
@@ -37,9 +37,10 @@ $table->drawView();
 ?>
 <br/>
 <br/>
-<input type="button" class="button" value="Add a Code Module" onclick="go('code_module_form.php');">&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="button" class="button" value="Add a Query Module" onclick="go('query_module_form.php');">&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="button" class="button" value="Add a HTML Module" onclick="go('html_module_form.php');">
+<input type="button" class="button" value="Add a Code Module" onclick="go('code_module_form.php');"/>&nbsp;&nbsp;
+<input type="button" class="button" value="Add a Query Module" onclick="go('query_module_form.php');"/>&nbsp;&nbsp;
+<input type="button" class="button" value="Add an HTML Module" onclick="go('html_module_form.php');"/>&nbsp;&nbsp;
+<input type="button" class="button" value="Add a Menu Module" onclick="go('menu_module_form.php');"/>
 <?
 require_once admin_end_page;
 ?>

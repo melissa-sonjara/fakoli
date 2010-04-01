@@ -19,7 +19,7 @@ $module = new Module();
 
 $form = new AutoForm($module);
 $form->required("title");
-$form->hide("php_code_file");
+$form->hide("php_code_file", "menu_id", "menu_parameters");
 $form->alias("css_class", "CSS Class");
 
 $form->allowDelete = true;

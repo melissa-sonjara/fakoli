@@ -45,7 +45,9 @@ class MenuView
 					return null;
 				}
 				
-				return ($page->identifier) ? $page->identifier : $page->page_id;
+				$link = ($page->identifier) ? $page->identifier : $page->page_id;
+				if ($this->queryString) $link .= $this->queryString;
+				return $link;
 			}
 			else
 			{

@@ -18,7 +18,7 @@ $publication = get_class(new Publication());
 
 $module = new Module();
 
-$module->filter = new InclusionFilter("module_id", "title", "php_code_file", "content_type", "css_class");
+$module->filter = new InclusionFilter("module_id", "title", "php_code_file", "content_type", "css_class", "global", "global_position");
 $module->content_type = "Code";
 
 $form = new AutoForm($module);
