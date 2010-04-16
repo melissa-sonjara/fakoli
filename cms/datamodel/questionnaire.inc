@@ -1,18 +1,38 @@
 <?php
-/* =======================================================================
- * USAID/DG Epp Funding Application
- * Developed by Sonjara, Inc.
- * For further information please contact Siobhan Green at sio@sonjara.com
- * =======================================================================
- * 
- * Title: datamodel/questionnaire.inc
- * 
- * 
- */
+/**************************************************************
 
-require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
-require_once realpath(dirname(__FILE__)."/../datamodel/dataitem_class.inc");
-require_once realpath(dirname(__FILE__)."/../components/questionnaire/questionnaire_form.inc");
+ Copyright (c) 2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+
+require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 
 
 class Questionnaire extends DataItem
@@ -32,16 +52,7 @@ class Questionnaire extends DataItem
 		return $this->getRelatedList(Question, "questionnaire_key", $constraint);
 	}
 	
-	function Question($constraint)
-	{
-		$questions = $this->Questions("WHERE LOWER(question) LIKE LOWER('%$constraint%')");
-		if(count($questions) > 0)
-			$question = $questions[0];
-			
-		return $question;
-		
-	}
-	
+
 	function DataItemClass()
 	{
 		return $this->getRelated(DataItemClass);
@@ -166,12 +177,11 @@ class Question extends DataItem
 	
 	function Question()
 	{
-		$this->table = "question_epp";
+		$this->table = "question";
 		$this->primary_key = "question_key";
 		
 		$this->DataItem(func_get_args());
 	}
-						
 }
 
 
@@ -196,13 +206,11 @@ class Answer extends DataItem
 	
 	function Answer()
 	{
-		$this->table = "answer_epp";
+		$this->table = "answer";
 		$this->primary_key = "answer_key";
 		
 		$this->DataItem(func_get_args());
 	}
-						
-	
 }
 
 
@@ -214,25 +222,12 @@ class DataItemClass extends DataItem
 	);
 	
 	var $relations = array(
-					Questionnaires 	=>	Questionnaire,
-					Attachments		=>	Attachment,
-					MessageMerges	=>	MessageMerge
+					Questionnaires 	=>	Questionnaire
 	);
 	
 	function Questionnaires($constraint = "")
 	{
 		return $this->getRelatedList(Questionnaire, "class_key", $constraint);
-	}
-	
-	function Attachments($constraint = "")
-	{
-		return $this->getRelatedList(Attachment, "class_key", $constraint);
-	}
-	
-	function MessageMerges()
-	{
-		$merges = query(MessageMerge, "WHERE merge_key IN (SELECT merge_key FROM merge_class_jn_epp WHERE class_key={$this->class_key})");
-		return $merges;
 	}
 	
 	function getClass()
@@ -245,7 +240,7 @@ class DataItemClass extends DataItem
 	
 	function DataItemClass()
 	{
-		$this->table = "dataitem_class_epp";
+		$this->table = "dataitem_class";
 		$this->primary_key = "class_key";
 		
 		$this->DataItem(func_get_args());
