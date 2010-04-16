@@ -1242,7 +1242,7 @@ class DataItem
 		
 		if ($plural)
 		{
-			pluralize($c);
+			$c = pluralize($c);
 		}
 		
 		return $c;
