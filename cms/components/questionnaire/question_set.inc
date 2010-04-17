@@ -127,10 +127,10 @@ class QuestionSet
 		echo "<td style='width: 125px;border: dotted 1px #000'><b>Question</b> <input type='text' name='question_{$question->question_key}' value='{$question->question_number}' size='4'/></td>"; 
 		echo "<td style='border: dotted 1px #000'>{$question->question}</td>";
 
-		echo "<td style='border: dotted 1px #000'>&nbsp;<a class='button' href='/dgepp/admin/question_form.php?question_key={$question->question_key}'>&nbsp;Edit&nbsp;</a>&nbsp;</td>";
+		echo "<td style='border: dotted 1px #000'>&nbsp;<a class='button' href='question_form.php?question_key={$question->question_key}'>&nbsp;Edit&nbsp;</a>&nbsp;</td>";
 		if($this->editable)
 		{
-			echo "<td style='border: dotted 1px #000'>&nbsp;<a class='button' href='/dgepp/admin/question_delete.php?question_key={$question->question_key}&questionnaire_key={$question->questionnaire_key}' onclick=\"return confirm('Are you sure you wish to delete this question?');'\">&nbsp;Delete&nbsp;</a>&nbsp;</td>";
+			echo "<td style='border: dotted 1px #000'>&nbsp;<a class='button' href='question_delete.php?question_key={$question->question_key}&questionnaire_key={$question->questionnaire_key}' onclick=\"return confirm('Are you sure you wish to delete this question?');'\">&nbsp;Delete&nbsp;</a>&nbsp;</td>";
 		}	
 		echo "</tr>";
 	}
