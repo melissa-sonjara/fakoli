@@ -74,14 +74,16 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 	{		
 		$this->_startField($field);
 
+		$current = $this->parent->data->get($field);
+		
 		foreach($this->items as $item)
 		{
 			$name = $this->formatName($item, $this->nameField);
-			$valueField = ($this->valueField != "") ? $this->valueField : $item->primary_key;
+			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
 			//trace("valueField: $valueField", 3);
 			
 			echo "<input type='radio' name='{$field}' value='{$item->$valueField}'";
-			if ($item->$valueField == $this->parent->data->$field) echo " selected";
+			if ($item->get($valueField) == $current) echo " selected";
 			echo ">&nbsp;$name\n";
 
 			echo ($this->horizontal) ? "&nbsp;&nbsp;&nbsp;" : "<br/>";
@@ -101,13 +103,14 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 		//trace("valueField: $valueField", 3);
 		
 		$value = $this->parent->params->get($field, $mode);
+		$current = $this->parent->data->get($field);
 		
 		foreach($this->items as $item)
 		{
 			$name = $this->formatName($item, $this->nameField);
 
 			echo "<input type='radio' name='{$field}:$mode' value='{$value}'";
-			if ($item->$valueField == $this->parent->data->$field) echo " selected";
+			if ($item->get($valueField) == $current) echo " selected";
 			echo ">&nbsp;$name\n";
 
 			echo ($this->horizontal) ? "&nbsp;&nbsp;&nbsp;" : "<br/>";			
@@ -125,9 +128,9 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 		
 		foreach($this->items as $item)
 		{
-			$valueField = $this->valueField ? $this->valueField : $item->primary_key;
+			$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
 			
-			if ($this->parent->data->$field == $item->$valueField)
+			if ($this->parent->data->get($field) == $item->get($valueField))
 			{
 				$name = $this->formatName($item, $this->nameField);
 				echo $name;

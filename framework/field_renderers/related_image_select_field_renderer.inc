@@ -75,9 +75,9 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 		if ($obj->$field)
 		{
 			$related = $obj->getRelated($this->relatedClass, $field);
-			$valueField = ($this->valueField != "") ? $this->valueField : $related->primary_key;
+			$valueField = ($this->valueField != "") ? $this->valueField : $related->getPrimaryKey();
 			//trace("valueField: $valueField", 3);
-			$img = "<img src='{$related->$imgField}'/>";
+			$img = "<img src='".$related->get($imgField)."'/>";
 		}
 		else
 		{
@@ -85,7 +85,7 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 		}
 
 		$this->_startField($field);
-		echo "<input type='hidden' name='$field'  value='{$this->parent->data->$field}'><button name='{$field}_button' class='{$this->parent->buttonCSS}' onclick='{$field}_toggle(); return false;'>$img</button>";
+		echo "<input type='hidden' name='$field'  value='".$this->parent->data->get($field)."'><button name='{$field}_button' class='{$this->parent->buttonCSS}' onclick='{$field}_toggle(); return false;'>$img</button>";
 		
 		echo "<div style='display: none; position: absolute' id='{$field}_options'>";
 	
@@ -93,7 +93,7 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 		
 		foreach($items as $item)
 		{
-			$valueField = ($this->valueField != "") ? $this->valueField : $item->primary_key;
+			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
 			
 			//trace("valueField: $valueField imageField: $imgField", 3);
 			echo "<img style='cursor: pointer; float: left' src='{$item->$imgField}' onclick='{$field}_select(\"{$item->$valueField}\", \"{$item->$imgField}\"); return false;'/>";

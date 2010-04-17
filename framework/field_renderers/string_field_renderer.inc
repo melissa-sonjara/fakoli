@@ -88,7 +88,7 @@ class StringFieldRenderer extends FieldRenderer
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 		
-		echo "<input type='text' name='$field' value='".htmlspecialchars($this->parent->data->$field, ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
+		echo "<input type='text' name='$field' value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
 
 		if ($this->limit)
 		{
@@ -104,7 +104,7 @@ class StringFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">{$this->parent->data->$field}</td>\n";		
+		echo ">".$this->parent->data->get($field)."</td>\n";		
 		echo "</tr>\n";	
 	}
 

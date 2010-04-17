@@ -36,6 +36,7 @@
  */
 
 require_once realpath(dirname(__FILE__)."/connection_manager.inc");
+require_once realpath(dirname(__FILE__)."/abstract_data_item.inc");
 
 /*define("String", 1);	
 define("Number", 2);
@@ -47,117 +48,7 @@ define("Password", 7);
 define("Timestamp", 8);
 define("Text", 9);*/
 
-/**
- * Used to place a filter on the contents of a DataItem-derived object.
- * With an ExclusionFilter, the specified fields will be <b>excluded</b> from
- * any subsequent queries or operations.
- * 
- * 
- */
-class ExclusionFilter
-{
-	var $fields = array();
-	var $type = "ExclusionFilter";
-	
-	function ExclusionFilter()
-	{
-		$args = func_get_args();
-		for($i = 0; $i < count($args); ++$i)
-		{
-			$this->fields[$args[$i]] = true;
-		}
-	}
-	
-	function isExcluded($field)
-	{
-		return (array_key_exists($field, $this->fields));
-	}	
-	
-	function add()
-	{
-		$args = func_get_args();
-		for($i = 0; $i < count($args); ++$i)
-		{
-			$this->fields[$args[$i]] = true;
-		}
-	}
-		
-	function remove()
-	{
-		$args = func_get_args();
-		for($i = 0; $i < count($args); ++$i)
-		{
-			unset($this->fields[$args[$i]]);
-		}
-	}
-	
-	function includeField($field)
-	{
-		$this->remove($field);
-	}
-	
-	function excludeField($field)
-	{
-		$this->add($field);
-	}
-}
 
-/**
- * Used to place a filter on the contents of a DataItem-derived object.
- * With an InclusionFilter, only the specified fields (and the primary key)
- * will be <b>included</b> in any subsequent queries or operations.
- */
-class InclusionFilter
-{
-	var $fields = array();
-	var $type = "InclusionFilter";
-	
-	function InclusionFilter()
-	{
-		$args = func_get_args();
-		for($i = 0; $i < count($args); ++$i)
-		{
-			$this->fields[$args[$i]] = true;
-		}
-	}
-	
-	function isExcluded($field)
-	{
-		return !(array_key_exists($field, $this->fields));
-	}	
-
-	function add()
-	{
-		$args = func_get_args();
-		for($i = 0; $i < count($args); ++$i)
-		{
-			$this->fields[$args[$i]] = true;
-		}
-	}
-	
-	function remove()
-	{
-		$args = func_get_args();
-		for($i = 0; $i < count($args); ++$i)
-		{
-			unset($this->fields[$args[$i]]);
-		}
-	}
-
-	function includeField($field)
-	{
-		$this->add($field);
-	}
-	
-	function excludeField($field)
-	{
-		$this->remove($field);
-	}
-}
-
-define("SerializeRelations", 1);
-define("SerializeDirectRelations", 2);
-define("ProtectHTML", 4);
 
 /**
  * DataItem is the generic base class for database mapped classes. It provides a
@@ -165,10 +56,8 @@ define("ProtectHTML", 4);
  * 
  * 
  */
-class DataItem
+class DataItem extends AbstractDataItem
 {
-	var $filter;
-	var $_options = 0;
 	
 	/**
 	 * Constructor. DataItems can be constructed in three ways:<br>
@@ -214,44 +103,23 @@ class DataItem
 			}
 		}
 	}
-
-	/**
-	 * Set a behavior option flag
-	 * @param integer $opt the option to set 
-	 */
-	function setOption($opt)
-	{
-		$this->_options |= $opt;
-	}
 	
 	/**
-	 * Clear the specified behavior option flag
-	 * @param integer $opt the option to clear
+	 * Cast this object to another class. For simple DataItems this checks that the class
+	 * is the same as the supplied class and returns a reference if so. If not an exception is
+	 * thrown.
+	 * @param string $class
+	 * @return instance of the specified class, if compatible
+	 * @throws DataItemException
 	 */
-	function clearOptions($opt)
+	function cast($class)
 	{
-		$this->_options |= $opt;
-	}
-	
-	/**
-	 * Retrieves a connection to the database.
-	 *
-	 * @return a connection to the database
-	 */
-	function getConnection()
-	{
-		//TODO: Add transactional support
-		return ConnectionManager::getConnection();
-	}
-	
-	/**
-	 * Subclasses can override this function to provide additional 
-	 * identity constraints to be used when querying or updating. This allows for
-	 * easy and safe siloing of data between application users based on session variables.
-	 */
-	function getIdentityConstraint()
-	{
-		return "";
+		if (get_class($this) != $class)
+		{
+			throw new DataItemException("Cannot cast ".get_class($this)." to $class.");
+		}
+		
+		return $this;
 	}
 	
 	/**
@@ -274,6 +142,14 @@ class DataItem
         }
 	}
 		
+	/**
+	 * Retrieve the field type list for this object. 
+	 */
+	function getFields()
+	{
+		return $this->fields;
+	}
+	
 	/**
 	 * Returned a comma-separated list of the fields for this object (applying the assigned
 	 * filter if there is one).
@@ -339,6 +215,79 @@ class DataItem
 		return (!array_key_exists($relation, $this->relations)) ? false : true;
 	}
 			
+	/**
+	 * Retrieves the primary key field name
+	 */
+	function getPrimaryKey()
+	{
+		return $this->primary_key;
+	}
+	
+	/**
+	 * Retrieves a list of all the primary keys used for an object as an array
+	 * @return array all the primary keys for this object's constituent parts
+	 */
+	function getPrimaryKeyList()
+	{
+		return array($this->primary_key);
+	}
+	
+	/**
+	 * Retrieve the value for the specified field.
+	 * @param string $field the field to retrieve
+	 * @return mixed the value of that field
+	 */
+	function get($field)
+	{
+		return $this->$field;
+	}
+	
+	/**
+	 * Set the value of the specified field
+	 * @param $field the field to set
+	 * @param $value the value to which the field is to be set
+	 */
+	function set($field, $value)
+	{
+		$this->$field = $value;
+	}
+	
+	/**
+	 * Retrieves the data type of the specified field
+	 * @param $field the field in question
+	 * @return string the data type of the specified field
+	 */
+	function getType($field)
+	{
+		return $this->fields[$field];
+	}
+	
+	/**
+	 * Returns the filter set on this object. 
+	 */
+	function getFilter()
+	{
+		return $this->filter;
+	}
+
+	/**
+	 * Sets the filter on this object.
+	 * @param $filter the filter
+	 */
+	function setFilter($filter)
+	{
+		$this->filter = $filter;
+	}	
+	
+	/**
+	 * Retrieve the list of field aliases
+	 * @return array the alias list for this object
+	 */
+	function getFieldAliases()
+	{
+		return $this->fieldAliases;
+	}
+	
 	/**
 	 * Load the object with the specified primary key
 	 * 
@@ -483,191 +432,6 @@ class DataItem
 		}
 		
 		return $success;
-	}
-
-	/**
-	 * Returns the properly quoted value of the specified field. Quoting rules
-	 * are dependent on the specified type of the field.
-	 * 
-	 * @param string $field the field to return
-	 * @param string $type the type of the field.
-	 */
-	function quoteFieldValue($field, $type)
-	{
-		$query = "";
-
-		$db = $this->getConnection();
-		
-		switch($type)
-		{
-		case Number:
-		case Currency:
-		
-			if ($this->$field == "" || !is_numeric($this->$field))
-			{
-				$query .= "0";
-			}
-			else
-			{
-				$query .= $this->$field;
-			}
-			break;
-	
-		case Date:
-		
-			$query .= ($this->$field) ? $db->quote($this->reformatToSQLDate($this->$field)) : "NULL";
-			break;
-			
-		case Timestamp:
-			
-			$query .= $db->quote(date("Y-m-d H:i:s"));
-			break;
-			
-		case Boolean:
-			
-			$query .= ($this->$field) ? "1" : "0";
-			break;
-			
-		case String:
-		case Text:
-			
-		default:
-		
-			$query .= $db->quote($this->$field);
-			break;
-		}		
-
-		return $query;			
-	}
-	
-	function formatFieldValue($field)
-	{
-		$type = $this->fields[$field];
-		
-		$val = ""; 
-		switch($type)
-		{
-		case Number:
-		
-			if ($this->$field == "" || !is_numeric($this->$field))
-			{
-				$val = "0";
-			}
-			else
-			{
-				$val = $this->$field;
-			}
-			break;
-	
-		case Currency:
-					
-			if ($this->$field == "" || !is_numeric($this->$field))
-			{
-				$val = "0";
-			}
-			else
-			{
-				$val = number_format($this->$field, 2);
-			}
-			break;
-						
-		case Date:
-		
-			if (!$this->$field) return "";
-			$val = formatDateShort($this->$field);
-			break;
-			
-		case Timestamp:
-			
-			$val = date("Y-m-d H:i:s");
-			break;
-			
-		case Boolean:
-			
-			$query .= ($this->$field) ? "True" : "False";
-			break;
-			
-		case String:
-		case Text:
-			
-		default:
-		
-			$val = $this->$field;
-			break;
-		}		
-
-		return $val;					
-	}
-	
-	/**
-	 * Format field for XML output
-	 */
-	function formatFieldForXML($field)
-	{
-		$type = $this->fields[$field];
-		
-		$v = "";
-		switch($type)
-		{
-		case HTML:
-			
-			if ($this->_options & ProtectHTML)
-			{
-				$v = str_replace( array("<", ">", "&"), array("[_[OPENTAG]_]", "[_[CLOSETAG]_]", "[_[AMPERSAND]_]"), $this->$field);				
-				break;
-			}
-			
-		case Number:
-		case Date:
-		case Timestamp:
-		case String:
-		case Text:
-		default:
-		
-			$v = htmlspecialchars($this->$field);
-			break;
-		}
-		
-		return $v;	
-			
-	}
-	
-	/**
-	 * Reformats the specified date to be in a format used by the database.
-	 * 
-	 * @param string $date the date to reformat.
-	 */
-	function reformatToSQLDate($date)
-	{
-		trace($date, 3);
-		$fields = array();
-		if (preg_match("|^(\\d+)[\-/](\\d+)[\-/](\\d{4})$|", $date, $fields))
-		{
-			$date = $fields[3]."-".$fields[1]."-".$fields[2];
-		}
-		else if (preg_match("|^(\\d+)/(\\d+)/(\\d{4})\\s+(\\d+:\\d+:\\d+)|", $date, $fields))
-		{
-			$date = $fields[3]."-".$fields[1]."-".$fields[2]." ".$fields[4];
-		}
-
-		return $date;
-	}
-	
-	function reformatFromSQLDate($date)
-	{
-		$fields = array();
-		if (preg_match("|^(\\d{4})-(\\d\\d)-(\\d\\d)$|", $date, $fields))
-		{
-			$date = $fields[2]."/".$fields[3]."/".$fields[1];
-		}
-		else if (preg_match("|(\\d{4})-(\\d\\d)-(\\d\\d)\\s+(\\d+:\\d+:\\d+)|", $date, $fields))
-		{
-			$date = $fields[2]."/".$fields[3]."/".$fields[1]." ".$fields[4];
-		}
-		
-		if ($date == "00/00/0000") $date = "";
-		
-		return $date;
 	}
 	
 	/**
@@ -1162,7 +926,7 @@ class DataItem
 		// Feature enhancement - allow drill-down through relation functions
 		
 		$matches = array();
-		preg_match_all("/\\{([\\w_]+)\.([\\w_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 		
 		foreach($matches as $match)
 		{
@@ -1229,24 +993,6 @@ class DataItem
 		
 		return $field;
 	}
-		
-	function prettifyClassName($plural = false)
-	{
-		$c = ($this->pretty_class_name) ? $this->pretty_class_name : get_class($this);
-		$c = preg_replace(array("/([a-z])([A-Z0-9])/",
-								"/_/"),
-						  array("$1 $2",
-						  		" "),
-						  $c);
-		$c = ucwords($c);
-		
-		if ($plural)
-		{
-			$c = pluralize($c);
-		}
-		
-		return $c;
-	}
 
 	/**
 	 * Link this object to the specified target by setting corresponding field
@@ -1271,6 +1017,7 @@ class DataItem
  * 
  * @param string $class the name of the class of objects to query
  * @param $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
+ * @param $filter optional filter to apply to the query
  * @param $page optional page number to retrieve
  * @param $size optional size of pages
  */

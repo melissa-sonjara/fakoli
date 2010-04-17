@@ -68,7 +68,7 @@ class SelectFieldRenderer extends FieldRenderer
 	var $onChange; // optional selection change handler
 	var	$max_chars;
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options, $onChange="")
+	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="")
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
@@ -114,9 +114,11 @@ class SelectFieldRenderer extends FieldRenderer
 			 * for this field
 			 * */
 			$othEntry = true;
+			$current = $this->parent->data->get($field);
+			
 			foreach($this->options as $value => $name)
 			{
-				if($this->parent->data->$field == $value)
+				if($current == $value)
 				{
 					$selected = " selected";
 					$othEntry = false;
@@ -128,7 +130,7 @@ class SelectFieldRenderer extends FieldRenderer
 			}
 			
 			if($othEntry)
-				$addEntryValue = $this->parent->data->$field;
+				$addEntryValue = $this->parent->data->get($field);
 			
 			echo "</select>";
 		}
@@ -175,9 +177,9 @@ class SelectFieldRenderer extends FieldRenderer
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		if (array_key_exists($this->parent->data->$field, $this->options))
+		if (array_key_exists($this->parent->data->get($field), $this->options))
 		{
-			echo $this->options[$this->parent->data->$field];
+			echo $this->options[$this->parent->data->get($field)];
 		}
 		else
 		{
@@ -190,9 +192,11 @@ class SelectFieldRenderer extends FieldRenderer
 	{
 		$found = false;
 		
+		$current = $this->parent->data->get($field);
+		
 		foreach($this->options as $value => $name)
 		{
-			if($this->parent->data->$field == $value && $value != '')
+			if($current == $value && $value != '')
 			{
 				$found = true;
 			}
@@ -202,7 +206,7 @@ class SelectFieldRenderer extends FieldRenderer
 		
 		if ($_POST["{$field}_addEntry"] && !$found)
 		{
-			$this->parent->data->$field = $_POST["{$field}_addEntry"];
+			$this->parent->data->set($field,  $_POST["{$field}_addEntry"]);
 		}
 	}
 	

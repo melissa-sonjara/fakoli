@@ -145,8 +145,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		foreach($this->items as $item)
 		{
 			$name = $this->formatName($item, $this->nameField);
-			$valueField = ($this->valueField != "") ? $this->valueField : $item->primary_key;
-			$value = $item->$valueField;
+			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
+			$value = $item->get($valueField);
 			
 			$vals[$name] = $value;
 		}
@@ -155,6 +155,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		{
 			ksort($vals, SORT_LOCALE_STRING);
 		}
+		
+		$current = $this->parent->data->get($field);
 		
 		foreach($vals as $name => $value)
 		{
@@ -168,11 +170,9 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			 * retrieved or loaded from a saved record, then
 			 * set selected to the field value of that record
 			 */			
-			if (($this->parent->data->$field != NULL) AND
-				($value == $this->parent->data->$field)) 
+			if (($current != NULL) AND ($value == $current)) 
 				echo " selected";
-			elseif (($this->parent->data->$field == NULL) AND
-				($value != NULL) AND ($value == $default))
+			elseif (($current == NULL) AND ($value != NULL) AND ($value == $default))
 				echo " selected";
 			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
 		}
@@ -185,21 +185,22 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		else if ($this->otherField)
 		{
 			$otherField = $this->otherField;
+			$filter = $this->parent->data->getFilter();
 			
-			$value = $this->parent->data->$otherField;
-			$pkField = $this->parent->data->primary_key;
+			$value = $this->parent->data->get($otherField);
+			$pkField = $this->parent->data->getPrimaryKey();
 			if ($this->parent->data->$pkField && 
-				$this->parent->data->filter && 
-				$this->parent->data->filter->isExcluded($this->otherField))
+				$filter && 
+				$filter->isExcluded($this->otherField))
 			{
 				$obj = clone($this->parent->data);
-				$obj->filter = new InclusionFilter($obj->primary_key, $this->otherField);
+				$obj->setFilter(new InclusionFilter($obj->getPrimaryKey(), $this->otherField));
 				$obj->select();
-				$value = $obj->$otherField;
+				$value = $obj->get($otherField);
 			}
 			else
 			{
-				$value = $this->data->$otherField;
+				$value = $this->data->get($otherField);
 			}
 			echo "<span style='white-space: nowrap'> if other, please specify: <input type='text' name='{$otherField}' value='{$value}' size='30'/></span>";
 		}
@@ -214,7 +215,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td><select name='{$field}:$mode'>\n";
 		echo "<option value=''></option>\n";
-		$valueField = ($this->valueField != "") ? $this->valueField : $item->primary_key;
+		$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
 		//trace("valueField: $valueField", 3);
 		
 		$value = $this->parent->params->get($field, $mode);
@@ -223,8 +224,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		{
 			$name = $this->formatName($item, $this->nameField);
 
-			echo "<option value='{$item->$valueField}'";
-			if ($item->$valueField == $value) echo " selected";
+			echo "<option value='{$item->get($valueField)}'";
+			if ($item->get($valueField) == $value) echo " selected";
 			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
 		}
 		echo "</select>";
@@ -238,11 +239,13 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
 		
+		$current = $this->parent->data->get($field);
+		
 		foreach($this->items as $item)
 		{
-			$valueField = $this->valueField ? $this->valueField : $item->primary_key;
+			$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
 			
-			if ($this->parent->data->$field == $item->$valueField)
+			if ($current == $item->get($valueField))
 			{
 				$name = $this->formatName($item, $this->nameField);
 				echo $name;
@@ -279,17 +282,19 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		if ($this->otherField)
 		{
+			$filter = $this->parent->data->getFilter();
+			
 			// Ensure that the 'other' field value gets written
-			if ($this->parent->data->filter)
+			if ($filter)
 			{
-				$this->parent->data->filter->includeField($this->otherField);
+				$filter->includeField($this->otherField);
 				$otherField = $this->otherField;
-				$this->parent->data->$otherField = isset($_POST[$otherField]) ? $_POST[$otherField] : "";
+				$this->parent->data->set($otherField, isset($_POST[$otherField]) ? $_POST[$otherField] : "");
 			}
 		}
 		
 		if (!$this->allowAdd) return;
-		$valueField = $valueField ? $this->valueField : $item->primary_key;
+		$valueField = $valueField ? $this->valueField : $item->getPrimaryKey();
 		$field = "autoform_add_$valueField";
 		$val = $_POST[$field];
 		
@@ -301,19 +306,19 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			{
 				if ($val == $this->formatName($item, $this->nameField))
 				{
-					$this->data->$valueField = $item->$valueField;
+					$this->data->set($valueField, $item->get($valueField));
 					return;
 				}
 			}
 			
 			$obj = ($this->templateItem) ? $this->templateItem : new $this->relatedClass;
-			$pk = $obj->primary_key;
+			$pk = $obj->getPrimaryKey();
 			
 			$nameField = $this->nameField;
 			
-			$obj->$nameField = $val;
+			$obj->set($nameField, $val);
 			$obj->save();
-			$this->parent->data->$valueField = $obj->$pk;
+			$this->parent->data->set($valueField, $obj->get($pk));
 		}
 	}
 }

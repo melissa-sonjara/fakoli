@@ -83,7 +83,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		$editor = $field."_editor";
 		echo "var $editor = new RichTextEditor('$editor', '$field', '";
-		echo trim(jsSafe($this->parent->data->$field));
+		echo trim(jsSafe($this->parent->data->get($field)));
 		echo "', '{$this->width}', '{$this->height}', false, false";
 		if ($this->parent->HTMLEditorCSSPath) echo ", '{$this->parent->HTMLEditorCSSPath}'";
 		echo ");\n";
@@ -127,7 +127,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		}
 		echo "<td colspan='$this->colspan'";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">{$this->parent->data->$field}</td>\n";		
+		echo ">".$this->parent->data->get($field)."</td>\n";		
 		echo "</tr>\n";	
 	}	
 

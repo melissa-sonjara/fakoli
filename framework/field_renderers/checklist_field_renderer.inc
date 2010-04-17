@@ -122,7 +122,7 @@ class CheckListFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
-		$values = explode(",", $this->parent->data->$field);
+		$values = explode(",", $this->parent->data->get($field));
 		
 		if ($this->grouped)
 		{
@@ -195,20 +195,23 @@ class CheckListFieldRenderer extends FieldRenderer
 	{		
 		if (is_array($_POST[$field]))
 		{
-			$this->parent->data->$field = implode(",",  array_values($_POST[$field]));
+			$this->parent->data->set($field, implode(",",  array_values($_POST[$field])));
 		}
 		else
 		{
-			$this->parent->data->$field = $_POST[$field];
+			$this->parent->data->set($field, $_POST[$field]);
 		}
 		
 		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
 		
 		if ($_POST["{$field}_addEntry"])
 		{
-			if($this->parent->data->$field)
-				$this->parent->data->$field .= ",";	
-			$this->parent->data->$field .= $_POST["{$field}_addEntry"];
+			if($this->parent->data->get($field))
+			{
+				$this->parent->data->set($field, $this->parent->data->get($field) . ",");
+			}
+			
+			$this->parent->data->set($field, $this->parent->data->get($field) . $_POST["{$field}_addEntry"]);
 		}
 	}
 	

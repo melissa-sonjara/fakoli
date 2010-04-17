@@ -79,6 +79,9 @@ class AutoForm
 	var $markRequiredFields = false;		///< Set to true to add an asterisk after required field labels.
 	var $onFormatLabel = null; ///< Label Processing hook
     var $buttons_at_top = false;
+    
+    var $fields;	///< Local field cache
+    
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
 	 *
@@ -106,20 +109,30 @@ class AutoForm
 
 		$this->validator->id = $this->id;
 
+		$this->fields = $this->data->getFields();
+		
 		// Add in a default renderer for each field
-		foreach($this->data->fields as $field => $type)
+		foreach($this->fields as $field => $type)
 		{
 			$this->renderers[$field] = $this->createRenderer($field);
 		}
 		
+		$aliases = $this->data->getFieldAliases();
 		// Read in default alias definitions from DataItem
-		if ($this->data->fieldAliases)
+		if ($aliases)
 		{
-			foreach($this->data->fieldAliases as $field => $alias)
+			foreach($aliases as $field => $alias)
 			{
 				$this->alias($field, $alias);
 			}
 		}
+		
+		$pks = $this->data->getPrimaryKeyList();
+		foreach($pks as $p)
+		{
+			$this->hide($p);
+		}
+		
 	}
 
 
@@ -132,9 +145,10 @@ class AutoForm
 	 */
 	function createRenderer($field)
 	{
-		if (!array_key_exists($field, $this->data->fields)) return null;
+		if (!array_key_exists($field, $this->fields)) return null;
 
-		$type =$this->data->fields[$field] ;
+		$type = $this->fields[$field];
+		
 		switch($type)
 		{
 		case String: 
@@ -185,10 +199,11 @@ class AutoForm
 	 */
 	function addDefaultValidators()
 	{
-
-		foreach(array_keys($this->data->fields) as $field)
+		$filter = $this->data->getFilter();
+		
+		foreach(array_keys($this->fields) as $field)
 		{
-			if ($this->data->filter && $this->data->filter->isExcluded($field)) continue;
+			if ($filter && $filter->isExcluded($field)) continue;
 
 			$renderer = $this->getRenderer($field);
 			if ($renderer)
@@ -224,11 +239,13 @@ class AutoForm
 		}
 
 		$obj =& $this->data;
+		$filter = $obj->getFilter();
+		$pk = $obj->getPrimaryKey();
+		
 		$script = "";
-		foreach(array_keys($obj->fields) as $field)
+		foreach(array_keys($this->fields) as $field)
 		{
-			if ($field != $pk&&
-			!($obj->filter && $obj->filter->isExcluded($field)))
+			if ($field != $pk && !($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if ($renderer)
@@ -249,10 +266,9 @@ class AutoForm
 		echo "function onSubmit{$this->id}(form)\n{\n";
 		echo "\tif (!validate_{$this->id}(form)) return false;\n";
 
-		foreach(array_keys($obj->fields) as $field)
+		foreach(array_keys($this->fields) as $field)
 		{
-			if ($field != $pk&&
-			!($obj->filter && $obj->filter->isExcluded($field)))
+			if ($field != $pk && !($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if ($renderer)
@@ -518,12 +534,12 @@ class AutoForm
 	function drawForm()
 	{
 		$obj =& $this->data;
-		$pk = $obj->primary_key;
+		$pk = $obj->getPrimaryKey();
 
 		$submitLabel = $this->submitLabel;
 		if ($submitLabel == "")
 		{
-			$submitLabel = ($obj->$pk != "" && $obj->$pk != 0) ? "Update ".$obj->prettifyClassName() : "Add ".$obj->prettifyClassName();
+			$submitLabel = ($obj->get($pk) != "" && $obj->get($pk) != 0) ? "Update ".$obj->prettifyClassName() : "Add ".$obj->prettifyClassName();
 		}
 
 		//echo "<!--\n";
@@ -534,10 +550,10 @@ class AutoForm
 		{
 			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
 		}
-		echo "<input type='hidden' name='$pk' value='{$obj->$pk}'>\n";
+		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
-			echo "<input type='hidden' name='$hidden' value='{$obj->$hidden}'/>\n";
+			echo "<input type='hidden' name='$hidden' value='{$obj->get($hidden)}'/>\n";
 		}
 
 		echo "<table";
@@ -557,7 +573,7 @@ class AutoForm
 				echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
 			}
 
-			if ($obj->$pk && $this->allowDelete)
+			if ($obj->get($pk) && $this->allowDelete)
 			{
 				$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
 					
@@ -581,10 +597,11 @@ class AutoForm
 			echo "<tr>\n <td colspan='2'><b>* indicates required field</b></td></tr>\n";
 		}
 
-		foreach(array_keys($obj->fields) as $field)
+		$filter = $obj->getFilter();
+		
+		foreach(array_keys($this->fields) as $field)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
-			!($obj->filter && $obj->filter->isExcluded($field)))
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if ($renderer)
@@ -627,7 +644,7 @@ class AutoForm
 			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
 		}
 
-		if ($obj->$pk && $this->allowDelete)
+		if ($obj->get($pk) && $this->allowDelete)
 		{
 			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
 
@@ -676,12 +693,13 @@ class AutoForm
 		echo ">\n";
 
 		$obj =& $this->data;
-		$pk = $obj->primary_key;
-
+		$pk = $obj->getPrimaryKey();
+		$filter = $obj->getFilter();
+		
 		foreach(array_keys($obj->fields) as $field)
 		{
 			if ($field != $pk && $obj->$field != "" && !array_key_exists($field, $this->hidden) &&
-			!($obj->filter && $obj->filter->isExcluded($field)))
+			!($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if ($renderer)
@@ -770,7 +788,9 @@ class AutoForm
 		$obj =& $this->data;
 
 		$obj->fromPOST();
-
+		$filter = $obj->getFilter();
+		$pk = $obj->getPrimaryKey();
+		
 		if (isset($_POST["#FORMID#"]))
 		{
 			$this->id = $_POST["#FORMID#"];
@@ -792,10 +812,10 @@ class AutoForm
 		$this->msg = $this->validator->validate();
 		if ($this->msg != "") return false;
 
-		foreach (array_keys($obj->fields) as $field)
+		foreach (array_keys($this->fields) as $field)
 		{
 			if ($field != $pk  && !array_key_exists($field, $this->hidden) &&
-			!($obj->filter && $obj->filter->isExcluded($field)))
+			!($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if ($renderer)
@@ -816,10 +836,10 @@ class AutoForm
 
 		$obj->save();
 
-		foreach (array_keys($obj->fields) as $field)
+		foreach (array_keys($this->fields) as $field)
 		{
 			if ($field != $pk  && !array_key_exists($field, $this->hidden) &&
-			!($obj->filter && $obj->filter->isExcluded($field)))
+			!($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if ($renderer)

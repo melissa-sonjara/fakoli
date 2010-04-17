@@ -52,7 +52,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{
-		$value = htmlspecialchars($this->parent->data->$field, ENT_QUOTES, 'UTF-8');
+		$value = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		
 		// display with commas between thousands
 		$value = number_format($value, 2);
@@ -92,7 +92,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">$".number_format($this->parent->data->$field, 2)."</td>\n";		
+		echo ">$".number_format($this->parent->data->get($field), 2)."</td>\n";		
 		echo "</tr>\n";			
 	}
 	
@@ -100,7 +100,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 	function preProcess($field)
 	{
 		$value= $_POST[$field];
-		$this->parent->data->$field = str_replace(",", "", $value);
+		$this->parent->data->set($field, str_replace(",", "", $value));
 	}
 	
 }

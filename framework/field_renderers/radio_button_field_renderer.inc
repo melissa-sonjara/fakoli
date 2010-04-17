@@ -56,9 +56,11 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
+		$current = $this->parent->data->get($field);
+		
 		foreach($this->options as $value => $name)
 		{
-			$selected = ($this->parent->data->$field == $value) ? " checked" : "";
+			$selected = ($current == $value) ? " checked" : "";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
 			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected>$name</option>";
@@ -97,9 +99,9 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		if (array_key_exists($this->parent->data->$field, $this->options))
+		if (array_key_exists($this->parent->data->get($field), $this->options))
 		{
-			echo $this->options[$this->parent->data->$field];
+			echo $this->options[$this->parent->data->get($field)];
 		}
 		else
 		{

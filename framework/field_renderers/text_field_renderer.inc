@@ -88,13 +88,13 @@ class TextFieldRenderer extends FieldRenderer
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 		echo "<textarea name='$field' rows='{$this->rows}' cols='{$this->columns}'$onkeypress>";
-		echo htmlspecialchars($this->parent->data->$field, ENT_QUOTES, 'UTF-8');
+		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		echo "</textarea>";
 		
 		if ($this->limit)
 		{
 			echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
-			echo strlen(trim($this->parent->data->$field));
+			echo strlen(trim($this->parent->data->get($field)));
 			echo "</span> of $this->limit characters</div></div>";
 		}
 		
@@ -115,7 +115,7 @@ class TextFieldRenderer extends FieldRenderer
 		echo "<td colspan='{$this->colspan}'";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		$text = htmlspecialchars($this->parent->data->$field, ENT_QUOTES, 'UTF-8');
+		$text = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		$text = str_replace("\n", "<br/>", $text);
 		echo $text;
 		echo "</td>\n</tr>\n";		

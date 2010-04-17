@@ -68,9 +68,11 @@ class RatingFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 		
 		echo "{$this->minLabel}&nbsp;&nbsp;";
+		$current = $this->parent->data->get($field);
+		
 		for($i = 1; $i <= $this->ranks; ++$i)
 		{
-			$checked = ($this->parent->data->$field == $i) ? " checked='checked'" : "";
+			$checked = ($current == $i) ? " checked='checked'" : "";
 			echo "<input type='radio' name='$field' value='$i'$checked>&nbsp;$i&nbsp;&nbsp;&nbsp;";
 		}
 		
@@ -86,7 +88,7 @@ class RatingFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">{$this->parent->data->$field}</td>\n";		
+		echo ">".$this->parent->data->get($field)."</td>\n";		
 		echo "</tr>\n";	
 	}
 

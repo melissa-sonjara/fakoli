@@ -37,6 +37,11 @@
  * @package Sonjara-Tools
  */
 
+/**
+ * Check whether the user has one of a specified set of roles
+ * @param $role the role(s) to check against, as a comma-delimited list
+ * @return true if the user has one of the roles, false otherwise.
+ */
 function checkRole($role)
 {
 	global $user;
@@ -647,6 +652,10 @@ function redirect($page)
 	else if ($page[0] == '/')
 	{
 		$location = "http://$server$page";
+	}
+	else if (preg_match( "/^[\\w\\d_\\-\\.]+$/", $page))
+	{
+		$location = "http://$server/$page";
 	}
 	else
 	{

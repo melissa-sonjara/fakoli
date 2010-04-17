@@ -110,13 +110,13 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		$this->_startField($field);
 		
 		$obj = $this->parent->data;
-		$pk = $obj->primary_key;
+		$pk = $obj->getPrimaryKey();
 		
 		$rc = $this->options[0];
 		
-		$itempk = $rc->primary_key;
+		$itempk = $rc->getPrimaryKey();
 		
-		$selected = ($obj->$pk != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->$pk}", $rc->primary_key) : array();
+		$selected = ($obj->get($pk) != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->get($pk)}", $rc->getPrimaryKey()) : array();
 		
 		if ($this->showSelectAll)
 		{
@@ -154,13 +154,13 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		if (count($this->options) == 0) return;
 		
 		$obj = $this->parent->data;
-		$pk = $obj->primary_key;
+		$pk = $obj->getPrimaryKey();
 		
-		if ($obj->$pk == "") return;
+		if ($obj->get($pk) == "") return;
 		
-		$optpk = $this->options[0]->primary_key;
+		$optpk = $this->options[0]->getPrimaryKey();
 		
-		$items = indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->$pk}", $optpk);
+		$items = indexedQuery($this->xrefClass, "WHERE {$pk}=".$obj->get($pk), $optpk);
 		
 		echo "<tr>\n";
 		$this->_printLabel($this->label);
@@ -183,22 +183,22 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	function postProcess($field = "")
 	{
 		$obj = $this->parent->data;
-		$pk = $obj->primary_key;
+		$pk = $obj->getPrimaryKey();
 		
-		$optpk = $this->options[0]->primary_key;
+		$optpk = $this->options[0]->getPrimaryKey();
 		
 		// Clear out current relations
 		
 		$xref = new $this->xrefClass;
-		$xref->delete("WHERE {$pk}={$obj->$pk}");
+		$xref->delete("WHERE {$pk}=".$obj->get($pk));
 		
 		if (isset($_POST[$this->field]))
 		{
 			foreach($_POST[$this->field] as $optionpk => $dummy)
 			{
 				$xref = new $this->xrefClass;
-				$xref->$pk = $obj->$pk;
-				$xref->$optpk = $optionpk;
+				$xref->set($pk, $obj->get($pk));
+				$xref->set($optpk, $optionpk);
 				$xref->save();
 			}
 		}

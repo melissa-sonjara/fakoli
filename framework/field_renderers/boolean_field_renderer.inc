@@ -50,7 +50,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "<td colspan='2' style='text-align: left'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
 		echo "><input type='checkbox' value='1' name='$field'";
-		if ($this->parent->data->$field)
+		if ($this->parent->data->get($field))
 		{
 			echo " checked";
 		}
@@ -70,7 +70,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "<td colspan='2'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
 		echo "><input type='checkbox' value='1' name='$field:$mode'";
-		if ($this->parent->data->$field)
+		if ($this->parent->data->get($field))
 		{
 			echo " checked";
 		}
@@ -86,7 +86,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		echo ($this->parent->data->$field) ? "Yes" : "No";
+		echo ($this->parent->data->get($field)) ? "Yes" : "No";
 		echo "</td>\n</tr>\n";
 	}
 }

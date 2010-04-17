@@ -94,11 +94,11 @@ function <?echo $this->parent->id?>_showPassword()
 	
 	function renderField($field)
 	{
-		$pk = $this->parent->data->primary_key;
+		$pk = $this->parent->data->getPrimaryKey();
 	
 		$this->_startField($field);
 		
-		if ($this->parent->data->$pk && !$this->forceReset)
+		if ($this->parent->data->get($pk) && !$this->forceReset)
 		{
 			echo "<a id='{$this->parent->id}_link' href='#' onclick='{$this->parent->id}_showPassword();return false;'>Click to reset password</a>\n";
 			$this->renderPasswordBlock($field, "none");
@@ -126,7 +126,7 @@ function <?echo $this->parent->id?>_showPassword()
 	
 	function preProcess($field = "")
 	{
-		$pk = $this->parent->data->primary_key;
+		$pk = $this->parent->data->getPrimaryKey();
 		
 		if (!$this->parent->data->$pk || $_POST["{$this->parent->id}_reset_password"])
 		{
@@ -134,18 +134,20 @@ function <?echo $this->parent->id?>_showPassword()
 		}
 		else
 		{
-			if ($this->parent->data->filter == null)
+			if ($this->parent->data->getFilter() == null)
 			{
-				$this->parent->data->filter = new ExclusionFilter();
+				$this->parent->data->setFilter(new ExclusionFilter());
 			}
 			
-			if ($this->parent->data->filter->type == "ExclusionFilter")
+			$filter = $this->parent->data->getFilter();
+			
+			if ($filter->type == "ExclusionFilter")
 			{
-				$this->parent->data->filter->add($field);
+				$filter->add($field);
 			}
 			else
 			{
-				$this->parent->data->filter->remove($field);
+				$filter->remove($field);
 			}
 		}
 		
@@ -162,7 +164,7 @@ function <?echo $this->parent->id?>_showPassword()
 			$password = crypt($password);
 		}
 		
-		$this->parent->data->$field = $password;
+		$this->parent->data->set($field, $password);
 	}	
 }
 

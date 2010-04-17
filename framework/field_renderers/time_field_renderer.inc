@@ -51,7 +51,7 @@ class TimeFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{
-		$value = $this->parent->data->$field;
+		$value = $this->parent->data->get($field);
 		
 		if ($value)
 		{
@@ -85,7 +85,7 @@ class TimeFieldRenderer extends FieldRenderer
 		echo "<td colspan='2'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
 		echo "><input type='checkbox' value='1' name='$field:$mode'";
-		if ($this->parent->data->$field)
+		if ($this->parent->data->get($field))
 		{
 			echo " checked";
 		}
@@ -101,7 +101,7 @@ class TimeFieldRenderer extends FieldRenderer
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		echo date('h:i A', strttotime($this->parent->data->$field));
+		echo date('h:i A', strttotime($this->parent->data->get($field)));
 		echo "</td>\n</tr>\n";
 	}
 	
@@ -113,7 +113,7 @@ class TimeFieldRenderer extends FieldRenderer
 		if ($aa != "AM" && $aa != "PM") die("Invalid meridiem");
 		if ($aa == "PM" && $hh != "12") $hh += 12;
 		if ($aa == "AM" && $hh == "12") $hh = "00";
-		$this->parent->data->$field = "$hh:$mm";
+		$this->parent->data->set($field, "$hh:$mm");
 	}
 }
 
