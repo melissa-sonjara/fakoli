@@ -22,11 +22,11 @@
 
 DROP TABLE IF EXISTS `login_token`;
 CREATE TABLE  `login_token` (
-  `token_key` int(10) unsigned NOT NULL auto_increment,
+  `token_id` int(10) unsigned NOT NULL auto_increment,
   `token` varchar(10) NOT NULL,
   `expire_date` date NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  USING BTREE (`token_key`),
+  PRIMARY KEY  USING BTREE (`token_id`),
   UNIQUE KEY `token_idx` USING BTREE (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
