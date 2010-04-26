@@ -134,5 +134,15 @@ function getImage()
 		return $thumbnail;
 	}
 	
+function getCaption()
+	{
+		return $this->title;
+	}
+	
+	function getShortCredit()
+	{
+		//this is used to create the correct citation for a library item
+		return $this->credits;
+	}
 }
 ?>
