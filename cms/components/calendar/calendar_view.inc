@@ -19,23 +19,35 @@ class CalendarView
 	var $id;
 	var	$month;
 	var $year;
-	var $eventHandler;
+	var $eventHandlers = array();
 	var $calendarLink = "/calendar";
 	var $listLink = "/event_list";
 	var $detailLink = "/event_detail";
 	var $yearParam = "year";
 	var $monthParam = "month";
 	
-	function CalendarView($events, $handler, $id = null)
+	function CalendarView($events, $id = null)
 	{
 		$this->events = $events;
 		$this->id = $id;
 		$this->month = date("n");
 		$this->year = date("Y");
-		$this->eventHandler = $handler;
 	}
 
-
+	function addHandler($class, $handler)
+	{
+		$this->eventHandlers[$class] = $handler;
+		$handler->view = $this;
+	}
+	
+	function getHandler($event)
+	{
+		$cl = $event->composite_class;
+		if (!$cl) $cl = get_class($event);
+		trace("getting event handler for $cl", 3);
+		return $this->eventHandlers[$cl];
+	}
+	
 	function formatTime12($time)
 	{
 		$time = explode(" ", $time);
@@ -44,17 +56,28 @@ class CalendarView
 	}
 
 	
+	function summary($event)
+	{
+		return $this->getHandler($event)->summary($event);
+	}
+	
+	function details($event, $param = null)
+	{
+		return $this->getHandler($event)->details($event, $param);
+	}
+	
 	function filterEvents($events, $currentDay)
 	{
 		$ret = array();
 		
 		foreach($events as $event)
 		{
-		
-			if ($this->eventHandler->filter($event, $currentDay))
+			$handler = $this->getHandler($event);
+			
+			if ($handler->filter($event, $currentDay))
 			{
 				$ret[] = $event;
-			}				
+			}
 		}
 		
 		return $ret;
@@ -168,7 +191,8 @@ ENDSCRIPT;
 				
 				foreach($eventsToday as $event)
 				{
-					$bubbles .= $this->eventHandler->summary($event);
+					$handler = $this->getHandler($event);
+					$bubbles .= $handler->summary($event);
 				}
 					
 				$bubbles .=
@@ -248,8 +272,10 @@ ENDSCRIPT;
 
 				foreach($eventsToday as $event)
 				{
+					$handler = $this->getHandler($event);
+					
 					$content .= "<div class='event_summary'>";
-					$content .= $this->eventHandler->summary($event);
+					$content .= $handler->summary($event);
 					$content .= "</div>";
 				}					
 			}
