@@ -9,13 +9,19 @@ $page_role = "admin";
 require_once "../../include/config.inc";
 require_once "../../include/permissions.inc";
 require_once "../datamodel/event.inc";
+require_once "../datamodel/site.inc";
 require_once "../../framework/auto_form.inc";
 
 $event = new Event();
 
 $form = new AutoForm($event);
 $form->required("title", "start_date", "end_date");
+$form->readonly("composite_class");
 $form->allowDelete = true;
+
+$sites = query(Site, "ORDER BY site_name");
+
+$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);
 
 if ($method == "POST")
 {

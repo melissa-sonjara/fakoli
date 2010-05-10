@@ -1,10 +1,5 @@
 <?php
-/* =======================================================================
- * Africa AI Site Management Application
- * Developed by Sonjara, Inc. for SRA, International
- * For further information please contact Andy Green at andy@sonjara.com
- * =======================================================================
- */
+
 
 $page_role = "admin";
 

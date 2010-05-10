@@ -30,7 +30,7 @@ if (count($newsItems) > 0)
 	{
 ?>
  <tr>
-  <td><a title="<?echo $item->title ?>" href="news_item_form.php?news_item_id=<?echo $item->news_item_id ?>"><b><?echo ellipsis($item->title, 80) ?></b></a></td>
+  <td><b><a title="<?echo $item->title ?>" href="news_item_form.php?news_item_id=<?echo $item->news_item_id ?>"><?echo ellipsis($item->title, 80) ?></a></b></td>
   <td><?echo formatDate($item->last_modified) ?></td>
  </tr>
 <?

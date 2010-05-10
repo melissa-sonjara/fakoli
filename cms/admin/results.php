@@ -4,7 +4,7 @@ require_once "../../include/config.inc";
 require_once "../datamodel/topic.inc";
 require_once "../datamodel/region.inc";
 require_once "../../include/permissions.inc";
-require_once "../datamodel/publication.inc";
+require_once "../datamodel/document.inc";
 require_once "../datamodel/focus.inc";
 
 require_once "../datamodel/best_practice.inc";

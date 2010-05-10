@@ -58,7 +58,7 @@ if (count($events) > 0)
 
 ?>
  <tr>
-  <td><a title="<?echo $event->title ?>" href="event_form.php?event_id=<?echo $event->event_id ?>"><b><?echo ellipsis($event->title, 80) ?></b></a></td>
+  <td><b><a title="<?echo $event->title ?>" href="event_form.php?event_id=<?echo $event->event_id ?>"><?echo ellipsis($event->title, 80) ?></a></b></td>
   <td><? echo $event->location ?></td>
   <td><? echo $event->reformatFromSQLDate($event->start_date) ?></td>
   <td><? echo $event->reformatFromSQLDate($event->end_date) ?></td>

@@ -4,7 +4,7 @@ require_once "../../include/config.inc";
 require_once "../datamodel/module.inc";
 require_once "../datamodel/news_item.inc";
 require_once "../datamodel/group.inc";
-require_once "../datamodel/publication.inc";
+require_once "../datamodel/document.inc";
 require_once "../datamodel/page.inc";
 require_once "../../include/permissions.inc";
 require_once "../../framework/auto_form.inc";

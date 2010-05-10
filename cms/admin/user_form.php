@@ -11,6 +11,7 @@ $siteUser = new SiteUser();
 $form = new AutoForm($siteUser);
 $roleSelect = new SelectFieldRenderer($form, "role", "Role", $siteUserRoles);
 $redirect = "users.php";
+$form->unique("email");
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")
@@ -24,7 +25,7 @@ if ($method == "POST")
 if ($site_user_id)
 {
 	$siteUser->load($site_user_id);
-	$title = "Edit Account for {$user->first_name} {$user->last_name}";
+	$title = "Edit Account for {$siteUser->first_name} {$siteUser->last_name}";
 }
 else
 {
