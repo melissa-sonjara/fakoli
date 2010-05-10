@@ -14,7 +14,7 @@ date: 11/09
 
 require_once $config['homedir']."/cms/datamodel/module.inc";
 require_once $config['homedir']."/cms/datamodel/news_item.inc";
-require_once $config['homedir']."/cms/datamodel/publication.inc";
+require_once $config['homedir']."/cms/datamodel/document.inc";
 
 abstract class ModuleView
 {
@@ -105,6 +105,8 @@ class CodeModuleView extends ModuleView
 		global $config;
 		global $script;
 		global $styles;
+		global $page;
+		global $site;
 		
 		if ($this->module->php_code_file)
 		{

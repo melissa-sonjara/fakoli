@@ -28,8 +28,11 @@ class PageView
 		global $user;
 		global $script;
 		global $styles;
+		global $page;
+		global $site;
 		
 		$page = $this->page; // Pass through to code include
+		$site = $page->Site(); // Pass through to code include
 		
 		$template = $this->page->getTemplate();
 		

@@ -1,5 +1,5 @@
 <?php
-require_once realpath(dirname(__FILE__)."/../datamodel/publication.inc");
+require_once realpath(dirname(__FILE__)."/../datamodel/document.inc");
 require_once realpath(dirname(__FILE__)."/../datamodel/author.inc");
 require_once realpath(dirname(__FILE__)."/../datamodel/focus.inc");
 require_once realpath(dirname(__FILE__)."/../datamodel/region.inc");
