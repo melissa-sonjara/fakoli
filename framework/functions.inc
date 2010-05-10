@@ -653,7 +653,7 @@ function redirect($page)
 	{
 		$location = "http://$server$page";
 	}
-	else if (preg_match( "/^[\\w\\d_\\-\\.]+$/", $page))
+	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
 	{
 		$location = "http://$server/$page";
 	}

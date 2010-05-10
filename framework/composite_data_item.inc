@@ -295,6 +295,23 @@ class CompositeDataItem extends AbstractDataItem
 		}
 	}
 		
+	function loadFromBase($id)
+	{
+		$num = count($this->__objects);
+		
+		$this->__objects[$num - 1]->load($id);
+		
+		for($i = $num - 2; $i >= 0; --$i)
+		{
+			trace("BOOGER!", 3);
+			$pk = $this->__objects[$i+1]->getPrimaryKey();
+			$cl = get_class($this->__objects[$i]);
+			$obj = querySingle($cl, "WHERE $pk=".$this->__objects[$i+1]->get($pk));
+			$this->__objects[$i] = $obj;
+			$this->$cl = $obj;
+		} 
+	}
+	
 	/**
 	 * Store the object in the database.
 	 */
@@ -306,6 +323,11 @@ class CompositeDataItem extends AbstractDataItem
 		
 		for($i = $num - 1; $i >= 0; --$i)
 		{
+			if ($this->__objects[$i]->hasField("composite_class"))
+			{
+				$this->__objects[$i]->set("composite_class", get_class($this));
+			}
+			
 			$this->__objects[$i]->save();
 			if ($i != 0)
 			{
@@ -379,7 +401,17 @@ class CompositeDataItem extends AbstractDataItem
 	 */
 	function delete($constraint = "")
 	{
-		throw new DataItemException("TODO: Implement CompositeDataItem::delete()");
+		if ($constraint)
+		{
+			throw new DataItemException("CompositeDataItem::delete() does not currently support constraint clauses");
+		}
+		
+		$num = count($this->__objects);
+		
+		for($i = 0; $i < $num; ++$i)
+		{
+			$this->__objects[$i]->delete();
+		}
 	}
 		
 	/**
@@ -396,7 +428,7 @@ class CompositeDataItem extends AbstractDataItem
 		{
 			if ($obj->hasField($field))
 			{
-				return $obj->distinctValue($field, $sorted, $constraint);
+				return $obj->distinctValues($field, $sorted, $constraint);
 			}
 		}
 		

@@ -50,7 +50,8 @@ class SiteUser extends DataItem
 						"username"		=>	String,
 						"password"		=>	Password,
 						"email"			=>	String,
-						"active"		=>	Boolean);
+						"active"		=>	Boolean,
+						"notes"			=>	Text);
 						
 	// Relations
 
@@ -62,6 +63,11 @@ class SiteUser extends DataItem
 		$this->default_format = "{first_name} {last_name}";
 		
 		$this->DataItem(func_get_args());
+	}
+	
+	function getAdminForm()
+	{		
+		return "user_form.php";
 	}
 }
 

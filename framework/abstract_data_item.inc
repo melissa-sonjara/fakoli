@@ -1,4 +1,8 @@
 <?php
+
+class DataItemException extends Exception {}
+class DataNotFoundException extends Exception {}
+
 /**
  * Used to place a filter on the contents of a DataItem-derived object.
  * With an ExclusionFilter, the specified fields will be <b>excluded</b> from

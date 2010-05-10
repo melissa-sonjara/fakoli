@@ -131,7 +131,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	}
 	
 	function renderField($field)
-	{		
+	{	
 		$this->_startField($field);
 		echo "<select name='$field'";
 		
@@ -188,8 +188,9 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			$filter = $this->parent->data->getFilter();
 			
 			$value = $this->parent->data->get($otherField);
+			
 			$pkField = $this->parent->data->getPrimaryKey();
-			if ($this->parent->data->$pkField && 
+			if ($this->parent->data->get($pkField) && 
 				$filter && 
 				$filter->isExcluded($this->otherField))
 			{
@@ -200,8 +201,9 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			}
 			else
 			{
-				$value = $this->data->get($otherField);
+				$value = $this->parent->data->get($otherField);
 			}
+			
 			echo "<span style='white-space: nowrap'> if other, please specify: <input type='text' name='{$otherField}' value='{$value}' size='30'/></span>";
 		}
 		$this->_endField($field);

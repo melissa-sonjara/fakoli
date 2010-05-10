@@ -1,4 +1,4 @@
-﻿-- Questionnaire sql
+-- Questionnaire sql
 --
 -- SQL to create tables for questionnaire component
 --

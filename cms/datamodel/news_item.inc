@@ -47,7 +47,9 @@ class NewsItem extends DataItem
 						"created_date"	=>	Date,
 						"archive_date"  =>  Date,
 						"last_modified"	=>	Timestamp,
-						"published"		=>	Boolean);
+						"published"		=>	Boolean,
+						"allow_comment" =>	Boolean,
+						"headline"		=>	Boolean);
 
 	var $relations = array(	"Image" => Image,
 							"Sites"	=>	Site,

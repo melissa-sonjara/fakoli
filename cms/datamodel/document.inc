@@ -1,4 +1,4 @@
-<?php
+<?
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,52 +31,39 @@
 
 *****************************************************************/
 
+ 
 require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 
-class Site extends DataItem
+/**
+ * This class maps the publication table.
+ */
+class Document extends DataItem
 {
 	// Fields
-	var $fields = array("site_id"			=> Number,
-						"site_name"			=> String,
-						"domain"			=> String,
-						"description"		=> Text,
-						"default_template"	=> String,
-						"print_template"	=> String,
-						"popup_template"	=> String,
-						"mobile_template"	=> String,
-						"enabled"			=> Boolean);
 	
-// Relations
+	var $fields = array("document_id"			=>	Number,
+						"title"					=>	String,
+						"publication_date"		=>	Date,
+						"file"					=>  String,
+						"abstract"				=>	HTML,
+						"public"				=>	Boolean,
+						"last_modified"			=>	Timestamp,
+						"is_local"				=>	Boolean,
+						"author"				=>	String);
+						
+	// Relations
 	
-	var $relations = array(	"Pages"		=>	Page,
-							"NewsItems"	=>	NewsItem,
-							"Events"	=>	Event);
+	var $relations = array(	"Topics"	=>	Topic);
 	
-	function Pages($constraint = "")
+	function Document()
 	{
-		return $this->getRelatedList(Page, "", $constraint);
-	}
-	
-	function NewsItems($constraint = "")
-	{
-		return $this->crossReference(NewsItem, NewsItemSiteXref, $constraint);
-	}
-	
-	function Events($constraint = "")
-	{
-		return $this->crossReference(Event, EventSiteXref, $constraint);
-	}
-	
-	// Constructor
-	function Site()
-	{
-		$this->primary_key = "site_id";
-		$this->table = "site";
+		$this->primary_key = "document_id";
+		$this->table = "document";
 		
-		$this->default_format = "{site_name}";
+		$this->default_format = "{title}";
+		
 		$this->DataItem(func_get_args());
 	}
 }
-	
 
 ?>

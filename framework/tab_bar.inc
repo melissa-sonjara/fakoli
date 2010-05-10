@@ -63,12 +63,15 @@ class TabBar
 	 */
 	function TabBar($id, $tabs, $queryString = "", $useQueryString = true, $showNumber = false)
 	{
+		global $config;
+		
 		$this->id			  = $id;
-		$this->tabs          = $tabs;
-		$this->page           = basename($_SERVER["PHP_SELF"]);
+		$this->tabs           = $tabs;
+		$this->page           = ($config['prettyURLs']) ? $_REQUEST['identifier'] : basename($_SERVER["PHP_SELF"]);
 		$this->queryString    = $queryString;
 		$this->useQueryString = $useQueryString;
 		$this->showNumber     = $showNumber;
+		trace("PAGE: **** {$this->page}", 3);
 	}
 	
 	/**

@@ -319,6 +319,26 @@ class DataItem extends AbstractDataItem
 		}
 	}
 		
+
+	/**
+	 * Creates an outer CompositeDataItem from its base component. In order
+	 * for this method to succeed, the base component table must have a 'composite_class' 
+	 * field that is populated with the class name of the correct CompositeDataItem class.
+	 * @return the containing CompositeDataItem for this base component.
+	 */
+	function loadComposite()
+	{
+		if (!$this->hasField("composite_class") || !$this->composite_class)
+		{
+			throw new DataItemException("Cannot create composite from ".get_class($this)." as required composite cannot be determined");
+		}
+		
+		$composite = new $this->composite_class;
+		$composite->loadFromBase($this->get($this->getPrimaryKey()));
+		
+		return $composite;
+	}
+
 	/**
 	 * Store the object in the database.
 	 */
@@ -1536,6 +1556,44 @@ function extractFieldValues($items, $field)
 		$out[] = $item->$field;
 	}
 	return $out;
+}
+
+/**
+ * Find the first item in the array that matches the supplied value for the specified field.
+ * @param array $items the items to search
+ * @param string $field the name of the field to match
+ * @param mixed $value the value that must be matched
+ * @return DataItem the first matching object, or null if no match is found
+ */
+function findItem($items, $field, $value)
+{
+	foreach($items as $item)
+	{
+		if ($item->get($field) == $value) return $item;
+	}
+	
+	return null;
+}
+
+/**
+ * Find the index of the first item in the array that matches the supplied value for the specified field.
+ * @param array $items the items to search
+ * @param string $field the name of the field to match
+ * @param mixed $value the value that must be matched
+ * @return mixed the index of the first matching object, or false if no match was found
+ */
+
+function findItemIndex($items, $field, $value)
+{
+	$idx = 0;
+	
+	foreach($items as $item)
+	{
+		if ($item->get($field) == $value) return $idx;
+		++$idx;
+	}
+	
+	return false;
 }
 
 function restoreHTML($text)

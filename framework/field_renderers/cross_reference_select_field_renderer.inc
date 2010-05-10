@@ -101,6 +101,17 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		}
 	}
 	
+	function getMatchingPK($xref, $obj)
+	{
+		$pks = $obj->getPrimaryKeyList();
+		foreach($pks as $pk)
+		{
+			if ($xref->hasField($pk)) return $pk;
+		}
+		
+		throw new DataItemException("No matching foreign key in xref table");
+	}
+	
 	function renderField($field = "")
 	{
 		if (count($this->options) == 0) return;
@@ -110,11 +121,13 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		$this->_startField($field);
 		
 		$obj = $this->parent->data;
-		$pk = $obj->getPrimaryKey();
-		
+
 		$rc = $this->options[0];
+
+		$xref = new $this->xrefClass;
 		
-		$itempk = $rc->getPrimaryKey();
+		$itempk = $this->getMatchingPK($xref, $rc);
+		$pk = $this->getMatchingPK($xref, $obj);
 		
 		$selected = ($obj->get($pk) != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->get($pk)}", $rc->getPrimaryKey()) : array();
 		
@@ -153,12 +166,14 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	{
 		if (count($this->options) == 0) return;
 		
+		$xref = new $this->xrefClass;
+		
 		$obj = $this->parent->data;
-		$pk = $obj->getPrimaryKey();
+		$pk = $this->getMatchingPK($xref, $obj);
 		
 		if ($obj->get($pk) == "") return;
 		
-		$optpk = $this->options[0]->getPrimaryKey();
+		$optpk = $this->getMatchingPK($xref, $this->options[0]);
 		
 		$items = indexedQuery($this->xrefClass, "WHERE {$pk}=".$obj->get($pk), $optpk);
 		
@@ -182,10 +197,12 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	
 	function postProcess($field = "")
 	{
-		$obj = $this->parent->data;
-		$pk = $obj->getPrimaryKey();
+		$xref = new $this->xrefClass;
 		
-		$optpk = $this->options[0]->getPrimaryKey();
+		$obj = $this->parent->data;
+		$pk =  $this->getMatchingPK($xref, $obj);
+		
+		$optpk = $this->getMatchingPK($xref, $this->options[0]);
 		
 		// Clear out current relations
 		
