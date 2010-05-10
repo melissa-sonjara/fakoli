@@ -32,7 +32,7 @@
 *****************************************************************/
 
 /*
- * Title: login.php
+ * Title: /login
  * 
  * Description: Validates the SiteUser login.
  * 

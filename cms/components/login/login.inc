@@ -48,7 +48,7 @@
  // return codes
 define("valid_login", 1);
 define("valid_token_login", 2);
-define("invalid_username", 3; // 0 matches found 
+define("invalid_username", 3); // 0 matches found 
 define("invalid_password", 4); 
 
 
@@ -99,7 +99,7 @@ function validateLogin($username, $password, &$page)
 		if ($username == $_SESSION["user"]->email)
 		{
 			// Already logged in, redirect to home
-			redirect("index.php");
+			redirect("/home");
 		}
 		else
 		{
@@ -178,7 +178,7 @@ function redirectToFromPage()
 
 	$l_user = $_SESSION["user"];
 	
-	if (!$page || startsWith($page, "components/login.php"))
+	if (!$page || startsWith($page, "components/login"))
 		$page = "index.php";	
 
 	redirect($page);

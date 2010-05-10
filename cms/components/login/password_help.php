@@ -103,7 +103,7 @@ else
 	passwordHelpForm();	
 }
 ?>
-<h4><a href="login.php">Return to the login page</a></h4>
+<h4><a href="/login">Return to the login page</a></h4>
 <?
 
 require_once realpath(dirname(__FILE__))."/../../templates/end_page.inc";
