@@ -562,7 +562,7 @@ abstract class AbstractDataItem
 		
 		if ($plural)
 		{
-			pluralize($c);
+			$c = pluralize($c);
 		}
 		
 		return $c;

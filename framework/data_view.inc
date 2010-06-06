@@ -370,12 +370,15 @@ class DataListView
 			{
 				call_user_func($this->onStartRow, $item);
 			}
-			
+						
 			foreach($this->columns as $column)
 			{
 				$val = $column->format($item);
-				if (preg_match("/^[\\d\\.]+$/", $val))
+				
+				/* JDG 5/11/10 currency export fix */
+				if (preg_match("/^[\\d\\,\\.]+$/", $val))
 				{
+					$val = str_replace(",", "", $val);
 					$x->writeNumber($r, $c, $val);
 				}
 				else
@@ -396,8 +399,10 @@ class DataListView
 			foreach($this->footerColumns as $column)
 			{
 				$val = $column->format();
-				if (preg_match("/^[\\d\\.]+$/", $val))
+				/* JDG 5/11/10 currency export fix */
+				if (preg_match("/^[\\d\\,\\.]+$/", $val))
 				{
+					$val = str_replace(",", "", $val);
 					$x->writeNumber($r, $c, $val);
 				}
 				else

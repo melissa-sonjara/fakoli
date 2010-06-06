@@ -41,11 +41,12 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class DateFieldRenderer extends FieldRenderer
 {
 	var $validator;
+	var $required = true;
 	
 	function DateFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
-		$this->validator = new DateValidator("", "");
+		$this->validator = new DateValidator("", "", $required);
 	}
 	
 	function addValidatorsToForm($field)

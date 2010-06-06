@@ -127,8 +127,25 @@ class GroupedDataListView
 		
 		foreach($groups as $group)
 		{
-			$this->group($group->format($format), $group->$field);
+			$this->group($this->format($group, $format), $group->$field);
 		} 
+	}
+
+	
+	/**
+	 * Outputs the text for the groupedBy title bar using the given group dataitem
+	 * object. This function should not be invoked directly, but is invoked as 
+	 * part of the GroupedDataListView's rendering operations.
+	 * 
+	 * @param $group the dataitem object for the title bar being rendered
+	 * @return title for the titel bar.
+	 */	
+	function format($group, $template)
+	{
+		if(!is_callable($template))
+			return $group->format($template);
+		else
+			return call_user_func($template, $group);
 	}
 	
 	/**

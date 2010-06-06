@@ -162,7 +162,11 @@ ENDSCRIPT;
 /**
  * Date Validator.
  * 
+ * Dates are required by default. To make a date not required, set
+ * the following in the calling script:
  * 
+ * $dateRenderer = $form->getRenderer("date field");
+ * $dateRenderer->required = false; 
  */
 class DateValidator extends AbstractValidator
 {
@@ -214,7 +218,9 @@ ENDSCRIPT;
 
 		$result = "";
 			
-		if ($this->required && (!isset($_POST[$this->field]) || $_POST[$this->field] == ""))
+		if(!$this->required)
+			$result = "";
+		else if (!isset($_POST[$this->field]) || $_POST[$this->field] == "")
 		{
 			$result = "{$this->title} is a required field.";
 		}
