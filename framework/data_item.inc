@@ -1049,6 +1049,7 @@ function query($class)
 	$size = -1;
 	
 	$filter = null;
+	$params = array();
 	
 	if (func_num_args() > 1)
 	{
@@ -1058,6 +1059,11 @@ function query($class)
 		{
 			$filter = func_get_arg(1);
 			++$idx;
+		}
+		
+		if (is_array(func_get_arg($idx)))
+		{
+			$params = func_get_arg($idx++);
 		}
 		
 		if (func_num_args() > $idx)
@@ -1105,7 +1111,7 @@ function query($class)
 		$db = ConnectionManager::getConnection();
 		
 		$result = $db->prepare($query);
-		$result->execute();
+		$result->execute($params);
 		
 		if ($page > 0)
 		{

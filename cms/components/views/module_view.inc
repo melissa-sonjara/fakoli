@@ -105,6 +105,7 @@ class CodeModuleView extends ModuleView
 		global $config;
 		global $script;
 		global $styles;
+		global $dialogs;
 		global $page;
 		global $site;
 		

@@ -78,6 +78,12 @@ class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 		$onChange = "selChanged_{$field}";
 		$this->field = $field;
 		$this->popupUrl = $popupUrl . "?{$field}=";
+		
+		// show none if none - overrides SelectFieldRenderer code that
+		// adds options when there are none
+		if ($options == null)
+			$options[0] = "";
+		
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
 		$this->buttonLabel = $label;
 	}	

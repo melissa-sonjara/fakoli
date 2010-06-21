@@ -214,10 +214,20 @@ class DataListView
 			{
 				$attrs .= " style='{$this->cssStyle}'";
 			}
+
+			/* 
+			 * JDG 6/15/2010 - if the cssStyle has a width setting, either px or
+			 * &, apply that width style to the filter and paginator to avoid 
+			 * formatting problems. 
+			 */
+			$width = '100%';
+			if (preg_match("/^\\width:.*?\\d{1,3}px|width:.*?\\d{1,3}%/", $this->cssStyle, $matches))
+				$width = $matches[0]; 
 		
-?>
-		<div style="float: right" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
-		<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div>
+?>			
+		<div style="width: <?echo $width ?>">
+		<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
+		<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div></div>
 		<table<?echo $attrs?>>
 		 <thead>
 		  <tr>

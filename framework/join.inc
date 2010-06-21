@@ -86,10 +86,10 @@ class InnerJoinResult
 		
 		foreach($matches as $match)
 		{
-			$class = $matches[1];
-			$subtemplate = $matches[2];
+			$class = $match[1];
+			$subtemplate = $match[2];
 	
-			$value = $this->$class->format($subtemplate);
+			$value = $this->$class->format("{".$subtemplate."}");
 			
 			$template = str_replace($match[0], $value, $template);
 		}

@@ -48,9 +48,11 @@ class Site extends DataItem
 	
 // Relations
 	
-	var $relations = array(	"Pages"		=>	Page,
-							"NewsItems"	=>	NewsItem,
-							"Events"	=>	Event);
+	var $relations = array(	"Pages"				=>	Page,
+							"NewsItems"			=>	NewsItem,
+							"Events"			=>	Event,
+							"Fora"				=>	Forum,
+							"ForumSummaries"	=>	ForumSummary);
 	
 	function Pages($constraint = "")
 	{
@@ -66,6 +68,17 @@ class Site extends DataItem
 	{
 		return $this->crossReference(Event, EventSiteXref, $constraint);
 	}
+	
+	function Fora($constraint = "")
+	{
+		return $this->crossReference(Forum, ForumSiteXref, $constraint);
+	}
+	
+	function ForumSummaries($constraint = "")
+	{
+		return $this->crossReference(ForumSummary, ForumSiteXref, $constraint);
+	}
+	
 	
 	// Constructor
 	function Site()

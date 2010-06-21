@@ -235,7 +235,7 @@ class AutoForm
 		foreach($this->validator->validators as $v)
 		{
 			$v->title = $this->prettifyFieldName($v->field);
-			$v->readOnly = $this->isReadOnly($v->field);
+			$v->readOnly = $this->isReadOnly($v->field) || $this->isHidden($v->field);
 		}
 
 		$obj =& $this->data;
@@ -369,6 +369,16 @@ class AutoForm
 		}
 	}
 
+	/**
+	 * Check whether the specified field is hidden in the form.
+	 * @param string $field the name of the field
+	 * @return boolean true if the field has been hidden, false otherwise.
+	 */
+	function isHidden($field)
+	{
+		return array_key_exists($field, $this->hidden) ? $this->hidden[$field] : false;
+	}
+	
 	/**
 	 * Adds an annotation (such as brief explanatory text) to the specified field.
 	 * The annotation is displayed next to the field when the form is renderered.
@@ -509,6 +519,12 @@ class AutoForm
 		$this->validator->add(new MatchValidator($field, $title, $match, $matchTitle));
 	}
 
+	/**
+	 * Adds a password validator to the specified field.
+	 * 
+	 * @param string $field The name of the field.
+	 * @param unknown_type The title of the field
+	 */
 	function password($field, $title)
 	{
 		$this->validator->add(new passwordValidator($field, $title));
@@ -891,7 +907,7 @@ class AutoForm
 		$this->msg = $this->validator->validate();
 		return ($this->msg == "");
 	}
-
+	
 	/**
 	 * @deprecated
 	 *

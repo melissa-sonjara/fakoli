@@ -49,11 +49,14 @@ class NewsItem extends DataItem
 						"last_modified"	=>	Timestamp,
 						"published"		=>	Boolean,
 						"allow_comment" =>	Boolean,
-						"headline"		=>	Boolean);
+						"headline"		=>	Boolean,
+						"tags"			=>	String,
+						"user_id"		=>	Number);
 
-	var $relations = array(	"Image" => Image,
-							"Sites"	=>	Site,
-							"Comments" => Comment);
+	var $relations = array(	"Image" 	=> Image,
+							"Sites"		=> Site,
+							"Comments"	=> Comment,
+							"Author"	=> SiteUser);
 	
 	function Image()
 	{
@@ -68,6 +71,12 @@ class NewsItem extends DataItem
 	function Comments($constraint = "")
 	{
 		return $this->crossReference(Comment, NewsItemCommentXref, $constraint);
+	}
+	
+	function Author()
+	{
+		if (!$this->user_id) return null;
+		return $this->getRelated(SiteUser);
 	}
 	
 	function NewsItem()

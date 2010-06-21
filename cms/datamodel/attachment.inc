@@ -31,55 +31,33 @@
 
 *****************************************************************/
 
-require_once  "../../../include/config.inc";
-require_once  $config['homedir']."/include/permissions.inc";
-require_once  $config['homedir']."/datamodel/context_help.inc";
-require_once  $config['homedir']."/framework/auto_form.inc";
-require_once  $config['homedir']."/framework/tree.inc";
+require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 
-
-$title = "Context-Sensitive Help";
-$page_role = "admin";
-
-
-$help_key = checkNumeric($_GET["help_key"]);
-$field = ($_GET["field"]);
-$className = ($_GET["class"]);
-$prettyClassName = ($_GET["prettyClassName"]);
-
-if(!$help_key && (!$field || !$className))
-	redirect("context_help_list.php");
-
-$help = new ContextHelp();
-
-if(!$help_key)
+class Attachment extends DataItem
 {
-	$help->field = $field;
-	$help->class_name = $className;
+	// Fields
+	var $fields = array("attachment_id"		=>	Number,
+						"user_id"			=>	Number,
+						"filename"			=>	String,
+						"local_filename"	=>	String,
+						"last_modified"		=>	Timestamp,
+						"file_size"			=>	String);
+	
+	//Relations
+	var $relations = array(	"User"	=>	SiteUser);
+	
+	function User()
+	{
+		return $this->getRelated(SiteUser);
+	}
+	
+	function Attachment()
+	{
+		$this->table = "attachment";
+		$this->primary_key = "attachment_id";
+		
+		$this->DataItem(func_get_args());
+	}		
 }
-else
-{
-	$help->load($help_key);	
-}
-
-$form = new AutoForm($help);
-$form->allowDelete = true;
-$form->readonly("field", "class_name");
-$redirect = "context_help_list.php";
-$form->button("Cancel", $redirect);
-
-if ($method == "POST")
-{
-	$form->save();
-	redirect($redirect);
-}
-
-
-$script = $form->writeScript();
-
-include_once admin_begin_page;
-
-$form->drawForm();
-
-include_once admin_end_page;
+ 
 ?>

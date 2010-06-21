@@ -28,6 +28,7 @@ class PageView
 		global $user;
 		global $script;
 		global $styles;
+		global $dialogs;
 		global $page;
 		global $site;
 		

@@ -140,6 +140,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo "<div style='width: {$this->width}px; height: {$this->height}px; border: solid 1px black; overflow: auto'>\n";
 		}
 		
+		$countOptions = count($this->options);
 		foreach($this->options as $item)
 		{
 			$p = $item->$itempk;
@@ -158,6 +159,9 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		{
 			echo "</div>\n";
 		}
+
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";		
 		
 		$this->_endField($field);
 	}

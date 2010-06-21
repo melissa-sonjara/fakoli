@@ -655,21 +655,24 @@ ENDSCRIPT;
  * Add this validator the the script using:
  * $form->validator->add(new RequiredCheckListValidator($field, $label, $min));
  */
-class RequiredCheckListValidator extends RequiredValidator
+class RequiredCheckListValidator extends AbstractValidator
 {
 	var $min = "";
 	var $empty = "";
 	var $addEntry = false;
+	var $msgText = "checkbox";
 	
 	function RequiredCheckListValidator($field, $title, $min = 1, $addEntry = true)
 	{
 		$this->min = $min;
 		$this->AbstractValidator($field, $title);
 		$this->addEntry = $addEntry;
+		if($min > 1)
+			$this->msgText = pluralize($msgText);
 	}
 	
 	function writeClient()
-	{
+	{		
 $script = <<<ENDSCRIPT
 		
 		var i = 1;
@@ -693,7 +696,7 @@ $script = <<<ENDSCRIPT
 	
 	if ({$this->min} > 0 && countChecked < {$this->min})
 	{
-		alert("You must check at least {$this->min} checkboxes for {$this->title}.");
+		alert("You must check at least {$this->min} {$this->msgText} for {$this->title}.");
 		return false;
 	}
 		
@@ -727,7 +730,7 @@ ENDSCRIPT;
 			
 		if ($count < $this->min)
 		{
-			return "You must check at least {$this->min} checkboxes for {$this->title}.";
+			return "You must check at least {$this->min} {$this->msgText} for {$this->title}.";
 		}
 		else
 		{

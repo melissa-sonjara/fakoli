@@ -78,7 +78,9 @@ var ModalDialog = new Class(
     options: 
     {
 		draggable: false,
-		handle: Class.Empty
+		handle: Class.Empty,
+		closeLink: Class.Empty,
+		body:	Class.Empty
 	},
     
     element: Class.Empty,
@@ -88,21 +90,36 @@ var ModalDialog = new Class(
     	this.element = $(element);
     	this.setOptions(options);
     	if (this.element) this.element.setStyle('display', 'none');
+    	if (this.options.body) this.options.body = $(this.options.body);
+    	if (this.options.closeLink)
+    	{
+    		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
+    	}
     },
     
     center: function()
     {
+    	if (this.options.body)
+    	{
+    		this.options.body.setStyle('height', 'auto');
+    	}
+    	
     	var curtain = $('curtain');
     	var windowHeight = window.innerHeight ? window.innerHeight :
     		document.documentElement.clientHeight ?
     		document.documentElement.clientHeight : document.body.clientHeight; 
+    	
+    	if (this.element.offsetHeight > windowHeight && this.options.body)
+    	{
+    		this.options.body.setStyles({'height': windowHeight * 0.9, 'overflow-y': 'auto'});
+    	}
     	
     	var x = (document.body.clientWidth - this.element.offsetWidth) / 2;
     	var y = (windowHeight - this.element.offsetHeight) / 2;
     	this.element.setStyles({position: (this.draggable || window.ie6) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});
     },
     
-    show: function(onComplete)
+    show: function(onComplete, fragmentURL)
     {
     	if (this.options.draggable)
     	{
@@ -121,6 +138,23 @@ var ModalDialog = new Class(
     		}
     		
     		var drag = new Drag.Move(this.element, options);
+    	}
+    	
+    	
+    	if (fragmentURL && this.options.body)
+    	{
+    		this.options.body.set('text', "Loading...");
+    		var request = new Request(
+    		{
+    			method: 'get', 
+    			url: fragmentURL, 
+    			onSuccess: function(html) 
+    			{ 
+    				this.options.body.set('html', html);
+    				this.center();
+    			}.bind(this)
+    		});
+    		request.send();
     	}
     	
     	window.lowerCurtain(function() {
@@ -146,6 +180,7 @@ var FloatingDialog = new Class(
 	{
 		draggable: false,
 		handle:    Class.Empty,
+		body:	   Class.Empty,
 		top: 	   Class.Empty,
 		left:	   Class.Empty
 	},
@@ -157,6 +192,7 @@ var FloatingDialog = new Class(
 		this.element = $(element);
 		this.setOptions(options);
 		if (this.element) this.element.setStyle('display', 'none');
+    	if (this.options.body) this.options.body = $(this.options.body);
 	},
 	
     position: function()
@@ -182,7 +218,7 @@ var FloatingDialog = new Class(
     },
     
     
-    show: function(onComplete)
+    show: function(onComplete, fragmentURL)
     {
     	if (this.options.draggable)
     	{
@@ -204,6 +240,22 @@ var FloatingDialog = new Class(
     	}
     	
     	this.position();
+    	
+    	if (fragmentURL && this.options.body)
+    	{
+    		this.options.body.set('text', "Loading...");
+    		var request = new Request(
+    		{
+    			method: 'get', 
+    			url: fragmentURL, 
+    			onSuccess: function(html) 
+    			{ 
+    				this.options.body.set('html', html);
+    				this.position();
+    			}.bind(this)
+    		});
+    		request.send();
+    	}
     	
     	this.element.setStyles({'display': 'block', 'opacity': 0});
     	new Fx.Tween(this.element).start('opacity', 1).chain(onComplete);

@@ -105,6 +105,11 @@ $doc_mime_types = array(
         ".png" => "image/x-png"
 );
 
+$doc_icons = array(	".doc"		=>	"/framework/images/msword_icon.png",
+					".xls"		=>	"/framework/images/msexcel_icon.png",
+					".pdf"		=>	"/framework/images/pdf_icon.png",
+					".ppt"		=>	"/framework/images/ppt_icon.png",
+					"default"	=>	"/framework/images/file_icon.png");
 /**
  * LEGACY Global function to connect to the database.
  * Uses the parameters defined in the global $conn array. 
@@ -415,6 +420,16 @@ function getMimeType($name)
 	return $type;
 }
 
+function getDocIcon($doc)
+{
+	global $doc_icons;
+	$n = strtolower($doc);
+	$extension = substr($n, strrpos($n, "."));
+	$icon = $doc_icons[$extension];
+	if (!$icon) $icon = "/framework/images/file_icon.png";
+	return $icon;
+}
+
 /**
  * Counts the number of rows in the specified table.
  * Constraints can be passed in as part of the table string if required
@@ -653,7 +668,7 @@ function redirect($page)
 	{
 		$location = "http://$server$page";
 	}
-	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
+	else if (preg_match( "/^[\\w\\d_\\-\\.]+$/", $page))
 	{
 		$location = "http://$server/$page";
 	}

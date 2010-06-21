@@ -52,6 +52,7 @@ class DateFieldRenderer extends FieldRenderer
 	function addValidatorsToForm($field)
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+
 		$this->validator->field = $field;
 		$this->validator->title = $label;
 		
