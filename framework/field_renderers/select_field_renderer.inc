@@ -126,13 +126,13 @@ class SelectFieldRenderer extends FieldRenderer
 				else
 					$selected = "";
 				
-				echo "<option value='$value'$selected>$name</option>";
+				echo "<option value='$value'$selected>$name</option>\n";
 			}
 			
 			if($othEntry)
 				$addEntryValue = $this->parent->data->get($field);
 			
-			echo "</select>";
+			echo "</select>\n";
 		}
 		
 		/*

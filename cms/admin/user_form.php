@@ -11,7 +11,7 @@ $siteUser = new SiteUser();
 $form = new AutoForm($siteUser);
 $roleSelect = new SelectFieldRenderer($form, "role", "Role", $siteUserRoles);
 $redirect = "users.php";
-$form->unique("email");
+$form->unique("email", "That email address is already in use for another user");
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")

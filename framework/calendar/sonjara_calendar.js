@@ -405,7 +405,7 @@ function Calendar(varName, formName, ctrlName)
 		var x = (event.pageX > 0) ? event.pageX : event.x + scrollLeft();
 		var y = (event.pageY > 0) ? event.pageY : event.y + scrollTop();
 		
-		window.status = (left  +"," + top +" " + width + "x" + height + ": " + x + ", " + y);
+		//window.status = (left  +"," + top +" " + width + "x" + height + ": " + x + ", " + y);
 		
 		// Fudge for IE's bad borders
 		if (ie)

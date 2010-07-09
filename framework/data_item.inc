@@ -315,7 +315,9 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die("DataItem::load() failed - ".$e->getMessage());
+			$err = "DataItem::load() failed - ".$e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 	}
 		
@@ -397,7 +399,9 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die("DataItem::exists() failed - " . $e->getMessage());
+			$err = "DataItem::exists() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 		
 		return $exists;
@@ -448,7 +452,48 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die("DataItem::update() failed - " . $e->getMessage());		
+			$err = "DataItem::update() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);		
+		}
+		
+		return $success;
+	}
+	
+	/**
+	 * Executes an explicit update command against the database. This enables
+	 * you to perform updates on the object using database functions, allowing
+	 * for atomic operations, etc. For example, you might make such a call as
+	 * $obj->updateExplicit("SET count=count+1"); The object is refreshed from
+	 * the database automatically after the update.
+	 * @param string $updates the update command to be run
+	 * @param array $params optional array for bound parameters
+	 * @return boolean TRUE if the update was successful, FALSE if not.
+	 */
+	function updateExplicit($updates, $params = null)
+	{
+		$pk = $this->primary_key;
+		
+		$query = "UPDATE {$this->table} $updates WHERE {$pk}=".$this->get($pk);
+		
+		trace("DataItem::update() - $query", 3);
+		
+		try
+		{
+			$db = $this->getConnection();
+			$stmt = $db->prepare($query);
+			$success = $stmt->execute($cmd);
+			if ($success === FALSE)
+			{
+				trace("DataItem::updateExplicit failed - $query", 2);
+			}
+			$this->select();
+		}
+		catch(PDOException $e)
+		{
+			$err = "DataItem::updateExplicit() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 		
 		return $success;
@@ -505,7 +550,9 @@ class DataItem extends AbstractDataItem
 		}	
 		catch(PDOException $e)
 		{
-			die("DataItem::insert() failed - ". $e->getMessage());		
+			$err = "DataItem::insert() failed - ". $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 		return $success;						
 	}
@@ -533,7 +580,9 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die ("DataItem::delete() failed - " . $e->getMessage());
+			$err = "DataItem::delete() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 	}
 		
@@ -576,7 +625,9 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die ("DataItem::delete() failed - " . $e->getMessage());
+			$err = "DataItem::distinctValues() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 		
 	}
@@ -784,7 +835,9 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die("DataItem::crossReference() failed - " . $e->getMessage());
+			$err = "DataItem::crossReference() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 		return $list;
 	}  
@@ -832,7 +885,9 @@ class DataItem extends AbstractDataItem
 		}
 		catch(PDOException $e)
 		{
-			die("DataItem::queryValue() failed - " . $e->getMessage());
+			$err = "DataItem::queryValue() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
 		}
 		
 		return $value;
@@ -1137,7 +1192,9 @@ function query($class)
 	}
 	catch(PDOException $e)
 	{
-		die("query() failed - " . $e->getMessage());
+		$err = "query() failed - " . $e->getMessage();
+		trace($err, 2);
+		throw new DataItemException($err);
 	}
 	
 	trace(count($items)." items found", 4);
@@ -1164,7 +1221,7 @@ function querySingle($class)
 	
 	if (count($result) > 1)
 	{
-		die("Ambiguous singleton query");
+		throw new DataItemException("Ambiguous singleton query");
 	}
 	
 	if (count($result) == 1)
@@ -1223,10 +1280,11 @@ function queryValue($class, $func)
 	}
 	catch(PDOException $e)
 	{
-		die("queryValue() failed - " . $e->getMessage());
+		$err = "queryValue() failed - " . $e->getMessage();
+		trace($err, 2);
+		throw new DataItemException($err);
 	}
 	
-	trace("Value = $value", 3);
 	return $value;
 }
 
@@ -1317,7 +1375,9 @@ function indexedQuery($class)
 	}
 	catch(PDOException $e)
 	{
-		die("indexedQuery() failed - " . $e->getMessage());
+		$err = "indexedQuery() failed - " . $e->getMessage();
+		trace($err, 2);
+		throw new DataItemException($err);
 	}
 	
 	return $items;
@@ -1395,7 +1455,9 @@ function groupedQuery($class)
 	}
 	catch(PDOException $e)
 	{
-		die("groupedQuery() failed - " . $e->getMessage());	
+		$err = "groupedQuery() failed - " . $e->getMessage();
+		trace($err, 2);
+		throw new DataItemException($err);
 	}
 	
 	return $items;

@@ -116,7 +116,7 @@ class ForumDetailsView
 		$this->table->column("Title", array($this, formatTitle), true, "width: 40%")
 					->column("Last Post", array($this, formatLastPost), true, "width: 40%")
 					->column("Views", "{views}", true, "width: 10%; text-align: center")
-					->column("Replies", "{replies}", true, "width: 10%; text-align: center");
+					->column("Replies", "{countReplies()}", true, "width: 10%; text-align: center");
 		$this->table->emptyMessage = "No topics have been started in this discussion forum";
 		$this->table->filter = true;
 		$this->table->pageSize = 20;

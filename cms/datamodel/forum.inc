@@ -257,6 +257,11 @@ class ForumTopic extends DataItem
 		return $this->getRelatedList(ForumMessage, "", $constraint);
 	}
 	
+	function countReplies()
+	{
+		return queryValue(ForumMessage, "COUNT(1)", "WHERE topic_id={$this->topic_id} and deleted=0");
+	}
+	
 	function ForumTopic()
 	{
 		$this->primary_key = "topic_id";

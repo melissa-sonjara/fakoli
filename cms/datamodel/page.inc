@@ -121,7 +121,7 @@ class Page extends DataItem
 			break;
 
 		case 'popup':
-			$templatefile = $site->popup_template;
+			$templateFile = $site->popup_template;
 			break;
 			
 		case 'mobile':
@@ -131,7 +131,7 @@ class Page extends DataItem
 		if (!$templateFile) $templateFile = $this->template;
 		
 		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
-
+			
 		return $template;
 	}
 	
