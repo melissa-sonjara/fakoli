@@ -24,7 +24,13 @@ class MenuView
 	function MenuView($m)
 	{
 		$this->m = $m;
-		$this->pages = indexedQuery(Page, "WHERE site_id={$this->m->site_id}", "page_id", new InclusionFilter("page_id", "identifier", "published", "role"));
+		//$this->pages = indexedQuery(Page, "WHERE site_id={$this->m->site_id}", "page_id", new InclusionFilter("page_id", "identifier", "published", "role"));
+		$this->pages = IndexedQuery::create(Page)
+									->constraints("WHERE site_id=:s")
+									->indexBy("page_id")
+									->filter(new InclusionFilter("page_id", "identifier", "published", "role"))
+									->bind(":s", $this->m->site_id)
+									->execute();
 		
 		//linkItemsInHTMLFields($this->module);
 	}
@@ -70,7 +76,8 @@ class MenuView
 		foreach($gmenus[0] as $m) 
 		{
 		  
-		  if ( preg_match('/--*/', $m->title) ) {
+		  if ( preg_match('/^\\-\\-*/', $m->title) ) 
+		  {
     		echo "<li><img src=/images/placeholder_6.jpg></li>";
           }
 		  else 

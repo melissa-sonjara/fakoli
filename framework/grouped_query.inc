@@ -31,37 +31,24 @@
 
 *****************************************************************/
 
-class Query
+class GroupedQuery
 {
 	var $class;
 	var $constraints;
-	var $page;
-	var $size;
 	var $filter;
 	var $params;
+	var $groupBy;
 	
-	function Query($class, $constraints = "")
+	function GroupedQuery($class, $constraints = "", $groupBy = "")
 	{
 		$this->class = $class;
 		$this->constraints = $constraints;
-	
-		$page = -1;
-		$size = -1;
-		
-		$filter = null;
-		$params = array();
+		$this->groupBy = $groupBy;
 	}
-
+	
 	function constraints($constraints)
 	{
 		$this->constraints = $constraints;
-		return $this;
-	}
-	
-	function page($page, $size)
-	{
-		$this->page = $page;
-		$this->size = $size;
 		return $this;
 	}
 	
@@ -87,37 +74,42 @@ class Query
 		
 		return $this;
 	}
+		
+	function groupBy($groupBy)
+	{
+		$this->groupBy = $groupBy;
+		return $this;
+	}
 	
 	function execute()
 	{
 		$prototype = new $this->class;
-		$prototype->filter = $this->filter;
-	
-		$order_by_idx = strpos(strtoupper($this->constraints), "ORDER BY");
-		$orderBy = "";	
 		
+		if (!$this->groupBy) $this->groupBy = $prototype->getPrimaryKey();
+		
+		if ($this->filter)
+		{
+			$prototype->filter = $this->filter;
+		}
+		
+		$order_by_idx = strpos(strtoupper($this->constraints), "ORDER BY");	
 		if ($order_by_idx !== false)
 		{
 			$orderBy = substr($this->constraints, $order_by_idx);
 			
 			$this->constraints = substr($this->constraints, 0, $order_by_idx);
 		} 
-		
+			
+		$fields = $prototype->getFieldList();
+	
 		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
-		$this->constraints .= " ".$prototype->getIdentityConstraint();
+	
+		$query = "SELECT $fields FROM {$prototype->table} {$this->constraints} ".$prototype->getIdentityConstraint()." $orderBy";;
+		trace($query, 3);
 		
-		if (is_object($this->filter))
-		{
-			$query = "SELECT ".$prototype->getFieldList()." FROM {$prototype->table} {$this->constraints} $orderBy";
-		}
-		else
-		{
-			$query = "SELECT * FROM {$prototype->table} {$this->constraints} $orderBy";
-		}
-		
-		trace("$query", 3);
-		trace("Page: $this->page Size: $this->size", 3);
 		$items = array();
+		
+		$field = $this->groupBy;
 		
 		try
 		{
@@ -125,82 +117,62 @@ class Query
 			
 			$result = $db->prepare($query);
 			$result->execute($this->params);
-			
-			if ($this->page > 0)
-			{
-				$count = ($this->page - 1) * $this->size;
-				while($count--)
-				{
-					$result->fetch();
-				}
-			}
-			
+	
 			while($line = $result->fetch())
 			{
-				$item = new $this->class;
-				$item->filter = $this->filter;
+				$item = new $this->class;	//Hack to work around PHP's stupid implementation of get_class()
 				$item->populate($line);
-				$items[] = $item;
-				
-				--$size;
-				if ($size == 0) break;
+				$items[$item->$field][] = $item;
 			}
-			
+		
 			unset($result);
 		}
 		catch(PDOException $e)
 		{
-			$err = "query() failed - " . $e->getMessage();
+			$err = "groupedQuery() failed - " . $e->getMessage();
 			trace($err, 2);
 			throw new DataItemException($err);
 		}
 		
-		trace(count($items)." items found", 4);
 		return $items;
 	}
 	
-	static function create($class, $constraints = "")
+	static function create($class, $constraints = "", $groupBy = "")
 	{
-		return new Query($class, $constraints);
+		return new GroupedQuery($class, $constraints, $groupBy);
 	}
 }
+		
 
-/**
- * Performs a query against the database, returning an array of DataItem objects of the specified class.
+/** Performs a query against the database, returning an array of arrays of DataItem objects of the specified class,
+ * grouped by a particular field. If the indexing field has unique values, indexedQuery() might be more appropriate.
  * 
  * @param string $class the name of the class of objects to query
- * @param $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
- * @param $filter optional filter to apply to the query
- * @param $page optional page number to retrieve
- * @param $size optional size of pages
+ * @param string $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
+ * @param string $field optional the name of the field by which to group the results
+ * @param object $filter optional filter used to select subset of the database fields for the result 
+ * (See InclusionFilter and ExclusionFilter)
  */
-function query($class)
+function groupedQuery($class)
 {
-	$query = new Query($class);
-
+	$field = $prototype->primary_key;
+	
+	$filter = null;
+	
+	$query = new GroupedQuery($class);
+	
 	if (func_num_args() > 1)
 	{
-		$idx = 1;
+		$query->constraints(func_get_arg(1));
 		
-		if (is_object(func_get_arg(1)))
+		if (func_num_args() > 2)
 		{
-			$query->filter($filter);
-			++$idx;
-		}
-		
-		if (is_array(func_get_arg($idx)))
-		{
-			$query->params(func_get_arg($idx++));
-		}
-		
-		if (func_num_args() > $idx)
-		{
-			$query->constraints(func_get_arg($idx));
+			$query->groupBy(func_get_arg(2));
 			
-			if (func_num_args() == $idx + 3)
+			if (func_num_args() > 3)
 			{
-				$query->page(func_get_arg($idx + 1), func_get_arg($idx + 2));
-			}
+				$query->filter(func_get_arg(3));
+			} 
 		}
 	}
 	

@@ -31,37 +31,24 @@
 
 *****************************************************************/
 
-class Query
+class IndexedQuery
 {
 	var $class;
 	var $constraints;
-	var $page;
-	var $size;
 	var $filter;
 	var $params;
+	var $indexBy;
 	
-	function Query($class, $constraints = "")
+	function IndexedQuery($class, $constraints = "", $indexBy = "")
 	{
 		$this->class = $class;
 		$this->constraints = $constraints;
-	
-		$page = -1;
-		$size = -1;
-		
-		$filter = null;
-		$params = array();
+		$this->indexBy = $indexBy;
 	}
-
+	
 	function constraints($constraints)
 	{
 		$this->constraints = $constraints;
-		return $this;
-	}
-	
-	function page($page, $size)
-	{
-		$this->page = $page;
-		$this->size = $size;
 		return $this;
 	}
 	
@@ -75,27 +62,37 @@ class Query
 	{
 		$this->params = $params;
 		return $this;
-	}
+	}	
 	
 	function bind()
 	{
 		$num = func_num_args();
-		for($i = 0; $i < $num; ++$i)
+		for($i = 0; $i < $num; $i += 2)
 		{
 			$this->params[func_get_arg($i)] = func_get_arg($i + 1);
 		}
 		
 		return $this;
 	}
+
+	function indexBy($indexBy)
+	{
+		$this->indexBy = $indexBy;
+		return $this;
+	}
 	
 	function execute()
 	{
 		$prototype = new $this->class;
-		$prototype->filter = $this->filter;
 	
-		$order_by_idx = strpos(strtoupper($this->constraints), "ORDER BY");
-		$orderBy = "";	
+		if (!$this->indexBy) $this->indexBy = $prototype->getPrimaryKey();
 		
+		if ($this->filter)
+		{
+			$prototype->filter = $this->filter;
+		}
+		
+		$order_by_idx = strpos(strtoupper($this->constraints), "ORDER BY");	
 		if ($order_by_idx !== false)
 		{
 			$orderBy = substr($this->constraints, $order_by_idx);
@@ -103,108 +100,94 @@ class Query
 			$this->constraints = substr($this->constraints, 0, $order_by_idx);
 		} 
 		
-		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
-		$this->constraints .= " ".$prototype->getIdentityConstraint();
+		$fields = $prototype->getFieldList();
 		
-		if (is_object($this->filter))
-		{
-			$query = "SELECT ".$prototype->getFieldList()." FROM {$prototype->table} {$this->constraints} $orderBy";
-		}
-		else
-		{
-			$query = "SELECT * FROM {$prototype->table} {$this->constraints} $orderBy";
-		}
+		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; 
+		$query = "SELECT $fields FROM {$prototype->table} {$this->constraints} ".$prototype->getIdentityConstraint()." $orderBy";
+		trace("DataItem indexedQuery(): $query", 3);
 		
-		trace("$query", 3);
-		trace("Page: $this->page Size: $this->size", 3);
 		$items = array();
+		
+		$field = $this->indexBy;
 		
 		try
 		{
 			$db = ConnectionManager::getConnection();
-			
+	
 			$result = $db->prepare($query);
 			$result->execute($this->params);
-			
-			if ($this->page > 0)
-			{
-				$count = ($this->page - 1) * $this->size;
-				while($count--)
-				{
-					$result->fetch();
-				}
-			}
 			
 			while($line = $result->fetch())
 			{
 				$item = new $this->class;
-				$item->filter = $this->filter;
 				$item->populate($line);
-				$items[] = $item;
-				
-				--$size;
-				if ($size == 0) break;
+				if (array_key_exists($item->$field, $items))
+				{
+					// Implicitly promote to array if there is a collision
+					if (!is_array($items[$item->$field]))
+					{
+						$items[$item->$field] = array($items[$item->$field]);
+					}
+					$items[$item->$field][] = $item;
+				}
+				else
+				{
+					$items[$item->$field] = $item;
+				}
 			}
 			
 			unset($result);
 		}
 		catch(PDOException $e)
 		{
-			$err = "query() failed - " . $e->getMessage();
+			$err = "indexedQuery() failed - " . $e->getMessage();
 			trace($err, 2);
 			throw new DataItemException($err);
 		}
 		
-		trace(count($items)." items found", 4);
-		return $items;
+		return $items;	
 	}
 	
-	static function create($class, $constraints = "")
+	static function create($class, $constraints = "", $indexBy = "")
 	{
-		return new Query($class, $constraints);
+		return new IndexedQuery($class, $constraints, $indexBy);
 	}
 }
 
-/**
- * Performs a query against the database, returning an array of DataItem objects of the specified class.
+
+/** Performs a query against the database, returning an array of DataItem objects of the specified class,
+ * indexed by a particular field. If more than one item is found that matches the same value of the indexing field,
+ * the results entry is promoted to an array automatically. However, in cases where this is common, using
+ * groupedQuery() might simplify your calling code.
  * 
  * @param string $class the name of the class of objects to query
- * @param $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
- * @param $filter optional filter to apply to the query
- * @param $page optional page number to retrieve
- * @param $size optional size of pages
+ * @param string $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
+ * @param string $field optional the name of the field by which to index the results
+ * @param object $filter optional filter used to select subset of the database fields for the result 
+ * (See InclusionFilter and ExclusionFilter)
  */
-function query($class)
+function indexedQuery($class)
 {
-	$query = new Query($class);
-
+	$field = $prototype->primary_key;
+	$filter = null;
+	
+	$query = new IndexedQuery($class);
+	
 	if (func_num_args() > 1)
 	{
-		$idx = 1;
+		$query->constraints(func_get_arg(1));
 		
-		if (is_object(func_get_arg(1)))
+		if (func_num_args() > 2)
 		{
-			$query->filter($filter);
-			++$idx;
-		}
-		
-		if (is_array(func_get_arg($idx)))
-		{
-			$query->params(func_get_arg($idx++));
-		}
-		
-		if (func_num_args() > $idx)
-		{
-			$query->constraints(func_get_arg($idx));
+			$query->indexBy(func_get_arg(2));
 			
-			if (func_num_args() == $idx + 3)
+			if (func_num_args() > 3)
 			{
-				$query->page(func_get_arg($idx + 1), func_get_arg($idx + 2));
-			}
-		}
+				$query->filter(func_get_arg(3));
+			} 
+		}		
 	}
-	
+
 	return $query->execute();
 }
-
 ?>

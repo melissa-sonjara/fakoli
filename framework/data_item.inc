@@ -31,12 +31,11 @@
 
 *****************************************************************/
 
-/**
- * 
- */
-
 require_once realpath(dirname(__FILE__)."/connection_manager.inc");
 require_once realpath(dirname(__FILE__)."/abstract_data_item.inc");
+require_once realpath(dirname(__FILE__)."/query.inc");
+require_once realpath(dirname(__FILE__)."/indexed_query.inc");
+require_once realpath(dirname(__FILE__)."/grouped_query.inc");
 
 /*define("String", 1);	
 define("Number", 2);
@@ -47,8 +46,6 @@ define("Boolean", 6);
 define("Password", 7);
 define("Timestamp", 8);
 define("Text", 9);*/
-
-
 
 /**
  * DataItem is the generic base class for database mapped classes. It provides a
@@ -1087,119 +1084,7 @@ class DataItem extends AbstractDataItem
 	}
 }
 	
-/**
- * Performs a query against the database, returning an array of DataItem objects of the specified class.
- * 
- * @param string $class the name of the class of objects to query
- * @param $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
- * @param $filter optional filter to apply to the query
- * @param $page optional page number to retrieve
- * @param $size optional size of pages
- */
-function query($class)
-{
-	$constraints = "";
-	
-	$page = -1;
-	$size = -1;
-	
-	$filter = null;
-	$params = array();
-	
-	if (func_num_args() > 1)
-	{
-		$idx = 1;
-		
-		if (is_object(func_get_arg(1)))
-		{
-			$filter = func_get_arg(1);
-			++$idx;
-		}
-		
-		if (is_array(func_get_arg($idx)))
-		{
-			$params = func_get_arg($idx++);
-		}
-		
-		if (func_num_args() > $idx)
-		{
-			$constraints = func_get_arg($idx);
-			
-			if (func_num_args() == $idx + 3)
-			{
-				$page = func_get_arg($idx + 1);
-				$size = func_get_arg($idx + 2);
-			}
-		}
-	}
-	
-	$prototype = new $class;
-	$prototype->filter = $filter;
-	
-	$order_by_idx = strpos(strtoupper($constraints), "ORDER BY");
-	$orderBy = "";	
-	if ($order_by_idx !== false)
-	{
-		$orderBy = substr($constraints, $order_by_idx);
-		
-		$constraints = substr($constraints, 0, $order_by_idx);
-	} 
-	
-	if ($constraints == "") $constraints = "WHERE 1=1"; //TODO - tidy this up some day
-	$constraints .= " ".$prototype->getIdentityConstraint();
-	
-	if (is_object($filter))
-	{
-		$query = "SELECT ".$prototype->getFieldList()." FROM {$prototype->table} $constraints $orderBy";
-	}
-	else
-	{
-		$query = "SELECT * FROM {$prototype->table} $constraints $orderBy";
-	}
-	
-	trace("DataItem query: $query", 3);
-	trace("Page: $page Size: $size", 3);
-	$items = array();
-	
-	try
-	{
-		$db = ConnectionManager::getConnection();
-		
-		$result = $db->prepare($query);
-		$result->execute($params);
-		
-		if ($page > 0)
-		{
-			$count = ($page - 1) * $size;
-			while($count--)
-			{
-				$result->fetch();
-			}
-		}
-		
-		while($line = $result->fetch())
-		{
-			$item = new $class;	//Hack to work around PHP's stupid implementation of get_class()
-			$item->filter = $filter;
-			$item->populate($line);
-			$items[] = $item;
-			
-			--$size;
-			if ($size == 0) break;
-		}
-		
-		unset($result);
-	}
-	catch(PDOException $e)
-	{
-		$err = "query() failed - " . $e->getMessage();
-		trace($err, 2);
-		throw new DataItemException($err);
-	}
-	
-	trace(count($items)." items found", 4);
-	return $items;
-}
+
 
 /**
  * Performs a query against the database and returns a matching singleton object. If the query
@@ -1288,180 +1173,7 @@ function queryValue($class, $func)
 	return $value;
 }
 
-/** Performs a query against the database, returning an array of DataItem objects of the specified class,
- * indexed by a particular field. If more than one item is found that matches the same value of the indexing field,
- * the results entry is promoted to an array automatically. However, in cases where this is common, using
- * groupedQuery() might simplify your calling code.
- * 
- * @param string $class the name of the class of objects to query
- * @param string $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
- * @param string $field optional the name of the field by which to index the results
- * @param object $filter optional filter used to select subset of the database fields for the result 
- * (See InclusionFilter and ExclusionFilter)
- */
-function indexedQuery($class)
-{
-	$field = $prototype->primary_key;
-	$filter = null;
-	
-	if (func_num_args() > 1)
-	{
-		$constraints = func_get_arg(1);
-		
-		if (func_num_args() > 2)
-		{
-			$field = func_get_arg(2);
-			
-			if (funC_num_args() > 3)
-			{
-				$filter = func_get_arg(3);
-			} 
-		}
-		
-		
-	}
 
-	$prototype = new $class;
-	
-	if ($filter)
-	{
-		$prototype->filter = $filter;
-	}
-	
-	$order_by_idx = strpos(strtoupper($constraints), "ORDER BY");	
-	if ($order_by_idx !== false)
-	{
-		$orderBy = substr($constraints, $order_by_idx);
-		
-		$constraints = substr($constraints, 0, $order_by_idx);
-	} 
-	
-	$fields = $prototype->getfieldList();
-	
-	if ($constraints == "") $constraints = "WHERE 1=1"; //TODO - tidy this up some day
-
-	$query = "SELECT $fields FROM {$prototype->table} $constraints ".$prototype->getIdentityConstraint()." $orderBy";
-	trace("DataItem indexedQuery(): $query", 3);
-	
-	$items = array();
-	
-	try
-	{
-		$db = ConnectionManager::getConnection();
-
-		$result = $db->prepare($query);
-		$result->execute();
-		
-		while($line = $result->fetch())
-		{
-			$item = new $class;	//Hack to work around PHP's stupid implementation of get_class()
-			$item->populate($line);
-			if (array_key_exists($item->$field, $items))
-			{
-				// Implicitly promote to array if there is a collision
-				if (!is_array($items[$item->$field]))
-				{
-					$items[$item->$field] = array($items[$item->$field]);
-				}
-				$items[$item->$field][] = $item;
-			}
-			else
-			{
-				$items[$item->$field] = $item;
-			}
-		}
-		
-		unset($result);
-	}
-	catch(PDOException $e)
-	{
-		$err = "indexedQuery() failed - " . $e->getMessage();
-		trace($err, 2);
-		throw new DataItemException($err);
-	}
-	
-	return $items;
-}
-
-/** Performs a query against the database, returning an array of arrays of DataItem objects of the specified class,
- * grouped by a particular field. If the indexing field has unique values, indexedQuery() might be more appropriate.
- * 
- * @param string $class the name of the class of objects to query
- * @param string $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"
- * @param string $field optional the name of the field by which to group the results
- * @param object $filter optional filter used to select subset of the database fields for the result 
- * (See InclusionFilter and ExclusionFilter)
- */
-function groupedQuery($class)
-{
-	$field = $prototype->primary_key;
-	
-	$filter = null;
-	
-	if (func_num_args() > 1)
-	{
-		$constraints = func_get_arg(1);
-		
-		if (func_num_args() > 2)
-		{
-			$field = func_get_arg(2);
-			
-			if (func_num_args() > 3)
-			{
-				$filter = func_get_arg(3);
-			} 
-		}
-	}
-
-	$prototype = new $class;
-	
-	if ($filter)
-	{
-		$prototype->filter = $filter;
-	}
-	
-	$order_by_idx = strpos(strtoupper($constraints), "ORDER BY");	
-	if ($order_by_idx !== false)
-	{
-		$orderBy = substr($constraints, $order_by_idx);
-		
-		$constraints = substr($constraints, 0, $order_by_idx);
-	} 
-		
-	$fields = $prototype->getfieldList();
-
-	if ($constraints == "") $constraints = "WHERE 1=1"; //TODO - tidy this up some day
-
-	$query = "SELECT $fields FROM {$prototype->table} $constraints ".$prototype->getIdentityConstraint()." $orderBy";;
-	trace("DataItem groupedQuery(): $query", 3);
-	
-	$items = array();
-	
-	try
-	{
-		$db = ConnectionManager::getConnection();
-		
-		$result = $db->prepare($query);
-		$result->execute();
-
-		while($line = $result->fetch())
-		{
-			$item = new $class;	//Hack to work around PHP's stupid implementation of get_class()
-			$item->populate($line);
-			$items[$item->$field][] = $item;
-		}
-	
-		unset($result);
-	}
-	catch(PDOException $e)
-	{
-		$err = "groupedQuery() failed - " . $e->getMessage();
-		trace($err, 2);
-		throw new DataItemException($err);
-	}
-	
-	return $items;
-}
 
 /**
  * Reindex an indexed or grouped query result by a different field.
