@@ -78,8 +78,7 @@ class Site extends DataItem
 	{
 		return $this->crossReference(ForumSummary, ForumSiteXref, $constraint);
 	}
-	
-	
+		
 	// Constructor
 	function Site()
 	{

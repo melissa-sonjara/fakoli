@@ -27,13 +27,21 @@ $form = new AutoForm($page);
 $form->alias("menu_id", "Menu");
 $form->markRequiredFields = true;
 
-$form->required("page_title");
+$form->required("page_title", "identifier");
+$form->regexp("identifier", "^[\\w_\\-]+$", "Identifier must consist of letters, numbers, underscores and dashes only.");
+
 $form->readonly("created_date");
 $form->unique("identifier", "A page on the site is already using this name. Please pick a new identifier.");
 $form->allowDelete = true;
 
 $codeSelect = new CodeFileSelectFieldRenderer($form, "php_code_file", "PHP Code File", "modules");
 $templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
+
+
+$roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
+
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
+
 
 $tabs = pageTabs($page_id);
 
@@ -62,54 +70,6 @@ else
 	$title = "Add a New Page";
 }
 
-/*$menus = query(Menus, "ORDER BY sort_order");
-
-$menuTree = new TreeControl("menu_id");
-$menuTree->width = 324;
-$menuTree->height = 280;
-$menuTree->selectMode = "single";
-
-if (count($menus) > 0)
-{   
-	
-	foreach ($menus as $m){
-		
-		$checked = ($m->menu_id == $page->menu_id);
-        
-	    	$menuNode = new TreeNode("menu_{$m->menu_id}", $m->title, "$m->menu_id", $checked, "tree_node_closed", "tree_node_open");
-	   
-	    $tmp = Array( 
-	                       'parent' => $m->parent_id, 
-	                       'node' => $menuNode);
-	    $displays[$m->menu_id] = $tmp;
-	}	
-
-	foreach ($displays as $menuID => $display) {
-		
-		trace("Adding {$menuID}", 4);
-		
-		if (empty($display['parent'])) {
-			$menuTree->add($display['node']);
-		}
-		else {
-			$parentNode = $displays[ $display['parent'] ]['node'];
-			if ($parentNode)
-			{
-				$parentNode->add($display['node']);
-			}
-		}
-	}
-}
-
-$treeSelect = new TreeSelectFieldRenderer($form, "menu_id", $menuTree);
-
-
-$script = $form->writeScript();
-$script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
-
-*/
-
-
 $redirect = "pages.php";
 $form->button("Cancel", $redirect);
 
@@ -120,12 +80,6 @@ $roleOptions = array(
 	"admin,member" 	=>	"Admin/Member"
 	
 );
-
-
-$roleList = new SelectFieldRenderer($form, "role", "Role", $roleOptions);
-
-$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
-
 
 $script .= $form->writeScript();
 

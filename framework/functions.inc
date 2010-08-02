@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2007,2008 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -241,7 +241,30 @@ function getMonthDays($m, $y)
 	
 	return $d;
 }
+
+/**
+ * Get the number of week days in the specified month
+ * @param number $m the month number
+ * @param number $y the year
+ * @return number the number of week days in that month
+ */
+function getMonthWeekDays($month, $year)
+{
+	$weekDaysInMonth = array
+	(
+		28	=>	array(20, 20, 20, 20, 20, 20, 20),
+		29	=>	array(21, 21, 21, 21, 21, 20, 20),
+		30	=>	array(22, 22, 22, 22, 21, 20, 21),
+		31	=>	array(23, 23, 23, 22, 21, 21, 22)
+	);
 	
+	$days = getMonthDays($month, $year);
+	$date = strtotime("$year-$month-01");
+	
+	$first = date("N", $date) - 1;
+	return $weekDaysInMonth[$days][$first];
+}
+
 /**
  * Format a time in 12 hour clock, no seconds
  */
@@ -668,7 +691,7 @@ function redirect($page)
 	{
 		$location = "http://$server$page";
 	}
-	else if (preg_match( "/^[\\w\\d_\\-\\.]+$/", $page))
+	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
 	{
 		$location = "http://$server/$page";
 	}
@@ -1067,6 +1090,11 @@ function ordinalSuffix($n, $sup = false)
 	if ($sup) return ($sup) ? "$n<sup>$suffix</sup>" : "$n$suffix";
 }
 
+/**
+ * Ensures that the http:// protocol specifier prefix is present in the supplied string
+ * @param string $uri the string to process
+ * @return string the full URL with protocol prefix added if it was missing.
+ */
 function makeURL($uri)
 {
 	 if (!startsWith($uri, "http://")) $uri = "http://$uri";
@@ -1104,7 +1132,12 @@ function formatCheckListItemsforView($options, $items)
 	return $list;
 }
 
-
+/**
+ * Appends the specified parameters to the supplied query string.
+ * @param string $qs the query string
+ * @param string $params parameters to append in query string format
+ * @return combined string
+ */
 function appendToQueryString($qs, $params)
 {
 	if (!$qs) 
@@ -1122,6 +1155,38 @@ function appendToQueryString($qs, $params)
 	return $qs;
 }
 
+/**
+ * Generates a query string containg the full set of values
+ * passed to this page both as GET and POST parameters.
+ * @return string the full query string for the current page.
+ */
+function getFullQueryString()
+{
+	$qs = "";
+	$sep = "?";
+	
+	foreach($_GET as $name => $value)
+	{
+		$qs .= $sep.urlencode($name)."=".urlencode($value); 
+		$sep = "&";
+	}
+	
+	foreach($_POST as $name => $value)
+	{
+		$qs .= $sep.urlencode($name)."=".urlencode($value); 
+		$sep = "&";
+	}
+
+	return $qs;
+}
+		
+/**
+ * Creates a randomized string of characters. This is not cryptographically secure
+ * and should not be used for cryptographic operations.
+ * 
+ * @param int $len the length of the string to generate
+ * @return string the generated string
+ */
 function makeRandomString($len)
 {
 	$str = "";

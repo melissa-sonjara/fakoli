@@ -121,11 +121,14 @@ class Page extends DataItem
 			break;
 
 		case 'popup':
-			$templatefile = $site->popup_template;
+			$templateFile = $site->popup_template;
 			break;
 			
 		case 'mobile':
 			$templateFile = $site->mobile_template;
+			
+		case 'nude':
+			return "<h2>{page_title}</h2>{description}";
 		}
 		
 		if (!$templateFile) $templateFile = $this->template;

@@ -2,7 +2,7 @@
 
 /**************************************************************
 
- Copyright (c) 2007,2008 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -87,7 +87,7 @@ class TextFieldRenderer extends FieldRenderer
 			echo "<div>";
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
-		echo "<textarea name='$field' rows='{$this->rows}' cols='{$this->columns}'$onkeypress>";
+		echo "<textarea id='$field' name='$field' rows='{$this->rows}' cols='{$this->columns}'$onkeypress>";
 		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		echo "</textarea>";
 		

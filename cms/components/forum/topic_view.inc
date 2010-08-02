@@ -89,7 +89,7 @@ class ForumTopicView
 ?>
 	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<a href="/attachment.php?attachment_id=<?echo $attachment->attachment_id?>"><?echo $attachment->filename?></a>&nbsp;(<?echo $attachment->file_size?>)
 <?
-						if ($message->Author() == $user->site_user_id || checkRole("admin,data"))
+						if ($author->site_user_id == $user->site_user_id || checkRole("admin,data"))
 						{
 ?>
 &nbsp;&nbsp;<a style="font-size: 10px" href="/cms/components/forum/forum_attachment_delete.php?forum_id=<?echo $this->topic->forum_id?>&message_id=<?echo $message->message_id?>&attachment_id=<?echo $attachment->attachment_id?>" onclick="return confirm('Are you sure you want to delete <?echo $attachment->filename?>?');">Delete this attachment</a>
@@ -102,12 +102,12 @@ class ForumTopicView
 			 	}
 				
 			 	$controls = array();
-				if ($message->Author() == $user->site_user_id || checkRole("admin,data"))
+				if ($author->site_user_id == $user->site_user_id || checkRole("admin,data"))
 				{
 					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\">Edit</a>";
 				}
 			
-				if ($message->Author() == $user->site_user_id || checkRole("admin,data"))
+				if ($author->site_user_id == $user->site_user_id || checkRole("admin,data"))
 				{
 					$controls[] = "<a href=\"/cms/components/forum/forum_message_delete.php?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
 				}		
@@ -120,7 +120,9 @@ class ForumTopicView
 <?				
 				$first = false;
 				$alt = !$alt;
-			}				
+			}
+
+			$this->topic->updateExplicit("SET views=views+1");
 		}
 		else
 		{

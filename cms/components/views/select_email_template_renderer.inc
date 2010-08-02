@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2007-2010 Sonjara, Inc
+ Copyright (c) 2007,2008 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -67,13 +67,13 @@
 
 require_once  $config['homedir']."/framework/field_renderers/select_field_renderer.inc";
 
-class SelectFieldViewSourceRenderer extends SelectFieldRenderer
+class SelectEmailTemplateRenderer extends SelectFieldRenderer
 {
 	var $popupUrl; // path of popup that display the source/preview
 	var $buttonLabel; // defaults to field label
 	var $field;
 	
-	function SelectFieldViewSourceRenderer(&$form, $field, $label, $options, $popupUrl)
+	function SelectEmailTemplateRenderer(&$form, $field, $label, $options, $popupUrl)
 	{
 		$onChange = "selChanged_{$field}";
 		$this->field = $field;
@@ -117,8 +117,14 @@ function <?echo $fn?>_preview()
 function <? echo $fn ?>(elt)
 {
   	var button = $('view_<? echo $this->field ?>_button');
+   	var cntrl = $('message');
+	var fragmentURL =  "/email_template_fragment?template_id=";
+
    	if (elt.value > 0)
+   	{
 		button.disabled = "";
+		cntrl.innerHTML = httpRequest(fragmentURL + elt.value);
+	}
 	else
 		button.disabled = "disabled";
 }

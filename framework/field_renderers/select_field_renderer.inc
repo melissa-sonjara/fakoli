@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2007,2008 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -126,13 +126,13 @@ class SelectFieldRenderer extends FieldRenderer
 				else
 					$selected = "";
 				
-				echo "<option value='$value'$selected>$name</option>";
+				echo "<option value='$value'$selected>$name</option>\n";
 			}
 			
 			if($othEntry)
 				$addEntryValue = $this->parent->data->get($field);
 			
-			echo "</select>";
+			echo "</select>\n";
 		}
 		
 		/*

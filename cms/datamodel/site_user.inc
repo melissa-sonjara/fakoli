@@ -35,6 +35,54 @@ require_once realpath(dirname(__FILE__)."/../../framework/data_item.inc");
 
 $siteUserRoles = array(	"admin"		=>	"Administrator",
 						"member"	=>	"Site Member");
+
+class SiteRole extends DataItem
+{
+	// Fields
+	
+	var $fields = array("role_id"		=>	Number,
+						"role"			=>	String,
+						"name"			=>	String,
+						"description"	=>	Text);
+	
+	
+	// Relations
+	var $relations = array("Site"	=>	Site);
+	
+	function Site()
+	{
+		return $this->getRelated(Site);
+	}
+	
+	function SiteRole()
+	{
+		$this->table = "site_role";
+		$this->primary_key = "role_id";
+		$this->default_format = "{name}";
+		
+		$this->DataItem(func_get_args());
+	}
+
+	/**
+	 * Retrieves the array of roles and their names for the current site for use in a CMS form.
+	 * @return array
+	 */
+	static function getRolesArray()
+	{
+		$roles = query(SiteRole, "WHERE role!='super' ORDER BY name");
+		
+		$rarr = array();
+		
+		foreach($roles as $role)
+		{
+			$rarr[$role->role] = $role->name;
+		}
+		
+		return $rarr;
+	}
+}
+
+	
 /**
  * This class maps the site_user table.
  */
@@ -42,16 +90,17 @@ class SiteUser extends DataItem
 {
 	// Fields
 	
-	var $fields = array("user_id"		=>	Number,
-						"first_name"	=>	String,
-						"last_name"		=>	String,
-						"role"			=>	String,
-						"title"			=>	String,
-						"username"		=>	String,
-						"password"		=>	Password,
-						"email"			=>	String,
-						"active"		=>	Boolean,
-						"notes"			=>	Text);
+	var $fields = array("user_id"			=>	Number,
+						"first_name"		=>	String,
+						"last_name"			=>	String,
+						"role"				=>	String,
+						"title"				=>	String,
+						"username"			=>	String,
+						"password"			=>	Password,
+						"email"				=>	String,
+						"active"			=>	Boolean,
+						"notes"				=>	Text,
+						"composite_class"	=>	String);
 						
 	// Relations
 

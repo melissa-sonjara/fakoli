@@ -111,10 +111,25 @@ class AttachmentFieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 		$pk = $this->getMatchingPK($xref, $this->parent->data);
+		$pkv = $this->parent->data->get($pk);
 		
+		$attachments = query(Attachment, "WHERE attachment_id in (select attachment_id from {$xref->table} where $pk=$pkv) ORDER BY attachment_id");		
+		$ids = displayFieldAsList($attachments, "attachment_id");
 ?>
-	<input type="hidden" value="" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
-	<div id="<?echo $this->parent->id?>_<?echo $field?>_list"></div>
+	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
+	<div id="<?echo $this->parent->id?>_<?echo $field?>_list">
+	<?
+
+ 		foreach($attachments as $attachment)
+ 		{
+ 			$icon = getDocIcon($attachment->filename);
+?>
+	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<?echo $attachment->filename?>&nbsp;(<?echo $attachment->file_size?>)
+	<br/>	
+<?	
+	}
+	?>
+	</div>
 	<a href="#" onclick="new AttachmentUploader().addAttachment(); return false"> Add an Attachment </a>
 <?
 		$this->_endField($field);

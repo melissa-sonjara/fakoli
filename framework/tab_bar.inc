@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2007,2008 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -215,14 +215,17 @@ class TabBar
 		
 		foreach($this->tabs as $text => $url)
 		{
+			trace("getNextPage::text is $text and url is $url; this page is {$this->page}", 3);
 			if ($found)
 			{
 				$dest = ($this->queryString!="") ? $this->appendQueryString($url, $this->queryString) : $url;
+				trace("getNextPage::found; dest is$dest", 3);
 				return $dest;
 			}
 			else if ($url == $this->page)
 			{
 				$found = true;
+				trace("getNextPage::url is this page", 3);	
 			} 
 		}
 
@@ -263,7 +266,7 @@ class TabBar
 			if ($i == $idx) break;
 			$i++;
 		}
-
+		
 		$dest = ($this->queryString!="") ? $this->appendQueryString($url, $this->queryString) : $url;
 		return $dest;	
 	}
@@ -373,4 +376,197 @@ class TabBar
 	
 	
 }
+
+
+
+/**
+ * The TabBar class is a user-interface control that
+ * manages 2 lines of tabs for multi-page dialogs.
+ * 
+ * Example code the include file calling script:
+ * 	$tabs = getTabs();
+ *	$qs = ($key) ? "{primary key}=$key" : "";
+ *	$tabBar = new TwoLevelTabBar($tabs, $qs);
+ *	$tabBar->setStates(array("submitted"	=>	"{icon path}"));
+ *	$tabBar->setDefaultStateImage("{icon_path}");
+ *	
+ *	return $tabBar;
+ *
+ * function getTabs()
+ * {
+ *	
+ *	$tabs = array(	"First Top Level Tab"	=>
+ *					array(	"First Lower Tab"			=>	"{identifier}",
+ *					  		"Second Lower Tab"		=>	"{identifier"),
+ *
+ *					
+ *					"2nd Top Level Tab"	=>
+ *					array(	"Lower tab"			=>	"{identifier",
+ *							"Lower tab"			=>	"{identifier") 
+ *
+ *	);
+ *					 
+ *	return $tabs;
+ *}
+ *
+ * 
+ */
+
+class TwoLevelTabBar extends TabBar
+{
+	function TwoLevelTabBar($tabs, $qs)
+	{
+		foreach($tabs as $text => $entry)
+		{
+			if (is_array($entry))
+			{
+				$tabs[$text] = new TabBar("subtabs", $entry, $qs);
+			}
+		}
+		
+		$this->TabBar("tabs", $tabs, $qs);
+		$this->showStates = false;
+	}
+	
+	function setFlags($flags)
+	{
+		foreach($this->tabs as $text => $entry)
+		{
+			if (get_class($entry) == "TabBar")
+			{
+				$entry->flags = $flags;
+			}
+		}
+		
+		$this->flags = $flags;
+	}
+	
+	function setStates($states)
+	{		
+		foreach($this->tabs as $text => $entry)
+		{
+			if (get_class($entry) == "TabBar")
+			{
+				$entry->states = $states;
+			}
+		}
+		
+		$this->states = $states;
+	}
+	
+	
+	function getNextPage()
+	{
+		$jump = false;
+		
+		foreach($this->tabs as $text => $entry)
+		{
+			if (get_class($entry) == "TabBar")
+			{
+				$entry->queryString = $this->queryString;
+				
+				if ($jump) return $entry->getPage(0);
+
+				$next = $entry->getNextPage();
+		
+				if ($next === false) continue;
+				if ($next === "")
+				{
+					$jump = true;
+					continue;
+				}
+				
+				return $next;
+			}
+		}
+			
+	}
+
+	
+		
+	function drawHorizontalCheckList()
+	{
+?>
+     <table class="checklist">
+     <tr>
+<?
+		foreach($this->tabs as $title => $steps)
+		{
+?>
+  <td colspan="2" class="title"><b><?echo $title?></b></td> 
+<?
+		}
+?>
+     </tr>
+<?		
+		$idx = 0;
+		
+		do
+		{
+			$found = false;
+			$row = "";
+
+			foreach($this->tabs as $title => $tabBar)
+			{
+				$steps = $tabBar->tabs;
+				$keys = array_keys($steps);
+				$title = $keys[$idx];
+				if (isset($steps[$title]))
+				{
+					$form = $steps[$title];
+					$found = true;
+					$status = $tabBar->flags[$form];
+					 
+					if ($status && $this->states[$status])
+					{
+						$img = "<img src='{$this->states[$status]}' alt='$status'/>";
+					}
+					else if ($this->defaultStateImage)
+					{
+						$img = "<img src='{$this->defaultStateImage}' alt=''/>";
+					}
+					
+					$row .= "<td class=\"status\">$img</td>";
+	  				$row .= "<td class=\"link\"><a href=\"$form?{$this->queryString}\">$title</a></td>";
+				}
+				else
+				{
+					$row .= "<td class=\"status\"></td>";
+      				$row .= "<td class=\"link\"></td>"; 
+
+				}
+			}
+
+			if ($found)
+			{			
+?>
+     <tr>
+      <?echo $row?>
+     </tr>
+<?
+			}
+			
+			$idx++;
+		}
+		while($found);
+?>
+     </table>
+<?			
+	}
+	
+	function setColor($color)
+	{
+		foreach($this->tabs as $text => $entry)
+		{
+			if (get_class($entry) == "TabBar")
+			{
+				$entry->cssClass = "{$color}_subtabs";
+			}
+		}
+		
+		$this->cssClass = "{$color}_tabs";
+	}
+}
+
+
 ?>
