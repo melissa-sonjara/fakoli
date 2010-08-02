@@ -41,14 +41,9 @@ $form->required("title");
 $form->hide("parent_id", "menu_id");
 $pageSelect = new RelatedItemSelectFieldRenderer($form, "page_id", "Page", Page, "ORDER BY page_title", "page_title", "page_id", true, true);
 
-$roleOptions = array(
-	""				 => "All",
-	"admin"			=>	"Admin",
-	"admin,member" 	=>	"Admin/Member"
-	
-);
 
-$roleList = new SelectFieldRenderer($form, "role", "Role", $roleOptions);
+$roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
+
 
 if ($method == "POST")
 {

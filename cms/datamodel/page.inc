@@ -126,12 +126,15 @@ class Page extends DataItem
 			
 		case 'mobile':
 			$templateFile = $site->mobile_template;
+			
+		case 'nude':
+			return "<h2>{page_title}</h2>{description}";
 		}
 		
 		if (!$templateFile) $templateFile = $this->template;
 		
 		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
-			
+
 		return $template;
 	}
 	

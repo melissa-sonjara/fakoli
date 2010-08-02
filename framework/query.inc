@@ -45,11 +45,11 @@ class Query
 		$this->class = $class;
 		$this->constraints = $constraints;
 	
-		$page = -1;
-		$size = -1;
+		$this->page = -1;
+		$this->size = -1;
 		
-		$filter = null;
-		$params = array();
+		$this->filter = null;
+		$this->params = array();
 	}
 
 	function constraints($constraints)
@@ -119,6 +119,8 @@ class Query
 		trace("Page: $this->page Size: $this->size", 3);
 		$items = array();
 		
+		$size = $this->size;
+		
 		try
 		{
 			$db = ConnectionManager::getConnection();
@@ -155,7 +157,7 @@ class Query
 			throw new DataItemException($err);
 		}
 		
-		trace(count($items)." items found", 4);
+		trace(count($items)." items found", 3);
 		return $items;
 	}
 	

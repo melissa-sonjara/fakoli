@@ -1,6 +1,8 @@
 <?php
 require_once "../../include/config.inc";
 
+$page_role = "admin";
+
 require_once "../datamodel/site.inc";
 require_once "../../include/permissions.inc";
 

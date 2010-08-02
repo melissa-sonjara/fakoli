@@ -285,7 +285,7 @@ class DataListView
 <?
 				if ($this->excelFile && $first)
 				{
-					$qs = appendToQueryString($_SERVER['QUERY_STRING'], "__excel={$this->id}");
+					$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
 ?>
 		<a href='<?echo $qs?>' style="float: left"><img src="/framework/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
 <?			

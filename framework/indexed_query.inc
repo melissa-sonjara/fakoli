@@ -121,18 +121,20 @@ class IndexedQuery
 			{
 				$item = new $this->class;
 				$item->populate($line);
-				if (array_key_exists($item->$field, $items))
-				{
+				$val = $item->get($field);
+				
+				if (array_key_exists($val, $items))
+				{	
 					// Implicitly promote to array if there is a collision
-					if (!is_array($items[$item->$field]))
+					if (!is_array($items[$val]))
 					{
-						$items[$item->$field] = array($items[$item->$field]);
+						$items[$val] = array($items[$val]);
 					}
-					$items[$item->$field][] = $item;
+					$items[$val][] = $item;
 				}
 				else
 				{
-					$items[$item->$field] = $item;
+					$items[$val] = $item;
 				}
 			}
 			

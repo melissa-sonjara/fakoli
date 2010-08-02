@@ -58,6 +58,7 @@ table.list th
 	font-weight: bold;
 	text-align: center;
 	padding: 4px;
+	white-space: nowrap;
 }
 
 table.list td
@@ -122,6 +123,7 @@ table.list td.subheading
 .filter
 {
 	padding: 6px;
+	height: 30px;
 }
 
 .filter input
@@ -152,6 +154,8 @@ tr.subheading td
 .paginator
 {
 	width: 30%;
+	height: 30px;
+	margin-bottom: 8px;
 }
 .paginator ul
 {
