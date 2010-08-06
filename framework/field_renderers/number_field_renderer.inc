@@ -49,7 +49,7 @@ class NumberFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
-		echo "<input type='text' name='$field' value='".$this->parent->data->get($field)."' size='15' onkeypress='return maskInput(event);'/>";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='".$this->parent->data->get($field)."' size='15' onkeypress='return maskInput(event);'/>";
 
 		$this->_endField($field);
 	}

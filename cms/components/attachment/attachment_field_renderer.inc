@@ -31,8 +31,7 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../datamodel/attachment.inc";
-require_once realpath(dirname(__FILE__))."/../../../framework/field_renderers.inc";
+Fakoli::usingFile("framework/field_renderers.inc");
 
 class AttachmentFieldRenderer extends FieldRenderer
 {

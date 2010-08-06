@@ -1,5 +1,7 @@
 <?php
 
+Fakoli::using("image");
+
 function validURL($item)
 {
 	return !is_numeric($item->image) && !is_numeric($item->thumbnail);

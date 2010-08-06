@@ -55,7 +55,8 @@ define("Text", 9);*/
  */
 class DataItem extends AbstractDataItem
 {
-	
+	var $_tx = null;
+		
 	/**
 	 * Constructor. DataItems can be constructed in three ways:<br>
 	 * <ol>
@@ -99,6 +100,23 @@ class DataItem extends AbstractDataItem
 				$this->load($arg);
 			}
 		}
+	}
+	
+	/**
+	 * Join the DataItem to the specified DataTransaction.
+	 * @param DataTransaction $tx the transaction to join
+	 */
+	function joinTransaction($tx)
+	{
+		$this->_tx = $tx;
+	}
+	
+	/**
+	 * Retrieves the current DataTransaction.
+	 */
+	function getTransaction()
+	{
+		return $this->_tx;
 	}
 	
 	/**
@@ -583,6 +601,28 @@ class DataItem extends AbstractDataItem
 		}
 	}
 		
+	/**
+	 * Delete all the rows in the database that correspond to this class.
+	 */
+	function deleteAll()
+	{
+		$query = "TRUNCATE TABLE {$this->table}";
+		$db = $this->getConnection();
+				
+		trace($query, 3);
+		
+		try
+		{
+			$db->exec($query);
+		}
+		catch(PDOException $e)
+		{
+			$err = "DataItem::deleteAll() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
+		}	
+	}
+
 	/**
 	 * Retrieves the distinct values in the database for the specified field 
 	 * across the specified set of records.

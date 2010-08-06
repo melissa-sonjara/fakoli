@@ -1,0 +1,35 @@
+<?php
+
+
+Fakoli::using("component");
+Fakoli::usingFile("framework/data_view.inc");
+
+Fakoli::assertRole("admin");
+
+$menu_item = "Components";
+$title = "Manage Components";
+
+
+$components = query(Component, "ORDER BY name");
+
+$table = new DataListView($components, "components");
+$table->column("Component Name", "<a href='component_form.php?component_id={component_id}'>{name}</a><span style='font-size: 10px'>{description}</span>", true)
+	  ->column("Version", "{version}", true)
+	  ->column("Author",  "{author}", true);
+
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 10;
+
+$script .= $table->writeScript();
+
+require_once admin_begin_page;
+
+$table->drawView();
+?>
+<br/>
+<br/>
+<a class="button" href="/cms/admin/scan_components.php"> Scan for Component Updates </a>
+<?
+require_once admin_end_page;
+?>

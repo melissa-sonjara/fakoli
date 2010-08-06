@@ -1,0 +1,217 @@
+@CHARSET "ISO-8859-1";
+
+/**************************************************************
+
+ Copyright (c) 2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+table.list
+{
+	background-color: #ffffff;
+	border: solid 1px #666;
+	border-collapse: collapse;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	vertical-align:top;
+}
+
+table.list b
+{
+	
+	color:  #2b388f;
+	font-weight: bold;
+}
+
+
+table.list th
+{
+	background-color: transparent;
+	color: #000;
+	font-weight: bold;
+	text-align: center;
+	padding: 4px;
+	white-space: nowrap;
+}
+
+table.list td
+{
+	padding: 4px;
+	border: solid 1px #666;
+}
+
+
+table.list tr.alt
+{
+	background-color: #f3f3f3;
+}
+
+table.small
+{
+	font-size: 8pt;
+}
+
+table.list td.subheading
+{
+	padding: 4px;
+	border: solid 1px #666;
+	background-color: #eee;
+	font-weight: bold;
+	font-style: oblique;
+}
+
+
+.sortable th
+{
+	background: url(/cms/images/bg.gif) right center no-repeat transparent;
+	cursor: pointer;
+	border: solid 1px #666;
+	
+}
+
+.sortable th.nosort
+{
+	background-image: none;
+	background-color: transparent;
+}
+
+.sortable th.forward_sort
+{
+	background: url(/cms/images/asc-white.gif) right center no-repeat #393683;
+	color: #fff;
+}
+
+.sortable th.reverse_sort
+{
+	background: url(/cms/images/desc-white.gif) right center no-repeat #393683;
+	color: #fff;
+}
+
+.sortable tr.alt
+{
+	background-color: #F0F0F6;
+}
+
+
+.filter
+{
+	padding: 6px;
+	height: 30px;
+}
+
+.filter input
+{
+	margin-left: 2px;
+}	
+
+tr.filtered td,
+tr.filtered a,
+tr.filtered a:link,
+tr.filtered a.hover
+{
+	color: #ddd;
+}
+
+tr.subheading
+{
+	background-color: #ddd;
+}
+
+tr.subheading td
+{
+	font-weight: bold;
+	cursor: pointer;
+	padding-left: 20px;
+}
+
+.paginator
+{
+	width: 30%;
+	height: 30px;
+	margin-bottom: 8px;
+}
+.paginator ul
+{
+	display: block;
+	float: right;
+}
+
+.paginator li
+{
+	list-style: none;
+	float: left;
+	margin-left: 10px;
+}
+
+.paginator a,
+.paginator a:link
+{
+	text-decoration: none !important;
+	display: inline-block;
+	border: none !important;
+	color: #666 !important;
+	padding: 2px;
+}
+
+.paginator a:hover,
+.paginator a:active
+{
+	color: #000 !important;
+	text-decoration: none !important;
+}
+
+table.list thead tr,
+table.list tfoot tr
+{
+	background: url(/images/table-header.png) bottom left repeat-x #ddd;
+}
+
+table.list tfoot td
+{
+	font-weight: bold;
+}
+
+tr.expanded td
+{
+	background: url(/cms/images/open.gif) left center no-repeat transparent;
+	padding-left: 20px;
+}
+
+tr.collapsed td
+{
+	background: url(/cms/images/closed.gif) left center no-repeat transparent;
+	padding-left: 20px;
+}
+
+td.icon
+{
+	text-align: center;
+	font-size: 8pt;
+}

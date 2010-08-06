@@ -1,4 +1,4 @@
-<?php
+ <?php
 $page_role = "admin,member,data";
 
 require_once "../../../include/config.inc";

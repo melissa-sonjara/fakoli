@@ -82,7 +82,7 @@ class DateFieldRenderer extends FieldRenderer
 		$date = $obj->reformatFromSQLDate($obj->get($field));
 		
 		$this->_startField($field);
-		echo "<input type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
 		$this->_endField($field);
 	}
 	

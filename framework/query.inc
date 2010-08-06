@@ -80,7 +80,7 @@ class Query
 	function bind()
 	{
 		$num = func_num_args();
-		for($i = 0; $i < $num; ++$i)
+		for($i = 0; $i < $num; $i += 2)
 		{
 			$this->params[func_get_arg($i)] = func_get_arg($i + 1);
 		}

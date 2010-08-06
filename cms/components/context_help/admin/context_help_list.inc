@@ -30,8 +30,8 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-*
-*/**************************************************************
+
+/**************************************************************
  * 
  * Title:  context_help_list.php
  * 
@@ -78,16 +78,11 @@
  * 
  ****************************************************************/
 
-require_once  "../../../include/config.inc";
-require_once  $config['homedir']."/include/permissions.inc";
-require_once  $config['homedir']."/datamodel/context_help.inc";
-require_once  $config['homedir']."/framework/auto_form.inc";
-require_once  $config['homedir']."/framework/tree.inc";
-
-
+Fakoli::usingFile("framework/auto_form.inc");
+Fakoli::usingFile("framework/tree.inc");
 
 $title = "Context-Sensitive Help";
-$page_role = "admin";
+
 
 	
 $includeFiles = array();	

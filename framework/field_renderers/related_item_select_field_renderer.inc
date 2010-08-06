@@ -133,7 +133,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	function renderField($field)
 	{	
 		$this->_startField($field);
-		echo "<select name='$field'";
+		echo "<select id='{$this->parent->id}_{$field}' name='$field'";
 		
 		if ($this->onChange)
 		{

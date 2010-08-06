@@ -31,8 +31,8 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../datamodel/image.inc";
-require_once realpath(dirname(__FILE__))."/../../../framework/field_renderers.inc";
+Fakoli::using("image");
+Fakoli::usingFile("framework/field_renderers.inc");
 
 class ImageSelectFieldRenderer extends FieldRenderer
 {

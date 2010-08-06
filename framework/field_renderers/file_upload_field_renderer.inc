@@ -62,7 +62,7 @@ class FileUploadFieldRenderer extends FieldRenderer
 	function renderField($field)
 	{
 		$this->_startField($field);
-		echo "<input type='file' name='$field' value='".$this->parent->data->get($field)."' size='{$this->size}'>";
+		echo "<input id='{$this->parent->id}_{$field}' type='file' name='$field' value='".$this->parent->data->get($field)."' size='{$this->size}'>";
 		$this->_endField($field);
 	}
 	

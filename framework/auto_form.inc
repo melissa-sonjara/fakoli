@@ -111,9 +111,13 @@ class AutoForm
 
 		$this->fields = $this->data->getFields();
 		
+		$filter = $this->data->getFilter();
+		
 		// Add in a default renderer for each field
 		foreach($this->fields as $field => $type)
 		{
+			if ($filter && $filter->isExcluded($field)) continue;
+			
 			$this->renderers[$field] = $this->createRenderer($field);
 		}
 		
@@ -569,7 +573,7 @@ class AutoForm
 		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
-			echo "<input type='hidden' name='$hidden' value='{$obj->get($hidden)}'/>\n";
+			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='{$obj->get($hidden)}'/>\n";
 		}
 
 		echo "<table";

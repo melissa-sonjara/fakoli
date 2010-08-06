@@ -31,9 +31,6 @@
 
 *****************************************************************/
 
-require_once "cms/datamodel/forum.inc";
-require_once "cms/datamodel/attachment.inc";
-
 class ForumTopicView
 {
 	var $topic;

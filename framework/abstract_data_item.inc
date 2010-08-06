@@ -34,6 +34,8 @@
 class DataItemException extends Exception {}
 class DataNotFoundException extends Exception {}
 
+require_once realpath(dirname(__FILE__)."/transaction.inc");
+
 /**
  * Used to place a filter on the contents of a DataItem-derived object.
  * With an ExclusionFilter, the specified fields will be <b>excluded</b> from
@@ -155,6 +157,7 @@ abstract class AbstractDataItem
 {
 	var $filter;
 	var $_options = 0;
+	var $_tx = null;
 	
 	/**
 	 * Cast this object to another class. This facility is provided so that
@@ -191,9 +194,28 @@ abstract class AbstractDataItem
 	 */
 	function getConnection()
 	{
-		//TODO: Add transactional support
-		return ConnectionManager::getConnection();
+		$tx = $this->getTransaction();
+		
+		if ($tx)
+		{
+			return $tx->getConnection();
+		}
+		else
+		{ 
+			return ConnectionManager::getConnection();
+		}
 	}
+	
+	/**
+	 * Join the DataItem to the specified DataTransaction.
+	 * @param DataTransaction $tx the transaction to join
+	 */
+	abstract function joinTransaction($tx);
+	
+	/**
+	 * Retrieves the current DataTransaction.
+	 */
+	abstract function getTransaction();
 	
 	/**
 	 * Subclasses can override this function to provide additional 
@@ -324,7 +346,17 @@ abstract class AbstractDataItem
 	 * Update the row in the database that corresponds to this object.
 	 */
 	abstract function update();
-		
+
+	/**
+	 * Delete the row in the database that corresponds to this object.
+	 */
+	abstract function delete($constraint = "");
+	
+	/**
+	 * Delete all the rows in the database that correspond to this class.
+	 */
+	abstract function deleteAll();
+
 	/**
 	 * Returns the properly quoted value of the specified field. Quoting rules
 	 * are dependent on the specified type of the field.
@@ -518,11 +550,6 @@ abstract class AbstractDataItem
 	 * Insert a new row in the database to store this object.
 	 */
 	abstract function insert();
-	
-	/**
-	 * Delete the row in the database that corresponds to this object.
-	 */
-	abstract function delete($constraint = "");
 		
 	/**
 	 * Retrieves the distinct values in the database for the specified field 

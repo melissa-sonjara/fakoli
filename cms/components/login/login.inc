@@ -125,7 +125,7 @@ function validateLogin($username, $password, &$page)
 			if ($hashedPassword == $match->password)
 				$rtn = valid_login;
 			else
-				$rtn = validTokenLogin($match, $password))
+				$rtn = validTokenLogin($match, $password);
 		}
 		else
 			$rtn = invalid_username;

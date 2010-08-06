@@ -31,8 +31,6 @@
 
 *****************************************************************/
 
-require_once $config['homedir']."/datamodel/context_help.inc";
-
 class ContextHelpManager
 {
 	static $_instance;

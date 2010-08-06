@@ -45,7 +45,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-require_once  $config['homedir']."/cms/datamodel/survey.inc";
+//require_once  $config['homedir']."/cms/datamodel/survey.inc";
 
 class EmailHandler
 {

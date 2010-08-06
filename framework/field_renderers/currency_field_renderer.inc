@@ -59,7 +59,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 
-		echo "$&nbsp;<input type='text' name='$field' value='{$value}' size='20'/>";
+		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='{$value}' size='20'/>";
 
 		$this->_endField($field);
 	}

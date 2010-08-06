@@ -31,8 +31,7 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../datamodel/forum.inc";
-require_once realpath(dirname(__FILE__))."/../../../framework/data_view.inc";
+Fakoli::usingFile("framework/data_view.inc");
 
 class ForumListView
 {

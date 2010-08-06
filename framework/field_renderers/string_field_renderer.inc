@@ -88,7 +88,7 @@ class StringFieldRenderer extends FieldRenderer
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 		
-		echo "<input type='text' name='$field' value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
 
 		if ($this->limit)
 		{

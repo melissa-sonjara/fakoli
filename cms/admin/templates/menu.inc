@@ -1,6 +1,8 @@
-
 <?php
-	if ($admin_menu)
+
+global $admin_menu;
+
+if ($admin_menu)
 	{
 		if (!$menu_item) $menu_item = basename($_SERVER['PHP_SELF']);
 ?>
