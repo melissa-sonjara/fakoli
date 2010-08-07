@@ -1,7 +1,8 @@
 <?php
 require_once "include/config.inc";
-require_once "cms/datamodel/page.inc";
-require_once "cms/components/views/page_view.inc";
+require_once "cms/core.inc";
+
+Fakoli::using("page");
 
 $page_id = checkNumeric($_GET["page_id"]);
 $identifier = mysql_escape_string($_GET["identifier"]);
@@ -26,8 +27,6 @@ if (!checkRole($page->role))
 {
 	redirect("/login");
 }
-
-require_once "include/permissions.inc";
 
 $pageView = new PageView($page, "{$page->template}.tpl");
 
