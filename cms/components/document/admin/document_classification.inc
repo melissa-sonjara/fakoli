@@ -53,7 +53,7 @@ else
 
 $script = $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $tabs->writeHTML();
 ?>
@@ -63,5 +63,5 @@ $form->drawForm();
 ?>
 </div><br/>
 <?
-require_once admin_end_page;
+
 ?>

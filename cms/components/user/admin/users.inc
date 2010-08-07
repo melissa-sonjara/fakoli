@@ -28,7 +28,7 @@ $table->excelFile = "Users.xls";
 
 $script = $table->writeScript();
 
-require_once admin_begin_page;
+
 ?>
 <input type="checkbox" class="checkbox" name="all" value="1"<?if ($all) echo " checked='checked'";?> onclick="go('/cms/admin/users?all=' + (this.checked?'1':'0'))">&nbsp;Show inactive user accounts<br/><br/>
 <?
@@ -38,5 +38,5 @@ $table->drawView();
 <button class="button" onclick="go('user_form')">Add New User</button>
 
 <?
-require_once admin_end_page;
+
 ?>

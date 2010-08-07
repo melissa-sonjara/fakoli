@@ -51,7 +51,7 @@ $menu_item = "Publications";
 $title = "Search Publications";
 
 
-require_once admin_begin_page;
+
 
 
 
@@ -187,5 +187,5 @@ foreach($samples as $sample)
 
 <br/>
 <?
-require_once admin_end_page;
+
 ?>

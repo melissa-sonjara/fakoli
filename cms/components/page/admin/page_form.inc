@@ -39,6 +39,7 @@ $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site,
 
 
 $tabs = pageTabs($page_id);
+$tabs->page = "page_form";
 
 if ($method == "POST")
 {
@@ -78,7 +79,7 @@ $roleOptions = array(
 
 $script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $tabs->writeHTML();
 ?>
@@ -89,5 +90,5 @@ $form->drawForm();
 </div>
 <?
 
-require_once admin_end_page;
+
 ?>

@@ -34,9 +34,9 @@ else
 
 $script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

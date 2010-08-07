@@ -178,9 +178,9 @@ class DataListView
 		if (count($this->items) == 0) return;
 		
 		$script = 
-		"\t<script type='text/javascript' src='/framework/js/sorting_table.js'></script>\n".
-	   	"\t<script type='text/javascript' src='/framework/js/paginating_table.js'></script>\n".  
-		"\t<script type='text/javascript' src='/framework/js/filtering_table.js'></script>\n";
+		"\t<script type='text/javascript' src='/fakoli/js/sorting_table.js'></script>\n".
+	   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".  
+		"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n";
 		
 		$constructor = "";
 		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter)

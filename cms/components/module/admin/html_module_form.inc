@@ -19,7 +19,7 @@ $form->required("title");
 $form->hide("content_type","ord_by","query_constraint","num_items", "php_code_file", "menu_id", "menu_parameters", "group_id");
 $form->alias("css_class", "CSS Class");
 $form->allowDelete = true;
-$redirect = "modules";
+$redirect = "/admin/modules";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")
@@ -45,9 +45,9 @@ else
 
 $script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

@@ -24,7 +24,7 @@ $table->emptyMessage = "No Documents have been added yet.";
 
 $script .= $table->writeScript();
 
-require_once admin_begin_page;
+
 
 $table->drawView();
 ?>
@@ -33,5 +33,5 @@ $table->drawView();
 <a href="document_form" class="button"> Add a New Document </a>
 <br/>
 <?
-require_once admin_end_page;
+
 ?>

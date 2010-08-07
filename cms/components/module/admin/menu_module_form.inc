@@ -16,7 +16,7 @@ $form->hide("content_type");
 $form->alias("css_class", "CSS Class");
 
 $form->allowDelete = true;
-$redirect = "modules";
+$redirect = "/admin/modules";
 $form->button("Cancel", $redirect);
 
 $menuSelect = new RelatedItemSelectFieldRenderer($form, "menu_id", "Menu", Menu, "ORDER BY name", "name", "menu_id");
@@ -42,9 +42,9 @@ else
 
 //$script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

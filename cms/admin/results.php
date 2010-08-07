@@ -129,7 +129,7 @@ $results = $join->query($query);
 
 $publications = removeDuplicates(extractJoinResults(Publication, $results));
 
-require_once admin_begin_page;
+
 
 
 
@@ -215,6 +215,6 @@ if ($pageno == $lastpage) {
 
 
 <?
-require_once admin_end_page;
+
 
 ?>

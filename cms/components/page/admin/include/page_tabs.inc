@@ -3,8 +3,8 @@ Fakoli::usingFile("framework/tab_bar.inc");
 
 function pageTabs($key)
 {
-	$tabs = array(	"Content"	=>	"page_form.php",
-					"Modules"	=>	"page_modules.php"
+	$tabs = array(	"Content"	=>	"/admin/page_form",
+					"Modules"	=>	"/admin/page_modules"
 					);
 
 	$qs = ($key) ? "page_id=$key" : ""; 

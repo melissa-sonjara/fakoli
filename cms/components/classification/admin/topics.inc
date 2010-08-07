@@ -17,15 +17,14 @@ $table->emptyMessage = "No topics have been created";
 
 $script .= $table->writeScript();
 
-require_once admin_begin_page;
+
 
 $table->drawView();
 ?>
-<br/>
 <br/>
 <a href="topic_form" class="button"> Add a New Topic </a>
 <br/>
 <br/>
 <?
-require_once admin_end_page;
+
 ?>

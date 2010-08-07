@@ -24,7 +24,7 @@ class ComponentManifest
 
 				"Components"	=>	array("page"	=>	"/admin/components",
 										  "role"	=>	"admin",
-								  		  "weight"	=>	2)
+								  		  "weight"	=>	0)
 			)
 		);		
 	}	

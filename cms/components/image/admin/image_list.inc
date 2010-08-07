@@ -5,8 +5,8 @@ Fakoli::usingFile("framework/tab_bar.inc");
 
 Fakoli::assertRole("admin");
 
-$tabs = array("Thumbnails"	=>	"images",
-			  "Details"		=>	"image_list",
+$tabs = array("Thumbnails"	=>	"/admin/images",
+			  "Details"		=>	"/admin/image_list",
 			);
 
 $tabBar = new TabBar("tabs", $tabs);
@@ -18,7 +18,9 @@ $images = query(Image);
 
 $count = 0;
 
-require_once admin_begin_page;
+$title = "Images";
+
+$tabBar->page = "image_list";
 
 $tabBar->writeHTML();
 ?>
@@ -62,5 +64,5 @@ else
 <br/>
 <input type="button" class="button" value="Add a New Image" onclick="go('image_form');">
 <?
-require_once admin_end_page;
+
 ?>

@@ -24,7 +24,7 @@ class SiteManifest
 
 				"Sites"	=>	array("page"	=>	"/admin/sites",
 								  "role"	=>	"admin",
-								  "weight"	=>	0)
+								  "weight"	=>	1)
 			)
 		);		
 	}	

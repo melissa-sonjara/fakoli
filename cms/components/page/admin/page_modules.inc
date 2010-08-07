@@ -1,24 +1,19 @@
 <?php
+Fakoli::using("page", "menu", "module");
+Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "../../include/config.inc";
-
-require_once "../datamodel/page.inc";
-require_once "../datamodel/module.inc";
-require_once "../datamodel/menus.inc";
-require_once "../../include/permissions.inc";
-require_once "../../framework/auto_form.inc";
-require_once "../../framework/tree.inc";
 require_once "include/page_tabs.inc";
 
 $menu_item = "Pages";
 
 $page_id = checkNumeric($_GET["page_id"]);
 
-if (!$page_id) redirect("index.php");
+if (!$page_id) redirect("/index");
 
 $page = new Page($page_id);
 
 $tabs = pageTabs($page_id);
+$tabs->page = "page_modules";
 
 $title = "Position Modules for {$page->page_title}";
 
@@ -44,10 +39,10 @@ if ($method == "POST")
 		}
 	}
 	
-	redirect("page_modules.php?page_id=$page_id");
+	redirect("/admin/page_modules?page_id=$page_id");
 }
 
-require_once admin_begin_page;
+
 
 $tabs->writeHTML();
 ?>
@@ -99,13 +94,13 @@ else {
 ?>
 </table>
 <br/>
-<input type="submit" class="button" name="submit" value="Update Module Positions"/><NOBR>&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="Preview Page" name="preview" onclick="window.open('/page.php?page_id=<?echo $page_id?>', 'popupwindow1', 'width=900, height=600, resizable=no, scrollbars=yes'); return false;"/>
+<input type="submit" class="button" name="submit" value="Update Module Positions"/><NOBR>&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="Preview Page" name="preview" onclick="window.open('/page?page_id=<?echo $page_id?>', 'popupwindow1', 'width=900, height=600, resizable=no, scrollbars=yes'); return false;"/>
 <?
 
 ?>
 </form>
 </div>
 <?
-require_once admin_end_page;
+
 
 ?>

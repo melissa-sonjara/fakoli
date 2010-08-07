@@ -23,7 +23,7 @@ $form->hide("php_code_file", "menu_id", "menu_parameters");
 $form->alias("css_class", "CSS Class");
 
 $form->allowDelete = true;
-$redirect = "modules.php";
+$redirect = "/admin/modules.php";
 $form->button("Cancel", $redirect);
 
 $form->getRenderer("template")->rows = 10;
@@ -57,9 +57,9 @@ $grpSelect = new RelatedItemSelectFieldRenderer($form, "group_id", "Group", Grou
 
 //$script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

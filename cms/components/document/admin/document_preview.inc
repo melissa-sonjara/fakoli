@@ -25,7 +25,7 @@ if ($publication_id)
 	$title = "Preview Publication: {$publication->title}";
 }
 
-require_once admin_begin_page;
+
 
 $tabs->writeHTML();
 ?>
@@ -35,5 +35,5 @@ $view->drawView();
 ?>
 </div><br/>
 <?
-require_once admin_end_page;
+
 ?>

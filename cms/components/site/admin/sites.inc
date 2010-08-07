@@ -18,7 +18,7 @@ $table->sortable = true;
 
 $script .= $table->writeScript();
 	  
-require_once admin_begin_page;
+
 
 $table->drawView();
 ?>
@@ -27,5 +27,5 @@ $table->drawView();
 <br/>
 <br/>
 <?
-require_once admin_end_page;
+
 ?>

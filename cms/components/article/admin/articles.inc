@@ -53,17 +53,17 @@ $table->emptyMessage = "No articles have been created yet.";
 
 function formatTitle($item)
 {
-	return "<a title=\"{$item->title}\" href=\"article_form?article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
+	return "<a title=\"{$item->title}\" href=\"/admin/article_form?article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 }
 
 $table->writeScript();
 
-require_once admin_begin_page;
+
 
 $table->drawView();
 ?>
 <br/>
-<input type="button" class="button" value="  Add an Article  " onclick="go('article_form');">
+<input type="button" class="button" value="  Add an Article  " onclick="go('/admin/article_form');">
 <?
-require_once admin_end_page;
+
 ?>

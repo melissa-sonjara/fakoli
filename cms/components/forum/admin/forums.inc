@@ -4,6 +4,8 @@ Fakoli::usingFile("framework/data_view.inc");
 
 $title = "Forums";
 
+$menu_item = "Forums";
+
 $fora = query(ForumSummary, "ORDER BY title");
 
 $table = new DataListView($fora, "fora");
@@ -17,14 +19,12 @@ $table->sortable = true;
 
 $table->writeScript();
 
-require_once admin_begin_page;
-
 $table->drawView();
 
 ?>
 <br/>
-<br/><a class='button' href='forum_form'> Create a Forum </a>
+<br/><a class='button' href='/admin/forum_form'> Create a Forum </a>
 <?
 
-require_once admin_end_page;
+
 ?>

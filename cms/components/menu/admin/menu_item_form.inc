@@ -1,11 +1,7 @@
 <?php
 
 
-Fakoli::using("menu");
-Fakoli::using("site");
-Fakoli::using("page");
-Fakoli::assertRole("admin");
-
+Fakoli::using("menu", "site", "role", "page");
 Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/menu_tabs.inc";
@@ -32,7 +28,7 @@ $menu = $menuItem->Menu();
 $site = $menu->Site();
 
 $tabs = menuTabs($menu_id);
-$tabs->page = "menu_items.php";
+$tabs->page = "menu_items";
 
 $form = new AutoForm($menuItem);
 
@@ -74,17 +70,17 @@ if ($method == "POST")
 		$form->save();
 		if ($form->deleted)
 		{
-			redirect("menu_items.php?menu_id={$menu->menu_id}");
+			redirect("/admin/menu_items?menu_id={$menu->menu_id}");
 		}
 		else
 		{
 			if ($parent_id)
 			{
-				redirect("menu_item_form.php?menu_item_id={$parent_id}");
+				redirect("/admin/menu_item_form?menu_item_id={$parent_id}");
 			}
 			else
 			{
-				redirect("menu_items.php?menu_id={$form->data->menu_id}");
+				redirect("/admin/menu_items?menu_id={$form->data->menu_id}");
 			}
 		}
 	}
@@ -102,7 +98,7 @@ if ($menu_item_id)
 		$form->allowDelete = true; 
 	}
 	
-	$form->button("Move Menu Item", "menu_move_form.php?menu_id=$menu_id&parent_id=$parent_id");
+	$form->button("Move Menu Item", "/admin/menu_move_form?menu_id=$menu_id&parent_id=$parent_id");
 	$form->button("Cancel", $redirect);
 }
 else
@@ -113,7 +109,7 @@ else
 
 $script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $tabs->writeHTML();
 ?>
@@ -146,7 +142,7 @@ if ($menu_item_id)
 ?>
  <tr>
   <td style="text-align: center; vertical-align: middle; width: 80px"><input type="text" style="width: 60px" name="m[<?echo $m->menu_id ?>]" value="<?echo $m->sort_order ?>"/></td>
-  <td><a href="menu_item_form.php?menu_item_id=<?echo $m->menu_item_id?>"><?echo $m->title ?></a></td>
+  <td><a href="/admin/menu_item_form?menu_item_id=<?echo $m->menu_item_id?>"><?echo $m->title ?></a></td>
  </tr>
 <?
 		}
@@ -155,7 +151,7 @@ if ($menu_item_id)
 
 <br/>
 
-<a href="#" class="button" onclick="document.forms['menu_order_form'].submit();">Update Menu Order</a>&nbsp;&nbsp;<a href="menu_item_form.php?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
+<a href="#" class="button" onclick="document.forms['menu_order_form'].submit();">Update Menu Order</a>&nbsp;&nbsp;<a href="menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
 
 </form>
 <?
@@ -163,12 +159,12 @@ if ($menu_item_id)
 	else
 	{
 ?><p><i>There are no sub-items associated with this menu item.</i></p>
-<a href="menu_item_form.php?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
+<a href="/admin/menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
 <?
 	}
 }
 ?>
 </div>
 <?
-require_once admin_end_page;
+
 ?>

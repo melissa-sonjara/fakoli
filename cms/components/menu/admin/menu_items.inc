@@ -35,7 +35,7 @@ $menuTree->add($rootNode);
 if (count($menuItems) > 0)
 {
 	foreach ($menuItems as $m) {
-	    $menuNode = new TreeNode("menu_item_{$m->menu_item_id}", $m->title, null, false, "tree_node_closed", "tree_node_open", "menu_item_form?menu_item_id={$m->menu_item_id}&parent_id={$m->parent_id}");
+	    $menuNode = new TreeNode("menu_item_{$m->menu_item_id}", $m->title, null, false, "tree_node_closed", "tree_node_open", "/admin/menu_item_form?menu_item_id={$m->menu_item_id}&parent_id={$m->parent_id}");
 	    //$help_pageNode->leafStyle = "file_node_leaf";
 	    $tmp = Array('parent'	 => $m->parent_id, 
 	                 'node'		 => $menuNode);
@@ -63,7 +63,7 @@ $tabs->page = "menu_items";
 $script = $menuTree->writeScript();
 $script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
 
-require_once admin_begin_page;
+
 
 $tabs->writeHTML();
 ?>
@@ -87,5 +87,5 @@ $menuTree->writeHTML();
 </table>
 </div>
 <?
-require_once admin_end_page;
+
 ?>

@@ -29,17 +29,14 @@ $table->emptyMessage = "No Modules have been added.";
 
 $script = $table->writeScript();
 
-require_once admin_begin_page;
+
 
 $table->drawView();
 
 ?>
 <br/>
 <br/>
-<input type="button" class="button" value="Add a Code Module" onclick="go('code_module_form');"/>&nbsp;&nbsp;
-<input type="button" class="button" value="Add a Query Module" onclick="go('query_module_form');"/>&nbsp;&nbsp;
-<input type="button" class="button" value="Add an HTML Module" onclick="go('html_module_form');"/>&nbsp;&nbsp;
-<input type="button" class="button" value="Add a Menu Module" onclick="go('menu_module_form');"/>
-<?
-require_once admin_end_page;
-?>
+<a class='button' href="/admin/code_module_form">Add a Code Module Form</a>&nbsp;&nbsp;
+<a class='button' href="/admin/query_module_form">Add a Query Module</a>&nbsp;&nbsp;
+<a class='button' href="/admin/html_module_form">Add an HTML Module</a>&nbsp;&nbsp;
+<a class='button' href="/admin/menu_module_form">Add a Menu Module</a>

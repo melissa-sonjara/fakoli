@@ -2,17 +2,19 @@
 Fakoli::using("forum", "site");
 Fakoli::usingFile("framework/auto_form.inc");
 
+$menu_item = "Forums";
+
 $forum_id = checkNumeric($_GET["forum_id"]);
 
 if ($forum_id)
 {
 	$forum = new Forum($forum_id);
-	$page->page_title = "Edit Forum: $forum->title";
+	$title = "Edit Forum: $forum->title";
 }
 else
 {
 	$forum = new Forum();
-	$page->page_title = "Add a New Discussion Forum";
+	$title = "Add a New Discussion Forum";
 }
 
 
@@ -51,9 +53,9 @@ if ($method == "POST")
 
 $script .= $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

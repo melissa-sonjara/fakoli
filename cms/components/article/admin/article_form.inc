@@ -18,7 +18,7 @@ else
 $form = new AutoForm($article);
 $form->required("title");
 $form->allowDelete = true;
-$redirect = "articles.php";
+$redirect = "articles";
 $form->button("Cancel", $redirect);
 $imageSelect = new ImageSelectFieldRenderer($form, "image_id");
 $form->alias("image_id", "Associated Image");
@@ -36,7 +36,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("articles.php");
+		redirect("/admin/articles");
 	}
 	
 	
@@ -58,9 +58,9 @@ else
 
 $script = $form->writeScript();
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

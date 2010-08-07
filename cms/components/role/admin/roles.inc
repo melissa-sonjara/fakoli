@@ -21,7 +21,7 @@ $table->emptyMessage = "No Site User Roles have been defined.";
 
 $script = $table->writeScript();
 
-require_once admin_begin_page;
+
 
 $table->drawView();
 ?>
@@ -29,5 +29,5 @@ $table->drawView();
 <button class="button" onclick="go('role_form')">Add New User Role</button>
 
 <?
-require_once admin_end_page;
+
 ?>

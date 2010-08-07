@@ -32,47 +32,29 @@
 *****************************************************************/
 
 Fakoli::using("calendar");
+Fakoli::usingFile("framework/data_view.inc");
 
 $title = "Events";
 
 $events = query(Event, "ORDER BY start_date");
 $lastUpdated = "";
 
-require_once admin_begin_page;
+$menu_item = "Events";
 
-if (count($events) > 0)
-{
-?>
-<table class="list" width="100%">
- <tr>
-  <th>Event</th>
-  <th>Location</th>
-  <th>Start Date</th>
-  <th>End Date</th>
- </tr>
-<?
-	foreach($events as $event)
-	{
+$table = new DataListView($events, "events");
+$table->column("Event", formatEvent, true)
+	  ->column("Location", "{location}", true)
+	  ->column("Start Date", "{start_date}", true)
+	  ->column("End Date", "{end_date}", true);
+	  
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 20;
+$table->emptyMessage = "No Events defined";
 
+$script .= $table->writeScript();
+
+$table->drawView();
 ?>
- <tr>
-  <td><b><a title="<?echo $event->title ?>" href="event_form.php?event_id=<?echo $event->event_id ?>"><?echo ellipsis($event->title, 80) ?></a></b></td>
-  <td><? echo $event->location ?></td>
-  <td><? echo $event->reformatFromSQLDate($event->start_date) ?></td>
-  <td><? echo $event->reformatFromSQLDate($event->end_date) ?></td>
- </tr>
-<?
-	}
-?></table>
-<?
-}
-else
-{
-	echo "<i>No Events defined</i><br>";
-}
-?>
-<br>
-<input type="button" class="button" value="  Add a new Event  " onclick="go('event_form');">
-<?
-require_once admin_end_page;
-?>
+<br/>
+<input type="button" class="button" value="  Add a new Event  " onclick="go('/admin/event_form');">

@@ -5,6 +5,7 @@ Fakoli::using("site");
 
 Fakoli::assertRole("admin");
 
+$menu_item = "Menus";
 
 $sites = query(Site, "ORDER BY site_name");
 
@@ -12,7 +13,7 @@ $menusBySite = groupedQuery(Menu, "ORDER BY name", "site_id");
 
 $title = "Menus";
 
-require_once admin_begin_page;
+
 
 foreach($sites as $site)
 {
@@ -29,7 +30,7 @@ foreach($sites as $site)
 		{
 			
 ?>
-	<dt><a href="menu_form?menu_id=<?echo $menu->menu_id?>"><?echo $menu->name?> (<?echo $menu->identifier?>)</a></dt>
+	<dt><a href="/admin/menu_form?menu_id=<?echo $menu->menu_id?>"><?echo $menu->name?> (<?echo $menu->identifier?>)</a></dt>
 	<dd><?echo $menu->description?></dd>
 <?		
 		}
@@ -47,7 +48,7 @@ foreach($sites as $site)
 }
 ?>
 <br/>
-<a class="button" href="menu_form">Add a Menu</a>
+<a class="button" href="/admin/menu_form">Add a Menu</a>
 <?
-require_once admin_end_page;
+
 ?>

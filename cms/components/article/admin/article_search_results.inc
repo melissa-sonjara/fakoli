@@ -19,7 +19,7 @@ $title = "Results for News Item Search";
 
 $newsitems = query(NewsItem, $search->generateConstraint());
 
-require_once admin_begin_page;
+
 ?>
 <!-- <pre><?print_r($search) ?></pre>
 <? echo $search->generateConstraint() ?><br/> -->
@@ -43,5 +43,5 @@ foreach ($newsitems as $newsitem)
 ?>
 </table>
 <?
-require_once admin_end_page;
+
 ?>

@@ -23,7 +23,7 @@ $table->pageSize = 10;
 
 $script .= $table->writeScript();
 
-require_once admin_begin_page;
+
 
 $table->drawView();
 ?>
@@ -31,5 +31,5 @@ $table->drawView();
 <br/>
 <a class="button" href="/cms/admin/scan_components.php"> Scan for Component Updates </a>
 <?
-require_once admin_end_page;
+
 ?>

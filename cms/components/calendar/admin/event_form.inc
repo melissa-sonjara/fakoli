@@ -10,6 +10,8 @@ Fakoli::usingFile("framework/auto_form.inc");
 
 Fakoli::assertRole("admin");
 
+$menu_item = "Events";
+
 $event = new Event();
 
 $form = new AutoForm($event);
@@ -25,7 +27,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{	
-		redirect("events.php");
+		redirect("/admin/events");
 	}
 }
 else
@@ -49,9 +51,9 @@ else
 $script = $form->writeScript();
 $section = "Calendar";
 
-require_once admin_begin_page;
+
 
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

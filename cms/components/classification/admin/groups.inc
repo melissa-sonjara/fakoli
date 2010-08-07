@@ -10,7 +10,7 @@ $title = "Manage Groups";
 
 $groups = query(Group, "ORDER BY group_id");
 
-require_once admin_begin_page;
+
 
 if (count($groups) > 0) {
 ?>
@@ -48,5 +48,5 @@ else {
 <br/>
 <br/>
 <?
-require_once admin_end_page;
+
 ?>

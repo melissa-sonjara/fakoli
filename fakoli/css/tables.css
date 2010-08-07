@@ -41,6 +41,7 @@ table.list
 	font-size: 12px;
 	width: 100%;
 	vertical-align:top;
+	-moz-border-radius: 4px;
 }
 
 table.list b
@@ -53,7 +54,7 @@ table.list b
 
 table.list th
 {
-	background-color: transparent;
+	background: url(/fakoli/images/table-header.png) top left repeat-x transparent;
 	color: #000;
 	font-weight: bold;
 	text-align: center;

@@ -178,7 +178,7 @@ else
 
 $script = $form->writeScript();
 
-require_once admin_begin_page;
+
 
 if ($image_id)
 {
@@ -189,5 +189,5 @@ if ($image_id)
 }
 $form->drawForm();
 
-require_once admin_end_page;
+
 ?>

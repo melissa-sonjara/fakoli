@@ -4,8 +4,8 @@ Fakoli::usingFile("framework/tab_bar.inc");
 
 function menuTabs($key)
 {
-	$tabs = array(	"Menu Details"	=>	"menu_form",
-				    "Menu Items"	=>	"menu_items"
+	$tabs = array(	"Menu Details"	=>	"/admin/menu_form",
+				    "Menu Items"	=>	"/admin/menu_items"
 				 );
 					
    
