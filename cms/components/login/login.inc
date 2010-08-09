@@ -51,135 +51,105 @@ define("valid_token_login", 2);
 define("invalid_username", 3); // 0 matches found 
 define("invalid_password", 4); 
 
-
-function emailToken($siteUser)
+class LoginManager
 {
-	global $config;
 	
-	// clean out old token; only allowed one
-	$oldToken = $siteUser->LoginToken();
-	if(isset($oldToken))
-		$oldToken->delete();
-	
-	$pk = getPrimaryKey($siteUser);
-	$token = LoginToken::generateToken($siteUser->$pk);
-	
-	$subject = $config["sitename"];
-	
-	$message = "This is a message from {$config["sitename"]}. ";
-	$message .= "A temporary password has been created for your account:\n\n";
-	$message .= "Password = " . $token->token . "\n\n";
-	$message .= "This password is valid for one login ONLY and expires after ";
-	$message .= formatDateShort($token->expire_date) . ". ";
-	$message .= "Once you have logged in, you must reset your password. "; 
-	$message .=  "Please note that the password is CASE SENSITIVE.";
-	$message = wordwrap($message, 100);
-	
-	$emailFrom = $config["email_from"];
-	
-	$headers = "From: $emailFrom\r\n";
-	$headers .= "Return-Path: ". $emailFrom . "\r\n";
-	$headers .= "Reply-To: ". $emailFrom . "\r\n";	
-	$headers .= "Content-type: text;\r\n";
-	$headers .= "Mime-Version: 1.0\r\n";
-	
-	$msg = new Mail($emailFrom, $siteUser->email, $subject, $message, $headers);
-	return $msg->send();
-	
-	return $sent;	
-}
-
-
-function validateLogin($username, $password, &$page)
-{
-	global $_SESSION;
-	
-	if (isset($_SESSION["user"]))
+	static function emailToken($siteUser)
 	{
-		if ($username == $_SESSION["user"]->email)
-		{
-			// Already logged in, redirect to home
-			redirect("/home");
-		}
-		else
-		{
-			// Logging in as someone else - log off the previous user before continuing 
-			unset($_SESSION["user"]);	
-		}
-	}
-	
-	if ($username && $password)
-	{	
-		$rtn = 0;
+		global $config;
 		
-		$matches = query(Teacher, "WHERE email='$username'");
+		// clean out old token; only allowed one
+		$oldToken = $siteUser->LoginToken();
+		if(isset($oldToken))
+			$oldToken->delete();
+		
+		$pk = getPrimaryKey($siteUser);
+		$token = LoginToken::generateToken($siteUser->$pk);
+		
+		$subject = $config["sitename"];
+		
+		$message = "This is a message from {$config["sitename"]}. ";
+		$message .= "A temporary password has been created for your account:\n\n";
+		$message .= "Password = " . $token->token . "\n\n";
+		$message .= "This password is valid for one login ONLY and expires after ";
+		$message .= formatDateShort($token->expire_date) . ". ";
+		$message .= "Once you have logged in, you must reset your password. "; 
+		$message .=  "Please note that the password is CASE SENSITIVE.";
+		$message = wordwrap($message, 100);
+		
+		$emailFrom = $config["email_from"];
+		
+		$headers = "From: $emailFrom\r\n";
+		$headers .= "Return-Path: ". $emailFrom . "\r\n";
+		$headers .= "Reply-To: ". $emailFrom . "\r\n";	
+		$headers .= "Content-type: text;\r\n";
+		$headers .= "Mime-Version: 1.0\r\n";
+		
+		$msg = new Mail($emailFrom, $siteUser->email, $subject, $message, $headers);
+		return $msg->send();
+		
+		return $sent;	
+	}
 
-		trace("Matches: ".count($matches), 3);
 
-		if(count($matches) > 0)
-			$match = $matches[0];
-	
-		if($match)
+	function validateLogin($username, $password, &$page)
+	{
+		$user = querySingle(SiteUser, "WHERE username='{$_POST["username"]}' and active=1 and role='admin'");
+		
+		if ($user && crypt($_POST["password"], $user->password) === $user->password)
 		{
-			$hashedPassword = $match->hashPassword($password);
-			if ($hashedPassword == $match->password)
-				$rtn = valid_login;
-			else
-				$rtn = validTokenLogin($match, $password);
-		}
-		else
-			$rtn = invalid_username;
-	
-		if($rtn == valid_login || $rtn == valid_token_login)
-			$_SESSION["user"] = $match;
+			session_start();
 			
-		if($rtn == valid_login)
-			redirectToFromPage();
-		elseif($rtn == valid_login_token)
-		{	// must reset their password
-			redirect("myprofile.php?reset=1");
+			$_SESSION["user"] = $user;
+			
+			redirect("/admin/index");
 		}
-	}	
-	return $rtn;	
-}
+		else
+		{
+			$msg = "Incorrect user name or password";
+		}
 
-
-
-/*
- * JDG 2/18/20. If the password does not match, check if the login was
- * a valid temporary token login
- */
-function validTokenLogin($match, $password, &$tokenLogin = false)
-{
-	$token = $match->LoginToken();
-	$today = date('Y-m-d');
-		
-	if (isset($token) AND $token->token == $password AND $token->expire_date >= $today)
-	{
-		$tokenLogin = true;
-		$token->delete();
-		return valid_token_login;
+		return $msg;
 	}
-	else
-		return invalid_password;
-}
 
 
-/*
- * If the user was on a page in the system when they were sent to login,
- * then redirect back to that from page.
- */
-function redirectToFromPage()
-{
-	global $_SESSION;
 
-	$page = $_SESSION["login_redirect"];
-	unset($_SESSION["login_redirect"]);
+	/*
+	 * JDG 2/18/20. If the password does not match, check if the login was
+	 * a valid temporary token login
+	 */
+	function validTokenLogin($match, $password, &$tokenLogin = false)
+	{
+		$token = $match->LoginToken();
+		$today = date('Y-m-d');
+			
+		if (isset($token) AND $token->token == $password AND $token->expire_date >= $today)
+		{
+			$tokenLogin = true;
+			$token->delete();
+			return valid_token_login;
+		}
+		else
+			return invalid_password;
+	}
 
-	$l_user = $_SESSION["user"];
 	
-	if (!$page || startsWith($page, "components/login"))
-		$page = "index.php";	
-
-	redirect($page);
+	/*
+	 * If the user was on a page in the system when they were sent to login,
+	 * then redirect back to that from page.
+	 */
+	function redirectToFromPage()
+	{
+		global $_SESSION;
+	
+		$page = $_SESSION["login_redirect"];
+		unset($_SESSION["login_redirect"]);
+	
+		$l_user = $_SESSION["user"];
+		
+		if (!$page || startsWith($page, "components/login"))
+			$page = "index.php";	
+	
+		redirect($page);
+	}
 }

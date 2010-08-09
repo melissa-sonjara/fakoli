@@ -25,7 +25,7 @@
       </div>
      </div>   
     </div>
-    <div id="footer"><div id="footer_shim"></div>{var:footer}</div>
+    <div id="footer">{var:footer}</div>
   </div>
  </body>
 </html>

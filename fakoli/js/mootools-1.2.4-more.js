@@ -23,8 +23,8 @@ provides: [MooTools.More]
 */
 
 MooTools.More = {
-	'version': '1.2.4.2',
-	'build': 'bd5a93c0913cce25917c48cbdacde568e15e02ef'
+	'version': '1.2.4.4',
+	'build': '6f6057dc645fdb7547689183b2311063bd653ddf'
 };
 
 /*
@@ -209,6 +209,337 @@ Log.logger = function(){
 };
 
 })();
+
+/*
+---
+
+script: Depender.js
+
+description: A stand alone dependency loader for the MooTools library.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Element.Events
+- core:1.2.4/Request.JSON
+- /MooTools.More
+- /Log
+
+provides: Depender
+
+...
+*/
+
+var Depender = {
+
+	options: {
+		/* 
+		onRequire: $empty(options),
+		onRequirementLoaded: $empty([scripts, options]),
+		onScriptLoaded: $empty({
+			script: script, 
+			totalLoaded: percentOfTotalLoaded, 
+			loaded: scriptsState
+		}),
+		serial: false,
+		target: null,
+		noCache: false,
+		log: false,*/
+		loadedSources: [],
+		loadedScripts: ['Core', 'Browser', 'Array', 'String', 'Function', 'Number', 'Hash', 'Element', 'Event', 'Element.Event', 'Class', 'DomReady', 'Class.Extras', 'Request', 'JSON', 'Request.JSON', 'More', 'Depender', 'Log'],
+		useScriptInjection: true
+	},
+
+	loaded: [],
+
+	sources: {},
+
+	libs: {},
+
+	include: function(libs){
+		this.log('include: ', libs);
+		this.mapLoaded = false;
+		var loader = function(data){
+			this.libs = $merge(this.libs, data);
+			$each(this.libs, function(data, lib){
+				if (data.scripts) this.loadSource(lib, data.scripts);
+			}, this);
+		}.bind(this);
+		if ($type(libs) == 'string'){
+			this.log('fetching libs ', libs);
+			this.request(libs, loader);
+		} else {
+			loader(libs);
+		}
+		return this;
+	},
+
+	required: [],
+
+	require: function(options){
+		var loaded = function(){
+			var scripts = this.calculateDependencies(options.scripts);
+			if (options.sources){
+				options.sources.each(function(source){
+					scripts.combine(this.libs[source].files);
+				}, this);
+			}
+			if (options.serial) scripts.combine(this.getLoadedScripts());
+			options.scripts = scripts;
+			this.required.push(options);
+			this.fireEvent('require', options);
+			this.loadScripts(options.scripts);
+		};
+		if (this.mapLoaded) loaded.call(this);
+		else this.addEvent('mapLoaded', loaded.bind(this));
+		return this;
+	},
+
+	cleanDoubleSlash: function(str){
+		if (!str) return str;
+		var prefix = '';
+		if (str.test(/^http:\/\//)){
+			prefix = 'http://';
+			str = str.substring(7, str.length);
+		}
+		str = str.replace(/\/\//g, '/');
+		return prefix + str;
+	},
+
+	request: function(url, callback){
+		new Request.JSON({
+			url: url,
+			secure: false,
+			onSuccess: callback
+		}).send();
+	},
+
+	loadSource: function(lib, source){
+		if (this.libs[lib].files){
+			this.dataLoaded();
+			return;
+		}
+		this.log('loading source: ', source);
+		this.request(this.cleanDoubleSlash(source + '/scripts.json'), function(result){
+			this.log('loaded source: ', source);
+			this.libs[lib].files = result;
+			this.dataLoaded();
+		}.bind(this));
+	},
+
+	dataLoaded: function(){
+		var loaded = true;
+		$each(this.libs, function(v, k){
+			if (!this.libs[k].files) loaded = false;
+		}, this);
+		if (loaded){
+			this.mapTree();
+			this.mapLoaded = true;
+			this.calculateLoaded();
+			this.lastLoaded = this.getLoadedScripts().getLength();
+			this.fireEvent('mapLoaded');
+			this.removeEvents('mapLoaded');
+		}
+	},
+
+	calculateLoaded: function(){
+		var set = function(script){
+			this.scriptsState[script] = true;
+		}.bind(this);
+		if (this.options.loadedScripts) this.options.loadedScripts.each(set);
+		if (this.options.loadedSources){
+			this.options.loadedSources.each(function(lib){
+				$each(this.libs[lib].files, function(dir){
+					$each(dir, function(data, file){
+						set(file);
+					}, this);
+				}, this);
+			}, this);
+		}
+	},
+
+	deps: {},
+
+	pathMap: {},
+
+	mapTree: function(){
+		$each(this.libs, function(data, source){
+			$each(data.files, function(scripts, folder){
+				$each(scripts, function(details, script){
+					var path = source + ':' + folder + ':' + script;
+					if (this.deps[path]) return;
+					this.deps[path] = details.deps;
+					this.pathMap[script] = path;
+				}, this);
+			}, this);
+		}, this);
+	},
+
+	getDepsForScript: function(script){
+		return this.deps[this.pathMap[script]] || [];
+	},
+
+	calculateDependencies: function(scripts){
+		var reqs = [];
+		$splat(scripts).each(function(script){
+			if (script == 'None' || !script) return;
+			var deps = this.getDepsForScript(script);
+			if (!deps){
+				if (window.console && console.warn) console.warn('dependencies not mapped: script: %o, map: %o, :deps: %o', script, this.pathMap, this.deps);
+			} else {
+				deps.each(function(scr){
+					if (scr == script || scr == 'None' || !scr) return;
+					if (!reqs.contains(scr)) reqs.combine(this.calculateDependencies(scr));
+					reqs.include(scr);
+				}, this);
+			}
+			reqs.include(script);
+		}, this);
+		return reqs;
+	},
+
+	getPath: function(script){
+		try {
+			var chunks = this.pathMap[script].split(':');
+			var lib = this.libs[chunks[0]];
+			var dir = (lib.path || lib.scripts) + '/';
+			chunks.shift();
+			return this.cleanDoubleSlash(dir + chunks.join('/') + '.js');
+		} catch(e){
+			return script;
+		}
+	},
+
+	loadScripts: function(scripts){
+		scripts = scripts.filter(function(s){
+			if (!this.scriptsState[s] && s != 'None'){
+				this.scriptsState[s] = false;
+				return true;
+			}
+		}, this);
+		if (scripts.length){
+			scripts.each(function(scr){
+				this.loadScript(scr);
+			}, this);
+		} else {
+			this.check();
+		}
+	},
+
+	toLoad: [],
+
+	loadScript: function(script){
+		if (this.scriptsState[script] && this.toLoad.length){
+			this.loadScript(this.toLoad.shift());
+			return;
+		} else if (this.loading){
+			this.toLoad.push(script);
+			return;
+		}
+		var finish = function(){
+			this.loading = false;
+			this.scriptLoaded(script);
+			if (this.toLoad.length) this.loadScript(this.toLoad.shift());
+		}.bind(this);
+		var error = function(){
+			this.log('could not load: ', scriptPath);
+		}.bind(this);
+		this.loading = true;
+		var scriptPath = this.getPath(script);
+		if (this.options.useScriptInjection){
+			this.log('injecting script: ', scriptPath);
+			var loaded = function(){
+				this.log('loaded script: ', scriptPath);
+				finish();
+			}.bind(this);
+			new Element('script', {
+				src: scriptPath + (this.options.noCache ? '?noCache=' + new Date().getTime() : ''),
+				events: {
+					load: loaded,
+					readystatechange: function(){
+						if (['loaded', 'complete'].contains(this.readyState)) loaded();
+					},
+					error: error
+				}
+			}).inject(this.options.target || document.head);
+		} else {
+			this.log('requesting script: ', scriptPath);
+			new Request({
+				url: scriptPath,
+				noCache: this.options.noCache,
+				onComplete: function(js){
+					this.log('loaded script: ', scriptPath);
+					$exec(js);
+					finish();
+				}.bind(this),
+				onFailure: error,
+				onException: error
+			}).send();
+		}
+	},
+
+	scriptsState: $H(),
+	
+	getLoadedScripts: function(){
+		return this.scriptsState.filter(function(state){
+			return state;
+		});
+	},
+
+	scriptLoaded: function(script){
+		this.log('loaded script: ', script);
+		this.scriptsState[script] = true;
+		this.check();
+		var loaded = this.getLoadedScripts();
+		var loadedLength = loaded.getLength();
+		var toLoad = this.scriptsState.getLength();
+		this.fireEvent('scriptLoaded', {
+			script: script,
+			totalLoaded: (loadedLength / toLoad * 100).round(),
+			currentLoaded: ((loadedLength - this.lastLoaded) / (toLoad - this.lastLoaded) * 100).round(),
+			loaded: loaded
+		});
+		if (loadedLength == toLoad) this.lastLoaded = loadedLength;
+	},
+
+	lastLoaded: 0,
+
+	check: function(){
+		var incomplete = [];
+		this.required.each(function(required){
+			var loaded = [];
+			required.scripts.each(function(script){
+				if (this.scriptsState[script]) loaded.push(script);
+			}, this);
+			if (required.onStep){
+				required.onStep({
+					percent: loaded.length / required.scripts.length * 100,
+					scripts: loaded
+				});
+			};
+			if (required.scripts.length != loaded.length) return;
+			required.callback();
+			this.required.erase(required);
+			this.fireEvent('requirementLoaded', [loaded, required]);
+		}, this);
+	}
+
+};
+
+$extend(Depender, new Events);
+$extend(Depender, new Options);
+$extend(Depender, new Log);
+
+Depender._setOptions = Depender.setOptions;
+Depender.setOptions = function(){
+	Depender._setOptions.apply(Depender, arguments);
+	if (this.options.log) Depender.enableLog();
+	return this;
+};
+
 
 /*
 ---
@@ -427,6 +758,15 @@ Array.implement({
 
 	unique: function(){
 		return [].combine(this);
+	},
+
+	shuffle: function(){
+		for (var i = this.length; i && --i;){
+			var temp = this[i], r = Math.floor(Math.random() * ( i + 1 ));
+			this[i] = this[r];
+			this[r] = temp;
+		}
+		return this;
 	}
 
 });
@@ -853,7 +1193,7 @@ var build = function(format){
 			bits = bits.slice(1).associate(parsed);
 			var date = new Date().clearTime();
 			if ('d' in bits) handle.call(date, 'd', 1);
-			if ('m' in bits) handle.call(date, 'm', 1);
+			if ('m' in bits || 'b' in bits || 'B' in bits) handle.call(date, 'm', 1);
 			for (var key in bits) handle.call(date, key, bits[key]);
 			return date;
 		}
@@ -1252,7 +1592,7 @@ var URI = new Class({
 		/*base: false*/
 	},
 
-	regex: /^(?:(\w+):)?(?:\/\/(?:(?:([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)?(\.\.?$|(?:[^?#\/]*\/)*)([^?#]*)(?:\?([^#]*))?(?:#(.*))?/,
+	regex: /^(?:(\w+):)?(?:\/\/(?:(?:([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?)?(\.\.?$|(?:[^?#\/]*\/)*)([^?#]*)(?:\?([^#]*))?(?:#(.*))?/,
 	parts: ['scheme', 'user', 'password', 'host', 'port', 'directory', 'file', 'query', 'fragment'],
 	schemes: {http: 80, https: 443, ftp: 21, rtsp: 554, mms: 1755, file: 0},
 
@@ -1345,8 +1685,9 @@ var URI = new Class({
 
 	setData: function(values, merge, part){
 		if (typeof values == 'string'){
-			values = this.getData();
-			values[arguments[0]] = arguments[1];
+			data = this.getData();
+			data[arguments[0]] = arguments[1];
+			values = data;
 		} else if (merge) {
 			values = $merge(this.getData(), values);
 		}
@@ -1598,6 +1939,110 @@ Elements.from = function(text, excludeScripts){
 
 	return (container || new Element('div')).set('html', text).getChildren();
 };
+
+/*
+---
+
+script: Element.Delegation.js
+
+description: Extends the Element native object to include the delegate method for more efficient event management.
+
+credits:
+- "Event checking based on the work of Daniel Steigerwald. License: MIT-style license.	Copyright: Copyright (c) 2008 Daniel Steigerwald, daniel.steigerwald.cz"
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+- Daniel Steigerwald
+
+requires:
+- core:1.2.4/Element.Event
+- core:1.2.4/Selectors
+- /MooTools.More
+
+provides: [Element.Delegation]
+
+...
+*/
+
+(function(addEvent, removeEvent){
+	
+	var match = /(.*?):relay\(([^)]+)\)$/,
+		combinators = /[+>~\s]/,
+		splitType = function(type){
+			var bits = type.match(match);
+			return !bits ? {event: type} : {
+				event: bits[1],
+				selector: bits[2]
+			};
+		},
+		check = function(e, selector){
+			var t = e.target;
+			if (combinators.test(selector = selector.trim())){
+				var els = this.getElements(selector);
+				for (var i = els.length; i--; ){
+					var el = els[i];
+					if (t == el || el.hasChild(t)) return el;
+				}
+			} else {
+				for ( ; t && t != this; t = t.parentNode){
+					if (Element.match(t, selector)) return document.id(t);
+				}
+			}
+			return null;
+		};
+
+	Element.implement({
+
+		addEvent: function(type, fn){
+			var splitted = splitType(type);
+			if (splitted.selector){
+				var monitors = this.retrieve('$moo:delegateMonitors', {});
+				if (!monitors[type]){
+					var monitor = function(e){
+						var el = check.call(this, e, splitted.selector);
+						if (el) this.fireEvent(type, [e, el], 0, el);
+					}.bind(this);
+					monitors[type] = monitor;
+					addEvent.call(this, splitted.event, monitor);
+				}
+			}
+			return addEvent.apply(this, arguments);
+		},
+
+		removeEvent: function(type, fn){
+			var splitted = splitType(type);
+			if (splitted.selector){
+				var events = this.retrieve('events');
+				if (!events || !events[type] || (fn && !events[type].keys.contains(fn))) return this;
+
+				if (fn) removeEvent.apply(this, [type, fn]);
+				else removeEvent.apply(this, type);
+
+				events = this.retrieve('events');
+				if (events && events[type] && events[type].keys.length == 0){
+					var monitors = this.retrieve('$moo:delegateMonitors', {});
+					removeEvent.apply(this, [splitted.event, monitors[type]]);
+					delete monitors[type];
+				}
+				return this;
+			}
+			return removeEvent.apply(this, arguments);
+		},
+
+		fireEvent: function(type, args, delay, bind){
+			var events = this.retrieve('events');
+			if (!events || !events[type]) return this;
+			events[type].keys.each(function(fn){
+				fn.create({bind: bind || this, delay: delay, arguments: args})();
+			}, this);
+			return this;
+		}
+
+	});
+
+})(Element.prototype.addEvent, Element.prototype.removeEvent);
 
 /*
 ---
@@ -1947,10 +2392,6 @@ Element.implement({
 				calc = rel == document.body ? window.getScroll() : rel.getPosition(),
 				top = calc.y, left = calc.x;
 
-		var scrolls = rel.getScrolls();
-		top += scrolls.y;
-		left += scrolls.x;
-
 		var dim = this.getDimensions({computeSize: true, styles:['padding', 'border','margin']});
 		var pos = {},
 				prefY = options.offset.y,
@@ -2090,15 +2531,15 @@ Element.implement({
 	hide: function(){
 		var d;
 		try {
-			// IE fails here if the element is not in the dom
-			if ((d = this.getStyle('display')) == 'none') d = null;
+			//IE fails here if the element is not in the dom
+			d = this.getStyle('display');
 		} catch(e){}
-		
-		return this.store('originalDisplay', d || 'block').setStyle('display', 'none');
+		return this.store('originalDisplay', d || '').setStyle('display', 'none');
 	},
 
 	show: function(display){
-		return this.setStyle('display', display || this.retrieve('originalDisplay') || 'block');
+		display = display || this.retrieve('originalDisplay') || 'block';
+		return this.setStyle('display', (display == 'none') ? 'block' : display);
 	},
 
 	swapClass: function(remove, add){
@@ -2180,19 +2621,18 @@ if (!window.Form) window.Form = {};
 
 		makeRequest: function(){
 			this.request = new Request.HTML($merge({
-					url: this.element.get('action'),
 					update: this.update,
 					emulation: false,
 					spinnerTarget: this.element,
 					method: this.element.get('method') || 'post'
 			}, this.options.requestOptions)).addEvents({
 				success: function(text, xml){
-					['success', 'complete'].each(function(evt){
+					['complete', 'success'].each(function(evt){
 						this.fireEvent(evt, [this.update, text, xml]);
 					}, this);
 				}.bind(this),
 				failure: function(xhr){
-					this.fireEvent('failure', xhr);
+					this.fireEvent('complete').fireEvent('failure', xhr);
 				}.bind(this),
 				exception: function(){
 					this.fireEvent('failure', xhr);
@@ -2224,7 +2664,8 @@ if (!window.Form) window.Form = {};
 		},
 
 		onFormValidate: function(valid, form, e) {
-			if (valid || !fv.options.stopOnFailure) {
+			var fv = this.element.retrieve('validator');
+			if (valid || (fv && !fv.options.stopOnFailure)) {
 				if (e && e.stop) e.stop();
 				this.send();
 			}
@@ -2234,7 +2675,6 @@ if (!window.Form) window.Form = {};
 			if (this.element.retrieve('validator')) {
 				//form validator was created after Form.Request
 				this.detach();
-				this.addFormEvent();
 				return;
 			}
 			e.stop();
@@ -2246,8 +2686,8 @@ if (!window.Form) window.Form = {};
 			var data = $H(this.options.extraData).toQueryString();
 			if (str) str += "&" + data;
 			else str = data;
-			this.fireEvent('send', [this.element, str]);
-			this.request.send({data: str});
+			this.fireEvent('send', [this.element, str.parseQueryString()]);
+			this.request.send({data: str, url: this.element.get("action")});
 			return this;
 		}
 
@@ -2372,6 +2812,232 @@ Form.Request.Append = new Class({
 /*
 ---
 
+script: OverText.js
+
+description: Shows text over an input that disappears when the user clicks into it. The text remains hidden if the user adds a value.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Options
+- core:1.2.4/Events
+- core:1.2.4/Element.Event
+- /Class.Binds
+- /Class.Occlude
+- /Element.Position
+- /Element.Shortcuts
+
+provides: [OverText]
+
+...
+*/
+
+var OverText = new Class({
+
+	Implements: [Options, Events, Class.Occlude],
+
+	Binds: ['reposition', 'assert', 'focus', 'hide'],
+
+	options: {/*
+		textOverride: null,
+		onFocus: $empty()
+		onTextHide: $empty(textEl, inputEl),
+		onTextShow: $empty(textEl, inputEl), */
+		element: 'label',
+		positionOptions: {
+			position: 'upperLeft',
+			edge: 'upperLeft',
+			offset: {
+				x: 4,
+				y: 2
+			}
+		},
+		poll: false,
+		pollInterval: 250,
+		wrap: false
+	},
+
+	property: 'OverText',
+
+	initialize: function(element, options){
+		this.element = document.id(element);
+		if (this.occlude()) return this.occluded;
+		this.setOptions(options);
+		this.attach(this.element);
+		OverText.instances.push(this);
+		if (this.options.poll) this.poll();
+		return this;
+	},
+
+	toElement: function(){
+		return this.element;
+	},
+
+	attach: function(){
+		var val = this.options.textOverride || this.element.get('alt') || this.element.get('title');
+		if (!val) return;
+		this.text = new Element(this.options.element, {
+			'class': 'overTxtLabel',
+			styles: {
+				lineHeight: 'normal',
+				position: 'absolute',
+				cursor: 'text'
+			},
+			html: val,
+			events: {
+				click: this.hide.pass(this.options.element == 'label', this)
+			}
+		}).inject(this.element, 'after');
+		if (this.options.element == 'label') {
+			if (!this.element.get('id')) this.element.set('id', 'input_' + new Date().getTime());
+			this.text.set('for', this.element.get('id'));
+		}
+
+		if (this.options.wrap) {
+			this.textHolder = new Element('div', {
+				styles: {
+					lineHeight: 'normal',
+					position: 'relative'
+				},
+				'class':'overTxtWrapper'
+			}).adopt(this.text).inject(this.element, 'before');
+		}
+
+		this.element.addEvents({
+			focus: this.focus,
+			blur: this.assert,
+			change: this.assert
+		}).store('OverTextDiv', this.text);
+		window.addEvent('resize', this.reposition.bind(this));
+		this.assert(true);
+		this.reposition();
+	},
+
+	wrap: function(){
+		if (this.options.element == 'label') {
+			if (!this.element.get('id')) this.element.set('id', 'input_' + new Date().getTime());
+			this.text.set('for', this.element.get('id'));
+		}
+	},
+
+	startPolling: function(){
+		this.pollingPaused = false;
+		return this.poll();
+	},
+
+	poll: function(stop){
+		//start immediately
+		//pause on focus
+		//resumeon blur
+		if (this.poller && !stop) return this;
+		var test = function(){
+			if (!this.pollingPaused) this.assert(true);
+		}.bind(this);
+		if (stop) $clear(this.poller);
+		else this.poller = test.periodical(this.options.pollInterval, this);
+		return this;
+	},
+
+	stopPolling: function(){
+		this.pollingPaused = true;
+		return this.poll(true);
+	},
+
+	focus: function(){
+		if (this.text && (!this.text.isDisplayed() || this.element.get('disabled'))) return;
+		this.hide();
+	},
+
+	hide: function(suppressFocus, force){
+		if (this.text && (this.text.isDisplayed() && (!this.element.get('disabled') || force))){
+			this.text.hide();
+			this.fireEvent('textHide', [this.text, this.element]);
+			this.pollingPaused = true;
+			if (!suppressFocus){
+				try {
+					this.element.fireEvent('focus');
+					this.element.focus();
+				} catch(e){} //IE barfs if you call focus on hidden elements
+			}
+		}
+		return this;
+	},
+
+	show: function(){
+		if (this.text && !this.text.isDisplayed()){
+			this.text.show();
+			this.reposition();
+			this.fireEvent('textShow', [this.text, this.element]);
+			this.pollingPaused = false;
+		}
+		return this;
+	},
+
+	assert: function(suppressFocus){
+		this[this.test() ? 'show' : 'hide'](suppressFocus);
+	},
+
+	test: function(){
+		var v = this.element.get('value');
+		return !v;
+	},
+
+	reposition: function(){
+		this.assert(true);
+		if (!this.element.isVisible()) return this.stopPolling().hide();
+		if (this.text && this.test()) this.text.position($merge(this.options.positionOptions, {relativeTo: this.element}));
+		return this;
+	}
+
+});
+
+OverText.instances = [];
+
+$extend(OverText, {
+
+	each: function(fn) {
+		return OverText.instances.map(function(ot, i){
+			if (ot.element && ot.text) return fn.apply(OverText, [ot, i]);
+			return null; //the input or the text was destroyed
+		});
+	},
+	
+	update: function(){
+
+		return OverText.each(function(ot){
+			return ot.reposition();
+		});
+
+	},
+
+	hideAll: function(){
+
+		return OverText.each(function(ot){
+			return ot.hide(true, true);
+		});
+
+	},
+
+	showAll: function(){
+		return OverText.each(function(ot) {
+			return ot.show();
+		});
+	}
+
+});
+
+if (window.Fx && Fx.Reveal) {
+	Fx.Reveal.implement({
+		hideInputs: Browser.Engine.trident ? 'select, input, textarea, object, embed, .overTxtLabel' : false
+	});
+}
+
+/*
+---
+
 script: Fx.Elements.js
 
 description: Effect to change any number of CSS properties of any number of Elements.
@@ -2453,7 +3119,7 @@ provides: [Fx.Accordion]
 ...
 */
 
-var Accordion = Fx.Accordion = new Class({
+Fx.Accordion = new Class({
 
 	Extends: Fx.Elements,
 
@@ -2475,10 +3141,14 @@ var Accordion = Fx.Accordion = new Class({
 	},
 
 	initialize: function(){
-		var params = Array.link(arguments, {'container': Element.type, 'options': Object.type, 'togglers': $defined, 'elements': $defined});
+		var params = Array.link(arguments, {
+			'container': Element.type, //deprecated
+			'options': Object.type,
+			'togglers': $defined,
+			'elements': $defined
+		});
 		this.parent(params.elements, params.options);
 		this.togglers = $$(params.togglers);
-		this.container = document.id(params.container);
 		this.previous = -1;
 		this.internalChain = new Chain();
 		if (this.options.alwaysHide) this.options.wait = true;
@@ -2502,7 +3172,8 @@ var Accordion = Fx.Accordion = new Class({
 				for (var fx in this.effects) el.setStyle(fx, 0);
 			}
 		}, this);
-		if ($chk(this.options.display)) this.display(this.options.display, this.options.initialDisplayFx);
+		if ($chk(this.options.display) || this.options.initialDisplayFx === false) this.display(this.options.display, this.options.initialDisplayFx);
+		if (this.options.fixedHeight !== false) this.options.returnHeightToAuto = false;
 		this.addEvent('complete', this.internalChain.callChain.bind(this.internalChain));
 	},
 
@@ -2568,6 +3239,37 @@ var Accordion = Fx.Accordion = new Class({
 			};
 		}.bind(this));
 		return useFx ? this.start(obj) : this.set(obj);
+	}
+
+});
+
+/*
+	Compatibility with 1.2.0
+*/
+var Accordion = new Class({
+
+	Extends: Fx.Accordion,
+
+	initialize: function(){
+		this.parent.apply(this, arguments);
+		var params = Array.link(arguments, {'container': Element.type});
+		this.container = params.container;
+	},
+
+	addSection: function(toggler, element, pos){
+		toggler = document.id(toggler);
+		element = document.id(element);
+		var test = this.togglers.contains(toggler);
+		var len = this.togglers.length;
+		if (len && (!test || pos)){
+			pos = $pick(pos, len - 1);
+			toggler.inject(this.togglers[pos], 'before');
+			element.inject(toggler, 'after');
+		} else if (this.container && !test){
+			toggler.inject(this.container);
+			element.inject(this.container);
+		}
+		return this.parent.apply(this, arguments);
 	}
 
 });
@@ -2690,7 +3392,7 @@ Fx.Reveal = new Class({
 						styles: this.options.styles,
 						mode: this.options.mode
 					});
-					this.element.setStyle('display', 'block');
+					this.element.setStyle('display', this.options.display);
 					if (this.options.transitionOpacity) startStyles.opacity = 1;
 					var zero = {};
 					$each(startStyles, function(style, name){
@@ -3057,12 +3759,14 @@ Fx.Slide = new Class({
 
 	options: {
 		mode: 'vertical',
+		wrapper: false,
 		hideOverflow: true
 	},
 
 	initialize: function(element, options){
 		this.addEvent('complete', function(){
 			this.open = (this.wrapper['offset' + this.layout.capitalize()] != 0);
+			if (this.open) this.wrapper.setStyle('height', '');
 			if (this.open && Browser.Engine.webkit419) this.element.dispose().inject(this.wrapper);
 		}, true);
 		this.element = this.subject = document.id(element);
@@ -3070,6 +3774,7 @@ Fx.Slide = new Class({
 		var wrapper = this.element.retrieve('wrapper');
 		var styles = this.element.getStyles('margin', 'position', 'overflow');
 		if (this.options.hideOverflow) styles = $extend(styles, {overflow: 'hidden'});
+		if (this.options.wrapper) wrapper = document.id(this.options.wrapper).setStyles(styles);
 		this.wrapper = wrapper || new Element('div', {
 			styles: styles
 		}).wraps(this.element);
@@ -3629,7 +4334,7 @@ Drag.Move = new Class({
 		if (this.container && $type(this.container) != 'element')
 			this.container = document.id(this.container.getDocument().body);
 		
-		var styles = element.getStyles('left', 'right', 'position');
+		var styles = element.getStyles('left', 'top', 'position');
 		if (styles.left == 'auto' || styles.top == 'auto')
 			element.setPosition(element.getPosition(element.getOffsetParent()));
 		
@@ -4039,12 +4744,20 @@ var Sortables = new Class({
 	getClone: function(event, element){
 		if (!this.options.clone) return new Element('div').inject(document.body);
 		if ($type(this.options.clone) == 'function') return this.options.clone.call(this, event, element, this.list);
-		return element.clone(true).setStyles({
+		var clone = element.clone(true).setStyles({
 			margin: '0px',
 			position: 'absolute',
 			visibility: 'hidden',
 			'width': element.getStyle('width')
-		}).inject(this.list).setPosition(element.getPosition(element.getOffsetParent()));
+		});
+		//prevent the duplicated radio inputs from unchecking the real one
+		if (clone.get('html').test('radio')) {
+			clone.getElements('input[type=radio]').each(function(input, i) {
+				input.set('name', 'clone_' + i);
+			});
+		}
+		
+		return clone.inject(this.list).setPosition(element.getPosition(element.getOffsetParent()));
 	},
 
 	getDroppables: function(){
@@ -4136,6 +4849,401 @@ var Sortables = new Class({
 /*
 ---
 
+script: Request.JSONP.js
+
+description: Defines Request.JSONP, a class for cross domain javascript via script injection.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+- Guillermo Rauch
+
+requires:
+- core:1.2.4/Element
+- core:1.2.4/Request
+- /Log
+
+provides: [Request.JSONP]
+
+...
+*/
+
+Request.JSONP = new Class({
+
+	Implements: [Chain, Events, Options, Log],
+
+	options: {/*
+		onRetry: $empty(intRetries),
+		onRequest: $empty(scriptElement),
+		onComplete: $empty(data),
+		onSuccess: $empty(data),
+		onCancel: $empty(),
+		log: false,
+		*/
+		url: '',
+		data: {},
+		retries: 0,
+		timeout: 0,
+		link: 'ignore',
+		callbackKey: 'callback',
+		injectScript: document.head
+	},
+
+	initialize: function(options){
+		this.setOptions(options);
+		if (this.options.log) this.enableLog();
+		this.running = false;
+		this.requests = 0;
+		this.triesRemaining = [];
+	},
+
+	check: function(){
+		if (!this.running) return true;
+		switch (this.options.link){
+			case 'cancel': this.cancel(); return true;
+			case 'chain': this.chain(this.caller.bind(this, arguments)); return false;
+		}
+		return false;
+	},
+
+	send: function(options){
+		if (!$chk(arguments[1]) && !this.check(options)) return this;
+
+		var type = $type(options), 
+				old = this.options, 
+				index = $chk(arguments[1]) ? arguments[1] : this.requests++;
+		if (type == 'string' || type == 'element') options = {data: options};
+
+		options = $extend({data: old.data, url: old.url}, options);
+
+		if (!$chk(this.triesRemaining[index])) this.triesRemaining[index] = this.options.retries;
+		var remaining = this.triesRemaining[index];
+
+		(function(){
+			var script = this.getScript(options);
+			this.log('JSONP retrieving script with url: ' + script.get('src'));
+			this.fireEvent('request', script);
+			this.running = true;
+
+			(function(){
+				if (remaining){
+					this.triesRemaining[index] = remaining - 1;
+					if (script){
+						script.destroy();
+						this.send(options, index).fireEvent('retry', this.triesRemaining[index]);
+					}
+				} else if(script && this.options.timeout){
+					script.destroy();
+					this.cancel().fireEvent('failure');
+				}
+			}).delay(this.options.timeout, this);
+		}).delay(Browser.Engine.trident ? 50 : 0, this);
+		return this;
+	},
+
+	cancel: function(){
+		if (!this.running) return this;
+		this.running = false;
+		this.fireEvent('cancel');
+		return this;
+	},
+
+	getScript: function(options){
+		var index = Request.JSONP.counter,
+				data;
+		Request.JSONP.counter++;
+
+		switch ($type(options.data)){
+			case 'element': data = document.id(options.data).toQueryString(); break;
+			case 'object': case 'hash': data = Hash.toQueryString(options.data);
+		}
+
+		var src = options.url + 
+			 (options.url.test('\\?') ? '&' :'?') + 
+			 (options.callbackKey || this.options.callbackKey) + 
+			 '=Request.JSONP.request_map.request_'+ index + 
+			 (data ? '&' + data : '');
+		if (src.length > 2083) this.log('JSONP '+ src +' will fail in Internet Explorer, which enforces a 2083 bytes length limit on URIs');
+
+		var script = new Element('script', {type: 'text/javascript', src: src});
+		Request.JSONP.request_map['request_' + index] = function(){ this.success(arguments, script); }.bind(this);
+		return script.inject(this.options.injectScript);
+	},
+
+	success: function(args, script){
+		if (script) script.destroy();
+		this.running = false;
+		this.log('JSONP successfully retrieved: ', args);
+		this.fireEvent('complete', args).fireEvent('success', args).callChain();
+	}
+
+});
+
+Request.JSONP.counter = 0;
+Request.JSONP.request_map = {};
+
+/*
+---
+
+script: Request.Queue.js
+
+description: Controls several instances of Request and its variants to run only one request at a time.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Element
+- core:1.2.4/Request
+- /Log
+
+provides: [Request.Queue]
+
+...
+*/
+
+Request.Queue = new Class({
+
+	Implements: [Options, Events],
+
+	Binds: ['attach', 'request', 'complete', 'cancel', 'success', 'failure', 'exception'],
+
+	options: {/*
+		onRequest: $empty(argsPassedToOnRequest),
+		onSuccess: $empty(argsPassedToOnSuccess),
+		onComplete: $empty(argsPassedToOnComplete),
+		onCancel: $empty(argsPassedToOnCancel),
+		onException: $empty(argsPassedToOnException),
+		onFailure: $empty(argsPassedToOnFailure),
+		onEnd: $empty,
+		*/
+		stopOnFailure: true,
+		autoAdvance: true,
+		concurrent: 1,
+		requests: {}
+	},
+
+	initialize: function(options){
+		if(options){
+			var requests = options.requests;
+			delete options.requests;	
+		}
+		this.setOptions(options);
+		this.requests = new Hash;
+		this.queue = [];
+		this.reqBinders = {};
+		
+		if(requests) this.addRequests(requests);
+	},
+
+	addRequest: function(name, request){
+		this.requests.set(name, request);
+		this.attach(name, request);
+		return this;
+	},
+
+	addRequests: function(obj){
+		$each(obj, function(req, name){
+			this.addRequest(name, req);
+		}, this);
+		return this;
+	},
+
+	getName: function(req){
+		return this.requests.keyOf(req);
+	},
+
+	attach: function(name, req){
+		if (req._groupSend) return this;
+		['request', 'complete', 'cancel', 'success', 'failure', 'exception'].each(function(evt){
+			if(!this.reqBinders[name]) this.reqBinders[name] = {};
+			this.reqBinders[name][evt] = function(){
+				this['on' + evt.capitalize()].apply(this, [name, req].extend(arguments));
+			}.bind(this);
+			req.addEvent(evt, this.reqBinders[name][evt]);
+		}, this);
+		req._groupSend = req.send;
+		req.send = function(options){
+			this.send(name, options);
+			return req;
+		}.bind(this);
+		return this;
+	},
+
+	removeRequest: function(req){
+		var name = $type(req) == 'object' ? this.getName(req) : req;
+		if (!name && $type(name) != 'string') return this;
+		req = this.requests.get(name);
+		if (!req) return this;
+		['request', 'complete', 'cancel', 'success', 'failure', 'exception'].each(function(evt){
+			req.removeEvent(evt, this.reqBinders[name][evt]);
+		}, this);
+		req.send = req._groupSend;
+		delete req._groupSend;
+		return this;
+	},
+
+	getRunning: function(){
+		return this.requests.filter(function(r){
+			return r.running;
+		});
+	},
+
+	isRunning: function(){
+		return !!(this.getRunning().getKeys().length);
+	},
+
+	send: function(name, options){
+		var q = function(){
+			this.requests.get(name)._groupSend(options);
+			this.queue.erase(q);
+		}.bind(this);
+		q.name = name;
+		if (this.getRunning().getKeys().length >= this.options.concurrent || (this.error && this.options.stopOnFailure)) this.queue.push(q);
+		else q();
+		return this;
+	},
+
+	hasNext: function(name){
+		return (!name) ? !!this.queue.length : !!this.queue.filter(function(q){ return q.name == name; }).length;
+	},
+
+	resume: function(){
+		this.error = false;
+		(this.options.concurrent - this.getRunning().getKeys().length).times(this.runNext, this);
+		return this;
+	},
+
+	runNext: function(name){
+		if (!this.queue.length) return this;
+		if (!name){
+			this.queue[0]();
+		} else {
+			var found;
+			this.queue.each(function(q){
+				if (!found && q.name == name){
+					found = true;
+					q();
+				}
+			});
+		}
+		return this;
+	},
+
+	runAll: function() {
+		this.queue.each(function(q) {
+			q();
+		});
+		return this;
+	},
+
+	clear: function(name){
+		if (!name){
+			this.queue.empty();
+		} else {
+			this.queue = this.queue.map(function(q){
+				if (q.name != name) return q;
+				else return false;
+			}).filter(function(q){ return q; });
+		}
+		return this;
+	},
+
+	cancel: function(name){
+		this.requests.get(name).cancel();
+		return this;
+	},
+
+	onRequest: function(){
+		this.fireEvent('request', arguments);
+	},
+
+	onComplete: function(){
+		this.fireEvent('complete', arguments);
+		if (!this.queue.length) this.fireEvent('end');
+	},
+
+	onCancel: function(){
+		if (this.options.autoAdvance && !this.error) this.runNext();
+		this.fireEvent('cancel', arguments);
+	},
+
+	onSuccess: function(){
+		if (this.options.autoAdvance && !this.error) this.runNext();
+		this.fireEvent('success', arguments);
+	},
+
+	onFailure: function(){
+		this.error = true;
+		if (!this.options.stopOnFailure && this.options.autoAdvance) this.runNext();
+		this.fireEvent('failure', arguments);
+	},
+
+	onException: function(){
+		this.error = true;
+		if (!this.options.stopOnFailure && this.options.autoAdvance) this.runNext();
+		this.fireEvent('exception', arguments);
+	}
+
+});
+
+
+/*
+---
+
+script: Request.Periodical.js
+
+description: Requests the same URL to pull data from a server but increases the intervals if no data is returned to reduce the load
+
+license: MIT-style license
+
+authors:
+- Christoph Pojer
+
+requires:
+- core:1.2.4/Request
+- /MooTools.More
+
+provides: [Request.Periodical]
+
+...
+*/
+
+Request.implement({
+
+	options: {
+		initialDelay: 5000,
+		delay: 5000,
+		limit: 60000
+	},
+
+	startTimer: function(data){
+		var fn = function(){
+			if (!this.running) this.send({data: data});
+		};
+		this.timer = fn.delay(this.options.initialDelay, this);
+		this.lastDelay = this.options.initialDelay;
+		this.completeCheck = function(response){
+			$clear(this.timer);
+			this.lastDelay = (response) ? this.options.delay : (this.lastDelay + this.options.delay).min(this.options.limit);
+			this.timer = fn.delay(this.lastDelay, this);
+		};
+		return this.addEvent('complete', this.completeCheck);
+	},
+
+	stopTimer: function(){
+		$clear(this.timer);
+		return this.removeEvent('complete', this.completeCheck);
+	}
+
+});
+
+/*
+---
+
 script: Assets.js
 
 description: Provides methods to dynamically load JavaScript, CSS, and Image files into the document.
@@ -4162,7 +5270,9 @@ var Asset = {
 			document: document,
 			check: $lambda(true)
 		}, properties);
-
+		
+		if (properties.onLoad) properties.onload = properties.onLoad;
+		
 		var script = new Element('script', {src: source, type: 'text/javascript'});
 
 		var load = properties.onload.bind(script), 
@@ -4207,6 +5317,8 @@ var Asset = {
 		var element = document.id(image) || new Element('img');
 		['load', 'abort', 'error'].each(function(name){
 			var type = 'on' + name;
+			var cap = name.capitalize();
+			if (properties['on' + cap]) properties[type] = properties['on' + cap];
 			var event = properties[type];
 			delete properties[type];
 			image[type] = function(){
@@ -4605,7 +5717,7 @@ var IframeShim = new Class({
 				this[this.options.display ? 'show' : 'hide']();
 				this.fireEvent('inject');
 			}).bind(this);
-			if (IframeShim.ready) window.addEvent('load', inject);
+			if (!IframeShim.ready) window.addEvent('load', inject);
 			else inject();
 		} else {
 			this.position = this.hide = this.show = this.dispose = $lambda(this);
@@ -4659,6 +5771,343 @@ window.addEvent('load', function(){
 /*
 ---
 
+script: Keyboard.js
+
+description: KeyboardEvents used to intercept events on a class for keyboard and format modifiers in a specific order so as to make alt+shift+c the same as shift+alt+c.
+
+license: MIT-style license
+
+authors:
+- Perrin Westrich
+- Aaron Newton
+- Scott Kyle
+
+requires:
+- core:1.2.4/Events
+- core:1.2.4/Options
+- core:1.2.4/Element.Event
+- /Log
+
+provides: [Keyboard]
+
+...
+*/
+
+(function(){
+	
+	var Keyboard = this.Keyboard = new Class({
+
+		Extends: Events,
+
+		Implements: [Options, Log],
+
+		options: {
+			/*
+			onActivate: $empty,
+			onDeactivate: $empty,
+			*/
+			defaultEventType: 'keydown',
+			active: false,
+			events: {},
+			nonParsedEvents: ['activate', 'deactivate', 'onactivate', 'ondeactivate', 'changed', 'onchanged']
+		},
+
+		initialize: function(options){
+			this.setOptions(options);
+			this.setup();
+		}, 
+		setup: function(){
+			this.addEvents(this.options.events);
+			//if this is the root manager, nothing manages it
+			if (Keyboard.manager && !this.manager) Keyboard.manager.manage(this);
+			if (this.options.active) this.activate();
+		},
+
+		handle: function(event, type){
+			//Keyboard.stop(event) prevents key propagation
+			if (event.preventKeyboardPropagation) return;
+			
+			var bubbles = !!this.manager;
+			if (bubbles && this.activeKB){
+				this.activeKB.handle(event, type);
+				if (event.preventKeyboardPropagation) return;
+			}
+			this.fireEvent(type, event);
+			
+			if (!bubbles && this.activeKB) this.activeKB.handle(event, type);
+		},
+
+		addEvent: function(type, fn, internal){
+			return this.parent(Keyboard.parse(type, this.options.defaultEventType, this.options.nonParsedEvents), fn, internal);
+		},
+
+		removeEvent: function(type, fn){
+			return this.parent(Keyboard.parse(type, this.options.defaultEventType, this.options.nonParsedEvents), fn);
+		},
+
+		toggleActive: function(){
+			return this[this.active ? 'deactivate' : 'activate']();
+		},
+
+		activate: function(instance){
+			if (instance) {
+				//if we're stealing focus, store the last keyboard to have it so the relenquish command works
+				if (instance != this.activeKB) this.previous = this.activeKB;
+				//if we're enabling a child, assign it so that events are now passed to it
+				this.activeKB = instance.fireEvent('activate');
+				Keyboard.manager.fireEvent('changed');
+			} else if (this.manager) {
+				//else we're enabling ourselves, we must ask our parent to do it for us
+				this.manager.activate(this);
+			}
+			return this;
+		},
+
+		deactivate: function(instance){
+			if (instance) {
+				if(instance === this.activeKB) {
+					this.activeKB = null;
+					instance.fireEvent('deactivate');
+					Keyboard.manager.fireEvent('changed');
+				}
+			}
+			else if (this.manager) {
+				this.manager.deactivate(this);
+			}
+			return this;
+		},
+
+		relenquish: function(){
+			if (this.previous) this.activate(this.previous);
+		},
+
+		//management logic
+		manage: function(instance){
+			if (instance.manager) instance.manager.drop(instance);
+			this.instances.push(instance);
+			instance.manager = this;
+			if (!this.activeKB) this.activate(instance);
+			else this._disable(instance);
+		},
+
+		_disable: function(instance){
+			if (this.activeKB == instance) this.activeKB = null;
+		},
+
+		drop: function(instance){
+			this._disable(instance);
+			this.instances.erase(instance);
+		},
+
+		instances: [],
+
+		trace: function(){
+			Keyboard.trace(this);
+		},
+
+		each: function(fn){
+			Keyboard.each(this, fn);
+		}
+
+	});
+	
+	var parsed = {};
+	var modifiers = ['shift', 'control', 'alt', 'meta'];
+	var regex = /^(?:shift|control|ctrl|alt|meta)$/;
+	
+	Keyboard.parse = function(type, eventType, ignore){
+		if (ignore && ignore.contains(type.toLowerCase())) return type;
+		
+		type = type.toLowerCase().replace(/^(keyup|keydown):/, function($0, $1){
+			eventType = $1;
+			return '';
+		});
+
+		if (!parsed[type]){
+			var key, mods = {};
+			type.split('+').each(function(part){
+				if (regex.test(part)) mods[part] = true;
+				else key = part;
+			});
+
+			mods.control = mods.control || mods.ctrl; // allow both control and ctrl
+			
+			var keys = [];
+			modifiers.each(function(mod){
+				if (mods[mod]) keys.push(mod);
+			});
+			
+			if (key) keys.push(key);
+			parsed[type] = keys.join('+');
+		}
+
+		return eventType + ':' + parsed[type];
+	};
+
+	Keyboard.each = function(keyboard, fn){
+		var current = keyboard || Keyboard.manager;
+		while (current){
+			fn.run(current);
+			current = current.activeKB;
+		}
+	};
+
+	Keyboard.stop = function(event){
+		event.preventKeyboardPropagation = true;
+	};
+
+	Keyboard.manager = new Keyboard({
+		active: true
+	});
+	
+	Keyboard.trace = function(keyboard){
+		keyboard = keyboard || Keyboard.manager;
+		keyboard.enableLog();
+		keyboard.log('the following items have focus: ');
+		Keyboard.each(keyboard, function(current){
+			keyboard.log(document.id(current.widget) || current.wiget || current);
+		});
+	};
+	
+	var handler = function(event){
+		var keys = [];
+		modifiers.each(function(mod){
+			if (event[mod]) keys.push(mod);
+		});
+		
+		if (!regex.test(event.key)) keys.push(event.key);
+		Keyboard.manager.handle(event, event.type + ':' + keys.join('+'));
+	};
+	
+	document.addEvents({
+		'keyup': handler,
+		'keydown': handler
+	});
+
+	Event.Keys.extend({
+		'shift': 16,
+		'control': 17,
+		'alt': 18,
+		'capslock': 20,
+		'pageup': 33,
+		'pagedown': 34,
+		'end': 35,
+		'home': 36,
+		'numlock': 144,
+		'scrolllock': 145,
+		';': 186,
+		'=': 187,
+		',': 188,
+		'-': Browser.Engine.Gecko ? 109 : 189,
+		'.': 190,
+		'/': 191,
+		'`': 192,
+		'[': 219,
+		'\\': 220,
+		']': 221,
+		"'": 222
+	});
+
+})();
+
+
+/*
+---
+
+script: Keyboard.js
+
+description: Enhances Keyboard by adding the ability to name and describe keyboard shortcuts, and the ability to grab shortcuts by name and bind the shortcut to different keys.
+
+license: MIT-style license
+
+authors:
+- Perrin Westrich
+
+requires:
+- core:1.2.4/Function
+- /Keyboard.Extras
+
+provides: [Keyboard.Extras]
+
+...
+*/
+Keyboard.prototype.options.nonParsedEvents.combine(['rebound', 'onrebound']);
+
+Keyboard.implement({
+
+	/*
+		shortcut should be in the format of:
+		{
+			'keys': 'shift+s', // the default to add as an event.
+			'description': 'blah blah blah', // a brief description of the functionality.
+			'handler': function(){} // the event handler to run when keys are pressed.
+		}
+	*/
+	addShortcut: function(name, shortcut) {
+		this.shortcuts = this.shortcuts || [];
+		this.shortcutIndex = this.shortcutIndex || {};
+		
+		shortcut.getKeyboard = $lambda(this);
+		shortcut.name = name;
+		this.shortcutIndex[name] = shortcut;
+		this.shortcuts.push(shortcut);
+		if(shortcut.keys) this.addEvent(shortcut.keys, shortcut.handler);
+		return this;
+	},
+
+	addShortcuts: function(obj){
+		for(var name in obj) this.addShortcut(name, obj[name]);
+		return this;
+	},
+
+	getShortcuts: function(){
+		return this.shortcuts || [];
+	},
+
+	getShortcut: function(name){
+		return (this.shortcutIndex || {})[name];
+	}
+
+});
+
+Keyboard.rebind = function(newKeys, shortcuts){
+	$splat(shortcuts).each(function(shortcut){
+		shortcut.getKeyboard().removeEvent(shortcut.keys, shortcut.handler);
+		shortcut.getKeyboard().addEvent(newKeys, shortcut.handler);
+		shortcut.keys = newKeys;
+		shortcut.getKeyboard().fireEvent('rebound');
+	});
+};
+
+
+Keyboard.getActiveShortcuts = function(keyboard) {
+	var activeKBS = [], activeSCS = [];
+	Keyboard.each(keyboard, [].push.bind(activeKBS));
+	activeKBS.each(function(kb){ activeSCS.extend(kb.getShortcuts()); });
+	return activeSCS;
+};
+
+Keyboard.getShortcut = function(name, keyboard, opts){
+	opts = opts || {};
+	var shortcuts = opts.many ? [] : null,
+		set = opts.many ? function(kb){
+				var shortcut = kb.getShortcut(name);
+				if(shortcut) shortcuts.push(shortcut);
+			} : function(kb) { 
+				if(!shortcuts) shortcuts = kb.getShortcut(name);
+			};
+	Keyboard.each(keyboard, set);
+	return shortcuts;
+};
+
+Keyboard.getShortcuts = function(name, keyboard) {
+	return Keyboard.getShortcut(name, keyboard, { many: true });
+};
+
+
+/*
+---
+
 script: Mask.js
 
 description: Creates a mask element to cover another.
@@ -4685,7 +6134,7 @@ var Mask = new Class({
 
 	Implements: [Options, Events],
 
-	Binds: ['resize'],
+	Binds: ['position'],
 
 	options: {
 		// onShow: $empty,
@@ -4702,12 +6151,13 @@ var Mask = new Class({
 		style: {},
 		'class': 'mask',
 		maskMargins: false,
-		useIframeShim: true
+		useIframeShim: true,
+		iframeShimOptions: {}
 	},
 
 	initialize: function(target, options){
-		this.target = document.id(target) || document.body;
-		this.target.store('mask', this);
+		this.target = document.id(target) || document.id(document.body);
+		this.target.store('Mask', this);
 		this.setOptions(options);
 		this.render();
 		this.inject();
@@ -4739,7 +6189,7 @@ var Mask = new Class({
 		target = target || this.options.inject ? this.options.inject.target : '' || this.target;
 		this.element.inject(target, where);
 		if (this.options.useIframeShim) {
-			this.shim = new IframeShim(this.element);
+			this.shim = new IframeShim(this.element, this.options.iframeShimOptions);
 			this.addEvents({
 				show: this.shim.show.bind(this.shim),
 				hide: this.shim.hide.bind(this.shim),
@@ -4779,8 +6229,7 @@ var Mask = new Class({
 
 	show: function(){
 		if (!this.hidden) return this;
-		this.target.addEvent('resize', this.resize);
-		if (this.target != document.body) document.id(document.body).addEvent('resize', this.resize);
+		window.addEvent('resize', this.position);
 		this.position();
 		this.showMask.apply(this, arguments);
 		return this;
@@ -4794,7 +6243,7 @@ var Mask = new Class({
 
 	hide: function(){
 		if (this.hidden) return this;
-		this.target.removeEvent('resize', this.resize);
+		window.removeEvent('resize', this.position);
 		this.hideMask.apply(this, arguments);
 		if (this.options.destroyOnHide) return this.destroy();
 		return this;
@@ -4890,7 +6339,8 @@ var Scroller = new Class({
 	initialize: function(element, options){
 		this.setOptions(options);
 		this.element = document.id(element);
-		this.listener = ($type(this.element) != 'element') ? document.id(this.element.getDocument().body) : this.element;
+		this.docBody = document.id(this.element.getDocument().body);
+		this.listener = ($type(this.element) != 'element') ?  this.docBody : this.element;
 		this.timer = null;
 		this.bound = {
 			attach: this.attach.bind(this),
@@ -4932,14 +6382,15 @@ var Scroller = new Class({
 	scroll: function(){
 		var size = this.element.getSize(), 
 			scroll = this.element.getScroll(), 
-			pos = this.element.getOffsets(), 
+			pos = this.element != this.docBody ? this.element.getOffsets() : {x: 0, y:0}, 
 			scrollSize = this.element.getScrollSize(), 
 			change = {x: 0, y: 0};
 		for (var z in this.page){
-			if (this.page[z] < (this.options.area + pos[z]) && scroll[z] != 0)
+			if (this.page[z] < (this.options.area + pos[z]) && scroll[z] != 0) {
 				change[z] = (this.page[z] - this.options.area - pos[z]) * this.options.velocity;
-			else if (this.page[z] + this.options.area > (size[z] + pos[z]) && scroll[z] + size[z] != scrollSize[z])
+			} else if (this.page[z] + this.options.area > (size[z] + pos[z]) && scroll[z] + size[z] != scrollSize[z]) {
 				change[z] = (this.page[z] - size[z] + this.options.area - pos[z]) * this.options.velocity;
+			}
 		}
 		if (change.y || change.x) this.fireEvent('change', [scroll.x + change.x, scroll.y + change.y]);
 	}
@@ -5001,21 +6452,20 @@ this.Tips = new Class({
 		hideDelay: 100,
 		className: 'tip-wrap',
 		offset: {x: 16, y: 16},
+		windowPadding: {x:0, y:0},
 		fixed: false
 	},
 
 	initialize: function(){
 		var params = Array.link(arguments, {options: Object.type, elements: $defined});
 		this.setOptions(params.options);
-		document.id(this);
-		
 		if (params.elements) this.attach(params.elements);
+		this.container = new Element('div', {'class': 'tip'});
 	},
 
 	toElement: function(){
 		if (this.tip) return this.tip;
-		
-		this.container = new Element('div', {'class': 'tip'});
+
 		return this.tip = new Element('div', {
 			'class': this.options.className,
 			styles: {
@@ -5079,8 +6529,10 @@ this.Tips = new Class({
 		}, this);
 		
 		$clear(this.timer);
-		this.timer = this.show.delay(this.options.showDelay, this, element);
-		this.position((this.options.fixed) ? {page: element.getPosition()} : event);
+		this.timer = (function(){
+			this.show(this, element);
+			this.position((this.options.fixed) ? {page: element.getPosition()} : event);
+		}).delay(this.options.showDelay, this);
 	},
 
 	elementLeave: function(event, element){
@@ -5090,11 +6542,10 @@ this.Tips = new Class({
 	},
 
 	fireForParent: function(event, element){
-		if (!element) return;
-		parentNode = element.getParent();
-		if (parentNode == document.body) return;
-		if (parentNode.retrieve('tip:enter')) parentNode.fireEvent('mouseenter', event);
-		else this.fireForParent(parentNode, event);
+		element = element.getParent();
+		if (!element || element == document.body) return;
+		if (element.retrieve('tip:enter')) element.fireEvent('mouseenter', event);
+		else this.fireForParent(event, element);
 	},
 
 	elementMove: function(event, element){
@@ -5102,6 +6553,8 @@ this.Tips = new Class({
 	},
 
 	position: function(event){
+		if (!this.tip) document.id(this);
+
 		var size = window.getSize(), scroll = window.getScroll(),
 			tip = {x: this.tip.offsetWidth, y: this.tip.offsetHeight},
 			props = {x: 'left', y: 'top'},
@@ -5109,7 +6562,7 @@ this.Tips = new Class({
 		
 		for (var z in props){
 			obj[props[z]] = event.page[z] + this.options.offset[z];
-			if ((obj[props[z]] + tip[z] - scroll[z]) > size[z]) obj[props[z]] = event.page[z] - this.options.offset[z] - tip[z];
+			if ((obj[props[z]] + tip[z] - scroll[z]) > size[z] - this.options.windowPadding[z]) obj[props[z]] = event.page[z] - this.options.offset[z] - tip[z];
 		}
 		
 		this.tip.setStyles(obj);
@@ -5121,10 +6574,12 @@ this.Tips = new Class({
 	},
 
 	show: function(element){
+		if (!this.tip) document.id(this);
 		this.fireEvent('show', [this.tip, element]);
 	},
 
 	hide: function(element){
+		if (!this.tip) document.id(this);
 		this.fireEvent('hide', [this.tip, element]);
 	}
 
@@ -5395,64 +6850,5 @@ MooTools.lang.set('en-US', 'Date', {
 	monthsUntil: '{delta} months from now',
 	yearUntil: '1 year from now',
 	yearsUntil: '{delta} years from now'
-
-});
-
-
-/*
----
-
-script: Form.Validator.English.js
-
-description: Date messages for English.
-
-license: MIT-style license
-
-authors:
-- Aaron Newton
-
-requires:
-- /Lang
-- /Form.Validator
-
-provides: [Form.Validator.English]
-
-...
-*/
-
-MooTools.lang.set('en-US', 'Form.Validator', {
-
-	required:'This field is required.',
-	minLength:'Please enter at least {minLength} characters (you entered {length} characters).',
-	maxLength:'Please enter no more than {maxLength} characters (you entered {length} characters).',
-	integer:'Please enter an integer in this field. Numbers with decimals (e.g. 1.25) are not permitted.',
-	numeric:'Please enter only numeric values in this field (i.e. "1" or "1.1" or "-1" or "-1.1").',
-	digits:'Please use numbers and punctuation only in this field (for example, a phone number with dashes or dots is permitted).',
-	alpha:'Please use letters only (a-z) with in this field. No spaces or other characters are allowed.',
-	alphanum:'Please use only letters (a-z) or numbers (0-9) only in this field. No spaces or other characters are allowed.',
-	dateSuchAs:'Please enter a valid date such as {date}',
-	dateInFormatMDY:'Please enter a valid date such as MM/DD/YYYY (i.e. "12/31/1999")',
-	email:'Please enter a valid email address. For example "fred@domain.com".',
-	url:'Please enter a valid URL such as http://www.google.com.',
-	currencyDollar:'Please enter a valid $ amount. For example $100.00 .',
-	oneRequired:'Please enter something for at least one of these inputs.',
-	errorPrefix: 'Error: ',
-	warningPrefix: 'Warning: ',
-
-	//Form.Validator.Extras
-
-	noSpace: 'There can be no spaces in this input.',
-	reqChkByNode: 'No items are selected.',
-	requiredChk: 'This field is required.',
-	reqChkByName: 'Please select a {label}.',
-	match: 'This field needs to match the {matchName} field',
-	startDate: 'the start date',
-	endDate: 'the end date',
-	currendDate: 'the current date',
-	afterDate: 'The date should be the same or after {label}.',
-	beforeDate: 'The date should be the same or before {label}.',
-	startMonth: 'Please select a start month',
-	sameMonth: 'These two dates must be in the same month - you must change one or the other.',
-	creditcard: 'The credit card number entered is invalid. Please check the number and try again. {length} digits entered.'
 
 });

@@ -1,8 +1,5 @@
 <?php
 
-require_once "../include/config.inc";
-require_once "../cms/datamodel/site_user.inc";
-
 $hideMenu = true;
 
 if ($method == "POST")
@@ -16,7 +13,7 @@ if ($method == "POST")
 		
 		$_SESSION["user"] = $user;
 		
-		redirect("index.php");
+		redirect("/admin/index");
 	}
 	else
 	{
@@ -26,9 +23,8 @@ if ($method == "POST")
 
 $title = "Website Administration";
 
-include_once admin_begin_page;
 ?>
-<br><br>
+<br/><br/>
 <form method="POST" action="login.php">
 <div align="center" style="width:100%">
 <table class="form" width="300">
@@ -47,20 +43,16 @@ include_once admin_begin_page;
 ?>&nbsp;</td>
  </tr>
  <tr>
-  <td style="text-align: right"><b>Username:</b></td>
+  <td style="text-align: right"><label for="username">Username:</label></td>
   <td><input type="text" name="username" width="40"></td>
  </tr>
  <tr>
-  <td style="text-align: right"><b>Password:</b></td>
+  <td style="text-align: right"><label for="password">Password:</label></td>
   <td><input type="password" name="password" width="40"></td>
  </tr>
  <tr>
-  <td colspan="2" style="text-align: center"><br><input type="submit" class="button" name="submit" value="Login"></td>
+  <td colspan="2" style="text-align: center"><br/><input type="submit" class="button" name="submit" value="Login"></td>
   </tr>
 </table>
 </div>
 </form>
-<br><br><br><br><br><br><br><br><br><br>
-<?
-include_once admin_end_page;
-?>

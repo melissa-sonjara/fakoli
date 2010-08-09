@@ -42,53 +42,49 @@
  *
  ***************************************************************/
 
-require_once realpath(dirname(__FILE__)."/../../include/config.inc");
-require_once realpath(dirname(__FILE__)."/../../datamodel/site_user.inc");
-require_once realpath(dirname(__FILE__)."/../../components/login/login.inc");
-
-session_start();
+Fakoli::using("login");
 
 if ($method == "POST")
 {
-	$username    = mysql_escape_string($_POST['username']);    //for logging in
+	$username = mysql_escape_string($_POST['username']); //for logging in
 	$password = mysql_escape_string($_POST['password']); //for logging in 
 	
-	$rtn = validateLogin($username, $password, $page);
+	$rtn = LoginManager::validateLogin($username, $password, $page);
 }
 
-require_once realpath(dirname(__FILE__)."/../../templates/begin_page.inc");
-
-if ($page) //means needs to login and then go to page
-{
-	print "<h4>************************ Please log-in to view the page that you requested. ****************************</h4>";
-}
+$title = "Web Site Administration";
 
 // Login form goes here
 ?>
-<table border='0' cellpadding='0' cellspacing='0' style='border:none;width:100%'>
+<form name='form1' method='POST' action=''>
+<table id="login">
  <tr>
-   <td style='width:450px;height:320px;border: none'>
-	<form name='form1' method='POST' action=''>
-	<p><label for="email">Username:</label>
-	<input name="email" type="text" value="<?=$username?>"/>
-	</p><br/>
-	<p><label for="password">Password:</label>
-	<input name="password" type="password"  value="<?=$password?>"/>
-	</p>
-	<p style="padding-left:110px;">
-	<a href="password_help.php?username=<?=$username?>&amp;page=<?=$page?>">Forgotten Password?</a>
-	</p>
-	<p style="padding-left:110px;">
-	<input name="Submit" type="submit" value="  Login  " class="button" />
-	</p>
-	</form>
-	<?
+   <td colspan="2">
+   <?
 	if ($rtn == invalid_username)
 		print "<p style=\"padding:20px 10px 0 10px;\"><font color=\"red\">We can not find the username address you provided in the system.<br />Use the link to the right to create a new account.<br />If you need help, please use the 'email us' link below.</font></p>";
 	if ($rtn == invalid_password)
 		print "<p style=\"padding:20px 10px 0 40px;\"><font color=\"red\">The password you provided is not the same as the one<br />associated with this email address in the system.<br /><b>******NOTE:</b> Passwords are case specific.<br />(example: password and Password are different)</font></p>";
 	?>
-	</td>
-<?
-require_once realpath(dirname(__FILE__)."/../../templates/end_page.inc");
-?>
+   </td>
+  </tr>
+  <tr>
+   <td><label for="username">Username:</label></td>
+   <td><input name="username" type="text" value="<?=$username?>"/></td>
+  </tr>
+  <tr>
+   <td><label for="password">Password:</label></td>
+   <td><input name="password" type="password"  value="<?=$password?>"/></td>
+  </tr>
+  <tr>
+   <td colspan="2" style="text-align: right">
+	<a href="/admin/password_help?username=<?=$username?>&amp;redirect=<?=$redirect?>">Forgotten Password?</a>
+   </td>
+  </tr>
+  <tr>
+   <td colspan="2" style="text-align: right">
+	<input name="Submit" type="submit" value="  Login  " class="button" />
+   </td>
+  </tr>
+</table>
+</form>

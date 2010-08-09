@@ -1197,4 +1197,35 @@ function makeRandomString($len)
 	
 	return $str;
 }
+
+/**
+ * Filter an array based on applying the specified callback to the keys.
+ * @param array $input the array to be filtered
+ * @param callback $callback a callback function or method
+ * @return array the filtered array.
+ */
+function arrayFilterKey( $input, $callback ) 
+{
+    if ( !is_array( $input ) ) 
+    {
+        return null;
+    }
+   
+    if ( empty( $input ) ) 
+    {
+        return $input;
+    }
+   
+    $filteredKeys = array_filter( array_keys( $input ), $callback );
+    
+    if ( empty( $filteredKeys ) ) 
+    {
+        return array();
+    }
+   
+    $input = array_intersect_key( array_flip( $filteredKeys ), $input );
+   
+    return $input;
+}
+
 ?>

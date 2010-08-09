@@ -12,6 +12,8 @@ class AdminPageView
 		if (!$identifier) $identifier = "index";
 		$this->identifier = $identifier;
 		
+		$this->page = Cache::get("fakoli_admin_pages_$identifier");
+		if ($this->page) return;
 		
 		$pages = Query::create(AdminPage, "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
@@ -23,6 +25,7 @@ class AdminPageView
 		}
 		
 		$this->page = $pages[0];
+		Cache::put("fakoli_admin_pages_$identifier", $this->page);
 	}
 
 
@@ -122,11 +125,30 @@ class AdminPageView
 <?
 		if (!$selectedMenuSectionIdx) $selectedMenuSectionIdx = 0;
 
-?>
+		global $script;
+		
+		$script .= <<<ENDSCRIPT
+
 <script type="text/javascript">
-var accordionOpenSection = <?echo $selectedMenuSectionIdx?>;
+window.addEvent('domready', function() {
+
+	var accordion = new Accordion('h4.atStart', 'div.atStart', {
+
+		opacity: false,
+		initialDisplayFx: false,
+		display: $selectedMenuSectionIdx,
+		onActive: function(toggler, element){
+			toggler.setStyles({'background-image': 'url(/fakoli/images/section_open.png)'});
+		},
+	 
+		onBackground: function(toggler, element){
+			toggler.setStyles({'background-image': 'url(/fakoli/images/section_closed.png)'});
+		}
+	}, $('accordion'));
+
+	});
 </script>
-<?
+ENDSCRIPT;
 		$menu = ob_get_contents();
 		ob_end_clean();
 		return $menu;

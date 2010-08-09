@@ -17,12 +17,13 @@ $menu_id = checkNumeric($_GET["menu_id"]);
 $menu = new Menu();
 
 $tabs = menuTabs($menu_id);
+$tabs->page = "menu_form";
 
 $form = new AutoForm($menu);
 
 $form->required("title");
 $form->allowDelete = true;
-$redirect = "menus.php";
+$redirect = "/admin/menus";
 $form->button("Cancel", $redirect);
 $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "order by site_name", "site_name", "site_id");
 if ($method == "POST")
@@ -30,7 +31,7 @@ if ($method == "POST")
 
 	if ($form->save())
 	{
-		redirect("menus.php");	
+		redirect("/admin/menus");	
 	}
 }
 

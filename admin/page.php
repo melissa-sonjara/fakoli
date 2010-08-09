@@ -4,11 +4,11 @@ require_once "../cms/core.inc";
 
 Fakoli::using("component");
 
-Fakoli::assertRole("admin");
-
 $identifier = $_GET["identifier"];
 
 if (!$identifier) $identifier = "index";
+
+if ($identifier != "login") Fakoli::assertRole("admin", "/admin/login");
 
 $view = new AdminPageView($identifier);
 $view->drawView();

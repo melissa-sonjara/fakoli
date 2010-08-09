@@ -42,6 +42,11 @@ class Cache
 {
 	static $cache;
 	
+	/**
+	 * Retrieve the specified object from the cache
+	 * @param string $key the key identifying the object
+	 * @return mixed the associated object, or null if no match was found
+	 */
 	static function get($key)
 	{
 		if (ini_get("apc.enabled"))
@@ -55,6 +60,19 @@ class Cache
 		}
 	}
 	
+	/**
+	 * Store the specified object in the cache at the specified key. If APC
+	 * cacheing is enabled then this value will be available to subsequent script
+	 * invocations, and the $ttl parameter can optionally be used to specify the 
+	 * time-to-live of the cache record. If APC is enabled and the TTL is not specified
+	 * then the item will stay in the cache until it is invalidated. If APC is not
+	 * enabled then the item will only remain in the cache for the rest of this
+	 * script invocation.
+	 * 
+	 * @param string $key the key that the value will be cached under.
+	 * @param mixed $obj the object or value to be cached
+	 * @param integer $ttl the time-to-live for the cache entry, in seconds
+	 */
 	static function put($key, $obj, $ttl = 0)
 	{
 		if (ini_get("apc.enabled"))
@@ -69,6 +87,14 @@ class Cache
 		}
 	}
 	
+	/**
+	 * Invalidates the specifed entry in the cache. This can be used to 
+	 * flag items in the cache that have potentially been updated by other
+	 * actions. These items are removed from the cache upon invalidation.
+	 * If the item has not been cached, no action is taken.
+	 * 
+	 * @param string $key the entry to be invalidated
+	 */
 	static function invalidate($key)
 	{
 		if (ini_get("apc.enabled"))
@@ -81,4 +107,42 @@ class Cache
 			return true;
 		}
 	}
+	
+	/**
+	 * Invalidate all entries in the cache that match a specific pattern. 
+	 * This can be used to 
+	 * flag items in the cache that have potentially been updated by other
+	 * actions. These items are removed from the cache upon invalidation.
+	 * If the item has not been cached, no action is taken.
+	 * 
+	 * @param string $pattern PCRE describing the matching keys
+	 */
+	static function invalidateMatching($pattern)
+	{
+		if(ini_get("apc.enabled"))
+		{
+			$iterator = new APCIterator("user", $pattern);
+			
+			while($key = $iterator->key())
+			{
+				Cache::invalidate($key);
+				$iterator->next();
+			}
+		}
+		else
+		{
+			Cache::$pattern = $pattern;
+			Cache::$cache = arrayFilterKey(Cache::$cache, array(Cache, filterKey));
+		}	
+	}
+	
+	/**
+	 * Internal callback function that supports the invalidateMatching function.
+	 * @param string $key the key to be filtered.
+	 */
+	static function filterKey($key)
+	{
+		return preg_match($key, Cache::$pattern);
+	}
+	
 }

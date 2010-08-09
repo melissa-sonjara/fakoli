@@ -14,8 +14,8 @@ $components = query(Component, "ORDER BY name");
 
 $table = new DataListView($components, "components");
 $table->column("Component Name", "<a href='/admin/component_form?component_id={component_id}'>{name}</a><span style='font-size: 10px'>{description}</span>", true)
-	  ->column("Version", "{version}", true)
-	  ->column("Author",  "{author}", true);
+	  ->column("Version", "{version}", true, "width: 10%; text-align: center")
+	  ->column("Author",  "{author}", true, "width: 20%; text-align: center");
 
 $table->sortable = true;
 $table->filter = true;

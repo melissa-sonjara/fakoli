@@ -164,8 +164,7 @@ class Fakoli
 		$menu = array("Web Site Content"	=> array(),
 					  "Collaboration"		=> array(),	
 					  "Classification"		=> array(),
-					  "User Management"		=> array(),
-					  "Public Site"			=>	array("Home page" =>	array("page"	=>	"/")));		
+					  "User Management"		=> array());		
 		
 		$components = Fakoli::getComponents();
 		foreach($components as $name => $component)
