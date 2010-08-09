@@ -128,10 +128,25 @@ class Fakoli
 		if (!$components)
 		{
 			$components = indexedQuery(Component, "WHERE enabled=1", "name");
+			if (count($components) == 0)
+			{
+				Fakoli::initialComponentScan();
+				$components = indexedQuery(Component, "WHERE enabled=1", "name");
+			}
+			
 			Cache::put("fakoli_components", $components);
 		}
 		
 		return $components;
+	}
+	
+	static function initialComponentScan()
+	{
+		require_once "cms/components/component/datamodel/component.inc";
+		require_once "cms/components/component/datamodel/admin_page.inc";
+		require_once "cms/components/component/component_manager.inc";
+		$mgr = new ComponentManager();
+		$mgr->scan();
 	}
 	
 	/**
@@ -209,7 +224,7 @@ class Fakoli
 	}
 }
 
-Fakoli::using("user");
+Fakoli::using("user", "login");
 
 $user = null;
 
@@ -230,23 +245,11 @@ if (isset($_SESSION["user"]))
 else
 {
 
-	if ($method == "POST")
-	{
-		if ($_POST["Login"])
-		{	
-			$user = querySingle(SiteUser, "WHERE username='{$_POST["username"]}' and active=1");
-			
-			if ($user && crypt($_POST["password"], $user->password) === $user->password)
-			{
-				session_start();
-				
-				$_SESSION["user"] = $user;
-			}
-			else
-			{
-				$login_error = "<span style='color: red'>Incorrect user name or password</span><br/>";
-			}
-		}
+	if ($method == "POST" && $_POST["Login"])
+	{	
+		$mgr = new LoginManager();
+		$mgr->validateLogin();
+		
 	}
 }
 ?>

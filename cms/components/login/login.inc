@@ -51,6 +51,8 @@ define("valid_token_login", 2);
 define("invalid_username", 3); // 0 matches found 
 define("invalid_password", 4); 
 
+Fakoli::using("user");
+
 class LoginManager
 {
 	
@@ -92,17 +94,25 @@ class LoginManager
 	}
 
 
-	function validateLogin($username, $password, &$page)
+	function validateLogin()
 	{
-		$user = querySingle(SiteUser, "WHERE username='{$_POST["username"]}' and active=1 and role='admin'");
+		global $user;
+		global $isAdmin;
 		
-		if ($user && crypt($_POST["password"], $user->password) === $user->password)
+		$mgr = new UserManager();
+
+		$username = $_POST[$mgr->getUsernameField()];
+		$password = $_POST["password"];
+		
+		$user = $mgr->validatePassword($username, $password);
+		
+		if ($user)
 		{
 			session_start();
 			
 			$_SESSION["user"] = $user;
 			
-			redirect("/admin/index");
+			redirect(($isAdmin) ? "/admin/index" : "/index");
 		}
 		else
 		{

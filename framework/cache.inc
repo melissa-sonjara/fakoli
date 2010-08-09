@@ -36,28 +36,40 @@
  * enabled, caching will be done through APC and will be available across page
  * accesses. If APC is not available, a simple in-memory hash is used.
  * 
- * @author andy
+ * @author Andy Green
  */
 class Cache
 {
-	static $cache;
+	static $instance;
+	
+	static function getInstance()
+	{
+		if (Cache::$instance) return Cache::$instance;
+		
+		if (ini_get("apc.enabled"))
+		{
+			Cache::$instance = new APCCache();
+		}
+		else if (ini_get("wincache.ucenabled"))
+		{
+			Cache::$instance = new WCCache();
+		}
+		else
+		{
+			Cache::$instance = new SimpleMemoryCache();
+		}
+		
+		return Cache::$instance;
+	}
 	
 	/**
 	 * Retrieve the specified object from the cache
 	 * @param string $key the key identifying the object
 	 * @return mixed the associated object, or null if no match was found
 	 */
-	static function get($key)
+	function get($key)
 	{
-		if (ini_get("apc.enabled"))
-		{
-			return unserialize(apc_fetch($key));
-		}
-		else
-		{
-			return Cache::$cache[$key];
-			return true;
-		}
+		return Cache::getInstance()->get($key);
 	}
 	
 	/**
@@ -73,18 +85,9 @@ class Cache
 	 * @param mixed $obj the object or value to be cached
 	 * @param integer $ttl the time-to-live for the cache entry, in seconds
 	 */
-	static function put($key, $obj, $ttl = 0)
+	function put($key, $obj, $ttl = 0)
 	{
-		if (ini_get("apc.enabled"))
-		{
-			return apc_store($key, serialize($obj), $ttl);
-		}
-		else
-		{
-			Cache::$cache[$key] = $obj;
-			return true;
-			// NOTE - ttl is ignored if using in-memory caching.
-		}
+		return Cache::getInstance()->put($key, $obj, $ttl);
 	}
 	
 	/**
@@ -95,19 +98,11 @@ class Cache
 	 * 
 	 * @param string $key the entry to be invalidated
 	 */
-	static function invalidate($key)
+	function invalidate($key)
 	{
-		if (ini_get("apc.enabled"))
-		{
-			return apc_delete($key);
-		}
-		else
-		{
-			unset(Cache::$cache[$key]);
-			return true;
-		}
+		return Cache::getInstance()->invalidate($key);
 	}
-	
+
 	/**
 	 * Invalidate all entries in the cache that match a specific pattern. 
 	 * This can be used to 
@@ -119,30 +114,146 @@ class Cache
 	 */
 	static function invalidateMatching($pattern)
 	{
-		if(ini_get("apc.enabled"))
-		{
-			$iterator = new APCIterator("user", $pattern);
-			
-			while($key = $iterator->key())
-			{
-				Cache::invalidate($key);
-				$iterator->next();
-			}
-		}
-		else
-		{
-			Cache::$pattern = $pattern;
-			Cache::$cache = arrayFilterKey(Cache::$cache, array(Cache, filterKey));
-		}	
+		return Cache::getInstance()->invalidateMatch($pattern);
+	}
+}
+
+
+/**
+ * Implements a simple in-memory cache when other cacheing mechanisms
+ * are not available.
+ * 
+ * @author Andy Green
+ */
+class SimpleMemoryCache
+{
+	var $cache;
+	
+	function SimpleMemoryCache()
+	{
+		trace("Creating Simple In-memory Cache", 3);
+		$this->cache = array();
+	}
+	
+	function get($key)
+	{
+		return $this->cache[$key];
+	}
+	
+	function put($key, $obj, $ttl = 0)
+	{
+		$this->cache[$key] = $obj;
+		return true;
+		// NOTE - ttl is ignored if using in-memory caching.
+	}
+	
+	function invalidate($key)
+	{
+		unset($this->cache[$key]);
+		return true;
+	}
+	
+	function invalidateMatching($pattern)
+	{
+		$this->pattern = $pattern;
+		$this->cache = arrayFilterKey($this->cache, array($this, filterKey));
+		unset($this->pattern);
 	}
 	
 	/**
 	 * Internal callback function that supports the invalidateMatching function.
 	 * @param string $key the key to be filtered.
 	 */
-	static function filterKey($key)
+	function filterKey($key)
 	{
-		return preg_match($key, Cache::$pattern);
+		return !preg_match($key, $this->pattern);
+	}
+}
+	
+
+/**
+ * Provides a simple cacheing mechanism using the Alternative PHP Cache extension.
+ * 
+ * @author Andy Green
+ */
+class APCCache
+{	
+	function APCCache()
+	{
+		trace("Creating APC Cache", 3);
 	}
 	
+	function get($key)
+	{
+		return unserialize(apc_fetch($key));
+	}
+	
+	function put($key, $obj, $ttl = 0)
+	{
+		return apc_store($key, serialize($obj), $ttl);
+	}
+	
+	function invalidate($key)
+	{
+		return apc_delete($key);
+	}
+
+	function invalidateMatching($pattern)
+	{
+		$iterator = new APCIterator("user", $pattern);
+		
+		while($key = $iterator->key())
+		{
+			Cache::invalidate($key);
+			$iterator->next();
+		}
+	}	
+}
+
+/**
+ * Provides a simple cacheing mechanism using the WinCache PHP extension (for use under IIS).
+ */
+class WCCache
+{
+	function WCCache()
+	{
+		trace("Creating WinCache cache", 3);
+	}
+	
+	function get($key)
+	{
+		return unserialize(wincache_ucache_get($key));
+	}
+	
+	function put($key, $obj, $ttl = 0)
+	{
+		return wincache_ucache_set($key, serialize($obj), $ttl);
+	}
+	
+	function invalidate($key)
+	{
+		return wincache_ucache_delete($key);
+	}
+
+	function invalidateMatching($pattern)
+	{
+		$info = wincache_ucache_info();
+		
+		$keys = array_keys($info['ucache_entries']);
+		$doomedKeys = arrayKeyFilter($keys, array($this, filterKey));
+		
+		foreach($doomedKeys as $key)
+		{
+			$this->invalidate($key);
+		}
+	}
+	
+	/**
+	 * Internal callback function that supports the invalidateMatching function.
+	 * @param string $key the key to be filtered.
+	 */
+	function filterKey($key)
+	{
+		return preg_match($key, $this->pattern);
+	}
 }

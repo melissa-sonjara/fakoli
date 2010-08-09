@@ -13,6 +13,8 @@
  */
 class ComponentManager
 {
+	var $found = array();
+	
 	/**
 	 * Creates a new ComponentManager object
 	 */
@@ -45,6 +47,11 @@ class ComponentManager
 		    	if (is_dir($f))
 		    	{
 		    		trace("== Found component '$file'", 3);
+		    		if ($this->found[$file])
+		    		{
+		    			trace("---- already defined - skipping", 3);
+		    			continue;
+		    		}
 		    		
 		    		if (!is_file($m))
 		    		{
@@ -71,6 +78,8 @@ class ComponentManager
 		    		$component->component_path = $f;
 		    		$component->joinTransaction($this->tx);
 		    		$component->save();
+		    		
+		    		$this->found[$file] = $component;
 		    		
 		    		$this->scanAdminPages($component);
 		    		

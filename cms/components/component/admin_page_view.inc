@@ -39,6 +39,7 @@ class AdminPageView
 		global $dialogs;
 		global $page;
 		global $menu_item;
+		global $isAdmin;
 		
 		$page = $this->page; // Pass through to code include
 		

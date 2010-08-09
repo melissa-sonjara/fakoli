@@ -1,8 +1,7 @@
 <?php
 
 require_once "../include/config.inc";
-
-require_once "../include/permissions.inc";
+require_once "cms/core.inc";
 
 if (!checkRole("admin"))
 {
@@ -12,3 +11,5 @@ else
 {
 	redirect("/admin/index");
 }
+
+?>

@@ -44,14 +44,6 @@
 
 Fakoli::using("login");
 
-if ($method == "POST")
-{
-	$username = mysql_escape_string($_POST['username']); //for logging in
-	$password = mysql_escape_string($_POST['password']); //for logging in 
-	
-	$rtn = LoginManager::validateLogin($username, $password, $page);
-}
-
 $title = "Web Site Administration";
 
 // Login form goes here
@@ -83,7 +75,7 @@ $title = "Web Site Administration";
   </tr>
   <tr>
    <td colspan="2" style="text-align: right">
-	<input name="Submit" type="submit" value="  Login  " class="button" />
+	<input name="Login" type="submit" value="  Login  " class="button" />
    </td>
   </tr>
 </table>
