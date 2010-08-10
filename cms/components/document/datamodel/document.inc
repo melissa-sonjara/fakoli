@@ -40,22 +40,45 @@ class Document extends DataItem
 	
 	var $fields = array("document_id"			=>	Number,
 						"title"					=>	String,
+						"file"					=>	String,
 						"publication_date"		=>	Date,
-						"file"					=>  String,
-						"abstract"				=>	HTML,
+						"keywords"				=>  String,
+						"notes"					=>	HTML,
 						"public"				=>	Boolean,
 						"last_modified"			=>	Timestamp,
-						"is_local"				=>	Boolean,
-						"author"				=>	String);
+						"document_library_id"	=>	Number,
+						"owner_id"				=>	Number);
 						
 	// Relations
 	
-	var $relations = array(	"Topics"	=>	Topic);
+	var $relations = array(	"Topics"			=>	Topic,
+							"Owner"				=>	"",
+							"DocumentLibrary"	=>	DocumentLibrary);
+	
+	function Topics($constraint = "")
+	{
+		return $this->crossReference(Topic, DocumentTopicXref, $constraint);
+	}
+
+	function Owner()
+	{
+		$mgr = new UserManager();
+		return $mgr->getUser($this->owner_id);
+	}
+
+	function DocumentLibrary()
+	{
+		return $this->getRelated(DocumentLibrary);
+	}
 	
 	function Document()
 	{
 		$this->primary_key = "document_id";
 		$this->table = "document";
+		
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["Owner"] = $mgr->getUserClass(); 
 		
 		$this->default_format = "{title}";
 		

@@ -33,26 +33,58 @@
 
 /**
  * Provides the interface to the user model for the application.
+ * This implementation uses the default user model as shipped with
+ * Fakoli/CMS. If you need to use a different user model you can
+ * simply implement your own 'user' component and include it in
+ * your application web root to override this one. In that case
+ * you must supply a UserManager class that conforms to the interface
+ * below.
  * 
  * @author andy
- *
  */
 class UserManager
 {
+	/**
+	 * Creates a new UserManager object.
+	 */
 	function UserManager()
 	{
 	}
 	
+	/**
+	 * Returns the field name of the username in the user model.
+	 * @return string
+	 */
 	function getUsernameField()
 	{
 		return "username";
 	}
 	
+	/**
+	 * Returns the datamodel class name of the user model.
+	 * @return string
+	 */
 	function getUserClass()
 	{
 		return SiteUser;
 	}
 	
+	/**
+	 * Retrieves the user with the specified id
+	 * @param $user_id the primary key identifying the user
+	 * @return object
+	 */
+	function getUser($user_id)
+	{
+		return new SiteUser($user_id);
+	}
+		
+	/**
+	 * Validates the user's username and password, returning the matching user.
+	 * @param $username the user's username
+	 * @param $password the supplied password
+	 * @return object the matching user if password is valid, null otherwise
+	 */
 	function validatePassword($username, $password)
 	{
 		$user = querySingle(SiteUser, "WHERE username='{$username}' and active=1");
@@ -66,4 +98,22 @@ class UserManager
 			return null;
 		}
 	}
+	
+	/**
+	 * Load any supporting information into the user's session after a valid login.
+	 * @param $user the user object
+	 */
+	function loadDefaultSession($user)
+	{
+	}
+	
+	/**
+	 * Redirect the user after a valid login.
+	 * @param $user the user object
+	 */
+	function loginRedirect($user)
+	{
+		redirect(($isAdmin) ? "/admin/index" : "/index");
+	}
+
 }

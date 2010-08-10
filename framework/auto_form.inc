@@ -47,7 +47,7 @@ class AutoForm
 	var $inputCSS = "";					///< CSS Class to use for input fields
 	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
 	var $style = "";
-	var $componentPath ="";
+	var $componentPath ="/fakoli";
 	var $buttonAlignment = "left";		///< Default Form button alignment
 	var $passwordEncryptor = "";		///< Password Encryption method name
 

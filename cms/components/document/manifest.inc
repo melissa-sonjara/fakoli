@@ -22,7 +22,7 @@ class DocumentManifest
 			"Web Site Content"	=> array
 			(
 
-				"Documents"	=>	array("page"	=>	"/admin/documents",
+				"Documents"	=>	array("page"	=>	"/admin/document_libraries",
 									  "role"	=>	"admin",
 									  "weight"	=>	3)
 			)

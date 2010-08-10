@@ -54,6 +54,10 @@ class AdminPageView
 		
 		$menu = $this->formatMenu($admin_menu);
 		
+		// If the script didn't provide a title, guess a reasonable default.
+		
+		if (!$title) $title = prettify(basename(substr($page->server_path, 0, -4)));
+		
 		// Populate variable references
 		
 		$vars = array();

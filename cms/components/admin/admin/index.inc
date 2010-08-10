@@ -2,6 +2,6 @@
 $title = "Site Administration";
 
 ?>
-<b>Welcome <?echo $user->first_name?> <?echo $user->last_name?>!</b>
+<b>Welcome <?echo $user->getFullName()?>!</b>
 <br/>
 <br/>

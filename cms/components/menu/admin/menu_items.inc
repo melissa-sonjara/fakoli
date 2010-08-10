@@ -61,9 +61,6 @@ $tabs = menuTabs($menu_id);
 $tabs->page = "menu_items";
 
 $script = $menuTree->writeScript();
-$script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
-
-
 
 $tabs->writeHTML();
 ?>

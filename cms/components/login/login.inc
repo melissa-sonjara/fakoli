@@ -97,7 +97,6 @@ class LoginManager
 	function validateLogin()
 	{
 		global $user;
-		global $isAdmin;
 		
 		$mgr = new UserManager();
 
@@ -112,7 +111,8 @@ class LoginManager
 			
 			$_SESSION["user"] = $user;
 			
-			redirect(($isAdmin) ? "/admin/index" : "/index");
+			$mgr->loadDefaultSession($user);
+			$mgr->loginRedirect($user);
 		}
 		else
 		{

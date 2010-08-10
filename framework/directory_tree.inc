@@ -33,37 +33,6 @@
 
 $_writtenDirectoryTreeControlScript = false;
 
-function buildFolderTree(&$tree, $folder, $base)
-{
-	$dir = opendir($folder);
-	
-	$root = _buildFolderTreeAux($folder, $base);
-	$tree->add($root);
-} 
-
-function _buildFolderTreeAux($folder, $base)
-{
-	$dir = opendir("$base/$folder");
-
-	$id = str_replace("/", "_", $folder);
-	$node = new FolderNode($id, basename($folder), $folder);
-	while( $directory = readdir($dir))
-	{
-		if ($directory == "." || $directory == "..") continue;
-		
-		if (is_dir("$base/$folder/$directory"))
-		{
-			
-			$node->add(_buildFolderTreeAux("$folder/$directory", $base));
-			
-		}
-	}
-	
-	closedir($dir);
-	
-	return $node;
-}
-
 class FileNode
 {
 	var $id;
@@ -106,7 +75,7 @@ class FolderNode
 	var $openStyle;
 	var $open;
 	
-	function FolderNode($id, $title, $value = "", $checked = false, $closedStyle = "tree_node_closed", $openStyle = "tree_node_open", $leafStyle = "tree_node_leaf")
+	function FolderNode($id, $title, $value = "", $checked = false, $closedStyle = "tree_node_closed", $openStyle = "tree_node_open", $leafStyle = "tree_node_plain")
 	{
 		$this->id          = $id;
 		$this->title       = $title;
@@ -216,7 +185,7 @@ class FolderNode
 	
 	function add(&$n)
 	{
-		trace($this->id." adding ".$n->id, 3);
+		trace($this->id." adding ".$n->id, 4);
 		if (is_array($n))
 		{
 			for($i = 0; $i < count($n); ++$i)
@@ -270,18 +239,18 @@ class DirectoryTreeControl
 	var $selectMode = "folder";
 	
 	var $children;
-	var $images = array("toggle_open"	=>	"/images/toggle_open.png",
-						"toggle_closed"	=>	"/images/toggle_closed.png",
-						"toggle_blank"  =>	"/images/toggle_blank.png",
-						"folder_open"	=>	"/images/folder_open.png",
-						"folder_closed"	=>	"/images/folder_closed.png",
-						"generic_file"	=>	"/images/file.png");
+	var $images = array("toggle_open"	=>	"/fakoli/images/toggle_open.png",
+						"toggle_closed"	=>	"/fakoli/images/toggle_closed.png",
+						"toggle_blank"  =>	"/fakoli/images/toggle_blank.png",
+						"folder_open"	=>	"/fakoli/images/folder_open.png",
+						"folder_closed"	=>	"/fakoli/images/folder_closed.png",
+						"generic_file"	=>	"/fakoli/images/file.png");
 	
-	var $icons = array(	".doc"		=>	"/images/msword_icon.png",
-						".xls"		=>	"/images/msexcel_icon.png",
-						".pdf"		=>	"/images/pdf_icon.png",
-						".ppt"		=>	"/images/ppt_icon.png",
-						"default"	=>	"/images/file_icon.png");
+	var $icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
+						".xls"		=>	"/fakoli/images/msexcel_icon.png",
+						".pdf"		=>	"/fakoli/images/pdf_icon.png",
+						".ppt"		=>	"/fakoli/images/ppt_icon.png",
+						"default"	=>	"/fakoli/images/file_icon.png");
 						
 	
 	function DirectoryTreeControl($id, $title = "", $showFiles = true, $style="tree", $scroll=true,$width=500,$height=400)
@@ -295,6 +264,38 @@ class DirectoryTreeControl
 		$this->showFiles = $showFiles;
 	}
 	
+
+	function buildFolderTree($folder, $base)
+	{
+		trace("Building Folder Tree: $folder, $base", 3);
+		$root = $this->_buildFolderTreeAux($folder, $base);
+		$this->children[$folder] = $root;
+	} 
+	
+	function _buildFolderTreeAux($folder, $base)
+	{
+		$f = $base . DIRECTORY_SEPARATOR . $folder;
+		$dir = opendir($f);
+	
+		$id = str_replace(DIRECTORY_SEPARATOR, "_", $folder);
+		$node = new FolderNode($id, basename($folder), $folder);
+		while( $directory = readdir($dir))
+		{
+			if ($directory == "." || $directory == "..") continue;
+			
+			if (is_dir($base . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $directory))
+			{				
+				$node->add($this->_buildFolderTreeAux($folder . DIRECTORY_SEPARATOR . $directory, $base));
+			}
+		}
+		
+		closedir($dir);
+		$this->folders[$folder] = $node;
+		
+		return $node;
+	}
+		
+
 	function writeScript()
 	{
 		global $_writtenDirectoryTreeControlScript;
@@ -306,10 +307,10 @@ class DirectoryTreeControl
 <!--
 function toggleDirectoryFolder(id, openStyle, closedStyle)
 {
-	var div = document.getElementById(id + "_contents");
-	var link = document.getElementById(id);
-	var toggle = document.getElementById(id + "_toggle");
-	var folder = document.getElementById(id + "_folder");
+	var div = $(id + "_contents");
+	var link = $(id);
+	var toggle = $(id + "_toggle");
+	var folder = $(id + "_folder");
 
 	if (div.style.display == "none" || div.style.display == "")
 	{
@@ -330,10 +331,10 @@ function toggleDirectoryFolder(id, openStyle, closedStyle)
 function selectItem(treeID, itemID, itemValue)
 {
 	_clearSelectionImpl(treeID);
-	var hidden = document.forms[0][treeID + "_value"];
+	var hidden = $(treeID + "_value");
 	hidden.value = itemValue;
 	
-	var item = document.getElementById(itemID + "_link");
+	var item = $(itemID + "_link");
 	item.className = "selected";
 	eval(treeID + "_onSelectItem('" + itemID + "', '" + itemValue + "');");
 }
@@ -347,9 +348,9 @@ function clearSelection(treeID)
 
 function _clearSelectionImpl(treeID)
 {
-	var hidden = document.forms[0][treeID + "_value"];
+	var hidden = $(treeID + "_value");
 	hidden.value = "";
-	var tree = document.getElementById(treeID);
+	var tree = $(treeID);
 	var elts = tree.getElementsByTagName("a");
 	for (i = 0; i < elts.length; ++i)
 	{
@@ -412,13 +413,11 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 	}
 	
 	function writeHTML()
-	{
-		trace("DirectoryTreeControl::writeHTML()", 3);
-		
-		ksort($this->children);
+	{	
+		//ksort($this->children);
 		$this->writeScript();
 ?>
-		<input type="hidden" name="<?echo $this->id?>_value" value="<?echo $this->selectedValue?>">
+		<input type="hidden" name="<?echo $this->id?>_value" id="<?echo $this->id?>_value" value="<?echo $this->selectedValue?>">
 		<table id="<?echo $this->id?>" class="<? echo $this->style?>" cellpadding="0" cellspacing="0">
 		 <? 
 		 if ($this->title)
@@ -438,9 +437,17 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 		foreach($this->children as $key => $child)
 		{
 			trace("Writing $key,{$child->title}", 3);
-			$child->_tree =& $this;
-			$child->calculateOpenState();
-			$child->writeHTML();
+			try
+			{
+				$child->_tree =& $this;
+				$child->calculateOpenState();
+				$child->writeHTML();
+			}
+			catch(Error $e)
+			{
+				var_dump($child);
+				throw $e;
+			}
 		}
 ?>
 		   </div>
@@ -454,7 +461,7 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 	{
 		$ext = substr($file, strrpos($file, "."));
 		$icon = $this->icons[$ext];
-		trace("getIcon($file) $ext $icon", 3);
+		trace("getIcon($file) $ext $icon", 4);
 		
 		if (!isset($icon))
 		{
@@ -480,10 +487,15 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 		}
 	}
 	
+	function findFolder($path)
+	{
+		return $this->folders[$path];
+	}
+	
 	function &findNode($path)
 	{
-		trace("DirectoryTree:findNode($path)", 3);
-		$elts = split("/", $path);
+		trace("DirectoryTree:findNode($path)", 4);
+		$elts = explode(DIRECTORY_SEPARATOR, $path);
 		
 		$node =& $this;
 		
