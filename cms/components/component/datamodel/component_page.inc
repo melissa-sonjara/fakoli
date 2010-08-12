@@ -31,74 +31,31 @@
 
 *****************************************************************/
 
-/**
- * Defines the Event class.
- */
-class Event extends DataItem
-{
-	var $fields = array("event_id"			=>	Number,
-						"title"				=>	String,
-						"calendar_id"		=>	Number,
-						"start_date"		=>	DateTime,
-						"end_date"			=>	DateTime,
-						"location"			=>	String,
-						"event_type"		=>	String,
-						"description"		=>	HTML,
-						"published"			=>	Boolean,
-						"last_modified"		=>	Timestamp,
-						"composite_class"	=>	String,);
-						
-	// Relations
-	
-	var $relations = array("Sites"		=>	Site,
-						   "Calendar"	=>	Calendar);
+require_once realpath(dirname(__FILE__)."/../../../../framework/data_item.inc");
 
-	function Sites($constraint = "")
+class ComponentPage extends DataItem
+{
+	// Fields
+	var $fields = array("component_page_id"	=>	Number,
+						"identifier"		=>	String,
+						"server_path"		=>	String,
+						"component_id"		=>	Number,
+						"role"				=>	String,
+						"enabled"			=>	Boolean);
+	
+	// Relations
+	var $relations = array("Component"	=>	Component);
+	
+	function Component()
 	{
-		return $this->crossReference(Site, EventSiteXref, $constraint);
+		return $this->getRelated(Component);
 	}
 	
-	function Calendar()
+	function ComponentPage()
 	{
-		return $this->getRelated(Calendar);
-	}
-	
-	function Event()
-	{
-		$this->table = "event";
-		$this->primary_key = "event_id";
+		$this->primary_key = "component_page_id";
+		$this->table = "component_page";
 		
 		$this->DataItem(func_get_args());
 	}
 }
-
-class EventSiteXref extends DataItem
-{
-	var $fields = array("event_site_xref_id"	=>	Number,
-						"event_id"				=>	Number,
-						"site_id"				=>	Number);
-	
-	// Relations
-	
-	var $relations = array(	"Event"	=>	Event,
-							"Site"	=>	Site);
-	
-	function Event()
-	{
-		return $this->getRelated(Event);
-	}
-	
-	function Site()
-	{
-		return $this->getRelated(Site);
-	}
-	
-	function EventSiteXref()
-	{
-		$this->primary_key = "event_site_xref_id";
-		$this->table = "event_site_xref";
-		
-		$this->DataItem(func_get_args());
-	}
-}
-?>

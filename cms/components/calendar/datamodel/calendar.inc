@@ -34,71 +34,36 @@
 /**
  * Defines the Event class.
  */
-class Event extends DataItem
+class Calendar extends DataItem
 {
-	var $fields = array("event_id"			=>	Number,
-						"title"				=>	String,
-						"calendar_id"		=>	Number,
-						"start_date"		=>	DateTime,
-						"end_date"			=>	DateTime,
-						"location"			=>	String,
-						"event_type"		=>	String,
-						"description"		=>	HTML,
-						"published"			=>	Boolean,
-						"last_modified"		=>	Timestamp,
-						"composite_class"	=>	String,);
-						
-	// Relations
+	var $fields = array("calendar_id"	=>	Number,
+						"name"			=>	String,
+						"description"	=>	HTML,
+						"owner_id"		=>	Number,
+						"role"			=>	String,
+						"last_modified"	=>	Timestamp);
 	
-	var $relations = array("Sites"		=>	Site,
-						   "Calendar"	=>	Calendar);
-
-	function Sites($constraint = "")
+	var $relations = array("Events"	=>	Event,
+						   "Owner"	=>	"");
+	
+	function Events($constraint = "")
 	{
-		return $this->crossReference(Site, EventSiteXref, $constraint);
+		return $this->getRelatedList(Event, "", $constraint);
+	}
+	
+	function Owner()
+	{
+		$mgr = new UserManager();
+		return $mgr->getUser($this->owner_id);
 	}
 	
 	function Calendar()
 	{
-		return $this->getRelated(Calendar);
-	}
-	
-	function Event()
-	{
-		$this->table = "event";
-		$this->primary_key = "event_id";
+		$this->table = "calendar";
+		$this->primary_key = "calendar_id";
 		
 		$this->DataItem(func_get_args());
 	}
 }
-
-class EventSiteXref extends DataItem
-{
-	var $fields = array("event_site_xref_id"	=>	Number,
-						"event_id"				=>	Number,
-						"site_id"				=>	Number);
 	
-	// Relations
-	
-	var $relations = array(	"Event"	=>	Event,
-							"Site"	=>	Site);
-	
-	function Event()
-	{
-		return $this->getRelated(Event);
-	}
-	
-	function Site()
-	{
-		return $this->getRelated(Site);
-	}
-	
-	function EventSiteXref()
-	{
-		$this->primary_key = "event_site_xref_id";
-		$this->table = "event_site_xref";
-		
-		$this->DataItem(func_get_args());
-	}
-}
 ?>

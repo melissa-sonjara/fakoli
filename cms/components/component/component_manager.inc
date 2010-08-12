@@ -188,6 +188,10 @@ class ComponentManager
 
 	function dispatchEvent()
 	{
+		global $method;
+		global $user;
+		global $config;
+				
 		$component = $this->getComponent($_REQUEST["component"]);
 		$action = $_REQUEST["action"];
 		

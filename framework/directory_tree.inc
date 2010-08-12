@@ -111,7 +111,7 @@ class FolderNode
 					{
 						$class = ($this->value == $this->_tree->selectedValue) ? "selected" : "folder";
 ?>
-			<a id="<?echo $this->id?>_link" class="<? echo $class?>" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo $this->value?>')"><?echo $this->title?></a>
+			<a id="<?echo $this->id?>_link" class="<? echo $class?>" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')"><?echo $this->title?></a>
 <?
 					}
 				}

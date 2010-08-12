@@ -161,6 +161,24 @@ class Query
 		return $items;
 	}
 	
+	function executeSingle()
+	{
+		$results = $this->execute();
+		if (count($results) == 1)
+		{
+			return $results[0];
+		}
+		
+		if (count($results) == 0)
+		{
+			throw new DataNotFoundException();
+		}		
+		else
+		{
+			throw new DataItemException("Ambiguous singleton query");
+		}
+	}
+	
 	static function create($class, $constraints = "")
 	{
 		return new Query($class, $constraints);

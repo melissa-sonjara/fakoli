@@ -8,6 +8,8 @@
    <script type="text/javascript" src="/fakoli/js/functions.js"></script>
    <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-core.js"></script>
    <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-more.js"></script>
+   <script type="text/javascript" src="/fakoli/js/ui.js"></script>
+   <script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
   {var:script}
   <title>{var:title}</title>
  </head>

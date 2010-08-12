@@ -37,6 +37,7 @@ class DocumentLibrary extends DataItem
 	
 	var $fields = array("document_library_id"	=>	Number,
 						"name"					=>	String,
+						"identifier"			=>	String,
 						"description"			=>	Text,
 						"owner_id"				=>	Number,
 						"manage_folders"		=>	String,
@@ -82,6 +83,15 @@ class DocumentLibrary extends DataItem
 		return reindexList($this->Folders($constraint), "path");
 	}
 		
+	static function findByIdentifier($identifier)
+	{
+		$match = Query::create(DocumentLibrary, "WHERE identifier=:id")
+					  ->bind(":id", $identifier)
+					  ->executeSingle();
+
+		return $match;
+	}
+	
 	function DocumentLibrary()
 	{
 		$this->primary_key = "document_library_id";

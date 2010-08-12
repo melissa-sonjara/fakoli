@@ -43,6 +43,50 @@ abstract class EventHandler
 	abstract function details($event);
 }
 
+class StandardEventHandler extends EventHandler
+{
+	function filter($event, $date)
+	{
+		$startTimeStamp = strtotime($event->start_date);
+		$endTimeStamp = strtotime($event->end_date);
+		$dateTimeStamp = strtotime($date);
+		 
+		return $dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp;
+	}
+
+	function summary($event)
+	{
+		return "<h4>{$event->title}</h4><p>{$event->event_type}</p>";
+	}
+	
+	function details($event, $byProgram = false)
+	{
+		ob_start();
+?>
+<div class="event_details">
+<h3><?echo $event->title?></h3>
+<div class="event_contents">
+<p><em><?echo $event->event_type?></em></p>
+<p><label style="width: 80px">Start: </label><?echo $event->start_date?><br/>
+<label style="width: 80px">End: </label><?echo $event->end_date?></p>
+<? 		
+		if ($event->location)
+		{ 
+?>
+<p><label>Location: </label><?echo $event->location?></p>
+<?
+		}
+?>
+<p><?echo $event->description?></p>
+</div>
+</div>
+<?
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
+}
+
 class CalendarView
 {
 	var $current_day;
@@ -116,9 +160,13 @@ class CalendarView
 	
 	function rewriteQueryString($year, $month)
 	{
+		global $isAdmin;
+		
 		$qs = $_SERVER['QUERY_STRING'];
 		
 		$identifier = $_REQUEST["identifier"];
+		
+		if ($isAdmin) $identifier = "admin/$identifier";
 		
 		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$qs = preg_replace("/{$this->yearParam}=\\d+&*/", "", $qs);
@@ -167,7 +215,7 @@ class CalendarView
 	{
 		global $script;
 		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/cms/components/calendar/calendar.js"></script>
+<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
 ENDSCRIPT;
 		
 		$this->calculateMonthRange();
@@ -262,6 +310,29 @@ ENDSCRIPT;
 	
 	function drawMonth()
 	{
+		global $script;
+		$script .= <<<ENDSCRIPT
+<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
+ENDSCRIPT;
+
+		global $dialogs;
+		ob_start();
+?>
+<div class="dialog" id="eventDetailDlg" style="width: 500px">
+ <div class="dialog_header" id="eventDetailDlgHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeEventDetailDlg' href="javascript:eventDialog.hide();"">Close &times;</a></div>
+   <span"style="font-weight: bold" id="eventDetailDlgTitle">Event Detail</span>
+  </div>	
+ </div>
+ <div id="eventDetailDlgBody" class="dialog_body">
+ </div>
+</div>
+
+<?
+		$dialogs .= ob_get_contents();
+		ob_end_clean();
+		
 		$this->calculateMonthRange();
 ?>		
 <div id="fullcalendar">
@@ -305,10 +376,12 @@ ENDSCRIPT;
 				{
 					$handler = $this->getHandler($event);
 					
-					$content .= "<div class='event_summary'>";
+					$content .= "<div class='event_summary' onclick='showEventDetail({$event->event_id})'>";
 					$content .= $handler->summary($event);
 					$content .= "</div>";
-				}					
+				}
+
+				$link = $i;
 			}
 			else
 			{
@@ -337,5 +410,65 @@ ENDSCRIPT;
 </div>		
 <?
 	}
+		
+	function header($alt = event_display)
+	{
+		$link = $this->rewriteQueryString($this->year, $this->month, $alt);
+		$altTitle = ($alt == event_display) ? "List of Events" : "Calendar";
+?>		
+<table width="100%" class="layout">
+ <tr>
+  <td><p><a href="<? echo $link ?>">View <? echo $altTitle ?></a></p></td>
+  <td align="right">
+   <form method="get" action="">
+    <select name="month">
+<?
+	for($i = 1; $i <= 12; ++$i)
+	{
+		$monthName = date("F", strtotime("$i/1/2007"));
+		option($i, $monthName, $i == $this->month);
+	}
+?>
+    </select>&nbsp;<select name="year">
+<?
+	for($i = 2006; $i < 2012; ++$i)
+	{
+		option($i, $i, $i == $this->year);
+	}
+?>
+    </select>
+    <input type="submit" class="button" value=" GO "/>
+   </form>
+  </td>
+ </tr>
+</table>
+<?
+		
+	}
+	
+	function drawEventList()
+	{
+		$this->calculateMonthRange();
+		
+		$this->header(calendar_display);
+
+		if (count($this->events) > 0)
+		{
+			foreach($this->events as $event)
+			{
+				$handler = $this->getHandler($event);
+				$content .= $handler->details($event);
+				$content .= "<br>";
+			}
+			echo $content;
+		}
+		else
+		{
+?>
+<p><i>No events have been scheduled for this month.</i></p>
+<?
+		}
+	}
+	
 }
 ?>

@@ -21,7 +21,7 @@ class CalendarManifest
 		(
 			"Collaboration" => 
 
-				array("Events"	=>	array("page"	=>	"/admin/events",
+				array("Calendars"	=>	array("page"	=>	"/admin/calendars",
 					  "role"	=>	"admin",
 					  "weight"	=>	2))
 		);

@@ -171,6 +171,18 @@ class Fakoli
 		}
 	}
 	
+	static function usingFeature()
+	{
+		$num = func_num_args();
+		
+		for($i = 0; $i < $num; ++$i)
+		{
+			$file = func_get_arg($i);
+			
+			require_once realpath(dirname(__FILE__)."/../framework/{$file}.inc");
+		}
+	}	
+
 	static function getAdminMenu()
 	{
 		$menu = Cache::get("fakoli_admin_menu");

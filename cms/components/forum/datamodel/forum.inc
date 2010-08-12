@@ -49,7 +49,7 @@ class Forum extends DataItem
 	// Relations
 	
 	var $relations = array("Sites"		=>	Site,
-						   "Owner"		=>	SiteUser,
+						   "Owner"		=>	"",
 						   "Messages"	=>	ForumMessage,
 						   "Topics"		=>	ForumTopic,
 						   "LastPost"	=>	ForumMessage,
@@ -62,7 +62,8 @@ class Forum extends DataItem
 	
 	function Owner()
 	{
-		return $this->getRelated(SiteUser, "owner_id");
+		$mgr = new UserManager();
+		return $mgr->getUser($this->owner_id);
 	}
 	
 	function Topics($constraint = "")
@@ -92,6 +93,10 @@ class Forum extends DataItem
 		$this->table = "forum";	
 		$this->default_format = "{title}";
 
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["Owner"] = $mgr->getUserClass(); 
+		
 		$this->DataItem(func_get_args());
 	}
 }
@@ -149,7 +154,7 @@ class ForumMessage extends DataItem
 	var $relations = array(	"Forum"			=>	Forum,
 							"Parent"		=>	ForumMessage,
 							"Topic"			=>	ForumTopic,
-							"Author"		=>	SiteUser,
+							"Author"		=>	"",
 							"Attachments"	=>	Attachment);
 	
 	function Forum()
@@ -169,7 +174,8 @@ class ForumMessage extends DataItem
 	
 	function Author()
 	{
-		return $this->getRelated(SiteUser, "author_id");
+		$mgr = new UserManager();
+		return $mgr->getUser($this->author_id);
 	}
 	
 	function Attachments($constraint = "")
@@ -183,6 +189,10 @@ class ForumMessage extends DataItem
 		$this->table = "forum_message";
 		$this->default_format = "{title}";
 		
+
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["Author"] = $mgr->getUserClass(); 		
 		$this->DataItem(func_get_args());
 	}	
 }

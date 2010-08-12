@@ -29,12 +29,34 @@ class DocumentManager
 		return $permission;
 	}
 
-	
 	function writeScript()
 	{
+		global $dialogs;
+		
+		ob_start();
+?>
+<div class="dialog" id="documentManagerDlg" style="width: 500px">
+ <div class="dialog_header" id="documentManagerDlgHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeDocumentManagerDlg' href="javascript:docManagerDlg.hide();"">Close &times;</a></div>
+   <span"style="font-weight: bold" id="documentManagerTitle">Document Manager</span>
+  </div>	
+ </div>
+ <div id="documentManagerDlgBody" class="dialog_body">
+ </div>
+</div>
+<?
+		$dialogs .= ob_get_contents();
+		ob_end_clean();
+	
 		$script .= <<<ENDSCRIPT
 		
 		<script type="text/javascript">
+		
+		window.addEvent('domready', function()
+		{
+			docManagerDlg = new ModalDialog($('documentManagerDlg'), {handle: $('documentManagerDlgHeader'), draggable: true, body: $('documentManagerDlgBody')});
+		});		
 		
 		function downloadFile()
 		{
@@ -45,8 +67,28 @@ class DocumentManager
 		function editFile()
 		{
 			id = $('files_value').value;
-			go("document_form.php?doc_id=" + id);
+			docManagerDlg.show(function() {}, "/action/document/edit?document_id=" + id);
 		}
+		
+		function editResult(result)
+		{
+			if (result == "1")
+			{
+				docManagerDlg.hide();
+			}
+			else
+			{
+				$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+			}
+		}
+
+
+		function uploadFile()
+		{
+			id = $('files_value').value;
+			docManagerDlg.show(function() {}, "/action/document/upload?document_library_id={$this->library->document_library_id}");
+		}
+		
 		
 		function deleteFile()
 		{
@@ -130,7 +172,76 @@ ENDSCRIPT;
 		<button id="download" class="button" disabled="disabled"  onclick="downloadFile()"> Download File </button>&nbsp;&nbsp;
 		<button id="edit" class="button" disabled="disabled" onclick="editFile()">Edit Details...</button>&nbsp;&nbsp;
 		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
-		<button id="upload" class="button" onclick="go('document_form.php')">Upload a File...</button>
+		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
 <?
+	}
+	
+	/**
+	 * Upload a file from the specified form field to the specified folder within the current document library.
+	 * @param string $field the form field containing the record for uploaded file
+	 * @param string $folder the folder within the document library to which the file is to be uploaded
+	 * @return string the path of the uploaded file within the document library.
+	 */
+	function uploadFile($field, $folder)
+	{
+		
+		if (!$_FILES[$field]) 
+		{
+			die("No upload record found.");
+		}
+		
+		if ($_FILES[$field]["name"]=="") 
+		{
+			die("Upload name is empty");
+		}
+		
+		/* Copy across the uploaded file */
+		$folder = str_replace("/", DIRECTORY_SEPARATOR, $folder);
+		$folder = str_replace("\\", DIRECTORY_SEPARATOR, $folder);
+		
+		$name = $_FILES[$field]["name"];
+		
+		$filepath = $folder . DIRECTORY_SEPARATOR . $name;
+		$base = $this->library->getLibraryDirectory();
+		$dir = $base . DIRECTORY_SEPARATOR . $folder;
+		$fullpath = $dir . DIRECTORY_SEPARATOR . $name;
+		
+		trace("Upload Directory: {$dir}", 3);
+				
+		trace("Uploading file to $fullpath", 3);
+		
+		if (!file_exists($dir))
+		{
+			// If the directory does not exist, create it 
+			mkdir($dir);
+		}
+		
+		if (file_exists($fullpath))
+		{
+			// If a previous copy of the file already exists, remove it
+			unlink($fullpath);
+		}
+		
+		move_uploaded_file($_FILES[$field]["tmp_name"], $fullpath);
+		chmod($fullpath, 0755);
+		
+		return str_replace(DIRECTORY_SEPARATOR, "/", $filepath);
+	}
+
+	/**
+	 * Delete the specified document (assuming the user has permission).
+	 * @param Document $document the document object to be deleted
+	 * @return boolean true if the document was successfully deleted, false otherwise
+	 */
+	function deleteDocument($document)
+	{
+		$fullPath = $this->library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file;
+		if (file_exists($fullPath))
+		{
+			unlink($fullPath);
+		}
+		
+		$document->delete();
+		return true;
 	}
 }

@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__)."/connection_manager.inc");
+//require_once realpath(dirname(__FILE__)."/connection_manager.inc");
 require_once realpath(dirname(__FILE__)."/abstract_data_item.inc");
 require_once realpath(dirname(__FILE__)."/query.inc");
 require_once realpath(dirname(__FILE__)."/indexed_query.inc");

@@ -388,7 +388,8 @@ abstract class AbstractDataItem
 			break;
 	
 		case Date:
-		
+		case DateTime:
+			
 			$query .= ($val) ? $db->quote($this->reformatToSQLDate($val)) : "NULL";
 			break;
 			
@@ -451,6 +452,11 @@ abstract class AbstractDataItem
 			if (!$data) return "";
 			$val = formatDateShort($data);
 			break;
+			
+		/*case DateTime:
+			if (!$data) return "";
+			$val = formatDateShort($data);
+			break;*/
 			
 		case Timestamp:
 			

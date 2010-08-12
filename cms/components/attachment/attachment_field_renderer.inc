@@ -112,7 +112,15 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$pk = $this->getMatchingPK($xref, $this->parent->data);
 		$pkv = $this->parent->data->get($pk);
 		
-		$attachments = query(Attachment, "WHERE attachment_id in (select attachment_id from {$xref->table} where $pk=$pkv) ORDER BY attachment_id");		
+		if ($pkv)
+		{
+			$attachments = query(Attachment, "WHERE attachment_id in (select attachment_id from {$xref->table} where $pk=$pkv) ORDER BY attachment_id");
+		}
+		else
+		{
+			$attachments = array();
+		}
+				
 		$ids = displayFieldAsList($attachments, "attachment_id");
 ?>
 	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>

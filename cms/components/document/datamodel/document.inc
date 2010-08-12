@@ -43,7 +43,7 @@ class Document extends DataItem
 						"file"					=>	String,
 						"publication_date"		=>	Date,
 						"keywords"				=>  String,
-						"notes"					=>	HTML,
+						"notes"					=>	Text,
 						"public"				=>	Boolean,
 						"last_modified"			=>	Timestamp,
 						"document_library_id"	=>	Number,

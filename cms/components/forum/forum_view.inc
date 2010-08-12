@@ -79,7 +79,7 @@ class ForumListView
 		$user = $lastPost->Author();
 		
 		return "<a href='{$this->messageLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
-			   "<br/><span class='small'>by {$user->first_name} {$user->last_name} ({$lastPost->date_posted})</span>";
+			   "<br/><span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 		
 	}
 	
@@ -102,12 +102,13 @@ class ForumDetailsView
 	var $messages;
 	var $table;
 	var $topicLink;
+	var $width;
 	
 	function ForumDetailsView($forum, $topicLink)
 	{
 		$this->forum = $forum;
 		$this->topicLink = $topicLink;
-		
+			
 		$this->topics = $this->forum->Topics();
 		$this->messages = indexedQuery(ForumMessage, "WHERE forum_id={$forum->forum_id} AND parent_id=0", "topic_id");
 		
@@ -127,7 +128,7 @@ class ForumDetailsView
 	
 		$message = $this->messages[$topic->topic_id];
 		$user = $message->Author();
-		return "<a href='{$this->topicLink}?topic_id={$topic->topic_id}'>{$message->title}</a><br/><span class='small'>(Created by {$user->first_name} {$user->last_name})</span>";
+		return "<a href='{$this->topicLink}?topic_id={$topic->topic_id}'>{$message->title}</a><br/><span class='small'>(Created by ".$user->getFullName().")</span>";
 	}
 	
 	function formatLastPost($topic)
@@ -137,7 +138,7 @@ class ForumDetailsView
 		$user = $lastPost->Author();
 		
 		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
-			   "<br/><span class='small'>by {$user->first_name} {$user->last_name} ({$lastPost->date_posted})</span>";
+			   "<br/><span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 	}
 	
 	function writeScript()
@@ -147,7 +148,9 @@ class ForumDetailsView
 	
 	function drawView()
 	{
+		echo "<div style='width: {$this->width}'>";
 		$this->table->drawView();
+		echo "</div>";
 	}
 }
 ?>

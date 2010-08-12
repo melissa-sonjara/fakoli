@@ -75,10 +75,12 @@ class AutoForm
 
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
-	var $onDelete = "";						///< delete method name
-	var $markRequiredFields = false;		///< Set to true to add an asterisk after required field labels.
-	var $onFormatLabel = null; ///< Label Processing hook
+	var $onDelete = "";					///< delete method name
+	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
+	var $onFormatLabel = null; 			///< Label Processing hook
     var $buttons_at_top = false;
+    var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
+    var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
     
     var $fields;	///< Local field cache
     
@@ -163,6 +165,9 @@ class AutoForm
 			
 		case Date:
 			return new DateFieldRenderer($this);
+			
+		case DateTime:
+			return new DateTimeFieldRenderer($this);
 			
 		case Number:
 			return new NumberFieldRenderer($this);
@@ -263,7 +268,7 @@ class AutoForm
 		{
 			$r['renderer']->renderScript($r['field']);
 		}
-
+		
 		echo "<script type='text/javascript'>\n";
 		echo $this->validator->writeScript();
 		echo "\n\n";
@@ -287,8 +292,17 @@ class AutoForm
 			$r['renderer']->renderOnSubmitHandler($r['field']);
 		}
 
-		echo "\treturn true;\n}\n</script>\n";
+		echo "\treturn true;\n}\n\n";
+		
+		if ($this->ajaxSubmitHandler)
+		{
+?>
+$('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() {}, 'onComplete': <?echo $this->ajaxSubmitHandler; ?>, 'onFailure': <?echo $this->ajaxFailureHandler; ?>});
+<?
 
+		}
+
+		echo "</script>\n";
 		$script = ob_get_contents();
 		ob_end_clean();
 		return $script;
@@ -527,7 +541,7 @@ class AutoForm
 	 * Adds a password validator to the specified field.
 	 * 
 	 * @param string $field The name of the field.
-	 * @param unknown_type The title of the field
+	 * @param string The title of the field
 	 */
 	function password($field, $title)
 	{
@@ -537,9 +551,9 @@ class AutoForm
 	/**
 	 * Adds a custom button to the form.
 	 *
-	 * @param unknown_type $text
-	 * @param unknown_type $url
-	 * @param unknown_type $confirm
+	 * @param string $text the button label text
+	 * @param string $url the URL to handle the button press
+	 * @param string $confirm optional confirmation message
 	 */
 	function button($text, $url, $confirm = null)
 	{
@@ -547,10 +561,21 @@ class AutoForm
 	}
 
 	/**
+	 * Put the form into AJAX submission mode. You must supply a Javascript function to call
+	 * once the submission is complete.
+	 * @param string $success the Javascript callback function for success
+	 * @param string $failure the Javascript callback function for failure
+	 */
+	function ajaxSubmit($success, $failure)
+	{
+		$this->ajaxSubmitHandler = $success;
+		$this->ajaxFailureHandler = $failure;
+	}
+	
+	/**
 	 * Renders the form to HTML.
 	 *
 	 */
-
 	function drawForm()
 	{
 		$obj =& $this->data;
@@ -565,7 +590,9 @@ class AutoForm
 		//echo "<!--\n";
 		//print_r($this);
 		//echo "\n-->\n";
-		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data' onsubmit='return onSubmit{$this->id}(this);'>\n";
+		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+		if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+		echo ">\n";
 		if ($this->id)
 		{
 			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
@@ -607,10 +634,7 @@ class AutoForm
 			echo "<br/><br/></td></tr>";
 		}
 
-		if ($this->msg)
-		{
-			echo "<tr>\n <td colspan='2'><span class='error'>{$this->msg}</span</td></tr>\n";
-		}
+		echo "<tr>\n <td colspan='2' id='{$this->id}__error' class='error' style='display: ".($this->msg ? 'table-cell' : 'none')."'>{$this->msg}</td></tr>\n";
 
 		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
 		{

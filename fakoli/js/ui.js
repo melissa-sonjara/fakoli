@@ -144,8 +144,9 @@ var ModalDialog = new Class(
     	if (fragmentURL && this.options.body)
     	{
     		this.options.body.set('text', "Loading...");
-    		var request = new Request(
+    		var request = new Request.HTML(
     		{
+    			evalScripts: false,
     			method: 'get', 
     			url: fragmentURL, 
     			onSuccess: function(html) 
@@ -246,6 +247,7 @@ var FloatingDialog = new Class(
     		this.options.body.set('text', "Loading...");
     		var request = new Request(
     		{
+    			evalScripts: true,
     			method: 'get', 
     			url: fragmentURL, 
     			onSuccess: function(html) 

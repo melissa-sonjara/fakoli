@@ -281,6 +281,7 @@ require_once realpath(dirname(__FILE__))."/field_renderers/boolean_field_rendere
 require_once realpath(dirname(__FILE__))."/field_renderers/cross_reference_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/currency_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/date_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/datetime_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/file_upload_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/html_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/number_field_renderer.inc";

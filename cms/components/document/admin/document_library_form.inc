@@ -16,7 +16,7 @@ else
 	$library->owner_id = $user->user_id;
 }
 
-$library->filter = new InclusionFilter("document_library_id", "name", "description", "owner_id", "last_modified");
+$library->filter = new InclusionFilter("document_library_id", "name", "identifier", "description", "owner_id", "last_modified");
 
 $tabs = documentLibraryTabs($document_library_id);
 

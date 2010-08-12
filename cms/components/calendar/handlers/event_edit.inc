@@ -10,17 +10,21 @@ Fakoli::usingFeature("auto_form");
 
 Fakoli::assertRole("admin");
 
-$calendar_id = checkNumeric($_GET["calendar_id"]);
-
 $menu_item = "Events";
 
-$event = new Event();
+$event_id = checkNumeric($_GET["event_id"]);
 
-$form = new AutoForm($event);
+if (!$event_id) die("Invalid Parameter");
+
+$event = new Event($event_id);
+
+$form = new AutoForm($event, "POST", "/action/calendar/event_edit?event_id=$event_id");
+$event->filter = new ExclusionFilter("description");
 $form->required("title", "start_date", "end_date");
 $form->hide("composite_class");
 
 $form->allowDelete = true;
+$form->ajaxSubmit("function(result) {editEventResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $sites = query(Site, "ORDER BY site_name");
 
@@ -34,35 +38,16 @@ if ($method == "POST")
 	$_POST["calendar_id"] = $calendar_id;
 	if ($form->save())
 	{	
-		redirect("/admin/events");
-	}
-}
-else
-{
-	$event_id = checkNumeric($_GET["event_id"]);
-	
-	if ($event_id)
-	{
-		$form->load($event_id);
+		echo "1";
+		return;
 	}
 	else
 	{
-		$event->calendar_id = $calendar_id;
+		echo $form->msg;
 	}
 }
 
-if ($event->event_id)
-{
-	$title = "Edit Event";
-}
-else
-{
-	$title =  "Add New Event";
-}
-$script = $form->writeScript();
-$section = "Calendar";
-
-
+echo $form->writeScript();
 
 $form->drawForm();
 

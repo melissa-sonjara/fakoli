@@ -31,74 +31,26 @@
 
 *****************************************************************/
 
-/**
- * Defines the Event class.
- */
-class Event extends DataItem
-{
-	var $fields = array("event_id"			=>	Number,
-						"title"				=>	String,
-						"calendar_id"		=>	Number,
-						"start_date"		=>	DateTime,
-						"end_date"			=>	DateTime,
-						"location"			=>	String,
-						"event_type"		=>	String,
-						"description"		=>	HTML,
-						"published"			=>	Boolean,
-						"last_modified"		=>	Timestamp,
-						"composite_class"	=>	String,);
-						
-	// Relations
-	
-	var $relations = array("Sites"		=>	Site,
-						   "Calendar"	=>	Calendar);
+Fakoli::using("calendar");
+Fakoli::usingFile("framework/data_view.inc");
 
-	function Sites($constraint = "")
-	{
-		return $this->crossReference(Site, EventSiteXref, $constraint);
-	}
-	
-	function Calendar()
-	{
-		return $this->getRelated(Calendar);
-	}
-	
-	function Event()
-	{
-		$this->table = "event";
-		$this->primary_key = "event_id";
-		
-		$this->DataItem(func_get_args());
-	}
-}
+$title = "Calendars";
 
-class EventSiteXref extends DataItem
-{
-	var $fields = array("event_site_xref_id"	=>	Number,
-						"event_id"				=>	Number,
-						"site_id"				=>	Number);
-	
-	// Relations
-	
-	var $relations = array(	"Event"	=>	Event,
-							"Site"	=>	Site);
-	
-	function Event()
-	{
-		return $this->getRelated(Event);
-	}
-	
-	function Site()
-	{
-		return $this->getRelated(Site);
-	}
-	
-	function EventSiteXref()
-	{
-		$this->primary_key = "event_site_xref_id";
-		$this->table = "event_site_xref";
-		
-		$this->DataItem(func_get_args());
-	}
-}
+$calendars = query(Calendar, "ORDER BY name");
+
+$menu_item = "Calendars";
+
+$table = new DataListView($calendars, "calendars");
+$table->column("Calendar", "<a href='/admin/calendar_form?calendar_id={calendar_id}'>{name}</a>", true);
+	  
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 20;
+$table->emptyMessage = "No Calendars defined";
+
+$script .= $table->writeScript();
+
+$table->drawView();
 ?>
+<br/>
+<input type="button" class="button" value="  Add a new Calendar  " onclick="go('/admin/calendar_form');">
