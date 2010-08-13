@@ -127,16 +127,16 @@ class Module extends DataItem
 		switch($this->content_type)
 		{
 		case "Menu":
-			return "menu_module_form.php";
+			return "/admin/menu_module_form";
 							
 		case "Code":
-			return "code_module_form.php";
+			return "/admin/code_module_form";
 			
 		case "HTML":
-			return "html_module_form.php";
+			return "/admin/html_module_form";
 			
 		default:
-			return "query_module_form.php";				
+			return "/admin/query_module_form";				
 		}
 	}
 }

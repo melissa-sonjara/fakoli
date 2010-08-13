@@ -39,3 +39,15 @@ ALTER TABLE `news_item_site_xref` RENAME TO `article_site_xref`,
  CHANGE COLUMN `news_item_id` `article_id` INT(10) UNSIGNED NOT NULL,
  DROP PRIMARY KEY,
  ADD PRIMARY KEY (`article_site_xref_id`);
+ 
+ CREATE TABLE `component_page` (
+  `component_page_id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `identifier` VARCHAR(50) NOT NULL,
+  `server_path` VARCHAR(255) NOT NULL,
+  `component_id` INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  `role` VARCHAR(100) NOT NULL DEFAULT '',
+  `enabled` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`component_page_id`),
+  INDEX `component_page_idx`(`identifier`)
+)
+ENGINE = InnoDB;

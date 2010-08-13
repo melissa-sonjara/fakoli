@@ -29,7 +29,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("modules");	
+		redirect("/admin/modules");	
 	}
 }
 
@@ -37,7 +37,7 @@ if ($module_id)
 {
 	$module->load($module_id);
 	$title = "Edit Module: {$module->title}";
-	$form->button("Run the Module", "module_preview?module_id=$module_id");
+	$form->button("Run the Module", "/admin/module_preview?module_id=$module_id");
 }
 else
 {

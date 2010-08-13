@@ -297,7 +297,7 @@ class AutoForm
 		if ($this->ajaxSubmitHandler)
 		{
 ?>
-$('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() {}, 'onComplete': <?echo $this->ajaxSubmitHandler; ?>, 'onFailure': <?echo $this->ajaxFailureHandler; ?>});
+$('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSubmit<?echo $this->id?>($('<?echo $this->id?>')); }, 'onComplete': <?echo $this->ajaxSubmitHandler; ?>, 'onFailure': <?echo $this->ajaxFailureHandler; ?>});
 <?
 
 		}

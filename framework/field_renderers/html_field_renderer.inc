@@ -63,26 +63,18 @@ class HTMLFieldRenderer extends FieldRenderer
 	{
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
-			echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
+			//echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
 			echo "<link href='{$this->parent->componentPath}/richtext/sonjara_richtext.css' type='text/css' rel='stylesheet'></link>\n";
 			echo "<script type='text/javascript'>\n";
 			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/', '{$this->parent->componentPath}/richtext/');\n";
-			echo "</script>";
-			
+			echo "</script>\n";
+
 			HTMLFieldRenderer::$_includedRTEScript = true;
-		}		
-	}
-	
-	function renderField($field)
-	{
-		global $html_editor_extra_buttons;
-		
-		$this->_startField($field);
-		
+		}
+				
 		echo "<script type='text/javascript'>\n";
-		
 		$editor = $field."_editor";
-		echo "var $editor = new RichTextEditor('$editor', '$field', '";
+		echo "theEditors.$editor = new RichTextEditor('$editor', '$field', '";
 		echo trim(jsSafe($this->parent->data->get($field)));
 		echo "', '{$this->width}', '{$this->height}', false, false";
 		if ($this->parent->HTMLEditorCSSPath) echo ", '{$this->parent->HTMLEditorCSSPath}'";
@@ -90,7 +82,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		if ($this->hideStyleBar)
 		{
-			echo "$editor.showStyleBar = false;\n";
+			echo "theEditors.$editor.showStyleBar = false;\n";
 		}
 		
 		if(is_array($this->featureButtons))
@@ -108,10 +100,20 @@ class HTMLFieldRenderer extends FieldRenderer
 				echo "$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
 			}
 		}
-		echo "$editor.draw();\n";
-		echo "$editor.enableDesignMode();\n";
+		echo "\nwindow.addEvent('domready', function() {\n";
+		echo "theEditors.$editor.draw();\n";
+		echo "});\n";
 		echo "</script>";
+	}
+	
+	function renderField($field)
+	{
+		global $html_editor_extra_buttons;
+		
+		$this->_startField($field);
 
+		echo "<div id='{$field}_container'></div>";
+		
 		$this->_endField($field);
 	}
 
@@ -157,7 +159,7 @@ class HTMLFieldRenderer extends FieldRenderer
 	{
 		$editor = $field."_editor";
 		
-		echo "\t$editor.prepareForSubmit();\n";
+		echo "\ttheEditors.$editor.prepareForSubmit();\n";
 	}
 }
 

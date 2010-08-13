@@ -26,7 +26,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("modules");	
+		redirect("/admin/modules");	
 	}
 }
 
@@ -36,7 +36,7 @@ if ($module_id)
 	$module->content_type = HTML;
 	$title = "Edit Module: {$module->title}";
 	$form->override("template", $label = "HTML", new HTMLFieldRenderer($form));
-	$form->button("Run the Module", "module_preview?module_id=$module_id");
+	$form->button("Run the Module", "/admin/module_preview?module_id=$module_id");
 }
 else
 {

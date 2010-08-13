@@ -19,7 +19,10 @@ if (!$event_id) die("Invalid Parameter");
 $event = new Event($event_id);
 
 $form = new AutoForm($event, "POST", "/action/calendar/event_edit?event_id=$event_id");
-$event->filter = new ExclusionFilter("description");
+//$event->filter = new ExclusionFilter("description");
+$desc = $form->getRenderer("description");
+$desc->width = "450px";
+$desc->height = "120px";
 $form->required("title", "start_date", "end_date");
 $form->hide("composite_class");
 
