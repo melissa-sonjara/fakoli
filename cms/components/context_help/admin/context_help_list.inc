@@ -78,12 +78,12 @@
  * 
  ****************************************************************/
 
-Fakoli::usingFile("framework/auto_form.inc");
-Fakoli::usingFile("framework/tree.inc");
+Fakoli::using("context_help");
+Fakoli::usingFeature("auto_form", "tree");
 
 $title = "Context-Sensitive Help";
 
-
+$menu_item = "Context Help";
 	
 $includeFiles = array();	
 $classes = getClassesFromDataModel($includeFiles);
