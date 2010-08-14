@@ -60,13 +60,14 @@ class LoginManager
 	{
 		global $config;
 		
-		// clean out old token; only allowed one
-		$oldToken = $siteUser->LoginToken();
-		if(isset($oldToken))
-			$oldToken->delete();
+		$pk = $siteUser->getPrimaryKey();
+		$id = $siteUser->get($pk);
 		
-		$pk = getPrimaryKey($siteUser);
-		$token = LoginToken::generateToken($siteUser->$pk);
+		// clean out old token; only allowed one
+		$lt = new LoginToken();
+		$lt->delete("WHERE user_id=$id");
+				
+		$token = LoginToken::generateToken($id);
 		
 		$subject = $config["sitename"];
 		
@@ -77,7 +78,7 @@ class LoginManager
 		$message .= formatDateShort($token->expire_date) . ". ";
 		$message .= "Once you have logged in, you must reset your password. "; 
 		$message .=  "Please note that the password is CASE SENSITIVE.";
-		$message = wordwrap($message, 100);
+		$message = wordwrap($message, 80);
 		
 		$emailFrom = $config["email_from"];
 		
@@ -89,8 +90,6 @@ class LoginManager
 		
 		$msg = new Mail($emailFrom, $siteUser->email, $subject, $message, $headers);
 		return $msg->send();
-		
-		return $sent;	
 	}
 
 
@@ -162,4 +161,88 @@ class LoginManager
 	
 		redirect($page);
 	}
+	
+	
+	function passwordHelp($username = "")
+	{
+		$mgr = new UserManager();
+		$usernameField = $mgr->getUsernameField();
+		$emailField = $mgr->getEmailField();
+		
+		if (!$usernameField || !$emailField)
+		{
+			throw new FakoliException("Unable to provide password help");
+		}
+		
+		if($username)
+		{
+			$matches = Query::create(SiteUser, "WHERE username=:username")
+							->bind(":username", $username)
+							->execute();
+		
+			if(count($matches) > 0)
+				$match = $matches[0];
+		}
+		
+		?>
+		<h3>Password Help</h3>
+		<?
+		if($match)
+		{
+			$sent = LoginManager::emailToken($match);
+			
+			if($sent)
+			{
+				?>
+				<br/>
+				<p>A temporary password has been sent to the email address registered for your account. 
+				The email might take a few minutes to reach you.</p><br/>
+				<?
+			}
+			else
+			{	
+				?>
+				<br/>
+				<p>Mail could not be sent. Please contact <a href="<? echo $config["email_contact"]?>"><? echo $config["email_name"]?></a> for help.</p><br/>
+				<?	
+			} 
+		} // end if match
+		
+		elseif($username)
+		{
+			?>
+			<p><em>We can not find the username you provided in the system.</em></p>
+			<?
+			LoginManager::passwordHelpForm($username);
+		}
+		/*
+		 * Let the user enter their email address to request their password
+		 */
+		else
+		{
+			LoginManager::passwordHelpForm();	
+		}
+		
+?>
+<h4><a href="/login">Return to the login page</a></h4>
+<?
+	}
+	
+	static function passwordHelpForm($username = "")
+	{
+	?>
+	<br/>
+	<p>If you have an account on this system, please enter your email username and we will email a temporary password to you.</p>
+	<form name='form1' method='GET' action=''>
+	<p><label for="email">Email:</label>
+	<input name="username" type="text" value="<?=$username?>"/>
+	</p>
+	<br/>
+	<p><input name="Submit" type="submit" value="  Email Me  " class="button" /></p>
+	<br/>
+	</form>
+	<? 	
+	}
+	
+	
 }

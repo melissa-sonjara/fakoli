@@ -47,12 +47,18 @@
  * date: 4/19/10
  * 
  */
+Fakoli::using("login");
 
-require_once realpath(dirname(__FILE__))."/../../include/config.inc";
-require_once realpath(dirname(__FILE__))."/../../datamodel/site_user.inc";
-require_once realpath(dirname(__FILE__))."/../../components/login/login.inc";
+$username = $_GET['username'];
 
-$username = mysql_escape_string($_GET['username']);
+$mgr = new UserManager();
+$usernameField = $mgr->getUsernameField();
+$emailField = $mgr->getEmailField();
+
+if (!$usernameField || !$emailField)
+{
+	throw new FakoliException("Unable to provide password help");
+}
 
 if($username)
 {
@@ -61,8 +67,6 @@ if($username)
 	if(count($matches) > 0)
 		$match = $matches[0];
 }
-
-require_once realpath(dirname(__FILE__))."/../../templates/begin_page.inc";
 
 ?>
 <h3>Password Help</h3>
