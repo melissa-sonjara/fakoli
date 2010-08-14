@@ -3,6 +3,8 @@
 Fakoli::using("document");
 Fakoli::usingFile("framework/data_view.inc");
 
+$menu_item = "Documents";
+
 $libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
 
 $table = new DataListView($libraries, "libraries");

@@ -5,6 +5,8 @@ Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/document_library_tabs.inc";
 
+$menu_item = "Documents";
+
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
 if (!$document_library_id)

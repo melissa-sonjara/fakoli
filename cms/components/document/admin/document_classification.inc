@@ -5,6 +5,8 @@ Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/document_tabs.inc";
 
+$menu_item = "Documents";
+
 Fakoli::assertRole("admin");
 
 $menu_item = "Documents";
