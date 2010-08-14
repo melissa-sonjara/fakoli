@@ -274,6 +274,13 @@ function formatTime12($time)
 }
 
 /**
+ * Format a date and time in 12 hour clock, no seconds
+ */
+function formatDateTime12($time)
+{
+	return date("m/d/Y g:ia", $time);
+}
+/**
  * Returns the current time and date in a database compatible format
  * @return string
  */

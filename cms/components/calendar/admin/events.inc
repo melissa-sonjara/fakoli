@@ -34,18 +34,23 @@
 Fakoli::using("calendar");
 Fakoli::usingFile("framework/data_view.inc");
 
+function formatEvent($event)
+{
+	return "<a href='/admin/event_form?event_id={$event->event_id}'>{$event->title}</a><em> {$event->event_type}</em><p>".ellipsis($event->description, 120)."</p>";
+}
+
 $title = "Events";
 
 $events = query(Event, "ORDER BY start_date");
 $lastUpdated = "";
 
-$menu_item = "Events";
+$menu_item = "Calendars";
 
 $table = new DataListView($events, "events");
-$table->column("Event", formatEvent, true)
-	  ->column("Location", "{location}", true)
-	  ->column("Start Date", "{start_date}", true)
-	  ->column("End Date", "{end_date}", true);
+$table->column("Event", formatEvent, true, "width: 30%")
+	  ->column("Location", "{location}", true, "width: 30%")
+	  ->column("Start Date", "{start_date}", true, "width: 20%")
+	  ->column("End Date", "{end_date}", true, "width: 20%");
 	  
 $table->sortable = true;
 $table->filter = true;

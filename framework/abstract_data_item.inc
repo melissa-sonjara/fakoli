@@ -453,10 +453,10 @@ abstract class AbstractDataItem
 			$val = formatDateShort($data);
 			break;
 			
-		/*case DateTime:
+		case DateTime:
 			if (!$data) return "";
-			$val = formatDateShort($data);
-			break;*/
+			$val = formatDateTime12(strtotime($data));
+			break;
 			
 		case Timestamp:
 			
