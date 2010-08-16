@@ -30,12 +30,12 @@ $script = $table->writeScript();
 
 
 ?>
-<input type="checkbox" class="checkbox" name="all" value="1"<?if ($all) echo " checked='checked'";?> onclick="go('/cms/admin/users?all=' + (this.checked?'1':'0'))">&nbsp;Show inactive user accounts<br/><br/>
+<input type="checkbox" class="checkbox" name="all" value="1"<?if ($all) echo " checked='checked'";?> onclick="go('/admin/users?all=' + (this.checked?'1':'0'))">&nbsp;Show inactive user accounts<br/><br/>
 <?
 $table->drawView();
 ?>
 <br/>
-<button class="button" onclick="go('user_form')">Add New User</button>
+<button class="button" onclick="go('/admin/user_form')">Add New User</button>
 
 <?
 

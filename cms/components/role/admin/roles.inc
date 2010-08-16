@@ -26,7 +26,7 @@ $script = $table->writeScript();
 $table->drawView();
 ?>
 <br/>
-<button class="button" onclick="go('role_form')">Add New User Role</button>
+<button class="button" onclick="go('/admin/role_form')">Add New User Role</button>
 
 <?
 

@@ -62,7 +62,7 @@ else
 ?>
 </div>
 <br/>
-<input type="button" class="button" value="Add a New Image" onclick="go('image_form');">
+<input type="button" class="button" value="Add a New Image" onclick="go('/admin/image_form');">
 <?
 
 ?>

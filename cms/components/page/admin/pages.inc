@@ -29,7 +29,7 @@ $script = $pageTable->writeScript();
 $pageTable->drawView();
 ?>
 <br/><br/>
-<input type="button" class="button" value=" Add a New Page" onclick="go('page_form');">
+<input type="button" class="button" value=" Add a New Page" onclick="go('/admin/page_form');">
 <?
 
 ?>

@@ -78,7 +78,7 @@ $menuTree->writeHTML();
   <td colspan="2">&nbsp;</td>
  </tr>
  <tr>
-  <td align="left"><input type="button" class="button" value=" Add a New Menu Item" onclick="go('menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=0');"></td>
+  <td align="left"><input type="button" class="button" value=" Add a New Menu Item" onclick="go('/admin/menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=0');"></td>
   
  </tr>
 </table>
