@@ -1,0 +1,55 @@
+@CHARSET "ISO-8859-1";
+
+.message
+{
+	border: solid 1px #666;
+	background-color: #ffffff;
+	width: 640px;
+	padding: 5px 25px;
+	margin-bottom: 8px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.message .button
+{
+	float: right;
+}
+
+.message .small
+{
+	font-size: 11px;
+}
+
+.message .title
+{
+	display: block;
+	border-bottom: solid 1px #666;
+	margin-bottom: 10px;
+}
+
+.message_controls
+{
+	text-align: right;
+	font-size: 10px;
+}
+
+#content .message_controls a:link, #content .message_controls a:visited
+{
+	color: #335;
+	text-decoration: none;
+}
+
+#content .message_controls a:hover, #content .message_controls a:active
+{
+	text-decoration: underline;
+}
+
+.quote
+{
+	border: dashed 1px #666;
+	margin: 10px;
+	padding: 5px;
+	background-color: #ddd;
+	color: #444;
+}

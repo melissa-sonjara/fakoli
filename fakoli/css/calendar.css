@@ -1,0 +1,122 @@
+
+
+#fullcalendar
+{
+	border: none;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#fullcalendar table
+{
+	border-collapse: collapse;
+	border: solid 1px #666;
+	width: 100%;
+}
+
+#fullcalendar th
+{
+	text-align: center;
+	border: none;
+	background-color: #325E9E;
+	color: #fff;
+	height: 25px;
+}
+
+#fullcalendar td
+{
+	border: solid 1px #666;
+	height: 60px;
+	line-height: 100%;
+	padding: 1px;
+	vertical-align: top;
+}
+
+#fullcalendar td.month
+{
+	height: 20px;
+	text-align: center;
+	vertical-align: middle;
+	background: url(/framework/images/button-strip.gif) top left repeat-x transparent;
+	font-weight: bold;
+}
+
+#fullcalendar td.empty
+{
+	background-color: #eee;
+	border: none;
+	border-top: solid 1px #666;
+}
+
+#fullcalendar .small
+{
+	font-size: 8pt;
+}
+
+#fullcalendar .time
+{
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+
+.event_summary
+{
+	display: block;
+	line-height: 110%;
+	border: solid 1px #393683;
+	padding: 1px;
+	background-color: #eee;
+	color: #000;
+	outline: none;
+	font-size: 10px;
+	cursor: pointer;
+}
+
+.event_summary h4
+{
+	display: block;
+	font-size: 11px;
+	font-weight: bold;
+	padding: 3px 2px;
+	margin-top: 0;
+	margin-bottom: 5px;
+	border-bottom: solid 1px #393683;
+	color: #ddf;
+	background-color: #393683;
+}
+
+.event_summary a.button
+{
+	display: block;
+	width: 55px;
+	padding: 0px;
+	text-align: center;
+	margin: 8px 2px 2px auto;
+}
+
+.event_summary .status
+{
+	font-weight: normal;
+}
+
+.event_summary:hover
+{
+	background-color: #d9e3f2;
+	text-decoration: none;
+}
+
+.eventprogramtitle
+{
+	background-color: #393683;
+	color: #fff;
+	font-size: 7pt;
+	width: 100%;
+	padding: 1px;
+	margin-bottom: 2px;
+}
+
+body.program .eventprogramtitle
+{
+	background-color: #393683;
+}
