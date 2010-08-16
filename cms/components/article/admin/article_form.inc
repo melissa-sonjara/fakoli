@@ -18,7 +18,7 @@ else
 $form = new AutoForm($article);
 $form->required("title");
 $form->allowDelete = true;
-$redirect = "articles";
+$redirect = "/admin/articles";
 $form->button("Cancel", $redirect);
 $imageSelect = new ImageSelectFieldRenderer($form, "image_id");
 $form->alias("image_id", "Associated Image");

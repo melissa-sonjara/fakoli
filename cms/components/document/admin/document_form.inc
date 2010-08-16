@@ -24,7 +24,7 @@ $form = new AutoForm($document);
 $form->required("title", "abstract");
 $form->hide("is_local");
 $form->allowDelete=true;
-$redirect = "documents.php";
+$redirect = "admin/documents";
 $form->button("Cancel", $redirect);
 if ($document->file)
 {

@@ -12,7 +12,7 @@ $menu_item = "Publications";
 
 $publication_id = checkNumeric($_GET["publication_id"]);
 
-if (!$publication_id) redirect('index.php');
+if (!$publication_id) redirect('/admin/index');
 
 $publication = new Publication($publication_id);
 

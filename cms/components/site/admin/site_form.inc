@@ -16,7 +16,7 @@ $form = new AutoForm($site);
 
 $form->required("title");
 $form->allowDelete = true;
-$redirect = "sites";
+$redirect = "/admin/sites";
 $form->button("Cancel", $redirect);
 $templateSelect       = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "templates");
 $printTemplateSelect  = new TemplateSelectFieldRenderer($form, "print_template", "Print Template", "templates");
@@ -28,7 +28,7 @@ if ($method == "POST")
 
 	if ($form->save())
 	{
-		redirect("sites");	
+		redirect($redirect);	
 	}
 }
 

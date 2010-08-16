@@ -48,7 +48,7 @@ if ($method == "POST")
 	{
 	    if ($form->deleted)
 		{
-			redirect("pages.php");
+			redirect("/admin/pages");
 		}
 		
 		$tabs->queryString = "page_id={$form->data->page_id}";
@@ -66,7 +66,7 @@ else
 	$title = "Add a New Page";
 }
 
-$redirect = "pages.php";
+$redirect = "/admin/pages";
 $form->button("Cancel", $redirect);
 
 

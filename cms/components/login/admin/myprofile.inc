@@ -70,7 +70,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("index.php");
+		redirect("/admin/index");
 	}
 }
 

@@ -48,7 +48,7 @@ $className = ($_GET["class"]);
 $prettyClassName = ($_GET["prettyClassName"]);
 
 if(!$help_key && (!$field || !$className))
-	redirect("context_help_list.php");
+	redirect("/admin/context_help_list");
 
 $help = new ContextHelp();
 
@@ -65,7 +65,7 @@ else
 $form = new AutoForm($help);
 $form->allowDelete = true;
 $form->readonly("field", "class_name");
-$redirect = "context_help_list.php";
+$redirect = "/admin/context_help_list";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")

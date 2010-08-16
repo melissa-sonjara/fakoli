@@ -13,7 +13,7 @@ $topic = new Topic();
 $form = new AutoForm($topic);
 $form->required("topic");
 $form->allowDelete = true;
-$redirect = "topics";
+$redirect = "/admin/topics";
 $form->button("Cancel", $redirect);
 
 $groups = query(Group, "ORDER BY group_id"); 
@@ -26,7 +26,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("topics");	
+		redirect("/admin/topics");	
 	}
 }
 

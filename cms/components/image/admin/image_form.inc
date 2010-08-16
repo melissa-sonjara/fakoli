@@ -155,7 +155,7 @@ $form->hide("thumbnail");
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
 
-$redirect = "images";
+$redirect = "/admin/images";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")

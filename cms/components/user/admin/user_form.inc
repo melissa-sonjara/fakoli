@@ -10,7 +10,7 @@ $siteUser = new SiteUser();
 
 $form = new AutoForm($siteUser);
 $roleSelect = new SelectFieldRenderer($form, "role", "Role", $siteUserRoles);
-$redirect = "users.php";
+$redirect = "/admin/users";
 $form->unique("email", "That email address is already in use for another user");
 $form->button("Cancel", $redirect);
 
@@ -18,7 +18,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("users.php");	
+		redirect($redirect);	
 	}
 }
 
