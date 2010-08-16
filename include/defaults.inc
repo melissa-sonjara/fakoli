@@ -37,10 +37,5 @@ $html_editor_extra_buttons = array(
 	
 );
 
-define(admin_begin_page, $config['admin_templates_dir']."/begin_page.inc");
-define(admin_end_page, $config['admin_templates_dir']."/end_page.inc");
-define(admin_begin_popup, $config['admin_templates_dir']."/begin_popup.inc");
-define(admin_end_popup, $config['admin_templates_dir']."/end_popup.inc");
-
 require_once realpath(dirname(__FILE__))."/functions.inc";
 ?>

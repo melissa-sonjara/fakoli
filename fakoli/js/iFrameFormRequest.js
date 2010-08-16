@@ -42,8 +42,15 @@ var iFrameFormRequest = new Class({
 		this.formElmt = document.id(formElmt)
 			.set('target',this.frameId)
 			.addEvent('submit',function(){
+				if (this.options.onRequest)
+				{
+					var submitTest = this.options.onRequest();
+					if (!submitTest) 
+					{
+						return false;
+					}
+				}
 				this.loading = true;
-				this.options.onRequest();
 			}.bind(this));	
 
 		this.iframe = new IFrame({

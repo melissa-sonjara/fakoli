@@ -9,6 +9,14 @@ var Curtain = new Class(
 	
 	lower: function(onComplete)
 	{
+		var opacity = this.curtain.get('opacity');
+		var display = this.curtain.getStyle('display');
+		if (opacity > 0 && display == 'block')
+		{
+			if (onComplete) onComplete();
+			return;
+		}
+		
 		var cw = window.innerWidth == undefined ?
 				((document.documentElement.clientWidth == 0) ? document.body.clientWidth : document.documentElement.clientWidth)
 												 : window.innerWidth;
@@ -121,6 +129,8 @@ var ModalDialog = new Class(
     
     show: function(onComplete, fragmentURL)
     {
+    	var reload = this.element.getStyle('display') != 'none';
+    	
     	if (this.options.draggable)
     	{
     		var options = 
@@ -143,15 +153,18 @@ var ModalDialog = new Class(
     	
     	if (fragmentURL && this.options.body)
     	{
-    		this.options.body.set('text', "Loading...");
+    		if (!reload) this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
     		{
     			evalScripts: false,
+    			evalResponse: false,
     			method: 'get', 
     			url: fragmentURL, 
-    			onSuccess: function(html) 
+    			onSuccess: function(tree, elements, html, script) 
     			{ 
-    				this.options.body.set('html', html);
+    				this.options.body.set('text', '');
+    				this.options.body.adopt(tree);
+    				$exec(script);
     				this.center();
     			}.bind(this)
     		});
@@ -247,7 +260,6 @@ var FloatingDialog = new Class(
     		this.options.body.set('text', "Loading...");
     		var request = new Request(
     		{
-    			evalScripts: true,
     			method: 'get', 
     			url: fragmentURL, 
     			onSuccess: function(html) 

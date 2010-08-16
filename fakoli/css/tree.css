@@ -4,6 +4,14 @@ table.tree
 	font-size: 10pt;
 	font-family: Arial, Helvetica, sans-serif;
 	background-color: #fff;
+	margin: 0;
+	padding: 0;
+}
+
+table.tree td
+{
+	margin: 0px;
+	padding: 0px !important;
 }
 
 table.tree th
@@ -45,7 +53,7 @@ table.tree div
 	cursor: pointer;
 	color: #000;
 	font-weight: bold;
-	padding-left: 18px;
+	padding-left: 36px;
 	background: url(/fakoli/images/closed.png) center left no-repeat #fff;
 }
 
@@ -59,9 +67,10 @@ table.tree div
 	cursor: pointer;
 	color: #000;
 	font-weight: bold;
-	padding-left: 18px;
+	padding-left: 36px;
 	background: url(/fakoli/images/empty.png) center left no-repeat #fff;
 }
+
 
 .bare_node_open
 {
@@ -87,7 +96,7 @@ table.tree div
 	cursor: pointer;
 	color: #000;
 	font-weight: bold;
-	padding-left: 36px;
+	padding-left: 18px;
 	background: url(/fakoli/images/toggle_closed.png) center left no-repeat #fff;
 }
 
@@ -101,9 +110,10 @@ table.tree div
 	cursor: pointer;
 	color: #000;
 	font-weight: bold;
-	padding-left: 36px;
+	padding-left: 18px;
 	background: url(/fakoli/images/toggle_blank.png) center left no-repeat #fff;
 }
+
 
 .doc_node_leaf
 {
@@ -159,8 +169,22 @@ table.tree div
 	cursor: pointer;
 	color: #000;
 	font-weight: normal;
-	padding-left: 24px;
+	padding-left: 18px;
 	background: url(/fakoli/images/file_icon.png) center left no-repeat #fff;
+}
+
+.plain_node_leaf
+{
+	text-decoration: none;
+	display: block;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	cursor: pointer;
+	color: #000;
+	font-weight: normal;
+	padding-left: 0px;
+	background: #fff;
 }
 
 .tree a
@@ -169,6 +193,7 @@ table.tree div
 	text-decoration: none;
 	color: #000;
 	height: 24px;
+	border-bottom: none !important;
 }
 
 .tree a:hover
@@ -216,4 +241,37 @@ table.tree div
 	padding: 1px;
 	border: dotted 1px #fff;
 	text-decoration: none;
+}
+
+.tree_node_leaf input
+{
+	border: none !important;
+}
+
+.unchecked_node_leaf
+{
+	text-decoration: none;
+	display: block;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	cursor: pointer;
+	color: #000;
+	font-weight: bold;
+	padding-left: 24px;
+	background: url(/admin/images/toggle_blank.gif) center left no-repeat #fff;
+}
+
+.checked_node_leaf
+{
+	text-decoration: none;
+	display: block;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	cursor: pointer;
+	color: #000;
+	font-weight: bold;
+	padding-left: 24px;
+	background: url(/admin/images/toggle_checked.gif) center left no-repeat #fff;
 }

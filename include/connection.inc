@@ -6,7 +6,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
-require_once realpath(dirname(__FILE__)."/../framework/connection_manager.inc");
+require_once "framework/connection_manager.inc";
 
 ConnectionManager::$dsn = "mysql:dbname=sonjara_cms;host=localhost";
 ConnectionManager::$user = "sonjara_cms";

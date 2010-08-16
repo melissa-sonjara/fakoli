@@ -20,14 +20,14 @@
  to promote the sale, use or other dealings in this Software 
  without prior written authorization.
 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ thE SOFTWARE IS PROVIDED "AS IS", WIthOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO thE WARRANTIES
  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
+ NONINFRINGEMENT. IN NO EVENT SHALL thE AUthORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OthER LIABILITY,
+ WHEthER IN AN ACTION OF CONtrACT, TORT OR OthERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WIth thE SOFTWARE OR thE USE OR
+ OthER DEALINGS IN thE SOFTWARE.
 
 *****************************************************************/
 
@@ -37,22 +37,24 @@ var MonthSelectNone  = 0;
 var MonthSelectStart = 1;
 var MonthSelectEnd   = 2;
 
-function Calendar(varName, formName, ctrlName)
+var Calendar = new Class(
 {
-	this.varName  = varName;
-	this.formName = formName;
-	this.ctrlName = ctrlName;
-	this.divID    = varName + "_" + formName + "_" + ctrlName;
+	varName: 		"",
+	formName:		"",
+	ctrlName:		"",
+	divID:			"",
 	
-	this.control = null;
-	this.form    = null;
-	this.date    = null;
-	this.month   = 0;
-	this.year    = 0;
-	this.monthSelect = MonthSelectNone;
-	this.weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	this.months =   ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	this.longMonths = [	"January",
+	control:		Class.Empty,
+	form: 			Class.Empty,
+	date: 			Class.Empty,
+	calendar:		Class.Empty,
+	shim:			Class.Empty,
+	month: 			0,
+	year: 			0,
+	monthSelect:	MonthSelectNone,
+	weekdays:		["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+	months:			["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	longMonths:		[	"January",
 						"February",
 						"March",
 						"April",
@@ -63,48 +65,44 @@ function Calendar(varName, formName, ctrlName)
 						"September",
 						"October",
 						"November",
-						"December"];
+						"December"],
 						
-	this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	daysInMonth:	[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 	
-	
-	this.drawCalendar   	= drawCalendar;
-	this.getDateString  	= getDateString;
-	this.getMonthString 	= getMonthString;
-	this.getLongDateString = getLongDateString;
-	this.getDaysInMonth 	= getDaysInMonth;
-	this.getDateForDay  	= getDateForDay;
-	this.bind				= bind;
-	this.bindDate			= bindDate;
-	this.draw		    	= draw;
-	this.show				= show;
-	this.toggle				= toggle;
-	this.hide				= hide;
-	this.nextMonth		 	= nextMonth;
-	this.prevMonth			= prevMonth;
-	this.select  			= select;
-	this.onMouseOut        	= onMouseOut;
-	this.setMonthSelectMode = setMonthSelectMode;
-	this.onDateChanged  = onDateChanged;
-	// For IE5.5+, we need to use an IFRAME shim to ensure that
-	// the calendar overlays SELECT and IFRAME sections properly.
-	// However, for other browsers this can lead to visual artifacts,
-	// plus from a neatness standpoint there's no need to carry
-	// around an extra IFRAME if we don't need it...
-
-	if (navigator.appVersion.indexOf("MSIE")!=-1)
+	initialize: function(varName, formName, ctrlName)
 	{
-		var temp = navigator.appVersion.split("MSIE");
-		var version = parseFloat(temp[1]);
-		if (version>=5.5)
+		this.varName = varName;
+		this.formName = formName;
+		this.ctrlName = ctrlName;
+		this.divID    = varName + "_" + formName + "_" + ctrlName;
+		
+		// For IE5.5+, we need to use an IFRAME shim to ensure that
+		// the calendar overlays SELECT and IFRAME sections properly.
+		// However, for other browsers this can lead to visual artifacts,
+		// plus from a neatness standpoint there's no need to carry
+		// around an extra IFRAME if we don't need it...
+	
+		if (navigator.appVersion.indexOf("MSIE")!=-1)
 		{
-			document.write('<iframe id="' + this.divID + 'Shim" style="display: none; position: absolute; z-index: 254"></iframe>');
+			var temp = navigator.appVersion.split("MSIE");
+			var version = parseFloat(temp[1]);
+			if (version>=5.5)
+			{
+				this.shim = new Element('iframe', {id: this.divID + 'Shim'});
+				this.shim.setStyles({'display': 'none', 'position': 'absolute', 'z-index': 254});
+				$(document.body).adopt(this.shim);
+			}
 		}
-	}
 	
-	document.write('<div style="position: absolute; z-index: 255; visibility: hidden" id="' + this.divID + '" onmouseout="' + this.varName + '.onMouseOut(event)"></div>');
+		this.calendar = new Element('div', {id: this.divID});
+		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'visibility': 'hidden'});
+		this.calendar.addEvent('mouseout', function(e) {this.onMouseOut(e);}.bind(this));
+		
+		window.addEvent("domready", function() { $(document.body).adopt(this.calendar); }.bind(this));
 	
-	function getDateString(yearFirst)
+	},
+	
+	getDateString: function(yearFirst)
 	{
 		var d;
 		if (yearFirst)
@@ -117,14 +115,14 @@ function Calendar(varName, formName, ctrlName)
 		}
 		
 		return d;
-	}	
+	},	
 
-	function getMonthString()
+	getMonthString: function()
 	{
 		return this.months[this.date.getMonth()];
-	}
+	},
 
-	function getDaysInMonth(month, year)
+	getDaysInMonth: function(month, year)
 	{
 		var dim = this.daysInMonth[month];
 	
@@ -140,40 +138,41 @@ function Calendar(varName, formName, ctrlName)
 		}
 		
 		return dim;
-	}
-	function getLongDateString()
+	},
+
+	getLongDateString: function()
 	{
 		return this.date.getDate() + " " + this.longMonths[this.date.getMonth()] + " " + this.date.getFullYear();		
-	}
+	},
 	
-	function getDateForDay(day)
+	getDateForDay: function(day)
 	{
 		var d = (this.month + 1) + "/" + day + "/" +  this.year;
 	
 		return d;	
-	}
+	},
 	
-	function drawCalendar()
+	drawCalendar: function()
 	{
 		var doc;
 		
-		doc  = "<TABLE CLASS='calendar' CELLPADDING='2'>";
-		doc += "<TR>";
-		doc += "<TD COLSPAN='7'><TABLE BORDER='0' WIDTH='100%'>";
-		doc += "<TD CLASS='calnav'><A HREF=\"javascript:" + this.varName + ".prevMonth()\">&nbsp;&laquo;&nbsp;</a></TD>";
-		doc += "<TD CLASS='calmonth'>";
+		doc  = "<table class='calendar' cellpadding='2'>";
+		doc += "<tr>";
+		doc += "<td colspan='7'><table border='0' width='100%'>";
+		doc += "<td class='calnav'><a href=\"javascript:" + this.varName + ".prevMonth()\">&nbsp;&laquo;&nbsp;</a></td>";
+		doc += "<td class='calmonth'>";
 		switch(this.monthSelect)
 		{
 		case MonthSelectNone:
 			break;
 			
 		case MonthSelectStart:
-			doc += "<A HREF=\"javascript:" + 
+			doc += "<a href=\"javascript:" + 
 					this.varName + ".select('" + this.getDateForDay(1) + "')\">";
 			break;
 			
 		case MonthSelectEnd:
-			doc += "<A HREF=\"javascript:" + 
+			doc += "<a href=\"javascript:" + 
 					this.varName + ".select('" + this.getDateForDay(this.getDaysInMonth(this.month, this.year)) + "')\">";
 			break;
 		}
@@ -183,18 +182,18 @@ function Calendar(varName, formName, ctrlName)
 		if (this.monthSelect == MonthSelectStart ||
 			this.monthSelect == MonthSelectEnd)
 		{
-			doc += "</A>";
+			doc += "</a>";
 		}	
 		
-		doc += "</TD>";
-		doc += "<TD CLASS='calnav'><A HREF=\"javascript:" + this.varName + ".nextMonth()\">&nbsp;&raquo;&nbsp;</a></TD>";
-		doc += "</TR></TABLE>";
+		doc += "</td>";
+		doc += "<td class='calnav'><a href=\"javascript:" + this.varName + ".nextMonth()\">&nbsp;&raquo;&nbsp;</a></td>";
+		doc += "</tr></table>";
 		
-		doc += "<TR>";
+		doc += "<tr>";
 		
 		for(i = 0; i < 7; ++i)
 		{
-			doc += "<TH>";
+			doc += "<th>";
 			doc += this.weekdays[i];
 		}
 				
@@ -210,11 +209,11 @@ function Calendar(varName, formName, ctrlName)
 		
 		var startDay = fd.getDay();
 		
-		doc += "<TR>";
+		doc += "<tr>";
 		
 		for(i = 0; i < startDay; ++i)
 		{
-			doc += "<TD class='calday'>&nbsp;</TD>";
+			doc += "<td class='calday'>&nbsp;</td>";
 			++counter;
 		}
 		
@@ -222,7 +221,7 @@ function Calendar(varName, formName, ctrlName)
 		{
 			if ((counter % 7) == 0)
 			{
-				doc += "</TR><TR>";
+				doc += "</tr><tr>";
 			}
 			
 			var today = new Date();
@@ -245,23 +244,20 @@ function Calendar(varName, formName, ctrlName)
 			}
 			
 			++counter;
-			doc  += "<TD class='" + cellStyle + "'><A HREF=\"javascript:" + 
-					this.varName + ".select('" + this.getDateForDay(day) + "')\">" + day + "</A></TD>";
+			doc  += "<td class='" + cellStyle + "'><a href=\"javascript:" + 
+					this.varName + ".select('" + this.getDateForDay(day) + "')\">" + day + "</a></td>";
 			++day;
 		}
 		
-		doc += "</TR></TABLE>";
+		doc += "</tr></table>";
 				
 		//alert(doc);
 		return doc;
-	}
+	},
 	
-	function bind()
+	bindControl: function()
 	{
-		this.div = document.getElementById(this.divID);
-		this.shim = document.getElementById(this.divID + "Shim");
-		
-		this.form    = document.forms[formName];
+		this.form = document.forms[this.formName];
 		
 		if (!this.form)
 		{
@@ -269,7 +265,7 @@ function Calendar(varName, formName, ctrlName)
 			return;
 		}
 			
-		this.control = document.forms[formName][ctrlName];
+		this.control = document.forms[this.formName][this.ctrlName];
 		
 		if (!this.control)
 		{
@@ -277,9 +273,9 @@ function Calendar(varName, formName, ctrlName)
 		}
 	
 		this.bindDate();
-	}	
+	},
 	
-	function bindDate()
+	bindDate: function()
 	{
 		if (this.control.value)
 		{
@@ -293,52 +289,52 @@ function Calendar(varName, formName, ctrlName)
 		this.day   = this.date.getDate();
 		this.month = this.date.getMonth();
 		this.year  = this.date.getFullYear();
-	}
+	},
 
-	function show(parent)
+	show: function(parent)
 	{
-		if (!this.form) this.bind();
+		if (!this.form) this.bindControl();
 		this.draw();
 		
 		var top = getOffsetTop(parent);	
 		var left =  getOffsetLeft(parent) + parent.offsetWidth;
 		
-		this.div.style.position="absolute";
-		this.div.style.visibility="visible";
-		this.div.style.left = left + "px";
-		this.div.style.top = top + "px";
+		this.calendar.style.position="absolute";
+		this.calendar.style.visibility="visible";
+		this.calendar.style.left = left + "px";
+		this.calendar.style.top = top + "px";
 		
 		if (this.shim)
 		{
-			this.shim.style.width = this.div.offsetWidth;
-			this.shim.style.height = this.div.offsetHeight;
-			this.shim.style.top = this.div.style.top;
-			this.shim.style.left = this.div.style.left;
-			this.shim.style.zIndex =this.div.style.zIndex - 1;
+			this.shim.style.width = this.calendar.offsetWidth;
+			this.shim.style.height = this.calendar.offsetHeight;
+			this.shim.style.top = this.calendar.style.top;
+			this.shim.style.left = this.calendar.style.left;
+			this.shim.style.zIndex =this.calendar.style.zIndex - 1;
 			
 			this.shim.style.display = "block";
 		}
-	}
+	},
 	
 	
-	function hide()
+	hide: function()
 	{
-		if (!this.form) this.bind();
-		this.div.style.position="absolute";
-		this.div.style.visibility = "hidden";
+		if (!this.form) this.bindControl();
+		this.calendar.style.position="absolute";
+		this.calendar.style.visibility = "hidden";
 		
 		if (this.shim)
 		{
 			this.shim.style.display = "none";
 		}
-	}
+	},
 	
-	function toggle(parent)
+	toggle: function(parent)
 	{
-		if (!this.form) this.bind();
+		if (!this.form) this.bindControl();
 		
 
-		if (this.div.style.visibility == "visible")
+		if (this.calendar.style.visibility == "visible")
 		{
 			this.hide();
 		}
@@ -347,14 +343,14 @@ function Calendar(varName, formName, ctrlName)
 			this.bindDate();
 			this.show(parent);
 		}
-	}	
+	},
 			
-	function draw()
+	draw: function()
 	{
-		this.div.innerHTML= this.drawCalendar();
-	}
+		this.calendar.set('html', this.drawCalendar());
+	},
 	
-	function prevMonth()
+	prevMonth: function()
 	{
 		this.month--;
 		if (this.month < 0)
@@ -364,9 +360,9 @@ function Calendar(varName, formName, ctrlName)
 		}
 		
 		this.draw();
-	}
+	},
 
-	function nextMonth()
+	nextMonth: function()
 	{
 		this.month++;
 		if (this.month > 11)
@@ -376,56 +372,58 @@ function Calendar(varName, formName, ctrlName)
 		}
 		
 		this.draw();
-	}
+	},
 
-	function select(date)
+	select: function(date)
 	{
 		this.control.value = date;
 		this.bindDate();
 		this.onDateChanged(date);
 		this.draw();
-	}
+	},
 	
-	function setMonthSelectMode(mode)
+	setMonthSelectMode: function(mode)
 	{
 		this.monthSelect = mode;
-	}
+	},
 		
-	function onMouseOut(event)
+	onMouseOut: function(event)
 	{
-		var top = getOffsetTop(this.div);
-		var left = getOffsetLeft(this.div);
-		var width = this.div.offsetWidth;
-		var height = this.div.offsetHeight;
+		var coords = this.calendar.getCoordinates();
 		
-		var ie;
-		
-		if (!event.pageX) ie = true;
-		
-		var x = (event.pageX > 0) ? event.pageX : event.x + scrollLeft();
-		var y = (event.pageY > 0) ? event.pageY : event.y + scrollTop();
+		var x = event.page.x;
+		var y = event.page.y;
+//		var ie;
+//		
+//		
+//		if (!event.pageX) ie = true;
+//		
+//		var x = (event.pageX > 0) ? event.pageX : event.x + scrollLeft();
+//		var y = (event.pageY > 0) ? event.pageY : event.y + scrollTop();
 		
 		//window.status = (left  +"," + top +" " + width + "x" + height + ": " + x + ", " + y);
 		
 		// Fudge for IE's bad borders
-		if (ie)
-		{
-			left++;
-			top++;
-			width--;
-			height--;
-		}
+//		if (ie)
+//		{
+//			coords.left++;
+//			coords.top++;
+//			coords.width--;
+//			coords.height--;
+//		}
 		
-		if (x <= left || x >= left + width || y <= top || y >= top + height)
+		window.status = "(" + x + "," + y + ") [" + coords.left + ", " + coords.width + "] <" + coords.top + "," + coords.height + ">";
+		
+		if (x <= coords.left || x >= coords.left + coords.width || y <= coords.top || y >= coords.top + coords.height)
 		{
 			this.hide();
 		}
-	}
+	},
 	
-	function onDateChanged(date)
+	onDateChanged: function(date)
 	{
 	}
-}
+});
 
 function getOffsetLeft (el) 
 {

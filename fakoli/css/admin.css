@@ -1,9 +1,8 @@
 @charset "utf-8";
 body  
 {
-	margin: 5px auto 5px auto;
+	margin: 0;
 	padding: 0;
-	width: 960px;
 	text-align: left;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -73,6 +72,7 @@ a, a:active
 	width: 960px;
 	background-color: #fff;
 	border-collapse: collapse;
+	margin: 5px auto;
 }
 
 #header
@@ -369,9 +369,10 @@ table.list td a:hover
 	background-color: #325E9E;
 }
 
-input
+input, textarea, select
 {
-	border: solid 1px #ddd;
+	border: solid 1px #666;
+	background: #eef;
 }
 
 
@@ -419,7 +420,8 @@ input
 	border: solid 1px #888;
 	border-radius: 4px;
 	-moz-border-radius: 4px;
-	background: url(/cms/images/button-strip.gif) top left #cccccc;
+	background: url(/fakoli/images/button-strip.gif) top left #cccccc;
+	cursor: pointer;
 }
 
 a.button
@@ -529,7 +531,7 @@ input.button
 #tabs li 
 {
   float:left;
-  background:url("/cms/images/tabs/tab_left.gif") no-repeat left top;
+  background:url("/fakoli/images/tabs/tab_left.gif") no-repeat left top;
   margin:0;
   padding: 0;
   padding-left: 10px;
@@ -541,7 +543,7 @@ input.button
 {
   float:left;
   display:block;
-  background:url("/cms/images/tabs/tab_right.gif") no-repeat right top;
+  background:url("/fakoli/images/tabs/tab_right.gif") no-repeat right top;
   padding:3px 15px 3px 3px;
   text-decoration:none;
   font-weight:bold;
@@ -576,12 +578,12 @@ input.button
 
 #tabs .current 
 {
-  background-image:url("/cms/images/tabs/tab_left_on.gif");
+  background-image:url("/fakoli/images/tabs/tab_left_on.gif");
 }
 
 #tabs .current a 
 {
-  background-image:url("/cms/images/tabs/tab_right_on.gif");
+  background-image:url("/fakoli/images/tabs/tab_right_on.gif");
   color:#fff;
   padding-bottom:3px;
 }  
