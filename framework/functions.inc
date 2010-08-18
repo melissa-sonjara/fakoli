@@ -493,7 +493,7 @@ function checkNumeric($p)
 	{
 		foreach($p as $v)
 		{
-			if ($v="" && !is_numeric($v)) die("Invalid Parameter");
+			if ($v=="" && !is_numeric($v)) die("Invalid Parameter");
 		}
 	}
 	else if ($p!="" && !is_numeric($p)) die("Invalid Parameter");
