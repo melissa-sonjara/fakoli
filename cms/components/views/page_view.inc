@@ -67,7 +67,7 @@ class PageView
 		$printLink = "/{$this->page->identifier}".appendToQueryString($qs, "_style=print");
 		
 		$template = str_replace("{printIcon}", 
-			"<a href='$printLink' target='_blank'><img src='/framework/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
+			"<a href='$printLink' target='_blank'><img src='/fakoli/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
 			$template);
 		
 		// Populate the template with the appropriate menu(s).

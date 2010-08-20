@@ -95,9 +95,21 @@ class DocumentManager
 			if (confirm("Are you sure you want to delete this file?"))
 			{
 				id = $('files_value').value;
-				go("document_delete.php?doc_id=" + id);
+				
+				var request = new Request({'url': 		'/action/document/delete?document_id=' + id, 
+										   'method': 	'get',
+										   'onSuccess': function(responseText) 
+										   { 
+										   		if (responseText == "1") window.location.reload();
+										   }
+										   else
+										   {
+										   alert(responseText);
+										   },
+										   'onFailure':	function() { alert("Failed to communicate with server");});
+				request.send();
 			}
-		}		
+		}	
 		
 		function selectionChanged()
 		{

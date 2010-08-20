@@ -85,7 +85,7 @@ class PublicationView
 	if ($config['allow_pdf_download'] && $user)
 	{
 ?>
-	<p><label>Members Only: <a href="/download.php?publication_id=<?echo $this->publication->publication_id?>">Download full article</a>&nbsp;<img src="/framework/images/pdf_icon.png" alt="PDF Format" style="display: inline-block; vertical-align: middle"/></p>
+	<p><label>Members Only: <a href="/download.php?publication_id=<?echo $this->publication->publication_id?>">Download full article</a>&nbsp;<img src="/fakoli/images/pdf_icon.png" alt="PDF Format" style="display: inline-block; vertical-align: middle"/></p>
 <? 
 	}
 ?>

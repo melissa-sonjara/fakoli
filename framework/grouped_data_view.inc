@@ -350,7 +350,7 @@ class GroupedDataListView
 				{
 					$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
 ?>
-		<a href='<?echo $qs?>' style="float: left"><img src="/framework/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
 <?			
 				}
 				

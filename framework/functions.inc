@@ -105,11 +105,11 @@ $doc_mime_types = array(
         ".png" => "image/x-png"
 );
 
-$doc_icons = array(	".doc"		=>	"/framework/images/msword_icon.png",
-					".xls"		=>	"/framework/images/msexcel_icon.png",
-					".pdf"		=>	"/framework/images/pdf_icon.png",
-					".ppt"		=>	"/framework/images/ppt_icon.png",
-					"default"	=>	"/framework/images/file_icon.png");
+$doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
+					".xls"		=>	"/fakoli/images/msexcel_icon.png",
+					".pdf"		=>	"/fakoli/images/pdf_icon.png",
+					".ppt"		=>	"/fakoli/images/ppt_icon.png",
+					"default"	=>	"/fakoli/images/file_icon.png");
 /**
  * LEGACY Global function to connect to the database.
  * Uses the parameters defined in the global $conn array. 
@@ -456,7 +456,7 @@ function getDocIcon($doc)
 	$n = strtolower($doc);
 	$extension = substr($n, strrpos($n, "."));
 	$icon = $doc_icons[$extension];
-	if (!$icon) $icon = "/framework/images/file_icon.png";
+	if (!$icon) $icon = "/fakoli/images/file_icon.png";
 	return $icon;
 }
 
