@@ -1,4 +1,35 @@
 <?php
+/**************************************************************
+
+ Copyright (c) 2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
 
 Fakoli::usingFile("framework/directory_tree.inc");
 
@@ -48,92 +79,136 @@ class DocumentManager
 <?
 		$dialogs .= ob_get_contents();
 		ob_end_clean();
+		
+		ob_start();
+?>
+<script type="text/javascript">
+
+window.addEvent('domready', function()
+{
+	docManagerDlg = new ModalDialog($('documentManagerDlg'), {handle: $('documentManagerDlgHeader'), draggable: true, body: $('documentManagerDlgBody')});
+});		
+
+function downloadFile()
+{
+	id = $('files_value').value;
+	go("/action/document/download?document_id=" + id);
+}
+
+function editFile()
+{
+	id = $('files_value').value;
+	docManagerDlg.show(function() {}, "/action/document/edit?document_id=" + id);
+}
+
+function editResult(result)
+{
+	if (result == "1")
+	{
+		docManagerDlg.hide();
+	}
+	else
+	{
+		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+	}
+}
+
+
+function uploadFile()
+{
+	id = $('files_value').value;
+	docManagerDlg.show(function() {}, "/action/document/upload?document_library_id=<?echo $this->library->document_library_id?>");
+}
+
+
+function deleteFile()
+{
+	if (confirm("Are you sure you want to delete this file?"))
+	{
+		id = $('files_value').value;
+		
+		var request = new Request({'url': 		'/action/document/delete?document_id=' + id, 
+								   'method': 	'get',
+								   'onSuccess': function(responseText) 
+								   { 
+								   		if (responseText == "1") 
+								   		{
+								   			window.location.reload();
+								   		}
+								   		else
+								   		{
+								   			alert(responseText);
+								   		}
+								   },
+								   'onFailure':	function() { alert("Failed to communicate with server");}});
+		request.send();
+	}
+}	
+
+function selectionChanged()
+{
+	var id = $('files_value').value;
 	
-		$script .= <<<ENDSCRIPT
-		
-		<script type="text/javascript">
-		
-		window.addEvent('domready', function()
-		{
-			docManagerDlg = new ModalDialog($('documentManagerDlg'), {handle: $('documentManagerDlgHeader'), draggable: true, body: $('documentManagerDlgBody')});
-		});		
-		
-		function downloadFile()
-		{
-			id = $('files_value').value;
-			go("/action/document/download?document_id=" + id);
-		}
-		
-		function editFile()
-		{
-			id = $('files_value').value;
-			docManagerDlg.show(function() {}, "/action/document/edit?document_id=" + id);
-		}
-		
-		function editResult(result)
-		{
-			if (result == "1")
-			{
-				docManagerDlg.hide();
-			}
-			else
-			{
-				$('Document_form__error').set({'text': result, 'display': 'table-cell'});
-			}
-		}
+	if (id > 0)
+	{
+		$('download').disabled = false;
+		$('edit').disabled = false;
+		$('deleteButton').disabled = false;
+	}
+	else
+	{
+		$('download').disabled = true;
+		$('edit').disabled = true;
+		$('deleteButton').disabled = true;
+	}
+}
 
+<?
+		if (checkRole($this->library->manage_folders))
+		{
+?>
+function createFolder()
+{
+	docManagerDlg.show(function() {}, "/action/document/create_folder?document_library_id=<?echo $this->library->document_library_id?>");
+}
 
-		function uploadFile()
-		{
-			id = $('files_value').value;
-			docManagerDlg.show(function() {}, "/action/document/upload?document_library_id={$this->library->document_library_id}");
+function createFolderResult(result)
+{
+	if (result == 1)
+	{
+		window.location.reload();
+	}
+	else
+	{
+		alert(result);
+	}
+}
+
+function deleteFolder()
+{
+	docManagerDlg.show(function() {}, "/action/document/delete_folder?document_library_id=<?echo $this->library->document_library_id?>");
+}
+
+function deleteFolderResult(result)
+{
+	if (result == 1)
+	{
+		window.location.reload();
+	}
+	else
+	{
+		alert(result);
+	}
+}
+
+<?
 		}
-		
-		
-		function deleteFile()
-		{
-			if (confirm("Are you sure you want to delete this file?"))
-			{
-				id = $('files_value').value;
-				
-				var request = new Request({'url': 		'/action/document/delete?document_id=' + id, 
-										   'method': 	'get',
-										   'onSuccess': function(responseText) 
-										   { 
-										   		if (responseText == "1") window.location.reload();
-										   }
-										   else
-										   {
-										   alert(responseText);
-										   },
-										   'onFailure':	function() { alert("Failed to communicate with server");});
-				request.send();
-			}
-		}	
-		
-		function selectionChanged()
-		{
-			var id = $('files_value').value;
-			
-			if (id > 0)
-			{
-				$('download').disabled = false;
-				$('edit').disabled = false;
-				$('deleteButton').disabled = false;
-			}
-			else
-			{
-				form.download.disabled = true;
-				form.edit.disabled = true;
-				form.deleteButton.disabled = true;
-			}
-		}
-		
-		
-		</script>
-		
-ENDSCRIPT;
-		return $script;
+?>
+</script>
+<?
+		$script .= ob_get_contents();
+		ob_end_clean();
+		return $script;		
 	}
 	
 	function drawView()
@@ -186,6 +261,14 @@ ENDSCRIPT;
 		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
 		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
 <?
+		if (checkRole($this->library->manage_folders))
+		{
+?>
+		&nbsp;&nbsp;<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
+		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>
+<?
+		}
+
 	}
 	
 	/**
