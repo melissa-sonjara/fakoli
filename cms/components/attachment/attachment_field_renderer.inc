@@ -78,7 +78,7 @@ class AttachmentFieldRenderer extends FieldRenderer
  </div>
  <div class="dialog_body">
   <p id="attachmentDialogMessage"></p>
-  <form id="attachmentForm" method="POST" enctype="multipart/form-data" action="/cms/components/attachment/attachment_upload.php" >
+  <form id="attachmentForm" method="POST" enctype="multipart/form-data" action="/action/attachment/upload" >
    <br/>
    <label>Attachment File</label>
    <input type="file" name="attachmentFile"/>
@@ -91,8 +91,8 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$dialogs .= ob_get_contents();
 		ob_end_clean();
 ?>
-	<script type="text/javascript" src="/cms/js/iFrameFormRequest.js"></script>
-	<script type="text/javascript" src="/cms/components/attachment/attachment_uploader.js"></script>
+	<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
+	<script type="text/javascript" src="/fakoli/attachment/attachment_uploader.js"></script>
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
