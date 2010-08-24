@@ -489,7 +489,12 @@ class DataItem extends AbstractDataItem
 	{
 		$pk = $this->primary_key;
 		
-		$query = "UPDATE {$this->table} $updates WHERE {$pk}=".$this->get($pk);
+		$query = "UPDATE {$this->table} $updates";
+
+		if ($this->get($pk))
+		{
+			$query .= " WHERE {$pk}=".$this->get($pk);
+		}
 		
 		trace("DataItem::update() - $query", 3);
 		
@@ -502,7 +507,7 @@ class DataItem extends AbstractDataItem
 			{
 				trace("DataItem::updateExplicit failed - $query", 2);
 			}
-			$this->select();
+			if ($this->get($pk)) $this->select();
 		}
 		catch(PDOException $e)
 		{

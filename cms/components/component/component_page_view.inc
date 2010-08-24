@@ -1,0 +1,159 @@
+<?php
+
+Fakoli::using("page", "menu", "module");
+
+/**
+ * ComponentPageView generates the page content for a component page, 
+ * substituting page fields, menus and associated modules
+ * into an HTML template.
+ * 
+ * @author andy
+ */
+class ComponentPageView
+{
+	var $page; 		///< The ComponentPage object that we are viewing
+	var $template; 	///< The layout template used to render the page.
+	
+	function ComponentPageView($page, $template)
+	{
+		$this->page = $page;
+		$this->template = $template;	
+	}
+	
+	function drawView()
+	{
+		global $config;
+		global $method;
+		global $user;
+		global $script;
+		global $styles;
+		global $dialogs;
+		global $page;
+		global $site;
+		
+		$page = $this->page; // Pass through to code include
+		$site = Site::getSite(); // Pass through to code include
+		
+		$template = $this->page->getTemplate();
+		
+		// If the page has a PHP code include, execute it and insert the contents
+		
+		ob_start();
+		include $page->server_path;
+		$output = ob_get_contents();
+		ob_end_clean();
+			
+		$this->page->description .= $output;
+		
+		// Populate template fields from the Page object.
+		
+		foreach($this->page->fields as $field => $type)
+		{
+			$template = str_replace("{".$field."}", $this->page->$field, $template);
+		}		
+		
+		$template = str_replace("{description}", $output, $template);
+		if (!$title) $title = $page->page_title;
+		if (!$title) $title = prettify($this->page->identifier);
+		$template = str_replace("{page_title}", $title, $template);
+		
+		$qs = $_SERVER['QUERY_STRING'];
+		$identifier = $_REQUEST["identifier"];
+		
+		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
+		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
+		
+		$printLink = "/{$this->page->identifier}".appendToQueryString($qs, "_style=print");
+		
+		$template = str_replace("{printIcon}", 
+			"<a href='$printLink' target='_blank'><img src='/fakoli/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
+			$template);
+		
+		// Populate the template with the appropriate menu(s).
+		
+		$menuPositions = array();
+		
+		preg_match_all("/\{menu:(.*?)\}/", $template, $menuPositions, PREG_SET_ORDER);
+		
+		$menus = indexedQuery(Menu, "WHERE site_id={$site->site_id}", "identifier");
+		
+		foreach($menuPositions as $position)
+		{
+			$output = "";
+			
+			trace("Substituting Menu at Position {$position[0]} {$position[1]}", 3);
+						
+			if (array_key_exists($position[1], $menus))
+			{
+				$output .= "<div id='$position[1]'>";
+				
+				$view = new MenuView($menus[$position[1]]);
+				$output .= $view->drawView();	
+				
+				$output .= "</div>";			
+			}
+			
+			$template = str_replace($position[0], $output, $template);			
+		}
+		
+		
+		
+		// Populate the template with associated modules for the page at the correct positions.
+		
+		$positions = array();
+		
+		preg_match_all("/\{position:(.*?)\}/", $template, $positions, PREG_SET_ORDER);
+		
+		$modules = $this->page->getModulesByPosition();
+	
+		foreach($positions as $position)
+		{
+			$output = "";
+			
+			trace("Substituting at Position {$position[0]} {$position[1]}", 3);
+						
+			if (array_key_exists($position[1], $modules))
+			{
+				$output .= "<div id='$position[1]'>";
+				
+				foreach($modules[$position[1]] as $module)
+				{
+					$view = ModuleView::create($module);
+					$output .= $view->drawView();
+				}
+				
+				$output .= "</div>";				
+			}
+			
+			$template = str_replace($position[0], $output, $template);
+		}
+		
+		
+		
+		// Populate global variable references
+		
+		$vars = array();
+		
+		preg_match_all("/\{var:(.*?)\}/", $template, $vars, PREG_SET_ORDER);
+		
+		foreach($vars as $var)
+		{		
+			$expr = $var[0];
+			$name = $var[1];	
+			$template = str_replace($expr, $$name, $template);
+		}
+		
+		if (!$config['prettyURLs'])
+		{
+			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);
+			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)[\"']/i", "$1=$2/page.php?identifier=$3$2", $template);
+			$template = preg_replace("/go\\(([\"'])\\/?([\\w\\d_]+?)\\?/", "go($1/page.php?identifier=$2&", $template);
+			$template = preg_replace("/go\\(([\"'])\\/?([\\w\\d_]+?)[\"']/", "go($1/page.php?identifier=$2$1", $template);
+			
+		}
+		
+		return $template;
+	}
+}
+
+?>

@@ -207,7 +207,11 @@ var FloatingDialog = new Class(
 		this.setOptions(options);
 		if (this.element) this.element.setStyle('display', 'none');
     	if (this.options.body) this.options.body = $(this.options.body);
-	},
+    	if (this.options.closeLink)
+    	{
+    		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
+    	}
+    },
 	
     position: function()
     {

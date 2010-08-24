@@ -39,9 +39,12 @@ class ComponentPage extends DataItem
 	var $fields = array("component_page_id"	=>	Number,
 						"identifier"		=>	String,
 						"server_path"		=>	String,
-						"component_id"		=>	Number,
+						"component"			=>	String,
+						"page_title"		=>	String,
+						"template"			=>	String,
 						"role"				=>	String,
-						"enabled"			=>	Boolean);
+						"enabled"			=>	Boolean,
+						"scanned"			=>	Boolean);
 	
 	// Relations
 	var $relations = array("Component"	=>	Component);
@@ -51,10 +54,139 @@ class ComponentPage extends DataItem
 		return $this->getRelated(Component);
 	}
 	
+	function ComponentPageModuleXrefs($constraint = "ORDER BY position, sort_order")
+	{
+		return $this->getRelatedList(ComponentPageModuleXref, "", $constraint);
+	}
+	
+	function Modules($constraint = "ORDER BY position, sort_order")
+	{
+		return $this->crossReference(Module, ComponentPageModuleXref, $constraint);
+	}
+	
+	
+	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
+	{
+		$join = new InnerJoin();
+		$join->add(Module);
+		$join->add(ComponentPageModuleXref);
+		
+		$result = $join->groupedQuery("WHERE component_page_id={$this->component_page_id} $constraint", "ComponentPageModuleXref.position");
+		$modules = extractGroupedJoinResults(Module, $result);
+		
+		// Merge in global modules
+		$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+		foreach($globals as $position => $modulesAtPosition)
+		{
+			if (array_key_exists($position, $modules))
+			{
+				$modules[$position] = removeDuplicates(array_merge($modulesAtPosition, $modules[$position]));
+			}
+			else
+			{
+				$modules[$position] = $modulesAtPosition;
+			}
+		}
+		
+		return $modules;
+	}
+	
+	/**
+	 * Loads the template associated with this page.
+	 * @return string the contents of the template for this page.
+	 */
+	function getTemplate()
+	{
+		global $config;
+		
+		$style = $_REQUEST["_style"];
+		$site = Site::getSite();
+		
+		$templateFile = "";
+		
+		switch($style)
+		{
+		case 'print':
+			$templateFile = $site->print_template;
+			break;
+
+		case 'popup':
+			$templateFile = $site->popup_template;
+			break;
+			
+		case 'mobile':
+			$templateFile = $site->mobile_template;
+			
+		case 'nude':
+			return "{description}";
+		}
+		
+		if (!$templateFile) $templateFile = $this->template;
+		if (!$templateFile) $templateFile = $site->default_template;
+		
+		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
+
+		return $template;
+	}
+		
+	
+	/**
+	 * Retrieves an array of the position names defined in the template for this page.
+	 * @return array the positions defined in the template (sorted alphabetically)
+	 */
+	function getPositions()
+	{
+		$template = $this->getTemplate();
+		
+		$positionMatches = array();
+		
+		preg_match_all("/\{position:(.*?)\}/", $template, $positionMatches, PREG_PATTERN_ORDER);
+		
+		$positions = $positionMatches[1];		
+		sort($positions);
+		return $positions;
+	}
+	
+	
 	function ComponentPage()
 	{
 		$this->primary_key = "component_page_id";
 		$this->table = "component_page";
+		
+		$this->DataItem(func_get_args());
+	}
+}
+
+
+
+class ComponentPageModuleXref extends DataItem
+{
+	// Fields
+	var $fields = array("join_id"			=>	Number,
+						"component_page_id"	=>	Number,
+						"module_id"			=>	Number,
+						"position"			=>	String,
+						"sort_order"		=>	Number);
+	
+	// Relations
+	
+	var $relations = array(	"Page"			=>	ComponentPage,
+							"Module"		=>	Module);
+	
+	function Page()
+	{
+		return $this->getRelated(Page);
+	}
+	
+	function Module()
+	{
+		return $this->getRelated(Module);
+	}
+	
+	function ComponentPageModuleXref()
+	{
+		$this->table = "component_page_module_xref";
+		$this->primary_key = "join_id";
 		
 		$this->DataItem(func_get_args());
 	}

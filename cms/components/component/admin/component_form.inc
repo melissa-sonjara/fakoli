@@ -10,6 +10,7 @@ $title = "Component Definition";
 
 $form = new AutoForm($component);
 $form->readonly("name", "version", "author", "description", "component_path");
+$form->hide("priority");
 $form->button("Back to Components", "/admin/components");
 
 if ($method == "POST")

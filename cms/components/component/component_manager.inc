@@ -82,6 +82,7 @@ class ComponentManager
 		    		$this->found[$file] = $component;
 		    		
 		    		$this->scanAdminPages($component);
+		    		$this->scanComponentPages($component);
 		    		
 		    		Cache::invalidate("fakoli_includes_$file");
 		    	}
@@ -119,6 +120,47 @@ class ComponentManager
 		}
 	}
 		
+	function scanComponentPages($component)
+	{
+		$pages = $component->component_path . DIRECTORY_SEPARATOR . "pages";
+		
+		if (!is_dir($pages)) return;
+		trace("== Scanning $pages", 3);
+		
+		$handle = opendir($pages);
+		
+		while(false !== ($file = readdir($handle))) 
+		{
+			if (endsWith($file, ".inc"))
+			{
+				$identifier = preg_replace("/\\.inc$/", "", $file);
+				
+				try
+				{
+					$page = Query::create(ComponentPage, "WHERE component=:c AND identifier=:i")
+							->bind(":c", $component->name, ":i", $identifier)
+							->executeSingle();
+							
+					$page->scanned = true;
+					$page->filter = new InclusionFilter("component_page_id", "scanned");
+					$page->save();
+				}
+				catch(DataNotFoundException $e)
+				{
+					$page = new ComponentPage();
+					$page->identifier = $identifier;
+					$page->component = $component->name;
+					$page->server_path = $pages . DIRECTORY_SEPARATOR . $file;
+					$page->role = "";
+					$page->enabled = false;
+					$page->scanned = true;
+					$page->save();
+				}						
+			}
+		}
+		
+	}
+	
 	/**
 	 * Scans the application home directory and PHP include path
 	 * and builds the component and administration page map that
@@ -142,6 +184,10 @@ class ComponentManager
 			$p->joinTransaction($this->tx);
 			$p->deleteAll();
 		
+			$cp = new ComponentPage();
+			$cp->joinTransaction($this->tx);
+			$cp->updateExplicit("SET scanned=0");
+			
 			$path .= $config['homedir'] . PATH_SEPARATOR . ini_get("include_path");
 			
 			$roots = explode(PATH_SEPARATOR, $path);
@@ -155,12 +201,14 @@ class ComponentManager
 			Cache::invalidate("fakoli_components");
 			Cache::invalidate("fakoli_admin_menu");
 			
+			$cp->delete("WHERE scanned=0");
+			
 			$this->tx->commit();
 			unset($this->tx);
 		}
 		catch(Exception $e)
 		{
-			$tx->rollback();
+			$this->tx->rollback();
 			unset($this->tx);
 			throw $e;
 		}
