@@ -148,6 +148,7 @@ class ComponentManager
 				catch(DataNotFoundException $e)
 				{
 					$page = new ComponentPage();
+					$page->page_title = prettify($identifier);
 					$page->identifier = $identifier;
 					$page->component = $component->name;
 					$page->server_path = $pages . DIRECTORY_SEPARATOR . $file;
