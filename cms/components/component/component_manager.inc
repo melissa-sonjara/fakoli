@@ -142,7 +142,8 @@ class ComponentManager
 							->executeSingle();
 							
 					$page->scanned = true;
-					$page->filter = new InclusionFilter("component_page_id", "scanned");
+					$page->server_path = $pages . DIRECTORY_SEPARATOR . $file;
+					$page->filter = new InclusionFilter("component_page_id", "server_path", "scanned");
 					$page->save();
 				}
 				catch(DataNotFoundException $e)
