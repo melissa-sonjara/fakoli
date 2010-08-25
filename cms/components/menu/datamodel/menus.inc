@@ -75,6 +75,7 @@ class MenuItem extends DataItem
 						"title"			=> String,
 						"menu_id"		=> Number,
 						"parent_id" 	=> Number,
+						"identifier"	=> String,
 						"page_id"   	=> Number,
 						"url"       	=> String,
 						"sort_order"	=> Number,
@@ -90,7 +91,23 @@ class MenuItem extends DataItem
 	
 	function Page()
 	{
-		return $this->getRelated(Page);
+		$pages = Query::create(Page, "WHERE identifier=:i")
+					->bind(":i", $this->identifier)
+					->execute();
+		if (count($pages) > 0)
+		{
+			return $pages[0];
+		}
+
+		$pages = Query::create(ComponentPage, "WHERE identifier=:i")
+					->bind(":i", $this->identifier)
+					->execute();
+		if (count($pages) > 0)
+		{
+			return $pages[0];
+		}
+		
+		return null;
 	}
 	
 	function Menu()

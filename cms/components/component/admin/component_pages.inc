@@ -6,15 +6,24 @@ Fakoli::assertRole("admin");
 
 require_once "include/component_tabs.inc";
 
+$component_id = checkNumeric($_GET["component_id"]);
+
 $tabs = componentListTabs();
 
 $menu_item = "Components";
-$title = "Manage Components";
+$title = "Components Pages";
 
-
-$components = query(Component, "ORDER BY name");
-
-$view = new ComponentPageListView();
+if ($component_id)
+{
+	$component = new Component($component_id);
+	$view = new ComponentPageListView($component);
+	$title .= " for {$component->name}";
+	$tabs = componentFormTabs($component_id);
+}
+else
+{
+	$view = new ComponentPageListView();
+}
 
 $script .= $view->writeScript();
 

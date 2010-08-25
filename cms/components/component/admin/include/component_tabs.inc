@@ -24,4 +24,15 @@ function componentPageTabs($key)
 	return $bar;
 }
 
+function componentFormTabs($key)
+{
+	$tabs = array(	"Definition"		=>	"/admin/component_form",
+					"Component Pages"	=>	"/admin/component_pages");
+	
+	$qs = ($key) ? "component_id=$key" : ""; 
+	$bar = new TabBar("tabs", $tabs, $qs);
+	
+	return $bar;
+}
+
 ?>

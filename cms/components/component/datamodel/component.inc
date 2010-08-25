@@ -47,7 +47,16 @@ class Component extends DataItem
 						"last_modified"		=>	Timestamp);
 	
 	// Relations
-	var $relations = array();
+	var $relations = array("ComponentPages"	=>	ComponentPage);
+	
+	function ComponentPages()
+	{
+		$pages = Query::create(ComponentPage, "WHERE component=:i ORDER BY identifier")
+					->bind(":i", $this->name)
+					->execute();
+					
+		return $pages;
+	}
 	
 	function Component()
 	{

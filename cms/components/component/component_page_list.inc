@@ -9,17 +9,28 @@ class ComponentPageListView
 	var $pages;
 	var $templates;
 	
-	function ComponentPageListVieW()
+	function ComponentPageListView($component = null)
 	{
-		$this->pages = Query::create(ComponentPage, "ORDER BY component, identifier")->execute();
+		if ($component)
+		{
+			$this->pages = $component->ComponentPages();		
+		}
+		else
+		{
+			$this->pages = Query::create(ComponentPage, "ORDER BY component, identifier")->execute();
+		}
 		
 		$this->table = new DataListView($this->pages, "component_pages");
 		
-		$this->table->column("Component", array($this, formatComponent), true)
-			 		->column("Page", "<a href='/admin/component_page_form?component_page_id={component_page_id}'>{identifier}</a>", true)
+		if (!$component)
+		{
+			$this->table->column("Component", array($this, formatComponent), true);
+		}
+			
+		$this->table->column("Page", "<a href='/admin/component_page_form?component_page_id={component_page_id}'>{identifier}</a>", true)
 			 		->column("Template", array($this, formatTemplate), true)
 			 		->column("Role(s)", array($this, formatRole), true, "vertical-align: middle")
-			 		->column("Enabled", array($this, formatEnabled), true, "width: 10%; text-align: center");
+			 		->column("Enabled", array($this, formatEnabled), false, "width: 10%; text-align: center");
 		$this->table->sortable = true;
 		$this->table->filter = true;
 		$this->table->pageSize = 20;		

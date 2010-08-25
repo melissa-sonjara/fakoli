@@ -68,10 +68,11 @@ class SelectFieldRenderer extends FieldRenderer
 	var $onChange; // optional selection change handler
 	var	$max_chars;
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="")
+	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
+		$this->grouped = $grouped;
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
@@ -116,17 +117,42 @@ class SelectFieldRenderer extends FieldRenderer
 			$othEntry = true;
 			$current = $this->parent->data->get($field);
 			
-			foreach($this->options as $value => $name)
+			if ($this->grouped)
 			{
-				if($current == $value)
+				foreach($this->options as $groupName => $group)
 				{
-					$selected = " selected";
-					$othEntry = false;
+					echo "<optgroup label=\"$groupName\">\n";
+					
+					foreach($group as $value => $name)
+					{
+						if($current == $value)
+						{
+							$selected = " selected";
+							$othEntry = false;
+						}
+						else
+							$selected = "";
+						
+						echo "<option value='$value'$selected>$name</option>\n";
+					}
+					
+					echo "</optgroup>\n";
 				}
-				else
-					$selected = "";
-				
-				echo "<option value='$value'$selected>$name</option>\n";
+			}
+			else
+			{
+				foreach($this->options as $value => $name)
+				{
+					if($current == $value)
+					{
+						$selected = " selected";
+						$othEntry = false;
+					}
+					else
+						$selected = "";
+					
+					echo "<option value='$value'$selected>$name</option>\n";
+				}
 			}
 			
 			if($othEntry)

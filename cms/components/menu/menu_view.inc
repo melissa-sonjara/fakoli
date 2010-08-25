@@ -18,19 +18,22 @@ class MenuView
 {
 	var $m;
 	var $pages;
+	var $componentPages;
 	
 	function MenuView($m)
 	{
 		$this->m = $m;
-		//$this->pages = indexedQuery(Page, "WHERE site_id={$this->m->site_id}", "page_id", new InclusionFilter("page_id", "identifier", "published", "role"));
+
 		$this->pages = IndexedQuery::create(Page)
 									->constraints("WHERE site_id=:s")
-									->indexBy("page_id")
+									->indexBy("identifier")
 									->filter(new InclusionFilter("page_id", "identifier", "published", "role"))
 									->bind(":s", $this->m->site_id)
 									->execute();
 		
-		//linkItemsInHTMLFields($this->module);
+		$this->componentPages = IndexedQuery::create(ComponentPage)
+									->indexBy("identifier")
+									->execute();
 	}
 	
 	function getLink($menuItem)
@@ -38,18 +41,31 @@ class MenuView
 		// If the URL field is set explicitly, use that
 		if ($menuItem->url) return $menuItem->url;
 		
-		if ($menuItem->page_id)
+		if ($menuItem->identifier)
 		{
-			if (array_key_exists($menuItem->page_id, $this->pages))
+			if (array_key_exists($menuItem->identifier, $this->pages))
 			{
-				$page = $this->pages[$menuItem->page_id];
+				$page = $this->pages[$menuItem->identifier];
 				if (!$page->published || !checkRole($page->role))
 				{
 					// No link if the page is unpublished, or the user role doesn't match.
 					return null;
 				}
 				
-				$link = ($page->identifier) ? $page->identifier : $page->page_id;
+				$link = $menuItem->identifier;
+				if ($this->queryString) $link .= $this->queryString;
+				return $link;
+			}
+			else if (array_key_exists($menuItem->identifier, $this->componentPages))
+			{
+				$page = $this->componentPages[$menuItem->identifier];
+				if (!$page->enabled || !checkRole($page->role))
+				{				
+					// No link if the component page is unpublished, or the user role doesn't match.
+					return null;
+				}
+				
+				$link = $menuItem->identifier;
 				if ($this->queryString) $link .= $this->queryString;
 				return $link;
 			}
@@ -76,7 +92,7 @@ class MenuView
 		  
 		  if ( preg_match('/^\\-\\-*/', $m->title) ) 
 		  {
-    		echo "<li><img src=/images/placeholder_6.jpg></li>";
+    		echo "<li><hr/></li>";
           }
 		  else 
 		  {
