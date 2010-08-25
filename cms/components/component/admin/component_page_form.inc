@@ -13,6 +13,8 @@ if (!$component_page_id)
 	redirect("/");
 }
 
+$menu_item = "Components";
+
 $tabs = componentPageTabs($component_page_id);
 
 $title = "Component Page: {$page->identifier}";

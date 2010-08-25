@@ -8,6 +8,7 @@ require_once "include/component_tabs.inc";
 $component_id = checkNumeric($_GET["component_id"]);
 $component = new Component($component_id);
 
+$menu_item = "Components";
 $title = "Component Definition";
 
 $form = new AutoForm($component);
