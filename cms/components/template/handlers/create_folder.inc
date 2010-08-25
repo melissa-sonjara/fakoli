@@ -31,30 +31,17 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("template");
 Fakoli::usingFeature("validation");
 
-$document_library_id = checkNumeric($_GET["document_library_id"]);
-if (!$document_library_id)
-{
-	die("Invalid Parameter");
-}
+Fakoli::assertRole("admin");
 
-global $library;
-
-$library = new DocumentLibrary($document_library_id);
-
-$docMgr = new DocumentManager($library);
+$mgr = new TemplateManager($config['homedir'], 'templates');
 		
 $validator = new ValidationEngine();
 $validator->id = "folder_form";
 $validator->add(new RequiredValidator("parent_folder_value", "Parent Folder"));
 $validator->add(new RequiredValidator("folder_name", "Folder Name"));
-
-if (!checkRole($library->allow_access) || !checkRole($library->manage_folders))
-{
-	die("Access Denied");
-}
 
 if ($method == "POST")
 {
@@ -67,9 +54,11 @@ if ($method == "POST")
 	
 	$parent_folder = $_POST["parent_folder_value"];
 	$folder_name = $_POST["folder_name"];
-	if (!$parent_folder) $parent_folder = $config['uploaddir'];
+	if (!$parent_folder) $parent_folder = "templates";
 	
-	$path = $library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $parent_folder . DIRECTORY_SEPARATOR . $folder_name;
+	$path = $config['homedir'] . DIRECTORY_SEPARATOR . $parent_folder . DIRECTORY_SEPARATOR . $folder_name;
+	
+	trace($path, 3);
 	
 	if (file_exists($path))
 	{
@@ -85,10 +74,8 @@ else
 	$tree = new DirectoryTreeControl("parent_folder");
 	$tree->width = 320;
 	$tree->height = 150;
-	$tree->permissionCallback = array($docMgr, folderPermission);
-	$root = $library->getLibraryDirectory();
 		
-	$tree->buildFolderTree($config["uploaddir"], $root);
+	$tree->buildFolderTree('templates', $config['homedir']);
 
 ?>
 <script type="text/javascript">
@@ -97,7 +84,7 @@ else
 $('folder_form').iFrameFormRequest({'onRequest': function() { return validate_folder_form($('folder_form')); }, 'onComplete': createFolderResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
 
 </script>
-<form name="folder_form" id="folder_form" method="POST" action="/action/document/create_folder?document_library_id=<?echo $document_library_id?>">
+<form name="folder_form" id="folder_form" method="POST" action="/action/template/create_folder">
 <table class="form">
  <tr>
   <td style="vertical-align: top"><label>Parent Folder</label></td>

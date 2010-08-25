@@ -31,30 +31,15 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("template");
 Fakoli::usingFeature("validation");
+Fakoli::assertRole("admin");
 
-$document_library_id = checkNumeric($_GET["document_library_id"]);
-if (!$document_library_id)
-{
-	die("Invalid Parameter");
-}
-
-global $library;
-
-$library = new DocumentLibrary($document_library_id);
-
-$docMgr = new DocumentManager($library);
+$mgr = new TemplateManager($config['homedir'], 'templates');
 		
 $validator = new ValidationEngine();
 $validator->id = "folder_form";
-$validator->add(new RequiredValidator("parent_folder_value", "Parent Folder"));
-$validator->add(new RequiredValidator("folder_name", "Folder Name"));
-
-if (!checkRole($library->allow_access) || !checkRole($library->manage_folders))
-{
-	die("Access Denied");
-}
+$validator->add(new RequiredValidator("folder_value", "Folder"));
 
 if ($method == "POST")
 {
@@ -65,52 +50,66 @@ if ($method == "POST")
 		die($errors);
 	}
 	
-	$parent_folder = $_POST["parent_folder_value"];
-	$folder_name = $_POST["folder_name"];
-	if (!$parent_folder) $parent_folder = $config['uploaddir'];
+	$folder = $_POST["folder_value"];
 	
-	$path = $library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $parent_folder . DIRECTORY_SEPARATOR . $folder_name;
+	$path = $config['homedir'] . DIRECTORY_SEPARATOR . $folder;
 	
-	if (file_exists($path))
+	if (!file_exists($path))
 	{
-		die("A file or directory already exists with that name");
+		die("1"); // Already deleted - why worry the user?
 	}
 
-	mkdir($path);
-	chmod($path, "755");
-	die("1");
+	$handle = opendir($path);
+	while(($f = readdir($handle)) !== FALSE)
+	{
+		if ($f != "." && $f != "..") 
+		{
+			$nonempty = true;
+			break;
+		}
+	}
+	
+	closedir($handle);
+	
+	if ($nonempty)
+	{
+		die("The folder cannot be deleted because it is not empty");
+	}
+	else
+	{
+		rmdir($path);
+		die("1");
+	}	
 }
 else
 {
-	$tree = new DirectoryTreeControl("parent_folder");
+	$tree = new DirectoryTreeControl("folder");
 	$tree->width = 320;
 	$tree->height = 150;
-	$tree->permissionCallback = array($docMgr, folderPermission);
-	$root = $library->getLibraryDirectory();
+	$tree->permissionCallback = array($mgr, excludeVersionControl);
 		
-	$tree->buildFolderTree($config["uploaddir"], $root);
+	$tree->buildFolderTree("templates", $config['homedir']);
 
 ?>
 <script type="text/javascript">
 <? echo $validator->writeScript(); ?>
 
-$('folder_form').iFrameFormRequest({'onRequest': function() { return validate_folder_form($('folder_form')); }, 'onComplete': createFolderResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
+$('folder_form').iFrameFormRequest({'onRequest': function() { return validate_folder_form($('folder_form')); }, 'onComplete': deleteFolderResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
 
 </script>
-<form name="folder_form" id="folder_form" method="POST" action="/action/document/create_folder?document_library_id=<?echo $document_library_id?>">
+<form name="folder_form" id="folder_form" method="POST" action="/action/template/delete_folder">
+<p>Choose the folder you wish to delete using the tree below.<br/>
+Please note that only empty folders can be deleted <br/>
+(i.e. those which do not contain files or sub-folders).</p>
 <table class="form">
  <tr>
-  <td style="vertical-align: top"><label>Parent Folder</label></td>
+  <td style="vertical-align: top"><label>Folder</label></td>
   <td>
 	<? $tree->writeHTML(); ?>
   </td>
  </tr>
  <tr>
-  <td><label>Folder Name</label></td>
-  <td><input type="text" name="folder_name" value="" style="width: 320px"/></td>
- </tr>
- <tr>
-  <td colspan="2"><input type="submit" class="button" value="Create Folder"/></td>
+  <td colspan="2"><input type="submit" class="button" value="Delete Folder"/></td>
  </tr>
 </table>
 </form>
