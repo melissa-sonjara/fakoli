@@ -143,6 +143,7 @@ class Fakoli
 	static function initialComponentScan()
 	{
 		require_once "cms/components/component/datamodel/component.inc";
+		require_once "cms/components/component/datamodel/component_page.inc";
 		require_once "cms/components/component/datamodel/admin_page.inc";
 		require_once "cms/components/component/component_manager.inc";
 		$mgr = new ComponentManager();
