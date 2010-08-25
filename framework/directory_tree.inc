@@ -185,17 +185,19 @@ class FolderNode
 	
 	function add(&$n)
 	{
-		trace($this->id." adding ".$n->id, 4);
+		if (!$n) return;
+		
+		trace($this->id." adding ".$n->id, 3);
 		if (is_array($n))
 		{
 			for($i = 0; $i < count($n); ++$i)
 			{
-				$this->children[$n[$i]->title] =& $n[$i];
+				$this->children[$n[$i]->title] = $n[$i];
 			}
 		}
 		else
 		{
-			$this->children[$n->title] =& $n;
+			$this->children[$n->title] = $n;
 		}
 	}
 	
@@ -278,6 +280,8 @@ class DirectoryTreeControl
 		$dir = opendir($f);
 	
 		$id = str_replace(DIRECTORY_SEPARATOR, "_", $folder);
+		if ($this->permissionCallback && !call_user_func($this->permissionCallback, $folder)) return null;
+		
 		$node = new FolderNode($id, basename($folder), $folder);
 		while( $directory = readdir($dir))
 		{
@@ -295,7 +299,38 @@ class DirectoryTreeControl
 		return $node;
 	}
 		
-
+	function addFiles($folder, $base, $filter = null)
+	{
+		$f = $base . DIRECTORY_SEPARATOR . $folder;
+		$dir = opendir($f);
+	
+		$id = str_replace(DIRECTORY_SEPARATOR, "_", $folder);
+		if ($this->permissionCallback && !call_user_func($this->permissionCallback, $folder)) return null;
+		
+		while( $file = readdir($dir))
+		{
+			if ($file == "." || $file == "..") continue;
+			
+			$f = $base . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $file;
+			if (is_dir($f))
+			{
+				$this->addFiles($folder . DIRECTORY_SEPARATOR . $file, $base, $filter);
+			}
+			else if (is_file($f))
+			{
+				if ($filter && !call_user_func($filter, $f))
+				{
+					continue;
+				}
+				
+				trace("$f", 3);
+				
+				$node = new FileNode($id . "_" . $file, $file, $folder . DIRECTORY_SEPARATOR . $file);
+				$this->findFolder($folder)->add($node);
+			}
+		}
+	}
+	
 	function writeScript()
 	{
 		global $_writtenDirectoryTreeControlScript;

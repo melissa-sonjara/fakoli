@@ -49,7 +49,7 @@ var AttachmentUploader = (function()
 			
 			form.iFrameFormRequest(
 			{
-				'onRequest': function() { this.postStart(); }.bind(this),
+				'onRequest': function() { this.postStart(); return true; }.bind(this),
 				'onComplete': function(response) { this.postComplete(response);}.bind(this)
 			});
 			

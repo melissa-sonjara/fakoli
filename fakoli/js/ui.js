@@ -196,7 +196,8 @@ var FloatingDialog = new Class(
 		handle:    Class.Empty,
 		body:	   Class.Empty,
 		top: 	   Class.Empty,
-		left:	   Class.Empty
+		left:	   Class.Empty,
+		position:  Class.Empty
 	},
 	
 	element: Class.Empty,
@@ -232,7 +233,18 @@ var FloatingDialog = new Class(
 	    	y = (windowHeight - this.element.offsetHeight) / 2;
 		}
 
-		this.element.setStyles({position: (this.draggable || window.ie6) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});
+		var pos;
+		
+		if (this.options.position) 
+		{
+			pos = this.options.position;
+		}
+		else
+		{
+			pos = (this.draggable || window.ie6) ? 'absolute' : 'fixed';
+		}
+		
+		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 150});
     },
     
     

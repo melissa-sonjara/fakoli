@@ -7,13 +7,21 @@
   <link href="/fakoli/css/tables.css" rel="stylesheet"/>
   <link href="/fakoli/css/dialogs.css" rel="stylesheet"/>
   <link href="/fakoli/css/calendar.css" rel="stylesheet"/>
-   <script type="text/javascript" src="/fakoli/js/functions.js"></script>
-   <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-core.js"></script>
-   <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-more.js"></script>
-   <script type="text/javascript" src="/fakoli/js/ui.js"></script>
-   <script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
-   <script type='text/javascript' src='/fakoli/richtext/sonjara_richtext.js'></script>
-   <script type='text/javascript' src='/fakoli/calendar/sonjara_calendar.js'></script>
+  <link href="/fakoli/css/textarea-resizer.css" rel="stylesheet"/>
+  <script type="text/javascript" src="/fakoli/js/functions.js"></script>
+  <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-core.js"></script>
+  <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-more.js"></script>
+  <script type="text/javascript" src="/fakoli/js/ui.js"></script>
+  <script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
+  <script type="text/javascript" src="/fakoli/js/mootools-textarea-resizer.js"></script>
+  <script type='text/javascript' src='/fakoli/richtext/sonjara_richtext.js'></script>
+  <script type='text/javascript' src='/fakoli/calendar/sonjara_calendar.js'></script>
+  <script type="text/javascript">
+  window.addEvent('domready', function() 
+  {
+  	$$('textarea').resizable();
+  });  
+  </script>
   {var:script}
   <title>{var:title}</title>
  </head>
