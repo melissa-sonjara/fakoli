@@ -38,9 +38,11 @@ class Calendar extends DataItem
 {
 	var $fields = array("calendar_id"	=>	Number,
 						"name"			=>	String,
+						"identifier"	=>	String,
 						"description"	=>	HTML,
 						"owner_id"		=>	Number,
-						"role"			=>	String,
+						"read_access"	=>	String,
+						"write_access"	=>	String,
 						"last_modified"	=>	Timestamp);
 	
 	var $relations = array("Events"	=>	Event,

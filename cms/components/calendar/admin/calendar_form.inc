@@ -22,10 +22,9 @@ else
 
 $form = new AutoForm($calendar);
 $form->hide("owner_id");
-$form->alias("role", "Allowed access");
 
-
-$roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
+$readList = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
+$writeList = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
 
 $tabs = calendarTabs($calendar_id);
 
@@ -33,6 +32,8 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
+		$tabs->queryString = "calendar_id={$form->data->calendar_id}";
+		$tabs->next();
 	}
 }
 

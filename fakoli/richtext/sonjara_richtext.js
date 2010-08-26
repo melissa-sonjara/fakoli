@@ -115,6 +115,7 @@ var DropDownEntry = new Class(
 var DropDown = new Class(
 {
 	parent: 	Class.Empty,
+	title:		"",
 	name:		"",
 	entries:	[],
 	fn:			Class.Empty,
@@ -122,6 +123,7 @@ var DropDown = new Class(
 	initialize: function(parent, title, name, fn, entries)
 	{
 		this.parent = parent;
+		this.title = title;
 		this.name = name;
 		this.entries = entries;
 		this.fn = fn;
@@ -132,7 +134,7 @@ var DropDown = new Class(
 		var doc = "<select name='" + this.parent.name + "_" + this.name + 
 				  "' id='" + this.parent.name + "_" + this.name + 
 				  "' onchange='theEditors[\"" + this.parent.name + "\"]." + this.fn + "()' style='height:20px'>";
-		doc += "<option value='' selected>" + title + "</option>";
+		doc += "<option value='' selected>" + this.title + "</option>";
 		
 		for(var i = 0 ; i < this.entries.length ; ++i)
 		{

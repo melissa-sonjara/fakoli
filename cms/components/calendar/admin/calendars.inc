@@ -41,7 +41,8 @@ $calendars = query(Calendar, "ORDER BY name");
 $menu_item = "Calendars";
 
 $table = new DataListView($calendars, "calendars");
-$table->column("Calendar", "<a href='/admin/calendar_form?calendar_id={calendar_id}'>{name}</a>", true);
+$table->column("Calendar", "<a href='/admin/calendar_form?calendar_id={calendar_id}'>{name}</a>", true)
+	  ->column("Identifier", "{identifier}", true);
 	  
 $table->sortable = true;
 $table->filter = true;
