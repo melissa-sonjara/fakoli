@@ -1,15 +1,16 @@
 .grippie {
-    background:#EEEEEE url('/fakoli/images/grippie.png') no-repeat scroll center 2px;
-    border-color:#DDDDDD;
+    background:#EEEEEE url('/fakoli/images/grippie.png') no-repeat scroll center;
+    border-color:#666;
     border-style:solid;
-    border-width:0pt 1px 1px;
+    border-width:0px 1px 1px;
     cursor:s-resize;
-    height:9px;
+    height:7px;
     overflow:hidden;
     width: 100%;
 }
 
-.resizable-textarea {
+.resizable-textarea, .resizable-textarea textarea
+{
     display:block;
-    margin-bottom:0pt;
+    margin-bottom:0px;
 }
