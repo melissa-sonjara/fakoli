@@ -905,6 +905,21 @@ function canonicalizeURL($url)
 }
 
 /**
+ * Sanitize a file path, removing relative path sections and ensuring the correct
+ * directory separator is used throughout.
+ * @param string $path potentially dirty path
+ * @return string clean path
+ */
+function sanitizePath($path)
+{
+	$path = str_replace("/", DIRECTORY_SEPARATOR, $path);
+	$path = str_replace("\\", DIRECTORY_SEPARATOR, $path);
+	$path = str_replace("..".DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
+	$path = str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
+	return $path;
+}
+	
+/**
  * Make a POST request to a remote URL, returning the results.
  * @param $url the URL of the page to submit the POST request to
  * @param $data the POST parameters, passed as an array of key => value pairs 

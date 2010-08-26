@@ -41,7 +41,7 @@ $mgr = new TemplateManager($config['homedir'], 'templates');
 $validator = new ValidationEngine();
 $validator->id = "folder_form";
 $validator->add(new RequiredValidator("parent_folder_value", "Parent Folder"));
-$validator->add(new RequiredValidator("folder_name", "Folder Name"));
+$validator->add(new RequiredFileValidator("file", "Upload File"));
 
 if ($method == "POST")
 {
@@ -53,32 +53,22 @@ if ($method == "POST")
 	}
 	
 	$parent_folder = sanitizePath($_POST["parent_folder_value"]);
-	$folder_name = sanitizePath($_POST["folder_name"]);
 	if (!$parent_folder) $parent_folder = "templates";
-	
-	$path = $config['homedir'] . DIRECTORY_SEPARATOR . $parent_folder . DIRECTORY_SEPARATOR . $folder_name;
-	
-	trace($parent_folder, 3);
-	trace($folder_name, 3);
-	trace($path, 3);
-	
-	if (file_exists($path))
-	{
-		die("A file or directory already exists with that name");
-	}
 
-	mkdir($path);
-	chmod($path, "755");
+	$mgr->uploadFile("file", $parent_folder);
+	
 	die("1");
 }
 else
 {
+	$parent_folder = sanitizePath($_GET["parent_folder"]);
+	
 	$tree = new DirectoryTreeControl("parent_folder");
 	$tree->width = 320;
 	$tree->height = 150;
 		
 	$tree->buildFolderTree('templates', $config['homedir']);
-
+	$tree->selectedValue = $parent_folder;
 ?>
 <script type="text/javascript">
 <? echo $validator->writeScript(); ?>
@@ -86,7 +76,7 @@ else
 $('folder_form').iFrameFormRequest({'onRequest': function() { return validate_folder_form($('folder_form')); }, 'onComplete': createFolderResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
 
 </script>
-<form name="folder_form" id="folder_form" method="POST" action="/action/template/create_folder">
+<form name="folder_form" id="folder_form" method="POST" action="/action/template/upload" enctype='multipart/form-data'>
 <table class="form">
  <tr>
   <td style="vertical-align: top"><label>Parent Folder</label></td>
@@ -95,11 +85,11 @@ $('folder_form').iFrameFormRequest({'onRequest': function() { return validate_fo
   </td>
  </tr>
  <tr>
-  <td><label>Folder Name</label></td>
-  <td><input type="text" name="folder_name" value="" style="width: 320px"/></td>
+  <td><label>Upload File</label></td>
+  <td><input type="file" name="file" value="" style="width: 320px"/></td>
  </tr>
  <tr>
-  <td colspan="2"><input type="submit" class="button" value="Create Folder"/></td>
+  <td colspan="2"><input type="submit" class="button" value="Upload File"/></td>
  </tr>
 </table>
 </form>

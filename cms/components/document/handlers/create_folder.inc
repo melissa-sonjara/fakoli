@@ -65,8 +65,8 @@ if ($method == "POST")
 		die($errors);
 	}
 	
-	$parent_folder = $_POST["parent_folder_value"];
-	$folder_name = $_POST["folder_name"];
+	$parent_folder = sanitizePath($_POST["parent_folder_value"]);
+	$folder_name = sanitizePath($_POST["folder_name"]);
 	if (!$parent_folder) $parent_folder = $config['uploaddir'];
 	
 	$path = $library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $parent_folder . DIRECTORY_SEPARATOR . $folder_name;

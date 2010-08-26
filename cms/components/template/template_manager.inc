@@ -113,8 +113,25 @@ function editResult(result)
 
 function uploadFile()
 {
-	id = $('files_value').value;
-	templateManagerDlg.show(function() {}, "/action/template/upload?document_library_id=<?echo $this->library->document_library_id?>");
+	selected = $('files_value').value;
+
+	node = $($('files_node').value + "_link");
+
+	var parent_folder = "templates";
+	
+	if (node)
+	{
+		if (node.hasClass("folder"))
+		{
+			parent_folder = selected;
+		}
+		else if (node.hasClass("file"))
+		{
+			parent_folder = dirname(selected);
+		}
+	}
+	
+	templateManagerDlg.show(function() {}, "/action/template/upload?parent_folder=" + encodeURIComponent(parent_folder));
 }
 
 
@@ -145,11 +162,14 @@ function deleteFile()
 function selectionChanged()
 {
 	var file = $('files_value').value;
+	var node = $($('files_node').value + "_link");
+
 	
 	if (file != "")
 	{
-		$('edit').disabled = !file.match(/(\.css|\.tpl)$/);
-		$('deleteButton').disabled = false;
+		$('edit').disabled = node.hasClass("folder") || !file.match(/(\.css|\.tpl)$/);
+		$('deleteButton').disabled = node.hasClass("folder");
+		$('deleteFolder').disabled = node.hasClass("file");
 	}
 	else
 	{
@@ -212,7 +232,7 @@ function deleteFolderResult(result)
 		$tree->icons[".tpl"] = "/fakoli/images/tpl_icon.png";
 		$tree->icons[".css"] = "/fakoli/images/css_icon.png";
 		
-		$tree->selectMode = "file";
+		$tree->selectMode = "both";
 		
 		$tree->buildFolderTree($this->folder, $this->base);
 		$tree->addFiles($this->folder, $this->base, array($this, fileFilter));
@@ -242,66 +262,63 @@ function deleteFolderResult(result)
 	 * @param string $folder the folder within the template base to which the file is to be uploaded
 	 * @return string the path of the uploaded file.
 	 */
-//	function uploadFile($field, $folder)
-//	{
-//		
-//		if (!$_FILES[$field]) 
-//		{
-//			die("No upload record found.");
-//		}
-//		
-//		if ($_FILES[$field]["name"]=="") 
-//		{
-//			die("Upload name is empty");
-//		}
-//		
-//		/* Copy across the uploaded file */
-//		$folder = str_replace("/", DIRECTORY_SEPARATOR, $folder);
-//		$folder = str_replace("\\", DIRECTORY_SEPARATOR, $folder);
-//		
-//		$name = $_FILES[$field]["name"];
-//		
-//		$filepath = $folder . DIRECTORY_SEPARATOR . $name;
-//		$base = $this->library->getLibraryDirectory();
-//		$dir = $base . DIRECTORY_SEPARATOR . $folder;
-//		$fullpath = $dir . DIRECTORY_SEPARATOR . $name;
-//		
-//		trace("Upload Directory: {$dir}", 3);
-//				
-//		trace("Uploading file to $fullpath", 3);
-//		
-//		if (!file_exists($dir))
-//		{
-//			// If the directory does not exist, create it 
-//			mkdir($dir);
-//		}
-//		
-//		if (file_exists($fullpath))
-//		{
-//			// If a previous copy of the file already exists, remove it
-//			unlink($fullpath);
-//		}
-//		
-//		move_uploaded_file($_FILES[$field]["tmp_name"], $fullpath);
-//		chmod($fullpath, 0755);
-//		
-//		return str_replace(DIRECTORY_SEPARATOR, "/", $filepath);
-//	}
+	function uploadFile($field, $folder)
+	{
+		
+		if (!$_FILES[$field]) 
+		{
+			die("No upload record found.");
+		}
+		
+		if ($_FILES[$field]["name"]=="") 
+		{
+			die("Upload name is empty");
+		}
+		
+		/* Copy across the uploaded file */
+		$folder = sanitizePath($folder);
+		
+		$name = $_FILES[$field]["name"];
+		
+		$filepath = $folder . DIRECTORY_SEPARATOR . $name;
+		$dir = $this->base . DIRECTORY_SEPARATOR . $folder;
+		$fullpath = $dir . DIRECTORY_SEPARATOR . $name;
+		
+		trace("Upload Directory: {$dir}", 3);
+				
+		trace("Uploading file to $fullpath", 3);
+		
+		if (!file_exists($dir))
+		{
+			// If the directory does not exist, create it 
+			mkdir($dir);
+		}
+		
+		if (file_exists($fullpath))
+		{
+			// If a previous copy of the file already exists, remove it
+			unlink($fullpath);
+		}
+		
+		move_uploaded_file($_FILES[$field]["tmp_name"], $fullpath);
+		chmod($fullpath, 0755);
+		
+		return str_replace(DIRECTORY_SEPARATOR, "/", $filepath);
+	}
 
 	/**
 	 * Delete the specified document (assuming the user has permission).
 	 * @param Document $document the document object to be deleted
 	 * @return boolean true if the document was successfully deleted, false otherwise
 	 */
-//	function deleteDocument($document)
-//	{
-//		$fullPath = $this->library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file;
-//		if (file_exists($fullPath))
-//		{
-//			unlink($fullPath);
-//		}
-//		
-//		$document->delete();
-//		return true;
-//	}
+	function deleteFile($file)
+	{
+		$fullPath = $this->base . DIRECTORY_SEPARATOR . $file;
+		if (file_exists($fullPath))
+		{
+			unlink($fullPath);
+		}
+		
+		return true;
+	}
 }

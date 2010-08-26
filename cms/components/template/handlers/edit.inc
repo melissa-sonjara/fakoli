@@ -2,12 +2,9 @@
 Fakoli::using("template");
 Fakoli::assertRole("admin");
 
-$file = $_REQUEST["file"];
-$file = str_replace("..".DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $file);
+$file = sanitizePath($_REQUEST["file"]);
 
 $path = $config['homedir'] . DIRECTORY_SEPARATOR . $file;
-
-$path = str_replace("//", "/", $path);
 
 if ($method == "POST")
 {

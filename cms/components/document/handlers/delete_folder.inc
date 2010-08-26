@@ -64,7 +64,7 @@ if ($method == "POST")
 		die($errors);
 	}
 	
-	$folder = $_POST["folder_value"];
+	$folder = sanitizePath($_POST["folder_value"]);
 	
 	$path = $library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $folder;
 	

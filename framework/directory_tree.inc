@@ -99,7 +99,7 @@ class FolderNode
 			// Leaf node
 			if ($this->value)
 			{
-				if ($this->_tree->selectMode == "folder")
+				if ($this->_tree->selectMode == "folder" || $this->_tree->selectMode = "both")
 				{
 					if ($this->_tree->multiSelect)
 					{
@@ -145,7 +145,7 @@ class FolderNode
 <?
 			if ($this->value)
 			{
-				if ($this->_tree->selectMode == "folder")
+				if ($this->_tree->selectMode == "folder" || $this->_tree->selectMode == "both")
 				{
 					if ($this->_tree->multiSelect)
 					{
@@ -157,7 +157,7 @@ class FolderNode
 					{
 						$class = ($this->value == $this->_tree->selectedValue) ? "selected" : "folder";
 ?>
-				<a id="<?echo $this->id?>_link" class="folder" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo $this->value?>')"><?echo $this->title?></a>
+				<a id="<?echo $this->id?>_link" class="folder" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')"><?echo $this->title?></a>
 <?
 					}
 				}
@@ -328,7 +328,7 @@ class DirectoryTreeControl
 				
 				trace("$f", 3);
 				
-				$node = new FileNode($id . "_" . $file, $file, $folder . DIRECTORY_SEPARATOR . $file);
+				$node = new FileNode($id . "_" . str_replace(".", "_", $file), $file, $folder . DIRECTORY_SEPARATOR . $file);
 				$this->findFolder($folder)->add($node);
 			}
 		}
@@ -353,14 +353,16 @@ function toggleDirectoryFolder(id, openStyle, closedStyle)
 	if (div.style.display == "none" || div.style.display == "")
 	{
 		div.style.display = "block";
-		link.className = openStyle;
+		link.removeClass(closedStyle);
+		link.addClass(openStyle);
 		toggle.src = "<?echo $this->images['toggle_open']?>";
 		folder.src = "<?echo $this->images['folder_open']?>";
 	}
 	else
 	{
 		div.style.display="none";
-		link.className = closedStyle;
+		link.removeClass(openStyle);
+		link.addClass(closedStyle);
 		toggle.src = "<?echo $this->images['toggle_closed']?>";
 		folder.src = "<?echo $this->images['folder_closed']?>";
 	}
@@ -371,9 +373,12 @@ function selectItem(treeID, itemID, itemValue)
 	_clearSelectionImpl(treeID);
 	var hidden = $(treeID + "_value");
 	hidden.value = itemValue;
+
+	var node = $(treeID + "_node");
+	node.value = itemID;
 	
 	var item = $(itemID + "_link");
-	item.className = "selected";
+	item.addClass("selected");
 	eval(treeID + "_onSelectItem('" + itemID + "', '" + itemValue + "');");
 }
 
@@ -392,11 +397,7 @@ function _clearSelectionImpl(treeID)
 	var elts = tree.getElementsByTagName("a");
 	for (i = 0; i < elts.length; ++i)
 	{
-		if (elts[i].className == "selected")
-		{
-			elts[i].className = "<?echo $this->selectMode?>";
-			
-		}
+		elts[i].removeClass("selected");
 	}
 }
 
@@ -455,7 +456,8 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 		//ksort($this->children);
 		$this->writeScript();
 ?>
-		<input type="hidden" name="<?echo $this->id?>_value" id="<?echo $this->id?>_value" value="<?echo $this->selectedValue?>">
+		<input type="hidden" name="<?echo $this->id?>_value" id="<?echo $this->id?>_value" value="<?echo $this->selectedValue?>"/>
+		<input type="hidden" name="<?echo $this->id?>_node" id="<?echo $this->id?>_node" value=""/>
 		<table id="<?echo $this->id?>" class="<? echo $this->style?>" cellpadding="0" cellspacing="0">
 		 <? 
 		 if ($this->title)

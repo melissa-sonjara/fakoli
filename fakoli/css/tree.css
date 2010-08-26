@@ -234,7 +234,7 @@ table.tree div
 	border: dotted 1px #fff;
 }
 
-.tree a.selected
+.tree a.selected, .tree a.selected:hover
 {
 	color: #fff;
 	background-color: #002a6c;
