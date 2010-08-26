@@ -64,7 +64,7 @@ var TextareaResizer = new Class({
 
             staticOffset = 0;
             iLastMousePos = 0;
-        }
+        };
 
         var performDrag = function(e) {
             var iThisMousePos = mousePosition(e).y;
@@ -82,7 +82,7 @@ var TextareaResizer = new Class({
             if (iMousePos < iMin) {
                 endDrag(e);
             }
-        }
+        };
 
         var startDrag = function(e){
             textarea.blur();
@@ -93,14 +93,14 @@ var TextareaResizer = new Class({
             
             document.addEvent('mousemove', performDrag);
             document.addEvent('mouseup', endDrag);
-        }
+        };
 
         var mousePosition = function(e) {
             return {
                 x: e.event.clientX + document.documentElement.scrollLeft,
                 y: e.event.clientY + document.documentElement.scrollTop
             };
-        }
+        };
 
         grippie.addEvent('mousedown', startDrag);
     }

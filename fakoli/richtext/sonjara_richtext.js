@@ -404,7 +404,10 @@ var RichTextEditor = new Class({
 			container.set('html', doc);
 		}
 		
-		$(this.name + "_iframe").addEvent('load', function() { this.enableDesignMode(); }.bind(this));
+		
+		var rte = $(this.name + "_iframe");
+		if (rte.resizable) rte.resizable();
+		rte.addEvent('load', function() { this.enableDesignMode(); }.bind(this));
 	},
 		
 	drawToolbar: function(toolbar, toolbarName)
