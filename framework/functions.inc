@@ -51,8 +51,13 @@ function checkRole($role)
 	
 	if ($role != "" && $user->role == "") return false;
 	
-	$expr = "/\\b{$user->role}\\b/";
-	$allowed = (preg_match($expr, $role) > 0) ? true : false;
+	$userRoles = explode(",", $user->role);
+	foreach($userRoles as $ur)
+	{
+		$expr = "/\\b{$ur}\\b/";
+		$allowed = (preg_match($expr, $role) > 0) ? true : false;
+		if ($allowed) break;
+	}
 	
 	return $allowed;
 }
