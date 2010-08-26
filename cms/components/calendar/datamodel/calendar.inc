@@ -59,6 +59,16 @@ class Calendar extends DataItem
 		return $mgr->getUser($this->owner_id);
 	}
 	
+	static function findByIdentifier($identifier)
+	{
+		$match = Query::create(Calendar, "WHERE identifier=:id")
+					  ->bind(":id", $identifier)
+					  ->executeSingle();
+
+		return $match;
+	}
+	
+	
 	function Calendar()
 	{
 		$this->table = "calendar";
