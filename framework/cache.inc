@@ -114,7 +114,7 @@ class Cache
 	 */
 	static function invalidateMatching($pattern)
 	{
-		return Cache::getInstance()->invalidateMatch($pattern);
+		return Cache::getInstance()->invalidateMatching($pattern);
 	}
 }
 
@@ -237,15 +237,19 @@ class WCCache
 
 	function invalidateMatching($pattern)
 	{
+		$this->pattern = $pattern;
+		
 		$info = wincache_ucache_info();
 		
 		$keys = array_keys($info['ucache_entries']);
-		$doomedKeys = arrayKeyFilter($keys, array($this, filterKey));
+		$doomedKeys = array_filter($keys, array($this, filterKey));
 		
 		foreach($doomedKeys as $key)
 		{
 			$this->invalidate($key);
 		}
+		
+		unset($this->pattern);
 	}
 	
 	/**
@@ -254,6 +258,6 @@ class WCCache
 	 */
 	function filterKey($key)
 	{
-		return preg_match($key, $this->pattern);
+		return preg_match($this->pattern, $key);
 	}
 }
