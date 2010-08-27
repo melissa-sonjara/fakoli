@@ -12,7 +12,7 @@ date: 11/09
 
 ***************************************************************/
 
-Fakoli::using("page");
+Fakoli::using("page", "component");
 
 class MenuView
 {
