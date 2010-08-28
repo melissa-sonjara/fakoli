@@ -61,6 +61,15 @@ class UserManager
 	}
 	
 	/**
+	 * Returns the field name of the email field in the user model.
+	 * @return string
+	 */
+	function getEmailField()
+	{
+		return "email";
+	}
+	
+	/**
 	 * Returns the datamodel class name of the user model.
 	 * @return string
 	 */
@@ -79,6 +88,15 @@ class UserManager
 		return new SiteUser($user_id);
 	}
 		
+	function getUserByName($username)
+	{
+		$matches = Query::create(SiteUser, "WHERE $usernameField=:username")
+				->bind(":username", $username)
+				->execute();
+		
+		return (count($matches) > 0) ? $matches[0] : null;
+	}
+	
 	/**
 	 * Validates the user's username and password, returning the matching user.
 	 * @param $username the user's username

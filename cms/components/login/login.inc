@@ -51,7 +51,7 @@ define("valid_token_login", 2);
 define("invalid_username", 3); // 0 matches found 
 define("invalid_password", 4); 
 
-Fakoli::using("user");
+Fakoli::using("user", "email");
 
 class LoginManager
 {
@@ -166,6 +166,7 @@ class LoginManager
 	function passwordHelp($username = "")
 	{
 		$mgr = new UserManager();
+
 		$usernameField = $mgr->getUsernameField();
 		$emailField = $mgr->getEmailField();
 		
@@ -176,12 +177,7 @@ class LoginManager
 		
 		if($username)
 		{
-			$matches = Query::create(SiteUser, "WHERE username=:username")
-							->bind(":username", $username)
-							->execute();
-		
-			if(count($matches) > 0)
-				$match = $matches[0];
+			$match = $mgr->getUserByName($username);
 		}
 		
 		?>
@@ -232,9 +228,9 @@ class LoginManager
 	{
 	?>
 	<br/>
-	<p>If you have an account on this system, please enter your email username and we will email a temporary password to you.</p>
-	<form name='form1' method='GET' action=''>
-	<p><label for="email">Email:</label>
+	<p>If you have an account on this system, please enter your user name and we will email a temporary password to you.</p>
+	<form name='form1' method='POST' action='/password_help'>
+	<p><label for="username">User name:</label>
 	<input name="username" type="text" value="<?=$username?>"/>
 	</p>
 	<br/>

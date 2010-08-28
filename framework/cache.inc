@@ -201,14 +201,15 @@ class APCCache
 	function invalidateMatching($pattern)
 	{
 		trace("invalidateMatching: $pattern", 3);
-		$iterator = new APCIterator("user", $pattern);
+		//TODO - Not working on zither - investigate
+		/*$iterator = new APCIterator("user", $pattern);
 		
 		while($key = $iterator->key())
 		{
 			trace($key, 3);
 			Cache::invalidate($key);
 			$iterator->next();
-		}
+		}*/
 	}	
 }
 
