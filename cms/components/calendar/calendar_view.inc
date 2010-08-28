@@ -47,8 +47,11 @@ class StandardEventHandler extends EventHandler
 {
 	function filter($event, $date)
 	{
-		$startTimeStamp = strtotime($event->start_date);
-		$endTimeStamp = strtotime($event->end_date);
+		$start = explode(" ", $event->start_date);
+		$end = explode(" ", $event->end_date);
+		
+		$startTimeStamp = strtotime($start[0]);
+		$endTimeStamp = strtotime($end[0]);
 		$dateTimeStamp = strtotime($date);
 		 
 		return $dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp;
