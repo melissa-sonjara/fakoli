@@ -13,10 +13,17 @@ Fakoli::assertRole("admin");
 $menu_item = "Events";
 
 $event_id = checkNumeric($_GET["event_id"]);
+$calendar_id = checkNumeric($_GET["calendar_id"]);
 
-if (!$event_id) die("Invalid Parameter");
-
-$event = new Event($event_id);
+if (!$event_id)
+{
+	$event = new Event();
+	$event->calendar_id = $calendar_id;
+}
+else
+{
+	$event = new Event($event_id);
+}
 
 $form = new AutoForm($event, "POST", "/action/calendar/event_edit?event_id=$event_id");
 //$event->filter = new ExclusionFilter("description");
