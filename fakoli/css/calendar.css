@@ -136,7 +136,7 @@ body.program .eventprogramtitle
 .event_bubble_content
 {
 	width: 220px;
-	min-height: 30px;
+	min-height: 60px;
 	height: auto !important;
 	height: 30px;
 	background: url(/fakoli/calendar_view/images/event_bubble_middle.png) top left repeat-y transparent;
