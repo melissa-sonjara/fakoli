@@ -55,7 +55,7 @@ if ($method == "POST")
 	}
 }
 
-$event->calendar_id = $calendar_id;
+$form->data->calendar_id = $calendar_id;
 
 echo $form->writeScript();
 
