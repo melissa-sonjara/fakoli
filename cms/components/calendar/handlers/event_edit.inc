@@ -18,7 +18,6 @@ $calendar_id = checkNumeric($_REQUEST["calendar_id"]);
 if (!$event_id)
 {
 	$event = new Event();
-	$event->calendar_id = $calendar_id;
 }
 else
 {
@@ -55,6 +54,8 @@ if ($method == "POST")
 		echo $form->msg;
 	}
 }
+
+$event->calendar_id = $calendar_id;
 
 echo $form->writeScript();
 
