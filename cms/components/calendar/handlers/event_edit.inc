@@ -13,7 +13,7 @@ Fakoli::assertRole("admin");
 $menu_item = "Events";
 
 $event_id = checkNumeric($_GET["event_id"]);
-$calendar_id = checkNumeric($_GET["calendar_id"]);
+$calendar_id = checkNumeric($_REQUEST["calendar_id"]);
 
 if (!$event_id)
 {
@@ -45,7 +45,6 @@ $eventTypeSelect->allowAddEntry();
 
 if ($method == "POST")
 {
-	$_POST["calendar_id"] = $calendar_id;
 	if ($form->save())
 	{	
 		echo "1";
