@@ -64,6 +64,11 @@ function editEvent(id)
 	eventDialog.show(null, '/action/calendar/event_edit?event_id=' + id);
 }
 
+function newEvent(calendar_id)
+{
+	eventDialog.show(null, '/action/calendar/event_edit?calendar_id=' + calendar_id);
+}
+
 function editEventResult(result)
 {
 	window.location.reload();

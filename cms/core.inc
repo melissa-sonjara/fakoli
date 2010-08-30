@@ -235,6 +235,55 @@ class Fakoli
 	{
 		return str_replace(" ", "", prettify($name));
 	}
+	
+	static function sendResource($uri)
+	{
+		$resource = Fakoli::resolveResource($uri);
+		if (!$resource)
+		{
+			throw new FakoliException("Cannot find resource '$uri'");
+		}
+		
+		$mimeType = mime_content_type($resource);
+		$f = fopen($resource, "r");
+		$size = filesize($resource);
+	
+		header("Content-Type: $mimeType");
+		header("Content-Length: $size");
+		
+		fpassthru($f);
+		fclose($f);
+	}
+	
+	/**
+	 * Resolves the path to a  web resource based on the PHP include path.
+	 * @param string $path the web resource path (URI)
+	 * @return string the full server path of the matching file.
+	 */
+	static function resolveResource($resource)
+	{
+		if (strpos("../", $resource) !== FALSE)
+		{
+			throw new FakoliException("Attempt to resolve illegal resource path");
+		}
+		
+		$resource = sanitizePath($resource);
+		
+		$path = $config['homedir'] . PATH_SEPARATOR . ini_get("include_path");
+			
+		$roots = explode(PATH_SEPARATOR, $path);
+			
+		foreach($roots as $root)
+		{
+			$file = $root . DIRECTORY_SEPARATOR . $resource;
+			if (file_exists($file))
+			{
+				return $file;
+			}
+		}
+
+		return null;
+	}
 }
 
 Fakoli::using("user", "login");

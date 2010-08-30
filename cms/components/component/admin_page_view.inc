@@ -43,7 +43,7 @@ class AdminPageView
 		
 		$page = $this->page; // Pass through to code include
 		
-		$template = file_get_contents($config['homedir']."/fakoli/admin.tpl");
+		$template = file_get_contents(Fakoli::resolveResource("/fakoli/admin.tpl"));
 		
 		ob_start();
 		include $page->server_path;
