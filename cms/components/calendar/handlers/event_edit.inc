@@ -54,8 +54,17 @@ if ($method == "POST")
 		echo $form->msg;
 	}
 }
-
-$form->data->calendar_id = $calendar_id;
+else
+{
+	if ($event_id)
+	{
+		$form->load($event_id);
+	}
+	else
+	{
+		$event->calendar_id = $calendar_id;
+	}
+}
 
 echo $form->writeScript();
 
