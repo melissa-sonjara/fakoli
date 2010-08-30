@@ -519,6 +519,8 @@ var RichTextEditor = new Class({
 				oRTE.body.onbeforepaste = function(evt) { self.ieBeforePaste(evt); };
 				oRTE.body.onpaste = function() { self.iePaste(); };
 			}, 1000);
+			
+			$(this.name + "_iframe").removeEvents('load');
 		} 
 		else 
 		{

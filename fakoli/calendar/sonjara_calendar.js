@@ -82,6 +82,8 @@ var Calendar = new Class(
 		// plus from a neatness standpoint there's no need to carry
 		// around an extra IFRAME if we don't need it...
 	
+		var body = $(document.body ? document.body : document.documentElement);
+		
 		if (navigator.appVersion.indexOf("MSIE")!=-1)
 		{
 			var temp = navigator.appVersion.split("MSIE");
@@ -90,7 +92,7 @@ var Calendar = new Class(
 			{
 				this.shim = new Element('iframe', {id: this.divID + 'Shim'});
 				this.shim.setStyles({'display': 'none', 'position': 'absolute', 'z-index': 254});
-				$(document.body).adopt(this.shim);
+				body.adopt(this.shim);
 			}
 		}
 	
@@ -98,7 +100,7 @@ var Calendar = new Class(
 		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'visibility': 'hidden'});
 		this.calendar.addEvent('mouseout', function(e) {this.onMouseOut(e);}.bind(this));
 		
-		window.addEvent("domready", function() { $(document.body).adopt(this.calendar); }.bind(this));
+		window.addEvent("domready", function() { body.adopt(this.calendar); }.bind(this));
 	
 	},
 	

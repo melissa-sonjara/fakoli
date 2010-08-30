@@ -247,7 +247,7 @@ class Fakoli
 		$mimeType = mime_content_type($resource);
 		$f = fopen($resource, "r");
 		$size = filesize($resource);
-	
+		header("Cache-Control: max-age=300, must-revalidate");
 		header("Content-Type: $mimeType");
 		header("Content-Length: $size");
 		
