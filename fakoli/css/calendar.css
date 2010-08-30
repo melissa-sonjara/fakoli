@@ -79,9 +79,9 @@
 	display: block;
 	font-size: 11px;
 	font-weight: bold;
-	padding: 3px 2px;
+	padding: 2px 2px;
 	margin-top: 0;
-	margin-bottom: 5px;
+	margin-bottom: 0;
 	border-bottom: solid 1px #393683;
 	color: #ddf;
 	background-color: #393683;
@@ -120,4 +120,51 @@
 body.program .eventprogramtitle
 {
 	background-color: #393683;
+}
+
+
+.event_bubble
+{
+	display: none;
+	position: absolute;
+	background: url(/fakoli/calendar_view/images/event_bubble_top.png) top left no-repeat transparent;
+	width: 220px;
+	padding-top: 16px;
+	z-index: 90;
+}
+
+.event_bubble_content
+{
+	width: 220px;
+	min-height: 30px;
+	height: auto !important;
+	height: 30px;
+	background: url(/fakoli/calendar_view/images/event_bubble_middle.png) top left repeat-y transparent;
+	text-align: left;
+	padding-left: 15px;
+}
+
+.event_bubble_content h4
+{
+	margin-top: 0px;
+}
+
+.event_bubble_content h5
+{
+	margin: 0px;
+	font-size: 11px;
+}
+
+.event_bubble_content p
+{
+	margin: 0;
+	color: #000;
+	font-size: 10px;
+}
+
+.event_bubble_bottom
+{
+	width: 220px;
+	height: 53px;
+	background: url(/fakoli/calendar_view/images/event_bubble_bottom.png) top left no-repeat transparent;
 }
