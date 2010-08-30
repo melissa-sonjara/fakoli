@@ -244,12 +244,33 @@ class Fakoli
 			throw new FakoliException("Cannot find resource '$uri'");
 		}
 		
+	    $last_modified = filemtime($resource);
+
+		
 		$mimeType = mime_content_type($resource);
-		$f = fopen($resource, "r");
-		$size = filesize($resource);
+
+		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
 		header("Content-Type: $mimeType");
+		
+	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
+	    {
+	    	
+	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
+	        
+	        if($if_modified_since >= $last_modified)
+	        {
+	            header("HTTP/1.0 304 Not Modified");
+	            exit();
+	        }
+	    }
+
+	    $f = fopen($resource, "r");
+
+	    $size = filesize($resource);
 		header("Content-Length: $size");
+		header("Pragma: cache");
+		header("Expires:");
 		
 		fpassthru($f);
 		fclose($f);
