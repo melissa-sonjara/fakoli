@@ -444,7 +444,7 @@ function getDocSize($doc)
     return $doc_size;
 }
 
-function getMimeType($name)
+/*function getMimeType($name)
 {
 	global $doc_mime_types;
 	
@@ -453,7 +453,7 @@ function getMimeType($name)
 	$type = $doc_mime_types[$extension];
 	if (!$type) $type="application/octet-stream";
 	return $type;
-}
+}*/
 
 function getDocIcon($doc)
 {
