@@ -142,12 +142,12 @@ body.program .eventprogramtitle
 	background: url(/fakoli/calendar_view/images/event_bubble_middle.png) top left repeat-y transparent;
 	text-align: left;
 	padding-left: 15px;
+	padding-right: 40px;
 }
 
 .event_bubble_content h4
 {
 	margin-top: 0px;
-	margin-right: 40px;
 }
 
 .event_bubble_content h5
