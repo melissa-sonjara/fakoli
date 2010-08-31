@@ -247,7 +247,7 @@ class Fakoli
 	    $last_modified = filemtime($resource);
 
 		
-		$mimeType = mime_content_type($resource);
+		$mimeType = getMIMEType($resource);
 
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
