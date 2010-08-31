@@ -41,6 +41,7 @@
 class Cache
 {
 	static $instance;
+	static $app_name;
 	
 	static function getInstance()
 	{
@@ -58,6 +59,8 @@ class Cache
 		{
 			Cache::$instance = new SimpleMemoryCache();
 		}
+
+		Cache::$app_name = codify($config['sitename']);
 		
 		return Cache::$instance;
 	}
@@ -67,9 +70,9 @@ class Cache
 	 * @param string $key the key identifying the object
 	 * @return mixed the associated object, or null if no match was found
 	 */
-	function get($key)
+	static function get($key)
 	{
-		return Cache::getInstance()->get($key);
+		return Cache::getInstance()->get(Cache::$app_name."_".$key);
 	}
 	
 	/**
@@ -87,7 +90,7 @@ class Cache
 	 */
 	function put($key, $obj, $ttl = 0)
 	{
-		return Cache::getInstance()->put($key, $obj, $ttl);
+		return Cache::getInstance()->put(Cache::$app_name."_".$key, $obj, $ttl);
 	}
 	
 	/**
@@ -100,7 +103,7 @@ class Cache
 	 */
 	function invalidate($key)
 	{
-		return Cache::getInstance()->invalidate($key);
+		return Cache::getInstance()->invalidate(Cache::$app_name."_".$key);
 	}
 
 	/**
@@ -114,7 +117,7 @@ class Cache
 	 */
 	static function invalidateMatching($pattern)
 	{
-		return Cache::getInstance()->invalidateMatching($pattern);
+		return Cache::getInstance()->invalidateMatching("^".Cache::$app_name."_".$pattern);
 	}
 }
 
@@ -166,7 +169,7 @@ class SimpleMemoryCache
 	 */
 	function filterKey($key)
 	{
-		return !preg_match($key, $this->pattern);
+		return !preg_match("/".$this->pattern."/", $key);
 	}
 }
 	
@@ -261,6 +264,6 @@ class WCCache
 	 */
 	function filterKey($key)
 	{
-		return preg_match($this->pattern, $key);
+		return preg_match("/".$this->pattern."/", $key);
 	}
 }
