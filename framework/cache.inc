@@ -45,6 +45,8 @@ class Cache
 	
 	static function getInstance()
 	{
+		trace(get_class(Cache::$instance), 4);
+		
 		if (Cache::$instance) return Cache::$instance;
 		
 		if (ini_get("apc.enabled"))
@@ -88,7 +90,7 @@ class Cache
 	 * @param mixed $obj the object or value to be cached
 	 * @param integer $ttl the time-to-live for the cache entry, in seconds
 	 */
-	function put($key, $obj, $ttl = 0)
+	static function put($key, $obj, $ttl = 0)
 	{
 		return Cache::getInstance()->put(Cache::$app_name."_".$key, $obj, $ttl);
 	}
@@ -101,7 +103,7 @@ class Cache
 	 * 
 	 * @param string $key the entry to be invalidated
 	 */
-	function invalidate($key)
+	static function invalidate($key)
 	{
 		return Cache::getInstance()->invalidate(Cache::$app_name."_".$key);
 	}
@@ -134,7 +136,7 @@ class SimpleMemoryCache
 	
 	function SimpleMemoryCache()
 	{
-		trace("Creating Simple In-memory Cache", 3);
+		trace("Creating Simple In-memory Cache", 4);
 		$this->cache = array();
 	}
 	
@@ -183,7 +185,7 @@ class APCCache
 {	
 	function APCCache()
 	{
-		trace("Creating APC Cache", 3);
+		trace("Creating APC Cache", 4);
 	}
 	
 	function get($key)
@@ -223,7 +225,7 @@ class WCCache
 {
 	function WCCache()
 	{
-		trace("Creating WinCache cache", 3);
+		trace("Creating WinCache cache", 4);
 	}
 	
 	function get($key)

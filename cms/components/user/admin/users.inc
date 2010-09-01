@@ -16,7 +16,7 @@ $site_users = query(SiteUser, $constraint);
 
 $table = new DataListView($site_users, "site_users");
 
-$table->column("Name", "<a href='{getAdminForm()}?user_id={user_id}'>{last_name}, {first_name}</a>", true, 'width: 30%')
+$table->column("Name", "<a href='/admin/user_form?user_id={user_id}'>{last_name}, {first_name}</a>", true, 'width: 30%')
 	  ->column("Title", "{title}", true, 'width: 30%')
 	  ->column("Email Address", "{email}", true, "width: 30%")	 
 	  ->column("Role", "{role}", true, "width: 10%");	   

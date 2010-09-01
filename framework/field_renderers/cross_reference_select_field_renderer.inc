@@ -152,7 +152,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		}
 		if ($this->width && $this->height)
 		{
-			echo "<div style='width: {$this->width}px; height: {$this->height}px; border: solid 1px black; overflow: auto'>\n";
+			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$countOptions = count($this->options);

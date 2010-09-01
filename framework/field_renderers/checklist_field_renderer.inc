@@ -74,6 +74,8 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $addEntryText;
 	var $grouped;
 	var $addEntrySize= 20;
+	var $width;
+	var $height;
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -118,11 +120,23 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->addEntrySize = $size;
 	}
 	
+	function setSize($width, $height)
+	{
+		$this->width = $width;
+		$this->height = $height;
+	}
+
+
 	function renderField($field)
 	{
 		$this->_startField($field);
 		
-		$values = explode(",", $this->parent->data->get($field));
+		$values = explode(",", $this->parent->data->get($field));		
+				
+		if ($this->width && $this->height)
+		{
+			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+		}
 		
 		if ($this->grouped)
 		{
@@ -174,6 +188,12 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		// Save this count to loop through checkboxes on required validation
 		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".count($this->options)."\">";		
+		
+			
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
 		
 		$this->_endField($field);
 	}

@@ -56,7 +56,8 @@ define("Text", 9);*/
 class DataItem extends AbstractDataItem
 {
 	var $_tx = null;
-		
+	var $_pkDisabled = false;
+	
 	/**
 	 * Constructor. DataItems can be constructed in three ways:<br>
 	 * <ol>
@@ -135,6 +136,26 @@ class DataItem extends AbstractDataItem
 		}
 		
 		return $this;
+	}
+	
+	function disablePrimaryKey()
+	{
+		if (!$this->_disablePK)
+		{
+			$conn = $this->getConnection();
+			$conn->prepare("ALTER TABLE `{$this->table}` DISABLE KEYS")->execute();
+			$this->_disablePK = true;
+		}			
+	}
+	
+	function enablePrimaryKey()
+	{
+		if ($this->_disablePK)
+		{
+			$conn = $this->getConnection();
+			$conn->prepare("ALTER TABLE `{$this->table}` ENABLE KEYS")->execute();
+			$this->_disablePK = false;
+		}			
 	}
 	
 	/**
@@ -531,7 +552,7 @@ class DataItem extends AbstractDataItem
 		
 		foreach($this->fields as $field => $type)
 		{
-			if ($field == $pk) continue;
+			if ($field == $pk && !$this->_disablePK) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (!isset($this->$field) && $this->fields[$field] != Timestamp && $this->fields[$field] != Boolean) continue;
 			
