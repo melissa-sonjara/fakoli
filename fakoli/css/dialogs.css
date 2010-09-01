@@ -44,3 +44,17 @@
 	margin-right: 10px;
 	font-weight: bold;
 }
+
+.progressive_search a
+{
+	display: block;
+	text-decoration: none;
+	color: #000;
+	padding: 2px;
+	border-bottom: solid 1px #aaa;
+}
+
+.progressive_search a:hover
+{
+	background-color: #ddd;
+}

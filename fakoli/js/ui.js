@@ -296,3 +296,70 @@ var FloatingDialog = new Class(
     	new Fx.Tween(this.element).start('opacity', 0).chain(function() { this.element.setStyle('display', 'none');}.bind(this));
     }
 });
+
+
+var ProgressiveSearch = new Class({
+	
+	Implements: Options,
+	  
+	options: 
+	{
+		search:			Class.Empty,
+		minimumLength: 	4,
+		height: 		'150px',
+		width:			Class.Empty,
+		cssClass:		''
+	},
+  
+	element:	Class.Empty,
+	list: 		Class.Empty,
+	container:	Class.Empty,
+	
+	initialize: function(element, options)
+	{
+		this.setOptions(options);
+		this.element = $(element);
+		this.list = new Element('div', {'id': this.element.id + '_progressive_search', 'class': 'progressive_search'});
+		this.list.setStyles({'display': 'none', 'position': 'absolute', 'height': this.options.height, 'overflow-y': 'auto'});
+		this.container = new Element('div');
+		
+		this.list.adopt(this.container);
+		
+		if (this.options.cssClass) this.list.addClass(this.options.cssClass);
+		
+		var body = $(document.body ? document.body : document.documentElement);
+		body.adopt(this.list);
+		
+		this.element.addEvent('keyup', function() { this.onKeyPress();}.bind(this));
+	},
+	
+	onKeyPress: function()
+	{
+		var val = this.element.value;
+		
+		if (val.length < this.options.minimumLength) 
+		{
+			this.list.setStyle('display', 'none');
+			return;
+		}
+		
+		var name = this.element.id;
+		var request = new Request(
+	    		{
+	    			method: 'get', 
+	    			url: this.options.search + "?" + name + "=" + encodeURIComponent(val), 
+	    			onSuccess: function(html) 
+	    			{ 
+	    				this.showList(html);
+	    			}.bind(this)
+	    		});
+   		request.send();
+	},
+	
+	showList: function(html)
+	{
+		this.container.set('html', html);
+		var coords = this.element.getCoordinates();
+		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'height': this.options.height, 'display': 'block'});
+	}
+});
