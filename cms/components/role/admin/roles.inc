@@ -16,7 +16,7 @@ $table->column("Role", "<a href='role_form?role_id={role_id}'>{role}</a>", true,
 	  ->column("Name & Description", "<strong>{name}</strong><p>{description}", true, 'width: 70%');
 $table->sortable = true;
 $table->filter = true;
-$table->pageSize = 20;
+$table->pageSize = 5;
 $table->emptyMessage = "No Site User Roles have been defined.";
 
 $script = $table->writeScript();

@@ -8,6 +8,7 @@
   <link href="/fakoli/css/dialogs.css" rel="stylesheet"/>
   <link href="/fakoli/css/calendar.css" rel="stylesheet"/>
   <link href="/fakoli/css/textarea-resizer.css" rel="stylesheet"/>
+  {var:styles}
   <script type="text/javascript" src="/fakoli/js/functions.js"></script>
   <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-core.js"></script>
   <script type="text/javascript" src="/fakoli/js/mootools-1.2.4-more.js"></script>

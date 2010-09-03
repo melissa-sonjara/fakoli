@@ -105,6 +105,7 @@ class CodeModuleView extends ModuleView
 		global $dialogs;
 		global $page;
 		global $site;
+		global $user;
 		
 		if ($this->module->php_code_file)
 		{

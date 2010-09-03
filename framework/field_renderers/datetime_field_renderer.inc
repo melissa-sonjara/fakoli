@@ -178,7 +178,13 @@ class DateTimeFieldRenderer extends FieldRenderer
 		$aa = $_POST["{$field}_aa"];
 		$dd = $_POST["{$field}"];
 		
-		if ($aa != "AM" && $aa != "PM") die("Invalid meridiem");
+		if (!$dd)
+		{
+			$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("00/00/0000 00:00:00"));
+			return;
+		}
+		
+		if ($aa != "AM" && $aa != "PM") throw new FakoliException("Invalid meridiem");
 		if ($aa == "PM" && $hh != "12") $hh += 12;
 		if ($aa == "AM" && $hh == "12") $hh = "00";
 		$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("$dd $hh:$mm:00"));

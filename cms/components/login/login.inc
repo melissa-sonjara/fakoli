@@ -55,6 +55,7 @@ Fakoli::using("user", "email");
 
 class LoginManager
 {
+	static $error;
 	
 	static function emailToken($siteUser)
 	{
@@ -115,10 +116,8 @@ class LoginManager
 		}
 		else
 		{
-			$msg = "Incorrect user name or password";
+			LoginManager::$error = "Incorrect user name or password";
 		}
-
-		return $msg;
 	}
 
 

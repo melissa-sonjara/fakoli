@@ -320,7 +320,7 @@ var ProgressiveSearch = new Class({
 		this.setOptions(options);
 		this.element = $(element);
 		this.list = new Element('div', {'id': this.element.id + '_progressive_search', 'class': 'progressive_search'});
-		this.list.setStyles({'display': 'none', 'position': 'absolute', 'height': this.options.height, 'overflow-y': 'auto'});
+		this.list.setStyles({'display': 'none', 'position': 'absolute', 'max-height': this.options.height, 'overflow-y': 'auto'});
 		this.container = new Element('div');
 		
 		this.list.adopt(this.container);
@@ -360,6 +360,6 @@ var ProgressiveSearch = new Class({
 	{
 		this.container.set('html', html);
 		var coords = this.element.getCoordinates();
-		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'height': this.options.height, 'display': 'block'});
+		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'max-height': this.options.height, 'display': 'block'});
 	}
 });

@@ -195,7 +195,7 @@ class AutoForm
 			return null;
 			
 		default:
-			die("AutoForm::createRenderer(): Unknown type");
+			throw new FakoliException("AutoForm::createRenderer(): Unknown type");
 		}
 	}
 
@@ -213,7 +213,8 @@ class AutoForm
 		foreach(array_keys($this->fields) as $field)
 		{
 			if ($filter && $filter->isExcluded($field)) continue;
-
+			if ($this->readonly[$field]) continue; // No need to validate readonly fields
+			
 			$renderer = $this->getRenderer($field);
 			if ($renderer)
 			{
@@ -328,10 +329,8 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			return $this->renderers[$field];
 		}
 
-		echo("AutoForm::getRenderer(): Unknown field: $field");
-		echo "<pre>";
-		print_r($this->renderers);
-		echo "</pre>";
+		trace("AutoForm::getRenderer(): Unknown field: $field", 2);
+		return null;
 	}
 
 	/**

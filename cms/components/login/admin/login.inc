@@ -50,17 +50,16 @@ $title = "Web Site Administration";
 ?>
 <form name='form1' method='POST' action=''>
 <table id="login">
+<?
+	if (LoginManager::$error)
+	{
+?>
  <tr>
-   <td colspan="2">
-   <?
-	if ($rtn == invalid_username)
-		print "<p style=\"padding:20px 10px 0 10px;\"><font color=\"red\">We can not find the username address you provided in the system.<br />Use the link to the right to create a new account.<br />If you need help, please use the 'email us' link below.</font></p>";
-	if ($rtn == invalid_password)
-		print "<p style=\"padding:20px 10px 0 40px;\"><font color=\"red\">The password you provided is not the same as the one<br />associated with this email address in the system.<br /><b>******NOTE:</b> Passwords are case specific.<br />(example: password and Password are different)</font></p>";
-	?>
-   </td>
-  </tr>
+   <td colspan="2"><span class='error'><?echo LoginManager::$error?></span></td>
   <tr>
+<?
+	}
+?>
    <td><label for="username">Username:</label></td>
    <td><input name="username" type="text" value="<?=$username?>"/></td>
   </tr>

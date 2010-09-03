@@ -2,7 +2,8 @@
 require_once "include/config.inc";
 require_once "cms/core.inc";
 
-Fakoli::using("page");
+Fakoli::using("page", "component");
+
 
 $page_id = checkNumeric($_GET["page_id"]);
 $identifier = mysql_escape_string($_GET["identifier"]);
@@ -15,11 +16,31 @@ if ($page_id)
 }
 else
 {
-	$page = querySingle(Page, "WHERE identifier='$identifier'");
+	try
+	{
+		$page = Query::create(Page, "WHERE identifier=:i")
+					->bind(":i", $identifier)
+					->executeSingle();
+		
+		if (!$page->published && !checkRole("admin")) throw new FakoliException("Unrecognized page '$identifier'");
+		$pageView = new PageView($page, "{$page->template}.tpl");
+	}
+	catch(DataNotFoundException $e)
+	{
+		try
+		{
+			$page = Query::create(ComponentPage, "WHERE identifier=:i AND enabled=1")
+					->bind(":i", $identifier)
+					->executeSingle();
+			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+		}
+		catch(DataNotFoundException $e)
+		{
+			throw new FakoliException("Unrecognized page '$identifier'");
+		}
+	}
+	
 }
-
-if (!$page) die("Unrecognized page '$identifier'");
-if (!$page->published && !checkRole("admin")) die("Unrecognized page '$identifier'");
 
 $page_role = $page->role;
 
@@ -28,7 +49,6 @@ if (!checkRole($page->role))
 	redirect("/login");
 }
 
-$pageView = new PageView($page, "{$page->template}.tpl");
-
 echo $pageView->drawView();
+
 ?>
