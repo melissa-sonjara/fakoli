@@ -472,7 +472,7 @@ class CompositeDataItem extends AbstractDataItem
 	/**
 	 * Delete all the rows in the database that correspond to this class.
 	 */
-	abstract function deleteAll()
+	function deleteAll()
 	{
 		for($i = 0; $i < $num; ++$i)
 		{
