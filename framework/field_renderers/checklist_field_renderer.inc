@@ -120,20 +120,34 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->addEntrySize = $size;
 	}
 	
-	function setSize($width, $height)
+	function setSize($width, $height, $scrollAfter = 0)
 	{
 		$this->width = $width;
 		$this->height = $height;
+		$this->scrollAfter = $scrollAfter;
 	}
 
-
+	function getOptionCount()
+	{
+		if (!$this->grouped) return count($this->options);
+		
+		$count = 0;
+		
+		foreach($this->options as $groupName => $group);
+		{
+			$count += count($group) + 1;
+		}
+		
+		return $count;
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
 		
 		$values = explode(",", $this->parent->data->get($field));		
 				
-		if ($this->width && $this->height)
+		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
 		{
 			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
