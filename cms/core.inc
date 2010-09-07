@@ -283,6 +283,8 @@ class Fakoli
 	 */
 	static function resolveResource($resource)
 	{
+		global $config;
+		
 		if (strpos("../", $resource) !== FALSE)
 		{
 			throw new FakoliException("Attempt to resolve illegal resource path");
