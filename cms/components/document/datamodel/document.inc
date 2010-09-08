@@ -70,7 +70,7 @@ class Document extends DataItem
 	{
 		return $this->getRelated(DocumentLibrary);
 	}
-	
+
 	function Document()
 	{
 		$this->primary_key = "document_id";

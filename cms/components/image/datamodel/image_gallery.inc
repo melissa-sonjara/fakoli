@@ -48,6 +48,14 @@ class ImageGallery extends DataItem
 		return $config['uploadbase'] . DIRECTORY_SEPARATOR . "gallery_{$this->gallery_id}";
 	}
 	
+	static function findByIdentifier($identifier)
+	{
+		$match = Query::create(ImageGallery, "WHERE identifier=:id")
+					  ->bind(":id", $identifier)
+					  ->executeSingle();
+
+		return $match;
+	}
 	
 	function ImageGallery()
 	{

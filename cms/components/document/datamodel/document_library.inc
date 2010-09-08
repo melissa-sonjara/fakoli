@@ -82,7 +82,12 @@ class DocumentLibrary extends DataItem
 	{
 		return reindexList($this->Folders($constraint), "path");
 	}
-		
+			
+	function countDocuments()
+	{
+		return queryValue(Document, "COUNT(1)", "WHERE document_library_id={$this->document_library_id}");
+	}
+
 	static function findByIdentifier($identifier)
 	{
 		$match = Query::create(DocumentLibrary, "WHERE identifier=:id")

@@ -216,7 +216,7 @@ function deleteFolderResult(result)
 		global $config;
 		
 		$tree = new DirectoryTreeControl("files");
-		$tree->width = 500;
+		$tree->width = 700;
 		$tree->height = 400;
 		$tree->onSelectionChanged = "selectionChanged";
 		$tree->onDoubleClick = "downloadFile";
