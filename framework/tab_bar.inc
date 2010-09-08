@@ -64,10 +64,12 @@ class TabBar
 	function TabBar($id, $tabs, $queryString = "", $useQueryString = true, $showNumber = false)
 	{
 		global $config;
+		global $isAdmin;
 		
 		$this->id			  = $id;
 		$this->tabs           = $tabs;
 		$this->page           = ($config['prettyURLs']) ? $_REQUEST['identifier'] : basename($_SERVER["PHP_SELF"]);
+		if ($isAdmin) $this->page = "/admin/{$this->page}";
 		$this->queryString    = $queryString;
 		$this->useQueryString = $useQueryString;
 		$this->showNumber     = $showNumber;
@@ -132,7 +134,7 @@ class TabBar
          
         	// JDG 12/01/09, get the basename of the url, in case we need a
         	// longer path in the tab include file, as with digital movies
-          	if (basename($url) == $this->page)
+          	if ($url == $this->page)
 	        {
 	        	$style = " class='current'";
 	        }

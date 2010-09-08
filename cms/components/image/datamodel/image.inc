@@ -35,19 +35,27 @@
 class Image extends DataItem
 {
 	// Fields
-	var $fields = array("image_id"		=> Number,
-						"title"			=> String,
-						"image_file" 	=> String,
-						"thumbnail" 	=> String,
-						"ALT_tag"		=> String,
-						"folder"		=> String,
-						"date_taken" 	=> Date,
-						"credits" 		=> String,
-						"caption" 		=> String,
-						"keywords" 		=> String,
-						"status" 		=> String,
-						"image_rotator" => Boolean,
-						"image_type"	=> String);
+	var $fields = array("image_id"				=> Number,
+						"title"					=> String,
+						"image_file" 			=> String,
+						"ALT_tag"				=> String,
+						"date_taken"		 	=> Date,
+						"credits" 				=> String,
+						"caption" 				=> String,
+						"keywords" 				=> String,
+						"published"				=> Boolean,
+						"include_in_slideshow"	=> Boolean,
+						"image_type"			=> String,
+						"gallery_id"			=> Number);
+	
+	// Relations
+	
+	var $relations = array("Gallery"	=>	ImageGallery);
+	
+	function Gallery()
+	{
+		return $this->getRelated(ImageGallery);
+	}
 	
 	function Image()
 	{

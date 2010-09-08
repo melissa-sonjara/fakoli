@@ -1,71 +1,52 @@
 <?php
 
 Fakoli::using("image");
-Fakoli::usingFile("framework/tab_bar.inc");
+Fakoli::usingFeature("tab_bar");
+
+require_once "include/image_gallery_tabs.inc";
 
 Fakoli::assertRole("admin");
 
-$tabs = array("Thumbnails"	=>	"/admin/images",
-			  "Details"		=>	"/admin/image_list",
-			);
+$gallery_id = checkNumeric($_GET["gallery_id"]);
 
-$tabBar = new TabBar("tabs", $tabs);
-$tabBar->useQueryString = false;
+if (!$gallery_id) redirect("/admin/image_galleries");
+
+$gallery = new ImageGallery($gallery_id);
+$images = $gallery->Images("ORDER BY title");
+
+$tabs = imageGalleryTabs($gallery_id);
 
 $menu_item = "Images";
 
-$images = query(Image);
-
 $count = 0;
 
-$title = "Images";
+$title = "Images in {$gallery->gallery_name}";
 
-$tabBar->page = "images";
-
-$tabBar->writeHTML();
+$grid = new ImageListView($images, "image_form?gallery_id={gallery_id}&image_id={image_id}");
+$tabs->writeHTML();
 
 ?>
-	<div style="overflow:auto; width:100%; height: 300px; border: 1px; border-style: solid">
+	<div style="width: 100%; border: solid 1px #000;">
+		<div style="overflow:auto; width:100%; height: 260px;border: none">
 <?
 if (count($images) > 0)
 {
+	$grid->drawGrid();
 ?>
-	<table class="layout" width="100%"><tr>
- 
- 	
-	<?
 
-	foreach($images as $image)
-	{
-		?>
-		
-		<td style="font-size: 10pt; text-align: center">
-		<a href="image_form?image_id=<?echo $image->image_id ?>"><img src="<?echo $image->thumbnail ?> " alt="Small version of image"/><br/>
-		<?echo $image->title?></a></td>
-	    <?php 
-		++$count;
-		if (($count % 3) == 0)
-		{
-			echo "</tr><tr>";
-		}				
-    }
-    ?>
-</tr>	
-</table>
 <br/>
 <?
 }
 else
 {
 	?>
-	<p><i>No images have been added.</i></p>
+	<p style="margin: 8px"><br/><i>No images have been added to this gallery</i></p>
 	<?
 }
 ?>
 </div>
 <br/>
-<input type="button" class="button" value="Add a New Image" onclick="go('/admin/image_form');">
-
-<?
-
-?>
+<div style="padding: 8px">
+<a class="button" href="/admin/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
+</div>
+</div>

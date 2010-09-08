@@ -86,7 +86,14 @@ class SelectFieldRenderer extends FieldRenderer
 		if ($this->options == null)
 		{
 			$opt = $form->data->distinctValues($field, true);
-			$this->options = array_combine($opt, $opt);
+			if (count($opt) > 0)
+			{
+				$this->options = array_combine($opt, $opt);
+			}
+			else
+			{
+				$this->options = array();
+			}
 		}		
 	}
 	

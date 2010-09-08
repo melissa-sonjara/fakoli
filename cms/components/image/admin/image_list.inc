@@ -1,68 +1,42 @@
 <?php
 
 Fakoli::using("image");
-Fakoli::usingFile("framework/tab_bar.inc");
+Fakoli::usingFeature("tab_bar", "data_view");
+
+require_once "include/image_gallery_tabs.inc";
 
 Fakoli::assertRole("admin");
 
-$tabs = array("Thumbnails"	=>	"/admin/images",
-			  "Details"		=>	"/admin/image_list",
-			);
+$gallery_id = checkNumeric($_GET["gallery_id"]);
 
-$tabBar = new TabBar("tabs", $tabs);
-$tabBar->useQueryString = false;
+if (!$gallery_id) redirect("/admin/image_galleries");
 
-$menu_item = "Images";
+$tabs = imageGalleryTabs($gallery_id);
 
-$images = query(Image);
+$gallery = new ImageGallery($gallery_id);
+$images = $gallery->Images("ORDER BY title");
 
-$count = 0;
+$title = "Images in {$gallery->gallery_name}";
 
-$title = "Images";
-
-$tabBar->page = "image_list";
-
-$tabBar->writeHTML();
-?>
-	<div style="overflow:auto; width:100%; height: 300px; border: 1px; border-style: solid">
-<?
-if (count($images) > 0)
-{
-?>
-	<table class="list" width="100%">
- <tr>
-  <th>Title</th>
-  <th>Image File</th>
-   
-  	 </tr>
- 	
-	<?
+$table = new DataListView($images, "images");
+$table->column("Title", "<a href='image_form?image_id={image_id}'>{title}</a>", true, "width: 50%")
+	  ->column("Image File", "{image_file}", true, "width: 50%");
+$table->emptyMessage = "No images have been added to this gallery";
+$table->pageSize = 20;
+$table->sortable = true;
+$table->filter = true;
 	
-	foreach($images as $image)
-	{
-		?>
-		
-		<tr><td><b><a href="image_form?image_id=<?echo $image->image_id ?>">
-  <?echo $image->title ?></a></b></td>
-		<td><?echo basename($image->image_file) ?></td>
-		</tr>	
-<?			
-    }
-    ?>
 
-</table>
-<?
-}
-else
-{
-	?>
-	<p><i>No images have been added.</i></p>
-	<?
-}
+$table->writeScript();
+
+$tabs->writeHTML();
 ?>
+	<div style="width:100%; border: solid 1px black; margin: 0; padding: 0">
+	 <div style="padding: 8px">
+<?
+$table->drawView();
+?>
+<br/><br/>
+<a class="button" href="/admin/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
 </div>
-<br/>
-<input type="button" class="button" value="Add a New Image" onclick="go('/admin/image_form');">
-<?
-
-?>
+</div>

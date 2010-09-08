@@ -22,7 +22,7 @@ class ImageManifest
 			"Web Site Content"	=> array
 			(
 
-				"Images"	=>	array("page"	=>	"/admin/images",
+				"Images"	=>	array("page"	=>	"/admin/image_galleries",
 									  "role"	=>	"admin",
 								  	  "weight"	=>	4)
 			)
