@@ -36,6 +36,11 @@ class ImageGallery extends DataItem
 		return $this->Owner()->getFullName();
 	}
 	
+	function countImages()
+	{
+		return queryValue(Image, "COUNT(1)", "WHERE gallery_id={$this->gallery_id}");
+	}
+	
 	function getGalleryDirectory()
 	{
 		global $config;
