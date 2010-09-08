@@ -119,7 +119,7 @@ $tabs->writeHTML();
 if ($image_id)
 {
 ?>
-<img src="<?echo $image->thumbnail ?> " alt="Small version of image"/><br/>
+<img src="<?echo $image->getThumbnail(350) ?> " alt="Small version of image"/><br/>
 
 <?
 }

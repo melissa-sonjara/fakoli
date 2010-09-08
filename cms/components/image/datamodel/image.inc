@@ -86,58 +86,26 @@ class Image extends DataItem
 		return $text;
 	}
 	
-function getImage()
+	function getImage()
 	{
 		global $config;
-		
-		if ($this->image == "" || is_numeric($this->image))
-		{
-			$medium = $this->Media();
-			$img = $medium->icon;
-		}
-		else
-		{
-			$img = $this->image;
-		}
-		
+
 		if ($img == "blank" || $img == "")
 		{
-		 	$img = "/images/blank.gif";
+		 	$img = "/fakoli/images/blank.gif";
 		}		 	
-		
-		if ($img[0] == "/")
+		else
 		{
-			$img = "http://{$config['http_host']}$img";	
+			$img = "/action/image/show?image_id={$this->image_id}";
 		}
 		
 		return $img;
 	}
 	
-	function getThumbnail()
+	function getThumbnail($size = 0)
 	{
-		global $config;
-		
-		if ( ($this->thumbnail == "" || is_numeric($this->thumbnail)) )
-		{
-			//$medium = $this->Media();
-			$thumbnail = $medium->icon;
-		}
-		else
-		{
-			$thumbnail = $this->thumbnail;
-		}
-		
-		if ($thumbnail == "blank" || $thumbnail == "")
-		{
-		 	$thumbnail = "/images/blank.gif";
-		}		 	
-		
-		if (substr($thumbnail, 0, 1) == "/")
-		{
-			$thumbnail = "http://{$config['http_host']}$thumbnail";
-		}
-		
-		return $thumbnail;
+		$mgr = new ImageManager();
+		return $mgr->thumbnailLink($this->image_id, $size);
 	}
 	
 function getCaption()
