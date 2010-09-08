@@ -48,7 +48,7 @@ if (!checkRole($library->allow_access))
 
 //TODO: Folder level security
 
-$filepath = $library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file;
+$filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
 $mimeType = getMimeType($document->file);
 	
 $f = fopen($filepath, "r");
