@@ -76,7 +76,10 @@ class ForumTopicView
 	 </div>
 	 <?
 			 	$attachments = $message->Attachments();
-			 	$pk = $user->primary_key;
+			 	$userMgr = new UserManager();
+			 	$cl = $userMgr->getUserClass();
+			 	$u = new $cl;
+			 	$pk = $u->getPrimaryKey();
 			 	
 			 	if (count($attachments) > 0)
 			 	{
@@ -101,17 +104,20 @@ class ForumTopicView
 			 	}
 				
 			 	$controls = array();
-				if ($author->get($pk) == $user->get($pk) || checkRole("admin,data"))
+				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data"))
 				{
 					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\">Edit</a>";
 				}
 			
-				if ($author->get($pk) == $user->get($pk) || checkRole("admin,data"))
+				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data"))
 				{
 					$controls[] = "<a href=\"/action/forum/message_delete?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
 				}		
 				
-				$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&parent_id={$message->message_id}\">Reply</a>";
+				if ($user)
+				{
+					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&parent_id={$message->message_id}\">Reply</a>";
+				}
 	 	
 ?>
 	<div class="message_controls"><? echo implode("&nbsp;|&nbsp;", $controls);?></div>

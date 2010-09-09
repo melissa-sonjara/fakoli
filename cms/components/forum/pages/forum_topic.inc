@@ -1,6 +1,6 @@
 <?php
 
-Fakoli::using("forum", "attachment");
+Fakoli::using("user", "forum", "attachment");
 
 $forum_id = checkNumeric($_GET["forum_id"]);
 $topic_id = checkNumeric($_GET["topic_id"]);

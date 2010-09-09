@@ -79,7 +79,7 @@ class ForumListView
 		$user = $lastPost->Author();
 		
 		return "<a href='{$this->messageLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
-			   "<br/><span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
+			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 		
 	}
 	
