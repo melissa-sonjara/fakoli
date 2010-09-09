@@ -41,7 +41,7 @@ class StringFieldRenderer extends FieldRenderer
 {	
 	var $size = 50;
 	var $limit = 0; // optional - restricts users from entering character count over limit
-	
+	var $autocomplete = true; // default
 
 	function StringFieldRenderer(&$parent)
 	{
@@ -88,7 +88,9 @@ class StringFieldRenderer extends FieldRenderer
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 		
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
+		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";
+		
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
 
 		if ($this->limit)
 		{
