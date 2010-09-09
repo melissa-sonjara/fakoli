@@ -69,7 +69,7 @@ class ForumTopicView
 				}
 ?>
 	  <strong><?echo $message->title?></strong><br/>
-	  <span class="small">Posted by <?echo $author->first_name?> <?echo $author->last_name?> at <?echo $message->date_posted?></span>
+	  <span class="small">Posted by <?echo $author->getFullName()?> at <?echo $message->date_posted?></span>
 	 </div>
 	 <div class="message_content">
 	  <?echo $message->message?>

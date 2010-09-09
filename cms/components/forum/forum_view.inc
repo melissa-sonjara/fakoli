@@ -128,7 +128,7 @@ class ForumDetailsView
 	
 		$message = $this->messages[$topic->topic_id];
 		$user = $message->Author();
-		return "<a href='{$this->topicLink}?topic_id={$topic->topic_id}'>{$message->title}</a><br/><span class='small'>(Created by ".$user->getFullName().")</span>";
+		return "<a href='{$this->topicLink}?topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$user->getFullName().")</span>";
 	}
 	
 	function formatLastPost($topic)
@@ -138,7 +138,7 @@ class ForumDetailsView
 		$user = $lastPost->Author();
 		
 		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
-			   "<br/><span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
+			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 	}
 	
 	function writeScript()

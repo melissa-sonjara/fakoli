@@ -19,15 +19,15 @@ $view->drawView();
 ?>
 <br/>
 <div style="width: 100%"><div style="float: right">
-<button onclick="go('/forum/forum_message_form?forum_id=<?echo $forum_id?>')">Create a Topic</button>
+<a class="button" href="/forum_message_form?forum_id=<?echo $forum_id?>">Create a Topic</a>
 <?
 if (checkRole("admin"))
 {
 ?>
-&nbsp;&nbsp;<button onclick="go('/forum/forum_form?forum_id=<?echo $forum_id?>')">Edit this Discussion Forum</button>
+&nbsp;&nbsp;<a class="button" href="/forum_form?forum_id=<?echo $forum_id?>">Edit this Discussion Forum</a>
 <?
 }
 ?>
 </div>
-<button onclick="go('/forum_list');">&laquo; Back to Forum List</button>
+<a class="button" href="/forum_list">&laquo; Back to Forum List</a>
 </div>

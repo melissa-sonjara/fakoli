@@ -8,7 +8,7 @@ if (!$_FILES['attachmentFile'])
 	die("No upload record found.");
 }
 
-if ($_FILES[attachmentFile]["name"]=="") 
+if ($_FILES['attachmentFile']["name"]=="") 
 {
 	die("Upload name is empty");
 }
