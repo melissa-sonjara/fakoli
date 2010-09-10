@@ -38,8 +38,8 @@ require_once realpath(dirname(__FILE__)."/components/component/datamodel/compone
 class FakoliException extends Exception {}
 
 /**
- * This class provides the Fakoli CMS core. It contains almost no functionality
- * of its own - everything is defined as components.
+ * This class provides the Fakoli CMS core. It contains basic utility functions
+ * used by components and modules to access the component map.
  * 
  * @author andy
  *
@@ -198,21 +198,23 @@ class Fakoli
 		foreach($components as $name => $component)
 		{
 			$manifest = $component->loadManifest();
-
-			$componentMenuItems = $manifest->getAdminMenu();
-			if ($componentMenuItems)
+			if (method_exists($manifest, getAdminMenu))
 			{
-				foreach($componentMenuItems as $category => $items)
+				$componentMenuItems = $manifest->getAdminMenu();
+				if ($componentMenuItems)
 				{
-					if (!$menu[$category])
+					foreach($componentMenuItems as $category => $items)
 					{
-						$menu[$category] = $items;
-					}
-					else
-					{	
-						$menu[$category] = array_merge($menu[$category], $items);
-					}
-				}			
+						if (!$menu[$category])
+						{
+							$menu[$category] = $items;
+						}
+						else
+						{	
+							$menu[$category] = array_merge($menu[$category], $items);
+						}
+					}			
+				}
 			}
 		}
 		
@@ -224,6 +226,62 @@ class Fakoli
 		Cache::put("fakoli_admin_menu", $menu);
 		
 		return $menu;
+	}
+	
+	static function getScripts()
+	{
+		$scripts = Cache::get("fakoli_scripts");
+		if ($scripts) return $scripts;
+		
+		$scriptArray = array();
+		
+		$components = Fakoli::getComponents();
+		foreach($components as $name => $component)
+		{
+			$manifest = $component->loadManifest();		
+			if (method_exists($manifest, getScripts))
+			{
+				// Calculate union of scripts
+				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts(), $scriptArray));  
+			}
+		}
+
+		$scripts = "";
+		foreach($scriptArray as $s)
+		{
+			$scripts .= "  <script type='text/javascript' src='$s'></script>\n";
+		}
+		
+		Cache::put("fakoli_scripts", $scripts);
+		return $scripts;
+	}
+	
+	static function getStyles()
+	{
+		$scripts = Cache::get("fakoli_styles");
+		if ($styles) return $styles;
+		
+		$styleArray = array();
+		
+		$components = Fakoli::getComponents();
+		foreach($components as $name => $component)
+		{
+			$manifest = $component->loadManifest();		
+			if (method_exists($manifest, getStyles))
+			{
+				// Calculate union of styles
+				$styleArray = array_merge($styleArray, array_diff($manifest->getStyles(), $styleArray));  
+			}
+		}
+
+		$styles = "";
+		foreach($styleArray as $s)
+		{
+			$styles .= "  <link href='$s' rel='stylesheet'/>\n";
+		}
+		
+		Cache::put("fakoli_styles", $styles);
+		return $styles;		
 	}
 	
 	static function compareByWeight($item1, $item2)

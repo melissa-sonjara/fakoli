@@ -122,3 +122,10 @@ var TextareaResizer = new Class({
     });
 
 })();
+
+
+// AJG - Automatically apply to all textareas on the page on load
+window.addEvent('domready', function() 
+{
+  	$$('textarea').resizable();
+});  

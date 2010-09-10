@@ -128,7 +128,10 @@ class ComponentPageView
 			$template = str_replace($position[0], $output, $template);
 		}
 		
+		// Pull in the script and style dependencies defined by the components
 		
+		$script = Fakoli::getScripts() . $script;
+		$styles = Fakoli::getStyles() . $styles;		
 		
 		// Populate global variable references
 		

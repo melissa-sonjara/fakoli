@@ -203,6 +203,8 @@ class ComponentManager
 			Cache::invalidate("fakoli_components");
 			Cache::invalidate("fakoli_admin_menu");
 			Cache::invalidateMatching("fakoli_includes_.*");
+			Cache::invalidate("fakoli_scripts");
+			Cache::invalidate("fakoli_styles");
 			
 			$cp->delete("WHERE scanned=0");
 			

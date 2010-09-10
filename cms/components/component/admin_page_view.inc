@@ -58,6 +58,11 @@ class AdminPageView
 		
 		if (!$title) $title = prettify(basename(substr($page->server_path, 0, -4)));
 		
+		// Pull in the script and style dependencies defined by the components
+		
+		$script = Fakoli::getScripts() . $script;
+		$styles = Fakoli::getStyles() . $styles;
+		
 		// Populate variable references
 		
 		$vars = array();
