@@ -78,7 +78,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 		}
 		else
 		{
-			$src = "/cms/images/noimage.gif";
+			$src = "/fakoli/images/noimage.gif";
 		}
 ?>
 <input type='text' name='<?echo $field ?>' id='<?echo $field ?>' value='<?echo $key ?>' style='display: none'>
