@@ -49,12 +49,12 @@ class Article extends DataItem
 						"allow_comment" =>	Boolean,
 						"headline"		=>	Boolean,
 						"tags"			=>	String,
-						"user_id"		=>	Number);
+						"author_id"		=>	Number);
 
 	var $relations = array(	"Image" 	=> Image,
 							"Sites"		=> Site,
 							"Comments"	=> Comment,
-							"Author"	=> SiteUser);
+							"Author"	=> "");
 	
 	function Image()
 	{
@@ -73,8 +73,13 @@ class Article extends DataItem
 	
 	function Author()
 	{
-		if (!$this->user_id) return null;
-		return $this->getRelated(SiteUser);
+		$mgr = new UserManager();
+		return $mgr->getUser($this->author_id);
+	}
+	
+	function getAuthorName()
+	{
+		return $this->Author()->getFullName();
 	}
 	
 	function Article()
@@ -83,6 +88,10 @@ class Article extends DataItem
 		$this->primary_key = "article_id";
 		$this->pretty_class_name = "Article";
 		
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["Owner"] = $mgr->getUserClass(); 		
+				
 		$this->DataItem(func_get_args());
 	}
 }

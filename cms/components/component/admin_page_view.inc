@@ -84,6 +84,8 @@ class AdminPageView
 			$template = preg_replace("/go\\(([\"'])\\/?([\\w\\d_]+?)[\"']/", "go($1/page.php?identifier=$2$1", $template);
 			
 		}
+				
+		$template = ComponentManager::fireEvent("PostProcessPage", &$template);
 		
 		echo $template;		
 	}

@@ -42,7 +42,7 @@ $articles = query(Article, "ORDER BY last_modified DESC");
 $table = new DataListView($articles, "articles");
 $table->column("Title", formatTitle, true)
 	  ->column("Article Type", "{article_type}", true)
-	  ->column("Author", "{Author.first_name} {Author.last_name}", true)
+	  ->column("Author", "{getAuthorName()}", true)
 	  ->column("Last Modified", "{last_modified}", true);
 	  
 $table->sortable = true;
@@ -56,14 +56,14 @@ function formatTitle($item)
 	return "<a title=\"{$item->title}\" href=\"/admin/article_form?article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 }
 
-$table->writeScript();
+$script .= $table->writeScript();
 
 
 
 $table->drawView();
 ?>
 <br/>
-<input type="button" class="button" value="  Add an Article  " onclick="go('/admin/article_form');">
+<a class="button" href="/admin/article_form">Add an Article</a>
 <?
 
 ?>

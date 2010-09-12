@@ -120,6 +120,10 @@ class ComponentManager
 		}
 	}
 		
+	/**
+	 * Scan and build the compoment page map for the specified component.
+	 * @param $component the component to be scanned.
+	 */
 	function scanComponentPages($component)
 	{
 		$pages = $component->component_path . DIRECTORY_SEPARATOR . "pages";
@@ -205,8 +209,10 @@ class ComponentManager
 			Cache::invalidateMatching("fakoli_includes_.*");
 			Cache::invalidate("fakoli_scripts");
 			Cache::invalidate("fakoli_styles");
+			Cache::invalidate("fakoli_event_map");
 			
 			$cp->delete("WHERE scanned=0");
+			
 			
 			$this->tx->commit();
 			unset($this->tx);
@@ -226,11 +232,7 @@ class ComponentManager
 	 */
 	function getComponent($component)
 	{
-		$components = Cache::get("fakoli_components");
-		if (!$components)
-		{
-			$components = Fakoli::getComponents();
-		}
+		$components = Fakoli::getComponents();
 		
 		if (!array_key_exists($component, $components))
 		{
@@ -239,7 +241,71 @@ class ComponentManager
 		return $components[$component];
 	}	
 
-	function dispatchEvent()
+	/**
+	 * Retrieve the event handler map. The map is generated on the first request
+	 * and cached for future reference.
+	 * @return array the event handler map
+	 */
+	static function getEventHandlers()
+	{
+		$eventMap = Cache::get("fakoli_event_map");
+		if ($eventMap) return $eventMap;
+		
+		$components = Fakoli::getComponents();
+		
+		$eventMap = array();
+		
+		foreach($components as $componentName => $component)
+		{
+			$manifest = $component->loadManifest();
+			
+			if (!method_exists($manifest, subscribeToEvents)) continue;
+	
+			$subscriptions = $manifest->subscribeToEvents();
+			
+			foreach($subscriptions as $event => $handler)
+			{
+				$handlerRecord = array("component" => $componentName, "priority" => $component->priority, "handler" => $handler);
+				
+				if (array_key_exists($event, $eventMap))
+				{
+					$eventMap[$event][] = $handlerRecord;
+				}
+				else
+				{
+					$eventMap[$event] = array($handlerRecord);
+				} 
+			}
+		}
+		
+		Cache::put("fakoli_event_map", $eventMap);
+		return $eventMap;
+	}
+	
+	/**
+	 * Fire an event to all subscribers as detailed in their manifests.
+	 * @param string $event the name of the event
+	 * @param array $parameter any parameters being passed to the event
+	 */
+	static function fireEvent($event, &$parameter = null)
+	{
+		$eventMap = ComponentManager::getEventHandlers();
+		
+		if (!array_key_exists($event, $eventMap)) return;
+	
+		foreach($eventMap[$event] as $subscription)
+		{
+			Fakoli::using($subscription["component"]);
+			$parameter = call_user_func($subscription["handler"], $parameter);
+		}
+		
+		return $parameter;
+	}
+		 
+	/**
+	 * Dispatch an incoming user action to the appropriate component handler script.
+	 */
+	function dispatchAction()
 	{
 		global $method;
 		global $user;
