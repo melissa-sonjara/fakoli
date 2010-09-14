@@ -202,7 +202,7 @@ function isDefined(obj)
 
 function appendQueryString(url, params)
 {
-	url += params.indexOf("?") >= 0 ? "&" : "?";
+	url += url.indexOf("?") >= 0 ? "&" : "?";
 	url += params;
 	
 	return url;
