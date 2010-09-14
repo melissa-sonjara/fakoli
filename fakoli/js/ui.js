@@ -347,7 +347,7 @@ var ProgressiveSearch = new Class({
 		var request = new Request(
 	    		{
 	    			method: 'get', 
-	    			url: this.options.search + "?" + name + "=" + encodeURIComponent(val), 
+	    			url: appendQueryString(this.options.search, name + "=" + encodeURIComponent(val)), 
 	    			onSuccess: function(html) 
 	    			{ 
 	    				this.showList(html);

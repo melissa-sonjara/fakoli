@@ -200,6 +200,14 @@ function isDefined(obj)
 	 if(typeof(obj) !="undefined") return true; else return false; 
 }
 
+function appendQueryString(url, params)
+{
+	url += params.indexOf("?") >= 0 ? "&" : "?";
+	url += params;
+	
+	return url;
+}
+
 // Fix for Internet Explorer document.getElementById() bug.
 // IE will falsely match meta tags when searching the DOM with the above method,
 
