@@ -314,12 +314,15 @@ class ComponentManager
 		$component = $this->getComponent($_REQUEST["component"]);
 		$action = $_REQUEST["action"];
 		
+		trace("ComponentManager::dispatchAction action: $action", 3);
+		
 		if (!preg_match("/^[\\w\\d_]+$/", $action))
 		{
 			throw new FakoliException("Invalid action");
 		}
 		
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
+		trace("ComponentManager::dispatchAction handler: $handler", 3);
 		
 		if (!is_file($handler))
 		{
