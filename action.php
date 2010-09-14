@@ -5,6 +5,8 @@ require_once "cms/core.inc";
 Fakoli::using("component");
 
 $mgr = new ComponentManager();
+
+trace("action.php:: post mgr construction", 3);
 $mgr->dispatchAction();
 
 ?>
