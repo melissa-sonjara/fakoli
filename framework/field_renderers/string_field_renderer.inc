@@ -36,12 +36,32 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
 /**
  * Field renderer for string data fields. Renders as a single-line text field.
+ * 
+ * size: the length of the input field
+ * 
+ * limit: maximum number of characters user may enter
+ * 
+ * autocomplete: whether field may attempt autocompletion based on the
+ * user-entered data string. 
+ * 
+ * onChange: script-defined callback function to call when user edits
+ * the field (script is called on field exit, not for each key entered)
+ * 
+ * disable: alternative to readonly; field can be reenabled thru javascript
+ * 
+ * Example:
+ * to disable input in a field, add the following line of code to your
+ * calling script:
+ * $form->getRenderer("foo")->disable = true;
+ * 
  */
 class StringFieldRenderer extends FieldRenderer
 {	
 	var $size = 50;
 	var $limit = 0; // optional - restricts users from entering character count over limit
 	var $autocomplete = true; // default
+	var $onChange = ""; // optional callback on data input change
+	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 
 	function StringFieldRenderer(&$parent)
 	{
@@ -90,7 +110,11 @@ class StringFieldRenderer extends FieldRenderer
 		
 		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";
 		
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $onkeypress/>";
+		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";
+		
+		$disable = ($this->disable) ? "disabled='disabled'" : "";
+		
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' $onchange $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable $onkeypress/>";
 
 		if ($this->limit)
 		{

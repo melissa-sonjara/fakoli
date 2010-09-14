@@ -640,6 +640,41 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			echo "<tr>\n <td colspan='2'><b>* indicates required field</b></td></tr>\n";
 		}
 
+		$this->renderFields($obj);
+	
+		echo "<tr>\n";
+		echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
+		if ($this->useLinkSubmit)
+		{
+			echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
+		}
+		else
+		{
+			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
+		}
+
+		if ($obj->get($pk) && $this->allowDelete)
+		{
+			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
+
+			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
+			      value='$deleteLabel'
+			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
+		}
+
+		$this->drawButtons();
+
+		echo "</td>";
+		echo "</table>\n</form>\n";
+	}
+	
+	/*
+	 * JDG 9/14/2010
+	 * Break out this function to facilitate inheritence 
+	 * when fields needs custom layout.
+	 */
+	function renderFields($obj)
+	{
 		$filter = $obj->getFilter();
 		
 		foreach(array_keys($this->fields) as $field)
@@ -675,31 +710,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 				$renderer->renderField($field);
 			}
 		}
-
-		echo "<tr>\n";
-		echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
-		if ($this->useLinkSubmit)
-		{
-			echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
-		}
-		else
-		{
-			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
-		}
-
-		if ($obj->get($pk) && $this->allowDelete)
-		{
-			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
-
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
-			      value='$deleteLabel'
-			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
-		}
-
-		$this->drawButtons();
-
-		echo "</td>";
-		echo "</table>\n</form>\n";
+		
 	}
 
 	/**
