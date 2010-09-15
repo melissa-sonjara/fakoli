@@ -27,7 +27,12 @@ class ForumManifest
 								  	  "weight"	=>	2)
 			)
 		);		
-	}	
+	}
+	
+	static function getStyles()
+	{
+		return array("/fakoli/css/forum.css");
+	}
 }
 
 ?>
