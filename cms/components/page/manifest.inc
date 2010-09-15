@@ -28,6 +28,11 @@ class PageManifest
 			)
 		);		
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array("ResolveIdentifier" => array(PageManager, displayPage));
+	}
 }
 
 ?>

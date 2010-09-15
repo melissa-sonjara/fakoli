@@ -9,7 +9,7 @@ class ComponentManifest
 		$component->description = "Component management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 1;
 		$component->enabled = true;
 		
 		return $component;
@@ -28,6 +28,11 @@ class ComponentManifest
 			)
 		);		
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array("ResolveIdentifier" => array(ComponentManager, displayPage));
+	}
 	
 	static function getStyles()
 	{

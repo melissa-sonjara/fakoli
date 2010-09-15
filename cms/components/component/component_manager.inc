@@ -278,8 +278,25 @@ class ComponentManager
 			}
 		}
 		
+		// Prioritize event handlers
+		foreach($eventMap as $event => $handlers)
+		{
+			uasort($eventMap[$event], array(ComponentManager, compareByPriority));
+		}
+		
 		Cache::put("fakoli_event_map", $eventMap);
 		return $eventMap;
+	}
+	
+	/**
+	 * Priority comparison callback - not for external use.
+	 * @param array $item1
+	 * @param array $item2
+	 * @return integer comparison value
+	 */
+	static function compareByPriority($item1, $item2)
+	{
+		return $item1["priority"] - $item2["priority"];
 	}
 	
 	/**
@@ -287,16 +304,29 @@ class ComponentManager
 	 * @param string $event the name of the event
 	 * @param array $parameter any parameters being passed to the event
 	 */
-	static function fireEvent($event, &$parameter = null)
+	static function fireEvent($event, $parameter = null)
 	{
 		$eventMap = ComponentManager::getEventHandlers();
 		
 		if (!array_key_exists($event, $eventMap)) return;
 	
+		$continue = true;
+		
 		foreach($eventMap[$event] as $subscription)
 		{
 			Fakoli::using($subscription["component"]);
-			$parameter = call_user_func($subscription["handler"], $parameter);
+
+			if (is_array($subscription["handler"]))
+			{
+				trace("Handling $event with {$subscription["handler"][0]}::{$subscription["handler"][1]}", 3);
+			}
+			else
+			{
+				trace("Handling $event with {$subscription["handler"]}", 3);
+			}
+					
+			$parameter = call_user_func($subscription["handler"], $parameter, &$continue);
+			if (!$continue) break;
 		}
 		
 		return $parameter;
@@ -330,6 +360,34 @@ class ComponentManager
 		}
 		
 		include $handler;
+	}
+	
+	static function displayPage($identifier, &$continue)
+	{
+		global $page_role;
+		
+		try
+		{
+			$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
+			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+		
+			$page_role = $page->role;
+			
+			if (!checkRole($page->role))
+			{
+				redirect("/login");
+			}
+			
+			echo $pageView->drawView();
+			
+			$continue = false;
+		}
+		catch(DataNotFoundException $e)
+		{
+			
+		}
+		
+		return $identifier;
 	}
 }
 ?>

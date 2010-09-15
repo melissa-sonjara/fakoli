@@ -147,6 +147,16 @@ class ComponentPage extends DataItem
 		return $positions;
 	}
 	
+	static function findByIdentifier($identifier, $constraint = "")
+	{
+		$constraint = preg_replace("/^\s*WHERE\s+/i", "AND ", $constraint);
+		
+		$match = Query::create(ComponentPage, "WHERE identifier=:id $constraint")
+					  ->bind(":id", $identifier)
+					  ->executeSingle();
+
+		return $match;
+	}
 	
 	function ComponentPage()
 	{

@@ -1,0 +1,34 @@
+<?php
+
+Fakoli::using("component");
+
+class BlogManager
+{
+	static function displayBlog($identifier, &$continue)
+	{
+		try
+		{
+			$page = ComponentPage::findByIdentifier("blog", "WHERE enabled=1");
+			$_GET["blog"] = $identifier;
+		
+			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+		
+			$page_role = $page->role;
+			
+			if (!checkRole($page->role))
+			{
+				redirect("/login");
+			}
+			
+			echo $pageView->drawView();
+			
+			$continue = false;
+		}
+		catch(DataNotFoundException $e)
+		{
+			
+		}
+		
+		return $identifier;
+	}
+}
