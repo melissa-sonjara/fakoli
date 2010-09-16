@@ -116,8 +116,10 @@ class ComponentManager
 				$page->component_id = $component->component_id;
 				$page->joinTransaction($this->tx);
 				$page->save();
+				Cache::invalidate("fakoli_admin_pages_{$page->identifier}");				
 			}
 		}
+		
 	}
 		
 	/**
@@ -206,7 +208,6 @@ class ComponentManager
 			
 			Cache::invalidate("fakoli_components");
 			Cache::invalidate("fakoli_admin_menu");
-			Cache::invalidateMatching("fakoli_includes_.*");
 			Cache::invalidate("fakoli_scripts");
 			Cache::invalidate("fakoli_styles");
 			Cache::invalidate("fakoli_event_map");

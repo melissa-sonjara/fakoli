@@ -249,7 +249,12 @@ class WCCache
 		
 		$info = wincache_ucache_info();
 		
-		$keys = array_keys($info['ucache_entries']);
+		$keys = array();
+		
+		foreach($info['ucache_entries'] as $entry)
+		{
+			$keys[] = $entry['key_name'];
+		}
 		$doomedKeys = array_filter($keys, array($this, filterKey));
 		
 		foreach($doomedKeys as $key)
