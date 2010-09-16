@@ -103,8 +103,12 @@ class LoginManager
 		$username = $_POST[$mgr->getUsernameField()];
 		$password = $_POST["password"];
 		
+		// JDG - guard against data not found exception
+		if(!$username OR !$password)
+			return LoginManager::$error = "Incorrect user name or password.";			
+	
 		$user = $mgr->validatePassword($username, $password);
-		
+
 		if ($user)
 		{
 			session_start();
@@ -116,7 +120,7 @@ class LoginManager
 		}
 		else
 		{
-			LoginManager::$error = "Incorrect user name or password";
+			LoginManager::$error = "Incorrect user name or password.";
 		}
 	}
 
