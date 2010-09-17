@@ -163,6 +163,8 @@ class ComponentPage extends DataItem
 		$this->primary_key = "component_page_id";
 		$this->table = "component_page";
 		
+		$this->default_format = "{identifier}";
+		
 		$this->DataItem(func_get_args());
 	}
 }

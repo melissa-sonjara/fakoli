@@ -33,5 +33,13 @@ class PageManager
 		
 		return $identifier;
 	}
+	
+	static function enumeratePages(&$items)
+	{
+		$pages = Query::create(Page, "ORDER BY page_title")->execute();
+		
+		$items["Pages"] = $pages;
+		return $items;
+	}
 }
 ?>

@@ -31,7 +31,9 @@ class ComponentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" => array(ComponentManager, displayPage));
+		return array("ResolveIdentifier" 	=> array(ComponentManager, displayPage),
+					 "EnumerateItems"		=> array(ComponentManager, enumerateComponentPages));
+					 
 	}
 	
 	static function getStyles()

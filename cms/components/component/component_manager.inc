@@ -390,5 +390,13 @@ class ComponentManager
 		
 		return $identifier;
 	}
+	
+	static function enumerateComponentPages(&$items)
+	{
+		$pages = Query::create(ComponentPage, "ORDER BY identifier")->execute();
+		
+		$items["Component Pages"] = $pages;
+		return $items;
+	}
 }
 ?>

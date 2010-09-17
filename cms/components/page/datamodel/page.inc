@@ -173,7 +173,7 @@ class Page extends DataItem
 		$this->primary_key = "page_id";
 		$this->table = "page";
 		
-		$this->default_format = "{title}";
+		$this->default_format = "{page_title}";
 		
 		$this->DataItem(func_get_args());
 	}

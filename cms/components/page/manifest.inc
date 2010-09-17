@@ -31,7 +31,8 @@ class PageManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" => array(PageManager, displayPage));
+		return array("ResolveIdentifier" 	=> array(PageManager, displayPage),
+					 "EnumerateItems"		=> array(PageManager, enumeratePages));
 	}
 }
 

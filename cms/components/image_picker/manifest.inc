@@ -31,7 +31,7 @@ class ImagePickerManifest
 					  "tooltip"	=>	"Insert Photos", 
 					  "url"		=>	"/image_picker",
 					  "width"	=>	"600px",
-					  "height"	=>	"670px");
+					  "height"	=>	"600px");
 	}
 		
 	static function getScripts()

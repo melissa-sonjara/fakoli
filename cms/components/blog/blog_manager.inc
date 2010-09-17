@@ -31,4 +31,12 @@ class BlogManager
 		
 		return $identifier;
 	}
+	
+	static function enumerateItems(&$items)
+	{
+		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		
+		$items["Blogs"] = $blogs;
+		return $items;
+	}
 }

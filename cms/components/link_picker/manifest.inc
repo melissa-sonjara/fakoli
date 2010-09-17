@@ -26,12 +26,12 @@ class LinkPickerManifest
 		global $html_editor_extra_buttons;
 
 		$html_editor_extra_buttons[] =
-				array("name"	=>	"image_picker",
+				array("name"	=>	"link_picker",
 					  "image"	=>	"/fakoli/richtext/images/document_link.gif", 
 					  "tooltip"	=>	"Link to Page or Document", 
-					  "url"		=>	"/action/link_picker/show",
+					  "url"		=>	"/link_picker",
 					  "width"	=>	"500px",
-					  "height"	=>	"670px");
+					  "height"	=>	"600px");
 	}
 		
 }
