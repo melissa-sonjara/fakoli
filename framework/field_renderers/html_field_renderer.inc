@@ -61,6 +61,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
+		global $html_editor_extra_buttons;
+		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
 			//echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
@@ -89,7 +91,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		{
 			foreach($this->featureButtons as $button)
 			{
-				echo "$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
+				echo "theEditors.$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
 			}
 		}
 		
@@ -97,7 +99,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		{
 			foreach($html_editor_extra_buttons as $button)
 			{
-				echo "$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
+				echo "theEditors.$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
 			}
 		}
 		echo "\nwindow.addEvent('domready', function() {\n";
