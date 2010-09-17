@@ -393,6 +393,8 @@ function clearCheckBoxes(id, except)
 		$_activeTree= $this;
 		
 		$this->writeScript();
+		$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+		$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
 		
 		if ($this->selectMode == "single")
 		{
@@ -400,7 +402,7 @@ function clearCheckBoxes(id, except)
 <input type='hidden' name='<?echo $this->id ?>' id='<?echo $this->id?>' value='<?echo $this->value ?>'/>
 <? 
 		}
-?><table id="<?echo $this->id?>_table" class="<? echo $this->style?>" cellpadding="0" cellspacing="0" <? if ($this->width && !$this->height) echo "style='width:{$this->width}px'"; ?>>
+?><table id="<?echo $this->id?>_table" class="<? echo $this->style?>" cellpadding="0" cellspacing="0" <? if ($this->width) echo "style='width:{$width}'"; ?>>
 		 <? 
 		 if ($this->title)
 		 {
@@ -413,7 +415,7 @@ function clearCheckBoxes(id, except)
 		 ?>
 		 <tr>
 		  <td>
-		   <div style="padding: 0; margin: 0; <? if ($this->width > 0 && $this->height > 0) { ?> width: <? echo $this->width?>px;height: <?echo $this->height?>px;<? } ?><?if ($this->scroll) echo "overflow: auto"?>">
+		   <div style="padding: 0; margin: 0; width: 100%;<? if ($this->height > 0) { ?> height: <?echo $this->height?>px;<? } ?><?if ($this->scroll) echo "overflow: auto"?>">
 <?
 		$this->writeNodes();
 ?>

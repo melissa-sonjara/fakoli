@@ -35,45 +35,67 @@ Fakoli::usingFeature("tree");
 require_once "include/link_picker_tabs.inc";
 
 $editor = $_GET["Editor"];
+$document_library_id = checkNumeric($_GET["document_library_id"]);
 
-$itemsByType = array();
+$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
 
-$itemsByType = ComponentManager::fireEvent("EnumerateItems", &$itemsByType);
-
-$tree = new TreeControl("items");
-$tree->width = "100%";
-$tree->height = "280";
-$tree->selectMode = "single";
-
-foreach($itemsByType as $type => $items)
+if (!$document_library_id && count($libraries) > 0)
 {
-	$typeNode = new TreeNode($type, $type, null, false, "tree_node_closed", "tree_node_open");
-	
-	foreach($items as $item)
-	{
-		$itemNode = new TreeNode("{$type}_{$item->identifier}", $item->format(), null, false, "tree_node_closed", "tree_node_open", "javascript:insertLink(\"/{$item->identifier}\")");
-		$itemNode->leafStyle = "file_node_leaf";
-		$typeNode->add($itemNode);
-	}
-	
-	$tree->add($typeNode);
+	$document_library_id = $libraries[0]->document_library_id;
 }
 
-$tabs = linkPickerTabs("Editor=$editor");
-$tabs->page = "/link_picker";
-
-$script .= $tree->writeScript();
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
-
 function insertLink(url)
 {
 	window.opener.theEditors['$editor'].formatSelection("<a href=\"" + url + "\">");
+}
+
+function showLibrary(id)
+{
+	document.location.href="/document_picker?Editor=$editor&document_library_id=" + id;
+}
+
+function documentSelected()
+{
+	$('linkButton').disabled = false;
+}
+
+function linkToDocument()
+{
+	id = $('files_value').value;
+	insertLink("/action/document/download?document_id=" + id);
 	window.close();
 }
+
 </script>
 ENDSCRIPT;
 
+$tabs = linkPickerTabs("Editor=$editor");
+$tabs->page = "/document_picker";
+
 $tabs->writeHTML();
-$tree->writeHTML();
+
+$library = new DocumentLibrary();
+if ($document_library_id) $library->load($document_library_id);
+
+$docMgr = new DocumentManager($library);
+
 ?>
+<div style="border: solid 1px #666; background: url(/fakoli/images/table-header.png); width: 100%;padding: 2px 0px">
+ <strong>&nbsp;Document Library: </strong>
+ <select name="document_library_id" onchange="showLibrary(this.value)">
+<?
+	foreach($libraries as $library)
+	{
+		option($library->document_library_id, $library->name, $document_library_id);
+	} 
+?>
+ </select>
+</div>
+<?
+$docMgr->drawSelectView("documentSelected", "linkToDocument", "100%", 240);
+?>
+<br/>
+<button id="linkButton" onclick="linkToDocument()" disabled="disabled" class="button">Link to Document</button>
+<br/>

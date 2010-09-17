@@ -339,4 +339,46 @@ function deleteFolderResult(result)
 		$document->delete();
 		return true;
 	}
+	
+	function drawSelectView($selectionChanged = "", $doubleClick = "", $width=700, $height = 400)
+	{
+		global $config;
+		
+		$tree = new DirectoryTreeControl("files");
+		$tree->width = $width;
+		$tree->height = $height;
+		$tree->onSelectionChanged = $selectionChanged;
+		$tree->onDoubleClick = $doubleClick;
+		
+		$tree->selectMode = "file";
+		$tree->permissionCallback = array($this, folderPermission);
+		
+		$root = $this->library->getLibraryDirectory();
+		
+		$tree->buildFolderTree($config["uploaddir"], $root);
+				
+		foreach($this->documents as $doc)
+		{
+			$file = str_replace("/", DIRECTORY_SEPARATOR, $doc->file);
+			$file = str_replace("\\", DIRECTORY_SEPARATOR, $file);
+			
+			trace($file, 4);
+			$folderNode = $tree->findFolder(dirname($file));
+			
+			if ($folderNode != null)
+			{
+				trace("Found Folder {$folderNode->id}", 4);
+				$id = str_replace(DIRECTORY_SEPARATOR, "_", $file);
+			
+				$folderNode->add(new FileNode($id, basename($file), $doc->document_id));
+			}
+			else
+			{
+				trace("*** NODE NOT FOUND - $file", 3);
+			}
+		}
+				
+		$tree->children["documents"]->open = true;		
+		$tree->writeHTML(); 
+	}
 }

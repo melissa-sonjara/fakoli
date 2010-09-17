@@ -31,7 +31,7 @@ class LinkPickerManifest
 					  "tooltip"	=>	"Link to Page or Document", 
 					  "url"		=>	"/link_picker",
 					  "width"	=>	"500px",
-					  "height"	=>	"600px");
+					  "height"	=>	"400px");
 	}
 		
 }

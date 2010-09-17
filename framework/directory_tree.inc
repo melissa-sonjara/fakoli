@@ -453,12 +453,14 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 	
 	function writeHTML()
 	{	
+		$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+		$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
 		//ksort($this->children);
 		$this->writeScript();
 ?>
 		<input type="hidden" name="<?echo $this->id?>_value" id="<?echo $this->id?>_value" value="<?echo $this->selectedValue?>"/>
 		<input type="hidden" name="<?echo $this->id?>_node" id="<?echo $this->id?>_node" value=""/>
-		<table id="<?echo $this->id?>" class="<? echo $this->style?>" cellpadding="0" cellspacing="0">
+		<table id="<?echo $this->id?>" class="<? echo $this->style?>" style="width: <? echo $width?>;height: <?echo $height?>" cellpadding="0" cellspacing="0">
 		 <? 
 		 if ($this->title)
 		 {
@@ -471,7 +473,7 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 		 ?>
 		 <tr>
 		  <td>
-		   <div style="width: <? echo $this->width?>px;height: <?echo $this->height?>px;<?if ($this->scroll) echo "overflow: auto"?>">
+		   <div style="margin: 0; padding: 0;width: 100%;height: <?echo $height?>;<?if ($this->scroll) echo "overflow: auto"?>">
 <?
 		$c = count($this->children);
 		foreach($this->children as $key => $child)
