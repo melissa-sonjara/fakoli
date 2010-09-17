@@ -331,6 +331,7 @@ var ProgressiveSearch = new Class({
 		body.adopt(this.list);
 		
 		this.element.addEvent('keyup', function() { this.onKeyPress();}.bind(this));
+		this.element.addEvent('blur', function() { this.hideList();}.bind(this));
 	},
 	
 	onKeyPress: function()
@@ -361,5 +362,10 @@ var ProgressiveSearch = new Class({
 		this.container.set('html', html);
 		var coords = this.element.getCoordinates();
 		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'max-height': this.options.height, 'display': 'block'});
+	},
+	
+	hideList: function()
+	{
+		this.list.setStyle('display', 'none');
 	}
 });
