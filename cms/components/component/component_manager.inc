@@ -252,11 +252,11 @@ class ComponentManager
 		$eventMap = Cache::get("fakoli_event_map");
 		if ($eventMap) return $eventMap;
 		
-		$components = Fakoli::getComponents();
+		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
 		
 		$eventMap = array();
 		
-		foreach($components as $componentName => $component)
+		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();
 			
@@ -266,7 +266,7 @@ class ComponentManager
 			
 			foreach($subscriptions as $event => $handler)
 			{
-				$handlerRecord = array("component" => $componentName, "priority" => $component->priority, "handler" => $handler);
+				$handlerRecord = array("component" => $component->name, "priority" => $component->priority, "handler" => $handler);
 				
 				if (array_key_exists($event, $eventMap))
 				{
@@ -280,10 +280,10 @@ class ComponentManager
 		}
 		
 		// Prioritize event handlers
-		foreach($eventMap as $event => $handlers)
+		/*foreach($eventMap as $event => $handlers)
 		{
 			usort($eventMap[$event], array(ComponentManager, compareByPriority));
-		}
+		}*/
 		
 		Cache::put("fakoli_event_map", $eventMap);
 		return $eventMap;
