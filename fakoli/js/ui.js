@@ -314,6 +314,7 @@ var ProgressiveSearch = new Class({
 	element:	Class.Empty,
 	list: 		Class.Empty,
 	container:	Class.Empty,
+	allowHide:	true,
 	
 	initialize: function(element, options)
 	{
@@ -332,6 +333,8 @@ var ProgressiveSearch = new Class({
 		
 		this.element.addEvent('keyup', function() { this.onKeyPress();}.bind(this));
 		this.element.addEvent('blur', function() { this.hideList();}.bind(this));
+		this.list.addEvent('mouseover', function() { this.allowHide = false; }.bind(this));
+		this.list.addEvent('mouseout', function() { this.allowHide = true; }.bind(this));
 	},
 	
 	onKeyPress: function()
@@ -366,6 +369,8 @@ var ProgressiveSearch = new Class({
 	
 	hideList: function()
 	{
+		if (!this.allowHide) return;
+		
 		this.list.setStyle('display', 'none');
 	}
 });
