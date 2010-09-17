@@ -45,6 +45,8 @@ class Cache
 	
 	static function getInstance()
 	{
+		global $config;
+		
 		trace(get_class(Cache::$instance), 4);
 		
 		if (Cache::$instance) return Cache::$instance;
