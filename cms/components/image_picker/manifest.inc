@@ -9,7 +9,7 @@ class ImagePickerManifest
 		$component->description = "Image picker functionality for Fakoli/CMS RTE integration";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 5;
 		$component->enabled = true;
 		
 		return $component;
