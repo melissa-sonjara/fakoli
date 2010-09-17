@@ -282,7 +282,7 @@ class ComponentManager
 		// Prioritize event handlers
 		foreach($eventMap as $event => $handlers)
 		{
-			uasort($eventMap[$event], array(ComponentManager, compareByPriority));
+			usort($eventMap[$event], array(ComponentManager, compareByPriority));
 		}
 		
 		Cache::put("fakoli_event_map", $eventMap);
