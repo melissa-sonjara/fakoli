@@ -163,10 +163,29 @@ class ImageManager
 		fclose($f);
 		
 	}
-	
+		
 	function thumbnailLink($image_id, $size)
 	{
 		return "/action/image/thumbnail?image_id=$image_id&size=$size";
+	}
+	
+	function getSize($image_id, &$width, &$height)
+	{
+		$image = new Image($image_id);
+		$gallery = $image->Gallery();
+		
+		//TODO: Fix this
+		//if (!checkRole($gallery->read_access))
+		//{
+		//	throw new FakoliException("Access Denied");
+		//}
+
+		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
+		
+		$img = imageCreateFromString(file_get_contents($imageFile));
+		$width = imagesx($img);
+		$height = imagesy($img);
+		imageDestroy($img);
 	}
 	
 }

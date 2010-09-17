@@ -1,0 +1,69 @@
+@CHARSET "ISO-8859-1";
+
+.imageLink a
+{
+	text-align: center;	
+	text-decoration: none;
+	color: #000;
+	display: block;
+	text-align: center;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+.imageLink img
+{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.imageGrid 
+{
+	margin:0;
+	padding:15px 8px 0;
+}
+.imageGrid li 
+{
+	display:inline-block;
+	margin: 4px;
+	padding:0;
+	vertical-align:top;
+}
+.imageGrid li > div 
+{
+	display:table;
+	width:150px;
+}
+
+.imageGrid a 
+{
+	background-color:#eef;
+	color:#000000;
+	cursor:pointer;
+	display:block;
+	text-decoration:none;
+}
+
+.imageGrid > li .wrapImage 
+{
+	display:table-cell;
+	height: 150px;
+	vertical-align:middle;
+	width: 150px;
+}
+
+.imageGrid img 
+{
+	border:1px solid #666;
+	vertical-align:middle;
+}
+
+.imageGrid .caption 
+{
+	display:block;
+	font-size: 0.9em;
+	line-height:1.1;
+	padding:0.3em 5px;
+	width:150px;
+}

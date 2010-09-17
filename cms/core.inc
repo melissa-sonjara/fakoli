@@ -367,7 +367,7 @@ class Fakoli
 	}
 }
 
-Fakoli::using("user", "login");
+Fakoli::using("user", "login", "component");
 
 $user = null;
 
@@ -395,4 +395,7 @@ else
 		
 	}
 }
+
+ComponentManager::fireEvent("Initialize");
+
 ?>

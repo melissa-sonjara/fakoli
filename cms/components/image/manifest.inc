@@ -27,7 +27,12 @@ class ImageManifest
 								  	  "weight"	=>	4)
 			)
 		);		
-	}	
+	}
+	
+	static function getStyles()
+	{
+		return array("/fakoli/css/image.css");
+	}
 }
 
 ?>

@@ -29,8 +29,8 @@ $html_editor_extra_buttons = array(
 	
 
 	array("name"	=>	"image_picker",
-		  "image"	=>	"/cms/images/photos.gif", 
-		  "tooltip"	=>	"Insert Photos", 
+		  "image"	=>	"/fakoli/richtext/images/insert_photo.gif", 
+		  "tooltip"	=>	"Insert Image from Gallery", 
 		  "url"		=>	"/cms/components/image_picker/image_picker.php",
 		  "width"	=>	"500px",
 		  "height"	=>	"670px")
