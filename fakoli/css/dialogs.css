@@ -45,6 +45,13 @@
 	font-weight: bold;
 }
 
+.progressive_search
+{
+	background-color: #fff;
+	text-align: left;
+	border: solid 1px #666;
+}
+
 .progressive_search a
 {
 	display: block;
