@@ -235,8 +235,8 @@ class Fakoli
 		
 		$scriptArray = array();
 		
-		$components = Fakoli::getComponents();
-		foreach($components as $name => $component)
+		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();		
 			if (method_exists($manifest, getScripts))
@@ -263,8 +263,8 @@ class Fakoli
 		
 		$styleArray = array();
 		
-		$components = Fakoli::getComponents();
-		foreach($components as $name => $component)
+		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();		
 			if (method_exists($manifest, getStyles))
