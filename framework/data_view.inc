@@ -61,6 +61,7 @@ class DataListView
 	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
 	var $excelFile;		///< Filename for automatic Excel export
+	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
 	
 	/**
 	 * Creates a new DataListView object.
@@ -188,7 +189,7 @@ class DataListView
 			return "";
 		}
 		
-		if ($this->pageSize > 0)
+		if ($this->pageSize > 0 AND $this->paginate)
 		{
 			$constructor = "\n\t\tvar {$this->id}_paginator = new PaginatingTable('{$this->id}', '{$this->id}_paginator', {per_page: {$this->pageSize}});";
 		}
@@ -258,8 +259,22 @@ class DataListView
 		
 ?>			
 		<div style="width: <?echo $width ?>">
-		<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
-		<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div></div>
+		<? 
+		if($this->paginate)
+		{
+			?>
+			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
+			<?php
+		}
+		
+		if($this->filter)
+		{
+		?>
+			<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div>
+		<?php 
+		}
+		?>
+		</div>
 		<table<?echo $attrs?>>
 		 <thead>
 		  <tr>

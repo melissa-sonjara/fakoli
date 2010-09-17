@@ -164,11 +164,11 @@ class TabBar
          	{
 	         	if (array_key_exists($url, $this->flags))
 	         	{
-	         		$text = "<img src='{$this->states[$this->flags[$url]]}' style='display: inline-block;vertical-align: middle'/>&nbsp;$text";         	
+	         		$text = "<img src='{$this->states[$this->flags[$url]]}' style='border: none; display: inline-block;vertical-align: middle'/>&nbsp;$text";         	
 	         	}
 	         	else if ($this->defaultStateImage)
 	         	{
-	         		$text = "<img src='{$this->defaultStateImage}' style='display: inline-block;vertical-align: middle'/>&nbsp;$text";
+	         		$text = "<img src='{$this->defaultStateImage}' style='border: none; display: inline-block;vertical-align: middle'/>&nbsp;$text";
 	         	}
          	}
 	        echo "<li$style><a href=\"$dest\"$active>$text</a></li>";
