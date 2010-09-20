@@ -405,6 +405,7 @@ abstract class AbstractDataItem
 			
 		case String:
 		case Text:
+		case TimeZone:
 			
 		default:
 		
@@ -470,6 +471,7 @@ abstract class AbstractDataItem
 			
 		case String:
 		case Text:
+		case TimeZone:
 			
 		default:
 		
