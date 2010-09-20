@@ -42,7 +42,7 @@ if ($method == "POST")
 	redirect("/admin/page_modules?page_id=$page_id");
 }
 
-
+$tabs->page = "/admin/component_page_modules";
 
 $tabs->writeHTML();
 ?>
@@ -94,7 +94,7 @@ else {
 ?>
 </table>
 <br/>
-<input type="submit" class="button" name="submit" value="Update Module Positions"/><NOBR>&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="Preview ComponentPage" name="preview" onclick="window.open('/page?page_id=<?echo $page_id?>', 'popupwindow1', 'width=900, height=600, resizable=no, scrollbars=yes'); return false;"/>
+<input type="submit" class="button" name="submit" value="Update Module Positions"/><NOBR>&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="Preview Component Page" name="preview" onclick="window.open('/<?echo $page->identifier?>', 'popupwindow1', 'width=900, height=600, resizable=no, scrollbars=yes'); return false;"/>
 <?
 
 ?>
