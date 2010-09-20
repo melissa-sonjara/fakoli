@@ -65,25 +65,10 @@ foreach($modules as $module)
  <td><strong><a href="<?echo $module->getAdminForm()?>?module_id=<?echo $module->module_id?>" ><?echo $module->title?></a></strong></td>
  <td><select name="module[<?echo $module->module_id?>]">
  <?
-
- /*if($module->title == "Login") { 
- 	echo '<option selected="Login">Login</option>';
- 	$position->sort_order=1;
- }*/
- 
-if ($module->title == "Search") { 
-	
-	echo "<option selected='Right'>Right</option>";
-	$position->sort_order=1;
-}
-else {
-    echo "<option selected=''></option>";
-}
- 
- foreach($positions as $p)
- {
- 	option($p, ucwords($p), $position->position);
- }
+	foreach($positions as $p)
+	{
+ 		option($p, ucwords($p), $position->position);
+ 	}
  ?>
  </select></td>
  <td>
@@ -94,7 +79,7 @@ else {
 ?>
 </table>
 <br/>
-<input type="submit" class="button" name="submit" value="Update Module Positions"/><NOBR>&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="Preview Component Page" name="preview" onclick="window.open('/<?echo $page->identifier?>', 'popupwindow1', 'width=900, height=600, resizable=no, scrollbars=yes'); return false;"/>
+<input type="submit" class="button" name="submit" value="Update Module Positions"/>&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="Preview Component Page" name="preview" onclick="window.open('/<?echo $page->identifier?>', 'popupwindow1', 'width=900, height=600, resizable=no, scrollbars=yes'); return false;"/>
 <?
 
 ?>
