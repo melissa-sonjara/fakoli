@@ -178,6 +178,9 @@ class AutoForm
 		case Boolean:
 			return new BooleanFieldRenderer($this);
 			
+		case TimeZone:
+			return new TimezoneFieldRenderer($this);
+			
 		case Password:
 			return new PasswordFieldRenderer($this);
 			
@@ -192,7 +195,7 @@ class AutoForm
 			
 		case Timestamp:
 			
-			return null;
+			return null;			
 			
 		default:
 			throw new FakoliException("AutoForm::createRenderer(): Unknown type");
