@@ -2,14 +2,14 @@
 
 Fakoli::using("component");
 
-class BlogManager
+class CalendarManager
 {
-	static function displayBlog($identifier, &$continue)
+	static function displayCalendar($identifier, &$continue)
 	{
 		try
 		{
-			$page = ComponentPage::findByIdentifier("blog", "WHERE enabled=1");
-			$_GET["blog"] = $identifier;
+			$page = ComponentPage::findByIdentifier("calendar_view", "WHERE enabled=1");
+			$_GET["cal"] = $identifier;
 		
 			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
 		
@@ -34,9 +34,9 @@ class BlogManager
 	
 	static function enumerateItems(&$items)
 	{
-		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		$calendars = Query::create(Calendar, "ORDER BY title")->execute();
 		
-		$items["Blogs"] = $blogs;
+		$items["Calendars"] = $calendars;
 		return $items;
 	}
 }

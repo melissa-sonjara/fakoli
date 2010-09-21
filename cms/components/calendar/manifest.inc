@@ -26,6 +26,12 @@ class CalendarManifest
 					  "weight"	=>	2))
 		);
 	}	
+
+	static function subscribeToEvents()
+	{
+		return array("ResolveIdentifier" => array(CalendarManager, displayCalendar),
+					 "EnumerateItems"	 => array(CalendarManager, enumerateItems));
+	}
 }
 
 ?>

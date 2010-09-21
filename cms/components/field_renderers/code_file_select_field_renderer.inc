@@ -31,61 +31,72 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../../framework/field_renderers.inc";
+Fakoli::usingFeature("field_renderers");
+Fakoli::using("component");
 
 class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 {
 	function CodeFileSelectFieldRenderer(&$form, $field, $label, $directory, $onChange="")
 	{
+		trace("Scanning Modules", 3);
+		
 		global $config;
 		$path = $config["homedir"]."/".$directory;
 	
 		$options = array("" => "");
-		$options = array_merge($options, $this->readFiles($config["homedir"], $directory));
-			
-		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
+		$options = array_merge($options, array("General Code Files" => $this->readFiles($config["homedir"], $directory)));
+		
+		$components = Fakoli::getComponents();
+		trace(count($components)." components", 3);
+		foreach($components as $name => $component)
+		{
+			trace("Scanning $name", 3);
+			$modules = $this->readFiles($component->component_path, $directory);
+			if (count($modules) > 0)
+			{
+				$options = array_merge($options, array(ucwords($name)." Modules" => $modules));
+			}
+		}
+		
+		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange, true);
 	}
 	
 	function readFiles($home, $dir)
 	{
-		trace("Scanning Modules", 3);
 		 
 		$options = array();
 		
-		$folders = array("$dir");		
+		$path = $home . DIRECTORY_SEPARATOR . $dir;
 		
-		while(($dir = array_shift($folders)) !== null)
-		{
-			$path = "$home/$dir";
-			
-			trace("Reading $path", 3);
-			
-			$handle = opendir($path);
-			while(false !== ($file = readdir($handle))) 
-	    	{
-	    		trace($file, 4);
-	    		
-	    		if ($file != "." && 
-	    			$file != ".." && 
-	    			$file != ".svn" && 
-	    			$file != "CVS")
-	    		{
-	    			$f = "$path/$file";
-					$l = "$dir/$file";
-					
-	    			if (is_dir($f))
-	    			{
-	    				array_push($folders, $l);	
-	    			}
-					else if (preg_match('/.inc$/i', $file)) 
-					{
-						$options[$l] = $l;
-					}
-	    		}        	
-	    	}
-	
-		    closedir($handle);
-		}
+		trace("Reading $path", 3);
+		
+		if (!file_exists($path)) return $options;
+		
+		$handle = opendir($path);
+		while(false !== ($file = readdir($handle))) 
+    	{
+    		trace($file, 4);
+    		
+    		if ($file != "." && 
+    			$file != ".." && 
+    			$file != ".svn" && 
+    			$file != "CVS")
+    		{
+    			$f = "$path/$file";
+				$l = "$dir/$file";
+				
+    			if (is_dir($f))
+    			{
+    				array_push($folders, $l);	
+    			}
+				else if (preg_match('/.inc$/i', $file)) 
+				{
+					$options[$l] = $l;
+				}
+    		}        	
+    	}
+
+	    closedir($handle);
 		
 	    return $options;
 	    
