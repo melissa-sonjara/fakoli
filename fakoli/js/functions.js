@@ -161,7 +161,7 @@ function maskInput(e)
 		return true;
 	}
 	// numbers
-	else if ((("0123456789.,").indexOf(keychar) > -1))
+	else if ((("0123456789.,-").indexOf(keychar) > -1))
 	{
 		return true;
 	}
