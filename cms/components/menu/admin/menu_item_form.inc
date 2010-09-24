@@ -1,7 +1,7 @@
 <?php
 
 
-Fakoli::using("menu", "site", "role", "page");
+Fakoli::using("menu", "site", "role", "page", "field_renderers");
 Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/menu_tabs.inc";
@@ -35,7 +35,7 @@ $form = new AutoForm($menuItem);
 $form->required("title");
 //$form->allowDelete = true;
 $form->hide("parent_id", "menu_id", "page_id");
-
+/*
 $pageChoices = array("Content Pages" => array(), "Component Pages" => array());
 
 $contentPages = Query::create(Page, "ORDER BY page_title")->execute();
@@ -50,6 +50,8 @@ foreach($componentPages as $page)
 }
 
 $identifierSelect = new SelectFieldRenderer($form, "identifier", "Page", $pageChoices, null, true);
+*/
+$identifierSelect = new CMSItemSelectFieldRenderer($form, "identifier", "Page", null);
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
 
