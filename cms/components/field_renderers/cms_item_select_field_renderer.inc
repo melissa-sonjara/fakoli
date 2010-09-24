@@ -24,7 +24,7 @@ class CMSItemSelectFieldRenderer extends SelectFieldRenderer
 		}
 		
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange, true);		
-	}	
+	}
 }
 
 ?>

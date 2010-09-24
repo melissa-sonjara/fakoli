@@ -378,6 +378,7 @@ class ComponentManager
 			
 			if (!checkRole($page->role))
 			{
+				$_SESSION["login_redirect"] = "/$identifier";
 				redirect("/login");
 			}
 			
