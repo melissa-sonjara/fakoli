@@ -73,6 +73,7 @@ class Calendar extends DataItem
 	{
 		$this->table = "calendar";
 		$this->primary_key = "calendar_id";
+		$this->default_format = "{name}";
 		
 		$this->DataItem(func_get_args());
 	}

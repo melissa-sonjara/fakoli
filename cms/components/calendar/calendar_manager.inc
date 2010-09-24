@@ -34,7 +34,7 @@ class CalendarManager
 	
 	static function enumerateItems(&$items)
 	{
-		$calendars = Query::create(Calendar, "ORDER BY title")->execute();
+		$calendars = Query::create(Calendar, "ORDER BY name")->execute();
 		
 		$items["Calendars"] = $calendars;
 		return $items;
