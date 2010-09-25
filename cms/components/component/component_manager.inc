@@ -281,12 +281,6 @@ class ComponentManager
 			}
 		}
 		
-		// Prioritize event handlers
-		/*foreach($eventMap as $event => $handlers)
-		{
-			usort($eventMap[$event], array(ComponentManager, compareByPriority));
-		}*/
-		
 		Cache::put("fakoli_event_map", $eventMap);
 		return $eventMap;
 	}
@@ -309,9 +303,15 @@ class ComponentManager
 	 */
 	static function fireEvent($event, $parameter = null)
 	{
+		trace("** Firing event '$event'", 3);
+		 
 		$eventMap = ComponentManager::getEventHandlers();
 		
-		if (!array_key_exists($event, $eventMap)) return;
+		if (!array_key_exists($event, $eventMap)) 
+		{
+			trace(" No handlers subscribed to '$event'", 3);
+			return;
+		}
 	
 		$continue = true;
 		
