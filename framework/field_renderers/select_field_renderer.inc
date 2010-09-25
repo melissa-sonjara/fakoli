@@ -128,6 +128,12 @@ class SelectFieldRenderer extends FieldRenderer
 			{
 				foreach($this->options as $groupName => $group)
 				{
+					if ($groupName == "")
+					{
+						echo "<option value=''></option>\n";
+						continue;
+					}
+					
 					echo "<optgroup label=\"$groupName\">\n";
 					
 					foreach($group as $value => $name)
