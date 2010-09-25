@@ -9,7 +9,7 @@ class CalendarManifest
 		$component->description = "Basic Calendar display and handling for Fakoli/CMS components";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 4;
 		$component->enabled = true;
 		
 		return $component;
