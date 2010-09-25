@@ -43,7 +43,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 		global $config;
 		$path = $config["homedir"]."/".$directory;
 	
-		$options = array("" => "");
+		$options = array("" => array("" => ""));
 		$options = array_merge($options, array("General Code Files" => $this->readFiles($config["homedir"], $directory)));
 		
 		$components = Fakoli::getComponents();
