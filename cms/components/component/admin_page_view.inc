@@ -46,7 +46,16 @@ class AdminPageView
 		$template = file_get_contents(Fakoli::resolveResource("/fakoli/admin.tpl"));
 		
 		ob_start();
-		include $page->server_path;
+		
+		try
+		{
+			include $page->server_path;
+		}
+		catch(Exception $e)
+		{
+			//
+		}
+		
 		$content = ob_get_contents();
 		ob_end_clean();
 	
