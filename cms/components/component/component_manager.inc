@@ -309,8 +309,8 @@ class ComponentManager
 		
 		if (!array_key_exists($event, $eventMap)) 
 		{
-			trace(" No handlers subscribed to '$event'", 3);
-			return;
+			trace("No handlers subscribed to '$event'", 3);
+			return $parameter;
 		}
 	
 		$continue = true;
