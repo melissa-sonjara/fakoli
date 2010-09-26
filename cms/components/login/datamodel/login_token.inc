@@ -62,20 +62,21 @@ function LoginToken()
 class LoginToken extends DataItem
 {
 	var $fields = array(
-				"token_key"			=>	Number,
+				"token_id"			=>	Number,
 				"token"				=>	String,
 				"expire_date"		=>	Date,
 				"user_id"			=>	Number
 	);
 	
 	var $relations = array(
-					"SiteUser"		=>	SiteUser
+					"SiteUser"		=>	""
 	);
 	
 	
 	function SiteUser()
 	{
-		return $this->getRelated(SiteUser);
+		$mgr = new UserManager();
+		return $mgr->getUser($this->user_id);
 	}
 	
 	/*
@@ -114,8 +115,12 @@ class LoginToken extends DataItem
 	function LoginToken()
 	{
 		$this->table = "login_token";
-		$this->primary_key = "token_key";
-			
+		$this->primary_key = "token_id";
+					
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["SiteUser"] = $mgr->getUserClass(); 
+		
 		$this->DataItem(func_get_args());	
 	}
 }

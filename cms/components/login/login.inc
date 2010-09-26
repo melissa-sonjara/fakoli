@@ -120,7 +120,18 @@ class LoginManager
 		}
 		else
 		{
-			LoginManager::$error = "Incorrect user name or password.";
+			$user = $this->validateTokenLogin($username, $password);
+			
+			if ($user)
+			{
+				$_SESSION["user"] = $user;
+				$mgr->loadDefaultSession($user);
+				redirect($mgr->getPasswordResetPage());
+			}
+			else
+			{	
+				LoginManager::$error = "Incorrect user name or password.";
+			}
 		}
 	}
 
@@ -130,19 +141,34 @@ class LoginManager
 	 * JDG 2/18/20. If the password does not match, check if the login was
 	 * a valid temporary token login
 	 */
-	function validTokenLogin($match, $password, &$tokenLogin = false)
+	function validateTokenLogin($username, $password)
 	{
-		$token = $match->LoginToken();
-		$today = date('Y-m-d');
+		try
+		{		
+			$mgr = new UserManager();
+			$user = $mgr->getUserByName($username);
+			if (!$user) return null;
 			
-		if (isset($token) AND $token->token == $password AND $token->expire_date >= $today)
-		{
-			$tokenLogin = true;
-			$token->delete();
-			return valid_token_login;
+			$token = Query::create(LoginToken, "WHERE user_id=:id")
+							->bind(":id", $user->get($user->primary_key))
+							->executeSingle();
+							
+			$today = date('Y-m-d');
+				
+			if (isset($token) AND $token->token == $password AND $token->expire_date >= $today)
+			{
+				$token->delete();
+				return $user;
+			}
+			else
+			{
+				return null;
+			}
 		}
-		else
-			return invalid_password;
+		catch(Exception $e)
+		{
+			return null;
+		}
 	}
 
 	/**
