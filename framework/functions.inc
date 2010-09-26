@@ -46,7 +46,7 @@ function checkRole($role)
 {
 	global $user;
 	
-	if ($role == "" || $user->role == "super") return true;
+	if ($role == "" || $user->role == "super" || $user->role == "admin") return true;
 	if (!$user) return false;
 	
 	if ($role != "" && $user->role == "") return false;

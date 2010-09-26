@@ -96,7 +96,7 @@ class Fakoli
 		    	closedir($handle);
 			}
 	
-			trace($c->component_path, 3);
+			trace($c->component_path, 4);
 			
 			$handle = opendir($c->component_path);
 	

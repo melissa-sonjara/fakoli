@@ -155,7 +155,7 @@ class ComponentPageView
 			
 		}
 		
-		$mgr = ComponentManager::fireEvent("PostProcessPage", &$template);
+		$template = ComponentManager::fireEvent("PostProcessPage", &$template);
 		
 		return $template;
 	}

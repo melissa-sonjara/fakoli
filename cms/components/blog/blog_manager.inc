@@ -17,7 +17,7 @@ class BlogManager
 			
 			if (!checkRole($page->role))
 			{
-				$_SESSION["login_redirect"] = "/$identifier";
+				LoginManager::storeRedirectPage();
 				redirect("/login");
 			}
 			

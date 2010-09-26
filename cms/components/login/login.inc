@@ -145,6 +145,18 @@ class LoginManager
 			return invalid_password;
 	}
 
+	/**
+	 * Store the page from which a user has been redirected when prompted 
+	 * to login or create an account.
+	 */
+	function storeRedirectPage()
+	{
+		global $_SESSION;
+	
+		$page = $_SERVER["REQUEST_URI"];
+		$_SESSION["login_redirect"] = $page;
+		trace($page, 3);
+	}
 	
 	/*
 	 * If the user was on a page in the system when they were sent to login,
