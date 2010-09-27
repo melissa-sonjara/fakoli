@@ -303,13 +303,13 @@ class ComponentManager
 	 */
 	static function fireEvent($event, $parameter = null)
 	{
-		trace("** Firing event '$event'", 3);
+		trace("** Firing event '$event'", 4);
 		 
 		$eventMap = ComponentManager::getEventHandlers();
 		
 		if (!array_key_exists($event, $eventMap)) 
 		{
-			trace("No handlers subscribed to '$event'", 3);
+			trace("No handlers subscribed to '$event'", 4);
 			return $parameter;
 		}
 	
@@ -321,11 +321,11 @@ class ComponentManager
 
 			if (is_array($subscription["handler"]))
 			{
-				trace("Handling $event with {$subscription["handler"][0]}::{$subscription["handler"][1]}", 3);
+				trace("Handling $event with {$subscription["handler"][0]}::{$subscription["handler"][1]}", 4);
 			}
 			else
 			{
-				trace("Handling $event with {$subscription["handler"]}", 3);
+				trace("Handling $event with {$subscription["handler"]}", 4);
 			}
 					
 			$parameter = call_user_func($subscription["handler"], $parameter, &$continue);
@@ -347,7 +347,7 @@ class ComponentManager
 		$component = $this->getComponent($_REQUEST["component"]);
 		$action = $_REQUEST["action"];
 		
-		trace("ComponentManager::dispatchAction action: $action", 3);
+		trace("ComponentManager::dispatchAction action: $action", 4);
 		
 		if (!preg_match("/^[\\w\\d_]+$/", $action))
 		{
@@ -355,7 +355,7 @@ class ComponentManager
 		}
 		
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
-		trace("ComponentManager::dispatchAction handler: $handler", 3);
+		trace("ComponentManager::dispatchAction handler: $handler", 4);
 		
 		if (!is_file($handler))
 		{
