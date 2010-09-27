@@ -307,6 +307,7 @@ function jsSafe($str, $escapeEntities = false)
 	$str = str_replace("\r", "", $str);
 	$str = str_replace("\n", "\\n", $str);
 	$str = str_replace("&#39;", "\'", $str);
+	$str = str_ireplace("</script>", "\x3C/script\x3E", $str);
 	
 	if ($escapeEntities)
 	{
