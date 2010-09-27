@@ -33,21 +33,16 @@
  
 Fakoli::using("image");
 
-$gallery_id = checkNumeric($_GET["gallery_id"]);
+$image_id = checkNumeric($_GET["image_id"]);
 
-if (!$gallery_id)
-{
-	redirect("/index");
-	return;
-}
+$image = new Image($image_id);
 
-$gallery = new ImageGallery($gallery_id);
-$images = $gallery->Images();
+$width = 100;
+$height = 100;
+$mgr = new ImageManager();
+$mgr->getScaledSize($image_id, 600, $width, $height);
 
-$page->page_title = $gallery->gallery_name;
-
-$view = new ImageGalleryView($images, "javascript:modalPopup('Image Gallery', '/action/image/simple_lightbox_view?image_id={image_id}', 'auto', 'auto');");
-$view->spacing = "6px";
-$view->styles = "margin-left: 40px";
-$view->drawGallery();
 ?>
+<div style="width: <?echo $width?>px; height: <?echo $height?>px;background: url(/fakoli/slideshow/images/loading_animation.gif) center center no-repeat #2a2a2f">
+<img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px; display: none" alt="<?echo $image->ALT_tag?>" onload="this.setStyles({'display': 'block', 'opacity': 0}); $(this).fade('in');"/>
+</div>

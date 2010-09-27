@@ -218,5 +218,61 @@ class ImageManager
 		$height = imagesy($img);
 		imageDestroy($img);
 	}
+
+	function getScaledSize($image_id, $size, &$width, &$height)
+	{
+		$this->getSize($image_id, $width, $height);
+		
+		if ($width > $height)
+		{
+			$height = $height * $size / $width;
+			$width = $size;
+		}
+		else
+		{
+			$width = $width * $size / $height;
+			$height = $size;
+		}
+	}
 	
+	static function displayImageGallery($identifier, &$continue)
+	{
+		try
+		{
+			$gallery = Query::create(ImageGallery, "WHERE identifier=:i")
+							->bind(":i", $identifier)
+							->executeSingle();
+							
+			$page = ComponentPage::findByIdentifier("image_gallery", "WHERE enabled=1");
+			$_GET["gallery_id"] = $gallery->gallery_id;
+		
+			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+		
+			$page_role = $page->role;
+			
+			if (!checkRole($page->role))
+			{
+				LoginManager::storeRedirectPage();
+				redirect("/login");
+			}
+			
+			echo $pageView->drawView();
+			
+			$continue = false;
+		}
+		catch(DataNotFoundException $e)
+		{
+			
+		}
+		
+		return $identifier;
+	}
+	
+	static function enumerateItems(&$items)
+	{
+		$galleries = Query::create(ImageGallery, "ORDER BY title")->execute();
+		
+		$items["Image Galleries"] = $galleries;
+		return $items;
+	}
 }

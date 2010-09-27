@@ -9,7 +9,7 @@ function validURL($item)
 	
 /**
  * The Slideshow class provides a reusable user interface control that displays
- * primary source items from the database in a zoomable format. The control is 
+ * images from the database in a zoomable format. The control is 
  * flexible, and can be used to display multiple images in either a slideshow or
  * lightbox format. Additional information and navigation areas can be shown or 
  * hidden as required.

@@ -463,12 +463,12 @@ var Slideshow = (function()
 			if (this.playing)
 			{
 				this.playing = false;
-				this.playButton.setStyle('background-image', 'url(/cms/components/slideshow/images/play.gif)');
+				this.playButton.setStyle('background-image', 'url(/fakoli/slideshow/images/play.gif)');
 			}
 			else
 			{
 				this.playing = true;
-				this.playButton.setStyle('background-image', 'url(/cms/components/slideshow/images/stop.gif)');
+				this.playButton.setStyle('background-image', 'url(/fakoli/slideshow/images/stop.gif)');
 				this.playNext();
 			}
 		},
@@ -480,13 +480,13 @@ var Slideshow = (function()
 			{
 				this.caption.setStyle('display', 'none');
 				this.creditText.setStyle('display', 'none');
-				this.infoButton.setStyle('background-image', 'url(/cms/components/slideshow/images/info_off.gif)');
+				this.infoButton.setStyle('background-image', 'url(/fakoli/slideshow/images/info_off.gif)');
 			}
 			else
 			{
 				this.caption.setStyle('display', 'inline');
 				this.creditText.setStyle('display', 'inline');
-				this.infoButton.setStyle('background-image', 'url(/cms/components/slideshow/images/info.gif)');
+				this.infoButton.setStyle('background-image', 'url(/fakoli/slideshow/images/info.gif)');
 			}
 		},
 		
@@ -647,6 +647,6 @@ var Slideshow = (function()
 		if (instance) return instance;
 		else instance = new SlideshowSingleton(options);
 		return instance;
-	}
+	};
 })();
 

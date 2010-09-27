@@ -64,6 +64,12 @@ class ImageManifest
 	{
 		return array("/fakoli/css/image.css");
 	}
+	
+	static function subscribeToEvents()
+	{
+		return array("ResolveIdentifier" => array(ImageManager, displayImageGallery),
+					 "EnumerateItems"	 => array(ImageManager, enumerateItems));
+	}
 }
 
 ?>
