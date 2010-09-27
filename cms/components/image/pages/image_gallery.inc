@@ -44,7 +44,7 @@ if (!$gallery_id)
 $gallery = new ImageGallery($gallery_id);
 $images = $gallery->Images();
 
-$page->page_title = $gallery->gallery_name + "Image Gallery";
+$page->page_title = $gallery->gallery_name . "Image Gallery";
 
 $view = new ImageGalleryView($images, "javascript:modalPopup('Image Gallery', '/action/image/simple_lightbox_view?image_id={image_id}', 'auto', 'auto');");
 $view->spacing = "6px";
