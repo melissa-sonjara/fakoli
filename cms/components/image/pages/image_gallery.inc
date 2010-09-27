@@ -33,10 +33,21 @@
  
 Fakoli::using("image");
 
-$image_id = checkNumeric($_GET["image_id"]);
-$size = checkNumeric($_GET["size"]);
+$gallery_id = checkNumeric($_GET["gallery_id"]);
 
-$mgr = new ImageManager();
-$mgr->renderThumbnail($image_id, $size);
+if (!$gallery_id)
+{
+	redirect("/index");
+	return;
+}
 
+$gallery = new ImageGallery($gallery_id);
+$images = $gallery->Images();
+
+$page->page_title = $gallery->gallery_name;
+
+$view = new ImageListView($images, "");
+$view->spacing = "12px";
+$view->styles = "margin-left: 40px";
+$view->drawGrid();
 ?>

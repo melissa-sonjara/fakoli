@@ -69,6 +69,9 @@ a, a:active
 	border: solid 1px #000;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
+	-moz-box-shadow: 3px 3px 3px #666;
+	-webkit-box-shadow: 3px 3px 3px #666;
+	box-shadow: 3px 3px 3px #666;
 	width: 960px;
 	background-color: #fff;
 	border-collapse: collapse;
@@ -136,6 +139,9 @@ a, a:active
 	margin-right: auto;
 	background-color: #cfceef;
 	padding: 5px;
+	-moz-box-shadow: 2px 2px 12px #888;
+	-webkit-box-shadow: 2px 2px 12px #888;
+	box-shadow: 2px 2px 12px #888;
 }
 
 #login input

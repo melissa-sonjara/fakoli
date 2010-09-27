@@ -13,6 +13,9 @@
 	border: solid 1px #000;
 	background-color: #fff;
 	display: none;
+	-moz-box-shadow: 2px 2px 12px #444;
+	-webkit-box-shadow: 2px 2px 12px #444;
+	box-shadow: 2px 2px 12px #444;
 }
 
 .dialog_header
