@@ -62,7 +62,9 @@ var ImagePicker = new Class({
 			var srcdoc = window.opener.document;
 	
 			srcdoc.getElementById(this.selectModeField).value = this.selectedKey;
-			srcdoc.getElementById(this.selectModePreview).src = "/action/image/thumbnail?image_id=" + image_id + "&size=150";
+			
+			var preview = srcdoc.getElementById(this.selectModePreview);
+			preview.src = "/action/image/thumbnail?image_id=" + this.selectedKey + "&size=150";
 			window.close();
 		}
 		else
