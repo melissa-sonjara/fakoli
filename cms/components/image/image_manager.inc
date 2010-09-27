@@ -270,7 +270,7 @@ class ImageManager
 	
 	static function enumerateItems(&$items)
 	{
-		$galleries = Query::create(ImageGallery, "ORDER BY title")->execute();
+		$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
 		
 		$items["Image Galleries"] = $galleries;
 		return $items;
