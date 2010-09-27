@@ -31,23 +31,53 @@
 
 *****************************************************************/
  
-Fakoli::using("image");
-
-$gallery_id = checkNumeric($_GET["gallery_id"]);
-
-if (!$gallery_id)
+class ImageGalleryView
 {
-	redirect("/index");
-	return;
+	var $listView;
+	var $id;
+	
+	var $images;
+	var $linkFormat;
+	var $spacing = 0;
+	var $styles;
+	
+	function ImageGalleryView($images, $linkFormat, $id = "images")
+	{
+		$this->id = $id;
+		$this->listView = new ImageListView($images, $linkFormat, $id . "_listView");
+	}
+
+	function drawGallery()
+	{
+		global $script;
+		
+		$script .= <<<ENDSCRIPT
+	<script type="text/javascript" src="/fakoli/image_gallery/image_gallery.js"></script>
+	<script type="text/javascript">
+	var gallery;
+	window.addEvent('domready', function()
+	{
+		gallery = new ImageGallery('$this->id');
+	});
+	</script>	
+ENDSCRIPT;
+
+		$width = count($this->listView->images) / 2 * 185;
+		$this->listView->styles="position: absolute; width: {$width}px";
+		$this->listView->spacing = $this->spacing;
+		
+?>
+<div id="<?echo $this->id?>__left" style="width: 32px; float: left;<?echo $this->styles?>"><img id="<?echo $this->id?>_scroll_left" src="/fakoli/image_gallery/scroll_left.png" style="margin-top: 160px"/>&nbsp;</div>
+<div id="<?echo $this->id?>" style="width: 560px; height: 450px; position: relative; overflow: hidden; float: left">
+<?
+		$this->listView->drawGrid();
+?>
+</div>
+<div id="<?echo $this->id?>_right" style="width: 32px; float: left"><img id="<?echo $this->id?>_scroll_right" src="/fakoli/image_gallery/scroll_right.png" style="margin-top: 160px"/>&nbsp;</div>
+</div>
+<?
+	}
 }
 
-$gallery = new ImageGallery($gallery_id);
-$images = $gallery->Images();
-
-$page->page_title = $gallery->gallery_name;
-
-$view = new ImageGalleryView($images, "");
-$view->spacing = "6px";
-$view->styles = "margin-left: 40px";
-$view->drawGallery();
-?>
+	
+	
