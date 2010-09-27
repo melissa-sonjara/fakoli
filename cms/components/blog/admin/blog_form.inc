@@ -65,6 +65,7 @@ $writeSelect->setSize(350, 150, 10);
 $typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type");
 $typeSelect->allowAddEntry();
 $imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
+$form->alias("image_id", "Image");
 
 if ($method == "POST")
 {
