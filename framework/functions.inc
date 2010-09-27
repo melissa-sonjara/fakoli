@@ -693,10 +693,12 @@ function redirect($page)
 		$page = preg_replace("/^\\/?([\\w\\d_]+)$/", "/page.php?identifier=$1", $page);
 	}
 	
+	trace("redirect:: page is $page", 3);
 	$server = $config['http_host'];
 	if (!$server) $server="localhost:8080";
-	
-	if (!strncmp($page, "http://", 7))
+
+	// JDG 9/27/10 - handle https
+	if (!strncmp($page, "http://", 7) OR (!strncmp($page, "https://", 8)))
 	{
 		$location = $page;
 	}
