@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("blog");
+Fakoli::using("blog", "field_renderers");
 Fakoli::usingFeature("auto_form");
 
 $blog_id = checkNumeric($_GET["blog_id"]);
@@ -62,6 +62,9 @@ $readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", Si
 $readSelect->setSize(350, 150, 10);
 $writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
 $writeSelect->setSize(350, 150, 10);
+$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type");
+$typeSelect->allowAddEntry();
+$imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
 
 if ($method == "POST")
 {

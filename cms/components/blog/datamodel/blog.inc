@@ -37,11 +37,13 @@ class Blog extends DataItem
 	var $fields = array("blog_id"				=>	Number,
 						"title"					=>	String,
 						"identifier"			=>	String,
+						"image_id"				=>	Number,
 						"description"			=>	HTML,
 						"owner_id"				=>	Number,
 						"read_access"			=>	String,
 						"write_access"			=>	String,					
 						"default_article_order"	=>	String,
+						"blog_type"				=>	String,
 						"allow_comments"		=>	Boolean,
 						"published"				=>	Boolean,
 						"created_date"			=>	DateTime);
@@ -49,7 +51,8 @@ class Blog extends DataItem
 	// Relations
 	
 	var $relations = array("Owner"		=>	"",
-						   "Articles"	=>	Article);
+						   "Articles"	=>	Article,
+						   "Image"		=>	Images);
 						
 	function Owner()
 	{
@@ -60,6 +63,11 @@ class Blog extends DataItem
 	function getOwnerName()
 	{
 		return $this->Owner()->getFullName();
+	}
+	
+	function Image()
+	{
+		return $this->getRelated(Image);
 	}
 	
 	function Articles($constraint = "")
