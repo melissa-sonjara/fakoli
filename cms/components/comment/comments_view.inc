@@ -31,23 +31,19 @@
 
 *****************************************************************/
 
-require_once $config['homedir']."/cms/datamodel/comment.inc";
-require_once $config['homedir']."/cms/datamodel/news_item.inc";
-require_once  $config['homedir']."/framework/auto_form.inc";
-
-
+Fakoli::using("article");
+Fakoli::usingFeature("auto_form");
 
 class CommentsView
 {
 
-	
 	function CommentsView($title = null)
 	{
 		$this->title = $title || "Comment on this article";
 		
 	
 	}
-	function CommentForm($news_item_id, $site_user_id)
+	function CommentForm($article_id, $site_user_id)
 	{
 		$comment = new Comment();
 		$comment->user_id = $site_user_id;
@@ -62,10 +58,10 @@ class CommentsView
 	function saveComments() {
 
 		$this->form->save();
-		$news_item_id = checkNumeric($_GET["news_item_id"]);
-		$newsItemComment = new NewsItemCommentXref();
+		$article_id = checkNumeric($_GET["article_id"]);
+		$newsItemComment = new ArticleCommentXref();
 		$newsItemComment->comment_id = $this->form->data->comment_id;
-		$newsItemComment->news_item_id = $news_item_id;
+		$newsItemComment->article_id = $article_id;
 		$newsItemComment->save();
 	
 	}
@@ -73,11 +69,11 @@ class CommentsView
 	function displayComments()
 	{
 			   
-		$news_item_id = checkNumeric($_GET["news_item_id"]);
+		$article_id = checkNumeric($_GET["article_id"]);
 	
-		$news_item = new NewsItem($news_item_id);
+		$article = new Article($article_id);
 
-		$comments = $news_item->Comments("WHERE news_item_id=$news_item_id");
+		$comments = $article->Comments("WHERE article_id=$article_id");
 		if(count ($comments)) {
 		foreach ($comments as $comment) {
 		 

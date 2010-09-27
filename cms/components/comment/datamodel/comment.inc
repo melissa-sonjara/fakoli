@@ -34,18 +34,18 @@
 class Comment extends DataItem
 {
 	// Fields
-	var $fields = array("comment_id"		=> Number,
+	var $fields = array("comment_id"	=> Number,
 						"title"			=> String,
 						"description"	=> Text,
-						"date_posted"		=> Timestamp,
-						"user_id"  => Number,
-						"author"  => String);
+						"date_posted"	=> Timestamp,
+						"user_id"  		=> Number,
+						"author"  		=> String);
 	
 // Relations
 	
-	var $relations = array(	"NewsItem"	=>	NewsItem);
-							
-	function NewsItem()
+	var $relations = array(	"User"		=>	"");
+				
+	function User()
 	{
 		return $this->getRelated(NewsItem);
 	}
