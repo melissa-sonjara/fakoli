@@ -77,7 +77,11 @@ Window.implement(
 
 });
 
-
+function modalPopup(title, url, width, height)
+{
+	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height});
+	popup.show(null, url);
+}
 
 var ModalDialog = new Class(
 {
@@ -85,10 +89,13 @@ var ModalDialog = new Class(
     
     options: 
     {
-		draggable: false,
-		handle: Class.Empty,
-		closeLink: Class.Empty,
-		body:	Class.Empty
+		draggable: 	false,
+		handle: 	Class.Empty,
+		closeLink: 	Class.Empty,
+		body:		Class.Empty,
+		width: 		"500px",
+		height:		"auto",
+		title:		"Dialog"
 	},
     
     element: Class.Empty,
@@ -97,14 +104,70 @@ var ModalDialog = new Class(
     {
     	this.element = $(element);
     	this.setOptions(options);
+    	
+    	if (!this.element)
+    	{
+    		this.element = this.createDialog(element);
+    	}
+    	
     	if (this.element) this.element.setStyle('display', 'none');
-    	if (this.options.body) this.options.body = $(this.options.body);
+    	if (this.options.body) 
+    	{
+    		this.options.body = $(this.options.body);
+    	}
+    	else
+    	{
+    		this.options.body = $(this.element.id + "Body");
+    	}
+    	
     	if (this.options.closeLink)
     	{
     		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
     	}
+    	
+    	this.setTitle(this.options.title);
+    	this.element.setStyles({'width': this.options.width, 'height': this.options.height});
     },
     
+    setTitle: function(title)
+    {
+    	this.options.title = title;
+    	if (this.element)
+    	{
+    		$(this.element.id + 'Title').set('text', title);
+    	}
+    },
+    
+    createDialog: function(id)
+    {
+    	var dialog = new Element('div', {'class': 'dialog', 
+    									 'display': 'none', 
+    									 'id': id, 
+    									 'width': this.options.width, 
+    									 'height': this.options.height});
+    	
+    	var dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
+    	
+    	var padding = new Element('div');
+    	padding.setStyles({'padding': '4px'});
+    	
+    	var body = new Element('div', {'id': id + 'Body', 'class': 'dialog_body'});
+    	
+    	padding.set('html', "<div style='float: right'>&nbsp;<a id='close" + id + "' href=''>Close &times;</a></div>" +
+    						"<span style='font-weight: bold' id='" + id + "Title'>" + this.options.title + "</span>");
+    	
+    	this.options.closeLink = "close" + id;
+    	this.options.body = body;
+     	
+    	padding.inject(dialog_header);    	
+    	dialog_header.inject(dialog, 'top');
+    	body.inject(dialog, 'bottom');
+		var doc = $(document.body ? document.body : document.documentElement);
+		
+		doc.adopt(dialog);
+		return dialog;
+    },
+    	
     center: function()
     {
     	if (this.options.body)
