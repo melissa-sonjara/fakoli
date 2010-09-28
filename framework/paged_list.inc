@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,56 +31,61 @@
 
 *****************************************************************/
 
-Fakoli::using("user", "blog");
-Fakoli::usingFeature("paged_list");
-
-class BlogView
+class PagedList
 {
-	var $blog;
+	var $items;
+	var $id;
+	var $format;
+	var $pageSize = 10;
+	var $listTag = "ul";
+	var $CSSclass = null;
+	var $styles = null;
 	
-	function BlogView($blog)
+	function PagedList($items, $id = "paged_list", $format = null)
 	{
-		$this->blog = $blog;
+		$this->items = $items;
+		$this->id = $id;
+		$this->format = $format;
 	}
 	
-	function drawArticleList()
+	function writeScript()
 	{
-		global $page;
-		global $script;
-		
-		$page->page_title = $this->blog->title;
-		
-		$articles = $this->blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
-
-		$list = new PagedList($articles, "article_list", array($this, formatArticle));
-		$list->CSSclass = "article_list";
-		$list->styles = "clear: both";
-		
-		$script .= $list->writeScript();
-		$list->drawList();
+		ob_start();
+?>
+	<script type="text/javascript">
+	window.addEvent('domready', function()
+	{
+		var <?echo $this->id?> = new PaginatingList('<?echo $this->id?>', '<?echo $this->id?>_paginator', {per_page: <?echo $this->pageSize?>});
+	});
+	</script>
+<?
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
 	}
-		
-	function formatArticle($article)
+	
+	function drawList()
 	{
-		$out = "";
-		if ($article->image_id)
+		$attrs = "";
+		if ($this->CSSclass) $attrs .= " class='{$this->CSSClass}'";
+		if ($this->styles) $attrs .= " style='{$this->styles}'";
+?>
+			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
+			<<?echo $this->listTag?> id="<?echo $this->id?>"<?echo $attrs?>>
+<?
+		foreach($this->items as $item)
 		{
-			$image = $article->Image();
-			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
+			echo "<li>";
+			
+			if (is_callable($this->format))
+			{
+				echo call_user_func($this->format, $item);
+			}
+			else echo $item->format($this->format);
+			
+			echo "</li>\n";
 		}
-		
-		$out .= "<div class='article_summary'><a href='/article?article_id={$article->article_id}'><h4>{$article->title}</h4></a>";
-		if ($article->teaser) $out .= $article->teaser;
-		$out .= "</div>";
-		return $out;
-	}
-	
-	function drawArticle($article_id)
-	{	
-		global $page;
-		$article = new Article($article_id);
-		$page->page_title = $article->title;
-		
-		echo $article->message;
+		echo "</{$this->listTag}>\n";
 	}
 }
+?>

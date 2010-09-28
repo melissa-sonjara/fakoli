@@ -437,3 +437,115 @@ var ProgressiveSearch = new Class({
 		this.list.setStyle('display', 'none');
 	}
 });
+
+
+
+var PaginatingList = new Class(
+{
+	Implements: Options,
+  
+	options: 
+	{
+    	per_page: 10
+	},
+	
+	list: 			Class.Empty,
+	paginator: 		Class.Empty,
+	current_page:	1,
+
+	initialize: function(list, paginator, options)
+	{
+		this.list = $(list);
+		this.paginator = $(paginator);
+		this.setOptions(options);
+		this.pages = Math.ceil(this.list.getElements("li").length  / this.options.per_page );
+		
+		this.createPagination();
+		
+		this.toPage(this.current_page);
+	},
+	
+	createPagination: function()
+	{
+		this.paginator.empty();
+	    this.createPaginationNode( '&#171;', function(evt)
+	    {
+	        var evt = new Event( evt );
+	        this.toPrevPage();
+	        evt.stop();
+	        return false;
+	    }).injectInside( this.paginator );
+	      
+	    var li = new Element('li', {'class': 'pager'} );
+	    var a = new Element('a', {'href': "#", 'class': 'goto-page', 'html': 'Page ' + (this.current_page || 1) + " of " + this.pages});
+	    a.injectInside(li);
+	    li.injectInside(this.paginator);
+	    
+	    this.createPaginationNode( '&#187;', function(evt)
+	    {
+	        var evt = new Event( evt );
+	        this.toNextPage();
+	        evt.stop();
+	        return false;
+	    }).injectInside( this.paginator );
+	},
+	  
+	createPaginationNode: function( text, evt ) 
+	{
+	     var span = new Element( 'span' ).set( 'html', text );
+	     if (text == '&#171;'){
+	       var a = new Element( 'a', { 'href': '#', 'class': 'previous-page' }).addEvent( 'click', evt.bind( this ) );
+	     } else if (text == '&#187;'){
+	       var a = new Element( 'a', { 'href': '#', 'class': 'next-page' }).addEvent( 'click', evt.bind( this ) );
+	     } else {
+	       var a = new Element( 'a', { 'href': '#'}).addEvent( 'click', evt.bind( this ) );
+	     }
+	     var li = new Element( 'li' );
+	     span.injectInside( a.injectInside( li ) );
+	     return li;	    
+	},
+	
+	updatePage: function()
+	{
+		var pagers = this.paginator.getElements("a.goto-page");
+    	pagers.each(function(p) { p.innerHTML = 'Page ' + (this.current_page || 1) + " of " + this.pages; }.bind(this));    	
+	},
+	
+	toPrevPage: function()
+	{
+		this.toPage( this.current_page - 1 );
+	},
+	
+	toNextPage: function()
+	{
+		this.toPage( this.current_page + 1 );
+	},
+	
+	toPage: function(page_num)
+	{
+	    page_num = page_num.toInt();
+	    if (page_num > this.pages || page_num < 1) return;
+	    this.current_page = page_num;
+	    this.low_limit = this.options.per_page * ( this.current_page - 1 );
+	    this.high_limit = this.options.per_page * this.current_page;
+	    
+	    var kids = this.list.getChildren();
+	    
+	    for(var i = 0; i < this.low_limit; ++i)
+	    {
+	    	kids[i].setStyle('display', 'none');
+	    }
+	    
+	    for(var i = this.low_limit; i < this.high_limit && i < kids.length; ++i)
+	    {
+	    	kids[i].setStyle('display', 'list-item');
+	    }
+	    
+	    for(var i = this.high_limit; i < kids.length; ++i)
+	    {
+	    	kids[i].setStyle('display', 'none');
+	    }
+	    
+	    this.updatePage();
+	}
+});

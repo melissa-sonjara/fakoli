@@ -27,6 +27,11 @@ class BlogManifest
 		);
 	}	
 	
+	static function getStyles()
+	{
+		return array("/fakoli/css/blog.css");
+	}
+	 
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" => array(BlogManager, displayBlog),
