@@ -6,8 +6,9 @@
 	margin-right: 40px;
 }
 
-#article_list li
+#article_list a
 {
+	display: block;
 	border:1px solid #ccc;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -17,11 +18,15 @@
 	padding: 5px;
 	margin-bottom: 10px;
 	background-color: #eef;
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 #article_list img
 {
 	margin: 5px;
+	border: solid 1px #666;
 }
 
 .article_summary

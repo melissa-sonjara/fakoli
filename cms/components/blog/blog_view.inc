@@ -47,7 +47,29 @@ class BlogView
 	{
 		global $page;
 		global $script;
-		
+
+		$script .= <<<ENDSCRIPT
+	<script type="text/javascript">
+	window.addEvent('domready', function()
+	{
+		$$("#article_list a").each(function(elt) 
+		{		
+			elt.addEvents(
+			{
+				'mouseover': function()
+				{
+					this.morph({'background-color': '#A9CDED', 'border-color': '#666666'});
+				}.bind(elt),
+				'mouseout': function()
+				{
+					this.morph({'background-color': '#eeeeff', 'border-color': '#cccccc'});
+				}.bind(elt)
+			});
+		});
+	});
+	</script>
+ENDSCRIPT;
+	
 		$page->page_title = $this->blog->title;
 		
 		$articles = $this->blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
@@ -62,16 +84,16 @@ class BlogView
 		
 	function formatArticle($article)
 	{
-		$out = "";
+		$out = "<a href='/article?article_id={$article->article_id}' style='display: block'>";
 		if ($article->image_id)
 		{
 			$image = $article->Image();
 			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
-		$out .= "<div class='article_summary'><a href='/article?article_id={$article->article_id}'><h4>{$article->title}</h4></a>";
+		$out .= "<div class='article_summary'><h4>{$article->title}</h4>";
 		if ($article->teaser) $out .= $article->teaser;
-		$out .= "</div>";
+		$out .= "</div><div style='clear: both'></div></a>";
 		return $out;
 	}
 	
