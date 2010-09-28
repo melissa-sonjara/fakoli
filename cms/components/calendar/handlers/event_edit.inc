@@ -37,7 +37,11 @@ $form->ajaxSubmit("function(result) {editEventResult(result);}", "function() {\$
 
 $sites = query(Site, "ORDER BY site_name");
 
-$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);
+if (count($sites) > 1)
+{
+	$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);
+}
+
 $calendarSelect = new RelatedItemSelectFieldRenderer($form, "calendar_id", "Calendar", Calendar, "ORDER BY name", "{name}", "calendar_id", false, false, 80);
 $eventTypeSelect = new SelectFieldRenderer($form, "event_type", "Event Type");
 $eventTypeSelect->allowAddEntry();
