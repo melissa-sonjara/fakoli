@@ -73,7 +73,7 @@ class AttachmentFieldRenderer extends FieldRenderer
  <div class="dialog_header" id="attachmentDialogHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeAttachmentDialog'">Close &times;</a></div>
-   <span"style="font-weight: bold">Add an Attachment</span>
+   <span"style="font-weight: bold" id="attachmentDialogTitle">Add an Attachment</span>
   </div>	
  </div>
  <div class="dialog_body">
@@ -83,7 +83,7 @@ class AttachmentFieldRenderer extends FieldRenderer
    <label>Attachment File</label>
    <input type="file" name="attachmentFile"/>
    <br/>
-   <br/><input type="submit" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"/>
+   <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"/>
   </form>
  </div>
 </div>
