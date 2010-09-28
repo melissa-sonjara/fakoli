@@ -62,7 +62,7 @@ class BlogView
 				}.bind(elt),
 				'mouseout': function()
 				{
-					this.morph({'background-color': '#eeeeff', 'border-color': '#cccccc'});
+					this.morph({'background-color': '#DEFAFF', 'border-color': '#cccccc'});
 				}.bind(elt)
 			});
 		});
