@@ -43,6 +43,8 @@ class RadioButtonFieldRenderer extends FieldRenderer
 {
 	var $options;
 	var $horizontal = false;
+	var $onChange = ""; // optional callback on data input change
+	
 	
 	function RadioButtonFieldRenderer(&$form, $field, $label, $options)
 	{
@@ -61,9 +63,10 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($current == $value) ? " checked" : "";
+			$onchange = ($this->onChange) ? "onclick='$this->onChange(this)'" : "";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected>$name</option>";
+			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected $onchange>$name</option>";
 			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
 		}
 		
