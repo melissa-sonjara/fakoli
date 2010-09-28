@@ -74,6 +74,26 @@ ENDSCRIPT;
 		
 		$articles = $this->blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
 
+		$image = $this->blog->Image();
+		if ($image || $this->blog->description)
+		{
+?>
+<p>
+<?
+			if ($image)
+			{
+?>
+ <img src="/action/image/thumbnail?image_id=<?echo $image->image_id?>&size=320" align="left" class="blog_image"/>
+<?				
+			}
+			
+			echo $this->blog->description;
+?>
+</p>
+<div style="clear:both"></div>
+<?
+		}
+		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "article_list";
 		$list->styles = "clear: both";
