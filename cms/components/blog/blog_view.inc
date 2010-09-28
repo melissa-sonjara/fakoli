@@ -77,6 +77,7 @@ ENDSCRIPT;
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "article_list";
 		$list->styles = "clear: both";
+		$list->pageSize = 5;
 		
 		$script .= $list->writeScript();
 		$list->drawList();
@@ -84,7 +85,7 @@ ENDSCRIPT;
 		
 	function formatArticle($article)
 	{
-		$out = "<a href='/article?article_id={$article->article_id}' style='display: block'>";
+		$out = "<a href='/{$this->blog->identifier}?article_id={$article->article_id}' style='display: block'>";
 		if ($article->image_id)
 		{
 			$image = $article->Image();
