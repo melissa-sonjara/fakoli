@@ -24,14 +24,14 @@ $positions = $page->getPositions();
 if ($method == "POST")
 {
 	$xref = new ComponentPageModuleXref();
-	$xref->delete("WHERE page_id=$page_id");
+	$xref->delete("WHERE component_page_id=$page_id");
 	
 	foreach($_POST["module"] as $module_id => $position)
 	{
 		if ($position)
 		{
 			$xref = new ComponentPageModuleXref();
-			$xref->page_id = $page_id;
+			$xref->component_page_id = $page_id;
 			$xref->module_id = $module_id;
 			$xref->position = $position;
 			$xref->sort_order = $_POST["sort_order"][$module_id];
@@ -39,7 +39,7 @@ if ($method == "POST")
 		}
 	}
 	
-	redirect("/admin/page_modules?page_id=$page_id");
+	redirect("/admin/component_page_modules?component_page_id=$page_id");
 }
 
 $tabs->page = "/admin/component_page_modules";
@@ -47,7 +47,7 @@ $tabs->page = "/admin/component_page_modules";
 $tabs->writeHTML();
 ?>
 <div id="form" style="clear:left;border:solid 1px #000; padding: 4px;">
-<form method="POST" action="?page_id=<?echo $page_id?>">
+<form method="POST" action="?component_page_id=<?echo $page_id?>">
 <table class="list">
  <tr>
   <th>Module</th>
@@ -65,6 +65,8 @@ foreach($modules as $module)
  <td><strong><a href="<?echo $module->getAdminForm()?>?module_id=<?echo $module->module_id?>" ><?echo $module->title?></a></strong></td>
  <td><select name="module[<?echo $module->module_id?>]">
  <?
+ 	option("", "", $position->position);
+ 	
 	foreach($positions as $p)
 	{
  		option($p, ucwords($p), $position->position);

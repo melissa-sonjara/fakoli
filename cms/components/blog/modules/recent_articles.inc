@@ -35,9 +35,21 @@ Fakoli::using("blog");
 
 $identifier = $_GET["blog"];
 
-$blog = Blog::createFromIdentifier($identifier);
+$blog = Blog::findByIdentifier($identifier);
 
-$articles = $blog->Articles("WHERE published=1 ORDER BY created_date DESC");
+$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$blog->default_article_order}");
 
+if (count($articles) > 0)
+{
+	echo "<h3>Recent Articles</h3>";
+	echo "<ul class='recent_articles'>";
+	foreach($articles as $article)
+	{
+		echo "<li><a href='/$identifier?article_id={$article->article_id}'>".ellipsis($article->title, 80, true)."</a>\n";
+		++$count;
+		if ($count > 10) break;
+	}
+	echo "</ul>";
+}
 
 ?>

@@ -40,3 +40,16 @@
 	margin-top: 5px;
 	font-size: 13px;
 }
+
+.recent_articles
+{
+	list-style: none;
+	padding-left: 0;
+}
+
+.recent_articles a
+{
+	font-size: 10px;
+	font-weight: normal;
+}
+

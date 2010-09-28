@@ -111,7 +111,27 @@ class CodeModuleView extends ModuleView
 		{
 			ob_start();
 			echo "<div class='$cssClass'>";
-			include $config['homedir']."/{$this->module->php_code_file}";
+			
+			$codePath = explode(",", $this->module->php_code_file);
+			if (count($codePath) == 2)
+			{
+				$name = $codePath[0];
+				$php_code_file = $codePath[1];
+				$components = Fakoli::getComponents();
+				if (array_key_exists($name, $components))
+				{
+					$path = $components[$name]->component_path;
+					include $path."/{$php_code_file}";
+				}
+				else
+				{
+					throw new FakoliException("Unknown component");
+				}
+			}
+			else
+			{
+				include $config['homedir']."/{$this->module->php_code_file}";
+			}
     		echo "</div>";
     		$output = ob_get_contents();
  			ob_end_clean();

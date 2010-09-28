@@ -51,7 +51,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 		foreach($components as $name => $component)
 		{
 			trace("Scanning $name", 3);
-			$modules = $this->readFiles($component->component_path, $directory);
+			$modules = $this->readFiles($component->component_path, $directory, $name);
 			if (count($modules) > 0)
 			{
 				$options = array_merge($options, array(ucwords($name)." Modules" => $modules));
@@ -61,9 +61,8 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange, true);
 	}
 	
-	function readFiles($home, $dir)
-	{
-		 
+	function readFiles($home, $dir, $prefix = null)
+	{		 
 		$options = array();
 		
 		$path = $home . DIRECTORY_SEPARATOR . $dir;
@@ -91,7 +90,14 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
     			}
 				else if (preg_match('/.inc$/i', $file)) 
 				{
-					$options[$l] = $l;
+					if ($prefix)
+					{
+						$options["$prefix,$l"] = $l;
+					}
+					else
+					{
+						$options[$l] = $l;
+					}
 				}
     		}        	
     	}

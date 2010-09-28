@@ -95,7 +95,7 @@ var ModalDialog = new Class(
 		body:		Class.Empty,
 		width: 		"500px",
 		height:		"auto",
-		title:		"Dialog"
+		title:		Class.Empty
 	},
     
     element: Class.Empty,
@@ -125,7 +125,7 @@ var ModalDialog = new Class(
     		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
     	}
     	
-    	this.setTitle(this.options.title);
+    	if (this.options.title)	this.setTitle(this.options.title);
     	this.element.setStyles({'width': this.options.width, 'height': this.options.height});
     },
     
