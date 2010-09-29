@@ -648,6 +648,48 @@ ENDSCRIPT;
 
 
 /**
+ * RequiredBoolean Validator.
+ * 
+ * Verifies single checkbox (Boolean renderer)
+ * is checked.
+ * 
+ * Add this validator the the script using:
+ * $form->validator->add(new RequiredBooleanValidator($field, $label, $empty));
+ */
+class RequiredBooleanValidator extends RequiredValidator
+{
+	var $msg;
+	
+	function RequiredBooleanValidator($field, $title, $msg = "")
+	{
+		$this->AbstractValidator($field, $title);
+		$this->msg = ($msg) ? $msg : $title . " is a required field.";
+	}
+	
+	function writeClient()
+	{		
+$script = <<<ENDSCRIPT
+		
+	var boolObj = form["{$this->field}"];
+		
+	if (boolObj.checked == false)
+	{
+		alert("{$this->msg}");
+		return false;
+	}
+		
+	
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	// no need to overwrite server side validation or parent class
+}	
+
+
+
+/**
  * RequiredCheckList Validator.
  * 
  * Verifies min count of checkboxes checked
