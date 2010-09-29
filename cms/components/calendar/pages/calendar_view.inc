@@ -55,7 +55,7 @@ $view->month = $month;
 
 $view->drawMonth();
 
-if (checkRole($calendar->write_access))
+if ($user && checkRole($calendar->write_access))
 {
 ?>
 <br/>
