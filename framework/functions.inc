@@ -63,6 +63,28 @@ function checkRole($role)
 }
 
 /**
+ * Filter the given list, retaining only the objects that match the current
+ * user's role profile in the given parameter.
+ * 
+ * @param $items the array of items to be filtered
+ * @param $field the name of the field defining the role restriction
+ * @return array the filtered array
+ */
+function filterByRole($items, $field)
+{
+	$ret = array();
+	foreach($items as $item)
+	{
+		if (checkRole($item->get($field)))
+		{
+			$ret[] = $item;
+		}
+	}
+	
+	return $ret;
+}
+
+/**
  * MIME types allowable for image uploads 
  */
 $image_types = array( "image/jpeg", "image/gif", "image/x-png", "image/pjpeg" );
