@@ -8,8 +8,6 @@ Fakoli::using("calendar");
 Fakoli::using("site");
 Fakoli::usingFeature("auto_form");
 
-Fakoli::assertRole("admin");
-
 $menu_item = "Events";
 
 $event_id = checkNumeric($_GET["event_id"]);
@@ -18,10 +16,17 @@ $calendar_id = checkNumeric($_REQUEST["calendar_id"]);
 if (!$event_id)
 {
 	$event = new Event();
+	$calendar = new Calendar($calendar_id);
 }
 else
 {
 	$event = new Event($event_id);
+	$calendar = $event->Calendar();
+}
+
+if (!checkRole($calendar->writeAccess))
+{
+	die("Access Denied");
 }
 
 $form = new AutoForm($event, "POST", "/action/calendar/event_edit?event_id=$event_id");
