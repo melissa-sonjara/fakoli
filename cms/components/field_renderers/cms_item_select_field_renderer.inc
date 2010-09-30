@@ -9,7 +9,7 @@ class CMSItemSelectFieldRenderer extends SelectFieldRenderer
 				
 		$itemsByType = array();
 		
-		$itemsByType = ComponentManager::fireEvent("EnumerateItems", &$itemsByType);
+		$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
 		
 		$options = array();
 		

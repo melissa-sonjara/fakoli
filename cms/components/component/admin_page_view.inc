@@ -94,7 +94,7 @@ class AdminPageView
 			
 		}
 				
-		$template = ComponentManager::fireEvent("PostProcessPage", &$template);
+		$template = ComponentManager::fireEvent("PostProcessPage", $template);
 		
 		echo $template;		
 	}
