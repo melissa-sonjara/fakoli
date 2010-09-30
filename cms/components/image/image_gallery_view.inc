@@ -79,5 +79,62 @@ ENDSCRIPT;
 	}
 }
 
+
+class ImageGalleryList
+{
+	var $galleries;
+	var $linkFormat;
+	var $id;
+	var $galleryView;
 	
+	function ImageGalleryList($galleries, $linkFormat, $id = "galleries")
+	{
+		$this->galleries = $galleries;
+		$this->linkFormat = $linkFormat;
+		
+		$this->id = $id;
+		$this->galleryView = new ImageGalleryView($this->collateImages(), $this->linkFormat, $this->id);
+		$this->galleryView->listView->titleFormat = "{Gallery.gallery_name}";
+	}
+	
+	function collateImages()
+	{
+		$this->images = array();
+		
+		if (count($this->galleries) == 0) return;
+		
+		$ids = formatItems($this->galleries, "{gallery_id}", ", ");
+		$groupedImages = GroupedQuery::create(Image, "WHERE gallery_id IN (". $ids .") AND published=1", "gallery_id")
+						->execute();
+						
+		foreach($groupedImages as $gallery_id => $images)
+		{
+			$this->images[] = $images[0];
+		}
+		
+		return $this->images;
+	}		
+		
+	function drawGallery()
+	{
+		if (count($this->images) == 0)
+		{
+			echo "<p>No photos have been published on this site.</p>";
+			return;
+		}
+		
+		$this->galleryView->drawGallery();	
+	}	
+
+	function drawList()
+	{
+		if (count($this->images) == 0)
+		{
+			echo "<p>No photos have been published on this site.</p>";
+			return;
+		}
+		
+		$this->galleryView->listView->drawGrid();	
+	}	
+}
 	

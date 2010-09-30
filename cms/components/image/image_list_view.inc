@@ -38,6 +38,7 @@ class ImageListView
 	var $linkFormat;
 	var $spacing = 0;
 	var $styles;
+	var $titleFormat = "{title}";
 	
 	function ImageListView($images, $linkFormat, $id = "images")
 	{
@@ -83,7 +84,7 @@ ENDSCRIPT;
 			?>
 			<li><div class="imageLink"<?if ($this->spacing) echo " style='margin: {$this->spacing}'";?>><a href="<?echo $link?>">
 			<span class="wrapImage"><img src="<?echo $thumb ?> " alt="Small version of image"/></span>
-			<span class="caption"><?echo $image->title?></span></a>
+			<span class="caption"><?echo $image->format($this->titleFormat)?></span></a>
 			</div></li>
 			<?
 	    }

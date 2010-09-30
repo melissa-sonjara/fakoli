@@ -43,6 +43,7 @@ class ImageGallery extends DataItem
 						"owner_id"		=>	Number,
 						"read_access"	=>	String,
 						"write_access"	=>	String,
+						"published"		=>	Boolean,
 						"last_modified"	=>	Timestamp);
 	
 	// Relations
@@ -67,9 +68,18 @@ class ImageGallery extends DataItem
 		return $this->Owner()->getFullName();
 	}
 	
-	function countImages()
+	function countImages($constraint = "")
 	{
-		return queryValue(Image, "COUNT(1)", "WHERE gallery_id={$this->gallery_id}");
+		if ($constraint)
+		{
+			$constraint .= " AND ";
+		}
+		else
+		{
+			$constraint = "WHERE ";
+		}
+		$constraint .= "gallery_id={$this->gallery_id}";
+		return queryValue(Image, "COUNT(1)", $constraint);
 	}
 	
 	function getGalleryDirectory()
