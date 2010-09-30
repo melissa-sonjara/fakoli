@@ -113,7 +113,7 @@ if ($menu_item_id)
 		$form->allowDelete = true; 
 	}
 	
-	$form->button("Move Menu Item", "/admin/menu_move_form?menu_id=$menu_id&parent_id=$parent_id");
+	$form->button("Move Menu Item", "/admin/menu_move_form?menu_item_id=$menu_item_id&parent_id=$parent_id");
 	$form->button("Cancel", $redirect);
 }
 else
