@@ -328,7 +328,7 @@ class ComponentManager
 				trace("Handling $event with {$subscription["handler"]}", 4);
 			}
 					
-			$parameter = call_user_func_array($subscription["handler"], array($parameter, &$continue));
+			$parameter = call_user_func($subscription["handler"], $parameter, &$continue);
 			if (!$continue) break;
 		}
 		
