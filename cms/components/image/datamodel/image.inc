@@ -89,7 +89,7 @@ class Image extends DataItem
 	function findByFileName($filename)
 	{
 		$filename = "$filename";
-		$images = Query::create(Image, "WHERE image_file=':f'")
+		$images = Query::create(Image, "WHERE image_file=:f")
 					->bind(":f", $filename)
 					->execute();
 		
