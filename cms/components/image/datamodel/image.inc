@@ -86,6 +86,16 @@ class Image extends DataItem
 		return $text;
 	}
 	
+	function findByFileName($filename)
+	{
+		$filename = "%$filename";
+		$images = Query::create(Image, "WHERE image_file like ':f'")
+					->bind(":f", $filename)
+					->execute();
+		
+		return count($images) > 0 ? $images[0] : null;
+	}
+	
 	function getImage()
 	{
 		global $config;

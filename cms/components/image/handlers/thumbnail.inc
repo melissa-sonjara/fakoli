@@ -36,6 +36,22 @@ Fakoli::using("image");
 $image_id = checkNumeric($_GET["image_id"]);
 $size = checkNumeric($_GET["size"]);
 
+if (!$image_id)
+{
+	$img = $_GET["img"];
+	if ($img)
+	{
+		$image = Image::findByFilename($img);
+		if ($image) 
+		{
+			$image_id = $image->image_id;
+		}
+		else
+		{
+			throw new FakoliException("Unknown Image");
+		}
+	}
+}
 $mgr = new ImageManager();
 $mgr->renderThumbnail($image_id, $size);
 
