@@ -86,9 +86,8 @@ class Image extends DataItem
 		return $text;
 	}
 	
-	function findByFileName($filename)
+	static function findByFileName($filename)
 	{
-		$filename = "$filename";
 		$images = Query::create(Image, "WHERE image_file=:f")
 					->bind(":f", $filename)
 					->execute();
