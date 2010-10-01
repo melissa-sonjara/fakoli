@@ -35,7 +35,27 @@ Fakoli::using("image");
 
 $image_id = checkNumeric($_GET["image_id"]);
 
-$image = new Image($image_id);
+
+if (!$image_id)
+{
+	$img = $_GET["img"];
+	if ($img)
+	{
+		$image = Image::findByFilename($img);
+		if ($image) 
+		{
+			$image_id = $image->image_id;
+		}
+		else
+		{
+			throw new FakoliException("Unknown Image");
+		}
+	}
+}
+else
+{
+	$image = new Image($image_id);
+}
 
 $width = 100;
 $height = 100;
