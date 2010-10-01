@@ -93,7 +93,7 @@ class Image extends DataItem
 					->bind(":f", $filename)
 					->execute();
 		
-		return count($images) > 0 ? $images[0] : null;
+		return (count($images) > 0) ? $images[0] : null;
 	}
 	
 	function getImage()
