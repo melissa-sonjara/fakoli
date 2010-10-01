@@ -81,7 +81,8 @@ class AutoForm
     var $buttons_at_top = false;
     var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
     var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
-    
+    var $required = array(); // list of required fields
+
     var $fields;	///< Local field cache
     
 	/**
@@ -221,7 +222,9 @@ class AutoForm
 			$renderer = $this->getRenderer($field);
 			if ($renderer)
 			{
-				$renderer->addValidatorsToForm($field);
+				// JDG 9/19/2010 - let each renderer supply its own validator
+				$required = (array_search($field, $this->required) === FALSE) ? false : true;
+				$renderer->addValidatorsToForm($field, $required);
 			}
 		}
 
@@ -277,6 +280,7 @@ class AutoForm
 		echo $this->validator->writeScript();
 		echo "\n\n";
 		echo "function onSubmit{$this->id}(form)\n{\n";
+		
 		echo "\tif (!validate_{$this->id}(form)) return false;\n";
 
 		foreach(array_keys($this->fields) as $field)
@@ -464,7 +468,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		{
 			if ($this->data->hasField($required))
 			{
-				$this->validator->add(new RequiredValidator($required, $this->prettifyFieldName($required)));
+				array_push($this->required, $required);
 			}
 		}
 	}
@@ -476,7 +480,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 */
 	function isRequired($field)
 	{
-		return $this->validator->isRequired($field);
+		return (array_search($field, $this->required) !== FALSE) ? true : false;
 	}
 
 	/**

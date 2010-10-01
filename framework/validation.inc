@@ -162,51 +162,26 @@ ENDSCRIPT;
 /**
  * Date Validator.
  * 
- * Dates are required by default. To make a date not required, set
- * the following in the calling script:
- * 
- * $dateRenderer = $form->getRenderer("date field");
- * $dateRenderer->required = false; 
  */
 class DateValidator extends AbstractValidator
 {
-	var $required = true;
-	
 	function DateValidator($field, $title)
 	{
-		$this->AbstractValidator($field, $title);
-		
-		if (func_num_args() > 2)
-		{
-			$this->required = func_get_arg(2);
-		}
+		$this->AbstractValidator($field, $title);		
 	}
 	
 	function writeClient()
 	{
 		if ($this->readOnly) return "";
 		
-		$script = "";
-		if ($this->required)
-		{
-			$script = <<<ENDSCRIPT
-		
-	if (form["{$this->field}"].value == "")
-	{
-		alert("{$this->title} is a required field. Please supply a value.");
-		return false;
-	}
-ENDSCRIPT;
-		}
-		
 		$script .= <<<ENDSCRIPT
-			
-	if (form["{$this->field}"].value != "" &&
+	 if (form["{$this->field}"].value != "" &&
 		!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
 	{
 		alert("{$this->title} must be in the format MM/DD/YYYY");
 		return false;
 	}
+		
 ENDSCRIPT;
 
 		return $script;
@@ -215,21 +190,100 @@ ENDSCRIPT;
 	function validate()
 	{
 		global $_POST;
-
-		$result = "";
-			
-		if(!$this->required)
-			$result = "";
-		else if (!isset($_POST[$this->field]) || $_POST[$this->field] == "")
-		{
-			$result = "{$this->title} is a required field.";
-		}
-		else if (!preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
+		
+		if ($_POST[$this->field] != "" AND !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
 		{
 			$result = "{$this->title} must be in the format MM/DD/YYYY";
 		}	
 		
 		return $result;
+	}
+}
+
+
+/**
+ * TimeValidator.
+ * 
+ * If the user enters a value in a time field, check
+ * if it is valid. 
+ * 
+ * The hour html tag field name is the field name with "_hh" after it.
+ * The minute html tag field name is the field name with "_mm" after it.
+ */
+class TimeValidator extends AbstractValidator
+{
+	var $message;
+	
+	function TimeValidator($field, $title)
+	{
+		$this->AbstractValidator($field, $title);	
+	}
+		
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+	
+$script = <<<ENDSCRIPT
+	var hourObj = form["{$this->field}_hh"];
+	var minObj = form["{$this->field}_mm"];
+	
+		if (hourObj.value != "" && (hourObj.value < 1 || hourObj.value > 12))
+		{
+			alert("{$this->title} Hours must be in the range 1 to 12");
+			return false;
+		}	
+		
+		if (minObj.value != "" && (minObj.value < 0 || minObj.value > 59))
+		{
+			alert("{$this->title} Minutes must be in the range 0 to 59");
+			return false;
+		}
+		
+		
+ENDSCRIPT;
+
+		return $script;
+	}
+}
+
+
+/**
+ * RequiredTimeValidator.
+ * 
+ * Custom validation for time fields which render the field
+ * name html as x_hh and x_mm and thus cannot use the standard
+ * RequiredValidator.
+ */
+class RequiredTimeValidator extends AbstractValidator
+{
+	var $empty = "";
+
+	function RequiredTimeValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+	if ((
+	form["{$this->field}_hh"] != "" && form["{$this->field}_hh"].style.display != "none" &&
+	form["{$this->field}_hh"].value == "{$this->empty}") || 
+	(form["{$this->field}_mm"] != "" && form["{$this->field}_mm"].style.display != "none" &&
+	form["{$this->field}_mm"].value == "{$this->empty}")
+	)
+	{
+		alert("{$this->title} is a required field. Please supply a value.");
+		return false;
+	}
+	
+	
+ENDSCRIPT;
+
+		return $script;
 	}
 }
 

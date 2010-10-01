@@ -41,25 +41,26 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class DateTimeFieldRenderer extends FieldRenderer
 {
 	var $validator;
-	var $required = true;
+	var $requireTime = true; // whether the time component of the field is also required
 	
 	function DateTimeFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
-		$this->validator = new DateValidator("", "", $required);
 	}
 	
-	function addValidatorsToForm($field)
+	function addValidatorsToForm($field, $required = false)
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
-
-		$this->validator->field = $field;
-		$this->validator->title = $label;
-		
-		$this->parent->validator->add($this->validator);
-
-		$this->parent->validator->add(new RangeValidator("{$field}_hh", "$label Hours", 1, 12));
-		$this->parent->validator->add(new RangeValidator("{$field}_mm", "$label Minutes", 0, 59));
+	
+		$this->parent->validator->add(new DateValidator($field, $label));
+		$this->parent->validator->add(new TimeValidator($field, $label));
+			
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredValidator($field, $label));
+			if($this->requireTime)
+				$this->parent->validator->add(new RequiredTimeValidator($field, $label));
+		}	
 	}
 	
 	function renderScript($field)
@@ -84,23 +85,29 @@ class DateTimeFieldRenderer extends FieldRenderer
 		$obj = $this->parent->data;
 		$value = $obj->get($field);
 		
-		$date = formatDateShort($obj->reformatFromSQLDate($value));
+		// JDG 10/1/2010 check for empty saved string
+		$date = "";
+		if($value AND $value != '0000-00-00 00:00:00')
+			$date = formatDateShort($obj->reformatFromSQLDate($value));
 		
 		$this->_startField($field);
 		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
-		
-		if ($value)
+			
+		// JDG 10/1/2010 check for empty saved string
+		if ($value AND strstr($value, '00:00:00') > 0)
 		{
 			$text = date("h/i/A", strtotime($value));
 			list($hh, $mm, $aa) = explode("/", $text);
 		}
 		
+		echo "<div id='{$this->parent->id}_{$field}_block' style='display: inline-block'>\n";
 		echo "&nbsp;&nbsp;<input type='text' value='$hh' name='{$field}_hh' size='2' maxlength='2' onkeydown='return maskInput(event);'>&nbsp;:&nbsp;<input type='text' value='$mm' name='{$field}_mm' size='2' maxlength='2' onkeydown='return maskInput(event);'>";
 		echo "&nbsp;<select name='{$field}_aa'><option";
 		if ($aa == 'AM') echo " selected";
 		echo ">AM</option><option";
 		if ($aa == 'PM') echo " selected";
 		echo ">PM</option></select>";
+		echo "</div>\n";
 		
 		$this->_endField($field);
 	}
@@ -181,6 +188,11 @@ class DateTimeFieldRenderer extends FieldRenderer
 		if (!$dd)
 		{
 			$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("00/00/0000 00:00:00"));
+			return;
+		}
+		if(!$hh)
+		{
+			$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("$dd"));
 			return;
 		}
 		

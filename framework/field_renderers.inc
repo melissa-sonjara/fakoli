@@ -159,16 +159,25 @@ class FieldRenderer
 		
 		echo "</td>\n</tr>\n";
 	}
+
 	
 	/**
 	 * This method is called by the AutoForm to add any default input validators that are required
 	 * by the FieldRenderer.
+	 * 
+	 * Fields that need custom validation or a custom required validator 
+	 * should override this function.
 	 *
 	 * @param string $field the field name
+	 * 
+	 * @param boolean $required - whether the field is required
 	 */
-	function addValidatorsToForm($field)
+	function addValidatorsToForm($field, $required = false)
 	{
-		// No validators by default	
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		if($required)
+			$this->parent->validator->add(new RequiredValidator($field, $label));
 	}
 	
 	
