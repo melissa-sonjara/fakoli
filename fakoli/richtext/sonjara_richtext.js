@@ -456,6 +456,8 @@ var RichTextEditor = new Class({
 	
 	enableDesignMode: function() 
 	{
+		if (this.loading) return;
+		
 		var frameHtml = "<html id=\"" + this.name + "\">\n";
 		frameHtml += "<head>\n";
 		frameHtml += '<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />';
@@ -498,6 +500,8 @@ var RichTextEditor = new Class({
 	
 		if (document.all) 
 		{
+			this.loading = true;
+			
 			var oRTE = this.findFrame().document;
 			//alert(oRTE);
 			oRTE.charset = "ISO-8859-1";
@@ -521,6 +525,7 @@ var RichTextEditor = new Class({
 			}, 1000);
 			
 			$(this.name + "_iframe").removeEvents('load');
+			this.loading = false;
 		} 
 		else 
 		{
