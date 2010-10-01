@@ -94,7 +94,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
 			
 		// JDG 10/1/2010 check for empty saved string
-		if ($value AND strstr($value, '00:00:00') > 0)
+		if ($value AND substr($value, '00:00:00') > 0)
 		{
 			$text = date("h/i/A", strtotime($value));
 			list($hh, $mm, $aa) = explode("/", $text);
