@@ -25,10 +25,10 @@ var Curtain = new Class(
 												 : window.innerHeight;
 		
 		var dw = document.width == undefined ? document.body.offsetWidth: document.width;
-		var dh = document.height == undefined ? document.body.offsetHeight: document.width;
+		var dh = document.height == undefined ? document.body.offsetHeight: document.height;
 		 
 		var w = dw;
-		var h = document.height;
+		var h = dh;
 		var l = document.left;
 		
 		if (ch > h) h = ch;
