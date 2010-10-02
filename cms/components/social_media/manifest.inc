@@ -31,13 +31,13 @@
 
 *****************************************************************/
 
-class SiteManifest
+class SocialMediaManifest
 {
 	static function getComponentDefinition()
 	{
 		$component = new Component();
-		$component->name = "site";
-		$component->description = "Basic site definition for Fakoli/CMS";
+		$component->name = "social_media";
+		$component->description = "Social Media integration for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
 		$component->priority = 0;
@@ -48,17 +48,7 @@ class SiteManifest
 	
 	static function getAdminMenu()
 	{
-		return array
-		(
-			"Web Site Content"	=> array
-			(
-
-				"Sites"	=>	array("page"	=>	"/admin/sites",
-								  "role"	=>	"admin",
-								  "weight"	=>	1)
-			)
-		);		
+		return array();
 	}	
 }
-
 ?>

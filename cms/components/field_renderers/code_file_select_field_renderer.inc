@@ -54,7 +54,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 			$modules = $this->readFiles($component->component_path, $directory, $name);
 			if (count($modules) > 0)
 			{
-				$options = array_merge($options, array(ucwords($name)." Modules" => $modules));
+				$options = array_merge($options, array(prettify($name)." Modules" => $modules));
 			}
 		}
 		
