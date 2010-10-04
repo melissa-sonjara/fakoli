@@ -157,7 +157,18 @@ class Fakoli
 	 */
 	static function assertRole($role, $redirect = "/index")
 	{
-		if (!checkRole($role)) redirect($redirect);
+		global $user;
+		
+		if (!checkRole($role))
+		{
+			if (!$user)
+			{
+				$mgr = new LoginManager();
+				$mgr->storeRedirectPage();
+			}
+
+			redirect($redirect);
+		}
 	}
 	
 	static function usingFile()
