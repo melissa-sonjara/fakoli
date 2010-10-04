@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+Fakoli::using("image");
+
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
 if (!$gallery_id) return "";
