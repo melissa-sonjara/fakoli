@@ -17,7 +17,21 @@ class EmailManifest
 	
 	static function getAdminMenu()
 	{
-		return null;
+		return array
+		(
+			"Classification"	=> array
+			(
+
+				"Email Templates"	=>	array("page"	=>	"/admin/email_template_list",
+									  "role"	=>	"admin",
+									  "weight"	=>	20),
+			
+				"Merge Codes"	=>	array("page"	=>	"/admin/merge_code_list",
+									  "role"	=>	"admin",
+									  "weight"	=>	21)
+			
+			)
+		);
 	}	
 }
 

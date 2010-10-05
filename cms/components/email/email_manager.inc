@@ -43,50 +43,40 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  ***************************************************************/
 
-
-
-//require_once  $config['homedir']."/cms/datamodel/survey.inc";
-
 class EmailHandler
 {
-	var $toAddr;
-	var $subject;
-	var $message;
-	var $displayText;
-	var $headers;
+	var $mail;
 
 	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "")
 	{
 		global $config;
 
-		$this->toAddr = $toAddr;
-		$this->subject = $subject;
-		$this->displayText = $displayText;
-
-		if(!$emailFrom) $emailFrom =  $config["email_from"];
-
+		if(!$emailFrom) $emailFrom =  $config["email_contact"];
+			
 		// Use the MD5 algorithm to generate a random hash
 		$random_hash = md5(date('r', time()));
 
-		$this->headers = "From: $emailFrom\r\n";
-		$this->headers .= "Return-Path: ". $emailFrom . "\r\n";
-		$this->headers .= "Reply-To: ". $emailFrom . "\r\n";
-		$this->headers .= "Mime-Version: 1.0\r\n";
+		$headers = "From: $emailFrom\r\n";
+		$headers .= "Return-Path: ". $emailFrom . "\r\n";
+		$headers .= "Reply-To: ". $emailFrom . "\r\n";
+		$headers .= "Mime-Version: 1.0\r\n";
 
 		if($config["alt_text_email"] == false)
-			$this->headers .= "Content-type: text;\r\n";
+			$headers .= "Content-type: text;\r\n";
 		else
-			$this->headers .= "\r\nContent-Type: multipart/alternative; boundary=\"PHP-alt-".$random_hash."\"";
+			$headers .= "\r\nContent-Type: multipart/alternative; boundary=\"PHP-alt-".$random_hash."\"";
 
 		if($message AND $config["alt_text_email"])
-			$this->message = $this->getMessageScript($message, $random_hash);
+			$message = $this->getMessageScript($message, $random_hash);
 		elseif($message)
 		{
 			$patterns = array("/<br>/", "/&nbsp;/");
 			$replacements = array("\r\n", " ");
 			$message =  preg_replace($patterns, $replacements, $message);
-			$this->message = stripHTML($message);
+			$body = stripHTML($message);
 		}
+		
+		$this->mail = new Mail($emailFrom, $toAddr, $subject, $body, $headers);
 	}
 
 	/*
@@ -129,7 +119,7 @@ Content-Type: text/html; charset="iso-8859-1" Content-Transfer-Encoding:
 
 	function send()
 	{
-		return mail($this->toAddr, $this->subject, $this->message, $this->headers);
+		return $this->mail->send();
 	}
 
 }
@@ -138,44 +128,44 @@ Content-Type: text/html; charset="iso-8859-1" Content-Transfer-Encoding:
 
 class EmailManager
 {
-	var $template;
+	var $emailTemplate;
 	var $item; // dataitem object of the base class sending the emails
+	var $recipients;
 	var $message;
 	var $subject;
 	var $emailFrom;
 
-	function EmailManager($item, $template_id, $emailFrom = "", $message = "")
+	function EmailManager($item, $email_template_id, $emailFrom = "")
 	{
 		$this->item = $item;
-		$this->template_id = $template_id;
-		$this->template = new EmailTemplate($template_id);
+		$this->email_template_id = $email_template_id;
+		$this->emailTemplate = new EmailTemplate($email_template_id);
 		$this->emailFrom = $emailFrom;
-		$this->message = $message;
-
+	
 		$this->mergeEmail();
 	}
 
 
 	function mergeEmail()
 	{
-		$merges = $this->item->EmailCodeMerges();
+		$mergeCodes = query(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}'");
 		
-		//echo "<pre>"; print_r($this->template); echo "</pre>";
-		//echo "<pre>"; print_r($merges); echo "</pre>";
+		//echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
+		//echo "<pre>"; print_r($mergeCodes); echo "</pre>";
 
-		if(count($merges) > 0)
+		if(count($mergeCodes) > 0)
 		{
 			$patterns = array();
 			$replacements = array();
 				
-			foreach($merges as $merge)
+			foreach($mergeCodes as $mergeCode)
 			{
 				
-				$replaceText = $this->getReplaceText($merge);
+				$replaceText = $this->getReplaceText($mergeCode);
 						
 				if($replaceText)
 				{
-					array_push($patterns, "[$merge->name]");
+					array_push($patterns, "[$mergeCode->name]");
 					array_push($replacements, $replaceText);
 				}
 			}
@@ -183,35 +173,49 @@ class EmailManager
 
 		//echo "<pre>"; print_r($patterns); echo "</pre>";
 		//echo "<pre>"; print_r($replacements); echo "</pre>";
-		$this->subject = $this->searchReplaceText($patterns, $replacements, $this->template->subject);
-		$this->message = $this->searchReplaceText($patterns, $replacements, $this->message);
-		if($this->template->hasField("message_footer"))
-			$this->message .= $this->searchReplaceText($patterns, $replacements, $this->template->message_footer);
+		
+		$this->recipients = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->recipients);
+		$this->subject = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->subject);
+		$this->message = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->message);
 	}
 	
 	
-	function getReplaceText($merge)
+	function getReplaceText($mergeCode)
 	{
-		if(is_callable($merge->map))
-			$replaceText = call_user_func($merge->map, $this->item);
+		if(is_callable($mergeCode->map))
+		{
+			$replaceText = call_user_func($mergeCode->map, $this->item);
+		}
 		else
 		{
-			list($relation, $field) = explode(".", $merge->map);
-				
-			// if the value_obj is the same as calling class then just keep that
+			list($relation, $field) = explode(".", $mergeCode->map);
+			
+			$className = get_class($this->item);
+					
+				// if the value_obj is the same as calling class then just keep that
 			$replaceObj = (get_class($this->item) == $relation) ? $this->item : $this->item->$relation();
-
-			if(is_object($replaceObj) AND $merge->function)
+			
+			// such as Order.formatOrder(), a function in the Order datamodel, called
+			// from sending class Program
+			if(is_object($replaceObj) AND $mergeCode->function)
+			{
 				$replaceText = $replaceObj->$field();
+			}
+			
+			// e.g., Program->name, a field in Program datamodel
 			elseif(is_object($replaceObj))
 			{
-				$replaceText = $replaceObj->format("{".$field ."}");
+					$replaceText = $replaceObj->format("{".$field ."}");
 			}
+			
+			// e.g., Program.orderList, a function called from the sending
+			// class Program
 			else // function called from the sending class
 			{
-				$replaceText = $replaceObj;
+				$replaceText = $this->item->$replaceObj();
 			}
 		}
+		
 		return $replaceText;		
 	}
 	
@@ -228,15 +232,52 @@ class EmailManager
 		
 		return $lText;
 	}
+	
+	function getRecipients()
+	{
+		$validRecipients = array();
+		
+		if($this->recipients)
+		{
+			$recipients = explode(",", $this->recipients);
+			if(count($recipients) > 0)
+			{
+				foreach($recipients as $recipient)
+				{
+					if(preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i', $recipient))
+						array_push($validRecipients, $recipient);
+				}
+			}
+		}
+		return $validRecipients;
+	}
 
 	function sendEmail()
 	{
-		$email = new EmailHandler($this->item->email, $this->subject, $this->message, $this->emailFrom);
-
-		$sent = $email->send();
-
+		$recipients = $this->getRecipients();
+		
+		if(count($recipients) == 0)
+			return;
+			
+		foreach($recipients as $recipient)
+		{
+			$email = new EmailHandler($recipient, $this->subject, $this->message);
+			$sent = $email->send();
+		}
 		return $sent;
 	}
 }
 
+
+
+function sendEmailUsingEmailManager($sendingItem, $name)
+{
+	$emailTemplate = querySingle(EmailTemplate, "WHERE name='{$name}'");
+
+	if($emailTemplate)
+	{
+		$emailManager = new EmailManager($sendingItem, $emailTemplate->email_template_id);
+		$emailManager->sendEmail();
+	}
+}
 ?>
