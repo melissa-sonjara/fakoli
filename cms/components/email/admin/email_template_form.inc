@@ -34,6 +34,10 @@ $form->unique("name", "An email template already exists with that title. Please 
 $form->required("name", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
 
+// Name is used to find the template - do not change once saved
+if($emailTemplate->email_template_id)
+	$form->readOnly("name");
+
 $table = getMergeCodeTable($emailTemplate);
 
 if ($method == "POST")
