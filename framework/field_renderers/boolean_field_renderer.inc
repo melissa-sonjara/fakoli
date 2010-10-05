@@ -44,6 +44,18 @@ class BooleanFieldRenderer extends FieldRenderer
 		$this->FieldRenderer($parent);		
 	}
 	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredBooleanValidator($field, $label));
+		}
+		
+	}
+	
+	
 	function renderField($field)
 	{
 		echo "<tr>\n";
