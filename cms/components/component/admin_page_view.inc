@@ -53,7 +53,7 @@ class AdminPageView
 		}
 		catch(Exception $e)
 		{
-			//
+			echo $e->getMessage();
 		}
 		
 		$content = ob_get_contents();
