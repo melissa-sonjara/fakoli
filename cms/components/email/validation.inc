@@ -2,6 +2,9 @@
 /*
  * Email Template validation
  * 
+ * Loop through the list of emails and check if each is a valid email.
+ * Stop at the first invalid email. Ignore merge code emails, e.g., 
+ * [user_email]
  */
 
 Fakoli::usingFeature("validation");
