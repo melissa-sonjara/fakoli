@@ -31,8 +31,10 @@ $form->annotate("recipients", "(separate email addresses with a comma ',')");
 $form->annotate("subject", "Codes must be enclosed in brackets '[' and ']'.");
 $form->annotate("message", "Codes must be enclosed in brackets '[' and ']'.");
 $form->unique("name", "An email template already exists with that title. Please choose a different title.");
-$form->required("name", "subject", "message");
+$form->required("name", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
+
+$form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
@@ -49,10 +51,13 @@ if ($method == "POST")
 $script .= $form->writeScript();
 $script .= $table->writeScript();
 echo "<h3>This form allows you to create or edit an email template.</h3>\n";
-echo "<p>The following codes are available for the recipients, subject and message fields of this template:</p>\n";
 
-$table->drawView();
-echo "</p><p>Additional codes can be added by your systems administrator.</p>"; 
+if($emailTemplate->email_template_id)
+{
+	echo "<p>The following codes are available for the recipients, subject and message fields of this template:</p>\n";
+	$table->drawView();
+	echo "</p><p>Additional codes can be added by your systems administrator.</p>";
+} 
 $form->drawForm();
 
 
