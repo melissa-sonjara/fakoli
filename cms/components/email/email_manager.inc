@@ -214,6 +214,10 @@ class EmailManager
 			{
 				$replaceText = $this->item->$replaceObj();
 			}
+			else 
+			{
+				return "";
+			}
 		}
 		
 		return $replaceText;		
