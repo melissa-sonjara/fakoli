@@ -34,7 +34,7 @@ $form->unique("name", "An email template already exists with that title. Please 
 $form->required("name", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
 
-$form->validator->add(new EmailListValidator("recipients", "Recipients"));
+//$form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
