@@ -39,10 +39,12 @@ require_once "include/image_gallery_tabs.inc";
 $menu_item = "Images";
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
+$allowDelete = false;
 
 if ($gallery_id)
 {
 	$gallery = new ImageGallery($gallery_id);
+	$allowDelete = ($gallery->countImages() == 0);
 }
 else
 {
@@ -55,6 +57,7 @@ $gallery->filter = new ExclusionFilter("read_access", "write_access");
 $tabs = imageGalleryTabs($gallery_id);
 
 $form = new AutoForm($gallery);
+$form->allowDelete = $allowDelete;
 $form->hide("owner_id");
 
 if ($method == "POST")
