@@ -210,10 +210,9 @@ class EmailManager
 			
 			// e.g., Program.orderList, a function called from the sending
 			// class Program
-			else // function called from the sending class
+			else if ($replaceObj) // function called from the sending class
 			{
-				//AJG - is this what you mean?
-				$replaceText = $this->item->$field();
+				$replaceText = $this->item->$replaceObj();
 			}
 		}
 		
