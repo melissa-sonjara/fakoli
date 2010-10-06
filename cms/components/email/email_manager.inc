@@ -212,7 +212,8 @@ class EmailManager
 			// class Program
 			else // function called from the sending class
 			{
-				$replaceText = $this->item->$replaceObj();
+				//AJG - is this what you mean?
+				$replaceText = $this->item->$field();
 			}
 		}
 		
