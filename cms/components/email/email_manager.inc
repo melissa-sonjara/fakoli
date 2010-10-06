@@ -280,6 +280,7 @@ function sendEmailUsingEmailManager($sendingItem, $name)
 
 	if($emailTemplate)
 	{
+		trace("Sending email '$name'", 3);
 		$emailManager = new EmailManager($sendingItem, $emailTemplate->email_template_id);
 		$emailManager->sendEmail();
 	}
