@@ -72,6 +72,11 @@
 	outline: none;
 	font-size: 10px;
 	cursor: pointer;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 5px #AAAAAA;
+	-webkit-box-shadow: 2px 2px 5px #AAAAAA;
+	box-shadow: 2px 2px 5px #AAAAAA;
 }
 
 .event_summary h4
