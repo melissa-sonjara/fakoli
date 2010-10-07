@@ -110,6 +110,8 @@ class CalendarView
 		$this->id = $id;
 		$this->month = date("n");
 		$this->year = date("Y");
+		$this->addHandler(Event, new StandardEventHandler());
+		ComponentManager::fireEvent("RegisterCalendarEventHandlers", $this);
 	}
 
 	function addHandler($class, $handler)
