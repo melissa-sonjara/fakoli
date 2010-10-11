@@ -128,7 +128,7 @@ class ForumDetailsView
 	
 		$message = $this->messages[$topic->topic_id];
 		$user = $message->Author();
-		return "<a href='{$this->topicLink}?topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$user->getFullName().")</span>";
+		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$user->getFullName().")</span>";
 	}
 	
 	function formatLastPost($topic)
