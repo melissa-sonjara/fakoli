@@ -26,6 +26,7 @@ class PageView
 		global $user;
 		global $script;
 		global $styles;
+		global $breadcrumbs;
 		global $dialogs;
 		global $page;
 		global $site;
@@ -130,7 +131,10 @@ class PageView
 		// Pull in the script and style dependencies defined by the components
 		
 		$script = Fakoli::getScripts() . $script;
-		$styles = Fakoli::getStyles() . $styles;	
+		$styles = Fakoli::getStyles() . $styles;
+		
+		// Get the breadcrumbs
+		$breadcrumbs = Breadcrumbs::getBreadcrumbs($identifier, $qs);
 		
 		// Populate global variable references
 		

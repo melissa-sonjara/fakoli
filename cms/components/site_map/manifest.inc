@@ -31,51 +31,34 @@
 
 *****************************************************************/
 
-require_once  "../../../include/config.inc";
-require_once  $config['homedir']."/include/permissions.inc";
-require_once  $config['homedir']."/datamodel/context_help.inc";
-require_once  $config['homedir']."/framework/auto_form.inc";
-require_once  $config['homedir']."/framework/tree.inc";
-
-
-$title = "Context-Sensitive Help";
-$page_role = "admin";
-
-
-$help_key = checkNumeric($_GET["help_key"]);
-$field = ($_GET["field"]);
-$className = ($_GET["class"]);
-$prettyClassName = ($_GET["prettyClassName"]);
-
-if(!$help_key && (!$field || !$className))
-	redirect("/admin/context_help_list");
-
-$help = new ContextHelp();
-
-if(!$help_key)
+class SiteMapManifest
 {
-	$help->field = $field;
-	$help->class_name = $className;
-}
-else
-{
-	$help->load($help_key);	
-}
+	static function getComponentDefinition()
+	{
+		$component = new Component();
+		$component->name = "site_map";
+		$component->description = "Maps the site hierarchy of pages";
+		$component->author = "Janice Gallant";
+		$component->version = "1.0";
+		$component->priority = 0;
+		$component->enabled = true;
+		
+		return $component;
+	}
+	
+	static function getAdminMenu()
+	{
+		return array
+		(
+			"Web Site Content"	=> array
+			(
 
-$form = new AutoForm($help);
-$form->allowDelete = true;
-$form->readonly("field", "class_name");
-$redirect = "/admin/context_help_list";
-$form->button("Cancel", $redirect);
-
-if ($method == "POST")
-{
-	$form->save();
-	redirect($redirect);
+				"Site Map"	=>	array("page"	=>	"/admin/site_map",
+								  "role"	=>	"admin",
+								  "weight"	=>	10)
+			)
+		);		
+	}	
 }
 
-
-$script = $form->writeScript();
-
-$form->drawForm();
 ?>

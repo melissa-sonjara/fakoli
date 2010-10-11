@@ -131,7 +131,18 @@ class UserManager
 	 */
 	function loginRedirect($user)
 	{
-		redirect(($isAdmin) ? "/admin/index" : "/index");
+		global $isAdmin;
+		global $_SESSION;
+
+		$page = $_SESSION["login_redirect"];
+		unset($_SESSION["login_redirect"]);
+	
+		if (!$page || startsWith($page, "components/login"))
+		{
+			$page = ($isAdmin) ? "/admin/index" : "/index";
+		}	
+		
+		redirect($page);
 	}
 
 }

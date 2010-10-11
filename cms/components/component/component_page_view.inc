@@ -27,6 +27,7 @@ class ComponentPageView
 		global $user;
 		global $script;
 		global $styles;
+		global $breadcrumbs;
 		global $dialogs;
 		global $page;
 		global $site;
@@ -132,7 +133,10 @@ class ComponentPageView
 		
 		$script = Fakoli::getScripts() . $script;
 		$styles = Fakoli::getStyles() . $styles;		
-		
+
+		// Get the breadcrumbs
+		$breadcrumbs = Breadcrumbs::getBreadcrumbs($identifier, $qs);
+			
 		// Populate global variable references
 		
 		$vars = array();

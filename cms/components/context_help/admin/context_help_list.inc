@@ -100,14 +100,10 @@ if(!$sort)
 $classTree = buildClassHelpTree($classes);
 $script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
 
-include_once admin_begin_page;
-
 ?><p>Using the list below you can provide content-sensitive help and publication criteria
 popup text for use on forms throughout the site.</p>
 <? 
 $classTree->writeHTML();
-
-include_once admin_end_page;
 
 /*
  * Search the scripts in the datamodel folder for classes for which
