@@ -103,6 +103,7 @@ class SiteMap extends DataItem
 			}
 		}
 		
+		$pageList[""] = "";
 		return $pageList;
 	}
 		
