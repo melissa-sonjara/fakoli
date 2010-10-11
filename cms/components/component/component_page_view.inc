@@ -1,6 +1,6 @@
 <?php
 
-Fakoli::using("page", "menu", "module");
+Fakoli::using("page", "menu", "module", "site_map");
 
 /**
  * ComponentPageView generates the page content for a component page, 
