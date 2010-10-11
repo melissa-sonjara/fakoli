@@ -64,7 +64,7 @@ class ForumTopicView
 				if ($first)
 				{
 ?>
-	<button class="button" onclick="go('forum_message_form?forum_id=<?echo $this->topic->forum_id?>&parent_id=<?echo $this->topic->message_id?>')"> Reply to this topic </button>	
+	<button class="button" onclick="go('forum_message_form?forum_id=<?echo $this->topic->forum_id?>&topic_id=<? echo $this->topic->topic_id ?>&parent_id=<?echo $this->topic->message_id?>')"> Reply to this topic </button>	
 <?
 				}
 ?>
@@ -106,17 +106,17 @@ class ForumTopicView
 			 	$controls = array();
 				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data"))
 				{
-					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\">Edit</a>";
+					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&message_id={$message->message_id}\">Edit</a>";
 				}
 			
 				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data"))
 				{
-					$controls[] = "<a href=\"/action/forum/message_delete?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
+					$controls[] = "<a href=\"/action/forum/message_delete?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
 				}		
 				
 				if ($user)
 				{
-					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&parent_id={$message->message_id}\">Reply</a>";
+					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&parent_id={$message->message_id}\">Reply</a>";
 				}
 	 	
 ?>
