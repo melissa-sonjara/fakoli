@@ -1,6 +1,6 @@
 <?php
 
-Fakoli::using("page", "menu", "module");
+Fakoli::using("page", "menu", "module", "site_map");
 
 /**
  * PageView generates the page content, substituting page fields, menus and associated modules
