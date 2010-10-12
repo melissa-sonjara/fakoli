@@ -67,6 +67,8 @@ elseif ($method == "POST")
   		$form->save();
 		redirect($redirect);
 	}
+	else
+		$form->msg = "<warning>Invalid tree. A page cannot have a parent that is also a child.</warning>";
 }
 
 
@@ -125,14 +127,10 @@ function validateSiteMapTree($siteMapPage)
 	// don't check if no change in parent
 	if($siteMapPage->parent != $newParent)
 	{	
-		if($siteMapPage->identifier == $newParent)
+		if($siteMapPage->parent_identifier == $newParent)
 			$valid = false;
 		else
-		{
-			$valid = validateDescendents($siteMapPage, $valid);
-			if($valid)
-				$valid = validateAncestors($siteMapPage, $valid);
-		}
+			$valid = validateDescendents($siteMapPage, $newParent, $valid);
 	}
 	return $valid;
 }
@@ -141,9 +139,10 @@ function validateSiteMapTree($siteMapPage)
 
 /*
  * Recursively create an array of all child pages of $page down to the
- * leaf page.
+ * leaf page. Check if any of the child pages' identifier is the
+ * same as the newly selected parent.
  */
-function validateDescendents($siteMapPage, &$valid)
+function validateDescendents($siteMapPage, $newParent, &$valid)
 {
     $children = $siteMapPage->Children();
  
@@ -152,33 +151,14 @@ function validateDescendents($siteMapPage, &$valid)
 		foreach($children as $child) 
 		{
 			trace("validateDescendents:: child identifier {$child->identifier}", 3);
-			if($child->identifier == $siteMapPage->identifier)
+			if($child->identifier == $newParent)
 				$valid = false;
 			else
-				validateDescendents($child, $valid);
+				validateDescendents($child, $newParent, $valid);
         }
     }
     return $valid;
 }
 
-
-/*
- * Recursively create an array of all parent pages of $siteMapPage 
- * up to the root node.
- */
-function validateAncestors($siteMapPage, &$valid)
-{
-   $parent = $siteMapPage->Parent();
- 
-    if($parent) 
-    {
-		trace("validateAncestors:: child identifier {$parent->identifier}", 3);
-    	if($parent->identifier == $siteMapPage->identifier)
-    		$valid = false;
-    	else
-			validateAncestors($parent, $parents);
-    }
-    return $valid;	
-}
 
 ?>
