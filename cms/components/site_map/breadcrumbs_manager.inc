@@ -24,17 +24,15 @@ class Breadcrumbs
 		$component = querySingle(Component, "WHERE name = 'site_map'");
 
 		if(!$component OR $component->enabled == false)
-			return;
+			return "";
 
-		$currentSiteMapPage = Query::create(SiteMap, "WHERE identifier=:i")
-						->bind(":i", $identifier)
-						->executeSingle();
-	
+		$currentSiteMapPage = querySingle(SiteMap, "WHERE identifier = '{$identifier}'");
+						
 		trace("Breadcrumbs:: currentSiteMapPage id {$currentSiteMapPage->identifier}", 3);
 		
 		if(!$currentSiteMapPage)
-			return;
-
+			return "";
+			
 		$upTreePages = Breadcrumbs::getUpTreePages($currentSiteMapPage);
 	
 		/*
