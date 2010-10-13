@@ -26,7 +26,12 @@ class Breadcrumbs
 		if(!$component OR $component->enabled == false)
 			return "";
 
-		$currentSiteMapPage = querySingle(SiteMap, "WHERE identifier = '{$identifier}'");
+		$currentSiteMapPages = query(SiteMap, "WHERE identifier = '{$identifier}'");
+		if(count($currentSiteMapPages) > 0)
+			$currentSiteMapPage = $currentSiteMapPages[0];
+		else
+			return "";
+			
 						
 		trace("Breadcrumbs:: currentSiteMapPage id {$currentSiteMapPage->identifier}", 3);
 		
