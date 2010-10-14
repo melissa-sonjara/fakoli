@@ -219,6 +219,8 @@ class LoginManager
 		if($username)
 		{
 			$match = $mgr->getUserByName($username);
+			if(!$match AND $emailField)
+				$match = $mgr->getUserByEmail($username);
 		}
 		
 		?>
@@ -267,11 +269,14 @@ class LoginManager
 	
 	static function passwordHelpForm($username = "")
 	{
+		$mgr = new UserManager();
+		$passwordHelpText = $mgr->getPasswordHelpText();
+		$userNameLabel = $mgr->getUserNameLabel();
 	?>
 	<br/>
-	<p>If you have an account on this system, please enter your user name and we will email a temporary password to you.</p>
+	<p><?php echo $passwordHelpText ?></p>
 	<form name='form1' method='POST' action='/password_help'>
-	<p><label for="username">User name:</label>
+	<p><label for="username"><?php echo $userNameLabel ?>:&nbsp;</label>
 	<input name="username" type="text" value="<?=$username?>"/>
 	</p>
 	<br/>
