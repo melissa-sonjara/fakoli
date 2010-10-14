@@ -271,7 +271,7 @@ class LoginManager
 	{
 		$mgr = new UserManager();
 		$passwordHelpText = $mgr->getPasswordHelpText();
-		$userNameLabel = $mgr->getUserNameLabel();
+		$userNameLabel = $mgr->getPasswordHelpUserNameLabel();
 	?>
 	<br/>
 	<p><?php echo $passwordHelpText ?></p>
