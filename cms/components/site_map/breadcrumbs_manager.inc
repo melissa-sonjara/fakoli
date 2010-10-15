@@ -31,9 +31,6 @@ class Breadcrumbs
 			
 		$component = querySingle(Component, "WHERE name = 'site_map'");
 
-		if(!$component OR $component->enabled == false)
-			return "";
-
 		$currentSiteMapPages = query(SiteMap, "WHERE identifier = '{$identifier}'");
 		if(count($currentSiteMapPages) > 0)
 			$currentSiteMapPage = $currentSiteMapPages[0];
