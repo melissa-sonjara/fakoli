@@ -121,7 +121,7 @@ function popupEvent(event)
 }
 
 
-function maskInput(e)
+function maskInput(e, allowneg)
 {
 	var key;
 	var keychar;
@@ -152,7 +152,10 @@ function maskInput(e)
 	{
 		return true;
 	}
-	
+	else if(allowneg == true && keychar == '-')
+	{
+		return true
+	}
 	return false;
 }
 
