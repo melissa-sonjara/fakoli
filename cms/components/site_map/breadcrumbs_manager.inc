@@ -18,9 +18,17 @@ Fakoli::using("site_map");
 
 
 class Breadcrumbs
-{
-	static function getBreadcrumbs($identifier, $qs)
-	{				
+{	
+	function getBreadcrumbs($page)
+	{
+		global $breadcrumbs;
+			
+		$qs = $_SERVER['QUERY_STRING'];
+		$identifier = $_REQUEST["identifier"];
+		
+		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
+		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
+			
 		$component = querySingle(Component, "WHERE name = 'site_map'");
 
 		if(!$component OR $component->enabled == false)
@@ -32,13 +40,12 @@ class Breadcrumbs
 		else
 			return "";
 			
-						
 		trace("Breadcrumbs:: currentSiteMapPage id {$currentSiteMapPage->identifier}", 3);
 		
 		if(!$currentSiteMapPage)
 			return "";
 			
-		$upTreePages = Breadcrumbs::getUpTreePages($currentSiteMapPage);
+		$upTreePages = $this->getUpTreePages($currentSiteMapPage);
 	
 		/*
 		 * No need to show breadcrumbs if there is just one single
@@ -71,7 +78,7 @@ class Breadcrumbs
 		return $breadcrumbs;
 	}
 			
-	static function getUpTreePages($currentSiteMapPage)
+	function getUpTreePages($currentSiteMapPage)
 	{
 		if($currentSiteMapPage)
 		{	

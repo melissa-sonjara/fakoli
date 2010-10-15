@@ -58,6 +58,11 @@ class SiteMapManifest
 								  "weight"	=>	10)
 			)
 		);		
+	}
+
+	static function subscribeToEvents()
+	{
+		return array("PreProcessPage" 	=> array(Breadcrumbs, getBreacrumbs));
 	}	
 }
 
