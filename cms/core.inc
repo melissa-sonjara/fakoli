@@ -140,6 +140,27 @@ class Fakoli
 		return $components;
 	}
 	
+	/**
+	 * Return the component record by name
+	 * @param string $name the name of the component
+	 * @return Component the component record for the specified component.
+	 */
+	static function getComponent($name)
+	{
+		$components = Fakoli::getComponents();
+		return $components[$name];
+	}
+	
+	/**
+	 * Test whether the specified component has been registered
+	 * @param string $name the name of the component to test
+	 * @return boolean true if registered, false otherwise
+	 */
+	static function componentExists($name)
+	{
+		return array_key_exists($name, Fakoli::getComponents());
+	}
+	
 	static function initialComponentScan()
 	{
 		require_once "cms/components/component/datamodel/component.inc";
