@@ -1,6 +1,6 @@
 <?php
 
-Fakoli::using("page", "menu", "module", "site_map");
+Fakoli::using("page", "menu", "module");
 
 /**
  * ComponentPageView generates the page content for a component page, 
@@ -137,9 +137,6 @@ class ComponentPageView
 		
 		$script = Fakoli::getScripts() . $script;
 		$styles = Fakoli::getStyles() . $styles;		
-
-		// Get the breadcrumbs
-		$breadcrumbs = Breadcrumbs::getBreadcrumbs($identifier, $qs);
 			
 		// Populate global variable references
 		
