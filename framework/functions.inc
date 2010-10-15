@@ -628,9 +628,11 @@ function firstSentence($text)
 
 function stripHTML($text)
 {
-		$text = preg_replace("/<.*?>/", "", $text);
+		/*$text = preg_replace("/<.*?>/", "", $text);*/
+		$text = strip_tags($text);
 		return $text;
 }
+
 
 /**
  * Runs a query, returns the first field in each row of the resultset as a comma-delimited list.
