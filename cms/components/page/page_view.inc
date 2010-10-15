@@ -1,6 +1,6 @@
 <?php
 
-Fakoli::using("page", "menu", "module", "site_map");
+Fakoli::using("page", "menu", "module");
 
 /**
  * PageView generates the page content, substituting page fields, menus and associated modules
@@ -134,9 +134,6 @@ class PageView
 		
 		$script = Fakoli::getScripts() . $script;
 		$styles = Fakoli::getStyles() . $styles;
-		
-		// Get the breadcrumbs
-		$breadcrumbs = Breadcrumbs::getBreadcrumbs($identifier, $qs);
 		
 		// Populate global variable references
 		
