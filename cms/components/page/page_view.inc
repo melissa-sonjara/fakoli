@@ -36,6 +36,8 @@ class PageView
 		
 		$template = $this->page->getTemplate();
 		
+		$template = ComponentManager::fireEvent("PreProcessPage", $template);
+		
 		// If the page has a PHP code include, execute it and insert the contents
 		
 		if ($this->page->php_code_file)
@@ -48,7 +50,7 @@ class PageView
 			$this->page->description .= $output;
 		}
 		
-		
+		$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		
 		// Populate template fields from the Page object.
 		
@@ -148,6 +150,8 @@ class PageView
 			$name = $var[1];	
 			$template = str_replace($expr, $$name, $template);
 		}
+				
+		$template = ComponentManager::fireEvent("PostProcessPage", $template);
 		
 		if (!$config['prettyURLs'])
 		{

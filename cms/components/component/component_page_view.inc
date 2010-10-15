@@ -37,13 +37,17 @@ class ComponentPageView
 		
 		$template = $this->page->getTemplate();
 		
+		$template = ComponentManager::fireEvent("PreProcessPage", $template);
+		
 		// If the page has a PHP code include, execute it and insert the contents
 		
 		ob_start();
 		include $page->server_path;
 		$output = ob_get_contents();
 		ob_end_clean();
-			
+
+		$output = ComponentManager::fireEvent("PostProcessContent", $output);
+		
 		$this->page->description .= $output;
 		
 		// Populate template fields from the Page object.

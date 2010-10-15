@@ -45,6 +45,8 @@ class AdminPageView
 		
 		$template = file_get_contents(Fakoli::resolveResource("/fakoli/admin.tpl"));
 		
+		$template = ComponentManager::fireEvent("PreProcessPage", $template);
+		
 		ob_start();
 		
 		try
@@ -59,6 +61,8 @@ class AdminPageView
 		$content = ob_get_contents();
 		ob_end_clean();
 	
+		$content = ComponentManager::fireEvent("PostProcessContent", $content);
+		
 		$admin_menu = Fakoli::getAdminMenu();
 		
 		$menu = $this->formatMenu($admin_menu);
