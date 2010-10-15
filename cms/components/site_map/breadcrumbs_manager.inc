@@ -35,12 +35,12 @@ class Breadcrumbs
 		if(count($currentSiteMapPages) > 0)
 			$currentSiteMapPage = $currentSiteMapPages[0];
 		else
-			return "";
+			return $page;
 			
 		trace("Breadcrumbs:: currentSiteMapPage id {$currentSiteMapPage->identifier}", 3);
 		
 		if(!$currentSiteMapPage)
-			return "";
+			return $page;
 			
 		$upTreePages = Breadcrumbs::getUpTreePages($currentSiteMapPage);
 	
