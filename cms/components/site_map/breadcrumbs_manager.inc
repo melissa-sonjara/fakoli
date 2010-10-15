@@ -19,7 +19,7 @@ Fakoli::using("site_map");
 
 class Breadcrumbs
 {	
-	function getBreadcrumbs($page)
+	static function getBreadcrumbs($page)
 	{
 		global $breadcrumbs;
 			
@@ -42,7 +42,7 @@ class Breadcrumbs
 		if(!$currentSiteMapPage)
 			return "";
 			
-		$upTreePages = $this->getUpTreePages($currentSiteMapPage);
+		$upTreePages = Breadcrumbs::getUpTreePages($currentSiteMapPage);
 	
 		/*
 		 * No need to show breadcrumbs if there is just one single
@@ -72,10 +72,10 @@ class Breadcrumbs
 			}
 		}
 				
-		return $breadcrumbs;
+		return $page;
 	}
 			
-	function getUpTreePages($currentSiteMapPage)
+	static function getUpTreePages($currentSiteMapPage)
 	{
 		if($currentSiteMapPage)
 		{	
