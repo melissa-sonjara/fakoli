@@ -37,9 +37,16 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for numeric data fields. Renders as a text box
  * with numerically masked input (user cannot enter non-numeric characters).
+ * 
+ * Allow negative defaults to false; if a field should allow negative numbers, 
+ * calling script should add the following line:
+ * $form->getRenderer("field_name")->allowNegative = true;
  */
 class NumberFieldRenderer extends FieldRenderer
 {
+	// Whether user can enter a negative number
+	var $allowNegative = false;
+	
 	function NumberFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
@@ -49,7 +56,12 @@ class NumberFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='".$this->parent->data->get($field)."' size='15' onkeypress='return maskInput(event);'/>";
+		// JDG - maskInput function doesn't recognize boolean var value
+		// translate to 0 or 1
+		$allowneg = ($this->allowNegative) ? 1 : 0;
+		echo "<input type='text' name='$field' 
+		value='".$this->parent->data->get($field)."' 
+		size='15' onkeypress='return maskInput(event, $allowneg);'/>";
 
 		$this->_endField($field);
 	}
@@ -63,6 +75,26 @@ class NumberFieldRenderer extends FieldRenderer
 		echo ">".$this->parent->data->get($field)."</td>\n";		
 		echo "</tr>\n";	
 	}
+	
+	// if users enter negatives where they shouldn't (any position other than first,
+	// strip them out
+	function preProcess($field)
+	{
+		$value= $_POST[$field];
+		
+		$value = str_replace(",", "", $value);
+		
+		if($this->allowNegative)
+		{			
+			if(substr($value, 0,1) == '-')
+				$value = '-' . str_replace("-", "", $value);
+			else
+				$value = str_replace("-", "", $value);
+		}
+		$this->parent->data->$field = $value;
+	}
+	
+	
 }
 
 ?>
