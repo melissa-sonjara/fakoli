@@ -90,6 +90,10 @@ class Blog extends DataItem
 		return $articles;
 	}
 	
+	function countArticles()
+	{
+		return queryValue(Article, "COUNT(1)", "WHERE article_type='{$this->title}'");
+	}
 
 	static function findByIdentifier($identifier)
 	{

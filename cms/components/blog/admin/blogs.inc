@@ -36,10 +36,20 @@ Fakoli::usingFeature("data_view");
 
 $blogs = Query::create(Blog, "ORDER BY title")->execute();
 
+function showPublished($blog)
+{
+	$img = $blog->published ? "on.png" : "off.png";
+	$alt = $blog->published ? "Enabled" : "Disabled";
+
+	return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+}
+
 $table = new DataListView($blogs, "blogs");
 $table->column("Title", "<a href='/admin/blog_form?blog_id={blog_id}'>{title}</a>", true, "width: 40%")
-	  ->column("Identifier", "{identifier}", true, "width: 40%")
-	  ->column("Owner", "{getOwnerName()}", true, "width: 20%");
+	  ->column("Identifier", "{identifier}", true, "width: 30%")
+	  ->column("Owner", "{getOwnerName()}", true, "width: 20%")
+	  ->column("# Articles", "{countArticles()}", true, "width: 10%; text-align: center")
+	  ->column("Published", showPublished, true, "width: 10%; text-align: center");
 	  
 $table->sortable = true;
 $table->filter = true;
