@@ -74,6 +74,8 @@ ENDSCRIPT;
 		
 		$articles = $this->blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
 
+		echo "<div>{$this->blog->description}</div>";
+		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "article_list";
 		$list->styles = "clear: both";
