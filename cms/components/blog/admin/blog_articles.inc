@@ -80,7 +80,7 @@ $tabs->writeHTML();
 $table->drawView();
 ?>
 <br/>
-<a class="button" href="/admin/article_form">Add an Article</a>
+<a class="button" href="/admin/blog_article_form?blog_id=<?echo $blog_id?>">Add an Article</a>
 <br/>
 </div>
 <br/>
