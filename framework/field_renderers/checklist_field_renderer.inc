@@ -231,6 +231,10 @@ class CheckListFieldRenderer extends FieldRenderer
 		{
 			$this->parent->data->set($field, implode(",",  array_values($_POST[$field])));
 		}
+		else if (!is_set($_POST[$field]))
+		{
+			$this->parent->data->set($field, "");
+		}
 		else
 		{
 			$this->parent->data->set($field, $_POST[$field]);
