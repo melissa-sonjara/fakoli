@@ -606,7 +606,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
-			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='{$obj->get($hidden)}'/>\n";
+			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
 
 		echo "<table";
