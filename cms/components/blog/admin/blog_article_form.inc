@@ -30,56 +30,72 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-
-Fakoli::using("blog", "field_renderers");
-Fakoli::usingFeature("auto_form");
+ 
+Fakoli::using("article", "site", "image", "field_renderers", "blog");
+Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/blog_tabs.inc";
 
+$article = new Article();
+$article_id = checkNumeric($_GET["article_id"]);
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-$blog = new Blog();
+if (!$blog_id) redirect("/admin/index");
 
-if ($blog_id)
+$blog = new Blog($blog_id);
+
+if ($article_id)
 {
-	$blog->load($blog_id);
-	$title = "Editing Blog Definition for $blog->title";
+	$article->load($article_id);
 }
 else
 {
-	$title = "Add a new Blog";
-	
-	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
-	$_POST["created_date"] = now();
+	$article->created_date = now();
 }
 
-$redirect = "/admin/blogs";
-
-$tabs = blogTabs($blog_id);
-
-$form = new AutoForm($blog);
-$form->hide("owner_id", "created_date");
+$form = new AutoForm($article);
+$form->required("title");
+$form->allowDelete = true;
+$redirect = "/admin/blog_articles?blog_id={$blog->blog_id}";
 $form->button("Cancel", $redirect);
+$imageSelect = new ImageSelectFieldRenderer($form, "image_id");
+$form->alias("image_id", "Associated Image");
+$form->readonly("created_date");
+$form->hide("author_id"); //TODO - allow author selection/re-assignment?
+$form->hide("article_type");
+$article->article_type = $blog->title;
 
-$orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest"));
-$readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
-$readSelect->setSize(350, 150, 10);
-$writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
-$writeSelect->setSize(350, 150, 10);
-$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type");
-$typeSelect->allowAddEntry();
-$imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
-$form->alias("image_id", "Image");
+$sites = query(Site, "ORDER BY site_name");
+
+$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
+
+$form->getRenderer("archive_date")->validator->required = false;
 
 if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect($redirect);
+		redirect("/admin/blog_articles?blog_id={$blog->blog_id}");
 	}
 }
 
-$script .= $form->writeScript();
+if ($form->data->article_id)
+{
+	$title = "Edit Article";
+}
+else
+{
+	$title =  "Add Article";
+
+	if (!$article_id) $form->hide("created_date");
+}
+
+$tabs = blogTabs($blog_id);
+$tabs->page = "/admin/blog_articles";
+
+
+$script = $form->writeScript();
+
 
 $tabs->writeHTML();
 ?>
@@ -87,5 +103,5 @@ $tabs->writeHTML();
 <?
 $form->drawForm();
 ?>
-<br/>
 </div>
+<br/>

@@ -31,61 +31,56 @@
 
 *****************************************************************/
 
-Fakoli::using("blog", "field_renderers");
-Fakoli::usingFeature("auto_form");
+Fakoli::using("article", "blog");
+Fakoli::usingFile("framework/data_view.inc");
 
 require_once "include/blog_tabs.inc";
 
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-$blog = new Blog();
+if (!$blog_id) redirect("/admin/index");
 
-if ($blog_id)
-{
-	$blog->load($blog_id);
-	$title = "Editing Blog Definition for $blog->title";
-}
-else
-{
-	$title = "Add a new Blog";
-	
-	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
-	$_POST["created_date"] = now();
-}
+global $blog;
+$blog = new Blog($blog_id);
 
-$redirect = "/admin/blogs";
+$title = "Articles in {$blog->title}";
+$menu_item = "Articles";
+
 
 $tabs = blogTabs($blog_id);
 
-$form = new AutoForm($blog);
-$form->hide("owner_id", "created_date");
-$form->button("Cancel", $redirect);
+$articles = $blog->Articles("ORDER BY last_modified DESC");
 
-$orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest"));
-$readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
-$readSelect->setSize(350, 150, 10);
-$writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
-$writeSelect->setSize(350, 150, 10);
-$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type");
-$typeSelect->allowAddEntry();
-$imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
-$form->alias("image_id", "Image");
+$table = new DataListView($articles, "articles");
+$table->column("Title", formatTitle, true)
+	  ->column("Article Type", "{article_type}", true)
+	  ->column("Author", "{getAuthorName()}", true)
+	  ->column("Last Modified", "{last_modified}", true);
+	  
+$table->sortable = true;
+$table->filter = true;
+$table->excelFile = "articles.xls";
+$table->pageSize = 20;
+$table->emptyMessage = "No articles have been created yet.";
 
-if ($method == "POST")
+function formatTitle($item)
 {
-	if ($form->save())
-	{
-		redirect($redirect);
-	}
+	global $blog;
+	return "<a title=\"{$item->title}\" href=\"/admin/blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 }
 
-$script .= $form->writeScript();
+$script .= $table->writeScript();
+
+
 
 $tabs->writeHTML();
 ?>
 <div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
 <?
-$form->drawForm();
+$table->drawView();
 ?>
 <br/>
+<a class="button" href="/admin/article_form">Add an Article</a>
+<br/>
 </div>
+<br/>
