@@ -31,6 +31,16 @@
 
 *****************************************************************/
 
+/**
+ * Query provides an object-oriented interface for database queries.
+ * By instantiating Query objects you can specify a full or partial 
+ * set of criteria and parameters, and then subsequently execute the query
+ * to retrieve the results. You can pass around the constructed Query 
+ * object and execute it multiple times, allowing for lazy evaluation
+ * and other performance enhancing tricks.
+ * @author andy
+ *
+ */
 class Query
 {
 	var $class;
@@ -40,6 +50,12 @@ class Query
 	var $filter;
 	var $params;
 	
+	/**
+	 * Creates a new Query object.
+	 * @param string $class the DataItem class to be queried
+	 * @param string $constraints [optional] constraint clause for the query
+	 * @return a new Query object
+	 */
 	function Query($class, $constraints = "")
 	{
 		$this->class = $class;
@@ -52,12 +68,24 @@ class Query
 		$this->params = array();
 	}
 
+	/**
+	 * Sets the constraint clause for the Query
+	 * @param $constraints the constraint clause;
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
 	function constraints($constraints)
 	{
 		$this->constraints = $constraints;
 		return $this;
 	}
 	
+	/**
+	 * Sets the page number and size for constraining the result set by page.
+	 * By default results are not paged.
+	 * @param $page integer the page number
+	 * @param $size integer the number of items per page
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
 	function page($page, $size)
 	{
 		$this->page = $page;
@@ -65,18 +93,33 @@ class Query
 		return $this;
 	}
 	
+	/**
+	 * Sets a filter to constrain the fields retrieved when the query is executed.
+	 * @param $filter Object the InclusionFilter or ExclusionFilter to use
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
 	function filter($filter)
 	{
 		$this->filter = $filter;
 		return $this;
 	}
 	
+	/**
+	 * Sets the bound parameters array. Generally it is more convenient to call bind()
+	 * but this method can be useful if the query is being constructed programmatically.
+	 * @param $params the array of placeholders and parameters to bind
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
 	function params($params)
 	{
 		$this->params = $params;
 		return $this;
 	}
 	
+	/**
+	 * Binds placeholders to parameter values.
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
 	function bind()
 	{
 		$num = func_num_args();
@@ -88,6 +131,11 @@ class Query
 		return $this;
 	}
 	
+	/**
+	 * Executes the query and returns an array of DataItems containing the results
+	 * (the class of items returned is as specified in the Query constructor).
+	 * @return array an array of DataItems containing the results.
+	 */
 	function execute()
 	{
 		$prototype = new $this->class;
@@ -161,6 +209,12 @@ class Query
 		return $items;
 	}
 	
+	/**
+	 * Executes the query and returns a singleton result row. If no results match
+	 * then a DataNotFoundException is thrown. If more than one row matches, then
+	 * a DataItemException is thrown.
+	 * @return DataItem the matching DataItem from the database
+	 */
 	function executeSingle()
 	{
 		$results = $this->execute();
@@ -178,7 +232,54 @@ class Query
 			throw new DataItemException("Ambiguous singleton query");
 		}
 	}
+
+	/**
+	 * Query the database to calculate an aggregate value. The database table associated with
+	 * the specified class is used as the source for the data.
+	 * @param string $func the value or function to retrieve
+	 */
+	function executeValue($func)
+	{
+		$prototype = new $this->class;
+		
+		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
+		$this->constraints .= " ".$prototype->getIdentityConstraint();
+			
+		$query = "SELECT $func as result FROM {$prototype->table} $constraints";
+		
+		trace($query, 3);
+		
+		try
+		{
+			$db = ConnectionManager::getConnection();
+			
+			$result = $db->prepare($query);
+			$result->execute();
+			
+			if ($row = $result->fetch())
+			{
+				$value = $row['result'];
+			}
 	
+			unset($result);
+		}
+		catch(PDOException $e)
+		{
+			$err = "Query::executeValue() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
+		}
+		
+		return $value;
+	}
+	
+	
+	/**
+	 * Static factory method to create a new Query. 
+	 * @param string $class the DataItem class to be queried
+	 * @param string $constraints [optional] constraint clause for the query
+	 * @return a new Query object
+	 */
 	static function create($class, $constraints = "")
 	{
 		return new Query($class, $constraints);

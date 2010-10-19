@@ -92,7 +92,9 @@ class Blog extends DataItem
 	
 	function countArticles()
 	{
-		return queryValue(Article, "COUNT(1)", "WHERE article_type='{$this->title}'");
+		return Query::create(Article, "WHERE article_type=:a")
+					->bind(":a", $this->title)
+					->executeValue("COUNT(1)");
 	}
 
 	static function findByIdentifier($identifier)
