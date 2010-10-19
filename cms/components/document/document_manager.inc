@@ -41,7 +41,14 @@ class DocumentManager
 	function DocumentManager($library)
 	{		
 		$this->library = $library;
-		$this->documents = $library->Documents("ORDER BY title");
+		if ($this->library->document_library_id) 
+		{
+			$this->documents = $library->Documents("ORDER BY title");
+		}
+		else
+		{
+			$this->documents = array();
+		}
 	}
 	
 	function folderPermission($folder)
@@ -353,32 +360,42 @@ function deleteFolderResult(result)
 		$tree->selectMode = "file";
 		$tree->permissionCallback = array($this, folderPermission);
 		
-		$root = $this->library->getLibraryDirectory();
-		
-		$tree->buildFolderTree($config["uploaddir"], $root);
-				
-		foreach($this->documents as $doc)
+		if ($this->documents)
 		{
-			$file = str_replace("/", DIRECTORY_SEPARATOR, $doc->file);
-			$file = str_replace("\\", DIRECTORY_SEPARATOR, $file);
+			$root = $this->library->getLibraryDirectory();
 			
-			trace($file, 4);
-			$folderNode = $tree->findFolder(dirname($file));
-			
-			if ($folderNode != null)
+			$tree->buildFolderTree($config["uploaddir"], $root);
+					
+			foreach($this->documents as $doc)
 			{
-				trace("Found Folder {$folderNode->id}", 4);
-				$id = str_replace(DIRECTORY_SEPARATOR, "_", $file);
-			
-				$folderNode->add(new FileNode($id, basename($file), $doc->document_id));
-			}
-			else
-			{
-				trace("*** NODE NOT FOUND - $file", 3);
-			}
-		}
+				$file = str_replace("/", DIRECTORY_SEPARATOR, $doc->file);
+				$file = str_replace("\\", DIRECTORY_SEPARATOR, $file);
 				
-		$tree->children["documents"]->open = true;		
-		$tree->writeHTML(); 
+				trace($file, 4);
+				$folderNode = $tree->findFolder(dirname($file));
+				
+				if ($folderNode != null)
+				{
+					trace("Found Folder {$folderNode->id}", 4);
+					$id = str_replace(DIRECTORY_SEPARATOR, "_", $file);
+				
+					$folderNode->add(new FileNode($id, basename($file), $doc->document_id));
+				}
+				else
+				{
+					trace("*** NODE NOT FOUND - $file", 3);
+				}
+			}
+					
+			$tree->children["documents"]->open = true;
+			$tree->writeHTML(); 
+		}
+		else
+		{
+?>
+		<div style="width: <?echo $width?>px;height:<?echo $height?>px;border: solid 1px #000;">&nbsp;</div>
+<?			
+	
+		}
 	}
 }

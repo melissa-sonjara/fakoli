@@ -93,9 +93,11 @@ $docMgr = new DocumentManager($library);
 ?>
  </select>
 </div>
+<div style="clear: left">
 <?
 $docMgr->drawSelectView("documentSelected", "linkToDocument", "100%", 240);
 ?>
 <br/>
 <button id="linkButton" onclick="linkToDocument()" disabled="disabled" class="button">Link to Document</button>
 <br/>
+</div>

@@ -74,5 +74,6 @@ function insertLink(url)
 ENDSCRIPT;
 
 $tabs->writeHTML();
+?><div style="clear:left"><?
 $tree->writeHTML();
-?>
+?></div>
