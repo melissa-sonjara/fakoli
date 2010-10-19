@@ -95,7 +95,7 @@ if ($gallery_id) $gallery->load($gallery_id);
 
 $images = $gallery->Images();
 
-$view = new ImageListView($images, "");
+$view = new ImageListView($images, "javascript:imagePicker.selectImage({image_id}, '{title}')");
 
 ?>
 <div style="border: solid 1px #666; background: url(/fakoli/images/table-header.png); width: 95%;margin-left: 10px; padding: 2px;">
