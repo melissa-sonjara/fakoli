@@ -58,7 +58,7 @@ $tabs->writeHTML();
 
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
-window.addEvent('domready', function() { $('images_box').resizable(); };
+window.addEvent('domready', function() { $('images_box').resizable(); });
 </script>
 ENDSCRIPT;
 
