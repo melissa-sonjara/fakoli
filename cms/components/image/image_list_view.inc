@@ -69,9 +69,7 @@ class ImageListView
 					this.morph({'background-color': '#eeeeff', 'border-color': '#cccccc'});
 				}.bind(elt)
 			});
-		});
-		
-		$$('.imageGrid').resizable();
+		});		
 	});
 	</script>
 ENDSCRIPT;
