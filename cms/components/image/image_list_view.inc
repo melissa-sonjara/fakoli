@@ -70,6 +70,8 @@ class ImageListView
 				}.bind(elt)
 			});
 		});
+		
+		$$('.imageGrid').resizable();
 	});
 	</script>
 ENDSCRIPT;
