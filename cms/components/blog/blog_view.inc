@@ -280,6 +280,8 @@ class BookBlogViewHandler implements IBlogViewHandler
 <a href="/<?echo $blog->identifier?>" class="button" style="float: left">&laquo; Back to Contents Page</a>
 <?
 		}
+		
+		echo "<div style='clear:both'>&nbsp;</div>";
 	}
 }
 
