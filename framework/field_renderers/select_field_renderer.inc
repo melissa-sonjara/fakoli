@@ -146,7 +146,7 @@ class SelectFieldRenderer extends FieldRenderer
 						else
 							$selected = "";
 						
-						echo "<option value='$value'$selected>$name</option>\n";
+						echo "<option value='".htmlSafe($value)."'$selected>$name</option>\n";
 					}
 					
 					echo "</optgroup>\n";
@@ -164,7 +164,7 @@ class SelectFieldRenderer extends FieldRenderer
 					else
 						$selected = "";
 					
-					echo "<option value='$value'$selected>$name</option>\n";
+					echo "<option value='".htmlSafe($value)."'$selected>$name</option>\n";
 				}
 			}
 			
@@ -201,7 +201,7 @@ class SelectFieldRenderer extends FieldRenderer
 		{
 			$selected = ($searchValue == $value) ? " selected" : "";
 			
-			echo "<option value='$value'$selected>$name</option>";
+			echo "<option value='".htmlSafe($value)."'$selected>$name</option>";
 		}
 		echo "</select></td></tr>\n";
 		
