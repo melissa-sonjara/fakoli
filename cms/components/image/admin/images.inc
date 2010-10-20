@@ -56,8 +56,14 @@ $title = "Images in {$gallery->gallery_name}";
 $grid = new ImageListView($images, "image_form?gallery_id={gallery_id}&image_id={image_id}");
 $tabs->writeHTML();
 
+$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+window.addEvent('domready', function() { $('images_box').resizable(); };
+</script>
+ENDSCRIPT;
+
 ?>
-	<div style="width: 100%; border: solid 1px #000;">
+	<div style="width: 100%; border: solid 1px #000;" id="images_box">
 		<div style="overflow:auto; width:100%; height: 260px;border: none">
 <?
 if (count($images) > 0)
