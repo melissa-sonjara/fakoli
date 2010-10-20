@@ -63,8 +63,8 @@ window.addEvent('domready', function() { $('images_box').resizable(); });
 ENDSCRIPT;
 
 ?>
-	<div style="width: 100%; border: solid 1px #000;" id="images_box">
-		<div style="overflow:auto; width:100%; height: 260px;border: none">
+	<div style="width: 100%; border: solid 1px #000;">
+		<div style="overflow:auto; width:100%; height: 260px;border: none" id="images_box">
 <?
 if (count($images) > 0)
 {
