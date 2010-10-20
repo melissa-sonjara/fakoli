@@ -254,7 +254,7 @@ class Query
 			$db = ConnectionManager::getConnection();
 			
 			$result = $db->prepare($query);
-			$result->execute();
+			$result->execute($this->params);
 			
 			if ($row = $result->fetch())
 			{
