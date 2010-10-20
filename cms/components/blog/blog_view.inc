@@ -255,13 +255,15 @@ class BookBlogViewHandler implements IBlogViewHandler
 		$article = new Article($article_id);
 		$page->page_title = $article->title;
 		
+		echo "<div class='chapter'>\n";
+		
 		echo $article->message;
 				
 		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
 		
 		$idx = findItemIndex($articles, "article_id", $article->article_id);
 		
-		echo "<div class='chapter'><br/>";
+		echo "<br/>";
 		
 		if ($idx < count($articles) - 1)
 		{
