@@ -140,7 +140,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 	
 	static function register($view)
 	{
-		$view->registerHandler("Standard", new DefaultBlogViewHandler());
+		$view->registerHandler("News", new NewsBlogViewHandler());
 		return $view;
 	}
 	
@@ -191,9 +191,97 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		$page->page_title = $article->title;
 		
 		echo $article->message;
+		
+?><br/><a class="button" href="/<?echo $blog->identifier?>">&laquo; Back to <?echo $blog->title?></a><?
 	}
 }
 
+
+class BookBlogViewHandler implements IBlogViewHandler
+{
+	function DefaultBlogViewHandler()
+	{
+	}
+	
+	static function register($view)
+	{
+		$view->registerHandler("Book", new BookBlogViewHandler());
+		return $view;
+	}
+	
+	function drawArticleList($blog)
+	{
+		global $page;
+		global $script;
+		
+		$this->blog = $blog;
+		
+		$page->page_title = $blog->title;
+		
+		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+
+		echo "<div id='blog_description' class='Book'>{$blog->description}</div>";
+		
+		$list = new PagedList($articles, "article_list", array($this, formatArticle));
+		$list->CSSclass = "Standard";
+		$list->styles = "clear: both";
+		$list->pageSize = 5;
+		
+		$script .= $list->writeScript();
+		$list->drawList();
+	}
+		
+	function formatArticle($article)
+	{
+		$out = "<div class='article_summary'>";
+		
+		if ($article->image_id)
+		{
+			$image = $article->Image();
+			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
+		}
+		
+		$out .= "<h4><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>";
+		$out .= "{$article->title}</a></h4>";
+		
+		if ($article->teaser) $out .= $article->teaser;
+		$out .= "</div>";
+		return $out;
+	}
+	
+	function drawArticle($blog, $article_id)
+	{	
+		global $page;
+		$article = new Article($article_id);
+		$page->page_title = $article->title;
+		
+		echo $article->message;
+				
+		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+		
+		$idx = findItemIndex($articles, "article_id", $article->article_id);
+		
+		if (idx < count($articles) - 1)
+		{
+?>
+<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx+1]->article_id?>" class="button" style="float: right"><?echo $blog->title?> &raquo;</a>
+<?
+		}
+		
+		if ($idx > 0)
+		{
+?>
+<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx-1]->article_id?>" class="button" style="float: left">&laquo; <?echo $blog->title?></a>
+<?
+		}
+		else
+		{
+?>
+<a href="/<?echo $blog->identifier?>" class="button" style="float: left">&laquo; Back to Contents Page</a>
+<?
+		}
+	}
+}
 
 class BlogView
 {
@@ -220,19 +308,18 @@ class BlogView
 	}
 	
 	function drawArticle($article_id)
-	{	
-		global $page;
-		$article = new Article($article_id);
-		$page->page_title = $article->title;
+	{			
+		$type = $this->blog->blog_type;
+		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
 		
-		echo $article->message;
+		$this->handlers[$type]->drawArticle($this->blog, $article_id);
 	}
 	
 	static function registerStandardHandlers($view)
 	{
 		$view->registerHandler("Standard", new DefaultBlogViewHandler());
 		$view->registerHandler("News", new NewsBlogViewHandler());
-		//$view->registerHandler("Book", new BookBlogViewHandler());
+		$view->registerHandler("Book", new BookBlogViewHandler());
 		
 		return $view;
 	}	
