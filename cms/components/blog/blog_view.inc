@@ -261,7 +261,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		
 		$idx = findItemIndex($articles, "article_id", $article->article_id);
 		
-		if (idx < count($articles) - 1)
+		if ($idx < count($articles) - 1)
 		{
 ?>
 <a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx+1]->article_id?>" class="button" style="float: right"><?echo ellipsis($articles[$idx+1]->title, 60, true)?> &raquo;</a>
