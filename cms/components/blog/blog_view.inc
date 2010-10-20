@@ -264,14 +264,14 @@ class BookBlogViewHandler implements IBlogViewHandler
 		if (idx < count($articles) - 1)
 		{
 ?>
-<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx+1]->article_id?>" class="button" style="float: right"><?echo ellipsis($article->title, 60, true)?> &raquo;</a>
+<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx+1]->article_id?>" class="button" style="float: right"><?echo ellipsis($articles[$idx+1]->title, 60, true)?> &raquo;</a>
 <?
 		}
 		
 		if ($idx > 0)
 		{
 ?>
-<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx-1]->article_id?>" class="button" style="float: left">&laquo; <?echo ellipsis($article->title, 60, true)?></a>
+<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx-1]->article_id?>" class="button" style="float: left">&laquo; <?echo ellipsis($articles[$idx-1]->title, 60, true)?></a>
 <?
 		}
 		else
