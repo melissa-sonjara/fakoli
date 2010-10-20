@@ -261,6 +261,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		
 		$idx = findItemIndex($articles, "article_id", $article->article_id);
 		
+		echo "<br/>";
 		if ($idx < count($articles) - 1)
 		{
 ?>
