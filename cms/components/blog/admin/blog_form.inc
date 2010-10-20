@@ -61,13 +61,16 @@ $form = new AutoForm($blog);
 $form->hide("owner_id", "created_date");
 $form->button("Cancel", $redirect);
 
+$blogView = new BlogView($blog);
+$blogTypes = array_keys($blogView->handlers);
+$blogTypes = array_combine($blogTypes, $blogTypes);
+
 $orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest"));
 $readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
 $readSelect->setSize(350, 150, 10);
 $writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
 $writeSelect->setSize(350, 150, 10);
-$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type");
-$typeSelect->allowAddEntry();
+$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type", $blogTypes);
 $imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
 $form->alias("image_id", "Image");
 

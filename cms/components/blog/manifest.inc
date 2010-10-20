@@ -35,7 +35,8 @@ class BlogManifest
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" => array(BlogManager, displayBlog),
-					 "EnumerateItems"	 => array(BlogManager, enumerateItems));
+					 "EnumerateItems"	 => array(BlogManager, enumerateItems),
+					 "RegisterBlogViewHandlers" => array(BlogView, registerStandardHandlers));
 	}
 }
 

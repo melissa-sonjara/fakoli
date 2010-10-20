@@ -67,7 +67,7 @@ class PagedList
 	function drawList()
 	{
 		$attrs = "";
-		if ($this->CSSclass) $attrs .= " class='{$this->CSSClass}'";
+		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
 ?>
 			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>

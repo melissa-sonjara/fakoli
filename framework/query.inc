@@ -245,7 +245,7 @@ class Query
 		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
 		$this->constraints .= " ".$prototype->getIdentityConstraint();
 			
-		$query = "SELECT $func as result FROM {$prototype->table} $constraints";
+		$query = "SELECT $func as result FROM {$prototype->table} {$this->constraints}";
 		
 		trace($query, 3);
 		

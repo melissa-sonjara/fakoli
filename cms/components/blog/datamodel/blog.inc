@@ -80,7 +80,7 @@ class Blog extends DataItem
 		{
 			$constraint = preg_replace("/^\s*WHERE\s+/i", "AND ", $constraint);
 		}
-		
+	
 		$constraint = "WHERE article_type=:a $constraint";
 		
 		$articles = Query::create(Article, $constraint)
@@ -92,8 +92,7 @@ class Blog extends DataItem
 	
 	function countArticles()
 	{
-		return Query::create(Article, "WHERE article_type=:a")
-					->bind(":a", $this->title)
+		return Query::create(Article, "WHERE article_type='{$this->title}'")
 					->executeValue("COUNT(1)");
 	}
 

@@ -31,53 +31,64 @@
 
 *****************************************************************/
 
-Fakoli::using("user", "blog");
+Fakoli::using("user", "blog", "component");
 Fakoli::usingFeature("paged_list");
 
-class BlogView
+/**
+ * IBlogViewHandler defines the interface that BlogViewHandlers must provide.
+ * @author andy
+ *
+ */
+interface IBlogViewHandler
 {
-	var $blog;
+	/**
+	 * Draw the list of articles for the specified blog.
+	 * @param Blog $blog the Blog object
+	 */
+	function drawArticleList($blog);
 	
-	function BlogView($blog)
+	/**
+	 * Draw the specific article in the blog.
+	 * @param Blog $blog the Blog object
+	 * @param integer $article_id the ID of the Article
+	 */
+	function drawArticle($blog, $article_id);
+}
+
+
+
+/**
+ * DefaultBlogViewHandler provides a standard, no-frills display for blog entries.
+ * @author andy
+ *
+ */
+class DefaultBlogViewHandler implements IBlogViewHandler
+{
+	function DefaultBlogViewHandler()
 	{
-		$this->blog = $blog;
 	}
 	
-	function drawArticleList()
+	static function register($view)
+	{
+		$view->registerHandler("Standard", new DefaultBlogViewHandler());
+		return $view;
+	}
+	
+	function drawArticleList($blog)
 	{
 		global $page;
 		global $script;
-
-		$script .= <<<ENDSCRIPT
-	<script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		$$("#article_list a").each(function(elt) 
-		{		
-			elt.addEvents(
-			{
-				'mouseover': function()
-				{
-					this.morph({'background-color': '#A9CDED', 'border-color': '#666666'});
-				}.bind(elt),
-				'mouseout': function()
-				{
-					this.morph({'background-color': '#DEFAFF', 'border-color': '#cccccc'});
-				}.bind(elt)
-			});
-		});
-	});
-	</script>
-ENDSCRIPT;
-	
-		$page->page_title = $this->blog->title;
 		
-		$articles = $this->blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+		$this->blog = $blog;
+		
+		$page->page_title = $blog->title;
+		
+		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
 
-		echo "<div>{$this->blog->description}</div>";
+		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
-		$list->CSSclass = "article_list";
+		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		$list->pageSize = 5;
 		
@@ -87,17 +98,125 @@ ENDSCRIPT;
 		
 	function formatArticle($article)
 	{
-		$out = "<a href='/{$this->blog->identifier}?article_id={$article->article_id}' style='display: block'>";
+		$out = "<div class='article_summary'>";
+		
 		if ($article->image_id)
 		{
 			$image = $article->Image();
 			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
-		$out .= "<div class='article_summary'><h4>{$article->title}</h4>";
+		$out .= "<h4><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>";
+		$out .= "{$article->title}</a></h4>";
+		
 		if ($article->teaser) $out .= $article->teaser;
-		$out .= "</div><div style='clear: both'></div></a>";
+		$out .= "</div>";
 		return $out;
+	}
+	
+	function drawArticle($blog, $article_id)
+	{	
+		global $page;
+		$article = new Article($article_id);
+		$page->page_title = $article->title;
+		
+		echo $article->message;
+	}
+}
+
+
+
+
+/**
+ * NewsBlogViewHandler provides a simple blog view tailored displaying news articles.
+ * @author andy
+ *
+ */
+class NewsBlogViewHandler implements IBlogViewHandler
+{
+	function NewsBlogViewHandler()
+	{
+	}
+	
+	static function register($view)
+	{
+		$view->registerHandler("Standard", new DefaultBlogViewHandler());
+		return $view;
+	}
+	
+	function drawArticleList($blog)
+	{
+		global $page;
+		global $script;
+		
+		$this->blog = $blog;
+		
+		$page->page_title = $blog->title;
+		
+		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+
+		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
+		
+		$list = new PagedList($articles, "article_list", array($this, formatArticle));
+		$list->CSSclass = "Standard";
+		$list->styles = "clear: both";
+		$list->pageSize = 10;
+		
+		$script .= $list->writeScript();
+		$list->drawList();
+	}
+		
+	function formatArticle($article)
+	{
+		$out = "<div class='article_summary'>";
+		
+		if ($article->image_id)
+		{
+			$image = $article->Image();
+			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
+		}
+		
+		$out .= "<h4><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>";
+		$out .= "{$article->title}</a></h4>";
+		$out .= "<strong>".formatDateLong($article->created_date)."</strong>";
+		if ($article->teaser) $out .= " - ".$article->teaser;
+		$out .= "<br/><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>Read More &raquo;</a></div>";
+		return $out;
+	}
+	
+	function drawArticle($blog, $article_id)
+	{	
+		global $page;
+		$article = new Article($article_id);
+		$page->page_title = $article->title;
+		
+		echo $article->message;
+	}
+}
+
+
+class BlogView
+{
+	var $blog;
+	var $handlers;
+	
+	function BlogView($blog)
+	{
+		$this->blog = $blog;
+		ComponentManager::fireEvent("RegisterBlogViewHandlers", $this);
+	}
+	
+	function registerHandler($type, $handler)
+	{
+		$this->handlers[$type] = $handler;
+	}
+	
+	function drawArticleList()
+	{
+		$type = $this->blog->blog_type;
+		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
+		
+		$this->handlers[$type]->drawArticleList($this->blog);
 	}
 	
 	function drawArticle($article_id)
@@ -108,4 +227,13 @@ ENDSCRIPT;
 		
 		echo $article->message;
 	}
+	
+	static function registerStandardHandlers($view)
+	{
+		$view->registerHandler("Standard", new DefaultBlogViewHandler());
+		$view->registerHandler("News", new NewsBlogViewHandler());
+		//$view->registerHandler("Book", new BookBlogViewHandler());
+		
+		return $view;
+	}	
 }
