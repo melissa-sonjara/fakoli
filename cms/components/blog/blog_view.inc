@@ -261,7 +261,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		
 		$idx = findItemIndex($articles, "article_id", $article->article_id);
 		
-		echo "<br/>";
+		echo "<div class='chapter'><br/>";
 		if ($idx < count($articles) - 1)
 		{
 ?>
@@ -282,7 +282,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 <?
 		}
 		
-		echo "<div style='clear:both'>&nbsp;</div>";
+		echo "<div style='clear:both'>&nbsp;</div></div>";
 	}
 }
 
