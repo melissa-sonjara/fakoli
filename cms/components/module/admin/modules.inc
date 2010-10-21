@@ -36,6 +36,6 @@ $table->drawView();
 ?>
 <br/>
 <br/>
-<a class='button' href="/admin/code_module_form">Add a Code Module Form</a>&nbsp;&nbsp;
+<a class='button' href="/admin/code_module_form">Add a Code Module</a>&nbsp;&nbsp;
 <a class='button' href="/admin/html_module_form">Add an HTML Module</a>&nbsp;&nbsp;
 <a class='button' href="/admin/menu_module_form">Add a Menu Module</a>
