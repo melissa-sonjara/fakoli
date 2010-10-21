@@ -145,4 +145,24 @@ class UserManager
 		redirect($page);
 	}
 
+
+	/**
+	 * Returns the identifier of the password reset page.
+	 * @return string the identifier of the password reset page.
+	 */
+	function getPasswordResetPage()
+	{
+		return "/password_help";
+	}
+	
+	function getPasswordHelpText()
+	{
+		return "If you have an account on this system, please enter your user name or your user email address and we will email a temporary password to you.";
+	}
+	
+	function getPasswordHelpUserNameLabel()
+	{
+		return "User name or email";	
+	}
+	
 }
