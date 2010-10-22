@@ -43,6 +43,11 @@ if (!$blog)
 	throw new FakoliException("Unknown Blog");
 }
 
+if (!$blog->published)
+{
+	redirect("/index");
+}
+
 $view = new BlogView($blog);
 
 if ($article_id)
