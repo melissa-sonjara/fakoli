@@ -41,7 +41,15 @@ if (!$gallery_id)
 	return;
 }
 
+
 $gallery = new ImageGallery($gallery_id);
+
+if (!$gallery->published)
+{
+	redirect("/index");
+	return;
+}
+
 $images = $gallery->Images();
 
 $page->page_title = $gallery->gallery_name . " Image Gallery";
