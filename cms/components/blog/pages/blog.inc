@@ -46,6 +46,7 @@ if (!$blog)
 if (!$blog->published)
 {
 	redirect("/index");
+	return;
 }
 
 $view = new BlogView($blog);
