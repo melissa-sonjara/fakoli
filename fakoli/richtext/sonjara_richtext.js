@@ -458,7 +458,8 @@ var RichTextEditor = new Class({
 	{
 		if (this.loading) return;
 		
-		var frameHtml = "<html id=\"" + this.name + "\">\n";
+		var frameHtml = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"; 
+		frameHtml += "<html id=\"" + this.name + "\">\n";
 		frameHtml += "<head>\n";
 		frameHtml += '<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />';
 		
@@ -655,7 +656,15 @@ var RichTextEditor = new Class({
 		} 
 		else 
 		{
-			oHdnField.value = $(this.name + "_iframe").contentWindow.document.body.innerHTML;
+			// Strip errant <br> tags in Firefox
+			var doc = $(this.name + "_iframe").contentWindow.document;
+			var preBlocks = doc.getElementsByTagName("PRE");
+			for(var i = 0; i < preBlocks.length; ++i)
+			{
+				alert(preBlocks[i].innerHTML);
+				preBlocks[i].innerHTML = unescape(preBlocks[i].innerHTML.replace(/<br\/?>/gi, "\n"));
+			}
+			oHdnField.value = doc.body.innerHTML;
 		}
 		
 		//alert(oHdnField.value);
