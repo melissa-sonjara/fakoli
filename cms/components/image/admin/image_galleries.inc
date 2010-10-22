@@ -38,10 +38,19 @@ $menu_item = "Images";
 
 $galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
 
+function showPublished($gallery)
+{
+	$img = $gallery->published ? "on.png" : "off.png";
+	$alt = $gallery->published ? "Enabled" : "Disabled";
+
+	return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+}
+
 $table = new DataListView($galleries, "galleries");
 $table->column("Image Gallery", "<a href='/admin/image_gallery_form?gallery_id={gallery_id}'>{gallery_name}</a>", true, "width: 55%")
 	  ->column("Owner", "{getOwnerName()}", true, "width: 30%")
-	  ->column("# Images", "{countImages()}", true, "width: 15%;text-align: right");
+	  ->column("# Images", "{countImages()}", true, "width: 15%;text-align: right")
+	  ->column("Published", showPublished, false, "text-align: center");
 	  
 $table->sortable = true;
 $table->filter = true;
