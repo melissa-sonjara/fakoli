@@ -661,7 +661,6 @@ var RichTextEditor = new Class({
 			var preBlocks = doc.getElementsByTagName("PRE");
 			for(var i = 0; i < preBlocks.length; ++i)
 			{
-				alert(preBlocks[i].innerHTML);
 				preBlocks[i].innerHTML = unescape(preBlocks[i].innerHTML.replace(/<br\/?>/gi, "\n"));
 			}
 			oHdnField.value = doc.body.innerHTML;
