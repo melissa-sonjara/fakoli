@@ -39,11 +39,20 @@ $menu_item = "Articles";
 
 $articles = query(Article, "ORDER BY last_modified DESC");
 
+function showPublished($article)
+{
+	$img = $article->published ? "on.png" : "off.png";
+	$alt = $article->published ? "Enabled" : "Disabled";
+
+	return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+}
+
 $table = new DataListView($articles, "articles");
 $table->column("Title", formatTitle, true)
 	  ->column("Article Type", "{article_type}", true)
 	  ->column("Author", "{getAuthorName()}", true)
-	  ->column("Last Modified", "{last_modified}", true);
+	  ->column("Date Created", "{created_date}", true)
+	  ->column("Published", showPublished, true, "text-align: center");
 	  
 $table->sortable = true;
 $table->filter = true;
