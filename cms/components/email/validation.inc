@@ -30,7 +30,8 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-*/*
+
+/*
  * Email Template validation
  * 
  * Loop through the list of emails and check if each is a valid email.
