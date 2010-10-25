@@ -78,8 +78,7 @@ class FileUploadFieldRenderer extends FieldRenderer
 	
 	function preProcess($field)
 	{
-		$handler = $this->handler;
-		$handler($field, $this->parent->data);
+		call_user_func($this->handler, $field, $this->parent->data);
 	}
 
 	function required($message = "")

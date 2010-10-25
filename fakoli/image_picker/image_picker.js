@@ -194,6 +194,16 @@ var ImagePicker = new Class({
 		}
 	
 		return false;
+	},
+	
+	uploadImage: function()
+	{
+		var gallery_id = $('gallery_id').value;
+		this.popup = modalPopup("Upload Image", "/action/image_picker/image_upload?gallery_id=" + gallery_id);
+	},
+	
+	hideUploadPopup: function()
+	{
+		this.popup.hide();
 	}
-
 });

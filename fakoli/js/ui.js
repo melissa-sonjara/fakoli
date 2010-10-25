@@ -5,6 +5,13 @@ var Curtain = new Class(
 	initialize: function()
 	{
 		this.curtain = $('curtain');
+		if (!this.curtain)
+		{
+			this.curtain = new Element('div', {'id': 'curtain'});
+			var doc = $(document.body ? document.body : document.documentElement);
+			
+			doc.adopt(this.curtain);
+		}
 	},
 	
 	lower: function(onComplete)
@@ -81,6 +88,12 @@ function modalPopup(title, url, width, height)
 {
 	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height});
 	popup.show(null, url);
+	return popup;
+}
+
+function hideModalPopup(popup)
+{
+	if (popup) popup.hide();
 }
 
 var ModalDialog = new Class(

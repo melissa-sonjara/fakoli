@@ -38,61 +38,6 @@ require_once "include/image_gallery_tabs.inc";
 
 $menu_item = "Images";
 
- function imageUploadHandler($field, $image)
-{
-	global $config;
-	
-	trace("imageUploadHandler() called for $field", 3);
-	
-	if (!$_FILES[$field]) 
-	{
-		trace("No upload record for $field", 3);
-		return false;
-	}
-	if ($_FILES[$field]["name"]=="") 
-	{
-		trace("Upload name is empty", 3);
-		return false;
-	}
-
-	$gallery = $image->Gallery();
-	
-	$dir = $gallery->getGalleryDirectory();
-	if (!file_exists($dir))
-	{
-		mkdir($dir);
-	}
-	
-	/* Copy across the uploaded file */
-
-	trace("Upload Base: {$dir}", 3);
-    
-	$filename = $_FILES[$field]['name'];
-	$ext = strtolower(substr($filename, -4));
-	
-	trace("Image format: $ext", 3);
-	
-	if ($ext != ".jpg" && $ext != ".png") 
-	{
-		throw new FakoliException("Unsupported image format");
-	}
-	
-	$target = $dir . DIRECTORY_SEPARATOR . $filename;
-	trace ("Uploading file to $target", 3);
-	
-	 if (file_exists($target))
-	{
-		// If a previous copy of the file already exists, remove it
-		unlink($target);
-	}
-	
-  	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
-  	chmod($target, 0755);
-	$image->image_file = $filename;  	
-  	return true;
-}
-
-
 $image_id = checkNumeric($_GET["image_id"]);
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
@@ -118,7 +63,7 @@ $tabs = imageGalleryTabs($gallery_id);
 $form = new AutoForm($image);
 $form->allowDelete = true;
 
-$imageUpload = new FileUploadFieldRenderer($form, "image_file", "Image File", imageUploadHandler);
+$imageUpload = new FileUploadFieldRenderer($form, "image_file", "Image File", array(ImageManager, imageUploadHandler));
 $imageUpload->size = 60;
 
 $form->required( "title");

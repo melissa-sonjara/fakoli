@@ -30,13 +30,32 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
+
+/**
+ * The ImageManager class provides basic Image manipulation functions
+ * that are useful when working with Image objects.
+ * @author andy
+ *
+ */
 class ImageManager
 {
+	/**
+	 * Creates a new ImageManager
+	 */
 	function ImageManager()
 	{
 	}
 	
+	/**
+	 * Renders the Image specified by the image_id at the specified size.
+	 * Note that the size is the length of the major axis, and aspect ratio
+	 * is maintained. The generated image is cached after rendering to speed
+	 * subsequent accesses. The image file is output with the correct HTTP 
+	 * headers to ensure correct interpretation by the browser.
+	 * 
+	 * @param $image_id the ID of the image to render
+	 * @param $size the size of the major axis, in pixels
+	 */
 	function renderThumbnail($image_id, $size = 0)
 	{		
 		global $config;
@@ -150,6 +169,11 @@ class ImageManager
 		
 	}
 	
+	/**
+	 * Renders the specified image at its natural size. The image file is output with the correct HTTP 
+	 * headers to ensure correct interpretation by the browser.
+	 * @param $image_id the ID of the image to be rendered.
+	 */
 	function renderImage($image_id)
 	{
 		$image = new Image($image_id);
@@ -195,11 +219,23 @@ class ImageManager
 		
 	}
 		
+	/**
+	 * Returns the URI that can be used to access the specified image at the given size.
+	 * @param $image_id the ID of the image
+	 * @param $size the size of the major axis in pixels
+	 * @return string URI that can be used in an <img> tag to view this image.
+	 */
 	function thumbnailLink($image_id, $size)
 	{
 		return "/action/image/thumbnail?image_id=$image_id&size=$size";
 	}
 	
+	/**
+	 * Determines the size of the specified image.
+	 * @param $image_id the ID of the image to be queried.
+	 * @param $width returns the width of the image in pixels
+	 * @param $height returns the height of the image in pixels
+	 */
 	function getSize($image_id, &$width, &$height)
 	{
 		$image = new Image($image_id);
@@ -219,6 +255,14 @@ class ImageManager
 		imageDestroy($img);
 	}
 
+	/**
+	 * Calculates the width and height of an image after it is scaled to the 
+	 * specified size along its major axis.
+	 * @param $image_id the ID of the image.
+	 * @param $size the required length of the major axis
+	 * @param $width returns the width of the scaled image
+	 * @param $height returns the height of the scaled image
+	 */
 	function getScaledSize($image_id, $size, &$width, &$height)
 	{
 		$this->getSize($image_id, $width, $height);
@@ -235,6 +279,11 @@ class ImageManager
 		}
 	}
 	
+	/**
+	 * Event handler to display an image gallery from the specified identifier
+	 * @param string $identifier the identifier to match
+	 * @param boolean $continue returns whether to continue processing this event
+	 */
 	static function displayImageGallery($identifier, &$continue)
 	{
 		try
@@ -268,6 +317,10 @@ class ImageManager
 		return $identifier;
 	}
 	
+	/**
+	 * Enumerate the Image Gallery objects.
+	 * @param  $items collection that the ImageGallery items are returned in
+	 */
 	static function enumerateItems(&$items)
 	{
 		$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
@@ -275,4 +328,66 @@ class ImageManager
 		$items["Image Galleries"] = $galleries;
 		return $items;
 	}
+	
+	
+	/**
+	 * Upload the image file specified in the given field. 
+	 * @param string $field the field name of the image file
+	 * @param $image the Image object the field is being uploaded to.
+	 * @return boolean true if the upload worked, false if it failed.
+	 */
+	static function imageUploadHandler($field, $image)
+	{
+		global $config;
+		
+		trace("imageUploadHandler() called for $field", 3);
+		
+		if (!$_FILES[$field]) 
+		{
+			trace("No upload record for $field", 3);
+			return false;
+		}
+		if ($_FILES[$field]["name"]=="") 
+		{
+			trace("Upload name is empty", 3);
+			return false;
+		}
+	
+		$gallery = $image->Gallery();
+		
+		$dir = $gallery->getGalleryDirectory();
+		if (!file_exists($dir))
+		{
+			mkdir($dir);
+		}
+		
+		/* Copy across the uploaded file */
+	
+		trace("Upload Base: {$dir}", 3);
+	    
+		$filename = $_FILES[$field]['name'];
+		$ext = strtolower(substr($filename, -4));
+		
+		trace("Image format: $ext", 3);
+		
+		if ($ext != ".jpg" && $ext != ".png") 
+		{
+			throw new FakoliException("Unsupported image format");
+		}
+		
+		$target = $dir . DIRECTORY_SEPARATOR . $filename;
+		trace ("Uploading file to $target", 3);
+		
+		 if (file_exists($target))
+		{
+			// If a previous copy of the file already exists, remove it
+			unlink($target);
+		}
+		
+	  	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
+	  	chmod($target, 0755);
+		$image->image_file = $filename;  	
+	  	return true;
+	}
+	
 }

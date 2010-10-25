@@ -61,7 +61,7 @@ class ImagePickerManifest
 					  "image"	=>	"/fakoli/richtext/images/insert_picture.gif", 
 					  "tooltip"	=>	"Insert Photos", 
 					  "url"		=>	"/image_picker",
-					  "width"	=>	"600px",
+					  "width"	=>	"620px",
 					  "height"	=>	"600px");
 	}
 		

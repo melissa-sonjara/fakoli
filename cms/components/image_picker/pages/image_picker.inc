@@ -99,8 +99,8 @@ $view = new ImageListView($images, "javascript:imagePicker.selectImage({image_id
 
 ?>
 <div style="border: solid 1px #666; background: url(/fakoli/images/table-header.png); width: 95%;margin-left: 10px; padding: 2px;">
- <strong>Gallery </strong>
- <select name="gallery_id" onchange="imagePicker.showImages(this.value)">
+<div style="float: left; width: auto"><strong>Gallery </strong>
+ <select name="gallery_id" id="gallery_id" onchange="imagePicker.showImages(this.value)">
 <?
 	foreach($galleries as $gallery)
 	{
@@ -109,7 +109,10 @@ $view = new ImageListView($images, "javascript:imagePicker.selectImage({image_id
 ?>
  </select>
 </div>
-<div id="image_list" style="overflow:auto; width:95%; height: 260px;border: solid 1px #666; margin-left: 10px; padding: 2px; background-color: #fff">
+<div style="float: right;width: auto"><button class="button" onclick="imagePicker.uploadImage()">Upload Image...</button></div>
+<div style="clear:both"></div>
+</div>
+<div id="image_list" style="overflow:auto; width:95%; height: 200px;border: solid 1px #666; margin-left: 10px; padding: 2px; background-color: #fff">
 <?
 $view->drawGrid();
 ?>
