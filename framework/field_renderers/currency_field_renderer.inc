@@ -106,4 +106,16 @@ class CurrencyFieldRenderer extends FieldRenderer
 		$this->parent->data->set($field, str_replace(",", "", $value));
 	}
 	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredCurrencyValidator($field, $label));
+		}
+		
+	}
+	
+	
 }
