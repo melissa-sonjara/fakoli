@@ -665,47 +665,14 @@ ENDSCRIPT;
 
 
 
-/**
- * RequiredTextValidator.
- * 
- * For fields rendered with TextFieldRenderer
- *  
- * Add this validator the the script using:
- * $form->validator->add(new RequiredTextValidator($field, $label, $empty));
- */
-class RequiredTextValidator extends RequiredValidator
-{
-	var $empty = "";
-	
-	function RequiredTextValidator($field, $title, $empty = "")
-	{
-		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
-	}
-	
-	function writeClient()
-	{
-		$script = <<<ENDSCRIPT
-		
-		
-	if (form["{$this->field}"].value == "{$this->empty}")
-	{
-		alert("{$this->title} is a required field. Please supply a value.");
-		return false;
-	}
-ENDSCRIPT;
-
-		return $script;
-	}
-}
-
-
 
 /**
  * RequiredBoolean Validator.
  * 
  * Verifies single checkbox (Boolean renderer)
- * is checked.
+ * is checked. While it would seem unnecessary to
+ * have a checkbox that must be checked, it is
+ * useful for "agree to the terms" fields.
  * 
  * Add this validator the the script using:
  * $form->validator->add(new RequiredBooleanValidator($field, $label, $empty));
@@ -837,6 +804,55 @@ ENDSCRIPT;
 
 
 
+/**
+ * RequiredCurrencyField Validator.
+ *
+ * Currency formats as 0.00; if required, then make 
+ * sure the value is not 0.00
+ */
+class RequiredCurrencyValidator extends RequiredValidator
+{
+	function RequiredCurrencyValidator($field, $title)
+	{
+		$this->empty = 0;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+		
+		var num =  parseFloat(form["{$this->field}"].value);
+					
+	if (num == $this->empty)
+	{
+		alert("{$this->title} is a required field. Please supply a value.");
+		return false;
+	}
+		
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if (!isset($_POST[$this->field]) OR floatval($_POST[$this->field]) == $this->empty)
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+}
+
 
 
 /**
@@ -950,4 +966,7 @@ ENDSCRIPT;
 		return false;
 	}
 }
+
+
+
 ?>
