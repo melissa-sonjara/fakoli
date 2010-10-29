@@ -89,3 +89,14 @@ CREATE TABLE  `forum_topic` (
 
 DROP VIEW IF EXISTS `forum_summary`;
 CREATE VIEW  `forum_summary` AS select `f`.`forum_id` AS `forum_id`,`f`.`title` AS `title`,`f`.`teaser` AS `teaser`,`f`.`published` AS `published`,(select count(1) AS `count(1)` from `forum_topic` where (`forum_topic`.`forum_id` = `f`.`forum_id`)) AS `topics`,(select count(1) AS `count(1)` from `forum_message` where ((`forum_message`.`forum_id` = `f`.`forum_id`) and (`forum_message`.`deleted` = 0))) AS `posts` from `forum` `f`;
+
+
+DROP TABLE IF EXISTS `forum_subscription`;
+CREATE TABLE  `forum_subscription` (
+  `forum_subscription_id` int(10) unsigned NOT NULL auto_increment,
+  `forum_id` int(10) unsigned NOT NULL,
+  `topic_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `subscription_type` tinyint(3) unsigned NOT NULL COMMENT 'daily digest or new item notification',
+  PRIMARY KEY  (`forum_subscription_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links forums and forum topics to subscribed users';
