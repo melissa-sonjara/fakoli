@@ -76,9 +76,6 @@ $forumKeys = implode(",", array_keys(reindexList($messages, "forum_id")));
 $forums = indexedQuery(Forum, "WHERE forum_id IN ($forumKeys)", "forum_id");
 $forumSubscribers = groupedQuery(ForumSubscription, "WHERE forum_id IN ($forumKeys) AND subscription_type = ".subscription_daily_digest, "forum_id");
 
-echo "forum subscribers:<br>";
-echo "<pre>"; print_r($forumSubscribers); echo "</pre>";
-
 $forumTopics = reindexList($topics, "forum_id");
 
 if(count($forumSubscribers) > 0)
