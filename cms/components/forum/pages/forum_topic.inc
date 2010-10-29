@@ -44,6 +44,8 @@ $page->page_title = $message->title;
 
 $view = new ForumTopicView($topic);
 
+echo $view->writeScript();
+
 $view->drawView();
 ?>
 	<button style="float: left" class="button" onclick="go('/forum_details?forum_id=<?echo $topic->forum_id?>');"> &laquo; Back to Topic List</button>	

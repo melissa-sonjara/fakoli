@@ -34,12 +34,20 @@
 class ForumTopicView
 {
 	var $topic;
+	var $subscriptionView;
 	
 	function ForumTopicView($topic, $id = "topic_view")
 	{
 		$this->topic = $topic;
 	
-		$this->messages = $this->topic->Messages("WHERE deleted=0 ORDER BY date_posted");		
+		$this->messages = $this->topic->Messages("WHERE deleted=0 ORDER BY date_posted");
+
+		$this->subscriptionView = new TopicSubscriptionView($this->topic);		
+	}
+	
+	function writeScript()
+	{
+		return $this->subscriptionView->writeScript();
 	}
 	
 	function drawView()
@@ -48,6 +56,8 @@ class ForumTopicView
 		
 		$first = true;
 		$alt = false;
+		
+		$this->subscriptionView->drawLink();
 		
 		if (count($this->messages) > 0)
 		{

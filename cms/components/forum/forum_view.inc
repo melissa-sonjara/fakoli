@@ -103,6 +103,7 @@ class ForumDetailsView
 	var $table;
 	var $topicLink;
 	var $width;
+	var $subscriptionView;
 	
 	function ForumDetailsView($forum, $topicLink)
 	{
@@ -120,6 +121,9 @@ class ForumDetailsView
 		$this->table->emptyMessage = "No topics have been started in this discussion forum";
 		$this->table->filter = true;
 		$this->table->pageSize = 20;
+		
+		$this->subscriptionView = new ForumSubscriptionView($this->forum, $this->topics);
+		
 	}
 	
 	function formatTitle($topic)
@@ -143,14 +147,19 @@ class ForumDetailsView
 	
 	function writeScript()
 	{
-		return $this->table->writeScript();
+		$script = $this->table->writeScript();
+		$script .= $this->subscriptionView->writeScript();
+		
+		return $script;
 	}
 	
 	function drawView()
-	{
+	{		
 		echo "<div style='width: {$this->width}'>";
+		$this->subscriptionView->drawLink();
 		$this->table->drawView();
 		echo "</div>";
 	}
-}
+	
+} // end class Forumview
 ?>

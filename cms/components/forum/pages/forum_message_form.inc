@@ -79,6 +79,7 @@ $form = new AutoForm($message);
 $form->button("Cancel", "/forum_details?forum_id=$forum_id");
 
 $form->hide("parent_id", "topic_id", "author_id", "forum_id", "date_posted", "deleted");
+$form->onSaveComplete = emailSubscribers;
 
 $attachmentHandler = new AttachmentFieldRenderer($form, "attachments", ForumMessageAttachmentXref);
 
@@ -119,4 +120,11 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 $form->drawForm();
+
+function emailSubscribers($form)
+{
+	$message = $form->data;
+	trace("emailSubscribers:: message id {$message->message_id}", 3);
+	SubscriptionManager::sendInstantNotifications($message);
+}
 ?>
