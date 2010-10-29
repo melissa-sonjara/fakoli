@@ -39,12 +39,45 @@ $menu_item = "Articles";
 
 $articles = query(Article, "ORDER BY last_modified DESC");
 
+$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+function togglePublished(img, id)
+{
+	var enable;
+	if (img.alt == "Published")
+	{
+		publish = 0;
+	}
+	else
+	{
+		publish = 1;
+	}
+	
+	var request = new Request({
+									url: "/action/article/update?article_id=" + id +"&published=" + publish,
+									method: 'get',
+									onSuccess: function (response) 
+									{ 
+										if (response == 1) 
+										{
+											img.src = publish ? "/fakoli/images/on.png" : "/fakoli/images/off.png";
+											img.alt = publish ? "Published" : "Unpublished";
+										}
+									},
+									onFailure: function () {},
+									async: true
+								});
+	request.send();
+}
+</script>
+ENDSCRIPT;
+
 function showPublished($article)
 {
 	$img = $article->published ? "on.png" : "off.png";
-	$alt = $article->published ? "Enabled" : "Disabled";
+	$alt = $article->published ? "Published" : "Unpublished";
 
-	return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+	return "<img src='/fakoli/images/$img' alt='$alt' onclick='togglePublished(this, {$article->article_id})' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
 }
 
 $table = new DataListView($articles, "articles");
