@@ -30,7 +30,7 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-*/*
+/*
  * Description: add/update/delete email messages
  * 
  * author: Janice Gallant for Sonjara, Inc.

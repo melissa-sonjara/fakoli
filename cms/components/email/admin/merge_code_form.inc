@@ -66,7 +66,6 @@ $form->annotate("function", "Whether the map is a function rather than relation"
 $form->annotate("map", "The path from the field name to the database values");
 $form->annotate("class_name", "The name of the dataitem class that can send the message (get the data values)");
 $form->button("Cancel", $redirect);
-$form->unique("name", "This name already exists. Please choose a different one.");
 
 if ($method == "POST")
 {

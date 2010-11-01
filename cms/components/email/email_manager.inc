@@ -76,6 +76,7 @@ class EmailHandler
 			$body = stripHTML($message);
 		}
 		
+		trace("EmailHandler:: toAddr: $toAddr; emailFrom: $emailFrom; subject: $subject, message: $body", 3);
 		$this->mail = new Mail($emailFrom, $toAddr, $subject, $body, $headers);
 	}
 
@@ -191,9 +192,14 @@ class EmailManager
 			list($relation, $field) = explode(".", $mergeCode->map);
 			
 			$className = get_class($this->item);
-					
-				// if the value_obj is the same as calling class then just keep that
-			$replaceObj = (get_class($this->item) == $relation) ? $this->item : $this->item->$relation();
+
+			// if the value_obj is the same as calling class then just keep that
+			if($relation AND $field)
+			{
+				$replaceObj = (get_class($this->item) == $relation) ? $this->item : $this->item->$relation();
+			}
+			else // we have a function from the calling class e.g., getUrl()
+				$replaceObj = $relation;
 			
 			// such as Order.formatOrder(), a function in the Order datamodel, called
 			// from sending class Program
@@ -210,13 +216,13 @@ class EmailManager
 			
 			// e.g., Program.orderList, a function called from the sending
 			// class Program
-			else if ($replaceObj) // function called from the sending class
+			else if ($replaceObj AND $mergeCode->function) // function called from the sending class
 			{
-				$replaceText = $this->item->$replaceObj();
+				$replaceText = $this->item->$replaceObj();	
 			}
-			else 
+			else // field of the calling class e.g., "comment"
 			{
-				return "";
+				return $replaceText = $this->item->replaceObj;
 			}
 		}
 		
