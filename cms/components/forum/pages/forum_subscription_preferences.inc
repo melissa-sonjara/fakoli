@@ -60,7 +60,6 @@ $script .= $table->writeScript();
 
 if ($method == "POST") 
 {
-	saveForm();
   	if(saveForm())
 		redirect("/forum_subscription_preferences");
 }
@@ -116,6 +115,9 @@ function saveForm()
 	global $_POST;
 		
 	$subscriptions = $_POST["subscription"];
+	
+	echo "<pre>"; print_r($_POST); echo "</pre>";
+		echo "<pre>"; print_r($subscriptions); echo "</pre>";
 	
 	if(count($subscriptions) > 0)
 	{
