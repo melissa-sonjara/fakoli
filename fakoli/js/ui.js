@@ -84,11 +84,11 @@ Window.implement(
 
 });
 
-function modalPopup(title, url, width, height)
+function modalPopup(title, url, width, height, returnPopup)
 {
 	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height});
 	popup.show(null, url);
-	return popup;
+	if (returnPopup) return popup;
 }
 
 function hideModalPopup(popup)

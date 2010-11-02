@@ -199,7 +199,7 @@ var ImagePicker = new Class({
 	uploadImage: function()
 	{
 		var gallery_id = $('gallery_id').value;
-		this.popup = modalPopup("Upload Image", "/action/image_picker/image_upload?gallery_id=" + gallery_id);
+		this.popup = modalPopup("Upload Image", "/action/image_picker/image_upload?gallery_id=" + gallery_id, 'auto', 'auto', true);
 	},
 	
 	hideUploadPopup: function()
