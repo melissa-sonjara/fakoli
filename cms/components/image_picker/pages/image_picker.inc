@@ -91,9 +91,15 @@ window.addEvent('domready', function()
 ENDSCRIPT;
 
 $gallery = new ImageGallery();
-if ($gallery_id) $gallery->load($gallery_id);
-
-$images = $gallery->Images();
+if ($gallery_id) 
+{
+	$gallery->load($gallery_id);
+	$images = $gallery->Images();
+}
+else
+{
+	$images = array();
+}
 
 $view = new ImageListView($images, "javascript:imagePicker.selectImage({image_id}, '{title}')");
 
