@@ -115,7 +115,7 @@ $view = new ImageListView($images, "javascript:imagePicker.selectImage({image_id
 ?>
  </select>
 </div>
-<div style="float: right;width: auto"><button class="button" onclick="imagePicker.uploadImage()">Upload Image...</button></div>
+<div style="float: right;width: auto"><button class="button" onclick="imagePicker.uploadImage()"<?if (!$gallery_id) echo " disabled='disabled'"?>>Upload Image...</button></div>
 <div style="clear:both"></div>
 </div>
 <div id="image_list" style="overflow:auto; width:95%; height: 200px;border: solid 1px #666; margin-left: 10px; padding: 2px; background-color: #fff">
