@@ -62,7 +62,7 @@ class ImageGalleryView
 	</script>	
 ENDSCRIPT;
 
-		$width = count($this->listView->images) / 2 * 185;
+		$width = (count($this->listView->images) + 1) / 2 * 185;
 		$this->listView->styles="position: absolute; width: {$width}px";
 		$this->listView->spacing = $this->spacing;
 		
