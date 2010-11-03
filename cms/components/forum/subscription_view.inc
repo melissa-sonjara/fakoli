@@ -17,6 +17,10 @@ class ForumSubscriptionView
 	var $subscription;
 	var $popupTitle;
 	var $topicSubscriptions;
+	var $subscribeForumButton = "/fakoli/images/button_subscribe_forum.png";
+	var $subscribeTopicButton = "/fakoli/images/button_subscribe_topic.png";
+	var $subscribedForumIcon = "/fakoli/images/icon_subscribed_to_forum.png";
+	var $subscribedTopicIcon = "/fakoli/images/icon_subscribed_to_topic.png";
 	
 	function ForumSubscriptionView($forum, $topics)
 	{
@@ -48,7 +52,6 @@ class ForumSubscriptionView
 	{
 		global $user;
 		if(!$user) return;
-		global $dialogs;
 		ob_start();
 ?>
 <div class="dialog" id="subscribePopup" style="width: 320px">
@@ -67,7 +70,7 @@ class ForumSubscriptionView
 </div>
 <?php 
 
-		$dialogs .= ob_get_contents();
+		$script .= ob_get_contents();
 		ob_end_clean();
 		
 		ob_start();
@@ -76,7 +79,7 @@ class ForumSubscriptionView
 
 var subscribePopupDialog;
 
-function subscribePopup(id, topic, source, topOffset)
+function subscribePopup(id, source, topOffset)
 {
 	var popup = $('subscribePopup');
 	
@@ -138,23 +141,37 @@ request.send();
 	{
 		global $user;		
 		if(!$user) return;
+		
+		$forum = $this->forum;
 			
 		$count = count($this->topicSubscriptions);
 		if(!$this->subscription AND $count == 0)
-			$text = "Subscribe to this Forum";
+			$this->drawButtonLink($this->subscribeForumButton, $forum->forum_id);
 		elseif(!$this->subscription AND $count > 0)
 		{
 			$text = "You are Currently Subscribed to $count ";
 			$text .= ($count > 1) ? "Topics" : "Topic";
 			$text .= " in this Forum"; 
+			$topOffset = ($count > 0) ? $count * 10 : 0;	
+			$this->drawIconLink($this->subscribedTopicIcon, $text, $forum->forum_id, $topOffset);
 		}
 		else
-			$text = "You are Currently Subscribed to this Forum";
+		{
+			$this->drawIconLink($this->subscribedForumIcon, "You are Currently Subscribed to this Forum",
+				 $forum->forum_id);
+		}
+	}
+	
+	function drawIconLink($icon, $text, $forum_id, $topOffset = 0)
+	{
+		$img = "<img src='$icon' style='border: none'>"; 
+		echo "<p style=\"text-align: right\">$img&nbsp;&nbsp;<a id='subscription_link' href=\"#\" onclick=\"subscribePopup({$forum_id}, this, {$topOffset}); return false\">$text</a></p>\n";
+	}
 
-		$count = count($this->topicSubscriptions);
-		$topOffset = ($count > 0) ? $count * 10 : 0;	
-		echo "<p style=\"text-align: right\"><a id='subscription_link' href=\"#\" onclick=\"subscribePopup({$this->forum->forum_id}, 0, this, {$topOffset}); return false\">$text</a></p>\n";
-		
+	function drawButtonLink($button, $forum_id, $topOffset = 0)
+	{
+		$img = "<img src='$button' style='border: none'>"; 
+		echo "<p style=\"text-align: right\"><a id='subscription_link' href=\"#\" onclick=\"subscribePopup($forum_id, this, {$topOffset}); return false\">$img</a></p>\n";
 	}
 	
 	function drawView()
@@ -284,23 +301,25 @@ class TopicSubscriptionView extends ForumSubscriptionView
 	{
 		global $user;
 		if(!$user) return;
+		$forum_id = $this->topic->forum_id;
 		
 		if($this->subscription)
 		{
-			$text = "You are Currently Subscribed to all Topics in this Forum";
+			$this->drawIconLink($this->subscribedForumIcon, "You are Currently Subscribed to all Topics in this Forum", 
+				$forum_id);
 		}
 		else
 		{
 			if($this->topicSubscription)
-				$text = "You are Currently Subscribed to this Topic";
+			{
+				$this->drawIconLink($this->subscribedTopicIcon, "You are Currently Subscribed to this Topic", 
+					$forum_id);
+			}
 			else
-				$text = "Subscribe to this Topic";
+			{
+				$this->drawButtonLink($this->subscribeTopicButton, $forum_id);
+			}
 		}
-		
-		$count = count($this->topicSubscriptions);
-		$topOffset = ($count > 0) ? $count * 5 : 0;		
-		echo "<p style=\"text-align: right\"><a id='subscription_link' href=\"#\" onclick=\"subscribePopup({$this->topic->forum_id}, 0, this, {$topOffset}); return false\">$text</a></p>\n";
-			
 	}
 	
 	function drawView()
