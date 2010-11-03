@@ -26,9 +26,10 @@ Fakoli::using("forum", "email", "user");
 /*
  * Get all the new posts from today for each topic
  */
-$today = date("Y-m-d");  
+$today = now();
+$yesterday = date('Y/m/d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d")-1, date("y")));
 
-$messages = groupedQuery(ForumMessage, "WHERE last_modified like '$today%' ORDER BY last_modified", "topic_id");
+$messages = groupedQuery(ForumMessage, "WHERE last_modified BETWEEN '$yesterday' AND '$today' ORDER BY last_modified", "topic_id");
 
 if(count($messages) == 0)
 	return;
