@@ -87,7 +87,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
   <td><img id='<?echo $field ?>_preview' src='<?echo $src ?>'/></td>
  </tr>
  <tr>
-  <td><button class='button' style='width: 100%' onclick="popup('/image_picker?Mode=select&Field=<?echo urlencode($field) ?>&Preview=<?echo urlencode($field."_preview") ?>', 'source_picker', 500, 600); return false;"> Select Image </button></td>
+  <td><button class='button' style='width: 100%' onclick="popup('/image_picker?Mode=select&Field=<?echo urlencode($field) ?>&Preview=<?echo urlencode($field."_preview") ?>', 'source_picker', 700, 600); return false;"> Select Image </button></td>
  </tr>
 </table>
 <?
