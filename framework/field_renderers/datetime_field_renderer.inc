@@ -59,7 +59,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 		{
 			$this->parent->validator->add(new RequiredValidator($field, $label));
 			if($this->requireTime)
-				$this->parent->validator->add(new RequiredTimeValidator($field, $label));
+				$this->parent->validator->add(new RequiredTimeValidator($field, $label . " Time"));
 		}	
 	}
 	

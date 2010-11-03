@@ -250,7 +250,7 @@ class AutoForm
 
 		foreach($this->validator->validators as $v)
 		{
-			$v->title = $this->prettifyFieldName($v->field);
+			$v->title = (!$v->title) ? $this->prettifyFieldName($v->field) : $v->title;
 			$v->readOnly = $this->isReadOnly($v->field) || $this->isHidden($v->field);
 		}
 
