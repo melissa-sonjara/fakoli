@@ -88,7 +88,7 @@ var templateManagerDlg;
 
 window.addEvent('domready', function()
 {
-	templateManagerDlg = new ModalDialog($('templateManagerDlg'), {width: '710px', handle: $('templateManagerDlgHeader'), draggable: true, body: $('templateManagerDlgBody')});
+	templateManagerDlg = new ModalDialog($('templateManagerDlg'), {width: '690px', handle: $('templateManagerDlgHeader'), draggable: true, body: $('templateManagerDlgBody')});
 });		
 
 function editFile()
