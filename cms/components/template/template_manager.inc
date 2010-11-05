@@ -66,7 +66,7 @@ class TemplateManager
 		
 		ob_start();
 ?>
-<div class="dialog" id="templateManagerDlg" style="width: 710px">
+<div class="dialog" id="templateManagerDlg">
  <div class="dialog_header" id="templateManagerDlgHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeDocumentManagerDlg' href="javascript:templateManagerDlg.hide();"">Close &times;</a></div>
@@ -88,7 +88,7 @@ var templateManagerDlg;
 
 window.addEvent('domready', function()
 {
-	templateManagerDlg = new ModalDialog($('templateManagerDlg'), {handle: $('templateManagerDlgHeader'), draggable: true, body: $('templateManagerDlgBody')});
+	templateManagerDlg = new ModalDialog($('templateManagerDlg'), {width: '710px', handle: $('templateManagerDlgHeader'), draggable: true, body: $('templateManagerDlgBody')});
 });		
 
 function editFile()
