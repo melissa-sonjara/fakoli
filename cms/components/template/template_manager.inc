@@ -66,7 +66,7 @@ class TemplateManager
 		
 		ob_start();
 ?>
-<div class="dialog" id="templateManagerDlg">
+<div class="dialog" id="templateManagerDlg" style="width: 710px">
  <div class="dialog_header" id="templateManagerDlgHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeDocumentManagerDlg' href="javascript:templateManagerDlg.hide();"">Close &times;</a></div>
