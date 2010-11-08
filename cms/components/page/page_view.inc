@@ -69,6 +69,8 @@ class PageView
 		
 		$template = ComponentManager::fireEvent("PreProcessPage", $template);
 		
+		$template = preg_replace("/\\{([\w\d:_]+)\\}/", "{_{_[$1]_}_}", $template);
+		
 		// If the page has a PHP code include, execute it and insert the contents
 		
 		if ($this->page->php_code_file)
@@ -87,7 +89,7 @@ class PageView
 		
 		foreach($this->page->fields as $field => $type)
 		{
-			$template = str_replace("{".$field."}", $this->page->$field, $template);
+			$template = str_replace("{_{_[".$field."]_}_}", $this->page->$field, $template);
 		}		
 		
 		$qs = $_SERVER['QUERY_STRING'];
@@ -98,7 +100,7 @@ class PageView
 		
 		$printLink = "/{$this->page->identifier}".appendToQueryString($qs, "_style=print");
 		
-		$template = str_replace("{printIcon}", 
+		$template = str_replace("{_{_[printIcon]_}_}", 
 			"<a href='$printLink' target='_blank'><img src='/fakoli/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
 			$template);
 		
@@ -106,7 +108,7 @@ class PageView
 		
 		$menuPositions = array();
 		
-		preg_match_all("/\{menu:(.*?)\}/", $template, $menuPositions, PREG_SET_ORDER);
+		preg_match_all("/\\{_\\{_\\[menu:(.*?)\\]_\\}_\\}/", $template, $menuPositions, PREG_SET_ORDER);
 		
 		$menus = indexedQuery(Menu, "WHERE site_id={$this->page->site_id}", "identifier");
 		
@@ -135,7 +137,7 @@ class PageView
 		
 		$positions = array();
 		
-		preg_match_all("/\{position:(.*?)\}/", $template, $positions, PREG_SET_ORDER);
+		preg_match_all("/\\{_\\{_\\[position:(.*?)\\]_\\}_\\}/", $template, $positions, PREG_SET_ORDER);
 		
 		$modules = $this->page->getModulesByPosition();
 	
@@ -170,7 +172,7 @@ class PageView
 		
 		$vars = array();
 		
-		preg_match_all("/\{var:(.*?)\}/", $template, $vars, PREG_SET_ORDER);
+		preg_match_all("/\\{_\\{_\\[var:(.*?)\\]_\\}_\\}/", $template, $vars, PREG_SET_ORDER);
 		
 		foreach($vars as $var)
 		{		
@@ -179,6 +181,9 @@ class PageView
 			$template = str_replace($expr, $$name, $template);
 		}
 				
+		$template = str_replace("{_{_[", "{", $template);
+		$template = str_replace("]_}_}", "}", $template);
+		
 		$template = ComponentManager::fireEvent("PostProcessPage", $template);
 		
 		if (!$config['prettyURLs'])
