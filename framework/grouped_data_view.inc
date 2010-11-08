@@ -108,6 +108,7 @@ class GroupedDataListView
 	var $groups;		///< The group definitions.
 	var $items;			///< The items to be displayed.
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
+	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -314,6 +315,11 @@ class GroupedDataListView
 				$attrs .= " style='{$this->cssStyle}'";
 			}
 			
+			if ($this->summary)
+			{
+				$attrs .= " summary='".htmlSafe($this->summary)."'";
+			}
+
 			$this->columnCount = count($this->columns);
 		
 ?>

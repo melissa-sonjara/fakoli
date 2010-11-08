@@ -62,6 +62,7 @@ class DataListView
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
 	var $excelFile;		///< Filename for automatic Excel export
 	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
+	var $summary;		  ///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	
 	/**
 	 * Creates a new DataListView object.
@@ -85,6 +86,7 @@ class DataListView
 		$this->emptyMessage = "No matching items.";
 		$this->onStartRow = null;
 		$this->excelFile = null;
+		$this->summary = null;
 		
 		return $this;
 	}
@@ -248,6 +250,11 @@ class DataListView
 				$attrs .= " style='{$this->cssStyle}'";
 			}
 
+			if ($this->summary)
+			{
+				$attrs .= " summary='".htmlSafe($this->summary)."'";
+			}
+			
 			/* 
 			 * JDG 6/15/2010 - if the cssStyle has a width setting, either px or
 			 * &, apply that width style to the filter and paginator to avoid 
