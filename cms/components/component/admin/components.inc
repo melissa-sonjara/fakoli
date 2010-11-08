@@ -54,6 +54,7 @@ $table->column("Component Name", "<a href='/admin/component_form?component_id={c
 $table->sortable = true;
 $table->filter = true;
 $table->pageSize = 10;
+$table->summary = "List of installed components";
 
 $script .= $table->writeScript();
 
