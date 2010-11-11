@@ -112,6 +112,12 @@ class MenuView
 	
 	function drawView()
 	{   	
+		global $script;
+		$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+window.addEvent('domready', function() { new FakoliMenu('{$this->m->identifier}'); });
+</script>
+ENDSCRIPT;
 		ob_start();
 		
 		$gmenus = regroupList($this->m->MenuItems("ORDER BY sort_order"), "parent_id");
