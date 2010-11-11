@@ -615,8 +615,8 @@ var FocusWatcher = new Class({
     	this.options.elementTypes.each(function(type) { this.elements.combine(($$(type))); }.bind(this));
     	this.elements.each(function(elt)
     	{
-    		elt.addEvents({'focus': function(e) { this.focus = elt; console.info("Focus: " + this.focus); this.fireEvent('focusChanged'); }.bind(watch),
-    					   'blur':  function(e) { this.blur = elt; console.info("Blur: " + elt);/*this.focus = null;*/ }.bind(watch)
+    		elt.addEvents({'focus': function(e) { this.focus = elt; this.fireEvent('focusChanged'); }.bind(watch),
+    					   'blur':  function(e) { this.blur = elt; }.bind(watch)
     					  });
     	});
 	}
