@@ -39,6 +39,8 @@ var FakoliMenu = new Class({
 		this.root = $(elt);
 		var menu = this;
 		
+		document.focusWatcher.addEvent('focusChanged', function() { if (!this.root.hasChild(document.focusWatcher.focus)) this.clearFocus(); }.bind(menu));
+		
 		// Extension of suckerfish to allow keyboard navigation of dropdowns.
 		
 		$$("#" + this.root.id + " > ul > li > a").each(function(elt) 
@@ -47,12 +49,7 @@ var FakoliMenu = new Class({
 									{
 										var event = new Event(e).stop();
 										this.updateFocus(event, elt);
-									}.bind(menu),
-						   'focusout': function(e)
-						   			   {
-											var event = new Event(e).stop();
-											this.clearFocus();
-						   			   }.bind(menu)
+									}.bind(menu)
 			});
 		});
 		
@@ -74,23 +71,7 @@ var FakoliMenu = new Class({
 		this.clearFocus();
 		
 		var parent = elt.getParent();
-		var target = event.event.target ? event.event.target : event.event.srcElement;
-		var found = false;
-		do
-		{
-			if (target == parent)
-			{
-				found = true;
-				break;
-			}
-			target = target.getParent();
-		}
-		while(target);
-		
-		if (found)
-		{
-			parent.addClass('sfhover');
-		}
+		parent.addClass('sfhover');
 	},
 	
 	clearFocus: function()
