@@ -594,3 +594,32 @@ var PaginatingList = new Class(
 	    this.updatePage();
 	}
 });
+
+var FocusWatcher = new Class({
+	
+	Implements : [Options, Events],
+	
+    options: {
+            elementTypes : ['textarea','input','select','button','a'],
+            onFocusChanged: $empty 
+    }, 
+    
+	focus: null,
+	blur: null,
+	elements: [],
+	
+	initialize: function(options)
+	{
+    	var watch = this;
+    	this.setOptions(options);
+    	this.options.elementTypes.each(function(type) { this.elements.combine(($$(type))); }.bind(this));
+    	this.elements.each(function(elt)
+    	{
+    		elt.addEvents({'focus': function(e) { this.focus = elt; console.info("Focus: " + this.focus); this.fireEvent('focusChanged'); }.bind(watch),
+    					   'blur':  function(e) { this.blur = elt; console.info("Blur: " + elt);/*this.focus = null;*/ }.bind(watch)
+    					  });
+    	});
+	}
+});
+    	
+window.addEvent('domready', function() { document.focusWatcher = new FocusWatcher(); });
