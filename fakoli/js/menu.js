@@ -68,7 +68,7 @@ var FakoliMenu = new Class({
 		this.clearFocus();
 		
 		var parent = elt.getParent();
-		var target = event.event.target;
+		var target = event.event.target ? event.event.target : event.event.srcElement;
 		var found = false;
 		do
 		{
