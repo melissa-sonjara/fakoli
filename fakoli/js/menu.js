@@ -43,11 +43,17 @@ var FakoliMenu = new Class({
 		
 		$$("#" + this.root.id + " > ul > li > a").each(function(elt) 
 		{
-			elt.addEvent('focus', function(e) 
-			{
-				var event = new Event(e).stop();
-				this.updateFocus(event, elt);
-			}.bind(menu));
+			elt.addEvents({'focus': function(e) 
+									{
+										var event = new Event(e).stop();
+										this.updateFocus(event, elt);
+									}.bind(menu),
+						   'focusout': function(e)
+						   			   {
+											var event = new Event(e).stop();
+											this.clearFocus();
+						   			   }.bind(menu)
+			});
 		});
 		
 		if (window.ie6)
