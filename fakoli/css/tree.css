@@ -6,6 +6,8 @@ table.tree
 	background-color: #fff;
 	margin: 0;
 	padding: 0;
+	-moz-box-shadow: 1px 1px 5px #666;
+	box-shadow: 1px 1px 5px #666;
 }
 
 table.tree td
