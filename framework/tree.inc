@@ -197,7 +197,7 @@ class TreeNode
 <?
 			}
 ?>
-		<?echo $title?></div>
+		<a href="#" onclick="<?echo $cmd?> return false;"><?echo $title?></a></div>
 		<div id='<?echo $this->id?>_contents' style='padding-left: <?echo $_activeTree->indent ?>; display: <? echo $display?>'>
 			
 <?			
