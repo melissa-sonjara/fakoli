@@ -199,11 +199,15 @@ table.tree div
 	font-weight: bold;
 }
 
-.tree a:hover,
+.tree a:hover
+{
+	color: #fff ! important;
+	background-color: #325E9E;
+}
+
 .tree a:focus
 {
-	color: #fff;
-	background-color: #325E9E;
+	background-color: #eee;
 }
 
 .tree a.folder
