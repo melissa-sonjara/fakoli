@@ -123,9 +123,7 @@ class TreeNode
 		{
 			// Leaf node
 			echo "<div class='{$this->leafStyle}'>";
-?>
-            <a href="#" onclick="return false">
-<?
+
 			if (isset($this->value) && $this->value !== "")
 			{
 ?>
@@ -149,7 +147,7 @@ class TreeNode
 <?
 			}
 		
-			echo "$title</a></div>";
+			echo "$title</div>";
 		}
 		else
 		{
