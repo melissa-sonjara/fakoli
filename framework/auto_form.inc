@@ -85,6 +85,8 @@ class AutoForm
 
     var $fields;	///< Local field cache
     
+    var $isReadOnly; ///< Specifies whether the entire form is read-only
+    
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
 	 *
@@ -584,6 +586,8 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 */
 	function drawForm()
 	{
+		if ($this->isReadOnly) return $this->drawReadOnly();
+		
 		$obj =& $this->data;
 		$pk = $obj->getPrimaryKey();
 
