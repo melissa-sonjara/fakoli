@@ -42,6 +42,8 @@ table.list
 	width: 100%;
 	vertical-align:top;
 	-moz-border-radius: 4px;
+	-moz-box-shadow: 1px 1px 5px #666;
+	box-shadow: 1px 1px 5px #666;
 }
 
 table.list b
