@@ -29,6 +29,26 @@ table.tree div
 	margin: 2px;
 }
 
+.tree a
+{
+	color: #000;
+	display: block;
+	text-decoration: none;
+	border: solid 1px none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 2px;
+	font-weight: bold;
+	width: auto;
+}
+
+.tree a:hover,
+.tree a:focus
+{
+	color: #fff;
+	background-color: #325E9E;
+}
+
 .tree_node_open
 {
 	text-decoration: none;
