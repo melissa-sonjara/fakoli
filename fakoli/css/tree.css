@@ -29,26 +29,6 @@ table.tree div
 	margin: 2px;
 }
 
-.tree a
-{
-	color: #000;
-	display: block;
-	text-decoration: none;
-	border: solid 1px none;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	padding: 2px;
-	font-weight: bold;
-	width: auto;
-}
-
-.tree a:hover,
-.tree a:focus
-{
-	color: #fff;
-	background-color: #325E9E;
-}
-
 .tree_node_open
 {
 	text-decoration: none;
@@ -207,22 +187,24 @@ table.tree div
 	background: #fff;
 }
 
+
 .tree a
 {
-	padding: 2px;
-	text-decoration: none;
 	color: #000;
-	height: 24px;
-	border-bottom: none !important;
+	text-decoration: none;
+	border: solid 1px none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 2px;
+	font-weight: bold;
 }
 
-.tree a:hover
+.tree a:hover,
+.tree a:focus
 {
-	background-color: #002a6c;
 	color: #fff;
+	background-color: #325E9E;
 }
-
-
 
 .tree a.folder
 {
