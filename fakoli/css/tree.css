@@ -201,13 +201,14 @@ table.tree div
 
 .tree a:hover
 {
-	color: #fff ! important;
+	color: #fff !important;
 	background-color: #325E9E;
 }
 
 .tree a:focus
 {
-	background-color: #eee;
+	background-color: #666;
+	color: #fff !important;
 }
 
 .tree a.folder
