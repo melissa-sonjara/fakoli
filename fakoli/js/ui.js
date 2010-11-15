@@ -595,6 +595,137 @@ var PaginatingList = new Class(
 	}
 });
 
+
+var Splitter = new Class({
+
+	Implements: Options,
+	
+	container: null,
+	layout: null,
+	panes: [],
+	lastPosition: null,
+	
+	options: 
+	{
+		orientation: 'vertical',
+		split: [50, 50],
+		minimumSize: 10
+	},
+	
+	initialize: function(element, options)
+	{
+		this.container = $(element);
+		this.setOptions(options);
+		
+		this.panes = this.container.getChildren();
+		if (this.panes.length != 2)
+		{
+			alert("Splitting Headache!");
+			return;
+		}
+		
+		this.layout = new Element('div');
+		this.layout.setStyles({"width": "100%", "height": "100%"});
+		this.splitter = new Element('div').addClass(this.getSplitterClass());
+		this.splitter.setStyle("float", "left");
+		this.layout.wraps(this.panes[0]);
+		this.splitter.inject(this.layout);
+		this.panes[1].inject(this.layout);
+		this.layout.inject(this.container);
+		
+		this.panes.each(function(elt) { elt.setStyles({"overflow-y": "auto", "float": "left"}); });
+		
+		this.splitter.addEvent('mousedown', function(e) { this.startResize(new Event(e)); }.bind(this));
+		this.calculateLayout();
+	},
+	
+	getSplitterClass: function()
+	{
+		return "splitter_" + this.options.orientation;
+	},
+	
+	setOrientation: function(orientation)
+	{
+		this.splitter.removeClass(this.getSplitterClass());
+		this.options.orientation = orientation;
+		this.splitter.addClass(this.getSplitterClass());
+		this.calculateLayout();
+	},
+	
+	calculateLayout: function()
+	{
+		var vert = this.options.orientation == 'vertical';
+		var prop = vert ? "height" : "width";
+		
+		if (vert)
+		{
+			var width = this.layout.getWidth();
+			this.panes.each(function(elt) { elt.setStyle("width", width); });
+		}
+		else
+		{
+			var height = this.layout.getHeight();
+			this.panes.each(function(elt) { elt.setStyle("height", height); });
+		}
+
+		var splitterSize = 9;//(vert) ? this.splitter.getHeight() : this.splitter.getWidth();
+		
+		var ratio = [0,0];
+		ratio[0] = this.options.split[0] / (this.options.split[0] + this.options.split[1]);
+		ratio[1] = this.options.split[1] / (this.options.split[0] + this.options.split[1]);
+		
+		
+		var size = (vert) ? this.layout.getHeight() : this.layout.getWidth();
+		size -= splitterSize;
+		
+		this.panes[0].setStyle(prop, Math.floor(ratio[0] * size));
+		this.panes[1].setStyle(prop, Math.floor(ratio[1] * size));
+	},
+	
+	startResize: function(e)
+	{
+		var vert = this.options.orientation == 'vertical';
+		var axis = (vert) ? "y" : "x";
+		var minF = (vert) ? "top" : "left";
+		var maxF = (vert) ? "bottom" : "right";
+		
+        var performDrag = function(e) 
+        {
+            var pos = mousePosition(e);
+            var coords = this.container.getCoordinates();
+            
+            var range = coords[maxF] - coords[minF];
+            var thumb = (pos[axis] - coords[minF]) / range * 100;
+            if (thumb < this.options.minimumSize) thumb = this.options.minimumSize;
+            if (thumb > (100 - this.options.minimumSize)) thumb = 100 - this.options.minimumSize;
+            
+            this.options.split[0] = thumb;
+            this.options.split[1] = 100 - thumb;
+            
+            this.calculateLayout();
+        }.bind(this);
+
+		var endDrag = function(e) 
+        {            
+            document.removeEvent('mousemove', performDrag);
+            document.removeEvent('mouseup', endDrag);
+        };
+        
+        var mousePosition = function(e) 
+        {
+            return { x: e.event.clientX + document.documentElement.scrollLeft,
+                y: e.event.clientY + document.documentElement.scrollTop};
+        };
+        
+        document.addEvents(
+		{
+			'mousemove': performDrag,
+			'mouseup': endDrag
+		});
+	},
+	
+});
+
 var FocusWatcher = new Class({
 	
 	Implements : [Options, Events],
