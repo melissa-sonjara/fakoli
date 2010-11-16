@@ -70,7 +70,7 @@ if ($method == "POST")
 			mkdir($d);
 		}
 		
-		if ($form->deleted) redirect("/admin/image_galleries.inc");
+		if ($form->deleted) redirect("/admin/image_galleries");
 		
 		$tabs->queryString = "gallery_id=".$form->data->gallery_id;
 		$tabs->next();
