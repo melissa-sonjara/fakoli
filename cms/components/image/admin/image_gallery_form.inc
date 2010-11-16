@@ -44,7 +44,7 @@ $allowDelete = false;
 if ($gallery_id)
 {
 	$gallery = new ImageGallery($gallery_id);
-	$allowDelete = ($gallery->countImages() == 0);
+	$allowDelete = ($gallery->countImages() == 0); 
 }
 else
 {
