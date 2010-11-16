@@ -61,7 +61,7 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
-		if ($this->parent->isReadOnly) return "";
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)) return "";
 		
 		global $html_editor_extra_buttons;
 		
