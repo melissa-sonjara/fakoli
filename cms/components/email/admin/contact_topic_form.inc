@@ -69,9 +69,8 @@ $form->allowDelete = true;
 $form->annotate("recipients", "(separate email addresses with a comma ',')");
 
 $sites = query(Site, "ORDER BY site_name");
-if(count($sites) > 0)
+if(count($sites) > 1)
 	$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Include in Sites", $sites, "site_name", ContactTopicSiteXref);
-
 //$form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 if ($method == "POST")
