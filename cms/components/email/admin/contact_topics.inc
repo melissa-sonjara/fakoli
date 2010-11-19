@@ -53,7 +53,7 @@ $table->column("Code Name", "<a href=\"/admin/contact_topic_form?contact_topic_i
 	  	->column("Recipients", "{recipients}");
 	  	
 $sites = query(Site);
-if(count($sites) > 0)
+if(count($sites) > 1)
 	$table->column("Sites", formatSiteList);
 	  	
 $table->emptyMessage = "There are no contact topics defined.";
