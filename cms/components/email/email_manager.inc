@@ -70,8 +70,8 @@ class EmailHandler
 			$message = $this->getMessageScript($message, $random_hash);
 		elseif($message)
 		{
-			$patterns = array("/<br>/", "/&nbsp;/");
-			$replacements = array("\r\n", " ");
+			$patterns = array("/<br>/", "/&nbsp;/", "<br/>");
+			$replacements = array("\r\n", " ", "\r\n");
 			$message =  preg_replace($patterns, $replacements, $message);
 			$body = stripHTML($message);
 		}
@@ -136,13 +136,11 @@ class EmailManager
 	var $subject;
 	var $emailFrom;
 
-	function EmailManager($item, $email_template_id, $emailFrom = "")
+	function EmailManager($item, $emailTemplate)
 	{
 		$this->item = $item;
-		$this->email_template_id = $email_template_id;
-		$this->emailTemplate = new EmailTemplate($email_template_id);
-		$this->emailFrom = $emailFrom;
-	
+		$this->emailTemplate = $emailTemplate;
+		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
 	}
 
@@ -191,12 +189,20 @@ class EmailManager
 		{
 			list($relation, $field) = explode(".", $mergeCode->map);
 			
+			trace("EmailManager::relation is $relation and field is $field", 3);
 			$className = get_class($this->item);
 
 			// if the value_obj is the same as calling class then just keep that
 			if($relation AND $field)
 			{
-				$replaceObj = (get_class($this->item) == $relation) ? $this->item : $this->item->$relation();
+				if(get_class($this->item) == $relation)
+				{
+					$replaceObj = $this->item;
+				}
+				elseif($this->item->hasRelation($relation))
+				{
+					$replaceObj = $this->item->$relation();
+				}
 			}
 			else // we have a function from the calling class e.g., getUrl()
 				$replaceObj = $relation;
@@ -211,7 +217,8 @@ class EmailManager
 			// e.g., Program->name, a field in Program datamodel
 			elseif(is_object($replaceObj))
 			{
-					$replaceText = $replaceObj->format("{".$field ."}");
+				$replaceText = $replaceObj->format("{".$field ."}");
+				trace("replaceObj is object; text is $replaceText");
 			}
 			
 			// e.g., Program.orderList, a function called from the sending
@@ -220,9 +227,9 @@ class EmailManager
 			{
 				$replaceText = $this->item->$replaceObj();	
 			}
-			else // field of the calling class e.g., "comment"
+			elseif($replaceObj) // field of the calling class e.g., "comment"
 			{
-				return $replaceText = $this->item->replaceObj;
+				return $replaceText = $this->item->$replaceObj;
 			}
 		}
 		
@@ -271,7 +278,7 @@ class EmailManager
 			
 		foreach($recipients as $recipient)
 		{
-			$email = new EmailHandler($recipient, $this->subject, $this->message);
+			$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom);
 			$sent = $email->send();
 		}
 		return $sent;
@@ -287,7 +294,7 @@ function sendEmailUsingEmailManager($sendingItem, $name)
 	if($emailTemplate)
 	{
 		trace("Sending email '$name'", 3);
-		$emailManager = new EmailManager($sendingItem, $emailTemplate->email_template_id);
+		$emailManager = new EmailManager($sendingItem, $emailTemplate);
 		$emailManager->sendEmail();
 	}
 }

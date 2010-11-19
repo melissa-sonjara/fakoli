@@ -43,12 +43,13 @@
  * 
  */
 
-require_once realpath(dirname(__FILE__))."/../../framework/tab_bar.inc";
+Fakoli::using("questionnaire");
+Fakoli::usingFeature("tab_bar");
 
 function questionnaireTabs($key = "")
 {
 	$tabs = getTabs();
-	$qs = ($key) ? "questionnaire_key=$key" : "";
+	$qs = ($key) ? "questionnaire_id=$key" : "";
 	$tabBar = new TabBar("tabs", $tabs, $qs);
 
 	return $tabBar;
@@ -57,9 +58,9 @@ function questionnaireTabs($key = "")
 function getTabs()
 {
 	
-		$tabs = array(	"Questionnaire Form"		=>	"questionnaire_form.php",
-						"Question Set"				=>	"question_list.php",
-					 	"Preview Questionnaire"		=>	"questionnaire_preview.php"
+		$tabs = array(	"Questionnaire Form"		=>	"questionnaire_form",
+						"Question Set"				=>	"question_list",
+					 	"Preview Questionnaire"		=>	"questionnaire_preview"
 					);	
 	
 	return $tabs;

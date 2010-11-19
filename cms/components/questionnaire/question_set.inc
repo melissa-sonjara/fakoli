@@ -51,7 +51,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * 
  * This form requires the following standard field names for the table
  * that stores the set of question:
- * question_key
+ * question_id
  * question_number
  * 
  * This form requires that the script for add/edit/delete a question
@@ -62,49 +62,62 @@ OTHER DEALINGS IN THE SOFTWARE.
  * contain the relation function name "Questions".
  * 
  * Parameters:
- * $questionnaire_key
+ * $questionnaire_id
  * $readOnly - whether the questions can be edited and/or deleted
  */
+
+Fakoli::using("questionnaire");
+
 class QuestionSet
 {
+	var $mgr;
 	var $questions = array();
-	var $questionnaire;
-	var $key;
 	var $editable;
-	var $noneText = "There are not yet any questions in this questionnaire.";
-	var $question_form = "question_form.php";
-
-	function QuestionSet($questionnaire_key)
+	var $buttons = array();
+	var $noneText = "No questions have been added.";
+	var $labelCSS = "";					///< CSS Class to use for label cells
+	var $buttonCSS = "";				///< CSS Class to use for buttons
+	var $componentPath ="/fakoli";
+	
+	function QuestionSet($mgr)
 	{
-		$this->questionnaire = new Questionnaire($questionnaire_key);
-		$this->key = $questionnaire_key;
-		$this->questions = $this->questionnaire->Questions("ORDER BY question_number");
-		$this->editable= $this->questionnaire->isEditable();
+		$this->mgr = $mgr;		
+		$this->questions = $this->mgr->getQuestions();
+		$this->editable = $this->mgr->isEditable();
 	}
 	
 	function writeScript()
 	{
-		
+		return "";
 	}
 	
 	function drawList()
 	{
+		global $auto_form_defaults;
+		foreach($auto_form_defaults as $field => $value)
+		{
+			$this->$field = $value;
+		}
+		
+		$pk = $this->mgr->getPrimaryKey();
+		
 		if (count($this->questions) > 0)
 		{
+			
 			if(!$this->editable)
-				echo "<h5>{$this->questionnaire->getNotEditableHTML()}</h5>";
+				echo "<h5>{$this->mgr->getNotEditableHTML()}</h5>";
 			?>
 			<form style='display: inline' name="question_order_form" method="POST" action="">
 			<table style="list; border: dotted 1px #000;border-collapse: collapse">
-			<?
+			<?				
 			foreach($this->questions as $question)
 			{
-				$this->drawOneQuestion($question);
+				$this->drawOneQuestion($question, $pk);
 			}
 			?>
 			</table>
 			<br/>
-			<input type="hidden" name="obj_key" value="<?echo $this->key ?>"/>
+			<input type="hidden" name="obj_id" value="<?echo $this->mgr->item->$pk ?>"/>
 			<input class='button' type="submit" name="reorder" value="&nbsp;Update Question Order&nbsp;"/>&nbsp;&nbsp;
 			<?
 		} // end draw table
@@ -112,8 +125,11 @@ class QuestionSet
 		{
 			echo $this->noneText ."<br/><br/>";
 		}
-		?>		
-		<a href="<? echo $this->question_form ?>?questionnaire_key=<? echo $this->key ?>" class="button"> Add a Question </a><br/>
+		
+		$this->drawOneButton($this->mgr->getQuestionForm(), "Create a New Question");
+		$this->drawButtons();
+		?>
+		<br/><br/>
 		</form>
 		<?
 	} // end function drawList
@@ -121,23 +137,38 @@ class QuestionSet
 	/*
 	 * drawOneQuestion - for each question row, include an edit and delete button
 	 */
-	function drawOneQuestion($question)
+	function drawOneQuestion($question, $pk)
 	{
+		$questionPk = $question->getPrimaryKey();
+		$orderField = $this->mgr->getOrderField();
 		echo "<tr>";
-		echo "<td style='width: 125px;border: dotted 1px #000'><b>Question</b> <input type='text' name='question_{$question->question_key}' value='{$question->question_number}' size='4'/></td>"; 
+		echo "<td style='width: 125px;border: dotted 1px #000'>
+		<b>Question</b> <input type='text' name='question_{$question->$questionPk}' value='{$question->$orderField}' size='4'/></td>"; 
 		echo "<td style='border: dotted 1px #000'>{$question->question}</td>";
+		
+		if($question->options)
+			$options = preg_replace("/\r\n/", "<br>", $question->options);
+		
+		echo "<td style='border: dotted 1px #000'>{$options}</td>";
+		
+		$disable = ($question->locked) ? "disabled='disabled'" : "";
 
-		echo "<td style='border: dotted 1px #000'>&nbsp;<a class='button' href='question_form.php?question_key={$question->question_key}'>&nbsp;Edit&nbsp;</a>&nbsp;</td>";
+		echo "<td style='border: dotted 1px #000'>&nbsp;";
+		$this->drawOneButton($this->mgr->getQuestionForm() . $question->$questionPk, "Edit");
+		echo "&nbsp;</td>";
+		
 		if($this->editable)
 		{
-			echo "<td style='border: dotted 1px #000'>&nbsp;<a class='button' href='question_delete.php?question_key={$question->question_key}&questionnaire_key={$question->questionnaire_key}' onclick=\"return confirm('Are you sure you wish to delete this question?');'\">&nbsp;Delete&nbsp;</a>&nbsp;</td>";
+			echo "<td style='border: dotted 1px #000'>&nbsp;";
+			$this->mgr->drawQuestionDeleteButton($question->$questionPk);
+			echo "&nbsp;</td>";
 		}	
 		echo "</tr>";
 	}
 	
 
 /*
- * Reorder questions, set the question_number and save to db.
+ * Reorder questions, set the sort_order and save to db.
  * 
  * After implementing the user's new order, renumber the questions
  * in sequence (e.g., 1, 2, 3 rather than 1, 3, 7).
@@ -145,36 +176,50 @@ class QuestionSet
  */
 	function reOrderQuestions()
 	{
-		global $_POST;
-		
-		// reorder
-		foreach($_POST as $name => $value)
-		{
-			if (!strncmp($name, "question_", 9))
-			{
-				$id = substr($name, 9);
-				$question = new Question();
-				$question->filter = new InclusionFilter("question_key", "question_number");	
-				$question->questionnaire_key = $this->key;
-				$question->question_key = $id;
-				$question->question_number = $value;
-				$question->save();
-			}
-		}
-		// renumber
-		$questionnaire = new Questionnaire($this->key);
-		$questions = $questionnaire->Questions("ORDER BY question_number");
-		$value = 1;
+		$this->mgr->reOrderQuestions();
+	} // end reOrderQuestions
 	
-		foreach($questions as $question)
+
+	/**
+	 * Adds a custom button to the form.
+	 *
+	 * @param string $text the button label text
+	 * @param string $url the URL to handle the button press
+	 * @param string $confirm optional confirmation message
+	 */
+	function button($text, $url, $confirm = null)
+	{
+		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm);
+	}
+	
+	/**
+	 * Draws any additional buttons specified in the calling script.
+	 *
+	 */
+	function drawButtons()
+	{
+		foreach($this->buttons as $button)
 		{
-			$question->filter = new InclusionFilter("question_number");
-			$question->question_number = $value;
-			$question->save();
-			$value++;
+			echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+			$this->drawOneButton($button['url'], $button['text'], $button['confirm']);
 		}
 
-	} // end reOrderQuestions
+	}
+	
+	static function drawOneButton($url, $text, $confirm = "", $buttonCSS = 'button')
+	{
+		if ($confirm)
+		{
+			$link = "if (confirm('".jsSafe($confirm)."')) go('{$url}'); return false;";
+		}
+		else
+		{
+			$link = "go('$url'); return false;";
+		}
+	
+		echo "<input type='button' class='{$buttonCSS}' onclick=\"$link\" value=\"$text\"/>";
+		
+	}
 	
 	
 } // end class QuestionSet

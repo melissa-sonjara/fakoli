@@ -42,13 +42,14 @@ class Attachment extends DataItem
 						"file_size"			=>	String);
 	
 	//Relations
-	var $relations = array(	"User"	=>	SiteUser);
+	var $relations = array("User"	=>	"");
 	
 	function User()
 	{
-		return $this->getRelated(SiteUser);
+		$mgr = new UserManager();
+		return $this->getRelated($mgr->getUserClass());
 	}
-	
+		
 	function Attachment()
 	{
 		$this->table = "attachment";

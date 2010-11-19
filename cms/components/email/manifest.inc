@@ -61,7 +61,17 @@ class EmailManifest
 									  "role"	=>	"admin",
 									  "weight"	=>	21)
 			
+			),
+			
+			"Collaboration"	=> array
+			(
+				"Contact Topics"	=>	array("page"	=>	"/admin/contact_topics",
+									  "role"	=>	"admin",
+									  "weight"	=>	25)
 			)
+				
+			
+			
 		);
 	}	
 }

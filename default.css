@@ -703,3 +703,19 @@ a.button
 {
 	text-decoration: underline;
 }	
+
+/* box border under tab bar */
+#tab_border {
+	clear: left;
+	border: solid 1px #000; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
+#inner_border {
+	border: dotted 1px #060;
+	padding: 5px; 
+	margin: 10px;
+}

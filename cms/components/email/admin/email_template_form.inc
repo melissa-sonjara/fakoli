@@ -45,6 +45,7 @@ Fakoli::usingFeature("auto_form");
 $email_template_id = checkNumeric($_GET["email_template_id"]);
 
 $emailTemplate = new EmailTemplate();
+global $config;
 
 if ($email_template_id)
 {
@@ -54,6 +55,7 @@ if ($email_template_id)
 else
 {
 	$title = "Add an Email Template";
+	$emailTemplate->sender_email = $config["email_from"];
 }
 
 $form = new AutoForm($emailTemplate);
@@ -62,7 +64,7 @@ $form->annotate("recipients", "(separate email addresses with a comma ',')");
 $form->annotate("subject", "Codes must be enclosed in brackets '[' and ']'.");
 $form->annotate("message", "Codes must be enclosed in brackets '[' and ']'.");
 $form->unique("name", "An email template already exists with that title. Please choose a different title.");
-$form->required("name", "recipients", "subject", "message");
+$form->required("name", "sender_email", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
 
 //$form->validator->add(new EmailListValidator("recipients", "Recipients"));

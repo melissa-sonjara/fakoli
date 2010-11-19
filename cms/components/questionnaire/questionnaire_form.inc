@@ -40,47 +40,11 @@ OTHER DEALINGS IN THE SOFTWARE.
  * The form formats the question display based on the 
  * type of question.
  * 
- * The questionnaire datamodel should have the following fields:
- * 			"questionnaire_key"			=>	Number,
- *			"title"						=>	String, 
- *	 		"class_key"					=>	Number 
- *
- * The title is the name of the type of questionnaire, e.g., Survey, Application
- * The class_key references the DataItemClass datamodel that lists defined
- * datamodel classes and whose key, combined with the "container_key" and question_key 
- * forms the unique key to retrieve an answer to a question.
- * 
- * The DataItemClass has the following fields:
- * 					"class_key"		=>	Number,
- *					"class_name"	=>	String
- *
-  * The Question datamodel should be defined with the following fields:
- * 		"question_key"			=>	Number,
- *		"questionnaire_key"		=>	Number,
- *		"question_number"		=>	Number,
- *		"question_type"			=>	Number,
- *		"question"				=>	HTML,
- * 		"options"				=>	Text,
- *		"required"				=>	Number,
- *		"char_limit"			=>	Number,
- *		"num_rows"				=>	Number
- *
- * and have the following relations:
- * 	Answer
- *  Questionnaire
- *  
- * Optional functions in the datamodel:
- *   isEditable() - determines if the question has been answered - to 
- *  control editability of the questionnaire
- *  
- * The Answer datamodel should be defined as follows:
- * 		"answer_key"				=>	Number,
- * 		"container_key"				=>	Number,  // key to the container data item object, e.g., Application application_key
- *		"class_key"					=>	Number, // to get to container class name 
- *		"question_key"				=>	Number,
- *		"value"						=>	String
- *
- * and have the relation "Question"
+ * The specifics of the different classes that can render
+ * questions are handled by a manger class which provides
+ * information such as the name of the question_id field,
+ * gets the set of Questions and Answers through its relations,
+ * and saves to its specific type of data structure.
  *
  * author: Janice Gallant for Sonjara, Inc.
  * 
@@ -88,23 +52,22 @@ OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
 
-require_once realpath(dirname(__FILE__)."/../../components/questionnaire/question_renderer.inc");
-
+Fakoli::using("questionnaire");
 
 
 /*
  * QuestionnaireForm
  * 
- * @param: $obj - the container data item object for the set of questions
- * (e.g., Survey). This datamodel must have the relations Questionnaire,
- * Questions, and Answers
+ * @param: $mgr - an object of class QuestionnnaireManager, SurveyManager,
+ * or other which provides specific data and values to this form as 
+ * requested. 
  * @param: $readonly - defaults to false - whether questionnaire is
  * being reviewed or answered.
  */
 
 class QuestionnaireForm
 {
-	var $obj;
+	var $mgr; // the object that links to the questions and answers: questionnaire, survey, quiz, etc.
 	var $questions;
 	var $answers;
 	var $readonly;
@@ -114,13 +77,16 @@ class QuestionnaireForm
 	var $msg; // validation msg 
 	var $num = 1; // starting number for first question; may be set by calling script to
 	 // append multiple question sets for review.
+	 
+	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 	
-	function QuestionnaireForm($obj, $readonly = false)
+	
+	function QuestionnaireForm($mgr, $readonly = false)
 	{		
-		$this->obj = $obj;
+		$this->mgr = $mgr;
 		$this->readonly = $readonly;
 		
-		$questions = $this->obj->Questions("ORDER BY question_number");
+		$questions = $this->mgr->getQuestions();
 
 		if(count($questions) > 0)
 		{
@@ -141,7 +107,8 @@ class QuestionnaireForm
 		
 	function getAnswer($question)
 	{
-		$answer = $this->answers[$question->question_key]; 
+		$qPk = $this->mgr->getQuestionKey();
+		$answer = $this->answers[$question->$qPk]; 
 		return ($answer) ? $answer->value : "";
 	}
 	
@@ -180,7 +147,7 @@ class QuestionnaireForm
 	{	
 		if(count($this->questions) == 0)
 		{
-			echo "There are no questions in this questionnaire.<br/>";
+			echo "There are no questions.<br/>";
 			return;
 		}
 		
@@ -209,14 +176,14 @@ class QuestionnaireForm
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
-		echo " <dt><b>{$this->num}.</b> {$question->question->question}&nbsp;{$required}</dt>\n";
+		echo " <dt><b>{$this->num}.</b> {$question->question->question}{$required}</dt>\n";
 		echo " <dd>";
 		if(!$displayOnly)
 			$question->writeHTML();
 		else
 			$question->drawView();
 
-		echo " </dd>";
+		echo " </dd><br/>";
 
 		if($displayOnly)
 			echo "<br/>";
@@ -249,9 +216,10 @@ class QuestionnaireForm
 	
 	function getIndexedAnswers()
 	{
-		$answers = $this->obj->Answers();
+		$answers = $this->mgr->getAnswers();
+		
 		if(count($answers) > 0)
-			$answers = reindexList($answers, "question_key");
+			$answers = reindexList($answers, $this->mgr->getQuestionKey());
 			
 		return $answers;
 	}
@@ -275,9 +243,9 @@ class QuestionnaireForm
 	{
 		global $_POST;
 
-		$pkName = $this->obj->primary_key;				
 		$answers = $this->getIndexedAnswers();
-		$questionnaire = new Questionnaire($this->obj->questionnaire_key);
+		$pk = $this->mgr->item->getPrimaryKey();
+		$qPk = $this->mgr->getQuestionKey();
 		
 		foreach($_POST as $name => $value)
 		{	
@@ -294,22 +262,22 @@ class QuestionnaireForm
 			
 			if (!strncmp("question_", $name, 9))
 			{
-				$question_key = substr($name, 9);
+				$question_id = substr($name, 9);
 	
-				$answer = $answers[$question_key];
+				$answer = $answers[$question_id];
+				$answerClass = $this->mgr->getAnswerClass();
 				
 				if(!$answer)
 				{
-					$answer = new Answer();
-					$answer->container_key = $this->obj->$pkName;
-					$answer->class_key = $this->obj->getClassKey();
-					$answer->question_key = $question_key;
+					$answer = new $answerClass();
+					$answer->$pk = $this->mgr->item->$pk;
+					$answer->$qPk = $question_id;
 					$answer->value = $valueAnswer;
 					$answer->save();
 				}
 				else
 				{
-					$answer = new Answer($answer->answer_key);
+					$answer = new $answerClass($answer->answer_id);
 					$answer->filter = new InclusionFilter("value");
 					$answer->value = $valueAnswer;
 					$answer->save();
@@ -318,30 +286,46 @@ class QuestionnaireForm
 		}
 		
 		// Need to handle deleted checkbox answers which don't appear in $_POST
-		$questions = $this->obj->Questions();
+		$questions = $this->mgr->getQuestions();
 	
-		foreach($questions as $question)
+		if(count($questions) > 0)
 		{
-			if($question->question_type == QuestionCheckList)
+			$indexed = reindexList($questions, "question_type_id");
+			$checkListType = querySingle(QuestionType, "WHERE class_name = 'CheckListView'");
+			$checkListQuestions = $indexed[$checkListType->question_type_id];
+			
+			if(count($checkListQuestions) < 0)
 			{
-				$answer = $answers[$question->question_key];
-				if($answer AND $answer->value)
-				{			
-					$postAnswer = $_POST["question_{$question->question_number}"];
-					if(!$postAnswer AND !is_array($postAnswer))
-					{
-						$answer->filter = new InclusionFilter("value");
-						$answer->value = "";
-						$answer->save();
+				foreach($checkListQuestions as $question)
+				{
+					$answer = $answers[$question->$qPk];
+					if($answer AND $answer->value)
+					{			
+						$postAnswer = $_POST["question_{$question->question_number}"];
+						if(!$postAnswer AND !is_array($postAnswer))
+						{
+							$answer->filter = new InclusionFilter("value");
+							$answer->value = "";
+							$answer->save();
+						}
 					}
-				}
+				}				
 			}
-		}
-
+		} 
+	
+		
 		// Even if invalid, we still want to save their answers
 		$this->msg = $this->validate();
 		if ($this->msg != "") return false;
 	
+
+		// onComplete event is fired once all processing has been completed
+		if ($this->onSaveComplete)
+		{
+			$onComplete = $this->onSaveComplete;
+			$onComplete($this);
+		}
+		
 		return true;
 		
 	}
@@ -362,3 +346,35 @@ class QuestionnaireForm
 		return $newArray;	
 	}
 }
+
+
+
+/*
+ * For questionnaire creator to view the layout of the questionnaire
+ * from the questionnaire data entry interface.
+ */
+class QuestionnairePreview extends QuestionnaireForm
+{
+	var $mgr;
+	
+	function QuestionnairePreview($mgr)
+	{
+		$this->mgr = $mgr;
+		$this->readonly = true;
+		
+		$questions = $this->mgr->getQuestions();
+		
+		if(count($questions) == 0) return;
+		
+		foreach($questions as $question)
+		{
+			$this->questions[] = QuestionField::create($this, $question);
+		}
+	}
+	
+	function writeScript()
+	{
+		return "";		
+	}
+}
+

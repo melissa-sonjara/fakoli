@@ -232,15 +232,27 @@ class SelectFieldRenderer extends FieldRenderer
 		$found = false;
 		
 		$current = $this->parent->data->get($field);
-		
-		foreach($this->options as $value => $name)
+
+		if ($this->grouped)
 		{
-			if($current == $value && $value != '')
+			foreach($this->options as $groupName => $group)
 			{
-				$found = true;
+				foreach($group as $value => $name)
+				{
+					if($current == $value && $value != '')
+						$found = true;
+				}
 			}
 		}
-					
+		else
+		{
+			foreach($this->options as $value => $name)
+			{
+				if($current == $value && $value != '')
+					$found = true;
+			}
+		}
+
 		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
 		
 		if ($_POST["{$field}_addEntry"] && !$found)

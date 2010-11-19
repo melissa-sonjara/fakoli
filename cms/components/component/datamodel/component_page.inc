@@ -44,14 +44,24 @@ class ComponentPage extends DataItem
 						"template"			=>	String,
 						"role"				=>	String,
 						"enabled"			=>	Boolean,
-						"scanned"			=>	Boolean);
+						"scanned"			=>	Boolean,
+						"site_id"			=>	Number
+	);
 	
 	// Relations
-	var $relations = array("Component"	=>	Component);
+	var $relations = array(
+							"Component"	=>	Component,
+							"Site"		=>	Site
+						);
 	
 	function Component()
 	{
 		return $this->getRelated(Component);
+	}
+	
+	function Site()
+	{
+		return $this->getRelated(Site);
 	}
 	
 	function ComponentPageModuleXrefs($constraint = "ORDER BY position, sort_order")
@@ -100,7 +110,8 @@ class ComponentPage extends DataItem
 		global $config;
 		
 		$style = $_REQUEST["_style"];
-		$site = Site::getSite();
+		$site = $this->Site();
+		if(!$site) Site::getSite();
 		
 		$templateFile = "";
 		

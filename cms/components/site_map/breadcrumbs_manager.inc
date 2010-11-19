@@ -54,15 +54,13 @@ class Breadcrumbs
 	static function getBreadcrumbs($page)
 	{
 		global $breadcrumbs;
-			
+
 		$qs = $_SERVER['QUERY_STRING'];
 		$identifier = $_REQUEST["identifier"];
 		
 		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
-			
-		$component = querySingle(Component, "WHERE name = 'site_map'");
-
+		
 		$currentSiteMapPages = query(SiteMap, "WHERE identifier = '{$identifier}'");
 		if(count($currentSiteMapPages) > 0)
 			$currentSiteMapPage = $currentSiteMapPages[0];

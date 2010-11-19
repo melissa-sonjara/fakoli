@@ -45,28 +45,8 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 11/4/09
  */ 
 
-require_once realpath(dirname(__FILE__)."/../../framework/validation.inc");
-require_once realpath(dirname(__FILE__)."/../../components/questionnaire/validation.inc");
-
-
-// Question Options
-define("QuestionMultipleChoice", 1);
-define("QuestionRating", 2);
-define("QuestionShortText", 3);
-define("QuestionFreeText", 4);
-define("QuestionCheckList", 5);
-
-$questionTypes = array
-(
-	QuestionFreeText		=>	"Free Text",
-	QuestionShortText		=>	"Short Text",
-	QuestionCheckList		=>	"CheckList",	
-	QuestionMultipleChoice 	=> 	"Multiple Choice",
-	QuestionRating			=> 	"Rating"
-	);
-
-
-
+Fakoli::using("questionnaire");
+require_once realpath(dirname(__FILE__)."/validation.inc");
 
 /*
  * QuestionField
@@ -90,12 +70,18 @@ class QuestionField
 		return "";
 	}
 	
+	function writeReportHTML()
+	{
+	}
+	
 	function QuestionField($parent, $question)
 	{
 		$this->parent = $parent;
 		$this->question = $question;
-		$this->answer = $this->parent->answers[$this->question->question_key];
+		$this->qPk = $this->question->getPrimaryKey();
 		
+		$qPk = $this->qPk;
+		$this->answer = $this->parent->answers[$this->question->$qPk];
 	}
 	
 	// Indicate required with asterisk
@@ -107,38 +93,21 @@ class QuestionField
 	function getRequiredValidator()
 	{
 		// empty answer signals to validate from form and $_POST
+		$pk = $this->question->getPrimaryKey();
+	
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		return new RequiredQuestionValidator("question_{$this->question->question_key}", "Question {$this->question->question_number}", "", $answer);
+		return new RequiredQuestionValidator("question_{$this->question->$pk}", "Question {$this->question->question_number}", "", $answer);
 	}
 	
 	
 	static function create($parent, $question)
 	{
-		switch($question->question_type)
+		$questionType = new QuestionType($question->question_type_id);
+		
+		if($questionType AND $questionType->class_name)
+			return new $questionType->class_name($parent, $question);
+		else
 		{
-		case QuestionMultipleChoice:
-			
-			return new MultiChoiceView($parent, $question);
-				
-		case QuestionRating:
-
-			return new RatingView($parent, $question);
-		
-		case QuestionShortText:
-
-			return new ShortTextView($parent, $question);
-			
-		case QuestionFreeText:
-
-			return new FreeTextView($parent, $question);
-			
-		case QuestionCheckList:
-		
-			return new CheckListView($parent, $question);
-			
-				
-			default:
-			
 			trace("QuestionField::create(): Unknown question type", 2);
 			die("Unknown question type");
 		}
@@ -154,9 +123,85 @@ class QuestionField
  * 
  * Radio buttons are in a table layout so that they align properly in IE7
  */
-class MultiChoiceView extends QuestionField
+class MultipleChoiceView extends QuestionField
 {
-	function MultiChoiceView($parent, $question)
+	function MultipleChoiceView($parent, $question)
+	{
+		$this->QuestionField($parent, $question);
+	}
+	
+	
+	function writeHTML()
+	{
+		$pk = $this->question->getPrimaryKey();
+		$options = explode("\n", $this->question->options);
+
+		$valueAnswer = $this->parent->getAnswer($this->question);
+
+		$readonly = $this->parent->readonly ? " DISABLED" : "";
+		
+		echo "<table class=\"layout\">";
+		
+		$count = count($options);
+		
+		if($count > 0)
+		{
+			$idx = 1;
+			foreach($options as $value => $text)
+			{
+				$selected = ($valueAnswer == $idx) ? " checked" : "";
+
+				echo "<tr><td style=\"padding:1px\"><input type='radio' 
+				style='border: none' name='question_{$this->question->$pk}' id='question_{$this->question->$pk}_$idx' 
+				value='$idx'$selected $readonly>&nbsp;$text</td></tr>";
+				$idx++;
+			}
+		}
+		
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_question_{$this->question->$pk}\" value=\"$count\">";		
+		
+		echo "</table>";
+		
+	}
+	
+	function drawView()
+	{
+		$this->writeHTML();	
+	}
+	
+	function getRequiredValidator()
+	{
+		$pk = $this->question->getPrimaryKey();
+	
+		// Empty question object signals to validator to validate from form and $_POST.
+		// Not empty means this is a view so we have the answer object that was saved.
+		$answer = ($this->parent->readonly) ? $this->answer : "";
+		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$this->question->question_number}", $answer);
+	}
+	
+	function writeReportHTML()
+	{
+		$pk = $this->parent->primary_key;
+		$qPk = $this->question->getPrimaryKey();
+		$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
+							
+?>
+<img src="<?php echo $link ?>" alt="Histogram"/>
+<?
+	}	
+}
+
+
+
+
+/*
+ * Creates a drop down view of options list
+ * 
+ */
+class SelectFieldView extends QuestionField
+{
+	function SelectFieldView($parent, $question)
 	{
 		$this->QuestionField($parent, $question);
 	}
@@ -171,15 +216,22 @@ class MultiChoiceView extends QuestionField
 
 		$readonly = $this->parent->readonly ? " DISABLED" : "";
 		
-		echo "<table class=\"layout\">";
-		
-		foreach($options as $option)
+		if(count($options) > 0)
 		{
-			$checked = ($value == $num) ? " checked='checked'" : "";
+			echo "<table class=\"layout\">";
+			$pk = $this->question->getPrimaryKey();
+			echo "<select name='question_{$this->question->$pk}'>\n";	
+			if(!$readonly)	
+				echo "<option value=''></option>"; // blank
 			
-			echo "<tr><td style=\"padding:1px\"><input type='radio' style=\"border:none\" name='question_{$this->question->question_key}' value='$num'$readonly$checked/>&nbsp;{$option}</td></tr>";	
+			foreach($options as $option)
+			{
+				$selected = ($value == $num) ? " selected" : "";				
+				echo "<option value='$num'$readonly$selected>$option</option>";
+				$num++;
+			}
 			
-			$num++;
+			echo "</select>";
 		}
 		
 		echo "</table>";
@@ -190,11 +242,19 @@ class MultiChoiceView extends QuestionField
 		$this->writeHTML();	
 	}
 	
+	function writeReportHTML()
+	{
+		$pk = $this->parent->primary_key;
+		$qPk = $this->question->getPrimaryKey();
+		$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
+							
+?><img src="<?php echo $link ?>" alt="Histogram"/><?
+	}	
 }
 
 class RatingView extends QuestionField
 {
-	function QuestionRating($parent, $question)
+	function RatingView($parent, $question)
 	{
 		$this->QuestionField($parent, $question);
 	}
@@ -207,15 +267,22 @@ class RatingView extends QuestionField
 		if (!$steps) $steps = 5;
 		
 		echo "$from&nbsp;";
-		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
-		$value = $this->parent->getAnswer($this->question);
 		
-		
+		$readonly = $this->parent->readonly ? " DISABLED" : "";
+		$valueAnswer = $this->parent->getAnswer($this->question);
+			
 		for($i = 1; $i <= $steps; ++$i)
 		{
-			$checked = ($value == $i) ? " checked='checked'" : "";
-			echo "<input type='radio' name='question_{$this->question->question_key}' value='$i'$readonly$checked/>&nbsp;";
+			$selected = ($valueAnswer == $i) ? " checked" : "";
+
+			$pk = $this->question->getPrimaryKey();
+			echo "<input type='radio' style='border: none' name='question_{$this->question->$pk}' 
+			id='question_{$this->question->$pk}_$i' 
+			value='$i'$selected $readonly />&nbsp;";
 		}
+		
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_question_{$this->question->$pk}\" value=\"$steps\">";		
 		
 		echo $to;
 	}
@@ -226,6 +293,24 @@ class RatingView extends QuestionField
 		$this->writeHTML();	
 	}
 
+	function getRequiredValidator()
+	{
+		// Empty question object signals to validator to validate from form and $_POST.
+		// Not empty means this is a view so we have the answer object that was saved.
+		$answer = ($this->parent->readonly) ? $this->answer : "";
+		$pk = $this->question->getPrimaryKey();
+	
+		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$this->question->question_number}", $answer);
+	}
+	
+	function writeReportHTML()
+	{
+		$pk = $this->parent->primary_key;
+		$qPk = $this->question->getPrimaryKey();
+		$link ="/action/questionnaire/rating_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
+							
+?><img src="<?php echo $link ?>" alt="Histogram"/><?
+	}
 }
 
 class ShortTextView extends QuestionField
@@ -239,13 +324,36 @@ class ShortTextView extends QuestionField
 	{
 		$value = $this->parent->getAnswer($this->question);
 		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
-		echo "<textarea name='question_{$this->question->question_key}' cols='80' $readonly>".htmlsafe($value)."</textarea>";
+		$pk = $this->question->getPrimaryKey();
+	
+		echo "<textarea name='question_{$this->question->$pk}' cols='75' rows='1' $readonly>".htmlsafe($value)."</textarea>";
 	}
 	
 	function drawView()
 	{
 		$value = $this->parent->getAnswer($this->question);
 		echo "<em>".htmlsafe($value)."</em>";
+	}
+	
+	function writeReportHTML()
+	{
+		$pk = $this->question->getPrimaryKey();	
+		$answers = $this->parent->Answers("WHERE $pk={$this->question->$pk}");
+?>
+<ul>
+<?
+		foreach($answers as $answer)
+		{
+			if ($answer->value)
+			{
+?>
+	<li><?echo formatAsHTML(stripHTML($answer->value)) ?></li>
+<?
+			}
+		}
+?>
+</ul>
+<?
 	}
 	
 }
@@ -263,7 +371,8 @@ class FreeTextView extends QuestionField
 		if ($this->question->char_limit)
 		{
 
-			$field = "question_{$this->question->question_key}";
+			$pk = $this->question->getPrimaryKey();
+			$field = "question_{$this->question->$pk}";
 					
 		$script = <<<ENDSCRIPT
 						
@@ -293,7 +402,8 @@ ENDSCRIPT;
 	
 	function writeHTML()
 	{
-		$field = "question_{$this->question->question_key}";
+		$pk = $this->question->getPrimaryKey();
+		$field = "question_{$this->question->$pk}";
 		
 		$rows = ($this->question->num_rows) ? $this->question->num_rows : 6;
 		
@@ -334,6 +444,29 @@ ENDSCRIPT;
 		echo "<em>".$answerVal."</em>";	
 	}
 	
+	
+		
+	function writeReportHTML()
+	{
+		$pk = $this->question->getPrimaryKey();	
+		$answers = $this->parent->Answers("WHERE $pk={$this->question->$pk}");
+?>
+<ul>
+<?
+		foreach($answers as $answer)
+		{
+			if ($answer->value)
+			{
+?>
+	<li><?echo formatAsHTML(stripHTML($answer->value))?></li>
+<?
+			}
+		}
+?>
+</ul>
+<?
+	}
+	
 }
 
 
@@ -367,6 +500,7 @@ class CheckListView extends QuestionField
 		$idx = 1;
 		
 		$count = count($options);
+		$pk = $this->question->getPrimaryKey();
 		
 		if($count > 0)
 		{
@@ -378,13 +512,13 @@ class CheckListView extends QuestionField
 				}
 								
 				echo "<tr><td style=\"padding:1px\"><input type='checkbox' 
-				class='checkbox' name='question_{$this->question->question_key}[$idx]' 
+				class='checkbox' name='question_{$this->question->$pk}[$idx]' 
 				value='$value'$readonly$checked/>&nbsp;$text</td></tr>";
 				$idx++;
 			}
 
 			// Save this count to loop through checkboxes on required validation
-			echo "<input type=\"hidden\" name=\"count_question_{$this->question->question_key}\" value=\"$count\">";		
+			echo "<input type=\"hidden\" name=\"count_question_{$this->question->$pk}\" value=\"$count\">";		
 		}
 		
 		echo "</table><br/>";
@@ -406,12 +540,30 @@ class CheckListView extends QuestionField
 	{
 		// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
+		$pk = $this->question->getPrimaryKey();
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		return new RequiredCheckListQuestionValidator("question_{$this->question->question_key}", "Question {$this->question->question_number}", $this->question->required, $answer);
+		return new RequiredCheckListQuestionValidator("question_{$this->question->$pk}", "Question {$this->question->question_number}", $this->question->required, $answer);
 	}
 	
 	function drawView()
 	{
 		$this->writeHTML();
 	}
+
+	
+	function writeReportHTML()
+	{
+		//$view = new CheckListResultsGraph(new SurveyManager($this->parent->survey), $this->question);
+		//$view->drawView();
+	
+		$pk = $this->parent->primary_key;
+		$qPk = $this->question->getPrimaryKey();
+		$link ="/action/questionnaire/checklist_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
+		
+		require_once $link;
+?>
+<img src="<?php echo $link ?>" alt="Histogram"/>
+<?
+
+	}	
 }

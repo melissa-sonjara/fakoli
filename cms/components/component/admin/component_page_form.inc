@@ -58,6 +58,7 @@ $templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template",
 
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
 
 if ($method == "POST")
 {

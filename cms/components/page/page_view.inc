@@ -63,7 +63,9 @@ class PageView
 		global $site;
 		
 		$page = $this->page; // Pass through to code include
-		$site = $page->Site(); // Pass through to code include
+		$site = $page->Site();
+		if(!$site)
+			$site = Site::getSite(); // Pass through to code include
 		
 		$template = $this->page->getTemplate();
 		
@@ -72,7 +74,38 @@ class PageView
 		$template = preg_replace("/\\{([\w\d:_]+)\\}/", "{_{_[$1]_}_}", $template);
 		
 		// If the page has a PHP code include, execute it and insert the contents
-		
+
+		if ($this->page->php_code_file)
+		{
+			ob_start();
+			
+			$codePath = explode(",", $this->page->php_code_file);
+			if (count($codePath) == 2)
+			{
+				$name = $codePath[0];
+				$php_code_file = $codePath[1];
+				$components = Fakoli::getComponents();
+				if (array_key_exists($name, $components))
+				{
+					$path = $components[$name]->component_path;
+					include $path."/{$php_code_file}";
+				}
+				else
+				{
+					throw new FakoliException("Unknown component");
+				}
+			}
+			else
+			{
+				include $config['homedir']."/{$this->page->php_code_file}";
+			}
+    		$output = ob_get_contents();
+ 			ob_end_clean();
+ 			$this->page->description .= $output;
+	
+		}	
+				
+		/*
 		if ($this->page->php_code_file)
 		{
 			ob_start();
@@ -82,7 +115,7 @@ class PageView
 			
 			$this->page->description .= $output;
 		}
-		
+		*/
 		$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		
 		// Populate template fields from the Page object.

@@ -1,0 +1,403 @@
+<?php
+/**************************************************************
+
+Copyright (c) 2007,2008 Sonjara, Inc
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+Except as contained in this notice, the name(s) of the above
+copyright holders shall not be used in advertising or otherwise
+to promote the sale, use or other dealings in this Software
+without prior written authorization.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+ /* 
+ * Title: results_view.inc
+ * 
+ * Description: Class for displaying aggregate data for 
+ * questionnaire responses.
+ * 
+ * Parameters:
+ * $obj - class that links to all the responses (e.g., Survey)
+ * 
+ * Steps:
+ * 
+ * 1) Get the questionnaire linked to obj.
+ * 
+ * 2) Get each of the questions. For each question, get the aggregation
+ * renderer defined for that question type.
+ * 
+ * 3) Get all the answers through the obj datamodel - these will be only
+ * the answers of submitted responses (not in progress or not started)
+ * 
+ * 4) Get the aggregate data. Save the aggregate data from multi choice, 
+ * ratings, checklist, and select field in optionAnswers; save the free text
+ * and short text in textAnswers.  
+ * 
+ * 5) Build a data view, grouped by question, for each display type and 
+ * draw the views.
+ */
+
+Fakoli::using("survey", "questionnaire");
+
+class SurveyResultsView
+{
+	var $obj;
+	var $questions;
+	var $answers;
+	var $emptyMessage = "There are no results.";
+	var $optionDataView;
+	var $textDataView;
+	var $optionAnswers;
+	var $textAnswers;
+	var $responseCount;
+	
+	function SurveyResultsView($obj)
+	{
+		$this->obj = $obj;
+		$questionnaire = $obj->Questionnaire();
+		if($questionnaire)
+		{
+			$this->questionTypes = QuestionType::getQuestionTypeList();
+		
+			$this->questions = $this->obj->Questions("ORDER BY sort_order");
+		
+			if(count($this->questions) > 0)			
+				$answers = $obj->Answers();
+		
+			if(count($answers) > 0)
+			{					
+				$this->responseCount = $obj->getResponseCount();
+				$this->answers = regroupList($answers, "question_id");
+		
+				foreach($this->questions as $question)
+				{
+					$answers = $this->answers[$question->question_id];
+					$this->getAggregateData($question, $answers);	
+				}
+			}
+		}
+		$this->buildOptionDataView();
+		$this->buildTextDataView();
+	}
+	
+	function getAggregateData($question, $answers)
+	{
+		switch($question->question_type_id)
+		{
+		case QuestionMultipleChoice:
+			
+			$this->optionAnswers[$question->question_id] = $this->getSingleSelectQuestionResultData($question, $answers);
+			break;	
+			
+		case QuestionRating:
+
+			$this->optionAnswers[$question->question_id] = $this->getRatingsQuestionResultData($question, $answers);
+			break;	
+			
+		case QuestionShortText:
+
+			$this->textAnswers[$question->question_id] = $answers; 		
+			break;	
+			
+		case QuestionFreeText:
+
+			$this->textAnswers[$question->question_id] = $answers; 		
+			break;	
+			
+		case QuestionCheckList:
+		
+			$this->optionAnswers[$question->question_id] = $this->getCheckListQuestionResultData($question, $answers);
+			break;	
+			
+		case QuestionDropDownList:
+
+			$this->optionAnswers[$question->question_id] = $this->getSingleSelectQuestionResultData($question, $answers);
+			break;	
+			
+		default:
+			
+			trace("getAggregateData: Unknown question type", 2);
+			die("Unknown question type");
+		}
+		
+	}
+	
+	/*
+	 * Use this function for multiple choice, and select field, get 
+	 * the count of answers for each option in the question option list.
+	 */ 
+	function getSingleSelectQuestionResultData($question, $answers)
+	{
+		$options = explode("\n", $question->options);
+		$idx = 1;
+		
+		if(count($options) > 0)
+		{
+			$answerValues = regroupList($answers, "value");
+			$optionAnswers = array();
+						
+			foreach($options as $option)
+			{
+				$count = count($answerValues[$idx]);
+				$optionAnswer = new OptionAnswer($question->question_id, $idx, $option, $count);
+				array_push($optionAnswers, $optionAnswer);
+				$idx++;
+			
+			}
+			return $optionAnswers;			
+		}		
+	}		
+	
+	/*
+	 * Use this for ratings - each radio button is not labeled in
+	 * the question option field so we need to create a label
+	 * for each in the results data display.
+	 */
+	function getRatingsQuestionResultData($question, $answers)
+	{
+		$answerValues = regroupList($answers, "value");
+		$optionAnswers = array();
+		$count = array();
+		$optionText = $this->getOptionText($question->options);
+		$steps = count($optionText);
+		
+		for($idx = 1; $idx <= $steps; ++$idx)
+		{
+			//echo "idx is $idx<br/>";
+			// store for calculating mean and median
+			$counts[$idx] = count($answerValues[$idx]);
+			$optionAnswer = new OptionAnswer($question->question_id, $idx, $optionText[$idx], $counts[$idx]);
+			array_push($optionAnswers, $optionAnswer);
+		}
+
+		$mean = new OptionAnswer($question->question_id, ++$idx, "Mean", $this->getMean($counts));
+		//$median = new OptionAnswer($question->question_id, ++$idx, "Median", $this->getMedian($optionAnswers));
+		array_push($optionAnswers, $mean);
+		//array_push($optionAnswers, $median);
+		
+		return $optionAnswers;
+	}
+	
+	function getOptionText($options)
+	{
+		$optionText = array();
+		
+		list($from, $to, $steps) = explode("\n", $options);
+		if (!$from) $from = "Lowest";
+		if (!$to) $to = "Highest";
+		if (!$steps) $steps = 5;
+		
+		for($idx = 1; $idx <= $steps; ++$idx)
+		{
+			if($idx > 1 AND $idx < $steps) 
+				$optionText[$idx] = $idx;
+			else
+				$optionText[$idx] = ($idx == 1) ? $from : $to;
+		}
+		return $optionText;
+	}
+	
+	function getMean($counts)
+	{
+		$total = 0;
+		$num = 0;
+		
+		foreach($counts as $value => $count)
+		{
+			$total += $value * $count;
+			$num += $count;
+		}
+		
+		return round($total / $num, 2);
+	}
+	
+	/*
+	 * The median will either be the middle value in the array if the count is odd
+	 * or the average of the center two numbers if the count is even.
+	 */
+	function getMedian($optionAnswers)
+	{
+		$median = 0.0;
+  		$index_1 = 0;
+		$index_2 = 0;
+
+		// determine if odd or even
+		$no_elements = count($optionAnswers);
+		//echo "no elements is $no_elements<br/>";
+		$odd = $no_elements % 2;
+
+		//odd take the middle number
+		if ($odd == 1)
+		{
+			//determine the middle
+			$the_index_1 = $no_elements / 2;
+
+			//cast to integer
+			settype($the_index_1, "integer");
+
+	 		//calculate the median
+    		$median = $optionAnswers[$the_index_1]->option;
+   		}
+  		else
+  		{
+    		//determine the two middle numbers
+    		$the_index_1 = $no_elements / 2;
+    		$the_index_2 = $the_index_1 - 1;
+
+    		//calculate the median
+    		$median = ($optionAnswers[$the_index_1] + $optionAnswers[$the_index_2]) / 2;
+  		}
+  		
+		return $median;
+  	}
+	
+	/*
+	 * For checklists, we need to get the array of answers
+	 * from the value field b/c users can choose more than one.
+	 * We store the answer comma delimited so explode and loop
+	 * through to get the count.
+	 */
+	function getCheckListQuestionResultData($question, $answers)
+	{
+		$options = explode("\n", $question->options);
+		$idx = 1;
+		
+		// Explode and record the count of each value answer
+		$answerCounts = $this->getCheckListAnswerCounts($answers);
+		if(count($options) > 0)
+		{
+			$optionAnswers = array();
+					
+			foreach($options as $option)
+			{
+				$count = $answerValues[$idx];
+				$optionAnswer = new OptionAnswer($question->question_id, $idx, $option, $answerCounts[$idx]);
+				array_push($optionAnswers, $optionAnswer);
+				$idx++;
+			}
+		}	
+		return $optionAnswers;
+	}
+	
+	function getCheckListAnswerCounts($answers)
+	{
+		if(count($answers) == 0)
+			return;
+
+		$count = array();
+			
+		foreach($answers as $answer)
+		{
+			$values = $answer->value;
+		
+			// include 0 value, first checkbox
+			if(strlen($values)==1 AND is_numeric($values))
+				$values = array($values);
+			elseif(strlen($values)==0)
+				$values = "";
+			else
+				$values = explode(",", $values);
+			
+			foreach($values as $value => $idx)
+			{
+				$count[$idx] += 1;
+			}
+		}
+		return $count;	
+	}
+	
+	function writeScript()
+	{
+		$script = $this->optionDataView->writeScript();
+		$script .= $this->textDataView->writeScript();
+		return $script;
+	}
+	
+	
+	function buildOptionDataView()
+	{		
+		$dataView = new GroupedDataListView($this->optionAnswers, "OptionDataList");
+		$dataView->column("Option", "{option}")
+			 ->column("Count", "{count}");	
+		$dataView->groupBy($this->questions, getGroupTitle);
+		$dataView->mode = 'accordion';
+		$dataView->emptyMessage = "There are no aggregated data results.";
+		$dataView->excelFile = "option_surveyData.xls";
+		$this->optionDataView = $dataView;
+	}
+	
+	function buildTextDataView()
+	{		
+		$dataView = new GroupedDataListView($this->textAnswers, "AnswerTextList");
+		$dataView->column("Answer Text", "{value}");
+		$dataView->groupBy($this->questions, "{sort_order}. {question}");
+		$dataView->mode = 'accordion';
+		$dataView->emptyMessage = "There are no text results.";
+		$dataView->excelFile = "text_surveyData.xls";
+		
+		$this->textDataView = $dataView;
+	}
+	
+	function drawView()
+	{
+		$recipientCount = count($this->obj->Responses());
+		$rText= ($recipientCount) ? $recipientCount: "0";
+		$countText = ($this->responseCount) ? $this->responseCount : "0"; 
+		echo "<h3>Aggregated Survey Answers based on $countText out of $rText Respondents</h3>\n";
+		$this->optionDataView->drawView();
+		echo "<h4>Free Text Responses</h4>";
+		$this->textDataView->drawView();
+	}
+}
+
+function getGroupTitle($question)
+{
+	$qs = $question->Questionnaire();
+	$questionTypes = QuestionType::getQuestionTypeList();
+	return  "{$question->sort_order}. {$question->question} " . $questionTypes[$question->question_type] . " Question";
+}
+
+/*
+ * Dummy dataitem class to enable use of dataview on
+ * option results
+ */
+class OptionAnswer extends DataItem
+{
+	var $fields = array(
+					"question_id"		=>	Number,
+					"option_number"		=>	Number, // position in list
+					"option"			=>	String,
+					"count"				=>	Number
+		);
+	
+	function OptionAnswer($question_id, $option_number, $option, $count)
+	{
+		$this->table = "option_answer";
+		$this->primary_key = "question_id";
+		$this->question_id = $question_id;
+		$this->option_number = $option_number;
+		$this->option = $option;
+		$this->count = $count;
+	}
+}

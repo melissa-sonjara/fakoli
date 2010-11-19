@@ -65,17 +65,37 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 	{		 
 		$options = array();
 		
+		$folders = $this->getFilesInPath($options, $home, $dir, $prefix);
+		if(count($folders) > 0)
+		{
+			foreach($folders as $folder)
+			{
+				trace("calling getFilesInPath for folder $folder", 3);
+				$this->getFilesInPath($options, $home, $folder, $prefix);
+			}
+		}
+	    return $options;
+	    
+	}
+	
+	function getFilesInPath(&$options, $home, $dir, $prefix)
+	{
 		$path = $home . DIRECTORY_SEPARATOR . $dir;
 		
 		trace("Reading $path", 3);
 		
-		if (!file_exists($path)) return $options;
+		if (!file_exists($path)) 
+		{
+			return $options;
+		}
 		
 		$handle = opendir($path);
+		$folders = array();
+ 
 		while(false !== ($file = readdir($handle))) 
     	{
     		trace($file, 4);
-    		
+      		
     		if ($file != "." && 
     			$file != ".." && 
     			$file != ".svn" && 
@@ -83,11 +103,12 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
     		{
     			$f = "$path/$file";
 				$l = "$dir/$file";
+				trace("f is $f and l is $l", 3);
 				
-    			if (is_dir($f))
+    			if (is_dir($f) AND $file != "include")
     			{
-    				array_push($folders, $l);	
-    			}
+     				array_push($folders, $l);
+   				}
 				else if (preg_match('/.inc$/i', $file)) 
 				{
 					if ($prefix)
@@ -101,11 +122,8 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 				}
     		}        	
     	}
-
-	    closedir($handle);
-		
-	    return $options;
-	    
+    	closedir($handle);
+    	return $folders;
 	}
 }
 ?>

@@ -31,11 +31,8 @@
 
 *****************************************************************/
 
-require_once  "../../../include/config.inc";
-require_once  $config['homedir']."/include/permissions.inc";
-require_once  $config['homedir']."/datamodel/context_help.inc";
-require_once  $config['homedir']."/framework/auto_form.inc";
-require_once  $config['homedir']."/framework/tree.inc";
+Fakoli::using("context_help");
+Fakoli::usingFeature("auto_form", "tree");
 
 
 $title = "Context-Sensitive Help";

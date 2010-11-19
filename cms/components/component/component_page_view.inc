@@ -64,7 +64,9 @@ class ComponentPageView
 		global $site;
 		
 		$page = $this->page; // Pass through to code include
-		$site = Site::getSite(); // Pass through to code include
+		$site = $page->Site();
+		if(!$site)
+			$site = Site::getSite(); // Pass through to code include
 		
 		$template = $this->page->getTemplate();
 		

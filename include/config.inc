@@ -5,8 +5,8 @@
 $config = array(
 
 	"sitename"		=> "Sonjara CMS Website",
-	"homedir"		=> "C:/code/cms.sonjara.com",
-	"uploadbase"	=> "C:/uploads/cms.sonjara.com",
+	"homedir"		=> "C:/code/cms",
+	"uploadbase"	=> "C:/uploads/cms",
 	"uploaddir" 	=> "documents", 			/* Directory for uploads */
 	"tmp"			=> "/tmp",					/* Scratch Directory */
 	"email_from" 	=> "andy@sonjara.com", 		/* From address for generated emails */
@@ -19,7 +19,7 @@ $config = array(
     "trace_level"	=> 3,						/* Debugging trace level (0-5) */
 	"trace_detail"	=>	TraceDetailHigh,		/* Detail level for trace output */
 
-	"admin_templates_dir"	=>	"C:/code/cms.sonjara.com/cms/admin/templates",
+	"admin_templates_dir"	=>	"C:/code/cms/cms/admin/templates",
 
 	// Application specific settings
 	"latest_addition_count"	=>	3,
