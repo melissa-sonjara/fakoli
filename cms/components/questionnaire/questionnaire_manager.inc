@@ -37,6 +37,17 @@ class QuestionnaireManager
 		return "question_form";
 	}
 	
+	function getQuestionKey()
+	{
+		return "question_id";
+	}
+	
+	function getAnswerKey()
+	{
+		return "answer_id";
+	}
+	
+	
 	function isEditable()
 	{
 		return $this->item->isEditable();

@@ -26,6 +26,11 @@ class SurveyManager
 		return "survey_question_id";
 	}
 	
+	function getAnswerKey()
+	{
+		return "survey_answer_id";
+	}
+	
 	function getQuestions()
 	{
 		$questions = $this->item->Questions();

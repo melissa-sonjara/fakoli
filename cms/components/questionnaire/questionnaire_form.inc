@@ -246,6 +246,7 @@ class QuestionnaireForm
 		$answers = $this->getIndexedAnswers();
 		$pk = $this->mgr->item->getPrimaryKey();
 		$qPk = $this->mgr->getQuestionKey();
+		$aPk = $this->mgr->getAnswerKey();
 		
 		foreach($_POST as $name => $value)
 		{	
@@ -277,7 +278,7 @@ class QuestionnaireForm
 				}
 				else
 				{
-					$answer = new $answerClass($answer->answer_id);
+					$answer = new $answerClass($answer->$aPk);
 					$answer->filter = new InclusionFilter("value");
 					$answer->value = $valueAnswer;
 					$answer->save();
