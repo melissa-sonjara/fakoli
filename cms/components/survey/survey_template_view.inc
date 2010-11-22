@@ -99,7 +99,7 @@ class SurveyQuestionSelectForm
 	var $tree;
 	var $item;
 	var $buttons = array();
-	var $noneText = "No questions have been added.";
+	var $noneText = "There are no questions.";
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $buttonCSS = "";				///< CSS Class to use for buttons
 	var $componentPath ="/fakoli";
@@ -177,6 +177,8 @@ class SurveyQuestionSelectForm
 <form method="POST" action="" id="survey_question_select_form">
 <?php
 
+		if(count($this->tree->children) == 0)
+			echo $this->noneText;
 		$this->tree->writeHTML();
 		
 		
