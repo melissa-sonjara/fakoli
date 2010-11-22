@@ -61,7 +61,10 @@ class CalendarManifest
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" => array(CalendarManager, displayCalendar),
-					 "EnumerateItems"	 => array(CalendarManager, enumerateItems));
+					 "EnumerateItems"	 => array(CalendarManager, enumerateItems),
+					 "EnumerateDataItemClasses" => array(CalendarManager, enumerateDataItemClasses)		
+		
+		);
 	}
 }
 

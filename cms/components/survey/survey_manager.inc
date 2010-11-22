@@ -87,6 +87,18 @@ class SurveyManager
 	{
 		return $this->item->Answers();
 	}
+	
+	static function enumerateDataItemClasses(&$classes)
+	{
+		array_push($classes, "SurveyAnswer");
+		array_push($classes, "SurveyMessage");
+		array_push($classes, "SurveyQuestion");
+		array_push($classes, "SurveyResponse");
+		array_push($classes, "Survey");
+		
+		return $classes;
+	}		
+	
 }
 
 

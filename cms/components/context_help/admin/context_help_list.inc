@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-/**************************************************************
+/*
  * 
  * Title:  context_help_list.php
  * 
@@ -76,7 +76,7 @@
  * 
  * date: 5/09
  * 
- ****************************************************************/
+ */
 
 Fakoli::using("context_help");
 Fakoli::usingFeature("auto_form", "tree");
@@ -85,12 +85,17 @@ $title = "Context-Sensitive Help";
 
 $menu_item = "Context Help";
 	
-$includeFiles = array();	
-$classes = getClassesFromDataModel($includeFiles);
+//$includeFiles = array();
+$classes = array();
+//$classes = getClassesFromDataModel($includeFiles);
+$classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
+
+/*
 foreach($includeFiles as $include)
 {
 	require_once $include;
 }
+*/
 
 $sort = checkNumeric($_GET["sort"]);
 if(!$sort)
@@ -183,7 +188,7 @@ function buildClassHelpTree($classes)
 			foreach($classItems as $item)
 			{			
 				$fieldNode = new TreeNode("field_{$item->field}", $item->field, null, false, "bare_node_closed", 
-					"bare_node_open", "context_help_form.php?help_key=$item->help_key&field=$item->field&class=$item->class_name&prettyClassName=$class->pretty_class_name");
+					"bare_node_open", "/admin/context_help_form/?help_id=$item->help_id&field=$item->field&class=$item->class_name&prettyClassName=$class->pretty_class_name");
 				$fieldNode->leafStyle = $item->help_key ? "checked_node_leaf" : "unchecked_node_leaf";
 				$classNode->add($fieldNode);
 				

@@ -136,7 +136,7 @@ if(count($subpages) > 0)
 ?>
 </table>
 <!--  </div> -->
-<input type="submit" name="update_order" class="button" value="Update Order"/><nobr>&nbsp;&nbsp;
+<input type="submit" name="update_order" class="button" value="Update Order"/>
 <? 
 	} 
 ?>

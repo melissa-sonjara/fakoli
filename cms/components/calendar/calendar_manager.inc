@@ -71,6 +71,15 @@ class CalendarManager
 		$items["Calendars"] = $calendars;
 		return $items;
 	}
+	
+	static function enumerateDataItemClasses(&$classes)
+	{
+		array_push($classes, "Calendar");
+		array_push($classes, "Event");
+		
+		return $classes;
+	}
+	
 }
 
 ?>

@@ -114,12 +114,12 @@ class ForumTopicView
 			 	}
 				
 			 	$controls = array();
-				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data"))
+				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data,moderator"))
 				{
 					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&message_id={$message->message_id}\">Edit</a>";
 				}
 			
-				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data"))
+				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data,moderator"))
 				{
 					$controls[] = "<a href=\"/action/forum/message_delete?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
 				}		
