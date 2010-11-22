@@ -71,24 +71,6 @@ function surveyDataTabs($key = "")
 	return $tabBar;
 }
 
-function responseTabs($key = "", $token = "")
-{
-	$tabs = getResponseTabs();
-	$qs = ($key) ? "survey_id=$key&token=$token" : "";
-	$tabBar = new TabBar("tabs", $tabs, $qs);
-
-	return $tabBar;
-}
-
-function getResponseTabs()
-{
-		$tabs = array(	"Survey Form"		=>	"survey_response_form",
-					 	"Preview &amp; Submit"	=>	"survey_response_preview"
-					);
-	return $tabs;
-}
-
-
 function getProgramList()
 {
 	global $user;

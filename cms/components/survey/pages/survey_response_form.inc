@@ -66,9 +66,6 @@ if(!$survey->isOpen() OR !$response->isEditable())
 	
 $form = new QuestionnaireForm(new SurveyResponseManager($response));
 $form->onSaveComplete = saveResponse;
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
-
-$tabs = responseTabs($survey_id, $token);
 
 if ($method == "POST")
 {
@@ -81,15 +78,12 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
-$tabs->writeHTML();
-?>
-<div id="tab_border">
-<?
+
 echo "<h3>". $survey->title . "</h3>\n";
 echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
 $form->drawForm();
 ?>
-<br></div><?
+<br><?
 
 function saveResponse($obj)
 {

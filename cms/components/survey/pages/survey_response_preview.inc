@@ -73,8 +73,6 @@ $form->submitLabel = "Submit";
 $form->button("Revise Survey", "/survey_response_form?survey_id=$survey_id&token=$token");
 $form->onSaveComplete = updateStatus;
 
-$tabs = responseTabs($survey_id, $token);
-
 if ($method == "POST")
 {
 	if($validate->Validate())
@@ -86,19 +84,12 @@ if ($method == "POST")
 	}
 }
 
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
-
 $script .= $form->writeScript();
-$tabs->writeHTML();
 ?>
-<div id="tab_border">
 <p>A preview of your responses is shown below. To submit your survey, scroll to the bottom of the page and click the "Submit" button.</p>
 <?
 $view->drawView();
 $form->drawForm();
-?>
-</div><?
-
 
 function updateStatus($obj)
 {
