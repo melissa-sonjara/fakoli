@@ -142,7 +142,7 @@ function surveyIntroductionPopup(id, source)
 	}
 
 	surveyIntroductionPopupDialog.targetID = id;
-	surveyIntroductionPopupDialog.top = source.getCoordinates().top - 200;
+	surveyIntroductionPopupDialog.top = source.getCoordinates().top;
 	surveyIntroductionPopupDialog.left = source.getCoordinates().left;
 	surveyIntroductionPopupDialog.show();
 	
