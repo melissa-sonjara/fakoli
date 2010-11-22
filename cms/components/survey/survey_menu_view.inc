@@ -88,6 +88,7 @@ class SurveyMenuView
 				"survey_manage"		=>	"survey_dashboard",
 				"survey_preview"	=>	"survey_template_select",
 				"survey_question_form"	=>	"survey_template_select",
+				"survey_question_select"	=>	"survey_template_select",
 				"survey_questions"	=>	"survey_template_select",
 				"survey_results"	=>	"survey_template_select",
 				"survey_template_form"	=>	"survey_templates",
@@ -95,7 +96,7 @@ class SurveyMenuView
 				"survey_template_question_form"	=>	"survey_templates",
 				"survey_template_question_select"	=>	"survey_templates",
 				"survey_template_questions"	=>		"survey_templates",
-				"survey_template_select"	=>"survey_templates",
+				"survey_template_select"	=>"survey_template_select",
 				"survey_templates"		=>	"survey_templates"
 		);
 		
