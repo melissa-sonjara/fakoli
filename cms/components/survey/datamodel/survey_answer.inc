@@ -45,7 +45,7 @@ class SurveyAnswer extends DataItem
 
 	function Question()
 	{
-		return querySingle(SurveyQuestion, "WHERE survey_question_id = {$this->survey_question_id}");
+		return $this->getRelated(SurveyQuestion, "survey_question_id");
 	}
 	
 	function SurveyAnswer()
