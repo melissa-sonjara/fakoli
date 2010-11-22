@@ -415,7 +415,8 @@ class SurveyQuestionForm
 		$form->annotate("char_limit", "<span class='annotate'>For freetext questions only</span>");
 		$form->annotate("num_rows", "<span class='annotate'>For freetext questions only</span>");
 		$form->hide("locked");
-		$form->onSaveComplete = saveSurveyQuestionXref;
+		if(!$question->survey_question_id)
+			$form->onSaveComplete = saveSurveyQuestionXref;
 
 		$form->allowDelete = false;
 	
