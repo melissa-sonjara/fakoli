@@ -431,6 +431,16 @@ CREATE TABLE  `merge_code` (
   PRIMARY KEY  USING BTREE (`merge_code_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
 
+-- codes for survey feature
+INSERT INTO `merge_code` (`name`,`description`,`function`,`map`,`class_name`) VALUES
+
+ ('survey_link','Inserts a link to the survey',1,'getEditUrl','SurveyResponse'),
+ ('survey_intro_link','Inserts a link to the survey, starting on its landing page.',1,'getIntroUrl','SurveyResponse'),
+ ('token','The key that enables a specific user to access the survey. This is generated randomly by the system when you send out the survey emails.',0,'SurveyResponse.token','SurveyResponse'),
+ ('survey_title','The title of the survey.',0,'Survey.title','SurveyResponse'),
+ ('survey_end_date','The last day that the survey will accept responses. Use only if you have specified a survey end date.',0,'Survey.end_date','SurveyResponse');
+
+
 DROP TABLE IF EXISTS `module`;
 CREATE TABLE  `module` (
   `module_id` int(10) unsigned NOT NULL AUTO_INCREMENT,

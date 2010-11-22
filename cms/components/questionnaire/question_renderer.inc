@@ -268,7 +268,7 @@ class RatingView extends QuestionField
 		
 		echo "$from&nbsp;";
 		
-		$readonly = $this->parent->readonly ? " DISABLED" : "";
+		$readonly = $this->parent->readonly ? " disabled='disabled'" : "";
 		$valueAnswer = $this->parent->getAnswer($this->question);
 		$qPk = $this->question->getPrimaryKey();
 		

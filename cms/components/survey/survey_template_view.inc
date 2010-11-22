@@ -79,7 +79,7 @@ class SurveyTemplatePreview
 	function SurveyTemplatePreview($surveyTemplate)
 	{
 		$mgr = new SurveyTemplateManager($surveyTemplate);
-		$this->qForm = new QuestionnaireForm($mgr);
+		$this->qForm = new QuestionnaireForm($mgr, true);
 	}
 	
 	function writeScript()
