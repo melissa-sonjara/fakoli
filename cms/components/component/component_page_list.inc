@@ -193,7 +193,7 @@ function rolePopup(roles, id, source)
 	
 	if (!rolePopupDialog)
 	{
-		rolePopupDialog = new FloatingDialog('rolePopup', {'closeLink': $('closeRolePopup'), 'position': 'absolute'});
+		rolePopupDialog = new FloatingDialog('rolePopup', {'closeLink': $('closeRolePopup'), 'position': 'absolute', 'width': 200});
 	}
 
 	popup.getElements("input[type='checkbox']").each(function(e) { e.checked = false; });
