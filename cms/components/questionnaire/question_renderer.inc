@@ -270,19 +270,19 @@ class RatingView extends QuestionField
 		
 		$readonly = $this->parent->readonly ? " DISABLED" : "";
 		$valueAnswer = $this->parent->getAnswer($this->question);
-			
+		$qPk = $this->question->getPrimaryKey();
+		
 		for($i = 1; $i <= $steps; ++$i)
 		{
 			$selected = ($valueAnswer == $i) ? " checked" : "";
 
-			$pk = $this->question->getPrimaryKey();
-			echo "<input type='radio' style='border: none' name='question_{$this->question->$pk}' 
-			id='question_{$this->question->$pk}_$i' 
+			echo "<input type='radio' style='border: none' name='question_{$this->question->$qPk}' 
+			id='question_{$this->question->$qPk}_$i' 
 			value='$i'$selected $readonly />&nbsp;";
 		}
 		
 		// Save this count to loop through checkboxes on required validation
-		echo "<input type=\"hidden\" name=\"count_question_{$this->question->$pk}\" value=\"$steps\">";		
+		echo "<input type=\"hidden\" name=\"count_question_{$this->question->$qPk}\" value=\"$steps\">";		
 		
 		echo $to;
 	}
