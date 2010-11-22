@@ -45,6 +45,8 @@ Fakoli::using("survey", "questionnaire");
 Fakoli::usingFeature("auto_form");
 
 global $survey_template_id;
+global $xref;
+
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
@@ -62,7 +64,6 @@ else
 	$question->locked = true;
 	$question->num_rows = 3; // default
 	$question->required = 0; // default
-	global $xref;
 	$xref = new SurveyQuestionXref();
 	$xref->survey_template_id = $survey_template_id;
 	$xref->sort_order = SurveyQuestionXref::getDefaultSortOrder("survey_template_id", $survey_template_id); 
