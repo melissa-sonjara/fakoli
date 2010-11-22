@@ -54,7 +54,8 @@ $surveyTemplate->filter = new ExclusionFilter("status");
 $form = new AutoForm($surveyTemplate);
 $form->required("name", "message");
 $form->annotate("message", "Create a boilerplate message for the email survey requests.
-<button onclick=\"mergeCodePopup({$page->component_page_id}, this); return false\">Advanced Features</button>");
+<button onclick=\"javascript:modalPopup('Advanced Message Features', '/advanced_message_features_popup?class_name=SurveyResponse', '500px', 'auto'); return false\">Advanced Features</button>"
+);
 
 $tabs = surveyTemplateTabs($survey_template_id, false);
 $styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
