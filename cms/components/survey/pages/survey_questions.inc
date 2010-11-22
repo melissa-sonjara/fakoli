@@ -43,63 +43,104 @@
  * date: 6/23/10
  */
 
-
-Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("auto_form");
+Fakoli::using("survey");
+Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
-$error = checkNumeric($_GET["error"]);
 
 if(!$survey_id)
-	redirect("/survey_list");
+	redirect("/survey_dashboard");
 
-$survey = new Survey($survey_id);
-$mgr = new SurveyManager($survey);
-$listView = new QuestionSet($mgr);
-$listView->button("Select from Existing Questions", "/survey_question_select?survey_id=$survey_id");
+$survey = new survey($survey_id);
 
+$xrefs = $survey->SurveyQuestionXrefs();
 
-if ($method == "POST")
-{
-	if ($_POST["done"])
-	{
-		$tabs->next();
-	}
-	else
-	{
-		$mgr->reorderQuestions();
-		// refresh
-		redirect("/survey_questions?survey_id=$survey_id");
-	}
-}
+$table = new DataListView($xrefs, "SurveyQuestions");
+$table->column("Question", "<a href=\"/survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}\">{Question.question}</a>")
+		->column("Sort Order", formatSortOrderInputField, false, "width: 10%")
+		->column("Options", formatOptions)
+		->column("Remove", formatRemoveButton)
+		;
+	  	
+$table->emptyMessage = "There are no questions defined.";
+$table->sortable = false;
+$table->cssStyle = "width: 80%";
 
-if($error)
-	$form->msg = $survey->getRequiredText($error, true);
-
-$tabs = surveyTabs($survey_id);
-
+$tabs = surveyTabs($survey_id, false);
 $styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
 
-$script .= $listView->writeScript();
-
 if ($method == "POST")
 {
-	if ($form->save())
-	{
-		$tabs->next();
-	}
+	reOrderQuestions($xrefs, $survey_id);
+	// refresh
+	redirect("/survey_questions?survey_id=$survey_id");
 }
 
-$menuView = new SurveyMenuView('survey_form');
-$survey_top_nav = $menuView->getView();
+$script .= $table->writeScript();
 
 $tabs->writeHTML();
+
+
 ?>
 <div id="tab_border">
-<button id="next_page_button" class="button" onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
-<h3>Survey Questions</h3>
-<div id="inner_border">
+<h3><?php echo $survey->title ?></h3>
+<p>Select the questions for this survey. You can select from a list of existing questions or create new ones. Removing a question from this survey does not delete the question from the database unless the question is not linked to any other template or survey.</p>
+<form style='display: inline' name="question_order_form" method="POST" action="">
 <?php
-$listView->drawList();
+$table->drawView();
 ?>
-</div></div>
+<br><br><input class='button' type="submit" name="reorder" value="&nbsp;Save Order&nbsp;"/>&nbsp;&nbsp;
+<a class='button' href='/survey_question_form?survey_id=<?php echo $survey_id ?>'>Create a New Question</a>&nbsp;&nbsp;
+<a class='button' href="/survey_question_select?survey_id=<?php echo $survey_id ?>">Select from Existing Questions</a>
+</div></form>
+<?php 
+
+function formatSortOrderInputField($xref)
+{
+	return "<input type='text' name='xref_{$xref->survey_question_xref_id}' 
+		value='{$xref->sort_order}' size='4'/>"; 
+}
+
+function formatOptions($xref)
+{
+	return preg_replace("/\r\n/", "<br>", $xref->Question()->options);
+	
+}
+
+function formatRemoveButton($xref)
+{
+	$confirm = "Are you sure you want to remove this question?";	
+	$url = "/action/survey/question_remove?survey_id={$xref->survey_id}&survey_question_id={$xref->survey_question_id}";
+	
+	$link = "if (confirm('".jsSafe($confirm)."')) go('{$url}'); return false;";
+	
+	return "<input type='button' class='button' onclick=\"$link\" value=\"Remove\"/>";
+}
+
+function reOrderQuestions($xrefs, $survey_id)
+{
+	global $_POST;
+	// reorder
+	foreach($_POST as $name => $value)
+	{
+		if (!strncmp($name, "xref_", 5))
+		{
+			$id = substr($name, 5);
+			$xref = new SurveyQuestionXref($id);
+	 		$xref->filter = new InclusionFilter("sort_order");
+			$xref->sort_order = $value;
+			$xref->save();
+		}
+	}
+	// renumber
+	$value = 1;
+	$xrefs = query(SurveyQuestionXref, "WHERE survey_id = {$survey_id} ORDER BY sort_order");
+	foreach($xrefs as $xref)
+	{
+		$xref->filter = new InclusionFilter("sort_order");
+		$xref->sort_order = $value;
+		$xref->save();
+		$value++;
+	}
+}
+?>

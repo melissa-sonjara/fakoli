@@ -45,8 +45,6 @@
 Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-
 $title = "My Surveys";
 
 $constraint = "WHERE deleted=0 ";
@@ -63,6 +61,7 @@ $menuView = new SurveyMenuView('survey_list');
 $survey_top_nav = $menuView->getView();
 $styles .= "<link href=\"/templates/css/survey.css\" rel=\"stylesheet\"/>";
 $styles .= "<link href=\"/templates/css/tree.css\" rel=\"stylesheet\"/>";
+$styles .= "<link href='templates/css/survey.css' rel='stylesheet'/>\n";
 
 ?>
 <div id="survey_tree">

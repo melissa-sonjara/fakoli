@@ -1,4 +1,36 @@
 <?php
+/**************************************************************
+
+ Copyright (c) 2007,2008 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
 /*
  * survey_email.inc
  * 
@@ -36,7 +68,7 @@ $form->submitLabel = "Save";
 $form->regexp("sender_email", "\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", "Please supply a valid email address containing a domain name.");
 $form->annotate("message", "Select from a set of boilerplate messages which you can then customize for this survey. 
 <button onclick=\"surveyMessagePopup({$page->component_page_id}, this); return false\">Select a Message</button>&nbsp&nbsp;
-<button onclick=\"javascript:modalPopup('Advanced Message Features', '/advanced_message_features_popup?class_name=SurveyResponse', '400px', 'auto'); return false\">Advanced Features</button>
+<button onclick=\"javascript:modalPopup('Advanced Message Features', '/advanced_message_features_popup?class_name=SurveyResponse', '500px', 'auto'); return false\">Advanced Features</button>
 ");
 
 if($error)
@@ -45,7 +77,6 @@ if($error)
 $tabs = surveyTabs($survey_id);
 
 $script .= $form->writeScript();
-$script .= SurveyMergeCodeDialog::writeScript();
 $script .= writeScript();
 
 if ($method == "POST")

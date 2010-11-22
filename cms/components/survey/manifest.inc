@@ -41,7 +41,7 @@ class SurveyManifest
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
 		$component->priority = 0;
-		$component->enabled = false;
+		$component->enabled = true;
 		
 		return $component;
 	}

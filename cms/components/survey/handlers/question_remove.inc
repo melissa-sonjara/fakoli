@@ -49,7 +49,8 @@ $survey_id = checkNumeric($_GET["survey_id"]);
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 
-$redirect = ($survey_template_id) ? "/survey_template_questions?survey_template_id=$survey_template_id" : "/survey_questions?survey_id=$survey_id";
+$redirect = ($survey_template_id) ? "/survey_template_questions?survey_template_id=$survey_template_id" : 
+	"/survey_questions?survey_id=$survey_id";
  
 if ($survey_question_id AND $survey_id)
 {
@@ -66,6 +67,32 @@ if(count($xrefs) > 0)
 	foreach($xrefs as $xref)
 		$xref->delete();
 }
+
+/*
+ * If the question is not linked to any survey template or
+ * survey, then delete.
+ */
+
+$surveyQuestion = new SurveyQuestion($survey_question_id);
+if($surveyQuestion->allowDelete())
+	$surveyQuestion->delete();
+
+	
+
+// renumber question set
+$idx = 1;
+$field = ($survey_id) ? "survey_id" : "survey_template_id";
+$value = ($survey_id) ? $survey_id : $survey_template_id;
+
+$xrefs = query(SurveyQuestionXref, "WHERE {$field} = {$value} ORDER BY sort_order");
+foreach($xrefs as $xref)
+{
+	$xref->filter = new InclusionFilter("sort_order");
+	$xref->sort_order = $idx;
+	$xref->save();
+	$idx++;
+}
+	
 redirect($redirect);
 
 ?>

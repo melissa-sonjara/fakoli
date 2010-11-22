@@ -45,8 +45,6 @@
 Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-
 if(!$user)
 	redirect("/login");
 
@@ -73,21 +71,28 @@ function getStartDate($survey)
 	return $date;
 }
 
+function getAuthor($survey)
+{
+	return $survey->User()->getFullName();
+}
+
 $styles .= "<link href=\"/templates/css/survey.css\" rel=\"stylesheet\"/>";
 
 $table = new DataListView($surveys, "surveys");
-$table->column("Survey Title", getSurveyLink, true, "width: 25%")
-		->column("Status", getStatus, true, "width: 10%")
+$table->column("Survey Title", getSurveyLink, true, "width: 15%")
+		->column("Author", getAuthor, true, "width: 10%")
+ 		->column("Status", getStatus, true, "width: 10%")
     	->column("Date Sent", getStartDate, true, "width: 12%")
-		->column("Percentage of Surveys Received", getSurveyProgressBar, true);
+		->column("Percentage of Surveys Received", getSurveyProgressBar, true, "width: 20%");
    
 $table->emptyMessage = "There are no surveys.";
 $table->sortable = true;
 $table->pageSize = 10;
 $table->filter = true;
-$table->cssStyle = "width: 90%";
+$table->cssStyle = "width: 98%";
 $table->cssClass = "survey";
 $script .= $table->writeScript();
 
 $table->drawView();
 ?>
+<br><a class="button" href="/survey_template_select">Create a Survey</a>

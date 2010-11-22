@@ -54,11 +54,11 @@ $form->annotate("message_footer", "the text to be included below the main
 message in all surveys, providing users with a link to response. 
 The text within brackets represent codes that will be filled in with data 
 from the survey record when the survey is sent. 
-<button onclick=\"mergeCodePopup({$page->admin_page_id}, this); return false\">View Merge Codes</button>");
+<button onclick=\"javascript:modalPopup('Advanced Message Features', '/advanced_message_features_popup?class_name=SurveyResponse', '500px', 'auto'); return false\">Advanced Features</button>"
+);
 $form->getRenderer("message_footer")->rows = 10;
 
 $script .= $form->writeScript();
-$script .= SurveyMergeCodeDialog::writeScript();
 
 if ($method == "POST")
 {

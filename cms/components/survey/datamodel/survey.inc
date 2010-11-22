@@ -63,7 +63,7 @@ class Survey extends DataItem
 	var $fields = array(
 				"survey_id"					=>	Number,
 				"title"						=>	String,
-				"introduction"				=>	HTML,
+				"introduction"				=>	Text,
 				"start_date"				=>	Date,
 				"end_date"					=>	Date,
 				"user_id"					=>	Number,
@@ -77,8 +77,8 @@ class Survey extends DataItem
 	var $relations = array(
 				"Responses"				=>	SurveyResponse,
 				"Questions"				=>	SurveyQuestion,
-				"SurveyQuestionXrefs"	=>	SurveyQuestionXref
-	
+				"SurveyQuestionXrefs"	=>	SurveyQuestionXref,
+				"User"					=>	""
 	);
 	
 	
@@ -101,6 +101,17 @@ class Survey extends DataItem
 				: "<p><b>$text[$index]</b></p>";
 				
 		return $html;
+	}
+	
+	function User()
+	{
+		$mgr = new UserManager();
+		return $this->getRelated($mgr->getUserClass());
+	}
+	
+	function SurveyQuestionXrefs($constraint = "ORDER BY sort_order")
+	{
+		return $this->getRelatedList(SurveyQuestionXref, "survey_id", $constraint);
 	}
 	
 	function Questions($constraint = "")
@@ -127,6 +138,24 @@ class Survey extends DataItem
 		}
 
 		return $text;
+	}
+	
+	function getInfoMessageText($index = 0)
+	{
+		if($index == 2) $error = true;
+			
+		static $text = array (
+				1	=>  "Reminder emails have been sent.",
+				2	=>	"Reminder emails could not be sent."
+				);
+	
+		$msg = $text[$index];
+		if($msg)
+		{
+			$html = ($error) ? "<p><warning>{$msg}</warning></p>"
+				: "<p><b>$msg</b></p>";
+		}		
+		return $html;
 	}
 	
 	function SurveyQuestionXref($constraint = "")
@@ -248,6 +277,13 @@ class Survey extends DataItem
 	{
 		$count = queryValue(SurveyResponse, "COUNT(1)", "WHERE status = " . response_submitted . " AND survey_id = {$this->survey_id}");
 		return $count;
+	}
+	
+	function getRecipientCount()
+	{
+		$count = queryValue(SurveyResponse, "COUNT(1)", "WHERE survey_id = {$this->survey_id}");
+		return $count;
+		
 	}
 	
 	function Survey()

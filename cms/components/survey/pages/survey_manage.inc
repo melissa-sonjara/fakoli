@@ -64,6 +64,7 @@ $tabs = surveyTabs($survey_id, false);
 $menuView = new SurveyMenuView('survey_form');
 $survey_top_nav = $menuView->getView();
 
+$page->page_title = "Manage Survey";
 $styles .= "<link href='templates/css/tabs.css' rel='stylesheet'/>\n";
 $styles .= "<link href='templates/css/survey.css' rel='stylesheet'/>\n";
 
@@ -86,7 +87,9 @@ $tabs->writeHTML();
 }
 $view->drawManageLinks();
 $view->drawView();
-?></div><?
+?>
+</div></div>
+<?
 
 
 function sendEmails($obj)

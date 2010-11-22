@@ -47,8 +47,8 @@ class SurveyResponse extends DataItem
 				"Questions"				=>	Questions,
 				"Answers"				=>	SurveyAnswer,
 				"SurveyEmailTemplate"	=>	SurveyEmailTemplate,
-				"Questionnaire"			=>	Questionnaire,
 				"Survey"				=>	Survey,
+				"MergeCodes"		=>	MergeCode,
 				"Program"				=>	Program
 	);
 
@@ -72,31 +72,26 @@ class SurveyResponse extends DataItem
 	
 	function Questions()
 	{
-		return $this->crossReference(Question, SurveyQuestionXref, "ORDER BY sort_order");
+		$survey = $this->Survey();
+		
+		if($survey)
+			$questions = $survey->Questions();
+			
+		return $questions;
 	}
 
 	function Survey()
 	{
 		return $this->getRelated(Survey);
 	}
-	
-	/* for email template code merge */
-	function Program()
-	{
-		// Don't use cross reference b/c need Survey to handle case where
-		// no program_id
-		$program = $this->Survey()->Program();
-			
-		return $program;
-	}
-	
+
 	function Answers($constraint = "")
 	{
 		$answers = array();
 		$questions = $this->Questions();
 		foreach($questions as $question)
 		{
-			$answer = querySingle(SurveyAnswer, "WHERE response_id = {$this->response_id} AND question_id = $question->question_id");
+			$answer = querySingle(SurveyAnswer, "WHERE response_id = {$this->response_id} AND survey_question_id = $question->survey_question_id");
 			if($answer)
 				array_push($answers, $answer);
 		}
@@ -114,10 +109,6 @@ class SurveyResponse extends DataItem
 		return $this->Survey()->Questionnaire();
 	}
 	
-	function getQuestionnaireId()
-	{
-		return $this->Questionnaire()->questionnaire_id;
-	}
 	
 	function isSubmitted()
 	{
@@ -185,6 +176,12 @@ class SurveyResponse extends DataItem
 			
 		return $link;
 	}
+
+	function MergeCodes()
+	{
+		return query(MergeCode, "WHERE class_name = 'SurveyResponse'");
+	}
+
 	
 	/* merge code */
 	function getIntroUrl()

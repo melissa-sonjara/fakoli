@@ -48,14 +48,14 @@ class SurveyQuestionXref extends DataItem
 	);
 	
 	var $relations = array(
-				"Questions"			=>	SurveyQuestion,
 				"Survey"			=>	Survey,
-				"SurveyTemplate"	=>	SurveyTemplate
+				"SurveyTemplate"	=>	SurveyTemplate,
+				"Question"			=>	SurveyQuestion
 	);
 	
-	function Questions()
+	function Question()
 	{
-		return $this->crossReference(SurveyQuestion, SurveyQuestionXref);
+		return querySingle(SurveyQuestion, "WHERE survey_question_id = {$this->survey_question_id}");
 	}
 	
 	function Survey()

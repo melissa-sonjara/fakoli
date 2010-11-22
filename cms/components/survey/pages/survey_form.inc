@@ -46,8 +46,6 @@
 Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("auto_form");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-
 $survey_id = checkNumeric($_GET["survey_id"]);
 $error = checkNumeric($_GET["error"]);
 
@@ -74,8 +72,10 @@ $form->required("title");
 $form->hide("user_id");
 $form->submitLabel = "Save";
 $form->annotate("end_date", "date on which survey closes to respondents");
-$form->annotate("introduction", "instructions for respondents");
-
+$form->annotate("introduction", "Instructions for respondents. You can write your own introductory message or choose from templated introductions.
+<button onclick=\"surveyIntroductionPopup({$page->component_page_id}, this); return false\">Select an Introduction</button>&nbsp&nbsp;
+");
+$form->getRenderer("introduction")->rows = 8; 
 $dateRenderer = $form->getRenderer("end_date");
 $dateRenderer->required = false;
 
@@ -84,6 +84,7 @@ $tabs = surveyTabs($survey_id);
 $styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
 
 $script .= $form->writeScript();
+$script .= writeScript();
 
 if ($method == "POST")
 {
@@ -105,4 +106,74 @@ else
 	$form->drawReadOnly();
 ?>
 </div><?
+
+
+function writeScript()
+{
+	$surveyTemplates = query(SurveyTemplate, "WHERE introduction != ''");
+
+	ob_start();
+?>
+<div class="dialog" id="surveyIntroductionPopup" style="width: 500px">
+ <div class="dialog_header" id="surveyIntroductionPopupHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeSurveyIntroductionPopup'">Close &times;</a></div>
+   <span style="font-weight: bold">Survey Introductions</span>
+  </div>	
+ </div>
+ <div class="dialog_body">
+<?
+$table = SurveyIntroductionView::getView($surveyTemplates);
+?>
+  </div>
+</div>
+
+<script type='text/javascript'>
+
+var surveyIntroductionPopupDialog;
+
+function surveyIntroductionPopup(id, source)
+{
+	var popup = $('surveyIntroductionPopup');
+	
+	if (!surveyIntroductionPopupDialog)
+	{
+		surveyIntroductionPopupDialog = new FloatingDialog('surveyIntroductionPopup', {'closeLink': $('closeSurveyIntroductionPopup'), 'position': 'absolute'});
+	}
+
+	surveyIntroductionPopupDialog.targetID = id;
+	surveyIntroductionPopupDialog.top = source.getCoordinates().top - 200;
+	surveyIntroductionPopupDialog.left = source.getCoordinates().left;
+	surveyIntroductionPopupDialog.show();
+	
+}
+
+
+function updateSurveyIntroduction()
+{
+	var id = surveyIntroductionPopupDialog.targetID;
+	var popup = $('surveyIntroductionPopup');
+
+	var introText;
+	popup.getElements("input[type='radio']").each(function(e) 
+			{ if (e.checked) 
+				introText = e.value;
+			}
+		);
+
+	var introduction = $('Survey_form').introduction;
+	introduction.innerHTML = introText;
+	surveyIntroductionPopupDialog.introduction = Class.Empty;
+	surveyIntroductionPopupDialog.targetID = 0;
+	surveyIntroductionPopupDialog.hide();
+}
+
+</script>
+<?
+		$script = ob_get_contents();
+		ob_end_clean();
+		$script .= $table->writeScript();
+		return $script;
+}
+
 ?>

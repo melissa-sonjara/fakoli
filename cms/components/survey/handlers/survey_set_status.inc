@@ -9,7 +9,7 @@
  * date: 5/18/10
  */
 
-require_once  $config['homedir']."/cms/datamodel/survey.inc";
+Fakoli::using("survey");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 $status = checkNumeric($_GET["status"]);

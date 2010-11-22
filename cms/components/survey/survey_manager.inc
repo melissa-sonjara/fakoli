@@ -62,17 +62,14 @@ class SurveyManager
 		return $this->item->getPrimaryKey();
 	}
 	
-	function getNotEditableHTML()
+	/*
+	 * Answers to a specific question
+	 */
+	function getAnswersOneQuestion($question_id)
 	{
-		return "";	
+		return query(SurveyAnswer, "WHERE response_id IN (SELECT response_id FROM survey_response WHERE survey_id = {$this->item->survey_id}) AND survey_question_id={$survey_question_id}");
 	}
-
-	function drawQuestionDeleteButton($pk)
-	{
-		$confirm = "Are you sure you want to remove this question?";	
-		$url = "/action/survey/question_unlink?survey_id={$this->item->survey_id}&survey_question_id=$pk";
-		QuestionSet::drawOneButton($url, "Remove", $confirm);
-	}
+	
 	
 	// The class that stores the answers
 	function getAnswerClass()
@@ -80,46 +77,6 @@ class SurveyManager
 		return "SurveyAnswer";
 	}
 	
-	function getOrderField()
-	{
-		return "sort_order";
-	}
-	
-	function reOrderQuestions()
-	{
-		global $_POST;
-
-		$xrefs = $this->item->SurveyQuestionXref("ORDER BY sort_order");
-		if(count($xrefs) > 0)
-			$indexedXrefs = reindexList($xrefs, "survey_question_id");
-		else
-			$indexedXrefs = array();
-			
-		// reorder
-		foreach($_POST as $name => $value)
-		{
-			if (!strncmp($name, "question_", 9))
-			{
-				$id = substr($name, 9);
-				$xref = $indexedXrefs[$id];
-				if($xref)
-				{
-					$xref->sort_order = $value;
-					$xref->save();
-				}
-			}
-		}
-		// renumber
-		$value = 1;
-	
-		foreach($xrefs as $xref)
-		{
-			$xref->filter = new InclusionFilter("sort_order");
-			$xref->sort_order = $value;
-			$xref->save();
-			$value++;
-		}
-	}
 	
 	function getAnswers()
 	{
@@ -145,7 +102,7 @@ class SurveyTemplateManager extends SurveyManager
 	{
 		return "survey_template_question_form?survey_template_id={$this->item->survey_template_id}&survey_question_id=";
 	}
-	
+		
 	function isEditable()
 	{
 		return true;
@@ -165,6 +122,11 @@ class SurveyResponseManager extends SurveyManager
 	function SurveyResponseManager($response)
 	{
 		$this->item = $response;	
+	}
+	
+	function getQuestions()
+	{
+		return $this->item->Questions();
 	}
 	
 	function getAnswers()

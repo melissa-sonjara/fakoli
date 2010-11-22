@@ -45,9 +45,8 @@
 Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-
 $survey_id = checkNumeric($_GET["survey_id"]);
+$msg_id = checkNumeric($_GET["msg_id"]);
 
 if(!$survey_id)
 	redirect("index");
@@ -55,6 +54,8 @@ if(!$survey_id)
 $survey = new Survey($survey_id);
 
 $responses = $survey->Responses("ORDER BY last_modified DESC");
+$recipientCount = $survey->getRecipientCount();
+$responseCount = $survey->getResponseCount();
 
 function getStatus($response)
 {
@@ -84,12 +85,25 @@ $table->cssStyle = "width: 100%";
 $table->excelFile = "surveyResults.xls";
 
 $tabs = surveyTabs($survey_id);
-$menuView = new SurveyMenuView('survey_form');
-$survey_top_nav = $menuView->getView();
+$msgText = $survey->getInfoMessageText($msg_id);
 
 $styles .= "<link href='templates/css/tabs.css' rel='stylesheet'/>\n";
 
 $script .= $table->writeScript();
+if($msg_id)
+{
+	$script .= writeScript($survey->getInfoMessageText($msg_id));
+
+$script .= <<<ENDSCRIPT
+<script type='text/javascript'>
+
+window.addEvent('load', function()
+{
+	confirmationPopup();
+});
+</script>
+ENDSCRIPT;
+}
 
 $tabs->writeHTML();
 ?>
@@ -101,6 +115,51 @@ if($survey->program_id)
 	echo "<h4>".$survey->Program()->name . "</h4>\n";
 
 $table->drawView();
+if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCount)
+	echo "<p><a class=\"button\" href=\"/survey_reminder_form?survey_id=$survey_id\">Send Survey Reminders</a></p>\n";
 ?>
 </div><?
+
+function writeScript($msgText)
+	{
+		ob_start();
+
+?>
+<div class="dialog" id="confirmationPopup" style="width: 300px; height: 100px; margin-top: -100px; margin-left: -150px;">
+ <div class="dialog_header" id="confirmationPopupHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeConfirmationPopup'">Close &times;</a></div>
+   <span style="font-weight: bold">Reminder Email Confirmation</span>
+  </div>	
+ </div>
+ <div class="dialog_body">
+<?
+echo $msgText;
+?>
+  </div>
+</div>
+<?		
+		$script .= ob_get_contents();
+		ob_end_clean();
+		
+		ob_start();
+?>
+<script type='text/javascript'>
+
+var confirmationPopupDialog;
+
+function confirmationPopup(source)
+{
+	var confirmationPopupDialog = new FloatingDialog('confirmationPopup', {'closeLink': $('closeConfirmationPopup'), 'position': 'absolute'});	
+	confirmationPopupDialog.show();
+}
+
+
+</script>
+<?
+		$script .= ob_get_contents();
+		ob_end_clean();
+		return $script;
+		
+	} // end writeScript
 ?>

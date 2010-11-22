@@ -44,9 +44,6 @@
 
 Fakoli::using("questionnaire", "survey", "email");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-require_once realpath(dirname(__FILE__)."/../../questionnaire/questionnaire_form.inc");
-
 $response_id = checkNumeric($_GET["response_id"]);
 
 if(!$response_id)
@@ -54,7 +51,7 @@ if(!$response_id)
 	
 $response = new SurveyResponse($response_id);
 
-$view = new QuestionnaireForm($response, true);
+$view = new QuestionnaireForm(new SurveyResponseForm($response), true);
 
 $script .= $view->writeScript();
 

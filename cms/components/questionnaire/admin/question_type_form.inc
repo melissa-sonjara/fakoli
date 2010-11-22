@@ -14,8 +14,6 @@
 Fakoli::using("questionnaire");
 Fakoli::usingFeature("auto_form");
 
-require_once realpath(dirname(__FILE__)."/../question_type_set.inc");
-
 $question_type_id = checkNumeric($_GET["question_type_id"]);
 
 $questionType = new QuestionType();

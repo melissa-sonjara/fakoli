@@ -31,7 +31,8 @@
 
 *****************************************************************/
 
-
+define("survey_question_answered", 1);
+define("survey_question_template", 2);
 
 class SurveyQuestion extends DataItem
 {
@@ -79,16 +80,48 @@ class SurveyQuestion extends DataItem
 		return ($count > 0) ? false : true;
 	}
 	
-	// If the question is editable and is linked only to this survey or 
-	// survey template, then allow delete.
+	/*
+	 * If the question is in one or more survey templates,
+	 * then the form is drawn read only.
+	 */
+	function isTemplateQuestion()
+	{
+		if(!$this->survey_question_id)
+			return false;
+			
+		$count = queryValue(SurveyQuestionXref, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id} AND survey_template_id is not null");
+
+		return ($count > 0) ? true : false;
+			
+	}
+	
+	/*
+	 * If the question is editable and is linked only to this survey or
+	 * survey template, then allow delete. This function is called
+	 * from survey_question_form to determine if a user can delete his/her
+	 * own question. 
+	 */
+	// 
+	// 
 	function allowDelete()
 	{
+		if(!$this->survey_question_id)
+			return true;
+			
 		if(!$this->isEditable()) 
 			return false;
 			
 		$count = queryValue(SurveyQuestionXref, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
 		
 		return ($count > 1) ? false : true;
+	}
+	
+	/*
+	 * Called from CMS?
+	 */
+	function allowLogicalDelete()
+	{
+		
 	}
 	
 	/* get the list of values the user checked in a checkbox */
@@ -122,10 +155,17 @@ class SurveyQuestion extends DataItem
 		return $list;
 	}
 	
-	function getNotEditableHTML()
+	
+	function getInfoText($index)
 	{
-		$text = "<p><i>Note:&nbsp;</i>This question has been answered. You may edit the question but be careful not to change its meaning.</p>";
-		return $text;	
+		static $text = array(
+				1	=>	"<i>Note:&nbsp;</i>This question has been answered. You may edit the question but be careful not to change its meaning.",
+				2	=>	"This question belongs to a survey template and cannot be edited."
+		);
+		
+		$html = "<p>$text[$index]</p>\n";
+		
+		return $html;
 	}
 	
 	

@@ -1,5 +1,4 @@
 <?php
-
 /**************************************************************
 
  Copyright (c) 2007,2008 Sonjara, Inc
@@ -32,46 +31,70 @@
 
 *****************************************************************/
 
- /* survey_data.inc
+/*
+ * survey_response.inc
  * 
- * Description: Displays aggregate results of a survey.
+ * Description: Displays a survey questionnaire for a user with token 
+ * access to answer.
  *  
  * author: Janice Gallant for Sonjara, Inc.
  * 
  * date: 5/13/10
  */
 
-
-Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("data_view");
+Fakoli::using("survey", "email");
+Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
+$token = $_GET["token"];
 
 if(!$survey_id)
-	redirect("index");
+	redirect("/index");
+
+if(!$token)
+	redirect("/survey_intro?survey_id={$survey_id}");
+
+$response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
+
+if(!$response)
+	redirect("/survey_intro?survey_id={$survey_id}");
 	
-$survey = new Survey($survey_id);
-$view = new SurveyReport(new SurveyManager($survey));
+$survey = $response->Survey();
 
-$tabs = surveyTabs($survey_id);
-$menuView = new SurveyMenuView('survey_form');
-$dataTabs = surveyDataTabs($survey_id);
+if(!$survey->isOpen() OR !$response->isEditable())
+	redirect("/survey_intro?survey_id=$survey_id&msg=1");
+	
+$form = new QuestionnaireForm(new SurveyResponseManager($response));
+$form->onSaveComplete = saveResponse;
+$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
 
-$script .= $view->writeScript();
-$styles .= "<link href='templates/css/tabs.css' rel='stylesheet'/>\n";
-$styles .= "<link href='templates/css/survey.css' rel='stylesheet'/>\n";
+$tabs = responseTabs($survey_id, $token);
 
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		redirect("/survey_response_preview?survey_id={$survey_id}&token=$token");		
+	}
+	else // refresh
+		redirect("/survey_response_form?survey_id={$survey_id}&token=$token");
+}
+
+$script .= $form->writeScript();
 $tabs->writeHTML();
 ?>
 <div id="tab_border">
-<h3>Aggregated Survey Results for <?echo $survey->title?></h3>
-<div id="inner_border" style="padding: 0;">
 <?
-$dataTabs->writeHTML();
+echo "<h3>". $survey->title . "</h3>\n";
+echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
+$form->drawForm();
 ?>
-<div style="padding: 4px;">
-<?
-$view->drawView();
-?>
-</div></div></div><?
+<br></div><?
+
+function saveResponse($obj)
+{
+	$response = $obj->mgr->item;	
+	$response->setStatus(response_in_progress);
+}
+
 ?>

@@ -49,10 +49,6 @@
 Fakoli::using("questionnaire", "survey", "email");
 Fakoli::usingFeature("data_view", "auto_form");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-require_once realpath(dirname(__FILE__)."/../../questionnaire/questionnaire_form.inc");
-require_once realpath(dirname(__FILE__)."/../../email/email_manager.inc");
-
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if (!$survey_id) 

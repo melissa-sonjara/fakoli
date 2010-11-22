@@ -43,26 +43,21 @@
 Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-require_once realpath(dirname(__FILE__)."/../results_view.inc");
-require_once realpath(dirname(__FILE__)."/../results_report.inc");
-
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
 	redirect("index");
 	
 $survey = new Survey($survey_id);
-$view = new SurveyResultsView($survey);
+$view = new SurveyResultsView(new SurveyManager($survey));
 
 $tabs = surveyTabs($survey_id);
-$menuView = new SurveyMenuView('survey_form');
-$survey_top_nav = $menuView->getView();
 $dataTabs = surveyDataTabs($survey_id);
 
 $tabs->page = "survey_data";
 
 $styles .= "<link href='templates/css/tabs.css' rel='stylesheet'/>\n";
+$styles .= "<link href='templates/css/survey.css' rel='stylesheet'/>\n";
 
 $script .= $view->writeScript();
 $tabs->writeHTML();

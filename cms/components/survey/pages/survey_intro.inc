@@ -32,27 +32,62 @@
 *****************************************************************/
 
 /*
- * Description: Nondisplay script to delete a question from a 
- * questionnaire question set.
+ * survey_intro.inc
  * 
+ * Description: Landing page for public survey access. Displays a link
+ * to the Survey Response Form that pops up a token input validation
+ * form before redirecting to the survey response form.
+ *  
  * author: Janice Gallant for Sonjara, Inc.
  * 
- * date: 1/04/10
- * 
+ * date: 5/18/10
  */
 
-Fakoli::using("questionnaire");
+Fakoli::using("survey");
 
-$question_id = checkNumeric($_GET["question_id"]);
-$questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+$survey_id = checkNumeric($_GET["survey_id"]);
+$msg = checkNumeric($_GET["msg"]);
 
-if (!$question_id) 
-	redirect("/questionnaire_list");
+if(!$survey_id)
+	redirect("index");
 
-$question = new Question($question_id);
+$script .= getScript();	
 
-$question->delete();
+$survey = new Survey($survey_id);
+if($survey->isClosed())
+	echo "<p>{$survey->title} closed on ". formatDate($survey->end_date) . "</p>\n";
+elseif($msg == 1)
+	echo "<p>You have already submitted your survey.</p>\n";
+else
+{
+	echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
+	echo "<p><a href=\"#\" onclick=\"editSurvey($survey_id);\">{$survey->title}</a></p>\n";
+}
+function getScript()
+{
+	ob_start();
+	?>
+	<script type="text/javascript">
+	function editSurvey(id)
+	{
+		var valid = false;
+		
+		while(!valid)
+		{
+			var token = prompt("Enter your survey access token");
+			if (token == null) return;
+			
+			valid = token.match(/^\w{5}$/);
+		}
 
-redirect("/question_list?questionnaire_id=$questionnaire_id");
+		go('survey_response_form?survey_id=' + id + '&token=' + token);
+	}		
 
+	</script>
+	<?
+	$script .= ob_get_contents();
+	ob_end_clean();
+	
+	return $script;			
+}
 ?>

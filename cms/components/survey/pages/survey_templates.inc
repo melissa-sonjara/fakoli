@@ -43,9 +43,11 @@ require_once realpath(dirname(__FILE__)."/../survey_template_view.inc");
 $surveyTemplates = query(SurveyTemplate, "ORDER BY title");
 
 $table = new DataListView($surveyTemplates, "surveyTemplates");
-$table->column("Title", "<a href=\"/survey_template_form?survey_template_id={survey_template_id}\">{title}</a>", true, "width: 25%")
-		->column("Introduction", "{introduction}", false, "width: 10%")
-		->column("View", getTemplateView, false, "width: 10%");
+$table->column("Title", "<a href=\"/survey_template_form?survey_template_id={survey_template_id}\">{title}", true, "width: 25%")
+		->column("Introduction", formatIntroduction, false, "width: 20%")
+		->column("Message", formatMessage, false, "width: 20%")
+		->column("Status", getSurveyTemplateStatus, false, "width: 10%")
+		->column("View", getTemplateView, false, "width: 5%");
 	
 $table->emptyMessage = "There are no survey templates defined.";
 $table->sortable = false;
@@ -53,16 +55,35 @@ $table->pageSize = 10;
 $table->filter = false;
 $table->cssStyle = "width: 90%";
 $script .= $table->writeScript();
-$script .= SurveyTemplateViewDialog::writeScript();
+$styles .= "<link href=\"/templates/css/table.css\" rel=\"stylesheet\"/>";
+$styles .= "<link href=\"/templates/css/survey.css\" rel=\"stylesheet\"/>";
 
+?>
+<div id='survey_table'><br><br>
+<?php
 $table->drawView();
 ?>
 <br/><a class="button" href="/survey_template_form">Create a Survey Template</a>
-
+</div>
 <?php 
+
+function formatIntroduction($surveyTemplate)
+{
+	return ellipsis($surveyTemplate->introduction, 80, true);	
+}
+
+function formatMessage($surveyTemplate)
+{
+	return ellipsis($surveyTemplate->message, 80, true);	
+}
 
 function getTemplateView($surveyTemplate)
 {
-	return "<button onclick=\"surveyTemplatePopup({$surveyTemplate->survey_template_id}, this); return false\">View Template</button>";	
+	return "<a class=\"button\" href=\"javascript:modalPopup('Survey Template', '/survey_template_preview_popup?survey_template_id={$surveyTemplate->survey_template_id}', '700px', 'auto');\">View</a>\n";
+}
+
+function getSurveyTemplateStatus($surveyTemplate)
+{
+	return $surveyTemplate->statusTypes[$surveyTemplate->status];
 }
 ?>

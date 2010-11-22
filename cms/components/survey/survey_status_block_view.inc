@@ -9,13 +9,13 @@ class SurveyStatusBlockView extends StatusBlockView
 	var $reviewUrl;
 	var $publicUrl;
 	var $statusUrl;
-	var $iconView = "/templates/images/icon_view.gif";
-	var $iconPublic = "/templates/images/icon_view_public.gif";
-	var $iconEdit = "/templates/images/icon_edit.gif";
-	var $iconOpen = "/templates/images/icon_reopen.gif";
-	var $iconClose = "/templates/images/icon_close.gif";
-	var $iconDelete = "/templates/images/icon_delete.gif";
-	var $iconResults = "/templates/images/icon_survey_results.gif";
+	var $iconView = "/fakoli/images/icon_view.gif";
+	var $iconPublic = "/fakoli/images/icon_view_public.gif";
+	var $iconEdit = "/fakoli/images/icon_edit.gif";
+	var $iconOpen = "/fakoli/images/icon_reopen.gif";
+	var $iconClose = "/fakoli/images/icon_close.gif";
+	var $iconDelete = "/fakoli/images/icon_delete.gif";
+	var $iconResults = "/fakoli/images/icon_survey_results.gif";
 	
 	function SurveyStatusBlockView($item)
 	{

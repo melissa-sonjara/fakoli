@@ -16,7 +16,7 @@
 
 
 Fakoli::using("email");
-Fakoli::usingFeature("tab_bar", "data_view", "status_tree");
+Fakoli::usingFeature("tab_bar", "data_view", "status_tree", "auto_form");
 
 function surveyTabs($key = "")
 {
@@ -271,11 +271,13 @@ function sendSurveyEmails($survey)
 		foreach($recipients as $recipient)
 		{
 			$response = query(SurveyResponse, "WHERE email='$recipient' AND survey_id={$survey->survey_id}");
-			if(!$response)
+			if(count($response) == 0)
 			{
 				$response = SurveyResponse::generateToken($survey->survey_id, $recipient);
 				$response->save();
 			}
+			else
+				$response = $response[0];
 			// Store info in email template data structure but
 			// don't save it.
 			$emailTemplate = new EmailTemplate();
@@ -353,7 +355,8 @@ class SurveyMessageView
 	
 		$table->emptyMessage = "There are no survey messages defined.";
 		$table->sortable = false;
-		$table->pageSize = 10;
+		$table->pageSize = 0;
+		$table->paginate = false;
 		$table->filter = false;
 		$table->cssStyle = "width: 90%";
 
@@ -365,4 +368,61 @@ class SurveyMessageView
 	}
 }
 
+
+
+class SurveyIntroductionView
+{
+	function SurveyIntroductionView()
+	{
+		
+	}
+	
+	static function getView($surveyTemplates)
+	{
+
+		$table = new DataListView($surveyTemplates, "surveyTemplates");
+		$table->column("Title", "<input style='border: none' type='radio' name='message' value='{message}'>{title}</input>", false, "width: 25%")
+			->column("Introduction", "{introduction}", false, "width: 50%");
+	
+		$table->emptyMessage = "There are no survey introductions defined.";
+		$table->sortable = false;
+		$table->pageSize = 0;
+		$table->paginate = false;
+		$table->filter = false;
+		$table->cssStyle = "width: 90%";
+
+		$table->drawView();
+?>
+  		<button class='button' style='float: left; margin-bottom: 5px; margin-top: 5px' onclick='updateSurveyIntroduction()'>Select Introduction</button>
+<?php		
+		return $table;
+	}
+}
+
+class SurveyQuestionForm
+{
+	function SurveyQuestionForm()
+	{
+		
+	}
+	
+	static function settings($question)
+	{
+		$form = new AutoForm($question);
+		$form->required("question");
+		$form->annotate("options", "<br><span class='annotate'>For Multiple-Choice or CheckList questions, list each option on a separate line.<br/>For Rating questions, list the text for lowest rating, text for highest rating and number of steps on separate lines.</span>");
+		$form->annotate("required", "<span class='annotate'>enter 0 if not required, 1 if required, and for checklist, enter the count of required checkboxes</span>");
+		$form->annotate("char_limit", "<span class='annotate'>For freetext questions only</span>");
+		$form->annotate("num_rows", "<span class='annotate'>For freetext questions only</span>");
+		$form->hide("locked");
+		$form->onSaveComplete = saveSurveyQuestionXref;
+
+		$form->allowDelete = false;
+	
+		$form->alias("char_limit", "Character Limit for Answer Field", 
+			"num_rows", "Number of Rows to Display for Answer");
+	
+		return $form;
+	}
+}
 ?>

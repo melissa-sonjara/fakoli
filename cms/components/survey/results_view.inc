@@ -59,10 +59,12 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 Fakoli::using("survey", "questionnaire");
+Fakoli::usingFeature("grouped_data_view");
 
 class SurveyResultsView
 {
 	var $obj;
+	var $survey;
 	var $questions;
 	var $answers;
 	var $emptyMessage = "There are no results.";
@@ -72,67 +74,68 @@ class SurveyResultsView
 	var $textAnswers;
 	var $responseCount;
 	
-	function SurveyResultsView($obj)
+	function SurveyResultsView($mgr)
 	{
-		$this->obj = $obj;
-		$questionnaire = $obj->Questionnaire();
-		if($questionnaire)
-		{
-			$this->questionTypes = QuestionType::getQuestionTypeList();
+		$this->mgr = $mgr;
+		$this->survey = $this->mgr->item;
+		$qPk = $this->mgr->getQuestionKey();
+
+		$this->questionTypes = QuestionType::getQuestionTypeList();
 		
-			$this->questions = $this->obj->Questions("ORDER BY sort_order");
+		$this->questions = $this->mgr->getQuestions();
 		
-			if(count($this->questions) > 0)			
-				$answers = $obj->Answers();
+		if(count($this->questions) > 0)			
+			$answers = $this->survey->Answers();
 		
-			if(count($answers) > 0)
-			{					
-				$this->responseCount = $obj->getResponseCount();
-				$this->answers = regroupList($answers, "question_id");
+		if(count($answers) > 0)
+		{					
+			$this->responseCount = $this->survey->getResponseCount();
+			$this->answers = regroupList($answers, $qPk);
 		
-				foreach($this->questions as $question)
-				{
-					$answers = $this->answers[$question->question_id];
-					$this->getAggregateData($question, $answers);	
-				}
+			foreach($this->questions as $question)
+			{
+				$answers = $this->answers[$question->$qPk];
+				$this->getAggregateData($question, $answers);	
 			}
 		}
+	
 		$this->buildOptionDataView();
 		$this->buildTextDataView();
 	}
-	
+
 	function getAggregateData($question, $answers)
 	{
+		$qPk = $this->mgr->getQuestionKey();
 		switch($question->question_type_id)
 		{
 		case QuestionMultipleChoice:
 			
-			$this->optionAnswers[$question->question_id] = $this->getSingleSelectQuestionResultData($question, $answers);
+			$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 			break;	
 			
 		case QuestionRating:
 
-			$this->optionAnswers[$question->question_id] = $this->getRatingsQuestionResultData($question, $answers);
+			$this->optionAnswers[$question->$qPk] = $this->getRatingsQuestionResultData($question, $answers);
 			break;	
 			
 		case QuestionShortText:
 
-			$this->textAnswers[$question->question_id] = $answers; 		
+			$this->textAnswers[$question->$qPk] = $answers; 		
 			break;	
 			
 		case QuestionFreeText:
 
-			$this->textAnswers[$question->question_id] = $answers; 		
+			$this->textAnswers[$question->$qPk] = $answers; 		
 			break;	
 			
 		case QuestionCheckList:
 		
-			$this->optionAnswers[$question->question_id] = $this->getCheckListQuestionResultData($question, $answers);
+			$this->optionAnswers[$question->$qPk] = $this->getCheckListQuestionResultData($question, $answers);
 			break;	
 			
 		case QuestionDropDownList:
 
-			$this->optionAnswers[$question->question_id] = $this->getSingleSelectQuestionResultData($question, $answers);
+			$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 			break;	
 			
 		default:
@@ -149,6 +152,7 @@ class SurveyResultsView
 	 */ 
 	function getSingleSelectQuestionResultData($question, $answers)
 	{
+		$qPk = $this->mgr->getQuestionKey();
 		$options = explode("\n", $question->options);
 		$idx = 1;
 		
@@ -160,7 +164,7 @@ class SurveyResultsView
 			foreach($options as $option)
 			{
 				$count = count($answerValues[$idx]);
-				$optionAnswer = new OptionAnswer($question->question_id, $idx, $option, $count);
+				$optionAnswer = new OptionAnswer($question->$qPk, $idx, $option, $count);
 				array_push($optionAnswers, $optionAnswer);
 				$idx++;
 			
@@ -176,6 +180,7 @@ class SurveyResultsView
 	 */
 	function getRatingsQuestionResultData($question, $answers)
 	{
+		$qPk = $this->mgr->getQuestionKey();
 		$answerValues = regroupList($answers, "value");
 		$optionAnswers = array();
 		$count = array();
@@ -187,12 +192,12 @@ class SurveyResultsView
 			//echo "idx is $idx<br/>";
 			// store for calculating mean and median
 			$counts[$idx] = count($answerValues[$idx]);
-			$optionAnswer = new OptionAnswer($question->question_id, $idx, $optionText[$idx], $counts[$idx]);
+			$optionAnswer = new OptionAnswer($question->$qPk, $idx, $optionText[$idx], $counts[$idx]);
 			array_push($optionAnswers, $optionAnswer);
 		}
 
-		$mean = new OptionAnswer($question->question_id, ++$idx, "Mean", $this->getMean($counts));
-		//$median = new OptionAnswer($question->question_id, ++$idx, "Median", $this->getMedian($optionAnswers));
+		$mean = new OptionAnswer($question->$qPk, ++$idx, "Mean", $this->getMean($counts));
+		//$median = new OptionAnswer($question->$qPk, ++$idx, "Median", $this->getMedian($optionAnswers));
 		array_push($optionAnswers, $mean);
 		//array_push($optionAnswers, $median);
 		
@@ -280,6 +285,7 @@ class SurveyResultsView
 	 */
 	function getCheckListQuestionResultData($question, $answers)
 	{
+		$qPk = $this->mgr->getQuestionKey();
 		$options = explode("\n", $question->options);
 		$idx = 1;
 		
@@ -292,7 +298,7 @@ class SurveyResultsView
 			foreach($options as $option)
 			{
 				$count = $answerValues[$idx];
-				$optionAnswer = new OptionAnswer($question->question_id, $idx, $option, $answerCounts[$idx]);
+				$optionAnswer = new OptionAnswer($question->$qPk, $idx, $option, $answerCounts[$idx]);
 				array_push($optionAnswers, $optionAnswer);
 				$idx++;
 			}
@@ -351,7 +357,7 @@ class SurveyResultsView
 	{		
 		$dataView = new GroupedDataListView($this->textAnswers, "AnswerTextList");
 		$dataView->column("Answer Text", "{value}");
-		$dataView->groupBy($this->questions, "{sort_order}. {question}");
+		$dataView->groupBy($this->questions, "{question_number}. {question}");
 		$dataView->mode = 'accordion';
 		$dataView->emptyMessage = "There are no text results.";
 		$dataView->excelFile = "text_surveyData.xls";
@@ -361,7 +367,7 @@ class SurveyResultsView
 	
 	function drawView()
 	{
-		$recipientCount = count($this->obj->Responses());
+		$recipientCount = count($this->survey->Responses());
 		$rText= ($recipientCount) ? $recipientCount: "0";
 		$countText = ($this->responseCount) ? $this->responseCount : "0"; 
 		echo "<h3>Aggregated Survey Answers based on $countText out of $rText Respondents</h3>\n";
@@ -373,9 +379,8 @@ class SurveyResultsView
 
 function getGroupTitle($question)
 {
-	$qs = $question->Questionnaire();
 	$questionTypes = QuestionType::getQuestionTypeList();
-	return  "{$question->sort_order}. {$question->question} " . $questionTypes[$question->question_type] . " Question";
+	return  "{$question->question_number}. {$question->question} " . $questionTypes[$question->question_type] . " Question";
 }
 
 /*

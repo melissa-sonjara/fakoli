@@ -45,9 +45,6 @@
 Fakoli::using("survey", "questionnaire");
 Fakoli::usingFeature("auto_form");
 
-require_once realpath(dirname(__FILE__)."/../../questionnaire/question_set.inc");
-require_once realpath(dirname(__FILE__)."/../survey_view.inc");
-
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
@@ -68,39 +65,40 @@ else
 	global $xref;
 	$xref = new SurveyQuestionXref();
 	$xref->survey_id = $survey_id;
-	$xref->survey_template_id = $survey_template_id;
-	$field = ($survey_id) ? "survey_id" : "survey_template_id";
-	$value = ($survey_id) ? $survey_id : $survey_template_id;
-	$xref->sort_order = SurveyQuestionXref::getDefaultSortOrder($field, $value); 
+	$xref->sort_order = SurveyQuestionXref::getDefaultSortOrder("survey_id", $survey_id); 
 }
 
 // check if question has been answered
 $editable = $question->isEditable();
-if(!$editable)
+$isTemplateQuestion = $question->isTemplateQuestion();
+
+if(!$editable OR $isTemplateQuestion)
 	$question->filter = new ExclusionFilter("question_type_id", "options");
 
 $redirect = "/survey_questions?survey_id=$survey_id";
-$form = new AutoForm($question);
-$form->required("question");
-$form->annotate("options", "<span style='font-weight: normal;font-size: 8pt'><br/>For Multiple-Choice or CheckList questions, list each option on a separate line.<br/>For Rating questions, list the text for lowest rating, text for highest rating and number of steps on separate lines</span>");
-$form->annotate("required", "<span style='font-weight: normal;font-size: 8pt'>enter 0 if not required, 1 if required, and for checklist, enter the count of required checkboxes</span>");
-$form->annotate("char_limit", "<span style='font-weight: normal;font-size: 8pt'>For freetext questions only</span>");
-$form->annotate("num_rows", "<span style='font-weight: normal;font-size: 8pt'>For freetext questions only</span>");
-$form->button("Cancel", $redirect);
-$form->hide("locked");
-$form->onSaveComplete = saveSurveyQuestionXref;
 
-$form->allowDelete = $question->allowDelete();
-	
-$form->alias("char_limit", "Character Limit for Answer Field", 
-			"num_rows", "Number of Rows to Display for Answer");
+$form = SurveyQuestionForm::settings($question);
 
-if($editable)
+if($editable AND !$isTemplateQuestion)
 	$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
+	
+if($isTemplateQuestion)
+	$form->readOnlyForm = true;
+
+if($survey_question_id)
+	$form->button("Remove", "/action/survey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
+$form->button("Cancel", $redirect);
+
+
+if(!$editable)
+	$infoText = $question->getInfoText(survey_question_answered);
+elseif($isTemplateQuestion)
+	$infoText = $question->getInfoText(survey_question_template);
 
 
 $tabs = surveyTabs($survey_id);
 $styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
+$styles .= "<link href=\"/templates/css/survey.css\" rel=\"stylesheet\"/>";
 $tabs->page = "survey_questions";
 $tabs->active = "Questions";
 
@@ -124,10 +122,8 @@ if($survey_id)
 <?
 }
 
-if(!$editable)
-{
-	echo "<h5>{$question->getNotEditableHTML()}</h5>";
-}
+echo "<b>{$infoText}</b>";
+
 $form->drawForm();
 
 function saveSurveyQuestionXref($obj)

@@ -1,5 +1,4 @@
 <?php
-
 /**************************************************************
 
  Copyright (c) 2007,2008 Sonjara, Inc
@@ -32,46 +31,13 @@
 
 *****************************************************************/
 
- /* survey_data.inc
- * 
- * Description: Displays aggregate results of a survey.
- *  
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 5/13/10
- */
+Fakoli::using("survey");
 
-
-Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("data_view");
-
-$survey_id = checkNumeric($_GET["survey_id"]);
-
-if(!$survey_id)
-	redirect("index");
-	
-$survey = new Survey($survey_id);
-$view = new SurveyReport(new SurveyManager($survey));
-
-$tabs = surveyTabs($survey_id);
-$menuView = new SurveyMenuView('survey_form');
-$dataTabs = surveyDataTabs($survey_id);
-
-$script .= $view->writeScript();
-$styles .= "<link href='templates/css/tabs.css' rel='stylesheet'/>\n";
-$styles .= "<link href='templates/css/survey.css' rel='stylesheet'/>\n";
-
-$tabs->writeHTML();
 ?>
-<div id="tab_border">
-<h3>Aggregated Survey Results for <?echo $survey->title?></h3>
-<div id="inner_border" style="padding: 0;">
-<?
-$dataTabs->writeHTML();
-?>
-<div style="padding: 4px;">
-<?
-$view->drawView();
-?>
-</div></div></div><?
-?>
+<p>Thank you for submitting your survey.</p>
+
+<p>Continue to the <a href="/index"><?php echo $config["sitename"]?> home page.</a></p>
+
+
+
+ 

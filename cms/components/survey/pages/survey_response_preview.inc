@@ -31,40 +31,78 @@
 
 *****************************************************************/
 
+/*
+ * survey_response_preview.inc
+ * 
+ * Description: Displays a preview of survey response to the person
+ * completing the survey. Validates that all required fields are complete 
+ * and lets the user submit.
+ *  
+ * author: Janice Gallant for Sonjara, Inc.
+ * 
+ * date: 5/19/10
+ */
 
 Fakoli::using("survey");
-Fakoli::usingFeature("tree");
+Fakoli::usingFeature("auto_form");
+
 
 $survey_id = checkNumeric($_GET["survey_id"]);
+$token = $_GET["token"];
 
 if(!$survey_id)
-	redirect("/survey_dashboard");
+	redirect("/index");
+if(!$token)
+	redirect("/survey_intro?survey_id={$survey_id}");
 
-$redirect = "/survey_questions?survey_id=$survey_id";
-$survey = new Survey($survey_id);
-$form = new SurveyQuestionSelectForm($survey);
-$form->button("Cancel", $redirect);
+$response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
 
-$tabs = surveyTabs($survey_id);
-$tabs->page = "survey_questions";
-$tabs->active = "Questions";
+if(!$response)
+	redirect("/survey_intro?survey_id={$survey_id}");
 
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
-$styles .= "<link href=\"/templates/css/tree.css\" rel=\"stylesheet\"/>";
+$survey = $response->Survey();
+if(!$survey->isOpen() OR !$response->isEditable())
+	redirect("/survey_intro?survey_id=$survey_id");
+
+$validate = new ValidateSurveyResponse($response);
+$view = new SurveyResponseView($response);
+$response->filter = new ExclusionFilter("last_modified");
+$form = new AutoForm($response);
+$form->hide("survey_id", "token", "email", "last_modified", "status");
+$form->submitLabel = "Submit";
+$form->button("Revise Survey", "/survey_response_form?survey_id=$survey_id&token=$token");
+$form->onSaveComplete = updateStatus;
+
+$tabs = responseTabs($survey_id, $token);
 
 if ($method == "POST")
 {
-	if ($form->save())
+	if($validate->Validate())
 	{
-		redirect($redirect);
+		if ($form->save())
+		{
+			redirect("/survey_response_confirmation?response_id={$response->response_id}");
+		}
 	}
 }
+
+$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
 
 $script .= $form->writeScript();
 $tabs->writeHTML();
 ?>
 <div id="tab_border">
-<h3>Select Survey Questions</h3>
+<p>A preview of your responses is shown below. To submit your survey, scroll to the bottom of the page and click the "Submit" button.</p>
 <?
+$view->drawView();
 $form->drawForm();
-?></div>
+?>
+</div><?
+
+
+function updateStatus($obj)
+{
+	$response = $obj->data;	
+	$response->setStatus(response_submitted);
+}
+?>

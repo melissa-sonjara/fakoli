@@ -65,19 +65,25 @@ Fakoli::using("questionnaire");
 
 class SurveyReport
 {
-	var $obj;
+	var $mgr;
+	var $survey;
 	var $questions;
 	var $answers;
 	var $emptyMessage = "There are no results to display.";
 	var $responseCount;
 	
-	function SurveyReport($obj)
+	function SurveyReport($mgr)
 	{
-		$this->obj = $obj;
-		
-		$this->questions = $this->obj->Questions();
+		$this->mgr = $mgr;
+		$this->survey = $this->mgr->item;
+		$this->questions = $this->mgr->getQuestions();
 	}
 	
+	function writeScript()
+	{
+		return "";
+	}
+
 	function getSurveyProgressBar($survey)
 	{
 		$percentage = 0;
@@ -104,14 +110,14 @@ class SurveyReport
 		?>
 		<h4>Responses Received</h4>
 		<p>
-		<?echo $this->getSurveyProgressBar($this->obj)?>
+		<?echo $this->getSurveyProgressBar($this->survey)?>
 		</p>
 		<?
 		if ($this->responseCount)
 		{
 			foreach($this->questions as $question)
 			{
-				$renderer = QuestionField::create($this->obj, $question);
+				$renderer = QuestionField::create($this->survey, $question);
 ?><h4><?echo $question->question_number?>. <?echo $question->question?></h4><?
 				$renderer->writeReportHTML();		
 			}

@@ -218,7 +218,7 @@ class EmailManager
 			elseif(is_object($replaceObj))
 			{
 				$replaceText = $replaceObj->format("{".$field ."}");
-				trace("replaceObj is object; text is $replaceText");
+				trace("replaceObj is object; text is $replaceText", 3);
 			}
 			
 			// e.g., Program.orderList, a function called from the sending
