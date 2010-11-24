@@ -53,7 +53,7 @@ var FakoliMenu = new Class({
 			});
 		});
 		
-		if (Browser.ie6 || Browser.ie7)
+		if (Browser.ie)
 		{
 			// Suckerfish style dropdown implementation for IE6 mouseovers.
 			
