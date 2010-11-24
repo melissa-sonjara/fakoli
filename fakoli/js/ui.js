@@ -207,6 +207,12 @@ var AbstractDialog = new Class(
     	this.options.closeLink = "close" + id;
     	this.options.body = body;
      	
+    	if (this.options.draggable)
+    	{
+    		this.options.handle = dialog_header;
+    		this.options.handle.setStyle('cursor', 'move');    		
+    	}
+    	
     	padding.inject(dialog_header);    	
     	dialog_header.inject(dialog, 'top');
     	body.inject(dialog, 'bottom');
@@ -376,13 +382,17 @@ var FloatingDialog = new Class(
     	if (fragmentURL && this.options.body)
     	{
     		this.options.body.set('text', "Loading...");
-    		var request = new Request(
+    		var request = new Request.HTML(
     		{
+    			evalScripts: false,
+    			evalResponse: false,
     			method: 'get', 
     			url: fragmentURL, 
-    			onSuccess: function(html) 
+    			onSuccess: function(tree, elements, html, script) 
     			{ 
-    				this.options.body.set('html', html);
+    				this.options.body.set('text', '');
+    				this.options.body.adopt(tree);
+    				$exec(script);
     				this.position();
     			}.bind(this)
     		});
@@ -716,7 +726,7 @@ var Splitter = new Class({
 			'mousemove': performDrag,
 			'mouseup': endDrag
 		});
-	},
+	}
 	
 });
 
