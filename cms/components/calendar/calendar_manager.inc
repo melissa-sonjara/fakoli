@@ -72,7 +72,7 @@ class CalendarManager
 		return $items;
 	}
 	
-	static function enumerateDataItemClasses(&$classes)
+	static function enumerateContextHelpClasses(&$classes)
 	{
 		array_push($classes, "Calendar");
 		array_push($classes, "Event");

@@ -62,7 +62,7 @@ class CalendarManifest
 	{
 		return array("ResolveIdentifier" => array(CalendarManager, displayCalendar),
 					 "EnumerateItems"	 => array(CalendarManager, enumerateItems),
-					 "EnumerateDataItemClasses" => array(CalendarManager, enumerateDataItemClasses)		
+					 "EnumerateContextHelpClasses" => array(CalendarManager, enumerateContextHelpClasses)		
 		
 		);
 	}

@@ -88,20 +88,12 @@ $menu_item = "Context Help";
 //$includeFiles = array();
 $classes = array();
 //$classes = getClassesFromDataModel($includeFiles);
-$classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
-
-/*
-foreach($includeFiles as $include)
-{
-	require_once $include;
-}
-*/
+$classes = ComponentManager::fireEvent("EnumerateContextClasses", $classes);
 
 $sort = checkNumeric($_GET["sort"]);
 if(!$sort)
 	$sort = 1;
 
-//$fieldHelpItems = getHelpFromDb($classes, $sort);
 $classTree = buildClassHelpTree($classes);
 $script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
 

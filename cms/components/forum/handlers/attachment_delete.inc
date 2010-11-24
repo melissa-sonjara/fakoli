@@ -45,7 +45,7 @@ $message = new ForumMessage($message_id);
 if ($message->forum_id != $forum_id) redirect("/");
 
 
-if ($message->author_id == $user->get($user->primary_key) || checkRole("admin"))
+if ($message->author_id == $user->get($user->primary_key) || checkRole("admin,data,moderator"))
 {
 	$attachment = new Attachment($attachment_id);
 	

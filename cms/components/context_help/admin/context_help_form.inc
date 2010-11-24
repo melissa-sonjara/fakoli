@@ -39,24 +39,24 @@ $title = "Context-Sensitive Help";
 $page_role = "admin";
 
 
-$help_key = checkNumeric($_GET["help_key"]);
+$help_id = checkNumeric($_GET["help_id"]);
 $field = ($_GET["field"]);
 $className = ($_GET["class"]);
 $prettyClassName = ($_GET["prettyClassName"]);
 
-if(!$help_key && (!$field || !$className))
+if(!$help_id && (!$field || !$className))
 	redirect("/admin/context_help_list");
 
 $help = new ContextHelp();
 
-if(!$help_key)
+if(!$help_id)
 {
 	$help->field = $field;
 	$help->class_name = $className;
 }
 else
 {
-	$help->load($help_key);	
+	$help->load($help_id);	
 }
 
 $form = new AutoForm($help);

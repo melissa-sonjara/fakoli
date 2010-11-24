@@ -59,6 +59,14 @@ class SurveyManifest
 			)
 		);		
 	}	
+	
+	
+	static function subscribeToEvents()
+	{
+		return array(
+					 "EnumerateContextHelpClasses" => array(SurveyManager, enumerateContextHelpClasses)		
+			);
+	}	
 }
 
 ?>
