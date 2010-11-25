@@ -32,7 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("forum");
-Fakoli::assertRole("admin", "moderator");
+Fakoli::assertRole("admin,moderator");
 
 $forum_id   = checkNumeric($_GET["forum_id"]);
 

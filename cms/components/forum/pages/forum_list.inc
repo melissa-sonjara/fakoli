@@ -33,7 +33,7 @@
 
 Fakoli::using("forum");
 
-$constraint = checkRole("admin") ? "ORDER BY title" : "WHERE published=1 ORDER BY title";
+$constraint = checkRole("admin") || checkRole("moderator") ? "ORDER BY title" : "WHERE published=1 ORDER BY title";
 
 $forumSummaries = $site->ForumSummaries($constraint);
 
@@ -44,14 +44,14 @@ $script .= $forumListView->writeScript();
 
 $forumListView->drawView();
 
-if (checkRole("admin","moderator"))
+if (checkRole("admin,moderator"))
 {
 ?>
 <br/>
 <button onclick="go('/forum_form')" class="button">Create a new Discussion Forum</button>
 <? 
 }
-elseif(checkRole('member','registeredusers'))
+elseif(checkRole('member,registeredusers'))
 {
 ?>
 <br/>

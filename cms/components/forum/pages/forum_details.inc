@@ -52,7 +52,7 @@ $view->drawView();
 <div style="width: 100%"><div style="float: right">
 <a class="button" href="/forum_message_form?forum_id=<?echo $forum_id?>">Create a Topic</a>
 <?
-if (checkRole("admin","moderator"))
+if (checkRole("admin,moderator"))
 {
 ?>
 &nbsp;&nbsp;<a class="button" href="/forum_form?forum_id=<?echo $forum_id?>">Edit this Discussion Forum</a>

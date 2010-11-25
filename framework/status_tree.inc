@@ -66,12 +66,18 @@ class StatusTrees
 	var $statusCategories;
 	var $emptyMessage = ""; // You do not have any...
 	var $width = 500;
-	var $statusBlockView; // class that inherits from StatusBlockView and displays the status block contents	
-	function StatusTrees($items, $statusCategories, $statusBlockView)
+	var $statusBlockView; // class that inherits from StatusBlockView and displays the status block contents
+	var $statusBlockHandler; // if not using callback class above, set to call action handler for view
+	
+	function StatusTrees($items, $statusCategories, $statusBlock)
 	{
 		$this->items = $items;
 		$this->statusCategories = $statusCategories;
 		$this->statusBlockView = $statusBlockView;
+		if(preg_match('/\//', $statusBlock))
+			$this->statusBlockHandler = $statusBlock;
+		else
+			$this->statusBlockView = $statusBlock;
 	}
 	
 	function buildStatusTrees()
@@ -96,12 +102,20 @@ class StatusTrees
 					
 					$node = $this->getNode($item, $pkName);
 
-					$statusBlockView = new $this->statusBlockView($item);
+					if($this->statusBlockView)
+					{
+						$statusBlockView = new $this->statusBlockView($item);
+						$block = $statusBlockView->getViewHTML(); 
+					}
 					
 					$subNode = new TreeNode("block_{$item->$pkName}", 
-											$statusBlockView->getViewHTML(), "",
+											$block, "",
 											false);
-											$subNode->leafStyle = "";
+					$subNode->leafStyle = "";
+					if($this->statusBlockHandler)
+					{
+						$subNode->onDemand = "{$this->statusBlockHandler}?$pkName={$item->$pkName}";
+					}
 					$node->add($subNode);
 					
 					$tree->add($node);
