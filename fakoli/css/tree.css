@@ -273,7 +273,7 @@ table.tree div
 	color: #000;
 	font-weight: bold;
 	padding-left: 24px;
-	background: url(/admin/images/toggle_blank.gif) center left no-repeat #fff;
+	background: url(/fakoli/images/toggle_blank.gif) center left no-repeat #fff;
 }
 
 .checked_node_leaf
@@ -287,5 +287,5 @@ table.tree div
 	color: #000;
 	font-weight: bold;
 	padding-left: 24px;
-	background: url(/admin/images/toggle_checked.gif) center left no-repeat #fff;
+	background: url(/fakoli/images/toggle_checked.gif) center left no-repeat #fff;
 }

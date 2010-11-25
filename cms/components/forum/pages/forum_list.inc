@@ -44,14 +44,14 @@ $script .= $forumListView->writeScript();
 
 $forumListView->drawView();
 
-if (checkRole("admin"))
+if (checkRole("admin","moderator"))
 {
 ?>
 <br/>
 <button onclick="go('/forum_form')" class="button">Create a new Discussion Forum</button>
 <? 
 }
-elseif(checkRole('member'))
+elseif(checkRole('member','registeredusers'))
 {
 ?>
 <br/>

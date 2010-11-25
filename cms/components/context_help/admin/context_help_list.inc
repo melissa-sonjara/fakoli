@@ -88,14 +88,14 @@ $menu_item = "Context Help";
 //$includeFiles = array();
 $classes = array();
 //$classes = getClassesFromDataModel($includeFiles);
-$classes = ComponentManager::fireEvent("EnumerateContextClasses", $classes);
+$classes = ComponentManager::fireEvent("EnumerateContextHelpClasses", $classes);
 
 $sort = checkNumeric($_GET["sort"]);
 if(!$sort)
 	$sort = 1;
 
 $classTree = buildClassHelpTree($classes);
-$script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
+$script .= "<link type='text/css' rel='stylesheet' href='/fakoli/css/tree.css'/>";
 
 ?><p>Using the list below you can provide content-sensitive help and publication criteria
 popup text for use on forms throughout the site.</p>

@@ -32,39 +32,49 @@
 *****************************************************************/
 
 Fakoli::using("forum");
+Fakoli::assertRole("admin", "moderator");
 
-$forum_id = checkNumeric($_GET["forum_id"]);
+$forum_id   = checkNumeric($_GET["forum_id"]);
+
+if (!$forum_id)
+	redirect("/forum_list");
 
 $forum = new Forum($forum_id);
 
-$page->page_title = $forum->title;
-
-$view = new ForumDetailsView($forum, "forum_topic");
-$view->table->cssStyle = "width: 700px; clear: both";
-
-$script .= $view->writeScript();
-?>
-<div><?echo $forum->description?></div>
-<?
-$view->drawView();
-?>
-<br/>
-<div style="width: 100%"><div style="float: right">
-<a class="button" href="/forum_message_form?forum_id=<?echo $forum_id?>">Create a Topic</a>
-<?
-if (checkRole("admin","moderator"))
+/*
+ * We already know there are no messages b/c we were allowed to 
+ * delete, but we need to delete all related records:
+ * 
+ *  ForumSiteXref
+ *  ForumTopic
+ *  ForumSubscription
+ */
+if($forum->allowDelete())
 {
-?>
-&nbsp;&nbsp;<a class="button" href="/forum_form?forum_id=<?echo $forum_id?>">Edit this Discussion Forum</a>
-<?
-	if($forum->allowDelete())
+	$xrefs = query(ForumSiteXref, "WHERE forum_id={$forum_id}");
+	if(count($xrefs) > 0)
 	{
-?>
-&nbsp;&nbsp;<a class="button" href="/action/forum/forum_delete?forum_id=<?echo $forum_id?>" onclick="return confirm('Are you sure you want to delete this forum?');">Delete this Discussion Forum</a>
-<?php		
-	}		
+		foreach($xrefs as $xref)
+			$xref->delete();
+	}
+	
+	$topics = query(ForumTopic, "WHERE forum_id={$forum_id}");
+	if(count($topics) > 0)
+	{
+		foreach($topics as $topic)
+		{
+			$topic->delete();
+		}
+	}
+	
+	$subscriptions = query(ForumSubscription, "WHERE forum_id={$forum_id}");
+	if(count($subscriptions) > 0)
+	{
+		foreach($subscriptions as $subscriptions)
+			$subscriptions->delete();
+	}
+	
+	$forum->delete();
 }
+redirect("/forum_list");
 ?>
-</div>
-<a class="button" href="/forum_list">&laquo; Back to Forum List</a>
-</div>

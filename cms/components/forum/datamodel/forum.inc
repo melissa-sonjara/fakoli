@@ -87,6 +87,12 @@ class Forum extends DataItem
 		return $this->getRelated(ForumSummary);
 	}
 	
+	function allowDelete()
+	{
+		$count = queryValue(ForumMessage, "COUNT(1)", "WHERE forum_id={$this->forum_id} AND message != '' AND deleted=0");
+		return ($count > 0) ? false : true;
+	}
+	
 	function Forum()
 	{
 		$this->primary_key = "forum_id";
