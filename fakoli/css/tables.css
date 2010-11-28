@@ -35,15 +35,15 @@
 table.list
 {
 	background-color: #ffffff;
-	border: solid 1px #666;
-	border-collapse: collapse;
+	border: solid #666;
+	border-width: 0px 1px 1px 0px;
 	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	width: 100%;
 	vertical-align:top;
-	-moz-border-radius: 4px;
 	-moz-box-shadow: 1px 1px 5px #666;
 	box-shadow: 1px 1px 5px #666;
+	border-spacing: 0;
 }
 
 table.list b
@@ -67,7 +67,8 @@ table.list th
 table.list td
 {
 	padding: 4px;
-	border: solid 1px #666;
+	border: solid #666;
+	border-width: 0px 0px 1px 1px;
 }
 
 
@@ -95,7 +96,8 @@ table.list td.subheading
 {
 	background: url(/fakoli/images/bg.gif) right center no-repeat transparent;
 	cursor: pointer;
-	border: solid 1px #666;
+	border: solid #666;
+	border-width: 1px 0px 1px 1px;
 	
 }
 
@@ -218,3 +220,4 @@ td.icon
 	text-align: center;
 	font-size: 8pt;
 }
+

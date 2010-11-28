@@ -64,6 +64,12 @@ class DataListView
 	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
 	var $summary;		  ///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	
+	// Scrolling Table parameters
+	
+	var $height;
+	var $scrollable = false;
+	var $resizable  = true;
+	
 	/**
 	 * Creates a new DataListView object.
 	 * 
@@ -91,6 +97,13 @@ class DataListView
 		return $this;
 	}
 
+	function scrollable($height = 300, $resizable = true)
+	{
+		$this->scrollable = true;
+		$this->height = $height;
+		$this->resizable = $resizable;
+	}
+	
 	/**
 	 * Adds a column definition to the DataListView.
 	 * @param $title the tilte of the column
@@ -105,6 +118,22 @@ class DataListView
 		return $this;
 	}
 
+	/**
+	 * Adds a selector column to the DataListView. If no format is specified
+	 * then selection is handled via a checklist box for the list objects' primary keys.
+	 * @param $format (optional) format to use for the selector
+	 */
+	function selector($format = "")
+	{
+		if (!$format && count($this->items))
+		{
+			$pk = $this->items[0]->primary_key;
+			$format = "<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+		}			
+		$this->column("&nbsp;", $format, false, "text-align: center");
+		return $this; 
+	}
+	
 	/**
 	 * Adds a text column to the table footer.
 	 * @param $text the text to display
@@ -221,6 +250,66 @@ class DataListView
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
+		if ($this->scrollable)
+		{
+			$script .= <<<ENDSCRIPT
+<style type="text/css">
+div.scrollContainer
+{
+	border: none;
+	clear: both;
+}
+	
+table.scroll {
+	clear: both;
+}
+
+table.scroll tbody
+{
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+</style>
+<!--[if IE]>
+<style type="text/css">
+div.scrollContainer
+{
+	position: relative;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	border: solid #666;
+	border-width: 1px 1px 1px 0;
+}
+
+table.scroll 
+{
+    border-width: 1px 1px 0px 0px;
+}
+
+table.scroll thead tr 
+{
+    position: absolute;
+    top: expression(this.offsetParent.scrollTop);
+}
+
+table.scroll tbody tr 
+{
+    height: auto;
+}
+
+table.scroll tbody tr:first-child td 
+{
+    padding: 29px 4px 4px 4px;
+}
+
+.sortable th
+{
+	border-width: 0px 0px 1px 1px;	
+}
+</style>
+<![endif]-->
+ENDSCRIPT;
+		}
 		return $script;
 	}
 	
@@ -242,6 +331,7 @@ class DataListView
 			{
 				$attrs .= " class='{$this->cssClass}";
 				if ($this->sortable) $attrs .=" sortable";
+				if ($this->scrollable) $attrs.= " scroll";
 				$attrs .= "'";
 			}
 			
@@ -282,7 +372,15 @@ class DataListView
 		}
 		?>
 		</div>
-		<table<?echo $attrs?>>
+		
+		<?
+			if ($this->scrollable)
+			{	
+				$tbodyAttrs = " style='height: ".($this->height - 24)."px'";
+				echo "<div class='scrollContainer' style='height: {$this->height}px'>";
+			}			
+		?>
+		<table border="0" cellpadding="0" cellspacing="0"<?echo $attrs?>>
 		 <thead>
 		  <tr>
 <?
@@ -302,6 +400,11 @@ class DataListView
 				{
 					$attrs .= " class='$cssClass'";
 				}
+				
+				if (preg_match("/^\\width:.*?\\d{1,3}px|width:.*?\\d{1,3}%/", $column->style, $matches))
+				{
+					$attrs .= " style='{$matches[0]}'";
+				} 
 ?>
 			<th<?echo $attrs?>>
 <?
@@ -321,7 +424,7 @@ class DataListView
 ?>
 		  </tr>	
 		 </thead>
-		 <tbody>
+		 <tbody<?echo $tbodyAttrs?>>
 <?
 			foreach($this->items as $item)
 			{
@@ -401,6 +504,7 @@ class DataListView
 ?>  		
 		</table>
 <?
+			echo "</div>";
 		}
 		else
 		{
