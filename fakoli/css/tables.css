@@ -221,3 +221,56 @@ td.icon
 	font-size: 8pt;
 }
 
+/* Scrolling tables for Firefox */
+
+div.scrollContainer
+{
+	border: none;
+	clear: both;
+}
+	
+table.scroll {
+	clear: both;
+}
+
+table.scroll tbody
+{
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* Scrolling tables for IE8 and below */
+div.scrollContainer
+{
+	position: relative\9;
+	overflow-y: scroll\9;
+	overflow-x: hidden\9;
+	border: solid #666\9;
+	border-width: 1px 1px 1px 0\9;
+}
+
+table.scroll 
+{
+    border-width: 1px 1px 0px 0px\9;
+}
+
+table.scroll thead tr 
+{
+    position: absolute\9;
+    top: expression(this.offsetParent.scrollTop)\9;
+}
+
+table.scroll tbody tr 
+{
+    height: auto\9;
+}
+
+table.scroll tbody tr:first-child td 
+{
+    padding: 29px 4px 4px 4px\9;
+}
+
+.sortable th
+{
+	border-width: 0px 0px 1px 1px\9;	
+}

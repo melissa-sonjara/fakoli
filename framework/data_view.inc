@@ -250,66 +250,6 @@ class DataListView
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
-		if ($this->scrollable)
-		{
-			$script .= <<<ENDSCRIPT
-<style type="text/css">
-div.scrollContainer
-{
-	border: none;
-	clear: both;
-}
-	
-table.scroll {
-	clear: both;
-}
-
-table.scroll tbody
-{
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-</style>
-<!--[if IE]>
-<style type="text/css">
-div.scrollContainer
-{
-	position: relative;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	border: solid #666;
-	border-width: 1px 1px 1px 0;
-}
-
-table.scroll 
-{
-    border-width: 1px 1px 0px 0px;
-}
-
-table.scroll thead tr 
-{
-    position: absolute;
-    top: expression(this.offsetParent.scrollTop);
-}
-
-table.scroll tbody tr 
-{
-    height: auto;
-}
-
-table.scroll tbody tr:first-child td 
-{
-    padding: 29px 4px 4px 4px;
-}
-
-.sortable th
-{
-	border-width: 0px 0px 1px 1px;	
-}
-</style>
-<![endif]-->
-ENDSCRIPT;
-		}
 		return $script;
 	}
 	
