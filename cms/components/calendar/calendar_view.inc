@@ -153,10 +153,14 @@ class CalendarView
 		foreach($events as $event)
 		{
 			$handler = $this->getHandler($event);
-			
-			if ($handler->filter($event, $currentDay))
+
+			if ($handler AND $handler->filter($event, $currentDay))
 			{
 				$ret[] = $event;
+			}
+			else
+			{
+				trace("CalendarView:: no event handler for event {$event->event_id}", 3);
 			}
 		}
 		
