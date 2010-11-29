@@ -164,14 +164,14 @@ class TreeNode
 			
 			if ($this->onDemand)
 			{
-				$cmd = "loadOnDemand('{$this->id}', '{$this->onDemand}');";
+				$cmd = "Tree.loadOnDemand('{$this->id}', '{$this->onDemand}');";
 			}
 			else
 			{
 				$cmd = "";
 			}
 			
-			$cmd .= "toggleFolder('{$this->id}', '{$this->openStyle}', '{$this->closedStyle}');";
+			$cmd .= "Tree.toggleFolder('{$this->id}', '{$this->openStyle}', '{$this->closedStyle}');";
 ?>
 		<div id='<?echo $this->id?>' class='<?echo $style?>' onclick="<?echo $cmd ?>">
 <?
@@ -183,7 +183,7 @@ class TreeNode
 				if ($this->disabled) echo " disabled";
 				if ($_activeTree->selectMode == "single") 
 				{
-					echo " onclick=\"clearCheckBoxes('{$_activeTree->id}', this);";
+					echo " onclick=\"Tree.clearCheckBoxes('{$_activeTree->id}', this);";
 					if ($_activeTree->onSelect)
 					{
 						echo " {$_activeTree->onSelect}();";
@@ -322,66 +322,11 @@ class TreeControl
 	}
 	
 	/**
+	 * @deprecated include the /fakoli/js/tree.js support file instead.
 	 * Writes the JavaScript support functions for the tree.
 	 */
 	function writeScript()
 	{
-		global $_writtenTreeControlScript;
-		
-		if (!$_writtenTreeControlScript)
-		{
-?>
-<script type="text/javascript">
-<!--
-function toggleFolder(id, openStyle, closedStyle)
-{
-	var div = document.getElementById(id + "_contents");
-	var link = document.getElementById(id);
-
-	if (div.style.display == "none" || div.style.display == "")
-	{
-		div.style.display = "block";
-		link.className = openStyle;
-	}
-	else
-	{
-		div.style.display="none";
-		link.className = closedStyle;
-	}
-}
-
-function loadOnDemand(id, url)
-{
-	var div = document.getElementById(id + "_contents");
-	if (!div.loaded)
-	{
-		html = httpRequest(url);
-		div.innerHTML = html;
-		div.loaded = true;
-	}
-}
-	
-function clearCheckBoxes(id, except)
-{
-	var div = document.getElementById(id + "_table");
-	var cboxes = div.getElementsByTagName("input");
-	for(i = 0; i < cboxes.length; ++i)
-	{
-		if (cboxes[i] != except)
-		{
-			cboxes[i].checked = false;
-		}
-	}
-	
-	except.form[id].value = except.value;
-}
-
-//-->
-</script>
-<?
-			$_writtenTreeControlScript = true;
-		}
-		
 	}
 	
 	/**

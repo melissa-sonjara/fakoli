@@ -32,45 +32,67 @@
 
 var Tree = new Class({
 	
-	toggleFolder: function(id, openStyle, closedStyle)
+	initialize: function()
 	{
-		var div  = $(id + "_contents");
-		var link = $(id);
-
-		if (div.style.display == "none" || div.style.display == "")
-		{
-			div.style.display = "block";
-			link.className = openStyle;
-		}
-		else
-		{
-			div.style.display="none";
-			link.className = closedStyle;
-		}
-	},
-
-	loadOnDemand: function(id, url)
-	{
-		var div = $(id + "_contents");
-		if (!div.loaded)
-		{
-			html = httpRequest(url);
-			div.innerHTML = html;
-			div.loaded = true;
-		}
-	},
-		
-	clearCheckBoxes: function(id, except)
-	{
-		var div = $(id + "_table");
-		div.getElements("input").each(function(box)
-		{
-			if (box != except)
-			{
-				box.checked = false;
-			}
-		});
-		
-		except.form[id].value = except.value;
 	}
 });
+
+Tree.toggleFolder = function(id, openStyle, closedStyle)
+{
+	var div  = $(id + "_contents");
+	var link = $(id);
+
+	if (div.style.display == "none" || div.style.display == "")
+	{
+		div.style.display = "block";
+		link.className = openStyle;
+	}
+	else
+	{
+		div.style.display="none";
+		link.className = closedStyle;
+	}
+};
+
+Tree.loadOnDemand = function(id, fragmentURL)
+{
+	var link = $(id );
+	var div = $(id + "_contents");
+	var cursor = link.getStyle('cursor');
+	
+	if (!div.loaded)
+	{
+		link.setStyle('cursor', 'progress');
+		
+		var request = new Request.HTML(
+		{
+			evalScripts: false,
+			evalResponse: false,
+			method: 'get', 
+			url: fragmentURL, 
+			onSuccess: function(tree, elements, html, script) 
+			{ 
+				div.set('text', '');
+				div.adopt(tree);
+				link.setStyle('cursor', cursor);
+				$exec(script);
+			}
+		});
+		request.send();
+		div.loaded = true;
+	}
+};
+		
+Tree.clearCheckBoxes = function(id, except)
+{
+	var div = $(id + "_table");
+	div.getElements("input").each(function(box)
+	{
+		if (box != except)
+		{
+			box.checked = false;
+		}
+	});
+	
+	except.form[id].value = except.value;
+};

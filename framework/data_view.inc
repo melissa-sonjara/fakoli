@@ -297,7 +297,7 @@ class DataListView
 ?>			
 		<div style="width: <?echo $width ?>">
 		<? 
-		if($this->paginate)
+		if($this->pageSize)
 		{
 			?>
 			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
