@@ -86,7 +86,8 @@ class ComponentManifest
 					 "/fakoli/js/mootools-textarea-resizer.js",
 					 "/fakoli/richtext/sonjara_richtext.js",
 					 "/fakoli/calendar/sonjara_calendar.js",
-					 "/fakoli/js/menu.js");
+					 "/fakoli/js/menu.js",
+					 "/fakoli/js/tree.js");
 	}
 }
 
