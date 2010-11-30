@@ -139,7 +139,7 @@ class ContextHelpManager
 		{
 			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('help-{$field}');\" onmouseover=\"showContextHelp('help-{$field}');\" onmouseout=\"hideContextHelp('help-{$field}');\">(help)</a>&nbsp;";
 			$text  .= "<div id=\"help-$field\" class=\"contexthelp\">\n";
-			$text  .= "<h2 id=\"heading-$field\">$title Help</h2>\n";
+			$text  .= "<p id=\"heading-$field\">$title Help</p>\n";
 			$text  .= $help;
 			$text  .= "</div>\n";
 		}

@@ -79,191 +79,94 @@
  */
 
 Fakoli::using("context_help");
-Fakoli::usingFeature("auto_form", "tree");
+Fakoli::usingFeature("auto_form", "grouped_data_view");
 
 $title = "Context-Sensitive Help";
 
 $menu_item = "Context Help";
 	
-//$includeFiles = array();
 $classes = array();
-//$classes = getClassesFromDataModel($includeFiles);
 $classes = ComponentManager::fireEvent("EnumerateContextHelpClasses", $classes);
 
-$sort = checkNumeric($_GET["sort"]);
-if(!$sort)
-	$sort = 1;
+$savedHelp = groupedQuery(ContextHelp, "", "class_name");
+$contextHelps = array();
 
-$classTree = buildClassHelpTree($classes);
-$script .= "<link type='text/css' rel='stylesheet' href='/fakoli/css/tree.css'/>";
+/*
+ * Build an array of context help objects grouped by class.
+ * If we have one saved, then use that; if not, create an
+ * new one and set the field and class name but don't save it.
+ * Help items are only saved when the user enters help on the form.
+ */
+if(count($classes) > 0)
+{
+	foreach($classes as $class)
+	{
+		$classObj = new $class();
+		$prettyClassName = $classObj->prettifyClassName();
+		$fields = $classObj->fields;
+		$savedFields = $savedHelp[$class];
+		if(count($savedFields) == 0) $savedFields = array();
+		if(is_array($classObj->additionalFields))
+			$fields = array_merge($fields, $class->additionalFields);
+		
+		$savedFields = reindexList($savedFields, "field");
+		
+		if(count($fields) > 0)
+		{
+			foreach($fields as $fieldName => $fieldType)
+			{
+				if(!array_key_exists($fieldName, $savedFields))
+				{
+					$contextHelp = new ContextHelp();
+					$contextHelp->class_name = $class;
+					$contextHelp->field = $fieldName;
+				}
+				else
+				{
+					$contextHelp = $savedFields[$fieldName];
+				}
+				
+				$contextHelp->pretty_class_name = $prettyClassName;
+				array_push($contextHelps, $contextHelp);			
+			}
+		}
+	}
+}
+
+$contextHelps = sortItems($contextHelps, "compareClasses");
+$groupedHelps = regroupList($contextHelps, "pretty_class_name");
+
+$table = new GroupedDataListView($groupedHelps, "ContextHelp");
+$table->column("Field", formatContextHelpFormLink)
+		  ->column("Title", "{title}", true)
+			->column("Help", "{help}", true)
+			;
+		  
+$table->mode = "tree";
+$table->cssStyle = "width: 90%";
+
+foreach(array_keys($groupedHelps) as $class_name)
+{
+	$table->group($class_name, $class_name);
+}
+
+$script = $table->writeScript();
 
 ?><p>Using the list below you can provide content-sensitive help and publication criteria
 popup text for use on forms throughout the site.</p>
 <? 
-$classTree->writeHTML();
+$table->drawView();
 
-/*
- * Search the scripts in the datamodel folder for classes for which
- * help can be written.
- */
-function getClassesFromDataModel(&$includeFiles)
+function formatContextHelpFormLink($contextHelp)
 {
-	global $config;
-	$lines = array();
-	$classes = array();
+	if($contextHelp->help_id) 
+		$param = "help_id={$contextHelp->help_id}";
+	else
+		$param = "class_name={$contextHelp->class_name}&field={$contextHelp->field}";
+	$html = "<a href=\"/admin/context_help_form?$param\">{$contextHelp->field}</a>\n";
 	
-	$path = $config["homedir"]."/datamodel";
-	
-	if ($handle = opendir($path)) 
-	{
-    	while (false !== ($file = readdir($handle))) 
-    	{
-    		// include *.inc and exclude ".", "..", ".bak", and ".CVS"
-  	       if (preg_match('/.inc$/i', $file) && !preg_match('/(.bak$)|(^CVS$)|(^\.{1,2}$)/i', $file)) 
- 	       {
- 	       		$filename = "{$path}/$file";
- 	       		array_push($includeFiles, $filename);
-  				getHelpClasses(file_get_contents($filename), $classes);
-     	   }        	
-    	}
-
-    closedir($handle);
-	}
- 
-	return $classes;
+	return $html;
 }
-
-/*
- * Search each line for the word "DataItem". If found, get the
- * class name at the beginning of the line.
- * 
- * Automatically eliminate Jn classes and FormStatus classes.
- * Other classes are eliminated if a comment follows the
- * class
- */
-function getHelpClasses($file, &$classes)
-{
-	$matches = array();
-	
-	$count = preg_match_all("/^\\s*class\\s+(\\w+?)\\s+extends\\s+DataItem(?!.*no help)/mi", $file, $matches, PREG_PATTERN_ORDER);
-	$classes = array_merge($classes, preg_grep("/(Xref|Jn|FormStatus)$/", $matches[1], PREG_GREP_INVERT));
-}
-
-/*
- * Get all the help records from the db, grouped by class. For
- * each help record, match it with the class/field we got from 
- * the datamodel.
- * 
- * For each class name we got from datamodel include file,
- * we need to get the class name we will dipslay (pretty_class_name,
- * if it exists or use class name from the file), field name,
- * help key, if exists. We put all this into an array and sort
- * by class name, then field name, before building the tree. 
- */
-
-function buildClassHelpTree($classes)
-{
-	$classTree = new TreeControl("class_tree", "", "tree", true, 600);
-	$classTree->height = "350";
-	$classTree->indent = "0px";
-	
-	$fieldHelpItems = getHelpFromDb($classes);
-	
-	foreach($fieldHelpItems as $classItems)
-	{
-		if(is_array($classItems))
-		{
-			$class = $classItems[0];
-		
-			$classNode = new TreeNode("class_$class->class_name", prettify($class->class_name), null, false, "bare_node_closed", "bare_node_open"); 
-		
-			foreach($classItems as $item)
-			{			
-				$fieldNode = new TreeNode("field_{$item->field}", $item->field, null, false, "bare_node_closed", 
-					"bare_node_open", "/admin/context_help_form/?help_id=$item->help_id&field=$item->field&class=$item->class_name&prettyClassName=$class->pretty_class_name");
-				$fieldNode->leafStyle = $item->help_key ? "checked_node_leaf" : "unchecked_node_leaf";
-				$classNode->add($fieldNode);
-				
-			}
-			$classTree->add($classNode);		
-		}
-	}		
-	return $classTree;			
-}
-
-/*
- * Create an array of classes. Sort the array, then
- * create a 2-D array grouped by class name with each
- * class having an array of its help field data.
- */
-function getHelpFromDb($classes)
-{
-	$fieldHelpItems = array();
-	$classItems = array();
-	
-	foreach($classes as $className)
-	{
-		$class = new $className();
-		$item = new fieldHelp($className, $class->prettifyClassName());
-		array_push($classItems, $item);
-	}
-
-	$classItems = sortItems($classItems, "compareClasses");
-	
-	foreach($classItems as $classItem)
-	{
-		$class = new $classItem->class_name();
-		$fields = array_keys($class->fields);
-		if(is_array($class->additionalFields))
-			$fields = array_merge($fields, $class->additionalFields);
-
-		foreach($fields as $field)
-		{
-			$item = new fieldHelp($classItem->class_name, $classItem->pretty_class_name, $field);
-			if(!is_array($fieldHelpItems[$classItem->class_name]))
-				$fieldHelpItems[$classItem->class_name] = array();
-			array_push($fieldHelpItems[$classItem->class_name], $item);
-		}
-	}
-	
-	$helps = query(ContextHelp);
-	
-	foreach($helps as $help)
-	{
-		if(array_key_exists($help->class_name, $fieldHelpItems))
-		{
-			$items = $fieldHelpItems[$help->class_name];
-			foreach($items as $item)
-			{
-				if($help->field == $item->field)
-					$item->help_key = $help->help_key;
-			}
-		}
-	}
-
-	return $fieldHelpItems;
-}
-
-
-class fieldHelp
-{
-	var $class_name;
-	var $field;
-	var $pretty_class_name;
-	var $help_key;
-	
-	function fieldHelp($className, $pretty_class_name = "", $field = "")
-	{
-		$this->class_name = $className;
-		$this->field = $field;
-		/*if($pretty_class_name)
-			$this->pretty_class_name = $pretty_class_name;
-		else
-			$this->pretty_class_name = $className;*/
-		$this->pretty_class_name = prettify($className);
-	}
-}
-
 
 /*
  * compare
@@ -291,6 +194,5 @@ function sortItems($items, $compare)
 	}
 	return $items;
 }
-
 
 ?>

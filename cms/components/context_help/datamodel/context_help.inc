@@ -34,12 +34,17 @@
 class ContextHelp extends DataItem
 {
 	// Fields
-	var $fields = array("help_key"		=>	Number,
-						"class_name"	=>	String,
-						"field"			=>	String,
-						"help"			=>	HTML,
-						"criteria"		=>	HTML,
-						"title"			=>	String);
+	var $fields = array(
+				"help_id"		=>	Number,
+				"class_name"	=>	String,
+				"field"			=>	String,
+				"title"			=>	String,
+				"help"			=>	HTML,
+				"criteria"		=>	HTML
+			);
+	
+	// additional
+	var $pretty_class_name;
 	
 	// No Relations
 	
@@ -48,11 +53,12 @@ class ContextHelp extends DataItem
 	
 	function ContextHelp()
 	{
-		$this->primary_key = "help_key";
+		$this->primary_key = "help_id";
 		$this->table = "context_help";
 		
 		$this->DataItem(func_get_args());
 	}
 	
 }
+
 ?>

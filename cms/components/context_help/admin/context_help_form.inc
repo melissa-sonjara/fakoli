@@ -41,8 +41,7 @@ $page_role = "admin";
 
 $help_id = checkNumeric($_GET["help_id"]);
 $field = ($_GET["field"]);
-$className = ($_GET["class"]);
-$prettyClassName = ($_GET["prettyClassName"]);
+$className = ($_GET["class_name"]);
 
 if(!$help_id && (!$field || !$className))
 	redirect("/admin/context_help_list");
@@ -59,6 +58,7 @@ else
 	$help->load($help_id);	
 }
 
+$help->filter = new ExclusionFilter("criteria");
 $form = new AutoForm($help);
 $form->allowDelete = true;
 $form->readonly("field", "class_name");

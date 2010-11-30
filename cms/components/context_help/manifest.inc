@@ -46,6 +46,17 @@ class ContextHelpManifest
 		return $component;
 	}
 	
+	static function getStyles()
+	{
+		return array("/fakoli/css/contexthelp.css");
+	}
+	
+	static function getScripts()
+	{
+		return array("/fakoli/js/script.js");
+	}
+	
+	
 	static function getAdminMenu()
 	{
 		return array

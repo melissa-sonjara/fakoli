@@ -33,6 +33,8 @@
 
 require_once realpath(dirname(__FILE__)."/data_item.inc");
 
+Fakoli::using("context_help");
+
 /**
  * FieldRenderer is the abstract base class for all FieldRenderers. 
  * FieldRenderers are used by the AutoForm class to provide the editing/display
