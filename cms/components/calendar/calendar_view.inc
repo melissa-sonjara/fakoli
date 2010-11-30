@@ -64,19 +64,22 @@ class StandardEventHandler extends EventHandler
 	
 	function details($event, $byProgram = false)
 	{
+		$start = formatDateShort($event->start_date) . " " . $this->formatTime12($event->start_date);
+		$end = formatDateShort($event->end_date) .  " " . $this->formatTime12($event->end_date);
+		
 		ob_start();
 ?>
 <div class="event_details">
 <h3><?echo $event->title?></h3>
 <div class="event_contents">
 <p><em><?echo $event->event_type?></em></p>
-<p><label style="width: 80px">Start: </label><?echo $event->start_date?><br/>
-<label style="width: 80px">End: </label><?echo $event->end_date?></p>
+<p><label style="width: 80px">Start: </label><?echo $start ?><br/>
+<label style="width: 80px">End: </label><?echo $end ?></p>
 <? 		
 		if ($event->location)
 		{ 
 ?>
-<p><label>Location: </label><?echo $event->location?></p>
+<p><label style="width: 80px">Location: </label><?echo $event->location?></p>
 <?
 		}
 ?>
@@ -88,6 +91,13 @@ class StandardEventHandler extends EventHandler
 		ob_end_clean();
 		return $out;
 	}
+	
+	function formatTime12($time)
+	{
+		$time = explode(" ", $time);
+		$time =  strtotime($time[1]);
+		return date("g:i A", $time);
+	}	
 }
 
 class CalendarView
