@@ -73,7 +73,8 @@ class ComponentManifest
 					 "/fakoli/css/tables.css",
 					 "/fakoli/css/dialogs.css",
 					 "/fakoli/css/calendar.css",
-					 "/fakoli/css/textarea-resizer.css");
+					 "/fakoli/css/textarea-resizer.css",
+					 "/fakoli/css/context_menu.css");
 	}
 	
 	static function getScripts()
@@ -87,7 +88,12 @@ class ComponentManifest
 					 "/fakoli/richtext/sonjara_richtext.js",
 					 "/fakoli/calendar/sonjara_calendar.js",
 					 "/fakoli/js/menu.js",
-					 "/fakoli/js/tree.js");
+					 "/fakoli/js/tree.js",
+					 "/fakoli/js/context_menu.js",
+					 "/fakoli/js/sorting_table.js",
+					 "/fakoli/js/paginating_table.js",
+					 "/fakoli/js/filtering_table.js",
+					 "/fakoli/js/grouping_table.js");
 	}
 }
 

@@ -70,6 +70,11 @@ class DataListView
 	var $scrollable = false;
 	var $resizable  = true;
 	
+	// Selection and Commands
+	
+	var $selectable  = false;
+	var $menu = null;
+	
 	/**
 	 * Creates a new DataListView object.
 	 * 
@@ -131,7 +136,16 @@ class DataListView
 			$format = "<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
 		}			
 		$this->column("&nbsp;", $format, false, "text-align: center");
+		$this->selectable = true;
 		return $this; 
+	}
+	
+	function commandMenu()
+	{
+		$this->menu = new ContextMenu($this->id . "_menu", "#{$this->id}_menu_button");
+		$this->menu->trigger = "click";
+		
+		return $this->menu;
 	}
 	
 	/**
@@ -250,6 +264,8 @@ class DataListView
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
+		if ($this->menu) $script .= $this->menu->writeScript();
+		
 		return $script;
 	}
 	
@@ -348,14 +364,31 @@ class DataListView
 ?>
 			<th<?echo $attrs?>>
 <?
-				if ($this->excelFile && $first)
+			
+				if ($first)
 				{
-					$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+					if ($this->excelFile)
+					{	
+						$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+					}
+
+					if ($this->excelFile && !$this->menu)
+					{
 ?>
 		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
-<?			
+<?									
+					}
+					else if ($this->menu)
+					{
+						if ($this->excelFile)
+						{
+							$this->menu->command($this->id."_excel", "Save as Excel...", $_SERVER['REQUEST_URI']."$qs", "/fakoli/images/msexcel_icon_small.png");
+						}
+?>
+		<img id="<?echo $this->id?>_menu_button" src="/fakoli/images/data_view_menu.png" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
+<?									
+					}
 				}
-				
 				$first = false;
 ?>
 <?echo $column->title?></th>
@@ -445,6 +478,8 @@ class DataListView
 		</table>
 <?
 			echo "</div>";
+			
+			if ($this->menu) echo $this->menu->writeMenu();
 		}
 		else
 		{
