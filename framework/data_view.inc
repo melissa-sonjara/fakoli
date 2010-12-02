@@ -477,7 +477,7 @@ class DataListView
 ?>  		
 		</table>
 <?
-			echo "</div>";
+			if ($this->scrollabel) echo "</div>";
 			
 			if ($this->menu) echo $this->menu->writeMenu();
 		}
