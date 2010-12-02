@@ -66,7 +66,7 @@ class RadioButtonFieldRenderer extends FieldRenderer
 			$onchange = ($this->onChange) ? "onclick='$this->onChange(this)'" : "";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected $onchange>$name</option>";
+			echo "<input id='{$this->parent->id}_$field' style='border: none' type='radio' name='$field' value='$value'$selected $onchange>$name</option>";
 			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
 		}
 		
