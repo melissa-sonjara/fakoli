@@ -40,11 +40,12 @@ class ImageListView
 	var $styles;
 	var $titleFormat = "{title}";
 	
-	function ImageListView($images, $linkFormat, $id = "images")
+	function ImageListView($images, $linkFormat, $id = "images", $titleFormat = "")
 	{
 		$this->id = $id;
 		$this->images = $images;
 		$this->linkFormat = $linkFormat;
+		$this->titleFormat = ($titleFormat) ? $titleFormat : "{title}";
 	}
 	
 	function drawGrid()
@@ -81,10 +82,16 @@ ENDSCRIPT;
 		{
 			$thumb = $imgMgr->thumbnailLink($image->image_id, 125);
 			$link = $image->format($this->linkFormat);
+			
+			if (is_callable($this->titleFormat))
+				$caption = call_user_func($this->titleFormat, $image);
+			else 
+				$caption = $image->format($this->titleFormat);
+			
 			?>
 			<li><div class="imageLink"<?if ($this->spacing) echo " style='margin: {$this->spacing}'";?>><a href="<?echo $link?>">
 			<span class="wrapImage"><img src="<?echo $thumb ?> " alt="Small version of image"/></span>
-			<span class="caption"><?echo $image->format($this->titleFormat)?></span></a>
+			<span class="caption"><?echo $caption ?></span></a>
 			</div></li>
 			<?
 	    }
@@ -92,6 +99,7 @@ ENDSCRIPT;
 		</ul>
 	<?
 	}
+
 }
 
 	
