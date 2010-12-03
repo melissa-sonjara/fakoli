@@ -314,6 +314,8 @@ function deleteFolderResult(result)
 		
 		$name = $_FILES[$field]["name"];
 		
+		if (!$folder) $folder = "documents";
+		
 		$filepath = $folder . DIRECTORY_SEPARATOR . $name;
 		$base = $this->library->getLibraryDirectory();
 		$dir = $base . DIRECTORY_SEPARATOR . $folder;
