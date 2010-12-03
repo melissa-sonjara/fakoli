@@ -127,6 +127,17 @@ function uploadFile()
 	docManagerDlg.show(function() {}, "/action/document/upload?document_library_id=<?echo $this->library->document_library_id?>");
 }
 
+function uploadResult(responseText)
+{
+	if (responseText == "1") 
+	{
+		window.location.reload();
+	}
+	else
+	{
+		alert(responseText);
+	}
+}
 
 function deleteFile()
 {
