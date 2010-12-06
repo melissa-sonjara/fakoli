@@ -37,13 +37,15 @@ class ContextMenuItem
 	var $icon;
 	var $text;
 	var $action;
-
-	function ContextMenuItem($command_id, $text, $action, $icon = "")
+	var $isURL;
+	
+	function ContextMenuItem($command_id, $text, $action, $icon = "", $isURL = true)
 	{
 		$this->command_id = $command_id;
 		$this->icon = $icon;
 		$this->text = $text;
 		$this->action = $action;
+		$this->isURL = $isURL;
 	}
 	
 	function draw()
@@ -53,7 +55,15 @@ class ContextMenuItem
 			$output = "<img src='{$this->icon}' alt='' style='float: left; margin: 2px 0px 0px 1px'/>";
 		}
 
-		$output .= "<a href='{$this->action}'>";
+		if ($this->isURL)
+		{
+			
+			$output .= "<a href='{$this->action}'>";
+		}
+		else
+		{
+			$output .= "<a href=\"#\" onclick=\"{$this->action}; return false;\">";
+		}
 		
 		$output .= $this->text;
 		$output .= "</a>";
@@ -80,18 +90,20 @@ class ContextMenu
 	var $items = array();
 	var $targets;
 	var $trigger = "contextmenu";
+	var $position = "pointer";
 	
-	function ContextMenu($id, $targets, $cssClass = "context_menu", $trigger = "contextmenu")
+	function ContextMenu($id, $targets, $cssClass = "context_menu", $trigger = "contextmenu", $position = "pointer")
 	{
 		$this->id = $id;
 		$this->targets = $targets;
 		$this->cssClass = "context_menu";
 		$this->trigger = $trigger;
+		$this->position = $position;
 	}
 	
-	function command($id, $text, $action, $icon = "")
+	function command($id, $text, $action, $isURL = true, $icon = "")
 	{
-		$this->items[] = new ContextMenuItem($id, $text, $action, $icon);
+		$this->items[] = new ContextMenuItem($id, $text, $action, $icon, $isURL);
 		return $this;
 	}
 	
@@ -106,7 +118,7 @@ class ContextMenu
 		$s = <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function() {
-new ContextMenu('$this->id', '$this->targets', '$this->trigger');
+new ContextMenu('$this->id', '$this->targets', '$this->trigger', {position: '{$this->position}'});
 });
 </script>
 ENDSCRIPT;
@@ -133,4 +145,45 @@ ENDSCRIPT;
 		ob_end_clean();
 		return $menu;
 	}
+}
+
+class ContextMenuManager
+{
+	var $menus;
+	
+	function ContextMenuManager()
+	{
+		$this->menus = array();
+	}
+	
+	function addMenu($id, $targets, $cssClass = "context_menu", $trigger = "contextmenu", $position = "pointer")
+	{
+		$menu = new ContextMenu($id, $targets, $cssClass, $trigger, $position);
+		$this->menus[] = $menu;
+		return $menu;
+	}
+	
+	function writeScript()
+	{
+		$script = "";
+		
+		foreach($this->menus as $menu)
+		{
+			$script .= $menu->writeScript();
+		}
+		
+		return $script;
+	}
+	
+	function writeMenus()
+	{
+		$menus = "";
+		
+		foreach($this->menus as $menu)
+		{
+			$menus .= $menu->writeMenu();
+		}
+		
+		return $menus;
+	}	
 }

@@ -1,14 +1,22 @@
 var ContextMenu = new Class(
 {
+	Implements: [Options],
+	
 	elements: [],
 	menu: 	null,
 	root:	null,
 	trigger:	'contextmenu',
+	options:
+	{
+		position: 'pointer'
+	},
 	
-	initialize: function(menu, elementSelector, trigger)
+	initialize: function(menu, elementSelector, trigger, options)
 	{
 		this.menu = $(menu);
 		this.trigger = trigger;
+		this.setOptions(options);
+		
 		var me = this;
 		
 		$$(elementSelector).each(function(elt)
@@ -17,7 +25,7 @@ var ContextMenu = new Class(
 			{
 				me.root = elt;
 				event = new Event(e).stop();
-				me.show();
+				me.show(event);
 			});
 		});
 		
@@ -25,15 +33,19 @@ var ContextMenu = new Class(
 		
 	},
 	
-	show: function()
+	show: function(event)
 	{
-		var coords = this.root.getCoordinates();
+		var coords = this.root.getCoordinates();		
 		var bc = $(document.body).getCoordinates();
+		
+		var left = (event && this.options.position == 'pointer') ? event.page.x : coords.left;
+		
 		this.menu.setStyles(
 				{'top': coords.bottom - bc.top,
-				 'left': coords.left,
+				 'left': left,
 				 'display': 'block',
-				 'opacity': 0});
+				 'opacity': 0,
+				 'z-index': 500});
 		this.menu.fade('in');
 	},
 	
