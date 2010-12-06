@@ -79,5 +79,5 @@ function hideToolTip(id)
 	var div = $(id);
 	if (div == null) return;
 
-	id.style.display = 'none';
+	div.style.display = 'none';
 }
