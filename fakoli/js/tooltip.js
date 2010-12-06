@@ -30,6 +30,8 @@
 
 *****************************************************************/
 
+var currentLink;
+
 function toggleToolTip(eltName)
 {
 	var elt = $(eltName);
@@ -49,37 +51,49 @@ function toggleToolTip(eltName)
 function showToolTip(link, evt, id, handlerURL)
 {
 	var link = $(link);
+	currentLink = $(link);
+	
 	var event = new Event(evt).stop();
-	var div = $(id);
-	var cursor = link.getStyle('cursor');
-	if(div == null) return;
 
-	link.setStyle('cursor', 'progress');
-   	
-	var request = new Request.HTML(
-    {
- 	
-    	evalScripts: false,
-		evalResponse: false,
-		method: 'get', 
-		url: handlerURL, 
-		onSuccess: function(tree, elements, html, script) 
-		{
-    		div.set('text', '');
-			div.adopt(tree);
-			div.setStyles({'display':  'block',
-						   'left':	   event.page.x + 4,
-						   'top':      event.page.y,
-						   'position': 'absolute'});
-			link.setStyle('cursor', cursor);
-			$exec(script);
-		}
-	});
-	request.send();
+	loadTooltip = function (link, event, id, handlerURL)
+	{
+		if (link != currentLink) return;
+		
+		var div = $(id);
+		var cursor = link.getStyle('cursor');
+		if(div == null) return;
+	
+		link.setStyle('cursor', 'progress');
+	   	
+		var request = new Request.HTML(
+	    {
+	 	
+	    	evalScripts: false,
+			evalResponse: false,
+			method: 'get', 
+			url: handlerURL, 
+			onSuccess: function(tree, elements, html, script) 
+			{
+	    		div.set('text', '');
+				div.adopt(tree);
+				div.setStyles({'display':  'block',
+							   'left':	   event.page.x + 4,
+							   'top':      event.page.y,
+							   'position': 'absolute'});
+				link.setStyle('cursor', cursor);
+				$exec(script);
+			}
+		});
+		request.send();
+	};
+		
+	loadTooltip.delay(1000, null, [link, event, id, handlerURL]);
 }
 
 function hideToolTip(id)
 {
+	currentLink = null;
+	
 	var div = $(id);
 	if (div == null) return;
 

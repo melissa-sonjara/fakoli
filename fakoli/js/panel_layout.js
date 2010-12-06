@@ -1,85 +1,109 @@
-var PanelLayout = new Class(
-{	
-	Implements: [Options],
-	container: null,
-	slots: {},
-	panels: new Hash({}),
-	panelList: [],
-	
-	options: 
+var PanelLayout = (function()
+{
+	var PanelLayoutSingleton = new Class(
 	{
-		stretch: false,
-		replace: false
-	},
-	
-	initialize: function(container, options)
-	{
-		this.container = $(container);
+		Implements: [Options],
+		container: null,
+		slots: {},
+		panels: new Hash({}),
+		panelList: [],
 		
-		this.setOptions(options);
-	},
-	
-	/**
-	 * Registers a slot into the layout
-	 */
-	addSlot: function(slot)
-	{
-		slot = $(slot);
-		this.slots[slot.id] = slot;
-		this.panels[slot.id] = new Hash({});
-	},
-	
-	addSlots: function(expr)
-	{
-		$$(expr).each(function(slot) { this.addSlot(slot); }.bind(this));
-	},
-	
-	/**
-	 * Docks a panel into a slot
-	 */
-	dock: function(panel, slot)
-	{
-		slot = $(slot);
-		
-		slot.adopt(panel.getContent());
-
-		this.panelList.push(panel);
-		this.panels[slot.id][panel.id] = panel;
-		
-		if (this.options.stretch)
+		options: 
 		{
-			panel.stretch();
-		}		
-	},
-	
-	/**
-	 * Loads a panel from the specified URL 
-	 * and docks it at the given slot.
-	 */
-	dockAndLoad: function(id, panelURL, slot, options)
-	{
-		slot = $(slot);
-		if (this.options.replace)
+			stretch: false,
+			replace: false,
+			tearoffWidth: 800,
+			tearoffHeight: 600
+		},
+		
+		initialize: function()
 		{
-			$each(this.panels[slot.id], function(panel, doomedid)
-			{	
-				panel.close();
-				this.panels[slot.id].erase(doomedid);
-				this.panelList.erase(panel);// = this.panelList.filter(function(panel) { return panel.id != doomedid; });
-			}.bind(this));
-		}
+			window.addEvent('resize', function() { this.stretch();}.bind(this));
+		},
 			
-		panel = new Panel(id, options);
-		panel.load(panelURL);
+		setup: function(container, options)
+		{
+			this.container = $(container);
+			
+			this.setOptions(options);
+		},
 		
-		this.dock(panel, slot);
-	},
+		/**
+		 * Registers a slot into the layout
+		 */
+		addSlot: function(slot)
+		{
+			slot = $(slot);
+			this.slots[slot.id] = slot;
+			this.panels[slot.id] = new Hash({});
+		},
+		
+		addSlots: function(expr)
+		{
+			$$(expr).each(function(slot) { this.addSlot(slot); }.bind(this));
+		},
+		
+		/**
+		 * Docks a panel into a slot
+		 */
+		dock: function(panel, slot)
+		{
+			slot = $(slot);
+			
+			slot.adopt(panel.getContent());
 	
-	stretch: function()
+			this.panelList.push(panel);
+			this.panels[slot.id][panel.id] = panel;
+			
+			if (this.options.stretch)
+			{
+				panel.stretch();
+			}		
+		},
+		
+		/**
+		 * Loads a panel from the specified URL 
+		 * and docks it at the given slot.
+		 */
+		dockAndLoad: function(id, panelURL, slot, options)
+		{
+			slot = $(slot);
+			if (this.options.replace)
+			{
+				$each(this.panels[slot.id], function(panel, doomedid)
+				{	
+					panel.close();
+					this.panels[slot.id].erase(doomedid);
+					this.panelList.erase(panel);// = this.panelList.filter(function(panel) { return panel.id != doomedid; });
+				}.bind(this));
+			}
+				
+			panel = new Panel(id, options);
+			panel.load(panelURL, slot.id);
+			
+			this.dock(panel, slot);
+		},
+		
+		stretch: function()
+		{
+			this.panelList.each(function(panel) { panel.stretch(); });
+		},
+		
+		tearoff: function(panelID)
+		{
+			var panel = this.panelList.filter(function(p) {return p.id = panelID; });
+			if (panel.length == 0) return;
+			popup("/tearoff?uri=" + escape(panel[0].url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+		}
+	});
+	
+	var instance;
+	return function()
 	{
-		this.panelList.each(function(panel) { panel.stretch(); });
-	}
-});
+		return instance ? instance : instance = new PanelLayoutSingleton();
+	};
+	
+})();
 
 var Panel = new Class(
 {
@@ -101,9 +125,25 @@ var Panel = new Class(
 		this.setOptions(options);
 	},
 	
-	load: function(panelURL)
-	{
+	load: function(panelURL, slotID)
+	{		
 		this.url = panelURL;
+
+		if (panelURL.indexOf("?") >= 0)
+		{
+			panelURL += "&";
+		}
+		else
+		{
+			panelURL += "?";
+		}
+		
+		panelURL += "panel=" + this.id;
+		
+		if (slotID)
+		{
+			panelURL += "&slot=" + slotID;
+		}
 		this.div = new Element('div', {id: this.id});
 		this.div.panel = this;
 		this.div.set('text', "Loading...");

@@ -28,6 +28,8 @@
 	z-index: 120;
 	font-weight: normal;
 	display: none;
+	-moz-box-shadow: 3px 3px 8px #666; 
+	box-shadow: 3px 3px 8px #666; 
 }
 	
 
