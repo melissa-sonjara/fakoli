@@ -48,6 +48,7 @@ function toggleToolTip(eltName)
 
 function showToolTip(link, evt, id, handlerURL)
 {
+	var link = $(link);
 	var event = new Event(evt).stop();
 	var div = $(id);
 	var cursor = link.getStyle('cursor');
@@ -66,7 +67,10 @@ function showToolTip(link, evt, id, handlerURL)
 		{
     		div.set('text', '');
 			div.adopt(tree);
-			div.style.display = 'block';
+			div.setStyles({'display':  'block',
+						   'left':	   event.page.x + 4,
+						   'top':      event.page.y,
+						   'position': 'absolute'});
 			link.setStyle('cursor', cursor);
 			$exec(script);
 		}
