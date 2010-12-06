@@ -602,7 +602,7 @@ var PaginatingList = new Class(
 
 var Splitter = new Class({
 
-	Implements: Options,
+	Implements: [Options, Events],
 	
 	container: null,
 	layout: null,
@@ -613,7 +613,8 @@ var Splitter = new Class({
 	{
 		orientation: 'vertical',
 		split: [50, 50],
-		minimumSize: 10
+		minimumSize: 10,
+		onresize: Class.Empty
 	},
 	
 	initialize: function(element, options)
@@ -684,6 +685,7 @@ var Splitter = new Class({
 		
 		this.panes[0].setStyle(prop, Math.floor(ratio[0] * size));
 		this.panes[1].setStyle(prop, Math.floor(ratio[1] * size));
+        this.fireEvent('resize');
 	},
 	
 	startResize: function(e)
