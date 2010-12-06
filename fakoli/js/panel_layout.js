@@ -109,7 +109,7 @@ var PanelLayout = (function()
 			var panel = this.findPanel(panelID);
 			if (panel == null) return;
 			
-			popup("/tearoff?uri=" + escape(panel[0].url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+			popup("/tearoff?uri=" + escape(panel.url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		}
 	});
 	
