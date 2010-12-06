@@ -74,6 +74,15 @@ class Page extends DataItem
 		return $this->getRelated(Site);
 	}
 	
+	static function findByIdentifier($identifier)
+	{
+		$match = Query::create(Page, "WHERE identifier=:id")
+					  ->bind(":id", $identifier)
+					  ->executeSingle();
+
+		return $match;
+	}	
+	
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
 		$join = new InnerJoin();
