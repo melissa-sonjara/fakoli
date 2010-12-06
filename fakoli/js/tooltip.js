@@ -46,9 +46,9 @@ function toggleToolTip(eltName)
 	}
 }
 
-function showToolTip(id, handlerURL)
+function showToolTip(link, evt, id, handlerURL)
 {
-	var link = $(id);
+	var event = new Event(evt).stop();
 	var div = $(id);
 	var cursor = link.getStyle('cursor');
 	if(div == null) return;
