@@ -89,10 +89,26 @@ var PanelLayout = (function()
 			this.panelList.each(function(panel) { panel.stretch(); });
 		},
 		
-		tearoff: function(panelID)
+		findPanel: function(panelID)
 		{
 			var panel = this.panelList.filter(function(p) {return p.id = panelID; });
-			if (panel.length == 0) return;
+			return (panel.length == 0) ? null : panel[0];
+		},
+		
+		closePanel: function(panelID)
+		{
+			var panel = this.findPanel(panelID);
+			if (panel == null) return;
+
+			panel.close();
+			this.panelList.erase(panel);
+		},
+		
+		tearoff: function(panelID)
+		{
+			var panel = this.findPanel(panelID);
+			if (panel == null) return;
+			
 			popup("/tearoff?uri=" + escape(panel[0].url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		}
 	});
