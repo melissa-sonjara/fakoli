@@ -64,7 +64,10 @@ if ($method == "POST")
 		$d = $form->data->getLibraryDirectory();
 		if (!is_dir($d) && !file_exists($d))
 		{
+			$docs = $d.DIRECTORY_SEPARATOR."documents";
 			mkdir($d);
+			mkdir($docs);
+			chmod($docs, 0777);
 		}
 		
 		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
