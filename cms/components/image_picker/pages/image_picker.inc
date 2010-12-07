@@ -153,7 +153,7 @@ if ($mode != "select")
      <td><input type="text" style="width: 60px" id="height" name="height" value="" onkeypress="return imagePicker.maskInput(event)" onkeyup="imagePicker.changeHeight()"/> pixels</td>
     </tr>
     <tr>
-     <td colspan="2"><input type="checkbox" id="aspect" name="aspect" value="1" checked="true">&nbsp;<label for="aspect">Maintain aspect ratio</label></td>
+     <td colspan="2"><input type="checkbox" id="aspect" name="aspect" value="1" checked />&nbsp;<label for="aspect">Maintain aspect ratio</label></td>
     </tr>
 
     <tr>
@@ -181,4 +181,3 @@ else
   </td>
  </tr>
 </table>
-</div>

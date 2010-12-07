@@ -116,6 +116,64 @@ ENDSCRIPT;
 }
 
 
+
+/**
+ * Validates a field rendered with TreeSelectFieldRenderer.
+ * When a tree has more than one level that can be selected,
+ * we need to determine that it is valid when at least
+ * one item at any level has been selected. 
+ */
+class RequiredTreeValidator extends AbstractValidator
+{
+	var $empty = "";
+
+	function RequiredTreeValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+
+		var div = $("{$this->field}_table");
+		var valid = false;
+
+		div.getElements("input").each(function(box)
+		{
+			if (box.checked == true)
+				valid = true;
+		});
+		
+		if(valid == false)
+		{
+			alert("{$this->title} is a required field. Please supply a value.");
+				return false;
+		}
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if (!isset($_POST[$this->field]))
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
 class RequiredFileValidator extends AbstractValidator
 {
 	var $message;
