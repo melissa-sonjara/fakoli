@@ -342,11 +342,14 @@ class Fakoli
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
 		header("Content-Type: $mimeType");
+		header("Pragma: private");
+		header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 		
 	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 	    {
 	    	
-	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
+	        $if_modified_since=strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]);
+	    	//$if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
 	        
 	        if($if_modified_since >= $last_modified)
 	        {
@@ -359,9 +362,7 @@ class Fakoli
 
 	    $size = filesize($resource);
 		header("Content-Length: $size");
-		header("Pragma: cache");
-		header("Expires:");
-		
+				
 		fpassthru($f);
 		fclose($f);
 	}
@@ -382,6 +383,9 @@ class Fakoli
 		
 		$resource = sanitizePath($resource);
 		
+		$file = Cache::get("resource:$resource");
+		if ($file) return $file;
+		
 		$path = $config['homedir'] . PATH_SEPARATOR . ini_get("include_path");
 			
 		$roots = explode(PATH_SEPARATOR, $path);
@@ -391,10 +395,11 @@ class Fakoli
 			$file = $root . DIRECTORY_SEPARATOR . $resource;
 			if (file_exists($file))
 			{
+				Cache::put("resource:$resource", $file);
 				return $file;
 			}
 		}
-
+				
 		return null;
 	}
 }
