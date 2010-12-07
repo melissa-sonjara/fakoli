@@ -68,6 +68,7 @@ var PanelLayout = (function()
 		dockAndLoad: function(id, panelURL, slot, options)
 		{
 			slot = $(slot);
+			slot.addClass("background-spinner");
 			if (this.options.replace)
 			{
 				$each(this.panels[slot.id], function(panel, doomedid)
@@ -79,7 +80,7 @@ var PanelLayout = (function()
 			}
 				
 			panel = new Panel(id, options);
-			panel.load(panelURL, slot.id);
+			panel.load(panelURL, slot.id, function() { slot.removeClass("background-spinner");});
 			
 			this.dock(panel, slot);
 		},
@@ -91,7 +92,7 @@ var PanelLayout = (function()
 		
 		findPanel: function(panelID)
 		{
-			var panel = this.panelList.filter(function(p) {return p.id = panelID; });
+			var panel = this.panelList.filter(function(p) {return p.id == panelID; });
 			return (panel.length == 0) ? null : panel[0];
 		},
 		
@@ -132,7 +133,8 @@ var Panel = new Class(
 	{ 
 		stretch: false, 
 		onstretched: Class.Empty,
-		onclose: Class.Empty
+		onclose: Class.Empty,
+		onload: Class.Empty
 	},
 	
 	initialize: function(id, options)
@@ -141,8 +143,9 @@ var Panel = new Class(
 		this.setOptions(options);
 	},
 	
-	load: function(panelURL, slotID)
+	load: function(panelURL, slotID, loadcallback)
 	{		
+		if (loadcallback) this.addEvent('load', loadcallback);
 		this.url = panelURL;
 
 		if (panelURL.indexOf("?") >= 0)
@@ -162,7 +165,6 @@ var Panel = new Class(
 		}
 		this.div = new Element('div', {id: this.id});
 		this.div.panel = this;
-		this.div.set('text', "Loading...");
 		
 		var request = new Request.HTML(
 		{
@@ -175,6 +177,7 @@ var Panel = new Class(
 				this.div.set('text', '');
 				this.div.adopt(tree);
 				$exec(script);
+				this.fireEvent('load');
 			}.bind(this)
 		});
 		request.send();
