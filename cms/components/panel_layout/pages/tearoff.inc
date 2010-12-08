@@ -19,7 +19,8 @@ window.addEvent('domready', function()
 	layout = new PanelLayout();
 	layout.setup('tearoff', {stretch: true, replace: true});
 	layout.addSlots('.slot');	
-	layout.dockAndLoad('main', '{$uri}', 'slot1', {stretch: true});
+	var panel = layout.dockAndLoad('main', '{$uri}', 'slot1', {stretch: true});
+	panel.addEvent('close', function() { window.close(); });
 });
 </script>
 ENDSCRIPT;

@@ -48,10 +48,8 @@ class ImageListView
 		$this->titleFormat = ($titleFormat) ? $titleFormat : "{title}";
 	}
 	
-	function drawGrid()
+	function writeScript()
 	{
-		$imgMgr = new ImageManager();
-		
 		global $script;
 		$script .= <<<ENDSCRIPT
 	<script type="text/javascript">
@@ -74,6 +72,15 @@ class ImageListView
 	});
 	</script>
 ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function drawGrid()
+	{
+		$imgMgr = new ImageManager();
+		
+		$this->writeScript();
 ?>
 		<ul class="imageGrid" id="<?echo $this->id?>"<?if ($this->styles) echo " style='{$this->styles}'";?>>
 	<?

@@ -54,14 +54,16 @@ Tree.toggleFolder = function(id, openStyle, closedStyle)
 	}
 };
 
-Tree.loadOnDemand = function(id, fragmentURL)
+Tree.loadOnDemand = function(id, fragmentURL, force)
 {
 	var link = $(id );
 	var div = $(id + "_contents");
 	var cursor = link.getStyle('cursor');
 	
-	if (!div.loaded)
+	if (!div.loaded || force)
 	{
+		if (force) div.set('text', '');
+		
 		link.setStyle('cursor', 'progress');
 		
 		var request = new Request.HTML(

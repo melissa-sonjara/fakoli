@@ -74,7 +74,7 @@ class DataListView
 	
 	var $selectable  = false;
 	var $menu = null;
-	
+	var $commandMenuIcon = "/fakoli/images/data_view_menu.png";
 	/**
 	 * Creates a new DataListView object.
 	 * 
@@ -144,6 +144,7 @@ class DataListView
 	{
 		$this->menu = new ContextMenu($this->id . "_menu", "#{$this->id}_menu_button");
 		$this->menu->trigger = "click";
+		$this->menu->position = "element";
 		
 		return $this->menu;
 	}
@@ -385,7 +386,7 @@ class DataListView
 							$this->menu->command($this->id."_excel", "Save as Excel...", $_SERVER['REQUEST_URI']."$qs", "/fakoli/images/msexcel_icon_small.png");
 						}
 ?>
-		<img id="<?echo $this->id?>_menu_button" src="/fakoli/images/data_view_menu.png" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
+		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
 <?									
 					}
 				}

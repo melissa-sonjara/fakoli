@@ -8,7 +8,9 @@ var ContextMenu = new Class(
 	trigger:	'contextmenu',
 	options:
 	{
-		position: 'pointer'
+		position: 'pointer',
+		offsetX: 0,
+		offsetY: 0
 	},
 	
 	initialize: function(menu, elementSelector, trigger, options)
@@ -24,7 +26,7 @@ var ContextMenu = new Class(
 			elt.addEvent(trigger, function(e)
 			{
 				me.root = elt;
-				event = new Event(e).stop();
+				var event = new Event(e).stop();
 				me.show(event);
 			});
 		});
@@ -41,8 +43,8 @@ var ContextMenu = new Class(
 		var left = (event && this.options.position == 'pointer') ? event.page.x : coords.left;
 		
 		this.menu.setStyles(
-				{'top': coords.bottom - bc.top,
-				 'left': left,
+				{'top': coords.bottom - bc.top + this.options.offsetY,
+				 'left': left + this.options.offsetX,
 				 'display': 'block',
 				 'opacity': 0,
 				 'z-index': 500});

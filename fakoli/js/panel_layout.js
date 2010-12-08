@@ -83,6 +83,8 @@ var PanelLayout = (function()
 			panel.load(panelURL, slot.id, function() { slot.removeClass("background-spinner");});
 			
 			this.dock(panel, slot);
+			
+			return panel;
 		},
 		
 		stretch: function()
