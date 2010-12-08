@@ -30,44 +30,31 @@
 
 *****************************************************************/
 
-var currentLink;
-
-function toggleToolTip(eltName)
-{
-	var elt = $(eltName);
-
-	if (elt == null) return null;
-
-	if (elt.style.display == 'block')
-	{
-		elt.style.display = 'none';
-	}
-	else
-	{
-		elt.style.display = 'block';
-	}
-}
-
-function showToolTip(link, evt, id, handlerURL)
+function showToolTip(link, evt, id, handlerURL, width)
 {
 	var link = $(link);
 	currentLink = $(link);
 	
 	var event = new Event(evt).stop();
-
 	loadTooltip = function (link, event, id, handlerURL)
 	{
 		if (link != currentLink) return;
 		
 		var div = $(id);
+		if(div == null) 
+		{
+			div = document.createElement('div');
+			div.setAttribute('id','tooltip');
+			div.setAttribute('class', 'tooltip_box');
+			link.appendChild(div); 
+		}
+		
 		var cursor = link.getStyle('cursor');
-		if(div == null) return;
 	
 		link.setStyle('cursor', 'progress');
 	   	
 		var request = new Request.HTML(
-	    {
-	 	
+	    {	 	
 	    	evalScripts: false,
 			evalResponse: false,
 			method: 'get', 
@@ -79,7 +66,8 @@ function showToolTip(link, evt, id, handlerURL)
 				div.setStyles({'display':  'block',
 							   'left':	   event.page.x + 4,
 							   'top':      event.page.y,
-							   'position': 'absolute'});
+							   'position': 'absolute',
+							   'width':		width});
 				link.setStyle('cursor', cursor);
 				$exec(script);
 			}
@@ -88,9 +76,9 @@ function showToolTip(link, evt, id, handlerURL)
 	};
 		
 	loadTooltip.delay(1000, null, [link, event, id, handlerURL]);
-}
+};
 
-function hideToolTip(id)
+function hideToolTip (id)
 {
 	currentLink = null;
 	
@@ -98,4 +86,4 @@ function hideToolTip(id)
 	if (div == null) return;
 
 	div.style.display = 'none';
-}
+};
