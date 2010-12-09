@@ -55,8 +55,10 @@ if ($email_template_id)
 else
 {
 	$title = "Add an Email Template";
-	$emailTemplate->sender_email = $config["email_from"];
 }
+
+if(!$emailTemplate->sender_email)
+	$emailTemplate->sender_email = $config["email_from"];
 
 $form = new AutoForm($emailTemplate);
 
@@ -67,13 +69,11 @@ $form->unique("name", "An email template already exists with that title. Please 
 $form->required("name", "sender_email", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
 
-//$form->validator->add(new EmailListValidator("recipients", "Recipients"));
+$form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
 	$form->readOnly("name");
-
-$table = getMergeCodeTable($emailTemplate);
 
 if ($method == "POST")
 {
@@ -82,34 +82,13 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
-$script .= $table->writeScript();
 echo "<h3>This form allows you to create or edit an email template.</h3>\n";
 
-if($emailTemplate->email_template_id)
+if($emailTemplate->class_name)
 {
-	echo "<p>The following codes are available for the recipients, subject and message fields of this template:</p>\n";
-	$table->drawView();
-	echo "</p><p>Additional codes can be added by your systems administrator.</p>";
-} 
-$form->drawForm();
-
-
-function getMergeCodeTable($emailTemplate)
-{	
-	if($emailTemplate->class_name)
-		$mergeCodes = query(MergeCode, "WHERE class_name = '{$emailTemplate->class_name}' ORDER BY NAME");
-		
-	if(count($mergeCodes) > 0)
-		$list = formatItems($mergeCodes, "{name}", ", ");
-
-	$table = new DataListView($mergeCodes, "mergeCodes");
-	$table->column("Code Name", "{name}")
-	  		->column("Description", "{description}");
-	  	
-	$table->emptyMessage = "There are no merge codes defined for this template.";
-	$table->sortable = false;
-	$table->cssStyle = "width: 50%";
-	
-	return $table;
+?>
+<button onclick="javascript:modalPopup('Advanced Features', '/advanced_email_features_popup?class_name=<?php echo $emailTemplate->class_name ?>', '500px', 'auto'); return false">Advanced Features</button>
+<?php
 }
+$form->drawForm();
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007,2008 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,44 +31,39 @@
 
 *****************************************************************/
 
-/* 
- * Title: email_code_list.php
+/*
  * 
- * Description: table list view of email template
- * fields. For developers only - not for client
+ * Description: Displays survey message advanced features in a
+ * popup.
  * 
- * author: Janice Gallant for Sonjara, Inc.
+ * @author: Janice Gallant for Sonjara, Inc.
  * 
- * date: 8/13/10
-
-***************************************************************/
-
+ * date: 5/27/2010
+ */
 
 Fakoli::using("email");
-Fakoli::usingFeature("grouped_data_view");
+Fakoli::usingFeature("data_view");
 
-$mergeCodes = groupedQuery(MergeCode, "ORDER BY name", "class_name");
+$class_name = mysql_escape_string($_REQUEST["class_name"]);
 
-$classes = indexedQuery(MergeCode, "ORDER BY class_name", "class_name");
-
-$table = new GroupedDataListView($mergeCodes, "mergeCodes");
-$table->column("Code Name", "<a href=\"/admin/merge_code_form?merge_code_id={merge_code_id}\">{name}</a>")
-	  	->column("Description", "{description}")
-		->column("Map", "{map}")
-		;
-			  	
+$page->page_title = "Advanced Features &ndash; Merge Codes";
+$mergeCodes = query(MergeCode, "WHERE class_name='$class_name'");
+$table = new DataListView($mergeCodes, "mergeCodes");
+$table->column("Code Name", "{name}", false, "width: 30%")
+		->column("Description", "{description}", false, "width: 70%");
+	  	
 $table->emptyMessage = "There are no merge codes defined.";
-$table->mode = "tree";
+$table->sortable = false;
 $table->cssStyle = "width: 100%";
 
-foreach(array_keys($classes) as $class_name)
-{
-	$table->group($class_name, $class_name);
-}
+$table->writeScript();
 
-$script .= $table->writeScript();
-
-$table->drawView();
-		
-echo "<br/><br/><a class='button' href='/admin/merge_code_form'>Add a Merge Code</a>\n";
 ?>
+<p>The following codes are available for the recipients, subject and message fields of this template:</p>
+<?php
+$table->drawView();	
+?>
+<p>Additional codes can be added by your systems administrator.</p>";
+<p>Example:</p>
+<p>Please take a few minutes to complete this short [program_name] survey. Your feedback will help us know our participants and improve our program.</p>
+<p>The survey will be open for responses until [survey_end_date]. We appreciate your support. </p>
