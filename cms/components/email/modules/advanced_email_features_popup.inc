@@ -63,7 +63,7 @@ $table->writeScript();
 <?php
 $table->drawView();	
 ?>
-<p>Additional codes can be added by your systems administrator.</p>";
+<p>Additional codes can be added by your systems administrator.</p>
 <p>Example:</p>
 <p>Please take a few minutes to complete this short [program_name] survey. Your feedback will help us know our participants and improve our program.</p>
 <p>The survey will be open for responses until [survey_end_date]. We appreciate your support. </p>
