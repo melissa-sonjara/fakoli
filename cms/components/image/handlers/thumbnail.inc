@@ -35,6 +35,8 @@ Fakoli::using("image");
 
 $image_id = checkNumeric($_GET["image_id"]);
 $size = checkNumeric($_GET["size"]);
+$width = checkNumeric($_GET["width"]);
+$height = checkNumeric($_GET["height"]);
 
 if (!$image_id)
 {
@@ -53,6 +55,6 @@ if (!$image_id)
 	}
 }
 $mgr = new ImageManager();
-$mgr->renderThumbnail($image_id, $size);
+$mgr->renderThumbnail($image_id, $size, $width, $height);
 
 ?>
