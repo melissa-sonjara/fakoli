@@ -71,7 +71,7 @@ class ImageManager
 		//	throw new FakoliException("Access Denied");
 		//}
 		
-		if (!$size) $size = $config['thumbnail_size'];
+		if (!$size && !$width && !$height) $size = $config['thumbnail_size'];
 		
 		$ext = strtolower(substr($image->image_file, -4));
 
