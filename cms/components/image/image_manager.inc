@@ -55,8 +55,10 @@ class ImageManager
 	 * 
 	 * @param $image_id the ID of the image to render
 	 * @param $size the size of the major axis, in pixels
+	 * @param $width the specific width of the rendered thumbnail (if $size is 0)
+	 * @param $height the specific height of the rendered thumbnail (if $size and $width are 0)
 	 */
-	function renderThumbnail($image_id, $size = 0)
+	function renderThumbnail($image_id, $size = 0, $width = 0, $height = 0)
 	{		
 		global $config;
 		
@@ -94,18 +96,36 @@ class ImageManager
 			$fullWidth = imagesx($src);
 			$fullHeight = imagesy($src);
 			
-			if ($fullWidth > $fullHeight)
+			if ($size)
 			{
-				$newWidth = $size;
-				$newHeight = intval(($fullHeight * $size) / $fullWidth);
-				
+				if ($fullWidth > $fullHeight)
+				{
+					$newWidth = $size;
+					$newHeight = intval(($fullHeight * $size) / $fullWidth);
+					
+				}
+				else
+				{
+					$newWidth = intval(($fullWidth * $size) / $fullHeight);
+					$newHeight = $size;
+				}
+			}
+			else if ($width)
+			{
+				$newWidth = $width;
+				$newHeight = intval(($fullHeight * $width) / $fullWidth);
+			}
+			else if ($height)
+			{
+				$newHeight = $height;
+				$newWidth = intval(($fullWidth * $height) / $fullHeight);
 			}
 			else
 			{
-				$newWidth = intval(($fullWidth * $size) / $fullHeight);
-				$newHeight = $size;
+				$newWidth = $fullWidth;
+				$newHeight = $fullHeight;
 			}
-			
+						
 			$dst = imagecreatetruecolor($newWidth, $newHeight);
 			imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $fullWidth, $fullHeight);
 			
