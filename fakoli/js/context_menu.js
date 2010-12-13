@@ -53,6 +53,6 @@ var ContextMenu = new Class(
 	
 	hide: function()
 	{
-		this.menu.setStyles({'display': 'none', 'opacity': 0});
+		if (this.menu) this.menu.setStyles({'display': 'none', 'opacity': 0});
 	}
 });

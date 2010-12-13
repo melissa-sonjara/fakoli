@@ -682,6 +682,7 @@ var Splitter = new Class({
 		
 		var size = (vert) ? this.layout.getHeight() : this.layout.getWidth();
 		size -= splitterSize;
+		if (size < 0) size = 0;
 		
 		this.panes[0].setStyle(prop, Math.floor(ratio[0] * size));
 		this.panes[1].setStyle(prop, Math.floor(ratio[1] * size));

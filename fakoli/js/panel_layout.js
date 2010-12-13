@@ -131,6 +131,8 @@ var Panel = new Class(
 	id:	"",
 	url: "",
 	div: null,
+	header: null,
+	body: null,
 	options: 
 	{ 
 		stretch: false, 
@@ -176,9 +178,16 @@ var Panel = new Class(
 			url: panelURL, 
 			onSuccess: function(tree, elements, html, script) 
 			{ 
+				elements.each(function(elt) { elt.panel = this;}.bind(this));
 				this.div.set('text', '');
 				this.div.adopt(tree);
+				
+				this.header = $$('.panel_header')[0];
+				this.body = $$('.panel_body')[0];
+				this.stretch();
+
 				$exec(script);
+				
 				this.fireEvent('load');
 			}.bind(this)
 		});
@@ -195,7 +204,18 @@ var Panel = new Class(
 		if (!this.options.stretch) return;
 		
 		var parent = this.div.getParent();
-		this.div.setStyles({width: parent.getWidth() - 2, height: parent.getHeight() - 2});
+		var parentHeight = parent.getHeight();
+		var parentWidth = parent.getWidth();
+		
+		this.div.setStyles({width: parentWidth - 2, height: parentHeight - 2});
+		
+		if (this.body)
+		{
+			var headerHeight = this.header ? this.header.getHeight() : 0;
+			
+			this.body.setStyles({width: parentWidth - 2, height: parentHeight - headerHeight - 2});
+		}
+		
 		this.fireEvent('stretched');
 	},
 	

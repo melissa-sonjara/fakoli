@@ -54,6 +54,17 @@ class PanelView
 		{
 			$this->script .= $this->menu->writeScript();
 		}
+		
+		$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+var <?echo $this->id?>_body = $('<?echo $this->id?>_body');
+if (<?echo $this->id?>_body.panel)
+{
+	panel.body = <?echo $this->id?>_body;
+	panel.header = $('<?echo $this->id?>_header');
+}
+</script>
+ENDSCRIPT;
 		return $this->script;
 	}
 	
