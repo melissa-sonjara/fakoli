@@ -51,6 +51,9 @@ class TabBar
 	var $defaultStateImage;
 	var $showStates = true;
 	
+	var $dynamic = false;
+	var $container = "";
+	
 	/**
 	 * Construct a new TabBar control.
 	 * 
@@ -76,6 +79,58 @@ class TabBar
 		trace("PAGE: **** {$this->page}", 3);
 	}
 	
+	function dynamicLoad($container)
+	{
+		$this->container = $container;
+		$this->dynamic = true;
+	}
+	
+	function writeScript()
+	{
+		$script = "";
+		if (!$this->dynamic) return $script;
+		
+		$script .= <<<ENDSCRIPT
+	<script type="text/javascript">
+	window.addEvent('domready', function()
+	{
+		$('{$this->id}').getElements("a").each(function(a)
+		{
+			a.addEvent('click', function(e) 
+			{
+				new Event(e).stop();
+				var url = a.href;
+				var parent = a.getParent();
+				$('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
+				parent.addClass('current');
+				
+				var request = new Request.HTML(
+				{
+					evalScripts: false,
+					evalResponse: false,
+					method: 'get', 
+					url: a.href, 
+					onSuccess: function(tree, elements, html, script) 
+					{ 
+						var container = $('{$this->container}');
+						container.set('text', '');
+						container.adopt(tree);
+		
+						\$exec(script);
+
+					}.bind(this)
+				});
+				
+				request.send();
+							
+			});
+		});
+	});
+	</script>	
+ENDSCRIPT;
+
+		return $script;
+	}
 	/**
 	 * Writes the HTML for this control to standard output.
 	 */
