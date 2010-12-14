@@ -4,7 +4,6 @@ var ContextMenu = new Class(
 	
 	elements: [],
 	menu: 	null,
-	root:	null,
 	trigger:	'contextmenu',
 	options:
 	{
@@ -16,6 +15,9 @@ var ContextMenu = new Class(
 	initialize: function(menu, elementSelector, trigger, options)
 	{
 		this.menu = $(menu);
+
+		if (!this.menu) return;
+
 		this.trigger = trigger;
 		this.setOptions(options);
 		
@@ -25,19 +27,24 @@ var ContextMenu = new Class(
 		{
 			elt.addEvent(trigger, function(e)
 			{
-				me.root = elt;
+				ContextMenu.root = elt;
 				var event = new Event(e).stop();
 				me.show(event);
 			});
 		});
 		
-		$(document.body).addEvent('click', function(e) { me.hide(); });
+		var doc = $(document.body ? document.body : document.documentElement);
+		
+		doc.addEvent('click', function(e) { me.hide(); });
+		
+		this.menu = this.menu.dispose();
+		doc.adopt(this.menu);
 		
 	},
 	
 	show: function(event)
 	{
-		var coords = this.root.getCoordinates();		
+		var coords = ContextMenu.root.getCoordinates();		
 		var bc = $(document.body).getCoordinates();
 		
 		var left = (event && this.options.position == 'pointer') ? event.page.x : coords.left;
@@ -56,3 +63,6 @@ var ContextMenu = new Class(
 		if (this.menu) this.menu.setStyles({'display': 'none', 'opacity': 0});
 	}
 });
+
+// Static global for root element of displayed menu
+ContextMenu.root = null;

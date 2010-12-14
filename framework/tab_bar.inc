@@ -96,20 +96,14 @@ class TabBar
 	{
 		$('{$this->id}').getElements("a").each(function(a)
 		{
-			a.addEvent('click', function(e) 
+			a.loadTab = function()
 			{
-				new Event(e).stop();
-				var url = a.href;
-				var parent = a.getParent();
-				$('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
-				parent.addClass('current');
-				
 				var request = new Request.HTML(
 				{
 					evalScripts: false,
 					evalResponse: false,
 					method: 'get', 
-					url: a.href, 
+					url: this.href, 
 					onSuccess: function(tree, elements, html, script) 
 					{ 
 						var container = $('{$this->container}');
@@ -122,8 +116,23 @@ class TabBar
 				});
 				
 				request.send();
-							
+			};
+			
+			a.addEvent('click', function(e) 
+			{
+				new Event(e).stop();
+				var url = a.href;
+				var parent = a.getParent();
+				$('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
+				parent.addClass('current');
+				
+				a.loadTab();			
 			});
+		});
+		
+		$('{$this->id}').getElements("li.current a").each(function(a)
+		{
+			a.loadTab();
 		});
 	});
 	</script>	
