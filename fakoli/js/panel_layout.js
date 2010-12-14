@@ -79,12 +79,12 @@ var PanelLayout = (function()
 				}.bind(this));
 			}
 				
-			panel = new Panel(id, options);
-			panel.load(panelURL, slot.id, function() { slot.removeClass("background-spinner");});
+			var newPanel = new Panel(id, options);
+			newPanel.load(panelURL, slot.id, function() { slot.removeClass("background-spinner");});
 			
-			this.dock(panel, slot);
+			this.dock(newPanel, slot);
 			
-			return panel;
+			return newPanel;
 		},
 		
 		stretch: function()

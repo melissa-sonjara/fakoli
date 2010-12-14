@@ -5,15 +5,20 @@ $uri = $_GET["uri"];
 
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
-var testSplitter;
 var layout;
 
-function toggleSplit()
+function stretch()
 {
-	var orientation = (testSplitter.options.orientation == "horizontal") ? "vertical" : "horizontal";
-	testSplitter.setOrientation(orientation);
+	var cw = window.innerWidth == undefined ?
+			((document.documentElement.clientWidth == 0) ? document.body.clientWidth : document.documentElement.clientWidth)
+											 : window.innerWidth;
+	var ch = window.innerHeight == undefined ? 
+			((document.documentElement.clientHeight == 0) ? document.body.clientHeight : document.documentElement.clientHeight)
+											 : window.innerHeight;
+
+	$('slot1').setStyles({width: cw, height: ch}); 
 }
-	
+
 window.addEvent('domready', function()
 {
 	layout = new PanelLayout();
@@ -21,6 +26,10 @@ window.addEvent('domready', function()
 	layout.addSlots('.slot');	
 	var panel = layout.dockAndLoad('main', '{$uri}', 'slot1', {stretch: true});
 	panel.addEvent('close', function() { window.close(); });
+	
+	stretch();
+	window.addEvent('resize', stretch);
+	
 });
 </script>
 ENDSCRIPT;
