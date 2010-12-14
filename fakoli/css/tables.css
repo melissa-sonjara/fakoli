@@ -246,7 +246,7 @@ div.scrollContainer
 	overflow-y: scroll\9;
 	overflow-x: hidden\9;
 	border: solid #666\9;
-	border-width: 1px 1px 1px 0\9;
+	border-width: 1px 1px 1px 1px\9;
 }
 
 table.scroll 
