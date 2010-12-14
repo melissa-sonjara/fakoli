@@ -46,6 +46,9 @@ class NumberFieldRenderer extends FieldRenderer
 {
 	// Whether user can enter a negative number
 	var $allowNegative = false;
+	var $size = 15;
+	var $onKeyUp; // javascript callback function
+	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
 	
 	function NumberFieldRenderer(&$parent)
 	{
@@ -56,12 +59,14 @@ class NumberFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
+		$disable = ($this->disable) ? "disabled='disabled'" : "";
+		$onKeyUp = ($this->onKeyUp) ? " onkeyup='{$this->onKeyUp}()'" : "";
 		// JDG - maskInput function doesn't recognize boolean var value
 		// translate to 0 or 1
 		$allowneg = ($this->allowNegative) ? 1 : 0;
-		echo "<input type='text' name='$field' 
+		echo "<input id='{$this->parent->id}_$field' type='text' name='$field' 
 		value='".$this->parent->data->get($field)."' 
-		size='15' onkeypress='return maskInput(event, $allowneg);'/>";
+		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onKeyUp/>";
 
 		$this->_endField($field);
 	}
