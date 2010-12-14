@@ -204,16 +204,19 @@ var Panel = new Class(
 		if (!this.options.stretch) return;
 		
 		var parent = this.div.getParent();
-		var parentHeight = parent.getHeight();
-		var parentWidth = parent.getWidth();
+		var parentHeight = parent.getHeight() - 2;
+		var parentWidth = parent.getWidth() - 2;
 		
-		this.div.setStyles({width: parentWidth - 2, height: parentHeight - 2});
+		if (parentHeight < 0) parentHeight = 0;
+		if (parentWidth < 0) parentWidth = 0;
+		
+		this.div.setStyles({width: parentWidth, height: parentHeight});
 		
 		if (this.body)
 		{
 			var headerHeight = this.header ? this.header.getHeight() : 0;
 			
-			this.body.setStyles({width: parentWidth - 2, height: parentHeight - headerHeight - 2});
+			this.body.setStyles({width: parentWidth, height: parentHeight - headerHeight});
 		}
 		
 		this.fireEvent('stretched');
