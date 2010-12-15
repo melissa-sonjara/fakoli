@@ -48,13 +48,13 @@ class ImageGallery extends DataItem
 	
 	// Relations
 	
-	var $relations = array(	"Images"	=>	Image,
+	var $relations = array(	"Images"	=>	ImageRecord,
 							"Owner"		=>	"");
 
 	
 	function Images($constraint = "")
 	{
-		return $this->getRelatedList(Image, "", $constraint);
+		return $this->getRelatedList(ImageRecord, "", $constraint);
 	}
 	
 	function Owner()
@@ -79,7 +79,7 @@ class ImageGallery extends DataItem
 			$constraint = "WHERE ";
 		}
 		$constraint .= "gallery_id={$this->gallery_id}";
-		return queryValue(Image, "COUNT(1)", $constraint);
+		return queryValue(ImageRecord, "COUNT(1)", $constraint);
 	}
 	
 	function getGalleryDirectory()

@@ -39,7 +39,7 @@ $gallery_id = checkNumeric($_GET["gallery_id"]);
 
 if (!$image_id && !$gallery_id) redirect("/admin/image_galleries");
 
-$image = new Image();
+$image = new ImageRecord();
 
 if ($image_id)
 {

@@ -32,7 +32,7 @@
 *****************************************************************/
 
 
-class Image extends DataItem
+class ImageRecord extends DataItem
 {
 	// Fields
 	var $fields = array("image_id"				=> Number,
@@ -57,12 +57,13 @@ class Image extends DataItem
 		return $this->getRelated(ImageGallery);
 	}
 	
-	function Image()
+	function ImageRecord()
 	{
 		$this->table = "image";
 		$this->primary_key = "image_id";
 		
 		$this->default_format = "{title}";
+		$this->pretty_class_name = "Image";		
 		
 		$this->DataItem(func_get_args());
 	}
@@ -88,7 +89,7 @@ class Image extends DataItem
 	
 	static function findByFileName($filename)
 	{
-		$images = Query::create(Image, "WHERE image_file=:f")
+		$images = Query::create(ImageRecord, "WHERE image_file=:f")
 					->bind(":f", $filename)
 					->execute();
 		

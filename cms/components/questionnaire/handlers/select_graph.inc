@@ -30,15 +30,14 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-/*
-Fakoli::using("questionnaire");
+
+Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_pie.php');
 require_once ('jpgraph/jpgraph_pie3d.php');
 
-echo "here";
 $question_id = checkNumeric($_GET["question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
@@ -50,7 +49,6 @@ $answers = $survey->Answers("WHERE survey_question_id=$survey_question_id");
 
 $options = explode("\n", $question->options);
 $idx = 1;
-echo "<pre>"; print_r($options); echo "</pre>";
 $optionAnswers = array();
 $legengs = array();
 
@@ -68,7 +66,7 @@ if(count($options) > 0)
 }		
 
 // Create the Pie Graph.
-$graph = new PieGraph(500,300);
+$graph = new PieGraph(850,400);
 $graph->SetFrame(false);
 $graph->SetAntiAliasing();
 
@@ -81,7 +79,7 @@ $graph->SetAntiAliasing();
 // Create pie plot
 $p1 = new PiePlot($optionAnswers);
 //$p1->SetTheme("sand");
-$p1->SetCenter(0.4);
+$p1->SetCenter(0.25);
 //$p1->SetAngle(30);
 $p1->value->SetFont(FF_ARIAL,FS_NORMAL,12);
 $p1->SetLegends($legends);
@@ -90,4 +88,3 @@ $p1->SetShadow();
 $graph->Add($p1);
 $graph->Stroke();	
 ?>
-*/

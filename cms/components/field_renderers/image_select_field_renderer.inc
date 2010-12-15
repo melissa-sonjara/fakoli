@@ -73,7 +73,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 			$key = $this->parent->data->get($field);
 		if ($key)
 		{
-			$item = new Image($key);
+			$item = new ImageRecord($key);
 			$src = $item->getThumbnail();
 		}
 		else

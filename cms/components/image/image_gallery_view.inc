@@ -104,7 +104,7 @@ class ImageGalleryList
 		if (count($this->galleries) == 0) return;
 		
 		$ids = formatItems($this->galleries, "{gallery_id}", ", ");
-		$groupedImages = GroupedQuery::create(Image, "WHERE gallery_id IN (". $ids .") AND published=1", "gallery_id")
+		$groupedImages = GroupedQuery::create(ImageRecord, "WHERE gallery_id IN (". $ids .") AND published=1", "gallery_id")
 						->execute();
 						
 		foreach($groupedImages as $gallery_id => $images)

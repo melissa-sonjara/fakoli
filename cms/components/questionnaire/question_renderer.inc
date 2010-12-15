@@ -560,7 +560,7 @@ class CheckListView extends QuestionField
 		$qPk = $this->question->getPrimaryKey();
 		$link ="/action/questionnaire/checklist_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
 		
-		require_once $link;
+		//require_once $link;
 ?>
 <img src="<?php echo $link ?>" alt="Histogram"/>
 <?

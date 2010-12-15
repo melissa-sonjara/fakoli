@@ -62,7 +62,7 @@ class ImageManager
 	{		
 		global $config;
 		
-		$image = new Image($image_id);
+		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
 
 		//TODO: Fix this
@@ -196,7 +196,7 @@ class ImageManager
 	 */
 	function renderImage($image_id)
 	{
-		$image = new Image($image_id);
+		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
 		
 		//TODO: Fix this
@@ -258,7 +258,7 @@ class ImageManager
 	 */
 	function getSize($image_id, &$width, &$height)
 	{
-		$image = new Image($image_id);
+		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
 		
 		//TODO: Fix this

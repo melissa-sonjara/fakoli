@@ -51,14 +51,14 @@ class Article extends DataItem
 						"tags"			=>	String,
 						"author_id"		=>	Number);
 
-	var $relations = array(	"Image" 	=> Image,
+	var $relations = array(	"Image" 	=> ImageRecord,
 							"Sites"		=> Site,
 							"Comments"	=> Comment,
 							"Author"	=> "");
 	
 	function Image()
 	{
-		return $this->getRelated(Image);
+		return $this->getRelated(ImageRecord);
 	}
 	
 	function Sites($constraint = "")

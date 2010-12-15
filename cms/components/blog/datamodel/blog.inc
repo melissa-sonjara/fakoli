@@ -52,7 +52,7 @@ class Blog extends DataItem
 	
 	var $relations = array("Owner"		=>	"",
 						   "Articles"	=>	Article,
-						   "Image"		=>	Images);
+						   "Image"		=>	ImageRecord);
 						
 	function Owner()
 	{
@@ -67,7 +67,7 @@ class Blog extends DataItem
 	
 	function Image()
 	{
-		return $this->getRelated(Image);
+		return $this->getRelated(ImageRecord);
 	}
 	
 	function Articles($constraint = "")

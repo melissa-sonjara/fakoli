@@ -41,7 +41,7 @@ if (!$image_id)
 	$img = $_GET["img"];
 	if ($img)
 	{
-		$image = Image::findByFilename($img);
+		$image = ImageRecord::findByFilename($img);
 		if ($image) 
 		{
 			$image_id = $image->image_id;
@@ -54,7 +54,7 @@ if (!$image_id)
 }
 else
 {
-	$image = new Image($image_id);
+	$image = new ImageRecord($image_id);
 }
 
 $width = 100;

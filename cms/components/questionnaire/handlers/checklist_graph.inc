@@ -30,8 +30,8 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-/*
-Fakoli::using("questionnaire");
+
+Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
 require_once ('jpgraph/jpgraph.php');
@@ -41,7 +41,7 @@ function getOptionText($options)
 {
 	$optionText = array();
 	
-	$options = explode("\n", $this->question->options);
+	$options = explode("\n", $options);
 	
 	$idx = 1;
 	foreach($options as $option)
@@ -52,12 +52,12 @@ function getOptionText($options)
 	return $optionText;
 }
 	
-$question_id = checkNumeric($_GET["question_id"]);
+$question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 
-$question = new Question($question_id);
+$question = new SurveyQuestion($question_id);
 $survey = new EmailSurvey($survey_id);
-$answers = $survey->Answers("WHERE question_id=$question_id");
+$answers = $survey->Answers("WHERE survey_question_id=$question_id");
 		
 $answerValues = regroupList($answers, "value");
 
@@ -109,5 +109,3 @@ $graph->Add($bplot);
 // Finally send the graph to the browser
 $graph->Stroke();
 ?>
-?>
-*/
