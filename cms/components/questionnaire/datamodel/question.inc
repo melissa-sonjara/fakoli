@@ -32,7 +32,7 @@
 *****************************************************************/
 
 
-class StemQuestion extends DataItem
+class Question extends DataItem
 {
 	var $fields = array (	"question_id"			=>	Number,
 							"questionnaire_id"		=>	Number,
@@ -122,7 +122,7 @@ class StemQuestion extends DataItem
 	}
 	
 	
-	function StemQuestion()
+	function Question()
 	{
 		$this->table = "question";
 		$this->primary_key = "question_id";
