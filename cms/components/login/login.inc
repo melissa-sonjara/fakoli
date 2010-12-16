@@ -78,8 +78,7 @@ class LoginManager
 		
 		$message = "This is a message from {$config["sitename"]}. ";
 		$message .= "A temporary password has been created for your account:\n\n";
-		if($userNameField != $emailField)
-			$message .= $userNameField . " = {$siteUser->$userNameField}\n";
+		$message .= "Username = " . $siteUser->$userNameField ."\n";
 		$message .= "Password = " . $token->token . "\n\n";
 		$message .= "This password is valid for one login ONLY and expires after ";
 		$message .= formatDateShort($token->expire_date) . ". ";
