@@ -74,7 +74,7 @@ class LoginManager
 		
 		$mgr = new UserManager();
 		$userNameField = $mgr->getUsernameField();
-		$emailField = $mgr->getEmailField();
+		$userNameField = $siteUser->hasField($userNameField) ? $userNameField : $mgr->getEmailField();
 		
 		$message = "This is a message from {$config["sitename"]}. ";
 		$message .= "A temporary password has been created for your account:\n\n";
