@@ -73,11 +73,13 @@ class ImageManager
 		
 		if (!$size && !$width && !$height) $size = $config['thumbnail_size'];
 		
+		$suffix = $size ? "" : $width ? "w" : $height ? "h" : "";
+		
 		$ext = strtolower(substr($image->image_file, -4));
 
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
-		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $size . $ext;
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $size . $suffix . $ext;
 		
 		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
 		{
