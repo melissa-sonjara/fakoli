@@ -101,7 +101,9 @@ class DocumentLibrary extends DataItem
 	{
 		$this->primary_key = "document_library_id";
 		$this->table = "document_library";
-
+	
+		$this->default_format = "{name}";
+	
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 

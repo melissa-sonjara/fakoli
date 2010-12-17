@@ -411,4 +411,19 @@ function deleteFolderResult(result)
 	
 		}
 	}
+	
+		
+	/**
+	 * Enumerate the Document objects.
+	 * @param  $items collection that the Document items are returned in
+	 */
+	static function enumerateItems(&$items)
+	{
+		$documents = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+		
+		$items["Document Library"] = $documents;
+		return $items;
+	}
+	
+	
 }

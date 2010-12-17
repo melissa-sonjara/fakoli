@@ -46,6 +46,13 @@ class DocumentManifest
 		return $component;
 	}
 	
+	static function subscribeToEvents()
+	{
+		return array(
+				"EnumerateItems"	 => array(DocumentManager, enumerateItems)
+				);
+	}
+	
 	static function getAdminMenu()
 	{
 		return array
@@ -57,7 +64,7 @@ class DocumentManifest
 									  "role"	=>	"admin",
 									  "weight"	=>	3)
 			)
-		);		
+		);
 	}	
 }
 
