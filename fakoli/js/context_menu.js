@@ -23,13 +23,17 @@ var ContextMenu = new Class(
 		
 		var me = this;
 		
-		$$(elementSelector).each(function(elt)
+		elementSelector = $splat(elementSelector);
+		elementSelector.each(function(selector)
 		{
-			elt.addEvent(trigger, function(e)
+			$$(selector).each(function(elt)
 			{
-				ContextMenu.root = elt;
-				var event = new Event(e).stop();
-				me.show(event);
+				elt.addEvent(trigger, function(e)
+				{
+					ContextMenu.root = elt;
+					var event = new Event(e).stop();
+					me.show(event);
+				});
 			});
 		});
 		
@@ -48,9 +52,10 @@ var ContextMenu = new Class(
 		var bc = $(document.body).getCoordinates();
 		
 		var left = (event && this.options.position == 'pointer') ? event.page.x : coords.left;
+		var top =  (event && this.options.position == 'pointer') ? event.page.y : coords.bottom - bc.top;
 		
 		this.menu.setStyles(
-				{'top': coords.bottom - bc.top + this.options.offsetY,
+				{'top': top + this.options.offsetY,
 				 'left': left + this.options.offsetX,
 				 'display': 'block',
 				 'opacity': 0,

@@ -200,6 +200,20 @@ function isDefined(obj)
 	 if(typeof(obj) !="undefined") return true; else return false; 
 }
 
+function findAncestor(element, tag)
+{
+	tag = tag.toUpperCase();
+	do
+	{
+		alert(element.tagName);
+		if (element.tagName.toUpperCase() == tag) return element;
+		element = element.getParent();
+	}
+	while(element);
+	
+	return null;		
+}
+
 function appendQueryString(url, params)
 {
 	url += url.indexOf("?") >= 0 ? "&" : "?";
