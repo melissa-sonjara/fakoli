@@ -63,7 +63,7 @@ class DataListView
 	var $excelFile;		///< Filename for automatic Excel export
 	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
 	var $summary;		  ///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
-	
+	var $zebra;			///< Specifies whether alternate rows in the table should be striped
 	// Scrolling Table parameters
 	
 	var $height;
@@ -98,6 +98,7 @@ class DataListView
 		$this->onStartRow = null;
 		$this->excelFile = null;
 		$this->summary = null;
+		$this->zebra = true;
 		
 		return $this;
 	}
@@ -255,7 +256,8 @@ class DataListView
 
 		if ($this->sortable)
 		{
-			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter});";
+			$zebra = $this->zebra ? "true" : "false";
+			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter, zebra: $zebra});";
 		}
 		
 		if ($constructor)
