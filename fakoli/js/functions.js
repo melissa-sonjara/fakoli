@@ -205,7 +205,6 @@ function findAncestor(element, tag)
 	tag = tag.toUpperCase();
 	do
 	{
-		alert(element.tagName);
 		if (element.tagName.toUpperCase() == tag) return element;
 		element = element.getParent();
 	}
