@@ -62,6 +62,7 @@ class AutoForm
 	var $overrides = array();			///< The field overrides collection
 	var $hidden = array();				///< The hidden fields collection
 	var $additional = array();			///< The additional (pseudo) fields collection
+	var $additional_at_top = false;		// whether additional fields are rendered above the datamodel's field list; if false, then rendered below
 	var $readonly = array();			///< The read-only fields collection
 	var $annotations = array();			///< The field annotations collection
 	var $buttons = array();				///< The custom buttons collection
@@ -618,26 +619,10 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		if ($this->style) echo " style='{$this->style}'";
 		echo ">\n";
 
-		if ($this->buttons_at_top) {
+		if ($this->buttons_at_top) 
+		{
 			echo "<tr>\n";
-			echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
-			if ($this->useLinkSubmit)
-			{
-				echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
-			}
-			else
-			{
-				echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
-			}
-
-			if ($obj->get($pk) && $this->allowDelete)
-			{
-				$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
-					
-				echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
-			      value='$deleteLabel'
-			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
-			}
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
 
 			$this->drawButtons();
 
@@ -651,9 +636,25 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			echo "<tr>\n <td colspan='2'><b>* indicates required field</b></td></tr>\n";
 		}
 
+		if($this->additional_at_top)
+			$this->renderAdditionalFields($obj);	
 		$this->renderFields($obj);
-	
+		if(!$this->additional_at_top)
+			$this->renderAdditionalFields($obj);	
+		
 		echo "<tr>\n";
+		$this->drawSubmitButtons($obj, $pk, $submitLabel);
+		$this->drawButtons();
+
+		echo "</td></tr>";
+		echo "</table>\n</form>\n";
+	}
+	
+	/*
+	 * JDG 12/17/2010 - break out from drawForm into into function 
+	 */
+	function drawSubmitButtons($obj, $pk, $submitLabel)
+	{
 		echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
 		if ($this->useLinkSubmit)
 		{
@@ -667,17 +668,13 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		if ($obj->get($pk) && $this->allowDelete)
 		{
 			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
-
+				
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
-			      value='$deleteLabel'
-			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
-		}
-
-		$this->drawButtons();
-
-		echo "</td>";
-		echo "</table>\n</form>\n";
+		      value='$deleteLabel'
+		      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
+		}	
 	}
+	
 	
 	/*
 	 * JDG 9/14/2010
@@ -706,7 +703,14 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 				}
 			}
 		}
-
+	}
+	
+	/*
+	 * JDG 12/17/2010 - break out into function to allow option
+	 * to render additional fields at the top.
+	 */
+	function renderAdditionalFields($obj)
+	{
 		foreach($this->additional as $r)
 		{
 			$renderer = $r['renderer'];
@@ -720,8 +724,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			{
 				$renderer->renderField($field);
 			}
-		}
-		
+		}		
 	}
 
 	/**
