@@ -113,6 +113,11 @@ var PanelLayout = (function()
 			if (panel == null) return;
 			
 			popup("/tearoff?uri=" + escape(panel.url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+		},
+		
+		tearoffURL: function(url)
+		{
+			popup("/tearoff?uri=" + escape(url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		}
 	});
 	
