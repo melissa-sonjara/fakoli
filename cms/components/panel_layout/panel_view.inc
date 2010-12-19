@@ -23,6 +23,12 @@ class PanelButton
 	}
 }
 
+interface PanelControl
+{
+	function writeScript();
+	function drawControl();
+}
+	
 class PanelView
 {
 	var $id;
@@ -33,6 +39,7 @@ class PanelView
 	var $menu;
 	var $script;
 	var $buttons;
+	var $controls;
 	
 	function PanelView($id, $title)
 	{
@@ -40,12 +47,18 @@ class PanelView
 		$this->title = $title;
 		
 		$this->buttons = array();
+		$this->controls = array();
 	}
 	
 	function button($icon, $text, $tooltip, $action)
 	{
 		$this->buttons[] = new PanelButton($icon, $text, $tooltip, $action);		
 		return $this;
+	}
+	
+	function control($control)
+	{
+		$this->controls[] = $control;
 	}
 	
 	function writeScript()
@@ -55,7 +68,7 @@ class PanelView
 			$this->script .= $this->menu->writeScript();
 		}
 		
-		$script .= <<<ENDSCRIPT
+		$this->script .= <<<ENDSCRIPT
 <script type="text/javascript">
 var <?echo $this->id?>_body = $('<?echo $this->id?>_body');
 if (<?echo $this->id?>_body.panel)
@@ -65,6 +78,15 @@ if (<?echo $this->id?>_body.panel)
 }
 </script>
 ENDSCRIPT;
+
+		if (count($this->controls) > 0)
+		{
+			foreach($this->controls as $control)
+			{
+				$this->script .= $control->writeScript();
+			}
+		}
+		
 		return $this->script;
 	}
 	
@@ -95,6 +117,7 @@ ENDSCRIPT;
 ?>	
 		  <?echo $this->title?>
 <?
+		
 		if (count($this->buttons) > 0)
 		{
 ?>
@@ -107,6 +130,14 @@ ENDSCRIPT;
 ?>			
 			</div>
 <?
+		}
+		
+		if (count($this->controls) > 0)
+		{
+			foreach($this->controls as $control)
+			{
+				$control->drawControl();
+			}
 		}
 ?>
 		 </div>
