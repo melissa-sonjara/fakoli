@@ -32,7 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("component", "role", "site");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("data_view", "context_menu");
 
 class ComponentPageListView
 {
@@ -52,6 +52,13 @@ class ComponentPageListView
 		}
 		
 		$this->table = new DataListView($this->pages, "component_pages");
+		$this->table->selector();
+		
+		$contextMenu = $this->table->commandMenu();
+		$contextMenu->command("component_enable", "Enable Pages", "#")
+					->command("component_disable", "Disable Pages", "#")
+				    ->command("component_roles", "Set Page Roles", "#")
+					->command("component_site",	"Set Page Site", "#");
 		
 		if (!$component)
 		{

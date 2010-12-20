@@ -70,11 +70,11 @@ class PanelView
 		
 		$this->script .= <<<ENDSCRIPT
 <script type="text/javascript">
-var <?echo $this->id?>_body = $('<?echo $this->id?>_body');
-if (<?echo $this->id?>_body.panel)
+var {$this->id}_body = $('{$this->id}_body');
+if ({$this->id}_body.panel)
 {
-	panel.body = <?echo $this->id?>_body;
-	panel.header = $('<?echo $this->id?>_header');
+	panel.body = {$this->id}_body;
+	panel.header = $('{$this->id}_header');
 }
 </script>
 ENDSCRIPT;

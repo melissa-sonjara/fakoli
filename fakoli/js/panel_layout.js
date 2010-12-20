@@ -138,6 +138,7 @@ var Panel = new Class(
 	div: null,
 	header: null,
 	body: null,
+	slotID: "",
 	options: 
 	{ 
 		stretch: false, 
@@ -156,22 +157,10 @@ var Panel = new Class(
 	{		
 		if (loadcallback) this.addEvent('load', loadcallback);
 		this.url = panelURL;
+		this.slotID = slotID;
+		
+		panelURL = this.addPanelToURL(panelURL);
 
-		if (panelURL.indexOf("?") >= 0)
-		{
-			panelURL += "&";
-		}
-		else
-		{
-			panelURL += "?";
-		}
-		
-		panelURL += "panel=" + this.id;
-		
-		if (slotID)
-		{
-			panelURL += "&slot=" + slotID;
-		}
 		this.div = new Element('div', {id: this.id});
 		this.div.panel = this;
 		
@@ -187,8 +176,8 @@ var Panel = new Class(
 				this.div.set('text', '');
 				this.div.adopt(tree);
 				
-				this.header = $$('.panel_header')[0];
-				this.body = $$('.panel_body')[0];
+				this.header = this.div.getElements('.panel_header')[0];
+				this.body = this.div.getElements('.panel_body')[0];
 				this.stretch();
 
 				$exec(script);
@@ -231,5 +220,64 @@ var Panel = new Class(
 	{
 		this.fireEvent('close');
 		this.div.dispose();
+	},
+	
+	addPanelToURL: function(panelURL)
+	{
+		if (panelURL.indexOf("?") >= 0)
+		{
+			panelURL += "&";
+		}
+		else
+		{
+			panelURL += "?";
+		}
+		
+		panelURL += "panel=" + this.id;
+		
+		if (this.slotID)
+		{
+			panelURL += "&slot=" + this.slotID;
+		}
+		
+		return panelURL;
+	},
+		
+	update: function (panelURL)
+	{
+		if (!panelURL)
+		{
+			panelURL = this.url;
+		}
+		else
+		{
+			this.url = panelURL;
+		}
+
+		panelURL = this.addPanelToURL(panelURL);
+				
+		var request = new Request.HTML(
+		{
+			evalScripts: false,
+			evalResponse: false,
+			method: 'get', 
+			url: panelURL, 
+			onSuccess: function(tree, elements, html, script) 
+			{ 
+				this.fireEvent('close');
+				elements.each(function(elt) { elt.panel = this;}.bind(this));
+				this.div.set('text', '');
+				this.div.adopt(tree);
+				
+				this.header = this.div.getElements('.panel_header')[0];
+				this.body = this.div.getElements('.panel_body')[0];
+				this.stretch();
+
+				$exec(script);
+				
+				this.fireEvent('load');
+			}.bind(this)
+		});
+		request.send();
 	}
 });
