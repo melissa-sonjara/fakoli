@@ -56,6 +56,8 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		
 	function renderField($field)
 	{
+		if($this->horizontal)
+			$this->colspan = 2;
 		$this->_startField($field);
 		
 		$current = $this->parent->data->get($field);

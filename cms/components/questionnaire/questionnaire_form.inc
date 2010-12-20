@@ -201,7 +201,7 @@ class QuestionnaireForm
 		$this->writeHTML();
 		
 		echo "<br/>";
-		echo "<input type=\"submit\" style=\"float: right\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
+		echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
 		echo "<br/>";
 		echo "</form>";	
 		echo "</div>";	
@@ -247,7 +247,7 @@ class QuestionnaireForm
 		$pk = $this->mgr->item->getPrimaryKey();
 		$qPk = $this->mgr->getQuestionKey();
 		$aPk = $this->mgr->getAnswerKey();
-		
+
 		foreach($_POST as $name => $value)
 		{	
 		// convert array of checks to comma delimated string
@@ -271,6 +271,7 @@ class QuestionnaireForm
 				if(!$answer)
 				{
 					$answer = new $answerClass();
+					// e.g., response_id
 					$answer->$pk = $this->mgr->item->$pk;
 					$answer->$qPk = $question_id;
 					$answer->value = $valueAnswer;

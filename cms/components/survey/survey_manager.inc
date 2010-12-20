@@ -30,6 +30,13 @@ class SurveyManager
 	{
 		return "survey_answer_id";
 	}
+
+	function getQuestionNumber($question)
+	{
+		$xref = $question->SurveyQuestionXref($this->item->survey_id);
+		if($xref)
+			return  $xref->sort_order;
+	}
 	
 	function getQuestions()
 	{

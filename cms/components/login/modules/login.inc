@@ -34,7 +34,7 @@
 /*
  * Title: /login
  * 
- * Description: Validates the user login.
+ * Description: Validates the SiteUser login.
  * 
  * author: Andy Green for Sonjara, Inc.
  * 
@@ -43,6 +43,7 @@
  ***************************************************************/
 
 Fakoli::using("login");
+
 
 // Login form goes here
 ?>

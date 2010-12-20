@@ -57,8 +57,13 @@ class BooleanFieldRenderer extends FieldRenderer
 	
 	
 	function renderField($field)
-	{
-		echo "<tr>\n";
+	{		
+		if ($this->annotateBefore && $this->parent->annotations[$field] && $this->colspan == 1)
+		{
+			echo "<tr><td>". $this->parent->annotations[$field] ."</td></tr>";
+		}
+		
+		echo "<tr>\n";	
 		echo "<td colspan='2' style='text-align: left'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
 		echo "><input id='{$this->parent->id}_{$field}' type='checkbox' value='1' name='$field'";
@@ -69,7 +74,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo ">&nbsp;<label for='$field'>";
 		echo $this->_getLabel($field, false);
 		echo "</label>";
-		if ($this->parent->annotations[$field])
+		if (!$this->annotateBefore && $this->parent->annotations[$field])
 		{
 			echo "<br/>{$this->parent->annotations[$field]}";
 		}

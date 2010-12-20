@@ -57,7 +57,7 @@ $table->drawView();
 <br><br><input class='button' type="submit" name="reorder" value="&nbsp;Save Order&nbsp;"/>&nbsp;&nbsp;
 <a class='button' href='/survey_template_question_form?survey_template_id=<?php echo $survey_template_id ?>'>Create a New Question</a>&nbsp;&nbsp;
 <a class='button' href="/survey_template_question_select?survey_template_id=<?php echo $survey_template_id ?>">Select from Existing Questions</a>
-</div></form>
+</form></div>
 <?php 
 
 function formatSortOrderInputField($xref)

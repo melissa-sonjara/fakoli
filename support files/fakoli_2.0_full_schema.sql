@@ -490,30 +490,6 @@ CREATE TABLE  `page_module_xref` (
   PRIMARY KEY (`join_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DROP TABLE IF EXISTS `question_type`;
-CREATE TABLE  `question_type` (
-  `question_type_id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) NOT NULL COMMENT 'type name',
-  `class_name` varchar(100) NOT NULL COMMENT 'the name of the question renderer class',
-  `sort_order` tinyint(3) unsigned NOT NULL default '0' COMMENT 'order in the question form drop down',
-  `options` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this type has an options list',
-  `char_limit` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this type can have a char limit; 0 if not',
-  `num_rows` tinyint(3) unsigned NOT NULL default '0' COMMENT 'default number of rows, if applicable to type; 0 if not',
-  PRIMARY KEY  USING BTREE (`question_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Question types available for questionnaires';
-
-
-/*!40000 ALTER TABLE `question_type` DISABLE KEYS */;
-INSERT INTO `question_type` (`question_type_id`,`name`,`class_name`,`sort_order`,`options`,`char_limit`,`num_rows`) VALUES 
- (1,'Multiple Choice','MultipleChoiceView',4,1,0,0),
- (2,'Rating Question','RatingView',5,1,0,0),
- (3,'Short Text','ShortTextView',2,0,0,0),
- (4,'Free Text','FreeTextView',1,0,1,3),
- (5,'Checklist','CheckListView',3,1,0,0),
- (6,'Drop Down List','SelectFieldView',6,1,0,0);
-/*!40000 ALTER TABLE `question_type` ENABLE KEYS */;
-
-
 DROP TABLE IF EXISTS `site`;
 CREATE TABLE  `site` (
   `site_id` int(10) unsigned NOT NULL auto_increment,
@@ -620,6 +596,31 @@ CREATE TABLE  `questionnaire` (
   `title` varchar(100) NOT NULL COMMENT 'title of the individiual questionnaire: e.g., Course 312 Evaluation',
   PRIMARY KEY  (`questionnaire_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='links a questionnaire to its container class';
+
+
+DROP TABLE IF EXISTS `question_type`;
+CREATE TABLE  `question_type` (
+  `question_type_id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL COMMENT 'type name',
+  `class_name` varchar(100) NOT NULL COMMENT 'the name of the question renderer class',
+  `sort_order` tinyint(3) unsigned NOT NULL default '0' COMMENT 'order in the question form drop down',
+  `options` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this type has an options list',
+  `char_limit` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this type can have a char limit; 0 if not',
+  `num_rows` tinyint(3) unsigned NOT NULL default '0' COMMENT 'default number of rows, if applicable to type; 0 if not',
+  PRIMARY KEY  USING BTREE (`question_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Question types available for questionnaires';
+
+
+/*!40000 ALTER TABLE `question_type` DISABLE KEYS */;
+INSERT INTO `question_type` (`question_type_id`,`name`,`class_name`,`sort_order`,`options`,`char_limit`,`num_rows`) VALUES 
+ (1,'Multiple Choice','MultipleChoiceView',4,1,0,0),
+ (2,'Rating Question','RatingView',5,1,0,0),
+ (3,'Short Text','ShortTextView',2,0,0,0),
+ (4,'Free Text','FreeTextView',1,0,1,3),
+ (5,'Checklist','CheckListView',3,1,0,0),
+ (6,'Drop Down List','SelectFieldView',6,1,0,0);
+/*!40000 ALTER TABLE `question_type` ENABLE KEYS */;
+
 
 -- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 -- Tables for Survey Component
