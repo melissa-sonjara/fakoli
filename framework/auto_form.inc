@@ -880,6 +880,25 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		$this->msg = $this->validator->validate();
 		if ($this->msg != "") return false;
 
+		$this->preProcessFields($pk, $filter);
+	
+		$obj->save();
+
+		$this->postProcessFields($pk, $filter);
+		
+		// onComplete event is fired once all processing has been completed
+
+		if ($this->onSaveComplete)
+		{
+			$onComplete = $this->onSaveComplete;
+			$onComplete($this);
+		}
+
+		return true;
+	}
+
+	function preProcessFields($pk, $filter)
+	{
 		foreach (array_keys($this->fields) as $field)
 		{
 			if ($field != $pk  && !array_key_exists($field, $this->hidden) &&
@@ -892,7 +911,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 				}
 			}
 		}
-
+		
 		foreach($this->additional as $r)
 		{
 			$renderer = $r['renderer'];
@@ -900,10 +919,10 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 
 			$renderer->preProcess($field);
 		}
-
-
-		$obj->save();
-
+	}
+	
+	function postProcessFields($pk, $filter)
+	{
 		foreach (array_keys($this->fields) as $field)
 		{
 			if ($field != $pk  && !array_key_exists($field, $this->hidden) &&
@@ -924,18 +943,8 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 
 			$renderer->postProcess($field);
 		}
-
-		// onComplete event is fired once all processing has been completed
-
-		if ($this->onSaveComplete)
-		{
-			$onComplete = $this->onSaveComplete;
-			$onComplete($this);
-		}
-
-		return true;
 	}
-
+	
 	function remove(&$obj)
 	{
 		$obj->delete();

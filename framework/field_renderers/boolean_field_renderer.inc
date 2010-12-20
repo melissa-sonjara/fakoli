@@ -39,6 +39,8 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class BooleanFieldRenderer extends FieldRenderer
 {
+	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	
 	function BooleanFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);		
@@ -62,7 +64,9 @@ class BooleanFieldRenderer extends FieldRenderer
 		{
 			echo "<tr><td>". $this->parent->annotations[$field] ."</td></tr>";
 		}
-		
+
+		$disable = ($this->disable) ? "disabled='disabled'" : "";
+	
 		echo "<tr>\n";	
 		echo "<td colspan='2' style='text-align: left'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
@@ -71,7 +75,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		{
 			echo " checked";
 		}
-		echo ">&nbsp;<label for='$field'>";
+		echo " $disable>&nbsp;<label for='$field'>";
 		echo $this->_getLabel($field, false);
 		echo "</label>";
 		if (!$this->annotateBefore && $this->parent->annotations[$field])
