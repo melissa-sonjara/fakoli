@@ -73,6 +73,8 @@ class PanelView
 var {$this->id}_body = $('{$this->id}_body');
 if ({$this->id}_body.panel)
 {
+	var panel = {$this->id}_body.panel;
+	
 	panel.body = {$this->id}_body;
 	panel.header = $('{$this->id}_header');
 }
