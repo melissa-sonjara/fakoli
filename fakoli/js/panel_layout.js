@@ -7,6 +7,7 @@ var PanelLayout = (function()
 		slots: {},
 		panels: new Hash({}),
 		panelList: [],
+		splitters: [],
 		
 		options: 
 		{
@@ -41,6 +42,16 @@ var PanelLayout = (function()
 		addSlots: function(expr)
 		{
 			$$(expr).each(function(slot) { this.addSlot(slot); }.bind(this));
+		},
+		
+		addSplitter: function(splitter)
+		{
+			this.splitters.push(splitter);
+		},
+		
+		addSplitters: function(expr)
+		{
+			this.splitters = $$(expr);
 		},
 		
 		/**
@@ -118,6 +129,11 @@ var PanelLayout = (function()
 		tearoffURL: function(url)
 		{
 			popup("/tearoff?uri=" + escape(url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+		},
+		
+		calculateLayout: function()
+		{
+			this.splitters.each(function(s) { s.calculateLayout(); });
 		}
 	});
 	

@@ -608,6 +608,7 @@ var Splitter = new Class({
 	layout: null,
 	panes: [],
 	lastPosition: null,
+	resizing: false,
 	
 	options: 
 	{
@@ -659,6 +660,10 @@ var Splitter = new Class({
 	
 	calculateLayout: function()
 	{
+		if (this.resizing) return;
+		
+		this.resizing = true;
+		
 		var vert = this.options.orientation == 'vertical';
 		var prop = vert ? "height" : "width";
 		
@@ -687,6 +692,8 @@ var Splitter = new Class({
 		this.panes[0].setStyle(prop, Math.floor(ratio[0] * size));
 		this.panes[1].setStyle(prop, Math.floor(ratio[1] * size));
         this.fireEvent('resize');
+        
+        this.resizing = false;
 	},
 	
 	startResize: function(e)
