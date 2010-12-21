@@ -134,7 +134,7 @@ ENDSCRIPT;
 <?
 		foreach($this->items as $item)
 		{
-			echo "<li>";
+			echo "<li class='{$item->command_id}'>";
 			$item->draw();
 			echo "</li>";
 		}	
