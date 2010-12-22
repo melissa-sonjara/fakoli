@@ -137,7 +137,7 @@ class DataListView
 			$format = "<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
 		}
 				
-		if($format = "radio" && count($this->items) ){
+		if($format == "radio" && count($this->items) ){
 			$pk = $this->items[0]->primary_key;
 			$format = "<input type='radio' class='radio' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
 		}	
