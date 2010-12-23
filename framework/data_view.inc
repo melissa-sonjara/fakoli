@@ -128,7 +128,7 @@ class DataListView
 	 * Adds a selector column to the DataListView. If no format is specified
 	 * then selection is handled via a checklist box for the list objects' primary keys.
 	 * @param $format (optional) format to use for the selector
-	 */
+	 */ 
 	function selector($format = "")
 	{
 		if (!$format && count($this->items))
