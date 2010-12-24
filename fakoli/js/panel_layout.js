@@ -4,7 +4,7 @@ var PanelLayout = (function()
 	{
 		Implements: [Options],
 		container: null,
-		slots: {},
+		slots: new Hash({}),
 		panels: new Hash({}),
 		panelList: [],
 		splitters: [],
@@ -133,7 +133,17 @@ var PanelLayout = (function()
 		
 		calculateLayout: function()
 		{
-			this.splitters.each(function(s) { s.calculateLayout(); });
+			if (this.splitters.length > 0)
+			{
+				this.splitters.each(function(s) { s.calculateLayout(); });
+			}
+			else
+			{
+				$each(this.slots, function(slot, slotID)
+				{
+					slot.setStyles({'width': this.container.getWidth(), 'height': this.container.getHeight()});
+				}.bind(this));
+			}
 		}
 	});
 	

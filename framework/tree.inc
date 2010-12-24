@@ -116,7 +116,7 @@ class TreeNode
 		}
 		else
 		{
-			$title = $this->title;
+			$title = "<a href='#' onclick='return false'>{$this->title}</a>";
 		}
 		
 		if ($c == 0 && !$this->onDemand)
@@ -198,7 +198,7 @@ class TreeNode
 <?
 			}
 ?>
-		<a href="#" onclick="return false"><?echo $title?></a></div>
+		<?echo $title?></div>
 		<div id='<?echo $this->id?>_contents' style='padding-left: <?echo $_activeTree->indent ?>; display: <? echo $display?>'>
 			
 <?			
