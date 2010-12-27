@@ -16,7 +16,8 @@ function stretch()
 			((document.documentElement.clientHeight == 0) ? document.body.clientHeight : document.documentElement.clientHeight)
 											 : window.innerHeight;
 
-	$('slot1').setStyles({width: cw, height: ch}); 
+	$('tearoff').setStyles({width: cw, height: ch});
+	layout.calculateLayout(); 
 }
 
 window.addEvent('domready', function()
@@ -24,10 +25,11 @@ window.addEvent('domready', function()
 	layout = new PanelLayout();
 	layout.setup('tearoff', {stretch: true, replace: true});
 	layout.addSlots('.slot');	
+	stretch();
+	
 	var panel = layout.dockAndLoad('main', '{$uri}', 'slot1', {stretch: true});
 	panel.addEvent('close', function() { window.close(); });
 	
-	stretch();
 	window.addEvent('resize', stretch);
 	
 });

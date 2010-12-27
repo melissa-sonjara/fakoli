@@ -33,33 +33,50 @@
 
 Fakoli::assertRole("admin");
 
-$component_page_id = checkNumeric($_GET["component_page_id"]);
+$component_page_ids = checkNumeric($_GET["component_page_id"]);
 
-if (!$component_page_id) die("");
+if (!$component_page_ids) die("");
 
-$page = new ComponentPage($component_page_id);
-
-$filter = new InclusionFilter("component_page_id");
-
-if (isset($_GET["enabled"]))
+if (!is_array($component_page_ids))
 {
-	$filter->add("enabled");
-	$page->enabled = checkNumeric($_GET["enabled"]);
+	$component_page_ids = array($component_page_ids);
 }
 
-if (isset($_GET["role"]))
+foreach($component_page_ids as $component_page_id)
 {
-	$filter->add("role");
-	$page->role = mysql_escape_string($_GET["role"]);
+		
+	$page = new ComponentPage($component_page_id);
+	
+	$filter = new InclusionFilter("component_page_id");
+	
+	if (isset($_GET["enabled"]))
+	{
+		$filter->add("enabled");
+		$page->enabled = checkNumeric($_GET["enabled"]);
+	}
+	
+	if (isset($_GET["role"]))
+	{
+		$filter->add("role");
+		$page->role = mysql_escape_string($_GET["role"]);
+	}
+
+	if (isset($_GET["site_id"]))
+	{
+		$filter->add("site_id");
+		$page->site_id = checkNumeric($_GET["site_id"]);
+	}
+	
+	if (isset($_GET["template"]))
+	{
+		$filter->add("template");
+		$page->template = mysql_escape_string($_GET["template"]);
+	}
+	
+		
+	$page->filter = $filter;
+	$page->save();
 }
 
-if (isset($_GET["template"]))
-{
-	$filter->add("template");
-	$page->template = mysql_escape_string($_GET["template"]);
-}
-
-$page->filter = $filter;
-$page->save();
 echo "1";
 ?>

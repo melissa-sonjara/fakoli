@@ -55,10 +55,11 @@ class ComponentPageListView
 		$this->table->selector();
 		
 		$contextMenu = $this->table->commandMenu();
-		$contextMenu->command("component_enable", "Enable Pages", "#")
-					->command("component_disable", "Disable Pages", "#")
-				    ->command("component_roles", "Set Page Roles", "#")
-					->command("component_site",	"Set Page Site", "#");
+		$contextMenu->command("component_enable", "Enable Pages", "new ComponentPageList().setEnabled(1)", false)
+					->command("component_disable", "Disable Pages", "new ComponentPageList().setEnabled(0)", false)
+					->command("component_site",	"Set Page Template", "new ComponentPageList().templatePopup($('component_pages').getSelectedValues())", false)
+					->command("component_roles", "Set Page Roles", "new ComponentPageList().rolePopupMulti($('component_pages').getSelectedValues())", false)
+					->command("component_site",	"Set Page Site", "new ComponentPageList().sitePopup($('component_pages').getSelectedValues())", false);
 		
 		if (!$component)
 		{
@@ -88,12 +89,12 @@ class ComponentPageListView
 		$img = $page->enabled ? "on.png" : "off.png";
 		$alt = $page->enabled ? "Enabled" : "Disabled";
 
-		return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer' onclick='toggleEnabled(this, {$page->component_page_id})'/>";
+		return "<img src='/fakoli/images/$img' id='enable_{$page->component_page_id}' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer' onclick='new ComponentPageList().toggleEnabled(this, {$page->component_page_id})'/>";
 	}
 	
 	function formatTemplate($page)
 	{
-		$out = "<select onchange='changeTemplate(this.value, {$page->component_page_id})' id='select_{$page->identifier}'>\n";
+		$out = "<select onchange='new ComponentPageList().changeTemplate(this.value, {$page->component_page_id})' id='template_{$page->component_page_id}'>\n";
 		$out .= "<option value=''></option>\n";
 		foreach($this->templates as $template)
 		{
@@ -111,8 +112,8 @@ class ComponentPageListView
 	
 	function formatRole($page)
 	{
-		$out = "<button onclick=\"rolePopup('{$page->identifier}_roles', {$page->component_page_id}, this); return false\" class='button small' style='float: right'>...</button>";
-		$out .= "<span id=\"{$page->identifier}_roles\">$page->role</span>";
+		$out = "<button onclick=\"new ComponentPageList().rolePopup('roles_{$page->component_page_id}', {$page->component_page_id}, this); return false\" class='button small' style='float: right'>...</button>";
+		$out .= "<span id=\"roles_{$page->component_page_id}\">$page->role</span>";
 
 		return $out;
 	}
@@ -120,6 +121,7 @@ class ComponentPageListView
 	function writeScript()
 	{
 		$roles = SiteRole::getRolesArray();
+		$sites = Site::getSites();
 		
 		global $dialogs;
 		ob_start();
@@ -140,7 +142,49 @@ foreach($roles as $role => $name)
 <?	
 }
 ?>
-  <button class='button' style='float: right; margin-bottom: 4px' onclick='updateRoles()'>Update Roles</button>
+  <button class='button' style='float: right; margin-bottom: 4px' onclick='new ComponentPageList().updateRoles()'>Update Roles</button>
+ </div>
+</div>
+<div class="dialog" id="sitePopup" style="width: 200px">
+ <div class="dialog_header" id="sitePopupHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeSitePopup'">Close &times;</a></div>
+   <span"style="font-weight: bold">Sites</span>
+  </div>	
+ </div>
+ <div class="dialog_body">
+  <label for="site_id">Select Site: </label>
+   <select id="site_id" name="site_id">
+<?
+	foreach($sites as $s)
+	{
+		option($s->site_id, $s->site_name, 0);
+	}
+?>
+   </select><br/>
+  <button class='button' style='float: right; margin-bottom: 4px' onclick='new ComponentPageList().updateSites()'>Update Templates</button>
+ </div>
+</div>
+<div class="dialog" id="templatePopup" style="width: 200px">
+ <div class="dialog_header" id="templatePopupHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeTemplatePopup'">Close &times;</a></div>
+   <span"style="font-weight: bold">Templates</span>
+  </div>	
+ </div>
+ <div class="dialog_body">
+  <label for="template_id">Select Template: </label>
+	<select id='template_id'>
+	 <option value=''></option>   
+<?
+
+	foreach($this->templates as $template)
+	{
+		option($template, $template, "");
+	}
+?>
+   </select><br/>
+  <button class='button' style='float: right; margin-bottom: 4px' onclick='new ComponentPageList().updateTemplates()'>Update Templates</button>
  </div>
 </div>
 <?		
@@ -149,107 +193,7 @@ foreach($roles as $role => $name)
 		
 		ob_start();
 ?>
-<script type='text/javascript'>
-function toggleEnabled(img, id)
-{
-	var enable;
-	if (img.alt == "Enabled")
-	{
-		enable = 0;
-	}
-	else
-	{
-		enable = 1;
-	}
-	
-	var request = new Request({
-									url: "/action/component/update_page?component_page_id=" + id +"&enabled=" + enable,
-									method: 'get',
-									onSuccess: function (response) 
-									{ 
-										if (response == 1) 
-										{
-											img.src = enable ? "/fakoli/images/on.png" : "/fakoli/images/off.png";
-											img.alt = enable ? "Enabled" : "Disabled";
-										}
-									},
-									onFailure: function () {},
-									async: true
-								});
-	request.send();
-}
-
-function changeTemplate(template, id)
-{
-	var request = new Request({
-		url: "/action/component/update_page?component_page_id=" + id +"&template=" + encodeURIComponent(template),
-		method: 'get',
-		onSuccess: function (response) {},
-		onFailure: function () {},
-		async: true
-	});
-	request.send();
-}
-
-
-var rolePopupDialog;
-
-function rolePopup(roles, id, source)
-{
-	var popup = $('rolePopup');
-	
-	if (!rolePopupDialog)
-	{
-		rolePopupDialog = new FloatingDialog('rolePopup', {'closeLink': $('closeRolePopup'), 'position': 'absolute', 'width': 200});
-	}
-
-	popup.getElements("input[type='checkbox']").each(function(e) { e.checked = false; });
-
-	roles = $(roles);
-	var val = roles.get('text');
-	var tokens = val.split(',');
-
-	tokens.each(function(t) { if (t != '') $('role_' + t).checked = true; });
-
-	rolePopupDialog.targetID = id;
-	rolePopupDialog.roles = roles;
-	rolePopupDialog.top = source.getCoordinates().top;
-	rolePopupDialog.left = source.getCoordinates().left - 204;
-	rolePopupDialog.show();
-	
-}
-
-function updateRoles()
-{
-	var id = rolePopupDialog.targetID;
-	var popup = $('rolePopup');
-
-	var roles = [];
-	
-	popup.getElements("input[type='checkbox']").each(function(e) { if (e.checked) roles.push(e.value); });
-
-	var role = roles.join(",");
-
-	var request = new Request({
-		url: "/action/component/update_page?component_page_id=" + id +"&role=" + encodeURIComponent(role),
-		method: 'get',
-		onSuccess: function (response) 
-		{
-			if (response == 1)
-			{
-				rolePopupDialog.roles.set('text', role);
-				rolePopupDialog.roles = Class.Empty;
-				rolePopupDialog.targetID = 0;
-				rolePopupDialog.hide();
-			}
-		},
-		onFailure: function () {},
-		async: true
-	});
-request.send();
-}
-
-</script>
+<script type='text/javascript' src="/fakoli/component/component_page_list.js"></script>
 <?
 		$script = ob_get_contents();
 		ob_end_clean();

@@ -93,6 +93,11 @@ class Site extends DataItem
 		throw new FakoliException("No site defined");
 	}
 	
+	static function getSites()
+	{
+		return Query::create(Site, "ORDER BY site_name")->execute();
+	}
+	
 	// Constructor
 	function Site()
 	{
