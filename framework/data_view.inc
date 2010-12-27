@@ -266,6 +266,11 @@ class DataListView
 			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter, zebra: $zebra});";
 		}
 		
+		if ($this->selectable)
+		{
+			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
+		}
+		
 		if ($constructor)
 		{
 			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
