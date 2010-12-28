@@ -438,6 +438,17 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	}
 
 	/**
+	 * Use this method to hide the labels for the specified fields in the form.
+	 */
+	function hideLabel()
+	{
+		foreach(func_get_args() as $naked)
+		{
+			$this->getRenderer($naked)->hideLabel = true;
+		}
+	}
+	
+	/**
 	 * Call this method to make one or more fields read-only in the form's user interface.
 	 * For instance, calling readonly("field1", "field3") would cause field1 and field3
 	 * to be rendered read-only.

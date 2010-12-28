@@ -56,6 +56,7 @@ class FieldRenderer
 	var $colspan = 1;
 	var $annotateBefore = false;
 	var $annotateNextLine = true;
+	var $hideLabel = false;
 	
 	/**
 	 * Constructor
@@ -83,12 +84,18 @@ class FieldRenderer
 	 */
 	function _printLabel($field, $colspan=1, $styles = "", $annotation = "")
 	{		
+		if ($this->hideLabel && $colspan > 1 && !$annotation) return;
+		
 		$label = $this->_getLabel($field);
 		
 		echo "<td colspan='$colspan'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
 		if ($styles) echo " style='$styles'";
-		echo "><label for='$field'>$label</label> $annotation</td>\n";
+		echo ">";
+		
+		if (!$this->hideLabel) echo "<label for='$field'>$label</label> ";
+		
+		echo "$annotation</td>\n";
 	}
 
 	function _getLabel($field, $addSuffix = true)
