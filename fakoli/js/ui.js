@@ -128,9 +128,9 @@ function hideModalPopup(popup)
 	if (popup) popup.hide();
 }
 
-function messagePopup(title, message, returnPopup)
+function messagePopup(title, message, width, height, returnPopup)
 {
-	var popup = new ModalDialog('modalPopup', {'title': title, 'width': 'auto', 'height': 'auto'});
+	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height});
 	popup.options.body.set('html', message);
 	popup.show();
 	if (returnPopup) return popup; 
