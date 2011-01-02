@@ -87,7 +87,7 @@ class TextFieldRenderer extends FieldRenderer
 			echo "<div>";
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
-		echo "<textarea id='$field' name='$field' rows='{$this->rows}' cols='{$this->columns}'$onkeypress>";
+		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}'$onkeypress>";
 		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		echo "</textarea>";
 		

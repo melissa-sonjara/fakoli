@@ -59,7 +59,7 @@ window.addEvent('domready', function()
 		
 		$id = $this->parent->id."_".$field;
 		
-		echo "<input type='hidden' value='".$this->parent->data->get($field)."' id='{$id}'/><button class='button' id='{$id}_button'>&nbsp;</button>";
+		echo "<input type='hidden' name='$field' value='".$this->parent->data->get($field)."' id='{$id}'/><button class='button' id='{$id}_button'>&nbsp;</button>";
 		
 		$this->_endField($field);		
 	}
