@@ -88,6 +88,19 @@ class AutoForm
     
     var $readOnlyForm; ///< Specifies whether the entire form is read-only
     
+    static $fieldRendererMap = array (
+    	String		=>	StringFieldRenderer,
+    	HTML		=>	HTMLFieldRenderer,
+		Date		=>	DateFieldRenderer,
+    	DateTime	=>	DateTimeFieldRenderer,
+    	Number		=>	NumberFieldRenderer,
+    	Currency	=>	CurrencyFieldRenderer,
+		Boolean		=>	BooleanFieldRenderer,
+		TimeZone	=>	TimezoneFieldRenderer,
+		Password	=>	PasswordFieldRenderer,
+		Text		=>	TextFieldRenderer,
+		Time		=>	TimeFieldRenderer,
+		Rating		=>	RatingFieldRenderer);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
 	 *
@@ -159,53 +172,26 @@ class AutoForm
 
 		$type = $this->fields[$field];
 		
-		switch($type)
+		if ($type == "Timestamp") return null; // No field renderer required for this type
+		
+		if (array_key_exists($type, AutoForm::$fieldRendererMap))
 		{
-		case String: 
-			return new StringFieldRenderer($this);
-			
-		case HTML:
-			return new HTMLFieldRenderer($this);
-			
-		case Date:
-			return new DateFieldRenderer($this);
-			
-		case DateTime:
-			return new DateTimeFieldRenderer($this);
-			
-		case Number:
-			return new NumberFieldRenderer($this);
-			
-		case Currency:
-			return new CurrencyFieldRenderer($this);
-			
-		case Boolean:
-			return new BooleanFieldRenderer($this);
-			
-		case TimeZone:
-			return new TimezoneFieldRenderer($this);
-			
-		case Password:
-			return new PasswordFieldRenderer($this);
-			
-		case Text:
-			return new TextFieldRenderer($this);
-			
-		case Time:
-			return new TimeFieldRenderer($this);
-			
-		case Rating:
-			return new RatingFieldRenderer($this);
-			
-		case Timestamp:
-			
-			return null;			
-			
-		default:
-			throw new FakoliException("AutoForm::createRenderer(): Unknown type");
+			return new AutoForm::$fieldRendererMap[$type]($this);
 		}
+		
+		throw new FakoliException("AutoForm::createRenderer(): Unknown type '$type'");
 	}
 
+	/**
+	 * Registers a custom type-to-renderer mapping.
+	 * @param string $type the type identifier
+	 * @param string $rendererClass the class name of the renderer to handle fields of this type
+	 */
+	static function registerFieldRendererClass($type, $rendererClass)
+	{
+		AutoForm::$fieldRendererMap[$type] = $rendererClass;
+	}
+	
 	/**
 	 * Creates default validators for fields in the form. Currently this adds Date format validators
 	 * to all date fields - other fields are not affected.
