@@ -71,6 +71,7 @@ class TreeNode
 	var $onDemand;
 	var $disabled;
 	var $target;
+	var $extras;	///< Extra data/controls to be shown with this tree node.
 	
 	/**
 	 * Create a new TreeNode.
@@ -97,7 +98,8 @@ class TreeNode
 		$this->leafStyle   = "tree_node_leaf";
 		$this->onDemand    = "";
 		$this->disabled	   = false;
-		$this->target       = $target;
+		$this->target      = $target;
+		$this->extras	   = "";
 	}
 	
 	/**
@@ -112,11 +114,11 @@ class TreeNode
 
 		if ($this->link)
 		{
-			$title = "<a href='{$this->link}' target='{$this->target}'>{$this->title}</a>";
+			$title = "<a href='{$this->link}' target='{$this->target}'>{$this->title}</a>{$this->extras}";
 		}
 		else
 		{
-			$title = "<a href='#' onclick='return false'>{$this->title}</a>";
+			$title = "<a href='#' onclick='return false'>{$this->title}</a>{$this->extras}";
 		}
 		
 		if ($c == 0 && !$this->onDemand)
