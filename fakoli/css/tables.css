@@ -267,7 +267,7 @@ table.scroll tbody tr
 
 table.scroll tbody tr:first-child td 
 {
-    padding: 29px 4px 4px 4px\9;
+/*    padding: 29px 4px 4px 4px\9;*/
 }
 
 .sortable th
