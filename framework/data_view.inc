@@ -234,7 +234,8 @@ class DataListView
 		$script = 
 		"\t<script type='text/javascript' src='/fakoli/js/sorting_table.js'></script>\n".
 	   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".  
-		"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n";
+		"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n".
+		"\t<script type='text/javascript' src='/fakoli/js/scrolling_table.js'></script>\n";
 		
 		$constructor = "";
 		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter)
@@ -270,6 +271,11 @@ class DataListView
 		{
 			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
 		}
+
+		if ($this->scrollable) 
+		{
+			$constructor = "\n\t\tnew ScrollingTable('{$this->id}');";
+		}
 		
 		if ($constructor)
 		{
@@ -279,7 +285,6 @@ class DataListView
 		}
 
 		if ($this->menu) $script .= $this->menu->writeScript();
-		
 		return $script;
 	}
 	

@@ -93,7 +93,8 @@ class ComponentManifest
 					 "/fakoli/js/sorting_table.js",
 					 "/fakoli/js/paginating_table.js",
 					 "/fakoli/js/filtering_table.js",
-					 "/fakoli/js/grouping_table.js");
+					 "/fakoli/js/grouping_table.js",
+					 "/fakoli/js/scrolling_table.js");
 	}
 }
 
