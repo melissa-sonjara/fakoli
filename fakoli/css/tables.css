@@ -254,11 +254,11 @@ table.scroll
     border-width: 1px 1px 0px 0px\9;
 }
 
-table.scroll thead tr 
+/*table.scroll thead tr 
 {
     position: absolute\9;
     top: expression(this.offsetParent.scrollTop)\9;
-}
+}*/
 
 table.scroll tbody tr 
 {
