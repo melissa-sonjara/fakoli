@@ -163,10 +163,19 @@ class TreeNode
 				$style = $this->closedStyle;
 				$display = "none";
 			}
-			
+						
 			if ($this->onDemand)
 			{
 				$cmd = "Tree.loadOnDemand('{$this->id}', '{$this->onDemand}');";
+				
+				if ($this->open)
+				{
+?>
+<script type="text/javascript">
+	window.addEvent('domready', function() {Tree.loadOnDemand('<?echo $this->id?>', '<?echo $this->onDemand?>');});
+</script>
+<?
+				}					
 			}
 			else
 			{
