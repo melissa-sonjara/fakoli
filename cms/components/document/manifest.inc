@@ -40,7 +40,7 @@ class DocumentManifest
 		$component->description = "Document management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 2;
 		$component->enabled = true;
 		
 		return $component;
