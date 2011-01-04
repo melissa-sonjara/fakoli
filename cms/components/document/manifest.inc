@@ -49,7 +49,8 @@ class DocumentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"EnumerateItems"	 => array(DocumentManager, enumerateItems)
+				"EnumerateItems"	 => array(DocumentManager, enumerateItems),
+				"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary)
 				);
 	}
 	

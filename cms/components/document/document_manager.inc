@@ -275,10 +275,22 @@ function deleteFolderResult(result)
 		 <? $tree->writeHTML(); ?>
 		<br/>
 		<button id="download" class="button" disabled="disabled"  onclick="downloadFile()"> Download File </button>&nbsp;&nbsp;
+		<?
+		if (checkRole($this->library->upload_files))
+		{
+?>
 		<button id="edit" class="button" disabled="disabled" onclick="editFile()">Edit Details...</button>&nbsp;&nbsp;
-		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
 		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
 <?
+		}
+		
+		if (checkRole($this->library->delete_files))
+		{
+?>
+		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
+<?
+		}
+		
 		if (checkRole($this->library->manage_folders))
 		{
 ?>
@@ -425,5 +437,33 @@ function deleteFolderResult(result)
 		return $items;
 	}
 	
+	static function displayLibrary($identifier, &$continue)
+	{
+		try
+		{
+			$page = ComponentPage::findByIdentifier("document_library", "WHERE enabled=1");
+			$_GET["library"] = $identifier;
+		
+			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+		
+			$page_role = $page->role;
+			
+			if (!checkRole($page->role))
+			{
+				LoginManager::storeRedirectPage();
+				redirect("/login");
+			}
+			
+			echo $pageView->drawView();
+			
+			$continue = false;
+		}
+		catch(DataNotFoundException $e)
+		{
+			
+		}
+		
+		return $identifier;
+	}
 	
 }

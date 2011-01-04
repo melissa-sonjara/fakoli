@@ -47,12 +47,13 @@ if (!$document_library_id)
 
 $library = new DocumentLibrary($document_library_id);
 
-$library->filter = new InclusionFilter("document_library_id", "manage_folders", "upload_files", "delete_files", "last_modified");
+$library->filter = new InclusionFilter("document_library_id", "allow_access", "manage_folders", "upload_files", "delete_files", "last_modified");
 
 $tabs = documentLibraryTabs($document_library_id);
 
 $form = new AutoForm($library);
 
+$manageFoldersList = new CheckListFieldRenderer($form, "allow_access", "Allow Read Access", SiteRole::getRolesArray());
 $manageFoldersList = new CheckListFieldRenderer($form, "manage_folders", "Create & Delete Folders", SiteRole::getRolesArray());
 $uploadFilesList   = new CheckListFieldRenderer($form, "upload_files", "Upload Files", SiteRole::getRolesArray());
 $deleteFilesList   = new CheckListFieldRenderer($form, "delete_files", "Delete Files", SiteRole::getRolesArray());
