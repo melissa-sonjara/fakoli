@@ -39,6 +39,8 @@ class CalendarManager
 	{
 		try
 		{
+			$calendar = Calendar::findByIdentifier($identifier);
+			
 			$page = ComponentPage::findByIdentifier("calendar_view", "WHERE enabled=1");
 			$_GET["cal"] = $identifier;
 		

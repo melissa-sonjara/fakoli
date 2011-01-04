@@ -441,7 +441,9 @@ function deleteFolderResult(result)
 	{
 		try
 		{
+			$library = DocumentLibrary::findByIdentifier($identifier);			
 			$page = ComponentPage::findByIdentifier("document_library", "WHERE enabled=1");
+			
 			$_GET["library"] = $identifier;
 		
 			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
