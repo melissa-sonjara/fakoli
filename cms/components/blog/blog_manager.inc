@@ -39,6 +39,7 @@ class BlogManager
 	{
 		try
 		{
+			$blog = Blog::findByIdentifier($identifier);
 			$page = ComponentPage::findByIdentifier("blog", "WHERE enabled=1");
 			$_GET["blog"] = $identifier;
 		
