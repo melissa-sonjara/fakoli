@@ -14,7 +14,8 @@ var PanelLayout = (function()
 			stretch: false,
 			replace: false,
 			tearoffWidth: 800,
-			tearoffHeight: 600
+			tearoffHeight: 600,
+			tearoff: "tearoff"
 		},
 		
 		initialize: function()
@@ -123,12 +124,12 @@ var PanelLayout = (function()
 			var panel = this.findPanel(panelID);
 			if (panel == null) return;
 			
-			popup("/tearoff?uri=" + escape(panel.url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+			popup("/" + this.options.tearoff + "?uri=" + escape(panel.url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		},
 		
 		tearoffURL: function(url)
 		{
-			popup("/tearoff?uri=" + escape(url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+			popup("/" + this.options.tearoff + "?uri=" + escape(url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		},
 		
 		calculateLayout: function()
