@@ -236,6 +236,9 @@ var Panel = new Class(
 		if (!this.options.stretch) return;
 		
 		var parent = this.div.getParent();
+		
+		if (!parent) return;
+		
 		var parentHeight = parent.getHeight() - 2;
 		var parentWidth = parent.getWidth() - 2;
 		
