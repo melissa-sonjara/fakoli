@@ -63,7 +63,7 @@ var PanelLayout = (function()
 				if (!slot) panel.close();
 				
 				panel.getContent().inject(slot);
-			});
+			}.bind(this));
 		},
 		
 		/**
