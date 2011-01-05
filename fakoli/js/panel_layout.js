@@ -55,6 +55,17 @@ var PanelLayout = (function()
 			this.splitters = $$(expr);
 		},
 		
+		reParent: function()
+		{
+			this.panelList.each(function(panel)
+			{
+				var slot = $(panel.slotID);
+				if (!slot) panel.close();
+				
+				slot.adopt(panel.getContent());
+			});
+		},
+		
 		/**
 		 * Docks a panel into a slot
 		 */
