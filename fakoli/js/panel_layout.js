@@ -59,7 +59,7 @@ var PanelLayout = (function()
 		{
 			this.panelList.each(function(panel)
 			{
-				var slot = $(panel.slotID);
+				var slot = this.slots[panel.slotID];
 				if (!slot) panel.close();
 				
 				panel.getContent().inject(slot);
