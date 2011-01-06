@@ -89,6 +89,8 @@ ENDSCRIPT;
 			}
 		}
 		
+		if (is_object($this->title)) $this->title->writeScript();
+		
 		return $this->script;
 	}
 	
@@ -116,9 +118,15 @@ ENDSCRIPT;
 	  		<img id="<?echo $this->id?>_menu_button" src="/fakoli/images/data_view_menu.png" alt="Panel Menu" style="border: none; display:inline-block;vertical-align: middle"/>
 <?		
 		}
-?>	
-		  <?echo $this->title?>
-<?
+
+		if (is_object($this->title)) 
+		{ 
+			$this->title->drawControl(); 
+		} 
+		else 
+		{ 
+			echo $this->title;
+		}
 		
 		if (count($this->buttons) > 0)
 		{
