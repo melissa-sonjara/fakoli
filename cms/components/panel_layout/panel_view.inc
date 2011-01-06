@@ -230,7 +230,6 @@ ENDSCRIPT;
 			}
 ?>			
 			</div>
-			<div style="height: 0; clear: both"></div>
 <?
 		}
 		
@@ -241,7 +240,10 @@ ENDSCRIPT;
 				$control->drawControl();
 			}
 		}
-		
+
+?>
+			<div style="height: 0; clear: both"></div>
+<?
 		if (count($this->toolbars) > 0)
 		{
 			foreach($this->toolbars as $toolbar)
