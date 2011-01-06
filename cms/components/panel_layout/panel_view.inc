@@ -230,6 +230,7 @@ ENDSCRIPT;
 			}
 ?>			
 			</div>
+			<div style="height: 0; clear: both"></div>
 <?
 		}
 		
