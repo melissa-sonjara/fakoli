@@ -63,7 +63,7 @@ var PanelLayout = (function()
 				if (!slot) panel.close();
 				
 				slot.set('html', "<p>" + slot.id + " = " + panel.getContent().id + "</p>");
-				//panel.getContent().inject(slot);
+				panel.getContent().inject(slot);
 			}.bind(this));
 		},
 		
