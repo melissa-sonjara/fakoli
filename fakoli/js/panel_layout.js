@@ -64,6 +64,7 @@ var PanelLayout = (function()
 			{
 				this.disconnected.adopt(panel.getContent());
 			}.bind(this));
+			this.panels = new Hash({});
 			
 		},
 		
@@ -73,7 +74,7 @@ var PanelLayout = (function()
 			{
 				var slot = this.slots[panel.slotID];
 				if (!slot) panel.close();
-				panel.getContent().inject(slot);
+				this.dock(panel, slot);
 			}.bind(this));
 		},
 		
