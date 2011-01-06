@@ -23,7 +23,7 @@ var PanelLayout = (function()
 		{
 			window.addEvent('resize', function() { this.stretch();}.bind(this));
 			this.disconnected = new Element('div');
-			this.diconnected.setStyle('display', 'none');			
+			this.disconnected.setStyle('display', 'none');			
 		},
 			
 		setup: function(container, options)
