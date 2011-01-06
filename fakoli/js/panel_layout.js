@@ -65,7 +65,6 @@ var PanelLayout = (function()
 				this.disconnected.adopt(panel.getContent());
 			}.bind(this));
 			this.panels = new Hash({});
-			
 		},
 		
 		reParent: function()
