@@ -62,7 +62,7 @@ var PanelLayout = (function()
 		{
 			this.panelList.each(function(panel)			
 			{
-				this.disconnected.adopt(panel);
+				this.disconnected.adopt(panel.getContent());
 			}.bind(this));
 			
 		},
