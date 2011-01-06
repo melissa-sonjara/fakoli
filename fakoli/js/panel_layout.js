@@ -8,6 +8,7 @@ var PanelLayout = (function()
 		panels: new Hash({}),
 		panelList: [],
 		splitters: [],
+		disconnected: null,
 		
 		options: 
 		{
@@ -21,6 +22,8 @@ var PanelLayout = (function()
 		initialize: function()
 		{
 			window.addEvent('resize', function() { this.stretch();}.bind(this));
+			this.disconnected = new Element('div');
+			this.diconnected.setStyle('display', 'none');			
 		},
 			
 		setup: function(container, options)
@@ -53,6 +56,15 @@ var PanelLayout = (function()
 		addSplitters: function(expr)
 		{
 			this.splitters = $$(expr);
+		},
+		
+		disconnect: function()
+		{
+			this.panelList.each(function(panel)			
+			{
+				this.disconnected.adopt(panel);
+			}.bind(this));
+			
 		},
 		
 		reParent: function()
