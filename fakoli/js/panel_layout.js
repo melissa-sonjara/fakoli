@@ -206,7 +206,7 @@ var Panel = new Class(
 	{		
 		if (loadcallback) this.addEvent('load', loadcallback);
 		this.url = panelURL;
-		this.slotID = slotID;
+		if (slotID) this.slotID = slotID;
 		
 		panelURL = this.addPanelToURL(panelURL);
 
