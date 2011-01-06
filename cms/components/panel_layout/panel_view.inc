@@ -1,6 +1,13 @@
 <?php
 
-class PanelButton
+interface PanelControl
+{
+	function writeScript();
+	function drawControl();
+}
+	
+
+class PanelButton implements PanelControl
 {
 	var $icon;
 	var $text;
@@ -14,8 +21,12 @@ class PanelButton
 		$this->tooltip = $tooltip;
 		$this->action = $action;
 	}
+
+	function writeScript()
+	{
+	}
 	
-	function draw()
+	function drawControl()
 	{
 ?>
 	<img src="<?echo $this->icon?>" alt="<?echo $this->text?>" title="<?echo $this->tooltip?>" style="border: none; display:inline-block;vertical-align: middle" onclick="<?echo $this->action?>; return false"/>
@@ -23,12 +34,76 @@ class PanelButton
 	}
 }
 
-interface PanelControl
+
+class PanelSeparator implements PanelControl
 {
-	function writeScript();
-	function drawControl();
-}
+	var $width;
 	
+	function PanelSeparator($width)
+	{
+		$this->width = $width;
+	}
+	
+	function writeScript()
+	{
+	}
+	
+	function drawControl()
+	{
+		echo "<div style='display: inline-block;width: {$this->width}px'>&nbsp;</div>";
+	}
+}
+
+class PanelToolbar
+{
+	var $controls;
+
+	function PanelToolbar()
+	{
+		$this->controls = array();		
+	}
+	
+	function button($icon, $text, $tooltip, $action)
+	{
+		$this->controls[] = new PanelButton($icon, $text, $tooltip, $action);		
+		return $this;
+	}
+
+	function separator($width = 8)
+	{
+		$this->controls[] = new PanelSeparator($width);
+		return $this;
+	}
+	
+	function control($control)
+	{
+		$this->controls[] = $control;
+		return $this;
+	}
+	
+	function writeScript()
+	{
+		foreach($this->controls as $control)
+		{
+			$control->writeScript();
+		}
+	}
+	
+	function drawToolbar()
+	{
+?>
+<div class="panel_toolbar">
+<?
+		foreach($this->controls as $control)
+		{
+			$control->drawControl();
+		}
+?>
+</div>
+<?
+	}
+}
+
 class PanelView
 {
 	var $id;
@@ -40,6 +115,7 @@ class PanelView
 	var $script;
 	var $buttons;
 	var $controls;
+	var $toolbars;
 	
 	function PanelView($id, $title)
 	{
@@ -59,6 +135,13 @@ class PanelView
 	function control($control)
 	{
 		$this->controls[] = $control;
+		return $this;
+	}
+	
+	function toolbar($toolbar)
+	{
+		$this->toolbars[] = $toolbar;
+		return $this;
 	}
 	
 	function writeScript()
@@ -89,7 +172,15 @@ ENDSCRIPT;
 			}
 		}
 		
-		if (is_object($this->title)) $this->title->writeScript();
+		if (count($this->toolbars) > 0)
+		{
+			foreach($this->toolbars as $toolbar)
+			{
+				$this->script .= $toolbar->writeScript();
+			}
+		}
+		
+		if (is_object($this->title)) $script .= $this->title->writeScript();
 		
 		return $this->script;
 	}
@@ -135,7 +226,7 @@ ENDSCRIPT;
 <?
 			foreach($this->buttons as $button)
 			{
-				$button->draw();
+				$button->drawControl();
 			}
 ?>			
 			</div>
@@ -147,6 +238,14 @@ ENDSCRIPT;
 			foreach($this->controls as $control)
 			{
 				$control->drawControl();
+			}
+		}
+		
+		if (count($this->toolbars) > 0)
+		{
+			foreach($this->toolbars as $toolbar)
+			{
+				$this->script .= $toolbar->writeScript();
 			}
 		}
 ?>
