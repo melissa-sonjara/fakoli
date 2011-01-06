@@ -116,9 +116,9 @@ Window.implement(
 
 });
 
-function modalPopup(title, url, width, height, returnPopup)
+function modalPopup(title, url, width, height, returnPopup, draggable)
 {
-	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height});
+	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height, 'draggable': draggable});
 	popup.show(null, url);
 	if (returnPopup) return popup;
 }
@@ -128,9 +128,9 @@ function hideModalPopup(popup)
 	if (popup) popup.hide();
 }
 
-function messagePopup(title, message, width, height, returnPopup)
+function messagePopup(title, message, width, height, returnPopup, draggable)
 {
-	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height});
+	var popup = new ModalDialog('modalPopup', {'title': title, 'width': width, 'height': height, 'draggable': draggable});
 	popup.options.body.set('html', message);
 	popup.show();
 	if (returnPopup) return popup; 
