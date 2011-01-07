@@ -147,7 +147,7 @@ ENDSCRIPT;
 	{
 		foreach($this->tabs as $text => $entry)
 		{
-			if (get_class($entry) == "TabBar")
+			if (is_object($entry) && get_class($entry) == "TabBar")
 			{
 				$entry->page = $this->page;
 				$entry->queryString = $this->queryString;
