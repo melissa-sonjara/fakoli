@@ -16,7 +16,8 @@ var PanelLayout = (function()
 			replace: false,
 			tearoffWidth: 800,
 			tearoffHeight: 600,
-			tearoff: "tearoff"
+			tearoff: "tearoff",
+			defaultPanel: ""
 		},
 		
 		initialize: function()
@@ -75,6 +76,8 @@ var PanelLayout = (function()
 				if (!slot) panel.close();
 				this.dock(panel, slot);
 			}.bind(this));
+			
+			this.loadDefaultPanels();
 		},
 		
 		/**
@@ -167,6 +170,19 @@ var PanelLayout = (function()
 					slot.setStyles({'width': this.container.getWidth(), 'height': this.container.getHeight()});
 				}.bind(this));
 			}
+		},
+		
+		loadDefaultPanels: function()
+		{
+			if (!this.options.defaultPanel) return;
+			
+			$each(this.slots, function(slot, slotID)
+			{
+				if (this.panels[slotID].getLength() == 0)
+				{
+					this.dockAndLoad(slotID + "_empty_panel", this.options.defaultPanel, slot, {stretch: this.options.stretch});
+				}
+			}.bind(this));
 		}
 	});
 	
