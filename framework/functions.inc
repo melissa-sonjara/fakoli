@@ -1129,7 +1129,7 @@ function endsWith($text, $end)
  */
 function stripHTMLTags($text)
 {
-	return preg_replace("/<.*?>/", "", $textt;
+	return preg_replace("/<.*?>/", "", $text);
 }
 
 /**
