@@ -242,7 +242,7 @@ ENDSCRIPT;
 		
 		foreach($this->tabs as $text => $entry)
 		{
-			if (get_class($entry) == "TabBar" &&
+			if (is_object($entry) && get_class($entry) == "TabBar" &&
 				$entry->findPage($this->page))
 			{
 				$entry->writeHTML();
