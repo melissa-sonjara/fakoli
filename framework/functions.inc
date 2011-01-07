@@ -254,6 +254,28 @@ function formatTimestamp($ts)
 	return date("F d, Y", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
 }
 
+/*
+ * Format timestamp with date in short format
+ * e.g., 1/2/2011 and include time in 12 hour format
+ *  e.g., 10:15am
+ */
+function formatTimestampShort($ts)
+{
+		if (!$ts) return "N/A";
+
+	$yyyy = substr($ts,0,4);
+	$mm   = substr($ts,4,2);
+	$dd   = substr($ts,6,2);
+	$hh   = substr($ts,8,2);
+	$mi   = substr($ts,10,2);
+	$ss   = substr($ts,12,2);
+
+    if ($yyyy == '0000') return "N/A";
+		    
+	return date("m/d/Y g:ia", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+	
+}
+
 /**
  * Returns the number of days in the specified month
  * @param number $m the month number
@@ -1107,7 +1129,7 @@ function endsWith($text, $end)
  */
 function stripHTMLTags($text)
 {
-	return preg_replace("/<.*?>/", "", $text);
+	return preg_replace("/<.*?>/", "", $textt;
 }
 
 /**
