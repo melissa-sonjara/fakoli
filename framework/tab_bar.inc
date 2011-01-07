@@ -175,7 +175,7 @@ ENDSCRIPT;
         	{
         		$url = $entry;
         	}
-        	else if (get_class($entry) == "TabBar")
+        	else if (is_object($entry) && get_class($entry) == "TabBar")
         	{
         		if ($entry->findPage($this->page))
         		{
