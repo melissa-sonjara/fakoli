@@ -90,6 +90,9 @@ var PanelLayout = (function()
 			slot.adopt(panel.getContent());
 	
 			this.panelList.push(panel);
+			
+			if (!this.panels[slot.id]) this.panels[slot.id] = new Hash({});
+			
 			this.panels[slot.id][panel.id] = panel;
 			
 			if (this.options.stretch)
@@ -140,8 +143,12 @@ var PanelLayout = (function()
 			var panel = this.findPanel(panelID);
 			if (panel == null) return;
 
+			this.panels[panel.slotID].erase(panel.id);
+			
 			panel.close();
 			this.panelList.erase(panel);
+			
+			this.loadDefaultPanels();
 		},
 		
 		tearoff: function(panelID)
