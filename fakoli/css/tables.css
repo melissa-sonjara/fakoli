@@ -44,6 +44,7 @@ table.list
 	-moz-box-shadow: 1px 1px 5px #666;
 	box-shadow: 1px 1px 5px #666;
 	border-spacing: 0;
+	clear: both;
 }
 
 table.list b
@@ -273,4 +274,14 @@ table.scroll tbody tr:first-child td
 .sortable th
 {
 	border-width: 0px 0px 1px 1px\9;	
+}
+
+tr.selected,
+tr.selected td
+tr.selected a,
+tr.selected a:visited
+tr.selected a:hover
+{
+	background-color: #393683;
+	color: #fff;
 }
