@@ -38,11 +38,14 @@ var TextareaResizer = new Class({
 
     resizable: function(){
 
+    	
         var staticOffset = 0;
         var iLastMousePos = 0;
         var iMin = 32;
 
         var textarea = this.element;
+       	if (textarea.hasClass("fixed-size")) return;
+       	
         textarea.addClass('processed');
         
         var div = new Element('div').addClass('resizable-textarea');
