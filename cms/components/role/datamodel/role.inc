@@ -78,6 +78,14 @@ class SiteRole extends DataItem
 		
 		return $rarr;
 	}
+	
+	// Given a role code, return the record
+	static function getRole($role)
+	{
+		$names = query(SiteRole, "WHERE role='$role'");
+		if(count($names) > 0)
+			return $names[0];
+	}
 }
 
 ?>

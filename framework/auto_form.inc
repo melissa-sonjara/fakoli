@@ -83,6 +83,7 @@ class AutoForm
     var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
     var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
     var $required = array(); // list of required fields
+    var $requiredFieldsText = "* indicates required field";
 
     var $fields;	///< Local field cache
     
@@ -630,7 +631,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 
 		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
 		{
-			echo "<tr>\n <td colspan='2'><b>* indicates required field</b></td></tr>\n";
+			echo "<tr>\n <td colspan='2'><b>{$this->requiredFieldsText}</b></td></tr>\n";
 		}
 
 		if($this->additional_at_top)

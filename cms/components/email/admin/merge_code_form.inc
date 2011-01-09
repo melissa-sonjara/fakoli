@@ -56,16 +56,27 @@ if ($merge_code_id)
 	$mergeCode->load($merge_code_id);
 }
 
+$helps = MergeCodeHelp::getHelp();
+$table = new DataListView($helps, "MergeCodeHelps");
+$table->column("Usage", "{usage}")
+		->column("Example", "{example}")
+	;
+
+$table->sortable = false;
+$table->cssStyle = "width: 100%";
+$table->paginate = false;
+
 $form = new AutoForm($mergeCode);
 
 $redirect = "/admin/merge_code_list";
 $form->required("name", "class_name", "field");
 $form->allowDelete = true;
 $form->annotate("name", "The field name that will be used in the email subject or message (e.g., employee_name, due_date, amount)");
-$form->annotate("function", "Whether the map is a function rather than relation");
-$form->annotate("map", "The path from the field name to the database values");
-$form->annotate("class_name", "The name of the dataitem class that can send the message (get the data values)");
+$form->annotate("function", "Whether the name following the dot separator in the map, or the map itself if no dot separator, refers to a function rather than a field name.");
+$form->annotate("map", "The path from the merge code name to the database values");
+$form->annotate("class_name", "The name of the DataItem class that can send the message (get the data values)");
 $form->button("Cancel", $redirect);
+$form->alias("class_name", "Sending Class Name");
 
 if ($method == "POST")
 {
@@ -76,7 +87,10 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
+$script .= $table->writeScript();
 
-echo "<p>Merge code maps define the relation or function from the mail sending class to the value in the form FunctionName, RelationName.fieldname, or RelationName.functionName or callbackFunctionName. The final value needed must be returned by the final value in the map, whether a field or function.";
+echo "<p>You will need some knowledge of the system's tables DataModels to enter merge codes.";
+echo "<h4>Merge Code Mapping</h4>\n";
+$table->drawView();
 $form->drawForm();
 ?>
