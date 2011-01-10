@@ -329,6 +329,30 @@ function formatDateTime12($time)
 {
 	return date("m/d/Y g:ia", $time);
 }
+
+/*
+ * Formats a datetime in date short format
+ * with hours on 12 hour clock, no seconds.
+ * If time component is 00:00:00, then
+ * don't return time.
+ */
+function formatDateTime12Hr($datetime)
+{
+	$yyyy = substr($datetime,0,4);
+	$mm   = substr($datetime,5,2);
+	$dd   = substr($datetime,8,2);
+	$hh   = substr($datetime,11,2);
+	$mi   = substr($datetime,14,2);
+	$ss = "00";
+	
+    if ($yyyy == '0000') return "N/A";
+    if($hh == '00')
+		return date("m/d/Y", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+    else
+		return date("m/d/Y g:ia", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+}
+
+
 /**
  * Returns the current time and date in a database compatible format
  * @return string
