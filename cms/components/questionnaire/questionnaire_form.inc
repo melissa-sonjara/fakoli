@@ -77,21 +77,36 @@ class QuestionnaireForm
 	var $msg; // validation msg 
 	var $num = 1; // starting number for first question; may be set by calling script to
 	 // append multiple question sets for review.
-	 
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 	
+	// AutoForm defaults
+	var $labelCSS = "";					///< CSS Class to use for label cells
+	var $valueCSS = "";					///< CSS Class to use for field/value cells
+	var $buttonCSS = "";				///< CSS Class to use for buttons
+	var $inputCSS = "";					///< CSS Class to use for input fields
+	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
+	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
+	var $onFormatLabel = null; 			///< Label Processing hook
+    var $requiredFieldsText = "* indicates required question";
 	
 	function QuestionnaireForm($mgr, $readonly = false)
 	{		
+		global $auto_form_defaults;
+		
 		$this->mgr = $mgr;
 		$this->readonly = $readonly;
+
+		foreach($auto_form_defaults as $field => $value)
+		{
+			$this->$field = $value;
+		}
 		
 		$questions = $this->mgr->getQuestions();
-
+			
 		if(count($questions) > 0)
 		{
 			$this->answers = $this->getIndexedAnswers();		
-			
+
 			foreach($questions as $question)
 			{
 				$this->questions[] = QuestionField::create($this, $question);
@@ -162,7 +177,7 @@ class QuestionnaireForm
 		}
 		
 		if(!$displayOnly)
-			echo "<b>* indicates required question</b><br/><br/>";
+			echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
 		
 		foreach($this->questions as $question)
 		{

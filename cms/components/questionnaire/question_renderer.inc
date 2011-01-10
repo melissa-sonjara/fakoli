@@ -74,13 +74,17 @@ class QuestionField
 	{
 	}
 	
+	function drawSummaryView()
+	{
+		$valueAnswer = $this->parent->getAnswer($this->question);
+		echo "<p>$valueAnswer</p>";
+	}
+	
 	function QuestionField($parent, $question)
 	{
 		$this->parent = $parent;
 		$this->question = $question;
-		$this->qPk = $this->question->getPrimaryKey();
-		
-		$qPk = $this->qPk;
+		$qPk = $question->getPrimaryKey();
 		$this->answer = $this->parent->answers[$this->question->$qPk];
 	}
 	
@@ -94,7 +98,7 @@ class QuestionField
 	{
 		// empty answer signals to validate from form and $_POST
 		$pk = $this->question->getPrimaryKey();
-	
+		
 		$answer = ($this->parent->readonly) ? $this->answer : "";
 		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", "", $answer);
@@ -171,11 +175,31 @@ class MultipleChoiceView extends QuestionField
 		$this->writeHTML();	
 	}
 	
+	// Draw answer only, not all options
+	function drawSummaryView()
+	{
+		$pk = $this->question->getPrimaryKey();
+		$options = explode("\n", $this->question->options);
+		
+		$valueAnswer = $this->parent->getAnswer($this->question);
+		
+		$count = count($options);	
+		if($count > 0)
+		{
+			$idx = 1;
+			foreach($options as $value => $text)
+			{
+				if($valueAnswer == $idx)
+					echo "<p>$text</p>\n";
+				$idx++;
+			}
+		}
+	}
+	
 	function getRequiredValidator()
 	{
 		$pk = $this->question->getPrimaryKey();
-	
-		// Empty question object signals to validator to validate from form and $_POST.
+			// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
 		$answer = ($this->parent->readonly) ? $this->answer : "";
 		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);	
@@ -244,6 +268,28 @@ class SelectFieldView extends QuestionField
 		$this->writeHTML();	
 	}
 	
+// Draw answer only, not all options
+	function drawSummaryView()
+	{
+		$pk = $this->question->getPrimaryKey();
+		$options = explode("\n", $this->question->options);
+		
+		$valueAnswer = $this->parent->getAnswer($this->question);
+		
+		$count = count($options);	
+		if($count > 0)
+		{
+			$idx = 1;
+			foreach($options as $value => $text)
+			{
+				if($valueAnswer == $idx)
+					echo "<p>$text</p>\n";
+				$idx++;
+			}
+		}
+	}
+	
+	
 	function writeReportHTML()
 	{
 		$pk = $this->parent->primary_key;
@@ -272,6 +318,7 @@ class RatingView extends QuestionField
 		
 		$readonly = $this->parent->readonly ? " disabled='disabled'" : "";
 		$valueAnswer = $this->parent->getAnswer($this->question);
+		
 		$qPk = $this->question->getPrimaryKey();
 		
 		for($i = 1; $i <= $steps; ++$i)
@@ -299,8 +346,8 @@ class RatingView extends QuestionField
 	{
 		// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
+		$pk = $this->question->getPrimaryKey();	
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		$pk = $this->question->getPrimaryKey();
 		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);	
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
@@ -479,12 +526,8 @@ class CheckListView extends QuestionField
 		$this->QuestionField($parent, $question);
 	}
 	
-	function writeHTML()
+	function getValues()
 	{
-		$optionArr = explode("\n", $this->question->options);
-
-		$options = $this->parent->incrementArray($optionArr);
-	
 		$values = $this->parent->getAnswer($this->question);
 		
 		// include 0 value, first checkbox
@@ -494,7 +537,17 @@ class CheckListView extends QuestionField
 			$values = "";
 		else
 			$values = explode(",", $values);
-			
+		
+		return $values;
+	}
+	
+	function writeHTML()
+	{
+		$optionArr = explode("\n", $this->question->options);
+		$options = $this->parent->incrementArray($optionArr);
+	
+		$values = $this->getValues();
+		
 		$readonly = $this->parent->readonly ? " DISABLED" : "";
 		
 		// to do - put the font style into css
@@ -553,6 +606,31 @@ class CheckListView extends QuestionField
 		$this->writeHTML();
 	}
 
+	// Draw answer only, not all options
+	function drawSummaryView()
+	{
+		$optionArr = explode("\n", $this->question->options);
+		$options = $this->parent->incrementArray($optionArr);
+	
+		$values = $this->getValues();
+				
+		$count = count($options);	
+		if($count > 0)
+		{
+			$idx = 1;
+			foreach($options as $value => $text)
+			{
+				if(is_array($values))
+				{				
+					if(array_search($value, $values) !== FALSE)
+					{
+						echo "<p>$text</p>\n";				
+					}				
+				}
+				$idx++;
+			}
+		}
+	}
 	
 	function writeReportHTML()
 	{

@@ -110,12 +110,15 @@ class RequiredCheckListQuestionValidator extends RequiredValidator
 {
 	var $min;
 	var $answer;
+	var $text;
 	
 	function RequiredCheckListQuestionValidator($field, $title, $min = 0, $answer = "")
 	{
 		$this->min = $min;
 		$this->answer = $answer;
 		$this->AbstractValidator($field, $title);
+		
+		$this->text = ($min < 2) ? "checkbox" : "checkboxes";
 	}
 		
 	function writeClient()
@@ -133,10 +136,10 @@ class RequiredCheckListQuestionValidator extends RequiredValidator
 			if(fieldName.checked == true)
 				countChecked += 1;
 		}
-		
+			
 	if ({$this->min} > 0 && countChecked < {$this->min})
 	{
-		alert("You must check at least {$this->min} checkboxes for {$this->title}.");
+		alert("You must check at least {$this->min} {$this->text} for {$this->title}.");
 		return false;
 	}
 ENDSCRIPT;
@@ -169,7 +172,7 @@ ENDSCRIPT;
 		
 		if ($count < $this->min)
 		{
-			return "You must check at least {$this->min} checkboxes for {$this->title}.";
+			return "You must check at least {$this->min} {$this->text} for {$this->title}.";
 		}
 		else
 		{
