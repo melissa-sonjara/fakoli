@@ -28,8 +28,6 @@ window.addEvent('domready', function()
 	stretch();
 	
 	var panel = layout.dockAndLoad('main', '{$uri}', 'slot1', {stretch: true});
-	panel.addEvent('close', function() { window.close(); });
-	
 	window.addEvent('resize', stretch);
 	
 });
