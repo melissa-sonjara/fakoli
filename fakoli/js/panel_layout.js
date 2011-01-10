@@ -156,12 +156,18 @@ var PanelLayout = (function()
 			var panel = this.findPanel(panelID);
 			if (panel == null) return;
 			
-			popup("/" + this.options.tearoff + "?uri=" + escape(panel.url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+			var url = "/" + this.options.tearoff + "?uri=" + escape(panel.url);
+			if (this.options.defaultPanel) url += "&defaultPanel=" + escape(this.options.defaultPanel);
+			
+			popup(url, "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		},
 		
 		tearoffURL: function(url)
 		{
-			popup("/" + this.options.tearoff + "?uri=" + escape(url), "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
+			var url = "/" + this.options.tearoff + "?uri=" + escape(url);
+			if (this.options.defaultPanel) url += "&defaultPanel=" + escape(this.options.defaultPanel);
+			
+			popup(url, "_blank", this.options.tearoffWidth, this.options.tearoffHeight);
 		},
 		
 		calculateLayout: function()

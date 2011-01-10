@@ -2,6 +2,7 @@
 Fakoli::using("panel_layout");
 
 $uri = $_GET["uri"];
+$default = $_GET["defaultPanel"];
 
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
@@ -29,6 +30,7 @@ window.addEvent('domready', function()
 	
 	var panel = layout.dockAndLoad('main', '{$uri}', 'slot1', {stretch: true});
 	window.addEvent('resize', stretch);
+	layout.options.defaultPanel = '$default';
 	
 });
 </script>
