@@ -203,7 +203,7 @@ var AbstractDialog = new Class(
     },	
     
     createDialog: function(id)
-    {
+    {   
     	var dialog = new Element('div', {'class': 'dialog', 
     									 'display': 'none', 
     									 'id': id, 
@@ -211,11 +211,13 @@ var AbstractDialog = new Class(
     									 'height': this.options.height});
     	
     	var dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
+    	dialog_header.setStyle('width', this.options.width);
     	
     	var padding = new Element('div');
-    	padding.setStyles({'padding': '4px'});
+    	padding.setStyles({'padding': '4px', 'width': this.options.width});
     	
     	var body = new Element('div', {'id': id + 'Body', 'class': 'dialog_body'});
+    	body.setStyle('width', this.options.width);
     	
     	padding.set('html', "<div style='float: right'>&nbsp;<a id='close" + id + "' href=''>Close &times;</a></div>" +
     						"<span style='font-weight: bold' id='" + id + "Title'>" + this.options.title + "</span>");
