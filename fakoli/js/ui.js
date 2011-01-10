@@ -136,6 +136,14 @@ function messagePopup(title, message, width, height, returnPopup, draggable)
 	if (returnPopup) return popup; 
 }
 
+
+function floatingPopup(id, title, url, width, height, returnPopup, draggable)
+{
+	var popup = new FloatingDialog(id, {'title': title, 'width': width, 'height': height, 'draggable': draggable});
+	popup.show(null, url);
+	if (returnPopup) return popup;
+}
+
 var AbstractDialog = new Class(
 {
     Implements: [Options],
