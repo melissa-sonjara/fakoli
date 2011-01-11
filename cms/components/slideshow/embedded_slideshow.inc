@@ -31,41 +31,49 @@
 
 *****************************************************************/
 
-class SlideshowManifest
+class EmbeddedSlideshowHandler
 {
-	static function getComponentDefinition()
+	static function postProcessContent($content)
 	{
-		$component = new Component();
-		$component->name = "slideshow";
-		$component->description = "Zoomable slideshow component for uploaded images";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 20;
-		$component->enabled = true;
+		global $script;
 		
-		return $component;
-	}
-	
-	static function getAdminMenu()
-	{
-		return null;
-	}	
-	
-	function getScripts()
-	{
-		return array("/fakoli/slideshow/slideshow.js");
-	}
-	
-	
-	function getStyles()
-	{
-		return array("/fakoli/slideshow/slideshow.css");
-	}
-	
-	static function subscribeToEvents()
-	{
-		return array("PostProcessContent"	=> array(EmbeddedSlideshowHandler, postProcessContent));
+		$matches = array();
+		
+		if (preg_match("/\\{slideshow:(?:<span>)?([\\w\\d_]+)(?:<\\/span>)?:(\\d+)\\s*x\\s*(\\d+)\\}/i", $content, $matches))
+		{
+			$gallery_id = $matches[1];
+			$width = $matches[2];
+			$height = $matches[3];
+			
+			if (is_numeric($gallery_id))
+			{
+				$gallery = new ImageGallery($gallery_id);
+			}
+			else
+			{
+				$gallery = ImageGallery::findByIdentifier($gallery_id);
+			}
+			
+			$images = $gallery->Images("WHERE include_in_slideshow=1");
+			
+			$slideshow = new Slideshow($images, $width, $height);
+			
+			$script .= $slideshow->writeScript();
+			
+			ob_start();
+			
+			$slideshow->writeHTML();
+			
+			$sout = ob_get_contents();
+			
+			ob_end_clean();
+			
+			$content = str_replace($matches[0], $sout, $content);
+		}
+		
+		return $content;
 	}
 }
+
 
 ?>

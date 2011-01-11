@@ -252,6 +252,11 @@ class ImageManager
 		return "/action/image/thumbnail?image_id=$image_id&size=$size";
 	}
 	
+	function imageLink($image_id)
+	{
+		return "/action/image/show?image_id=$image_id";
+	}
+	
 	/**
 	 * Determines the size of the specified image.
 	 * @param $image_id the ID of the image to be queried.

@@ -86,8 +86,7 @@ var Slideshow = (function()
 		images: [],
 		captions: [],
 		credits: [],
-		urls: [],
-		keys: [],
+
 		
 		initialize: function(options)
 		{
@@ -371,16 +370,8 @@ var Slideshow = (function()
 			
 			new Fx.Tween(this.loadedImages[i], {duration: 1500, transition: Fx.Transitions.linear}).start('opacity', 1);
 			
-			if (this.urls[i])
-			{
-				this.caption.innerHTML = "<a target='_blank' href='" + this.urls[i] + "'>" + this.captions[i] + "</a>";
-				this.creditText.innerHTML = "<a target='_blank' href='" + this.urls[i] + "'>" + this.credits[i] + "</a>";
-			}
-			else
-			{
-				this.caption.innerHTML = this.captions[i];
-				this.creditText.innerHTML = this.credits[i];
-			}
+			this.caption.innerHTML = this.captions[i];
+			this.creditText.innerHTML = this.credits[i];
 				
 			this.showing = i;
 		
@@ -417,16 +408,9 @@ var Slideshow = (function()
 			}
 			
 			this.loadedImages[i].setStyle('opacity', 1);
-			if (this.urls[i])
-			{
-				this.caption.innerHTML = "<a target='_blank' href='" + this.urls[i] + "'>" + this.captions[i] + "</a>";
-				this.creditText.innerHTML = "<a target='_blank' href='" + this.urls[i] + "'>" + this.credits[i] + "</a>";
-			}
-			else
-			{
-				this.caption.innerHTML = this.captions[i];
-				this.creditText.innerHTML = this.credits[i];
-			}
+
+			this.caption.innerHTML = this.captions[i];
+			this.creditText.innerHTML = this.credits[i];
 				
 			this.showing = i;
 		
@@ -640,12 +624,6 @@ var Slideshow = (function()
 		{
 			idx = this.getIndex(url, this.images);
 			return this.credits[idx];
-		},
-	
-		getURL: function(url)
-		{
-			idx = getIndex(url, this.images);
-			return this.urls[idx];
 		},
 	
 		getKey: function(url)

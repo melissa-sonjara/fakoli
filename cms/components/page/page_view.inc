@@ -116,7 +116,7 @@ class PageView
 			$this->page->description .= $output;
 		}
 		*/
-		$output = ComponentManager::fireEvent("PostProcessContent", $output);
+		$this->page->description = ComponentManager::fireEvent("PostProcessContent", $this->page->description);
 		
 		// Populate template fields from the Page object.
 		

@@ -32,11 +32,6 @@
 *****************************************************************/
 
 Fakoli::using("image");
-
-function validURL($item)
-{
-	return !is_numeric($item->image) && !is_numeric($item->thumbnail);
-}
 	
 /**
  * The Slideshow class provides a reusable user interface control that displays
@@ -57,24 +52,6 @@ class Slideshow
 	var $showThumbnails;
 	var $autoPlay;
 	var $preload;
-	
-	function formatList($field)
-	{
-		global $config;
-		
-		$first = true;
-		foreach ($this->items as $item)
-		{
-			if (!$first) $list .= ", ";
-			$val = trim($item->$field);
-			if ($val[0] == '/') $val = "http://{$config['http_host']}$val";
-			
-			$list .= "\"".jsSafe($val)."\"";
-			$first = false;
-		}
-		
-		echo $list;
-	}
 
 	function Slideshow($items, $width=500, $height=400)
 	{
@@ -84,7 +61,7 @@ class Slideshow
 			$items = array($items);
 		}
 		
-		$this->items  = array_filter($items, validURL);
+		$this->items = $items;
 		
 		$this->width  = $width;
 		$this->height = $height;
@@ -110,12 +87,13 @@ class Slideshow
 	
 	function writeScript()
 	{
+		$mgr = new ImageManager();
+		global $config;
+		
 		ob_start();
 ?>
-<link rel="stylesheet" type="text/css" href="/cms/components/slideshow/slideshow.css" />
-<script type="text/javascript" src="/cms/components/slideshow/slideshow.js"></script>
 <!--[if IE]>
-<link rel="stylesheet" type="text/css" href="/cms/components/slideshow/ie.css"/>
+<link rel="stylesheet" type="text/css" href="/fakoli/slideshow/ie.css"/>
 <![endif]-->
 
 <script type="text/javascript"><!--
@@ -127,13 +105,25 @@ window.addEvent('domready', function() {
 
 	slideshow.thumbnails = [
 <?
-	$this->formatList("thumbnail");
+	$thumbs = array();
+	foreach($this->items as $item)
+	{
+		$thumbs[] = "'http://".$config['http_host'].$mgr->thumbnailLink($item->image_id, 100)."'";
+	}
+	
+	echo implode(", ", $thumbs);
 ?>
 	];
 	
 	slideshow.images = [
 <?
-	$this->formatList("image_file");
+	$images = array();
+	foreach($this->items as $item)
+	{
+		$images[] = "'http://".$config['http_host'].$mgr->imageLink($item->image_id)."'";
+	}
+
+	echo implode(", ", $images);
 ?>
 	];
 	
@@ -164,35 +154,6 @@ foreach($this->items as $item)
 }
 ?>
 	];	
-
-	
-	slideshow.urls = [
-<?
-$first = true;
-foreach($this->items as $item)
-{
-	if (!$first) echo ", ";
-?>
-					"/primary_sources/item.php?item=<? echo jsSafe(trim($item->LOC_key))?>"
-<?	
-	$first = false;
-	}
-?>
-	];
-
-	slideshow.keys = [
-<?
-$first = true;
-foreach($this->items as $item)
-{
-	if (!$first) echo ", ";
-?>
-					"<? echo jsSafe(trim($item->LOC_key))?>"
-<?	
-	$first = false;
-}
-?>
-	];
 
 	slideshow.load();
 });
@@ -229,7 +190,7 @@ foreach($this->items as $item)
 			<tr>
 				<td id="zoom_slider">
 				<div id="zoom_scale">
-				<div id="zoom_thumb"><img src="/cms/components/slideshow/images/zoom_thumb.gif" width="24" height="12" alt="" style="display: block;"/></div>
+				<div id="zoom_thumb"><img src="/fakoli/slideshow/images/zoom_thumb.gif" width="24" height="12" alt="" style="display: block;"/></div>
 				</div>
 				</td>
 			</tr>
@@ -249,15 +210,14 @@ foreach($this->items as $item)
   <td colspan="3" id="credit">&nbsp;<span id="creditText"></span></td>
  </tr>
 </table>
-<table>
+<table cellpadding="0" cellspacing="0">
 <tr>
-<td width="28%"></td>
 <td>
-<table id="thumbnails" cellpadding="0" cellspacing="0" style="width:<? echo $this->width; if (!$this->showThumbnails) echo "; display:none"; ?>">
+<table id="thumbnails" cellpadding="0" cellspacing="0" style="width:<? echo $this->width."px"; if (!$this->showThumbnails) echo "; display:none"; ?>">
  <tr>
   <td id="scroll_left"></td>
   <td id="strip">
-   <div id="thumbnail_strip" style="width: <? echo $this->width - 46 ?>">
+   <div id="thumbnail_strip" style="width: <? echo $this->width - 46 ?>px">
  	<div id="thumbnail_scroll"><div id="thumbnail_highlight"></div></div>
  	</div>
   </td>
