@@ -420,12 +420,16 @@ class DataListView
 <?
 			foreach($this->items as $item)
 			{
+				$cl = "";
+				
 				if ($this->onStartRow)
 				{
-					call_user_func($this->onStartRow, $item);
+					$retval = call_user_func($this->onStartRow, $item);
+					if ($retval === false) continue; // return false to indicate row should be skipped
+					if ($retval) $cl = " class='$retval'"; // return a string to indicate a css class for the row
 				}
 ?>
-          <tr>
+          <tr<?echo $cl?>>
 <?
 				foreach($this->columns as $column)
 				{
