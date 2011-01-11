@@ -64,7 +64,22 @@ class SlideshowManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("PostProcessContent"	=> array(EmbeddedSlideshowHandler, postProcessContent));
+		return array("PostProcessContent"	=> array(EmbeddedSlideshowHandler, postProcessContent),
+					 "Initialize"			=> array(SlideshowManifest, onInitialize));
+	}	
+
+	
+	static function onInitialize()
+	{
+		global $html_editor_extra_buttons;
+
+		$html_editor_extra_buttons[] =
+				array("name"	=>	"slideshow_picker",
+					  "image"	=>	"/fakoli/images/slideshow_button.png", 
+					  "tooltip"	=>	"Insert a Slideshow", 
+					  "url"		=>	"/slideshow_picker",
+					  "width"	=>	"500px",
+					  "height"	=>	"400px");
 	}
 }
 
