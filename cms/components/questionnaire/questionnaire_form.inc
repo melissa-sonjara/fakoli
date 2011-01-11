@@ -395,3 +395,29 @@ class QuestionnairePreview extends QuestionnaireForm
 	}
 }
 
+
+/*
+ * QuestionnaireResponseView
+ * 
+ * @param: $mgr - an object of class QuestionnnaireManager, SurveyManager,
+ * or other which provides specific data and values to this form as 
+ * requested. 
+  */
+
+class QuestionnaireResponseView extends QuestionnaireForm
+{
+	function QuestionnaireResponseView($mgr)
+	{
+		parent::QuestionnaireForm($mgr, true);
+	}
+	
+	function writeOneQuestion($question, $displayOnly = false)
+	{
+		$required = $question->getRequired();
+		echo " <dt><b>{$this->num}.</b> {$question->question->question}{$required}</dt>\n";
+		echo " <dd>";
+		$question->drawSummaryView();
+		echo " </dd><br/>";
+		echo "</dl>";
+	}	
+}
