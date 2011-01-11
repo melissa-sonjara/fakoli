@@ -54,7 +54,7 @@ class EmbeddedSlideshowHandler
 				$gallery = ImageGallery::findByIdentifier($gallery_id);
 			}
 			
-			$images = $gallery->Images("WHERE include_in_slideshow=1");
+			$images = $gallery->Images("WHERE include_in_slideshow=1 ORDER BY sort_order, image_id");
 			
 			$slideshow = new Slideshow($images, $width, $height);
 			

@@ -45,6 +45,7 @@ class ImageRecord extends DataItem
 						"keywords" 				=> String,
 						"published"				=> Boolean,
 						"include_in_slideshow"	=> Boolean,
+						"sort_order"			=> Number,
 						"image_type"			=> String,
 						"gallery_id"			=> Number);
 	

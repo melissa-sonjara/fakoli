@@ -41,7 +41,7 @@ if (!$gallery_id) return;
 $gallery = new ImageGallery($gallery_id);
 if (!$gallery->published) return;
 
-$images = $gallery->Images("WHERE include_in_slideshow=1");
+$images = $gallery->Images("WHERE include_in_slideshow=1 ORDER BY sort_order, image_id");
 
 $slideshow = new Slideshow($images);
 
