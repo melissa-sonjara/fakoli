@@ -316,5 +316,6 @@ require_once realpath(dirname(__FILE__))."/field_renderers/time_field_renderer.i
 require_once realpath(dirname(__FILE__))."/field_renderers/tree_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/checklist_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/timezone_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/zipcode_field_renderer.inc";
 
 ?>
