@@ -101,7 +101,8 @@ class AutoForm
 		Password	=>	PasswordFieldRenderer,
 		Text		=>	TextFieldRenderer,
 		Time		=>	TimeFieldRenderer,
-		Rating		=>	RatingFieldRenderer);	///< Provides the mapping from Type identifier to FieldRenderer
+		Rating		=>	RatingFieldRenderer,
+		ZipCode		=>	ZipCodeRenderer);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
 	 *
