@@ -224,18 +224,19 @@ var AbstractDialog = new Class(
     	
     	this.options.closeLink = "close" + id;
     	this.options.body = body;
-     	
-    	if (this.options.draggable)
-    	{
-    		this.options.handle = dialog_header;
-    		this.options.handle.setStyle('cursor', 'move');    		
-    	}
+
     	
     	padding.inject(dialog_header);    	
     	dialog_header.inject(dialog, 'top');
     	body.inject(dialog, 'bottom');
 		var doc = $(document.body ? document.body : document.documentElement);
-		
+     	
+    	if (this.options.draggable)
+    	{
+    		this.options.handle = $splat(padding);
+    		padding.setStyle('cursor', 'move');    		
+    	}		
+    	
 		doc.adopt(dialog);
 		return dialog;
     }    
@@ -284,15 +285,11 @@ var ModalDialog = new Class(
     			onDrag: function(element, event) 
     			{ 
     				new Event(event).stop(); 
-    			} 
+    			},
+    			handle: this.options.handle
     		};
     		
-    		if (this.options.handle)
-    		{
-    			options.handle = this.options.handle;
-    		}
-    		
-    		var drag = new Drag.Move(this.element, options);
+    		var drag = new Drag(this.element, options);
     	}
     	
     	
@@ -384,15 +381,11 @@ var FloatingDialog = new Class(
     			onDrag: function(element, event) 
     			{ 
     				new Event(event).stop(); 
-    			} 
+    			},
+    			handle: this.options.handle
     		};
     		
-    		if (this.options.handle)
-    		{
-    			options.handle = this.options.handle;
-    		}
-    		
-    		var drag = new Drag.Move(this.element, options);
+    		var drag = new Drag(this.element, options);
     	}
     	
     	this.position();
@@ -409,7 +402,7 @@ var FloatingDialog = new Class(
     			onSuccess: function(tree, elements, html, script) 
     			{ 
     				this.options.body.set('text', '');
-    				this.options.body.adopt(tree);
+    				this.options.body.set('html', html);
     				$exec(script);
     				this.position();
     			}.bind(this)
