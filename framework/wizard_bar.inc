@@ -31,9 +31,8 @@
 
 *****************************************************************/
 
-/**
- * 
- */
+Fakoli::usingFeature("tab_bar");
+
  
 /**
  * The WizardBar class is a user-interface control that
@@ -41,7 +40,7 @@
  * 
  * 
  */
-class WizardBar
+class WizardBar extends TabBar
 {
 	var $styles = array("past"			=>	"past_step",
 						"current"		=>	"current_step",
@@ -56,6 +55,7 @@ class WizardBar
 	var $page = "";
 	var $links = true;
 	
+	
 	/**
 	 * Construct a new WizardBar control.
 	 * 
@@ -65,12 +65,16 @@ class WizardBar
 	 * @param bool   $number flag to indicate whether to display step numbers
 	 * @param bool   $showNext flag to indicate whether to display a "Next Page" link
 	 */
-	function WizardBar($steps = array(), $queryString = "", $spacer = "&nbsp;&raquo;&nbsp;", $number = false, $showNext = false, $useQueryString = true)
+	function WizardBar($id, $steps = array(), $queryString = "", $spacer = "&nbsp;&raquo;&nbsp;", $number = false, $showNext = false, $useQueryString = true)
 	{
-		global $_SERVER;
+		global $config;
+		global $isAdmin;
 		
+		$this->id			  = $id;
 		$this->steps          = $steps;
-		$this->page           = basename($_SERVER["PHP_SELF"]);
+		$this->page           = ($config['prettyURLs']) ? $_REQUEST['identifier'] : basename($_SERVER["PHP_SELF"]);
+		if ($isAdmin) $this->page = "/admin/{$this->page}";
+		$this->queryString    = $queryString;
 		$this->queryString    = $queryString;
 		$this->spacer         = $spacer;
 		$this->showNumber     = $number;
@@ -89,71 +93,72 @@ class WizardBar
 	    $next    = "";
 		$count   = 0;
 		$getNext = false;
-    
+
+	    echo "<div id='{$this->id}'";
+	    
+	    if ($this->cssClass) echo " class='{$this->cssClass}'";
+	    
+	    echo "><ul>";		
 	    foreach ($this->steps as $text => $url)
     	{
-        	++$count;
-        
-	        if (!$first)
-        	{
-            	echo $this->spacer;
+ 	    	++$count;
+        	$active = "";
+        	$style = "";
+ 	    	         
+        	 if (!$first)
+     		{	
+     			$spacer = $this->spacer;
         	}
         	else
         	{
+        		$spacer = "";
             	$first = false;
         	}
-         
-	        if ($url == $this->page)
+      	
+          	if ($url == $this->page)
 	        {
-	            $style = $this->styles["current"];
-	            $future = true;
-	            $getNext = true;
+	        	$style = " class='current'";
 	        }
-	        else if ($future)
-	        {
-	        	if ($this->queryString != "" || !$this->useQueryString)
-	        	{
-		            $style = $this->styles["future"];
-		            if ($getNext)
-		            {
-		                $next = "$url?{$this->queryString}";
-		                $getNext = true;
-		            }
-	        	}
-	        	else
-	        	{
-	        		$style = $this->styles["unreachable"];
-	        	}
-	        }
-	        else
-	        {
-	            $style = $this->styles["past"];
+
+        	if ($this->queryString == "" && $this->useQueryString && $count > 1)
+        	{
+        		$active = " class='disabled'";
 	        }
         
         	if ($this->showNumber) $text = "$count.&nbsp;$text";
          
-        	if ($this->links)
-        	{
-	         	if ($this->useQueryString)
+         	if ($this->useQueryString)
+         	{
+	        	$dest = ($this->queryString!="") ? $this->appendQueryString($url, $this->queryString) :"#";
+         	}
+         	else
+         	{
+         		$dest = ($url == $this->page) ? "#" : $url;
+         	}
+        
+         	if ($this->anchor)
+         	{
+         		$dest = ($dest != "#") ? "$dest#{$this->anchor}" : "#{$this->anchor}";
+         	}
+         	
+         	if ($this->showStates)
+         	{
+	         	if (array_key_exists($url, $this->flags))
 	         	{
-		        	$dest = ($this->queryString!="")?"$url?{$this->queryString}":"#";
+	         		$text = "<img src='{$this->states[$this->flags[$url]]}' style='border: none; display: inline-block;vertical-align: middle'/>&nbsp;$text";         	
 	         	}
-	         	else
+	         	else if ($this->defaultStateImage)
 	         	{
-	         		$dest = ($url == $this->page) ? "#" : $url;
+	         		$text = "<img src='{$this->defaultStateImage}' style='border: none; display: inline-block;vertical-align: middle'/>&nbsp;$text";
 	         	}
-        	}
-        	else
-        	{
-        		$dest = "#";        
-        	}
-        	
-	        echo "<a href=\"$dest\" class=\"$style\">$text</a>";
-    	}
-		
-		if ($next && $this->showNext) echo $this->spacer."<a href='$next'>Next Page</a>";
-    	return $next;		
-	}
+         	}
+         	
+             echo "<li$style>$spacer<a href=\"$dest\"$active>$text</a></li>";
+        	}	
+			
+    	// close wizard div
+    	echo "</ul></div>\n";
+ 	}
 	
 	/**
 	 * Appends a query string to the supplied URL
