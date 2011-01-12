@@ -248,7 +248,7 @@ ENDSCRIPT;
 		{
 			foreach($this->toolbars as $toolbar)
 			{
-				$this->script .= $toolbar->writeScript();
+				$toolbar->drawToolbar();
 			}
 		}
 ?>

@@ -35,4 +35,12 @@ $table->drawView();
 <label for="height" style="display: inline-block; width: 70px;">Height: </label><input type="text" style="width: 100px" id="height" value="400"/><br/>
 <br/>
 <a href="#" onclick="picker.insertSlideshow()" class="button">Insert Slideshow</a>
+<?
 
+function countPhotos($gallery)
+{
+	return Query::create(ImageRecord, "WHERE gallery_id=:id AND include_in_slideshow=1")
+				->bind(":id", $gallery->gallery_id)
+				->executeValue("COUNT(1)");
+}
+?>
