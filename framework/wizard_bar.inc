@@ -33,6 +33,7 @@
 
 Fakoli::usingFeature("tab_bar");
 
+
  
 /**
  * The WizardBar class is a user-interface control that
@@ -42,45 +43,21 @@ Fakoli::usingFeature("tab_bar");
  */
 class WizardBar extends TabBar
 {
-	var $styles = array("past"			=>	"past_step",
-						"current"		=>	"current_step",
-						"future"		=>	"future_step",
-						"unreachable"	=>	"unreachable_step");
-
-	var $steps  = array();
-	var $spacer = " ";
-	var $queryString = null;
-	var $showNumber = false;
-	var $showNext = true;
-	var $page = "";
-	var $links = true;
-	
+	var $spacer = "&nbsp;&raquo;&nbsp;";
 	
 	/**
 	 * Construct a new WizardBar control.
 	 * 
 	 * @param string $queryString the Query String portion of the page URIs
-	 * @param array  $steps the steps in the workflow
-	 * @param string $spacer the spacer symbol to put between steps
-	 * @param bool   $number flag to indicate whether to display step numbers
-	 * @param bool   $showNext flag to indicate whether to display a "Next Page" link
+	 * @param array  $tabs the steps in the workflow
+	 * @param string $queryString the query string to append to the links
+	 * @param bool   $useQueryString flag to indicate whether a query string is required.
+	 *               If so, and none is provided, then all tabs except the first are disabled.
+	 * @param bool   $showNumber flag to indicate whether to display step numbers
 	 */
-	function WizardBar($id, $steps = array(), $queryString = "", $spacer = "&nbsp;&raquo;&nbsp;", $number = false, $showNext = false, $useQueryString = true)
+	function WizardBar($id, $tabs = array(), $queryString = "", $useQueryString = true, $showNumber = false)
 	{
-		global $config;
-		global $isAdmin;
-		
-		$this->id			  = $id;
-		$this->steps          = $steps;
-		$this->page           = ($config['prettyURLs']) ? $_REQUEST['identifier'] : basename($_SERVER["PHP_SELF"]);
-		if ($isAdmin) $this->page = "/admin/{$this->page}";
-		$this->queryString    = $queryString;
-		$this->queryString    = $queryString;
-		$this->spacer         = $spacer;
-		$this->showNumber     = $number;
-		$this->showNext       = $showNext;
-		$this->useQueryString = $useQueryString;
-		
+		parent::TabBar($id, $tabs, $queryString, $useQueryString, $showNumber);
 	}
 	
 	/**
@@ -90,17 +67,16 @@ class WizardBar extends TabBar
 	{
 	    $first   = true;
 	    $future  = false;
-	    $next    = "";
 		$count   = 0;
-		$getNext = false;
 
 	    echo "<div id='{$this->id}'";
 	    
 	    if ($this->cssClass) echo " class='{$this->cssClass}'";
 	    
 	    echo "><ul>";		
-	    foreach ($this->steps as $text => $url)
-    	{
+		foreach($this->tabs as $text => $url)
+	    {
+     		
  	    	++$count;
         	$active = "";
         	$style = "";
@@ -118,13 +94,14 @@ class WizardBar extends TabBar
           	if ($url == $this->page)
 	        {
 	        	$style = " class='current'";
+	        	$future = true;
 	        }
-
-        	if ($this->queryString == "" && $this->useQueryString && $count > 1)
-        	{
-        		$active = " class='disabled'";
+     		elseif (($future AND ($this->queryString == "" && 
+     			$this->useQueryString && $count > 1)) OR $this->states[$url] == 'disable')
+	        {
+	     		$active = " class='disabled'";
 	        }
-        
+	  
         	if ($this->showNumber) $text = "$count.&nbsp;$text";
          
          	if ($this->useQueryString)
@@ -159,63 +136,5 @@ class WizardBar extends TabBar
     	// close wizard div
     	echo "</ul></div>\n";
  	}
-	
-	/**
-	 * Appends a query string to the supplied URL
-	 *
-	 * @param string $url
-	 * @param string $qs
-	 * @return string
-	 */
-	function appendQueryString($url, $qs)
-	{
-		$url .= (strstr($url, "?") !== false) ? "&$qs" : "?$qs";
-		return $url;
-	}
-
-	/**
-	 * Get the next page in the tab list after the current page.
-	 *
-	 * @return string
-	 */
-	function getNextPage()
-	{
-		$found = false;
-		
-		foreach($this->steps as $text => $url)
-		{
-			if ($found)
-			{
-				$dest = ($this->queryString!="") ? $this->appendQueryString($url, $this->queryString) : $url;
-				return $dest;
-			}
-			else if ($url == $this->page)
-			{
-				$found = true;
-			} 
-		}
-		
-		return "";
-	}
-	
-	/**
-	 * Return the URL for the page at the specified tab index.
-	 * 
-	 * @param string $idx the index of the tab for which we require the URL 
-	 */
-	function getPage($idx)
-	{
-		$i = 0;
-		
-		foreach($this->steps as $text => $url)
-		{
-			if ($i == $idx) break;
-			$i++;
-		}
-
-		$dest = ($this->queryString!="") ? $this->appendQueryString($url, $this->queryString) : $url;
-		return $dest;	
-	}
-	
 }
 ?>
