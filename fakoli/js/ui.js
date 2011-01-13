@@ -211,32 +211,29 @@ var AbstractDialog = new Class(
     									 'height': this.options.height});
     	
     	var dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
-    	dialog_header.setStyle('width', this.options.width);
     	
     	var padding = new Element('div');
-    	padding.setStyles({'padding': '4px', 'width': this.options.width});
+    	padding.setStyles({'padding': '4px'});
     	
     	var body = new Element('div', {'id': id + 'Body', 'class': 'dialog_body'});
-    	body.setStyle('width', this.options.width);
     	
     	padding.set('html', "<div style='float: right'>&nbsp;<a id='close" + id + "' href=''>Close &times;</a></div>" +
     						"<span style='font-weight: bold' id='" + id + "Title'>" + this.options.title + "</span>");
     	
     	this.options.closeLink = "close" + id;
     	this.options.body = body;
-
+     	
+    	if (this.options.draggable)
+    	{
+    		this.options.handle = dialog_header;
+    		this.options.handle.setStyle('cursor', 'move');    		
+    	}
     	
     	padding.inject(dialog_header);    	
     	dialog_header.inject(dialog, 'top');
     	body.inject(dialog, 'bottom');
 		var doc = $(document.body ? document.body : document.documentElement);
-     	
-    	if (this.options.draggable)
-    	{
-    		this.options.handle = $splat(padding);
-    		padding.setStyle('cursor', 'move');    		
-    	}		
-    	
+		
 		doc.adopt(dialog);
 		return dialog;
     }    
@@ -285,11 +282,15 @@ var ModalDialog = new Class(
     			onDrag: function(element, event) 
     			{ 
     				new Event(event).stop(); 
-    			},
-    			handle: this.options.handle
+    			} 
     		};
     		
-    		var drag = new Drag(this.element, options);
+    		if (this.options.handle)
+    		{
+    			options.handle = this.options.handle;
+    		}
+    		
+    		var drag = new Drag.Move(this.element, options);
     	}
     	
     	
@@ -305,7 +306,7 @@ var ModalDialog = new Class(
     			onSuccess: function(tree, elements, html, script) 
     			{ 
     				this.options.body.set('text', '');
-    				this.options.body.adopt(tree);
+    				this.options.body.set('html', html);
     				$exec(script);
     				this.center();
     			}.bind(this)
@@ -381,11 +382,15 @@ var FloatingDialog = new Class(
     			onDrag: function(element, event) 
     			{ 
     				new Event(event).stop(); 
-    			},
-    			handle: this.options.handle
+    			} 
     		};
     		
-    		var drag = new Drag(this.element, options);
+    		if (this.options.handle)
+    		{
+    			options.handle = this.options.handle;
+    		}
+    		
+    		var drag = new Drag.Move(this.element, options);
     	}
     	
     	this.position();
