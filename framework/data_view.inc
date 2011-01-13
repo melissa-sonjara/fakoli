@@ -274,7 +274,7 @@ class DataListView
 
 		if ($this->scrollable) 
 		{
-			$constructor = "\n\t\tnew ScrollingTable('{$this->id}');";
+			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
 		}
 		
 		if ($constructor)
