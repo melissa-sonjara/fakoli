@@ -80,8 +80,8 @@ class WizardBar extends TabBar
  	    	++$count;
         	$active = "";
         	$style = "";
- 	    	         
-        	 if (!$first)
+
+        	if (!$first)
      		{	
      			$spacer = $this->spacer;
         	}
@@ -89,17 +89,19 @@ class WizardBar extends TabBar
         	{
         		$spacer = "";
             	$first = false;
+            	$style = "first ";
         	}
       	
           	if ($url == $this->page)
 	        {
-	        	$style = " class='current'";
-	        	$future = true;
+	        	$style .= "current";
+	        	$future = true;	        
 	        }
      		elseif (($future AND ($this->queryString == "" && 
      			$this->useQueryString && $count > 1)) OR $this->states[$url] == 'disable')
 	        {
 	     		$active = " class='disabled'";
+	     		$style .= "disabled";
 	        }
 	  
         	if ($this->showNumber) $text = "$count.&nbsp;$text";
@@ -130,7 +132,7 @@ class WizardBar extends TabBar
 	         	}
          	}
          	
-             echo "<li$style>$spacer<a href=\"$dest\"$active>$text</a></li>";
+             echo "<li class='$style'>$spacer<a href=\"$dest\"$active>$text</a></li>";
         	}	
 			
     	// close wizard div
