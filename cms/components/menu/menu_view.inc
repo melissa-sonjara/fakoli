@@ -77,7 +77,7 @@ class MenuView
 			if (array_key_exists($menuItem->identifier, $this->pages))
 			{
 				$page = $this->pages[$menuItem->identifier];
-				if (!$page->published || !checkRole($page->role))
+				if (!$page->published)
 				{
 					// No link if the page is unpublished, or the user role doesn't match.
 					return null;
