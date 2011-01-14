@@ -95,7 +95,7 @@ class MenuView
 				// Allow menu item link to show even if user can't get to page
 				if (!$page->enabled)
 				{				
-					// No link if the component page is unpublished, or the user role doesn't match.
+					// No link if the component page is unpublished.
 					return null;
 				}
 				
