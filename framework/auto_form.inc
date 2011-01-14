@@ -272,7 +272,7 @@ class AutoForm
 		echo "\n\n";
 		echo "function onSubmit{$this->id}(form)\n{\n";
 		
-		echo "\tif (!validate_{$this->id}(form)) return false;\n";
+		echo "\tif (validate_{$this->id} != null && !validate_{$this->id}(form)) return false;\n";
 
 		foreach(array_keys($this->fields) as $field)
 		{
@@ -562,10 +562,12 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 * @param string $text the button label text
 	 * @param string $url the URL to handle the button press
 	 * @param string $confirm optional confirmation message
+	 * @param boolean $isScript true if the url is javascript code to execute, 
+	 * 							false if it is a URL to redirect to
 	 */
-	function button($text, $url, $confirm = null)
+	function button($text, $url, $confirm = null, $isScript = false)
 	{
-		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm);
+		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm, 'isScript' => $isScript);
 	}
 
 	/**
@@ -734,13 +736,15 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	{
 		foreach($this->buttons as $button)
 		{
+			$url = ($button['isScript']) ? $button['url'] : "go('{$button['url']}');";
+			
 			if ($button['confirm'])
 			{
-				$link = "if (confirm('".jsSafe($button['confirm'])."')) go('{$button['url']}'); return false;";
+				$link = "if (confirm('".jsSafe($button['confirm'])."')) $url; return false;";
 			}
 			else
 			{
-				$link = "go('{$button['url']}'); return false;";
+				$link = "$url; return false;";
 			}
 
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' class='{$this->buttonCSS}' onclick=\"$link\" value=\"{$button['text']}\"/>";
