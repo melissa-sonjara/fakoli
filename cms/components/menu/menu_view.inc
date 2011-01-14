@@ -90,7 +90,10 @@ class MenuView
 			else if (array_key_exists($menuItem->identifier, $this->componentPages))
 			{
 				$page = $this->componentPages[$menuItem->identifier];
-				if (!$page->enabled || !checkRole($page->role))
+				
+				// JDG - remove check role on page 12/14/2011
+				// Allow menu item link to show even if user can't get to page
+				if (!$page->enabled)
 				{				
 					// No link if the component page is unpublished, or the user role doesn't match.
 					return null;
