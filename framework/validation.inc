@@ -219,10 +219,6 @@ ENDSCRIPT;
 		return $script;
 	}
 	
-	function validate()
-	{
-		// same as parent class
-	}
 }
 
 
