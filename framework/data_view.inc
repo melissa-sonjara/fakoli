@@ -72,9 +72,10 @@ class DataListView
 	
 	// Selection and Commands
 	
-	var $selectable  = false;
-	var $menu = null;
-	var $commandMenuIcon = "/fakoli/images/data_view_menu.png";
+	var $selectable  = false;	///< Whether the table provides a selection mechanism
+	var $menu = null;			///< Context menu for selection-based operations
+	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
+	
 	/**
 	 * Creates a new DataListView object.
 	 * 

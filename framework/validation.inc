@@ -1024,6 +1024,42 @@ ENDSCRIPT;
 	}
 	
 	/**
+	 * Get the specified validator by field and class
+	 * @param unknown_type $field the validator's field
+	 * @param unknown_type $class the validator's class
+	 */
+	function getValidator($field, $class)
+	{
+		foreach($this->validators as $v)
+		{
+			if ($v->field == $field && get_class($v) == $class)
+			{
+				return $v;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Get the validators attached to a specific field
+	 * @param $field the field
+	 */
+	function getValidators($field)
+	{
+		$vals = array();
+		foreach($this->validators as $v)
+		{
+			if ($v->field == $field)
+			{
+				$vals[] = $v;
+			}
+		}
+		
+		return $vals;
+	}
+	
+	/**
 	 * Perform server-side validation of the posted form values. The msg field of the ValidationEngine
 	 * accumulates all the error messages raised by the individual validators.
 	 * @return true if the form data is valid for all validators, false if one or more fields contain invalid data.
