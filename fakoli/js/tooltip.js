@@ -43,10 +43,10 @@ function showToolTip(link, evt, id, handlerURL, width)
 		var div = $(id);
 		if(div == null) 
 		{
-			div = document.createElement('div');
-			div.setAttribute('id','tooltip');
-			div.setAttribute('class', 'tooltip_box');
-			link.appendChild(div); 
+			div = new Element('div', {'id': 'tooltip', 'class': 'tooltip_box'});
+			var doc = document.body ? document.body : document.documentElement;
+			
+			div.inject(doc, 'top'); 
 		}
 		
 		var cursor = link.getStyle('cursor');

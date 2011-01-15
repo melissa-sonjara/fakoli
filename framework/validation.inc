@@ -174,6 +174,59 @@ ENDSCRIPT;
 }
 
 
+/*
+ * When we must not set any of the buttons by default
+ * and the field is required, we need this validator
+ * instead of "RequiredValidator"
+ * 
+ * JDG 1/14/2011
+ */
+class RequiredRadioButtonValidator extends RequiredValidator
+{
+	var $empty = "";
+
+	function RequiredTreeValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+
+		var valid = false;
+
+		var radios = form["{$this->field}"];
+		
+ 		for(i=0; i < radios.length; i++)
+ 		{
+ 	    	if (radios[i].checked == true) 
+	    	{
+			   valid = true;
+	    	}
+		} 		
+		 		
+		if(valid == false)
+		{
+			alert("{$this->title} is a required field. Please supply a value.");
+				return false;
+		}
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		// same as parent class
+	}
+}
+
+
+
 class RequiredFileValidator extends AbstractValidator
 {
 	var $message;
@@ -552,6 +605,8 @@ ENDSCRIPT;
 /**
  * RangeValidator class. Checks that the user-supplied value for a given form
  * field is within the supplied range.
+ * 
+ * $form->validator->add(new RangeValidator($field, $label, $min, $max, $message));
  */
 class RangeValidator extends AbstractValidator
 {
