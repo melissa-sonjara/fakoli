@@ -5,7 +5,7 @@ var Slideshow = (function()
 	{
 	    Implements: [Options, Events],
 	    
-	    options: 	{preload: true, showInfo: true, autoPlay: false},
+	    options: 	{preload: true, showInfo: true, autoPlay: false, transition: 'switch'},
 	    busy: 		false,
 		timer: 		null,
 		playing: 	false,
@@ -327,16 +327,38 @@ var Slideshow = (function()
 						   'height': h});
 		},
 	
+		transition: function(i)
+		{
+			switch(this.options.transition)
+			{
+			case "fade":
+				
+				if (this.showing != -1)
+				{
+					new Fx.Tween(this.loadedImages[this.showing], {duration: 1500, transition: Fx.Transitions.linear}).start('opacity', 0);
+				}	
+				
+				new Fx.Tween(this.loadedImages[i], {duration: 1500, transition: Fx.Transitions.linear}).start('opacity', 1);
+				break;
+				
+			case "switch":
+			default:
+				
+				if (this.showing != -1)
+				{
+					this.loadedImages[this.showing].setStyle('opacity', 0);
+				}
+				this.loadedImages[i].setStyle('opacity', 1);
+				break;
+			}
+		},
+		
 		selectImage: function(i)
 		{
 			if (this.busy) return;
 			//alert("selectImage(" + i + ")");
-			if (this.showing != -1)
-			{
-				new Fx.Tween(this.loadedImages[this.showing], {duration: 1500, transition: Fx.Transitions.linear}).start('opacity', 0);
-			}	
 			
-			new Fx.Tween(this.loadedImages[i], {duration: 1500, transition: Fx.Transitions.linear}).start('opacity', 1);
+			this.transition(i);
 			
 			this.caption.innerHTML = this.captions[i];
 			this.creditText.innerHTML = this.credits[i];
