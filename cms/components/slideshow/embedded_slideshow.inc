@@ -57,6 +57,7 @@ class EmbeddedSlideshowHandler
 			$images = $gallery->Images("WHERE include_in_slideshow=1 ORDER BY sort_order, image_id");
 			
 			$slideshow = new Slideshow($images, $width, $height);
+			$slideshow->preload = false;
 			
 			$script .= $slideshow->writeScript();
 			

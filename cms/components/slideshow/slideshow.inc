@@ -101,7 +101,7 @@ class Slideshow
 
 window.addEvent('domready', function() {
 
-	var slideshow = new Slideshow({preload: <?echo $this->preload ? "true" : "false"?>, showInfo: <?echo $this->showInfo ? "true" : "false" ?>, autoPlay: <?echo $this->autoPlay ? "true" : "false"?>});
+	var slideshow = new Slideshow({preload: <?echo $this->preload ? "true" : "false"?>, showThumbnails: <?echo $this->showThumbnails ? "true" : "false"?>, showInfo: <?echo $this->showInfo ? "true" : "false" ?>, autoPlay: <?echo $this->autoPlay ? "true" : "false"?>});
 
 	slideshow.thumbnails = [
 <?
