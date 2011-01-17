@@ -508,7 +508,7 @@ var Slideshow = (function()
 				this.selectImage(0);
 			}
 			
-			this.timer = this.playNext.delay(10000);
+			this.timer = this.playNext.bind(this).delay(10000);
 		},
 		
 		selectImageFromURL: function(url)
