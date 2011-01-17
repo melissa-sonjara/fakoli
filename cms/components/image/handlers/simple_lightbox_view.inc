@@ -61,8 +61,7 @@ $width = 100;
 $height = 100;
 $mgr = new ImageManager();
 $mgr->getScaledSize($image_id, 600, $width, $height);
-
 ?>
-<div style="width: <?echo $width?>px; height: <?echo $height?>px;background: url(/fakoli/slideshow/images/loading_animation.gif) center center no-repeat #2a2a2f">
-<img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px; display: none" alt="<?echo $image->ALT_tag?>" onload="this.setStyles({'display': 'block', 'opacity': 0}); $(this).fade('in');"/>
+<div style="width: <?echo $width?>px; height: <?echo $height?>px;background: url(/fakoli/images/loader.gif) center center no-repeat #fff">
+<img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px" alt="<?echo $image->ALT_tag?>"/>
 </div>
