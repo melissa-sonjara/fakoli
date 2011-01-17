@@ -5,7 +5,7 @@ var Slideshow = (function()
 	{
 	    Implements: [Options, Events],
 	    
-	    options: 	{preload: true, showInfo: true, autoPlay: false, transition: 'switch'},
+	    options: 	{preload: true, showInfo: true, autoPlay: true, transition: 'switch'},
 	    busy: 		false,
 		timer: 		null,
 		playing: 	false,
