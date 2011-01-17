@@ -69,7 +69,7 @@ class Slideshow
 		$this->showControls = true;
 		$this->showInfo = true;
 		$this->showThumbnails = true;
-		$this->autoPlay = false;
+		$this->autoPlay = true;
 		$this->preload = true;
 	}
 	
