@@ -36,7 +36,7 @@ var Slideshow = (function()
 	{
 	    Implements: [Options, Events],
 	    
-	    options: 	{preload: true, showInfo: true, autoPlay: false, transition: 'fade'},
+	    options: 	{preload: true, showInfo: true, autoPlay: false, transition: 'switch'},
 	    busy: 		false,
 		timer: 		null,
 		playing: 	false,
