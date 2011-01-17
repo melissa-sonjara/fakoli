@@ -5,7 +5,7 @@ var Slideshow = (function()
 	{
 	    Implements: [Options, Events],
 	    
-	    options: 	{preload: true, showInfo: true, autoPlay: true, transition: 'switch'},
+	    options: 	{preload: true, showThumbnails: true, showInfo: true, autoPlay: true, transition: 'switch'},
 	    busy: 		false,
 		timer: 		null,
 		playing: 	false,
@@ -168,8 +168,14 @@ var Slideshow = (function()
 				onComplete: function()
 				{
 	
-					
-					slideshow.loadImages();
+					if (slideshow.options.preload)
+					{
+						slideshow.loadImages();
+					}
+					else
+					{
+						slideshow.selectImage(0);
+					}
 				}
 			});	
 		},
@@ -618,7 +624,7 @@ var Slideshow = (function()
 		
 		load: function()
 		{
-			if (this.options.preload)
+			if (this.options.preload || this.options.showThumbnails)
 			{
 				this.loadThumbnails();
 			}
