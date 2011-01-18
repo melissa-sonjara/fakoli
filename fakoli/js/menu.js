@@ -59,7 +59,10 @@ var FakoliMenu = new Class({
 			
 			$$("#" + this.root.id + " > ul > li").each(function (elt)
 					{
-						elt.addEvents({'mouseover': function() { elt.addClass("sfhover"); elt.getElement('ul').setStyle('left', elt.getCoordinates().left); },
+						elt.addEvents({'mouseover': function() 
+							{ 
+								elt.addClass("sfhover"); 
+								elt.getElement('ul').setStyles({'left': elt.getCoordinates().left, 'top': elt.getCoordinates().bottom}); },
 									   'mouseout': function() { elt.removeClass("sfhover");  elt.getElement('ul').setStyle('left', -2000);} 
 									 });
 					});
