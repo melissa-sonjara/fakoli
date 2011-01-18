@@ -255,7 +255,7 @@ var AbstractDialog = new Class(
     	
     	if (this.options.closeLink)
     	{
-    		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
+    		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); if (this.disposeOnExit) { this.options.body.set('text', ''); }.bind(this));
     	}
     	
     	if (this.options.title)	this.setTitle(this.options.title);
@@ -367,6 +367,7 @@ var ModalDialog = new Class(
     	
     	if (fragmentURL && this.options.body)
     	{
+    		this.disposeOnExit = true;
     		if (!reload) this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
     		{
@@ -468,7 +469,8 @@ var FloatingDialog = new Class(
     	
     	if (fragmentURL && this.options.body)
     	{
-    		this.options.body.set('text', "Loading...");
+       		this.disposeOnExit = true;
+       	 	this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
     		{
     			evalScripts: false,
