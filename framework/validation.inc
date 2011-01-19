@@ -972,9 +972,10 @@ ENDSCRIPT;
  */
 class ValidationEngine
 {
-	var $validators = array();
-	var $msg = "";
-	var $id = "";
+	var $validators = array(); 	///< The array of validators making up this validation engine
+	var $msg = "";				///< Validation error messages accumulator;
+	var $id = "";				///< The ID of this validator
+	var $generateScript = true;	///< Specifies whether to generate client-side validation script
 	
 	/**
 	 * Create a new ValidationEngine.
@@ -997,11 +998,14 @@ function validate{$suffix}(form)
 {
 ENDSCRIPT;
 
-		foreach($this->validators as $v)
-		{
-			$script .= $v->writeClient();
+		if ($this->generateScript)
+		{ 
+			foreach($this->validators as $v)
+			{
+				$script .= $v->writeClient();
+			}
 		}
-		
+				
 		$script .= <<<ENDSCRIPT
 
 	return true;
