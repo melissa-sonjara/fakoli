@@ -751,6 +751,26 @@ class DataItem extends AbstractDataItem
 	}
 	
 	/**
+	 * Automatically populate the object based on a custom set of parameters
+	 * (such as a filtered $_POST collection)
+	 */
+	function fromDataSet($params)
+	{
+		foreach($this->fields as $field => $type)
+		{
+    	   	if ($this->filter && $this->filter->isExcluded($field)) continue;
+			if (array_key_exists($field, $params))
+			{
+				$this->$field = $params[$field];
+			}
+			elseif (!array_key_exists($field, $params) AND ($type == Boolean))
+			{
+				$this->$field = 0;
+			}
+		}
+	}
+	
+	/**
 	 * Compare this object to another object. If all the fields match,
 	 * the method returns true, otherwise false. If a filter is in place on
 	 * the source object, then only the filtered fields are compared.

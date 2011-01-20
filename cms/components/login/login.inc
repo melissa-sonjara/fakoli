@@ -140,7 +140,51 @@ class LoginManager
 		}
 	}
 
+	function validateAjaxLogin()
+	{
+		global $user;
+		
+		$mgr = new UserManager();
 
+		$username = $_POST[$mgr->getUsernameField()];
+		$password = $_POST["password"];
+		
+		// JDG - guard against data not found exception
+		if(!$username OR !$password)
+		{
+			LoginManager::$error = "Incorrect user name or password.";
+			return "ERROR|".LoginManager::$error;
+		}			
+	
+		$user = $mgr->validatePassword($username, $password);
+
+		if ($user)
+		{
+			session_start();
+			
+			$_SESSION["user"] = $user;
+			
+			$mgr->loadDefaultSession($user);
+			return "OK|".$mgr->getLoginRedirect($user);
+		}
+		else
+		{
+			$user = $this->validateTokenLogin($username, $password);
+			
+			if ($user)
+			{
+				$_SESSION["user"] = $user;
+				$mgr->loadDefaultSession($user);
+				return "OK|".$mgr->getPasswordResetPage();
+			}
+			else
+			{	
+				LoginManager::$error = "Incorrect user name or password.";
+				return "ERROR|".LoginManager::$error;
+			}
+		}
+	}
+	
 
 	/*
 	 * JDG 2/18/20. If the password does not match, check if the login was

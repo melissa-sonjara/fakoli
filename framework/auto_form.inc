@@ -87,7 +87,9 @@ class AutoForm
 
     var $fields;	///< Local field cache
     
-    var $readOnlyForm; ///< Specifies whether the entire form is read-only
+    var $readOnlyForm;  ///< Specifies whether the entire form is read-only
+    var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
+    var $dataSet; 		///< Custom data set
     
     static $fieldRendererMap = array (
     	String		=>	StringFieldRenderer,
@@ -116,6 +118,8 @@ class AutoForm
 	{
 		global $auto_form_defaults;
 
+		$this->subordinate = false;
+		
 		$this->validator = new ValidationEngine();
 
 		foreach($auto_form_defaults as $field => $value)
@@ -159,8 +163,20 @@ class AutoForm
 		}
 		
 	}
+	
+	/**
+	 * Returns the target data item for the form
+	 */
+	function getData()
+	{
+		return $this->data;
+	}
 
-
+	function setDataSet($params)
+	{
+		$this->dataSet = $params;
+	}
+	
 	/**
 	 * This factory method creates a FieldRender based on the type
 	 * of the specified field.
@@ -225,6 +241,22 @@ class AutoForm
 		}
 	}
 
+	/**
+	 * Retrieve the validation engine for this AutoForm.
+	 */
+	function getValidationEngine()
+	{
+		return $this->validator;
+	}
+	
+	/**
+	 * Set this AutoForm to be a subordinate form within a CompositeAutoForm.
+	 */
+	function makeSubordinate()
+	{
+		$this->subordinate = true;
+	}
+	
 	/**
 	 * This method writes any Javascript code that will be required for the generated
 	 * form to operate, including code for Rich Text Editors, Date Pickers and field validation.
@@ -602,9 +634,14 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		//echo "<!--\n";
 		//print_r($this);
 		//echo "\n-->\n";
-		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
-		if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
-		echo ">\n";
+		
+		if (!$this->subordinate)
+		{
+			echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+			if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+			echo ">\n";
+		}
+		
 		if ($this->id)
 		{
 			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
@@ -620,7 +657,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		if ($this->style) echo " style='{$this->style}'";
 		echo ">\n";
 
-		if ($this->buttons_at_top) 
+		if ($this->buttons_at_top && !$this->subordinate) 
 		{
 			echo "<tr>\n";
 			$this->drawSubmitButtons($obj, $pk, $submitLabel);
@@ -642,13 +679,22 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		$this->renderFields($obj);
 		if(!$this->additional_at_top)
 			$this->renderAdditionalFields($obj);	
-		
-		echo "<tr>\n";
-		$this->drawSubmitButtons($obj, $pk, $submitLabel);
-		$this->drawButtons();
+					
+		if (!$this->subordinate)
+		{		
+			echo "<tr>\n";
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
+			$this->drawButtons();
+	
+			echo "</td></tr>";
+		}
 
-		echo "</td></tr>";
-		echo "</table>\n</form>\n";
+		echo "</table>\n";
+		
+		if (!$this->subordinate)
+		{
+			echo "</form>\n";
+		}
 	}
 	
 	/*
@@ -858,7 +904,15 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 
 		$obj =& $this->data;
 
-		$obj->fromPOST();
+		if ($this->dataSet)
+		{
+			$obj->fromDataSet($this->dataSet);
+		}
+		else
+		{
+			$obj->fromPOST();
+		}
+		
 		$filter = $obj->getFilter();
 		$pk = $obj->getPrimaryKey();
 		
