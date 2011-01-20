@@ -187,7 +187,7 @@ function onCompositeFormSubmit(form)
 		{
 			foreach($_POST as $name => $value)
 			{
-				if (strncmp($name, "__", 2))
+				if (strpos($name, "__") === false)
 				{
 					unset($_POST[$name]);
 				}

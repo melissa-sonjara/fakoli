@@ -104,7 +104,7 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
-		if (!isset($_POST[$this->field]))
+		if (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty)
 		{
 			return "{$this->title} is a required field.";
 		}

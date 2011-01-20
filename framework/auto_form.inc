@@ -89,7 +89,6 @@ class AutoForm
     
     var $readOnlyForm;  ///< Specifies whether the entire form is read-only
     var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
-    var $dataSet; 		///< Custom data set
     
     static $fieldRendererMap = array (
     	String		=>	StringFieldRenderer,
@@ -257,6 +256,21 @@ class AutoForm
 		$this->subordinate = true;
 	}
 	
+	function configureValidators()
+	{
+		if ($this->validatorsConfigured) return;
+		
+		$this->addDefaultValidators();
+
+		foreach($this->validator->validators as $v)
+		{
+			$v->title = (!$v->title) ? $this->prettifyFieldName($v->field) : $v->title;
+			$v->readOnly = $this->isReadOnly($v->field) || $this->isHidden($v->field);
+		}
+		
+		$this->validatorsConfigured = true;
+	}
+	
 	/**
 	 * This method writes any Javascript code that will be required for the generated
 	 * form to operate, including code for Rich Text Editors, Date Pickers and field validation.
@@ -269,14 +283,8 @@ class AutoForm
 
 		ob_start();
 
-		$this->addDefaultValidators();
-
-		foreach($this->validator->validators as $v)
-		{
-			$v->title = (!$v->title) ? $this->prettifyFieldName($v->field) : $v->title;
-			$v->readOnly = $this->isReadOnly($v->field) || $this->isHidden($v->field);
-		}
-
+		$this->configureValidators();
+		
 		$obj =& $this->data;
 		$filter = $obj->getFilter();
 		$pk = $obj->getPrimaryKey();
@@ -902,16 +910,10 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	{
 		$this->patchUpReferences();
 
-		$obj =& $this->data;
+		$this->configureValidators();
 
-		if ($this->dataSet)
-		{
-			$obj->fromDataSet($this->dataSet);
-		}
-		else
-		{
-			$obj->fromPOST();
-		}
+		$obj =& $this->data;
+		$obj->fromPOST();
 		
 		$filter = $obj->getFilter();
 		$pk = $obj->getPrimaryKey();
