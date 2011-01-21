@@ -103,7 +103,7 @@ function onCompositeFormSubmit(form)
 			$output = preg_replace("/\\bname=(['\"])([^'\"]*?)['\"]/", "name=$1{$form->id}__$2$1", $output);
 			
 ?>
-		<div id="<?echo $this->id?>_container" class="<?echo $this->containerClass?>">
+		<div id="<?echo $form->id?>_container" class="<?echo $this->containerClass?>">
 <?
 			echo $output;
 ?>
