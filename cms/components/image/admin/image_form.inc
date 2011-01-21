@@ -95,7 +95,7 @@ $tabs->writeHTML();
 if ($image_id)
 {
 ?>
-<img src="<?echo $image->getThumbnail(350) ?> " alt="Small version of image"/><br/>
+<a href="/action/image/show?image_id=<?echo $image_id?> target="_blank"><img src="<?echo $image->getThumbnail(350) ?> " alt="Small version of image"/></a><br/>
 
 <?
 }
