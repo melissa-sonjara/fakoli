@@ -24,7 +24,14 @@ function stretch()
 window.addEvent('domready', function()
 {
 	layout = new PanelLayout();
-	layout.setup('tearoff', {stretch: true, replace: true});
+	layout.setup('tearoff', {stretch: true, replace: true, 
+		onLoad: function()
+		{
+			var titleField = $('tearoff').getElement(".tearoff_title");
+			if (titleField != null) document.title = titleField.get('text');	
+		} 
+	});
+	
 	layout.addSlots('.slot');	
 	stretch();
 	

@@ -196,11 +196,14 @@ ENDSCRIPT;
 	function drawView()
 	{
 		if ($this->menu) $this->dialogs .= $this->menu->writeMenu();
-		
+
+		$title = is_object($this->title) ? $this->title->getText() : $title; 
 		ob_start();
 ?>
 		<?echo $this->writeScript()?>
 		<?echo $this->dialogs?>
+		
+		<span class="tearoff_title" style="display:none"><?echo $title?></span>
 		 <div id="<?echo $this->id?>_header" class="panel_header">
 <?
 		if ($this->menu)

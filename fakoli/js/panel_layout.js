@@ -2,7 +2,7 @@ var PanelLayout = (function()
 {
 	var PanelLayoutSingleton = new Class(
 	{
-		Implements: [Options],
+		Implements: [Options, Events],
 		container: null,
 		slots: new Hash({}),
 		panels: new Hash({}),
@@ -17,7 +17,8 @@ var PanelLayout = (function()
 			tearoffWidth: 800,
 			tearoffHeight: 600,
 			tearoff: "tearoff",
-			defaultPanel: ""
+			defaultPanel: "",
+			onLoad: Class.Empty
 		},
 		
 		initialize: function()
@@ -120,7 +121,7 @@ var PanelLayout = (function()
 			}
 				
 			var newPanel = new Panel(id, options);
-			newPanel.load(panelURL, slot.id, function() { slot.removeClass("background-spinner");});
+			newPanel.load(panelURL, slot.id, function() { slot.removeClass("background-spinner"); this.fireEvent('load');}.bind(this));
 			
 			this.dock(newPanel, slot);
 			
