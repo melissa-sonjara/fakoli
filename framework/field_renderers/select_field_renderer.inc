@@ -114,6 +114,8 @@ class SelectFieldRenderer extends FieldRenderer
 			
 			if ($this->onChange != "")
 				echo " onchange='$this->onChange(this)'";
+			elseif($this->addEntry)
+				echo " onchange='onChange_{$this->parent->id}_{$field}(this)'";
 			
 			echo ">\n";
 			
@@ -154,22 +156,26 @@ class SelectFieldRenderer extends FieldRenderer
 			}
 			else
 			{
+				/*
+				 * If there is no match but there is a value saved, 
+				 * (user entered an addEntry value) then set current 
+				 *  to blank so that the "Other" option is shown as selected. 
+				 */		
+				if(!array_key_exists($current, $this->options))
+				{
+					$addEntryValue = $current;
+					$current = "";
+				}
 				foreach($this->options as $value => $name)
 				{
 					if($current == $value)
-					{
 						$selected = " selected";
-						$othEntry = false;
-					}
 					else
 						$selected = "";
 					
 					echo "<option value='".htmlSafe($value)."'$selected>$name</option>\n";
 				}
 			}
-			
-			if($othEntry)
-				$addEntryValue = $this->parent->data->get($field);
 			
 			echo "</select>\n";
 		}
@@ -182,9 +188,12 @@ class SelectFieldRenderer extends FieldRenderer
 		$type = $this->addEntry ? 'text' : 'hidden';
 		
 		if ($this->addEntry)
+		{
 			echo "&nbsp;{$this->addEntryText}&nbsp;";
+			$onChange = " onchange='onChange_{$this->parent->id}_{$field}_addEntry(this)'";
 			
-		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='20'/>";
+		}	
+		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='20' $onChange/>";
 		
 		$this->_endField($field);
 	}
@@ -253,29 +262,81 @@ class SelectFieldRenderer extends FieldRenderer
 			}
 		}
 
-		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
+		$addEntry = $_POST["{$field}_addEntry"];
+		trace("addEntry($field): $addEntry and found $found", 3);
 		
 		if ($_POST["{$field}_addEntry"] && !$found)
 		{
-			$this->parent->data->set($field,  $_POST["{$field}_addEntry"]);
+			trace("setting field $field with add entry value $addEntry", 3);
+			$this->parent->data->set($field,  $addEntry);
 		}
 	}
+	
+	/*
+	 * If the calling script is using addEntry and
+	 * does not supply its own onChange function,
+	 * then write this onChange function to remove
+	 * the added entry when the selected value in
+	 * the drop down is NOT "Other". If the calling
+	 * script requires additional onChange
+	 * handling, it can override and incorporate this
+	 * handling into its own custom function.
+	 */
+	function renderScript($field)
+	{
+		$fn = "{$this->parent->id}_$field";
+		$addEntry = $field . "_addEntry";
+		
+		if(!$this->onChange AND $this->addEntry)
+		{
+?>
+<script type="text/javascript">
+function onChange_<?echo $fn?>(elt)
+{
+	if(!elt.value == '')
+	{
+		var addEntry = $('<?php echo $addEntry ?>');
+		if(addEntry)
+			addEntry.value = '';		
+	}
+}
+</script>
+<?
+		}	
+
+		if($this->addEntry)
+		{
+			?>
+		}
+	<script type="text/javascript">
+function onChange_<?echo "{$fn}_addEntry" ?>(elt)
+{
+	if(elt.value)
+	{
+		var selected = $('<?php echo $field ?>');
+		if(selected)
+			selected.value = '';		
+	}
+}
+</script>	
+<?php	
+		}		
+	}
+	
 	
 	/*
 	 * addOtherOption
 	 * 
 	 * If the user enables addEntryText, then add a "Other" option to the 
-	 * options array if one does not already exist. Sort by options key so 
-	 * that the blank is on top. Can also add a blank option.
+	 * options array if one does not already exist. Can also add a 
+	 * blank option.
 	 */
 	function addOtherOption($text = "Other")
 	{
 		if(!array_key_exists("", $this->options))
 		{
 			$this->options[""] = $text;
-		}
-		
-		ksort($this->options);
+		}		
 	}
 
 	
