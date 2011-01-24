@@ -825,3 +825,14 @@ warning
 	background-image: url(/fakoli/images/warning_icon.gif);
 	background-repeat: no-repeat;
 }
+
+
+/* box border under tab bar */
+#tab_border {
+	clear: left;
+	border: solid 1px #000; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
