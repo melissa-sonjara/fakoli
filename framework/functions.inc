@@ -1267,14 +1267,36 @@ function getFullQueryString()
 	
 	foreach($_GET as $name => $value)
 	{
-		$qs .= $sep.urlencode($name)."=".urlencode($value); 
-		$sep = "&";
+		if (is_array($value))
+		{
+			foreach($value as $key => $val)
+			{
+				$qs .= $sep.urlencode($name)."[".urlencode($key)."]=".urlencode($val);
+				$sep = "&";
+			}
+		}
+		else
+		{
+			$qs .= $sep.urlencode($name)."=".urlencode($value); 
+			$sep = "&";
+		}
 	}
 	
 	foreach($_POST as $name => $value)
 	{
-		$qs .= $sep.urlencode($name)."=".urlencode($value); 
-		$sep = "&";
+		if (is_array($value))
+		{
+			foreach($value as $key => $val)
+			{
+				$qs .= $sep.urlencode($name)."[".urlencode($key)."]=".urlencode($val);
+				$sep = "&";
+			}
+		}
+		else
+		{
+			$qs .= $sep.urlencode($name)."=".urlencode($value); 
+			$sep = "&";
+		}
 	}
 
 	return $qs;
