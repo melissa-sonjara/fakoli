@@ -461,7 +461,7 @@ abstract class AbstractDataItem
 			
 		case Timestamp:
 			
-			$val = date("Y-m-d H:i:s");
+			$val = date("Y-m-d H:i:s", strtotime($data));
 			break;
 			
 		case Boolean:
