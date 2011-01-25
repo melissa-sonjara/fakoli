@@ -69,6 +69,8 @@ class MenuView
 	
 	function getLink($menuItem)
 	{
+		if (!checkRole($menuItem->role)) return null;
+		
 		// If the URL field is set explicitly, use that
 		if ($menuItem->url) return $menuItem->url;
 		
