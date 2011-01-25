@@ -41,6 +41,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class DateFieldRenderer extends FieldRenderer
 {
 	var $validator;
+	var $readOnlyFormat = ""; // default is standard "F d, Y", accepts "long" and "short"
 	
 	function DateFieldRenderer(&$parent)
 	{
@@ -145,11 +146,18 @@ class DateFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
+		if(!$this->readOnlyFormat)
+			$date = formatDate($this->parent->data->get($field));
+		elseif($this->readOnlyFormat == 'short')
+			$date = formatDateShort($this->parent->data->get($field));
+		elseif($this->readOnlyFormat == 'long')
+			$date = formatDateLong($this->parent->data->get($field));
+			
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->parent->data->get($field)."</td>\n";		
+		echo ">".$date."</td>\n";		
 		echo "</tr>\n";	
 	}	
 }
