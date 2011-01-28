@@ -57,6 +57,7 @@ var TextareaResizer = new Class({
         grippie.inject(span);
         grippie.setStyle('margin-right', grippie.offsetWidth - textarea.offsetWidth);
         grippie.setStyle('width', textarea.getStyle('width'));
+        grippie.setStyles({'padding': 0, 'margin': 0});
 
         var endDrag = function(e) {            
             document.removeEvent('mousemove', performDrag);
