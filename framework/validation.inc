@@ -521,10 +521,12 @@ ENDSCRIPT;
 class PasswordValidator extends RequiredValidator
 {
 	var $empty = "";
+	var $form_id;
 	
-	function PasswordValidator($field, $title, $empty = "")
+	function PasswordValidator($field, $title, $form_id = "", $empty = "")
 	{
 		$this->empty = $empty;
+		$this->form_id = $form_id;
 		$this->AbstractValidator($field, $title);
 	}
 
@@ -543,10 +545,25 @@ class PasswordValidator extends RequiredValidator
 		return false;
 	}
 		
-	
 ENDSCRIPT;
 
 		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		$reset = $_POST["{$this->form_id}_reset_password"];
+		
+		if ($reset == 1 AND (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty))
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
 	}
 }
 

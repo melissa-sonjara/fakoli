@@ -593,7 +593,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 */
 	function password($field, $title)
 	{
-		$this->validator->add(new passwordValidator($field, $title));
+		$this->validator->add(new PasswordValidator($field, $title, $this->id));
 	}
 
 	/**
