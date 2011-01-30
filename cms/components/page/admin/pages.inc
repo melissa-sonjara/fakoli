@@ -36,26 +36,38 @@ Fakoli::using("site");
 
 Fakoli::assertRole("admin");
 
-Fakoli::usingFile("framework/tree.inc");
-Fakoli::usingFile("framework/grouped_data_view.inc");
+Fakoli::usingFeature("data_view", "data_tabs");
 
 $title = "Manage Pages";
 $menu_item = "Pages";
 
-$pagesBySite = groupedQuery(Page, "ORDER BY page_title", "site_id");
+$site_id = checkNumeric($_GET["site_id"]);
 
 $sites = query(Site, "ORDER BY site_name");
 
-$pageTable = new GroupedDataListView($pagesBySite, "pages");
+if (!$site_id) $site_id = $sites[0]->site_id;
+
+$tabs = new DataItemTabBar("tabs", $sites);
+$pagesBySite = Query::create(Page, "WHERE site_id=:site ORDER BY page_title")
+					->bind(":site", $site_id)
+					->execute();
+
+
+$pageTable = new DataListView($pagesBySite, "pages");
 $pageTable->column("Title", "<a href='/admin/page_form?page_id={page_id}'>{page_title}</a>", true, "width: 40%")
 		  ->column("Page Identifier", "{identifier}", true, "width: 20%")
 		  ->column("Code File", "{php_code_file}", true, "width: 40%");
 		  
-$pageTable->mode = "tree";
-$pageTable->groupBy($sites);
+$pageTable->sortable = true;
+$pageTable->filter = true;
 $pageTable->cssStyle = "width: 100%";
 
 $script = $pageTable->writeScript();
+
+$tabs->writeHTML();
+?>
+<div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
+<?
 
 $pageTable->drawView();
 ?>
