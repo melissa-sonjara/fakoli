@@ -522,7 +522,7 @@ ENDSCRIPT;
 				$result = "{$this->title} and {$this->confirmTitle} do not match";
 			}
 		}
-		else if (strtolower($value1) != strolower($value2))
+		else if (strtolower($value1) != strtolower($value2))
 		{
 			$result = "{$this->title} and {$this->confirmTitle} do not match";
 		}		
