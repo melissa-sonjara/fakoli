@@ -74,7 +74,7 @@ class CalendarManager
 		return $items;
 	}
 	
-	static function enumerateContextHelpClasses(&$classes)
+	static function enumerateContextHelpClasses($classes)
 	{
 		array_push($classes, "Event");
 		
