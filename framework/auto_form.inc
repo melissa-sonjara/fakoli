@@ -579,10 +579,11 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 * @param string $title
 	 * @param string $match The name of the second field that must match
 	 * @param string $matchTitle
+	 * @param string $caseSensitive specifies whether the match is case sensitive
 	 */
-	function match($field, $title, $match, $matchTitle)
+	function match($field, $title, $match, $matchTitle, $caseSensitive = true)
 	{
-		$this->validator->add(new MatchValidator($field, $title, $match, $matchTitle));
+		$this->validator->add(new MatchValidator($field, $title, $match, $matchTitle, $caseSensitive));
 	}
 
 	/**

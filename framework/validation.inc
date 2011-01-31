@@ -465,8 +465,9 @@ class MatchValidator extends AbstractValidator
 {
 	var $confirm;
 	var $confirmTitle;
-
-	function MatchValidator($field, $title, $confirm, $confirmTitle)
+	var $caseSensitive = true;
+	
+	function MatchValidator($field, $title, $confirm, $confirmTitle, $caseSensitive = true)
 	{
 		$this->confirm = $confirm;
 		$this->confirmTitle = $confirmTitle;
@@ -479,7 +480,10 @@ class MatchValidator extends AbstractValidator
 		trace("MatchValidator::writeClient", 3);
 		if ($this->readOnly) return "";
 		
-		$script = <<<ENDSCRIPT
+		if ($this->caseSensitive)
+		{
+
+			$script = <<<ENDSCRIPT
 			
 	if (form["{$this->field}"].value != form["{$this->confirm}"].value)
 	{
@@ -487,7 +491,18 @@ class MatchValidator extends AbstractValidator
 		return false;
 	}
 ENDSCRIPT;
-
+		}
+		else
+		{
+			$script = <<<ENDSCRIPT
+			
+	if (form["{$this->field}"].value.toLowerCase() != form["{$this->confirm}"].value.toLowerCase())
+	{
+		alert("{$this->title} and {$this->confirmTitle} do not match.");
+		return false;
+	}
+ENDSCRIPT;
+		}
 		return $script;
 	}
 	
@@ -499,11 +514,17 @@ ENDSCRIPT;
 		$value1 = $_POST[$this->field];
 		$value2 = $_POST[$this->confirm];
 		
-		if ($value1 != $value2)
+		if ($this->caseSensitive)
+		{
+			if ($value1 != $value2)
+			{
+				$result = "{$this->title} and {$this->confirmTitle} do not match";
+			}
+		}
+		else if (strtolower($value1) != strolower($value2))
 		{
 			$result = "{$this->title} and {$this->confirmTitle} do not match";
-		}
-		
+		}		
 		return $result;
 	}
 }
