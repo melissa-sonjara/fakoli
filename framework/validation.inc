@@ -471,6 +471,7 @@ class MatchValidator extends AbstractValidator
 	{
 		$this->confirm = $confirm;
 		$this->confirmTitle = $confirmTitle;
+		$this->caseSensitive = $caseSensitive;
 		
 		$this->AbstractValidator($field, $title);
 	}
