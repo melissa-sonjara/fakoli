@@ -58,14 +58,24 @@ var FakoliMenu = new Class({
 			// Suckerfish style dropdown implementation for IE6 mouseovers.
 			
 			$$("#" + this.root.id + " > ul > li").each(function (elt)
+			{
+				elt.addEvents(
+				{
+					'mouseover': function() 
+					{ 
+						elt.addClass("sfhover"); 
+						var ul = elt.getElement('ul');
+						if (ul) ul.setStyles({'left': elt.getCoordinates().left, 'top': elt.getCoordinates().bottom}); 
+					},
+						
+					'mouseout': function() 
 					{
-						elt.addEvents({'mouseover': function() 
-							{ 
-								elt.addClass("sfhover"); 
-								elt.getElement('ul').setStyles({'left': elt.getCoordinates().left, 'top': elt.getCoordinates().bottom}); },
-									   'mouseout': function() { elt.removeClass("sfhover");  elt.getElement('ul').setStyle('left', -2000);} 
-									 });
-					});
+						elt.removeClass("sfhover");  
+						var ul = elt.getElement('ul');
+						if (ul) ul.setStyle('left', -2000);
+					} 
+				 });
+			});
 		}
 	},
 	
