@@ -104,6 +104,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty)
 		{
 			return "{$this->title} is a required field.";
@@ -161,6 +163,8 @@ ENDSCRIPT;
 	function validate()
 	{
 		global $_POST;
+		
+		if ($this->readOnly) return "";
 		
 		if (!isset($_POST[$this->field]))
 		{
@@ -255,6 +259,8 @@ ENDSCRIPT;
 	function validate()
 	{
 		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_FILES[$this->field]))
 		{
 			return $this->message;
@@ -297,6 +303,8 @@ ENDSCRIPT;
 	function validate()
 	{
 		global $_POST;
+		
+		if ($this->readOnly) return "";
 		
 		if ($_POST[$this->field] != "" AND !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
 		{
@@ -576,6 +584,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
+		if ($this->readOnly) return "";
+		
 		$reset = $_POST["{$this->form_id}_reset_password"];
 		
 		if ($reset == 1 AND (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty))
@@ -626,6 +636,8 @@ ENDSCRIPT;
 	
 	function validate()
 	{
+		if ($this->readOnly) return "";
+		
 		//$exp = preg_replace("|([^/])|", "$1\\/", $this->regexp);
 		$exp = $this->regexp;
 		if (!preg_match("/{$exp}/i", $_POST[$this->field]))
@@ -685,6 +697,8 @@ ENDSCRIPT;
 	
 	function validate()
 	{
+		if ($this->readOnly) return "";
+		
 		$val = $_POST[$this->field];
 		if ($val === "" || $val < $this->min || $val > $this->max)
 		{
@@ -747,6 +761,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_POST[$this->field]) && !isset($_POST["{$this->field}_addEntry"]))
 		{
 			return "{$this->title} is a required field.";
@@ -799,6 +815,8 @@ ENDSCRIPT;
 	function validate()
 	{
 		global $_POST;
+		
+		if ($this->readOnly) return "";
 		
 		if (!isset($_POST[$this->field]))
 		{
@@ -922,6 +940,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 
+		if ($this->readOnly) return "";
+		
 		$values = $_POST[$this->field];
 		
 		// convert array of checks to comma delimated string and 
@@ -988,6 +1008,8 @@ ENDSCRIPT;
 	function validate()
 	{
 		global $_POST;
+		
+		if ($this->readOnly) return "";
 		
 		if (!isset($_POST[$this->field]) OR floatval($_POST[$this->field]) == $this->empty)
 		{
