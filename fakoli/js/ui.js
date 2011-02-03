@@ -102,7 +102,8 @@ window.center = function()
 var Curtain = new Class(
 {
 	curtain: Class.Empty,
-
+	shim: Class.Empty,
+	
 	initialize: function()
 	{
 		this.curtain = $('curtain');
@@ -113,10 +114,14 @@ var Curtain = new Class(
 			
 			doc.adopt(this.curtain);
 		}
+		
+		this.shim = new IframeShim(this.curtain);
 	},
 	
 	lower: function(onComplete)
 	{
+		var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+		
 		var opacity = this.curtain.get('opacity');
 		var display = this.curtain.getStyle('display');
 		if (opacity > 0 && display == 'block')
@@ -147,7 +152,11 @@ var Curtain = new Class(
 								height: h,
 								display: 'block',
 								opacity: 0,
-								position: (Browser.ie6) ? 'absolute' : 'fixed' });
+								position: (noFixed) ? 'absolute' : 'fixed' });
+		
+		this.shim.position();
+		this.shim.show();
+		
 		if (onComplete)
 		{
 			new Fx.Tween(this.curtain).start('opacity', 0.5).chain(onComplete);
@@ -160,6 +169,8 @@ var Curtain = new Class(
 	
 	raise: function(onComplete)
 	{
+		this.shim.hide();
+		
 		if (onComplete)
 		{
 			new Fx.Tween(this.curtain).start('opacity', 0.0).chain(onComplete);
@@ -321,6 +332,8 @@ var ModalDialog = new Class(
     	
     center: function()
     {
+    	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+    	
     	if (this.options.body)
     	{
     		this.options.body.setStyle('height', 'auto');
@@ -338,7 +351,7 @@ var ModalDialog = new Class(
     	
     	var x = (document.body.clientWidth - this.element.offsetWidth) / 2;
     	var y = (windowHeight - this.element.offsetHeight) / 2;
-    	this.element.setStyles({position: (this.draggable || window.ie6) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});
+    	this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});
     },
     
     show: function(onComplete, fragmentURL)
@@ -413,7 +426,8 @@ var FloatingDialog = new Class(
     position: function()
     {
 		var x, y;
-		
+    	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+    			
 		if (this.top && this.left)
 		{
 			x = this.left;
@@ -437,7 +451,7 @@ var FloatingDialog = new Class(
 		}
 		else
 		{
-			pos = (this.draggable || window.ie6) ? 'absolute' : 'fixed';
+			pos = (this.draggable || noFixed) ? 'absolute' : 'fixed';
 		}
 		
 		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 150});
