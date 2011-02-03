@@ -31,53 +31,64 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__)."/../../../../framework/data_item.inc");
+Fakoli::using("settings");
+Fakoli::usingFeature("data_tabs", "data_view");
 
-class Component extends DataItem
+$component_id = checkNumeric($_GET["component_id"]);
+
+$title = "Application Settings";
+$menu_item = "Application Settings";
+
+$components = Settings::getComponents();
+
+if (count($components) == 0)
 {
-	// Fields
-	var $fields = array("component_id"		=>	Number,
-						"name"				=>	String,
-						"version"			=>	String,
-						"author"			=>	String,
-						"description"		=>	Text,
-						"priority"			=>	Number,
-						"enabled"			=>	Boolean,
-						"component_path"	=>	String,
-						"last_modified"		=>	Timestamp);
-	
-	// Relations
-	var $relations = array("ComponentPages"	=>	ComponentPage);
-	
-	function ComponentPages()
+	echo "<p><em>There are no application settings defined.</em></p>";
+	return;
+}
+
+if (!$component_id) $component_id = $components[0]->component_id;
+
+$component = new Component($component_id);
+
+if ($method == "POST")
+{
+	foreach($_POST["settings"] as $settings_id => $value)
 	{
-		$pages = Query::create(ComponentPage, "WHERE component=:i ORDER BY identifier")
-					->bind(":i", $this->name)
-					->execute();
-					
-		return $pages;
+		$setting = new Settings($settings_id);
+		$setting->value = $value;
+		$setting->save();
+		Cache::invalidate("settings_{$setting->component}_{$setting->name}");
 	}
-	
-	function getPrettyName()
+}
+
+$settings = Query::create(Settings, "WHERE component=:component ORDER BY name")
+				->bind(":component", $component->name)
+				->execute();
+				
+$tabs = new DataItemTabBar("tabs", $components);
+
+$tabs->writeHTML();
+?>
+<div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
+<form method="POST" action="?component_id=<?echo $component_id?>">
+<table class="form">
+<?
+	foreach($settings as $setting)
 	{
-		return prettify($this->name);
+?>
+ <tr>
+  <td class="label"><?echo prettify($setting->name)?></td>
+  <td class="value"><input type="text" style="width: 300px" name="settings[<?echo $setting->settings_id?>]" value="<?echo $setting->value?>"/></td>
+ </tr>
+<?
 	}
-	
-	function Component()
-	{
-		$this->table = "component";
-		$this->primary_key = "component_id";
-		$this->default_format = "{getPrettyName()}";
-		
-		$this->DataItem(func_get_args());
-	}
-	
-	function loadManifest()
-	{
-		Fakoli::using($this->name);
-		$cl = Fakoli::getComponentClassRoot($this->name)."Manifest";
-		return new $cl;
-	}
-}			
+?>
+</table>
+<br/><br/>
+<input type="submit" class="button" value=" Save Changes "/>
+</form>
+</div>
+<?
 
 ?>

@@ -248,6 +248,8 @@ class ComponentManager
 			
 			$this->tx->commit();
 			unset($this->tx);
+		
+			ComponentManager::fireEvent("ComponentScanComplete");
 		}
 		catch(Exception $e)
 		{

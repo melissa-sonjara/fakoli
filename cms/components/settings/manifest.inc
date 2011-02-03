@@ -31,53 +31,34 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__)."/../../../../framework/data_item.inc");
-
-class Component extends DataItem
+class SettingsManifest
 {
-	// Fields
-	var $fields = array("component_id"		=>	Number,
-						"name"				=>	String,
-						"version"			=>	String,
-						"author"			=>	String,
-						"description"		=>	Text,
-						"priority"			=>	Number,
-						"enabled"			=>	Boolean,
-						"component_path"	=>	String,
-						"last_modified"		=>	Timestamp);
-	
-	// Relations
-	var $relations = array("ComponentPages"	=>	ComponentPage);
-	
-	function ComponentPages()
+	static function getComponentDefinition()
 	{
-		$pages = Query::create(ComponentPage, "WHERE component=:i ORDER BY identifier")
-					->bind(":i", $this->name)
-					->execute();
-					
-		return $pages;
-	}
-	
-	function getPrettyName()
-	{
-		return prettify($this->name);
-	}
-	
-	function Component()
-	{
-		$this->table = "component";
-		$this->primary_key = "component_id";
-		$this->default_format = "{getPrettyName()}";
+		$component = new Component();
+		$component->name = "settings";
+		$component->description = "Application settings management for Fakoli/CMS";
+		$component->author = "Andy Green";
+		$component->version = "1.0";
+		$component->priority = 0;
+		$component->enabled = true;
 		
-		$this->DataItem(func_get_args());
+		return $component;
 	}
 	
-	function loadManifest()
+	static function getAdminMenu()
 	{
-		Fakoli::using($this->name);
-		$cl = Fakoli::getComponentClassRoot($this->name)."Manifest";
-		return new $cl;
-	}
-}			
+		return array
+		(
+			"Web Site Content"	=> array
+			(
+
+				"Application Settings"	=>	array("page"	=>	"/admin/settings",
+									 			  "role"	=>	"admin",
+								  	  			  "weight"	=>	4)
+			)
+		);		
+	}	
+}
 
 ?>
