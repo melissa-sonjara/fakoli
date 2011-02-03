@@ -58,17 +58,9 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $includePlus4 = true;
 
-	function ZipCodeFieldRenderer(&$form, $field, $label)
+	function ZipCodeFieldRenderer(&$form)
 	{	
 		$this->FieldRenderer($form);
-		if ($form->data->hasField($field))
-		{
-			$form->override($field, $label, $this);
-		}
-		else
-		{
-			$form->add($this, $field);
-		}
 	}
 	
 	function addValidatorsToForm($field, $required = false)
@@ -111,7 +103,6 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 
-		echo "<div>";
 		$onkeyup = " onkeyup='{$field}_keyup(event);'";
 		$onkeypress=" onkeypress='return maskInput(event)'";
 		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";	
@@ -122,7 +113,6 @@ class ZipCodeFieldRenderer extends FieldRenderer
 		type='text' name='$field' $onchange $autocomplete 
 		value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' 
 		size='5' $disable $onkeypress $onkeyup/>";
-		echo "</div>";
 		$this->_endField($field);
 	}
 	
