@@ -147,7 +147,7 @@ var Curtain = new Class(
 								height: h,
 								display: 'block',
 								opacity: 0,
-								position: 'fixed'});
+								position: (Browser.ie6) ? 'absolute' : 'fixed' });
 		if (onComplete)
 		{
 			new Fx.Tween(this.curtain).start('opacity', 0.5).chain(onComplete);
