@@ -118,11 +118,14 @@ class MenuView
 	function drawView()
 	{   	
 		global $script;
+		// JDG 2/4/2011 - remove FakoliMenu for now b/c of placement issue
+		/*
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function() { new FakoliMenu('{$this->m->identifier}'); });
 </script>
 ENDSCRIPT;
+*/
 		ob_start();
 		
 		$gmenus = regroupList($this->m->MenuItems("ORDER BY sort_order"), "parent_id");
