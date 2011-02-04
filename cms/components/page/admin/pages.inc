@@ -73,6 +73,7 @@ $pageTable->drawView();
 ?>
 <br/><br/>
 <input type="button" class="button" value=" Add a New Page" onclick="go('/admin/page_form');">
+</div>
 <?
 
 ?>
