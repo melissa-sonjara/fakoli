@@ -82,6 +82,8 @@ class AutoForm
     var $buttons_at_top = false;
     var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
     var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
+    var $onSubmitHandler = null;        ///< Javascript Callback for user-defined onsubmit hook
+    
     var $required = array(); // list of required fields
     var $requiredFieldsText = "* indicates required field";
 
@@ -331,6 +333,11 @@ class AutoForm
 			$r['renderer']->renderOnSubmitHandler($r['field']);
 		}
 
+		if ($this->onSubmitHandler)
+		{
+			echo "\t if (!{$this->onSubmitHandler})(form) return false;\n;";
+		}
+		
 		echo "\treturn true;\n}\n\n";
 		
 		if ($this->ajaxSubmitHandler)
