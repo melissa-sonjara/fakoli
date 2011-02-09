@@ -794,10 +794,10 @@ function redirect($page)
 	{
 		$location = "http://$server$page";
 	}
-	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
-	{
-		$location = "http://$server/$page";
-	}
+//	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
+//	{
+//		$location = "http://$server/$page";
+//	}
 	else
 	{
 		$directory = dirname($_SERVER['REQUEST_URI']);
