@@ -62,9 +62,19 @@ class ComponentPageView
 		global $dialogs;
 		global $page;
 		global $site;
+		global $section;
 		
 		$page = $this->page; // Pass through to code include
-		$site = $page->Site();
+		
+		if ($section)
+		{
+			$site = $section->Site();
+		}
+		else
+		{
+			$site = $page->Site();
+		}
+		
 		if(!$site)
 			$site = Site::getSite(); // Pass through to code include
 		

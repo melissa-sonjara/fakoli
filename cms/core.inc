@@ -221,10 +221,11 @@ class Fakoli
 		$menu = Cache::get("fakoli_admin_menu");
 		if ($menu) return $menu;
 		
-		$menu = array("Web Site Content"	=> array(),
-					  "Collaboration"		=> array(),	
-					  "Classification"		=> array(),
-					  "User Management"		=> array());		
+		$menu = array("Web Site Content"		=> array(),
+					  "Web Site Configuration"	=> array(),
+					  "Collaboration"			=> array(),	
+					  "Classification"			=> array(),
+					  "User Management"			=> array());		
 		
 		$components = Fakoli::getComponents();
 		foreach($components as $name => $component)

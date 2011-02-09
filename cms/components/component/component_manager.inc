@@ -431,7 +431,7 @@ class ComponentManager
 		return $identifier;
 	}
 	
-	static function enumerateComponentPages(&$items)
+	static function enumerateComponentPages($items)
 	{
 		$pages = Query::create(ComponentPage, "ORDER BY identifier")->execute();
 		

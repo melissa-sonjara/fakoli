@@ -31,34 +31,48 @@
 
 *****************************************************************/
 
-class SettingsManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "settings";
-		$component->description = "Application settings management for Fakoli/CMS";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 0;
-		$component->enabled = true;
-		
-		return $component;
-	}
-	
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Web Site Configuration"	=> array
-			(
+Fakoli::using("section", "field_renderers", "site");
+Fakoli::usingFeature("auto_form");
 
-				"Application Settings"	=>	array("page"	=>	"/admin/settings",
-									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	12)
-			)
-		);		
-	}	
+require_once "include/section_tabs.inc";
+
+$menu_item = "Sections";
+
+$section_id = checkNumeric($_GET["section_id"]);
+
+$section = new Section();
+
+if ($section_id)
+{
+	$section->load($section_id);
 }
 
+$form = new AutoForm($section);
+
+$form->alias("section", "Section Identifier");
+
+$templateSelect = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "templates");
+
+$roleList = new CheckListFieldRenderer($form, "default_role", "Default Role", SiteRole::getRolesArray());
+
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
+
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		redirect("/admin/sections");
+	}
+}
+
+$script .= $form->writeScript();
+
+$tabs = sectionTabs($section_id);
+
+$tabs->writeHTML();
 ?>
+<div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
+<?
+$form->drawForm();
+?>
+</div>

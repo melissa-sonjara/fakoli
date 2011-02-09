@@ -50,7 +50,7 @@ class TemplateManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Web Site Configuration"	=> array
 			(
 
 				"Templates"	=>	array(	"page"	=>	"/admin/templates",

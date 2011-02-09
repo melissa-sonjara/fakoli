@@ -50,7 +50,7 @@ class SiteMapManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Web Site Configuration"	=> array
 			(
 
 				"Site Map"	=>	array("page"	=>	"/admin/site_map",

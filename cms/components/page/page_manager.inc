@@ -66,7 +66,7 @@ class PageManager
 		return $identifier;
 	}
 	
-	static function enumeratePages(&$items)
+	static function enumeratePages($items)
 	{
 		$pages = Query::create(Page, "ORDER BY page_title")->execute();
 		

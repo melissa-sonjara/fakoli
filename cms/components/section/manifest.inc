@@ -31,13 +31,13 @@
 
 *****************************************************************/
 
-class SettingsManifest
+class SectionManifest
 {
 	static function getComponentDefinition()
 	{
 		$component = new Component();
-		$component->name = "settings";
-		$component->description = "Application settings management for Fakoli/CMS";
+		$component->name = "section";
+		$component->description = "Section management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
 		$component->priority = 0;
@@ -53,9 +53,9 @@ class SettingsManifest
 			"Web Site Configuration"	=> array
 			(
 
-				"Application Settings"	=>	array("page"	=>	"/admin/settings",
-									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	12)
+				"Sections"	=>	array("page"	=>	"/admin/sections",
+									  "role"	=>	"admin",
+								  	  "weight"	=>	2)
 			)
 		);		
 	}	

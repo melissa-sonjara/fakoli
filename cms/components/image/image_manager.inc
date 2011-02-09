@@ -348,7 +348,7 @@ class ImageManager
 	 * Enumerate the Image Gallery objects.
 	 * @param  $items collection that the ImageGallery items are returned in
 	 */
-	static function enumerateItems(&$items)
+	static function enumerateItems($items)
 	{
 		$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
 		

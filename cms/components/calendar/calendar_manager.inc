@@ -66,7 +66,7 @@ class CalendarManager
 		return $identifier;
 	}
 	
-	static function enumerateItems(&$items)
+	static function enumerateItems($items)
 	{
 		$calendars = Query::create(Calendar, "ORDER BY name")->execute();
 		

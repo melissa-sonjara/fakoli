@@ -50,7 +50,7 @@ class ComponentManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Web Site Configuration"	=> array
 			(
 
 				"Components"	=>	array("page"	=>	"/admin/components",

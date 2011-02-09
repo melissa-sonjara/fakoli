@@ -574,6 +574,16 @@ function checkNumeric($p)
 	return $p;
 }
 
+
+/**
+ * Security helper function. Check that the given parameter is a valid identifier
+ * (alphanumeric, _ and digits only with no spaces). Empty string is valid
+ */
+function checkIdentifier($p)
+{
+	return preg_match("/^[A-Za-z0-9_\\-]*$/", $p) ? $p : die("Invalid Parameter");
+}
+
 /**
  * Utility function to nicely format addresses, etc.                 
  * (skips blank entries, places all other entries on separate lines) 
@@ -588,6 +598,14 @@ if ($count%2==0) $color = "#EEEEEE";
 return $color;
 }
 
+/**
+ * Truncate the supplied text at the given maximum length. If the
+ * string is truncated then an ellipsis is added.
+ * 
+ * @param unknown_type $txt the text to truncate
+ * @param unknown_type $max the maximum allowed length
+ * @param unknown_type $wholeWord true to truncate to whole words only 
+ */
 function ellipsis($txt, $max, $wholeWord = false)
 {
 	if (strlen($txt) > $max)

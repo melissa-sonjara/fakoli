@@ -65,7 +65,7 @@ class BlogManager
 		return $identifier;
 	}
 	
-	static function enumerateItems(&$items)
+	static function enumerateItems($items)
 	{
 		$blogs = Query::create(Blog, "ORDER BY title")->execute();
 		

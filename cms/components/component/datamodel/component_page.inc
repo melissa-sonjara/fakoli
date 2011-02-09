@@ -108,6 +108,7 @@ class ComponentPage extends DataItem
 	function getTemplate()
 	{
 		global $config;
+		global $section;
 		
 		$style = $_REQUEST["_style"];
 		$site = $this->Site();
@@ -131,7 +132,12 @@ class ComponentPage extends DataItem
 		case 'nude':
 			return "{description}";
 		}
-		
+
+		if ($section)
+		{
+			if (!$templateFile) $templateFile = $section->getTemplateFile($this->identifier);
+		}
+				
 		if (!$templateFile) $templateFile = $this->template;
 		if (!$templateFile) $templateFile = $site->default_template;
 		

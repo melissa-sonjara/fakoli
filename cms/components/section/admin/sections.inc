@@ -31,34 +31,25 @@
 
 *****************************************************************/
 
-class SettingsManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "settings";
-		$component->description = "Application settings management for Fakoli/CMS";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 0;
-		$component->enabled = true;
-		
-		return $component;
-	}
-	
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Web Site Configuration"	=> array
-			(
+Fakoli::using("section");
+Fakoli::usingFeature("data_view");
 
-				"Application Settings"	=>	array("page"	=>	"/admin/settings",
-									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	12)
-			)
-		);		
-	}	
-}
+$menu_item = "Sections";
 
+$sections = Query::create(Section, "ORDER BY section")->execute();
+
+$table = new DataListView($sections, "sections");
+$table->column("Section", "<a href='/admin/section_form?section_id={section_id}'>{section}</a>", true)
+	  ->column("Title", "{section_title}", true)
+	  ->column("Default Role", "{default_role}", true);
+
+$table->filter = true;
+$table->sortable = true;
+$table->emptyMessage = "No sections have been created.";
+
+$script .= $table->writeScript();
+
+$table->drawView();
 ?>
+<br/>
+<a class='button' href='/admin/section_form'>Add a New Section</a>
