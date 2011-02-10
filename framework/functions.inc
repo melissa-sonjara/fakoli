@@ -800,7 +800,7 @@ function redirect($page)
 //	}
 	else
 	{
-		$directory = dirname($_SERVER['REQUEST_URI']);
+		$directory = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['REQUEST_URI']));
 		if ($directory == "/") $directory = "";
 		$location = "http://".$server.$directory."/".$page;
 	}
