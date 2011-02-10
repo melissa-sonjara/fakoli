@@ -40,7 +40,8 @@ class Section extends DataItem
 						"section_title"		=>	String,
 						"default_template"	=>	String,
 						"default_role"		=>	String,
-						"site_id"			=>	Number);
+						"site_id"			=>	Number,
+						"use_SSL"			=>	Boolean);
 	
 	var $relations = array("Content"	=>	SectionContent,
 						   "Site"		=>	Site);
