@@ -121,6 +121,7 @@ var FilteringTable = new Class({
 		headers.each(function(h, i) 
 		{ 
 			var text = h.innerText || h.textContent;
+			if (text.match(/^(?:\s|&nbsp;)*$/)) return;
 			var elt = new Element('option', {'value': i, 'html': text});
 			self.filterSelect.appendChild(elt); 
 		}
