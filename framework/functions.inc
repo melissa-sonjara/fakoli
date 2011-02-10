@@ -40,18 +40,22 @@
 /**
  * Check whether the user has one of a specified set of roles
  * @param $role the role(s) to check against, as a comma-delimited list
+ * @param $account (optional) the account object to check (must have a 'role' property). 
+ * If not provided, the default user account is used (assumed to be in the global $user variable).
  * @return true if the user has one of the roles, false otherwise.
  */
-function checkRole($role)
+function checkRole($role, $account = null)
 {
 	global $user;
 	
-	if ($role == "" || $user->role == "super" || $user->role == "admin") return true;
-	if (!$user) return false;
+	if (!$account) $account = $user;
 	
-	if ($role != "" && $user->role == "") return false;
+	if ($role == "" || $account->role == "super" || $account->role == "admin") return true;
+	if (!$account) return false;
 	
-	$userRoles = explode(",", $user->role);
+	if ($role != "" && $account->role == "") return false;
+	
+	$userRoles = explode(",", $account->role);
 	foreach($userRoles as $ur)
 	{
 		$expr = "/\\b{$ur}\\b/";

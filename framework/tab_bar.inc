@@ -371,8 +371,8 @@ ENDSCRIPT;
 		 * JDG 6/15/2010, insert "/" before identifier but not if
 		 * the page is *.php
 		 */
-		if(!preg_match("/.php/i", $next))
-			$next = "/". $next;
+		//if(!preg_match("/.php/i", $next))
+		//	$next = "/". $next;
 		trace("tabbar::next:: next is $next",3);
 		redirect($next);	
 	}
