@@ -41,7 +41,8 @@ $sections = Query::create(Section, "ORDER BY section")->execute();
 $table = new DataListView($sections, "sections");
 $table->column("Section", "<a href='/admin/section_form?section_id={section_id}'>{section}</a>", true)
 	  ->column("Title", "{section_title}", true)
-	  ->column("Default Role", "{default_role}", true);
+	  ->column("Default Role", "{default_role}", true)
+	  ->column("Default Page", "<a href='/{section}/'>{default_page}</a>", true);
 
 $table->filter = true;
 $table->sortable = true;

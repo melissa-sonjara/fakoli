@@ -40,6 +40,7 @@ class Section extends DataItem
 						"section_title"		=>	String,
 						"default_template"	=>	String,
 						"default_role"		=>	String,
+						"default_page"		=>	String,
 						"site_id"			=>	Number,
 						"use_SSL"			=>	Boolean);
 	
