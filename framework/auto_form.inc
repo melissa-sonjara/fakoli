@@ -373,7 +373,17 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		{
 			return $this->renderers[$field];
 		}
-
+		else // JDG 2/13/2011 get renderer from additional field set
+		{
+			foreach($this->additional as $r)
+			{
+				$renderer = $r['renderer'];
+				$rField = $r['field'];
+				if($rField == $field)
+					return $renderer;
+			}					
+		}
+		
 		trace("AutoForm::getRenderer(): Unknown field: $field", 2);
 		return null;
 	}

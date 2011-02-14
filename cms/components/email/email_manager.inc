@@ -67,7 +67,7 @@ class EmailHandler
 			$headers .= "\r\nContent-Type: multipart/alternative; boundary=\"PHP-alt-".$random_hash."\"";
 
 		if($message AND $config["alt_text_email"])
-			$message = $this->getMessageScript($message, $random_hash);
+			$body = $this->getMessageScript($message, $random_hash);
 		elseif($message)
 		{
 			$patterns = array("/<br>/", "/&nbsp;/", "<br/>");
@@ -135,13 +135,15 @@ class EmailManager
 	var $message;
 	var $subject;
 	var $emailFrom;
+	var $preview;
 
-	function EmailManager($item, $emailTemplate)
+	function EmailManager($item, $emailTemplate, $preview = false)
 	{
 		$this->item = $item;
 		$this->emailTemplate = $emailTemplate;
 		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
+		$this->preview = $preview;
 	}
 
 
@@ -245,6 +247,7 @@ class EmailManager
 	
 	function searchReplaceText($patterns, $replacements, $text)
 	{
+		trace("EmailManager::searchReplaceText start text $text", 3);
 		$lText = "";
 		
 		if(count($patterns) > 0 AND $text != "")
@@ -254,6 +257,7 @@ class EmailManager
 		else
 			$lText = $text;
 		
+		trace("EmailManager::searchReplaceText end text $lText", 3);
 		return $lText;
 	}
 	
@@ -261,6 +265,7 @@ class EmailManager
 	{
 		$validRecipients = array();
 		
+		trace("EmailManager:getRecipients", 3);
 		if($this->recipients)
 		{
 			$recipients = explode(",", $this->recipients);
@@ -273,18 +278,24 @@ class EmailManager
 				}
 			}
 		}
+		trace("EmailManager:getRecipients recipient count". count($validRecipients), 3);
 		return $validRecipients;
 	}
 
 	function sendEmail()
 	{
+		trace("EmailManager:: sendEmail", 3);
 		$recipients = $this->getRecipients();
 		
 		if(count($recipients) == 0)
+		{
+			trace("EmailManager:: Warning - no recipients", 3);
 			return;
+		}
 			
 		foreach($recipients as $recipient)
 		{
+			trace("EmailManager:: sending email to recipient $recipient", 3);
 			$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom);
 			$sent = $email->send();
 		}
@@ -302,7 +313,9 @@ function sendEmailUsingEmailManager($sendingItem, $name)
 	{
 		trace("Sending email '$name'", 3);
 		$emailManager = new EmailManager($sendingItem, $emailTemplate);
-		$emailManager->sendEmail();
+		$rtn = $emailManager->sendEmail();
+		trace("EmailManager:: rtn code $rtn", 3);
 	}
 }
+
 ?>

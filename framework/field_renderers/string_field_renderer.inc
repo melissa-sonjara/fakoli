@@ -62,6 +62,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $autocomplete = true; // default
 	var $onChange = ""; // optional callback on data input change
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	var $password = false;
 
 	function StringFieldRenderer(&$parent)
 	{
@@ -108,13 +109,12 @@ class StringFieldRenderer extends FieldRenderer
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 		
-		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";
+		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";		
+		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
+		$disable = ($this->disable) ? "disabled='disabled'" : "";		
+		$inputType = (!$this->password) ? "text" : "password";
 		
-		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";
-		
-		$disable = ($this->disable) ? "disabled='disabled'" : "";
-		
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' $onchange $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable $onkeypress/>";
+		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $onchange $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable $onkeypress/>";
 
 		if ($this->limit)
 		{
