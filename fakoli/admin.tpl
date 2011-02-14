@@ -2,9 +2,9 @@
  <html>
  <head>
   <meta name="description" content="Sonjara CMS Administrative Site">
-  <link href="/fakoli/css/admin.css" rel="stylesheet"/>
 {var:styles}
 {var:script}
+  <link href="/fakoli/css/admin.css" rel="stylesheet"/>
   <title>{var:title}</title>
  </head>
  <body>

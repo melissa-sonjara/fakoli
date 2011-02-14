@@ -56,6 +56,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 	{
 		$value = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		
+		$value = floatval($value);
 		// display with commas between thousands
 		$value = number_format($value, 2);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
