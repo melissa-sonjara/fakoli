@@ -136,6 +136,7 @@ class EmailManager
 	var $subject;
 	var $emailFrom;
 	var $preview;
+	var $onSendComplete; // optional user-defined callback function after send is successful
 
 	function EmailManager($item, $emailTemplate, $preview = false)
 	{
@@ -315,6 +316,14 @@ function sendEmailUsingEmailManager($sendingItem, $name)
 		$emailManager = new EmailManager($sendingItem, $emailTemplate);
 		$rtn = $emailManager->sendEmail();
 		trace("EmailManager:: rtn code $rtn", 3);
+		
+		// Create record of attempt whether successful or not 
+		if ($this->onSendComplete)
+		{
+			$onComplete = $this->onSendComplete;
+			$onComplete($this, $rtn);
+		}
+		
 	}
 }
 

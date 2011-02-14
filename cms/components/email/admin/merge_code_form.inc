@@ -78,6 +78,16 @@ $form->annotate("class_name", "The name of the DataItem class that can send the 
 $form->button("Cancel", $redirect);
 $form->alias("class_name", "Sending Class Name");
 
+// Get list of class names from email template records
+$emailTemplate = new EmailTemplate();
+$classNames = $emailTemplate->distinctValues("class_name", true);
+if (count($classNames) > 0)
+{
+	$classNameList = array_combine($classNames, $classNames);
+}
+		
+$classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", $classNameList);
+
 if ($method == "POST")
 {
 	if($form->save())

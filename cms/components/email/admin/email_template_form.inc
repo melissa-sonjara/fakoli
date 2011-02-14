@@ -68,6 +68,7 @@ $form->annotate("message", "Codes must be enclosed in brackets '[' and ']'.");
 $form->unique("name", "An email template already exists with that title. Please choose a different title.");
 $form->required("name", "sender_email", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
+$classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", array());
 
 $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
@@ -87,7 +88,7 @@ echo "<h3>This form allows you to create or edit an email template.</h3>\n";
 if($emailTemplate->class_name)
 {
 ?>
-<button onclick="javascript:modalPopup('Advanced Features', '/advanced_email_features_popup?class_name=<?php echo $emailTemplate->class_name ?>', '500px', 'auto'); return false">Advanced Features</button>
+<button onclick="javascript:modalPopup('Advanced Features', '/action/email/advanced_email_features?class_name=<?php echo $emailTemplate->class_name ?>', '500px', 'auto'); return false">Advanced Features</button>
 <?php
 }
 $form->drawForm();
