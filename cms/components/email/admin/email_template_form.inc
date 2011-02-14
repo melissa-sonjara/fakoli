@@ -69,6 +69,7 @@ $form->unique("name", "An email template already exists with that title. Please 
 $form->required("name", "sender_email", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
 $classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", array());
+$classSelect->allowAddEntry();
 
 $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
