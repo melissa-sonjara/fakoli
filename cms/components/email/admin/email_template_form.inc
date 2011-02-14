@@ -47,6 +47,8 @@ $email_template_id = checkNumeric($_GET["email_template_id"]);
 $emailTemplate = new EmailTemplate();
 global $config;
 
+$menu_item = "Email Templates";
+
 if ($email_template_id)
 {
 	$emailTemplate->load($email_template_id);
@@ -75,7 +77,12 @@ $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
+{
+	$form->data->set("name", prettify($emailTemplate->name));
 	$form->readOnly("name");
+}
+else
+	$form->annotate("name", "Please use a code-style name with lowercase letters and underscores between works (e.g., application_notification)");
 
 if ($method == "POST")
 {

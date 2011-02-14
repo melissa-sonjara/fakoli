@@ -47,7 +47,10 @@
 Fakoli::using("email");
 Fakoli::usingFeature("grouped_data_view");
 
+$menu_item = "Merge Codes";
+
 $mergeCodes = groupedQuery(MergeCode, "ORDER BY name", "class_name");
+
 
 $classes = indexedQuery(MergeCode, "ORDER BY class_name", "class_name");
 

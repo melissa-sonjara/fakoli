@@ -47,6 +47,8 @@ Fakoli::usingFeature("grouped_data_view");
 
 $emailTemplates = groupedQuery(EmailTemplate, "ORDER BY name", "class_name");
 
+$menu_item = "Email Templates";
+
 $classes = indexedQuery(EmailTemplate, "ORDER BY class_name", "class_name");
 
 $table = new GroupedDataListView($emailTemplates, "templates");

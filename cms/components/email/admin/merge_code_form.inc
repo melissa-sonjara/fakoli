@@ -47,6 +47,8 @@
 Fakoli::using("email");
 Fakoli::usingFeature("auto_form");
 
+$menu_item = "Merge Codes";
+
 $merge_code_id = checkNumeric($_GET["merge_code_id"]);
 
 $mergeCode = new MergeCode();
