@@ -145,12 +145,14 @@ class EmailManager
 	var $emailFrom;
 	var $onSendComplete; // optional user-defined callback function after send is successful
 
-	function EmailManager($item, $emailTemplate)
+	function EmailManager($item, $emailTemplate, $onSendComplete = "")
 	{
-		$this->item = $item;
+		$this->item = clone($item);
+		$this->item->filter = "";
 		$this->emailTemplate = $emailTemplate;
 		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
+		$this->onSendComplete = $onSendComplete;
 	}
 
 
@@ -324,7 +326,15 @@ class EmailManager
 }
 
 
-
+/*
+ * $sendindItem - object of a DataModel class. The templates class_name
+ * must be the same class as the object
+ * 
+ * $name - name of the email template to be sent
+ * 
+ * $onSendComplete - optional user callback function, e.g., record
+ * email to log file
+ */
 function sendEmailUsingEmailManager($sendingItem, $name, $onSendComplete = "")
 {
 	$emailTemplate = EmailTemplate::getEmailTemplate($name);
@@ -332,9 +342,7 @@ function sendEmailUsingEmailManager($sendingItem, $name, $onSendComplete = "")
 	if($emailTemplate)
 	{
 		trace("Sending email '$name'", 3);
-		$emailManager = new EmailManager($sendingItem, $emailTemplate);
-		if($onSendComplete)
-			$emailManager->onSendComplete = $onSendComplete;
+		$emailManager = new EmailManager($sendingItem, $emailTemplate, $onSendComplete);
 		$rtn = $emailManager->sendEmail();
 		trace("EmailManager:: rtn code $rtn", 3);
 	}
