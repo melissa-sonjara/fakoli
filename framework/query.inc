@@ -132,6 +132,37 @@ class Query
 	}
 	
 	/**
+	 * Return true if the query matches one or more rows in the database.
+	 */
+	function exists()
+	{
+		$prototype = new $this->class;
+		$pk = $prototype->getPrimaryKey();
+		
+		$query = "SELECT $pk FROM {$prototype->table} {$this->constraints} LIMIT 1";
+		
+		$exists = false;
+		
+		try
+		{
+			$db = ConnectionManager::getConnection();
+			
+			$result = $db->prepare($query);
+			
+			if ($line == $result->fetch()) $exists = true;
+			
+			unset($result);
+		}
+		catch(PDOException $e)
+		{
+			throw new DataItemException($e->getMessage());
+		}
+		
+		return $exists;
+				 
+	}
+	
+	/**
 	 * Executes the query and returns an array of DataItems containing the results
 	 * (the class of items returned is as specified in the Query constructor).
 	 * @return array an array of DataItems containing the results.
