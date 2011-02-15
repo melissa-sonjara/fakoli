@@ -71,8 +71,8 @@ class EmailHandler
 			$body = $this->getMessageScript($message, $random_hash);
 		elseif($message)
 		{
-			$patterns = array("/<br>/", "/&nbsp;/", "<br/>");
-			$replacements = array("\r\n", " ", "\r\n");
+			$patterns = array("/<br>/", "/&nbsp;/", "/<p>/", "/<BR>/", "/<P>/");
+			$replacements = array("\r\n", " ", "\r\n", "\r\n", "\r\n");
 			$message =  preg_replace($patterns, $replacements, $message);
 			$body = stripHTML($message);
 		}
@@ -125,13 +125,12 @@ Content-Type: text/html; charset="iso-8859-1" Content-Transfer-Encoding:
 		
 		// Call the callback whether successful or not; calling script
 		// decides how to handle either way. 
-		if ($this->onSendComplete)
+		if ($this->onSendComplete AND is_callable($this->onSendComplete))
 		{
-			$onComplete = $this->onSendComplete;
-			$onComplete($this->mail, $rtn);
-		}
+			call_user_func($this->onSendComplete, $mail, $rtn);
+		}			
+		return $rtn;
 	}
-
 }
 
 
@@ -144,16 +143,14 @@ class EmailManager
 	var $message;
 	var $subject;
 	var $emailFrom;
-	var $preview;
 	var $onSendComplete; // optional user-defined callback function after send is successful
 
-	function EmailManager($item, $emailTemplate, $preview = false)
+	function EmailManager($item, $emailTemplate)
 	{
 		$this->item = $item;
 		$this->emailTemplate = $emailTemplate;
 		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
-		$this->preview = $preview;
 	}
 
 
@@ -303,6 +300,12 @@ class EmailManager
 			return;
 		}
 			
+		/*
+		 * Call the callback whether successful or not; calling script
+		 * decides how to handle either way. Each recipient could have
+		 * different result so we don't record multiple recipients in
+		 * one record.
+		 */
 		foreach($recipients as $recipient)
 		{
 			trace("EmailManager:: sending email to recipient $recipient", 3);
@@ -311,14 +314,10 @@ class EmailManager
 			
 			$rtn = $email->send();
 			
-			// Call the callback whether successful or not; calling script
-			// decides how to handle either way. 
-			if ($this->onSendComplete)
+			if ($this->onSendComplete AND is_callable($this->onSendComplete))
 			{
-				$onComplete = $this->onSendComplete;
-				$onComplete($this, $email, $rtn);
-			}
-			
+				call_user_func($this->onSendComplete, $this, $recipient, $rtn);
+			}			
 		}
 		return $rtn;
 	}
@@ -326,17 +325,21 @@ class EmailManager
 
 
 
-function sendEmailUsingEmailManager($sendingItem, $name)
+function sendEmailUsingEmailManager($sendingItem, $name, $onSendComplete = "")
 {
-	$emailTemplate = querySingle(EmailTemplate, "WHERE name='{$name}'");
+	$emailTemplate = EmailTemplate::getEmailTemplate($name);
 
 	if($emailTemplate)
 	{
 		trace("Sending email '$name'", 3);
 		$emailManager = new EmailManager($sendingItem, $emailTemplate);
+		if($onSendComplete)
+			$emailManager->onSendComplete = $onSendComplete;
 		$rtn = $emailManager->sendEmail();
 		trace("EmailManager:: rtn code $rtn", 3);
 	}
+	
+	return $rtn;
 }
 
 ?>

@@ -45,6 +45,15 @@ class EmailTemplate extends DataItem
 	);
 		
 	
+	static function getEmailTemplate($name)
+	{
+		$emailTemplates = query(EmailTemplate, "WHERE name='$name'");
+
+		if(count($emailTemplates) > 0)
+			return $emailTemplates[0];
+		
+	}
+	
 	function EmailTemplate()
 	{
 		$this->table = "email_template";
