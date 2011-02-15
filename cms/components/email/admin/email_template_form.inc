@@ -78,11 +78,10 @@ $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
 {
-	$form->data->set("name", prettify($emailTemplate->name));
 	$form->readOnly("name");
 }
 else
-	$form->annotate("name", "Please use a code-style name with lowercase letters and underscores between works (e.g., application_notification)");
+	$form->annotate("name", "Please use a code-style name with lowercase letters and underscores between words (e.g., application_notification)");
 
 if ($method == "POST")
 {

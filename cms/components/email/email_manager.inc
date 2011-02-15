@@ -46,6 +46,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 class EmailHandler
 {
 	var $mail;
+	var $onSendComplete; // optional user callback function after mail is sent
 
 	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "")
 	{
@@ -120,7 +121,15 @@ Content-Type: text/html; charset="iso-8859-1" Content-Transfer-Encoding:
 
 	function send()
 	{
-		return $this->mail->send();
+		$rtn = $this->mail->send();
+		
+		// Call the callback whether successful or not; calling script
+		// decides how to handle either way. 
+		if ($this->onSendComplete)
+		{
+			$onComplete = $this->onSendComplete;
+			$onComplete($this->mail, $rtn);
+		}
 	}
 
 }
@@ -297,10 +306,21 @@ class EmailManager
 		foreach($recipients as $recipient)
 		{
 			trace("EmailManager:: sending email to recipient $recipient", 3);
+			
 			$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom);
-			$sent = $email->send();
+			
+			$rtn = $email->send();
+			
+			// Call the callback whether successful or not; calling script
+			// decides how to handle either way. 
+			if ($this->onSendComplete)
+			{
+				$onComplete = $this->onSendComplete;
+				$onComplete($this, $email, $rtn);
+			}
+			
 		}
-		return $sent;
+		return $rtn;
 	}
 }
 
@@ -316,14 +336,6 @@ function sendEmailUsingEmailManager($sendingItem, $name)
 		$emailManager = new EmailManager($sendingItem, $emailTemplate);
 		$rtn = $emailManager->sendEmail();
 		trace("EmailManager:: rtn code $rtn", 3);
-		
-		// Create record of attempt whether successful or not 
-		if ($this->onSendComplete)
-		{
-			$onComplete = $this->onSendComplete;
-			$onComplete($this, $rtn);
-		}
-		
 	}
 }
 

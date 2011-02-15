@@ -58,16 +58,6 @@ if ($merge_code_id)
 	$mergeCode->load($merge_code_id);
 }
 
-$helps = MergeCodeHelp::getHelp();
-$table = new DataListView($helps, "MergeCodeHelps");
-$table->column("Usage", "{usage}")
-		->column("Example", "{example}")
-	;
-
-$table->sortable = false;
-$table->cssStyle = "width: 100%";
-$table->paginate = false;
-
 $form = new AutoForm($mergeCode);
 
 $redirect = "/admin/merge_code_list";
@@ -99,10 +89,11 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
-$script .= $table->writeScript();
 
-echo "<p>You will need some knowledge of the system's tables DataModels to enter merge codes.";
-echo "<h4>Merge Code Mapping</h4>\n";
-$table->drawView();
+?>
+<p>You will need some knowledge of the system's tables DataModels to enter merge codes.</p>
+<button onclick="javascript:modalPopup('Merge Code Help', '/action/email/merge_code_help', '500px', 'auto'); return false">Merge Code Help</button>
+<?php
+
 $form->drawForm();
 ?>
