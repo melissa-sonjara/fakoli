@@ -114,6 +114,8 @@ foreach($itemsByType as $type => $items)
 
 foreach($content as $item)
 {
+	if (!array_key_exists($item->identifier, $types)) continue;
+	
 	$type = $types[$item->identifier];
 	$child = new TreeNode("content['{$item->identifier}']", $item->identifier, $item->section_content_id, false, "plain_tree_closed", "plain_tree_open");
 	$child->leafStyle = "file_node_leaf";
