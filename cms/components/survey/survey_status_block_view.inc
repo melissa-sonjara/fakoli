@@ -23,7 +23,7 @@ class SurveyStatusBlockView extends StatusBlockView
 		$pk = $item->getPrimaryKey();
 		$this->deleteUrl = "survey_delete?survey_id={$item->$pk}";
 		$this->editUrl = "survey_form?survey_id={$item->$pk}";
-		$this->statusUrl = "action/survey/survey_set_status?survey_id={$item->$pk}&status=";
+		$this->statusUrl = "/action/survey/survey_set_status?survey_id={$item->$pk}&status=";
 		$this->resultsUrl = "survey_data?survey_id={$item->$pk}";
 		$this->publicUrl = "survey_intro?survey_id={$item->$pk}";
 		$this->reviewUrl = "survey_data?survey_id={$item->$pk}";

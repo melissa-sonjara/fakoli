@@ -70,7 +70,7 @@ class QuestionnaireManager
 	
 	function getQuestionDeleteHandler()
 	{
-		return "action/questionnaire/question_delete";
+		return "/action/questionnaire/question_delete";
 	}
 	
 	function drawQuestionDeleteButton($pk)
