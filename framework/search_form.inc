@@ -331,8 +331,8 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		{
 			if (!$first) $query .= " OR (";
 					
-			$query .= "f_name LIKE '{$words[$idx]}%' 
-			AND l_name LIKE '{$words[$idx+1]}%'";
+			$query .= "first_name LIKE '{$words[$idx]}%' 
+			AND last_name LIKE '{$words[$idx+1]}%'";
 
 			$idx += 1;
 			$query .= ") ";
