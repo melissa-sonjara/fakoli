@@ -75,31 +75,35 @@ class MergeCodeHelp extends DataItem
 	{
 		$helps = array();
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a field in the sending class object, enter just the field name as the 'Map' or enter the sending class name dot separator and field name";
+		$help->usage = "To get a <b>field</b> in the sending class object, enter just the field name as the 'Map' or enter the sending class name dot separator and field name";
 		$help->example = "my_field or MySendingClass.my_field";
 		$helps[0] = $help;
-		
 	
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a field in a related class object, enter the related class name as defined in the DataModel. Use the dot separator to link to the field name. The map does not allow links to relations of relations.";
+		$help->usage = "To get a <b>field</b> in a <b>related</b> class object, enter the related class name as defined in the DataModel. Use the dot separator to link to the field name. The map does not allow links to relations of relations.";
 		$help->example = "MyRelation.my_field";
 		$helps[1] = $help;
 
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a value from a function in the DataModel of the sending class, enter the function name or the sending class name with dot separator and function name.  You must check the box to indicate the name is a function.";
+		$help->usage = "To get a value from a <b>function</b> in the DataModel of the sending class, enter the function name or the sending class name with dot separator and function name.  You must check the box to indicate the name is a function.";
 		$help->example = "'myFunction' or 'MySendingClass.myFunction' and check 'Function'";
 		$helps[2] = $help;
 
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a value from a function in a related class, enter the related class name as defined in the DataModel with a dot separator and function name. The map does not allow links to relations of relations.";
+		$help->usage = "To get a value from a <b>function</b> in a <b>related</b> class, enter the related class name as defined in the DataModel with a dot separator and function name. The map does not allow links to relations of relations.";
 		$help->example = "'MyRelation.myFunction' and check 'Function'";
 		$helps[3] = $help;
 
 		$help = new MergeCodeHelp();
-		$help->usage = "Get a value from a callback function.";
-		$help->help = "The map must state the name of the function. You must check the box to indicate the name is a function.";
+		$help->usage = "To get a value from a <b>callback</b> function, the map must state the name of the function. You must check the box to indicate the name is a function.";
 		$help->example = "'myCallbackFunction' and check 'Function'";
 		$helps[4] = $help;
+		
+		$help = new MergeCodeHelp();
+		$help->usage = "To get a value from a static <b>function</b> of a <b>non-DataItem</b> class, enter the class name, dot separator, and static function. The class definition must be included in the calling script. You must check the box to indicate the name is a function. The static function will receive the sending object as a parameter.";
+		$help->example = "'myClassName.myStaticFunction' and check 'Function'";
+		$helps[5] = $help;
+		
 		return $helps;
 	}
 }
