@@ -150,7 +150,7 @@ class Query
 			$result = $db->prepare($query);
 			$result->execute($this->params);
 			
-			if ($line == $result->fetch()) $exists = true;
+			if ($result->fetch()) $exists = true;
 			
 			unset($result);
 		}
