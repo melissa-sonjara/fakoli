@@ -148,6 +148,7 @@ class Query
 			$db = ConnectionManager::getConnection();
 			
 			$result = $db->prepare($query);
+			$result->execute($this->params);
 			
 			if ($line == $result->fetch()) $exists = true;
 			
