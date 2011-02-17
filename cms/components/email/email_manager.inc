@@ -191,6 +191,7 @@ class EmailManager
 	
 	function getReplaceText($mergeCode)
 	{
+			
 		if(is_callable($mergeCode->map))
 		{
 			$replaceText = call_user_func($mergeCode->map, $this->item);
@@ -213,41 +214,49 @@ class EmailManager
 				{
 					$replaceObj = $this->item->$relation();
 				}
+				// static funtion of a class, must be included in sending script
+				elseif(is_callable(array($relation, $field)))
+				{
+					$replaceText = call_user_func(array($relation, $field), $this->item);
+				}
 				else
 				{
-					trace("EmailManager::item does not have the specified relation", 3);
+					trace("EmailManager::item does not have the specified relation or class callback function", 3);
 				}
 			}
 			else // we have a function from the calling class e.g., getUrl()
 				$replaceObj = $relation;
 			
-			// such as Order.formatOrder(), a function in the Order datamodel, called
-			// from sending class Program
-			if(is_object($replaceObj) AND $mergeCode->function)
+			if(!$replaceText)
 			{
-				$replaceText = $replaceObj->$field();
-				trace("EmailManager::replaceObj is related class and field is function; " . get_class($replaceObj). " $field; replaceText: $replaceText", 3);
-			}
+				// such as Order.formatOrder(), a function in the Order datamodel, called
+				// from sending class Program
+				if(is_object($replaceObj) AND $mergeCode->function)
+				{
+					$replaceText = $replaceObj->$field();
+					trace("EmailManager::replaceObj is related class and field is function; " . get_class($replaceObj). " $field; replaceText: $replaceText", 3);
+				}
 			
-			// e.g., Program->name, a field in Program datamodel
-			elseif(is_object($replaceObj))
-			{
-				$replaceText = $replaceObj->format("{".$field ."}");
-				trace("EmailManager::replaceObj is object; text is $replaceText", 3);
-			}
+				// 	e.g., Program->name, a field in Program datamodel
+				elseif(is_object($replaceObj))
+				{
+					$replaceText = $replaceObj->format("{".$field ."}");
+					trace("EmailManager::replaceObj is object; text is $replaceText", 3);
+				}
 			
-			// e.g., Program.orderList, a function called from the sending
-			// class Program
-			else if ($replaceObj AND $mergeCode->function) // function called from the sending class
-			{
-				$replaceText = $this->item->$replaceObj();	
-				trace("EmailManager::replaceText is function from sending class", 3);
-			}
-			elseif($replaceObj) // field of the calling class e.g., "comment"
-			{
-				return $replaceText = $this->item->$replaceObj;
-				trace("EmailManager::replaceText is field of the calling class", 3);
-			}
+				// 	e.g., Program.orderList, a function called from the sending
+				// 	class Program
+				else if (is_callable($replaceObj) AND $mergeCode->function) // function called from the sending class
+				{
+					trace("EmailManager::replaceText is function from sending class", 3);
+					$replaceText = $this->item->$replaceObj();	
+				}
+				elseif($replaceObj) // field of the calling class e.g., "comment"
+				{
+					return $replaceText = $this->item->$replaceObj;
+					trace("EmailManager::replaceText is field of the calling class", 3);
+				}
+			} // end if we don't already have the replace text
 		}
 		
 		trace("replaceText is $replaceText", 3);
@@ -256,7 +265,6 @@ class EmailManager
 	
 	function searchReplaceText($patterns, $replacements, $text)
 	{
-		trace("EmailManager::searchReplaceText start text $text", 3);
 		$lText = "";
 		
 		if(count($patterns) > 0 AND $text != "")
@@ -266,7 +274,6 @@ class EmailManager
 		else
 			$lText = $text;
 		
-		trace("EmailManager::searchReplaceText end text $lText", 3);
 		return $lText;
 	}
 	
