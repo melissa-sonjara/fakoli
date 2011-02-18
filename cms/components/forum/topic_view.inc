@@ -98,9 +98,9 @@ class ForumTopicView
 			 		foreach($attachments as $attachment)
 			 		{
 			 			$icon = getDocIcon($attachment->filename);
-?>
-	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<a href="/attachment.php?attachment_id=<?echo $attachment->attachment_id?>"><?echo $attachment->filename?></a>&nbsp;(<?echo $attachment->file_size?>)
-<?
+
+			 			echo $this->formatAttachment($icon, $attachment);
+		 			
 						if ($author->get($pk) == $user->get($pk) || checkRole("admin,data"))
 						{
 ?>
@@ -146,5 +146,16 @@ class ForumTopicView
 <?
 		}
 	}
+	
+	function formatAttachment($icon, $attachment)
+	{
+		global $config;
+		$dir = $config["attachmentdir"];
+		
+		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
+		$link .= "<a href='/{$dir}/{$attachment->filename}'>{$attachment->filename}</a>&nbsp;({$attachment->file_size})\n";
+		
+		return $link;
+	}		
 }
 ?>
