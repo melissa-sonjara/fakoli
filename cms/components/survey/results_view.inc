@@ -7,7 +7,7 @@ Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without
 restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
+copy, modify, merge, publish, distribute, sublicense, and or sell
 copies of the Software, and to permit persons to whom the
 Software is furnished to do so, subject to the following
 conditions:
@@ -85,7 +85,7 @@ class SurveyResultsView
 		$this->questions = $this->mgr->getQuestions();
 		
 		if(count($this->questions) > 0)			
-			$answers = $this->survey->Answers();
+			$answers = $this->mgr->getAnswers();
 		
 		if(count($answers) > 0)
 		{					
@@ -106,34 +106,37 @@ class SurveyResultsView
 	function getAggregateData($question, $answers)
 	{
 		$qPk = $this->mgr->getQuestionKey();
-		switch($question->question_type_id)
+		
+		$questionType = new QuestionType($question->question_type_id);
+				
+		switch($questionType->class_name)
 		{
-		case QuestionMultipleChoice:
+		case MultipleChoiceView:
 			
 			$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 			break;	
 			
-		case QuestionRating:
+		case RatingView:
 
 			$this->optionAnswers[$question->$qPk] = $this->getRatingsQuestionResultData($question, $answers);
 			break;	
 			
-		case QuestionShortText:
+		case ShortTextView:
 
 			$this->textAnswers[$question->$qPk] = $answers; 		
 			break;	
 			
-		case QuestionFreeText:
-
-			$this->textAnswers[$question->$qPk] = $answers; 		
+		case FreeTextView:
+				
+			$this->textAnswers[$question->$qPk] = $answers;
 			break;	
 			
-		case QuestionCheckList:
+		case CheckListView:
 		
 			$this->optionAnswers[$question->$qPk] = $this->getCheckListQuestionResultData($question, $answers);
 			break;	
 			
-		case QuestionDropDownList:
+		case SelectFieldView:
 
 			$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 			break;	
@@ -355,14 +358,25 @@ class SurveyResultsView
 	
 	function buildTextDataView()
 	{		
-		$dataView = new GroupedDataListView($this->textAnswers, "AnswerTextList");
-		$dataView->column("Answer Text", "{value}");
-		$dataView->groupBy($this->questions, "{question_number}. {question}");
-		$dataView->mode = 'accordion';
-		$dataView->emptyMessage = "There are no text results.";
-		$dataView->excelFile = "text_surveyData.xls";
+		$table = new GroupedDataListView($this->textAnswers, "AnswerTextList");
+		$table->column("Answer Text", array(SurveyResultsView, formatAnswer));
+		$table->groupBy($this->questions, array(SurveyResultsView, formatQuestion));
+		$table->mode = 'accordion';
+		$table->emptyMessage = "There are no text results.";
+		$table->excelFile = "text_surveyData.xls";
 		
-		$this->textDataView = $dataView;
+		$this->textDataView = $table;
+	}
+	
+	// question number is a psuedo field for some question dataitem objects
+	static function formatQuestion($question)
+	{
+		return $question->question_number . ". " . $question->question;
+	}
+	
+	static function formatAnswer($answer)
+	{
+		return ($answer->value) ? $answer->value : "Not Answered";
 	}
 	
 	function drawView()

@@ -150,7 +150,18 @@ class SurveyResponseManager extends SurveyManager
 	
 	function getQuestions()
 	{
-		return $this->item->Questions();
+		$questions = $this->item->Questions();
+		if(count($questions) > 0)
+		{
+			$idx = 0;
+			foreach($questions as $question)
+			{
+				$question->question_number = $idx;
+				$idx++;
+			}
+		}
+		
+		return $questions;
 	}
 	
 	function getAnswers()
