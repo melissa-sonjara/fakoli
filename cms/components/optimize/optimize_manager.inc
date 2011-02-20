@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("settings");
+Fakoli::using("settings", "optimize");
 Fakoli::usingFeature("cache");
 
 class OptimizeManager
@@ -44,6 +44,7 @@ class OptimizeManager
 		Cache::invalidate("css_cache_timestamp");
 		Settings::setDefaultValue("optimize", "optimize_scripts", "");
 		Settings::setDefaultValue("optimize", "optimize_styles", "");
+		Settings::setDefaultValue("optimize", "compress_javascript", "");
 	}
 	
 	static function preprocessScripts($scripts)
@@ -68,6 +69,12 @@ class OptimizeManager
 						$cachedScripts .= file_get_contents($resource);
 						$cachedScripts .= "\n";
 					}
+				}
+				
+				if (Settings::getValue("optimize", "compress_javascript"))
+				{
+					$packer = new JavaScriptPacker($cachedScripts, '62', true, false);
+					$cachedScripts = $packer->pack();
 				}
 				
 				Cache::put("script_cache", $cachedScripts);
