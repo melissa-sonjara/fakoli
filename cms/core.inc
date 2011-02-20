@@ -279,6 +279,8 @@ class Fakoli
 			}
 		}
 
+		$scriptArray = ComponentManager::fireEvent("PreProcessScripts", $scriptArray);
+		
 		$scripts = "";
 		foreach($scriptArray as $s)
 		{
@@ -291,7 +293,7 @@ class Fakoli
 	
 	static function getStyles()
 	{
-		$scripts = Cache::get("fakoli_styles");
+		$styles = Cache::get("fakoli_styles");
 		if ($styles) return $styles;
 		
 		$styleArray = array();
@@ -307,6 +309,8 @@ class Fakoli
 			}
 		}
 
+		$styleArray = ComponentManager::fireEvent("PreProcessStyles", $styleArray);
+		
 		$styles = "";
 		foreach($styleArray as $s)
 		{
