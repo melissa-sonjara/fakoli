@@ -72,6 +72,8 @@ class SessionManager
 	
 	static function read($id)
 	{
+		trace("Session Read $id", 3);
+		
 		try
 		{
 			$session = PHPSession::read($id);
@@ -86,6 +88,8 @@ class SessionManager
 	
 	static function write($id, $data)
 	{
+		trace("Session Write $id", 3);
+		
 		$session = PHPSession::read($id);
 		if (!$session) $session = new PHPSession();
 
