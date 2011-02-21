@@ -97,8 +97,6 @@ class SessionManager
 		
 		if ($session->session_id && ($data == $session->data))
 		{
-			if ($expiry == $session->expires) return;
-			
 			$session->filter = new ExclusionFilter("data", "id");
 		}
 		else
