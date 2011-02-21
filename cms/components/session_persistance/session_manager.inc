@@ -89,7 +89,7 @@ class SessionManager
 		$session = PHPSession::read($id);
 		if (!$session) $session = new PHPSession();
 
-		$expiry = time() + SessionManager::$lifeTime;;
+		$expiry = time() + SessionManager::$lifeTime;
 		
 		/*if ($session->session_id && ($data == $session->data))
 		{
