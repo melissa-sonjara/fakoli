@@ -810,6 +810,7 @@ function redirect($page)
 	}
 		
   	header("Location: $location");
+  	session_write_close();
   	exit;
 }
 
