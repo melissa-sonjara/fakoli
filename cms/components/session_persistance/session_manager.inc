@@ -40,7 +40,7 @@ class SessionManager
 	
 	static function createDefaultSettings()
 	{
-		Settings::setDefaultValue("session_persistance", "Profile_ID", "");
+		Settings::setDefaultValue("session_persistance", "enable_database_persistance", "");
 	}
 	
 	static function onInitialize()
