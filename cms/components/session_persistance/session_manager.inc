@@ -76,7 +76,6 @@ class SessionManager
 		{
 			$session = PHPSession::read($id);
 			if ($session->expires < time()) return null;
-			SessionManager::$hash = md5($session->data);
 			return $session->data;
 		}
 		catch(Exception $e)
@@ -97,6 +96,10 @@ class SessionManager
 			if ($expiry == $session->expires) return;
 			
 			$session->filter = new ExclusionFilter("data", "id");
+		}
+		else
+		{
+			$session->filter = null;
 		}
 		
 		$session->id = $id;
