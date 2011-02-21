@@ -127,7 +127,7 @@ class SessionManager
 	static function gc()
 	{
 		$session = new PHPSession();
-		$session->delete("WHERE expiry < ".time());
+		$session->delete("WHERE expires < ".time());
 	}
 }
 ?>
