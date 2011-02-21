@@ -42,6 +42,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 {
 	var $validator;
 	var $requireTime = true; // whether the time component of the field is also required
+	var $readOnlyFormat = ""; // callback function to format datetime, default is formatDateTime12Hr;
 	
 	function DateTimeFieldRenderer(&$parent)
 	{
@@ -170,11 +171,16 @@ class DateTimeFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
+		if(!$this->readOnlyFormat)
+			$date = formatDateTime12Hr($this->parent->data->get($field));
+		elseif(is_callable($this->readOnlyFormat))
+			$date = call_user_func($this->readOnlyFormat, $this->parent->data->get($field));
+					
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->parent->data->get($field)."</td>\n";		
+		echo ">".$date."</td>\n";		
 		echo "</tr>\n";	
 	}
 	
