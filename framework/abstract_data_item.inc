@@ -366,11 +366,17 @@ abstract class AbstractDataItem
 	 */
 	function quoteFieldValue($field, $type)
 	{
-		$query = "";
 
-		$db = $this->getConnection();
-		
 		$val = $this->get($field);
+		
+		return $this->quoteValue($val, $type);
+	}
+	
+	function quoteValue($val, $type)
+	{
+		$query = "";
+		
+		$db = $this->getConnection();
 		
 		switch($type)
 		{

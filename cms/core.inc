@@ -413,6 +413,8 @@ Fakoli::using("user", "login", "component");
 
 $user = null;
 
+ComponentManager::fireEvent("RegisterSessionPersistance");
+
 session_start();
 
 if (isset($_SESSION["user"]))
