@@ -95,7 +95,7 @@ class SessionManager
 
 		$expiry = time() + SessionManager::$lifeTime;
 		
-		/*if ($session->session_id && ($data == $session->data))
+		if ($session->session_id && ($data == $session->data))
 		{
 			if ($expiry == $session->expires) return;
 			
@@ -104,7 +104,7 @@ class SessionManager
 		else
 		{
 			$session->filter = null;
-		}*/
+		}
 		
 		$session->id = $id;
 		$session->data = $data;
@@ -114,6 +114,8 @@ class SessionManager
 	
 	static function destroy($id)
 	{
+		trace("Session Destroy $id", 3);
+		
 		try
 		{
 			$session = PHPSession::read($id);
