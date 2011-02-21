@@ -368,7 +368,7 @@ class Fakoli
 	    $size = filesize($resource);
 		header("Content-Length: $size");
 				
-		if (!fpassthru($f)) throw new DataItemException("Resource send failed");
+		fpassthru($f);
 		fclose($f);
 	}
 	
