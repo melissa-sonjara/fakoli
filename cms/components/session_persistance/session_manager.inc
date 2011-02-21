@@ -92,7 +92,7 @@ class SessionManager
 
 		$expiry = time() + SessionManager::$lifeTime;;
 		
-		if ($session->id && ($data == $session->data))
+		if ($session->session_id && ($data == $session->data))
 		{
 			if ($expiry == $session->expires) return;
 			
