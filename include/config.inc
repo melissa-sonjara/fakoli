@@ -4,16 +4,16 @@
  */
 $config = array(
 
-	"sitename"		=> "Sonjara CMS Website",
-	"homedir"		=> "C:/code/cms",
-	"uploadbase"	=> "C:/uploads/cms",
+	"sitename"		=> "New Sonjara Website",
+	"homedir"		=> "/srv/www/vhosts/v2.sonjara.com",
+	"uploadbase"	=> "/srv/www/vhosts/v2.sonjara.com",
 	"uploaddir" 	=> "documents", 			/* Directory for uploads */
 	"tmp"			=> "/tmp",					/* Scratch Directory */
-	"email_from" 	=> "andy@sonjara.com", 		/* From address for generated emails */
-    "http_host"		=> "cms",		/* URL for this server */
+	"email_from" 	=> "sonja@sonjara.com", 		/* From address for generated emails */
+    "http_host"		=> "v2.sonjara.com",		/* URL for this server */
 
-    "email_contact" => "andy@sonjara.com", 		/* Email Address for contact */
-    "email_name" 	=> "Andy Green", 			/* Name of contact */
+    "email_contact" => "Sonja@sonjara.com", 		/* Email Address for contact */
+    "email_name" 	=> "Sonja Hubbard", 			/* Name of contact */
     
     "trace_path"	=> "/share/cms_trace.log",	/* File path to trace output log */
     "trace_level"	=> 3,						/* Debugging trace level (0-5) */
