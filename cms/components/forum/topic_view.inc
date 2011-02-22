@@ -153,7 +153,8 @@ class ForumTopicView
 		$dir = $config["uploaddir"];
 		
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
-		$link .= "<a href='/{$dir}{$attachment->local_filename}'>{$attachment->filename}</a>&nbsp;({$attachment->file_size})\n";
+		$link .= "<a href='/action/attachment/download?attachment_id={$attachment->attachment_id}'>{$attachment->filename}
+		</a>&nbsp;({$attachment->file_size})\n";
 		
 		return $link;
 	}		
