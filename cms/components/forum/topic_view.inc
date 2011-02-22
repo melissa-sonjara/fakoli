@@ -150,10 +150,10 @@ class ForumTopicView
 	function formatAttachment($icon, $attachment)
 	{
 		global $config;
-		$dir = $config["attachmentdir"];
+		$dir = $config["uploadbase"];
 		
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
-		$link .= "<a href='/{$dir}/{$attachment->filename}'>{$attachment->filename}</a>&nbsp;({$attachment->file_size})\n";
+		$link .= "<a href='/{$dir}{$attachment->local_filename}'>{$attachment->filename}</a>&nbsp;({$attachment->file_size})\n";
 		
 		return $link;
 	}		

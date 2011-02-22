@@ -22,7 +22,6 @@ class SubscriptionManager
 		if(count($subscribers) > 0)
 		{
 			$mgr = new UserManager();
-			$userClass = $mgr->getUserClass();
 			$emailField = $mgr->getEmailField();
 			$emailContent = SubscriptionManager::formatTopicInstantNotification($message);
 			$subject = $config["sitename"] . " Forum Instant Notification"; 
@@ -30,9 +29,13 @@ class SubscriptionManager
 	
 			foreach($subscribers as $subscriber)
 			{		
-				$emailTo = $subscriber->User()->$emailField;
-				$emailHandler = new EmailHandler($emailTo, $subject, $emailContent);
-				$emailHandler->send();
+				$l_user = $subscriber->User();
+				if($l_user)
+				{
+					$emailTo = $l_user->$emailField;
+					$emailHandler = new EmailHandler($emailTo, $subject, $emailContent);
+					$emailHandler->send();
+				}
 			}
 		}
 	}
