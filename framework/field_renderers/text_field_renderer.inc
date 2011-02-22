@@ -44,6 +44,7 @@ class TextFieldRenderer extends FieldRenderer
 	var $columns = 60;
 	var $colspan = 2;
 	var $limit = 0;
+	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	
 	function TextFieldRenderer(&$parent)
 	{
@@ -87,7 +88,8 @@ class TextFieldRenderer extends FieldRenderer
 			echo "<div>";
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
-		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}'$onkeypress>";
+		$disable = ($this->disable) ? "disabled='disabled'" : "";	
+		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $disable $onkeypress>";
 		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		echo "</textarea>";
 		
