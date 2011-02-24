@@ -64,17 +64,15 @@ class StandardEventHandler extends EventHandler
 	
 	function details($event, $byProgram = false)
 	{
-		$start = formatDateShort($event->start_date) . " " . $this->formatTime12($event->start_date);
-		$end = formatDateShort($event->end_date) .  " " . $this->formatTime12($event->end_date);
-		
+		// JDG 2/24/2011 - call formatDateTime12Hr
 		ob_start();
 ?>
 <div class="event_details">
 <h3><?echo $event->title?></h3>
 <div class="event_contents">
 <p><em><?echo $event->event_type?></em></p>
-<p><label style="width: 80px">Start: </label><?echo $start ?><br/>
-<label style="width: 80px">End: </label><?echo $end ?></p>
+<p><label style="width: 80px">Start: </label><?echo formatDateTime12Hr($event->start_date) ?><br/>
+<label style="width: 80px">End: </label><?echo formatDateTime12Hr($event->end_date) ?></p>
 <? 		
 		if ($event->location)
 		{ 
@@ -92,12 +90,6 @@ class StandardEventHandler extends EventHandler
 		return $out;
 	}
 	
-	function formatTime12($time)
-	{
-		$time = explode(" ", $time);
-		$time =  strtotime($time[1]);
-		return date("g:i A", $time);
-	}	
 }
 
 class CalendarView
@@ -138,13 +130,6 @@ class CalendarView
 		return $this->eventHandlers[$cl];
 	}
 	
-	function formatTime12($time)
-	{
-		$time = explode(" ", $time);
-		$time =  strtotime($time[1]);
-		return date("g:ia", $time);
-	}
-
 	
 	function summary($event)
 	{
@@ -395,7 +380,9 @@ ENDSCRIPT;
 				{
 					$handler = $this->getHandler($event);
 					
-					$content .= "<div class='event_summary' onclick='showEventDetail({$event->event_id})'>";
+					// JDG 2/24/2011 send handler class to event details
+					$handler_class = get_class($handler);
+					$content .= "<div class='event_summary' onclick='showEventDetail({$event->event_id}, \"{$handler_class}\")'>";
 					$content .= $handler->summary($event);
 					$content .= "</div>";
 				}

@@ -34,12 +34,13 @@
 Fakoli::using("calendar");
 
 $event_id = checkNumeric($_GET["event_id"]);
+$handler_class = mysql_escape_string($_GET["handler_class"]);
 
 if (!$event_id) die("Invalid Parameter");
 
 $event = new Event($event_id);
 
-$handler = new StandardEventHandler();
+$handler = (!$handler_class) ? new StandardEventHandler() : new $handler_class();
 
 echo $handler->details($event);
 

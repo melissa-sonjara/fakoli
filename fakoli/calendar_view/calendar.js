@@ -54,9 +54,9 @@ window.addEvent('domready', function()
 	}
 });	
 
-function showEventDetail(id)
+function showEventDetail(id, handler_class)
 {
-	eventDialog.show(null, '/action/calendar/event_details?event_id=' + id);
+	eventDialog.show(null, '/action/calendar/event_details?event_id=' + id + '&handler_class=' + handler_class);
 }
 
 function editEvent(id)
