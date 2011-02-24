@@ -582,7 +582,7 @@ class DataListView
 		}
 				
 		$x->send();
-		ajaxResult();
+		ajaxReturn();
 	}
 }
 ?>
