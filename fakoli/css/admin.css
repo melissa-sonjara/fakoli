@@ -435,7 +435,8 @@ input, textarea, select
 	cursor: pointer;
 }
 
-a.button
+a.button,
+table.list a.button
 {
 	text-decoration: none;
 	font-size: 10pt;
@@ -444,9 +445,12 @@ a.button
 	width: auto;
 	outline: none;
 	cursor: pointer;
+	font-weight: normal;
+	white-space: nowrap;
 }
 
-.button:hover 
+.button:hover,
+table.list .button:hover
 {
 	color: #000;
 	border: solid 1px #000;
@@ -836,3 +840,4 @@ warning
 	padding-top: 10px;
 	padding-bottom: 4px;
 }
+

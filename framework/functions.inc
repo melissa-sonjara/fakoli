@@ -1373,6 +1373,18 @@ function arrayFilterKey( $input, $callback )
     return $input;
 }
 
+/**
+ * Returns a string output and exits the script cleanly. We used to be
+ * able to use die(), but because of PHP 5's messed up session handling
+ * this throws an error if there is a custom session handler registered.
+ * 
+ * @param string $msg
+ */
+function ajaxReturn($msg = null)
+{
+	session_write_close();
+	die($msg);
+}
 
 function getMIMEType($filename) 
 {
