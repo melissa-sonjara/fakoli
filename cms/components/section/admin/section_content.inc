@@ -77,7 +77,7 @@ $contentByIdentifier = reindexList($content, "identifier");
 $title = "Section Content for {$section->section_title}";
 
 $itemsByType = array();		
-$itemsByType = ComponentManager::fireEvent("EnumerateItems", &$itemsByType);
+$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
 
 $types = categorizeItemTypes($itemsByType);
  
