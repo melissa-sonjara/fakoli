@@ -54,7 +54,8 @@ $dir = $config["attachmentdir"];
 $name = $_FILES['attachmentFile']["name"];
 $base = $config['uploadbase'];
 
-
+trace ("Upload name _FILES attachmentFile name $name", 3);
+trace ("Upload attachment dir $dir", 3);
 trace ("Uploading file to $base/$file", 3);
 
 if (!file_exists("$base/$dir"))
@@ -69,6 +70,8 @@ $attachment->save();
 $extension = substr($name, strrpos($name, "."));
 
 $file = "$dir/{$attachment->attachment_id}$extension";
+
+trace ("Uploading file dir/attachment id extension: $file", 3);
 
 if (file_exists("$base/$file"))
 {
