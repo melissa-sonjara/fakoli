@@ -37,7 +37,7 @@ Fakoli::usingFeature("validation");
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 if (!$document_library_id)
 {
-	die("Invalid Parameter");
+	ajaxReturn("Invalid Parameter");
 }
 
 global $library;
@@ -52,7 +52,7 @@ $validator->add(new RequiredValidator("folder_value", "Folder"));
 
 if (!checkRole($library->allow_access) || !checkRole($library->manage_folders))
 {
-	die("Access Denied");
+	ajaxReturn("Access Denied");
 }
 
 if ($method == "POST")
@@ -61,7 +61,7 @@ if ($method == "POST")
 	if ($errors)
 	{
 		// Throw the validation error back to the calling AJAX script
-		die($errors);
+		ajaxReturn($errors);
 	}
 	
 	$folder = sanitizePath($_POST["folder_value"]);
@@ -87,12 +87,12 @@ if ($method == "POST")
 	
 	if ($nonempty)
 	{
-		die("The folder cannot be deleted because it is not empty");
+		ajaxReturn("The folder cannot be deleted because it is not empty");
 	}
 	else
 	{
 		rmdir($path);
-		die("1");
+		ajaxReturn("1");
 	}	
 }
 else

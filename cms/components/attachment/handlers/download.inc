@@ -52,4 +52,6 @@ header("Content-Length: $size");
 	
 fpassthru($f);
 fclose($f);
+
+session_write_close();
 ?>

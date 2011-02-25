@@ -54,7 +54,7 @@ else
 
 if (!checkRole($calendar->writeAccess))
 {
-	die("Access Denied");
+	ajaxReturn("Access Denied");
 }
 
 $form = new AutoForm($event, "POST", "/action/calendar/event_edit?event_id=$event_id");
@@ -83,8 +83,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{	
-		echo "1";
-		return;
+		ajaxReturn("1");
 	}
 	else
 	{

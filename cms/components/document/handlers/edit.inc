@@ -62,12 +62,12 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		echo "1";
+		ajaxReturn("1");
 		return;
 	}
 	else
 	{
-		echo $form->msg;
+		ajaxReturn($form->msg);
 		return;
 	}
 }

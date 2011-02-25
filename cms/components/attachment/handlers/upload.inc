@@ -37,12 +37,12 @@ $attachment = new Attachment();
 
 if (!$_FILES['attachmentFile']) 
 {
-	die("No upload record found.");
+	ajaxReturn("No upload record found.");
 }
 
 if ($_FILES['attachmentFile']["name"]=="") 
 {
-	die("Upload name is empty");
+	ajaxReturn("Upload name is empty");
 }
 
 /* Copy across the uploaded file */
@@ -91,5 +91,5 @@ $attachment->save();
 
 $icon = getDocIcon($name);
 
-echo "$attachment->attachment_id:$name:$icon:$size";
+ajaxReturn("$attachment->attachment_id:$name:$icon:$size");
 ?>
