@@ -48,19 +48,20 @@ if ($_FILES['attachmentFile']["name"]=="")
 /* Copy across the uploaded file */
 
 trace("Upload Base: {$config['uploadbase']}", 3);
-trace("Upload Attachment Directory: {$config['attachmentdir']}", 3);
+trace("Upload Directory: {$config['uploaddir']}", 3);
 
 $dir = $config["attachmentdir"];
 $name = $_FILES['attachmentFile']["name"];
+$base = $config['uploadbase'];
 
-trace ("Uploading file to base/file: $base/$file", 3);
+
+trace ("Uploading file to $base/$file", 3);
 
 if (!file_exists("$base/$dir"))
 {
 	// If the directory does not exist, create it 
 	mkdir("{$config['uploadbase']}/$dir");
 }
-
 
 $attachment->user_id = $user->get($user->primary_key);
 $attachment->save();
@@ -75,13 +76,9 @@ if (file_exists("$base/$file"))
 	unlink("$base/$file");
 }
 
-trace("Upload: _FILES attachmentFile tmp_name is ". $_FILES['attachmentFile']["tmp_name"], 3);
-
 move_uploaded_file($_FILES['attachmentFile']["tmp_name"], "$base/$file");
 chmod("$base/$file", 0755);
  
-trace("Upload: base/file is $base/$file", 3);
-
 $size =  getScaledSize(filesize("$base/$file"));
 
 $attachment->filename = $name;
