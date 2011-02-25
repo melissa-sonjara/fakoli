@@ -68,8 +68,9 @@ $form->annotate("recipients", "(separate email addresses with a comma ',')");
 $form->annotate("subject", "Codes must be enclosed in brackets '[' and ']'.");
 $form->annotate("message", "Codes must be enclosed in brackets '[' and ']'.");
 $form->unique("name", "An email template already exists with that title. Please choose a different title.");
-$form->required("name", "sender_email", "recipients", "subject", "message");
+$form->required("name", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
+$form->allowDelete = true;
 $classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", array());
 $classSelect->allowAddEntry();
 
