@@ -46,7 +46,7 @@ trace("attachment download: filepath:" . $filepath, 3);
 $f = fopen($filepath, "r");
 $size = filesize($filepath);
 	
-header("Content-Disposition: attachment;filename=\"" . basename($attachment->local_filename) . "\"");
+header("Content-Disposition: attachment;filename=\"" . basename($attachment->filename) . "\"");
 header("Content-Type: $mimeType");
 header("Content-Length: $size");
 	
