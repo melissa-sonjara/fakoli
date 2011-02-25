@@ -37,7 +37,7 @@ $attachment_id = checkNumeric($_GET["attachment_id"]);
 
 $attachment = new Attachment($attachment_id);
 
-$dir = $config['uploadbase'] . DIRECTORY_SEPARATOR . $config["attachmentdir"];
+$dir = $config['uploadbase'] . DIRECTORY_SEPARATOR;
 
 $filepath = sanitizePath($dir . $attachment->local_filename);
 $mimeType = getMimeType($attachment->local_filename);
