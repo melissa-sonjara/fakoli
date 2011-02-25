@@ -160,8 +160,8 @@ class EmailManager
 	{
 		$mergeCodes = query(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}'");
 		
-		//echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
-		//echo "<pre>"; print_r($mergeCodes); echo "</pre>";
+		echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
+		echo "<pre>"; print_r($mergeCodes); echo "</pre>";
 
 		if(count($mergeCodes) > 0)
 		{
@@ -180,8 +180,8 @@ class EmailManager
 			}
 		}
 
-		//echo "<pre>"; print_r($patterns); echo "</pre>";
-		//echo "<pre>"; print_r($replacements); echo "</pre>";
+		echo "<pre>"; print_r($patterns); echo "</pre>";
+		echo "<pre>"; print_r($replacements); echo "</pre>";
 		
 		$this->recipients = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->recipients);
 		$this->subject = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->subject);
@@ -202,22 +202,26 @@ class EmailManager
 			
 			trace("EmailManager::relation is $relation and field is $field", 3);
 			$className = get_class($this->item);
-
+			trace("EmailManager::class name is $className", 3);
+			
 			// if the value_obj is the same as calling class then just keep that
 			if($relation AND $field)
 			{
 				if(get_class($this->item) == $relation)
 				{
 					$replaceObj = $this->item;
+					trace("EmailManager::replaceObj equals item", 3);
 				}
 				elseif($this->item->hasRelation($relation))
 				{
 					$replaceObj = $this->item->$relation();
+					trace("EmailManager::Item has relation", 3);
 				}
 				// static funtion of a class, must be included in sending script
 				elseif(is_callable(array($relation, $field)))
 				{
 					$replaceText = call_user_func(array($relation, $field), $this->item);
+					trace("EmailManager:: static function of class, replace Text $replaceText", 3);
 				}
 				else
 				{
@@ -226,7 +230,9 @@ class EmailManager
 			}
 			else // we have a function from the calling class e.g., getUrl()
 				$replaceObj = $relation;
-			
+
+			trace("EmailManager:: finished with both codes that have both relation and field: replace Text $replaceText", 3);
+				
 			if(!$replaceText)
 			{
 				// such as Order.formatOrder(), a function in the Order datamodel, called
@@ -246,7 +252,7 @@ class EmailManager
 			
 				// 	e.g., Program.orderList, a function called from the sending
 				// 	class Program
-				else if (is_callable($replaceObj) AND $mergeCode->function) // function called from the sending class
+				elseif($mergeCode->function) // function called from the sending class
 				{
 					trace("EmailManager::replaceText is function from sending class", 3);
 					$replaceText = $this->item->$replaceObj();	
