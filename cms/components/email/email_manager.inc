@@ -160,8 +160,8 @@ class EmailManager
 	{
 		$mergeCodes = query(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}'");
 		
-		echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
-		echo "<pre>"; print_r($mergeCodes); echo "</pre>";
+		//echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
+		//echo "<pre>"; print_r($mergeCodes); echo "</pre>";
 
 		if(count($mergeCodes) > 0)
 		{
@@ -180,8 +180,8 @@ class EmailManager
 			}
 		}
 
-		echo "<pre>"; print_r($patterns); echo "</pre>";
-		echo "<pre>"; print_r($replacements); echo "</pre>";
+		//echo "<pre>"; print_r($patterns); echo "</pre>";
+		//echo "<pre>"; print_r($replacements); echo "</pre>";
 		
 		$this->recipients = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->recipients);
 		$this->subject = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->subject);
