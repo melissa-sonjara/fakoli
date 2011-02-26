@@ -615,6 +615,36 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	}
 
 	/**
+	 * Disable autocomplete for the selected fields. If no fields are specified, 
+	 * autocomplete is disabled for all the fields in the form.
+	 */
+	function disableAutoComplete()
+	{
+		$numArgs = func_num_args();
+		
+		if ($numArgs == 0)
+		{
+			foreach($this->data->fields as $field => $type)
+			{
+				if ($this->data->hasField($field))
+				{
+					$this->getRenderer($field)->autocomplete = false;
+				}
+			}
+		}
+		else
+		{
+			for($i = 0; $i < $numArgs; ++$i)
+			{
+				if ($this->data->hasField($field))
+				{
+					$this->getRenderer($field)->autocomplete = false;
+				}
+			}
+		}
+	}
+			
+	/**
 	 * Adds a custom button to the form.
 	 *
 	 * @param string $text the button label text
