@@ -108,4 +108,6 @@ $graph->Add($bplot);
 
 // Finally send the graph to the browser
 $graph->Stroke();
+
+session_write_close();
 ?>
