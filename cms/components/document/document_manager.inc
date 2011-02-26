@@ -312,12 +312,12 @@ function deleteFolderResult(result)
 		
 		if (!$_FILES[$field]) 
 		{
-			die("No upload record found.");
+			throw new FakoliException("No upload record found.");
 		}
 		
 		if ($_FILES[$field]["name"]=="") 
 		{
-			die("Upload name is empty");
+			throw new FakoliException("Upload name is empty");
 		}
 		
 		/* Copy across the uploaded file */
