@@ -248,7 +248,7 @@ class EmailManager
 				$valid = false;
 			}
 		}
-		else // Map has just one part
+		elseif($part1) // Map has just one part
 		{
 			if(is_callable($part1))
 			{
