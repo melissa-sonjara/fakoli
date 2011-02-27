@@ -229,7 +229,7 @@ class EmailManager
 					trace("EmailManager:: part1 is relation of sending class and part2 is a function in that relation.", 3);
 					$replaceText = $replaceObj->$part2();
 				}	
-				elseif($replaceObj->hasField($part2))
+				elseif(is_object($replaceObj) && $replaceObj->hasField($part2))
 				{
 					trace("EmailManager:: part1 is relation and part2 is a field in that related class.", 3);
 					$replaceText = $replaceObj->format("{".$part2 ."}");
