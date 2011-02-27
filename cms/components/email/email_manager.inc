@@ -170,13 +170,15 @@ class EmailManager
 				
 			foreach($mergeCodes as $mergeCode)
 			{
-				
-				$replaceText = $this->getReplaceText($mergeCode);
+				if($mergeCode->map)
+				{
+					$replaceText = $this->getReplaceText($mergeCode->map);
 						
-				// Even if replace text is empty, still add to
-				// list to get rid of code from the text (e.g., [merge_code])
-				array_push($patterns, "[$mergeCode->name]");
-				array_push($replacements, $replaceText);
+					// Even if replace text is empty, still add to
+					// 	list to get rid of code from the text (e.g., [merge_code])
+					array_push($patterns, "[$mergeCode->name]");
+					array_push($replacements, $replaceText);
+				}
 			}
 		}
 
@@ -201,14 +203,11 @@ class EmailManager
 	 * b) function of calling class
 	 * c) field of calling class
 	 */
-	function getReplaceText($mergeCode)
+	function getReplaceText($mergeCodeMap)
 	{	
 		$valid = true;
-		
-		if(!$mergeCode->map)
-			return "";
-			
-		list($part1, $part2) = explode(".", $mergeCode->map);
+					
+		list($part1, $part2) = explode(".", $mergeCodeMap);
 
 		trace("EmailManager::part1 is $part1 and part2 is $part2", 3);
 			
