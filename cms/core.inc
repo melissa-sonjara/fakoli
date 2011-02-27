@@ -314,7 +314,7 @@ class Fakoli
 		$styles = "";
 		foreach($styleArray as $s)
 		{
-			$styles .= "  <link href='$s' rel='stylesheet' media='all'/>\n";
+			$styles .= "  <link href='$s' rel='stylesheet' type='text/css' media='all'/>\n";
 		}
 		
 		Cache::put("fakoli_styles", $styles);
