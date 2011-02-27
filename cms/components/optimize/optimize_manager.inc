@@ -67,7 +67,7 @@ class OptimizeManager
 						}
 						
 						$cachedScripts .= file_get_contents($resource);
-						$cachedScripts .= "\n";
+						$cachedScripts .= "\r\n";
 					}
 				}
 				
@@ -107,7 +107,7 @@ class OptimizeManager
 						}
 						
 						$cachedStyles .= file_get_contents($resource);
-						$cachedStyles .= "\n";
+						$cachedStyles .= "\r\n";
 					}
 				}
 				
