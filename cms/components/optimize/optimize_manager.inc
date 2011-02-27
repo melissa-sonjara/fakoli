@@ -111,7 +111,7 @@ class OptimizeManager
 					}
 				}
 				
-				$cachedStyles = preg_replace("/^@CHARSET.*$/", "", $cachedStyles);
+				$cachedStyles = preg_replace("/^@CHARSET.*$/mi", "", $cachedStyles);
 				$cachedStyles = str_replace("\r\n", "\n", $cachedStyles);	
 				$cachedStyles = str_replace("\n", "\r\n", $cachedStyles);	
 				
