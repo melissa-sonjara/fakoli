@@ -548,6 +548,7 @@ var ProgressiveSearch = new Class({
 		
 		this.element.addEvent('keyup', function() { this.onKeyPress();}.bind(this));
 		this.element.addEvent('blur', function() { this.hideList();}.bind(this));
+		this.element.setProperty('autocomplete', 'off');
 		this.list.addEvent('mouseover', function() { this.allowHide = false; }.bind(this));
 		this.list.addEvent('mouseout', function() { this.allowHide = true; }.bind(this));
 	},
