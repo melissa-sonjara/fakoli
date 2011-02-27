@@ -206,7 +206,7 @@ class EmailManager
 		$valid = true;
 		
 		if(!$mergeCode->map)
-			return;
+			return "";
 			
 		list($part1, $part2) = explode(".", $mergeCode->map);
 
@@ -315,36 +315,46 @@ class EmailManager
 		return $validRecipients;
 	}
 
+	/*
+	 * Call the callback whether successful or not; calling script
+	 * decides how to handle either way. Each recipient could have
+	 * different result so we don't record multiple recipients in
+	 * one record.
+	 */
+	
 	function sendEmail()
 	{
 		trace("EmailManager:: sendEmail", 3);
 		$recipients = $this->getRecipients();
+		$rtn = false;
 		
-		if(count($recipients) == 0)
+		if(count($recipients) > 0)
+		{
+			foreach($recipients as $recipient)
+			{
+				$rtn = $this->sendOneEmail($recipient);
+			}
+		}
+		else
 		{
 			trace("EmailManager:: Warning - no recipients", 3);
-			return;
 		}
+		return $rtn;
+	}
+	
+	function sendOneEmail($recipient)
+	{
+		trace("EmailManager:: sending email to recipient $recipient", 3);
+				
+		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom);
+				
+		$rtn = $email->send();
 			
-		/*
-		 * Call the callback whether successful or not; calling script
-		 * decides how to handle either way. Each recipient could have
-		 * different result so we don't record multiple recipients in
-		 * one record.
-		 */
-		foreach($recipients as $recipient)
+		if ($this->onSendComplete AND is_callable($this->onSendComplete))
 		{
-			trace("EmailManager:: sending email to recipient $recipient", 3);
-			
-			$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom);
-			
-			$rtn = $email->send();
-			
-			if ($this->onSendComplete AND is_callable($this->onSendComplete))
-			{
-				call_user_func($this->onSendComplete, $this, $recipient, $rtn);
-			}			
-		}
+			call_user_func($this->onSendComplete, $this, $recipient, $rtn);
+		}			
+		
 		return $rtn;
 	}
 }
