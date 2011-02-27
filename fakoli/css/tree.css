@@ -250,11 +250,6 @@ table.tree div
 	border: dotted 1px #fff;
 	text-decoration: none;
 }
-
-.tree input["checkbox"]:focus
-{
-	background-color: #325E9E;
-}
 	
 .tree_node_leaf input
 {
