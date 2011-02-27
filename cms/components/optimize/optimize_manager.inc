@@ -111,6 +111,10 @@ class OptimizeManager
 					}
 				}
 				
+				$cachedStyles = preg_replace("/@CHARSET.*?/", "", $cachedStyles);
+				$cachedStyles = str_replace("\r\n", "\n", $cachedStyles);	
+				$cachedStyles = str_replace("\n", "\r\n", $cachedStyles);	
+				
 				Cache::put("css_cache", $cachedStyles);
 				Cache::put("css_cache_timestamp", $last_modified);
 			}
