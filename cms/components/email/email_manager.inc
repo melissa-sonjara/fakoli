@@ -77,7 +77,7 @@ class EmailHandler
 			$body = stripHTML($message);
 		}
 		
-		trace("EmailHandler:: toAddr: $toAddr; emailFrom: $emailFrom; subject: $subject, message: $body", 3);
+		//trace("EmailHandler:: toAddr: $toAddr; emailFrom: $emailFrom; subject: $subject, message: $body", 3);
 		$this->mail = new Mail($emailFrom, $toAddr, $subject, $body, $headers);
 	}
 
@@ -189,83 +189,94 @@ class EmailManager
 	}
 	
 	
+	/*
+	 * If the mergeCode map has 2 parts, then possible interpretations: 
+	 * a) Part 1 is relation and part 2 is field of relation
+	 * b) part 1 is relation and part 2 is function in that relation
+	 * c) part 1 is a class and part2 is a static function in that class
+	 *
+	 * 
+	 * If the mergeCode map has 1 part, then it must be
+	 * a) callback function, no class
+	 * b) function of calling class
+	 * c) field of calling class
+	 */
 	function getReplaceText($mergeCode)
-	{
+	{	
+		$valid = true;
+		
+		if(!$mergeCode->map)
+			return;
 			
-		if(is_callable($mergeCode->map))
+		list($part1, $part2) = explode(".", $mergeCode->map);
+
+		trace("EmailManager::part1 is $part1 and part2 is $part2", 3);
+			
+		if(get_class($this->item) == $part1)
 		{
-			$replaceText = call_user_func($mergeCode->map, $this->item);
-		}
-		else
+			trace("EmailManager::part1 equals item class", 3);
+			$part1 = $part2;
+			$part2 = "";
+		}			
+				
+		if($part2)
 		{
-			list($relation, $field) = explode(".", $mergeCode->map);
-			
-			trace("EmailManager::relation is $relation and field is $field", 3);
-			$className = get_class($this->item);
-			trace("EmailManager::class name is $className", 3);
-			
-			// if the value_obj is the same as calling class then just keep that
-			if($relation AND $field)
+			if($this->item->hasRelation($part1))
 			{
-				if(get_class($this->item) == $relation)
+				$replaceObj = $this->item->$part1();
+				if(is_callable(array($replaceObj, $part2)))
 				{
-					$replaceObj = $this->item;
-					trace("EmailManager::replaceObj equals item", 3);
-				}
-				elseif($this->item->hasRelation($relation))
+					trace("EmailManager:: part1 is relation of sending class and part2 is a function in that relation.", 3);
+					$replaceText = $replaceObj->$part2();
+				}	
+				elseif($replaceObj->hasField($part2))
 				{
-					$replaceObj = $this->item->$relation();
-					trace("EmailManager::Item has relation", 3);
-				}
-				// static funtion of a class, must be included in sending script
-				elseif(is_callable(array($relation, $field)))
-				{
-					$replaceText = call_user_func(array($relation, $field), $this->item);
-					trace("EmailManager:: static function of class, replace Text $replaceText", 3);
+					trace("EmailManager:: part1 is relation and part2 is a field in that related class.", 3);
+					$replaceText = $replaceObj->format("{".$part2 ."}");
 				}
 				else
 				{
-					trace("EmailManager::item does not have the specified relation or class callback function", 3);
+					$valid = false;
 				}
 			}
-			else // we have a function from the calling class e.g., getUrl()
-				$replaceObj = $relation;
-
-			trace("EmailManager:: finished with both codes that have both relation and field: replace Text $replaceText", 3);
-				
-			if(!$replaceText)
+			elseif(is_callable(array($part1, $part2)))
 			{
-				// such as Order.formatOrder(), a function in the Order datamodel, called
-				// from sending class Program
-				if(is_object($replaceObj) AND $mergeCode->function)
-				{
-					$replaceText = $replaceObj->$field();
-					trace("EmailManager::replaceObj is related class and field is function; " . get_class($replaceObj). " $field; replaceText: $replaceText", 3);
-				}
-			
-				// 	e.g., Program->name, a field in Program datamodel
-				elseif(is_object($replaceObj))
-				{
-					$replaceText = $replaceObj->format("{".$field ."}");
-					trace("EmailManager::replaceObj is object; text is $replaceText", 3);
-				}
-			
-				// 	e.g., Program.orderList, a function called from the sending
-				// 	class Program
-				elseif($mergeCode->function) // function called from the sending class
-				{
-					trace("EmailManager::replaceText is function from sending class", 3);
-					$replaceText = $this->item->$replaceObj();	
-				}
-				elseif($replaceObj) // field of the calling class e.g., "comment"
-				{
-					return $replaceText = $this->item->$replaceObj;
-					trace("EmailManager::replaceText is field of the calling class", 3);
-				}
-			} // end if we don't already have the replace text
+				trace("EmailManager:: part1 is class and part2 is static function of a class.", 3);
+				$replaceText = call_user_func(array($part1, $part2), $this->item);
+			}
+			else
+			{
+				$valid = false;
+			}
+		}
+		else // Map has just one part
+		{
+			if(is_callable($part1))
+			{
+				trace("EmailManager:: part1 is callback function.", 3);
+				$replaceText = call_user_func($part1, $this->item);
+			}
+			elseif(is_callable(array($this->item, $part1)))
+			{
+				trace("EmailManager:: part1 is function from sending class.", 3);
+				$replaceText = $this->item->$part1();
+			}
+			elseif($this->item->hasField($part1))
+			{
+				trace("EmailManager:: part1 is field of sending class.", 3);
+				$replaceText = $this->item->format("{".$part1 ."}");
+			}
+			else
+			{
+				$valid = false;
+			}
 		}
 		
-		trace("replaceText is $replaceText", 3);
+		if($valid)
+			trace("EmailManager:: replaceText is $replaceText", 3);
+		else
+			trace("EmailManager:: Warning: merge code map not valid.", 3);
+	
 		return $replaceText;		
 	}
 	

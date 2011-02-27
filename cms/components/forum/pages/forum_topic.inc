@@ -48,6 +48,13 @@ echo $view->writeScript();
 
 $view->drawView();
 ?>
-	<button style="float: left" class="button" onclick="go('/forum_details?forum_id=<?echo $topic->forum_id?>');"> &laquo; Back to Topic List</button>	
+	<button style="float: left" class="button" onclick="go('/forum_details?forum_id=<?echo $topic->forum_id?>');"> &laquo; Back to Topic List</button>
+	<?php 
+if($user)
+{
+	?>	
 	<button style="float: left; margin-left: 425px" class="button" onclick="go('forum_message_form?forum_id=<?echo $topic->forum_id?>&topic_id=<? echo $topic->topic_id ?>&parent_id=<?echo $topic->message_id?>')"> Reply to this topic </button>
+	<?php 
+}
+	?>
 <?

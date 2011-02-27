@@ -71,7 +71,7 @@ class ForumTopicView
 	<div id="message<?echo $message->message_id?>" class="<?echo $class?>">
 	 <div class="title">
 <?
-				if ($first)
+				if ($first && $user)
 				{
 ?>
 	<button class="button" onclick="go('forum_message_form?forum_id=<?echo $this->topic->forum_id?>&topic_id=<? echo $this->topic->topic_id ?>&parent_id=<?echo $this->topic->message_id?>')"> Reply to this topic </button>	
@@ -101,7 +101,7 @@ class ForumTopicView
 
 			 			echo $this->formatAttachment($icon, $attachment);
 		 			
-						if ($author->get($pk) == $user->get($pk) || checkRole("admin,data"))
+						if ($author && $user && ($author->get($pk) == $user->get($pk)) || checkRole("admin,data"))
 						{
 ?>
 &nbsp;&nbsp;<a style="font-size: 10px" href="/action/forum/attachment_delete?forum_id=<?echo $this->topic->forum_id?>&message_id=<?echo $message->message_id?>&attachment_id=<?echo $attachment->attachment_id?>" onclick="return confirm('Are you sure you want to delete <?echo $attachment->filename?>?');">Delete this attachment</a>

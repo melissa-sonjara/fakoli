@@ -47,11 +47,17 @@ $script .= $view->writeScript();
 <div><?echo $forum->description?></div>
 <?
 $view->drawView();
+
 ?>
 <br/>
 <div style="width: 100%"><div style="float: right">
+<?php 
+if($user)
+{
+?>
 <a class="button" href="/forum_message_form?forum_id=<?echo $forum_id?>">Create a Topic</a>
 <?
+}
 if (checkRole("admin,moderator"))
 {
 ?>
