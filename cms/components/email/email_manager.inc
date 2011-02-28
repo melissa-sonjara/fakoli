@@ -107,14 +107,14 @@ class EmailHandler
 		?>
 
 ----PHP-alt-<?php echo "$random_hash\n"; ?>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 <? echo stripHTMLTags($msg); ?>
 
 
 ----PHP-alt-<?php echo "$random_hash\n"; ?>
-Content-Type: text/html; charset="iso-8859-1"
+Content-Type: text/html
 Content-Transfer-Encoding: quoted-printable
 
 <?echo $html ?>
