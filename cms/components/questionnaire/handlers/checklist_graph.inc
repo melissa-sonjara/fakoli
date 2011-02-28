@@ -90,8 +90,8 @@ $graph->SetScale("textint");
 $graph->SetFrame(false); // No border around the graph
 
 // Setup font for axis
-$graph->xaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
-$graph->yaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
+$graph->xaxis->SetFont(FF_VERDANA,FS_NORMAL,8);
+$graph->yaxis->SetFont(FF_VERDANA,FS_NORMAL,8);
 
 // Show 0 label on Y-axis (default is not to show)
 $graph->yscale->ticks->SupressZeroLabel(false);
