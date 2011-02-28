@@ -140,7 +140,7 @@ function onCompositeFormSubmit(form)
 <?
 		}
 		
-		echo "<div style='clear:both'>&nbsp;</div><br/><br/>";
+		echo "<div style='clear:both'>&nbsp;</div><br/>";
 	}
 	
 	/**
