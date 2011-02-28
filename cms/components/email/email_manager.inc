@@ -168,29 +168,70 @@ class EmailManager
 	}
 
 
+	/*
+	 * Get all the merge codes used in the recipient, subject, and
+	 * message fields in the template.
+	 * 
+	 * Given the merge codes in use in the template, retrieve the
+	 * maps for those merge codes in the database.
+	 * 
+	 * For each used merge code, if a record exists in merge
+	 * code table, then use that map; if not, treat the
+	 * code itself as a map. This allows fields in the
+	 * sending class to be accessed without a merge code record.
+	 * E.g., merge code "first_name" access the first_name field
+	 * in the sending class.
+	 *  
+	 */
 	function mergeEmail()
 	{
-		$mergeCodes = query(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}'");
+		$usedMergeCodes = array(); 
 		
-		//echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
-		//echo "<pre>"; print_r($mergeCodes); echo "</pre>";
+		$emailText = $this->emailTemplate->recipients . $this->emailTemplate->subject . $this->emailTemplate->message;
+		preg_match_all("/\[(.*?)\]/", $emailText, $usedMergeCodes, PREG_PATTERN_ORDER);
+	
+		$usedMergeCodes = $usedMergeCodes[1];		
+		
+		$used = "'". implode("','", array_values($usedMergeCodes)) . "'";
 
+		$mergeCodes = Query::create(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}' and name in ($used)")
+			->bind(":cn", $this->emailTemplate->class_name, ":mc", $used)
+			->execute();
+			
 		if(count($mergeCodes) > 0)
+			$indexed = reindexList($mergeCodes, "name");
+		else
+			$indexed = array();
+
+		//echo "<pre>"; print_r($mergeCodes); echo "</pre>";	
+		//echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
+	
+		if(count($usedMergeCodes) > 0)
 		{
 			$patterns = array();
 			$replacements = array();
 				
-			foreach($mergeCodes as $mergeCode)
+			foreach($usedMergeCodes as $idx => $name)
 			{
-				if($mergeCode->map)
+				if(array_key_exists($name, $indexed))
+					$mergeCode = $indexed[$name];
+				else
 				{
-					$replaceText = $this->getReplaceText($mergeCode->map);
-						
-					// Even if replace text is empty, still add to
-					// 	list to get rid of code from the text (e.g., [merge_code])
-					array_push($patterns, "[$mergeCode->name]");
-					array_push($replacements, $replaceText);
-				}
+					$mergeCode = new MergeCode();
+					$mergeCode->map = $name;
+				} 
+				
+				$map = ($mergeCode) ? $mergeCode->map : $name;
+				
+				trace("EmailManager:: map is $map", 3);
+					
+				if($map)
+					$replaceText = $this->getReplaceText($map);
+
+				// Even if replace text is empty, still add to
+				// 	list to get rid of code from the text (e.g., [merge_code])
+				array_push($patterns, "[$name]");
+				array_push($replacements, $replaceText);
 			}
 		}
 

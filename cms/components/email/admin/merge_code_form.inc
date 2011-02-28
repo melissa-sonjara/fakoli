@@ -58,13 +58,13 @@ if ($merge_code_id)
 	$mergeCode->load($merge_code_id);
 }
 
+$mergeCode->filter = new ExclusionFilter("function");
 $form = new AutoForm($mergeCode);
 
 $redirect = "/admin/merge_code_list";
 $form->required("name", "class_name", "field");
 $form->allowDelete = true;
 $form->annotate("name", "The field name that will be used in the email subject or message (e.g., employee_name, due_date, amount)");
-$form->annotate("function", "Whether the name following the dot separator in the map, or the map itself if no dot separator, refers to a function rather than a field name.");
 $form->annotate("map", "The path from the merge code name to the database values");
 $form->annotate("class_name", "The name of the DataItem class that can send the message (get the data values)");
 $form->button("Cancel", $redirect);

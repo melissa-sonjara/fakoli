@@ -38,7 +38,7 @@ class MergeCode extends DataItem
 			"name"				=>	String,
 			"description"		=>	Text,
 			"map"				=>	String,
-			"function"			=>	Boolean,
+			"function"			=>	Boolean, // deprecated
 			"class_name"		=>	String
 	);
 
@@ -75,8 +75,8 @@ class MergeCodeHelp extends DataItem
 	{
 		$helps = array();
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a <b>field</b> in the sending class object, enter just the field name as the 'Map' or enter the sending class name dot separator and field name";
-		$help->example = "my_field or MySendingClass.my_field";
+		$help->usage = "To get a <b>field</b> in the sending class object, a merge code record is not needed; use '[field_name]' as the merge code";
+		$help->example = "N/A";
 		$helps[0] = $help;
 	
 		$help = new MergeCodeHelp();
@@ -85,23 +85,23 @@ class MergeCodeHelp extends DataItem
 		$helps[1] = $help;
 
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a value from a <b>function</b> in the DataModel of the sending class, enter the function name or the sending class name with dot separator and function name.  You must check the box to indicate the name is a function.";
-		$help->example = "'myFunction' or 'MySendingClass.myFunction' and check 'Function'";
+		$help->usage = "To get a value from a <b>function</b> in the DataModel of the sending class, enter the function name.";
+		$help->example = "myFunction";
 		$helps[2] = $help;
 
 		$help = new MergeCodeHelp();
 		$help->usage = "To get a value from a <b>function</b> in a <b>related</b> class, enter the related class name as defined in the DataModel with a dot separator and function name. The map does not allow links to relations of relations.";
-		$help->example = "'MyRelation.myFunction' and check 'Function'";
+		$help->example = "MyRelation.myFunction";
 		$helps[3] = $help;
 
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a value from a <b>callback</b> function, the map must state the name of the function. You must check the box to indicate the name is a function.";
-		$help->example = "'myCallbackFunction' and check 'Function'";
+		$help->usage = "To get a value from a <b>callback</b> function, the map must state the name of the function. The function must be available from the calling script. The callback function will receive the sending object as a parameter.";
+		$help->example = "myCallbackFunction";
 		$helps[4] = $help;
 		
 		$help = new MergeCodeHelp();
-		$help->usage = "To get a value from a static <b>function</b> of a <b>non-DataItem</b> class, enter the class name, dot separator, and static function. The class definition must be included in the calling script. You must check the box to indicate the name is a function. The static function will receive the sending object as a parameter.";
-		$help->example = "'myClassName.myStaticFunction' and check 'Function'";
+		$help->usage = "To get a value from a static <b>function</b> of a <b>non-DataItem</b> class, enter the class name, dot separator, and static function name. The class definition must be included in the calling script. The static function will receive the sending object as a parameter.";
+		$help->example = "myClassName.myStaticFunction";
 		$helps[5] = $help;
 		
 		return $helps;
