@@ -92,20 +92,20 @@ class EmailHandler
 		ob_start(); //Turn on output buffering
 		?>
 
---PHP-alt-<?php echo $random_hash; ?>
+----PHP-alt-<?php echo $random_hash; ?>
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
 		<? echo stripHTMLTags($msg); ?>
 
 
---PHP-alt-<?php echo $random_hash; ?>
+----PHP-alt-<?php echo $random_hash; ?>
 Content-Type: text/html; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
 		<?echo $msg ?>
 
---PHP-alt-<?php echo $random_hash; ?>
+----PHP-alt-<?php echo $random_hash; ?>
 --
 		<?
 		//copy current buffer contents into $message variable
