@@ -208,7 +208,7 @@ class QuestionnaireForm
 	
 	function drawForm()
 	{
-		echo "<div style=\"clear: left; border: none; padding: 4px; width: 600px\">";
+		echo "<div class='questionnaire_form'>";
 		
 		echo "<form id=\"Questionnaire_form\" method=\"POST\" action=\"\" ";
 		echo "enctype='multipart/form-data' onsubmit='return onSubmitQuestionnaire_form(this);'>";

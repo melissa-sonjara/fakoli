@@ -40,10 +40,15 @@ class QuestionnaireManifest
 		$component->description = "Create custom questionnaires, surveys, quizzes, etc.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 3;
 		$component->enabled = true;
 		
 		return $component;
+	}
+	
+	static function getStyles()
+	{
+		return array("/fakoli/css/questionnaire.css");
 	}
 	
 	static function getAdminMenu()
