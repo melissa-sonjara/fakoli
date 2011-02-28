@@ -52,7 +52,7 @@ function getOptionText($options)
 	return $optionText;
 }
 	
-$question_id = checkNumeric($_GET["survey_question_id"]);
+$question_id = checkNumeric($_GET["question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 $question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
