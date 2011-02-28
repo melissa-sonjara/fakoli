@@ -98,7 +98,7 @@ $graph->yscale->ticks->SupressZeroLabel(false);
 
 // Setup X-axis labels
 $graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetLabelAngle(70);
+$graph->xaxis->SetLabelAngle(20);
 
 // Create the bar pot
 $bplot = new BarPlot($datay);
