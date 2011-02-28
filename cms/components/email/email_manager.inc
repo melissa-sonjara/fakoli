@@ -90,8 +90,8 @@ class EmailHandler
 		if ($config['html_email_template'])
 		{
 			$template = file_get_contents($config['homedir'] . $config['html_email_template']);
-			$template = str_replace($template, "{var:styles}", Fakoli::getStyles());
-			$html = str_replace($template, "{message}", $msg);
+			$template = str_replace("{var:styles}", Fakoli::getStyles(), $template);
+			$html = str_replace("{message}", $msg, $template);
 		}
 		else
 		{
