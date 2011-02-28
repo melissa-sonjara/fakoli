@@ -65,7 +65,7 @@ class EmailHandler
 		if($config["alt_text_email"] == false)
 			$headers .= "Content-type: text;\r\n";
 		else
-			$headers .= "\r\nContent-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"";
+			$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
 		if($message AND $config["alt_text_email"])
 			$body = $this->getMessageScript($message, $random_hash);
