@@ -135,8 +135,9 @@ function onCompositeFormSubmit(form)
 <?
 			echo $output;
 ?>
-			<br/><br/>
+
 		</div>
+		<br/><br/>
 <?
 		}
 	}
