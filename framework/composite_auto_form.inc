@@ -116,6 +116,32 @@ function onCompositeFormSubmit(form)
 		echo "</form>\n";
 	}	
 	
+	function drawReadOnly()
+	{
+	/**
+	 * Draw the sub-forms, with a combined single set of submission buttons.
+	 */
+	function drawForm()
+	{
+		foreach($this->forms as $form)
+		{
+			ob_start();
+			$form->drawReadOnly();
+			$output = ob_get_contents();
+			ob_end_clean();
+			
+			$output = preg_replace("/\\bname=(['\"])([^'\"]*?)['\"]/", "name=$1{$form->id}__$2$1", $output);
+			
+?>
+		<div id="<?echo $form->id?>_container" class="<?echo $this->containerClass?>">
+<?
+			echo $output;
+?>
+		</div>
+<?
+		}
+	}
+	
 	/**
 	 * Adds a custom button to the form.
 	 *
