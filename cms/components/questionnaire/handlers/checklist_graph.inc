@@ -58,6 +58,9 @@ $survey_id = checkNumeric($_GET["survey_id"]);
 $question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
 $survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
 
+var_dump($question);
+var_dump($survey);
+
 //$question = new SurveyQuestion($question_id);
 //$survey = new EmailSurvey($survey_id);
 $answers = $survey->Answers("WHERE survey_question_id=$question_id");
