@@ -40,12 +40,13 @@ require_once ('jpgraph/jpgraph_pie3d.php');
 
 $question_id = checkNumeric($_GET["question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
-$survey_question_id = checkNumeric($_GET["survey_question_id"]);
 
-if($survey_question_id)
-	$question = new SurveyQuestion($survey_question_id);
-$survey = new EmailSurvey($survey_id);
-$answers = $survey->Answers("WHERE survey_question_id=$survey_question_id");
+$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
+$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+
+//$question = new SurveyQuestion($question_id);
+//$survey = new EmailSurvey($survey_id);
+$answers = $survey->Answers("WHERE question_id=$question_id");
 
 $options = explode("\n", $question->options);
 $idx = 1;
