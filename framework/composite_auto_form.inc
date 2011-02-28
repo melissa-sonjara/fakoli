@@ -116,12 +116,10 @@ function onCompositeFormSubmit(form)
 		echo "</form>\n";
 	}	
 	
-	function drawReadOnly()
-	{
 	/**
-	 * Draw the sub-forms, with a combined single set of submission buttons.
+	 * Draw the read-only sub-forms.
 	 */
-	function drawForm()
+	function drawReadOnly()
 	{
 		foreach($this->forms as $form)
 		{
