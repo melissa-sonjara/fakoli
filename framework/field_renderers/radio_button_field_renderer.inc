@@ -52,7 +52,15 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		$this->options = $options;
 				
 		$this->FieldRenderer($form);
-		$form->override($field, $label, $this);
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->alias($field, $label);
+		}
 	}
 		
 	function renderField($field)

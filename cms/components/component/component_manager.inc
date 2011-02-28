@@ -382,7 +382,7 @@ class ComponentManager
 		
 		trace("ComponentManager::dispatchAction action: $action", 4);
 		
-		if (!preg_match("/^[\\w\\d_]+$/", $action))
+		if (!preg_match("/^[\\w\\d_\\.]+$/", $action))
 		{
 			throw new FakoliException("Invalid action");
 		}
