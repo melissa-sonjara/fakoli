@@ -137,9 +137,10 @@ function onCompositeFormSubmit(form)
 ?>
 
 		</div>
-		<br/><br/>
 <?
 		}
+		
+		echo "<br/><br/>";
 	}
 	
 	/**
