@@ -60,9 +60,9 @@ class BooleanFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{		
-		if ($this->annotateBefore && $this->parent->annotations[$field] && $this->colspan == 1)
+		if ($this->annotateBefore && $this->parent->annotations[$field])
 		{
-			echo "<tr><td>". $this->parent->annotations[$field] ."</td></tr>";
+			echo "<tr><td colspan='{$this->colspan}'>". $this->parent->annotations[$field] ."</td></tr>";
 		}
 
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
