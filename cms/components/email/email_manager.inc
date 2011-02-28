@@ -87,6 +87,8 @@ class EmailHandler
 	 */
 	function getMessageScript($msg, $random_hash)
 	{
+		global $config;
+		
 		if ($config['html_email_template'])
 		{
 			$template = file_get_contents($config['homedir'] . $config['html_email_template']);
