@@ -87,7 +87,17 @@ class EmailHandler
 	 */
 	function getMessageScript($msg, $random_hash)
 	{
-
+		if ($config['html_email_template'])
+		{
+			$template = file_get_contents($config['homedir'] . $config['html_email_template']);
+			$template = str_replace($template, "{var:styles}", Fakoli::getStyles());
+			$html = str_replace($template, "{message}", $msg);
+		}
+		else
+		{
+			$html = $msg;
+		}		
+		
 		//define the body of the message.
 		ob_start(); //Turn on output buffering
 		?>
@@ -103,7 +113,7 @@ Content-Transfer-Encoding: quoted-printable
 Content-Type: text/html; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-<?echo $msg ?>
+<?echo $html ?>
 
 ----PHP-alt-<?php echo $random_hash; ?>--
 		<?
