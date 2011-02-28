@@ -108,6 +108,7 @@ class EmailHandler
 
 ----PHP-alt-<?php echo "$random_hash\n"; ?>
 Content-Type: text/plain
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 <? echo stripHTMLTags($msg); ?>
@@ -115,6 +116,7 @@ Content-Transfer-Encoding: quoted-printable
 
 ----PHP-alt-<?php echo "$random_hash\n"; ?>
 Content-Type: text/html
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 <?echo $html ?>
