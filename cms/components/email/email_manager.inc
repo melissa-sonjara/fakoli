@@ -65,7 +65,7 @@ class EmailHandler
 		if($config["alt_text_email"] == false)
 			$headers .= "Content-type: text;\r\n";
 		else
-			$headers .= "\r\nContent-Type: multipart/alternative; boundary=\"PHP-alt-".$random_hash."\"";
+			$headers .= "\r\nContent-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"";
 
 		if($message AND $config["alt_text_email"])
 			$body = $this->getMessageScript($message, $random_hash);
@@ -92,23 +92,19 @@ class EmailHandler
 		ob_start(); //Turn on output buffering
 		?>
 
---PHP-alt-
-		<?php echo $random_hash; ?>
+--PHP-alt-<?php echo $random_hash; ?>
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
 
 		<? echo stripHTMLTags($msg); ?>
 
 
---PHP-alt-
-		<?php echo $random_hash; ?>
-Content-Type: text/html; charset="iso-8859-1" Content-Transfer-Encoding:
-7bit
+--PHP-alt-<?php echo $random_hash; ?>
+Content-Type: text/html; charset="iso-8859-1" Content-Transfer-Encoding: 7bit
 
 		<?echo $msg ?>
 
---PHP-alt-
-		<?php echo $random_hash; ?>
+--PHP-alt-<?php echo $random_hash; ?>
 --
 		<?
 		//copy current buffer contents into $message variable
