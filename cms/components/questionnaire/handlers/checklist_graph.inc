@@ -63,7 +63,7 @@ var_dump($survey);
 
 //$question = new SurveyQuestion($question_id);
 //$survey = new EmailSurvey($survey_id);
-$answers = $survey->Answers("WHERE survey_question_id=$question_id");
+$answers = $survey->Answers("WHERE question_id=$question_id");
 		
 $answerValues = regroupList($answers, "value");
 
