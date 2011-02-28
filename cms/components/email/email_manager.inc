@@ -105,8 +105,7 @@ Content-Transfer-Encoding: quoted-printable
 
 		<?echo $msg ?>
 
-----PHP-alt-<?php echo $random_hash; ?>
---
+----PHP-alt-<?php echo $random_hash; ?>--
 		<?
 		//copy current buffer contents into $message variable
 		// and delete current output buffer
