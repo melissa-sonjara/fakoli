@@ -55,8 +55,8 @@ function getOptionText($options)
 $question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 
-$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", &$question_id);
-$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", &$survey_id);
+$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
+$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
 
 //$question = new SurveyQuestion($question_id);
 //$survey = new EmailSurvey($survey_id);
