@@ -70,7 +70,7 @@ $script .= $table->writeScript();
 
 $table->drawView();
 
-echo "<p><a class='button' href='/admin/email_template_form'>Add a Template</a></p>\n";
+echo "<p><a class='button' href='/admin/email_template_form'>Add a Template</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button' href='/admin/test_email_form'>Send a Test Email</a></p>\n";
 
 function formatEmailTemplateLink($emailTemplate)
 {
