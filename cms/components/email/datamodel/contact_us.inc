@@ -25,7 +25,8 @@ class ContactUs extends DataItem
 	
 	function ContactTopic()
 	{
-		return $this->getRelated(ContactTopic);
+		if($this->contact_topic_id)
+			return $this->getRelated(ContactTopic);
 	}
 	
 	function ContactUs()

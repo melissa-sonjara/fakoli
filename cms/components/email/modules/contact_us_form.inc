@@ -85,7 +85,10 @@ if ($method == "POST")
 	else
 		$recipients = explode(",", $contactTopic->recipients);
 
-	$subject = $contactTopic->topic . ": ". $contactUs->subject;
+	if($contactTopic)
+		$subject = $contactTopic->topic . " ";
+		
+	$subject .= $contactUs->subject;
 	
 	foreach($recipients as $recipient)	
 		$handler = new Mail($contactUs->email, $recipient, $subject, $contactUs->message);
