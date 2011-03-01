@@ -191,8 +191,8 @@ class EmailManager
 		preg_match_all("/\[(.*?)\]/", $emailText, $usedMergeCodes, PREG_PATTERN_ORDER);
 	
 		$usedMergeCodes = $usedMergeCodes[1];		
-		
-		$used = "'". implode("','", array_values($usedMergeCodes)) . "'";
+				
+		$used = strip_tags("'". implode("','", array_values($usedMergeCodes)) . "'");
 
 		$mergeCodes = Query::create(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}' and name in ($used)")
 			->bind(":cn", $this->emailTemplate->class_name, ":mc", $used)
@@ -202,9 +202,6 @@ class EmailManager
 			$indexed = reindexList($mergeCodes, "name");
 		else
 			$indexed = array();
-
-		//echo "<pre>"; print_r($mergeCodes); echo "</pre>";	
-		//echo "<pre>"; print_r($this->emailTemplate); echo "</pre>";
 	
 		if(count($usedMergeCodes) > 0)
 		{
@@ -213,23 +210,29 @@ class EmailManager
 				
 			foreach($usedMergeCodes as $idx => $name)
 			{
-				if(array_key_exists($name, $indexed))
-					$mergeCode = $indexed[$name];
+				$clean_name = strip_tags($name);
+				if(array_key_exists($clean_name, $indexed))
+					$mergeCode = $indexed[$clean_name];
 				else
 				{
 					$mergeCode = new MergeCode();
-					$mergeCode->map = $name;
+					$mergeCode->map = $clean_name;
 				} 
 				
-				$map = ($mergeCode) ? $mergeCode->map : $name;
+				$map = ($mergeCode) ? $mergeCode->map : $clean_name;
 				
 				trace("EmailManager:: map is $map", 3);
 					
 				if($map)
-					$replaceText = $this->getReplaceText($map);
+					$replaceText = $this->getReplaceText(strip_tags($map));
 
-				// Even if replace text is empty, still add to
-				// 	list to get rid of code from the text (e.g., [merge_code])
+				/*
+				 *  Even if replace text is empty, still add to
+				 *  list to get rid of code from the text (e.g., [merge_code]).
+				 *  Search on the "dirty" name that could contain stray
+				 *  html so that the text is replaced.
+				 */
+		
 				array_push($patterns, "[$name]");
 				array_push($replacements, $replaceText);
 			}
