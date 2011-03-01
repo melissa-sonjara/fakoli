@@ -525,7 +525,7 @@ class DataListView
 		$c = 0;
 		foreach($this->columns as $column)
 		{
-			$x->writeText(0, $c, $column->title);
+			$x->writeText(0, $c, stripHTML($column->title));
 			++$c;
 		}
 		
