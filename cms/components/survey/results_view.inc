@@ -350,7 +350,7 @@ class SurveyResultsView
 		$dataView->column("Option", "{option}")
 			 ->column("Count", "{count}");	
 		$dataView->groupBy($this->questions, getGroupTitle);
-		$dataView->mode = 'accordion';
+		$dataView->mode = 'tree';
 		$dataView->emptyMessage = "There are no aggregated data results.";
 		$dataView->excelFile = "option_surveyData.xls";
 		$this->optionDataView = $dataView;
@@ -361,7 +361,7 @@ class SurveyResultsView
 		$table = new GroupedDataListView($this->textAnswers, "AnswerTextList");
 		$table->column("Answer Text", array(SurveyResultsView, formatAnswer));
 		$table->groupBy($this->questions, array(SurveyResultsView, formatQuestion));
-		$table->mode = 'accordion';
+		$table->mode = 'tree';
 		$table->emptyMessage = "There are no text results.";
 		$table->excelFile = "text_surveyData.xls";
 		
