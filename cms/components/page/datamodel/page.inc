@@ -117,6 +117,8 @@ class Page extends DataItem
 	function getTemplate()
 	{
 		global $config;
+		global $section;
+		
 		$style = $_REQUEST["_style"];
 		$site = $this->Site();
 		
@@ -139,6 +141,10 @@ class Page extends DataItem
 			return "<h2>{page_title}</h2>{description}";
 		}
 		
+		if ($section)
+		{
+			if (!$templateFile) $templateFile = $section->getTemplateFile($this->identifier);
+		}
 		if (!$templateFile) $templateFile = $this->template;
 		
 		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
