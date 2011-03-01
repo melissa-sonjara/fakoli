@@ -65,13 +65,25 @@ class ContactTopic extends DataItem
 		{
 			$site = $page->Site();
 			if(!$site) $site = Site::getSite();
-			$topics = query(ContactTopic, "WHERE contact_topic_id IN (SELECT contact_topic_id FROM contact_topic_site_xref WHERE site_id = {$site->site_id}) ORDER BY sort_order");
+			if($site)
+			{
+				$siteTopics = Query::create(ContactTopicSiteXref, "WHERE site_id=:s")
+					->bind(":s", $site->site_id)
+					->execute();
+					
+				if(count($siteTopics) > 0)
+				{
+					$topicList = implode(",", array_keys(reindexList($siteTopics, "contact_topic_id")));	
+					$topics = query(ContactTopic, "WHERE contact_topic_id IN ($topicList) ORDER BY sort_order");
+				}
+			}
 		}
 		if(count($topics) > 0)
 		{
 			foreach($topics as $topic)
 				$topicList[$topic->contact_topic_id] = $topic->topic;
 		}
+
 		return $topicList;
 	}
 

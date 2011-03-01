@@ -8,6 +8,8 @@ class EmailManagerTest extends DataItem
 	var $fields = array(
 				"test_id"		=>	Number,
 				"string"		=>	String,
+				"email"			=>	String,
+				"date"			=>	Date,
 				"relation_id"	=>	Number
 	);
 	
