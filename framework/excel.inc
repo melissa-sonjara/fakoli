@@ -110,9 +110,10 @@ class ExcelFile
 			$this->close();
 		}
 
-		//session_cache_limiter("public");
+		session_cache_limiter("private_no_expire, must-revalidate");
 		header("Content-Type: application/vnd.msexcel");
-		//header("Content-Disposition: attachment;filename=$this->filename");
+		header("Content-Disposition: attachment;filename=$this->filename");
+		header("Pragma: private");
 		header("Content-Transfer-Encoding: binary");
 		header("Content-Length: ".strlen($this->content));
 		
