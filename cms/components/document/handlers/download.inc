@@ -54,6 +54,7 @@ $mimeType = getMimeType($document->file);
 $f = fopen($filepath, "r");
 $size = filesize($filepath);
 	
+header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
 header("Content-Type: $mimeType");
 header("Content-Length: $size");
