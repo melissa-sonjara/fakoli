@@ -347,8 +347,8 @@ class SurveyResultsView
 	function buildOptionDataView()
 	{		
 		$dataView = new GroupedDataListView($this->optionAnswers, "OptionDataList");
-		$dataView->column("Option", "{option}")
-			 ->column("Count", "{count}");	
+		$dataView->column("Option", "{option}", false, "width: 90%")
+			 ->column("Count", "{count}", false, "width: 10%");	
 		$dataView->groupBy($this->questions, getGroupTitle);
 		$dataView->mode = 'tree';
 		$dataView->emptyMessage = "There are no aggregated data results.";
