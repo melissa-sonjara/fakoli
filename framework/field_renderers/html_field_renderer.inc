@@ -61,7 +61,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)) return "";
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)
+			|| array_key_exists($field, $this->parent->hidden)) return "";
 		
 		global $html_editor_extra_buttons;
 		
@@ -112,11 +113,13 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{
+		
 		global $html_editor_extra_buttons;
 		
 		$this->_startField($field);
 
-		echo "<div id='{$field}_container'></div>";
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+			echo "<div id='{$field}_container'></div>";
 		
 		$this->_endField($field);
 	}
@@ -161,6 +164,9 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 	function renderOnSubmitHandler($field)
 	{
+		// JDG 3/2/2011., no js for readonly field
+		if ($this->parent->isReadOnly($field)) return "";
+		
 		$editor = $field."_editor";
 		
 		echo "\ttheEditors.$editor.prepareForSubmit();\n";
