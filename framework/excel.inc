@@ -112,7 +112,7 @@ class ExcelFile
 
 		session_cache_limiter("public");
 		header("Content-Type: application/vnd.msexcel");
-		//header("Content-Disposition: attachment;filename=$this->filename");
+		header("Content-Disposition: attachment;filename=$this->filename");
 		header("Content-Transfer-Encoding: binary");
 		header("Content-Length: ".strlen($this->content));
 		
