@@ -110,8 +110,7 @@ class ExcelFile
 			$this->close();
 		}
 
-		header("Last-Modified: ".date('r'));
-		header("Cache-Control: max-age=10, must-revalidate");
+		session_cache_limiter("public");
 		header("Content-Type: application/vnd.msexcel");
 		header("Content-Disposition: attachment;filename=$this->filename");
 		header("Content-Transfer-Encoding: binary");
