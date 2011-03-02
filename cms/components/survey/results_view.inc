@@ -394,7 +394,7 @@ class SurveyResultsView
 function getGroupTitle($question)
 {
 	$questionTypes = QuestionType::getQuestionTypeList();
-	return  "{$question->question_number}. {$question->question} " . $questionTypes[$question->question_type] . " Question";
+	return  "{$question->question_number}. {$question->question} " . $questionTypes[$question->question_type];
 }
 
 /*
