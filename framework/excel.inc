@@ -111,7 +111,7 @@ class ExcelFile
 		}
 
 		header("Last-Modified: ".date('r'));
-		header("Cache-Control: max-age=300, must-revalidate");
+		header("Cache-Control: max-age=10, must-revalidate");
 		header("Content-Type: application/vnd.msexcel");
 		header("Content-Disposition: attachment;filename=$this->filename");
 		header("Content-Transfer-Encoding: binary");
