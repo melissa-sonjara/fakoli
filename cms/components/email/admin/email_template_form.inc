@@ -78,11 +78,9 @@ $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
-{
-	$form->readOnly("name");
-}
-else
-	$form->annotate("name", "Please use a code-style name with lowercase letters and underscores between words (e.g., application_notification)");
+	$warning = " <b><i>Warning</i></b>: name changes to existing templates require code updates.";
+
+$form->annotate("name", "Please use a code-style name with lowercase letters and underscores between words (e.g., application_notification).$warning");
 
 if ($method == "POST")
 {
