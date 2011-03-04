@@ -814,6 +814,11 @@ function redirect($page)
   	exit;
 }
 
+$traceLevels = array(1	=>	"FATAL",
+					 2	=>	"ERROR",
+					 3	=>	"TRACE",
+					 4	=>	"DEBUG",
+					 5  =>  "NOTE*");	
 /**
  * Send output to the trace log
  * @param $msg the message to output
@@ -822,6 +827,7 @@ function redirect($page)
 function trace($msg, $lvl)
 {
 	global $config;
+	global $traceLevels;
 	
 	if ($lvl <= $config["trace_level"])
 	{
@@ -847,7 +853,7 @@ function trace($msg, $lvl)
 			
 			$ref .= $callingFn["function"]."(): ";
 			
-			error_log(date("Y-m-d H:i:s")." : ".$_SERVER['REQUEST_URI']." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s")." : ".$_SERVER['REQUEST_URI']." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 
 		case TraceDetailHigh:
@@ -868,18 +874,18 @@ function trace($msg, $lvl)
 			
 			$ref .= $callingFn["function"]."(): ";
 			
-			error_log(date("Y-m-d H:i:s")." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s")." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 			
 				
 		case TraceDetailMedium:
-			error_log(date("Y-m-d H:i:s : ").$msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s : ").$msg."\r\n", 3, $config["trace_path"]);
 			break;
 
 		case TraceDetailNormal:
 		default:
 			
-			error_log($msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 		}
 	}
