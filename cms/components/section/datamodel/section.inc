@@ -118,7 +118,8 @@ class SectionContent extends DataItem
 						"section_id"			=>	String,
 						"identifier"			=>	String,
 						"role"					=>	String,
-						"template"				=>	String);
+						"template"				=>	String,
+						"use_SSL"				=>	Boolean);
 	
 	function SectionContent()
 	{
