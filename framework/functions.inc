@@ -367,6 +367,14 @@ function now()
 }
 
 /**
+ * Returns today as a string. All of it.
+ */
+function today()
+{
+	return date('Y-m-d');
+}
+
+/**
  * Utility function to escape a string correctly for use in a Javascript client-side call.
  * 
  * @param string $str the string to make safe.
