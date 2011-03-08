@@ -74,6 +74,9 @@ class AutoForm
 	var $HTMLEditorDefaultWidth = "540px";	///< Default width for Rich Text Editor controls.
 	var $HTMLEditorDefaultHeight = "200px";	///< Default height for Rich Text Editor controls.
 
+	var $passwordEnterLabel = "Enter";		///< Text for Password Enter label
+	var $passwordConfirmLabel = "Confirm";	///< Text for Password Confirm label
+	
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
 	var $onDelete = "";					///< delete method name
