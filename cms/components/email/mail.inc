@@ -56,6 +56,22 @@ class Mail
 
 	function send()
 	{
+		$debug = Settings::getValue("email", "use_debugging_mode");
+		$debugPath = Settings::getValue("email", "debugging_mode_output_path");
+		
+		if ($debug)
+		{
+			$fp = fopen($debugPath . DIRECTORY_SEPARATOR . $this->to, 'a');
+			fwrite($fp, "From: $this->from\n".
+	                "To: $this->to\n".
+	                $this->headers.
+	                "Subject: $this->subject\n".
+	                "\n".
+	                "$this->body\n\n");
+	        fclose($fp);
+	        return true;
+		}
+		
 	    $smtp = new SMTP;
 	    //$smtp->do_debug = 1; # sets the amount of debug information we get
 	

@@ -73,7 +73,13 @@ class EmailManifest
 			
 			
 		);
-	}	
+	}
+	
+			
+	static function subscribeToEvents()
+	{
+		return array("ComponentScanComplete" => array(EmailManager, setDefaults));
+	}
 }
 
 ?>

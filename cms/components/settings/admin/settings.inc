@@ -58,7 +58,7 @@ if ($method == "POST")
 		$setting = new Settings($settings_id);
 		$setting->value = $value;
 		$setting->save();
-		Cache::invalidate("settings_{$setting->component}_{$setting->name}");
+		Cache::put("setting_{$setting->component}_{$setting->name}", $setting);
 	}
 }
 

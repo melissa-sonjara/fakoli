@@ -412,6 +412,19 @@ class EmailManager
 		
 		return $rtn;
 	}
+	
+	static function setDefaults()
+	{
+		global $config;
+		
+		Settings::setDefaultValue("email", "use_debugging_mode", false);
+		
+		$defaultPath = $config['uploadbase'] . DIRECTORY_SEPARATOR . "email_debug_logs";
+		
+		if (!file_exists($defaultPath)) mkdir($defaultPath);
+		
+		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath);
+	}
 }
 
 
