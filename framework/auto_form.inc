@@ -341,6 +341,11 @@ class AutoForm
 			echo "\t if (!{$this->onSubmitHandler})(form) return false;\n;";
 		}
 		
+		if ($this->interstitialMessage)
+		{
+			echo "\tinterstitial('".jsSafe($this->interstitialMessage)."');\n;";
+		}
+		
 		echo "\treturn true;\n}\n\n";
 		
 		if ($this->ajaxSubmitHandler)

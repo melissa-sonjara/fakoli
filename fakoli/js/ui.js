@@ -512,6 +512,89 @@ var FloatingDialog = new Class(
     }
 });
 
+var Interstitial = new Class({
+	
+	Implements: Options,
+	
+	options:
+	{
+		spinner:	'/fakoli/images/loader.gif',
+		cssClass:	'interstitial',
+		id:			'interstitial',
+		width:		400,
+		height:		66
+	},
+
+	message: "",
+	interstitial: Class.Empty,
+	
+	initialize: function(message, options)
+	{
+		this.setOptions(options);
+		this.message = message;
+		
+		this.interstitial = this.createInterstitial();
+	},
+	
+	createInterstitial: function()
+	{
+		var div = new Element('div', {'class': this.options.cssClass, 
+									  'id': this.options.id});
+									  
+		div.setStyles({'width': this.options.width, 
+					   'height': this.options.height,
+					   'display': 'none',
+					   'padding': '10px'});
+
+		var img = new Element('img', {'src': this.options.spinner, 'align': 'left'});
+		img.setStyle("margin-right", 20);
+		img.inject(div);
+		
+		var text = new Element('span', {'html': this.message});
+		text.inject(div, 'bottom');
+		
+		var doc = $(document.body ? document.body : document.documentElement);
+
+		doc.adopt(div);
+		return div;
+	},
+	
+	center: function()
+	{
+	   	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+	   	
+	   	var size = window.size();
+	   	var coords = this.interstitial.getCoordinates();
+	   	var x = (size.width - coords.width) / 2;
+	   	var y = (size.height - coords.height) / 2;
+
+	   	this.interstitial.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});	   	
+	},
+	
+	show: function()
+	{
+	   	window.lowerCurtain(function() 
+	   	{
+    		this.interstitial.setStyle('display', 'block');
+    		this.center(); 
+    	}.bind(this));
+	},
+	
+	hide: function()
+	{
+    	window.raiseCurtain();
+    	this.interstitial.setStyle('display', 'none');
+	}
+	
+});
+
+function interstitial(message)
+{
+	var int = new Interstitial(message);
+	int.show();
+	
+	return int;
+}
 
 var ProgressiveSearch = new Class({
 	
