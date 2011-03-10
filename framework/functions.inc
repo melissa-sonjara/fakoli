@@ -797,6 +797,13 @@ function redirect($page)
 	$server = $config['http_host'];
 	if (!$server) $server="localhost:8080";
 
+	//AJG: 3/9/11 - maintain current protocol by default
+	
+	$https = $_SERVER['HTTPS'];
+	if ($https == "off") $https = false;
+	
+	$protocol = $https ? "https" : "http";
+	
 	// JDG 9/27/10 - handle https
 	if (!strncmp($page, "http://", 7) OR (!strncmp($page, "https://", 8)))
 	{
@@ -804,7 +811,7 @@ function redirect($page)
 	}
 	else if ($page[0] == '/')
 	{
-		$location = "http://$server$page";
+		$location = "$protocol://$server$page";
 	}
 //	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
 //	{
@@ -814,7 +821,7 @@ function redirect($page)
 	{
 		$directory = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['REQUEST_URI']));
 		if ($directory == "/") $directory = "";
-		$location = "http://".$server.$directory."/".$page;
+		$location = "$protocol://".$server.$directory."/".$page;
 	}
 		
   	header("Location: $location");
