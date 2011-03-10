@@ -86,10 +86,10 @@ class SurveyResultsView
 		
 		if(count($this->questions) > 0)			
 			$answers = $this->mgr->getAnswers();
-		
+			
 		if(count($answers) > 0)
 		{					
-			$this->responseCount = $this->survey->getResponseCount();
+			$this->responseCount = $this->mgr->getResponseCount();
 			$this->answers = regroupList($answers, $qPk);
 		
 			foreach($this->questions as $question)
@@ -381,13 +381,27 @@ class SurveyResultsView
 	
 	function drawView()
 	{
-		$recipientCount = count($this->survey->Responses());
-		$rText= ($recipientCount) ? $recipientCount: "0";
-		$countText = ($this->responseCount) ? $this->responseCount : "0"; 
-		echo "<h3>Aggregated Survey Answers based on $countText out of $rText Respondents</h3>\n";
+		echo $this->getHeading();
 		$this->optionDataView->drawView();
 		echo "<h4>Free Text Responses</h4>";
 		$this->textDataView->drawView();
+	}
+	
+	/*
+	 * Applications that don't want to see the the number of
+	 * unsubmitted surveys, should return 0 recipient count from 
+	 * the results manager to omit that portion of the heading. 
+	 */
+	function getHeading()
+	{
+		$recipientCount = $this->mgr->getRecipientCount();
+		
+		$countText = ($this->responseCount) ? $this->responseCount : "0"; 
+		$text = "<h3>Aggregated Survey Answers based on $countText ";
+		$text .= ($recipientCount) ? "out of $recipientCount " : "";
+		$text .= "Respondents</h3>\n";
+		
+		return $text;
 	}
 }
 

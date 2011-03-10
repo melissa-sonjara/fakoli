@@ -46,7 +46,7 @@ class SurveyManager
 			$idx = 1;
 			foreach($questions as $question)
 			{
-				$question->sort_order = $idx;
+				$question->question_number = $idx;
 				$idx++;
 			}
 		}
@@ -167,8 +167,42 @@ class SurveyResponseManager extends SurveyManager
 	function getAnswers()
 	{
 		return $this->item->Answers();
+	}	
+}
+
+
+/*
+ * Handle getting total results/response counts for one survey for
+ * display of results.
+ */
+class SurveyResultsManager extends SurveyManager
+{
+	function SurveyResultsManager($survey)
+	{
+		$this->item = $survey;
 	}
 	
-
+	function Responses($constraint = "")
+	{
+		return $this->item->Responses();			
+	}
 	
+	
+	function getRecipientCount()
+	{
+		return $this->item->getRecipientCount();
+	}
+	
+	function getResponseCount()
+	{
+		return $this->item->getResponseCount();
+	}
+	
+	/*
+	 * Only get answers to submitted (not in progress) questionnaires/surveys
+	 */
+	function getAnswers()
+	{
+		return $this->item->Answers();
+	}
 }
