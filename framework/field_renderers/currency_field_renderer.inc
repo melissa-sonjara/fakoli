@@ -104,7 +104,9 @@ class CurrencyFieldRenderer extends FieldRenderer
 	function preProcess($field)
 	{
 		$value= $_POST[$field];
-		$this->parent->data->set($field, str_replace(",", "", $value));
+		$value =  str_replace(",", "", $value);
+		$this->parent->data->set($field, $value);
+		$_POST[$field] = $value;
 	}
 	
 	function addValidatorsToForm($field, $required = false)
