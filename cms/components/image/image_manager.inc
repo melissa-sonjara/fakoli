@@ -65,6 +65,7 @@ class ImageManager
 		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
 
+		trace("renderThumbnail:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
 		//TODO: Fix this
 		//if (!checkRole($gallery->read_access))
 		//{
@@ -80,6 +81,7 @@ class ImageManager
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
 		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . $ext;
+		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
 		
 		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
 		{
@@ -133,12 +135,14 @@ class ImageManager
 			
 			if (!file_exists($cacheDir))
 			{
+				trace("renderThumbnail:: creating cachedir", 3);
 				mkdir($cacheDir);
 			}
 			
 			if (file_exists($cacheFile))
 			{
 				// If a previous copy of the file already exists, remove it
+				trace("renderThumbnail:: unlinking cachefile", 3);
 				unlink($cacheFile);
 			}
 			
@@ -169,11 +173,13 @@ class ImageManager
 		
 	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 	    {
+			trace("renderThumbnail:: array_key_exists(HTTP_IF_MODIFIED_SINCE,_SERVER", 3);
 	    	
 	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
 	        
 	        if($if_modified_since >= $last_modified)
 	        {
+				trace("renderThumbnail:: if_modified_since >= last_modified", 3);
 	            header("HTTP/1.0 304 Not Modified");
 	            exit();
 	        }
@@ -188,7 +194,7 @@ class ImageManager
 		
 		fpassthru($f);
 		fclose($f);
-		
+		trace("renderThumbnail:: exiting", 3);
 	}
 	
 	/**
