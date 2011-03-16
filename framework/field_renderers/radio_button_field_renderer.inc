@@ -62,7 +62,19 @@ class RadioButtonFieldRenderer extends FieldRenderer
 			$form->alias($field, $label);
 		}
 	}
+
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredTreeValidator($field, $label));
+		}
+		
+	}
+	
+	
 	function renderField($field)
 	{
 		if($this->horizontal)
