@@ -100,6 +100,8 @@ class Fakoli
 			
 			$handle = opendir($c->component_path);
 	
+			if (!$handle) continue;
+			
 			while(false !== ($file = readdir($handle))) 
 	    	{
 	    		if (endsWith($file, ".inc"))
