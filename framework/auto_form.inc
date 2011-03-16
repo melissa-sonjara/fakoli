@@ -679,6 +679,15 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	}
 	
 	/**
+	 * Determine if this form is the one that was submitted. Useful for managing pages
+	 * with multiple forms.
+	 */
+	function matchesSubmitted()
+	{
+		return (isset($_POST["#FORMID#"]) && $_POST["#FORMID#"] == $this->id);
+	}
+
+	/**
 	 * Renders the form to HTML.
 	 *
 	 */
