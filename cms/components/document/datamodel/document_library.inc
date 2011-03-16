@@ -98,6 +98,13 @@ class DocumentLibrary extends DataItem
 		return $match;
 	}
 	
+	static function getDefaultRole()
+	{ 	
+		$roles = Query::create(SiteRole, "WHERE role like 'admin%'")->execute();
+				
+		return (count($roles) > 0) ? $roles[0]->role : null;
+	}
+	
 	function DocumentLibrary()
 	{
 		$this->primary_key = "document_library_id";

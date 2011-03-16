@@ -48,14 +48,25 @@ else
 {
 	$library = new DocumentLibrary();
 	$library->owner_id = $user->user_id;
+	$defaultRole = DocumentLibrary::getDefaultRole();
+	if($defaultRole)
+	{
+		$library->allow_access = $defaultRole;
+		$library->manage_folders = $defaultRole;
+		$library->upload_files = $defaultRole;
+		$library->delete_files = $defaultRole;
+	}
 }
 
-$library->filter = new InclusionFilter("document_library_id", "name", "identifier", "description", "owner_id", "last_modified");
+$library->filter = new InclusionFilter("document_library_id", "name", 
+"identifier", "description", "owner_id", "last_modified",
+"allow_access", "manage_folders", "upload_files", "delete_files");
 
 $tabs = documentLibraryTabs($document_library_id);
 
 $form = new AutoForm($library);
-$form->hide("owner_id");
+$form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files");
+$form->required("name", "identifier");
 
 if ($method == "POST")
 {
@@ -71,7 +82,7 @@ if ($method == "POST")
 		}
 		
 		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
-		$tabs->next();
+		redirect("/admin/document_library_permissions?document_library_id={$form->data->document_library_id}");
 	}
 }
 
