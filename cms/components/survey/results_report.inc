@@ -127,6 +127,25 @@ class SurveyReport
 			echo "<p><em>{$this->emptyMessage}</em></p>";
 		}
 	}
+	
+	/*
+	 * Respond to event fired by questionnaire component graph handlers
+	 */
+	static function getSurvey($survey_id)
+	{
+		trace("Returning Survey {$survey_id[0]}", 3);
+		return new Survey($survey_id[0]);
+	}
+
+	/*
+	 * Respond to event fired by questionnaire component graph handlers
+	 */
+	static function getQuestion($question_id)
+	{
+		trace("Returning Question {$question_id[0]}", 3);
+		return new SurveyQuestion($question_id[0]);
+	}	
+	
 }
 		
 		

@@ -41,10 +41,20 @@ require_once ('jpgraph/jpgraph_bar.php');
 
 
 $question_id = checkNumeric($_GET["survey_question_id"]);
+$qField = "question_id";
+
+if(!$question_id)
+{
+	$question_id = checkNumeric($_GET["survey_question_id"]);
+	$qField = "survey_question_id";
+	
+}
 $survey_id = checkNumeric($_GET["survey_id"]);
 
-$question = new SurveyQuestion($question_id);
-$survey = new EmailSurvey($survey_id);
+$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
+$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+
+$answers = $survey->Answers("WHERE $qField=$question_id");
 
 function getOptionText($options)
 {
@@ -64,8 +74,10 @@ function getOptionText($options)
 	}
 	return $optionText;
 }
-$answers = $survey->Answers("WHERE survey_question_id=$question_id");
-		
+
+
+$answers = $survey->Answers("WHERE $qField=$question_id");
+
 $answerValues = regroupList($answers, "value");
 
 $datay = array();
