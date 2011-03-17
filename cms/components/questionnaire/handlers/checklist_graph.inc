@@ -36,25 +36,9 @@ Fakoli::usingFeature("data_view");
 
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_bar.php');
-
-function getOptionText($options)
-{
-	$optionText = array();
-	
-	$options = explode("\n", $options);
-	
-	$idx = 1;
-	foreach($options as $option)
-	{
-		$optionText[$idx++] = trim(stripHTML($option));
-	}
-
-	return $optionText;
-}
 	
 $question_id = checkNumeric($_GET["question_id"]);
 $qField = "question_id";
-
 if(!$question_id)
 {
 	$question_id = checkNumeric($_GET["survey_question_id"]);
@@ -67,8 +51,8 @@ $question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($quest
 $survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
 
 $answers = $survey->Answers("WHERE $qField=$question_id");
-		
-$answerValues = regroupList($answers, "value");
+
+$counts = SurveyResultsView::getCheckListAnswerCounts($answers);
 
 $datay = array();
 
@@ -81,13 +65,11 @@ for($idx = 1; $idx <= $steps; ++$idx)
 {
 	//echo "idx is $idx<br/>";
 	// store for calculating mean and median
-	$counts[$idx] = count($answerValues[$idx]);
 	$totalValue += $idx * $counts[$idx];
 	$totalCount += $counts[$idx];
 	$datay[] = $counts[$idx];
 	$datax[] = $optionText[$idx];
 }
-
 
 // Setup the graph.
 $graph = new Graph(500,300);
@@ -119,4 +101,19 @@ $graph->Add($bplot);
 $graph->Stroke();
 
 session_write_close();
+
+function getOptionText($options)
+{
+	$optionText = array();
+	
+	$options = explode("\n", $options);
+	
+	$idx = 1;
+	foreach($options as $option)
+	{
+		$optionText[$idx++] = trim(stripHTML($option));
+	}
+
+	return $optionText;
+}
 ?>

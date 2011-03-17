@@ -86,6 +86,27 @@ class SiteRole extends DataItem
 		if(count($names) > 0)
 			return $names[0];
 	}
+	
+	/*
+	 * Given a comma delimited list of roles (as role is stored
+	 * in the user role field, return the list of corresponding
+	 * role names.
+	 */
+	static function getRoleNames($role)
+	{
+		$roles = explode(",", $role);
+		if(count($roles) > 0)
+		{
+			foreach($roles as $role)
+			{
+				$name = SiteRole::getRole($role);
+				if($name)
+					$names[] = $name->name;
+			}
+		}
+	
+		return implode(", ", array_values($names));
+	}
 }
 
 ?>

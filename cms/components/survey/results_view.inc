@@ -309,7 +309,7 @@ class SurveyResultsView
 		return $optionAnswers;
 	}
 	
-	function getCheckListAnswerCounts($answers)
+	static function getCheckListAnswerCounts($answers)
 	{
 		if(count($answers) == 0)
 			return;
