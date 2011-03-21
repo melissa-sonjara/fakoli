@@ -356,6 +356,29 @@ function formatDateTime12Hr($datetime)
 		return date("m/d/Y g:ia", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
 }
 
+/*
+ * Given a phone number containing various
+ * separator characters between the numbers,
+ * clear out the separators and standardize
+ * the format as 
+ * (xxx) xxx-xxxx
+ * 
+ * tylerhall on 11/30/-1
+ * http://snipplr.com/view/25/format-phone-number/
+ */
+function format_phone($phone)
+{
+	$phone = preg_replace("/[^0-9]/", "", $phone);
+	
+	if(strlen($phone) == 7)
+		return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
+	elseif(strlen($phone) == 10)
+		return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "($1) $2-$3", $phone);
+	else
+		return $phone;
+}
+
+
 
 /**
  * Returns the current time and date in a database compatible format
