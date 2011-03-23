@@ -257,7 +257,7 @@ class ForumTopic extends DataItem
 	 
 	function LastPost()
 	{
-		$messages = $this->Messages("ORDER BY date_posted DESC LIMIT 1");
+		$messages = $this->Messages("WHERE deleted=false ORDER BY date_posted DESC LIMIT 1");
 		return count($messages) > 0 ? $messages[0] : null;
 	}
 	
