@@ -110,8 +110,9 @@ class ForumDetailsView
 		$this->forum = $forum;
 		$this->topicLink = $topicLink;
 			
-		$this->topics = $this->forum->Topics();
-		$this->messages = indexedQuery(ForumMessage, "WHERE forum_id={$forum->forum_id} AND parent_id=0", "topic_id");
+		$msgTable = new ForumMessage();
+		$this->topics = $this->forum->Topics("WHERE message_id not in (select message_id from {$msgTable->table} where deleted=true)");
+		$this->messages = indexedQuery(ForumMessage, "WHERE forum_id={$forum->forum_id} AND deleted=false AND parent_id=0", "topic_id");
 		
 		$this->table = new DataListView($this->topics, "topic_list");
 		$this->table->column("Title", array($this, formatTitle), true, "width: 40%")
