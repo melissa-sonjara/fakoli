@@ -95,6 +95,7 @@ if ($method == "POST")
 		foreach($sort_nums as $key => $sort_num)
 		{
 			$m = new MenuItem();
+			$m->filter = new InclusionFilter("menu_item_id", "sort_order");
 			$m->load($key);
 			$m->sort_order = $sort_num;
 			$m->save();
@@ -186,7 +187,7 @@ if ($menu_item_id)
 		{
 ?>
  <tr>
-  <td style="text-align: center; vertical-align: middle; width: 80px"><input type="text" style="width: 60px" name="m[<?echo $m->menu_id ?>]" value="<?echo $m->sort_order ?>"/></td>
+  <td style="text-align: center; vertical-align: middle; width: 80px"><input type="text" style="width: 60px" name="m[<?echo $m->menu_item_id ?>]" value="<?echo $m->sort_order ?>"/></td>
   <td><a href="/admin/menu_item_form?menu_item_id=<?echo $m->menu_item_id?>"><?echo $m->title ?></a></td>
  </tr>
 <?
@@ -196,7 +197,7 @@ if ($menu_item_id)
 
 <br/>
 
-<a href="#" class="button" onclick="document.forms['menu_order_form'].submit();">Update Menu Order</a>&nbsp;&nbsp;<a href="menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
+<input type="submit" class="button" value="Update Menu Order"/>&nbsp;&nbsp;<a href="menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
 
 </form>
 <?
