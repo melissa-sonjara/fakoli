@@ -137,9 +137,12 @@ $doc_mime_types = array(
 );
 
 $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
+					".docx"		=>	"/fakoli/images/msword_icon.png",
 					".xls"		=>	"/fakoli/images/msexcel_icon.png",
+					".xlsx"		=>	"/fakoli/images/msexcel_icon.png",
 					".pdf"		=>	"/fakoli/images/pdf_icon.png",
 					".ppt"		=>	"/fakoli/images/ppt_icon.png",
+					".pptx"		=>	"/fakoli/images/ppt_icon.png",
 					"default"	=>	"/fakoli/images/file_icon.png");
 /**
  * LEGACY Global function to connect to the database.
