@@ -82,13 +82,49 @@ var AttachmentUploader = (function()
 				var icon = match[3];
 				var size = match[4];
 				
-				this.list.innerHTML += "<img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" + name + " (" + size + ")<br/>";
+				this.list.innerHTML += 
+					"<div id='attachment_" +id + "'><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
+					"<a href='/action/attachment/download?attachment_id=" + id + "'>" + name + "</a>&nbsp;(" + size + ")&nbsp;" +
+					"<a href='#' onclick='new AttachmentUploader().deleteAttachment(\"" + name + "\", " + id + "); return false' title='Delete this Attachment'>" +
+					"<img src='/fakoli/images/delete.gif' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a></div>";
 				
 				if (this.control.value) this.control.value += ",";
 				this.control.value += id;
 				
 				this.uploadDialog.hide();
 			}
+		},
+		
+		deleteAttachment: function(filename, id)
+		{
+			if (!confirm("Are you sure you want to delete " + filename + "?")) return;
+			
+			var request = new Request(
+			{
+				'url': 		'/action/attachment/delete?attachment_id=' + id, 
+			    'method': 	'get',
+				'onSuccess': function(responseText) 
+				{ 
+					if (responseText == "OK") 
+					{
+						$('attachment_' + id).dispose();
+						
+						if (this.control.value)
+						{
+							var regexp = new RegExp("\\b" + id + "\\b");
+							this.control.value = this.control.value.replace(regexp, "");							
+							this.control.value = this.control.value.replace(",,", ",");
+						}
+					}
+					else
+					{
+						alert(responseText);
+					}
+				}.bind(new AttachmentUploader()),
+				'onFailure':	function() { alert("Failed to communicate with server"); }
+			});
+			
+			request.send();
 		}
 		
 	});

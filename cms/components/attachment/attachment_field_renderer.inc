@@ -131,8 +131,8 @@ class AttachmentFieldRenderer extends FieldRenderer
  		{
  			$icon = getDocIcon($attachment->filename);
 ?>
-	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<?echo $attachment->filename?>&nbsp;(<?echo $attachment->file_size?>)
-	<br/>	
+	<div id='attachment_<?echo $attachment->attachment_id?>'><img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<a href='/action/attachment/download?attachment_id=<?echo $attachment->attachment_id?>'><?echo $attachment->filename?></a>&nbsp;(<?echo $attachment->file_size?>)
+	&nbsp;<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='/fakoli/images/delete.gif' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a></div>
 <?	
 	}
 	?>
