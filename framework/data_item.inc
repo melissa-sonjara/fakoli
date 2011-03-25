@@ -825,7 +825,7 @@ class DataItem extends AbstractDataItem
 			
 		}
 		
-		if ($this->hasField($field))
+		if (array_key_exists($field, $this->fields))
 		{
 			$pk = $obj->primary_key;
 			$obj->$pk = $this->$field;
