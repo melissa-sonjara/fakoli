@@ -63,6 +63,11 @@ class DataTransaction
 	 */
 	function rollback()
 	{
+		if (!$this->conn)
+		{
+			throw new DataItemException("Attempt to rollback a previously completed transaction");
+		}			
+		
 		$this->conn->rollback();
 		$this->conn = null;
 	}
@@ -72,6 +77,11 @@ class DataTransaction
 	 */
 	function commit()
 	{
+		if (!$this->conn)
+		{
+			throw new DataItemException("Attempt to rollback a previously completed transaction");
+		}	
+		
 		$this->conn->commit();
 		$this->conn = null;
 	}
