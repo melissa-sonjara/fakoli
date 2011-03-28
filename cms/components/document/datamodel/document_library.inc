@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+Fakoli::using("fileshare");
+
 class DocumentLibrary extends DataItem
 {
 	// Fields
@@ -44,11 +46,15 @@ class DocumentLibrary extends DataItem
 						"manage_folders"		=>	String,
 						"upload_files"			=>	String,
 						"delete_files"			=>	String,
+						"create_date"			=>	Timestamp,
 						"last_modified"			=>	Timestamp);
 
 	var $relations = array(	"Owner"		=> "",
 							"Documents"	=>	Document,
-							"Folders"	=>	DocumentFolder);
+							"Folders"	=>	DocumentFolder,
+							"FileshareUsers"	=>	FileshareUserXref	
+	
+	);
 							
 	
 	function Owner()
@@ -56,6 +62,15 @@ class DocumentLibrary extends DataItem
 		$mgr = new UserManager();
 		return $mgr->getUser($this->owner_id);
 	}
+	
+	function isOwner()
+	{
+		global $user;
+		$owner = $this->Owner();
+
+		return ($owner->user_id == $user->user_id) ? true : false;
+	}
+	
 	
 	function Documents($constraint = "")
 	{
@@ -97,6 +112,27 @@ class DocumentLibrary extends DataItem
 
 		return $match;
 	}
+	
+	function FileshareUsers($constraint = "")
+	{
+		return $this->getRelatedList(FileshareUserXref, "", $constraint);	
+	}
+	
+	/*
+	 * Check fileshare user-level access
+	 */
+	function allow_access()
+	{
+		global $user;
+		
+		if($this->isOwner())
+			return true;
+		
+		$xrefs = $this->FileshareUsers("WHERE user_id={$user->user_id}");
+
+		return (count($xrefs) > 0) ? true : false;
+	}
+	
 	
 	static function getDefaultRole()
 	{ 	

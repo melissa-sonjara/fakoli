@@ -45,7 +45,6 @@ Fakoli::usingFeature("auto_form");
 $email_template_id = checkNumeric($_GET["email_template_id"]);
 
 $emailTemplate = new EmailTemplate();
-global $config;
 
 $menu_item = "Email Templates";
 
@@ -72,6 +71,7 @@ $form->required("name", "recipients", "subject", "message");
 $form->button("Cancel", "/admin/email_template_list");
 $form->allowDelete = true;
 $classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", array());
+
 $classSelect->allowAddEntry();
 
 $form->validator->add(new EmailListValidator("recipients", "Recipients"));
@@ -94,7 +94,7 @@ echo "<h3>This form allows you to create or edit an email template.</h3>\n";
 if($emailTemplate->class_name)
 {
 ?>
-<button onclick="javascript:modalPopup('Advanced Features', '/action/email/advanced_email_features?class_name=<?php echo $emailTemplate->class_name ?>', '500px', 'auto'); return false">Advanced Features</button>
+<a class="button" href="#" onclick="new EmailManager().showAdvancedFeatures(); return false">Advanced Features</a>
 <?php
 }
 $form->drawForm();

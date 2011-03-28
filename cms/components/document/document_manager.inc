@@ -37,6 +37,7 @@ class DocumentManager
 {
 	var $library;
 	var $docs;
+	var $documents;
 	
 	function DocumentManager($library)
 	{		
@@ -267,12 +268,18 @@ function deleteFolderResult(result)
 			}
 		}
 				
-		$tree->children["documents"]->open = true;
+			$tree->children["documents"]->open = true;
 		
-		$page->page_title = "Documents";
+			$page->page_title = "Documents";
+	
+			$tree->writeHTML(); 
+
+			$this->drawButtons();
+		}
 		
-?>
-		 <? $tree->writeHTML(); ?>
+		function drawButtons()
+		{
+?>		
 		<br/>
 		<button id="download" class="button" disabled="disabled"  onclick="downloadFile()"> Download File </button>&nbsp;&nbsp;
 		<?
@@ -296,7 +303,7 @@ function deleteFolderResult(result)
 ?>
 		&nbsp;&nbsp;<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
 		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>
-<?
+<?php			
 		}
 
 	}
@@ -468,4 +475,40 @@ function deleteFolderResult(result)
 		return $identifier;
 	}
 	
+	// Used by document_library_form and fileshare_library_form
+	static function createLibraryObj()
+	{
+		global $user;
+
+		$library = new DocumentLibrary();
+		$library->owner_id = $user->user_id;
+		$library->create_date = now();
+		$defaultRole = DocumentLibrary::getDefaultRole();
+		if($defaultRole)
+		{
+			$library->allow_access = $defaultRole;
+			$library->manage_folders = $defaultRole;
+			$library->upload_files = $defaultRole;
+			$library->delete_files = $defaultRole;
+		}	
+		
+		
+		$library->filter = new InclusionFilter("document_library_id", "name", 
+		"identifier", "description", "owner_id", "last_modified",
+		"allow_access", "manage_folders", "upload_files", "delete_files", "create_date");
+		
+		return $library;
+	}	
+	
+	static function createLibrary($form)
+	{
+		$d = $form->data->getLibraryDirectory();
+		if (!is_dir($d) && !file_exists($d))
+		{
+			$docs = $d.DIRECTORY_SEPARATOR."documents";
+			mkdir($d);
+			mkdir($docs);
+			chmod($docs, 0777);
+		}
+	}
 }

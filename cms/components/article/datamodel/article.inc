@@ -49,7 +49,9 @@ class Article extends DataItem
 						"allow_comment" =>	Boolean,
 						"headline"		=>	Boolean,
 						"tags"			=>	String,
-						"author_id"		=>	Number);
+						"author_id"		=>	Number,
+						"author"		=>	String
+			);
 
 	var $relations = array(	"Image" 	=> ImageRecord,
 							"Sites"		=> Site,

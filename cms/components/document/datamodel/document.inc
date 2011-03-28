@@ -47,13 +47,15 @@ class Document extends DataItem
 						"public"				=>	Boolean,
 						"last_modified"			=>	Timestamp,
 						"document_library_id"	=>	Number,
-						"owner_id"				=>	Number);
+						"owner_id"				=>	Number
+	);
 						
 	// Relations
 	
 	var $relations = array(	"Topics"			=>	Topic,
 							"Owner"				=>	"",
-							"DocumentLibrary"	=>	DocumentLibrary);
+							"DocumentLibrary"	=>	DocumentLibrary
+	);
 	
 	function Topics($constraint = "")
 	{
@@ -65,12 +67,20 @@ class Document extends DataItem
 		$mgr = new UserManager();
 		return $mgr->getUser($this->owner_id);
 	}
+	
+	function isOwner()
+	{
+		global $user;
+		$owner = $this->Owner();
+
+		return ($owner->user_id == $user->user_id) ? true : false;
+	}
 
 	function DocumentLibrary()
 	{
 		return $this->getRelated(DocumentLibrary);
 	}
-
+	
 	function Document()
 	{
 		$this->primary_key = "document_id";

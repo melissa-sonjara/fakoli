@@ -34,12 +34,12 @@
 class MergeCode extends DataItem
 {
 	var $fields = array(
+			"class_name"		=>	String,
 			"merge_code_id"		=>	Number,
 			"name"				=>	String,
 			"description"		=>	Text,
 			"map"				=>	String,
-			"function"			=>	Boolean, // deprecated
-			"class_name"		=>	String
+			"function"			=>	Boolean // deprecated
 	);
 
 	
@@ -108,4 +108,20 @@ class MergeCodeHelp extends DataItem
 	}
 }
 
+
+class RelationHelp extends DataItem
+{
+	var $fields = array(
+			"relation_id"	=>	Number,
+			"name"			=>	String,
+			"class_name"	=>	String
+	);
+	
+	function RelationHelp()
+	{
+		$this->table = "relation";
+		$this->primary_key = "relation_id";	
+	}
+	
+}
 ?>

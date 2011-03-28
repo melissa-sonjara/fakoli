@@ -1,4 +1,4 @@
-<?php
+<?
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,50 +31,65 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "role");
-Fakoli::usingFile("framework/auto_form.inc");
-
+Fakoli::using("document", "role", "fileshare");
 Fakoli::usingFile("framework/tab_bar.inc");
-
-require_once "include/document_library_tabs.inc";
-
-$menu_item = "Documents";
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
-if ($document_library_id)
+if (!$document_library_id)
 {
-	$library = new DocumentLibrary($document_library_id);
-}
-else
-{
-	$library = DocumentManager::createLibraryObj();
+	redirect("/fileshare_libraries");
 }
 
-$tabs = documentLibraryTabs($document_library_id);
+$page->page_title = "Fileshare Library User Community";
+$library = new DocumentLibrary($document_library_id);
+if(!$library->isOwner())
+	redirect("/fileshare_libraries");
 
-$form = new AutoForm($library);
-$form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files", "create_date");
-$form->required("name", "identifier");
+$tabs = FileshareManager::libraryTabs($document_library_id);
+$styles .= FileshareManager::getStyles();
 
-if ($method == "POST")
+
+$script .= <<<ENDSCRIPT
+<script type='text/javascript'>
+
+window.addEvent('domready', function()
 {
-	if ($form->save())
-	{
-		DocumentManager::createLibrary($form);
-		
-		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
-		redirect("/admin/document_library_permissions?document_library_id={$form->data->document_library_id}");
-	}
-}
+	var memberSearch = new LibraryManager().memberProgressiveSearch($document_library_id);
+});
+</script>
+ENDSCRIPT;
 
-
-$script .= $form->writeScript();
-
+$mgr = new UserManager();
+$class_name = $mgr->getUserClass();
+$xrefClass = new FileshareUserXref(); 
+$members = Query::create($class_name, "WHERE user_id in (select user_id from {$xrefClass->table} where document_library_id=:d)")
+	->bind(":d", $document_library_id)
+	->execute();
+	
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div id="fileshare_content">
+<div id="tab_border" style="height: auto;">
+<h3>Fileshare Member Community for <?echo $library->name?></h3>
+<table class="layout">
+<tr><td>
 <?
-$form->drawForm();
+FileshareManager::drawMemberSearchForm($library);
+?> 
+<div id="member_select">
+<div id="member_scrollbox" style="height: 200px;">
+<?php
+FileshareManager::constructListMembers($members, $library->document_library_id);
+
+$param = "?document_library_id=$document_library_id";
+
 ?>
 </div>
+<div id="submit_block">
+<a class="button" href="/fileshare_library_form<?php echo $param ?>">BACK</a>
+<div style="float: right">
+<a class="button" href="/fileshare_library_files<?php echo $param ?>">CONTINUE</a>
+</div></div>
+</div>
+</td></tr></table></div></div>

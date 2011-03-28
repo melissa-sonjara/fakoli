@@ -36,12 +36,12 @@ class EmailTemplate extends DataItem
 {
 	var $fields = array(
 				"email_template_id"		=>	Number,
+				"class_name"			=>	String,
 				"name"					=>	String,
 				"sender_email"			=>	String,
 				"recipients"			=>	Text,
 				"subject"				=>	String,
-				"message"				=>	HTML,
-				"class_name"			=>	String
+				"message"				=>	HTML
 	);
 		
 	

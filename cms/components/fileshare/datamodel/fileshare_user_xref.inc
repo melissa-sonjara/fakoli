@@ -1,4 +1,4 @@
-<?
+<?php
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,37 +31,38 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "user", "fileshare");
 
-
-$page_role = "admin,user";
-
-$document_id = checkNumeric($_GET["document_id"]);
-
-$document = new Document($document_id);
-$library = $document->DocumentLibrary();
-
-if (!checkRole($library->allow_access) && !$library->allowAccess())
+class FileshareUserXref extends DataItem
 {
-	ajaxReturn("Access Denied");
+	var $fields = array(
+		"fileshare_user_xref_id"	=>	Number,
+		"document_library_id"		=>	Number,
+		"user_id"					=>	Number
+	);
+	
+	var $relations = array(
+		"DocumentLibrary"		=>	DocumentLibrary,
+		"User"					=>	""
+	);
+	
+	
+	function DocumentLibrary()
+	{
+		return $this->getRelated(DocumentLibrary);
+	}
+	
+	function User()
+	{
+		$mgr = new UserManager();
+		return $mgr->getUser($this->user_id);
+	}
+	
+	
+	function FileshareUserXref()
+	{
+		$this->primary_key = "fileshare_user_xref_id";
+		$this->table = "fileshare_user_xref";
+
+		$this->DataItem(func_get_args());
+	}
 }
-
-
-//TODO: Folder level security
-
-$filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
-$mimeType = getMimeType($document->file);
-	
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
-header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
-header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
-
-session_write_close();
-?>

@@ -32,57 +32,38 @@
 *****************************************************************/
 
 /*
- * Title: email_template_list.php
+ * Create a clone of the given email template.
  * 
- * Description: table list view of email template text.
- * 
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 6/7/10
  */
 
-
 Fakoli::using("email");
-Fakoli::usingFeature("grouped_data_view");
 
-$emailTemplates = groupedQuery(EmailTemplate, "ORDER BY name", "class_name");
 
-$menu_item = "Email Templates";
+$email_template_id = checkNumeric($_GET["email_template_id"]);
 
-$classes = indexedQuery(EmailTemplate, "ORDER BY class_name", "class_name");
-
-$table = new GroupedDataListView($emailTemplates, "templates");
-$table->column("Name", formatEmailTemplateLink, true)
-		->column("Recipients", "{recipients}", true)
-		->column("Subject", "{subject}", true)
-	  	->column("Message", formatEmailMessage, true);
-	  	
-$table->emptyMessage = "There are no email templates defined.";
-$table->mode = "tree";
-$table->cssStyle = "width: 100%";
-
-foreach(array_keys($classes) as $class_name)
+if($email_template_id)
 {
-	$table->group($class_name, $class_name);
-}
-
-$script .= $table->writeScript();
-
-$table->drawView();
-
-echo "<p><a class='button' href='/admin/email_template_form'>Add a Template</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button' href='/admin/test_email_form'>Send a Test Email</a></p>\n";
-
-function formatEmailTemplateLink($emailTemplate)
-{
-	$name = prettify($emailTemplate->name);
-	$text = "<a href=\"/admin/email_template_form?email_template_id={$emailTemplate->email_template_id}\">{$name}</a>";
+	$emailTemplate = new EmailTemplate($email_template_id);
+	$clone = clone($emailTemplate);
 	
-	return $text;
+	do
+	{
+		$clone->name = "copy_of_" . $clone->name;	
+	} while (!isUnique($clone->name));
+	
+	$clone->email_template_id = null;
+	$clone->save();
 }
 
+redirect("/admin/email_template_form?email_template_id={$clone->email_template_id}");
 
-function formatEmailMessage($message)
+function isUnique($name)
 {
-	return ellipsis($message->message, 300, true);	
+	$count = Query::create(EmailTemplate, "WHERE name = :n")
+		->bind(":n", $name)
+		->executeValue("COUNT(1)");
+
+	return ($count > 0) ? false : true;
 }
+
 ?>

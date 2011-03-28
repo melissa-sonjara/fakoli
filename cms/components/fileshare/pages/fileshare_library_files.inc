@@ -31,37 +31,33 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "user", "fileshare");
+Fakoli::using("document", "fileshare");
+Fakoli::usingFile("framework/tab_bar.inc");
 
 
-$page_role = "admin,user";
+$document_library_id = checkNumeric($_GET["document_library_id"]);
 
-$document_id = checkNumeric($_GET["document_id"]);
-
-$document = new Document($document_id);
-$library = $document->DocumentLibrary();
-
-if (!checkRole($library->allow_access) && !$library->allowAccess())
+if (!$document_library_id)
 {
-	ajaxReturn("Access Denied");
+	redirect("/fileshare_libraries");
 }
 
+$library = new DocumentLibrary($document_library_id);
 
-//TODO: Folder level security
 
-$filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
-$mimeType = getMimeType($document->file);
-	
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
-header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
-header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
+$tabs = FileshareManager::libraryTabs($document_library_id);
+$styles .= FileshareManager::getStyles();
 
-session_write_close();
+$mgr = new FileshareManager($library);
+
+$script .= $mgr->writeScript();
+$tabs->writeHTML();
+
 ?>
+<div id="tab_border">
+<h3>Files in <?echo $library->name?></h3>
+<?
+$mgr->drawView();
+
+?>
+</div>

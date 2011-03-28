@@ -160,7 +160,7 @@ class EmailManager
 	function EmailManager($item, $emailTemplate, $onSendComplete = "")
 	{
 		$this->item = clone($item);
-		$this->item->filter = "";
+		$this->item->filter = null;
 		$this->emailTemplate = $emailTemplate;
 		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
@@ -194,8 +194,8 @@ class EmailManager
 				
 		$used = strip_tags("'". implode("','", array_values($usedMergeCodes)) . "'");
 
-		$mergeCodes = Query::create(MergeCode, "WHERE class_name = '{$this->emailTemplate->class_name}' and name in ($used)")
-			->bind(":cn", $this->emailTemplate->class_name, ":mc", $used)
+		$mergeCodes = Query::create(MergeCode, "WHERE class_name = :cn and name in ($used)")
+			->bind(":cn", $this->emailTemplate->class_name)
 			->execute();
 			
 		if(count($mergeCodes) > 0)
@@ -224,7 +224,7 @@ class EmailManager
 				trace("EmailManager:: map is $map", 3);
 					
 				if($map)
-					$replaceText = $this->getReplaceText(strip_tags($map));
+					$replaceText = $this->getReplaceText($map);
 
 				/*
 				 *  Even if replace text is empty, still add to
@@ -240,10 +240,9 @@ class EmailManager
 
 		//echo "<pre>"; print_r($patterns); echo "</pre>";
 		//echo "<pre>"; print_r($replacements); echo "</pre>";
-		
-		$this->recipients = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->recipients);
-		$this->subject = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->subject);
-		$this->message = $this->searchReplaceText($patterns, $replacements, $this->emailTemplate->message);
+		$fields = array("recipients", "subject", "message");
+		foreach($fields as $field)
+			$this->$field = str_replace($patterns, $replacements, $this->emailTemplate->$field);			
 	}
 	
 	
@@ -258,6 +257,9 @@ class EmailManager
 	 * a) callback function, no class
 	 * b) function of calling class
 	 * c) field of calling class
+	 * 
+	 * Check if has field before check if is_callable in case the field
+	 * name could be interpreted as callable (e.g., "date)
 	 */
 	function getReplaceText($mergeCodeMap)
 	{	
@@ -279,16 +281,16 @@ class EmailManager
 			if($this->item->hasRelation($part1))
 			{
 				$replaceObj = $this->item->$part1();
-				if(is_callable(array($replaceObj, $part2)))
-				{
-					trace("EmailManager:: part1 is relation of sending class and part2 is a function in that relation.", 3);
-					$replaceText = $replaceObj->$part2();
-				}	
-				elseif(is_object($replaceObj) && $replaceObj->hasField($part2))
+				if(is_object($replaceObj) && $replaceObj->hasField($part2))
 				{
 					trace("EmailManager:: part1 is relation and part2 is a field in that related class.", 3);
 					$replaceText = $replaceObj->format("{".$part2 ."}");
 				}
+				elseif(is_callable(array($replaceObj, $part2)))
+				{
+					trace("EmailManager:: part1 is relation of sending class and part2 is a function in that relation.", 3);
+					$replaceText = $replaceObj->$part2();
+				}	
 				else
 				{
 					$valid = false;
@@ -306,7 +308,12 @@ class EmailManager
 		}
 		elseif($part1) // Map has just one part
 		{
-			if(is_callable($part1))
+			if($this->item->hasField($part1))
+			{
+				trace("EmailManager:: part1 is field of sending class.", 3);
+				$replaceText = $this->item->format("{".$part1 ."}");
+			}
+			elseif(is_callable($part1))
 			{
 				trace("EmailManager:: part1 is callback function.", 3);
 				$replaceText = call_user_func($part1, $this->item);
@@ -315,11 +322,6 @@ class EmailManager
 			{
 				trace("EmailManager:: part1 is function from sending class.", 3);
 				$replaceText = $this->item->$part1();
-			}
-			elseif($this->item->hasField($part1))
-			{
-				trace("EmailManager:: part1 is field of sending class.", 3);
-				$replaceText = $this->item->format("{".$part1 ."}");
 			}
 			else
 			{
@@ -335,20 +337,7 @@ class EmailManager
 		return $replaceText;		
 	}
 	
-	function searchReplaceText($patterns, $replacements, $text)
-	{
-		$lText = "";
-		
-		if(count($patterns) > 0 AND $text != "")
-		{
-			$lText = str_replace($patterns, $replacements, $text);
-		}
-		else
-			$lText = $text;
-		
-		return $lText;
-	}
-	
+
 	function getRecipients()
 	{
 		$validRecipients = array();
@@ -362,14 +351,17 @@ class EmailManager
 				foreach($recipients as $recipient)
 				{
 					if(preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i', $recipient))
-						array_push($validRecipients, $recipient);
+						$validRecipients[] = $recipient;
+					else
+						trace("EmailManager:getRecipients invalid recipient $recipient", 3);
+						
 				}
 			}
 		}
-		trace("EmailManager:getRecipients recipient count". count($validRecipients), 3);
+
 		return $validRecipients;
 	}
-
+	
 	/*
 	 * Call the callback whether successful or not; calling script
 	 * decides how to handle either way. Each recipient could have
@@ -379,7 +371,6 @@ class EmailManager
 	
 	function sendEmail()
 	{
-		trace("EmailManager:: sendEmail", 3);
 		$recipients = $this->getRecipients();
 		$rtn = false;
 		
@@ -392,7 +383,7 @@ class EmailManager
 		}
 		else
 		{
-			trace("EmailManager:: Warning - no recipients", 3);
+			trace("EmailManager:: Warning - no valid recipients", 3);
 		}
 		return $rtn;
 	}
@@ -425,6 +416,7 @@ class EmailManager
 		
 		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath);
 	}
+
 }
 
 

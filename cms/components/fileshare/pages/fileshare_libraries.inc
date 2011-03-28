@@ -31,58 +31,28 @@
 
 *****************************************************************/
 
-/*
- * Title: email_template_list.php
- * 
- * Description: table list view of email template text.
- * 
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 6/7/10
- */
+Fakoli::using("document", "fileshare");
+Fakoli::usingFile("framework/data_view.inc");
 
+$userXref = new FileshareUserXref();
+$libraries = Query::create(DocumentLibrary, "WHERE owner_id=:u or document_library_id in (select document_library_id from {$userXref->table} where user_id=:u) ORDER BY name")
+	->bind(":u", $user->user_id)
+	->execute();
 
-Fakoli::using("email");
-Fakoli::usingFeature("grouped_data_view");
-
-$emailTemplates = groupedQuery(EmailTemplate, "ORDER BY name", "class_name");
-
-$menu_item = "Email Templates";
-
-$classes = indexedQuery(EmailTemplate, "ORDER BY class_name", "class_name");
-
-$table = new GroupedDataListView($emailTemplates, "templates");
-$table->column("Name", formatEmailTemplateLink, true)
-		->column("Recipients", "{recipients}", true)
-		->column("Subject", "{subject}", true)
-	  	->column("Message", formatEmailMessage, true);
-	  	
-$table->emptyMessage = "There are no email templates defined.";
-$table->mode = "tree";
-$table->cssStyle = "width: 100%";
-
-foreach(array_keys($classes) as $class_name)
-{
-	$table->group($class_name, $class_name);
-}
-
+$table = new DataListView($libraries, "libraries");
+$table->column("Shared Space", "<a href='/fileshare_library_search?document_library_id={document_library_id}'>{name}</a> {description}", true)
+	->column("Last Modified By", array(FileshareManager, getLibraryLastModifiedBy), true)
+	->column("Last Modified", array(FileshareManager, getLibraryLastModified), true)
+	->column("Created By", "{Owner.first_name} {Owner.last_name}", true)
+	;
+		  
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 10;
+$table->emptyMessage = "You do not have any file sharing libraries.";
 $script .= $table->writeScript();
 
 $table->drawView();
-
-echo "<p><a class='button' href='/admin/email_template_form'>Add a Template</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button' href='/admin/test_email_form'>Send a Test Email</a></p>\n";
-
-function formatEmailTemplateLink($emailTemplate)
-{
-	$name = prettify($emailTemplate->name);
-	$text = "<a href=\"/admin/email_template_form?email_template_id={$emailTemplate->email_template_id}\">{$name}</a>";
-	
-	return $text;
-}
-
-
-function formatEmailMessage($message)
-{
-	return ellipsis($message->message, 300, true);	
-}
 ?>
+<br/>
+<a class="button" href="/fileshare_library_form">Create a File Sharing Library</a>

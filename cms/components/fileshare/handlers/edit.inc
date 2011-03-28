@@ -31,66 +31,49 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("document", "fileshare");
 Fakoli::usingFile("framework/auto_form.inc");
 
-$document_library_id = checkNumeric($_GET["document_library_id"]);
-if (!$document_library_id)
+$document_id = checkNumeric($_GET["document_id"]);
+if (!$document_id)
 {
 	ajaxReturn("Invalid Parameter");
 }
 
-global $library;
-
-$library = new DocumentLibrary($document_library_id);
+$document = new Document($document_id);
+$library = $document->DocumentLibrary();
 
 if (!checkRole($library->allow_access) && !$library->allowAccess())
 {
 	ajaxReturn("Access Denied");
 }
 
-$document = new Document();
+$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "author");
 
-$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "publication_date", "document_library_id", "owner_id");
-
-$form = new AutoForm($document, "POST", "/action/document/upload?document_library_id=$document_library_id");
-$form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->hide("publication_date", "document_library_id", "owner_id");
+$form = new AutoForm($document, "POST", "/action/fileshare/edit?document_id=$document_id", "DocumentDetails_form");
+$form->readonly("file");
 $form->required("title");
-$form->validator->add(new RequiredFileValidator("file", "File", "You must select a file to upload."));
+$form->ajaxSubmit("function(result) {new LibraryManager().editDocumentDetailsResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->button("Cancel", "new LibraryManager().closeEditDocumentDetails()", null, true);
 
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
 $notes->columns = 38;
 
-$folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
-$fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
-
 if ($method == "POST")
 {
-	$_POST["publication_date"] = now();
-	$_POST["owner_id"] = $user->user_id;
-	$_POST["document_library_id"] = $document_library_id;
-	
 	if ($form->save())
 	{
-		ajaxReturn("1");
+		ajaxReturn("OK");
+		return;
 	}
 	else
 	{
 		ajaxReturn($form->msg);
+		return;
 	}
 }
 
 echo $form->writeScript();
 $form->drawForm();
-
-function uploadLibraryFile($field, $document)
-{
-	global $library;
-	global $form;
-	
-	$mgr = new DocumentManager($library);
-	$document->file = $mgr->uploadFile($field, $_POST["folder_value"]);
-}
 ?>

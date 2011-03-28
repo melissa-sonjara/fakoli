@@ -1,4 +1,4 @@
-<?
+<?php
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,37 +31,39 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "user", "fileshare");
-
-
-$page_role = "admin,user";
-
-$document_id = checkNumeric($_GET["document_id"]);
-
-$document = new Document($document_id);
-$library = $document->DocumentLibrary();
-
-if (!checkRole($library->allow_access) && !$library->allowAccess())
+class FileshareManifest
 {
-	ajaxReturn("Access Denied");
+	static function getComponentDefinition()
+	{
+		$component = new Component();
+		$component->name = "fileshare";
+		$component->description = "Management of collaboration file sharing of document libraries";
+		$component->author = "Janice Gallant";
+		$component->version = "1.0";
+		$component->priority = 2;
+		$component->enabled = true;
+		
+		return $component;
+	}
+	
+	static function subscribeToEvents()
+	{
+		return array(
+				);
+	}
+	
+	static function getAdminMenu()
+	{
+		return array
+		(
+	
+		);
+	}
+
+	static function getScripts()
+	{
+		return array("/fakoli/js/library.js");
+	} 		
 }
 
-
-//TODO: Folder level security
-
-$filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
-$mimeType = getMimeType($document->file);
-	
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
-header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
-header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
-
-session_write_close();
 ?>

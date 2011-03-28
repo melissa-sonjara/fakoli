@@ -40,7 +40,7 @@ class EmailManifest
 		$component->description = "Email management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 10;
 		$component->enabled = true;
 		
 		return $component;
@@ -74,12 +74,19 @@ class EmailManifest
 			
 		);
 	}
-	
+
 			
 	static function subscribeToEvents()
 	{
 		return array("ComponentScanComplete" => array(EmailManager, setDefaults));
 	}
+	
+	static function getScripts()
+	{
+		return array("/fakoli/js/email.js");
+	} 	
+	
 }
+
 
 ?>

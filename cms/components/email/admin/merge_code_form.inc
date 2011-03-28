@@ -78,7 +78,8 @@ if (count($classNames) > 0)
 	$classNameList = array_combine($classNames, $classNames);
 }
 		
-$classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", $classNameList);
+$classSelect = new SelectFieldViewSourceRenderer($form, "class_name", "Class Name", $classNameList, "new EmailManager().openMergeCodeDialog()");
+$classSelect->buttonLabel = "Related Values";
 
 if ($method == "POST")
 {
@@ -94,6 +95,5 @@ $script .= $form->writeScript();
 <p>You will need some knowledge of the system's tables DataModels to enter merge codes.</p>
 <button onclick="javascript:modalPopup('Merge Code Help', '/action/email/merge_code_help', '500px', 'auto'); return false">Merge Code Help</button>
 <?php
-
 $form->drawForm();
 ?>

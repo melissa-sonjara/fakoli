@@ -31,66 +31,53 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("document", "role", "fileshare");
 Fakoli::usingFile("framework/auto_form.inc");
+Fakoli::usingFile("framework/tab_bar.inc");
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
-if (!$document_library_id)
+
+if ($document_library_id)
 {
-	ajaxReturn("Invalid Parameter");
+	$library = new DocumentLibrary($document_library_id);
+	if(!$library->isOwner())
+		redirect("/fileshare_libraries");
+}
+else
+{
+	$library = DocumentManager::createLibraryObj();
 }
 
-global $library;
+$form = new AutoForm($library);
+$form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files", "create_date", "identifier");
+$form->required("name");
+$form->onSaveComplete = setLibraryIdentifier;
+$form->unique("name", "A library already exists with that name. Please choose a different name.");
 
-$library = new DocumentLibrary($document_library_id);
-
-if (!checkRole($library->allow_access) && !$library->allowAccess())
-{
-	ajaxReturn("Access Denied");
-}
-
-$document = new Document();
-
-$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "publication_date", "document_library_id", "owner_id");
-
-$form = new AutoForm($document, "POST", "/action/document/upload?document_library_id=$document_library_id");
-$form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->hide("publication_date", "document_library_id", "owner_id");
-$form->required("title");
-$form->validator->add(new RequiredFileValidator("file", "File", "You must select a file to upload."));
-
-$notes = $form->getRenderer("notes");
-$notes->colspan = 1;
-$notes->columns = 38;
-
-$folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
-$fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
+$tabs = FileshareManager::libraryTabs($document_library_id);
+$styles .= FileshareManager::getStyles();
 
 if ($method == "POST")
 {
-	$_POST["publication_date"] = now();
-	$_POST["owner_id"] = $user->user_id;
-	$_POST["document_library_id"] = $document_library_id;
-	
 	if ($form->save())
 	{
-		ajaxReturn("1");
-	}
-	else
-	{
-		ajaxReturn($form->msg);
+		DocumentManager::createLibrary($form);
+				
+		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
+		redirect("/fileshare_library_members?document_library_id=".$form->data->document_library_id);
 	}
 }
 
-echo $form->writeScript();
+
+$script .= $form->writeScript();
+$tabs->writeHTML();
+?>
+<div id="tab_border">
+<?php
 $form->drawForm();
 
-function uploadLibraryFile($field, $document)
+function setLibraryIdentifier(&$form)
 {
-	global $library;
-	global $form;
-	
-	$mgr = new DocumentManager($library);
-	$document->file = $mgr->uploadFile($field, $_POST["folder_value"]);
+	FileshareManager::setLibraryIdentifier($form);
 }
-?>
+?></div>

@@ -54,30 +54,42 @@
  *					3	=>	"Formal Assessment"
  * 					)
  * 
- * @param string $popupUrl url of the source preview 
+ * @param string $callback javascript function that opens the popup e.g., openMyDialog or new MyClass().openMyDialog
+ * the "()" is left off and supplied in the selection change function written
+ * by this class.
  * 
  * Calling script creates an instance as follows:
  * $myFieldSelect = new SelectFieldViewSourceRenderer($form, "field name", "Label", options array, 
- *      popupUrl);
+ *      jsFunction);
  *      
- * calling script must call writeScript below the call to $script .= $form->writeScript:
- * $script .= $myFieldSelect->writeScript();
+ * The javascript function name provided must contain a call to create the
+ * modal dialog. This function receives the select field value. Example:
+ * 
+ * myJavascriptFunction(selectFieldValue)
+ * {
+ * 	  modalPopup('myTitle', '/action/myComponent/my_modal_dialog?mySelectField=' + selectFieldValue, '400px', 'auto', true);
+ * }
  *
  */
 
-require_once  $config['homedir']."/framework/field_renderers/select_field_renderer.inc";
+
+require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
 class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 {
-	var $popupUrl; // path of popup that display the source/preview
 	var $buttonLabel; // defaults to field label
 	var $field;
-	
-	function SelectFieldViewSourceRenderer(&$form, $field, $label, $options, $popupUrl)
+	// javascript function that opens the popup e.g., openMyDialog or new MyClass().openMyDialog
+	var $callback;
+
+	function SelectFieldViewSourceRenderer(&$form, $field, $label, $options, $callback)
 	{
 		$onChange = "selChanged_{$field}";
 		$this->field = $field;
-		$this->popupUrl = $popupUrl . "?{$field}=";
+		
+		// If user provided ending "()" on function, remove
+		$callback = preg_replace("/\(*?\)$/", "", $callback);
+		$this->callback = $callback;
 		
 		// show none if none - overrides SelectFieldRenderer code that
 		// adds options when there are none
@@ -90,58 +102,46 @@ class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 	
 	function renderScript($field)
 	{
-		$fn = "{$this->parent->id}_$field";
-		
+		$fn = "{$this->parent->id}_{$field}";
+		$selChanged = "selChanged_" . $field;
+
 ?>
 <script type="text/javascript">
-function <?echo $fn?>_preview()
+function <?echo $fn ?>_preview()
 {
 	var elt = $('<? echo $field ?>');
-	
+
 	if (elt.value)
 	{
-		popup('<? echo $this->popupUrl ?>' + elt.value, '', 750, 640);
+		var dialog = <?php echo $this->callback ?>(elt.value);
 	}
 }
-</script>
-<?		
-	}
-	
-	function writeScript()
-	{
-		$fn = "selChanged_$this->field";
-		
-		ob_start();
-?>
-<script type="text/javascript">
-function <? echo $fn ?>(elt)
+
+function <? echo $selChanged ?>(elt)
 {
-  	var button = $('view_<? echo $this->field ?>_button');
-   	if (elt.value > 0)
-		button.disabled = "";
+  	var button = $('view_<? echo $field ?>_button');
+   	if (elt.value)
+		button.disabled = "";		
 	else
 		button.disabled = "disabled";
 }
 
 window.addEvent('load', function()
 {
-	var elt = $('<? echo $this->field ?>');
-	<? echo $fn ?>(elt);	
-});
-
-	</script>
-	<?
-	$script .= ob_get_contents();
-	ob_end_clean();
-	
-	return $script;		
+   	var elt = $('<? echo $field ?>');
+   <? echo $selChanged ?>(elt);	
+ });
+</script>
+<?
 	}
+	
 
 	function _endField($field)
 	{
 		$name = "view_{$field}_button";
-		echo "&nbsp;<button id=\"$name\" name=\"$name\" onclick=\"{$this->parent->id}_{$field}_preview(); return false;\" class=\"button\">View {$this->buttonLabel}</button>";
 		
+		echo "&nbsp;<button id=\"$name\" name=\"$name\" onclick=\"{$this->parent->id}_{$field}_preview(); return false;\" class=\"button\">View {$this->buttonLabel}</button>";
+	
 		parent::_endField($field);
 	}
 } // end class SelectFieldViewSourceRenderer
