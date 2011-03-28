@@ -61,7 +61,10 @@ class PageView
 		global $dialogs;
 		global $page;
 		global $site;
-		
+		global $menu_identifier;
+		global $identifier;
+		global $section;
+				
 		$page = $this->page; // Pass through to code include
 		$site = $page->Site();
 		if(!$site)

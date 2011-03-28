@@ -35,12 +35,14 @@
 class Menu extends DataItem
 {
 	// Fields
-	var $fields = array("menu_id"		=>	Number,
-						"site_id"		=>	Number,
-						"name"			=>	String,
-						"identifier"	=>	String,
-						"description"	=>	Text,
-						"css_class"		=>	String);
+	var $fields = array("menu_id"					=>	Number,
+						"site_id"					=>	Number,
+						"name"						=>	String,
+						"identifier"				=>	String,
+						"description"				=>	Text,
+						"css_class"					=>	String,
+						"highlight_current_item"	=>	Boolean,
+						"highlight_current_section"	=>	Boolean);
 	
 	// Relations
 	var $relations = array(	"Site"		=>	Site,
@@ -50,7 +52,7 @@ class Menu extends DataItem
 	{
 		return $this->getRelated(Site);
 	}
-	
+
 	function MenuItems($constraint = "")
 	{
 		return $this->getRelatedList(MenuItem, "", $constraint);

@@ -63,6 +63,9 @@ class ComponentPageView
 		global $page;
 		global $site;
 		global $section;
+		global $menu_identifier;
+		global $identifier;
+		global $section;
 		
 		$page = $this->page; // Pass through to code include
 		

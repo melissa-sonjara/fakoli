@@ -115,9 +115,32 @@ class MenuView
 		return "#";
 	}
 	
+	function getItemCSS($m)
+	{
+		global $menu_identifier;
+		global $identifier;
+		global $section;
+		
+		if ($this->m->highlight_current_item)
+		{
+			if ($m->identifier == $identifier || ($menu_identifier && $m->identifier == $menu_identifier))
+			{
+				return " class='current'";
+			}
+		}
+					
+		if	($this->m->highlight_current_section && $m->identifier == $section->default_page)
+		{
+			return " class='current'";
+		}
+		
+		return "";
+	}
+	
 	function drawView()
 	{   	
 		global $script;
+		
 		// JDG 2/4/2011 - remove FakoliMenu for now b/c of placement issue
 		/*
 		$script .= <<<ENDSCRIPT
@@ -145,13 +168,13 @@ ENDSCRIPT;
 			
 			if(!$gmenus[$m->menu_item_id]) 
 			{
-				if ($link) echo "<li><a href='$link'>$m->title</a></li>"; // has et
+				if ($link) echo "<li".$this->getItemCSS($m)."><a href='$link'>$m->title</a></li>"; // has et
 			}
 			else 
 			{
 			     if ($link)
 			     {
-			     	echo "<li><a href='$link'>$m->title</a>"; // no li et
+			     	echo "<li".$this->getItemCSS($m)."><a href='$link'>$m->title</a>"; // no li et
 				    if (array_key_exists($m->menu_item_id, $gmenus))
 				    {
 				     	echo "<ul>"; // no ul et
@@ -161,14 +184,14 @@ ENDSCRIPT;
 					    	
 					    	if ($link)
 					    	{
-				            	echo "<li><a href='$link'>$submenu->title</a>";  // only one level; 
+				            	echo "<li".$this->getItemCSS($submenu)."><a href='$link'>$submenu->title</a>";  // only one level; 
 					            if($gmenus[$submenu->menu_item_id]) 
 					            {
 					             	echo "<ul>";
 					             	foreach ($gmenus[$submenu->menu_item_id] as $subsubmenu) 
 					             	{
 					             		$link = $this->getLink($subsubmenu);
-					             		if ($link) echo "<li><a href='$link'>$subsubmenu->title</a></li>"; // level 3 menus GOOD
+					             		if ($link) echo "<li".$this->getItemCSS($subsubmenu)."><a href='$link'>$subsubmenu->title</a></li>"; // level 3 menus GOOD
 					             	}
 					             	echo "</ul>"; // end ul for level 3 //GOOD
 					             }

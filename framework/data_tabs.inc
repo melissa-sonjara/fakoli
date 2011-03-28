@@ -62,6 +62,27 @@ class DataItemTabBar
 		$this->uri = $uri;
 	}
 	
+
+	/**
+	 * Appends a query string to the supplied URL
+	 *
+	 * @param string $url
+	 * @param string $qs
+	 * @return string
+	 */
+	function appendQueryString($url, $qs)
+	{
+		if ($url[0] == "&") 
+		{
+			$url = $qs.$url;
+		}
+		else
+		{
+			$url .= (strstr($url, "?") !== false) ? "&$qs" : "?$qs";
+		}
+		return $url;
+	}
+
 	/**
 	 * Writes the HTML for this control to standard output.
 	 */
