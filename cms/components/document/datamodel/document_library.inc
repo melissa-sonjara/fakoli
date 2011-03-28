@@ -121,7 +121,7 @@ class DocumentLibrary extends DataItem
 	/*
 	 * Check fileshare user-level access
 	 */
-	function allow_access()
+	function allowAccess()
 	{
 		global $user;
 		
