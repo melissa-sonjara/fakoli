@@ -61,7 +61,7 @@ $script .= $table->writeScript();
 if ($method == "POST") 
 {
   	if(saveForm())
-		redirect("/forum_subscription_preferences");
+		redirect("forum_subscription_preferences");
 }
 
 

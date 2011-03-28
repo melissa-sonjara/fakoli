@@ -55,7 +55,7 @@ $forumRequest->subject = "New Forum Request";
 $form = new AutoForm($forumRequest);
 $form->readonly("to", "subject");
 $form->submitLabel = "Email Technical Support";
-$form->button("Cancel", "/forum_list");
+$form->button("Cancel", "forum_list");
 $form->annotate("message", "Please specify a suggested title for the new forum and a description of its intended topic area.");
 
 if ($method == "POST")
@@ -63,7 +63,7 @@ if ($method == "POST")
 	$emailHandler = new EmailHandler($form->data->to, $form->data->subject, $_POST["message"], $user->email);
 	$sent = $emailHandler->send();
 	$msg = ($sent > 0) ? 1 : 2;
-	redirect("/forum_request_form?msg=$msg");
+	redirect("forum_request_form?msg=$msg");
 }
 
 $script .= $form->writeScript();
@@ -73,7 +73,7 @@ else
 {
 	echo $forumRequest->getInfoText($msg);
 ?>
-<button onclick="go('/forum_list')" class="button">Return to Discussion Forums</button>
+<button onclick="go('forum_list')" class="button">Return to Discussion Forums</button>
 <?
 } 
 ?>

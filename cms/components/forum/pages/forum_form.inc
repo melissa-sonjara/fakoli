@@ -70,7 +70,7 @@ if ($method == "POST")
 			$jn->save();
 		}
 		
-		redirect("/forum_list");
+		redirect("forum_list");
 	}
 }
 

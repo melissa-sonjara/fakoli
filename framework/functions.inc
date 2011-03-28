@@ -1158,10 +1158,13 @@ function prettify($name)
 /**
  * Takes a singular string and makes it plural.
  * @param $text the string to make plural
+ * @param $count integer (optional) the number of items, to determine whether to pluralize or not
  * @return string the plural version
  */
-function pluralize($text)
+function pluralize($text, $count = 0)
 {
+	if ($count == 1) return $text;
+	
 	$c = $text;
 
 	if (preg_match("/[^aeiouAEIOU]y$/", $c))

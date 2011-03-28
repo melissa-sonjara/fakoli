@@ -48,7 +48,7 @@ echo $view->writeScript();
 
 $view->drawView();
 ?>
-	<button style="float: left" class="button" onclick="go('/forum_details?forum_id=<?echo $topic->forum_id?>');"> &laquo; Back to Topic List</button>
+	<button style="float: left" class="button" onclick="go('forum_details?forum_id=<?echo $topic->forum_id?>');"> &laquo; Back to Topic List</button>
 	<?php 
 if($user)
 {

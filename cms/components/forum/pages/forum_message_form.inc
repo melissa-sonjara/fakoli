@@ -76,7 +76,7 @@ else
 
 
 $form = new AutoForm($message);
-$form->button("Cancel", "/forum_details?forum_id=$forum_id");
+$form->button("Cancel", "forum_details?forum_id=$forum_id");
 
 $form->hide("parent_id", "topic_id", "author_id", "forum_id", "date_posted", "deleted");
 $form->onSaveComplete = emailSubscribers;
@@ -108,11 +108,11 @@ if ($method == "POST")
 			$form->data->topic_id = $topic->topic_id;
 			$form->data->save();
 			
-			redirect("/forum_details?forum_id={$forum_id}");
+			redirect("forum_details?forum_id={$forum_id}");
 		}
 		else
 		{
-			redirect("/forum_topic?forum_id={$forum_id}&topic_id={$message->topic_id}");
+			redirect("forum_topic?forum_id={$forum_id}&topic_id={$message->topic_id}");
 		}
 	}
 }
