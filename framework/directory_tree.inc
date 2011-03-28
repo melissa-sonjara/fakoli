@@ -280,6 +280,7 @@ class DirectoryTreeControl
 	function _buildFolderTreeAux($folder, $base)
 	{
 		$f = $base . DIRECTORY_SEPARATOR . $folder;
+		trace("Directory tree: buildFolderTreeAux f $f", 3);
 		$dir = opendir($f);
 	
 		$id = str_replace(DIRECTORY_SEPARATOR, "_", $folder);
