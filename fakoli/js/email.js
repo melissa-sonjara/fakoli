@@ -49,7 +49,7 @@ var EmailManager =  (function()
 		
 		openMergeCodeDialog: function(class_name)
 		{
-			this.dialog = modalPopup('AutoCreate Merge Code', '/action/email/auto_create_merge_code?class_name=' + class_name, '400px', 'auto', true);
+			this.dialog = modalPopup('View Related Values and Create Merge Code', '/action/email/auto_create_merge_code?class_name=' + class_name, '400px', 'auto', true);
 		},
 		
 		showAdvancedFeatures: function()

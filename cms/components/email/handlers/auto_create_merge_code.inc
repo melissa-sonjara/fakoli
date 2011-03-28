@@ -17,7 +17,7 @@ if(!$class_name)
 $classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
 
 if(!array_search($class_name, $classes))
-	ajaxReturn("<p>No relations available for this class");
+	ajaxReturn("No relations available for this class");
 
 $obj = new $class_name();
 $relations = $obj->relations;
@@ -48,7 +48,7 @@ if(count($relations) > 0)
 					
 					$str = "'" . $f_name . "'";
 					$fieldNode = new TreeNode("field_{$name}_{$f_name}", $f_name, null, false, "tree_node_closed", "tree_node_open", "javascript:new EmailManager().createMergeCode(\"$name\", \"$f_name\")");
-	   				$fieldNode->leafStyle = "file_node_leaf";
+	   				$fieldNode->leafStyle = "plain_node_leaf";
 					$relationNode->add($fieldNode);
 				}
 			}
@@ -57,20 +57,7 @@ if(count($relations) > 0)
 	}
 }
 
-
-
 $script .= $tree->writeScript();
-
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-
-function createMergeCode(class_name)
-{
-	alert(class_name);
-}
-</script>
-ENDSCRIPT;
-echo $script;
 
 $tree->writeHTML();
 
