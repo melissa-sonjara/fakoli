@@ -239,5 +239,11 @@ function uploadFileshareFile()
 		
 		$library->filter = new InclusionFilter("identifier");
 		$library->save();
-	}		
+	}
+
+	static function getDocumentAuthor($document)
+	{
+		$owner = $document->Owner();
+		return ($owner) ? $owner->getFullName() : "";
+	}
 }

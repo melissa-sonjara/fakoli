@@ -50,7 +50,7 @@ $mgr = new FileshareManager($library, $keyword);
 $table = new DataListView($mgr->documents, "library_documents");
 $table->column("Title", array($mgr, formatDocumentTitle), true)
 	->column("File", array($mgr, formatDocumentFileLink), true)
-	->column("Author", "{author}", true)
+	->column("Author", array($mgr, getDocumentAuthor), true)
 	->column("Last Modified", array($mgr, getDocumentLastModified), true)
 	->column("Notes", "{notes}", true)
 	;
