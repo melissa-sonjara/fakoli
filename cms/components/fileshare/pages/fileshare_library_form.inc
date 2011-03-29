@@ -40,7 +40,7 @@ $document_library_id = checkNumeric($_GET["document_library_id"]);
 if ($document_library_id)
 {
 	$library = new DocumentLibrary($document_library_id);
-	if(!$library->isOwner())
+	if(!$library->isOwner() && !checkRole("fileshare,admin"))
 		redirect("/fileshare_libraries");
 }
 else

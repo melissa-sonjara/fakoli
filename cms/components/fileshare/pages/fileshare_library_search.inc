@@ -45,6 +45,10 @@ if (!$document_library_id)
 $page->page_title = "Fileshare Library Files";
 
 $library = new DocumentLibrary($document_library_id);
+
+if(!$library->allowAccess())
+	redirect("/fileshare_libraries");
+
 $mgr = new FileshareManager($library, $keyword);
 
 $table = new DataListView($mgr->documents, "library_documents");
@@ -60,7 +64,7 @@ $table->filter = true;
 $table->pageSize = 10;
 $table->emptyMessage = "There are no documents in this library.";
 
-if($library->isOwner())
+if($library->isOwner() || checkRole("fileshare,admin"))
 	$tabs = FileshareManager::libraryTabs($document_library_id);
 $styles .= FileshareManager::getStyles();
 

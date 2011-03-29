@@ -125,7 +125,10 @@ class DocumentLibrary extends DataItem
 	{
 		global $user;
 		
-		if($this->isOwner())
+		if(!$user)
+			return false;
+			
+		if($this->isOwner() || checkRole($this->allow_access))
 			return true;
 		
 		$xrefs = $this->FileshareUsers("WHERE user_id={$user->user_id}");
@@ -133,12 +136,27 @@ class DocumentLibrary extends DataItem
 		return (count($xrefs) > 0) ? true : false;
 	}
 	
-	
+	/*
+	 * Set admin role as default for full access rights to
+	 * new libraries. If creating a library in the fileshare
+	 * space, also allow "fileshare" role full
+	 * access rights.
+	 */
 	static function getDefaultRole()
-	{ 	
-		$roles = Query::create(SiteRole, "WHERE role like 'admin%'")->execute();
-				
-		return (count($roles) > 0) ? $roles[0]->role : null;
+	{
+		$identifier = $_REQUEST["identifier"];
+
+		if(preg_match("/fileshare/i", $identifier))
+			$constraint = "WHERE role like 'admin%' or role like 'fileshare%'";
+		else
+			$constraint = "WHERE role like 'admin%'";
+	
+		$roles = Query::create(SiteRole, $constraint)->execute();
+
+		if(count($roles) > 0)
+			$role = formatItems($roles, "{role}", ",");
+			
+		return $role;
 	}
 	
 	function DocumentLibrary()

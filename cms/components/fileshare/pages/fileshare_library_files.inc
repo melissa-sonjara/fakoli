@@ -34,7 +34,6 @@
 Fakoli::using("document", "fileshare");
 Fakoli::usingFile("framework/tab_bar.inc");
 
-
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
 if (!$document_library_id)
@@ -44,8 +43,11 @@ if (!$document_library_id)
 
 $library = new DocumentLibrary($document_library_id);
 
-
-$tabs = FileshareManager::libraryTabs($document_library_id);
+if(!$library->allowAccess())
+	redirect("/fileshare_libraries");
+	
+if($library->isOwner() || checkRole("fileshare,admin"))
+	$tabs = FileshareManager::libraryTabs($document_library_id);
 $styles .= FileshareManager::getStyles();
 
 $mgr = new FileshareManager($library);

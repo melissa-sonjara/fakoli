@@ -43,7 +43,7 @@ if (!$document_library_id)
 
 $page->page_title = "Fileshare Library User Community";
 $library = new DocumentLibrary($document_library_id);
-if(!$library->isOwner())
+if(!$library->isOwner() && !checkRole("fileshare,admin"))
 	redirect("/fileshare_libraries");
 
 $tabs = FileshareManager::libraryTabs($document_library_id);

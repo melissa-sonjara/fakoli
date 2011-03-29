@@ -83,7 +83,7 @@ class FileshareManager extends DocumentManager
 		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
 <?
 		
-		if ($this->library->isOwner())
+		if ($this->library->isOwner() || checkRole("fileshare,admin"))
 		{
 ?>
 		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
@@ -193,10 +193,36 @@ function uploadFileshareFile()
 		</a>&nbsp;&nbsp;\n";
 		
 		// delete link
-		if($document->isOwner() || $this->library->isOwner())
+		if($document->isOwner() || $this->library->isOwner() || checkRole("fileshare"))
 			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\">(delete)</a>\n";
 		
 		return $link;
+	}	
+	
+	/*
+	 * Get the libraries the user is linked to either by
+	 * fileshare_user_xref, by being the owner, or by
+	 * their role.
+	 */
+	static function getSharedLibraries()
+	{
+		global $user;
+		
+		$userXref = new FileshareUserXref();
+		
+		$constraint = "WHERE owner_id=:u or document_library_id in (select document_library_id from {$userXref->table} where user_id=:u)";
+		$roles = explode(",", $user->role);
+		if(count($roles) > 0)
+		{
+			foreach($roles as $role)
+				$constraint .= " or allow_access like '%$role%' ";	
+		}
+		
+		$libraries = Query::create(DocumentLibrary, "$constraint ORDER BY name")
+			->bind(":u", $user->user_id)
+			->execute();
+		
+		return $libraries;
 	}	
 	
 	static function getLibraryLastModified($library)

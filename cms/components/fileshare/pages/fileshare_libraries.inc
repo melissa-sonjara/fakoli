@@ -34,10 +34,7 @@
 Fakoli::using("document", "fileshare");
 Fakoli::usingFile("framework/data_view.inc");
 
-$userXref = new FileshareUserXref();
-$libraries = Query::create(DocumentLibrary, "WHERE owner_id=:u or document_library_id in (select document_library_id from {$userXref->table} where user_id=:u) ORDER BY name")
-	->bind(":u", $user->user_id)
-	->execute();
+$libraries = FileshareManager::getSharedLibraries();
 
 $table = new DataListView($libraries, "libraries");
 $table->column("Shared Space", "<a href='/fileshare_library_search?document_library_id={document_library_id}'>{name}</a> {description}", true)

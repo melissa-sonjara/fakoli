@@ -52,6 +52,7 @@ $document->filter = new InclusionFilter("document_id", "title", "notes", "keywor
 
 $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
 $form->readonly("file");
+$form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $notes = $form->getRenderer("notes");
