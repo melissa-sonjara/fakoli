@@ -101,7 +101,7 @@ if($tabs)
 $table->drawView();
 ?><br>
 <div id="submit_block">
-<a style="height: 22px;" class="button" href="#" onclick="uploadFileshareFile(); return false">Upload a File</a>
+<a style="height: 20px;" class="button" href="#" onclick="uploadFileshareFile(); return false">Upload a File</a>
 </div>
 <?php 
 if($tabs)
