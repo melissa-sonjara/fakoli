@@ -79,16 +79,19 @@
  	color: #aaa;
 }
 
+
+
 #tabs .current 
 {
   color: #000000;
   background-image:url(/templates/images/tab_left_on.gif);
 }
 
+
 #tabs .current a 
 {
   background-image:url(/templates/images/tab_right_on.gif);
-  color: #000000;
+  color: #FFFFFF;
   padding-bottom:4px;
 }  
 
