@@ -461,7 +461,7 @@ class GroupedDataListView
 	 */
 	function writeExcelFile($file)
 	{
-		$x = new ExcelFile($file);
+		$x = ExcelFileWriter::create($file);
 		
 		$c = 0;
 		foreach($this->columns as $column)

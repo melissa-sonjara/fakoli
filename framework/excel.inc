@@ -32,10 +32,76 @@
 *****************************************************************/
 
 /**
+ * ExcelFileWriter is an abstract factory to allow different 
+ * Excel libraries to be used at the programmer's preference.
+ * 
+ * @author andy
+ *
+ */
+class ExcelFileWriter
+{
+	static $handler = ExcelFile;
+	
+	static function create($filename)
+	{
+		return new ExcelFileWriter::$handler($filename);
+	}
+	
+	static function RegisterHandler($handlerClass)
+	{
+		ExcelFileWriter::$handler = $handlerClass;
+	}
+}
+
+/**
+ * Minimum base interface that must be provided by an ExcelFile implementation.
+ * @author andy
+ *
+ */
+interface IExcelFile
+{
+	/**
+	 * Write a number to the cell at the specified row and column
+	 * @param integer $row
+	 * @param integer $col
+	 * @param number $value
+	 */
+	function writeNumber($row, $col, $value);
+	
+	/**
+	 * Write text to the cell at the specified row and column 
+	 * @param integer $row the cell row number
+	 * @param integer $col the cell column number
+	 * @param string $value the string to insert
+	 */
+	function writeText($row, $col, $value );
+	
+	/**
+	 * Abort processing, output the specified error string
+	 * @param string $error
+	 */
+	function abort($error);
+
+	/**
+	 * Prevent further output to the spreadsheet.
+	 */	
+	function close();
+	
+	/**
+	 * Transmit the spreadsheet to the client.
+	 */
+	function send();
+}
+
+/**
  * Generate a binary format Microsoft Excel file for download.
+ * The default ExcelFile writer is an extremely limited implementation
+ * that outputs BIFF8 format (Excel 97/2000). It is designed to be 
+ * compact and provide Excel output without incurring any external 
+ * dependencies.
  * @author andy
  */
-class ExcelFile
+class ExcelFile implements IExcelFile
 {
 	var $filename;
 	var $open;
@@ -92,7 +158,7 @@ class ExcelFile
 	function abort($error)
 	{
 		ob_end_clean();
-		die($error);
+		ajaxReturn($error);
 	}
 	
 	function close()
