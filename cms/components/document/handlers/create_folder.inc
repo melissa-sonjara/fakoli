@@ -77,7 +77,7 @@ if ($method == "POST")
 	}
 
 	mkdir($path);
-	chmod($path, "755");
+	chmod($path, 0755);
 	ajaxReturn("1");
 }
 else
