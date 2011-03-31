@@ -36,8 +36,10 @@ Fakoli::usingFile("framework/data_view.inc");
 
 $libraries = FileshareManager::getSharedLibraries();
 
+$styles .= FileshareManager::getStyles();
+
 $table = new DataListView($libraries, "libraries");
-$table->column("Shared Space", "<a href='/fileshare_library_search?document_library_id={document_library_id}'>{name}</a> {description}", true)
+$table->column("Library", "<a href='/fileshare_library_search?document_library_id={document_library_id}'>{name}</a> {description}", true)
 	->column("Last Modified By", array(FileshareManager, getLibraryLastModifiedBy), true)
 	->column("Last Modified", array(FileshareManager, getLibraryLastModified), true)
 	->column("Created By", "{Owner.first_name} {Owner.last_name}", true)
@@ -52,4 +54,6 @@ $script .= $table->writeScript();
 $table->drawView();
 ?>
 <br/>
-<a class="button" href="/fileshare_library_form">Create a File Sharing Library</a>
+<div id="submit_block">
+<a class="button" style="height: 21px" href="/fileshare_library_form">Create a Filesharing Library</a>
+</div>
