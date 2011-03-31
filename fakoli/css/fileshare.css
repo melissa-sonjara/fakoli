@@ -342,6 +342,11 @@ a.list_member
 	clear: both;
 }
 
+#buttons
+{
+	margin-top: 10px;
+}
+
 table.tree
 {
 	border: none;
