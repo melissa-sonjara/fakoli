@@ -53,6 +53,8 @@ $document->filter = new InclusionFilter("document_id", "title", "notes", "keywor
 $form = new AutoForm($document, "POST", "/action/fileshare/edit?document_id=$document_id", "DocumentDetails_form");
 $form->readonly("file");
 $form->required("title");
+$form->getRenderer("title")->autocomplete = false;
+$form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {new LibraryManager().editDocumentDetailsResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "new LibraryManager().closeEditDocumentDetails()", null, true);
 

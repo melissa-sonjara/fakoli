@@ -182,14 +182,23 @@ function uploadFileshareFile()
 		return $link;
 	}	
 	
-	
+	/*
+	 * If the document file path is very long, substitute
+	 * "..." in the middle, rather than the end b/c the
+	 * file name is that most important.
+	 */
 	function formatDocumentFileLink($document)
 	{
 		$document_id = $document->document_id;
-		
+
+		$len = strlen($document->file);
+		if($len > 50)
+			$file = substr($document->file, 0, 25)."..." . substr($document->file, len - 20);
+		else
+			$file = $document->file;
 		$icon = getDocIcon($document->file);
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
-		$link .= "<a href='/action/document/download?document_id={$document_id}'>{$document->file}
+		$link .= "<a href='/action/document/download?document_id={$document_id}'>{$file}
 		</a>&nbsp;&nbsp;\n";
 		
 		// delete link

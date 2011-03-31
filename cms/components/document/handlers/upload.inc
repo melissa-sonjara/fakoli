@@ -58,6 +58,8 @@ $form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{
 $form->hide("publication_date", "document_library_id", "owner_id");
 $form->required("title");
 $form->validator->add(new RequiredFileValidator("file", "File", "You must select a file to upload."));
+$form->annotate("keywords", "Separate keywords with a comma");
+$form->getRenderer("title")->autocomplete = false;
 
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
