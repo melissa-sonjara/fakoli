@@ -51,6 +51,7 @@ if($library->isOwner() || checkRole("fileshare,admin"))
 $styles .= FileshareManager::getStyles();
 
 $mgr = new FileshareManager($library);
+$mgr->width = 640;
 
 $script .= $mgr->writeScript();
 $tabs->writeHTML();

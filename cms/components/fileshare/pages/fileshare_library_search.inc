@@ -86,6 +86,7 @@ if($tabs)
 <?php 
 }
 ?>
+<table id="library_search" class="layout" style="width: auto"><tr><td>
 <h3>Files in <?echo $library->name?></h3>
 <form id="keyword_search_form" style="float: right" method="GET" action="">
 <label for='keyword'>Keyword</label>
@@ -95,14 +96,13 @@ if($tabs)
 <input type="hidden" name="document_library_id" value="<?php echo $document_library_id ?>"/>
 <br>
 </form>
-<div style="clear: both"></div>
-
 <?
 $table->drawView();
 ?><br>
 <div id="submit_block">
 <a style="height: 20px;" class="button" href="#" onclick="uploadFileshareFile(); return false">Upload a File</a>
 </div>
+</td></tr></table>
 <?php 
 if($tabs)
 {

@@ -76,8 +76,7 @@ class FileshareManager extends DocumentManager
 	 */
 	function drawButtons()
 	{
-?>		
-		<br/>
+?>		<div id="buttons">
 		<button id="download" class="button" disabled="disabled"  onclick="downloadFile()"> Download File </button>&nbsp;&nbsp;
 		<button id="edit" class="button" disabled="disabled" onclick="editFile()">Edit Details...</button>&nbsp;&nbsp;
 		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
@@ -87,10 +86,12 @@ class FileshareManager extends DocumentManager
 		{
 ?>
 		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
+		<br><br>
 		&nbsp;&nbsp;<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
 		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>
 <?php			
 		}
+?></div><?php
 	}
 	
 	

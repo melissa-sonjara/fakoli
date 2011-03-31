@@ -196,15 +196,6 @@ a.list_member
 }
 
 
-#content #member_search_form
-{
-	float: left; 
-	padding-top: 8px; 
-	padding-bottom: 0px;
-	display: block;	
-}
-
-
 #right .module #fileshare_list h3.fileshare_list
 {
 	background-color: #EEEEEE;
@@ -222,7 +213,7 @@ a.list_member
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
-	width: 190px;
+	width: 180px;
 	background-color: #fff;
 	color:#000;
 	font-family: Arial, Helvetica, sans-serif;
@@ -231,7 +222,7 @@ a.list_member
 }
 
 
-#right .module #fileshare ul 
+#fileshare_list ul 
 {
 	margin: 0;
 	padding: 0;
@@ -241,13 +232,14 @@ a.list_member
 }
 
 
-#right #fileshare_list li
+#fileshare_list li
 {
 	padding-left: 5px;
 	padding-bottom: 5px;
 }
 
-#right .module #fileshare_list ul li .list_member
+
+#fileshare_list ul li .list_member
 {
 	background-color: #EFF2F7; 
 	float: left; 
@@ -277,19 +269,6 @@ a.list_member
 }
 
 
-#group_name
-{
-	background-color: #FDE0B5; 
-	border: solid 1px #BCBCE9;
-	float: left; 
-	margin: 2px; 
-	padding: 2px; 
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	text-decoration: none;	
-	vertical-align: middle;
-	cursor: pointer;	
-}
 
 #fileshare_content #submit_block .button, 
 	#fileshare_content #submit_block a.button,
@@ -333,21 +312,6 @@ a.list_member
 	
 }
 
-#fileshare_content #mail_group_members .submit_block button a:visited
-{
-	text-decoration: none;
-}
-
-#fileshare_content #mail_group_members .submit_block button a:hover
-{
-	cursor: pointer;	
-}
-
-.private
-{
-	color: #990000;
-	font-size: 10px;
-}
 
 /* Letter section headings */
 .heading_black
@@ -361,177 +325,6 @@ a.list_member
 
 
 
-
-#fileshare #program_scrollbox 
-{
-  clear: left;
-}
-
-#fileshare #program_scrollbox  ul  
-{
-  margin:0;
-  padding: 0;
-  list-style:none;
-  text-align: left;
-  height: 25px;
-  vertical-align: middle;
-}
-
-#fileshare_content #alpha_tabs
-{
-	float: left;
-	margin-top: 20px;
-	width: 3em;	
-}
-
-
-#fileshare_content #alpha_tabs ul
-{
-	display: inline-block;
-	float: left;	
- 	list-style: none;
-	border-top:	solid 1px #AAA;
-	border-left: solid 1px #AAA;
-	-moz-border-radius-topleft: 10px;
-	-moz-border-radius-bottomleft: 10px;
-	border-bottom: solid 1px #AAA;
-	height:auto;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	text-align: center;
-	padding-left: 8px;
-	padding-right: 0px;
-	margin-right: 0px;	
-	margin-left: 5px;	
-}
-
-
-#fileshare_content #alpha_tabs ul li
-{
-}
-
-#fileshare_content #alpha_tabs a
-{
-	clear: both;
-	float: left;	
-}
-
-#fileshare_content #alpha_tabs a.alphabet
-{
-	line-height: 30px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color:#2B388F;
-	font-weight: bold;
-	text-decoration:none;
-	text-align: center;
-}
-
-
-#fileshare_content #alpha_tabs a.disabled
-{
-	color: #aaa;
-  	font-weight: normal;
-  text-decoration:none!important; 
-}
-
-#fileshare_content #alpha_tabs a.disabled:hover
-{
- 	color: #aaa;
-}
-
-
-#fileshare #program_scrollbox  ul li
-{
-	vertical-align: middle;	
-	display: block;
-	float: left;
-}
-
-#fileshare #program_scrollbox ul li.action
-{
-	padding: none;
-	width: 30px;
-	min-height: 25px;
-	margin-top: 5px;
-	/* Hack to provide min-height for IE 6 */
-	height:auto !important; 
-	display: block;
- }
-
-  
-#fileshare #program_scrollbox li a,
-	#fileshare #poc_scrollbox a
-	#fileshare #address_book_scrollbox a	
-{
-  font-weight:bold;
-  color:#000;
-  outline: none;
-  display: inline;
- }
-
-
-
-/* Commented Backslash Hack
-
-   hides rule from IE5-Mac \*/
-
-#fileshare #program_scrollbox .list_member li a {float:none;}
-
-/* End IE5-Mac hack */
-
-#fileshare #program_scrollbox .list_member li a:link ,  #fileshare #program_scrollbox  .list_member li a:visited 
-{
-  text-decoration: none;
-}
-
-#fileshare #program_scrollbox .list_member li a:hover, #fileshare #program_scrollbox  .list_member li a:active
-{
-  text-decoration: none;
-  color: #333;
-}
-
-#fileshare #program_scrollbox .list_member li a.disabled
-{
-	color: #333;
-}
-
-#fileshare #program_scrollbox .list_member li a.disabled:hover
-{
-	color: #333;
-	text-decoration: none;
-}
-
-
-
-#top_menu
-{
-	width: 750px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	padding-top: 5px;
-	float: right;
-	min-height: 40px;
-}
-
-#top_menu a
-{
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	color: #000066!important; 
-	font-weight: bold;
-	text-decoration:none;
-}
-
-
-#fileshare_content label.group_title
-{
-	padding-bottom: 20px; 
-	padding-top: 20px; 
-	padding-right: 10px;
-}
-
-
 /* box border under tab bar */
 #tab_border {
 	clear: left;
@@ -540,5 +333,18 @@ a.list_member
 	padding-right: 4px;
 	padding-top: 10px;
 	padding-bottom: 4px;
-	width: 98%;
+	width: 642px;
 }
+
+
+#library_search .paginator
+{
+	clear: both;
+}
+
+table.tree
+{
+	border: none;
+}
+
+

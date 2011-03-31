@@ -38,6 +38,8 @@ class DocumentManager
 	var $library;
 	var $docs;
 	var $documents;
+	var $width = 700;
+	var $height = 400;
 	
 	function DocumentManager($library)
 	{		
@@ -235,8 +237,8 @@ function deleteFolderResult(result)
 		global $config;
 		
 		$tree = new DirectoryTreeControl("files");
-		$tree->width = 700;
-		$tree->height = 400;
+		$tree->width = $this->width;
+		$tree->height = $this->height;
 		$tree->onSelectionChanged = "selectionChanged";
 		$tree->onDoubleClick = "downloadFile";
 		

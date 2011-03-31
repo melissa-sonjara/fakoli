@@ -426,6 +426,16 @@ function htmlsafe($str)
 {
 	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
+
+function HTMLToText($html)
+{
+	$patterns = array("/<br>/", "/&nbsp;/", "/<p>/", "/<BR>/", "/<P>/");
+	$replacements = array("\r\n", " ", "\r\n", "\r\n", "\r\n");
+	$text =  stripHTML(preg_replace($patterns, $replacements, $html));
+	
+	return $text;
+}
+
 /**
  * Outputs the MIME type list based on an array of MIME types.
  * Use this function to generate the contents of ACCEPT= attributes

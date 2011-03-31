@@ -92,45 +92,7 @@ var LibraryManager =  (function()
 		},
 			
 
-		/*
-		 * When the user selects a program from the program list dialog
-		 * add the member to the fileshare library.
-		 * Insert the new item into the member dialog box on the 
-		 * fileshare library permissions page.
-		 */
-	
-		addMemberFromDialog: function(document_library_id, user_id)
-		{				
-			var request = new Request({
-				url: "/action/fileshare/add_member?document_library_id=" + document_library_id+ "&user_id=" + user_id,
-				method: 'get',
-				
-				onSuccess: function(response) 
-				{ 
-					var box = $('member_scrollbox');
-					var dialog_box = $(fromDiv);
-					
-					var divId = pk + "_" + value;
-					var div = new Element('div', {'id': divId, 'class': ''});
-					div.set('html', response);
-					div.inject(box);
 		
-					var children = dialog_box.getChildren();
-					children.each(function(member)
-					{
-						if(member.id == pk + "_" + value)
-						{
-							dialog_box.removeChild(member);
-						}
-					});
-				
-				}.bind(this)
-			});
-	
-			request.send();		
-		},
-	
-	
 		/*
 		 * When the user clicks the x in the user name div,
 		 * remove the user from the member scrollbox
@@ -200,7 +162,7 @@ var LibraryManager =  (function()
 				{ 
 					var box = $('member_scrollbox');
 					
-					var divId = "user_id" + user_id;
+					var divId = "user_id_" + user_id;
 					var div = new Element('div', {'id': divId, 'class': ''});
 					div.set('html', response);
 					div.inject(box);
