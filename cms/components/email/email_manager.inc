@@ -191,13 +191,16 @@ class EmailManager
 		preg_match_all("/\[(.*?)\]/", $emailText, $usedMergeCodes, PREG_PATTERN_ORDER);
 	
 		$usedMergeCodes = $usedMergeCodes[1];		
-				
-		$used = strip_tags("'". implode("','", array_values($usedMergeCodes)) . "'");
 
-		$mergeCodes = Query::create(MergeCode, "WHERE class_name = :cn and name in ($used)")
-			->bind(":cn", $this->emailTemplate->class_name)
-			->execute();
-			
+		if(count($usedMergeCodes) > 0)
+		{
+			$used = strip_tags("'". implode("','", array_values($usedMergeCodes)) . "'");
+		
+			$mergeCodes = Query::create(MergeCode, "WHERE class_name = :cn and name in ($used)")
+				->bind(":cn", $this->emailTemplate->class_name)
+				->execute();
+		}
+		
 		if(count($mergeCodes) > 0)
 			$indexed = reindexList($mergeCodes, "name");
 		else
@@ -412,7 +415,7 @@ class EmailManager
 		
 		$defaultPath = $config['uploadbase'] . DIRECTORY_SEPARATOR . "email_debug_logs";
 		
-		if (!file_exists($defaultPath)) mkdir($defaultPath);
+		//if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
 		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath);
 	}
