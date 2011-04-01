@@ -83,7 +83,7 @@ DirectoryTree.clearSelection = function(treeID)
 	eval(treeID + "_onClearSelection();");
 };
 
-DirectoryTree _clearSelectionImpl = function(treeID)
+DirectoryTree._clearSelectionImpl = function(treeID)
 {
 	var hidden = $(treeID + "_value");
 	hidden.value = "";
