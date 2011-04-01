@@ -88,7 +88,7 @@ DirectoryTree._clearSelectionImpl = function(treeID)
 	var hidden = $(treeID + "_value");
 	hidden.value = "";
 	var tree = $(treeID);
-	var elts = tree.getElementsByTagName("a");
+	var elts = tree.getElements("a");
 	for (i = 0; i < elts.length; ++i)
 	{
 		elts[i].removeClass("selected");
