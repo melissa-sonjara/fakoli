@@ -141,7 +141,7 @@ class FolderNode
 				$display = "none";
 			}
 ?>
-		<div id='<?echo $this->id?>'><img id="<?echo $this->id?>_toggle" src="<?echo $toggle?>" align="absmiddle" onclick="DirectoryTree.toggleDirectoryFolder('<?echo $this->id?>')"><img id="<?echo $this->id?>_folder" align="absmiddle" src="<?echo $folder?>" onclick="toggleDirectoryFolder('<?echo $this->id?>')">
+		<div id='<?echo $this->id?>'><img id="<?echo $this->id?>_toggle" src="<?echo $toggle?>" align="absmiddle" onclick="DirectoryTree.toggleDirectoryFolder('<?echo $this->id?>')"><img id="<?echo $this->id?>_folder" align="absmiddle" src="<?echo $folder?>" onclick="DirectoryTree.toggleDirectoryFolder('<?echo $this->id?>')">
 <?
 			if ($this->value)
 			{
