@@ -333,7 +333,7 @@ a.list_member
 	padding-right: 4px;
 	padding-top: 10px;
 	padding-bottom: 4px;
-	width: 642px;
+	width: 640px;
 }
 
 
@@ -352,4 +352,8 @@ table.tree
 	border: none;
 }
 
+#tabs.fileshare
+{
+	width: 642px;
+}
 

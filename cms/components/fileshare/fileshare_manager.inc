@@ -125,7 +125,9 @@ function uploadFileshareFile()
 			);
 
 		$qs = ($key) ? "document_library_id=$key" : ""; 
-		return new TabBar("tabs", $tabs, $qs);
+		$tabs = new TabBar("tabs", $tabs, $qs);
+		$tabs->cssClass = "fileshare";
+		return $tabs;
 	}
 	
 	static function getStyles()
