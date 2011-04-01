@@ -63,6 +63,7 @@ $table->sortable = true;
 $table->filter = true;
 $table->pageSize = 10;
 $table->emptyMessage = "There are no documents in this library.";
+$table->cssStyles = "width: 640px";
 
 if($library->isOwner() || checkRole("fileshare,admin"))
 	$tabs = FileshareManager::libraryTabs($document_library_id);
