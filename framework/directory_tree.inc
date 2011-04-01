@@ -57,7 +57,7 @@ class FileNode
 		$icon_image = $this->_tree->getIcon($this->title);
 		$class = ($this->value == $this->_tree->selectedValue) ? "selected" : "file";
 ?>
-		<div><img src="<?echo $this->_tree->images['toggle_blank']?>" align="absmiddle"><img src="<?echo $icon_image?>" align="absmiddle"><a id="<?echo $this->id?>_link" class="<?echo $class?>" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')" ondblclick="<?echo $this->_tree->id?>_onDoubleClick()"><?echo $this->title?></a></div>
+		<div><img src="<?echo $this->_tree->images['toggle_blank']?>" align="absmiddle"><img src="<?echo $icon_image?>" align="absmiddle"><a id="<?echo $this->id?>_link" class="<?echo $class?>" href="javascript:DirectoryTree.selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')" ondblclick="<?echo $this->_tree->id?>_onDoubleClick()"><?echo $this->title?></a></div>
 <?
 	}
 }
