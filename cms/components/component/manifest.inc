@@ -89,6 +89,7 @@ class ComponentManifest
 					 "/fakoli/calendar/sonjara_calendar.js",
 					 "/fakoli/js/menu.js",
 					 "/fakoli/js/tree.js",
+		 			 "/fakoli/js/directory_tree.js",
 					 "/fakoli/js/context_menu.js",
 					 "/fakoli/js/sorting_table.js",
 					 "/fakoli/js/paginating_table.js",
