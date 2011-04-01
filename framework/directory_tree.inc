@@ -111,7 +111,7 @@ class FolderNode
 					{
 						$class = ($this->value == $this->_tree->selectedValue) ? "selected" : "folder";
 ?>
-			<a id="<?echo $this->id?>_link" class="<? echo $class?>" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')"><?echo $this->title?></a>
+			<a id="<?echo $this->id?>_link" class="<? echo $class?>" href="javascript:DirectoryTree.selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')"><?echo $this->title?></a>
 <?
 					}
 				}
@@ -141,7 +141,7 @@ class FolderNode
 				$display = "none";
 			}
 ?>
-		<div id='<?echo $this->id?>'><img id="<?echo $this->id?>_toggle" src="<?echo $toggle?>" align="absmiddle" onclick="toggleDirectoryFolder('<?echo $this->id?>')"><img id="<?echo $this->id?>_folder" align="absmiddle" src="<?echo $folder?>" onclick="toggleDirectoryFolder('<?echo $this->id?>')">
+		<div id='<?echo $this->id?>'><img id="<?echo $this->id?>_toggle" src="<?echo $toggle?>" align="absmiddle" onclick="DirectoryTree.toggleDirectoryFolder('<?echo $this->id?>')"><img id="<?echo $this->id?>_folder" align="absmiddle" src="<?echo $folder?>" onclick="toggleDirectoryFolder('<?echo $this->id?>')">
 <?
 			if ($this->value)
 			{
@@ -157,14 +157,14 @@ class FolderNode
 					{
 						$class = ($this->value == $this->_tree->selectedValue) ? "selected" : "folder";
 ?>
-				<a id="<?echo $this->id?>_link" class="folder" href="javascript:selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')"><?echo $this->title?></a>
+				<a id="<?echo $this->id?>_link" class="folder" href="javascript:DirectoryTree.selectItem('<?echo $this->_tree->id?>', '<?echo $this->id?>', '<?echo jsSafe($this->value)?>')"><?echo $this->title?></a>
 <?
 					}
 				}
 				else
 				{
 ?>
-					<a id="<?echo $this->id?>_link" class="folder" href="javascript:toggleDirectoryFolder('<?echo $this->id?>')"><?echo $this->title?></a>
+					<a id="<?echo $this->id?>_link" class="folder" href="javascript:DirectoryTree.toggleDirectoryFolder('<?echo $this->id?>')"><?echo $this->title?></a>
 <?
 				}			}
 ?>
@@ -337,79 +337,7 @@ class DirectoryTreeControl
 	
 	function writeScript()
 	{
-		global $_writtenDirectoryTreeControlScript;
-		
-		if (!$_writtenDirectoryTreeControlScript)
-		{
-?>
-<script type="text/javascript">
-<!--
-function toggleDirectoryFolder(id, openStyle, closedStyle)
-{
-	var div = $(id + "_contents");
-	var link = $(id);
-	var toggle = $(id + "_toggle");
-	var folder = $(id + "_folder");
-
-	if (div.style.display == "none" || div.style.display == "")
-	{
-		div.style.display = "block";
-		link.removeClass(closedStyle);
-		link.addClass(openStyle);
-		toggle.src = "<?echo $this->images['toggle_open']?>";
-		folder.src = "<?echo $this->images['folder_open']?>";
-	}
-	else
-	{
-		div.style.display="none";
-		link.removeClass(openStyle);
-		link.addClass(closedStyle);
-		toggle.src = "<?echo $this->images['toggle_closed']?>";
-		folder.src = "<?echo $this->images['folder_closed']?>";
-	}
-}
-
-function selectItem(treeID, itemID, itemValue)
-{
-	_clearSelectionImpl(treeID);
-	var hidden = $(treeID + "_value");
-	hidden.value = itemValue;
-
-	var node = $(treeID + "_node");
-	node.value = itemID;
-	
-	var item = $(itemID + "_link");
-	item.addClass("selected");
-	eval(treeID + "_onSelectItem('" + itemID + "', '" + itemValue + "');");
-}
-
-function clearSelection(treeID)
-{
-
-	_clearSelectionImpl(treeID);
-	eval(treeID + "_onClearSelection();");
-}
-
-function _clearSelectionImpl(treeID)
-{
-	var hidden = $(treeID + "_value");
-	hidden.value = "";
-	var tree = $(treeID);
-	var elts = tree.getElementsByTagName("a");
-	for (i = 0; i < elts.length; ++i)
-	{
-		elts[i].removeClass("selected");
-	}
-}
-
-//-->
-</script>
-<?
-			$_writtenTreeControlScript = true;
-		}
-	
 	// Event Hooks
-	
 ?>
 <script type="text/javascript">
 function <?echo $this->id?>_onSelectItem(itemID, itemValue)
