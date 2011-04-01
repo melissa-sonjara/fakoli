@@ -415,7 +415,7 @@ class EmailManager
 		
 		$defaultPath = $config['uploadbase'] . DIRECTORY_SEPARATOR . "email_debug_logs";
 		
-		//if (!file_exists($defaultPath)) mkdir($defaultPath);
+		if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
 		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath);
 	}
