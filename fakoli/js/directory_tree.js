@@ -50,7 +50,7 @@ DirectoryTree.toggleDirectoryFolder = function(id, openStyle, closedStyle)
 		link.removeClass(closedStyle);
 		link.addClass(openStyle);
 		toggle.src = "/fakoli/images/toggle_open.png";
-		folder.src = "/fakoli/images/folder_open.gif";
+		folder.src = "/fakoli/images/folder_open.png";
 	}
 	else
 	{
