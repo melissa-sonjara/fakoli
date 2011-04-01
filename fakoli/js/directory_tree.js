@@ -49,16 +49,16 @@ DirectoryTree.toggleDirectoryFolder = function(id, openStyle, closedStyle)
 		div.style.display = "block";
 		link.removeClass(closedStyle);
 		link.addClass(openStyle);
-		toggle.src = "<?echo $this->images['toggle_open']?>";
-		folder.src = "<?echo $this->images['folder_open']?>";
+		toggle.src = "/fakoli/images/toggle_open.png";
+		folder.src = "/fakoli/images/folder_open.gif";
 	}
 	else
 	{
 		div.style.display="none";
 		link.removeClass(openStyle);
 		link.addClass(closedStyle);
-		toggle.src = "<?echo $this->images['toggle_closed']?>";
-		folder.src = "<?echo $this->images['folder_closed']?>";
+		toggle.src = "/fakoli/images/toggle_closed.png";
+		folder.src = "/fakoli/images/folder_closed.png";
 	}
 };
 
