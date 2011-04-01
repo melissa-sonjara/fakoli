@@ -93,4 +93,4 @@ DirectoryTree._clearSelectionImpl = function(treeID)
 	{
 		elts[i].removeClass("selected");
 	}
-}
+};
