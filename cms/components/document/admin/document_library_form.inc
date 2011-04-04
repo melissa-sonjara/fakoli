@@ -56,6 +56,8 @@ $tabs = documentLibraryTabs($document_library_id);
 $form = new AutoForm($library);
 $form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files", "create_date");
 $form->required("name", "identifier");
+$form->allowDelete = true;
+$form->onDelete = deleteDocumentLibary;
 
 if ($method == "POST")
 {
@@ -76,5 +78,12 @@ $tabs->writeHTML();
 <div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
 <?
 $form->drawForm();
+
+function deleteDocumentLibary($library)
+{
+	$mgr = new DocumentManager($library);
+	$mgr->deleteDocumentLibrary();	
+	redirect("/admin/document_libraries");
+}
 ?>
 </div>

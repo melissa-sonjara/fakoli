@@ -115,7 +115,7 @@ class DocumentLibrary extends DataItem
 	
 	function FileshareUsers($constraint = "")
 	{
-		return $this->getRelatedList(FileshareUserXref, "", $constraint);	
+		return $this->getRelatedList(FileshareUserXref, "document_library_id", $constraint);	
 	}
 	
 	/*

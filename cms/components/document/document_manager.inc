@@ -381,6 +381,19 @@ function deleteFolderResult(result)
 		return true;
 	}
 	
+	/*
+	 * Delete a folder record and its path in the file system.
+	 */
+	function deleteFolder($folder)
+	{
+		$folder = sanitizePath($folder);
+		$path = $this->library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $folder;
+	
+		if (file_exists($path))
+			rmdir($path);
+		$folder->delete();
+	}
+	
 	function drawSelectView($selectionChanged = "", $doubleClick = "", $width=700, $height = 400)
 	{
 		global $config;
@@ -512,5 +525,33 @@ function deleteFolderResult(result)
 			mkdir($docs);
 			chmod($docs, 0777);
 		}
+	}
+	
+	function deleteDocumentLibrary()
+	{
+		$documents = $this->library->Documents();
+		if(count($documents) > 0)
+		{
+			foreach($documents as $document)
+				$this->deleteDocument($document);
+		}
+			
+		$folders = $this->library->Folders();
+		if(count($folders) > 0)
+		{
+			foreach($folders as $folder)
+			{
+				$this->deleteFolder($folder);
+			}
+		}
+			
+		$fileshareUsers = $this->library->FileshareUsers();
+		if(count($fileshareUsers) > 0)
+		{
+			foreach($fileshareUsers as $f_user)
+				$f_user->delete();
+		}	
+		
+		$this->library->delete();
 	}
 }
