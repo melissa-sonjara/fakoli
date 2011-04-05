@@ -142,7 +142,7 @@ function uploadFileshareFile()
 	{
 ?>
 <div id="role" style="float: right; width: 30%; z-index: 2">
-<a style="height: 20px" class="button" href="#" onclick="new LibraryManager().openRoleDialog(<?php echo $library->document_library_id ?>); return false;">Set Role Permissions</a>
+<a style="height: 20px" class="button" href="#" onclick="new LibraryManager().openRoleDialog(<?php echo $library->document_library_id ?>); return false;">Set Global Access</a>
 </div>
 <div id="member_search_form">
 <label for='name'>Add Members</label>

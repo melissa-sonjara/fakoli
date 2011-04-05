@@ -8,53 +8,39 @@ if(!$document_library_id)
 	ajaxReturn("invalid parameters");
 
 $library = new DocumentLibrary($document_library_id);
-$library->filter = new InclusionFilter("upload_files", "allow_access", "manage_folders");
+$library->filter = new InclusionFilter("");
 
-$sroles = SiteRole::getRolesArray();
+$roles = Query::create(SiteRole, "ORDER BY role")->execute();
 
-foreach($sroles as $role => $name)
-{
-	if(!preg_match("/$role/", "admin"))
-		$roles[$role] = $name;
-}
-
+if(count($roles) > 0)
+	$allRoles = implode(",", array_keys(reindexList($roles, "role")));
 
 $form = new AutoForm($library, "POST", "/action/fileshare/role_permission_form?document_library_id={$document_library_id}", "RolePermission_form");
 $form->ajaxSubmit("function(result) {new LibraryManager().rolesEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$readCheck = new CheckListFieldRenderer($form, "allow_access", "Allow Read Access", $roles);
-$writeCheck = new CheckListFieldRenderer($form, "upload_files", "Upload Files", $roles);
-$manageCheck = new CheckListFieldRenderer($form, "manage_folders", "Create &amp; Delete Folders", $roles);
-$deleteCheck = new CheckListFieldRenderer($form, "delete_files", "Delete Files", $roles);
-$form->submitLabel = "Update Role Permissions";
+$form->add(new BooleanFieldRenderer($form), "read_access");
+$form->alias("read_access", "Allow All Site Members to View");
+if(preg_match("/$allRoles/", $library->allow_access))
+	$form->data->set("read_access", true);
+
+$form->submitLabel = "Update Access";
 
 if ($method == "POST") 
 {
-	if($form->save())
-	{
-		echo "OK";
-		return;
-	}
+	$read = $_POST["read_access"];
+
+	if($read)
+		$library->allow_access = $allRoles;
 	else
-	{
-		echo $form->msg;
-		return;
-	}
+		$library->allow_access = DocumentLibrary::getDefaultRole(true);
+	$library->filter = new InclusionFilter("allow_access");
+	$library->save();
+	
+	echo "OK";
+	return;
+	// no error conditions;
 }
 
 echo $form->writeScript();
 
 $form->drawForm();
-
-class RolePermission extends DataItem
-{
-	var $fields = array();
-	
-	function RolePermission()
-	{
-		$this->primary_key = "role_id";
-		$this->table = "role_permission";
-
-		$this->DataItem(func_get_args());
-	}
-}
 ?>

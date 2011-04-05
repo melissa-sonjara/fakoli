@@ -176,7 +176,7 @@ var LibraryManager =  (function()
 		
 		openRoleDialog: function(document_library_id)
 		{
-			this.dialog = modalPopup('Edit Library Role Permissions', '/action/fileshare/role_permission_form?document_library_id=' + document_library_id, '550px', 'auto', true);		
+			this.dialog = modalPopup('Fileshare Site Member Access', '/action/fileshare/role_permission_form?document_library_id=' + document_library_id, '550px', 'auto', true);		
 		},
 		
 		rolesEdited: function(response)

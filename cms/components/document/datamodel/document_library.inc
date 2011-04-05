@@ -148,11 +148,11 @@ class DocumentLibrary extends DataItem
 	 * space, also allow "fileshare" role full
 	 * access rights.
 	 */
-	static function getDefaultRole()
+	static function getDefaultRole($fileshare = false)
 	{
 		$identifier = $_REQUEST["identifier"];
 
-		if(preg_match("/fileshare/i", $identifier))
+		if(preg_match("/fileshare/i", $identifier) || $fileshare)
 			$constraint = "WHERE role like 'admin%' or role like 'fileshare%'";
 		else
 			$constraint = "WHERE role like 'admin%'";
