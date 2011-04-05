@@ -89,9 +89,9 @@ if($tabs)
 <table id="library_search" class="layout" style="width: auto"><tr><td>
 <table class="layout">
 <tr>
-<td style="width: 50%">
+<td style="width: 40%">
 <h3>Files in <?echo $library->name?></h3>
-</td>
+</td style="width: 60%">
 <td>
 <form id="keyword_search_form" method="GET" action="">
 <label for='keyword'>Keyword</label>
