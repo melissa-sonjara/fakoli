@@ -63,7 +63,9 @@ class ComponentManifest
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" 	=> array(ComponentManager, displayPage),
-					 "EnumerateItems"		=> array(ComponentManager, enumerateComponentPages));
+					 "EnumerateItems"		=> array(ComponentManager, enumerateComponentPages),
+					"DeleteRole"			=>	array(ComponentManager, deleteRole)
+					);
 					 
 	}
 	

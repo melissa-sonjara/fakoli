@@ -73,5 +73,15 @@ class PageManager
 		$items["Pages"] = $pages;
 		return $items;
 	}
+	
+	static function deleteRole($del_role)
+	{
+		$constraint = "WHERE role like '%$del_role%'";
+		$pages = Query::create(Page, $constraint)->execute();
+		
+		RoleManager::deleteRoleFromString($pages, $del_role);
+		
+		return $del_role;		
+	}	
 }
 ?>

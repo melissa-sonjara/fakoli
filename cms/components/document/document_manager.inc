@@ -554,4 +554,19 @@ function deleteFolderResult(result)
 		
 		$this->library->delete();
 	}
+
+	// Not the most efficient but how often will we use it?
+	static function deleteRole($del_role)
+	{
+		$constraint = "WHERE role like '%$del_role%'";
+		
+		$roleFields = array("upload_files", "delete_files", "manage_folders", "allow_access");
+		foreach($roleFields as $field)
+		{
+			$libraries = Query::create(DocumentLibrary, "WHERE $field like '%$del_role%'")->execute();
+			RoleManager::deleteRoleFromString($libraries, $del_role, $field);
+		}
+		
+		return $del_role;	
+	}		
 }

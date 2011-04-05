@@ -165,4 +165,17 @@ class UserManager
 		return "User name or email";	
 	}
 	
+	static function deleteRole($del_role)
+	{
+		$constraint = "WHERE role like '%$del_role%'";
+		
+		$mgr = new UserManager();
+		$class = $mgr->getUserClass();
+		$users = Query::create($class, $constraint)->execute();
+		
+		RoleManager::deleteRoleFromString($users, $del_role);
+		
+		return $del_role;
+	}		
+	
 }

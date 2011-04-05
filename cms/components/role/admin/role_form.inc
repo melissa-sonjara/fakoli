@@ -44,6 +44,8 @@ $form = new AutoForm($role);
 $redirect = "/admin/roles";
 $form->unique("role", "That role has already been defined");
 $form->required("role", "name");
+$form->allowDelete = true;
+$form->onDelete = deleteRole;
 
 $form->button("Cancel", $redirect);
 
@@ -67,9 +69,12 @@ else
 
 $script .= $form->writeScript();
 
-
-
 $form->drawForm();
 
-
+function deleteRole($role)
+{
+	ComponentManager::fireEvent("DeleteRole", $role->role);	
+	$role->delete();
+	redirect("/admin/roles");
+}
 ?>

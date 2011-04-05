@@ -63,6 +63,22 @@ class Component extends DataItem
 		return prettify($this->name);
 	}
 	
+	static function formatOptions()
+	{
+		$options = array();
+		
+		$components = removeDuplicates(Query::create(Component, "ORDER BY name")->execute(), "name");
+		if(count($components) > 0)
+		{
+			foreach($components as $component)
+			{
+				$options[$component->name] = $component->name;
+			}
+		}
+		
+		return $options;
+	}
+	
 	function Component()
 	{
 		$this->table = "component";

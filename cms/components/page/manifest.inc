@@ -63,7 +63,10 @@ class PageManifest
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" 	=> array(PageManager, displayPage),
-					 "EnumerateItems"		=> array(PageManager, enumeratePages));
+					 "EnumerateItems"		=> array(PageManager, enumeratePages),
+					"DeleteRole"			=>	array(PageManager, deleteRole)
+		
+				);
 	}
 }
 

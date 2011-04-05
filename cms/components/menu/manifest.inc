@@ -58,7 +58,14 @@ class MenuManifest
 								  "weight"	=>	2)
 			)
 		);		
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array(
+					"DeleteRole"			=>	array(MenuManager, deleteRole)
+				);
+	}		
 }
 
 ?>

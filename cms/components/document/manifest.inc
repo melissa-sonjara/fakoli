@@ -50,7 +50,8 @@ class DocumentManifest
 	{
 		return array(
 				"EnumerateItems"	 => array(DocumentManager, enumerateItems),
-				"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary)
+				"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
+				"DeleteRole"			=>	array(DocumentManager, deleteRole)
 				);
 	}
 	

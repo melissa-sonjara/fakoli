@@ -59,6 +59,13 @@ class UserManifest
 			)
 		);		
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array(
+					"DeleteRole"			=>	array(UserManager, deleteRole)
+				);
+	}	
 }
 
 ?>

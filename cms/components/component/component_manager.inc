@@ -438,5 +438,16 @@ class ComponentManager
 		$items["Component Pages"] = $pages;
 		return $items;
 	}
+	
+	static function deleteRole($del_role)
+	{
+		$constraint = "WHERE role like '%$del_role%'";
+		$componentPages = Query::create(ComponentPage, $constraint)->execute();
+		
+		RoleManager::deleteRoleFromString($componentPages, $del_role);
+
+		return $del_role;
+		
+	}
 }
 ?>
