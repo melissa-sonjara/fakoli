@@ -118,6 +118,12 @@ class DocumentLibrary extends DataItem
 		return $this->getRelatedList(FileshareUserXref, "document_library_id", $constraint);	
 	}
 	
+	function getFileshareUser($user_id)
+	{
+		$xrefs = $this->FileshareUsers("WHERE user_id = $user_id");
+		return (count($xrefs) > 0) ? $xrefs[0] : null;	
+	}
+	
 	/*
 	 * Check fileshare user-level access
 	 */

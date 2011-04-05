@@ -100,7 +100,7 @@ var LibraryManager =  (function()
 		removeMember: function(document_library_id, user_id)
 		{
 			var request = new Request({
-				url: "/action/mail_list/remove_member?document_library_id=" + document_library_id + "&user_id=" + user_id,
+				url: "/action/fileshare/remove_member?document_library_id=" + document_library_id + "&user_id=" + user_id,
 				method: 'get',
 				
 				onSuccess: function(response) 

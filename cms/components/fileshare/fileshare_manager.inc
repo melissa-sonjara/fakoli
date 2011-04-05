@@ -87,7 +87,7 @@ class FileshareManager extends DocumentManager
 ?>
 		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
 		<br><br>
-		&nbsp;&nbsp;<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
+		<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
 		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>
 <?php			
 		}
@@ -194,11 +194,7 @@ function uploadFileshareFile()
 	{
 		$document_id = $document->document_id;
 
-		$len = strlen($document->file);
-		if($len > 50)
-			$file = substr($document->file, 0, 25)."..." . substr($document->file, len - 20);
-		else
-			$file = $document->file;
+		$file = basename($document->file);
 		$icon = getDocIcon($document->file);
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
 		$link .= "<a href='/action/document/download?document_id={$document_id}'>{$file}
@@ -206,7 +202,7 @@ function uploadFileshareFile()
 		
 		// delete link
 		if($document->isOwner() || $this->library->isOwner() || checkRole("fileshare"))
-			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\">(delete)</a>\n";
+			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"><a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"></a>\n";
 		
 		return $link;
 	}	
@@ -222,19 +218,25 @@ function uploadFileshareFile()
 		
 		$userXref = new FileshareUserXref();
 		
-		$constraint = "WHERE owner_id=:u or document_library_id in (select document_library_id from {$userXref->table} where user_id=:u)";
-		$roles = explode(",", $user->role);
-		if(count($roles) > 0)
-		{
-			foreach($roles as $role)
-				$constraint .= " or allow_access like '%$role%' ";	
-		}
+		$roleLibraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+		$roleLibraries = filterByRole($roleLibraries, "allow_access");
 		
+		$constraint = "WHERE owner_id=:u or document_library_id in (select document_library_id from {$userXref->table} where user_id=:u)";
+			
 		$libraries = Query::create(DocumentLibrary, "$constraint ORDER BY name")
 			->bind(":u", $user->user_id)
 			->execute();
+			
+		if(count($libraries) == 0)
+			$libraries = array();
+			
+		if(count($roleLibraries) > 0)
+		{
+			foreach($roleLibraries as $rLibrary)
+				$libraries[] = $rLibrary;
+		}
 		
-		return $libraries;
+		return removeDuplicates($libraries, "document_library_id");
 	}	
 	
 	static function getLibraryLastModified($library)

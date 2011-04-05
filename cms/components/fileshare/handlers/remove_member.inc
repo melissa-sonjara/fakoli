@@ -6,37 +6,21 @@
 
 Fakoli::using("program", "mail_list");
 
-$group_email_id = checkNumeric($_GET["group_email_id"]);
-$program_id = checkNumeric($_GET["program_id"]);
-$poc_id = checkNumeric($_GET["poc_id"]);
+$document_library_id = checkNumeric($_GET["document_library_id"]);
 $user_id = checkNumeric($_GET["user_id"]);
 
-trace("Remove_member:: group_email_id $group_email_id", 3);
+trace("Remove_member:: document_library_id $document_library_id", 3);
 
-if(!$group_email_id)
-	ajaxReturn("no group_email_id");
+if(!$document_library_id)
+	ajaxReturn("invalid parameters");
 
-$groupEmail = new GroupEmail($group_email_id);
+$library = new DocumentLibrary($document_library_id);
 
-if($program_id)
+if($user_id)
 {
-	$xref = $groupEmail->getProgramXref($program_id);	
-	if($xref)
-		$xref->delete();
+	trace("Remove_member:: user_id $user_id from library $document_library_id", 3);
 	
-}
-elseif($poc_id)
-{
-	trace("Remove_member:: group_email_id $group_email_id and poc_id $poc_id", 3);
-	$xref = $groupEmail->getPOCXref($poc_id);
-	if($xref)
-		$xref->delete();
-}
-elseif($user_id)
-{
-	trace("Remove_member:: group_email_id $group_email_id and user_id $user_id", 3);
-	
-	$xref = $groupEmail->getUserXref($user_id);
+	$xref = $library->getFileshareUser($user_id);
 	if($xref)
 		$xref->delete();
 	

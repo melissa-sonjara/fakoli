@@ -56,7 +56,6 @@ $table->column("Title", array($mgr, formatDocumentTitle), true)
 	->column("File", array($mgr, formatDocumentFileLink), true)
 	->column("Author", array($mgr, getDocumentAuthor), true)
 	->column("Last Modified", array($mgr, getDocumentLastModified), true)
-	->column("Notes", "{notes}", true)
 	;
 		  
 $table->sortable = true;
@@ -88,15 +87,22 @@ if($tabs)
 }
 ?>
 <table id="library_search" class="layout" style="width: auto"><tr><td>
+<table class="layout">
+<tr>
+<td style="width: 50%">
 <h3>Files in <?echo $library->name?></h3>
-<form id="keyword_search_form" style="float: right" method="GET" action="">
+</td>
+<td>
+<form id="keyword_search_form" method="GET" action="">
 <label for='keyword'>Keyword</label>
 <input id='LibrarySearch_form_keyword' type='text' name='keyword' autocomplete='off' value='' size='20'/>
 &nbsp;
 <input type='submit' class='button' name='submit' value='Search'/>
 <input type="hidden" name="document_library_id" value="<?php echo $document_library_id ?>"/>
-<br>
 </form>
+</td>
+</tr>
+</table>
 <?
 $table->drawView();
 ?><br>
