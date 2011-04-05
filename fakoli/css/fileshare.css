@@ -287,7 +287,8 @@ a.list_member
 	#fileshare_content #submit_block a.button,
 	#DocumentLibrary_form .button,
 	#submit_block .button,
-	#submit_block a.button
+	#submit_block a.button,
+	#role a.button
 {
 	background: none;
 	font-size: 12px;	
@@ -312,7 +313,8 @@ a.list_member
 
 #fileshare_content .submit_block a.button,
 #fileshare_content .submit_block a.button a:visited,
-#submit_block a.button a:visited
+#submit_block a.button a:visited,
+#role a:visited
 {
 	text-decoration: none;
 	padding-top: 5px;

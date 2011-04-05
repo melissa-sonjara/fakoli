@@ -172,9 +172,30 @@ var LibraryManager =  (function()
 			});
 	
 			request.send();		
+		},
+		
+		openRoleDialog: function(document_library_id)
+		{
+			this.dialog = modalPopup('Edit Library Role Permissions', '/action/fileshare/role_permission_form?document_library_id=' + document_library_id, '550px', 'auto', true);		
+		},
+		
+		rolesEdited: function(response)
+		{
+			if(response == "OK")
+				this.closeRoleDialog();
+			else
+			{
+				var err = $('RolePermission_form__error');
+				err.set('html', response);
+				err.setStyle('display', 'table-cell');
+			}	
+		},
+		
+		closeRoleDialog: function()
+		{
+			this.dialog.hide();
 		}
 		
-	
 		});
 
 	var instance;
