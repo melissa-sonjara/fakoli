@@ -21,9 +21,10 @@ foreach($sroles as $role => $name)
 
 $form = new AutoForm($library, "POST", "/action/fileshare/role_permission_form?document_library_id={$document_library_id}", "RolePermission_form");
 $form->ajaxSubmit("function(result) {new LibraryManager().rolesEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$readCheck = new CheckListFieldRenderer($form, "allow_access", "Read Access", $roles);
-$writeCheck = new CheckListFieldRenderer($form, "upload_files", "Upload Access", $roles);
-$manageCheck = new CheckListFieldRenderer($form, "manage_folders", "Manage Folders", $roles);
+$readCheck = new CheckListFieldRenderer($form, "allow_access", "Allow Read Access", $roles);
+$writeCheck = new CheckListFieldRenderer($form, "upload_files", "Upload Files", $roles);
+$manageCheck = new CheckListFieldRenderer($form, "manage_folders", "Create &amp; Delete Folders", $roles);
+$deleteCheck = new CheckListFieldRenderer($form, "delete_files", "Delete Files", $roles);
 $form->submitLabel = "Update Role Permissions";
 
 if ($method == "POST") 
