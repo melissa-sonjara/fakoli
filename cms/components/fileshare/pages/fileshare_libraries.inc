@@ -55,5 +55,5 @@ $table->drawView();
 ?>
 <br/>
 <div id="submit_block">
-<a class="button" style="height: 21px" href="/fileshare_library_form">Create a Filesharing Library</a>
+<a href="/fileshare_library_form"><img alt="create_library" src="/fakoli/images/button_create_library.png"/></a>
 </div>

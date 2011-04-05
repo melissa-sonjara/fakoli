@@ -11,7 +11,7 @@ $styles .= FileshareManager::getStyles();
 
 ?>	
 <div id="fileshare_list">
-<h3 class="fileshare_list">Fileshare Libraries</h3>
+<h3 class="fileshare_list"><img alt="library" src="/fakoli/images/icon_library.png"><a class="heading" href="/fileshare_libraries">Fileshare Libraries</a></h3>
 <ul>
 <?php 
 if(count($libraries) > 0)
@@ -29,5 +29,5 @@ if(count($libraries) > 0)
 </div>
 <div style="text-align: center">
 <br>
-<a href="/fileshare_library_form">Create Fileshare Library</a>
+<a href="/fileshare_library_form"><img alt="create_library" src="/fakoli/images/button_create_library.png"/></a>
 </div>

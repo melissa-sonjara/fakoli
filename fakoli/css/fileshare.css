@@ -205,20 +205,33 @@ a.list_member
 }
 
 
+
+#right .module #fileshare_list h3.fileshare_list a.heading, 
+#right .module #fileshare_list h3.fileshare_list a.visited
+{
+	text-decoration: none;
+}
+
+
+
 #right .module #fileshare_list
 {
-	border: solid 1px  #81b1c7;
 	height: 200px;
 	overflow: auto;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
-	width: 180px;
+	width: 205px;
 	background-color: #fff;
 	color:#000;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
 	text-align: left;
+	border: 1px #A9CDED;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-box-shadow: 2px 2px 12px #999999;
+	-webkit-box-shadow: 2px 2px 12px #999999;
 }
 
 
