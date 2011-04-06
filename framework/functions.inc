@@ -813,7 +813,27 @@ function option($value, $text, $sel = "")
 	}
 	echo ">$text</option>";	
 }
-	
+
+
+/**
+ * Write out an option tag to a string, marking as selected if applicable.
+ * @param mixed $value the value of the option
+ * @param string $text the text for the option
+ * @param mixed $sel a value to compare to the $value field, 
+ * to determine whether the option should be selected. 
+ */
+function str_option($value, $text, $sel = "")
+{
+	$opt = "<option value='$value'";
+	if ($sel == $value)
+	{
+		$opt .= " selected";
+	}
+	$opt .= ">$text</option>";
+
+	return $opt;
+}
+
 /**
  * Simplified redirect.
  * @param $page the page to redirect to
