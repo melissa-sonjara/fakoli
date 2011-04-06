@@ -32,7 +32,6 @@
 *****************************************************************/
 
 Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("data_view");
 
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_pie.php');
