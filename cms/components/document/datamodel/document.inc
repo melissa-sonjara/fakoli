@@ -87,7 +87,7 @@ class Document extends DataItem
 		
 		$library = $this->DocumentLibrary();
 		
-		$member = $library->FileshareUsers("WHERE user_id={$user->user_id}");
+		$member = $library->getFileshareUser($user->user_id);
 		
 		if($this->isOwner() || checkRole($library->manage_folders) || 
 		checkRole($library->upload_files) || checkRole($library->delete_files) || $member)
