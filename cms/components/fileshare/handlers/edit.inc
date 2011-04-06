@@ -43,10 +43,6 @@ if (!$document_id)
 $document = new Document($document_id);
 $library = $document->DocumentLibrary();
 
-if (!checkRole($library->allow_access) && !$library->allowAccess())
-{
-	ajaxReturn("Access Denied");
-}
 
 $document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "author");
 
@@ -61,6 +57,11 @@ $form->button("Cancel", "new LibraryManager().closeEditDocumentDetails()", null,
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
 $notes->columns = 38;
+
+if (!$document->fileshareAllowEdit())
+{
+	$form->readOnlyForm = true;
+}
 
 if ($method == "POST")
 {

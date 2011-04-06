@@ -75,6 +75,37 @@ class Document extends DataItem
 
 		return ($owner->user_id == $user->user_id) ? true : false;
 	}
+	
+	/*
+	 * For fileshare space, role-based permissions must be anything
+	 * in addition or other than just "allow_access" to get edit
+	 * details rights to a document.
+	 */
+	function fileshareAllowEdit()
+	{
+		global $user;
+		
+		$library = $this->DocumentLibrary();
+		
+		$member = $library->FileshareUsers("WHERE user_id={$user->user_id}");
+		
+		if($this->isOwner() || checkRole($library->manage_folders) || 
+		checkRole($library->upload_files) || checkRole($library->delete_files) || $member)
+			return true;
+		else
+			return false;
+	}
+	
+	function fileshareAllowDelete()
+	{
+		$library = $this->DocumentLibrary();
+		
+		if($this->isOwner() || $library->isOwner() || 
+			checkRole($library->delete_files))
+			return true;
+		else
+			return false;
+	}
 
 	function DocumentLibrary()
 	{

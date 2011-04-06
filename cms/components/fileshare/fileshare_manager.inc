@@ -204,7 +204,7 @@ function uploadFileshareFile()
 		</a>&nbsp;&nbsp;\n";
 		
 		// delete link
-		if($document->isOwner() || $this->library->isOwner() || checkRole("fileshare"))
+		if($document->fileshareAllowDelete())
 			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"><a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"></a>\n";
 		
 		return $link;
