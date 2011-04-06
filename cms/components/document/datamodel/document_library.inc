@@ -134,13 +134,31 @@ class DocumentLibrary extends DataItem
 		if(!$user)
 			return false;
 			
-		if($this->isOwner() || checkRole($this->allow_access))
+		if($this->isOwner() || checkRole($this->allow_access) || $this->isFileshareMember($user->user_id))
 			return true;
-		
-		$xrefs = $this->FileshareUsers("WHERE user_id={$user->user_id}");
 
-		return (count($xrefs) > 0) ? true : false;
+		return false;
 	}
+	
+		
+	function fileshareAllowUpload()
+	{
+		if($this->isOwner() || checkRole($this->upload_files) || $this->isFileshareMember())
+			return true;
+		else
+			return false;
+	}
+	
+		
+	function isFileshareMember()
+	{
+		global $user;
+		
+		$member = $this->getFileshareUser($user->user_id);
+		
+		return ($member) ? true : false;
+	}
+
 	
 	/*
 	 * Set admin role as default for full access rights to
