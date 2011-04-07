@@ -13,12 +13,10 @@ if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 {
     $date = $_SERVER["HTTP_IF_MODIFIED_SINCE"];
     $if_modified_since=strtotime($date);
-        
-    trace("-------- $if_modified_since >= $last_modified", 3);
-    
+     
     if($if_modified_since >= $last_modified)
     {
-        header("HTTP/1.1 304 Not Modified");
+        header("HTTP/1.0 304 Not Modified");
         return;
     }
 }
