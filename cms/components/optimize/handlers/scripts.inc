@@ -16,11 +16,11 @@ if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
         
     trace("-------- $if_modified_since >= $last_modified", 3);
     
-    /*if($if_modified_since >= $last_modified)
+    if($if_modified_since >= $last_modified)
     {
-        header("HTTP/1.0 304 Not Modified");
+        header("HTTP/1.1 304 Not Modified");
         exit();
-    }*/
+    }
 }
 
 $content = Cache::get("script_cache");
