@@ -19,7 +19,7 @@ if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
     if($if_modified_since >= $last_modified)
     {
         header("HTTP/1.1 304 Not Modified");
-        exit();
+        return;
     }
 }
 
