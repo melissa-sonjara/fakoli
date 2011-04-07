@@ -405,6 +405,151 @@ class SurveyResultsView
 	}
 }
 
+
+/*
+ * Show the results for one survey in the format:
+ * 
+ * Company Name    Question 1   Question 2...
+ * Acme             Answer 1    Answer 2
+ * 
+ * Steps:
+ * 
+ * 1) Get all response objects for this survey. A response
+ * object is a record that links one person's set of answers 
+ * to one survey's set of questions.
+ * 
+ * 2) For each response object, create a dummy data model
+ * object of class SpreadsheetResponse. This object will hold
+ * the response object's name (e.g., participant or company name)
+ * and the answers to each question in the survey. Since the
+ * number of questions in a surey varies, we create the field list
+ * for SurveySpreadsheet dynamically and assign each field its
+ * formatted answer value, retrieved from the QuestionnaireForm class.
+ * 
+ * 3) Give all the spreadsheet objects to DataListView to render
+ * the table. 
+ * 
+ * @param mgr - instance of SurveyResultsManager
+ * which can access array of response objects and
+ * get the question set for the survey
+ */
+class SurveySpreadsheetView extends SurveyResultsView
+{
+	var $table;
+	
+	function SurveySpreadsheetView($mgr)
+	{
+		$spreadsheetResponses = $this->getSpreadsheetResponses($mgr->Responses(), $mgr->getAnswers(), $mgr->getQuestionKey());
+		$this->table = $this->buildTable($spreadsheetResponses, $mgr->getQuestions());
+	}
+
+	/*
+	 * $responses - array of response objects that link a survey to a set of answers.
+	 * 
+	 * $surveyAnswers - array of all answers to this survey.
+	 * 
+	 * $qPk - the survey question table primary key name (e.g., survey_id)
+	 */
+	function getSpreadsheetResponses($responses, $surveyAnswers, $qPk)
+	{
+		if(count($responses) == 0)
+			return;
+			
+		$pk = $responses[0]->primary_key;
+		$answers = reindexList($surveyAnswers, $pk);
+
+		$view = new QuestionnaireForm(new ParticipantSurveyResponseManager($responses[0]));
+		
+		/*
+	 	* Reuse the same view obj for each response, replacing only the response
+	 	* obj and the set of answers, not re-retrieving the question set.
+	 	*/
+		foreach($responses as $response)
+		{
+			//$view->mgr->item = $response;
+			$responseAnswers = $answers[$response->$pk];
+			if(!is_array($responseAnswers))
+				$responseAnswers = array($responseAnswers);
+			$view->answers = reindexList($responseAnswers, $qPk);
+			
+			$idx = 1;
+			$fields = array();
+			$values = array();
+			
+			$fields["name"] = String;
+			$values["name"] = $response->getFullName();
+			foreach($view->questions as $question)
+			{
+				$fields["answer_{$idx}"] = String;
+				$values["answer_{$idx}"] = $question->getAnswer();
+				$idx++; 
+			}
+			$spreadsheetResponse = new SpreadsheetResponse();
+			$spreadsheetResponse->fields = $fields;
+			
+			// Assign each field its value.
+			foreach($spreadsheetResponse->fields as $name => $type)
+				$spreadsheetResponse->$name = $values[$name];
+				
+			$spreadsheetResponses[] = $spreadsheetResponse;
+		}		
+		return $spreadsheetResponses;
+	}
+	
+	function buildTable($spreadsheetResponses, $questions)
+	{
+		$table = new DataListView($spreadsheetResponses, "surveySpreadsheet");
+		$table->column("Name", "{name}", true, "width: 40px");
+
+		if(count($questions) > 0)
+		{
+			$idx = 1;
+			foreach($questions as $question)
+			{
+				$title = ($question->question_name) ? $question->question_name : $question->question;
+				$table->column("{$title}", "{answer_$idx}", false, "width: 120px");
+				$idx++;	
+			}
+		}
+		
+		$width = (120 * $idx )+ 40;
+
+		$table->emptyMessage = "There are no responses to this survey.";
+		$table->sortable = true;
+		$table->paginate = false;
+		$table->filter = false;
+		$table->cssStyle = "width: {$width}px; font-size: 8px; white-space: normal;";
+		$table->excelFile = "surveySpreadsheet.xls";
+
+		return $table;
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();
+	}
+	
+}
+
+
+class SpreadsheetResponse extends DataItem
+{
+	var $fields = array();
+	
+	function SpreadsheetResponse()
+	{
+		$this->table = "spreadsheet_response";
+		$this->primary_key = "survey_id";
+		
+		$this->DataItem(func_get_args());		
+	}
+}
+
 function getGroupTitle($question)
 {
 	$questionTypes = QuestionType::getQuestionTypeList();

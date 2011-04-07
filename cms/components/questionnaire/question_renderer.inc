@@ -59,6 +59,7 @@ class QuestionField
 	var $question;
 	var $readonly;
 	var $answer;
+	var $answerSeparator = "<br>"; // for list of answers in checklist renderer
 	
 	function writeScript()
 	{
@@ -74,12 +75,52 @@ class QuestionField
 	{
 	}
 	
+	/*
+	 * Draws the answer to a question as text, not
+	 * as formatted hmtl.
+	 */
 	function drawSummaryView()
 	{
-		$valueAnswer = $this->parent->getAnswer($this->question);
-		echo "<p>$valueAnswer</p>";
+		echo "<p>" . $this->getAnswer() . "</p>";
 	}
 	
+	/*
+	 * Gets the answer, unmassaged, from the value
+	 * field of the table. Used for freetext and
+	 * shorttext.
+	 */
+	function getAnswer()
+	{
+		return $this->parent->getAnswer($this->question);
+	}
+	
+	// Get single answer from a set of options
+	// (SelectField and Multichoice)
+	function getOptionAnswer()
+	{
+		$pk = $this->question->getPrimaryKey();
+		$options = explode("\n", $this->question->options);
+		
+		$valueAnswer = $this->parent->getAnswer($this->question);
+		
+		$count = count($options);	
+		if($count > 0)
+		{
+			$idx = 1;
+			foreach($options as $value => $text)
+			{
+				if($valueAnswer == $idx)
+				{
+					$answer = $text;
+					break;
+				}
+				$idx++;
+			}
+		}	
+
+		return $answer;	
+	}
+		
 	function QuestionField($parent, $question)
 	{
 		$this->parent = $parent;
@@ -174,26 +215,13 @@ class MultipleChoiceView extends QuestionField
 	{
 		$this->writeHTML();	
 	}
-	
-	// Draw answer only, not all options
-	function drawSummaryView()
+		
+	/*
+	 * Get the single text answer for this mult choice question
+	 */
+	function getAnswer()
 	{
-		$pk = $this->question->getPrimaryKey();
-		$options = explode("\n", $this->question->options);
-		
-		$valueAnswer = $this->parent->getAnswer($this->question);
-		
-		$count = count($options);	
-		if($count > 0)
-		{
-			$idx = 1;
-			foreach($options as $value => $text)
-			{
-				if($valueAnswer == $idx)
-					echo "<p>$text</p>\n";
-				$idx++;
-			}
-		}
+		return $this->getOptionAnswer();
 	}
 	
 	function getRequiredValidator()
@@ -268,27 +296,11 @@ class SelectFieldView extends QuestionField
 		$this->writeHTML();	
 	}
 	
-// Draw answer only, not all options
-	function drawSummaryView()
-	{
-		$pk = $this->question->getPrimaryKey();
-		$options = explode("\n", $this->question->options);
-		
-		$valueAnswer = $this->parent->getAnswer($this->question);
-		
-		$count = count($options);	
-		if($count > 0)
-		{
-			$idx = 1;
-			foreach($options as $value => $text)
-			{
-				if($valueAnswer == $idx)
-					echo "<p>$text</p>\n";
-				$idx++;
-			}
-		}
-	}
 	
+	function getAnswer()
+	{
+		return $this->getOptionAnswer();
+	}
 	
 	function writeReportHTML()
 	{
@@ -336,7 +348,32 @@ class RatingView extends QuestionField
 		echo $to;
 	}
 	
+	function getAnswer()
+	{
+		list($from, $to, $steps) = explode("\n", $this->question->options);
+		if (!$from) $from = "Lowest";
+		if (!$to) $to = "Highest";
+		if (!$steps) $steps = 5;
 		
+		$answer = "$from&nbsp;";
+		
+		$valueAnswer = $this->parent->getAnswer($this->question);		
+		$qPk = $this->question->getPrimaryKey();
+		
+		for($i = 1; $i <= $steps; ++$i)
+		{
+			$selected = ($valueAnswer == $i) ? " checked" : "";
+
+			$answer .= "<input type='radio' style='border: none' name='question_{$this->question->$qPk}' 
+			id='question_{$this->question->$qPk}_$i' 
+			value='$i'$selected disabled='disabled' />&nbsp;";
+		}
+		
+		$answer .= $to;
+
+		return $answer;
+	}
+	
 	function drawView()
 	{
 		$this->writeHTML();	
@@ -606,12 +643,13 @@ class CheckListView extends QuestionField
 		$this->writeHTML();
 	}
 
-	// Draw answer only, not all options
-	function drawSummaryView()
+		
+	function getAnswer()
 	{
 		$optionArr = explode("\n", $this->question->options);
 		$options = $this->parent->incrementArray($optionArr);
-	
+		
+		$answers = array();
 		$values = $this->getValues();
 				
 		$count = count($options);	
@@ -624,12 +662,13 @@ class CheckListView extends QuestionField
 				{				
 					if(array_search($value, $values) !== FALSE)
 					{
-						echo "<p>$text</p>\n";				
+						$answers[] = $text;				
 					}				
 				}
 				$idx++;
 			}
-		}
+		}		
+		return implode($this->answerSeparator, $answers);
 	}
 	
 	function writeReportHTML()
