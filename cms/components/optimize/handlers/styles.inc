@@ -3,12 +3,6 @@ Fakoli::usingFeature("cache");
 
 $last_modified = Cache::get("css_cache_timestamp");
 
-header("Last-Modified: ".date('r', $last_modified));
-header("Cache-Control: max-age=300, must-revalidate");
-header("Content-Type: text/css");
-header("Pragma: private");
-header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
-		
 if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 {
     
@@ -21,6 +15,12 @@ if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
     }
 }
 
+header("Last-Modified: ".date('r', $last_modified));
+header("Cache-Control: max-age=300, must-revalidate");
+header("Content-Type: text/css");
+header("Pragma: private");
+header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
+		
 if (!$noChange)
 {
 	$content = Cache::get("css_cache");
