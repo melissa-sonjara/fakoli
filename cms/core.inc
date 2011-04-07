@@ -345,12 +345,6 @@ class Fakoli
 
 		
 		$mimeType = getMIMEType($resource);
-
-		header("Last-Modified: ".date('r', $last_modified));
-		header("Cache-Control: max-age=300, must-revalidate");
-		header("Content-Type: $mimeType");
-		header("Pragma: private");
-		header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 		
 	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 	    {
@@ -361,17 +355,26 @@ class Fakoli
 	        if($if_modified_since >= $last_modified)
 	        {
 	            header("HTTP/1.0 304 Not Modified");
-	            exit();
+	            $noChange = true;
 	        }
 	    }
 
-	    $f = fopen($resource, "r");
-
-	    $size = filesize($resource);
-		header("Content-Length: $size");
-				
-		fpassthru($f);
-		fclose($f);
+		header("Last-Modified: ".date('r', $last_modified));
+		header("Cache-Control: max-age=300, must-revalidate");
+		header("Content-Type: $mimeType");
+		header("Pragma: private");
+		header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
+	    
+		if (!$noChange)
+		{
+		    $f = fopen($resource, "r");
+	
+		    $size = filesize($resource);
+			header("Content-Length: $size");
+					
+			fpassthru($f);
+			fclose($f);
+		}
 	}
 	
 	/**
