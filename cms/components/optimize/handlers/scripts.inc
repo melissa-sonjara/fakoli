@@ -11,17 +11,14 @@ header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 		
 if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 {
-	// AJG: Work-around for PHP 5.3.2 strtotime SEGFAULT
-	
-    /*$pd = date_parse_from_format('r', $_SERVER["HTTP_IF_MODIFIED_SINCE"]);
     
-    $if_modified_since = mktime($pd);
+    $if_modified_since=strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]);
         
     if($if_modified_since >= $last_modified)
     {
         header("HTTP/1.0 304 Not Modified");
         exit();
-    }*/
+    }
 }
 
 $content = Cache::get("script_cache");
