@@ -12,7 +12,7 @@ header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 {
     $date = $_SERVER["HTTP_IF_MODIFIED_SINCE"];
-    $if_modified_since=strtotime($date);
+    //$if_modified_since=strtotime($date);
         
     if($if_modified_since >= $last_modified)
     {
