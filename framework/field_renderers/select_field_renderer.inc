@@ -302,12 +302,11 @@ function onChange_<?echo $fn?>(elt)
 }
 </script>
 <?
-		}	
+		} // end if onChange and addEntry
 
 		if($this->addEntry)
 		{
-			?>
-		}
+?>
 	<script type="text/javascript">
 function onChange_<?echo "{$fn}_addEntry" ?>(elt)
 {
@@ -320,8 +319,8 @@ function onChange_<?echo "{$fn}_addEntry" ?>(elt)
 }
 </script>	
 <?php	
-		}		
-	}
+		} // ent if this addEntry		
+	} // end function renderScript
 	
 	
 	/*
