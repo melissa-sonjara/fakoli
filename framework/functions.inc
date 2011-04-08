@@ -885,6 +885,24 @@ function redirect($page)
   	exit;
 }
 
+/**
+ * Returns the query string for the current page, cleaned of any 
+ * Fakoli-related navigation parameters.
+ */
+function getCleanQueryString()
+{
+	$qs = $_SERVER['QUERY_STRING'];
+
+	$params = array();
+	
+	foreach($_GET as $key => $value)
+	{
+		if ($key != "identifier" && $key != "section") $params[$key] = $value;
+	}
+	
+	return http_build_query($params);
+}
+
 $traceLevels = array(1	=>	"FATAL",
 					 2	=>	"ERROR",
 					 3	=>	"TRACE",
