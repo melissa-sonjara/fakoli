@@ -142,8 +142,8 @@ var LibraryManager =  (function()
 		
 		memberProgressiveSearch: function(document_library_id)
 		{
-			var field = 'LibraryGroupMembers_form_name';
-			this.listBox = new ProgressiveSearch(field, {'search': '/action/fileshare/user_search_handler?document_library_id=' + document_library_id + '&field=' + field, 'cssClass': 'scrollbox'});
+			var field = 'LibraryGroupMembers_form_name';			
+			this.listBox = new ProgressiveSearch(field, {'search': '/action/fileshare/user_search_handler?document_library_id=' + document_library_id + '&field=' + field,  width: '450px', minimumLength: 3, 'cssClass': 'scrollbox'});
 		},
 		
 		keywordProgressiveSearch: function(document_library_id)

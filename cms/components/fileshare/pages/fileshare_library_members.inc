@@ -63,7 +63,7 @@ ENDSCRIPT;
 $mgr = new UserManager();
 $class_name = $mgr->getUserClass();
 $xrefClass = new FileshareUserXref(); 
-$members = Query::create($class_name, "WHERE user_id in (select user_id from {$xrefClass->table} where document_library_id=:d)")
+$members = Query::create($class_name, "WHERE user_id in (select user_id from {$xrefClass->table} where document_library_id=:d) ORDER BY last_name, first_name")
 	->bind(":d", $document_library_id)
 	->execute();
 	

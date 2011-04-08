@@ -29,7 +29,7 @@ $class_name = $mgr->getUserClass();
 
 $libraryMember = new FileshareUserXref();
 $members = Query::create($class_name, "WHERE (first_name like :s or last_name like :s or email like :s) 
-	and (user_id not in (select user_id from {$libraryMember->table} where document_library_id=:l)) LIMIT 100")
+	and user_id not in (select user_id from {$libraryMember->table} where document_library_id=:l) LIMIT 100")
 	->bind(":s", $search, ":l", $document_library_id)
 	->execute();
 
