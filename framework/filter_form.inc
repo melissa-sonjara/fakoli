@@ -34,6 +34,61 @@
 Fakoli::usingFile("framework/search_form.inc");
 Fakoli::usingFile("framework/field_renderers/select_field_renderer.inc");
 
+/*
+ * Filter form adds a select field renderer to a page that allows
+ * the user to select one item from the filter and the page reloads,
+ * querying the list of items using the filter selection.
+ * 
+ * The concept is that a list page of objects of class myItem, can be 
+ * filtered by creating an empty instance of class myItem, 
+ * assigning the "GET" filter values to fields in that instance. 
+ * Only fields in myItem that are useful for the filter would be 
+ * included in its object filter. 
+ * 
+ * @author Janice Gallant for Sonjara, Inc.
+ * 
+ * 4/2011
+ * 
+ * Example of incorporating this feature into a form that lists
+ * budget table data where budget obj has field "year" and we show
+ * a year drop down.
+ * 
+ * Fakoli::usingFeature("filter_form");
+ * 
+ * $year = checkNumeric($_GET["year"]);
+ * 
+ * if(!$year) // get your default year
+ * 	$year = FiscalYear::currentYear()->year;
+ * 
+ * $budget = new Budget();
+ * $budget->year = $year;
+ * $budget->filter = new InclusionFilter("year");
+ * $filterForm = new FilterForm($budget);
+ * 
+ * 	$yearSelect = new FilterFieldRenderer($filterForm, "year", "Year", Budget::getYearOptions());
+ *  $yearSelect->all = false; // we don't want to show "All" option in the filter
+ *  
+ *  $filterForm->drawForm();
+ *  
+ *  * * * * * * * * *
+ *  
+ *  Example of filtering application objects:
+ *  
+ *  $application = new Application();
+ *  $application->status = checkNumeric($_GET["status"]);
+ *  $application->round_id = $_GET["round_id"];
+ *  $application->country_id = $_GET["country_id"];
+ *  $application->filter = new InclusionFilter("status", "country_id", "round_id");
+ *  $filterForm = new FilterForm($application);
+ *  $statusSelect = new FilterFieldRenderer($filterForm, "status", "Status", $application->statusTypes);
+ *  $roundSelect = new FilterFieldRenderer($filterForm, "round_id", "Round", FundingRound::getRoundList());
+ *  $countrySelect = new FilterFieldRenderer($filterForm, "country_id", "Country", Country::getList("WHERE country_id in (SELECT country_id FROM application)"));
+ *  
+ *  $applications = query(Application, $filterForm->getConstraint()." ORDER BY round_key DESC");
+ *	
+ *   $filterForm->drawForm();
+ *  
+ */
 class FilterForm extends SearchForm
 {
 	var $search;
@@ -46,7 +101,6 @@ class FilterForm extends SearchForm
 		{
 			$this->$field = $value;
 		}
-
 				
 		$this->data =& $target;
 		$this->method = $method;
@@ -66,7 +120,6 @@ class FilterForm extends SearchForm
 		}
 		
 		$this->setFilterParameters();
-	
 	}
 	
 	function drawForm()
@@ -94,8 +147,8 @@ class FilterForm extends SearchForm
 	 * Default for all parameters included in filter is equal
 	 * Additional search parameters can be added by calling script with
 	 * the syntax:
-	 * $filterForm->search->setParam("round_key", "member", implode(",", array_keys($rounds)));
-	 * Do not include these additional parameters in the filter.
+	 * $filterForm->search->setParam("round_id", "member", implode(",", array_keys($rounds)));
+	 * Do not include these additional parameters in the object filter.
 	 */
 	function setFilterParameters()
 	{
@@ -121,8 +174,13 @@ class FilterForm extends SearchForm
 	}	
 }
 
-
-
+/*
+ * Renders a select field drop down with the option
+ * set given. When one option is selected, the page
+ * reloads with the selected item as the parameter 
+ * to be retrieved with "GET".
+ * 
+ */
 class FilterFieldRenderer extends SelectFieldRenderer
 {
 	var $options;
@@ -171,10 +229,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		?>
    		</select>&nbsp;</div>
   		<?		
-		
 	}
-	
-	
 } // end class FilterFieldRenderer
 
 ?>
