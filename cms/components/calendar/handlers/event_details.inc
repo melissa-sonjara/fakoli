@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("calendar");
+Fakoli::using("calendar", "component");
 
 $event_id = checkNumeric($_GET["event_id"]);
 $handler_class = mysql_escape_string($_GET["handler_class"]);
@@ -40,15 +40,16 @@ if (!$event_id) die("Invalid Parameter");
 
 $event = new Event($event_id);
 
-$handler = (!$handler_class) ? new StandardEventHandler() : new $handler_class();
-
+trace("EventDetails handler class $handler_class", 3);
+if(!$handler_class)
+	$handler = new StandardEventHandler();
+else
+	$handler = ComponentManager::fireEvent("CalendarGetHandler", $handler_class);
+	
+if(!is_object($handler))
+	$handler = new StandardEventHandler();
+	
 echo $handler->details($event);
 
-if (checkRole("admin"))
-{
-?>
-<br/>
-<button class='button' onclick='editEvent(<?echo $event_id?>)'>Edit this Event</button>
-<?
-}
+$handler->drawEditButton($event_id);
 ?>

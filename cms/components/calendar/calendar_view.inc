@@ -56,6 +56,19 @@ class StandardEventHandler extends EventHandler
 		 
 		return $dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp;
 	}
+	
+	// JDG - call this from event_details.inc to allow inheriting
+	// classes to override the permissions/edit function call
+	function drawEditButton($event_id)
+	{
+		if(checkRole("admin"))
+		{
+?>
+<br/>
+<button class='button' onclick='editEvent(<?echo $event_id?>)'>Edit this Event</button>
+<?
+		}	
+	}
 
 	function summary($event)
 	{
