@@ -506,7 +506,7 @@ class SurveySpreadsheetView extends SurveyResultsView
 			$idx = 1;
 			foreach($questions as $question)
 			{
-				$title = ($question->question_name) ? $question->question_name : $question->question;
+				$title = ($question->question_name) ? $question->question_name :  ellipsis(stripHTML($question->question), 80);
 				$table->column("{$title}", "{answer_$idx}", false, "width: 120px");
 				$idx++;	
 			}
