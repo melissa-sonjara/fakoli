@@ -90,24 +90,31 @@ class SessionManager
 	{
 		trace("Session Write $id", 3);
 		
-		$session = PHPSession::read($id);
-		if (!$session) $session = new PHPSession();
-
-		$expiry = time() + SessionManager::$lifeTime;
-		
-		if ($session->session_id && ($data == $session->data))
-		{
-			$session->filter = new ExclusionFilter("data", "id");
+		try
+		{			
+			$session = PHPSession::read($id);
+			if (!$session) $session = new PHPSession();
+	
+			$expiry = time() + SessionManager::$lifeTime;
+			
+			if ($session->session_id && ($data == $session->data))
+			{
+				$session->filter = new ExclusionFilter("data", "id");
+			}
+			else
+			{
+				$session->filter = null;
+			}
+			
+			$session->id = $id;
+			$session->data = $data;
+			$session->expires = $expiry;
+			$session->save();
 		}
-		else
+		catch(Exception $e)
 		{
-			$session->filter = null;
 		}
 		
-		$session->id = $id;
-		$session->data = $data;
-		$session->expires = $expiry;
-		$session->save();
 	}
 	
 	static function destroy($id)
