@@ -145,6 +145,10 @@ tr.filtered a.hover
 	color: #ddd;
 }
 
+tr.filtered
+{
+	display: none;
+}
 tr.subheading
 {
 	background-color: #ddd;
