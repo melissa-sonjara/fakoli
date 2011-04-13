@@ -106,7 +106,10 @@ var FilteringTable = new Class({
 			}
 		}.bind(this));
 		
-		if (this.options.paginator) this.options.paginator.update_pages();
+		if (this.options.paginator) 
+		{
+			this.options.paginator.update_pages();
+		}
 	},
 	
 	createFilter: function()
