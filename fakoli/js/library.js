@@ -40,14 +40,10 @@ var LibraryManager =  (function()
 						{'url': 		'/action/document/delete?document_id=' + document_id, 
 						  'method': 	'get',
 						 'onSuccess': function(response) 
-				{ 
+					{ 
 					if (response == "1") 
 					{
 						window.location.reload();
-					}
-					else
-					{
-						alert(responseText);
 					}
 				 },
 				
