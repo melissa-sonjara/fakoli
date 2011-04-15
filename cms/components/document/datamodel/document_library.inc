@@ -66,6 +66,10 @@ class DocumentLibrary extends DataItem
 	function isOwner()
 	{
 		global $user;
+		
+		if(!$user)
+			return false;
+			
 		$owner = $this->Owner();
 
 		return ($owner->user_id == $user->user_id) ? true : false;
