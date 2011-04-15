@@ -135,14 +135,34 @@ class DocumentLibrary extends DataItem
 			return false;
 			
 		if($this->isOwner() || checkRole($this->allow_access) || $this->isFileshareMember($user->user_id))
+		{
 			return true;
-
+		}
 		return false;
 	}
 	
+	function allowManageFiles()
+	{
+		global $user;
+		
+		if(!$user)
+			return false;
+			
+		if($this->isOwner() || checkRole($this->manage_folders) || $this->isFileshareMember())
+		{
+			return true;
+		}
+		return false;
+		
+	}
 		
 	function fileshareAllowUpload()
 	{
+		global $user;
+		
+		if(!$user)
+			return false;
+		
 		if($this->isOwner() || checkRole($this->upload_files) || $this->isFileshareMember())
 			return true;
 		else

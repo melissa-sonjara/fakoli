@@ -50,7 +50,7 @@ $validator = new ValidationEngine();
 $validator->id = "folder_form";
 $validator->add(new RequiredValidator("folder_value", "Folder"));
 
-if (!checkRole($library->allow_access) || !checkRole($library->manage_folders))
+if (!checkRole($library->allow_access) && !$library->allowManageFiles())
 {
 	ajaxReturn("Access Denied");
 }

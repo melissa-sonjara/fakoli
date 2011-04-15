@@ -52,7 +52,7 @@ $validator->add(new RequiredValidator("parent_folder_value", "Parent Folder"));
 $validator->add(new RequiredValidator("folder_name", "Folder Name"));
 $validator->add(new RegularExpressionValidator("folder_name", "Folder Name", "^[A-Za-z0-9_\-]+$", "Please supply a valid folder name, with only alphanumeric characters, underscore, or dash"));
 
-if (!checkRole($library->allow_access) || !checkRole($library->manage_folders))
+if (!checkRole($library->allow_access) && !$library->allowManageFiles())
 {
 	ajaxReturn("Access Denied");
 }

@@ -60,7 +60,7 @@ class DocumentManager
 		
 		$permission = true;
 		
-		if (strpos($folder, "Board Members Only") !== FALSE && !checkRole("board,admin,super"))
+		if (strpos($folder, "Board Members Only") !== FALSE && (!checkRole("board,admin,super") && !$this->library->allowManageFiles()))
 		{
 			$permission = false;
 		}
@@ -185,7 +185,7 @@ function selectionChanged()
 }
 
 <?
-		if (checkRole($this->library->manage_folders))
+		if (checkRole($this->library->manage_folders) || $this->library->allowManageFiles())
 		{
 ?>
 function createFolder()
