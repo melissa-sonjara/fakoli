@@ -59,6 +59,9 @@ class DocumentLibrary extends DataItem
 	
 	function Owner()
 	{
+		if(!$this->owner_id)
+			return null;
+			
 		$mgr = new UserManager();
 		return $mgr->getUser($this->owner_id);
 	}
