@@ -43,7 +43,7 @@ if (!$document_id)
 $document = new Document($document_id);
 $library = $document->DocumentLibrary();
 
-if (!checkRole($library->allow_access))
+if (!checkRole($library->allow_access && !$document->fileshareAllowDelete()))
 {
 	ajaxReturn("Access Denied");
 }
