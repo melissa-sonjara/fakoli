@@ -58,6 +58,8 @@ class SessionManager
 	        array(SessionManager, "destroy"),
 	        array(SessionManager, "gc")
 	      );
+	      
+	   register_shutdown_function(session_write_close);
 	}
 	
 	static function open($save_path, $session_name)
