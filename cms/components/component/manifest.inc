@@ -64,7 +64,7 @@ class ComponentManifest
 	{
 		return array("ResolveIdentifier" 	=> array(ComponentManager, displayPage),
 					 "EnumerateItems"		=> array(ComponentManager, enumerateComponentPages),
-					"DeleteRole"			=>	array(ComponentManager, deleteRole)
+					 "DeleteRole"			=> array(ComponentManager, deleteRole)
 					);
 					 
 	}
