@@ -76,7 +76,8 @@ class ImageManager
 		
 		$suffix = $size ? "$size" : ($width ? "{$width}w" : ($height ? "{$height}h" : ""));
 		
-		$ext = strtolower(substr($image->image_file, -4));
+		$nameParts = explode(".",$image->image_file);
+		$ext = strtolower($nameParts[1]);
 
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
@@ -90,7 +91,11 @@ class ImageManager
  			case ".jpg":
  				$src = imagecreatefromjpeg($imageFile);
  				break;
- 			
+
+ 			case ".jpeg":
+ 				$src = imagecreatefromjpeg($imageFile);
+ 				break;
+				
  			case ".png":
  				$src = imagecreatefrompng($imageFile);
  				break;
@@ -153,6 +158,11 @@ class ImageManager
 				imagejpeg($dst, $cacheFile, 85);
 				break;
 				
+			case ".jpeg":
+				
+				imagejpeg($dst, $cacheFile, 85);
+				break;
+
 			case ".png":
 				
 				imagepng($dst, $cacheFile);
@@ -399,7 +409,17 @@ class ImageManager
 		trace("Upload Base: {$dir}", 3);
 	    
 		$filename = $_FILES[$field]['name'];
-		$ext = strtolower(substr($filename, -4));
+
+		$nameParts = explode(".",$filename);		
+		$ext = ".".strtolower($nameParts[1]);
+		
+		if ($ext == ".jpeg")
+		{
+			$ext = ".jpg";
+			$filename = strtolower($nameParts[0]) . $ext;
+		}
+		
+		// $ext = strtolower(substr($filename, -4));
 		
 		trace("Image format: $ext", 3);
 		
@@ -409,6 +429,7 @@ class ImageManager
 		}
 		
 		$target = $dir . DIRECTORY_SEPARATOR . $filename;
+		
 		trace ("Uploading file to $target", 3);
 		
 		 if (file_exists($target))
