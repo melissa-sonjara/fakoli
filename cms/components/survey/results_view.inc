@@ -518,7 +518,7 @@ class SurveySpreadsheetView extends SurveyResultsView
 		$table->sortable = true;
 		$table->paginate = false;
 		$table->filter = false;
-		$table->cssStyle = "width: {$width}px; font-size: 8px; white-space: normal;";
+		$table->cssStyle = "width: {$width}px; font-size: 10px; white-space: normal;";
 		$table->excelFile = "surveySpreadsheet.xls";
 
 		return $table;
