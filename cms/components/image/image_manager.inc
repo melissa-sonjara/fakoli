@@ -77,7 +77,7 @@ class ImageManager
 		$suffix = $size ? "$size" : ($width ? "{$width}w" : ($height ? "{$height}h" : ""));
 		
 		$nameParts = explode(".",$image->image_file);
-		$ext = strtolower($nameParts[1]);
+		$ext = ".".strtolower($nameParts[1]);
 
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
