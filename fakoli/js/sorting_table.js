@@ -227,10 +227,10 @@ var SortingTable = new Class({
       { matcher: /(\d{4})-(\d{1,2})-(\d{1,2})/,
         conversion_function: function( row ) {
           var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
-          cell = this.conversion_matcher.exec( cell );
-          return cell[1]+
-                 '00'.substr(0,2-cell[2].length).concat(cell[2])+
-                 '00'.substr(0,2-cell[3].length).concat(cell[3]);
+          var d = this.conversion_matcher.exec( cell );
+          return d ? d[1]+
+                 '00'.substr(0,2-d[2].length).concat(d[2])+
+                 '00'.substr(0,2-d[3].length).concat(d[3]) : cell;
         }
       },
       // Numbers
