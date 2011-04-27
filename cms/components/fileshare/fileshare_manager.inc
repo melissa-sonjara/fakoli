@@ -299,11 +299,5 @@ function uploadFileshareFile()
 		$owner = $document->Owner();
 		return ($owner) ? $owner->getFullName() : "";
 	}
-	
-	static function getDocumentFolder($document)
-	{
-
 		
-	}
-	
 }
