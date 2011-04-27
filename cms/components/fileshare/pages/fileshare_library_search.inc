@@ -52,8 +52,7 @@ if(!$library->allowAccess())
 $mgr = new FileshareManager($library, $keyword);
 
 $table = new DataListView($mgr->documents, "library_documents");
-$table /*->column("Folder", array($mgr, getDocumentFolder), true)*/ 
-	->column("File", array($mgr, formatDocumentFileLink), true)
+$table->column("File", array($mgr, formatDocumentTitle), true)
 	->column("Uploaded By", array($mgr, getDocumentAuthor), true) 
 	->column("Last Modified", array($mgr, getDocumentLastModified), true)
 	;
