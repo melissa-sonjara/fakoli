@@ -182,8 +182,16 @@ function uploadFileshareFile()
 	function formatDocumentTitle($document)
 	{
 		$document_id = $document->document_id;
+		
+		$link .= "<a href=\"/action/document/download?document_id={$document->title}\">{$file}
+		</a>&nbsp;&nbsp;\n";
+		
+		// Doc edit icon after the title
+		$link .= "<a href=\"#\" onclick=\"new LibraryManager().editDocumentDetailsDialog($document_id); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
 
-		$link .= "<a href=\"#\" onclick=\"new LibraryManager().editDocumentDetailsDialog($document_id); return false;\">{$document->title}</a>\n";
+		// Doc delete link
+		if($document->fileshareAllowDelete())
+			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"><a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"></a>\n";
 					
 		return $link;
 	}	
@@ -200,9 +208,11 @@ function uploadFileshareFile()
 		$file = basename($document->file);
 		$icon = getDocIcon($document->file);
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
-		$link .= "<a href='/action/document/download?document_id={$document_id}'>{$file}
+		$link .= "<a href='/action/document/download?document_id={$document_id}'>{$document->title}
 		</a>&nbsp;&nbsp;\n";
 		
+		$link .= "<a href=\"#\" onclick=\"new LibraryManager().editDocumentDetailsDialog($document_id); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
+
 		// delete link
 		if($document->fileshareAllowDelete())
 			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"><a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"></a>\n";
@@ -289,4 +299,11 @@ function uploadFileshareFile()
 		$owner = $document->Owner();
 		return ($owner) ? $owner->getFullName() : "";
 	}
+	
+	static function getDocumentFolder($document)
+	{
+
+		
+	}
+	
 }
