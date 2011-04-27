@@ -208,7 +208,7 @@ function uploadFileshareFile()
 		$file = basename($document->file);
 		$icon = getDocIcon($document->file);
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
-		$link .= "<a href='/action/document/download?document_id={$document_id}'>{$document->title}
+		$link .= "<a href=\"/action/document/download?document_id={$document_id}\">{$document->title}
 		</a>&nbsp;&nbsp;\n";
 		
 		$link .= "<a href=\"#\" onclick=\"new LibraryManager().editDocumentDetailsDialog($document_id); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
