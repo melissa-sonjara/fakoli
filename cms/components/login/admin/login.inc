@@ -56,7 +56,7 @@ $title = "Web Site Administration";
 ?>
  <tr>
    <td colspan="2"><span class='error'><?echo LoginManager::$error?></span></td>
-  <tr>
+
 <?
 	}
 ?>
