@@ -191,7 +191,8 @@ class QuestionnaireForm
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
-		echo " <dt><b>{$this->num}.</b> {$question->question->question}{$required}</dt>\n";
+		echo " <dt><label for='question_{$this->num}><b>{$this->num}.</b> {$question->question->question}{$required}</label></dt>\n";
+				
 		echo " <dd>";
 		if(!$displayOnly)
 			$question->writeHTML();
