@@ -82,7 +82,7 @@ if(!$editable)
 
 $redirect = "/question_list?questionnaire_id=$questionnaire_id";
 $form = new AutoForm($question);
-$form->hide("question_id", "questionnaire_id");
+$form->hide("question_id", "questionnaire_id", "question_name");
 $form->required("question_number", "question");
 $form->annotate("options", "<span style='font-weight: normal;font-size: 8pt'><br/>For Multiple-Choice or CheckList questions, list each option on a separate line.<br/>For Rating questions, list the text for lowest rating, text for highest rating and number of steps on separate lines</span>");
 $form->annotate("required", "<span style='font-weight: normal;font-size: 8pt'>enter 0 if not required, 1 if required, and for checklist, enter the count of required checkboxes</span>");

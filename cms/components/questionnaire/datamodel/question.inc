@@ -39,6 +39,7 @@ class Question extends DataItem
 							"question_number"		=>	Number,
 							"question_type_id"		=>	Number,
 							"question"				=>	HTML,
+							"question_name"			=>	String,
 							"options"				=>	Text,
 							"required"				=>	Number,
 							"char_limit"			=>	Number,
