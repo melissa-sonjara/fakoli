@@ -396,7 +396,7 @@ class SurveyQuestionForm
 		$form->annotate("required", "<span class='annotate'>enter 0 if not required, 1 if required, and for checklist, enter the count of required checkboxes</span>");
 		$form->annotate("char_limit", "<span class='annotate'>For freetext questions only</span>");
 		$form->annotate("num_rows", "<span class='annotate'>For freetext questions only</span>");
-		$form->hide("locked");
+		$form->hide("locked", "question_name");
 		if(!$question->survey_question_id)
 			$form->onSaveComplete = saveSurveyQuestionXref;
 
