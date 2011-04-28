@@ -91,7 +91,9 @@ class DocumentLibrary extends DataItem
 		
 	function getOwnerName()
 	{
-		return $this->Owner()->getFullName();
+		$owner = $this->Owner();
+		
+		return ($owner) ? $owner->getFullName() : "";
 	}
 	
 	function getLibraryDirectory()

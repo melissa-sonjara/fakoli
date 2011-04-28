@@ -569,4 +569,34 @@ function deleteFolderResult(result)
 		
 		return $del_role;	
 	}		
+	
+	static function documentLibraryTabs($key)
+	{
+		$tabs = array(	
+				"Details"		=>	"document_library_form",
+				"Files"			=>	"document_library_files"
+					);
+
+		$qs = ($key) ? "document_library_id=$key" : ""; 
+		return new TabBar("tabs", $tabs, $qs);
+	}	
+	
+	static function buildDocumentLibraryForm($library)
+	{
+		$form = new AutoForm($library);
+		$form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files", "create_date");
+		$form->required("name", "identifier");
+		$form->allowDelete = true;
+		$form->onDelete = deleteDocumentLibary;
+		
+		return $form;
+	}	
+
+	static function getStyles()
+	{
+		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
+		
+		return $styles;
+	}	
+	
 }

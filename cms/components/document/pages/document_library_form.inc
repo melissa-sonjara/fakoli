@@ -33,12 +33,7 @@
 
 Fakoli::using("document", "role");
 Fakoli::usingFile("framework/auto_form.inc");
-
 Fakoli::usingFile("framework/tab_bar.inc");
-
-require_once "include/document_library_tabs.inc";
-
-$menu_item = "Documents";
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
@@ -51,7 +46,8 @@ else
 	$library = DocumentManager::createLibraryObj();
 }
 
-$tabs = documentLibraryTabs($document_library_id);
+$tabs = DocumentManager::documentLibraryTabs($document_library_id);
+$styles .= DocumentManager::getStyles();
 
 $form = DocumentManager::buildDocumentLibraryForm($library);
 
@@ -62,7 +58,7 @@ if ($method == "POST")
 		DocumentManager::createLibrary($form);
 		
 		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
-		redirect("/admin/document_library_permissions?document_library_id={$form->data->document_library_id}");
+		redirect("/document_library_permissions?document_library_id={$form->data->document_library_id}");
 	}
 }
 
@@ -71,7 +67,7 @@ $script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div id="tab_border">
 <?
 $form->drawForm();
 
@@ -79,7 +75,7 @@ function deleteDocumentLibary($library)
 {
 	$mgr = new DocumentManager($library);
 	$mgr->deleteDocumentLibrary();	
-	redirect("/admin/document_libraries");
+	redirect("/document_libraries");
 }
 ?>
 </div>

@@ -1,4 +1,4 @@
-<?php
+<?
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,55 +31,31 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "role");
-Fakoli::usingFile("framework/auto_form.inc");
-
-Fakoli::usingFile("framework/tab_bar.inc");
-
-require_once "include/document_library_tabs.inc";
+Fakoli::using("document");
 
 $menu_item = "Documents";
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
-if ($document_library_id)
+if (!$document_library_id)
 {
-	$library = new DocumentLibrary($document_library_id);
-}
-else
-{
-	$library = DocumentManager::createLibraryObj();
+	redirect("/document_libraries");
 }
 
-$tabs = documentLibraryTabs($document_library_id);
+$library = new DocumentLibrary($document_library_id);
 
-$form = DocumentManager::buildDocumentLibraryForm($library);
+$mgr = new DocumentManager($library);
 
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		DocumentManager::createLibrary($form);
-		
-		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
-		redirect("/admin/document_library_permissions?document_library_id={$form->data->document_library_id}");
-	}
-}
+$tabs = DocumentManager::documentLibraryTabs($document_library_id);
+$styles .= DocumentManager::getStyles();
 
-
-$script .= $form->writeScript();
+$script .= $mgr->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div id="tab_border">
+<h3>Files in <?echo $library->name?></h3>
 <?
-$form->drawForm();
-
-function deleteDocumentLibary($library)
-{
-	$mgr = new DocumentManager($library);
-	$mgr->deleteDocumentLibrary();	
-	redirect("/admin/document_libraries");
-}
+$mgr->drawView();
 ?>
 </div>

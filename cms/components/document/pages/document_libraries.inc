@@ -31,55 +31,17 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "role");
-Fakoli::usingFile("framework/auto_form.inc");
-
-Fakoli::usingFile("framework/tab_bar.inc");
-
-require_once "include/document_library_tabs.inc";
-
-$menu_item = "Documents";
-
-$document_library_id = checkNumeric($_GET["document_library_id"]);
-
-if ($document_library_id)
-{
-	$library = new DocumentLibrary($document_library_id);
-}
-else
-{
-	$library = DocumentManager::createLibraryObj();
-}
-
-$tabs = documentLibraryTabs($document_library_id);
-
-$form = DocumentManager::buildDocumentLibraryForm($library);
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		DocumentManager::createLibrary($form);
-		
-		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
-		redirect("/admin/document_library_permissions?document_library_id={$form->data->document_library_id}");
-	}
-}
+Fakoli::using("document");
+Fakoli::usingFile("framework/data_view.inc");
 
 
-$script .= $form->writeScript();
+$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
 
-$tabs->writeHTML();
+$view = new DocumentLibraryListView($libraries);
+
+$script .= $view->writeScript();
+
+$view->drawView();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
-<?
-$form->drawForm();
-
-function deleteDocumentLibary($library)
-{
-	$mgr = new DocumentManager($library);
-	$mgr->deleteDocumentLibrary();	
-	redirect("/admin/document_libraries");
-}
-?>
-</div>
+<br/>
+<a href="/document_library_form" class="button">Create a Document Library</a>
