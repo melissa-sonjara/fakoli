@@ -55,7 +55,15 @@ class SettingsManifest
 
 				"Application Settings"	=>	array("page"	=>	"/admin/settings",
 									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	12)
+								  	  			  "weight"	=>	12)			
+			),
+			
+			"Classification"	=> array
+			(
+
+				"Define Settings Options"	=>	array("page"	=>	"/admin/setting_list",
+									 			  "role"	=>	"admin",
+								  	  			  "weight"	=>	12)			
 			)
 		);		
 	}	

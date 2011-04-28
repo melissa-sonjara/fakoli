@@ -31,43 +31,44 @@
 
 *****************************************************************/
 
-Fakoli::using("settings");
-Fakoli::usingFeature("data_tabs", "data_view");
+Fakoli::using("settings", "field_renderers");
+Fakoli::usingFeature("auto_form");
 
-$component_id = checkNumeric($_GET["component_id"]);
+$settings_id = checkNumeric($_GET["settings_id"]);
 
-$title = "Application Settings";
-$menu_item = "Application Settings";
+$setting = new Settings();
 
-$components = Settings::getComponents();
+$menu_item = "Define Settings Options";
 
-if (count($components) == 0)
+if ($settings_id)
 {
-	echo "<p><em>There are no application settings defined.</em></p>";
-	return;
+	$setting->load($settings_id);
+	$title = "Edit Setting";
+}
+else
+{
+	$title = "Add Setting";
 }
 
-if (!$component_id) 
-	$component_id = $components[0]->component_id;
+$form = new AutoForm($setting);
 
-$component = new Component($component_id);
-				
-$form = new SettingAutoForm($component);
+$form->readOnly("component", "name");
+$form->hide("value", "options");
+$form->allowDelete = true;
+$form->annotate("name", "Please use a code-style name with lowercase letters and underscores between words (e.g., output_path). <b><i>Warning</b></i> Changes to the name will require code changes.");
+$form->annotate("options", "Option list for select or checklist field renderers. <b><i>Warning</b></i>: changing the order of options will change the selected value on the Application Settings form.");
+$typeSelect = new SelectFieldRenderer($form, "field_type", "Field Type", Settings::$fieldTypes);
 
 if ($method == "POST")
 {
 	if($form->save())
-		redirect("/admin/settings?component_id=$component_id");
+		redirect("/admin/setting_list");
 }
-
-$tabs = new DataItemTabBar("tabs", $components);
 
 $script .= $form->writeScript();
 
-$tabs->writeHTML();
 ?>
-<div id="tab_border">
-
-<?php 
+<h4>This features allows you to customize the system's application setting options. It is designed for use by systems administrators. CMS Users can modify <a href="/admin/settings">Application Settings</a> under CMS Web Site Configuration.</h4>
+<?php
 $form->drawForm();
-?></div>
+?>

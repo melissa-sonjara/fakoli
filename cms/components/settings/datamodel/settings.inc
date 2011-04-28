@@ -39,10 +39,31 @@ class Settings extends DataItem
 	var $fields = array("settings_id"	=>	Number,
 						"component"		=>	String,
 						"name"			=>	String,
-						"value"			=>	String);
+						"annotation"	=>	Text,
+						"value"			=>	String,
+						"field_type"	=>	String
+					);
 	
 	// relationships
 	var $relations = array();
+	
+	static $fieldTypes = array(
+				"String"	=>	"String",
+				"Number"	=>	"Number",
+				"Boolean"	=>	"Boolean",
+				"Date"		=>	"Date"
+				//"Select"	=>	"SelectFieldRenderer",
+				//"CheckList"	=>	"CheckListFieldRenderer"
+	); 
+	
+	/*
+	 * Not sure if it makes sense to allow these application
+	 * setting types. Wait and see if it is needed.
+	 */
+	static $customTypes = array(
+				//"Select"	=>	String,
+				//"CheckList"	=>	String
+	);
 	
 	function Settings()
 	{
@@ -73,8 +94,9 @@ class Settings extends DataItem
 		
 		return $setting->value;
 	}
+
 	
-	static function setValue($component, $name, $value)
+	static function setValue($component, $name, $value, $field_type, $annotation)
 	{
 		$setting = Settings::getValue($component, $name);
 		if (!$setting)
@@ -82,6 +104,8 @@ class Settings extends DataItem
 			$setting = new Settings();
 			$setting->component = $component;
 			$setting->name = $name;
+			$setting->field_type = $field_type;
+			$settin->annotation = $annotation;
 		}
 		
 		$setting->value = $value;
@@ -89,11 +113,30 @@ class Settings extends DataItem
 		Cache::put("setting_{$component}_{$name}", $setting);
 	}
 	
-	static function setDefaultValue($component, $name, $value)
+	/*
+	 * field_type: Number, String, Boolean
+	 */
+	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "")
 	{
 		$setting = new Settings();
 		if ($setting->exists("WHERE component='$component' AND name='$name'")) return;
-		Settings::setValue($component, $name, $value);
+		Settings::setValue($component, $name, $value, $field_type, $annotation);
+	}
+	
+	static function formatOptionList()
+	{
+		if(!$this->options)
+			return;
+			
+		$options = explode("\n", $this->options);
+		
+		$optionList = array();
+		foreach($options as $option)
+		{
+			$optionList[$option] = $option;
+		}
+		
+		return $optionList;
 	}
 	
 	static function getComponents()
@@ -102,5 +145,27 @@ class Settings extends DataItem
 	}					
 }
 
+/*
+ * Dummy data model to render a component's settinsg
+ * as a form, using the "type" field of the setting
+ * record to determine the renderer.
+ * 
+ * The fields array is built in the settings.inc 
+ * script and given to AutoForm.
+ */
+class ComponentSettings extends DataItem
+{
+	var $fields = array();
+
+	function ComponentSettings()
+	{
+		$this->primary_key = "settings_id";
+		$this->table = "settings";
+		
+		$this->DataItem(func_get_args());
+	}
+	
+	
+}
 
 ?>
