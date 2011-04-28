@@ -34,14 +34,10 @@
 Fakoli::using("image");
 Fakoli::usingFeature("auto_form");
 
-require_once "include/image_gallery_tabs.inc";
-
-$menu_item = "Images";
-
 $image_id = checkNumeric($_GET["image_id"]);
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
-if (!$image_id && !$gallery_id) redirect("/admin/image_galleries");
+if (!$image_id && !$gallery_id) redirect("/image_galleries");
 
 $image = new ImageRecord();
 
@@ -58,7 +54,8 @@ else
 	$image->gallery_id = $gallery_id;
 }
 
-$tabs = imageGalleryTabs($gallery_id);
+$tabs = ImageManager::imageGalleryTabs($gallery_id);
+$styles .= ImageManager::getStyles();
 
 $form = new AutoForm($image);
 $form->allowDelete = true;
@@ -72,7 +69,7 @@ $form->hide("thumbnail", "gallery_id");
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
 
-$redirect = "/admin/images?gallery_id={$image->gallery_id}";
+$redirect = "/images?gallery_id={$image->gallery_id}";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")
@@ -86,7 +83,7 @@ if ($method == "POST")
 
 $script = $form->writeScript();
 
-$tabs->page = "/admin/images";
+$tabs->page = "images";
 $tabs->writeHTML();
 ?>
 <div id="tab_border">

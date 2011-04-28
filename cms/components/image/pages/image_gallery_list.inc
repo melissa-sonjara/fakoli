@@ -30,60 +30,17 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
-Fakoli::using("image");
-Fakoli::usingFeature("auto_form");
 
-require_once "include/image_gallery_tabs.inc";
+Fakoli::using("image");
+Fakoli::usingFeature("data_view");
 
 $menu_item = "Images";
 
-$gallery_id = checkNumeric($_GET["gallery_id"]);
-$allowDelete = false;
+$view = new ImageGalleriesView();
 
-if ($gallery_id)
-{
-	$gallery = new ImageGallery($gallery_id);
-	$allowDelete = ($gallery->countImages() == 0); 
-}
-else
-{
-	$gallery = new ImageGallery();
-	$gallery->owner_id = $user->user_id;
-}
+$script .= $view->writeScript();
 
-$gallery->filter = new ExclusionFilter("read_access", "write_access");
-
-$tabs = imageGalleryTabs($gallery_id);
-
-$form = new AutoForm($gallery);
-$form->allowDelete = $allowDelete;
-$form->hide("owner_id");
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		$d = $form->data->getGalleryDirectory();
-		if (!is_dir($d) && !file_exists($d))
-		{
-			mkdir($d);
-		}
-		
-		if ($form->deleted) redirect("/admin/image_galleries");
-		
-		$tabs->queryString = "gallery_id=".$form->data->gallery_id;
-		$tabs->next();
-	}
-}
-
-
-$script .= $form->writeScript();
-
-$tabs->writeHTML();
+$view->drawView();
 ?>
-<div id="tab_border" style="margin-right: -2px">
-<?
-$form->drawForm();
-?>
-</div>
+<br/>
+<a href="/image_gallery_form" class="button">Create an Image Gallery</a>

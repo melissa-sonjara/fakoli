@@ -34,12 +34,7 @@
 Fakoli::using("image");
 Fakoli::usingFeature("auto_form");
 
-require_once "include/image_gallery_tabs.inc";
-
-$menu_item = "Images";
-
 $gallery_id = checkNumeric($_GET["gallery_id"]);
-$allowDelete = false;
 
 if ($gallery_id)
 {
@@ -54,10 +49,11 @@ else
 
 $gallery->filter = new ExclusionFilter("read_access", "write_access");
 
-$tabs = imageGalleryTabs($gallery_id);
+$tabs = ImageManager::imageGalleryTabs($gallery_id);
+$styles .= ImageManager::getStyles();
 
 $form = new AutoForm($gallery);
-$form->allowDelete = $allowDelete;
+
 $form->hide("owner_id");
 
 if ($method == "POST")
@@ -70,7 +66,7 @@ if ($method == "POST")
 			mkdir($d);
 		}
 		
-		if ($form->deleted) redirect("/admin/image_galleries");
+		if ($form->deleted) redirect("/image_galleries");
 		
 		$tabs->queryString = "gallery_id=".$form->data->gallery_id;
 		$tabs->next();
@@ -82,7 +78,7 @@ $script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border" style="margin-right: -2px">
+<div id="tab_border">
 <?
 $form->drawForm();
 ?>

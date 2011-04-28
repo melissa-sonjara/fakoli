@@ -107,7 +107,121 @@ ENDSCRIPT;
 	<?
 	}
 
+	static function writeResizeScript()
+	{
+	
+		$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+window.addEvent('domready', function() { $('images_box').resizable(); });
+</script>
+ENDSCRIPT;
+
+		return $script;
+	}	
+
 }
 
 	
+
+class ImageGalleryListView
+{
+	var $table;
+	
+	function ImageGalleryListView($gallery)
+	{
+		$images = $gallery->Images("ORDER BY title");
+		
+		$this->table = $this->buildTable($images);
+	}
+
+	function buildTable($images)
+	{
+
+		$table = new DataListView($images, "images");
+		$table->column("Title", "<a href='image_form?image_id={image_id}'>{title}</a>", true, "width: 50%")
+	  		->column("Image File", "{image_file}", true, "width: 50%");
+		$table->emptyMessage = "No images have been added to this gallery";
+		$table->pageSize = 20;
+		$table->sortable = true;
+		$table->filter = true;
+		
+		return $table;
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();	
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();		
+	}
+}
+
+class ImageGalleriesView
+{
+	var $table;
+	
+	function ImageGalleriesView()
+	{
+		
+		$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
+		
+		$this->table = $this->buildTable($galleries);
+	}
+	
+	function buildTable($galleries)
+	{
+		$table = new DataListView($galleries, "galleries");
+		$table->column("Image Gallery", array($this, formatTitleLink), true, "width: 55%")
+	  		->column("Owner", "{getOwnerName()}", true, "width: 30%")
+	  		->column("# Images", "{countImages()}", true, "width: 15%;text-align: right")
+	  		->column("Published", array($this, showPublished), false, "text-align: center");
+	  
+		$table->sortable = true;
+		$table->filter = true;
+		$table->pageSize = 10;
+		$table->emptyMessage = "No Image Galleries have been created.";
+		
+		return $table;
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();	
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();
+	}
+	
+	function formatTitleLink($gallery)
+	{
+		return $gallery->format("<a href='/image_gallery_form?gallery_id={gallery_id}'>{gallery_name}</a>");	
+	}
+
+	function showPublished($gallery)
+	{
+		$img = $gallery->published ? "on.png" : "off.png";
+		$alt = $gallery->published ? "Enabled" : "Disabled";
+
+		return "<img src='/fakoli/images/$img' alt='$alt' onclick='toggleGalleryPublished(this, {$gallery->gallery_id})' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+	}	
+}
+
+class AdminImageGalleriesView extends ImageGalleriesView
+{
+	function AdminImageGalleriesView()
+	{
+		parent::ImageGalleriesView();	
+	}
+	
+	function formatTitleLink($gallery)
+	{
+		return $gallery->format("<a href='/admin/image_gallery_form?gallery_id={gallery_id}'>{gallery_name}</a>");	
+	}
+	
+}
 	

@@ -444,4 +444,23 @@ class ImageManager
 	  	return true;
 	}
 	
+
+	static function imageGalleryTabs($key)
+	{
+		$tabs = array(
+			"Definition"		=>	"image_gallery_form",		
+			"Thumbnails"		=>	"images",
+			"Detailed List"		=>	"image_list"
+		);
+
+		$qs = ($key) ? "gallery_id=$key" : ""; 
+		return new TabBar("tabs", $tabs, $qs);
+	}
+	
+	static function getStyles()
+	{
+		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
+		
+		return $styles;
+	}		
 }

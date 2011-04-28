@@ -68,7 +68,7 @@ $script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div id="tab_border" style="margin-right: -2px;">
 <?
 
 $form->drawForm();

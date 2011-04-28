@@ -32,58 +32,30 @@
 *****************************************************************/
  
 Fakoli::using("image");
-Fakoli::usingFeature("auto_form");
-
-require_once "include/image_gallery_tabs.inc";
-
-$menu_item = "Images";
+Fakoli::usingFeature("tab_bar", "data_view");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
-$allowDelete = false;
 
-if ($gallery_id)
-{
-	$gallery = new ImageGallery($gallery_id);
-	$allowDelete = ($gallery->countImages() == 0); 
-}
-else
-{
-	$gallery = new ImageGallery();
-	$gallery->owner_id = $user->user_id;
-}
+if (!$gallery_id) redirect("/image_galleries");
 
-$gallery->filter = new ExclusionFilter("read_access", "write_access");
+$tabs = ImageManager::imageGalleryTabs($gallery_id);
+$styles .= ImageManager::getStyles();
 
-$tabs = imageGalleryTabs($gallery_id);
+$gallery = new ImageGallery($gallery_id);
 
-$form = new AutoForm($gallery);
-$form->allowDelete = $allowDelete;
-$form->hide("owner_id");
+$title = "Images in {$gallery->gallery_name}";
 
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		$d = $form->data->getGalleryDirectory();
-		if (!is_dir($d) && !file_exists($d))
-		{
-			mkdir($d);
-		}
-		
-		if ($form->deleted) redirect("/admin/image_galleries");
-		
-		$tabs->queryString = "gallery_id=".$form->data->gallery_id;
-		$tabs->next();
-	}
-}
-
-
-$script .= $form->writeScript();
+$view = new ImageGalleryListView($gallery);
+	
+$view->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border" style="margin-right: -2px">
-<?
-$form->drawForm();
+	<div id="image_gallery_detail"><div id="image_detail">
+<?php
+$view->drawView();
 ?>
-</div>
+<br/><br/>
+<a class="button" href="/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
+</div></div>
+<?

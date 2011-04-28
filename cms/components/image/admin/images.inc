@@ -56,34 +56,21 @@ $title = "Images in {$gallery->gallery_name}";
 $grid = new ImageListView($images, "image_form?gallery_id={gallery_id}&image_id={image_id}");
 $tabs->writeHTML();
 
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-window.addEvent('domready', function() { $('images_box').resizable(); });
-</script>
-ENDSCRIPT;
+$script .= ImageListView::writeResizeScript();
 
-?>
-	<div style="width: 100%; border: solid 1px #000;">
-		<div style="overflow:auto; width:100%; height: 260px;border: none;border-bottom: solid 1px #666" id="images_box">
-<?
+echo "<div id=\"image_grid\">\n<div id=\"image_box\">\n";
+
 if (count($images) > 0)
 {
 	$grid->drawGrid();
-?>
-
-<br/>
-<?
 }
 else
 {
-	?>
-	<p style="margin: 8px"><br/><i>No images have been added to this gallery</i></p>
-	<?
+	echo "<p style=\"margin: 8px\"><br/><i>No images have been added to this gallery</i></p>\n";
 }
 ?>
 </div>
 <br/>
 <div style="padding: 8px">
 <a class="button" href="/admin/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
-</div>
-</div>
+</div></div>

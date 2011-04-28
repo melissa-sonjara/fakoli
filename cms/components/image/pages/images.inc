@@ -32,58 +32,40 @@
 *****************************************************************/
  
 Fakoli::using("image");
-Fakoli::usingFeature("auto_form");
-
-require_once "include/image_gallery_tabs.inc";
-
-$menu_item = "Images";
+Fakoli::usingFeature("tab_bar");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
-$allowDelete = false;
 
-if ($gallery_id)
+if (!$gallery_id) redirect("/image_galleries");
+
+$gallery = new ImageGallery($gallery_id);
+$images = $gallery->Images("ORDER BY title");
+
+$tabs = ImageManager::imageGalleryTabs($gallery_id);
+$styles .= ImageManager::getStyles();
+
+$count = 0;
+
+$page->page_title = "Images in {$gallery->gallery_name}";
+
+$grid = new ImageListView($images, "image_form?gallery_id={gallery_id}&image_id={image_id}");
+$tabs->writeHTML();
+
+$script .= ImageListView::writeResizeScript();
+
+echo "<div id=\"image_grid\">\n<div id=\"image_box\">\n";
+
+if (count($images) > 0)
 {
-	$gallery = new ImageGallery($gallery_id);
-	$allowDelete = ($gallery->countImages() == 0); 
+	$grid->drawGrid();
 }
 else
 {
-	$gallery = new ImageGallery();
-	$gallery->owner_id = $user->user_id;
+	echo "<p style=\"margin: 8px\"><br/><i>No images have been added to this gallery</i></p>\n";
 }
-
-$gallery->filter = new ExclusionFilter("read_access", "write_access");
-
-$tabs = imageGalleryTabs($gallery_id);
-
-$form = new AutoForm($gallery);
-$form->allowDelete = $allowDelete;
-$form->hide("owner_id");
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		$d = $form->data->getGalleryDirectory();
-		if (!is_dir($d) && !file_exists($d))
-		{
-			mkdir($d);
-		}
-		
-		if ($form->deleted) redirect("/admin/image_galleries");
-		
-		$tabs->queryString = "gallery_id=".$form->data->gallery_id;
-		$tabs->next();
-	}
-}
-
-
-$script .= $form->writeScript();
-
-$tabs->writeHTML();
-?>
-<div id="tab_border" style="margin-right: -2px">
-<?
-$form->drawForm();
 ?>
 </div>
+<br/>
+<div style="padding: 8px">
+<a class="button" href="/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
+</div></div>
