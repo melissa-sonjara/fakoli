@@ -409,15 +409,17 @@ class EmailManager
 	
 	static function setDefaults()
 	{
+		trace("EmailManager::setDefaults", 3);
+		
 		global $config;
 		
-		Settings::setDefaultValue("email", "use_debugging_mode", false);
+		Settings::setDefaultValue("email", "use_debugging_mode", false, "Boolean");
 		
 		$defaultPath = $config['uploadbase'] . DIRECTORY_SEPARATOR . "email_debug_logs";
 		
 		if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
-		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath);
+		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath, "String");
 	}
 
 }
