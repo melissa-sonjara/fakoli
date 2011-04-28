@@ -39,6 +39,7 @@ class SurveyQuestion extends DataItem
 	var $fields = array (	"survey_question_id"	=>	Number,
 							"question_type_id"		=>	Number,
 							"question"				=>	HTML,
+							"question_name"			=>	String,
 							"options"				=>	Text,
 							"required"				=>	Number,
 							"char_limit"			=>	Number,

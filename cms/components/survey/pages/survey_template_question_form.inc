@@ -86,7 +86,7 @@ if($question->isEditable())
 if($survey_question_id)
 	$form->button("Remove", "/action/survey/question_remove?survey_template_id={$survey_template_id}&survey_question_id={$survey_question_id}");
 $form->button("Cancel", $redirect);
-
+$form->hide("question_name");
 
 if(!$editable)
 	$infoText = $question->getInfoText(survey_question_answered);
