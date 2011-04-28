@@ -72,6 +72,67 @@ class BlogManager
 		$items["Blogs"] = $blogs;
 		return $items;
 	}
+	
+	static function buildBlogForm($blog, $redirect, $blogView)
+	{
+		$form = new AutoForm($blog);
+		$form->hide("owner_id", "created_date");
+		$form->button("Cancel", $redirect);
+		
+		$blogTypes = array_keys($blogView->handlers);
+		$blogTypes = array_combine($blogTypes, $blogTypes);
+		
+		$orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest"));
+		$readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
+		$readSelect->setSize(350, 150, 10);
+		$writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
+		$writeSelect->setSize(350, 150, 10);
+		$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type", $blogTypes);
+		$imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
+		$form->alias("image_id", "Image");
+			
+		return $form;
+	}
+	
+	static function blogTabs($blog_id)
+	{
+		$tabs = array(	
+				"Blog Definition"	=>	"blog_form",
+				"Articles"			=>	"blog_articles"
+				);
+
+		$bar = new TabBar("tabs", $tabs, "blog_id=$blog_id");
+	
+		return $bar;
+	}
+	
+	static function buildBlogArticleForm($article, $blog)
+	{
+		$form = new AutoForm($article);
+		$form->required("title");
+		$form->allowDelete = true;
+		$redirect = "/admin/blog_articles?blog_id={$blog->blog_id}";
+		$form->button("Cancel", $redirect);
+		$imageSelect = new ImageSelectFieldRenderer($form, "image_id");
+		$form->alias("image_id", "Associated Image");
+		$form->readonly("created_date");
+		$form->hide("author_id"); //TODO - allow author selection/re-assignment?
+		$form->hide("article_type");
+		
+		$sites = query(Site, "ORDER BY site_name");
+		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
+
+		$form->getRenderer("archive_date")->validator->required = false;
+		
+		return $form;
+	}
+	
+	static function getStyles()
+	{
+		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
+		
+		return $styles;
+	}		
 }
 
 ?>

@@ -30,63 +30,27 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
-Fakoli::using("article", "site", "image", "field_renderers", "blog");
-Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "include/blog_tabs.inc";
+Fakoli::using("blog");
 
-$article = new Article();
-$article_id = checkNumeric($_GET["article_id"]);
+Fakoli::assertRole("admin,content");
+
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-if (!$blog_id) redirect("/admin/index");
+if (!$blog_id) 
+	ajaxReturn("invalid parameters");
 
 $blog = new Blog($blog_id);
 
-if ($article_id)
+$filter = new InclusionFilter("blog_id");
+
+if (isset($_GET["published"]))
 {
-	$article->load($article_id);
-}
-else
-{
-	$article->created_date = now();
-}
-
-
-$article->article_type = $blog->title;
-
-$form = BlogManager::buildBlogArticleForm($article, $blog);
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		redirect("/admin/blog_articles?blog_id={$blog->blog_id}");
-	}
+	$filter->add("published");
+	$blog->published = checkNumeric($_GET["published"]);
 }
 
-if ($form->data->article_id)
-{
-	$title = "Edit Article";
-}
-else
-{
-	$title =  "Add Article";
-
-	if (!$article_id) $form->hide("created_date");
-}
-
-$tabs = blogTabs($blog_id);
-$tabs->page = "/admin/blog_articles";
-
-$script = $form->writeScript();
-
-$tabs->writeHTML();
+$blog->filter = $filter;
+$blog->save();
+echo "1";
 ?>
-<div id="tab_border">
-<?
-$form->drawForm();
-?>
-</div>
-<br/>

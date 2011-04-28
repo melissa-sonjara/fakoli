@@ -46,78 +46,17 @@ $blog = new Blog($blog_id);
 $title = "Articles in {$blog->title}";
 $menu_item = "Articles";
 
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-function togglePublished(img, id)
-{
-	var enable;
-	if (img.alt == "Published")
-	{
-		publish = 0;
-	}
-	else
-	{
-		publish = 1;
-	}
-	
-	var request = new Request({
-									url: "/action/article/update?article_id=" + id +"&published=" + publish,
-									method: 'get',
-									onSuccess: function (response) 
-									{ 
-										if (response == 1) 
-										{
-											img.src = publish ? "/fakoli/images/on.png" : "/fakoli/images/off.png";
-											img.alt = publish ? "Published" : "Unpublished";
-										}
-									},
-									onFailure: function () {},
-									async: true
-								});
-	request.send();
-}
-</script>
-ENDSCRIPT;
+$view = new AdminBlogArticlesView($blog);
 
-function showPublished($article)
-{
-	$img = $article->published ? "on.png" : "off.png";
-	$alt = $article->published ? "Published" : "Unpublished";
-
-	return "<img src='/fakoli/images/$img' alt='$alt' onclick='togglePublished(this, {$article->article_id})' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
-}
 $tabs = blogTabs($blog_id);
 
-$articles = $blog->Articles("ORDER BY last_modified DESC");
-
-$table = new DataListView($articles, "articles");
-$table->column("Title", formatTitle, true)
-	  ->column("Author", "{getAuthorName()}", true)
-	  ->column("Date Created", "{created_date}", true)
-	  ->column("Published", showPublished, false, "text-align: center");
-	  
-	  
-$table->sortable = true;
-$table->filter = true;
-$table->excelFile = "articles.xls";
-$table->pageSize = 20;
-$table->emptyMessage = "No articles have been created yet.";
-
-function formatTitle($item)
-{
-	global $blog;
-	return "<a title=\"{$item->title}\" href=\"/admin/blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
-}
-
-$script .= $table->writeScript();
-
-
+$script .= $view->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
+<div id="tab_border">
 <?
-$table->drawView();
+$view->drawView();
 ?>
 <br/>
 <a class="button" href="/admin/blog_article_form?blog_id=<?echo $blog_id?>">Add an Article</a>

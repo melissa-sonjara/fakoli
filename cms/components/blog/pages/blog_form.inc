@@ -30,57 +30,45 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
-Fakoli::using("article", "site", "image", "field_renderers", "blog");
-Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "include/blog_tabs.inc";
+Fakoli::using("blog", "field_renderers");
+Fakoli::usingFeature("auto_form");
 
-$article = new Article();
-$article_id = checkNumeric($_GET["article_id"]);
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-if (!$blog_id) redirect("/admin/index");
+$blog = new Blog();
 
-$blog = new Blog($blog_id);
-
-if ($article_id)
+if ($blog_id)
 {
-	$article->load($article_id);
+	$blog->load($blog_id);
+	$page->page_title = "Editing Blog Definition for $blog->title";
 }
 else
 {
-	$article->created_date = now();
+	$page->page_title = "Add a new Blog";
+	
+	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
+	$_POST["created_date"] = now();
 }
 
+$redirect = "/blogs";
 
-$article->article_type = $blog->title;
+$tabs = BlogManager::blogTabs($blog_id);
+$styles .= BlogManager::getStyles();
 
-$form = BlogManager::buildBlogArticleForm($article, $blog);
+$blogView = new BlogView($blog);
+
+$form = BlogManager::buildBlogForm($blog, $redirect, $blogView);
 
 if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("/admin/blog_articles?blog_id={$blog->blog_id}");
+		redirect($redirect);
 	}
 }
 
-if ($form->data->article_id)
-{
-	$title = "Edit Article";
-}
-else
-{
-	$title =  "Add Article";
-
-	if (!$article_id) $form->hide("created_date");
-}
-
-$tabs = blogTabs($blog_id);
-$tabs->page = "/admin/blog_articles";
-
-$script = $form->writeScript();
+$script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
@@ -88,5 +76,5 @@ $tabs->writeHTML();
 <?
 $form->drawForm();
 ?>
-</div>
 <br/>
+</div>

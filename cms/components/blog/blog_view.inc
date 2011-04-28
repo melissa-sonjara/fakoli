@@ -330,3 +330,139 @@ class BlogView
 		return $view;
 	}	
 }
+
+class BlogListView
+{
+	var $table;
+	
+	function BlogListView()
+	{
+		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		
+		$this->table = $this->buildTable($blogs);
+	}
+	
+	function buildTable($blogs)
+	{
+		$table = new DataListView($blogs, "blogs");
+		$table->column("Title", array($this, formatTitleLink), true, "width: 40%")
+	  		->column("Identifier", "{identifier}", true, "width: 30%")
+	  		->column("Owner", "{getOwnerName()}", true, "width: 20%")
+	  		->column("# Articles", "{countArticles()}", true, "width: 10%; text-align: center")
+	  		->column("Published", array($this, showPublished), true, "width: 10%; text-align: center");
+	  
+		$table->sortable = true;
+		$table->filter = true;
+		$table->pageSize = 15;
+		$table->emptyMessage = "No blogs have been created yet.";
+		
+		return $table;
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();
+	}
+	
+	function formatTitleLink($blog)
+	{
+		return $blog->format("<a href='/blog_form?blog_id={blog_id}'>{title}</a>");
+	}
+
+	function showPublished($blog)
+	{
+		$img = $blog->published ? "on.png" : "off.png";
+		$alt = $blog->published ? "Published" : "Unpublished";
+		
+		
+		return "<img src='/fakoli/images/$img' alt='$alt' onclick='toggleBlogPublished(this, {$blog->blog_id})' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+	}	
+}
+
+class AdminBlogListView extends BlogListView
+{
+	function AdminBlogListView()
+	{
+		parent::BlogListView();
+	}
+	
+	function formatTitleLink($blog)
+	{
+		return $blog->format("<a href='/admin/blog_form?blog_id={blog_id}'>{title}</a>");
+	}
+}
+
+class BlogArticlesView
+{
+	var $table;
+	
+	function BlogArticlesView($blog)	
+	{
+		$articles = $blog->Articles("ORDER BY last_modified DESC");
+
+		$this->table = $this->buildTable($articles);	
+	}
+	
+	function buildTable($articles)
+	{
+		$table = new DataListView($articles, "articles");
+		$table->column("Title", array($this, formatTitle), true)
+	  		->column("Author", "{getAuthorName()}", true)
+	  		->column("Date Created", "{created_date}", true)
+	  		->column("Published", array($this, showPublished), false, "text-align: center");
+	  
+		$table->sortable = true;
+		$table->filter = true;
+		$table->excelFile = "articles.xls";
+		$table->pageSize = 20;
+		$table->emptyMessage = "No articles have been created yet.";
+		
+		return $table;
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();
+	}
+
+	function drawView()
+	{
+		$this->table->drawView();
+	}
+	
+	function showPublished($article)
+	{
+		$img = $article->published ? "on.png" : "off.png";
+		$alt = $article->published ? "Published" : "Unpublished";
+
+		return "<img src='/fakoli/images/$img' alt='$alt' onclick='toggleArticlePublished(this, {$article->article_id})' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+	}
+
+
+	function formatTitle($item)
+	{
+		global $blog;
+		return "<a title=\"{$item->title}\" href=\"/blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
+	}
+	
+}
+
+class AdminBlogArticlesView extends BlogArticlesView
+{
+	function AdminBlogArticlesView($blog)
+	{
+		parent::BlogArticlesView($blog);
+	}
+
+	function formatTitle($item)
+	{
+		global $blog;
+		return "<a title=\"{$item->title}\" href=\"/admin/blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
+	}	
+	
+}

@@ -57,22 +57,8 @@ $redirect = "/admin/blogs";
 
 $tabs = blogTabs($blog_id);
 
-$form = new AutoForm($blog);
-$form->hide("owner_id", "created_date");
-$form->button("Cancel", $redirect);
-
 $blogView = new BlogView($blog);
-$blogTypes = array_keys($blogView->handlers);
-$blogTypes = array_combine($blogTypes, $blogTypes);
-
-$orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest"));
-$readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
-$readSelect->setSize(350, 150, 10);
-$writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
-$writeSelect->setSize(350, 150, 10);
-$typeSelect = new SelectFieldRenderer($form, "blog_type", "Blog Type", $blogTypes);
-$imageSelect = new ImageSelectFieldRenderer($form, "image_id", false);
-$form->alias("image_id", "Image");
+$form = BlogManager::buildBlogForm($blog, $redirect, $blogView);
 
 if ($method == "POST")
 {
@@ -86,7 +72,7 @@ $script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
+<div id="tab_border">
 <?
 $form->drawForm();
 ?>

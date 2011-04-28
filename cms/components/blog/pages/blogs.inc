@@ -30,63 +30,15 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
-Fakoli::using("article", "site", "image", "field_renderers", "blog");
-Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "include/blog_tabs.inc";
+Fakoli::using("user", "blog");
+Fakoli::usingFeature("data_view");
 
-$article = new Article();
-$article_id = checkNumeric($_GET["article_id"]);
-$blog_id = checkNumeric($_GET["blog_id"]);
+$view = new BlogListView();
 
-if (!$blog_id) redirect("/admin/index");
+$script .= $view->writeScript();
 
-$blog = new Blog($blog_id);
-
-if ($article_id)
-{
-	$article->load($article_id);
-}
-else
-{
-	$article->created_date = now();
-}
-
-
-$article->article_type = $blog->title;
-
-$form = BlogManager::buildBlogArticleForm($article, $blog);
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		redirect("/admin/blog_articles?blog_id={$blog->blog_id}");
-	}
-}
-
-if ($form->data->article_id)
-{
-	$title = "Edit Article";
-}
-else
-{
-	$title =  "Add Article";
-
-	if (!$article_id) $form->hide("created_date");
-}
-
-$tabs = blogTabs($blog_id);
-$tabs->page = "/admin/blog_articles";
-
-$script = $form->writeScript();
-
-$tabs->writeHTML();
+$view->drawView();
 ?>
-<div id="tab_border">
-<?
-$form->drawForm();
-?>
-</div>
 <br/>
+<a class="button" href="blog_form">Add a new Blog</a>

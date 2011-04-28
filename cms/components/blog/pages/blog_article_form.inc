@@ -34,13 +34,11 @@
 Fakoli::using("article", "site", "image", "field_renderers", "blog");
 Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "include/blog_tabs.inc";
-
 $article = new Article();
 $article_id = checkNumeric($_GET["article_id"]);
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-if (!$blog_id) redirect("/admin/index");
+if (!$blog_id) redirect("/index");
 
 $blog = new Blog($blog_id);
 
@@ -62,23 +60,25 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("/admin/blog_articles?blog_id={$blog->blog_id}");
+		redirect("/blog_articles?blog_id={$blog->blog_id}");
 	}
 }
 
 if ($form->data->article_id)
 {
-	$title = "Edit Article";
+	$page->page_title = "Edit Article";
 }
 else
 {
-	$title =  "Add Article";
+	$page->page_title =  "Add Article";
 
 	if (!$article_id) $form->hide("created_date");
 }
 
-$tabs = blogTabs($blog_id);
-$tabs->page = "/admin/blog_articles";
+$tabs = BlogManager::blogTabs($blog_id);
+$tabs->page = "blog_articles";
+
+$styles .= BlogManager::getStyles();
 
 $script = $form->writeScript();
 
