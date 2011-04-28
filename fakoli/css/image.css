@@ -70,3 +70,31 @@
 	padding:0.3em 5px;
 	width:150px;
 }
+
+#image_grid
+{
+	width: 100%; 
+	border: solid 1px #000;	
+}
+
+#images_box
+{
+	overflow:auto; 
+	height: 260px;
+	border: none;
+	border-bottom: solid 1px #666;
+	padding-bottom: 10px;
+}
+
+#container #image_gallery_detail
+{
+	width:100%; 
+	border: solid 1px black; 
+	margin: 0; 	
+}
+
+#container #image_detail
+{
+	padding: 0;
+	padding: 8px;	
+}
