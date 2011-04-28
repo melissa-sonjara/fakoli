@@ -37,75 +37,11 @@ Fakoli::usingFile("framework/data_view.inc");
 $title = "Articles";
 $menu_item = "Articles";
 
-$articles = query(Article, "ORDER BY last_modified DESC");
+$view = new AdminArticleListView();
 
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-function togglePublished(img, id)
-{
-	var enable;
-	if (img.alt == "Published")
-	{
-		publish = 0;
-	}
-	else
-	{
-		publish = 1;
-	}
-	
-	var request = new Request({
-									url: "/action/article/update?article_id=" + id +"&published=" + publish,
-									method: 'get',
-									onSuccess: function (response) 
-									{ 
-										if (response == 1) 
-										{
-											img.src = publish ? "/fakoli/images/on.png" : "/fakoli/images/off.png";
-											img.alt = publish ? "Published" : "Unpublished";
-										}
-									},
-									onFailure: function () {},
-									async: true
-								});
-	request.send();
-}
-</script>
-ENDSCRIPT;
+$script .= $view->writeScript();
 
-function showPublished($article)
-{
-	$img = $article->published ? "on.png" : "off.png";
-	$alt = $article->published ? "Published" : "Unpublished";
-
-	return "<img src='/fakoli/images/$img' alt='$alt' onclick='togglePublished(this, {$article->article_id})' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
-}
-
-$table = new DataListView($articles, "articles");
-$table->column("Title", formatTitle, true)
-	  ->column("Article Type", "{article_type}", true)
-	  ->column("Author", "{getAuthorName()}", true)
-	  ->column("Date Created", "{created_date}", true)
-	  ->column("Published", showPublished, false, "text-align: center");
-	  
-$table->sortable = true;
-$table->filter = true;
-$table->excelFile = "articles.xls";
-$table->pageSize = 20;
-$table->emptyMessage = "No articles have been created yet.";
-
-function formatTitle($item)
-{
-	return "<a title=\"{$item->title}\" href=\"/admin/article_form?article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
-}
-
-$script .= $table->writeScript();
-
-
-
-$table->drawView();
+$view->drawView();
 ?>
 <br/>
 <a class="button" href="/admin/article_form">Add an Article</a>
-<?
-
-?>

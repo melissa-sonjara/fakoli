@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::assertRole("admin");
+Fakoli::assertRole("admin,content");
 
 $article_id = checkNumeric($_GET["article_id"]);
 

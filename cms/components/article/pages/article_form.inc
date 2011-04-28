@@ -46,18 +46,19 @@ else
 	$article->created_date = now();
 }
 
-$form = ArticleManager::buildArticleForm($article);
 
-$redirect = "/admin/articles";
+$form = ArticleManager::buildArticleForm($article);
+$redirect = "/articles";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("/admin/articles");
-	}
+		redirect("/articles");
+	}	
 }
+
 
 if ($form->data->article_id)
 {
@@ -71,7 +72,6 @@ else
 }
 
 $script = $form->writeScript();
-
 
 $form->drawForm();
 

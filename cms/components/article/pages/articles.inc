@@ -30,49 +30,17 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
-Fakoli::using("article", "site", "image", "field_renderers");
-Fakoli::usingFile("framework/auto_form.inc");
 
-$article = new Article();
-$article_id = checkNumeric($_GET["article_id"]);
-	
-if ($article_id)
-{
-	$article->load($article_id);
-}
-else
-{
-	$article->created_date = now();
-}
+Fakoli::using("article");
+Fakoli::usingFile("framework/data_view.inc");
 
-$form = ArticleManager::buildArticleForm($article);
+$page->page_title = "Articles";
 
-$redirect = "/admin/articles";
-$form->button("Cancel", $redirect);
+$view = new ArticleListView();
 
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		redirect("/admin/articles");
-	}
-}
+$script .= $view->writeScript();
 
-if ($form->data->article_id)
-{
-	$title = "Edit Article";
-}
-else
-{
-	$title =  "Add Article";
-
-	if (!$article_id) $form->hide("created_date");
-}
-
-$script = $form->writeScript();
-
-
-$form->drawForm();
-
+$view->drawView();
 ?>
+<br/>
+<a class="button" href="/article_form">Add an Article</a>
