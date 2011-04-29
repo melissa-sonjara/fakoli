@@ -149,7 +149,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		if (is_array($rawValue))
 		{
 			$this->preProcess($field);
-			$this->parent->data->get($field);
+			$rawValue = $this->parent->data->get($field);
 		}
 		
 		$values = explode(",", $rawValue);		
