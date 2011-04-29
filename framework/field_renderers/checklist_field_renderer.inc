@@ -152,7 +152,7 @@ class CheckListFieldRenderer extends FieldRenderer
 			$this->parent->data->get($field);
 		}
 		
-		$values = explode(",", $rawValues);		
+		$values = explode(",", $rawValue);		
 				
 		$divider = $this->horizontal ? " " : "<br/>";
 		
