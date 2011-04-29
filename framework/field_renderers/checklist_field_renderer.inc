@@ -145,7 +145,14 @@ class CheckListFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
-		$values = explode(",", $this->parent->data->get($field));		
+		$rawValue = $this->parent->data->get($field);
+		if (is_array($rawValue))
+		{
+			$this->preProcess($field);
+			$this->parent->data->get($field);
+		}
+		
+		$values = explode(",", $rawValues);		
 				
 		$divider = $this->horizontal ? " " : "<br/>";
 		
