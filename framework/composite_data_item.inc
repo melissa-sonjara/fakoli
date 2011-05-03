@@ -598,6 +598,11 @@ class CompositeDataItem extends AbstractDataItem
 	}
 
 	
+	function fromXML($node)
+	{
+		//TODO: Implement this
+	}
+	
 	function format($template = "", $separator = ",")
 	{
 		$matches = array();

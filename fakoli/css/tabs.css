@@ -1,6 +1,7 @@
 @CHARSET "ISO-8859-1";
 
-#tabs 
+#tabs,
+#popup_tabs 
 {
 
   width:100%;
@@ -12,7 +13,8 @@
   padding-top: 12px;
 }
 
-#tabs ul  
+#tabs ul,
+#popup_tabs ul  
 {
   margin:0;
   padding: 0;
@@ -22,7 +24,8 @@
   height: 24px;
 }
 
-#tabs li 
+#tabs li,
+#popup_tabs li 
 {
   float:left;
   background:url(/templates/images/tab_left.gif) no-repeat left top;
@@ -34,7 +37,8 @@
   color: #000000;
  }
   
-#tabs a
+#tabs a,
+#popup_tabs a
 {
   float:left;
   display:block;
@@ -54,41 +58,53 @@
 
 #tabs a {float:none;}
 
+#popup_tabs a {float:none;}
+
 /* End IE5-Mac hack */
 
- #tabs a:link ,  #tabs a:visited 
+#tabs a:link,  
+#tabs a:visited,
+#popup_tabs a:link,  
+#popup_tabs a:visited
 {
   text-decoration: none;
   color: #000000;
 }
 
-#tabs a:hover, #tabs a:active
+#tabs a:hover, 
+#tabs a:active,
+#popup_tabs a:hover, 
+#popup_tabs a:active
 {
   color: #000000;
   background-color: #2B388F; 
 }
 
-#tabs a.disabled
+#tabs a.disabled,
+#popup_tabs a.disabled
 {
 	color: #aaa;
   	font-weight: normal;
 }
 
-#tabs a.disabled:hover
+#tabs a.disabled:hover,
+#popup_tabs a.disabled:hover
 {
  	color: #aaa;
 }
 
 
 
-#tabs .current 
+#tabs .current,
+#popup_tabs .current
 {
   color: #000000;
   background-image:url(/templates/images/tab_left_on.gif);
 }
 
 
-#tabs .current a 
+#tabs .current a,
+#popup_tabs .current a
 {
   background-image:url(/templates/images/tab_right_on.gif);
   color: #FFFFFF;

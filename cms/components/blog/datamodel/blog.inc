@@ -106,6 +106,15 @@ class Blog extends DataItem
 		return $match;
 	}	
 	
+	static function findByTitle($title)
+	{
+		$match = Query::create(Blog, "WHERE title=:title")
+					  ->bind(":title", $title)
+					  ->executeSingle();
+
+		return $match;
+	}
+	
 	function Blog()
 	{
 		$this->primary_key = "blog_id";

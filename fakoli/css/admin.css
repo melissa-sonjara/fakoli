@@ -521,7 +521,8 @@ input.button
 	background-color: #325e9e;
 }
 
-#tabs 
+#tabs,
+#popup_tabs 
 {
   float:left;
   width:100%;
@@ -533,7 +534,8 @@ input.button
   padding-top: 12px;
 }
 
-#tabs ul  
+#tabs ul,
+#popup_tabs ul  
 {
   margin:0;
   padding: 0;
@@ -543,7 +545,8 @@ input.button
   height: 24px;
 }
 
-#tabs li 
+#tabs li,
+#popup_tabs li 
 {
   float:left;
   background:url("/fakoli/images/tabs/tab_left.gif") no-repeat left top;
@@ -554,7 +557,8 @@ input.button
   text-align: center;
 }
   
-#tabs a
+#tabs a,
+#popup_tabs a
 {
   float:left;
   display:block;
@@ -572,31 +576,37 @@ input.button
    hides rule from IE5-Mac \*/
 
 #tabs a {float:none;}
+#popup_tabs a {float:none;}
 
 /* End IE5-Mac hack */
 
-#tabs a:hover 
+#tabs a:hover,
+#popup_tabs a:hover
 {
   text-decoration: underline;
 }
 
-#tabs a.disabled
+#tabs a.disabled,
+#popup_tabs a.disabled
 {
 	color: #fff;
 }
 
-#tabs a.disabled:hover
+#tabs a.disabled:hover,
+#popup_tabs a.disabled:hover
 {
 	color: #fff;
 	text-decoration: none;
 }
 
-#tabs .current 
+#tabs .current,
+#popup_tabs .current 
 {
   background-image:url("/fakoli/images/tabs/tab_left_on.gif");
 }
 
-#tabs .current a 
+#tabs .current a,
+#popup_tabs .current a
 {
   background-image:url("/fakoli/images/tabs/tab_right_on.gif");
   color:#fff;

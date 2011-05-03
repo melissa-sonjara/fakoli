@@ -1148,19 +1148,31 @@ var RichTextEditor = new Class({
 	    }
 	},
 	
-	addToolbarButton: function(name, image, tooltip, url, width, height)
+	addToolbarButton: function(name, image, tooltip, handler, width, height)
 	{
+			
 	    var fn = "onButton" + name;
-	    url += (url.indexOf("?") > -1) ? "&" : "?";
-	    url += "Editor=" + this.name;
+		if (typeof handler == 'function')
+		{
+			this[fn] = function()
+			{
+				handler(this);
+			};
+		}
+		else
+		{
+			url = handler;
+			url += (url.indexOf("?") > -1) ? "&" : "?";
+			url += "Editor=" + this.name;
 	    
-	    this[fn] =  function() 
-	                { 
-	                    var w = window.open(url, name, 
-	                                        'width='+width+',height='+height+',toolbar=0,scrollbars=1,resizable=1,status=0');
-	                    w.focus();
-	                };
-	
+		    this[fn] =  function() 
+		                { 
+		                    var w = window.open(url, name, 
+		                                        'width='+width+',height='+height+',toolbar=0,scrollbars=1,resizable=1,status=0');
+		                    w.focus();
+		                };
+		}
+		
         this.toolbar.push(new Button(this, name, image, tooltip, fn));
 	},
 	

@@ -1,4 +1,3 @@
-<?php
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,26 +30,68 @@
 
 *****************************************************************/
 
-Fakoli::using("section");
-Fakoli::usingFeature("data_view");
+var LinkPicker =  (function()
+{
+	var LinkPickerSingleton = new Class(
+	{
+		editor: "",
+		dialog: Class.Empty,
+		
+		initialize: function()
+		{
+		},
+		
+		show: function(editor)
+		{
+			this.editor = editor;
+			this.dialog = modalPopup("Link Picker", "/action/link_picker/popup?Editor=" + this.editor.name, 500, 400, true, false); 
+		},
+		
+		hide: function()
+		{
+			this.dialog.hide();
+		},
+		
+		insertLink: function(url)
+		{
+			this.editor.formatSelection("<a href=\"" + url + "\">");
+			this.hide();
+		},
+		
+		showLibrary: function(id)
+		{
+			$$('#popup_tabs .current a').each(function(a) { a.loadTab("/action/link_picker/document_picker?Editor=" + this.editor.name + "&document_library_id=" + id); }.bind(this));
+		},
 
-$menu_item = "Sections";
+		documentSelected: function()
+		{
+			$('linkButton').disabled = false;
+		},
 
-$sections = Query::create(Section, "ORDER BY section")->execute();
+		linkToDocument: function()
+		{
+			id = $('files_value').value;
+			this.insertLink("/action/document/download?document_id=" + id);
+		}
+		
+	});
+	
+	var instance;
+	return function()
+	{
+		return instance ? instance : instance = new LinkPickerSingleton();
+	};
+	
+})();
 
-$table = new DataListView($sections, "sections");
-$table->column("Section", "<a href='/admin/section_form?section_id={section_id}'>{section}</a>", true)
-	  ->column("Title", "{section_title}", true)
-	  ->column("Default Role", "{default_role}", true)
-	  ->column("Default Page", "<a href='/{section}/'>{default_page}</a>", true);
+var picker;
 
-$table->filter = true;
-$table->sortable = true;
-$table->emptyMessage = "No sections have been created.";
+function linkPicker(editor)
+{
+	picker = new LinkPicker().show(editor);
+}
 
-$script .= $table->writeScript();
-
-$table->drawView();
-?>
-<br/>
-<a class='button' href='/admin/section_form'>Add a New Section</a>&nbsp;&nbsp;<a class='button' href='/action/section/export'>Export Section Layout</a>
+function closeLinkPicker()
+{
+	picker = new LinkPicker().hide();
+}

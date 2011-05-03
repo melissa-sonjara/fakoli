@@ -94,7 +94,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		{
 			foreach($this->featureButtons as $button)
 			{
-				echo "theEditors.$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
+				$this->addEditorButton($editor, $button);
 			}
 		}
 		
@@ -102,13 +102,25 @@ class HTMLFieldRenderer extends FieldRenderer
 		{
 			foreach($html_editor_extra_buttons as $button)
 			{
-				echo "theEditors.$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
+				$this->addEditorButton($editor, $button);
 			}
 		}
 		echo "\nwindow.addEvent('domready', function() {\n";
 		echo "theEditors.$editor.draw();\n";
 		echo "});\n";
 		echo "</script>";
+	}
+	
+	function addEditorButton($editor, $button)
+	{
+		if ($button['url'])
+		{
+			echo "theEditors.$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', '{$button['url']}', '{$button['width']}', '{$button['height']}');\n";
+		}
+		else
+		{
+			echo "theEditors.$editor.addToolbarButton('{$button['name']}', '{$button['image']}', '{$button['tooltip']}', {$button['handler']});\n";
+		}		
 	}
 	
 	function renderField($field)

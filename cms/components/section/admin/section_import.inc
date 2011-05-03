@@ -31,26 +31,8 @@
 
 *****************************************************************/
 
-Fakoli::using("section");
-Fakoli::usingFeature("data_view");
+Fakoli::using("section", "site");
+Fakoli::usingFeature("auto_form");
 
-$menu_item = "Sections";
 
-$sections = Query::create(Section, "ORDER BY section")->execute();
-
-$table = new DataListView($sections, "sections");
-$table->column("Section", "<a href='/admin/section_form?section_id={section_id}'>{section}</a>", true)
-	  ->column("Title", "{section_title}", true)
-	  ->column("Default Role", "{default_role}", true)
-	  ->column("Default Page", "<a href='/{section}/'>{default_page}</a>", true);
-
-$table->filter = true;
-$table->sortable = true;
-$table->emptyMessage = "No sections have been created.";
-
-$script .= $table->writeScript();
-
-$table->drawView();
 ?>
-<br/>
-<a class='button' href='/admin/section_form'>Add a New Section</a>&nbsp;&nbsp;<a class='button' href='/action/section/export'>Export Section Layout</a>

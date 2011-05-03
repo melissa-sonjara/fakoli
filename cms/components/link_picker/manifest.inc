@@ -52,6 +52,11 @@ class LinkPickerManifest
 	}	
 
 	
+	static function getScripts()
+	{
+		return array("/fakoli/link_picker/link_picker.js");
+	}
+	
 	static function onInitialize()
 	{
 		global $html_editor_extra_buttons;
@@ -60,9 +65,7 @@ class LinkPickerManifest
 				array("name"	=>	"link_picker",
 					  "image"	=>	"/fakoli/richtext/images/document_link.gif", 
 					  "tooltip"	=>	"Link to Page or Document", 
-					  "url"		=>	"/link_picker",
-					  "width"	=>	"500px",
-					  "height"	=>	"400px");
+					  "handler"	=>	"linkPicker");
 	}
 		
 }

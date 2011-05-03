@@ -1071,6 +1071,23 @@ class DataItem extends AbstractDataItem
 		return $xml;
 	}
 		
+	function fromXML($node)
+	{
+		if ($node->nodeType != XML_ELEMENT_NODE || $node->tagName != get_class($this)) return;
+		
+		$kids = $node->childNodes();
+		$numChildren = $kids->length;
+		
+		for($i = 0; $i < $numChildren; ++$i)
+		{
+			$n = $kids->item($i);
+			
+			if ($n->nodeType != XML_ELEMENT_NODE) continue;
+			$field = $n->tagName;
+			$this->set($field, $n->nodeValue);
+		}
+	}
+	
 	function format($template = "", $separator = ", ")
 	{
 		trace(get_class($this)." Format: $template", 4);

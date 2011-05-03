@@ -96,14 +96,14 @@ class TabBar
 	{
 		$('{$this->id}').getElements("a").each(function(a)
 		{
-			a.loadTab = function()
+			a.loadTab = function(override)
 			{
 				var request = new Request.HTML(
 				{
 					evalScripts: false,
 					evalResponse: false,
 					method: 'get', 
-					url: this.href, 
+					url: override ? override : this.href, 
 					onSuccess: function(tree, elements, html, script) 
 					{ 
 						var container = $('{$this->container}');

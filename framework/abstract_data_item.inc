@@ -617,7 +617,13 @@ abstract class AbstractDataItem
 	 * field with value "" is not considered empty).
 	 */
 	abstract function toXML($indent = 0, $path = null);
-			
+
+	/**
+	 * Populates the object from the specified XML node
+	 * @param DOMNode $node
+	 */
+	abstract function fromXML($node);
+	
 	abstract function format($template = "", $separator = ", ");
 	
 	abstract function prettifyFieldName($field);
