@@ -64,7 +64,7 @@ if ($method == "POST")
 		DocumentManager::createLibrary($form);
 				
 		$tabs->queryString = "document_library_id=".$form->data->document_library_id;
-		redirect("/fileshare_library_members?document_library_id=".$form->data->document_library_id);
+		redirect("fileshare_library_members?document_library_id=".$form->data->document_library_id);
 	}
 }
 
