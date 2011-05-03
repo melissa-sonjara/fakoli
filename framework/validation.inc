@@ -970,8 +970,6 @@ ENDSCRIPT;
 	}
 }
 
-
-
 /**
  * RequiredCurrencyField Validator.
  *
@@ -1175,6 +1173,76 @@ ENDSCRIPT;
 		
 		return false;
 	}
+}
+
+
+
+/*
+ * When the data entry interface contains multiple tabs (pages)
+ * that the user can move around freely (e.g., not required to 
+ * complete tab c before moving on to tab d) then we validate on 
+ * the final submit tab. 
+ * 
+ * The warning message is called from the final tab's summary 
+ * view display for each section and on the tab page the user 
+ * is redirected to if they attempt to submit when there is an
+ * error. 
+ * 
+ * E.g., user does not complete grant application.
+ * On the view summary section
+ * "Grant Application"
+ * 
+ * we write warning: "You must complete the grant application"
+ * 
+ * @author Janice Gallant for Sonjara, Inc.
+ * 
+ * 5/3/2011
+ */
+abstract class ValidateTabSet
+{
+	var $msg;
+	
+	function ValidateTabSet()
+	{	
+	}
+	
+	/*
+	 * Called when user clicks submit: validate each tab page and 
+	 * redirect to first page that is invalid or returns true.
+	 */
+	function Validate()
+	{	
+	}
+	
+	/*
+	 * Additional functions as required to validate each page
+	 * in the tab set. For example:
+	 * 
+	 * function validateGrant()
+	 * 
+	 * function validateProgram()
+	 * 
+	 * function validateOrder()
+	 * 
+	 * these functions set msg variable to the appropriate error/warning
+	 * message.
+	 */
+	
+	
+	/*
+	 * Called from summary view class for each section if
+	 * the section is invalid.
+	 * 
+	 * The div must be an id for the background image to
+	 * show - does not work for css classes.
+	 */
+	function warning()
+	{
+		if($this->msg)
+		{
+			echo "<div id='warning'>{$this->msg}</div>\n";
+		}	
+	}	
 }
 
 
