@@ -39,7 +39,7 @@ $keyword = mysql_escape_string($_GET["keyword"]);
 
 if (!$document_library_id)
 {
-	redirect("/fileshare_libraries");
+	redirect("fileshare_libraries");
 }
 
 $page->page_title = "Fileshare Library Files";

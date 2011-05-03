@@ -38,13 +38,13 @@ $document_library_id = checkNumeric($_GET["document_library_id"]);
 
 if (!$document_library_id)
 {
-	redirect("/fileshare_libraries");
+	redirect("fileshare_libraries");
 }
 
 $page->page_title = "Fileshare Library User Community";
 $library = new DocumentLibrary($document_library_id);
 if(!$library->isOwner() && !checkRole("fileshare,admin"))
-	redirect("/fileshare_libraries");
+	redirect("fileshare_libraries");
 
 $tabs = FileshareManager::libraryTabs($document_library_id);
 $styles .= FileshareManager::getStyles();
@@ -87,9 +87,9 @@ $param = "?document_library_id=$document_library_id";
 ?>
 </div>
 <div id="submit_block">
-<a class="button" href="/fileshare_library_form<?php echo $param ?>">BACK</a>
+<a class="button" href="fileshare_library_form<?php echo $param ?>">BACK</a>
 <div style="float: right">
-<a class="button" href="/fileshare_library_files<?php echo $param ?>">CONTINUE</a>
+<a class="button" href="fileshare_library_files<?php echo $param ?>">CONTINUE</a>
 </div></div>
 </div>
 </td></tr></table></div></div>
