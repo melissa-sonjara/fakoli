@@ -281,53 +281,6 @@ a.list_member
 	z-index: 148;
 }
 
-
-
-#fileshare_content #submit_block .button, 
-	#fileshare_content #submit_block a.button,
-	#DocumentLibrary_form .button,
-	#submit_block .button,
-	#submit_block a.button,
-	#role a.button
-{
-	background: none;
-	font-size: 12px;	
-    font-weight:bold;
-	color:#FFFFFF !important;
-    background-color:#2B388F !important;
-    background-position: 0 -2189px;
-    border-bottom-color: #2B388F;
-    border-left-color-ltr-source: physical;
-    border-left-color-rtl-source: physical;
-    border-left-color-value: #2B388F;
-    border-right-color-ltr-source: physical;
-    border-right-color-rtl-source: physical;
-    border-right-color-value: #2B388F;
-    border-top-color: #2B388F;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-    height: 25px;
-	padding-bottom: 3px;
-}
-
-
-#fileshare_content .submit_block a.button,
-#fileshare_content .submit_block a.button a:visited,
-#submit_block a.button a:visited,
-#role a:visited
-{
-	text-decoration: none;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 7px;
-	padding-right: 7px;
-	-moz-border-radius: 5px;
-	-moz-box-shadow: 2px 2px 8px #CCC;
-	border: solid 1px #ddd;
-	
-}
-
-
 /* Letter section headings */
 .heading_black
 {
