@@ -245,6 +245,7 @@ ENDSCRIPT;
 			if (is_object($entry) && get_class($entry) == "TabBar" &&
 				$entry->findPage($this->page))
 			{
+				$entry->useQueryString = $this->useQueryString;
 				$entry->writeHTML();
 			}
 		}
