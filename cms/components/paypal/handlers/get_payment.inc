@@ -64,7 +64,7 @@ $item_name = Settings::getValue("paypal", "paypal_item_name");
 if(!$transaction_id || !$merchant_id || !$paypal_url)
 	ajaxReturn("invalid parameters");
 	
-$return = "http://". $config["http_host"] . "/" . $return;
+$return = "http://". $config["http_host"] . "/" . $return . "?transaction_id=$transaction_id";
 $notify = "http://" . $config["http_host"] . "/" . $notify . "?transaction_id=$transaction_id";
 $cancel = "http://". $config["http_host"] . "/" . $cancel;
 	

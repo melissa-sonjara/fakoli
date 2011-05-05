@@ -57,8 +57,8 @@ $transaction->filter = new InclusionFilter("order_date", "status", "payment_tran
 $transaction->order_date = $date;
 $transaction->payment_transaction_id = $_POST["txn_id"];
 $transaction->payment_amount = $_POST["mc_gross"];
-$transaction->transaction_type = "PayPal";
 $transaction->status = "submitted"; 
+$transaction->save();
 
 sendEmailUsingEmailManager($transaction, 'paypal_sandbox_payment_confirmation');		
 

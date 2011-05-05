@@ -32,6 +32,10 @@
 *****************************************************************/
 
 /*
+ * This component is intended to be used like an abstract class: 
+ * as a template or guide for developing a customized 
+ * order/transaction/payment component for a specific web site.
+ * 
  * PayPal sandbox account:
  * 
  * Paypal sandbox personal:

@@ -31,7 +31,23 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
+Fakoli::using("paypal");
+Fakoli::usingFeature("auto_form");
+
+$transaction_id = checkNumeric($_GET["transaction_id"]);
+	
+$transaction = new PayPalSandboxTransaction();
+
+if($transaction_id)
+	$transaction->load($transaction_id);
 
 // Your confirmation text here
 
-echo "Thank you for your order.";
+echo "<p>Thank you for your order.</p>\n";
+
+$form = new AutoForm($transaction);
+
+$form->readOnlyForm = true;
+
+$form->drawForm();
+?>
