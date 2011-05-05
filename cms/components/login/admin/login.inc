@@ -56,10 +56,11 @@ $title = "Web Site Administration";
 ?>
  <tr>
    <td colspan="2"><span class='error'><?echo LoginManager::$error?></span></td>
-
+</tr>
 <?
 	}
 ?>
+<tr>
    <td><label for="username">Username:</label></td>
    <td><input name="username" type="text" value="<?=$username?>"/></td>
   </tr>
