@@ -105,7 +105,7 @@ class Settings extends DataItem
 			$setting->component = $component;
 			$setting->name = $name;
 			$setting->field_type = $field_type;
-			$settin->annotation = $annotation;
+			$setting->annotation = $annotation;
 		}
 		
 		$setting->value = $value;
