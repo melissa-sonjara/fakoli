@@ -59,8 +59,7 @@ if(!$transaction_id)
 	
 $transaction = new PayPalSandboxTransaction($transaction_id);
 
-// The timestamp is converted to date; some implementations
-// may prefer a timestamp field.
+// The timestamp is converted to datetime format
 $date = date('Y-m-d H:m:s', strtotime($_POST["payment_date"]));
 trace("TransactionHandler:: payment date $date", 3);
 
