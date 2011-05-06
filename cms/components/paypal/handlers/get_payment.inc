@@ -71,7 +71,7 @@ if(!$transaction_id || !$merchant_id || !$paypal_url)
  */
 $trans = "?transaction_id=$transaction_id";
 $return = "http://". $config["http_host"] . "/payment_confirmation" . $trans;
-$notify = "http://" . $config["http_host"] . "/transaction_handler" . $trans;
+$notify = "http://" . $config["http_host"] . "/action/paypal/transaction_handler" . $trans;
 $cancel = "http://". $config["http_host"] . "/sandbox_purchase" . $trans;
 $item_name = "Sandbox Item";
 	
