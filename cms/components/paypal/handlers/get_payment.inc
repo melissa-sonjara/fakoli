@@ -69,7 +69,7 @@ if(!$transaction_id || !$merchant_id || !$paypal_url)
  * These variables are not in application settings b/c an application
  * may need more than one paypal checkout pathway. 
  */
-$trans = "transaction_id=$transaction_id";
+$trans = "?transaction_id=$transaction_id";
 $return = "http://". $config["http_host"] . "/payment_confirmation" . $trans;
 $notify = "http://" . $config["http_host"] . "/paypal_transaction_handler" . $trans;
 $cancel = "http://". $config["http_host"] . "/sandbox_purchase" . $trans;
