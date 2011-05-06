@@ -48,8 +48,7 @@ class PayPalManager
 {
 	
 	function PayPalManager()
-	{
-		
+	{	
 	}
 
 	static function setDefaults()
@@ -57,11 +56,6 @@ class PayPalManager
 		trace("PayPalManager::setDefaults", 3);
 		
 		Settings::setDefaultValue("paypal", "paypal_url", "https://www.sandbox.paypal.com/cgi-bin/webscr", "String");
-		Settings::setDefaultValue("paypal", "merchant_id", "DN4KM78LGXRTE", "String");
-		Settings::setDefaultValue("paypal", "payment_confirmation", "payment_confirmation", "String", "Page on our site PayPal should redirect users to after payment is complete");
-		Settings::setDefaultValue("paypal", "paypal_transaction_handler", "action/paypal/transaction_handler", "String", "File that receives PayPal's payment confirmation and records amount paid, date, and PayPal transaction id");
-		Settings::setDefaultValue("paypal", "payment_cancel", "payment_cancelled", "String", "Page on our site PayPal should redirect users to when payment is cancelled, e.g., a home page");
-		Settings::setDefaultValue("paypal", "paypal_item_name", "Sandbox Item", "String", "The general-purpose name of the product offering or service, such as the website's company name");
-		
+		Settings::setDefaultValue("paypal", "merchant_id", "DN4KM78LGXRTE", "String");		
 	}			
 }

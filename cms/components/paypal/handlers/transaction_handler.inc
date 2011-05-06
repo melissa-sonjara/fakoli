@@ -35,6 +35,15 @@ OTHER DEALINGS IN THE SOFTWARE.
  * Handles Instance Payment Notification (IPN) from Paypal
  * If the user cancels payment, this handler is not called.
  * 
+ * The application should alert admin/order fulfillment staff when/if
+ * the paypal reported payment amount is not equal to the amount
+ * expected: 
+ * 
+ * amount != payment_amount
+ *  
+ * This can occur if the user tampers with the parameter string in the
+ * url at the PayPal site, changing the amount sent to Paypal. 
+ * 
  * Janice Gallant for Sonjara, Inc.
  * 
  * 9/27/2010
@@ -50,16 +59,19 @@ if(!$transaction_id)
 	
 $transaction = new PayPalSandboxTransaction($transaction_id);
 
+// The timestamp is converted to date; some implementations
+// may prefer a timestamp field.
 $date = date('Y-m-d H:m:s', strtotime($_POST["payment_date"]));
 trace("TransactionHandler:: payment date $date", 3);
 
-$transaction->filter = new InclusionFilter("order_date", "status", "payment_transaction_id", "payment_amount", "payment_type");
+$transaction->filter = new InclusionFilter("order_date", "status", "payment_transaction_id", "payment_amount");
 $transaction->order_date = $date;
 $transaction->payment_transaction_id = $_POST["txn_id"];
 $transaction->payment_amount = $_POST["mc_gross"];
 $transaction->status = "submitted"; 
 $transaction->save();
 
+// Confirmation email must be created in CMS => Email Templates
 sendEmailUsingEmailManager($transaction, 'paypal_sandbox_payment_confirmation');		
 
 ?>

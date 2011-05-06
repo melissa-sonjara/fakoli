@@ -56,17 +56,24 @@ $transaction = new PayPalSandboxTransaction($transaction_id);
 
 $merchant_id = Settings::getValue("paypal", "merchant_id");
 $paypal_url = Settings::getValue("paypal", "paypal_url");
-$return = Settings::getValue("paypal", "payment_confirmation");
-$notify = Settings::getValue("paypal", "paypal_transaction_handler");
-$cancel = Settings::getValue("paypal", "payment_cancel");
-$item_name = Settings::getValue("paypal", "paypal_item_name");
 
 if(!$transaction_id || !$merchant_id || !$paypal_url)
 	ajaxReturn("invalid parameters");
-	
-$return = "http://". $config["http_host"] . "/" . $return . "?transaction_id=$transaction_id";
-$notify = "http://" . $config["http_host"] . "/" . $notify . "?transaction_id=$transaction_id";
-$cancel = "http://". $config["http_host"] . "/" . $cancel;
+
+/*
+ * These variables are broken out from the parameter string to
+ * clearly identify the variables that need to be customized.
+ * Other variables may need customization for specific implementations
+ * (e.g., shipping charges or tax).
+ * 
+ * These variables are not in application settings b/c an application
+ * may need more than one paypal checkout pathway. 
+ */
+$trans = "transaction_id=$transaction_id";
+$return = "http://". $config["http_host"] . "/payment_confirmation" . $trans;
+$notify = "http://" . $config["http_host"] . "/paypal_transaction_handler" . $trans;
+$cancel = "http://". $config["http_host"] . "/sandbox_purchase" . $trans;
+$item_name = "Sandbox Item";
 	
 $param = "cmd=_xclick&business=$merchant_id";
 $param .= "&lc=US";
@@ -85,7 +92,6 @@ $param .= "&return={$return}";
 $param .= "&notify_url={$notify}";
 $param .= "&cancel_return={$cancel}";
 $param .= "&tax_rate=0.000";
-$param .= "&shipping=0.00";
 $param .= "&bn=PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted";
 
 redirect($paypal_url . "?$param");
