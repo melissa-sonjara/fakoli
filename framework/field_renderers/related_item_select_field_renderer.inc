@@ -111,8 +111,6 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->templateItem = null;
 		$this->sorted = false;
 		
-		$this->getRelatedItems();
-		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
@@ -131,7 +129,9 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	}
 	
 	function renderField($field)
-	{	
+	{
+		$this->getRelatedItems();
+
 		$this->_startField($field);
 		echo "<select id='{$this->parent->id}_{$field}' name='$field'";
 		
@@ -234,26 +234,17 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	}
 	
 	function renderReadOnly($field)
-	{		
+	{	
+		$item = $this->getSelectedItem($field);
+		
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
 		
-		$current = $this->parent->data->get($field);
-		
-		foreach($this->items as $item)
-		{
-			$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
-			
-			if ($current == $item->get($valueField))
-			{
-				$name = $this->formatName($item, $this->nameField);
-				echo $name;
-				break;
-			}
-		}
+		$name = $this->formatName($item, $this->nameField);
+		echo $name;
 		
 		echo "</td>\n";
 		echo "</tr>\n";
@@ -275,6 +266,25 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		return $this->items;
 	}
 
+	function getSelectedItem($field)
+	{
+		$item = new $this->relatedClass;
+		$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
+		$value = $this->parent->data->get($field);
+		
+		try
+		{
+			$item = Query::create($this->relatedClass, "WHERE {$valueField}=:v")
+						 ->bind(":v", $value)
+						 ->executeSingle();
+		}
+		catch(DataNotFoundException $e)
+		{
+			$item = new $this->relatedClass;
+		}
+		
+		return $item;
+	}
 	
 	function preProcess($field = "")
 	{
