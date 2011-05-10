@@ -360,6 +360,40 @@ function formatDateTime12Hr($datetime)
 }
 
 /*
+ * If start and end dates are the same date 
+ * then show the date followed by start and end time.
+ * Otherwise, show start date and time to end date
+ * and time. 
+ * 
+ * $start - datetime
+ * $end - datetime
+ */
+function formatStartDateToEndDate($start, $end)
+{
+	$yyyy = substr($start,0,4);
+	$yyyy_2 = substr($end,0,4);
+	$mm   = substr($start,5,2);
+	$mm_2   = substr($end,5,2);
+	$dd   = substr($start,8,2);
+	$dd_2   = substr($end,8,2);
+			
+	if($yyyy != $yyyy_2 || $mm != $mm_2 || $dd != $dd_2)
+	{
+		return formatDateTime12Hr($start) ." &ndash; ". foramtDateTime12Hr($end);
+	}
+	else
+	{
+		$hh   = substr($start,11,2);
+		$mi   = substr($start,14,2);
+		$hh_2   = substr($end,11,2);
+		$mi_2   = substr($end,14,2);
+		$s_time = date("g:ia", mktime($hh,$mi));
+		$e_time = date("g:ia", mktime($hh_2,$mi_2));
+		return formatDateShort($start) . " $s_time &ndash; $e_time";
+	}	
+}
+
+/*
  * Given a phone number containing various
  * separator characters between the numbers,
  * clear out the separators and standardize
@@ -807,8 +841,8 @@ function parseMultiParam($collection, $param)
 function option($value, $text, $sel = "")
 {
 	echo "<option value='$value'";
-	if ($sel == $value)
-	{
+	if ($sel === $value)
+	{		
 		echo " selected";
 	}
 	echo ">$text</option>";	
