@@ -54,7 +54,7 @@ class PayPalManifest
 	{
 		$component = new Component();
 		$component->name = "paypal";
-		$component->description = "Paypal payment transaction handling.";
+		$component->description = "Template or guide for Paypal payment transaction handling.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
 		$component->priority = 3;
