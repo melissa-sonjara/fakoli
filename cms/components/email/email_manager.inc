@@ -74,7 +74,7 @@ class EmailHandler
 			$patterns = array("/<br>/", "/&nbsp;/", "/<p>/", "/<BR>/", "/<P>/");
 			$replacements = array("\r\n", " ", "\r\n", "\r\n", "\r\n");
 			$message =  preg_replace($patterns, $replacements, $message);
-			$body = stripHTML($message);
+			$body = trim(stripHTML($message));
 		}
 		
 		//trace("EmailHandler:: toAddr: $toAddr; emailFrom: $emailFrom; subject: $subject, message: $body", 3);
