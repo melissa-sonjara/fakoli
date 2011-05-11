@@ -111,7 +111,7 @@ Content-Type: text/plain
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-<? echo stripHTMLTags($msg); ?>
+<? echo trim(stripHTMLTags($msg)); ?>
 
 
 ----PHP-alt-<?php echo "$random_hash\n"; ?>
