@@ -66,6 +66,7 @@ class CommentsView
 		
 		$this->form->writeScript();
 		$this->form->drawForm();
+		echo "<br/>";
 	}
 
 	function saveComments() {
