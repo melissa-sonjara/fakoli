@@ -440,7 +440,7 @@ class ImageManager
 		
 	  	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
 	  	chmod($target, 0755);
-		$image->image_file = $filename;  	
+		$image->set("image_file", $filename);  	
 	  	return true;
 	}
 	
