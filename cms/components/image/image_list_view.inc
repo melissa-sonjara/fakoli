@@ -128,12 +128,12 @@ class ImageGalleryListView
 	var $table;
 	var $link;
 	
-	function ImageGalleryListView($gallery)
+	function ImageGalleryListView($gallery, $link = "image_form?image_id={image_id}")
 	{
 		$images = $gallery->Images("ORDER BY title");
+		$this->link = $link;
 		
 		$this->table = $this->buildTable($images);
-		$this->link = "image_form?image_id={image_id}";
 	}
 
 	function buildTable($images)
