@@ -126,19 +126,21 @@ ENDSCRIPT;
 class ImageGalleryListView
 {
 	var $table;
+	var $link;
 	
 	function ImageGalleryListView($gallery)
 	{
 		$images = $gallery->Images("ORDER BY title");
 		
 		$this->table = $this->buildTable($images);
+		$this->link = "image_form?image_id={image_id}";
 	}
 
 	function buildTable($images)
 	{
 
 		$table = new DataListView($images, "images");
-		$table->column("Title", "<a href='image_form?image_id={image_id}'>{title}</a>", true, "width: 50%")
+		$table->column("Title", "<a href='{$this->link}'>{title}</a>", true, "width: 50%")
 	  		->column("Image File", "{image_file}", true, "width: 50%");
 		$table->emptyMessage = "No images have been added to this gallery";
 		$table->pageSize = 20;
