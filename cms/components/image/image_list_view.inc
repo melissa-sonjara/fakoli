@@ -87,7 +87,7 @@ ENDSCRIPT;
 	
 		foreach($this->images as $image)
 		{
-			$thumb = $imgMgr->thumbnailLink($image->image_id, 125);
+			$thumb = $imgMgr->thumbnailLink($image->get("image_id"), 125);
 			$link = $image->format($this->linkFormat);
 			
 			if (is_callable($this->titleFormat))
