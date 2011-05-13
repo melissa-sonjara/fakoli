@@ -229,7 +229,9 @@ class CheckListFieldRenderer extends FieldRenderer
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
 		
-		//TODO: Output read-only
+		$value = $this->parent->data->get($field);
+		$value = str_replace(",", ", ", $value);
+		echo $value;
 		
 		echo "</td></tr>\n";
 	}
