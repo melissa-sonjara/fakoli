@@ -238,6 +238,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	
 	function postProcess($field = "")
 	{
+		if (count($this->options) == 0) return;
+
 		$xref = new $this->xrefClass;
 		
 		$obj = $this->parent->data;
