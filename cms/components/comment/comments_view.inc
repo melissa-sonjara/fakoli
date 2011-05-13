@@ -45,12 +45,25 @@ class CommentsView
 	}
 	function CommentForm($article_id, $site_user_id)
 	{
+		global $user;
+		
 		$comment = new Comment();
 		$comment->user_id = $site_user_id;
 		$this->form = new AutoForm($comment);
 		$this->form->getRenderer("description")->columns = 63;
-		$this->form->required("title", "description", "author");
+		$this->form->required("title", "description");
+		$this->form->alias("description", "comment");
 		$this->form->hide(user_id);
+		
+		if ($user) 
+		{
+			$this->form->hide("author");
+		}
+		else
+		{
+			$this->form->required("author");
+		}
+		
 		$this->form->writeScript();
 		$this->form->drawForm();
 	}
