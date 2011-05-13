@@ -45,6 +45,8 @@ table.list
 	box-shadow: 1px 1px 5px #666;
 	border-spacing: 0;
 	clear: both;
+	border-collapse: collapse;
+	empty-cells: show;
 }
 
 table.list b
