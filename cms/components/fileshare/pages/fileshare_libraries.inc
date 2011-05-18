@@ -39,7 +39,7 @@ $libraries = FileshareManager::getSharedLibraries();
 $styles .= FileshareManager::getStyles();
 
 $table = new DataListView($libraries, "libraries");
-$table->column("Library", "<a href='fileshare_library_search?document_library_id={document_library_id}'>{name}</a> {description}", true)
+$table->column("Library", "<a href='fileshare_library_files?document_library_id={document_library_id}'>{name}</a> {description}", true)
 	->column("Last Modified By", array(FileshareManager, getLibraryLastModifiedBy), true)
 	->column("Last Modified", array(FileshareManager, getLibraryLastModified), true)
 	->column("Created By", "{Owner.first_name} {Owner.last_name}", true)
