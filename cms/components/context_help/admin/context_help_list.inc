@@ -107,7 +107,7 @@ if(count($classes) > 0)
 		$savedFields = $savedHelp[$class];
 		if(count($savedFields) == 0) $savedFields = array();
 		if(is_array($classObj->additionalFields))
-			$fields = array_merge($fields, $class->additionalFields);
+			$fields = array_merge($fields, array_combine($classObj->additionalFields, $classObj->additionalFields));
 		
 		$savedFields = reindexList($savedFields, "field");
 		
