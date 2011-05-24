@@ -54,7 +54,7 @@ $mgr = new FileshareManager($library);
 $mgr->width = 640;
 
 $script .= $mgr->writeScript();
-$tabs->writeHTML();
+if ($tabs) $tabs->writeHTML();
 
 ?>
 <div id="tab_border">
