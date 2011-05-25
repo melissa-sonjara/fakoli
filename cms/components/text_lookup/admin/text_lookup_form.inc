@@ -71,6 +71,7 @@ $classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", $class
 $classSelect->allowAddEntry();
 $form->annotate("class_name", "If merge codes are used, identify the class name that can access the values.");
 $form->button("Cancel", $redirect);
+$form->allowDelete = true;
 
 if($text_id)
 	$form->annotate("code", "Code field changes will require changes to existing lookups in the code base.");
@@ -88,7 +89,7 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 ?>
-<a class="button" href="#" onclick="new TextLookup().showAdvancedFeatures(); return false">Advanced Features</a>
+<p><a class="button" href="#" onclick="new TextLookup().showAdvancedFeatures(); return false">Advanced Features</a></p>
 <?php
 
 $form->drawForm();
