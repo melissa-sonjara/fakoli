@@ -286,7 +286,7 @@ class DirectoryTreeControl
 		trace("Directory tree: buildFolderTreeAux f $f", 3);
 		$dir = opendir($f);
 	
-		$id = str_replace(DIRECTORY_SEPARATOR, "_", $folder);
+		$id = $this->id."_".str_replace(DIRECTORY_SEPARATOR, "_", $folder);
 		if ($this->permissionCallback && !call_user_func($this->permissionCallback, $folder)) return null;
 		
 		$node = new FolderNode($id, basename($folder), $folder);
