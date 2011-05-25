@@ -44,11 +44,11 @@ class TextLookup extends DataItem
 	
 
 	var $relations = array(
-			TextTranslations	=>	TextTranslation	
+			"Translations"	=>	TextTranslation	
 	);
 	
 	
-	function TextTranslations($constraint = "")
+	function Translations($constraint = "")
 	{
 		return $this->getRelatedList(TextTranslation, "", $constraint);
 	}

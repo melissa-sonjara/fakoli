@@ -72,6 +72,7 @@ $classSelect->allowAddEntry();
 $form->annotate("class_name", "If merge codes are used, identify the class name that can access the values.");
 $form->button("Cancel", $redirect);
 $form->allowDelete = true;
+$form->onDelete = onDeleteCascade;
 
 if($text_id)
 	$form->annotate("code", "Code field changes will require changes to existing lookups in the code base.");
@@ -91,6 +92,11 @@ $script .= $form->writeScript();
 ?>
 <p><a class="button" href="#" onclick="new TextLookup().showAdvancedFeatures(); return false">Advanced Features</a></p>
 <?php
+
+function onDeleteCascade(&$text)
+{
+	TextLookupManager::deleteText($text);	
+}
 
 $form->drawForm();
 ?>
