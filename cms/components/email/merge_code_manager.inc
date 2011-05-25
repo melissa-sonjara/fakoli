@@ -233,6 +233,59 @@ class MergeCodeManager
 			return str_replace($this->patterns, $this->replacements, $text);
 	}
 	
+	static function buildMergeCodeTable($class_name)
+	{
+		$classes = array();
+		$classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
+
+		$mergeCodes = Query::create(MergeCode, "WHERE class_name=:cn")
+			->bind(":cn", $class_name)
+			->execute();
+
+		if(array_search($class_name, $classes))
+		{
+			$obj = new $class_name();	
+			$mergeCodes = MergeCodeManager::getDefaultCodes($obj, $mergeCodes);
+		}
+
+		$table = new DataListView($mergeCodes, "mergeCodes");
+		$table->column("Code Name", "{name}", false)
+				->column("Description", "{description}", false)
+		;		
+		$table->emptyMessage = "There are no merge codes defined.";
+		$table->sortable = false;
+		$table->cssStyle = "width: 100%";
+		
+		return $table;
+	}	
+	
+
+/*
+ * Any of the sending class's fields can be used as a merge
+ * code w/o creating a merge_code record. Since primary or
+ * foreign key fields are not useful as codes, omit these from 
+ * the list. Also omit composite_class fields and passwords.
+ */
+	static function getDefaultCodes($obj, $mergeCodes)
+	{
+		$fields = $obj->getFields();
+		if(count($fields) > 0)
+		{
+			foreach($fields as $name => $type)
+			{
+				if(preg_match("/_id/", $name) || preg_match("/composite/", $name) 
+					|| preg_match("/password/", $name) || $type == Boolean)
+					continue;
+			
+				$mCode = new MergeCode();
+				$mCode->name = $name;
+				$mCode->map = "N/A";
+				$mCode->description = $type ." field in ". get_class($obj);
+				$mergeCodes[] = $mCode;
+			}	
+		}
+		return $mergeCodes;
+	}
 }
 
 ?>
