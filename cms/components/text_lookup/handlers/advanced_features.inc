@@ -69,14 +69,14 @@ $table->cssStyle = "width: 100%";
 
 echo $table->writeScript();
 ?>
-<p>The following codes are available for the recipients, subject and message fields of this template:</p>
+<p>The following codes are available for class <?php echo $class_name ?>:</p>
 <?php
 $table->drawView();
 ?>
 <p>Additional codes can be added by your systems administrator.</p>
 <p>Example:</p>
 <p>Please take a few minutes to complete this short [program_name] survey. Your feedback will help us know our participants and improve our program.</p>
-<p>The survey will be open for responses until [survey_end_date]. We appreciate your support. </p>
+<p>The survey will be open for responses until [survey_end_date]. We appreciate your support. </p><br>
 
 <?php 
 
