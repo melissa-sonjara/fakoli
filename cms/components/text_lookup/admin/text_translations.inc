@@ -31,39 +31,53 @@
 
 *****************************************************************/
 
-/**************************************************************
 /*
- * Dummy datamodel to build contact us form. No db table
- * - data is not retreived or stored. 
+ * Show all text translations for a given text item and
+ * allow the user to create another translation or
+ * edit an existing one.
  * 
- * Reshma Joshi for Sonjara, Inc.
+ * @author Janice Gallant for Sonjara, Inc.
  * 
- * 2/14/2011
- *
+ * 5/24/2011
+ */
 
-*****************************************************************/
-  
 
-class Email extends DataItem
-{
-	var $fields = array(
-				"email_id"		=>	Number,
-				"sender_name"					=>	String,
-				"sender_email"			=>	String,
-				"recipient"			=>	Text,
-				"subject"				=>	String,
-				"message"				=>	Text,
-				
-	);
-		
+Fakoli::using("text_lookup");
+Fakoli::usingFeature("data_view");
+
+$text_id = checkNumeric($_GET["text_id"]);
+
+if(!$text_id)
+	redirect("/text_lookup_list");
 	
-	function Email()
-	{
-		$this->table = "email";
-		$this->primary_key = "email_id";
-		
-		$this->DataItem(func_get_args());
-	}
-}
+$menu_item = "Text Lookup";
 
+$text = new TextLookup($text_id);
+$title = "Text Translations for " . $text->code;
 
+$texts = Query::create(TextTranslation, "WHERE text_id=:text_id ORDER BY language")
+	->bind(":text_id", $text_id)
+	->execute();
+
+$table = new DataListView($texts, "textTranslations");
+$table->column("Code", "{TextLookup.code}", true)
+	->column("Text", "{TextLookup.text}", true)
+	->column("Language", "{language}", true)
+	->column("Translation", "<a href='/admin/text_translation_form?text_translation_id={text_translation_id}'>{text}</a>", true)
+	;
+  
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 10;
+$table->emptyMessage = "No text translations have been defined.";
+
+$script .= $table->writeScript();
+
+?>
+<p><label for="text">Text:&nbsp;</label><?php echo $text->text ?></p>
+<?php 
+$table->drawView();
+?>
+<br/>
+<a class='button' href='/admin/text_translation_form?text_id=<?php echo $text_id ?>'>Add a Translation</a>
+<br/>

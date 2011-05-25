@@ -56,8 +56,43 @@ var EmailManager =  (function()
 		{
 			var class_name = $('class_name').value;
 			this.dialog = modalPopup('Advanced Features', '/action/email/advanced_email_features?class_name=' + class_name, '500px', 'auto')	
-		}
+		},
 		
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 * 
+		 *           Mail To form
+		 *           
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * */         
+		
+		sendMailTo: function(response)
+		{
+			if (response == "OK")
+			{
+				this.closeMailToDialog();
+			}
+			else
+			{
+				var err = $('MailTo_form__error');
+				err.set('html', response);
+				err.setStyle('display', 'table-cell');
+			}
+		},
+		
+		closeMailToDialog: function()
+		{
+			this.dialog.hide();
+		},
+		
+		mailto: function(to, subject, message)
+		{
+			if(!to)
+				to = "";
+			if(!subject)
+				subject = "";
+			if(!message)
+				message = "";
+			this.dialog = modalPopup('Send an Email', '/action/email/mail_to?to=' + to + "&subject=" + subject + "&message=" + message, '520px', 'auto', true);
+		}
 		  
 		});
 

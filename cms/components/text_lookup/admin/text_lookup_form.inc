@@ -31,39 +31,65 @@
 
 *****************************************************************/
 
-/**************************************************************
 /*
- * Dummy datamodel to build contact us form. No db table
- * - data is not retreived or stored. 
+ * For admin to define text that appears on
+ * various pages in the site.
  * 
- * Reshma Joshi for Sonjara, Inc.
+ * Janice Gallant for Sonjara, Inc.
  * 
- * 2/14/2011
- *
+ * 09/03/2010
+ */
 
-*****************************************************************/
-  
 
-class Email extends DataItem
+Fakoli::using("text_lookup", "email");
+Fakoli::usingFeature("auto_form");
+
+$text_id = checkNumeric($_GET["text_id"]);
+
+$menu_item = "Text Lookup";
+
+$text = new TextLookup();
+
+if ($text_id)
 {
-	var $fields = array(
-				"email_id"		=>	Number,
-				"sender_name"					=>	String,
-				"sender_email"			=>	String,
-				"recipient"			=>	Text,
-				"subject"				=>	String,
-				"message"				=>	Text,
-				
-	);
-		
-	
-	function Email()
-	{
-		$this->table = "email";
-		$this->primary_key = "email_id";
-		
-		$this->DataItem(func_get_args());
-	}
+	$text->load($text_id);
 }
 
 
+$redirect = "/admin/text_lookup_list";
+
+$form = new AutoForm($text);
+$form->unique("code", "Text already exists with that code.");
+
+$mergeCode = new MergeCode();
+$classNames = $mergeCode->distinctValues("class_name", true);
+if (count($classNames) > 0)
+{
+	$classNameList = array_combine($classNames, $classNames);
+}
+$classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", $classNameList);
+$classSelect->allowAddEntry();
+$form->annotate("class_name", "If merge codes are used, identify the class name that can access the values.");
+$form->button("Cancel", $redirect);
+
+if($text_id)
+	$form->annotate("code", "Code field changes will require changes to existing lookups in the code base.");
+else
+	$form->annotate("code", "Please provide the code as all lowercase letters and link words with an underscore (e.g., my_code)");
+
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		redirect($redirect);
+	}
+}
+
+$script .= $form->writeScript();
+
+?>
+<a class="button" href="#" onclick="new TextLookup().showAdvancedFeatures(); return false">Advanced Features</a>
+<?php
+
+$form->drawForm();
+?>

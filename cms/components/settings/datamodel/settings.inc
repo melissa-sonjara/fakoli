@@ -51,7 +51,8 @@ class Settings extends DataItem
 				"String"	=>	"String",
 				"Number"	=>	"Number",
 				"Boolean"	=>	"Boolean",
-				"Date"		=>	"Date"
+				"Date"		=>	"Date",
+				"Currency"	=>	"Currency"
 				//"Select"	=>	"SelectFieldRenderer",
 				//"CheckList"	=>	"CheckListFieldRenderer"
 	); 

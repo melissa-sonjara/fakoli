@@ -834,8 +834,11 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		foreach($this->additional as $r)
 		{
 			$renderer = $r['renderer'];
+			// JDG 5/24/11 - fix get field name
 			$field = $r['field'];
-
+			if(!$field)
+				$field = $renderer->field;
+		
 			if ($this->readonly[$field])
 			{
 				$renderer->renderReadOnly($field);

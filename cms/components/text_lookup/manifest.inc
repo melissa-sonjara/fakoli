@@ -31,39 +31,40 @@
 
 *****************************************************************/
 
-/**************************************************************
-/*
- * Dummy datamodel to build contact us form. No db table
- * - data is not retreived or stored. 
- * 
- * Reshma Joshi for Sonjara, Inc.
- * 
- * 2/14/2011
- *
-
-*****************************************************************/
-  
-
-class Email extends DataItem
+class TextLookupManifest
 {
-	var $fields = array(
-				"email_id"		=>	Number,
-				"sender_name"					=>	String,
-				"sender_email"			=>	String,
-				"recipient"			=>	Text,
-				"subject"				=>	String,
-				"message"				=>	Text,
-				
-	);
-		
-	
-	function Email()
+	static function getComponentDefinition()
 	{
-		$this->table = "email";
-		$this->primary_key = "email_id";
+		$component = new Component();
+		$component->name = "text_lookup";
+		$component->description = "Text data repository and lookup with multilanguage support.";
+		$component->author = "Janice Gallant";
+		$component->version = "1.0";
+		$component->priority = 2;
+		$component->enabled = true;
 		
-		$this->DataItem(func_get_args());
+		return $component;
 	}
+	
+	static function getAdminMenu()
+	{
+		return array
+		(
+			"Classification"	=> array
+			(
+
+				"Text Lookup"	=>	array("page"	=>	"/admin/text_lookup_list",
+								  "role"	=>	"admin",
+								  "weight"	=>	10)
+			)
+		);		
+	}
+	
+	static function getScripts()
+	{
+		return array("/fakoli/js/text_lookup.js");
+	} 	
+		
 }
 
-
+?>

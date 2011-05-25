@@ -31,39 +31,29 @@
 
 *****************************************************************/
 
-/**************************************************************
-/*
- * Dummy datamodel to build contact us form. No db table
- * - data is not retreived or stored. 
- * 
- * Reshma Joshi for Sonjara, Inc.
- * 
- * 2/14/2011
- *
 
-*****************************************************************/
+Fakoli::using("text_lookup");
+Fakoli::usingFeature("data_view");
+
+$menu_item = "Text Lookup";
+
+$texts = Query::create(TextLookup, "ORDER BY code")->execute();
+
+$table = new DataListView($texts, "textLookup");
+$table->column("Code", "<a href='/admin/text_lookup_form?text_id={text_id}'>{code}</a>", true)
+	->column("Text", "{text}", true)
+	->column("Class Name", "{class_name}", true)
+	->column("", "<a href='/admin/text_translations?text_id={text_id}'>Translations</a>", true)
+	;
   
+$table->sortable = true;
+$table->filter = true;
+$table->pageSize = 10;
+$table->emptyMessage = "No text lookups have been defined.";
 
-class Email extends DataItem
-{
-	var $fields = array(
-				"email_id"		=>	Number,
-				"sender_name"					=>	String,
-				"sender_email"			=>	String,
-				"recipient"			=>	Text,
-				"subject"				=>	String,
-				"message"				=>	Text,
-				
-	);
-		
-	
-	function Email()
-	{
-		$this->table = "email";
-		$this->primary_key = "email_id";
-		
-		$this->DataItem(func_get_args());
-	}
-}
-
-
+$script .= $table->writeScript();
+$table->drawView();
+?>
+<br/>
+<a class='button' href='/admin/text_lookup_form'>Add a Text Lookup</a>
+<br/>

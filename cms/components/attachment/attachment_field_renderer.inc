@@ -64,6 +64,8 @@ class AttachmentFieldRenderer extends FieldRenderer
 
 	function renderScript($field)
 	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+		
 		global $dialogs;
 		if (!$field) $field = $this->field;
 		
@@ -107,8 +109,68 @@ class AttachmentFieldRenderer extends FieldRenderer
 		if (!$field) $field = $this->field;
 		
 		$xref = new $this->xrefClass;
-		
+	
 		$this->_startField($field);
+		
+		$attachments = $this->getAttachments();
+					
+		$ids = displayFieldAsList($attachments, "attachment_id");
+?>
+	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
+	<div id="<?echo $this->parent->id?>_<?echo $field?>_list">
+	<?
+
+ 		foreach($attachments as $attachment)
+ 		{
+ ?>	<div id='attachment_<?echo $attachment->attachment_id?>'>
+ <?php		
+ 			$this->drawOneAttachment($attachment);
+ ?>
+	&nbsp;
+	<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='/fakoli/images/delete.gif' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a>
+	</div>
+<?	
+		}
+	?>
+	</div>
+	<a href="#" onclick="new AttachmentUploader().addAttachment(); return false"> Add an Attachment </a>
+<?
+		$this->_endField($field);
+	}
+	
+	// JDG 5/24/11 - add readonly handling
+	function renderReadOnly($field = "")
+	{
+		if (!$field) $field = $this->field;
+	
+		echo "<tr>\n";
+		$this->_printLabel($field);
+		echo "<td";
+		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
+		echo ">";
+			
+		$attachments = $this->getAttachments();
+	
+		if(count($attachments) > 0)
+		{
+ 			foreach($attachments as $attachment)
+ 			{
+ ?>	<div id='attachment_<?echo $attachment->attachment_id?>'>
+ <?php
+ 				$this->drawOneAttachment($attachment);
+ ?>
+	 </div>
+<?	
+			}
+		}
+
+		echo "</td></tr>\n";
+	}
+	
+	function getAttachments()
+	{
+		$xref = new $this->xrefClass;
+		
 		$pk = $this->getMatchingPK($xref, $this->parent->data);
 		$pkv = $this->parent->data->get($pk);
 		
@@ -121,34 +183,23 @@ class AttachmentFieldRenderer extends FieldRenderer
 			$attachments = array();
 		}
 				
-		$ids = displayFieldAsList($attachments, "attachment_id");
-?>
-	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
-	<div id="<?echo $this->parent->id?>_<?echo $field?>_list">
-	<?
-
- 		foreach($attachments as $attachment)
- 		{
+		return $attachments;
+	}	
+	
+	function drawOneAttachment($attachment)
+	{
  			$icon = getDocIcon($attachment->filename);
 ?>
-	<div id='attachment_<?echo $attachment->attachment_id?>'><img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<a href='/action/attachment/download?attachment_id=<?echo $attachment->attachment_id?>'><?echo $attachment->filename?></a>&nbsp;(<?echo $attachment->file_size?>)
-	&nbsp;<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='/fakoli/images/delete.gif' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a></div>
-<?	
-	}
-	?>
-	</div>
-	<a href="#" onclick="new AttachmentUploader().addAttachment(); return false"> Add an Attachment </a>
-<?
-		$this->_endField($field);
-	}
-	
-	function renderReadOnly($field = "")
-	{
-
+	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;
+	<a href='/action/attachment/download?attachment_id=<?echo $attachment->attachment_id?>'><?echo $attachment->filename?></a>&nbsp;
+	(<?echo $attachment->file_size?>)
+<?			
 	}
 	
 	function postProcess($field = "")
 	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+		
 		if (!$field) $field = $this->field;
 		
 		$xref = new $this->xrefClass;

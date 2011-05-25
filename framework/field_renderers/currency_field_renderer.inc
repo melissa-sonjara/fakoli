@@ -41,6 +41,8 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class CurrencyFieldRenderer extends FieldRenderer
 {
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	var $onChange = ""; // optional callback on data input change
+	
 	
 	function CurrencyFieldRenderer(&$parent)
 	{
@@ -60,10 +62,11 @@ class CurrencyFieldRenderer extends FieldRenderer
 		// display with commas between thousands
 		$value = number_format($value, 2);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
-	
+		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
+		
 		$this->_startField($field);
 
-		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='{$value}' $disable size='20'/>";
+		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='{$value}' $onchange $disable size='20'/>";
 
 		$this->_endField($field);
 	}
@@ -103,6 +106,8 @@ class CurrencyFieldRenderer extends FieldRenderer
 	// allow user to enter commas if they wish and strip them out before saving
 	function preProcess($field)
 	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+			
 		$value= $_POST[$field];
 		$value =  str_replace(",", "", $value);
 		$this->parent->data->set($field, $value);

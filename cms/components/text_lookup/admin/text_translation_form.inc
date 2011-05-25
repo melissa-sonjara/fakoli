@@ -31,39 +31,61 @@
 
 *****************************************************************/
 
-/**************************************************************
 /*
- * Dummy datamodel to build contact us form. No db table
- * - data is not retreived or stored. 
+ * For admin to translate text that appears on
+ * various pages in the site.
  * 
- * Reshma Joshi for Sonjara, Inc.
+ * Janice Gallant for Sonjara, Inc.
  * 
- * 2/14/2011
- *
+ * 09/03/2010
+ */
 
-*****************************************************************/
-  
 
-class Email extends DataItem
-{
-	var $fields = array(
-				"email_id"		=>	Number,
-				"sender_name"					=>	String,
-				"sender_email"			=>	String,
-				"recipient"			=>	Text,
-				"subject"				=>	String,
-				"message"				=>	Text,
-				
-	);
-		
+Fakoli::using("text_lookup");
+Fakoli::usingFeature("auto_form");
+
+$text_translation_id = checkNumeric($_GET["text_translation_id"]);
+$text_id = checkNumeric($_GET["text_id"]);
+
+if(!$text_translation_id && !$text_id)
+	redirect("/text_lookup_list");
 	
-	function Email()
+$menu_item = "Text Lookup";
+
+$translation = new TextTranslation();
+
+if($text_translation_id)
+{
+	$translation->load($text_translation_id);
+	$text = $translation->TextLookup();
+	$text_id = $text->text_id;
+}	
+else
+{
+	$translation->text_id = $text_id;
+	$text = new TextLookup($text_id);
+}		
+
+$title = "Text Translation form for " . $text->code;
+
+$form = new AutoForm($translation);
+
+$redirect = "/admin/text_translations?text_id={$text_id}";
+$form->button("Cancel", $redirect);
+$form->alias("text", "Translated Text");
+$languageSelect = new SelectFieldRenderer($form, "language", "Language", TextTranslation::$languageOptions);
+$textSelect = new RelatedItemSelectFieldRenderer($form, "text_id", "Text", TextLookup, "WHERE text_id={$text_id}", "text", "text_id");
+$form->readonly("text_id");
+
+if ($method == "POST")
+{
+	if ($form->save())
 	{
-		$this->table = "email";
-		$this->primary_key = "email_id";
-		
-		$this->DataItem(func_get_args());
+		redirect($redirect);
 	}
 }
 
+$script .= $form->writeScript();
 
+$form->drawForm();
+?>

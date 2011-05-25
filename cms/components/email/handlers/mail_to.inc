@@ -31,22 +31,62 @@
 
 *****************************************************************/
 
+/*
+ * Provides a modal dialog "Mail To" form as an alternative
+ * for the often sluggish performance of a user's mail client.
+ * 
+ * @author Janice Gallant for Sonjara, Inc.
+ * 
+ * 4/15/2011
+ */
+
+
 Fakoli::using("email");
 Fakoli::usingFeature("auto_form");
 
-$email = new Email();
+$to = mysql_escape_string($_GET["to"]);
+$subject = mysql_escape_string($_GET["subject"]);
+$message = mysql_escape_string($_GET["message"]);
+
+$email = new EmailTemplate();
+
+$email->recipients = ($to) ? $to : "";
+$email->subject = ($subject) ? $subject : "";
+$email->message = ($message) ? $message : "";
 
 $form = new AutoForm($email);
+$form = new AutoForm($email, "POST", "/action/email/mail_to?to=$to&subject=$subject&message=$message", "MailTo_form");
+
+$form->hide("sender_email", "class_name", "name");
+$form->ajaxSubmit("function(result) {new EmailManager().sendMailTo(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->button("Cancel", "new EmailManager().closeMailToDialog()", null, true);
 $form->submitLabel = "Send Email";
+$form->validator->add(new EmailListValidator("recipients", "Recipients"));
+$form->required("recipients", "subject", "message");
+$form->override("message", $label = "Message", new TextFieldRenderer($form));
+$form->getRenderer("message")->rows = 10;
+$form->override("recipients", $label = "To", new StringFieldRenderer($form));
 
 if ($method == "POST")
 {
-	$email->fromPOST();
-	
-	$handler = new EmailHandler($email->recipient, $email->subject, $email->message, $email->sender_email);
-	$handler->send();
+	$obj =& $form->data;
+	$obj->fromPOST();
+	$msg = $form->validator->validate();
+	if ($msg == "")
+	{
+		$mgr = new EmailHandler($obj->recipients, $obj->subject, $obj->message, $user->email);
+		$mgr->send();
+		echo "OK";
+		return;
+	}
+	else
+	{
+		echo $msg;
+		return;
+	}		
 }
 
-$script .= $form->writeScript();
+echo $form->writeScript();
+
 $form->drawForm();
 ?>

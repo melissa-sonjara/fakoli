@@ -50,6 +50,7 @@ class NumberFieldRenderer extends FieldRenderer
 	var $size = 15;
 	var $onKeyUp; // javascript callback function
 	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
+	var $onChange = ""; // optional callback on data input change
 	
 	function NumberFieldRenderer(&$parent)
 	{
@@ -66,10 +67,11 @@ class NumberFieldRenderer extends FieldRenderer
 		// translate to 0 or 1
 		$allowneg = ($this->allowNegative) ? 1 : 0;
 		$autocomplete = ($this->autocomplete) ? "" : " autocomplete='off' ";
+		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
 		
 		echo "<input id='{$this->parent->id}_$field' type='text' name='$field' 
 		value='".$this->parent->data->get($field)."' $autocomplete
-		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onKeyUp/>";
+		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
 
 		$this->_endField($field);
 	}
