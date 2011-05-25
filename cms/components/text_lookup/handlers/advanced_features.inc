@@ -51,6 +51,9 @@ $page->page_title = "Advanced Features &ndash; Merge Codes";
 $table = MergeCodeManager::buildMergeCodeTable($class_name);
 
 echo $table->writeScript();
+
+if(!$class_name)
+	$class_name = "Other";
 ?>
 <p>The following codes are available for class <?php echo $class_name ?>:</p>
 <?php
