@@ -52,8 +52,14 @@ $table->emptyMessage = "You do not have any file sharing libraries.";
 $script .= $table->writeScript();
 
 $table->drawView();
+
+if ($user)
+{
 ?>
 <br/>
 <div id="submit_block">
 <a href="fileshare_library_form"><img alt="create_library" src="/fakoli/images/button_create_library.png"/></a>
 </div>
+<?
+}
+?>
