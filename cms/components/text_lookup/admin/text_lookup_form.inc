@@ -43,6 +43,7 @@
 
 Fakoli::using("text_lookup", "email");
 Fakoli::usingFeature("auto_form");
+Fakoli::usingFile("framework/tab_bar.inc");
 
 $text_id = checkNumeric($_GET["text_id"]);
 
@@ -79,17 +80,21 @@ if($text_id)
 else
 	$form->annotate("code", "Please provide the code as all lowercase letters and link words with an underscore (e.g., my_code)");
 
+$tabs = TextLookupManager::getTabs($text_id);
+	
 if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect($redirect);
+		redirect("/admin/text_translations?text_id={$form->data->text_id}");
 	}
 }
 
 $script .= $form->writeScript();
 
+$tabs->writeHTML();
 ?>
+<div id="tab_border">
 <p>This form allows you to edit text that appears in the website. The text is retrieved for display on a web page using the code name given here.</p>
 <p><a class="button" href="#" onclick="new TextLookup().showAdvancedFeatures(); return false">Advanced Features</a></p>
 <?php
@@ -100,4 +105,4 @@ function onDeleteCascade(&$text)
 }
 
 $form->drawForm();
-?>
+?></div>

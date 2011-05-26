@@ -83,8 +83,8 @@ class TextLookup extends DataItem
 			else
 				return $text->text;
 		}
-		else
-			return "";
+		else // return the code to signal that no value was found.
+			return $code;
 	}
 	
 

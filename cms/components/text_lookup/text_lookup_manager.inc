@@ -54,4 +54,16 @@ class TextLookupManager
 		$text->delete();
 		
 	}
+	
+	static function getTabs($key = "")
+	{
+		$tabs = array(
+			"Text Lookup"			=>	"/admin/text_lookup_form",
+			"Translations"		=>	"/admin/text_translations"
+			);
+
+		$qs = ($key) ? "text_id=$key" : ""; 
+		$tabs = new TabBar("tabs", $tabs, $qs);
+		return $tabs;
+	}
 }

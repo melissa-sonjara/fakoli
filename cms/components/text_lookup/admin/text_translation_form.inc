@@ -43,6 +43,7 @@
 
 Fakoli::using("text_lookup");
 Fakoli::usingFeature("auto_form");
+Fakoli::usingFile("framework/tab_bar.inc");
 
 $text_translation_id = checkNumeric($_GET["text_translation_id"]);
 $text_id = checkNumeric($_GET["text_id"]);
@@ -77,6 +78,10 @@ $languageSelect = new SelectFieldRenderer($form, "language", "Language", TextTra
 $textSelect = new RelatedItemSelectFieldRenderer($form, "text_id", "Text", TextLookup, "WHERE text_id={$text_id}", "text", "text_id");
 $form->readonly("text_id");
 
+
+$tabs = TextLookupManager::getTabs($text_id);
+$tabs->page = "/admin/text_translations";
+
 if ($method == "POST")
 {
 	if ($form->save())
@@ -86,6 +91,9 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
-
-$form->drawForm();
+$tabs->writeHTML();
 ?>
+<div id="tab_border">
+<?php 
+$form->drawForm();
+?></div>

@@ -44,6 +44,7 @@
 
 Fakoli::using("text_lookup");
 Fakoli::usingFeature("data_view");
+Fakoli::usingFile("framework/tab_bar.inc");
 
 $text_id = checkNumeric($_GET["text_id"]);
 
@@ -71,13 +72,17 @@ $table->filter = true;
 $table->pageSize = 10;
 $table->emptyMessage = "No text translations have been defined.";
 
-$script .= $table->writeScript();
 
+$tabs = TextLookupManager::getTabs($text_id);
+
+$script .= $table->writeScript();
+$tabs->writeHTML();
 ?>
+<div id="tab_border">
 <p><label for="text">Text:&nbsp;</label><?php echo $text->text ?></p>
 <?php 
 $table->drawView();
-?>
+?></div>
 <br/>
 <a class='button' href='/admin/text_translation_form?text_id=<?php echo $text_id ?>'>Add a Translation</a>
 <br/>
