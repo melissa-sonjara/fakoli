@@ -175,7 +175,7 @@ class EmailManager
 	function mergeEmail()
 	{
 		$emailText = $this->emailTemplate->recipients . $this->emailTemplate->subject . $this->emailTemplate->message;
-		$mgr = new MergeCodeManager($this->item, $emailText);
+		$mgr = new MergeCodeManager($this->item, $emailText, $this->emailTemplate->class_name);
 	
 		$fields = array("recipients", "subject", "message");
 		foreach($fields as $field)

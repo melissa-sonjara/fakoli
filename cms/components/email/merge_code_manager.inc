@@ -43,16 +43,24 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  ***************************************************************/
 
-
+/*
+ * 
+ * Allow class_name to be passed b/c some email templates
+ * have a different class_name for merge codes than the item
+ * for special handling.
+ * 
+ */
 class MergeCodeManager
 {
 	var $item;
 	var $patterns;
 	var $replacements;
+	var $class_name;
 
-	function MergeCodeManager($item, $inText)
+	function MergeCodeManager($item, $inText, $class_name = "")
 	{
 		$this->item = $item;
+		$this->class_name = ($class_name) ? $class_name : get_class($item);
 		
 		$usedMergeCodes = array(); 
 		preg_match_all("/\[(.*?)\]/", $inText, $usedMergeCodes, PREG_PATTERN_ORDER);
@@ -89,7 +97,7 @@ class MergeCodeManager
 			$used = strip_tags("'". implode("','", array_values($usedMergeCodes)) . "'");
 		
 			$mergeCodes = Query::create(MergeCode, "WHERE class_name = :cn and name in ($used)")
-				->bind(":cn", get_class($this->item))
+				->bind(":cn", $this->class_name)
 				->execute();
 		}
 		
