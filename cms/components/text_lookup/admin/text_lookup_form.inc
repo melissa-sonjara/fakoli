@@ -62,12 +62,10 @@ $redirect = "/admin/text_lookup_list";
 $form = new AutoForm($text);
 $form->unique("code", "Text already exists with that code.");
 
-$mergeCode = new MergeCode();
-$classNames = $mergeCode->distinctValues("class_name", true);
-if (count($classNames) > 0)
-{
-	$classNameList = array_combine($classNames, $classNames);
-}
+$classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
+if (count($classes) > 0)
+	$classNameList = array_combine($classes, $classes);
+
 $classSelect = new SelectFieldRenderer($form, "class_name", "Class Name", $classNameList);
 $classSelect->allowAddEntry();
 $form->annotate("class_name", "If merge codes are used, identify the class name that can access the values.");
