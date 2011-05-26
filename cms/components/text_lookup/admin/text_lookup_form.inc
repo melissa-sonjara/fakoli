@@ -90,6 +90,7 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 ?>
+<p>This form allows you to edit text that appears in the website. The text is retrieved for display on a web page using the code name given here.</p>
 <p><a class="button" href="#" onclick="new TextLookup().showAdvancedFeatures(); return false">Advanced Features</a></p>
 <?php
 

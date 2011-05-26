@@ -59,6 +59,12 @@ class TextLookup extends DataItem
 	 * retrieve any merge codes values for codes used in the 
 	 * text that have been saved to merge_code table under 
 	 * the same class name as the $obj.
+	 * 
+	 * $code - the value of the code field of the text object
+	 * 
+	 * $obj - a data item instance that can retrieve values
+	 * for merge codes used in the block of text (the text
+	 * field value of table text_lookup.
 	 */
 	static function getText($code, $obj = null)
 	{
