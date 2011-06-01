@@ -105,7 +105,23 @@ class SurveyManager
 		
 		return $classes;
 	}		
-	
+
+
+	static function setDefaults()
+	{
+		trace("SurveyManager::setDefaults", 3);
+		
+		global $config;
+		
+		Settings::setDefaultValue("survey", "sender_email", "", "String", "The email address that will appear as the sender of the survey email");
+		Settings::setDefaultValue("survey", "email_subject", "Survey from ". $config["http_host"], "String", "The default or standard subject line for survey emails");
+		Settings::setDefaultValue("survey", "message_footer", "<br><br>Click the link below to access the survey:<br>[survey_link]<br><br>or go to<br>[survey_intro_link], click on [survey_title], and enter your access token [token] at the prompt.<br>", "Text", "The text to be included below the main 
+			message in all surveys, providing users with a link to response. 
+			The text within brackets represent codes that will be filled in with data 
+			from the survey record when the survey is sent.");
+				
+	}	
+		
 }
 
 
@@ -205,4 +221,5 @@ class SurveyResultsManager extends SurveyManager
 	{
 		return $this->item->Answers();
 	}
+
 }

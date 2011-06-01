@@ -53,7 +53,7 @@ else
 $form = new AutoForm($setting);
 
 $form->readOnly("component");
-$form->hide("value", "options");
+$form->hide("value");
 $form->button("Cancel", "/admin/setting_list");
 $form->annotate("name", "Please use a code-style name with lowercase letters and underscores between words (e.g., output_path). <b><i>Warning</b></i> Changes to the name will require code changes.");
 $form->annotate("options", "Option list for select or checklist field renderers. <b><i>Warning</b></i>: changing the order of options will change the selected value on the Application Settings form.");

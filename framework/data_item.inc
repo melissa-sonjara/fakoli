@@ -58,6 +58,19 @@ class DataItem extends AbstractDataItem
 	var $_tx = null;
 	var $_pkDisabled = false;
 	
+	static $dataTypeRendererMap = array(
+		"Boolean"	=>	BooleanTypeRenderer,	
+		"Currency"	=>	CurrencyTypeRenderer,
+		"Date"		=>	DateTypeRenderer,
+		"DateTime"	=>	DateTimeTypeRenderer,
+		"Number"	=>	NumberTypeRenderer,	
+		"String"	=>	StringTypeRenderer,
+		"Text"		=>	TextTypeRenderer,
+		"Timestamp"	=>	TimestampTypeRenderer,
+		"Timezone"	=>	TimezoneTypeRenderer
+	);
+	
+	
 	/**
 	 * Constructor. DataItems can be constructed in three ways:<br>
 	 * <ol>
@@ -1088,6 +1101,35 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
+	/*
+	 * Substitute values for field names in a string, 
+	 * with the fields formatted using their type's 
+	 * default format or according to the formatting
+	 * template sting passed in.
+	 * 
+	 * example template string:
+	 * "{program_name} {start_date} {number_students}"
+	 * 
+	 * The start_date field can have formatting specifications 
+	 * such as "{start_date:long} for long format.
+	 * 
+	 * Fields can also be retrieved through a relation from
+	 * the dataitem obj that calls this format function.
+	 * 
+	 * for example:
+	 * "{MyRelation.event_name}"
+	 * 
+	 * Variables used:
+	 * $format - stores the pattern inside the braces {} for 
+	 * search & replace substitution in the template string. 
+	 * 
+	 * $fieldFormat - the requested formatting for the field, if
+	 * any.
+	 * 
+	 * $sub - the value to be substituted or replacement
+	 * value in the tempalte string.
+	 * 
+	 */
 	function format($template = "", $separator = ", ")
 	{
 		trace(get_class($this)." Format: $template", 4);
@@ -1098,46 +1140,13 @@ class DataItem extends AbstractDataItem
 			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
 		}
 
-		// Feature enhancement - allow drill-down through relation functions
+		// Allow drill-down through relation functions
+		$template = $this->formatThroughRelation($template, $separator);
 		
-		$matches = array();
-		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
-		
-		foreach($matches as $match)
-		{
-			$relation = $match[1];
-			$field = $match[2];
-			$constraint = count($match) == 4 ? $match[3] : null;
-			
-			
-			if ($constraint)
-			{
-				$relations = $this->$relation($constraint);
-				$format = "{".$relation.".".$field.":".$constraint."}";
-			}
-			else
-			{
-				$relations = $this->$relation();
-				$format = "{".$relation.".".$field."}";
-			}
-			
-			$sub = "";
-			
-			if (is_array($relations))
-			{
-				$sub = displayFieldAsList($relations, $field, $separator);
-			}
-			else
-			{
-				$sub = $relations->formatFieldValue($field);
-			}
-			
-			trace("Replacing {$match[0]} [ $format ] with '$sub'", 4);
-			
-			$template = str_replace($format, $sub, $template);
-		}
+		$template = $this->formatField($template);
 		
 		// Simple method calls - no parameter passing
+		// ??Is this block ever executed??
 		
 		$matches = array();
 		preg_match_all("/\\{([\\w_]+)\\(\\)\\}/", $template, $matches, PREG_SET_ORDER);
@@ -1154,6 +1163,99 @@ class DataItem extends AbstractDataItem
 		
 		return $template;
 	}
+		
+	/*
+	 * Call formatFieldValue on a field with
+	 * formatting specification given.
+	 * 
+	 * e.g.: 
+	 * {amount:2}
+	 * {start_date:long}
+	 */
+	function formatField($template)
+	{
+		$matches = array();
+		
+		preg_match_all("/\\{([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+
+		foreach($matches as $match)
+		{
+			$field = $match[1];
+			$fieldFormat = $match[2];
+			trace("formatField, field $field and fieldFormat $fieldFormat", 3);
+			
+			$format = "{".$field.":".$fieldFormat."}";
+			
+			$sub = $this->formatFieldValue($field, $fieldFormat);
+			
+			$template = str_replace($format, $sub, $template);
+		}
+		return $template;
+	}
+	
+	/*
+	 * Format a field value that is accessed through a relation.
+	 * The relation can return multiple items.
+	 * e.g.,
+	 * 
+	 * {Program.program_name}
+	 * {Event.start_date} or {Event.start_date:long}
+	 * {Events.event_name}
+	 */
+	function formatThroughRelation($template, $separator = ", ")
+	{
+		$matches = array();
+		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match)
+		{
+			$relation = $match[1];
+			$field = $match[2];
+			
+			if(count($match) == 4 && preg_match("/^where|order/i", $match[3]))
+				$constraint = $match[3];
+			elseif(count($match) == 4)
+				$fieldTemplate = $match[3];
+
+			trace("function format: formatThroughRelations template $template field $field relation $relation constraint $constraint", 3);
+			
+			if ($constraint)
+			{
+				$relations = $this->$relation($constraint);
+				$format = "{".$relation.".".$field.":".$constraint."}";
+			}
+			elseif($fieldTemplate)
+			{
+				$relations = $this->$relation();
+				$format = "{".$relation.".".$field.":".$fieldTemplate."}";
+			}
+			else
+			{
+				$relations = $this->$relation();
+				$format = "{".$relation.".".$field."}";
+			}
+			
+			$sub = "";
+			
+			if (is_array($relations))
+			{
+				$formatTemplate = ($fieldTemplate) ? "{".$field .":".$fieldTemplate . "}" : "{".$field."}";
+				$sub = formatItems($relations, $formatTemplate, $separator);
+	
+			}
+			else
+			{
+				$sub = $relations->formatFieldValue($field, $fieldTemplate);
+			}
+			
+			trace("format using relations: Replacing {$match[0]} [ $format ] with '$sub'", 4);
+			
+			$template = str_replace($format, $sub, $template);
+		}
+		
+		return $template;
+	}
+	
 	
 	function prettifyFieldName($field)
 	{
@@ -1418,7 +1520,9 @@ function formatItems($items, $template, $separator = "")
 	{
 		if (!$item) continue;
 		if (!$first) $list .= $separator;
+		trace("before calling function format formatItems list is $list template $template separator $separator and class is " . get_class($item), 3);
 		$list .= $item->format($template);
+		trace("after calling function format, formatItems list is $list template $template separator $separator", 3);
 		$first = false;
 	}
 	

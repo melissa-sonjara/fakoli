@@ -1,7 +1,8 @@
 <?php
+
 /**************************************************************
 
- Copyright (c) 2007,2008 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,26 +32,45 @@
 
 *****************************************************************/
 
-class SurveySetting extends DataItem
+require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
+
+class CurrencyTypeRenderer extends AbstractTypeRenderer
 {
-	var $fields = array(
-				"survey_setting_id"		=>	Number,
-				"sender_email"			=>	String,
-				"email_subject"			=>	String,
-				"message_footer"		=>	Text
-	);
 	
-	static function loadSettings()
+	function CurrencyTypeRenderer()
 	{
-		$settings = query(SurveySetting, "LIMIT 1");
-		return (count($settings) > 0) ? $settings[0] : null;
 	}
 	
-	function SurveySetting()
+	/*
+	 * For currency formatting, the template should be 
+	 * a number, reprenting the decimal parameter to the
+	 * function number_format.
+	 * 
+	 * If no template, formats with 2 decimals.
+	 * 
+	 * A future enhancement would be to allow for
+	 * additional decimal format options such as
+	 * placement of ",". However, it can wait until needed.
+	 * 
+	 * http://php.net/manual/en/function.number-format.php
+	 * 
+	 * For example:
+	 * {amount:0} returns 89
+	 * {amount:1} returns 89.3
+	 * {amount:2} returns 89.32
+	 */
+	static function format($value, $template = "")
 	{
-		$this->table = "survey_setting";
-		$this->primary_key = "survey_setting_id";
+		$template = trim($template);
+	
+		if ($value == "" || !is_numeric($value))
+			$text = "0";				
+		elseif($template != "" && is_numeric($template))
+			$text = number_format($value, $template);
 
-		$this->DataItem(func_get_args());	
+		if(!$text)
+			$text = number_format($value, 2);
+		
+		return $text; 
 	}
 }

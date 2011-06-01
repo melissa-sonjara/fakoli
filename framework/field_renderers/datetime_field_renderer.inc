@@ -37,12 +37,16 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for date data fields. Renders with date format
  * validation and a date picking popup widget.
+ * 
+ * @template - field formatting format for readonly is standard 
+ * "F d, Y", accepts "long", "daylong", and "short" and any
+ * format string used by php date function
  */
 class DateTimeFieldRenderer extends FieldRenderer
 {
 	var $validator;
 	var $requireTime = true; // whether the time component of the field is also required
-	var $readOnlyFormat = ""; // callback function to format datetime, default is formatDateTime12Hr;
+	var $template = ""; // default reaonly format is short style
 	
 	function DateTimeFieldRenderer(&$parent)
 	{
@@ -94,15 +98,16 @@ class DateTimeFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
 			
-		// JDG 10/1/2010 check for empty saved string
-		if ($value AND substr($value, '00:00:00') > 0)
+		// If no time component, show as blank, not 12:00 AM
+		if ($value AND !preg_match("/00:00:00$/", $value))
 		{
 			$text = date("h/i/A", strtotime($value));
 			list($hh, $mm, $aa) = explode("/", $text);
 		}
 		
 		echo "<div id='{$this->parent->id}_{$field}_block' style='display: inline-block'>\n";
-		echo "&nbsp;&nbsp;<input type='text' value='$hh' name='{$field}_hh' size='2' maxlength='2' onkeydown='return maskInput(event);'>&nbsp;:&nbsp;<input type='text' value='$mm' name='{$field}_mm' size='2' maxlength='2' onkeydown='return maskInput(event);'>";
+		echo "&nbsp;&nbsp;<input type='text' value='$hh' name='{$field}_hh' size='2' maxlength='2' onkeydown='return maskInput(event);'>
+		&nbsp;:&nbsp;<input type='text' value='$mm' name='{$field}_mm' size='2' maxlength='2' onkeydown='return maskInput(event);'>";
 		echo "&nbsp;<select name='{$field}_aa'><option";
 		if ($aa == 'AM') echo " selected";
 		echo ">AM</option><option";
@@ -170,17 +175,12 @@ class DateTimeFieldRenderer extends FieldRenderer
 	}
 	
 	function renderReadOnly($field)
-	{
-		if(!$this->readOnlyFormat)
-			$date = formatDateTime12Hr($this->parent->data->get($field));
-		elseif(is_callable($this->readOnlyFormat))
-			$date = call_user_func($this->readOnlyFormat, $this->parent->data->get($field));
-					
+	{					
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$date."</td>\n";		
+		echo ">".$this->format($field)."</td>\n";		
 		echo "</tr>\n";	
 	}
 	
@@ -207,6 +207,12 @@ class DateTimeFieldRenderer extends FieldRenderer
 		if ($aa == "AM" && $hh == "12") $hh = "00";
 		$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("$dd $hh:$mm:00"));
 	}
+	
+	function format($field)
+	{
+		return DateTimeTypeRenderer::format($this->parent->data->get($field), $this->template);
+	}
+	
 }
 
 ?>

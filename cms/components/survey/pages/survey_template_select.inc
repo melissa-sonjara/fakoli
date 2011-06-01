@@ -178,7 +178,7 @@ function formSave()
 	$fields = array("title", "introduction", "message");
 	foreach($fields as $field)
 		$survey->$field = $surveyTemplate->$field;
-	$survey->sender_email = $surveySettings->sender_email;
+	$survey->sender_email = Survey::getSenderEmail();
 	$survey->user_id = $user->user_id;
 	$survey->save();
 	

@@ -59,7 +59,8 @@ class MergeCodeManager
 
 	function MergeCodeManager($item, $inText, $class_name = "")
 	{
-		$this->item = $item;
+		$this->item = clone($item);
+		$this->item->filter = null;
 		$this->class_name = ($class_name) ? $class_name : get_class($item);
 		
 		$usedMergeCodes = array(); 

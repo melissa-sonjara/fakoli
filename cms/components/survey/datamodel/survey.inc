@@ -286,6 +286,17 @@ class Survey extends DataItem
 		
 	}
 	
+	static function getSenderEmail()
+	{
+		$email = Settings::getValue("survey", "sender_email");
+		if(!$email)
+			$email = Settings::getValue("settings", "email_contact");
+		if(!$email)
+			$email = Settings::getValue("settings", "email_from");
+
+		return $email;
+	}
+	
 	function Survey()
 	{
 		$this->table = "survey";

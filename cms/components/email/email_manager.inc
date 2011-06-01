@@ -260,6 +260,12 @@ class EmailManager
 		if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
 		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath, "String");
+		Settings::setDefaultValue("email", "email_from", "andy@sonjara.com", "String", "From address for generated emails");
+		Settings::setDefaultValue("email", "email_contact", "andy@sonjara.com", "String", "To address for generated emails");
+		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Name of email contact");
+		Settings::setDefaultValue("email", "mail_server", "timpani.sonjara.com", "String");
+		Settings::setDefaultValue("email", "alt_text_email", false, "Boolean", "Whether the mail server can send html-formatted email messages");
+		
 	}
 
 }

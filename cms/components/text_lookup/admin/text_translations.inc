@@ -82,7 +82,7 @@ $tabs->writeHTML();
 <p><label for="text">Text:&nbsp;</label><?php echo $text->text ?></p>
 <?php 
 $table->drawView();
-?></div>
+?>
 <br/>
 <a class='button' href='/admin/text_translation_form?text_id=<?php echo $text_id ?>'>Add a Translation</a>
-<br/>
+<br><br></div>

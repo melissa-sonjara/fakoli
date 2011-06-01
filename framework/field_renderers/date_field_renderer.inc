@@ -37,11 +37,15 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for date data fields. Renders with date format
  * validation and a date picking popup widget.
+ * 
+ * @template - field formatting format for readonly is standard 
+ * "F d, Y", accepts "long", "daylong", and "short" and any
+ * format string used by php date function
  */
 class DateFieldRenderer extends FieldRenderer
 {
 	var $validator;
-	var $readOnlyFormat = ""; // default is standard "F d, Y", accepts "long" and "short"
+	var $template = ""; // default reaonly format is short style
 	
 	function DateFieldRenderer(&$parent)
 	{
@@ -146,20 +150,19 @@ class DateFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		if(!$this->readOnlyFormat)
-			$date = formatDate($this->parent->data->get($field));
-		elseif($this->readOnlyFormat == 'short')
-			$date = formatDateShort($this->parent->data->get($field));
-		elseif($this->readOnlyFormat == 'long')
-			$date = formatDateLong($this->parent->data->get($field));
-			
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$date."</td>\n";		
+		echo ">".$this->format($field)."</td>\n";		
 		echo "</tr>\n";	
-	}	
+	}
+
+	function format($field)
+	{
+		return DateTypeRenderer::format($this->parent->data->get($field), $this->template);
+	}
+	
 }
 
 ?>

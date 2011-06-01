@@ -1,7 +1,8 @@
 <?php
+
 /**************************************************************
 
- Copyright (c) 2007,2008 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,42 +32,16 @@
 
 *****************************************************************/
 
-/*
- * For to update survey global settings.
- */
+require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
-
-Fakoli::using("email", "survey");
-Fakoli::usingFeature("auto_form", "data_view");
-
-$surveySettings = SurveySetting::loadSettings();
-if(!$surveySettings)
-	$surveySettings = new SurveySetting();
-
-$form = new AutoForm($surveySettings);
-
-$redirect = "/admin/index";
-$form->button("Cancel", $redirect);
-$form->required("sender_email", "email_subject", "message_footer");
-$form->annotate("sender_email", "the email address that will appear as the sender of the survey email");
-$form->annotate("email_subject", "the subject line in the email of survey requests");
-$form->annotate("message_footer", "the text to be included below the main 
-message in all surveys, providing users with a link to response. 
-The text within brackets represent codes that will be filled in with data 
-from the survey record when the survey is sent. 
-<button onclick=\"javascript:modalPopup('Advanced Message Features', '/advanced_message_features_popup?class_name=SurveyResponse', '500px', 'auto'); return false\">Advanced Features</button>"
-);
-$form->getRenderer("message_footer")->rows = 10;
-
-$script .= $form->writeScript();
-
-if ($method == "POST")
-{
-	if ($form->save())
+class TimezoneTypeRenderer extends AbstractTypeRenderer
+{	
+	function TimezoneTypeRenderer()
 	{
-		redirect($redirect);
+	}
+	
+	static function format($value, $template = "")
+	{			
+		return $value; 
 	}
 }
-
-$form->drawForm();
-?>

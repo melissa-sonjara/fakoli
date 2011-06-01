@@ -1,7 +1,8 @@
 <?php
+
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,47 +32,26 @@
 
 *****************************************************************/
 
+require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
-
-
-class TextLookupManager
-{
-	
-	function TextLookupManager()
+class NumberTypeRenderer extends AbstractTypeRenderer
+{	
+	function NumberTypeRenderer()
 	{
-	}
-
-	static function deleteText($text)
-	{
-		$translations = $text->Translations();
-		
-		if(count($translations) > 0)
-		{
-			foreach($translations as $translation)
-				$translation->delete();
-		}
-		
-		$text->delete();
-		
 	}
 	
-	static function getTabs($key = "")
+	static function format($value, $template = "")
 	{
-		$tabs = array(
-			"Text Lookup"			=>	"/admin/text_lookup_form",
-			"Translations"		=>	"/admin/text_translations"
-			);
-
-		$qs = ($key) ? "text_id=$key" : ""; 
-		$tabs = new TabBar("tabs", $tabs, $qs);
-		return $tabs;
-	}
+		$template = trim($template);
 	
-
-	static function setDefaults()
-	{
-		$options = implode("\n", array_keys(TextTranslation::$languageOptions));
-		Settings::setDefaultValue("text_lookup", "language", "English", "String", "", "", $options);
-	}
+		if ($value == "" || !is_numeric($value))
+			$text = "0";
+		elseif($template != "" && is_numeric($template))
+			$text = number_format($value, $template);
 		
+		if(!$text)
+			$text = $value;
+			
+		return $text; 
+	}
 }

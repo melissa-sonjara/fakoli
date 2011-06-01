@@ -1,7 +1,8 @@
 <?php
+
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -32,46 +33,37 @@
 *****************************************************************/
 
 
+require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
-
-class TextLookupManager
+class BooleanTypeRenderer extends AbstractTypeRenderer
 {
-	
-	function TextLookupManager()
+	function BooleanTypeRenderer()
 	{
 	}
-
-	static function deleteText($text)
+	
+	/*
+	 * If no template, then return True/False. If there is a template
+	 * but missing a value for true or false, then return True/False.
+	 * 
+	 * Template should be provided in the format:
+	 * {my_field_name:StringForTrue/StringForFalse}
+	 * e.g.,
+	 * {active:Yes/No} returns Yes if active and No if not
+	 */
+	static function format($value, $template = "")
 	{
-		$translations = $text->Translations();
-		
-		if(count($translations) > 0)
+		trace("DateTimeTypeRenderer template is $template and value is $value", 3);
+
+		if($template)
 		{
-			foreach($translations as $translation)
-				$translation->delete();
+			list($true, $false) = explode("/", $template);
+			if($true && $false)		
+				$text = ($value) ? $true : $false;
 		}
 		
-		$text->delete();
-		
+		if(!$text)
+			$text = ($value) ? "True" : "False";
+				
+		return $text; 
 	}
-	
-	static function getTabs($key = "")
-	{
-		$tabs = array(
-			"Text Lookup"			=>	"/admin/text_lookup_form",
-			"Translations"		=>	"/admin/text_translations"
-			);
-
-		$qs = ($key) ? "text_id=$key" : ""; 
-		$tabs = new TabBar("tabs", $tabs, $qs);
-		return $tabs;
-	}
-	
-
-	static function setDefaults()
-	{
-		$options = implode("\n", array_keys(TextTranslation::$languageOptions));
-		Settings::setDefaultValue("text_lookup", "language", "English", "String", "", "", $options);
-	}
-		
 }

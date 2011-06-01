@@ -50,13 +50,6 @@ class SurveyManifest
 	{
 		return array
 		(
-			"Classification"	=> array
-			(
-
-				"Survey Settings"	=>	array("page"	=>	"/admin/survey_setting_form",
-								  "role"	=>	"admin",
-								  "weight"	=>	30)
-			)
 		);		
 	}	
 	
@@ -64,9 +57,11 @@ class SurveyManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					 "EnumerateContextHelpClasses" => array(SurveyManager, enumerateContextHelpClasses)		
+					 "EnumerateContextHelpClasses" => array(SurveyManager, enumerateContextHelpClasses),
+					"ComponentScanComplete" => array(SurveyManager, setDefaults)
 			);
 	}	
+
 }
 
 ?>

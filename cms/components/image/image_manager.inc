@@ -462,5 +462,13 @@ class ImageManager
 		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
 		
 		return $styles;
-	}		
+	}	
+
+	static function setDefaults()
+	{
+		trace("ImageManager::setDefaults", 3);
+		
+		Settings::setDefaultValue("image", "thumbnail_size", 75, "Number", "");	
+	}
+	
 }

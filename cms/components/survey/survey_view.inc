@@ -240,13 +240,18 @@ class SurveyView
 
 
 
-
+/*
+ * Called from survey_preview.inc
+ * 
+ */
 function sendSurveyEmails($survey)
 {
 	global $config;
 	
 	$recipients = explode(",", $survey->recipients);
-	$surveySetting = SurveySetting::loadSettings ();
+	
+	$subject = Settings::getValue("survey", "email_subject");
+	$message_footer = Settings::getValue("survey", "message_footer");
 	
 	if(count($recipients) > 0)
 	{
@@ -265,8 +270,8 @@ function sendSurveyEmails($survey)
 			$emailTemplate = new EmailTemplate();
 			$emailTemplate->sender_email = $survey->sender_email;
 			$emailTemplate->recipients = $recipient;
-			$emailTemplate->subject = $surveySetting->email_subject;
-			$emailTemplate->message = $survey->message . $surveySetting->message_footer;
+			$emailTemplate->subject = $subject;
+			$emailTemplate->message = $survey->message . $message_footer;
 			$emailTemplate->class_name = "SurveyResponse";
 			$emailHandler = new EmailManager($response, $emailTemplate);
 			$sent = $emailHandler->sendEmail();	

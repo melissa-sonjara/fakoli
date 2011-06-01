@@ -40,7 +40,7 @@ class TextLookupManifest
 		$component->description = "Text data repository and lookup with multilanguage support.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
-		$component->priority = 2;
+		$component->priority = 20;
 		$component->enabled = true;
 		
 		return $component;
@@ -64,6 +64,12 @@ class TextLookupManifest
 	{
 		return array("/fakoli/js/text_lookup.js");
 	} 	
+	
+			
+	static function subscribeToEvents()
+	{
+		return array("ComponentScanComplete" => array(TextLookupManager, setDefaults));
+	}	
 		
 }
 

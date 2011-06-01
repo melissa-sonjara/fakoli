@@ -45,8 +45,10 @@ $roleSelect->setSize(323, 120);
 
 $redirect = "/admin/users";
 $form->unique("email", "That email address is already in use for another user");
-$form->hide("composite_class");
+$form->hide("composite_class", "language");
 $form->button("Cancel", $redirect);
+
+//$languageSelect = new SelectFieldRenderer($form, "language", "Language", SiteUser::$languageOptions);
 
 if ($method == "POST")
 {

@@ -42,7 +42,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 {
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $onChange = ""; // optional callback on data input change
-	
+	var $template = 2; // how to format readonly - 2 decimal places  
 	
 	function CurrencyFieldRenderer(&$parent)
 	{
@@ -60,7 +60,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 		
 		$value = floatval($value);
 		// display with commas between thousands
-		$value = number_format($value, 2);
+		$value = $this->format($field);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
 		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
 		
@@ -99,7 +99,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">$".number_format($this->parent->data->get($field), 2)."</td>\n";		
+		echo ">$". $this->format($field)."</td>\n";		
 		echo "</tr>\n";			
 	}
 	
@@ -131,6 +131,11 @@ class CurrencyFieldRenderer extends FieldRenderer
 		if ($this->parent->isReadOnly($field)) return "";
 		
 		echo "\t\$('{$this->parent->id}_{$field}').value = rawNumber($('{$this->parent->id}_{$field}').value);\n";
+	}
+	
+	function format($field)
+	{
+		return CurrencyTypeRenderer::format($this->parent->data->get($field), $this->template);
 	}
 	
 }

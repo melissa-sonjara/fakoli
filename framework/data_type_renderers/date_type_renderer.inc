@@ -1,7 +1,8 @@
 <?php
+
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,47 +32,44 @@
 
 *****************************************************************/
 
+require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
-
-
-class TextLookupManager
+class DateTypeRenderer extends AbstractTypeRenderer
 {
 	
-	function TextLookupManager()
+	function DateTypeRenderer()
 	{
-	}
-
-	static function deleteText($text)
-	{
-		$translations = $text->Translations();
-		
-		if(count($translations) > 0)
-		{
-			foreach($translations as $translation)
-				$translation->delete();
-		}
-		
-		$text->delete();
-		
 	}
 	
-	static function getTabs($key = "")
-	{
-		$tabs = array(
-			"Text Lookup"			=>	"/admin/text_lookup_form",
-			"Translations"		=>	"/admin/text_translations"
-			);
-
-		$qs = ($key) ? "text_id=$key" : ""; 
-		$tabs = new TabBar("tabs", $tabs, $qs);
-		return $tabs;
-	}
-	
-
-	static function setDefaults()
-	{
-		$options = implode("\n", array_keys(TextTranslation::$languageOptions));
-		Settings::setDefaultValue("text_lookup", "language", "English", "String", "", "", $options);
-	}
+	/*
+	 * If no template, use formatDateShort, otherwise,
+	 * format using template provided the date function:
+	 * 
+	 * http://php.net/manual/en/function.date.php
+	 * 
+	 * examples:
+	 * {my_date:m/d/Y} returns the default 2/12/11
+	 * {my_date:l F j, Y} returns long format Monday February 12, 2011
+	 * {my_date:F d, Y} returns February 12, 2011
+	 * 
+	 * Template shorthand:
+	 * {my_date:short} - returns format 1 above
+	 * {my_date:daylong} = returns format 2 above
+	 * {my_date:long} - returns format 3 above
+	 * 
+	 */
+	static function format($date, $template = "")
+	{		
+		$text = "";
 		
+		if($date && !$template)
+			$template = "m/d/Y";
+		$template = AbstractTypeRenderer::translationDateTemplate($template, false);
+ 
+		if($date)
+			$text = date($template, strtotime($date));
+			
+		// return blank if no date
+		return $text; 
+	}
 }

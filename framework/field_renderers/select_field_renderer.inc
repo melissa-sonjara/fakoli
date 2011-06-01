@@ -76,25 +76,27 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
+			// JDG 5/30/11 - don't crash on additiona/psuedo fields
+			// only query if real field
 			$form->override($field, $label, $this);
+			if ($this->options == null)
+			{
+				$opt = $form->data->distinctValues($field, true);
+				if (count($opt) > 0)
+				{
+					$this->options = array_combine($opt, $opt);
+				}
+				else
+				{
+					$this->options = array();
+				}
+			}		
 		}
 		else
 		{
 			$form->add($this, $field);
 		}
 		
-		if ($this->options == null)
-		{
-			$opt = $form->data->distinctValues($field, true);
-			if (count($opt) > 0)
-			{
-				$this->options = array_combine($opt, $opt);
-			}
-			else
-			{
-				$this->options = array();
-			}
-		}		
 	}
 	
 	function allowAddEntry($text = "or add new")

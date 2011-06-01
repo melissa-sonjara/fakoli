@@ -67,6 +67,13 @@ class SettingsManifest
 			)
 		);		
 	}	
+	
+			
+	static function subscribeToEvents()
+	{
+		return array("ComponentScanComplete" => array(SettingsManager, setDefaults));
+	}
+		
 }
 
 ?>

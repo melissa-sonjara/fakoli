@@ -68,8 +68,12 @@ class ImageManifest
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" => array(ImageManager, displayImageGallery),
-					 "EnumerateItems"	 => array(ImageManager, enumerateItems));
+					 "EnumerateItems"	 => array(ImageManager, enumerateItems),
+					"ComponentScanComplete" => array(ImageManager, setDefaults)
+		);
+		
 	}
+
 }
 
 ?>

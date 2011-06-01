@@ -35,6 +35,7 @@ class DataItemException extends Exception {}
 class DataNotFoundException extends Exception {}
 
 require_once realpath(dirname(__FILE__)."/transaction.inc");
+require_once realpath(dirname(__FILE__)."/data_type_renderers/abstract_type_renderer.inc");
 
 /**
  * Used to place a filter on the contents of a DataItem-derived object.
@@ -422,69 +423,29 @@ abstract class AbstractDataItem
 		return $query;			
 	}
 	
-	function formatFieldValue($field)
+	/*
+	 * Call data type renderer to get default format if no
+	 * template or template-reqested format.
+	 * 
+	 * JDG 5/28/2011
+	 */
+	function formatFieldValue($field, $template = "")
 	{
 		$type = $this->getType($field);
 		$data = $this->get($field);
 		
-		$val = ""; 
-		switch($type)
+		$val = "";
+		 
+		$renderer = DataItem::$dataTypeRendererMap[$type];
+		if($renderer)
 		{
-		case Number:
-		
-			if ($data == "" || !is_numeric($data))
-			{
-				$val = "0";
-			}
-			else
-			{
-				$val = $data;
-			}
-			break;
-	
-		case Currency:
-					
-			if ($data == "" || !is_numeric($data))
-			{
-				$val = "0";
-			}
-			else
-			{
-				$val = number_format($data, 2);
-			}
-			break;
-						
-		case Date:
-		
-			if (!$data) return "";
-			$val = formatDateShort($data);
-			break;
-			
-		case DateTime:
-			if (!$data) return "";
-			$val = formatDateTime12(strtotime($data));
-			break;
-			
-		case Timestamp:
-			
-			$val = date("Y-m-d H:i:s", strtotime($data));
-			break;
-			
-		case Boolean:
-			
-			$query .= ($data) ? "True" : "False";
-			break;
-			
-		case String:
-		case Text:
-		case TimeZone:
-			
-		default:
-		
+			$formatter = array($renderer, "format");
+			$val = call_user_func($formatter, $data, $template); 
+		}
+		else
+		{
 			$val = $data;
-			break;
-		}		
-
+		}
 		return $val;					
 	}
 	

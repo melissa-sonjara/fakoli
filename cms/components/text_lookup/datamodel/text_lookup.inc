@@ -31,14 +31,14 @@
 
 *****************************************************************/
 
-Fakoli::using("email");
+Fakoli::using("email", "settings");
 
 class TextLookup extends DataItem
 {
 	var $fields = array(
 			"text_id"	=>	Number,
 			"code"		=>	String,
-			"text"		=>	HTML, // default language American English
+			"text"		=>	HTML, // default language English
 			"class_name"	=>	String
 	);
 	
@@ -75,6 +75,8 @@ class TextLookup extends DataItem
 		if(count($texts) > 0)
 		{
 			$text = $texts[0];
+
+			$text = TextTranslation::getTranslation($text);
 			if(isset($obj))
 			{
 				$mgr = new MergeCodeManager($obj, $text->text);
@@ -85,6 +87,28 @@ class TextLookup extends DataItem
 		}
 		else // return the code to signal that no value was found.
 			return $code;
+	}
+	
+	/*
+	 * Given a text record, find the remaining languages
+	 * for which this text has NOT yet been translated.
+	 */
+	function getTranslationOptions()
+	{
+		$translations = $this->Translations();
+		if(count($translations) > 0)
+			$indexed = regroupList($translations, "language");
+		else
+			$index = array();
+			
+		$options = array();
+		foreach(TextTranslation::$languageOptions as $language)
+		{
+			if($language != "English" && !array_key_exists($language, $indexed))
+				$options[$language] = $language;
+		}
+			
+		return $options;
 	}
 	
 
@@ -111,12 +135,19 @@ class TextTranslation extends DataItem
 			"TextLookup"			=>	TextLookup
 	);
 	
+	/*
+	 * Used by both user form, for users to specify their
+	 * language and in Application Settings => Text Lookup
+	 * to set the application default.
+	 */
 	static $languageOptions = array(
+		"English"	=>	"English",
 		"French"	=>	"French",
 		"Spanish"	=>	"Spanish",
 		"German"	=>	"German",
 		"Russian"	=>	"Russian"
 	);
+	
 	
 	function TextLookup()
 	{
@@ -130,4 +161,38 @@ class TextTranslation extends DataItem
 
 		$this->DataItem(func_get_args());
 	}	
+	
+	/*
+	 * A language specified in the user's record
+	 * takes precedence over the CMS Application Setting
+	 * for language. 
+	 * 
+	 * If the requested translation is not found, then
+	 * return the original English text.
+	 */
+	static function getTranslation($text)
+	{
+		global $user;
+		
+		if($user && $user->hasField("language") && $user->language)
+			$language = $user->language;
+		else
+			$language = Settings::getValue("text_lookup", "language");	
+		
+		if(!$language || $language == "English")
+			return $text;
+		else
+		{
+			$translations = Query::create(TextTranslation, "WHERE text_id=:text_id AND language=:language")
+				->bind(":text_id", $text->text_id, ":language", $language)
+				->execute();
+				
+			if(count($translations) > 0 && $translations[0]->text)
+			{
+				$text->text = $translations[0]->text;
+			}
+		}	
+		
+		return $text;
+	}
 }

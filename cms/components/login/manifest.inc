@@ -49,7 +49,13 @@ class LoginManifest
 	static function getAdminMenu()
 	{
 		return null;	
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array("ComponentScanComplete" => array(LoginManager, setDefaults));
+	}
+	
 }
 
 ?>

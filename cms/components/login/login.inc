@@ -335,5 +335,8 @@ class LoginManager
 	<? 	
 	}
 	
-	
+	static function setDefaults()
+	{
+		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean");
+	}
 }

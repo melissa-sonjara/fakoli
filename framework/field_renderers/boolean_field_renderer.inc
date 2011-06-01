@@ -40,6 +40,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class BooleanFieldRenderer extends FieldRenderer
 {
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	var $template = "Yes/No"; // How to format read only
 	
 	function BooleanFieldRenderer(&$parent)
 	{
@@ -107,8 +108,13 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		echo ($this->parent->data->get($field)) ? "Yes" : "No";
+		echo $this->format($field);
 		echo "</td>\n</tr>\n";
+	}
+	
+	function format($field)
+	{
+		return BooleanTypeRenderer::format($this->parent->data->get($field), $this->template);
 	}
 }
 

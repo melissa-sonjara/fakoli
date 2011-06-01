@@ -48,6 +48,7 @@ class SiteUser extends DataItem
 						"email"				=>	String,
 						"active"			=>	Boolean,
 						"notes"				=>	Text,
+						"language"			=>	String,
 						"composite_class"	=>	String);
 						
 	// Relations

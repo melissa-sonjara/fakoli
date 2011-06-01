@@ -38,8 +38,10 @@ class Settings extends DataItem
 	// Fields
 	var $fields = array("settings_id"	=>	Number,
 						"component"		=>	String,
+						"category"		=>	String,
 						"name"			=>	String,
 						"annotation"	=>	Text,
+						"options"		=>	Text,
 						"value"			=>	String,
 						"field_type"	=>	String
 					);
@@ -52,19 +54,10 @@ class Settings extends DataItem
 				"Number"	=>	"Number",
 				"Boolean"	=>	"Boolean",
 				"Date"		=>	"Date",
-				"Currency"	=>	"Currency"
-				//"Select"	=>	"SelectFieldRenderer",
-				//"CheckList"	=>	"CheckListFieldRenderer"
+				"Currency"	=>	"Currency",
+				"Text"		=>	"Text"
 	); 
 	
-	/*
-	 * Not sure if it makes sense to allow these application
-	 * setting types. Wait and see if it is needed.
-	 */
-	static $customTypes = array(
-				//"Select"	=>	String,
-				//"CheckList"	=>	String
-	);
 	
 	function Settings()
 	{
@@ -97,7 +90,7 @@ class Settings extends DataItem
 	}
 
 	
-	static function setValue($component, $name, $value, $field_type, $annotation)
+	static function setValue($component, $name, $value, $field_type, $annotation, $category, $options)
 	{
 		$setting = Settings::getValue($component, $name);
 		if (!$setting)
@@ -107,6 +100,8 @@ class Settings extends DataItem
 			$setting->name = $name;
 			$setting->field_type = $field_type;
 			$setting->annotation = $annotation;
+			$setting->options = $options;
+			$setting->category = $category;
 		}
 		
 		$setting->value = $value;
@@ -115,19 +110,34 @@ class Settings extends DataItem
 	}
 	
 	/*
-	 * field_type: Number, String, Boolean
+	 * 1) component
+	 * 
+	 * 2) name
+	 * 
+	 * 3) value
+	 * 
+	 * 4) field_type: Number, String, Boolean, Currency, Date, Text
+	 * 
+	 * 5) annotation: explanatory text about the use of this setting to be 
+	 * written as a field annotation
+	 * 
+	 * 6) category: optional subcategory - usefull if the list of settings for a component is very larg
+	 * 
+	 * 7) options: optional return delimited "\n" list of options, if the field has a set
+	 * of options for the user to select from. 
+	 * 
 	 */
-	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "")
+	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "", $category = "", $options = "")
 	{
 		$setting = new Settings();
 		if ($setting->exists("WHERE component='$component' AND name='$name'")) return;
-		Settings::setValue($component, $name, $value, $field_type, $annotation);
+		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options);
 	}
 	
-	static function formatOptionList()
+	function formatOptionList()
 	{
 		if(!$this->options)
-			return;
+			return null;
 			
 		$options = explode("\n", $this->options);
 		

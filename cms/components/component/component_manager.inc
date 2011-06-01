@@ -253,7 +253,9 @@ class ComponentManager
 		}
 		catch(Exception $e)
 		{
-			$this->tx->rollback();
+			// JDG 6/1/2011 - if failes on ComponentScanComplete
+			if(isset($this->tx))
+				$this->tx->rollback();
 			unset($this->tx);
 			throw $e;
 		}

@@ -42,7 +42,7 @@
  */
 
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "settings");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -54,11 +54,10 @@ if(!$survey_id)
 $survey = new Survey($survey_id);
 	
 $survey->filter = new InclusionFilter("sender_email", "recipients", "message");
+
 if(!$survey->sender_email)
-{
-	$surveySettings = SurveySetting::loadSettings();
-	$survey->sender_email = $surveySettings->sender_email;
-} 
+	$survey->sender_email = Survey::getSenderEmail();
+ 
 $form = new AutoForm($survey);
 
 $form->annotate("recipients", "(separate email addresses with a comma ',')");
