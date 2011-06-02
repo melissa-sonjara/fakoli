@@ -53,7 +53,7 @@ $tabs = documentLibraryTabs($document_library_id);
 
 $form = new AutoForm($library);
 
-$manageFoldersList = new CheckListFieldRenderer($form, "allow_access", "Allow Read Access", SiteRole::getRolesArray());
+$allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Read Access", DocumentManager::getRoleOptions());
 $manageFoldersList = new CheckListFieldRenderer($form, "manage_folders", "Create & Delete Folders", SiteRole::getRolesArray());
 $uploadFilesList   = new CheckListFieldRenderer($form, "upload_files", "Upload Files", SiteRole::getRolesArray());
 $deleteFilesList   = new CheckListFieldRenderer($form, "delete_files", "Delete Files", SiteRole::getRolesArray());

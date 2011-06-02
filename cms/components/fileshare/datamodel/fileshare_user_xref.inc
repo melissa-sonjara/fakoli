@@ -31,6 +31,9 @@
 
 *****************************************************************/
 
+define("fileshare_only_group_members_read", 0);
+define("fileshare_all_site_members_read", 1);
+define("fileshare_all_visitors_read", 2);
 
 class FileshareUserXref extends DataItem
 {

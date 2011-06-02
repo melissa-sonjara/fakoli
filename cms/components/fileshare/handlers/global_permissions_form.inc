@@ -31,6 +31,17 @@
 
 *****************************************************************/
 
+/*
+ * Let's library owner set global permissions:
+ * 
+ *  1) Allow only members to view
+ *  
+ *  2) Allow all site members to view
+ *  
+ *  3) Allow visitors to view
+ * 
+ */
+
 Fakoli::using("document", "fileshare", "role");
 Fakoli::usingFile("framework/auto_form.inc");
 
@@ -47,12 +58,18 @@ $roles = Query::create(SiteRole, "ORDER BY name")->execute();
 if(count($roles) > 0)
 	$allRoles = implode(",", array_keys(reindexList($roles, "role")));
 
-$form = new AutoForm($library, "POST", "/action/fileshare/role_permission_form?document_library_id={$document_library_id}", "RolePermission_form");
-$form->ajaxSubmit("function(result) {new LibraryManager().rolesEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->add(new BooleanFieldRenderer($form), "read_access");
-$form->alias("read_access", "Allow All Site Members to View");
-if(preg_match("/$allRoles/", $library->allow_access))
-	$form->data->set("read_access", true);
+$form = new AutoForm($library, "POST", "/action/fileshare/global_permissions_form?document_library_id={$document_library_id}", "RolePermission_form");
+$form->ajaxSubmit("function(result) {new LibraryManager().permissionsEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+
+$permissionsSelect = new RadioButtonFieldRenderer($form, "read_access", "Permissions", FileshareManager::getGlobalPermissionOptions());
+
+
+if(preg_match("/visitor/", $library->allow_access))
+	$form->data->set("read_access", fileshare_all_visitors_read);
+elseif(preg_match("/$allRoles/", $library->allow_access))
+	$form->data->set("read_access", fileshare_all_site_members_read);
+else
+	$form->data->set("read_access", fileshare_only_group_members_read);
 
 $form->submitLabel = "Update Access";
 
@@ -60,10 +77,12 @@ if ($method == "POST")
 {
 	$read = $_POST["read_access"];
 
-	if($read)
+	if($read == fileshare_only_group_members_read)
+		$library->allow_access = DocumentLibrary::getDefaultRole(true);
+	elseif($read == fileshare_all_site_members_read)
 		$library->allow_access = $allRoles;
 	else
-		$library->allow_access = DocumentLibrary::getDefaultRole(true);
+		$library->allow_access = DocumentManager::getRoleList();
 	$library->filter = new InclusionFilter("allow_access");
 	$library->save();
 	

@@ -53,7 +53,7 @@ $script .= $table->writeScript();
 
 $table->drawView();
 
-if ($user)
+if ($user && !checkRole("visitor"))
 {
 ?>
 <br/>

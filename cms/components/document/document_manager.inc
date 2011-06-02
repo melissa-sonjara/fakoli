@@ -599,4 +599,20 @@ function deleteFolderResult(result)
 		return $styles;
 	}	
 	
+	/*
+	 * Read  or allow_access roles, include
+	 * visitor (nonuser) option.
+	 */
+	static function getRoleOptions()
+	{
+		$roles = SiteRole::getRolesArray();
+		$roles["visitor"] = "Visitor";	
+		return $roles;
+	}
+
+	static function getRoleList()
+	{
+		$roles = DocumentManager::getRoleOptions();
+		return implode(",", array_keys($roles));
+	}		
 }

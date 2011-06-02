@@ -56,9 +56,19 @@ if(count($libraries) > 0)
 <?php		
 	}
 }
+
+
 ?>
 </div>
+<?php 
+if ($user && !checkRole("visitor"))
+{
+?>
 <div style="text-align: center">
 <br>
 <a href="/fileshare_library_form"><img alt="create_library" src="/fakoli/images/button_create_library.png"/></a>
 </div>
+<?php 
+}
+
+?>

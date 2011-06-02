@@ -78,10 +78,15 @@ class FileshareManager extends DocumentManager
 	{
 ?>		<div id="buttons">
 		<button id="download" class="button" disabled="disabled"  onclick="downloadFile()"> Download File </button>&nbsp;&nbsp;
+		
+<?php
+if(!checkRole("visitor"))
+{ 
+?>
 		<button id="edit" class="button" disabled="disabled" onclick="editFile()">Edit Details...</button>&nbsp;&nbsp;
 		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
 <?
-		
+}		
 		if ($this->library->isOwner() || checkRole("fileshare,admin"))
 		{
 ?>
@@ -142,7 +147,7 @@ function uploadFileshareFile()
 	{
 ?>
 <div id="role" style="float: right; width: 30%; z-index: 2">
-<a style="height: 20px; padding-left: 10px; padding-right: 10px;" class="button" href="#" onclick="new LibraryManager().openRoleDialog(<?php echo $library->document_library_id ?>); return false;">Set Global Access</a>
+<a style="height: 20px; padding-left: 10px; padding-right: 10px;" class="button" href="#" onclick="new LibraryManager().openPermissionsDialog(<?php echo $library->document_library_id ?>); return false;">Set Global Access</a>
 </div>
 <div id="member_search_form">
 <label for='name'>Add Members</label>
@@ -224,6 +229,9 @@ function uploadFileshareFile()
 	 * Get the libraries the user is linked to either by
 	 * fileshare_user_xref, by being the owner, or by
 	 * their role.
+	 * 
+	 * If the library allows visitors read access then
+	 * show to nonusers.
 	 */
 	static function getSharedLibraries()
 	{
@@ -231,6 +239,9 @@ function uploadFileshareFile()
 		
 		$userXref = new FileshareUserXref();
 		
+		
+		if(!$user)
+			$user = FileshareManager::setVisitor();
 		$roleLibraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
 		$roleLibraries = filterByRole($roleLibraries, "allow_access");
 		
@@ -299,5 +310,23 @@ function uploadFileshareFile()
 		$owner = $document->Owner();
 		return ($owner) ? $owner->getFullName() : "";
 	}
+	
+	static function getGlobalPermissionOptions()
+	{
+		$options = array(fileshare_only_group_members_read	=>  "Limit Access to Group Members",
+						 fileshare_all_site_members_read	=>	"Allow All Site Members to View",
+						 fileshare_all_visitors_read	=>	"Allow All Site Members and Site Visitors to View"
+						);		
+		return $options;
+	}
+	
+	static function setVisitor()
+	{
+		$userClass = UserManager::getUserClass();
+		$user = new $userClass();
+		$user->user_id = 0;
+		$user->role = "visitor";
 		
+		return $user;
+	}
 }

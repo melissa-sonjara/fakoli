@@ -141,7 +141,7 @@ class DocumentLibrary extends DataItem
 		global $user;
 		
 		if(!$user)
-			return false;
+			$user = FileshareManager::setVisitor();
 			
 		if($this->isOwner() || checkRole($this->allow_access) || $this->isFileshareMember($user->user_id))
 		{

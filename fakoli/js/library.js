@@ -170,15 +170,15 @@ var LibraryManager =  (function()
 			request.send();		
 		},
 		
-		openRoleDialog: function(document_library_id)
+		openPermissionsDialog: function(document_library_id)
 		{
-			this.dialog = modalPopup('Fileshare Site Member Access', '/action/fileshare/role_permission_form?document_library_id=' + document_library_id, '550px', 'auto', true);		
+			this.dialog = modalPopup('Fileshare Access', '/action/fileshare/global_permissions_form?document_library_id=' + document_library_id, '550px', 'auto', true);		
 		},
 		
-		rolesEdited: function(response)
+		permissionsEdited: function(response)
 		{
 			if(response == "OK")
-				this.closeRoleDialog();
+				this.closeDialog();
 			else
 			{
 				var err = $('RolePermission_form__error');
@@ -187,7 +187,7 @@ var LibraryManager =  (function()
 			}	
 		},
 		
-		closeRoleDialog: function()
+		closeDialog: function()
 		{
 			this.dialog.hide();
 		}
