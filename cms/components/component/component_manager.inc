@@ -250,6 +250,9 @@ class ComponentManager
 			unset($this->tx);
 		
 			ComponentManager::fireEvent("ComponentScanComplete");
+			
+			ComponentManager::fireEvent("upgradeComponent");
+			
 		}
 		catch(Exception $e)
 		{
@@ -449,6 +452,30 @@ class ComponentManager
 		RoleManager::deleteRoleFromString($componentPages, $del_role);
 
 		return $del_role;
+		
+	}
+	
+	static function setComponentVersion($component_name)
+	{
+		$components = Query::create(Component, "WHERE name=:component_name")
+			->bind(":component_name", $component_name)
+			->execute();
+		
+		if(count($components) == 0)
+			return;
+			
+		$component = $components[0];
+		
+		$latest_version = ComponentUpdateLog::getLatestVersion($component_name);
+		
+		// To do - set inital values in table for existing components to start
+
+		if($latest_version && $latest_version != $component->version)
+		{
+			$component->version = $latest_version;
+			$component->filter = new InclusionFilter("version");
+			$component->save();	
+		}
 		
 	}
 }
