@@ -33,7 +33,7 @@
 
 
 Fakoli::using("section");
-Fakoli::usingFeature("tree");
+Fakoli::usingFeature("tree", "context_menu");
 
 $menu_item = "Sections";
 
@@ -117,8 +117,10 @@ foreach($content as $item)
 	if (!array_key_exists($item->identifier, $types)) continue;
 	
 	$type = $types[$item->identifier];
+	$properties = $contentByIdentifier[$item->identifier];
+	
 	$child = new TreeNode("content['{$item->identifier}']", $item->identifier, $item->section_content_id, false, "plain_tree_closed", "plain_tree_open");
-	$child->leafStyle = "file_node_leaf";
+	$child->leafStyle = ($properties->template || $properties->role || $properties->use_SSL) ? "flagged_node_leaf" : "file_node_leaf";
 	$categories[$type]->add($child);
 }
 
@@ -126,6 +128,31 @@ foreach($categories as $category)
 {
 	$contentTree->add($category);
 }
+
+$script .= <<<ENDSCRIPT
+<script src="/fakoli/js/section_content_manager.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+var sectionContentManager;
+
+window.addEvent("domready", function()
+{
+	sectionContentManager = new SectionContentManager('section_content_tree_table');
+});
+
+</script>
+ENDSCRIPT;
+
+$contextMenu = new ContextMenu("section_content_menu", "#section_content_tree_table");
+$contextMenu->command("set_template", "Set Template...", "sectionContentManager.setTemplate()", false)
+			->command("set_roles",	"Set Role Permissions...", "sectionContentManager.setRole()", false)
+			->command("set_ssl", "Configure SSL...", "sectionContentManager.setSSL()", false)
+			->command("set_all", "All Properties...", "sectionContentManager.allProperties()", "", false)
+			->separator()
+			->command("use_defaults", "Use Section Defaults", "sectionContentManager.clearProperties()", "", false);
+
+$script .= $contextMenu->writeScript();
+$dialogs .= $contextMenu->writeMenu();
 
 $tabs = sectionTabs($section_id);
 
