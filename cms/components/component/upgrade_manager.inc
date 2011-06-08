@@ -75,18 +75,21 @@
  * class that handles the update or, when only
  * sql needs to be executed (no code) then the handler is:
  * 	"sql:description". You must save the sql update 
- * statements in the attachment_schema.sql file.
+ * statements in the {component_name} + _schema.sql file.
  * 
  * Update functions must return true if successful so
  * that the update is saved to the log.
  * 
- * When sql updates are made locally, you can use
+ * When sql updates are made locally or have already
+ * been made (as in the case of existing custom web site 
+ * components, e.g., STEM2Stern programs) you can use
  * the syntax "done" in place of "sql", then run
  * component scan to record the update to the 
  * ComponentUpdateLog without running the sql (which has
- * already been run). Remember to change the handler back 
- * to "sql" before uploading the file.
- * 
+ * already been run). For local only "done", remember to 
+ * change the handler back to "sql" before uploading 
+ * the file so that the updates are run on other sites.
+ *
  * Example:
  *  var $updateMap = array(
  *  	"1.0"		=>	"sql:Initial Installation",
@@ -120,11 +123,12 @@ abstract class UpgradeManager
  	* for this component in the ComponentUpdateLog.
  	* 
  	* Loop through the updateMap, the history of
- 	* updates provided in this file, and check 
- 	* the latest version against each one. If
- 	* the latest version is less than the update, then
- 	* execute the update and save the record of this
- 	* update in the ComponentUpdateLog table.
+ 	* updates provided by the component's child class 
+ 	* update manager, and check the latest version 
+ 	* against each one. If the latest version is less 
+ 	* than the update, then execute the update and save 
+ 	* the record of this update in the ComponentUpdateLog 
+ 	* table.
 	 */
 	function upgrade()
 	{					
@@ -152,12 +156,16 @@ abstract class UpgradeManager
 	}
 	
 	/*
-	 * For updates that are just executing sql,
-	 * call this function from the child class's
-	 * function "update_xx" to execute the sql
-	 * and record the component update.
-	 */
-	
+	 * If the update is just sql, then parse the
+	 * sql file for the updates in the version number's 
+	 * section. 
+	 * 
+	 * If the update handler is "done", then just return
+	 * true.
+	 * 
+	 * If the handler is a custom functionin the child
+	 * class, then execute that function.
+	 */	
 	function upgradeOneVersion($version_number, $function)
 	{			
 		if($function == "sql")
@@ -174,8 +182,6 @@ abstract class UpgradeManager
 	/*
 	 * Execute the section of the component's sql update file
 	 * that relations to the specified version number.
-	 * 
-	 * $fp - file pointer opened in the calling class
 	 * 
 	 * $version_number - the version number that identifies
 	 * the block of sql in the file to be executed.
