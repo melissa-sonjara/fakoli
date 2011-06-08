@@ -73,12 +73,15 @@ class DateTimeTypeRenderer extends AbstractTypeRenderer
 		$template = AbstractTypeRenderer::translationDateTemplate($template);
 		
 		// strip time component if hours is empty
-		if(substr($datetime, 12, 2) == 0)
+		if(preg_match("/00:00:00/", $datetime))
 		{		
 			$patterns = "/(g|i|a|:|h|s|b|p|t|z|c|r|u)/i";
     		$template = preg_replace($patterns, "", $template);
+			trace("DateTimeTypeRenderer no time component: template is $template and value is $datetime", 3);
 		}
-			
+
+		trace("DateTimeTypeRenderer template is $template and value is $datetime", 3);
+		
 		if($datetime)
 			$text = date($template, strtotime($datetime));
 		// else if no date return "";
