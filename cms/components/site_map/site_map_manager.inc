@@ -51,7 +51,7 @@
  * 10/8/2010
  */
 
-Fakoli::using("component", "page", "menu");
+Fakoli::using("component", "page", "menu", "site");
 
 class SiteMapManager
 {
