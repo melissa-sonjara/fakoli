@@ -60,11 +60,14 @@ class SiteManifest
 		);		
 	}
 
+			/*
 	static function subscribeToEvents()
 	{
+
 		return array(
 				"upgradeComponent"		=>	array(SiteManager, upgradeComponent)
 			);
+			
 	}		
 }
 
