@@ -32,7 +32,7 @@
 *****************************************************************/
 
 
-
+Fakoli::using("text_lookup");
 
 class TextLookupManager
 {
