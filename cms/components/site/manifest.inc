@@ -67,8 +67,9 @@ class SiteManifest
 		return array(
 				"upgradeComponent"		=>	array(SiteManager, upgradeComponent)
 			);
-			
-	}		
+		
+	}
+	*/		
 }
 
 ?>
