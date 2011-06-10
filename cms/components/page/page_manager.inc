@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+Fakoli::using("page");
+
 class PageManager
 {
 	static function displayPage($identifier, &$continue)

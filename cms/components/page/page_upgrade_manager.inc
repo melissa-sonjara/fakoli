@@ -46,6 +46,9 @@
 
 Fakoli::using("page", "component");
 
+require_once realpath(dirname(__FILE__)."/../component/upgrade_manager.inc");
+
+
 class PageUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
