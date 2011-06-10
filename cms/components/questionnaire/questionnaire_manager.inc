@@ -118,5 +118,11 @@ class QuestionnaireManager
 		}
 
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new QuestionnaireUpgradeManager();
+		$mgr->upgrade();
+	}	
 }
 ?>

@@ -155,6 +155,12 @@ class ContextHelpManager
 		
 		return "{$links}\n{$text}";
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new ContextHelpUpgradeManager();
+		$mgr->upgrade();
+	}		
 }
 
 function addContextHelp($form, $field, $label)

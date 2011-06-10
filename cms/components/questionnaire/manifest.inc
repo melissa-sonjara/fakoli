@@ -62,7 +62,14 @@ class QuestionnaireManifest
 								  "role"	=>	"admin",
 								  "weight"	=>	50)
 			)		);		
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(QuestionnaireManager, upgradeComponent)
+			);
+	}		
 }
 
 ?>

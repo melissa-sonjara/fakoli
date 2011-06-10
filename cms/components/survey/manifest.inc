@@ -58,7 +58,9 @@ class SurveyManifest
 	{
 		return array(
 					 "EnumerateContextHelpClasses" => array(SurveyManager, enumerateContextHelpClasses),
-					"ComponentScanComplete" => array(SurveyManager, setDefaults)
+					"ComponentScanComplete" => array(SurveyManager, setDefaults),
+					"upgradeComponent"		=>	array(SurveyManager, upgradeComponent)
+		
 			);
 	}	
 

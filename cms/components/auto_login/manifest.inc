@@ -28,6 +28,14 @@ class AutoLoginManifest
 			)
 		);		
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(AutoLoginManager, upgradeComponent)
+			);
+	}		
+	
 }
 
 ?>

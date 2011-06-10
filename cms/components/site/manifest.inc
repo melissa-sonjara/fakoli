@@ -58,7 +58,14 @@ class SiteManifest
 								  "weight"	=>	1)
 			)
 		);		
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(SiteManager, upgradeComponent)
+			);
+	}		
 }
 
 ?>

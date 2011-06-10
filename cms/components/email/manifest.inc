@@ -78,7 +78,10 @@ class EmailManifest
 			
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(EmailManager, setDefaults));
+		return array("ComponentScanComplete" => array(EmailManager, setDefaults),
+						"upgradeComponent"		=>	array(EmailManager, upgradeComponent)
+		
+		);
 	}
 	
 	static function getScripts()

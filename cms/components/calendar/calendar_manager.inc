@@ -81,6 +81,12 @@ class CalendarManager
 		return $classes;
 	}
 	
+	static function upgradeComponent()
+	{
+		$mgr = new CalendarUpgradeManager();
+		$mgr->upgrade();
+	}	
+	
 }
 
 ?>

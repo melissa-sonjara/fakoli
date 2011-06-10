@@ -329,4 +329,10 @@ function uploadFileshareFile()
 		
 		return $user;
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new FileshareUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

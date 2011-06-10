@@ -208,7 +208,7 @@ class ComponentManager
 	function scan()
 	{
 		global $config;
-
+		
 		$this->tx = new DataTransaction();
 		
 		try
@@ -249,14 +249,13 @@ class ComponentManager
 			$this->tx->commit();
 			unset($this->tx);
 		
-			ComponentManager::fireEvent("ComponentScanComplete");
-			
 			ComponentManager::fireEvent("upgradeComponent");
 			
+			ComponentManager::fireEvent("ComponentScanComplete");
 		}
 		catch(Exception $e)
 		{
-			// JDG 6/1/2011 - if failes on ComponentScanComplete
+			// JDG 6/1/2011 - if fails on ComponentScanComplete
 			if(isset($this->tx))
 				$this->tx->rollback();
 			unset($this->tx);
@@ -478,5 +477,49 @@ class ComponentManager
 		}
 		
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new ComponentUpgradeManager();
+		$mgr->upgrade();
+	}	
+	
+
+	static function componentListTabs()
+	{
+		$tabs = array(	"Components"		=>	"/admin/components",
+					"Component Pages"	=>	"/admin/component_pages"
+					);
+
+		$bar = new TabBar("tabs", $tabs, "");
+		$bar->useQueryString = false;
+		
+		return $bar;
+	}
+
+	static function componentPageTabs($key)
+	{
+		$tabs = array(	"Definition"	=>	"/admin/component_page_form",
+					"Modules"		=>	"/admin/component_page_modules");
+	
+		$qs = ($key) ? "component_page_id=$key" : ""; 
+		$bar = new TabBar("tabs", $tabs, $qs);
+		
+		return $bar;
+	}
+
+	static function componentFormTabs($key)
+	{
+		$tabs = array(	"Definition"		=>	"/admin/component_form",
+					"Component Pages"	=>	"/admin/component_pages",
+					"Version History"	=>	"/admin/component_versions"
+		);
+	
+		$qs = ($key) ? "component_id=$key" : ""; 
+		$bar = new TabBar("tabs", $tabs, $qs);
+		
+		return $bar;
+	}
+	
 }
 ?>

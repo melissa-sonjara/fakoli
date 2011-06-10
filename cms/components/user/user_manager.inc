@@ -178,4 +178,9 @@ class UserManager
 		return $del_role;
 	}		
 	
+	static function upgradeComponent()
+	{
+		$mgr = new UserUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

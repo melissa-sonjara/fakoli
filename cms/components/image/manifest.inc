@@ -69,7 +69,9 @@ class ImageManifest
 	{
 		return array("ResolveIdentifier" => array(ImageManager, displayImageGallery),
 					 "EnumerateItems"	 => array(ImageManager, enumerateItems),
-					"ComponentScanComplete" => array(ImageManager, setDefaults)
+					"ComponentScanComplete" => array(ImageManager, setDefaults),
+					"upgradeComponent"		=>	array(ImageManager, upgradeComponent)
+		
 		);
 		
 	}

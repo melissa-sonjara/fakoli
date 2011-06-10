@@ -58,7 +58,14 @@ class SectionManifest
 								  	  "weight"	=>	2)
 			)
 		);		
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(SectionManager, upgradeComponent)
+			);
+	}		
 }
 
 ?>

@@ -339,4 +339,10 @@ class LoginManager
 	{
 		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean");
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new LoginUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

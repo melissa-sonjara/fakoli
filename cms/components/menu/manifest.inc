@@ -63,8 +63,9 @@ class MenuManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"DeleteRole"			=>	array(MenuManager, deleteRole)
-				);
+					"DeleteRole"			=>	array(MenuManager, deleteRole),
+					"upgradeComponent"		=>	array(MenuManager, upgradeComponent)
+		);
 	}		
 }
 

@@ -32,14 +32,13 @@
 *****************************************************************/
 
 Fakoli::using("component");
+Fakoli::usingFile("framework/tab_bar.inc");
 
 Fakoli::assertRole("admin");
 
-require_once "include/component_tabs.inc";
-
 $component_id = checkNumeric($_GET["component_id"]);
 
-$tabs = componentListTabs();
+$tabs = ComponentManager::componentListTabs();
 
 $menu_item = "Components";
 $title = "Components Pages";
@@ -49,7 +48,7 @@ if ($component_id)
 	$component = new Component($component_id);
 	$view = new ComponentPageListView($component);
 	$title .= " for {$component->name}";
-	$tabs = componentFormTabs($component_id);
+	$tabs = ComponentManager::componentFormTabs($component_id);
 }
 else
 {

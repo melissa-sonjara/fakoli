@@ -50,6 +50,13 @@ class CommentManifest
 	{
 		return array();
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(ClassificationManager, upgradeComponent)
+			);
+	}		
 }
 
 ?>

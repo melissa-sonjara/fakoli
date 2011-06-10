@@ -67,7 +67,9 @@ class BlogManifest
 	{
 		return array("ResolveIdentifier" => array(BlogManager, displayBlog),
 					 "EnumerateItems"	 => array(BlogManager, enumerateItems),
-					 "RegisterBlogViewHandlers" => array(BlogView, registerStandardHandlers));
+					 "RegisterBlogViewHandlers" => array(BlogView, registerStandardHandlers),
+					 "upgradeComponent"		=>	array(BlogManager, upgradeComponent)
+		);
 	}
 }
 

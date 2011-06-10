@@ -57,5 +57,11 @@ class PayPalManager
 		
 		Settings::setDefaultValue("paypal", "paypal_url", "https://www.sandbox.paypal.com/cgi-bin/webscr", "String");
 		Settings::setDefaultValue("paypal", "merchant_id", "DN4KM78LGXRTE", "String");		
-	}			
+	}
+
+	static function upgradeComponent()
+	{
+		$mgr = new PayPalUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

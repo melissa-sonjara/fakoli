@@ -34,8 +34,6 @@
 Fakoli::using("component", "menu", "module");
 Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "include/component_tabs.inc";
-
 $menu_item = "Components";
 
 $page_id = checkNumeric($_GET["component_page_id"]);
@@ -44,7 +42,7 @@ if (!$page_id) redirect("/index");
 
 $page = new ComponentPage($page_id);
 
-$tabs = componentPageTabs($page_id);
+$tabs = ComponentManager::componentPageTabs($page_id);
 $tabs->page = "component_page_modules";
 
 $title = "Position Modules for {$page->page_title}";

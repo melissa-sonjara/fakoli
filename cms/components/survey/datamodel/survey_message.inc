@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-
+// Deprecated??
 class SurveyMessage extends DataItem
 {
 	var $fields = array(

@@ -58,7 +58,15 @@ class ArticleManifest
 								  	  "weight"	=>	5)
 			)
 		);		
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(ArticleManager, upgradeComponent)
+			);
+	}		
+	
 }
 
 ?>

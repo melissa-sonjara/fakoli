@@ -63,7 +63,8 @@ class UserManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"DeleteRole"			=>	array(UserManager, deleteRole)
+					"DeleteRole"			=>	array(UserManager, deleteRole),
+					"upgradeComponent"		=>	array(UserManager, upgradeComponent)
 				);
 	}	
 }

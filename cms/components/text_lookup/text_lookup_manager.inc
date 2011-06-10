@@ -73,5 +73,11 @@ class TextLookupManager
 		$options = implode("\n", array_keys(TextTranslation::$languageOptions));
 		Settings::setDefaultValue("text_lookup", "language", "English", "String", "", "", $options);
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new TextLookupUpgradeManager();
+		$mgr->upgrade();
+	}	
 		
 }

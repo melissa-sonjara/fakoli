@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("settings");
+Fakoli::using("settings", "session_persistance");
 
 class SessionManager
 {
@@ -138,5 +138,11 @@ class SessionManager
 		$session = new PHPSession();
 		$session->delete("WHERE expires < ".time());
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new SessionPersistenceUpgradeManager();
+		$mgr->upgrade();
+	}	
 }
 ?>

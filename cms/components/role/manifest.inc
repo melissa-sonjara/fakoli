@@ -58,7 +58,14 @@ class RoleManifest
 								  		  "weight"	=>	2)
 			)
 		);		
-	}	
+	}
+
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(RoleManager, upgradeComponent)
+			);
+	}		
 }
 
 ?>

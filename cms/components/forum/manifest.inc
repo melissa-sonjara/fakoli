@@ -64,6 +64,14 @@ class ForumManifest
 	{
 		return array("/fakoli/css/forum.css");
 	}
+	
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(ForumManager, upgradeComponent)
+			);
+	}
+	
 }
 
 ?>

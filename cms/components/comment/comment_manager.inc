@@ -31,40 +31,16 @@
 
 *****************************************************************/
 
-Fakoli::usingFile("framework/tab_bar.inc");
-
-function componentListTabs()
+class CommentManager
 {
-	$tabs = array(	"Components"		=>	"/admin/components",
-					"Component Pages"	=>	"/admin/component_pages"
-					);
-
-	$bar = new TabBar("tabs", $tabs, "");
-	$bar->useQueryString = false;
+	function CommentManager()
+	{
+		
+	}
 	
-	return $bar;
+	static function upgradeComponent()
+	{
+		$mgr = new CommentUpgradeManager();
+		$mgr->upgrade();
+	}
 }
-
-function componentPageTabs($key)
-{
-	$tabs = array(	"Definition"	=>	"/admin/component_page_form",
-					"Modules"		=>	"/admin/component_page_modules");
-	
-	$qs = ($key) ? "component_page_id=$key" : ""; 
-	$bar = new TabBar("tabs", $tabs, $qs);
-	
-	return $bar;
-}
-
-function componentFormTabs($key)
-{
-	$tabs = array(	"Definition"		=>	"/admin/component_form",
-					"Component Pages"	=>	"/admin/component_pages");
-	
-	$qs = ($key) ? "component_id=$key" : ""; 
-	$bar = new TabBar("tabs", $tabs, $qs);
-	
-	return $bar;
-}
-
-?>

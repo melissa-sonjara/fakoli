@@ -69,6 +69,13 @@ class ContextHelpManifest
 		);		
 				
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(ContextHelpManager, upgradeComponent)
+			);
+	}		
 }
 
 ?>

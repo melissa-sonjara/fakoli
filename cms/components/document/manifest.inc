@@ -51,8 +51,9 @@ class DocumentManifest
 		return array(
 				"EnumerateItems"	 => array(DocumentManager, enumerateItems),
 				"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
-				"DeleteRole"			=>	array(DocumentManager, deleteRole)
-				);
+				"DeleteRole"			=>	array(DocumentManager, deleteRole),
+				"upgradeComponent"		=>	array(DocumentManager, upgradeComponent)
+		);
 	}
 	
 	static function getAdminMenu()

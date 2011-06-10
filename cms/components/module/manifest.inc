@@ -59,6 +59,13 @@ class ModuleManifest
 			)
 		);		
 	}	
+	
+	static function subscribeToEvents()
+	{
+		return array(
+				"upgradeComponent"		=>	array(ModuleManager, upgradeComponent)
+			);
+	}	
 }
 
 ?>

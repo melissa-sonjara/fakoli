@@ -224,5 +224,11 @@ class SiteMapManager
 		$this->checkForRemovedModuleAndComponentPages();
 		$this->setHierarchyFromMenuItems();		
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new SiteMapUpgradeManager();
+		$mgr->upgrade();
+	}	
 }
 ?>

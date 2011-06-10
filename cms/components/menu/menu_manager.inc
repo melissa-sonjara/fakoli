@@ -17,5 +17,11 @@ class MenuManager
 		RoleManager::deleteRoleFromString($mItems, $del_role);
 		
 		return $del_role;
-	}		
+	}	
+
+	static function upgradeComponent()
+	{
+		$mgr = new MenuUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

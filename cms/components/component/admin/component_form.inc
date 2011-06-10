@@ -34,8 +34,6 @@
 Fakoli::using("component");
 Fakoli::usingFeature("auto_form");
 
-require_once "include/component_tabs.inc";
-
 $component_id = checkNumeric($_GET["component_id"]);
 $component = new Component($component_id);
 
@@ -55,7 +53,7 @@ if ($method == "POST")
 	}
 }
 
-$tabs = componentFormTabs($component_id);
+$tabs = ComponentManager::componentFormTabs($component_id);
 
 $script .= $form->writeScript();
 

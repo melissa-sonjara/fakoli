@@ -614,5 +614,11 @@ function deleteFolderResult(result)
 	{
 		$roles = DocumentManager::getRoleOptions();
 		return implode(",", array_keys($roles));
-	}		
+	}	
+
+	static function upgradeComponent()
+	{
+		$mgr = new DocumentUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

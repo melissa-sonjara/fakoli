@@ -83,5 +83,11 @@ class PageManager
 		
 		return $del_role;		
 	}	
+	
+	static function upgradeComponent()
+	{
+		$mgr = new PageUpgradeManager();
+		$mgr->upgrade();
+	}	
 }
 ?>

@@ -135,4 +135,10 @@ class SettingsManager
 		}	
 		return $tabs;
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new SettingsUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

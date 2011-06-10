@@ -7,7 +7,7 @@ class ComponentUpdateLog extends DataItem
 			"component_update_log_id"	=>	Number,
 			"component"					=>	String,
 			"version_number"			=>	Number,
-			"date_updated"				=>	Timestamp,
+			"date_updated"				=>	DateTime,
 			"description"				=>	Text
 	);
 	
@@ -18,6 +18,7 @@ class ComponentUpdateLog extends DataItem
 		$log->component = $component;
 		$log->version_number = $version_number;
 		$log->description = $description;
+		$log->date_updated = now();
 		$log->save();
 	}
 	
@@ -26,6 +27,13 @@ class ComponentUpdateLog extends DataItem
 		return Query::create(ComponentUpdateLog, "WHERE component=:component")
 			->bind(":component", $component)
 			->executeValue("MAX(version_number)");
+	}
+	
+	static function getLogs($component_name)
+	{
+		return Query::create(ComponentUpdateLog, "WHERE component=:component_name ORDER BY date_updated DESC")
+			->bind(":component_name", $component_name)
+			->execute();
 	}
 	
 	function ComponentUpdateLog()

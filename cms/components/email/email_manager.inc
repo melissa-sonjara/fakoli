@@ -267,6 +267,12 @@ class EmailManager
 		Settings::setDefaultValue("email", "alt_text_email", false, "Boolean", "Whether the mail server can send html-formatted email messages");
 		
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new EmailUpgradeManager();
+		$mgr->upgrade();
+	}	
 
 }
 

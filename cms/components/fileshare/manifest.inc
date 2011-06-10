@@ -49,9 +49,10 @@ class FileshareManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				);
+				"upgradeComponent"		=>	array(FileshareManager, upgradeComponent)
+			);
 	}
-	
+			
 	static function getAdminMenu()
 	{
 		return array

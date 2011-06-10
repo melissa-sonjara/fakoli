@@ -132,7 +132,13 @@ class BlogManager
 		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
 		
 		return $styles;
-	}		
+	}	
+
+	static function upgradeComponent()
+	{
+		$mgr = new BlogUpgradeManager();
+		$mgr->upgrade();
+	}	
 }
 
 ?>

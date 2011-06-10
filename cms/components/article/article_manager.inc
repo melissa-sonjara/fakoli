@@ -27,4 +27,10 @@ class ArticleManager
 		
 		return $form;
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new ArticleUpgradeManager();
+		$mgr->upgrade();
+	}	
 }

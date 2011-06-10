@@ -36,9 +36,7 @@ Fakoli::usingFile("framework/data_view.inc");
 
 Fakoli::assertRole("admin");
 
-require_once "include/component_tabs.inc";
-
-$tabs = componentListTabs();
+$tabs = ComponentManager::componentListTabs();
 
 $menu_item = "Components";
 $title = "Manage Components";

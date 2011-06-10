@@ -73,7 +73,9 @@ class PayPalManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"ComponentScanComplete" => array(PayPalManager, setDefaults)
+				"ComponentScanComplete" => array(PayPalManager, setDefaults),
+				"upgradeComponent"		=>	array(PayPalManager, upgradeComponent)
+		
 		);
 	}			
 }

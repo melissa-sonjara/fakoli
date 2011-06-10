@@ -34,8 +34,6 @@
 Fakoli::using("component", "field_renderers", "role");
 Fakoli::usingFile("framework/auto_form.inc");
 
-require_once "include/component_tabs.inc";
-
 $component_page_id = checkNumeric($_GET["component_page_id"]);
 $page = new ComponentPage($component_page_id);
 
@@ -46,7 +44,7 @@ if (!$component_page_id)
 
 $menu_item = "Components";
 
-$tabs = componentPageTabs($component_page_id);
+$tabs = ComponentManager::componentPageTabs($component_page_id);
 
 $title = "Component Page: {$page->identifier}";
 

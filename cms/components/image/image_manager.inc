@@ -471,4 +471,10 @@ class ImageManager
 		Settings::setDefaultValue("image", "thumbnail_size", 75, "Number", "");	
 	}
 	
+	static function upgradeComponent()
+	{
+		$mgr = new ImageUpgradeManager();
+		$mgr->upgrade();
+	}	
+	
 }

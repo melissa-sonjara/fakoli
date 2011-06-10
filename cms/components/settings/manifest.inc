@@ -71,7 +71,9 @@ class SettingsManifest
 			
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(SettingsManager, setDefaults));
+		return array("ComponentScanComplete" => array(SettingsManager, setDefaults),
+					"upgradeComponent"		=>	array(SettingsManager, upgradeComponent)	
+		);
 	}
 		
 }
