@@ -60,7 +60,6 @@ class SiteManifest
 		);		
 	}
 
-			/*
 	static function subscribeToEvents()
 	{
 
@@ -68,8 +67,7 @@ class SiteManifest
 				"upgradeComponent"		=>	array(SiteManager, upgradeComponent)
 			);
 		
-	}
-	*/		
+	}		
 }
 
 ?>

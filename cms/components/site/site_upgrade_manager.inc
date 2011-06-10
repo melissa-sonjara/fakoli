@@ -47,7 +47,9 @@
 Fakoli::using("site", "component");
 
 // can't find UpgradeManager ???
-class SiteUpgradeManager //extends UpgradeManager
+require_once realpath(dirname(__FILE__)."/../component/upgrade_manager.inc");
+
+class SiteUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation"
