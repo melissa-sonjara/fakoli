@@ -42,6 +42,33 @@ class StringTypeRenderer extends AbstractTypeRenderer
 	
 	static function format($value, $template = "")
 	{			
+		if (!$template) return $value;
+		
+		switch($template)
+		{
+		case "codify":
+			return codify($value);
+
+		case "prettify":
+			return prettify($value);
+		
+		case "upper":
+			return strtoupper($value);
+			
+		case "lower":
+			return strtolower($value);
+			
+		case "ucwords":
+			return ucwords(strtolower($value));
+			
+		default:
+			
+			if (is_numeric($template))
+			{
+				return ellipsis($value, $template, true);
+			}
+		}
+		
 		return $value; 
 	}
 }
