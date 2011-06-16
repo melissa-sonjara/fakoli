@@ -57,7 +57,7 @@ if(count($messages) > 0)
  			continue;
 	
 		$message = $messages[$topic->topic_id];
-		echo "<li><a href='form_topic/forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a></li>\n";
+		echo "<li><a href='forum_topic/forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a></li>\n";
  	}		
 	echo "</ul>\n";
 	echo "</div>\n";
