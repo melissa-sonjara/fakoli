@@ -1257,7 +1257,7 @@ function pluralize($text, $count = 0)
 	{
 		$c = substr($c, 0, -1)."ies";
 	}
-	else if (preg_match("/(?:ss|o|x|s)$/", $c))
+	else if (preg_match("/(?:ss|o|x|s|h)$/", $c))
 	{
 		$c .= "es";
 	}

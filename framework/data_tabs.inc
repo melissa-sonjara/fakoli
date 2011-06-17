@@ -83,6 +83,20 @@ class DataItemTabBar
 		return $url;
 	}
 
+	function writeScript()
+	{
+		$script = <<<ENDSCRIPT
+<script type='text/javascript'>
+window.addEvent('load', function()
+{
+	new ScrollingTabs('{$this->id}');
+});
+</script>
+ENDSCRIPT;
+
+		return $script;
+	}
+	
 	/**
 	 * Writes the HTML for this control to standard output.
 	 */

@@ -63,7 +63,7 @@ if ($method == "POST")
 $tabs = new DataItemTabBar("tabs", $components);
 
 $script .= $form->writeScript();
-
+$script .= $tabs->writeScript();
 $tabs->writeHTML();
 ?>
 <div id="tab_border">
