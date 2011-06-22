@@ -57,7 +57,7 @@ class SearchManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("search", "search_result_format", "Combined List", "Select", "Specifies the display format to use when displaying results", "", "Combined List\nGrouped by Type");
+		Settings::setDefaultValue("search", "search_result_format", "Combined List", "String", "Specifies the display format to use when displaying results", "", "Combined List\nGrouped by Type");
 		Settings::setDefaultValue("search", "results_per_page", "20", "Number", "Specifies the number of results to show per page. Set to zero for no pagination.");
 		
 		SearchManager::buildSearchMap();
