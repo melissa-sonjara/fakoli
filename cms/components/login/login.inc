@@ -70,9 +70,13 @@ class LoginManager
 				
 		$token = LoginToken::generateToken($id);
 		
+		$mgr = new UserManager();
+		
+		if(is_callable(array($mgr, emailToken)))
+			return $mgr->emailToken($siteUser);
+		
 		$subject = $config["sitename"];
 		
-		$mgr = new UserManager();
 		$userNameField = $mgr->getUsernameField();
 		$userNameField = $siteUser->hasField($userNameField) ? $userNameField : $mgr->getEmailField();
 		
