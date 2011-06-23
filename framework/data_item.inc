@@ -1549,9 +1549,7 @@ function formatItems($items, $template, $separator = "")
 	{
 		if (!$item) continue;
 		if (!$first) $list .= $separator;
-		trace("before calling function format formatItems list is $list template $template separator $separator and class is " . get_class($item), 3);
 		$list .= $item->format($template);
-		trace("after calling function format, formatItems list is $list template $template separator $separator", 3);
 		$first = false;
 	}
 	
