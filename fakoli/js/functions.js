@@ -192,7 +192,7 @@ function formatCurrency(val)
 
 function rawNumber(val)
 {
-	return Number(val.replace(/[^\d\.]/g, ''));
+	return Number(val.replace(/[^\d\.\-]/g, ''));
 }
 
 function isDefined(obj)

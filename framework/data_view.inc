@@ -117,11 +117,12 @@ class DataListView
 	 * @param $format the formatter for the column, either as a formatting string or callback function
 	 * @param $sortable whether this column is sortable
 	 * @param $style any inline styles specific to this column
+	 * @param $typeHint hint for cell type to use when exporting to Excel
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function column($title, $format, $sortable = false, $style = null)
+	function column($title, $format, $sortable = false, $style = null, $typeHint = null)
 	{
-		$this->columns[] = new DataColumn($title, $format, $sortable, $style);
+		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint);
 		return $this;
 	}
 
@@ -542,16 +543,31 @@ class DataListView
 			{
 				$val = $column->format($item);
 				
-				/* JDG 5/11/10 currency export fix */
-				if (preg_match("/^[\\d\\,\\.]+$/", $val))
+				switch($column->typeHint)
 				{
-					$val = str_replace(",", "", $val);
-					$x->writeNumber($r, $c, $val);
-				}
-				else
-				{
-					// No HTML required in Excel output
+				case String:
+
 					$x->writeText($r, $c, stripHTML($val));
+					break;
+					
+				case Number:
+					
+					$x->writeNumber($r, $c, $val);
+					break;
+					
+				default:
+					
+					/* JDG 5/11/10 currency export fix */
+					if (preg_match("/^[\\d\\,\\.]+$/", $val))
+					{
+						$val = str_replace(",", "", $val);
+						$x->writeNumber($r, $c, $val);
+					}
+					else
+					{
+						// No HTML required in Excel output
+						$x->writeText($r, $c, stripHTML($val));
+					}
 				}
 				
 				++$c;

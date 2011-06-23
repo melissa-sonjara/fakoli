@@ -41,7 +41,7 @@ class DataColumn
 	var $sortable;	///< Boolean value indicating whether this column is sortable
 	var $title;		///< The title text for this column
 	var $style;		///< Any CSS styles to be applied to this column
-	
+	var $typeHint;
 	/**
 	 * Creates a new DataColumn. Generally this function should not be invoked directly,
 	 * but should be accessed through the DataListView::column() method.
@@ -51,12 +51,13 @@ class DataColumn
 	 * @param unknown_type $style any CSS styles to be appled to the column
 	 * @return DataColumn a new DataColumn instance
 	 */
-	function DataColumn($title, $template, $sortable = true, $style = null)
+	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null)
 	{
 		$this->template = $template;
 		$this->sortable = $sortable;
 		$this->title = $title;
 		$this->style = $style;
+		$this->typeHint = $typeHint;
 	}
 	
 	/**
