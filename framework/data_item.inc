@@ -344,6 +344,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function load($id)
 	{
+		if ($this->cacheLookup($id)) return;
+		 
 		$fields = $this->getfieldList();
 		$query = "SELECT $fields FROM {$this->table} WHERE {$this->primary_key}=$id ".$this->getIdentityConstraint();
 		trace("DataItem::load($id): $query", 3);
@@ -403,6 +405,11 @@ class DataItem extends AbstractDataItem
     	{
     		return $this->insert();
     	}
+    	
+    	if ($this->cacheLocal)
+		{
+			Cache::invalidate(get_class($this)."_cache");
+		}
 	}
 		
 	/**
@@ -820,6 +827,28 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
+	function cacheLookup($id)
+	{
+		if ($this->cacheLocal)
+		{
+			$cache = get_class($this)."_cache";
+			$items = Cache::get($cache);
+			if (!is_array($items))
+			{
+				$items = IndexedQuery::create(get_class($this), "", $this->primary_key)->execute();
+				Cache::put($cache, $items);
+			}
+			if (array_key_exists($id, $items))
+			{
+				trace("Using local cache $cache for item $id", 5);
+				$this->copy($items[$id]);
+				return true;
+			}
+		}
+		
+		return false;
+	}	
+		
 	/**
 	 * Returns a single item related by the specified foreign key. The foreign
 	 * key name must match the primary key name for the specified class. 
@@ -842,6 +871,7 @@ class DataItem extends AbstractDataItem
 		{
 			$pk = $obj->primary_key;
 			$obj->$pk = $this->$field;
+			
 			$obj->select();
 		}
 		else
@@ -1132,7 +1162,6 @@ class DataItem extends AbstractDataItem
 	 */
 	function format($template = "", $separator = ", ")
 	{
-		trace(get_class($this)." Format: $template", 4);
 		if ($template == "") $template = $this->default_format;
 		
 		foreach($this->fields as $field => $type)
@@ -1182,7 +1211,7 @@ class DataItem extends AbstractDataItem
 		{
 			$field = $match[1];
 			$fieldFormat = $match[2];
-			trace("formatField, field $field and fieldFormat $fieldFormat", 3);
+			trace("formatField, field $field and fieldFormat $fieldFormat", 5);
 			
 			$format = "{".$field.":".$fieldFormat."}";
 			
@@ -1217,7 +1246,7 @@ class DataItem extends AbstractDataItem
 			elseif(count($match) == 4)
 				$fieldTemplate = $match[3];
 
-			trace("function format: formatThroughRelations template $template field $field relation $relation constraint $constraint", 3);
+			trace("function format: formatThroughRelations template $template field $field relation $relation constraint $constraint", 5);
 			
 			if ($constraint)
 			{
@@ -1248,7 +1277,7 @@ class DataItem extends AbstractDataItem
 				$sub = $relations->formatFieldValue($field, $fieldTemplate);
 			}
 			
-			trace("format using relations: Replacing {$match[0]} [ $format ] with '$sub'", 4);
+			trace("format using relations: Replacing {$match[0]} [ $format ] with '$sub'", 5);
 			
 			$template = str_replace($format, $sub, $template);
 		}

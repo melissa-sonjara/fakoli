@@ -359,6 +359,14 @@ abstract class AbstractDataItem
 	abstract function deleteAll();
 
 	/**
+	 * Populate the object from the local cache if the object is marked as "cacheLocal".
+	 */
+	function cacheLookup($id)
+	{
+		return false;
+	}
+	
+	/**
 	 * Returns the properly quoted value of the specified field. Quoting rules
 	 * are dependent on the specified type of the field.
 	 * 

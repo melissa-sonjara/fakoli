@@ -60,7 +60,7 @@ class TimestampTypeRenderer extends AbstractTypeRenderer
  	*/
 	static function format($timestamp, $template = "")
 	{
-		trace("TimestampTypeRenderer template is $template and value is $timestamp", 3);
+		trace("TimestampTypeRenderer template is $template and value is $timestamp", 5);
 			
 		$text = "";
 		

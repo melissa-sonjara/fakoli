@@ -62,7 +62,7 @@ class DateTimeTypeRenderer extends AbstractTypeRenderer
  	*/
 	static function format($datetime, $template = "")
 	{
-		trace("DateTimeTypeRenderer template is $template and value is $datetime", 3);
+		trace("DateTimeTypeRenderer template is $template and value is $datetime", 5);
 			
 		$text = "";
 			
@@ -77,10 +77,10 @@ class DateTimeTypeRenderer extends AbstractTypeRenderer
 		{		
 			$patterns = "/(g|i|a|:|h|s|b|p|t|z|c|r|u)/i";
     		$template = preg_replace($patterns, "", $template);
-			trace("DateTimeTypeRenderer no time component: template is $template and value is $datetime", 3);
+			trace("DateTimeTypeRenderer no time component: template is $template and value is $datetime", 5);
 		}
 
-		trace("DateTimeTypeRenderer template is $template and value is $datetime", 3);
+		trace("DateTimeTypeRenderer template is $template and value is $datetime", 5);
 		
 		if($datetime)
 			$text = date($template, strtotime($datetime));

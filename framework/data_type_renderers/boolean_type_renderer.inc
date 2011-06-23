@@ -52,7 +52,7 @@ class BooleanTypeRenderer extends AbstractTypeRenderer
 	 */
 	static function format($value, $template = "")
 	{
-		trace("DateTimeTypeRenderer template is $template and value is $value", 3);
+		trace("BooleanTypeRenderer template is $template and value is $value", 5);
 
 		if($template)
 		{
