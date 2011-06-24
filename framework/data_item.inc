@@ -870,9 +870,20 @@ class DataItem extends AbstractDataItem
 		if (array_key_exists($field, $this->fields))
 		{
 			$pk = $obj->primary_key;
-			$obj->$pk = $this->$field;
+			$val = $this->get($field);
 			
-			$obj->select();
+			$obj->$pk = $val;
+			
+			$cache = "_$class_$field_$val";
+			if (isset($this->$cache))
+			{
+				$obj = $this->$cache;
+			}
+			else
+			{
+				$obj->select();
+				$this->$cache = $obj;
+			}			
 		}
 		else
 		{
