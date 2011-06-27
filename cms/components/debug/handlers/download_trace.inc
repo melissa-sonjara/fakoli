@@ -33,7 +33,7 @@
 
 Fakoli::using("debug", "settings");
 
-$filename = Settings::getValue("settings", "debug");
+$filename = Settings::getValue("debug", "trace_path");
 
 $filepath = sanitizePath($filename);
 
