@@ -64,28 +64,40 @@ class TimestampTypeRenderer extends AbstractTypeRenderer
 			
 		$text = "";
 		
-		if (!$timestamp) 
-			$text = "N/A";
+		if (!$timestamp) return "N/A";
+		
 		// This default is needed for XML transation but is not
 		// a user-readable format.
 		elseif($timestamp && !$template)
 			$template = "Y-m-d H:i:s";
-		
-		$yyyy = substr($timestamp,0,4);
-		$mm   = substr($timestamp,4,2);
-		$dd   = substr($timestamp,6,2);
-		$hh   = substr($timestamp,8,2);
-		$mi   = substr($timestamp,10,2);
-		$ss   = substr($timestamp,12,2);
 
 		$template = AbstractTypeRenderer::translationDateTemplate($template);
+			
+		if (preg_match("/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/", $timestamp))
+		{
+			$timestamp = preg_replace("/\\D/", "", $timestamp);
+		}
 		
-		if ($yyyy == '0000') 
-    		$text = "N/A";
-
-     	if($timestamp)
-  			$text = date($template, mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
-					
+		if (preg_match("/^\\d{14}$/", $timestamp))
+		{
+			$yyyy = substr($timestamp,0,4);
+			$mm   = substr($timestamp,4,2);
+			$dd   = substr($timestamp,6,2);
+			$hh   = substr($timestamp,8,2);
+			$mi   = substr($timestamp,10,2);
+			$ss   = substr($timestamp,12,2);
+			
+			if ($yyyy == '0000') 
+	    		$text = "N/A";
+	
+	     	if($timestamp)
+	  			$text = date($template, mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+		}
+		else
+		{
+			$text = date($template, strftime($timestamp));
+		}
+							
 		return $text; 
 	}
 }
