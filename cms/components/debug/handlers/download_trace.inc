@@ -37,7 +37,8 @@ $filename = Settings::getValue("settings", "debug");
 
 $filepath = sanitizePath($filename);
 
-$mimeType = getMimeType($filename);
+// set mime type to text so that we can open and read the contents
+$mimetype = "text/plain";
 
 trace("trace download: filepath:" . $filepath, 3);
 $f = fopen($filepath, "r");
