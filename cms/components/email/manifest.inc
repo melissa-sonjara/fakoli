@@ -59,7 +59,11 @@ class EmailManifest
 			
 				"Merge Codes"	=>	array("page"	=>	"/admin/merge_code_list",
 									  "role"	=>	"admin",
-									  "weight"	=>	21)
+									  "weight"	=>	21),
+
+				"Email Debug Logs"	=>	array("page"	=>	"/admin/email_debug_logs",
+									  "role"	=>	"admin",
+									  "weight"	=>	30)
 			
 			),
 			

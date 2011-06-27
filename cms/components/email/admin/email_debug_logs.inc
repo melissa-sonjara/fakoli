@@ -31,33 +31,23 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Settings
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("email");
+Fakoli::usingFeature("data_view");
 
-Fakoli::using("settings", "component");
+$logs = EmailManager::scanDebugLogs();
 
-class SettingsUpgradeManager extends UpgradeManager
-{
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
-	);
-	
-	function SettingsUpgradeManager()
-	{
-		$this->component_name = "settings";
+$table = new DataListView($logs, "emailDebugLogs");
+$table->column("Recipient", "<a href=\"/action/email/download_email_log?filename={filename}\">{filename}</a>", true)
+		->column("Last Modified", "{date}", true)
+		;
+			  	
+$table->emptyMessage = "There are no email debug logs.";
+$table->mode = "tree";
+$table->cssStyle = "width: 80%";
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
-}
+$script .= $table->writeScript();
+
+echo "<p>All emails sent to a recipient are stored in one file with the recipient as the filename.</p>\n";
+$table->drawView();
+
+?>

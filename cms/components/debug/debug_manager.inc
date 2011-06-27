@@ -31,33 +31,33 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Settings
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
-
-Fakoli::using("settings", "component");
-
-class SettingsUpgradeManager extends UpgradeManager
+class DebugManager
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
-	);
-	
-	function SettingsUpgradeManager()
+	function DebugManager()
 	{
-		$this->component_name = "settings";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		
 	}
+	
+	static function setDefaults()
+	{
+		trace("DebugManager::setDefaults", 3);
+		
+		global $config;
+		
+		preg_match_all("/([\\w\\d_]+)\.?([^}]*)/", $config["http_host"], $matches, PREG_SET_ORDER);
+		if(count($matches) > 0)
+		{
+			$matches = $matches[0];
+			if(count($matches) > 1)
+			{
+				$path = $matches[1];
+			}
+			$tracePath = "/share/". $path . "_trace.log";
+		}
+
+		Settings::setDefaultValue("debug", "trace_path", $tracePath, "String", "File path to trace output log");
+		Settings::setDefaultValue("debug", "trace_level", 3, "Number", "Lowest to output only the most serious errors; highest for all", "", "1\n2\n\n3\n4\n5");
+		Settings::setDefaultValue("debug", "trace_detail", "TraceDetailHigh", "String", "The level of detail to be output", "", "TraceDetailFull\nTraceDetailHigh\nTraceDetailMedium\nTraceDetailNormal");		
+	}
+	
 }

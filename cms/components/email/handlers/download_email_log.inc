@@ -1,4 +1,4 @@
-<?php
+<?
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,33 +31,27 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Settings
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("email", "settings");
 
-Fakoli::using("settings", "component");
+$filename = mysql_escape_string($_GET["filename"]);
 
-class SettingsUpgradeManager extends UpgradeManager
-{
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
-	);
+$dir = Settings::getValue("email", "debugging_mode_output_path") . DIRECTORY_SEPARATOR;
+
+$filepath = sanitizePath($dir . $filename);
+
+// set mime type to text so that we can open and read the contents
+$mimetype = "text/plain";
+
+trace("component update log download: filepath:" . $filepath, 3);
+$f = fopen($filepath, "r");
+$size = filesize($filepath);
 	
-	function SettingsUpgradeManager()
-	{
-		$this->component_name = "settings";
+header("Content-Disposition: attachment;filename=\"" . basename($filename) . "\"");
+header("Content-Type: $mimeType");
+header("Content-Length: $size");
+	
+fpassthru($f);
+fclose($f);
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
-}
+session_write_close();
+?>

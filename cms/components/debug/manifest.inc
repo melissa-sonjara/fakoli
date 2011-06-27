@@ -31,33 +31,35 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Settings
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
-
-Fakoli::using("settings", "component");
-
-class SettingsUpgradeManager extends UpgradeManager
+class DebugManifest
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
-	);
-	
-	function SettingsUpgradeManager()
+	static function getComponentDefinition()
 	{
-		$this->component_name = "settings";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		$component = new Component();
+		$component->name = "debug";
+		$component->description = "Trace statements and test harnesses";
+		$component->author = "Janice Gallant";
+		$component->version = "1.0";
+		$component->priority = 2;
+		$component->enabled = true;
+		
+		return $component;
 	}
+	
+	
+	static function getAdminMenu()
+	{
+		return array
+		(
+			"Classification"	=> array
+			(
+
+				"Trace"	=>	array("page"	=>	"/admin/trace",
+									  "role"	=>	"admin",
+									  "weight"	=>	30)
+			)
+		);
+	}	
 }
+
+?>

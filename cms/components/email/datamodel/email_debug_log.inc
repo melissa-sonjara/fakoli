@@ -31,33 +31,21 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Settings
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
 
-Fakoli::using("settings", "component");
-
-class SettingsUpgradeManager extends UpgradeManager
+class EmailDebugLog extends DataItem
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
+	var $fields = array(
+			"log_id"	=>	Number,
+			"filename"	=>	String,
+			"date"		=>	String
 	);
 	
-	function SettingsUpgradeManager()
+	function EmailDebugLog()
 	{
-		$this->component_name = "settings";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		$this->table = "email_debug_log";
+		$this->primary_key = "log_id";
+		
+		$this->DataItem(func_get_args());
+		
 	}
 }

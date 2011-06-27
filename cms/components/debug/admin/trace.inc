@@ -31,33 +31,18 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Settings
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("debug");
 
-Fakoli::using("settings", "component");
+$filename = Settings::getValue("debug", "trace_path");
+$filepath = sanitizePath($filename);
 
-class SettingsUpgradeManager extends UpgradeManager
+if(file_exists($filepath))
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
-	);
-	
-	function SettingsUpgradeManager()
-	{
-		$this->component_name = "settings";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
+	$date = date("F d, Y g:ia", (filemtime($filepath)));
+	$basename = basename($filepath);
+	echo "<p><label><a href=\"/action/debug/download_trace\">{$basename}</a></p></label>\n";
+	echo "<label><p>Last Modified: $date</p></label>\n";
 }
+else
+	echo "<p>No trace file found at {$filepath}.</p>\n";
+?>

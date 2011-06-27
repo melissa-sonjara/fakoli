@@ -73,16 +73,11 @@ class SettingsManager
 				$path = $matches[1];
 				$sitename = prettify($path);
 			}
-			$tracePath = "/share/". $path . "_trace.log";
 		}
 
 		Settings::setDefaultValue("settings", "prettyUrls", true, "Boolean", "Whether urls are translated to CMS identifiers", "General");		
 		Settings::setDefaultValue("settings", "allow_pdf_download", true, "Boolean", "", "General");
 		Settings::setDefaultValue("settings", "sitename", $sitename, "String", "", "General");
-		
-		Settings::setDefaultValue("settings", "trace_path", $tracePath, "String", "File path to trace output log", "General");
-		Settings::setDefaultValue("settings", "trace_level", 3, "Number", "Lowest to output only the most serious errors; highest for all", "General", "1\n2\n\n3\n4\n5");
-		Settings::setDefaultValue("settings", "trace_detail", "TraceDetailHigh", "String", "The level of detail to be output", "General", "TraceDetailFull\nTraceDetailHigh\nTraceDetailMedium\nTraceDetailNormal");
 		
 		Settings::setDefaultValue("settings", "formCSS", "form", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "labelCSS", "label", "String", "", "AutoForm");

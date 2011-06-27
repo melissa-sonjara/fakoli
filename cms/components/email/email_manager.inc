@@ -43,6 +43,8 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  ***************************************************************/
 
+Fakoli::using("settings");
+
 class EmailHandler
 {
 	var $mail;
@@ -273,7 +275,39 @@ class EmailManager
 		$mgr = new EmailUpgradeManager();
 		$mgr->upgrade();
 	}	
+	
+	/*
+	 * Scan the email debug log path to retrieve
+	 * all the log files.
+	 */
+	static function scanDebugLogs()
+	{
+		$path = Settings::getValue("email", "debugging_mode_output_path");
+	
+		$logs = array();
+		
+		trace("EmailManager::Scanning $path", 3);
 
+		$handle = opendir($path);
+		$idx = 0;
+		while(false !== ($file = readdir($handle)))
+		{
+			// omit "." and ".." in the directory
+			if (!preg_match("/(^\.{1,2}$)/i", $file))
+			{
+				$log = new EmailDebugLog();
+				$log->log_id = $idx;
+				$log->filename = $file;
+				$log->date = date("F d, Y g:ia", (filemtime($path . DIRECTORY_SEPARATOR . $file)));
+			 	$logs[$log->log_id] = $log;
+			 	$idx++;
+			}
+		}
+		    
+	    closedir($handle);
+		
+	    return $logs;
+	}
 }
 
 
