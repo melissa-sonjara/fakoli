@@ -289,6 +289,10 @@ class EmailManager
 		trace("EmailManager::Scanning $path", 3);
 
 		$handle = opendir($path);
+		
+		if(!$handle)
+			return;
+			
 		$idx = 0;
 		while(false !== ($file = readdir($handle)))
 		{
