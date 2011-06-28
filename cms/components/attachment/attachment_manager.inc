@@ -62,6 +62,18 @@ class AttachmentManager
 		$attachment->delete();		
 	}
 	
+	static function getAttachmentLink($attachment)
+	{
+ 		$icon = getDocIcon($attachment->filename);
+ 		
+ 		$html .= "<img src=\"$icon\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;
+		<a href=\"/action/attachment/download?attachment_id={$attachment->attachment_id}\">{$attachment->filename}</a>&nbsp;
+		({$attachment->file_size})";
+	
+ 		return $html;
+	}
+	
+	
 	static function deleteAttachmentXref($attachment_id, $xrefClass)
 	{
 		
