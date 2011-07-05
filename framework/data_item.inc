@@ -397,6 +397,11 @@ class DataItem extends AbstractDataItem
 	 */
 	function save()
 	{
+	    if ($this->cacheLocal)
+		{
+			Cache::invalidate(get_class($this)."_cache");
+		}
+
 		if ($this->exists())
     	{
     		return $this->update();
@@ -405,11 +410,6 @@ class DataItem extends AbstractDataItem
     	{
     		return $this->insert();
     	}
-    	
-    	if ($this->cacheLocal)
-		{
-			Cache::invalidate(get_class($this)."_cache");
-		}
 	}
 		
 	/**
