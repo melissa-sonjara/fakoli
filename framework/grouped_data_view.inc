@@ -263,7 +263,7 @@ class GroupedDataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
-		if ($this->excelFile && $_GET["__excel"] == $this->id)
+		if ($this->excelFile && $_REQUEST["__excel"] == $this->id)
 		{
 			$this->writeExcelFile($this->excelFile);	
 		}
