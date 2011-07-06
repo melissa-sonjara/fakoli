@@ -691,9 +691,9 @@ class SearchForm extends AutoForm
 	var $modifiers;
 	var $params;
 
-	var $searchModeTypes = array("like"	=> "exact phrase match",
-						"all"	=>	"match all words in any order",
-						"any"	=>	"match any words");	
+	var $searchModeTypes = array("like"	=>  "exact phrase match",
+								 "all"	=>	"match all words in any order",
+								 "any"	=>	"match any words");	
 	/**
 	 * Create a new Search Form.
 	 * @param $target the target DataItem object
@@ -829,6 +829,20 @@ class SearchForm extends AutoForm
 		if ($this->formCSS) echo "class='{$this->formCSS}'"; 
 		echo ">\n";
 		
+		$this->renderSearchFields();
+		
+		echo "<tr>\n";
+		echo "<td colspan='2' class='submit'><br/><input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'>";
+
+		$this->drawButtons();
+		
+		echo "</td></table>\n</form>\n";
+	}
+
+	function renderSearchFields()
+	{
+		$obj =& $this->data;
+		
 		foreach(array_keys($obj->fields) as $field)
 		{
 			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
@@ -847,14 +861,8 @@ class SearchForm extends AutoForm
 			$renderer->renderSearchField($field, $mode);
 		}
 		
-		echo "<tr>\n";
-		echo "<td colspan='2' class='submit'><br/><input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'>";
-
-		$this->drawButtons();
-		
-		echo "</td></table>\n</form>\n";
 	}
-
+	
 	/*
 	 * 3/12/10, JG, make separate function from drawForm
 	 * so that inheriting classes can create a customized

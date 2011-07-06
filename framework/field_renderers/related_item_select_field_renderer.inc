@@ -213,6 +213,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	{
 		if ($mode != "equal") return;
 		
+		$this->getRelatedItems();
+		
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td><select name='{$field}:$mode'>\n";
