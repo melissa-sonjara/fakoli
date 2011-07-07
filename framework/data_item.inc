@@ -179,15 +179,33 @@ class DataItem extends AbstractDataItem
 	 * 
 	 * @param array $line the array of values to populate the object with. 
 	 */
-	function populate($line)
+	function populate($line, $alias = false)
 	{
-		foreach ($line as $field => $value)
+		// NOTE - structured for speed, since the general case is no aliasing
+		// therefore we want to reduce the number of tests of the alias 
+		
+    	if ($alias)
         {
-			//TODO: Figure out why this line causes login to fail for PSL.
-        	if (!array_key_exists($field, $this->fields)) continue;
-        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+	    	foreach ($line as $field => $value)
+	        {
+        		if (!startsWith($field, $alias)) continue;
+        		$field = substr($field, strlen($alias) + 1);
         	
-            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value); 
+	        	if (!array_key_exists($field, $this->fields)) continue;
+	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+	        	
+	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value); 
+	       	}
+        }
+        else
+        {
+			foreach ($line as $field => $value)
+	        {
+	        	if (!array_key_exists($field, $this->fields)) continue;
+	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+        	
+	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        } 
         }
 	}
 		
@@ -217,6 +235,10 @@ class DataItem extends AbstractDataItem
 				$list .= "$alias.";
 			}
 			$list .= $field;
+			if ($alias)
+			{
+				$list .= " as `$alias.$field`";
+			}
 			$first = false;
 		}
 		
