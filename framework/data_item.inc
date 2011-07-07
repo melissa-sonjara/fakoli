@@ -186,10 +186,12 @@ class DataItem extends AbstractDataItem
 		
     	if ($alias)
         {
+        	$offset = strlen($alias) + 1;
+        	
 	    	foreach ($line as $field => $value)
 	        {
         		if (!startsWith($field, $alias)) continue;
-        		$field = substr($field, strlen($alias) + 1);
+        		$field = substr($field, $offset);
         	
 	        	if (!array_key_exists($field, $this->fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
