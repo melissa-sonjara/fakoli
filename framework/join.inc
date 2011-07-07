@@ -317,8 +317,8 @@ class InnerJoin
 				for($i = 0; $i < count($this->classes); ++$i)
 				{
 					$class = $this->classes[$i];
-					$item->$class = new $class;	//Hack to work around PHP's stupid implementation of get_class()
-					$item->$class->populate($line);
+					$item->$class = new $class;	
+					$item->$class->populate($line, $this->aliases[$item->$class->table]);
 				
 					--$size;
 					if ($size == 0) break;
@@ -380,8 +380,8 @@ class InnerJoin
 				for($i = 0; $i < count($this->classes); ++$i)
 				{
 					$class = $this->classes[$i];
-					$item->$class = new $class;	//Hack to work around PHP's stupid implementation of get_class()
-					$item->$class->populate($line);
+					$item->$class = new $class;	
+					$item->$class->populate($line, $this->aliases[$item->$class->table]);
 				}
 	
 				$idx = $item->$idxClass->$field;
@@ -451,8 +451,8 @@ class InnerJoin
 				for($i = 0; $i < count($this->classes); ++$i)
 				{
 					$class = $this->classes[$i];
-					$item->$class = new $class;	//Hack to work around PHP's stupid implementation of get_class()
-					$item->$class->populate($line);
+					$item->$class = new $class;	
+					$item->$class->populate($line, $this->aliases[$item->$class->table]);
 				}
 	
 				$idx = $item->$idxClass->$field;
