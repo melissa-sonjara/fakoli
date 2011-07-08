@@ -45,9 +45,9 @@ class SearchManager
 	
 	var $searchResults;
 	
-	function SearchManager()
+	function SearchManager($results = null)
 	{
-		$this->searchResults = null;
+		$this->searchResults = $results;
 	}
 	
 	static function upgradeComponent()
