@@ -66,7 +66,7 @@ class DataItem extends AbstractDataItem
 		"Number"	=>	NumberTypeRenderer,	
 		"String"	=>	StringTypeRenderer,
 		"Text"		=>	TextTypeRenderer,
-		"HTML"		=>	HTMLTypeRenderer,
+		"HTML"		=>	TextTypeRenderer,
 		"Timestamp"	=>	TimestampTypeRenderer,
 		"Timezone"	=>	TimezoneTypeRenderer
 	);
