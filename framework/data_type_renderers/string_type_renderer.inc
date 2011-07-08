@@ -61,11 +61,14 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "ucwords":
 			return ucwords(strtolower($value));
 			
+		case "stripHTML":
+			return stripHTML($value);
+			
 		default:
 			
 			if (is_numeric($template))
 			{
-				return ellipsis($value, $template, true);
+				return ellipsis(stripHTML($value), $template, true);
 			}
 		}
 		
