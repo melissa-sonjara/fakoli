@@ -49,7 +49,7 @@ class DocumentTotalDownloadsView
 		
 		$this->table = new DataListView($results, "document_download_stats_total");
 		$this->table->column("File", "<a href='document_form?document_id={Document.document_id}'>{Document.title}</a>", true, "width: 80%")
-					->column("# Downloads", "{DocumentDownloadTotalStats.download_count}", true, "width: 20%");
+					->column("# Downloads", "{DocumentDownloadTotalStats.download_count:0}", true, "width: 20%");
 					
 		$this->table->filter = true;
 		$this->table->pageSize = 25;
