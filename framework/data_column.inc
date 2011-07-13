@@ -158,4 +158,36 @@ class FooterValueColumn extends FooterColumn
 	}
 }
 
+class FooterTotalColumn extends FooterColumn
+{
+	var $total = 0;
+	var $template = "";
+	var $field = "";
+	
+	function FooterTotalColumn($field, $template = "", $style = "", $colspan = 1)
+	{
+		$this->field = $field;
+		
+		$matches = array();
+		if (preg_match("/:(.*?)}/", $this->field, $matches))
+		{
+			$this->template = $matches[1];
+			$this->field = str_replace($matches[1], "", $this->field);
+		} 
+		
+		$this->FooterColumn($style, $colspan);
+	}
+	
+	function onStartRow($item)
+	{
+		$val = $item->format($this->field);
+		$this->total += $val;
+	}
+	
+	function format()
+	{
+		$renderer = new NumberTypeRenderer();
+		return $renderer->format($this->total, $this->template);
+	}
+}
 ?>

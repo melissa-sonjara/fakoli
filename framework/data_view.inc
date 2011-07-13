@@ -59,6 +59,7 @@ class DataListView
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
+	var $totalCallbacks;///< Array of callbacks for totalling columns
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
 	var $excelFile;		///< Filename for automatic Excel export
 	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
@@ -100,6 +101,7 @@ class DataListView
 		$this->excelFile = null;
 		$this->summary = null;
 		$this->zebra = true;
+		$this->totalCallbacks = array();
 		
 		return $this;
 	}
@@ -181,6 +183,22 @@ class DataListView
 	function footerValue($callback, $style = "", $colspan = 1)
 	{
 		$this->footerColumns[] = new FooterValueColumn($callback, $style, $colspan);
+		return $this;
+	}
+	
+	/**
+	 * Adds a value column to the table footer.
+	 * @param $callback Callback function or object method used to calculate the value for this column.
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerTotal($field, $style = "text-align: right", $colspan = 1)
+	{
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$this->footerColumns[] = $column;
+		$this->totalCallbacks[] = array($column, onStartRow);
+		
 		return $this;
 	}
 	
@@ -429,6 +447,11 @@ class DataListView
 					$retval = call_user_func($this->onStartRow, $item);
 					if ($retval === false) continue; // return false to indicate row should be skipped
 					if ($retval) $cl = " class='$retval'"; // return a string to indicate a css class for the row
+				}
+				
+				foreach($this->totalCallbacks as $cb)
+				{
+					call_user_func($cb, $item);
 				}
 ?>
           <tr<?echo $cl?>>
