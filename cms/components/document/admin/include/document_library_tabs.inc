@@ -37,7 +37,8 @@ function documentLibraryTabs($key)
 {
 	$tabs = array(	"Details"		=>	"/admin/document_library_form",
 					"Permissions"	=>	"/admin/document_library_permissions",
-					"Files"			=>	"/admin/document_library_files"
+					"Files"			=>	"/admin/document_library_files",
+					"Statistics"	=>	"/admin/document_library_stats"
 					);
 
 	$qs = ($key) ? "document_library_id=$key" : ""; 

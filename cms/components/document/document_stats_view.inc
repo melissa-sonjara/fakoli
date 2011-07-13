@@ -1,4 +1,4 @@
-<?
+<?php
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,41 +31,40 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "user", "fileshare");
+Fakoli::usingFeature("data_view", "join");
 
-
-$page_role = "admin,user";
-
-$document_id = checkNumeric($_GET["document_id"]);
-
-$document = new Document($document_id);
-$library = $document->DocumentLibrary();
-
-if (!checkRole($library->allow_access) && !$library->allowAccess())
+class DocumentTotalDownloadsView
 {
-	ajaxReturn("Access Denied");
+	var $library;
+	var $table;
+	
+	function DocumentTotalDownloadsView($library)
+	{
+		$this->library = $library;
+
+		$join = new InnerJoin();
+		$join->add(Document);
+		$join->add(DocumentDownloadTotalStats);
+		$results = $join->query("WHERE document_library_id={$this->library->document_library_id} ORDER BY title");
+		
+		$this->table = new DataListView($results, "document_download_stats_total");
+		$this->table->column("File", "<a href='document_form?document_id={Document.document_id}'>{Document.title}</a>", true, "width: 80%")
+					->column("# Downloads", "{DocumentDownloadTotalStats.download_count}", true, "width: 20%");
+					
+		$this->table->filter = true;
+		$this->table->pageSize = 25;
+		$this->table->excelFile = $library->identifier."_download_stats_".date("Y_m_d").".xls";
+		$this->table->emptyMessage = "No documents have been downloaded from this library";
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();
+	}
 }
-
-$d = new DocumentDownload();
-$d->document_id = $document_id;
-$d->user_id = ($user) ? $user->user_id : 0;
-$d->save();
-
-//TODO: Folder level security
-
-$filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
-$mimeType = getMimeType($document->file);
-	
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
-header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
-header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
-
-session_write_close();
 ?>

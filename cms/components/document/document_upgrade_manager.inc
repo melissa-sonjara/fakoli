@@ -49,7 +49,8 @@ Fakoli::using("document", "component");
 class DocumentUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Add document download tracking table"
 	);
 	
 	function DocumentUpgradeManager()

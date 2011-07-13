@@ -31,41 +31,31 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "user", "fileshare");
+Fakoli::using("document");
 
+require_once "include/document_library_tabs.inc";
 
-$page_role = "admin,user";
+$menu_item = "Documents";
 
-$document_id = checkNumeric($_GET["document_id"]);
+$document_library_id = checkNumeric($_GET["document_library_id"]);
 
-$document = new Document($document_id);
-$library = $document->DocumentLibrary();
-
-if (!checkRole($library->allow_access) && !$library->allowAccess())
+if (!$document_library_id)
 {
-	ajaxReturn("Access Denied");
+	redirect("/admin/document_libraries");
 }
 
-$d = new DocumentDownload();
-$d->document_id = $document_id;
-$d->user_id = ($user) ? $user->user_id : 0;
-$d->save();
+$library = new DocumentLibrary($document_library_id);
 
-//TODO: Folder level security
+$view = new DocumentTotalDownloadsView($library);
+$tabs = documentLibraryTabs($document_library_id);
 
-$filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
-$mimeType = getMimeType($document->file);
-	
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
-header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
-header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
+$script .= $view->writeScript();
 
-session_write_close();
+$tabs->writeHTML();
 ?>
+<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<h3>Download Statistics for <?echo $library->name?></h3>
+<?
+$view->drawView();
+?>
+</div>
