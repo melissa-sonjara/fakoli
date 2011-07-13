@@ -56,7 +56,7 @@ class DocumentTotalDownloadsView
 		$this->table->excelFile = $library->identifier."_download_stats_".date("Y_m_d").".xls";
 		$this->table->emptyMessage = "No documents have been downloaded from this library";
 		
-		$this->table->footerText("total")
+		$this->table->footerText("Total")
 			 		->footerTotal("{DocumentDownloadTotalStats.download_count:0}", "text-align: right");
 	}
 	
