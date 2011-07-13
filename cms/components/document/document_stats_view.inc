@@ -49,12 +49,15 @@ class DocumentTotalDownloadsView
 		
 		$this->table = new DataListView($results, "document_download_stats_total");
 		$this->table->column("File", "<a href='document_form?document_id={Document.document_id}'>{Document.title}</a>", true, "width: 80%")
-					->column("# Downloads", "{DocumentDownloadTotalStats.download_count:0}", true, "width: 20%");
+					->column("# Downloads", "{DocumentDownloadTotalStats.download_count:0}", true, "width: 20%; text-align: right");
 					
 		$this->table->filter = true;
 		$this->table->pageSize = 25;
 		$this->table->excelFile = $library->identifier."_download_stats_".date("Y_m_d").".xls";
 		$this->table->emptyMessage = "No documents have been downloaded from this library";
+		
+		$this->table->footerText("total")
+			 		->footerTotal("{DocumentDownloadTotalStats.download_count:0}", "text-align: right");
 	}
 	
 	function writeScript()
