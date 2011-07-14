@@ -52,8 +52,8 @@ $form->submitLabel = "Update Properties";
 
 if ($method == "POST")
 {
-	$form->preProcessFields($sectionContent->primary_key, $filter);
 	$sectionContent->fromPOST();
+	$sectionContent->role = implode(",", $_POST["role"]);
 	$form->postProcessFields($sectionContent->primary_key, $filter);
 	
 	foreach($ids as $id)
