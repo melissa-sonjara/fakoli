@@ -410,9 +410,11 @@ class ShortTextView extends QuestionField
 	{
 		$value = $this->parent->getAnswer($this->question);
 		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
+		$autocomplete = "autocomplete='off'";		
+	
 		$pk = $this->question->getPrimaryKey();
 	
-		echo "<textarea name='question_{$this->question->$pk}' cols='75' rows='1' $readonly>".htmlsafe($value)."</textarea>";
+		echo "<textarea name='question_{$this->question->$pk}' cols='75' rows='1' $readonly $autocomplete>".htmlsafe($value)."</textarea>";
 	}
 	
 	function drawView()
@@ -502,7 +504,9 @@ ENDSCRIPT;
 		$value = $this->parent->getAnswer($this->question);
 		
 		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
-		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly>".htmlsafe($value)."</textarea>";
+		$autocomplete = "autocomplete='off'";		
+		
+		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly $autocomplete>".htmlsafe($value)."</textarea>";
 		
 				
 		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
