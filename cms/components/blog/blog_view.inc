@@ -106,7 +106,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
-		$out .= "<h4><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>";
+		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
 		$out .= "{$article->title}</a></h4>";
 		
 		if ($article->teaser) $out .= $article->teaser;
@@ -176,11 +176,11 @@ class NewsBlogViewHandler implements IBlogViewHandler
 			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
-		$out .= "<h4><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>";
+		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
 		$out .= "{$article->title}</a></h4>";
 		$out .= "<strong>".formatDateLong($article->created_date)."</strong>";
 		if ($article->teaser) $out .= " - ".$article->teaser;
-		$out .= "<br/><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>Read More &raquo;</a></div>";
+		$out .= "<br/><a href='{$this->blog->identifier}?article_id={$article->article_id}'>Read More &raquo;</a></div>";
 		return $out;
 	}
 	
@@ -241,7 +241,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
-		$out .= "<h4><a href='/{$this->blog->identifier}?article_id={$article->article_id}'>";
+		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
 		$out .= "{$article->title}</a></h4>";
 		
 		if ($article->teaser) $out .= $article->teaser;
@@ -268,20 +268,20 @@ class BookBlogViewHandler implements IBlogViewHandler
 		if ($idx < count($articles) - 1)
 		{
 ?>
-<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx+1]->article_id?>" class="button" style="float: right"><?echo ellipsis($articles[$idx+1]->title, 60, true)?> &raquo;</a>
+<a href="<?echo $blog->identifier?>?article_id=<?echo $articles[$idx+1]->article_id?>" class="button" style="float: right"><?echo ellipsis($articles[$idx+1]->title, 60, true)?> &raquo;</a>
 <?
 		}
 		
 		if ($idx > 0)
 		{
 ?>
-<a href="/<?echo $blog->identifier?>?article_id=<?echo $articles[$idx-1]->article_id?>" class="button" style="float: left">&laquo; <?echo ellipsis($articles[$idx-1]->title, 60, true)?></a>
+<a href="<?echo $blog->identifier?>?article_id=<?echo $articles[$idx-1]->article_id?>" class="button" style="float: left">&laquo; <?echo ellipsis($articles[$idx-1]->title, 60, true)?></a>
 <?
 		}
 		else
 		{
 ?>
-<a href="/<?echo $blog->identifier?>" class="button" style="float: left">&laquo; Back to Contents Page</a>
+<a href="<?echo $blog->identifier?>" class="button" style="float: left">&laquo; Back to Contents Page</a>
 <?
 		}
 		
@@ -371,7 +371,7 @@ class BlogListView
 	
 	function formatTitleLink($blog)
 	{
-		return $blog->format("<a href='/blog_form?blog_id={blog_id}'>{title}</a>");
+		return $blog->format("<a href='blog_form?blog_id={blog_id}'>{title}</a>");
 	}
 
 	function showPublished($blog)
@@ -447,7 +447,7 @@ class BlogArticlesView
 	function formatTitle($item)
 	{
 		global $blog;
-		return "<a title=\"{$item->title}\" href=\"/blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
+		return "<a title=\"{$item->title}\" href=\"blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 	}
 	
 }
