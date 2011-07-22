@@ -747,11 +747,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			echo "<tr>\n <td colspan='2'><b>{$this->requiredFieldsText}</b></td></tr>\n";
 		}
 
-		if($this->additional_at_top)
-			$this->renderAdditionalFields($obj);	
-		$this->renderFields($obj);
-		if(!$this->additional_at_top)
-			$this->renderAdditionalFields($obj);	
+		$this->renderAllFields($obj);
 					
 		if (!$this->subordinate)
 		{		
@@ -795,6 +791,14 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		}	
 	}
 	
+	function renderAllFields($obj)
+	{
+		if($this->additional_at_top)
+			$this->renderAdditionalFields($obj);	
+		$this->renderFields($obj);
+		if(!$this->additional_at_top)
+			$this->renderAdditionalFields($obj);		
+	}
 	
 	/*
 	 * JDG 9/14/2010
@@ -809,18 +813,23 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		{
 			if ($field != $pk && !array_key_exists($field, $this->hidden) && !($filter && $filter->isExcluded($field)))
 			{
-				$renderer = $this->getRenderer($field);
-				if ($renderer)
-				{
-					if ($this->readonly[$field])
-					{
-						$renderer->renderReadOnly($field);
-					}
-					else
-					{
-						$renderer->renderField($field);
-					}
-				}
+				$this->renderOneField($field);
+			}
+		}
+	}
+	
+	function renderOneField($field)
+	{
+		$renderer = $this->getRenderer($field);
+		if ($renderer)
+		{
+			if ($this->readonly[$field])
+			{
+				$renderer->renderReadOnly($field);
+			}
+			else
+			{
+				$renderer->renderField($field);
 			}
 		}
 	}
