@@ -435,7 +435,7 @@ class SearchParameters
 		trace("SearchParameters::get({$field}:$mode): $value", 3);
 		return $value;
 	}
-	
+		
 	function fromArray($array)
 	{
 		foreach(array_keys($this->target->fields) as $field)
@@ -493,6 +493,10 @@ class SearchParameters
 		$this->params["{$field}:{$mode}"] = $value;
 	}
 	
+	function set($field, $mode, $value)
+	{
+		$this->setParam($field, $mode, $value);
+	}
 	
 	function fromGET()
 	{
@@ -773,32 +777,14 @@ class SearchForm extends AutoForm
 				}
 			}		
 		}
-		/*
-		echo "<script type='text/javascript'>\n";
-		echo "function onSubmit{$this->id}()\n{\n";
-			
-		foreach(array_keys($obj->fields) as $field)
+		
+		// JDG 7/15/2011 - need scripts for additional fields
+		foreach($this->additional as $r)
 		{
-			if ($field != $pk&& 
-				!($obj->filter && $obj->filter->isExcluded($field)))
-			{
-				$mode = $this->getMatchingMode($field);
-				
-				$renderer = $this->getRenderer($field);
-				if ($renderer)
-				{
-					$renderer->renderOnSubmitHandler($field);
-				}
-			}		
-		}
+			$mode = $this->getMatchingMode($r['field']);
+			$r['renderer']->renderSearchScript($r['field'], $mode);
+		}	
 
-		foreach($this->additional as $renderer)
-		{
-			$renderer->renderSearchScript("", "");
-		}
-				
-		echo "\treturn true;\n}\n</script>\n";	
-		*/
 		$script = ob_get_contents();
 		ob_end_clean();
 		return $script;

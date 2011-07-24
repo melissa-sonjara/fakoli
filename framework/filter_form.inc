@@ -33,6 +33,7 @@
 
 Fakoli::usingFile("framework/search_form.inc");
 Fakoli::usingFile("framework/field_renderers/select_field_renderer.inc");
+Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
 
 /*
  * Filter form adds a select field renderer to a page that allows
@@ -90,38 +91,17 @@ Fakoli::usingFile("framework/field_renderers/select_field_renderer.inc");
  *  
  */
 class FilterForm extends SearchForm
-{
+{	
 	var $search;
 	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
-		global $auto_form_defaults;
-
-		foreach($auto_form_defaults as $field => $value)
-		{
-			$this->$field = $value;
-		}
-				
-		$this->data =& $target;
-		$this->method = $method;
-		$this->action = $action;
-		$this->id = ($id != "") ? $id : get_class($this->data)."_form";
-	
-		$this->fields = $this->data->getFields();
-		
-		$filter = $this->data->getFilter();
-		
-		// Add in a default renderer for each field
-		foreach($this->fields as $field => $type)
-		{
-			if ($filter && $filter->isExcluded($field)) continue;
-			
-			$this->renderers[$field] = $this->createRenderer($field);
-		}
+		parent::SearchForm($target, $method, $action, $id);
 		
 		$this->setFilterParameters();
 	}
-	
+		
+		
 	function drawForm()
 	{
 		$obj =& $this->data;
@@ -135,13 +115,12 @@ class FilterForm extends SearchForm
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
 		
-		$this->renderFields($obj);
-		$this->renderAdditionalFields($obj);	
-	
+		$this->renderSearchFields();
+		
 		echo "</div>\n";
 		echo "</form><br><br>\n";
 	}
-	
+
 
 	/*
 	 * Default for all parameters included in filter is equal
@@ -169,8 +148,7 @@ class FilterForm extends SearchForm
 	
 	function getConstraint()
 	{
-		$constraint = $this->search->generateConstraint(true);
-		return $constraint;
+		return $this->search->generateConstraint(true);
 	}	
 }
 
@@ -230,6 +208,104 @@ class FilterFieldRenderer extends SelectFieldRenderer
    		</select>&nbsp;</div>
   		<?		
 	}
+	
+	function renderSearchField($field)
+	{
+		$this->renderField($field);
+	}
+	
 } // end class FilterFieldRenderer
+
+class DateFilterFieldRenderer extends DateFieldRenderer
+{
+	var $mode;
+	
+	function DateFilterFieldRenderer(&$form, $field, $label, $mode)
+	{
+		$this->mode = $mode;
+		$this->FieldRenderer($form);
+		
+		$this->label = ($label) ? $label : prettify($field);
+		
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+		}
+		
+		$form->search->setParam($field, $mode, $form->data->$field);
+		$form->modifiers[$field] = $mode;
+	}	
+	
+	function renderSearchScript($field, $mode)
+	{
+		$script = "";
+		
+		if (!$this->_includedDateScript)
+		{
+			echo "<script src='{$this->parent->componentPath}/calendar/sonjara_calendar.js' type='text/javascript'></script>\n";
+			echo "<link href='{$this->parent->componentPath}/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'>\n";
+			$this->_includedDateScript = true;
+		}
+		
+		if ($mode == "range")
+		{
+			$calendar_from = "{$field}_calendar_from";
+			$calendar_to = "{$field}_calendar_to";
+			
+			echo "<script type='text/javascript'>\n";
+			echo "var $calendar_from = new Calendar('$calendar_from', '{$this->parent->id}', '$field:from');\n";
+			echo "var $calendar_to = new Calendar('$calendar_to', '{$this->parent->id}', '$field:to');\n";
+			echo "</script>\n";
+		}
+		else
+		{
+			$calendar = "{$field}_calendar_{$mode}";
+			echo "<script type='text/javascript'>\n";
+			echo "var $calendar = new Calendar('$calendar', '{$this->parent->id}', '$field:$mode');\n";
+			echo "</script>\n";
+		}
+	}
+	
+	
+	function renderField($field, $mode)
+	{
+		$onchange = "onchange='this.form.submit()'";
+		
+		if ($mode == "range")
+		{
+			$date_from = $this->parent->search->get($field, "from");
+			$date_to = $this->parent->search->get($field, "to");
+			echo "<tr>\n";
+			$this->_printLabel($field);
+			echo "<td>";
+			echo "<input type='text' name='$field:from' value='$date_from' size='12' $onchange>&nbsp;
+			<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)' $onchange>";
+			echo " to <input type='text' name='$field:to' value='$date_to' size='12' $onchange>&nbsp;
+			<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)' $onchange></td>\n";
+			echo "</td>\n";
+			echo "</tr>\n";	
+		}
+		else
+		{
+			$date = $this->parent->params->get($field, $mode);
+			echo "<tr>\n";
+			$this->_printLabel($field);
+			echo "<td>";
+			echo "<input type='text' name='$field:$mode' value='$date' size='12' $onchange>&nbsp;
+			<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_{$mode}.toggle(this)' $onchange></td>\n";
+			echo "</td>\n";
+			echo "</tr>\n";			
+		}
+	}
+	
+	function renderSearchField($field)
+	{
+		$this->renderField($field, $this->mode);
+	}	
+}
 
 ?>

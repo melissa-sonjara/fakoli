@@ -95,6 +95,8 @@ class SelectFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
+			// JDG 7/22/2011 - allow "additional" fields to override label
+			$form->overrides[$field]['label'] = $label;
 		}
 		
 	}
