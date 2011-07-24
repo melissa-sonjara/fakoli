@@ -132,3 +132,18 @@ CREATE TABLE `component_page_module_xref` (
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `component_update_log` ADD COLUMN `filename` varchar(50) default NULL COMMENT 'output of update scripts - e.g., list of records modified and how modified';
+
+DROP TABLE IF EXISTS `component_update_log_attachment_xref`;
+CREATE TABLE  `component_update_log_attachment_xref` (
+  `log_xref_id` int(10) unsigned NOT NULL auto_increment,
+  `component_update_log_id` int(10) unsigned NOT NULL,
+  `attachment_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`log_xref_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- END Version 1.1
+

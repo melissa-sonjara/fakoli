@@ -8,17 +8,20 @@ class ComponentUpdateLog extends DataItem
 			"component"					=>	String,
 			"version_number"			=>	Number,
 			"date_updated"				=>	DateTime,
-			"description"				=>	Text
+			"description"				=>	Text,
+			"filename"					=>	String
 	);
 	
 	
-	static function recordUpdate($component, $version_number, $description = "")
+	static function recordUpdate($component, $version_number, $description = "", $fileName)
 	{
 		$log = new ComponentUpdateLog();
 		$log->component = $component;
 		$log->version_number = $version_number;
 		$log->description = $description;
+		$log->filename = $fileName;
 		$log->date_updated = now();
+		
 		$log->save();
 	}
 	

@@ -50,7 +50,9 @@ $table = new DataListView($logs, "component_logs");
 		
 $table->column("Version", "{version_number}", true)
 			 ->column("Date Updated", "{date_updated:long}", true)
-			->column("Description", "{description}", true);
+			->column("Description", "{description}", true)
+			->column("Log File", drawLogFile, true)
+			;
 			
 $table->sortable = true;
 $table->filter = true;
@@ -66,6 +68,14 @@ $tabs->writeHTML();
 <div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
 <?
 $table->drawView();
+
+function drawLogFile($log)
+{
+	if($log->filename)
+  		return $log->format("<a href='/action/component/download_update_log?component_update_log_id={component_update_log_id}'>{filename}</a>");
+  	else
+  		return "";		
+}
 ?>
 <br/>
 </div>

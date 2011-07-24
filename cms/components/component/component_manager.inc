@@ -521,5 +521,15 @@ class ComponentManager
 		return $bar;
 	}
 	
+	static function setDefaults()
+	{
+		trace("ComponentManager::setDefaults", 3);
+		global $config;
+		
+		$defaultPath = $config['uploadbase'] . DIRECTORY_SEPARATOR . "upgrade_output_path";		
+		if (!file_exists($defaultPath)) mkdir($defaultPath);
+		
+		Settings::setDefaultValue("component", "upgrade_output_path", $defaultPath, "String");
+	}
 }
 ?>

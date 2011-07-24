@@ -1,4 +1,4 @@
-<?php
+<?
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,40 +31,27 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Component
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("component", "settings");
 
-Fakoli::using("component");
-require_once "cms/components/component/upgrade_manager.inc";
+$component_update_log_id = checkNumeric($_GET["component_update_log_id"]);
 
-class ComponentUpgradeManager extends UpgradeManager
-{
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:add table component_update_log_attachment_xref"
-	);
-	
-	function ComponentUpgradeManager()
-	{
-		$this->component_name = "component";
+$log = new ComponentUpdateLog($component_update_log_id);
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();
-	}
+$dir = Settings::getValue("component", "upgrade_output_path") . DIRECTORY_SEPARATOR;
+
+$filepath = sanitizePath($dir . $log->filename);
+$mimeType = getMimeType($log->filename);
+
+trace("component update log download: filepath:" . $filepath, 3);
+$f = fopen($filepath, "r");
+$size = filesize($filepath);
 	
-	function bootstrap()
-	{
-		$this->executeVersionSql("0");
-	}
+header("Content-Disposition: attachment;filename=\"" . basename($log->filename) . "\"");
+header("Content-Type: $mimeType");
+header("Content-Length: $size");
 	
-}
+fpassthru($f);
+fclose($f);
+
+session_write_close();
+?>

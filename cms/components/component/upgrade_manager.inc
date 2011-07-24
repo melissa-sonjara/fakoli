@@ -96,25 +96,37 @@
  *  	"1.1"		=>	"update_1_1:separate name field into first and last names",
  *  	"1.2"		=>	"sql:add field activity_duration to program table"
  *  );
- *  	
+ *  
+ *  The $log is used to store details of the upgrade when the
+ *  handler is a custom function.
+ *  
+ *  For example, a function to create missing ledger records might 
+ *  write the following details to $this->log:
+ *  $this->log .= $xrefPurchase->format("Creating purchase record: registration id: {$xref->conference_participant_xref_id} transaction_id {transaction_id} participant_id {participant_id} conference_id {conference_id} amount {amount} transaction_type {transaction_type} product_code {product_code}\r\n");	
+ *  The upgrade manager will create a log file with the contents of $this->log
+ *  and store it in the component_update_log record so it can be downloaded
+ *  and reviewed, if needed.
 */
 
 abstract class UpgradeManager
 {
 	var $sqlFile;
 	var $component_name;
-	
+	var $log; // output from update functions to store in log file;
+		
+	/*
+	 * Set sqlFile name as component name + "_schema.sql".
+	 * First check custom app for match; if not, then check
+	 * Fakoli. Custom components take precedence over
+	 * Fakoli (e.g., custom user component over Fakoli's user component.
+	 */
 	function UpgradeManager()
 	{
 		global $config;
 	
-		// set default sql file name for the component
-		// Check if file path is Fakoli; if not, then custom site component
-		$file = realpath(dirname(__FILE__)."/../" . $this->component_name ."/". $this->component_name . "_schema.sql");
-		if(file_exists($file))
-			$this->sqlFile = $file;
-		else
-			$this->sqlFile = $config['homedir'] . "/" . "components" ."/".  $this->component_name ."/". $this->component_name . "_schema.sql";
+		$this->sqlFile = $config['homedir'] . "/" . "components" ."/".  $this->component_name ."/". $this->component_name . "_schema.sql";
+		if(!file_exists($this->file))
+			$this->file = realpath(dirname(__FILE__)."/../" . $this->component_name ."/". $this->component_name . "_schema.sql");
 	}
 	
 	
@@ -139,6 +151,8 @@ abstract class UpgradeManager
 		{
 			foreach($this->updateMap as $version_number => $handler)
 			{
+				// remove any contents from a previous upgraded version
+				$this->log = "";
 				if($latest_version < $version_number)
 				{
 					list($function, $description) = explode(":", $handler);
@@ -198,7 +212,8 @@ abstract class UpgradeManager
 		$lines = array();
 		$fp = fopen($this->sqlFile, 'r');
 		$version_id = "version " . $version_number; // case insensitive
-	
+		trace("UpgradeManager::version id: $version_id file $this->sqlFile", 3);
+		
 		if(!$fp)
 		{
 			trace("Error: executeVersionSql failed to open file", 3);
@@ -226,6 +241,7 @@ abstract class UpgradeManager
 		{
 			foreach($lines as $line)
 			{
+				trace("UpgradeManager:: processing update schema line $line", 3);
 				$sqlStatement .= $line;
 				if(preg_match("/;\s$/", $line))
 				{
@@ -248,6 +264,7 @@ abstract class UpgradeManager
 	
 			foreach($sqlStatements as $sqlStatement)
 			{
+				trace("UpgradeManager:: executing statement: $sqlStatement", 3);
 				$db->exec($sqlStatement);	
 			}
 
@@ -266,6 +283,19 @@ abstract class UpgradeManager
 	
 	function recordUpdate($version, $description)
 	{
-		ComponentUpdateLog::recordUpdate($this->component_name, $version, $description);
+		if($this->log)
+			$fileName = $this->saveLogFile($version);
+		ComponentUpdateLog::recordUpdate($this->component_name, $version, $description, $fileName);
 	}	
+	
+	function saveLogFile($version)
+	{
+		$upgradePath = Settings::getValue("component", "upgrade_output_path");
+	
+		$fileName = $this->component_name . "_" . $version . ".txt";
+		$fp = fopen($upgradePath . DIRECTORY_SEPARATOR . $fileName, 'w');
+		fwrite($fp, $this->log);
+	    fclose($fp);
+	    return $fileName;
+	}
 }

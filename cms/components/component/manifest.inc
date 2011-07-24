@@ -65,7 +65,8 @@ class ComponentManifest
 		return array("ResolveIdentifier" 	=> array(ComponentManager, displayPage),
 					 "EnumerateItems"		=> array(ComponentManager, enumerateComponentPages),
 					 "DeleteRole"			=> array(ComponentManager, deleteRole),
-					"upgradeComponent"		=>	array(ComponentManager, upgradeComponent)	
+					"upgradeComponent"		=>	array(ComponentManager, upgradeComponent),
+					"ComponentScanComplete" => array(ComponentManager, setDefaults)	
 					);
 					 
 	}
