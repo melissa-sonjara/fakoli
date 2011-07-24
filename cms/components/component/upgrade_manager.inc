@@ -124,9 +124,9 @@ abstract class UpgradeManager
 	{
 		global $config;
 	
-		$this->sqlFile = $config['homedir'] . "/" . "components" ."/".  $this->component_name ."/". $this->component_name . "_schema.sql";
-		if(!file_exists($this->file))
-			$this->file = realpath(dirname(__FILE__)."/../" . $this->component_name ."/". $this->component_name . "_schema.sql");
+		$fakoliFile = realpath(dirname(__FILE__)."/../" . $this->component_name ."/". $this->component_name . "_schema.sql");
+		$siteFile = $config['homedir'] . "/" . "components" ."/".  $this->component_name ."/". $this->component_name . "_schema.sql";
+		$this->sqlFile = (file_exists($siteFile)) ? $siteFile : $fakoliFile;
 	}
 	
 	
@@ -210,6 +210,12 @@ abstract class UpgradeManager
 	function executeVersionSql($version_number)
 	{
 		$lines = array();
+		if(!file_exists($this->sqlFile))
+		{
+			trace("UpgradeManager:: sql file does not exists {$this->sqlFile}", 3);
+			return;
+		}
+		
 		$fp = fopen($this->sqlFile, 'r');
 		$version_id = "version " . $version_number; // case insensitive
 		trace("UpgradeManager::version id: $version_id file $this->sqlFile", 3);
