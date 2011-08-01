@@ -51,13 +51,6 @@ class DebugManifest
 	{
 		return array
 		(
-			"Classification"	=> array
-			(
-
-				"Trace"	=>	array("page"	=>	"/admin/trace",
-									  "role"	=>	"admin",
-									  "weight"	=>	30)
-			)
 		);
 	}	
 }
