@@ -56,11 +56,15 @@ class DataListFieldRenderer extends FieldRenderer
 	var $field;
 	var $table;
 	
-	function DataListFieldRenderer(&$parent, $table)
+	function DataListFieldRenderer(&$parent, $table, $field = "", $label = "")
 	{
 		$this->FieldRenderer($parent);
-		$field = $table->id;
-		$this->field = $$field;
+		if(!$field)
+			$field = $table->id;
+			
+		if(!$label)
+			$label = prettify($field);
+		$this->field = $field;
 		$this->table = $table;
 		if ($parent->data->hasField($field))
 		{
@@ -69,7 +73,9 @@ class DataListFieldRenderer extends FieldRenderer
 		else
 		{
 			$parent->add($this, $field);	
+			$form->overrides[$field]['label'] = $label;
 		}
+		$this->colspan = 2;
 	}
 	
 	function renderScript()
@@ -84,7 +90,11 @@ class DataListFieldRenderer extends FieldRenderer
 	
 	function renderField()
 	{
+		if (!$field) $field = $this->field;
+		
+		$this->_startField($field);
 		$this->table->drawView();
+		$this->_endField($field);
 	}
 	
 	function preProcess($field = "")

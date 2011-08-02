@@ -249,6 +249,25 @@ class EmailManager
 		return $rtn;
 	}
 	
+	static function send($sendingItem, $name, $onSendComplete = "")
+	{
+		$emailTemplate = EmailTemplate::getEmailTemplate($name);
+
+		if($emailTemplate)
+		{
+			trace("Sending email '$name'", 3);
+			$emailManager = new EmailManager($sendingItem, $emailTemplate, $onSendComplete);
+			$rtn = $emailManager->sendEmail();
+			trace("EmailManager:: rtn code $rtn", 3);
+		}
+		else
+		{
+			$rtn = 0;
+			trace("EmailManager::no template found", 3);
+		}
+		return $rtn;
+	}	
+	
 	static function setDefaults()
 	{
 		trace("EmailManager::setDefaults", 3);
@@ -268,7 +287,7 @@ class EmailManager
 		Settings::setDefaultValue("email", "mail_server", "timpani.sonjara.com", "String");
 		Settings::setDefaultValue("email", "alt_text_email", false, "Boolean", "Whether the mail server can send html-formatted email messages");
 		
-	}
+	}	
 	
 	static function upgradeComponent()
 	{

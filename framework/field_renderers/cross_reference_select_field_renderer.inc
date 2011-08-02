@@ -62,7 +62,17 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		$this->showSelectAll = false;
 		
 		$this->FieldRenderer($form);
-		$form->add($this);
+		
+		// JDG 7/31/2011 - allow override
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;
+		}	
 	}
 	
 	function setSize($width, $height)
