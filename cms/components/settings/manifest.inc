@@ -63,7 +63,7 @@ class SettingsManifest
 
 				"Define Settings Options"	=>	array("page"	=>	"/admin/setting_list",
 									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	12)			
+								  	  			  "weight"	=>	30)			
 			)
 		);		
 	}	
