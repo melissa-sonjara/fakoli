@@ -60,9 +60,7 @@ class ImagePickerManifest
 				array("name"	=>	"image_picker",
 					  "image"	=>	"/fakoli/richtext/images/insert_picture.gif", 
 					  "tooltip"	=>	"Insert Photos", 
-					  "url"		=>	"/image_picker",
-					  "width"	=>	"620px",
-					  "height"	=>	"600px");
+					  "handler"	=>	"imagePicker");
 	}
 		
 	static function getScripts()
