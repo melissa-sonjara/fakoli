@@ -61,6 +61,16 @@ class QuestionField
 	var $answer;
 	var $answerSeparator = "<br>"; // for list of answers in checklist renderer
 	
+	
+	function QuestionField($parent, $question)
+	{
+		$this->parent = $parent;
+		$this->question = $question;
+		$qPk = $question->getPrimaryKey();
+		$this->answer = $this->parent->answers[$this->question->$qPk];
+	}
+	
+	
 	function writeScript()
 	{
 		return "";
@@ -119,15 +129,50 @@ class QuestionField
 		}	
 
 		return $answer;	
-	}
-		
-	function QuestionField($parent, $question)
+	}		
+	
+	function writeLimitScript()
 	{
-		$this->parent = $parent;
-		$this->question = $question;
-		$qPk = $question->getPrimaryKey();
-		$this->answer = $this->parent->answers[$this->question->$qPk];
+		if ($this->question->char_limit)
+		{
+
+			$pk = $this->question->getPrimaryKey();
+			$field = "question_{$this->question->$pk}";
+					
+		$script = <<<ENDSCRIPT
+						
+/* <![CDATA[ */
+	function {$field}_keyup(event)
+	{
+		var form = document.getElementById('Questionnaire_form');
+		var ctrl = form['{$field}'];
+		var len = ctrl.value.length;
+		if (len >= {$this->question->char_limit}) 
+		{
+			ctrl.value = ctrl.value.substring(0, {$this->question->char_limit});
+			len = {$this->question->char_limit};
+		}
+
+		var count = document.getElementById('{$field}_length');
+		count.innerHTML = len;
 	}
+
+ENDSCRIPT;
+	
+			return $script;
+
+		}
+	}
+	
+		
+	function renderLimitEnd($limit, $field, $value)
+	{
+		if ($limit)
+		{
+			echo strlen(trim($value));
+			echo "</span> of {$limit} characters";
+		}
+	 }	
 	
 	// Indicate required with asterisk
 	function getRequired()
@@ -399,6 +444,7 @@ class RatingView extends QuestionField
 	}
 }
 
+// JDG 8/4/2011 - change to String rendering
 class ShortTextView extends QuestionField
 {
 	function ShortTextView($parent, $question)
@@ -411,16 +457,33 @@ class ShortTextView extends QuestionField
 		$value = $this->parent->getAnswer($this->question);
 		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
 		$autocomplete = "autocomplete='off'";		
-	
+		
 		$pk = $this->question->getPrimaryKey();
 	
-		echo "<textarea name='question_{$this->question->$pk}' cols='75' rows='1' $readonly $autocomplete>".htmlsafe($value)."</textarea>";
+		$field = "question_" . $this->question->$pk;
+		
+		if ($this->question->char_limit)
+		{
+			$onkeypress = " onkeyup='{$field}_keyup(event);'";
+		}
+		
+		echo "<input id='$field' type='text' name='$field' $readonly $autocomplete value='".htmlspecialchars($value, ENT_QUOTES, 'UTF-8')."' size='50' $disable $onkeypress/>";
+		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
+		
+		parent::renderLimitEnd($this->question->char_limit, $field, $value);
+		echo "</div><br/>";
+		
 	}
 	
 	function drawView()
 	{
 		$value = $this->parent->getAnswer($this->question);
 		echo "<em>".htmlsafe($value)."</em>";
+	}
+	
+	function writeScript()
+	{
+		return parent::writeLimitScript();
 	}
 	
 	function writeReportHTML()
@@ -456,35 +519,7 @@ class FreeTextView extends QuestionField
 	
 	function writeScript()
 	{
-		if ($this->question->char_limit)
-		{
-
-			$pk = $this->question->getPrimaryKey();
-			$field = "question_{$this->question->$pk}";
-					
-		$script = <<<ENDSCRIPT
-						
-/* <![CDATA[ */
-	function {$field}_keyup(event)
-	{
-		var form = document.getElementById('Questionnaire_form');
-		var ctrl = form['{$field}'];
-		var len = ctrl.value.length;
-		if (len >= {$this->question->char_limit}) 
-		{
-			ctrl.value = ctrl.value.substring(0, {$this->question->char_limit});
-			len = {$this->question->char_limit};
-		}
-
-		var count = document.getElementById('{$field}_length');
-		count.innerHTML = len;
-	}
-
-ENDSCRIPT;
-	
-			return $script;
-
-		}
+		return parent::writeLimitScript();
 	}
 	
 	
@@ -508,13 +543,10 @@ ENDSCRIPT;
 		
 		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly $autocomplete>".htmlsafe($value)."</textarea>";
 		
-				
 		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
-		if ($this->question->char_limit)
-		{
-			echo strlen(trim($value));
-			echo "</span> of {$this->question->char_limit} characters";
-		}
+		
+		parent::renderLimitEnd($this->question->char_limit, $field, $value);
+		
 		echo "</div></div><br/>";
 		
 	}
