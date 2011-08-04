@@ -164,6 +164,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	var $options;
 	var $label;
 	var $all = true;
+	var $all_value = "";
 	
 	function FilterFieldRenderer(&$form, $field, $label = "", $options)
 	{
@@ -193,7 +194,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
     	if($this->all)
     	{
     	?>
-		<option value="">All</option>  
+		<option value="<?php echo $this->all_value ?>">All</option>  
 		<?
     	}
 
