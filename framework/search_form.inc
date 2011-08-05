@@ -855,7 +855,7 @@ class SearchForm extends AutoForm
 	 * form layout and call this function from its own
 	 * drawForm. 
 	 */
-	function RenderOneSearchField($field)
+	function renderOneSearchField($field)
 	{
 		$mode = $this->getMatchingMode($field);
 		$renderer = $this->getRenderer($field);
