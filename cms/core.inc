@@ -333,9 +333,9 @@ class Fakoli
 		return str_replace(" ", "", prettify($name));
 	}
 	
-	static function sendResource($uri)
+	static function sendResource($uri, $component = "")
 	{
-		$resource = Fakoli::resolveResource($uri);
+		$resource = Fakoli::resolveResource($uri, $component);
 		if (!$resource)
 		{
 			throw new FakoliException("Cannot find resource '$uri'");
@@ -380,9 +380,10 @@ class Fakoli
 	/**
 	 * Resolves the path to a  web resource based on the PHP include path.
 	 * @param string $path the web resource path (URI)
+	 * @param string $component (optional) the component that owns the resource
 	 * @return string the full server path of the matching file.
 	 */
-	static function resolveResource($resource)
+	static function resolveResource($resource, $component = "")
 	{
 		global $config;
 		
@@ -392,6 +393,22 @@ class Fakoli
 		}
 		
 		$resource = sanitizePath($resource);
+		
+		if ($component)
+		{
+			$components = Fakoli::getComponents();
+			
+			if (!$components[$component])
+			{
+				throw new FakoliException("Attempt to reference unknown or disabled component '$component'");
+			}
+			
+			$c = $components[$component];
+			
+			$file = $c->component_path . DIRECTORY_SEPARATOR . $resource;
+			
+			return (file_exists($file)) ? $file : null;
+		}
 		
 		$file = Cache::get("resource:$resource");
 		if ($file) return $file;
