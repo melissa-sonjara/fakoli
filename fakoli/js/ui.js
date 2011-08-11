@@ -546,7 +546,7 @@ var Interstitial = new Class({
 					   'display': 'none',
 					   'padding': '10px'});
 
-		var img = new Element('img', {'src': this.options.spinner, 'align': 'left'});
+		var img = Asset.image(this.options.spinner, {'align': 'left'});
 		img.setStyle("margin-right", 20);
 		img.inject(div);
 		
@@ -587,6 +587,8 @@ var Interstitial = new Class({
 	}
 	
 });
+
+Asset.image('/fakoli/images/loader.gif');
 
 function interstitial(message)
 {
