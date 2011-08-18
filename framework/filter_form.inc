@@ -97,7 +97,6 @@ class FilterForm extends SearchForm
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
 		parent::SearchForm($target, $method, $action, $id);
-		
 		$this->setFilterParameters();
 	}
 		
@@ -216,6 +215,53 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	}
 	
 } // end class FilterFieldRenderer
+
+class BooleanFilterFieldRenderer extends BooleanFieldRenderer
+{
+	function BooleanFilterFieldRenderer(&$parent)
+	{
+		parent::BooleanFieldRenderer($parent);
+	}
+	
+	function renderSearchField($field)
+	{
+		$onchange = " onchange='this.form.submit();'";
+
+		echo "<input type='checkbox' value='1' name='$field'";
+		if ($this->parent->data->get($field))
+		{
+			echo " checked";
+		}
+		echo "$onchange>&nbsp;";
+		echo $this->parent->prettifyFieldName($field);
+	}
+}
+
+class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
+{
+	function RadioButtonFieldRenderer(&$parent, $field, $label, $options)
+	{
+		parent::RadioButtonFieldRenderer($parent, $field, $label, $options);
+	}
+	
+	function renderSearchField($field)
+	{
+		$onchange = " onchange='this.form.submit();'";
+		
+		$searchValue = $this->parent->data->get($field);
+		echo "<tr>\n";
+		$this->_printLabel($field);
+		echo "<td>\n";
+		foreach($this->options as $value => $name)
+		{
+			$selected = ($searchValue == $value) ? " checked" : "";
+			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected$onchange>$name</option>";
+			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
+		}
+		echo "</td></tr>\n";
+		
+	}
+}
 
 class DateFilterFieldRenderer extends DateFieldRenderer
 {
