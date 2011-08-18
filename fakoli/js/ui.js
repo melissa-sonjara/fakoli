@@ -658,6 +658,8 @@ var ProgressiveSearch = new Class({
 	{
 		var val = this.element.value;
 		
+		if (val == '') this.showDefaultList();
+		
 		if (val.length < this.options.minimumLength) 
 		{
 			this.list.setStyle('display', 'none');
