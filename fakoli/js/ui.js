@@ -608,7 +608,9 @@ var ProgressiveSearch = new Class({
 		minimumLength: 	4,
 		height: 		'150px',
 		width:			Class.Empty,
-		cssClass:		''
+		cssClass:		'',
+		parameter:		'',
+		defaultSearch:	Class.Empty		
 	},
   
 	element:	Class.Empty,
@@ -626,6 +628,19 @@ var ProgressiveSearch = new Class({
 		
 		this.list.adopt(this.container);
 		
+		this.container.select = function(value)
+		{
+			this.element.value = value;
+			this.list.setStyle('display', 'none');
+			return this;
+		}.bind(this);
+		
+		this.container.search = function(value)
+		{
+			this.search(value);
+			return this;
+		}.bind(this);
+		
 		if (this.options.cssClass) this.list.addClass(this.options.cssClass);
 		
 		var body = $(document.body ? document.body : document.documentElement);
@@ -633,6 +648,7 @@ var ProgressiveSearch = new Class({
 		
 		this.element.addEvent('keyup', function() { this.onKeyPress();}.bind(this));
 		this.element.addEvent('blur', function() { this.hideList();}.bind(this));
+		this.element.addEvent('focus', function() { this.showDefaultList();}.bind(this));
 		this.element.setProperty('autocomplete', 'off');
 		this.list.addEvent('mouseover', function() { this.allowHide = false; }.bind(this));
 		this.list.addEvent('mouseout', function() { this.allowHide = true; }.bind(this));
@@ -648,7 +664,7 @@ var ProgressiveSearch = new Class({
 			return;
 		}
 		
-		var name = this.element.id;
+		var name = this.options.parameter ? this.options.parameter : this.element.id;
 		var request = new Request(
 	    		{
 	    			method: 'get', 
@@ -659,6 +675,12 @@ var ProgressiveSearch = new Class({
 	    			}.bind(this)
 	    		});
    		request.send();
+	},
+	
+	search: function(val)
+	{
+		this.element.value = val;
+		this.onKeyPress();
 	},
 	
 	showList: function(html)
@@ -673,6 +695,23 @@ var ProgressiveSearch = new Class({
 		if (!this.allowHide) return;
 		
 		this.list.setStyle('display', 'none');
+	},
+	
+	showDefaultList: function()
+	{
+		if (this.element.value == '' && this.options.defaultSearch)
+		{
+			var request = new Request(
+		    		{
+		    			method: 'get', 
+		    			url: this.options.defaultSearch, 
+		    			onSuccess: function(html) 
+		    			{ 
+		    				this.showList(html);
+		    			}.bind(this)
+		    		});
+	   		request.send();
+	   	}
 	}
 });
 
