@@ -137,7 +137,6 @@ class CodeModuleView extends ModuleView
 		if ($this->module->php_code_file)
 		{
 			ob_start();
-			echo "<div class='$cssClass'>";
 			
 			$codePath = explode(",", $this->module->php_code_file);
 			if (count($codePath) == 2)
@@ -159,9 +158,10 @@ class CodeModuleView extends ModuleView
 			{
 				include $config['homedir']."/{$this->module->php_code_file}";
 			}
-    		echo "</div>";
-    		$output = ob_get_contents();
+    		$output = trim(ob_get_contents());
  			ob_end_clean();
+    		
+ 			$output = ($output !== '') ? "<div class='$cssClass'>".$output."</div>" : "";
 		}	
 
 		return $output;
