@@ -107,7 +107,7 @@ class QueryModuleView extends ModuleView
 		
     	eval($this->module->template);
     	
-    	$template = ob_get_contents();
+    	$template = trim(ob_get_contents());
     	
     	ob_end_clean();
     			
