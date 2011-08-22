@@ -111,7 +111,7 @@ class QueryModuleView extends ModuleView
     	
     	ob_end_clean();
     			
-    	return $template ? "<div class='$cssClass'>".$template."</div>" : "";
+    	return ($template !== '') ? "<div class='$cssClass'>".$template."</div>" : "";
 	}
 }
 
