@@ -105,17 +105,13 @@ class QueryModuleView extends ModuleView
 
 		ob_start();
 		
-		echo "<div class='$cssClass'>";
-		
     	eval($this->module->template);
-    	
-    	echo "</div>";
     	
     	$template = ob_get_contents();
     	
     	ob_end_clean();
-    	
-    	return $template;
+    			
+    	return $template ? "<div class='$cssClass'>".$template."</div>" : "";
 	}
 }
 
