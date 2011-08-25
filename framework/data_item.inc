@@ -899,7 +899,7 @@ class DataItem extends AbstractDataItem
 			
 			$obj->$pk = $val;
 			
-			$cache = "_$class_$field_$val";
+			$cache = "_{$class}_{$field}_{$val}";
 			if (isset($this->$cache))
 			{
 				$obj->copy($this->$cache);
