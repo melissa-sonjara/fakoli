@@ -88,6 +88,7 @@ class QuestionnaireForm
 	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
 	var $onFormatLabel = null; 			///< Label Processing hook
     var $requiredFieldsText = "* indicates required question";
+	var $subordinate = false;
 	
 	function QuestionnaireForm($mgr, $readonly = false)
 	{		
@@ -120,6 +121,16 @@ class QuestionnaireForm
 		}
 	}
 		
+	function makeSubordinate($subordinate = true)
+	{
+		$this->subordinate = $subordinate;
+	}
+	
+	function getValidationEngine()
+	{
+		return $this;
+	}
+	
 	function getAnswer($question)
 	{
 		$qPk = $this->mgr->getQuestionKey();
@@ -211,15 +222,22 @@ class QuestionnaireForm
 	{
 		echo "<div class='questionnaire_form'>";
 		
-		echo "<form id=\"Questionnaire_form\" method=\"POST\" action=\"\" ";
-		echo "enctype='multipart/form-data' onsubmit='return onSubmitQuestionnaire_form(this);'>";
-				
+		if (!$this->subordinate)
+		{		
+			echo "<form id=\"Questionnaire_form\" method=\"POST\" action=\"\" ";
+			echo "enctype='multipart/form-data' onsubmit='return onSubmitQuestionnaire_form(this);'>";
+		}
+		
 		$this->writeHTML();
 		
-		echo "<br/>";
-		echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
-		echo "<br/>";
-		echo "</form>";	
+		if (!$this->subordinate)
+		{
+			echo "<br/>";
+			echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
+			echo "<br/>";
+			echo "</form>";	
+		}
+		
 		echo "</div>";	
 	}
 	
