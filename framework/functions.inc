@@ -1529,7 +1529,6 @@ function getMIMEType($filename)
 		'txt' => 'text/plain',
         'htm' => 'text/html',
         'html' => 'text/html',
-        'php' => 'text/html',
         'css' => 'text/css',
         'js' => 'application/javascript',
         'json' => 'application/json',
@@ -1595,7 +1594,8 @@ function getMIMEType($filename)
     }
     else 
     {
-        return 'application/octet-stream';
+    	// Prevent other file types (such as source code or configuration files) from being served
+        die("");
     }
 }
 ?>
