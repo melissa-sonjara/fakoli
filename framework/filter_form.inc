@@ -139,7 +139,7 @@ class FilterForm extends SearchForm
 			if (!array_key_exists($field, $this->hidden) &&
 				!($obj->filter && $obj->filter->isExcluded($field)))
 			{
-				if(is_numeric($obj->$field))
+				if($obj->get("$field"))
 					$this->search->setParam($field, "equal", $obj->$field);
 			}
 		}

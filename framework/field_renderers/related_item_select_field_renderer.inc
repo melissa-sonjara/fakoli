@@ -119,6 +119,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
+			// JDG 8/14/2011 - allow "additional" fields to override label
+			$form->overrides[$field]['label'] = $label;
 		}
 	}
 	
@@ -245,6 +247,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
 		
+		trace("RelatedItemSelectFieldRenderer renderReadOnly name field is {$this->nameField} field is $field and item is {$item->role}", 3);
 		$name = $this->formatName($item, $this->nameField);
 		echo $name;
 		

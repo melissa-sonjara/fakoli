@@ -109,6 +109,7 @@ class GroupedDataListView
 	var $items;			///< The items to be displayed.
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
 	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
+	var $selectable  = false;	///< Whether the table provides a selection mechanism
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -194,6 +195,35 @@ class GroupedDataListView
 		$this->columns[] = new DataColumn($title, $format, $sortable, $style);
 		return $this;
 	}
+	
+
+	/**
+	 * Adds a selector column to the DataListView. If no format is specified
+	 * then selection is handled via a checklist box for the list objects' primary keys.
+	 * @param $format (optional) format to use for the selector
+	 */ 
+	function selector($format = "")
+	{
+		if(count($this->items))
+		{
+			foreach($this->items as $groupKey => $items)
+			{
+				$pk = $items[0]->getPrimaryKey();
+				break;
+			}
+		}
+		
+		if (!$format && count($items))
+			$format = "<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+				
+		if($format == "radio" && count($items))
+			$format = "<input type='radio' class='radio' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+			
+		$this->column("&nbsp;", $format, false, "text-align: center");
+		$this->selectable = true;
+		return $this; 
+	}
+	
 
 	/**
 	 * Adds a text column to the table footer.
@@ -274,6 +304,11 @@ class GroupedDataListView
 		
 		$constructor = "";
 
+		if ($this->selectable)
+		{
+			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
+		}
+		
 		if ($this->mode != 'fixed')
 		{
 			$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";
