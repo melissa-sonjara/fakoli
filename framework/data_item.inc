@@ -897,6 +897,11 @@ class DataItem extends AbstractDataItem
 			$pk = $obj->primary_key;
 			$val = $this->get($field);
 			
+			if (!$val)
+			{
+				throw new DataItemException("Attempt to dereference through empty field '$field'");
+			}
+			
 			$obj->$pk = $val;
 			
 			$cache = "_{$class}_{$field}_{$val}";
