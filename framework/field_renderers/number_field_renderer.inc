@@ -67,7 +67,7 @@ class NumberFieldRenderer extends FieldRenderer
 		// translate to 0 or 1
 		$allowneg = ($this->allowNegative) ? 1 : 0;
 		$autocomplete = ($this->autocomplete) ? "" : " autocomplete='off' ";
-		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
+		$onchange = ($this->onChange) ? "onchange='{$this->onChange}(this)'" : "";		
 		
 		echo "<input id='{$this->parent->id}_$field' type='text' name='$field' 
 		value='".$this->parent->data->get($field)."' $autocomplete
