@@ -129,6 +129,9 @@ class Settings extends DataItem
 	 */
 	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "", $category = "", $options = "")
 	{
+		$setting = (Cache::get("setting_{$component}_{$name}"));
+		if ($setting) return;
+		
 		$setting = new Settings();
 		if ($setting->exists("WHERE component='$component' AND name='$name'")) return;
 		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options);
