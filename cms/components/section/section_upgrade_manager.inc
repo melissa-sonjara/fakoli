@@ -49,7 +49,8 @@ Fakoli::using("section", "component");
 class SectionUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added modules positioning to sections"
 	);
 	
 	function SectionUpgradeManager()

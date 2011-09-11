@@ -36,7 +36,8 @@ Fakoli::usingFeature("tab_bar");
 function sectionTabs($key)
 {
 	$tabs = array(	"Section Definition"	=>	"/admin/section_form",
-					"Section Content"		=>	"/admin/section_content"
+					"Section Content"		=>	"/admin/section_content",
+					"Section Modules"		=>	"/admin/section_modules"
 					);
 
 	$qs = ($key) ? "section_id=$key" : ""; 

@@ -41,3 +41,16 @@ INSERT INTO `section_content` (`section_content_id`,`section_id`,`identifier`,`t
 /*!40000 ALTER TABLE `section_content` ENABLE KEYS */;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+CREATE TABLE  `section_module_xref` (
+  `join_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `section_id` int(10) unsigned NOT NULL,
+  `module_id` int(10) unsigned NOT NULL,
+  `position` varchar(45) NOT NULL,
+  `sort_order` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`join_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- END Version 1.1

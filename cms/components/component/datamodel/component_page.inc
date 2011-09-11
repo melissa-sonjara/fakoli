@@ -77,12 +77,20 @@ class ComponentPage extends DataItem
 	
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
+		global $section;
+		
 		$join = new InnerJoin();
 		$join->add(Module);
 		$join->add(ComponentPageModuleXref);
 		
 		$result = $join->groupedQuery("WHERE component_page_id={$this->component_page_id} $constraint", "ComponentPageModuleXref.position");
 		$modules = extractGroupedJoinResults(Module, $result);
+		
+		// If no modules have been set, use the section defaults
+		if (count($modules) == 0 && $section)
+		{
+			$modules = $section->getmodulesByPosition($constraint);
+		}
 		
 		// Merge in global modules
 		$globals = groupedQuery(Module, "WHERE global=1", "global_position");

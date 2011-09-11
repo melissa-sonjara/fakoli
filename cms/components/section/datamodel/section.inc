@@ -44,8 +44,20 @@ class Section extends DataItem
 						"site_id"			=>	Number,
 						"use_SSL"			=>	Boolean);
 	
-	var $relations = array("Content"	=>	SectionContent,
-						   "Site"		=>	Site);
+	var $relations = array("SectionModuleXrefs"	=>	SectionModuleXref,
+						   "Modules"			=>	Module,
+						   "Content"			=>	SectionContent,
+						   "Site"				=>	Site);
+	
+	function SectionModuleXrefs($constraint = "ORDER BY position, sort_order")
+	{
+		return $this->getRelatedList(SectionModuleXref, "", $constraint);
+	}
+	
+	function Modules($constraint = "ORDER BY position, sort_order")
+	{
+		return $this->crossReference(Module, SectionModuleXref, $constraint);
+	}
 	
 	function Content($constraint = "")
 	{
@@ -101,6 +113,74 @@ class Section extends DataItem
 		return $this->default_role;
 	}
 	
+	
+	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
+	{
+		$modules = Cache::get("section_module_map_{$this->section_id}");
+		if (!$modules)
+		{
+			$join = new InnerJoin();
+			$join->add(Module);
+			$join->add(SectionModuleXref);
+			
+			$result = $join->groupedQuery("WHERE section_id={$this->section_id} $constraint", "SectionModuleXref.position");
+			$modules = extractGroupedJoinResults(Module, $result);
+			
+			// Merge in global modules
+			$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+			foreach($globals as $position => $modulesAtPosition)
+			{
+				if (array_key_exists($position, $modules))
+				{
+					$modules[$position] = removeDuplicates(array_merge($modulesAtPosition, $modules[$position]));
+				}
+				else
+				{
+					$modules[$position] = $modulesAtPosition;
+				}
+			}
+			
+			Cache::put("section_module_map_{$this->section_id}", $modules);
+		}
+				
+		return $modules;
+	}
+	
+	function clearModuleCache()
+	{
+		Cache::invalidate("section_module_map_{$this->section_id}");
+	}
+	
+	/**
+	 * Loads the default template associated with this section.
+	 * @return string the contents of the template for this section.
+	 */
+	function getDefaultTemplate()
+	{
+		global $config;
+		$template = file_get_contents("{$config['homedir']}/templates/{$this->default_template}");
+
+		return $template;
+	}
+	
+	/**
+	 * Retrieves an array of the position names defined in the template for this page.
+	 * @return array the positions defined in the template (sorted alphabetically)
+	 */
+	function getPositions()
+	{
+		$template = $this->getDefaultTemplate();
+		
+		$positionMatches = array();
+		
+		preg_match_all("/\{position:(.*?)\}/", $template, $positionMatches, PREG_PATTERN_ORDER);
+		
+		$positions = $positionMatches[1];		
+		sort($positions);
+		return $positions;
+	}
+	
+	
 	function Section()
 	{
 		$this->primary_key = "section_id";
@@ -125,6 +205,40 @@ class SectionContent extends DataItem
 	{
 		$this->primary_key = "section_content_id";
 		$this->table=  "section_content";
+		
+		$this->DataItem(func_get_args());
+	}
+}
+
+
+class SectionModuleXref extends DataItem
+{
+	// Fields
+	var $fields = array("join_id"		=>	Number,
+						"section_id"	=>	Number,
+						"module_id"		=>	Number,
+						"position"		=>	String,
+						"sort_order"	=>	Number);
+	
+	// Relations
+	
+	var $relations = array(	"Section"	=>	Section,
+							"Module"	=>	Module);
+	
+	function Section()
+	{
+		return $this->getRelated(Section);
+	}
+	
+	function Module()
+	{
+		return $this->getRelated(Module);
+	}
+	
+	function SectionModuleXref()
+	{
+		$this->table = "section_module_xref";
+		$this->primary_key = "join_id";
 		
 		$this->DataItem(func_get_args());
 	}
