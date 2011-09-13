@@ -113,6 +113,14 @@ class Section extends DataItem
 		return $this->default_role;
 	}
 	
+	static function findSection($section_name)
+	{
+		$sections = Query::create(Section, "WHERE section=:section")
+			->bind(":section", $section_name)
+			->execute();
+		
+		return (count($sections) > 0) ? $sections[0] : null;
+	}
 	
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
