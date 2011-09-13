@@ -110,6 +110,8 @@
 
 Fakoli::using("component", "section");
 
+require_once realpath(dirname(__FILE__)."/../section/datamodel/section.inc");
+
 abstract class UpgradeManager
 {
 	var $sqlFile;
