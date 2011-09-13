@@ -108,10 +108,6 @@
  *  and reviewed, if needed.
 */
 
-Fakoli::using("component", "section");
-
-require_once realpath(dirname(__FILE__)."/../section/datamodel/section.inc");
-
 abstract class UpgradeManager
 {
 	var $sqlFile;
@@ -324,9 +320,14 @@ abstract class UpgradeManager
 		if(count($items) == 0)
 			return true;
 			
-		$section = Section::findSection($section_name);
-		if(!$section)
+		$sections = Query::create(Section, "WHERE section=:section")
+			->bind(":section", $section_name)
+			->execute();
+			
+		if(count($sections) == 0)
 			return false;
+		else
+			$section = $sections[0];
 			
 		foreach($items as $item)
 		{
