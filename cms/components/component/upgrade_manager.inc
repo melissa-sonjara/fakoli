@@ -108,6 +108,8 @@
  *  and reviewed, if needed.
 */
 
+Fakoli::using("component", "section");
+
 abstract class UpgradeManager
 {
 	var $sqlFile;
