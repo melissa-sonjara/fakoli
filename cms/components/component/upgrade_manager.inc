@@ -304,4 +304,43 @@ abstract class UpgradeManager
 	    fclose($fp);
 	    return $fileName;
 	}
+	
+	/*
+	 * Utility function for use by calling classes to
+	 * add an array of items of class Page, ComponentPage,
+	 * Blog, ImageGallery, DocumentLibrary, Calendar 
+	 * to a section.
+	 * 
+	 * We find the section based on the section name,
+	 * and query the existing content to avoid adding
+	 * the identifier twice.
+	 */
+	function addSectionContent($items, $section_name = "/")
+	{
+		if(count($items) == 0)
+			return true;
+			
+		$section = Section::findSection($section_name);
+		if(!$section)
+			return false;
+			
+		foreach($items as $item)
+		{
+			$found = Query::create(SectionContent, "WHERE identifier=:identifier AND section_id=:section_id")
+				->bind(":identifier", $item->identifier, ":section_id", $section->section_id)
+				->execute();
+				
+			if(count($found) == 0)
+			{
+				$content = new SectionContent();
+				$content->section_id = $section->section_id;
+				$content->identifier = $item->identifier;
+				$content->template = $item->template;
+				$content->role = $item->role;
+				$content->save();
+			}
+		}
+		
+		return true;
+	}	
 }
