@@ -113,7 +113,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	function allowAddEntry($text = "or add new", $size)
+	function allowAddEntry($text = "or add new", $size = 40)
 	{
 		$this->addEntry = true;
 		$this->addEntryText = $text;
