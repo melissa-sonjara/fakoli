@@ -104,7 +104,7 @@ class GroupedDataListView
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawFooter;	///< Callback hook that gets called after all rows have been drawn.
-	var $mode;			///< The display mode for the table.
+	var $mode;			///< The display mode for the table: fixed or tree
 	var $groups;		///< The group definitions.
 	var $items;			///< The items to be displayed.
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
@@ -427,8 +427,9 @@ class GroupedDataListView
 							{
 								$attrs .= " style='{$column->style}'";
 							}
+			// JDG 9/14 - write styles
 ?>
-		    <td><?echo $column->format($item)?></td>
+		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
 <?
 						}
 ?>
