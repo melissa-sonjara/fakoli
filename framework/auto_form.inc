@@ -338,7 +338,7 @@ class AutoForm
 
 		if ($this->onSubmitHandler)
 		{
-			echo "\t if (!{$this->onSubmitHandler})(form) return false;\n;";
+			echo "\t if (!{$this->onSubmitHandler}(form)) return false;\n;";
 		}
 		
 		if ($this->interstitialMessage)
