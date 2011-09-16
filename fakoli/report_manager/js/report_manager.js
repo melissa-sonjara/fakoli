@@ -40,3 +40,23 @@ ReportManager.updateFilters = function()
 		}
 	});
 };
+
+ReportManager.saveReport = function()
+{
+	ReportManager.dialog = modalPopup("Save Custom Report", "/action/report_manager/save_report", null, null, true);
+};
+
+ReportManager.onSaveReport = function()
+{
+	$('custom_report_title').value = $('CustomReport_form_title').value;
+	$('custom_report_description').value = $('CustomReport_form_description').value;
+	$('custom_report_mode').value = 'save';
+	ReportManager.commitSave.delay(100);
+		
+	return false;
+};
+
+ReportManager.commitSave = function()
+{
+	$('custom_report').submit();
+};
