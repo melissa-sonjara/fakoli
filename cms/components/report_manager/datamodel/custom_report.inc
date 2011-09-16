@@ -31,33 +31,24 @@
 
 *****************************************************************/
 
-class ReportManagerManifest
+class CustomReport extends DataItem
 {
-	static function getComponentDefinition()
+	// Fields
+	
+	var $fields = array("report_id"		=>	Number,
+						"manager_class"	=>	String,
+						"title"			=>	String,
+						"description"	=>	Text,
+						"configuration"	=>	Text);
+	
+	var $relations = array();
+	
+	function CustomReport()
 	{
-		$component = new Component();
-		$component->name = "report_manager";
-		$component->description = "General purpose manager for configurable reporting screens";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 5;
-		$component->enabled = true;
+		$this->primary_key = "report_id";
+		$this->table = "custom_report";
 		
-		return $component;
+		$this->DataItem(func_get_args());
 	}
-	
-	static function getScripts()
-	{
-		return array("/fakoli/report_manager/js/report_manager.js");
-	}
-	
-	
-	static function subscribeToEvents()
-	{
-		return array(
-				"upgradeComponent"		=>	array(ReportManagerUpgradeManager, upgradeComponent)
-			);
-	}	
 }
-
 ?>

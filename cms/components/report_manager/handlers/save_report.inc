@@ -31,33 +31,19 @@
 
 *****************************************************************/
 
-class ReportManagerManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "report_manager";
-		$component->description = "General purpose manager for configurable reporting screens";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 5;
-		$component->enabled = true;
-		
-		return $component;
-	}
-	
-	static function getScripts()
-	{
-		return array("/fakoli/report_manager/js/report_manager.js");
-	}
-	
-	
-	static function subscribeToEvents()
-	{
-		return array(
-				"upgradeComponent"		=>	array(ReportManagerUpgradeManager, upgradeComponent)
-			);
-	}	
-}
+Fakoli::using("report_manager");
+
+$report_id = checkNumeric($_GET["report_id"]);
+
+$report = new CustomReport();
+
+if ($report_id) $report->load($report_id);
+
+$report->filter = new InclusionFilter("report_id", "title", "description");
+
+$form = new AutoForm($report);
+$form->onSubmitHandler = "ReportManager.onSaveReport";
+echo $form->writeScript();
+$form->drawForm();
 
 ?>

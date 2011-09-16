@@ -31,33 +31,27 @@
 
 *****************************************************************/
 
-class ReportManagerManifest
+Fakoli::using("report_manager", "component");
+
+class ReportManagerUpgradeManager extends UpgradeManager
 {
-	static function getComponentDefinition()
+	var $updateMap = array(
+			"1.0"		=>	"done:Initial Installation",
+			"1.1"		=>	"sql:Added table for persisting custom reports"
+	);
+	
+	function ReportManagerUpgradeManager()
 	{
-		$component = new Component();
-		$component->name = "report_manager";
-		$component->description = "General purpose manager for configurable reporting screens";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 5;
-		$component->enabled = true;
+		$this->component_name = "report_manager";
+
+		// sets the sqlFile name according to default
+		parent::UpgradeManager();		
+	}
 		
-		return $component;
-	}
-	
-	static function getScripts()
+	static function upgradeComponent()
 	{
-		return array("/fakoli/report_manager/js/report_manager.js");
-	}
-	
-	
-	static function subscribeToEvents()
-	{
-		return array(
-				"upgradeComponent"		=>	array(ReportManagerUpgradeManager, upgradeComponent)
-			);
+		$mgr = new ReportManagerUpgradeManager();
+		$mgr->upgrade();
 	}	
 }
-
 ?>

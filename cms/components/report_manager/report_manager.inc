@@ -41,12 +41,19 @@ Fakoli::usingFeature("tree", "search_form", "data_view");
  */
 class ReportManager
 {
+	var $report_id;
+	var $title;
+	var $description;
+	
 	var $tables;
 	var $join;
 	var $report;
 	
 	function ReportManager()
 	{
+		$this->selected = null;
+		
+		$this->report_id = 0;
 		$this->tables = array();
 	}
 	
@@ -94,7 +101,12 @@ class ReportManager
 		$script .= $tree->writeScript();
 
 		
-		echo "<form method='POST' action=''>";
+		echo "<form method='POST' action='' id='custom_report'>";
+		echo "<input type='hidden' name='report_id' value='{$this->report_id}'/>";
+		echo "<input type='hidden' name='custom_report_mode' value='search' id='custom_report_mode'/>";
+		echo "<input type='hidden' name='custom_report_title' value='' id='custom_report_title'/>";
+		echo "<input type='hidden' name='custom_report_description' value='' id='custom_report_description'/>";
+		
 		echo "<div style='float: left; width: 320px'>";
 		echo "<strong>Select Report Fields</strong><br/><br/>";
 		$tree->writeHTML();
@@ -115,7 +127,8 @@ class ReportManager
 			echo "</fieldset>";
 		}
 		
-		echo "</div><div style='clear: left'><br/><input type='checkbox' name='__excel' value='custom_report'/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/></div></form>";
+		echo "</div><div style='clear: left'><br/><input type='checkbox' name='__excel' value='custom_report'/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
+		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.saveReport(); return false;'>Save Report</a></div></form>";
 	}
 	
 	/**
@@ -132,10 +145,44 @@ class ReportManager
 		return null;
 	}
 	
+	function populateSelected()
+	{
+		if ($_REQUEST["custom_report_title"]) $this->title = $_REQUEST["custom_report_title"];
+		if ($_REQUEST["custom_report_description"]) $this->description = $_REQUEST["custom_report_description"];
+		
+		foreach($this->tables as $table)
+		{
+			if ($_REQUEST["table_{$table->class}"])
+			{
+				$this->selected["table_{$table->class}"] = true;
+				$this->constraint .= $table->getConstraint($first);
+				
+				foreach($table->columns as $column)
+				{
+					$col = "column_".codify($column->title);
+					if ($_REQUEST[$col])
+					{
+						$this->selected[$col] = true;
+					}
+				}
+			}
+		}
+	}
 	
 	function generateReport()
 	{
 		global $script;
+		
+		if (!isset($this->selected))
+		{
+			$this->populateSelected();
+		}
+		
+		if ($_REQUEST["custom_report_mode"] == "save")
+		{
+			$this->save();
+			return;
+		}
 		
 		$this->join = new InnerJoin();
 		$this->join->unique = true;
@@ -144,25 +191,24 @@ class ReportManager
 		
 		foreach($this->tables as $table)
 		{
-			if ($_REQUEST["table_{$table->class}"])
+			if ($this->selected["table_{$table->class}"])
 			{
 				$this->join->add($table->class);
-				$constraint .= $table->getConstraint($first);
 				$first = false;
 			}
 		}
 		
-		$results = $this->join->query($constraint);
+		$results = $this->join->query($this->constraint);
 		
 		$report = new DataListView($results, "custom_report");
 		
 		foreach($this->tables as $table)
 		{
-			if ($_REQUEST["table_{$table->class}"])
+			if ($this->selected["table_{$table->class}"])
 			{
 				foreach($table->columns as $column)
 				{
-					if ($_REQUEST["column_".codify($column->title)])
+					if ($this->selected["column_".codify($column->title)])
 					{
 						$report->column($column->title, $column->format, $column->sortable, $column->style, $column->type);
 					}
@@ -170,12 +216,41 @@ class ReportManager
 			}
 		}
 		
-		$report->excelFile = "custom_report_".date("Y_m_d_Hi").".xls";
-		
+		if ($this->title)
+		{
+			$report->excelFile = codify($this->title)."_".date("Y_m_d_Hi").".xls";
+		}
+		else
+		{
+			$report->excelFile = "custom_report_".date("Y_m_d_Hi").".xls";
+		}
+			
 		$script .= $report->writeScript();
 		
 		$report->cssClass = "list small";
 		$report->drawView();
+	}
+		
+	function save()
+	{
+		$report = new CustomReport();
+		$report->report_id = $this->report_id;
+		$report->title = $this->title;
+		$report->description = $this->description;
+		$report->configuration = serialize($this);
+		$report->manager_class = get_class($this);
+		
+		$report->save();
+		
+		$this->report_id = $report->report_id;
+	}
+	
+	static function load($report_id)
+	{
+		$report = new CustomReport($report_id);
+
+		$instance = unserialize($report->configuration);
+		return $instance;
 	}
 }
 
@@ -252,6 +327,7 @@ class ReportTable
 		
 		return $constraint;
 	}
+
 }
 
 class ReportColumn
