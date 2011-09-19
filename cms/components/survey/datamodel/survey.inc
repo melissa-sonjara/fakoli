@@ -165,7 +165,7 @@ class Survey extends DataItem
 				function isEditable()
 				{
 					if(!$this->survey_id)
-					return true;
+						return true;
 						
 					global $user;
 					return ($this->isAuthor() AND $this->status == "not sent") ? true : false;

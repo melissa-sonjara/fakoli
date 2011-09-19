@@ -60,6 +60,7 @@ else
 	$pk = $user->getPrimaryKey();
 	$survey->user_id = $user->$pk;
 	$survey->sender_email = $config["email_from"];
+	$survey->status = "not sent";
 }
 
 $survey->filter = new InclusionFilter("title", "introduction", "start_date", "end_date", "user_id");

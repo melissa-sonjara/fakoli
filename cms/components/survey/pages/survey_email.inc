@@ -56,7 +56,7 @@ $survey = new Survey($survey_id);
 $survey->filter = new InclusionFilter("sender_email", "recipients", "message");
 
 if(!$survey->sender_email)
-$survey->sender_email = Survey::getSenderEmail();
+	$survey->sender_email = Survey::getSenderEmail();
 
 $form = new AutoForm($survey);
 
