@@ -219,12 +219,14 @@ class SurveyManager
 		return $survey;
 	}
 
-	function getQuestionSets($pk, $value)
+	function getQuestionSets($survey_id = 0)
 	{
-		$constraint = "WHERE $pk > 0";
-		$questions = Query::create(SurveyQuestionXref, "WHERE $pk =:$pk")
-		->bind(":$pk", $value)
-		->execute();
+		if($survey_id > 0)
+		{
+			$questions = Query::create(SurveyQuestionXref, "WHERE survey_id=:survey_id")
+			->bind(":survey_id", $survey_id)
+			->execute();
+		}
 			
 		if(count($questions) > 0)
 		{
@@ -232,10 +234,29 @@ class SurveyManager
 			$constraint .= " AND survey_question_id NOT IN ($list)";
 		}
 
-		$surveyQuestionSets = groupedQuery(SurveyQuestionXref, $constraint, $pk);
-
-		//echo "<pre>"; print_r($surveyQuestionSets); echo "</pre>";
+		$surveyQuestionSets = groupedQuery(SurveyQuestionXref, "WHERE survey_id > 0 ". $constraint, "survey_id");
+		
 		return $surveyQuestionSets;
+	}
+	
+	function getTemplateQuestionSets($survey_template_id = 0)
+	{
+		if($survey_template_id > 0)
+		{
+			$questions = Query::create(SurveyQuestionXref, "WHERE survey_template_id=:survey_template_id")
+			->bind(":survey_template_id", $survey_template_id)
+			->execute();
+		}
+			
+		if(count($questions) > 0)
+		{
+			$list = formatItems($questions, "{survey_question_id}", ",");
+			$constraint .= " AND survey_question_id NOT IN ($list)";
+		}
+
+		$surveyQuestionSets = groupedQuery(SurveyQuestionXref, "WHERE survey_template_id > 0 ". $constraint, "survey_template_id");
+
+		return $surveyQuestionSets;	
 	}
 
 	/*

@@ -46,7 +46,7 @@ $form = new AutoForm($surveyTemplate);
 
 $redirect = "/survey_template_questions?survey_template_id=$survey_template_id";
 
-$questionSets = SurveyManager::getQuestionSets("survey_template_id", $survey_template_id);
+$questionSets = SurveyManager::getTemplateQuestionSets($survey_template_id);
 
 $table = new GroupedDataListView($questionSets, "templates");
 

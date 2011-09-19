@@ -46,27 +46,17 @@ $survey->filter = new InclusionFilter("survey_id");
 $form = new AutoForm($survey);
 $form->button("Cancel", $redirect);
 
-$questionSets = SurveyManager::getQuestionSets("survey_id", $survey_id);
-
-$table = new GroupedDataListView($questionSets, "surveys");
-
-$table->selector();
-$table->column("Question", "{Question.question}")
-->column("Options", array(CMSSurveyTableManager, formatOptions))
-->column("Required", array(CMSSurveyTableManager, formatRequired))
-;
+$templateQuestionSets = SurveyManager::getTemplateQuestionSets();
 	
-$table->emptyMessage = "There are no survey questions to select.";
-$table->mode = "fixed";
-$table->cssStyle = "width: 100%";
+$surveyTemplateTable = buildTable($templateQuestionSets, "survey_template_question_sets", "survey_template_id");
 
-foreach(array_keys($questionSets) as $survey_id)
-{
-	$survey = new Survey($survey_id);
-	$table->group($survey->title, $survey_id);
-}
+$questionSets = SurveyManager::getQuestionSets($survey_id);
+$surveyTable = buildTable($questionSets, "survey_question_sets", "survey_id");
 
-$questionSelect = new DataListFieldRenderer($form, $table, "survey_question_select", "Select Survey Questions");
+$questionSelect = new DataListFieldRenderer($form, $surveyTemplateTable, "survey_template_question_select", "Select Survey Template Questions");
+
+$templateQuestionSelect = new DataListFieldRenderer($form, $surveyTable, "survey_question_select", "Select Survey Questions");
+
 $form->submitLabel = "Select";
 $questionSelect->onPostProcess = selectQuestions;
 
@@ -89,6 +79,30 @@ $tabs->writeHTML();
 <h3>Select Survey Questions</h3>
 <?
 $form->drawForm();
+
+function buildTable($sets, $id, $pk)
+{
+	$table = new GroupedDataListView($sets, $id);
+
+	$table->selector();
+	$table->column("Question", "{Question.question}")
+	->column("Options", array(CMSSurveyTableManager, formatOptions))
+	->column("Required", array(CMSSurveyTableManager, formatRequired))
+	;
+	
+	$table->emptyMessage = "There are no survey questions to select.";
+	$table->mode = "fixed";
+	$table->cssStyle = "width: 100%";
+
+	foreach(array_keys($sets) as $value)
+	{
+		$class = ($pk == "survey_template_id") ? "SurveyTemplate" : "Survey";
+		$survey = new $class($value);
+		$table->group($survey->title, $value);
+	}
+
+	return $table;
+}
 
 function selectQuestions($questionSelect, $field)
 {
