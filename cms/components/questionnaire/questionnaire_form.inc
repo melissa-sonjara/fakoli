@@ -31,15 +31,15 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
- /* 
+/*
  * Title: questionnaire_form.inc
- * 
- * Description: Class for building custom surveys, questionaires, 
+ *
+ * Description: Class for building custom surveys, questionaires,
  * quizzes and response interface.
- * 
- * The form formats the question display based on the 
+ *
+ * The form formats the question display based on the
  * type of question.
- * 
+ *
  * The specifics of the different classes that can render
  * questions are handled by a manger class which provides
  * information such as the name of the question_id field,
@@ -47,9 +47,9 @@ OTHER DEALINGS IN THE SOFTWARE.
  * and saves to its specific type of data structure.
  *
  * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 11/4/09 
- * 
+ *
+ * date: 11/4/09
+ *
  */
 
 Fakoli::using("questionnaire");
@@ -57,10 +57,10 @@ Fakoli::using("questionnaire");
 
 /*
  * QuestionnaireForm
- * 
+ *
  * @param: $mgr - an object of class QuestionnnaireManager, SurveyManager,
- * or other which provides specific data and values to this form as 
- * requested. 
+ * or other which provides specific data and values to this form as
+ * requested.
  * @param: $readonly - defaults to false - whether questionnaire is
  * being reviewed or answered.
  */
@@ -74,11 +74,11 @@ class QuestionnaireForm
 	var $submitLabel = "Save";
 	var $validators = array();
 	var $requiredText = "<b>You must answer all required questions.</b><br/>";
-	var $msg; // validation msg 
+	var $msg; // validation msg
 	var $num = 1; // starting number for first question; may be set by calling script to
-	 // append multiple question sets for review.
+	// append multiple question sets for review.
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
-	
+
 	// AutoForm defaults
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $valueCSS = "";					///< CSS Class to use for field/value cells
@@ -87,13 +87,13 @@ class QuestionnaireForm
 	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
 	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
 	var $onFormatLabel = null; 			///< Label Processing hook
-    var $requiredFieldsText = "* indicates required question";
+	var $requiredFieldsText = "* indicates required question";
 	var $subordinate = false;
-	
+
 	function QuestionnaireForm($mgr, $readonly = false)
-	{		
+	{
 		global $auto_form_defaults;
-		
+
 		$this->mgr = $mgr;
 		$this->readonly = $readonly;
 
@@ -101,43 +101,43 @@ class QuestionnaireForm
 		{
 			$this->$field = $value;
 		}
-		
+
 		$questions = $this->mgr->getQuestions();
 			
 		if(count($questions) > 0)
 		{
-			$this->answers = $this->getIndexedAnswers();		
+			$this->answers = $this->getIndexedAnswers();
 
 			foreach($questions as $question)
 			{
 				$this->questions[] = QuestionField::create($this, $question);
 			}
-			
+				
 			foreach($this->questions as $question)
 			{
 				if($question->question->required)
-					array_push($this->validators, $question->getRequiredValidator());				
-			}			
+					array_push($this->validators, $question->getRequiredValidator());
+			}
 		}
 	}
-		
+
 	function makeSubordinate($subordinate = true)
 	{
 		$this->subordinate = $subordinate;
 	}
-	
+
 	function getValidationEngine()
 	{
 		return $this;
 	}
-	
+
 	function getAnswer($question)
 	{
 		$qPk = $this->mgr->getQuestionKey();
-		$answer = $this->answers[$question->$qPk]; 
+		$answer = $this->answers[$question->$qPk];
 		return ($answer) ? $answer->value : "";
 	}
-	
+
 	function writeScript()
 	{
 		$script = "";
@@ -147,10 +147,10 @@ class QuestionnaireForm
 			
 		foreach($this->questions as $question)
 		{
-			$script .= $question->writeScript();	
+			$script .= $question->writeScript();
 		}
-		
-		
+
+
 		$script .= "function validate_Questionnaire_form(form)\n";
 		$script .= "{";
 
@@ -160,7 +160,7 @@ class QuestionnaireForm
 		$script .= "\n\n return true;\n}";
 		$script .= "\n\n";
 		$script .= "function onSubmitQuestionnaire_form(form)\n{\n";
-		
+
 		// return true because we need to save their answers, even if they
 		// didn't answer all questions (invalid form)
 		$script .= "\t validate_Questionnaire_form(form); return true;\n}";
@@ -168,15 +168,15 @@ class QuestionnaireForm
 		if ($script) $script = "<script type='text/javascript'>\n$script\n</script>";
 		return $script;
 	}
-	
+
 	function writeHTML($displayOnly = false)
-	{	
+	{
 		if(count($this->questions) == 0)
 		{
 			echo "There are no questions.<br/>";
 			return;
 		}
-		
+
 		if($this->requiredText AND !$displayOnly)
 		{
 			if ($this->msg)
@@ -186,24 +186,24 @@ class QuestionnaireForm
 			}
 			echo $this->requiredText;
 		}
-		
+
 		if(!$displayOnly)
 			echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
-		
+
 		foreach($this->questions as $question)
 		{
 			$this->writeOneQuestion($question, $displayOnly);
 			$this->num++;
 		}
-		
+
 		echo "</dl>";
 	}
-	
+
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
 		echo " <dt><label for='question_{$this->num}>'<b>{$this->num}.</b> {$question->question->question}{$required}</label></dt>\n";
-				
+
 		echo " <dd>";
 		if(!$displayOnly)
 			$question->writeHTML();
@@ -216,48 +216,48 @@ class QuestionnaireForm
 			echo "<br/>";
 		echo "</dl>";
 	}
-	
-	
+
+
 	function drawForm()
 	{
 		echo "<div class='questionnaire_form'>";
-		
+
 		if (!$this->subordinate)
-		{		
+		{
 			echo "<form id=\"Questionnaire_form\" method=\"POST\" action=\"\" ";
 			echo "enctype='multipart/form-data' onsubmit='return onSubmitQuestionnaire_form(this);'>";
 		}
-		
+
 		$this->writeHTML();
-		
+
 		if (!$this->subordinate)
 		{
 			echo "<br/>";
 			echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
 			echo "<br/>";
-			echo "</form>";	
+			echo "</form>";
 		}
-		
-		echo "</div>";	
+
+		echo "</div>";
 	}
-	
-		
+
+
 	// display or preview view
 	function drawView()
 	{
 		$this->writeHTML(true);
 	}
-	
+
 	function getIndexedAnswers()
 	{
 		$answers = $this->mgr->getAnswers();
-		
+
 		if(count($answers) > 0)
 			$answers = reindexList($answers, $this->mgr->getQuestionKey());
 			
 		return $answers;
 	}
-	
+
 	function validate()
 	{
 		foreach($this->validators as $validator)
@@ -272,7 +272,7 @@ class QuestionnaireForm
 		return $result;
 	}
 
-	
+
 	function save()
 	{
 		global $_POST;
@@ -283,8 +283,8 @@ class QuestionnaireForm
 		$aPk = $this->mgr->getAnswerKey();
 
 		foreach($_POST as $name => $value)
-		{	
-		// convert array of checks to comma delimated string
+		{
+			// convert array of checks to comma delimated string
 			if (is_array($value))
 			{
 				$valueAnswer = implode(",",  array_values($value));
@@ -293,15 +293,15 @@ class QuestionnaireForm
 			{
 				$valueAnswer = $value;
 			}
-			
-			
+				
+				
 			if (!strncmp("question_", $name, 9))
 			{
 				$question_id = substr($name, 9);
-	
+
 				$answer = $answers[$question_id];
 				$answerClass = $this->mgr->getAnswerClass();
-				
+
 				if(!$answer)
 				{
 					$answer = new $answerClass();
@@ -320,23 +320,23 @@ class QuestionnaireForm
 				}
 			}
 		}
-		
+
 		// Need to handle deleted checkbox answers which don't appear in $_POST
 		$questions = $this->mgr->getQuestions();
-	
+
 		if(count($questions) > 0)
 		{
 			$indexed = reindexList($questions, "question_type_id");
 			$checkListType = querySingle(QuestionType, "WHERE class_name = 'CheckListView'");
 			$checkListQuestions = $indexed[$checkListType->question_type_id];
-			
+				
 			if(count($checkListQuestions) < 0)
 			{
 				foreach($checkListQuestions as $question)
 				{
 					$answer = $answers[$question->$qPk];
 					if($answer AND $answer->value)
-					{			
+					{
 						$postAnswer = $_POST["question_{$question->question_number}"];
 						if(!$postAnswer AND !is_array($postAnswer))
 						{
@@ -345,15 +345,15 @@ class QuestionnaireForm
 							$answer->save();
 						}
 					}
-				}				
+				}
 			}
-		} 
-	
-		
+		}
+
+
 		// Even if invalid, we still want to save their answers
 		$this->msg = $this->validate();
 		if ($this->msg != "") return false;
-	
+
 
 		// onComplete event is fired once all processing has been completed
 		if ($this->onSaveComplete)
@@ -361,12 +361,12 @@ class QuestionnaireForm
 			$onComplete = $this->onSaveComplete;
 			$onComplete($this);
 		}
-		
+
 		return true;
-		
+
 	}
-	
-	
+
+
 	// change from starting at 0 to starting at 1
 	static function incrementArray($array)
 	{
@@ -376,10 +376,10 @@ class QuestionnaireForm
 			while($idx < (count($array)))
 			{
 				$newArray[$idx+1] = $array[$idx];
-				$idx++;	
+				$idx++;
 			}
 		}
-		return $newArray;	
+		return $newArray;
 	}
 }
 
@@ -392,36 +392,36 @@ class QuestionnaireForm
 class QuestionnairePreview extends QuestionnaireForm
 {
 	var $mgr;
-	
+
 	function QuestionnairePreview($mgr)
 	{
 		$this->mgr = $mgr;
 		$this->readonly = true;
-		
+
 		$questions = $this->mgr->getQuestions();
-		
+
 		if(count($questions) == 0) return;
-		
+
 		foreach($questions as $question)
 		{
 			$this->questions[] = QuestionField::create($this, $question);
 		}
 	}
-	
+
 	function writeScript()
 	{
-		return "";		
+		return "";
 	}
 }
 
 
 /*
  * QuestionnaireResponseView
- * 
+ *
  * @param: $mgr - an object of class QuestionnnaireManager, SurveyManager,
- * or other which provides specific data and values to this form as 
- * requested. 
-  */
+ * or other which provides specific data and values to this form as
+ * requested.
+ */
 
 class QuestionnaireResponseView extends QuestionnaireForm
 {
@@ -429,7 +429,7 @@ class QuestionnaireResponseView extends QuestionnaireForm
 	{
 		parent::QuestionnaireForm($mgr, true);
 	}
-	
+
 	function writeOneQuestion($question, $displayOnly = false)
 	{
 		$required = $question->getRequired();
@@ -438,5 +438,5 @@ class QuestionnaireResponseView extends QuestionnaireForm
 		$question->drawSummaryView();
 		echo " </dd><br/>";
 		echo "</dl>";
-	}	
+	}
 }

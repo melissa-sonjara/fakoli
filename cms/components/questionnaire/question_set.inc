@@ -31,16 +31,16 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
- /* 
+/*
  * Title: question_set.inc
- * 
+ *
  * Description: Handles listing and ordering the questions
  * within a questionnaire.
- *  
+ *
  * author: Janice Gallant for Sonjara, Inc.
- * 
+ *
  * date: 11/4/09
- * 
+ *
  */
 
 
@@ -48,19 +48,19 @@ OTHER DEALINGS IN THE SOFTWARE.
 /*
  * class QuestionSet - displays table list view of the set of questions
  * created for a given object.
- * 
+ *
  * This form requires the following standard field names for the table
  * that stores the set of question:
  * question_id
  * question_number
- * 
+ *
  * This form requires that the script for add/edit/delete a question
  * be in the same directory as the calling script and be in the format
- * $prefix + "_question_form.php 
- * 
+ * $prefix + "_question_form.php
+ *
  * The reorder function requires that the class that links to the questions
  * contain the relation function name "Questions".
- * 
+ *
  * Parameters:
  * $questionnaire_id
  * $readOnly - whether the questions can be edited and/or deleted
@@ -78,19 +78,19 @@ class QuestionSet
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $buttonCSS = "";				///< CSS Class to use for buttons
 	var $componentPath ="/fakoli";
-	
+
 	function QuestionSet($mgr)
 	{
-		$this->mgr = $mgr;		
+		$this->mgr = $mgr;
 		$this->questions = $this->mgr->getQuestions();
 		$this->editable = $this->mgr->isEditable();
 	}
-	
+
 	function writeScript()
 	{
 		return "";
 	}
-	
+
 	function drawList()
 	{
 		global $auto_form_defaults;
@@ -98,42 +98,44 @@ class QuestionSet
 		{
 			$this->$field = $value;
 		}
-		
+
 		$pk = $this->mgr->getPrimaryKey();
-		
+
 		if (count($this->questions) > 0)
 		{
-			
+				
 			if(!$this->editable)
 				echo "<h5>{$this->mgr->getNotEditableHTML()}</h5>";
 			?>
-			<form style='display: inline' name="question_order_form" method="POST" action="">
-			<table style="list; border: dotted 1px #000;border-collapse: collapse">
-			<?				
-			foreach($this->questions as $question)
-			{
-				$this->drawOneQuestion($question, $pk);
-			}
-			?>
-			</table>
-			<br/>
-			<input type="hidden" name="obj_id" value="<?echo $this->mgr->item->$pk ?>"/>
-			<input class='button' type="submit" name="reorder" value="&nbsp;Update Question Order&nbsp;"/>&nbsp;&nbsp;
-			<?
+<form style='display: inline' name="question_order_form" method="POST"
+	action="">
+<table style="border: dotted 1px #000; border-collapse: collapse">
+<?
+foreach($this->questions as $question)
+{
+	$this->drawOneQuestion($question, $pk);
+}
+?>
+</table>
+<br />
+<input type="hidden" name="obj_id"
+	value="<?echo $this->mgr->item->$pk ?>" /> <input class='button'
+	type="submit" name="reorder" value="&nbsp;Update Question Order&nbsp;" />&nbsp;&nbsp;
+<?
 		} // end draw table
 		else
 		{
 			echo $this->noneText ."<br/><br/>";
 		}
-		
+
 		$this->drawOneButton($this->mgr->getQuestionForm(), "Create a New Question");
 		$this->drawButtons();
-		?>
-		<br/><br/>
-		</form>
+		?> <br />
+<br />
+</form>
 		<?
 	} // end function drawList
-	
+
 	/*
 	 * drawOneQuestion - for each question row, include an edit and delete button
 	 */
@@ -145,40 +147,40 @@ class QuestionSet
 		echo "<td style='width: 125px;border: dotted 1px #000'>
 		<b>Question</b> <input type='text' name='question_{$question->$questionPk}' value='{$question->$orderField}' size='4'/></td>"; 
 		echo "<td style='border: dotted 1px #000'>{$question->question}</td>";
-		
+
 		if($question->options)
 			$options = preg_replace("/\r\n/", "<br>", $question->options);
-		
+
 		echo "<td style='border: dotted 1px #000'>{$options}</td>";
-		
+
 		$disable = ($question->locked) ? "disabled='disabled'" : "";
 
 		echo "<td style='border: dotted 1px #000'>&nbsp;";
 		$this->drawOneButton($this->mgr->getQuestionForm() . $question->$questionPk, "Edit");
 		echo "&nbsp;</td>";
-		
+
 		if($this->editable)
 		{
 			echo "<td style='border: dotted 1px #000'>&nbsp;";
 			$this->mgr->drawQuestionDeleteButton($question->$questionPk);
 			echo "&nbsp;</td>";
-		}	
+		}
 		echo "</tr>";
 	}
-	
 
-/*
- * Reorder questions, set the sort_order and save to db.
- * 
- * After implementing the user's new order, renumber the questions
- * in sequence (e.g., 1, 2, 3 rather than 1, 3, 7).
- * 
- */
+
+	/*
+	 * Reorder questions, set the sort_order and save to db.
+	 *
+	 * After implementing the user's new order, renumber the questions
+	 * in sequence (e.g., 1, 2, 3 rather than 1, 3, 7).
+	 *
+	 */
 	function reOrderQuestions()
 	{
 		$this->mgr->reOrderQuestions();
 	} // end reOrderQuestions
-	
+
 
 	/**
 	 * Adds a custom button to the form.
@@ -191,7 +193,7 @@ class QuestionSet
 	{
 		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm);
 	}
-	
+
 	/**
 	 * Draws any additional buttons specified in the calling script.
 	 *
@@ -205,7 +207,7 @@ class QuestionSet
 		}
 
 	}
-	
+
 	static function drawOneButton($url, $text, $confirm = "", $buttonCSS = 'button')
 	{
 		if ($confirm)
@@ -216,12 +218,12 @@ class QuestionSet
 		{
 			$link = "go('$url'); return false;";
 		}
-	
+
 		echo "<input type='button' class='{$buttonCSS}' onclick=\"$link\" value=\"$text\"/>";
-		
+
 	}
-	
-	
+
+
 } // end class QuestionSet
 
 
