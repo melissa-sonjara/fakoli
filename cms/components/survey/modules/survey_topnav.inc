@@ -1,7 +1,7 @@
 <?php
-
 Fakoli::using("survey");
 
 $identifier = $_REQUEST["identifier"];
 
-echo SurveyMenuView::getView($identifier);
+$menu = new SurveyMenuView($identifier, "top");
+$menu->drawView();

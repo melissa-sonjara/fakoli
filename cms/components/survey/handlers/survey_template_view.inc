@@ -31,56 +31,43 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/* survey_results.inc
+/**************************************************************
  *
- * Description: Displays a table data list view of survey responses
- * with aggregate data results.
+ * Title: survey_template_preview_popup.inc
+ *
+ * Description: Displays view of a questionnaire in a popup.
  *
  * author: Janice Gallant for Sonjara, Inc.
  *
- * date: 5/13/10
- */
+ * date: 5/27/2010
+ *
+ ***************************************************************/
 
+Fakoli::using("survey");
 
-Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("data_view");
-
+$survey_template_id = checkNumeric($_GET["survey_template_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
+$select = checkNumeric($_GET["select"]);
 
-if(!$survey_id)
-	redirect("index");
+if($survey_template_id)
+{
+	$survey_id = 0;
+	$view = new SurveyTemplateView(new SurveyTemplate($survey_template_id));
+}
+elseif($survey_id)
+{
+	$survey_template_id = 0;
+	$survey = new Survey($survey_id);
+	$survey->filter = new InclusionFilter("title", "introduction", "message");
+	$view = new SurveyTemplateView($survey);
+}
+else
+ajaxReturn("unknown survey");
 
-$survey = new Survey($survey_id);
-
-$responses = $survey->Responses("ORDER BY last_modified DESC");
-$recipientCount = $survey->getRecipientCount();
-$responseCount = $survey->getResponseCount();
-
-$table = new DataListView($responses, "surveyResponses");
-$table->column("Token", "<a href='#' onclick=\"new Survey().showSurveyResponse({response_id}); return false\">{token}</a>", true)
-->column("Status", array(CMSSurveyTableManager, formatResponseStatus), true)
-->column("Date Submitted", array(CMSSurveyTableManager, formatResponseSubmitDate), true)
-;
-
-$table->emptyMessage = "There are no responses to this survey.";
-$table->sortable = true;
-$table->pageSize = 20;
-$table->filter = false;
-$table->cssStyle = "width: 100%";
-$table->excelFile = "surveyResults.xls";
-
-$tabs = SurveyManager::surveyTabs($survey_id);
-
-$script .= $table->writeScript();
-
-$tabs->writeHTML();
+if($select)
+	echo "<p><a class='button' href='#' onclick=\"new Survey().createSurveyFromTemplate($survey_template_id, $survey_id); return false();\">Create New Survey Using this Template</a></p>\n";
+echo $view->writeScript();
+$view->drawView();
+if($select)
+	echo "<p><a class='button' href='#' onclick=\"new Survey().createSurveyFromTemplate($survey_template_id, $survey_id); return false();\">Create New Survey Using this Template</a></p>\n";
 ?>
-<div id="tab_border">
-<h3>Survey Responses</h3>
-<?
-echo "<h3>".$survey->getTitle() . "</h3>\n";
-
-$table->drawView();
-if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCount)
-echo "<p><a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a></p>\n";
-?></div>

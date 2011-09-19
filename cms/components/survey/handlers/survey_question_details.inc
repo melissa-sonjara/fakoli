@@ -1,4 +1,5 @@
 <?php
+
 /**************************************************************
 
 Copyright (c) 2007,2008 Sonjara, Inc
@@ -31,6 +32,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
+
+/*
+ * Shows details of one survey question.
+ */
+
 /*
  * Description: Form to add/update/delete a survey question.
  * Can be used for either defining standard questions for
@@ -49,96 +55,61 @@ $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
-$question = new SurveyQuestion();
-
 if(!$survey_question_id AND !$survey_id)
-	redirect("/index");
+	ajaxReturn("unknown question or survey");
 
-if($survey_question_id)
+$question = new SurveyQuestion($survey_question_id);
+
+if($question->question_type_id != question_type_checklist)
+	$question->fields["required"] = Boolean;
+
+$question->filter = new ExclusionFilter("locked");
+
+$form = new AutoForm($question, "POST", "/action/survey/survey_question_detail?survey_id=$survey_id&survey_question_id=$survey_question_id");
+
+$form->getRenderer("num_rows")->size = 5;
+$form->getRenderer("char_limit")->size = 5;
+
+if($question->question_type_id == question_type_multi)
 {
-	$question->load($survey_question_id);
+	$form->hide("char_limit", "num_rows");
 }
-else
+elseif($question->question_type_id == question_type_rating)
 {
-	$question->num_rows = 3; // default
-	$question->required = 0; // default
-	global $xref;
-	$xref = new SurveyQuestionXref();
-	$xref->survey_id = $survey_id;
-	$xref->sort_order = SurveyQuestionXref::getDefaultSortOrder("survey_id", $survey_id);
+	$form->hide("char_limit", "num_rows");
+	$form->add(new StringFieldRenderer($form), "label_for_lowest");
+	$form->add(new StringFieldRenderer($form), "label_for_highest");
+	$form->add(new NumberFieldRenderer($form), "number_of_steps");
+	$form->hide("options");
+	$form = SurveyQuestionForm::setOptionsToRatings($form);
 }
-
-// check if question has been answered
-$editable = $question->isEditable();
-$isTemplateQuestion = $question->isTemplateQuestion();
-
-if(!$editable OR $isTemplateQuestion)
-$question->filter = new ExclusionFilter("question_type_id", "options");
-
-$redirect = "/survey_questions?survey_id=$survey_id";
-
-$form = SurveyQuestionForm::settings($question);
-
-if($editable AND !$isTemplateQuestion)
+elseif($question->question_type_id == question_type_short)
 {
-	$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
-	$typeSelect->onChange = "new Survey().onChangeQuestionType";
+	$form->hide("num_rows", "options");
+}
+elseif($question->question_type_id == question_type_free)
+{
+	$form->hide("options");
+}
+elseif($question->question_type_id == question_type_checklist)
+{
+	$form->hide("char_limit", "num_rows");
+}
+elseif($question->question_type_id == question_type_dropdown)
+{
+	$form->hide("char_limit", "num_rows");
 }
 
-if($isTemplateQuestion)
+
 $form->readOnlyForm = true;
 
-if($survey_question_id)
-$form->button("Remove", "/action/survey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
-$form->button("Cancel", $redirect);
-$form->hide("question_name");
+if(!$question->isTemplateQuestion())
+	$infoText = $question->getInfoText(survey_question_answered);
+else
+	$infoText = $question->getInfoText(survey_question_template);
 
-if(!$editable)
-$infoText = $question->getInfoText(survey_question_answered);
-elseif($isTemplateQuestion)
-$infoText = $question->getInfoText(survey_question_template);
-
-$tabs = SurveyManager::surveyTabs($survey_id);
-$tabs->page = "survey_questions";
-$tabs->active = "Questions";
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		redirect($redirect);
-	}
-}
-
-
-$script .= $form->writeScript();
-
-$script .= <<<ENDSCRIPT
-	<script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		 new Survey().setQuestionTypeOptions();
-	});	
-	</script>
-ENDSCRIPT;
-
-if($survey_id)
-{
-	$tabs->writeHTML();
-
-	?>
-<div id="tab_border"><?
-}
+echo $form->writeScript();
 
 echo "<b>{$infoText}</b>";
 
 $form->drawForm();
-
-function saveSurveyQuestionXref($obj)
-{
-	$question = $obj->data;
-	global $xref;
-	$xref->survey_question_id = $question->survey_question_id;
-	$xref->save();
-}
-?></div>

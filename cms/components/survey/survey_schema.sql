@@ -18,7 +18,7 @@ CREATE TABLE `survey` (
   `sender_email` varchar(100) DEFAULT NULL,
   `recipients` text,
   `message` text,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `status` varchar(15) varchar(15) NOT NULL DEFAULT 'not sent',
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links a questionnaire to an email template';
@@ -73,5 +73,15 @@ CREATE TABLE `survey_template` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'in progress, published, in review',
   PRIMARY KEY (`survey_template_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+INSERT INTO `merge_code` (`name`,`description`,`map`,`class_name`) VALUES
+ ('survey_link',NULL,'getEditUrl','SurveyResponse'),
+ ('survey_intro_link',NULL,'getIntroUrl','SurveyResponse'),
+ ('token',NULL,'SurveyResponse.token','SurveyResponse'),
+ ('survey_title',NULL,'Survey.title','SurveyResponse'),
+ ('survey_end_date',NULL,'Survey.end_date','SurveyResponse');
+
+
 
 -- END Version 1.0

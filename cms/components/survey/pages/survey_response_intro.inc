@@ -31,56 +31,35 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/* survey_results.inc
- *
- * Description: Displays a table data list view of survey responses
- * with aggregate data results.
+/*
+ * Description: Landing page for public survey access. Displays a link
+ * to the Survey Response Form that pops up a token input validation
+ * form before redirecting to the survey response form.
  *
  * author: Janice Gallant for Sonjara, Inc.
  *
- * date: 5/13/10
+ * date: 5/18/10
  */
 
-
-Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("data_view");
+Fakoli::using("survey");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
+$msg = checkNumeric($_GET["msg"]);
 
 if(!$survey_id)
-	redirect("index");
+redirect("index");
 
 $survey = new Survey($survey_id);
 
-$responses = $survey->Responses("ORDER BY last_modified DESC");
-$recipientCount = $survey->getRecipientCount();
-$responseCount = $survey->getResponseCount();
+$page->page_title = "{$survey->title}";
 
-$table = new DataListView($responses, "surveyResponses");
-$table->column("Token", "<a href='#' onclick=\"new Survey().showSurveyResponse({response_id}); return false\">{token}</a>", true)
-->column("Status", array(CMSSurveyTableManager, formatResponseStatus), true)
-->column("Date Submitted", array(CMSSurveyTableManager, formatResponseSubmitDate), true)
-;
-
-$table->emptyMessage = "There are no responses to this survey.";
-$table->sortable = true;
-$table->pageSize = 20;
-$table->filter = false;
-$table->cssStyle = "width: 100%";
-$table->excelFile = "surveyResults.xls";
-
-$tabs = SurveyManager::surveyTabs($survey_id);
-
-$script .= $table->writeScript();
-
-$tabs->writeHTML();
+if($survey->isClosed())
+echo "<p>{$survey->title} closed on ". formatDate($survey->end_date) . "</p>\n";
+elseif($msg == 1)
+echo "<p>You have already submitted your survey.</p>\n";
+else
+{
+	echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
+	echo "<p><a href=\"#\" onclick=\"new Survey().showTokenDialog($survey_id); return false;\">{$survey->title}</a></p>\n";
+}
 ?>
-<div id="tab_border">
-<h3>Survey Responses</h3>
-<?
-echo "<h3>".$survey->getTitle() . "</h3>\n";
-
-$table->drawView();
-if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCount)
-echo "<p><a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a></p>\n";
-?></div>

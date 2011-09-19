@@ -32,64 +32,35 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 /*
- * survey_response.inc
  *
- * Description: Displays a survey questionnaire for a user with token
- * access to answer.
+ * Description: Displays survey message advanced features in a
+ * popup.
  *
- * author: Janice Gallant for Sonjara, Inc.
+ * @author: Janice Gallant for Sonjara, Inc.
  *
- * date: 5/13/10
+ * date: 5/27/2010
  */
 
 Fakoli::using("survey", "email");
-Fakoli::usingFeature("auto_form");
+Fakoli::usingFeature("data_view");
 
-$survey_id = checkNumeric($_GET["survey_id"]);
-$token = $_GET["token"];
+$table = MergeCodeManager::buildMergeCodeTable("SurveyResponse");
 
-if(!$survey_id)
-	redirect("/index");
-
-if(!$token)
-	redirect("survey_response_intro?survey_id={$survey_id}");
-
-$response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
-
-if(!$response)
-	redirect("survey_response_intro?survey_id={$survey_id}");
-
-$survey = $response->Survey();
-
-if(!$survey->isOpen() OR !$response->isEditable())
-	redirect("survey_response_intro?survey_id=$survey_id&msg=1");
-
-$form = new QuestionnaireForm(new SurveyResponseManager($response));
-$form->onSaveComplete = saveResponse;
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		redirect("survey_response_preview?survey_id={$survey_id}&token=$token");
-	}
-	else // refresh
-		redirect("survey_response_form?survey_id={$survey_id}&token=$token");
-}
-
-$script .= $form->writeScript();
-
-echo "<h3>". $survey->title . "</h3>\n";
-echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
-$form->drawForm();
-?>
-<br>
-<?
-
-function saveResponse($obj)
-{
-	$response = $obj->mgr->item;
-	$response->setStatus(response_in_progress);
-}
+$page->page_title = "Advanced Features &ndash; Merge Codes";
+	
+echo $table->writeScript();
 
 ?>
+<p>Customize your survey email message using the following codes to
+insert survey data from the database. The codes will appear in
+[brackets] while you edit your email template and will be replaced by
+data values when you email your survey.</p>
+<?php
+$table->drawView();
+?>
+<p>Example:</p>
+<p>Please take a few minutes to complete this short [program_name]
+survey. Your feedback will help us know our participants and improve our
+program.</p>
+<p>The survey will be open for responses until [survey_end_date]. We
+appreciate your support.</p>

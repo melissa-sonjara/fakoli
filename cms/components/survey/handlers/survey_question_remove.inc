@@ -32,64 +32,51 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 /*
- * survey_response.inc
- *
- * Description: Displays a survey questionnaire for a user with token
- * access to answer.
+ * Description: Nondisplay script to unlink a question from a
+ * survey question set by deleting the survey_question_xref
+ * record. Can be called either from survey_template_questions
+ * or survey_questions.
  *
  * author: Janice Gallant for Sonjara, Inc.
  *
- * date: 5/13/10
+ * date: 11/12/10
+ *
  */
 
-Fakoli::using("survey", "email");
-Fakoli::usingFeature("auto_form");
+Fakoli::using("survey");
 
-$survey_id = checkNumeric($_GET["survey_id"]);
-$token = $_GET["token"];
+$survey_question_xref_id = checkNumeric($_GET["survey_question_xref_id"]);
 
-if(!$survey_id)
-	redirect("/index");
+if(!$survey_question_xref_id)
+	ajaxReturn("unknown SurveyQuestionXref");
 
-if(!$token)
-	redirect("survey_response_intro?survey_id={$survey_id}");
+$xref = new SurveyQuestionXref($survey_question_xref_id);
 
-$response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
+$question = $xref->Question();
 
-if(!$response)
-	redirect("survey_response_intro?survey_id={$survey_id}");
+// only delete if not linked to any other survey or template
+if($question && $question->allowDelete())
+	$question->delete();
 
-$survey = $response->Survey();
+$survey = $xref->Survey();
 
-if(!$survey->isOpen() OR !$response->isEditable())
-	redirect("survey_response_intro?survey_id=$survey_id&msg=1");
+if(!$survey)
+	$survey = $xref->SurveyTemplate();
 
-$form = new QuestionnaireForm(new SurveyResponseManager($response));
-$form->onSaveComplete = saveResponse;
+$surveyQuestionXrefs = $survey->SurveyQuestionXrefs("ORDER BY sort_order");
 
-if ($method == "POST")
+// renumber question set
+$idx = 1;
+foreach($surveyQuestionXrefs as $surveyQuestionXref)
 {
-	if ($form->save())
-	{
-		redirect("survey_response_preview?survey_id={$survey_id}&token=$token");
-	}
-	else // refresh
-		redirect("survey_response_form?survey_id={$survey_id}&token=$token");
+	$surveyQuestionXref->filter = new InclusionFilter("sort_order");
+	$surveyQuestionXref->sort_order = $idx;
+	$surveyQuestionXref->save();
+	$idx++;
 }
 
-$script .= $form->writeScript();
+$xref->delete();
 
-echo "<h3>". $survey->title . "</h3>\n";
-echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
-$form->drawForm();
-?>
-<br>
-<?
-
-function saveResponse($obj)
-{
-	$response = $obj->mgr->item;
-	$response->setStatus(response_in_progress);
-}
+ajaxReturn("OK");
 
 ?>

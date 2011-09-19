@@ -1,345 +1,251 @@
 <?php
 
- /* 
+/*
  * Title: survey.inc
- * 
+ *
  * Description: Classes and functions for email questionnaire
- * surveys. 
- * 
+ * surveys.
+ *
  * author: Janice Gallant for Sonjara, Inc.
- * 
+ *
  * date: 5/13/2010
  *
  * Updated labels for Survey Template (formerly called Questionnaire) (S. Hubbard, 7 June 2010)
- * 
+ *
  */
 
 
 Fakoli::using("email");
 Fakoli::usingFeature("tab_bar", "data_view", "status_tree", "auto_form");
 
-function surveyTabs($key = "")
-{
-	$tabs = getSurveyTabs($key);
-	$qs = ($key) ? "survey_id=$key" : "";
-	$tabBar = new TwoLevelTabBar($tabs, $qs);
-		
-	return $tabBar;
-}
 
-function getSurveyTabs($key)
+
+class SurveyTemplateView
 {
-	if(!$key)
-		$formTitle = "Create a Survey";
-	else
+	var $mgr;
+	var $questionnaireView;
+	var $surveyForm;
+
+	function SurveyTemplateView($surveyTemplate)
 	{
-		$survey = new Survey($key);
-		$formTitle = ($survey->isEditable()) ? "Edit Survey" : "Survey Details";
+		$this->mgr = new SurveyTemplateManager($surveyTemplate);
+		$this->questionnaireView = new QuestionnairePreview($this->mgr);
+		$this->surveyForm = new AutoForm($surveyTemplate);
+		$this->surveyForm->hide("status");
+		$this->surveyForm->readOnlyForm = true;
 	}
 
-	$images[0] = "<img src='/fakoli/images/tab_create_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";	
-	$images[1] = "<img src='/fakoli/images/tab_manage_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-	$images[2] = "<img src='/fakoli/images/tab_view_results.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-	
-	
-	$tabs = array(	$images[0] . $formTitle	=>
-					array(	"Introduction"			=>	"survey_form",
-					  		"Questions"				=>	"survey_questions",
-						  	"Email"					=>	"survey_email",
-							"Preview/Send"	=>	"survey_preview"),
-					
-					$images[1]. "Manage Survey"	=>
-					array(	"My Survey"				=>	"survey_manage"),
-
-					$images[1] . "View Results"	=>
-					array(	"Survey Responses"		=>	"survey_results",
-							"Survey Data"			=>	"survey_data"),
-						);
-						
-					
-	return $tabs;
-}
-
-
-
-function surveyDataTabs($key = "")
-{
-	$tabs = array(	"Graphical View"	=>	"survey_data",
-					"Tabular View"		=>	"survey_data_table");
-	
-	$tabBar = new TabBar("datatabs", $tabs, "survey_id=$key");
-	return $tabBar;
-}
-
-function getProgramList()
-{
-	global $user;
-	
-	if(checkRole('admin'))
-		$programs = query(Program, "ORDER BY name");
-	else	
-		$programs = $user->Programs("ORDER BY name");
-	
-	$programList = array();
-	if(count($programs) > 0)
+	function writeScript()
 	{
-		foreach($programs as $program)
-			$programList[$program->program_id] = $program->name;
+		$script = $this->questionnaireView->writeScript();
+		$script .= $this->surveyForm->writeScript();
+
+		return $script;
 	}
 
-	// puts this at the end
-	array_push($programList, "not applicable");
+	function drawView()
+	{
+		$this->surveyForm->drawForm();
+		echo "<p><label>Survey Questions</label></p>\n";
+		$this->questionnaireView->drawView();
+	}
 
-	return $programList;
 }
 
-
-class SurveyView
+/*
+ * Display survey on preview & send page.
+ */
+class SurveyPreviewSendView
 {
+	var $mgr; // class SurveyManager
 	var $survey;
-	var $emailMerge;
+	var $questionnaireView;
+	var $surveyForm;
 	var $validate;
-	
-	function SurveyView($survey, $validationCheck = true)
+
+	function SurveyPreviewSendView($survey)
 	{
 		$this->survey = $survey;
+		$this->mgr = new SurveyManager($survey);
+		$this->questionnaireView = new QuestionnairePreview($this->mgr);
+
 		$surveyResponse = new SurveyResponse();
 		$surveyResponse->survey_id = $this->survey->survey_id;
 		if($this->emailTemplate)
-			$this->emailMerge = new EmailManager($surveyResponse, $this->emailTemplate->template_id, $this->survey->sender_email, $this->survey->message);
-		if ($validationCheck)
-			$this->validate = new ValidateSurvey($survey);	
+		$this->emailMerge = new EmailManager($surveyResponse, $this->emailTemplate->template_id, $this->survey->sender_email, $this->survey->message);
+
+		$c_survey = clone($survey);
+		$mergeMgr = new MergeCodeManager($surveyResponse, $survey->message, "SurveyResponse");
+		$c_survey->message = $mergeMgr->searchAndReplace($survey->message);
+		$c_survey->filter = new InclusionFilter("title", "introduction", "message", "sender_email", "recipients", "start_date", "end_date");
+		if(!$c_survey->recipients)
+			$c_survey->recipients = "Not specified";
+		if(!$c_survey->start_date)
+		{
+			$c_survey->fields["start_date"] = String;
+			$c_survey->start_date = "N/A";
+		}
+		if(!$c_survey->end_date)
+		{
+			$c_survey->fields["end_date"] = String;
+			$c_survey->end_date = "Not specified";
+		}
+		$this->surveyForm = new AutoForm($c_survey);
+		$this->surveyForm->readOnlyForm = true;
+
+		$this->validate = new ValidateSurvey($survey);
 	}
-	
+
+	function writeScript()
+	{
+		$script = $this->questionnaireView->writeScript();
+		$script .= $this->surveyForm->writeScript();
+
+		return $script;
+	}
+
 	function drawView()
 	{
-		$this->drawSurveyDetails();
+		if(!$this->validate->validateEmail())
+			$this->validate->warning();
+
+		$this->surveyForm->drawForm();
 		$this->drawQuestionnaire();
-		$this->drawEmailTemplate();
 	}
-	
-	function drawSurveyDetails()
-	{
-		echo $this->getSurveyDetails();
-	}
-	
-	/* shared with status block */
-	function getSurveyDetails()
-	{	
-		$startDate = ($this->survey->start_date > 0) ? formatDate($this->survey->start_date) : "not sent";
-		$endDate = ($this->survey->end_date > 0) ? formatDate($this->survey->end_date) : "not specified";
-		
-		$html = "<p><label>Title </label>{$this->survey->title}</p>\n";	
-		$html .= "<p><label>Introduction </label>". formatAsHTML($this->survey->introduction) ."</p>\n";
-	 	$html .= "<p><label>Start Date </label>$startDate</p>\n";
-		$html .= "<p><label>End Date </label>$endDate</p>\n";
-		return $html;
-	}
-	
+
 	function drawQuestionnaire()
 	{
-		if($this->validate)
-		{
-			$error = $this->validate->validateQuestionnaire();
-			
-			if($error)
-				echo $this->survey->getRequiredText($error, true);
-		}
+		$this->validate->msg = "";
 
-		$mgr = new SurveyManager($this->survey);
-		$questionnaireView = new QuestionnairePreview($mgr);
+		if(!$this->validate->validateQuestionnaire())
+		$this->validate->warning();
+
 		echo "<p><label>Survey Questions</label></p>\n";
-		$questionnaireView->drawView();
+		$this->questionnaireView->drawView();
 	}
-	
-	function drawEmailTemplate()
+}
+
+class SurveyManageView extends SurveyPreviewSendView
+{
+	var $emailMerge;
+	var $deleteUrl = "";
+	var $editUrl;
+	var $reviewUrl;
+	var $publicUrl;
+	var $statusUrl;
+	var $iconView = "/fakoli/images/icon_view.gif";
+	var $iconPublic = "/fakoli/images/icon_view_public.gif";
+	var $iconEdit = "/fakoli/images/icon_edit.gif";
+	var $iconOpen = "/fakoli/images/icon_reopen.gif";
+	var $iconClose = "/fakoli/images/icon_close.gif";
+	var $iconDelete = "/fakoli/images/icon_delete.gif";
+	var $iconResults = "/fakoli/images/icon_survey_results.gif";
+	var $iconReminder = "/fakoli/images/email.gif";
+
+
+	function SurveyManageView($survey)
 	{
-		if($this->validate)
-		{
-			$error = $this->validate->validateEmail();
-			if($validate->survey)
-				$this->survey = $validate->survey; // identify incorrect email addresses
-
-			if($error)
-				echo $this->survey->getRequiredText($error, true);
-		}
-
-		$recipients = ($this->survey->recipients) ? $this->survey->recipients : "not specified";
-		echo "<p><label>Recipient List </label>{$recipients}</p>\n";
-		$emailFrom = ($this->survey->sender_email) ? $this->survey->sender_email : "not specified";
-		echo "<p><label>Email From </label>". $emailFrom ."</p>\n";
-		
-		if($this->emailMerge)
-		{
-			echo "<p><label>Email Subject </label>". formatAsHTML($this->emailMerge->subject) ."</p>\n";
-			echo "<p><label>Email Message</label></p>\n";
-			echo "<p>". formatAsHTML($this->emailMerge->message) ."</p>\n";
-		}	
+		parent::SurveyPreviewSendView($survey, true);
 	}
-	
-	/* 
+
+	function drawView()
+	{
+		$this->drawManageLinks();
+		parent::drawView();
+	}
+
+
+	/*
 	 * Draw a:link button options on Manage Survey tab
 	 * view
 	 * public view
 	 * edit
 	 * close
-	 * delete 
+	 * delete
 	 */
 	function drawManageLinks()
 	{
-		/* share paths and icons with status block */
-		$block = new SurveyStatusBlockView($this->survey);	
+		$pk = $this->survey->getPrimaryKey();
+		$value = $this->survey->$pk;
+		$this->editUrl = "survey_form?survey_id={$value}";
+		$this->publicUrl = "survey_response_intro?survey_id={$value}";
+		$this->reviewUrl = "survey_data?survey_id={$value}";
+
+		$responseCount = $this->mgr->getResponseCount();
 		$status = $this->survey->status;
-		$rtn = "&return=1";
-		 		
-		if($status > survey_not_sent)
+
+		echo "<div id='manage_survey'>\n";
+
+		if($status != "not sent")
 		{
-			$html .= $this->getOneManageLink($block->reviewUrl, 
-				$block->iconView, "View");
+			if(responseCount > 0)
+			{
+				echo $this->getOneManageLink($this->reviewUrl,
+				$this->iconView, "View Results");
+			}
+				
+			echo $this->getOneManageLink($this->publicUrl,
+			$this->iconPublic, "Public View");
+		}
+
+		if($status == "not sent")
+		{
+			echo $this->getOneManageLink($this->editUrl,
+			$this->iconEdit, "Edit");
+		}
+		elseif($status == "open")
+		{
+			echo $this->getOneManageLink("", $this->iconClose,
+				"Close", "new Survey().closeSurvey($value)");
+				
+			if(count($this->survey->getNonResponders()) > 0)
+			{
+				echo $this->getOneManageLink("", $this->iconReminder,
+					"Send Reminders", "new Survey().showSurveyReminderDialog($value)");
+			}
+		}
+		elseif($status == "closed")
+		{
+			echo $this->getOneManageLink("#", $this->iconOpen,
+				"Reopen", "new Survey().reopenSurvey($value)");
+		}
+
+		if($status != "open")
+		{
+			echo $this->getOneManageLink("#", $this->iconDelete,
+				"Delete", "new Survey().deleteSurvey($value, $responseCount)");
+		}
 			
-			$html .= $this->getOneManageLink($block->publicUrl, 
-				$block->iconPublic, "Public View");	
-		}
-		
-		if($status == survey_not_sent)
-		{
-			$html .= $this->getOneManageLink($block->editUrl,
-				$block->iconEdit, "Edit");
-		}
-		elseif($status == survey_open) 
-		{
-			$html .= $this->getOneManageLink($block->statusUrl . survey_closed . $rtn,
-					$block->iconClose, "Close");
-		}
-		elseif($status == survey_closed)
-		{
-			$html .= $this->getOneManageLink($block->statusUrl . survey_open . $rtn,
-					$block->iconOpen, "Reopen");
-		}
-		
-		if($status != survey_open)
-		{
-			$html .= $this->getOneManageLink($block->deleteUrl . $rtn,
-					$block->iconDelete, "Delete");
-		}
-		
-		echo "<div id='manage_survey'\n";
-		echo $html;
 		echo "</div>\n";
 	}
-	
-	function getOneManageLink($url, $icon, $label)
+
+	function getOneManageLink($url, $icon, $label, $onclick = "")
 	{
-		$html = "<a href=\"{$url}\"><img src=\"{$icon}\" style='border: none;'/>&nbsp;$label</a>\n";
-		
+		if(!$onclick)
+			$html = "<a href='{$url}'>";
+		else
+			$html .= "<a href='#' onclick=\"$onclick; return false;\">";
+		$html .= "<img src=\"{$icon}\" style='border: none;'/>&nbsp;$label</a>\n";
+
 		return $html;
 	}
 }
 
 
-
-
-
-/*
- * Called from survey_preview.inc
- * 
- */
-function sendSurveyEmails($survey)
-{
-	global $config;
-	
-	$recipients = explode(",", $survey->recipients);
-	
-	$subject = Settings::getValue("survey", "email_subject");
-	$message_footer = Settings::getValue("survey", "message_footer");
-	
-	if(count($recipients) > 0)
-	{
-		foreach($recipients as $recipient)
-		{
-			$response = query(SurveyResponse, "WHERE email='$recipient' AND survey_id={$survey->survey_id}");
-			if(count($response) == 0)
-			{
-				$response = SurveyResponse::generateToken($survey->survey_id, $recipient);
-				$response->save();
-			}
-			else
-				$response = $response[0];
-			// Store info in email template data structure but
-			// don't save it.
-			$emailTemplate = new EmailTemplate();
-			$emailTemplate->sender_email = $survey->sender_email;
-			$emailTemplate->recipients = $recipient;
-			$emailTemplate->subject = $subject;
-			$emailTemplate->message = $survey->message . $message_footer;
-			$emailTemplate->class_name = "SurveyResponse";
-			$emailHandler = new EmailManager($response, $emailTemplate);
-			$sent = $emailHandler->sendEmail();	
-		}
-	}
-	
-	$survey->setStatus(survey_open); 
-}
-
-function onDeleteSurveyCascade($survey)
-{
-	$responses = $survey->Responses();
-	if(count($responses) > 0)
-	{
-		foreach($responses as $response)
-		{
-			$answers = $response->Answers();
-			if(count($answers) > 0)
-			{
-				foreach($answers as $answer)
-					$answer->delete();
-			}
-			$response->delete();
-		}
-	}
-	$survey->filter = new InclusionFilter("deleted");
-	$survey->deleted = true;
-	$survey->save();
-	
-}
-
-
-
-function getSurveyProgressBar($survey)
-{
-	$percentage = 0;
-	$total = queryValue(SurveyResponse, "COUNT(1)", "WHERE survey_id={$survey->survey_id}");
-	if($total > 0)
-	{
-		$responseCount = $survey->getResponseCount();
-		$percentage = round($responseCount / $total * 100, 0);
-	}
-	
-	$html = "<div class='col2'>\n";
-	$html .= $percentage . "%";
-	if ($responseCount) $html .= " <span style='font-size: 8pt'>($responseCount&nbsp;of&nbsp;$total)</span>";
-	$html .= "</div>\n";
-	$html .= "<div class='progress_bar'>\n";
-	$html .= "<div class='progress' style='width: $percentage%'>\n";
-	$html .= "</div></div>\n";
-	
-	return $html;
-}
-
 class SurveyMessageView
 {
 	function SurveyMessageView()
 	{
-		
+
 	}
-	
+
 	static function getView($surveyTemplates)
 	{
 
 		$table = new DataListView($surveyTemplates, "surveyTemplates");
 		$table->column("Title", "<input style='border: none' type='radio' name='message' value='{message}'>{title}</input>", false, "width: 25%")
-			->column("Message", "{message}", false, "width: 50%");
-	
+		->column("Message", "{message}", false, "width: 50%");
+
 		$table->emptyMessage = "There are no survey messages defined.";
 		$table->sortable = false;
 		$table->pageSize = 0;
@@ -348,9 +254,11 @@ class SurveyMessageView
 		$table->cssStyle = "width: 90%";
 
 		$table->drawView();
-?>
-  		<button class='button' style='float: left; margin-bottom: 5px; margin-top: 5px' onclick='updateSurveyMessage()'>Select Message</button>
-<?php		
+		?>
+<button class='button'
+	style='float: left; margin-bottom: 5px; margin-top: 5px'
+	onclick='updateSurveyMessage()'>Select Message</button>
+		<?php
 		return $table;
 	}
 }
@@ -361,16 +269,16 @@ class SurveyIntroductionView
 {
 	function SurveyIntroductionView()
 	{
-		
+
 	}
-	
+
 	static function getView($surveyTemplates)
 	{
 
 		$table = new DataListView($surveyTemplates, "surveyTemplates");
 		$table->column("Title", "<input style='border: none' type='radio' name='message' value='{message}'>{title}</input>", false, "width: 25%")
-			->column("Introduction", "{introduction}", false, "width: 50%");
-	
+		->column("Introduction", "{introduction}", false, "width: 50%");
+
 		$table->emptyMessage = "There are no survey introductions defined.";
 		$table->sortable = false;
 		$table->pageSize = 0;
@@ -379,9 +287,11 @@ class SurveyIntroductionView
 		$table->cssStyle = "width: 90%";
 
 		$table->drawView();
-?>
-  		<button class='button' style='float: left; margin-bottom: 5px; margin-top: 5px' onclick='updateSurveyIntroduction()'>Select Introduction</button>
-<?php		
+		?>
+<button class='button'
+	style='float: left; margin-bottom: 5px; margin-top: 5px'
+	onclick='updateSurveyIntroduction()'>Select Introduction</button>
+		<?php
 		return $table;
 	}
 }
@@ -390,26 +300,74 @@ class SurveyQuestionForm
 {
 	function SurveyQuestionForm()
 	{
-		
+
 	}
-	
+
 	static function settings($question)
 	{
 		$form = new AutoForm($question);
 		$form->required("question");
-		$form->annotate("options", "<br><span class='annotate'>For Multiple-Choice or CheckList questions, list each option on a separate line.<br/>For Rating questions, list the text for lowest rating, text for highest rating and number of steps on separate lines.</span>");
-		$form->annotate("required", "<span class='annotate'>enter 0 if not required, 1 if required, and for checklist, enter the count of required checkboxes</span>");
-		$form->annotate("char_limit", "<span class='annotate'>For freetext questions only</span>");
-		$form->annotate("num_rows", "<span class='annotate'>For freetext questions only</span>");
-		$form->hide("locked", "question_name");
+		$form->annotate("options", "<br><span class='annotate'>List each option on a separate line.</span>");
+		$form->annotate("question_name", "<span class='annotate'>For spreadsheet report column headings</span>");
+		$form->hide("locked");
 		if(!$question->survey_question_id)
 			$form->onSaveComplete = saveSurveyQuestionXref;
 
 		$form->allowDelete = false;
-	
-		$form->alias("char_limit", "Character Limit for Answer Field", 
-			"num_rows", "Number of Rows to Display for Answer");
-	
+
+		$form->alias("char_limit", "Character Limit for Answer",
+			"num_rows", "Number of Rows for Answer",
+			"options", "Options for Answer",
+			"required", "Answer Required"
+			);
+
+			$form->getRenderer("question")->height = "100px";
+
+			$form->add(new StringFieldRenderer($form), "label_for_lowest");
+			$form->add(new StringFieldRenderer($form), "label_for_highest");
+			$form->add(new NumberFieldRenderer($form), "number_of_steps");
+
+			$form->getRenderer("num_rows")->size = 5;
+			$form->getRenderer("char_limit")->size = 5;
+
+			if($question->survey_question_id && question_type_rating)
+				$form = SurveyQuestionForm::setOptionsToRatings($form);
+			else
+				$form = SurveyQuestionForm::setDefaultRatings($form);
+
+			$form->labelCSS = "survey_question_form_label";
+				
+			return $form;
+	}
+
+	static function setRatingsToOptions()
+	{
+		global $_POST;
+
+		$options = $_POST["label_for_lowest"] . "\r\n";
+		$options .= $_POST["label_for_highest"] . "\r\n";
+		$options .= $_POST["number_of_steps"] . "\r\n";
+
+		$_POST["options"] = $options;
+	}
+
+	static function setOptionsToRatings($form)
+	{
+		list($from, $to, $steps) = explode("\n", $form->data->get("options"));
+
+		$form->data->set("label_for_lowest", $from);
+		$form->data->set("label_for_highest", $to);
+		$form->data->set("number_of_steps", $steps);
+
+		return $form;
+	}
+
+	static function setDefaultRatings($form)
+	{
+		$form->data->set("label_for_lowest", "Lowest");
+		$form->data->set("label_for_highest", "Highest");
+		$form->data->set("number_of_steps", 5);
+
 		return $form;
 	}
 }
