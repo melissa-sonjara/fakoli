@@ -58,6 +58,11 @@ var Survey =  (function()
 			this.dialog = modalPopup('Survey Preview', '/action/survey/survey_template_view?survey_id=' + survey_id, '700px', 'auto', true);
 		},	
 
+		questionFormSetup: function(question_type_id)
+		{
+			var form = $('SurveyQuestion_form');
+			this.setQuestionTypeFields(question_type_id, form);
+		},
 		
 		setQuestionTypeOptions: function()
 		{
@@ -65,14 +70,13 @@ var Survey =  (function()
 			this.onChangeQuestionType(typeElt);
 		},
 		
-		onChangeQuestionType: function(typeElt)
+		setQuestionTypeFields: function(type, form)
 		{
-			var type = typeElt.value;
-			var form = $('SurveyQuestion_form');
-		
-			switch(type)
+			var question_type_id = parseInt(type);
+			
+			switch(question_type_id)
 			{
-				case "1": // multiple choice
+				case 1: // multiple choice
 					this.showOptionsField(form);
 					this.hide_tr('SurveyQuestion_form_num_rows');
 					this.hideRatingsFields();
@@ -80,7 +84,7 @@ var Survey =  (function()
 					this.renderRequiredCheckbox(form);
 					break;
 
-				case "2": // rating
+				case 2: // rating
 					this.hideOptionsField(form);
 					this.hide_tr('SurveyQuestion_form_num_rows');
 					this.showRatingsFields();
@@ -88,7 +92,7 @@ var Survey =  (function()
 					this.renderRequiredCheckbox(form);
 					break;
 			
-				case "3": // short text
+				case 3: // short text
 					this.hideOptionsField(form);
 					this.hide_tr('SurveyQuestion_form_num_rows');
 					this.hideRatingsFields();
@@ -96,7 +100,7 @@ var Survey =  (function()
 					this.renderRequiredCheckbox(form);
 					break;
 					
-				case "4": // free text
+				case 4: // free text
 					this.hideOptionsField(form);
 					this.show_tr('SurveyQuestion_form_num_rows');
 					this.hideRatingsFields();
@@ -104,7 +108,7 @@ var Survey =  (function()
 					this.renderRequiredCheckbox(form);
 					break;
 				
-				case "5": // checklist
+				case 5: // checklist
 					this.showOptionsField(form);
 					this.hide_tr('SurveyQuestion_form_num_rows');
 					this.hideRatingsFields();
@@ -112,7 +116,7 @@ var Survey =  (function()
 					this.renderRequiredNumber(form);
 					break;
 					
-				case "6": // drop down list
+				case 6: // drop down list
 					this.showOptionsField(form);
 					this.hide_tr('SurveyQuestion_form_num_rows');
 					this.hideRatingsFields();
@@ -123,6 +127,15 @@ var Survey =  (function()
 				default:
 					break;
 			}
+		},
+		
+		onChangeQuestionType: function(typeElt)
+		{
+			var type = typeElt.value;
+			var form = $('SurveyQuestion_form');
+		
+			var question_type_id = parseInt(type);
+			this.setQuestionTypeFields(question_type_id, form);
 		},
 		
 		hideOptionsField: function(form)
@@ -151,6 +164,7 @@ var Survey =  (function()
 			option_label_tr = this.getOptionsLabel(form);
 
 			this.show_tr('SurveyQuestion_form_options');
+			
 			if(option_label_tr)
 				option_label_tr.setStyle("display", "");
 		},
@@ -232,7 +246,8 @@ var Survey =  (function()
 		hide_tr: function(id)
 		{
 			var elt = $(id);
-			var tr = findAncestor(elt, "tr");
+			if(elt)
+				var tr = findAncestor(elt, "tr");
 			if(tr)
 				tr.setStyle("display", "none");		
 		},
@@ -240,7 +255,8 @@ var Survey =  (function()
 		show_tr: function(id)
 		{
 			var elt = $(id);
-			var tr = findAncestor(elt, "tr");
+			if(elt)
+				var tr = findAncestor(elt, "tr");
 			if(tr)
 				tr.setStyle("display", "");		
 		},
