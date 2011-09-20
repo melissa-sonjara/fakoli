@@ -53,7 +53,12 @@ class SurveyManifest
 		);
 	}
 
-
+	/*
+	 * Note: if this manifest subscribes to events:
+	 * QuestionnaireGetQuestion and QuestionnaireGetSurvey
+	 * the graphs feature for any website that does NOT
+	 * override the survey component will break.
+	 */
 	static function subscribeToEvents()
 	{
 		return array(
