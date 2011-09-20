@@ -122,7 +122,6 @@ class Question extends DataItem
 		return $text;	
 	}
 	
-	
 	function Question()
 	{
 		$this->table = "question";
