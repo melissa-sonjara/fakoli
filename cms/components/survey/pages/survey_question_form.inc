@@ -72,31 +72,29 @@ else
 $editable = $question->isEditable();
 $isTemplateQuestion = $question->isTemplateQuestion();
 
-if(!$editable OR $isTemplateQuestion)
-$question->filter = new ExclusionFilter("question_type_id", "options");
-
 $redirect = "/survey_questions?survey_id=$survey_id";
 
-$form = SurveyQuestionForm::settings($question);
+$form = SurveyQuestionForm::settings($question, $editable);
+
+$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
 
 if($editable AND !$isTemplateQuestion)
-{
-	$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
 	$typeSelect->onChange = "new Survey().onChangeQuestionType";
-}
 
 if($isTemplateQuestion)
-$form->readOnlyForm = true;
+	$form->readOnlyForm = true;
+elseif(!$editable)
+	$form->readOnly("question_type_id", "options");
 
 if($survey_question_id)
-$form->button("Remove", "/action/survey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
+	$form->button("Remove", "/action/survey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
 $form->button("Cancel", $redirect);
 $form->hide("question_name");
 
 if(!$editable)
-$infoText = $question->getInfoText(survey_question_answered);
+	$infoText = $question->getInfoText(survey_question_answered);
 elseif($isTemplateQuestion)
-$infoText = $question->getInfoText(survey_question_template);
+	$infoText = $question->getInfoText(survey_question_template);
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 $tabs->page = "survey_questions";
@@ -117,7 +115,7 @@ $script .= <<<ENDSCRIPT
 	<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		 new Survey().setQuestionTypeOptions();
+		 new Survey().questionFormSetup($question->question_type_id);
 	});	
 	</script>
 ENDSCRIPT;

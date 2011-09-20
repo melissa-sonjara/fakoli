@@ -122,20 +122,24 @@ class SurveyQuestion extends DataItem
 			return ($count > 1) ? false : true;
 		}
 
-
 		function isFreeText()
 		{
-			return ($this->question_type_id == question_type_free) ? true : false;
+			return ($this->question_type_id == 4) ? true : false;
 		}
 
 		function isShortText()
 		{
-			return ($this->question_type_id == question_type_short) ? true : false;
+			return ($this->question_type_id == 3) ? true : false;
 		}
 
 		function isCheckList()
 		{
-			return ($this->question_type_id == question_type_checklist) ? true : false;
+			return ($this->question_type_id == 5) ? true : false;
+		}
+		
+		function isRatings()
+		{
+			return ($this->question_type_id == 2) ? true : false;	
 		}
 
 

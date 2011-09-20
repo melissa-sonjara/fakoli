@@ -303,7 +303,7 @@ class SurveyQuestionForm
 
 	}
 
-	static function settings($question)
+	static function settings($question, $editable)
 	{
 		$form = new AutoForm($question);
 		$form->required("question");
@@ -321,23 +321,31 @@ class SurveyQuestionForm
 			"required", "Answer Required"
 			);
 
-			$form->getRenderer("question")->height = "100px";
+		$form->getRenderer("question")->height = "100px";
 
+		if($question->isRatings() || $editable)
+		{
 			$form->add(new StringFieldRenderer($form), "label_for_lowest");
 			$form->add(new StringFieldRenderer($form), "label_for_highest");
 			$form->add(new NumberFieldRenderer($form), "number_of_steps");
-
+		}
+		
+		if($editable || $question->isFreeText() || $question->isShortText())
+		{
 			$form->getRenderer("num_rows")->size = 5;
 			$form->getRenderer("char_limit")->size = 5;
+		}
+		else
+			$form->hide("num_rows", "char_limit");
 
-			if($question->survey_question_id && question_type_rating)
-				$form = SurveyQuestionForm::setOptionsToRatings($form);
-			else
-				$form = SurveyQuestionForm::setDefaultRatings($form);
+		if($question->survey_question_id && $question->isRatings())
+			$form = SurveyQuestionForm::setOptionsToRatings($form);
+		elseif($editable)
+			$form = SurveyQuestionForm::setDefaultRatings($form);
 
-			$form->labelCSS = "survey_question_form_label";
+		$form->labelCSS = "survey_question_form_label";
 				
-			return $form;
+		return $form;
 	}
 
 	static function setRatingsToOptions()

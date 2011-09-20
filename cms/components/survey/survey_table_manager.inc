@@ -33,7 +33,7 @@ class CMSSurveyTableManager
 		if(!$editable || $isTemplateQuestion)
 			return $question->question;
 		else
-			return $xref->format("<a href=\survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}\">{Question.question}</a>");
+			return $xref->format("<a href=\"survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}\">{Question.question}</a>");
 	}
 
 	function formatOptions($xref)
