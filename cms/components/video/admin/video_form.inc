@@ -65,6 +65,11 @@ $form->annotate("height", "<em>Natural height of video in pixels</em>");
 $form->annotate("video_file", "<em>Video File in FLV format</em>");
 $form->annotate("image_file", "<em>First Frame in PNG or JPG format</em>");
 
+if ($video_id && $video->video_file)
+{
+	$form->button("Play Video", "videoLightbox(this, '$video_id'); return false;");
+}
+
 $videoMgr = new VideoManager();
 if ($videoMgr->hasFFMPEG())
 {
