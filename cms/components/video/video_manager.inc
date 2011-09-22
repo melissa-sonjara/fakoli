@@ -84,6 +84,11 @@ class VideoManager
 		return $this->ffmpeg->getFrameRate();
 	}
 	
+	function getNextKeyFrame()
+	{
+		return $this->ffmpeg->getNextKeyFrame();
+	}	
+	
 	function makeMultipleTwo($value)
 	{
 		return intval($value) >> 1 << 1;
