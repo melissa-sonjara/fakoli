@@ -39,3 +39,9 @@ CREATE TABLE  `video_gallery` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `video` ADD COLUMN `sort_order` INTEGER UNSIGNED DEFAULT 0 AFTER `video_gallery_id`;
+
+-- END Version 1.1
