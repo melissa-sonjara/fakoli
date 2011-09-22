@@ -87,7 +87,12 @@ class VideoManager
 	function getNextKeyFrame()
 	{
 		return $this->ffmpeg->getNextKeyFrame();
-	}	
+	}
+
+	function getFrame($idx)
+	{
+		return $this->ffmpeg->getFrame($idx);
+	}
 	
 	function makeMultipleTwo($value)
 	{
