@@ -112,7 +112,7 @@ function uploadFLV($field, $video)
 {
 	global $config;
 	
-	trace("imageUploadHandler() called for $field", 3);
+	trace("uploadFLV() called for $field", 3);
 	
 	if (!$_FILES[$field]) 
 	{
