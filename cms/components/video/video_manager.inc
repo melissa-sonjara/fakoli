@@ -48,6 +48,28 @@ class VideoManager
 		Settings::setDefaultValue("video", "ffmpeg_path", "", String, "Directory containing the ffmpeg binary executables");
 	}
 	
+	static function onInitialize()
+	{
+		global $html_editor_extra_buttons;
+		global $script;
+		
+		$html_editor_extra_buttons[] =
+				array("name"	=>	"video_picker",
+					  "image"	=>	"/fakoli/images/video_button.png", 
+					  "tooltip"	=>	"Insert Video",
+					  "handler"	=>	"videoPicker");
+			
+		$flowPlayerScript = Settings::getValue("video", "flowplayer_script");
+		if ($flowPlayerScript)
+		{
+			$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";
+		}
+		
+		$flowPlayer = Settings::getValue("video", "flowplayer_player");
+		
+		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
+	}
+	
 	static function upgradeComponent()
 	{
 		$mgr = new VideoUpgradeManager();
