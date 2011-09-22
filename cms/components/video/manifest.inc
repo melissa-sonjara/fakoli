@@ -31,8 +31,6 @@
 
 *****************************************************************/
  
-Fakoli::using("settings");
-
 class VideoManifest
 {
 	static function getComponentDefinition()
@@ -62,28 +60,6 @@ class VideoManifest
 		);		
 	}	
 		
-	static function onInitialize()
-	{
-		global $html_editor_extra_buttons;
-		global $script;
-		
-		$html_editor_extra_buttons[] =
-				array("name"	=>	"video_picker",
-					  "image"	=>	"/fakoli/images/video_button.png", 
-					  "tooltip"	=>	"Insert Video",
-					  "handler"	=>	"videoPicker");
-			
-		$flowPlayerScript = Settings::getValue("video", "flowplayer_script");
-		if ($flowPlayerScript)
-		{
-			$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";
-		}
-		
-		$flowPlayer = Settings::getValue("video", "flowplayer_player");
-		
-		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
-	}
-		
 	static function getScripts()
 	{
 		return array("/components/video/js/video_picker.js",
@@ -93,7 +69,7 @@ class VideoManifest
 	static function subscribeToEvents()
 	{
 		return array("ComponentScanComplete"	=> array(VideoManager, setDefaults),
-					 "Initialize" 				=> array(VideoManifest, onInitialize),
+					 "Initialize" 				=> array(VideoManager, onInitialize),
 					 "RegisterBlogViewHandlers" => array(VideoBlogHandler, register),
 					 "upgradeComponent"			=> array(VideoManager, upgradeComponent));
 	}
