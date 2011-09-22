@@ -71,7 +71,7 @@ class Fakoli
 			}
 	
 			$components = Fakoli::getComponents();
-			var_dump($components);
+			
 			if (!$components[$component])
 			{
 				throw new FakoliException("Attempt to reference unknown or disabled component '$component'");
