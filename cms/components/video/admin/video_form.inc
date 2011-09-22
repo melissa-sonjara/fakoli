@@ -67,7 +67,7 @@ $form->annotate("image_file", "<em>First Frame in PNG or JPG format</em>");
 
 if ($video_id && $video->video_file)
 {
-	$form->button("Play Video", "videoLightbox(this, '$video_id'); return false;");
+	$form->button("Play Video", "videoLightbox(this, '$video_id'); return false;", false, true);
 }
 
 $videoMgr = new VideoManager();
