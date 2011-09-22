@@ -83,6 +83,7 @@ $form->allowDelete = true;
 
 $redirect = "/admin/videos";
 $form->button("Cancel", $redirect);
+$form->onSaveComplete = processVideo;
 
 if ($method == "POST")
 {
@@ -205,6 +206,20 @@ function uploadImage($field, $video)
   	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
   	chmod($target, 0755);
 	$video->image_file = basename($filename);  	
+
+	$videoMgr = new VideoManager();
+	if ($videoMgr->hasFFMPEG())
+	{
+		$videoMgr->open($filename);
+		$video->width = $videoManager->getFrameWidth();
+		$video->height = $videoManager->getFrameHeight();
+	}
+	
   	return true;
+}
+
+function processVideo($form)
+{
+	
 }
 ?>
