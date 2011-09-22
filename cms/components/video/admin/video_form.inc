@@ -175,7 +175,7 @@ function uploadFLV($field, $video)
 			unlink($target);
 		}
 		imagepng($frame, $target);
-		$video->imageFile = basename($target);
+		$video->image_file = basename($target);
 	}
 	
 	return true;
