@@ -168,9 +168,9 @@ function videoLightbox(element, id)
 
 	if (!title) title = "Video";
 
-	var size = httpRequest('/action/swf/video_size?video_id=' + id);
+	var size = httpRequest('/action/video/video_size?video_id=' + id);
 	var dimensions = size.split('x');
-	modalPopup(title, "/action/swf/video?video_id=" + id, (Number(dimensions[0]) + 8),(Number(dimensions[1]) + 36));
+	modalPopup(title, "/action/video/video?video_id=" + id, (Number(dimensions[0]) + 8),(Number(dimensions[1]) + 36));
 }
 
 function videoTranscript(id)
