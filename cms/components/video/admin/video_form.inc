@@ -160,8 +160,8 @@ function uploadFLV($field, $video)
 	if ($videoMgr->hasFFMPEG())
 	{
 		$videoMgr->open($target);
-		$video->width = $videoManager->getFrameWidth();
-		$video->height = $videoManager->getFrameHeight();
+		$video->width = $videoMgr->getFrameWidth();
+		$video->height = $videoMgr->getFrameHeight();
 	}
 	
 	return true;
