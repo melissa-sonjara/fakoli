@@ -51,17 +51,13 @@ class Video extends DataItem
 	
 	// Relationships
 	
-	var $relations = array("User"		=>	SiteUser,
+	var $relations = array("User"		=>	"",
 						   "Gallery"	=>	VideoGallery);
-	
-	function Image()
-	{
-		return $this->getRelated(ImageRecord);
-	}
 	
 	function User()
 	{
-		return $this->getRelated(SiteUser);
+		$mgr = new UserManager();
+		return $mgr->getUser($this->user_id);
 	}
 	
 	function VideoGallery()
@@ -73,6 +69,9 @@ class Video extends DataItem
 	{
 		$this->table = "video";
 		$this->primary_key = "video_id";
+		
+		$mgr = new UserManager();
+		$this->relations["Owner"] = $mgr->getUserClass(); 		
 		
 		$this->DataItem(func_get_args());
 	}
