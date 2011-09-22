@@ -167,6 +167,15 @@ function uploadFLV($field, $video)
 		$videoMgr->open($target);
 		$video->width = $videoMgr->getFrameWidth();
 		$video->height = $videoMgr->getFrameHeight();
+		
+		$frame = $videoMgr->getNextKeyFrame()->toGDImage();
+		$target .= ".png";
+		if (file_exists($target))
+		{
+			unlink($target);
+		}
+		imagepng($frame, $target);
+		$video->imageFile = basename($target);
 	}
 	
 	return true;
