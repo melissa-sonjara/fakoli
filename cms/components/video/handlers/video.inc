@@ -36,7 +36,7 @@ $video = new Video($video_id);
 
 $width = $video->width;
 $height = $video->height;
-$swf = "/swf/".$video->video_file;
+$swf = "/".Settings::getValue("video", "video_folder")."/".$video->video_file;
 
 ?>
 <div style="width: <?echo $width?>px; height: <?echo $height?>px; margin: 0; padding: 0;">
