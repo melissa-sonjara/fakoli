@@ -1,5 +1,10 @@
 window.addEvent('load', function()
 {
+	installFlowplayer();	
+});
+
+function installFlowplayer()
+{
 	if (!flowplayerPath) return;
 	
 	var videos = $$('.video');
@@ -14,5 +19,4 @@ window.addEvent('load', function()
 		var play = v.hasClass("autoplay");
 		flowplayer(v.id, flowplayerPath, {clip: { autoPlay: play, autoBuffering: true}});
 	});
-		
-});
+}

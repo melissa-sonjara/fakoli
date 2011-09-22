@@ -39,15 +39,7 @@ $height = $video->height;
 $swf = "/".Settings::getValue("video", "video_folder")."/".$video->video_file;
 
 ?>
-<div style="width: <?echo $width?>px; height: <?echo $height?>px; margin: 0; padding: 0;">
-            <object id="csSWF" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="<?echo $width?>" height="<?echo $height?>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,115,0">
-                <param name="src" value="http://<?echo $config['http_host']?><?echo $swf?>"/>
-                <param name="bgcolor" value="#1a1a1a"/>
-                <param name="quality" value="best"/>
-                <param name="allowScriptAccess" value="always"/>
-                <param name="allowFullScreen" value="true"/>
-                <param name="scale" value="showall"/>
-                <param name="flashVars" value="autostart=true"/>
-                <embed name="csSWF" src="http://<?echo $config['http_host']?><?echo $swf?>" width="<?echo $width?>" height="<?echo $height?>" bgcolor="#1a1a1a" quality="best" allowScriptAccess="always" allowFullScreen="true" scale="showall" flashVars="autostart=true&thumb=FirstFrame.png&thumbscale=45&showendscreen=false&color=0x1A1A1A,0x1A1A1A" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
-            </object>
-</div>           
+<a class='video autoplay' href='<?echo $swf?>' style='display: block; width: <?echo $width?>px; height: <?echo $height?>px;'></a>
+<script type='text/javascript'>
+installFlowplayer();
+</script>
