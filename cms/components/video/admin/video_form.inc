@@ -81,7 +81,7 @@ $imageUploadRenderer->size = 60;
 
 $form->allowDelete = true;
 
-$redirect = "/admin/videos";
+$redirect = "/admin/videos?video_gallery_id=$video_gallery_id";
 $form->button("Cancel", $redirect);
 $form->onSaveComplete = processVideo;
 
@@ -155,7 +155,16 @@ function uploadFLV($field, $video)
   	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
   	chmod($target, 0755);
 	$video->video_file = $filename;  	
-  	return true;
+
+	$videoMgr = new VideoManager();
+	if ($videoMgr->hasFFMPEG())
+	{
+		$videoMgr->open($filename);
+		$video->width = $videoManager->getFrameWidth();
+		$video->height = $videoManager->getFrameHeight();
+	}
+	
+	return true;
 }
 
 
@@ -206,14 +215,6 @@ function uploadImage($field, $video)
   	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
   	chmod($target, 0755);
 	$video->image_file = basename($filename);  	
-
-	$videoMgr = new VideoManager();
-	if ($videoMgr->hasFFMPEG())
-	{
-		$videoMgr->open($filename);
-		$video->width = $videoManager->getFrameWidth();
-		$video->height = $videoManager->getFrameHeight();
-	}
 	
   	return true;
 }
