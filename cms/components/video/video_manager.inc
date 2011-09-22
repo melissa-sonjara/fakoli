@@ -37,6 +37,7 @@ class VideoManager
 {
 	function VideoManager()
 	{
+		trace("Creating VideoManager", 3);
 	}
 	
 	static function setDefaults()
@@ -66,12 +67,16 @@ class VideoManager
 	
 	function getFrameWidth()
 	{
-		return $this->makeMultipleTwo($this->ffmpeg->getFrameWidth());	
+		$width = $this->makeMultipleTwo($this->ffmpeg->getFrameWidth());
+		trace("Width: $width", 3);
+		return $width;	
 	}
 	
 	function getFrameHeight()
 	{
-		return $this->makeMultipleTwo($this->ffmpeg->getFrameHeight());	
+		$height = $this->makeMultipleTwo($this->ffmpeg->getFrameHeight());
+		trace("Height: $height", 3);
+		return $height;	
 	}
 	
 	function getFrameRate()
