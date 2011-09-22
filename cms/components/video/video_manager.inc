@@ -60,6 +60,7 @@ class VideoManager
 	
 	function open($file)
 	{
+		trace("Opening video '$file'", 3);
 		$this->ffmpeg = new ffmpeg_movie($file);
 	}
 	
