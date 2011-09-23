@@ -65,6 +65,11 @@ $desc->height = "100px";
 $form->required("title", "start_date", "end_date");
 $form->hide("composite_class");
 
+if (!checkRole("admin"))
+{
+	$form->hide("published");
+}
+
 $form->allowDelete = true;
 $form->ajaxSubmit("function(result) {editEventResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
