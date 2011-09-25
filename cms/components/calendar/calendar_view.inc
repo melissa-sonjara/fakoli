@@ -62,8 +62,9 @@ class StandardEventHandler extends EventHandler
 		if($diff_dates <= 5) 
 		{
 			return ($dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp);
-	    }
-		else {
+		}
+		else 
+		{
 			return  ($dateTimeStamp == $startTimeStamp);
 		}
 	}
