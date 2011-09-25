@@ -54,7 +54,18 @@ class StandardEventHandler extends EventHandler
 		$endTimeStamp = strtotime($end[0]);
 		$dateTimeStamp = strtotime($date);
 		 
-		return $dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp;
+		$diff = abs($endTimeStamp - $startTimeStamp);
+        $days=getdate($diff);
+        $diff_dates = $days[mday] + 1;
+       
+		
+		if($diff_dates <= 5) 
+		{
+			return ($dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp);
+	    }
+		else {
+			return  ($dateTimeStamp == $startTimeStamp);
+		}
 	}
 	
 	// JDG - call this from event_details.inc to allow inheriting
