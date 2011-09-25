@@ -50,11 +50,14 @@ class CalendarManifest
 	{
 		return array
 		(
-			"Collaboration" => 
-
-				array("Calendars"	=>	array("page"	=>	"/admin/calendars",
-					  "role"	=>	"admin",
-					  "weight"	=>	2))
+			"Collaboration" => array("Calendars"	=>	array("page"	=>	"/admin/calendars",
+					 							   "role"	=>	"admin",
+					 							   "weight"	=>	2)
+												 ),
+				"Classification" => array("Event Types"	=>	array("page"	=>	"/admin/event_types",
+					 							      "role"	=>	"admin",
+					  								  "weight"	=>	10)
+												     )
 		);
 	}	
 
