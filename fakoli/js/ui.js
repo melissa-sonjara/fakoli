@@ -747,7 +747,7 @@ var PaginatingList = new Class(
 	createPagination: function()
 	{
 		this.paginator.empty();
-	    this.createPaginationNode( '&#171;', function(evt)
+	    this.createPaginationNode( '&#60;&#60;&#32;&#80;&#114;&#101;&#118;', function(evt)
 	    {
 	        var evt = new Event( evt );
 	        this.toPrevPage();
@@ -760,7 +760,7 @@ var PaginatingList = new Class(
 	    a.injectInside(li);
 	    li.injectInside(this.paginator);
 	    
-	    this.createPaginationNode( '&#187;', function(evt)
+	    this.createPaginationNode( '&#78;&#101;&#120;&#116;&#32;&#62;&#62;', function(evt)
 	    {
 	        var evt = new Event( evt );
 	        this.toNextPage();
@@ -772,10 +772,10 @@ var PaginatingList = new Class(
 	createPaginationNode: function( text, evt ) 
 	{
 	     var span = new Element( 'span' ).set( 'html', text );
-	     if (text == '&#171;'){
-	       var a = new Element( 'a', { 'href': '#', 'class': 'previous-page' }).addEvent( 'click', evt.bind( this ) );
-	     } else if (text == '&#187;'){
-	       var a = new Element( 'a', { 'href': '#', 'class': 'next-page' }).addEvent( 'click', evt.bind( this ) );
+	     if (text == '&#60;&#60;&#32;&#80;&#114;&#101;&#118;'){
+	       var a = new Element( 'a', { 'href': '#', 'class': 'paginate' }).addEvent( 'click', evt.bind( this ) );
+	     } else if (text == '&#78;&#101;&#120;&#116;&#32;&#62;&#62;'){
+	       var a = new Element( 'a', { 'href': '#', 'class': 'paginate' }).addEvent( 'click', evt.bind( this ) );
 	     } else {
 	       var a = new Element( 'a', { 'href': '#'}).addEvent( 'click', evt.bind( this ) );
 	     }

@@ -131,7 +131,7 @@ var PaginatingTable = new Class({
   create_pagination: function() {
     this.paginators.each(function(paginator){
       paginator.empty();
-      this.create_pagination_node( '&#171;', function(evt){
+      this.create_pagination_node( '&#60;&#60;&#32;&#80;&#114;&#101;&#118;', function(evt){
         var evt = new Event( evt );
         this.to_prev_page();
         evt.stop();
@@ -143,7 +143,7 @@ var PaginatingTable = new Class({
       a.injectInside(li);
       li.injectInside(paginator);
       
-     this.create_pagination_node( '&#187;', function(evt){
+     this.create_pagination_node( '&#78;&#101;&#120;&#116;&#32;&#62;&#62;', function(evt){
         var evt = new Event( evt );
         this.to_next_page();
         evt.stop();
@@ -154,10 +154,10 @@ var PaginatingTable = new Class({
  
   create_pagination_node: function( text, evt ) {
     var span = new Element( 'span' ).set( 'html', text );
-    if (text == '&#171;'){
-      var a = new Element( 'a', { 'href': '#', 'class': 'previous-page' }).addEvent( 'click', evt.bind( this ) );
-    } else if (text == '&#187;'){
-      var a = new Element( 'a', { 'href': '#', 'class': 'next-page' }).addEvent( 'click', evt.bind( this ) );
+    if (text == '&#60;&#60;&#32;&#80;&#114;&#101;&#118;'){
+      var a = new Element( 'a', { 'href': '#', 'class': 'paginate' }).addEvent( 'click', evt.bind( this ) );
+    } else if (text == '&#78;&#101;&#120;&#116;&#32;&#62;&#62;'){
+      var a = new Element( 'a', { 'href': '#', 'class': 'paginate' }).addEvent( 'click', evt.bind( this ) );
     } else {
       var a = new Element( 'a', { 'href': '#'}).addEvent( 'click', evt.bind( this ) );
     }
