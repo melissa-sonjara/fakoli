@@ -214,6 +214,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		
 		if (isset($_POST[$field]))
 		{
+			trace("AttachmentFieldRenderer postProcess _POST attachment field is ". $_POST[$field], 3);
 			$ids = explode(",", $_POST[$field]);
 			
 			foreach($ids as $id)
@@ -224,6 +225,10 @@ class AttachmentFieldRenderer extends FieldRenderer
 				$xref->save();
 			}
 		}
+		else
+		{
+			trace("AttachmentFieldRenderer postProcess _POST attachment field is empty", 3);			
+		}	
 	}
 }
 
