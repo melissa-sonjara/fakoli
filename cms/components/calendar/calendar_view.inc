@@ -152,7 +152,11 @@ class CalendarView
 		$cl = $event->composite_class;
 		if (!$cl) $cl = get_class($event);
 		trace("getting event handler for $cl", 3);
-		return $this->eventHandlers[$cl];
+		$handler = $this->eventHandlers[$cl];
+		// JDG 9/2011 if no hander for composite class, use Event handler
+		if(!$handler)
+			$handler = $this->eventHandlers["Event"];
+		return $handler;
 	}
 	
 	
