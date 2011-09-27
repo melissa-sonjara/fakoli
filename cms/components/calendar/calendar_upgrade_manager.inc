@@ -50,7 +50,7 @@ class CalendarUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>   "sql: Add the table event_type and calendar_event_type_xref"
+			"1.1"		=>   "done: Add the table event_type and calendar_event_type_xref"
 	);
 	
 	function CalendarUpgradeManager()
