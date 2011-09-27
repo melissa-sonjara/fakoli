@@ -46,11 +46,17 @@ class Calendar extends DataItem
 						"last_modified"	=>	Timestamp);
 	
 	var $relations = array("Events"	=>	Event,
-						   "Owner"	=>	"");
+						   "Owner"	=>	"",
+							"EventTypes" => EventType);
 	
 	function Events($constraint = "")
 	{
 		return $this->getRelatedList(Event, "", $constraint);
+	}
+	
+	function EventTypes($constraint = "")
+	{
+		return $this->crossReference(EventType, CalendarEventTypeXref, $constraint);
 	}
 	
 	function Owner()
