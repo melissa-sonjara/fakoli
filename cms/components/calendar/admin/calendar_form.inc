@@ -40,6 +40,8 @@ require_once "include/calendar_tabs.inc";
 
 $calendar_id = checkNumeric($_GET["calendar_id"]);
 
+$eventTypes = query(EventType, "order by name");
+
 if ($calendar_id)
 {
 	$calendar = new Calendar($calendar_id);
@@ -55,6 +57,7 @@ else
 $form = new AutoForm($calendar);
 $form->hide("owner_id");
 
+$calendar_event_type_list = new CrossReferenceSelectFieldRenderer($form, "event_type", "Event Types", $eventTypes, "name", CalendarEventTypeXref);
 $readList = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
 $writeList = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
 
