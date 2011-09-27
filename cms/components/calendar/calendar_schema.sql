@@ -43,3 +43,20 @@ CREATE TABLE `event_site_xref` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+CREATE TABLE  `seaperch`.`event_type` (
+  `event_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`event_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+CREATE TABLE  `seaperch`.`calendar_event_type_xref` (
+  `calendar_event_type_xref_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `calendar_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `event_type_id` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`calendar_event_type_xref_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+-- END Version 1.1
