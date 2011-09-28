@@ -40,7 +40,7 @@ class SectionManifest
 		$component->description = "Section management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 4;
 		$component->enabled = true;
 		
 		return $component;

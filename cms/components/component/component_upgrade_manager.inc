@@ -44,7 +44,6 @@
  * 
  */
 
-Fakoli::using("component");
 require_once "cms/components/component/upgrade_manager.inc";
 
 class ComponentUpgradeManager extends UpgradeManager

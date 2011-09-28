@@ -46,7 +46,8 @@ class FakoliException extends Exception {}
  */
 class Fakoli
 {
-	static $componentsUsed = array();
+	static $componentsUsed = array();	///< Array of the components that have been referenced in this page request
+	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
 	
 	/**
 	 * Import the datamodels, views and manifest for the specified component.
@@ -129,6 +130,9 @@ class Fakoli
 		
 		if (!$components)
 		{
+			$component = new Component();
+			if (!$component->tableExists()) Fakoli::bootstrap();
+		
 			$components = indexedQuery(Component, "WHERE enabled=1", "name");
 			if (count($components) == 0)
 			{
@@ -137,6 +141,7 @@ class Fakoli
 			}
 			
 			Cache::put("fakoli_components", $components);
+			
 		}
 		
 		return $components;
@@ -169,10 +174,24 @@ class Fakoli
 		require_once "cms/components/component/datamodel/component_page.inc";
 		require_once "cms/components/component/datamodel/admin_page.inc";
 		require_once "cms/components/component/component_manager.inc";
+		
 		$mgr = new ComponentManager();
 		$mgr->scan();
 	}
 	
+	static function bootstrap()
+	{
+		require_once "cms/components/component/datamodel/component.inc";
+		require_once "cms/components/component/datamodel/component_page.inc";
+		require_once "cms/components/component/datamodel/admin_page.inc";
+		require_once "cms/components/component/component_manager.inc";
+		require_once "cms/components/component/upgrade_manager.inc";
+		require_once "cms/components/component/component_upgrade_manager.inc";
+		
+		$mgr = new ComponentUpgradeManager();
+		$mgr->bootstrap();
+	}	
+		
 	/**
 	 * Assert that the user has one of the specified roles.
 	 * @param string $role

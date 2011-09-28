@@ -9,7 +9,7 @@ class ModuleManager
 	
 	static function upgradeComponent()
 	{
-		$mgr = new MenuUpgradeManager();
+		$mgr = new ModuleUpgradeManager();
 		$mgr->upgrade();
 	}	
 }

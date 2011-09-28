@@ -209,6 +209,8 @@ class ComponentManager
 	{
 		global $config;
 		
+		Fakoli::$scanning = true;
+		
 		$this->tx = new DataTransaction();
 		
 		try
@@ -252,6 +254,8 @@ class ComponentManager
 			ComponentManager::fireEvent("upgradeComponent");
 			
 			ComponentManager::fireEvent("ComponentScanComplete");
+			
+			Fakoli::$scanning = false;
 		}
 		catch(Exception $e)
 		{
@@ -259,6 +263,9 @@ class ComponentManager
 			if(isset($this->tx))
 				$this->tx->rollback();
 			unset($this->tx);
+			
+			Fakoli::$scanning = false;
+			
 			throw $e;
 		}
 	}
@@ -342,6 +349,8 @@ class ComponentManager
 	{
 		trace("** Firing event '$event'", 4);
 		 
+		Fakoli::using("user");
+		
 		$eventMap = ComponentManager::getEventHandlers();
 		
 		if (!array_key_exists($event, $eventMap)) 

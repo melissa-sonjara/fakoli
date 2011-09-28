@@ -40,7 +40,7 @@ class EmailManifest
 		$component->description = "Email management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 10;
+		$component->priority = 3;
 		$component->enabled = true;
 		
 		return $component;

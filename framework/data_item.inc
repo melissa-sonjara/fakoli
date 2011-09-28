@@ -695,6 +695,39 @@ class DataItem extends AbstractDataItem
 	}
 
 	/**
+	 * Check if the table for this class exists in the database.
+	 */
+	function tableExists()
+	{
+		$query = "SHOW TABLES LIKE '{$this->table}'";
+		$db = $this->getConnection();
+				
+		trace($query, 3);
+		
+		$exists = false;
+		
+		try
+		{
+			$result = $db->prepare($query);
+			$result->execute();
+			
+			if ($line = $result->fetch())
+			{
+				$exists = true;
+			}
+			
+			unset($result);
+		}
+		catch(PDOException $e)
+		{
+			$err = "DataItem::tableExists() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
+		}
+
+		return $exists;
+	}	
+	/**
 	 * Retrieves the distinct values in the database for the specified field 
 	 * across the specified set of records.
 	 * @param string $field

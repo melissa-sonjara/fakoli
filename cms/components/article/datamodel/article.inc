@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("blog");
+Fakoli::using("blog", "user");
 
 /**
  * Defines the Article class.

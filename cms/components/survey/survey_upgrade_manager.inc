@@ -44,7 +44,7 @@
  * 
  */
 
-Fakoli::using("survey", "component");
+Fakoli::using("survey", "component", "user");
 
 class SurveyUpgradeManager extends UpgradeManager
 {

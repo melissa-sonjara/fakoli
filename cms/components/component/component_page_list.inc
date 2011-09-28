@@ -31,7 +31,6 @@
 
 *****************************************************************/
 
-Fakoli::using("component", "role", "site");
 Fakoli::usingFeature("data_view", "context_menu");
 
 class ComponentPageListView

@@ -32,8 +32,6 @@
 *****************************************************************/
 
 
-Fakoli::using("component");
-
 class AdminPageView
 {
 	var $identifier;

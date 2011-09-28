@@ -18,7 +18,7 @@ CREATE TABLE `survey` (
   `sender_email` varchar(100) DEFAULT NULL,
   `recipients` text,
   `message` text,
-  `status` varchar(15) varchar(15) NOT NULL DEFAULT 'not sent',
+  `status` varchar(15) NOT NULL DEFAULT 'not sent',
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links a questionnaire to an email template';
