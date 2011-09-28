@@ -578,6 +578,12 @@ class DataListView
 					$x->writeNumber($r, $c, $val);
 					break;
 					
+				case Currency:
+					
+					$val = str_replace(array("$", ","), array("", ""), $val);
+					$x->writeNumber($r, $c, $val);
+					break;
+					
 				default:
 					
 					/* JDG 5/11/10 currency export fix */
