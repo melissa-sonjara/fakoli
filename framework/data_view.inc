@@ -587,9 +587,9 @@ class DataListView
 				default:
 					
 					/* JDG 5/11/10 currency export fix */
-					if (preg_match("/^[\\d\\,\\.]+$/", $val))
+					if (preg_match("/^[\\d\\,\\.\\$]+$/", $val))
 					{
-						$val = str_replace(",", "", $val);
+						$val = str_replace(array("$", ","), array("", ""), $val);
 						$x->writeNumber($r, $c, $val);
 					}
 					else
