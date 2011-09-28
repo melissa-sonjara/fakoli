@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("section", "field_renderers", "site");
+Fakoli::using("section", "field_renderers", "site", "role");
 Fakoli::usingFeature("auto_form");
 
 require_once "include/section_tabs.inc";
