@@ -69,6 +69,8 @@ Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
  * 	$yearSelect = new FilterFieldRenderer($filterForm, "year", "Year", Budget::getYearOptions());
  *  $yearSelect->all = false; // we don't want to show "All" option in the filter
  *  
+ *  $constraint = $filterForm->getConstraint();
+ *  
  *  $filterForm->drawForm();
  *  
  *  * * * * * * * * *
@@ -87,7 +89,7 @@ Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
  *  
  *  $applications = query(Application, $filterForm->getConstraint()." ORDER BY round_key DESC");
  *	
- *   $filterForm->drawForm();
+ *  $filterForm->drawForm();
  *  
  *  Example when using CompositeDataItems:
  *  Must use methods get and set on the CompositeDataItem
@@ -99,6 +101,10 @@ Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
  *  $te->set("event_type", $_GET["event_type"]);
  *  $filterForm = new FilterForm($te);
  *  $typeSelect = new FilterFieldRenderer($filterForm, "event_type", "Event Type", array(TrainingEvent::formatEventTypes()));
+ *  
+ *  $constraint = $filterForm->getConstraint();
+ *  
+ *  $filterForm->drawForm();
  *  
  */
 class FilterForm extends SearchForm
@@ -152,14 +158,11 @@ class FilterForm extends SearchForm
 			if (!array_key_exists($field, $this->hidden) &&
 				!($obj->filter && $obj->filter->isExcluded($field)))
 			{
-				if($obj->get("$field"))
-				{
-					if($obj->$field && !is_int($obj->$field))
-						$value = urlencode($obj->$field);
-					else
-						$value = $obj->$field;
+				$value = $obj->get($field);
+				if($value && !is_int($value))
+					$value = urlencode($value);
+				if($value)
 					$this->search->setParam($field, "equal", $value);
-				}
 			}
 		}
 	}

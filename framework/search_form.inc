@@ -552,7 +552,9 @@ class SearchParameters
 				$modifier = "equal";
 			}
 			
-			$handler = $this->handlers[$this->target->fields[$field]];
+			// JDG 9/2011 - handle CompositeDatItems
+			$fields = $this->target->getFields();
+			$handler = $this->handlers[$fields[$field]];
 			if ($handler == null)
 			{
 				die("Unknown Type: {$this->target->fields[$field]} for field $field");
