@@ -89,6 +89,17 @@ Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
  *	
  *   $filterForm->drawForm();
  *  
+ *  Example when using CompositeDataItems:
+ *  Must use methods get and set on the CompositeDataItem
+ *  
+ *  $filterForm->data->set("event_type", $_GET["event_type"]);
+ *  
+ *  $te = 	new CompositeTrainingEvent();
+ *  $te->filter = new InclusionFilter("event_type");
+ *  $te->set("event_type", $_GET["event_type"]);
+ *  $filterForm = new FilterForm($te);
+ *  $typeSelect = new FilterFieldRenderer($filterForm, "event_type", "Event Type", array(TrainingEvent::formatEventTypes()));
+ *  
  */
 class FilterForm extends SearchForm
 {	
@@ -132,15 +143,23 @@ class FilterForm extends SearchForm
 	{
 		$obj = $this->data;
 		
+		// JDG 9/2011 handle CompositeDataItems
+		$fields = $obj->getFields();
 		$this->search = new SearchParameters($obj);
 
-		foreach(array_keys($obj->fields) as $field)
+		foreach(array_keys($fields) as $field)
 		{
 			if (!array_key_exists($field, $this->hidden) &&
 				!($obj->filter && $obj->filter->isExcluded($field)))
 			{
 				if($obj->get("$field"))
-					$this->search->setParam($field, "equal", $obj->$field);
+				{
+					if($obj->$field && !is_int($obj->$field))
+						$value = urlencode($obj->$field);
+					else
+						$value = $obj->$field;
+					$this->search->setParam($field, "equal", $value);
+				}
 			}
 		}
 	}
@@ -196,12 +215,11 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		<option value="<?php echo $this->all_value ?>">All</option>  
 		<?
     	}
-
-     	$fieldValue = $this->parent->data->get($field);
-    	trace("Filter form renderer field $fieldValue", 3);
-    	foreach($this->options as $value => $name)
+    	
+     	$fieldValue = $this->parent->data->get("$field");
+     	foreach($this->options as $value => $name)
 		{
-			$selected = (!strcmp($value, $fieldValue)) ? " selected" : "";
+  			$selected = (!strcmp($value, $fieldValue)) ? " selected" : "";
 			echo "<option value='{$value}' $selected>$name</option>\n";
 		}
 		?>

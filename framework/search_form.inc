@@ -828,8 +828,10 @@ class SearchForm extends AutoForm
 	function renderSearchFields()
 	{
 		$obj =& $this->data;
+		// JDG 9/2011 handle CompositeDataItems
+		$fields = $obj->getFields();
 		
-		foreach(array_keys($obj->fields) as $field)
+		foreach(array_keys($fields) as $field)
 		{
 			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
 				!($obj->filter && $obj->filter->isExcluded($field)))
