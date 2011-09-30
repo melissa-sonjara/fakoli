@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("component");
+Fakoli::using("component", "role");
 Fakoli::usingFile("framework/tab_bar.inc");
 
 Fakoli::assertRole("admin");

@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("section", "field_renderers");
+Fakoli::using("section", "field_renderers", "role");
 Fakoli::usingFeature("auto_form");
 
 Fakoli::assertRole("admin");

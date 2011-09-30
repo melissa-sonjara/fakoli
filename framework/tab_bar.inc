@@ -432,7 +432,7 @@ ENDSCRIPT;
 	{
 		foreach($this->tabs as $text => $entry)
 		{
-			if (isobject($entry) && get_class($entry) == "TabBar")
+			if (is_object($entry) && get_class($entry) == "TabBar")
 			{
 				$entry->defaultStateImage = $img;
 			}
