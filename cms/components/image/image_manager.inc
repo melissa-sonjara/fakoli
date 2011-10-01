@@ -338,7 +338,7 @@ class ImageManager
 			$page = ComponentPage::findByIdentifier("image_gallery", "WHERE enabled=1");
 			$_GET["gallery_id"] = $gallery->gallery_id;
 		
-			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+			$pageView = new ComponentPageView($page);
 		
 			$page_role = $page->role;
 			

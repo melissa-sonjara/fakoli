@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2011 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,55 +31,31 @@
 
 *****************************************************************/
  
-class VideoManifest
+Fakoli::using("video");
+
+$gallery_id = checkNumeric($_GET["gallery_id"]);
+
+if (!$gallery_id)
 {
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "video";
-		$component->description = "Support for videos, video galleries and video blogs.";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 10;
-		$component->enabled = true;
-		
-		return $component;
-	}
-
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Web Site Content"	=> array
-			(
-
-				"Videos"	=>	array("page"	=>	"/admin/video_galleries",
-									  "role"	=>	"admin",
-								  	  "weight"	=>	9)
-			)
-		);		
-	}	
-		
-	static function getScripts()
-	{
-		return array("/components/video/js/video_picker.js",
-					 "/components/video/js/video.js");
-	}
-	
-	static function getStyles()
-	{
-		return array("/components/video/css/video.css");
-	}
-	
-	static function subscribeToEvents()
-	{
-		return array("ResolveIdentifier" 		=> array(VideoManager, displayVideoGallery),
-					 "EnumerateItems"	 		=> array(VideoManager, enumerateItems),
-					 "ComponentScanComplete"	=> array(VideoManager, setDefaults),
-					 "Initialize" 				=> array(VideoManager, onInitialize),
-					 "RegisterBlogViewHandlers" => array(VideoBlogHandler, register),
-					 "upgradeComponent"			=> array(VideoManager, upgradeComponent));
-	}
+	redirect("/index");
+	return;
 }
 
+
+$gallery = new VideoGallery($gallery_id);
+
+if (!$gallery->published)
+{
+	redirect("/index");
+	return;
+}
+
+$videos = $gallery->Videos();
+
+$page->page_title = $gallery->gallery_name;
+
+$view = new VideoGalleryView($videos, "#", "videos", "videoLightbox(this, {video_id}); return false");
+$view->spacing = "6px";
+$view->styles = "margin-left: 40px";
+$view->drawGallery();
 ?>

@@ -31,55 +31,14 @@
 
 *****************************************************************/
  
-class VideoManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "video";
-		$component->description = "Support for videos, video galleries and video blogs.";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 10;
-		$component->enabled = true;
-		
-		return $component;
-	}
+Fakoli::using("video");
 
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Web Site Content"	=> array
-			(
+$video_id = checkNumeric($_GET["video_id"]);
+$size = checkNumeric($_GET["size"]);
+$width = checkNumeric($_GET["width"]);
+$height = checkNumeric($_GET["height"]);
 
-				"Videos"	=>	array("page"	=>	"/admin/video_galleries",
-									  "role"	=>	"admin",
-								  	  "weight"	=>	9)
-			)
-		);		
-	}	
-		
-	static function getScripts()
-	{
-		return array("/components/video/js/video_picker.js",
-					 "/components/video/js/video.js");
-	}
-	
-	static function getStyles()
-	{
-		return array("/components/video/css/video.css");
-	}
-	
-	static function subscribeToEvents()
-	{
-		return array("ResolveIdentifier" 		=> array(VideoManager, displayVideoGallery),
-					 "EnumerateItems"	 		=> array(VideoManager, enumerateItems),
-					 "ComponentScanComplete"	=> array(VideoManager, setDefaults),
-					 "Initialize" 				=> array(VideoManager, onInitialize),
-					 "RegisterBlogViewHandlers" => array(VideoBlogHandler, register),
-					 "upgradeComponent"			=> array(VideoManager, upgradeComponent));
-	}
-}
+$mgr = new VideoManager();
+$mgr->renderThumbnail($video_id, $size, $width, $height);
 
 ?>

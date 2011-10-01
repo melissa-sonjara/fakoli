@@ -45,7 +45,7 @@ class ComponentPageView
 	var $page; 		///< The ComponentPage object that we are viewing
 	var $template; 	///< The layout template used to render the page.
 	
-	function ComponentPageView($page, $template)
+	function ComponentPageView($page, $template = "")
 	{
 		$this->page = $page;
 		$this->template = $template;	
