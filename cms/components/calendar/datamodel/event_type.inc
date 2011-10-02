@@ -39,11 +39,26 @@ class EventType extends DataItem
 	var $fields = array("event_type_id"	=>	Number,
 						"name"			=>	String,
 						);
-	
-	
+
 	// Relations
 	
 	var $relations = array();
+	
+	function getEventTypeList()
+	{
+		$eventTypeList = array();
+		
+		$eventTypes = Query::create(EventType, "ORDER BY name")->execute();
+		if(count($eventTypes) > 0)
+		{
+			foreach($eventTypes as $eventType)
+			{
+				$eventTypeList[$eventType->name] = $eventType->name;
+			}
+		}
+		
+		return $eventTypeList;
+	}
 	
 	function EventType()
 	{
