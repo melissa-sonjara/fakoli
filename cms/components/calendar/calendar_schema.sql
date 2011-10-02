@@ -60,3 +60,14 @@ CREATE TABLE `calendar_event_type_xref` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+INSERT INTO `event_type` (`event_type_id`,`name`) VALUES 
+ (1,'Competition'),
+ (2,'Mission'),
+ (3,'Kick-off'),
+ (4,'Showcase'),
+ (5,'Training');
+ 
+ --END Version 1.2
