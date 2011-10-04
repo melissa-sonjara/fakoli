@@ -104,6 +104,9 @@ Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
  *  
  *  $constraint = $filterForm->getConstraint();
  *  
+ *  Use constraint to query on your target object's table, 
+ *  e.g., "Events"
+ *  
  *  $filterForm->drawForm();
  *  
  */
@@ -167,9 +170,16 @@ class FilterForm extends SearchForm
 		}
 	}
 	
-	function getConstraint()
+	/*
+	 * getConstraint
+	 * 
+	 * @first: whether this set of clauses is the first in a group
+	 * 
+	 * @firstText: the text is this is the first clause: either
+	 * WHERE or AND ( 
+	 */	function getConstraint($first = true, $firstText = "WHERE")
 	{
-		return $this->search->generateConstraint(true);
+		return $this->search->generateConstraint($first, $firstText);
 	}	
 }
 
