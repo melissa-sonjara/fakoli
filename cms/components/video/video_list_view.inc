@@ -163,18 +163,3 @@ class VideoGalleryListView
 		$this->table->drawView();		
 	}
 }
-
-class AdminVideoGalleriesView extends VideoGalleriesView
-{
-	function AdminVideoGalleriesView()
-	{
-		parent::VideoGalleriesView();	
-	}
-	
-	function formatTitleLink($gallery)
-	{
-		return $gallery->format("<a href='/admin/video_gallery_form?gallery_id={gallery_id}'>{gallery_name}</a>");	
-	}
-	
-}
-	
