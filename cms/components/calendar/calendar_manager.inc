@@ -87,6 +87,12 @@ class CalendarManager
 		$mgr->upgrade();
 	}	
 	
+	static function calendarGetHandler()
+	{
+		$calendarHandler = new CalendarHandler();
+		return $calendarHandler;
+	}
+	
 }
 
 ?>
