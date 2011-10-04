@@ -36,14 +36,14 @@ Fakoli::usingFeature("auto_form", "data_view", "filter_form");
 
 $identifier = $_GET["cal"];
 
+$event_type = $_GET["event_type"];
+
 $calendar = Calendar::findByIdentifier($identifier);
 
 if (!checkRole($calendar->read_access)) redirect("/");
 
 $year = checkNumeric($_REQUEST["year"]);
 $month = checkNumeric($_REQUEST["month"]);
-
-$event_type = $_REQUEST["event_type"];
 
 $page->page_title = "{$calendar->name}";
 
@@ -81,40 +81,15 @@ $endStr = sprintf("%d-%02d-01", $nextYear, $nextMonth);
 
 $constraint = "WHERE 1=1 AND end_date >= '$startStr' AND start_date < '$endStr' AND published=1";
 
-if($event_type) {
-    $constraint .= " AND event_type = '$event_type' ";
-}
+$calendarHandler = ComponentManager::fireEvent("calendarGetHandler", $identifier);
 
-$constraint .= " ORDER BY start_date";
+$calendarHandler->drawFilter();
 
-$events = $calendar->Events($constraint);
-
-$view = new CalendarView($events, "fullcalendar");
-
+$view = new CalendarView($calendarHandler->getEvents($calendar, $contraint), "fullcalendar");
 $view->year = $year;
 $view->month = $month;
-
-$event = 	new CompositeEventAddress();
-
-$event->filter = new InclusionFilter("event_type");
-
-$event->set("event_type", $event_type);
-		
-$filterForm = new FilterForm($event);
-
-$typeSelect =  new FilterFieldRenderer($filterForm, "event_type", "Event Type", EventType::getEventTypeList());
-$typeSelect->all = false;
-
-$filterForm->drawForm();
-
 $view->drawMonth();
 
-if ($user && checkRole($calendar->write_access))
-{
-?>
-<br/>
-<a href='/admin/event_form?calendar_id=<?echo $calendar->calendar_id?>' onclick="newEvent(<?echo $calendar->calendar_id?>); return false;" class='button'>Add an Event</a>
-<br/>
-<?
-}
+$calendarHandler->addButtonsAtBottom($calendar);
+
 ?>
