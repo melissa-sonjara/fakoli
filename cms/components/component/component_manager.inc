@@ -99,22 +99,22 @@ class ComponentManager
 			    		trace("== Instantiating $cl", 3);
 			    		
 			    		$manifest = new $cl;
+			    		$component = $manifest->getComponentDefinition();
+			    		$component->component_path = $f;
+			    		$component->joinTransaction($this->tx);
+			    		$component->save();
+			    		
+			    		$this->found[$file] = $component;
+			    		
+			    		$this->scanAdminPages($component);
+			    		$this->scanComponentPages($component);
+		    		
 		    		}
 		    		catch(Exception $e)
 		    		{
 		    			trace("-- Failed to instantiate manifest class. Skipping...", 3);	    		
 		    		}
 	
-		    		$component = $manifest->getComponentDefinition();
-		    		$component->component_path = $f;
-		    		$component->joinTransaction($this->tx);
-		    		$component->save();
-		    		
-		    		$this->found[$file] = $component;
-		    		
-		    		$this->scanAdminPages($component);
-		    		$this->scanComponentPages($component);
-		    		
 		    		Cache::invalidate("fakoli_includes_$file");
 		    	}
 		    }
