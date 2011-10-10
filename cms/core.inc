@@ -450,7 +450,7 @@ class Fakoli
 	}
 }
 
-Fakoli::using("user", "login", "component");
+Fakoli::using("component", "user", "login");
 
 $user = null;
 
