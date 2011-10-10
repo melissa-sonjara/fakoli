@@ -199,9 +199,8 @@ abstract class UpgradeManager
 	{
 		global $config;
 	
-		$fakoliFile = realpath(dirname(__FILE__)."/../" . $this->component_name ."/". $this->component_name . "_schema.sql");
-		$siteFile = $config['homedir'] . "/" . "components" ."/".  $this->component_name ."/". $this->component_name . "_schema.sql";
-		$this->sqlFile = (file_exists($siteFile)) ? $siteFile : $fakoliFile;
+		$component = Component::getComponent($this->component_name);		
+		$this->sqlFile = $component->component_path . DIRECTORY_SEPARATOR . $this->component_name . "_schema.sql";
 	}
 	
 	
