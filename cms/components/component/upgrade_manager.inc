@@ -355,7 +355,7 @@ abstract class UpgradeManager
 		{
 			$db->rollBack();
 			fclose($fp);
-			ajaxReturn("SQL execute version update failed - ".$e->getMessage());	
+			ajaxReturn("Failed to upgrade {$this->component_name} to $version_id - ".$e->getMessage());	
 		}
 	
 		return true;
