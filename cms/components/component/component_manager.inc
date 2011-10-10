@@ -352,8 +352,6 @@ class ComponentManager
 	{
 		trace("** Firing event '$event'", 4);
 		 
-		Fakoli::using("user");
-		
 		$eventMap = ComponentManager::getEventHandlers();
 		
 		if (!array_key_exists($event, $eventMap)) 
