@@ -272,7 +272,36 @@ class ComponentManager
 			throw $e;
 		}
 	}
+
+	/**
+	 * Locate the component path for the named component using the
+	 * standard precedence rules.
+	 * @param string $name
+	 */
+	static function findComponentPath($name)
+	{
+		global $config;
 		
+		$path .= $config['homedir'] . PATH_SEPARATOR . ini_get("include_path");
+			
+		$roots = explode(PATH_SEPARATOR, $path);
+			
+		foreach($roots as $root)
+		{
+			if ($root == ".") continue;
+
+			$path = $root . DIRECTORY_SEPARATOR . "cms" . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . $name;
+			
+			if (file_exists($path)) return $path;
+			
+			$path = $root . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . $name;
+			
+			if (file_exists($path)) return $path;
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Retrieve the component definition record for the specified component.
 	 * @param $component the name of the component
