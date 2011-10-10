@@ -199,8 +199,8 @@ abstract class UpgradeManager
 	{
 		global $config;
 	
-		$component = Component::findComponentPath($this->component_name);		
-		$this->sqlFile = $component->component_path . DIRECTORY_SEPARATOR . $this->component_name . "_schema.sql";
+		$path = ComponentManager::findComponentPath($this->component_name);		
+		$this->sqlFile = $path . DIRECTORY_SEPARATOR . $this->component_name . "_schema.sql";
 	}
 	
 	
