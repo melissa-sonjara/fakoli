@@ -235,6 +235,8 @@ class ComponentManager
 			
 			foreach($roots as $root)
 			{
+				if ($root == ".") continue;
+				
 				trace("Scanning $root for components", 3);
 				$this->scanComponents($root, "cms/components");
 				$this->scanComponents($root, "components");
