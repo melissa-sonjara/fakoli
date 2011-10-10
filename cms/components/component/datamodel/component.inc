@@ -79,6 +79,11 @@ class Component extends DataItem
 		return $options;
 	}
 	
+	static function getComponent($name)
+	{
+		return Query::create(Component, "WHERE name=:n")->bind(":n", $name)->executeSingle();
+	}
+	
 	function Component()
 	{
 		$this->table = "component";
