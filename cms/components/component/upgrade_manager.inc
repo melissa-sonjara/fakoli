@@ -199,7 +199,7 @@ abstract class UpgradeManager
 	{
 		global $config;
 	
-		$component = Component::getComponent($this->component_name);		
+		$component = Fakoli::getComponent($this->component_name);		
 		$this->sqlFile = $component->component_path . DIRECTORY_SEPARATOR . $this->component_name . "_schema.sql";
 	}
 	
