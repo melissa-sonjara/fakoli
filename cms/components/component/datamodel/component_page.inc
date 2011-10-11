@@ -151,7 +151,6 @@ class ComponentPage extends DataItem
 		
 		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
 
-		echo "{$config['homedir']}/templates/{$templateFile}";
 		return $template;
 	}
 		
