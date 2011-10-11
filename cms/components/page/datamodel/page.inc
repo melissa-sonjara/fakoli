@@ -97,7 +97,7 @@ class Page extends DataItem
 		// If no modules have been set, use the section defaults
 		if (count($modules) == 0 && $section)
 		{
-			$modules = $section->getmodulesByPosition($constraint);
+			$modules = $section->getModulesByPosition($constraint);
 		}
 		
 		// Merge in global modules
