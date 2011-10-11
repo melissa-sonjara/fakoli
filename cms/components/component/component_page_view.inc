@@ -82,7 +82,7 @@ class ComponentPageView
 			$site = Site::getSite(); // Pass through to code include
 		
 		$template = $this->page->getTemplate();
-		echo $template;
+		echo "TEMPLATE: $template";
 		$template = ComponentManager::fireEvent("PreProcessPage", $template);
 		
 		// If the page has a PHP code include, execute it and insert the contents
