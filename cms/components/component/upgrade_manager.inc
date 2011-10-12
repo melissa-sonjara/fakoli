@@ -90,17 +90,17 @@
  * Example: comment component
 
 -------
-Fakoli::using("comment", "component");
+Fakoli::using("mycomponent", "component");
 
-class CommentUpgradeManager extends UpgradeManager
+class MyComponentUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 		"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function CommentUpgradeManager()
+	function MyComponentUpgradeManager()
 	{
-		$this->component_name = "comment";
+		$this->component_name = "mycomponent";
 
 		// sets the sqlFile name according to default
 		parent::UpgradeManager();		
@@ -359,6 +359,12 @@ abstract class UpgradeManager
 		}
 	
 		return true;
+	}
+	
+	function log($text)
+	{
+		$text = preg_replace("/<br>$/i", "", $text);
+		$this->log .= $text . "\r\n";
 	}
 	
 	function recordUpdate($version, $description)
