@@ -1461,6 +1461,41 @@ function getFullQueryString()
 	return $qs;
 }
 		
+/*
+ * Convert a php array to a javascript array.
+ * 
+ * @items - array of objects or simple array
+ * 
+ * @field - if items is array of objects, the field
+ * in the object to use to create the javascript array
+ * 
+ * returns javascript array in the format "[cat, dog, spider]";
+ */
+function toJSArray($items, $field = "")
+{
+	$js_arr = "[";
+	$first = true;
+
+	if(count($items) == 0)
+		return "";
+		
+	if(is_object($items[0]) && !$field)
+	{
+		$field = $items[0]->getPrimaryKey();
+	}
+		
+	foreach($items as $item)
+	{
+		if (!$first) $js_arr .=", ";
+		$js_arr .= (is_object($item) && $field) ? $item->$field : $item;
+		$first = false;
+	}
+		
+	$js_arr .= "]";
+	
+	return $js_arr;
+}
+
 /**
  * Creates a randomized string of characters. This is not cryptographically secure
  * and should not be used for cryptographic operations.
