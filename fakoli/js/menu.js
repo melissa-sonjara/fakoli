@@ -33,10 +33,12 @@
 var FakoliMenu = new Class({
 	
 	root:	Class.Empty,
+	reveal:	null,
 	
-	initialize: function(elt)
+	initialize: function(elt, reveal)
 	{
 		this.root = $(elt);
+		this.reveal = reveal;
 		var menu = this;
 		
 		document.focusWatcher.addEvent('focusChanged', function() { if (!this.root.hasChild(document.focusWatcher.focus)) this.clearFocus(); }.bind(menu));
@@ -66,6 +68,10 @@ var FakoliMenu = new Class({
 						elt.addClass("sfhover"); 
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyles({'left': elt.getCoordinates().left, 'top': elt.getCoordinates().bottom}); 
+						if (this.reveal)
+						{
+							ul.reveal(reveal);
+						}
 					},
 						
 					'mouseout': function() 
@@ -73,6 +79,10 @@ var FakoliMenu = new Class({
 						elt.removeClass("sfhover");  
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyle('left', -2000);
+						if (this.reveal)
+						{
+							ul.dissolve();
+						}
 					} 
 				 });
 			});
@@ -85,6 +95,10 @@ var FakoliMenu = new Class({
 		
 		var parent = elt.getParent();
 		parent.addClass('sfhover');
+		if (this.reveal)
+		{
+			elt.reveal(reveal);
+		}
 	},
 	
 	clearFocus: function()
