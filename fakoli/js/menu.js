@@ -68,9 +68,9 @@ var FakoliMenu = new Class({
 						elt.addClass("sfhover"); 
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyles({'left': elt.getCoordinates().left, 'top': elt.getCoordinates().bottom}); 
-						if (this.reveal)
+						if (menu.reveal)
 						{
-							ul.reveal(reveal);
+							ul.reveal(menu.reveal);
 						}
 					},
 						
@@ -79,7 +79,7 @@ var FakoliMenu = new Class({
 						elt.removeClass("sfhover");  
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyle('left', -2000);
-						if (this.reveal)
+						if (menu.reveal)
 						{
 							ul.dissolve();
 						}
@@ -97,7 +97,7 @@ var FakoliMenu = new Class({
 		parent.addClass('sfhover');
 		if (this.reveal)
 		{
-			$(elt).reveal(reveal);
+			$(elt).reveal(this.reveal);
 		}
 	},
 	
