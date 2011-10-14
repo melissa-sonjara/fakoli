@@ -97,7 +97,7 @@ var FakoliMenu = new Class({
 		parent.addClass('sfhover');
 		if (this.reveal)
 		{
-			elt.reveal(reveal);
+			$(elt).reveal(reveal);
 		}
 	},
 	
