@@ -61,6 +61,7 @@ $size = filesize($filepath);
 	
 header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
+header("Cache-Control: must-revalidate");
 header("Content-Type: $mimeType");
 header("Content-Length: $size");
 	
