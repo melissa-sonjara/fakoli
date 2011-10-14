@@ -33,12 +33,10 @@
 var FakoliMenu = new Class({
 	
 	root:	Class.Empty,
-	reveal:	null,
 	
-	initialize: function(elt, reveal)
+	initialize: function(elt)
 	{
 		this.root = $(elt);
-		this.reveal = reveal;
 		var menu = this;
 		
 		document.focusWatcher.addEvent('focusChanged', function() { if (!this.root.hasChild(document.focusWatcher.focus)) this.clearFocus(); }.bind(menu));
@@ -55,8 +53,8 @@ var FakoliMenu = new Class({
 			});
 		});
 		
-		//if (Browser.Engine.trident)
-		//{
+		if (Browser.Engine.trident)
+		{
 			// Suckerfish style dropdown implementation for IE6 mouseovers.
 			
 			$$("#" + this.root.id + " > ul > li").each(function (elt)
@@ -68,10 +66,6 @@ var FakoliMenu = new Class({
 						elt.addClass("sfhover"); 
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyles({'left': elt.getCoordinates().left, 'top': elt.getCoordinates().bottom}); 
-						if (menu.reveal)
-						{
-							ul.reveal(menu.reveal);
-						}
 					},
 						
 					'mouseout': function() 
@@ -79,14 +73,10 @@ var FakoliMenu = new Class({
 						elt.removeClass("sfhover");  
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyle('left', -2000);
-						if (menu.reveal)
-						{
-							ul.dissolve();
-						}
 					} 
 				 });
 			});
-		//}
+		}
 	},
 	
 	updateFocus: function(event, elt)
@@ -95,10 +85,6 @@ var FakoliMenu = new Class({
 		
 		var parent = elt.getParent();
 		parent.addClass('sfhover');
-		if (this.reveal)
-		{
-			$(elt).reveal(this.reveal);
-		}
 	},
 	
 	clearFocus: function()
