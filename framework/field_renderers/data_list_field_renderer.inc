@@ -54,26 +54,25 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class DataListFieldRenderer extends FieldRenderer
 {
 	var $field;
+	var $label;
 	var $table;
 	
 	function DataListFieldRenderer(&$parent, $table, $field = "", $label = "")
 	{
 		$this->FieldRenderer($parent);
-		if(!$field)
-			$field = $table->id;
-			
-		if(!$label)
-			$label = prettify($field);
-		$this->field = $field;
+
+		$this->field = ($field) ? $field : $table->id;
+		$this->label = ($label) ? $label : prettify($this->field);
+				
 		$this->table = $table;
-		if ($parent->data->hasField($field))
+		if ($parent->data->hasField($this->field))
 		{
-			$parent->override($field, $label, $this);
+			$parent->override($this->field, $this->label, $this);
 		}
 		else
 		{
-			$parent->add($this, $field);	
-			$form->overrides[$field]['label'] = $label;
+			$parent->add($this, $this->field);	
+			$form->overrides[$this->field]['label'] = $this->label;
 		}
 		$this->colspan = 2;
 	}
