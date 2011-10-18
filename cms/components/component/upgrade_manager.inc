@@ -363,8 +363,10 @@ abstract class UpgradeManager
 	
 	function log($text)
 	{
-		$text = preg_replace("/<br>$/i", "", $text);
-		$this->log .= $text . "\r\n";
+		if(preg_match("/(<br>|<br\/>)$/i", $text))
+			$this->log .= preg_replace(array("/<br>$/i", "/<br\/>$/i"), "\r\n", $text);
+		else
+			$this->log .= $text . "\r\n";
 	}
 	
 	function recordUpdate($version, $description)
