@@ -118,7 +118,14 @@ class TreeNode
 		}
 		else
 		{
-			$title = "<a href='#' onclick='return false'>{$this->title}</a>{$this->extras}";
+			$title = "<a href='#' onclick='";
+			
+			if ($_activeTree->onSelect)
+			{
+				$title .= "{$_activeTree->onSelect}(\"{$this->value}\");";
+			}
+			
+			$title .= "; return false'>{$this->title}</a>{$this->extras}";
 		}
 		
 		if ($c == 0 && !$this->onDemand)
@@ -126,7 +133,7 @@ class TreeNode
 			// Leaf node
 			echo "<div class='{$this->leafStyle}'>";
 
-			if (isset($this->value) && $this->value !== "")
+			if (isset($this->value) && $this->value !== "" && $_activeTree->selectMode != 'navigation')
 			{
 ?>
 			<input type="checkbox" class="checkbox" name="<? echo $this->id?>" value="<? echo $this->value?>"<? 
@@ -134,16 +141,16 @@ class TreeNode
 				if ($this->disabled) echo " disabled";
 				if ($_activeTree->selectMode == "single") 
 				{
-					echo " onclick=\"clearCheckBoxes('{$_activeTree->id}', this);";
+					echo " onclick=\"Tree.clearCheckBoxes('{$_activeTree->id}', this);";
 					if ($_activeTree->onSelect)
 					{
-						echo " {$_activeTree->onSelect}();";
+						echo " {$_activeTree->onSelect}('{$this->value}');";
 					}
 					echo "\"";
 				}
 				else if ($_activeTree->onSelect)
 				{
-					echo " onclick=\"{$_activeTree->onSelect}();\"";
+					echo " onclick=\"{$_activeTree->onSelect}('{$this->value}');\"";
 				}
 				 ?>/>
 <?
@@ -197,13 +204,13 @@ class TreeNode
 					echo " onclick=\"Tree.clearCheckBoxes('{$_activeTree->id}', this);";
 					if ($_activeTree->onSelect)
 					{
-						echo " {$_activeTree->onSelect}();";
+						echo " {$_activeTree->onSelect}('{$this->value}');";
 					}
 					echo "\"";
 				}
 				else if ($_activeTree->onSelect)
 				{
-					echo " onclick=\"{$_activeTree->onSelect}();\"";
+					echo " onclick=\"{$_activeTree->onSelect}('{$this->value}');\"";
 				}
 				 ?>/>
 <?

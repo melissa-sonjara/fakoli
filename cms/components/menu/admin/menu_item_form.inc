@@ -83,6 +83,9 @@ $identifierSelect = new SelectFieldRenderer($form, "identifier", "Page", $pageCh
 */
 $identifierSelect = new CMSItemSelectFieldRenderer($form, "identifier", "Page", null);
 
+$urlSelect = new CMSLinkSelectFieldRenderer($form, "url", "Link");
+
+
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
 
 
