@@ -231,6 +231,8 @@ class ComponentManager
 			
 			$path .= $config['homedir'] . PATH_SEPARATOR . ini_get("include_path");
 			
+			if (isset($config["extra_includes"])) $path .= PATH_SEPARATOR . $config["extra_includes"];
+			
 			$roots = explode(PATH_SEPARATOR, $path);
 			
 			foreach($roots as $root)
