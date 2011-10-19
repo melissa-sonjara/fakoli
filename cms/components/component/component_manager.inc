@@ -191,7 +191,7 @@ class ComponentManager
 					$page->component = $component->name;
 					$page->server_path = $pages . DIRECTORY_SEPARATOR . $file;
 					$page->role = "";
-					$page->enabled = false;
+					$page->enabled = true;
 					$page->scanned = true;
 					$page->save();
 				}						
