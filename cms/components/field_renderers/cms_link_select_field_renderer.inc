@@ -7,9 +7,9 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 	var $editableValue = true;
 	var $size = 40;
 	
-	function CMSLinkSelectFieldRenderer($form, $field, $label)
+	function CMSLinkSelectFieldRenderer(&$form, $field, $label)
 	{
-		$this->FieldRenderer($form);
+		$this->FieldRenderer(&$form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);
