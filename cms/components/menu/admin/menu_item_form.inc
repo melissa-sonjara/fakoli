@@ -64,7 +64,7 @@ $form = new AutoForm($menuItem);
 
 $form->required("title");
 //$form->allowDelete = true;
-$form->hide("parent_id", "menu_id", "page_id");
+$form->hide("parent_id", "menu_id", "page_id", "identifier");
 /*
 $pageChoices = array("Content Pages" => array(), "Component Pages" => array());
 
@@ -80,8 +80,8 @@ foreach($componentPages as $page)
 }
 
 $identifierSelect = new SelectFieldRenderer($form, "identifier", "Page", $pageChoices, null, true);
-*/
 $identifierSelect = new CMSItemSelectFieldRenderer($form, "identifier", "Page", null);
+*/
 
 $urlSelect = new CMSLinkSelectFieldRenderer($form, "url", "Link");
 
