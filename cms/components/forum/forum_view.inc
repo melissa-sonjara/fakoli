@@ -64,7 +64,7 @@ class ForumListView
 	
 	function formatTitle($item)
 	{
-		$text = "<a href='{$this->forumLink}?forum_id={$item->forum_id}'>{$item->title}</a";
+		$text = "<a href='{$this->forumLink}?forum_id={$item->forum_id}'>{$item->title}</a>";
 		if ($item->teaser)
 		{
 			$text .= "<br/><span class='small'>{$item->teaser}</span>";
