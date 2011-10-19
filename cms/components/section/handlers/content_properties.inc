@@ -56,7 +56,7 @@ if ($method == "POST")
 	
 	if ($scope == "role" || $scope == "all")
 	{
-		$sectionContent->role = implode(",", $_POST["role"]);
+		$sectionContent->role = isset($_POST["role"]) ? implode(",", $_POST["role"]) : "";
 	}
 	
 	$form->postProcessFields($sectionContent->primary_key, $filter);
