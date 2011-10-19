@@ -1075,7 +1075,7 @@ var RichTextEditor = new Class({
 		text = text.replace(/<link(?:.|[\n\r])*?>/gi, "");
 
 	    text = text.replace(/<(\/?(?:p|a[^>]*|h\d|ul|ol|li|br|hr|table|tbody|thead|tfoot|tr|td)).*?>/gi, "[_*_[$1]_*_]");
-	    text = text.replace(/<[\s\S]?>/gi, "");
+	    text = text.replace(/<[\s\S]*?>/gi, "");
 	    text = text.replace(/\[_\*_\[/gi, "<");
 	    text = text.replace(/\]_\*_\]/gi, ">");
 	    text = text.replace(/<p>\s*<\/p>/g, "");
