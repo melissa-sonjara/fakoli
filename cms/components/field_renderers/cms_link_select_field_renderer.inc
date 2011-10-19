@@ -9,7 +9,7 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 	
 	function CMSLinkSelectFieldRenderer(&$form, $field, $label)
 	{
-		$this->FieldRenderer(&$form);
+		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);
@@ -25,7 +25,7 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 	{
 
 		$itemsByType = array();
-		$itemsByType = ComponentManager::fireEvent("EnumerateItems", &$itemsByType);
+		$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
 		$types = $this->categorizeItemTypes($itemsByType);
 		
 		$this->tree = new TreeControl("items");
