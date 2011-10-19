@@ -56,19 +56,19 @@ class ComponentPageListView
 		
 		$contextMenu = $this->table->commandMenu();
 		$contextMenu->command("component_enable", "Enable Pages", "new ComponentPageList().setEnabled(1)", false)
-					->command("component_disable", "Disable Pages", "new ComponentPageList().setEnabled(0)", false)
-					->command("component_site",	"Set Page Template", "new ComponentPageList().templatePopup($('component_pages').getSelectedValues())", false)
-					->command("component_roles", "Set Page Roles", "new ComponentPageList().rolePopupMulti($('component_pages').getSelectedValues())", false)
-					->command("component_site",	"Set Page Site", "new ComponentPageList().sitePopup($('component_pages').getSelectedValues())", false);
+					->command("component_disable", "Disable Pages", "new ComponentPageList().setEnabled(0)", false);
+					//->command("component_site",	"Set Page Template", "new ComponentPageList().templatePopup($('component_pages').getSelectedValues())", false)
+					//->command("component_roles", "Set Page Roles", "new ComponentPageList().rolePopupMulti($('component_pages').getSelectedValues())", false)
+					//->command("component_site",	"Set Page Site", "new ComponentPageList().sitePopup($('component_pages').getSelectedValues())", false);
 		
 		if (!$component)
 		{
 			$this->table->column("Component", array($this, formatComponent), true);
 		}
 			
-		$this->table->column("Page", "<a href='/admin/component_page_form?component_page_id={component_page_id}'>{identifier}</a>", true)
-			 		->column("Template", array($this, formatTemplate), true)
-			 		->column("Role(s)", array($this, formatRole), true, "vertical-align: middle")
+		$this->table->column("Page", "<a href='/admin/component_page_form?component_page_id={component_page_id}'>{identifier}</a>", true, "width: 50%")
+			 		//->column("Template", array($this, formatTemplate), true)
+			 		//->column("Role(s)", array($this, formatRole), true, "vertical-align: middle")
 			 		->column("Enabled", array($this, formatEnabled), false, "width: 10%; text-align: center");
 		$this->table->sortable = true;
 		$this->table->filter = true;
