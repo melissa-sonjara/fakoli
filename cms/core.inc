@@ -137,11 +137,12 @@ class Fakoli
 			if (count($components) == 0)
 			{
 				Fakoli::initialComponentScan();
-				$components = indexedQuery(Component, "WHERE enabled=1", "name");
+				$components = Cache::get("fakoli_components");
 			}
-			
-			Cache::put("fakoli_components", $components);
-			
+			else
+			{
+				Cache::put("fakoli_components", $components);
+			}
 		}
 		
 		return $components;

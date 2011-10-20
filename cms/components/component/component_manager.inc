@@ -256,6 +256,9 @@ class ComponentManager
 			$this->tx->commit();
 			unset($this->tx);
 		
+			$components = indexedQuery(Component, "WHERE enabled=1", "name");			
+			Cache::put("fakoli_components", $components);
+			
 			ComponentManager::fireEvent("upgradeComponent");
 			
 			ComponentManager::fireEvent("ComponentScanComplete");
