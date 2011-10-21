@@ -53,6 +53,13 @@
     line-height: 16px;
 }
 
+/* span class inside h3 for city, state, year, etc. */
+#grouped_list h3 .details
+{
+	font-size: 12px;
+	font-weight: normal;
+}
+
 /* div for teaser or summary of the item displayed */
 #grouped_list .summary
 {
