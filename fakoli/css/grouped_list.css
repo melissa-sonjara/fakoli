@@ -1,0 +1,60 @@
+@CHARSET "ISO-8859-1";
+
+/* default styles to accompany framework/grouped_list or GroupedList class */
+
+
+#grouped_list
+{
+	list-style: none;
+	margin-right: 40px;
+}
+
+#grouped_list li
+{
+	list-style: none;	
+}
+
+#grouped_list a
+{
+	display: block;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 12px #888;
+	-webkit-box-shadow: 2px 2px 12px #888;
+	box-shadow: 2px 2px 12px #888;
+	padding: 5px;
+	margin-bottom: 10px;
+	background-color: #EEEEEE;
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#grouped_list img
+{
+	margin: 5px;
+	border: solid 1px #666;
+}
+
+/* The expand/collapse node/title of the list */
+#grouped_list .node
+{
+	font-weight: bold;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* The heading for each li summary block */
+#grouped_list h3
+{
+  	color: #000000;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+/* div for teaser or summary of the item displayed */
+#grouped_list .summary
+{
+	margin-left: 130px;
+}
