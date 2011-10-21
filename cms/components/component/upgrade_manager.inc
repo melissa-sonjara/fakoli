@@ -394,8 +394,8 @@ abstract class UpgradeManager
 	 * to a section.
 	 * 
 	 * Alternatively, $items can be an array of
-	 * identifiers as long as the identifiers are
-	 * a CMS Page or Component Page.
+	 * identifiers or a single identifier as long as 
+	 * the identifiers are a CMS Page or Component Page.
 	 * 
 	 * We find the section based on the section name,
 	 * and query the existing content to avoid adding
