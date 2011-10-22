@@ -61,21 +61,27 @@ class SettingAutoForm extends AutoForm
 				$this->annotate($setting->name, $setting->annotation);
 
 			/*
-		 	* Create SelectFieldRenderer using the setting 
-		 	* options field values.
+			 * Create custom renderers. If option is not
+			 * a custom renderer name, then assume it is
+			 * a set of options for SelectFieldRenderer.
 		 	*/
-	
-			if($setting->options)
+			if($setting->options == "FileUploadFieldRenderer")
+			{
+				$renderers[$setting->settings_id] = new FileUploadFieldRenderer($this, $setting->name, prettify($setting->name), uploadSettingFile);
+				$this->annotate($setting->name, "<a href='/action/settings/download?setting_id={$setting->settings_id}'>{$setting->value}</a>");
+				
+			}
+			elseif($setting->options)
 			{
 				$optionList = $setting->formatOptionList();
 				if(isset($optionList))
 					$renderers[$setting->settings_id] = new SelectFieldRenderer($this, $setting->name, prettify($setting->name), $optionList);
 			}
+	
 			
 		}
-					
-		$this->submitLabel = "Save Changes";
-			
+
+		$this->submitLabel = "Save Changes";			
 	}
 	
 	function writeSettings($settings)
@@ -117,8 +123,6 @@ class SettingAutoForm extends AutoForm
 	
 		$indexedSettings = reindexList($this->settings, "name");
 		
-		echo "<pre>"; print_r($obj); echo "</pre>";
-		
 		foreach($obj->fields as $name => $type)
 		{
 			if(array_key_exists($name, $indexedSettings))
@@ -133,4 +137,51 @@ class SettingAutoForm extends AutoForm
 		}
 		return true;
 	}
+}
+
+function uploadSettingFile($field, $setting)
+{
+	global $config;
+
+	trace("uploadSettingFile called for $field", 3);
+
+	if (!$_FILES[$field])
+	{
+		trace("No upload record for $field", 2);
+		return false;
+	}
+	if ($_FILES[$field]["name"]=="")
+	{
+		trace("Upload name is empty", 2);
+		return false;
+	}
+
+	/* Copy across the uploaded file */
+
+	trace("Upload Base: {$config['uploadbase']}", 3);
+	trace("Upload Directory: {$config['uploaddir']}", 3);
+
+	$dir = $config["uploaddir"];
+	$name = $_FILES[$field]["name"];
+	$file = "$dir/$name";
+
+	trace ("Uploading file to {$config['uploadbase']}/$file", 3);
+
+	if (!file_exists("{$config['uploadbase']}/$dir"))
+	{
+		// If the directory does not exist, create it
+		mkdir("{$config['uploadbase']}/$dir");
+	}
+	else if (file_exists("{$config['uploadbase']}/$file"))
+	{
+		// If a previous copy of the file already exists, remove it
+		unlink("{$config['uploadbase']}/$file");
+	}
+
+	move_uploaded_file($_FILES[$field]["tmp_name"], "{$config['uploadbase']}/$file");
+	chmod("{$config['uploadbase']}/$file", 0755);
+
+	$setting->$field = "$file";
+	 
+	return true;
 }

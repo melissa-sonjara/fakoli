@@ -538,30 +538,28 @@ abstract class UpgradeManager
 	 * We need the full object b/c we need to set the menu 
 	 * item's role using the object's roles
 	 * 
-	 * $menu_name - name of menu to which the item should be
-	 * added
+	 * $menu_identifier - identifier of menu in table "menu" to which the item should be
+	 * added (e.g., "personnel_subnav", "global")
 	 *
 	 * $title - the title to give to the menu item, if not supplied
 	 * then prettify the identifier
 	 * 
-	 * $parent_menu - the title of the menu_item under which this menu item 
-	 * should be added - empty if top level
+	 * $parent_identifier - the identifier of the menu_item in menu_item table
+	 * under which this menu item should be added - empty if top level
 	 * 
 	 * $sort_order - the desired sort order for this item; if empty
 	 * then set to bottom.
 	 * 
 	 */
-	function addMenuItem($item, $menu_name, $title = "", $parent_menu = "", $sort_order = 0)
+	function addMenuItem($item, $menu_identifier, $title = "", $parent_identifier = "", $sort_order = 0)
 	{				
 		// Find the menu
-		$menus = Query::create(Menu, "WHERE name=:name")
-			->bind(":name", $menu_name)
+		$menus = Query::create(Menu, "WHERE identifier=:identifier")
+			->bind(":identifier", $menu_identifier)
 			->execute();
 			
 		if(count($menus) == 0)
-		{
 			return false;
-		}
 		else
 			$menu = $menus[0];
 			
@@ -572,8 +570,7 @@ abstract class UpgradeManager
 		}
 		else
 			$page = $item;
-			
-			
+						
 		$found = Query::create(MenuItem, "WHERE identifier=:identifier AND menu_id=:menu_id")
 			->bind(":identifier", $page->identifier, ":menu_id", $menu->menu_id)
 			->executeValue("COUNT(1)");
@@ -586,10 +583,10 @@ abstract class UpgradeManager
 		
 		$parent_id = 0;
 		
-		if($parent_menu)
+		if($parent_identifier)
 		{
-			$parents = Query::create(MenuItem, "WHERE title=:title")
-				->bind(":title", $parent_menu)
+			$parents = Query::create(MenuItem, "WHERE identifier=:identifier")
+				->bind(":identifier", $parent_identifier)
 				->execute();
 
 			if(count($parents) > 0)
@@ -606,7 +603,7 @@ abstract class UpgradeManager
 		$menuItem = new MenuItem();
 		$menuItem->title = ($title) ? $title : prettify($page->identifier);
 		$menuItem->menu_id = $menu->menu_id;
-		$menuItem->parent_id = ($parent) ? $parent->menu_item_id : 0;
+		$menuItem->parent_id = $parent_id;
 		$menuItem->published = 1;
 		$menuItem->role = $page->role;
 		$menuItem->identifier = $page->identifier;

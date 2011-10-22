@@ -56,7 +56,7 @@ $form->readOnly("component");
 $form->hide("value");
 $form->button("Cancel", "/admin/setting_list");
 $form->annotate("name", "Please use a code-style name with lowercase letters and underscores between words (e.g., output_path). <b><i>Warning</b></i> Changes to the name will require code changes.");
-$form->annotate("options", "Option list for select or checklist field renderers. <b><i>Warning</b></i>: changing the order of options will change the selected value on the Application Settings form.");
+$form->annotate("options", "Option list for select or checklist field renderers or name of custom field renderer (e.g., FileUploadFieldRenderer). <b><i>Warning</b></i>: changing the order of options will change the selected value on the Application Settings form.");
 $form->annotate("name", "Name changes must be accompanied by code updates to the function that sets the default value.");
 $typeSelect = new SelectFieldRenderer($form, "field_type", "Field Type", Settings::$fieldTypes);
 
