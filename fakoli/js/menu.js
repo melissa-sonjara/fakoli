@@ -33,10 +33,15 @@
 var FakoliMenu = new Class({
 	
 	root:	Class.Empty,
+	options: 
+	{
+		position: 'bottomLeft'
+	},
 	
-	initialize: function(elt)
+	initialize: function(elt, options)
 	{
 		this.root = $(elt);
+		this.options = options;
 		var menu = this;
 		
 		document.focusWatcher.addEvent('focusChanged', function() { if (!this.root.hasChild(document.focusWatcher.focus)) this.clearFocus(); }.bind(menu));
@@ -65,7 +70,7 @@ var FakoliMenu = new Class({
 					{ 
 						elt.addClass("sfhover"); 
 						var ul = elt.getElement('ul');
-						if (ul) ul.position({'relativeTo': elt, position: 'bottomLeft'}); 
+						if (ul) ul.position({'relativeTo': elt, 'position': menu.options.position}); 
 					},
 						
 					'mouseout': function() 
