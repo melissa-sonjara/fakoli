@@ -32,6 +32,8 @@
 
 var FakoliMenu = new Class({
 	
+	Implements: [Options],
+	
 	root:	Class.Empty,
 	options: 
 	{
@@ -42,7 +44,7 @@ var FakoliMenu = new Class({
 	initialize: function(elt, options)
 	{
 		this.root = $(elt);
-		this.options = options;
+		this.options = this.setOptions(options);
 		var menu = this;
 		
 		document.focusWatcher.addEvent('focusChanged', function() { if (!this.root.hasChild(document.focusWatcher.focus)) this.clearFocus(); }.bind(menu));
