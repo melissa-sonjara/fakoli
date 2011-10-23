@@ -65,7 +65,7 @@ var FakoliMenu = new Class({
 					{ 
 						elt.addClass("sfhover"); 
 						var ul = elt.getElement('ul');
-						if (ul) ul.setStyles({'position': 'relative', 'left': 0, 'top': elt.getCoordinates().height}); 
+						if (ul) ul.position({'relativeTo': elt, position: 'bottomLeft'}); 
 					},
 						
 					'mouseout': function() 
