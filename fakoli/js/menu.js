@@ -38,7 +38,7 @@ var FakoliMenu = new Class({
 	options: 
 	{
 		position: 'bottomLeft',
-		effect: ''
+		effect: 'fade'
 	},
 	
 	initialize: function(elt, options)
