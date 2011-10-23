@@ -35,7 +35,8 @@ var FakoliMenu = new Class({
 	root:	Class.Empty,
 	options: 
 	{
-		position: 'bottomLeft'
+		position: 'bottomLeft',
+		effect: ''
 	},
 	
 	initialize: function(elt, options)
@@ -70,7 +71,15 @@ var FakoliMenu = new Class({
 					{ 
 						elt.addClass("sfhover"); 
 						var ul = elt.getElement('ul');
-						if (ul) ul.position({'relativeTo': elt, 'position': menu.options.position}); 
+						if (ul) ul.position({'relativeTo': elt, 'position': menu.options.position});
+						if (effect == 'fade')
+						{
+							ul.fade('in');
+						}
+						else if (effect == 'reveal')
+						{
+							ul.reveal();
+						}
 					},
 						
 					'mouseout': function() 
@@ -78,6 +87,14 @@ var FakoliMenu = new Class({
 						elt.removeClass("sfhover");  
 						var ul = elt.getElement('ul');
 						if (ul) ul.setStyle('left', -2000);
+						if (effect == 'fade')
+						{
+							ul.fade('out');
+						}
+						else if (effect == 'reveal')
+						{
+							ul.dissolve();
+						}
 					} 
 				 });
 			});
