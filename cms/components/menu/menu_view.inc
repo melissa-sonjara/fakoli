@@ -175,7 +175,7 @@ ENDSCRIPT;
 			{
 			     if ($link)
 			     {
-			     	echo "<li".$this->getItemCSS($m)."><a href='$link'>$m->title"; // no li et
+			     	echo "<li".$this->getItemCSS($m)."><a href='$link'>$m->title</a>"; // no li et
 				    if (array_key_exists($m->menu_item_id, $gmenus))
 				    {
 				     	echo "<ul>"; // no ul et
@@ -204,7 +204,7 @@ ENDSCRIPT;
 						}
 			     
 					    echo "</ul>";
-					    echo "</a></li>";
+					    echo "</li>";
 				    }
 				}
 			}
