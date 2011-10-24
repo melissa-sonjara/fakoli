@@ -69,9 +69,12 @@ var FakoliMenu = new Class({
 			{
 				var ul = elt.getElement('ul');
 				
-				if (menu.options.effect == 'fade')
+				if (ul)
 				{
-					ul.setStyle('opacity', 0);
+					if (menu.options.effect == 'fade')
+					{
+						ul.setStyle('opacity', 0);
+					}
 				}
 				
 				elt.addEvents(
