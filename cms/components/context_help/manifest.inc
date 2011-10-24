@@ -73,7 +73,8 @@ class ContextHelpManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(ContextHelpManager, upgradeComponent)
+				"upgradeComponent"		=>	array(ContextHelpManager, upgradeComponent),
+				"onInitialize"			=>	array(ContextHelpManager, onInitialize)
 			);
 	}		
 }

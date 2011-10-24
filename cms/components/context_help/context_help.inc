@@ -161,6 +161,13 @@ class ContextHelpManager
 		$mgr = new ContextHelpUpgradeManager();
 		$mgr->upgrade();
 	}		
+	
+	static function onInitialize()
+	{
+		global $auto_form_defaults;
+		
+		$auto_form_defaults["onFormatLabel"] = "addContextHelp";
+	}
 }
 
 function addContextHelp($form, $field, $label)
