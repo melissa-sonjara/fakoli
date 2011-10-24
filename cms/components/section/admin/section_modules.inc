@@ -57,7 +57,7 @@ if ($method == "POST")
 {
 	$xref = new SectionModuleXref();
 	$xref->delete("WHERE section_id=$section_id");
-	$section->clearModuleMap();
+	$section->clearModuleCache();
 	
 	foreach($_POST["module"] as $module_id => $position)
 	{
