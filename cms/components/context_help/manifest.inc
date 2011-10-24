@@ -74,7 +74,7 @@ class ContextHelpManifest
 	{
 		return array(
 				"upgradeComponent"		=>	array(ContextHelpManager, upgradeComponent),
-				"onInitialize"			=>	array(ContextHelpManager, onInitialize)
+				"Initialize"			=>	array(ContextHelpManager, onInitialize)
 			);
 	}		
 }
