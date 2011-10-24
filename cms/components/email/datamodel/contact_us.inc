@@ -106,8 +106,8 @@ class ContactTopic extends DataItem
 					
 				if(count($siteTopics) > 0)
 				{
-					$topicList = implode(",", array_keys(reindexList($siteTopics, "contact_topic_id")));	
-					$topics = query(ContactTopic, "WHERE contact_topic_id IN ($topicList) ORDER BY sort_order");
+					$topicKeyList = formatItems($siteTopics, "{contact_topic_id}", ",");	
+					$topics = query(ContactTopic, "WHERE contact_topic_id IN ($topicKeyList) ORDER BY sort_order");
 				}
 			}
 		}
