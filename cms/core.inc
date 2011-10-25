@@ -450,7 +450,11 @@ class Fakoli
 		foreach($components as $name => $c)
 		{
 			$file = $c->component_path . DIRECTORY_SEPARATOR . $resource;
-			if (file_exists($file)) return $file;
+			if (file_exists($file))
+			{				
+				Cache::put("resource:$resource", $file);
+				return $file;
+			}
 		}
 				
 		return null;
