@@ -11,7 +11,7 @@ class DashboardManifest
 		$component->author = "Andy Green";
 		$component->version = "1.0";
 		$component->priority = 4;
-		$component->enabled = false;
+		$component->enabled = true;
 		
 		return $component;
 	}
