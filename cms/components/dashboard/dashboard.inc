@@ -79,22 +79,22 @@ class DashboardView
 	{
 		$script = "";
 		
-		foreach($this->top as $w)
+		foreach($this->topWidgets as $w)
 		{
 			$script .= $w->writeScript();
 		}
 		
-		foreach($this->left as $w)
+		foreach($this->leftWidgets as $w)
 		{
 			$script .= $w->writeScript();
 		}
 		
-		foreach($this->right as $w)
+		foreach($this->rightWidgets as $w)
 		{
 			$script .= $w->writeScript();
 		}
 		
-		foreach($this->bottom as $w)
+		foreach($this->bottomWidgets as $w)
 		{
 			$script .= $w->writeScript();
 		}	
