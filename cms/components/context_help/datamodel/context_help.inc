@@ -39,8 +39,8 @@ class ContextHelp extends DataItem
 				"class_name"	=>	String,
 				"field"			=>	String,
 				"title"			=>	String,
-				"help"			=>	HTML,
-				"criteria"		=>	HTML
+				"help"			=>	Text,
+				"criteria"		=>	Text
 			);
 	
 	// additional
