@@ -117,6 +117,7 @@ class FilterForm extends SearchForm
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
 		parent::SearchForm($target, $method, $action, $id);
+		$this->formCSS = "filter";
 		$this->setFilterParameters();
 	}
 		
@@ -126,21 +127,36 @@ class FilterForm extends SearchForm
 		$obj =& $this->data;
 		$pk = $obj->getPrimaryKey();
 
-		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'>\n";
-		echo "<div id=\"filter\">\n";
- 
+		echo "<form id='{$this->id}_filter' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'>\n";
+		echo "<div";
+ 		if ($this->formCSS) echo " class='{$this->formCSS}'";
+		if ($this->style) echo " style='{$this->style}'";
+		echo ">\n";
+		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
-		
+
 		$this->renderSearchFields();
 		
 		echo "</div>\n";
-		echo "</form><br><br>\n";
+		echo "</form>\n";
 	}
 
-
+	/*
+	 * Override an existing SearchParameter constraint
+	 * clause handler or add one. 
+	 * 
+	 * @handler - callback function that creates the
+	 * constraint clause for the given field
+	 */
+	function setHandler($field, $handler)
+	{
+		$this->search->paramHandlers[$field] = $handler;
+	}
+	
+	
 	/*
 	 * Default for all parameters included in filter is equal
 	 * Additional search parameters can be added by calling script with
@@ -159,7 +175,8 @@ class FilterForm extends SearchForm
 		foreach(array_keys($fields) as $field)
 		{
 			if (!array_key_exists($field, $this->hidden) &&
-				!($obj->filter && $obj->filter->isExcluded($field)))
+				!($obj->filter && $obj->filter->isExcluded($field))
+				)
 			{
 				$value = $obj->get($field);
 				if($value && !is_int($value))
@@ -170,17 +187,16 @@ class FilterForm extends SearchForm
 		}
 	}
 	
-	/*
-	 * getConstraint
-	 * 
-	 * @first: whether this set of clauses is the first in a group
-	 * 
-	 * @firstText: the text is this is the first clause: either
-	 * WHERE or AND ( 
-	 */	function getConstraint($first = true, $firstText = "WHERE")
+	function getConstraint($first = true, $firstText = "WHERE")
 	{
 		return $this->search->generateConstraint($first, $firstText);
-	}	
+	}
+	
+	function setParam($field, $mode, $value)
+	{
+		$this->search->setParam($field, $mode, $value);
+	}
+	
 }
 
 /*
@@ -209,7 +225,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		else
 		{
 			$form->add($this, $field);
-		}
+		}		
 	}
 	
 	
@@ -247,24 +263,111 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	
 } // end class FilterFieldRenderer
 
+
+/*
+ * For Boolean checkboxes, the unchecked value "0" is not
+ * included in the parameter string. This is a problem when
+ * we want the field to be checked on initial page load or
+ * by default because we can't identify when the box is
+ * unchecked b/c the user unchecked it or because
+ * we just loaded. To fix this problem, we write the checkbox
+ * as field name "field" + "_box" and create a hidden field
+ * with the field name. This hidden field will appear in the 
+ * url as 0 if user unchecked the box and 1 if checked.
+ * The hidden field is set using onchange event on the
+ * checkbox html.
+ * 
+ * If checked is the desired default, set to 1 in the calling script:
+ * e.g.,
+ * 
+	$unbilledCheckbox = new BooleanFilterFieldRenderer($filterForm, "ledger_id", "Show Unbilled Only");
+	$unbilledCheckbox->default = 1;
+ *
+ * For BooleanFilters, we also may want to use a callback to
+ * generate the clause for this field. E.g:
+ * 
+	// Set custom callback handler to generate the constraint for ledger_id
+	$filterForm->setHandler("ledger_id", array(ProjectManager, getLedgerClause));
+	
+	function getLedgerClause($name, $value)
+	{
+		if(!$value && is_numeric($value))
+			return "";
+		else
+			return "{$name}=0";
+	}
+ */
 class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 {
-	function BooleanFilterFieldRenderer(&$parent)
+	var $default = 0; // initial setting when page loaded
+	
+	function BooleanFilterFieldRenderer(&$parent, $field = "", $label = "")
 	{
-		parent::BooleanFieldRenderer($parent);
+		$this->label = ($label) ? $label : prettify($field);
+		
+		$this->FieldRenderer($parent);
+		if ($parent->data->hasField($field))
+		{
+			$parent->override($field, $label, $this);
+		}
+		else
+		{
+			$parent->add($this, $field);
+			$parent->overrides[$field]['label'] = $this->label;
+		}
+
+		$this->parent->search->setParam($field, "equal", $this->parent->data->get($field));
+	}
+	
+	/*
+	 * When the checkbox is checked or unchecked,
+	 * update the value of the hidden field.
+	 */
+	function renderSearchScript($field)
+	{
+		$selChanged = "selChanged_" . $field . "_box";
+
+?>
+<script type="text/javascript">
+
+function <? echo $selChanged ?>(elt)
+{
+  	var value_field = $('<?php echo $field ?>');
+  	var new_value = "0";
+  
+  	if(value_field && elt)
+  	{
+ 	  	if(elt.checked == true)
+  	  		new_value = "1";
+   	 	
+   	  	value_field.set("value", new_value);
+  	}
+	elt.form.submit();
+}
+</script>
+<?	
 	}
 	
 	function renderSearchField($field)
 	{
-		$onchange = " onchange='this.form.submit();'";
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		echo "<input type='checkbox' value='1' name='{$field}_box'";
 
-		echo "<input type='checkbox' value='1' name='$field'";
-		if ($this->parent->data->get($field))
+		$value = $this->parent->data->get($field);
+
+		if(!$value && !is_numeric($value))
+			$value = $this->default;
+	
+		if ($value)
 		{
 			echo " checked";
 		}
-		echo "$onchange>&nbsp;";
-		echo $this->parent->prettifyFieldName($field);
+		echo " onchange='selChanged_{$field}_box(this);'\">&nbsp;\n";
+				
+		if(!$value) $value = 0;
+		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
+		echo $label;
 	}
 }
 

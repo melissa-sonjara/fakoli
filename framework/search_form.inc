@@ -413,6 +413,7 @@ class SearchParameters
 	var $params;
 	var $handlers;
 	var $joinWith = "AND"; // AND or OR
+	var $paramHandlers = array(); // custom search handlers
 	
 	function SearchParameters($target)
 	{
@@ -552,16 +553,24 @@ class SearchParameters
 				$modifier = "equal";
 			}
 			
-			// JDG 9/2011 - handle CompositeDatItems
-			$fields = $this->target->getFields();
-			$handler = $this->handlers[$fields[$field]];
-			if ($handler == null)
+			// JDG 10/25/2011 - allow callback function for clauses
+			if(!array_key_exists($field, $this->paramHandlers))
 			{
-				die("Unknown Type: {$this->target->fields[$field]} for field $field");
+				$fields = $this->target->getFields();
+				$handler = $this->handlers[$fields[$field]];
+				if ($handler == null)
+					die("Unknown Type: {$this->target->fields[$field]} for field $field");
+				$clause = $this->getClause($handler, $modifier, $field, $value);			
 			}
-
-			$clause = $this->getClause($handler, $modifier, $field, $value);			
-
+			else
+			{
+				$handler = $this->paramHandlers[$field];
+				if(method_exists($handler, $modifier))
+					$clause = $handler->$modifier($field, $value);
+				else
+					$clause = call_user_func($handler, $field, $value);
+			}
+	
 			$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
 		}
 		
@@ -754,7 +763,20 @@ class SearchForm extends AutoForm
 	{
 		$this->params->fromPOST();
 	}
-
+	
+	
+	/*
+	 * Override an existing SearchParameter constraint
+	 * clause handler or add one. 
+	 * 
+	 * @handler - callback function that creates the
+	 * constraint clause for the given field
+	 */
+	function setHandler($field, $handler)
+	{
+		$this->params->paramHandlers[$field] = $handler;
+	}
+	
 	/**
 	 * Generate any javascript required by the search form.
 	 * @see framework/AutoForm#writeScript()
@@ -846,11 +868,12 @@ class SearchForm extends AutoForm
 		{
 			$renderer = $r['renderer'];
 			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+				
 			$mode = $this->getMatchingMode($field);
-			
 			$renderer->renderSearchField($field, $mode);
 		}
-		
 	}
 	
 	/*
