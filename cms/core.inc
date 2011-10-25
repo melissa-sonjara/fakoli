@@ -445,6 +445,13 @@ class Fakoli
 				Cache::put("resource:$resource", $file);
 				return $file;
 			}
+			
+			$file = $root . DIRECTORY_SEPARATOR . "cms" . DIRECTORY_SEPARATOR . $resource;
+			if (file_exists($file))
+			{
+				Cache::put("resource:$resource", $file);
+				return $file;
+			}			
 		}
 
 		foreach($components as $name => $c)
