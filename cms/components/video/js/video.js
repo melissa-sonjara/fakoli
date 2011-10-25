@@ -5,7 +5,7 @@ window.addEvent('load', function()
 
 function installFlowplayer()
 {
-	if (!flowplayerPath) return;
+	if (typeof flowplayerPath == 'undefined' || !flowplayerPath) return;
 	
 	var videos = $$('.video');
 	
