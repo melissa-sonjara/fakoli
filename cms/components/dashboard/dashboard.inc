@@ -34,7 +34,7 @@
 interface DashboardWidget
 {
 	function writeScript();
-	function drawView();
+	function drawWidget();
 }
 
 class DashboardView
@@ -108,22 +108,22 @@ class DashboardView
 		<div id="<?echo $this->id?>">
 		 <div class="dashboard_top" style="width: 100%">
 <?
-		foreach($this->topWidgets as $w) $w->drawView();
+		foreach($this->topWidgets as $w) $w->drawWidget();
 ?>
 		 </div>
 		 <div class="dashboard_left" style="clear:both;width:50%;float:left">
 <?
-		foreach($this->leftWidgets as $w) $w->drawView();
+		foreach($this->leftWidgets as $w) $w->drawWidget();
 ?>
 		 </div>
 		 <div class="dashboard_right" style="width:50%;float:left">
 <?
-		foreach($this->rightWidgets as $w) $w->drawView();
+		foreach($this->rightWidgets as $w) $w->drawWidget();
 ?>
 		 </div>
 		 <div class="dashboard_bottom" style="clear:both;width: 100%">
 <?
-		foreach($this->bottomWidgets as $w) $w->drawView();
+		foreach($this->bottomWidgets as $w) $w->drawWidget();
 ?>
 		 </div>
 		</div>
