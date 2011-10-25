@@ -414,10 +414,10 @@ class Fakoli
 		
 		$resource = sanitizePath($resource);
 		
+		$components = Fakoli::getComponents();
+		
 		if ($component)
 		{
-			$components = Fakoli::getComponents();
-			
 			if (!$components[$component])
 			{
 				throw new FakoliException("Attempt to reference unknown or disabled component '$component'");
@@ -446,7 +446,13 @@ class Fakoli
 				return $file;
 			}
 		}
-				
+
+		foreach($components as $name => $c)
+		{
+			$file = $c->component_path . DIRECTORY_SEPARATOR . $resource;
+			if (file_exists($file)) return $file;
+		}
+		return (file_exists($file)) ? $file
 		return null;
 	}
 }
