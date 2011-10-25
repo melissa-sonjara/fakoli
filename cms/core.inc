@@ -452,7 +452,7 @@ class Fakoli
 			$file = $c->component_path . DIRECTORY_SEPARATOR . $resource;
 			if (file_exists($file)) return $file;
 		}
-		return (file_exists($file)) ? $file
+				
 		return null;
 	}
 }
