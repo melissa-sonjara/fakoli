@@ -44,7 +44,7 @@ trace("EventDetails handler class $handler_class", 3);
 if(!$handler_class)
 	$handler = new StandardEventHandler();
 else
-	$handler = ComponentManager::fireEvent("CalendarGetHandler", $handler_class);
+	$handler = ComponentManager::fireEvent("CalendarGetEventHandler", $handler_class);
 	
 if(!is_object($handler))
 	$handler = new StandardEventHandler();
