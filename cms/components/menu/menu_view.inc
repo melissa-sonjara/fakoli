@@ -156,16 +156,20 @@ ENDSCRIPT;
 		
 		$css = ($this->m->css_class) ? " class='{$this->m->css_class}'" : "";
 		echo "<ul{$css}>"; // has end tag
+		$found = false;
+		
 		foreach($gmenus[0] as $m) 
 		{
 		  
 		  if ( preg_match('/^\\-\\-*/', $m->title) ) 
 		  {
     		echo "<li><hr/></li>";
+    		$found = true;
           }
 		  else 
 		  {
 			$link = $this->getLink($m);
+			if ($link) $found = true;
 			
 			if(!$gmenus[$m->menu_item_id]) 
 			{
@@ -216,7 +220,7 @@ ENDSCRIPT;
 		$out = ob_get_contents();
 		ob_end_clean();
 		
-		return $out;
+		return ($found) ? $out : "";
 	}
 }
 	
