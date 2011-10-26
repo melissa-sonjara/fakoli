@@ -136,12 +136,14 @@ class ComponentPageView
 						
 			if (array_key_exists($position[1], $menus))
 			{
-				$output .= "<div id='$position[1]'>";
-				
 				$view = new MenuView($menus[$position[1]]);
-				$output .= $view->drawView();	
-				
-				$output .= "</div>";			
+				$menuBody = $view->drawView();
+				if ($menuBody)
+				{
+					$output .= "<div id='$position[1]'>";					
+					$output .= $menuBody; 
+					$output .= "</div>";
+				}			
 			}
 			
 			$template = str_replace($position[0], $output, $template);			
