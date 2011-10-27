@@ -47,7 +47,6 @@ $script .= $view->writeScript();
 <div><?echo $forum->description?></div>
 <?
 $view->drawView();
-
 ?>
 <br/>
 <div style="width: 100%"><div style="float: right">
