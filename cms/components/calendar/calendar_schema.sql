@@ -63,11 +63,7 @@ CREATE TABLE `calendar_event_type_xref` (
 
 -- START Version 1.2
 
-INSERT INTO `event_type` (`event_type_id`,`name`) VALUES 
- (1,'Competition'),
- (2,'Mission'),
- (3,'Kick-off'),
- (4,'Showcase'),
- (5,'Training');
+-- JDG 10/27/2011 removed event types
+-- Fakoli should not have any data specific to just one of our websites.
  
  --END Version 1.2
