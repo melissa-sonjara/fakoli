@@ -128,6 +128,7 @@ class CalendarView
 	var $eventHandlers = array(); // deprecated method
 	var $calendarLink = "/calendar";
 	var $listLink = "/event_list";
+	var $listDialog = ""; // javascript function for bubble popup
 	var $detailLink = "/event_detail";
 	var $yearParam = "year";
 	var $monthParam = "month";
@@ -167,10 +168,13 @@ class CalendarView
 	 */
 	function getHandler($event)
 	{
+		// Event can be class other than "event" e.g., TrainingEvent
 		if(get_class($event) == "Event" && $event->composite_class)
 			$event_class = $event->composite_class;
 		else // Can be class "Event" or any other obj that is calendar-based
 			$event_class = get_class($event);
+
+		trace("getting event handler for $event_class", 3);
 				
 		if(array_key_exists($event_class, $this->handlerMap))
 		{
@@ -321,7 +325,7 @@ ENDSCRIPT;
 				$eventBubbleID = "event_bubble_".str_replace("-", "_", $currentDay);
 				$dayTitle = date("F jS Y", strtotime($currentDay));
 				
-				$link = "<a class='eventlink' href='{$this->listLink}?date=$currentDay' onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$i}</a>";
+				$link = $this->formatEventListLink($this->listLink, $this->listDialog, $currentDay, $eventBubbleID, $i);
 				
 				$bubbles .= 
 				"<div id='$eventBubbleID' class='event_bubble'>
@@ -507,6 +511,33 @@ ENDSCRIPT;
 <?
 		
 	}
+	
+	/*
+	 * Link to the day's events from mini calendar
+	 */
+	function formatEventListLink($link, $dLink, $currentDay, $eventBubbleID, $idx)
+	{
+		if($link)
+		{
+			$link = (preg_match("/\?/", $link)) ? "&" : "?";
+			$link .= "date=$currentDay";
+		}
+		else
+			$link = "#";
+		
+		if($dLink)
+		{
+			if(preg_match("/[\(.*?\)]$/", $dLink))
+				$dLink = preg_replace("/[\(.*?\)]$/", ", '$currentDay')", $dLink);
+			else
+				$dLink .= "('$currentDay')";
+			$onclick = "onclick=\"$dLink; return false;\"";
+		}
+		
+		return "<a class='eventlink' href='{$link}' $onclick; 
+		onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$idx}</a>";
+	}
+	
 	
 	function drawEventList()
 	{
