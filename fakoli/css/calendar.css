@@ -61,6 +61,78 @@
 	font-weight: bold;
 }
 
+
+#minicalendar
+{
+	border: solid 1px #666666 !important;
+	width: 170px;
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#minicalendar table
+{
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	font-size: 9px;
+	text-align: center;
+	width: 100%;
+	
+}
+
+#minicalendar th
+{
+	background: #BCCBD6;
+	color: #000;
+	padding: 4px;
+	text-align: center;
+}
+
+#minicalendar td
+{
+	border-right: solid 1px #ddd;
+	border-bottom: solid 1px #ddd;
+	vertical-align: top;
+	padding: 4px;
+	background-color: #fff;
+}
+
+#minicalendar td.month
+{
+	font-weight: bold;
+	font-size: 10px;
+	color: #000;
+	background-color: #BCCBD6;
+	text-align: center;
+	vertical-align: middle;
+	border-right: none;
+	border-bottom: #000;
+}
+
+#minicalendar td.empty
+{
+	background-color: #eee;
+}
+	
+#minicalendar td.event
+{
+	font-weight: bold;
+	background-color: #57B6DD;
+}
+
+#minicalendar td.event a:link
+{
+	font-size: 9px;
+	margin: 0;
+}
+
+#minicalendar td.today
+{
+	background-color: #ffa;
+}
+
 .event_summary
 {
 	display: block;
