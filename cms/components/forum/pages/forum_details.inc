@@ -40,7 +40,7 @@ $forum = new Forum($forum_id);
 $page->page_title = $forum->title;
 
 $view = new ForumDetailsView($forum, "forum_topic");
-$view->table->cssStyle = "width: 700px; clear: both";
+$view->table->cssStyle = "width: 100%; clear: both";
 
 $script .= $view->writeScript();
 ?>
