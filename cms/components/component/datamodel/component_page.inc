@@ -141,6 +141,10 @@ class ComponentPage extends DataItem
 			return "{description}";
 		}
 
+		// JDG 11/1/2011 - let page template override section tempkate
+		if (!$templateFile && $this->template) 
+			$templateFile = $this->template;
+
 		if ($section)
 		{
 			if (!$templateFile) $templateFile = $section->getTemplateFile($this->identifier);

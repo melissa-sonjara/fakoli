@@ -46,7 +46,11 @@ class PageManager
 						->executeSingle();
 			
 			if (!$page->published && !checkRole("admin")) throw new FakoliException("Unrecognized page '$identifier'");
-			$pageView = new PageView($page, "{$page->template}.tpl");
+
+			// JDG 11/2011 - why did the code think the template would not have tpl at the end??
+			// avoid adding 2nd "tpl" 
+			$page_template = (preg_match("/tpl$/", $page->template)) ? $page->template : "{$page->template}.tpl";
+			$pageView = new PageView($page, $page_template);
 		
 			$page_role = $page->role;
 			

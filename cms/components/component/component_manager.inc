@@ -457,7 +457,10 @@ class ComponentManager
 		try
 		{
 			$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
-			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+
+			// JDG 11/2011 - are templates ever stored with tpl at the end?? 
+			$page_template = (preg_match("/tpl$/", $page->template)) ? $page->template : "{$page->template}.tpl";
+			$pageView = new ComponentPageView($page, $page_template);
 		
 			$page_role = $page->role;
 			
