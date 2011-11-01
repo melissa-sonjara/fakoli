@@ -70,7 +70,7 @@ class GroupedListGroup extends DataGroup
 		if ($this->groupStyles) $attrs .= " style='{$this->groupStyles}'";
 		
 		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : ($this->expanded) ? "expanded" : "collapsed";
-
+	
 		// Output the section heading (e.g., "ul" tag)
 		echo "<{$this->listTag} id=\"{$this->parent->group_id}[{$this->key}]\" class=\"node\" $attrs>\n";
 		// Output the section title
@@ -127,7 +127,7 @@ class GroupedList
 	function groupBy($groups, $format = null, $field = "")
 	{
 		if (count($groups) == 0) return;
-		if (!$field) $field = $groups[0]->primary_key;
+		if (!$field) $field = $groups[0]->getPrimaryKey();
 
 		$this->group_id = $field;
 		
@@ -157,12 +157,12 @@ class GroupedList
 	function writeScript()
 	{
 		if(count($this->items) == 0) return;
-		
+				
 		$script = "<script type='text/javascript' src='/fakoli/js/grouping_list.js'></script>\n";
 		
 		if ($this->mode != 'fixed')
 		{
-			$constructor = "\n\t\tvar {$this->id} = new GroupingList('{$this->id}', {mode: '{$this->mode}'});";
+			$constructor .= "\n\t\tvar {$this->id} = new GroupingList('{$this->id}', {mode: '{$this->mode}'});";
 		}
 		
 		if ($constructor)
@@ -207,7 +207,7 @@ class GroupedList
 					echo "</li>\n";
 				}
 				
-				echo "</{$group->listTag}\n";
+				echo "</{$group->listTag}>\n";
 			}
 		} // end for each groups as group
 
