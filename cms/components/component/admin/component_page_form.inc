@@ -52,8 +52,8 @@ $form = new AutoForm($page);
 $form->readonly("component", "identifier", "server_path");
 $form->hide("scanned");
 $form->button("Back to Component Pages", "/admin/component_pages");
-$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates", "", true);
-
+$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
+$form->annotate("template", "Fakoli 3 projects use Section Content to set template");
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
 $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");

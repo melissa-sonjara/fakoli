@@ -148,10 +148,6 @@ class Page extends DataItem
 		case 'nude':
 			return "<h2>{page_title}</h2>{description}";
 		}
-
-		// JDG 11/1/2011 - let page template override section tempkate
-		if (!$templateFile && $this->template) 
-			$templateFile = $this->template;
 		
 		if ($section)
 		{

@@ -35,17 +35,14 @@ require_once realpath(dirname(__FILE__))."/../../../framework/field_renderers.in
 
 class TemplateSelectFieldRenderer extends SelectFieldRenderer
 {
-	function TemplateSelectFieldRenderer(&$form, $field, $label, $directory, $onChange="", $allowNone = false)
+	function TemplateSelectFieldRenderer(&$form, $field, $label, $directory, $onChange="")
 	{
 		global $config;
 		$path = $config["homedir"]."/".$directory;
 	
 		$options = array();
 		$options = array_merge($options, $this->readFiles("{$config["homedir"]}/$directory", ""));
-
-		if($allowNone)
-			$options[""] = "";
-			
+		
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
 	}
 	
