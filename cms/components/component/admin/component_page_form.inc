@@ -52,7 +52,7 @@ $form = new AutoForm($page);
 $form->readonly("component", "identifier", "server_path");
 $form->hide("scanned");
 $form->button("Back to Component Pages", "/admin/component_pages");
-$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
+$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates", "", true);
 
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
