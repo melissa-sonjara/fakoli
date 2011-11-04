@@ -181,7 +181,7 @@ class GroupedList
 		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
 
-		echo "<div id='grouped_list' class='{$this->groupListClass}'>\n";
+		echo "<div id='grouped_list' class='{$this->groupedListClass}'>\n";
 		
 		if(count($this->groups) == 0) return;
 		
