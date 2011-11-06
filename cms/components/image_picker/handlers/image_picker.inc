@@ -168,7 +168,7 @@ else
 ?>
     <tr>
      <td style="text-align: center"><br/>
-      <input type="button" class="button" name="insert" value="Select Image" onclick="new ImagePicker().insertImage()"/>
+      <input type="button" class="button" name="insert" value="Select Image" onclick="new ImagePicker().setSelectedImage('<?php echo $field ?>')"/>
      </td>
      <td style="text-align: center"><br/>
       <input type="button" class="button" name="insert" value="Clear Image" onclick="new ImagePicker().clearImage()"/>

@@ -87,10 +87,20 @@ var ImagePicker =  (function()
 			}
 			else
 			{   
-			    var align = $('alignment').value;
+				var align = 0;
+			    var align_elt = $('alignment');
+			    if(align_elt)
+			    	align = align_elt.value;
 			    
-			    var w = $('width').value;
-			    var h = $('height').value;	    
+			    var width = $('width');
+			    var height = $('height');
+			    var w = 0;
+			    var h = 0;
+			    
+			    if(width)
+			    	w = width.value;
+			    if(height)
+			    	h = height.value;	    
 			    
 			    var size = w > h ? w: h;
 			    
@@ -120,13 +130,17 @@ var ImagePicker =  (function()
 						
 			    var img  = "<img image_id=\"" + this.selectedKey + "\" src=\"" + src + "\" " + s + "border=\"0\"" + " alt=\"" + this.selectedTitle + "\"" + a + ">";
 			    
-			    this.editor.insertAtSelection(img);
+			    if(this.editor)
+			    	this.editor.insertAtSelection(img);
 			    this.hide();
 			}
 		},
 	
 		getImageSize: function()
 		{
+			var width = $('width');
+			var height = $('height');
+
 			var request = new Request({
 					method: 'get', 
 	    			url: "/action/image_picker/get_image_size?image_id=" + this.selectedKey, 
@@ -134,13 +148,17 @@ var ImagePicker =  (function()
 	    			{ 
 						if (!result.match(/^\d+,\d+/))
 						{
-							$('width').value = "";
-							$('height').value = "";
+							if(width)
+								$('width').value = "";
+							if(height)
+								$('height').value = "";
 						}
 			
 						var dimensions = result.split(",");
-						$('width').value = dimensions[0];
-						$('height').value = dimensions[1];
+						if(width)
+							width.value = dimensions[0];
+						if(height)
+							height.value = dimensions[1];
 						this.originalWidth = dimensions[0];
 						this.originalHeight = dimensions[1];
 	    			}.bind(this)
@@ -217,6 +235,25 @@ var ImagePicker =  (function()
 		{
 			var gallery_id = $('gallery_id').value;
 			this.popup = modalPopup("Upload Image", "/action/image_picker/image_upload?gallery_id=" + gallery_id, 'auto', 'auto', true);
+		},
+		
+		showSelectImageDialog: function(field)
+		{
+			this.dialog = modalPopup("Select Image", "/action/image_picker/image_picker?Mode=select&Field=" + field + "&Preview=" + field + "_preview", '700', '600', true);			
+		},
+		
+		setSelectedImage: function(field)
+		{
+			if (this.selectedKey == 0) return;
+	
+			var imageField = $(field);
+			if(imageField)
+				imageField.set("value", this.selectedKey)
+				
+			var preview = $(field + '_preview');
+			if(preview)
+				preview.src = "/action/image/thumbnail?image_id=" + this.selectedKey + "&size=150";
+			this.dialog.hide();
 		},
 		
 		hideUploadPopup: function()
