@@ -42,9 +42,9 @@ class OptimizeManager
 		Cache::invalidate("script_cache_timestamp");
 		Cache::invalidate("css_cache");
 		Cache::invalidate("css_cache_timestamp");
-		Settings::setDefaultValue("optimize", "optimize_scripts", "");
-		Settings::setDefaultValue("optimize", "optimize_styles", "");
-		Settings::setDefaultValue("optimize", "compress_javascript", "");
+		Settings::setDefaultValue("optimize", "optimize_scripts", "", Boolean);
+		Settings::setDefaultValue("optimize", "optimize_styles", "", Boolean);
+		Settings::setDefaultValue("optimize", "compress_javascript", "", Boolean);
 	}
 	
 	static function preprocessScripts($scripts)
