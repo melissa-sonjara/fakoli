@@ -47,7 +47,8 @@ class Section extends DataItem
 	var $relations = array("SectionModuleXrefs"	=>	SectionModuleXref,
 						   "Modules"			=>	Module,
 						   "Content"			=>	SectionContent,
-						   "Site"				=>	Site);
+						   "Site"				=>	Site
+							);
 	
 	function SectionModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
@@ -63,7 +64,7 @@ class Section extends DataItem
 	{
 		return $this->getRelatedList(SectionContent, "", $constraint);
 	}
-	
+		
 	function Site()
 	{
 		return $this->getRelated(Site);
@@ -208,6 +209,16 @@ class SectionContent extends DataItem
 						"role"					=>	String,
 						"template"				=>	String,
 						"use_SSL"				=>	Boolean);
+	
+	var $relations = array(
+						"Section"	=>	Section
+	);
+	
+
+	function Section()
+	{
+		return $this->getRelated(Section);
+	}
 	
 	function SectionContent()
 	{

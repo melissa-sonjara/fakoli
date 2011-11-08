@@ -437,8 +437,11 @@ abstract class UpgradeManager
 				$content = new SectionContent();
 				$content->section_id = $section->section_id;
 				$content->identifier = $page->identifier;
-				$content->template = $page->template;
-				$content->role = $page->role;
+				
+				if($section->default_template != $page->template)
+					$content->template = $page->template;
+				if($section->default_role != $page->role)
+					$content->role = $page->role;
 				$content->save();
 				$this->log .= $page->format("Adding page {identifier} to section {$section->section_title}\r\n");
 			}
