@@ -7,6 +7,9 @@ class ActivityTracker
 	{
 		global $user;
 		if (!$user) return;
+
+		$enabled = Settings::getValue("activity_tracker", "track_activity");
+		if (!$enabled) return;
 		
 		$activity = new UserActivity();
 
