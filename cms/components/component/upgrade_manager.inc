@@ -283,10 +283,12 @@ abstract class UpgradeManager
 	 */	
 	function executeVersionSql($version_number)
 	{
+		trace("** Upgrade {$this->component_name} to Version $version_number", 3);
+		
 		$lines = array();
 		if(!file_exists($this->sqlFile))
 		{
-			trace("UpgradeManager:: sql file does not exists {$this->sqlFile}", 3);
+			trace("UpgradeManager:: sql file does not exists {$this->sqlFile}", 2);
 			return;
 		}
 		
@@ -321,7 +323,7 @@ abstract class UpgradeManager
 		{
 			foreach($lines as $line)
 			{
-				trace("UpgradeManager:: processing update schema line $line", 3);
+				trace("UpgradeManager:: processing update schema line $line", 4);
 				$sqlStatement .= $line;
 				if(preg_match("/;\s$/", $line))
 				{
