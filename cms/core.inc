@@ -468,7 +468,7 @@ class Fakoli
 	}
 }
 
-Fakoli::using("user", "login", "component");
+Fakoli::using("field_renderers", "user", "login", "component");
 
 $user = null;
 
