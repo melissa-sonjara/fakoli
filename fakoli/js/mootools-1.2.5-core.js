@@ -3517,7 +3517,7 @@ Request.HTML = new Class({
 				doc.async = false;
 				doc.loadXML(root);
 			} else {
-				doc = new DOMParser().parseFromString(root, 'text/xml');
+				doc = new DOMParser().parseFromString(root, 'text/xhtml');
 			}
 			root = doc.getElementsByTagName('root')[0];
 			if (!root) return null;
