@@ -153,8 +153,9 @@ class Page extends DataItem
 		{
 			if (!$templateFile) $templateFile = $section->getTemplateFile($this->identifier);
 		}
-		else // JDG 11/11 - if no section, set template to page template
-			$templateFile = $this->template;
+
+		if (!$templateFile) $templateFile = $this->template;
+		if (!$templateFile) $templateFile = $site->default_template;
 		
 		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
 
