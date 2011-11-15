@@ -34,6 +34,8 @@
 Fakoli::usingFile("framework/search_form.inc");
 Fakoli::usingFile("framework/field_renderers/select_field_renderer.inc");
 Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
+Fakoli::usingFile("framework/field_renderers/boolean_field_renderer.inc");
+
 
 /*
  * Filter form adds a select field renderer to a page that allows

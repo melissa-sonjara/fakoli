@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::usingFile("framework/field_renderers.inc");
+Fakoli::usingFile("framework/field_renderers/text_field_renderer.inc");
 
 /*
  * For forms that use a field "recipients" for entry of
