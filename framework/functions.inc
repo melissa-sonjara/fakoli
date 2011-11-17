@@ -380,7 +380,7 @@ function formatStartDateToEndDate($start, $end)
 			
 	if($yyyy != $yyyy_2 || $mm != $mm_2 || $dd != $dd_2)
 	{
-		return formatDateTime12Hr($start) ." &ndash; ". foramtDateTime12Hr($end);
+		return formatDateTime12Hr($start) ." &ndash; ". formatDateTime12Hr($end);
 	}
 	else
 	{
