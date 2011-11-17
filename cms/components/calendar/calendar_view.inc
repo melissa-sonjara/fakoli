@@ -124,11 +124,9 @@ class CalendarView
 	var $id;
 	var	$month;
 	var $year;
-	var $handlerMap = array(); // key is event class, value is handler class name
-	var $eventHandlers = array(); // deprecated method
+	var $eventHandlers = array();
 	var $calendarLink = "/calendar";
 	var $listLink = "/event_list";
-	var $listDialog = ""; // javascript function for bubble popup
 	var $detailLink = "/event_detail";
 	var $yearParam = "year";
 	var $monthParam = "month";
@@ -143,54 +141,21 @@ class CalendarView
 		ComponentManager::fireEvent("RegisterCalendarEventHandlers", $this);
 	}
 
-	// deprecated - registered event handlers should send
-	// string of handler class name instead
 	function addHandler($class, $handler)
 	{
 		$this->eventHandlers[$class] = $handler;
 		$handler->view = $this;
 	}
 	
-	/*
-	 * Preferred approach is for subscribes to RegisterCalendarEventHandlers
-	 * to respond with function that maps a composite or event class to
-	 * a handler class. Example:
-	 * 	static function registerCalendarEventHandlers(&$view)
-	 *  {
-	 * 		$view->handlerMap["CompositeRegistrationEvent"] = "RegistrationEventHandler";
-	 * 		return $view;
-	 *  }
-	 *
-	 * For backwards compatibility, if not found, we will attempt to 
-	 * retrieve a custom handler from the array "eventHandlers" with
-	 * index composite class or event class.
-	 *
-	 */
 	function getHandler($event)
 	{
-		// Event can be class other than "event" e.g., TrainingEvent
-		if(get_class($event) == "Event" && $event->composite_class)
-			$event_class = $event->composite_class;
-		else // Can be class "Event" or any other obj that is calendar-based
-			$event_class = get_class($event);
-
-		trace("getting event handler for $event_class", 3);
-				
-		if(array_key_exists($event_class, $this->handlerMap))
-		{
-			$handler_class = $this->handlerMap[$event_class];
-			$handler = new $handler_class($event);
-		}
-		// deprecated method of supplying an event handler
-		elseif(array_key_exists($event_class, $this->eventHandlers))
-		{
-			$handler = $this->eventHandlers[$event_class];
-		}
-		else // event is not class or base class "Event" and no handler supplied
-		{
-			$pk = $event->getPrimaryKey();
-			trace("CalendarView:: no event handler for event {$event->$pk} class " . get_class($event), 3);
-		}
+		$cl = $event->composite_class;
+		if (!$cl) $cl = get_class($event);
+		trace("getting event handler for $cl", 3);
+		$handler = $this->eventHandlers[$cl];
+		// JDG 9/2011 if no hander for composite class, use Event handler
+		if(!$handler)
+			$handler = $this->eventHandlers["Event"];
 		return $handler;
 	}
 	
@@ -208,15 +173,19 @@ class CalendarView
 	function filterEvents($events, $currentDay)
 	{
 		$ret = array();
-
+		
 		foreach($events as $event)
 		{
 			$handler = $this->getHandler($event);
+
 			if ($handler AND $handler->filter($event, $currentDay))
 			{
 				$ret[] = $event;
 			}
-			// If not found - function getHandler outputs trace
+			else
+			{
+				trace("CalendarView:: no event handler for event {$event->event_id}", 3);
+			}
 		}
 		
 		return $ret;
@@ -325,7 +294,7 @@ ENDSCRIPT;
 				$eventBubbleID = "event_bubble_".str_replace("-", "_", $currentDay);
 				$dayTitle = date("F jS Y", strtotime($currentDay));
 				
-				$link = $this->formatEventListLink($this->listLink, $this->listDialog, $currentDay, $eventBubbleID, $i);
+				$link = "<a class='eventlink' href='{$this->listLink}?date=$currentDay' onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$i}</a>";
 				
 				$bubbles .= 
 				"<div id='$eventBubbleID' class='event_bubble'>
@@ -511,33 +480,6 @@ ENDSCRIPT;
 <?
 		
 	}
-	
-	/*
-	 * Link to the day's events from mini calendar
-	 */
-	function formatEventListLink($link, $dLink, $currentDay, $eventBubbleID, $idx)
-	{
-		if($link)
-		{
-			$link = (preg_match("/\?/", $link)) ? "&" : "?";
-			$link .= "date=$currentDay";
-		}
-		else
-			$link = "#";
-		
-		if($dLink)
-		{
-			if(preg_match("/[\(.*?\)]$/", $dLink))
-				$dLink = preg_replace("/[\(.*?\)]$/", ", '$currentDay')", $dLink);
-			else
-				$dLink .= "('$currentDay')";
-			$onclick = "onclick=\"$dLink; return false;\"";
-		}
-		
-		return "<a class='eventlink' href='{$link}' $onclick; 
-		onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$idx}</a>";
-	}
-	
 	
 	function drawEventList()
 	{
