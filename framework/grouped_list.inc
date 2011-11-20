@@ -56,8 +56,6 @@ require_once realpath(dirname(__FILE__))."/grouped_data_view.inc";
 
 class GroupedListGroup extends DataGroup
 {
-	var $listTag = "ul";
-	
 	function GroupListGroup($parent, $title, $key, $expanded = false, $fixed = false)
 	{
 		parent::DataGroup($parent, $title, $key, $expanded, $fixed);
@@ -70,12 +68,11 @@ class GroupedListGroup extends DataGroup
 		if ($this->groupStyles) $attrs .= " style='{$this->groupStyles}'";
 		
 		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : ($this->expanded) ? "expanded" : "collapsed";
-	
-		// Output the section heading (e.g., "ul" tag)
-		echo "<{$this->listTag} id=\"{$this->parent->group_id}[{$this->key}]\" class=\"node\" $attrs>\n";
+
+		echo "<h2 id=\"{$this->parent->group_id}[{$this->key}]\" $attrs>\n";
 		// Output the section title
 		echo "{$this->title}\n";
-		echo "</{$this->listTag}>\n";
+		echo "</h2>\n";
 	}
 }
 
@@ -189,11 +186,13 @@ class GroupedList
 		{
 			if (array_key_exists($group->key, $this->items))
 			{
+				echo "<div id='content_{$group->key}'>\n";
+
 				$group->draw();
 					
 				$itemsInGroup = $this->items[$group->key];
 
-				echo "<{$group->listTag} id=\"subheading[{$group->key}]\" class=\"subheading\" $attrs>\n";
+				echo "<ul id=\"subheading[{$group->key}]\" class=\"subheading\" $attrs>\n";
 	
 				foreach($itemsInGroup as $item)
 				{
@@ -207,7 +206,8 @@ class GroupedList
 					echo "</li>\n";
 				}
 				
-				echo "</{$group->listTag}>\n";
+				echo "</ul>\n";
+				echo "</div>\n";
 			}
 		} // end for each groups as group
 

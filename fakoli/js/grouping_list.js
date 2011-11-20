@@ -9,7 +9,7 @@ var GroupingList = new Class({
   
 	options: 
 	{
-		mode: 		'tree',
+		mode: 		'accordian',
 		groupClass: 'subheading'
 	},
   
@@ -18,10 +18,10 @@ var GroupingList = new Class({
 	
 	initialize: function(div, options) 
 	{
-		this.div = $(div);
+		this.div = $('grouped_list');
 		this.setOptions(options);
 
-		this.subheadings = this.div.getElements("ul." + this.options.groupClass);
+		this.subheadings = this.div.getElements("h2");
 		
 		var self = this;
 		
@@ -33,53 +33,90 @@ var GroupingList = new Class({
 				self.handleClick(h); 
 			}); 
 		});
+		
+		// Default Set first to open
+		var content_divs = this.div.getChildren('div');
+		var subheadings = content_divs[0].getChildren('h2');
+		subheadings[0].removeClass('collapsed'); 
+		subheadings[0].addClass('expanded');
+		
 		this.update();
 	},
 	
+
 	update: function()
 	{
-		var items = this.div.getChildren();
-		
+		var content_divs = this.div.getChildren('div');
+		var subheadings;
+		var subheading;
+		var lists;
+			
 		var expanded = true;
-		for(r = 0; r < items.length; ++r)
+		
+		content_divs.each(function(div)
 		{
-			if (items[r].hasClass('subheading')) 
+			subheadings = div.getChildren('h2');
+			subheading = subheadings[0]; // there will only be one
+			lists = div.getChildren('ul');
+		
+			if(subheading.hasClass('expanded'))
 			{
-				expanded = items[r].hasClass('expanded');
+				lists.each(function(list)
+				{
+					list.setStyle('display', '');
+				});
 			}
 			else
 			{
-				items[r].setStyle('display', expanded ? '' : 'none');
+				lists.each(function(list)
+				{
+					list.setStyle('display', 'none');
+				});
 			}
-		}
+		});
+	
 	},
 	
 	handleClick: function(item)
 	{
-		if (this.options.mode == 'accordion')
+		this.subheadings.each(function(r) 
+		{ 
+			if(r.get('id') != item.get('id'))
+			{
+				r.removeClass('expanded'); 
+				r.addClass('collapsed');
+			}
+		});
+		
+		if(item.hasClass('collapsed'))
 		{
-			this.subheadings.each(function(item) 
-			{ 
-				item.removeClass('expanded'); 
-				item.addClass('collapsed'); 
-			});
 			item.removeClass('collapsed');
 			item.addClass('expanded');
 		}
-		else if (this.options.mode == 'tree')
+		else
 		{
-			if (item.hasClass('expanded'))
-			{
-				item.removeClass('expanded');
-				item.addClass('collapsed');
-			}
-			else
-			{
-				item.removeClass('collapsed');
-				item.addClass('expanded');
-			}
+			item.removeClass('expanded');
+			item.addClass('collapsed');
 		}
-		
+	
 		this.update();
-	}
+	},
+	
+	morphItems: function()
+	{
+		$$("#grouped_list a").each(function(elt) 
+		{		
+			elt.addEvents(
+			{
+				'mouseover': function()
+				{
+					this.morph({'background-color': '#990000', 'border-color': '#666666'});
+				}.bind(elt),
+				'mouseout': function()
+				{
+					this.morph({'background-color': '#EEEEEE', 'border-color': '#cccccc'});
+				}.bind(elt)
+			});
+		});
+	}	
 });

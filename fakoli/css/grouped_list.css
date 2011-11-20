@@ -38,11 +38,17 @@
 }
 
 /* The expand/collapse node/title of the list */
-#grouped_list .node
+#grouped_list h2
 {
 	font-weight: bold;
     font-size: 14px;
     text-align: left;
+    background: #525C60;
+    color: white;
+    cursor: pointer;
+    line-height: 16px;
+    margin: 0 0 4px 0;
+    padding: 3px 5px 1px; 
 }
 
 /* The heading for each li summary block */
@@ -52,6 +58,7 @@
     font-size: 14px;
     line-height: 16px;
 }
+
 
 /* span class inside h3 for city, state, year, etc. */
 #grouped_list h3 .details
