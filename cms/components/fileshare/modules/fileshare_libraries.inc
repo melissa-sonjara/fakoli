@@ -51,7 +51,7 @@ if(count($libraries) > 0)
 	{
 ?>
 <li>
-<a href="/fileshare_library_search?document_library_id=<? echo $library->document_library_id ?>"><?php echo $library->name ?></a>
+<a href="fileshare_library_search?document_library_id=<? echo $library->document_library_id ?>"><?php echo $library->name ?></a>
 </li>
 <?php		
 	}
@@ -59,6 +59,7 @@ if(count($libraries) > 0)
 
 
 ?>
+</ul>
 </div>
 <?php 
 if ($user && !checkRole("visitor"))
@@ -66,7 +67,7 @@ if ($user && !checkRole("visitor"))
 ?>
 <div style="text-align: center">
 <br>
-<a href="/fileshare_library_form"><img alt="create_library" src="/fakoli/images/button_create_library.png"/></a>
+<a href="fileshare_library_form"><img alt="create_library" src="/fakoli/images/button_create_library.png"/></a>
 </div>
 <?php 
 }
