@@ -12,6 +12,7 @@ CREATE TABLE `text_lookup` (
   `text_id` int(10) unsigned NOT NULL auto_increment,
   `code` varchar(45) NOT NULL,
   `text` text NOT NULL,
+  `class_name` varchar(50) NOT NULL COMMENT 'class name that can access merge code values, if used',
   PRIMARY KEY  (`text_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
