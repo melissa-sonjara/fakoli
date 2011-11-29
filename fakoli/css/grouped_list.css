@@ -2,7 +2,6 @@
 
 /* default styles to accompany framework/grouped_list or GroupedList class */
 
-
 #grouped_list
 {
 	list-style: none;
@@ -20,11 +19,11 @@
 	border:1px solid #ccc;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
-	-moz-box-shadow: 2px 2px 12px #888;
-	-webkit-box-shadow: 2px 2px 12px #888;
-	box-shadow: 2px 2px 12px #888;
+	-moz-box-shadow: 2px 2px 5px #999;
+	-webkit-box-shadow: 2px 2px 5px #999;
+	box-shadow: 2px 2px 5px #999;
 	padding: 5px;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	background-color: #EEEEEE;
 	color: #333;
 	text-decoration: none;
@@ -38,17 +37,24 @@
 }
 
 /* The expand/collapse node/title of the list */
-#grouped_list h2
-{
-	font-weight: bold;
-    font-size: 14px;
-    text-align: left;
-    background: #525C60;
-    color: white;
+
+#grouped_list h2 {
+    background: scroll 0 0 #FFF;
+	background-image:url(/fakoli/images/arrow_icon.png);
+	background-repeat:no-repeat;
+	color: navy;
     cursor: pointer;
-    line-height: 16px;
-    margin: 0 0 4px 0;
-    padding: 3px 5px 1px; 
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    margin: 0 0 4px;
+    padding: 1px 25px 15px;
+    text-align: left;
+}
+
+#grouped_list h2.expanded
+{
+	background-image: url(/fakoli/images/arrow_down_icon.png);
 }
 
 /* The heading for each li summary block */
