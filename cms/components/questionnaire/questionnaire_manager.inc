@@ -16,9 +16,9 @@ class QuestionnaireManager
 	/**
 	 * Creates a new QuestionnaireManager object.
 	 */
-	function QuestionnaireManager($questionnaire_id)
+	function QuestionnaireManager($questionnaire)
 	{
-		$this->item = new Questionnaire($questionnaire_id);
+		$this->item = $questionnaire;
 	}
 	
 	function getQuestions()
@@ -34,7 +34,7 @@ class QuestionnaireManager
 	 */
 	function getQuestionForm()
 	{
-		return "question_form";
+		return "question_form?questionnaire_id={$this->item->questionnaire_id}";
 	}
 	
 	function getQuestionKey()
@@ -46,8 +46,7 @@ class QuestionnaireManager
 	{
 		return "answer_id";
 	}
-	
-	
+		
 	function isEditable()
 	{
 		return $this->item->isEditable();

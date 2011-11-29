@@ -52,6 +52,14 @@ class Question extends DataItem
 								"QuestionType"		=>	QuestionType
 	);
 	
+	
+	var $fieldAliases = array(
+		"char_limit"	=>	"Character Limit for Answer",
+		"num_rows"		=>	"Number of Rows for Answer",
+		"options"		=>	"Options for Answer",
+		"required"		=>	"Answer	Required",
+	);
+	
 	// Answer to one object's questionnaire's question
 	function Answer()
 	{	
@@ -122,6 +130,26 @@ class Question extends DataItem
 		return $text;	
 	}
 	
+	function isFreeText()
+	{
+		return ($this->question_type_id == 4) ? true : false;
+	}
+
+	function isShortText()
+	{
+		return ($this->question_type_id == 3) ? true : false;
+	}
+
+	function isCheckList()
+	{
+		return ($this->question_type_id == 5) ? true : false;
+	}
+		
+	function isRatings()
+	{
+		return ($this->question_type_id == 2) ? true : false;	
+	}
+		
 	function Question()
 	{
 		$this->table = "question";

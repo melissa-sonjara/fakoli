@@ -67,7 +67,10 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 Fakoli::using("questionnaire");
+Fakoli::usingFeature("data_view", "auto_form");
+Fakoli::usingFile("framework/field_renderers/string_field_renderer.inc");
 
+// deprecated - use QuestionSetForm instead
 class QuestionSet
 {
 	var $mgr;
@@ -227,3 +230,135 @@ foreach($this->questions as $question)
 } // end class QuestionSet
 
 
+class QuestionSetForm extends AutoForm
+{
+	var $mgr;
+	
+	function QuestionSetForm($mgr)
+	{
+		$this->mgr = $mgr;
+		$obj = clone($this->mgr->item);
+		$questions = $this->mgr->getQuestions();		
+		$obj->filter = new InclusionFilter();
+		parent::AutoForm($obj);
+		$link = $this->mgr->getQuestionForm();
+		$this->button("Create a New Question", $link);
+		$this->buildTable($questions);
+	}
+
+	function buildTable($questions)
+	{	
+		$class = (count($questions) > 0) ? get_class($questions[0]) : "Question";
+		$pk = (count($questions) > 0) ? $questions[0]->getPrimaryKey() : "question_id";
+			
+		$link = $this->mgr->getQuestionDeleteHandler();
+		$table = new DataListView($questions, "Questions");
+		$table->column("Question", array($this, formatQuestionLink))
+			->column("Sort Order", "<input type='text' name=\"question_{{$pk}}\"
+				value=\"{question_number}\" size=\"4\"/>", false, "width: 10%")
+			->column("Options", array($this, formatOptions))
+			->column("Required", array($this, formatRequired))
+			->column("Remove", "<a href=\"$link?$pk={{$pk}}\"><img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/delete.gif\"></a>")
+		;
+
+		$table->emptyMessage = "There are no questions defined.";
+		$table->sortable = false;
+		$table->paginate = false;
+		$table->cssStyle = "width: 100%";
+
+		$questionSelect = new DataListFieldRenderer($this, $table, "questions", " ");
+		$this->submitLabel = "Update Order";
+		$questionSelect->onPostProcess = reOrderQuestions;
+	}
+		
+	function formatQuestionLink($question)
+	{
+		$editable = $question->isEditable();
+
+		if(!$editable)
+			$html = $question->question;
+		else
+		{
+			$link = $this->mgr->getQuestionForm();
+			$link .= (preg_match("/\?/", $link)) ? "&" : "?";		
+			$pk .= $question->getPrimaryKey();
+			$link .= "$pk={$question->$pk}";
+			$html = $question->format("<a href=\"$link\">{question}</a>");
+		}	
+		return $html;
+	}
+
+	function formatOptions($question)
+	{
+		if($question->isFreeText() || $question->isShortText())
+		{
+			$text .= "Character Limit: ";
+			$text .=  ($question->char_limit) ? $question->char_limit : "None";
+			$text .= "<br>";
+		}
+		elseif($question->isRatings())
+		{
+			list($from, $to, $steps) = explode("\n", $question->options);
+			if (!$from) $from = "Lowest";
+			if (!$to) $to = "Highest";
+			if (!$steps) $steps = 5;
+			$text = $from . "<br>" . $to . "<br>" . $steps;	
+		}
+		else
+		{
+			$text =  preg_replace("/\r\n/", "<br>", $question->options);
+		}
+
+		if($question->isFreeText())
+			$text .= "Number of Rows: " . $question->num_rows . "<br>";
+			
+		return $text;
+	}
+
+	function formatRequired($question)
+	{
+		if($question->isCheckList())
+			return ($question->required > 0) ? $question->required : "No";
+		else
+			return ($question->required == 1) ? "Yes" : "No";
+	}
+	
+	function writeScript()
+	{
+		return parent::writeScript();
+	}
+	
+	function drawForm()
+	{
+		parent::drawForm();
+	}
+	
+}
+
+/*
+ * Use this custom renderer to copy the pseudo field values 
+ * Label for Lowest, Label for Highest, and Number of Steps 
+ * into the options text field before saving the form.
+ */
+class RatingQuestionFieldRenderer extends StringFieldRenderer
+{
+	function RatingQuestionFieldRenderer(&$parent)
+	{
+		$this->FieldRenderer($parent);
+	}
+	
+	function preProcess($field)
+	{
+		global $_POST;
+		
+		$question = $this->parent->data;
+		if($question->isRatings())
+		{
+			$lowest = $_POST["label_for_lowest"];
+			trace("RatingQuestionFieldRenderer: lowest $lowest", 3);
+			$highest = $_POST["label_for_highest"];
+			$steps = $_POST["number_of_steps"];
+			$this->parent->data->set("options", $lowest . "\n" . $highest . "\n" . $steps);
+		}
+	}
+}

@@ -69,7 +69,12 @@ class QuestionnaireManifest
 		return array(
 				"upgradeComponent"		=>	array(QuestionnaireManager, upgradeComponent)
 			);
-	}		
+	}	
+	
+	static function getScripts()
+	{
+		return array("/fakoli/js/questionnaire.js");
+	}	
 }
 
 ?>

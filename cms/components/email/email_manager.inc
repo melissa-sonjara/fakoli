@@ -113,7 +113,7 @@ Content-Type: text/plain
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-<? echo trim(stripHTMLTags($msg)); ?>
+<?php echo trim(stripHTMLTags($msg)); ?>
 
 
 ----PHP-alt-<?php echo "$random_hash\n"; ?>
@@ -121,10 +121,10 @@ Content-Type: text/html
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-<?echo $html ?>
+<?php echo $html ?>
 
 ----PHP-alt-<?php echo $random_hash; ?>--
-		<?
+		<?php
 		//copy current buffer contents into $message variable
 		// and delete current output buffer
 		$message = ob_get_clean();
@@ -148,7 +148,35 @@ Content-Transfer-Encoding: 8bit
 }
 
 
-
+/*
+ * Takes an email template and an obj of any DataItem class
+ * and sends email to a list of recipients after substituting
+ * merge codes for values from the obj.
+ * 
+ * For example: message text "Dear [first_name]" becomes
+ * Dear John Smith
+ * 
+ * @item: obj of DataItem class that has the field values to be used
+ * in the email (e.g., user, program, order).
+ * 
+ * @emailTemplate: instance of DataItem EmailTemplate. This can
+ * be an instance constructed on the fly rather than retrieved from
+ * the db. If constructed, the following fields must be set:
+ *   recipients
+ *   subject
+ *   message
+ *   class_name
+ * 
+ * @onSendComplete: optional callback function to record the
+ * email that was sent in a log.
+ * 
+ * The following var are set in function mergeEmail after
+ * the MergeCodeManager performs the substitutions:
+ * 
+ * recipients
+ * subject
+ * message
+ */
 class EmailManager
 {
 	var $emailTemplate;

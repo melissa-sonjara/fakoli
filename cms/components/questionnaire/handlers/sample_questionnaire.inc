@@ -31,60 +31,21 @@
 
 *****************************************************************/
 
-/*
- * 
- * Title: question_list.php
- * 
- * Description: Numbered list view of questions in a questionnaire.
- * User can select a question to edit.
- * 
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 11/9/09
- * 
- */
-
 Fakoli::using("questionnaire");
-Fakoli::usingFeature("auto_form");
+Fakoli::usingFeature("data_view");
 
-require_once realpath(dirname(__FILE__)."/../questionnaire_tabs.inc");
-require_once realpath(dirname(__FILE__)."/../question_set.inc");
+$samples = Query::create(Questionnaire, "WHERE title = 'Sample Questionnaire'")->execute();
 
-$questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+if(count($samples) == 0)
+	ajaxReturn("No questionnaire samples provided");
+	
+$sample = $samples[0];	
 
-if (!$questionnaire_id) 
-	redirect("/questionnaire_list");
+$mgr = new QuestionnaireManager($sample);
+$view = new QuestionnairePreview($mgr);
 
-$mgr = new QuestionnaireManager(new Questionnaire($questionnaire_id));
-$listView = new QuestionSet($mgr);
-
-$tabs = questionnaireTabs($questionnaire_id);
-
-if ($method == "POST")
-{
-	if ($_POST["done"])
-	{
-		redirect("/questionnaire_preview?questionnaire_id=$questionnaire_id");
-	}
-	else
-	{
-		$listView->reorderQuestions();
-		// refresh
-		redirect("/question_list?questionnaire_id=$questionnaire_id");
-	}
-}
-
-$script .= $listView->writeScript();
-$tabs->writeHTML();
 ?>
-
-<div style="clear:left;border:solid 1px #000; padding: 4px;">
-<h3><?echo $questionnaire->title ?></h3>
-<?
-$listView->drawList();
-?>
+<h3><?echo $sample->title ?></h3>
 <br/>
-<form method="POST" action="">
-<input class='button' type="submit" name="done" value="Done Adding Questions"/>
-</form>
-</div>
+<?
+$view->drawView();

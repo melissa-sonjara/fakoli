@@ -61,16 +61,15 @@ if(!$question_id AND !$questionnaire_id)
 if($question_id)
 {
 	$question->load($question_id);
-	$subtitle = "Edit a Question";
 	$questionnaire_id = $question->questionnaire_id; // needed for tabs
 }
 else
 {
 	$question->questionnaire_id = $questionnaire_id;
 	$question->question_number = queryValue(Question, "MAX(question_number)", "WHERE questionnaire_id=$questionnaire_id") + 1;
+	$question->question_type_id = 4; // free text
 	$question->num_rows = 3; // default
 	$question->required = 0; // default
-	$subtitle = "Add a Question";
 }
 
 
@@ -80,24 +79,24 @@ $editable = $question->isEditable();
 if(!$editable)
 	$question->filter = new ExclusionFilter("question_type_id", "options");		
 
-$redirect = "/question_list?questionnaire_id=$questionnaire_id";
+$redirect = "question_list?questionnaire_id=$questionnaire_id";
 $form = new AutoForm($question);
 $form->hide("question_id", "questionnaire_id", "question_name");
 $form->required("question_number", "question");
-$form->annotate("options", "<span style='font-weight: normal;font-size: 8pt'><br/>For Multiple-Choice or CheckList questions, list each option on a separate line.<br/>For Rating questions, list the text for lowest rating, text for highest rating and number of steps on separate lines</span>");
-$form->annotate("required", "<span style='font-weight: normal;font-size: 8pt'>enter 0 if not required, 1 if required, and for checklist, enter the count of required checkboxes</span>");
-$form->annotate("char_limit", "<span style='font-weight: normal;font-size: 8pt'>For freetext questions only</span>");
-$form->annotate("num_rows", "<span style='font-weight: normal;font-size: 8pt'>For freetext questions only</span>");
+$form->annotate("options", "<br><span class='annotate'>List each option on a separate line.</span>");
 $form->button("Cancel", $redirect);
 
-if($editable)
-	$form->allowDelete = true;
-	
-$form->alias("char_limit", "Character Limit for Answer Field", 
-			"num_rows", "Number of Rows to Display for Answer");
+$form->getRenderer("question")->height = "100px";
 
 if($editable)
+{
+	$form->allowDelete = true;
+	$form->add(new  RatingQuestionFieldRenderer($form), "label_for_lowest");
+	$form->add(new StringFieldRenderer($form), "label_for_highest");
+	$form->add(new NumberFieldRenderer($form), "number_of_steps");	
 	$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
+	$typeSelect->onChange = "new Questionnaire().onChangeQuestionType";
+}
 
 $tabs = questionnaireTabs($questionnaire_id);
 $tabs->page = "question_list";
@@ -111,9 +110,16 @@ if ($method == "POST")
 	}
 }
 
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
-
 $script .= $form->writeScript();
+
+$script .= <<<ENDSCRIPT
+	<script type="text/javascript">
+	window.addEvent('domready', function()
+	{
+		new Questionnaire().setup('RegistrationQuestion_form', $question->question_type_id);
+	});	
+	</script>
+ENDSCRIPT;
 
 $tabs->writeHTML();
 
@@ -122,7 +128,7 @@ $tabs->writeHTML();
 <button style="float: right" class="button" 
 onclick="go('<?echo $tabs->getNextPage() ?>')">  Next Page &raquo;  </button>
 <?
-echo "<h3>{$questionnaire->title}: $subtitle</h3>";
+echo "<h3>{$questionnaire->title}</h3>";
 if(!$editable)
 {
 	echo "<h5>{$question->getNotEditableHTML()}</h5>";

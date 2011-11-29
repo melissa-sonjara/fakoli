@@ -16,20 +16,6 @@ CREATE TABLE `answer` (
   PRIMARY KEY  (`answer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
 
-CREATE TABLE `question` (
-  `question_id` int(10) unsigned NOT NULL auto_increment,
-  `questionnaire_id` int(10) unsigned NOT NULL COMMENT 'references questionnaire table',
-  `question_number` int(10) unsigned NOT NULL,
-  `question_type_id` int(10) unsigned NOT NULL COMMENT 'freetext, multiple choice, ratings, etc.',
-  `question` text NOT NULL COMMENT 'the text of the question',
-  `question_name` varchar(80) default NULL COMMENT 'short question title, for spreadsheet view',
-  `options` text COMMENT 'for checklists or multiple choice, the list of answer options',
-  `required` tinyint(3) unsigned default '0' COMMENT '1 for required text; count for required number of checks in checkbox list',
-  `char_limit` int(8) unsigned default '0' COMMENT 'character limit for free text fields',
-  `num_rows` tinyint(3) unsigned default '0' COMMENT 'number of input rows to display on freetext',
-  PRIMARY KEY  (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
-
 CREATE TABLE `question_type` (
   `question_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL COMMENT 'type name',
@@ -58,5 +44,34 @@ CREATE TABLE  `questionnaire` (
   `composite_class` varchar(100) default NULL,
   PRIMARY KEY  (`questionnaire_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='user-defined questionnaire';
+
+INSERT INTO `questionnaire` (`questionnaire_id`,`title`) VALUES
+  (1,'Sample Questionnaire');
+
+
+CREATE TABLE `question` (
+  `question_id` int(10) unsigned NOT NULL auto_increment,
+  `questionnaire_id` int(10) unsigned NOT NULL COMMENT 'references questionnaire table',
+  `question_number` int(10) unsigned NOT NULL,
+  `question_type_id` int(10) unsigned NOT NULL COMMENT 'freetext, multiple choice, ratings, etc.',
+  `question` text NOT NULL COMMENT 'the text of the question',
+  `question_name` varchar(80) default NULL COMMENT 'short question title, for spreadsheet view',
+  `options` text COMMENT 'for checklists or multiple choice, the list of answer options',
+  `required` tinyint(3) unsigned default '0' COMMENT '1 for required text; count for required number of checks in checkbox list',
+  `char_limit` int(8) unsigned default '0' COMMENT 'character limit for free text fields',
+  `num_rows` tinyint(3) unsigned default '0' COMMENT 'number of input rows to display on freetext',
+  PRIMARY KEY  (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+
+INSERT INTO `question` (`questionnaire_id`,`question_type_id`,`question`,`question_number`,`question_name`,`options`,`required`,`char_limit`,`num_rows`) VALUES
+  (1,4,'This is a Free Text question. The respondent is provided a text field for the answer. The answer may be several sentences. You can limit the number of characters in their answer if you wish and specify the height of the text box as the number of rows.\r\n\r\nFor example: Please let us know how we can improve our service.',3,'','',0,0,3),
+ (1,3,'This is a Short Text question. Respondents will have just one line for their answer.',4,'','',0,0,3),
+ (1,5,'This is a checklist question. You may require a minimum number of checkboxes to be checked. \r\n\r\nWhich of these factors influenced your decision to shop with us? ',5,'','price\r\nservice\r\nspeed of delivery',1,0,3),
+ (1,1,'Multiple Choice question.\r\n\r\nHow did you hear about us?',6,'','web site\r\nfriend\r\nnewspaper',0,0,3),
+ (1,2,'Rating Question. \r\n\r\nHow would you rate our service?',7,'','Lowest\nHighest\n5',0,0,3),
+ (1,6,'Drop Down List.\r\n\r\nWhat is your age range?',8,'','10-15\r\n16-20\r\n21-25\r\n25-30\r\n31-35\r\n36-40\r\n41-45\r\n46-50\r\n51-55\r\n56-60\r\nover 60',0,0,3),
+ (1,5,'Checklist Question with just one Yes checkbox:\r\n\r\nDo you agree to the terms stated above?',9,'','Yes',1,0,3);
+
+
 
 -- END Version 1.0
