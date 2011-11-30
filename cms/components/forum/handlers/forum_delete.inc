@@ -37,7 +37,7 @@ Fakoli::assertRole("admin,moderator");
 $forum_id   = checkNumeric($_GET["forum_id"]);
 
 if (!$forum_id)
-	redirect("/forum_list");
+	redirect($_SERVER['HTTP_REFERER']);
 
 $forum = new Forum($forum_id);
 
@@ -76,5 +76,7 @@ if($forum->allowDelete())
 	
 	$forum->delete();
 }
-redirect("/forum_list");
+
+redirect($_SERVER['HTTP_REFERER']);
+
 ?>
