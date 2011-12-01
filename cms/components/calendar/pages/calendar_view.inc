@@ -85,7 +85,7 @@ $calendarHandler = ComponentManager::fireEvent("calendarGetHandler", $identifier
 
 $calendarHandler->drawFilter();
 
-$view = new CalendarView($calendarHandler->getEvents($calendar, $contraint), "fullcalendar");
+$view = new CalendarView($calendarHandler->getEvents($calendar, $constraint), "fullcalendar");
 $view->year = $year;
 $view->month = $month;
 $view->drawMonth();
