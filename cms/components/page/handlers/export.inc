@@ -31,22 +31,22 @@
 
 *****************************************************************/
 
-Fakoli::using("section");
+Fakoli::using("page");
 
 Fakoli::assertRole("admin");
 
-$sections = Query::create(Section, "ORDER BY section_id")->execute();
+$pages = Query::create(Page, "ORDER BY page_id")->execute();
 
-foreach($sections as $section)
+foreach($pages as $page)
 {
-	$section->setOption(SerializeDirectRelations);
+	$page->setOption(SerializeDirectRelations);
 }
 
-$file = codify($config["sitename"]."_sections_".date("Ymd")).".xml";
+$file = codify($config["sitename"]."_pages_".date("Ymd")).".xml";
 	
 header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . $file . "\"");
 header("Content-Type: text/xml");
 
-echo toXML("Sections", $sections);
+echo toXML("Pages", $pages);
 ?>

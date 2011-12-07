@@ -162,9 +162,14 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		foreach($vals as $name => $value)
 		{
+
+			$name = htmlSafe($name);
+			$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 			//trace("valueField: $valueField", 3);
 			
 			echo "<option value='{$value}'";
+			
+			if ($trunced != $name) echo " title='$name'";
 			
 			/*
 			 * If this form is new and there is a default, then
@@ -176,13 +181,13 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 				echo " selected";
 			elseif (($current == NULL) AND ($value != NULL) AND ($value == $default))
 				echo " selected";
-			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
+			echo ">$trunced</option>\n";			
 		}
 		echo "</select>";
 		
 		if ($this->allowAdd)
 		{
-			echo " or add new: <input type='text' name='autoform_add_$field' value='' size='30'>";
+			echo "<span style='white-space: nowrap'> or add new: <input type='text' name='autoform_add_$field' value='' size='30'></span>";
 		}
 		else if ($this->otherField)
 		{

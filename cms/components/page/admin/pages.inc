@@ -72,7 +72,7 @@ $tabs->writeHTML();
 $pageTable->drawView();
 ?>
 <br/><br/>
-<input type="button" class="button" value=" Add a New Page" onclick="go('/admin/page_form');">
+<input type="button" class="button" value=" Add a New Page" onclick="go('/admin/page_form');">&nbsp;&nbsp;<a class='button' href='/action/page/export'>Export Pages</a>
 </div>
 <?
 

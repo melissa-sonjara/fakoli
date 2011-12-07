@@ -101,6 +101,11 @@ class SelectFieldRenderer extends FieldRenderer
 		
 	}
 	
+	function setMaxChars($max)
+	{
+		$this->max_chars = $max;
+	}
+	
 	function allowAddEntry($text = "or add new")
 	{
 		$this->addEntry = true;
@@ -144,6 +149,9 @@ class SelectFieldRenderer extends FieldRenderer
 					
 					foreach($group as $value => $name)
 					{
+						$name = htmlSafe($name);
+						$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
+						
 						if($current == $value)
 						{
 							$selected = " selected";
@@ -152,7 +160,9 @@ class SelectFieldRenderer extends FieldRenderer
 						else
 							$selected = "";
 						
-						echo "<option value='".htmlSafe($value)."'$selected>$name</option>\n";
+						$optionTitle = ($name != $trunced) ? " title='$name'" : "";
+						
+						echo "<option$optionTitle value='".htmlSafe($value)."'$selected>$trunced</option>\n";
 					}
 					
 					echo "</optgroup>\n";
@@ -172,13 +182,18 @@ class SelectFieldRenderer extends FieldRenderer
 				}
 				foreach($this->options as $value => $name)
 				{
+					$name = htmlSafe($name);
+					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
+					
 					if($current == $value)
 						$selected = " selected";
 					else
 						$selected = "";
+						
+					$optionTitle = ($name != $trunced) ? " title='$name'" : "";
 					
-					echo "<option value='".htmlSafe($value)."'$selected>$name</option>\n";
-				}
+					echo "<option$optionTitle value='".htmlSafe($value)."'$selected>$trunced</option>\n";
+										}
 			}
 			
 			echo "</select>\n";

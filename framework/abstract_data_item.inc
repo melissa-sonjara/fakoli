@@ -475,6 +475,11 @@ abstract class AbstractDataItem
 				$v = str_replace( array("<", ">", "&"), array("[_[OPENTAG]_]", "[_[CLOSETAG]_]", "[_[AMPERSAND]_]"), $data);				
 				break;
 			}
+			else
+			{
+				$v = htmlentities($data);
+				break;
+			}
 			
 		case Number:
 		case Date:
@@ -483,7 +488,7 @@ abstract class AbstractDataItem
 		case Text:
 		default:
 		
-			$v = htmlspecialchars($data);
+			$v = htmlentities($data);
 			break;
 		}
 		
