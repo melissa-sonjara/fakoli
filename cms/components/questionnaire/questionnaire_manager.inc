@@ -42,11 +42,6 @@ class QuestionnaireManager
 		return "question_id";
 	}
 	
-	function getAnswerKey()
-	{
-		return "answer_id";
-	}
-		
 	function isEditable()
 	{
 		return $this->item->isEditable();
@@ -60,11 +55,6 @@ class QuestionnaireManager
 	function getNotEditableHTML()
 	{
 		return $this->item->getNotEditableHTML();	
-	}
-	
-	function getAnswers()
-	{
-		return $this->item->Answers();
 	}
 	
 	function getQuestionDeleteHandler()
@@ -122,6 +112,46 @@ class QuestionnaireManager
 	{
 		$mgr = new QuestionnaireUpgradeManager();
 		$mgr->upgrade();
+	}	
+}
+
+/*
+ * @response - object of DataItem class that links
+ * the set of user's responses.
+ */
+class QuestionnaireResponseManager
+{
+	var $item;
+	
+	function QuestionnaireResponseManager($response)
+	{
+		$this->item = $response;	
+	}
+
+	function getQuestions()
+	{
+		return $this->item->Questions("ORDER BY question_number");
+	}
+
+	function getQuestionKey()
+	{
+		return "question_id";
+	}
+	
+	function getAnswerKey()
+	{
+		return "answer_id";
+	}
+			
+	// The class that stores the answers
+	function getAnswerClass()
+	{
+		return "Answer";
+	}
+	
+	function getAnswers()
+	{
+		return $this->item->Answers();
 	}	
 }
 ?>

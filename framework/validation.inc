@@ -1243,6 +1243,29 @@ abstract class ValidateTabSet
 			echo "<div id='warning'>{$this->msg}</div>\n";
 		}	
 	}	
+	
+/*
+	 * When system returns user to a tab b/c not
+	 * valid or completed, show a popup message
+	 * for the error.
+	 */
+	function writeScript()
+	{
+		$msg = stripHTML($this->msg);
+		if($msg)
+		{
+		
+$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+window.addEvent('domready', function()
+{
+	alert('$msg');
+});
+</script>
+ENDSCRIPT;
+		}
+		return $script;		
+	}		
 }
 
 

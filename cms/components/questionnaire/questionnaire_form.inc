@@ -183,6 +183,7 @@ class QuestionnaireForm
 			{
 				echo "<tr>\n <td colspan='2'><span class='error'>{$this->msg}</span</td></tr>\n";
 				$this->msg = "";
+				echo "</span>\n";
 			}
 			echo $this->requiredText;
 		}
@@ -305,6 +306,7 @@ class QuestionnaireForm
 				if(!$answer)
 				{
 					$answer = new $answerClass();
+					trace("QuestionnaireForm::save pk is $pk qPk is $qPk question_id is $question_id", 3);
 					// e.g., response_id
 					$answer->$pk = $this->mgr->item->$pk;
 					$answer->$qPk = $question_id;
@@ -421,6 +423,20 @@ class QuestionnairePreview extends QuestionnaireForm
  * @param: $mgr - an object of class QuestionnnaireManager, SurveyManager,
  * or other which provides specific data and values to this form as
  * requested.
+ * 
+ * This view is similar to calling QuestionnaireForm as readonly
+ * except that responses are displayed in summary or text only form,
+ * not as disabled fields readonly fields.
+ * 
+ * Calling page should call function drawView rather than
+ * drawForm for display only view.
+ * 
+ * e.g.,
+ * 
+ * $mgr = new MyQuestionnaireResponseManger($myObj);
+ * $view = new QuestionnaireResponseView($mgr);
+ * 
+ * $view->drawView();
  */
 
 class QuestionnaireResponseView extends QuestionnaireForm

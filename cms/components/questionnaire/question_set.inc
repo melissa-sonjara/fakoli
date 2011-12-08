@@ -273,18 +273,12 @@ class QuestionSetForm extends AutoForm
 		
 	function formatQuestionLink($question)
 	{
-		$editable = $question->isEditable();
+		$link = $this->mgr->getQuestionForm();
+		$link .= (preg_match("/\?/", $link)) ? "&" : "?";		
+		$pk .= $question->getPrimaryKey();
+		$link .= "$pk={$question->$pk}";
+		$html = $question->format("<a href=\"$link\">{question}</a>");
 
-		if(!$editable)
-			$html = $question->question;
-		else
-		{
-			$link = $this->mgr->getQuestionForm();
-			$link .= (preg_match("/\?/", $link)) ? "&" : "?";		
-			$pk .= $question->getPrimaryKey();
-			$link .= "$pk={$question->$pk}";
-			$html = $question->format("<a href=\"$link\">{question}</a>");
-		}	
 		return $html;
 	}
 
