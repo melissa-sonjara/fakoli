@@ -38,12 +38,13 @@ CREATE TABLE `email_template` (
 INSERT INTO `email_template` (`name`,`sender_email`,`recipients`,`subject`,`message`,`class_name`) VALUES 
   ('test','','[email]','test [field]','relation and field:<br>[relation_field]<br><br>field of sending class:<br>[field]<br><br>callback of a class<br>[class_field]<br><br>function in sending class<br>[function]<br><br>function in relation<br>[relation_function]<br><br>callback function not in a class<br>[callback_function]<br><br>test invalid code<br>[invalid_code]<br><br>test invalid no map<br>[invalid_no_map]<br><br>test field with no merge code record<br>[string]<br><br>test merge code with html inside- email manager should strip the html so that the code is valid.<br>[<span>field]</span><br><br><br>test no merge code record on relation<br>[EmailManagerTestRelation.string]<br><br>test date field<br><br>[<span>date]</span>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n','EmailManagerTest');
 
-
-CREATE TABLE `merge_code` (
+DROP TABLE IF EXISTS `merge_code`;
+CREATE TABLE  `merge_code` (
   `merge_code_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL COMMENT 'name used in the template',
   `description` text,
-   `map` varchar(80) DEFAULT NULL COMMENT 'how the code maps through relations to the value',
+  `function` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'whether value_field is a function',
+  `map` varchar(80) DEFAULT NULL COMMENT 'how the code maps through relations to the value',
   `class_name` varchar(50) NOT NULL COMMENT 'class name that can map this code',
   PRIMARY KEY (`merge_code_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
