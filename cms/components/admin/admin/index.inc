@@ -37,4 +37,4 @@ $title = "Site Administration";
 <b>Welcome <?echo $user->getFullName()?>!</b>
 <br/>
 <br/>
-<a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/php_info", "800px", "600px"); return false;' class="button">Show PHP Configuration</a>
+<a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/php_info", "800px"); return false;' class="button">Show PHP Configuration</a>
