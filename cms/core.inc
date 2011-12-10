@@ -361,6 +361,11 @@ class Fakoli
 			throw new FakoliException("Cannot find resource '$uri'");
 		}
 		
+		Fakoli::sendFile($resource);
+	}
+	
+	static function sendFile($resource)
+	{
 	    $last_modified = filemtime($resource);
 
 		
