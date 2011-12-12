@@ -76,7 +76,7 @@ class TabBar
 		$this->queryString    = $queryString;
 		$this->useQueryString = $useQueryString;
 		$this->showNumber     = $showNumber;
-		trace("PAGE: **** {$this->page}", 3);
+		trace("PAGE: **** {$this->page}", 4);
 	}
 	
 	function dynamicLoad($container)
