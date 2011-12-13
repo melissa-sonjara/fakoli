@@ -15,6 +15,7 @@ var GroupingList = new Class({
   
 	div: null,
 	subheadings: null,
+	openFirst: false,
 	
 	initialize: function(div, options) 
 	{
@@ -35,11 +36,13 @@ var GroupingList = new Class({
 		});
 		
 		// Default Set first to open
-		var content_divs = this.div.getChildren('div');
-		var subheadings = content_divs[0].getChildren('h2');
-		subheadings[0].removeClass('collapsed'); 
-		subheadings[0].addClass('expanded');
-		
+		if(this.openFirst)
+		{
+			var content_divs = this.div.getChildren('div');
+			var subheadings = content_divs[0].getChildren('h2');
+			subheadings[0].removeClass('collapsed'); 
+			subheadings[0].addClass('expanded');
+		}
 		this.update();
 	},
 	
