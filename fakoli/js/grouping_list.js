@@ -15,6 +15,7 @@ var GroupingList = new Class({
   
 	div: null,
 	subheadings: null,
+	content_divs: null,
 	openFirst: false,
 	
 	initialize: function(div, options) 
@@ -23,9 +24,10 @@ var GroupingList = new Class({
 		this.setOptions(options);
 
 		this.subheadings = this.div.getElements("h2");
-		
+		this.content_divs = this.div.getChildren('div');
+	
 		var self = this;
-		
+	
 		this.subheadings.each(function(h) 
 		{ 
 			h.addEvent('click', function(e) 
@@ -34,12 +36,27 @@ var GroupingList = new Class({
 				self.handleClick(h); 
 			}); 
 		});
+	
+		this.subheadings.each(function(r) 
+		{ 
+			r.addClass('collapsed');
+		});
+
+		
+		this.content_divs.each(function(cd)
+		{
+			cd.addEvent('click', function(e) 
+			{ 
+				new Event(e).stop(); 
+				self.handleClick(cd); 
+			}); 
+		});
+		
 		
 		// Default Set first to open
 		if(this.openFirst)
 		{
-			var content_divs = this.div.getChildren('div');
-			var subheadings = content_divs[0].getChildren('h2');
+			var subheadings = this.content_divs[0].getChildren('h2');
 			subheadings[0].removeClass('collapsed'); 
 			subheadings[0].addClass('expanded');
 		}
@@ -49,14 +66,13 @@ var GroupingList = new Class({
 
 	update: function()
 	{
-		var content_divs = this.div.getChildren('div');
 		var subheadings;
 		var subheading;
 		var lists;
 			
 		var expanded = true;
 		
-		content_divs.each(function(div)
+		this.content_divs.each(function(div)
 		{
 			subheadings = div.getChildren('h2');
 			subheading = subheadings[0]; // there will only be one
@@ -93,7 +109,7 @@ var GroupingList = new Class({
 		
 		if(item.hasClass('collapsed'))
 		{
-			item.removeClass('collapsed');
+		item.removeClass('collapsed');
 			item.addClass('expanded');
 		}
 		else
