@@ -98,9 +98,9 @@ var ImagePicker =  (function()
 			    var h = 0;
 			    
 			    if(width)
-			    	w = width.value;
+			    	w = parseInt(width.value);
 			    if(height)
-			    	h = height.value;	    
+			    	h = parseInt(height.value);	    
 			    
 			    var size = w > h ? w: h;
 			    
