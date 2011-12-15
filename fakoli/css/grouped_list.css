@@ -39,10 +39,8 @@
 /* The expand/collapse node/title of the list */
 
 #grouped_list h2 {
-    background: scroll 0 0 #FFF;
-	background-image:url(/fakoli/images/arrow_icon.png);
-	background-repeat:no-repeat;
-	color: navy;
+    background: url("/fakoli/images/arrow_icon.png") no-repeat scroll 0 0 #FFFFFF;
+    color: maroon;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
@@ -51,6 +49,7 @@
     padding: 1px 25px 15px;
     text-align: left;
 }
+
 
 #grouped_list h2.expanded
 {
