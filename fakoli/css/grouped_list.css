@@ -34,6 +34,7 @@
 {
 	margin: 5px;
 	border: solid 1px #666;
+	vertical-align: middle;
 }
 
 /* The expand/collapse node/title of the list */
