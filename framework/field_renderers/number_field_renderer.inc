@@ -51,6 +51,8 @@ class NumberFieldRenderer extends FieldRenderer
 	var $onKeyUp; // javascript callback function
 	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
 	var $onChange = ""; // optional callback on data input change
+	var $units = "";
+	var $unitsPosition = "";
 	
 	function NumberFieldRenderer(&$parent, $field = null)
 	{
@@ -59,6 +61,12 @@ class NumberFieldRenderer extends FieldRenderer
 		{
 			$parent->add($this, $field);
 		}
+	}
+	
+	function setUnits($units, $position)
+	{
+		$this->units = $units;
+		$this->unitsPosition = $position);
 	}
 	
 	function renderField($field)
@@ -73,10 +81,14 @@ class NumberFieldRenderer extends FieldRenderer
 		$autocomplete = ($this->autocomplete) ? "" : " autocomplete='off' ";
 		$onchange = ($this->onChange) ? "onchange='{$this->onChange}(this)'" : "";		
 		
+		if ($this->unitsPosition == "before") echo $units;
+		
 		echo "<input id='{$this->parent->id}_$field' type='text' name='$field' 
 		value='".$this->parent->data->get($field)."' $autocomplete
 		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
-
+		
+		if ($this->unitsPosition == "after") echo $units;
+		
 		$this->_endField($field);
 	}
 
