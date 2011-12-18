@@ -52,9 +52,13 @@ class NumberFieldRenderer extends FieldRenderer
 	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
 	var $onChange = ""; // optional callback on data input change
 	
-	function NumberFieldRenderer(&$parent)
+	function NumberFieldRenderer(&$parent, $field)
 	{
 		$this->FieldRenderer($parent);
+		if (!$parent->data->hasField($field))
+		{
+			$parent->add($this, $field);
+		}
 	}
 	
 	function renderField($field)
