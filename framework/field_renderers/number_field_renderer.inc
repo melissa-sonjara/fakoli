@@ -66,7 +66,7 @@ class NumberFieldRenderer extends FieldRenderer
 	function setUnits($units, $position)
 	{
 		$this->units = $units;
-		$this->unitsPosition = $position);
+		$this->unitsPosition = $position;
 	}
 	
 	function renderField($field)
