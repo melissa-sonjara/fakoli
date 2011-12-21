@@ -41,17 +41,6 @@ var GroupingList = new Class({
 		{ 
 			r.addClass('collapsed');
 		});
-
-		
-		this.content_divs.each(function(cd)
-		{
-			cd.addEvent('click', function(e) 
-			{ 
-				new Event(e).stop(); 
-				self.handleClick(cd); 
-			}); 
-		});
-		
 		
 		// Default Set first to open
 		if(this.openFirst)
