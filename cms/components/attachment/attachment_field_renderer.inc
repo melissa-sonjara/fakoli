@@ -103,7 +103,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
-		new AttachmentUploader().setup('attachmentForm', '<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>');
+		new AttachmentUploader().setup('attachmentForm', '<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
 	});
 	</script>
 <?
