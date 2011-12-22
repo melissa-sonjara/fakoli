@@ -45,7 +45,7 @@ var AttachmentUploader = (function()
 		{
 		},
 	
-		setup: function(form, list, control)
+		setup: function(form, list, control, cssClass, deleteIcon)
 		{
 			form = $(form);
 			
@@ -58,6 +58,8 @@ var AttachmentUploader = (function()
 			this.form = form;
 			this.list = $(list);
 			this.control = $(control);
+			this.cssClass = cssClass;
+			this.deleteIcon = deleteIcon;
 			
 			this.uploadDialog = new ModalDialog($("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
 		},
