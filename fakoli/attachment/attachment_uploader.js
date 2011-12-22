@@ -38,6 +38,8 @@ var AttachmentUploader = (function()
 		uploadDialog: Class.Empty,
 		form: Class.Empty,
 		list: Class.Empty,
+		cssClass: "",
+		deleteIcon: "",
 		
 		initialize: function()
 		{
@@ -83,10 +85,10 @@ var AttachmentUploader = (function()
 				var size = match[4];
 				
 				this.list.innerHTML += 
-					"<div id='attachment_" +id + "'><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
+					"<li id='attachment_" +id + "' class='" + this.cssClass + "'><span><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
 					"<a href='/action/attachment/download?attachment_id=" + id + "'>" + name + "</a>&nbsp;(" + size + ")&nbsp;" +
 					"<a href='#' onclick='new AttachmentUploader().deleteAttachment(\"" + name + "\", " + id + "); return false' title='Delete this Attachment'>" +
-					"<img src='/fakoli/images/delete.gif' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a></div>";
+					"<img src='" + this.deleteIcon + "' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a></span></li>";
 				
 				if (this.control.value) this.control.value += ",";
 				this.control.value += id;
