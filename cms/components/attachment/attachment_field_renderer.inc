@@ -127,13 +127,13 @@ class AttachmentFieldRenderer extends FieldRenderer
 
  		foreach($attachments as $attachment)
  		{
- ?>	<div id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
+ ?>	<span id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
  <?php		
  			$this->drawOneAttachment($attachment);
  ?>
 	&nbsp;
 	<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='<?echo $this->deleteIcon?>' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a>
-	</div>
+	</span>
 <?	
 		}
 	?>
@@ -160,11 +160,11 @@ class AttachmentFieldRenderer extends FieldRenderer
 		{
  			foreach($attachments as $attachment)
  			{
- ?>	<div id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
+ ?>	<span id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
  <?php
  				$this->drawOneAttachment($attachment);
  ?>
-	 </div>
+	 </span>
 <?	
 			}
 		}
