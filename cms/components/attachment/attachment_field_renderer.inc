@@ -39,6 +39,8 @@ class AttachmentFieldRenderer extends FieldRenderer
 	var $xrefClass;
 	var $field;
 	var $label;
+	var $cssClass = "attachment";
+	var $deleteIcon = "/fakoli/images/delete.gif";
 	
 	function AttachmentFieldRenderer(&$form, $field, $xrefClass)
 	{
@@ -48,6 +50,9 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$this->FieldRenderer($form);
 		$this->label = $form->prettifyFieldName($field);
 		$form->add($this);
+		
+		if (isset($form->attachment_css_class)) $this->cssClass = $form->attachment_css_class;
+		if (isset($form->attachment_delete_icon)) $this->deleteIcon = $form->attachment_delete_icon;
 	} 
 
 	
@@ -122,12 +127,12 @@ class AttachmentFieldRenderer extends FieldRenderer
 
  		foreach($attachments as $attachment)
  		{
- ?>	<div id='attachment_<?echo $attachment->attachment_id?>'>
+ ?>	<div id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
  <?php		
  			$this->drawOneAttachment($attachment);
  ?>
 	&nbsp;
-	<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='/fakoli/images/delete.gif' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a>
+	<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='<?echo $this->deleteIcon?>' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a>
 	</div>
 <?	
 		}
@@ -155,7 +160,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		{
  			foreach($attachments as $attachment)
  			{
- ?>	<div id='attachment_<?echo $attachment->attachment_id?>'>
+ ?>	<div id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
  <?php
  				$this->drawOneAttachment($attachment);
  ?>
