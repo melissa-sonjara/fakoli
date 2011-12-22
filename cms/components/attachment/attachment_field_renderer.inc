@@ -155,16 +155,18 @@ class AttachmentFieldRenderer extends FieldRenderer
 		echo ">";
 			
 		$attachments = $this->getAttachments();
-	
+?>	
+	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
+<?
 		if(count($attachments) > 0)
 		{
  			foreach($attachments as $attachment)
  			{
- ?>	<span id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
+ ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
  <?php
  				$this->drawOneAttachment($attachment);
  ?>
-	 </span>
+	 </li>
 <?	
 			}
 		}
