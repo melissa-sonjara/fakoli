@@ -122,22 +122,22 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$ids = displayFieldAsList($attachments, "attachment_id");
 ?>
 	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
-	<div id="<?echo $this->parent->id?>_<?echo $field?>_list">
+	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
 	<?
 
  		foreach($attachments as $attachment)
  		{
- ?>	<span id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
+ ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'>
  <?php		
  			$this->drawOneAttachment($attachment);
  ?>
 	&nbsp;
 	<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='<?echo $this->deleteIcon?>' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a>
-	</span>
+	</li>
 <?	
 		}
 	?>
-	</div>
+	</ul>
 	<a href="#" onclick="new AttachmentUploader().addAttachment(); return false"> Add an Attachment </a>
 <?
 		$this->_endField($field);
