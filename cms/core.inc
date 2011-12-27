@@ -471,7 +471,48 @@ class Fakoli
 				
 		return null;
 	}
+	
+	static function errorHandler($errLevel, $errMsg, $errFile, $errLine)
+	{
+		if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+		
+		throw new ErrorException($errMsg, $errLevel, $errLevel, $errFile, $errLine);
+	}
+
+	static function exceptionHandler($exception)
+	{
+		try 
+		{
+	    	//Getting exception information
+			$errMsg = $exception->getMessage();
+			$errLevel = $exception->getCode();
+			$errFile = $exception->getFile();
+			$errLine = $exception->getLine();
+	        
+			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+		
+			while(ob_end_clean()); // Clear all output buffers.
+
+			$err = Fakoli::resolveResource("/fakoli/error.tpl");
+			$template = file_get_contents($err);
+			$out = str_replace("{error}", $errLevel . " " . $errMsg, $template);
+			echo $out;
+		}
+		catch (Exception $ex)
+		{
+			echo $ex->getCode()." ";
+			echo $ex->getMessage();
+			//Do nothing. 
+			//Avoiding error from error handling...
+		}
+	    
+		/* Don't execute PHP internal error handler */
+	    return true;
+	}
 }
+
+set_error_handler(array("Fakoli", "errorHandler"));
+set_exception_handler(array("Fakoli", "exceptionHandler"));
 
 Fakoli::using("field_renderers", "user", "login", "component");
 
