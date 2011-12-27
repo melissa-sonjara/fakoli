@@ -495,12 +495,11 @@ class Fakoli
 
 			$err = Fakoli::resolveResource("/fakoli/error.tpl");
 			$template = file_get_contents($err);
-			$out = str_replace("{error}", $errLevel . " " . $errMsg, $template);
+			$out = str_replace("{error}", $errMsg, $template);
 			echo $out;
 		}
 		catch (Exception $ex)
 		{
-			echo $ex->getCode()." ";
 			echo $ex->getMessage();
 			//Do nothing. 
 			//Avoiding error from error handling...

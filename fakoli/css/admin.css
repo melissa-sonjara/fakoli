@@ -851,3 +851,25 @@ warning
 	padding-bottom: 4px;
 }
 
+#error_report
+{
+	display: block;
+	width: 600px;
+	margin: 50px auto;
+}
+
+#error_report_header
+{
+	padding: 2px;
+}
+
+#error_report .dialog_body
+{
+	padding: 10px;
+	font-weight: bold;
+}
+
+#error_report_icon
+{
+	float: left;
+}
