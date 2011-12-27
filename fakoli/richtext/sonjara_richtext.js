@@ -178,9 +178,9 @@ function setRichTextEnv(cssPath, imagePath, root)
 	rteRoot = root;
 }
 
-isIE = ((ua.indexOf("msie") != -1) && (ua.indexOf("opera") == -1) && (ua.indexOf("webtv") == -1)); 
-isGecko = (ua.indexOf("gecko") != -1);
-isSafari = (ua.indexOf("safari") != -1);
+isIE = Browser.Engine.trident; 
+isGecko = Browser.Engine.gecko;
+isSafari = Browser.Engine.webkit; // Also Chrome
 isKonqueror = (ua.indexOf("konqueror") != -1);
 	
 var styleCache = [];
@@ -499,7 +499,7 @@ var RichTextEditor = new Class({
 		frameHtml += "</body>\n";
 		frameHtml += "</html>";
 	
-		if (document.all) 
+		if (isIE) 
 		{
 			this.loading = true;
 			
