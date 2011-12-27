@@ -104,7 +104,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 	}
 	
 	// allow user to enter commas if they wish and strip them out before saving
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
 			
