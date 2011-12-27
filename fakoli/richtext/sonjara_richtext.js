@@ -575,7 +575,7 @@ var RichTextEditor = new Class({
 	
 	findFrame: function()
 	{
-		return document.frames(this.name);
+		return document.frames[this.name];
 	},
 	
 	toggleHTMLSrc: function() 
