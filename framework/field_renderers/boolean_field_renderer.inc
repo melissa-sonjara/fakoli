@@ -59,7 +59,7 @@ class BooleanFieldRenderer extends FieldRenderer
 	}
 	
 	
-	function renderField($field, $mode = "match")
+	function renderField($field)
 	{		
 		if ($this->annotateBefore && $this->parent->annotations[$field])
 		{
@@ -86,7 +86,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "</td>\n</tr>\n";
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode = "match")
 	{
 		echo "<tr>\n";
 		echo "<td colspan='2'";
