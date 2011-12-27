@@ -553,7 +553,7 @@ var RichTextEditor = new Class({
 				} 
 				catch (e) 
 				{
-					alert("Error preloading content.");
+					//alert("Error preloading content.");
 				}
 			} 
 			catch (e) 
