@@ -59,7 +59,7 @@ class BooleanFieldRenderer extends FieldRenderer
 	}
 	
 	
-	function renderField($field)
+	function renderField($field, $mode = "match")
 	{		
 		if ($this->annotateBefore && $this->parent->annotations[$field])
 		{
