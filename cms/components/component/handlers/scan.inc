@@ -32,7 +32,13 @@
 *****************************************************************/
 
 Fakoli::assertRole("admin");
-			
+
+Cache::invalidate("fakoli_components");
+Cache::invalidate("fakoli_admin_menu");
+Cache::invalidate("fakoli_scripts");
+Cache::invalidate("fakoli_styles");
+Cache::invalidate("fakoli_event_map");
+
 $mgr = new ComponentManager();
 $mgr->scan();
 
