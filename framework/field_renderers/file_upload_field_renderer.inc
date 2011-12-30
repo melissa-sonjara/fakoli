@@ -54,8 +54,16 @@ class FileUploadFieldRenderer extends FieldRenderer
 		$this->handler = $handler;
 		$this->field = $field;
 		
-		$form->override($field, $label, $this);
-		
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;		
+		}
+				
 		$size = 40;
 	}
 	
