@@ -119,7 +119,7 @@ class SelectFieldRenderer extends FieldRenderer
 		
 		if (count($this->options) > 0 || !$this->addEntry)
 		{
-			echo "<select name='$field' id='$field'";
+			echo "<select name='$field' id='{$this->parent->id}_{$field}'";
 			
 			if ($this->onChange != "")
 				echo " onchange='$this->onChange(this)'";
