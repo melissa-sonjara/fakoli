@@ -143,11 +143,11 @@ var FakoliMenu = new Class({
 		if (ul) 
 		{
 			ul.setStyle('left', -2000);
-			if (menu.options.effect == 'fade')
+			if (this.options.effect == 'fade')
 			{
 				ul.fade('out');
 			}
-			else if (menu.options.effect == 'reveal')
+			else if (this.options.effect == 'reveal')
 			{
 				ul.dissolve();
 			}
@@ -163,6 +163,6 @@ var FakoliMenu = new Class({
 	
 	clearFocus: function()
 	{
-		this.root.getElements("ul > li").each(function(elt) { elt.removeClass('sfhover'); });
+		this.root.getElements("ul > li").each(function(elt) { this.hideMenu(elt); });
 	}
 });
