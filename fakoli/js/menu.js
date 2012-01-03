@@ -81,36 +81,12 @@ var FakoliMenu = new Class({
 				{
 					'mouseover': function() 
 					{ 
-						elt.addClass("sfhover"); 
-						if (ul) 
-						{
-							ul.position({'relativeTo': elt, 'position': menu.options.position});
-							if (menu.options.effect == 'fade')
-							{
-								ul.fade('in');
-							}
-							else if (menu.options.effect == 'reveal')
-							{
-								ul.reveal();
-							}
-						}
+						menu.showMenu(elt);
 					},
 						
 					'mouseout': function() 
 					{
-						elt.removeClass("sfhover");  
-						if (ul) 
-						{
-							ul.setStyle('left', -2000);
-							if (menu.options.effect == 'fade')
-							{
-								ul.fade('out');
-							}
-							else if (menu.options.effect == 'reveal')
-							{
-								ul.dissolve();
-							}
-						}
+						menu.hideMenu(elt);
 					} 
 				 });
 			});
