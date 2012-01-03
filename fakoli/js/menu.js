@@ -117,12 +117,48 @@ var FakoliMenu = new Class({
 		//}
 	},
 	
+	showMenu: function(elt)
+	{
+		var ul = elt.getElement('ul');
+		elt.addClass("sfhover"); 
+		if (ul) 
+		{
+			ul.position({'relativeTo': elt, 'position': this.options.position});
+			if (this.options.effect == 'fade')
+			{
+				var ul = elt.getElement('ul');
+				ul.fade('in');
+			}
+			else if (this.options.effect == 'reveal')
+			{
+				ul.reveal();
+			}
+		}
+	},
+	
+	hideMenu: function(elt)
+	{
+		var ul = elt.getElement('ul');
+		elt.removeClass("sfhover");  
+		if (ul) 
+		{
+			ul.setStyle('left', -2000);
+			if (menu.options.effect == 'fade')
+			{
+				ul.fade('out');
+			}
+			else if (menu.options.effect == 'reveal')
+			{
+				ul.dissolve();
+			}
+		}
+	},
+	
 	updateFocus: function(event, elt)
 	{
 		this.clearFocus();
 		
-		var parent = elt.getParent();
-		parent.addClass('sfhover');
+		this.showMenu(elt.getParent());
 	},
 	
 	clearFocus: function()
