@@ -40,13 +40,13 @@ else
 {
 	if (!$section)
 	{
-		die("Unknown Section");
+		throw new FakoliException("The section you were attempting to access could not be found.");
 	}
 
 	$content = $section->getContent($identifier);
 	if (!$content)
 	{
-		die("Unknown page");
+		throw new FakoliException("The page you were attempting to access could not be found.");
 	}
 	
 	if ($content->role)
