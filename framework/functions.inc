@@ -951,7 +951,7 @@ $traceLevels = array(1	=>	"FATAL",
  * @param $msg the message to output
  * @param $lvl the severity level (0-5) of this message
  */
-function trace($msg, $lvl)
+function trace($msg, $lvl, $callStack = null)
 {
 	global $config;
 	global $traceLevels;
@@ -962,7 +962,7 @@ function trace($msg, $lvl)
 		{
 		case TraceDetailFull:
 			
-			$callStack = debug_backtrace();
+			$callStack = $callStack ? $callStack : debug_backtrace();
 			if (count($callStack) > 1)
 			{
 				$callingFn = $callStack[1];
@@ -984,8 +984,10 @@ function trace($msg, $lvl)
 			break;
 
 		case TraceDetailHigh:
-			$callStack = debug_backtrace();
-					if (count($callStack) > 1)
+			
+			$callStack = $callStack ? $callStack : debug_backtrace();
+
+			if (count($callStack) > 1)
 			{
 				$callingFn = $callStack[1];
 			}
