@@ -11,7 +11,7 @@
   <div id="error_report" class="dialog">
    <div class="dialog_header"><div id="error_report_header">An Error has Occurred</div></div>
     <div class="dialog_body"><img id="error_report_icon" src="/fakoli/images/error.png"/>
-    {error}
+    {message}
     </div>
     <div style="clear: left"></div>
    </div>   
