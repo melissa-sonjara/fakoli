@@ -59,6 +59,10 @@ class Cache
 		{
 			Cache::$instance = new WCCache();
 		}
+		else if (ini_get("eaccelerator.enable"))
+		{
+			Cache::$instance = new eAcceleratorCache();
+		}
 		else
 		{
 			Cache::$instance = new SimpleMemoryCache();
@@ -275,4 +279,38 @@ class WCCache
 	{
 		return preg_match("/".$this->pattern."/", $key);
 	}
+}
+
+
+/**
+ * Provides a simple cacheing mechanism using the eAccelerator PHP extension.
+ * Although eAccelerator is pretty much abandonware at this point, your ISP
+ * may still provide it instead of APC, and be unable to change.
+ */
+class eAcceleratorCache
+{
+	function eAcceleratorCache()
+	{
+		trace("Creating eAccelerator cache", 4);
+	}
+	
+	function get($key)
+	{
+		return unserialize(eaccelerator_get($key));
+	}
+	
+	function put($key, $obj, $ttl = 0)
+	{
+		return eaccelerator_put($key, serialize($obj), $ttl);
+	}
+	
+	function invalidate($key)
+	{
+		return eaccelerator_rm($key);
+	}
+
+	function invalidateMatching($pattern)
+	{
+		throw new FakoliException("eAcceleratorCache does not support the invalidateMatching() method");
+	}	
 }
