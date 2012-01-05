@@ -71,7 +71,17 @@ class ErrorLogManager
 			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
 		
 			while(ob_end_clean()); // Clear all output buffers.
-			
+
+			$log = new ErrorLog();
+			$log->code = $errLevel;
+			$log->message = $errMsg;
+			$log->file = $errFile;
+			$log->line = $errLine;
+			$log->details = $exception->getTraceAsString();
+			$log->user_id = $user ? $user->user_id : 0;
+			$log->uri = $uri;
+			$log->session = session_id();
+									
 			if (ErrorLogManager::$enableLogging)
 			{
 				try
@@ -80,15 +90,7 @@ class ErrorLogManager
 					{
 					case "Database":
 						
-						$log = new ErrorLog();
-						$log->code = $errLevel;
-						$log->message = $errMsg;
-						$log->file = $errFile;
-						$log->line = $errLine;
-						$log->details = $exception->getTraceAsString();
-						$log->user_id = $user ? $user->user_id : 0;
-						$log->uri = $uri;
-						$log->session = session_id();
+
 						$log->save();
 						
 						break;
@@ -112,7 +114,7 @@ class ErrorLogManager
 			
 			$err = Fakoli::resolveResource(ErrorLogManager::$errorPageTemplate);
 			$template = file_get_contents($err);
-			$out = str_replace("{error}", $errMsg, $template);
+			$out = $log->format($template);
 			echo $out;
 		}
 		catch (Exception $ex)
