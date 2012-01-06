@@ -127,6 +127,14 @@ class Cache
 	{
 		return Cache::getInstance()->invalidateMatching("^".Cache::$app_name."_".$pattern);
 	}
+	
+	/**
+	 * Clear the cache, deleting all records.
+	 */
+	static function clear()
+	{
+		return Cache::getInstance()->clear();
+	}
 }
 
 
@@ -179,6 +187,11 @@ class SimpleMemoryCache
 	{
 		return !preg_match("/".$this->pattern."/", $key);
 	}
+	
+	function clear()
+	{
+		$this->cache = array();
+	}
 }
 	
 
@@ -222,6 +235,11 @@ class APCCache
 			$iterator->next();
 		}*/
 	}	
+	
+	function clear()
+	{
+		apc_clear_cache('user');
+	}
 }
 
 /**
@@ -279,6 +297,11 @@ class WCCache
 	{
 		return preg_match("/".$this->pattern."/", $key);
 	}
+	
+	function clear()
+	{
+		wincache_ucache_clear();
+	}
 }
 
 /**
@@ -303,11 +326,16 @@ class FileBackedCache
 		
 		trace("Cache Directory: {$this->cacheDir}", 3);
 	}
-		
+
+	function keyToFile($key)
+	{
+		return $this->cacheDir . DIRECTORY_SEPARATOR . $key . ".txt";
+	}
+	
 	function get($key)
 	{
 		if (array_key_exists($key, $this->cache)) return $this->cache[$key];
-		$file = $this->cacheDir . DIRECTORY_SEPARATOR . $key;
+		$file = $this->keyToFile($key);
 		if (file_exists($file))
 		{
 			$c = unserialize(file_get_contents($file));
@@ -321,7 +349,8 @@ class FileBackedCache
 	{
 		$this->cache[$key] = $obj;
 		
-		$file = $this->cacheDir . DIRECTORY_SEPARATOR . $key;
+		$file = $this->keyToFile($key);
+		
 		if (!file_exists($file))
 		{
 			$fp = fopen($file, "w");
@@ -351,7 +380,8 @@ class FileBackedCache
 	
 	function invalidate($key)
 	{
-		$file = $this->cacheDir . DIRECTORY_SEPARATOR . $key;
+		$file = $this->keyToFile($key);
+
 		if (file_exists($file)) unlink($file);
 		unset($this->cache[$key]);
 		return true;
@@ -360,5 +390,13 @@ class FileBackedCache
 	function invalidateMatching($pattern)
 	{
 		throw new FakoliException("FileBackedCache currently does not support the invalidateMatching() method");
+	}
+	
+	function clear()
+	{
+		foreach(glob($this->cacheDir . DIRECTORY_SEPARATOR . "*.txt") as $doomed)
+		{
+			unlink($doomed);
+		} 
 	}
 }
