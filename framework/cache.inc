@@ -51,17 +51,17 @@ class Cache
 		
 		if (Cache::$instance) return Cache::$instance;
 		
-		if (ini_get("apc.enabled"))
+		if (array_key_exists("file_backed_cache_directory", $config))
+		{
+			Cache::$instance = new FileBackedCache();
+		}
+		else if (ini_get("apc.enabled"))
 		{
 			Cache::$instance = new APCCache();
 		}
 		else if (ini_get("wincache.ucenabled"))
 		{
 			Cache::$instance = new WCCache();
-		}
-		else if (ini_get("eaccelerator.enable"))
-		{
-			Cache::$instance = new eAcceleratorCache();
 		}
 		else
 		{
@@ -142,7 +142,7 @@ class SimpleMemoryCache
 	
 	function SimpleMemoryCache()
 	{
-		trace("Creating Simple In-memory Cache", 4);
+		trace("Creating Simple In-memory Cache", 3);
 		$this->cache = array();
 	}
 	
@@ -191,7 +191,7 @@ class APCCache
 {	
 	function APCCache()
 	{
-		trace("Creating APC Cache", 4);
+		trace("Creating APC Cache", 3);
 	}
 	
 	function get($key)
@@ -231,7 +231,7 @@ class WCCache
 {
 	function WCCache()
 	{
-		trace("Creating WinCache cache", 4);
+		trace("Creating WinCache cache", 3);
 	}
 	
 	function get($key)
@@ -281,36 +281,84 @@ class WCCache
 	}
 }
 
-
 /**
- * Provides a simple cacheing mechanism using the eAccelerator PHP extension.
- * Although eAccelerator is pretty much abandonware at this point, your ISP
- * may still provide it instead of APC, and be unable to change.
+ * Provides a simple File-backed caching implementation for when
+ * no shared memory caching extension is present, but the application
+ * has access to a writeable folder. This is NOT recommended for 
+ * high-volume sites, but may be your only option on a shared server.
  */
-class eAcceleratorCache
+class FileBackedCache
 {
-	function eAcceleratorCache()
-	{
-		trace("Creating eAccelerator cache", 4);
-	}
+	var $cache;
+	var $cacheDir;
 	
+	function FileBackedCache()
+	{
+		global $config;
+		
+		trace("Creating File-backed Cache", 3);
+		
+		$this->cacheDir = $config["file_backed_cache_directory"];
+		$this->cache = array();
+		
+		trace("Cache Directory: {$this->cacheDir}", 3);
+	}
+		
 	function get($key)
 	{
-		return unserialize(eaccelerator_get($key));
+		if (array_key_exists($key, $this->cache)) return $this->cache[$key];
+		$file = $this->cacheDir . DIRECTORY_SEPARATOR . $key;
+		if (file_exists($file))
+		{
+			$c = unserialize(file_get_contents($file));
+			$this->cache[$key] = $c;
+			return $c;
+		}
+		else return null;
 	}
 	
 	function put($key, $obj, $ttl = 0)
 	{
-		return eaccelerator_put($key, serialize($obj), $ttl);
+		$this->cache[$key] = $obj;
+		
+		$file = $this->cacheDir . DIRECTORY_SEPARATOR . $key;
+		if (!file_exists($file))
+		{
+			$fp = fopen($file, "w");
+			fwrite($fp, serialize($obj));
+			fclose($fp);
+		}
+		else
+		{
+			$fp = fopen($file, "r+");
+	
+			if (flock($fp, LOCK_EX)) 
+			{
+			    ftruncate($fp, 0);
+			    fwrite($fp, serialize($obj));
+			    flock($fp, LOCK_UN);
+			} 
+			else 
+			{
+			    echo "Couldn't get the lock!";
+			}
+		}
+		fclose($fp);
+		
+		return true;
+		// NOTE - ttl is ignored if using in-memory caching.
 	}
 	
 	function invalidate($key)
 	{
-		return eaccelerator_rm($key);
+		$file = $this->cacheDir . DIRECTORY_SEPARATOR . $key;
+		if (file_exists($file)) unlink($file);
+		unset($this->cache[$key]);
+		return true;
 	}
-
+	
 	function invalidateMatching($pattern)
 	{
-		throw new FakoliException("eAcceleratorCache does not support the invalidateMatching() method");
-	}	
+		throw new FakoliException("FileBackedCache currently does not support the invalidateMatching() method");
+	}
 }
