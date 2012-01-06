@@ -70,6 +70,7 @@ class DataListView
 	var $height;
 	var $scrollable = false;
 	var $resizable  = true;
+	var $rowId = false; // whether to include an id tag for each tr row
 	
 	// Selection and Commands
 	
@@ -150,6 +151,12 @@ class DataListView
 		$this->selectable = true;
 		return $this; 
 	}
+	
+	function formatRowId($item)
+	{
+		$pk = $item->getPrimaryKey();
+		return "{$pk}_" . $item->$pk;
+	}	
 	
 	function commandMenu()
 	{
@@ -351,7 +358,7 @@ class DataListView
 		
 ?>			
 		<div style="width: <?echo $width ?>">
-		<? 
+		<?php 
 		if($this->pageSize)
 		{
 			?>
@@ -368,7 +375,7 @@ class DataListView
 		?>
 		</div>
 		
-		<?
+		<?php
 			if ($this->scrollable)
 			{	
 				$tbodyAttrs = " style='height: ".($this->height - 24)."px'";
@@ -378,7 +385,7 @@ class DataListView
 		<table border="0" cellpadding="0" cellspacing="0"<?echo $attrs?>>
 		 <thead>
 		  <tr>
-<?
+<?php
 			$first = true;
 			
 			foreach($this->columns as $column)
@@ -402,7 +409,7 @@ class DataListView
 				} 
 ?>
 			<th<?echo $attrs?>>
-<?
+<?php
 			
 				if ($first)
 				{
@@ -441,7 +448,9 @@ class DataListView
 			foreach($this->items as $item)
 			{
 				$cl = "";
-				
+				if($this->rowId)
+					$rowId = $this->formatRowId($item);
+					
 				if ($this->onStartRow)
 				{
 					$retval = call_user_func($this->onStartRow, $item);
@@ -454,8 +463,8 @@ class DataListView
 					call_user_func($cb, $item);
 				}
 ?>
-          <tr<?echo $cl?>>
-<?
+          <tr id='<?php echo $rowId ?>' <?php echo $cl?>>
+<?php
 				foreach($this->columns as $column)
 				{
 					$attrs = "";
@@ -476,15 +485,15 @@ class DataListView
 					}
 ?>
 		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
-<?
+<?php
 				}
 ?>
 		  </tr>
-<?
+<?php
 			}
 ?>
 		</tbody>
-<?
+<?php
 			if ($this->onDrawFooter) call_user_func($this->onDrawFooter);
 			
 			if (count($this->footerColumns) > 0)
@@ -492,7 +501,7 @@ class DataListView
 ?>
 		<tfoot>
 		  <tr>		
-<?
+<?php
 				foreach($this->footerColumns as $column)
 				{
 					$attrs = "";
@@ -515,16 +524,16 @@ class DataListView
 					}
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
-<?
+<?php
 				}
 ?>
 		  </tr>
 		</tfoot>	
-<?
+<?php
 			}
 ?>  		
 		</table>
-<?
+<?php
 			if ($this->scrollable) echo "</div>";
 			
 			if ($this->menu) echo $this->menu->writeMenu();
