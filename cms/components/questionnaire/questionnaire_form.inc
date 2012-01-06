@@ -456,3 +456,4 @@ class QuestionnaireResponseView extends QuestionnaireForm
 		echo "</dl>";
 	}
 }
+?>
