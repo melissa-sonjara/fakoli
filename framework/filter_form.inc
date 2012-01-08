@@ -365,11 +365,11 @@ function <? echo $selChanged ?>(elt)
 		{
 			echo " checked";
 		}
-		echo " onchange='selChanged_{$field}_box(this);'\">&nbsp;\n";
+		echo " onchange='selChanged_{$field}_box(this);'\">\n";
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
-		echo $label;
+		echo "{$label}&nbsp;&nbsp;";
 	}
 }
 
