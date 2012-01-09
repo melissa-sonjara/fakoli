@@ -64,6 +64,9 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "stripHTML":
 			return stripHTML($value);
 			
+		case "jsSafe":
+			return jsSafe($value);
+		
 		default:
 			
 			if (is_numeric($template))
