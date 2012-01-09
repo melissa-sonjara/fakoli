@@ -47,7 +47,9 @@ class Comment extends DataItem
 				
 	function User()
 	{
-		return $this->getRelated(NewsItem);
+		$mgr = new UserManager();
+		$className = $mgr->getUserClass();
+		return $this->getRelated($className);
 	}
 		
 	// Constructor
