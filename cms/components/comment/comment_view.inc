@@ -67,12 +67,13 @@ class CommentView
 	
 	function buildCommentList($obj)
 	{
-		$comments = $obj->Comments("ORDER BY date_posted DESC");	
+		$comments = $obj->Comments("ORDER BY date_posted DESC");
+
 		$list = new PagedList($comments, "comment_list", array($this, formatComment));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		$list->pageSize = 5;
-		
+
 		return $list;
 	}
 	
@@ -100,7 +101,8 @@ class CommentView
 	function drawView()
 	{
 		echo "<h3>{$this->title}</h3>\n";
-		$this->list->drawList();
+		if(count($this->list->items) > 0)
+			$this->list->drawList();
 	}
 	
 	function drawForm()
