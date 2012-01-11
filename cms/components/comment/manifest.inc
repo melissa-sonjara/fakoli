@@ -56,7 +56,13 @@ class CommentManifest
 		return array(
 				"upgradeComponent"		=>	array(ClassificationManager, upgradeComponent)
 			);
-	}		
+	}	
+
+
+	static function getScripts()
+	{
+		return array("/fakoli/js/comment.js");
+	} 		
 }
 
 ?>

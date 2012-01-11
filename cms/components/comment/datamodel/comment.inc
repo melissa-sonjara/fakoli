@@ -36,10 +36,11 @@ class Comment extends DataItem
 	// Fields
 	var $fields = array("comment_id"	=> Number,
 						"title"			=> String,
-						"description"	=> Text,
-						"date_posted"	=> Timestamp,
 						"user_id"  		=> Number,
-						"author"  		=> String);
+						"author"  		=> String,
+						"date_posted"	=> Timestamp,
+						"description"	=> Text,
+				);
 	
 // Relations
 	
@@ -50,6 +51,16 @@ class Comment extends DataItem
 		$mgr = new UserManager();
 		$className = $mgr->getUserClass();
 		return $this->getRelated($className);
+	}
+	
+	function isEditable()
+	{
+		global $user;
+		
+		if(!$user)
+			return false;
+		
+		return ((checkRole("admin") || $comment->user_id == $user->user_id)) ? true : false;
 	}
 		
 	// Constructor

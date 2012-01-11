@@ -84,8 +84,10 @@ class CommentView
 		
 		if($comment->title)
 			$out .= "{$comment->title}<br>";
-			
-		$out .= $comment->format("<b>{$author}</b> on {date_posted:m/d/Y} wrote: {description}");
+
+		if($comment->isEditable())
+			$edit = " <a href='#' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}'); return false\">(edit)</a>";
+		$out .= $comment->format("<b>{$author}</b> on {date_posted:m/d/Y} wrote: {description}$edit");
 		
 		return $out;
 	}
