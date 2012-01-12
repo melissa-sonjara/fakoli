@@ -537,26 +537,33 @@ abstract class UpgradeManager
 	}
 	
 	/*
-	 * $item - page of class CMS Page, Component Page, 
+	 * @item - page of class CMS Page, Component Page, 
 	 * Calendar, etc. If an identifier is sent, it must
 	 * be of class CMS Page or Component Page. 
 	 * We need the full object b/c we need to set the menu 
 	 * item's role using the object's roles
 	 * 
-	 * $menu_identifier - identifier of menu in table "menu" to which the item should be
+	 * @menu_identifier - identifier of menu in table "menu" to which the item should be
 	 * added (e.g., "personnel_subnav", "global")
-	 *
-	 * $title - the title to give to the menu item, if not supplied
-	 * then prettify the identifier
 	 * 
-	 * $parent_identifier - the identifier of the menu_item in menu_item table
+	 * @parent_identifier - the identifier of the menu_item in menu_item table
 	 * under which this menu item should be added - empty if top level
 	 * 
-	 * $sort_order - the desired sort order for this item; if empty
+	 * @title - the title to give to the menu item, if not supplied
+	 * then prettify the identifier
+	 * 
+	 * @section_name - the identifier of the section that belongs in 
+	 * the url path to the page from this menu item. If not supplied, 
+	 * the default is the the identifier of the first section the page 
+	 * is linked to in section_content. This function uses the section 
+	 * to build the url field stored with the menu item in the format: 
+	 * section / page identifier (e.g., /global/programs).
+	 * 
+	 * @sort_order - the desired sort order for this item; if empty
 	 * then set to bottom.
 	 * 
 	 */
-	function addMenuItem($item, $menu_identifier, $title = "", $parent_identifier = "", $sort_order = 0)
+	function addMenuItem($item, $menu_identifier, $parent_identifier = "", $title = "", $section_name = "", $sort_order = 0)
 	{				
 		// Find the menu
 		$menus = Query::create(Menu, "WHERE identifier=:identifier")
@@ -605,11 +612,27 @@ abstract class UpgradeManager
 				->executeValue("MAX(sort_order)") + 1);
 		}
 		
+		if(!$section_name)
+		{
+			$sections = Query::create(SectionContent, "WHERE identifier=:identifier")
+				->bind(":identifier", $page->identifier)
+				->execute();
+
+			if(count($sections) == 0)
+			{
+				trace("UpgradeManager error: page {$page->identifier} is not in section content", 3);
+				return false;	
+			}
+
+			$section_name = $sections[0]->Section()->section;
+		}
+		
 		$menuItem = new MenuItem();
 		$menuItem->title = ($title) ? $title : prettify($page->identifier);
 		$menuItem->menu_id = $menu->menu_id;
 		$menuItem->parent_id = $parent_id;
 		$menuItem->published = 1;
+		$menuItem->url =  "/" . $section_name . "/" . $page->identifier;
 		$menuItem->role = $page->role;
 		$menuItem->identifier = $page->identifier;
 		$menuItem->sort_order = $sort_order;
