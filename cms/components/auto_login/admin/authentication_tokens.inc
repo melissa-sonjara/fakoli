@@ -36,6 +36,8 @@ Fakoli::usingFeature("data_view");
 
 $tokens = Query::create(AuthenticationToken, "")->execute();
 
+$menu_item = "Authentication Tokens";
+
 function formatEnabled($token)
 {
 	$img = $token->enabled ? "on.png" : "off.png";

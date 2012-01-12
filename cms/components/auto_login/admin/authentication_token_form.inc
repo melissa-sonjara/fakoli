@@ -34,6 +34,8 @@
 Fakoli::using("auto_login");
 Fakoli::usingFeature("auto_form");
 
+$menu_item = "Authentication Tokens";
+
 $token_id = checkNumeric($_GET["authentication_token_id"]);
 
 $token = new AuthenticationToken();
