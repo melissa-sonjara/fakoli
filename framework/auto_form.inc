@@ -817,10 +817,26 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			}
 		}
 	}
-	
+
+	/*
+	 * JDG 1/2012 - add handling of field that
+	 * is an additional field
+	 */
 	function renderOneField($field)
 	{
 		$renderer = $this->getRenderer($field);
+		
+		if(!$renderer)
+		{
+			foreach($this->additional as $r)
+			{
+				$renderer = $r['renderer'];
+				$field = $r['field'];
+				if(!$field)
+					$field = $renderer->field;
+			}
+		}
+			
 		if ($renderer)
 		{
 			if ($this->readonly[$field])
@@ -898,9 +914,11 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		$pk = $obj->getPrimaryKey();
 		$filter = $obj->getFilter();
 		
-		foreach(array_keys($obj->fields) as $field)
+		$fields = $obj->getFields();
+		foreach(array_keys($fields) as $field)
 		{
-			if ($field != $pk && $obj->$field != "" && !array_key_exists($field, $this->hidden) &&
+			$val = $obj->get($field);
+			if ($field != $pk && $obj->get($field) != "" && !array_key_exists($field, $this->hidden) &&
 			!($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
