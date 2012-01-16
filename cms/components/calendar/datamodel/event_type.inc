@@ -44,11 +44,31 @@ class EventType extends DataItem
 	
 	var $relations = array();
 	
+	/*
+	 * This function is deprecated. Since event types are supposed to 
+	 * be specific to a calendar, it is not useful to retrieve the 
+	 * list this way.
+	 */
 	function getEventTypeList()
 	{
 		$eventTypeList = array();
 		
 		$eventTypes = Query::create(EventType, "ORDER BY name")->execute();
+		if(count($eventTypes) > 0)
+		{
+			foreach($eventTypes as $eventType)
+			{
+				$eventTypeList[$eventType->name] = $eventType->name;
+			}
+		}
+		
+		return $eventTypeList;
+	}
+	
+	static function formatOptions($eventTypes)
+	{
+		$eventTypeList = array();
+		
 		if(count($eventTypes) > 0)
 		{
 			foreach($eventTypes as $eventType)

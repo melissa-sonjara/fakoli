@@ -33,12 +33,11 @@
 
 Fakoli::using("calendar", "component");
 
+// Event id could be id to a different table than "Event"
 $event_id = checkNumeric($_GET["event_id"]);
 $handler_class = mysql_escape_string($_GET["handler_class"]);
 
 if (!$event_id) die("Invalid Parameter");
-
-$event = new Event($event_id);
 
 trace("EventDetails handler class $handler_class", 3);
 if(!$handler_class)
@@ -48,6 +47,10 @@ else
 	
 if(!is_object($handler))
 	$handler = new StandardEventHandler();
+
+// Usually "Event" but could be other class
+$event_class = $handler->getEventClass();
+$event = new $event_class($event_id);
 	
 echo $handler->details($event);
 

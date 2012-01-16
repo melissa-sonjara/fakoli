@@ -1244,7 +1244,19 @@ abstract class ValidateTabSet
 		}	
 	}	
 	
-/*
+	/*
+	 * Show the validation issue/error as an informative message 
+	 * instead of a warning.
+	 */
+	function message()
+	{
+		if($this->msg)
+		{
+			echo "<p>{$this->msg}</p>\n";
+		}	
+	}	
+	
+	/*
 	 * When system returns user to a tab b/c not
 	 * valid or completed, show a popup message
 	 * for the error.
