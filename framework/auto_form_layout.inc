@@ -15,11 +15,11 @@ abstract class AutoFormLayout
 	abstract function startField($field, $renderer, $colspan = 1, $styles = "");
 	abstract function endField($field, $renderer);
 	
-	abstract function printLabel($field, $colspan=1, $styles = "", $annotation = "");
+	abstract function printLabel($field, $renderer, $styles = "", $annotation = "");
 	
 	function getLabel($field, $renderer, $addSuffix = true)
 	{
-		$label = isset($renderer->label) ? $renderer->label : $renderer->parent->prettifyFieldName($field);
+		$label = isset($renderer->label) ? $renderer->label : $this->form->prettifyFieldName($field);
 		
 		if ($renderer->parent->markRequiredFields &&
 		    $renderer->parent->isRequired($field))
@@ -84,7 +84,7 @@ class TableBasedFormLayout extends AutoFormLayout
 		
 		echo "<tr>\n";
 		
-		$this->printLabel($field, $renderer->colspan, $styles, ($renderer->colspan > 1) ? $this->parent->annotations[$field] : "");
+		$this->printLabel($field, $renderer, $styles, ($renderer->colspan > 1) ? $this->parent->annotations[$field] : "");
 		
 		if ($renderer->colspan > 1)
 		{
@@ -127,11 +127,11 @@ class TableBasedFormLayout extends AutoFormLayout
 	 * @param string $styles optional special styles that need to be applied
 	 * @param string $annotation annotation text for the field
 	 */
-	function printLabel($field, $colspan=1, $styles = "", $annotation = "")
+	function printLabel($field, $renderer, $styles = "", $annotation = "")
 	{		
-		if ($renderer->hideLabel && $colspan > 1 && !$annotation) return;
+		if ($renderer->hideLabel && $renderer->colspan > 1 && !$annotation) return;
 		
-		$label = $this->getLabel($field);
+		$label = $this->getLabel($field, $renderer);
 		
 		echo "<td colspan='$colspan'";
 		if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";

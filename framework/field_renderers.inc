@@ -83,40 +83,13 @@ class FieldRenderer
 	 * @param string $annotation annotation text for the field
 	 */
 	function _printLabel($field, $colspan=1, $styles = "", $annotation = "")
-	{		
-		if ($this->hideLabel && $colspan > 1 && !$annotation) return;
-		
-		$label = $this->_getLabel($field);
-		
-		echo "<td colspan='$colspan'";
-		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
-		if ($styles) echo " style='$styles'";
-		echo ">";
-		
-		if (!$this->hideLabel) echo "<label for='$field'>$label</label> ";
-		
-		echo "$annotation</td>\n";
+	{	
+		$this->parent->layout->printLabel($field, $this, $styles, $annotation);			
 	}
 
 	function _getLabel($field, $addSuffix = true)
 	{
-		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
-		
-		if ($this->parent->markRequiredFields &&
-		    $this->parent->isRequired($field))
-		{
-	    	$label .= "*";
-	    }
-
-	    $label .= $this->labelSuffix;
-		
-	    if ($this->parent->onFormatLabel)
-	    {
-	    	$fn = $this->parent->onFormatLabel;
-	    	$label = $fn($this->parent, $field, $label);
-	    }
-	    
-	    return $label;
+		return $this->parent->layout->getLabel($field, $addSuffix);
 	}
 	
 	/**
@@ -127,23 +100,7 @@ class FieldRenderer
 	 */
 	function _startField($field, $styles = "")
 	{
-		if ($this->colspan > 1) $styles = "text-align: left;$styles";
-		echo "<tr>\n";
-		$this->_printLabel($field, $this->colspan, $styles, ($this->colspan > 1) ? $this->parent->annotations[$field] : "");
-		
-		if ($this->colspan > 1)
-		{
-			echo "</tr>\n";
-			echo "<tr>\n";
-		}
-		echo "<td colspan='{$this->colspan}'";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-		
-		if ($this->annotateBefore && $this->parent->annotations[$field] && $this->colspan == 1)
-		{
-			echo $this->parent->annotations[$field]."<br/>";
-		}
+		$this->parent->layout->startField($field, $this, $styles);
 	}
 	
 	/**
@@ -153,20 +110,7 @@ class FieldRenderer
 	 */
 	function _endField($field)
 	{
-		if (!$this->annotateBefore && $this->colspan == 1 && $this->parent->annotations[$field])
-		{
-			if ($this->annotateNextLine)
-			{
-				echo "<br/>"; 
-			}
-			else 
-			{
-				echo "&nbsp;&nbsp;";
-			}
-			echo $this->parent->annotations[$field];
-		}
-		
-		echo "</td>\n</tr>\n";
+		$this->parent->layout->endField($field, $this);
 	}
 
 	
