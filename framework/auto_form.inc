@@ -32,6 +32,7 @@
 *****************************************************************/
 
 require_once realpath(dirname(__FILE__)."/field_renderers.inc");
+require_once realpath(dirname(__FILE__)."/auto_form_layout.inc");
 require_once realpath(dirname(__FILE__)."/validation.inc");
 
 /**
@@ -91,9 +92,14 @@ class AutoForm
     var $requiredFieldsText = "* indicates required field";
 
     var $fields;	///< Local field cache
+
+    var $groups = array(); ///< List of field groups
     
     var $readOnlyForm;  ///< Specifies whether the entire form is read-only
     var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
+    
+    var $layout; ///< Layout handler object
+    var $default_layout = "table";
     
     static $fieldRendererMap = array (
     	String		=>	StringFieldRenderer,
@@ -166,6 +172,7 @@ class AutoForm
 			$this->hide($p);
 		}
 		
+		$this->layout = AutoFormLayout::create($this->default_layout, $this);
 	}
 	
 	/**
@@ -179,6 +186,15 @@ class AutoForm
 	function setDataSet($params)
 	{
 		$this->dataSet = $params;
+	}
+	
+	/**
+	 * Override the default layout manager
+	 * 
+	 */
+	function setLayout($layout)
+	{
+		$this->layout = $layout;
 	}
 	
 	/**
@@ -491,6 +507,23 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	}
 
 	/**
+	 * Define a field grouping
+	 * @param string $name the legend to use for the group
+	 * 
+	 */
+	function group($name)
+	{
+		$group = array();
+		for($i = 1; $i < func_num_args(); ++$i)
+		{
+			$group[] = func_get_arg($i);
+		}
+		
+		$this->groups[$name] = $group;
+		return $group;
+	}
+	
+	/**
 	 * Use this method to hide the labels for the specified fields in the form.
 	 */
 	function hideLabel()
@@ -725,40 +758,39 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
 
-		echo "<table";
-		if ($this->formCSS) echo " class='{$this->formCSS}'";
-		if ($this->style) echo " style='{$this->style}'";
-		echo ">\n";
-
+		$this->layout->startUngrouped();
+		
 		if ($this->buttons_at_top && !$this->subordinate) 
 		{
-			echo "<tr>\n";
+			$this->layout->startButtonLine();
+			
 			$this->drawSubmitButtons($obj, $pk, $submitLabel);
 
 			$this->drawButtons();
 
-			echo "<br/><br/></td></tr>";
+			$this->layout->endButtonLine();
 		}
 
-		echo "<tr>\n <td colspan='2' id='{$this->id}__error' class='error' style='display: ".($this->msg ? 'table-cell' : 'none')."'>{$this->msg}</td></tr>\n";
+		$this->layout->errorBox();
 
 		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
 		{
-			echo "<tr>\n <td colspan='2'><b>{$this->requiredFieldsText}</b></td></tr>\n";
+			$this->layout->requiredFields($this->requiredFieldsText);
 		}
 
 		$this->renderAllFields($obj);
 					
 		if (!$this->subordinate)
 		{		
-			echo "<tr>\n";
+			$this->layout->startButtonLine();
+
 			$this->drawSubmitButtons($obj, $pk, $submitLabel);
 			$this->drawButtons();
 	
-			echo "</td></tr>";
+			$this->layout->endButtonLine();
 		}
 
-		echo "</table>\n";
+		$this->layout->endUngrouped();
 		
 		if (!$this->subordinate)
 		{
@@ -771,7 +803,6 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 */
 	function drawSubmitButtons($obj, $pk, $submitLabel)
 	{
-		echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
 		if ($this->useLinkSubmit)
 		{
 			echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
@@ -793,6 +824,8 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	
 	function renderAllFields($obj)
 	{
+		$this->renderedFields = array();
+		
 		if($this->additional_at_top)
 			$this->renderAdditionalFields($obj);	
 		$this->renderFields($obj);
@@ -809,9 +842,32 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	{
 		$filter = $obj->getFilter();
 		
+		if (count($this->groups) > 0)
+		{
+			$this->layout->endUngrouped();
+			
+			foreach($this->groups as $legend => $fields)
+			{
+				$this->layout->startGroup($legend);
+				
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneField($field);
+					}					
+				}
+				
+				$this->layout->endGroup();
+			}
+			
+			$this->layout->startUngrouped();
+			
+		}
+		
 		foreach(array_keys($this->fields) as $field)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) && !($filter && $filter->isExcluded($field)))
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$this->renderOneField($field);
 			}
@@ -847,6 +903,8 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			{
 				$renderer->renderField($field);
 			}
+			
+			$this->renderedFields[$field] = true;
 		}
 	}
 	
