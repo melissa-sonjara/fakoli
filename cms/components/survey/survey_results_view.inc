@@ -452,12 +452,13 @@ class SurveySpreadsheetView extends SurveyResultsView
 {
 	var $mgr;
 	var $table;
+	var $spreadsheetResponses; // save this var in case needed for a custom output
 
 	function SurveySpreadsheetView($mgr)
 	{
 		$this->mgr = $mgr;
-		$spreadsheetResponses = $this->getSpreadsheetResponses($mgr->Responses(), $mgr->getAnswers(), $mgr->getQuestionKey());
-		$this->table = $this->buildTable($spreadsheetResponses, $mgr->getQuestions());
+		$this->spreadsheetResponses = $this->getSpreadsheetResponses($mgr->Responses(), $mgr->getAnswers(), $mgr->getQuestionKey());
+		$this->table = $this->buildTable($this->spreadsheetResponses, $mgr->getQuestions());
 	}
 
 	/*
@@ -493,11 +494,14 @@ class SurveySpreadsheetView extends SurveyResultsView
 			$view->answers = reindexList($responseAnswers, $qPk);
 				
 			$idx = 1;
-			$fields = array();
+			$spreadsheetResponse = new SpreadsheetResponse();
+	
+			$fields = $spreadsheetResponse->getFields();
 			$values = array();
 				
-			$fields["name"] = String;
 			$values["name"] = $responseManager->getRespondent();
+			$fields[$pk] = Number;
+			$values[$pk] = $response->$pk;
 				
 			foreach($view->questions as $question)
 			{
@@ -505,7 +509,6 @@ class SurveySpreadsheetView extends SurveyResultsView
 				$values["answer_{$idx}"] = $question->getAnswer();
 				$idx++;
 			}
-			$spreadsheetResponse = new SpreadsheetResponse();
 			$spreadsheetResponse->fields = $fields;
 				
 			// Assign each field its value.
@@ -560,7 +563,10 @@ class SurveySpreadsheetView extends SurveyResultsView
 
 class SpreadsheetResponse extends DataItem
 {
-	var $fields = array();
+	var $fields = array(
+			"name"		=>	String,
+			//question/answer fields built at run time
+	);
 
 	function SpreadsheetResponse()
 	{
