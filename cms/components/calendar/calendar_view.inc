@@ -523,7 +523,7 @@ ENDSCRIPT;
 	{
 		if($link)
 		{
-			$link = (preg_match("/\?/", $link)) ? "&" : "?";
+			$link .= (preg_match("/\?/", $link)) ? "&" : "?";
 			$link .= "date=$currentDay";
 		}
 		else
