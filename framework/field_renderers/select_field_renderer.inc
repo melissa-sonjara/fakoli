@@ -67,6 +67,7 @@ class SelectFieldRenderer extends FieldRenderer
 	var $addEntryText;
 	var $onChange; // optional selection change handler
 	var	$max_chars;
+	var $min_chars;
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
@@ -150,6 +151,7 @@ class SelectFieldRenderer extends FieldRenderer
 					foreach($group as $value => $name)
 					{
 						$name = htmlSafe($name);
+						$name = $this->min_chars ? str_pad($name, $this->min_chars, "&nbsp;") : $name;
 						$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 						
 						if($current == $value)
@@ -183,6 +185,7 @@ class SelectFieldRenderer extends FieldRenderer
 				foreach($this->options as $value => $name)
 				{
 					$name = htmlSafe($name);
+					$name = $this->min_chars ? str_pad($name, $this->min_chars, "&nbsp;") : $name;
 					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 					
 					if($current == $value)
@@ -193,7 +196,7 @@ class SelectFieldRenderer extends FieldRenderer
 					$optionTitle = ($name != $trunced) ? " title='$name'" : "";
 					
 					echo "<option$optionTitle value='".htmlSafe($value)."'$selected>$trunced</option>\n";
-										}
+				}
 			}
 			
 			echo "</select>\n";
