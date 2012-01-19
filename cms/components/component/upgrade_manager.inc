@@ -390,6 +390,50 @@ abstract class UpgradeManager
 	}
 	
 	/*
+	 * Set the role, page title, or template for
+	 * a CMS Page or Component page when a Page or
+	 * Component page needs to override the settings
+	 * of the section(s) it is in.
+	 * 
+	 * @items can be any of the following:
+	 * 1) array of CMS Page or Component Page DataItem objects
+	 * 2) a single CMS Page or Component Page DataItem obj
+	 * 3) array of CMS Page or Component page identifiers
+	 * 4) a single CMS Page or Component Page identifier
+	 * 
+	 */
+	function setPageProperties($items, $role = "", $template = "", $page_title = "")
+	{
+		if($items && !is_array($items))
+			$items = array($items);
+			
+		if(count($items) == 0)
+			return true;
+			
+		foreach($items as $item)
+		{
+			if(!is_object($item))
+			{
+				$page = $this->searchByIdentifier($item);
+				if(!$page) return false;
+			}
+			else
+				$page = $item;
+				
+			$page->filter = new InclusionFilter("role", "template", "page_title");
+			if($role) 
+				$page->role = $role;
+			if($template)
+				$page->template = $template;
+			if($page_title)
+				$page->page_title = $page_title;
+			$page->save();
+		}	
+		
+		return true;
+	}
+	
+	/*
 	 * Utility function for use by calling classes to
 	 * add an array of items of class Page, ComponentPage,
 	 * Blog, ImageGallery, DocumentLibrary, Calendar 
@@ -583,13 +627,13 @@ abstract class UpgradeManager
 		else
 			$page = $item;
 						
-		$found = Query::create(MenuItem, "WHERE identifier=:identifier AND menu_id=:menu_id")
+		$found = Query::create(MenuItem, "WHERE (identifier=:identifier OR url like '%{$page->identifier}') AND menu_id=:menu_id")
 			->bind(":identifier", $page->identifier, ":menu_id", $menu->menu_id)
 			->executeValue("COUNT(1)");
 
 		if($found)
 		{
-			$this->log .= "Page identifier {$page->identifier} already linked to menu {$menu_name}\r\n";
+			$this->log .= "Page identifier {$page->identifier} already linked to menu {$menu_identifier}\r\n";
 			return true;
 		}
 		
