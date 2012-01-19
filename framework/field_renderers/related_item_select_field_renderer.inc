@@ -55,6 +55,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $sorted;
 	var $otherField;
 	var $onChange;
+	var $width;
 	
 /**
  * Create drop down list of item names in one table based on the key
@@ -134,8 +135,10 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	{
 		$this->getRelatedItems();
 
+		if($this->width)
+				$style = "style='width: {$this->width}'";
 		$this->_startField($field);
-		echo "<select id='{$this->parent->id}_{$field}' name='$field'";
+		echo "<select $style id='{$this->parent->id}_{$field}' name='$field'";
 		
 		if ($this->onChange)
 		{
