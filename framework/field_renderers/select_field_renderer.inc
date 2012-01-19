@@ -67,7 +67,7 @@ class SelectFieldRenderer extends FieldRenderer
 	var $addEntryText;
 	var $onChange; // optional selection change handler
 	var	$max_chars;
-	var $min_chars;
+	var $width;
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
@@ -120,7 +120,9 @@ class SelectFieldRenderer extends FieldRenderer
 		
 		if (count($this->options) > 0 || !$this->addEntry)
 		{
-			echo "<select name='$field' id='{$this->parent->id}_{$field}'";
+			if($this->width)
+				$style = "style='width: {$this->width}'";
+			echo "<select $style name='$field' id='{$this->parent->id}_{$field}'";
 			
 			if ($this->onChange != "")
 				echo " onchange='$this->onChange(this)'";
@@ -151,7 +153,6 @@ class SelectFieldRenderer extends FieldRenderer
 					foreach($group as $value => $name)
 					{
 						$name = htmlSafe($name);
-						$name = $this->min_chars ? str_pad($name, $this->min_chars, "&nbsp;") : $name;
 						$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 						
 						if($current == $value)
@@ -185,7 +186,6 @@ class SelectFieldRenderer extends FieldRenderer
 				foreach($this->options as $value => $name)
 				{
 					$name = htmlSafe($name);
-					$name = $this->min_chars ? str_pad($name, $this->min_chars, "&nbsp;") : $name;
 					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 					
 					if($current == $value)
