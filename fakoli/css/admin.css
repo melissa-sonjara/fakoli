@@ -23,6 +23,21 @@ table
 	text-align: left;
 }
 
+dl
+{
+	margin: 5px;
+	padding: 0;
+}
+
+dt
+{
+	font-weight: bold;
+}
+
+dd
+{
+	padding: 0;
+}
 
 #footer
 {
