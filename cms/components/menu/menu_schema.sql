@@ -36,3 +36,9 @@ CREATE TABLE `menu_item` (
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `menu_item` ADD COLUMN `permissions` varchar(200) NOT NULL DEFAULT '' AFTER `role`;
+
+-- END Version 1.1

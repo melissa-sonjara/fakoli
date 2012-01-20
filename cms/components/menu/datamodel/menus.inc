@@ -82,6 +82,7 @@ class MenuItem extends DataItem
 						"url"       	=> String,
 						"sort_order"	=> Number,
 						"role"		 	=> String,
+						"permissions"	=> String,
 						"published"		=> Boolean);
 	
 	// Relations
