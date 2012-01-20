@@ -49,6 +49,7 @@ class SettingAutoForm extends AutoForm
 		foreach($this->settings as $setting)
 		{
 			$fields[$setting->name] = ($setting->field_type) ? $setting->field_type : "String";
+			$this->group($setting->category, $setting->name);
 		}
 
 		$componentSettings->fields = $fields;
