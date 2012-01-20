@@ -36,7 +36,7 @@ Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/menu_tabs.inc";
 
-$menu_item = "Menu";
+$menu_item = "Menus";
 
 $menu_id = checkNumeric($_GET["menu_id"]);
 $menu_item_id = checkNumeric($_GET["menu_item_id"]);
