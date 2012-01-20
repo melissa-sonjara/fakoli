@@ -42,6 +42,8 @@ class DataColumn
 	var $title;		///< The title text for this column
 	var $style;		///< Any CSS styles to be applied to this column
 	var $typeHint;
+	var $onExport; ///< Optional user callback function for exporting the column.
+	
 	/**
 	 * Creates a new DataColumn. Generally this function should not be invoked directly,
 	 * but should be accessed through the DataListView::column() method.
@@ -49,15 +51,19 @@ class DataColumn
 	 * @param unknown_type $template the formatting template or formatter function for the column
 	 * @param unknown_type $sortable boolean indicating whether the column is sortable
 	 * @param unknown_type $style any CSS styles to be appled to the column
+	 * @param $typeHint hint for cell type to use when exporting to Excel
+	 * @param $onExport optional callback function to format value for Excel 
+
 	 * @return DataColumn a new DataColumn instance
 	 */
-	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null)
+	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null, $onExport = null)
 	{
 		$this->template = $template;
 		$this->sortable = $sortable;
 		$this->title = $title;
 		$this->style = $style;
 		$this->typeHint = $typeHint;
+		$this->onExport = $onExport;
 	}
 	
 	/**

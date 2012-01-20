@@ -121,11 +121,12 @@ class DataListView
 	 * @param $sortable whether this column is sortable
 	 * @param $style any inline styles specific to this column
 	 * @param $typeHint hint for cell type to use when exporting to Excel
+	 * @param $onExport optional callback function to format value for Excel
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function column($title, $format, $sortable = false, $style = null, $typeHint = null)
+	function column($title, $format, $sortable = false, $style = null, $typeHint = null, $onExport = null)
 	{
-		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint);
+		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint, $onExport);
 		return $this;
 	}
 
@@ -573,7 +574,10 @@ class DataListView
 						
 			foreach($this->columns as $column)
 			{
-				$val = $column->format($item);
+				if($column->onExport)
+					$val = call_user_func($column->onExport, $item, $column);
+				else
+					$val = $column->format($item);
 				
 				switch($column->typeHint)
 				{
