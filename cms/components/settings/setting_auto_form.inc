@@ -72,7 +72,7 @@ class SettingAutoForm extends AutoForm
 				$this->annotate($setting->name, "<a href='/action/settings/download?setting_id={$setting->settings_id}'>{$setting->value}</a>");
 				
 			}
-			else if ($settings->options == "Permissions")
+			else if ($setting->options == "Permissions")
 			{
 				$renderer = new ChecklistFieldRenderer($this, $setting->name, $setting->annotation ? $setting->annotation : prettify($setting->name), SiteRole::getRolesArray());
 				if ($setting->annotation) $form->annotation($setting->name, "");
