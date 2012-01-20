@@ -87,7 +87,7 @@ $urlSelect = new CMSLinkSelectFieldRenderer($form, "url", "Link");
 
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
-
+$permissionsList = Settings::createPermissionsFieldRenderer($form, "permissions", "Permissions");
 
 if ($method == "POST")
 {
