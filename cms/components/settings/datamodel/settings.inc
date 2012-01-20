@@ -258,8 +258,10 @@ class Settings extends DataItem
 		
 		foreach($permissions as $p)
 		{
-			if (!array_key_exists($p->component, $options)) $options[$p->component] = array();
-			$options[$p->component]["{$p->compononent}:{$p->name}"] = $p->annotation;
+			$c = prettify($p->component);
+			
+			if (!array_key_exists($c, $options)) $options[$c] = array();
+			$options[$c]["{$p->component}:{$p->name}"] = $p->annotation;
 		}
 		
 		$renderer = new CheckListFieldRenderer($form, $field, $label, $options, true);
