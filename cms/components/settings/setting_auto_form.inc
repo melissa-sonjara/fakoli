@@ -76,7 +76,7 @@ class SettingAutoForm extends AutoForm
 			{
 				$renderer = new ChecklistFieldRenderer($this, $setting->name, $setting->annotation ? $setting->annotation : prettify($setting->name), SiteRole::getRolesArray());
 				if ($setting->annotation) $this->annotate($setting->name, "");
-				$renderer->setSize(323, 120);
+				$renderer->horizontal = true;
 			}			
 			else if($setting->options)
 			{
