@@ -31,8 +31,15 @@
 
 *****************************************************************/
 
-Fakoli::usingFeature("cache");
+Fakoli::usingFeature("cache", "field_renderers");
 
+/**
+ * The Settings class provides components with a common API for specifying application
+ * settings and configuration values. These settings are stored in the application
+ * database and can be modified through the site administration screens.
+ * 
+ * @author andy
+ */
 class Settings extends DataItem
 {
 	// Fields
@@ -67,6 +74,11 @@ class Settings extends DataItem
 		$this->DataItem(func_get_args());
 	}
 	
+	/**
+	 * Retrieve the value of the specified Setting
+	 * @param string $component the name of the component that owns the setting
+	 * @param string $name the name of the setting
+	 */
 	static function getValue($component, $name)
 	{
 		$setting = (Cache::get("setting_{$component}_{$name}"));
@@ -137,16 +149,36 @@ class Settings extends DataItem
 		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options);
 	}
 	
+	/**
+	 * Set a Permission value indicating which SiteRoles have the given permission
+	 * @param string $component the name of the component that owns the permission
+	 * @param string $name the unique name of the permission
+	 * @param string $annotation short description of the permission 
+	 * @param string $value comma-separated list of roles that have the permission
+	 */
 	static function setPermission($component, $name, $annotation, $value)
 	{
 		Settings::setValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions");		
 	}
 	
+	/**
+	 * Set a default Permission value indicating which SiteRoles have the given permission
+	 * @param string $component the name of the component that owns the permission
+	 * @param string $name the unique name of the permission
+	 * @param string $annotation short description of the permission 
+	 * @param string $value comma-separated list of roles that have the permission
+	 */
 	static function setDefaultPermission($component, $name, $annotation, $value)
 	{
 		Settings::setDefaultValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions");		
 	} 
 	
+	/**
+	 * Check whether a user has a specific permission
+	 * @param string $component the component that owns the permission
+	 * @param string $name the unique name of the permission
+	 * @param object $account (optional) user account to test. If not specified the currently logged in user is tested.
+	 */
 	static function checkPermission($component, $name, $account = null)
 	{
 		$roles = Settings::getValue($component, $name);
@@ -154,13 +186,43 @@ class Settings extends DataItem
 		return checkRole($roles, $account);
 	}
 	
+	/**
+	 * Asserts whether the current user has a specific permission,
+	 * optionally redirecting to a specified location if they do not.
+	 * @param string $component the component that owns the permission
+	 * @param string $name the unique name of the permission
+	 * @param string $redirect URL to redirect to on failure
+	 */
 	static function assertPermission($component, $name, $redirect = "")
 	{
 		$roles = Settings::getValue($component, $name);
 		
 		Fakoli::assertRole($roles, $redirect);
 	}
+
+	/**
+	 * Check all the permissions specified in the given string. If the user
+	 * belongs to a role with ONE of the specified permissions, return true.
+	 * If the user does not, return false.
+	 * 
+	 * @param string $permissions permission list in the form "[component]:[permission],[component]:[permission]..."
+	 * @param object $account (optional) user account to test. If not specified the currently logged in user is tested.
+	 */
+	static function checkPermissions($permissions, $account = null)
+	{
+		if ($permissions == "") return true;
+		
+		$perms = explode(",", $permissions);
+		
+		foreach($perms as $perm)
+		{
+			list($component, $permission) = explode(":", $perm);
+			if (Settings::checkPermission($component, $permission, $account)) return true;
+		}
 	
+		return false;
+	}
+
 	function formatOptionList()
 	{
 		if(!$this->options)
@@ -180,8 +242,32 @@ class Settings extends DataItem
 	static function getComponents()
 	{
 		return Query::create(Component, "WHERE name in (SELECT DISTINCT component FROM settings) ORDER BY name")->execute();
-	}					
+	}
+
+	static function createPermissionsFieldRenderer($form, $field, $label = "")
+	{
+		$permissions = Query::create(Settings, "WHERE category='Permissions' ORDER BY component, annotation")->execute();
+		
+		if (count($permissions) == 0) 
+		{
+			$form->hide($field);			
+			return null;
+		}
+		
+		$options = array();
+		
+		foreach($permissions as $p)
+		{
+			if (!array_key_exists($p->component, $options)) $options[$p->component] = array();
+			$options[$p->component]["{$p->compononent}:{$p->name}"] = $p->annotation;
+		}
+		
+		$renderer = new CheckListFieldRenderer($form, $field, $label, $options, true);
+		$renderer->setSize(400, 150);
+		return $renderer;			
+	}
 }
+
 
 /*
  * Dummy data model to render a component's settinsg
