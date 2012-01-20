@@ -137,6 +137,30 @@ class Settings extends DataItem
 		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options);
 	}
 	
+	static function setPermission($component, $name, $annotation, $value)
+	{
+		Settings::setValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions");		
+	}
+	
+	static function setDefaultPermission($component, $name, $annotation, $value)
+	{
+		Settings::setDefaultValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions");		
+	} 
+	
+	static function checkPermission($component, $name, $account = null)
+	{
+		$roles = Settings::getValue($component, $name);
+		
+		return checkRole($roles, $account);
+	}
+	
+	static function assertPermission($component, $name, $redirect = "")
+	{
+		$roles = Settings::getValue($component, $name);
+		
+		Fakoli::assertRole($roles, $redirect);
+	}
+	
 	function formatOptionList()
 	{
 		if(!$this->options)
