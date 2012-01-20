@@ -40,8 +40,10 @@ var ScrollingTabs = new Class(
 			}
 		}
 		
+		this.tabsWidth += 2;
+		
 		this.tabContainer.setStyles({position: 'relative', overflow: 'hidden', padding: 0, height: tabsSize.height + 2});
-		this.tabList.setStyles({position: 'absolute', top: 0, left: 0, width: this.tabsWidth + 2});
+		this.tabList.setStyles({position: 'absolute', top: 0, left: 0, width: this.tabsWidth});
 		
 		this.tabContainer.tabScroller = this;
 		
