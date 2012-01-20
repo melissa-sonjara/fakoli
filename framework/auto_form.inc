@@ -513,7 +513,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	 */
 	function group($name)
 	{
-		$group = array();
+		$group = (array_key_exists($name, $this->groups)) ? $this->groups[$name] : array();
 		for($i = 1; $i < func_num_args(); ++$i)
 		{
 			$group[] = func_get_arg($i);
