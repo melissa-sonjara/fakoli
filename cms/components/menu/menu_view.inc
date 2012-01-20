@@ -69,7 +69,7 @@ class MenuView
 	
 	function getLink($menuItem)
 	{
-		if (!checkRole($menuItem->role) || ) return null;
+		if (!checkRole($menuItem->role) || !Settings::checkPermissions($menuItem->permissions)) return null;
 		
 		// If the URL field is set explicitly, use that
 		if ($menuItem->url) return $menuItem->url;
