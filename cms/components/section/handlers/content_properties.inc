@@ -53,7 +53,7 @@ if ($scope == "role" || $scope == "all")
 	$roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
 }
 
-if ($scope == "permissions")
+if ($scope == "permissions" || $scope == "all")
 {
 	$permissionsList = Settings::createPermissionsFieldRenderer($form, "permissions", "Permissions");
 }
@@ -69,6 +69,11 @@ if ($method == "POST")
 		$sectionContent->role = isset($_POST["role"]) ? implode(",", $_POST["role"]) : "";
 	}
 	
+	if ($scope == "permissions" || $scope == "all")
+	{
+		$sectionContent->permissions = isset($_POST["permissions"]) ? implode(",", $_POST["permissions"]) : "";
+	}
+
 	$form->postProcessFields($sectionContent->primary_key, $filter);
 	
 	foreach($ids as $id)
