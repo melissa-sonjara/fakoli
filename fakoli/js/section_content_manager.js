@@ -31,6 +31,14 @@ var SectionContentManager = new Class(
 		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=role&" + this.getQueryParams(), '320px', 'auto', true);		
 	},
 
+	setPermissions: function()
+	{
+		this.getValues();
+		if (this.values.length == 0) return;
+
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=permissions&" + this.getQueryParams(), '320px', 'auto', true);		
+	},
+	
 	setSSL: function()
 	{
 		this.getValues();
