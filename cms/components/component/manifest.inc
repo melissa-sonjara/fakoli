@@ -85,8 +85,10 @@ class ComponentManifest
 	static function getScripts()
 	{
 		return array("/fakoli/js/functions.js",
-					 "/fakoli/js/mootools-1.2.5-core.js",
-					 "/fakoli/js/mootools-1.2.5.1-more.js",
+					 //"/fakoli/js/mootools-1.2.5-core.js",
+					 //"/fakoli/js/mootools-1.2.5.1-more.js",
+					 "/fakoli/js/mootools-core-1.4.3.js",
+					 "/fakoli/js/mootools-more-1.4.0.1.js",
 					 "/fakoli/js/ui.js",
 					 "/fakoli/js/iFrameFormRequest.js",
 					 "/fakoli/js/mootools-textarea-resizer.js",
