@@ -12,7 +12,7 @@ var SectionContentManager = new Class(
 		this.getValues();
 		if (this.values.length == 0) return;
 
-		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=all&" + this.getQueryParams(), '480px', 'auto', true);		
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=all&" + this.getQueryParams(), '450px', 'auto', true);		
 	},
 		
 	setTemplate: function()
@@ -20,7 +20,7 @@ var SectionContentManager = new Class(
 		this.getValues();
 		if (this.values.length == 0) return;
 
-		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=template&" + this.getQueryParams(), '480px', 'auto', true);		
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=template&" + this.getQueryParams(), '450px', 'auto', true);		
 	},
 
 	setRole: function()
@@ -28,7 +28,7 @@ var SectionContentManager = new Class(
 		this.getValues();
 		if (this.values.length == 0) return;
 
-		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=role&" + this.getQueryParams(), '480px', 'auto', true);		
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=role&" + this.getQueryParams(), '450px', 'auto', true);		
 	},
 
 	setPermissions: function()
@@ -36,7 +36,7 @@ var SectionContentManager = new Class(
 		this.getValues();
 		if (this.values.length == 0) return;
 
-		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=permissions&" + this.getQueryParams(), '480px', 'auto', true);		
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=permissions&" + this.getQueryParams(), '450px', 'auto', true);		
 	},
 	
 	setSSL: function()
@@ -44,7 +44,7 @@ var SectionContentManager = new Class(
 		this.getValues();
 		if (this.values.length == 0) return;
 
-		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=ssl&" + this.getQueryParams(), '480px', 'auto', true);		
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=ssl&" + this.getQueryParams(), '450px', 'auto', true);		
 	},
 
 	cancel: function()
