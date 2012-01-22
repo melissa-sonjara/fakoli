@@ -56,6 +56,7 @@ if ($scope == "role" || $scope == "all")
 if ($scope == "permissions" || $scope == "all")
 {
 	$permissionsList = Settings::createPermissionsFieldRenderer($form, "permissions", "Permissions");
+	if ($permissionsList) $permissionsList->colspan = 2;
 }
 
 $form->submitLabel = "Update Properties";
