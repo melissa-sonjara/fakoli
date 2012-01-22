@@ -23,6 +23,11 @@ if ($scope == "role" || $scope == "all")
 	$filter->add("role");
 }
 
+if ($scope == "permissions" || $scope == "all")
+{
+	$filter->add("permissions");
+}
+
 if ($scope == "ssl" || $scope == "all")
 {
 	$filter->add("use_SSL");
@@ -46,6 +51,11 @@ if ($scope == "template" || $scope == "all")
 if ($scope == "role" || $scope == "all")
 {
 	$roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
+}
+
+if ($scope == "permissions")
+{
+	$permissionsList = Settings::createPermissionsFieldRenderer($form, "permissions", "Permissions");
 }
 
 $form->submitLabel = "Update Properties";
