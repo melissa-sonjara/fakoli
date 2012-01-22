@@ -50,7 +50,8 @@ class SectionUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added modules positioning to sections"
+			"1.1"		=>	"sql:Added modules positioning to sections",
+			"1.2"		=>	"sql:Added permissions fields to section and section_content tables"
 	);
 	
 	function SectionUpgradeManager()

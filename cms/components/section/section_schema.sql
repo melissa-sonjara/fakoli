@@ -54,3 +54,10 @@ CREATE TABLE  `section_module_xref` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE `section_content` ADD COLUMN `permissions` varchar(200) NOT NULL DEFAULT '' AFTER `role`;
+ALTER TABLE `section` ADD COLUMN `default_permissions` varchar(200) NOT NULL DEFAULT '' AFTER `default_role`;
+
+-- END Version 1.2

@@ -35,14 +35,15 @@ class Section extends DataItem
 {
 	// Fields
 	
-	var $fields = array("section_id"		=>	Number,
-						"section"			=>	String,
-						"section_title"		=>	String,
-						"default_template"	=>	String,
-						"default_role"		=>	String,
-						"default_page"		=>	String,
-						"site_id"			=>	Number,
-						"use_SSL"			=>	Boolean);
+	var $fields = array("section_id"			=>	Number,
+						"section"				=>	String,
+						"section_title"			=>	String,
+						"default_template"		=>	String,
+						"default_role"			=>	String,
+						"default_permissions"	=>	String,
+						"default_page"			=>	String,
+						"site_id"				=>	Number,
+						"use_SSL"				=>	Boolean);
 	
 	var $relations = array("SectionModuleXrefs"	=>	SectionModuleXref,
 						   "Modules"			=>	Module,
@@ -112,6 +113,13 @@ class Section extends DataItem
 		$content = $this->getContent($identifier);
 		if ($content->role) return $content->role;
 		return $this->default_role;
+	}
+	
+	function getPermissions($identifier)
+	{
+		$content = $this->getContent($identifier);
+		if ($content->permissions) return $content->permissions;
+		return $this->default_permissions;
 	}
 	
 	static function findSection($section_name)
@@ -207,6 +215,7 @@ class SectionContent extends DataItem
 						"section_id"			=>	String,
 						"identifier"			=>	String,
 						"role"					=>	String,
+						"permissions"			=>	String,
 						"template"				=>	String,
 						"use_SSL"				=>	Boolean);
 	
