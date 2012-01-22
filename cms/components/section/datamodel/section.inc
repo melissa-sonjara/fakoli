@@ -103,21 +103,21 @@ class Section extends DataItem
 	
 	function getTemplateFile($identifier)
 	{
-		$content = $this->getContent($identifier);
+		$content = is_object($identifier) ? $identifier : $this->getContent($identifier);
 		if ($content->template) return $content->template;
 		return $this->default_template;
 	}
 	
 	function getRole($identifier)
 	{
-		$content = $this->getContent($identifier);
+		$content = is_object($identifier) ? $identifier : $this->getContent($identifier);
 		if ($content->role) return $content->role;
 		return $this->default_role;
 	}
 	
 	function getPermissions($identifier)
 	{
-		$content = $this->getContent($identifier);
+		$content = is_object($identifier) ? $identifier : $this->getContent($identifier);
 		if ($content->permissions) return $content->permissions;
 		return $this->default_permissions;
 	}
