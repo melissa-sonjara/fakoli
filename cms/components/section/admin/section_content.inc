@@ -145,7 +145,8 @@ ENDSCRIPT;
 
 $contextMenu = new ContextMenu("section_content_menu", "#section_content_tree_table");
 $contextMenu->command("set_template", "Set Template...", "sectionContentManager.setTemplate()", false)
-			->command("set_roles",	"Set Role Permissions...", "sectionContentManager.setRole()", false)
+			->command("set_roles",	"Set Roles...", "sectionContentManager.setRole()", false)
+			->command("set_permissions", "Set Permissions...", "sectionContentManager.setPermissions()", false)
 			->command("set_ssl", "Configure SSL...", "sectionContentManager.setSSL()", false)
 			->command("set_all", "All Properties...", "sectionContentManager.allProperties()", "", false)
 			->separator()
