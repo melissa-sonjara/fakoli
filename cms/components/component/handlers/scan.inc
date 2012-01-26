@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-if (!Fakoli::checkRole("admin") && $_SERVER["REMOTE_ADDR"] != "127.0.0.1")
+if (!checkRole("admin") && $_SERVER["REMOTE_ADDR"] != "127.0.0.1")
 {
 	redirect("/index");
 }
