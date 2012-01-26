@@ -33,7 +33,7 @@
 
 if (!checkRole("admin") && $_SERVER["REMOTE_ADDR"] != "127.0.0.1")
 {
-	redirect("/index");
+	throw new FakoliException("Anonymous component scans cannot be run from {$_SERVER["REMOTE_ADDR"]}");
 }
 
 $mgr = new ComponentManager();
