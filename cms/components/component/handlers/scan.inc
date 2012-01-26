@@ -31,7 +31,10 @@
 
 *****************************************************************/
 
-Fakoli::assertRole("admin");
+if (!Fakoli::checkRole("admin") && $_SERVER["REMOTE_ADDR"] != "127.0.0.1")
+{
+	redirect("/index");
+}
 
 $mgr = new ComponentManager();
 $mgr->scan();
