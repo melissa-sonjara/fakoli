@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-if (!checkRole("admin") && $_SERVER["REMOTE_ADDR"] != "127.0.0.1")
+if (!checkRole("admin") && $_SERVER["REMOTE_ADDR"] != $_SERVER["SERVER_ADDR"])
 {
 	throw new FakoliException("Anonymous component scans cannot be run from {$_SERVER["REMOTE_ADDR"]}");
 }
