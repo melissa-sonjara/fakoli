@@ -39,6 +39,13 @@ if (!checkRole("admin") && $_SERVER["REMOTE_ADDR"] != "127.0.0.1")
 $mgr = new ComponentManager();
 $mgr->scan();
 
-redirect("/admin/components");
+if (checkRole("admin"))
+{
+	redirect("/admin/components");
+}
+else
+{
+	echo "Scan Complete\n";
+}
 
 ?>
