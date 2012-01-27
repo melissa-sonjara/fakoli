@@ -403,6 +403,8 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			{
 				$renderer = $r['renderer'];
 				$rField = $r['field'];
+				if(!$rField)
+					$rField = $renderer->field;
 				if($rField == $field)
 					return $renderer;
 			}					
