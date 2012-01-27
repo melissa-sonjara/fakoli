@@ -389,56 +389,20 @@ abstract class UpgradeManager
 	    return $fileName;
 	}
 	
-	/*
-	 * Set the role, page title, or template for
-	 * a CMS Page or Component page when a Page or
-	 * Component page needs to override the settings
-	 * of the section(s) it is in.
-	 * 
-	 * @items can be any of the following:
-	 * 1) array of CMS Page or Component Page DataItem objects
-	 * 2) a single CMS Page or Component Page DataItem obj
-	 * 3) array of CMS Page or Component page identifiers
-	 * 4) a single CMS Page or Component Page identifier
-	 * 
-	 */
-	function setPageProperties($items, $role = "", $template = "", $page_title = "")
-	{
-		if($items && !is_array($items))
-			$items = array($items);
-			
-		if(count($items) == 0)
-			return true;
-			
-		foreach($items as $item)
-		{
-			if(!is_object($item))
-			{
-				$page = $this->searchByIdentifier($item);
-				if(!$page) return false;
-			}
-			else
-				$page = $item;
-				
-			$page->filter = new InclusionFilter("role", "template", "page_title");
-			if($role) 
-				$page->role = $role;
-			if($template)
-				$page->template = $template;
-			if($page_title)
-				$page->page_title = $page_title;
-			$page->save();
-		}	
 		
-		return true;
-	}
-	
 	/*
 	 * Utility function for use by calling classes to
 	 * add an array of items of class Page, ComponentPage,
 	 * Blog, ImageGallery, DocumentLibrary, Calendar 
-	 * to a section.
+	 * to a section. 
 	 * 
+	 * @items can be any of the following:
+	 * 1) array of CMS Page, Component Page, Blog, ImageGallery,
+	 * DocumentLibrary, or Calendar DataItem objects
+	 * 2) a single DataItem obj of any of the above types
+	 * 3) array of CMS Page or Component page identifiers
+	 * 4) a single CMS Page or Component Page identifier
+
 	 * Alternatively, $items can be an array of
 	 * identifiers or a single identifier as long as 
 	 * the identifiers are a CMS Page or Component Page.
@@ -446,8 +410,11 @@ abstract class UpgradeManager
 	 * We find the section based on the section name,
 	 * and query the existing content to avoid adding
 	 * the identifier twice.
+	 * 
+	 * If the page is found, its role and template,
+	 * are updated, if an update is provided.
 	 */
-	function addSectionContent($items, $section_name = "/")
+	function addSectionContent($items, $section_name = "/", $role = "", $template = "")
 	{
 		if($items && !is_array($items))
 			$items = array($items);
@@ -460,7 +427,10 @@ abstract class UpgradeManager
 		->execute();
 			
 		if(count($sections) == 0)
+		{
+			trace("UpgradeManager::addSectionContent - section $section_name not found", 3);
 			return false;
+		}
 		else
 			$section = $sections[0];
 			
@@ -469,32 +439,44 @@ abstract class UpgradeManager
 			if(!is_object($item))
 			{
 				$page = $this->searchByIdentifier($item);
-				if(!$page) return false;
+				if(!$page)
+				{
+					trace("UpgradeManager::addSectionContent - page $page not found", 3);
+					return false;
+				}
 			}
 			else
 				$page = $item;
 			
-			$found = Query::create(SectionContent, "WHERE identifier=:identifier AND section_id=:section_id")
-			->bind(":identifier", $page->identifier, ":section_id", $section->section_id)
-			->executeValue("COUNT(1)");
+			// should be only one or none
+			$contents = Query::create(SectionContent, "WHERE identifier=:identifier AND section_id=:section_id")
+				->bind(":identifier", $page->identifier, ":section_id", $section->section_id)
+				->execute();
+				
+			$content = (count($contents) > 0) ? $contents[0] : null;
 
-			if(!$found)
+			if(!$content)
 			{
 				$content = new SectionContent();
 				$content->section_id = $section->section_id;
 				$content->identifier = $page->identifier;
-				
-				if($section->default_template != $page->template)
-					$content->template = $page->template;
-				if($section->default_role != $page->role)
-					$content->role = $page->role;
-				$content->save();
-				$this->log .= $page->format("Adding page {identifier} to section {$section->section_title}\r\n");
 			}
-		}
+			else
+			{
+				$content->filter = new InclusionFilter("template", "role");
+			}
 
+			if($section->default_template != $template)
+				$content->template = $template;
+			if($section->default_role != $role)
+				$content->role = $role;
+							
+			$content->save();
+		}
+		
 		return true;
 	}
+	
 	
 	/*
 	 * Given an array of either identifiers that must be
