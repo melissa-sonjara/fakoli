@@ -272,6 +272,56 @@ ENDSCRIPT;
 	}
 }
 
+class RequiredIfCheckedValidator extends AbstractValidator
+{
+	var $message;
+	var $checkbox;
+	
+	function RequiredIfCheckedValidator($field, $checkbox, $title, $checkboxTitle, $message = "")
+	{
+		$this->AbstractValidator($field, $title);
+		$this->checkbox = $checkbox;
+		
+		$this->message = $message ? $message : "{$title} is a required field. Please supply a value or uncheck {$checkboxTitle}.";
+
+		trace("RequiredIfCheckedValidator($field,$title,$checkboxTitle, $message)", 4);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$msg = jsSafe($this->message, true);
+		$script = <<<ENDSCRIPT
+		
+	if (form["{$this->field}"].style.display != "none" && form["{$this->checkbox}"].checked && form["{$this->field}"].value == "{$this->empty}")
+	{
+		alert("{$msg}");
+		return false;
+	}
+ENDSCRIPT;
+
+		return $script;
+	}
+
+	function validate()
+	{
+		
+		if ($this->readOnly) return "";
+		
+		if (!isset($_POST[$this->field]) && isset($_POST[$this->checkbox]))
+		{
+			return $this->message;
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+}
+ 
+
 /**
  * Date Validator.
  * 

@@ -586,6 +586,22 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	}
 
 	/**
+	 * Make a field required if a given checkbox is checked.
+	 * @param string $field the field to be validated
+	 * @param string $checkbox the checkbox controlling whether the field is required
+	 * @param string $message the message to display if validation fails.
+	 */
+	function requiredIfChecked($field, $checkbox, $fieldTitle = "", $checkboxTitle = "", $message = "")
+	{
+		if ($this->data->hasField($field))
+		{
+			$this->validator->add(new RequiredIfCheckedValidator($field, $checkbox, 
+																 $fieldTitle ? $fieldTitle : $this->prettifyFieldName($field), 
+																 $checkboxTitle ? $checkboxTitle : $this->prettifyFieldName($checkbox), $message));
+		}
+	}
+	
+	/**
 	 * Validate the user input for the specified field against a regular expression, outputting
 	 * the supplied message if the entered value does not match. This can be used to provide general
 	 * format-based validation for fields.
