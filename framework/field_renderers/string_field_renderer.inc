@@ -63,6 +63,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $onChange = ""; // optional callback on data input change
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $password = false;
+	var $template = ""; // StringTypeRenderer template for reaonly format (e.g., "prettify")
 	var $confirm = false;
 	
 	function StringFieldRenderer(&$parent)
@@ -144,7 +145,7 @@ class StringFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->parent->data->get($field)."</td>\n";		
+		echo ">".$this->format($field)."</td>\n";		
 		echo "</tr>\n";	
 	}
 
@@ -170,6 +171,7 @@ class StringFieldRenderer extends FieldRenderer
 		}		
 	}
 	
+		
 	function addValidatorsToForm($field, $required = false)
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
@@ -184,6 +186,13 @@ class StringFieldRenderer extends FieldRenderer
 			$this->parent->validator->add(new MatchValidator($field, $label, $confirm, $confirmLabel));
 		}
 	}
+	
+
+	function format($field)
+	{
+		return StringTypeRenderer::format($this->parent->data->get($field), $this->template);
+	}
+		
 }
 
 ?>
