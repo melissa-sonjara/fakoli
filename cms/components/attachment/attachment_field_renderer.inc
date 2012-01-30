@@ -155,20 +155,27 @@ class AttachmentFieldRenderer extends FieldRenderer
 		echo ">";
 			
 		$attachments = $this->getAttachments();
+		
+		// Omit ul li list if only one
+		if(count($attachments) == 1)
+		{
+			$this->drawOneAttachment($attachments[0]);
+		}
+		elseif(count($attachments) > 0)
+		{
 ?>	
 	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
-<?
-		if(count($attachments) > 0)
+<?	
+		foreach($attachments as $attachment)
 		{
- 			foreach($attachments as $attachment)
- 			{
  ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'><span>
  <?php
- 				$this->drawOneAttachment($attachment);
+ 			$this->drawOneAttachment($attachment);
  ?>
 	 </span></li>
-<?	
-			}
+<?
+		}
+?></ul><?php			
 		}
 
 		echo "</td></tr>\n";
@@ -205,6 +212,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	
 	function postProcess($field = "")
 	{
+		trace("AttachmentFieldRenderer postProcess field $field value ". $_POST[$field], 3);
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
 		
 		if (!$field) $field = $this->field;
