@@ -40,7 +40,7 @@ class SurveyManifest
 		$component->description = "Create custom survey questionnaires, survey email templates, and view survey responses.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
-		$component->priority = 4;
+		$component->priority = 10;
 		$component->enabled = true;
 
 		return $component;
