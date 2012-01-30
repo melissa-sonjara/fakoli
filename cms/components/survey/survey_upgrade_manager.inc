@@ -50,7 +50,6 @@ class SurveyUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:add view survey_question_answer",
 	);
 	
 	function SurveyUpgradeManager()
