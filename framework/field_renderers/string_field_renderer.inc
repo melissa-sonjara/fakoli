@@ -63,7 +63,8 @@ class StringFieldRenderer extends FieldRenderer
 	var $onChange = ""; // optional callback on data input change
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $password = false;
-
+	var $confirm = false;
+	
 	function StringFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
@@ -121,6 +122,19 @@ class StringFieldRenderer extends FieldRenderer
 			echo "</div>";
 		}
 		$this->_endField($field);
+		
+		if ($this->confirm)
+		{
+			$confirm = "confirm_$field";
+			$this->_startField($confirm);
+			
+			$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";		
+			$disable = ($this->disable) ? "disabled='disabled'" : "";		
+			$inputType = (!$this->password) ? "text" : "password";
+			echo "<input id='{$this->parent->id}_{$confirm}' type='$inputType' name='$confirm' $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable/>";
+		
+			$this->_endField($field);
+		}	
 	}
 	
 	
@@ -156,6 +170,20 @@ class StringFieldRenderer extends FieldRenderer
 		}		
 	}
 	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		$confirm = "confirm_$field";
+		$confirmLabel = "Confirm $label";
+		
+		if($required)
+			$this->parent->validator->add(new RequiredValidator($field, $label));
+			
+		if ($this->confirm)
+		{
+			$this->parent->validator->add(new MatchValidator($field, $label, $confirm, $confirmLabel));
+		}
+	}
 }
 
 ?>
