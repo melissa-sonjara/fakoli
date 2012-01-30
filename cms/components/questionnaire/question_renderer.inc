@@ -403,21 +403,9 @@ class RatingView extends QuestionField
 		if (!$to) $to = "Highest";
 		if (!$steps) $steps = 5;
 
-		$answer = "$from&nbsp;";
-
 		$valueAnswer = $this->parent->getAnswer($this->question);
-		$qPk = $this->question->getPrimaryKey();
-
-		for($i = 1; $i <= $steps; ++$i)
-		{
-			$selected = ($valueAnswer == $i) ? " checked" : "";
-
-			$answer .= "<input type='radio' style='border: none' name='question_{$this->question->$qPk}'
-			id='question_{$this->question->$qPk}_$i' 
-			value='$i'$selected disabled='disabled' />&nbsp;";
-		}
-
-		$answer .= $to;
+		if($valueAnswer)
+			$answer = "{$valueAnswer} rating on scale of $steps $from &ndash; $to";
 
 		return $answer;
 	}
