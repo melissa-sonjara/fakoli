@@ -161,7 +161,7 @@ class CheckListFieldRenderer extends FieldRenderer
 			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
-		$idx = 1;
+		$idx = 0;
 		
 		if ($this->grouped)
 		{
@@ -214,7 +214,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 		
 		// Save this count to loop through checkboxes on required validation
-		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".count($this->options)."\">";		
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".$idx."\">";		
 		
 			
 		if ($this->width && $this->height)
