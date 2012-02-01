@@ -161,6 +161,8 @@ class CheckListFieldRenderer extends FieldRenderer
 			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
+		$idx = 1;
+		
 		if ($this->grouped)
 		{
 			echo "<dl>\n";
@@ -171,7 +173,8 @@ class CheckListFieldRenderer extends FieldRenderer
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					
-					echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					$idx++;
 				}
 				
 				echo "</dd>";
@@ -185,7 +188,8 @@ class CheckListFieldRenderer extends FieldRenderer
 				foreach($this->options as $value => $text)
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
-					echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					$idx++;
 				}
 
 				if($this->addEntry)
