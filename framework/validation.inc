@@ -959,7 +959,7 @@ $script = <<<ENDSCRIPT
 		var max = form["count_{$this->field}"].value;
 		var fieldName;
 
-		for(i=1; i <= max; i++)
+		for(i=0; i < max; i++)
 		{
 			fieldName = form["{$this->field}["+i+"]"];
 			if(fieldName.checked == true)
