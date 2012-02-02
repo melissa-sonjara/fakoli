@@ -70,7 +70,7 @@
 		color-stop(0.77, rgb(238,238,238))
 	);
 
-	opacity: 0.85;
+	opacity: 1;
 	border-radius: 5px 5px 0 0;
 	border-top: solid 1px #666;
 	border-left: solid 1px #666;
