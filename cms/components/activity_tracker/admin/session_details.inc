@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("activity_tracker", "case", "swf");
+Fakoli::using("activity_tracker");
 Fakoli::usingFeature("data_view");
 
 $session_id = $_GET["session_id"];
@@ -25,8 +25,6 @@ $table->filter = true;
 $table->pageSize = 0;
 $table->paginate = false;
 $table->sortable = true;
-$table->zebra = false;
-$table->onStartRow = array($helper, onStartRow);
 
 $table->excelFile = "session_{$session_id}.xls";
 
