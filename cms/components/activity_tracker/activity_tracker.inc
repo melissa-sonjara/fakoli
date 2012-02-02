@@ -10,7 +10,7 @@ class ActivityTracker
 
 		$enabled = Settings::getValue("activity_tracker", "track_activity");
 		$entryPoint = basename($_SERVER['SCRIPT_NAME']);
-		trace($entryPoint, 2);
+
 		if (!$enabled || ($entryPoint != 'page.php' && $entryPoint != 'action.php')) return;
 		
 		$activity = new UserActivity();
