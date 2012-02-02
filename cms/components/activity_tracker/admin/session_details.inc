@@ -17,13 +17,12 @@ $activity = Query::create(UserActivity, "WHERE session_id=:id $constraints ORDER
 				 ->execute();
 
 $table = new DataListView($activity, "activity_table");
-$table->column("Date", "{activity_time}", true, "width: 15%")
-	  ->column("Method", "{method}", true, "width: 10%")
+$table->column("Date", "{activity_time}", true, "width: 20%")
+	  ->column("Method", "{method}", true, "width: 10%; text-align: center")
 	  ->column("URI", "{uri}", true);
 	  
 $table->filter = true;
 $table->pageSize = 50;
-$table->paginate = false;
 $table->sortable = true;
 
 $table->excelFile = "session_{$session_id}.xls";
