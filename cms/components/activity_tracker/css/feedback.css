@@ -18,7 +18,24 @@
 
 #feedback_closed
 {
-	background: none repeat scroll 0 0 #DDDDDD;
+	background-color: #DDDDDD;
+	
+	background-image: linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -o-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -moz-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -webkit-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -ms-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.01, rgb(170,170,170)),
+		color-stop(0.39, rgb(204,204,204)),
+		color-stop(0.77, rgb(238,238,238))
+	);
+
+	opacity: 0.85;
 	border-radius: 5px 5px 0 0;
 	border-top: solid 1px #666;
 	border-left: solid 1px #666;
@@ -36,7 +53,24 @@
 
 #feedback_open
 {
-	background: none repeat scroll 0 0 #DDDDDD;
+	background-color: #DDDDDD;
+	
+	background-image: linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -o-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -moz-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -webkit-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	background-image: -ms-linear-gradient(bottom, rgb(170,170,170) 1%, rgb(204,204,204) 39%, rgb(238,238,238) 77%);
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.01, rgb(170,170,170)),
+		color-stop(0.39, rgb(204,204,204)),
+		color-stop(0.77, rgb(238,238,238))
+	);
+
+	opacity: 0.85;
 	border-radius: 5px 5px 0 0;
 	border-top: solid 1px #666;
 	border-left: solid 1px #666;
