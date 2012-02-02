@@ -22,7 +22,7 @@ $table->column("Date", "{activity_time}", true, "width: 15%")
 	  ->column("URI", "{uri}", true);
 	  
 $table->filter = true;
-$table->pageSize = 0;
+$table->pageSize = 50;
 $table->paginate = false;
 $table->sortable = true;
 
