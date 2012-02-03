@@ -224,8 +224,8 @@ class InnerJoin
 				$d = $this->classes[$j];
 				$q = $this->protos[$d];
 				
-				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 3);
-				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 3);
+				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 5);
+				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 5);
 				
 				if (array_key_exists($p->primary_key, $q->fields))
 				{
