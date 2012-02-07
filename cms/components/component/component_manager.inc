@@ -402,11 +402,11 @@ class ComponentManager
 
 			if (is_array($subscription["handler"]))
 			{
-				trace("Handling $event with {$subscription["handler"][0]}::{$subscription["handler"][1]}", 3);
+				trace("Handling $event with {$subscription["handler"][0]}::{$subscription["handler"][1]}", 4);
 			}
 			else
 			{
-				trace("Handling $event with {$subscription["handler"]}", 3);
+				trace("Handling $event with {$subscription["handler"]}", 4);
 			}
 					
 			$parameter = call_user_func_array($subscription["handler"], array($parameter, &$continue));
