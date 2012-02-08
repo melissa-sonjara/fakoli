@@ -263,6 +263,26 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		$this->renderField($field);
 	}
 	
+	/*
+	 * Given an array of dataitem objects, return
+	 * an array of options with the key the primary
+	 * key of the obj and the name field the param given.
+	 */
+	static function formatOptions($items, $name_field)
+	{
+		$options = array();
+		
+		if(count($items) == 0)
+			return $options;
+			
+		foreach($items as $item)
+		{
+			$pk = $item->getPrimaryKey();
+			$options[$item->$pk] = $item->$name_field;
+		}
+		return $options;
+	}
+	
 } // end class FilterFieldRenderer
 
 
