@@ -91,7 +91,7 @@ class TextFieldRenderer extends FieldRenderer
 		$disable = ($this->disable) ? "disabled='disabled'" : "";	
 		if ($this->annotateBefore && $this->parent->annotations[$field])
 		{
-			echo "<table><tr><td colspan='{$this->colspan}'>". $this->parent->annotations[$field] ."</td></tr></table>";
+			echo $this->parent->annotations[$field];
 		}
 		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $disable $onkeypress>";
 		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
