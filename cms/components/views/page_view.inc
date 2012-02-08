@@ -98,7 +98,8 @@ class PageView
 		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
 		
-		$printLink = "/{$this->page->identifier}".appendToQueryString($qs, "_style=print");
+		// JDG 2/8/2012 - remove "/" before identifier so that it resolves to correct section
+		$printLink = "{$this->page->identifier}".appendToQueryString($qs, "_style=print");
 		
 		$template = str_replace("{printIcon}", 
 			"<a href='$printLink' target='_blank'><img src='/fakoli/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
