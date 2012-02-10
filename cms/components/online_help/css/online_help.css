@@ -49,3 +49,15 @@ body.banner h2
 	float:  right;
 	margin: 5px;
 }
+
+.help_tree a, .help_tree:visited
+{
+	color: #000;
+}
+
+.help_tree:hover
+{
+	background-color: #002a6c;
+	border-radius: 3px;
+	color: #fff;
+}
