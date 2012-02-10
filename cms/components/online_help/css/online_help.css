@@ -53,6 +53,7 @@ body.banner h2
 .help_tree a, .help_tree:visited
 {
 	display: inline-block;
+	padding: 2px;
 	color: #000;
 }
 
