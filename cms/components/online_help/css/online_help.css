@@ -52,10 +52,11 @@ body.banner h2
 
 .help_tree a, .help_tree:visited
 {
+	display: inline-block;
 	color: #000;
 }
 
-.help_tree:hover
+.help_tree a:hover
 {
 	background-color: #002a6c;
 	border-radius: 3px;
