@@ -61,7 +61,7 @@ class ContextHelpManifest
 	{
 		return array
 		(
-			"Classification"	=> array(
+			"Web Site Configuration"	=> array(
 
 				"Context Help"			=>	array("page"	=>	"/admin/context_help_list",
 											  "role"	=>	"admin",
