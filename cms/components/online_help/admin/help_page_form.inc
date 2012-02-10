@@ -54,6 +54,7 @@ if ($help_page_id)
 else
 {
 	$page->parent_id = $parent_id;
+	$oage->help_book_id = $help_book_id;
 }
 
 $form = new AutoForm($page);
@@ -96,7 +97,7 @@ if ($help_page_id)
 		$form->allowDelete = true; 
 	}
 	
-	$form->button("Move Help Page", "/admin/help_page_move_form?help_page_id={$help_page_id}&parent_id={$parent_id}");
+	$form->button("Move Help Page", "/admin/help_page_move_form?help_book_id={$help_book_id}&help_page_id={$help_page_id}&parent_id={$parent_id}");
 	$form->button("Cancel", $redirect);
 }
 else
