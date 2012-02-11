@@ -1347,8 +1347,12 @@ function ordinalSuffix($n, $sup = false)
 		}
 	}
 	else return $n;
-	
-	if ($sup) return ($sup) ? "$n<sup>$suffix</sup>" : "$n$suffix";
+
+	// JDG 2/10/12 - fix was not returning value if $sup false
+	if ($sup) 
+		return "$n<sup>$suffix</sup>"; 
+	else
+		return "$n$suffix";
 }
 
 /**

@@ -43,6 +43,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $onChange = ""; // optional callback on data input change
 	var $template = 2; // how to format readonly - 2 decimal places  
+	var $size = 20;
 	
 	function CurrencyFieldRenderer(&$parent)
 	{
@@ -66,7 +67,9 @@ class CurrencyFieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 
-		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='{$value}' $onchange $disable size='20'/>";
+		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' 
+		type='text' name='$field' value='{$value}' 
+		$onchange $disable size='{$this->size}'/>";
 
 		$this->_endField($field);
 	}
