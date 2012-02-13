@@ -646,13 +646,25 @@ class CheckListView extends QuestionField
 
 	}
 
-	// Indicate count of required checkboxes
+	/*
+	 * Indicate count of required checkboxes
+	 * 
+	 * If the count of options is 1 and the
+	 * question is required, then just
+	 * show "*" to denote required.
+	 */
 	function getRequired()
 	{
 		if($this->question->required > 0)
 		{
-			$required = "* at least " . $this->question->required;
-			$required .= ($this->question->required > 1) ? " checkboxes must be checked" : " checkbox must be checked";
+			$optionArr = explode("\n", $this->question->options);
+			if(count($optionArr) > 1)
+			{
+				$label = ($this->question->required > 1) ? "checkboxes" : "checkbox";
+				$required = "* at least " . $this->question->required . " $label must be checked";
+			}
+			else
+				$required = "*";
 		}
 		return $required;
 	}
