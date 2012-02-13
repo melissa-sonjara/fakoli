@@ -651,6 +651,9 @@ ENDSCRIPT;
 
 /**
  * Tests wheteher a field's value matches the supplied regular expression.
+ * 
+ * JDG 2/2012 - allow empty - validate nonempty if required
+ * with RequiredValidator.
  */
 class RegularExpressionValidator extends AbstractValidator
 {
@@ -674,7 +677,8 @@ class RegularExpressionValidator extends AbstractValidator
 		
 		$script = <<<ENDSCRIPT
 			
-	if (!form["{$this->field}"].value.match(/{$this->regexp}/i))
+	if(form["{$this->field}"].value != "" &&
+	!form["{$this->field}"].value.match(/{$this->regexp}/i))
 	{
 		alert("{$this->message}");
 		return false;
@@ -690,7 +694,7 @@ ENDSCRIPT;
 		
 		//$exp = preg_replace("|([^/])|", "$1\\/", $this->regexp);
 		$exp = $this->regexp;
-		if (!preg_match("/{$exp}/i", $_POST[$this->field]))
+		if ($_POST[$this->field] != "" && !preg_match("/{$exp}/i", $_POST[$this->field]))
 		{
 			$result = $this->message;
 		}	
