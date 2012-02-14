@@ -139,7 +139,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		$obj = $this->parent->data;
 
-		if (count($this->groupBy) > 0)
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
 		{
 			$keys = array_keys($this->options);
 			$rc = $this->options[$keys[0]][0];
@@ -167,7 +167,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		$countOptions = count($this->options);
 		
-		if (count($this->groupBy) > 0)
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
 		{
 			$gpk = $this->groupBy[0]->getPrimaryKey();
 						
@@ -178,6 +178,16 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 					echo $group->format($this->groupByFormat);
 					$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected); 
 				}
+			}
+		}
+		else if (is_string($this->groupBy))
+		{
+			$options = regroupList($this->options, $this->groupBy);
+
+			foreach($options as $group => $choices)
+			{
+				echo "<br/><h4>$group</h4>";
+				$this->renderCheckboxes($field, $choices, $itempk, $selected);
 			}
 		}
 		else
