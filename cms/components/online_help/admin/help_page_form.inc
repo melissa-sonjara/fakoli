@@ -54,7 +54,7 @@ if ($help_page_id)
 else
 {
 	$page->parent_id = $parent_id;
-	$oage->help_book_id = $help_book_id;
+	$page->help_book_id = $help_book_id;
 }
 
 $form = new AutoForm($page);
