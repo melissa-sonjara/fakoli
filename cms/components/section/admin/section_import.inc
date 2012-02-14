@@ -34,5 +34,96 @@
 Fakoli::using("section", "site");
 Fakoli::usingFeature("auto_form");
 
+$file = new SectionImportFile();
 
+$title = "Import Section Map";
+$menu_item = "Sections";
+
+$form = new AutoForm($file);
+$form->submitLabel = "Import Section Map";
+
+$fileUpload = new FileUploadFieldRenderer($form, "import_file", "Import File", importSectionMap);
+
+if ($method == "POST")
+{
+	importSectionMap();
+	redirect("sections");
+}
+
+$script .= $form->writeScript();
+
+$form->drawForm();
+
+function importSectionMap()
+{
+	$xml = file_get_contents($_FILES["import_file"]["tmp_name"]);	
+	
+	$doc = new DOMDocument();
+	$doc->loadXML($xml);
+	
+	$sectionNodes = $doc->getElementsByTagName("Section");
+	
+	$sections = array();
+	
+	foreach($sectionNodes as $node)
+	{
+		$section = new Section();
+		$section->fromXML($node);
+		$sections[] = $section;
+	}
+	
+	$contentNodes = $doc->getElementsByTagName("SectionContent");
+	
+	$sectionContent = array();
+	
+	foreach($contentNodes as $node)
+	{
+		$content = new SectionContent();
+		$content->fromXML($node);
+		$sectionContent[] = $content;
+	}
+	
+	trace("Importing Section Map", 3);
+	
+	$tx = new DataTransaction();
+	
+	try
+	{
+		$s = new Section();
+		$s->joinTransaction();
+		$s->deleteAll();
+		$s->disablePrimaryKey();
+		
+		foreach($sections as $section)
+		{
+			$section->_disablePK = true;
+			$section->joinTransaction($tx);
+			$section->save();
+		}
+			
+		$s->enablePrimaryKey();
+		
+		$c = new SectionContent();
+		$c->joinTransaction($tx);
+		$c->deleteAll();
+		$c->disablePrimaryKey();
+
+		foreach($sectionContent as $content)
+		{
+			$content->_disablePK = true;
+			$content->joinTransaction($tx);
+			$content->save();
+		}
+		
+		$c->enablePrimaryKey();
+		
+		$tx->commit();
+	}
+	catch(Exception $e)
+	{
+		$tx->rollback();
+		
+		throw $e;
+	}
+}
 ?>

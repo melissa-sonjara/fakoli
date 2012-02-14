@@ -1189,7 +1189,7 @@ class DataItem extends AbstractDataItem
 	{
 		if ($node->nodeType != XML_ELEMENT_NODE || $node->tagName != get_class($this)) return;
 		
-		$kids = $node->childNodes();
+		$kids = $node->childNodes;
 		$numChildren = $kids->length;
 		
 		for($i = 0; $i < $numChildren; ++$i)
@@ -1202,7 +1202,7 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
-	/*
+	/**
 	 * Substitute values for field names in a string, 
 	 * with the fields formatted using their type's 
 	 * default format or according to the formatting
@@ -1593,9 +1593,9 @@ function removeDuplicates($list, $field = "")
 	return $filtered;
 }
 
-function toXML($tag, $objects)
+function toXML($tag, $objects, $header = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>")
 {
-	$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n<$tag>\n";
+	$xml = "$header\n<$tag>\n";
 	
 	foreach($objects as $obj)
 	{

@@ -53,4 +53,4 @@ $script .= $table->writeScript();
 $table->drawView();
 ?>
 <br/>
-<a class='button' href='/admin/section_form'>Add a New Section</a>&nbsp;&nbsp;<a class='button' href='/action/section/export'>Export Section Layout</a>
+<a class='button' href='/admin/section_form'>Add a New Section</a>&nbsp;&nbsp;<a class='button' href='/action/section/export'>Export Section Layout</a>&nbsp;&nbsp;<a class='button' href='section_import'>Import Section Layout</a>

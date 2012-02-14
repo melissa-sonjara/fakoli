@@ -36,11 +36,7 @@ Fakoli::using("section");
 Fakoli::assertRole("admin");
 
 $sections = Query::create(Section, "ORDER BY section_id")->execute();
-
-foreach($sections as $section)
-{
-	$section->setOption(SerializeDirectRelations);
-}
+$content  = Query::create(SectionContent, "ORDER BY section_content_id")->execute();
 
 $file = codify($config["sitename"]."_sections_".date("Ymd")).".xml";
 	
@@ -48,5 +44,9 @@ header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . $file . "\"");
 header("Content-Type: text/xml");
 
-echo toXML("Sections", $sections);
+echo "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>";
+echo "\n<SectionMap>";
+echo toXML("SectionList", $sections, "");
+echo toXML("SectionContentList", $content, "");
+echo "</SectionMap>";
 ?>

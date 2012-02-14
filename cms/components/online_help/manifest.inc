@@ -68,6 +68,7 @@ class OnlineHelpManifest
 	static function subscribeToEvents()
 	{
 		return array(
+				"ComponentScanComplete"	=>	array(OnlineHelpManager, setDefaults),
 				"upgradeComponent"		=>	array(OnlineHelpManager, upgradeComponent),
 				"Initialize"			=>	array(OnlineHelpManager, onInitialize),
 				"PostProcessPage"		=>	array(OnlineHelpManager, substituteHelpLink)
