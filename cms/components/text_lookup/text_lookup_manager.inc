@@ -43,8 +43,12 @@ class TextLookupSerializationHandler
 
 	function export()
 	{
-		return SerializationManager::serialize(TextLookup, "ORDER BY text_id");
-		return SerializationManager::serialize(TextTranslation, "ORDER BY text_translation_id");
+		$xml = "\n<TextMap>";
+		$xml .= SerializationManager::serialize(TextLookup, "ORDER BY text_id");
+		$xml .= SerializationManager::serialize(TextTranslation, "ORDER BY text_translation_id");
+		$xml .= "\n</TextMap>";
+		
+		return $xml;
 	}
 	
 	function import($doc, $tx)
