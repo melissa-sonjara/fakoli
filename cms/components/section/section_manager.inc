@@ -31,6 +31,81 @@
 
 *****************************************************************/
 
+class SectionSerializationHandler implements SerializationHandler
+{
+	function SectionSerializationHandler()
+	{
+	}
+	
+	function export()
+	{
+		$sections = Query::create(Section, "ORDER BY section_id")->execute();
+		$content  = Query::create(SectionContent, "ORDER BY section_content_id")->execute();
+
+		$xml  = "\n<SectionMap>";
+		$xml .= toXML("SectionList", $sections, "");
+		$xml .= toXML("SectionContentList", $content, "");
+		$xml .= "</SectionMap>";
+		
+		return $xml;
+	}
+	
+	function import($doc, $tx)
+	{
+		trace("== Importing Section Map", 3);
+		
+		$sectionNodes = $doc->getElementsByTagName("Section");
+	
+		$sections = array();
+		
+		foreach($sectionNodes as $node)
+		{
+			$section = new Section();
+			$section->fromXML($node);
+			$sections[] = $section;
+		}
+		
+		$contentNodes = $doc->getElementsByTagName("SectionContent");
+		
+		$sectionContent = array();
+		
+		foreach($contentNodes as $node)
+		{
+			$content = new SectionContent();
+			$content->fromXML($node);
+			$sectionContent[] = $content;
+		}
+		
+		$s = new Section();
+		$s->joinTransaction();
+		$s->deleteAll();
+		$s->disablePrimaryKey();
+		
+		foreach($sections as $section)
+		{
+			$section->_disablePK = true;
+			$section->joinTransaction($tx);
+			$section->save();
+		}
+			
+		$s->enablePrimaryKey();
+		
+		$c = new SectionContent();
+		$c->joinTransaction($tx);
+		$c->deleteAll();
+		$c->disablePrimaryKey();
+
+		foreach($sectionContent as $content)
+		{
+			$content->_disablePK = true;
+			$content->joinTransaction($tx);
+			$content->save();
+		}
+		
+		$c->enablePrimaryKey();
+	}	
+}
+
 /**
  * SectionManager provides simple programmatic interface for managing registration of pages to sections.
  * @author andy
@@ -76,7 +151,13 @@ class SectionManager
 	{
 		$mgr = new SectionUpgradeManager();
 		$mgr->upgrade();
-	}		
+	}	
+
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("section", "Sections and Section Content", new SectionSerializationHandler());
+		return true;
+	}
 }
 
 ?>

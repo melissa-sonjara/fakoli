@@ -40,7 +40,7 @@ class ComponentManifest
 		$component->description = "Component management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 1;
+		$component->priority = 0;
 		$component->enabled = true;
 		
 		return $component;
@@ -55,7 +55,15 @@ class ComponentManifest
 
 				"Components"	=>	array("page"	=>	"/admin/components",
 										  "role"	=>	"admin",
-								  		  "weight"	=>	0)
+								  		  "weight"	=>	0),
+			
+				"Import Configuration" => array("page"		=>	"/admin/import",
+												"role"		=>	"admin",
+												"weight"	=>	98),
+			
+				"Export Configuration"	=>	array("page"	=>	"/admin/export",
+												  "role"	=>	"admin",
+												  "weight"	=>	99)
 			)
 		);		
 	}	

@@ -40,7 +40,7 @@ class MenuManifest
 		$component->description = "Menu management for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 1;
 		$component->enabled = true;
 		
 		return $component;
@@ -64,7 +64,8 @@ class MenuManifest
 	{
 		return array(
 					"DeleteRole"			=>	array(MenuManager, deleteRole),
-					"upgradeComponent"		=>	array(MenuManager, upgradeComponent)
+					"upgradeComponent"		=>	array(MenuManager, upgradeComponent),
+					"RegisterSerializationHandler"	=>	array(MenuManager, registerSerializationHandler)
 		);
 	}		
 }

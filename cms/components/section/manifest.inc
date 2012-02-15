@@ -63,7 +63,8 @@ class SectionManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(SectionManager, upgradeComponent)
+				"upgradeComponent"				=>	array(SectionManager, upgradeComponent),
+				"RegisterSerializationHandler"	=>	array(SectionManager, registerSerializationHandler)
 			);
 	}		
 }

@@ -31,7 +31,82 @@
 
 *****************************************************************/
 
-Fakoli::using("menu");
+Fakoli::using("component");
+
+class MenuSerializationHandler
+{
+	function MenuSerializationHandler()
+	{
+	}
+	
+	function export()
+	{
+		$menus		= Query::create(Menu, "ORDER BY menu_id")->execute();
+		$menuItems  = Query::create(MenuItem, "ORDER BY menu_item_id")->execute();
+
+		$xml  = "\n<MenuMap>";
+		$xml .= toXML("MenuList", $menus, "");
+		$xml .= toXML("MenuItemList", $menuItems, "");
+		$xml .= "</MenuMap>";
+		
+		return $xml;
+	}
+	
+	function import($doc, $tx)
+	{
+		trace("== Importing Menu Map", 3);
+		
+		$menuNodes = $doc->getElementsByTagName("Menu");
+	
+		$menus = array();
+		
+		foreach($menuNodes as $node)
+		{
+			$menu = new Menu();
+			$menu->fromXML($node);
+			$menus[] = $menu;
+		}
+		
+		$menuItemNodes = $doc->getElementsByTagName("MenuItem");
+		
+		$menuItem = array();
+		
+		foreach($menuItemNodes as $node)
+		{
+			$item = new MenuItem();
+			$item->fromXML($node);
+			$menuItem[] = $item;
+		}
+		
+		$m = new Menu();
+		$m->joinTransaction();
+		$m->deleteAll();
+		$m->disablePrimaryKey();
+		
+		foreach($menus as $menu)
+		{
+			$menu->_disablePK = true;
+			$menu->joinTransaction($tx);
+			$menu->save();
+		}
+			
+		$s->enablePrimaryKey();
+		
+		$m = new MenuItem();
+		$m->joinTransaction($tx);
+		$m->deleteAll();
+		$m->disablePrimaryKey();
+
+		foreach($menuItem as $item)
+		{
+			$item->_disablePK = true;
+			$item->joinTransaction($tx);
+			$item->save();
+		}
+		
+		$m->enablePrimaryKey();
+	}	
+}
 
 class MenuManager
 {
@@ -56,4 +131,10 @@ class MenuManager
 		$mgr = new MenuUpgradeManager();
 		$mgr->upgrade();
 	}	
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("menu", "Menus and Menu Items", new MenuSerializationHandler());
+		return true;
+	}
 }

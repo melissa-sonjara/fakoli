@@ -64,8 +64,9 @@ class PageManifest
 	{
 		return array("ResolveIdentifier" 	=> array(PageManager, displayPage),
 					 "EnumerateItems"		=> array(PageManager, enumeratePages),
-					"DeleteRole"			=>	array(PageManager, deleteRole),
-					"upgradeComponent"		=>	array(PageManager, upgradeComponent)
+					 "DeleteRole"			=>	array(PageManager, deleteRole),
+					 "upgradeComponent"		=>	array(PageManager, upgradeComponent),
+					 "RegisterSerializationHandler"	=>	array(PageManager, registerSerializationHandler)
 		
 				);
 	}

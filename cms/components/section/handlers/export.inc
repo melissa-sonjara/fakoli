@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("section");
+Fakoli::using("section", "component");
 
 Fakoli::assertRole("admin");
 
@@ -44,9 +44,7 @@ header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . $file . "\"");
 header("Content-Type: text/xml");
 
-echo "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>";
-echo "\n<SectionMap>";
-echo toXML("SectionList", $sections, "");
-echo toXML("SectionContentList", $content, "");
-echo "</SectionMap>";
+$mgr = new SerializationManager();
+
+echo $mgr->export("section");
 ?>

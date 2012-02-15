@@ -33,6 +33,51 @@
 
 Fakoli::using("page");
 
+class PageSerializationHandler
+{
+	function PageSerializationHandler()
+	{
+	}
+	
+	function export()
+	{
+		$pages = Query::create(Page, "ORDER BY page_id")->execute();
+		$xml .= toXML("PageList", $pages, "");
+		
+		return $xml;
+	}
+	
+	function import($doc, $tx)
+	{
+		trace("== Importing CMS Pages", 3);
+		
+		$pageNodes = $doc->getElementsByTagName("Page");
+	
+		$pages = array();
+		
+		foreach($pageNodes as $node)
+		{
+			$page = new Section();
+			$page->fromXML($node);
+			$pages[] = $page;
+		}
+		
+		$p = new Page();
+		$p->joinTransaction();
+		$p->deleteAll();
+		$p->disablePrimaryKey();
+		
+		foreach($pages as $page)
+		{
+			$page->_disablePK = true;
+			$page->joinTransaction($tx);
+			$page->save();
+		}
+			
+		$p->enablePrimaryKey();
+	}	
+}
+
 class PageManager
 {
 	static function displayPage($identifier, &$continue)
@@ -95,5 +140,11 @@ class PageManager
 		$mgr = new PageUpgradeManager();
 		$mgr->upgrade();
 	}	
+		
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("page", "CMS Pages", new PageSerializationHandler());
+		return true;
+	}
 }
 ?>
