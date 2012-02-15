@@ -34,6 +34,23 @@
 Fakoli::using("settings");
 Fakoli::usingFeature("data_tabs");
 
+class SettingsSerializationHandler
+{
+	function SettingsSerializationHandler()
+	{
+	}
+
+	function export()
+	{
+		return SerializationManager::serialize(Settings, "ORDER BY setting_id");
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(Settings, $doc, $tx);
+	}	
+}
+
 class SettingsManager
 {
 	function SettingsManager()
@@ -136,4 +153,10 @@ class SettingsManager
 		$mgr = new SettingsUpgradeManager();
 		$mgr->upgrade();
 	}	
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("settings", "Settings and Permissions", new SettingsSerializationHandler());
+		return true;
+	}		
 }

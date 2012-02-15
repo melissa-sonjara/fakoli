@@ -34,6 +34,26 @@
 
 Fakoli::using("text_lookup");
 
+class TextLookupSerializationHandler
+{
+	function TextLookupSerializationHandler()
+	{
+	}
+
+
+	function export()
+	{
+		return SerializationManager::serialize(TextLookup, "ORDER BY text_id");
+		return SerializationManager::serialize(TextTranslation, "ORDER BY text_translation_id");
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(TextLookup, $doc, $tx);
+		SerializationManager::unserialize(TextTranslation, $doc, $tx);
+	}		
+}
+
 class TextLookupManager
 {
 	
@@ -79,5 +99,10 @@ class TextLookupManager
 		$mgr = new TextLookupUpgradeManager();
 		$mgr->upgrade();
 	}	
-		
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("text_lookup", "Text and Translations", new TextLookupSerializationHandler());
+		return true;
+	}			
 }

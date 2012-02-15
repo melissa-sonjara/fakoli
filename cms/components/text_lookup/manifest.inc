@@ -68,8 +68,9 @@ class TextLookupManifest
 			
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(TextLookupManager, setDefaults),
-						"upgradeComponent"		=>	array(TextLookupManager, upgradeComponent)
+		return array("ComponentScanComplete" 		=>	array(TextLookupManager, setDefaults),
+					 "upgradeComponent"				=>	array(TextLookupManager, upgradeComponent),
+					 "RegisterSerializationHandler"	=>	array(TextLookupManager, registerSerializationHandler)
 		
 		);
 	}	
