@@ -63,7 +63,8 @@ class ModuleManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(ModuleManager, upgradeComponent)
+				"upgradeComponent"				=>	array(ModuleManager, upgradeComponent),
+				"RegisterSerializationHandler"	=>	array(ModuleManager, registerSerializationHandler)
 			);
 	}	
 }

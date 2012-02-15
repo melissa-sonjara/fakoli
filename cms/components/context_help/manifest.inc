@@ -73,8 +73,9 @@ class ContextHelpManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(ContextHelpManager, upgradeComponent),
-				"Initialize"			=>	array(ContextHelpManager, onInitialize)
+					"upgradeComponent"				=>	array(ContextHelpManager, upgradeComponent),
+					"Initialize"					=>	array(ContextHelpManager, onInitialize),
+					"RegisterSerializationHandler"	=>	array(ContextHelpManager, registerSerializationHandler)
 			);
 	}		
 }

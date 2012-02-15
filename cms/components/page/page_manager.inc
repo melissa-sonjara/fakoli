@@ -41,40 +41,17 @@ class PageSerializationHandler
 	
 	function export()
 	{
-		$pages = Query::create(Page, "ORDER BY page_id")->execute();
-		$xml .= toXML("PageList", $pages, "");
-		
+		$xml .= "\n<PageMap>";
+		$xml .= SerializationManager::serialize(Page, "ORDER BY page_id");
+		$xml .= SerializationManager::serialize(PageModuleXref);
+		$xml .= "\n</PageMap>";
 		return $xml;
 	}
 	
 	function import($doc, $tx)
 	{
-		trace("== Importing CMS Pages", 3);
-		
-		$pageNodes = $doc->getElementsByTagName("Page");
-	
-		$pages = array();
-		
-		foreach($pageNodes as $node)
-		{
-			$page = new Section();
-			$page->fromXML($node);
-			$pages[] = $page;
-		}
-		
-		$p = new Page();
-		$p->joinTransaction();
-		$p->deleteAll();
-		$p->disablePrimaryKey();
-		
-		foreach($pages as $page)
-		{
-			$page->_disablePK = true;
-			$page->joinTransaction($tx);
-			$page->save();
-		}
-			
-		$p->enablePrimaryKey();
+		SerializationManager::unserialize(Page, $doc, $tx);
+		SerializationManager::unserialize(PageModuleXref, $doc, $tx);
 	}	
 }
 

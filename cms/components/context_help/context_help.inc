@@ -31,6 +31,23 @@
 
 *****************************************************************/
 
+class ContextHelpSerializationHandler
+{
+	function ContextHelpSerializationHandler()
+	{
+	}
+
+	function export()
+	{
+		return SerializationManager::serialize(ContextHelp, "ORDER BY help_id");
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(ContextHelp, $doc, $tx);
+	}	
+}
+
 class ContextHelpManager
 {
 	static $_instance;
@@ -168,6 +185,12 @@ class ContextHelpManager
 		
 		$auto_form_defaults["onFormatLabel"] = "addContextHelp";
 	}
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("context_help", "Context Help", new ContextHelpSerializationHandler());
+		return true;
+	}	
 }
 
 function addContextHelp($form, $field, $label)

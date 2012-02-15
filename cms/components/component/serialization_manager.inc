@@ -79,6 +79,44 @@ class SerializationManager
 		$components = implode(",", array_keys(SerializationManager::$map));
 		return $this->import($xml, $components);
 	}
+	
+	
+	static function unserialize($class, $doc, $tx)
+	{
+		trace("== Instantiating $class Records", 3);
+		
+		$nodes = $doc->getElementsByTagName($class);
+	
+		$objects = array();
+		
+		foreach($nodes as $node)
+		{
+			$object = new $class;
+			$object->fromXML($node);
+			$objects[] = $object;
+		}
+				
+		$o = new $class;
+		$o->joinTransaction();
+		$o->deleteAll();
+		$o->disablePrimaryKey();
+		
+		foreach($objects as $object)
+		{
+			$object->_disablePK = true;
+			$object->joinTransaction($tx);
+			$object->save();
+		}
+			
+		$o->enablePrimaryKey();
+	}
+	
+	static function serialize($class, $constraint = "")
+	{
+		$objects = Query::create($class, $constraint)->execute();
+		return toXML($class."List", $objects, "");
+	}
+	
 }
 
 class SerializationForm
@@ -106,8 +144,13 @@ class SerializationForm
 	
 	function drawForm()
 	{
+		if ($this->mode == "Import")
+		{
+			$onsubmit = " onsubmit=\"return confirm('WARNING! Importing site content WILL overwrite existing content in your database.\\nThis CANNOT be undone.\\nDo you wish to continue?');\"";
+		}
+		
 ?>
-	<form method="POST" action="<?echo $this->action?>">
+	<form method="POST" action="<?echo $this->action?>" enctype="multipart/form-data"<?echo $onsubmit?>>
 <?
 		foreach(SerializationManager::$map as $component => $handler)
 		{
@@ -117,6 +160,14 @@ class SerializationForm
 		}
 ?>
 	<br/>
+<?
+		if ($this->mode == "Import")
+		{
+?>
+	<label for="import_file">Import File </label><input type="file" name="import_file"/><br/><br/>
+<?
+		}
+?>
 	<input type="submit" class="button" value="<?echo $this->mode?> Configuration"/>
 	</form>
 <?

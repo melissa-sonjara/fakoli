@@ -33,6 +33,30 @@
 
 Fakoli::using("component");
 
+class BlogSerializationHandler
+{
+	function BlogSerializationHandler()
+	{
+	}
+	
+	
+	function export()
+	{
+		$xml  = "\n<ArticleMap>";
+		$xml .= SerializationManager::serialize(Article, "ORDER BY article_id");
+		$xml .= SerializationManager::serialize(Blog, "ORDER BY blog_id");
+		$xml .= "</ArticleMap>";
+		
+		return $xml;
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(Article, $doc, $tx);
+		SerializationManager::unserialize(Blog, $doc, $tx);		
+	}		
+}
+
 class BlogManager
 {
 	static function displayBlog($identifier, &$continue)
@@ -139,6 +163,12 @@ class BlogManager
 		$mgr = new BlogUpgradeManager();
 		$mgr->upgrade();
 	}	
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("blog", "Articles and Blogs", new BlogSerializationHandler());
+		return true;
+	}
 }
 
 ?>
