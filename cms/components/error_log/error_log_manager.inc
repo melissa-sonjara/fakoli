@@ -127,6 +127,12 @@ class ErrorLogManager
 		/* Don't execute PHP internal error handler */
 	    return true;
 	}
+	
+	static function upgradeComponent()
+	{
+		$mgr = new ErrorLogUpgradeManager();
+		$mgr->upgrade();
+	}
 }
 
 ?>
