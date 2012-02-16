@@ -114,7 +114,9 @@ class AutoForm
 		Text		=>	TextFieldRenderer,
 		Time		=>	TimeFieldRenderer,
 		Rating		=>	RatingFieldRenderer,
-		ZipCode		=>	ZipCodeFieldRenderer);	///< Provides the mapping from Type identifier to FieldRenderer
+		ZipCode		=>	ZipCodeFieldRenderer,
+		PhoneNumber	=>	PhoneNumberFieldRenderer,
+		);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
 	 *

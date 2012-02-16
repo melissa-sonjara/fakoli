@@ -32,51 +32,67 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__)."/boolean_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/currency_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/date_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/datetime_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/number_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/phone_number_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/string_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/text_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/timestamp_type_renderer.inc");
-require_once realpath(dirname(__FILE__)."/timezone_type_renderer.inc");
+require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
-class AbstractTypeRenderer
-{		
-	function AbstractTypeRenderer()
+/*
+ * $parts is used by PhoneNumberFieldRenderer
+ * 
+ * standard rendering is in the format
+ * (123) 456-7890 ext 12
+ */
+class PhoneNumberTypeRenderer extends AbstractTypeRenderer
+{	
+	static $parts = array(
+			"area_code"	=> 3, 
+			"exchange"	=> 3,
+			""		=> 4, // leave local digits as base field name for RequiredValidator test 
+			"extension"	=> 6
+			);
+	
+	
+	function PhoneNumberTypeRenderer()
 	{
-		
 	}
 	
 	static function format($value, $template = "")
-	{
+	{			
+		if (!$template) return $value;
+		
+		switch($template)
+		{
 
+		case "standard":
+			return PhoneNumberTypeRenderer::standard($value);
+			
+		default:
+			
+			PhoneNumberTypeRenderer::standard($value);
+		}
+		
+		return $value; 
 	}
 	
-	/*
-	 * Given a date formatting shorthand, translate into the
-	 * format used by the php date function
-	 * 
-	 * @author Janice Gallant
-	 * 
-	 * 5/30/2011
-	 * 
-	 * @param $template - the field format template provided
-	 * 
-	 * @param $stripTime - whether any time component in the
-	 * tempalte should be ignored/removed.
-	 */
-	static function translationDateTemplate($template, $includeTime = true)
+	static function standard($value)
 	{
-		if($template == "short")
-			$template = ($includeTime) ? "m/d/Y g:ia" : "m/d/Y";
-		elseif($template == "daylong")
-			$template = ($includeTime) ? "l F j, Y g:ia" : "l F j, Y";
-		elseif($template == "long")
-			$template = ($includeTime) ? "F d, Y g:ia" : "F d, Y";
-	
-		return $template;	
-	}
+		$parts = PhoneNumberTypeRenderer::$parts;
+
+		$idx = 0;
+		foreach($parts as $part => $limit)
+		{
+			$values[$part] = substr($value, $idx, $limit);
+			$idx += $limit;
+		}
+
+		$phone = implode($values, "-");
+		
+		$area_code = $values["area_code"];
+		$ext = $values["extension"];
+		$phone = preg_replace("/^$area_code-/", "($area_code) ", $phone);
+		if($ext)
+			$phone = preg_replace("/-$ext$/", " ext $ext", $phone);
+		else
+			$phone = preg_replace("/-*$/", "", $phone);
+		
+		return $phone;
+	} 
 }

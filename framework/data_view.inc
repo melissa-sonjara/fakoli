@@ -195,8 +195,8 @@ class DataListView
 	}
 	
 	/**
-	 * Adds a value column to the table footer.
-	 * @param $callback Callback function or object method used to calculate the value for this column.
+	 * Sums the total for a column
+	 * @param $field the field to total in the format "{field}"
 	 * @param $style any CSS classes or inline styles to apply
 	 * @param $colspan the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
