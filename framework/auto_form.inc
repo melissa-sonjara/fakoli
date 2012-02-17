@@ -101,6 +101,8 @@ class AutoForm
     var $layout; ///< Layout handler object
     var $default_layout = "table";
     
+    // When adding new renderers, must also update
+    // DataItem $dataTypeRendererMap
     static $fieldRendererMap = array (
     	String		=>	StringFieldRenderer,
     	HTML		=>	HTMLFieldRenderer,

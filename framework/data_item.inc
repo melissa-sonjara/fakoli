@@ -57,18 +57,22 @@ class DataItem extends AbstractDataItem
 {
 	var $_tx = null;
 	var $_pkDisabled = false;
-	
+
+   // When adding new renderers, must also update
+    // AutoForm $fieldRendererMap	
 	static $dataTypeRendererMap = array(
-		"Boolean"	=>	BooleanTypeRenderer,	
-		"Currency"	=>	CurrencyTypeRenderer,
-		"Date"		=>	DateTypeRenderer,
-		"DateTime"	=>	DateTimeTypeRenderer,
-		"Number"	=>	NumberTypeRenderer,	
-		"String"	=>	StringTypeRenderer,
-		"Text"		=>	TextTypeRenderer,
-		"HTML"		=>	TextTypeRenderer,
-		"Timestamp"	=>	TimestampTypeRenderer,
-		"Timezone"	=>	TimezoneTypeRenderer
+		"Boolean"		=>	BooleanTypeRenderer,	
+		"Currency"		=>	CurrencyTypeRenderer,
+		"Date"			=>	DateTypeRenderer,
+		"DateTime"		=>	DateTimeTypeRenderer,
+		"Number"		=>	NumberTypeRenderer,	
+		"String"		=>	StringTypeRenderer,
+		"Text"			=>	TextTypeRenderer,
+		"HTML"			=>	TextTypeRenderer,
+		"Timestamp"		=>	TimestampTypeRenderer,
+		"Timezone"		=>	TimezoneTypeRenderer,
+		"PhoneNumber"	=>	PhoneNumberTypeRenderer,
+	
 	);
 	
 	
