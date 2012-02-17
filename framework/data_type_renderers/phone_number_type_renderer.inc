@@ -56,8 +56,6 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 	
 	static function format($value, $template = "")
 	{			
-		if (!$template) return $value;
-		
 		switch($template)
 		{
 
