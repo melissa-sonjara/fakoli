@@ -789,6 +789,7 @@ class SearchForm extends AutoForm
 		$script = "";				
 		foreach(array_keys($obj->fields) as $field)
 		{
+			trace("SearchForm writeScript field $field", 3);
 			if ($field != $pk&& 
 				!($obj->filter && $obj->filter->isExcluded($field)))
 			{
@@ -805,8 +806,13 @@ class SearchForm extends AutoForm
 		// JDG 7/15/2011 - need scripts for additional fields
 		foreach($this->additional as $r)
 		{
-			$mode = $this->getMatchingMode($r['field']);
-			$r['renderer']->renderSearchScript($r['field'], $mode);
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+				
+			$mode = $this->getMatchingMode($field);
+			$renderer->renderSearchScript($field, $mode);
 		}	
 
 		$script = ob_get_contents();
@@ -864,16 +870,7 @@ class SearchForm extends AutoForm
 			}
 		}
 		
-		foreach($this->additional as $r)
-		{
-			$renderer = $r['renderer'];
-			$field = $r['field'];
-			if(!$field)
-				$field = $renderer->field;
-				
-			$mode = $this->getMatchingMode($field);
-			$renderer->renderSearchField($field, $mode);
-		}
+		$this->renderAdditionalField();
 	}
 	
 	/*
@@ -891,6 +888,21 @@ class SearchForm extends AutoForm
 			$renderer->renderSearchField($field, $mode);
 		}
 	}
+	
+	function renderAdditionalFields()
+	{
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+				
+			$mode = $this->getMatchingMode($field);
+			$renderer->renderSearchField($field, $mode);
+		}
+	}
+	
 }
 
 ?>

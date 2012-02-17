@@ -144,6 +144,38 @@ class FilterForm extends SearchForm
 		
 		echo "</div>\n";
 		echo "</form>\n";
+		echo "<div style=\"clear: both\">\n</div>\n";
+	}
+	
+	/*
+	 * If the form contains a DateRangeFilterRenderer,
+	 * it must be rendered last.
+	 */
+	function renderSearchFields()
+	{
+		$obj =& $this->data;
+		// JDG 9/2011 handle CompositeDataItems
+		$fields = $obj->getFields();
+
+		foreach(array_keys($fields) as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
+				!($obj->filter && $obj->filter->isExcluded($field)))
+			{
+				$renderer = $this->getRenderer($field);
+				if(get_class($renderer) == DateRangeFilterRenderer)
+				{
+					$dateRangeField = $field;
+					continue;
+				}
+				$this->renderOneSearchField($field);
+			}
+		}
+
+		$this->renderAdditionalFields($obj);
+			
+		if($dateRangeField)
+			$this->renderOneSearchField($dateRangeField);
 	}
 
 	/*
@@ -419,96 +451,329 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 	}
 }
 
-class DateFilterFieldRenderer extends DateFieldRenderer
+/*
+ * Adds a Date Range Filter with start and end dates
+ * and Next and Previous buttons to a FilterForm.
+ * 
+ * Usage: first create the instance of FilterForm,
+ * including in the DataItem object filter any other
+ * fields that you want to filter on (e.g., status drop 
+ * down)
+ * 
+ * 	$filterForm = new FilterForm($obj);
+ *
+ * Then add the date range renderer to the form:
+ * 
+ *  $dateRangeRenderer = new DateRangeFilterRenderer($filterForm, "start_date_field", "end_date_field", "month");
+ *  
+ *  @param - filterForm - instand of class FilterForm
+ *  
+ *  @param - start_date_field - the field in the DataItem obj
+ *  sent to the FilterForm that is the date to be queried on
+ *  (e.g., order_date)
+ *  
+ *  @param - end_date_field - the field in the DataItem obj sent
+ *  to the FilterForm that is the end date to be queried on. If
+ *  the query involves just one field, send the same field name
+ *  for both. Example where field names are different:
+ *  	program_start_date and program_end_date
+ *  
+ *  @param - stepMode - the increment for the Next and Previous
+ *  buttons. Default is "month", can be "year" or "fiscal_year"
+ *  
+ *  @param - fiscal_year_start - the numeric starting month
+ *  of the fiscal_year, if the step mode is fiscal_year.
+ *  May be stored in Settings - varies among web sites
+ *  so is not queried directly here.
+ *  
+ *  Retrieve the date range constraint through FilterForm instance
+ *  $constraint = $filterForm->getConstraint();
+ *  
+ *  To show only the Prev/Next buttons and not the
+ *  start/end date input fields, hide the startDate
+ *  field
+ *  
+ *  $filterForm->hide("startDate");
+ *   
+ */
+class DateRangeFilterRenderer extends FieldRenderer
 {
-	var $mode;
+	var $startParam = "startDate";
+	var $endParam = "endDate";
+	var $stepMode; // month, year or fiscal_year
+	var $fiscal_year_start = 1; // month number on which fiscal year begins
 	
-	function DateFilterFieldRenderer(&$form, $field, $label, $mode)
+	var $startDate; // the start date for the filter field
+	var $endDate; // the end date for the filter field
+	
+	// the name of the date fields in the table to be searched
+	// if no endDateField, then search will be field BETWEEN startDate and endDate
+	var $field; // start date field
+	var $endDateField;
+	
+	var $stepLabel; // e.g., Next/Previous Month 
+	var $dateRangeLabel = "Reporting Period";
+	
+	function DateRangeFilterRenderer(&$parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1)
 	{
-		$this->mode = $mode;
-		$this->FieldRenderer($form);
+		$this->stepMode = $stepMode;
+		$this->field = $field;
+		$this->endDateField = ($endDateField) ? $endDateField : $field;
+		$this->fiscal_year_start = $fiscal_year_start;
+		$this->calculateDateRange();
 		
-		$this->label = ($label) ? $label : prettify($field);
-		
-		if ($form->data->hasField($field))
+		$this->label = "";
+		if ($parent->data->hasField($field))
 		{
-			$form->override($field, $label, $this);
+			$parent->override($field, $label, $this);
 		}
 		else
 		{
-			$form->add($this, $field);
-		}
+			$parent->add($this, $field);
+		}		
+		$this->FieldRenderer($parent);
 		
-		$form->search->setParam($field, $mode, $form->data->$field);
-		$form->modifiers[$field] = $mode;
-	}	
+		// Needs to have a value so that it is included in the constraint
+		$parent->setParam($this->startParam, "to", $this->to);
+		// override default search constraint generation
+		$parent->setHandler($this->startParam, array($this, getConstraint));
+	}
 	
-	function renderSearchScript($field, $mode)
+	function calculateDateRange()
 	{
-		$script = "";
+		$this->startDate = $_REQUEST[$this->startParam];
+		$this->endDate   = $_REQUEST[$this->endParam];
 		
-		if (!$this->_includedDateScript)
+		if ($this->startDate || $this->endDate)
 		{
-			echo "<script src='{$this->parent->componentPath}/calendar/sonjara_calendar.js' type='text/javascript'></script>\n";
-			echo "<link href='{$this->parent->componentPath}/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'>\n";
-			$this->_includedDateScript = true;
-		}
-		
-		if ($mode == "range")
-		{
-			$calendar_from = "{$field}_calendar_from";
-			$calendar_to = "{$field}_calendar_to";
+			$validator = new DateValidator($this->startParam, "From");
+			$validator->required = false;
+			$this->msg = $validator->validate();
 			
-			echo "<script type='text/javascript'>\n";
-			echo "var $calendar_from = new Calendar('$calendar_from', '{$this->parent->id}', '$field:from');\n";
-			echo "var $calendar_to = new Calendar('$calendar_to', '{$this->parent->id}', '$field:to');\n";
-			echo "</script>\n";
+			if ($this->msg) 
+			{
+				$startDate = null;
+			}
+			
+			$validator = new DateValidator($this->endParam, "To");
+			$validator->required = false;
+			
+			$this->msg = $validator->validate();
+		
+			if ($this->msg)
+			{
+				$endDate = null;
+			}
+		
+			if ($this->startDate) $this->startDate = new DateTime($this->startDate);
+			if ($this->endDate) $this->endDate = new DateTime($this->endDate);
+			
+			if ($this->startDate && $this->endDate) $this->subTitle = $this->startDate->format("jS F Y")." to ".$this->endDate->format("jS F Y");
+		
+			$this->subTitle = $this->startDate->format("F d, Y") . " &ndash; " .
+				 $this->endDate->format("F d, Y");
+
+			// JDG 2/12 - remove "inclusive of last day"
+	
+			// JDG 11/2011 - Need to set this for stepping with Prev Next
+			$this->month = $this->startDate->format("m");
+			$this->year = $this->startDate->format("Y");
+		}
+	
+		$this->month = checkNumeric($_REQUEST['month']);
+		$this->year = checkNumeric($_REQUEST['year']);
+
+		if (!$this->year) $this->year = date("Y");
+
+		// JDG 11/2011 - need to set step mode whether we have a 
+		// custom start/end date or not
+		if ($this->stepMode == "year")
+		{
+			// calendar year stepping mode
+			$this->setStepModeYear();
+		}
+		/*
+		 * If today's month for this year is less than
+		 * the fiscal year month, then show last year's
+		 * data
+		 */
+		elseif($this->stepMode == "fiscal_year")
+		{
+			if(!checkNumeric($_REQUEST['year']) && $this->fiscal_year_start > date("n"))
+				$this->year--;
+			$this->setStepModeYear($this->fiscal_year_start);
 		}
 		else
 		{
-			$calendar = "{$field}_calendar_{$mode}";
-			echo "<script type='text/javascript'>\n";
-			echo "var $calendar = new Calendar('$calendar', '{$this->parent->id}', '$field:$mode');\n";
-			echo "</script>\n";
+			// Monthly stepping mode
+			$this->setStepModeMonth();
 		}
+
+		$this->from = $this->startDate->format("Y-m-d");
+		$this->to = $this->endDate->format("Y-m-d");
+		$this->calculated = true;
+	}
+	
+	/*
+	 * The fiscal year in settings is stored as a string;
+	 * use this function to convert to a number.
+	 */
+	static function convertMonthStringToNumber($month)
+	{
+		for($i=1;$i<=12;$i++)
+		{
+			if(date("F", mktime(0, 0, 0, $i, 1, 0)) == $month)
+			{
+				$month_number = $i;
+				break;
+			}
+		}
+		return $month_number;
+	}
+	
+	function setStepModeMonth()
+	{
+		if (!$this->month)
+		{
+			$this->year = date("Y");
+			$this->month = date("m");
+		}
+				
+		$this->prevMonth = $this->month - 1;
+		$this->prevYear = $this->year;
+		if ($this->prevMonth == 0)
+		{
+			$this->prevYear--;
+			$this->prevMonth = 12;
+		}
+				
+		$this->nextMonth = $this->month + 1;
+		$this->nextYear = $this->year;
+		if ($this->nextMonth > 12)
+		{
+			$this->nextMonth = 1;
+			$this->nextYear++;
+		}
+				
+		if(!$this->startDate)
+			$this->startDate = new DateTime("{$this->year}-{$this->month}-01T00:00:00");
+			
+		if(!$this->endDate)
+		{
+			$this->endDate = clone $this->startDate;
+			$this->endDate->modify("+1 months");
+			// JDG 2/12 - show last day of month 
+			$this->endDate->modify("-1 days");
+		}
+
+		if(!$this->subTitle)
+			$this->subTitle = $this->startDate->format("F Y");	
+	}
+	
+	function setStepModeYear($startMonth = 1)
+	{
+		$this->month = $startMonth;
+				
+		$this->prevMonth = $startMonth;
+		$this->prevYear = $this->year - 1;
+				
+		$this->nextMonth = $startMonth;
+		$this->nextYear = $this->year + 1;
+		$this->subTitle=  $this->year;
+		
+		if(!$this->startDate)
+		{
+			$this->startDate = new DateTime("{$this->year}-{$this->month}-01T00:00:00");
+		}	
+		
+		if(!$this->endDate)
+		{
+			$this->endDate = clone $this->startDate;
+			$this->endDate->modify("+1 years");
+			$this->endDate->modify("-1 days");
+		}		
+	}
+	
+	function getConstraint()
+	{
+		if($this->field == $this->endDateField)
+		{
+			$name = $this->field;
+			$constraint = "$name BETWEEN '{$this->from}' AND '{$this->to}'";
+		}
+		else
+		{
+			$constraint = "{$this->endDateField} <= '{$this->to}' AND {$this->field} >= '{$this->from}' ";
+		}
+			
+		return $constraint;
 	}
 	
 	
-	function renderField($field, $mode)
+	function renderSearchScript($field)
 	{
-		$onchange = "onchange='this.form.submit()'";
+		if (array_key_exists($field, $this->parent->hidden)) return "";
 		
-		if ($mode == "range")
-		{
-			$date_from = $this->parent->search->get($field, "from");
-			$date_to = $this->parent->search->get($field, "to");
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td>";
-			echo "<input type='text' name='$field:from' value='$date_from' size='12' $onchange>&nbsp;
-			<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)' $onchange>";
-			echo " to <input type='text' name='$field:to' value='$date_to' size='12' $onchange>&nbsp;
-			<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)' $onchange></td>\n";
-			echo "</td>\n";
-			echo "</tr>\n";	
-		}
-		else
-		{
-			$date = $this->parent->params->get($field, $mode);
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td>";
-			echo "<input type='text' name='$field:$mode' value='$date' size='12' $onchange>&nbsp;
-			<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_{$mode}.toggle(this)' $onchange></td>\n";
-			echo "</td>\n";
-			echo "</tr>\n";			
-		}
+		$script .= <<<ENDSCRIPT
+
+<script src='/fakoli/calendar/sonjara_calendar.js' type='text/javascript'></script>
+<link href='/fakoli/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'></link>
+<script type="text/javascript">
+var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}_filter', 'startDate');
+var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}_filter', 'endDate');
+</script>
+
+ENDSCRIPT;
+		
+		echo $script;
 	}
 	
 	function renderSearchField($field)
 	{
-		$this->renderField($field, $this->mode);
-	}	
-}
+		if (!array_key_exists($this->startParam, $this->parent->hidden)) 
+			$this->writeFilter();
+		$this->writeButtons();
+	}
 
+	function writeFilter()
+	{
+		if (!$this->calculated) $this->calculateDateRange();
+		$endDate = clone $this->endDate;
+
+?>
+<div style="clear: both; float: left; padding-bottom: 4px">
+ <label><?php echo $this->dateRangeLabel ?> From: </label>
+ <input type="text" size="10" name="<?php echo $this->startParam ?>" value="<?echo $this->startDate->format("m/d/Y")?>">&nbsp;
+ <img src='/fakoli/calendar/calendar.gif' alt='Popup Calendar' style='vertical-align: middle; border:0' onclick='startDateCalendar.toggle(this)'/>
+ <label> To: </label><input type="text" size="10" name="<?php echo $this->endParam ?>" value="<?echo $endDate->format("m/d/Y")?>">&nbsp;
+ <img src='/fakoli/calendar/calendar.gif' alt='Popup Calendar' style='vertical-align: middle; border:0' onclick='endDateCalendar.toggle(this)'/>
+ &nbsp;<input type="submit" class="button" value=" Update View "/>
+ </div>
+<?
+	}
+	
+	function writeButtons()
+	{
+		if (!$this->calculated) $this->calculateDateRange();
+		
+		$queryString = $_SERVER["QUERY_STRING"];
+		
+		$queryString = preg_replace("/identifier=\\w+\\&?/", "", $queryString);
+		$queryString = preg_replace("/year=\\d+\\&?/", "", $queryString);
+		$queryString = preg_replace("/month=\\d+\\&?/", "", $queryString);
+		
+		$prevLink = appendToQueryString($queryString, "year=$this->prevYear&month=$this->prevMonth");
+		$nextLink = appendToQueryString($queryString, "year=$this->nextYear&month=$this->nextMonth");
+		
+		$stepLabel = ($this->stepLabel) ? $this->stepLabel : prettify($this->stepMode);
+?>
+<div style="clear: both; display: block; width: 100%; padding-bottom: 10px;">
+<div style="float: right; z-index:2; padding-bottom: 10px;">
+<input type="button" class="button" value="  Next <?echo $stepLabel ?> &raquo;  " onclick="go('<?echo $nextLink?>');">
+</div>
+<input type="button" class="button" value="  &laquo; Previous <?echo $stepLabel ?>   " onclick="go('<?echo $prevLink?>');">
+</div>
+<?
+	}
+}
 ?>
