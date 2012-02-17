@@ -317,21 +317,7 @@ abstract class UpgradeManager
 			}
 		}
 		
-		// Create an array of valid sql statements
-		// by scanning for ";"	
-		if(count($lines) > 0)
-		{
-			foreach($lines as $line)
-			{
-				trace("UpgradeManager:: processing update schema line $line", 4);
-				$sqlStatement .= $line;
-				if(preg_match("/;\s$/", $line))
-				{
-					$sqlStatements[] = $sqlStatement;
-					$sqlStatement = "";
-				}
-			}
-		}
+		$sqlStatements = $this->parseSQLStatements($lines);
 
 		if(count($sqlStatements) == 0)
 		{
@@ -339,6 +325,35 @@ abstract class UpgradeManager
 			return true;
 		}
 
+		$rtn = $this->executeSQLStatements($sqlStatements);
+	
+		return rtn;
+	}
+	
+	/*
+	 * Create an array of valid sql statements
+	 * by scanning for ";"	
+	 */
+	function parseSQLStatements($lines)
+	{
+		if(count($lines) == 0)
+			return;
+			
+		foreach($lines as $line)
+		{
+			trace("UpgradeManager:: processing update schema line $line", 4);
+			$sqlStatement .= $line;
+			if(preg_match("/;\s$/", $line))
+			{
+				$sqlStatements[] = $sqlStatement;
+				$sqlStatement = "";
+			}
+		}
+		return $sqlStatements;		
+	}
+	
+	function executeSQLStatements($sqlStatements)
+	{
 		try
 		{
 			$db = ConnectionManager::getConnection();
@@ -346,7 +361,6 @@ abstract class UpgradeManager
 	
 			foreach($sqlStatements as $sqlStatement)
 			{
-				trace("UpgradeManager:: executing statement: $sqlStatement", 3);
 				$db->exec($sqlStatement);	
 			}
 
@@ -359,7 +373,7 @@ abstract class UpgradeManager
 			fclose($fp);
 			ajaxReturn("Failed to upgrade {$this->component_name} to $version_id - ".$e->getMessage());	
 		}
-	
+
 		return true;
 	}
 	
@@ -698,5 +712,61 @@ abstract class UpgradeManager
 			$item->filter = new InclusionFilter($field);
 			$item->save();
 		}	
-	}					
+	}	
+
+	/*
+	 * Use this function to execute sql in a file
+	 * that is not the main compoennt's sql schema file.
+	 * Needed when the data is too large to paste into the
+	 * schema file.
+	 * 
+	 * @param sqlFile - full path to sqlFile. File can only contain 
+	 * "-- " style for comments, not "/*"
+	 * 
+	 * @param - version_number - the version number of the calling
+	 * update function
+	 */
+	function executeSQLFile($sqlFile, $version_number)
+	{
+		trace("** Upgrade {$this->component_name} to version $version_number by executing file {$sqlFile}", 3);
+		
+		if(!file_exists($sqlFile))
+		{
+			trace("UpgradeManager:: sql file does not exists {$sqlFile}", 2);
+			return;
+		}
+		
+		$fp = fopen($sqlFile, 'r');
+		
+		if(!$fp)
+		{
+			trace("Error: executeVersionSql failed to open file", 3);
+			return;
+		}
+						
+		$lines = array();
+		while(($buffer = fgets($fp)) !== false)
+		{
+			// Omit blank lines and comments
+			if(trim($buffer) == "" || preg_match("/^--(.*?)\s/", $buffer))
+				continue;
+			$lines[] = $buffer;
+		}
+		
+		if(count($lines) == 0)
+		{
+			trace("UpgradeManager:: no lines parsed in file {$sqlFile}", 3);
+			return true;		
+		}
+			
+		$sqlStatements = $this->parseSQLStatements($lines);
+
+		if(count($sqlStatements) == 0)
+		{
+			trace("UpgradeManager:: no query statements found in sql file {$sqlFile} for version $version_number", 3);
+			return true;
+		}
+
+		return $this->executeSQLStatements($sqlStatements);
+	}
 }
