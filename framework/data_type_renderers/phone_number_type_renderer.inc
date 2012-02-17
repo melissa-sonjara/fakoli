@@ -107,4 +107,14 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 		
 		return $valueParts;
 	}
+	
+	/*
+	 * Given a string phone value that is not entered
+	 * using the renderer, strip it of nondigit values.
+	 */
+	static function stripPhone($value)
+	{		
+		$value = preg_replace("/^1-/","", $value);
+		return preg_replace("/\D/","", $value);
+	}
 }
