@@ -45,7 +45,7 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 	static $parts = array(
 			"area_code"	=> 3, 
 			"exchange"	=> 3,
-			""		=> 4, // leave local digits as base field name for RequiredValidator test 
+			""			=> 4, // leave local digits as base field name for RequiredValidator test 
 			"extension"	=> 6
 			);
 	
@@ -72,25 +72,39 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 	
 	static function standard($value)
 	{
-		$parts = PhoneNumberTypeRenderer::$parts;
-
-		$idx = 0;
-		foreach($parts as $part => $limit)
-		{
-			$values[$part] = substr($value, $idx, $limit);
-			$idx += $limit;
-		}
-
-		$phone = implode($values, "-");
+		$valueParts = PhoneNumberTypeRenderer::getValueParts($value);
 		
-		$area_code = $values["area_code"];
-		$ext = $values["extension"];
+		$phone = implode($valueParts, "-");
+		
+		$area_code = $valueParts["area_code"];
+		$ext = $valueParts["extension"];
 		$phone = preg_replace("/^$area_code-/", "($area_code) ", $phone);
 		if($ext)
 			$phone = preg_replace("/-$ext$/", " ext $ext", $phone);
 		else
 			$phone = preg_replace("/-*$/", "", $phone);
-		
+
 		return $phone;
 	} 
+	
+	/*
+	 * Given a string of just digits, break into
+	 * a value for each phone parts area code,
+	 * exchange, local, and extension).
+	 */
+	static function getValueParts($value)
+	{
+		$parts = PhoneNumberTypeRenderer::$parts;
+		
+		$valueParts = array();
+		
+		$idx = 0;
+		foreach($parts as $part => $limit)
+		{
+			$valueParts[$part] = substr($value, $idx, $limit);
+			$idx += $limit;
+		}
+		
+		return $valueParts;
+	}
 }

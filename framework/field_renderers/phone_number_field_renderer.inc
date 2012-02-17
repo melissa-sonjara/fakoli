@@ -63,6 +63,7 @@ class PhoneNumberFieldRenderer extends FieldRenderer
 {	
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $template = "standard"; // PhoneNumberTypeRenderer template for reaonly format (e.g., "(123) 456-7890 ext 123")
+	var $extension = false;
 		
 	function PhoneNumberFieldRenderer(&$parent)
 	{
@@ -80,6 +81,8 @@ class PhoneNumberFieldRenderer extends FieldRenderer
 <?php		
 	foreach($parts as $part => $limit)
 	{
+		if($part == "extension" && !$this->extension) 
+			continue;
 		$partField = ($part) ? "{$field}_{$part}" : $field;
 		$this->renderScriptOnePart($partField, $limit);
 	}
@@ -109,26 +112,29 @@ function <?echo $field ?>_keyup(event)
 		$this->_startField($field);
 
 		$value = $this->parent->data->get($field);
+
+		$valueParts = PhoneNumberTypeRenderer::getValueParts($value);
 		
 		$idx = 0;
 		foreach($parts as $part => $limit)
 		{
-			$values[$part] = substr($value, $idx, $limit);
-			$idx += $limit;
-		}
-		
-		$idx = 0;
-		foreach($parts as $part => $limit)
-		{
+			if($part == "extension" && !$this->extension)
+				continue;
+			
+			if($part == "area_code")
+				$pre = "(&nbsp;";
+			elseif($part == "exchange")
+				$pre = ")&nbsp;&nbsp;";
+			elseif($part == "extension")
+				$pre = "ext ";
+			else
+				$pre = "<b>&#65293;</b>";
+				
 			$partField = ($part) ? "{$field}_{$part}" : $field;
 			
 			$onkeypress = " onkeyup='{$partField}_keyup(event);'";	
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
-			if($part != "extension" && $part != "area_code")
-				echo "<b>&#65293;</b>";
-			else if($part == "extension")
-				echo "ext&nbsp;";
-			echo "<input id='{$this->parent->id}_{$partField}' type='text' name='{$partField}' value='".htmlspecialchars($values[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp";
+			echo "$pre<input id='{$this->parent->id}_{$partField}' type='text' name='{$partField}' value='".htmlspecialchars($valueParts[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp";
 			$idx++;	
 		}
 		
