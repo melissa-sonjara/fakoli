@@ -669,4 +669,34 @@ abstract class UpgradeManager
 	
 		return true;
 	}
+	
+	/*
+	 * reformat a string phone field to remove
+	 * nondigits so that it can use the PhoneFieldRenderer
+	 * 
+	 * @param item - obj of DataItem class
+	 * 
+	 * @param field - field name to reformat
+	 */
+	function reformatPhone(&$item, $field)
+	{
+		$oldPhone = $item->$field;
+		if(!$oldPhone)
+			return;
+
+		// remove the 1 before 800 or 888
+		$phone = preg_replace("/^1-/","", $oldPhone);
+		// remove all nondigits
+		$phone = preg_replace("/\D/","", $phone);
+
+		if($phone != $oldPhone)
+		{
+			$item->$field = $phone;
+			$table = $item->table;
+			$pk = $item->getPrimaryKey();
+			$this->log($item->format("Setting {$item->table} {$pk} $field from {$oldPhone} to {$phone}"));
+			$item->filter = new InclusionFilter($field);
+			$item->save();
+		}	
+	}					
 }
