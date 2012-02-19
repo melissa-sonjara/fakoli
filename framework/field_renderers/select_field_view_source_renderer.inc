@@ -109,7 +109,7 @@ class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 <script type="text/javascript">
 function <?echo $fn ?>_preview()
 {
-	var elt = $('<? echo $field ?>');
+	var elt = $('<? echo $fn ?>');
 
 	if (elt.value)
 	{
