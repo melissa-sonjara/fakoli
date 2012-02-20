@@ -189,7 +189,7 @@ class RequiredRadioButtonValidator extends RequiredValidator
 {
 	var $empty = "";
 
-	function RequiredTreeValidator($field, $title, $empty = "")
+	function RequiredRadioButtonValidator($field, $title, $empty = "")
 	{
 		$this->empty = $empty;
 		$this->AbstractValidator($field, $title);

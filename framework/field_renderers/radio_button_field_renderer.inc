@@ -67,9 +67,10 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
+		// JDG 2/2012 - changed from tree validator expects a div and does not match the rendering of this type
 		if($required)
 		{
-			$this->parent->validator->add(new RequiredTreeValidator($field, $label));
+			$this->parent->validator->add(new RequiredRadioButtonValidator($field, $label));
 		}
 		
 	}
