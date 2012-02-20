@@ -870,7 +870,7 @@ class SearchForm extends AutoForm
 			}
 		}
 		
-		$this->renderAdditionalField();
+		$this->renderAdditionalFields();
 	}
 	
 	/*
