@@ -47,7 +47,7 @@ var ToolTip = new Class(
 	initialize: function(id, options)
 	{
 		this.setOptions(ToolTip.globalOptions);
-		this.setOptions(options);
+		this.options.merge(options);
 		this.id = id;
 	},
 	
