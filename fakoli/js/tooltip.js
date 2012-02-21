@@ -109,12 +109,23 @@ var ToolTip = new Class(
 	
 	position: function(event)
 	{
-		this.div.setStyles({'display':  	'block',
-							'opacity':		0,
-						    'left':	   		event.page.x + 4,
-						    'top':      	event.page.y,
-						    'position':		'absolute',
-						    'width':		this.options.width});
+		if (!this.options.position)
+		{
+			this.div.setStyles({'display':  	'block',
+								'opacity':		0,
+							    'left':	   		event.page.x + 4,
+							    'top':      	event.page.y,
+							    'position':		'absolute',
+							    'width':		this.options.width});
+		}
+		else
+		{
+			this.div.position({'relativeTo': ToolTip.currentLink, 'position': this.options.position, 'edge': this.options.edge});
+			this.div.setStyles({'display':  	'block',
+								'opacity':		0,
+							    'position':		'absolute',
+							    'width':		this.options.width});
+		}
 		
 		this.div.fade('in');
 	},
