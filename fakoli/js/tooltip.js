@@ -37,7 +37,8 @@ var ToolTip = new Class(
 	{
 		'css': 		'tooltip_box',
 		'width':	'auto',
-		'loading':	"Loading..."
+		'loading':	"Loading...",
+		'delay':	250
 	},
 	
 	id:			'',
@@ -95,7 +96,7 @@ var ToolTip = new Class(
 			request.send();
 		};
 			
-		loadTooltip.delay(1000, null, [ToolTip.currentLink, event, this, handlerURL]);
+		loadTooltip.delay(this.options.delay, null, [ToolTip.currentLink, event, this, handlerURL]);
 	},
 
 	create: function()
