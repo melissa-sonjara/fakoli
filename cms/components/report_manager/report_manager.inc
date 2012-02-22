@@ -36,6 +36,77 @@ Fakoli::usingFeature("tree", "search_form", "data_view");
 /**
  * ReportManager provides a generic mechanism for implementing user configurable reports based on DataItem classes.
  * 
+ * To use ReportManager:
+ * 
+ * 1) create a component "report" in your application's components
+ * and create its manifest.inc file
+ * 
+ * 2) create folder "pages" with a file for each type of
+ * report needed in the application with names such as 
+ * "custom_xx_report" (e.g., custom_program_report)
+ * 
+ * 3) The page or pages should contain this code:  
+ * 
+Fakoli::using("report");
+
+$report = new XXReportManager();
+
+if ($method == "POST" || isset($_REQUEST["__excel"]))
+{
+	$report->generateReport();
+}
+else
+{
+	$report->drawForm();
+}
+
+ * 4) On the top level in the report component,
+ * add a php file xx_report_manager.inc with the code:
+ * 
+class XXReportManager extends ReportManager
+{
+	function XXReportManager()
+	{
+		$this->ReportManager();
+
+		$this->table(MyDataItemClass, "MyTitle")			
+			->column("My Field Label", "{my_field}", true, "")
+			...
+			;
+	}
+}
+
+ * 
+ * the same way you would create a DataListView
+ * Before closing the column list with the semicolon,
+ * you can also add search fields with the search mode
+ * (equal if not provided):
+ * 
+ * ->searchFields("contact_id", "name:like")
+ * 
+ * For fields that have values in a related table, create
+ * a RelatedItemSelectFieldRenderer for the search filter
+ * Example:	
+ * 
+ * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "affiliation_id", "Primary Program Type", Affiliation, "ORDER BY sort_order, affiliation", "affiliation", "affiliation_id");
+ * 
+ * If the field has a set of options defined in the
+ * DataItem class, create SelectFieldRenderer.
+ * Example:
+ * 
+ * new SelectFieldRenderer($this->getTable(Program)->form, "residency_requirement", "Residency Requirement", Program::$residencyTypes);	
+ * 
+ * If you need to search on a field that is no in the table
+ * but is instead in an xref table, such as the obj is linked
+ * to a set of states through a item_state_xref table, then
+ * create the RelatedItemSelectFieldRenderer but set an 
+ * additional or custom callback parameter handler:
+ * 
+ * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "state", "State", State, "ORDER BY name", "name", "state_id");	
+ * 
+ * $this->getTable(Program)->params->setParam("state", "equal", $_REQUEST["state:equal"]);
+ * $this->getTable(Program)->params->setHandler("state", array(ProgramReportManager, getStateConstraint));
+ * 
  * @author andy
  *
  */
@@ -145,6 +216,13 @@ class ReportManager
 		return null;
 	}
 	
+	/*
+	 * JDG 2/2012 avoid crash when user does not
+	 * check any tables/columns - by default
+	 * check first table and all its columns.
+	 * If table is checked w/o any columns checked
+	 * then select all columns in that table. 
+	*/
 	function populateSelected()
 	{
 		if ($_REQUEST["custom_report_title"]) $this->title = $_REQUEST["custom_report_title"];
@@ -154,19 +232,38 @@ class ReportManager
 		{
 			if ($_REQUEST["table_{$table->class}"])
 			{
-				$this->selected["table_{$table->class}"] = true;
-				$this->constraint .= $table->getConstraint($first);
-				
-				foreach($table->columns as $column)
-				{
-					$col = "column_".codify($column->title);
-					if ($_REQUEST[$col])
-					{
-						$this->selected[$col] = true;
-					}
-				}
+				$this->setSelected($table);
 			}
 		}
+		
+		if(count($this->selected) == 0)
+		{
+			$this->setSelected($this->tables[0], false);
+		}
+		
+	}
+	
+	/*
+	 * Set the given table as selected
+	 */
+	function setSelected($table, $checkRequest = true)
+	{
+		$this->selected["table_{$table->class}"] = true;
+		$this->constraint .= $table->getConstraint($first);
+
+		$colCount = 0;
+		foreach($table->columns as $column)
+		{
+			$col = "column_".codify($column->title);
+			if ($_REQUEST[$col] || !$checkRequest)
+			{
+				$this->selected[$col] = true;
+				$colCount ++;			
+			}
+		}	
+		
+		if($colCount == 0)
+			$this->setSelected($table, false);
 	}
 	
 	function generateReport()
@@ -262,6 +359,7 @@ class ReportTable
 	var $title;
 	var $form;
 	var $constraints;
+	var $params;
 	
 	function ReportTable($class, $title = "")
 	{
@@ -272,6 +370,9 @@ class ReportTable
 		$this->constraints = $constraints;
 		
 		$this->form = new SearchForm($this->proto);
+		// JDG 2/2012 - set params here to allow additional parameters
+		// to be set by the calling class
+		$this->params = new SearchParameters($this->proto);
 	}
 
 	function column($title, $format, $sortable = true, $style = "", $type = null)
@@ -290,7 +391,9 @@ class ReportTable
 		$filter = new InclusionFilter();
 		for($i = 0; $i < func_num_args(); ++$i)
 		{
-			list($field, $searchMode) = explode(":", func_get_arg($i));
+			// JDG 2/2012 - putting func_get_arg inside the explode crashes for me if not
+			$fieldMode = func_get_arg($i);
+			list($field, $searchMode) = explode(":", $fieldMode);
 			$filter->add($field);
 			if ($searchMode)
 			{
@@ -309,9 +412,8 @@ class ReportTable
 	
 	function getConstraint($first)
 	{
-		$params = new SearchParameters($this->proto, $first);
-		$params->fromArray($_REQUEST);
-		$constraint = $params->generateConstraint($first);
+		$this->params->fromArray($_REQUEST);
+		$constraint = $this->params->generateConstraint($first);
 		
 		if ($this->constraints)
 		{

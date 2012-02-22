@@ -436,6 +436,23 @@ class SearchParameters
 		trace("SearchParameters::get({$field}:$mode): $value", 3);
 		return $value;
 	}
+	
+	/*
+	 * Override default handling by setting
+	 * a custom callback to generate the
+	 * constraint for a field.
+	 * 
+	 * @param $field - the field name in the obj to be queried
+	 * 
+	 * @handler - callback function such as array(MyClass, MyFunction)
+	 * 
+	 * When the function is called, it is given the 
+	 * parameters $name and $value
+	 */
+	function setHandler($field, $handler)
+	{
+		$this->paramHandlers[$field] = $handler;	
+	}
 		
 	function fromArray($array)
 	{
