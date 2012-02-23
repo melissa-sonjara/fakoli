@@ -518,7 +518,8 @@ class DateRangeFilterRenderer extends FieldRenderer
 	{
 		$this->stepMode = $stepMode;
 		$this->field = $field;
-		$this->endDateField = ($endDateField) ? $endDateField : $field;
+		
+		$this->endDateField = ($endDateField == $field) ? $field : $endDateField;
 		$this->fiscal_year_start = $fiscal_year_start;
 		$this->calculateDateRange();
 		
@@ -705,7 +706,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 		{
 			$constraint = "{$this->endDateField} <= '{$this->to}' AND {$this->field} >= '{$this->from}' ";
 		}
-			
+	
 		return $constraint;
 	}
 	
