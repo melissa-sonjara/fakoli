@@ -56,6 +56,13 @@ class CustomReport extends DataItem
 		return $this->getRelated($mgr->getUserClass());
 	}
 	
+	function allowDelete()
+	{
+		if(!$this->report_id || !$this->title) return false;
+		
+		return true;
+	}
+	
 	function CustomReport()
 	{
 		$this->primary_key = "report_id";

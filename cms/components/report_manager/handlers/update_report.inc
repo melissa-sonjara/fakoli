@@ -49,7 +49,7 @@ $form->required("title");
 $form->ajaxSubmit("function(result) {ReportManager.reportSaved(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 	
 $form->submitLabel = "Save Report";
-$form->allowDelete = true;
+$form->allowDelete = $report->allowDelete();
 
 if ($method == "POST")
 {
