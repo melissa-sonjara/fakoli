@@ -300,17 +300,21 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	 * an array of options with the key the primary
 	 * key of the obj and the name field the param given.
 	 */
-	static function formatOptions($items, $name_field)
+	static function formatOptions($items, $template)
 	{
 		$options = array();
-		
+
+		// user sent just the field name
+		if(!preg_match("/^\{/", $template))
+			$template = "{" . $template . "}";
+			
 		if(count($items) == 0)
 			return $options;
 			
 		foreach($items as $item)
 		{
 			$pk = $item->getPrimaryKey();
-			$options[$item->$pk] = $item->$name_field;
+			$options[$item->$pk] = $item->format("$template");
 		}
 		return $options;
 	}
@@ -762,6 +766,8 @@ ENDSCRIPT;
 		$queryString = preg_replace("/identifier=\\w+\\&?/", "", $queryString);
 		$queryString = preg_replace("/year=\\d+\\&?/", "", $queryString);
 		$queryString = preg_replace("/month=\\d+\\&?/", "", $queryString);
+		$queryString = preg_replace("/startDate=\\d+\\&?/", "", $queryString);
+		$queryString = preg_replace("/endDate=\\d+\\&?/", "", $queryString);
 		
 		$prevLink = appendToQueryString($queryString, "year=$this->prevYear&month=$this->prevMonth");
 		$nextLink = appendToQueryString($queryString, "year=$this->nextYear&month=$this->nextMonth");
