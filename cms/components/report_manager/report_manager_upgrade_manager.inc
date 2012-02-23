@@ -37,7 +37,8 @@ class ReportManagerUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"done:Initial Installation",
-			"1.1"		=>	"sql:Added table for persisting custom reports"
+			"1.1"		=>	"sql:Added table for persisting custom reports",
+			"1.2"		=>	"sql:change configuration column to longtext; add column user_id",
 	);
 	
 	function ReportManagerUpgradeManager()

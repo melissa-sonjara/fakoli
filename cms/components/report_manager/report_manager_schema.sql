@@ -15,3 +15,10 @@ ENGINE = InnoDB;
 --
 -- END Version 1.1
 --
+
+-- START Version 1.2
+
+ALTER TABLE `custom_report` CHANGE COLUMN `configuration` `configuration` longtext;
+ALTER TABLE `custom_report` ADD COLUMN `user_id` int(10) NOT NULL DEFAULT '0';
+
+-- END Version 1.2

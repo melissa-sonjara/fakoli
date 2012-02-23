@@ -46,6 +46,16 @@ ReportManager.saveReport = function()
 	ReportManager.dialog = modalPopup("Save Custom Report", "/action/report_manager/save_report", null, null, true);
 };
 
+/*
+ * Update an already saved report such as a presaved
+ * report - saved on generate in case user wants to keep it.
+ */
+ReportManager.updateReport = function(report_id)
+{
+	ReportManager.dialog = modalPopup("Save Custom Report", "/action/report_manager/update_report?report_id=" + report_id, null, null, true);
+};
+
+
 ReportManager.onSaveReport = function()
 {
 	$('custom_report_title').value = $('CustomReport_form_title').value;
@@ -59,4 +69,15 @@ ReportManager.onSaveReport = function()
 ReportManager.commitSave = function()
 {
 	$('custom_report').submit();
+};
+
+
+ReportManager.reportSaved = function(response)
+{
+	if (response == "OK")
+	{
+		ReportManager.dialog.hide();		
+	}
+
+	$('CustomReport_form__error').set('html', response);
 };

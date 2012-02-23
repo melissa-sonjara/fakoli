@@ -42,6 +42,8 @@ if ($report_id) $report->load($report_id);
 $report->filter = new InclusionFilter("report_id", "title", "description");
 
 $form = new AutoForm($report);
+$form->required("title");
+
 $form->onSubmitHandler = "ReportManager.onSaveReport";
 echo $form->writeScript();
 $form->drawForm();

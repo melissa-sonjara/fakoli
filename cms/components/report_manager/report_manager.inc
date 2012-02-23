@@ -268,6 +268,8 @@ class ReportManager
 	
 	function generateReport()
 	{
+		$this->preSaveReport();
+		
 		global $script;
 		
 		if (!isset($this->selected))
@@ -326,14 +328,50 @@ class ReportManager
 		
 		$report->cssClass = "list small";
 		$report->drawView();
+		
+		$url = $_REQUEST["identifier"];
+		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
+		echo "&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
+	}
+	
+	/*
+	 * Save every report each time the user generates
+	 * in case they decide after generate that they
+	 * want to save it. This presave record will have
+	 * a blank title so before saving another, chekc
+	 * if that user already has a saved temp report
+	 * with no title (a report they didn't want to really
+	 * save).
+	 *  
+	 */
+	function preSaveReport()
+	{
+		global $user;
+		
+		if(!$this->report_id)
+		{
+			$this->report_id = Query::create(CustomReport, "WHERE manager_class=:manager_class AND user_id=:user_id AND title=''")
+				->bind(":manager_class", get_class($this), ":user_id", $user->user_id)
+				->executeValue("MAX(report_id)");
+			
+			if(!$this->report_id)
+			{
+				$this->title = "";
+				// $this->report_id is set in save function
+				$this->save();
+			}
+		}
 	}
 		
 	function save()
 	{
+		global $user;
+		
 		$report = new CustomReport();
 		$report->report_id = $this->report_id;
 		$report->title = $this->title;
 		$report->description = $this->description;
+		$report->user_id = $user->user_id;
 		$report->configuration = serialize($this);
 		$report->manager_class = get_class($this);
 		

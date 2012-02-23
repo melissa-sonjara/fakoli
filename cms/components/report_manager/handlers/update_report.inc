@@ -31,37 +31,36 @@
 
 *****************************************************************/
 
-class CustomReport extends DataItem
+Fakoli::using("report_manager");
+
+$report_id = checkNumeric($_GET["report_id"]);
+
+if(!$report_id)
+	ajaxRetur("unknown report");
+	
+$report = new CustomReport($report_id);
+
+$report->filter = new InclusionFilter("title", "description");
+
+$form = new AutoForm($report, "POST", "/action/report_manager/update_report?report_id=$report_id");
+
+$form->required("title");
+
+$form->ajaxSubmit("function(result) {ReportManager.reportSaved(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+	
+$form->submitLabel = "Save Report";
+$form->allowDelete = true;
+
+if ($method == "POST")
 {
-	// Fields
-	
-	var $fields = array("report_id"		=>	Number,
-						"manager_class"	=>	String,
-						"title"			=>	String,
-						"description"	=>	Text,
-						"configuration"	=>	Text,
-						"user_id"		=>	Number,
-	
-			);
-	
-	var $relations = array(
-			"User"		=>	"",
-	);
-	
-	function User()
-	{
-		if(!$this->user_id) return;
-		
-		$mgr = new UserManager();
-		return $this->getRelated($mgr->getUserClass());
-	}
-	
-	function CustomReport()
-	{
-		$this->primary_key = "report_id";
-		$this->table = "custom_report";
-		
-		$this->DataItem(func_get_args());
-	}
+	if($form->save())
+		ajaxReturn("OK");
+	else
+		ajaxReturn($form->msg);
 }
+
+echo $form->writeScript();
+
+$form->drawForm();
+
 ?>
