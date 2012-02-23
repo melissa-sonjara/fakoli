@@ -50,6 +50,20 @@ class Topic extends DataItem
 	{
 		return $this->crossReference(Document, DocumentTopicXref, $constraints);
 	}
+	
+	static function getTopicsArray()
+	{
+		$topics = query(Topic, "ORDER BY topic");
+		
+		$tarr = array();
+		
+		foreach($topics as $topic)
+		{
+			$tarr[$topic->topic] = $topic->topic;
+		}
+		
+		return $tarr;
+	}
 		
 	function Topic()
 	{
