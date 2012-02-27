@@ -6,6 +6,21 @@ require_once realpath(dirname(__FILE__)."/auto_form.inc");
  * CompositeAutoForm is a container for situations where multiple AutoForms need to
  * be managed on the same page within a single outer form.
  * 
+ * To create a composite form, create an instance of
+ * CompositeAutoForm and add to it all the subforms
+ * (instances of SubordinateAutoForm) to appear on that page.
+ * Some subforms may need special handling and so you will
+ * need to create a child class of SubordinateAutoForm.  
+ * 
+ * Example:
+ * $compositeForm = new CompositeAutoForm("POST", "", "my_form_id");
+ * 
+ * $compositeForm = new CompositeAutoForm("POST", "", "parts_order_address_form");
+ * $shippingPanel = new OrderAddressForm($compositeForm, "shipping", "Shipping Address", $shippingAddress, "ship_address_id", $orderShip);
+ * $billingPanel = new OrderAddressForm($compositeForm, "billing", "Billing Address", $billingAddress, "bill_address_id", $order);
+ * 
+ * Where OrderAddressForm is a child of class SubordinateAutoForm.
+ *  
  * @author andy
  *
  */
@@ -237,4 +252,142 @@ function onCompositeFormSubmit(form)
 		return $valid;
 	}
 		
+}
+
+/*
+ * Creates a form that can be a subordinate to
+ * a CompositeAutoForm.
+ * 
+ */
+class SubordinateAutoForm extends AutoForm
+{
+	var $id;
+	var $form;
+	var $parent;
+	var $msg;
+	var $allowEmpty; // whether we want to show an error message if entire subform is empty
+	
+	function SubordinateAutoForm($parent, $form, $allowEmpty  = false)
+	{
+		$this->parent = $parent;
+		$this->form = $form;
+		$this->id = $form->id;
+		$this->allowEmpty = $allowEmpty;
+		
+		$this->parent->addForm($this);	
+	}
+	
+	/*
+	 * For subordinates that require special handling,
+	 * create a child class of SubordinateAutoForm
+	 * and set the form's special characteristics here,
+	 * then add to its Composite instance.
+	 */
+	function createForm()
+	{
+		$this->form = new AutoForm($this->obj, "POST", "", $this->id);
+
+		// set hidden fields, aliases, special renderers etc.
+		$this->parent->addForm($this);
+	}
+	
+	/*
+	 * Use this function to set the form as subordinate to
+	 * its parent when no custom, child class is needed
+	 * because no special handling is required.
+	 *
+	 */
+	static function create($parent, $form, $allowEmpty  = fals)
+	{
+		return new SubordinateAutoForm($parent, $form, $allowEmpty);
+	}
+	
+	/**
+	 * Retrieve the validation engine for this AutoForm.
+	 */
+	function getValidationEngine()
+	{
+		return $this->form->validator;
+	}
+	
+	function getData()
+	{
+		return $this->form->getData();
+	}
+		
+	function setDataSet($params)
+	{
+		$this->form->setDataSet($params);
+	}
+	
+	function writeScript()
+	{
+		return $this->form->writeScript();
+	}
+	
+	function drawForm()
+	{
+		$this->form->drawForm();
+	}
+	
+	function drawReadOnly()
+	{
+		$this->form->drawReadOnly();
+	}
+	
+	function makeSubordinate()
+	{
+		$this->form->makeSubordinate();
+	}
+	
+	/*
+	 * If an empty subform should not produce an
+	 * error message then return true to the 
+	 * parent composite form.
+	 */
+	function save()
+	{
+		$rtn = $this->form->save();				
+
+		if(($rtn == false && !$this->allowEmpty) || 
+			($rtn == false && $this->allowEmpty && !$this->isEmpty()))
+		{
+			$this->msg = $this->form->msg;
+		}
+		else
+			$rtn = true;
+		return $rtn;
+	}
+
+	/*
+	 * If we don't want to show an error message
+	 * when an entire subform is empty then
+	 * check if empty. This is the case for
+	 * a spreadsheet that provides multiple empty
+	 * rows and we won't save if empty but don't 
+	 * consider a blank row an error.
+	 */
+	function isEmpty()
+	{
+		$empty = true;
+		$obj =& $this->form->getData();	
+		$pk = $obj->getPrimaryKey();
+		
+		$fields = $obj->getFields();
+		$filter = $obj->getFilter();
+		
+		foreach($fields as $field => $type)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->form->hidden) && !($filter && $filter->isExcluded($field)))
+			{
+				$value = $obj->$field;
+				if($value)
+				{
+					$empty = false;
+					break;
+				}
+			}
+		}
+		return $empty;
+	}
 }

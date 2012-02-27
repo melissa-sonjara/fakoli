@@ -52,7 +52,14 @@ abstract class AutoFormLayout
 	{
 		switch($type)
 		{
+		case "table_row":
+			return new TableRowFormLayout($form);
+			
+		case "spreadsheet":
+			return new SpreadsheetFormLayout($form);
+			
 		case "table":
+	
 		default:
 			return new TableBasedFormLayout($form);
 		}
@@ -176,4 +183,200 @@ class TableBasedFormLayout extends AutoFormLayout
 	{
 		echo "<tr>\n <td colspan='2'><b>{$text}</b></td></tr>\n";
 	}
+}
+
+/*
+ * Used for each subordinate form in SpreadSheetAutoForm.
+ */
+class TableRowFormLayout extends AutoFormLayout
+{
+	function TableRowFormLayout($form)
+	{
+		$this->AutoFormLayout($form);
+	}
+	
+	function startGroup($name)
+	{
+		$this->startUngrouped();
+	}
+	
+	function endGroup()
+	{
+		$this->endUngrouped();
+	}
+	
+			
+	function startField($field, $renderer, $colspan = 1, $styles = "")
+	{
+		echo "<td ";
+		if ($renderer->parent->valueCSS) echo " class='{$renderer->parent->valueCSS}'";
+		echo ">";
+		
+		if ($renderer->annotateBefore && $renderer->parent->annotations[$field] && $renderer->colspan == 1)
+		{
+			echo $renderer->parent->annotations[$field]."<br/>";
+		}		
+	}
+	
+	function endField($field, $renderer)
+	{
+		echo "</td>\n";
+	}
+	
+	function requiredFields($text)
+	{
+		// empty - want displayed once at top not for every form in the spreadsheet
+	}	
+	
+	/**
+	 * Internal method to generate the HTML for the field label
+	 *
+	 * @param string $field the field name
+	 * @param int $colspan the number of columns to span
+	 * @param string $styles optional special styles that need to be applied
+	 * @param string $annotation annotation text for the field
+	 */
+	function printLabel($field, $renderer, $styles = "", $annotation = "")
+	{		
+		if ($renderer->hideLabel && $renderer->colspan > 1 && !$annotation) return;
+		
+		$label = $this->getLabel($field, $renderer);
+		
+		echo "<th ";
+		if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
+		if ($styles) echo " style='$styles'";
+		echo ">";
+		
+		if (!$renderer->hideLabel) echo "<label for='$field'>$label</label> ";
+		
+		echo "$annotation</th>\n";
+	}
+	
+	function getLabel($field, $renderer, $styles, $annotation)
+	{
+		$obj = $renderer->parent->getData();
+		$label = isset($renderer->label) ? $renderer->label : $obj->prettifyFieldName($field);
+		
+		if ($renderer->parent->markRequiredFields &&
+		    $renderer->parent->isRequired($field))
+		{
+	    	$label .= "*";
+	    }
+
+	    $label .= $renderer->labelSuffix;
+		
+	    if ($renderer->parent->onFormatLabel)
+	    {
+	    	$fn = $renderer->parent->onFormatLabel;
+	    	$label = $fn($renderer->parent, $field, $label);
+	    }
+	    
+	    return $label;
+	}
+	
+	function startUngrouped()
+	{
+	}
+	
+	function endUngrouped()
+	{
+	}
+	
+	function startButtonLine()
+	{
+		// nothing to do
+	}
+	
+	function endButtonLine()
+	{
+		// nothing to do
+	}
+	
+	function errorBox()
+	{
+		echo "<tr>\n <td colspan='{$this->form->parent->colCount}' id='{$this->form->id}__error' class='error' style='display: ".($this->form->msg ? 'table-cell' : 'none')."'>{$this->form->msg}</td></tr>\n";
+	}	
+}
+
+/*
+ * Used for the overall layout handling of SpreadsheetAutoForm
+ * instance.
+ */
+class SpreadsheetFormLayout extends AutoFormLayout
+{
+	function SpreadsheetFormLayout($form)
+	{
+		$this->AutoFormLayout($form);
+	}
+	
+	function startGroup($name)
+	{
+		$this->startUngrouped();
+	}
+	
+	function endGroup()
+	{
+		$this->endUngrouped();
+	}
+	
+			
+	function startField($field, $renderer, $colspan = 1, $styles = "")
+	{
+	}
+	
+	function endField($field, $renderer)
+	{
+	}
+	
+	function requiredFields($text)
+	{
+		echo "<p><b>$text</b></p>";	
+	}	
+	
+	/**
+	 * Internal method to generate the HTML for the field label
+	 *
+	 * @param string $field the field name
+	 * @param int $colspan the number of columns to span
+	 * @param string $styles optional special styles that need to be applied
+	 * @param string $annotation annotation text for the field
+	 */
+	function printLabel($field, $renderer, $styles = "", $annotation = "")
+	{
+		// nothing to do		
+	}
+	
+	function getLabel($field, $renderer, $styles, $annotation)
+	{
+		// nothing to do
+	}
+	
+	function startUngrouped()
+	{
+		echo "<table ";
+		if ($this->form->formCSS) echo " class='{$this->form->formCSS}'";
+		if ($this->form->style) echo " style='{$this->form->style}'";
+		echo ">\n";
+	}
+	
+	function endUngrouped()
+	{
+		echo "</table>";
+	}
+	
+	function startButtonLine()
+	{
+		echo "<tr>\n";
+		echo " <td colspan='{$this->form->colCount}' class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
+	}
+	
+	function endButtonLine()
+	{
+		echo "</td></tr>";
+	}
+	
+	function errorBox()
+	{
+		// nothing to do
+	}	
 }
