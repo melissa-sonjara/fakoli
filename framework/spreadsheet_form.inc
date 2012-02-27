@@ -84,6 +84,18 @@ class SpreadsheetForm extends CompositeAutoForm
 		$subform->subordinate = true;
 		//$subform->layout = AutoFormLayout::create("table_row", $subform);
 
+		// Don't allow HTMLEditor in spreadsheet form,
+		// override with Text Editor
+		$fields = $subform->data->getFields();
+		foreach($fields as $field => $type)
+		{
+			$renderer = $subform->getRenderer($field);
+			if(get_class($renderer) == "HTMLFieldRenderer")
+			{
+				$subform->override($field, "", new TextFieldRenderer($subform));
+			}		
+		}
+		
 		$idx = 1;
 		foreach($items as $item)
 		{
