@@ -258,6 +258,17 @@ function onCompositeFormSubmit(form)
  * Creates a form that can be a subordinate to
  * a CompositeAutoForm.
  * 
+ * @param parent - the instance of CompositeAutoForm
+ * this form is subordinate to
+ * 
+ * @param form - the instance of AutoForm with all
+ * any custom settings needed (aliases, hidden fields, etc).
+ * 
+ * @allowEmpty - whether a completely empty form, that
+ * will not be saved, should be considered an error
+ * condition. For spreadsheet forms, an empty row should
+ * not report an error.
+ * 
  */
 class SubordinateAutoForm extends AutoForm
 {
@@ -289,17 +300,6 @@ class SubordinateAutoForm extends AutoForm
 
 		// set hidden fields, aliases, special renderers etc.
 		$this->parent->addForm($this);
-	}
-	
-	/*
-	 * Use this function to set the form as subordinate to
-	 * its parent when no custom, child class is needed
-	 * because no special handling is required.
-	 *
-	 */
-	static function create($parent, $form, $allowEmpty  = fals)
-	{
-		return new SubordinateAutoForm($parent, $form, $allowEmpty);
 	}
 	
 	/**
@@ -349,13 +349,13 @@ class SubordinateAutoForm extends AutoForm
 	{
 		$rtn = $this->form->save();				
 
-		if(($rtn == false && !$this->allowEmpty) || 
-			($rtn == false && $this->allowEmpty && !$this->isEmpty()))
+		if($rtn == false && $this->allowEmpty && $this->isEmpty())
 		{
-			$this->msg = $this->form->msg;
+			$rtn = true;
 		}
 		else
-			$rtn = true;
+			$this->msg = $this->form->msg;
+		
 		return $rtn;
 	}
 

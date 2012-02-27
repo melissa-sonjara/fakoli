@@ -123,8 +123,9 @@ class SpreadsheetForm extends CompositeAutoForm
 				$row->override($field, "", $renderer);
 			}		
 		}
-		$form = SubordinateAutoForm::create($this, $row, true);
-		$form->form->layout = AutoFormLayout::create("table_row", $form);
+		//$form = SubordinateAutoForm::create($this, $row, true);
+		$subform = new SubordinateAutoForm($this, $row, true);
+		$subform->form->layout = AutoFormLayout::create("table_row", $subform);
 	}
 	
 	/*
@@ -148,7 +149,7 @@ class SpreadsheetForm extends CompositeAutoForm
 			
 		if ($form->markRequiredFields && $form->validator->hasRequiredFields())
 		{
-			$this->layout->requiredFields($this->requiredFieldsText);
+			$this->layout->requiredFields($form->requiredFieldsText);
 		}
 				
 		$this->layout->startUngrouped();
