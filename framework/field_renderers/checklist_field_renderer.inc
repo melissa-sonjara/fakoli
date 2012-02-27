@@ -240,6 +240,50 @@ class CheckListFieldRenderer extends FieldRenderer
 		echo "</td></tr>\n";
 	}
 
+	/*
+	 * Only implemented for ungrouped option set
+	 */
+	function renderSearchField($field, $mode)
+	{
+		$this->_startField($field);
+		
+		$rawValue = $this->parent->params->get($field, $mode);
+		
+		if (is_array($rawValue))
+		{
+			$rawValue = implode(",",  array_values($_POST[$field]));
+			$this->parent->params->set($field, $mode, $rawValue);
+		}
+		
+		$values = explode(",", $rawValue);		
+				
+		$divider = $this->horizontal ? " " : "<br/>";
+		
+		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
+		{
+			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+		}
+		
+		$idx = 0;
+
+		if(count($this->options) > 0)
+		{
+			foreach($this->options as $value => $text)
+			{
+				$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='1'$checked/>&nbsp;$text$divider";
+				$idx++;
+			}
+		}
+				
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+		
+		$this->_endField($field);
+	}
+
 	function preProcess($field)
 	{		
 		if (is_array($_POST[$field]))

@@ -173,8 +173,6 @@ class SpreadsheetForm extends CompositeAutoForm
 		
 		foreach($this->forms as $form)
 		{
-			$form->form->layout->form->msg = $form->msg;
-					
 			ob_start();
 			$form->drawForm();
 			$output = ob_get_contents();
@@ -182,9 +180,9 @@ class SpreadsheetForm extends CompositeAutoForm
 			
 			$output = preg_replace("/\\bname=(['\"])([^'\"]*?)['\"]/", "name=$1{$form->id}__$2$1", $output);
 
-			echo "<tr id='{$form->id}_container' class='{$this->containerClass}'\n";
+			$form->form->layout->startUngrouped();
 			echo $output;
-			echo "</tr>\n";
+			$form->form->layout->endUngrouped();
 		}
 
 		$this->layout->endUngrouped();

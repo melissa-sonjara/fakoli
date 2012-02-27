@@ -216,11 +216,16 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 	/* 
 	 * Use when checking if a number is a member of a set.
 	 * For example, teachers_key in (8312, 5643, 9893) or
-	 * public in (2,4,5). Set must be comma delimited.
-	 * Set the additional parameter with setParam()
+	 * public in (2,4,5). Set can must be comma delimited
+	 * or an array where the keys are the values to
+	 * be included in the set.
+	 * 
 	 */
 	function member($name, $set)
 	{
+		$values = $set;
+		if(is_array($set))
+			$values = implode(",", array_keys($set));
 		return "$name IN ($set)";
 	}
 	
@@ -341,6 +346,19 @@ class StringSearchParameterHandler extends SearchParameterHandler
 
 		return $query;
 	}	
+	
+	/* 
+	 * Use when checking if a number is a member of a set.
+	 * For example, status in ('in_progress', 'submitted')
+	 * Set must be comma delimited.
+	 */
+	function member($name, $set)
+	{
+		$values = $set;
+		if(is_array($set))
+			$values = "'". implode("','", array_keys($set)) . "'";
+		return "$name IN ($values)";
+	}
 }
 
 
@@ -483,6 +501,12 @@ class SearchParameters
 				
 				$this->params["{$field}:startsWith"] = $array["{$field}:startsWith"];
 			}
+			else if (array_key_exists("{$field}:member", $array) && $array["{$field}:member"] != "")
+			{
+				trace("Found '{$field}:member'", 3);
+				
+				$this->params["{$field}:member"] = $array["{$field}:member"];
+			}
 			else 
 			{
 				if (array_key_exists("{$field}:from", $array) && $array["{$field}:from"] != "")
@@ -582,10 +606,10 @@ class SearchParameters
 			else
 			{
 				$handler = $this->paramHandlers[$field];
-				if(method_exists($handler, $modifier))
-					$clause = $handler->$modifier($field, $value);
-				else
+				if(is_array($handler) && method_exists($handler[0], $handler[1]))
 					$clause = call_user_func($handler, $field, $value);
+				elseif(method_exists($handler, $modifier))
+					$clause = $handler->$modifier($field, $value);
 			}
 	
 			$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
@@ -752,6 +776,7 @@ class SearchForm extends AutoForm
 		{
 			$this->modifiers[$fields[$i]] = $mode;
 		}
+		
 	}
 	
 	/**
@@ -760,7 +785,7 @@ class SearchForm extends AutoForm
 	 * @return string the matching mode set for that field.
 	 */
 	function getMatchingMode($field)
-	{
+	{		
 		$mode = (array_key_exists($field, $this->modifiers)) ? $this->modifiers[$field] : "equal";
 		return $mode;
 	}

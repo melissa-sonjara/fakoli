@@ -186,7 +186,8 @@ class TableBasedFormLayout extends AutoFormLayout
 }
 
 /*
- * Used for each subordinate form in SpreadSheetAutoForm.
+ * Used for each subordinate form row in 
+ * SpreadSheetAutoForm.
  */
 class TableRowFormLayout extends AutoFormLayout
 {
@@ -276,10 +277,12 @@ class TableRowFormLayout extends AutoFormLayout
 	
 	function startUngrouped()
 	{
+		echo "<tr id='{$this->form->id}_container' class='{$this->form->containerClass}'\n";
 	}
 	
 	function endUngrouped()
-	{
+	{		
+		echo "</tr>\n";
 	}
 	
 	function startButtonLine()
@@ -319,13 +322,14 @@ class SpreadsheetFormLayout extends AutoFormLayout
 		$this->endUngrouped();
 	}
 	
-			
 	function startField($field, $renderer, $colspan = 1, $styles = "")
 	{
+		// nothing do to
 	}
 	
 	function endField($field, $renderer)
 	{
+		// nothing do to
 	}
 	
 	function requiredFields($text)
@@ -333,14 +337,6 @@ class SpreadsheetFormLayout extends AutoFormLayout
 		echo "<p><b>$text</b></p>";	
 	}	
 	
-	/**
-	 * Internal method to generate the HTML for the field label
-	 *
-	 * @param string $field the field name
-	 * @param int $colspan the number of columns to span
-	 * @param string $styles optional special styles that need to be applied
-	 * @param string $annotation annotation text for the field
-	 */
 	function printLabel($field, $renderer, $styles = "", $annotation = "")
 	{
 		// nothing to do		
