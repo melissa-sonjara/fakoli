@@ -174,4 +174,35 @@ class SerializationForm
 	}
 }
 
+class SimpleSerializationHandler
+{
+	var $class;
+	var $constraint;
+	
+	function SimpleSerializationHandler($class, $constraint = "")
+	{
+		$this->class = $class;
+		
+		if ($constraint)
+		{
+			$this->constraint = $constraint;
+		}
+		else
+		{
+			$obj = new $class;
+			$this->constraint = "ORDER BY ".$obj->getPrimaryKey();
+		}
+	}
+	
+	function export()
+	{
+		return SerializationManager::serialize($this->class, $this->constraint);
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize($this->class, $doc, $tx);
+	}		
+}
+	
 ?>
