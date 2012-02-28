@@ -499,6 +499,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
  *  
  *  $filterForm->hide("startDate");
  *   
+ * @author: Andy Green
  */
 class DateRangeFilterRenderer extends FieldRenderer
 {
