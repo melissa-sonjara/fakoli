@@ -519,6 +519,8 @@ class DateRangeFilterRenderer extends FieldRenderer
 	var $stepLabel; // e.g., Next/Previous Month 
 	var $dateRangeLabel = "Reporting Period";
 	
+	var $handler; // custom parameter handler if override to getConstraint needed
+	
 	function DateRangeFilterRenderer(&$parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1)
 	{
 		$this->stepMode = $stepMode;
@@ -702,6 +704,11 @@ class DateRangeFilterRenderer extends FieldRenderer
 	
 	function getConstraint()
 	{
+		if(is_array($this->handler) && method_exists($this->handler[0], $this->handler[1]))
+		{
+			return call_user_func($this->handler, $this);
+		}
+		
 		if($this->field == $this->endDateField)
 		{
 			$name = $this->field;
@@ -715,6 +722,10 @@ class DateRangeFilterRenderer extends FieldRenderer
 		return $constraint;
 	}
 	
+	function setHandler($handler)
+	{
+		$this->handler = $handler;
+	}
 	
 	function renderSearchScript($field)
 	{
