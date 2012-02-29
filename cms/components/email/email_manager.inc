@@ -45,6 +45,32 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("settings");
 
+class EmailSerializationHandler
+{
+	function EmailSerializationHandler()
+	{
+	}
+	
+	
+	function export()
+	{
+		$xml  = "\n<EmailTemplateMap>";
+		$xml .= SerializationManager::serialize(EmailTemplate, "ORDER BY email_template_id");
+		$xml .= SerializationManager::serialize(MergeCode, "ORDER BY merge_code_id");
+		$xml .= SerializationManager::serialize(MergeCodeHelp, "ORDER BY help_id");
+		$xml .= SerializationManager::serialize(RelationHelp, "ORDER BY relation_id");
+		$xml .= "</EmailTemplateMap>";
+		
+		return $xml;
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(Article, $doc, $tx);
+		SerializationManager::unserialize(Blog, $doc, $tx);		
+	}			
+}
+
 class EmailHandler
 {
 	var $mail;
@@ -358,6 +384,12 @@ class EmailManager
 	    closedir($handle);
 		
 	    return $logs;
+	}
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("email", "Email Templates and Merge Codes", new EmailSerializationHandler());
+		return true;		
 	}
 }
 
