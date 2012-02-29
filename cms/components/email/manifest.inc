@@ -83,8 +83,8 @@ class EmailManifest
 	static function subscribeToEvents()
 	{
 		return array("ComponentScanComplete" => array(EmailManager, setDefaults),
-						"upgradeComponent"		=>	array(EmailManager, upgradeComponent,
-					"RegisterSerializationHandler"	=>	array(EmailManager, registerSerializationHandler))
+					"upgradeComponent"		=>	array(EmailManager, upgradeComponent),
+					"RegisterSerializationHandler"	=>	array(EmailManager, registerSerializationHandler)
 		
 		);
 	}
