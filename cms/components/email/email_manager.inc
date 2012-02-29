@@ -64,8 +64,8 @@ class EmailSerializationHandler
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(Article, $doc, $tx);
-		SerializationManager::unserialize(Blog, $doc, $tx);		
+		SerializationManager::unserialize(EmailTemplate, $doc, $tx);
+		SerializationManager::unserialize(MergeCode, $doc, $tx);		
 	}			
 }
 
