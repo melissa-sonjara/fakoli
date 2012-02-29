@@ -57,8 +57,6 @@ class EmailSerializationHandler
 		$xml  = "\n<EmailTemplateMap>";
 		$xml .= SerializationManager::serialize(EmailTemplate, "ORDER BY email_template_id");
 		$xml .= SerializationManager::serialize(MergeCode, "ORDER BY merge_code_id");
-		$xml .= SerializationManager::serialize(MergeCodeHelp, "ORDER BY help_id");
-		$xml .= SerializationManager::serialize(RelationHelp, "ORDER BY relation_id");
 		$xml .= "</EmailTemplateMap>";
 		
 		return $xml;
