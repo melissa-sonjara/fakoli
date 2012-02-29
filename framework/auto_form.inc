@@ -835,7 +835,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			{
 				$onclick = " onclick='this.disabled=true,this.form.submit();'";
 			}
-			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'$onclick/>";
+			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'$onclick ondblclick='return false;'/>";
 		}
 
 		if ($obj->get($pk) && $this->allowDelete)
