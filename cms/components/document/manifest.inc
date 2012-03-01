@@ -49,10 +49,11 @@ class DocumentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"EnumerateItems"	 => array(DocumentManager, enumerateItems),
-				"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
-				"DeleteRole"			=>	array(DocumentManager, deleteRole),
-				"upgradeComponent"		=>	array(DocumentManager, upgradeComponent)
+					"EnumerateItems"	 => array(DocumentManager, enumerateItems),
+					"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
+					"DeleteRole"			=>	array(DocumentManager, deleteRole),
+					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
+					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler)
 		);
 	}
 	
