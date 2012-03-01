@@ -80,7 +80,7 @@ class Cache
 	 */
 	static function get($key)
 	{
-		return Cache::getInstance()->get(Cache::$app_name."_".$key);
+		return Cache::getInstance()->get(ConnectionManager::$dsn."_".Cache::$app_name."_".$key);
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class Cache
 	 */
 	static function put($key, $obj, $ttl = 0)
 	{
-		return Cache::getInstance()->put(Cache::$app_name."_".$key, $obj, $ttl);
+		return Cache::getInstance()->put(ConnectionManager::$dsn."_".Cache::$app_name."_".$key, $obj, $ttl);
 	}
 	
 	/**
@@ -111,7 +111,7 @@ class Cache
 	 */
 	static function invalidate($key)
 	{
-		return Cache::getInstance()->invalidate(Cache::$app_name."_".$key);
+		return Cache::getInstance()->invalidate(ConnectionManager::$dsn."_".Cache::$app_name."_".$key);
 	}
 
 	/**
@@ -125,7 +125,7 @@ class Cache
 	 */
 	static function invalidateMatching($pattern)
 	{
-		return Cache::getInstance()->invalidateMatching("^".Cache::$app_name."_".$pattern);
+		return Cache::getInstance()->invalidateMatching("^".ConnectionManager::$dsn."_".Cache::$app_name."_".$pattern);
 	}
 	
 	/**
