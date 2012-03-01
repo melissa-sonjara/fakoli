@@ -33,6 +33,32 @@
 
 Fakoli::usingFile("framework/directory_tree.inc");
 
+class DocumentSerializationHandler
+{
+	function DocumentSerializationHandler()
+	{
+	}
+
+
+	function export()
+	{
+		$xml  = "\n<DocumentMap>";
+		$xml .= SerializationManager::serialize(DocumentLibrary, "ORDER BY document_library_id");
+		$xml .= SerializationManager::serialize(Document, "ORDER BY document_id");
+		$xml .= "</DocumentMap>";
+		
+		return $xml;
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(DocumentLibrary, $doc, $tx);
+		SerializationManager::unserialize(Document, $doc, $tx);		
+	}			
+}
+	
+}
+
 class DocumentManager
 {
 	var $library;
@@ -621,4 +647,10 @@ function deleteFolderResult(result)
 		$mgr = new DocumentUpgradeManager();
 		$mgr->upgrade();
 	}	
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("document_libraries", "Document Libraries &amp; Document Records (files need to be transferred manually)", new DocumentSerializationHandler());
+		return true;
+	}
 }
