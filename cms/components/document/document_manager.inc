@@ -57,8 +57,6 @@ class DocumentSerializationHandler
 	}			
 }
 	
-}
-
 class DocumentManager
 {
 	var $library;
