@@ -167,6 +167,13 @@ class SerializationForm
 	<label for="import_file">Import File </label><input type="file" name="import_file"/><br/><br/>
 <?
 		}
+		else
+		{
+			$file = codify($config["sitename"]."_".date("Ymd")).".xml";
+?>
+	<label for="export_file">Export File Name</label><input type="text" name="export_file" value="<?echo $file?>"/><br/><br/>
+<?
+		}	
 ?>
 	<input type="submit" class="button" value="<?echo $this->mode?> Configuration"/>
 	</form>

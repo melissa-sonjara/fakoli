@@ -3,8 +3,12 @@ Fakoli::using("component");
 
 Fakoli::assertRole("admin");
 
-$file = codify($config["sitename"]."_".date("Ymd")).".xml";
-	
+$file = $_REQUEST["export_file"];
+if (!$file)
+{
+	$file = codify($config["sitename"]."_".date("Ymd")).".xml";
+}
+
 header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . $file . "\"");
 header("Content-Type: text/xml");
