@@ -276,9 +276,6 @@ class LoginManager
 				$match = $mgr->getUserByEmail($username);
 		}
 		
-		?>
-		<h3>Password Help</h3>
-		<?
 		if($match)
 		{
 			$sent = LoginManager::emailToken($match);
