@@ -45,29 +45,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("settings");
 
-class EmailSerializationHandler
-{
-	function EmailSerializationHandler()
-	{
-	}
-	
-	
-	function export()
-	{
-		$xml  = "\n<EmailTemplateMap>";
-		$xml .= SerializationManager::serialize(EmailTemplate, "ORDER BY email_template_id");
-		$xml .= SerializationManager::serialize(MergeCode, "ORDER BY merge_code_id");
-		$xml .= "</EmailTemplateMap>";
-		
-		return $xml;
-	}
-	
-	function import($doc, $tx)
-	{
-		SerializationManager::unserialize(EmailTemplate, $doc, $tx);
-		SerializationManager::unserialize(MergeCode, $doc, $tx);		
-	}			
-}
 
 class EmailHandler
 {
@@ -386,7 +363,8 @@ class EmailManager
 	
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("email", "Email Templates and Merge Codes", new EmailSerializationHandler());
+		SerializationManager::registerHandler("email_templates", "Email Templates", new SimpleSerializationHandler(EmailTemplate));
+		SerializationManager::registerHandler("merge_codes", "Merge Codes", new SimpleSerializationHandler(MergeCode));
 		return true;		
 	}
 }
