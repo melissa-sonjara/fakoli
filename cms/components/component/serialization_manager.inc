@@ -144,6 +144,8 @@ class SerializationForm
 	
 	function drawForm()
 	{
+		global $config;
+		
 		if ($this->mode == "Import")
 		{
 			$onsubmit = " onsubmit=\"return confirm('WARNING! Importing site content WILL overwrite existing content in your database.\\nThis CANNOT be undone.\\nDo you wish to continue?');\"";
