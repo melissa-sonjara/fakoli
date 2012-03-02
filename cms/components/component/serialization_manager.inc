@@ -173,7 +173,7 @@ class SerializationForm
 		{
 			$file = codify($config["sitename"]."_".date("Ymd")).".xml";
 ?>
-	<label for="export_file">Export File Name</label><input type="text" name="export_file" value="<?echo $file?>"/><br/><br/>
+	<label for="export_file">Export File Name </label><input type="text" size="50" name="export_file" value="<?echo $file?>"/><br/><br/>
 <?
 		}	
 ?>
