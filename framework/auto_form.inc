@@ -904,7 +904,7 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	{
 		$renderer = $this->getRenderer($field);
 		
-		if(!$renderer && $this->data->fields[$field] != "Timestamp")
+		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
 		{
 			foreach($this->additional as $r)
 			{
