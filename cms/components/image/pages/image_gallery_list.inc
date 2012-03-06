@@ -43,4 +43,4 @@ $script .= $view->writeScript();
 $view->drawView();
 ?>
 <br/>
-<a href="/image_gallery_form" class="button">Create an Image Gallery</a>
+<a href="image_gallery_form" class="button">Create an Image Gallery</a>

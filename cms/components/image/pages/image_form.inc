@@ -37,7 +37,7 @@ Fakoli::usingFeature("auto_form");
 $image_id = checkNumeric($_GET["image_id"]);
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
-if (!$image_id && !$gallery_id) redirect("/image_galleries");
+if (!$image_id && !$gallery_id) redirect("image_galleries");
 
 $image = new ImageRecord();
 
@@ -69,7 +69,7 @@ $form->hide("thumbnail", "gallery_id");
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
 
-$redirect = "/images?gallery_id={$image->gallery_id}";
+$redirect = "images?gallery_id={$image->gallery_id}";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")

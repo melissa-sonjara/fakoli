@@ -36,7 +36,7 @@ Fakoli::usingFeature("tab_bar", "data_view");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
-if (!$gallery_id) redirect("/image_galleries");
+if (!$gallery_id) redirect("image_galleries");
 
 $tabs = ImageManager::imageGalleryTabs($gallery_id);
 $styles .= ImageManager::getStyles();
@@ -56,6 +56,6 @@ $tabs->writeHTML();
 $view->drawView();
 ?>
 <br/><br/>
-<a class="button" href="/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
+<a class="button" href="image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
 </div></div>
 <?

@@ -36,7 +36,7 @@ Fakoli::usingFeature("tab_bar");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
-if (!$gallery_id) redirect("/image_galleries");
+if (!$gallery_id) redirect("image_galleries");
 
 $gallery = new ImageGallery($gallery_id);
 $images = $gallery->Images("ORDER BY title");
@@ -67,5 +67,5 @@ else
 </div>
 <br/>
 <div style="padding: 8px">
-<a class="button" href="/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
+<a class="button" href="image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
 </div></div>

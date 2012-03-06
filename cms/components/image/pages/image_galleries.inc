@@ -36,7 +36,7 @@ Fakoli::using("image");
 $galleries = Query::create(ImageGallery, "WHERE published=1 ORDER BY gallery_name")
 				->execute();
 
-$view = new ImageGalleryList($images, "/{Gallery.identifier}', 'auto', 'auto');");
+$view = new ImageGalleryList($images, "{Gallery.identifier}', 'auto', 'auto');");
 $view->spacing = "6px";
 $view->styles = "margin-left: 40px";
 $view->drawList();
