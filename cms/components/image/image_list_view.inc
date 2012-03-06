@@ -201,7 +201,7 @@ class ImageGalleriesView
 	
 	function formatTitleLink($gallery)
 	{
-		return $gallery->format("<a href='/image_gallery_form?gallery_id={gallery_id}'>{gallery_name}</a>");	
+		return $gallery->format("<a href='image_gallery_form?gallery_id={gallery_id}'>{gallery_name}</a>");	
 	}
 
 	function showPublished($gallery)
