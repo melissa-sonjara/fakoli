@@ -265,7 +265,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		$obj = $this->parent->data;
 		$pk =  $this->getMatchingPK($xref, $obj);
 		
-		if (count($this->groupBy) > 0)
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
 		{
 			$keys = array_keys($this->options);
 			$rc = $this->options[$keys[0]][0];
