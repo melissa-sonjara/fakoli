@@ -234,7 +234,17 @@ class CheckListFieldRenderer extends FieldRenderer
 		echo ">";
 		
 		$value = $this->parent->data->get($field);
-		$value = str_replace(",", ", ", $value);
+		
+		// JDG 3/12 - show option value, if found, instead of key
+		$items = explode(",", $value);
+	
+		foreach($items as $item)
+		{
+			$answers[] = array_key_exists($item, $this->options) ? $this->options[$item] : $item;
+		}
+		
+		$value = implode(", ", $answers);
+		
 		echo $value;
 		
 		echo "</td></tr>\n";

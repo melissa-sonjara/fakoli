@@ -944,6 +944,9 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			if(!$field)
 				$field = $renderer->field;
 		
+			if(array_key_exists($field, $this->renderedFields))
+				continue;
+					
 			if ($this->readonly[$field])
 			{
 				$renderer->renderReadOnly($field);
