@@ -33,10 +33,12 @@
 
 require_once realpath(dirname(__FILE__)."/composite_auto_form.inc");
 
-/*
+/**
+ * SpreadsheetForm
+ * 
  * Provides input forms in a spreadsheet layout
- * where each row is a subform containin one dataitem
- * objects field renderers.
+ * where each row is a subform containing one dataitem
+ * object's field renderers.
  * 
  * @param subform - an instance of AutoForm containing
  * the target DataItem object. The target should have 
@@ -50,9 +52,9 @@ require_once realpath(dirname(__FILE__)."/composite_auto_form.inc");
  * displayed in an editable table row. If you wish 
  * to display only empty rows, send an empty array.
  *  
- *  @param $blanks - the number of blank rows desired,
- *  0 if only previously saved dataitem objects supplied
- *  in the items array will be displayed.
+ * @param blanks - the number of blank rows desired,
+ * 0 if only previously saved dataitem objects supplied
+ * in the items array will be displayed.
  *   
  */
 class SpreadsheetForm extends CompositeAutoForm
