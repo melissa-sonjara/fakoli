@@ -1215,9 +1215,33 @@ class DataItem extends AbstractDataItem
 	 * example template string:
 	 * "{program_name} {start_date} {number_students}"
 	 * 
+	 * 1. data type format specifications:
 	 * The start_date field can have formatting specifications 
-	 * such as "{start_date:long} for long format.
+	 * such as "{start_date:long} for long format. For more
+	 * information on formatting specifications following the colon,
+	 * check comments in DataTypeRenderer classes.
 	 * 
+	 * 2. Default value specification:
+	 * syntax:  {field|alternate}
+	 * example: {name|N/A}
+	 * 
+	 * In the above example "N/A" would be output if the name
+	 * field is empty or null. This will also work with numeric fields with
+	 * a value of 0 and booleans with false. Very useful for places where
+	 * you are linking to a form by name or title.
+	 * 
+	 * 3. Inline static method call:
+	 * syntax:  {class::method}
+	 * example: {MyHelper::getComplicatedOutput}
+	 * This works the same as passing array(MyHelper, getComplicatedOutput)
+	 * to a DataListView. It calls the static method getComplicatedOutput()
+	 * on the MyHelper class, passing the current object in as a parameter.
+	 * The new inline format means that you can use it as part of more
+	 * complicated expressions like:
+	 * "{name} - {MyHelper::getComplicatedOutput}"
+	 * 
+	 * 4. Retrieve field value through relations.
+	 *  
 	 * Fields can also be retrieved through a relation from
 	 * the dataitem obj that calls this format function.
 	 * 
