@@ -1280,17 +1280,39 @@ class DataItem extends AbstractDataItem
 	{
 		$matches = array();
 		
-		preg_match_all("/\\{([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)(::?|\\|)?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 
 		foreach($matches as $match)
 		{
 			$field = $match[1];
-			$fieldFormat = $match[2];
-			trace("formatField, field $field and fieldFormat $fieldFormat", 5);
+			$separator = $match[2];
+			$fieldFormat = $match[3];
+			trace("formatField, field $field, separator $separator and fieldFormat $fieldFormat", 5);
 			
-			$format = "{".$field.":".$fieldFormat."}";
+			$format = "{".$field.$separator.$fieldFormat."}";
 			
-			$sub = $this->formatFieldValue($field, $fieldFormat);
+			switch($separator)
+			{
+			case "|":
+				if (!$this->get($field)) 
+				{
+					$sub = $fieldFormat;
+				}
+				else
+				{
+					$sub = $this->formatFieldValue($field);
+				}
+				break;
+				
+			case "::":
+				
+				$sub = call_user_func(array($field, $fieldFormat), $this);
+				break;
+				
+			case ":":
+			default:
+				$sub = $this->formatFieldValue($field, $fieldFormat);
+			}
 			
 			$template = str_replace($format, $sub, $template);
 		}
