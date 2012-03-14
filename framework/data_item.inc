@@ -1309,7 +1309,9 @@ class DataItem extends AbstractDataItem
 		foreach($matches as $match)
 		{
 			$field = $match[1];
-			$separator = $match[2];
+			// JDG 3/12 fix issue with call to function in  DataItem in format like "{getTitle()}" with no separator;
+			$separator = ($match[2]) ? $match[2] : ":";
+		
 			$fieldFormat = $match[3];
 			trace("formatField, field $field, separator $separator and fieldFormat $fieldFormat", 5);
 			
