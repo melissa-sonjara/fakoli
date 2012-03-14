@@ -117,7 +117,8 @@ class DataListView
 	/**
 	 * Adds a column definition to the DataListView.
 	 * @param $title the tilte of the column
-	 * @param $format the formatter for the column, either as a formatting string or callback function
+	 * @param $format the formatter for the column, either as a formatting string or callback function.
+	 * (For details on format template specifications, see comments above class DataItem function format.)
 	 * @param $sortable whether this column is sortable
 	 * @param $style any inline styles specific to this column
 	 * @param $typeHint hint for cell type to use when exporting to Excel
