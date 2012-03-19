@@ -60,13 +60,16 @@ require_once realpath(dirname(__FILE__)."/composite_auto_form.inc");
 class SpreadsheetForm extends CompositeAutoForm
 {	
 	var $colCount = 0;
+	var $subform;
 	
 	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="")
 	{
+		$this->subform = $subform;
+		
 		// Create one instance of AutoForm to apply certain setting
 		// for all forms, e.g., aliases and hiddens
 		parent::CompositeAutoForm($method, $action);
-		$this->formCSS = "list";
+		$this->formCSS = "list spreadsheet";
 		$this->layout = AutoFormLayout::create("spreadsheet", $this);
 
 		$target = $subform->data;
@@ -142,7 +145,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		echo " onsubmit='return onCompositeFormSubmit(this);'";
 		echo ">\n";
 			
-		$form = $this->forms[0]->form;
+		$form = $this->subform;
 		$obj =& $form->getData();
 		$pk = $obj->getPrimaryKey();
 	
@@ -157,7 +160,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		$this->layout->startUngrouped();
 	
 		// Draw headings
-		echo "<tr>\n";
+		echo "<thead><tr>\n";
 		foreach($fields as $field => $type)
 		{
 			if ($field != $pk && !array_key_exists($field, $form->hidden) && !($filter && $filter->isExcluded($field)))
@@ -171,7 +174,7 @@ class SpreadsheetForm extends CompositeAutoForm
 			}
 		}	
 
-		echo "</tr>\n";		
+		echo "</tr></thead>\n";		
 		
 		foreach($this->forms as $form)
 		{

@@ -277,7 +277,7 @@ class TableRowFormLayout extends AutoFormLayout
 	
 	function startUngrouped()
 	{
-		echo "<tr id='{$this->form->id}_container' class='{$this->form->containerClass}'\n";
+		echo "<tr id='{$this->form->id}_container' class='{$this->form->containerClass}'>\n";
 	}
 	
 	function endUngrouped()

@@ -249,18 +249,14 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	{	
 		$item = $this->getSelectedItem($field);
 		
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+		$this->_startField($field);
 		
 		trace("RelatedItemSelectFieldRenderer renderReadOnly name field is {$this->nameField} field is $field and item is {$item->role}", 3);
 		$name = $this->formatName($item, $this->nameField);
 		echo $name;
 		
-		echo "</td>\n";
-		echo "</tr>\n";
+		$this->_endField($field);
+		
 	}
 
 	function getRelatedItems()
