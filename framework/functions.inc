@@ -125,7 +125,6 @@ $doc_extensions = array(
 		".xlsx" => "Microsoft Excel Spreadsheet",
 	    ".pptx" => "Microsoft Powerpoint Presentation",
 		".docx" => "Microsoft Word Document"
-
         );
 
 $doc_mime_types = array(
