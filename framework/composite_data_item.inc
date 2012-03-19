@@ -740,7 +740,7 @@ class CompositeDataItem extends AbstractDataItem
 			
 			while($line = $result->fetch())
 			{
-				$item = new InnerJoinResult($this->tag);
+				$item = new JoinResult($this->tag);
 				
 				for($i = 0; $i < count($this->classes); ++$i)
 				{
@@ -811,7 +811,7 @@ class CompositeDataItem extends AbstractDataItem
 			
 			while($line = $result->fetch())
 			{
-				$item = new InnerJoinResult($this->tag);
+				$item = new JoinResult($this->tag);
 				
 				for($i = 0; $i < count($this->classes); ++$i)
 				{
