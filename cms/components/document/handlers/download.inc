@@ -33,12 +33,10 @@
 
 Fakoli::using("document", "user", "fileshare");
 
-
-$page_role = "admin,user";
-
 $document_id = checkNumeric($_GET["document_id"]);
 
 $document = new Document($document_id);
+
 $library = $document->DocumentLibrary();
 
 if (!checkRole($library->allow_access) && !$library->allowAccess())
@@ -56,9 +54,13 @@ $d->save();
 $filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
 $mimeType = getMimeType($document->file);
 	
+trace("Download: opening document with filepath {$filepath} and mimeType {$mimeType}", 3);
+
 $f = fopen($filepath, "r");
 $size = filesize($filepath);
 	
+trace("Download: opened document {$document_id}", 3);
+
 header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
 header("Cache-Control: must-revalidate");
