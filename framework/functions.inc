@@ -121,7 +121,11 @@ $doc_extensions = array(
         ".zip" => "ZIP Archive",
         ".jpg" => "JPEG Image File",
         ".gif" => "GIF Image File",
-        ".png" => "PNG Image File"
+        ".png" => "PNG Image File",
+		".xlsx" => "Microsoft Excel Spreadsheet",
+	    ".pptx" => "Microsoft Powerpoint Presentation",
+		".docx" => "Microsoft Word Document"
+
         );
 
 $doc_mime_types = array(
@@ -134,7 +138,10 @@ $doc_mime_types = array(
         ".zip" => "application/zip",
         ".jpg" => "image/jpeg",
         ".gif" => "image/gif",
-        ".png" => "image/x-png"
+        ".png" => "image/x-png",
+		".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+	    ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+		".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 );
 
 $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
