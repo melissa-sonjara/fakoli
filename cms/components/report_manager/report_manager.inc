@@ -198,7 +198,8 @@ class ReportManager
 			echo "</fieldset>";
 		}
 		
-		echo "</div><div style='clear: left'><br/><input type='checkbox' name='__excel' value='custom_report'/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
+		echo "</div><div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'/> <strong>Include Incomplete Records in Results</strong>";
+		echo "<br/><input type='checkbox' name='__excel' value='custom_report'/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
 		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.saveReport(); return false;'>Save Report</a></div></form>";
 	}
 	
@@ -283,7 +284,9 @@ class ReportManager
 			return;
 		}
 		
-		$this->join = new InnerJoin();
+		$joinClass = ($_REQUEST['__include_incomplete'] == "1") ? LeftOuterJoin : InnerJoin;
+		
+		$this->join = new $joinClass;
 		$this->join->unique = true;
 		$constraint .= "";
 		$first = true;
