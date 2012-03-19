@@ -109,7 +109,7 @@ if($library->fileshareAllowUpload())
 {
 ?><br>
 <div id="submit_block">
-<a style="height: 20px;" class="button" href="#" onclick="uploadFileshareFile(); return false">Upload a File</a>
+<a class="button" href="#" onclick="uploadFileshareFile(); return false">Upload a File</a>
 </div>
 
 <?php
