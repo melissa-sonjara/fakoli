@@ -51,6 +51,8 @@ $d->save();
 
 //TODO: Folder level security
 
+trace("Download: document filename to download {$document->file}", 3);
+
 $filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
 $mimeType = getMimeType($document->file);
 	
