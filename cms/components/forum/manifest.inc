@@ -40,7 +40,7 @@ class ForumManifest
 		$component->description = "Discussion forums for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 1;
 		$component->enabled = true;
 		
 		return $component;
