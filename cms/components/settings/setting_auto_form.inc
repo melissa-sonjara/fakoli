@@ -40,10 +40,17 @@ class SettingAutoForm extends AutoForm
 	
 	function SettingAutoForm($component)
 	{
+		$this->component = $component;
+		
 		$this->settings = Query::create(Settings, "WHERE component=:component ORDER BY category, name")
 				->bind(":component", $component->name)
 				->execute();
-			
+
+		$this->buildForm($component->component_id);
+	}
+	
+	function buildForm($component_id = 0)
+	{
 		$componentSettings = new ComponentSettings();
 
 		foreach($this->settings as $setting)
@@ -53,7 +60,7 @@ class SettingAutoForm extends AutoForm
 		}
 
 		$componentSettings->fields = $fields;
-		parent::AutoForm($componentSettings, "POST", "?component_id={$component->component_id}");
+		parent::AutoForm($componentSettings, "POST", "?component_id={$component_id}");
 
 		foreach($this->settings as $setting)
 		{
@@ -84,11 +91,9 @@ class SettingAutoForm extends AutoForm
 				if(isset($optionList))
 					$renderers[$setting->settings_id] = new SelectFieldRenderer($this, $setting->name, prettify($setting->name), $optionList);
 			}
-	
-			
 		}
 
-		$this->submitLabel = "Save Changes";			
+		$this->submitLabel = "Save Changes";					
 	}
 	
 	function writeSettings($settings)
@@ -142,6 +147,8 @@ class SettingAutoForm extends AutoForm
 				
 			}
 		}
+		trace("Settings auto form returning true", 3);
+		
 		return true;
 	}
 }
@@ -191,4 +198,17 @@ function uploadSettingFile($field, $setting)
 	$setting->$field = "$file";
 	 
 	return true;
+}
+
+
+/*
+ * Shows all settings on one page.
+ */
+class SettingPageAutoForm extends SettingAutoForm
+{
+	function SettingPageAutoForm($settings)
+	{
+		$this->settings = $settings;
+		$this->buildForm();
+	}	
 }

@@ -55,7 +55,7 @@ class EmailHandler
 	{
 		global $config;
 
-		if(!$emailFrom) $emailFrom =  $config["email_contact"];
+		if(!$emailFrom) $emailFrom =  Settings::getValue('email', 'email_from');
 			
 		// Use the MD5 algorithm to generate a random hash
 		$random_hash = md5(date('r', time()));
@@ -65,23 +65,11 @@ class EmailHandler
 		$headers .= "Reply-To: ". $emailFrom . "\r\n";
 		$headers .= "Mime-Version: 1.0\r\n";
 
-		if($config["alt_text_email"] == false)
-			$headers .= "Content-type: text;\r\n";
-		else
-			$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
+		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
-		if($message AND $config["alt_text_email"])
-			$body = $this->getMessageScript($message, $random_hash);
-		elseif($message)
-		{
-			$patterns = array("/<br>/", "/&nbsp;/", "/<p>/", "/<BR>/", "/<P>/");
-			$replacements = array("\r\n", " ", "\r\n", "\r\n", "\r\n");
-			$message =  preg_replace($patterns, $replacements, $message);
-			$body = trim(stripHTML($message));
-		}
-		
-		//trace("EmailHandler:: toAddr: $toAddr; emailFrom: $emailFrom; subject: $subject, message: $body", 3);
-		$this->mail = new Mail($emailFrom, $toAddr, $subject, $body, $headers);
+		$message = $this->getMessageScript($message, $random_hash);
+			
+		$this->mail = new Mail($emailFrom, $toAddr, $subject, $message, $headers);
 	}
 
 	/*
