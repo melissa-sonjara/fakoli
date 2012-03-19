@@ -602,6 +602,20 @@ function getDocSize($doc)
     return $doc_size;
 }
 
+// ?Is getMIMEType supposed to be used instead of getMimeType??
+// Doesn't seem to work. 
+function getDocMimeType($name)
+{
+	global $doc_mime_types;
+	
+	$n = strtolower($name);
+	$extension = substr($n, strrpos($n, "."));
+	$type = $doc_mime_types[$extension];
+	if (!$type) $type="application/octet-stream";
+	return $type;
+	
+}
+
 /*function getMimeType($name)
 {
 	global $doc_mime_types;
