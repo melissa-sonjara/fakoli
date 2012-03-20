@@ -325,9 +325,15 @@ abstract class UpgradeManager
 			return true;
 		}
 
-		$rtn = $this->executeSQLStatements($sqlStatements);
-	
-		return rtn;
+		try
+		{
+			$rtn = $this->executeSQLStatements($sqlStatements);
+			return rtn;
+		}
+		catch(Exception $e)
+		{
+			throw new FakoliException("Failed to upgrade {$this->component_name} to $version_id - ". $e->getMessage());
+		}
 	}
 	
 	/*
@@ -371,7 +377,7 @@ abstract class UpgradeManager
 		{
 			$db->rollBack();
 			fclose($fp);
-			ajaxReturn("Failed to upgrade {$this->component_name} to $version_id - ".$e->getMessage());	
+			throw $e;	
 		}
 
 		return true;
