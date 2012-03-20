@@ -296,6 +296,11 @@ class ReportManager
 			if ($this->selected["table_{$table->class}"])
 			{
 				$this->join->add($table->class);
+				foreach($this->table->excludedKeys as $excluded)
+				{
+					$this->join->excludeKeyFromJoin($table->class, $excluded);
+				}
+				
 				$first = false;
 			}
 		}
@@ -401,6 +406,7 @@ class ReportTable
 	var $form;
 	var $constraints;
 	var $params;
+	var $excludedKeys;
 	
 	function ReportTable($class, $title = "")
 	{
@@ -414,6 +420,8 @@ class ReportTable
 		// JDG 2/2012 - set params here to allow additional parameters
 		// to be set by the calling class
 		$this->params = new SearchParameters($this->proto);
+		
+		$this->excludedKeys = array();
 	}
 
 	function column($title, $format, $sortable = true, $style = "", $type = null)
@@ -422,6 +430,12 @@ class ReportTable
 		return $this;
 	}
 
+	function excludeKeyFromJoin($key)
+	{
+		$this->excludedKeys[] = $key;
+		return $this;
+	}
+	
 	function getTitle()
 	{
 		return $this->title;
