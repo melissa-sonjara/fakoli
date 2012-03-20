@@ -296,7 +296,7 @@ class ReportManager
 			if ($this->selected["table_{$table->class}"])
 			{
 				$this->join->add($table->class);
-				foreach($this->table->excludedKeys as $excluded)
+				foreach($table->excludedKeys as $excluded)
 				{
 					$this->join->excludeKeyFromJoin($table->class, $excluded);
 				}
