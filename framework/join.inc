@@ -188,6 +188,7 @@ abstract class AbstractJoin
 		
 		$this->excludedKeys[$class][$key] = true;
 		
+		trace("*** Excluding $key on $class", 3);
 		return $this;
 	}
 	
