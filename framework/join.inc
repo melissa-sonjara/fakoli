@@ -127,6 +127,8 @@ abstract class AbstractJoin
 	var $unique = false;			///< true to output distinct rows only
 	var $tag = "join";				///< XML tag name
 
+	var $excludedKeys = array();
+	
 	/**
 	 * Adds a class to the join definition. Classes added using this method
 	 * are included in the eventual result set.
@@ -153,6 +155,8 @@ abstract class AbstractJoin
 					
 			$this->protos[$class]->filter = $filter;
 		}
+		
+		return $this;
 	}
 	
 	/**
@@ -163,6 +167,28 @@ abstract class AbstractJoin
 	function setFilter($class, $filter)
 	{
 		$this->protos[$class]->filter = $filter;
+		return $this;
+	}
+	
+	/**
+	 * By default joins are generated following the "most restrictive search" principle.
+	 * This means that all matching foreign key/primary key pairs are used in the join constraint.
+	 * You can use this method to override this behavior for a member of the join, specifying
+	 * that a given key should not be used as part of the join constraint.
+	 *  
+	 * @param string $class
+	 * @param string $key
+	 */
+	function excludeKeyFromJoin($class, $key)
+	{
+		if (!isset($this->excludeKeys[$class]))
+		{
+			$this->excludeKeys[$class] = array();
+		}
+		
+		$this->excludeKeys[$class][$key] = true;
+		
+		return $this;
 	}
 	
 	/**
@@ -454,6 +480,12 @@ class InnerJoin extends AbstractJoin
 				$d = $this->classes[$j];
 				$q = $this->protos[$d];
 				
+				if ($this->excludedKeys[$d][$q->primary_key] ||
+				    $this->excludedKeys[$d][$p->primary_key])
+				{
+					continue;
+				}
+				
 				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 5);
 				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 5);
 				
@@ -591,6 +623,12 @@ class LeftOuterJoin extends AbstractJoin
 			{
 				$d = $this->classes[$j];
 				$q = $this->protos[$d];
+				
+				if ($this->excludedKeys[$d][$q->primary_key] ||
+				    $this->excludedKeys[$d][$p->primary_key])
+				{
+					continue;
+				}
 				
 				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 5);
 				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 5);
