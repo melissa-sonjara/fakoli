@@ -624,17 +624,19 @@ class LeftOuterJoin extends AbstractJoin
 				$d = $this->classes[$j];
 				$q = $this->protos[$d];
 				
-				if ($this->excludedKeys[$d][$q->primary_key] ||
-				    $this->excludedKeys[$d][$p->primary_key])
-				{
-					continue;
-				}
+
 				
 				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 5);
 				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 5);
 				
 				if (array_key_exists($p->primary_key, $q->fields))
 				{
+					if ($this->excludedKeys[$d][$p->primary_key] ||
+				    	$this->excludedKeys[$c][$p->primary_key])
+					{
+						continue;
+					}
+					
 					//$join .= " AND t$i.{$p->primary_key}=t$j.{$p->primary_key}";
 					if ($joined[$j])
 					{
@@ -649,6 +651,12 @@ class LeftOuterJoin extends AbstractJoin
 				}
 				else if (array_key_exists($q->primary_key, $p->fields))
 				{
+					if ($this->excludedKeys[$d][$q->primary_key] ||
+				    	$this->excludedKeys[$c][$c->primary_key])
+					{
+						continue;
+					}
+					
 					//$join .= " AND t$i.{$q->primary_key}=t$j.{$q->primary_key}";
 					if ($joined[$j])
 					{
