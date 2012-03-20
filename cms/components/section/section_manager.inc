@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-class SectionSerializationHandler implements SerializationHandler
+class SectionSerializationHandler
 {
 	function SectionSerializationHandler()
 	{
