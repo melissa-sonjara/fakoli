@@ -181,12 +181,12 @@ abstract class AbstractJoin
 	 */
 	function excludeKeyFromJoin($class, $key)
 	{
-		if (!isset($this->excludeKeys[$class]))
+		if (!isset($this->excludedKeys[$class]))
 		{
-			$this->excludeKeys[$class] = array();
+			$this->excludedKeys[$class] = array();
 		}
 		
-		$this->excludeKeys[$class][$key] = true;
+		$this->excludedKeys[$class][$key] = true;
 		
 		return $this;
 	}
