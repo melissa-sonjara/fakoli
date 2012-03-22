@@ -2,7 +2,7 @@
 require_once "include/config.inc";
 require_once "cms/core.inc";
 
-Fakoli::using("page", "component", "section");
+Fakoli::using("page", "component", "section", "settings");
 
 
 $page_id = checkNumeric($_GET["page_id"]);
@@ -49,16 +49,10 @@ else
 		throw new FakoliException("The page you were attempting to access could not be found.");
 	}
 	
-	if ($content->role)
+	if (!checkRole($section->getRole($content)) ||
+		!Settings::checkPermissions($section->getPermissions($content)))
 	{
-		if (!checkRole($content->role))
-		{
-			redirect("/login");		
-		}
-	}
-	else if (!checkRole($section->default_role))
-	{
-		redirect("/login");	
+		redirect("/login");		
 	}
 	
 	trace("\$_SERVER['HTTPS'] = {$_SERVER['HTTPS']}", 3);
@@ -67,11 +61,13 @@ else
 	$https = $_SERVER['HTTPS'];
 	if ($https == "off") $https = false; // For IIS
 	
-	if ($section->use_SSL && !$https )
+	$ssl = $section->use_SSL || $content->use_SSL;
+	
+	if ($ssl && !$https )
 	{
 		redirect("https://".$config['http_host'].$_SERVER['REQUEST_URI']);
 	}
-	else if (!$section->use_SSL && $https && $identifier != "login" && !isset($_REQUEST["login"]))
+	else if (!$ssl && $https && $identifier != "login" && !isset($_REQUEST["login"]))
 	{
 		redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
 	}
