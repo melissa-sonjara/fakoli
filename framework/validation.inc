@@ -464,12 +464,13 @@ class UniqueValidator extends AbstractValidator
 	var $item;
 	var $message;
 	
-	function UniqueValidator($field, $title, $item, $message)
+	function UniqueValidator($field, $title, $item, $message, $extraConstraint = "")
 	{
 		$this->class = $item->table;
 		$this->message = $message;
 		$this->item =& $item;
-		
+		$this->extraConstraint = $extraConstraint;
+			
 		$this->AbstractValidator($field, $title);
 	}
 
@@ -497,6 +498,8 @@ class UniqueValidator extends AbstractValidator
 			$pk = $this->item->primary_key;
 			
 			$constraint = "WHERE {$this->field}='$value'";
+			
+			if ($this->extraConstraint) $constraint .= " AND {$this->extraConstraint}";
 			
 			if ($this->item->$pk)
 			{

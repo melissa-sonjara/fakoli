@@ -641,6 +641,14 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		}
 	}
 
+	function uniqueWithConstraint($field, $message, $constraint = "")
+	{
+		if ($this->data->hasField($field))
+		{
+			$this->validator->add(new UniqueValidator($field, $this->prettifyFieldName($field), $this->data, $message, $constraint));
+		}
+	}
+	
 	/**
 	 * Adds a range validator to the specified field.
 	 */
