@@ -322,7 +322,7 @@ abstract class UpgradeManager
 				{
 					trace("{$this->component_name} $version_id is dependent on {$depends[1]} {$depends[2]}", 3);
 					
-					UpgradeManager::upgradeComponent($depends[1], trim($depends[2]));
+					UpgradeManager::upgradeComponentToVersion($depends[1], trim($depends[2]));
 				}
 				
 				// Omit blank lines and comments
@@ -791,7 +791,7 @@ abstract class UpgradeManager
 		return $this->executeSQLStatements($sqlStatements);
 	}
 	
-	static function upgradeComponent($component, $version)
+	static function upgradeComponentToVersion($component, $version)
 	{
 		ComponentManager::fireEventTo("upgradeComponent", $component, $version);
 	}
