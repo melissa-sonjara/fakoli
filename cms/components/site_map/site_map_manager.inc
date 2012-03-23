@@ -225,10 +225,10 @@ class SiteMapManager
 		$this->setHierarchyFromMenuItems();		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new SiteMapUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 }
 ?>

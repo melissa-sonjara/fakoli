@@ -97,10 +97,10 @@ class SectionManager
 		return $content->exists("WHERE section_id={$section->section_id} AND identifier='$identifier'");
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new SectionUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 
 	static function registerSerializationHandler()

@@ -40,9 +40,9 @@ class ClassificationManager
 		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new ClassificationUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}
 }

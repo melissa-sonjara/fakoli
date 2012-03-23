@@ -139,10 +139,10 @@ class SessionManager
 		$session->delete("WHERE expires < ".time());
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new SessionPersistenceUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 }
 ?>

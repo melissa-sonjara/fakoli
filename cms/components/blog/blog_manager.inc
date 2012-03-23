@@ -158,10 +158,10 @@ class BlogManager
 		return $styles;
 	}	
 
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new BlogUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	static function registerSerializationHandler()

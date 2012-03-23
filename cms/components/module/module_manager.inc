@@ -52,10 +52,10 @@ class ModuleManager
 		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new ModuleUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	static function registerSerializationHandler()

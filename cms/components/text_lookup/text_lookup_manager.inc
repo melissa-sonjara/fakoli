@@ -98,10 +98,10 @@ class TextLookupManager
 		Settings::setDefaultValue("text_lookup", "language", "English", "String", "", "", $options);
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new TextLookupUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	static function registerSerializationHandler()

@@ -640,10 +640,10 @@ function deleteFolderResult(result)
 		return implode(",", array_keys($roles));
 	}	
 
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new DocumentUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	static function registerSerializationHandler()

@@ -49,10 +49,10 @@ class ReportManagerUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 		
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new ReportManagerUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 }
 ?>

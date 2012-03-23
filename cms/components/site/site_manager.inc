@@ -40,9 +40,9 @@ class SiteManager
 		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new SiteUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 }

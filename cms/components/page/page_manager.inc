@@ -112,10 +112,10 @@ class PageManager
 		return $del_role;		
 	}	
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new PageUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 		
 	static function registerSerializationHandler()

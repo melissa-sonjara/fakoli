@@ -568,10 +568,10 @@ class ComponentManager
 		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new ComponentUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 

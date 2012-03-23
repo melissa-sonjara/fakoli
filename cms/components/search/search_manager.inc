@@ -50,7 +50,7 @@ class SearchManager
 		$this->searchResults = $results;
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		Cache::invalidate("fakoli_search_map");
 	}

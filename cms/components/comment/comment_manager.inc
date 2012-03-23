@@ -38,9 +38,9 @@ class CommentManager
 		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new CommentUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}
 }

@@ -306,10 +306,10 @@ class EmailManager
 		
 	}	
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new EmailUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	/*

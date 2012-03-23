@@ -81,10 +81,10 @@ class CalendarManager
 		return $classes;
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new CalendarUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	static function calendarGetHandler()

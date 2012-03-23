@@ -74,10 +74,10 @@ class MenuManager
 		return $del_role;
 	}	
 
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new MenuUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	static function registerSerializationHandler()

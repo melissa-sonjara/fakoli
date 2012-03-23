@@ -59,9 +59,9 @@ class PayPalManager
 		Settings::setDefaultValue("paypal", "merchant_id", "DN4KM78LGXRTE", "String");		
 	}
 
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new PayPalUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 }

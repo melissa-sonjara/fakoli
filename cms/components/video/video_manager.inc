@@ -70,10 +70,10 @@ class VideoManager
 		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new VideoUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}
 	
 	function hasFFMPEG()

@@ -80,10 +80,10 @@
  * 3) In your manager class, add the function:
  
 -------
- 	static function upgradeComponent()
+ 	static function upgradeComponent($version)
 	{
 		$mgr = new MyComponentUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}
 -------
  * 	4) Create the class MyComponentUpgradeManager:

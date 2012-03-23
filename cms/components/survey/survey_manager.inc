@@ -454,10 +454,10 @@ class SurveyManager
 		return $classes;
 	}
 
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new SurveyUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}
 
 } // end class SurveyManager

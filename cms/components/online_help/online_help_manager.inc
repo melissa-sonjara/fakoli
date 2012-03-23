@@ -87,10 +87,10 @@ class OnlineHelpManager
 		return new TabBar("tabs", $tabs, $qs);
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new OnlineHelpUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 	
 	function startFrame($class)

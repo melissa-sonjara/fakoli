@@ -39,9 +39,9 @@ class ForumManager
 		
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new ForumUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}		
 }

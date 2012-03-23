@@ -31,10 +31,10 @@ class ActivityTracker
 		Settings::setDefaultValue("activity_tracker", "enable_feedback", "", Boolean, "Enable the user feedback feature. You will also need to assign the feedback module to a position in your template.");
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new ActivityTrackerUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}
 }
 

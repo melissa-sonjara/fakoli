@@ -107,10 +107,10 @@ class AutoLoginManager
 		return sha1(now());
 	}
 	
-	static function upgradeComponent()
+	static function upgradeComponent($version)
 	{
 		$mgr = new AutoLoginUpgradeManager();
-		$mgr->upgrade();
+		$mgr->upgrade($version);
 	}	
 }
 ?>
