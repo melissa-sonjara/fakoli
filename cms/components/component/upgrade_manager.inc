@@ -793,6 +793,7 @@ abstract class UpgradeManager
 	
 	static function upgradeComponentToVersion($component, $version)
 	{
+		trace("Firing upgrade event to $component, target version $version", 3);
 		ComponentManager::fireEventTo("upgradeComponent", $component, $version);
 	}
 }
