@@ -415,7 +415,50 @@ class ComponentManager
 		
 		return $parameter;
 	}
+
+	/**
+	 * Fire an event to the specificed component. If the component is not subscribed
+	 * the event is ignored.
+	 * @param string $event the name of the event
+	 * @param string $component The name of the target component
+	 * @param array $parameter any parameters being passed to the event
+	 */
+	static function fireEventTo($event, $component, $parameter = null)
+	{
+		trace("** Firing event '$event' to $component", 4);
 		 
+		$eventMap = ComponentManager::getEventHandlers();
+		
+		if (!array_key_exists($event, $eventMap)) 
+		{
+			trace("No handlers subscribed to '$event'", 4);
+			return $parameter;
+		}
+			
+		foreach($eventMap[$event] as $subscription)
+		{
+			if ($component == $subscription["component"])
+			{
+				
+				Fakoli::using($subscription["component"]);
+	
+				if (is_array($subscription["handler"]))
+				{
+					trace("Handling $event with {$subscription["handler"][0]}::{$subscription["handler"][1]}", 4);
+				}
+				else
+				{
+					trace("Handling $event with {$subscription["handler"]}", 4);
+				}
+						
+				$parameter = call_user_func_array($subscription["handler"], array($parameter, &$continue));
+				break;
+			}
+		}
+		
+		return $parameter;	
+	}
+	
 	/**
 	 * Dispatch an incoming user action to the appropriate component handler script.
 	 */

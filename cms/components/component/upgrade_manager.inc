@@ -216,7 +216,7 @@ abstract class UpgradeManager
  	* the record of this update in the ComponentUpdateLog 
  	* table.
 	 */
-	function upgrade()
+	function upgrade($upgrade_to = "")
 	{					
 		$latest_version = ComponentUpdateLog::getLatestVersion($this->component_name);
 		trace("UpgradeManager:: upgrade: latest version in db for component {$this->component_name} is $latest_version", 3);
@@ -235,6 +235,8 @@ abstract class UpgradeManager
 					else
 						break;
 				}
+				
+				if ($upgrade_to != "" && $upgrade_to == $version_number) break;
 			}
 		}
 				
@@ -310,6 +312,12 @@ abstract class UpgradeManager
 		{
 			while(($buffer = fgets($fp)) !== false && !preg_match("/^--\s.*?$version_id/i", $buffer))
 			{
+				$depends = array();
+				if (preg_match("/^--\s*Depends\s+On\s+(\w+)\s+(.*)*/i", $buffer, $depends))
+				{
+					UpgradeManager::upgradeComponent($depends[1], trim($depends[2]));
+				}
+				
 				// Omit blank lines and comments
 				if(trim($buffer) == "" || preg_match("/^--(.*?)\s/", $buffer))
 					continue;
@@ -774,5 +782,10 @@ abstract class UpgradeManager
 		}
 
 		return $this->executeSQLStatements($sqlStatements);
+	}
+	
+	static function upgradeComponent($component, $version)
+	{
+		ComponentManager::fireEventTo("upgradeComponent", $component, $version);
 	}
 }
