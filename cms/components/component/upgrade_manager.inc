@@ -218,6 +218,11 @@ abstract class UpgradeManager
 	 */
 	function upgrade($upgrade_to = "")
 	{					
+		if ($upgrade_to)
+		{
+			trace("Upgrading {$this->component_name} to version $upgrade_to", 3);
+		}
+		
 		$latest_version = ComponentUpdateLog::getLatestVersion($this->component_name);
 		trace("UpgradeManager:: upgrade: latest version in db for component {$this->component_name} is $latest_version", 3);
 					
