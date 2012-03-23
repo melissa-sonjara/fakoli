@@ -282,8 +282,13 @@ class FilterFieldRenderer extends SelectFieldRenderer
      	$fieldValue = $this->parent->data->get("$field");
      	foreach($this->options as $value => $name)
 		{
+			$name = htmlSafe($name);
+			$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
+		
   			$selected = (!strcmp($value, $fieldValue)) ? " selected" : "";
-			echo "<option value='{$value}' $selected>$name</option>\n";
+  			$optionTitle = ($name != $trunced) ? " title='$name'" : "";
+  			
+			echo "<option value='{$value}' $selected>$trunced</option>\n";
 		}
 		?>
    		</select>&nbsp;</div>
