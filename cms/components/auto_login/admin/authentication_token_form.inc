@@ -46,7 +46,7 @@ if ($token_id)
 }
 else
 {
-	$token->token = sha1(now());
+	$token->token = AutoLoginManager::generateToken();
 }
 
 $form = new AutoForm($token);

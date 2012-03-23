@@ -38,7 +38,10 @@ class AuthenticationToken extends DataItem
 						"token"						=>	String,
 						"user_id"					=>	Number,
 						"ip_address"				=>	String,
-						"enabled"					=>	Boolean);
+						"enabled"					=>	Boolean,
+						"single_use"				=>	Boolean,
+						"last_access"				=>	Timestamp,
+						"redirect_on_success"		=>	String);
 	
 	// Relations
 	var $relations = array("User"	=>	SiteUser);

@@ -49,7 +49,8 @@ Fakoli::using("auto_login", "component");
 class AutoLoginUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added support for single use authentication tokens"
 	);
 	
 	function AutoLoginUpgradeManager()

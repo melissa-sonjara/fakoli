@@ -42,7 +42,7 @@ class AutoLoginManager
 		global $user;
 		
 		$mgr = new UserManager();
-		if ($user->user_id) return true;
+		if ($user->user_id) redirect("/index");
 		
 		try
 		{
@@ -71,22 +71,40 @@ class AutoLoginManager
 					}
 				}
 				
-				if (!$match) return false;
+				if (!$match) 
+				{
+					throw new FakoliException("Access Denied");
+				}
 			}
+			
+			if ($authToken->single_use)
+			{
+				$authToken->enabled = false;
+			}
+			
+			$authToken->last_access = now();
+			$authToken->save();
 			
 			session_start();
 					
 			$_SESSION["user"] = $user;
 					
 			$mgr->loadDefaultSession($user);
+			
+			$uri = $authToken->redirect_on_success;
+			if (!$uri) $uri = "/index";
+			
+			redirect($uri);
 		}
 		catch(Exception $e)
 		{
-			echo "Authentication Failed";
-			return false;
+			throw new FakoliException("Authentication Failed");
 		}
-		
-		return true;
+	}
+	
+	static function generateToken()
+	{
+		return sha1(now());
 	}
 	
 	static function upgradeComponent()

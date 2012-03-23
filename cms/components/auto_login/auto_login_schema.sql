@@ -18,3 +18,11 @@ CREATE TABLE `authentication_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `authentication_token` ADD COLUMN `single_use` tinyint(3) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `authentication_token` ADD COLUMN `last_access` DATETIME NULL;
+ALTER TABLE `authentication_token` ADD COLUMN `redirect_on_success` VARCHAR(255) NULL;
+
+-- END Version 1.1
