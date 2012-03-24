@@ -12,11 +12,12 @@ class UserFeedback extends DataItem
 	
 	// Relations
 	
-	var $relations = array("User"	=>	SiteUser);
+	var $relations = array("User"	=>	"");
 	
 	function User()
-	{
-		return $this->getRelated(SiteUser);
+	{		
+		$mgr = new UserManager();
+		return $mgr->getUser($this->user_id);
 	}
 	
 	
@@ -24,6 +25,10 @@ class UserFeedback extends DataItem
 	{
 		$this->table = "feedback";
 		$this->primary_key = "feedback_id";
+
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["User"] = $mgr->getUserClass(); 	
 		
 		$this->DataItem(func_get_args());
 	}
