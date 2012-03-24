@@ -152,7 +152,8 @@ var Curtain = new Class(
 								height: h,
 								display: 'block',
 								opacity: 0,
-								position: (noFixed) ? 'absolute' : 'fixed' });
+								position: (noFixed) ? 'absolute' : 'fixed',
+								visibility: 'visible'});
 		
 		this.shim.position();
 		this.shim.show();
