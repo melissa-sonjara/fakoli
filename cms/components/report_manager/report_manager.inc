@@ -335,8 +335,15 @@ class ReportManager
 		$script .= $report->writeScript();
 		
 		$report->cssClass = "list small";
+		$this->writeResultsFormButtons();
+		
 		$report->drawView();
 		
+		$this->writeResultsFormButtons();
+	}
+	
+	function writeResultsFormButtons()
+	{
 		$url = $_REQUEST["identifier"];
 		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
 		echo "&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
