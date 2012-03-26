@@ -64,6 +64,7 @@ class ReportListView
 	
 	function buildTable()
 	{		
+		// NOTE: "CustomReports" id is referenced in report_manager.js function reportSaved
 		$table = new DataListView($this->reports, "CustomReports");
 		$table->column("Title",  "<a href='#' onclick='new ReportManager.updateReport({report_id}); return false;'>{title}</a>", true)
 			->column("Description", "{description}")

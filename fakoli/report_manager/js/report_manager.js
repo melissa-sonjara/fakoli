@@ -77,8 +77,12 @@ ReportManager.reportSaved = function(response)
 	if (response == "OK")
 	{
 		ReportManager.dialog.hide();	
-		window.location.reload();
 	}
-		
+	
+	// We don't need to reload if saving from report results page
+	var table = $('CustomReports');
+	if(table)
+		window.location.reload();
+	
 	$('CustomReport_form__error').set('html', response);
 };
