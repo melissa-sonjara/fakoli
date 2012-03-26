@@ -76,8 +76,9 @@ ReportManager.reportSaved = function(response)
 {
 	if (response == "OK")
 	{
-		ReportManager.dialog.hide();		
+		ReportManager.dialog.hide();	
+		window.location.reload();
 	}
-
+		
 	$('CustomReport_form__error').set('html', response);
 };
