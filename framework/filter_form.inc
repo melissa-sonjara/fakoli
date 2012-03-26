@@ -430,7 +430,7 @@ function <? echo $selChanged ?>(elt)
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
-		echo "{$label}&nbsp;&nbsp;";
+		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label>";
 	}
 }
 
