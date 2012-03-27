@@ -481,6 +481,8 @@ class ComponentManager
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
 		trace("ComponentManager::dispatchAction handler: $handler", 4);
 		
+		$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+		
 		// JDG tweak of desperation
 		//if($handler == "\handlers\scan.inc")
 			//$handler = "c:\code\\fakoli_2.0\cms\components\component\handlers\scan.inc";
@@ -491,6 +493,8 @@ class ComponentManager
 		}
 		
 		include $handler;
+		
+		$config["trace_level"] = Settings::getValue("debug", "trace_level");
 	}
 	
 	static function displayPage($identifier, &$continue)

@@ -47,7 +47,7 @@ class Cache
 	{
 		global $config;
 		
-		trace(get_class(Cache::$instance), 4);
+		trace(get_class(Cache::$instance), 5);
 		
 		if (Cache::$instance) return Cache::$instance;
 		
@@ -150,7 +150,7 @@ class SimpleMemoryCache
 	
 	function SimpleMemoryCache()
 	{
-		trace("Creating Simple In-memory Cache", 3);
+		trace("Creating Simple In-memory Cache", 4);
 		$this->cache = array();
 	}
 	
@@ -204,7 +204,7 @@ class APCCache
 {	
 	function APCCache()
 	{
-		trace("Creating APC Cache", 3);
+		trace("Creating APC Cache", 4);
 	}
 	
 	function get($key)
@@ -249,7 +249,7 @@ class WCCache
 {
 	function WCCache()
 	{
-		trace("Creating WinCache cache", 3);
+		trace("Creating WinCache cache", 4);
 	}
 	
 	function get($key)
@@ -319,7 +319,7 @@ class FileBackedCache
 	{
 		global $config;
 		
-		trace("Creating File-backed Cache", 3);
+		trace("Creating File-backed Cache", 4);
 		
 		$this->cacheDir = $config["file_backed_cache_directory"];
 		$this->cache = array();

@@ -134,6 +134,7 @@ class CodeModuleView extends ModuleView
 		global $site;
 		global $user;
 		
+		
 		if ($this->module->php_code_file)
 		{
 			ob_start();
@@ -147,7 +148,11 @@ class CodeModuleView extends ModuleView
 				if (array_key_exists($name, $components))
 				{
 					$path = $components[$name]->component_path;
+					$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+					
 					include $path."/{$php_code_file}";
+					
+					$config["trace_level"] = Settings::getValue("debug", "trace_level");
 				}
 				else
 				{
@@ -156,7 +161,11 @@ class CodeModuleView extends ModuleView
 			}
 			else
 			{
+				$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+				
 				include $config['homedir']."/{$this->module->php_code_file}";
+				
+				$config["trace_level"] = Settings::getValue("debug", "trace_level");
 			}
     		$output = trim(ob_get_contents());
  			ob_end_clean();

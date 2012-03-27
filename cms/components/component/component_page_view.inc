@@ -83,6 +83,8 @@ class ComponentPageView
 		
 		$template = $this->page->getTemplate();
 		
+		$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+		
 		$template = ComponentManager::fireEvent("PreProcessPage", $template);
 		
 		// If the page has a PHP code include, execute it and insert the contents
@@ -95,6 +97,8 @@ class ComponentPageView
 		$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		
 		$this->page->description .= $output;
+		
+		$config["trace_level"] = Settings::getValue("debug", "trace_level");
 		
 		// Populate template fields from the Page object.
 		

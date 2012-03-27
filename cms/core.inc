@@ -517,6 +517,8 @@ Fakoli::using("field_renderers", "user", "login", "component");
 
 $user = null;
 
+$config["trace_level"] = Settings::getValue("debug", "trace_level");
+					
 ComponentManager::fireEvent("RegisterSessionPersistance");
 
 session_start();
