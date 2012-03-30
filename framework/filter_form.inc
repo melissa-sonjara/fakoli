@@ -115,6 +115,7 @@ Fakoli::usingFile("framework/field_renderers/boolean_field_renderer.inc");
 class FilterForm extends SearchForm
 {	
 	var $search;
+	var $preserveQueryString = false;
 	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
@@ -128,7 +129,11 @@ class FilterForm extends SearchForm
 	{
 		$obj =& $this->data;
 		$pk = $obj->getPrimaryKey();
-
+		if ($this->preserveQueryString)
+		{
+			$obj->fromREQUEST();
+		}
+		
 		echo "<form id='{$this->id}_filter' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'>\n";
 		echo "<div";
  		if ($this->formCSS) echo " class='{$this->formCSS}'";
@@ -139,7 +144,18 @@ class FilterForm extends SearchForm
 		{
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
-
+		
+		if ($this->preserveQueryString)
+		{
+			foreach($_GET as $key => $value)
+			{
+				if ($key == "identifier" || $key == "section" || array_key_exists($this->hidden, $key) || $obj->hasField($key)) continue;
+			}
+			
+			echo "<input id='{$this->id}_{$key}' type='hidden' name='$key' value='".htmlSafe($value)."'/>\n";
+			
+		}
+		
 		$this->renderSearchFields();
 		
 		echo "</div>\n";
