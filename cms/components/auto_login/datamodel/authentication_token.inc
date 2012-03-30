@@ -44,17 +44,22 @@ class AuthenticationToken extends DataItem
 						"redirect_on_success"		=>	String);
 	
 	// Relations
-	var $relations = array("User"	=>	SiteUser);
+	var $relations = array("User"	=>	"");
 
 	function User()
 	{
-		return $this->getRelated(SiteUser);
+		$mgr = new UserManager();
+		return $mgr->getUser($this->user_id);
 	}
 
 	function AuthenticationToken()
 	{
 		$this->primary_key = "authentication_token_id";
 		$this->table = "authentication_token";
+
+		// Patch in the user class, since this can be overridden by the application
+		$mgr = new UserManager();
+		$this->relations["User"] = $mgr->getUserClass(); 	
 		
 		$this->DataItem(func_get_args());
 	}	

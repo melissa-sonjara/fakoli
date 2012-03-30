@@ -104,9 +104,30 @@ class AutoLoginManager
 	
 	static function generateToken()
 	{
-		return sha1(now());
+		global $user;
+		return sha1($user->user_id . now());
 	}
 	
+	static function createOneTimeToken($url, $ip_addr = null)
+	{
+		global $user;
+
+		if (!$ip_addr) $ip_addr = $_SERVER["SERVER_ADDR"];
+		
+		$token = new AuthenticationToken();
+		
+		$token->token = AutoLoginManager::generateToken();
+		$token->user_id = $user->get($user->getPrimaryKey());
+		$token->ip_address = $ip_addr;
+		$token->enabled = true;
+		$token->single_use = true;
+		$token->redirect_on_success = $url;
+		
+		$token->save();
+		
+		return $token->token;
+	}
+		 
 	static function upgradeComponent($version)
 	{
 		$mgr = new AutoLoginUpgradeManager();
