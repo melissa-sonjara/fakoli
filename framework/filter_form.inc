@@ -149,11 +149,9 @@ class FilterForm extends SearchForm
 		{
 			foreach($_GET as $key => $value)
 			{
-				if ($key == "identifier" || $key == "section" || array_key_exists($this->hidden, $key) || $obj->hasField($key)) continue;
+				if ($key == "identifier" || $key == "section" || $key == "submit" || array_key_exists($this->hidden, $key) || $obj->hasField($key)) continue;
+				echo "<input id='{$this->id}_{$key}' type='hidden' name='$key' value='".htmlSafe($value)."'/>\n";
 			}
-			
-			echo "<input id='{$this->id}_{$key}' type='hidden' name='$key' value='".htmlSafe($value)."'/>\n";
-			
 		}
 		
 		$this->renderSearchFields();
@@ -413,7 +411,7 @@ function <? echo $selChanged ?>(elt)
 {
   	var value_field = $('<?php echo $field ?>');
   	var new_value = "0";
-  
+
   	if(value_field && elt)
   	{
  	  	if(elt.checked == true)
@@ -440,9 +438,9 @@ function <? echo $selChanged ?>(elt)
 	
 		if ($value)
 		{
-			echo " checked";
+			echo " checked='checked'";
 		}
-		echo " onchange='selChanged_{$field}_box(this);'\">\n";
+		echo " onchange='selChanged_{$field}_box(this);'/>\n";
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
