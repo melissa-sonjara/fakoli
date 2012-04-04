@@ -140,8 +140,9 @@ class ImageGalleryListView
 	{
 
 		$table = new DataListView($images, "images");
-		$table->column("Title", "<a href='{$this->link}'>{title}</a>", true, "width: 50%")
-	  		->column("Image File", "{image_file}", true, "width: 50%");
+		$table->column("Title", "<a href='{$this->link}'>{title}</a>", true, "width: 40%")
+	  		->column("Image File", "{image_file}", true, "width: 40%")
+	  		->column("Date Taken", "{date_taken}", true, "width: 20%");
 		$table->emptyMessage = "No images have been added to this gallery";
 		$table->pageSize = 20;
 		$table->sortable = true;
