@@ -90,6 +90,8 @@ class UserManager
 		
 	function getUserByName($username)
 	{
+		$usernameField = $this->getUsernameField();
+		
 		$matches = Query::create(SiteUser, "WHERE $usernameField=:username")
 				->bind(":username", $username)
 				->execute();
