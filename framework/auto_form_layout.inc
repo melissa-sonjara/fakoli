@@ -73,9 +73,20 @@ class TableBasedFormLayout extends AutoFormLayout
 		$this->AutoFormLayout($form);
 	}
 	
-	function startGroup($name)
+	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
-		echo "<fieldset><legend>$name</legend>";
+		$class = "";
+		if ($collapsible)
+		{
+			$class = "collapsible";
+			$class .= $collapsed ? " collapsed" : " expanded";
+			
+			$class = " class='$class'";
+		}
+		
+		$id = $this->form->id . "_" . codify($name) . "_group";
+		
+		echo "<fieldset id='$id'$class><legend>$name</legend>";
 		$this->startUngrouped();
 	}
 	

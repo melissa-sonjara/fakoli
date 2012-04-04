@@ -94,6 +94,7 @@ class AutoForm
     var $fields;	///< Local field cache
 
     var $groups = array(); ///< List of field groups
+    var $collapsibleGroups = array(); //< List of collapsible groups and their default states
     
     var $readOnlyForm;  ///< Specifies whether the entire form is read-only
     var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
@@ -376,6 +377,17 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 
 		}
 
+		// Add collapsible group handlers
+		
+		echo "\twindow.addEvent('domready', function() {\n";
+		foreach($this->collapsibleGroups as $group => $toggle)
+		{
+			$groupID = $this->id . "_" . codify($group) . "_group";
+			$toggleID = $this->id . "_" . $toggle;
+			
+			echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+		}
+		echo "\t});\n";
 		echo "</script>\n";
 		$script = ob_get_contents();
 		ob_end_clean();
@@ -527,6 +539,16 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 		
 		$this->groups[$name] = $group;
 		return $group;
+	}
+	
+	/**
+	 * Allows a group to be shown or hidden based on the value of another control
+	 * @param string $name the name of the group
+	 * @param string $toggleControl the field name of the toggling control
+	 */
+	function makeGroupCollapsible($name, $toggleControl)
+	{
+		$this->collapsibleGroups[$name] = $toggleControl;
 	}
 	
 	/**
@@ -878,7 +900,14 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 			
 			foreach($this->groups as $legend => $fields)
 			{
-				$this->layout->startGroup($legend);
+				$collapsible = array_key_exists($legend, $this->collapsibleGroups);
+				if ($collapsible)
+				{
+					$cf = $this->collapsibleGroups[$legend];
+					$collapsed = !$this->data->$cf;
+				}
+				
+				$this->layout->startGroup($legend, $collapsible, $collapsed);
 				
 				foreach($fields as $field)
 				{
