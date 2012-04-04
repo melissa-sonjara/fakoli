@@ -102,10 +102,12 @@ class AutoLoginManager
 		}
 	}
 	
-	static function generateToken()
+	static function generateToken($id = 0)
 	{
 		global $user;
-		return sha1($user->user_id . now());
+		
+		if ($id == 0) $id = $user->user_id;
+		return sha1($id . now());
 	}
 	
 	static function createOneTimeToken($url, $ip_addr = null)
