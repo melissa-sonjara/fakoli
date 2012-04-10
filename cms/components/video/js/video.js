@@ -34,7 +34,7 @@ function installFlowplayer()
 					rtmp:  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
 				},
 				debug: true,
-				log: { level: 'info' }
+				log: { level: 'debug' }
 	        });
 		}
 		else
