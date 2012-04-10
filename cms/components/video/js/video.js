@@ -29,7 +29,7 @@ function installFlowplayer()
 				clip: {autoPlay: play, live: isLive, provider: 'percy', url: stream}, 
 				plugins: 
 				{ 
-					'percy':  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
+					'percy':  { url: "/flowplayer/flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
 				}
 	        });
 		}
