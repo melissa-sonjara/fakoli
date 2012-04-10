@@ -24,6 +24,12 @@ function installFlowplayer()
 			var conn = dirname(v.href);
 			var stream = basename(v.href);
 			
+			if (v.name)
+			{
+				conn = v.href;
+				stream = v.name;
+			}
+			
 			v.href = "";
 			
 			flowplayer(v.id, flowplayerPath, 
