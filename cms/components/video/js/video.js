@@ -17,15 +17,19 @@ function installFlowplayer()
 		}
 
 		var play = v.hasClass("autoplay");
+		var isLive = v.hasClass("live");
 		
 		if (v.href.indexOf("rtmp:") == 0)
 		{
+			var conn = dirname(v.href);
+			var stream = basename(v.href);
+			
 			flowplayer(v.id, flowplayerPath, 
 			{
-				clip: {autoPlay: play, provider: 'percy'}, 
+				clip: {autoPlay: play, live: isLive, provider: 'percy', url: stream}, 
 				plugins: 
 				{ 
-					'percy':  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: v.href}
+					'percy':  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
 				}
 	        });
 		}
