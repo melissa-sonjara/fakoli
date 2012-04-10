@@ -24,6 +24,8 @@ function installFlowplayer()
 			var conn = dirname(v.href);
 			var stream = basename(v.href);
 			
+			v.href = "";
+			
 			flowplayer(v.id, flowplayerPath, 
 			{
 				clip: {autoPlay: play, live: isLive, provider: 'rtmp', url: stream}, 
