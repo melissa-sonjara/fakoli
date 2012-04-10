@@ -113,6 +113,19 @@ function basename(str)
 	return str.substring(idx + 1);
 }
 
+function dirname(str)
+{
+	var idx = str.lastIndexOf('\\');
+	if (idx == -1)
+	{
+		idx = str.lastIndexOf('/');
+	}
+	
+	if (idx == -1) return "";
+	
+	return str.substring(0, idx);
+}
+
 // script used for popup events
 function popupEvent(event)
 {
