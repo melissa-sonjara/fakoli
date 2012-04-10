@@ -26,10 +26,10 @@ function installFlowplayer()
 			
 			flowplayer(v.id, flowplayerPath, 
 			{
-				clip: {autoPlay: play, live: isLive, provider: 'percy', url: stream}, 
+				clip: {autoPlay: play, live: isLive, provider: 'rtmp', url: stream}, 
 				plugins: 
 				{ 
-					'percy':  { url: "/flowplayer/flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
+					rtmp:  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
 				}
 	        });
 		}
