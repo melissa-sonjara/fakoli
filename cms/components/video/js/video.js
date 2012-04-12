@@ -34,7 +34,7 @@ function installFlowplayer()
 			
 			flowplayer(v.id, flowplayerPath, 
 			{
-				clip: {autoPlay: play, live: isLive, provider: 'rtmp', url: stream}, 
+				clip: {autoPlay: play, live: isLive, provider: 'rtmp', url: stream, subscribe: isLive}, 
 				plugins: 
 				{ 
 					rtmp:  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
