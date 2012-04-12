@@ -37,7 +37,7 @@ function installFlowplayer()
 				clip: {autoPlay: play, live: isLive, provider: 'rtmp', url: stream, subscribe: isLive}, 
 				plugins: 
 				{ 
-					rtmp:  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn}
+					rtmp:  { url: "flowplayer.rtmp-3.2.9.swf", netConnectionUrl: conn, subscribe: isLive}
 				}
 	        });
 		}
