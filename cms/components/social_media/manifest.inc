@@ -50,5 +50,10 @@ class SocialMediaManifest
 	{
 		return array();
 	}	
+		
+	static function subscribeToEvents()
+	{
+		return array("ComponentScanComplete" 	  => array(SocialMediaManager, setDefaults)	);
+	}	
 }
 ?>
