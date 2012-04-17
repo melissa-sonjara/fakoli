@@ -25,5 +25,5 @@ TermsAndConditions.approve = function()
 	acceptedTerms.value = 1;
 	
 	var form = document.id(TermsAndConditions.formId);
-	form.submit();
+	form.submit.click();
 };
