@@ -10,7 +10,7 @@ TermsAndConditions.showTerms = function()
 	if (TermsAndConditions.dialog != Class.Empty) return true;
 	
 	var acceptedTerms = document.id(TermsAndConditions.id);
-	if (acceptedTerms.value) return true;
+	if (acceptedTerms.value != "0") return true;
 	
 	TermsAndConditions.Dialog = modalPopup(TermsAndConditions.title, "/action/terms_and_conditions/show", 800, 500, true, false);
 
