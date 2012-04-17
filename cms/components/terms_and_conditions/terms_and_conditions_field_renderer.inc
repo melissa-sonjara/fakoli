@@ -44,10 +44,12 @@ class TermsAndConditionsFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
+		$formId = $this->parent->id;
 		$id = $this->parent->id."_".$field;
 		$title = Settings::getValue("terms_and_conditions", "title");
 ?>
 <script type="text/javascript">
+TermsAndConditions.formId = "<?echo $formId?>";
 TermsAndConditions.id = "<?echo $id?>";
 TermsAndConditions.title = "<?echo $title?>";
 </script>
