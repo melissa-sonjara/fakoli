@@ -1,11 +1,13 @@
 var TermsAndConditions = new Class({
 });
 
+TermsAndConditions.formId = Class.Empty;
 TermsAndConditions.id = Class.Empty;
 TermsAndConditions.title = "Terms And Conditions";
 
 TermsAndConditions.showTerms = function()
 {
+	if (TermsAndConditions.formId == Class.Empty) return true;
 	if (TermsAndConditions.id == Class.Empty) return true;
 	if (TermsAndConditions.dialog != Class.Empty) return true;
 	
@@ -21,5 +23,7 @@ TermsAndConditions.approve = function()
 {
 	var acceptedTerms = document.id(TermsAndConditions.id);
 	acceptedTerms.value = 1;
-	acceptedTerms.form.submit();
+	
+	var form = document.id(TermsAndConditions.formId);
+	form.submit();
 };
