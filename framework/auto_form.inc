@@ -219,7 +219,7 @@ class AutoForm
 		
 		if (array_key_exists($type, AutoForm::$fieldRendererMap))
 		{
-			return new AutoForm::$fieldRendererMap[$type]($this);
+			return new AutoForm::$fieldRendererMap[$type]($this, $field);
 		}
 		
 		throw new FakoliException("AutoForm::createRenderer(): Unknown type '$type'");
