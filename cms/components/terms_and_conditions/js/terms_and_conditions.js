@@ -22,4 +22,4 @@ TermsAndConditions.approve = function()
 	var acceptedTerms = document.id(TermsAndConditions.id);
 	acceptedTerms.value = 1;
 	acceptedTerms.form.submit();
-}
+};
