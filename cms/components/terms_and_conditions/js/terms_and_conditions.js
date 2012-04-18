@@ -12,7 +12,8 @@ TermsAndConditions.showTerms = function()
 	if (TermsAndConditions.dialog != Class.Empty) return true;
 	
 	var acceptedTerms = document.id(TermsAndConditions.id);
-	if (acceptedTerms.value != "0") return true;
+	if (acceptedTerms.value != "0" &&
+		acceptedTerms.value != "") return true;
 	
 	TermsAndConditions.Dialog = modalPopup(TermsAndConditions.title, "/action/terms_and_conditions/show", 800, 500, true, false);
 
@@ -25,5 +26,5 @@ TermsAndConditions.approve = function()
 	acceptedTerms.value = 1;
 	
 	var form = document.id(TermsAndConditions.formId);
-	$(form.submit).click();
+	form.submit();
 };

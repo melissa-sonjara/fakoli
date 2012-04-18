@@ -857,11 +857,11 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	{
 		if ($this->useLinkSubmit)
 		{
-			echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
+			echo "<a class='{$this->buttonCSS}' name='Submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
 		}
 		else
 		{
-			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel' ondblclick='return false;'/>";
+			echo "<input type='submit' class='{$this->buttonCSS}' name='Submit' value='$submitLabel' ondblclick='return false;'/>";
 		}
 
 		if ($obj->get($pk) && $this->allowDelete)
