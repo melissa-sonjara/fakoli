@@ -91,7 +91,7 @@ class TextFieldRenderer extends FieldRenderer
 		$disable = ($this->disable) ? "disabled='disabled'" : "";	
 		if ($this->annotateBefore && $this->parent->annotations[$field])
 		{
-			echo $this->parent->annotations[$field];
+			echo $this->parent->annotations[$field]."<br />";
 		}
 		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $disable $onkeypress>";
 		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
@@ -99,7 +99,7 @@ class TextFieldRenderer extends FieldRenderer
 		
 		if ($this->limit)
 		{
-			echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
+			echo "<br /><div style='clear: left; float: right'><span id='{$field}_length'>";
 			echo strlen(trim($this->parent->data->get($field)));
 			echo "</span> of $this->limit characters</div></div>";
 		}
