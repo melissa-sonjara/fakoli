@@ -425,6 +425,7 @@ class ReportTable
 		$this->constraints = $constraints;
 		
 		$this->form = new SearchForm($this->proto);
+		$this->form->id = "custom_report";
 		// JDG 2/2012 - set params here to allow additional parameters
 		// to be set by the calling class
 		$this->params = new SearchParameters($this->proto);
