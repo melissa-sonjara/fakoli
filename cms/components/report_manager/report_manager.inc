@@ -192,6 +192,7 @@ class ReportManager
 			if ($this->formCSS) echo "class='{$this->formCSS}'"; 
 			echo ">\n";
 
+			$script .= $table->form->writeScript();
 			$table->form->renderSearchFields();
 
 			echo "</table>\n";
