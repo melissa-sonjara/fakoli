@@ -443,6 +443,8 @@ class SearchParameters
 		$this->handlers[String] 	= new StringSearchParameterHandler();
 		$this->handlers[HTML] 		= new StringSearchParameterHandler();
 		$this->handlers[Date]		= new DateSearchParameterHandler();
+		$this->handlers[DateTime]	= new DateSearchParameterHandler();
+		$this->handlers[Timestamp]	= new DateSearchParameterHandler();
 		$this->handlers[Number]		= new NumberSearchParameterHandler();
 		$this->handlers[Currency]	= new NumberSearchParameterHandler();
 		$this->handlers[Boolean]	= new NumberSearchParameterHandler();		
