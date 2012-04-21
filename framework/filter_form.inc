@@ -429,6 +429,7 @@ function <? echo $selChanged ?>(elt)
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
+		echo "<div style='display: inline-block' class='checkbox'>\n";
 		echo "<input type='checkbox' value='1' name='{$field}_box'";
 
 		$value = $this->parent->data->get($field);
@@ -444,7 +445,7 @@ function <? echo $selChanged ?>(elt)
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
-		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label>";
+		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label></div>";
 	}
 }
 

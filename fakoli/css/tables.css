@@ -137,7 +137,13 @@ table.list td.subheading
 .filter input
 {
 	margin-left: 2px;
-}	
+}
+
+.filter .checkbox
+{
+	padding-right: 12px;
+}
+
 
 tr.filtered td,
 tr.filtered a,
