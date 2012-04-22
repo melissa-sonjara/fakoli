@@ -49,15 +49,18 @@ class AutoLoginManager
 							->bind(":token", $token)
 							->executeSingle();
 
-			if ($user && $user->user_id == $authToken->user_id && $user->active)
+			if ($user)
 			{
-				$uri = $authToken->redirect_on_success;
-				if (!$uri) $uri = "/index";
-			
-				redirect($uri);
+				if ($user->user_id == $authToken->user_id && $user->active)
+				{
+					$uri = $authToken->redirect_on_success;
+					if (!$uri) $uri = "/index";
+				
+					redirect($uri);
+				}
+				else return false;
 			}
-			else return false;
-			
+				
 			$user = $authToken->User();
 		
 			if (!$user->active) return false;
