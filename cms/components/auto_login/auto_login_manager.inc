@@ -42,14 +42,22 @@ class AutoLoginManager
 		global $user;
 		
 		$mgr = new UserManager();
-		if ($user->user_id) redirect("/index");
 		
 		try
 		{
 			$authToken = Query::create(AuthenticationToken, "WHERE token=:token AND enabled=1")
 							->bind(":token", $token)
 							->executeSingle();
-							
+
+			if ($user && $user->user_id == $authToken->user_id && $user->active)
+			{
+				$uri = $authToken->redirect_on_success;
+				if (!$uri) $uri = "/index";
+			
+				redirect($uri);
+			}
+			else return false;
+			
 			$user = $authToken->User();
 		
 			if (!$user->active) return false;
