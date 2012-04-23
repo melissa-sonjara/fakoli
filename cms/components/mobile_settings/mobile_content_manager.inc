@@ -32,6 +32,8 @@ class MobileSettingsManager
 		
 		$mobileSection = Settings::getValue("mobile_settings", "mobile_content_section");
 		
+		trace("Mobile: $mobileSection->section vs $section->section", 3);
+		
 		if ($mobileSection->section != $section->section && MobileSettingsManager::useMobile())
 		{
 			$uri = ($mobileSection->section == "/") ? "/" : "/{$mobileSection->section}/";
