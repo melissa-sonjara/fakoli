@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("settings");
+Fakoli::using("settings", "section");
 
 /**
  *
@@ -28,15 +28,17 @@ class MobileSettingsManager
 		
 		trace ("Using Dedicated Mobile Section", 3);
 		
-		global $section;
+		$section = checkIdentifier($_GET["section"]);
 		
 		$mobileSection = Settings::getValue("mobile_settings", "mobile_content_section");
 		
-		trace("Mobile: $mobileSection->section vs $section->section", 3);
+		if ($mobileSection == "") return;
 		
-		if ($mobileSection->section != $section->section && MobileSettingsManager::useMobile())
+		trace("Mobile: $mobileSection vs $section", 3);
+		
+		if ($mobileSection != $section && MobileSettingsManager::useMobile())
 		{
-			$uri = ($mobileSection->section == "/") ? "/" : "/{$mobileSection->section}/";
+			$uri = ($mobileSection == "/") ? "/" : "/{$mobileSection}/";
 			
 			trace("Redirecting to mobile section at $uri", 3);
 			redirect($uri);
