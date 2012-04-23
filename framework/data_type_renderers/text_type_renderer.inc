@@ -64,6 +64,9 @@ class TextTypeRenderer extends AbstractTypeRenderer
 		case "stripHTML":
 			return stripHTML($value);
 			
+		case "HTML":
+			return formatAsHtml($value);
+			
 		default:
 			
 			if (is_numeric($template))
