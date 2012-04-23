@@ -59,6 +59,8 @@ class MobileSettingsManager
 	
 	static function useMobile()
 	{
+		if (isset($_SESSION["useMobile"])) return $_SESSION["useMobile"];
+		
 		$mobileTablets = Settings::getValue("mobile_settings", "send_mobile_content_to_tablets");
 		
 		$detect = new MobileDetect();
