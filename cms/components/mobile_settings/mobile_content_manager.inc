@@ -59,8 +59,15 @@ class MobileSettingsManager
 		
 		$detect = new MobileDetect();
 		
-		if ($detect->isTablet() && $mobileTablets) return true;
-		return $detect->isMobile(); 
+		$mobile = false;
+		
+		if ($detect->isTablet() && $mobileTablets) 
+		{
+			$mobile = true;
+		}
+		else $mobile = $detect->isMobile(); 
+		
+		trace("useMobile: ".($mobile?'true':'false'), 3);
 	}
 }
 
