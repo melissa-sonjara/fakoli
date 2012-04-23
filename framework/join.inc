@@ -100,6 +100,16 @@ class JoinResult
 			
 			$template = str_replace($match[0], $value, $template);
 		}
+
+		$matches = array();
+		
+		preg_match_all("/\\{([\\w\\d_]+)::([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+
+		foreach($matches as $match)
+		{
+			$sub = call_user_func(array($match[1], $match[2]), $this);
+			$template = str_replace($match[0], $sub, $template);
+		}
 		
 		return $template;
 	}
