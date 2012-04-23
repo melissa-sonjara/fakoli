@@ -4,7 +4,7 @@ class MobileSettingsManifest
 	static function getComponentDefinition()
 	{
 		$component = new Component();
-		$component->name = "mobile";
+		$component->name = "mobile_settings";
 		$component->description = "Detects mobile browsers and implements mobile browser content-selection rules.";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
