@@ -30,7 +30,7 @@ class MobileSettingsManager
 		
 		$mobileSection = Settings::getValue("mobile_settings", "mobile_content_section");
 		
-		if ($mobileSection->identifier != $section->identifier && MobileManager::useMobile())
+		if ($mobileSection->identifier != $section->identifier && MobileSettingsManager::useMobile())
 		{
 			redirect("/{$mobileSection->identifier}/");
 		}
@@ -40,7 +40,7 @@ class MobileSettingsManager
 	{
 		global $site;
 		
-		if (!MobileManager::useMobile()) return false;
+		if (!MobileSettingsManager::useMobile()) return false;
 		
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 		$mode = ($mode == "Use Mobile Template");
