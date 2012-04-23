@@ -68,6 +68,8 @@ class MobileSettingsManager
 		else $mobile = $detect->isMobile(); 
 		
 		trace("useMobile: ".($mobile?'true':'false'), 3);
+		
+		return $mobile;
 	}
 }
 
