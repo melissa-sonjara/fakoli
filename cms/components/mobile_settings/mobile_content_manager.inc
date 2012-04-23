@@ -30,9 +30,10 @@ class MobileSettingsManager
 		
 		$mobileSection = Settings::getValue("mobile_settings", "mobile_content_section");
 		
-		if ($mobileSection->identifier != $section->identifier && MobileSettingsManager::useMobile())
+		if ($mobileSection->section != $section->section && MobileSettingsManager::useMobile())
 		{
-			redirect("/{$mobileSection->identifier}/");
+			$uri = $mobileSection->section == "/" ? "/" : "/{$mobileSection->section}/";
+			redirect($uri);
 		}
 	}
 	
