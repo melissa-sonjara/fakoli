@@ -1,5 +1,5 @@
 <?
-class MobileContentManifest
+class MobileSettingsManifest
 {
 	static function getComponentDefinition()
 	{
@@ -17,9 +17,9 @@ class MobileContentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(MobileContentManager, setDefaults),
-					"Initialize"			=>	array(MobileContentManager, onInitialize),
-					"OverrideTemplate"		=>	array(MobileContentManager, overrideTemplate)
+					"ComponentScanComplete"	=>	array(MobileSettingsManager, setDefaults),
+					"Initialize"			=>	array(MobileSettingsManager, onInitialize),
+					"OverrideTemplate"		=>	array(MobileSettingsManager, overrideTemplate)
 		);
 	}
 }
