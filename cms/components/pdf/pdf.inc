@@ -5,12 +5,14 @@ class PDF
 {
 	var $uri;
 	var $ssl;
+	var $output;
 	
-	function PDF($uri, $ssl = false, $useToken = true)
+	function PDF($uri, $ssl = false, $useToken = true, $output = null)
 	{
 		$this->uri = $uri;
 		$this->ssl = $ssl;
 		$this->useToken = $useToken;
+		$this->output = $output;
 	}
 
 	function coverPage($url)
@@ -38,7 +40,7 @@ class PDF
 		$tmpName = sha1($url . now()) . ".pdf";
 		
 		
-		$output = PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName;
+		$output = $this->output ? $this->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
 		$cmd = "$exe -q $url $output";
 		
 		trace($cmd, 3);
