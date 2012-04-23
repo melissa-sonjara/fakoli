@@ -26,13 +26,17 @@ class MobileSettingsManager
 
 		if ($mode != "Dedicated Mobile Section") return;
 		
+		trace ("Using Dedicated Mobile Section", 3);
+		
 		global $section;
 		
 		$mobileSection = Settings::getValue("mobile_settings", "mobile_content_section");
 		
 		if ($mobileSection->section != $section->section && MobileSettingsManager::useMobile())
 		{
-			$uri = $mobileSection->section == "/" ? "/" : "/{$mobileSection->section}/";
+			$uri = ($mobileSection->section == "/") ? "/" : "/{$mobileSection->section}/";
+			
+			trace("Redirecting to mobile section at $uri", 3);
 			redirect($uri);
 		}
 	}
