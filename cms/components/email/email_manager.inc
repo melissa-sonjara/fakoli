@@ -51,18 +51,21 @@ class EmailHandler
 	var $mail;
 	var $onSendComplete; // optional user callback function after mail is sent
 
-	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "")
+	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "")
 	{
 		global $config;
 
-		if(!$emailFrom) $emailFrom =  Settings::getValue('email', 'email_from');
-			
+		if(!$emailFrom) 
+		{
+			$emailFrom =  Settings::getValue('email', 'email_from');
+			$emailName =  Settings::getValue('email', 'email_name');
+		}
 		// Use the MD5 algorithm to generate a random hash
 		$random_hash = md5(date('r', time()));
-
-		$headers = "From: $emailFrom\r\n";
+		$headers = "From: ". $emailName . " <" . $emailFrom . ">\r\n";
+		//$headers = "From: $emailFrom\r\n";
 		$headers .= "Return-Path: ". $emailFrom . "\r\n";
-		$headers .= "Reply-To: ". $emailFrom . "\r\n";
+		$headers .= "Reply-To: ". $emailName . " <" . $emailFrom . ">\r\n";
 		$headers .= "Mime-Version: 1.0\r\n";
 
 		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
@@ -174,6 +177,7 @@ class EmailManager
 	var $message;
 	var $subject;
 	var $emailFrom;
+	var $emailName;
 	var $onSendComplete; // optional user-defined callback function after send is successful
 
 	function EmailManager($item, $emailTemplate, $onSendComplete = "")
@@ -181,6 +185,7 @@ class EmailManager
 		$this->item = clone($item);
 		$this->item->filter = null;
 		$this->emailTemplate = $emailTemplate;
+		$this->emailName = $emailTemplate->name;
 		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
 		$this->onSendComplete = $onSendComplete;
@@ -254,7 +259,7 @@ class EmailManager
 	{
 		trace("EmailManager:: sending email to recipient $recipient", 3);
 				
-		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom);
+		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom, $this->emailName);
 				
 		$rtn = $email->send();
 			
