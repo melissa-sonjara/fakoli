@@ -9,6 +9,7 @@ var ScrollingTabs = new Class(
 	tabIndex: 0,
 	currentIndex: 0,
 	containerWidth: 0,
+	useDropdown: 0,
 	
 	initialize: function(tabContainer)
 	{
@@ -44,6 +45,12 @@ var ScrollingTabs = new Class(
 		
 		if (this.tabsWidth > this.containerWidth)
 		{
+			if (this.tabsWidth - this.containerWidth > 200)
+			{
+				// Abitrary significant overflow
+				this.useDropdown = 1;
+			}
+			
 			this.tabContainer.setStyles({position: 'relative', overflow: 'hidden', padding: 0, height: tabsSize.height + 2});
 			this.tabList.setStyles({position: 'absolute', top: 0, left: 0, width: this.tabsWidth});
 			
@@ -81,6 +88,29 @@ var ScrollingTabs = new Class(
 
 		leftButton.inject(div);
 		rightButton.inject(div);
+		
+		if (this.useDropdown)
+		{
+			this.dropdownButton = new Element('img', {'src': '/fakoli/images/tab_dropdown_button.gif'});
+			this.dropdownButton.setStyles({'cursor': 'pointer'});
+			
+			this.dropdownButton.addEvents(
+			{
+				'mouseenter': function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_dropdown_button_active.gif');},
+				'mouseleave':  function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_dropdown_button.gif');},
+				'click': 	 function(e) { new Event(e).stop(); this.toggleDropdown();}.bind(this)
+			});
+			
+			this.dropdownButton.inject(div);
+			
+			this.dropdown = new Element('div', {class: 'tabs_dropdown'});
+			this.dropdownList = this.tabList.clone().erase('style');
+			this.dropdownList.inject(this.dropdown);
+			
+			var doc = $(document.body ? document.body : document.documentElement);			
+			doc.adopt(this.dropdown);
+		}
+		
 		div.inject(this.tabContainer);
 	},
 	
@@ -91,6 +121,19 @@ var ScrollingTabs = new Class(
 		if (this.tabIndex < 0) this.tabIndex = 0;
 		if (this.tabIndex > this.maxIndex) this.tabIndex = this.maxIndex;
 		this.tabList.tween('left', -this.tabsOffsets[this.tabIndex]);
-	}
+	},
 	
+	toggleDropdown: function()
+	{
+		var style = this.dropdown.getStyle('display');
+		this.dropdown.position({'relativeTo': this.dropdownButton, 'position': 'bottomRight', 'edge': 'topRight'});
+		if (style == 'none')
+		{
+			this.dropdown.setStyle('display', 'block');
+		}
+		else
+		{
+			this.dropdown.setStyle('display', 'none');
+		}
+	}
 });
