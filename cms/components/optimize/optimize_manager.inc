@@ -45,6 +45,8 @@ class OptimizeManager
 		Settings::setDefaultValue("optimize", "optimize_scripts", "", Boolean);
 		Settings::setDefaultValue("optimize", "optimize_styles", "", Boolean);
 		Settings::setDefaultValue("optimize", "compress_javascript", "", Boolean);
+		Settings::setDefaultValue("optimize", "compress_styles", "", Boolean);
+		Settings::setDefaultValue("optimize", "compress_page_content", "", Boolean);
 	}
 	
 	static function preprocessScripts($scripts)
@@ -69,12 +71,6 @@ class OptimizeManager
 						$cachedScripts .= file_get_contents($resource);
 						$cachedScripts .= "\r\n";
 					}
-				}
-				
-				if (Settings::getValue("optimize", "compress_javascript"))
-				{
-					$packer = new JavaScriptPacker($cachedScripts, '62', true, false);
-					$cachedScripts = $packer->pack();
 				}
 				
 				Cache::put("script_cache", $cachedScripts);
@@ -123,5 +119,14 @@ class OptimizeManager
 		}
 			
 		return $styles;
+	}
+	
+	static function preProcessPage($template)
+	{
+		if (Settings::getValue("optimize", "compress_page_content") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+		{
+			ob_start("ob_gzhandler");
+		}
+		return $template;
 	}
 }

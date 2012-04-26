@@ -25,7 +25,15 @@ header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 if (!$noChange)
 {	
 	$content = Cache::get("script_cache");
-	header("Content-Length: ".strlen($content));
+	
+	if (Settings::getValue("optimize", "compress_javascript") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+	{
+		ob_start("ob_gzhandler");
+	}
+	else
+	{
+		header("Content-Length: ".strlen($content));
+	}
 	
 	echo $content;
 }
