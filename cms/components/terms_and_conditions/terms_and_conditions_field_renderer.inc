@@ -37,8 +37,10 @@ class TermsAndConditionsFieldRenderer extends FieldRenderer
 {
 	function TermsAndConditionsFieldRenderer(&$parent, $field)
 	{
+		global $isAdmin;
+		
 		$this->FieldRenderer($parent);
-		$this->parent->onSubmitHandler = "TermsAndConditions.showTerms";
+		if (!$isAdmin) $this->parent->onSubmitHandler = "TermsAndConditions.showTerms";
 		$this->parent->hide($field);
 	}
 	
