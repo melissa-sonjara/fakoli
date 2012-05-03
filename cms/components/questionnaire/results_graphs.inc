@@ -123,7 +123,7 @@ class QuestionnaireResultsGraph
 		
 		$optionAnswers = array();
 		$count = array();
-		$optionText = getOptionText($question->options);
+		$optionText = QuestionnaireResultsGraph::getRatingsOptionText($question->options);
 		$steps = count($optionText);
 		
 		for($idx = 1; $idx <= $steps; ++$idx)
