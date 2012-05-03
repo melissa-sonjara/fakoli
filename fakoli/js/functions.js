@@ -30,6 +30,11 @@
 
 *****************************************************************/
 
+
+String.prototype.count=function(s1) { 
+    return (this.length - this.replace(new RegExp(s1,"g"), '').length) / s1.length;
+}
+
 function popup(url, name, width, height)
 {
 	if (arguments.length == 5)
@@ -332,6 +337,3 @@ if (/msie/i.test (navigator.userAgent)) //only override IE
 }
 
 
-String.prototype.count=function(s1) { 
-    return (this.length - this.replace(new RegExp(s1,"g"), '').length) / s1.length;
-}
