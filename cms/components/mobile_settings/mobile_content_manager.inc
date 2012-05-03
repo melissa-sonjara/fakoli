@@ -23,8 +23,9 @@ class MobileSettingsManager
 	static function onInitialize()
 	{
 		global $isResource;
+		global $isAction;
 		
-		if ($isResource) return;
+		if ($isResource || $isAction) return;
 		
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 
