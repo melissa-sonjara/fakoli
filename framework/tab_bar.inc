@@ -71,7 +71,7 @@ class TabBar
 		
 		$this->id			  = $id;
 		$this->tabs           = $tabs;
-		$this->page           = ($config['prettyURLs']) ? $_REQUEST['identifier'] : basename($_SERVER["PHP_SELF"]);
+		$this->page           = ($config['prettyURLs'] === false) ? basename($_SERVER["PHP_SELF"]) :  $_REQUEST['identifier'];
 		if ($isAdmin) $this->page = "/admin/{$this->page}";
 		$this->queryString    = $queryString;
 		$this->useQueryString = $useQueryString;

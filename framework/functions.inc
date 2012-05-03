@@ -901,7 +901,7 @@ function redirect($page)
 	global $_SERVER;
 	global $config;
   
-	if (!$config['prettyURLs'])
+	if ($config['prettyURLs'] === false)
 	{
 		$page = preg_replace("/^\\/?([\\w\\d_]+?)\\?/", "/page.php?identifier=$1&", $page);
 		$page = preg_replace("/^\\/?([\\w\\d_]+)$/", "/page.php?identifier=$1", $page);

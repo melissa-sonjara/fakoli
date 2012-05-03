@@ -204,7 +204,7 @@ class ComponentPageView
 			$template = str_replace($expr, $$name, $template);
 		}
 		
-		if (!$config['prettyURLs'])
+		if ($config['prettyURLs'] === false)
 		{
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)[\"']/i", "$1=$2/page.php?identifier=$3$2", $template);
