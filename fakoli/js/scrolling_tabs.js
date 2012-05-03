@@ -103,7 +103,7 @@ var ScrollingTabs = new Class(
 			
 			this.dropdownButton.inject(div);
 			
-			this.dropdown = new Element('div', {class: 'tabs_dropdown'});
+			this.dropdown = new Element('div', {'class': 'tabs_dropdown'});
 			this.dropdownList = this.tabList.clone().erase('style');
 			this.dropdownList.inject(this.dropdown);
 			
