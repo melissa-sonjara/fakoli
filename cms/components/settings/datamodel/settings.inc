@@ -76,7 +76,7 @@ class Settings extends DataItem
 	
 	static function getSetting($component, $name)
 	{
-		$setting = (Cache::get("setting_{$component}_{$name}"));
+		$setting = Cache::get("setting_{$component}_{$name}");
 		
 		if (!$setting)
 		{
@@ -110,7 +110,7 @@ class Settings extends DataItem
 	
 	static function setValue($component, $name, $value, $field_type, $annotation, $category, $options)
 	{
-		$setting = Settings::getValue($component, $name);
+		$setting = Settings::getSetting($component, $name);
 		if (!$setting)
 		{
 			$setting = new Settings();
@@ -147,7 +147,7 @@ class Settings extends DataItem
 	 */
 	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "", $category = "", $options = "")
 	{
-		$setting = Settings::getSetting($component, $name);;
+		$setting = Settings::getSetting($component, $name);
 		if ($setting) 
 		{
 			if ($category != $setting->category)

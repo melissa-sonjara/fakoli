@@ -237,7 +237,7 @@ class LoginManager
 		trace($page, 3);
 	}
 	
-	/*
+	/**
 	 * If the user was on a page in the system when they were sent to login,
 	 * then redirect back to that from page.
 	 */
@@ -256,6 +256,26 @@ class LoginManager
 		redirect($page);
 	}
 	
+	/**
+	 * Redirect the user to the login page. If the user is logged
+	 * in with a mobile device then redirect to the mobile login page
+	 * if one is defined.
+	 */
+	function redirectToLogin()
+	{
+		$isMobile = Component::fireEvent("CheckUseMobile");
+		
+		$mobileLogin = Settings::getValue("login", "mobile_login_page");
+		$mainLogin = Settings::getValue("login", "main_login_page");
+		
+		if (!$mainLogin) $mainLogin = "/login";
+		
+		if ($isMobile && $mobileLogin)
+		{
+			redirect($mobileLogin);
+		}
+		else redirect($mainLogin);
+	}
 	
 	function passwordHelp($username = "")
 	{
@@ -338,7 +358,12 @@ class LoginManager
 	
 	static function setDefaults()
 	{
+		trace("Setting Login defaults", 4);
+		
 		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean");
+
+		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users");
+		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)");
 	}
 	
 	static function upgradeComponent($version)

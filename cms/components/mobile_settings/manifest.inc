@@ -19,7 +19,8 @@ class MobileSettingsManifest
 		return array(
 					"ComponentScanComplete"	=>	array(MobileSettingsManager, setDefaults),
 					"Initialize"			=>	array(MobileSettingsManager, onInitialize),
-					"OverrideTemplate"		=>	array(MobileSettingsManager, overrideTemplate)
+					"OverrideTemplate"		=>	array(MobileSettingsManager, overrideTemplate),
+					"CheckUseMobile"		=>	array(MobileSettingsManager, useMobile)
 		);
 	}
 }
