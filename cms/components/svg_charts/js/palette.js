@@ -17,4 +17,4 @@ var Palette = new Class(
 
 Palette.palettes = {};
 
-new Palette('standard', '#fff', '#000', ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff']);
+new Palette('standard', '#fff', '#000', ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff', '#800', '#080', '#008', '#880', '#808', '#088', '#888']);
