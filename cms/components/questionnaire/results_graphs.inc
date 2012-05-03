@@ -168,7 +168,7 @@ class QuestionnaireResultsGraph
 			if($idx > 1 AND $idx < $steps) 
 				$optionText[$idx] = $idx;
 			else
-				$optionText[$idx] = ($idx == 1) ? $from : $to;
+				$optionText[$idx] = ($idx == 1) ? jsSafe(trim($from)) : jsSafe(trim($to));
 				
 		}
 		return $optionText;
