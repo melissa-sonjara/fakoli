@@ -2,7 +2,7 @@
 require_once "include/config.inc";
 require_once "cms/core.inc";
 
-Fakoli::using("page", "component", "section", "settings");
+Fakoli::using("page", "component", "section", "settings", "login");
 
 
 $page_id = checkNumeric($_GET["page_id"]);
@@ -30,7 +30,7 @@ if ($page_id)
 	
 	if (!checkRole($page->role))
 	{
-		redirect("/login");
+		LoginManager::redirectToLogin();	
 	}
 	
 	echo $pageView->drawView();
@@ -52,7 +52,7 @@ else
 	if (!checkRole($section->getRole($content)) ||
 		!Settings::checkPermissions($section->getPermissions($content)))
 	{
-		redirect("/login");		
+		LoginManager::redirectToLogin();		
 	}
 	
 	trace("\$_SERVER['HTTPS'] = {$_SERVER['HTTPS']}", 3);
