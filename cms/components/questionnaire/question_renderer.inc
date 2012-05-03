@@ -283,12 +283,19 @@ class MultipleChoiceView extends QuestionField
 	{
 		$pk = $this->parent->primary_key;
 		$qPk = $this->question->getPrimaryKey();
-		$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
+				
+		if (Settings::getValue("survey", "interactive_graphs"))
+		{
+			QuestionnaireResultsGraph::drawSelectResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
+		}
+		else
+		{
+			$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
 			
-		?>
-<img
-	src="<?php echo $link ?>" alt="Histogram" />
-		<?
+?>
+<img src="<?php echo $link ?>" alt="Pie Chart" />
+<?
+		}
 	}
 }
 
@@ -352,11 +359,18 @@ class SelectFieldView extends QuestionField
 	{
 		$pk = $this->parent->primary_key;
 		$qPk = $this->question->getPrimaryKey();
-		$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
-			
-		?>
-<img src="<?php echo $link ?>" alt="Histogram" />
-		<?
+		
+		if (Settings::getValue("survey", "interactive_graphs"))
+		{
+			QuestionnaireResultsGraph::drawSelectResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
+		}
+		else
+		{
+			$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";			
+?>
+<img src="<?php echo $link ?>" alt="Pie Chart" />
+<?
+		}
 	}
 }
 
@@ -429,11 +443,18 @@ class RatingView extends QuestionField
 	{
 		$pk = $this->parent->primary_key;
 		$qPk = $this->question->getPrimaryKey();
-		$link ="/action/questionnaire/rating_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
-			
-		?>
+
+		if (Settings::getValue("survey", "interactive_graphs"))
+		{
+			QuestionnaireResultsGraph::drawRatingResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
+		}
+		else
+		{
+			$link ="/action/questionnaire/rating_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";			
+?>
 <img src="<?php echo $link ?>" alt="Histogram" />
-		<?
+<?
+		}
 	}
 }
 
@@ -714,18 +735,19 @@ class CheckListView extends QuestionField
 
 	function writeReportHTML()
 	{
-		//$view = new CheckListResultsGraph(new SurveyManager($this->parent->survey), $this->question);
-		//$view->drawView();
-
 		$pk = $this->parent->primary_key;
 		$qPk = $this->question->getPrimaryKey();
-		$link ="/action/questionnaire/checklist_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
-
-		//require_once $link;
-		?>
-<img
-	src="<?php echo $link ?>" alt="Histogram" />
-		<?
-
+				
+		if (Settings::getValue("survey", "interactive_graphs"))
+		{
+			QuestionnaireResultsGraph::drawChecklistResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
+		}
+		else
+		{
+			$link ="/action/questionnaire/checklist_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
+?>
+<img src="<?php echo $link ?>" alt="Histogram" />
+<?
+		}
 	}
 }

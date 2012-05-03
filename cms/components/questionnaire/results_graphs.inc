@@ -31,93 +31,161 @@
 
 *****************************************************************/
 
-Fakoli::using("questionnaire");
-/*
-require_once ('jpgraph/jpgraph.php');
-require_once ('jpgraph/jpgraph_bar.php');
+Fakoli::using("questionnaire", "svg_charts");
 
-class CheckListResultsGraph
+class QuestionnaireResultsGraph
 {
-	var $mgr;
-	var $question;
-	
-	function CheckListResultsGraph($mgr, $question)
+	static function drawSelectResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$this->mgr = $mgr;
-		$this->question = $question;		
-	}
+		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
+		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
 
-	function getOptionText($options)
-	{
-		$optionText = array();
-	
-		$options = explode("\n", $this->question->options);
-	
+		$answers = $survey->Answers("WHERE $qField=$question_id");
+
+		$options = explode("\n", $question->options);
 		$idx = 1;
-		foreach($options as $option)
+		$optionAnswers = array();
+		$legends = array();
+		
+		if(count($options) > 0)
 		{
-			$optionText[$idx++] = trim(stripHTML($option));
-		}
+			$answerValues = regroupList($answers, "value");
+						
+			foreach($options as $option)
+			{	
+				$legends[] = trim($option);
+				$count = count($answerValues[$idx]);
+				$optionAnswers[] = $count;
+				$idx++;	
+			}
+		}		
 
-		return $optionText;
+		$pie = new PieChart("results_$question_id", 650, 400, $optionAnswers, $legends, "standard");
+		$pie->setRadius(150);
+		$pie->setCenter(180,180);
+		$pie->setLabelSize(12);
+		$pie->setStrokeWidth(2);
+		$pie->showLegend(true, 375, 20);
+		$pie->shadow = false;
+		$pie->emboss = true;
+		$pie->draw();
 	}
 	
-	function drawView()
+	static function drawChecklistResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = $this->question;
-		$answers = $this->mgr->getAnswersOneQuestion($question->question_id);
+		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
+		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+		
+		$answers = $survey->Answers("WHERE $qField=$question_id");
+		
+		$counts = SurveyResultsView::getCheckListAnswerCounts($answers);
+		
+		$datay = array();
+		
+		$optionAnswers = array();
+		$count = array();
+		$optionText = QuestionnaireResultsGraph::getOptionText($question->options);
+		$steps = count($optionText);
+		
+		for($idx = 1; $idx <= $steps; ++$idx)
+		{
+			//echo "idx is $idx<br/>";
+			// store for calculating mean and median
+			$totalValue += $idx * $counts[$idx];
+			$totalCount += $counts[$idx];
+			$datay[] = $counts[$idx] ? $counts[$idx] : 0;
+			$datax[] = $optionText[$idx];
+		}
+		
+		// Setup the graph.
+		$graph = new Histogram(650,300);
+		$graph = new Histogram("histogram_$question_id", count($datax) * 80 + 100, 400, 50, 10, count($datax) * 80, 300, "standard");
+		$graph->setLabels($datax);
+		$graph->ticks = 10;
+		$graph->columnMargin = 0.4;
+		
+		$series = new HistogramSeries("block", "Answers", $datay);
+		$graph->addSeries($series);
+		$graph->draw();
+	}
+	
+	
+	static function drawRatingResults($surveyField, $qField, $survey_id, $question_id)
+	{
+		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
+		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+		
+		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
 		$answerValues = regroupList($answers, "value");
 		
 		$datay = array();
-
+		
 		$optionAnswers = array();
 		$count = array();
-		$optionText = $this->getOptionText($question->options);
+		$optionText = getOptionText($question->options);
 		$steps = count($optionText);
-
+		
 		for($idx = 1; $idx <= $steps; ++$idx)
 		{
-			//	echo "idx is $idx<br/>";
-			// 	store for calculating mean and median
+			//echo "idx is $idx<br/>";
+			// store for calculating mean and median
 			$counts[$idx] = count($answerValues[$idx]);
 			$totalValue += $idx * $counts[$idx];
 			$totalCount += $counts[$idx];
 			$datay[] = $counts[$idx];
 			$datax[] = $optionText[$idx];
 		}
-
-
+		
+		$mean = "Average: ".number_format($totalValue / $totalCount, 1);
+		
 		// Setup the graph.
-		$graph = new Graph(500,300);
-		$graph->img->SetMargin(60,20,35,75);
-		$graph->SetScale("textint");
-		$graph->SetFrame(false); // No border around the graph
-
-		// 	Setup font for axis
-		$graph->xaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
-		$graph->yaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
-
-		// 	Show 0 label on Y-axis (default is not to show)
-		$graph->yscale->ticks->SupressZeroLabel(false);
-
-		// Setup X-axis labels
-		$graph->xaxis->SetTickLabels($datax);
-		$graph->xaxis->SetLabelAngle(50);
-
-		// Create the bar pot
-		$bplot = new BarPlot($datay);
-		$bplot->SetWidth(0.6);
-
-		// Set color for the frame of each bar
-		$bplot->SetColor("black");
-		$graph->Add($bplot);
-
-		// Finally send the graph to the browser
-		$graph->Stroke();
+		$graph = new Histogram(650,300);
+		$graph = new Histogram("histogram_$question_id", count($datax) * 80 + 100, 400, 50, 10, count($datax) * 80, 300, "standard");
+		$graph->setLabels($datax);
+		$graph->ticks = 10;
+		$graph->columnMargin = 0.4;
+		
+		//$graph->setTitle($mean);
+		
+		$series = new HistogramSeries("block", "Ratings", $datay);
+		$graph->addSeries($series);
+		$graph->draw();
 		
 	}
+	
+	private static function getRatingsOptionText($options)
+	{
+		$optionText = array();
+		
+		list($from, $to, $steps) = explode("\n", $options);
+		if (!$from) $from = "Lowest";
+		if (!$to) $to = "Highest";
+		if (!$steps) $steps = 5;
+		
+		for($idx = 1; $idx <= $steps; ++$idx)
+		{
+			if($idx > 1 AND $idx < $steps) 
+				$optionText[$idx] = $idx;
+			else
+				$optionText[$idx] = ($idx == 1) ? $from : $to;
+		}
+		return $optionText;
+	}
+	
+	private static function getOptionText($options)
+	{
+		$optionText = array();
+		
+		$options = explode("\n", $options);
+		
+		$idx = 1;
+		foreach($options as $option)
+		{
+			$optionText[$idx++] = jsSafe(wordwrap(trim(stripHTML($option)), 12));
+		}
+	
+		return $optionText;
+	}	
 }
-
-
-?>*/
+?>

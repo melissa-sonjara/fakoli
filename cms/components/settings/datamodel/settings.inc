@@ -74,12 +74,7 @@ class Settings extends DataItem
 		$this->DataItem(func_get_args());
 	}
 	
-	/**
-	 * Retrieve the value of the specified Setting
-	 * @param string $component the name of the component that owns the setting
-	 * @param string $name the name of the setting
-	 */
-	static function getValue($component, $name)
+	static function getSetting($component, $name)
 	{
 		$setting = (Cache::get("setting_{$component}_{$name}"));
 		
@@ -97,8 +92,19 @@ class Settings extends DataItem
 				return null;
 			}		
 		}
+		return $setting;
+	}
+	
+	/**
+	 * Retrieve the value of the specified Setting
+	 * @param string $component the name of the component that owns the setting
+	 * @param string $name the name of the setting
+	 */
+	static function getValue($component, $name)
+	{
+		$setting = Settings::getSetting($component, $name);
 		
-		return $setting->value;
+		return $setting ? $setting->value : null;
 	}
 
 	
@@ -141,11 +147,17 @@ class Settings extends DataItem
 	 */
 	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "", $category = "", $options = "")
 	{
-		$setting = (Cache::get("setting_{$component}_{$name}"));
-		if ($setting) return;
+		$setting = Settings::getSetting($component, $name);;
+		if ($setting) 
+		{
+			if ($category != $setting->category)
+			{
+				$setting->category = $category;
+				$setting->save();
+			}
+			return;
+		}
 		
-		$setting = new Settings();
-		if ($setting->exists("WHERE component='$component' AND name='$name'")) return;
 		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options);
 	}
 	
