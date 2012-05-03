@@ -22,6 +22,10 @@ class MobileSettingsManager
 
 	static function onInitialize()
 	{
+		global $isResource;
+		
+		if ($isResource) return;
+		
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 
 		if ($mode != "Dedicated Mobile Section") return;
