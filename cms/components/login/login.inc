@@ -263,7 +263,7 @@ class LoginManager
 	 */
 	function redirectToLogin()
 	{
-		$isMobile = Component::fireEvent("CheckUseMobile");
+		$isMobile = ComponentManager::fireEvent("CheckUseMobile");
 		
 		$mobileLogin = Settings::getValue("login", "mobile_login_page");
 		$mainLogin = Settings::getValue("login", "main_login_page");
