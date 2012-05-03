@@ -48,6 +48,8 @@ var PieChart = new Class(
 		
 		this.values.each(function(val, idx) 
 		{ 
+			if (val == 0) return;
+			
 			var end = angle + val * increment; 
 			var center = angle + (val * increment / 2);
 			
