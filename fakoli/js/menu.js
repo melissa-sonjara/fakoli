@@ -131,6 +131,6 @@ var FakoliMenu = new Class({
 	
 	clearFocus: function()
 	{
-		this.root.getElements("ul > li").each(function(elt) { this.hideMenu(elt); });
+		this.root.getElements("ul > li").each(function(elt) { this.hideMenu(elt); }.bind(this));
 	}
 });
