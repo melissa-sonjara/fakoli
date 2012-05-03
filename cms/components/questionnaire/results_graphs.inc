@@ -170,7 +170,7 @@ class QuestionnaireResultsGraph
 			else
 				$optionText[$idx] = ($idx == 1) ? $from : $to;
 		}
-		return $optionText;
+		return jsSafe(trim(stripHTML($optionText)));
 	}
 	
 	private static function getOptionText($options)
