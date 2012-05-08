@@ -42,7 +42,7 @@ Fakoli::usingFeature("data_view");
 $surveyTemplates = query(SurveyTemplate, "ORDER BY title");
 
 $table = new DataListView($surveyTemplates, "surveyTemplates");
-$table->column("Title", "<a href=\"/survey_template_form?survey_template_id={survey_template_id}\">{title}", true, "width: 25%")
+$table->column("Title", "<a href=\"survey_template_form?survey_template_id={survey_template_id}\">{title}", true, "width: 25%")
 	->column("Introduction", "{introduction:80}", false, "width: 20%")
 	->column("Message", "{message:80}", false, "width: 20%")
 	->column("Status", getSurveyTemplateStatus, false, "width: 10%")
@@ -61,13 +61,13 @@ $script .= $table->writeScript();
 <?php
 $table->drawView();
 ?> <br />
-<a class="button" href="/survey_template_form">Create a Survey Template</a>
+<a class="button" href="survey_template_form">Create a Survey Template</a>
 </div>
 <?php
 
 function getTemplateView($surveyTemplate)
 {
-	return "<a class=\"button\" href=\"javascript:modalPopup('Survey Template', '/survey_template_preview_popup?survey_template_id={$surveyTemplate->survey_template_id}', '700px', 'auto');\">View</a>\n";
+	return "<a class=\"button\" href=\"javascript:modalPopup('Survey Template', 'survey_template_preview_popup?survey_template_id={$surveyTemplate->survey_template_id}', '700px', 'auto');\">View</a>\n";
 }
 
 function getSurveyTemplateStatus($surveyTemplate)

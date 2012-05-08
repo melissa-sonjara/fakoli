@@ -52,16 +52,16 @@ $token = $_GET["token"];
 if(!$survey_id)
 redirect("/index");
 if(!$token)
-redirect("/survey_response_intro?survey_id={$survey_id}");
+redirect("survey_response_intro?survey_id={$survey_id}");
 
 $response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
 
 if(!$response)
-redirect("/survey_response_intro?survey_id={$survey_id}");
+redirect("survey_response_intro?survey_id={$survey_id}");
 
 $survey = $response->Survey();
 if(!$survey->isOpen() OR !$response->isEditable())
-redirect("/survey_response_intro?survey_id=$survey_id");
+redirect("survey_response_intro?survey_id=$survey_id");
 
 $validate = new ValidateSurveyResponse($response);
 $view = new SurveyResponseView($response);
@@ -69,7 +69,7 @@ $response->filter = new ExclusionFilter("last_modified");
 $form = new AutoForm($response);
 $form->hide("survey_id", "token", "email", "last_modified", "status");
 $form->submitLabel = "Submit";
-$form->button("Revise Survey", "/survey_response_form?survey_id=$survey_id&token=$token");
+$form->button("Revise Survey", "survey_response_form?survey_id=$survey_id&token=$token");
 $form->onSaveComplete = updateStatus;
 
 if ($method == "POST")
@@ -78,7 +78,7 @@ if ($method == "POST")
 	{
 		if ($form->save())
 		{
-			redirect("/survey_response_confirmation?response_id={$response->response_id}");
+			redirect("survey_response_confirmation?response_id={$response->response_id}");
 		}
 	}
 }

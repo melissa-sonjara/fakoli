@@ -50,7 +50,7 @@ Fakoli::usingFeature("auto_form");
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
 if (!$survey_template_id)
-	redirect("/survey_dashboard");
+	redirect("survey_dashboard");
 
 $surveyTemplate = new SurveyTemplate($survey_template_id);
 
@@ -74,7 +74,7 @@ if ($method == "POST")
 {
 	if ($form AND $form->save())
 	{
-		redirect("/survey_templates");
+		redirect("survey_templates");
 	}
 }
 
@@ -105,6 +105,6 @@ function updateStatus($form)
 	else
 		$surveyTemplate->setInProgress();
 
-	redirect("/survey_templates");
+	redirect("survey_templates");
 }
 ?>

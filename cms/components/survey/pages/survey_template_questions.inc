@@ -14,7 +14,7 @@ Fakoli::usingFeature("data_view");
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
 if(!$survey_template_id)
-redirect("/survey_templates");
+redirect("survey_templates");
 
 $surveyTemplate = new SurveyTemplate($survey_template_id);
 $surveyTemplate->filter = new InclusionFilter("survey_template_id");
@@ -23,7 +23,7 @@ $form = new AutoForm($surveyTemplate);
 $xrefs = $surveyTemplate->SurveyQuestionXrefs();
 
 $table = new DataListView($xrefs, "SurveyQuestions");
-$table->column("Question", "<a href=\"/survey_template_question_form?survey_template_id={survey_template_id}&survey_question_id={survey_question_id}\">{Question.question}</a>")
+$table->column("Question", "<a href=\"survey_template_question_form?survey_template_id={survey_template_id}&survey_question_id={survey_question_id}\">{Question.question}</a>")
 	->column("Sort Order", "<input type='text' name=\"xref_{survey_question_xref_id}\"
 		value=\"{sort_order}\" size=\"4\"/>", false, "width: 10%")
 	->column("Options", array(CMSSurveyTableManager, formatOptions))
@@ -73,9 +73,9 @@ if(count($xrefs) == 0)
 {
 	?>
 <p><a class='button'
-	href='/survey_template_question_form?survey_template_id=<?php echo $survey_template_id ?>'>Create
+	href='survey_template_question_form?survey_template_id=<?php echo $survey_template_id ?>'>Create
 a New Question</a>&nbsp;&nbsp; <a class='button'
-	href="/survey_template_question_select?survey_template_id=<?php echo $survey_template_id ?>">Select
+	href="survey_template_question_select?survey_template_id=<?php echo $survey_template_id ?>">Select
 from Existing Questions</a></p>
 	<?php
 }

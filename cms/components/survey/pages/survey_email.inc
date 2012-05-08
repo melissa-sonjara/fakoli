@@ -34,7 +34,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 /*
  * survey_email.inc
  *
- * Description: Link an email template to a specific questionnaire/survey.
+ * Description: Link an email template to a specific questionnairesurvey.
  *
  * author: Janice Gallant for Sonjara, Inc.
  *
@@ -49,7 +49,7 @@ $survey_id = checkNumeric($_GET["survey_id"]);
 $error = checkNumeric($_GET["error"]);
 
 if(!$survey_id)
-	redirect("/survey_list");
+	redirect("survey_list");
 
 $survey = new Survey($survey_id);
 

@@ -49,7 +49,7 @@ Fakoli::usingFeature("data_view");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-redirect("/survey_dashboard");
+redirect("survey_dashboard");
 
 $survey = new survey($survey_id);
 
@@ -88,7 +88,7 @@ if ($method == "POST")
 {
 	if($form->save())
 	{
-		redirect("/survey_questions?survey_id=$survey_id");
+		redirect("survey_questions?survey_id=$survey_id");
 	}
 }
 
@@ -111,9 +111,9 @@ if(count($xrefs) == 0)
 {
 	?>
 <p><a class='button'
-	href='/survey_question_form?survey_id=<?php echo $survey_id ?>'>Create
+	href='survey_question_form?survey_id=<?php echo $survey_id ?>'>Create
 a New Question</a>&nbsp;&nbsp; <a class='button'
-	href="/survey_question_select?survey_id=<?php echo $survey_id ?>">Select
+	href="survey_question_select?survey_id=<?php echo $survey_id ?>">Select
 from Existing Questions</a></p>
 	<?php
 }

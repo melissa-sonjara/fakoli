@@ -135,7 +135,7 @@ function formSave()
 	$survey_id = $_POST["survey_id"];
 
 	if(!$survey_template_id AND !$survey_id)
-		redirect("/survey_dashboard");
+		redirect("survey_dashboard");
 
 	if($survey_template_id)
 		$surveyTemplate = new SurveyTemplate($survey_template_id);

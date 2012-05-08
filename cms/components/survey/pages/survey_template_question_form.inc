@@ -72,7 +72,7 @@ else
 // check if question has been answered
 $editable = $question->isEditable();
 
-$redirect = "/survey_template_questions?survey_template_id=$survey_template_id";
+$redirect = "survey_template_questions?survey_template_id=$survey_template_id";
 
 $form = SurveyQuestionForm::settings($question, $editable);
 
@@ -82,7 +82,7 @@ if($question->isEditable())
 	$typeSelect->onChange = "new Survey().onChangeQuestionType";
 
 if($survey_question_id)
-	$form->button("Remove", "/action/survey/question_remove?survey_template_id={$survey_template_id}&survey_question_id={$survey_question_id}");
+	$form->button("Remove", "/actionsurvey/question_remove?survey_template_id={$survey_template_id}&survey_question_id={$survey_question_id}");
 
 $form->button("Cancel", $redirect);
 

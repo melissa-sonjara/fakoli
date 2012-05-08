@@ -76,4 +76,4 @@ $script .= $table->writeScript();
 $table->drawView();
 ?>
 <br>
-<a class="button" href="/survey_template_select">Create a Survey</a>
+<a class="button" href="survey_template_select">Create a Survey</a>

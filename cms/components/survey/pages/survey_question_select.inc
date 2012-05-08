@@ -38,9 +38,9 @@ Fakoli::usingFeature("grouped_data_view");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-redirect("/survey_dashboard");
+redirect("survey_dashboard");
 
-$redirect = "/survey_questions?survey_id=$survey_id";
+$redirect = "survey_questions?survey_id=$survey_id";
 $survey = new Survey($survey_id);
 $survey->filter = new InclusionFilter("survey_id");
 $form = new AutoForm($survey);

@@ -38,13 +38,13 @@ Fakoli::usingFeature("grouped_data_view");
 $survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
 if(!$survey_template_id)
-	redirect("/survey_templates");
+	redirect("survey_templates");
 
 $surveyTemplate = new SurveyTemplate($survey_template_id);
 $surveyTemplate->filter = new InclusionFilter("survey_template_id");
 $form = new AutoForm($surveyTemplate);
 
-$redirect = "/survey_template_questions?survey_template_id=$survey_template_id";
+$redirect = "survey_template_questions?survey_template_id=$survey_template_id";
 
 $questionSets = SurveyManager::getTemplateQuestionSets($survey_template_id);
 

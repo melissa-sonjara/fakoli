@@ -72,7 +72,7 @@ else
 $editable = $question->isEditable();
 $isTemplateQuestion = $question->isTemplateQuestion();
 
-$redirect = "/survey_questions?survey_id=$survey_id";
+$redirect = "survey_questions?survey_id=$survey_id";
 
 $form = SurveyQuestionForm::settings($question, $editable);
 
@@ -87,7 +87,7 @@ elseif(!$editable)
 	$form->readOnly("question_type_id", "options");
 
 if($survey_question_id)
-	$form->button("Remove", "/action/survey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
+	$form->button("Remove", "/actionsurvey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
 $form->button("Cancel", $redirect);
 $form->hide("question_name");
 

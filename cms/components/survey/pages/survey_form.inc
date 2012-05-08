@@ -34,7 +34,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 /*
  * survey_form.inc
  *
- * Description: Link an email template to a specific questionnaire/survey
+ * Description: Link an email template to a specific questionnairesurvey
  * and set of recipients. Provide a button for user to send the emails.
  *
  * author: Janice Gallant for Sonjara, Inc.

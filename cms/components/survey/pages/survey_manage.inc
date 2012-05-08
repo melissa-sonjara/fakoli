@@ -52,7 +52,7 @@ Fakoli::usingFeature("data_view");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if (!$survey_id)
-redirect("/survey_list");
+redirect("survey_list");
 
 $survey = new Survey($survey_id);
 
