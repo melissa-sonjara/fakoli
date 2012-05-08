@@ -78,8 +78,7 @@ class ActivityTrackerManifest
 	
 	static function getStyles()
 	{
-		return array("/components/activity_tracker/css/activity_tracker.css",
-					 "/components/activity_tracker/css/feedback.css");
+		return array("/components/activity_tracker/css/feedback.css");
 	}
 }
 
