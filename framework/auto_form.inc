@@ -262,7 +262,9 @@ class AutoForm
 
 		foreach($this->additional as $r)
 		{
-			$r['renderer']->addValidatorsToForm($r['field']);
+			// JDG 5/2012 - check if additional field is required
+			$required = (array_search($r['field'], $this->required) === FALSE) ? false : true;
+			$r['renderer']->addValidatorsToForm($r['field'], $required);
 		}
 	}
 
@@ -594,11 +596,27 @@ $('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSu
 	{
 		foreach(func_get_args() as $required)
 		{
-			if ($this->data->hasField($required))
+			if ($this->data->hasField($required) || $this->hasAdditional($required))
 			{
 				array_push($this->required, $required);
 			}
 		}
+	}
+	
+	/**
+	 * Check if this field exists as an additional field
+	 */
+	function hasAdditional($field)
+	{
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$rField = $r['field'];
+			if($rField == $field)
+				return true;
+		}
+
+		return $false;
 	}
 
 	/**
