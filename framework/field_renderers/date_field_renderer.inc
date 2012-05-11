@@ -135,7 +135,8 @@ class DateFieldRenderer extends FieldRenderer
 			$this->_printLabel($field);
 			echo "<td>";
 			echo "<input type='text' name='$field:from' value='$date_from' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)'>";
-			echo " {$toLabel} <input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
+			echo "&nbsp;<label for='date_to'>$toLabel</label>&nbsp;";
+			echo "<input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
 			echo "</td>\n";
 			echo "</tr>\n";	
 		}
