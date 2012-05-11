@@ -783,8 +783,6 @@ class SearchParameters
  * $order = new Order();
  * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
  * $form = new SearchForm($order, "GET", "review_orders");
- * $form->setMatchingMode("startsWith", "first_name", "last_name");
- * $form->setMatchingMode("range", "order_date");
  * $form->readOnlyForm = true;
  * $form->button("Search Again", "order_search_form");
  * 
@@ -1041,7 +1039,7 @@ class SearchForm extends AutoForm
 	 */
 	function renderOneSearchField($field)
 	{
-		$mode = $this->getMatchingMode($field);		
+		$mode = $this->getMatchingMode($field);
 		$renderer = $this->getRenderer($field);
 			
 		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
@@ -1122,6 +1120,12 @@ class SearchForm extends AutoForm
 		$obj =& $this->data;
 		$pk = $obj->primary_key;
 		$filter = $obj->getFilter();
+		
+		foreach($this->params->params as $param => $value)
+		{
+			list($field, $modifier) = explode(":", $param);
+			$this->setMatchingMode($modifier, $field);
+		}
 		
 		if (count($this->groups) > 0)
 		{
