@@ -126,13 +126,16 @@ class DateFieldRenderer extends FieldRenderer
 	{
 		if ($mode == "range")
 		{
+			$label = $this->parent->layout->getLabel($field, $this);
+			$toLabel = (preg_match("/Between/i", $label)) ? "and" : "to";
+			
 			$date_from = $this->parent->params->get($field, "from");
 			$date_to = $this->parent->params->get($field, "to");
 			echo "<tr>\n";
 			$this->_printLabel($field);
 			echo "<td>";
 			echo "<input type='text' name='$field:from' value='$date_from' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)'>";
-			echo " to <input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
+			echo " {$toLabel} <input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
 			echo "</td>\n";
 			echo "</tr>\n";	
 		}
@@ -154,15 +157,38 @@ class DateFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->format($field)."</td>\n";		
+		echo ">".$this->format($this->parent->data->get($field))."</td>\n";		
 		echo "</tr>\n";	
 	}
-
-	function format($field)
-	{
-		return DateTypeRenderer::format($this->parent->data->get($field), $this->template);
-	}
 	
+	function renderDateRangeReadOnly($field, $date_from, $date_to)
+	{
+		$label = $this->parent->layout->getLabel($field, $this);
+		
+		if($date_from && $date_to)
+		{
+			$toLabel = (preg_match("/Between/i", $label)) ? "and" : "to";
+		}
+		else if($date_from && !$date_to)
+		{
+			$this->label = preg_replace("/Between/i", "From", $label);
+		}
+		else // date to and no date_from
+		{
+			$this->label = preg_replace("/(Between)|(From)/i", "Up To", $label);		
+		}
+		echo "<tr>\n";
+		$this->_printLabel($field);
+		echo "<td";
+		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
+		echo ">".$this->format($date_from). "&nbsp;<label for='date_to'>$toLabel</label>&nbsp;" . $this->format($date_to) ."</td>\n";
+		echo "</tr>\n";		
+	}
+
+	function format($value)
+	{
+		return DateTypeRenderer::format($value, $this->template);
+	}
 }
 
 ?>
