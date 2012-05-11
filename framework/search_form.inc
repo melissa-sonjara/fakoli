@@ -742,13 +742,65 @@ class SearchParameters
 /**
  * SearchForm generates forms for searching based on a supplied DataItem.
  * 
+ * Since SearchForm extends AutoForm, functionality such as alias,
+ * hide, layout and field grouping, and custom field renderer are available.
+ * 
+ * Example to create the search form:
+ * 
+ * $order = new Order();
+ * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
+ *  
+ * // on submit, system redirects to "review_orders" identifier and retrives
+ * // values through GET
+ * $form = new SearchForm($order, "GET", "review_orders");
+ * 
+ * // default matching mode is equal but can be set to others available
+ * // in the SearchParameters
+ * $form->setMatchingMode("startsWith", "first_name", "last_name");
+ * $form->setMatchingMode("range", "order_date");
+ * 
+ * $script .= $form->writeScript();
+ * $form->drawForm();
+ * 
+ * ------------------
+ * Example of the page that processes the constraint:
+ * 
+ * $order = new Order();
+ * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
+ *  
+ * // on submit, system redirects to "review_orders" identifier and retrives
+ * // values through GET
+ * $search = new SearchParameters($order);
+ * $search->fromGET();
+ * 
+ * $constraint = $search->generateConstraint();
+ * 
+ * -------------------
+ * 
+ * Example of drawing a readonly SearchForm on the results page
+ * to show the user the criteria on which they searched.
+ * 
+ * $order = new Order();
+ * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
+ * $form = new SearchForm($order, "GET", "review_orders");
+ * $form->setMatchingMode("startsWith", "first_name", "last_name");
+ * $form->setMatchingMode("range", "order_date");
+ * $form->readOnlyForm = true;
+ * $form->button("Search Again", "order_search_form");
+ * 
+ * $script .= $form->writeScript();
+ * $form->drawForm();
+ * 
+ *
  * @author andy
  */
 class SearchForm extends AutoForm
 {
 	var $modifiers;
 	var $params;
-
+	var $hasSearchCriteria = false;
+	var $emptyMessage = "No search criteria was provided.";
+	
 	var $searchModeTypes = array("like"	=>  "exact phrase match",
 								 "all"	=>	"match all words in any order",
 								 "any"	=>	"match any words");	
@@ -870,6 +922,8 @@ class SearchForm extends AutoForm
 	 */
 	function drawForm()
 	{
+		if ($this->readOnlyForm) return $this->drawReadOnly();
+		
 		$obj =& $this->data;
 		$pk = $obj->primary_key;
 		
@@ -879,42 +933,104 @@ class SearchForm extends AutoForm
 			$submitLabel = "Search ".pluralize($obj->prettifyClassName(true));
 		}
 		
-		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}'>\n";
-		foreach(array_keys($this->hidden) as $hidden)
+		if (!$this->subordinate)
 		{
-			echo "<input type='hidden' name='$hidden' value='{$obj->$hidden}'>\n";
+			echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+			if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+			echo ">\n";
 		}
 		
-		echo "<table ";
-		if ($this->formCSS) echo "class='{$this->formCSS}'"; 
-		echo ">\n";
+		if ($this->id)
+		{
+			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
+		}
 		
-		$this->renderSearchFields();
+		foreach(array_keys($this->hidden) as $hidden)
+		{
+			echo "<input id='{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
+		}	
 		
-		echo "<tr>\n";
-		echo "<td colspan='2' class='submit'><br/><input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'>";
+		$this->layout->startUngrouped();
+		
+		if ($this->buttons_at_top && !$this->subordinate) 
+		{
+			$this->layout->startButtonLine();
+			
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
 
-		$this->drawButtons();
+			$this->drawButtons();
+
+			$this->layout->endButtonLine();
+		}
+
+		$this->layout->errorBox();
+
+		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
+		{
+			$this->layout->requiredFields($this->requiredFieldsText);
+		}
+
+		$this->renderSearchFields($obj);
+					
+		if (!$this->subordinate)
+		{		
+			$this->layout->startButtonLine();
+
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
+			$this->drawButtons();
+	
+			$this->layout->endButtonLine();
+		}
+
+		$this->layout->endUngrouped();
 		
-		echo "</td></table>\n</form>\n";
+		if (!$this->subordinate)
+		{
+			echo "</form>\n";
+		}
 	}
 
-	function renderSearchFields()
+	function renderSearchFields($obj)
 	{
-		$obj =& $this->data;
-		// JDG 9/2011 handle CompositeDataItems
-		$fields = $obj->getFields();
+		$filter = $obj->getFilter();
 		
-		foreach(array_keys($fields) as $field)
+		if (count($this->groups) > 0)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
-				!($obj->filter && $obj->filter->isExcluded($field)))
+			$this->layout->endUngrouped();
+			
+			foreach($this->groups as $legend => $fields)
+			{
+				$collapsible = array_key_exists($legend, $this->collapsibleGroups);
+				if ($collapsible)
+				{
+					$cf = $this->collapsibleGroups[$legend];
+					$collapsed = !$this->data->$cf;
+				}
+				
+				$this->layout->startGroup($legend, $collapsible, $collapsed);
+				
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneSearchField($field);
+					}					
+				}
+				
+				$this->layout->endGroup();
+			}
+			
+			$this->layout->startUngrouped();
+			
+		}
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$this->renderOneSearchField($field);
 			}
 		}
-		
-		$this->renderAdditionalFields();
 	}
 	
 	/*
@@ -925,11 +1041,51 @@ class SearchForm extends AutoForm
 	 */
 	function renderOneSearchField($field)
 	{
-		$mode = $this->getMatchingMode($field);
+		$mode = $this->getMatchingMode($field);		
 		$renderer = $this->getRenderer($field);
+			
+		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
+		{
+			foreach($this->additional as $r)
+			{
+				$renderer = $r['renderer'];
+				$field = $r['field'];
+				if(!$field)
+					$field = $renderer->field;
+			}
+		}
+			
 		if ($renderer)
 		{
-			$renderer->renderSearchField($field, $mode);
+			if(!$this->readOnlyForm)
+			{
+				$renderer->renderSearchField($field, $mode);
+			}
+			else if($this->readOnlyForm && (get_class($renderer) != DateFieldRenderer || $mode != "range"))
+			{
+				$value = $this->params->get($field, $mode);
+				if($value)
+				{
+					// Set the value into the form's data obj so that the
+					// renderReadOnly function works the same as with AutoForm
+					$this->data->set($field, $value);
+					$renderer->renderReadOnly($field);
+					$this->hasSearchCriteria = true;
+				}
+			}
+			else if($this->readOnlyForm)
+			{
+				$date_from = $this->params->get($field, "from");
+				$date_to = $this->params->get($field, "to");
+				if($date_from || $date_to)
+				{
+					$renderer->renderDateRangeReadOnly($field, $date_from, $date_to);
+					$this->hasSearchCriteria = true;
+				}
+			}
+			// count as rendered even if we didn't render because readonly and
+			// no value so that we don't try to render again
+			$this->renderedFields[$field] = true;
 		}
 	}
 	
@@ -941,12 +1097,71 @@ class SearchForm extends AutoForm
 			$field = $r['field'];
 			if(!$field)
 				$field = $renderer->field;
-				
+
 			$mode = $this->getMatchingMode($field);
-			$renderer->renderSearchField($field, $mode);
+			
+			if(!array_key_exists($field, $this->renderedFields) &&  $this->params->get($field, $mode))
+			{
+				$renderer->renderSearchField($field, $mode);
+			}
+			$this->renderedFields[$field] = true;
 		}
 	}
 	
+	/**
+	 * Draws the form in read-only mode. Used to display
+	 * the search criteria on the results screen.
+	 */
+	function drawReadOnly()
+	{
+		echo "<table";
+		if ($this->formCSS) echo " class='{$this->formCSS}'";
+		if ($this->style) echo " style='{$this->style}'";
+		echo ">\n";
+
+		$obj =& $this->data;
+		$pk = $obj->primary_key;
+		$filter = $obj->getFilter();
+		
+		if (count($this->groups) > 0)
+		{
+			foreach($this->groups as $legend => $fields)
+			{			
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && 
+					!array_key_exists($field, $this->renderedFields) && 
+					!($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneSearchField($field);
+					}					
+				}
+			}		
+		}
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				$this->renderOneSearchField($field);
+			}
+		}
+					
+		if(!$this->hasSearchCriteria)
+		{
+			echo "<tr>\n<td style='padding-top: 10px; padding-bottom: 10px'><i>{$this->emptyMessage}</i></td>\n</tr>\n";
+		}
+		
+		ob_start();
+		$this->drawButtons();
+		$buttons .= ob_get_contents();
+		ob_end_clean();
+		
+		if($buttons)
+			echo "<tr><td>".  preg_replace("/^(&nbsp;)+/", "", $buttons) . "</td>\n<tr>\n";
+		
+		echo "</table>";
+	}
 }
 
 ?>

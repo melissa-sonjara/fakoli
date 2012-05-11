@@ -87,7 +87,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	function createSpreadsheetRowForms($items, $subform)
 	{
 		$subform->subordinate = true;
-		//$subform->layout = AutoFormLayout::create("table_row", $subform);
+		$subform->layout = AutoFormLayout::create("table_row", $subform);
 
 		// Don't allow HTMLEditor in spreadsheet form,
 		// override with Text Editor

@@ -147,7 +147,8 @@ class TableBasedFormLayout extends AutoFormLayout
 	 */
 	function printLabel($field, $renderer, $styles = "", $annotation = "")
 	{		
-		if ($renderer->hideLabel && $renderer->colspan > 1 && !$annotation) return;
+		$colspan = $renderer->colspan;
+		if ($renderer->hideLabel && $colspan > 1 && !$annotation) return;
 		
 		$label = $this->getLabel($field, $renderer);
 		
@@ -194,6 +195,28 @@ class TableBasedFormLayout extends AutoFormLayout
 	{
 		echo "<tr>\n <td colspan='2'><b>{$text}</b></td></tr>\n";
 	}
+}
+
+/**
+ * Used when you want layout to provide field ordering but
+ * don't want groups or borders around the group(s).
+ */
+class UngroupedFormLayout extends TableBasedFormLayout
+{
+	function UngroupedFormLayout($form)
+	{
+		$this->AutoFormLayout($form);
+	}
+	
+	function startGroup($name)
+	{
+		$this->startUngrouped();
+	}
+	
+	function endGroup()
+	{
+		$this->endUngrouped();
+	}	
 }
 
 /*
