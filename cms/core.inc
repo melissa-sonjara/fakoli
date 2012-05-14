@@ -75,7 +75,8 @@ class Fakoli
 			
 			if (!$components[$component])
 			{
-				throw new FakoliException("Attempt to reference unknown or disabled component '$component'");
+				trace("Attempt to reference unknown or disabled component '$component'", 2);
+				continue;
 			}
 			
 			$c = $components[$component];
