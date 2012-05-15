@@ -1124,7 +1124,8 @@ class SearchForm extends AutoForm
 		foreach($this->params->params as $param => $value)
 		{
 			list($field, $modifier) = explode(":", $param);
-			$this->setMatchingMode($modifier, $field);
+			if(!array_key_exists($field, $this->modifiers))
+				$this->setMatchingMode($modifier, $field);
 		}
 		
 		if (count($this->groups) > 0)
