@@ -38,12 +38,14 @@ $logs = EmailManager::scanDebugLogs();
 
 $table = new DataListView($logs, "emailDebugLogs");
 $table->column("Recipient", "<a href=\"/action/email/download_email_log?filename={filename}\">{filename}</a>", true)
-		->column("Last Modified", "{date}", true)
+		->column("Last Modified", "{date:Y-m-d g:ia}", true)
 		;
 			  	
 $table->emptyMessage = "There are no email debug logs.";
 $table->mode = "tree";
 $table->cssStyle = "width: 80%";
+$table->filter = true;
+$table->sortable = true;
 
 $script .= $table->writeScript();
 
