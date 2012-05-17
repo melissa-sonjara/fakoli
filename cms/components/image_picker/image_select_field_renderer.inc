@@ -100,6 +100,10 @@ class ImageSelectFieldRenderer extends FieldRenderer
 	
 	function preProcess($field = "")
 	{
+		if ($this->parent->data->get($field) === "")
+		{
+			$this->parent->data->set($field, 0);
+		}
 		// Nothing to do
 	}
 	
