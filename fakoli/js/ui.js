@@ -768,6 +768,11 @@ var PaginatingList = new Class(
 	        evt.stop();
 	        return false;
 	    }).injectInside( this.paginator );
+	    
+	    if (this.pages <= 1)
+	    {
+	    	this.paginator.getParent().setStyle('display', 'none');
+	    }
 	},
 	  
 	createPaginationNode: function( text, evt ) 

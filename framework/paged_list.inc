@@ -31,17 +31,28 @@
 
 *****************************************************************/
 
+/**
+ * The PagedList class provides a simple User Interface control
+ * to allow pagination of HTML lists of DataItems. 
+ * @author andy
+ */
 class PagedList
 {
-	var $items;
-	var $id;
-	var $format;
-	var $pageSize = 10;
-	var $listTag = "ul";
-	var $CSSclass = null;
-	var $styles = null;
-	var $emptyList = "No items in the list";
+	var $items;									///< The items to be displayed in the list
+	var $id;									///< The HTML id of the list
+	var $format;								///< The formatter used to display the list items (either a format string or a callback function or method)
+	var $pageSize = 10;							///< The number of items per page
+	var $listTag = "ul";						///< The HTML list tag type
+	var $CSSclass = null;						///< CSS class(es) to be applied to the list
+	var $styles = null;							///< Specific CSS styles to be applied to the list
+	var $emptyList = "No items in the list";	///< Message to display when the list is empty
 	
+	/**
+	 * Creates a new PagedList control.
+	 * @param array $items the array of DataItems to be displayed in the list
+	 * @param string $id the HTML id of the list
+	 * @param mixed $format The formatter used to display the list items (either a format string or a callback function or method)
+	 */
 	function PagedList($items, $id = "paged_list", $format = null)
 	{
 		$this->items = $items;
