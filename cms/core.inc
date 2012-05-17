@@ -39,7 +39,8 @@ class FakoliException extends Exception {}
 
 /**
  * This class provides the Fakoli CMS core. It contains basic utility functions
- * used by components and modules to access the component map.
+ * used by components and modules to access the component map, and provides facilities
+ * for serving resources and pages to the client.
  * 
  * @author andy
  *
@@ -50,7 +51,9 @@ class Fakoli
 	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
 	
 	/**
-	 * Import the datamodels, views and manifest for the specified component.
+	 * Import the datamodels, views and manifest for the specified component(s).
+	 * More than one component can be specified in the call.
+	 * 
 	 * @param string $component the component to import
 	 */
 	static function using()
@@ -170,6 +173,10 @@ class Fakoli
 		return array_key_exists($name, Fakoli::getComponents());
 	}
 	
+	/**
+	 * Performs a complete component scan if the component table
+	 * is found to be empty.
+	 */
 	static function initialComponentScan()
 	{
 		require_once "cms/components/component/datamodel/component.inc";
@@ -181,6 +188,10 @@ class Fakoli
 		$mgr->scan();
 	}
 	
+	/**
+	 * Bootstraps the creation of the database schema if the component
+	 * table does not exist.
+	 */
 	static function bootstrap()
 	{
 		require_once "cms/components/component/datamodel/component.inc";
@@ -215,6 +226,9 @@ class Fakoli
 		}
 	}
 	
+	/**
+	 * Uses the specified framework file(s) from the framework directory.
+	 */
 	static function usingFile()
 	{
 		$num = func_num_args();
@@ -227,6 +241,12 @@ class Fakoli
 		}
 	}
 	
+	/**
+	 * Uses the specified framework feature(s). Each feature corresponds to
+	 * a file in the framework directory (without the extension). Use this 
+	 * method to select the framework functionality you require for your page,
+	 * (such as 'auto_form' or 'data_view').
+	 */
 	static function usingFeature()
 	{
 		$num = func_num_args();
@@ -239,6 +259,10 @@ class Fakoli
 		}
 	}	
 
+	/**
+	 * Builds the administration menu, combining menu items supplied by
+	 * the registered components in their manifests.
+	 */
 	static function getAdminMenu()
 	{
 		$menu = Cache::get("fakoli_admin_menu");
@@ -284,6 +308,10 @@ class Fakoli
 		return $menu;
 	}
 	
+	/**
+	 * Returns the HTML scripts tags for Javascript files specified by
+	 * the registered components in their manifest files.
+	 */
 	static function getScripts()
 	{
 		$scripts = Cache::get("fakoli_scripts");
@@ -314,6 +342,10 @@ class Fakoli
 		return $scripts;
 	}
 	
+	/**
+	 * Returns the HTML link tags for CSS files specified by
+	 * the registered components in their manifest files.
+	 */
 	static function getStyles()
 	{
 		$styles = Cache::get("fakoli_styles");
@@ -344,16 +376,35 @@ class Fakoli
 		return $styles;		
 	}
 	
+	/**
+	 * Sorting callback function that sorts two admin menu items by their specified weights.
+	 * Used during the construction of the admin menu.
+	 * @param array $item1
+	 * @param array $item2
+	 */
 	static function compareByWeight($item1, $item2)
 	{
 		return $item1["weight"] - $item2["weight"];
 	}
 	
+	/**
+	 * Retrieves the capitalized camlCase name for the specified component.
+	 * This is the root of the name for the component's manifest class. 
+	 * @param string $name the component's name
+	 */
 	static function getComponentClassRoot($name)
 	{
 		return str_replace(" ", "", prettify($name));
 	}
 	
+	/**
+	 * Sends the resource at the specified URI to the client. This is used
+	 * by the resource.php dispatcher to send files owned by the library that
+	 * may not be within the web root.
+	 * 
+	 * @param unknown_type $uri the URI to the resource
+	 * @param unknown_type $component the component that owns the resource
+	 */
 	static function sendResource($uri, $component = "")
 	{
 		$resource = Fakoli::resolveResource($uri, $component);
@@ -365,6 +416,10 @@ class Fakoli
 		Fakoli::sendFile($resource);
 	}
 	
+	/**
+	 * Sends the contents of the specified file to the client.
+	 * @param string $resource the full local file path of the resource
+	 */
 	static function sendFile($resource)
 	{
 	    $last_modified = filemtime($resource);
@@ -471,6 +526,73 @@ class Fakoli
 		}
 				
 		return null;
+	}
+	
+	static function sendPage($sectionIdentifier, $identifier, $page_id = null)
+	{
+		trace("Send Page: '$sectionIdentifier', '$identifier', '$page_id'", 2);
+		
+		if (!$sectionIdentifier) $sectionIdentifier = "/";
+		
+		global $section;
+		
+		$section = Section::createFromIdentifier($sectionIdentifier);
+		
+		if (!$page_id && !$identifier)
+		{
+			redirect("/{$section->section}/$section->default_page");
+		}
+		
+		if ($page_id)
+		{
+			$page = new Page($page_id);
+		
+			$page_role = $page->role;
+			
+			if (!checkRole($page->role))
+			{
+				LoginManager::redirectToLogin();	
+			}
+			
+			echo $pageView->drawView();
+			
+		}
+		else
+		{
+			if (!$section)
+			{
+				throw new FakoliException("The section you were attempting to access could not be found.");
+			}
+		
+			$content = $section->getContent($identifier);
+			if (!$content)
+			{
+				throw new FakoliException("The page you were attempting to access could not be found.");
+			}
+			
+			if (!checkRole($section->getRole($content)) ||
+				!Settings::checkPermissions($section->getPermissions($content)))
+			{
+				LoginManager::redirectToLogin();		
+			}
+			
+			trace("\$_SERVER['HTTPS'] = {$_SERVER['HTTPS']}", 3);
+			trace("\$_SERVER['REQUEST_URI'] = {$_SERVER['REQUEST_URI']}", 3);
+			
+			$https = $_SERVER['HTTPS'];
+			if ($https == "off") $https = false; // For IIS
+			
+			if ($section->use_SSL && !$https )
+			{
+				redirect("https://".$config['http_host'].$_SERVER['REQUEST_URI']);
+			}
+			else if (!$section->use_SSL && $https && $identifier != "login" && !isset($_REQUEST["login"]))
+			{
+				redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
+			}
+		
+			ComponentManager::fireEvent("ResolveIdentifier", $identifier);
+		}
 	}
 	
 	static function errorHandler($errLevel, $errMsg, $errFile, $errLine)
