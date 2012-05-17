@@ -40,6 +40,7 @@ class PagedList
 	var $listTag = "ul";
 	var $CSSclass = null;
 	var $styles = null;
+	var $emptyList = "No items in the list";
 	
 	function PagedList($items, $id = "paged_list", $format = null)
 	{
@@ -66,6 +67,12 @@ class PagedList
 	
 	function drawList()
 	{
+		if (!count($this->items))
+		{
+			echo "<p>{$this->emptyList}</p>";
+			return;
+		}
+		
 		$attrs = "";
 		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
