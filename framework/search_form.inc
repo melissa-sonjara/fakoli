@@ -379,8 +379,11 @@ class DateSearchParameterHandler extends SearchParameterHandler
 			// JDG 5/2012  - need month and day to have "0" if single digit
 			$date = date('Y-m-d', strtotime($date));
 		}
+		// datetime
 		else if (preg_match("|^(\\d+)/(\\d+)/(\\d{4})\\s+(\\d+:\\d+:\\d+)|", $date, $fields))
 		{
+			// JDG 5/2012  - need month and day to have "0" if single digit
+			$date = date('Y-m-d', strtotime($date));
 			$date = $fields[3]."-".$fields[1]."-".$fields[2]." ".$fields[4];
 		}
 	
@@ -970,7 +973,7 @@ class SearchForm extends AutoForm
 			$this->layout->requiredFields($this->requiredFieldsText);
 		}
 
-		$this->renderSearchFields($obj);
+		$this->renderSearchFields();
 					
 		if (!$this->subordinate)
 		{		
@@ -990,8 +993,9 @@ class SearchForm extends AutoForm
 		}
 	}
 
-	function renderSearchFields($obj)
+	function renderSearchFields()
 	{
+		$obj =& $this->data;
 		$filter = $obj->getFilter();
 		
 		if (count($this->groups) > 0)
