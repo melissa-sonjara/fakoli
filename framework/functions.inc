@@ -106,7 +106,8 @@ $doc_types = array( "application/msword",
 		    "application/ms-powerpoint",
 		    "application/mspowerpoint",
 		    "text/html",
-		    "text/rtf" );
+		    "text/rtf",
+			"audio/mpeg" );
 
 /**
  * Mapping of common file extensions to human-readable document type
@@ -124,7 +125,8 @@ $doc_extensions = array(
         ".png" => "PNG Image File",
 		".xlsx" => "Microsoft Excel Spreadsheet",
 	    ".pptx" => "Microsoft Powerpoint Presentation",
-		".docx" => "Microsoft Word Document"
+		".docx" => "Microsoft Word Document",
+		".mp3"	=> "MP3 Audio File"
         );
 
 $doc_mime_types = array(
@@ -140,7 +142,8 @@ $doc_mime_types = array(
         ".png" => "image/x-png",
 		".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 	    ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-		".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+		".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		".mp3" => "audio/mpeg"
 );
 
 $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
