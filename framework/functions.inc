@@ -153,6 +153,7 @@ $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
 					".pdf"		=>	"/fakoli/images/pdf_icon.png",
 					".ppt"		=>	"/fakoli/images/ppt_icon.png",
 					".pptx"		=>	"/fakoli/images/ppt_icon.png",
+					".mp3"		=>	"/fakoli/images/mp3.png",
 					"default"	=>	"/fakoli/images/file_icon.png");
 /**
  * LEGACY Global function to connect to the database.
