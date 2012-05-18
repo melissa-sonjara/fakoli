@@ -269,7 +269,7 @@ class VideoManager
 							->executeSingle();
 							
 			$page = ComponentPage::findByIdentifier("video_gallery", "WHERE enabled=1");
-			$_GET["gallery_id"] = $gallery->gallery_id;
+			$_GET["gallery_id"] = $gallery->video_gallery_id;
 		
 			$pageView = new ComponentPageView($page);
 		
