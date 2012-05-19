@@ -148,13 +148,14 @@ class AttachmentFieldRenderer extends FieldRenderer
 	{
 		if (!$field) $field = $this->field;
 	
+		$attachments = $this->getAttachments();
+		if(count($attachments) < 2) $this->colspan = 1;
+		
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-			
-		$attachments = $this->getAttachments();
+		echo ">";		
 		
 		// Omit ul li list if only one
 		if(count($attachments) == 1)
