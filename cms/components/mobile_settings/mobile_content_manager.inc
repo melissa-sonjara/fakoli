@@ -59,7 +59,10 @@ class MobileSettingsManager
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 		$mode = ($mode == "Use Mobile Template");
 		$continue = !$mode;
-		return $mode ? $site->mobile_template : $template;
+		$out = $mode ? $site->mobile_template : $template;
+		
+		trace("OverrideTemplate: $template -> $out", 3);
+		return $out;
 	}
 	
 	static function useMobile()
