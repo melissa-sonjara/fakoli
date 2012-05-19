@@ -54,7 +54,7 @@ class MobileSettingsManager
 	{
 		global $site;
 		
-		if (!MobileSettingsManager::useMobile()) return false;
+		if (!MobileSettingsManager::useMobile()) return $template;
 		
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 		$mode = ($mode == "Use Mobile Template");
