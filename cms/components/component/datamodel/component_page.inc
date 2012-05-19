@@ -149,11 +149,7 @@ class ComponentPage extends DataItem
 		if (!$templateFile) $templateFile = $this->template;
 		if (!$templateFile) $templateFile = $site->default_template;
 		
-		trace("templateFile1: $templateFile", 1);
-		
 		$templateFile = ComponentManager::fireEvent("OverrideTemplate", $templateFile);
-		
-		trace("templateFile2: $templateFile", 1);
 		
 		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
 
