@@ -616,6 +616,11 @@ class Fakoli
 		
 			while(ob_end_clean()); // Clear all output buffers.
 
+			if (Settings::getValue("optimize", "compress_page_content") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+			{
+				ob_start("ob_gzhandler");
+			}
+		
 			$err = Fakoli::resolveResource("/fakoli/error.tpl");
 			$template = file_get_contents($err);
 			$out = str_replace("{message}", $errMsg, $template);
