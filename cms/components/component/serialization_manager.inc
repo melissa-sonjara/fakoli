@@ -53,7 +53,10 @@ class SerializationManager
 		$components = explode(",", $components);
 		
 		$doc = new DOMDocument();
-		$doc->loadXML($xml);
+		if (!$doc->loadXML($xml))
+		{
+		 	throw new FakoliException("Failed to load XML data file");
+		};
 		
 		$tx = new DataTransaction();
 

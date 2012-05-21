@@ -83,9 +83,6 @@ var BlockSeriesRenderer = new Class(
 			if (this.series.options.emboss)
 			{
 				column.emboss();
-//				highlights = this.chart.paper.rect(x, y, columnWidth, columnHeight);
-//				highlights.attr({fill: fillSwatch});
-//				highlights.emboss();
 			}
 
 			if (this.series.options.shadow)

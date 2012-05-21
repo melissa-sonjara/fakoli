@@ -26,10 +26,10 @@ class HistogramSeries
 		$options = array();
 		foreach ($this->options as $opt => $val)
 		{
-			$options[] = "'$opt': '$val',";
+			$options[] = "'$opt': $val";
 		}
 		
-		$options = "{".implode(",", $options)."}";
+		$options = "{".implode(", ", $options)."}";
 		
 		$out = "new HistogramSeries('{$this->type}', '" . jsSafe($this->title) . "', [{$values}], $options)";
 		return $out;
@@ -58,6 +58,7 @@ class Histogram
 	var $series = array();
 	var $ticks = 10;
 	var $max = 0;
+	var $columnMargin = 0.2;
 	var $morphing = false;
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
@@ -149,7 +150,8 @@ window.addEvent('domready', function ()
 		legendX: {$this->legendX},
 		legendY: {$this->legendY},
 		ticks: {$this->ticks},
-		max: {$this->max}
+		max: {$this->max},
+		columnMargin: {$this->columnMargin}
 	});
 	
 	{$this->id}.labels = [ {$labels} ];

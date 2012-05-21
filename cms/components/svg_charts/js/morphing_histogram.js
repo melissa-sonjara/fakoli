@@ -29,13 +29,13 @@ var MorphingHistogram = new Class({
         
 		var prevleft = this.options.chartLeft + 8;
 		
-        this.prevButton = this.paper.circle(prevleft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none"}).dropShadow(2, 1, 1, 0.1);
-        this.prevArrow = this.paper.path("M" + (prevleft + 5) + ",14l-12,6 12,6z").attr({fill: this.palette.strokeColor});
+        this.prevButton = this.paper.circle(prevleft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none", 'cursor': 'pointer'}).dropShadow(2, 1, 1, 0.1);
+        this.prevArrow = this.paper.path("M" + (prevleft + 5) + ",14l-12,6 12,6z").attr({fill: this.palette.strokeColor, 'cursor': 'pointer'});
 
         var nextLeft = this.options.chartLeft + this.options.chartWidth - 12;
 
-        this.nextButton = this.paper.circle(nextLeft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none"}).dropShadow(2, 1, 1, 0.1);
-        this.nextArrow = this.paper.path("M" + (nextLeft - 4) + ",14l12,6 -12,6z").attr({fill: this.palette.strokeColor});
+        this.nextButton = this.paper.circle(nextLeft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none", 'cursor': 'pointer'}).dropShadow(2, 1, 1, 0.1);
+        this.nextArrow = this.paper.path("M" + (nextLeft - 4) + ",14l12,6 -12,6z").attr({fill: this.palette.strokeColor, 'cursor': 'pointer'});
 
         this.prevButton.click(function() { this.prev(); }.bind(this))
         			   .mouseover(function() { this.highlight(this.prevButton, this.prevArrow); }.bind(this))
