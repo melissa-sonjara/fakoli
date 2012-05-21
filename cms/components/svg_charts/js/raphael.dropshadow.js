@@ -36,7 +36,8 @@
 					merge = $("feMerge"), 
 					mergeNodeShadow = $("feMergeNode"), 
 					mergeNodeSource = $("feMergeNode");
-				fltr.id = "dropshadow";
+				id = ("dropshadow_" + size + "_" + offsetX + "_" + offsetY + "_" + opacity).replace(".", "_");
+				fltr.id = id;
 				$(fltr, {
 					"height" : "150%",
 					"width" : "150%"
@@ -61,7 +62,7 @@
 				this.paper.defs.appendChild(fltr);
 				this._blur = fltr;
 				$(this.node, {
-					"filter" : "url(#" + fltr.id + ")"
+					"filter" : "url(#" + id + ")"
 				});
 			} else {
 				if(this._blur) {

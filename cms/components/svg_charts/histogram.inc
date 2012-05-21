@@ -58,6 +58,7 @@ class Histogram
 	var $series = array();
 	var $ticks = 10;
 	var $max = 0;
+	var $morphing = false;
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -125,11 +126,13 @@ class Histogram
 			$data .= "\t{$this->id}.addSeries(".$s->toScript().");\n";
 		}
 		
+		$jsClass = $this->morphing ? "MorphingHistogram" : "Histogram";
+		
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function ()
 {
-	var {$this->id} = new Histogram('{$this->id}', 
+	var {$this->id} = new $jsClass('{$this->id}', 
 	{
 		width: {$this->width}, 
 		height: {$this->height}, 

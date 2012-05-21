@@ -23,7 +23,8 @@ class SvgChartsManifest
 				"/components/svg_charts/js/palette.js",
 				"/components/svg_charts/js/chart.js",
 				"/components/svg_charts/js/pie_chart.js",
-				"/components/svg_charts/js/histogram.js"
+				"/components/svg_charts/js/histogram.js",
+				"/components/svg_charts/js/morphing_histogram.js"
 		);
 	}
 

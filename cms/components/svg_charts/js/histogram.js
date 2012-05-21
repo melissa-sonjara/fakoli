@@ -12,7 +12,9 @@ var HistogramSeries = new Class(
 		emboss: true,
 		styles: {}
 	},
-
+	columns: [],
+	renderer: Class.Empty,
+	
 	initialize: function(type, title, values, options)
 	{
 		this.type = type;
@@ -26,18 +28,24 @@ var HistogramSeries = new Class(
 	
 	draw: function(chart, index)
 	{
-		var renderer = Class.Empty;
-		
-		switch(this.type)
+		if (!this.renderer)
 		{
-		case 'block':
+			switch(this.type)
+			{
+			case 'block':
+				
+				this.renderer = new BlockSeriesRenderer(chart, this, index);
+			}
 			
-			renderer = new BlockSeriesRenderer(chart, this, index);
+			if (!this.renderer) return;
 		}
-		
-		if (!renderer) return;
-		
-		renderer.draw();
+		this.renderer.draw();
+	},
+	
+	morph: function(series)
+	{
+		if (!this.renderer) return;
+		this.renderer.morph(series);		
 	}
 });
 
@@ -60,7 +68,7 @@ var BlockSeriesRenderer = new Class(
 		
 		this.series.values.each(function(val, i)
 		{
-			var columnWidth = (this.chart.columnWidth / this.chart.blockSeriesCount) * (1 - this.chart.options.columnMargin);
+			var columnWidth = this.chart.blockWidth;
 
 			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth) + (this.chart.blockSeriesDrawn * columnWidth);
 			var columnLeft = this.chart.columnWidth * i + columnOffset;
@@ -85,10 +93,23 @@ var BlockSeriesRenderer = new Class(
 				column.dropShadow(5, 1, 1, 0.1);
 			}
 			
+			this.series.columns.push(column);
 			
 		}.bind(this));
 
 		this.chart.blockSeriesDrawn++;
+	},
+	
+	// Morph this series to match the values of the supplied series
+	morph: function(series)
+	{
+		series.values.each(function(val, i)
+		{
+			var columnHeight = this.chart.options.chartHeight * val / this.chart.max;
+			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
+
+			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, "<>");
+		}.bind(this));
 	}
 });
 
@@ -116,12 +137,13 @@ var Histogram = new Class(
 		shadow: false,
 		gridStrokeWidth: 1,
 		ticks: 10,
-		columnMargin: 0.2
+		columnMargin: 0.2,
+		titleSize: 20
 	},
 	
 	initialize: function(id, options, labels)
 	{
-		this.parent(id)
+		this.parent(id);
 		this.setOptions(options);
 		this.labels = labels;
 	},
@@ -135,6 +157,23 @@ var Histogram = new Class(
 	{
 		this.createChart();
 
+		this.setupHistogram();
+		
+		this.blockWidth = (this.columnWidth / this.blockSeriesCount) * (1 - this.options.columnMargin);
+		this.drawChart();
+	},
+	
+	drawChart: function()
+	{
+
+		this.drawBlocks();
+		this.drawLabels();
+		this.drawTicks();
+		this.drawLegend();
+	},
+	
+	setupHistogram: function()
+	{
 		if (this.labels.length == 0)
 		{
 			count = this.series[0].length;
@@ -161,8 +200,8 @@ var Histogram = new Class(
 			{
 				this.blockSeriesCount++;
 			}
-		}.bind(this));
-			
+		}.bind(this));	
+	
 		var grid = this.paper.rect(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight);
 		grid.attr({"stroke-width": this.options.strokeWidth, stroke: this.palette.strokeColor, fill: this.options.chartBackground});
 		if (this.options.shadow)
@@ -175,16 +214,15 @@ var Histogram = new Class(
 		this.columnWidth = this.options.chartWidth / count;
 		
 		var grid = this.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, this.labels.length, this.options.ticks, this.palette.strokeColor);
-
+	},
+	
+	drawBlocks: function()
+	{
 		var idx = 0;
 		this.series.each(function(s)
 		{
 			s.draw(this, idx++);
-		}.bind(this));
-		
-		this.drawLabels();
-		this.drawTicks();
-		this.drawLegend();
+		}.bind(this));		
 	},
 	
 	drawLabels: function()
