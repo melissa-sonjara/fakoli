@@ -110,6 +110,7 @@ class GroupedDataListView
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
 	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
+	var $rowId = false; // whether to include an id tag for each tr row
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -224,7 +225,12 @@ class GroupedDataListView
 		return $this; 
 	}
 	
-
+	function formatRowId($item)
+	{
+		$pk = $item->getPrimaryKey();
+		return "id='{$pk}_" . $item->$pk . "'";
+	}	
+	
 	/**
 	 * Adds a text column to the table footer.
 	 * @param $text the text to display
@@ -413,12 +419,15 @@ class GroupedDataListView
 
 					foreach($this->items[$group->key] as $item)
 					{
+						if($this->rowId)
+							$rowId = $this->formatRowId($item);
+	
 						if ($this->onStartRow)
 						{
 							call_user_func($this->onStartRow, $item);
 						}
 ?>
-          <tr>
+          <tr <?php echo $rowId ?>>
 <?
 						foreach($this->columns as $column)
 						{

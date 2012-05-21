@@ -200,7 +200,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	 * keys of the objects that saved successfully
 	 * to use to reload the page after save.
 	 */
-	function getQueryString()
+	function getQueryString($qs = "")
 	{
 		$values = array();
 		
@@ -212,11 +212,15 @@ class SpreadsheetForm extends CompositeAutoForm
 			if($val)
 			{
 				$name = "{$form->id}_$pk}";
-				$qs .= $sep.urlencode($pk)."[".urlencode($name)."]=".urlencode($val);
+				$params .= $sep.urlencode($pk)."[".urlencode($name)."]=".urlencode($val);
 				$sep = "&";
 			}
 		}
-		return $qs;
+		
+		if($params && $qs)
+			$params = appendToQueryString($qs, $params);
+		
+		return $params;
 	}
 }
 
