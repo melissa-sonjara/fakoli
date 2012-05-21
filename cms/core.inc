@@ -597,6 +597,12 @@ class Fakoli
 	
 	static function errorHandler($errLevel, $errMsg, $errFile, $errLine)
 	{
+		// Transform XML DOM warning messages into exceptions for easier handling
+	    if ($errLevel==E_WARNING && (substr_count($errMsg,"DOMDocument::loadXML()")>0))
+	    {
+	        throw new DOMException($errMsg);
+	    }
+	    
 		if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
 		
 		throw new ErrorException($errMsg, $errLevel, $errLevel, $errFile, $errLine);
