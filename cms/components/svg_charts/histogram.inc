@@ -106,6 +106,11 @@ class Histogram
 		$this->strokeWidth = $s;
 	}
 	
+	function setPalette($palette)
+	{
+		$this->palette = $palette;
+	}
+	
 	function showLegend($show, $x = 0, $y = 0)
 	{
 		$this->legend = $show;
