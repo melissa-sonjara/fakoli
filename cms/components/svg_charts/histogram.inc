@@ -44,6 +44,7 @@ class Histogram
 	var $chartTop;
 	var $chartWidth;
 	var $chartHeight;
+	var $chartBackground = "#ddd";
 	var $palette;
 	var $labelSize = 12;
 	var $strokeWidth = 1;
@@ -160,6 +161,7 @@ window.addEvent('domready', function ()
 		chartTop: {$this->chartTop}, 
 		chartWidth: {$this->chartWidth},
 		chartHeight: {$this->chartHeight},
+		chartBackground: {$this->chartBackground},
 		palette: '{$this->palette}',
 		labelSize: {$this->labelSize},
 		strokeWidth: {$this->strokeWidth},
