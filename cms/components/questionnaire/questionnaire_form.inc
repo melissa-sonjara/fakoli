@@ -89,7 +89,8 @@ class QuestionnaireForm
 	var $onFormatLabel = null; 			///< Label Processing hook
 	var $requiredFieldsText = "* indicates required question";
 	var $subordinate = false;
-
+	var $buttons = array();				///< The custom buttons collection
+	
 	function QuestionnaireForm($mgr, $readonly = false)
 	{
 		global $auto_form_defaults;
@@ -130,7 +131,44 @@ class QuestionnaireForm
 	{
 		return $this;
 	}
+			
+	/**
+	 * Adds a custom button to the form.
+	 *
+	 * @param string $text the button label text
+	 * @param string $url the URL to handle the button press
+	 * @param string $confirm optional confirmation message
+	 * @param boolean $isScript true if the url is javascript code to execute, 
+	 * 							false if it is a URL to redirect to
+	 */
+	function button($text, $url, $confirm = null, $isScript = false)
+	{
+		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm, 'isScript' => $isScript);
+	}
+	
+	/**
+	 * Draws any additional buttons specified in the calling script.
+	 *
+	 */
+	function drawButtons()
+	{
+		foreach($this->buttons as $button)
+		{
+			$url = ($button['isScript']) ? $button['url'] : "go('{$button['url']}');";
+			
+			if ($button['confirm'])
+			{
+				$link = "if (confirm('".jsSafe($button['confirm'])."')) $url; return false;";
+			}
+			else
+			{
+				$link = "$url; return false;";
+			}
 
+			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' class='{$this->buttonCSS}' onclick=\"$link\" value=\"{$button['text']}\"/>";
+		}
+
+	}
 	function getAnswer($question)
 	{
 		$qPk = $this->mgr->getQuestionKey();
@@ -235,6 +273,7 @@ class QuestionnaireForm
 		{
 			echo "<br/>";
 			echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
+			$this->drawButtons();
 			echo "<br/>";
 			echo "</form>";
 		}
