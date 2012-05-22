@@ -35,6 +35,10 @@ var HistogramSeries = new Class(
 			case 'block':
 				
 				this.renderer = new BlockSeriesRenderer(chart, this, index);
+				
+			case 'line':
+				
+				this.renderer = new LineSeriesRenderer(chart, this, index);
 			}
 			
 			if (!this.renderer) return;
@@ -108,6 +112,52 @@ var BlockSeriesRenderer = new Class(
 			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, "<>");
 		}.bind(this));
 	}
+});
+
+var LineSeriesRenderer = new Class(
+{
+	chart: Class.Empty,
+	series: Class.Empty,
+	index: 0,
+	
+	initialize: function(chart, series, index)
+	{
+		this.chart = chart;
+		this.series = series;
+		this.index = index;
+	},
+	
+	draw: function()
+	{
+		var fillSwatch = this.chart.palette.swatches[this.index];
+		
+		var p = "";
+		var cmd = "M";
+		
+		this.series.values.each(function(val, i)
+		{
+			var columnWidth = this.chart.blockWidth;
+
+			var columnOffset = this.chart.columnWidth / 2;
+			var columnCenter = this.chart.columnWidth * i + columnOffset;
+			
+			
+			var x = this.chart.options.chartLeft + columnCenter;
+			var columnHeight = this.chart.options.chartHeight * val / this.chart.max;
+			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
+			
+			p += cmd + x + "," + y;
+			cmd = "L";			
+		}.bind(this));
+
+		var path = this.chart.paper.path(p);
+	},
+	
+	// Morph this series to match the values of the supplied series
+	morph: function(series)
+	{
+
+	}		
 });
 
 var Histogram = new Class(
