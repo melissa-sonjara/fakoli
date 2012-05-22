@@ -90,7 +90,7 @@ var MorphingHistogram = new Class({
 	
 	morphColumns: function()
 	{
-		this.series[0].morph(this.series[this.index]);
+		this.series[this.options.startIndex].morph(this.series[this.index]);
 	},
 	
 	highlight: function(button, arrow)
