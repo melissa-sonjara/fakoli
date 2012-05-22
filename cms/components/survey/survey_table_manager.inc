@@ -39,6 +39,8 @@ class CMSSurveyTableManager
 	function formatOptions($xref)
 	{
 		$question = $xref->Question();
+		if (!$question) return "";
+		
 		if($question->isFreeText() || $question->isShortText())
 		{
 			$text .= "Character Limit: ";
@@ -47,7 +49,7 @@ class CMSSurveyTableManager
 		}
 		else
 		{
-			$text =  preg_replace("/\r\n/", "<br>", $question->options);
+			$text =  preg_replace("/\n/", "; ", $question->options);
 		}
 
 		if($question->isFreeText())
@@ -60,7 +62,8 @@ class CMSSurveyTableManager
 	function formatRequired($xref)
 	{
 		$question = $xref->Question();
-
+		if (!$question) return "";
+		
 		if($question->isCheckList())
 			return ($question->required > 0) ? $question->required : "No";
 		else
