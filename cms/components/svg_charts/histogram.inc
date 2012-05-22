@@ -60,6 +60,7 @@ class Histogram
 	var $max = 0;
 	var $columnMargin = 0.2;
 	var $morphing = false;
+	var $yAxisLabels = array();
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -94,6 +95,11 @@ class Histogram
 		$this->labelSize = $size;
 	}
 	
+	function setYAxisLabels($labels)
+	{
+		$this->yAxisLabels = $labels;
+	}
+	
 	function setStrokeWidth($s)
 	{
 		$this->strokeWidth = $s;
@@ -116,6 +122,13 @@ class Histogram
 		global $script;
 		
 		$labels = "'".implode("', '", $this->labels) . "'";
+		
+		if (count($this->yAxisLabels))
+		{
+			$yaxis = "'".implode("', '", $this->yAxisLabels) . "'";
+			$yaxis = "\t{$this->id}.yAxisLabels = [ $yaxis ];";
+		}
+		
 		$animate = $this->animate ? "true" : "false";
 		$shadow = $this->shadow ? "true": "false";	
 		$legend = $this->legend ? "true" : "false";
@@ -155,6 +168,7 @@ window.addEvent('domready', function ()
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
+{$yaxis}
 {$data}
 	{$this->id}.draw();
 });
