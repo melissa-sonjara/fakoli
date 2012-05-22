@@ -35,10 +35,12 @@ var HistogramSeries = new Class(
 			case 'block':
 				
 				this.renderer = new BlockSeriesRenderer(chart, this, index);
+				break;
 				
 			case 'line':
 				
 				this.renderer = new LineSeriesRenderer(chart, this, index);
+				break;
 			}
 			
 			if (!this.renderer) return;
