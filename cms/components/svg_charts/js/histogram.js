@@ -150,7 +150,7 @@ var LineSeriesRenderer = new Class(
 			cmd = "L";			
 		}.bind(this));
 
-		var path = this.chart.paper.path(p);
+		var path = this.chart.paper.path(p).attr({"stroke-width": this.options.strokeWidth * 2, stroke: fillSwatch});
 	},
 	
 	// Morph this series to match the values of the supplied series
