@@ -60,6 +60,7 @@ class Histogram
 	var $max = 0;
 	var $columnMargin = 0.2;
 	var $morphing = false;
+	var $startIndex = 0;
 	var $yAxisLabels = array();
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
@@ -164,6 +165,7 @@ window.addEvent('domready', function ()
 		legendY: {$this->legendY},
 		ticks: {$this->ticks},
 		max: {$this->max},
+		startIndex: {$this->startIndex},
 		columnMargin: {$this->columnMargin}
 	});
 	
