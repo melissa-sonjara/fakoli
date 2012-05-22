@@ -161,7 +161,7 @@ window.addEvent('domready', function ()
 		chartTop: {$this->chartTop}, 
 		chartWidth: {$this->chartWidth},
 		chartHeight: {$this->chartHeight},
-		chartBackground: {$this->chartBackground},
+		chartBackground: '{$this->chartBackground}',
 		palette: '{$this->palette}',
 		labelSize: {$this->labelSize},
 		strokeWidth: {$this->strokeWidth},
