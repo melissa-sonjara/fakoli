@@ -116,6 +116,7 @@ var Histogram = new Class(
 	Implements: [Options],
 	series: [],
 	labels: [],
+	yAxisLabels: [],
 	max: 0,
 	
 	options:
@@ -239,14 +240,24 @@ var Histogram = new Class(
 		var increment = this.max / this.options.ticks;
 		
 		var tick = 0;
+		var idx = 0;
 		var y = this.options.chartTop + this.options.chartHeight;
 		var ystep = this.options.chartHeight / this.options.ticks;
 		
 		for(tick = 0; tick <= this.max; tick += increment)
 		{
-			var text = this.paper.text(this.options.chartLeft - 10, y, tick);
+			if (this.yAxisLabels.length > 0)
+			{
+				label = this.yAxisLabels[idx];
+			}
+			else
+			{
+				label = tick;
+			}
+			var text = this.paper.text(this.options.chartLeft - 10, y, label);
 			text.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "end"});
 			y -= ystep;
+			++idx;
 		}
 	},
 	
