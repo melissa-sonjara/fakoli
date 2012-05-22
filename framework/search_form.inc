@@ -1104,7 +1104,7 @@ class SearchForm extends AutoForm
 
 			$mode = $this->getMatchingMode($field);
 			
-			if(!array_key_exists($field, $this->renderedFields) &&  $this->params->get($field, $mode))
+			if(!array_key_exists($field, $this->renderedFields))
 			{
 				$renderer->renderSearchField($field, $mode);
 			}
