@@ -10,7 +10,9 @@ var HistogramSeries = new Class(
 	{
 		shadow: false,
 		emboss: true,
-		styles: {}
+		styles: {},
+		strokeWidth: 2,
+		symbolSize: 12
 	},
 	columns: [],
 	renderer: Class.Empty,
@@ -131,10 +133,11 @@ var LineSeriesRenderer = new Class(
 	
 	draw: function()
 	{
-		var fillSwatch = this.chart.palette.swatches[this.index];
+		var lineColor = this.chart.palette.swatches[this.index];
 		
 		var p = "";
 		var cmd = "M";
+		var coords = [];
 		
 		this.series.values.each(function(val, i)
 		{
@@ -148,11 +151,16 @@ var LineSeriesRenderer = new Class(
 			var columnHeight = this.chart.options.chartHeight * val / this.chart.max;
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 			
+			coords[i] = {'x': x, 'y': y};
 			p += cmd + x + "," + y;
 			cmd = "L";			
 		}.bind(this));
 
-		var path = this.chart.paper.path(p).attr({"stroke-width": this.chart.options.strokeWidth * 2, stroke: fillSwatch});
+		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.strokeWidth, stroke: lineColor});
+		
+		coords.each(function(c, i) {
+			var dot = this.chart.paper.circle(c.x, c.y, this.series.symbolSize).attr({"stroke-width": this.series.strokeWidth, stroke: lineColor});
+		}.bind(this));	
 	},
 	
 	// Morph this series to match the values of the supplied series
