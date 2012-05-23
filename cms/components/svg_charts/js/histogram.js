@@ -160,8 +160,8 @@ var LineSeriesRenderer = new Class(
 		
 		this.coords.each(function(c, i) {
 			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground, 'cursor': 'pointer'});
-			dot.mouseover(function() {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); });
-			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); });
+			dot.mouseover(function() {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); }.bind(this));
+			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); }.bind(this));
 			
 		}.bind(this));	
 	},
