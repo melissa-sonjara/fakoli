@@ -200,7 +200,8 @@ var Histogram = new Class(
 		gridStrokeWidth: 1,
 		ticks: 10,
 		columnMargin: 0.2,
-		titleSize: 20
+		titleSize: 20,
+		title: ''
 	},
 	
 	initialize: function(id, options, labels)
@@ -232,6 +233,7 @@ var Histogram = new Class(
 		this.drawLabels();
 		this.drawTicks();
 		this.drawLegend();
+		this.drawTitle();
 	},
 	
 	setupHistogram: function()
@@ -340,6 +342,13 @@ var Histogram = new Class(
 	        path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
 	    }
 	    return this.paper.path(path.join(",")).attr({stroke: color});
+	},
+	
+	drawTitle: function()
+	{
+		if (this.options.title == '') return;
+		this.title = this.paper.text(this.options.chartWidth / 2 + this.options.chartLeft, this.options.chartTop - 30, s.title);
+    	this.title.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize});
 	}
 	
 });
