@@ -32,7 +32,7 @@ class HistogramSeries
 
 		if ($this->onClick)
 		{
-			$options[] = "'onClick: {$this->onClick}";
+			$options[] = "'onClick': {$this->onClick} ";
 		} 
 		
 		$options = "{".implode(", ", $options)."}";
