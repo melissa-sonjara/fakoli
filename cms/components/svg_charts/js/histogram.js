@@ -151,7 +151,7 @@ var LineSeriesRenderer = new Class(
 			var columnHeight = this.chart.options.chartHeight * val / this.chart.max;
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 			
-			coords[] = {'x': x, 'y': y};
+			coords.push({'x': x, 'y': y});
 			p += cmd + x + "," + y;
 			cmd = "L";			
 		}.bind(this));
