@@ -12,7 +12,7 @@ var HistogramSeries = new Class(
 		emboss: true,
 		styles: {},
 		strokeWidth: 2,
-		symbolSize: 12
+		symbolSize: 4
 	},
 	columns: [],
 	renderer: Class.Empty,
