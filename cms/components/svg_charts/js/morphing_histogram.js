@@ -96,6 +96,7 @@ var MorphingHistogram = new Class({
 		this,index = idx;
 		this.titles[this.index].animate({'opacity': 1}, 1000, '<>');
 		this.morphColumns();
+		this.paper.safari();
 	},
 		
 	morphColumns: function()
