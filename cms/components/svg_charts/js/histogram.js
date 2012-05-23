@@ -1,6 +1,6 @@
 var HistogramSeries = new Class(
 {
-	Implements: [Options],
+	Implements: [Options, Events],
 	type: 'block',
 	title: '',
 	values: [],
@@ -12,7 +12,8 @@ var HistogramSeries = new Class(
 		emboss: true,
 		styles: {},
 		strokeWidth: 2,
-		symbolSize: 4
+		symbolSize: 4,
+		onClick: Class.Empty
 	},
 	columns: [],
 	renderer: Class.Empty,
@@ -162,7 +163,7 @@ var LineSeriesRenderer = new Class(
 			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground, 'cursor': 'pointer'});
 			dot.mouseover(function() {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); }.bind(this));
 			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); }.bind(this));
-			
+			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
 		}.bind(this));	
 	},
 	
