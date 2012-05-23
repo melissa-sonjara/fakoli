@@ -137,7 +137,7 @@ var LineSeriesRenderer = new Class(
 		
 		var p = "";
 		var cmd = "M";
-		var coords = [];
+		this.coords = [];
 		
 		this.series.values.each(function(val, i)
 		{
@@ -151,14 +151,14 @@ var LineSeriesRenderer = new Class(
 			var columnHeight = this.chart.options.chartHeight * val / this.chart.max;
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 			
-			coords.push({'x': x, 'y': y});
+			this.coords.push({'x': x, 'y': y});
 			p += cmd + x + "," + y;
 			cmd = "L";			
 		}.bind(this));
 
 		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
-		coords.each(function(c, i) {
+		this.coords.each(function(c, i) {
 			var dot = this.chart.paper.circle(c.x, c.y, this.series.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		}.bind(this));	
 	},
