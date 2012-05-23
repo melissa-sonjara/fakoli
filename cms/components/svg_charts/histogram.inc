@@ -6,6 +6,7 @@ class HistogramSeries
 	var $title;
 	var $values;
 	var $options = array();
+	var $onClick;
 	
 	function HistogramSeries($type, $title, $values)
 	{
@@ -28,6 +29,11 @@ class HistogramSeries
 		{
 			$options[] = "'$opt': $val";
 		}
+
+		if ($this->onClick)
+		{
+			$options[] = "'onClick: {$this->onClick}";
+		} 
 		
 		$options = "{".implode(", ", $options)."}";
 		
