@@ -156,7 +156,7 @@ var LineSeriesRenderer = new Class(
 			cmd = "L";			
 		}.bind(this));
 
-		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.soptions.trokeWidth, stroke: lineColor});
+		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
 		coords.each(function(c, i) {
 			var dot = this.chart.paper.circle(c.x, c.y, this.series.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
