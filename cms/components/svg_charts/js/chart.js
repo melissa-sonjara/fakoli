@@ -9,7 +9,7 @@ var Chart = new Class(
 	{
 		this.id = id;
 		this.container = document.id(id);
-		
+		this.container.chart(this);
 	},
 	
 	createChart: function()
