@@ -151,15 +151,15 @@ var LineSeriesRenderer = new Class(
 			var columnHeight = this.chart.options.chartHeight * val / this.chart.max;
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 			
-			coords[i] = {'x': x, 'y': y};
+			coords[] = {'x': x, 'y': y};
 			p += cmd + x + "," + y;
 			cmd = "L";			
 		}.bind(this));
 
-		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.strokeWidth, stroke: lineColor});
+		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.soptions.trokeWidth, stroke: lineColor});
 		
 		coords.each(function(c, i) {
-			var dot = this.chart.paper.circle(c.x, c.y, this.series.symbolSize).attr({"stroke-width": this.series.strokeWidth, stroke: lineColor});
+			var dot = this.chart.paper.circle(c.x, c.y, this.series.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		}.bind(this));	
 	},
 	
