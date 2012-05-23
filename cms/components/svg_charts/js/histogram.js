@@ -159,7 +159,7 @@ var LineSeriesRenderer = new Class(
 		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
 		this.coords.each(function(c, i) {
-			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
+			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground});
 		}.bind(this));	
 	},
 	
