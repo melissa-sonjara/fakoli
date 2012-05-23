@@ -69,6 +69,7 @@ class Histogram
 	var $morphing = false;
 	var $startIndex = 0;
 	var $yAxisLabels = array();
+	var $title = "";
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -179,7 +180,8 @@ window.addEvent('domready', function ()
 		ticks: {$this->ticks},
 		max: {$this->max},
 		startIndex: {$this->startIndex},
-		columnMargin: {$this->columnMargin}
+		columnMargin: {$this->columnMargin},
+		title: '{$this->title}'
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
