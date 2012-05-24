@@ -261,7 +261,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		if (is_array($rawValue))
 		{
-			$rawValue = implode(",",  array_values($_POST[$field]));
+			$rawValue = implode(",", array_values($rawValue));
 			$this->parent->params->set($field, $mode, $rawValue);
 		}
 		
@@ -296,29 +296,32 @@ class CheckListFieldRenderer extends FieldRenderer
 
 	function preProcess($field)
 	{		
-		if (is_array($_POST[$field]))
+		$value = ($this->parent->method == "POST") ? $_POST[$field] : $_GET[$field];
+		$addEntry = ($this->parent->method == "POST") ? $_POST["{$field}_addEntry"] : $_GET["{$field}_addEntry"];
+		
+		if (is_array($value))
 		{
-			$this->parent->data->set($field, implode(",",  array_values($_POST[$field])));
+			$this->parent->data->set($field, implode(",",  array_values($value)));
 		}
-		else if (!$_POST[$field])
+		else if (!$value)
 		{
 			$this->parent->data->set($field, "");
 		}
 		else
 		{
-			$this->parent->data->set($field, $_POST[$field]);
+			$this->parent->data->set($field, $value);
 		}
 		
-		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
+		trace("addEntry($field): $addEntry", 3);
 		
-		if ($_POST["{$field}_addEntry"])
+		if ($addEntry)
 		{
 			if($this->parent->data->get($field))
 			{
 				$this->parent->data->set($field, $this->parent->data->get($field) . ",");
 			}
 			
-			$this->parent->data->set($field, $this->parent->data->get($field) . $_POST["{$field}_addEntry"]);
+			$this->parent->data->set($field, $this->parent->data->get($field) . $addEntry);
 		}
 	}
 	
