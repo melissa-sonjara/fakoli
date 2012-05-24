@@ -1035,6 +1035,18 @@ class SearchForm extends AutoForm
 				$this->renderOneSearchField($field);
 			}
 		}
+		
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				$this->renderOneSearchField($field);
+			}	
+		}
 	}
 	
 	/*
@@ -1157,6 +1169,18 @@ class SearchForm extends AutoForm
 				$this->renderOneSearchField($field);
 			}
 		}
+		
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				$this->renderOneSearchField($field);
+			}	
+		}		
 					
 		if(!$this->hasSearchCriteria)
 		{
