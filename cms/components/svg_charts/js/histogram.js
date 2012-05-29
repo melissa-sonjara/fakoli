@@ -64,7 +64,7 @@ var HistogramSeries = new Class(
 	{
 		if (idx > this.options.tooltips.length) return;
 		
-		showTextToolTip(this.chart.container, evt, this.chart.id, this.options.tooltips[idx]);
+		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", this.options.tooltips[idx]);		
 	},
 	
 	hideToolTip: function()
