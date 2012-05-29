@@ -68,7 +68,7 @@ var MorphingHistogram = new Class({
 	
 	next: function()
 	{
-		if (this.index < this.blockSeriesCount - 1)
+		if (this.index < this.series.length - 1)
 		{
 			this.titles[this.index].animate({'opacity': 0}, 1000, '<>');
 			this.index++;
