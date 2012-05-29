@@ -17,6 +17,7 @@ class SvgChartsManifest
 	static function getScripts()
 	{
 		return array(
+				"/fakoli/js/tooltip.js",
 				"/components/svg_charts/js/raphael.js",
 				"/components/svg_charts/js/raphael.dropshadow.js",
 				"/components/svg_charts/js/raphael.emboss.js",
