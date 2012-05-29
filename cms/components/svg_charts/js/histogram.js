@@ -231,6 +231,7 @@ var Histogram = new Class(
 	addSeries: function(series)
 	{
 		this.series.push(series);
+		series.index = this.series.length - 1;
 	},
 	
 	draw: function()
