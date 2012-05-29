@@ -181,12 +181,12 @@ var LineSeriesRenderer = new Class(
 	morph: function(series)
 	{
 		var p = this.calculatePath(series);
-		
-		this.path.animate({'path': p}, 1000, "<>");
+		var lineColor = this.chart.palette.swatches[series.index];
+		this.path.animate({'path': p, 'stroke': lineColor}, 1000, "<>");
 		
 		this.dots.each(function(dot, i) 
 		{
-			dot.animate({'cy': this.coords[i].y}, 1000, "<>");
+			dot.animate({'cy': this.coords[i].y, 'stroke': lineColor}, 1000, "<>");
 		}.bind(this));
 	}		
 });
