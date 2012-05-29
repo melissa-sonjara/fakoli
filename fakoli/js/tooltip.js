@@ -107,7 +107,7 @@ var ToolTip = new Class(
 		
 		textTooltip = function(link, event, tip, text)
 		{
-			if (link != ToolTip.currentLink) return;
+			//if (link != ToolTip.currentLink) return;
 			
 			if (tip.div == null) 
 			{
