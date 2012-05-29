@@ -69,7 +69,7 @@ var HistogramSeries = new Class(
 	
 	hideToolTip: function()
 	{
-		hideToolTip(this.chart.id);
+		hideToolTip(this.chart.id + "_tooltip");
 	}	
 });
 
