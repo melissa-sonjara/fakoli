@@ -60,14 +60,14 @@ var HistogramSeries = new Class(
 		this.renderer.morph(series);		
 	},
 	
-	showTooltip: function(idx)
+	showToolTip: function(idx)
 	{
 		if (idx > this.options.tooltips.length) return;
 		
 		showTextToolTip(this.chart.container, new DOMEvent(), this.chart.id, this.options.tooltips[idx]);
 	},
 	
-	hideTooltip: function()
+	hideToolTip: function()
 	{
 		hideToolTip(this.chart.id);
 	}	
