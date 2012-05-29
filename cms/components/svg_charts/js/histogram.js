@@ -157,7 +157,7 @@ var LineSeriesRenderer = new Class(
 		var cmd = "M";
 		this.coords = [];
 		
-		this.series.values.each(function(val, i)
+		series.values.each(function(val, i)
 		{
 			var columnWidth = this.chart.blockWidth;
 
