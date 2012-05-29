@@ -124,6 +124,8 @@ var LineSeriesRenderer = new Class(
 	chart: Class.Empty,
 	series: Class.Empty,
 	index: 0,
+	path: Class.Empty,
+	dots: [],
 	
 	initialize: function(chart, series, index)
 	{
@@ -136,6 +138,21 @@ var LineSeriesRenderer = new Class(
 	{
 		var lineColor = this.chart.palette.swatches[this.index];
 		
+		var p = this.calculatePath(this.series);
+
+		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
+		
+		this.coords.each(function(c, i) {
+			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground, 'cursor': 'pointer'});
+			dot.mouseover(function() {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); }.bind(this));
+			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); }.bind(this));
+			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
+			this.dots.push(dot);
+		}.bind(this));	
+	},
+	
+	calculatePath: function(series)
+	{
 		var p = "";
 		var cmd = "M";
 		this.coords = [];
@@ -156,21 +173,21 @@ var LineSeriesRenderer = new Class(
 			p += cmd + x + "," + y;
 			cmd = "L";			
 		}.bind(this));
-
-		var path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
-		this.coords.each(function(c, i) {
-			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground, 'cursor': 'pointer'});
-			dot.mouseover(function() {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); }.bind(this));
-			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); }.bind(this));
-			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
-		}.bind(this));	
+		return p;
 	},
 	
 	// Morph this series to match the values of the supplied series
 	morph: function(series)
 	{
-
+		var p = this.calculatePath(series);
+		
+		this.path.animate({'path': p}, 1000, "<>");
+		
+		this.dots.each(function(dot, i) 
+		{
+			dot.animate({'x': this.coords[i].x, 'y': this.coords[i].y}, 1000, "<>");
+		});
 	}		
 });
 
