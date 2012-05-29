@@ -7,6 +7,7 @@ class HistogramSeries
 	var $values;
 	var $options = array();
 	var $onClick;
+	var $tooltips = array();
 	
 	function HistogramSeries($type, $title, $values)
 	{
@@ -34,9 +35,16 @@ class HistogramSeries
 		{
 			$options[] = "'onClick': {$this->onClick} ";
 		} 
+
+		if (count($this->tooltips))
+		{
+			$tooltips = "['".implode("', '", $this->tooltips)."']";
+			$options[] = "'tooltips': $tooltips";
+		}
 		
 		$options = "{".implode(", ", $options)."}";
 		
+			
 		$out = "new HistogramSeries('{$this->type}', '" . jsSafe($this->title) . "', [{$values}], $options)";
 		return $out;
 	}
