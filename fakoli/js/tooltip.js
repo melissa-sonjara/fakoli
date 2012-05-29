@@ -99,6 +99,28 @@ var ToolTip = new Class(
 		loadTooltip.delay(this.options.delay, null, [ToolTip.currentLink, event, this, handlerURL]);
 	},
 
+	showText: function(link, evt, text)
+	{
+		ToolTip.currentLink = document.id(link);
+		
+		var event = new Event(evt).stop();
+		
+		textTooltip = function(link, event, tip, text)
+		{
+			if (link != ToolTip.currentLink) return;
+			
+			if (tip.div == null) 
+			{
+				tip.create();
+			}
+
+			tip.position(event);
+			tip.div.set('html', text);
+		};
+		
+		textTooltip.delay(this.options.delay, null, [ToolTip.currentLink, event, this, text]);	
+	},
+	
 	create: function()
 	{
 		this.div = new Element('div', {'id': this.id, 'class': this.options.css});
@@ -158,6 +180,13 @@ function showToolTip(link, evt, id, handlerURL, width)
 	if (width) tip.options.width = width;
 	tip.show(link, evt, handlerURL);
 };
+
+function showTextToolTip(link, evt, id, text, width)
+{
+	var tip = ToolTip.getToolTip(id);
+	if (width) tip.options.width = width;
+	tip.showText(link, evt, text);
+}
 
 function hideToolTip (id)
 {
