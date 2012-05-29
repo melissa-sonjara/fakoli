@@ -60,11 +60,11 @@ var HistogramSeries = new Class(
 		this.renderer.morph(series);		
 	},
 	
-	showToolTip: function(idx)
+	showToolTip: function(evt, idx)
 	{
 		if (idx > this.options.tooltips.length) return;
 		
-		showTextToolTip(this.chart.container, new DOMEvent(), this.chart.id, this.options.tooltips[idx]);
+		showTextToolTip(this.chart.container, evt, this.chart.id, this.options.tooltips[idx]);
 	},
 	
 	hideToolTip: function()
@@ -159,7 +159,7 @@ var LineSeriesRenderer = new Class(
 		
 		this.coords.each(function(c, i) {
 			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground, 'cursor': 'pointer'});
-			dot.mouseover(function() {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.showToolTip(i);}.bind(this));
+			dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.showToolTip(e, i);}.bind(this));
 			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); this.series.hideToolTip();}.bind(this));
 			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
 			this.dots.push(dot);
