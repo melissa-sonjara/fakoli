@@ -13,7 +13,8 @@ var HistogramSeries = new Class(
 		styles: {},
 		strokeWidth: 2,
 		symbolSize: 4,
-		onClick: Class.Empty
+		onClick: Class.Empty,
+		colorMode: 'series'
 	},
 	columns: [],
 	renderer: Class.Empty,
@@ -73,10 +74,10 @@ var BlockSeriesRenderer = new Class(
 	
 	draw: function()
 	{
-		var fillSwatch = this.chart.palette.swatches[this.index];
-		
 		this.series.values.each(function(val, i)
 		{
+			var fillSwatch = this.chart.palette.swatches[(this.series.options.colorMode == 'series') ? this.index : i];			
+
 			var columnWidth = this.chart.blockWidth;
 
 			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth) + (this.chart.blockSeriesDrawn * columnWidth);
