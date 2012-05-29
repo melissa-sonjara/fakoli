@@ -186,7 +186,7 @@ var LineSeriesRenderer = new Class(
 		
 		this.dots.each(function(dot, i) 
 		{
-			this.dots[i].animate({'y': this.coords[i].y}, 1000, "<>");
+			dot.animate({'cy': this.coords[i].y}, 1000, "<>");
 		}.bind(this));
 	}		
 });
