@@ -34,7 +34,7 @@ var PieChart = new Class(
 		this.setOptions(options);
 	},
 	
-	draw: function()
+	drawChart: function()
 	{
 		this.createChart();
 		

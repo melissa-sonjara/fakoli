@@ -15,7 +15,7 @@ var MorphingHistogram = new Class({
 		this.parent(id, options, labels);
 	},
 	
-	draw: function()
+	drawChart: function()
 	{
 		this.createChart();
 

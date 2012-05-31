@@ -18,6 +18,24 @@ var Chart = new Class(
 		this.palette = Palette.palettes[this.options.palette];
 	},
 	
+	draw: function()
+	{
+		this.drawChart();
+		
+	    //Handle Android
+	    if (!this.testSVG()) 
+	    {
+	        //Get chart SVG and output to canvas
+	        var canvas = document.createElement("canvas");
+	        canvas.setAttribute("style", "height:" + chartEle.height() + ";width:" + chartEle.width() + ";");
+
+	        canvg(canvas, this.container.innerHTML);
+
+	        this.container.empty(); //NOTE: Android 2.1 is hit and miss here
+	        this.container.insert(canvas);
+	    }
+	}
+	
 	drawLegend: function()
 	{
 		if (this.options.legend)
@@ -36,5 +54,10 @@ var Chart = new Class(
 				y+=30;
 			}.bind(this));
 		}
+	},
+	
+	testSVG: function() 
+	{
+	    return !!document.createElementNS && !! document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
 	}
 });

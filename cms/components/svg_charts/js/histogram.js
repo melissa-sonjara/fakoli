@@ -253,17 +253,17 @@ var Histogram = new Class(
 		series.index = this.series.length - 1;
 	},
 	
-	draw: function()
+	drawChart: function()
 	{
 		this.createChart();
 
 		this.setupHistogram();
 		
 		this.blockWidth = (this.columnWidth / this.blockSeriesCount) * (1 - this.options.columnMargin);
-		this.drawChart();
+		this.drawHistogram();
 	},
 	
-	drawChart: function()
+	drawHistogram: function()
 	{
 
 		this.drawBlocks();
