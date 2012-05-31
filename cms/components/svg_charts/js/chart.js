@@ -34,7 +34,7 @@ var Chart = new Class(
 	        this.container.empty(); //NOTE: Android 2.1 is hit and miss here
 	        this.container.insert(canvas);
 	    }
-	}
+	},
 	
 	drawLegend: function()
 	{
