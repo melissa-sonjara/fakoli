@@ -24,7 +24,7 @@ var MorphingHistogram = new Class({
 		this.index = this.options.startIndex;
 		this.blockWidth = this.columnWidth * (1 - this.options.columnMargin);
 		
-		this.drawChart();
+		this.drawHistogram();
 		
         
 		var prevleft = this.options.chartLeft + 8;
