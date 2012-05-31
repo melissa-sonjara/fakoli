@@ -29,6 +29,7 @@ var Chart = new Class(
 	        var canvas = document.createElement("canvas");
 	        canvas.setAttribute("style", "height:" + chartEle.height() + ";width:" + chartEle.width() + ";");
 
+	        alert("SVG? " + this.container.innerHTML);
 	        canvg(canvas, this.container.innerHTML);
 
 	        this.container.empty(); //NOTE: Android 2.1 is hit and miss here
