@@ -22,6 +22,7 @@ var Chart = new Class(
 	{
 		this.drawChart();
 		
+		alert("Boo!");
 	    //Handle Android
 	    if (!this.testSVG()) 
 	    {
