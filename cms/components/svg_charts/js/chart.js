@@ -26,11 +26,10 @@ var Chart = new Class(
 	    if (!this.testSVG()) 
 	    {
 	        //Get chart SVG and output to canvas
-	        var canvas = document.createElement("canvas");
+	        var canvas = document.createElement("canvas", {'id': 'canvas_' + this.id});
 	        canvas.setAttribute("style", "height:" + chartEle.height() + ";width:" + chartEle.width() + ";");
 
-	        alert("SVG? " + this.container.innerHTML);
-	        canvg(canvas, this.container.innerHTML);
+	        canvg(canvas.id, this.container.get('html'));
 
 	        this.container.empty(); //NOTE: Android 2.1 is hit and miss here
 	        this.container.insert(canvas);
