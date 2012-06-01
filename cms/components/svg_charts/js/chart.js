@@ -14,7 +14,7 @@ var Chart = new Class(
 	
 	createChart: function()
 	{
-		var ratio = this.options.width / this.options.height;
+		var ratio = this.options.height / this.options.width;
 		var size = this.container.getSize();
 		if (size.y == 0)
 		{
