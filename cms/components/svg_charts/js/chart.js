@@ -16,13 +16,13 @@ var Chart = new Class(
 	{
 		var ratio = this.options.width / this.options.height;
 		var size = this.container.getSize();
-		if (size.height == 0)
+		if (size.y == 0)
 		{
-			size.height = size.width * ratio;
-			this.container.set('height', size.height);
+			size.y = size.x * ratio;
+			this.container.set('height', size.y);
 		}
 		
-		this.paper = Raphael(this.container.id, size.width, size.height);
+		this.paper = Raphael(this.container.id, size.x, size.y);
 		this.paper.setViewBox(0, 0, this.options.width, this.options.height, true);
 		this.palette = Palette.palettes[this.options.palette];
 	},
