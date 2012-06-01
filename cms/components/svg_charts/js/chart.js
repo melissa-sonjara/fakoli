@@ -20,13 +20,13 @@ var Chart = new Class(
 		{
 			size.y = size.x * ratio;
 			this.container.set('height', size.y);
-			this.container.addEvent('resize', function(e)
+			window.addEvent('resize', function(e)
 			{
 				var size = this.container.getSize();
 				size.y = size.x * ratio;
 				this.container.set('height', size.y);
 				this.paper.setSize(size.x, size.y);
-			});
+			}.bind(this));
 		}
 
 		this.paper = Raphael(this.container.id, size.x, size.y);
