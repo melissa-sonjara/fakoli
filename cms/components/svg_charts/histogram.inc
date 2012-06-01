@@ -54,6 +54,8 @@ class Histogram
 {
 	var $width;
 	var $height;
+	var $containerWidth;
+	var $containerHeight;
 	var $chartLeft;
 	var $chartTop;
 	var $chartWidth;
@@ -83,6 +85,7 @@ class Histogram
 	{
 		$this->id = $id;
 		$this->setSize($width, $height);
+		$this->setContainerSize($width, $height);
 		$this->positionChart($chartLeft, $chartTop, $chartWidth, $chartHeight);
 		
 		$this->palette = $palette;
@@ -94,6 +97,12 @@ class Histogram
 		$this->height = $height;
 	}
 
+	function setContainerSize($width, $height = "0")
+	{
+		$this->containerWidth = $width;
+		$this->containerHeight = $height;
+	}
+	
 	function positionChart($left, $top, $width, $height)
 	{
 		$this->chartLeft = $left;
@@ -155,6 +164,9 @@ class Histogram
 		$shadow = $this->shadow ? "true": "false";	
 		$legend = $this->legend ? "true" : "false";
 		
+		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
+		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
+		
 		$data = "";
 		
 		foreach($this->series as $s)
@@ -199,7 +211,7 @@ window.addEvent('domready', function ()
 });
 </script>
 ENDSCRIPT;
-		echo "<div id='{$this->id}' style='width: {$this->width}px; height {$this->height}px'></div>";
+		echo "<div id='{$this->id}' style='width: {$containerWidth}px; height {$containerHeight}px'></div>";
 	}	
 }
 ?>

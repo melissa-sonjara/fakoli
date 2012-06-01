@@ -37,6 +37,8 @@ class PieChart
 {
 	var $width;
 	var $height;
+	var $containerWidth;
+	var $containerHeight;
 	var $cx;
 	var $cy;
 	var $values;
@@ -58,6 +60,7 @@ class PieChart
 	{
 		$this->id = $id;
 		$this->setSize($width, $height);
+		$this->setContainerSize($width, $height);
 		$this->values = $values;
 		$this->labels = $labels;
 		$this->palette = $palette;
@@ -70,6 +73,12 @@ class PieChart
 		if (!$this->cx) $this->cx = $this->width / 2;
 		if (!$this->cy) $this->cy = $this->height / 2;
 		if (!$this->radius) $this->radius = min($width, $height) * .4;
+	}
+	
+	function setContainerSize($width, $height = "0")
+	{
+		$this->containerWidth = $width;
+		$this->containerHeight = $height;
 	}
 	
 	function setCenter($cx, $cy)
@@ -118,6 +127,9 @@ class PieChart
 		$legend = $this->legend ? "true" : "false";
 		$percentages = $this->showPercentages ? "true" : "false";
 		
+		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
+		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
+		
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function ()
@@ -148,7 +160,7 @@ window.addEvent('domready', function ()
 });
 </script>
 ENDSCRIPT;
-		echo "<div id='{$this->id}' style='width: {$this->width}px; height {$this->height}px'></div>";
+		echo "<div id='{$this->id}' style='width: {$containerWidth}; height {$containerHeight}'></div>";
 	}	
 }
 ?>

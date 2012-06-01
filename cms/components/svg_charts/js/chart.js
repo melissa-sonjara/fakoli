@@ -14,27 +14,27 @@ var Chart = new Class(
 	
 	createChart: function()
 	{
-		this.paper = Raphael(this.container.id, this.options.width, this.options.height);
+		var ratio = this.options.width / this.options.height;
+		var size = this.container.getSize();
+		if (size.height == 0)
+		{
+			size.height = size.width * ratio;
+			this.container.set('height', size.height);
+		}
+		
+		this.paper = Raphael(this.container.id, size.width, size.height);
+		this.paper.setViewBox(0, 0, this.options.width, this.options.height, true);
 		this.palette = Palette.palettes[this.options.palette];
 	},
 	
 	draw: function()
 	{
-		this.drawChart();
+		if (!this.testSVG())
+		{
+			
+		}
 		
-		alert("Boo!");
-	    //Handle Android
-	    if (!this.testSVG()) 
-	    {
-	        //Get chart SVG and output to canvas
-	        var canvas = document.createElement("canvas", {'id': 'canvas_' + this.id});
-	        canvas.setAttribute("style", "height:" + chartEle.height() + ";width:" + chartEle.width() + ";");
-
-	        canvg(canvas.id, this.container.get('html'));
-
-	        this.container.empty(); //NOTE: Android 2.1 is hit and miss here
-	        this.container.insert(canvas);
-	    }
+		this.drawChart();		
 	},
 	
 	drawLegend: function()
