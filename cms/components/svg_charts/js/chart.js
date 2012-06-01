@@ -20,7 +20,7 @@ var Chart = new Class(
 		{
 			size.y = size.x * ratio;
 			this.container.set('height', size.y);
-			this.container.addEvent('size', function(e)
+			this.container.addEvent('resize', function(e)
 			{
 				var size = this.container.getSize();
 				size.y = size.x * ratio;
