@@ -20,8 +20,15 @@ var Chart = new Class(
 		{
 			size.y = size.x * ratio;
 			this.container.set('height', size.y);
+			this.container.addEvent('size', function(e)
+			{
+				var size = this.container.getSize();
+				size.y = size.x * ratio;
+				this.container.set('height', size.y);
+				this.paper.setSize(size.x, size.y);
+			});
 		}
-		
+
 		this.paper = Raphael(this.container.id, size.x, size.y);
 		this.paper.setViewBox(0, 0, this.options.width, this.options.height, true);
 		this.palette = Palette.palettes[this.options.palette];
