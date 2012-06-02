@@ -33,7 +33,8 @@ $auto_form_defaults = array(
 
 	"labelCSS"	=>	"label",
 	"buttonCSS"	=>	"button",
-	"componentPath"	=> "/fakoli"
+	"componentPath"	=> "/fakoli",
+	"markRequiredFields"		=>	true
 );
 
 
