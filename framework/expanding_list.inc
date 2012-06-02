@@ -73,12 +73,12 @@ class ExpandingList
 		var body = elt.getNext("dd");
 		if (body.getStyle("display") == 'block')
 		{
-			body.setStyle("display", "none");
+			body.dissolve();
 			elt.removeClass("expanded");
 		}
 		else
 		{
-			body.setStyle("display", "block");
+			body.reveal();
 			elt.addClass("expanded");
 		}		
 	}
