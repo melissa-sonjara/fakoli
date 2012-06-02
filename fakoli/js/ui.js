@@ -130,6 +130,7 @@ var Curtain = new Class(
 			return;
 		}
 		
+		var windowSize = window.size();
 		var cw = window.innerWidth == undefined ?
 				((document.documentElement.clientWidth == 0) ? document.body.clientWidth : document.documentElement.clientWidth)
 												 : window.innerWidth;
@@ -147,9 +148,9 @@ var Curtain = new Class(
 		if (ch > h) h = ch;
 		
 		this.curtain.setStyles({top: 0,
-								left: l,
-								width: w,
-								height: h,
+								left: 0,
+								width: windowSize.width,
+								height: windowSize.height,
 								display: 'block',
 								opacity: 0,
 								position: (noFixed) ? 'absolute' : 'fixed',
