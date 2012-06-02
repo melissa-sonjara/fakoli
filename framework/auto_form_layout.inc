@@ -500,7 +500,7 @@ class MobileFormLayout extends AutoFormLayout
 			if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
 			if ($styles) echo " style='$styles'";
 		
-			echo "$label</label> ";
+			echo ">$label</label> ";
 		}
 		
 		echo "$annotation\n";
