@@ -31,7 +31,12 @@ class MobileSettingsManager
 		
 		if ($isResource || $isAction || $mode == "Deliver Full Content") return;
 		
-		$auto_form_defaults["default_layout"] = "mobile";
+		$useMobile = MobileSettingsManager::useMobile();
+		
+		if ($useMobile) 
+		{
+			$auto_form_defaults["default_layout"] = "mobile";
+		}
 		
 		if ($mode != "Dedicated Mobile Section") return;
 		
@@ -45,7 +50,7 @@ class MobileSettingsManager
 		
 		trace("Mobile: $mobileSection vs $section", 3);
 		
-		if ($mobileSection != $section && MobileSettingsManager::useMobile())
+		if ($mobileSection != $section && $useMobile)
 		{
 			$uri = ($mobileSection == "/") ? "/" : "/{$mobileSection}/";
 			
