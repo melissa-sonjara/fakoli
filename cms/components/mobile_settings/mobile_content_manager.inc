@@ -24,11 +24,15 @@ class MobileSettingsManager
 	{
 		global $isResource;
 		global $isAction;
+		global $auto_form_defaults;
 		
-		if ($isResource || $isAction) return;
 		
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
-
+		
+		if ($isResource || $isAction || $mode == "Deliver Full Content") return;
+		
+		$auto_form_defaults["default_layout"] = "mobile";
+		
 		if ($mode != "Dedicated Mobile Section") return;
 		
 		trace ("Using Dedicated Mobile Section", 3);
