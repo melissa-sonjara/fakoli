@@ -45,7 +45,7 @@ class ExpandingList
 	var $bodyFormat;							///< The formatter used to display the list item bodies (either a format string or a callback function or method)
 	var $CSSclass = null;						///< CSS class(es) to be applied to the list
 	var $styles = null;							///< Specific CSS styles to be applied to the list
-	var $emptyList = "No items in the list";	///< Message to display when the list is empty
+	var $emptyMessage = "No items in the list";	///< Message to display when the list is empty
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -94,7 +94,7 @@ class ExpandingList
 	{
 		if (!count($this->items))
 		{
-			echo "<p>{$this->emptyList}</p>";
+			echo "<p>{$this->emptyMessage}</p>";
 			return;
 		}
 		
