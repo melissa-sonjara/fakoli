@@ -43,7 +43,7 @@ class ExpandingList
 	var $id;									///< The HTML id of the list
 	var $titleFormat;							///< The formatter used to display the list item titles (either a format string or a callback function or method)
 	var $bodyFormat;							///< The formatter used to display the list item bodies (either a format string or a callback function or method)
-	var $CSSclass = null;						///< CSS class(es) to be applied to the list
+	var $CSSclass = "expanding_list";			///< CSS class(es) to be applied to the list
 	var $styles = null;							///< Specific CSS styles to be applied to the list
 	var $emptyMessage = "No items in the list";	///< Message to display when the list is empty
 	
