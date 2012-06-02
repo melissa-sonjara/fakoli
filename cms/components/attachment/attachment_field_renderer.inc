@@ -41,6 +41,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	var $label;
 	var $cssClass = "attachment";
 	var $deleteIcon = "/fakoli/images/delete.gif";
+	var $useCamera = false;
 	
 	function AttachmentFieldRenderer(&$form, $field, $xrefClass)
 	{
@@ -90,7 +91,7 @@ class AttachmentFieldRenderer extends FieldRenderer
    <label>Attachment File</label>
    <input type="file" name="attachmentFile"/>
    <br/>
-   <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"/>
+   <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"<?if ($this->useCamera) { echo ' accept="image/*;capture=camera"'}?>/>
   </form>
  </div>
 </div>
