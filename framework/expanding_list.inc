@@ -71,7 +71,7 @@ class ExpandingList
 	{
 		elt = document.id(elt);
 		var body = elt.getNext("dd");
-		if (body.getStyle("display") == 'block')
+		if (elt.hasClass("expanded"))
 		{
 			body.dissolve();
 			elt.removeClass("expanded");
