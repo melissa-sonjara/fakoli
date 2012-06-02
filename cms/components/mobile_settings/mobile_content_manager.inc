@@ -50,12 +50,15 @@ class MobileSettingsManager
 		
 		trace("Mobile: $mobileSection vs $section", 3);
 		
-		if ($mobileSection != $section && $useMobile)
+		if ($mobileSection != $section)
 		{
-			$uri = ($mobileSection == "/") ? "/" : "/{$mobileSection}/";
-			
-			trace("Redirecting to mobile section at $uri", 3);
-			redirect($uri);
+			if ($useMobile)
+			{
+				$uri = ($mobileSection == "/") ? "/" : "/{$mobileSection}/";
+				
+				trace("Redirecting to mobile section at $uri", 3);
+				redirect($uri);
+			}
 		}
 		else
 		{
