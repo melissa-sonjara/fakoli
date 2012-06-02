@@ -54,7 +54,7 @@ class ExpandingList
 	 * @param mixed $titleFormat The formatter used to display the list item titles (either a format string or a callback function or method)
 	 * @param mixes $bodyFormat The formatter used to display the list item bodies (either a format string or a callback function or method)
 	 */
-	function PagedList($items, $id = "expanding_list", $titleFormat = null, $bodyFormat = null)
+	function ExpandingList($items, $id = "expanding_list", $titleFormat = null, $bodyFormat = null)
 	{
 		$this->items = $items;
 		$this->id = $id;
