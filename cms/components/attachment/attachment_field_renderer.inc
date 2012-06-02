@@ -91,7 +91,7 @@ class AttachmentFieldRenderer extends FieldRenderer
    <label>Attachment File</label>
    <input type="file" name="attachmentFile"/>
    <br/>
-   <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"<?if ($this->useCamera) { echo ' accept="image/*;capture=camera"'; }?>/>
+   <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"<?if ($this->useCamera) { echo ' accept="image/*" capture="camera"'; }?>/>
   </form>
  </div>
 </div>
