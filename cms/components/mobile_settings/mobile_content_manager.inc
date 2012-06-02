@@ -91,9 +91,9 @@ class MobileSettingsManager
 		
 		$mobile = false;
 		
-		if ($detect->isTablet() && $mobileTablets) 
+		if ($detect->isTablet()) 
 		{
-			$mobile = true;
+			$mobile = $mobileTablets;
 		}
 		else $mobile = $detect->isMobile(); 
 		
