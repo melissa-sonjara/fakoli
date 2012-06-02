@@ -448,12 +448,10 @@ class MobileFormLayout extends AutoFormLayout
 	}
 	
 	function startField($field, $renderer, $colspan = 1, $styles = "")
-	{
-		if ($renderer->colspan > 1) $styles = "text-align: left;$styles";
-		
+	{	
 		echo "<br/>\n";
 		
-		$this->printLabel($field, $renderer, $styles, ($renderer->colspan > 1) ? $this->parent->annotations[$field] : "");
+		$this->printLabel($field, $renderer, $styles, $this->parent->annotations[$field]);
 		
 		echo "<br/>\n";
 		
@@ -492,7 +490,7 @@ class MobileFormLayout extends AutoFormLayout
 	function printLabel($field, $renderer, $styles = "", $annotation = "")
 	{		
 		$colspan = $renderer->colspan;
-		if ($renderer->hideLabel && $colspan > 1 && !$annotation) return;
+		if ($renderer->hideLabel && !$annotation) return;
 		
 		$label = $this->getLabel($field, $renderer);
 		
