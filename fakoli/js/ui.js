@@ -341,17 +341,20 @@ var ModalDialog = new Class(
     	}
     	
     	var curtain = $('curtain');
-    	var windowHeight = window.innerHeight ? window.innerHeight :
-    		document.documentElement.clientHeight ?
-    		document.documentElement.clientHeight : document.body.clientHeight; 
+    	var windowSize = window.size();
     	
-    	if (this.element.offsetHeight > windowHeight && this.options.body)
+    	if (this.element.offsetWidth > windowSize.width)
     	{
-    		this.options.body.setStyles({'height': windowHeight * 0.9, 'overflow-y': 'auto'});
+    		this.element.setStyle('width', windowSize.width * 0.9);
     	}
     	
-    	var x = (document.body.clientWidth - this.element.offsetWidth) / 2;
-    	var y = (windowHeight - this.element.offsetHeight) / 2;
+    	if (this.element.offsetHeight > windowSize.height && this.options.body)
+    	{
+    		this.options.body.setStyles({'height': windowSize.height * 0.9, 'overflow-y': 'auto'});
+    	}
+    	
+    	var x = (windowSize.width - this.element.offsetWidth) / 2;
+    	var y = (windowSize.height - this.element.offsetHeight) / 2;
     	this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});
     },
     
