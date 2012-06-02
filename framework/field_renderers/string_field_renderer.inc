@@ -58,13 +58,14 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class StringFieldRenderer extends FieldRenderer
 {	
 	var $size = 50;
-	var $limit = 0; // optional - restricts users from entering character count over limit
-	var $autocomplete = true; // default
-	var $onChange = ""; // optional callback on data input change
-	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
-	var $password = false;
-	var $template = ""; // StringTypeRenderer template for reaonly format (e.g., "prettify")
+	var $limit = 0; 			///< optional - restricts users from entering character count over limit
+	var $autocomplete = true; 	///< default is true. Set to false to disable autocompletion
+	var $onChange = ""; 		///< optional (javascript) callback on data input change
+	var $disable = false; 		///< alternative to readonly; field can be reenabled thru javascript
+	var $password = false;		///< Render the field as a password field (masked characters)
+	var $template = ""; 		///< StringTypeRenderer template for readonly format (e.g., "prettify")
 	var $confirm = false;
+	var $width = 0;				///< Optionally specify a CSS width for the field
 	
 	function StringFieldRenderer(&$parent)
 	{
@@ -115,8 +116,8 @@ class StringFieldRenderer extends FieldRenderer
 		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
 		$disable = ($this->disable) ? "disabled='disabled'" : "";		
 		$inputType = (!$this->password) ? "text" : "password";
-		
-		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $onchange $autocomplete value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable $onkeypress/>";
+		$style = ($this->width) ? " style='width: {$this->width}px" : "";
+		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $onchange $autocomplete $style value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable $onkeypress/>";
 
 		if ($this->limit)
 		{
