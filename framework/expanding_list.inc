@@ -122,7 +122,7 @@ class ExpandingList
 				echo call_user_func($this->bodyFormat, $item);
 			}
 			else echo $item->format($this->bodyFormat);
-			echo "</dl>\n";
+			echo "</dd>\n";
 		}
 		echo "</dl>\n";
 	}
