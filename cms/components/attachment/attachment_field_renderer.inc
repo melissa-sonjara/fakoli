@@ -76,7 +76,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		
 		ob_start();
 ?>
-<div class="dialog" id="attachmentDialog" style="width: 400px">
+<div class="dialog" id="attachmentDialog" style="width: 260px">
  <div class="dialog_header" id="attachmentDialogHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeAttachmentDialog'">Close &times;</a></div>
