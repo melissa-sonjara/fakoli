@@ -64,7 +64,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $disable = false; 		///< alternative to readonly; field can be reenabled thru javascript
 	var $password = false;		///< Render the field as a password field (masked characters)
 	var $template = ""; 		///< StringTypeRenderer template for readonly format (e.g., "prettify")
-	var $confirm = false;
+	var $confirm = false;		///< Render a second field for the user to confirm their entry (for email addresses, etc)
 	var $width = 0;				///< Optionally specify a CSS width for the field
 	
 	function StringFieldRenderer(&$parent)
