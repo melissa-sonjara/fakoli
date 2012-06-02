@@ -65,7 +65,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $password = false;		///< Render the field as a password field (masked characters)
 	var $template = ""; 		///< StringTypeRenderer template for readonly format (e.g., "prettify")
 	var $confirm = false;		///< Render a second field for the user to confirm their entry (for email addresses, etc)
-	var $width = 0;				///< Optionally specify a CSS width for the field
+	var $width = "";				///< Optionally specify a CSS width for the field
 	
 	function StringFieldRenderer(&$parent)
 	{
@@ -116,7 +116,7 @@ class StringFieldRenderer extends FieldRenderer
 		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
 		$disable = ($this->disable) ? "disabled='disabled'" : "";		
 		$inputType = (!$this->password) ? "text" : "password";
-		$style = ($this->width) ? " style='width: {$this->width}px" : "";
+		$style = ($this->width) ? " style='width: {$this->width}" : "";
 		
 		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $onchange $autocomplete $style value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' size='{$this->size}' $disable $onkeypress/>";
 
