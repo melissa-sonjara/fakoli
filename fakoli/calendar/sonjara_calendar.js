@@ -381,7 +381,15 @@ var Calendar = new Class(
 		this.control.value = date;
 		this.bindDate();
 		this.onDateChanged(date);
-		this.draw();
+		// Hide calendar after select on touch screen devices
+		if (Browser.Platform.ios || Browser.Platform.android || Browser.Platform.webos)
+		{
+			this.hide();
+		}
+		else
+		{
+			this.draw();
+		}
 	},
 	
 	setMonthSelectMode: function(mode)
