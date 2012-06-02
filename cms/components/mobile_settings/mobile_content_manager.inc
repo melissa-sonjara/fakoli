@@ -57,6 +57,10 @@ class MobileSettingsManager
 			trace("Redirecting to mobile section at $uri", 3);
 			redirect($uri);
 		}
+		else
+		{
+			$auto_form_defaults["default_layout"] = "mobile";
+		}
 	}
 	
 	static function overrideTemplate($template, &$continue)
