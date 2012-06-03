@@ -46,6 +46,7 @@ class ExpandingList
 	var $CSSclass = "expanding_list";			///< CSS class(es) to be applied to the list
 	var $styles = null;							///< Specific CSS styles to be applied to the list
 	var $emptyMessage = "No items in the list";	///< Message to display when the list is empty
+	var $groupTag = "h4";
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -98,6 +99,11 @@ class ExpandingList
 			return;
 		}
 		
+		if (is_array($this->items[0]))
+		{
+			$this->drawGroupedList();
+		}	
+		
 		$attrs = "";
 		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
@@ -125,6 +131,42 @@ class ExpandingList
 			echo "</dd>\n";
 		}
 		echo "</dl>\n";
+	}
+	
+	function drawGroupedList()
+	{
+		$attrs = "";
+		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
+		if ($this->styles) $attrs .= " style='{$this->styles}'";
+		
+		foreach($this->items as $group => $items)
+		{
+?>
+		<<?echo $this->groupTag?>><?echo $group?></<?echo $this->groupTag?>>		
+			<dl id="<?echo $this->id?>_<?echo codify($group)?>"<?echo $attrs?>>
+<?
+			foreach($items as $item)
+			{
+				echo "<dt onclick='return {$this->id}_toggleDD(this);'>";
+				
+				if (is_callable($this->titleFormat))
+				{
+					echo call_user_func($this->titleFormat, $item);
+				}
+				else echo $item->format($this->titleFormat);
+				
+				echo "</dt>\n";
+				
+				echo "<dd style='display: none'>";
+				if (is_callable($this->bodyFormat))
+				{
+					echo call_user_func($this->bodyFormat, $item);
+				}
+				else echo $item->format($this->bodyFormat);
+				echo "</dd>\n";
+			}
+			echo "</dl>\n";
+		}
 	}
 }
 ?>
