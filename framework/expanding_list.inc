@@ -102,6 +102,7 @@ class ExpandingList
 		if (is_array($this->items[0]))
 		{
 			$this->drawGroupedList();
+			return;
 		}	
 		
 		$attrs = "";
