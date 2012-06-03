@@ -282,7 +282,9 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	{
 	   	$label = $this->label;
 		if($this->width)
-			$style = "style='width: {$this->width}'"
+		{
+			$style = "style='width: {$this->width}'";
+		}
 		?>
   		<div style="float: left; padding-bottom: 4px;">
 		<label for='<?php echo $field?>' class="<?php echo $this->parent->labelCSS ?>"><?php echo $label ?></label>		
