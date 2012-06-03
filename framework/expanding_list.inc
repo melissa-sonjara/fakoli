@@ -47,6 +47,7 @@ class ExpandingList
 	var $styles = null;							///< Specific CSS styles to be applied to the list
 	var $emptyMessage = "No items in the list";	///< Message to display when the list is empty
 	var $groupTag = "h4";
+	var $grouped = false;
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -99,7 +100,7 @@ class ExpandingList
 			return;
 		}
 		
-		if (is_array($this->items[0]))
+		if ($this->grouped)
 		{
 			$this->drawGroupedList();
 			return;
