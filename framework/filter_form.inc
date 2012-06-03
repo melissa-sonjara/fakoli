@@ -288,7 +288,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		?>
   		<div style="float: left; padding-bottom: 4px;">
 		<label for='<?php echo $field?>' class="<?php echo $this->parent->labelCSS ?>"><?php echo $label ?></label>		
-    	<select name="<?php echo $field ?>"$<?echo $style?> onchange="this.form.submit();">
+    	<select name="<?php echo $field ?>" <?echo $style?> onchange="this.form.submit();">
     	<?php 
     	if($this->all)
     	{
