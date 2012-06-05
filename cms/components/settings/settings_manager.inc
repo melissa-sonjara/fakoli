@@ -105,7 +105,7 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "componentPath", "/fakoli", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "HTMLEditorHideStyleBar", true, "Boolean", "", "AutoForm");
 		Settings::setDefaultValue("settings", "HTMLEditorDefaultWidth", "540px", "String", "", "AutoForm");
-		Settings::setDefaultValue("settings", "HTMLEditorDefaultWidth", "200px", "String", "", "AutoForm");
+		Settings::setDefaultValue("settings", "HTMLEditorDefaultHeight", "200px", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "javascriptEnabled", true, "Boolean", "", "AutoForm");
 		Settings::setDefaultValue("settings", "markRequiredFields", true, "Boolean", "", "AutoForm");
 		Settings::setDefaultValue("settings", "onFormatLabel", "addContextHelp", "String", "Callback function for start of field label", "AutoForm");
