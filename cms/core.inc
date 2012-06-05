@@ -49,7 +49,7 @@ class Fakoli
 {
 	static $componentsUsed = array();	///< Array of the components that have been referenced in this page request
 	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
-	
+	static $outputBufferLevel = 0;		///< Records the level at which gzip output buffering began
 	/**
 	 * Import the datamodels, views and manifest for the specified component(s).
 	 * More than one component can be specified in the call.
@@ -620,11 +620,11 @@ class Fakoli
 	        
 			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
 		
-			while(ob_end_clean()); // Clear all output buffers.
-
-			if (Settings::getValue("optimize", "compress_page_content") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+			trace("ZIP: Winding back output buffers from ".ob_get_level(), 3);
+			
+			while(ob_get_level() > Fakoli::$outputBufferLevel); // Clear all output buffers.
 			{
-				ob_start("ob_gzhandler");
+				ob_end_clean();
 			}
 		
 			$err = Fakoli::resolveResource("/fakoli/error.tpl");
@@ -648,6 +648,8 @@ set_error_handler(array("Fakoli", "errorHandler"));
 set_exception_handler(array("Fakoli", "exceptionHandler"));
 
 Fakoli::using("field_renderers", "user", "login", "component");
+
+ComponentManager::fireEvent("ConfigurationBootstrap");
 
 $user = null;
 

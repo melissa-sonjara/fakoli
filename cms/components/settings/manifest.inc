@@ -73,7 +73,8 @@ class SettingsManifest
 	{
 		return array("ComponentScanComplete" 		=>	array(SettingsManager, setDefaults),
 					 "upgradeComponent"				=>	array(SettingsManager, upgradeComponent),
-					 "RegisterSerializationHandler"	=>	array(SettingsManager, registerSerializationHandler)
+					 "RegisterSerializationHandler"	=>	array(SettingsManager, registerSerializationHandler),
+					 "ConfigurationBootstrap"		=>	array(SettingsManager, configurationBootstrap)
 		);
 	}
 		

@@ -61,6 +61,9 @@ abstract class AutoFormLayout
 		case "spreadsheet":
 			return new SpreadsheetFormLayout($form);
 			
+		case "simple":
+			return new SimpleFormLayout($form);
+			
 		case "table":
 	
 		default:
@@ -459,6 +462,136 @@ class MobileFormLayout extends AutoFormLayout
 		{
 			echo $renderer->parent->annotations[$field]."<br/>";
 		}
+	}
+	
+	function endField($field, $renderer)
+	{
+		if (!$renderer->annotateBefore && $renderer->parent->annotations[$field])
+		{
+			if ($renderer->annotateNextLine)
+			{
+				echo "<br/>"; 
+			}
+			else 
+			{
+				echo "&nbsp;&nbsp;";
+			}
+			echo $renderer->parent->annotations[$field];
+		}
+		
+		echo "<br/>\n";
+	}
+	
+	/**
+	 * Internal method to generate the HTML for the field label
+	 *
+	 * @param string $field the field name
+	 * @param int $colspan the number of columns to span
+	 * @param string $styles optional special styles that need to be applied
+	 * @param string $annotation annotation text for the field
+	 */
+	function printLabel($field, $renderer, $styles = "", $annotation = "")
+	{		
+		$colspan = $renderer->colspan;
+		if ($renderer->hideLabel && !$annotation) return;
+		
+		$label = $this->getLabel($field, $renderer);
+		
+		if (!$renderer->hideLabel)
+		{
+			echo "<label for='$field'";
+			if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
+			if ($styles) echo " style='$styles'";
+		
+			echo ">$label</label> ";
+		}
+		
+		echo "$annotation\n";
+	}
+
+	function startUngrouped()
+	{
+		echo "<div";
+		if ($this->form->formCSS) echo " class='{$this->form->formCSS}'";
+		if ($this->form->style) echo " style='{$this->form->style}'";
+		echo ">\n";
+	}
+	
+	function endUngrouped()
+	{
+		echo "</div>";
+	}
+	
+	function startButtonLine()
+	{
+		echo "<br/>\n";
+		echo " <div class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
+	}
+	
+	function endButtonLine()
+	{
+		echo "</div><br/>";
+	}
+	
+	function errorBox()
+	{
+		echo "<div id='{$this->form->id}__error' class='error' style='display: ".($this->form->msg ? 'table-cell' : 'none')."'>{$this->form->msg}</div>\n";
+	}	
+	
+	function requiredFields($text)
+	{
+		echo "<p style='font-weight: bold'>{$text}</p>\n";
+	}
+}
+
+
+
+
+/**
+ * SimpleFormLayout provides a form with minimal HTML, and does not employ table-based layout.
+ */
+class SimpleFormLayout extends AutoFormLayout
+{
+	function MobileFormLayout($form)
+	{
+		$this->AutoFormLayout($form);
+	}
+	
+	function startGroup($name, $collapsible = false, $collapsed = false)
+	{
+		$class = "";
+		if ($collapsible)
+		{
+			$class = "collapsible";
+			$class .= $collapsed ? " collapsed" : " expanded";
+			
+			$class = " class='$class'";
+		}
+		
+		$id = $this->form->id . "_" . codify($name) . "_group";
+		
+		echo "<fieldset id='$id'$class><legend>$name</legend>";
+		$this->startUngrouped();
+	}
+	
+	function endGroup()
+	{
+		$this->endUngrouped();
+		echo "</fieldset>";
+	}
+	
+	function startField($field, $renderer, $colspan = 1, $styles = "")
+	{	
+		echo "<br/>\n";
+		
+		$this->printLabel($field, $renderer, $styles, $this->parent->annotations[$field]);
+		
+		if ($renderer->annotateBefore && $renderer->parent->annotations[$field])
+		{
+			echo $renderer->parent->annotations[$field]." ";
+		}
+
+		if ($colspan == 2) echo "<br/>\n";
 	}
 	
 	function endField($field, $renderer)

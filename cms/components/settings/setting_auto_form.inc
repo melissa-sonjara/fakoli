@@ -147,6 +147,9 @@ class SettingAutoForm extends AutoForm
 				
 			}
 		}
+		Cache::invalidate("auto_form_defaults");
+		Cache::invalidate("config");
+		
 		trace("Settings auto form returning true", 3);
 		
 		return true;
