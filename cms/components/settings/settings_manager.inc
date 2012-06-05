@@ -116,6 +116,39 @@ class SettingsManager
 		
 	}
 	
+	/**
+	 * Sets the Fakoli framework configuration variables according
+	 * to the settings stored in the database. If a configuration variable
+	 * already has a value (i.e. manually specified in the config.inc file)
+	 * then the value is not overwritten.
+	 * 
+	 * The goal of this function is to aid with the migration of application-specific
+	 * settings out of configuration files and into the application settings in the database.
+	 */
+	static function configurationBootstrap()
+	{
+		global $auto_form_defaults;
+		
+		$afDefaults = Cache::get("auto_form_defaults");
+		if (!$afDefaults)
+		{
+			$afDefaults = array();
+			$autoFormSettings = Query::create(Settings, "WHERE component='settings' AND category='auto_form'")->execute();
+			
+			foreach($autoFormSettings as $setting)
+			{
+				$afDefaults[$setting->name] = $setting->value;
+			}
+			
+			Cache::put("auto_form_defaults", $afDefaults);
+		}
+		
+		foreach($afDefaults as $name => $value)
+		{
+			$auto_form_defaults[$name] = $value;
+		}
+	}
+	
 	static function getSubTabs($component)
 	{
 		$tabs = null;
