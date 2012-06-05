@@ -133,7 +133,7 @@ class SettingsManager
 		if (!$afDefaults)
 		{
 			$afDefaults = array();
-			$autoFormSettings = Query::create(Settings, "WHERE component='settings' AND category='auto_form'")->execute();
+			$autoFormSettings = Query::create(Settings, "WHERE component='settings' AND category='AutoForm'")->execute();
 			
 			foreach($autoFormSettings as $setting)
 			{
@@ -145,7 +145,7 @@ class SettingsManager
 		
 		foreach($afDefaults as $name => $value)
 		{
-			$auto_form_defaults[$name] = $value;
+			if (!isset($auto_form_defaults[$name])) $auto_form_defaults[$name] = $value;
 		}
 	}
 	
