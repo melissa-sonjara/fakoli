@@ -126,6 +126,9 @@ class OptimizeManager
 		if (Settings::getValue("optimize", "compress_page_content") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 		{
 			ob_start("ob_gzhandler");
+			$level = ob_get_level();
+			trace("ZIP output buffer level: $level", 3);
+			Fakoli::$outputBufferLevel = $level;
 		}
 		return $template;
 	}
