@@ -42,8 +42,8 @@
  * date: 7/12/10
  */
 
-require_once $config['homedir']."cms/datamodel/forum.inc";
-require_once $config['homedir']."framework/auto_form.inc";
+require_once $config['homedir']."/cms/datamodel/forum.inc";
+require_once $config['homedir']."/framework/auto_form.inc";
 require_once  $config['homedir']."/cms/components/mail/email_manager.inc";
 
 $msg = checkNumeric($_GET["msg"]);
