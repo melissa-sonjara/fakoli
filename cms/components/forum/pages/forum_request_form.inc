@@ -42,7 +42,7 @@
  * date: 7/12/10
  */
 
-Fakoli::using("email", "mail");
+Fakoli::using("forum", "mail", "email");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $msg = checkNumeric($_GET["msg"]);
