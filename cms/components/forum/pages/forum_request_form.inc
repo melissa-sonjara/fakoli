@@ -47,7 +47,7 @@ Fakoli::usingFile("framework/auto_form.inc");
 
 $msg = checkNumeric($_GET["msg"]);
 
-$forumRequest = new ForumRequest();
+$forumRequest = new Forum();
 $forumRequest->to = $config["email_tech"];
 $forumRequest->subject = "New Forum Request";
 
