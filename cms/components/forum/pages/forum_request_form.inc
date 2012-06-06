@@ -70,7 +70,7 @@ if(!$msg)
 	$form->drawForm();
 else
 {
-	echo $forumRequest->getInfoText($msg);
+	//echo $forumRequest->getInfoText($msg);
 ?>
 <button onclick="go('forum_list')" class="button">Return to Discussion Forums</button>
 <?
