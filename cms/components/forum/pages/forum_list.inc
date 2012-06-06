@@ -48,9 +48,10 @@ if (checkRole("admin,moderator"))
 {
 ?>
 <br/>
-<button onclick="go('forum_form')" class="button">Create a new Discussion Forum</button>
+<button onclick="go('forum_form')" class="button">Create a New Discussion Forum</button>
 <? 
 }
+/*
 elseif(checkRole('member,registeredusers'))
 {
 ?>
@@ -58,4 +59,5 @@ elseif(checkRole('member,registeredusers'))
 <button onclick="go('forum_request_form')" class="button">Request a new Forum</button>
 <?
 }
+*/
 ?>
