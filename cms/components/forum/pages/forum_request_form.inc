@@ -62,7 +62,7 @@ if ($method == "POST")
 	$emailHandler = new EmailHandler($form->data->to, $form->data->subject, $_POST["message"], $user->email);
 	$sent = $emailHandler->send();
 	$msg = ($sent > 0) ? 1 : 2;
-	redirect("forum_request_form?msg=$msg");
+	redirect("forum_list");
 }
 
 $script .= $form->writeScript();
