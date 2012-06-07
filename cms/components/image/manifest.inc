@@ -45,6 +45,8 @@ class ImageManifest
 		
 		return $component;
 	}
+		
+	var $allow_sessionless_handlers = true;
 	
 	static function getAdminMenu()
 	{
