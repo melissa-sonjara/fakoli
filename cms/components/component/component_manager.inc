@@ -478,6 +478,12 @@ class ComponentManager
 			throw new FakoliException("Invalid action");
 		}
 		
+		$manifest = $component->loadManifest();
+		if (!isset($user) && !$manifest->allow_sessionless_handlers)
+		{
+			throw new FakoliException("Session Expired");
+		}
+		
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
 		trace("ComponentManager::dispatchAction handler: $handler", 4);
 		

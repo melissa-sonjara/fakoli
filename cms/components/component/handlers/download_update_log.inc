@@ -33,6 +33,8 @@
 
 Fakoli::using("component", "settings");
 
+Fakoli::assertRole("admin");
+
 $component_update_log_id = checkNumeric($_GET["component_update_log_id"]);
 
 $log = new ComponentUpdateLog($component_update_log_id);

@@ -46,6 +46,8 @@ class LoginManifest
 		return $component;
 	}
 	
+	var $allow_sessionless_handlers = true;
+	
 	static function getAdminMenu()
 	{
 		return null;	

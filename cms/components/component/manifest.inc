@@ -46,6 +46,8 @@ class ComponentManifest
 		return $component;
 	}
 	
+	var $allow_sessionless_handlers = true;
+	
 	static function getAdminMenu()
 	{
 		return array

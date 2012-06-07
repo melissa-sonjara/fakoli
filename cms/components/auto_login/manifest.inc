@@ -15,6 +15,8 @@ class AutoLoginManifest
 		
 		return $component;
 	}
+		
+	var $allow_sessionless_handlers = true;
 	
 	static function getAdminMenu()
 	{
