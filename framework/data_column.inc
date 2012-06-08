@@ -182,6 +182,17 @@ class FooterTotalColumn extends FooterColumn
 		$this->field = $field;
 		
 		/*
+		 * If the calling function puts a "$" before the
+		 * field name, then mark this as type currency and
+		 * output the "$" before the total.
+		 */
+		if(strpos($this->field, "$", 0) !== FALSE)
+		{
+			$this->typeHint = Currency;
+			$this->field = substr($this->field, 1); 
+		}
+			
+		/*
 		 * In case the field has template formatting instructions,
 		 * move those out to the template variable so that
 		 * the field var is just the field and can be totalled
@@ -200,13 +211,27 @@ class FooterTotalColumn extends FooterColumn
 	function onStartRow($item)
 	{
 		$val = $item->format($this->field);
+	
+		// Make the number a raw number value before adding
+		$val =  str_replace(",", "", $val);
+		
 		$this->total += $val;
 	}
 	
 	function format()
 	{
-		$renderer = new NumberTypeRenderer();
-		return $renderer->format($this->total, $this->template);
+		if(!$this->typeHint || $this->typeHint == Number)
+		{
+			$renderer = new NumberTypeRenderer();
+		}
+		elseif($this->typeHint == Currency)
+		{
+			$renderer = new CurrencyTypeRenderer();
+			$out = "$";
+		}
+		
+		$out .= $renderer->format($this->total, $this->template);
+		return $out;
 	}
 }
 ?>
