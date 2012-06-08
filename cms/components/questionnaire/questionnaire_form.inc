@@ -194,8 +194,10 @@ class QuestionnaireForm
 		$script .= "{";
 
 		foreach($this->validators as $validator)
+		{
 			$script .= $validator->writeClient();
-
+		}
+		
 		$script .= "\n\n return true;\n}";
 		$script .= "\n\n";
 		$script .= "function onSubmitQuestionnaire_form(form)\n{\n";
