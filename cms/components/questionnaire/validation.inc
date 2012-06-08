@@ -218,7 +218,7 @@ class RequiredRadioButtonQuestionValidator extends RequiredValidator
 	if (countChecked < 1)
 	{
 		alert("You must select an option for {$this->title}.");
-		return true;
+		return false;
 	}
 	
 ENDSCRIPT;
