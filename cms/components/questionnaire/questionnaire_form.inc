@@ -90,6 +90,7 @@ class QuestionnaireForm
 	var $requiredFieldsText = "* indicates required question";
 	var $subordinate = false;
 	var $buttons = array();				///< The custom buttons collection
+	var $allowIncompleteSave = true;	///< Allows users to save partially completed forms
 	
 	function QuestionnaireForm($mgr, $readonly = false)
 	{
@@ -199,10 +200,16 @@ class QuestionnaireForm
 		$script .= "\n\n";
 		$script .= "function onSubmitQuestionnaire_form(form)\n{\n";
 
-		// return true because we need to save their answers, even if they
-		// didn't answer all questions (invalid form)
-		$script .= "\t validate_Questionnaire_form(form); return true;\n}";
-			
+		if ($this->allowSaveIncomplete)
+		{
+			// return true because we need to save their answers, even if they
+			// didn't answer all questions (invalid form)
+			$script .= "\t validate_Questionnaire_form(form); return true\n}";
+		}
+		else
+		{
+			$script .= "\t return validate_Questionnaire_form(form);\n}";
+		}
 		if ($script) $script = "<script type='text/javascript'>\n$script\n</script>";
 		return $script;
 	}
