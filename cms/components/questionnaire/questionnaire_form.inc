@@ -202,7 +202,7 @@ class QuestionnaireForm
 		$script .= "\n\n";
 		$script .= "function onSubmitQuestionnaire_form(form)\n{\n";
 
-		if ($this->allowSaveIncomplete)
+		if ($this->$allowIncompleteSave)
 		{
 			// return true because we need to save their answers, even if they
 			// didn't answer all questions (invalid form)
