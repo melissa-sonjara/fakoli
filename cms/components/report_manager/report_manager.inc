@@ -324,15 +324,22 @@ class ReportManager
 			}
 		}
 		
-		if ($this->title)
+		$this->setFooterColumns($report);
+		
+		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
+		
+		if(isset($_REQUEST["__excel"]))
 		{
-			$report->excelFile = codify($this->title)."_".date("Y_m_d_Hi").".xls";
+			$report->excelFile = $reportTitle . ".xls";
 		}
+		/* to do - pdf output 
 		else
 		{
-			$report->excelFile = "custom_report_".date("Y_m_d_Hi").".xls";
+			$identifier = $_REQUEST["identifier"];
+			$pdf = new PDF("/$identifier", false, true, $reportTitle . ".pdf");
+			$pdf->generate();
 		}
-			
+		*/
 		$script .= $report->writeScript();
 		
 		$report->cssClass = "list small";
@@ -343,6 +350,47 @@ class ReportManager
 		$this->writeResultsFormButtons();
 	}
 	
+
+	/**
+	 * If the user set footer columns, set them into the report.
+	 */
+	function setFooterColumns(&$report)
+	{
+		$colspan = 0;
+		foreach($this->tables as $table)
+		{
+			if ($this->selected["table_{$table->class}"])
+			{
+				foreach($table->columns as $column)
+				{
+					if ($this->selected["column_".codify($column->title)])
+					{
+						if(array_key_exists($column->title, $table->footerColumns))
+						{
+							$footer = $table->footerColumns[$column->title];
+							$footer->colspan = ++$colspan;
+							$report->footerColumns[] = $footer;
+							if(get_class($footer) == FooterTotalColumn)
+							{
+								$report->totalCallbacks[] = array($footer, onStartRow);
+							}
+							$colspan = 0;
+						}
+						else
+						{
+							$colspan += 1;
+						}
+					}
+				}
+			}	
+		}
+		
+		if($colspan)
+		{
+			$report->footerColumns[] =  new FooterTextColumn("", "", $colspan);
+		}
+	}
+		
 	function writeResultsFormButtons()
 	{
 		$url = $_REQUEST["identifier"];
@@ -415,6 +463,9 @@ class ReportTable
 	var $constraints;
 	var $params;
 	var $excludedKeys;
+	var $columns = array();
+	var $footerColumns = array();
+	var $totalCallbacks = array();
 	
 	function ReportTable($class, $title = "")
 	{
@@ -493,7 +544,51 @@ class ReportTable
 		
 		return $constraint;
 	}
+	
+	/**
+	 * Adds a text column to the table footer.
+	 * @param $title the title of the columnn under which the footer value should be displayed
+	 * @param $text the text to display
+	 * @param $style any CSS classes or inline styles to apply
+	 * @return ReportManager returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerText($text = "", $style = "")
+	{
+		$column = new ReportFooterColumn($title, $text, "", $style);
+		$this->footerColumns[$title] = $column;
+		
+		return $column;
+	}
 
+	/**
+	 * Adds a value column to the table footer.
+	 * @param $title the title of the columnn under which the footer value should be displayed
+	 * @param $callback Callback function or object method used to calculate the value for this column.
+	 * @param $style any CSS classes or inline styles to apply
+	 * @return ReportManager returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerValue($title, $callback, $style = "")
+	{
+		$column = new FooterValueColumn($callback, $style);
+		$this->footerColumns[$title] = $column;
+		
+		return $column;
+	}
+	
+	/**
+	 * Sums the total for a column
+	 * @param $title the title of the columnn under which the footer value should be displayed
+	 * @param $field the field to total in the format "{field}"
+	 * @param $style any CSS classes or inline styles to apply
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerTotal($title, $field, $style = "text-align: right")
+	{
+		$column = new FooterTotalColumn($field, $template = "", $style);
+		$this->footerColumns[$title] = $column;
+		
+		return $column;
+	}
 }
 
 class ReportColumn

@@ -1027,6 +1027,81 @@ ENDSCRIPT;
 	}
 }
 
+
+/**
+ * RequiredCrossReferenceSelectValidator
+ * 
+ * Verifies min count of checkboxes checked
+ * 
+ * Add this validator the the script using:
+ * $form->validator->add(new RequiredCrossReferenceSelectValidator($field, $label, $min));
+ */
+class RequiredCrossReferenceSelectValidator extends AbstractValidator
+{
+	var $min = "";
+	var $empty = "";
+	var $addEntry = false;
+	var $msgText = "checkbox";
+	
+	function RequiredCrossReferenceSelectValidator($field, $title, $min = 1)
+	{
+		$this->min = $min;
+		$this->AbstractValidator($field, $title);
+		$this->addEntry = $addEntry;
+		if($min > 1)
+			$this->msgText = pluralize($msgText);
+	}
+	
+	function writeClient()
+	{		
+$script = <<<ENDSCRIPT
+		
+		var i = 1;
+		var countChecked = 0;
+		var max = form["count_{$this->field}"].value;
+		var elt;
+	
+		for(i=1; i <= max; i++)
+		{
+			elt = form["{$this->field}["+i+"]"];
+			if(elt.checked == true)
+				countChecked += 1;
+		}
+	
+	if ({$this->min} > 0 && countChecked < {$this->min})
+	{
+		alert("You must check at least {$this->min} {$this->msgText} for {$this->title}.");
+		return false;
+	}
+ENDSCRIPT;
+			
+		return $script;
+	}
+	
+	
+	function validate()
+	{
+		global $_POST;
+
+		if ($this->readOnly) return "";
+		
+		if (isset($_POST[$this->field]))
+		{
+			$count = count($_POST[$this->field]);
+		}		
+				
+		if ($count < $this->min)
+		{
+			return "You must check at least {$this->min} {$this->msgText} for {$this->title}.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
 /**
  * RequiredCurrencyField Validator.
  *

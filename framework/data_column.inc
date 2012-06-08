@@ -170,10 +170,23 @@ class FooterTotalColumn extends FooterColumn
 	var $template = "";
 	var $field = "";
 	
+	/**
+	 * 
+	 * @param string $field - the field to be totals
+	 * @param string $template - the formatting template
+	 * @param string $style 
+	 * @param number $colspan 
+	 */
 	function FooterTotalColumn($field, $template = "", $style = "", $colspan = 1)
 	{
 		$this->field = $field;
 		
+		/*
+		 * In case the field has template formatting instructions,
+		 * move those out to the template variable so that
+		 * the field var is just the field and can be totalled
+		 * correctly.
+		 */
 		$matches = array();
 		if (preg_match("/:(.*?)}/", $this->field, $matches))
 		{
