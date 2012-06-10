@@ -111,6 +111,8 @@ class GroupedDataListView
 	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
 	var $rowId = false; // whether to include an id tag for each tr row
+	var $subFooterColumns = array(); // subtotal footer for group
+	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -256,6 +258,46 @@ class GroupedDataListView
 		$this->footerColumns[] = new FooterValueColumn($callback, $style, $colspan);
 		return $this;
 	}
+	
+	/**
+	 * Sums the total for a column
+	 * @param $field the field to total in the format "{field}"
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerTotal($field, $style = "text-align: right", $colspan = 1)
+	{
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$this->footerColumns[] = $column;
+		$this->totalCallbacks[] = array($column, onStartRow);
+		
+		return $this;
+	}
+	
+	/**
+	 * Adds a text column to the table footer.
+	 * @param $text the text to display
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function subFooterText($text = "", $style = "", $colspan = 1)
+	{
+		$this->subFooterColumns[] = new FooterTextColumn($text, $style, $colspan);
+		return $this;
+	}
+	
+	
+	function subFooterTotal($field, $style = "text-align: right", $colspan = 1)
+	{
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$this->subFooterColumns[] = $column;
+		$this->totalCallbacks[] = array($column, onStartRow);
+		
+		return $this;
+	}
+	
 	
 	/**
 	 * Sets the client-side ID for this DataListView. 
@@ -426,6 +468,12 @@ class GroupedDataListView
 						{
 							call_user_func($this->onStartRow, $item);
 						}
+						
+						foreach($this->totalCallbacks as $cb)
+						{
+							call_user_func($cb, $item);
+						}
+						
 ?>
           <tr <?php echo $rowId ?>>
 <?
@@ -436,7 +484,6 @@ class GroupedDataListView
 							{
 								$attrs .= " style='{$column->style}'";
 							}
-			// JDG 9/14 - write styles
 ?>
 		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
 <?
@@ -444,9 +491,10 @@ class GroupedDataListView
 ?>
 		  </tr>
 <?
-					}
-				}
-			}
+					} // end foreach group items as items
+					$this->drawSubFooterColumns();
+				} // end if group key is in items array
+			} // end for each groups as group
 ?>
 		</tbody>
 <?
@@ -460,24 +508,7 @@ class GroupedDataListView
 <?
 				foreach($this->footerColumns as $column)
 				{
-					$attrs = "";
-					$cssClass = "";
-					if ($column->style)
-					{
-						if (preg_match("/^[\\w_]*$/", $column->style))
-						{
-							$attrs .= " class='{$column->style}'";
-						}
-						else
-						{
-							$attrs .= " style='{$column->style}'";
-						}
-					}
-
-					if ($column->colspan != 1)
-					{
-						$attrs .= " colspan='{$column->colspan}'";
-					}
+					$attr = $this->getFooterColumnFormatting($column);
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?
@@ -495,6 +526,51 @@ class GroupedDataListView
 		{
 			echo "<p><em>{$this->emptyMessage}</em></p>";
 		}
+	}
+	
+	function getFooterColumnFormatting($column)
+	{
+		$attrs = "";
+		$cssClass = "";
+		if ($column->style)
+		{
+			if (preg_match("/^[\\w_]*$/", $column->style))
+			{
+				$attrs .= " class='{$column->style}'";
+			}
+			else
+			{
+				$attrs .= " style='{$column->style}'";
+			}
+		}
+
+		if ($column->colspan != 1)
+		{
+			$attrs .= " colspan='{$column->colspan}'";
+		}
+			
+		return $attrs;
+	}
+	
+	function drawSubFooterColumns()
+	{
+		if (count($this->subFooterColumns) == 0)
+			return;
+?>
+		 <tr>		
+<?
+		foreach($this->subFooterColumns as $column)
+		{		
+			$attrs = $this->getFooterColumnFormatting($column);
+?>
+			<td<?echo $attrs?>><?echo $column->format()?></td>								
+<?
+			// reset to 0 before start of next group
+			$column->total = 0;
+		}
+?>
+		 </tr>
+<?	
 	}
 	
 	/**
