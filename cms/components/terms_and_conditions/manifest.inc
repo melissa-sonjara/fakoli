@@ -14,6 +14,8 @@ class TermsAndConditionsManifest
 		return $component;
 	}
 
+	var $allow_sessionless_handlers = true;
+	
 	static function getScripts()
 	{
 		return array(
