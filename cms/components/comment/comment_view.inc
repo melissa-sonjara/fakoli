@@ -152,7 +152,7 @@ class CommentView
 			$xref->save();	
 			
 			$this->list = $this->buildCommentList($obj);
-			unset($_POST["comment_id"]); // Clear out the comment_id to prevent contamination when rendering
+			$form->data->set("comment_id", ""); // Clear out the comment_id to prevent contamination when rendering
 			return true;	
 		}
 	}	
