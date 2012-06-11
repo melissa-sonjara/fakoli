@@ -57,6 +57,11 @@ $form->submitLabel = "Email Technical Support";
 $form->button("Cancel", "forum_list");
 $form->annotate("message", "Please specify a suggested title for the new forum and a description of its intended topic area.");
 
+$mgr = new UserManager();
+
+$form->hide("owner_id");
+$forumRequest->owner_id = $user->get($user->primary_key);
+
 if ($method == "POST")
 {
 	$emailHandler = new EmailHandler($form->data->to, $form->data->subject, $_POST["message"], $user->email);
