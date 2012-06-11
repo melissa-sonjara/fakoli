@@ -99,6 +99,18 @@ class UserManager
 		return (count($matches) > 0) ? $matches[0] : null;
 	}
 	
+	
+	function getUserByEmail($email)
+	{
+		$emailField = $this->getEmailField();
+		
+		$matches = Query::create(SiteUser, "WHERE $emailField=:email")
+				->bind(":email", $email)
+				->execute();
+		
+		return (count($matches) > 0) ? $matches[0] : null;
+	}
+
 	/**
 	 * Validates the user's username and password, returning the matching user.
 	 * @param $username the user's username
