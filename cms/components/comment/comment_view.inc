@@ -151,6 +151,7 @@ class CommentView
 			$xref->set("comment_id", $form->data->get("comment_id"));
 			$xref->save();	
 			
+			$this->list = $this->buildCommentList($obj);
 			return true;	
 		}
 	}	
