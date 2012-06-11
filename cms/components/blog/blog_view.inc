@@ -316,16 +316,23 @@ class BlogView
 	function drawArticle($article_id)
 	{		
 		global $script;
+		global $method;
 			
 		$type = $this->blog->blog_type;
 		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
 		
 		$this->handlers[$type]->drawArticle($this->blog, $article_id);
-		
+
 		if ($this->blog->allow_comments && $article_id)
 		{
 			$article = new Article($article_id);
 			$view = new CommentView($article, ArticleCommentXref);
+			
+			if ($method == "POST")
+			{
+				$view->save();
+			}
+			
 			$script .= $view->writeScript();
 			$view->drawView();
 			$view->drawForm();
