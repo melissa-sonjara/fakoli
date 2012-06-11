@@ -328,6 +328,7 @@ class BlogView
 			$view = new CommentView($article, ArticleCommentXref);
 			$script .= $view->writeScript();
 			$view->drawView();
+			$view->drawForm();
 		}
 	}
 	
