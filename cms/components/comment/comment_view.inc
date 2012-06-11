@@ -120,7 +120,7 @@ class CommentView
 		$comment->user_id = $user->user_id;
 		$form = new AutoForm($comment);
 		$form->required("description");
-		$form->alias("description", "comment");
+		$form->alias("description", "Comment");
 		$form->hide(user_id);
 		
 		if ($user) 
