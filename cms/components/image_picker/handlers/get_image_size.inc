@@ -41,7 +41,7 @@ $mgr = new ImageManager();
 $width=0;
 $height=0;
 
-$mgr->getSize($image_id, &$width, &$height);
+$mgr->getSize($image_id, $width, $height);
 
 echo "$width,$height";
 ?>
