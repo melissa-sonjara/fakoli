@@ -19,7 +19,7 @@ if($comment_id)
 }
 else
 {
-	$comment->user_id = $user->person_id;
+	$comment->user_id = $user->get($user->primary_key);
 	$comment->date_posted = today();
 }
 
