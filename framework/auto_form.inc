@@ -371,6 +371,8 @@ class AutoForm
 		
 		echo "\treturn true;\n}\n\n";
 		
+		echo "\twindow.addEvent('domready', function() {\n";
+		
 		if ($this->ajaxSubmitHandler)
 		{
 ?>
@@ -381,7 +383,6 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 
 		// Add collapsible group handlers
 		
-		echo "\twindow.addEvent('domready', function() {\n";
 		foreach($this->collapsibleGroups as $group => $toggle)
 		{
 			$groupID = $this->id . "_" . codify($group) . "_group";
