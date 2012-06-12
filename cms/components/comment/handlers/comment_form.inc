@@ -10,20 +10,24 @@ Fakoli::usingFeature("auto_form");
 
 $comment_id = checkNumeric($_GET["comment_id"]);
 $xref_class = mysql_escape_string($_GET["xref_class"]);
+$key_name = mysql_escape_string($_GET["key_name"]);
+$key_value = checkNumeric($_GET["key_value"]);
 
 $comment = new Comment();
 
-if($comment_id)
+if ($comment_id)
 {
 	$comment->load($comment_id);
+	$newPost = false;
 }
 else
 {
 	$comment->user_id = $user->get($user->primary_key);
 	$comment->date_posted = today();
+	$newPost = true;
 }
 
-$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class", "EditComment_form");
+$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value", "EditComment_form");
 $form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
 $form->data->set("xref_class", $xref_class);
@@ -54,10 +58,23 @@ $form->allowDelete = true;
 
 if($method == "POST")
 {
-	if($form->save()) 
+	if($form->save())
+	{
+		if ($newPost)
+		{
+			$xref = new $xref_class;
+			$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
+			$xref->set($key_name, $key_value);
+			$xref->save();
+		}
+
 		ajaxReturn("OK");
+			
+	}
 	else
+	{
 		ajaxReturn($form->msg);
+	}
 }
 
 echo $form->writeScript();
