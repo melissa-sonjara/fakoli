@@ -44,6 +44,10 @@
 
 Fakoli::using("login");
 
+//optional login text here
+
+TextLookup::getText("login_text");
+
 // Login form goes here
 ?>
 <form name='form1' method='POST' action=''>
