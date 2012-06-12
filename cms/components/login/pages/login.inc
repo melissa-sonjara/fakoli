@@ -45,8 +45,9 @@
 Fakoli::using("login", "text_lookup");
 
 //optional login text here
-
-echo TextLookup::getText("login_text");
+$loginText = TextLookup::getText("login_text");
+if($loginText) 
+	echo $loginText;
 
 // Login form goes here
 ?>
