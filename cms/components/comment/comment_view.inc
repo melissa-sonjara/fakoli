@@ -81,14 +81,21 @@ class CommentView
 	function formatComment($comment)
 	{
 		$author = ($comment->user_id) ? $comment->format("{User.first_name} {User.last_name}") : $comment->author;
+
+		$out = "<div id='comment{$comment->comment_id}' class='message'>\n";
+		$out .=" <div class='title'>";
 		
 		if($comment->title)
-			$out .= "{$comment->title}<br>";
-
-		if($comment->isEditable())
-			$edit = " <a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}'); return false\"> Edit </a>";
-		$out .= $comment->format("<b>{$author}</b> on {date_posted:m/d/Y} wrote: {description:stripHTML}$edit");
+		{
+			$out .= "<strong>{$comment->title}</strong><br/>";
+		}
 		
+		$out .= "<span class='small'>Posted by $author at {$comment->date_posted}</span>\n </div>";
+		if($comment->isEditable())
+			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}'); return false\"> Edit </a>";
+		$out .= $comment->format("{description:stripHTML}$edit");
+		
+		$out .= "</div>";
 		return $out;
 	}
 	
