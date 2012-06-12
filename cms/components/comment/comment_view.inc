@@ -124,6 +124,7 @@ class CommentView
 		$form->required("description");
 		$form->alias("description", "Comment");
 		$form->hide(user_id);
+		$form->onSaveComplete = array($this, addXrefRecord);
 		
 		if ($user) 
 		{
@@ -137,6 +138,13 @@ class CommentView
 		return $form;
 	}
 	
+	function addXrefRecord($form)
+	{
+		$xref = new $this->xrefClass;
+		$xref->set($this->obj->primary_key, $this->obj->get($this->obj->primary_key));
+		$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
+		$xref->save();
+	}
 
 	function save() 
 	{
