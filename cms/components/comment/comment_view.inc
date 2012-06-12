@@ -85,7 +85,7 @@ class CommentView
 		$out = "<div id='comment{$comment->comment_id}' class='message'>\n";
 		$out .=" <div class='title'>";
 		
-		if($comment->title)
+		if ($comment->title)
 		{
 			$out .= "<strong>{$comment->title}</strong><br/>";
 		}
