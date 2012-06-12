@@ -117,8 +117,10 @@ class CommentView
 		global $user;
 		
 		$comment = new Comment();
-		$comment->user_id = $user->user_id;
-		$form = new AutoForm($comment);
+		$comment->user_id = $user->get($user->primary_key);
+		$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=&xref_class={$this->xrefClass}", "Comment_form");
+		$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		
 		$form->required("description");
 		$form->alias("description", "Comment");
 		$form->hide(user_id);
@@ -151,8 +153,6 @@ class CommentView
 			$xref->set("comment_id", $form->data->get("comment_id"));
 			$xref->save();	
 			
-			$this->list = $this->buildCommentList($obj);
-			$form->data->set("comment_id", ""); // Clear out the comment_id to prevent contamination when rendering
 			return true;	
 		}
 	}	
