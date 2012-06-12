@@ -65,8 +65,12 @@ class TextLookup extends DataItem
 	 * $obj - a data item instance that can retrieve values
 	 * for merge codes used in the block of text (the text
 	 * field value of table text_lookup.
+	 * 
+	 * @param blank - whether blank is ok; if ok, then return blank when
+	 * no match found; if not, return the text string to signal to the
+	 * developer the value is missing from the db.
 	 */
-	static function getText($code, $obj = null)
+	static function getText($code, $obj = null, $blank = false)
 	{
 		$texts = Query::create(TextLookup, "WHERE code=:c")
 			->bind(":c", $code)
@@ -85,8 +89,14 @@ class TextLookup extends DataItem
 			else
 				return $text->text;
 		}
-		else // return the code to signal that no value was found.
+		else if($blank = false) // return the code to signal that no value was found.
+		{
 			return $code;
+		}
+		else
+		{
+			return "";
+		}
 	}
 	
 	/*
