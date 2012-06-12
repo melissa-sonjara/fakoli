@@ -31,10 +31,11 @@
 
 *****************************************************************/
 
-Fakoli::usingFile("framework/search_form.inc");
-Fakoli::usingFile("framework/field_renderers/select_field_renderer.inc");
-Fakoli::usingFile("framework/field_renderers/date_field_renderer.inc");
-Fakoli::usingFile("framework/field_renderers/boolean_field_renderer.inc");
+require_once realpath(dirname(__FILE__)."/search_form.inc");
+require_once realpath(dirname(__FILE__)."/field_renderers/select_field_renderer.inc");
+require_once realpath(dirname(__FILE__)."/field_renderers/date_field_renderer.inc");
+require_once realpath(dirname(__FILE__)."/field_renderers/boolean_field_renderer.inc");
+require_once realpath(dirname(__FILE__)."/field_renderers/checklist_field_renderer.inc");
 
 
 /*
@@ -450,6 +451,97 @@ function <? echo $selChanged ?>(elt)
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
 		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label></div>";
+	}
+}
+
+/**
+ * 
+ * Usage:
+ * 
+ * Displays a horizontal set of checkboxes with optional default values
+ * checked. Constraint is obj's field value must be a member of the
+ * set of checked boxes.
+ * 
+ * ex:
+ * 	$statusChecklist = new CheckListFilterFieldRenderer($filterForm, "status", "Status", Task::$taskStatusOptions, "Not Started Yet,In Progress,Internally Completed");		
+ * 
+ * @author janice
+ *
+ */
+class CheckListFilterFieldRenderer extends CheckListFieldRenderer
+{
+	/**
+	 * 
+	 * @param FilterForm $form
+	 * @param string $field
+	 * @param string $label
+	 * @param array $options - array of checklist options
+	 * @param string $defaults - list of defaults to be checked in comma delimited string
+	 */
+	function CheckListFilterFieldRenderer(&$form, $field, $label, $options, $defaults = "")
+	{
+		parent::CheckListFieldRenderer($form, $field, $label, $options);
+		$this->horizontal = true;
+		
+		$value = $this->parent->data->get($field);
+		if(!$value && !is_numeric($value) && $defaults)
+		{
+			$defaults = explode(",", preg_replace("/,\s*/", ",", $defaults));
+			$first = $defaults[0];
+			if(!is_numeric($first) && !preg_match("/^'/", $first))
+			{
+				$defaults = "'" . implode("','", $defaults) . "'";
+			}
+			
+			// The form's data value is used to set the selected checkboxes and cannot contain the "'" around the string values
+			$this->parent->data->set($field, array_flip(explode(",", preg_replace("/'/", "", $defaults))));
+			$value = $defaults;
+		}
+		
+		// The search parameter's value is used in the constraint and must contain "'" around each string value
+		$this->parent->search->setParam($field, "member", $value);
+	}
+	
+	/*
+	 * Draws a horizontal line of checkboxes.
+	 */
+	function renderSearchField($field)
+	{
+		echo "<div style='float: left; padding-bottom: 8px;'>\n";
+		
+		echo "<ul style='clear: both; list-style: none outside none; margin-left: -40px; margin-top: 2px'>\n";
+		$wrap = "<li style='display: block; float: left; padding-right: 10px'>\n";
+		$unwrap = "</li>\n";
+		
+		echo $wrap;
+		$this->_startField($field, $this->styles);
+		echo $unwrap;
+		
+		$searchValues = $this->parent->data->get($field);
+		
+		if(is_array($searchValues))
+		{
+			$searchValues = explode(",", implode(",", array_keys($searchValues)));
+		}
+						
+		$idx = 0;
+
+		if(count($this->options) > 0)
+		{
+			foreach($this->options as $value => $text)
+			{
+				echo $wrap;
+				$onchange = " onchange='this.form.submit();'";
+				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
+				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
+				$idx++;
+				echo $unwrap;
+			}
+		}
+
+		echo "</ul>\n</div>\n<div style='clear: both'></div>\n";
+		
+		$this->_endField($field);
 	}
 }
 
