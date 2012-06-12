@@ -42,7 +42,7 @@
  *
  ***************************************************************/
 
-Fakoli::using("login");
+Fakoli::using("login", "text_lookup");
 
 //optional login text here
 
