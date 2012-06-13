@@ -12,9 +12,9 @@ $comment_id = checkNumeric($_GET["comment_id"]);
 $xref_class = mysql_escape_string($_GET["xref_class"]);
 $key_name = mysql_escape_string($_GET["key_name"]);
 $key_value = checkNumeric($_GET["key_value"]);
-$component = mysql_escape_string($_GET["component"]);
+$xref_component = mysql_escape_string($_GET["xref_component"]);
 
-if ($component) Fakoli::using("component");
+if ($xref_component) Fakoli::using($xref_component);
 
 $comment = new Comment();
 
@@ -30,7 +30,7 @@ else
 	$newPost = true;
 }
 
-$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&component=$component", "EditComment_form");
+$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&xref_component=$xref_component", "EditComment_form");
 $form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
 $form->data->set("xref_class", $xref_class);

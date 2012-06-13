@@ -137,7 +137,7 @@ class CommentView
 		
 		$comment = new Comment();
 		$comment->user_id = $user->get($user->primary_key);
-		$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=&xref_class={$this->xrefClass}&key_name=$key_name&key_value=$key_value&component={$this->component}", "Comment_form");
+		$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=&xref_class={$this->xrefClass}&key_name=$key_name&key_value=$key_value&xref_component={$this->component}", "Comment_form");
 		$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 		
 		$form->required("description");

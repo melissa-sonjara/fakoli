@@ -10,7 +10,7 @@ var Comment =  (function()
 	
 		showCommentDialog: function(comment_id, xref_class, component)
 		{
-			this.dialog = modalPopup('Comment', '/action/comment/comment_form?comment_id=' + comment_id + '&xref_class=' + xref_class + "&component=" + component, '520px', 'auto', true);
+			this.dialog = modalPopup('Comment', '/action/comment/comment_form?comment_id=' + comment_id + '&xref_class=' + xref_class + "&xref_component=" + component, '520px', 'auto', true);
 		},
 			
 		commentFormResult: function(response)
