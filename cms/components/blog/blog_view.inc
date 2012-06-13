@@ -326,7 +326,7 @@ class BlogView
 		if ($this->blog->allow_comments && $article_id)
 		{
 			$article = new Article($article_id);
-			$view = new CommentView($article, ArticleCommentXref);
+			$view = new CommentView($article, ArticleCommentXref, "article");
 			
 			if ($method == "POST")
 			{

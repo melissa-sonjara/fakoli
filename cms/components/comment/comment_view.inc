@@ -54,12 +54,21 @@ class CommentView
 	var $list;
 	var $form;
 	var $xrefClass;
+	var $component;
 	var $title;
 	
-	function CommentView($obj, $xrefClass, $title = "")
+	/**
+	 * 
+	 * @param unknown_type $obj
+	 * @param unknown_type $xrefClass
+	 * @param unknown_type $title
+	 * @param unknown_type $component
+	 */
+	function CommentView($obj, $xrefClass, $component, $title = "")
 	{
 		$this->obj = $obj;
 		$this->xrefClass = $xrefClass;
+		$this->component = $component;
 		$this->title = ($title) ? $title : "Comments";
 		$this->list = $this->buildCommentList($obj);
 		$this->form = $this->buildCommentForm();
@@ -92,7 +101,7 @@ class CommentView
 		
 		$out .= "<span class='small'>Posted by $author at {$comment->date_posted}</span>\n </div>\n <div class='message_content'>";
 		if($comment->isEditable())
-			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}'); return false\"> Edit </a><div style='clear:both'></div>";
+			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}', '{$this->component}'); return false\"> Edit </a><div style='clear:both'></div>";
 		$out .= $comment->format("{description:stripHTML}$edit");
 		
 		$out .= "</div></div>";
@@ -128,7 +137,7 @@ class CommentView
 		
 		$comment = new Comment();
 		$comment->user_id = $user->get($user->primary_key);
-		$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=&xref_class={$this->xrefClass}&key_name=$key_name&key_value=$key_value", "Comment_form");
+		$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=&xref_class={$this->xrefClass}&key_name=$key_name&key_value=$key_value&component={$this->component}", "Comment_form");
 		$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 		
 		$form->required("description");
