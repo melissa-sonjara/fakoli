@@ -32,6 +32,7 @@
 *****************************************************************/
 
 require_once realpath(dirname(__FILE__)."/search_form.inc");
+require_once realpath(dirname(__FILE__)."/auto_form_layout.inc");
 require_once realpath(dirname(__FILE__)."/field_renderers/select_field_renderer.inc");
 require_once realpath(dirname(__FILE__)."/field_renderers/date_field_renderer.inc");
 require_once realpath(dirname(__FILE__)."/field_renderers/boolean_field_renderer.inc");
@@ -117,10 +118,11 @@ class FilterForm extends SearchForm
 {	
 	var $search;
 	var $preserveQueryString = false;
-	
+ 	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
 		parent::SearchForm($target, $method, $action, $id);
+		$this->layout = new FilterFormLayout($this);
 		$this->formCSS = "filter";
 		$this->setFilterParameters();
 	}
@@ -154,8 +156,12 @@ class FilterForm extends SearchForm
 				echo "<input id='{$this->id}_{$key}' type='hidden' name='$key' value='".htmlSafe($value)."'/>\n";
 			}
 		}
+
+		$this->layout->startUngrouped();
 		
 		$this->renderSearchFields();
+
+		$this->layout->endUngrouped();
 		
 		echo "</div>\n";
 		echo "</form>\n";
@@ -169,28 +175,73 @@ class FilterForm extends SearchForm
 	function renderSearchFields()
 	{
 		$obj =& $this->data;
-		// JDG 9/2011 handle CompositeDataItems
-		$fields = $obj->getFields();
-
-		foreach(array_keys($fields) as $field)
+		$filter = $obj->getFilter();
+		
+		if (count($this->groups) > 0)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
-				!($obj->filter && $obj->filter->isExcluded($field)))
+			$this->layout->endUngrouped();
+			
+			foreach($this->groups as $legend => $fields)
+			{
+				$collapsible = array_key_exists($legend, $this->collapsibleGroups);
+				if ($collapsible)
+				{
+					$cf = $this->collapsibleGroups[$legend];
+					$collapsed = !$this->data->$cf;
+				}
+				
+				$this->layout->startGroup($legend, $collapsible, $collapsed);
+				
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneSearchField($field);
+					}					
+				}
+				
+				$this->layout->endGroup();
+			}
+			
+			$this->layout->startUngrouped();
+			
+		}
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
 				if(get_class($renderer) == DateRangeFilterRenderer)
 				{
 					$dateRangeField = $field;
 					continue;
-				}
+				}	
 				$this->renderOneSearchField($field);
 			}
 		}
-
-		$this->renderAdditionalFields($obj);
-			
+		
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				if(get_class($renderer) == DateRangeFilterRenderer)
+				{
+					$dateRangeField = $field;
+					continue;
+				}	
+				$this->renderOneSearchField($field);
+			}	
+		}
+				
 		if($dateRangeField)
+		{
 			$this->renderOneSearchField($dateRangeField);
+		}
 	}
 
 	/*
@@ -262,6 +313,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	var $all = true;
 	var $all_value = "";
 	var $width = "";
+	var $cssClass = 'select';
 	
 	function FilterFieldRenderer(&$form, $field, $label = "", $options)
 	{
@@ -281,14 +333,15 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	
 	function renderField($field)
 	{
-	   	$label = $this->label;
+		$this->_startField($field, $this->styles);
+		
 		if($this->width)
 		{
-			$style = "style='width: {$this->width}'";
+			$styles .= "style='width: {$this->width}'";
 		}
+			
 		?>
-  		<div style="float: left; padding-bottom: 4px;">
-		<label for='<?php echo $field?>' class="<?php echo $this->parent->labelCSS ?>"><?php echo $label ?></label>		
+ 		<label for='<?php echo $field?>' class="<?php echo $this->parent->labelCSS ?>"><?php echo $label ?></label>		
     	<select name="<?php echo $field ?>" <?echo $style?> onchange="this.form.submit();">
     	<?php 
     	if($this->all)
@@ -310,9 +363,11 @@ class FilterFieldRenderer extends SelectFieldRenderer
 			echo "<option value='{$value}' $selected>$trunced</option>\n";
 		}
 		?>
-   		</select>&nbsp;</div>
+   		</select>&nbsp;
   		<?		
-	}
+  		
+  		$this->_endField($field);
+  	}
 	
 	function renderSearchField($field)
 	{
@@ -359,11 +414,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
  * The hidden field is set using onchange event on the
  * checkbox html.
  * 
- * If checked is the desired default, set to 1 in the calling script:
- * e.g.,
- * 
-	$unbilledCheckbox = new BooleanFilterFieldRenderer($filterForm, "ledger_id", "Show Unbilled Only");
-	$unbilledCheckbox->default = 1;
+	$unbilledCheckbox = new BooleanFilterFieldRenderer($filterForm, "ledger_id", "Show Unbilled Only", 1);
  *
  * For BooleanFilters, we also may want to use a callback to
  * generate the clause for this field. E.g:
@@ -381,9 +432,16 @@ class FilterFieldRenderer extends SelectFieldRenderer
  */
 class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 {
-	var $default = 0; // initial setting when page loaded
+	var $cssClass = "boolean";
 	
-	function BooleanFilterFieldRenderer(&$parent, $field = "", $label = "")
+	/**
+	 * 
+	 * @param $parent
+	 * @param $field
+	 * @param $label
+	 * @param $default - whether the checkbox should be check or unchecked as the default
+	 */
+	function BooleanFilterFieldRenderer(&$parent, $field = "", $label = "", $default = 0)
 	{
 		$this->label = ($label) ? $label : prettify($field);
 		
@@ -398,6 +456,15 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 			$parent->overrides[$field]['label'] = $this->label;
 		}
 
+		$value = $this->parent->data->get($field);
+		if(!$value && !is_numeric($value))
+		{
+			// The form's data value is used to set the checkbox
+			$this->parent->data->set($field, $default);
+			$value = $default;
+		}
+		
+		// The search parameter value is used for the constraint
 		$this->parent->search->setParam($field, "equal", $this->parent->data->get($field));
 	}
 	
@@ -432,15 +499,11 @@ function <? echo $selChanged ?>(elt)
 	
 	function renderSearchField($field)
 	{
-		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
-		
-		echo "<div style='display: inline-block' class='checkbox'>\n";
+		$this->_startField($field, $this->styles);
+			
 		echo "<input type='checkbox' value='1' name='{$field}_box'";
 
 		$value = $this->parent->data->get($field);
-
-		if(!$value && !is_numeric($value))
-			$value = $this->default;
 	
 		if ($value)
 		{
@@ -450,7 +513,9 @@ function <? echo $selChanged ?>(elt)
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
-		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label></div>";
+		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label>";
+		
+		$this->_endField($field);
 	}
 }
 
@@ -470,6 +535,8 @@ function <? echo $selChanged ?>(elt)
  */
 class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 {
+	var $cssClass = 'checklist';
+	
 	/**
 	 * 
 	 * @param FilterForm $form
@@ -507,15 +574,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 	 */
 	function renderSearchField($field)
 	{
-		echo "<div style='float: left; padding-bottom: 8px;'>\n";
-		
-		echo "<ul style='clear: both; list-style: none outside none; margin-left: -40px; margin-top: 2px'>\n";
-		$wrap = "<li style='display: block; float: left; padding-right: 10px'>\n";
-		$unwrap = "</li>\n";
-		
-		echo $wrap;
 		$this->_startField($field, $this->styles);
-		echo $unwrap;
 		
 		$searchValues = $this->parent->data->get($field);
 		
@@ -530,45 +589,77 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		{
 			foreach($this->options as $value => $text)
 			{
-				echo $wrap;
+				echo "<li>\n";
 				$onchange = " onchange='this.form.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
 				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
 				$idx++;
-				echo $unwrap;
+				echo "</li>\n";
 			}
 		}
 
-		echo "</ul>\n</div>\n<div style='clear: both'></div>\n";
-		
-		$this->_endField($field);
+		$this->_endField($field);	
+	}
+	
+	function _startField($field, $styles)
+	{
+		echo "<div class='{$this->cssClass}'>\n";
+		echo "<ul>\n";		
+		echo "<li>\n";
+		$this->parent->layout->printLabel($field, $this, $styles, "");
+		echo "</li>\n";	
+	}
+	
+	function _endField($field, $styles)
+	{
+		echo "</ul>\n";
+		$this->parent->layout->endField($field);	
+		echo "<div style='clear: both'></div>\n";
 	}
 }
 
 class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 {
+	var $cssClass = "radio";
+	
 	function RadioButtonFieldRenderer(&$parent, $field, $label, $options)
 	{
 		parent::RadioButtonFieldRenderer($parent, $field, $label, $options);
+		$this->horizontal = true;
 	}
 	
 	function renderSearchField($field)
 	{
-		$onchange = " onchange='this.form.submit();'";
+		$this->_startField($field, $this->styles);
+		
+		$onchange = " onchange='this.form.submit();'";		
 		
 		$searchValue = $this->parent->data->get($field);
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td>\n";
+
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($searchValue == $value) ? " checked" : "";
 			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected$onchange>$name</option>";
 			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
 		}
-		echo "</td></tr>\n";
+		
+		$this->_endField($field);
+	}
+
+	function _startField($field, $styles)
+	{
+		echo "<div class='{$this->cssClass}'>\n";
+		$this->parent->layout->printLabel($field, $this, $styles, "");
+		echo "<ul>\n";		
 		
 	}
+
+	function _endField($field, $styles)
+	{
+		echo "</ul>\n";
+		$this->parent->layout->endField($field);	
+		echo "<div style='clear: both'></div>\n";
+	}	
 }
 
 /*

@@ -127,11 +127,12 @@ table.list td.subheading
 	background-color: #F0F0F6;
 }
 
-
+/* filter_form filters */
 .filter
 {
-	padding: 6px;
-	height: 30px;
+	padding-top: 6px;
+	height: auto;
+	padding-bottom: 10px;
 }
 
 .filter input
@@ -139,11 +140,51 @@ table.list td.subheading
 	margin-left: 2px;
 }
 
-.filter .checkbox
+.filter .boolean
 {
 	padding-right: 12px;
+	display: inline-block;
 }
 
+.filter .select
+{
+	padding-right: 5px;
+	float: left; 
+	padding-bottom: 4px;	
+	display: block;
+}
+
+.filter .checklist,
+	.radio
+{
+	clear: both;
+	float: left; 
+	padding-bottom: 0px;
+	padding-top: 4px;
+	height: auto;
+	width: 100%;
+	display: inline-block;
+}
+
+.filter .checklist ul,
+	.radio ul
+{
+	list-style: none outside none; 
+	margin-left: -40px; 
+	margin-top: 2px;
+	display: inline-block;
+}
+
+
+.filter .checklist ul li,
+	.radio ul li
+{ 
+	float: left; 
+	padding-right: 10px;
+}
+
+
+/* end filter_form filters */
 
 tr.filtered td,
 tr.filtered a,
@@ -252,7 +293,8 @@ table.list tfoot td
 tr.expanded td
 {
 	background: url(/fakoli/images/open.gif) left center no-repeat transparent;
-	padding-left: 20px;
+	padding-left: 80px;
+	margin-left: 80px;
 }
 
 tr.collapsed td
@@ -330,3 +372,4 @@ tr.selected a:hover
 	background-color: #393683;
 	color: #fff;
 }
+
