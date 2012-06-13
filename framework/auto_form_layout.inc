@@ -673,3 +673,97 @@ class SimpleFormLayout extends AutoFormLayout
 		echo "<p style='font-weight: bold'>{$text}</p>\n";
 	}
 }
+
+/**
+ * Layout for list filtering using filter_form.inc.
+ * This layout is not table-based; it used float left
+ * divs to layout the filter fields left to right.
+ * 
+ * @author janice
+ */
+class FilterFormLayout extends AutoFormLayout
+{
+	function FilterFormLayout($form)
+	{
+		$this->AutoFormLayout($form);
+	}
+	
+	function startGroup($name, $collapsible = false, $collapsed = false)
+	{
+		$class = "";
+		if ($collapsible)
+		{
+			$class = "collapsible";
+			$class .= $collapsed ? " collapsed" : " expanded";
+			
+			$class = " class='$class'";
+		}
+		
+		$id = $this->form->id . "_" . codify($name) . "_group";
+		
+		$this->startUngrouped();
+	}
+	
+	function endGroup()
+	{
+		$this->endUngrouped();
+	}
+	
+	function startField($field, $renderer, $colspan = 1, $styles = "")
+	{
+		echo "<div class='{$renderer->cssClass}'>\n";
+		$this->printLabel($field, $renderer, $styles, "");
+	}
+	
+	function endField($field, $renderer)
+	{
+		echo "</div>\n";
+	}
+	
+	/**
+	 * Internal method to generate the HTML for the field label
+	 *
+	 * @param string $field the field name
+	 * @param int $colspan the number of columns to span
+	 * @param string $styles optional special styles that need to be applied
+	 * @param string $annotation annotation text for the field
+	 */
+	function printLabel($field, $renderer, $styles = "", $annotation = "")
+	{		
+		if ($renderer->hideLabel) return;
+		
+		$label = $this->getLabel($field, $renderer);
+		
+		if (!$renderer->hideLabel) echo "<label for='$field'>$label</label> ";
+	}
+
+	function startUngrouped()
+	{
+		// nothing to do
+	}
+	
+	function endUngrouped()
+	{
+		// nothing to do
+	}
+	
+	function startButtonLine()
+	{
+		// nothing to do
+	}
+	
+	function endButtonLine()
+	{
+		// nothing to do
+	}
+	
+	function errorBox()
+	{
+		// nothing to do
+	}	
+	
+	function requiredFields($text)
+	{
+		// nothing to do
+	}
+}
