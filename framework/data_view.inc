@@ -570,7 +570,8 @@ class DataListView
 			$c = 0;
 			if ($this->onStartRow)
 			{
-				call_user_func($this->onStartRow, $item);
+				$retval = call_user_func($this->onStartRow, $item);
+				if ($retval === false) continue;
 			}
 						
 			foreach($this->columns as $column)
