@@ -44,7 +44,7 @@ global $blog;
 $blog = new Blog($blog_id);
 
 $title = "Articles in {$blog->title}";
-$menu_item = "Articles";
+$menu_item = "Blogs";
 
 $view = new AdminBlogArticlesView($blog);
 

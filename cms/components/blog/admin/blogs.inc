@@ -34,6 +34,8 @@
 Fakoli::using("user", "blog");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Blogs";
+
 $view = new AdminBlogListView();
 
 $script .= $view->writeScript();

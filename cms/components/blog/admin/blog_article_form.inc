@@ -41,6 +41,7 @@ $article_id = checkNumeric($_GET["article_id"]);
 $blog_id = checkNumeric($_GET["blog_id"]);
 
 if (!$blog_id) redirect("/admin/index");
+$menu_item = "Blogs";
 
 $blog = new Blog($blog_id);
 

@@ -40,6 +40,8 @@ $blog_id = checkNumeric($_GET["blog_id"]);
 
 $blog = new Blog();
 
+$menu_item = "Blogs";
+
 if ($blog_id)
 {
 	$blog->load($blog_id);
