@@ -70,7 +70,9 @@ class DataListView
 	var $height;
 	var $scrollable = false;
 	var $resizable  = true;
-	var $rowId = false; // whether to include an id tag for each tr row
+	var $rowId = false;			///< whether to include an id tag for each tr row
+	var $dragReorder = false; 	///< Enabled drag & drop reordering
+	var $reorderHandler = null;	///< Handler script that implements reordering records
 	
 	// Selection and Commands
 	
@@ -112,6 +114,22 @@ class DataListView
 		$this->scrollable = true;
 		$this->height = $height;
 		$this->resizable = $resizable;
+	}
+	
+	/**
+	 * Turns on drag & drop item reordering for the table. This feature
+	 * disables sorting, paging and filtering for the table.
+	 * 
+	 * @param string $handler URL of the handler script that processes the item reordering
+	 */
+	function enableDragReorder($handler)
+	{
+		$this->sortable = false;
+		$this->filter = false;
+		$this->pageSize = 0;
+		$this->paginate = false;
+		$this->dragReorder = true;
+		$this->reorderHandler = $handler;
 	}
 	
 	/**
@@ -306,13 +324,20 @@ class DataListView
 			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
 		}
 		
-		if ($constructor)
+		if ($constructor || $this->dragReorder)
 		{
 			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
 			$script .= $constructor;
-			$script .= "\n\t});\n\t</script>\n";
+			
+			if ($this->dragReorder)
+			{
+				$script .= "\n\t\tnew Sortables('{$this->id}');";
+			}
+			
+			$script .= "\n\t});\n\t</script>\n";";
 		}
 
+		
 		if ($this->menu) $script .= $this->menu->writeScript();
 		return $script;
 	}
