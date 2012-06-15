@@ -331,7 +331,7 @@ class DataListView
 			
 			if ($this->dragReorder)
 			{
-				$script .= "\n\t\tnew Sortables('{$this->id}');";
+				$script .= "\n\t\tnew Sortables(document.id('{$this->id}'));";
 			}
 			
 			$script .= "\n\t});\n\t</script>\n";
