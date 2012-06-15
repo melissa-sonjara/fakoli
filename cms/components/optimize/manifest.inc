@@ -46,6 +46,8 @@ class OptimizeManifest
 		return $component;
 	}
 		
+	var $allow_sessionless_handlers = true;
+	
 	static function subscribeToEvents()
 	{
 		return array("ComponentScanComplete" => array(OptimizeManager, clearCache),
