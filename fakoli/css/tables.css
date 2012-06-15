@@ -388,7 +388,7 @@ table.reorder tr
 
 table.reorder tr:hover
 {
-	background-color: #ffd;
+	background-color: #ffc;
 }
 
 tr.dragRow
