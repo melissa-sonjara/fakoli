@@ -73,7 +73,7 @@ class DataListView
 	var $rowId = false;			///< whether to include an id tag for each tr row
 	var $dragReorder = false; 	///< Enabled drag & drop reordering
 	var $reorderHandler = null;	///< Handler script that implements reordering records
-	
+	var $dragText = "";			///< Optional text to display above reorderable table
 	// Selection and Commands
 	
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
@@ -129,6 +129,9 @@ class DataListView
 		$this->pageSize = 0;
 		$this->paginate = false;
 		$this->dragReorder = true;
+		$this->rowId = true;
+		$this->zebra = false;
+		
 		$this->reorderHandler = $handler;
 	}
 	
@@ -285,7 +288,7 @@ class DataListView
 		"\t<script type='text/javascript' src='/fakoli/js/scrolling_table.js'></script>\n";
 		
 		$constructor = "";
-		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter)
+		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter && !$this->dragReorder)
 		{
 			return "";
 		}
@@ -331,7 +334,7 @@ class DataListView
 			
 			if ($this->dragReorder)
 			{
-				$script .= "\n\t\tnew Sortables(document.id('{$this->id}'));";
+				$script .= "\n\t\tnew DraggableTable('#{$this->id} tbody', '{$this->reorderHandler}', '{$this->items[0]->primary_key}');";
 			}
 			
 			$script .= "\n\t});\n\t</script>\n";
@@ -361,6 +364,7 @@ class DataListView
 				$attrs .= " class='{$this->cssClass}";
 				if ($this->sortable) $attrs .=" sortable";
 				if ($this->scrollable) $attrs.= " scroll";
+				if ($this->dragReorder) $attrs .= " reorder";
 				$attrs .= "'";
 			}
 			
@@ -398,6 +402,11 @@ class DataListView
 		?>
 			<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div>
 		<?php 
+		}
+		
+		if ($this->dragText)
+		{
+			echo "<span class='small'>{$this->dragText}</span>";
 		}
 		?>
 		</div>
