@@ -83,7 +83,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		$page->page_title = $blog->title;
 		
-		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+		$articles = $blog->Articles("WHERE published=1");	
 
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
@@ -153,7 +153,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 		$page->page_title = $blog->title;
 		
-		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+		$articles = $blog->Articles("WHERE published=1");	
 
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
@@ -218,7 +218,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		
 		$page->page_title = $blog->title;
 		
-		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+		$articles = $blog->Articles("WHERE published=1");	
 
 		echo "<div id='blog_description' class='Book'>{$blog->description}</div>";
 		
@@ -259,7 +259,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		
 		echo $article->message;
 				
-		$articles = $blog->Articles("WHERE published=1 ORDER BY created_date {$this->blog->default_article_order}");	
+		$articles = $blog->Articles("WHERE published=1");	
 		
 		$idx = findItemIndex($articles, "article_id", $article->article_id);
 		
@@ -417,11 +417,14 @@ class AdminBlogListView extends BlogListView
 
 class BlogArticlesView
 {
+	var $blog;
 	var $table;
 	
 	function BlogArticlesView($blog)	
 	{
-		$articles = $blog->Articles("ORDER BY last_modified DESC");
+		$this->blog = $blog;
+		
+		$articles = $blog->Articles("ORDER BY sort_order, last_modified DESC");
 
 		$this->table = $this->buildTable($articles);	
 	}
@@ -477,6 +480,14 @@ class AdminBlogArticlesView extends BlogArticlesView
 		parent::BlogArticlesView($blog);
 	}
 
+	function buildTable($articles)
+	{
+		$table = parent::buildTable($articles);
+		$table->enableDragReorder("/action/blog/reorder_articles?blog_id={$this->blog->blog_id}");
+		$table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the articles</span>";
+		return $table;
+	}
+	
 	function formatTitle($item)
 	{
 		global $blog;

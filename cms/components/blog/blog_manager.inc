@@ -106,7 +106,7 @@ class BlogManager
 		$blogTypes = array_keys($blogView->handlers);
 		$blogTypes = array_combine($blogTypes, $blogTypes);
 		
-		$orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest"));
+		$orderSelect = new SelectFieldRenderer($form, "default_article_order", "Default Article Order", array("DESC" => "Newest to Oldest", "ASC" => "Oldest to Newest", "SORT" => "Sorted Order"));
 		$readSelect = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
 		$readSelect->setSize(350, 150, 10);
 		$writeSelect = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());

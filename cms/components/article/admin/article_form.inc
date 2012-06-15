@@ -47,6 +47,7 @@ else
 }
 
 $form = ArticleManager::buildArticleForm($article);
+$form->hide("sort_order");
 
 $redirect = "/admin/articles";
 $form->button("Cancel", $redirect);

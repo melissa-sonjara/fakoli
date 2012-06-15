@@ -404,9 +404,9 @@ class DataListView
 		<?php 
 		}
 		
-		if ($this->dragText)
+		if ($this->dragReorder)
 		{
-			echo "<span class='small'>{$this->dragText}</span>";
+			echo $this->dragText;
 		}
 		?>
 		</div>

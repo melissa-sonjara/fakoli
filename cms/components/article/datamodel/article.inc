@@ -52,7 +52,8 @@ class Article extends DataItem
 						"headline"		=>	Boolean,
 						"tags"			=>	String,
 						"author_id"		=>	Number,
-						"author"		=>	String
+						"author"		=>	String,
+						"sort_order"	=>	Number
 			);
 
 	var $relations = array(	"Image" 	=> ImageRecord,

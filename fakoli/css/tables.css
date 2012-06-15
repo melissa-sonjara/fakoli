@@ -373,3 +373,20 @@ tr.selected a:hover
 	color: #fff;
 }
 
+table.reorder
+{
+	position: relative;
+}
+
+table.reorder tr
+{
+	background-color: #fff;
+	border-top: solid 1px #666;
+	border-right: solid 1px #666;
+	cursor: move;
+}
+
+tr.dragRow
+{
+	box-shadow: 1px 1px 15px #666;
+}	

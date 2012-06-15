@@ -57,3 +57,9 @@ CREATE TABLE `article_site_xref` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `article` ADD COLUMN `sort_order` INT(10) NOT NULL DEFAULT 0;
+
+-- END Version 1.1

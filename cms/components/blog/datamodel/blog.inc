@@ -72,14 +72,26 @@ class Blog extends DataItem
 	
 	function Articles($constraint = "")
 	{
-		if (!$constraint)
+		if (!$constraint || stripos($constraint, "ORDER") === false)
 		{
-			$constraint = "ORDER BY created_date $this->default_article_order";
+			switch($this->default_article_order)
+			{
+				case "DESC":
+					$constraint .= " ORDER BY created_date DESC";
+					break;	
+								
+				case "ASC":
+					$constraint .= " ORDER BY created_date ASC";
+					break;
+					
+				case "SORT":
+				default: 
+					$constraint .= " ORDER BY sort_order";
+					break;
+			}
 		}
-		else
-		{
-			$constraint = preg_replace("/^\s*WHERE\s+/i", "AND ", $constraint);
-		}
+
+		$constraint = preg_replace("/^\s*WHERE\s+/i", "AND ", $constraint);
 	
 		$constraint = "WHERE article_type=:a $constraint";
 		

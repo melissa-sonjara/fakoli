@@ -16,7 +16,8 @@ Fakoli::using("article", "component");
 class ArticleUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added sort_order field to article table"
 	);
 	
 	function ArticleUpgradeManager()
