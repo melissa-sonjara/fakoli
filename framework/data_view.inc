@@ -334,7 +334,7 @@ class DataListView
 				$script .= "\n\t\tnew Sortables('{$this->id}');";
 			}
 			
-			$script .= "\n\t});\n\t</script>\n";";
+			$script .= "\n\t});\n\t</script>\n";
 		}
 
 		
