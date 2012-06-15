@@ -32,7 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("menu", "site", "role", "page", "field_renderers");
-Fakoli::usingFile("framework/auto_form.inc");
+Fakoli::usingFeature("auto_form", "data_view");
 
 require_once "include/menu_tabs.inc";
 
@@ -176,44 +176,22 @@ if ($menu_item_id)
 <?
 	if ($submenus)
 	{
+		$subTable = new DataListView($submenus, "submenus");
+		$subTable->column("Title", "<a href='/admin/menu_item_form?menu_item_id={menu_item_id}'>{title}</a>")
+				 ->column("Link", "{url}");
+				 
+		$subTable->enableDragReorder("/action/menu/reorder_submenus");
+		$subTable->dragText = "<span style='font-size: 10px'>Click and drag to reorder menu items</span>";
+		$subTable->emptyMessage = "<p><i>There are no sub-items associated with this menu item.</i></p>";
+		$script .= $subTable->writeScript();
+		
+		$subTable->drawView();
+	}
 ?>
-
-<form name='menu_order_form' method="POST" action="">
-<input type="hidden" name="reorder_subitems" value="1"/>
-<table class="list" style='width: 90%; margin-left: 4%'>
- <tr>
-  <th>Sort Order</th>
-  <th>Menu</th>
- </tr>
-<?
-		foreach($submenus as $m)
-		{
-?>
- <tr>
-  <td style="text-align: center; vertical-align: middle; width: 80px"><input type="text" style="width: 60px" name="m[<?echo $m->menu_item_id ?>]" value="<?echo $m->sort_order ?>"/></td>
-  <td><a href="/admin/menu_item_form?menu_item_id=<?echo $m->menu_item_id?>"><?echo $m->title ?></a></td>
- </tr>
-<?
-		}
-?>
-</table>
 
 <br/>
-
-<input type="submit" class="button" value="Update Menu Order"/>&nbsp;&nbsp;<a href="menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
-
-</form>
-<?
-	}
-	else
-	{
-?><p><i>There are no sub-items associated with this menu item.</i></p>
-<a href="/admin/menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
-<?
-	}
-}
-?>
+<a href="menu_item_form?menu_id=<?echo $menu->menu_id?>&parent_id=<?echo $menu_item_id?>" class="button">Add a new Sub-item</a>
 </div>
 <?
-
+}
 ?>
