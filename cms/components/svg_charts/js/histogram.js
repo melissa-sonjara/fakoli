@@ -60,6 +60,16 @@ var HistogramSeries = new Class(
 		this.renderer.morph(series);		
 	},
 	
+	hasTooltip: function(idx)
+	{
+		if (idx > this.options.tooltips.length) return false;
+		
+		var text = this.options.tooltips[idx];
+		if (text == '') return false;
+		
+		return true;
+	},
+	
 	showToolTip: function(evt, idx)
 	{
 		if (idx > this.options.tooltips.length) return;
@@ -155,13 +165,13 @@ var LineSeriesRenderer = new Class(
 	draw: function()
 	{
 		var lineColor = this.chart.palette.swatches[this.index];
-		
+		var fillColor = this.chart.options.chartBackground;
 		var p = this.calculatePath(this.series);
 
 		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
 		this.coords.each(function(c, i) {
-			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: this.chart.options.chartBackground, 'cursor': 'pointer'});
+			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? fillColor : lineColor, 'cursor': 'pointer'});
 			dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.showToolTip(e, i);}.bind(this));
 			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); this.series.hideToolTip();}.bind(this));
 			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
