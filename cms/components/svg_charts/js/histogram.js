@@ -172,7 +172,7 @@ var LineSeriesRenderer = new Class(
 		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
 		this.coords.each(function(c, i) {
-			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? fillColor : lineColor, 'cursor': 'pointer'});
+			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor, 'cursor': 'pointer'});
 			dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.showToolTip(e, i);}.bind(this));
 			dot.mouseout(function() {dot.animate({'r': this.series.options.symbolSize}, 250, "backout"); this.series.hideToolTip();}.bind(this));
 			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
@@ -211,11 +211,12 @@ var LineSeriesRenderer = new Class(
 	{
 		var p = this.calculatePath(series);
 		var lineColor = this.chart.palette.swatches[series.index];
+		var fillColor = this.chart.options.chartBackground;
 		this.path.animate({'path': p, 'stroke': lineColor}, 1000, "<>");
 		
 		this.dots.each(function(dot, i) 
 		{
-			dot.animate({'cy': this.coords[i].y, 'stroke': lineColor}, 1000, "<>");
+			dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, "<>");
 		}.bind(this));
 	}		
 });
