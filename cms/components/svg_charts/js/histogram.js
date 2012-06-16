@@ -15,7 +15,8 @@ var HistogramSeries = new Class(
 		symbolSize: 4,
 		onClick: Class.Empty,
 		colorMode: 'series',
-		toolTips: []
+		toolTips: [],
+		indicateTooltips: false
 	},
 	columns: [],
 	renderer: Class.Empty,
