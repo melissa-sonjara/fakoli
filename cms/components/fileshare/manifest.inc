@@ -46,6 +46,12 @@ class FileshareManifest
 		return $component;
 	}
 	
+	/*
+	 * $allow_sessionless_handlers is false because this component users
+	 * document component's download handler - the only handler that needs
+	 * to allow nonusers access
+	 */
+	
 	static function subscribeToEvents()
 	{
 		return array(
