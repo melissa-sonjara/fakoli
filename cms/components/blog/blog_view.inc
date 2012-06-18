@@ -178,7 +178,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
 		$out .= "{$article->title}</a></h4>";
-		$out .= "<strong>".formatDateLong($article->created_date)."</strong>";
+		$out .= $article->format("<strong>{created_date:daylong}</strong>");
 		if ($article->teaser) $out .= " - ".$article->teaser;
 		$out .= "<br/><a href='{$this->blog->identifier}?article_id={$article->article_id}'>Read More &raquo;</a></div>";
 		return $out;

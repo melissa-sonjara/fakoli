@@ -93,15 +93,14 @@ class StandardEventHandler extends EventHandler
 	
 	function details($event, $byProgram = false)
 	{
-		// JDG 2/24/2011 - call formatDateTime12Hr
 		ob_start();
 ?>
 <div class="event_details">
 <h3><?echo $event->title?></h3>
 <div class="event_contents">
 <p><em><?echo $event->event_type?></em></p>
-<p><label style="width: 80px">Start: </label><?echo formatDateTime12Hr($event->start_date) ?><br/>
-<label style="width: 80px">End: </label><?echo formatDateTime12Hr($event->end_date) ?></p>
+<p><label style="width: 80px">Start: </label><?echo $event->format("{start_date:short}") ?><br/>
+<label style="width: 80px">End: </label><?echo $event->format("{end_date:short}") ?></p>
 <? 		
 		if ($event->location)
 		{ 

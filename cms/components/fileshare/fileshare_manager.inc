@@ -269,12 +269,12 @@ function uploadFileshareFile()
 			->bind(":l", $library->document_library_id)
 			->execute();
 			
-		return (count($documents) > 0) ? formatDateTime12Hr($documents[0]->last_modified) : null;
+		return (count($documents) > 0) ? $documents[0]->format("{last_modified:short}") : null;
 	}		
 	
 	static function getDocumentLastModified($document)
 	{
-		return formatDateTime12Hr($document->last_modified);
+		return $document->format("{last_modified:short}");
 	}		
 	
 	

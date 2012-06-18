@@ -55,7 +55,7 @@ trace("Download: document filename to download {$document->file}", 3);
 
 $filepath = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
 
-$mimeType = getDocMimeType($document->file);
+$mimeType = DocumentHandler::getDocMimeType($document->file);
 	
 trace("Download: opening document with filepath {$filepath} and mimeType {$mimeType}", 3);
 

@@ -85,7 +85,7 @@ class LoginManager
 		$message .= "Username = " . $siteUser->$userNameField ."\n";
 		$message .= "Password = " . $token->token . "\n\n";
 		$message .= "This password is valid for one login ONLY and expires after ";
-		$message .= formatDateShort($token->expire_date) . ". ";
+		$message .= $token->format("{expire_date} ");
 		$message .= "Once you have logged in, you must reset your password. "; 
 		$message .=  "Please note that the password is CASE SENSITIVE.";
 		$message = wordwrap($message, 80);
