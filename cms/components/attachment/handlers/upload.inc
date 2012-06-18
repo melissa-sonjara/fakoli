@@ -89,7 +89,7 @@ $attachment->local_filename = $file;
 $attachment->file_size =$size;
 $attachment->save();
 
-$icon = getDocIcon($name);
+$icon = DocumentHandler::getDocIcon($name);
 
 ajaxReturn("$attachment->attachment_id:$name:$icon:$size");
 ?>

@@ -175,7 +175,7 @@ class ImageManager
 
 		$last_modified = filemtime($cacheFile);
 		
-		$mimeType = getMIMEType($cacheFile);
+		$mimeType = DocumentHandler::getMIMEType($cacheFile);
 
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
@@ -227,7 +227,7 @@ class ImageManager
 		
 		$last_modified = filemtime($imageFile);
 		
-		$mimeType = getMIMEType($imageFile);
+		$mimeType = DocumentHandler::getMIMEType($imageFile);
 
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");

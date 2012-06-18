@@ -222,7 +222,7 @@ class VideoManager
 
 		$last_modified = filemtime($cacheFile);
 		
-		$mimeType = getMIMEType($cacheFile);
+		$mimeType = DocumentHandler::getMIMEType($cacheFile);
 
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");

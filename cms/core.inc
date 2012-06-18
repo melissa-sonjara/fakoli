@@ -425,7 +425,7 @@ class Fakoli
 	    $last_modified = filemtime($resource);
 
 		
-		$mimeType = getMIMEType($resource);
+		$mimeType = DocumentHandler::getMIMEType($resource);
 		
 	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 	    {

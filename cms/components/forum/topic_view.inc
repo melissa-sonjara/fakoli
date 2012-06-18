@@ -97,7 +97,7 @@ class ForumTopicView
 			 		
 			 		foreach($attachments as $attachment)
 			 		{
-			 			$icon = getDocIcon($attachment->filename);
+			 			$icon = DocumentHandler::getDocIcon($attachment->filename);
 
 			 			echo $this->formatAttachment($icon, $attachment);
 		 			

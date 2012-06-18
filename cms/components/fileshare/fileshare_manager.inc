@@ -211,7 +211,7 @@ function uploadFileshareFile()
 		$document_id = $document->document_id;
 
 		$file = basename($document->file);
-		$icon = getDocIcon($document->file);
+		$icon = DocumentHandler::getDocIcon($document->file);
 		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
 		$link .= "<a href=\"/action/document/download?document_id={$document_id}\">{$document->title}
 		</a>&nbsp;&nbsp;\n";
