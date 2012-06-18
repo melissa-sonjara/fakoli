@@ -70,6 +70,9 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "html":
 			return formatAsHTML($value);
 			
+		case "phone":
+			return StringTypeRenderer::phone($value);
+			
 		default:
 			
 			if (is_numeric($template))
@@ -79,5 +82,27 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		}
 		
 		return $value; 
-	}
+	}	
+	
+	/*
+	 * Given a phone number containing various
+ 	 * separator characters between the numbers,
+	 * clear out the separators and standardize
+	 * the format as 
+ 	 * (xxx) xxx-xxxx
+	 * 
+ 	 * tylerhall on 11/30/-1
+ 	 * http://snipplr.com/view/25/format-phone-number/
+	 */
+	static function phone($phone)
+	{
+		$phone = preg_replace("/[^0-9]/", "", $phone);
+	
+		if(strlen($phone) == 7)
+			return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
+		elseif(strlen($phone) == 10)
+			return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "($1) $2-$3", $phone);
+		else
+			return $phone;
+	}	
 }

@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+require_once realpath(dirname(__FILE__)."/document_handler.inc");
+
 /*
  * Library of commonly used functions.
  * 
@@ -92,69 +94,6 @@ function filterByRole($items, $field)
  * MIME types allowable for image uploads 
  */
 $image_types = array( "image/jpeg", "image/gif", "image/x-png", "image/pjpeg" );
-
-/**
- * MIME types allowable for document uploads 
- */
-$doc_types = array( "application/msword", 
-		    "application/vnd.ms-excel", 
-		    "application/excel",
-		    "application/ms-excel",
-		    "application/pdf",
-			"application/zip",
-		    "application/vnd.ms-powerpoint",
-		    "application/ms-powerpoint",
-		    "application/mspowerpoint",
-		    "text/html",
-		    "text/rtf",
-			"audio/mpeg" );
-
-/**
- * Mapping of common file extensions to human-readable document type
- */
-$doc_extensions = array( 
-        ".doc" => "Microsoft Word Document",
-        ".xls" => "Microsoft Excel Spreadsheet",
-        ".ppt" => "Microsoft Powerpoint Presentation",
-        ".pdf" => "Adobe Acrobat PDF",
-        ".rtf" => "Rich Text Format",
-        ".htm" => "HTML File",
-        ".zip" => "ZIP Archive",
-        ".jpg" => "JPEG Image File",
-        ".gif" => "GIF Image File",
-        ".png" => "PNG Image File",
-		".xlsx" => "Microsoft Excel Spreadsheet",
-	    ".pptx" => "Microsoft Powerpoint Presentation",
-		".docx" => "Microsoft Word Document",
-		".mp3"	=> "MP3 Audio File"
-        );
-
-$doc_mime_types = array(
-		".doc" => "application/msword",
-        ".xls" => "application/vnd.ms-excel",
-        ".ppt" => "application/vnd.ms-powerpoint",
-        ".pdf" => "application/pdf",
-        ".rtf" => "text/rtf",
-        ".htm" => "text/html",
-        ".zip" => "application/zip",
-        ".jpg" => "image/jpeg",
-        ".gif" => "image/gif",
-        ".png" => "image/x-png",
-		".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-	    ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-		".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-		".mp3" => "audio/mpeg"
-);
-
-$doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
-					".docx"		=>	"/fakoli/images/msword_icon.png",
-					".xls"		=>	"/fakoli/images/msexcel_icon.png",
-					".xlsx"		=>	"/fakoli/images/msexcel_icon.png",
-					".pdf"		=>	"/fakoli/images/pdf_icon.png",
-					".ppt"		=>	"/fakoli/images/ppt_icon.png",
-					".pptx"		=>	"/fakoli/images/ppt_icon.png",
-					".mp3"		=>	"/fakoli/images/mp3.png",
-					"default"	=>	"/fakoli/images/file_icon.png");
 /**
  * LEGACY Global function to connect to the database.
  * Uses the parameters defined in the global $conn array. 
