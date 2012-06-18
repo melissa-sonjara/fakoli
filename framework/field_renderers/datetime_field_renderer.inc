@@ -93,7 +93,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 		// JDG 10/1/2010 check for empty saved string
 		$date = "";
 		if($value AND $value != '0000-00-00 00:00:00')
-			$date = formatDateShort($obj->reformatFromSQLDate($value));
+			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "m/d/Y");
 		
 		$this->_startField($field);
 		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
