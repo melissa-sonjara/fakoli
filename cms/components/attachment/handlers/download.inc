@@ -40,7 +40,7 @@ $attachment = new Attachment($attachment_id);
 $dir = $config['uploadbase'] . DIRECTORY_SEPARATOR;
 
 $filepath = sanitizePath($dir . $attachment->local_filename);
-$mimeType = getMimeType($attachment->local_filename);
+$mimeType = DocumentHandler::getDocMimeType($attachment->local_filename);
 
 trace("attachment download: filepath:" . $filepath, 3);
 $f = fopen($filepath, "r");
