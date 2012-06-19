@@ -1206,6 +1206,25 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
+	function toJSON()
+	{
+		$out = array();
+				
+		foreach($this->fields as $field => $type)
+		{
+			if ($this->filter && $this->filter->isExcluded($field))
+			{
+				continue;
+			}
+			
+			$val = $this->get($field);
+			
+			$out[] = "\"{$field}\": \"".(jsSafe($this->get($field)))."\"";			
+		}	
+		
+		return "{".implode(", ", $out)."}";		
+	}
+	
 	/**
 	 * Substitute values for field names in a string, 
 	 * with the fields formatted using their type's 
@@ -1656,6 +1675,30 @@ function toXML($tag, $objects, $header = "<?xml version=\"1.0\" encoding=\"iso-8
 	$xml .= "</$tag>\n";
 	
 	return $xml;
+}
+
+function toJSON($items)
+{
+	$out = array();
+	
+	foreach($items as $item)
+	{
+		$out[] = $item->toJSON();
+	}
+	
+	return "[".implode(", ", $out)."]";
+}
+
+function toJSONGrouped($items)
+{
+	$out = array();
+
+	foreach($items as $key => $group)
+	{
+		$out[] = "\"$key\": ".toJSON($group);
+	}
+	
+	return "{".implode(", ", $out)."}";
 }
 
 function displayFieldAsList($items, $field, $separator = ", ")
