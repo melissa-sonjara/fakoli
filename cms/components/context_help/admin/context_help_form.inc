@@ -34,6 +34,7 @@
 Fakoli::using("context_help");
 Fakoli::usingFeature("auto_form", "tree");
 
+$menu_item = "Context Help";
 
 $title = "Context-Sensitive Help";
 $page_role = "admin";
