@@ -116,6 +116,8 @@ function connect_db()
 /**
  *  Utility function to nicely format addresses, etc.
  * (skips blank entries, places all other entries on separate lines) 
+ * 
+ * Deprecated
  */
 function formatAddress() 
 {
@@ -130,6 +132,8 @@ function formatAddress()
 
 /**
  * Utility function to format currency using $ and , and stuff
+ * 
+ * Deprecated
  */
 function formatCurrency($amount)
 {
@@ -140,6 +144,8 @@ function formatCurrency($amount)
  * Utility function to format date (no time component).
  * 
  * @param string $date the date to format
+ * 
+ * Deprecated
  */
 function formatDate($date)
 {
@@ -150,6 +156,12 @@ function formatDate($date)
 	}	
 }
 	
+/**
+ * 
+ * @param $date
+ * 
+ * Deprecated
+ */
 function formatMonthYear($date)
 {
 	
@@ -161,6 +173,8 @@ function formatMonthYear($date)
 	
 /**
  * Utility function to format date in short form (MM/DD/YYYY), with no time component.
+ * 
+ * Deprecated
  */
 function formatDateShort($date)
 {
@@ -176,6 +190,12 @@ function formatDateShort($date)
 	return $text;
 }
 
+/**
+ * 
+ * @param $date
+ * 
+ * Deprecated
+ */
 function formatDateLong($date)
 {
 	$text = "";
@@ -193,6 +213,8 @@ function formatDateLong($date)
  * Timestamp is a string in the format 'YYYYMMDDHHIISS'.
  * 
  * @param string $ts the timestamp to format. 
+ * 
+ * Deprecated
  */
 function formatTimestamp($ts)
 {
@@ -215,6 +237,8 @@ function formatTimestamp($ts)
  * Format timestamp with date in short format
  * e.g., 1/2/2011 and include time in 12 hour format
  *  e.g., 10:15am
+ *  
+ *  Deprecated
  */
 function formatTimestampShort($ts)
 {
@@ -238,6 +262,8 @@ function formatTimestampShort($ts)
  * @param number $m the month number
  * @param number $y the year
  * @return number the number of days in that month
+ * 
+ * Deprecated
  */
 function getMonthDays($m, $y)
 {
@@ -253,6 +279,8 @@ function getMonthDays($m, $y)
  * @param number $m the month number
  * @param number $y the year
  * @return number the number of week days in that month
+ * 
+ * Deprecated
  */
 function getMonthWeekDays($month, $year)
 {
@@ -273,6 +301,8 @@ function getMonthWeekDays($month, $year)
 
 /**
  * Format a time in 12 hour clock, no seconds
+ * 
+ * Deprecated
  */
 function formatTime12($time)
 {
@@ -281,6 +311,8 @@ function formatTime12($time)
 
 /**
  * Format a date and time in 12 hour clock, no seconds
+ * 
+ * Deprecated
  */
 function formatDateTime12($time)
 {
@@ -292,6 +324,8 @@ function formatDateTime12($time)
  * with hours on 12 hour clock, no seconds.
  * If time component is 00:00:00, then
  * don't return time.
+ * 
+ * Deprecated
  */
 function formatDateTime12Hr($datetime)
 {
@@ -317,6 +351,8 @@ function formatDateTime12Hr($datetime)
  * 
  * $start - datetime
  * $end - datetime
+ * 
+ * Deprecated
  */
 function formatStartDateToEndDate($start, $end)
 {
@@ -352,6 +388,8 @@ function formatStartDateToEndDate($start, $end)
  * 
  * tylerhall on 11/30/-1
  * http://snipplr.com/view/25/format-phone-number/
+ * 
+ * Deprecated
  */
 function format_phone($phone)
 {
@@ -423,7 +461,9 @@ function HTMLToText($html)
 /**
  * Outputs the MIME type list based on an array of MIME types.
  * Use this function to generate the contents of ACCEPT= attributes
- * for <INPUT TYPE="file" ...> tags.                                
+ * for <INPUT TYPE="file" ...> tags.    
+ * 
+ * Deprecated
  */
 function printMIMETypeList($types)
 {
@@ -445,7 +485,9 @@ function printMIMETypeList($types)
  *  @param string  $field     the name of the field in the table
  *  @param string  $idfield   the name of the primary key field for the table
  *  @param integer $id        the primary key value for the row the upload is associated with
- *  @param string  $mimefield the field in the table that will store the MIME type of the file. 
+ *  @param string  $mimefield the field in the table that will store the MIME type of the file.
+ *  
+ *  Deprecated
  */
 function uploadFile($input, $types, $table, $field, $idfield, $id, $mimefield)
 {
@@ -499,6 +541,8 @@ function uploadFile($input, $types, $table, $field, $idfield, $id, $mimefield)
  * based on the file extension of the supplied file name.
  * 
  * @param string $doc the filename of the document
+ * 
+ * Deprecated
  */
 function getDocType($doc)
 {
@@ -520,6 +564,8 @@ function getDocType($doc)
  * Returns the file size in Kb for a document
  * 
  * @param string $doc the (local) URL of the document  
+ * 
+ * Deprecated
  */
 function getDocSize($doc)
 {
@@ -547,6 +593,12 @@ function getDocSize($doc)
 
 // ?Is getMIMEType supposed to be used instead of getMimeType??
 // Doesn't seem to work. 
+/**
+ * 
+ * @param $name
+ * 
+ * Deprecated
+ */
 function getDocMimeType($name)
 {
 	global $doc_mime_types;
@@ -570,6 +622,12 @@ function getDocMimeType($name)
 	return $type;
 }*/
 
+/**
+ * 
+ * @param unknown_type $doc
+ * 
+ * Deprecated
+ */
 function getDocIcon($doc)
 {
 	global $doc_icons;
@@ -635,6 +693,8 @@ function checkIdentifier($p)
  * (skips blank entries, places all other entries on separate lines) 
  *
  * @param integer $count the index of the current line
+ * 
+ * Deprecated
  */
 function color($count)
 {
@@ -678,6 +738,12 @@ function ellipsis($txt, $max, $wholeWord = false)
 	return $txt;
 }
 
+/**
+ * 
+ * @param unknown_type $strText
+ * 
+ * Deprecated
+ */
 function rteSafe($strText) {
     //returns safe code for preloading in the RTE
     $tmpString = $strText;
@@ -699,12 +765,25 @@ function rteSafe($strText) {
     return $tmpString;
 }
 
+/**
+ * 
+ * @param unknown_type $strText
+ * @param unknown_type $css
+ * 
+ * Deprecated
+ */
 function rtePrepare($strText, $css)
 {
     global $_SERVER;    
     return rteSafe($strText);
 }
 
+/**
+ * 
+ * @param unknown_type $strText
+ * 
+ * Deprecated
+ */
 function rteClean($strText)
 {
 	$patterns = array(	"|<\\!\\-\\-\\s+HEADERS\\s+\\-\\->.*<\\!\\-\\-\\s+/HEADERS\\s+\\-\\->|i",
@@ -751,6 +830,8 @@ function stripHTML($text)
  * Runs a query, returns the first field in each row of the resultset as a comma-delimited list.
  * 
  * @param string $query the query to run.
+ * 
+ * Deprecated
  */
 function queryList($query)
 {
@@ -1337,6 +1418,7 @@ function makeURL($uri)
  * To do: add handling of grouped checkboxes and
  * provide parameter for delimiter between items
  *
+ * Deprecated
  */
 function formatCheckListItemsforView($options, $items)
 {
@@ -1526,6 +1608,12 @@ function ajaxReturn($msg = null)
 	die($msg);
 }
 
+/**
+ * 
+ * @param String $filename
+ * 
+ * Deprecated
+ */
 function getMIMEType($filename) 
 {
 	$mime_types = array(
