@@ -34,6 +34,8 @@
 Fakoli::using("template");
 Fakoli::usingFeature("directory_tree");
 
+$menu_item = "Templates";
+
 $mgr = new TemplateManager($config["homedir"], "templates");
 
 $script .= $mgr->writeScript();
