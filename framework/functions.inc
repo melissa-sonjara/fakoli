@@ -32,6 +32,7 @@
 *****************************************************************/
 
 require_once realpath(dirname(__FILE__)."/document_handler.inc");
+require_once realpath(dirname(__FILE__)."/date_utils.inc");
 
 /*
  * Library of commonly used functions.
