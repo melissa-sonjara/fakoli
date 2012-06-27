@@ -304,7 +304,7 @@ abstract class UpgradeManager
 		}
 		
 		$fp = fopen($this->sqlFile, 'r');
-		$version_id = "version " . $version_number; // case insensitive
+		$version_id = str_replace(".", "\\.", "version " . $version_number); // case insensitive
 		trace("UpgradeManager::version id: $version_id file $this->sqlFile", 3);
 		
 		if(!$fp)
@@ -317,9 +317,9 @@ abstract class UpgradeManager
 			continue;
 				
 		// Found start of this verson's update section in the sql file
-		if(preg_match("/^--\s.*?$version_id/i", $buffer))
+		if(preg_match("/^--\s*START\s*$version_id/i", $buffer))
 		{
-			while(($buffer = fgets($fp)) !== false && !preg_match("/^--\s.*?$version_id/i", $buffer))
+			while(($buffer = fgets($fp)) !== false && !preg_match("/^--\s*END\s*$version_id/i", $buffer))
 			{
 				$depends = array();
 				if (preg_match("/^--\s*Depends\s+On\s+(\w+)\s+(.*)/i", $buffer, $depends))
