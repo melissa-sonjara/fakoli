@@ -644,6 +644,8 @@ class Fakoli
 	}
 }
 
+Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting
+
 set_error_handler(array("Fakoli", "errorHandler"));
 set_exception_handler(array("Fakoli", "exceptionHandler"));
 
