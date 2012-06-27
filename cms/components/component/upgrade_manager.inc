@@ -351,7 +351,7 @@ abstract class UpgradeManager
 		}
 		catch(Exception $e)
 		{
-			throw new FakoliException("Failed to upgrade {$this->component_name} to $version_id - ". $e->getMessage());
+			throw new FakoliException("Failed to upgrade {$this->component_name} to version $version_number - ". $e->getMessage());
 		}
 	}
 	
