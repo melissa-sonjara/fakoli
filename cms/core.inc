@@ -475,6 +475,11 @@ class Fakoli
 		
 		$resource = sanitizePath($resource);
 		
+		$dir = dirname($resource);
+		trace("DIR: $dir", 1);
+		// Exclude the following component sub-directories
+		if ($dir == "datamodel" || $dir == "updates" || $dir == "admin") return null;
+		
 		$components = Fakoli::getComponents();
 		
 		if ($component)
