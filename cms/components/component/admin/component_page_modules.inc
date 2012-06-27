@@ -49,7 +49,6 @@ $title = "Position Modules for {$page->page_title}";
 
 $modulePositions = reindexList($page->ComponentPageModuleXrefs(), "module_id");
 $modules = query(Module, "ORDER BY title");
-$positions = $page->getPositions();
 
 if ($method == "POST")
 {
@@ -93,16 +92,7 @@ foreach($modules as $module)
 ?>
 <tr>
  <td><strong><a href="<?echo $module->getAdminForm()?>?module_id=<?echo $module->module_id?>" ><?echo $module->title?></a></strong></td>
- <td><select name="module[<?echo $module->module_id?>]">
- <?
- 	option("", "", $position->position);
- 	
-	foreach($positions as $p)
-	{
- 		option($p, ucwords($p), $position->position);
- 	}
- ?>
- </select></td>
+ <td><input type="text" name="module[<?echo $module->module_id?>]" value="<?echo $position->position?>"/></td>
  <td>
  <input type="text" name="sort_order[<?echo $module->module_id?>]" maxlength="4" style="width: 50px" value="<?echo $position->sort_order?>"/></td>
 </tr>	
