@@ -88,6 +88,15 @@ class SerializationManager
 	{
 		trace("== Instantiating $class Records", 3);
 		
+		// Check to see if there are any list tags for the class present.
+		// If not, the class was not serialized in this document, so return
+		// without processing. If there is a list tag (even if it is empty)
+		// we continue processing. This allows for correct deletion of items
+		// as part of the import process.
+		
+		$lists = $doc->getElementsByTagName($class . "List");
+		if (count($lists) == 0) return;
+		
 		$nodes = $doc->getElementsByTagName($class);
 	
 		$objects = array();
