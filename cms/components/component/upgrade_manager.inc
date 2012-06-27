@@ -186,6 +186,7 @@ class MyComponentUpgradeManager extends UpgradeManager
 abstract class UpgradeManager
 {
 	var $sqlFile;
+	var $xmlDir;
 	var $component_name;
 	var $log; // output from update functions to store in log file;
 		
@@ -201,6 +202,7 @@ abstract class UpgradeManager
 	
 		$path = ComponentManager::findComponentPath($this->component_name);		
 		$this->sqlFile = $path . DIRECTORY_SEPARATOR . $this->component_name . "_schema.sql";
+		$this->xmlDir = $path . DIRECTORY_SEPARATOR . "updates";
 	}
 	
 	
@@ -265,6 +267,8 @@ abstract class UpgradeManager
 	{			
 		if($function == "sql")
 			return $this->executeVersionSql($version_number);
+		else if ($function == "xml")
+			return $this->executeVersionXML($version_number);
 		elseif($function != "done")
 		{		
 			$updater = array($this, $function);
@@ -404,6 +408,29 @@ abstract class UpgradeManager
 			$this->log .= preg_replace(array("/<br>$/i", "/<br\/>$/i"), "\r\n", $text);
 		else
 			$this->log .= $text . "\r\n";
+	}
+	
+	function executeVersionXML($version)
+	{
+		trace("** Upgrade {$this->component_name} to Version $version_number", 3);
+		
+		if (!is_dir($this->xmlDir))
+		{
+			throw new FakoliException("XML update directory does not exists for {$this->component_name}");
+		}
+		
+		$file = $this->xmlDir . DIRECTORY_SEPARATOR . $this->component_name ."_" . $version . ".xml";
+		
+		if (!file_exists($file))
+		{
+			throw new FakoliException("No XML update for version $version of $this->component_name");
+		}
+		
+		$xml = file_get_contents($file);
+		$mgr = new SerializationManager();
+		$mgr->importAll($xml);
+		
+		return true;
 	}
 	
 	function recordUpdate($version, $description)
