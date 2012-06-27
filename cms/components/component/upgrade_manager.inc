@@ -335,7 +335,7 @@ abstract class UpgradeManager
 				$lines[] = $buffer;
 			}
 			
-			trace("**     Upgrade has ".count($lines)." lines", 3);
+			trace("** Upgrade has ".count($lines)." lines", 3);
 		}
 		
 		$sqlStatements = $this->parseSQLStatements($lines);
