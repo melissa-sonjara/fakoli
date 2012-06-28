@@ -414,7 +414,15 @@ abstract class UpgradeManager
 	
 	function executeVersionXML($version)
 	{
+		global $config;
+		
 		trace("** Upgrade {$this->component_name} to Version $version_number", 3);
+		
+		if (preg_match("/\\b{$this->component_name}\\b/", $config["ignore_xml_updates"]))
+		{
+			trace("** Ignoring this upgrade as specified in config", 3);
+			return true;
+		}
 		
 		if (!is_dir($this->xmlDir))
 		{
