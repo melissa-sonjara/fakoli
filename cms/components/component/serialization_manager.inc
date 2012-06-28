@@ -95,7 +95,7 @@ class SerializationManager
 		// as part of the import process.
 		
 		$lists = $doc->getElementsByTagName($class . "List");
-		if (count($lists) == 0) return;
+		if ($lists->length == 0) return;
 		
 		$nodes = $doc->getElementsByTagName($class);
 	
