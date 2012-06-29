@@ -31,34 +31,43 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Video
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::usingFeature("data_view", "join");
 
-Fakoli::using("video", "component");
-
-class VideoUpgradeManager extends UpgradeManager
+class VideoTotalDownloadsView
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added missing sort_order field to video table",
-			"1.2"		=>	"sql:Add video_download table and views video_download_daily_stats and video_download_total_stats",
-	);
+	var $gallery;
+	var $table;
 	
-	function VideoUpgradeManager()
+	function VideoTotalDownloadsView($gallery)
 	{
-		$this->component_name = "video";
+		$this->gallery = $gallery;
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		$join = new InnerJoin();
+		$join->add(Video);
+		$join->add(VideoDownloadTotalStats);
+		$results = $join->query("WHERE video_gallery_id={$this->gallery->video_gallery_id} ORDER BY title");
+		
+		$this->table = new DataListView($results, "video_download_stats_total");
+		$this->table->column("Video File", "<a href='video_form?video_id={Video.video_id}'>{Video.title}</a>", true, "width: 80%")
+					->column("# Downloads", "{VideoDownloadTotalStats.download_count:0}", true, "width: 20%; text-align: right");
+					
+		$this->table->filter = true;
+		$this->table->pageSize = 25;
+		$this->table->excelFile = $gallery->identifier."_download_stats_".date("Y_m_d").".xls";
+		$this->table->emptyMessage = "No videos have been downloaded from this gallery";
+		
+		$this->table->footerText("Total")
+			 		->footerTotal("{VideoDownloadTotalStats.download_count:0}", "text-align: right");
+	}
+	
+	function writeScript()
+	{
+		return $this->table->writeScript();
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();
 	}
 }
+?>

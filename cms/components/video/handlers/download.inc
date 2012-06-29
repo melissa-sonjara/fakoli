@@ -31,34 +31,42 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Video
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("video", "user");
 
-Fakoli::using("video", "component");
+$video_id = checkNumeric($_GET["video_id"]);
 
-class VideoUpgradeManager extends UpgradeManager
-{
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added missing sort_order field to video table",
-			"1.2"		=>	"sql:Add video_download table and views video_download_daily_stats and video_download_total_stats",
-	);
+$video = new Video($video_id);
+
+$gallery = $video->VideoGallery();
+
+// no permissions check
+
+$videoDownload = new VideoDownload();
+$videoDownload->video_id = $video_id;
+$videoDownload->user_id = ($user) ? $user->user_id : 0;
+$videoDownload->save();
+
+trace("Download: video filename to download {$video->video_file}", 3);
+
+$filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $video->video_file);
+
+$mimeType = DocumentHandler::getDocMimeType($video->video_file);
 	
-	function VideoUpgradeManager()
-	{
-		$this->component_name = "video";
+trace("Download: opening video with filepath {$filepath} and mimeType {$mimeType}", 3);
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
-}
+$f = fopen($filepath, "r");
+$size = filesize($filepath);
+	
+trace("Download: opened video {$video_id}", 3);
+
+header("Pragma: private");
+header("Content-Disposition: attachment;filename=\"" . basename($video->video_file) . "\"");
+header("Cache-Control: must-revalidate");
+header("Content-Type: $mimeType");
+header("Content-Length: $size");
+	
+fpassthru($f);
+fclose($f);
+
+session_write_close();
+?>

@@ -1,4 +1,4 @@
-<?php
+<?
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -31,34 +31,25 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Video
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("video");
 
-Fakoli::using("video", "component");
+$menu_item = "Videos";
 
-class VideoUpgradeManager extends UpgradeManager
+$video_gallery_id = checkNumeric($_GET["video_gallery_id"]);
+
+if (!$video_gallery_id)
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added missing sort_order field to video table",
-			"1.2"		=>	"sql:Add video_download table and views video_download_daily_stats and video_download_total_stats",
-	);
-	
-	function VideoUpgradeManager()
-	{
-		$this->component_name = "video";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
+	redirect("/admin/video_galleries");
 }
+
+$gallery = new VideoGallery($video_gallery_id);
+
+$view = new VideoTotalDownloadsView($gallery);
+
+$script .= $view->writeScript();
+
+?>
+<h3>Download Statistics for <?echo $gallery->name?></h3>
+<?
+$view->drawView();
+?>
