@@ -6,6 +6,7 @@ class PDF
 	var $uri;
 	var $ssl;
 	var $output;
+	var $footer;
 	
 	function PDF($uri, $ssl = false, $useToken = true, $output = null)
 	{
@@ -19,6 +20,17 @@ class PDF
 	{
 		$this->cover = $url;
 		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param $text - text of the footer
+	 * @param $position - valid positions are left, right, and center
+	 * @param $size - font size for the footer ?? doesn't work
+	 */
+	function footer($text, $position = "center", $size = 11)
+	{
+		$this->footer = "--footer-font-size {$size} --footer-{$position} \"{$text}\"";
 	}
 	
 	function generate()
@@ -36,12 +48,13 @@ class PDF
 		}
 		
 		$url = "http".($this->ssl?"s":"")."://".$config["http_host"].$uri;
-		
+			
 		$tmpName = sha1($url . now()) . ".pdf";
 		
-		
+		$footer = ($this->footer) ?  $this->footer : "";
+	
 		$output = $this->output ? $this->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
-		$cmd = "$exe -q $url $output";
+		$cmd = "$exe $footer -q $url $output";
 		
 		trace($cmd, 3);
 		
