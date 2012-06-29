@@ -111,7 +111,7 @@ class GroupedDataListView
 	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
 	var $rowId = false; // whether to include an id tag for each tr row
-	var $subFooterColumns = array(); // subtotal footer for group
+	var $groupFooterColumns = array(); // subtotal footer for group
 	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
 	
 	/**
@@ -282,17 +282,17 @@ class GroupedDataListView
 	 * @param $colspan the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function subFooterText($text = "", $style = "", $colspan = 1)
+	function groupFooterText($text = "", $style = "", $colspan = 1)
 	{
-		$this->subFooterColumns[] = new FooterTextColumn($text, $style, $colspan);
+		$this->groupFooterColumns[] = new FooterTextColumn($text, $style, $colspan);
 		return $this;
 	}
 	
 	
-	function subFooterTotal($field, $style = "text-align: right", $colspan = 1)
+	function groupFooterTotal($field, $style = "text-align: right", $colspan = 1)
 	{
 		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
-		$this->subFooterColumns[] = $column;
+		$this->groupFooterColumns[] = $column;
 		$this->totalCallbacks[] = array($column, onStartRow);
 		
 		return $this;
@@ -554,12 +554,12 @@ class GroupedDataListView
 	
 	function drawSubFooterColumns()
 	{
-		if (count($this->subFooterColumns) == 0)
+		if (count($this->groupFooterColumns) == 0)
 			return;
 ?>
 		 <tr>		
 <?
-		foreach($this->subFooterColumns as $column)
+		foreach($this->groupFooterColumns as $column)
 		{		
 			$attrs = $this->getFooterColumnFormatting($column);
 ?>
