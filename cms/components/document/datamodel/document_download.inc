@@ -80,7 +80,7 @@ class DocumentDownloadDailyStats extends DataItem
 	
 	var $relations = array("Library"	=>	DocumentLibrary);
 	
-	function Lbrary()
+	function Library()
 	{
 		return $this->getRelated(DocumentLibrary);
 	}
