@@ -32,9 +32,7 @@
 *****************************************************************/
  
 Fakoli::using("video");
-Fakoli::usingFeature("auto_form");
-
-require_once "include/video_gallery_tabs.inc";
+Fakoli::usingFeature("auto_form", "tab_bar");
 
 $menu_item = "Videos";
 
@@ -46,7 +44,7 @@ $gallery = new VideoGallery($gallery_id);
 
 $gallery->filter = new InclusionFilter("gallery_id", "read_access", "write_access");
 
-$tabs = videoGalleryTabs($gallery_id);
+$tabs = VideoManager::videoGalleryTabs($gallery_id);
 
 $form = new AutoForm($gallery);
 $form->hide("owner_id");

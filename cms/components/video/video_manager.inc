@@ -293,6 +293,19 @@ class VideoManager
 		return $identifier;
 	}
 	
+	static function videoGalleryTabs($key)
+	{
+		$tabs = array(	
+				"Gallery" 		=>	"/admin/video_gallery_form",
+				"Permissions"	=>	"/admin/video_gallery_permissions",					
+				"Videos" 		=>	"/admin/videos",
+				"Statistics"	=>	"/admin/video_gallery_stats",
+				);
+
+		$qs = ($key) ? "video_gallery_id=$key" : ""; 
+		return new TabBar("tabs", $tabs, $qs);
+	}	
+	
 	/**
 	 * Enumerate the Image Gallery objects.
 	 * @param  $items collection that the ImageGallery items are returned in

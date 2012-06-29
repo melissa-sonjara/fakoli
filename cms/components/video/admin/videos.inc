@@ -32,11 +32,9 @@
 *****************************************************************/
 
 Fakoli::using("video");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("data_view", "tab_bar");
 
 $menu_item = "Videos";
-
-require_once "include/video_gallery_tabs.inc";
 
 $video_gallery_id = checkNumeric($_GET["video_gallery_id"]);
 $videos = Query::create(Video, "WHERE video_gallery_id=:g ORDER BY title")
@@ -56,7 +54,7 @@ $table->pageSize = 25;
 $table->emptyMessage = "No videos have been uploaded to this gallery.";
 $script .= $table->writeScript();
 
-$tabs = videoGalleryTabs($video_gallery_id);
+$tabs = VideoManager::videoGalleryTabs($video_gallery_id);
 
 $tabs->writeHTML();
 ?>

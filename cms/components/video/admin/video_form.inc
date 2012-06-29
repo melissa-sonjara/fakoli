@@ -32,9 +32,7 @@
 *****************************************************************/
  
 Fakoli::using("video");
-Fakoli::usingFeature("auto_form");
-
-require_once "include/video_gallery_tabs.inc";
+Fakoli::usingFeature("auto_form", "tab_bar");
 
 $menu_item = "Videos";
 
@@ -101,7 +99,7 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 
-$tabs = videoGalleryTabs($video_gallery_id);
+$tabs = VideoManager::videoGalleryTabs($video_gallery_id);
 $tabs->page = "/admin/videos";
 
 $tabs->writeHTML();

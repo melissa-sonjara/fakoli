@@ -49,7 +49,7 @@ $view = new VideoTotalDownloadsView($gallery);
 $script .= $view->writeScript();
 
 ?>
-<h3>Download Statistics for <?echo $gallery->name?></h3>
+<h3>Download Statistics for <?echo $gallery->gallery_name?></h3>
 <?
 $view->drawView();
 ?>
