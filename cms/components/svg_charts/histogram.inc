@@ -38,7 +38,7 @@ class HistogramSeries
 
 		if (count($this->tooltips))
 		{
-			$tooltips = "['".implode("', '", array_map($this->tooltips, jsSafe))."']";
+			$tooltips = "['".implode("', '", array_map(jsSafe, $this->tooltips))."']";
 			$options[] = "'tooltips': $tooltips";
 		}
 		
