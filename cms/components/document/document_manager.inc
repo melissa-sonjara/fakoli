@@ -208,6 +208,19 @@ function selectionChanged()
 	}
 }
 
+function rescanLibrary()
+{
+	result = httpRequest("/action/document/rescan?document_library_id=<?echo $this->library->document_library_id?>");
+	if (result == "OK")
+	{
+		window.location.reload();
+	}
+	else
+	{
+		alert(result);
+	}
+}
+
 <?
 		if (checkRole($this->library->manage_folders) || $this->library->allowManageFiles())
 		{
@@ -328,10 +341,16 @@ function deleteFolderResult(result)
 		{
 ?>
 		&nbsp;&nbsp;<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
-		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>
+		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>&nbsp;&nbsp;
 <?php			
 		}
 
+		if (checkRole("admin"))
+		{
+?>
+		<button id="rescan" class="button" onclick="rescanLibrary()">Rescan</button>
+<?
+		}
 	}
 	
 	/**
@@ -622,6 +641,50 @@ function deleteFolderResult(result)
 		
 		return $styles;
 	}	
+	
+	function rescan()
+	{
+		$this->indexedDocuments = reindexList($this->documents, "file");
+		$this->indexedFolders = IndexedQuery::create(DocumentFolder, "WHERE document_library_id=:id", "path")
+											->bind(":id", $this->library->document_library_id)
+											->execute();
+											
+		$this->scanFiles("documents");											
+	}
+	
+	function scanFiles($path)
+	{
+		global $user;
+		
+		$base = sanitizePath($this->library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $path);
+		
+		$files = scandir($base);
+		foreach($files as $file)
+		{
+			if ($file == "." || $file == "..") continue;
+			 
+			$f = $path . DIRECTORY_SEPARATOR . $file;
+							
+			if (is_dir($base . DIRECTORY_SEPARATOR . $file))
+			{
+				$this->scanFiles($f);
+			}
+			else
+			{
+				if ($this->indexedDocuments[$f]) continue;
+				
+				$doc = new Document();
+				$doc->title = $file;
+				$doc->file = $f;
+				$doc->keywords = "";
+				$doc->notes = "";
+				$doc->public = true;
+				$doc->document_library_id = $this->library->document_library_id;
+				$doc->owner_id = $user->get($user->getPrimaryKey());
+				$doc->save();
+			}
+		}
+	}
 	
 	/*
 	 * Read  or allow_access roles, include
