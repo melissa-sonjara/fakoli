@@ -172,7 +172,7 @@ class ReportManager
 		$script .= $tree->writeScript();
 
 		
-		echo "<form method='POST' action='' id='custom_report' onsubmit='interstitial(\"Generating your Report\"); return true;'>";
+		echo "<form method='POST' action='' id='custom_report' onsubmit='interstitial(\"Generating Your Report...\"); return true;'>";
 		echo "<input type='hidden' name='report_id' value='{$this->report_id}'/>";
 		echo "<input type='hidden' name='custom_report_mode' value='search' id='custom_report_mode'/>";
 		echo "<input type='hidden' name='custom_report_title' value='' id='custom_report_title'/>";
