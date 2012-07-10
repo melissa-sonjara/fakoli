@@ -84,3 +84,9 @@ group by d.document_id;
 --
 -- END Version 1.1
 --
+
+-- START Version 1.2
+
+ALTER TABLE `document` ADD COLUMN `author` VARCHAR(200) NOT NULL DEFAULT '' AFTER `keywords`;
+
+-- END Version 1.2

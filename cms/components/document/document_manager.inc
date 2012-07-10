@@ -686,6 +686,60 @@ function deleteFolderResult(result)
 		}
 	}
 	
+	function importMetaData($file) 
+	{
+		$this->indexedDocuments = reindexList($this->documents, "file");
+		
+		$fp = fopen($file, "r");
+		
+		$fields = fgetcsv($fp);
+		
+		$fileIdx = -1;
+		
+		foreach($fields as $field)
+		{
+			if ($field == "file")
+			{
+				$fileIdx = $i;
+				break;
+			}
+			
+			$i++;
+		}
+
+		if ($fileIdx < 0)
+		{
+			throw new FakoliException("'field' column not present");
+		}
+		
+		while($values = fgetcsv($fp))
+		{
+			$path = "documents" . DIRECTORY_SEPARATOR . $values[$fileIdx];
+			
+			trace($path, 3);
+			
+			if (!array_key_exists($path, $this->indexedDocuments)) continue;
+			
+			$doc = $this->indexedDocuments[$path];
+			
+			$i = 0;
+			
+			foreach($fields as $field)
+			{
+				if ($field == "file")
+				{
+					$i++;
+					break;
+				}
+				
+				$doc->set($field, $values[$i]);
+				$i++;
+			}
+			
+			$doc->save();
+		}
+	}
+	
 	/*
 	 * Read  or allow_access roles, include
 	 * visitor (nonuser) option.

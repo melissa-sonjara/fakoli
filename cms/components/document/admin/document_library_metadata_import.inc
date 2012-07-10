@@ -31,34 +31,61 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Document
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("document", "role");
+Fakoli::usingFile("framework/auto_form.inc");
 
-Fakoli::using("document", "component");
+Fakoli::usingFile("framework/tab_bar.inc");
 
-class DocumentUpgradeManager extends UpgradeManager
+require_once "include/document_library_tabs.inc";
+
+$menu_item = "Documents";
+
+$document_library_id = checkNumeric($_GET["document_library_id"]);
+
+if ($document_library_id)
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Add document download tracking table",
-			"1.2"		=>	"sql:Added author field to document table"
-	);
-	
-	function DocumentUpgradeManager()
-	{
-		$this->component_name = "document";
+	$library = new DocumentLibrary($document_library_id);
+}
+else
+{
+	$library = DocumentManager::createLibraryObj();
+}
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+$tabs = documentLibraryTabs($document_library_id);
+$tabs->page = "document_library_form";
+
+$library->filter = new InclusionFilter("document_library_id");
+$form = new AutoForm($library);
+
+$form->submitLabel = "Import Metadata";
+
+$upload = new FileUploadFieldRenderer($form, "metadata", "Metadata File", uploadMetaData);
+
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		redirect("document_library_form?document_library_id={$document_library_id}");
 	}
 }
+
+
+$script .= $form->writeScript();
+
+$tabs->writeHTML();
+?>
+<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<?
+$form->drawForm();
+?>
+</div>
+<?
+function uploadMetaData($field, $library)
+{
+	$file = $_FILES[$field]["tmp_name"];
+	$library = new DocumentLibrary($library->document_library_id);
+	$mgr = new DocumentManager($library);
+	$mgr->importMetadata($file);
+}
+
+?>

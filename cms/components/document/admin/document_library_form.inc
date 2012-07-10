@@ -55,6 +55,8 @@ $tabs = documentLibraryTabs($document_library_id);
 
 $form = DocumentManager::buildDocumentLibraryForm($library);
 
+$form->button("Import Metadata...", "document_library_metadata_import?document_library_id={$document_library_id}");
+
 if ($method == "POST")
 {
 	if ($form->save())
