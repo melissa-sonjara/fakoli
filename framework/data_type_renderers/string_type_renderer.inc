@@ -70,6 +70,9 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "html":
 			return formatAsHTML($value);
 			
+		case "xml":
+			return htmlentities($value, ENT_XML1);
+			
 		case "phone":
 			return StringTypeRenderer::phone($value);
 			
