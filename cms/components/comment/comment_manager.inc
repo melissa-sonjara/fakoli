@@ -38,6 +38,12 @@ class CommentManager
 		
 	}
 	
+	static function setDefaults()
+	{		
+		Settings::setDefaultValue("comment", "allow_annonymous_comment", false, Boolean);
+	}
+	
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new CommentUpgradeManager();

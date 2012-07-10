@@ -55,7 +55,7 @@ class CommentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array(
+		return array("ComponentScanComplete" => array(CommentManager, setDefaults),
 				"upgradeComponent"		=>	array(CommentManager, upgradeComponent)
 			);
 	}	
