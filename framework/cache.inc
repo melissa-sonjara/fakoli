@@ -55,11 +55,11 @@ class Cache
 		{
 			Cache::$instance = new FileBackedCache();
 		}
-		else if (ini_get("apc.enabled"))
+		else if (ini_get("apc.enabled") && PHP_SAPI !== 'cli')
 		{
 			Cache::$instance = new APCCache();
 		}
-		else if (ini_get("wincache.ucenabled"))
+		else if (ini_get("wincache.ucenabled") && PHP_SAPI !== 'cli')
 		{
 			Cache::$instance = new WCCache();
 		}
@@ -359,7 +359,7 @@ class FileBackedCache
 		}
 		else
 		{
-			$fp = fopen($file, "r+");
+			$fp = fopen($file, "w+");
 	
 			if (flock($fp, LOCK_EX)) 
 			{
