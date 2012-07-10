@@ -462,16 +462,17 @@ class ComponentManager
 	/**
 	 * Dispatch an incoming user action to the appropriate component handler script.
 	 */
-	function dispatchAction()
+	function dispatchAction($process = null)
 	{
 		global $method;
 		global $user;
 		global $config;
 				
-		$component = $this->getComponent($_REQUEST["component"]);
 		$action = $_REQUEST["action"];
 		
-		trace("ComponentManager::dispatchAction action: $action", 4);
+		trace("ComponentManager::dispatchAction action: $action", 3);
+		
+		$component = $this->getComponent($_REQUEST["component"]);
 		
 		if (!preg_match("/^[\\w\\d_\\.]+$/", $action))
 		{
@@ -479,13 +480,13 @@ class ComponentManager
 		}
 		
 		$manifest = $component->loadManifest();
-		if (!isset($user) && !$manifest->allow_sessionless_handlers)
+		if (!isset($user) && !$manifest->allow_sessionless_handlers && !$process)
 		{
 			throw new FakoliException("Session Expired");
 		}
 		
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
-		trace("ComponentManager::dispatchAction handler: $handler", 4);
+		trace("ComponentManager::dispatchAction handler: $handler", 3);
 		
 		$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
 			
@@ -497,6 +498,61 @@ class ComponentManager
 		include $handler;
 		
 		$config["trace_level"] = Settings::getValue("debug", "trace_level");
+	}
+	
+	function dispatchLocalAction($action, $process = null)
+	{
+		global $method;
+		
+		trace($action, 3);
+		
+		list($uri, $queryString) = explode("?", $action);
+		
+		trace("URI: $uri, Query String: $queryString", 3);
+		
+		list($empty, $prefix, $component, $action) = explode("/", $uri);
+		
+		trace("Prefix: $prefix, Component: $component, Action: $action", 3);
+		
+		if ($prefix != "action") 
+		{
+			throw new FakoliException("Malformed action handler");
+		}
+
+		$oldGET = $_GET;
+		$oldREQUEST = $_REQUEST;
+		$oldMethod = $method;
+		
+		parse_str($queryString, $_GET);
+		
+		trace("\$_GET: " . json_encode($_GET), 3);
+		
+		$_GET["component"] = $component;
+		$_GET["action"] = $action;
+		
+		$_REQUEST["component"] = $component;
+		$_REQUEST["action"] = $action;	
+		
+		ob_start();
+		
+		try
+		{
+			$this->dispatchAction($process);
+		}
+		catch(Exception $e)
+		{
+			trace($e->getMessage(), 3);
+			echo $e->getMessage();
+		}
+		
+		$output = ob_get_contents();
+		ob_end_clean();
+		
+		$_GET = $oldGET;
+		$_REQUEST = $oldREQUEST;
+		$method = $oldMethod;
+		
+		return $output;
 	}
 	
 	static function displayPage($identifier, &$continue)
