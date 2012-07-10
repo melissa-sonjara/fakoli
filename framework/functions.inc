@@ -1221,6 +1221,21 @@ function postRemote($url, $data, $timeout = 30)
 	return $result;
 }
 
+function postRemoteXML($url, $xml, $timeout = 30)
+{
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_MUTE, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$result = trim(curl_exec($ch));
+	curl_close($ch);
+	return $result;
+}
+
 /**
  * Retrieve the HTTP headers for the specified remote URL (excluding the body).
  * @param string $url the URL to retrieve
