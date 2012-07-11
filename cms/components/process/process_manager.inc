@@ -67,12 +67,12 @@ class ProcessManager
 		global $config;
 		
 		$this->id = sha1(now() . $action);
-		$launch  = stristr(PHP_OS, "WIN") ? "start " : "start \"FAKOLI\" ";
-		
+		$launch  = stristr(PHP_OS, "WIN") ? "start " : "";
+		$bg = stristr(PHP_OS, "WIN") ? "" : " &";
 		$run = Settings::getValue("process", "PHP_executable")." ".sanitizePath(Fakoli::getComponent("process")->component_path) . DIRECTORY_SEPARATOR . "run.php";
 		$home = $config['homedir'];
 		
-		$cmd = "$launch$run ".escapeshellarg($home)." ".escapeshellarg($this->id)." ".escapeshellarg($action);
+		$cmd = "$launch$run ".escapeshellarg($home)." ".escapeshellarg($this->id)." ".escapeshellarg($action).$bg;
 		
 		$this->put("status", "Starting");
 		$this->put("error", "");
