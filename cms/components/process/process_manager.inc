@@ -77,6 +77,8 @@ class ProcessManager
 		$this->put("status", "Starting");
 		$this->put("error", "");
 		
+		trace($cmd, 3);
+		
 		pclose(popen($cmd, "r")); 
 		
 		return $this->id;
