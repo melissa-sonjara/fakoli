@@ -75,6 +75,7 @@ $script .= $form->writeScript();
 $tabs->writeHTML();
 ?>
 <div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<h3><?echo $library->name?></h3>
 <?
 $form->drawForm();
 ?>
