@@ -65,7 +65,10 @@ class DateTypeRenderer extends AbstractTypeRenderer
 		if($date && !$template)
 			$template = "m/d/Y";
 		$template = AbstractTypeRenderer::translationDateTemplate($template, false);
- 
+ 		
+		// Blank for zero dates
+		if (!strncmp("0000-00-00", $date, 10)) return "";
+		
 		if($date)
 			$text = date($template, strtotime($date));
 			
