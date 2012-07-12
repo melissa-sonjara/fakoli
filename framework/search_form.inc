@@ -528,6 +528,12 @@ class SearchParameters
 				
 				$this->params["{$field}:member"] = $array["{$field}:member"];
 			}
+			else if (array_key_exists("{$field}:any", $array) && $array["{$field}:any"] != "")
+			{
+				trace("Found '{$field}:any'", 3);
+				
+				$this->params["{$field}:any"] = $array["{$field}:any"];
+			}
 			else 
 			{
 				if (array_key_exists("{$field}:from", $array) && $array["{$field}:from"] != "")
