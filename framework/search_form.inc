@@ -190,7 +190,7 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 		if (is_array($value))
 		{
 			if (count($value) == 0) return "";
-			return "$name in (".implode(",", $value).") ";
+			return "$name in (".implode(",", array_values($value)).") ";
 		}
 		else return "$name=$value";
 	}	
