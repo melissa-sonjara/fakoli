@@ -281,7 +281,7 @@ class CheckListFieldRenderer extends FieldRenderer
 			foreach($this->options as $value => $text)
 			{
 				$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
-				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='1'$checked/>&nbsp;$text$divider";
+				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
 				$idx++;
 			}
 		}
