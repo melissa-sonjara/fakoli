@@ -183,6 +183,18 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 		return "$name=$value";
 	}
 	
+	function any($name, $value)
+	{
+		checkNumeric($value);
+		
+		if (is_array($value))
+		{
+			if (count($value) == 0) return "";
+			return "$name in (".implode(",", $value).") ";
+		}
+		else return "$name=$value";
+	}	
+		
 	function like($name, $value)
 	{
 		die("Inappropriate matching mode");
