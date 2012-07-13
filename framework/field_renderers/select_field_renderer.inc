@@ -68,6 +68,8 @@ class SelectFieldRenderer extends FieldRenderer
 	var $onChange; // optional selection change handler
 	var	$max_chars;
 	var $width;
+	var $defaultBlank = true; // whether the drop down includes a blank as the default
+	var $defaultText = "Choose One";
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
@@ -91,7 +93,7 @@ class SelectFieldRenderer extends FieldRenderer
 				{
 					$this->options = array();
 				}
-			}		
+			}
 		}
 		else
 		{
@@ -114,12 +116,29 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->addOtherOption();
 	}
 	
+	/**
+	 * If no blank exists in the options and the user has not already
+	 * saved a value, add a blank as the first option.
+	 * 
+	 * @param $field
+	 */
+	function addDefaultOption($field)
+	{
+		if(!$this->defaultBlank || $this->parent->data->get($field)) return;
+		
+		if(!array_key_exists("", $this->options))
+		{
+			$options[""] = $this->defaultText;
+			$this->options = array_merge($options, $this->options);
+		}
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
-		
+			
 		if (count($this->options) > 0 || !$this->addEntry)
-		{
+		{			
 			if($this->width)
 				$style = "style='width: {$this->width}'";
 			echo "<select $style name='$field' id='{$this->parent->id}_{$field}'";
@@ -172,7 +191,7 @@ class SelectFieldRenderer extends FieldRenderer
 				}
 			}
 			else
-			{
+			{	
 				/*
 				 * If there is no match but there is a value saved, 
 				 * (user entered an addEntry value) then set current 
@@ -183,6 +202,9 @@ class SelectFieldRenderer extends FieldRenderer
 					$addEntryValue = $current;
 					$current = "";
 				}
+			
+				$this->addDefaultOption($field);	
+		
 				foreach($this->options as $value => $name)
 				{
 					$name = htmlSafe($name);
