@@ -146,7 +146,7 @@ table.list td.subheading
 	display: inline-block;
 }
 
-.filter .select
+.filter .select, .prog_search
 {
 	padding-right: 5px;
 	float: left; 
