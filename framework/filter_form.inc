@@ -1002,4 +1002,66 @@ ENDSCRIPT;
 <?
 	}
 }
+
+
+class ProgressiveSearchFilterFieldRenderer extends FieldRenderer
+{
+	var $cssClass = 'prog_search';
+	var $searchOptions = "";
+	var $size = 12;
+	
+	/**
+	 * 
+	 * 
+	 * @param $parent
+	 * @param $field
+	 * @param $label
+	 * @param $searchOptions - ProgressiveSearch options, e.g., 
+	 * 'search': '/action/task/task_search_handler?$qs', minimumLength: 1, 'cssClass': 'scrollbox', 'width': '300px'
+	 */
+	function ProgressiveSearchFilterFieldRenderer(&$parent, $field, $label = "", $searchOptions)
+	{
+		$this->FieldRenderer($parent);
+		if ($field && !$parent->data->hasField($field))
+		{
+			$parent->add($this, $field);
+			$parent->overrides[$field]['label'] = $label;
+		}
+		else if($label)
+		{
+			$parent->override($field, $label, $this);	
+		}
+		
+		$this->searchOptions = $searchOptions;
+	}
+	
+	function renderSearchField($field)
+	{
+		$this->_startField($field, $this->styles);
+				
+		echo "<input id='$field' type='text' name='$field' 
+		value='".$this->parent->data->get($field)."' autocomplete='off' 
+		size='{$this->size}'/>";
+		
+		$this->_endField($field);
+	}
+	
+	function renderSearchScript($field)
+	{
+?>
+<script type="text/javascript">
+window.addEvent('domready', function()
+{
+	new ProgressiveSearch('<?php echo $field ?>', <?php echo $this->searchOptions ?>);
+});
+</script>
+		<?		
+	}
+	
+	
+	function renderField($field)
+	{
+		$this->renderSearchField($field);
+	}
+}
 ?>
