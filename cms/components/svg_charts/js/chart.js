@@ -67,5 +67,31 @@ var Chart = new Class(
 	testSVG: function() 
 	{
 	    return !!document.createElementNS && !! document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
+	},
+	
+	saveImage: function()
+	{	
+		this.canvas = new Element("canvas", {id: this.id + "_canvas"});
+		this.canvas.setStyles({width: this.container.getWidth(), height: this.container.getHeight(), display: 'none'});
+		document.body.adopt(this.canvas);
+		svg = this.container.get('html');
+
+	    canvg('diagram_canvas', svg, {renderCallback: this.saveImageCallback.bind(this), ignoreMouse: true, ignoreAnimation: true});
+	},
+	
+	saveImageCallback: function()
+	{
+		if (!this.form)
+		{
+			this.form = new Element("form", {method: 'post', action: '/components/svg_charts/save_image', display: 'none'});
+			var input = new Element("input", {type: 'hidden', name: 'img', value: ''});
+			this.form.adopt(input);
+			document.body.adopt(form);
+		}
+		
+		var img = document.getElementById(this.id + "_canvas").toDataURL("image/png");
+	    this.form["img"].value = img;
+	    this.form.submit();
 	}
+
 });

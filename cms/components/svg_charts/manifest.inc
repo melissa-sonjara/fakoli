@@ -21,8 +21,11 @@ class SvgChartsManifest
 				"/components/svg_charts/js/raphael.js",
 				"/components/svg_charts/js/raphael.dropshadow.js",
 				"/components/svg_charts/js/raphael.emboss.js",
+				"/components/svg_charts/js/canvg.js",
+				"/components/svg_charts/rgbcolor.js",
 				"/components/svg_charts/js/palette.js",
 				"/components/svg_charts/js/chart.js",
+				"/components/svg_charts/js/shape.js",
 				"/components/svg_charts/js/pie_chart.js",
 				"/components/svg_charts/js/histogram.js",
 				"/components/svg_charts/js/morphing_histogram.js"
