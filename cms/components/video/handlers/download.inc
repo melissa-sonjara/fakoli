@@ -39,6 +39,9 @@ $video = new Video($video_id);
 
 $gallery = $video->VideoGallery();
 
+// Clear output buffers
+while(!ob_end_clean());
+
 // no permissions check
 
 $videoDownload = new VideoDownload();
