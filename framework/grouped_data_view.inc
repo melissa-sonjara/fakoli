@@ -104,10 +104,15 @@ class GroupedDataListView
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawFooter;	///< Callback hook that gets called after all rows have been drawn.
-	var $mode;			///< The display mode for the table.
+	var $mode;			///< The display mode for the table: fixed or tree
 	var $groups;		///< The group definitions.
 	var $items;			///< The items to be displayed.
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
+	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
+	var $selectable  = false;	///< Whether the table provides a selection mechanism
+	var $rowId = false; // whether to include an id tag for each tr row
+	var $groupFooterColumns = array(); // subtotal footer for group
+	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -193,7 +198,41 @@ class GroupedDataListView
 		$this->columns[] = new DataColumn($title, $format, $sortable, $style);
 		return $this;
 	}
+	
 
+	/**
+	 * Adds a selector column to the DataListView. If no format is specified
+	 * then selection is handled via a checklist box for the list objects' primary keys.
+	 * @param $format (optional) format to use for the selector
+	 */ 
+	function selector($format = "")
+	{
+		if(count($this->items))
+		{
+			foreach($this->items as $groupKey => $items)
+			{
+				$pk = $items[0]->getPrimaryKey();
+				break;
+			}
+		}
+		
+		if (!$format && count($items))
+			$format = "<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+				
+		if($format == "radio" && count($items))
+			$format = "<input type='radio' class='radio' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+			
+		$this->column("&nbsp;", $format, false, "text-align: center");
+		$this->selectable = true;
+		return $this; 
+	}
+	
+	function formatRowId($item)
+	{
+		$pk = $item->getPrimaryKey();
+		return "id='{$pk}_" . $item->$pk . "'";
+	}	
+	
 	/**
 	 * Adds a text column to the table footer.
 	 * @param $text the text to display
@@ -219,6 +258,46 @@ class GroupedDataListView
 		$this->footerColumns[] = new FooterValueColumn($callback, $style, $colspan);
 		return $this;
 	}
+	
+	/**
+	 * Sums the total for a column
+	 * @param $field the field to total in the format "{field}"
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerTotal($field, $style = "text-align: right", $colspan = 1)
+	{
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$this->footerColumns[] = $column;
+		$this->totalCallbacks[] = array($column, onStartRow);
+		
+		return $this;
+	}
+	
+	/**
+	 * Adds a text column to the table footer.
+	 * @param $text the text to display
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function groupFooterText($text = "", $style = "", $colspan = 1)
+	{
+		$this->groupFooterColumns[] = new FooterTextColumn($text, $style, $colspan);
+		return $this;
+	}
+	
+	
+	function groupFooterTotal($field, $style = "text-align: right", $colspan = 1)
+	{
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$this->groupFooterColumns[] = $column;
+		$this->totalCallbacks[] = array($column, onStartRow);
+		
+		return $this;
+	}
+	
 	
 	/**
 	 * Sets the client-side ID for this DataListView. 
@@ -262,17 +341,22 @@ class GroupedDataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
-		if ($this->excelFile && $_GET["__excel"] == $this->id)
+		if ($this->excelFile && $_REQUEST["__excel"] == $this->id)
 		{
 			$this->writeExcelFile($this->excelFile);	
 		}
 				
 		if (count($this->items) == 0) return;
 		
-		$script = "<script type='text/javascript' src='/framework/js/grouping_table.js'></script>\n";
+		$script = "<script type='text/javascript' src='/fakoli/js/grouping_table.js'></script>\n";
 		
 		$constructor = "";
 
+		if ($this->selectable)
+		{
+			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
+		}
+		
 		if ($this->mode != 'fixed')
 		{
 			$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";
@@ -314,6 +398,11 @@ class GroupedDataListView
 				$attrs .= " style='{$this->cssStyle}'";
 			}
 			
+			if ($this->summary)
+			{
+				$attrs .= " summary='".htmlSafe($this->summary)."'";
+			}
+
 			$this->columnCount = count($this->columns);
 		
 ?>
@@ -350,7 +439,7 @@ class GroupedDataListView
 				{
 					$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
 ?>
-		<a href='<?echo $qs?>' style="float: left"><img src="/framework/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
 <?			
 				}
 				
@@ -372,12 +461,21 @@ class GroupedDataListView
 
 					foreach($this->items[$group->key] as $item)
 					{
+						if($this->rowId)
+							$rowId = $this->formatRowId($item);
+	
 						if ($this->onStartRow)
 						{
 							call_user_func($this->onStartRow, $item);
 						}
+						
+						foreach($this->totalCallbacks as $cb)
+						{
+							call_user_func($cb, $item);
+						}
+						
 ?>
-          <tr>
+          <tr <?php echo $rowId ?>>
 <?
 						foreach($this->columns as $column)
 						{
@@ -387,15 +485,16 @@ class GroupedDataListView
 								$attrs .= " style='{$column->style}'";
 							}
 ?>
-		    <td><?echo $column->format($item)?></td>
+		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
 <?
 						}
 ?>
 		  </tr>
 <?
-					}
-				}
-			}
+					} // end foreach group items as items
+					$this->drawSubFooterColumns();
+				} // end if group key is in items array
+			} // end for each groups as group
 ?>
 		</tbody>
 <?
@@ -409,24 +508,7 @@ class GroupedDataListView
 <?
 				foreach($this->footerColumns as $column)
 				{
-					$attrs = "";
-					$cssClass = "";
-					if ($column->style)
-					{
-						if (preg_match("/^[\\w_]*$/", $column->style))
-						{
-							$attrs .= " class='{$column->style}'";
-						}
-						else
-						{
-							$attrs .= " style='{$column->style}'";
-						}
-					}
-
-					if ($column->colspan != 1)
-					{
-						$attrs .= " colspan='{$column->colspan}'";
-					}
+					$attr = $this->getFooterColumnFormatting($column);
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?
@@ -446,6 +528,51 @@ class GroupedDataListView
 		}
 	}
 	
+	function getFooterColumnFormatting($column)
+	{
+		$attrs = "";
+		$cssClass = "";
+		if ($column->style)
+		{
+			if (preg_match("/^[\\w_]*$/", $column->style))
+			{
+				$attrs .= " class='{$column->style}'";
+			}
+			else
+			{
+				$attrs .= " style='{$column->style}'";
+			}
+		}
+
+		if ($column->colspan != 1)
+		{
+			$attrs .= " colspan='{$column->colspan}'";
+		}
+			
+		return $attrs;
+	}
+	
+	function drawSubFooterColumns()
+	{
+		if (count($this->groupFooterColumns) == 0)
+			return;
+?>
+		 <tr>		
+<?
+		foreach($this->groupFooterColumns as $column)
+		{		
+			$attrs = $this->getFooterColumnFormatting($column);
+?>
+			<td<?echo $attrs?>><?echo $column->format()?></td>								
+<?
+			// reset to 0 before start of next group
+			$column->total = 0;
+		}
+?>
+		 </tr>
+<?	
+	}
+	
 	/**
 	 * Writes the data table out as an Excel File. The file is output
 	 * with an 'attachment' disposition, which will prompt a save dialog in
@@ -455,7 +582,7 @@ class GroupedDataListView
 	 */
 	function writeExcelFile($file)
 	{
-		$x = new ExcelFile($file);
+		$x = ExcelFileWriter::create($file);
 		
 		$c = 0;
 		foreach($this->columns as $column)

@@ -40,6 +40,11 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class CurrencyFieldRenderer extends FieldRenderer
 {
+	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	var $onChange = ""; // optional callback on data input change
+	var $template = 2; // how to format readonly - 2 decimal places  
+	var $size = 20;
+	
 	function CurrencyFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
@@ -54,12 +59,17 @@ class CurrencyFieldRenderer extends FieldRenderer
 	{
 		$value = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		
+		$value = floatval($value);
 		// display with commas between thousands
-		$value = number_format($value, 2);
+		$value = $this->format($field);
+		$disable = ($this->disable) ? "disabled='disabled'" : "";
+		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
 		
 		$this->_startField($field);
 
-		echo "$&nbsp;<input type='text' name='$field' value='{$value}' size='20'/>";
+		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' 
+		type='text' name='$field' value='{$value}' 
+		$onchange $disable size='{$this->size}'/>";
 
 		$this->_endField($field);
 	}
@@ -92,15 +102,43 @@ class CurrencyFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">$".number_format($this->parent->data->get($field), 2)."</td>\n";		
+		echo ">$". $this->format($field)."</td>\n";		
 		echo "</tr>\n";			
 	}
 	
 	// allow user to enter commas if they wish and strip them out before saving
-	function preProcess($field)
+	function preProcess($field = "")
 	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+			
 		$value= $_POST[$field];
-		$this->parent->data->set($field, str_replace(",", "", $value));
+		$value =  str_replace(",", "", $value);
+		$this->parent->data->set($field, $value);
+		$_POST[$field] = $value;
+	}
+	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredCurrencyValidator($field, $label));
+		}
+		
+	}
+	
+	function renderOnSubmitHandler($field)
+	{
+		// JDG 3/2/2011., no js for readonly field
+		if ($this->parent->isReadOnly($field)) return "";
+		
+		echo "\t\$('{$this->parent->id}_{$field}').value = rawNumber($('{$this->parent->id}_{$field}').value);\n";
+	}
+	
+	function format($field)
+	{
+		return CurrencyTypeRenderer::format($this->parent->data->get($field), $this->template);
 	}
 	
 }

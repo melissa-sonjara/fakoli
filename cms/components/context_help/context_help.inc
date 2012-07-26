@@ -31,7 +31,22 @@
 
 *****************************************************************/
 
-require_once $config['homedir']."/datamodel/context_help.inc";
+class ContextHelpSerializationHandler
+{
+	function ContextHelpSerializationHandler()
+	{
+	}
+
+	function export()
+	{
+		return SerializationManager::serialize(ContextHelp, "ORDER BY help_id");
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(ContextHelp, $doc, $tx);
+	}	
+}
 
 class ContextHelpManager
 {
@@ -139,9 +154,9 @@ class ContextHelpManager
 				
 		if ($help)
 		{
-			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('help-{$field}');\" onmouseover=\"showContextHelp('help-{$field}');\" onmouseout=\"hideContextHelp('help-{$field}');\">(help)</a>&nbsp;";
+			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('help-{$field}');\" onmouseover=\"showContextHelp('help-{$field}');\" onmouseout=\"hideContextHelp('help-{$field}');\">(?)</a>&nbsp;";
 			$text  .= "<div id=\"help-$field\" class=\"contexthelp\">\n";
-			$text  .= "<h2 id=\"heading-$field\">$title Help</h2>\n";
+			$text  .= "<p id=\"heading-$field\">$title Help</p>\n";
 			$text  .= $help;
 			$text  .= "</div>\n";
 		}
@@ -157,6 +172,25 @@ class ContextHelpManager
 		
 		return "{$links}\n{$text}";
 	}
+	
+	static function upgradeComponent($version)
+	{
+		$mgr = new ContextHelpUpgradeManager();
+		$mgr->upgrade($version);
+	}		
+	
+	static function onInitialize()
+	{
+		global $auto_form_defaults;
+		
+		$auto_form_defaults["onFormatLabel"] = "addContextHelp";
+	}
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("context_help", "Context Help", new ContextHelpSerializationHandler());
+		return true;
+	}	
 }
 
 function addContextHelp($form, $field, $label)

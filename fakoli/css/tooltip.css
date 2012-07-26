@@ -1,0 +1,82 @@
+@CHARSET "ISO-8859-1";
+
+
+#tooltip
+{
+	color: #718A14 !important;
+	border: none !important;
+	outline: none;
+}
+
+
+
+#tooltip:hover
+{
+	text-decoration: none;
+}
+
+.tooltip_box
+{
+	position: absolute;
+	width: 400px;
+	border: solid 1px #000;
+	background-color: #ffffcc;
+	white-space: normal;
+	margin: 4px;
+	padding: 4px;
+	font-size: 8pt;
+	z-index: 120;
+	font-weight: normal;
+	display: none;
+	-moz-box-shadow: 3px 3px 8px #666; 
+	box-shadow: 3px 3px 8px #666; 
+}
+	
+
+
+#tooltip .col2 	{
+	float: right;
+	color: #000;
+	width: 40%;
+ 	height: auto;
+ 	z-index: 2;
+  	margin: 5px;
+  	padding: 5px;
+  	text-align: left;
+}
+
+#tooltip img
+{
+	background-color: #fff;
+	color: #000;
+}
+
+
+#tooltip p
+{
+	font-size: 8pt;
+	border-bottom: none;
+}
+
+
+
+.tip {
+	color: #fff;
+	width: 172px;
+	z-index: 13000;
+}
+ 
+.tip-title {
+	font-weight: bold;
+	font-size: 11px;
+	margin: 0;
+	padding: 8px 8px 4px;
+	background: url(/wiki/lib/tpl/clientside/images/bubble.png) top left;
+}
+ 
+.tip-text {
+	font-size: 11px;
+	padding: 4px 8px 8px;
+	background: url(/wiki/lib/tpl/clientside/images/bubble.png) bottom right;
+}
+

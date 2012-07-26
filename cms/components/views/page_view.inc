@@ -1,4 +1,36 @@
 <?php
+/**************************************************************
+
+ Copyright (c) 2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
 require_once realpath(dirname(__FILE__))."/../../datamodel/page.inc";
 require_once realpath(dirname(__FILE__))."/menu_view.inc";
 require_once realpath(dirname(__FILE__))."/../../datamodel/menus.inc";
@@ -33,7 +65,9 @@ class PageView
 		global $site;
 		
 		$page = $this->page; // Pass through to code include
-		$site = $page->Site(); // Pass through to code include
+		$site = $page->Site();
+		if(!$site)
+			$site = Site::getSite(); // Pass through to code include
 		
 		$template = $this->page->getTemplate();
 		
@@ -64,10 +98,11 @@ class PageView
 		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
 		
-		$printLink = "/{$this->page->identifier}".appendToQueryString($qs, "_style=print");
+		// JDG 2/8/2012 - remove "/" before identifier so that it resolves to correct section
+		$printLink = "{$this->page->identifier}".appendToQueryString($qs, "_style=print");
 		
 		$template = str_replace("{printIcon}", 
-			"<a href='$printLink' target='_blank'><img src='/framework/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
+			"<a href='$printLink' target='_blank'><img src='/fakoli/images/print.gif' style='display: inline-block; vertical-align: middle;border: none'></a>&nbsp;<a href='$printLink' target='_blank'>Print this Page</a>",
 			$template);
 		
 		// Populate the template with the appropriate menu(s).
@@ -144,7 +179,7 @@ class PageView
 			$template = str_replace($expr, $$name, $template);
 		}
 		
-		if (!$config['prettyURLs'])
+		if ($config['prettyURLs'] === false)
 		{
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)[\"']/i", "$1=$2/page.php?identifier=$3$2", $template);

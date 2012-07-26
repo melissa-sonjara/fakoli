@@ -1,0 +1,45 @@
+@CHARSET "ISO-8859-1";
+
+.context_menu
+{
+	position: absolute;
+	display: none;
+	border: solid 1px #666;
+	width: auto;
+	background-color: #eee;
+	-moz-box-shadow: 1px 1px 3px #666;
+	box-shadow: 1px 1px 3px #666;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	font-size: 9pt;
+}
+
+.context_menu li
+{
+	margin: 2px;
+}
+
+
+.context_menu li a:link,
+.context_menu li a:visited
+{
+	display: block;
+	color: #000;
+	border: none;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 24px;
+	padding-right: 10px;
+	font-weight: normal;
+	white-space: nowrap;
+	text-decoration: none;
+}
+
+.context_menu li a:hover,
+.context_menu li a:active,
+.context_menu li a:focus	
+{
+	background-color: #406080;
+	color: #fff;
+}

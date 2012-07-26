@@ -39,32 +39,54 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class BooleanFieldRenderer extends FieldRenderer
 {
+	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	var $template = "Yes/No"; // How to format read only
+	
 	function BooleanFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);		
 	}
 	
-	function renderField($field)
+	function addValidatorsToForm($field, $required = false)
 	{
-		echo "<tr>\n";
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredBooleanValidator($field, $label));
+		}
+		
+	}
+	
+	
+	function renderField($field)
+	{		
+		if ($this->annotateBefore && $this->parent->annotations[$field])
+		{
+			echo "<tr><td colspan='{$this->colspan}'>". $this->parent->annotations[$field] ."</td></tr>";
+		}
+
+		$disable = ($this->disable) ? "disabled='disabled'" : "";
+	
+		echo "<tr>\n";	
 		echo "<td colspan='2' style='text-align: left'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
-		echo "><input type='checkbox' value='1' name='$field'";
+		echo "><input id='{$this->parent->id}_{$field}' type='checkbox' value='1' name='$field'";
 		if ($this->parent->data->get($field))
 		{
 			echo " checked";
 		}
-		echo ">&nbsp;<label for='$field'>";
+		echo " $disable>&nbsp;<label for='$field'>";
 		echo $this->_getLabel($field, false);
 		echo "</label>";
-		if ($this->parent->annotations[$field])
+		if (!$this->annotateBefore && $this->parent->annotations[$field])
 		{
 			echo "<br/>{$this->parent->annotations[$field]}";
 		}
 		echo "</td>\n</tr>\n";
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode = "match")
 	{
 		echo "<tr>\n";
 		echo "<td colspan='2'";
@@ -86,8 +108,13 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		echo ($this->parent->data->get($field)) ? "Yes" : "No";
+		echo $this->format($field);
 		echo "</td>\n</tr>\n";
+	}
+	
+	function format($field)
+	{
+		return BooleanTypeRenderer::format($this->parent->data->get($field), $this->template);
 	}
 }
 

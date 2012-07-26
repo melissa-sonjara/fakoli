@@ -67,26 +67,46 @@ class SelectFieldRenderer extends FieldRenderer
 	var $addEntryText;
 	var $onChange; // optional selection change handler
 	var	$max_chars;
+	var $width;
+	var $defaultBlank = true; // whether the drop down includes a blank as the default
+	var $defaultText = "Choose One";
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="")
+	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
+		$this->grouped = $grouped;
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
+			// JDG 5/30/11 - don't crash on additiona/psuedo fields
+			// only query if real field
 			$form->override($field, $label, $this);
+			if ($this->options == null)
+			{
+				$opt = $form->data->distinctValues($field, true);
+				if (count($opt) > 0)
+				{
+					$this->options = array_combine($opt, $opt);
+				}
+				else
+				{
+					$this->options = array();
+				}
+			}
 		}
 		else
 		{
 			$form->add($this, $field);
+			// JDG 7/22/2011 - allow "additional" fields to override label
+			$form->overrides[$field]['label'] = $label;
 		}
 		
-		if ($this->options == null)
-		{
-			$opt = $form->data->distinctValues($field, true);
-			$this->options = array_combine($opt, $opt);
-		}		
+	}
+	
+	function setMaxChars($max)
+	{
+		$this->max_chars = $max;
 	}
 	
 	function allowAddEntry($text = "or add new")
@@ -96,16 +116,37 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->addOtherOption();
 	}
 	
+	/**
+	 * If no blank exists in the options and the user has not already
+	 * saved a value, add a blank as the first option.
+	 * 
+	 * @param $field
+	 */
+	function addDefaultOption($field)
+	{
+		if(!$this->defaultBlank || $this->parent->data->get($field)) return;
+		
+		if(!array_key_exists("", $this->options))
+		{
+			$options[""] = $this->defaultText;
+			$this->options = array_merge($options, $this->options);
+		}
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
-		
+			
 		if (count($this->options) > 0 || !$this->addEntry)
-		{
-			echo "<select name='$field' id='$field'";
+		{			
+			if($this->width)
+				$style = "style='width: {$this->width}'";
+			echo "<select $style name='$field' id='{$this->parent->id}_{$field}'";
 			
 			if ($this->onChange != "")
 				echo " onchange='$this->onChange(this)'";
+			elseif($this->addEntry)
+				echo " onchange='onChange_{$this->parent->id}_{$field}(this)'";
 			
 			echo ">\n";
 			
@@ -116,21 +157,69 @@ class SelectFieldRenderer extends FieldRenderer
 			$othEntry = true;
 			$current = $this->parent->data->get($field);
 			
-			foreach($this->options as $value => $name)
+			if ($this->grouped)
 			{
-				if($current == $value)
+				foreach($this->options as $groupName => $group)
 				{
-					$selected = " selected";
-					$othEntry = false;
+					if ($groupName == "")
+					{
+						echo "<option value=''></option>\n";
+						continue;
+					}
+					
+					echo "<optgroup label=\"$groupName\">\n";
+					
+					foreach($group as $value => $name)
+					{
+						$name = htmlSafe($name);
+						$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
+						
+						if($current == $value)
+						{
+							$selected = " selected";
+							$othEntry = false;
+						}
+						else
+							$selected = "";
+						
+						$optionTitle = ($name != $trunced) ? " title='$name'" : "";
+						
+						echo "<option$optionTitle value='".htmlSafe($value)."'$selected>$trunced</option>\n";
+					}
+					
+					echo "</optgroup>\n";
 				}
-				else
-					$selected = "";
-				
-				echo "<option value='$value'$selected>$name</option>\n";
 			}
+			else
+			{	
+				/*
+				 * If there is no match but there is a value saved, 
+				 * (user entered an addEntry value) then set current 
+				 *  to blank so that the "Other" option is shown as selected. 
+				 */		
+				if(!array_key_exists($current, $this->options))
+				{
+					$addEntryValue = $current;
+					$current = "";
+				}
 			
-			if($othEntry)
-				$addEntryValue = $this->parent->data->get($field);
+				$this->addDefaultOption($field);	
+		
+				foreach($this->options as $value => $name)
+				{
+					$name = htmlSafe($name);
+					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
+					
+					if($current == $value)
+						$selected = " selected";
+					else
+						$selected = "";
+						
+					$optionTitle = ($name != $trunced) ? " title='$name'" : "";
+					
+					echo "<option$optionTitle value='".htmlSafe($value)."'$selected>$trunced</option>\n";
+				}
+			}
 			
 			echo "</select>\n";
 		}
@@ -143,9 +232,12 @@ class SelectFieldRenderer extends FieldRenderer
 		$type = $this->addEntry ? 'text' : 'hidden';
 		
 		if ($this->addEntry)
+		{
 			echo "&nbsp;{$this->addEntryText}&nbsp;";
+			$onChange = " onchange='onChange_{$this->parent->id}_{$field}_addEntry(this)'";
 			
-		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='20'/>";
+		}	
+		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='20' $onChange/>";
 		
 		$this->_endField($field);
 	}
@@ -162,7 +254,7 @@ class SelectFieldRenderer extends FieldRenderer
 		{
 			$selected = ($searchValue == $value) ? " selected" : "";
 			
-			echo "<option value='$value'$selected>$name</option>";
+			echo "<option value='".htmlSafe($value)."'$selected>$name</option>";
 		}
 		echo "</select></td></tr>\n";
 		
@@ -193,38 +285,101 @@ class SelectFieldRenderer extends FieldRenderer
 		$found = false;
 		
 		$current = $this->parent->data->get($field);
-		
-		foreach($this->options as $value => $name)
+
+		if ($this->grouped)
 		{
-			if($current == $value && $value != '')
+			foreach($this->options as $groupName => $group)
 			{
-				$found = true;
+				foreach($group as $value => $name)
+				{
+					if($current == $value && $value != '')
+						$found = true;
+				}
 			}
 		}
-					
-		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
+		else
+		{
+			foreach($this->options as $value => $name)
+			{
+				if($current == $value && $value != '')
+					$found = true;
+			}
+		}
+
+		$addEntry = $_POST["{$field}_addEntry"];
+		trace("addEntry($field): $addEntry and found $found", 3);
 		
 		if ($_POST["{$field}_addEntry"] && !$found)
 		{
-			$this->parent->data->set($field,  $_POST["{$field}_addEntry"]);
+			trace("setting field $field with add entry value $addEntry", 3);
+			$this->parent->data->set($field,  $addEntry);
 		}
 	}
+	
+	/*
+	 * If the calling script is using addEntry and
+	 * does not supply its own onChange function,
+	 * then write this onChange function to remove
+	 * the added entry when the selected value in
+	 * the drop down is NOT "Other". If the calling
+	 * script requires additional onChange
+	 * handling, it can override and incorporate this
+	 * handling into its own custom function.
+	 */
+	function renderScript($field)
+	{
+		$fn = "{$this->parent->id}_$field";
+		$addEntry = $field . "_addEntry";
+		
+		if(!$this->onChange AND $this->addEntry)
+		{
+?>
+<script type="text/javascript">
+function onChange_<?echo $fn?>(elt)
+{
+	if(!elt.value == '')
+	{
+		var addEntry = $('<?php echo $addEntry ?>');
+		if(addEntry)
+			addEntry.value = '';		
+	}
+}
+</script>
+<?
+		} // end if onChange and addEntry
+
+		if($this->addEntry)
+		{
+?>
+	<script type="text/javascript">
+function onChange_<?echo "{$fn}_addEntry" ?>(elt)
+{
+	if(elt.value)
+	{
+		var selected = $('<?php echo $field ?>');
+		if(selected)
+			selected.value = '';		
+	}
+}
+</script>	
+<?php	
+		} // ent if this addEntry		
+	} // end function renderScript
+	
 	
 	/*
 	 * addOtherOption
 	 * 
 	 * If the user enables addEntryText, then add a "Other" option to the 
-	 * options array if one does not already exist. Sort by options key so 
-	 * that the blank is on top. Can also add a blank option.
+	 * options array if one does not already exist. Can also add a 
+	 * blank option.
 	 */
 	function addOtherOption($text = "Other")
 	{
 		if(!array_key_exists("", $this->options))
 		{
 			$this->options[""] = $text;
-		}
-		
-		ksort($this->options);
+		}		
 	}
 
 	

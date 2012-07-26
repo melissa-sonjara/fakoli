@@ -37,20 +37,58 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for numeric data fields. Renders as a text box
  * with numerically masked input (user cannot enter non-numeric characters).
+ * 
+ * Allow negative defaults to false; if a field should allow negative numbers, 
+ * calling script should add the following line:
+ * $form->getRenderer("field_name")->allowNegative = true;
  */
 class NumberFieldRenderer extends FieldRenderer
 {
-	function NumberFieldRenderer(&$parent)
+	// Whether user can enter a negative number
+	var $allowNegative = false;
+	var $autocomplete = true;
+	var $size = 15;
+	var $onKeyUp; // javascript callback function
+	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
+	var $onChange = ""; // optional callback on data input change
+	var $units = "";
+	var $unitsPosition = "";
+	
+	function NumberFieldRenderer(&$parent, $field = null)
 	{
 		$this->FieldRenderer($parent);
+		if ($field && !$parent->data->hasField($field))
+		{
+			$parent->add($this, $field);
+		}
+	}
+	
+	function setUnits($units, $position)
+	{
+		$this->units = $units;
+		$this->unitsPosition = $position;
 	}
 	
 	function renderField($field)
 	{
 		$this->_startField($field);
 		
-		echo "<input type='text' name='$field' value='".$this->parent->data->get($field)."' size='15' onkeypress='return maskInput(event);'/>";
-
+		$disable = ($this->disable) ? "disabled='disabled'" : "";
+		$onKeyUp = ($this->onKeyUp) ? " onkeyup='{$this->onKeyUp}()'" : "";
+		// JDG - maskInput function doesn't recognize boolean var value
+		// translate to 0 or 1
+		$allowneg = ($this->allowNegative) ? 1 : 0;
+		$autocomplete = ($this->autocomplete) ? "" : " autocomplete='off' ";
+		$onchange = ($this->onChange) ? "onchange='{$this->onChange}(this)'" : "";		
+		
+		if ($this->unitsPosition == "before") echo $this->units." ";
+		
+		echo "<input id='{$this->parent->id}_$field' type='text' name='$field' 
+		value='".$this->parent->data->get($field)."' $autocomplete
+		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
+		
+		if ($this->unitsPosition == "after") echo " ".$this->units;
+		
 		$this->_endField($field);
 	}
 
@@ -63,6 +101,26 @@ class NumberFieldRenderer extends FieldRenderer
 		echo ">".$this->parent->data->get($field)."</td>\n";		
 		echo "</tr>\n";	
 	}
+	
+	// if users enter negatives where they shouldn't (any position other than first,
+	// strip them out
+	function preProcess($field)
+	{
+		$value= $_POST[$field];
+		
+		$value = str_replace(",", "", $value);
+		
+		if($this->allowNegative)
+		{			
+			if(substr($value, 0,1) == '-')
+				$value = '-' . str_replace("-", "", $value);
+			else
+				$value = str_replace("-", "", $value);
+		}
+		$this->parent->data->$field = $value;
+	}
+	
+	
 }
 
 ?>

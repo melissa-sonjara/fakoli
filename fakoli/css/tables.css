@@ -1,0 +1,397 @@
+@CHARSET "ISO-8859-1";
+
+/**************************************************************
+
+ Copyright (c) 2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+table.list
+{
+	background-color: #ffffff;
+	border: solid #666;
+	border-width: 1px 1px 0px 0px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	vertical-align:top;
+	-moz-box-shadow: 1px 1px 5px #666;
+	box-shadow: 1px 1px 5px #666;
+	border-spacing: 0;
+	clear: both;
+	border-collapse: collapse;
+	empty-cells: show;
+}
+
+table.list b
+{
+	
+	color:  #2b388f;
+	font-weight: bold;
+}
+
+
+table.list th
+{
+	background: url(/fakoli/images/table-header.png) top left repeat-x transparent;
+	color: #000;
+	font-weight: bold;
+	text-align: center;
+	padding: 4px;
+	white-space: nowrap;	
+	border: solid #666;
+	border-width: 0px 0px 1px 1px;
+}
+
+table.list td
+{
+	padding: 4px;
+	border: solid #666;
+	border-width: 0px 0px 1px 1px;
+}
+
+
+table.list tr.alt
+{
+	background-color: #f3f3f3;
+}
+
+table.small
+{
+	font-size: 8pt;
+}
+
+table.list td.subheading
+{
+	padding: 4px;
+	border: solid 1px #666;
+	background-color: #eee;
+	font-weight: bold;
+	font-style: oblique;
+}
+
+
+.sortable th
+{
+	background: url(/fakoli/images/bg.gif) right center no-repeat transparent;
+	cursor: pointer;
+	
+}
+
+.sortable th.nosort
+{
+	background: url("/fakoli/images/table-header.png") left center repeat-x transparent;
+	background-color: transparent;
+}
+
+.sortable th.forward_sort
+{
+	background: url(/fakoli/images/asc-white.gif) right center no-repeat #393683;
+	color: #fff;
+}
+
+.sortable th.reverse_sort
+{
+	background: url(/fakoli/images/desc-white.gif) right center no-repeat #393683;
+	color: #fff;
+}
+
+.sortable tr.alt
+{
+	background-color: #F0F0F6;
+}
+
+/* filter_form filters */
+.filter
+{
+	padding-top: 6px;
+	height: auto;
+	padding-bottom: 10px;
+}
+
+.filter input
+{
+	margin-left: 2px;
+}
+
+.filter .boolean
+{
+	padding-right: 12px;
+	display: inline-block;
+}
+
+.filter .select, .prog_search
+{
+	padding-right: 5px;
+	float: left; 
+	padding-bottom: 4px;	
+	display: block;
+}
+
+.filter .checklist,
+	.radio
+{
+	clear: both;
+	float: left; 
+	padding-bottom: 0px;
+	padding-top: 4px;
+	height: auto;
+	width: 100%;
+	display: inline-block;
+}
+
+.filter .checklist ul,
+	.radio ul
+{
+	list-style: none outside none; 
+	margin-left: -40px; 
+	margin-top: 2px;
+	display: inline-block;
+}
+
+
+.filter .checklist ul li,
+	.radio ul li
+{ 
+	float: left; 
+	padding-right: 10px;
+}
+
+
+/* end filter_form filters */
+
+tr.filtered td,
+tr.filtered a,
+tr.filtered a:link,
+tr.filtered a.hover
+{
+	color: #ddd;
+}
+
+tr.filtered
+{
+	display: none;
+}
+tr.subheading
+{
+	background-color: #ddd;
+}
+
+tr.subheading td
+{
+	font-weight: bold;
+	cursor: pointer;
+	padding-left: 20px;
+}
+
+.paginator
+{
+	height: 34px;
+	margin-bottom: 8px;
+	color: #666;
+}
+.paginator ul
+{
+	display: block;
+	float: right;
+}
+
+.paginator li
+{
+	list-style: none;
+	float: left;
+	margin-left: 10px;
+}
+
+/*
+.paginator a,
+.paginator a:link
+{
+	text-decoration: none !important;
+	display: inline-block;
+	border: none !important;
+	color: #666;
+	padding: 2px;
+}
+
+.paginator a:hover,
+.paginator a:active
+{
+	color: #000 !important;
+	text-decoration: none !important;
+}
+*/
+
+.paginate{
+#	background: #888 url(/images/alert-overlay.png) repeat-x;
+	background-color: #888;
+	display: inline-block;
+	padding: 5px 8px 5px;
+	color: #fff !important;
+	text-decoration: none;
+	font-weight: normal;
+	font-size: 0.9em;
+	line-height: 1;
+	border-radius: 5px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+	border-bottom: 1px solid rgba(0,0,0,0.25);
+ 	position: relative;
+	cursor: pointer;
+	padding-bottom: 0.3em;
+	margin-top: -0.2em;
+}
+
+.paginate:hover {
+	background-color: #444;
+	color: #fff !important;
+}
+
+.goto-page{
+	color: #111 !important;
+}
+
+table.list thead tr,
+table.list tfoot tr
+{
+	background: url(/fakoli/images/table-header.png) bottom left repeat-x #ddd;
+}
+
+table.list tfoot td
+{
+	font-weight: bold;
+}
+
+tr.expanded td
+{
+	background: url(/fakoli/images/open.gif) left center no-repeat transparent;
+	padding-left: 80px;
+	margin-left: 80px;
+}
+
+tr.collapsed td
+{
+	background: url(/fakoli/images/closed.gif) left center no-repeat transparent;
+	padding-left: 20px;
+}
+
+td.icon
+{
+	text-align: center;
+	font-size: 8pt;
+}
+
+/* Scrolling tables for Firefox */
+
+div.scrollContainer
+{
+	border: none;
+	clear: both;
+}
+	
+table.scroll {
+	clear: both;
+}
+
+table.scroll tbody
+{
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* Scrolling tables for IE8 and below */
+div.scrollContainer
+{
+	position: relative\9;
+	overflow-y: scroll\9;
+	overflow-x: hidden\9;
+	border: solid #666\9;
+	border-width: 1px 1px 1px 1px\9;
+}
+
+table.scroll 
+{
+    border-width: 1px 1px 0px 0px\9;
+}
+
+/*table.scroll thead tr 
+{
+    position: absolute\9;
+    top: expression(this.offsetParent.scrollTop)\9;
+}*/
+
+table.scroll tbody tr 
+{
+    height: auto\9;
+}
+
+table.scroll tbody tr:first-child td 
+{
+/*    padding: 29px 4px 4px 4px\9;*/
+}
+
+.sortable th
+{
+	border-width: 0px 0px 1px 1px\9;	
+}
+
+tr.selected,
+tr.selected td
+tr.selected a,
+tr.selected a:visited
+tr.selected a:hover
+{
+	background-color: #393683;
+	color: #fff;
+}
+
+table.reorder
+{
+	position: relative;
+}
+
+table.reorder tr
+{
+	background-color: #fff;
+	border-top: solid 1px #666;
+	border-right: solid 1px #666;
+	cursor: move;
+}
+
+table.reorder tr:hover
+{
+	background-color: #ffc;
+}
+
+tr.dragRow
+{
+	box-shadow: 1px 1px 15px #666;
+}	

@@ -104,6 +104,68 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
+		if ($this->readOnly) return "";
+		
+		if (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty)
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
+
+/**
+ * Validates a field rendered with TreeSelectFieldRenderer.
+ * When a tree has more than one level that can be selected,
+ * we need to determine that it is valid when at least
+ * one item at any level has been selected. 
+ */
+class RequiredTreeValidator extends AbstractValidator
+{
+	var $empty = "";
+
+	function RequiredTreeValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+
+		var div = $("{$this->field}_table");
+		var valid = false;
+
+		div.getElements("input").each(function(box)
+		{
+			if (box.checked == true)
+				valid = true;
+		});
+		
+		if(valid == false)
+		{
+			alert("{$this->title} is a required field. Please supply a value.");
+				return false;
+		}
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_POST[$this->field]))
 		{
 			return "{$this->title} is a required field.";
@@ -114,6 +176,55 @@ ENDSCRIPT;
 		}
 	}
 }
+
+
+/*
+ * When we must not set any of the buttons by default
+ * and the field is required, we need this validator
+ * instead of "RequiredValidator"
+ * 
+ * JDG 1/14/2011
+ */
+class RequiredRadioButtonValidator extends RequiredValidator
+{
+	var $empty = "";
+
+	function RequiredRadioButtonValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+
+		var valid = false;
+
+		var radios = form["{$this->field}"];
+		
+ 		for(i=0; i < radios.length; i++)
+ 		{
+ 	    	if (radios[i].checked == true) 
+	    	{
+			   valid = true;
+	    	}
+		} 		
+		 		
+		if(valid == false)
+		{
+			alert("{$this->title} is a required field. Please supply a value.");
+				return false;
+		}
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+}
+
 
 
 class RequiredFileValidator extends AbstractValidator
@@ -148,6 +259,8 @@ ENDSCRIPT;
 	function validate()
 	{
 		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_FILES[$this->field]))
 		{
 			return $this->message;
@@ -159,54 +272,79 @@ ENDSCRIPT;
 	}
 }
 
-/**
- * Date Validator.
- * 
- * Dates are required by default. To make a date not required, set
- * the following in the calling script:
- * 
- * $dateRenderer = $form->getRenderer("date field");
- * $dateRenderer->required = false; 
- */
-class DateValidator extends AbstractValidator
+class RequiredIfCheckedValidator extends AbstractValidator
 {
-	var $required = true;
+	var $message;
+	var $checkbox;
 	
-	function DateValidator($field, $title)
+	function RequiredIfCheckedValidator($field, $checkbox, $title, $checkboxTitle, $message = "")
 	{
 		$this->AbstractValidator($field, $title);
+		$this->checkbox = $checkbox;
 		
-		if (func_num_args() > 2)
-		{
-			$this->required = func_get_arg(2);
-		}
+		$this->message = $message ? $message : "{$title} is a required field. Please supply a value or uncheck {$checkboxTitle}.";
+
+		trace("RequiredIfCheckedValidator($field,$title,$checkboxTitle, $message)", 4);
 	}
 	
 	function writeClient()
 	{
 		if ($this->readOnly) return "";
 		
-		$script = "";
-		if ($this->required)
-		{
-			$script = <<<ENDSCRIPT
+		$msg = jsSafe($this->message, true);
+		$script = <<<ENDSCRIPT
 		
-	if (form["{$this->field}"].value == "")
+	if (form["{$this->field}"].style.display != "none" && form["{$this->checkbox}"].checked && form["{$this->field}"].value == "{$this->empty}")
 	{
-		alert("{$this->title} is a required field. Please supply a value.");
+		alert("{$msg}");
 		return false;
 	}
 ENDSCRIPT;
+
+		return $script;
+	}
+
+	function validate()
+	{
+		
+		if ($this->readOnly) return "";
+		
+		if (!isset($_POST[$this->field]) && isset($_POST[$this->checkbox]))
+		{
+			return $this->message;
 		}
+		else
+		{
+			return "";
+		}
+	}
+	
+}
+ 
+
+/**
+ * Date Validator.
+ * 
+ */
+class DateValidator extends AbstractValidator
+{
+	function DateValidator($field, $title)
+	{
+		$this->AbstractValidator($field, $title);		
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
 		
 		$script .= <<<ENDSCRIPT
-			
-	if (form["{$this->field}"].value != "" &&
+	 if (form["{$this->field}"].value != "" &&
 		!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
 	{
 		alert("{$this->title} must be in the format MM/DD/YYYY");
 		return false;
 	}
+		
 ENDSCRIPT;
 
 		return $script;
@@ -215,21 +353,102 @@ ENDSCRIPT;
 	function validate()
 	{
 		global $_POST;
-
-		$result = "";
-			
-		if(!$this->required)
-			$result = "";
-		else if (!isset($_POST[$this->field]) || $_POST[$this->field] == "")
-		{
-			$result = "{$this->title} is a required field.";
-		}
-		else if (!preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
+		
+		if ($this->readOnly) return "";
+		
+		if ($_POST[$this->field] != "" AND !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
 		{
 			$result = "{$this->title} must be in the format MM/DD/YYYY";
 		}	
 		
 		return $result;
+	}
+}
+
+
+/**
+ * TimeValidator.
+ * 
+ * If the user enters a value in a time field, check
+ * if it is valid. 
+ * 
+ * The hour html tag field name is the field name with "_hh" after it.
+ * The minute html tag field name is the field name with "_mm" after it.
+ */
+class TimeValidator extends AbstractValidator
+{
+	var $message;
+	
+	function TimeValidator($field, $title)
+	{
+		$this->AbstractValidator($field, $title);	
+	}
+		
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+	
+$script = <<<ENDSCRIPT
+	var hourObj = form["{$this->field}_hh"];
+	var minObj = form["{$this->field}_mm"];
+	
+		if (hourObj.value != "" && (hourObj.value < 1 || hourObj.value > 12))
+		{
+			alert("{$this->title} Hours must be in the range 1 to 12");
+			return false;
+		}	
+		
+		if (minObj.value != "" && (minObj.value < 0 || minObj.value > 59))
+		{
+			alert("{$this->title} Minutes must be in the range 0 to 59");
+			return false;
+		}
+		
+		
+ENDSCRIPT;
+
+		return $script;
+	}
+}
+
+
+/**
+ * RequiredTimeValidator.
+ * 
+ * Custom validation for time fields which render the field
+ * name html as x_hh and x_mm and thus cannot use the standard
+ * RequiredValidator.
+ */
+class RequiredTimeValidator extends AbstractValidator
+{
+	var $empty = "";
+
+	function RequiredTimeValidator($field, $title, $empty = "")
+	{
+		$this->empty = $empty;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+	if ((
+	form["{$this->field}_hh"] != "" && form["{$this->field}_hh"].style.display != "none" &&
+	form["{$this->field}_hh"].value == "{$this->empty}") || 
+	(form["{$this->field}_mm"] != "" && form["{$this->field}_mm"].style.display != "none" &&
+	form["{$this->field}_mm"].value == "{$this->empty}")
+	)
+	{
+		alert("{$this->title} is a required field. Please supply a value.");
+		return false;
+	}
+	
+	
+ENDSCRIPT;
+
+		return $script;
 	}
 }
 
@@ -245,12 +464,13 @@ class UniqueValidator extends AbstractValidator
 	var $item;
 	var $message;
 	
-	function UniqueValidator($field, $title, $item, $message)
+	function UniqueValidator($field, $title, $item, $message, $extraConstraint = "")
 	{
 		$this->class = $item->table;
 		$this->message = $message;
 		$this->item =& $item;
-		
+		$this->extraConstraint = $extraConstraint;
+			
 		$this->AbstractValidator($field, $title);
 	}
 
@@ -279,6 +499,8 @@ class UniqueValidator extends AbstractValidator
 			
 			$constraint = "WHERE {$this->field}='$value'";
 			
+			if ($this->extraConstraint) $constraint .= " AND {$this->extraConstraint}";
+			
 			if ($this->item->$pk)
 			{
 				$constraint .= " AND {$pk}!='{$this->item->$pk}'";
@@ -304,11 +526,13 @@ class MatchValidator extends AbstractValidator
 {
 	var $confirm;
 	var $confirmTitle;
-
-	function MatchValidator($field, $title, $confirm, $confirmTitle)
+	var $caseSensitive = true;
+	
+	function MatchValidator($field, $title, $confirm, $confirmTitle, $caseSensitive = true)
 	{
 		$this->confirm = $confirm;
 		$this->confirmTitle = $confirmTitle;
+		$this->caseSensitive = $caseSensitive;
 		
 		$this->AbstractValidator($field, $title);
 	}
@@ -318,7 +542,10 @@ class MatchValidator extends AbstractValidator
 		trace("MatchValidator::writeClient", 3);
 		if ($this->readOnly) return "";
 		
-		$script = <<<ENDSCRIPT
+		if ($this->caseSensitive)
+		{
+
+			$script = <<<ENDSCRIPT
 			
 	if (form["{$this->field}"].value != form["{$this->confirm}"].value)
 	{
@@ -326,7 +553,18 @@ class MatchValidator extends AbstractValidator
 		return false;
 	}
 ENDSCRIPT;
-
+		}
+		else
+		{
+			$script = <<<ENDSCRIPT
+			
+	if (form["{$this->field}"].value.toLowerCase() != form["{$this->confirm}"].value.toLowerCase())
+	{
+		alert("{$this->title} and {$this->confirmTitle} do not match.");
+		return false;
+	}
+ENDSCRIPT;
+		}
 		return $script;
 	}
 	
@@ -338,11 +576,17 @@ ENDSCRIPT;
 		$value1 = $_POST[$this->field];
 		$value2 = $_POST[$this->confirm];
 		
-		if ($value1 != $value2)
+		if ($this->caseSensitive)
+		{
+			if ($value1 != $value2)
+			{
+				$result = "{$this->title} and {$this->confirmTitle} do not match";
+			}
+		}
+		else if (strtolower($value1) != strtolower($value2))
 		{
 			$result = "{$this->title} and {$this->confirmTitle} do not match";
-		}
-		
+		}		
 		return $result;
 	}
 }
@@ -360,10 +604,12 @@ ENDSCRIPT;
 class PasswordValidator extends RequiredValidator
 {
 	var $empty = "";
+	var $form_id;
 	
-	function PasswordValidator($field, $title, $empty = "")
+	function PasswordValidator($field, $title, $form_id = "", $empty = "")
 	{
 		$this->empty = $empty;
+		$this->form_id = $form_id;
 		$this->AbstractValidator($field, $title);
 	}
 
@@ -382,15 +628,35 @@ class PasswordValidator extends RequiredValidator
 		return false;
 	}
 		
-	
 ENDSCRIPT;
 
 		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if ($this->readOnly) return "";
+		
+		$reset = $_POST["{$this->form_id}_reset_password"];
+		
+		if ($reset == 1 AND (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty))
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
 	}
 }
 
 /**
  * Tests wheteher a field's value matches the supplied regular expression.
+ * 
+ * JDG 2/2012 - allow empty - validate nonempty if required
+ * with RequiredValidator.
  */
 class RegularExpressionValidator extends AbstractValidator
 {
@@ -414,7 +680,8 @@ class RegularExpressionValidator extends AbstractValidator
 		
 		$script = <<<ENDSCRIPT
 			
-	if (!form["{$this->field}"].value.match(/{$this->regexp}/i))
+	if(form["{$this->field}"].value != "" &&
+	!form["{$this->field}"].value.match(/{$this->regexp}/i))
 	{
 		alert("{$this->message}");
 		return false;
@@ -426,9 +693,11 @@ ENDSCRIPT;
 	
 	function validate()
 	{
+		if ($this->readOnly) return "";
+		
 		//$exp = preg_replace("|([^/])|", "$1\\/", $this->regexp);
 		$exp = $this->regexp;
-		if (!preg_match("/{$exp}/i", $_POST[$this->field]))
+		if ($_POST[$this->field] != "" && !preg_match("/{$exp}/i", $_POST[$this->field]))
 		{
 			$result = $this->message;
 		}	
@@ -440,6 +709,8 @@ ENDSCRIPT;
 /**
  * RangeValidator class. Checks that the user-supplied value for a given form
  * field is within the supplied range.
+ * 
+ * $form->validator->add(new RangeValidator($field, $label, $min, $max, $message));
  */
 class RangeValidator extends AbstractValidator
 {
@@ -483,6 +754,8 @@ ENDSCRIPT;
 	
 	function validate()
 	{
+		if ($this->readOnly) return "";
+		
 		$val = $_POST[$this->field];
 		if ($val === "" || $val < $this->min || $val > $this->max)
 		{
@@ -545,6 +818,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_POST[$this->field]) && !isset($_POST["{$this->field}_addEntry"]))
 		{
 			return "{$this->title} is a required field.";
@@ -598,6 +873,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 		
+		if ($this->readOnly) return "";
+		
 		if (!isset($_POST[$this->field]))
 		{
 			return "Please enter at least {$this->min} for {$this->title}.";
@@ -611,39 +888,48 @@ ENDSCRIPT;
 
 
 
+
 /**
- * RequiredTextValidator.
+ * RequiredBoolean Validator.
  * 
- * For fields rendered with TextFieldRenderer
- *  
+ * Verifies single checkbox (Boolean renderer)
+ * is checked. While it would seem unnecessary to
+ * have a checkbox that must be checked, it is
+ * useful for "agree to the terms" fields.
+ * 
  * Add this validator the the script using:
- * $form->validator->add(new RequiredTextValidator($field, $label, $empty));
+ * $form->validator->add(new RequiredBooleanValidator($field, $label, $empty));
  */
-class RequiredTextValidator extends RequiredValidator
+class RequiredBooleanValidator extends RequiredValidator
 {
-	var $empty = "";
+	var $msg;
 	
-	function RequiredTextValidator($field, $title, $empty = "")
+	function RequiredBooleanValidator($field, $title, $msg = "")
 	{
-		$this->empty = $empty;
 		$this->AbstractValidator($field, $title);
+		$this->msg = ($msg) ? $msg : $title . " is a required field.";
 	}
 	
 	function writeClient()
-	{
-		$script = <<<ENDSCRIPT
+	{		
+$script = <<<ENDSCRIPT
 		
+	var boolObj = form["{$this->field}"];
 		
-	if (form["{$this->field}"].value == "{$this->empty}")
+	if (boolObj.checked == false)
 	{
-		alert("{$this->title} is a required field. Please supply a value.");
+		alert("{$this->msg}");
 		return false;
 	}
+		
+	
 ENDSCRIPT;
 
 		return $script;
 	}
-}
+	
+	// no need to overwrite server side validation or parent class
+}	
 
 
 
@@ -680,7 +966,7 @@ $script = <<<ENDSCRIPT
 		var max = form["count_{$this->field}"].value;
 		var fieldName;
 
-		for(i=1; i <= max; i++)
+		for(i=0; i < max; i++)
 		{
 			fieldName = form["{$this->field}["+i+"]"];
 			if(fieldName.checked == true)
@@ -711,6 +997,8 @@ ENDSCRIPT;
 	{
 		global $_POST;
 
+		if ($this->readOnly) return "";
+		
 		$values = $_POST[$this->field];
 		
 		// convert array of checks to comma delimated string and 
@@ -740,6 +1028,130 @@ ENDSCRIPT;
 }
 
 
+/**
+ * RequiredCrossReferenceSelectValidator
+ * 
+ * Verifies min count of checkboxes checked
+ * 
+ * Add this validator the the script using:
+ * $form->validator->add(new RequiredCrossReferenceSelectValidator($field, $label, $min));
+ */
+class RequiredCrossReferenceSelectValidator extends AbstractValidator
+{
+	var $min = "";
+	var $empty = "";
+	var $addEntry = false;
+	var $msgText = "checkbox";
+	
+	function RequiredCrossReferenceSelectValidator($field, $title, $min = 1)
+	{
+		$this->min = $min;
+		$this->AbstractValidator($field, $title);
+		$this->addEntry = $addEntry;
+		if($min > 1)
+			$this->msgText = pluralize($msgText);
+	}
+	
+	function writeClient()
+	{		
+$script = <<<ENDSCRIPT
+		
+		var i = 1;
+		var countChecked = 0;
+		var max = form["count_{$this->field}"].value;
+		var elt;
+	
+		for(i=1; i <= max; i++)
+		{
+			elt = form["{$this->field}["+i+"]"];
+			if(elt.checked == true)
+				countChecked += 1;
+		}
+	
+	if ({$this->min} > 0 && countChecked < {$this->min})
+	{
+		alert("You must check at least {$this->min} {$this->msgText} for {$this->title}.");
+		return false;
+	}
+ENDSCRIPT;
+			
+		return $script;
+	}
+	
+	
+	function validate()
+	{
+		global $_POST;
+
+		if ($this->readOnly) return "";
+		
+		if (isset($_POST[$this->field]))
+		{
+			$count = count($_POST[$this->field]);
+		}		
+				
+		if ($count < $this->min)
+		{
+			return "You must check at least {$this->min} {$this->msgText} for {$this->title}.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
+/**
+ * RequiredCurrencyField Validator.
+ *
+ * Currency formats as 0.00; if required, then make 
+ * sure the value is not 0.00
+ */
+class RequiredCurrencyValidator extends RequiredValidator
+{
+	function RequiredCurrencyValidator($field, $title)
+	{
+		$this->empty = 0;
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+		
+		var num =  parseFloat(form["{$this->field}"].value);
+					
+	if (num == $this->empty)
+	{
+		alert("{$this->title} is a required field. Please supply a value.");
+		return false;
+	}
+		
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if ($this->readOnly) return "";
+		
+		if (!isset($_POST[$this->field]) OR floatval($_POST[$this->field]) == $this->empty)
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+}
 
 
 
@@ -751,9 +1163,10 @@ ENDSCRIPT;
  */
 class ValidationEngine
 {
-	var $validators = array();
-	var $msg = "";
-	var $id = "";
+	var $validators = array(); 	///< The array of validators making up this validation engine
+	var $msg = "";				///< Validation error messages accumulator;
+	var $id = "";				///< The ID of this validator
+	var $generateScript = true;	///< Specifies whether to generate client-side validation script
 	
 	/**
 	 * Create a new ValidationEngine.
@@ -776,11 +1189,14 @@ function validate{$suffix}(form)
 {
 ENDSCRIPT;
 
-		foreach($this->validators as $v)
-		{
-			$script .= $v->writeClient();
+		if ($this->generateScript)
+		{ 
+			foreach($this->validators as $v)
+			{
+				$script .= $v->writeClient();
+			}
 		}
-		
+				
 		$script .= <<<ENDSCRIPT
 
 	return true;
@@ -800,6 +1216,42 @@ ENDSCRIPT;
 		{
 			$this->validators[] = $v;
 		}
+	}
+	
+	/**
+	 * Get the specified validator by field and class
+	 * @param unknown_type $field the validator's field
+	 * @param unknown_type $class the validator's class
+	 */
+	function getValidator($field, $class)
+	{
+		foreach($this->validators as $v)
+		{
+			if ($v->field == $field && get_class($v) == $class)
+			{
+				return $v;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Get the validators attached to a specific field
+	 * @param $field the field
+	 */
+	function getValidators($field)
+	{
+		$vals = array();
+		foreach($this->validators as $v)
+		{
+			if ($v->field == $field)
+			{
+				$vals[] = $v;
+			}
+		}
+		
+		return $vals;
 	}
 	
 	/**
@@ -854,4 +1306,112 @@ ENDSCRIPT;
 		return false;
 	}
 }
+
+
+
+/*
+ * When the data entry interface contains multiple tabs (pages)
+ * that the user can move around freely (e.g., not required to 
+ * complete tab c before moving on to tab d) then we validate on 
+ * the final submit tab. 
+ * 
+ * The warning message is called from the final tab's summary 
+ * view display for each section and on the tab page the user 
+ * is redirected to if they attempt to submit when there is an
+ * error. 
+ * 
+ * E.g., user does not complete grant application.
+ * On the view summary section
+ * "Grant Application"
+ * 
+ * we write warning: "You must complete the grant application"
+ * 
+ * @author Janice Gallant for Sonjara, Inc.
+ * 
+ * 5/3/2011
+ */
+abstract class ValidateTabSet
+{
+	var $msg;
+	
+	function ValidateTabSet()
+	{	
+	}
+	
+	/*
+	 * Called when user clicks submit: validate each tab page and 
+	 * redirect to first page that is invalid or returns true.
+	 */
+	function Validate()
+	{	
+	}
+	
+	/*
+	 * Additional functions as required to validate each page
+	 * in the tab set. For example:
+	 * 
+	 * function validateGrant()
+	 * 
+	 * function validateProgram()
+	 * 
+	 * function validateOrder()
+	 * 
+	 * these functions set msg variable to the appropriate error/warning
+	 * message.
+	 */
+	
+	
+	/*
+	 * Called from summary view class for each section if
+	 * the section is invalid.
+	 * 
+	 * The div must be an id for the background image to
+	 * show - does not work for css classes.
+	 */
+	function warning()
+	{
+		if($this->msg)
+		{
+			echo "<div id='warning'>{$this->msg}</div>\n";
+		}	
+	}	
+	
+	/*
+	 * Show the validation issue/error as an informative message 
+	 * instead of a warning.
+	 */
+	function message()
+	{
+		if($this->msg)
+		{
+			echo "<p>{$this->msg}</p>\n";
+		}	
+	}	
+	
+	/*
+	 * When system returns user to a tab b/c not
+	 * valid or completed, show a popup message
+	 * for the error.
+	 */
+	function writeScript()
+	{
+		$msg = stripHTML($this->msg);
+		if($msg)
+		{
+		
+$script .= <<<ENDSCRIPT
+<script type="text/javascript">
+window.addEvent('domready', function()
+{
+	alert('$msg');
+});
+</script>
+ENDSCRIPT;
+		}
+		return $script;		
+	}		
+}
+
+
+
 ?>

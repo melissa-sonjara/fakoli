@@ -37,26 +37,32 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for date data fields. Renders with date format
  * validation and a date picking popup widget.
+ * 
+ * @template - field formatting format for readonly is standard 
+ * "F d, Y", accepts "long", "daylong", and "short" and any
+ * format string used by php date function
  */
 class DateFieldRenderer extends FieldRenderer
 {
 	var $validator;
-	var $required = true;
+	var $template = ""; // default reaonly format is short style
 	
 	function DateFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
-		$this->validator = new DateValidator("", "", $required);
 	}
 	
-	function addValidatorsToForm($field)
+	function addValidatorsToForm($field, $required = false)
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
-
-		$this->validator->field = $field;
-		$this->validator->title = $label;
 		
-		$this->parent->validator->add($this->validator);
+		$this->parent->validator->add(new DateValidator($field, $label));
+		
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredValidator($field, $label));
+		}
+		
 	}
 	
 	function renderScript($field)
@@ -82,7 +88,7 @@ class DateFieldRenderer extends FieldRenderer
 		$date = $obj->reformatFromSQLDate($obj->get($field));
 		
 		$this->_startField($field);
-		echo "<input type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
 		$this->_endField($field);
 	}
 	
@@ -120,13 +126,17 @@ class DateFieldRenderer extends FieldRenderer
 	{
 		if ($mode == "range")
 		{
+			$label = $this->parent->layout->getLabel($field, $this);
+			$toLabel = (preg_match("/Between/i", $label)) ? "and" : "to";
+			
 			$date_from = $this->parent->params->get($field, "from");
 			$date_to = $this->parent->params->get($field, "to");
 			echo "<tr>\n";
 			$this->_printLabel($field);
 			echo "<td>";
 			echo "<input type='text' name='$field:from' value='$date_from' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)'>";
-			echo " to <input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
+			echo "&nbsp;<label for='date_to'>$toLabel</label>&nbsp;";
+			echo "<input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
 			echo "</td>\n";
 			echo "</tr>\n";	
 		}
@@ -148,9 +158,38 @@ class DateFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->parent->data->get($field)."</td>\n";		
+		echo ">".$this->format($this->parent->data->get($field))."</td>\n";		
 		echo "</tr>\n";	
-	}	
+	}
+	
+	function renderDateRangeReadOnly($field, $date_from, $date_to)
+	{
+		$label = $this->parent->layout->getLabel($field, $this);
+		
+		if($date_from && $date_to)
+		{
+			$toLabel = (preg_match("/Between/i", $label)) ? "and" : "to";
+		}
+		else if($date_from && !$date_to)
+		{
+			$this->label = preg_replace("/Between/i", "From", $label);
+		}
+		else // date to and no date_from
+		{
+			$this->label = preg_replace("/(Between)|(From)/i", "Up To", $label);		
+		}
+		echo "<tr>\n";
+		$this->_printLabel($field);
+		echo "<td";
+		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
+		echo ">".$this->format($date_from). "&nbsp;<label for='date_to'>$toLabel</label>&nbsp;" . $this->format($date_to) ."</td>\n";
+		echo "</tr>\n";		
+	}
+
+	function format($value)
+	{
+		return DateTypeRenderer::format($value, $this->template);
+	}
 }
 
 ?>

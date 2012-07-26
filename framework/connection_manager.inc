@@ -69,7 +69,7 @@ class ConnectionManager
 		catch(PDOException $e)
 		{
 			trace("Database connection failed - " . $e->getMessage(), 1);
-			die("Database connection failed - " . $e->getMessage());
+			throw new DataItemException("Database connection failed - " . $e->getMessage());
 		}
 	}
 	
@@ -89,7 +89,7 @@ class ConnectionManager
 		catch(PDOException $e)
 		{
 			trace("Database connection failed - " . $e->getMessage(), 1);
-			die("Database connection failed - " . $e->getMessage());
+			throw new DataItemException("Database connection failed - " . $e->getMessage());
 		}
 	}
 	

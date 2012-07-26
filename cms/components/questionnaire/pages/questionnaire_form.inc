@@ -1,0 +1,109 @@
+<?php
+/**************************************************************
+
+ Copyright (c) 2007,2008 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+ /* 
+ * Description: Form to add/update/delete a questionnaire
+ * 
+ * author: Janice Gallant for Sonjara, Inc.
+ * 
+ * date: 1/8/10 
+ */
+
+Fakoli::using("questionnaire");
+Fakoli::usingFeature("auto_form");
+
+require_once realpath(dirname(__FILE__)."/../questionnaire_tabs.inc");
+
+$questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+
+$questionnaire = new Questionnaire();
+
+if ($questionnaire_id)
+{
+	$questionnaire->load($questionnaire_id);
+}
+
+$form = new AutoForm($questionnaire);
+
+$form->required("title");
+$form->hide("composite_class");
+$form->button("Cancel", "/questionnaire_list");
+$form->unique("title", "A questionnaire already exists with that title. Please choose a different title.");
+
+if($questionnaire->isEditable())
+{
+	$form->allowDelete = true;	
+	$form->onDelete = onDeleteCascade;
+}
+
+$tabs = questionnaireTabs($questionnaire_id);
+
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		$tabs->queryString = "questionnaire_id={$form->data->questionnaire_id}";
+		$tabs->next();
+	}
+}
+
+$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
+
+$script .= $form->writeScript();
+$tabs->writeHTML();
+
+?>
+<div style="clear:left;border:solid 1px #000; padding: 4px;">
+<?
+$form->drawForm();
+?>
+</div><?
+
+function onDeleteCascade(&$questionnaire)
+{
+	$questions = $questionnaire->Questions();
+	
+	if(count($questions) > 0)
+	{
+		foreach($questions as $question)
+		{
+			$question->delete();
+		}
+	}
+	
+	$questionnaire->delete();
+	
+	redirect("/questionnaire_list");
+	
+}
+?>

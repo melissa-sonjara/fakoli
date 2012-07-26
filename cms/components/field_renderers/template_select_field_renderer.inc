@@ -42,7 +42,7 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 	
 		$options = array();
 		$options = array_merge($options, $this->readFiles("{$config["homedir"]}/$directory", ""));
-			
+		
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
 	}
 	

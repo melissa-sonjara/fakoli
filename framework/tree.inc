@@ -71,6 +71,7 @@ class TreeNode
 	var $onDemand;
 	var $disabled;
 	var $target;
+	var $extras;	///< Extra data/controls to be shown with this tree node.
 	
 	/**
 	 * Create a new TreeNode.
@@ -97,7 +98,8 @@ class TreeNode
 		$this->leafStyle   = "tree_node_leaf";
 		$this->onDemand    = "";
 		$this->disabled	   = false;
-		$this->target       = $target;
+		$this->target      = $target;
+		$this->extras	   = "";
 	}
 	
 	/**
@@ -112,18 +114,26 @@ class TreeNode
 
 		if ($this->link)
 		{
-			$title = "<a href='{$this->link}' target='{$this->target}'>{$this->title}</a>";
+			$title = "<a href='{$this->link}' target='{$this->target}'>{$this->title}</a>{$this->extras}";
 		}
 		else
 		{
-			$title = $this->title;
+			$title = "<a href='#' onclick='";
+			
+			if ($_activeTree->onSelect)
+			{
+				$title .= "{$_activeTree->onSelect}(\"{$this->value}\");";
+			}
+			
+			$title .= "; return false'>{$this->title}</a>{$this->extras}";
 		}
 		
 		if ($c == 0 && !$this->onDemand)
 		{
 			// Leaf node
 			echo "<div class='{$this->leafStyle}'>";
-			if (isset($this->value) && $this->value !== "")
+
+			if (isset($this->value) && $this->value !== "" && $_activeTree->selectMode != 'navigation')
 			{
 ?>
 			<input type="checkbox" class="checkbox" name="<? echo $this->id?>" value="<? echo $this->value?>"<? 
@@ -131,16 +141,16 @@ class TreeNode
 				if ($this->disabled) echo " disabled";
 				if ($_activeTree->selectMode == "single") 
 				{
-					echo " onclick=\"clearCheckBoxes('{$_activeTree->id}', this);";
+					echo " onclick=\"Tree.clearCheckBoxes('{$_activeTree->id}', this);";
 					if ($_activeTree->onSelect)
 					{
-						echo " {$_activeTree->onSelect}();";
+						echo " {$_activeTree->onSelect}('{$this->value}');";
 					}
 					echo "\"";
 				}
 				else if ($_activeTree->onSelect)
 				{
-					echo " onclick=\"{$_activeTree->onSelect}();\"";
+					echo " onclick=\"{$_activeTree->onSelect}('{$this->value}');\"";
 				}
 				 ?>/>
 <?
@@ -160,17 +170,26 @@ class TreeNode
 				$style = $this->closedStyle;
 				$display = "none";
 			}
-			
+						
 			if ($this->onDemand)
 			{
-				$cmd = "loadOnDemand('{$this->id}', '{$this->onDemand}');";
+				$cmd = "Tree.loadOnDemand('{$this->id}', '{$this->onDemand}');";
+				
+				if ($this->open)
+				{
+?>
+<script type="text/javascript">
+	window.addEvent('domready', function() {Tree.loadOnDemand('<?echo $this->id?>', '<?echo $this->onDemand?>');});
+</script>
+<?
+				}					
 			}
 			else
 			{
 				$cmd = "";
 			}
 			
-			$cmd .= "toggleFolder('{$this->id}', '{$this->openStyle}', '{$this->closedStyle}');";
+			$cmd .= "Tree.toggleFolder('{$this->id}', '{$this->openStyle}', '{$this->closedStyle}');";
 ?>
 		<div id='<?echo $this->id?>' class='<?echo $style?>' onclick="<?echo $cmd ?>">
 <?
@@ -182,16 +201,16 @@ class TreeNode
 				if ($this->disabled) echo " disabled";
 				if ($_activeTree->selectMode == "single") 
 				{
-					echo " onclick=\"clearCheckBoxes('{$_activeTree->id}', this);";
+					echo " onclick=\"Tree.clearCheckBoxes('{$_activeTree->id}', this);";
 					if ($_activeTree->onSelect)
 					{
-						echo " {$_activeTree->onSelect}();";
+						echo " {$_activeTree->onSelect}('{$this->value}');";
 					}
 					echo "\"";
 				}
 				else if ($_activeTree->onSelect)
 				{
-					echo " onclick=\"{$_activeTree->onSelect}();\"";
+					echo " onclick=\"{$_activeTree->onSelect}('{$this->value}');\"";
 				}
 				 ?>/>
 <?
@@ -321,66 +340,11 @@ class TreeControl
 	}
 	
 	/**
+	 * @deprecated include the /fakoli/js/tree.js support file instead.
 	 * Writes the JavaScript support functions for the tree.
 	 */
 	function writeScript()
 	{
-		global $_writtenTreeControlScript;
-		
-		if (!$_writtenTreeControlScript)
-		{
-?>
-<script type="text/javascript">
-<!--
-function toggleFolder(id, openStyle, closedStyle)
-{
-	var div = document.getElementById(id + "_contents");
-	var link = document.getElementById(id);
-
-	if (div.style.display == "none" || div.style.display == "")
-	{
-		div.style.display = "block";
-		link.className = openStyle;
-	}
-	else
-	{
-		div.style.display="none";
-		link.className = closedStyle;
-	}
-}
-
-function loadOnDemand(id, url)
-{
-	var div = document.getElementById(id + "_contents");
-	if (!div.loaded)
-	{
-		html = httpRequest(url);
-		div.innerHTML = html;
-		div.loaded = true;
-	}
-}
-	
-function clearCheckBoxes(id, except)
-{
-	var div = document.getElementById(id + "_table");
-	var cboxes = div.getElementsByTagName("input");
-	for(i = 0; i < cboxes.length; ++i)
-	{
-		if (cboxes[i] != except)
-		{
-			cboxes[i].checked = false;
-		}
-	}
-	
-	except.form[id].value = except.value;
-}
-
-//-->
-</script>
-<?
-			$_writtenTreeControlScript = true;
-		}
-		
 	}
 	
 	/**
@@ -393,6 +357,8 @@ function clearCheckBoxes(id, except)
 		$_activeTree= $this;
 		
 		$this->writeScript();
+		$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+		$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
 		
 		if ($this->selectMode == "single")
 		{
@@ -400,7 +366,7 @@ function clearCheckBoxes(id, except)
 <input type='hidden' name='<?echo $this->id ?>' id='<?echo $this->id?>' value='<?echo $this->value ?>'/>
 <? 
 		}
-?><table id="<?echo $this->id?>_table" class="<? echo $this->style?>" cellpadding="0" cellspacing="0" <? if ($this->width && !$this->height) echo "style='width:{$this->width}px'"; ?>>
+?><table id="<?echo $this->id?>_table" class="<? echo $this->style?>" cellpadding="0" cellspacing="0" <? if ($this->width) echo "style='width:{$width}'"; ?>>
 		 <? 
 		 if ($this->title)
 		 {
@@ -413,7 +379,7 @@ function clearCheckBoxes(id, except)
 		 ?>
 		 <tr>
 		  <td>
-		   <div style="padding: 0; margin: 0; <? if ($this->width > 0 && $this->height > 0) { ?> width: <? echo $this->width?>px;height: <?echo $this->height?>px;<? } ?><?if ($this->scroll) echo "overflow: auto"?>">
+		   <div style="padding: 0; margin: 0; width: 100%;<? if ($this->height > 0) { ?> height: <?echo $this->height?>px;<? } ?><?if ($this->scroll) echo "overflow: auto"?>">
 <?
 		$this->writeNodes();
 ?>

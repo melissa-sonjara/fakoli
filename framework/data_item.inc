@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__)."/connection_manager.inc");
+//require_once realpath(dirname(__FILE__)."/connection_manager.inc");
 require_once realpath(dirname(__FILE__)."/abstract_data_item.inc");
 require_once realpath(dirname(__FILE__)."/query.inc");
 require_once realpath(dirname(__FILE__)."/indexed_query.inc");
@@ -55,6 +55,26 @@ define("Text", 9);*/
  */
 class DataItem extends AbstractDataItem
 {
+	var $_tx = null;
+	var $_pkDisabled = false;
+
+   // When adding new renderers, must also update
+    // AutoForm $fieldRendererMap	
+	static $dataTypeRendererMap = array(
+		"Boolean"		=>	BooleanTypeRenderer,	
+		"Currency"		=>	CurrencyTypeRenderer,
+		"Date"			=>	DateTypeRenderer,
+		"DateTime"		=>	DateTimeTypeRenderer,
+		"Number"		=>	NumberTypeRenderer,	
+		"String"		=>	StringTypeRenderer,
+		"Text"			=>	TextTypeRenderer,
+		"HTML"			=>	TextTypeRenderer,
+		"Timestamp"		=>	TimestampTypeRenderer,
+		"Timezone"		=>	TimezoneTypeRenderer,
+		"PhoneNumber"	=>	PhoneNumberTypeRenderer,
+	
+	);
+	
 	
 	/**
 	 * Constructor. DataItems can be constructed in three ways:<br>
@@ -102,6 +122,23 @@ class DataItem extends AbstractDataItem
 	}
 	
 	/**
+	 * Join the DataItem to the specified DataTransaction.
+	 * @param DataTransaction $tx the transaction to join
+	 */
+	function joinTransaction($tx)
+	{
+		$this->_tx = $tx;
+	}
+	
+	/**
+	 * Retrieves the current DataTransaction.
+	 */
+	function getTransaction()
+	{
+		return $this->_tx;
+	}
+	
+	/**
 	 * Cast this object to another class. For simple DataItems this checks that the class
 	 * is the same as the supplied class and returns a reference if so. If not an exception is
 	 * thrown.
@@ -119,6 +156,26 @@ class DataItem extends AbstractDataItem
 		return $this;
 	}
 	
+	function disablePrimaryKey()
+	{
+		if (!$this->_disablePK)
+		{
+			$conn = $this->getConnection();
+			$conn->prepare("ALTER TABLE `{$this->table}` DISABLE KEYS")->execute();
+			$this->_disablePK = true;
+		}			
+	}
+	
+	function enablePrimaryKey()
+	{
+		if ($this->_disablePK)
+		{
+			$conn = $this->getConnection();
+			$conn->prepare("ALTER TABLE `{$this->table}` ENABLE KEYS")->execute();
+			$this->_disablePK = false;
+		}			
+	}
+	
 	/**
 	 * Populates the object using the supplied associative array (field -> value).
 	 * Only values that match the definition of the sub-classed object will be copied.
@@ -127,15 +184,35 @@ class DataItem extends AbstractDataItem
 	 * 
 	 * @param array $line the array of values to populate the object with. 
 	 */
-	function populate($line)
+	function populate($line, $alias = false)
 	{
-		foreach ($line as $field => $value)
+		// NOTE - structured for speed, since the general case is no aliasing
+		// therefore we want to reduce the number of tests of the alias 
+		
+    	if ($alias)
         {
-			//TODO: Figure out why this line causes login to fail for PSL.
-        	if (!array_key_exists($field, $this->fields)) continue;
-        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+        	$offset = strlen($alias) + 1;
         	
-            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value); 
+	    	foreach ($line as $field => $value)
+	        {
+        		if (!startsWith($field, $alias)) continue;
+        		$field = substr($field, $offset);
+        	
+	        	if (!array_key_exists($field, $this->fields)) continue;
+	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+	        	
+	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value); 
+	       	}
+        }
+        else
+        {
+			foreach ($line as $field => $value)
+	        {
+	        	if (!array_key_exists($field, $this->fields)) continue;
+	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+        	
+	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        } 
         }
 	}
 		
@@ -165,6 +242,10 @@ class DataItem extends AbstractDataItem
 				$list .= "$alias.";
 			}
 			$list .= $field;
+			if ($alias)
+			{
+				$list .= " as `$alias.$field`";
+			}
 			$first = false;
 		}
 		
@@ -292,6 +373,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function load($id)
 	{
+		if ($this->cacheLookup($id)) return;
+		 
 		$fields = $this->getfieldList();
 		$query = "SELECT $fields FROM {$this->table} WHERE {$this->primary_key}=$id ".$this->getIdentityConstraint();
 		trace("DataItem::load($id): $query", 3);
@@ -343,6 +426,11 @@ class DataItem extends AbstractDataItem
 	 */
 	function save()
 	{
+	    if ($this->cacheLocal)
+		{
+			Cache::invalidate(get_class($this)."_cache");
+		}
+
 		if ($this->exists())
     	{
     		return $this->update();
@@ -471,7 +559,12 @@ class DataItem extends AbstractDataItem
 	{
 		$pk = $this->primary_key;
 		
-		$query = "UPDATE {$this->table} $updates WHERE {$pk}=".$this->get($pk);
+		$query = "UPDATE {$this->table} $updates";
+
+		if ($this->get($pk))
+		{
+			$query .= " WHERE {$pk}=".$this->get($pk);
+		}
 		
 		trace("DataItem::update() - $query", 3);
 		
@@ -484,7 +577,7 @@ class DataItem extends AbstractDataItem
 			{
 				trace("DataItem::updateExplicit failed - $query", 2);
 			}
-			$this->select();
+			if ($this->get($pk)) $this->select();
 		}
 		catch(PDOException $e)
 		{
@@ -508,7 +601,7 @@ class DataItem extends AbstractDataItem
 		
 		foreach($this->fields as $field => $type)
 		{
-			if ($field == $pk) continue;
+			if ($field == $pk && !$this->_disablePK) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (!isset($this->$field) && $this->fields[$field] != Timestamp && $this->fields[$field] != Boolean) continue;
 			
@@ -583,6 +676,61 @@ class DataItem extends AbstractDataItem
 		}
 	}
 		
+	/**
+	 * Delete all the rows in the database that correspond to this class.
+	 */
+	function deleteAll()
+	{
+		$query = "TRUNCATE TABLE {$this->table}";
+		$db = $this->getConnection();
+				
+		trace($query, 3);
+		
+		try
+		{
+			$db->exec($query);
+		}
+		catch(PDOException $e)
+		{
+			$err = "DataItem::deleteAll() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
+		}	
+	}
+
+	/**
+	 * Check if the table for this class exists in the database.
+	 */
+	function tableExists()
+	{
+		$query = "SHOW TABLES LIKE '{$this->table}'";
+		$db = $this->getConnection();
+				
+		trace($query, 3);
+		
+		$exists = false;
+		
+		try
+		{
+			$result = $db->prepare($query);
+			$result->execute();
+			
+			if ($line = $result->fetch())
+			{
+				$exists = true;
+			}
+			
+			unset($result);
+		}
+		catch(PDOException $e)
+		{
+			$err = "DataItem::tableExists() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
+		}
+
+		return $exists;
+	}	
 	/**
 	 * Retrieves the distinct values in the database for the specified field 
 	 * across the specified set of records.
@@ -685,6 +833,26 @@ class DataItem extends AbstractDataItem
 	}
 	
 	/**
+	 * Automatically populate the object based on a custom set of parameters
+	 * (such as a filtered $_POST collection)
+	 */
+	function fromDataSet($params)
+	{
+		foreach($this->fields as $field => $type)
+		{
+    	   	if ($this->filter && $this->filter->isExcluded($field)) continue;
+			if (array_key_exists($field, $params))
+			{
+				$this->$field = $params[$field];
+			}
+			elseif (!array_key_exists($field, $params) AND ($type == Boolean))
+			{
+				$this->$field = 0;
+			}
+		}
+	}
+	
+	/**
 	 * Compare this object to another object. If all the fields match,
 	 * the method returns true, otherwise false. If a filter is in place on
 	 * the source object, then only the filtered fields are compared.
@@ -721,6 +889,28 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
+	function cacheLookup($id)
+	{
+		if ($this->cacheLocal)
+		{
+			$cache = get_class($this)."_cache";
+			$items = Cache::get($cache);
+			if (!is_array($items))
+			{
+				$items = IndexedQuery::create(get_class($this), "", $this->primary_key)->execute();
+				Cache::put($cache, $items);
+			}
+			if (array_key_exists($id, $items))
+			{
+				trace("Using local cache $cache for item $id", 5);
+				$this->copy($items[$id]);
+				return true;
+			}
+		}
+		
+		return false;
+	}	
+		
 	/**
 	 * Returns a single item related by the specified foreign key. The foreign
 	 * key name must match the primary key name for the specified class. 
@@ -739,11 +929,25 @@ class DataItem extends AbstractDataItem
 			
 		}
 		
-		if ($this->hasField($field))
+		if (array_key_exists($field, $this->fields))
 		{
 			$pk = $obj->primary_key;
-			$obj->$pk = $this->$field;
-			$obj->select();
+			$val = $this->get($field);
+			
+			if (!$val) return null;
+			
+			$obj->$pk = $val;
+			
+			$cache = "_{$class}_{$field}_{$val}";
+			if (isset($this->$cache))
+			{
+				$obj->copy($this->$cache);
+			}
+			else
+			{
+				$obj->select();
+				$this->$cache = $obj;
+			}			
 		}
 		else
 		{
@@ -985,9 +1189,97 @@ class DataItem extends AbstractDataItem
 		return $xml;
 	}
 		
+	function fromXML($node)
+	{
+		if ($node->nodeType != XML_ELEMENT_NODE || $node->tagName != get_class($this)) return;
+		
+		$kids = $node->childNodes;
+		$numChildren = $kids->length;
+		
+		for($i = 0; $i < $numChildren; ++$i)
+		{
+			$n = $kids->item($i);
+			
+			if ($n->nodeType != XML_ELEMENT_NODE) continue;
+			$field = $n->tagName;
+			$this->set($field, $n->nodeValue);
+		}
+	}
+	
+	function toJSON()
+	{
+		$out = array();
+				
+		foreach($this->fields as $field => $type)
+		{
+			if ($this->filter && $this->filter->isExcluded($field))
+			{
+				continue;
+			}
+			
+			$val = $this->get($field);
+			
+			$out[] = "\"{$field}\": \"".(jsSafe($this->get($field)))."\"";			
+		}	
+		
+		return "{".implode(", ", $out)."}";		
+	}
+	
+	/**
+	 * Substitute values for field names in a string, 
+	 * with the fields formatted using their type's 
+	 * default format or according to the formatting
+	 * template sting passed in.
+	 * 
+	 * example template string:
+	 * "{program_name} {start_date} {number_students}"
+	 * 
+	 * 1. data type format specifications:
+	 * The start_date field can have formatting specifications 
+	 * such as "{start_date:long} for long format. For more
+	 * information on formatting specifications following the colon,
+	 * check comments in DataTypeRenderer classes.
+	 * 
+	 * 2. Default value specification:
+	 * syntax:  {field|alternate}
+	 * example: {name|N/A}
+	 * 
+	 * In the above example "N/A" would be output if the name
+	 * field is empty or null. This will also work with numeric fields with
+	 * a value of 0 and booleans with false. Very useful for places where
+	 * you are linking to a form by name or title.
+	 * 
+	 * 3. Inline static method call:
+	 * syntax:  {class::method}
+	 * example: {MyHelper::getComplicatedOutput}
+	 * This works the same as passing array(MyHelper, getComplicatedOutput)
+	 * to a DataListView. It calls the static method getComplicatedOutput()
+	 * on the MyHelper class, passing the current object in as a parameter.
+	 * The new inline format means that you can use it as part of more
+	 * complicated expressions like:
+	 * "{name} - {MyHelper::getComplicatedOutput}"
+	 * 
+	 * 4. Retrieve field value through relations.
+	 *  
+	 * Fields can also be retrieved through a relation from
+	 * the dataitem obj that calls this format function.
+	 * 
+	 * for example:
+	 * "{MyRelation.event_name}"
+	 * 
+	 * Variables used:
+	 * $format - stores the pattern inside the braces {} for 
+	 * search & replace substitution in the template string. 
+	 * 
+	 * $fieldFormat - the requested formatting for the field, if
+	 * any.
+	 * 
+	 * $sub - the value to be substituted or replacement
+	 * value in the tempalte string.
+	 * 
+	 */
 	function format($template = "", $separator = ", ")
 	{
-		trace(get_class($this)." Format: $template", 4);
 		if ($template == "") $template = $this->default_format;
 		
 		foreach($this->fields as $field => $type)
@@ -995,46 +1287,13 @@ class DataItem extends AbstractDataItem
 			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
 		}
 
-		// Feature enhancement - allow drill-down through relation functions
+		// Allow drill-down through relation functions
+		$template = $this->formatThroughRelation($template, $separator);
 		
-		$matches = array();
-		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
-		
-		foreach($matches as $match)
-		{
-			$relation = $match[1];
-			$field = $match[2];
-			$constraint = count($match) == 4 ? $match[3] : null;
-			
-			
-			if ($constraint)
-			{
-				$relations = $this->$relation($constraint);
-				$format = "{".$relation.".".$field.":".$constraint."}";
-			}
-			else
-			{
-				$relations = $this->$relation();
-				$format = "{".$relation.".".$field."}";
-			}
-			
-			$sub = "";
-			
-			if (is_array($relations))
-			{
-				$sub = displayFieldAsList($relations, $field, $separator);
-			}
-			else
-			{
-				$sub = $relations->formatFieldValue($field);
-			}
-			
-			trace("Replacing {$match[0]} [ $format ] with '$sub'", 4);
-			
-			$template = str_replace($format, $sub, $template);
-		}
+		$template = $this->formatField($template);
 		
 		// Simple method calls - no parameter passing
+		// ??Is this block ever executed??
 		
 		$matches = array();
 		preg_match_all("/\\{([\\w_]+)\\(\\)\\}/", $template, $matches, PREG_SET_ORDER);
@@ -1051,6 +1310,123 @@ class DataItem extends AbstractDataItem
 		
 		return $template;
 	}
+		
+	/*
+	 * Call formatFieldValue on a field with
+	 * formatting specification given.
+	 * 
+	 * e.g.: 
+	 * {amount:2}
+	 * {start_date:long}
+	 */
+	function formatField($template)
+	{
+		$matches = array();
+		
+		preg_match_all("/\\{([\\w\\d_]+)(::?|\\|)?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+
+		foreach($matches as $match)
+		{
+			$field = $match[1];
+			// JDG 3/12 fix issue with call to function in  DataItem in format like "{getTitle()}" with no separator;
+			$separator = ($match[2]) ? $match[2] : ":";
+		
+			$fieldFormat = $match[3];
+			trace("formatField, field $field, separator $separator and fieldFormat $fieldFormat", 5);
+			
+			$format = "{".$field.$separator.$fieldFormat."}";
+			
+			switch($separator)
+			{
+			case "|":
+				if (!$this->get($field)) 
+				{
+					$sub = $fieldFormat;
+				}
+				else
+				{
+					$sub = $this->formatFieldValue($field);
+				}
+				break;
+				
+			case "::":
+				
+				$sub = call_user_func(array($field, $fieldFormat), $this);
+				break;
+				
+			case ":":
+			default:
+				$sub = $this->formatFieldValue($field, $fieldFormat);
+			}
+			
+			$template = str_replace($format, $sub, $template);
+		}
+		return $template;
+	}
+	
+	/*
+	 * Format a field value that is accessed through a relation.
+	 * The relation can return multiple items.
+	 * e.g.,
+	 * 
+	 * {Program.program_name}
+	 * {Event.start_date} or {Event.start_date:long}
+	 * {Events.event_name}
+	 */
+	function formatThroughRelation($template, $separator = ", ")
+	{
+		$matches = array();
+		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match)
+		{
+			$relation = $match[1];
+			$field = $match[2];
+			
+			if(count($match) == 4 && preg_match("/^where|order/i", $match[3]))
+				$constraint = $match[3];
+			elseif(count($match) == 4)
+				$fieldTemplate = $match[3];
+
+			trace("function format: formatThroughRelations template $template field $field relation $relation constraint $constraint", 5);
+			
+			if ($constraint)
+			{
+				$relations = $this->$relation($constraint);
+				$format = "{".$relation.".".$field.":".$constraint."}";
+			}
+			elseif($fieldTemplate)
+			{
+				$relations = $this->$relation();
+				$format = "{".$relation.".".$field.":".$fieldTemplate."}";
+			}
+			else
+			{
+				$relations = $this->$relation();
+				$format = "{".$relation.".".$field."}";
+			}
+			
+			$sub = "";
+			
+			if (is_array($relations))
+			{
+				$formatTemplate = ($fieldTemplate) ? "{".$field .":".$fieldTemplate . "}" : "{".$field."}";
+				$sub = formatItems($relations, $formatTemplate, $separator);
+	
+			}
+			else
+			{
+				if ($relations) $sub = $relations->formatFieldValue($field, $fieldTemplate);
+			}
+			
+			trace("format using relations: Replacing {$match[0]} [ $format ] with '$sub'", 5);
+			
+			$template = str_replace($format, $sub, $template);
+		}
+		
+		return $template;
+	}
+	
 	
 	function prettifyFieldName($field)
 	{
@@ -1288,9 +1664,9 @@ function removeDuplicates($list, $field = "")
 	return $filtered;
 }
 
-function toXML($tag, $objects)
+function toXML($tag, $objects, $header = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>")
 {
-	$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n<$tag>\n";
+	$xml = "$header\n<$tag>\n";
 	
 	foreach($objects as $obj)
 	{
@@ -1299,6 +1675,30 @@ function toXML($tag, $objects)
 	$xml .= "</$tag>\n";
 	
 	return $xml;
+}
+
+function toJSON($items)
+{
+	$out = array();
+	
+	foreach($items as $item)
+	{
+		$out[] = $item->toJSON();
+	}
+	
+	return "[".implode(", ", $out)."]";
+}
+
+function toJSONGrouped($items)
+{
+	$out = array();
+
+	foreach($items as $key => $group)
+	{
+		$out[] = "\"$key\": ".toJSON($group);
+	}
+	
+	return "{".implode(", ", $out)."}";
 }
 
 function displayFieldAsList($items, $field, $separator = ", ")

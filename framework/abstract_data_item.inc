@@ -34,6 +34,9 @@
 class DataItemException extends Exception {}
 class DataNotFoundException extends Exception {}
 
+require_once realpath(dirname(__FILE__)."/transaction.inc");
+require_once realpath(dirname(__FILE__)."/data_type_renderers/abstract_type_renderer.inc");
+
 /**
  * Used to place a filter on the contents of a DataItem-derived object.
  * With an ExclusionFilter, the specified fields will be <b>excluded</b> from
@@ -155,6 +158,7 @@ abstract class AbstractDataItem
 {
 	var $filter;
 	var $_options = 0;
+	var $_tx = null;
 	
 	/**
 	 * Cast this object to another class. This facility is provided so that
@@ -191,9 +195,28 @@ abstract class AbstractDataItem
 	 */
 	function getConnection()
 	{
-		//TODO: Add transactional support
-		return ConnectionManager::getConnection();
+		$tx = $this->getTransaction();
+		
+		if ($tx)
+		{
+			return $tx->getConnection();
+		}
+		else
+		{ 
+			return ConnectionManager::getConnection();
+		}
 	}
+	
+	/**
+	 * Join the DataItem to the specified DataTransaction.
+	 * @param DataTransaction $tx the transaction to join
+	 */
+	abstract function joinTransaction($tx);
+	
+	/**
+	 * Retrieves the current DataTransaction.
+	 */
+	abstract function getTransaction();
 	
 	/**
 	 * Subclasses can override this function to provide additional 
@@ -324,7 +347,25 @@ abstract class AbstractDataItem
 	 * Update the row in the database that corresponds to this object.
 	 */
 	abstract function update();
-		
+
+	/**
+	 * Delete the row in the database that corresponds to this object.
+	 */
+	abstract function delete($constraint = "");
+	
+	/**
+	 * Delete all the rows in the database that correspond to this class.
+	 */
+	abstract function deleteAll();
+
+	/**
+	 * Populate the object from the local cache if the object is marked as "cacheLocal".
+	 */
+	function cacheLookup($id)
+	{
+		return false;
+	}
+	
 	/**
 	 * Returns the properly quoted value of the specified field. Quoting rules
 	 * are dependent on the specified type of the field.
@@ -334,11 +375,17 @@ abstract class AbstractDataItem
 	 */
 	function quoteFieldValue($field, $type)
 	{
-		$query = "";
 
-		$db = $this->getConnection();
-		
 		$val = $this->get($field);
+		
+		return $this->quoteValue($val, $type);
+	}
+	
+	function quoteValue($val, $type)
+	{
+		$query = "";
+		
+		$db = $this->getConnection();
 		
 		switch($type)
 		{
@@ -356,7 +403,8 @@ abstract class AbstractDataItem
 			break;
 	
 		case Date:
-		
+		case DateTime:
+			
 			$query .= ($val) ? $db->quote($this->reformatToSQLDate($val)) : "NULL";
 			break;
 			
@@ -372,6 +420,7 @@ abstract class AbstractDataItem
 			
 		case String:
 		case Text:
+		case TimeZone:
 			
 		default:
 		
@@ -382,63 +431,29 @@ abstract class AbstractDataItem
 		return $query;			
 	}
 	
-	function formatFieldValue($field)
+	/*
+	 * Call data type renderer to get default format if no
+	 * template or template-reqested format.
+	 * 
+	 * JDG 5/28/2011
+	 */
+	function formatFieldValue($field, $template = "")
 	{
 		$type = $this->getType($field);
 		$data = $this->get($field);
 		
-		$val = ""; 
-		switch($type)
+		$val = "";
+		 
+		$renderer = DataItem::$dataTypeRendererMap[$type];
+		if($renderer)
 		{
-		case Number:
-		
-			if ($data == "" || !is_numeric($data))
-			{
-				$val = "0";
-			}
-			else
-			{
-				$val = $data;
-			}
-			break;
-	
-		case Currency:
-					
-			if ($data == "" || !is_numeric($data))
-			{
-				$val = "0";
-			}
-			else
-			{
-				$val = number_format($data, 2);
-			}
-			break;
-						
-		case Date:
-		
-			if (!$data) return "";
-			$val = formatDateShort($data);
-			break;
-			
-		case Timestamp:
-			
-			$val = date("Y-m-d H:i:s");
-			break;
-			
-		case Boolean:
-			
-			$query .= ($data) ? "True" : "False";
-			break;
-			
-		case String:
-		case Text:
-			
-		default:
-		
+			$formatter = array($renderer, "format");
+			$val = call_user_func($formatter, $data, $template); 
+		}
+		else
+		{
 			$val = $data;
-			break;
-		}		
-
+		}
 		return $val;					
 	}
 	
@@ -460,6 +475,11 @@ abstract class AbstractDataItem
 				$v = str_replace( array("<", ">", "&"), array("[_[OPENTAG]_]", "[_[CLOSETAG]_]", "[_[AMPERSAND]_]"), $data);				
 				break;
 			}
+			else
+			{
+				$v = htmlentities($data);
+				break;
+			}
 			
 		case Number:
 		case Date:
@@ -468,7 +488,7 @@ abstract class AbstractDataItem
 		case Text:
 		default:
 		
-			$v = htmlspecialchars($data);
+			$v = htmlentities($data);
 			break;
 		}
 		
@@ -518,11 +538,6 @@ abstract class AbstractDataItem
 	 * Insert a new row in the database to store this object.
 	 */
 	abstract function insert();
-	
-	/**
-	 * Delete the row in the database that corresponds to this object.
-	 */
-	abstract function delete($constraint = "");
 		
 	/**
 	 * Retrieves the distinct values in the database for the specified field 
@@ -576,7 +591,13 @@ abstract class AbstractDataItem
 	 * field with value "" is not considered empty).
 	 */
 	abstract function toXML($indent = 0, $path = null);
-			
+
+	/**
+	 * Populates the object from the specified XML node
+	 * @param DOMNode $node
+	 */
+	abstract function fromXML($node);
+	
 	abstract function format($template = "", $separator = ", ");
 	
 	abstract function prettifyFieldName($field);

@@ -85,7 +85,7 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 		}
 
 		$this->_startField($field);
-		echo "<input type='hidden' name='$field'  value='".$this->parent->data->get($field)."'><button name='{$field}_button' class='{$this->parent->buttonCSS}' onclick='{$field}_toggle(); return false;'>$img</button>";
+		echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='$field'  value='".$this->parent->data->get($field)."'><button name='{$field}_button' class='{$this->parent->buttonCSS}' onclick='{$field}_toggle(); return false;'>$img</button>";
 		
 		echo "<div style='display: none; position: absolute' id='{$field}_options'>";
 	

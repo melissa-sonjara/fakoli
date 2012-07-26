@@ -31,18 +31,23 @@
 
 *****************************************************************/
 
-require_once "cms/datamodel/forum.inc";
-require_once "cms/datamodel/attachment.inc";
-
 class ForumTopicView
 {
 	var $topic;
+	var $subscriptionView;
 	
 	function ForumTopicView($topic, $id = "topic_view")
 	{
 		$this->topic = $topic;
 	
-		$this->messages = $this->topic->Messages("WHERE deleted=0 ORDER BY date_posted");		
+		$this->messages = $this->topic->Messages("WHERE deleted=0 ORDER BY date_posted");
+
+		$this->subscriptionView = new TopicSubscriptionView($this->topic);		
+	}
+	
+	function writeScript()
+	{
+		return $this->subscriptionView->writeScript();
 	}
 	
 	function drawView()
@@ -51,6 +56,8 @@ class ForumTopicView
 		
 		$first = true;
 		$alt = false;
+		
+		$this->subscriptionView->drawLink();
 		
 		if (count($this->messages) > 0)
 		{
@@ -64,35 +71,40 @@ class ForumTopicView
 	<div id="message<?echo $message->message_id?>" class="<?echo $class?>">
 	 <div class="title">
 <?
-				if ($first)
+				if ($first && $user)
 				{
 ?>
-	<button class="button" onclick="go('forum_message_form?forum_id=<?echo $this->topic->forum_id?>&parent_id=<?echo $this->topic->message_id?>')"> Reply to this topic </button>	
+	<button class="button" onclick="go('forum_message_form?forum_id=<?echo $this->topic->forum_id?>&topic_id=<? echo $this->topic->topic_id ?>&parent_id=<?echo $this->topic->message_id?>')"> Reply to this topic </button>	
 <?
 				}
 ?>
 	  <strong><?echo $message->title?></strong><br/>
-	  <span class="small">Posted by <?echo $author->first_name?> <?echo $author->last_name?> at <?echo $message->date_posted?></span>
+	  <span class="small">Posted by <?echo $author->getFullName()?> at <?echo $message->date_posted?></span>
 	 </div>
 	 <div class="message_content">
 	  <?echo $message->message?>
 	 </div>
 	 <?
 			 	$attachments = $message->Attachments();
+			 	$userMgr = new UserManager();
+			 	$cl = $userMgr->getUserClass();
+			 	$u = new $cl;
+			 	$pk = $u->getPrimaryKey();
+			 	
 			 	if (count($attachments) > 0)
 			 	{
 			 		echo "<h4 style='margin-bottom: 4px'>Attachments</h4>";
 			 		
 			 		foreach($attachments as $attachment)
 			 		{
-			 			$icon = getDocIcon($attachment->filename);
-?>
-	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;<a href="/attachment.php?attachment_id=<?echo $attachment->attachment_id?>"><?echo $attachment->filename?></a>&nbsp;(<?echo $attachment->file_size?>)
-<?
-						if ($author->site_user_id == $user->site_user_id || checkRole("admin,data"))
+			 			$icon = DocumentHandler::getDocIcon($attachment->filename);
+
+			 			echo $this->formatAttachment($icon, $attachment);
+		 			
+						if ($author && $user && ($author->get($pk) == $user->get($pk)) || checkRole("admin,data"))
 						{
 ?>
-&nbsp;&nbsp;<a style="font-size: 10px" href="/cms/components/forum/forum_attachment_delete.php?forum_id=<?echo $this->topic->forum_id?>&message_id=<?echo $message->message_id?>&attachment_id=<?echo $attachment->attachment_id?>" onclick="return confirm('Are you sure you want to delete <?echo $attachment->filename?>?');">Delete this attachment</a>
+&nbsp;&nbsp;<a style="font-size: 10px" href="/action/forum/attachment_delete?forum_id=<?echo $this->topic->forum_id?>&message_id=<?echo $message->message_id?>&attachment_id=<?echo $attachment->attachment_id?>" onclick="return confirm('Are you sure you want to delete <?echo $attachment->filename?>?');">Delete this attachment</a>
 <?
 						}	
 ?>
@@ -102,17 +114,20 @@ class ForumTopicView
 			 	}
 				
 			 	$controls = array();
-				if ($author->site_user_id == $user->site_user_id || checkRole("admin,data"))
+				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data,moderator"))
 				{
-					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\">Edit</a>";
+					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&message_id={$message->message_id}\">Edit</a>";
 				}
 			
-				if ($author->site_user_id == $user->site_user_id || checkRole("admin,data"))
+				if ($user && $author->get($pk) == $user->get($pk) || checkRole("admin,data,moderator"))
 				{
-					$controls[] = "<a href=\"/cms/components/forum/forum_message_delete.php?forum_id={$this->topic->forum_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
+					$controls[] = "<a href=\"/action/forum/message_delete?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&message_id={$message->message_id}\" onclick=\"return confirm('Are you sure you want to delete this message?');\">Delete</a>";
 				}		
 				
-				$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&parent_id={$message->message_id}\">Reply</a>";
+				if ($user)
+				{
+					$controls[] = "<a href=\"forum_message_form?forum_id={$this->topic->forum_id}&topic_id={$this->topic->topic_id}&parent_id={$message->message_id}\">Reply</a>";
+				}
 	 	
 ?>
 	<div class="message_controls"><? echo implode("&nbsp;|&nbsp;", $controls);?></div>
@@ -131,5 +146,17 @@ class ForumTopicView
 <?
 		}
 	}
+	
+	function formatAttachment($icon, $attachment)
+	{
+		global $config;
+		$dir = $config["uploaddir"];
+		
+		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
+		$link .= "<a href='/action/attachment/download?attachment_id={$attachment->attachment_id}'>{$attachment->filename}
+		</a>&nbsp;({$attachment->file_size})\n";
+		
+		return $link;
+	}		
 }
 ?>

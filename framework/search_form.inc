@@ -183,6 +183,20 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 		return "$name=$value";
 	}
 	
+	function any($name, $value)
+	{
+		trace("NUMBER: ANY!!!", 3);
+		
+		checkNumeric($value);
+		
+		if (is_array($value))
+		{
+			if (count($value) == 0) return "";
+			return "$name in (".implode(",", array_values($value)).") ";
+		}
+		else return "$name=$value";
+	}	
+		
 	function like($name, $value)
 	{
 		die("Inappropriate matching mode");
@@ -216,11 +230,16 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 	/* 
 	 * Use when checking if a number is a member of a set.
 	 * For example, teachers_key in (8312, 5643, 9893) or
-	 * public in (2,4,5). Set must be comma delimited.
-	 * Set the additional parameter with setParam()
+	 * public in (2,4,5). Set can must be comma delimited
+	 * or an array where the keys are the values to
+	 * be included in the set.
+	 * 
 	 */
 	function member($name, $set)
 	{
+		$values = $set;
+		if(is_array($set))
+			$values = implode(",", array_keys($set));
 		return "$name IN ($set)";
 	}
 	
@@ -331,8 +350,8 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		{
 			if (!$first) $query .= " OR (";
 					
-			$query .= "f_name LIKE '{$words[$idx]}%' 
-			AND l_name LIKE '{$words[$idx+1]}%'";
+			$query .= "first_name LIKE '{$words[$idx]}%' 
+			AND last_name LIKE '{$words[$idx+1]}%'";
 
 			$idx += 1;
 			$query .= ") ";
@@ -341,6 +360,19 @@ class StringSearchParameterHandler extends SearchParameterHandler
 
 		return $query;
 	}	
+	
+	/* 
+	 * Use when checking if a number is a member of a set.
+	 * For example, status in ('in_progress', 'submitted')
+	 * Set must be comma delimited.
+	 */
+	function member($name, $set)
+	{
+		$values = $set;
+		if(is_array($set))
+			$values = "'". implode("','", array_keys($set)) . "'";
+		return "$name IN ($values)";
+	}
 }
 
 
@@ -358,9 +390,14 @@ class DateSearchParameterHandler extends SearchParameterHandler
 		if (preg_match("|^(\\d+)[\-/](\\d+)[\-/](\\d{4})$|", $date, $fields))
 		{
 			$date = $fields[3]."-".$fields[1]."-".$fields[2];
+			// JDG 5/2012  - need month and day to have "0" if single digit
+			$date = date('Y-m-d', strtotime($date));
 		}
+		// datetime
 		else if (preg_match("|^(\\d+)/(\\d+)/(\\d{4})\\s+(\\d+:\\d+:\\d+)|", $date, $fields))
 		{
+			// JDG 5/2012  - need month and day to have "0" if single digit
+			$date = date('Y-m-d', strtotime($date));
 			$date = $fields[3]."-".$fields[1]."-".$fields[2]." ".$fields[4];
 		}
 	
@@ -413,6 +450,7 @@ class SearchParameters
 	var $params;
 	var $handlers;
 	var $joinWith = "AND"; // AND or OR
+	var $paramHandlers = array(); // custom search handlers
 	
 	function SearchParameters($target)
 	{
@@ -424,6 +462,8 @@ class SearchParameters
 		$this->handlers[String] 	= new StringSearchParameterHandler();
 		$this->handlers[HTML] 		= new StringSearchParameterHandler();
 		$this->handlers[Date]		= new DateSearchParameterHandler();
+		$this->handlers[DateTime]	= new DateSearchParameterHandler();
+		$this->handlers[Timestamp]	= new DateSearchParameterHandler();
 		$this->handlers[Number]		= new NumberSearchParameterHandler();
 		$this->handlers[Currency]	= new NumberSearchParameterHandler();
 		$this->handlers[Boolean]	= new NumberSearchParameterHandler();		
@@ -436,6 +476,23 @@ class SearchParameters
 		return $value;
 	}
 	
+	/*
+	 * Override default handling by setting
+	 * a custom callback to generate the
+	 * constraint for a field.
+	 * 
+	 * @param $field - the field name in the obj to be queried
+	 * 
+	 * @handler - callback function such as array(MyClass, MyFunction)
+	 * 
+	 * When the function is called, it is given the 
+	 * parameters $name and $value
+	 */
+	function setHandler($field, $handler)
+	{
+		$this->paramHandlers[$field] = $handler;	
+	}
+		
 	function fromArray($array)
 	{
 		foreach(array_keys($this->target->fields) as $field)
@@ -465,6 +522,18 @@ class SearchParameters
 				
 				$this->params["{$field}:startsWith"] = $array["{$field}:startsWith"];
 			}
+			else if (array_key_exists("{$field}:member", $array) && $array["{$field}:member"] != "")
+			{
+				trace("Found '{$field}:member'", 3);
+				
+				$this->params["{$field}:member"] = $array["{$field}:member"];
+			}
+			else if (array_key_exists("{$field}:any", $array) && $array["{$field}:any"] != "")
+			{
+				trace("Found '{$field}:any'", 3);
+				
+				$this->params["{$field}:any"] = $array["{$field}:any"];
+			}
 			else 
 			{
 				if (array_key_exists("{$field}:from", $array) && $array["{$field}:from"] != "")
@@ -493,6 +562,10 @@ class SearchParameters
 		$this->params["{$field}:{$mode}"] = $value;
 	}
 	
+	function set($field, $mode, $value)
+	{
+		$this->setParam($field, $mode, $value);
+	}
 	
 	function fromGET()
 	{
@@ -548,14 +621,24 @@ class SearchParameters
 				$modifier = "equal";
 			}
 			
-			$handler = $this->handlers[$this->target->fields[$field]];
-			if ($handler == null)
+			// JDG 10/25/2011 - allow callback function for clauses
+			if(!array_key_exists($field, $this->paramHandlers))
 			{
-				die("Unknown Type: {$this->target->fields[$field]} for field $field");
+				$fields = $this->target->getFields();
+				$handler = $this->handlers[$fields[$field]];
+				if ($handler == null)
+					die("Unknown Type: {$this->target->fields[$field]} for field $field");
+				$clause = $this->getClause($handler, $modifier, $field, $value);			
 			}
-
-			$clause = $this->getClause($handler, $modifier, $field, $value);			
-
+			else
+			{
+				$handler = $this->paramHandlers[$field];
+				if(is_array($handler) && method_exists($handler[0], $handler[1]))
+					$clause = call_user_func($handler, $field, $value);
+				elseif(method_exists($handler, $modifier))
+					$clause = $handler->$modifier($field, $value);
+			}
+	
 			$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
 		}
 		
@@ -684,16 +767,66 @@ class SearchParameters
 /**
  * SearchForm generates forms for searching based on a supplied DataItem.
  * 
+ * Since SearchForm extends AutoForm, functionality such as alias,
+ * hide, layout and field grouping, and custom field renderer are available.
+ * 
+ * Example to create the search form:
+ * 
+ * $order = new Order();
+ * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
+ *  
+ * // on submit, system redirects to "review_orders" identifier and retrives
+ * // values through GET
+ * $form = new SearchForm($order, "GET", "review_orders");
+ * 
+ * // default matching mode is equal but can be set to others available
+ * // in the SearchParameters
+ * $form->setMatchingMode("startsWith", "first_name", "last_name");
+ * $form->setMatchingMode("range", "order_date");
+ * 
+ * $script .= $form->writeScript();
+ * $form->drawForm();
+ * 
+ * ------------------
+ * Example of the page that processes the constraint:
+ * 
+ * $order = new Order();
+ * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
+ *  
+ * // on submit, system redirects to "review_orders" identifier and retrives
+ * // values through GET
+ * $search = new SearchParameters($order);
+ * $search->fromGET();
+ * 
+ * $constraint = $search->generateConstraint();
+ * 
+ * -------------------
+ * 
+ * Example of drawing a readonly SearchForm on the results page
+ * to show the user the criteria on which they searched.
+ * 
+ * $order = new Order();
+ * $order->filter = new InclusionFilter("order_date", "first_name, "last_name);
+ * $form = new SearchForm($order, "GET", "review_orders");
+ * $form->readOnlyForm = true;
+ * $form->button("Search Again", "order_search_form");
+ * 
+ * $script .= $form->writeScript();
+ * $form->drawForm();
+ * 
+ *
  * @author andy
  */
 class SearchForm extends AutoForm
 {
 	var $modifiers;
 	var $params;
-
-	var $searchModeTypes = array("like"	=> "exact phrase match",
-						"all"	=>	"match all words in any order",
-						"any"	=>	"match any words");	
+	var $hasSearchCriteria = false;
+	var $emptyMessage = "No search criteria was provided.";
+	
+	var $searchModeTypes = array("like"	=>  "exact phrase match",
+								 "all"	=>	"match all words in any order",
+								 "any"	=>	"match any words");	
 	/**
 	 * Create a new Search Form.
 	 * @param $target the target DataItem object
@@ -720,6 +853,7 @@ class SearchForm extends AutoForm
 		{
 			$this->modifiers[$fields[$i]] = $mode;
 		}
+		
 	}
 	
 	/**
@@ -728,7 +862,7 @@ class SearchForm extends AutoForm
 	 * @return string the matching mode set for that field.
 	 */
 	function getMatchingMode($field)
-	{
+	{		
 		$mode = (array_key_exists($field, $this->modifiers)) ? $this->modifiers[$field] : "equal";
 		return $mode;
 	}
@@ -748,7 +882,20 @@ class SearchForm extends AutoForm
 	{
 		$this->params->fromPOST();
 	}
-
+	
+	
+	/*
+	 * Override an existing SearchParameter constraint
+	 * clause handler or add one. 
+	 * 
+	 * @handler - callback function that creates the
+	 * constraint clause for the given field
+	 */
+	function setHandler($field, $handler)
+	{
+		$this->params->paramHandlers[$field] = $handler;
+	}
+	
 	/**
 	 * Generate any javascript required by the search form.
 	 * @see framework/AutoForm#writeScript()
@@ -761,6 +908,7 @@ class SearchForm extends AutoForm
 		$script = "";				
 		foreach(array_keys($obj->fields) as $field)
 		{
+			trace("SearchForm writeScript field $field", 3);
 			if ($field != $pk&& 
 				!($obj->filter && $obj->filter->isExcluded($field)))
 			{
@@ -773,32 +921,19 @@ class SearchForm extends AutoForm
 				}
 			}		
 		}
-		/*
-		echo "<script type='text/javascript'>\n";
-		echo "function onSubmit{$this->id}()\n{\n";
-			
-		foreach(array_keys($obj->fields) as $field)
+		
+		// JDG 7/15/2011 - need scripts for additional fields
+		foreach($this->additional as $r)
 		{
-			if ($field != $pk&& 
-				!($obj->filter && $obj->filter->isExcluded($field)))
-			{
-				$mode = $this->getMatchingMode($field);
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
 				
-				$renderer = $this->getRenderer($field);
-				if ($renderer)
-				{
-					$renderer->renderOnSubmitHandler($field);
-				}
-			}		
-		}
+			$mode = $this->getMatchingMode($field);
+			$renderer->renderSearchScript($field, $mode);
+		}	
 
-		foreach($this->additional as $renderer)
-		{
-			$renderer->renderSearchScript("", "");
-		}
-				
-		echo "\treturn true;\n}\n</script>\n";	
-		*/
 		$script = ob_get_contents();
 		ob_end_clean();
 		return $script;
@@ -810,6 +945,8 @@ class SearchForm extends AutoForm
 	 */
 	function drawForm()
 	{
+		if ($this->readOnlyForm) return $this->drawReadOnly();
+		
 		$obj =& $this->data;
 		$pk = $obj->primary_key;
 		
@@ -819,20 +956,101 @@ class SearchForm extends AutoForm
 			$submitLabel = "Search ".pluralize($obj->prettifyClassName(true));
 		}
 		
-		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}'>\n";
-		foreach(array_keys($this->hidden) as $hidden)
+		if (!$this->subordinate)
 		{
-			echo "<input type='hidden' name='$hidden' value='{$obj->$hidden}'>\n";
+			echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+			if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+			echo ">\n";
 		}
 		
-		echo "<table ";
-		if ($this->formCSS) echo "class='{$this->formCSS}'"; 
-		echo ">\n";
-		
-		foreach(array_keys($obj->fields) as $field)
+		if ($this->id)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) &&
-				!($obj->filter && $obj->filter->isExcluded($field)))
+			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
+		}
+		
+		foreach(array_keys($this->hidden) as $hidden)
+		{
+			echo "<input id='{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
+		}	
+		
+		$this->layout->startUngrouped();
+		
+		if ($this->buttons_at_top && !$this->subordinate) 
+		{
+			$this->layout->startButtonLine();
+			
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
+
+			$this->drawButtons();
+
+			$this->layout->endButtonLine();
+		}
+
+		$this->layout->errorBox();
+
+		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
+		{
+			$this->layout->requiredFields($this->requiredFieldsText);
+		}
+
+		$this->renderSearchFields();
+					
+		if (!$this->subordinate)
+		{		
+			$this->layout->startButtonLine();
+
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
+			$this->drawButtons();
+	
+			$this->layout->endButtonLine();
+		}
+
+		$this->layout->endUngrouped();
+		
+		if (!$this->subordinate)
+		{
+			echo "</form>\n";
+		}
+	}
+
+	function renderSearchFields()
+	{
+		$obj =& $this->data;
+		$filter = $obj->getFilter();
+		
+		if (count($this->groups) > 0)
+		{
+			$this->layout->endUngrouped();
+			
+			foreach($this->groups as $legend => $fields)
+			{
+				$collapsible = array_key_exists($legend, $this->collapsibleGroups);
+				if ($collapsible)
+				{
+					$cf = $this->collapsibleGroups[$legend];
+					$collapsed = !$this->data->$cf;
+				}
+				
+				$this->layout->startGroup($legend, $collapsible, $collapsed);
+				
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneSearchField($field);
+					}					
+				}
+				
+				$this->layout->endGroup();
+			}
+			
+			$this->layout->startUngrouped();
+			
+		}
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$this->renderOneSearchField($field);
 			}
@@ -842,33 +1060,162 @@ class SearchForm extends AutoForm
 		{
 			$renderer = $r['renderer'];
 			$field = $r['field'];
-			$mode = $this->getMatchingMode($field);
-			
-			$renderer->renderSearchField($field, $mode);
+			if(!$field)
+				$field = $renderer->field;
+			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				$this->renderOneSearchField($field);
+			}	
 		}
-		
-		echo "<tr>\n";
-		echo "<td colspan='2' class='submit'><br/><input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'>";
-
-		$this->drawButtons();
-		
-		echo "</td></table>\n</form>\n";
 	}
-
+	
 	/*
 	 * 3/12/10, JG, make separate function from drawForm
 	 * so that inheriting classes can create a customized
 	 * form layout and call this function from its own
 	 * drawForm. 
 	 */
-	function RenderOneSearchField($field)
+	function renderOneSearchField($field)
 	{
 		$mode = $this->getMatchingMode($field);
 		$renderer = $this->getRenderer($field);
+			
+		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
+		{
+			foreach($this->additional as $r)
+			{
+				$renderer = $r['renderer'];
+				$field = $r['field'];
+				if(!$field)
+					$field = $renderer->field;
+			}
+		}
+			
 		if ($renderer)
 		{
-			$renderer->renderSearchField($field, $mode);
+			if(!$this->readOnlyForm)
+			{
+				$renderer->renderSearchField($field, $mode);
+			}
+			else if($this->readOnlyForm && (get_class($renderer) != DateFieldRenderer || $mode != "range"))
+			{
+				$value = $this->params->get($field, $mode);
+				if($value)
+				{
+					// Set the value into the form's data obj so that the
+					// renderReadOnly function works the same as with AutoForm
+					$this->data->set($field, $value);
+					$renderer->renderReadOnly($field);
+					$this->hasSearchCriteria = true;
+				}
+			}
+			else if($this->readOnlyForm)
+			{
+				$date_from = $this->params->get($field, "from");
+				$date_to = $this->params->get($field, "to");
+				if($date_from || $date_to)
+				{
+					$renderer->renderDateRangeReadOnly($field, $date_from, $date_to);
+					$this->hasSearchCriteria = true;
+				}
+			}
+			// count as rendered even if we didn't render because readonly and
+			// no value so that we don't try to render again
+			$this->renderedFields[$field] = true;
 		}
+	}
+	
+	function renderAdditionalFields()
+	{
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+
+			$mode = $this->getMatchingMode($field);
+			
+			if(!array_key_exists($field, $this->renderedFields))
+			{
+				$renderer->renderSearchField($field, $mode);
+			}
+			$this->renderedFields[$field] = true;
+		}
+	}
+	
+	/**
+	 * Draws the form in read-only mode. Used to display
+	 * the search criteria on the results screen.
+	 */
+	function drawReadOnly()
+	{
+		echo "<table";
+		if ($this->formCSS) echo " class='{$this->formCSS}'";
+		if ($this->style) echo " style='{$this->style}'";
+		echo ">\n";
+
+		$obj =& $this->data;
+		$pk = $obj->primary_key;
+		$filter = $obj->getFilter();
+		
+		foreach($this->params->params as $param => $value)
+		{
+			list($field, $modifier) = explode(":", $param);
+			if(!array_key_exists($field, $this->modifiers))
+				$this->setMatchingMode($modifier, $field);
+		}
+		
+		if (count($this->groups) > 0)
+		{
+			foreach($this->groups as $legend => $fields)
+			{			
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && 
+					!array_key_exists($field, $this->renderedFields) && 
+					!($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneSearchField($field);
+					}					
+				}
+			}		
+		}
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				$this->renderOneSearchField($field);
+			}
+		}
+		
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			{
+				$this->renderOneSearchField($field);
+			}	
+		}		
+					
+		if(!$this->hasSearchCriteria)
+		{
+			echo "<tr>\n<td style='padding-top: 10px; padding-bottom: 10px'><i>{$this->emptyMessage}</i></td>\n</tr>\n";
+		}
+		
+		ob_start();
+		$this->drawButtons();
+		$buttons .= ob_get_contents();
+		ob_end_clean();
+		
+		if($buttons)
+			echo "<tr><td>".  preg_replace("/^(&nbsp;)+/", "", $buttons) . "</td>\n<tr>\n";
+		
+		echo "</table>";
 	}
 }
 

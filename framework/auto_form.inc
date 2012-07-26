@@ -32,6 +32,7 @@
 *****************************************************************/
 
 require_once realpath(dirname(__FILE__)."/field_renderers.inc");
+require_once realpath(dirname(__FILE__)."/auto_form_layout.inc");
 require_once realpath(dirname(__FILE__)."/validation.inc");
 
 /**
@@ -47,7 +48,7 @@ class AutoForm
 	var $inputCSS = "";					///< CSS Class to use for input fields
 	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
 	var $style = "";
-	var $componentPath ="";
+	var $componentPath ="/fakoli";
 	var $buttonAlignment = "left";		///< Default Form button alignment
 	var $passwordEncryptor = "";		///< Password Encryption method name
 
@@ -62,6 +63,7 @@ class AutoForm
 	var $overrides = array();			///< The field overrides collection
 	var $hidden = array();				///< The hidden fields collection
 	var $additional = array();			///< The additional (pseudo) fields collection
+	var $additional_at_top = false;		// whether additional fields are rendered above the datamodel's field list; if false, then rendered below
 	var $readonly = array();			///< The read-only fields collection
 	var $annotations = array();			///< The field annotations collection
 	var $buttons = array();				///< The custom buttons collection
@@ -73,15 +75,51 @@ class AutoForm
 	var $HTMLEditorDefaultWidth = "540px";	///< Default width for Rich Text Editor controls.
 	var $HTMLEditorDefaultHeight = "200px";	///< Default height for Rich Text Editor controls.
 
+	var $passwordEnterLabel = "Enter";		///< Text for Password Enter label
+	var $passwordConfirmLabel = "Confirm";	///< Text for Password Confirm label
+	
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
-	var $onDelete = "";						///< delete method name
-	var $markRequiredFields = false;		///< Set to true to add an asterisk after required field labels.
-	var $onFormatLabel = null; ///< Label Processing hook
+	var $onDelete = "";					///< delete method name
+	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
+	var $onFormatLabel = null; 			///< Label Processing hook
     var $buttons_at_top = false;
+    var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
+    var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
+    var $onSubmitHandler = null;        ///< Javascript Callback for user-defined onsubmit hook
     
+    var $required = array(); // list of required fields
+    var $requiredFieldsText = "* indicates required field";
+
     var $fields;	///< Local field cache
+
+    var $groups = array(); ///< List of field groups
+    var $collapsibleGroups = array(); //< List of collapsible groups and their default states
     
+    var $readOnlyForm;  ///< Specifies whether the entire form is read-only
+    var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
+    
+    var $layout; ///< Layout handler object
+    var $default_layout = "table";
+    
+    // When adding new renderers, must also update
+    // DataItem $dataTypeRendererMap
+    static $fieldRendererMap = array (
+    	String		=>	StringFieldRenderer,
+    	HTML		=>	HTMLFieldRenderer,
+		Date		=>	DateFieldRenderer,
+    	DateTime	=>	DateTimeFieldRenderer,
+    	Number		=>	NumberFieldRenderer,
+    	Currency	=>	CurrencyFieldRenderer,
+		Boolean		=>	BooleanFieldRenderer,
+		TimeZone	=>	TimezoneFieldRenderer,
+		Password	=>	PasswordFieldRenderer,
+		Text		=>	TextFieldRenderer,
+		Time		=>	TimeFieldRenderer,
+		Rating		=>	RatingFieldRenderer,
+		ZipCode		=>	ZipCodeFieldRenderer,
+		PhoneNumber	=>	PhoneNumberFieldRenderer,
+		);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
 	 *
@@ -95,6 +133,8 @@ class AutoForm
 	{
 		global $auto_form_defaults;
 
+		$this->subordinate = false;
+		
 		$this->validator = new ValidationEngine();
 
 		foreach($auto_form_defaults as $field => $value)
@@ -111,9 +151,13 @@ class AutoForm
 
 		$this->fields = $this->data->getFields();
 		
+		$filter = $this->data->getFilter();
+		
 		// Add in a default renderer for each field
 		foreach($this->fields as $field => $type)
 		{
+			if ($filter && $filter->isExcluded($field)) continue;
+			
 			$this->renderers[$field] = $this->createRenderer($field);
 		}
 		
@@ -133,9 +177,31 @@ class AutoForm
 			$this->hide($p);
 		}
 		
+		$this->layout = AutoFormLayout::create($this->default_layout, $this);
+	}
+	
+	/**
+	 * Returns the target data item for the form
+	 */
+	function getData()
+	{
+		return $this->data;
 	}
 
-
+	function setDataSet($params)
+	{
+		$this->dataSet = $params;
+	}
+	
+	/**
+	 * Override the default layout manager
+	 * 
+	 */
+	function setLayout($layout)
+	{
+		$this->layout = $layout;
+	}
+	
 	/**
 	 * This factory method creates a FieldRender based on the type
 	 * of the specified field.
@@ -149,47 +215,26 @@ class AutoForm
 
 		$type = $this->fields[$field];
 		
-		switch($type)
+		if ($type == "Timestamp") return null; // No field renderer required for this type
+		
+		if (array_key_exists($type, AutoForm::$fieldRendererMap))
 		{
-		case String: 
-			return new StringFieldRenderer($this);
-			
-		case HTML:
-			return new HTMLFieldRenderer($this);
-			
-		case Date:
-			return new DateFieldRenderer($this);
-			
-		case Number:
-			return new NumberFieldRenderer($this);
-			
-		case Currency:
-			return new CurrencyFieldRenderer($this);
-			
-		case Boolean:
-			return new BooleanFieldRenderer($this);
-			
-		case Password:
-			return new PasswordFieldRenderer($this);
-			
-		case Text:
-			return new TextFieldRenderer($this);
-			
-		case Time:
-			return new TimeFieldRenderer($this);
-			
-		case Rating:
-			return new RatingFieldRenderer($this);
-			
-		case Timestamp:
-			
-			return null;
-			
-		default:
-			die("AutoForm::createRenderer(): Unknown type");
+			return new AutoForm::$fieldRendererMap[$type]($this, $field);
 		}
+		
+		throw new FakoliException("AutoForm::createRenderer(): Unknown type '$type'");
 	}
 
+	/**
+	 * Registers a custom type-to-renderer mapping.
+	 * @param string $type the type identifier
+	 * @param string $rendererClass the class name of the renderer to handle fields of this type
+	 */
+	static function registerFieldRendererClass($type, $rendererClass)
+	{
+		AutoForm::$fieldRendererMap[$type] = $rendererClass;
+	}
+	
 	/**
 	 * Creates default validators for fields in the form. Currently this adds Date format validators
 	 * to all date fields - other fields are not affected.
@@ -204,20 +249,56 @@ class AutoForm
 		foreach(array_keys($this->fields) as $field)
 		{
 			if ($filter && $filter->isExcluded($field)) continue;
-
+			if ($this->readonly[$field]) continue; // No need to validate readonly fields
+			
 			$renderer = $this->getRenderer($field);
 			if ($renderer)
 			{
-				$renderer->addValidatorsToForm($field);
+				// JDG 9/19/2010 - let each renderer supply its own validator
+				$required = (array_search($field, $this->required) === FALSE) ? false : true;
+				$renderer->addValidatorsToForm($field, $required);
 			}
 		}
 
 		foreach($this->additional as $r)
 		{
-			$r['renderer']->addValidatorsToForm($r['field']);
+			// JDG 5/2012 - check if additional field is required
+			$required = (array_search($r['field'], $this->required) === FALSE) ? false : true;
+			$r['renderer']->addValidatorsToForm($r['field'], $required);
 		}
 	}
 
+	/**
+	 * Retrieve the validation engine for this AutoForm.
+	 */
+	function getValidationEngine()
+	{
+		return $this->validator;
+	}
+	
+	/**
+	 * Set this AutoForm to be a subordinate form within a CompositeAutoForm.
+	 */
+	function makeSubordinate()
+	{
+		$this->subordinate = true;
+	}
+	
+	function configureValidators()
+	{
+		if ($this->validatorsConfigured) return;
+		
+		$this->addDefaultValidators();
+
+		foreach($this->validator->validators as $v)
+		{
+			$v->title = (!$v->title) ? $this->prettifyFieldName($v->field) : $v->title;
+			$v->readOnly = $this->isReadOnly($v->field) || $this->isHidden($v->field);
+		}
+		
+		$this->validatorsConfigured = true;
+	}
+	
 	/**
 	 * This method writes any Javascript code that will be required for the generated
 	 * form to operate, including code for Rich Text Editors, Date Pickers and field validation.
@@ -230,14 +311,8 @@ class AutoForm
 
 		ob_start();
 
-		$this->addDefaultValidators();
-
-		foreach($this->validator->validators as $v)
-		{
-			$v->title = $this->prettifyFieldName($v->field);
-			$v->readOnly = $this->isReadOnly($v->field) || $this->isHidden($v->field);
-		}
-
+		$this->configureValidators();
+		
 		$obj =& $this->data;
 		$filter = $obj->getFilter();
 		$pk = $obj->getPrimaryKey();
@@ -259,12 +334,13 @@ class AutoForm
 		{
 			$r['renderer']->renderScript($r['field']);
 		}
-
+		
 		echo "<script type='text/javascript'>\n";
 		echo $this->validator->writeScript();
 		echo "\n\n";
 		echo "function onSubmit{$this->id}(form)\n{\n";
-		echo "\tif (!validate_{$this->id}(form)) return false;\n";
+		
+		echo "\tif (validate_{$this->id} != null && !validate_{$this->id}(form)) return false;\n";
 
 		foreach(array_keys($this->fields) as $field)
 		{
@@ -283,8 +359,39 @@ class AutoForm
 			$r['renderer']->renderOnSubmitHandler($r['field']);
 		}
 
-		echo "\treturn true;\n}\n</script>\n";
+		if ($this->onSubmitHandler)
+		{
+			echo "\t if (!{$this->onSubmitHandler}(form)) return false;\n;";
+		}
+		
+		if ($this->interstitialMessage)
+		{
+			echo "\tinterstitial('".jsSafe($this->interstitialMessage)."');\n;";
+		}
+		
+		echo "\treturn true;\n}\n\n";
+		
+		echo "\twindow.addEvent('domready', function() {\n";
+		
+		if ($this->ajaxSubmitHandler)
+		{
+?>
+document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { return onSubmit<?echo $this->id?>(document.id('<?echo $this->id?>')); }, 'onComplete': <?echo $this->ajaxSubmitHandler; ?>, 'onFailure': <?echo $this->ajaxFailureHandler; ?>});
+<?
 
+		}
+
+		// Add collapsible group handlers
+		
+		foreach($this->collapsibleGroups as $group => $toggle)
+		{
+			$groupID = $this->id . "_" . codify($group) . "_group";
+			$toggleID = $this->id . "_" . $toggle;
+			
+			echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+		}
+		echo "\t});\n";
+		echo "</script>\n";
 		$script = ob_get_contents();
 		ob_end_clean();
 		return $script;
@@ -309,11 +416,21 @@ class AutoForm
 		{
 			return $this->renderers[$field];
 		}
-
-		echo("AutoForm::getRenderer(): Unknown field: $field");
-		echo "<pre>";
-		print_r($this->renderers);
-		echo "</pre>";
+		else // JDG 2/13/2011 get renderer from additional field set
+		{
+			foreach($this->additional as $r)
+			{
+				$renderer = $r['renderer'];
+				$rField = $r['field'];
+				if(!$rField)
+					$rField = $renderer->field;
+				if($rField == $field)
+					return $renderer;
+			}					
+		}
+		
+		trace("AutoForm::getRenderer(): Unknown field: $field", 2);
+		return null;
 	}
 
 	/**
@@ -411,6 +528,44 @@ class AutoForm
 	}
 
 	/**
+	 * Define a field grouping
+	 * @param string $name the legend to use for the group
+	 * 
+	 */
+	function group($name)
+	{
+		$group = (array_key_exists($name, $this->groups)) ? $this->groups[$name] : array();
+		for($i = 1; $i < func_num_args(); ++$i)
+		{
+			$group[] = func_get_arg($i);
+		}
+		
+		$this->groups[$name] = $group;
+		return $group;
+	}
+	
+	/**
+	 * Allows a group to be shown or hidden based on the value of another control
+	 * @param string $name the name of the group
+	 * @param string $toggleControl the field name of the toggling control
+	 */
+	function makeGroupCollapsible($name, $toggleControl)
+	{
+		$this->collapsibleGroups[$name] = $toggleControl;
+	}
+	
+	/**
+	 * Use this method to hide the labels for the specified fields in the form.
+	 */
+	function hideLabel()
+	{
+		foreach(func_get_args() as $naked)
+		{
+			$this->getRenderer($naked)->hideLabel = true;
+		}
+	}
+	
+	/**
 	 * Call this method to make one or more fields read-only in the form's user interface.
 	 * For instance, calling readonly("field1", "field3") would cause field1 and field3
 	 * to be rendered read-only.
@@ -442,11 +597,27 @@ class AutoForm
 	{
 		foreach(func_get_args() as $required)
 		{
-			if ($this->data->hasField($required))
+			if ($this->data->hasField($required) || $this->hasAdditional($required))
 			{
-				$this->validator->add(new RequiredValidator($required, $this->prettifyFieldName($required)));
+				array_push($this->required, $required);
 			}
 		}
+	}
+	
+	/**
+	 * Check if this field exists as an additional field
+	 */
+	function hasAdditional($field)
+	{
+		foreach($this->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			$rField = $r['field'];
+			if($rField == $field)
+				return true;
+		}
+
+		return $false;
 	}
 
 	/**
@@ -456,9 +627,25 @@ class AutoForm
 	 */
 	function isRequired($field)
 	{
-		return $this->validator->isRequired($field);
+		return (array_search($field, $this->required) !== FALSE) ? true : false;
 	}
 
+	/**
+	 * Make a field required if a given checkbox is checked.
+	 * @param string $field the field to be validated
+	 * @param string $checkbox the checkbox controlling whether the field is required
+	 * @param string $message the message to display if validation fails.
+	 */
+	function requiredIfChecked($field, $checkbox, $fieldTitle = "", $checkboxTitle = "", $message = "")
+	{
+		if ($this->data->hasField($field))
+		{
+			$this->validator->add(new RequiredIfCheckedValidator($field, $checkbox, 
+																 $fieldTitle ? $fieldTitle : $this->prettifyFieldName($field), 
+																 $checkboxTitle ? $checkboxTitle : $this->prettifyFieldName($checkbox), $message));
+		}
+	}
+	
 	/**
 	 * Validate the user input for the specified field against a regular expression, outputting
 	 * the supplied message if the entered value does not match. This can be used to provide general
@@ -495,6 +682,14 @@ class AutoForm
 		}
 	}
 
+	function uniqueWithConstraint($field, $message, $constraint = "")
+	{
+		if ($this->data->hasField($field))
+		{
+			$this->validator->add(new UniqueValidator($field, $this->prettifyFieldName($field), $this->data, $message, $constraint));
+		}
+	}
+	
 	/**
 	 * Adds a range validator to the specified field.
 	 */
@@ -513,42 +708,97 @@ class AutoForm
 	 * @param string $title
 	 * @param string $match The name of the second field that must match
 	 * @param string $matchTitle
+	 * @param string $caseSensitive specifies whether the match is case sensitive
 	 */
-	function match($field, $title, $match, $matchTitle)
+	function match($field, $title, $match, $matchTitle, $caseSensitive = true)
 	{
-		$this->validator->add(new MatchValidator($field, $title, $match, $matchTitle));
+		$this->validator->add(new MatchValidator($field, $title, $match, $matchTitle, $caseSensitive));
 	}
 
 	/**
 	 * Adds a password validator to the specified field.
 	 * 
 	 * @param string $field The name of the field.
-	 * @param unknown_type The title of the field
+	 * @param string The title of the field
 	 */
 	function password($field, $title)
 	{
-		$this->validator->add(new passwordValidator($field, $title));
+		$this->validator->add(new PasswordValidator($field, $title, $this->id));
 	}
 
 	/**
+	 * Disable autocomplete for the selected fields. If no fields are specified, 
+	 * autocomplete is disabled for all the fields in the form.
+	 */
+	function disableAutoComplete()
+	{
+		$numArgs = func_num_args();
+		
+		if ($numArgs == 0)
+		{
+			foreach($this->data->fields as $field => $type)
+			{
+				if ($this->data->hasField($field))
+				{
+					$this->getRenderer($field)->autocomplete = false;
+				}
+			}
+		}
+		else
+		{
+			for($i = 0; $i < $numArgs; ++$i)
+			{
+				if ($this->data->hasField($field))
+				{
+					$this->getRenderer($field)->autocomplete = false;
+				}
+			}
+		}
+	}
+			
+	/**
 	 * Adds a custom button to the form.
 	 *
-	 * @param unknown_type $text
-	 * @param unknown_type $url
-	 * @param unknown_type $confirm
+	 * @param string $text the button label text
+	 * @param string $url the URL to handle the button press
+	 * @param string $confirm optional confirmation message
+	 * @param boolean $isScript true if the url is javascript code to execute, 
+	 * 							false if it is a URL to redirect to
 	 */
-	function button($text, $url, $confirm = null)
+	function button($text, $url, $confirm = null, $isScript = false)
 	{
-		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm);
+		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm, 'isScript' => $isScript);
+	}
+
+	/**
+	 * Put the form into AJAX submission mode. You must supply a Javascript function to call
+	 * once the submission is complete.
+	 * @param string $success the Javascript callback function for success
+	 * @param string $failure the Javascript callback function for failure
+	 */
+	function ajaxSubmit($success, $failure)
+	{
+		$this->ajaxSubmitHandler = $success;
+		$this->ajaxFailureHandler = $failure;
+	}
+	
+	/**
+	 * Determine if this form is the one that was submitted. Useful for managing pages
+	 * with multiple forms.
+	 */
+	function matchesSubmitted()
+	{
+		return (isset($_POST["#FORMID#"]) && $_POST["#FORMID#"] == $this->id);
 	}
 
 	/**
 	 * Renders the form to HTML.
 	 *
 	 */
-
 	function drawForm()
 	{
+		if ($this->readOnlyForm) return $this->drawReadOnly();
+		
 		$obj =& $this->data;
 		$pk = $obj->getPrimaryKey();
 
@@ -561,7 +811,14 @@ class AutoForm
 		//echo "<!--\n";
 		//print_r($this);
 		//echo "\n-->\n";
-		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data' onsubmit='return onSubmit{$this->id}(this);'>\n";
+		
+		if (!$this->subordinate)
+		{
+			echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+			if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+			echo ">\n";
+		}
+		
 		if ($this->id)
 		{
 			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
@@ -569,76 +826,153 @@ class AutoForm
 		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
-			echo "<input type='hidden' name='$hidden' value='{$obj->get($hidden)}'/>\n";
+			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
 
-		echo "<table";
-		if ($this->formCSS) echo " class='{$this->formCSS}'";
-		if ($this->style) echo " style='{$this->style}'";
-		echo ">\n";
-
-		if ($this->buttons_at_top) {
-			echo "<tr>\n";
-			echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
-			if ($this->useLinkSubmit)
-			{
-				echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
-			}
-			else
-			{
-				echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
-			}
-
-			if ($obj->get($pk) && $this->allowDelete)
-			{
-				$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
-					
-				echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
-			      value='$deleteLabel'
-			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
-			}
+		$this->layout->startUngrouped();
+		
+		if ($this->buttons_at_top && !$this->subordinate) 
+		{
+			$this->layout->startButtonLine();
+			
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
 
 			$this->drawButtons();
 
-			echo "<br/><br/></td></tr>";
+			$this->layout->endButtonLine();
 		}
 
-		if ($this->msg)
-		{
-			echo "<tr>\n <td colspan='2'><span class='error'>{$this->msg}</span</td></tr>\n";
-		}
+		$this->layout->errorBox();
 
 		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
 		{
-			echo "<tr>\n <td colspan='2'><b>* indicates required field</b></td></tr>\n";
+			$this->layout->requiredFields($this->requiredFieldsText);
 		}
 
+		$this->renderAllFields($obj);
+					
+		if (!$this->subordinate)
+		{		
+			$this->layout->startButtonLine();
+
+			$this->drawSubmitButtons($obj, $pk, $submitLabel);
+			$this->drawButtons();
+	
+			$this->layout->endButtonLine();
+		}
+
+		$this->layout->endUngrouped();
+		
+		if (!$this->subordinate)
+		{
+			echo "</form>\n";
+		}
+	}
+	
+	/*
+	 * JDG 12/17/2010 - break out from drawForm into into function 
+	 */
+	function drawSubmitButtons($obj, $pk, $submitLabel)
+	{
+		if ($this->useLinkSubmit)
+		{
+			echo "<a class='{$this->buttonCSS}' name='Submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
+		}
+		else
+		{
+			echo "<input type='submit' class='{$this->buttonCSS}' name='Submit' value='$submitLabel' ondblclick='return false;'/>";
+		}
+
+		if ($obj->get($pk) && $this->allowDelete)
+		{
+			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
+				
+			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
+		      value='$deleteLabel'
+		      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
+		}	
+	}
+	
+	function renderAllFields($obj)
+	{
+		$this->renderedFields = array();
+		
+		if($this->additional_at_top)
+			$this->renderAdditionalFields($obj);	
+		$this->renderFields($obj);
+		if(!$this->additional_at_top)
+			$this->renderAdditionalFields($obj);		
+	}
+	
+	/*
+	 * JDG 9/14/2010
+	 * Break out this function to facilitate inheritence 
+	 * when fields needs custom layout.
+	 */
+	function renderFields($obj)
+	{
 		$filter = $obj->getFilter();
+		
+		if (count($this->groups) > 0)
+		{
+			$this->layout->endUngrouped();
+			
+			foreach($this->groups as $legend => $fields)
+			{
+				$collapsible = array_key_exists($legend, $this->collapsibleGroups);
+				if ($collapsible)
+				{
+					$cf = $this->collapsibleGroups[$legend];
+					$collapsed = !$this->data->$cf;
+				}
+				
+				$this->layout->startGroup($legend, $collapsible, $collapsed);
+				
+				foreach($fields as $field)
+				{
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+					{
+						$this->renderOneField($field);
+					}					
+				}
+				
+				$this->layout->endGroup();
+			}
+			
+			$this->layout->startUngrouped();
+			
+		}
 		
 		foreach(array_keys($this->fields) as $field)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) && !($filter && $filter->isExcluded($field)))
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
-				$renderer = $this->getRenderer($field);
-				if ($renderer)
-				{
-					if ($this->readonly[$field])
-					{
-						$renderer->renderReadOnly($field);
-					}
-					else
-					{
-						$renderer->renderField($field);
-					}
-				}
+				$this->renderOneField($field);
 			}
 		}
+	}
 
-		foreach($this->additional as $r)
+	/*
+	 * JDG 1/2012 - add handling of field that
+	 * is an additional field
+	 */
+	function renderOneField($field)
+	{
+		$renderer = $this->getRenderer($field);
+		
+		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
 		{
-			$renderer = $r['renderer'];
-			$field = $r['field'];
-
+			foreach($this->additional as $r)
+			{
+				$renderer = $r['renderer'];
+				$field = $r['field'];
+				if(!$field)
+					$field = $renderer->field;
+			}
+		}
+			
+		if ($renderer)
+		{
 			if ($this->readonly[$field])
 			{
 				$renderer->renderReadOnly($field);
@@ -647,32 +981,37 @@ class AutoForm
 			{
 				$renderer->renderField($field);
 			}
+			
+			$this->renderedFields[$field] = true;
 		}
-
-		echo "<tr>\n";
-		echo "<td colspan='2' class='submit' style='text-align: {$this->buttonAlignment}'><br/>";
-		if ($this->useLinkSubmit)
+	}
+	
+	/*
+	 * JDG 12/17/2010 - break out into function to allow option
+	 * to render additional fields at the top.
+	 */
+	function renderAdditionalFields($obj)
+	{
+		foreach($this->additional as $r)
 		{
-			echo "<a class='{$this->buttonCSS}' name='submit' onclick='if (onSubmit{$this->id}(document.forms.{$this->id})) return document.forms.{$this->id}.submit(); else return false;'>$submitLabel</a>";
-		}
-		else
-		{
-			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
-		}
-
-		if ($obj->get($pk) && $this->allowDelete)
-		{
-			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
-
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
-			      value='$deleteLabel'
-			      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
-		}
-
-		$this->drawButtons();
-
-		echo "</td>";
-		echo "</table>\n</form>\n";
+			$renderer = $r['renderer'];
+			// JDG 5/24/11 - fix get field name
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+		
+			if(array_key_exists($field, $this->renderedFields))
+				continue;
+					
+			if ($this->readonly[$field])
+			{
+				$renderer->renderReadOnly($field);
+			}
+			else
+			{
+				$renderer->renderField($field);
+			}
+		}		
 	}
 
 	/**
@@ -683,13 +1022,15 @@ class AutoForm
 	{
 		foreach($this->buttons as $button)
 		{
+			$url = ($button['isScript']) ? $button['url'] : "go('{$button['url']}');";
+			
 			if ($button['confirm'])
 			{
-				$link = "if (confirm('".jsSafe($button['confirm'])."')) go('{$button['url']}'); return false;";
+				$link = "if (confirm('".jsSafe($button['confirm'])."')) $url; return false;";
 			}
 			else
 			{
-				$link = "go('{$button['url']}'); return false;";
+				$link = "$url; return false;";
 			}
 
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' class='{$this->buttonCSS}' onclick=\"$link\" value=\"{$button['text']}\"/>";
@@ -712,9 +1053,11 @@ class AutoForm
 		$pk = $obj->getPrimaryKey();
 		$filter = $obj->getFilter();
 		
-		foreach(array_keys($obj->fields) as $field)
+		$fields = $obj->getFields();
+		foreach(array_keys($fields) as $field)
 		{
-			if ($field != $pk && $obj->$field != "" && !array_key_exists($field, $this->hidden) &&
+			$val = $obj->get($field);
+			if ($field != $pk && $obj->get($field) != "" && !array_key_exists($field, $this->hidden) &&
 			!($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
@@ -801,9 +1144,11 @@ class AutoForm
 	{
 		$this->patchUpReferences();
 
-		$obj =& $this->data;
+		$this->configureValidators();
 
+		$obj =& $this->data;
 		$obj->fromPOST();
+		
 		$filter = $obj->getFilter();
 		$pk = $obj->getPrimaryKey();
 		
@@ -828,6 +1173,25 @@ class AutoForm
 		$this->msg = $this->validator->validate();
 		if ($this->msg != "") return false;
 
+		$this->preProcessFields($pk, $filter);
+	
+		$obj->save();
+
+		$this->postProcessFields($pk, $filter);
+		
+		// onComplete event is fired once all processing has been completed
+
+		if ($this->onSaveComplete)
+		{
+			$onComplete = $this->onSaveComplete;
+			$onComplete($this);
+		}
+
+		return true;
+	}
+
+	function preProcessFields($pk, $filter)
+	{
 		foreach (array_keys($this->fields) as $field)
 		{
 			if ($field != $pk  && !array_key_exists($field, $this->hidden) &&
@@ -840,7 +1204,7 @@ class AutoForm
 				}
 			}
 		}
-
+		
 		foreach($this->additional as $r)
 		{
 			$renderer = $r['renderer'];
@@ -848,10 +1212,10 @@ class AutoForm
 
 			$renderer->preProcess($field);
 		}
-
-
-		$obj->save();
-
+	}
+	
+	function postProcessFields($pk, $filter)
+	{
 		foreach (array_keys($this->fields) as $field)
 		{
 			if ($field != $pk  && !array_key_exists($field, $this->hidden) &&
@@ -872,18 +1236,8 @@ class AutoForm
 
 			$renderer->postProcess($field);
 		}
-
-		// onComplete event is fired once all processing has been completed
-
-		if ($this->onSaveComplete)
-		{
-			$onComplete = $this->onSaveComplete;
-			$onComplete($this);
-		}
-
-		return true;
 	}
-
+	
 	function remove(&$obj)
 	{
 		$obj->delete();

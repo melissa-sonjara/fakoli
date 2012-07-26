@@ -1,0 +1,38 @@
+@CHARSET "ISO-8859-1";
+
+
+.context_link
+{
+	color: #718A14 !important;
+	border: none !important;
+	outline: none;
+}
+
+.context_link:hover
+{
+	text-decoration: underline !important;
+}
+
+div.contexthelp
+{
+	position: absolute;
+	max-width: 600px;
+	border: solid 1px #000;
+	background-color: #ffffcc;
+	white-space: normal;
+	margin: 4px;
+	padding: 4px;
+	font-size: 8pt;
+	z-index: 120;
+	display: none;
+	font-weight: normal;
+}
+	
+
+div.contexthelp p
+{
+	font-size: 8pt;
+	border-bottom: solid 1px #000;
+	margin-bottom: 12px;
+	color: #000 !important;
+}

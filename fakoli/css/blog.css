@@ -1,0 +1,57 @@
+@CHARSET "ISO-8859-1";
+
+.Standard
+{
+	list-style: none;
+	margin-right: 40px;
+}
+
+.Standard li
+{
+	margin-bottom: 15px;
+/*
+	border-bottom: solid 1px #ccc;
+*/
+	padding-bottom: 5px;
+}
+
+.Standard a, .Standard a:link, .Standard a:visited
+{
+	color: #000;
+}
+
+.Standard a:hover, .Standard a:active
+{
+	text-decoration: underline;
+}
+
+.Standard img
+{
+	margin: 5px;
+	border: solid 1px #666;
+}
+
+.Standard .article_summary
+{
+}
+
+.Standard h4
+{
+	color: #333;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 13px;
+}
+
+.recent_articles
+{
+	list-style: none;
+	padding-left: 0;
+}
+
+.recent_articles a
+{
+	font-size: 10px;
+	font-weight: normal;
+}
+

@@ -1,0 +1,25 @@
+@CHARSET "ISO-8859-1";
+
+.feedback
+{
+	background-color: #cfc;
+	font-weight: bold;
+}
+
+.prototype_page
+{
+	background-color: #ccf;
+	font-weight: bold;
+}
+
+.image_action
+{
+	background-color: #eee;
+	color: #aaa;
+}
+
+.action
+{
+	background-color: #eee;
+	color: #338;
+}

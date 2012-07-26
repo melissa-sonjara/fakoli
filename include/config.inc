@@ -4,22 +4,22 @@
  */
 $config = array(
 
-	"sitename"		=> "Sonjara CMS Website",
-	"homedir"		=> "C:/code/cms.sonjara.com",
-	"uploadbase"	=> "C:/uploads/cms.sonjara.com",
+	"sitename"		=> "New Sonjara Website",
+	"homedir"		=> "/srv/www/vhosts/v2.sonjara.com",
+	"uploadbase"	=> "/srv/www/vhosts/v2.sonjara.com",
 	"uploaddir" 	=> "documents", 			/* Directory for uploads */
 	"tmp"			=> "/tmp",					/* Scratch Directory */
-	"email_from" 	=> "andy@sonjara.com", 		/* From address for generated emails */
-    "http_host"		=> "cms",		/* URL for this server */
+	"email_from" 	=> "sonja@sonjara.com", 		/* From address for generated emails */
+    "http_host"		=> "v2.sonjara.com",		/* URL for this server */
 
-    "email_contact" => "andy@sonjara.com", 		/* Email Address for contact */
-    "email_name" 	=> "Andy Green", 			/* Name of contact */
+    "email_contact" => "Sonja@sonjara.com", 		/* Email Address for contact */
+    "email_name" 	=> "Sonja Hubbard", 			/* Name of contact */
     
     "trace_path"	=> "/share/cms_trace.log",	/* File path to trace output log */
     "trace_level"	=> 3,						/* Debugging trace level (0-5) */
 	"trace_detail"	=>	TraceDetailHigh,		/* Detail level for trace output */
 
-	"admin_templates_dir"	=>	"C:/code/cms.sonjara.com/cms/admin/templates",
+	"admin_templates_dir"	=>	"C:/code/cms/cms/admin/templates",
 
 	// Application specific settings
 	"latest_addition_count"	=>	3,
@@ -33,58 +33,14 @@ $auto_form_defaults = array(
 
 	"labelCSS"	=>	"label",
 	"buttonCSS"	=>	"button",
-	"componentPath"	=> "/framework"
+	"componentPath"	=> "/fakoli",
+	"markRequiredFields"		=>	true
 );
 
-
-$admin_menu = array(
-
-"Web Site Content"	=> array(
-
-		"Sites"			=>	array("page"	=>	"/cms/admin/sites.php",
-								  "role"	=>	"admin"),
-
-		"Pages"			=>	array("page"	=>	"/cms/admin/pages.php",
-								  "role"	=>	"admin"),
-	
-		"Menus"			=>	array("page"	=>	"/cms/admin/menus.php",
-								  "role"	=>	"admin"),
-
-		"Images"		=>	array("page"	=>	"/cms/admin/images.php",
-								  "role"	=>	"admin"),
-									  
-		"Articles"		=>	array("page"	=>	"/cms/admin/news_items.php",
-								  "role"	=>	"admin"),
-									  
-		"Documents"		=>	array("page"	=>	"/cms/admin/publications.php",
-								  "role"	=>	"admin"),
-
-		"Modules"		=>	array("page"	=>	"/cms/admin/modules.php",
-								  "role"	=>	"admin")),
-
-	
-	"Classification"	=> array(
-
-		"Groups"			=>	array("page"	=>	"/cms/admin/grps.php",
-									  "role"	=>	"admin"),
-
-		"Topics"			=>	array("page"	=>	"/cms/admin/topics.php",
-									  "role"	=>	"admin")),
-
-								  							  
-	"User Management"	=>	array(
-
-		"Users"				=>	array("page"	=>	"/cms/admin/users.php",
-									  "role"	=>	"admin")),
-	
-							  							  
-	"Public Site"		=>	array(
-		"Home page"			=>	array("page"	=>	"/"))
-);
 
 require_once realpath(dirname(__FILE__))."/connection.inc";
 require_once realpath(dirname(__FILE__))."/defaults.inc";
-require_once realpath(dirname(__FILE__))."/../framework/functions.inc";
+require_once "framework/functions.inc";
 
 /**
  * Pull out a simple reference to the request method

@@ -54,15 +54,23 @@ class FileUploadFieldRenderer extends FieldRenderer
 		$this->handler = $handler;
 		$this->field = $field;
 		
-		$form->override($field, $label, $this);
-		
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;		
+		}
+				
 		$size = 40;
 	}
 	
 	function renderField($field)
 	{
 		$this->_startField($field);
-		echo "<input type='file' name='$field' value='".$this->parent->data->get($field)."' size='{$this->size}'>";
+		echo "<input id='{$this->parent->id}_{$field}' type='file' name='$field' value='".$this->parent->data->get($field)."' size='{$this->size}'>";
 		$this->_endField($field);
 	}
 	
@@ -78,8 +86,7 @@ class FileUploadFieldRenderer extends FieldRenderer
 	
 	function preProcess($field)
 	{
-		$handler = $this->handler;
-		$handler($field, $this->parent->data);
+		call_user_func($this->handler, $field, $this->parent->data);
 	}
 
 	function required($message = "")

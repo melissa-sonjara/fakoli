@@ -74,6 +74,8 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $addEntryText;
 	var $grouped;
 	var $addEntrySize= 20;
+	var $width;
+	var $height;
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -111,18 +113,55 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	function allowAddEntry($text = "or add new", $size)
+	function allowAddEntry($text = "or add new", $size = 40)
 	{
 		$this->addEntry = true;
 		$this->addEntryText = $text;
 		$this->addEntrySize = $size;
 	}
 	
+	function setSize($width, $height, $scrollAfter = 0)
+	{
+		$this->width = $width;
+		$this->height = $height;
+		$this->scrollAfter = $scrollAfter;
+	}
+
+	function getOptionCount()
+	{
+		if (!$this->grouped) return count($this->options);
+		
+		$count = 0;
+		
+		foreach($this->options as $groupName => $group);
+		{
+			$count += count($group) + 1;
+		}
+		
+		return $count;
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
 		
-		$values = explode(",", $this->parent->data->get($field));
+		$rawValue = $this->parent->data->get($field);
+		if (is_array($rawValue))
+		{
+			$this->preProcess($field);
+			$rawValue = $this->parent->data->get($field);
+		}
+		
+		$values = explode(",", $rawValue);		
+				
+		$divider = $this->horizontal ? " " : "<br/>";
+		
+		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
+		{
+			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+		}
+		
+		$idx = 0;
 		
 		if ($this->grouped)
 		{
@@ -134,7 +173,8 @@ class CheckListFieldRenderer extends FieldRenderer
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					
-					echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='$value'$checked/>&nbsp;$text<br/>";
+					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					$idx++;
 				}
 				
 				echo "</dd>";
@@ -148,7 +188,8 @@ class CheckListFieldRenderer extends FieldRenderer
 				foreach($this->options as $value => $text)
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
-					echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='$value'$checked/>&nbsp;$text<br/>";
+					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					$idx++;
 				}
 
 				if($this->addEntry)
@@ -173,7 +214,13 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 		
 		// Save this count to loop through checkboxes on required validation
-		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".count($this->options)."\">";		
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".$idx."\">";		
+		
+			
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
 		
 		$this->_endField($field);
 	}
@@ -186,32 +233,95 @@ class CheckListFieldRenderer extends FieldRenderer
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
 		
-		//TODO: Output read-only
+		$value = $this->parent->data->get($field);
+		
+		// JDG 3/12 - show option value, if found, instead of key
+		$items = explode(",", $value);
+	
+		foreach($items as $item)
+		{
+			$answers[] = array_key_exists($item, $this->options) ? $this->options[$item] : $item;
+		}
+		
+		$value = implode(", ", $answers);
+		
+		echo $value;
 		
 		echo "</td></tr>\n";
 	}
 
+	/*
+	 * Only implemented for ungrouped option set
+	 */
+	function renderSearchField($field, $mode)
+	{
+		$this->_startField($field);
+		
+		$rawValue = $this->parent->params->get($field, $mode);
+		
+		if (is_array($rawValue))
+		{
+			$rawValue = implode(",", array_values($rawValue));
+			$this->parent->params->set($field, $mode, $rawValue);
+		}
+		
+		$values = explode(",", $rawValue);		
+				
+		$divider = $this->horizontal ? " " : "<br/>";
+		
+		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
+		{
+			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+		}
+		
+		$idx = 0;
+
+		if(count($this->options) > 0)
+		{
+			foreach($this->options as $value => $text)
+			{
+				$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
+				$idx++;
+			}
+		}
+				
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+		
+		$this->_endField($field);
+	}
+
 	function preProcess($field)
 	{		
-		if (is_array($_POST[$field]))
+		$value = ($this->parent->method == "POST") ? $_POST[$field] : $_GET[$field];
+		$addEntry = ($this->parent->method == "POST") ? $_POST["{$field}_addEntry"] : $_GET["{$field}_addEntry"];
+		
+		if (is_array($value))
 		{
-			$this->parent->data->set($field, implode(",",  array_values($_POST[$field])));
+			$this->parent->data->set($field, implode(",",  array_values($value)));
+		}
+		else if (!$value)
+		{
+			$this->parent->data->set($field, "");
 		}
 		else
 		{
-			$this->parent->data->set($field, $_POST[$field]);
+			$this->parent->data->set($field, $value);
 		}
 		
-		trace("addEntry($field): ".$_POST["{$field}_addEntry"], 3);
+		trace("addEntry($field): $addEntry", 3);
 		
-		if ($_POST["{$field}_addEntry"])
+		if ($addEntry)
 		{
 			if($this->parent->data->get($field))
 			{
 				$this->parent->data->set($field, $this->parent->data->get($field) . ",");
 			}
 			
-			$this->parent->data->set($field, $this->parent->data->get($field) . $_POST["{$field}_addEntry"]);
+			$this->parent->data->set($field, $this->parent->data->get($field) . $addEntry);
 		}
 	}
 	

@@ -59,8 +59,26 @@ class DataListView
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
+	var $totalCallbacks;///< Array of callbacks for totalling columns
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
 	var $excelFile;		///< Filename for automatic Excel export
+	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
+	var $summary;		  ///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
+	var $zebra;			///< Specifies whether alternate rows in the table should be striped
+	// Scrolling Table parameters
+	
+	var $height;
+	var $scrollable = false;
+	var $resizable  = true;
+	var $rowId = false;			///< whether to include an id tag for each tr row
+	var $dragReorder = false; 	///< Enabled drag & drop reordering
+	var $reorderHandler = null;	///< Handler script that implements reordering records
+	var $dragText = "";			///< Optional text to display above reorderable table
+	// Selection and Commands
+	
+	var $selectable  = false;	///< Whether the table provides a selection mechanism
+	var $menu = null;			///< Context menu for selection-based operations
+	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	
 	/**
 	 * Creates a new DataListView object.
@@ -84,24 +102,94 @@ class DataListView
 		$this->emptyMessage = "No matching items.";
 		$this->onStartRow = null;
 		$this->excelFile = null;
+		$this->summary = null;
+		$this->zebra = true;
+		$this->totalCallbacks = array();
 		
 		return $this;
 	}
 
+	function scrollable($height = 300, $resizable = true)
+	{
+		$this->scrollable = true;
+		$this->height = $height;
+		$this->resizable = $resizable;
+	}
+	
+	/**
+	 * Turns on drag & drop item reordering for the table. This feature
+	 * disables sorting, paging and filtering for the table.
+	 * 
+	 * @param string $handler URL of the handler script that processes the item reordering
+	 */
+	function enableDragReorder($handler)
+	{
+		$this->sortable = false;
+		$this->filter = false;
+		$this->pageSize = 0;
+		$this->paginate = false;
+		$this->dragReorder = true;
+		$this->rowId = true;
+		$this->zebra = false;
+		
+		$this->reorderHandler = $handler;
+	}
+	
 	/**
 	 * Adds a column definition to the DataListView.
 	 * @param $title the tilte of the column
-	 * @param $format the formatter for the column, either as a formatting string or callback function
+	 * @param $format the formatter for the column, either as a formatting string or callback function.
+	 * (For details on format template specifications, see comments above class DataItem function format.)
 	 * @param $sortable whether this column is sortable
 	 * @param $style any inline styles specific to this column
+	 * @param $typeHint hint for cell type to use when exporting to Excel
+	 * @param $onExport optional callback function to format value for Excel
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function column($title, $format, $sortable = false, $style = null)
+	function column($title, $format, $sortable = false, $style = null, $typeHint = null, $onExport = null)
 	{
-		$this->columns[] = new DataColumn($title, $format, $sortable, $style);
+		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint, $onExport);
 		return $this;
 	}
 
+	/**
+	 * Adds a selector column to the DataListView. If no format is specified
+	 * then selection is handled via a checklist box for the list objects' primary keys.
+	 * @param $format (optional) format to use for the selector
+	 */ 
+	function selector($format = "")
+	{
+		if (!$format && count($this->items))
+		{
+			$pk = $this->items[0]->primary_key;
+			$format = "<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+		}
+				
+		if($format == "radio" && count($this->items) ){
+			$pk = $this->items[0]->primary_key;
+			$format = "<input type='radio' class='radio' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'/>";
+		}	
+		
+		$this->column("&nbsp;", $format, false, "text-align: center");
+		$this->selectable = true;
+		return $this; 
+	}
+	
+	function formatRowId($item)
+	{
+		$pk = $item->getPrimaryKey();
+		return "{$pk}_" . $item->$pk;
+	}	
+	
+	function commandMenu()
+	{
+		$this->menu = new ContextMenu($this->id . "_menu", "#{$this->id}_menu_button");
+		$this->menu->trigger = "click";
+		$this->menu->position = "element";
+		
+		return $this->menu;
+	}
+	
 	/**
 	 * Adds a text column to the table footer.
 	 * @param $text the text to display
@@ -125,6 +213,22 @@ class DataListView
 	function footerValue($callback, $style = "", $colspan = 1)
 	{
 		$this->footerColumns[] = new FooterValueColumn($callback, $style, $colspan);
+		return $this;
+	}
+	
+	/**
+	 * Sums the total for a column
+	 * @param $field the field to total in the format "{field}"
+	 * @param $style any CSS classes or inline styles to apply
+	 * @param $colspan the colspan for the column
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function footerTotal($field, $style = "text-align: right", $colspan = 1)
+	{
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$this->footerColumns[] = $column;
+		$this->totalCallbacks[] = array($column, onStartRow);
+		
 		return $this;
 	}
 	
@@ -170,7 +274,7 @@ class DataListView
 	{
 		$this->setID(); // Set to a default ID if none was specified.
 		
-		if ($this->excelFile && $_GET["__excel"] == $this->id)
+		if ($this->excelFile && $_REQUEST["__excel"] == $this->id)
 		{
 			$this->writeExcelFile($this->excelFile);	
 		}
@@ -178,17 +282,18 @@ class DataListView
 		if (count($this->items) == 0) return;
 		
 		$script = 
-		"\t<script type='text/javascript' src='/framework/js/sorting_table.js'></script>\n".
-	   	"\t<script type='text/javascript' src='/framework/js/paginating_table.js'></script>\n".  
-		"\t<script type='text/javascript' src='/framework/js/filtering_table.js'></script>\n";
+		"\t<script type='text/javascript' src='/fakoli/js/sorting_table.js'></script>\n".
+	   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".  
+		"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n".
+		"\t<script type='text/javascript' src='/fakoli/js/scrolling_table.js'></script>\n";
 		
 		$constructor = "";
-		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter)
+		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter && !$this->dragReorder)
 		{
 			return "";
 		}
 		
-		if ($this->pageSize > 0)
+		if ($this->pageSize > 0 AND $this->paginate)
 		{
 			$constructor = "\n\t\tvar {$this->id}_paginator = new PaginatingTable('{$this->id}', '{$this->id}_paginator', {per_page: {$this->pageSize}});";
 		}
@@ -208,16 +313,35 @@ class DataListView
 
 		if ($this->sortable)
 		{
-			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter});";
+			$zebra = $this->zebra ? "true" : "false";
+			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter, zebra: $zebra});";
 		}
 		
-		if ($constructor)
+		if ($this->selectable)
+		{
+			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
+		}
+
+		if ($this->scrollable) 
+		{
+			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
+		}
+		
+		if ($constructor || $this->dragReorder)
 		{
 			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
 			$script .= $constructor;
+			
+			if ($this->dragReorder)
+			{
+				$script .= "\n\t\tnew DraggableTable('#{$this->id} tbody', '{$this->reorderHandler}', '{$this->items[0]->primary_key}');";
+			}
+			
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
+		
+		if ($this->menu) $script .= $this->menu->writeScript();
 		return $script;
 	}
 	
@@ -239,6 +363,8 @@ class DataListView
 			{
 				$attrs .= " class='{$this->cssClass}";
 				if ($this->sortable) $attrs .=" sortable";
+				if ($this->scrollable) $attrs.= " scroll";
+				if ($this->dragReorder) $attrs .= " reorder";
 				$attrs .= "'";
 			}
 			
@@ -247,6 +373,11 @@ class DataListView
 				$attrs .= " style='{$this->cssStyle}'";
 			}
 
+			if ($this->summary)
+			{
+				$attrs .= " summary='".htmlSafe($this->summary)."'";
+			}
+			
 			/* 
 			 * JDG 6/15/2010 - if the cssStyle has a width setting, either px or
 			 * &, apply that width style to the filter and paginator to avoid 
@@ -258,12 +389,39 @@ class DataListView
 		
 ?>			
 		<div style="width: <?echo $width ?>">
-		<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
-		<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div></div>
-		<table<?echo $attrs?>>
+		<?php 
+		if($this->pageSize)
+		{
+			?>
+			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
+			<?php
+		}
+		
+		if($this->filter)
+		{
+		?>
+			<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div>
+		<?php 
+		}
+		
+		if ($this->dragReorder)
+		{
+			echo $this->dragText;
+		}
+		?>
+		</div>
+		
+		<?php
+			if ($this->scrollable)
+			{	
+				$tbodyAttrs = " style='height: ".($this->height - 24)."px'";
+				echo "<div class='scrollContainer' style='height: {$this->height}px'>";
+			}			
+		?>
+		<table border="0" cellpadding="0" cellspacing="0"<?echo $attrs?>>
 		 <thead>
 		  <tr>
-<?
+<?php
 			$first = true;
 			
 			foreach($this->columns as $column)
@@ -280,17 +438,39 @@ class DataListView
 				{
 					$attrs .= " class='$cssClass'";
 				}
+				
+				if (preg_match("/^\\width:.*?\\d{1,3}px|width:.*?\\d{1,3}%/", $column->style, $matches))
+				{
+					$attrs .= " style='{$matches[0]}'";
+				} 
 ?>
 			<th<?echo $attrs?>>
-<?
-				if ($this->excelFile && $first)
+<?php
+			
+				if ($first)
 				{
-					$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+					if ($this->excelFile)
+					{	
+						$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+					}
+
+					if ($this->excelFile && !$this->menu)
+					{
 ?>
-		<a href='<?echo $qs?>' style="float: left"><img src="/framework/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
-<?			
+		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+<?									
+					}
+					else if ($this->menu)
+					{
+						if ($this->excelFile)
+						{
+							$this->menu->command($this->id."_excel", "Save as Excel...", $_SERVER['REQUEST_URI']."$qs", "/fakoli/images/msexcel_icon_small.png");
+						}
+?>
+		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
+<?									
+					}
 				}
-				
 				$first = false;
 ?>
 <?echo $column->title?></th>
@@ -299,17 +479,28 @@ class DataListView
 ?>
 		  </tr>	
 		 </thead>
-		 <tbody>
+		 <tbody<?echo $tbodyAttrs?>>
 <?
 			foreach($this->items as $item)
 			{
+				$cl = "";
+				if($this->rowId)
+					$rowId = $this->formatRowId($item);
+					
 				if ($this->onStartRow)
 				{
-					call_user_func($this->onStartRow, $item);
+					$retval = call_user_func($this->onStartRow, $item);
+					if ($retval === false) continue; // return false to indicate row should be skipped
+					if ($retval) $cl = " class='$retval'"; // return a string to indicate a css class for the row
+				}
+				
+				foreach($this->totalCallbacks as $cb)
+				{
+					call_user_func($cb, $item);
 				}
 ?>
-          <tr>
-<?
+          <tr id='<?php echo $rowId ?>' <?php echo $cl?>>
+<?php
 				foreach($this->columns as $column)
 				{
 					$attrs = "";
@@ -330,15 +521,15 @@ class DataListView
 					}
 ?>
 		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
-<?
+<?php
 				}
 ?>
 		  </tr>
-<?
+<?php
 			}
 ?>
 		</tbody>
-<?
+<?php
 			if ($this->onDrawFooter) call_user_func($this->onDrawFooter);
 			
 			if (count($this->footerColumns) > 0)
@@ -346,7 +537,7 @@ class DataListView
 ?>
 		<tfoot>
 		  <tr>		
-<?
+<?php
 				foreach($this->footerColumns as $column)
 				{
 					$attrs = "";
@@ -369,16 +560,19 @@ class DataListView
 					}
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
-<?
+<?php
 				}
 ?>
 		  </tr>
 		</tfoot>	
-<?
+<?php
 			}
 ?>  		
 		</table>
-<?
+<?php
+			if ($this->scrollable) echo "</div>";
+			
+			if ($this->menu) echo $this->menu->writeMenu();
 		}
 		else
 		{
@@ -395,12 +589,12 @@ class DataListView
 	 */
 	function writeExcelFile($file)
 	{
-		$x = new ExcelFile($file);
+		$x = ExcelFileWriter::create($file);
 		
 		$c = 0;
 		foreach($this->columns as $column)
 		{
-			$x->writeText(0, $c, $column->title);
+			$x->writeText(0, $c, stripHTML($column->title));
 			++$c;
 		}
 		
@@ -410,23 +604,48 @@ class DataListView
 			$c = 0;
 			if ($this->onStartRow)
 			{
-				call_user_func($this->onStartRow, $item);
+				$retval = call_user_func($this->onStartRow, $item);
+				if ($retval === false) continue;
 			}
 						
 			foreach($this->columns as $column)
 			{
-				$val = $column->format($item);
-				
-				/* JDG 5/11/10 currency export fix */
-				if (preg_match("/^[\\d\\,\\.]+$/", $val))
-				{
-					$val = str_replace(",", "", $val);
-					$x->writeNumber($r, $c, $val);
-				}
+				if($column->onExport)
+					$val = call_user_func($column->onExport, $item, $column);
 				else
+					$val = $column->format($item);
+				
+				switch($column->typeHint)
 				{
-					// No HTML required in Excel output
+				case String:
+
 					$x->writeText($r, $c, stripHTML($val));
+					break;
+					
+				case Number:
+					
+					$x->writeNumber($r, $c, $val);
+					break;
+					
+				case Currency:
+					
+					$val = str_replace(array("$", ","), array("", ""), $val);
+					$x->writeNumber($r, $c, $val);
+					break;
+					
+				default:
+					
+					/* JDG 5/11/10 currency export fix */
+					if (preg_match("/^[\\d\\,\\.\\$]+$/", $val))
+					{
+						$val = str_replace(array("$", ","), array("", ""), $val);
+						$x->writeNumber($r, $c, $val);
+					}
+					else
+					{
+						// No HTML required in Excel output
+						$x->writeText($r, $c, stripHTML($val));
+					}
 				}
 				
 				++$c;
@@ -457,7 +676,7 @@ class DataListView
 		}
 				
 		$x->send();
-		die();
+		ajaxReturn();
 	}
 }
 ?>

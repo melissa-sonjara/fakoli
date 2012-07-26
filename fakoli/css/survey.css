@@ -1,0 +1,558 @@
+@CHARSET "ISO-8859-1";
+
+/*
+light blue:  #A9CDED
+dark blue:#2B388F
+light gray:  #E0E0E0
+*/ /* Survey Top Navigation sections */
+#survey_topnav {
+	float: left;
+	width: 100%;
+	background: none;
+	margin-left: 18px;
+	margin-right: 20px;
+	padding-top: 20px;
+	padding-bottom: 16px;
+}
+
+#survey_topnav ul #manage_survey ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#survey_topnav ul li {
+	display: inline-block;
+	float: left;
+	font: normal 14px Arial;
+	text-align: center;
+	vertical-align: middle;
+	color: #fff;
+	margin-left: 1px;
+	margin-right: 1px;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-left: 1px;
+	padding-right: 1px;
+	height: 60px;
+	width: 175px;
+}
+
+#survey_topnav ul li a:link {
+	color: #002A6C;
+	text-decoration: none;
+	overflow: auto; /*force hasLayout in IE7 */
+}
+
+#survey_topnav ul li a:active,#survey_topnav ul li a:hover {
+	display: inline-block;
+}
+
+#survey_topnav img {
+	padding: 0px;
+	border: medium none;
+}
+
+/* Holy Hack for IE \*/
+* html #survey_topnav ul li {
+	float: left;
+	height: 1%;
+}
+
+* html #survey_topnav ul li a {
+	height: 1%;
+}
+
+/* End */ /* end survey top navigation */
+div#survey_tree {
+	width: 700px;
+}
+
+#survey_tree .tree .status_block {
+	width: 700px;
+	border-left: solid 1px #999999 !important;
+	border-bottom: solid 1px #999999 !important;
+	border-right: solid 1px #999999 !important;
+	border-top: solid 1px #999999 !important;
+	margin-bottom: 4px;
+	margin-left: 2px;
+	margin-right: 2px;
+	display: table-cell;
+	padding-left: 5px;
+	font-size: 12px;
+}
+
+#survey_tree .tree .status_block table.list th {
+	background-color: #999999 !important;
+}
+
+#survey_tree .tree .status_block td {
+	border: none !important;
+}
+
+#survey_tree .tree .status_block a,a:link {
+	text-decoration: none;
+}
+
+#survey_tree .status_block button {
+	width: 185px;
+}
+
+#survey_tree .tree .status_block a.button {
+	font-weight: normal;
+	color: #000;
+	background: #A9CDED;
+	border: solid 1px #888 !important;
+	display: block;
+	padding: 2px;
+	text-decoration: none;
+	width: 170px;
+}
+
+#survey_tree .tree .status_block a.button:hover {
+	background: #2B388F;
+	color: #FFFFFF; /* white */
+	border: solid 1px #000;
+}
+
+#survey_tree .tree .status_block table.tree div.scroll {
+	border: 1px solid #000000;
+	height: 200px;
+	overflow: auto;
+	padding: 2px;
+	width: auto;
+}
+
+#survey_tree .tree .status_block img {
+	vertical-align: middle;
+	border: none;
+}
+
+/** Div based table layout for status fragments **/
+#survey_tree .tree .status_block #col2 {
+	float: right;
+	background-color: #fff;
+	width: 25%;
+	height: auto;
+	z-index: 2;
+	margin-right: 5px;
+	padding-right: 10px;
+}
+
+/* If these need to be overridden, put them inside a survey-specific div 
+
+#tabs {
+	width: 100%;
+	background: #ffffff;
+	font-size: 12px;
+	line-height: 18px;
+	text-align: center;
+	clear: left;
+	padding-top: 12px;
+}
+
+#tabs ul {
+	margin: 0;
+	padding: 0;
+	padding-top: 2px;
+	list-style: none;
+	text-align: center;
+	height: 24px;
+}
+
+#tabs li {
+	float: left;
+	background: url(/templates/images/tab_left.gif) no-repeat left top;
+	margin: 0;
+	padding: 0;
+	padding-left: 10px;
+	font-size: 9pt;
+	text-align: center;
+	color: #000000;
+}
+
+#tabs a {
+	float: left;
+	display: block;
+	background: url(/templates/images/tab_right.gif) no-repeat right top;
+	padding: 3px 15px 3px 3px;
+	text-decoration: none;
+	font-weight: bold;
+	outline: none;
+	border: none !important;
+}
+
+/* Commented Backslash Hack
+
+   hides rule from IE5-Mac \*/
+/*#tabs a {
+	float: none;
+}
+
+/* End IE5-Mac hack */
+/*#tabs a:link,#tabs a:visited {
+	text-decoration: none;
+	color: #000000;
+}
+
+#tabs a:hover,#tabs a:active {
+	color: #000000;
+	background-color: #2B388F;
+}
+
+#tabs a.disabled {
+	color: #000000;
+	font-weight: normal;
+}
+
+#tabs a.disabled:hover {
+	color: #000000;
+}
+
+#tabs .current {
+	color: #000000;
+	background-image: url(/templates/images/tab_left_on.gif);
+}
+
+#tabs .current a {
+	background-image: url(/templates/images/tab_right_on.gif);
+	color: #000000;
+	padding-bottom: 4px;
+}*/
+
+#subtabs {
+	background-color: #1c5892;
+	clear: left;
+	padding: 0;
+	margin: 0;
+	border-left: solid 1px #000;
+	border-top: solid 1px #000;
+	border-right: solid 1px #000;
+	text-decoration: none;
+}
+
+#subtabs ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+	background-color: #A9CDED;
+	height: 24px;
+	width: 100%;
+}
+
+#subtabs li {
+	float: left;
+	background-color: #E0E0E0;
+	border-right: solid 1px #000;
+	margin: 0;
+	padding: 0;
+	font-size: 11px;
+	text-align: center;
+	text-decoration: none;
+}
+
+#subtabs a {
+	float: left;
+	display: block;
+	background-color: #a9cded;
+	padding: 3px 15px 3px 15px;
+	font-weight: normal;
+	color: #000;
+	height: 18px;
+	outline: none;
+	border: none !important;
+}
+
+#subtabs a:hover {
+	background-color: #1c5892;
+	color: #000000;
+	text-decoration: none;
+}
+
+#subtabs li.current a,#subtabs li.current a:hover {
+	font-weight: bold;
+	background-color: #2B388F;
+	color: #ffffff;
+	text-decoration: none;
+}
+
+#subtabs a:visited {
+	text-decoration: none;
+	background-color: #E0E0E0;
+	color: #000000;
+	font-weight: normal;
+}
+
+#subtabs a:link {
+	text-decoration: none;
+	background-color: #E0E0E0;
+	color: #000000;
+}
+
+#subtabs a.disabled {
+	font-style: italic;
+}
+
+/* Manage Tab */
+#prog_bar {
+	width: 50%;
+}
+
+#prog_bar #col2 {
+	float: right;
+	background-color: #fff;
+	width: 10%;
+	height: auto;
+	z-index: 2;
+	margin-right: 5px;
+	padding-right: 10px;
+}
+
+#manage_survey {
+	text-decoration: none;
+}
+
+#manage_survey a:visited {
+	text-decoration: none;
+	font-weight: normal;
+}
+
+#manage_survey a:hover {
+	font-weight: bold;
+}
+
+#manage_survey a:link {
+	text-decoration: none;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	margin: 10px;
+	padding: 2px;
+}
+
+#manage_survey img {
+	border: none;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+/* end Manage Survey tab */ /* box border under tab bar */
+#tab_border {
+	clear: left;
+	border: solid 1px #000;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
+#inner_border {
+	border: dotted 1px #060;
+	padding: 5px;
+	margin: 10px;
+}
+
+#next_page_button {
+	float: right;
+}
+
+/* Big blue button - create your own questionnaire */
+#content a.button_lg {
+	font-weight: normal;
+	font-size: 16px;
+	color: #FFFFFF;
+	background: #191970;
+	border: solid 1px #F5FFFFA;
+	display: inline-block;
+	padding: 10px;
+	width: auto;
+	text-decoration: none;
+}
+
+#content a.button_lg:hover {
+	text-decoration: underline;
+}
+
+#datatabs {
+	background-color: #eee;
+	clear: left;
+	padding: 0;
+	margin: 0;
+	border-bottom: dotted 1px #000;
+	text-decoration: none;
+}
+
+#datatabs ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+	height: 24px;
+	width: 100%;
+}
+
+#datatabs li {
+	float: left;
+	background-color: #E0E0E0;
+	border-right: dotted 1px #000;
+	margin: 0;
+	padding: 0;
+	font-size: 11px;
+	text-align: center;
+	text-decoration: none;
+}
+
+#datatabs a {
+	float: left;
+	display: block;
+	background-color: #a9cded;
+	padding: 3px 15px 3px 15px;
+	font-weight: normal;
+	color: #000;
+	height: 18px;
+	outline: none;
+	border: none !important;
+}
+
+#datatabs a:link {
+	text-decoration: none;
+	background-color: #E0E0E0;
+	color: #000000;
+}
+
+#datatabs a:hover {
+	background-color: #A9CDED;
+	color: #000;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+#datatabs li.current a,#datatabs li.current a:hover {
+	font-weight: bold;
+	background-color: #2B388F;
+	color: #ffffff;
+	text-decoration: none;
+}
+
+#datatabs a:visited {
+	text-decoration: none;
+	background-color: #E0E0E0;
+	color: #000000;
+	font-weight: normal;
+}
+
+#datatabs a.disabled {
+	font-style: italic;
+}
+
+#survey_table table.list td a.button {
+	background-color: #EAEAEA;
+	font-weight: normal;
+	color: #000000;
+	border: solid 1px #888 !important;
+	display: inline-block;
+	width: auto;
+	padding: 4px;
+	text-decoration: none !important;
+}
+
+survey_tree table.tree {
+	margin: 10px;
+}
+
+table.survey {
+	background-color: transparent;
+	border: solid 1px #666;
+	border-collapse: collapse;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	vertical-align: top;
+	line-height: 20px
+}
+
+table.survey th {
+	background-color: #eeeeee;
+	color: #000;
+	font-weight: bold;
+	text-align: left;
+	padding: 4px;
+	border: 0;
+}
+
+table.survey td {
+	padding: 4px;
+	border: 0;
+}
+
+table.survey tr.alt {
+	background-color: transparent;
+	border: 0;
+}
+
+/* survey dashboard progress bar */
+.progress_bar {
+	width: 70%;
+	border: 1px solid #666;
+	background-color: #eeeeee;
+	height: 15px;
+}
+
+.progress_bar .progress {
+	background-color: #00CD00;
+	height: 15px;
+}
+
+table.survey div.col2 {
+	float: right;
+	background-color: #fff;
+	width: 10%;
+	height: auto;
+	z-index: 2;
+	margin-right: 5px;
+	padding-right: 10px;
+	text-align: center;
+}
+
+/* end survey progress bar */
+span.annotate {
+	font-weight: normal;
+	font-size: 8pt;
+}
+
+/* end survey dashboard progress bar */
+#right #survey_sidenav .module {
+	background: none;
+	width: auto;
+}
+
+#content .survey {
+	width: 70%;
+}
+
+/* 
+need to set fixed width so that when js shows/hides
+fields when question type changes, columns, the label 
+column doesn't change.
+*/
+td.survey_question_form_label {
+	font-weight: bold;
+	text-align: left;
+	vertical-align: top;
+	font-size: 10pt;
+	color: #ooo;
+	border-bottom: 0;
+	width: 35%;
+}
+
+#warning {
+	font-size: 10pt;
+	color: #CC0000;
+	font-weight: bold;
+	padding-left: 20px;
+	background-image: url(/fakoli/images/warning_icon.gif);
+	background-repeat: no-repeat;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

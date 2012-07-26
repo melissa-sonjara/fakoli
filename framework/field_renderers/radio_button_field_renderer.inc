@@ -43,17 +43,43 @@ class RadioButtonFieldRenderer extends FieldRenderer
 {
 	var $options;
 	var $horizontal = false;
+	var $onChange = ""; // optional callback on data input change
+	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	
 	
 	function RadioButtonFieldRenderer(&$form, $field, $label, $options)
 	{
 		$this->options = $options;
 				
 		$this->FieldRenderer($form);
-		$form->override($field, $label, $this);
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->alias($field, $label);
+		}
 	}
+
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
+		// JDG 2/2012 - changed from tree validator expects a div and does not match the rendering of this type
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredRadioButtonValidator($field, $label));
+		}
+		
+	}
+	
+	
 	function renderField($field)
 	{
+		if($this->horizontal)
+			$this->colspan = 2;
 		$this->_startField($field);
 		
 		$current = $this->parent->data->get($field);
@@ -61,9 +87,11 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($current == $value) ? " checked" : "";
+			$onchange = ($this->onChange) ? "onclick='$this->onChange(this)'" : "";
+			$disable = ($this->disable) ? "disabled='disabled'" : "";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			echo "<input style='border: none' type='radio' name='$field' value='$value'$selected>$name</option>";
+			echo "<input id='{$this->parent->id}_$field' style='border: none' type='radio' name='$field' value='$value'$selected $onchange $disable/>&nbsp;$name";
 			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
 		}
 		

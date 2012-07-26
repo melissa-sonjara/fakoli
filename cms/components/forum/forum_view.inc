@@ -31,8 +31,7 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../datamodel/forum.inc";
-require_once realpath(dirname(__FILE__))."/../../../framework/data_view.inc";
+Fakoli::usingFile("framework/data_view.inc");
 
 class ForumListView
 {
@@ -65,7 +64,7 @@ class ForumListView
 	
 	function formatTitle($item)
 	{
-		$text = "<a href='{$this->forumLink}?forum_id={$item->forum_id}'>{$item->title}</a";
+		$text = "<a href='{$this->forumLink}?forum_id={$item->forum_id}'>{$item->title}</a>";
 		if ($item->teaser)
 		{
 			$text .= "<br/><span class='small'>{$item->teaser}</span>";
@@ -80,7 +79,7 @@ class ForumListView
 		$user = $lastPost->Author();
 		
 		return "<a href='{$this->messageLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
-			   "<br/><span class='small'>by {$user->first_name} {$user->last_name} ({$lastPost->date_posted})</span>";
+			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 		
 	}
 	
@@ -103,14 +102,17 @@ class ForumDetailsView
 	var $messages;
 	var $table;
 	var $topicLink;
+	var $width;
+	var $subscriptionView;
 	
 	function ForumDetailsView($forum, $topicLink)
 	{
 		$this->forum = $forum;
 		$this->topicLink = $topicLink;
-		
-		$this->topics = $this->forum->Topics();
-		$this->messages = indexedQuery(ForumMessage, "WHERE forum_id={$forum->forum_id} AND parent_id=0", "topic_id");
+			
+		$msgTable = new ForumMessage();
+		$this->topics = $this->forum->Topics("WHERE message_id not in (select message_id from {$msgTable->table} where deleted=true)");
+		$this->messages = indexedQuery(ForumMessage, "WHERE forum_id={$forum->forum_id} AND deleted=false AND parent_id=0", "topic_id");
 		
 		$this->table = new DataListView($this->topics, "topic_list");
 		$this->table->column("Title", array($this, formatTitle), true, "width: 40%")
@@ -120,6 +122,9 @@ class ForumDetailsView
 		$this->table->emptyMessage = "No topics have been started in this discussion forum";
 		$this->table->filter = true;
 		$this->table->pageSize = 20;
+		
+		$this->subscriptionView = new ForumSubscriptionView($this->forum, $this->topics);
+		
 	}
 	
 	function formatTitle($topic)
@@ -128,7 +133,7 @@ class ForumDetailsView
 	
 		$message = $this->messages[$topic->topic_id];
 		$user = $message->Author();
-		return "<a href='{$this->topicLink}?topic_id={$topic->topic_id}'>{$message->title}</a><br/><span class='small'>(Created by {$user->first_name} {$user->last_name})</span>";
+		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$user->getFullName().")</span>";
 	}
 	
 	function formatLastPost($topic)
@@ -138,17 +143,24 @@ class ForumDetailsView
 		$user = $lastPost->Author();
 		
 		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
-			   "<br/><span class='small'>by {$user->first_name} {$user->last_name} ({$lastPost->date_posted})</span>";
+			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 	}
 	
 	function writeScript()
 	{
-		return $this->table->writeScript();
+		$script = $this->table->writeScript();
+		$script .= $this->subscriptionView->writeScript();
+		
+		return $script;
 	}
 	
 	function drawView()
-	{
+	{		
+		echo "<div style='width: {$this->width}'>";
+		$this->subscriptionView->drawLink();
 		$this->table->drawView();
+		echo "</div>";
 	}
-}
+	
+} // end class Forumview
 ?>

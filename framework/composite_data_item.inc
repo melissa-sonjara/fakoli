@@ -37,6 +37,7 @@ require_once realpath(dirname(__FILE__))."/join.inc";
 class CompositeDataItem extends AbstractDataItem
 {
 	var $__objects;
+	var $__tx = null;
 	
 	function CompositeDataItem()
 	{
@@ -81,6 +82,28 @@ class CompositeDataItem extends AbstractDataItem
 		if ($this->$class) return $this->$class;
 		
 		throw new DataItemException("Cannot cast from ".get_class($this)." to $class");
+	}
+
+	/**
+	 * Join the DataItem to the specified DataTransaction.
+	 * @param DataTransaction $tx the transaction to join
+	 */
+	function joinTransaction($tx)
+	{
+		foreach($this->__objects as $obj)
+		{
+			$obj->joinTransaction($tx);
+		}
+		
+		$this->__tx = $tx;
+	}
+	
+	/**
+	 * Retrieves the current DataTransaction.
+	 */
+	function getTransaction()
+	{
+		return $this->__tx;
 	}
 	
 	/**
@@ -447,6 +470,17 @@ class CompositeDataItem extends AbstractDataItem
 	}
 		
 	/**
+	 * Delete all the rows in the database that correspond to this class.
+	 */
+	function deleteAll()
+	{
+		for($i = 0; $i < $num; ++$i)
+		{
+			$this->__objects[$i]->deleteAll();
+		}
+	}
+	
+	/**
 	 * Retrieves the distinct values in the database for the specified field 
 	 * across the specified set of records.
 	 * @param string $field
@@ -563,6 +597,11 @@ class CompositeDataItem extends AbstractDataItem
 		return $xml;
 	}
 
+	
+	function fromXML($node)
+	{
+		//TODO: Implement this
+	}
 	
 	function format($template = "", $separator = ",")
 	{
@@ -701,7 +740,7 @@ class CompositeDataItem extends AbstractDataItem
 			
 			while($line = $result->fetch())
 			{
-				$item = new InnerJoinResult($this->tag);
+				$item = new JoinResult($this->tag);
 				
 				for($i = 0; $i < count($this->classes); ++$i)
 				{
@@ -772,7 +811,7 @@ class CompositeDataItem extends AbstractDataItem
 			
 			while($line = $result->fetch())
 			{
-				$item = new InnerJoinResult($this->tag);
+				$item = new JoinResult($this->tag);
 				
 				for($i = 0; $i < count($this->classes); ++$i)
 				{

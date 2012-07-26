@@ -55,6 +55,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $sorted;
 	var $otherField;
 	var $onChange;
+	var $width;
 	
 /**
  * Create drop down list of item names in one table based on the key
@@ -111,8 +112,6 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->templateItem = null;
 		$this->sorted = false;
 		
-		$this->getRelatedItems();
-		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
@@ -121,6 +120,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
+			// JDG 8/14/2011 - allow "additional" fields to override label
+			$form->overrides[$field]['label'] = $label;
 		}
 	}
 	
@@ -131,9 +132,13 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	}
 	
 	function renderField($field)
-	{	
+	{
+		$this->getRelatedItems();
+
+		if($this->width)
+				$style = "style='width: {$this->width}'";
 		$this->_startField($field);
-		echo "<select name='$field'";
+		echo "<select $style id='{$this->parent->id}_{$field}' name='$field'";
 		
 		if ($this->onChange)
 		{
@@ -160,9 +165,14 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		foreach($vals as $name => $value)
 		{
+
+			$name = htmlSafe($name);
+			$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 			//trace("valueField: $valueField", 3);
 			
 			echo "<option value='{$value}'";
+			
+			if ($trunced != $name) echo " title='$name'";
 			
 			/*
 			 * If this form is new and there is a default, then
@@ -174,13 +184,13 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 				echo " selected";
 			elseif (($current == NULL) AND ($value != NULL) AND ($value == $default))
 				echo " selected";
-			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
+			echo ">$trunced</option>\n";			
 		}
 		echo "</select>";
 		
 		if ($this->allowAdd)
 		{
-			echo " or add new: <input type='text' name='autoform_add_$field' value='' size='30'>";
+			echo "<span style='white-space: nowrap'> or add new: <input type='text' name='autoform_add_$field' value='' size='30'></span>";
 		}
 		else if ($this->otherField)
 		{
@@ -213,6 +223,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	{
 		if ($mode != "equal") return;
 		
+		$this->getRelatedItems();
+		
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td><select name='{$field}:$mode'>\n";
@@ -234,29 +246,17 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	}
 	
 	function renderReadOnly($field)
-	{		
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+	{	
+		$item = $this->getSelectedItem($field);
 		
-		$current = $this->parent->data->get($field);
+		$this->_startField($field);
 		
-		foreach($this->items as $item)
-		{
-			$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
-			
-			if ($current == $item->get($valueField))
-			{
-				$name = $this->formatName($item, $this->nameField);
-				echo $name;
-				break;
-			}
-		}
+		trace("RelatedItemSelectFieldRenderer renderReadOnly name field is {$this->nameField} field is $field and item is {$item->role}", 3);
+		$name = $this->formatName($item, $this->nameField);
+		echo $name;
 		
-		echo "</td>\n";
-		echo "</tr>\n";
+		$this->_endField($field);
+		
 	}
 
 	function getRelatedItems()
@@ -275,6 +275,25 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		return $this->items;
 	}
 
+	function getSelectedItem($field)
+	{
+		$item = new $this->relatedClass;
+		$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
+		$value = $this->parent->data->get($field);
+		
+		try
+		{
+			$item = Query::create($this->relatedClass, "WHERE {$valueField}=:v")
+						 ->bind(":v", $value)
+						 ->executeSingle();
+		}
+		catch(DataNotFoundException $e)
+		{
+			$item = new $this->relatedClass;
+		}
+		
+		return $item;
+	}
 	
 	function preProcess($field = "")
 	{

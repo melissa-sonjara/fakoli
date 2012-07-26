@@ -1,0 +1,79 @@
+@CHARSET "ISO-8859-1";
+
+/* default styles to accompany framework/grouped_list or GroupedList class */
+
+#grouped_list
+{
+	list-style: none;
+	margin-right: 40px;
+}
+
+#grouped_list li
+{
+	list-style: none;	
+}
+
+#grouped_list a
+{
+	display: block;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 5px #999;
+	-webkit-box-shadow: 2px 2px 5px #999;
+	box-shadow: 2px 2px 5px #999;
+	padding: 5px;
+	margin-bottom: 20px;
+	background-color: #EEEEEE;
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#grouped_list img
+{
+	margin: 5px;
+	border: solid 1px #666;
+}
+
+/* The expand/collapse node/title of the list */
+
+#grouped_list h2 {
+    background: url("/fakoli/images/arrow_icon.png") no-repeat scroll 0 0 #FFFFFF;
+    color: maroon;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    margin: 0 0 4px;
+    padding: 1px 25px 15px;
+    text-align: left;
+}
+
+
+#grouped_list h2.expanded
+{
+	background-image: url(/fakoli/images/arrow_down_icon.png);
+}
+
+/* The heading for each li summary block */
+#grouped_list h3
+{
+  	color: #000000;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+
+/* span class inside h3 for city, state, year, etc. */
+#grouped_list h3 .details
+{
+	font-size: 12px;
+	font-weight: normal;
+}
+
+/* div for teaser or summary of the item displayed */
+#grouped_list .summary
+{
+	margin-left: 130px;
+}

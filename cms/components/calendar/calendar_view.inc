@@ -41,6 +41,82 @@ abstract class EventHandler
 	
 	abstract function summary($event);
 	abstract function details($event);
+	
+	function getEventClass()
+	{
+		return Event;
+	}
+	
+	
+	function drawEditButton($event_id)
+	{
+		if(checkRole("admin"))
+		{
+?>
+<br/>
+<button class='button' onclick='editEvent(<?echo $event_id?>)'>Edit this Event</button>
+<?
+		}	
+	}	
+}
+
+class StandardEventHandler extends EventHandler
+{
+	function filter($event, $date)
+	{
+		$start = explode(" ", $event->start_date);
+		$end = explode(" ", $event->end_date);
+		
+		$startTimeStamp = strtotime($start[0]);
+		$endTimeStamp = strtotime($end[0]);
+		$dateTimeStamp = strtotime($date);
+		 
+		$diff = abs($endTimeStamp - $startTimeStamp);
+        $days=getdate($diff);
+        $diff_dates = $days[mday] + 1;
+       
+		
+		if($diff_dates <= 5) 
+		{
+			return ($dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp);
+		}
+		else 
+		{
+			return  ($dateTimeStamp == $startTimeStamp);
+		}
+	}
+
+	function summary($event)
+	{
+		return "<h4>{$event->title}</h4><p>{$event->event_type}</p>";
+	}
+	
+	function details($event, $byProgram = false)
+	{
+		ob_start();
+?>
+<div class="event_details">
+<h3><?echo $event->title?></h3>
+<div class="event_contents">
+<p><em><?echo $event->event_type?></em></p>
+<p><label style="width: 80px">Start: </label><?echo $event->format("{start_date:short}") ?><br/>
+<label style="width: 80px">End: </label><?echo $event->format("{end_date:short}") ?></p>
+<? 		
+		if ($event->location)
+		{ 
+?>
+<p><label style="width: 80px">Location: </label><?echo $event->location?></p>
+<?
+		}
+?>
+<p><?echo $event->description?></p>
+</div>
+</div>
+<?
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
 }
 
 class CalendarView
@@ -50,9 +126,11 @@ class CalendarView
 	var $id;
 	var	$month;
 	var $year;
-	var $eventHandlers = array();
+	var $handlerMap = array(); // key is event class, value is handler class name
+	var $eventHandlers = array(); // deprecated method
 	var $calendarLink = "/calendar";
 	var $listLink = "/event_list";
+	var $listDialog = ""; // javascript function for bubble popup
 	var $detailLink = "/event_detail";
 	var $yearParam = "year";
 	var $monthParam = "month";
@@ -63,29 +141,61 @@ class CalendarView
 		$this->id = $id;
 		$this->month = date("n");
 		$this->year = date("Y");
+		$this->addHandler(Event, new StandardEventHandler());
+		ComponentManager::fireEvent("RegisterCalendarEventHandlers", $this);
 	}
 
+	// deprecated - registered event handlers should send
+	// string of handler class name instead
 	function addHandler($class, $handler)
 	{
 		$this->eventHandlers[$class] = $handler;
 		$handler->view = $this;
 	}
 	
+	/*
+	 * Preferred approach is for subscribes to RegisterCalendarEventHandlers
+	 * to respond with function that maps a composite or event class to
+	 * a handler class. Example:
+	 * 	static function registerCalendarEventHandlers(&$view)
+	 *  {
+	 * 		$view->handlerMap["CompositeRegistrationEvent"] = "RegistrationEventHandler";
+	 * 		return $view;
+	 *  }
+	 *
+	 * For backwards compatibility, if not found, we will attempt to 
+	 * retrieve a custom handler from the array "eventHandlers" with
+	 * index composite class or event class.
+	 *
+	 */
 	function getHandler($event)
 	{
-		$cl = $event->composite_class;
-		if (!$cl) $cl = get_class($event);
-		trace("getting event handler for $cl", 3);
-		return $this->eventHandlers[$cl];
+		// Event can be class other than "event" e.g., TrainingEvent
+		if(get_class($event) == "Event" && $event->composite_class)
+			$event_class = $event->composite_class;
+		else // Can be class "Event" or any other obj that is calendar-based
+			$event_class = get_class($event);
+
+		trace("getting event handler for $event_class", 3);
+				
+		if(array_key_exists($event_class, $this->handlerMap))
+		{
+			$handler_class = $this->handlerMap[$event_class];
+			$handler = new $handler_class($event);
+		}
+		// deprecated method of supplying an event handler
+		elseif(array_key_exists($event_class, $this->eventHandlers))
+		{
+			$handler = $this->eventHandlers[$event_class];
+		}
+		else // event is not class or base class "Event" and no handler supplied
+		{
+			$pk = $event->getPrimaryKey();
+			trace("CalendarView:: no event handler for event {$event->$pk} class " . get_class($event), 3);
+		}
+		return $handler;
 	}
 	
-	function formatTime12($time)
-	{
-		$time = explode(" ", $time);
-		$time =  strtotime($time[1]);
-		return date("g:ia", $time);
-	}
-
 	
 	function summary($event)
 	{
@@ -100,15 +210,15 @@ class CalendarView
 	function filterEvents($events, $currentDay)
 	{
 		$ret = array();
-		
+
 		foreach($events as $event)
 		{
 			$handler = $this->getHandler($event);
-			
-			if ($handler->filter($event, $currentDay))
+			if ($handler AND $handler->filter($event, $currentDay))
 			{
 				$ret[] = $event;
 			}
+			// If not found - function getHandler outputs trace
 		}
 		
 		return $ret;
@@ -116,9 +226,13 @@ class CalendarView
 	
 	function rewriteQueryString($year, $month)
 	{
+		global $isAdmin;
+		
 		$qs = $_SERVER['QUERY_STRING'];
 		
 		$identifier = $_REQUEST["identifier"];
+		
+		if ($isAdmin) $identifier = "admin/$identifier";
 		
 		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$qs = preg_replace("/{$this->yearParam}=\\d+&*/", "", $qs);
@@ -167,7 +281,7 @@ class CalendarView
 	{
 		global $script;
 		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/cms/components/calendar/calendar.js"></script>
+<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
 ENDSCRIPT;
 		
 		$this->calculateMonthRange();
@@ -213,7 +327,7 @@ ENDSCRIPT;
 				$eventBubbleID = "event_bubble_".str_replace("-", "_", $currentDay);
 				$dayTitle = date("F jS Y", strtotime($currentDay));
 				
-				$link = "<a class='eventlink' href='{$this->listLink}?date=$currentDay' onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$i}</a>";
+				$link = $this->formatEventListLink($this->listLink, $this->listDialog, $currentDay, $eventBubbleID, $i);
 				
 				$bubbles .= 
 				"<div id='$eventBubbleID' class='event_bubble'>
@@ -262,6 +376,29 @@ ENDSCRIPT;
 	
 	function drawMonth()
 	{
+		global $script;
+		$script .= <<<ENDSCRIPT
+<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
+ENDSCRIPT;
+
+		global $dialogs;
+		ob_start();
+?>
+<div class="dialog" id="eventDetailDlg" style="width: 500px">
+ <div class="dialog_header" id="eventDetailDlgHeader">
+  <div style="padding: 4px;">
+   <div style="float: right">&nbsp;<a id='closeEventDetailDlg' href="javascript:eventDialog.hide();">Close &times;</a></div>
+   <span"style="font-weight: bold" id="eventDetailDlgTitle">Event Detail</span>
+  </div>	
+ </div>
+ <div id="eventDetailDlgBody" class="dialog_body">
+ </div>
+</div>
+
+<?
+		$dialogs .= ob_get_contents();
+		ob_end_clean();
+		
 		$this->calculateMonthRange();
 ?>		
 <div id="fullcalendar">
@@ -305,10 +442,15 @@ ENDSCRIPT;
 				{
 					$handler = $this->getHandler($event);
 					
-					$content .= "<div class='event_summary'>";
+					// JDG 2/24/2011 send handler class to event details
+					$handler_class = get_class($handler);
+					$pk = $event->getPrimaryKey();
+					$content .= "<div class='event_summary' onclick='showEventDetail({$event->$pk}, \"{$handler_class}\")'>";
 					$content .= $handler->summary($event);
 					$content .= "</div>";
-				}					
+				}
+
+				$link = $i;
 			}
 			else
 			{
@@ -337,5 +479,92 @@ ENDSCRIPT;
 </div>		
 <?
 	}
+		
+	function header($alt = event_display)
+	{
+		$link = $this->rewriteQueryString($this->year, $this->month, $alt);
+		$altTitle = ($alt == event_display) ? "List of Events" : "Calendar";
+?>		
+<table width="100%" class="layout">
+ <tr>
+  <td><p><a href="<? echo $link ?>">View <? echo $altTitle ?></a></p></td>
+  <td align="right">
+   <form method="get" action="">
+    <select name="month">
+<?
+	for($i = 1; $i <= 12; ++$i)
+	{
+		$monthName = date("F", strtotime("$i/1/2007"));
+		option($i, $monthName, $i == $this->month);
+	}
+?>
+    </select>&nbsp;<select name="year">
+<?
+	for($i = 2006; $i < 2012; ++$i)
+	{
+		option($i, $i, $i == $this->year);
+	}
+?>
+    </select>
+    <input type="submit" class="button" value=" GO "/>
+   </form>
+  </td>
+ </tr>
+</table>
+<?
+		
+	}
+	
+	/*
+	 * Link to the day's events from mini calendar
+	 */
+	function formatEventListLink($link, $dLink, $currentDay, $eventBubbleID, $idx)
+	{
+		if($link)
+		{
+			$link .= (preg_match("/\?/", $link)) ? "&" : "?";
+			$link .= "date=$currentDay";
+		}
+		else
+			$link = "#";
+		
+		if($dLink)
+		{
+			if(preg_match("/[\(.*?\)]$/", $dLink))
+				$dLink = preg_replace("/[\(.*?\)]$/", ", '$currentDay')", $dLink);
+			else
+				$dLink .= "('$currentDay')";
+			$onclick = "onclick=\"$dLink; return false;\"";
+		}
+		
+		return "<a class='eventlink' href=\"{$link}\" $onclick; 
+		onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$idx}</a>";
+	}
+	
+	
+	function drawEventList()
+	{
+		$this->calculateMonthRange();
+		
+		$this->header(calendar_display);
+
+		if (count($this->events) > 0)
+		{
+			foreach($this->events as $event)
+			{
+				$handler = $this->getHandler($event);
+				$content .= $handler->details($event);
+				$content .= "<br>";
+			}
+			echo $content;
+		}
+		else
+		{
+?>
+<p><i>No events have been scheduled for this month.</i></p>
+<?
+		}
+	}
+	
 }
 ?>

@@ -31,6 +31,9 @@
 
 *****************************************************************/
 
+require_once realpath(dirname(__FILE__)."/document_handler.inc");
+require_once realpath(dirname(__FILE__)."/date_utils.inc");
+
 /*
  * Library of commonly used functions.
  * 
@@ -40,76 +43,58 @@
 /**
  * Check whether the user has one of a specified set of roles
  * @param $role the role(s) to check against, as a comma-delimited list
+ * @param $account (optional) the account object to check (must have a 'role' property). 
+ * If not provided, the default user account is used (assumed to be in the global $user variable).
  * @return true if the user has one of the roles, false otherwise.
  */
-function checkRole($role)
+function checkRole($role, $account = null)
 {
 	global $user;
 	
-	if ($role == "" || $user->role == "super") return true;
-	if (!$user) return false;
+	if (!$account) $account = $user;
 	
-	if ($role != "" && $user->role == "") return false;
+	if ($role == "" || $account->role == "super" || $account->role == "admin") return true;
+	if (!$account) return false;
 	
-	$expr = "/\\b{$user->role}\\b/";
-	$allowed = (preg_match($expr, $role) > 0) ? true : false;
+	if ($role != "" && $account->role == "") return false;
+	
+	$userRoles = explode(",", $account->role);
+	foreach($userRoles as $ur)
+	{
+		$expr = "/\\b{$ur}\\b/";
+		$allowed = (preg_match($expr, $role) > 0) ? true : false;
+		if ($allowed) break;
+	}
 	
 	return $allowed;
+}
+
+/**
+ * Filter the given list, retaining only the objects that match the current
+ * user's role profile in the given parameter.
+ * 
+ * @param $items the array of items to be filtered
+ * @param $field the name of the field defining the role restriction
+ * @return array the filtered array
+ */
+function filterByRole($items, $field)
+{
+	$ret = array();
+	foreach($items as $item)
+	{
+		if (checkRole($item->get($field)))
+		{
+			$ret[] = $item;
+		}
+	}
+	
+	return $ret;
 }
 
 /**
  * MIME types allowable for image uploads 
  */
 $image_types = array( "image/jpeg", "image/gif", "image/x-png", "image/pjpeg" );
-
-/**
- * MIME types allowable for document uploads 
- */
-$doc_types = array( "application/msword", 
-		    "application/vnd.ms-excel", 
-		    "application/excel",
-		    "application/ms-excel",
-		    "application/pdf",
-		    "application/vnd.ms-powerpoint",
-		    "application/ms-powerpoint",
-		    "application/mspowerpoint",
-		    "text/html",
-		    "text/rtf" );
-
-/**
- * Mapping of common file extensions to human-readable document type
- */
-$doc_extensions = array( 
-        ".doc" => "Microsoft Word Document",
-        ".xls" => "Microsoft Excel Spreadsheet",
-        ".ppt" => "Microsoft Powerpoint Presentation",
-        ".pdf" => "Adobe Acrobat PDF",
-        ".rtf" => "Rich Text Format",
-        ".htm" => "HTML File",
-        ".zip" => "ZIP Archive",
-        ".jpg" => "JPEG Image File",
-        ".gif" => "GIF Image File",
-        ".png" => "PNG Image File"
-        );
-
-$doc_mime_types = array(
-		".doc" => "application/msword",
-        ".xls" => "application/vnd.ms-excel",
-        ".ppt" => "application/vnd.ms-powerpoint",
-        ".pdf" => "application/pdf",
-        ".rtf" => "text/rtf",
-        ".htm" => "text/html",
-        ".zip" => "application/zip",
-        ".jpg" => "image/jpeg",
-        ".gif" => "image/gif",
-        ".png" => "image/x-png"
-);
-
-$doc_icons = array(	".doc"		=>	"/framework/images/msword_icon.png",
-					".xls"		=>	"/framework/images/msexcel_icon.png",
-					".pdf"		=>	"/framework/images/pdf_icon.png",
-					".ppt"		=>	"/framework/images/ppt_icon.png",
-					"default"	=>	"/framework/images/file_icon.png");
 /**
  * LEGACY Global function to connect to the database.
  * Uses the parameters defined in the global $conn array. 
@@ -132,6 +117,8 @@ function connect_db()
 /**
  *  Utility function to nicely format addresses, etc.
  * (skips blank entries, places all other entries on separate lines) 
+ * 
+ * Deprecated
  */
 function formatAddress() 
 {
@@ -146,6 +133,8 @@ function formatAddress()
 
 /**
  * Utility function to format currency using $ and , and stuff
+ * 
+ * Deprecated
  */
 function formatCurrency($amount)
 {
@@ -156,6 +145,8 @@ function formatCurrency($amount)
  * Utility function to format date (no time component).
  * 
  * @param string $date the date to format
+ * 
+ * Deprecated
  */
 function formatDate($date)
 {
@@ -166,6 +157,12 @@ function formatDate($date)
 	}	
 }
 	
+/**
+ * 
+ * @param $date
+ * 
+ * Deprecated
+ */
 function formatMonthYear($date)
 {
 	
@@ -177,6 +174,8 @@ function formatMonthYear($date)
 	
 /**
  * Utility function to format date in short form (MM/DD/YYYY), with no time component.
+ * 
+ * Deprecated
  */
 function formatDateShort($date)
 {
@@ -192,6 +191,12 @@ function formatDateShort($date)
 	return $text;
 }
 
+/**
+ * 
+ * @param $date
+ * 
+ * Deprecated
+ */
 function formatDateLong($date)
 {
 	$text = "";
@@ -209,6 +214,8 @@ function formatDateLong($date)
  * Timestamp is a string in the format 'YYYYMMDDHHIISS'.
  * 
  * @param string $ts the timestamp to format. 
+ * 
+ * Deprecated
  */
 function formatTimestamp($ts)
 {
@@ -227,11 +234,37 @@ function formatTimestamp($ts)
 	return date("F d, Y", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
 }
 
+/*
+ * Format timestamp with date in short format
+ * e.g., 1/2/2011 and include time in 12 hour format
+ *  e.g., 10:15am
+ *  
+ *  Deprecated
+ */
+function formatTimestampShort($ts)
+{
+		if (!$ts) return "N/A";
+
+	$yyyy = substr($ts,0,4);
+	$mm   = substr($ts,4,2);
+	$dd   = substr($ts,6,2);
+	$hh   = substr($ts,8,2);
+	$mi   = substr($ts,10,2);
+	$ss   = substr($ts,12,2);
+
+    if ($yyyy == '0000') return "N/A";
+		    
+	return date("m/d/Y g:ia", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+	
+}
+
 /**
  * Returns the number of days in the specified month
  * @param number $m the month number
  * @param number $y the year
  * @return number the number of days in that month
+ * 
+ * Deprecated
  */
 function getMonthDays($m, $y)
 {
@@ -247,6 +280,8 @@ function getMonthDays($m, $y)
  * @param number $m the month number
  * @param number $y the year
  * @return number the number of week days in that month
+ * 
+ * Deprecated
  */
 function getMonthWeekDays($month, $year)
 {
@@ -267,11 +302,109 @@ function getMonthWeekDays($month, $year)
 
 /**
  * Format a time in 12 hour clock, no seconds
+ * 
+ * Deprecated
  */
 function formatTime12($time)
 {
 	return date("g:ia", $time);
 }
+
+/**
+ * Format a date and time in 12 hour clock, no seconds
+ * 
+ * Deprecated
+ */
+function formatDateTime12($time)
+{
+	return date("m/d/Y g:ia", $time);
+}
+
+/*
+ * Formats a datetime in date short format
+ * with hours on 12 hour clock, no seconds.
+ * If time component is 00:00:00, then
+ * don't return time.
+ * 
+ * Deprecated
+ */
+function formatDateTime12Hr($datetime)
+{
+	$yyyy = substr($datetime,0,4);
+	$mm   = substr($datetime,5,2);
+	$dd   = substr($datetime,8,2);
+	$hh   = substr($datetime,11,2);
+	$mi   = substr($datetime,14,2);
+	$ss = "00";
+	
+    if ($yyyy == '0000') return "N/A";
+    if($hh == '00')
+		return date("m/d/Y", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+    else
+		return date("m/d/Y g:ia", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
+}
+
+/*
+ * If start and end dates are the same date 
+ * then show the date followed by start and end time.
+ * Otherwise, show start date and time to end date
+ * and time. 
+ * 
+ * $start - datetime
+ * $end - datetime
+ * 
+ * Deprecated
+ */
+function formatStartDateToEndDate($start, $end)
+{
+	$yyyy = substr($start,0,4);
+	$yyyy_2 = substr($end,0,4);
+	$mm   = substr($start,5,2);
+	$mm_2   = substr($end,5,2);
+	$dd   = substr($start,8,2);
+	$dd_2   = substr($end,8,2);
+			
+	if($yyyy != $yyyy_2 || $mm != $mm_2 || $dd != $dd_2)
+	{
+		return formatDateTime12Hr($start) ." &ndash; ". formatDateTime12Hr($end);
+	}
+	else
+	{
+		$hh   = substr($start,11,2);
+		$mi   = substr($start,14,2);
+		$hh_2   = substr($end,11,2);
+		$mi_2   = substr($end,14,2);
+		$s_time = date("g:ia", mktime($hh,$mi));
+		$e_time = date("g:ia", mktime($hh_2,$mi_2));
+		return formatDateShort($start) . " $s_time &ndash; $e_time";
+	}	
+}
+
+/*
+ * Given a phone number containing various
+ * separator characters between the numbers,
+ * clear out the separators and standardize
+ * the format as 
+ * (xxx) xxx-xxxx
+ * 
+ * tylerhall on 11/30/-1
+ * http://snipplr.com/view/25/format-phone-number/
+ * 
+ * Deprecated
+ */
+function format_phone($phone)
+{
+	$phone = preg_replace("/[^0-9]/", "", $phone);
+	
+	if(strlen($phone) == 7)
+		return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
+	elseif(strlen($phone) == 10)
+		return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "($1) $2-$3", $phone);
+	else
+		return $phone;
+}
+
+
 
 /**
  * Returns the current time and date in a database compatible format
@@ -280,6 +413,14 @@ function formatTime12($time)
 function now()
 {
 	return date('Y/m/d H:i:s');
+}
+
+/**
+ * Returns today as a string. All of it.
+ */
+function today()
+{
+	return date('Y-m-d');
 }
 
 /**
@@ -295,6 +436,7 @@ function jsSafe($str, $escapeEntities = false)
 	$str = str_replace("\r", "", $str);
 	$str = str_replace("\n", "\\n", $str);
 	$str = str_replace("&#39;", "\'", $str);
+	$str = str_ireplace("</script>", "\\x3C/script\\x3E", $str);
 	
 	if ($escapeEntities)
 	{
@@ -307,10 +449,22 @@ function htmlsafe($str)
 {
 	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
+
+function HTMLToText($html)
+{
+	$patterns = array("/<br>/", "/&nbsp;/", "/<p>/", "/<BR>/", "/<P>/");
+	$replacements = array("\r\n", " ", "\r\n", "\r\n", "\r\n");
+	$text =  stripHTML(preg_replace($patterns, $replacements, $html));
+	
+	return $text;
+}
+
 /**
  * Outputs the MIME type list based on an array of MIME types.
  * Use this function to generate the contents of ACCEPT= attributes
- * for <INPUT TYPE="file" ...> tags.                                
+ * for <INPUT TYPE="file" ...> tags.    
+ * 
+ * Deprecated
  */
 function printMIMETypeList($types)
 {
@@ -332,7 +486,9 @@ function printMIMETypeList($types)
  *  @param string  $field     the name of the field in the table
  *  @param string  $idfield   the name of the primary key field for the table
  *  @param integer $id        the primary key value for the row the upload is associated with
- *  @param string  $mimefield the field in the table that will store the MIME type of the file. 
+ *  @param string  $mimefield the field in the table that will store the MIME type of the file.
+ *  
+ *  Deprecated
  */
 function uploadFile($input, $types, $table, $field, $idfield, $id, $mimefield)
 {
@@ -386,6 +542,8 @@ function uploadFile($input, $types, $table, $field, $idfield, $id, $mimefield)
  * based on the file extension of the supplied file name.
  * 
  * @param string $doc the filename of the document
+ * 
+ * Deprecated
  */
 function getDocType($doc)
 {
@@ -407,6 +565,8 @@ function getDocType($doc)
  * Returns the file size in Kb for a document
  * 
  * @param string $doc the (local) URL of the document  
+ * 
+ * Deprecated
  */
 function getDocSize($doc)
 {
@@ -432,7 +592,15 @@ function getDocSize($doc)
     return $doc_size;
 }
 
-function getMimeType($name)
+// ?Is getMIMEType supposed to be used instead of getMimeType??
+// Doesn't seem to work. 
+/**
+ * 
+ * @param $name
+ * 
+ * Deprecated
+ */
+function getDocMimeType($name)
 {
 	global $doc_mime_types;
 	
@@ -441,15 +609,33 @@ function getMimeType($name)
 	$type = $doc_mime_types[$extension];
 	if (!$type) $type="application/octet-stream";
 	return $type;
+	
 }
 
+/*function getMimeType($name)
+{
+	global $doc_mime_types;
+	
+	$n = strtolower($name);
+	$extension = substr($n, strrpos($n, "."));
+	$type = $doc_mime_types[$extension];
+	if (!$type) $type="application/octet-stream";
+	return $type;
+}*/
+
+/**
+ * 
+ * @param unknown_type $doc
+ * 
+ * Deprecated
+ */
 function getDocIcon($doc)
 {
 	global $doc_icons;
 	$n = strtolower($doc);
 	$extension = substr($n, strrpos($n, "."));
 	$icon = $doc_icons[$extension];
-	if (!$icon) $icon = "/framework/images/file_icon.png";
+	if (!$icon) $icon = "/fakoli/images/file_icon.png";
 	return $icon;
 }
 
@@ -486,11 +672,21 @@ function checkNumeric($p)
 	{
 		foreach($p as $v)
 		{
-			if ($v="" && !is_numeric($v)) die("Invalid Parameter");
+			if ($v!="" && !is_numeric($v)) die("Invalid Parameter");
 		}
 	}
 	else if ($p!="" && !is_numeric($p)) die("Invalid Parameter");
 	return $p;
+}
+
+
+/**
+ * Security helper function. Check that the given parameter is a valid identifier
+ * (alphanumeric, _ and digits only with no spaces). Empty string is valid
+ */
+function checkIdentifier($p)
+{
+	return preg_match("/^[A-Za-z0-9_\\-]*$/", $p) ? $p : die("Invalid Parameter");
 }
 
 /**
@@ -498,6 +694,8 @@ function checkNumeric($p)
  * (skips blank entries, places all other entries on separate lines) 
  *
  * @param integer $count the index of the current line
+ * 
+ * Deprecated
  */
 function color($count)
 {
@@ -507,6 +705,14 @@ if ($count%2==0) $color = "#EEEEEE";
 return $color;
 }
 
+/**
+ * Truncate the supplied text at the given maximum length. If the
+ * string is truncated then an ellipsis is added.
+ * 
+ * @param unknown_type $txt the text to truncate
+ * @param unknown_type $max the maximum allowed length
+ * @param unknown_type $wholeWord true to truncate to whole words only 
+ */
 function ellipsis($txt, $max, $wholeWord = false)
 {
 	if (strlen($txt) > $max)
@@ -533,6 +739,12 @@ function ellipsis($txt, $max, $wholeWord = false)
 	return $txt;
 }
 
+/**
+ * 
+ * @param unknown_type $strText
+ * 
+ * Deprecated
+ */
 function rteSafe($strText) {
     //returns safe code for preloading in the RTE
     $tmpString = $strText;
@@ -554,12 +766,25 @@ function rteSafe($strText) {
     return $tmpString;
 }
 
+/**
+ * 
+ * @param unknown_type $strText
+ * @param unknown_type $css
+ * 
+ * Deprecated
+ */
 function rtePrepare($strText, $css)
 {
     global $_SERVER;    
     return rteSafe($strText);
 }
 
+/**
+ * 
+ * @param unknown_type $strText
+ * 
+ * Deprecated
+ */
 function rteClean($strText)
 {
 	$patterns = array(	"|<\\!\\-\\-\\s+HEADERS\\s+\\-\\->.*<\\!\\-\\-\\s+/HEADERS\\s+\\-\\->|i",
@@ -593,14 +818,21 @@ function firstSentence($text)
 
 function stripHTML($text)
 {
-		$text = preg_replace("/<.*?>/", "", $text);
-		return $text;
+	/*$text = preg_replace("/<.*?>/", "", $text);*/
+
+	// JDG 5/19/2011 - remove &ndash, &nbsp;
+	$text = html_entity_decode($text);
+	$text = strip_tags($text);
+	return $text;
 }
+
 
 /**
  * Runs a query, returns the first field in each row of the resultset as a comma-delimited list.
  * 
  * @param string $query the query to run.
+ * 
+ * Deprecated
  */
 function queryList($query)
 {
@@ -658,13 +890,33 @@ function parseMultiParam($collection, $param)
 function option($value, $text, $sel = "")
 {
 	echo "<option value='$value'";
-	if ($sel == $value)
-	{
+	if ($sel === $value)
+	{		
 		echo " selected";
 	}
 	echo ">$text</option>";	
 }
-	
+
+
+/**
+ * Write out an option tag to a string, marking as selected if applicable.
+ * @param mixed $value the value of the option
+ * @param string $text the text for the option
+ * @param mixed $sel a value to compare to the $value field, 
+ * to determine whether the option should be selected. 
+ */
+function str_option($value, $text, $sel = "")
+{
+	$opt = "<option value='$value'";
+	if ($sel == $value)
+	{
+		$opt .= " selected";
+	}
+	$opt .= ">$text</option>";
+
+	return $opt;
+}
+
 /**
  * Simplified redirect.
  * @param $page the page to redirect to
@@ -674,46 +926,80 @@ function redirect($page)
 	global $_SERVER;
 	global $config;
   
-	if (!$config['prettyURLs'])
+	if ($config['prettyURLs'] === false)
 	{
 		$page = preg_replace("/^\\/?([\\w\\d_]+?)\\?/", "/page.php?identifier=$1&", $page);
 		$page = preg_replace("/^\\/?([\\w\\d_]+)$/", "/page.php?identifier=$1", $page);
 	}
 	
+	trace("redirect:: page is $page", 3);
 	$server = $config['http_host'];
 	if (!$server) $server="localhost:8080";
+
+	//AJG: 3/9/11 - maintain current protocol by default
 	
-	if (!strncmp($page, "http://", 7))
+	$https = $_SERVER['HTTPS'];
+	if ($https == "off") $https = false;
+	
+	$protocol = $https ? "https" : "http";
+	
+	// JDG 9/27/10 - handle https
+	if (!strncmp($page, "http://", 7) OR (!strncmp($page, "https://", 8)))
 	{
 		$location = $page;
 	}
 	else if ($page[0] == '/')
 	{
-		$location = "http://$server$page";
+		$location = "$protocol://$server$page";
 	}
-	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
-	{
-		$location = "http://$server/$page";
-	}
+//	else if (preg_match( "/^[\\w\\d_\\-]+$/", $page))
+//	{
+//		$location = "http://$server/$page";
+//	}
 	else
 	{
-		$directory = dirname($_SERVER['PHP_SELF']);
+		$directory = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['REQUEST_URI']));
 		if ($directory == "/") $directory = "";
-		$location = "http://".$server.$directory."/".$page;
+		$location = "$protocol://".$server.$directory."/".$page;
 	}
 		
   	header("Location: $location");
+  	session_write_close();
   	exit;
 }
 
+/**
+ * Returns the query string for the current page, cleaned of any 
+ * Fakoli-related navigation parameters.
+ */
+function getCleanQueryString()
+{
+	$qs = $_SERVER['QUERY_STRING'];
+
+	$params = array();
+	
+	foreach($_GET as $key => $value)
+	{
+		if ($key != "identifier" && $key != "section") $params[$key] = $value;
+	}
+	
+	return http_build_query($params);
+}
+
+$traceLevels = array(1	=>	"FATAL",
+					 2	=>	"ERROR",
+					 3	=>	"TRACE",
+					 4	=>	"DEBUG",
+					 5  =>  "NOTE*");	
 /**
  * Send output to the trace log
  * @param $msg the message to output
  * @param $lvl the severity level (0-5) of this message
  */
-function trace($msg, $lvl)
+function trace($msg, $lvl, $callStack = null)
 {
 	global $config;
+	global $traceLevels;
 	
 	if ($lvl <= $config["trace_level"])
 	{
@@ -721,7 +1007,7 @@ function trace($msg, $lvl)
 		{
 		case TraceDetailFull:
 			
-			$callStack = debug_backtrace();
+			$callStack = $callStack ? $callStack : debug_backtrace();
 			if (count($callStack) > 1)
 			{
 				$callingFn = $callStack[1];
@@ -739,12 +1025,14 @@ function trace($msg, $lvl)
 			
 			$ref .= $callingFn["function"]."(): ";
 			
-			error_log(date("Y-m-d H:i:s")." : ".$_SERVER['REQUEST_URI']." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s")." : ".$_SERVER['REQUEST_URI']." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 
 		case TraceDetailHigh:
-			$callStack = debug_backtrace();
-					if (count($callStack) > 1)
+			
+			$callStack = $callStack ? $callStack : debug_backtrace();
+
+			if (count($callStack) > 1)
 			{
 				$callingFn = $callStack[1];
 			}
@@ -760,18 +1048,18 @@ function trace($msg, $lvl)
 			
 			$ref .= $callingFn["function"]."(): ";
 			
-			error_log(date("Y-m-d H:i:s")." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s")." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 			
 				
 		case TraceDetailMedium:
-			error_log(date("Y-m-d H:i:s : ").$msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s : ").$msg."\r\n", 3, $config["trace_path"]);
 			break;
 
 		case TraceDetailNormal:
 		default:
 			
-			error_log($msg."\r\n", 3, $config["trace_path"]);
+			error_log("[".$traceLevels[$lvl]."] ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 		}
 	}
@@ -898,6 +1186,21 @@ function canonicalizeURL($url)
 }
 
 /**
+ * Sanitize a file path, removing relative path sections and ensuring the correct
+ * directory separator is used throughout.
+ * @param string $path potentially dirty path
+ * @return string clean path
+ */
+function sanitizePath($path)
+{
+	$path = str_replace("/", DIRECTORY_SEPARATOR, $path);
+	$path = str_replace("\\", DIRECTORY_SEPARATOR, $path);
+	$path = str_replace("..".DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
+	$path = str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
+	return $path;
+}
+	
+/**
  * Make a POST request to a remote URL, returning the results.
  * @param $url the URL of the page to submit the POST request to
  * @param $data the POST parameters, passed as an array of key => value pairs 
@@ -912,6 +1215,21 @@ function postRemote($url, $data, $timeout = 30)
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$result = trim(curl_exec($ch));
+	curl_close($ch);
+	return $result;
+}
+
+function postRemoteXML($url, $xml, $timeout = 30)
+{
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_MUTE, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 	$result = trim(curl_exec($ch));
 	curl_close($ch);
@@ -988,17 +1306,20 @@ function prettify($name)
 /**
  * Takes a singular string and makes it plural.
  * @param $text the string to make plural
+ * @param $count integer (optional) the number of items, to determine whether to pluralize or not
  * @return string the plural version
  */
-function pluralize($text)
+function pluralize($text, $count = 0)
 {
+	if ($count == 1) return $text;
+	
 	$c = $text;
 
 	if (preg_match("/[^aeiouAEIOU]y$/", $c))
 	{
 		$c = substr($c, 0, -1)."ies";
 	}
-	else if (preg_match("/(?:ss|o|x)$/", $c))
+	else if (preg_match("/(?:ss|o|x|s|ch)$/", $c))
 	{
 		$c .= "es";
 	}
@@ -1086,8 +1407,12 @@ function ordinalSuffix($n, $sup = false)
 		}
 	}
 	else return $n;
-	
-	if ($sup) return ($sup) ? "$n<sup>$suffix</sup>" : "$n$suffix";
+
+	// JDG 2/10/12 - fix was not returning value if $sup false
+	if ($sup) 
+		return "$n<sup>$suffix</sup>"; 
+	else
+		return "$n$suffix";
 }
 
 /**
@@ -1109,6 +1434,7 @@ function makeURL($uri)
  * To do: add handling of grouped checkboxes and
  * provide parameter for delimiter between items
  *
+ * Deprecated
  */
 function formatCheckListItemsforView($options, $items)
 {
@@ -1167,19 +1493,76 @@ function getFullQueryString()
 	
 	foreach($_GET as $name => $value)
 	{
-		$qs .= $sep.urlencode($name)."=".urlencode($value); 
-		$sep = "&";
+		if (is_array($value))
+		{
+			foreach($value as $key => $val)
+			{
+				$qs .= $sep.urlencode($name)."[".urlencode($key)."]=".urlencode($val);
+				$sep = "&";
+			}
+		}
+		else
+		{
+			$qs .= $sep.urlencode($name)."=".urlencode($value); 
+			$sep = "&";
+		}
 	}
 	
 	foreach($_POST as $name => $value)
 	{
-		$qs .= $sep.urlencode($name)."=".urlencode($value); 
-		$sep = "&";
+		if (is_array($value))
+		{
+			foreach($value as $key => $val)
+			{
+				$qs .= $sep.urlencode($name)."[".urlencode($key)."]=".urlencode($val);
+				$sep = "&";
+			}
+		}
+		else
+		{
+			$qs .= $sep.urlencode($name)."=".urlencode($value); 
+			$sep = "&";
+		}
 	}
 
 	return $qs;
 }
 		
+/*
+ * Convert a php array to a javascript array.
+ * 
+ * @items - array of objects or simple array
+ * 
+ * @field - if items is array of objects, the field
+ * in the object to use to create the javascript array
+ * 
+ * returns javascript array in the format "[cat, dog, spider]";
+ */
+function toJSArray($items, $field = "")
+{
+	$js_arr = "[";
+	$first = true;
+
+	if(count($items) == 0)
+		return "";
+		
+	if(is_object($items[0]) && !$field)
+	{
+		$field = $items[0]->getPrimaryKey();
+	}
+		
+	foreach($items as $item)
+	{
+		if (!$first) $js_arr .=", ";
+		$js_arr .= (is_object($item) && $field) ? $item->$field : $item;
+		$first = false;
+	}
+		
+	$js_arr .= "]";
+	
+	return $js_arr;
+}
+
 /**
  * Creates a randomized string of characters. This is not cryptographically secure
  * and should not be used for cryptographic operations.
@@ -1196,5 +1579,131 @@ function makeRandomString($len)
 	}
 	
 	return $str;
+}
+
+/**
+ * Filter an array based on applying the specified callback to the keys.
+ * @param array $input the array to be filtered
+ * @param callback $callback a callback function or method
+ * @return array the filtered array.
+ */
+function arrayFilterKey( $input, $callback ) 
+{
+    if ( !is_array( $input ) ) 
+    {
+        return null;
+    }
+   
+    if ( empty( $input ) ) 
+    {
+        return $input;
+    }
+   
+    $filteredKeys = array_filter( array_keys( $input ), $callback );
+    
+    if ( empty( $filteredKeys ) ) 
+    {
+        return array();
+    }
+   
+    $input = array_intersect_key( array_flip( $filteredKeys ), $input );
+   
+    return $input;
+}
+
+/**
+ * Returns a string output and exits the script cleanly. We used to be
+ * able to use die(), but because of PHP 5's messed up session handling
+ * this throws an error if there is a custom session handler registered.
+ * 
+ * @param string $msg
+ */
+function ajaxReturn($msg = null)
+{
+	session_write_close();
+	die($msg);
+}
+
+/**
+ * 
+ * @param String $filename
+ * 
+ * Deprecated
+ */
+function getMIMEType($filename) 
+{
+	$mime_types = array(
+
+		'txt' => 'text/plain',
+        'htm' => 'text/html',
+        'html' => 'text/html',
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'json' => 'application/json',
+        'xml' => 'application/xml',
+        'swf' => 'application/x-shockwave-flash',
+        'flv' => 'video/x-flv',
+
+        // images
+        'png' => 'image/png',
+        'jpe' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'jpg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'bmp' => 'image/bmp',
+        'ico' => 'image/vnd.microsoft.icon',
+        'tiff' => 'image/tiff',
+        'tif' => 'image/tiff',
+        'svg' => 'image/svg+xml',
+        'svgz' => 'image/svg+xml',
+
+        // archives
+        'zip' => 'application/zip',
+        'rar' => 'application/x-rar-compressed',
+        'exe' => 'application/x-msdownload',
+        'msi' => 'application/x-msdownload',
+        'cab' => 'application/vnd.ms-cab-compressed',
+
+        // audio/video
+        'mp3' => 'audio/mpeg',
+        'qt' => 'video/quicktime',
+        'mov' => 'video/quicktime',
+
+        // adobe
+        'pdf' => 'application/pdf',
+        'psd' => 'image/vnd.adobe.photoshop',
+        'ai' => 'application/postscript',
+        'eps' => 'application/postscript',
+        'ps' => 'application/postscript',
+
+        // ms office
+        'doc' => 'application/msword',
+        'rtf' => 'application/rtf',
+        'xls' => 'application/vnd.ms-excel',
+        'ppt' => 'application/vnd.ms-powerpoint',
+
+        // open office
+        'odt' => 'application/vnd.oasis.opendocument.text',
+        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+    );
+
+    $ext = strtolower(array_pop(explode('.',$filename)));
+
+    if (array_key_exists($ext, $mime_types)) 
+    {
+        return $mime_types[$ext];
+    }
+    elseif (function_exists('finfo_open')) 
+    {
+        $finfo = finfo_open(FILEINFO_MIME);
+        $mimetype = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+        return $mimetype;
+    }
+    else 
+    {
+    	// Prevent other file types (such as source code or configuration files) from being served
+        die("");
+    }
 }
 ?>

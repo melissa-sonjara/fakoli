@@ -41,6 +41,8 @@ class DataColumn
 	var $sortable;	///< Boolean value indicating whether this column is sortable
 	var $title;		///< The title text for this column
 	var $style;		///< Any CSS styles to be applied to this column
+	var $typeHint;
+	var $onExport; ///< Optional user callback function for exporting the column.
 	
 	/**
 	 * Creates a new DataColumn. Generally this function should not be invoked directly,
@@ -49,14 +51,19 @@ class DataColumn
 	 * @param unknown_type $template the formatting template or formatter function for the column
 	 * @param unknown_type $sortable boolean indicating whether the column is sortable
 	 * @param unknown_type $style any CSS styles to be appled to the column
+	 * @param $typeHint hint for cell type to use when exporting to Excel
+	 * @param $onExport optional callback function to format value for Excel 
+
 	 * @return DataColumn a new DataColumn instance
 	 */
-	function DataColumn($title, $template, $sortable = true, $style = null)
+	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null, $onExport = null)
 	{
 		$this->template = $template;
 		$this->sortable = $sortable;
 		$this->title = $title;
 		$this->style = $style;
+		$this->typeHint = $typeHint;
+		$this->onExport = $onExport;
 	}
 	
 	/**
@@ -157,4 +164,74 @@ class FooterValueColumn extends FooterColumn
 	}
 }
 
+class FooterTotalColumn extends FooterColumn
+{
+	var $total = 0;
+	var $template = "";
+	var $field = "";
+	
+	/**
+	 * 
+	 * @param string $field - the field to be totals
+	 * @param string $template - the formatting template
+	 * @param string $style 
+	 * @param number $colspan 
+	 */
+	function FooterTotalColumn($field, $template = "", $style = "", $colspan = 1)
+	{
+		$this->field = $field;
+		
+		/*
+		 * If the calling function puts a "$" before the
+		 * field name, then mark this as type currency and
+		 * output the "$" before the total.
+		 */
+		if(strpos($this->field, "$", 0) !== FALSE)
+		{
+			$this->typeHint = Currency;
+			$this->field = substr($this->field, 1); 
+		}
+			
+		/*
+		 * In case the field has template formatting instructions,
+		 * move those out to the template variable so that
+		 * the field var is just the field and can be totalled
+		 * correctly.
+		 */
+		$matches = array();
+		if (preg_match("/:(.*?)}/", $this->field, $matches))
+		{
+			$this->template = $matches[1];
+			$this->field = str_replace($matches[1], "", $this->field);
+		} 
+		
+		$this->FooterColumn($style, $colspan);
+	}
+	
+	function onStartRow($item)
+	{
+		$val = $item->format($this->field);
+	
+		// Make the number a raw number value before adding
+		$val =  str_replace(",", "", $val);
+		
+		$this->total += $val;
+	}
+	
+	function format()
+	{
+		if(!$this->typeHint || $this->typeHint == Number)
+		{
+			$renderer = new NumberTypeRenderer();
+		}
+		elseif($this->typeHint == Currency)
+		{
+			$renderer = new CurrencyTypeRenderer();
+			$out = "$";
+		}
+		
+		$out .= $renderer->format($this->total, $this->template);
+		return $out;
+	}
+}
 ?>

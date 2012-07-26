@@ -1,13 +1,41 @@
 <?php
+/**************************************************************
 
-function validURL($item)
-{
-	return !is_numeric($item->image) && !is_numeric($item->thumbnail);
-}
+ Copyright (c) 2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+Fakoli::using("image");
 	
 /**
  * The Slideshow class provides a reusable user interface control that displays
- * primary source items from the database in a zoomable format. The control is 
+ * images from the database in a zoomable format. The control is 
  * flexible, and can be used to display multiple images in either a slideshow or
  * lightbox format. Additional information and navigation areas can be shown or 
  * hidden as required.
@@ -24,24 +52,6 @@ class Slideshow
 	var $showThumbnails;
 	var $autoPlay;
 	var $preload;
-	
-	function formatList($field)
-	{
-		global $config;
-		
-		$first = true;
-		foreach ($this->items as $item)
-		{
-			if (!$first) $list .= ", ";
-			$val = trim($item->$field);
-			if ($val[0] == '/') $val = "http://{$config['http_host']}$val";
-			
-			$list .= "\"".jsSafe($val)."\"";
-			$first = false;
-		}
-		
-		echo $list;
-	}
 
 	function Slideshow($items, $width=500, $height=400)
 	{
@@ -51,7 +61,7 @@ class Slideshow
 			$items = array($items);
 		}
 		
-		$this->items  = array_filter($items, validURL);
+		$this->items = $items;
 		
 		$this->width  = $width;
 		$this->height = $height;
@@ -77,12 +87,13 @@ class Slideshow
 	
 	function writeScript()
 	{
+		$mgr = new ImageManager();
+		global $config;
+		
 		ob_start();
 ?>
-<link rel="stylesheet" type="text/css" href="/cms/components/slideshow/slideshow.css" />
-<script type="text/javascript" src="/cms/components/slideshow/slideshow.js"></script>
 <!--[if IE]>
-<link rel="stylesheet" type="text/css" href="/cms/components/slideshow/ie.css"/>
+<link rel="stylesheet" type="text/css" href="/fakoli/slideshow/ie.css"/>
 <![endif]-->
 
 <script type="text/javascript"><!--
@@ -90,17 +101,29 @@ class Slideshow
 
 window.addEvent('domready', function() {
 
-	var slideshow = new Slideshow({preload: <?echo $this->preload ? "true" : "false"?>, showInfo: <?echo $this->showInfo ? "true" : "false" ?>, autoPlay: <?echo $this->autoPlay ? "true" : "false"?>});
+	var slideshow = new Slideshow({preload: <?echo $this->preload ? "true" : "false"?>, showThumbnails: <?echo $this->showThumbnails ? "true" : "false"?>, showInfo: <?echo $this->showInfo ? "true" : "false" ?>, autoPlay: <?echo $this->autoPlay ? "true" : "false"?>});
 
 	slideshow.thumbnails = [
 <?
-	$this->formatList("thumbnail");
+	$thumbs = array();
+	foreach($this->items as $item)
+	{
+		$thumbs[] = "'http://".$config['http_host'].$mgr->thumbnailLink($item->image_id, 100)."'";
+	}
+	
+	echo implode(", ", $thumbs);
 ?>
 	];
 	
 	slideshow.images = [
 <?
-	$this->formatList("image_file");
+	$images = array();
+	foreach($this->items as $item)
+	{
+		$images[] = "'http://".$config['http_host'].$mgr->imageLink($item->image_id)."'";
+	}
+
+	echo implode(", ", $images);
 ?>
 	];
 	
@@ -131,35 +154,6 @@ foreach($this->items as $item)
 }
 ?>
 	];	
-
-	
-	slideshow.urls = [
-<?
-$first = true;
-foreach($this->items as $item)
-{
-	if (!$first) echo ", ";
-?>
-					"/primary_sources/item.php?item=<? echo jsSafe(trim($item->LOC_key))?>"
-<?	
-	$first = false;
-	}
-?>
-	];
-
-	slideshow.keys = [
-<?
-$first = true;
-foreach($this->items as $item)
-{
-	if (!$first) echo ", ";
-?>
-					"<? echo jsSafe(trim($item->LOC_key))?>"
-<?	
-	$first = false;
-}
-?>
-	];
 
 	slideshow.load();
 });
@@ -196,7 +190,7 @@ foreach($this->items as $item)
 			<tr>
 				<td id="zoom_slider">
 				<div id="zoom_scale">
-				<div id="zoom_thumb"><img src="/cms/components/slideshow/images/zoom_thumb.gif" width="24" height="12" alt="" style="display: block;"/></div>
+				<div id="zoom_thumb"><img src="/fakoli/slideshow/images/zoom_thumb.gif" width="24" height="12" alt="" style="display: block;"/></div>
 				</div>
 				</td>
 			</tr>
@@ -216,15 +210,14 @@ foreach($this->items as $item)
   <td colspan="3" id="credit">&nbsp;<span id="creditText"></span></td>
  </tr>
 </table>
-<table>
+<table cellpadding="0" cellspacing="0">
 <tr>
-<td width="28%"></td>
 <td>
-<table id="thumbnails" cellpadding="0" cellspacing="0" style="width:<? echo $this->width; if (!$this->showThumbnails) echo "; display:none"; ?>">
+<table id="thumbnails" cellpadding="0" cellspacing="0" style="width:<? echo $this->width."px"; if (!$this->showThumbnails) echo "; display:none"; ?>">
  <tr>
   <td id="scroll_left"></td>
   <td id="strip">
-   <div id="thumbnail_strip" style="width: <? echo $this->width - 46 ?>">
+   <div id="thumbnail_strip" style="width: <? echo $this->width - 46 ?>px">
  	<div id="thumbnail_scroll"><div id="thumbnail_highlight"></div></div>
  	</div>
   </td>

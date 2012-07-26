@@ -51,6 +51,9 @@ class TabBar
 	var $defaultStateImage;
 	var $showStates = true;
 	
+	var $dynamic = false;
+	var $container = "";
+	
 	/**
 	 * Construct a new TabBar control.
 	 * 
@@ -64,16 +67,79 @@ class TabBar
 	function TabBar($id, $tabs, $queryString = "", $useQueryString = true, $showNumber = false)
 	{
 		global $config;
+		global $isAdmin;
 		
 		$this->id			  = $id;
 		$this->tabs           = $tabs;
-		$this->page           = ($config['prettyURLs']) ? $_REQUEST['identifier'] : basename($_SERVER["PHP_SELF"]);
+		$this->page           = ($config['prettyURLs'] === false) ? basename($_SERVER["PHP_SELF"]) :  $_REQUEST['identifier'];
+		if ($isAdmin) $this->page = "/admin/{$this->page}";
 		$this->queryString    = $queryString;
 		$this->useQueryString = $useQueryString;
 		$this->showNumber     = $showNumber;
-		trace("PAGE: **** {$this->page}", 3);
+		trace("PAGE: **** {$this->page}", 4);
 	}
 	
+	function dynamicLoad($container)
+	{
+		$this->container = $container;
+		$this->dynamic = true;
+	}
+	
+	function writeScript()
+	{
+		$script = "";
+		if (!$this->dynamic) return $script;
+		
+		$script .= <<<ENDSCRIPT
+	<script type="text/javascript">
+	window.addEvent('domready', function()
+	{
+		$('{$this->id}').getElements("a").each(function(a)
+		{
+			a.loadTab = function(override)
+			{
+				var request = new Request.HTML(
+				{
+					evalScripts: false,
+					evalResponse: false,
+					method: 'get', 
+					url: override ? override : this.href, 
+					onSuccess: function(tree, elements, html, script) 
+					{ 
+						var container = $('{$this->container}');
+						container.set('text', '');
+						container.adopt(tree);
+		
+						\$exec(script);
+
+					}.bind(this)
+				});
+				
+				request.send();
+			};
+			
+			a.addEvent('click', function(e) 
+			{
+				new Event(e).stop();
+				var url = a.href;
+				var parent = a.getParent();
+				$('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
+				parent.addClass('current');
+				
+				a.loadTab();			
+			});
+		});
+		
+		$('{$this->id}').getElements("li.current a").each(function(a)
+		{
+			a.loadTab();
+		});
+	});
+	</script>	
+ENDSCRIPT;
+
+		return $script;
+	}
 	/**
 	 * Writes the HTML for this control to standard output.
 	 */
@@ -81,7 +147,7 @@ class TabBar
 	{
 		foreach($this->tabs as $text => $entry)
 		{
-			if (get_class($entry) == "TabBar")
+			if (is_object($entry) && get_class($entry) == "TabBar")
 			{
 				$entry->page = $this->page;
 				$entry->queryString = $this->queryString;
@@ -109,7 +175,7 @@ class TabBar
         	{
         		$url = $entry;
         	}
-        	else if (get_class($entry) == "TabBar")
+        	else if (is_object($entry) && get_class($entry) == "TabBar")
         	{
         		if ($entry->findPage($this->page))
         		{
@@ -132,7 +198,7 @@ class TabBar
          
         	// JDG 12/01/09, get the basename of the url, in case we need a
         	// longer path in the tab include file, as with digital movies
-          	if (basename($url) == $this->page)
+          	if ($url == $this->page)
 	        {
 	        	$style = " class='current'";
 	        }
@@ -162,11 +228,11 @@ class TabBar
          	{
 	         	if (array_key_exists($url, $this->flags))
 	         	{
-	         		$text = "<img src='{$this->states[$this->flags[$url]]}' style='display: inline-block;vertical-align: middle'/>&nbsp;$text";         	
+	         		$text = "<img src='{$this->states[$this->flags[$url]]}' style='border: none; display: inline-block;vertical-align: middle'/>&nbsp;$text";         	
 	         	}
 	         	else if ($this->defaultStateImage)
 	         	{
-	         		$text = "<img src='{$this->defaultStateImage}' style='display: inline-block;vertical-align: middle'/>&nbsp;$text";
+	         		$text = "<img src='{$this->defaultStateImage}' style='border: none; display: inline-block;vertical-align: middle'/>&nbsp;$text";
 	         	}
          	}
 	        echo "<li$style><a href=\"$dest\"$active>$text</a></li>";
@@ -176,9 +242,10 @@ class TabBar
 		
 		foreach($this->tabs as $text => $entry)
 		{
-			if (get_class($entry) == "TabBar" &&
+			if (is_object($entry) && get_class($entry) == "TabBar" &&
 				$entry->findPage($this->page))
 			{
+				$entry->useQueryString = $this->useQueryString;
 				$entry->writeHTML();
 			}
 		}
@@ -243,7 +310,7 @@ class TabBar
 		
 		foreach($this->tabs as $text => $entry)
 		{
-			if (get_class($entry) == "TabBar")
+			if (is_object($entry) && get_class($entry) == "TabBar")
 			{
 				$num = count($entry->tabs);
 				
@@ -305,8 +372,8 @@ class TabBar
 		 * JDG 6/15/2010, insert "/" before identifier but not if
 		 * the page is *.php
 		 */
-		if(!preg_match("/.php/i", $next))
-			$next = "/". $next;
+		//if(!preg_match("/.php/i", $next))
+		//	$next = "/". $next;
 		trace("tabbar::next:: next is $next",3);
 		redirect($next);	
 	}
@@ -365,7 +432,7 @@ class TabBar
 	{
 		foreach($this->tabs as $text => $entry)
 		{
-			if (get_class($entry) == "TabBar")
+			if (is_object($entry) && get_class($entry) == "TabBar")
 			{
 				$entry->defaultStateImage = $img;
 			}

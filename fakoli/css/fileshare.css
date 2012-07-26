@@ -1,0 +1,331 @@
+HARSET "ISO-8859-1";
+
+#fileshare_content
+{
+	width: 600px;
+}	
+
+/* box border  */
+#bordered_block
+{
+	background-color: #fff;
+	border-radius: 8px;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 8px #CCC;
+	border: solid 1px #BCBCE9;
+	padding-bottom: 10px;
+	padding-left: 5px;
+	padding-top: 10px;	
+	text-align: left;
+	margin-top: 12px;
+	margin-bottom: 10px;
+	width: 720px;	
+	height: 400px;
+	overflow: auto; 
+}
+
+
+/* submit button div block; border over, right aligned */
+#fileshare_content #submit_block
+{
+	border-top: solid 2px #CCC; 
+	padding-top: 15px; 
+	padding-bottom: 0px; 
+	margin-top: 20px;	
+	margin-right: 0px;	
+	margin-bottom: 10px;
+}
+
+#fileshare_content #submit_block a:link
+{
+	font-weight: bold;
+}
+
+#fileshare_content #submit_block a:visited
+{
+	color: #000000;
+}
+	
+
+img.button
+{
+	margin-top: 15px;
+}
+
+#fileshare
+{
+	text-decoration: none;	
+	margin: 5px; 
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+#fileshare_content .layout
+{
+	margin-left: 5px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+.layout .heading
+{
+	float: left;
+	padding: 15px;
+	padding-right: 20px;
+	padding-left: 10px;
+	vertical-align: middle;
+	text-align: middle;
+}
+
+
+#fileshare_content #member_select #member_scrollbox
+{
+	border: solid 1px  #81b1c7;
+	width: 500px;
+	overflow: auto; 
+	text-decoration: none;	
+	margin: 5px;
+	margin-left: 0px; 
+	border-radius: 5px;
+	padding: 5px;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 5px #CCC;
+}
+
+
+#fileshare_content #member_select  #member_scrollbox  .list_member
+{
+	background-color: #EFF2F7; 
+	border: solid 1px #BCBCE9;
+	float: left; 
+	margin: 5px; 
+	padding-left: 4px; 
+	padding-right: 7px; 
+	padding-top: 3px; 
+	padding-bottom: 5px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	text-decoration: none;
+	cursor: default;
+}
+
+#fileshare #program_scrollbox li.list_member
+{
+	margin: 2px;
+	padding: 2px; 
+	max-width: 340px;	 
+	display: block;
+}
+
+
+#fileshare .list_member .list_action
+{
+	width: auto:
+}
+
+#fileshare #member_scrollbox .list_member .action, 
+	#fileshare #program_scrollbox .list_member img
+{
+	background: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+#member_select
+{
+	width: auto; 
+	clear:both; 
+	padding: 8px; 
+}
+
+
+#member_select .list_member a:link, 
+	#fileshare .list_member a:link
+{
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
+}
+
+#member_select a:visited, 
+	#fileshare .list_member a:visited
+{
+	text-decoration: none;
+}
+
+#fileshare .list_member a:hover
+{
+	background-color: #96A6CE;	
+	display: block;
+}	
+
+
+#member_select a:link, #member_select a:visited
+{
+	display: inline;
+	text-decoration: none;
+	color: #ABB8D2;
+	font-weight: bold;	
+	padding-left: 5px;
+	padding-right: 5px;	
+}
+
+.ann
+{
+	color: #2B388F;
+	font-size: 12px;
+}
+
+img
+{
+	display:inline;
+	vertical-align: middle;
+	border: none;	
+}
+
+
+a.list_member
+{
+	color: #ABB8D2;
+	font-weight: bold;	
+	padding-left: 5px;
+	padding-right: 5px;	
+	text-decoration: none;
+	
+}
+
+
+#right .module #fileshare_list h3.fileshare_list
+{
+	background-color: #EEEEEE;
+	color: #000000;
+	text-align: center;
+	width: auto;
+}
+
+
+
+#right .module #fileshare_list h3.fileshare_list a.heading, 
+#right .module #fileshare_list h3.fileshare_list a.visited
+{
+	text-decoration: none;
+}
+
+
+
+#right .module #fileshare_list
+{
+	height: 200px;
+	overflow: auto;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	width: 205px;
+	background-color: #fff;
+	color:#000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	text-align: left;
+	border: 1px #A9CDED;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-box-shadow: 2px 2px 12px #999999;
+	-webkit-box-shadow: 2px 2px 12px #999999;
+}
+
+
+#fileshare_list ul 
+{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	z-index: 148;
+	padding-top: 8px;
+}
+
+
+#fileshare_list li
+{
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+
+
+#fileshare_list ul li .list_member
+{
+	background-color: #EFF2F7; 
+	float: left; 
+	text-decoration: none;
+	cursor: default;		
+	vertical-align: middle;
+	background: transparent;
+	color: #fff;
+	margin-left: 13px;
+	height: 23px;
+	position: relative;
+	z-index: 148;
+}
+
+#right .module #fileshare_list ul li .action
+{
+	background-color: none; 
+	float: left; 
+	text-decoration: none;
+	cursor: default;		
+	vertical-align: middle;
+	background: transparent;
+	margin-left: 13px;
+	height: 23px;
+	position: relative;
+	z-index: 148;
+}
+
+/* Letter section headings */
+.heading_black
+{
+	font-size: 15px;
+	font: Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	color: #000000;
+    border-bottom: 1px solid #808080;
+}
+
+
+
+/* box border under tab bar */
+#tab_border {
+	clear: left;
+	border: solid 1px #000; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+	width: 640px;
+}
+
+
+#library_search .paginator
+{
+	clear: both;
+}
+
+#buttons
+{
+	margin-top: 10px;
+}
+
+table.tree
+{
+	border: none;
+}
+
+#tabs.fileshare
+{
+	width: 642px;
+}
+
+#library_documents.list
+{
+	width: 636px;
+}

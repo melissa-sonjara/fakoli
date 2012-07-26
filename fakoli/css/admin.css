@@ -1,0 +1,929 @@
+@charset "utf-8";
+body  
+{
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	line-height: normal;
+	background-color: #b8c5d9;
+	color: #00000;
+}
+ 
+img
+{
+	border: none;
+}
+
+table
+{
+	vertical-align: top;
+	text-align: left;
+}
+
+dl
+{
+	margin: 5px;
+	padding: 0;
+}
+
+dt
+{
+	font-weight: bold;
+}
+
+dd
+{
+	padding: 0;
+	margin: 5px;
+}
+
+#footer
+{
+	clear: both;
+	height: 10px;
+	background: url(/fakoli/images/divider.png)  192px 0px repeat-y transparent;
+}
+
+#footer_shim
+{
+	margin: 0;
+	padding: 0 0 0 12px;
+	height: 10px;
+	border-right: solid 1px #000;
+	width: 180px;
+}
+.footer, .footer a, .footer a:link, .footer a:visited
+{
+	color: #ffffff;
+	margin: 0px;
+	padding: 0px;
+	font-family: Calibri, sans-serif;
+	font-size: 11pt;
+	font-weight: bold;
+	text-decoration: none;
+	background: #336600; 
+
+}  
+#footer a, #footer a:visited
+{
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a, a:active
+{
+	outline:  none;
+}
+
+#frame
+{
+	background: url(/fakoli/images/fakoli_cms_banner.jpg) top left no-repeat #fff;
+	border: solid 1px #000;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-moz-box-shadow: 2px 2px 12px #666;
+	-webkit-box-shadow: 2px 2px 12px #666;
+	box-shadow: 2px 2px 12px #666;
+	width: 960px;
+	background-color: #fff;
+	border-collapse: collapse;
+	margin: 5px auto;
+}
+
+#header
+{
+	height: 120px;
+	margin: 0;
+	padding: 0;
+    border-bottom: solid 1px #000;
+}
+
+#header a
+{
+	display: block;
+	height: 120px;
+	width: 960px;
+}
+
+#layout
+{
+	position: relative;
+	width: 960px;
+	margin: 0;
+	padding: 0;
+	background: url(/fakoli/images/divider.png)  192px 0px repeat-y #ffffff;
+	display: table-cell;
+	min-height: 400px;
+}
+
+#container
+{
+	padding: 10px;
+}
+
+#header_divider
+{
+	height: 6px;
+	font-size: 1pt;
+	background-color: #2B6926;
+}
+
+#leftnav
+{
+	float: left;
+	vertical-align: top;
+	padding-top: 5px;
+	padding-left: 6px;
+	padding-right: 6px;
+	padding-bottom: 12px;
+	width: 180px;
+	background: #FFFFFF;
+	min-height: 400px;
+}
+
+#login
+{
+	margin-top: 100px;
+	border: solid 1px #000;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #cfceef;
+	padding: 5px;
+	-moz-box-shadow: 2px 2px 12px #888;
+	-webkit-box-shadow: 2px 2px 12px #888;
+	box-shadow: 2px 2px 12px #888;
+}
+
+#login input
+{
+	border: solid 1px #333;
+}
+
+.module
+{
+	vertical-align: top;
+	background: #ffffff ;
+	padding-top:5px;
+	margin-top:5px;
+}
+
+
+#content  
+{	
+	font-size: 12px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-style: normal;
+	line-height: 16px;
+	font-weight: normal;
+	padding: 2px;
+	vertical-align: top;
+}
+
+#content p {
+	color: #000000;
+
+
+}
+#content a:link, #content a:visited,  #content a:hover{
+
+	color: #000000;
+	font-weight: bold;
+
+}
+
+.menuitem, .menuitem:link
+{
+	font-family: Verdana, sans-serif;
+	FONT-SIZE: 10pt;
+	display: block;
+	height: 30px;
+	padding-right: 10px;
+	FONT-FAMILY: arial;
+	TEXT-DECORATION: none;
+	color: #fff;
+	text-align: right;
+	font-weight: normal;
+}
+
+.menuitem:hover 
+{
+	COLOR: #504c31;
+	background-color: #8bad51;
+}
+
+.selecteditem
+{
+	font-family: Verdana, sans-serif;
+	FONT-SIZE: 10pt;
+	display: block;
+	height: 30px;
+	padding-right: 10px;
+	FONT-FAMILY: arial;
+	TEXT-DECORATION: none;
+	color: #fff;
+	text-align: right;
+	COLOR: #504c31;
+	background-color: #8bad51;
+}
+
+
+#content_cell
+{
+	padding-left:  20px;
+	padding-top:   1px; 
+	padding-right: 20px;
+	background-color: #fff;
+	border-left: solid 1px #ccc;
+	vertical-align: top;
+	/*height: 550px;*/
+	font-size: 12px;	
+}
+
+
+#content-admin
+
+{
+	float: left;
+	margin-left: 180px;
+	width: 760px;
+	margin: 0;
+	padding: 0;
+	min-height: 400px;
+}
+
+#content-admin h2 
+{
+	vertical-align: top;
+	color: #000 ;
+	border-bottom: solid 1px #ccc;
+	font-size: 18px;
+	margin-top: 10px;
+	padding-top: 0px;
+	padding-bottom: 4px;
+	font-family: Calibri, Arial, Helvetica, sans-serif;	
+}
+
+h2
+{
+	color: #000;
+	border-bottom: solid 1px #ccc;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+h3
+{
+	color: #000;
+	border-bottom: solid 1px #ccc;
+	font-size: 16px;
+}
+
+
+label
+{
+	font-size: 14px;
+	color: #000;
+	border-bottom: 0;
+	font-weight: bold;
+}
+
+h4
+{
+	color: #555;
+	font-size: 12px;	
+	border-bottom: solid 1px #ccc;
+}
+
+
+table.form
+{
+	background-color: #fffff;
+	line-height: 18px;
+}
+
+table.form th
+{
+	background-color: #ddd;
+	color: #fff;
+	font-weight: bold;
+	text-align: left;
+	padding: 4px;
+}
+
+table.form td
+{
+	padding: 4px;
+	text-align: left;
+}
+
+td.label
+{
+	font-weight: bold;
+	text-align: left;
+	vertical-align: top;
+	font-size: 10pt;
+	color: #ooo;
+	border-bottom: 0;
+}
+
+/*table.list
+{
+	background-color: #ffffff;
+	border: solid 1px #ddd;
+	border-collapse: collapse;
+	font-size: 10pt;
+}
+
+table.list th
+{
+	background-color: #ddd;
+	color: #fff;
+	font-weight: bold;
+	text-align: left;
+	padding: 4px;
+}
+
+table.list td
+{
+	padding: 4px;
+	border: solid 1px #ccc;
+}
+
+table.list td.subheading
+{
+	padding: 4px;
+	border: solid 1px #ccc;
+	background-color: #ccc;
+	font-weight: bold;
+	font-style: oblique;
+}
+
+table.list td.subtotal
+{
+	padding: 4px;
+	border: solid 1px #ccc;
+	background-color: #ccc;
+	font-weight: bold;
+	font-style: normal;
+}
+*/
+
+table.list td a
+{
+	color: #000;
+	display: block;
+	text-decoration: none;
+	border: solid 1px none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 2px;
+	font-weight: bold;
+}
+
+table.list td a:hover
+{
+	color: #fff;
+	background-color: #325E9E;
+}
+
+input, textarea, select
+{
+	border: solid 1px #666;
+	background: #eef;
+}
+
+.scrollbox
+{
+	border: solid 1px #666;
+	background: #fff;
+} 
+
+#calloutbox
+{
+ padding: 5px;
+ width: 200px;
+ float: right;
+ background: #dddddd;
+ border: solid 1px #ccc;
+ margin:9px;
+ height:auto;
+ 
+}
+
+#calloutbox  h2
+
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	font-weight: bold;
+	font-size: 12px;
+}
+#calloutbox P {
+	color: #000;
+	font-size: 12px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-style: normal;
+	line-height: 16px;
+	font-weight: normal;
+}
+
+#calloutbox a:link, #calloutbox a:visited,  #calloutbox a:hover{
+
+	color: #000;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.button
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border: solid 1px #888;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	background: url(/fakoli/images/button-strip.gif) top left #cccccc;
+	cursor: pointer;
+}
+
+a.button,
+table.list a.button
+{
+	text-decoration: none;
+	font-size: 10pt;
+	padding: 2px 6px;
+	color: #000;
+	width: auto;
+	outline: none;
+	cursor: pointer;
+	font-weight: normal;
+	white-space: nowrap;
+}
+
+.button:hover,
+table.list .button:hover
+{
+	color: #000;
+	border: solid 1px #000;
+}
+
+input.button
+{
+	padding: 2px 6px;
+	cursor: pointer;
+}
+
+#menu h4
+{
+	font-family: Tahoma, Verdana, sans-serif;
+	display: block;
+	font-size: 12px;
+	color: #000;
+	border: solid 1px #666;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	background: url(/fakoli/images/table-header.png) top left repeat-x transparent;
+	padding-left: 20px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	margin-bottom: 6px;
+	cursor: pointer;
+}
+
+#menu .adminmenuitem:hover
+{
+	color: #000;
+	background-color: #ddd;
+	min-width: 4px;
+}
+
+#menu .adminmenuitem
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	display: block;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 10px;
+	padding-left: 20px;
+	border: solid 1px #fff;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	text-decoration: none;	
+	color: #333;
+	text-align: left;
+}
+
+#menu .selectedadminitem
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	display: block;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 10px;
+	padding-left: 20px;
+	border: solid 1px #fff;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	text-decoration: none;	
+	text-align: left;
+	color: #fff;
+	background-color: #325e9e;
+}
+
+#tabs,
+#popup_tabs 
+{
+  float:left;
+  width:100%;
+  background:#ffffff;
+  font-size:12px;
+  line-height:18px;
+  text-align: center;
+  clear: left;
+  padding-top: 12px;
+}
+
+#tabs ul,
+#popup_tabs ul  
+{
+  margin:0;
+  padding: 0;
+  padding-top: 2px;
+  list-style:none;
+  text-align: center;
+  height: 24px;
+}
+
+#tabs li,
+#popup_tabs li 
+{
+  float:left;
+  background:url("/fakoli/images/tabs/tab_left.gif") no-repeat left top;
+  margin:0;
+  padding: 0;
+  padding-left: 10px;
+  font-size: 9pt;
+  text-align: center;
+}
+  
+#tabs a,
+#popup_tabs a
+{
+  float:left;
+  display:block;
+  background:url("/fakoli/images/tabs/tab_right.gif") no-repeat right top;
+  padding:3px 15px 3px 3px;
+  text-decoration:none;
+  font-weight:bold;
+  color:#000 ;
+  outline: none;
+  border: none !important;
+}  
+
+/* Commented Backslash Hack
+
+   hides rule from IE5-Mac \*/
+
+#tabs a {float:none;}
+#popup_tabs a {float:none;}
+
+/* End IE5-Mac hack */
+
+#tabs a:hover,
+#popup_tabs a:hover
+{
+  text-decoration: underline;
+}
+
+#tabs a.disabled,
+#popup_tabs a.disabled
+{
+	color: #fff;
+}
+
+#tabs a.disabled:hover,
+#popup_tabs a.disabled:hover
+{
+	color: #fff;
+	text-decoration: none;
+}
+
+#tabs .current,
+#popup_tabs .current 
+{
+  background-image:url("/fakoli/images/tabs/tab_left_on.gif");
+}
+
+#tabs .current a,
+#popup_tabs .current a
+{
+  background-image:url("/fakoli/images/tabs/tab_right_on.gif");
+  color:#fff;
+  padding-bottom:3px;
+}  
+
+
+#subtabs
+{
+	background-color: #1c5892;
+	clear: left;
+	padding: 0;
+	margin: 0;
+	border-left: solid 1px #000;
+	border-top: solid 1px #000;
+	border-right: solid 1px #000;
+	text-decoration: none;
+	width: 100%;
+}
+
+
+#subtabs ul  
+{
+  margin:0;
+  padding: 0;
+  list-style:none;
+  text-align: center;
+  background-color: #eee;
+  height: 24px;
+  width: 100%;
+}
+
+#subtabs li 
+{
+  float: left;
+  background-color: #E0E0E0;
+  border-right: solid 1px #000;
+  margin:0;
+  padding: 0;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: none ;
+}
+  
+#subtabs a
+{
+  float:left;
+  display:block;
+  background-color: #a9cded;
+  padding: 3px 15px 3px 15px;
+  font-weight:normal;
+  color: #000;
+  height: 18px;
+  outline: none;
+  border: none !important;
+}  
+
+#subtabs li a:hover {
+	background-color: #aaa;	
+	color: #000;
+	text-decoration: none;
+}
+
+
+#subtabs li.current a,
+#subtabs li.current a:hover
+{
+	font-weight: bold;
+	background-color: #325E9E;
+	color: #ffffff;
+	text-decoration: none;
+}
+
+
+
+#subtabs a:visited {
+	text-decoration: none;
+	background-color: #E0E0E0;
+ 	color: #000000;
+    font-weight:normal;	
+}
+
+
+#subtabs a:link {
+	text-decoration: none;
+	background-color:  #E0E0E0;
+ 	color: #000000;
+}
+
+#subtabs a.disabled {
+	font-style: italic;
+}
+	
+
+.whitelabel
+{
+	color: #ffffff;
+
+}
+
+
+
+.glossary_link
+{
+	color: #799840;
+}
+
+#termPopup
+{
+	border: solid 1px #000;
+	background-color: #ffffdd;
+	font-size: 9pt;
+	padding: 4px;
+	width: 250px;
+	position: absolute;
+	display: none;
+}
+
+
+#right
+{
+	background: #fff;
+	float: right;
+	width: 220px;
+	vertical-align: top;
+	margin-left: 5px;
+	padding-left: 10px;
+	padding-top: 12px;
+	margin-right: 5px;
+	margin-top: 0px;
+
+}
+
+	
+	
+#right div.module
+
+{
+	border-top: solid 1px #ccc;
+	border-left: solid 1px #ccc;
+	padding-left: 5px;
+
+}
+
+#right img.center
+{
+	display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+#additional_content div.module
+{
+	border-top: solid 1px #ccc;
+
+}
+
+
+#right a:link, #right  a:visited,  #right  a:hover
+{
+
+	color: #006600;
+	font-weight: normal;
+}
+
+#right h3
+
+{
+	font-size: 16px;
+}
+
+#bottom_boxes
+	
+	{
+	
+	color: #006600;
+	vertical-align: top;
+	/*width: 730px;*/
+}
+	
+	
+#bottom_boxes div.module
+
+{
+	width: 210px;
+	vertical-align: top;
+	float: left;
+	border-top: solid 1px #ccc;
+	border-right: solid 1px #ccc;
+	padding-top: 12px;
+	padding-left: 6px;
+	padding-right: 6px;
+	padding-bottom: 12px;
+	height: 250px;
+}
+
+#bottom_boxes a:link, #bottom_boxes  a:visited,  #bottom_boxes  a:hover
+{
+
+	color: #000;
+	font-weight: normal;
+}
+
+#breadcrumbs
+{
+	padding-bottom: 10px;
+	font-size: 11px;
+	font-weight: normal;
+	color: #555;
+}
+
+#breadcrumbs a
+{
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+
+#breadcrumbs a:hover
+{
+	text-decoration: underline;
+}	
+
+
+warning
+{
+	font-size: 10pt;
+	color: #CC0000;
+	font-weight: bold;
+	padding-left: 20px;
+	background-image: url(/fakoli/images/warning_icon.gif);
+	background-repeat: no-repeat;
+}
+
+
+/* box border under tab bar */
+#tab_border {
+	clear: left;
+	border: solid 1px #000; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
+#error_report
+{
+	display: block;
+	width: 600px;
+	margin: 50px auto;
+}
+
+#error_report_header
+{
+	padding: 2px;
+}
+
+#error_report .dialog_body
+{
+	padding: 10px;
+	font-weight: bold;
+}
+
+#error_report_icon
+{
+	float: left;
+}
+
+
+
+.tabs_dropdown 
+{
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 1px solid #000000;
+  box-shadow: 1px 1px 3px #333333;
+  display: none;
+  height: 200px;
+  left: 0;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  width: 150px;
+}
+
+.tabs_dropdown ul
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tabs_dropdown a,
+.tabs_dropdown a:visited
+{
+	display: block;
+	color: #000;
+	text-decoration: none;
+	padding: 2px;
+}
+
+.tabs_dropdown a:hover
+{
+	color: #fff;
+	background-color: #325E9E;
+}

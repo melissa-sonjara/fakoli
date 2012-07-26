@@ -33,6 +33,8 @@
 
 require_once realpath(dirname(__FILE__)."/data_item.inc");
 
+Fakoli::using("context_help");
+
 /**
  * FieldRenderer is the abstract base class for all FieldRenderers. 
  * FieldRenderers are used by the AutoForm class to provide the editing/display
@@ -54,6 +56,7 @@ class FieldRenderer
 	var $colspan = 1;
 	var $annotateBefore = false;
 	var $annotateNextLine = true;
+	var $hideLabel = false;
 	
 	/**
 	 * Constructor
@@ -80,34 +83,13 @@ class FieldRenderer
 	 * @param string $annotation annotation text for the field
 	 */
 	function _printLabel($field, $colspan=1, $styles = "", $annotation = "")
-	{		
-		$label = $this->_getLabel($field);
-		
-		echo "<td colspan='$colspan'";
-		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
-		if ($styles) echo " style='$styles'";
-		echo "><label for='$field'>$label</label> $annotation</td>\n";
+	{	
+		$this->parent->layout->printLabel($field, $this, $styles, $annotation);			
 	}
 
 	function _getLabel($field, $addSuffix = true)
 	{
-		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
-		
-		if ($this->parent->markRequiredFields &&
-		    $this->parent->isRequired($field))
-		{
-	    	$label .= "*";
-	    }
-
-	    $label .= $this->labelSuffix;
-		
-	    if ($this->parent->onFormatLabel)
-	    {
-	    	$fn = $this->parent->onFormatLabel;
-	    	$label = $fn($this->parent, $field, $label);
-	    }
-	    
-	    return $label;
+		return $this->parent->layout->getLabel($field, $addSuffix);
 	}
 	
 	/**
@@ -118,23 +100,7 @@ class FieldRenderer
 	 */
 	function _startField($field, $styles = "")
 	{
-		if ($this->colspan > 1) $styles = "text-align: left;$styles";
-		echo "<tr>\n";
-		$this->_printLabel($field, $this->colspan, $styles, ($this->colspan > 1) ? $this->parent->annotations[$field] : "");
-		
-		if ($this->colspan > 1)
-		{
-			echo "</tr>\n";
-			echo "<tr>\n";
-		}
-		echo "<td colspan='{$this->colspan}'";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-		
-		if ($this->annotateBefore && $this->parent->annotations[$field] && $this->colspan == 1)
-		{
-			echo $this->parent->annotations[$field]."<br/>";
-		}
+		$this->parent->layout->startField($field, $this, $styles);
 	}
 	
 	/**
@@ -144,31 +110,27 @@ class FieldRenderer
 	 */
 	function _endField($field)
 	{
-		if (!$this->annotateBefore && $this->colspan == 1 && $this->parent->annotations[$field])
-		{
-			if ($this->annotateNextLine)
-			{
-				echo "<br/>"; 
-			}
-			else 
-			{
-				echo "&nbsp;&nbsp;";
-			}
-			echo $this->parent->annotations[$field];
-		}
-		
-		echo "</td>\n</tr>\n";
+		$this->parent->layout->endField($field, $this);
 	}
+
 	
 	/**
 	 * This method is called by the AutoForm to add any default input validators that are required
 	 * by the FieldRenderer.
+	 * 
+	 * Fields that need custom validation or a custom required validator 
+	 * should override this function.
 	 *
 	 * @param string $field the field name
+	 * 
+	 * @param boolean $required - whether the field is required
 	 */
-	function addValidatorsToForm($field)
+	function addValidatorsToForm($field, $required = false)
 	{
-		// No validators by default	
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+		if($required)
+			$this->parent->validator->add(new RequiredValidator($field, $label));
 	}
 	
 	
@@ -281,6 +243,7 @@ require_once realpath(dirname(__FILE__))."/field_renderers/boolean_field_rendere
 require_once realpath(dirname(__FILE__))."/field_renderers/cross_reference_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/currency_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/date_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/datetime_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/file_upload_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/html_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/number_field_renderer.inc";
@@ -296,5 +259,10 @@ require_once realpath(dirname(__FILE__))."/field_renderers/text_field_renderer.i
 require_once realpath(dirname(__FILE__))."/field_renderers/time_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/tree_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/checklist_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/timezone_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/zipcode_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/select_field_view_source_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/data_list_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/phone_number_field_renderer.inc";
 
 ?>

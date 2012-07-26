@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * 
 */
 
-require_once realpath(dirname(__FILE__)."/../../framework/validation.inc");
+Fakoli::usingFeature("validation");
 
 /**
  * RequiredQuestion Validator.
@@ -110,12 +110,15 @@ class RequiredCheckListQuestionValidator extends RequiredValidator
 {
 	var $min;
 	var $answer;
+	var $text;
 	
 	function RequiredCheckListQuestionValidator($field, $title, $min = 0, $answer = "")
 	{
 		$this->min = $min;
 		$this->answer = $answer;
 		$this->AbstractValidator($field, $title);
+		
+		$this->text = ($min < 2) ? "checkbox" : "checkboxes";
 	}
 		
 	function writeClient()
@@ -133,10 +136,10 @@ class RequiredCheckListQuestionValidator extends RequiredValidator
 			if(fieldName.checked == true)
 				countChecked += 1;
 		}
-		
+			
 	if ({$this->min} > 0 && countChecked < {$this->min})
 	{
-		alert("You must check at least {$this->min} checkboxes for {$this->title}.");
+		alert("You must check at least {$this->min} {$this->text} for {$this->title}.");
 		return false;
 	}
 ENDSCRIPT;
@@ -169,7 +172,75 @@ ENDSCRIPT;
 		
 		if ($count < $this->min)
 		{
-			return "You must check at least {$this->min} checkboxes for {$this->title}.";
+			return "You must check at least {$this->min} {$this->text} for {$this->title}.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}
+
+
+
+/**
+ * RequiredRadioButtonQuestion Validator.
+ * 
+ * Validates one radio button is checked
+ */
+class RequiredRadioButtonQuestionValidator extends RequiredValidator
+{
+	var $answer;
+	
+	function RequiredRadioButtonQuestionValidator($field, $title, $answer = "")
+	{
+		$this->answer = $answer;
+		$this->AbstractValidator($field, $title);
+	}
+		
+	function writeClient()
+	{
+		$script = <<<ENDSCRIPT
+
+		var i = 1;
+		var countChecked = 0;
+		var max = form["count_{$this->field}"].value;
+
+		var fieldName;
+		for(i=1; i <= max; i++)
+		{
+			fieldName = form["{$this->field}_"+i];
+			if(fieldName.checked)
+				countChecked += 1;
+		}
+			
+			
+	if (countChecked < 1)
+	{
+		alert("You must select an option for {$this->title}.");
+		return false;
+	}
+	
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		if(!$this->answer)
+		{
+			global $_POST;
+			$value = $_POST[$this->field];
+		}
+		else
+		{
+			$value = $this->answer->value;
+		}
+		
+		if(!$value)
+		{
+			return "You must select an option for {$this->title}.";
 		}
 		else
 		{

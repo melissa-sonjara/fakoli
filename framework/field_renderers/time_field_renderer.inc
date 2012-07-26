@@ -39,7 +39,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class TimeFieldRenderer extends FieldRenderer
 {
-	function BooleanFieldRenderer(&$parent)
+	function TimeFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);		
 	}
@@ -52,8 +52,9 @@ class TimeFieldRenderer extends FieldRenderer
 	function renderField($field)
 	{
 		$value = $this->parent->data->get($field);
-		
-		if ($value)
+
+		// JDG show as empty if value stored is 00
+		if ($value AND $value != '00:00:00')
 		{
 			$text = date("h/i/A", strtotime($value));
 			list($hh, $mm, $aa) = explode("/", $text);
@@ -71,12 +72,16 @@ class TimeFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function addValidatorsToForm($field)
+	function addValidatorsToForm($field, $required = false)
 	{
 		$prettyName = $this->parent->prettifyFieldName($field);
 
-		$this->parent->validator->add(new RangeValidator("{$field}_hh", "$prettyName Hours", 1, 12));
-		$this->parent->validator->add(new RangeValidator("{$field}_mm", "$prettyName Minutes", 0, 59));
+		$this->parent->validator->add(new TimeValidator($field, $label));
+				
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredTimeValidator($field, $label));
+		}		
 	}
 	
 	function renderSearchField($field)
@@ -111,6 +116,14 @@ class TimeFieldRenderer extends FieldRenderer
 		$mm = checkNumeric($_POST["{$field}_mm"]);
 		$aa = $_POST["{$field}_aa"];
 		if ($aa != "AM" && $aa != "PM") die("Invalid meridiem");
+
+		// JDG - allow time fields to be empty
+		if(!$hh)
+		{
+			$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("00:00"));
+			return;
+		}
+	
 		if ($aa == "PM" && $hh != "12") $hh += 12;
 		if ($aa == "AM" && $hh == "12") $hh = "00";
 		$this->parent->data->set($field, "$hh:$mm");

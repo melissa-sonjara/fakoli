@@ -77,15 +77,18 @@ function <?echo $this->parent->id?>_showPassword()
 	
 	function renderPasswordBlock($field, $display = "block")
 	{
+		$enter = $this->parent->passwordEnterLabel;
+		$confirm = $this->parent->passwordConfirmLabel;
+	
 ?>
 			 <input type="hidden" name="<?echo $field ?>" value="">
 			 <table border="0" cellspacing="0" cellpadding="0" id="<?echo $this->parent->id ?>_password_block" style="padding: 0px; display: <?echo $display ?>">
 			  <tr>
-  				<td style="vertical-align: top; text-align: left">Enter&nbsp;</td>
+  				<td style="vertical-align: top; text-align: left"><?echo $enter?>&nbsp;</td>
   				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $this->parent->id?>_password" size="20" value=""/></td>
  			  </tr>
  			  <tr>
-  				<td style="vertical-align: top; text-align: left">Confirm&nbsp;</td>
+  				<td style="vertical-align: top; text-align: left"><?echo $confirm?>&nbsp;</td>
   				<td><input type="password" name="<?echo $this->parent->id?>_confirm" size="20" value=""/></td>
  			  </tr>
  			 </table>		

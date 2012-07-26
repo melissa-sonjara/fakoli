@@ -50,6 +50,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $label;
 	var $options;
 	var $showSelectAll;
+	var $groupBy;
 	
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -61,13 +62,29 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		$this->showSelectAll = false;
 		
 		$this->FieldRenderer($form);
-		$form->add($this);
+		
+		// JDG 7/31/2011 - allow override
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;
+		}	
 	}
 	
 	function setSize($width, $height)
 	{
 		$this->width = $width;
 		$this->height = $height;
+	}
+	
+	function groupBy($groupBy, $format = "")
+	{
+		$this->groupBy = $groupBy;
+		$this->groupByFormat = $format;
 	}
 	
 	function renderScript($field)
@@ -122,7 +139,15 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		$obj = $this->parent->data;
 
-		$rc = $this->options[0];
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
+		{
+			$keys = array_keys($this->options);
+			$rc = $this->options[$keys[0]][0];
+		}
+		else
+		{
+			$rc = $this->options[0];
+		}
 
 		$xref = new $this->xrefClass;
 		
@@ -137,11 +162,53 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		}
 		if ($this->width && $this->height)
 		{
-			echo "<div style='width: {$this->width}px; height: {$this->height}px; border: solid 1px black; overflow: auto'>\n";
+			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$countOptions = count($this->options);
-		foreach($this->options as $item)
+		
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
+		{
+			$gpk = $this->groupBy[0]->getPrimaryKey();
+						
+			foreach($this->groupBy as $group)
+			{
+				if (array_key_exists($group->get($gpk), $this->options))
+				{
+					echo $group->format($this->groupByFormat);
+					$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected); 
+				}
+			}
+		}
+		else if (is_string($this->groupBy))
+		{
+			$options = regroupList($this->options, $this->groupBy);
+
+			foreach($options as $group => $choices)
+			{
+				echo "<br/><h4>$group</h4>";
+				$this->renderCheckboxes($field, $choices, $itempk, $selected);
+			}
+		}
+		else
+		{
+			$this->renderCheckBoxes($field, $this->options, $itempk, $selected);  
+		}
+		
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";		
+		
+		$this->_endField($field);
+	}
+	
+	function renderCheckboxes($field, $items, $itempk, $selected)
+	{
+		foreach($items as $item)
 		{
 			$p = $item->$itempk;
 			
@@ -154,16 +221,6 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo $this->formatName($item, $this->nameField);
 			echo "<br/>";
 		}
-
-		if ($this->width && $this->height)
-		{
-			echo "</div>\n";
-		}
-
-		// Save this count to loop through checkboxes on required validation
-		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";		
-		
-		$this->_endField($field);
 	}
 	
 	function renderReadOnly($field = "")
@@ -201,12 +258,24 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	
 	function postProcess($field = "")
 	{
+		if (count($this->options) == 0) return;
+
 		$xref = new $this->xrefClass;
 		
 		$obj = $this->parent->data;
 		$pk =  $this->getMatchingPK($xref, $obj);
 		
-		$optpk = $this->getMatchingPK($xref, $this->options[0]);
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
+		{
+			$keys = array_keys($this->options);
+			$rc = $this->options[$keys[0]][0];
+		}
+		else
+		{
+			$rc = $this->options[0];
+		}
+		
+		$optpk = $this->getMatchingPK($xref, $rc);
 		
 		// Clear out current relations
 		

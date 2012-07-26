@@ -32,7 +32,7 @@ table.tree div
 	cursor: pointer;
 	font-weight: bold;
 	padding-left: 36px;
-	background: url(/framework/images/open.png) center left no-repeat #fff;
+	background: url(/fakoli/images/open.png) center left no-repeat #fff;
 }
 
 .tree_node_closed
@@ -46,7 +46,7 @@ table.tree div
 	color: #000;
 	font-weight: bold;
 	padding-left: 18px;
-	background: url(/framework/images/closed.png) center left no-repeat #fff;
+	background: url(/fakoli/images/closed.png) center left no-repeat #fff;
 }
 
 .tree_node_leaf
@@ -60,7 +60,7 @@ table.tree div
 	color: #000;
 	font-weight: bold;
 	padding-left: 18px;
-	background: url(/framework/images/empty.png) center left no-repeat #fff;
+	background: url(/fakoli/images/empty.png) center left no-repeat #fff;
 }
 
 .bare_node_open
@@ -74,7 +74,7 @@ table.tree div
 	cursor: pointer;
 	font-weight: bold;
 	padding-left: 18px;
-	background: url(/framework/images/toggle_open.png) center left no-repeat #fff;
+	background: url(/fakoli/images/toggle_open.png) center left no-repeat #fff;
 }
 
 .bare_node_closed
@@ -88,7 +88,7 @@ table.tree div
 	color: #000;
 	font-weight: bold;
 	padding-left: 36px;
-	background: url(/framework/images/toggle_closed.png) center left no-repeat #fff;
+	background: url(/fakoli/images/toggle_closed.png) center left no-repeat #fff;
 }
 
 .bare_node_leaf
@@ -102,7 +102,7 @@ table.tree div
 	color: #000;
 	font-weight: bold;
 	padding-left: 36px;
-	background: url(/framework/images/toggle_blank.png) center left no-repeat #fff;
+	background: url(/fakoli/images/toggle_blank.png) center left no-repeat #fff;
 }
 
 .doc_node_leaf
@@ -117,7 +117,7 @@ table.tree div
 	font-weight: normal;
 	padding-left: 20px;
 
-	background: url(/framework/images/msword_icon.png) center left no-repeat #fff;
+	background: url(/fakoli/images/msword_icon.png) center left no-repeat #fff;
 }
 
 .ppt_node_leaf
@@ -131,7 +131,7 @@ table.tree div
 	color: #000;
 	font-weight: normal;
 	padding-left: 18px;
-	background: url(/framework/images/ppt_icon.png) center left no-repeat #fff;
+	background: url(/fakoli/images/ppt_icon.png) center left no-repeat #fff;
 	
 }
 
@@ -146,7 +146,7 @@ table.tree div
 	color: #000;
 	font-weight: normal;
 	padding-left: 18px;
-	background: url(/framework/images/pdf_icon.png) center left no-repeat #fff;
+	background: url(/fakoli/images/pdf_icon.png) center left no-repeat #fff;
 }
 
 .file_node_leaf
@@ -160,7 +160,7 @@ table.tree div
 	color: #000;
 	font-weight: normal;
 	padding-left: 24px;
-	background: url(/framework/images/file_icon.png) center left no-repeat #fff;
+	background: url(/fakoli/images/file_icon.png) center left no-repeat #fff;
 }
 
 .tree a
