@@ -649,6 +649,12 @@ class LeftOuterJoin extends AbstractJoin
 					}
 					
 					//$join .= " AND t$i.{$p->primary_key}=t$j.{$p->primary_key}";
+					$idx = "{$j}-{$p->primary_key}";
+					if ($joined[$idx])
+					{
+						continue;
+					}
+					
 					if ($joined[$j])
 					{
 						$join .= " AND t$i.{$p->primary_key}=t$j.{$p->primary_key}";
@@ -659,6 +665,8 @@ class LeftOuterJoin extends AbstractJoin
 					}
 					
 					$joined[$j] = true;
+					$joined[$idx] = true;
+					
 				}
 				else if (array_key_exists($q->primary_key, $p->fields))
 				{
@@ -668,6 +676,12 @@ class LeftOuterJoin extends AbstractJoin
 						continue;
 					}
 					
+					$idx = "{$j}-{$q->primary_key}";
+					if ($joined[$idx])
+					{
+						continue;
+					}
+
 					//$join .= " AND t$i.{$q->primary_key}=t$j.{$q->primary_key}";
 					if ($joined[$j])
 					{
@@ -679,6 +693,7 @@ class LeftOuterJoin extends AbstractJoin
 					}
 					
 					$joined[$j] = true;
+					$joined[$idx] = true;
 				}
 				
 			}
