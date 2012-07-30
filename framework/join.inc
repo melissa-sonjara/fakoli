@@ -663,7 +663,7 @@ class LeftOuterJoin extends AbstractJoin
 				else if (array_key_exists($q->primary_key, $p->fields))
 				{
 					if ($this->excludedKeys[$d][$q->primary_key] ||
-				    	$this->excludedKeys[$c][$c->primary_key])
+				    	$this->excludedKeys[$c][$q->primary_key])
 					{
 						continue;
 					}
