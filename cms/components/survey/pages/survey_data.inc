@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "survey_manager");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -51,12 +51,11 @@ if(!$survey_id)
 	redirect("index");
 
 $survey = new Survey($survey_id);
-$view = new SurveyReport(new SurveyManager($survey));
+$view = new SurveyReport(new SurveyResultsManager($survey));
 
 $tabs = SurveyManager::surveyTabs($survey_id);
-$menuView = new SurveyMenuView('survey_form');
 
-$page->page_title = "Survey Data: Graphical Summary";
+$page->page_title = "Graphical Data for {$survey->title}";
 
 $script .= $view->writeScript();
 

@@ -31,47 +31,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/*
- * Lets admin users select from standard questions to create a
- * set of questions.
+/**
  *
- * @author Janice Gallant for Sonjara, Inc.
+ * Description: Displays view of a survey in a modal dialog.
  *
- * 10/17/2010
- */
+ * author: Janice Gallant for Sonjara, Inc.
+ *
+ * date: 5/27/2010
+ *
+ ***************************************************************/
 
-Fakoli::using("survey", "questionnaire");
-Fakoli::usingFeature("auto_form");
+Fakoli::using("survey", "survey_manager");
 
-$survey_template_id = checkNumeric($_GET["survey_template_id"]);
+$survey_id = checkNumeric($_GET["survey_id"]);
 
-$surveyTemplate = new SurveyTemplate();
+if(!$survey_id)
+	ajaxReturn("Survey View - unknown survey");
+	
+$survey = new Survey($survey_id);
+$survey->filter = new InclusionFilter("title", "introduction", "message");
+$view = new SurveyView($survey);
 
-if($survey_template_id)
-	$surveyTemplate->load($survey_template_id);
-
-$surveyTemplate->filter = new ExclusionFilter("status");
-$form = new AutoForm($surveyTemplate);
-$form->required("name", "message");
-$form->annotate("message", "Create a boilerplate message for the email survey requests.
-<a class='button' href='#' onclick=\"new Survey().showAdvancedFeaturesDialog(); return false\">Advanced Features</a>"
-);
-
-$tabs = SurveyTemplateManager::surveyTemplateTabs($survey_template_id, false);
-
-if ($method == "POST")
-{
-	if($form->save())
-	{
-		$tabs->queryString = "survey_template_id={$form->data->survey_template_id}";
-		$tabs->next();
-	}
-}
-
-$script .= $form->writeScript();
-
-$tabs->writeHTML();
+echo $view->writeScript();
+$view->drawView();
 ?>
-<div id="tab_border"><?php
-$form->drawForm();
-?></div>

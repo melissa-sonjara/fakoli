@@ -3,60 +3,278 @@ var Survey =  (function()
 	var SurveySingleton = new Class(
 	{
 		dialog: null,
+		question_count: null,
 			
 		initialize: function()
 		{
 		},
+		
+		showIntroductionDialog: function()
+		{
+			this.dialog = modalPopup('Survey Introductions', '/action/survey/introduction_select_dialog', '450px', 'auto', true);		
+		},
+		
+		introductionSelectResult: function(response)
+		{
+			this.closeDialog();
+			
+			if(response)	
+			{
+				var elt = $("Survey_form_introduction");
+				if(elt)
+					elt.set("value", response);
+			}
+	
+		},
+		
+		showMessageSelectDialog: function()
+		{
+			this.dialog = modalPopup('Survey Messages', '/action/survey/message_select_dialog', '450px', 'auto', true);		
+		},
+		
+		messageSelectResult: function(response)
+		{
+			this.closeDialog();
+			
+			if(response)	
+			{
+				var elt = $("Survey_form_message");
+				if(elt)
+					elt.set("value", response);
+			}
+	
+		},	
 	
 		showAdvancedFeaturesDialog: function()
 		{
 			this.dialog = modalPopup('Advanced Message Features', '/action/survey/advanced_message_features_dialog', '450px', 'auto', true);
 		},
-		
-		createSurveyFromTemplate: function(survey_template_id, survey_id)
-		{
-			var request = new Request(
-			{
-				'url': 		'/action/survey/survey_create_from_template?survey_template_id=' + survey_template_id + '&survey_id=' + survey_id, 
-				  'method': 	'get',
-				 'onSuccess': function(response) 
-			{ 
-				var survey_id = parseInt(response);
-				if(!isNaN(survey_id))
-				{
-					go("survey_form?survey_id=" + survey_id);
-				}
-			 },
-			
-			 'onFailure':	function() { alert("Failed to communicate with server");}
-			 });
-			
-			request.send();		
-		},
-
-		// survey_template_preview page - preview/publish the survey template
-		showSurveyTemplateView: function(survey_template_id)
-		{
-			this.dialog = modalPopup('Survey Template', '/action/survey/survey_template_view?survey_template_id=' + survey_template_id, '700px', 'auto', true);
-		},	
-		
-		// survey_template_select page - use survey template as a template
-		showSurveyTemplateSelectView: function(survey_template_id)
-		{
-			this.dialog = modalPopup('Survey Template Preview', '/action/survey/survey_template_view?survey_template_id=' + survey_template_id + '&select=1', '700px', 'auto', true);
-		},	
-		
-		// survey_template_select page - use existing survey as a template
-		showSurveySelectView: function(survey_id)
-		{
-			this.dialog = modalPopup('Survey Select', '/action/survey/survey_template_view?survey_id=' + survey_id + '&select=1', '700px', 'auto', true);
-		},	
-		
+				
 		// survey preview & send
 		showSurveyPreview: function(survey_id)
 		{
-			this.dialog = modalPopup('Survey Preview', '/action/survey/survey_template_view?survey_id=' + survey_id, '700px', 'auto', true);
+			this.dialog = modalPopup('Survey Preview', '/action/survey/survey_view?survey_id=' + survey_id, '700px', 'auto', true);
 		},	
+		
+		closeSurvey: function(survey_id)
+		{
+			var request = new Request(
+			{
+				'url': 		'/action/survey/close_survey?survey_id=' + survey_id, 
+				  'method': 	'get',
+				 'onSuccess': function(response) 
+				 { 
+					if (response == "OK") 
+					{
+						window.location.reload();
+					}
+				},
+					
+				 'onFailure':	function() { alert("Failed to communicate with server");}
+			});
+				
+			request.send();			
+		},
+		
+		reopenSurvey: function(survey_id)
+		{
+			var request = new Request(
+			{
+				'url': 		'/action/survey/reopen_survey?survey_id=' + survey_id, 
+				  'method': 	'get',
+				 'onSuccess': function(response) 
+				 { 
+					if (response == "OK") 
+					{
+						window.location.reload();
+					}
+				},
+					
+				 'onFailure':	function() { alert("Failed to communicate with server");}
+			});
+						
+			request.send();
+		},
+		
+				
+		/*
+		 * Handle Actions drop down in survey_dashboard table
+		 */
+		handleSurveyAction: function(elt, survey_id, response_count)
+		{
+			var action = elt.value;
+			
+			if(action == 'edit')
+			{
+				go("survey_form?survey_id=" + survey_id);
+			}
+			else if(action == 'view')
+			{
+				this.showSurveyPreview(survey_id);
+			}
+			else if(action == 'public_view')
+			{
+				go("survey_response_intro?survey_id=" + survey_id);
+			}
+			else if(action == 'delete')
+			{
+				this.deleteSurvey(survey_id, response_count);
+			}
+			else if(action == 'clone')
+			{
+				this.cloneSurvey(survey_id);
+			}
+			else if(action == "view_results")
+			{
+				go("survey_data?survey_id=" + survey_id);
+			}
+			else if(action == "close")
+			{
+				this.closeSurvey(survey_id);
+			}
+			else if(action == "reopen")
+			{
+				this.reopenSurvey(survey_id);
+			}
+			else if(action == "send_reminders")
+			{
+				this.showSurveyReminderDialog(survey_id);
+			}
+			else if(action == "send")
+			{
+				go("survey_preview?survey_id=" + survey_id);
+			}
+					
+			elt.set('value', '');
+		},
+	
+		/*
+		 * Remove survey question from survey_questions table list view
+		 * and hide the removed row.
+		 */
+		removeSurveyQuestion: function(survey_question_xref_id)
+		{
+			if (confirm("Are you sure you want to remove this question?"))
+			{		
+				var request = new Request(
+				{
+					'url': 		'/action/survey/survey_question_remove?survey_question_xref_id=' + survey_question_xref_id, 
+					  'method': 	'get',
+					 'onSuccess': function(response) 
+					 { 
+						if (response == "OK") 
+						{
+							var tr = $("survey_question_xref_id_" + survey_question_xref_id);
+							tr.setStyle("display", "none");
+						}
+					 },
+				
+					 'onFailure':	function() { alert("Failed to communicate with server");}
+				 });
+				
+				request.send();				
+			}		
+		},
+		
+		/*
+		 * Remove button from survey question form.
+		 */
+		removeSurveyQuestionFromForm: function(survey_id, survey_question_id)
+		{
+			var request = new Request(
+			{
+				'url': 		'/action/survey/survey_question_remove?survey_id=' + survey_id + '&survey_question_id=' + survey_question_id, 
+				  'method': 	'get',
+				 'onSuccess': function(response) 
+				 { 
+					if (response == "OK") 
+					{
+						go("survey_questions?survey_id=" + survey_id);
+					}
+				 },
+				
+			 'onFailure':	function() { alert("Failed to communicate with server");}
+			 });
+				
+			request.send();						
+		},
+	
+		
+		showQuestionNamesDialog: function(survey_id)
+		{
+			this.dialog = modalPopup('Survey Spreadsheet Column Headings', '/action/survey/question_names_form?survey_id=' + survey_id, '700px', 'auto', true);		
+		},
+		
+		questionNamesFormResult: function(response)
+		{
+			if (response == "OK")
+			{
+				window.location.reload();
+			}
+
+			$('QuestionNames_form__error').set('html', response);
+		},
+	
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 * 
+		 *           Survey Response
+		 * 
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+		showSurveyResponse: function(response_id)
+		{
+			this.dialog = modalPopup('Survey Response', '/action/survey/survey_response_view?response_id=' + response_id, '700px', 'auto', true);		
+		},
+		
+	
+		showTokenDialog: function(survey_id)
+		{
+			var valid = false;
+			
+			while(!valid)
+			{
+				var token = prompt("Enter your survey access token");
+				if (token == null) return;
+				
+				valid = token.match(/^\w{5}$/);
+			}
+
+			go('survey_response_form?survey_id=' + survey_id + '&token=' + token);
+		},
+
+		showSurveyReminderDialog: function(survey_id)
+		{
+			this.dialog = modalPopup('Send Survey Reminders', '/action/survey/survey_reminder_form?survey_id=' + survey_id, '550px', 'auto', true);
+		},
+	
+		surveyReminderFormResult: function(response)
+		{
+			var elt = $("survey_reminder_result");
+			if(response == "OK" || response == "FAIL")
+			{
+				this.closeDialog();
+				elt.set("display", "block");
+				if(response == "OK")
+				{
+					elt.set("class", "");
+					elt.set("text", "Message has been sent.");
+				}
+				else
+				{
+					elt.set("text", "Message could not be sent.");
+				}
+			}
+			else
+			{
+				$('SurveyReminder_form__error').set('html', response);
+			}
+		},
+	
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 * 
+		 *           Question Form
+		 * 
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		questionFormSetup: function(question_type_id)
 		{
@@ -266,146 +484,7 @@ var Survey =  (function()
 			this.dialog = modalPopup('Survey Question', '/action/survey/survey_question_details?survey_id=' + survey_id + '&survey_question_id=' + survey_question_id, '500px', 'auto', true);		
 		},
 		
-		removeSurveyQuestion: function(survey_question_xref_id)
-		{
-			if (confirm("Are you sure you want to remove this question?"))
-			{		
-				var request = new Request(
-				{
-					'url': 		'/action/survey/survey_question_remove?survey_question_xref_id=' + survey_question_xref_id, 
-					  'method': 	'get',
-					 'onSuccess': function(response) 
-				{ 
-					if (response == "OK") 
-					{
-						window.location.reload();
-					}
-				 },
-				
-				 'onFailure':	function() { alert("Failed to communicate with server");}
-				 });
-				
-				request.send();				
-			}		
-		},
-		
-		showSurveyResponse: function(response_id)
-		{
-			this.dialog = modalPopup('Survey Response', '/action/survey/survey_response_view?response_id=' + response_id, '700px', 'auto', true);		
-		},
-		
-		showQuestionNamesDialog: function(survey_id)
-		{
-			this.dialog = modalPopup('Survey Spreadsheet Column Headings', '/action/survey/question_names_form?survey_id=' + survey_id, '700px', 'auto', true);		
-		},
-		
-		questionNamesFormResult: function(response)
-		{
-			if (response == "OK")
-			{
-				window.location.reload();
-			}
-
-			$('QuestionNames_form__error').set('html', response);
-		},
-
-		closeSurvey: function(survey_id)
-		{
-			var request = new Request(
-			{
-				'url': 		'/action/survey/close_survey?survey_id=' + survey_id, 
-				  'method': 	'get',
-				 'onSuccess': function(response) 
-				 { 
-					if (response == "OK") 
-					{
-						window.location.reload();
-					}
-				},
-					
-				 'onFailure':	function() { alert("Failed to communicate with server");}
-			});
-				
-			request.send();			
-		},
-		
-		reopenSurvey: function(survey_id)
-		{
-			var request = new Request(
-			{
-				'url': 		'/action/survey/reopen_survey?survey_id=' + survey_id, 
-				  'method': 	'get',
-				 'onSuccess': function(response) 
-				 { 
-					if (response == "OK") 
-					{
-						window.location.reload();
-					}
-				},
-					
-				 'onFailure':	function() { alert("Failed to communicate with server");}
-			});
-						
-			request.send();
-		},
-		
-		deleteSurvey: function(survey_id, responseCount)
-		{
-			var msg = "Are you sure you want to delete this survey?";
-			if(responseCount > 0)
-				msg = "Are you sure you want to delete this survey and its " + responseCount + " responses?";
-		
-			if (confirm(msg))
-			{		
-				var request = new Request(
-				{
-					'url': 		'/action/survey/delete_survey?survey_id=' + survey_id, 
-					  'method': 	'get',
-					 'onSuccess': function(response) 
-				{ 
-					if (response == "OK") 
-					{
-						window.location.reload();
-					}
-				 },
-				
-				 'onFailure':	function() { alert("Failed to communicate with server");}
-				 });
-				
-				request.send();				
-			}		
-		},
-		
-		showSurveyReminderDialog: function(survey_id)
-		{
-			this.dialog = modalPopup('Send Survey Reminders', '/action/survey/survey_reminder_form?survey_id=' + survey_id, '550px', 'auto', true);
-		},
-	
-		surveyReminderFormResult: function(response)
-		{
-			if(response == "1" || response == "2")
-			{
-				this.dialog = modalPopup('Survey Reminders', '/action/survey/survey_reminder_result?rtn='+response, '550px', 'auto', true);
-			}
-	
-			$('Survey_form__error').set('html', response);
-		},
-		
-		showTokenDialog: function(survey_id)
-		{
-			var valid = false;
 			
-			while(!valid)
-			{
-				var token = prompt("Enter your survey access token");
-				if (token == null) return;
-				
-				valid = token.match(/^\w{5}$/);
-			}
-
-			go('survey_response_form?survey_id=' + survey_id + '&token=' + token);
-		},
-	
 		closeDialog: function()
 		{
 			this.dialog.hide();

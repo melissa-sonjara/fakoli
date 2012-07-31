@@ -42,16 +42,17 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey", "settings");
+Fakoli::using("questionnaire", "survey", "survey_manager", "settings", "email");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 $error = checkNumeric($_GET["error"]);
 
 if(!$survey_id)
-	redirect("survey_list");
+	redirect("survey_dashboard");
 
 $survey = new Survey($survey_id);
+$page->page_title .= " for {$survey->title}";
 
 $survey->filter = new InclusionFilter("sender_email", "recipients", "message");
 
@@ -63,13 +64,14 @@ $form = new AutoForm($survey);
 $form->annotate("recipients", "(separate email addresses with a comma ',')");
 $form->required("sender_email", "recipients", "message");
 $form->getRenderer("message")->rows = 10;
-$form->submitLabel = "Save";
+$form->submitLabel = "Save Survey Email";
 $form->regexp("sender_email", "\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", "Please supply a valid email address containing a domain name.");
+$recipientRenderer = new EmailListFieldRenderer($form, "recipients");
 
 if($survey->isEditable())
 {
 	$form->annotate("message", "Select from a set of boilerplate messages which you can then customize <br>for this survey.
-	<button onclick=\"surveyMessagePopup({$page->component_page_id}, this); return false\">Select a Message</button>&nbsp&nbsp;
+	<button onclick=\"new Survey().showMessageSelectDialog(); return false\">Select a Message</button>&nbsp&nbsp;
 	<button onclick=\"new Survey().showAdvancedFeaturesDialog(); return false\">Advanced Features</button>
 	");
 }
@@ -87,7 +89,6 @@ if($error)
 $tabs = SurveyManager::surveyTabs($survey_id);
 
 $script .= $form->writeScript();
-$script .= writeScript();
 
 if ($method == "POST")
 {
@@ -97,8 +98,6 @@ if ($method == "POST")
 	}
 }
 
-
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
 
 $tabs->writeHTML();
 ?>
@@ -112,73 +111,3 @@ if($validate)
 $form->drawForm();
 ?></div>
 </div>
-<?
-
-
-function writeScript()
-{
-	$surveyTemplates = query(SurveyTemplate);
-
-	ob_start();
-	?>
-<div class="dialog" id="surveyMessagePopup" style="width: 500px">
-<div class="dialog_header" id="surveyMessagePopupHeader">
-<div style="padding: 4px;">
-<div style="float: right">&nbsp;<a id='closeSurveyMessagePopup'">Close
-&times;</a></div>
-<span style="font-weight: bold">Survey Messages</span></div>
-</div>
-<div class="dialog_body"><?
-$table = SurveyMessageView::getView($surveyTemplates);
-?></div>
-</div>
-
-<script type='text/javascript'>
-
-var surveyMessagePopupDialog;
-
-function surveyMessagePopup(id, source)
-{
-	var popup = $('surveyMessagePopup');
-	
-	if (!surveyMessagePopupDialog)
-	{
-		surveyMessagePopupDialog = new FloatingDialog('surveyMessagePopup', {'closeLink': $('closeSurveyMessagePopup'), 'position': 'absolute'});
-	}
-
-	surveyMessagePopupDialog.targetID = id;
-	surveyMessagePopupDialog.top = source.getCoordinates().top - 200;
-	surveyMessagePopupDialog.left = source.getCoordinates().left;
-	surveyMessagePopupDialog.show();
-	
-}
-
-
-function updateSurveyMessage()
-{
-	var id = surveyMessagePopupDialog.targetID;
-	var popup = $('surveyMessagePopup');
-
-	var messageText;
-	popup.getElements("input[type='radio']").each(function(e) 
-			{ if (e.checked) 
-				messageText = e.value;
-			}
-		);
-
-	var message = $('Survey_form').message;
-	message.innerHTML = messageText;
-	surveyMessagePopupDialog.message = Class.Empty;
-	surveyMessagePopupDialog.targetID = 0;
-	surveyMessagePopupDialog.hide();
-}
-
-</script>
-<?
-$script = ob_get_contents();
-ob_end_clean();
-$script .= $table->writeScript();
-return $script;
-}
-
-?>

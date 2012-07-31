@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,51 +31,20 @@
 
 *****************************************************************/
 
-class QuestionnaireManifest
+Fakoli::using("survey_manager", "component");
+
+class SurveyManagerUpgradeManager extends UpgradeManager
 {
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "questionnaire";
-		$component->description = "Create custom questionnaires, surveys, quizzes, etc.";
-		$component->author = "Janice Gallant";
-		$component->version = "1.0";
-		$component->priority = 3;
-		$component->enabled = true;
-		
-		return $component;
-	}
+	var $updateMap = array(
+			"1.0"		=>	"sql:Initial Installation",
+	);
 	
-	static function getStyles()
+	function SurveyManagerUpgradeManager()
 	{
-		return array("/fakoli/css/questionnaire.css");
-	}
-	
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Classification"	=> array
-			(
+		$this->component_name = "survey_manager";
 
-				"Questionnaire Question Types"	=>	array("page"	=>	"/admin/question_types",
-								  "role"	=>	"admin",
-								  "weight"	=>	50)
-			)		);		
+		// sets the sqlFile name according to default
+		parent::UpgradeManager();		
 	}
-
-	static function subscribeToEvents()
-	{
-		return array(
-				"upgradeComponent"		=>	array(QuestionnaireManager, upgradeComponent)
-			);
-	}	
-	
-	static function getScripts()
-	{
-		return array("/components/questionnaire/js/questionnaire.js",
-			"/components/questionnaire/js/question.js");
-	}	
 }
-
 ?>

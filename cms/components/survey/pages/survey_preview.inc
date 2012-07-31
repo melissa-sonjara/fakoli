@@ -46,7 +46,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey", "email");
+Fakoli::using("questionnaire", "survey", "survey_manager", "email");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -55,6 +55,9 @@ if (!$survey_id)
 	redirect("survey_list");
 
 $survey = new Survey($survey_id);
+
+$page->page_title = ($survey->status != "not sent") ? "View" : "Preview/Send";
+$page->page_title .= " {$survey->title}";
 
 $validate = new ValidateSurvey($survey);
 $view = new SurveyPreviewSendView($survey);
@@ -94,7 +97,7 @@ $tabs->writeHTML();
 <p><? echo $survey->getStatusInfoText(); ?></p>
 <div id="inner_border"><?
 if($form)
-$form->drawForm();
+	$form->drawForm();
 $view->drawView();
 ?></div>
 </div>
@@ -102,7 +105,7 @@ $view->drawView();
 
 function sendEmails($obj)
 {
-	SurveyManager::sendSurveyEmails($obj->data);
+	SurveySendManager::sendSurveyEmails($obj->data);
 }
 
 ?>

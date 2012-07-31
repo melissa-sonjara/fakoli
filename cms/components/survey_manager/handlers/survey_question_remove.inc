@@ -43,39 +43,37 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 
 $survey_question_xref_id = checkNumeric($_GET["survey_question_xref_id"]);
+$survey_id = checkNumeric($_GET["survey_id"]);
+$survey_question_id = checkNumeric($_GET["survey_question_id"]);
 
-if(!$survey_question_xref_id)
-	ajaxReturn("unknown SurveyQuestionXref");
+$xref = new SurveyQuestionXref();
 
-$xref = new SurveyQuestionXref($survey_question_xref_id);
-
-$question = $xref->Question();
-
-// only delete if not linked to any other survey or template
-if($question && $question->allowDelete())
-	$question->delete();
-
-$survey = $xref->Survey();
-
-if(!$survey)
-	$survey = $xref->SurveyTemplate();
-
-$surveyQuestionXrefs = $survey->SurveyQuestionXrefs("ORDER BY sort_order");
-
-// renumber question set
-$idx = 1;
-foreach($surveyQuestionXrefs as $surveyQuestionXref)
+if($survey_question_xref_id)
 {
-	$surveyQuestionXref->filter = new InclusionFilter("sort_order");
-	$surveyQuestionXref->sort_order = $idx;
-	$surveyQuestionXref->save();
-	$idx++;
+	$xref->load($survey_question_xref_id);
+	$question = $xref->Question();
+	$survey = $xref->Survey();
+
+	// only delete if not linked to any other survey
+	if($question && $question->allowDelete())
+		$question->delete();
+	$xref->delete();
+	SurveyManager::updateSortOrder($survey);
+}
+else if($survey_id && $survey_question_id)
+{
+	$survey = new Survey($survey_id);
+	$xref->delete("WHERE survey_id=$survey_id AND survey_question_id=$survey_question_id");
+	SurveyManager::updateSortOrder($survey);
+}
+else
+{
+	ajaxReturn("Survey Question Remove - unknown SurveyQuestionXref");
 }
 
-$xref->delete();
 
 ajaxReturn("OK");
 

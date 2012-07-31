@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2007-2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,50 +31,35 @@
 
 *****************************************************************/
 
-class QuestionnaireManifest
+class SurveyManagerManifest
 {
 	static function getComponentDefinition()
 	{
 		$component = new Component();
-		$component->name = "questionnaire";
-		$component->description = "Create custom questionnaires, surveys, quizzes, etc.";
+		$component->name = "survey_manager";
+		$component->description = "General purpose manager for surveys";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
-		$component->priority = 3;
+		$component->priority = 5;
 		$component->enabled = true;
 		
 		return $component;
 	}
 	
-	static function getStyles()
+	static function getScripts()
 	{
-		return array("/fakoli/css/questionnaire.css");
+		return array("/components/survey_manager/js/survey_create.js",
+				"/components/survey_manager/js/survey_response.js",
+				"/components/survey_manager/js/survey_results.js",
+		);
 	}
 	
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Classification"	=> array
-			(
-
-				"Questionnaire Question Types"	=>	array("page"	=>	"/admin/question_types",
-								  "role"	=>	"admin",
-								  "weight"	=>	50)
-			)		);		
-	}
-
+	
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(QuestionnaireManager, upgradeComponent)
+				"upgradeComponent"		=>	array(SurveyManagerManager, upgradeComponent)
 			);
-	}	
-	
-	static function getScripts()
-	{
-		return array("/components/questionnaire/js/questionnaire.js",
-			"/components/questionnaire/js/question.js");
 	}	
 }
 

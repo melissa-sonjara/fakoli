@@ -43,18 +43,22 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "survey_manager");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
-$error = checkNumeric($_GET["error"]);
 
 $title = "Survey Request";
 
 $survey = new Survey();
 
+$page->page_title = "Survey Introduction";
+
 if($survey_id)
+{
 	$survey->load($survey_id);
+	$page->page_title .= " for {$survey->title}";
+}
 else
 {
 	$pk = $user->getPrimaryKey();
@@ -63,23 +67,16 @@ else
 	$survey->status = "not sent";
 }
 
-$survey->filter = new InclusionFilter("title", "introduction", "start_date", "end_date", "user_id");
+$survey->filter = new InclusionFilter("title", "introduction", "start_date", "end_date", "user_id", "status");
 $form = new AutoForm($survey);
-
-if($error)
-$form->msg = $survey->getRequiredText($error, true);
-
-$form->button("Cancel", "survey_list");
 $form->required("title");
-$form->hide("user_id");
+$form->hide("user_id", "status");
+$form->unique("title");
 $form->submitLabel = "Save";
 $form->annotate("end_date", "date on which survey closes to respondents");
 
 if($survey->isEditable())
 {
-	$form->annotate("introduction", "Instructions for respondents. You can write your own introductory message or choose from templated introductions.
-	<button onclick=\"surveyIntroductionPopup({$page->component_page_id}, this); return false\">Select an Introduction</button>&nbsp&nbsp;
-	");
 	$form->getRenderer("introduction")->rows = 8;
 	$form->hide("start_date");
 }
@@ -88,17 +85,10 @@ else
 	$form->readOnlyForm = true;
 }
 
-$dateRenderer = $form->getRenderer("end_date");
-$dateRenderer->required = false;
-
 $form->allowDelete = $survey->allowDelete();
 
 $tabs = SurveyManager::surveyTabs($survey_id);
-
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
-
 $script .= $form->writeScript();
-$script .= writeScript();
 
 if ($method == "POST")
 {
@@ -110,79 +100,29 @@ if ($method == "POST")
 }
 
 $tabs->writeHTML();
+
+if(!$survey_id)
+{
 ?>
 <div id="tab_border">
+<?php 
+}
+else
+{
+?>
+<div id="tab_border">
+<button id="next_page_button" class="button"
+	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
+<?php
+}
+?>
 <h3>Survey Introduction</h3>
 <?
 $form->drawForm();
 ?></div>
 <?
-
-
-function writeScript()
+if($survey_id)
 {
-	$surveyTemplates = query(SurveyTemplate, "WHERE introduction != ''");
-
-	ob_start();
-	?>
-<div class="dialog" id="surveyIntroductionPopup" style="width: 500px">
-<div class="dialog_header" id="surveyIntroductionPopupHeader">
-<div style="padding: 4px;">
-<div style="float: right">&nbsp;<a id='closeSurveyIntroductionPopup'">Close
-&times;</a></div>
-<span style="font-weight: bold">Survey Introductions</span></div>
-</div>
-<div class="dialog_body"><?
-$table = SurveyIntroductionView::getView($surveyTemplates);
-?></div>
-</div>
-
-<script type='text/javascript'>
-
-var surveyIntroductionPopupDialog;
-
-function surveyIntroductionPopup(id, source)
-{
-	var popup = $('surveyIntroductionPopup');
-	
-	if (!surveyIntroductionPopupDialog)
-	{
-		surveyIntroductionPopupDialog = new FloatingDialog('surveyIntroductionPopup', {'closeLink': $('closeSurveyIntroductionPopup'), 'position': 'absolute'});
-	}
-
-	surveyIntroductionPopupDialog.targetID = id;
-	surveyIntroductionPopupDialog.top = source.getCoordinates().top;
-	surveyIntroductionPopupDialog.left = source.getCoordinates().left;
-	surveyIntroductionPopupDialog.show();
-	
+?></div><?php
 }
-
-
-function updateSurveyIntroduction()
-{
-	var id = surveyIntroductionPopupDialog.targetID;
-	var popup = $('surveyIntroductionPopup');
-
-	var introText;
-	popup.getElements("input[type='radio']").each(function(e) 
-			{ if (e.checked) 
-				introText = e.value;
-			}
-		);
-
-	var introduction = $('Survey_form').introduction;
-	introduction.innerHTML = introText;
-	surveyIntroductionPopupDialog.introduction = Class.Empty;
-	surveyIntroductionPopupDialog.targetID = 0;
-	surveyIntroductionPopupDialog.hide();
-}
-
-</script>
-<?
-$script = ob_get_contents();
-ob_end_clean();
-$script .= $table->writeScript();
-return $script;
-}
-
 ?>

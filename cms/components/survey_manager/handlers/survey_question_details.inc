@@ -48,12 +48,11 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
-Fakoli::using("survey", "questionnaire");
+Fakoli::using("survey", "questionnaire", "survey_manager");
 Fakoli::usingFeature("auto_form");
 
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
-$survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
 if(!$survey_question_id AND !$survey_id)
 	ajaxReturn("unknown question or survey");
@@ -103,10 +102,7 @@ elseif($question->question_type_id == question_type_dropdown)
 
 $form->readOnlyForm = true;
 
-if(!$question->isTemplateQuestion())
-	$infoText = $question->getInfoText(survey_question_answered);
-else
-	$infoText = $question->getInfoText(survey_question_template);
+$infoText = $question->getInfoText(survey_question_template);
 
 echo $form->writeScript();
 

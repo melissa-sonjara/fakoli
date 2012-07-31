@@ -31,129 +31,57 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/*
- * Description: provides the more generic questionnaire
- * classes with the specifics of the survey datamodels and
- * page identifiers. For example, lets the QuestionSet
- * class know the identifier name of the survey question form.
- *
- * @author Janice Gallant for Sonjara, Inc.
- *
- * 10/13/2010
- */
 class SurveyManager
 {
-	var $item;
-
-	/**
-	 * Creates a new QuestionnaireManager object.
-	 */
-	function SurveyManager($survey)
+	function SurveyManager()
 	{
-		$this->item = $survey;
+		
 	}
 
-	function getQuestionKey()
+
+	static function surveyTabs($key = "")
 	{
-		return "survey_question_id";
+		$tabs = SurveyManager::getSurveyTabs($key);
+		$qs = ($key) ? "survey_id=$key" : "";
+		$tabBar = new TwoLevelTabBar($tabs, $qs);
+
+		return $tabBar;
 	}
 
-	function getAnswerKey()
+	static function getSurveyTabs($key)
 	{
-		return "survey_answer_id";
-	}
-
-	function getQuestionNumber($question)
-	{
-		$xref = $question->SurveyQuestionXref($this->item->survey_id);
-		if($xref)
-			return  $xref->sort_order;
-	}
-
-	function getQuestions()
-	{
-		$questions = $this->item->Questions();
-		if(count($questions) > 0)
+		$formTitle = "Create a Survey";
+		$previewTitle = "Preview/Send";
+		
+		if($key)
 		{
-			$idx = 1;
-			foreach($questions as $question)
-			{
-				$question->question_number = $idx;
-				$idx++;
-			}
+			$survey = new Survey($key);
+			$formTitle = ($survey->isEditable()) ? "Edit Survey" : "Survey Details";
+			if($survey->status != "not sent") $previewTitle = "View";
 		}
-		return $questions;
+
+		$images[0] = "<img src='/fakoli/images/tab_create_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+		$images[1] = "<img src='/fakoli/images/tab_view_results.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+
+		$tabs = array(
+		$images[0] . $formTitle	=> array(
+				"Introduction"			=>	"survey_form",
+				"Questions"				=>	"survey_questions",
+				"Email"					=>	"survey_email",
+				$previewTitle			=>	"survey_preview"
+				),
+		
+				$images[1] . "View Results"	=> array(
+				"Survey Responses"		=>	"survey_results",
+				"Graphical Data"		=>	"survey_data",
+				"Tabular View"			=>	"survey_data_table",
+				"Spreadsheet View"		=>	"survey_spreadsheet"
+				),
+			);
+					
+			return $tabs;
 	}
-
-	/**
-	 * Returns the field name of the page identifier for
-	 * add/update of survey questions.
-	 *
-	 * @return string
-	 */
-	function getQuestionForm()
-	{
-		return "survey_question_form?survey_id={$this->item->survey_id}&survey_question_id=";
-	}
-
-	function isEditable()
-	{
-		return $this->item->isEditable();
-	}
-
-	function getPrimaryKey()
-	{
-		return $this->item->getPrimaryKey();
-	}
-
-	/*
-	 * Answers to a specific question
-	 */
-	function getAnswersOneQuestion($question_id)
-	{
-		return query(SurveyAnswer, "WHERE response_id IN (SELECT response_id FROM survey_response WHERE survey_id = {$this->item->survey_id}) AND survey_question_id={$survey_question_id}");
-	}
-
-
-	// The class that stores the answers
-	function getAnswerClass()
-	{
-		return "SurveyAnswer";
-	}
-
-
-	function getAnswers()
-	{
-		return $this->item->Answers();
-	}
-
-	/* for survey aggregation */
-	function getResponseCount()
-	{
-		return $this->item->getResponseCount();
-	}
-
-	function getRecipientCount()
-	{
-		return $this->item->getRecipientCount();
-	}
-
-	static function setDefaults()
-	{
-		trace("SurveyManager::setDefaults", 3);
-
-		global $config;
-
-		Settings::setDefaultValue("survey", "sender_email", "", "String", "The email address that will appear as the sender of the survey email", "Survey Emails");
-		Settings::setDefaultValue("survey", "email_subject", "Survey from ". $config["http_host"], "String", "The default or standard subject line for survey emails", "Survey Emails");
-		Settings::setDefaultValue("survey", "message_footer", "<br><br>Click the link below to access the survey:<br>[survey_link]<br><br>or go to<br>[survey_intro_link], click on [survey_title], and enter your access token [token] at the prompt.<br>", "Text", "The text to be included below the main
-			message in all surveys, providing users with a link to response. 
-			The text within brackets represent codes that will be filled in with data 
-			from the survey record when the survey is sent.", "Survey Emails");
-		Settings::setDefaultValue("survey", "interactive_graphs", false, Boolean, "Show interactive SVG graphs on the report screens, rather than static images");
-
-	}
-
+	
 	static function getSurveyProgressBar($survey)
 	{
 		$percentage = 0;
@@ -175,104 +103,40 @@ class SurveyManager
 		return $html;
 	}
 
-	// $surveyTemplate can be class SurveyTemplate or
-	// Survey.
-	function createSurveyFromTemplate($surveyTemplate)
-	{
-		global $user;
 
-		$pk = $user->getPrimaryKey();
-
-		$newTitle = "Copy of {$surveyTemplate->title}";
-		do
-		{
-			$exists = Query::create(Survey, "WHERE title=:title")
-			->bind(":title", $newTitle)
-			->execute();
-			if(count($exists) > 0)
-				$newTitle = "Copy of " . $newTitle;
-
-		} while (count($exists) > 0);
-
-		$survey = new Survey();
-		$survey->title = $newTitle;
-		$survey->introduction = $surveyTemplate->introduction;
-		$survey->message = $surveyTemplate->message;
-		$survey->sender_email = Survey::getSenderEmail();
-		$survey->user_id = $user->$pk;
-		$survey->save();
-
-		$questions = $surveyTemplate->Questions();
-
-		if(count($questions) > 0)
-		{
-			$idx = 1;
-			foreach($questions as $question)
-			{
-				$xref = new SurveyQuestionXref();
-				$xref->survey_id = $survey->survey_id;
-				$xref->survey_question_id = $question->survey_question_id;
-				$xref->sort_order = $idx;
-				$xref->save();
-				$idx++;
-			}
-		}
-		return $survey;
-	}
-
+	/**
+	 * Retrieve all the question set for all surveys but
+	 * exclude any questions already linked to the given
+	 * survey. If the survey_id passed in is blank, then
+	 * there will be no questions to exclude.
+	 * 
+	 * @param $survey_id
+	 */
 	function getQuestionSets($survey_id = 0)
 	{
-		if($survey_id > 0)
+		$query = GroupedQuery::create(SurveyQuestionXref, "", "survey_id");
+		if($survey_id)
 		{
-			$questions = Query::create(SurveyQuestionXref, "WHERE survey_id=:survey_id")
-			->bind(":survey_id", $survey_id)
-			->execute();
+			$query->constraints = "WHERE survey_question_id NOT IN (SELECT survey_question_id FROM survey_question_xref WHERE survey_id = :survey_id)";
+			$query->bind(":survey_id", $survey_id);
 		}
-			
-		if(count($questions) > 0)
-		{
-			$list = formatItems($questions, "{survey_question_id}", ",");
-			$constraint .= " AND survey_question_id NOT IN ($list)";
-		}
-
-		$surveyQuestionSets = groupedQuery(SurveyQuestionXref, "WHERE survey_id > 0 ". $constraint, "survey_id");
+		
+		$surveyQuestionSets = $query->execute();
 		
 		return $surveyQuestionSets;
 	}
 	
-	function getTemplateQuestionSets($survey_template_id = 0)
-	{
-		if($survey_template_id > 0)
-		{
-			$questions = Query::create(SurveyQuestionXref, "WHERE survey_template_id=:survey_template_id")
-			->bind(":survey_template_id", $survey_template_id)
-			->execute();
-		}
-			
-		if(count($questions) > 0)
-		{
-			$list = formatItems($questions, "{survey_question_id}", ",");
-			$constraint .= " AND survey_question_id NOT IN ($list)";
-		}
-
-		$surveyQuestionSets = groupedQuery(SurveyQuestionXref, "WHERE survey_template_id > 0 ". $constraint, "survey_template_id");
-
-		return $surveyQuestionSets;	
-	}
-
 	/*
 	 * Save questions selected on survey_question_select
-	 * or survey_template_question_select.
 	 *
 	 * It is possible for the user to select the same question
-	 * if that question is part of 2 or more templates.
+	 * if that question is part of 2 or more surveys.
 	 */
 	static function saveSelectedQuestions($questionSelect, $field)
 	{
 		global $_POST;
 
-		$pk = $questionSelect->parent->data->getPrimaryKey();
-		$value = $questionSelect->parent->data->$pk;
+		$survey_id = $questionSelect->parent->data->survey_id;
 
 		$questionIds = $_POST["survey_question_xref_id"];
 
@@ -280,28 +144,52 @@ class SurveyManager
 		{
 			$list = implode(",", array_values($questionIds));
 			$questions = Query::create(SurveyQuestion, "WHERE survey_question_id IN (SELECT survey_question_id FROM survey_question_xref WHERE survey_question_xref_id IN ($list))")
-			->bind()
-			->execute();
+				->execute();
 
 			if(count($questions) > 0)
 			{
-				$sort_order = SurveyQuestionXref::getDefaultSortOrder($pk, $value);
+				$sort_order = 0;
 
 				foreach($questions as $question)
 				{
 					$xref = new SurveyQuestionXref();
-					$xref->$pk = $value;
+					$xref->survey_id = $survey_id;
 					$xref->survey_question_id = $question->survey_question_id;
+					if(!$sort_order)
+					{
+						$sort_order = $xref->getDefaultSortOrder();
+					}
+					else
+					{
+						$sort_order += 1;
+					}
+						
 					$xref->sort_order = $sort_order;
 					$xref->save();
-					$sort_order++;
 				}
 			}
 		}
 		return true;
 	}
 
-
+	/**
+	 * 
+	 * Given a survey, retrieve the set of SurveyQuestionXref 
+	 * objects and renumber the set.
+	 */
+	static function updateSortOrder($survey)
+	{
+		$surveyQuestionXrefs = $survey->SurveyQuestionXrefs("ORDER BY sort_order");
+		
+		// renumber question set
+		$idx = 1;
+		foreach($surveyQuestionXrefs as $surveyQuestionXref)
+		{
+			$surveyQuestionXref->saveSortOrder($idx);
+			$idx++;
+		}
+	}
+	
 	static function deleteSurvey($survey)
 	{
 		$responses = $survey->Responses();
@@ -324,7 +212,16 @@ class SurveyManager
 
 		return true;
 	}
+	
+} // end SurveyManager
 
+
+class SurveySendManager
+{
+	function SurveySendManager()
+	{
+		
+	}
 
 	/*
 	 * Called from survey_preview.inc
@@ -332,26 +229,19 @@ class SurveyManager
 	 */
 	function sendSurveyEmails($survey)
 	{
-		global $config;
-
 		$recipients = explode(",", $survey->recipients);
-
-		$subject = Settings::getValue("survey", "email_subject");
-		$message_footer = Settings::getValue("survey", "message_footer");
-
-		$sender_email = ($survey->sender_email) ? $survey->sender_email : Survey::getSenderEmail();
-
 		if(count($recipients) == 0)
-		return;
+			return;
 
+		SurveyManager::buildEmail($survey, $sender_email, $subject, $surveyMessage);
+				
 		// send the survey creator a test response copy
-		$recipients[] = $sender_email;
-
-		$surveyMessage = $survey->message .= $message_footer;
+		if(array_search($sender_email, $recipients) === FALSE)
+			$recipients[] = $sender_email;
 
 		$responses = Query::create(SurveyResponse, "WHERE survey_id=:survey_id")
-		->bind(":survey_id", $survey->survey_id)
-		->execute();
+			->bind(":survey_id", $survey->survey_id)
+			->execute();
 
 		if(count($responses) > 0)
 			$responses = reindexList($responses, "email");
@@ -364,12 +254,24 @@ class SurveyManager
 				$response->save();
 			}
 			else
+			{
 				$response = $responses[$recipient];
-
+				if(is_array($response)) $response = $response[0];
+			}
 			SurveyManager::sendOneSurveyEmail($survey, $subject, $response, $surveyMessage, $sender_email);
 		}
 
 		$survey->setStatus("open");
+	}
+	
+	static function buildEmail($survey, &$sender_email, &$subject, &$surveyMessage)
+	{
+		$subject = Settings::getValue("survey", "email_subject");
+		$message_footer = Settings::getValue("survey", "message_footer");
+
+		$sender_email = ($survey->sender_email) ? $survey->sender_email : Survey::getSenderEmail();
+
+		$surveyMessage = $survey->message .= $message_footer;
 	}
 
 	static function sendOneSurveyEmail($survey, $subject, $response, $surveyMessage, $sender_email)
@@ -378,151 +280,112 @@ class SurveyManager
 		$recipientMessage = $mergeMgr->searchAndReplace($surveyMessage);
 			
 		$emailHandler = new EmailHandler($response->email, $subject, $recipientMessage, $sender_email);
-		$sent = $emailHandler->send();
-
-		return $sent;
+		return $emailHandler->send();
 	}
 
+} // end SurveySendManager
 
-	static function surveyTabs($key = "")
-	{
-		$tabs = SurveyManager::getSurveyTabs($key);
-		$qs = ($key) ? "survey_id=$key" : "";
-		$tabBar = new TwoLevelTabBar($tabs, $qs);
-
-		return $tabBar;
-	}
-
-
-	static function getSurveyTabs($key)
-	{
-		if(!$key)
-			$formTitle = "Create a Survey";
-		else
-		{
-			$survey = new Survey($key);
-			$formTitle = ($survey->isEditable()) ? "Edit Survey" : "Survey Details";
-		}
-
-		$images[0] = "<img src='/fakoli/images/tab_create_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-		$images[1] = "<img src='/fakoli/images/tab_manage_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-		$images[2] = "<img src='/fakoli/images/tab_view_results.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-
-		$tabs = array(
-		$images[0] . $formTitle	=> array(
-				"Introduction"			=>	"survey_form",
-				"Questions"				=>	"survey_questions",
-				"Email"					=>	"survey_email",
-				"Preview/Send"			=>	"survey_preview"
-				),
-					
-				$images[1]. "Manage Survey"	=> array(
-				"My Survey"				=>	"survey_manage"
-				),
-
-				$images[1] . "View Results"	=> array(
-				"Survey Responses"		=>	"survey_results",
-				"Graphical Data"		=>	"survey_data",
-				"Tabular View"			=>	"survey_data_table",
-				"Spreadsheet View"		=>	"survey_spreadsheet"
-				),
-				);
-					
-				return $tabs;
-	}
-
-
-	static function enumerateContextHelpClasses($classes)
-	{
-		$classes[] = "SurveyAnswer";
-		$classes[] = "SurveyQuestion";
-		$classes[] = "SurveyResponse";
-		$classes[] = "SurveyTemplate";
-		$classes[] = "Survey";
-
-		return $classes;
-	}
-
-	static function enumerateDataItemClasses($classes)
-	{
-		$classes[] = "SurveyAnswer";
-		$classes[] = "SurveyQuestion";
-		$classes[] = "SurveyResponse";
-		$classes[] = "Survey";
-		$classes[] = "SurveyTemplate";
-		$classes[] = "SurveyQuestionXref";
-
-		return $classes;
-	}
-
-	static function upgradeComponent($version)
-	{
-		$mgr = new SurveyUpgradeManager();
-		$mgr->upgrade($version);
-	}
-
-} // end class SurveyManager
-
-
-class SurveyTemplateManager extends SurveyManager
+/*
+ * Description: provides the more generic questionnaire
+ * classes with the specifics of the survey datamodels and
+ * page identifiers. For example, lets the QuestionSet
+ * class know the identifier name of the survey question form.
+ *
+ * @author Janice Gallant for Sonjara, Inc.
+ *
+ * 10/13/2010
+ */
+class SurveyCreateManager
 {
-	function SurveyTemplateManager($surveyTemplate)
-	{
-		$this->item = $surveyTemplate;
-	}
-
-	function getQuestionNumber($question)
-	{
-		$pk = $this->item->getPrimaryKey();
-		$xref = $question->SurveyQuestionXref($this->item->$pk);
-		if($xref)
-			return $xref->sort_order;
-	}
-
+	var $item;
 
 	/**
-	 * Returns the field name of the page identifier for
-	 * add/update of survey questions.
-	 *
-	 * @return string
+	 * Creates a new QuestionnaireManager object.
 	 */
-	function getQuestionForm()
+	function SurveyCreateManager($survey)
 	{
-		return "survey_template_question_form?survey_template_id={$this->item->survey_template_id}&survey_question_id=";
+		$this->item = $survey;
+	}
+
+	/*
+	 * Called by QuestionnaireForm
+	 */
+	function getQuestionKey()
+	{
+		return "survey_question_id";
+	}
+
+	function getAnswerKey()
+	{
+		return "survey_answer_id";
+	}
+
+	/*
+	 * Called by QuestionRenderer
+	 */
+	function getQuestionNumber($question)
+	{
+		$xref = $question->SurveyQuestionXref($this->item->survey_id);
+		if($xref)
+			return  $xref->sort_order;
+	}
+
+	/*
+	 * Called by QuestionnaireForm and QuestionSetForm
+	 */
+	function getQuestions()
+	{
+		$questions = $this->item->Questions();
+		if(count($questions) > 0)
+		{
+			$idx = 1;
+			foreach($questions as $question)
+			{
+				$question->question_number = $idx;
+				$idx++;
+			}
+		}
+		return $questions;
 	}
 
 	function isEditable()
 	{
-		return true;
+		return $this->item->isEditable();
+	}
+
+	function getPrimaryKey()
+	{
+		return $this->item->getPrimaryKey();
+	}
+
+
+	// The class that stores the answers
+	function getAnswerClass()
+	{
+		return "SurveyAnswer";
 	}
 
 	function getAnswers()
 	{
-		return array();
+		return $this->item->Answers();
 	}
 
-	static function surveyTemplateTabs($key = "", $token = "")
+	/* for survey aggregation */
+	function getResponseCount()
 	{
-		$tabs = SurveyTemplateManager::getSurveyTemplateTabs();
-		$qs = ($key) ? "survey_template_id=$key" : "";
-		$tabBar = new TabBar("tabs", $tabs, $qs);
-
-		return $tabBar;
+		return $this->item->getResponseCount();
 	}
 
-	static function getSurveyTemplateTabs()
+	function getRecipientCount()
 	{
-		$tabs = array(
-				"Survey Template Form"		=>	"survey_template_form",
-				"Survey Template Questions"	=>	"survey_template_questions",
-				"Survey Template Preview &amp; Publish" => "survey_template_preview"
-				);
-				return $tabs;
+		return $this->item->getRecipientCount();
 	}
-}
 
 
-class SurveyResponseManager extends SurveyManager
+} // end class SurveyManager
+
+
+class SurveyResponseManager extends SurveyCreateManager
 {
 	var $item;
 
@@ -559,7 +422,6 @@ class SurveyResponseManager extends SurveyManager
 	{
 		return $this->item->token;
 	}
-
 }
 
 
@@ -567,7 +429,7 @@ class SurveyResponseManager extends SurveyManager
  * Handle getting total results/response counts for one survey for
  * display of results.
  */
-class SurveyResultsManager extends SurveyManager
+class SurveyResultsManager extends SurveyCreateManager
 {
 	function SurveyResultsManager($survey)
 	{
@@ -597,6 +459,4 @@ class SurveyResultsManager extends SurveyManager
 	{
 		return "Token";
 	}
-
-
 }

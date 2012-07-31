@@ -42,20 +42,18 @@ class SurveyQuestionXref extends DataItem
 	var $fields = array(
 				"survey_question_xref_id"	=>	Number,
 				"survey_id"					=>	Number,
-				"survey_template_id"	=>	String,
 				"survey_question_id"		=>	Number,
 				"sort_order"				=>	Number
 	);
 
 	var $relations = array(
 				"Survey"			=>	Survey,
-				"SurveyTemplate"	=>	SurveyTemplate,
 				"Question"			=>	SurveyQuestion
 	);
 
 	function Question()
 	{
-		return querySingle(SurveyQuestion, "WHERE survey_question_id = {$this->survey_question_id}");
+		return $this->getRelated(SurveyQuestion);
 	}
 
 	function Survey()
@@ -64,23 +62,17 @@ class SurveyQuestionXref extends DataItem
 			return $this->getRelated(Survey);
 	}
 
-	function SurveyTemplate()
-	{
-		if($this->survey_template_id)
-			return $this->getRelated(SurveyTemplate);
-	}
-
 	/*
 	 * get sort order either by searching for max with same survey_id
-	 * or survey_template_id
 	 */
-	static function getDefaultSortOrder($field, $value)
+	function getDefaultSortOrder()
 	{
-		$sortOrder = Query::create(SurveyQuestionXref, "WHERE $field=:$field")
-		->bind(":$field", $value)
-		->executeValue("MAX(sort_order)") + 1;
+		if(!$this->survey_id)
+			return 1;
 			
-		return $sortOrder;
+		return Query::create(SurveyQuestionXref, "WHERE survey_id=:survey_id")
+			->bind(":survey_id", $this->survey_id)
+			->executeValue("MAX(sort_order)") + 1;
 	}
 
 	function saveSortOrder($value)

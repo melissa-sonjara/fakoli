@@ -31,56 +31,28 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/*
- *
- * Title: survey_manage.inc
- *
- * Description: Preview of a survey response request. Provide
- * applicable button options such as public view, close survey, and
- * reopen survey.
- *
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 6/23/10
- *
- */
+Fakoli::using("survey", "survey_manager");
+Fakoli::usingFeature("data_view", "auto_form");
+
+$surveys = Query::create(Survey, "WHERE introduction != ''")->execute();
+$surveys = removeDuplicates($surveys, "introduction");
+
+$table = new DataListView($surveys, "surveys");
+
+$table->column("", "<input  style='border: none' type='radio' class='radio' name='survey_id[]' id='survey_id_{survey_id}' value='{survey_id}' onchange=\"new Survey().introductionSelectResult('{introduction}');\" />", false, "width: 10%")
+	->column("Title", "{title}", false, "width: 25%")	
+	->column("Introduction", "{introduction}", false, "width: 50%");
+
+$table->emptyMessage = "There are no survey introductions defined.";
+$table->sortable = false;
+$table->pageSize = 0;
+$table->paginate = false;
+$table->filter = false;
+$table->cssStyle = "width: 90%";
 
 
-Fakoli::using("questionnaire", "survey", "email");
-Fakoli::usingFeature("data_view");
+echo $table->writeScript();
 
-$survey_id = checkNumeric($_GET["survey_id"]);
+$table->drawView();
 
-if (!$survey_id)
-redirect("survey_list");
-
-$survey = new Survey($survey_id);
-
-if($survey->status == "not sent")
-$validate = new ValidateSurvey($survey);
-$view = new SurveyManageView($survey, ($validate) ? true : false);
-
-$tabs = SurveyManager::surveyTabs($survey_id, false);
-
-$page->page_title = "Manage Survey";
-
-$tabs->writeHTML();
 ?>
-<div id="tab_border">
-<button id="next_page_button" class="button"
-	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
-<h3>Manage Survey</h3>
-<div id="inner_border">
-<h2><? echo $survey->title ?></h2>
-<p><? echo $survey->getStatusInfoText(); ?></p>
-<? if ($survey->status > "not sent")
-{
-	?>
-<div id='prog_bar'>
-<h4>Percentage of Surveys Received</h4>
-	<? echo SurveyManager::getSurveyProgressBar($survey); ?></div>
-	<?
-}
-$view->drawView();
-?></div>
-</div>

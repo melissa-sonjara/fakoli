@@ -37,10 +37,10 @@ class SurveyManifest
 	{
 		$component = new Component();
 		$component->name = "survey";
-		$component->description = "Create custom survey questionnaires, survey email templates, and view survey responses.";
+		$component->description = "This component is generally used as a template for a developing customized surveys and survey response forms, and presentation of survey results. Custom implementation would override this component and interface with the survey_manager component to use classes that provide survey presentation support.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
-		$component->priority = 4;
+		$component->priority = 5;
 		$component->enabled = true;
 
 		return $component;
@@ -62,10 +62,10 @@ class SurveyManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					 "EnumerateContextHelpClasses" => array(SurveyManager, enumerateContextHelpClasses),
-				 	"EnumerateDataItemClasses" => array(SurveyManager, enumerateDataItemClasses),		
-					"ComponentScanComplete" => array(SurveyManager, setDefaults),
-					"upgradeComponent"		=>	array(SurveyManager, upgradeComponent)
+					 "EnumerateContextHelpClasses" => array(SurveyComponentManager, enumerateContextHelpClasses),
+				 	"EnumerateDataItemClasses" => array(SurveyComponentManager, enumerateDataItemClasses),		
+					"ComponentScanComplete" => array(SurveyComponentManager, setDefaults),
+					"upgradeComponent"		=>	array(SurveyComponentManager, upgradeComponent)
 		);
 	}
 
@@ -77,7 +77,8 @@ class SurveyManifest
 
 	static function getScripts()
 	{
-		return array("/fakoli/js/survey.js");
+		return array("/components/survey/js/survey.js",
+			);
 	}
 }
 

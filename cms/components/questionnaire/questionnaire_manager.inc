@@ -138,6 +138,9 @@ class QuestionnaireResponseManager
 		return "question_id";
 	}
 	
+	/*
+	 * Called by QuestionnaireForm
+	 */
 	function getAnswerKey()
 	{
 		return "answer_id";

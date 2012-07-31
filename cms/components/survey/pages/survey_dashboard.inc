@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 6/3/2010
  */
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "survey_manager");
 Fakoli::usingFeature("data_view");
 
 if(!$user)
@@ -56,15 +56,17 @@ if(!checkRole("admin"))
 }
 
 $surveys = Query::create(Survey, "$constraint  ORDER BY status, start_date DESC")
-->execute();
+	->execute();
 
 $table = new DataListView($surveys, "surveys");
-$table->column("Survey Title", array(CMSSurveyTableManager, formatSurveyLink), true, "width: 15%")
+$table->column("Survey Title", array(SurveyTableHelper, formatSurveyLink), true, "width: 15%")
 	->column("Author", "{User.first_name} {User.last_name}", true, "width: 10%")
-	->column("Status", array(CMSSurveyTableManager, formatSurveyStatus), true, "width: 10%")
-	->column("Date Sent", array(CMSSurveyTableManager, formatStartDate), true, "width: 12%")
-	->column("Percentage of Surveys Received", array(SurveyManager, getSurveyProgressBar), true, "width: 20%");
- 
+	->column("Status", array(SurveyTableHelper, formatSurveyStatus), true, "width: 10%")
+	->column("Date Sent", array(SurveyTableHelper, formatStartDate), true, "width: 12%")
+	->column("Percentage of Surveys Received", array(SurveyManager, getSurveyProgressBar), true, "width: 20%")
+ 	->column("Actions", array(SurveyTableHelper, formatActions), true, "width: 20%");
+	;
+ 	
 $table->emptyMessage = "There are no surveys.";
 $table->sortable = true;
 $table->pageSize = 10;
@@ -76,4 +78,4 @@ $script .= $table->writeScript();
 $table->drawView();
 ?>
 <br>
-<a class="button" href="survey_template_select">Create a Survey</a>
+<a class="button" href="survey_form">Create a Survey</a>

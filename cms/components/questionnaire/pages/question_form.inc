@@ -95,7 +95,7 @@ if($editable)
 	$form->add(new StringFieldRenderer($form), "label_for_highest");
 	$form->add(new NumberFieldRenderer($form), "number_of_steps");	
 	$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
-	$typeSelect->onChange = "new Questionnaire().onChangeQuestionType";
+	$typeSelect->onChange = "new Question().onChangeQuestionType";
 }
 
 $tabs = questionnaireTabs($questionnaire_id);
@@ -116,7 +116,7 @@ $script .= <<<ENDSCRIPT
 	<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		new Questionnaire().setup('RegistrationQuestion_form', $question->question_type_id);
+		 new Question().setup($question->question_type_id, '{$form->id}');
 	});	
 	</script>
 ENDSCRIPT;

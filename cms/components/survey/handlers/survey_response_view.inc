@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey", "email");
+Fakoli::using("questionnaire", "survey", "survey_manager", "email");
 
 $response_id = checkNumeric($_GET["response_id"]);
 
@@ -57,7 +57,7 @@ echo $view->writeScript();
 
 echo "<p><label>Survey: </label> ". $response->Survey()->getTitle(). "</p>\n";
 echo "<p><label>Email: </label>". $response->email . "</p>\n";
-echo "<p><label>Date Submitted: </label>". formatDate($response->last_modified) . "</p>\n";
+echo "<p><label>Date Submitted: </label>". $response->format("{last_modified:F d, Y}") . "</p>\n";
 
 $view->drawView();
 ?>

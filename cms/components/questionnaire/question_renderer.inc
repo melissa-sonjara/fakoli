@@ -412,16 +412,21 @@ class RatingView extends QuestionField
 
 	function getAnswer()
 	{
-		list($from, $to, $steps) = explode("\n", $this->question->options);
-		if (!$from) $from = "Lowest";
-		if (!$to) $to = "Highest";
-		if (!$steps) $steps = 5;
+		$this->getOptions($this->question->options, $from, $to, $steps);
 
 		$valueAnswer = $this->parent->getAnswer($this->question);
 		if($valueAnswer)
 			$answer = "{$valueAnswer} rating on scale of $steps $from &ndash; $to";
 
 		return $answer;
+	}
+	
+	static function getOptions($options, &$from, &$to, &$steps)
+	{
+		list($from, $to, $steps) = explode("\n", $options);
+		if (!$from) $from = "Lowest";
+		if (!$to) $to = "Highest";
+		if (!$steps) $steps = 5;
 	}
 
 	function drawView()

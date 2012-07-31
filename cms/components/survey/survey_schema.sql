@@ -60,10 +60,11 @@ CREATE TABLE `survey_response` (
   `token` varchar(10) NOT NULL COMMENT 'assigned response token',
   `email` varchar(100) NOT NULL,
   `last_modified` date DEFAULT NULL COMMENT 'date submitted',
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) varchar(20) NOT NULL DEFAULT 'not_started',
   PRIMARY KEY (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 CREATE TABLE `survey_template` (
   `survey_template_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -85,3 +86,18 @@ INSERT INTO `merge_code` (`name`,`description`,`map`,`class_name`) VALUES
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+DROP TABLE IF EXISTS `survey_template`;
+
+ALTER TABLE `survey_question_xref` drop column `survey_template_id`;
+
+ALTER TABLE `survey_question` drop column `locked`;
+
+ALTER TABLE `survey_response` CHANGE COLUMN `status` `status` varchar(20) NOT NULL DEFAULT 'not_started';
+update `survey_response` set status = 'not_started' where status = '0';
+update `survey_response` set status = 'in_progress' where status = '1';
+update `survey_response` set status = 'submitted' where status = '2';
+
+-- END Version 1.1

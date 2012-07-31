@@ -50,6 +50,7 @@ class SurveyUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:restructure surveys into types; omit survey template"
 	);
 	
 	function SurveyUpgradeManager()

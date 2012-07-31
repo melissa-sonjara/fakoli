@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 5/13/10
  */
 
-Fakoli::using("survey", "email");
+Fakoli::using("survey", "email", "survey_manager");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -89,7 +89,7 @@ $form->drawForm();
 function saveResponse($obj)
 {
 	$response = $obj->mgr->item;
-	$response->setStatus(response_in_progress);
+	$response->setStatus("in_progress");
 }
 
 ?>

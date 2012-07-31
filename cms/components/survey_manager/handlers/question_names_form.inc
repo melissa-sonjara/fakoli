@@ -37,7 +37,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -49,7 +49,7 @@ $survey = new Survey($survey_id);
 
 $survey->filter = new InclusionFilter("survey_id");
 $form = new AutoForm($survey, "POST", "/action/survey/question_names_form?survey_id=$survey_id", "QuestionNames_form");
-$form->ajaxSubmit("function(result) {new Survey().questionNamesFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {new SurveyResults().questionNamesFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $xrefs = $survey->SurveyQuestionXrefs();
 if(count($xrefs) > 0)
@@ -58,12 +58,12 @@ if(count($xrefs) > 0)
 	$questions = Query::create(SurveyQuestion, "WHERE survey_question_id IN ($list)")->execute();
 }
 else
-$questions = array();
+	$questions = array();
 
 $table = new DataListView($questions, "SurveyQuestions");
 $table->column("Question", "{question}")
-->column("Question Name", array(CMSSurveyTableManager, formatQuestionNameInputField), false)
-;
+	->column("Question Name", array(SurveyTableHelper, formatQuestionNameInputField), false)
+	;
 
 $table->emptyMessage = "There are no questions defined.";
 $table->sortable = false;
@@ -79,9 +79,9 @@ $form->readOnlyForm = true;
 if ($method == "POST")
 {
 	if($form->save())
-	ajaxReturn("OK");
+		ajaxReturn("OK");
 	else
-	ajaxReturn($form->msg);
+		ajaxReturn($form->msg);
 }
 
 echo $form->writeScript();

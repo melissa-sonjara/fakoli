@@ -31,7 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 
 ?>
 <p>Thank you for submitting your survey.</p>

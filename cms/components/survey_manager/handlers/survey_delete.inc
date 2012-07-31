@@ -11,7 +11,7 @@
  * date: 6/4/10
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 Fakoli::assertRole("admin");
 
 $survey_id = checkNumeric($_GET["survey_id"]);

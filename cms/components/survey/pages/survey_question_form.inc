@@ -42,12 +42,11 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
-Fakoli::using("survey", "questionnaire");
+Fakoli::using("survey", "survey_manager", "questionnaire");
 Fakoli::usingFeature("auto_form");
 
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
-$survey_template_id = checkNumeric($_GET["survey_template_id"]);
 
 $question = new SurveyQuestion();
 
@@ -57,44 +56,53 @@ if(!$survey_question_id AND !$survey_id)
 if($survey_question_id)
 {
 	$question->load($survey_question_id);
+	$survey = $question->Survey();
 }
 else
 {
-	$question->num_rows = 3; // default
-	$question->required = 0; // default
-	global $xref;
-	$xref = new SurveyQuestionXref();
-	$xref->survey_id = $survey_id;
-	$xref->sort_order = SurveyQuestionXref::getDefaultSortOrder("survey_id", $survey_id);
+	$survey = new Survey($survey_id);
+	$question->setDefaultValues();
 }
+
+$page->page_title .= " for {$survey->title}";
 
 // check if question has been answered
 $editable = $question->isEditable();
-$isTemplateQuestion = $question->isTemplateQuestion();
 
 $redirect = "survey_questions?survey_id=$survey_id";
 
-$form = SurveyQuestionForm::settings($question, $editable);
+$form = new AutoForm($question);
+$form->required("question");
+$form->annotate("options", "<br><span class='annotate'>List each option on a separate line.</span>");
+$form->getRenderer("question")->height = "100px";
 
+SurveyQuestionForm::questionTypeSetup($form, $question, $editable);
 $typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
 
-if($editable AND !$isTemplateQuestion)
-	$typeSelect->onChange = "new Survey().onChangeQuestionType";
+if($editable)
+	$typeSelect->onChange = "new Question().onChangeQuestionType";
 
-if($isTemplateQuestion)
-	$form->readOnlyForm = true;
-elseif(!$editable)
+if(!$editable)
 	$form->readOnly("question_type_id", "options");
 
 if($survey_question_id)
-	$form->button("Remove", "/actionsurvey/question_remove?survey_id={$survey_id}&survey_question_id={$survey_question_id}");
+{
+	$form->button("Remove", "new SurveyCreate().removeSurveyQuestionFromForm($survey_id, $survey_question_id)", "Are you sure you want to remove this question?", true);
+}
 $form->button("Cancel", $redirect);
 $form->hide("question_name");
+$form->data->set("survey_id", $survey_id);
 
 if(!$editable)
 	$infoText = $question->getInfoText(survey_question_answered);
-elseif($isTemplateQuestion)
-	$infoText = $question->getInfoText(survey_question_template);
+	
+if(!$question->survey_question_id)
+	$form->onSaveComplete = saveSurveyQuestionXref;
+
+if(!$survey_question_id)
+{
+	$form->onSaveComplete = saveSurveyQuestionXref;
+}
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 $tabs->page = "survey_questions";
@@ -112,12 +120,12 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 $script .= <<<ENDSCRIPT
-	<script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		 new Survey().questionFormSetup($question->question_type_id);
-	});	
-	</script>
+<script type="text/javascript">
+window.addEvent('domready', function()
+{
+	 new Question().setup($question->question_type_id, '{$form->id}');
+});	
+</script>
 ENDSCRIPT;
 
 if($survey_id)
@@ -132,10 +140,12 @@ echo "<b>{$infoText}</b>";
 
 $form->drawForm();
 
-function saveSurveyQuestionXref($obj)
+function saveSurveyQuestionXref(&$form)
 {
-	$question = $obj->data;
-	global $xref;
+	$question = $form->data;
+	$xref = new SurveyQuestionXref();
+	$xref->survey_id = $question->get("survey_id");
+	$xref->sort_order = $xref->getDefaultSortOrder();
 	$xref->survey_question_id = $question->survey_question_id;
 	$xref->save();
 }

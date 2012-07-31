@@ -44,7 +44,6 @@ class SurveyQuestion extends DataItem
 							"required"				=>	Number,
 							"char_limit"			=>	Number,
 							"num_rows"				=>	Number,
-							"locked"				=>	Boolean
 	);
 
 	var $relations = array (
@@ -88,20 +87,6 @@ class SurveyQuestion extends DataItem
 			return ($count > 0) ? false : true;
 		}
 
-		/*
-		 * If the question is in one or more survey templates,
-		 * then the form is drawn read only.
-		 */
-		function isTemplateQuestion()
-		{
-			if(!$this->survey_question_id)
-			return false;
-				
-			$count = queryValue(SurveyQuestionXref, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id} AND survey_template_id is not null");
-
-			return ($count > 0) ? true : false;
-				
-		}
 
 		/*
 		 * If the question is editable and is linked only to this survey or
@@ -149,6 +134,21 @@ class SurveyQuestion extends DataItem
 		function allowLogicalDelete()
 		{
 
+		}
+		
+		
+		function setDefaultValues()
+		{
+			$this->num_rows = 3;
+			$this->required = 0; 
+			
+			$qTypes = Query::create(QuestionType, "ORDER BY sort_order")
+				->execute();
+				
+			if(count($qTypes) > 0)
+			{
+				$this->question_type_id = $qTypes[0]->question_type_id;
+			}
 		}
 
 		/* get the list of values the user checked in a checkbox */

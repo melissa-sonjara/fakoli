@@ -31,47 +31,25 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/*
- * Description: Lets admin define sets of questions for use
- * in a survey. A question may be part of more than one set.
- */
-
 Fakoli::using("survey");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("data_view", "auto_form");
 
-$surveyTemplates = query(SurveyTemplate, "ORDER BY title");
+$surveys = Query::create(Survey, "WHERE message != ''")->execute();
+$surveys = removeDuplicates($surveys, "message");
 
-$table = new DataListView($surveyTemplates, "surveyTemplates");
-$table->column("Title", "<a href=\"survey_template_form?survey_template_id={survey_template_id}\">{title}", true, "width: 25%")
-	->column("Introduction", "{introduction:80}", false, "width: 20%")
-	->column("Message", "{message:80}", false, "width: 20%")
-	->column("Status", getSurveyTemplateStatus, false, "width: 10%")
-	->column("View", "<a class='button' href='#' onclick=\"new Survey().showSurveyTemplateView({survey_template_id}); return false;\">View</a>", false, "width: 5%");
+$table = new DataListView($surveys, "surveys");
 
-$table->emptyMessage = "There are no survey templates defined.";
+$table->column("", "<input  style='border: none' type='radio' class='radio' name='survey_id[]' id='survey_id_{survey_id}' value='{survey_id}' onchange=\"new Survey().messageSelectResult('{message}');\" />", false, "width: 10%")
+	->column("Title", "{title}", false, "width: 25%")	
+	->column("Introduction", "{message}", false, "width: 50%");
+
+$table->emptyMessage = "There are no survey messages defined.";
 $table->sortable = false;
-$table->pageSize = 10;
+$table->pageSize = 0;
+$table->paginate = false;
 $table->filter = false;
-$table->cssStyle = "width: 90%";
-$script .= $table->writeScript();
+$table->cssStyle = "width: 80%";
 
-?>
-<div id='survey_table'><br>
-<br>
-<?php
+echo $table->writeScript();
+
 $table->drawView();
-?> <br />
-<a class="button" href="survey_template_form">Create a Survey Template</a>
-</div>
-<?php
-
-function getTemplateView($surveyTemplate)
-{
-	return "<a class=\"button\" href=\"javascript:modalPopup('Survey Template', 'survey_template_preview_popup?survey_template_id={$surveyTemplate->survey_template_id}', '700px', 'auto');\">View</a>\n";
-}
-
-function getSurveyTemplateStatus($surveyTemplate)
-{
-	return $surveyTemplate->statusTypes[$surveyTemplate->status];
-}
-?>
