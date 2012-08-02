@@ -233,7 +233,7 @@ class SurveySendManager
 		if(count($recipients) == 0)
 			return;
 
-		SurveyManager::buildEmail($survey, $sender_email, $subject, $surveyMessage);
+		SurveySendManager::buildEmail($survey, $sender_email, $subject, $surveyMessage);
 				
 		// send the survey creator a test response copy
 		if(array_search($sender_email, $recipients) === FALSE)
@@ -258,7 +258,7 @@ class SurveySendManager
 				$response = $responses[$recipient];
 				if(is_array($response)) $response = $response[0];
 			}
-			SurveyManager::sendOneSurveyEmail($survey, $subject, $response, $surveyMessage, $sender_email);
+			SurveySendManager::sendOneSurveyEmail($survey, $subject, $response, $surveyMessage, $sender_email);
 		}
 
 		$survey->setStatus("open");

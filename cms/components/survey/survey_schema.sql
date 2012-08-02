@@ -44,15 +44,17 @@ CREATE TABLE `survey_question` (
   PRIMARY KEY (`survey_question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
 
+
 CREATE TABLE `survey_question_xref` (
   `survey_question_xref_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `survey_id` int(10) unsigned DEFAULT NULL COMMENT 'if survey question set',
   `survey_template_id` int(10) unsigned DEFAULT NULL COMMENT 'if standard question set',
   `survey_question_id` int(10) unsigned NOT NULL,
   `sort_order` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`survey_question_xref_id`)
+  PRIMARY KEY (`survey_question_xref_id`),
+  KEY `survey_idx` (`survey_id`),
+  KEY `survey_question_idx` (`survey_question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='survey question set or standard set';
-
 
 CREATE TABLE `survey_response` (
   `response_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -63,16 +65,6 @@ CREATE TABLE `survey_response` (
   `status` tinyint(3) varchar(20) NOT NULL DEFAULT 'not_started',
   PRIMARY KEY (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-CREATE TABLE `survey_template` (
-  `survey_template_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `introduction` text COMMENT 'instructions to users completing survey',
-  `message` text NOT NULL,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'in progress, published, in review',
-  PRIMARY KEY (`survey_template_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 

@@ -80,10 +80,13 @@ SurveyQuestionForm::questionTypeSetup($form, $question, $editable);
 $typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
 
 if($editable)
+{
 	$typeSelect->onChange = "new Question().onChangeQuestionType";
-
-if(!$editable)
+}
+else
+{
 	$form->readOnly("question_type_id", "options");
+}
 
 if($survey_question_id)
 {

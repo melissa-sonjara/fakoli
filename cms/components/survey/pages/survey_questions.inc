@@ -66,7 +66,7 @@ $table->column("Question", "<a href='survey_question_form?survey_id={survey_id}&
 	->column("Options", array(SurveyQuestionTableHelper, formatOptions))
 	->column("Required", array(SurveyQuestionTableHelper, formatRequired))
 	->column("Remove", "<a href=\"#\" onclick=\"new SurveyCreate().removeSurveyQuestion({survey_question_xref_id}); return false;\">
-			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>")
+			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>", false, "text-align: center")
 ;
 
 $table->emptyMessage = "There are no questions defined.";
