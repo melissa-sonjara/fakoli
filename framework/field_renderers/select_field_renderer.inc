@@ -126,10 +126,15 @@ class SelectFieldRenderer extends FieldRenderer
 	{
 		if(!$this->defaultBlank || $this->parent->data->get($field)) return;
 		
-		if(!array_key_exists("", $this->options))
+		if(count($this->options) && !array_search("", $this->options))
 		{
+			// want the blank at the top - array_merge causes issues; copy array instead
 			$options[""] = $this->defaultText;
-			$this->options = array_merge($options, $this->options);
+			foreach($this->options as $key => $value)
+			{
+				$options[$key] = $value;
+			}
+			$this->options = $options;
 		}
 	}
 	
