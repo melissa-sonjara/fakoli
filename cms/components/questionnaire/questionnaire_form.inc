@@ -238,19 +238,21 @@ class QuestionnaireForm
 		if(!$displayOnly)
 			echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
 
+		echo "<dl>\n";
+		
 		foreach($this->questions as $question)
 		{
 			$this->writeOneQuestion($question, $displayOnly);
 			$this->num++;
 		}
 
-		echo "</dl>";
+		echo "</dl>\n";
 	}
 
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
-		echo " <dt><label for='question_{$this->num}>'<b>{$this->num}.</b> {$question->question->question}{$required}</label></dt>\n";
+		echo " <dt><label for='question_{$this->num}'><b>{$this->num}.</b> {$question->question->question}{$required}</label></dt>\n";
 
 		echo " <dd>";
 		if(!$displayOnly)
@@ -262,7 +264,6 @@ class QuestionnaireForm
 
 		if($displayOnly)
 			echo "<br/>";
-		echo "</dl>";
 	}
 
 
