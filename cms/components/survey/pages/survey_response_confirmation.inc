@@ -31,12 +31,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("survey", "survey_manager");
+Fakoli::using("survey", "survey_manager", "settings");
 
+$sitename = Settings::getValue("settings", "sitename");
 ?>
 <p>Thank you for submitting your survey.</p>
 
-<p>Continue to the <a href="index"><?php echo $config["sitename"]?>
+<p>Continue to the <a href="index"><?php echo $settings ?>
  home page.</a></p>
 
 
