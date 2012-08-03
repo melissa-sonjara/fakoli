@@ -166,7 +166,7 @@ var Survey =  (function()
 			}
 			else if(action == "send_reminders")
 			{
-				new SurveyResponse().showSurveyReminderDialog(survey_id);
+				new this.showSurveyReminderDialog(survey_id);
 			}
 			else if(action == "send")
 			{

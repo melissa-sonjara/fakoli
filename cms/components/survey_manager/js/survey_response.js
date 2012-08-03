@@ -29,34 +29,6 @@ var SurveyResponse =  (function()
 			go('survey_response_form?survey_id=' + survey_id + '&token=' + token);
 		},
 
-		showSurveyReminderDialog: function(survey_id)
-		{
-			this.dialog = modalPopup('Send Survey Reminders', '/action/survey/survey_reminder_form?survey_id=' + survey_id, '550px', 'auto', true);
-		},
-	
-		surveyReminderFormResult: function(response)
-		{
-			var elt = $("survey_reminder_result");
-			if(response == "OK" || response == "FAIL")
-			{
-				this.closeDialog();
-				elt.set("display", "block");
-				if(response == "OK")
-				{
-					elt.set("class", "");
-					elt.set("text", "Message has been sent.");
-				}
-				else
-				{
-					elt.set("text", "Message could not be sent.");
-				}
-			}
-			else
-			{
-				$('SurveyReminder_form__error').set('html', response);
-			}
-		},
-			
 		closeDialog: function()
 		{
 			this.dialog.hide();

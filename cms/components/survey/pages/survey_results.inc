@@ -84,5 +84,5 @@ echo "<p id='survey_reminder_result' class='error' style='display: 'none'></p>\n
 
 $table->drawView();
 if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCount)
-echo "<p><a class=\"button\" href='#' onclick=\"new SurveyResponse().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a></p>\n";
+echo "<p><a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a></p>\n";
 ?></div>
