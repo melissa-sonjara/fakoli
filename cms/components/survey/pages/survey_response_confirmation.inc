@@ -37,7 +37,7 @@ $sitename = Settings::getValue("settings", "sitename");
 ?>
 <p>Thank you for submitting your survey.</p>
 
-<p>Continue to the <a href="index"><?php echo $settings ?>
+<p>Continue to the <a href="index"><?php echo $sitename ?>
  home page.</a></p>
 
 
