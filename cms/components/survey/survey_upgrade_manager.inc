@@ -51,8 +51,9 @@ class SurveyUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:restructure surveys into types; omit survey template",
-			"1.2"		=>	"sql:Added context_help field to survey_question"
-	);
+			"1.2"		=>	"sql:Added context_help field to survey_question",
+			"1.3"		=>	"sql:Add confirmation_message to survey table",
+			);
 	
 	function SurveyUpgradeManager()
 	{

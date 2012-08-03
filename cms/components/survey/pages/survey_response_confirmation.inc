@@ -33,12 +33,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("survey", "survey_manager", "settings");
 
-$sitename = Settings::getValue("settings", "sitename");
+$survey_id = checkNumeric($_GET["survey_id"]);
+
+if($survey_id)
+{
+	$survey = new Survey($survey_id);
+	$message = $survey->confirmation_message;
+}
+
+if($message)
+{
+	echo $survey->format("{confirmation_message}");
+}
+else
+{
+	$sitename = Settings::getValue("settings", "sitename");
+	echo "<p>Thank you for submitting your survey.</p><p>Continue to the <a href='/'>{$sitename} home page.</a></p>";
+}
 ?>
-<p>Thank you for submitting your survey.</p>
-
-<p>Continue to the <a href="index"><?php echo $sitename ?>
- home page.</a></p>
-
-
-

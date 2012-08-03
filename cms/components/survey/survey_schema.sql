@@ -100,3 +100,9 @@ update `survey_response` set status = 'submitted' where status = '2';
 ALTER TABLE `survey_question` ADD COLUMN `context_help` TEXT;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE `survey` ADD COLUMN `confirmation_message` TEXT after `message`;
+
+-- END Version 1.3

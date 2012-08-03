@@ -50,9 +50,14 @@ $survey_id = checkNumeric($_GET["survey_id"]);
 $token = $_GET["token"];
 
 if(!$survey_id)
-redirect("/index");
+{
+	redirect("/index");
+}
+
 if(!$token)
-redirect("survey_response_intro?survey_id={$survey_id}");
+{
+	redirect("survey_response_intro?survey_id={$survey_id}");
+}
 
 $response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
 
@@ -78,7 +83,7 @@ if ($method == "POST")
 	{
 		if ($form->save())
 		{
-			redirect("survey_response_confirmation?response_id={$response->response_id}");
+			redirect("survey_response_confirmation?survey_id={$survey_id}");
 		}
 	}
 }

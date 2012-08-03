@@ -55,6 +55,7 @@ class Survey extends DataItem
 				"sender_email"				=>	String,
 				"recipients"				=>	Text,
 				"message"					=>	Text,
+				"confirmation_message"		=>	HTML,
 				"status"					=>	String,
 				"deleted"					=>	Boolean
 	);

@@ -67,25 +67,30 @@ else
 	$survey->status = "not sent";
 }
 
-$survey->filter = new InclusionFilter("title", "introduction", "start_date", "end_date", "user_id", "status");
+$survey->filter = new InclusionFilter("title", "introduction", "confirmation_message", "start_date", "end_date", "user_id", "status");
 $form = new AutoForm($survey);
 $form->required("title");
 $form->hide("user_id", "status");
 $form->unique("title");
 $form->submitLabel = "Save";
 $form->annotate("end_date", "date on which survey closes to respondents");
+$form->getRenderer("introduction")->rows = 8;
+$form->alias("confirmation_message", "Confirmation Message for Respondents",
+	"introduction", "Introduction for Respondents");
 
-if($survey->isEditable())
+if($survey->isClosed())
 {
-	$form->getRenderer("introduction")->rows = 8;
-	$form->hide("start_date");
+	$form->readOnly("end_date");
 }
-else
+else if($survey->isOpen())
 {
-	$form->readOnlyForm = true;
+	$form->readOnly("start_date");
 }
 
 $form->allowDelete = $survey->allowDelete();
+
+$form->layout = new UngroupedFormLayout($form);
+$form->group("all", "title", "start_date", "end_date", "introduction");
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 $script .= $form->writeScript();

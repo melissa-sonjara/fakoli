@@ -58,7 +58,7 @@ class SurveyPreviewSendView
 		$c_survey = clone($survey);
 		$mergeMgr = new MergeCodeManager($surveyResponse, $survey->message, "SurveyResponse");
 		$c_survey->message = $mergeMgr->searchAndReplace($survey->message);
-		$c_survey->filter = new InclusionFilter("title", "introduction", "message", "sender_email", "recipients", "start_date", "end_date");
+		$c_survey->filter = new InclusionFilter("title", "introduction", "confirmation_message", "message", "sender_email", "recipients", "start_date", "end_date");
 		if(!$c_survey->recipients)
 			$c_survey->recipients = "Not specified";
 		if(!$c_survey->start_date)
@@ -71,9 +71,10 @@ class SurveyPreviewSendView
 			$c_survey->fields["end_date"] = String;
 			$c_survey->end_date = "Not specified";
 		}
-		$this->surveyForm = new AutoForm($c_survey);
-		$this->surveyForm->readOnlyForm = true;
-
+		$form = new AutoForm($c_survey);
+		$form->readOnlyForm = true;
+		
+		$this->surveyForm = $form;
 		$this->validate = new ValidateSurvey($survey);
 	}
 
