@@ -19,7 +19,7 @@ var SurveyCreate =  (function()
 			{		
 				var request = new Request(
 				{
-					'url': 		'/action/survey/delete_survey?survey_id=' + survey_id, 
+					'url': 		'/action/survey_manager/survey_delete?survey_id=' + survey_id, 
 					  'method': 	'get',
 					 'onSuccess': function(response) 
 				{ 
@@ -40,7 +40,7 @@ var SurveyCreate =  (function()
 		{
 			var request = new Request(
 			{
-				'url': 		'/action/survey/clone_survey?survey_id=' + survey_id, 
+				'url': 		'/action/survey_manager/clone_survey?survey_id=' + survey_id, 
 				'method': 	'get',
 				'onSuccess': function(response) 
 				{ 
@@ -68,7 +68,7 @@ var SurveyCreate =  (function()
 			{		
 				var request = new Request(
 				{
-					'url': 		'/action/survey/survey_question_remove?survey_question_xref_id=' + survey_question_xref_id, 
+					'url': 		'/action/survey_manager/survey_question_remove?survey_question_xref_id=' + survey_question_xref_id, 
 					  'method': 	'get',
 					 'onSuccess': function(response) 
 					 { 
@@ -93,7 +93,7 @@ var SurveyCreate =  (function()
 		{
 			var request = new Request(
 			{
-				'url': 		'/action/survey/survey_question_remove?survey_id=' + survey_id + '&survey_question_id=' + survey_question_id, 
+				'url': 		'/action/survey_manager/survey_question_remove?survey_id=' + survey_id + '&survey_question_id=' + survey_question_id, 
 				  'method': 	'get',
 				 'onSuccess': function(response) 
 				 { 

@@ -11,7 +11,7 @@ var SurveyResults =  (function()
 			
 		showQuestionNamesDialog: function(survey_id)
 		{
-			this.dialog = modalPopup('Survey Spreadsheet Column Headings', '/action/survey/question_names_form?survey_id=' + survey_id, '700px', 'auto', true);		
+			this.dialog = modalPopup('Survey Spreadsheet Column Headings', '/action/survey_manager/question_names_form?survey_id=' + survey_id, '700px', 'auto', true);		
 		},
 		
 		questionNamesFormResult: function(response)

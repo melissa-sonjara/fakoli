@@ -48,7 +48,7 @@ if(!$survey_id)
 $survey = new Survey($survey_id);
 
 $survey->filter = new InclusionFilter("survey_id");
-$form = new AutoForm($survey, "POST", "/action/survey/question_names_form?survey_id=$survey_id", "QuestionNames_form");
+$form = new AutoForm($survey, "POST", "/action/survey_manager/question_names_form?survey_id=$survey_id", "QuestionNames_form");
 $form->ajaxSubmit("function(result) {new SurveyResults().questionNamesFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $xrefs = $survey->SurveyQuestionXrefs();
@@ -62,7 +62,7 @@ else
 
 $table = new DataListView($questions, "SurveyQuestions");
 $table->column("Question", "{question}")
-	->column("Question Name", array(SurveyTableHelper, formatQuestionNameInputField), false)
+	->column("Question Name", array(SurveyQuestionTableHelper, formatQuestionNameInputField), false)
 	;
 
 $table->emptyMessage = "There are no questions defined.";
@@ -74,7 +74,9 @@ $form->submitLabel = "Save Question Names";
 $questionSelect->onPostProcess = saveQuestionNames;
 
 if(count($xrefs) == 0)
-$form->readOnlyForm = true;
+{
+	$form->readOnlyForm = true;
+}
 
 if ($method == "POST")
 {
@@ -97,8 +99,7 @@ function saveQuestionNames()
 		if (!strncmp($name, "question_", 9))
 		{
 			$id = substr($name, 9);
-			$question = new SurveyQuestion();
-			$question->survey_question_id = $id;
+			$question = new SurveyQuestion($id);
 			$question->question_name = $value;
 			$question->filter = new InclusionFilter("question_name");
 			$question->save();

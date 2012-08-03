@@ -193,6 +193,7 @@ class SurveyManager
 	static function deleteSurvey($survey)
 	{
 		$responses = $survey->Responses();
+		
 		if(count($responses) > 0)
 		{
 			foreach($responses as $response)

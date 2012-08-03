@@ -11,10 +11,9 @@ var SurveyResponse =  (function()
 	
 		showSurveyResponse: function(response_id)
 		{
-			this.dialog = modalPopup('Survey Response', '/action/survey/survey_response_view?response_id=' + response_id, '700px', 'auto', true);		
-		},
-		
-	
+			this.dialog = modalPopup('Survey Response', '/action/survey_manager/survey_response_view?response_id=' + response_id, '700px', 'auto', true);		
+		},	
+
 		showTokenDialog: function(survey_id)
 		{
 			var valid = false;

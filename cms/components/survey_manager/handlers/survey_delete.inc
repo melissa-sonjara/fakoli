@@ -12,16 +12,21 @@
  */
 
 Fakoli::using("survey", "survey_manager");
-Fakoli::assertRole("admin");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	"Error: survey not found<br>";
+	ajaxReturn("unknown survey");
 
 $survey = new Survey($survey_id);
 
-if(SurveyManager::deleteSurvey($survey))
-$survey->delete();
+if($survey->allowDelete())
+{
+	SurveyManager::deleteSurvey($survey);
+	ajaxReturn("OK");
+}
 else
-	"Error: Unable to delete survey {$survey->title}<br>";
+{
+	ajaxReturn("delete not allowed for survey {$survey->title}");
+}
+?>
