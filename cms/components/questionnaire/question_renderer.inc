@@ -226,7 +226,8 @@ class MultipleChoiceView extends QuestionField
 	{
 		$pk = $this->question->getPrimaryKey();
 		$options = explode("\n", $this->question->options);
-
+		$tips = explode("\n", $this->question->context_help);
+		
 		$valueAnswer = $this->parent->getAnswer($this->question);
 
 		$readonly = $this->parent->readonly ? " DISABLED" : "";
@@ -240,9 +241,15 @@ class MultipleChoiceView extends QuestionField
 			$idx = 1;
 			foreach($options as $value => $text)
 			{
+				$tip = $tips[$idx - 1];
+				if ($tip)
+				{
+					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."', 400); return false;\" ";
+				}
+				
 				$selected = ($valueAnswer == $idx) ? " checked" : "";
 
-				echo "<tr><td style=\"padding:1px\"><input type='radio'
+				echo "<tr><td style=\"padding:1px\"$tip><input type='radio'
 				style='border: none' name='question_{$this->question->$pk}' id='question_{$this->question->$pk}_$idx' 
 				value='$idx'$selected $readonly>&nbsp;$text</td></tr>";
 				$idx++;
