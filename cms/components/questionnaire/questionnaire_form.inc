@@ -260,7 +260,7 @@ class QuestionnaireForm
 		else
 			$question->drawView();
 
-		echo " </dd><br/>";
+		echo " <br/></dd>";
 
 		if($displayOnly)
 			echo "<br/>";
