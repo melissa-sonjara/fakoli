@@ -244,7 +244,7 @@ class MultipleChoiceView extends QuestionField
 				$tip = $tips[$idx - 1];
 				if ($tip)
 				{
-					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
 				}
 				
 				$selected = ($valueAnswer == $idx) ? " checked" : "";
@@ -398,7 +398,7 @@ class RatingView extends QuestionField
 		$tip =  $this->question->context_help;
 		if ($tip)
 		{
-			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
 		}
 		echo "<div$tip>$from&nbsp;";
 
@@ -501,7 +501,7 @@ class ShortTextView extends QuestionField
 		$tip =  $this->question->context_help;
 		if ($tip)
 		{
-			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
 		}		
 		
 		echo "<input id='$field' type='text' name='$field' $readonly $autocomplete value='".htmlspecialchars($value, ENT_QUOTES, 'UTF-8')."' size='50' $disable $onkeypress $tip/>";
@@ -581,7 +581,7 @@ class FreeTextView extends QuestionField
 		$tip =  $this->question->context_help;
 		if ($tip)
 		{
-			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
 		}
 		
 		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly $autocomplete $tip>".htmlsafe($value)."</textarea>";
@@ -686,7 +686,7 @@ class CheckListView extends QuestionField
 				$tip = $tips[$idx - 1];
 				if ($tip)
 				{
-					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
 				}
 								
 				echo "<tr><td style=\"padding:1px\"$tip><input type='checkbox'
