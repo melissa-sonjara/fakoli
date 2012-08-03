@@ -36,8 +36,8 @@ Fakoli::using("survey", "survey_manager");
 ?>
 <p>Thank you for submitting your survey.</p>
 
-<p>Continue to the <a href="/index"><?php echo $config["sitename"]?>
-home page.</a></p>
+<p>Continue to the <a href="index"><?php echo $config["sitename"]?>
+ home page.</a></p>
 
 
 
