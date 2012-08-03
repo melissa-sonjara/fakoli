@@ -43,7 +43,8 @@ class Question extends DataItem
 							"options"				=>	Text,
 							"required"				=>	Number,
 							"char_limit"			=>	Number,
-							"num_rows"				=>	Number
+							"num_rows"				=>	Number,
+							"context_help"			=>	Text
 						);
 						
 	var $relations = array (	

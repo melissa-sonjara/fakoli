@@ -75,3 +75,9 @@ INSERT INTO `question` (`questionnaire_id`,`question_type_id`,`question`,`questi
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+ 
+ALTER TABLE `question` ADD COLUMN `context_help` TEXT;
+
+-- END Version 1.1

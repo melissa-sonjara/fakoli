@@ -44,6 +44,7 @@ class SurveyQuestion extends DataItem
 							"required"				=>	Number,
 							"char_limit"			=>	Number,
 							"num_rows"				=>	Number,
+							"context_help"			=>	Text
 	);
 
 	var $relations = array (

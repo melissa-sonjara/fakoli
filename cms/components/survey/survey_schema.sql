@@ -93,3 +93,10 @@ update `survey_response` set status = 'in_progress' where status = '1';
 update `survey_response` set status = 'submitted' where status = '2';
 
 -- END Version 1.1
+
+
+-- START Version 1.2
+
+ALTER TABLE `survey_question` ADD COLUMN `context_help` TEXT;
+
+-- END Version 1.2
