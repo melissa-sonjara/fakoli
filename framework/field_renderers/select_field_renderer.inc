@@ -68,7 +68,8 @@ class SelectFieldRenderer extends FieldRenderer
 	var $onChange; // optional selection change handler
 	var	$max_chars;
 	var $width;
-	var $defaultBlank = true; // whether the drop down includes a blank as the default
+	// JDG 8/12 - set to true after all Fakoli projects have set required fields to required.
+	var $defaultBlank = false; // whether the drop down includes a blank as the default
 	var $defaultText = "Choose One";
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
