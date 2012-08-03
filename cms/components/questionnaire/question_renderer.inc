@@ -244,7 +244,7 @@ class MultipleChoiceView extends QuestionField
 				$tip = $tips[$idx - 1];
 				if ($tip)
 				{
-					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."', 400); return false;\" ";
+					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
 				}
 				
 				$selected = ($valueAnswer == $idx) ? " checked" : "";
@@ -395,7 +395,12 @@ class RatingView extends QuestionField
 		if (!$to) $to = "Highest";
 		if (!$steps) $steps = 5;
 
-		echo "$from&nbsp;";
+		$tip =  $this->question->context_help;
+		if ($tip)
+		{
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+		}
+		echo "<div$tip>$from&nbsp;";
 
 		$readonly = $this->parent->readonly ? " disabled='disabled'" : "";
 		$valueAnswer = $this->parent->getAnswer($this->question);
@@ -414,7 +419,7 @@ class RatingView extends QuestionField
 		// Save this count to loop through checkboxes on required validation
 		echo "<input type=\"hidden\" name=\"count_question_{$this->question->$qPk}\" value=\"$steps\">";
 
-		echo $to;
+		echo $to."</div>";
 	}
 
 	function getAnswer()
@@ -493,7 +498,13 @@ class ShortTextView extends QuestionField
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 
-		echo "<input id='$field' type='text' name='$field' $readonly $autocomplete value='".htmlspecialchars($value, ENT_QUOTES, 'UTF-8')."' size='50' $disable $onkeypress/>";
+		$tip =  $this->question->context_help;
+		if ($tip)
+		{
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+		}		
+		
+		echo "<input id='$field' type='text' name='$field' $readonly $autocomplete value='".htmlspecialchars($value, ENT_QUOTES, 'UTF-8')."' size='50' $disable $onkeypress $tip/>";
 		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
 
 		parent::renderLimitEnd($this->question->char_limit, $field, $value);
@@ -566,8 +577,14 @@ class FreeTextView extends QuestionField
 
 		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
 		$autocomplete = "autocomplete='off'";
-
-		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly $autocomplete>".htmlsafe($value)."</textarea>";
+		
+		$tip =  $this->question->context_help;
+		if ($tip)
+		{
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+		}
+		
+		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly $autocomplete $tip>".htmlsafe($value)."</textarea>";
 
 		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
 
@@ -644,6 +661,7 @@ class CheckListView extends QuestionField
 	{
 		$optionArr = explode("\n", $this->question->options);
 		$options = $this->parent->incrementArray($optionArr);
+		$tips = explode("\n", $this->question->context_help);
 
 		$values = $this->getValues();
 
@@ -665,7 +683,13 @@ class CheckListView extends QuestionField
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 				}
 
-				echo "<tr><td style=\"padding:1px\"><input type='checkbox'
+				$tip = $tips[$idx - 1];
+				if ($tip)
+				{
+					$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" ";
+				}
+								
+				echo "<tr><td style=\"padding:1px\"$tip><input type='checkbox'
 				class='checkbox' name='question_{$this->question->$pk}[$idx]' 
 				value='$value'$readonly$checked/>&nbsp;$text</td></tr>";
 				$idx++;
