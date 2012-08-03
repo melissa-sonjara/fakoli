@@ -96,6 +96,6 @@ $form->drawForm();
 
 function selectQuestions($questionSelect, $field)
 {
-	return SurveyManager::saveSelectedQuestions($questionSelect, $field);
+	SurveyManager::saveSelectedQuestions($questionSelect, $field);
 }
 ?></div>
