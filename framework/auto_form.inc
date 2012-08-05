@@ -90,7 +90,7 @@ class AutoForm
     var $onSubmitHandler = null;        ///< Javascript Callback for user-defined onsubmit hook
     var $required = array(); // list of required fields
     var $requiredFieldsText = "* indicates required field";
-
+	var $interstitialMessage = null;	///< Specifies the message to display in an interstitial while the form is being submitted
     var $fields;	///< Local field cache
 
     var $groups = array(); ///< List of field groups
