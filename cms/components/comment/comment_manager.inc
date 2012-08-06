@@ -40,7 +40,7 @@ class CommentManager
 	
 	static function setDefaults()
 	{		
-		Settings::setDefaultValue("comment", "allow_annonymous_comment", false, Boolean);
+		Settings::setDefaultValue("comment", "allow_anonymous_commenting", false, Boolean);
 	}
 	
 	
