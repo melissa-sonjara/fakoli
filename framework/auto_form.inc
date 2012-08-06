@@ -1177,7 +1177,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 	
 		if ($this->customSaveHandler)
 		{
-			call_user_func_array($this->customSaveHandler, array($this));
+			if (!call_user_func_array($this->customSaveHandler, array($this))) return false;
 		}
 		else
 		{
