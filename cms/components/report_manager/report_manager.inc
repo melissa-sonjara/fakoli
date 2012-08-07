@@ -119,6 +119,7 @@ class ReportManager
 	var $tables;
 	var $join;
 	var $report;
+	var $request;
 	
 	function ReportManager()
 	{
@@ -126,6 +127,13 @@ class ReportManager
 		
 		$this->report_id = 0;
 		$this->tables = array();
+		$this->request = $_REQUEST; // For config serialization
+	}
+	
+	function __sleep()
+	{
+		$this->request = array_remove_keys($this->request, "custom_report_mode", "PHPSESSIONID", "__utma", "__utmb", "__utmc", "__utmz");		
+		return array('report_id', 'title', 'description', 'request');	
 	}
 	
 	/**
@@ -135,7 +143,7 @@ class ReportManager
 	 */
 	function table($class, $title = "")
 	{
-		$table = new ReportTable($class, $title);
+		$table = new ReportTable($class, $title, $this->request);
 		$this->tables[] = $table;
 		return $table;
 	}
@@ -156,11 +164,13 @@ class ReportManager
 		
 		foreach($this->tables as $table)
 		{
-			$tableNode = new TreeNode("table_{$table->class}", $table->getTitle(), $table->class, false, "tree_node_closed", "tree_node_open");
+			$tableID = "table_{$table->class}";
+			$tableNode = new TreeNode($tableID, $table->getTitle(), $table->class, $this->selected[$tableID], "tree_node_closed", "tree_node_open");
 						
 			foreach($table->columns as $column)
 			{
-				$columnNode = new TreeNode("column_".codify($column->title), $column->title, $column->title, false,  "plain_tree_closed", "plain_tree_open");
+				$columnID = "column_".codify($column->title);
+				$columnNode = new TreeNode($columnID, $column->title, $column->title, $this->selected[$columnID],  "plain_tree_closed", "plain_tree_open");
 				$columnNode->leafStyle = "file_node_leaf";
 				
 				$tableNode->add($columnNode);
@@ -186,13 +196,16 @@ class ReportManager
 		
 		foreach($this->tables as $table)
 		{
-			echo "<fieldset id='{$table->class}' style='display: none'><legend>".$table->getTitle()."</legend>\n";
+			$display = $this->selected["table_{$table->class}"] ? "block" : "none";
+			
+			echo "<fieldset id='{$table->class}' style='display: $display'><legend>".$table->getTitle()."</legend>\n";
 			
 			echo "<table ";
 			if ($this->formCSS) echo "class='{$this->formCSS}'"; 
 			echo ">\n";
 
 			$script .= $table->form->writeScript();
+			$table->form->params->fromArray($this->request);
 			$table->form->renderSearchFields();
 
 			echo "</table>\n";
@@ -227,12 +240,12 @@ class ReportManager
 	*/
 	function populateSelected()
 	{
-		if ($_REQUEST["custom_report_title"]) $this->title = $_REQUEST["custom_report_title"];
-		if ($_REQUEST["custom_report_description"]) $this->description = $_REQUEST["custom_report_description"];
+		if ($this->request["custom_report_title"]) $this->title = $this->request["custom_report_title"];
+		if ($this->request["custom_report_description"]) $this->description = $this->request["custom_report_description"];
 		
 		foreach($this->tables as $table)
 		{
-			if ($_REQUEST["table_{$table->class}"])
+			if ($this->request["table_{$table->class}"])
 			{
 				$this->setSelected($table);
 			}
@@ -251,13 +264,13 @@ class ReportManager
 	function setSelected($table, $checkRequest = true)
 	{
 		$this->selected["table_{$table->class}"] = true;
-		$this->constraint .= $table->getConstraint($first);
+		$this->constraint .= $table->getConstraint($first, $this->request);
 
 		$colCount = 0;
 		foreach($table->columns as $column)
 		{
 			$col = "column_".codify($column->title);
-			if ($_REQUEST[$col] || !$checkRequest)
+			if ($this->request[$col] || !$checkRequest)
 			{
 				$this->selected[$col] = true;
 				$colCount ++;			
@@ -285,7 +298,7 @@ class ReportManager
 			return;
 		}
 		
-		$joinClass = ($_REQUEST['__include_incomplete'] == "1") ? LeftOuterJoin : InnerJoin;
+		$joinClass = ($this->request['__include_incomplete'] == "1") ? LeftOuterJoin : InnerJoin;
 		
 		$this->join = new $joinClass;
 		$this->join->unique = true;
@@ -328,14 +341,14 @@ class ReportManager
 		
 		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
 		
-		if(isset($_REQUEST["__excel"]))
+		if(isset($this->request["__excel"]))
 		{
 			$report->excelFile = $reportTitle . ".xls";
 		}
 		/* to do - pdf output 
 		else
 		{
-			$identifier = $_REQUEST["identifier"];
+			$identifier = $this->request["identifier"];
 			$pdf = new PDF("/$identifier", false, true, $reportTitle . ".pdf");
 			$pdf->generate();
 		}
@@ -393,7 +406,7 @@ class ReportManager
 		
 	function writeResultsFormButtons()
 	{
-		$url = $_REQUEST["identifier"];
+		$url = $this->request["identifier"];
 		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
 		echo "&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
 	}
@@ -448,7 +461,15 @@ class ReportManager
 	{
 		$report = new CustomReport($report_id);
 
-		$instance = unserialize($report->configuration);
+		$proto = unserialize($report->configuration);
+		$cl = get_class($proto);
+
+		$_REQUEST = $proto->request;
+		
+		$instance = new $cl;
+		$instance->request = $proto->request;
+		
+		$instance->populateSelected();
 		return $instance;
 	}
 }
@@ -467,13 +488,15 @@ class ReportTable
 	var $footerColumns = array();
 	var $totalCallbacks = array();
 	
-	function ReportTable($class, $title = "")
+	function ReportTable($class, $title = "", $request = null)
 	{
 		$this->class = $class;
 		$this->proto = new $class;
 		$this->fields = array();
 		$this->title = $title ? $title : $this->proto->prettifyClassName();
 		$this->constraints = $constraints;
+		
+		if ($request) $this->proto->fromDataSet($request);
 		
 		$this->form = new SearchForm($this->proto);
 		$this->form->id = "custom_report";
@@ -484,6 +507,21 @@ class ReportTable
 		$this->excludedKeys = array();
 	}
 
+	// Control Serialization ----
+	
+	function __sleep()
+	{
+		return array('class', 'fields', 'title', 'constraints', 'params', 'excludedKeys', 'columns', 'footerColumns', 'totalCallbacks');	
+	}
+	
+	function __wakeup()
+	{
+		$this->proto = new $this->class;
+		$this->form = new SearchForm($this->proto);
+	}
+	
+	// ----
+	
 	function column($title, $format, $sortable = true, $style = "", $type = null)
 	{
 		$this->columns[] = new ReportColumn($title, $format, $sortable, $style, $type);
@@ -525,9 +563,9 @@ class ReportTable
 		$this->constraints = $constraint;
 	}
 	
-	function getConstraint($first)
+	function getConstraint($first, $request)
 	{
-		$this->params->fromArray($_REQUEST);
+		$this->params->fromArray($request);
 		$constraint = $this->params->generateConstraint($first);
 		
 		if ($this->constraints)
