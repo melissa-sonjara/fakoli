@@ -132,7 +132,7 @@ class ReportManager
 	
 	function __sleep()
 	{
-		$this->request = array_remove_keys($this->request, "custom_report_mode", "PHPSESSIONID", "__utma", "__utmb", "__utmc", "__utmz");		
+		$this->request = array_remove_keys($this->request, "custom_report_mode", "PHPSESSID", "__utma", "__utmb", "__utmc", "__utmz");		
 		return array('report_id', 'title', 'description', 'request');	
 	}
 	
