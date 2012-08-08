@@ -440,7 +440,110 @@ class RatingView extends QuestionField
 		if (!$to) $to = "Highest";
 		if (!$steps) $steps = 5;
 	}
+	
+	/**
+	 * Draw results of all answers to one ratings question in
+	 * a histogram.
+	 * 
+	 * Called from an action handler. Handler must include the
+	 * jgraph library:
+	 * 
+	 * require_once ('jpgraph/jpgraph.php');
+	 * require_once ('jpgraph/jpgraph_bar.php');
+	 * 
+	 * The handler would instantiate the survey or questionnaire, 
+	 * the question, and the question renderer and retrieve the
+	 * array of answers grouped by value.
+	 * 
+	 * For example:
+	 * 
+	 * $survey = new Survey($survey_id);
+	 * $question = new SurveyQuestion($survey_question_id);
+	 * 
+	 * $answers = $survey->Answers("WHERE survey_question_id=$survey_question_id");
+	 * $answers = regroupList($answers, "value");
+	 * $renderer = QuestionField::create($survey, $question);
+	 * $renderer->drawJGraphView($answers);
+	 * 
+	 * @param Array $answers - array of answers to one ratings question 
+	 * grouped by field "value"
+	 */
+	function drawJGraphView($answers)
+	{
+		RatingView::drawJGraph($this->question->options, $answers);
+	}
+	
+	/**
+	 * Draw results of all answers to one ratings question in
+	 * a histogram.
+	 * 
+	 * @param String $options - in format label for lowest\nlabel for highest\n number steps
+	 * 	default options will be used if blank
+	 * @param Array $answers - array of answers to one ratings question 
+	 * grouped by field "value"
+	 */
+	static function drawJGraph($options, $answers)
+	{
+		$datay = array();
 
+		$optionAnswers = array();
+		$count = array();
+		$optionText = array();
+	
+		RatingView::getOptions($options, $from, $to, $steps);
+	
+		for($idx = 1; $idx <= $steps; ++$idx)
+		{
+			if($idx > 1 AND $idx < $steps) 
+				$optionText[$idx] = $idx;
+			else
+				$optionText[$idx] = ($idx == 1) ? $from : $to;
+		}	
+
+		$steps = count($optionText);
+
+		for($idx = 1; $idx <= $steps; ++$idx)
+		{
+			$counts[$idx] = count($answers[$idx]);
+			$totalValue += $idx * $counts[$idx];
+			$totalCount += $counts[$idx];
+			$datay[] = $counts[$idx];
+			$datax[] = $optionText[$idx];
+		}
+
+		$mean = "Average: ".number_format($totalValue / $totalCount, 1);
+
+		// Setup the graph.
+		$graph = new Graph(500,300);
+		$graph->img->SetMargin(60,20,35,75);
+		$graph->SetScale("textint");
+		$graph->SetFrame(false); // No border around the graph
+
+		// Setup font for axis
+		$graph->xaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
+		$graph->yaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
+
+		// Show 0 label on Y-axis (default is not to show)
+		$graph->yscale->ticks->SupressZeroLabel(false);
+
+		// Setup X-axis labels
+		$graph->xaxis->SetTickLabels($datax);
+		//$graph->xaxis->SetLabelAngle(50);
+		$graph->xaxis->SetTitle($mean);
+
+		// Create the bar pot
+		$bplot = new BarPlot($datay);
+		$bplot->SetWidth(0.6);
+
+		// Set color for the frame of each bar
+		$bplot->SetColor("black");
+		$graph->Add($bplot);
+		
+		// Finally send the graph to the browser
+		$graph->Stroke();
+	}
+	
+	
 	function drawView()
 	{
 		$this->writeHTML();
