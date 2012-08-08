@@ -41,6 +41,7 @@ class CommentManager
 	static function setDefaults()
 	{		
 		Settings::setDefaultValue("comment", "allow_anonymous_commenting", false, Boolean);
+		Settings::setDefaultValue("comment", "publish_automatically", true, Boolean);
 	}
 	
 	
