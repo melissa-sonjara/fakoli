@@ -96,7 +96,7 @@ class XXReportManager extends ReportManager
  * 
  * new SelectFieldRenderer($this->getTable(Program)->form, "residency_requirement", "Residency Requirement", Program::$residencyTypes);	
  * 
- * If you need to search on a field that is no in the table
+ * If you need to search on a field that is not in the table
  * but is instead in an xref table, such as the obj is linked
  * to a set of states through a item_state_xref table, then
  * create the RelatedItemSelectFieldRenderer but set an 
@@ -112,14 +112,17 @@ class XXReportManager extends ReportManager
  */
 class ReportManager
 {
-	var $report_id;
-	var $title;
-	var $description;
+	var $report_id;			///< ID of the saved report as persisted in the database
+	var $title;				///< Title of the report
+	var $description;		///< Longer description of the report
+	var $resultsPage = "";	///< The page used to display the search results
+	var $target;			///< The target window for the form results
 	
 	var $tables;
 	var $join;
 	var $report;
 	var $request;
+	var $interstitialMessage = "";	///< Optional interstitial message to display while report is being generated
 	
 	function ReportManager()
 	{
@@ -161,9 +164,12 @@ class ReportManager
 		$script .= $tableNavigator->writeScript();
 		$script .= $filterNavigator->writeScript();
 		
-		$action = Fakoli::scriptName();
+		$action = $this->resultsPage ? $this->resultsPage : Fakoli::scriptName();
+		$target = $this->target ? " target='{$this->target}'" : "";
 		
-		echo "<form method='POST' action='$action?report_id={$_GET['report_id']}' id='custom_report' onsubmit='interstitial(\"Generating Your Report...\"); return true;'>";
+		$interstitial = $this->interstitialMessage ? " onsubmit='interstitial(\"".jsSafe($this->interstitialMessage).".\"); return true;'" : "";
+		
+		echo "<form method='POST' action='$action?report_id={$_GET['report_id']}'$target id='custom_report'$interstitial>";
 		echo "<input type='hidden' name='report_id' value='{$this->report_id}'/>";
 		echo "<input type='hidden' name='custom_report_mode' value='search' id='custom_report_mode'/>";
 		echo "<input type='hidden' name='custom_report_title' value='' id='custom_report_title'/>";
