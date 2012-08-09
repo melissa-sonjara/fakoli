@@ -48,7 +48,7 @@ if(!$library->allowAccess())
 	
 if($library->isOwner() || checkRole("fileshare,admin"))
 	$tabs = FileshareManager::libraryTabs($document_library_id);
-$styles .= FileshareManager::getStyles();
+//$styles .= FileshareManager::getStyles();
 
 $mgr = new FileshareManager($library);
 $mgr->width = 640;

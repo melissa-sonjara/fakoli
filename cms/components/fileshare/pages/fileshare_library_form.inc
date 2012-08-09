@@ -55,7 +55,7 @@ $form->onSaveComplete = setLibraryIdentifier;
 $form->unique("name", "A library already exists with that name. Please choose a different name.");
 
 $tabs = FileshareManager::libraryTabs($document_library_id);
-$styles .= FileshareManager::getStyles();
+//$styles .= FileshareManager::getStyles();
 
 if ($method == "POST")
 {

@@ -155,66 +155,29 @@ class ReportManager
 	{
 		global $script;
 		
-		$tree = new TreeControl("custom_report");
-		$tree->scroll = true;
-		$tree->width = 310;
-		$tree->height = 430;
-		$tree->selectMode = "multi";
-		$tree->onSelect = "ReportManager.updateFilters";
+		$tableNavigator = new ReportTableNavigator(&$this->tables);
+		$filterNavigator = new ReportFilterNavigator(&$this->tables);
 		
-		foreach($this->tables as $table)
-		{
-			$tableID = "table_{$table->class}";
-			$tableNode = new TreeNode($tableID, $table->getTitle(), $table->class, $this->selected[$tableID], "tree_node_closed", "tree_node_open");
-						
-			foreach($table->columns as $column)
-			{
-				$columnID = "column_".codify($column->title);
-				$columnNode = new TreeNode($columnID, $column->title, $column->title, $this->selected[$columnID],  "plain_tree_closed", "plain_tree_open");
-				$columnNode->leafStyle = "file_node_leaf";
-				
-				$tableNode->add($columnNode);
-			}
-			
-			$tree->add($tableNode);
-		}
+		$script .= $tableNavigator->writeScript();
+		$script .= $filterNavigator->writeScript();
 		
-		$script .= $tree->writeScript();
-
+		$action = Fakoli::scriptName();
 		
-		echo "<form method='POST' action='' id='custom_report' onsubmit='interstitial(\"Generating Your Report...\"); return true;'>";
+		echo "<form method='POST' action='$action?report_id={$_GET['report_id']}' id='custom_report' onsubmit='interstitial(\"Generating Your Report...\"); return true;'>";
 		echo "<input type='hidden' name='report_id' value='{$this->report_id}'/>";
 		echo "<input type='hidden' name='custom_report_mode' value='search' id='custom_report_mode'/>";
 		echo "<input type='hidden' name='custom_report_title' value='' id='custom_report_title'/>";
 		echo "<input type='hidden' name='custom_report_description' value='' id='custom_report_description'/>";
+		$tableNavigator->drawView();
+		$filterNavigator->drawView();
 		
-		echo "<div style='float: left; width: 320px'>";
-		echo "<strong>Select Report Fields</strong><br/><br/>";
-		$tree->writeHTML();
-		echo "</div><div style='float: left: width: 550px'>";
-		echo "<strong>Filter By</strong><br/><br/>";
 		
-		foreach($this->tables as $table)
-		{
-			$display = $this->selected["table_{$table->class}"] ? "block" : "none";
-			
-			echo "<fieldset id='{$table->class}' style='display: $display'><legend>".$table->getTitle()."</legend>\n";
-			
-			echo "<table ";
-			if ($this->formCSS) echo "class='{$this->formCSS}'"; 
-			echo ">\n";
-
-			$script .= $table->form->writeScript();
-			$table->form->params->fromArray($this->request);
-			$table->form->renderSearchFields();
-
-			echo "</table>\n";
-			echo "</fieldset>";
-		}
+		$incomplete = $this->request["__include_incomplete"] ? " checked='checked'" : "";
+		$excel = $this->request["__excel"] ? " checked='checked'": "";
 		
-		echo "</div><div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'/> <strong>Include Incomplete Records in Results</strong>";
-		echo "<br/><input type='checkbox' name='__excel' value='custom_report'/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
-		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.saveReport(); return false;'>Save Report</a></div></form>";
+		echo "<div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'$incomplete/> <strong>Include Incomplete Records in Results</strong>";
+		echo "<br/><input type='checkbox' name='__excel' value='custom_report'$excel/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
+		echo "&nbsp;&nbsp;<button class='button' onclick='ReportManager.saveReport(); return false;'>Save Report</button></div></form>";
 	}
 	
 	/**
@@ -263,8 +226,9 @@ class ReportManager
 	 */
 	function setSelected($table, $checkRequest = true)
 	{
+		$table->selected = true;
 		$this->selected["table_{$table->class}"] = true;
-		$this->constraint .= $table->getConstraint($first, $this->request);
+		//$this->constraint .= $table->getConstraint($first, $this->request);
 
 		$colCount = 0;
 		foreach($table->columns as $column)
@@ -272,6 +236,7 @@ class ReportManager
 			$col = "column_".codify($column->title);
 			if ($this->request[$col] || !$checkRequest)
 			{
+				$column->selected = true;
 				$this->selected[$col] = true;
 				$colCount ++;			
 			}
@@ -281,8 +246,19 @@ class ReportManager
 			$this->setSelected($table, false);
 	}
 	
+	function generateConstraint()
+	{
+		foreach($this->tables as $table)
+		if ($this->selected["table_{$table->class}"])
+		{
+			$this->constraint .= $table->getConstraint($first, $this->request);
+		}
+	}
+	
 	function generateReport()
 	{
+		$t1 = microtime(true);
+		
 		$this->preSaveReport();
 		
 		global $script;
@@ -291,6 +267,8 @@ class ReportManager
 		{
 			$this->populateSelected();
 		}
+		
+		$this->generateConstraint();
 		
 		if ($_REQUEST["custom_report_mode"] == "save")
 		{
@@ -321,7 +299,7 @@ class ReportManager
 		
 		$results = $this->join->query($this->constraint);
 		
-		$report = new DataListView($results, "custom_report");
+		$report = new DataListView($results, "custom_report_results");
 		
 		foreach($this->tables as $table)
 		{
@@ -361,6 +339,10 @@ class ReportManager
 		$report->drawView();
 		
 		$this->writeResultsFormButtons();
+		
+		$t2 = microtime(true);
+		$elapsed = ($t2 - $t1);
+		echo "<p><em>Report generated in ".number_format($elapsed, 2)." seconds</em></p>";
 	}
 	
 
@@ -556,6 +538,18 @@ class ReportTable
 		
 		$this->proto->filter = $filter;
 		return $this;
+	}
+	
+	function favoriteColumns()
+	{
+		$favorites = array_combine(func_get_args(), func_get_args());
+		foreach($this->columns as $column)
+		{
+			if (array_key_exists($column->title, $favorites))
+			{
+				$column->favorite = true;
+			}
+		}	
 	}
 	
 	function additionalConstraints($constraint)

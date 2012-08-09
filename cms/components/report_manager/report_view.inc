@@ -66,10 +66,9 @@ class ReportListView
 	{		
 		// NOTE: "CustomReports" id is referenced in report_manager.js function reportSaved
 		$table = new DataListView($this->reports, "CustomReports");
-		$table->column("Title",  "<a href='#' onclick='new ReportManager.updateReport({report_id}); return false;'>{title}</a>", true)
-			->column("Description", "{description}")
-			->column("View", "<a class='button' href='{$this->identifier}?report_id={report_id}'>View</a>")
-			;
+		$table->column("Title",  "<a href='{$this->identifier}?report_id={report_id}&edit=1'>{title}</a>", true)
+			  ->column("Description", "{description}")
+			  ->column("View", "<a class='button' href='{$this->identifier}?report_id={report_id}'>View</a>");
 			
 		$table->pageSize=20;
 		$table->emptyMessage = "There are no custom reports.";

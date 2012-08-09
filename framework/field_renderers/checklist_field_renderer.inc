@@ -266,7 +266,8 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 		
 		$values = explode(",", $rawValue);		
-				
+		$values = array_combine($values, $values);
+		
 		$divider = $this->horizontal ? " " : "<br/>";
 		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
@@ -280,7 +281,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		{
 			foreach($this->options as $value => $text)
 			{
-				$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+				$checked = (array_key_exists($value, $values)) ? " checked" : "";
 				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
 				$idx++;
 			}

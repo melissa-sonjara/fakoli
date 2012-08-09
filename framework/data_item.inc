@@ -121,6 +121,16 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
+	function __sleep()
+	{
+		// No need to persist class variables, such as field metadata
+		
+		$f = array_keys($this->fields);
+		array_push($f, "primary_key", "table", "filter");
+		trace("FIELDS: ".implode(", ", $f), 2);
+		return $f;
+	}
+	
 	/**
 	 * Join the DataItem to the specified DataTransaction.
 	 * @param DataTransaction $tx the transaction to join

@@ -65,7 +65,7 @@ $table->cssStyles = "width: 640px";
 
 if($library->isOwner() || checkRole("fileshare,admin"))
 	$tabs = FileshareManager::libraryTabs($document_library_id);
-$styles .= FileshareManager::getStyles();
+//$styles .= FileshareManager::getStyles();
 
 $script .= $mgr->writeScript();
 $script .= $table->writeScript();

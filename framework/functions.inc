@@ -1706,4 +1706,14 @@ function getMIMEType($filename)
         die("");
     }
 }
+
+function array_remove_keys($array)
+{
+	for($i = 1; $i < func_num_args(); ++$i)
+	{
+		unset($array[func_get_arg($i)]);
+	}
+	
+	return $array;
+}
 ?>

@@ -30,6 +30,12 @@
 
 *****************************************************************/
 
+// Annotate the document body with browser info
+window.addEvent('domready', function()
+{
+	$(document.body).addClass(Browser.name).addClass((Browser.name + Browser.version).replace(".", "_"));
+});
+
 window.size = function()
 {
 	var w = 0;

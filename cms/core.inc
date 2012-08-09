@@ -647,6 +647,12 @@ class Fakoli
 		/* Don't execute PHP internal error handler */
 	    return true;
 	}
+	
+	static function scriptName()
+	{
+		list ($s, $qs) = explode("?", $_SERVER['REQUEST_URI']);
+		return $s;		
+	}
 }
 
 Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting

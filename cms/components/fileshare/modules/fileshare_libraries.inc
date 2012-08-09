@@ -38,7 +38,7 @@ Fakoli::using("fileshare", "document");
 
 $libraries = FileshareManager::getSharedLibraries();
 
-$styles .= FileshareManager::getStyles();
+//$styles .= FileshareManager::getStyles();
 
 ?>	
 <div id="fileshare_list">

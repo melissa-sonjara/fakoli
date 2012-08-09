@@ -71,6 +71,11 @@ class FileshareManifest
 	{
 		return array("/fakoli/js/library.js");
 	} 		
+	
+	static function getStyles()
+	{
+		return array("/fakoli/css/fileshare.css");
+	}
 }
 
 ?>

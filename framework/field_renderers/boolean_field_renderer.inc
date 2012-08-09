@@ -92,7 +92,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo "<td colspan='2'";
 		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
 		echo "><input type='checkbox' value='1' name='$field:$mode'";
-		if ($this->parent->data->get($field))
+		if ($this->parent->params->get($field, $mode))
 		{
 			echo " checked";
 		}

@@ -71,14 +71,6 @@
   color: #000000;
 }
 
-#tabs a:hover, 
-#tabs a:active,
-#popup_tabs a:hover, 
-#popup_tabs a:active
-{
-  color: #000000;
-  background-color: #2B388F; 
-}
 
 #tabs a.disabled,
 #popup_tabs a.disabled

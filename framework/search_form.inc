@@ -495,59 +495,21 @@ class SearchParameters
 		
 	function fromArray($array)
 	{
-		foreach(array_keys($this->target->fields) as $field)
+		$fields = array_keys($this->target->fields);
+		foreach($array as $field => $value)
 		{
-			trace("SearchParameters::fromGET: $field", 3);
-			if ($this->target->filter && $this->target->filter->isExcluded($field)) continue;
-			
-			if (array_key_exists($field, $array) && $array[$field] != "")
+			list($fieldname, $mode) = explode(":", $field);
+
+			if ($this->target->filter && $this->target->filter->isExcluded($fieldname)) continue;
+			if ($value != "")
 			{
-				$this->params[$field] = $array[$field];
-			}
-			else if (array_key_exists("{$field}:equal", $array) && $array["{$field}:equal"] != "")
-			{
-				trace("Found '{$field}:equal'", 3);
-				
-				$this->params["{$field}:equal"] = $array["{$field}:equal"];
-			}			
-			else if (array_key_exists("{$field}:like", $array) && $array["{$field}:like"] != "")
-			{
-				trace("Found '{$field}:like'", 3);
-				
-				$this->params["{$field}:like"] = $array["{$field}:like"];
-			}
-			else if (array_key_exists("{$field}:startsWith", $array) && $array["{$field}:startsWith"] != "")
-			{
-				trace("Found '{$field}:startsWith'", 3);
-				
-				$this->params["{$field}:startsWith"] = $array["{$field}:startsWith"];
-			}
-			else if (array_key_exists("{$field}:member", $array) && $array["{$field}:member"] != "")
-			{
-				trace("Found '{$field}:member'", 3);
-				
-				$this->params["{$field}:member"] = $array["{$field}:member"];
-			}
-			else if (array_key_exists("{$field}:any", $array) && $array["{$field}:any"] != "")
-			{
-				trace("Found '{$field}:any'", 3);
-				
-				$this->params["{$field}:any"] = $array["{$field}:any"];
-			}
-			else 
-			{
-				if (array_key_exists("{$field}:from", $array) && $array["{$field}:from"] != "")
+				if (is_array($value))
 				{
-					trace("Found '{$field}:from'", 3);
-					
-					$this->params["{$field}:from"] = $array["{$field}:from"];
+					$this->params[$field] = implode(",", array_values($value));
 				}
-				
-				if (array_key_exists("{$field}:to", $array) && $array["{$field}:to"] != "")
+				else
 				{
-					trace("Found '{$field}:to'", 3);
-					
-					$this->params["{$field}:to"] = $array["{$field}:to"];
+					$this->params[$field] = $value;
 				}
 			}
 		}
@@ -883,6 +845,10 @@ class SearchForm extends AutoForm
 		$this->params->fromPOST();
 	}
 	
+	function populateFromREQUEST()
+	{
+		$this->params->fromArray($_REQUEST);
+	}
 	
 	/*
 	 * Override an existing SearchParameter constraint

@@ -124,6 +124,8 @@ class LoginManager
 			
 			$_SESSION["user"] = $user;
 			
+
+			trace("USER: ".serialize($user), 1);
 			$mgr->loadDefaultSession($user);
 			$mgr->loginRedirect($user);
 		}

@@ -48,9 +48,14 @@ class ReportManagerManifest
 	
 	static function getScripts()
 	{
-		return array("/fakoli/report_manager/js/report_manager.js");
+		return array("/components/report_manager/js/report_manager.js",
+					 "/components/report_manager/js/report_table_navigator.js");
 	}
 	
+	static function getStyles()
+	{
+		return array("/components/report_manager/css/report_manager.css");
+	}
 	
 	static function subscribeToEvents()
 	{
