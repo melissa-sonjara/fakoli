@@ -31,6 +31,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
+Fakoli::using("questionnaire");
+
 class SurveyManager
 {
 	function SurveyManager()
@@ -315,6 +317,16 @@ class SurveyCreateManager
 	{
 		return "survey_question_id";
 	}
+	
+	static function getSurvey($survey_id)
+	{
+		return new Survey($survey_id);
+	}
+	
+	static function getQuestion($question_id)
+	{
+		return new SurveyQuestion($question_id);
+	}
 
 	function getAnswerKey()
 	{
@@ -461,3 +473,5 @@ class SurveyResultsManager extends SurveyCreateManager
 		return "Token";
 	}
 }
+
+QuestionnaireResultsGraph::$surveyManager = SurveyCreateManager;
