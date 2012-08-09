@@ -109,13 +109,13 @@ $tabs->writeHTML();
 if(!$survey_id)
 {
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <?php 
 }
 else
 {
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <button id="next_page_button" class="button"
 	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
 <?php

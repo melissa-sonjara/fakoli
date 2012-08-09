@@ -72,7 +72,6 @@ $table->sortable = true;
 $table->pageSize = 10;
 $table->filter = true;
 $table->cssStyle = "width: 98%";
-$table->cssClass = "survey";
 $script .= $table->writeScript();
 
 $table->drawView();

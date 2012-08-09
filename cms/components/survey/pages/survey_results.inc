@@ -76,7 +76,7 @@ $script .= $table->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <h3>Survey Responses</h3>
 <?
 echo "<h3>".$survey->getTitle() . "</h3>\n";

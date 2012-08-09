@@ -7,6 +7,16 @@
 	background: url();
 }
 
+#survey_tab_border
+{
+	width: 100%;
+	border: solid 1px #000; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
 table.survey {
 	background-color: transparent;
 	border: solid 1px #666;

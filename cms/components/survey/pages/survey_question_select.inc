@@ -88,7 +88,7 @@ if ($method == "POST")
 $script .= $form->writeScript();
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <h3>Select Survey Questions</h3>
 <?
 $form->drawForm();

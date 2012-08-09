@@ -29,7 +29,7 @@ $script .= $view->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <h3>Aggregated Survey Results for <?echo $survey->title?></h3>
 <p><a class="button" href="#"
 	onclick="new SurveyResults().showQuestionNamesDialog(<?php echo $survey_id ?>); return false;">Edit

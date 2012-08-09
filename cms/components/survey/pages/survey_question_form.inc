@@ -136,7 +136,7 @@ if($survey_id)
 	$tabs->writeHTML();
 
 	?>
-<div id="tab_border"><?
+<div id="survey_tab_border"><?
 }
 
 echo "<b>{$infoText}</b>";

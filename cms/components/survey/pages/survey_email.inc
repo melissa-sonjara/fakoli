@@ -101,7 +101,7 @@ if ($method == "POST")
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <button id="next_page_button" class="button"
 	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
 <h3>Survey Email</h3>
