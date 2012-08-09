@@ -39,13 +39,13 @@ class QuestionnaireResultsGraph
 	
 	static function drawSelectResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		if (!QuestionnaireGraphResult::$surveyManager)
+		if (!QuestionnaireResultsGraph::$surveyManager)
 		{
 			echo "<p><em>Survey Graphs are not available</em></p>";
 			return;
 		}
 		
-		$surveyManager = new QuestionnaireGraphResult::$surveyManager();
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
 		
 		$question = $surveyManager->getQuestion($question_id);
 		$survey = $surveyManager->getSurvey($survey_id);
@@ -83,13 +83,13 @@ class QuestionnaireResultsGraph
 	
 	static function drawChecklistResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		if (!QuestionnaireGraphResult::$surveyManager)
+		if (!QuestionnaireResultsGraph::$surveyManager)
 		{
 			echo "<p><em>Survey Graphs are not available</em></p>";
 			return;
 		}
 		
-		$surveyManager = new QuestionnaireGraphResult::$surveyManager();
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
 		
 		$question = $surveyManager->getQuestion($question_id);
 		$survey = $surveyManager->getSurvey($survey_id);
@@ -130,13 +130,13 @@ class QuestionnaireResultsGraph
 	
 	static function drawRatingResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		if (!QuestionnaireGraphResult::$surveyManager)
+		if (!QuestionnaireResultsGraph::$surveyManager)
 		{
 			echo "<p><em>Survey Graphs are not available</em></p>";
 			return;
 		}
 		
-		$surveyManager = new QuestionnaireGraphResult::$surveyManager();
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
 		
 		$question = $surveyManager->getQuestion($question_id);
 		$survey = $surveyManager->getSurvey($survey_id);
