@@ -542,7 +542,8 @@ class ReportTable
 	
 	function favoriteColumns()
 	{
-		$favorites = array_combine(func_get_args(), func_get_args());
+		$args = func_get_args();
+		$favorites = array_combine($args, $args);
 		foreach($this->columns as $column)
 		{
 			if (array_key_exists($column->title, $favorites))
