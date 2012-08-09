@@ -9,13 +9,11 @@
 
 #survey_tab_border
 {
-	width: 100%;
-	border: solid 1px #000; 
+	border: solid 1px #666; 
 	padding-left: 4px;
 	padding-right: 4px;
 	padding-top: 10px;
 	padding-bottom: 4px;
-	display: table-cell;
 	box-shadow: 1px 1px 5px #666;
 }
 
