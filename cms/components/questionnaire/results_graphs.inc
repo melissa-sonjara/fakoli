@@ -45,8 +45,8 @@ class QuestionnaireResultsGraph
 			return;
 		}
 		
-		$question = $surveyManager->getQuestion($question_id);
-		$survey = $surveyManager->getSurvey($survey_id);
+		$question = $surveyManager::getQuestion($question_id);
+		$survey = $surveyManager::getSurvey($survey_id);
 		
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 
@@ -87,8 +87,8 @@ class QuestionnaireResultsGraph
 			return;
 		}
 		
-		$question = $surveyManager->getQuestion($question_id);
-		$survey = $surveyManager->getSurvey($survey_id);
+		$question = $surveyManager::getQuestion($question_id);
+		$survey = $surveyManager::getSurvey($survey_id);
 				
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
@@ -132,8 +132,8 @@ class QuestionnaireResultsGraph
 			return;
 		}
 		
-		$question = $surveyManager->getQuestion($question_id);
-		$survey = $surveyManager->getSurvey($survey_id);
+		$question = $surveyManager::getQuestion($question_id);
+		$survey = $surveyManager::getSurvey($survey_id);
 				
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
