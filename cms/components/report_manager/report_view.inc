@@ -50,8 +50,9 @@ class ReportListView
 	var $reports;
 	var $table;
 	var $identifier; // report url
+	var $resultsPage;
 	
-	function ReportListView($manager_class, $identifier)
+	function ReportListView($manager_class, $identifier, $resultsPage)
 	{
 		// blank title means throw-away record presaved on generate page
 		$this->reports = Query::create(CustomReport, "WHERE manager_class=:manager_class AND title != ''")
@@ -59,6 +60,7 @@ class ReportListView
 			->execute();
 			
 		$this->identifier = $identifier;
+		$this->resultsPage = $resultsPage;
 		$this->table = $this->buildTable($reports);	
 	}
 	
@@ -68,7 +70,7 @@ class ReportListView
 		$table = new DataListView($this->reports, "CustomReports");
 		$table->column("Title",  "<a href='{$this->identifier}?report_id={report_id}&edit=1'>{title}</a>", true)
 			  ->column("Description", "{description}")
-			  ->column("View", "<a class='button' href='{$this->identifier}?report_id={report_id}'>View</a>");
+			  ->column("Actions", "<a target='_blank' class='button' href='{$this->resultsPage}?report_id={report_id}'>Run Report</a>&nbsp;<a class='button' href='{$this->identifier}?report_id={report_id}&edit=1'>Edit</a>");
 			
 		$table->pageSize=20;
 		$table->emptyMessage = "There are no custom reports.";
