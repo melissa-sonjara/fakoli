@@ -77,7 +77,7 @@ class QuestionnaireResultsGraph
 		$pie->setStrokeWidth(2);
 		$pie->showLegend(true, 375, 20);
 		$pie->shadow = false;
-		$pie->emboss = true;
+		//$pie->emboss = true;
 		$pie->draw();
 	}
 	
