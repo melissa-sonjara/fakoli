@@ -35,11 +35,19 @@ Fakoli::using("questionnaire", "svg_charts");
 
 class QuestionnaireResultsGraph
 {
+	static $surveyManager;
+	
 	static function drawSelectResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
-		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
-
+		if (!$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+		
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 
 		$options = explode("\n", $question->options);
@@ -73,9 +81,15 @@ class QuestionnaireResultsGraph
 	
 	static function drawChecklistResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
-		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+		if (!$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
 		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+				
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
 		$counts = SurveyResultsView::getCheckListAnswerCounts($answers);
@@ -112,9 +126,15 @@ class QuestionnaireResultsGraph
 	
 	static function drawRatingResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
-		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+		if (!$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
 		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+				
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
 		$answerValues = regroupList($answers, "value");
