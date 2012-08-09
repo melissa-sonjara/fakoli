@@ -101,7 +101,19 @@ class CommentView
 		
 		$out .= "<span class='small'>Posted by $author at {$comment->date_posted}</span>\n </div>\n <div class='message_content'>";
 		if($comment->isEditable())
-			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}', '{$this->component}'); return false\"> Edit </a><div style='clear:both'></div>";
+		{
+			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}', '{$this->component}'); return false\"> Edit </a>&nbsp;&nbsp;";
+		}
+		if($comment->published)
+		{
+			$edit .= "<a href='#' class='button' onclick=\"new Comment().commentPublish({comment_id}); return false;\"> Un-Publish </a>
+						<div style='clear:both'></div>";
+		}
+		else
+		{
+			$edit .= "<a href='#' class='button' onclick=\"new Comment().commentPublish({comment_id}); return false;\"> Publish </a>
+			<div style='clear:both'></div>";
+		}
 		$out .= $comment->format("{description:stripHTML}$edit");
 		
 		$out .= "</div></div>";

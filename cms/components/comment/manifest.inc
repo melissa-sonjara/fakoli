@@ -63,7 +63,7 @@ class CommentManifest
 
 	static function getScripts()
 	{
-		return array("/fakoli/js/comment.js");
+		return array("/components/comment/js/comment.js");
 	} 		
 }
 
