@@ -71,7 +71,7 @@ class SurveyManifest
 
 	static function getStyles()
 	{
-		return array("/fakoli/css/survey.css");
+		return array("/components/survey/css/survey.css");
 	}
 
 
