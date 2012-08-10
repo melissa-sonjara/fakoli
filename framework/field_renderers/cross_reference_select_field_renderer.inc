@@ -51,6 +51,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $options;
 	var $showSelectAll;
 	var $groupBy;
+	var $resizable = false;
 	
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -162,7 +163,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		}
 		if ($this->width && $this->height)
 		{
-			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			$resizable = $this->resizable ? " resizable": "";
+			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$countOptions = count($this->options);
