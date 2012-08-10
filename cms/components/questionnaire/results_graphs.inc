@@ -33,6 +33,33 @@
 
 Fakoli::using("questionnaire", "svg_charts");
 
+/**
+ * 
+ * Draws a graph of the aggregated answers for a given question.
+ * Uses either the default SurveyCreateManager class or a custom
+ * manager class set in the calling code using the syntax
+ * 
+ * 	QuestionnaireResultsGraph::$surveyManager = MyCustomSurveyManager;		
+ * 
+ * The custom survey manager must contain the following functions in
+ * order to use this graphing function:
+ * 
+ * static function getSurvey($survey_id)
+ * static function getQuestion($question_id)
+ * 
+ * @param String $surveyField - name of the field that has relation
+ * "Answers" so that it can retrieve an array of answer DataItem 
+ * objects with field "value" using the constraint $qField=$question_id
+ * 
+ * @param String $qField - the name of the question_id field (e.g.,
+ * 	question_id or survey_question_id
+ * 
+ * @param Number $survey_id - the key value of the survey or other
+ * object that can instantiate the DataItem object that has relation "Answers"
+ * 
+ * @param Number $question_id - the key value of the questionnaire
+ * or survey question that can instantiate the question DataItem object.
+ */
 class QuestionnaireResultsGraph
 {
 	static $surveyManager;
