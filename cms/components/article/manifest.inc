@@ -63,6 +63,7 @@ class ArticleManifest
 	static function subscribeToEvents()
 	{
 		return array(
+				"RegisterSearchables"	=>	array(ArticleManager, registerSearchables),
 				"upgradeComponent"		=>	array(ArticleManager, upgradeComponent)
 			);
 	}		

@@ -28,6 +28,13 @@ class ArticleManager
 		return $form;
 	}
 	
+	static function registerSearchables($searchables)
+	{
+		trace("ArticleManager registerSearchables", 3);
+		$searchables["article"] = array(Article);
+		return $searchables;
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new ArticleUpgradeManager();

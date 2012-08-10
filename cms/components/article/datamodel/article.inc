@@ -36,7 +36,7 @@ Fakoli::using("blog", "user");
 /**
  * Defines the Article class.
  */
-class Article extends DataItem
+class Article extends DataItem implements Searchable
 {
 	var $fields = array("article_id"	=>	Number,
 						"title"			=>	String,
@@ -98,6 +98,48 @@ class Article extends DataItem
 		$this->relations["Owner"] = $mgr->getUserClass(); 		
 				
 		$this->DataItem(func_get_args());
+	}
+	
+	function search($params)
+	{
+		trace("Searching Articles", 3);
+		
+		$params = "%$params%";
+		$articles = Query::create(Article, "WHERE title like :a OR teaser LIKE :b OR message like :c")
+					  ->bind(":a", $params, ":b", $params, ":c", $params)
+					  ->execute();
+					  
+		return SearchManager::wrap($articles, ArticleSearchResult);
+	}
+}
+
+class ArticleSearchResult extends AbstractSearchResult
+{
+	var $item;
+	
+	function ArticleSearchResult($item)
+	{
+		$this->item = $item;
+	}
+	
+	function relevance()
+	{
+		return 1;
+	}
+	
+	function title()
+	{
+		return $this->item->title;
+	}
+	
+	function date()
+	{
+		return $this->item->created_date;
+	}
+	
+	function summary()
+	{
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p><a href='article_view?article_id={article_id}'>Read More</a>");
 	}
 }
 
