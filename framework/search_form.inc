@@ -501,6 +501,7 @@ class SearchParameters
 			list($fieldname, $mode) = explode(":", $field);
 
 			if ($this->target->filter && $this->target->filter->isExcluded($fieldname)) continue;
+			if (!$mode) continue;
 			if ($value != "")
 			{
 				if (is_array($value))

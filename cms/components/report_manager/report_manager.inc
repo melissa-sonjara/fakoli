@@ -218,6 +218,7 @@ class ReportManager
 			{
 				$this->setSelected($table);
 			}
+			$table->load($this->request);
 		}
 		
 		if(count($this->selected) == 0)
@@ -459,6 +460,7 @@ class ReportManager
 		
 		$instance->populateSelected();
 		return $instance;
+
 	}
 }
 
@@ -506,6 +508,16 @@ class ReportTable
 	{
 		$this->proto = new $this->class;
 		$this->form = new SearchForm($this->proto);
+	}
+	
+	function load($request)
+	{		
+		if ($request) 
+		{
+			$this->proto->fromDataSet($request);
+			$this->params->fromArray($request);
+			$this->form->params->fromArray($request);
+		}
 	}
 	
 	// ----

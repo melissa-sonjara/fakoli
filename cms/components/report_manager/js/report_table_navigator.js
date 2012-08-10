@@ -129,7 +129,8 @@ var ReportTableNavigator = new Class(
 			table.tween('background-color', '#7f94b5');
 			columns.morph({'background-color': '#ffffff', 'color': '#666666'});
 			table.selectedCheckbox.checked = false;
-			table.filter.setDisplay('none');
+			fade = new Fx.Tween(table.filter, {property: 'opacity'});
+			fade.start(0).chain(function() { table.filter.setStyle('display', 'none'); });
 		}
 	},
 	
