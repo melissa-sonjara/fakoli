@@ -340,7 +340,7 @@ class ReportManager
 		*/
 		if ($inlineScript)
 		{
-			echo $script;
+			echo $report->writeScript();
 		}
 		else
 		{
