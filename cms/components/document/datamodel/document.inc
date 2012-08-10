@@ -34,7 +34,7 @@
 /**
  * This class maps the publication table.
  */
-class Document extends DataItem
+class Document extends DataItem implements Searchable
 {
 	// Fields
 	
@@ -125,6 +125,53 @@ class Document extends DataItem
 		$this->default_format = "{title}";
 		
 		$this->DataItem(func_get_args());
+	}
+	
+	function search($params)
+	{
+		trace("Searching Documents", 3);
+		
+		$params = "%$params%";
+		$documents = Query::create(Document, "WHERE title like :a OR keywords LIKE :b OR notes Like :c")
+					  ->bind(":a", $params, ":b", $params, ":c", $params)
+					  ->execute();
+					  
+		return SearchManager::wrap($documents, DocumentSearchResult);
+	}
+}
+
+class DocumentSearchResult extends AbstractSearchResult
+{
+	var $item;
+	
+	function PageSearchResult($item)
+	{
+		$this->item = $item;
+	}
+	
+	function relevance()
+	{
+		return 1;
+	}
+	
+	function title()
+	{
+		return $this->item->title;
+	}
+	
+	function date()
+	{
+		return $this->item->publication_date;
+	}
+	
+	function summary()
+	{
+		$file = $this->item->file;
+		
+		$type = getDocType($file);
+		$icon = getDocIcon($file);
+		
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Read More</a>");
 	}
 }
 

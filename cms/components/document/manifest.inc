@@ -54,6 +54,7 @@ class DocumentManifest
 					"EnumerateItems"	 => array(DocumentManager, enumerateItems),
 					"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
 					"DeleteRole"			=>	array(DocumentManager, deleteRole),
+					"RegisterSearchables"	=>	array(DocumentManager, registerSearchables),
 					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
 					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler)
 		);

@@ -756,6 +756,13 @@ function deleteFolderResult(result)
 		$roles = DocumentManager::getRoleOptions();
 		return implode(",", array_keys($roles));
 	}	
+	
+	static function registerSearchables($searchables)
+	{
+		trace("DocumentManager registerSearchables", 3);
+		$searchables["document"] = array(Document);
+		return $searchables;
+	}
 
 	static function upgradeComponent($version)
 	{
