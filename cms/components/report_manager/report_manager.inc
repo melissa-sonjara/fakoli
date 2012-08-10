@@ -262,7 +262,7 @@ class ReportManager
 		}
 	}
 	
-	function generateReport()
+	function generateReport($inlineScript = false)
 	{
 		$t1 = microtime(true);
 		
@@ -338,8 +338,15 @@ class ReportManager
 			$pdf->generate();
 		}
 		*/
-		$script .= $report->writeScript();
-		
+		if ($inlineScript)
+		{
+			echo $script;
+		}
+		else
+		{
+			$script .= $report->writeScript();
+		}
+				
 		$report->cssClass = "list small";
 		$this->writeResultsFormButtons();
 		
