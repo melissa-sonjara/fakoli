@@ -34,7 +34,7 @@
 Fakoli::usingFile("framework/join.inc");
 Fakoli::using("site");
 
-class Page extends DataItem
+class Page extends DataItem implements Searchable
 {
 	// Fields
 	var $fields = array("page_id" 				=>	Number,
@@ -203,6 +203,48 @@ class Page extends DataItem
 		$this->default_format = "{page_title}";
 		
 		$this->DataItem(func_get_args());
+	}
+	
+	function search($params)
+	{
+		trace("Searching Pages", 3);
+		
+		$params = "%$params%";
+		$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b")
+					  ->bind(":a", $params, ":b", $params)
+					  ->execute();
+					  
+		return SearchManager::wrap($pages, PageSearchResult);
+	}
+}
+
+class PageSearchResult extends AbstractSearchResult
+{
+	var $item;
+	
+	function PageSearchResult($item)
+	{
+		$this->item = $item;
+	}
+	
+	function relevance()
+	{
+		return 1;
+	}
+	
+	function title()
+	{
+		return $this->item->page_title;
+	}
+	
+	function date()
+	{
+		return $this->item->created_date;
+	}
+	
+	function summary()
+	{
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p><a href='page_view?page_id={page_id}'>Read More</a>");
 	}
 }
 
