@@ -576,11 +576,15 @@ class ReportTable
 				$column->favorite = true;
 			}
 		}	
+		
+		return $this;
 	}
 	
 	function additionalConstraints($constraint)
 	{
 		$this->constraints = $constraint;
+		
+		return $this;
 	}
 	
 	function getConstraint($first, $request)
