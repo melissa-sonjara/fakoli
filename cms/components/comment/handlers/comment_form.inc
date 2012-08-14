@@ -28,6 +28,10 @@ else
 	$comment->user_id = $user->get($user->primary_key);
 	$comment->date_posted = today();
 	$newPost = true;
+	if(Settings::getValue("comment", "publish_automatically"))
+	{
+		$comment->published = true;
+	}
 }
 
 $form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&xref_component=$xref_component", "EditComment_form");
