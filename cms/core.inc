@@ -539,6 +539,7 @@ class Fakoli
 		
 		if (!$sectionIdentifier) $sectionIdentifier = "/";
 		
+		global $config;
 		global $section;
 		
 		$section = Section::createFromIdentifier($sectionIdentifier);
