@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("user", "blog", "article", "comment", "component");
+Fakoli::using("user", "blog", "article", "comment", "component", "email");
 Fakoli::usingFeature("paged_list");
 
 /**
@@ -168,6 +168,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 	function formatArticle($article)
 	{
+		
 		$out = "<div class='article_summary'>";
 		
 		if ($article->image_id)
@@ -330,7 +331,13 @@ class BlogView
 			
 			if ($method == "POST")
 			{
-				$view->save();
+				if($view->save())
+				{
+					if(!Settings::getValue("comment", "publish_automatically"))
+					{
+						sendEmailUsingEmailManager($article, 'new_comment');
+					}
+				}
 			}
 			
 			$script .= $view->writeScript();
