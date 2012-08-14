@@ -40,7 +40,7 @@ class CommentManifest
 		$component->description = "Commenting functionality for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 2;
+		$component->priority = 10;
 		$component->enabled = true;
 		
 		return $component;
