@@ -2680,7 +2680,7 @@
 	}
 })();
 
-if (CanvasRenderingContext2D != undefined) {
+if (window.CanvasRenderingContext2D || CanvasRenderingContext2D) {
 	CanvasRenderingContext2D.prototype.drawSvg = function(s, dx, dy, dw, dh) {
 		canvg(this.canvas, s, { 
 			ignoreMouse: true, 
