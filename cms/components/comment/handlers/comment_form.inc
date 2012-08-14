@@ -28,15 +28,12 @@ else
 	$comment->user_id = $user->get($user->primary_key);
 	$comment->date_posted = today();
 	$newPost = true;
-	if(Settings::getValue("comment", "publish_automatically"))
-	{
-		$comment->published = true;
-	}
 }
 
 $form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&xref_component=$xref_component", "EditComment_form");
 $form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
+
 $form->data->set("xref_class", $xref_class);
 
 // To do - make it configurable whether to include title?
@@ -72,7 +69,7 @@ if($method == "POST")
 			$xref = new $xref_class;
 			$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
 			$xref->set($key_name, $key_value);
-			$xref->save();
+			$xref->save();				
 		}
 
 		ajaxReturn("OK");
