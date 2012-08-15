@@ -609,7 +609,7 @@ class Fakoli
 	        throw new DOMException($errMsg);
 	    }
 	    
-		if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+		if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT | E_DEPRECATED)) return;
 		
 		throw new ErrorException($errMsg, $errLevel, $errLevel, $errFile, $errLine);
 	}
@@ -624,7 +624,7 @@ class Fakoli
 			$errFile = $exception->getFile();
 			$errLine = $exception->getLine();
 	        
-			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT | E_DEPRECATED)) return;
 		
 			trace("ZIP: Winding back output buffers from ".ob_get_level(), 3);
 			
