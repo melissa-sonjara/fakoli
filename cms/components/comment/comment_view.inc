@@ -76,8 +76,14 @@ class CommentView
 
 	function buildCommentList($obj)
 	{
-		$comments = $obj->Comments("Where published=1 ORDER BY date_posted DESC");
-
+		if(checkRole(admin))
+		{
+			$comments = $obj->Comments("ORDER BY date_posted DESC");	
+		}
+		else
+		{
+			$comments = $obj->Comments("Where published=1 ORDER BY date_posted DESC");
+		}
 		$list = new PagedList($comments, "comment_list", array($this, formatComment));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
@@ -91,7 +97,14 @@ class CommentView
 	{
 		$author = ($comment->user_id) ? $comment->format("{User.first_name} {User.last_name}") : $comment->author;
 
-		$out = "<div id='comment{$comment->comment_id}' class='message'>\n";
+		if($comment->published)
+		{
+			$out = "<div id='comment{$comment->comment_id}' class='message'>\n";
+		}
+		else
+		{
+			$out = "<div id='comment{$comment->comment_id}' class='message_unpublished'>\n";
+		}
 		$out .=" <div class='title'>";
 
 		if ($comment->title)
