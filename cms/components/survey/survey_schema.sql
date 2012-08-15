@@ -62,7 +62,7 @@ CREATE TABLE `survey_response` (
   `token` varchar(10) NOT NULL COMMENT 'assigned response token',
   `email` varchar(100) NOT NULL,
   `last_modified` date DEFAULT NULL COMMENT 'date submitted',
-  `status` tinyint(3) varchar(20) NOT NULL DEFAULT 'not_started',
+  `status` varchar(20) NOT NULL DEFAULT 'not_started',
   PRIMARY KEY (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
