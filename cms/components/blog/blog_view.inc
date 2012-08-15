@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("user", "blog", "article", "comment", "component", "email");
+Fakoli::using("user", "blog", "article", "comment", "component");
 Fakoli::usingFeature("paged_list");
 
 /**
@@ -331,13 +331,7 @@ class BlogView
 			
 			if ($method == "POST")
 			{
-				if($view->save())
-				{
-					if(!Settings::getValue("comment", "publish_automatically"))
-					{
-						sendEmailUsingEmailManager($article, 'new_comment');
-					}
-				}
+				$view->save();
 			}
 			
 			$script .= $view->writeScript();
