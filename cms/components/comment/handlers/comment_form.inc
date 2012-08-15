@@ -69,7 +69,11 @@ if($method == "POST")
 			$xref = new $xref_class;
 			$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
 			$xref->set($key_name, $key_value);
-			$xref->save();				
+			$xref->save();
+			if(!Settings::getValue("comment", "publish_automatically"))
+			{
+				sendEmailUsingEmailManager($comment, 'new_comment');
+			}		
 		}
 
 		ajaxReturn("OK");
