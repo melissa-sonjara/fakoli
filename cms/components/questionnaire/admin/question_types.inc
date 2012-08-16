@@ -44,6 +44,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 Fakoli::using("questionnaire");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Questionnaire Question Types";
+
+$title = "Question Types";
+
 
 $questionTypes = query(QuestionType, "ORDER BY sort_order");
 
