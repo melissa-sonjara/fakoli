@@ -103,7 +103,7 @@ class CommentView
 		}
 		else
 		{
-			$out = "<a name='comment{$comment->comment_id}'><div id='comment{$comment->comment_id}' class='message_unpublished'>\n";
+			$out = "<a name='comment{$comment->comment_id}'></a><div id='comment{$comment->comment_id}' class='message_unpublished'>\n";
 		}
 		$out .=" <div class='title'>";
 
