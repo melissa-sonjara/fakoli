@@ -127,7 +127,6 @@ class DataItem extends AbstractDataItem
 		
 		$f = array_keys($this->fields);
 		array_push($f, "primary_key", "table", "filter");
-		trace("FIELDS: ".implode(", ", $f), 2);
 		return $f;
 	}
 	
