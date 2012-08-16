@@ -76,7 +76,7 @@ class CommentView
 
 	function buildCommentList($obj)
 	{
-		if(checkRole(admin))
+		if(checkRole("admin"))
 		{
 			$comments = $obj->Comments("ORDER BY date_posted DESC");	
 		}
@@ -117,7 +117,7 @@ class CommentView
 		{
 			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}', '{$this->component}'); return false\"> Edit </a>&nbsp;&nbsp;";
 		}
-		if(!Settings::getValue("comment","publish_automatically"))
+		if(checkRole("admin") && !Settings::getValue("comment","publish_automatically"))
 		{
 			if($comment->published)
 			{
