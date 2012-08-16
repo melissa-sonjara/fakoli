@@ -44,6 +44,8 @@
 Fakoli::using("site_map");
 Fakoli::usingFeature("tree");
 
+$menu_item = "Site Map";
+
 $siteMapPages = query(SiteMap, "ORDER BY identifier");
 
 $siteTree = new TreeControl("site_tree");

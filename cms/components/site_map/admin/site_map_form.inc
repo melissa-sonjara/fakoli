@@ -48,6 +48,8 @@
 Fakoli::using("site_map", "field_renderers", "page");
 Fakoli::usingFeature("auto_form");
 
+$menu_item = "Site Map";
+
 $site_map_id = checkNumeric($_GET["site_map_id"]);
 $parent_site_map_id = checkNumeric($_GET["parent_site_map_id"]);
 
