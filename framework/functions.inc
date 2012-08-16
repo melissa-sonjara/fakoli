@@ -1148,6 +1148,7 @@ function getRemote($url)
 	$url = canonicalizeURL($url);
 	trace("Retrieving $url", 3);
 	$ch = curl_init("$url");
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	$html = curl_exec($ch);
@@ -1244,6 +1245,7 @@ function postRemoteXML($url, $xml, $timeout = 30)
 function getRemoteHeaders($url)
 {
 	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_NOBODY, 1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
