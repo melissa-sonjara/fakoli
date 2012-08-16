@@ -1169,7 +1169,7 @@ function canonicalizeURL($url)
 {
 	global $config;
 	
-	if (startsWith($url, "http://")) return $url;
+	if (startsWith($url, "http://") || startsWith($url, "https://")) return $url;
 	
 
 	if (!startsWith($url, "/"))
