@@ -1152,7 +1152,11 @@ function getRemote($url)
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	$html = curl_exec($ch);
+	
+	if ($html === FALSE) throw new Exception(curl_error($ch));
+	
 	curl_close($ch);
+	
 	return $html;
 }
 
