@@ -250,7 +250,7 @@ class SelectFieldRenderer extends FieldRenderer
 	
 	function renderSearchField($field, $mode, $value = "")
 	{
-		if ($mode != "equal") return;
+		if ($mode != "equal") $mode = "equal";
 		
 		$searchValue = (!$value) ? $this->parent->params->get($field, $mode) : $value;
 		echo "<tr>\n";
