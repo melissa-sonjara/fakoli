@@ -395,18 +395,19 @@ class RatingView extends QuestionField
 		if (!$to) $to = "Highest";
 		if (!$steps) $steps = 5;
 
-		$tip =  $this->question->context_help;
-		if ($tip)
-		{
-			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
-		}
-		echo "<div$tip>$from&nbsp;";
 
 		$readonly = $this->parent->readonly ? " disabled='disabled'" : "";
 		$valueAnswer = $this->parent->getAnswer($this->question);
 
 		$qPk = $this->question->getPrimaryKey();
 
+		$tip =  $this->question->context_help;
+		if ($tip)
+		{
+			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$qPk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
+		}
+		echo "<div$tip>$from&nbsp;";
+		
 		for($i = 1; $i <= $steps; ++$i)
 		{
 			$selected = ($valueAnswer == $i) ? " checked" : "";
