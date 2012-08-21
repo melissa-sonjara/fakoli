@@ -74,7 +74,7 @@ else
 	{
 		$response = SurveyResponse::generateToken($survey->survey_id, $recipient);
 		$response->save();
-		redirect("survey_response_form?token={$response->token}");
+		redirect("survey_response_form?survey_id={$survey->survey_id}&token={$response->token}");
 	}
 	
 
