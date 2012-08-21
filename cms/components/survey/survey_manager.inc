@@ -62,8 +62,8 @@ class SurveyManager
 			if($survey->status != "not sent") $previewTitle = "View";
 		}
 
-		$images[0] = "<img src='/fakoli/images/tab_create_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-		$images[1] = "<img src='/fakoli/images/tab_view_results.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+		$images[0] = "<img src='/fakoli/images/tab_create_survey.png' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+		$images[1] = "<img src='/fakoli/images/tab_view_results.png' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
 
 		$tabs = array(
 		$images[0] . $formTitle	=> array(
