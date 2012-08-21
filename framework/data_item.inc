@@ -195,6 +195,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function populate($line, $alias = false)
 	{
+		global $config;
+		
 		// NOTE - structured for speed, since the general case is no aliasing
 		// therefore we want to reduce the number of tests of the alias 
 		
@@ -210,7 +212,14 @@ class DataItem extends AbstractDataItem
 	        	if (!array_key_exists($field, $this->fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
 	        	
-	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value); 
+	        	if ($config["no_charset_conversions"])
+	        	{
+	        		$this->$field = $value;
+	        	}
+	        	else
+	        	{
+	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	} 
 	       	}
         }
         else
@@ -219,8 +228,15 @@ class DataItem extends AbstractDataItem
 	        {
 	        	if (!array_key_exists($field, $this->fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
-        	
-	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	
+	        	if ($config["no_charset_conversions"])
+	        	{
+	        		$this->$field = $value;
+	        	}
+	        	else
+	        	{
+	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	} 
 	        } 
         }
 	}
