@@ -68,6 +68,7 @@ else
 	$survey->filter = new InclusionFilter("survey_id");
 	
 	$form = new AutoForm($survey);
+	$form->submitLabel = "Start Survey";
 	
 	if ($method == "POST")
 	{
