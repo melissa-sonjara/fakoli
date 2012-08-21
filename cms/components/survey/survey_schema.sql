@@ -106,3 +106,9 @@ ALTER TABLE `survey_question` ADD COLUMN `context_help` TEXT;
 ALTER TABLE `survey` ADD COLUMN `confirmation_message` TEXT after `message`;
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE `survey` ADD COLUMN `allow_anonymous_responses` TINYINT(3) DEFAULT 0;
+
+-- END Version 1.4
