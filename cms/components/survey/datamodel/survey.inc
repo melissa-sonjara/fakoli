@@ -54,7 +54,7 @@ class Survey extends DataItem
 				"user_id"						=>	Number,
 				"sender_email"					=>	String,
 				"recipients"					=>	Text,
-				"allow_anonymouse_responses"	=>	Boolean,
+				"allow_anonymous_responses"		=>	Boolean,
 				"message"						=>	Text,
 				"confirmation_message"			=>	HTML,
 				"status"						=>	String,
