@@ -69,7 +69,7 @@ else
 
 	}
 
-	$_POST['author_id'] = $user->user_id;
+	$_POST['author_id'] = $user->get($user->primary_key);
 	$_POST['forum_id'] = $forum_id;
 	$_POST['parent_id'] = $parent_id;
 }

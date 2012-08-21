@@ -39,6 +39,46 @@ class ForumManager
 		
 	}
 	
+	static function displayForum($identifier, &$continue)
+	{
+		global $page_role;
+		
+		try
+		{
+			$forum = Forum::findByIdentifier($identifier);
+			$page = ComponentPage::findByIdentifier("forum_details", "WHERE enabled=1");
+			$_GET["forum_id"] = $forum->forum_id;
+		
+			$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+		
+			$page_role = $page->role;
+			
+			if (!checkRole($page->role))
+			{
+				LoginManager::storeRedirectPage();
+				redirect("/login");
+			}
+			
+			echo $pageView->drawView();
+			
+			$continue = false;
+		}
+		catch(DataNotFoundException $e)
+		{
+			
+		}
+		
+		return $identifier;
+	}
+	
+	static function enumerateFora($items)
+	{
+		$pages = Query::create(Forum, "WHERE identifier IS NOT NULL AND identifier != '' ORDER BY title")->execute();
+		
+		$items["Discussion Forums"] = $pages;
+		return $items;
+	}
+
 	static function upgradeComponent($version)
 	{
 		$mgr = new ForumUpgradeManager();

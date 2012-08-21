@@ -38,6 +38,7 @@ class Forum extends DataItem
 	// Fields
 	
 	var $fields = array("forum_id"		=>	Number,
+						"identifier"	=>	String,
 						"title"			=>	String,
 						"teaser"		=>	Text,
 						"description"	=>	HTML,
@@ -91,6 +92,13 @@ class Forum extends DataItem
 	{
 		$count = queryValue(ForumMessage, "COUNT(1)", "WHERE forum_id={$this->forum_id} AND message != '' AND deleted=0");
 		return ($count > 0) ? false : true;
+	}
+	
+	static function findByIdentifier($identifier)
+	{
+		return Query::create(Forum, "WHERE identifier=:identifier")
+					->bind(":identifier", $identifier)
+					->executeSingle();
 	}
 	
 	function Forum()
