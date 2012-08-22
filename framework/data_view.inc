@@ -73,7 +73,7 @@ class DataListView
 	var $rowId = false;				///< whether to include an id tag for each tr row
 	var $dragReorder = false; 		///< Enabled drag & drop reordering
 	var $reorderHandler = null;		///< Handler script that implements reordering records
-	var $dragColumnOrder = false;	///< Enable drag & drop column reordering and show/hide capabilities
+	var $dragColumnReorder = false;	///< Enable drag & drop column reordering and show/hide capabilities
 	var $dragText = "";				///< Optional text to display above reorderable table
 	// Selection and Commands
 	
@@ -560,14 +560,14 @@ class DataListView
 						}
 					}
 
-					if ($column->colspan != 1 && !$this->dragColumnOrder)
+					if ($column->colspan != 1 && !$this->dragColumnReorder)
 					{
 						$attrs .= " colspan='{$column->colspan}'";
 					}
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?php
-					if ($column->colspan > 1 && $this->dragColumnOrder)
+					if ($column->colspan > 1 && $this->dragColumnReorder)
 					{
 						for($i = 1; $i < $column->colspan; ++$i)
 						{
