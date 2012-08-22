@@ -60,12 +60,13 @@ try
 		
 		$xref->filter = new InclusionFilter("survey_question_xref_id", "survey_id", "survey_question_id", "sort_order");
 		
+		$xref->load($id);
+		
 		if ($survey_id != $xref->survey_id)
 		{
 			throw new FakoliException("Data Mismatch");
 		}
 		
-		$xref->load($id);
 		$xref->sort_order = $sort_order;
 		$xref->save();
 	}
