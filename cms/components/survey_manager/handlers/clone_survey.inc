@@ -1,48 +1,42 @@
 <?php
- /* 
- * Description: Nondisplay script to copy a questionnaire. User
- * may wish to copy a questionnaire when the type of editing
- * desired is beyond what is allowed for questionnaires that
- * have been answered.
- * 
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 5/18/10
- */
-
-Fakoli::using("survey");
+Fakoli::using("survey", "questionnaire");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
 	ajaxReturn("Clone Survey - unknown survey");
 	
-$survey = new Survey($survey_id);
-$clone = clone $survey;
-$clone->survey_id = 0;
+$src = new Survey($survey_id);
 
-$pk = $user->getPrimaryKey();
-$clone->user_id = $user->$pk;
-$clone->status = "not sent";
+$dst = new Survey($survey_id);
+$dst->survey_id = 0;
+$dst->title .= "Copy of {$src->title}";
+$dst->status = "not sent";
+$dst->save();
 
-do
+$questions = $src->Questions();
+
+$ids = array();
+
+foreach($questions as $question)
 {
-	$clone->title = "Copy of {$clone->title}";
-} while ($clone->queryValue("COUNT(1)", "WHERE title = '{$clone->title}'") > 0);
-		
-$clone->save();
+	$newQuestion = new SurveyQuestion();
+	$newQuestion->copy($question);
+	$newQuestion->survey_question_id = 0;
+	$newQuestion->save();
+	
+	$ids[$question->survey_question_id] = $newQuestion->survey_question_id;
+}
 
-$xrefs = $survey->SurveyQuestionXrefs("ORDER BY sort_order");
-if(count($xrefs) > 0)
+$xrefs = $src->SurveyQuestionXrefs();
+
+foreach($xrefs as $xref)
 {
-	foreach($xrefs as $xref)
-	{
-		$copyXref = new SurveyQuestionXref();	 
-		$copyXref->survey_id = $clone->survey_id;
-		$copyXref->survey_question_id = $xref->survey_question_id;
-		$copyXref->sort_order = $xref->sort_order;
-		$copyXref->save();
-	}            
+	$newXref = new SurveyToolQuestionXref();
+	$newXref->survey_id = $dst->survey_id;
+	$newXref->survey_question_id = $ids[$xref->survey_question_id];
+	$newXref->sort_order = $xref->sort_order;
+	$newXref->save();
 }
 
 ajaxReturn("OK");
