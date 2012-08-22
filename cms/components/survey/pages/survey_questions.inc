@@ -101,6 +101,7 @@ if ($method == "POST")
 	}
 }
 
+$script .= $table->writeScript();
 $script .= $form->writeScript();
 
 $tabs->writeHTML();
