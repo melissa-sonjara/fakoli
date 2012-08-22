@@ -70,6 +70,8 @@ $table->column("Question", "<a href='survey_question_form?survey_id={survey_id}&
 ;
 
 $table->emptyMessage = "There are no questions defined.";
+$table->enableDragReorder("/action/survey/reorder_survey_questions?survey_id=$survey_id");
+$table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the survey questions</span>";
 $table->sortable = false;
 $table->cssStyle = "width: 100%";
 $table->rowId = true;
