@@ -255,7 +255,7 @@ class QuestionnaireForm
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
-		$qPk = $question->get($question->getPrimaryKey());
+		$qPk = $question->getID();
 		echo " <dt><label for='question_{$qPk}'>";
 		
 		if (!$question->skipNumbering)

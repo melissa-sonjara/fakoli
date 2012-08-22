@@ -70,7 +70,11 @@ class QuestionField
 		$this->answer = $this->parent->answers[$this->question->$qPk];
 	}
 
-
+	function getID()
+	{
+		return $this->question->get($this->question->getPrimaryKey());
+	}
+	
 	function writeScript()
 	{
 		return "";
