@@ -97,10 +97,6 @@ $tabs->writeHTML();
 <button id="next_page_button" class="button"
 	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
 <h3><?php echo $survey->title ?></h3>
-<p>Select the questions for this survey. You can select from a list of
-existing questions or create new ones. Removing a question from this
-survey does not delete the question from the database unless the
-question is not linked to any other survey.</p>
 <div id="inner_border"><?
 $table->drawView();
 ?>
