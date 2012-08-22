@@ -70,10 +70,11 @@ class DataListView
 	var $height;
 	var $scrollable = false;
 	var $resizable  = true;
-	var $rowId = false;			///< whether to include an id tag for each tr row
-	var $dragReorder = false; 	///< Enabled drag & drop reordering
-	var $reorderHandler = null;	///< Handler script that implements reordering records
-	var $dragText = "";			///< Optional text to display above reorderable table
+	var $rowId = false;				///< whether to include an id tag for each tr row
+	var $dragReorder = false; 		///< Enabled drag & drop reordering
+	var $reorderHandler = null;		///< Handler script that implements reordering records
+	var $dragColumnOrder = false;	///< Enable drag & drop column reordering and show/hide capabilities
+	var $dragText = "";				///< Optional text to display above reorderable table
 	// Selection and Commands
 	
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
@@ -327,7 +328,7 @@ class DataListView
 			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
 		}
 		
-		if ($constructor || $this->dragReorder)
+		if ($constructor || $this->dragReorder || $this->dragColumnReorder)
 		{
 			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
 			$script .= $constructor;
@@ -337,6 +338,11 @@ class DataListView
 				$script .= "\n\t\tnew DraggableTable('#{$this->id} tbody', '{$this->reorderHandler}', '{$this->items[0]->primary_key}');";
 			}
 			
+			if ($this->dragColumnReorder)
+			{
+				$script .= "\n\tnew DraggableColumnTable('{$this->id}');";
+			}
+				
 			$script .= "\n\t});\n\t</script>\n";
 		}
 

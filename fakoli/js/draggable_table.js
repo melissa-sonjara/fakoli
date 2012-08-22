@@ -90,3 +90,113 @@ var DraggableTable = new Class({
 		this.sortables = new Sortables(list, this.options);
 	}
 });
+
+var DraggableColumnTable = new Class({
+	
+	Implements: [Options],
+	elements: [],
+	table: Class.Empty,
+	clone: Class.Empty,
+	container: Class.Empty,
+	options:
+	{
+		dragDelay: 250
+	},
+	
+	initialize: function(table, options)
+	{
+		this.table = document.id(table);
+		this.setOptions(options);
+		this.elements = this.table.getElements("thead th");
+		if (this.elements.length == 0) return;
+		
+		this.container = this.elements[0].getParent();
+		
+		this.elements.each(function(element)
+		{
+			element.addEvent('mousedown', function(e) { new Event(e).stop(); this.mouseDown = true; this.startDrag.delay(this.options.dragDelay, this, [element, e]); }.bind(this));
+			element.addEvent('mouseup', function(e) { this.mouseDown = false; }.bind(this));
+		}.bind(this));	
+	},
+	
+	getClone: function(element)
+	{
+		if (this.clone)
+		{
+			this.clone.getElement("th").set('text', element.get('text'));
+			this.clone.fade('show');
+		}
+		else
+		{
+			this.clone = new Element('div');
+			this.clone.set('html', "<table class='list'><thead><tr><th>" + element.get('text') + "</th></tr></thead></table>");
+			this.clone.inject(document.body);
+		}
+		
+		this.clone.setStyles({width: element.getWidth(), cursor: 'pointer', position: 'absolute', display: 'block', 'opacity': 1, top: element.getTop(), left: element.getLeft()});
+	},
+	
+	startDrag: function(element, event)
+	{
+		if (!this.mouseDown) return;
+		
+		this.getClone(element);
+		this.dragIndex = this.container.getChildren().indexOf(element);
+		
+		this.drag = new Drag.Move(this.clone, 
+		{
+			droppables: this.elements,
+			onEnter:	this.onEnter.bind(this),
+			onLeave:	this.onLeave.bind(this),
+			onCancel:	this.cancel.bind(this),
+			onDrop:		this.drop.bind(this)
+		});
+		
+		this.drag.start(event);
+	},
+	
+	onEnter: function(draggable, droppable)
+	{
+		this.borderColor = droppable.getStyle('border-color');
+		droppable.setStyles({'opacity': 0.3});
+	},
+	
+	onLeave: function(draggable, droppable)
+	{
+		droppable.setStyles({'opacity': 1});
+	},
+	
+	cancel: function()
+	{
+		this.drag.detach();
+		this.clone.fade('out');
+	},
+	
+	drop: function(draggable, droppable)
+	{
+		if (!droppable) 
+		{
+			this.cancel();
+			return;
+		}
+		
+		droppable.setStyles({'opacity': 1});
+		this.drag.detach();
+		this.clone.fade('out');
+		
+		var kids =  this.container.getChildren();
+		this.dropIndex = kids.indexOf(droppable);
+		
+		if (this.dragIndex == this.dropIndex) return;
+		
+		position = this.dropIndex < this.dragIndex ? 'before' : 'after';
+		kids[this.dragIndex].inject(droppable, position);
+		
+		this.table.getElements('tbody tr').each(function(tr)
+		{
+			kids = tr.getChildren();
+			kids[this.dragIndex].inject(kids[this.dropIndex], position);
+		}.bind(this));
+		
+	}
+});

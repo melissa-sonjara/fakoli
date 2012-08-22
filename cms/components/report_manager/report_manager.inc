@@ -322,10 +322,11 @@ class ReportManager
 			}
 		}
 		
+		$report->dragColumnReorder = true;
+		
 		$this->setFooterColumns($report);
 		
 		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
-		
 		if(isset($this->request["__excel"]))
 		{
 			$report->excelFile = $reportTitle . ".xls";

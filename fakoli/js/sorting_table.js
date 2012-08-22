@@ -77,7 +77,7 @@ var SortingTable = new Class({
     this.headers.each(function( header, index ) {
       if (header.hasClass( this.options.dont_sort_class )) { return; }
       header.store( 'column', index );
-      header.addEvent( 'mousedown', function(evt){
+      header.addEvent( 'click', function(evt){
     	  if (evt.target != header) return;
         this.sort_by_header( evt.target );
         if ( this.options.paginator) this.options.paginator.to_page( 1 );
