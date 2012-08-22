@@ -32,7 +32,7 @@ $xrefs = $src->SurveyQuestionXrefs();
 
 foreach($xrefs as $xref)
 {
-	$newXref = new SurveyToolQuestionXref();
+	$newXref = new SurveyQuestionXref();
 	$newXref->survey_id = $dst->survey_id;
 	$newXref->survey_question_id = $ids[$xref->survey_question_id];
 	$newXref->sort_order = $xref->sort_order;
