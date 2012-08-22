@@ -10,7 +10,7 @@ $src = new Survey($survey_id);
 
 $dst = new Survey($survey_id);
 $dst->survey_id = 0;
-$dst->title .= "Copy of {$src->title}";
+$dst->title = "Copy of {$src->title}";
 $dst->status = "not sent";
 $dst->save();
 
