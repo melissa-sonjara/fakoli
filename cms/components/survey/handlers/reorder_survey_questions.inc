@@ -76,5 +76,6 @@ try
 catch(Exception $e)
 {
 	$tx->rollback();
+	ajaxReturn($e->getMessage());
 }	
 ?>
