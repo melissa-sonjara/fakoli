@@ -96,7 +96,7 @@ class Survey extends DataItem
 		return $this->getRelatedList(SurveyQuestionXref, "survey_id", $constraint);
 	}
 
-	function Questions($constraint = "")
+	function Questions($constraint = "ORDER BY sort_order")
 	{
 		if($this->survey_id)
 			return $this->crossReference(SurveyQuestion, SurveyQuestionXref, $constraint);
