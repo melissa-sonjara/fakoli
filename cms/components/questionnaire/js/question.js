@@ -83,7 +83,7 @@ var Question =  (function()
 					this.hide_tr(this.form_id + '_num_rows');
 					this.hideRatingsFields();
 					this.hide_tr(this.form_id + '_char_limit');
-					this.renderRequiredCheckbox();
+					this.hideRequired();
 					break;
 					
 				default:
@@ -222,6 +222,17 @@ var Question =  (function()
 				tr.setStyle("display", "");		
 		},
 	
+		hideRequired: function()
+		{
+			var requiredElt = $(this.form_id + '_required');
+			requiredElt.setStyle('display', 'none');
+			var required_label;		
+			var required_label = this.form.getElements("label[for='required']").each(function(label) 
+			{ 
+				label.set("html", "");
+			});
+		},
+		
 		closeDialog: function()
 		{
 			this.dialog.hide();
