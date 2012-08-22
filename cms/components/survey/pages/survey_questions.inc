@@ -55,14 +55,11 @@ $survey = new Survey($survey_id);
 $page->page_title .= " for {$survey->title}";
 
 $survey->filter = new InclusionFilter("survey_id");
-$form = new AutoForm($survey);
 
 $xrefs = $survey->SurveyQuestionXrefs();
 
 $table = new DataListView($xrefs, "SurveyQuestions");
 $table->column("Question", "<a href='survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}'>{Question.question}</a>")
-	->column("Sort Order", "<input type='text' name=\"xref_{survey_question_xref_id}\"
-		value=\"{sort_order}\" size=\"4\"/>", false, "width: 10%")
 	->column("Options", array(SurveyQuestionTableHelper, formatOptions))
 	->column("Required", array(SurveyQuestionTableHelper, formatRequired))
 	->column("Remove", "<a href=\"#\" onclick=\"new SurveyCreate().removeSurveyQuestion({survey_question_xref_id}); return false;\">
@@ -75,10 +72,6 @@ $table->dragText = "<span style='font-size: 10px'>Click and drag to change the o
 $table->sortable = false;
 $table->cssStyle = "width: 100%";
 $table->rowId = true;
-
-$questionSelect = new DataListFieldRenderer($form, $table, "survey_questions", "Survey Questions");
-$form->submitLabel = "Update Order";
-$questionSelect->onPostProcess = reOrderQuestions;
 
 if(count($xrefs) == 0)
 	$form->readOnlyForm = true;
@@ -102,7 +95,6 @@ if ($method == "POST")
 }
 
 $script .= $table->writeScript();
-$script .= $form->writeScript();
 
 $tabs->writeHTML();
 
@@ -116,28 +108,13 @@ existing questions or create new ones. Removing a question from this
 survey does not delete the question from the database unless the
 question is not linked to any other survey.</p>
 <div id="inner_border"><?
-$form->drawForm();
-
-/*
- * If no questions, the form won't be drawn so the extra buttons
- * won't be drawn and need to be called here.
- */
-if(count($xrefs) == 0)
-{
-	?>
-<p><a class='button'
-	href='survey_question_form?survey_id=<?php echo $survey_id ?>'>Create
-a New Question</a>&nbsp;&nbsp; 
-
-<?php 
-	if(count($questionSets))
-	{
+$table->drawView();
 ?>
-<a class='button' href="survey_question_select?survey_id=<?php echo $survey_id ?>">Select from Existing Questions</a></p>
-	<?php
-	}
-}
-?></div>
+<br><br>
+<a class='button' href='survey_tool_question_form?survey_id=<?php echo $survey_id ?>'>Create a New Question</a>&nbsp;&nbsp;
+<a class='button' href="survey_tool_question_select?survey_id=<?php echo $survey_id ?>">Select from Existing Questions</a>
+<br><br>
+</div>
 </div>
 <?php
 
