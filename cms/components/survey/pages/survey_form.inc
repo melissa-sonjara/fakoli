@@ -99,6 +99,11 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
+		if ($form->deleted)
+		{
+			redirect("survey_dashboard");
+		}
+		
 		$tabs->queryString = "survey_id={$form->data->survey_id}";
 		$tabs->next();
 	}
