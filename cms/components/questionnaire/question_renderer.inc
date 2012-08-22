@@ -206,6 +206,21 @@ ENDSCRIPT;
 }
 
 
+class HeadingView extends QuestionField
+{
+	function MultipleChoiceView($parent, $question)
+	{
+		$this->QuestionField($parent, $question);
+	}	
+	
+	/*
+	 * Draws the answer to a question as text, not
+	 * as formatted hmtl.
+	 */
+	function drawSummaryView()
+	{
+	}
+}
 
 
 /*

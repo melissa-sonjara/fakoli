@@ -78,6 +78,14 @@ var Question =  (function()
 					this.renderRequiredCheckbox();
 					break;
 					
+				case 7: // heading only
+					this.hideOptionsField();
+					this.hide_tr(this.form_id + '_num_rows');
+					this.hideRatingsFields();
+					this.hide_tr(this.form_id + '_char_limit');
+					this.renderRequiredCheckbox();
+					break;
+					
 				default:
 					break;
 			}
