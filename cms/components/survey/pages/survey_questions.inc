@@ -116,25 +116,3 @@ $table->drawView();
 <br><br>
 </div>
 </div>
-<?php
-
-function reOrderQuestions($tableSelect, $field)
-{
-	global $_POST;
-	// reorder
-	foreach($_POST as $name => $value)
-	{
-		if (!strncmp($name, "xref_", 5))
-		{
-			$id = substr($name, 5);
-			$xref = new SurveyQuestionXref($id);
-			$xref->saveSortOrder($value);
-		}
-	}
-
-	// renumber
-	$survey_id = $tableSelect->parent->data->get("survey_id");
-	$survey = new Survey($survey_id);
-	SurveyManager::updateSortOrder($survey);
-}
-?>
