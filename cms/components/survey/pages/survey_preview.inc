@@ -95,9 +95,11 @@ $tabs->writeHTML();
 	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
 <h3>Survey Preview &amp; Send</h3>
 <p><? echo $survey->getStatusInfoText(); ?></p>
-<div id="inner_border"><?
+<?
 if($form)
 	$form->drawForm();
+?>
+<div id="inner_border"><?
 $view->drawView();
 ?></div>
 </div>
