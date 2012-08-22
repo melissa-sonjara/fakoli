@@ -243,7 +243,10 @@ class QuestionnaireForm
 		foreach($this->questions as $question)
 		{
 			$this->writeOneQuestion($question, $displayOnly);
-			$this->num++;
+			if (!$question->skipNumbering)
+			{
+				$this->num++;
+			}
 		}
 
 		echo "</dl>\n";
@@ -252,7 +255,15 @@ class QuestionnaireForm
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
-		echo " <dt><label for='question_{$this->num}'><b>{$this->num}.</b> {$question->question->question}{$required}</label></dt>\n";
+		$qPk = $question->get($question->getPrimaryKey());
+		echo " <dt><label for='question_{$qPk}'>";
+		
+		if (!$question->skipNumbering)
+		{
+			echo "<b>{$this->num}.</b> ";
+		}
+		
+		echo "{$question->question->question}{$required}</label></dt>\n";
 
 		echo " <dd>";
 		if(!$displayOnly)

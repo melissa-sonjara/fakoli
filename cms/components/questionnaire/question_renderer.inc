@@ -208,6 +208,8 @@ ENDSCRIPT;
 
 class HeadingView extends QuestionField
 {
+	var $skipNumbering = true;
+	
 	function MultipleChoiceView($parent, $question)
 	{
 		$this->QuestionField($parent, $question);
