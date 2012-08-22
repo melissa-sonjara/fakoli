@@ -213,6 +213,12 @@ class HeadingView extends QuestionField
 		$this->QuestionField($parent, $question);
 	}	
 	
+
+	function drawView()
+	{
+		$this->writeHTML();
+	}
+
 	/*
 	 * Draws the answer to a question as text, not
 	 * as formatted hmtl.
