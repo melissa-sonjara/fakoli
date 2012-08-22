@@ -560,13 +560,20 @@ class DataListView
 						}
 					}
 
-					if ($column->colspan != 1)
+					if ($column->colspan != 1 && !$this->dragColumnOrder)
 					{
 						$attrs .= " colspan='{$column->colspan}'";
 					}
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?php
+					if ($column->colspan > 1 && $this->dragColumnOrder)
+					{
+						for($i = 1; $i < $column->colspan; ++$i)
+						{
+							echo "<td>&nbsp;</td>";
+						}
+					}
 				}
 ?>
 		  </tr>
