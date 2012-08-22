@@ -102,7 +102,7 @@ class SurveyPreviewSendView
 		if(!$this->validate->validateQuestionnaire())
 		$this->validate->warning();
 
-		echo "<p><label>Survey Questions</label></p>\n";
+		echo "<h4>Survey Questions</h4>\n";
 		$this->questionnaireView->drawView();
 	}
 }
