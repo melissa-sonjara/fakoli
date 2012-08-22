@@ -76,13 +76,7 @@ $table->rowId = true;
 if(count($xrefs) == 0)
 	$form->readOnlyForm = true;
 
-$form->button("Create a New Question", "survey_question_form?survey_id=$survey_id");
-
 $questionSets = SurveyManager::getQuestionSets($survey_id);
-if(count($questionSets))
-{
-	$form->button("Select from Existing Questions", "survey_question_select?survey_id=$survey_id");
-}
 
 $tabs = SurveyManager::surveyTabs($survey_id, false);
 
@@ -111,8 +105,15 @@ question is not linked to any other survey.</p>
 $table->drawView();
 ?>
 <br><br>
-<a class='button' href='survey_tool_question_form?survey_id=<?php echo $survey_id ?>'>Create a New Question</a>&nbsp;&nbsp;
-<a class='button' href="survey_tool_question_select?survey_id=<?php echo $survey_id ?>">Select from Existing Questions</a>
+<a class='button' href='survey_question_form?survey_id=<?php echo $survey_id ?>'>Create a New Question</a>&nbsp;&nbsp;
+<?
+if (count($questionSets))
+{
+?>
+<a class='button' href="survey_question_select?survey_id=<?php echo $survey_id ?>">Select from Existing Questions</a>
+<?
+}
+?>
 <br><br>
 </div>
 </div>
