@@ -50,7 +50,7 @@ $tx = new DataTransaction();
 
 try
 {
-	foreach($_GET["join_id"] as $id => $sort_order)
+	foreach($_GET["survey_question_xref_id"] as $id => $sort_order)
 	{
 		checkNumeric($id);
 		checkNumeric($sort_order);
@@ -58,7 +58,7 @@ try
 		$xref = new SurveyQuestionXref();
 		$xref->joinTransaction($tx);
 		
-		$xref->filter = new InclusionFilter("join_id", "survey_id", "survey_question_id", "sort_order");
+		$xref->filter = new InclusionFilter("survey_question_xref_id", "survey_id", "survey_question_id", "sort_order");
 		
 		if ($survey_id != $xref->survey_id)
 		{
