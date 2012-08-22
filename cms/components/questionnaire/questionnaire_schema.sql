@@ -81,3 +81,12 @@ INSERT INTO `question` (`questionnaire_id`,`question_type_id`,`question`,`questi
 ALTER TABLE `question` ADD COLUMN `context_help` TEXT;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+/*!40000 ALTER TABLE `question_type` DISABLE KEYS */;
+INSERT INTO `question_type` (`question_type_id`,`name`,`class_name`,`sort_order`,`options`,`char_limit`,`num_rows`) VALUES
+ (7,'Heading','HeadingView',7,1,0,0);
+/*!40000 ALTER TABLE `question_type` ENABLE KEYS */;
+
+-- END Version 1.2
