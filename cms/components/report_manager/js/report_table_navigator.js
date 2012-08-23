@@ -174,7 +174,7 @@ var ReportTableNavigator = new Class(
 		var text = link.get('text');
 		
 		var columns = table.columns;
-		if (text == "Show All Columns")
+		if (text == "Show All Fields")
 		{
 			columns.each(function(column)
 			{
