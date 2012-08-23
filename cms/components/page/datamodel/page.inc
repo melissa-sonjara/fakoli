@@ -213,6 +213,8 @@ class Page extends DataItem implements Searchable
 		{
 			$search = clone $params;
 			$search->target = $this;
+			$search->remapField("keywords", "meta_tag_keyword");
+			
 			$constraint = $search->generateConstraint();
 			
 			$pages = Query::create(Page, $constraint)
