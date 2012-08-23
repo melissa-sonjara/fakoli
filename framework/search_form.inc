@@ -603,9 +603,10 @@ class SearchParameters
 			{
 				$fields = $this->target->getFields();
 				$handler = $this->handlers[$fields[$field]];
-				if ($handler == null)
-					die("Unknown Type: {$this->target->fields[$field]} for field $field");
-				$clause = $this->getClause($handler, $modifier, $field, $value);			
+				if ($handler)
+				{
+					$clause = $this->getClause($handler, $modifier, $field, $value);			
+				}
 			}
 			else
 			{
