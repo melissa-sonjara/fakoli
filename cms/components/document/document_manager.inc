@@ -760,7 +760,10 @@ function deleteFolderResult(result)
 	static function registerSearchables($searchables)
 	{
 		trace("DocumentManager registerSearchables", 3);
-		$searchables["document"] = array(Document);
+		if (!array_key_exists("solr", Fakoli::getComponents())
+		{
+			$searchables["document"] = array(Document);
+		}
 		return $searchables;
 	}
 
