@@ -114,7 +114,7 @@ var PieChart = new Class(
 
         var params = { fill: this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth};
 
-        if (x1 == x2 && y1 == y2)
+        if (Math.abs(x1 - x2) < 0.1 && Math.abs(y1 - y2) < 0.1)
         {
         	return this.paper.circle(cx, cy, r).attr(params);
         }
