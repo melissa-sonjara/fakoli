@@ -760,7 +760,7 @@ function deleteFolderResult(result)
 	static function registerSearchables($searchables)
 	{
 		trace("DocumentManager registerSearchables", 3);
-		if (Settings::getSetting("solr", "enabled"))
+		if (!Settings::getSetting("solr", "enabled"))
 		{
 			$searchables["document"] = array(Document);
 		}
