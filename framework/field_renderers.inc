@@ -138,6 +138,9 @@ class FieldRenderer
 	 * Formats the given DataItem based on the supplied format string. This can either
 	 * be a string containing the name of the field to return, or it can be a more
 	 * complex format string using the syntax provided by DataItem::format().
+	 * 
+	 * For class callback formatting, use the syntax:
+	 * "{MyClassName::myFormattingFunction}"
 	 *
 	 * @param DataItem $item the item to format
 	 * @param string $name the name field or format string, as described above.
