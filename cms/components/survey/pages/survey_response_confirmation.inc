@@ -41,6 +41,8 @@ if($survey_id)
 	$message = $survey->confirmation_message;
 }
 
+echo "<h2>{$survey->title}</h2>";
+
 if($message)
 {
 	echo $survey->format("{confirmation_message}");
