@@ -61,6 +61,7 @@ class SpreadsheetForm extends CompositeAutoForm
 {	
 	var $colCount = 0;
 	var $subform;
+	var $columnWidths = array();
 	
 	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="")
 	{
@@ -131,6 +132,18 @@ class SpreadsheetForm extends CompositeAutoForm
 		//$form = SubordinateAutoForm::create($this, $row, true);
 		$subform = new SubordinateAutoForm($this, $row, true);
 		$subform->form->layout = AutoFormLayout::create("table_row", $subform);
+		
+	}
+	
+	/**
+	 * Set the td width for the table.
+	 * 
+	 * @param string $field
+	 * @param number $width
+	 */
+	function setColumnWidth($field, $width)
+	{
+		$this->columnWidths[$field] = $width;
 	}
 	
 	/*
@@ -168,7 +181,13 @@ class SpreadsheetForm extends CompositeAutoForm
 				$renderer = $form->getRenderer($field);
 				if($renderer)
 				{
-					$renderer->_printLabel($field, 1, $styles = "text-align: center");
+					$styles = "text-align: center;";
+					if(array_key_exists($field, $this->columnWidths))
+					{
+						$width = $this->columnWidths[$field];
+						$styles .= " width: {$width}px";
+					}
+					$renderer->_printLabel($field, 1, $styles);
 					$this->colCount++;
 				}
 			}
