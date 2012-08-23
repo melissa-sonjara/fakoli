@@ -540,6 +540,12 @@ class SearchParameters
 		$this->fromArray($_POST);
 	}
 	
+	function remapField($old, $new)
+	{
+		$this->params[$new] = $this->params[$old];	
+		unset($this->params[$old]);
+	}
+	
 	function toQueryString()
 	{
 		$qs = "";
