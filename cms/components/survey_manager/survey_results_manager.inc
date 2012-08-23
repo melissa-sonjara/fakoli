@@ -544,6 +544,7 @@ class SurveySpreadsheetView extends SurveyResultsView
 		$table->emptyMessage = "There are no responses to this survey.";
 		$table->sortable = true;
 		$table->paginate = false;
+		$table->dragColumnReorder = true;
 		$table->filter = false;
 		$table->cssStyle = "width: {$width}px; font-size: 10px; white-space: normal;";
 		$table->excelFile = "surveySpreadsheet.xls";
