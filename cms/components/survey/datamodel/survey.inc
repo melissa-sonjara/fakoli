@@ -46,20 +46,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 class Survey extends DataItem
 {
 	var $fields = array(
-				"survey_id"						=>	Number,
-				"title"							=>	String,
-				"introduction"					=>	Text,
-				"start_date"					=>	Date,
-				"end_date"						=>	Date,
-				"instructions"					=>	HTML,
-				"user_id"						=>	Number,
-				"sender_email"					=>	String,
-				"recipients"					=>	Text,
-				"allow_anonymous_responses"		=>	Boolean,
-				"message"						=>	Text,
-				"confirmation_message"			=>	HTML,
-				"status"						=>	String,
-				"deleted"						=>	Boolean
+				"survey_id"							=>	Number,
+				"title"								=>	String,
+				"introduction"						=>	Text,
+				"start_date"						=>	Date,
+				"end_date"							=>	Date,
+				"instructions"						=>	HTML,
+				"user_id"							=>	Number,
+				"sender_email"						=>	String,
+				"recipients"						=>	Text,
+				"allow_anonymous_responses"			=>	Boolean,
+				"show_preview_before_submitting"	=>	Boolean,
+				"message"							=>	Text,
+				"confirmation_message"				=>	HTML,
+				"status"							=>	String,
+				"deleted"							=>	Boolean
 	);
 
 	var $relations = array(

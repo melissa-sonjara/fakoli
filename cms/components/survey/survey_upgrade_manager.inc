@@ -54,7 +54,8 @@ class SurveyUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Added context_help field to survey_question",
 			"1.3"		=>	"sql:Add confirmation_message to survey table",
 			"1.4"		=>	"sql:Added allow_anonymous_responses flag to survey table",
-			"1.5"		=>	"sql:Added instructions field to survey table"
+			"1.5"		=>	"sql:Added instructions field to survey table",
+			"1.6"		=>	"sql:Added show_preview_before_submitting to survey table"
 			);
 	
 	function SurveyUpgradeManager()

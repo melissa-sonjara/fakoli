@@ -118,3 +118,9 @@ ALTER TABLE `survey` ADD COLUMN `allow_anonymous_responses` TINYINT(3) DEFAULT 0
 ALTER TABLE `survey` ADD COLUMN `instructions` TEXT AFTER `end_date`;
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+ALTER TABLE `survey` ADD COLUMN `show_preview_before_submitting` TINYINT(3) DEFAULT 1;
+
+-- END Version 1.6

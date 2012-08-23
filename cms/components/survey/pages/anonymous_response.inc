@@ -77,7 +77,7 @@ else
 		redirect("survey_response_form?survey_id={$survey->survey_id}&token={$response->token}");
 	}
 	
-
+	echo "<h2>{$survey->title}</h2>";
 	echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
 
 	$script .= $form->writeScript();

@@ -71,7 +71,14 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("survey_response_preview?survey_id={$survey_id}&token=$token");
+		if ($survey->show_preview_before_submitting)
+		{
+			redirect("survey_response_preview?survey_id={$survey_id}&token=$token");
+		}
+		else
+		{
+			redirect("survey_response_confirmation?survey_id={$survey_id}");
+		}
 	}
 	else // refresh
 		redirect("survey_response_form?survey_id={$survey_id}&token=$token");
@@ -92,7 +99,15 @@ $form->drawForm();
 function saveResponse($obj)
 {
 	$response = $obj->mgr->item;
-	$response->setStatus("in_progress");
+	$survey = $response->Survey();
+	if ($survey->show_preview_before_submitting)
+	{
+		$response->setStatus("in_progress");
+	}
+	else
+	{
+		$response->setStatus("submitted");
+	}	
 }
 
 ?>
