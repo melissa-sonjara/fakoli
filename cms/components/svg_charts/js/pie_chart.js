@@ -114,6 +114,11 @@ var PieChart = new Class(
 
         var params = { fill: this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth};
 
+        if (x1 == x2 && y1 == y2)
+        {
+        	return this.paper.circle(cx, cy, r).attr(params);
+        }
+        
         return this.paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > Math.PI), 0, x2, y2, "z"]).attr(params);
 	},
 	
