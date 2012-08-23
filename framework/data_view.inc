@@ -560,21 +560,43 @@ class DataListView
 						}
 					}
 
-					if ($column->colspan != 1 && !$this->dragColumnReorder)
+					if ($column->colspan > 1)
 					{
-						$attrs .= " colspan='{$column->colspan}'";
-					}
+						if (!$this->dragColumnReorder)
+						{
+							$attrs .= " colspan='{$column->colspan}'";
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?php
-					if ($column->colspan > 1 && $this->dragColumnReorder)
-					{
-						for($i = 1; $i < $column->colspan; ++$i)
+						}
+						else if (preg_match("/text-align:\\s*right/i", $column->style))
 						{
-							echo "<td>&nbsp;</td>";
+							for($i = 1; $i < $column->colspan; ++$i)
+							{
+								echo "<td>&nbsp;</td>";
+							}
+?>
+<td<?echo $attrs?>><?echo $column->format()?></td>
+<?
+						}
+						else
+						{
+?>
+<td<?echo $attrs?>><?echo $column->format()?></td>
+<?
+							for($i = 1; $i < $column->colspan; ++$i)
+							{
+								echo "<td>&nbsp;</td>";
+							}
 						}
 					}
-				}
+					else
+					{
+?>
+<td<?echo $attrs?>><?echo $column->format()?></td>
+<?
+					}
+				}						
 ?>
 		  </tr>
 		</tfoot>	

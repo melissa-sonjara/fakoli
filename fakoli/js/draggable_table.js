@@ -198,5 +198,11 @@ var DraggableColumnTable = new Class({
 			kids[this.dragIndex].inject(kids[this.dropIndex], position);
 		}.bind(this));
 		
+		this.table.getElements('tfoot tr').each(function(tr)
+		{
+			kids = tr.getChildren();
+			kids[this.dragIndex].inject(kids[this.dropIndex], position);
+		}.bind(this));
+		
 	}
 });
