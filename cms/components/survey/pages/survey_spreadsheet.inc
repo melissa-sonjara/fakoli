@@ -34,9 +34,7 @@ $tabs->writeHTML();
 <p><a class="button" href="#"
 	onclick="new SurveyResults().showQuestionNamesDialog(<?php echo $survey_id ?>); return false;">Edit
 Column Headings</a></p>
-<div id="survey_spreadsheet" class="scroll"
-	style="padding: 4px; padding-top: 10px; width: 100%; height: 500px; overflow: auto">
 <?
 $view->drawView();
-?></div>
+?>
 </div>
