@@ -338,9 +338,23 @@ class SurveyCreateManager
 	 */
 	function getQuestionNumber($question)
 	{
-		$xref = $question->SurveyQuestionXref($this->item->survey_id);
-		if($xref)
-			return  $xref->sort_order;
+		$questions = $this->item->Questions();
+		if(count($questions) > 0)
+		{
+			$idx = 1;
+			foreach($questions as $q)
+			{
+				$renderer = QuestionField::create($this->item, $q);
+				
+				if (!$renderer->skipNumbering)
+				{
+					$idx++;
+				}
+				
+				if ($question->question_id == $q->question_id) return $idx;
+			}
+		}
+		return "";
 	}
 
 	/*
