@@ -110,8 +110,6 @@ class Article extends DataItem implements Searchable
 			$search->target = $this;
 			$search->remapField("keywords", "tags");
 			
-			var_dump($search);
-			
 			$constraint = $search->generateConstraint();
 			
 			$pages = Query::create(Article, $constraint)
