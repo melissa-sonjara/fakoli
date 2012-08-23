@@ -209,11 +209,17 @@ class Page extends DataItem implements Searchable
 	{
 		trace("Searching Pages", 3);
 		
-		$params = "%$params%";
-		$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b")
-					  ->bind(":a", $params, ":b", $params)
-					  ->execute();
-					  
+		if (is_object($params))
+		{
+		}
+		else
+		{
+			$params = "%$params%";
+			$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b")
+						  ->bind(":a", $params, ":b", $params)
+						  ->execute();
+		}
+							  
 		return SearchManager::wrap($pages, PageSearchResult);
 	}
 }

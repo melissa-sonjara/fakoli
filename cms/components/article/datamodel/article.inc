@@ -104,11 +104,17 @@ class Article extends DataItem implements Searchable
 	{
 		trace("Searching Articles", 3);
 		
-		$params = "%$params%";
-		$articles = Query::create(Article, "WHERE title like :a OR teaser LIKE :b OR message like :c")
-					  ->bind(":a", $params, ":b", $params, ":c", $params)
-					  ->execute();
-					  
+		if (is_object($params))
+		{
+		}
+		else
+		{
+			$params = "%$params%";
+			$articles = Query::create(Article, "WHERE title like :a OR teaser LIKE :b OR message like :c")
+						  ->bind(":a", $params, ":b", $params, ":c", $params)
+						  ->execute();
+		}
+							  
 		return SearchManager::wrap($articles, ArticleSearchResult);
 	}
 }

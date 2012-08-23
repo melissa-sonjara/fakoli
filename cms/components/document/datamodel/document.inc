@@ -131,11 +131,17 @@ class Document extends DataItem implements Searchable
 	{
 		trace("Searching Documents", 3);
 		
-		$params = "%$params%";
-		$documents = Query::create(Document, "WHERE title like :a OR keywords LIKE :b OR notes Like :c")
-					  ->bind(":a", $params, ":b", $params, ":c", $params)
-					  ->execute();
-					  
+		if (is_object($params))
+		{
+		}
+		else
+		{
+			$params = "%$params%";
+			$documents = Query::create(Document, "WHERE title like :a OR keywords LIKE :b OR notes Like :c")
+						  ->bind(":a", $params, ":b", $params, ":c", $params)
+						  ->execute();
+		}
+							  
 		return SearchManager::wrap($documents, DocumentSearchResult);
 	}
 }
