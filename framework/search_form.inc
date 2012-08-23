@@ -542,8 +542,16 @@ class SearchParameters
 	
 	function remapField($old, $new)
 	{
-		$this->params[$new] = $this->params[$old];	
-		unset($this->params[$old]);
+		foreach($this->params as $key => $value)
+		{
+			list($field, $mode) = explode(":", $key);
+			if ($field == $old)
+			{
+				$this->params["$new:$mode"] = $value;
+				unset($this->params["$old:$mode"]);
+				return;
+			}
+		}
 	}
 	
 	function toQueryString()
