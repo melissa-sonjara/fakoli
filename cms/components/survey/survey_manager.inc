@@ -415,8 +415,13 @@ class SurveyResponseManager extends SurveyCreateManager
 			$idx = 0;
 			foreach($questions as $question)
 			{
-				$question->question_number = $idx;
-				$idx++;
+				$renderer = QuestionField::create($this->item, $question);
+				
+				if (!$renderer->skipNumbering)
+				{
+					$question->question_number = $idx;
+					$idx++;
+				}
 			}
 		}
 
