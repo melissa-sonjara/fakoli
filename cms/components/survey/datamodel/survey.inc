@@ -51,6 +51,7 @@ class Survey extends DataItem
 				"introduction"					=>	Text,
 				"start_date"					=>	Date,
 				"end_date"						=>	Date,
+				"instructions"					=>	HTML,
 				"user_id"						=>	Number,
 				"sender_email"					=>	String,
 				"recipients"					=>	Text,

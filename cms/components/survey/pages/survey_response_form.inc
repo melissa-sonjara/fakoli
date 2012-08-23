@@ -80,7 +80,10 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 echo "<h3>". $survey->title . "</h3>\n";
-echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
+if ($survey->instructions)
+{
+	echo "<p>" . formatAsHTML($survey->instructions) . "</p>\n";
+}
 $form->drawForm();
 ?>
 <br>
