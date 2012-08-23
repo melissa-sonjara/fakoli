@@ -190,7 +190,7 @@ ENDSCRIPT;
 		$pk = $this->question->getPrimaryKey();
 
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
+		$question_number = ($this->question->question_number) ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", "", $answer);
 	}
 
