@@ -639,7 +639,7 @@ class ShortTextView extends QuestionField
 		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";
 
 		parent::renderLimitEnd($this->question->char_limit, $field, $value);
-		echo "</div><br/>";
+		echo "</div>";
 
 	}
 
@@ -721,7 +721,7 @@ class FreeTextView extends QuestionField
 
 		parent::renderLimitEnd($this->question->char_limit, $field, $value);
 
-		echo "</div></div><br/>";
+		echo "</div></div>";
 
 	}
 
@@ -830,7 +830,7 @@ class CheckListView extends QuestionField
 			echo "<input type=\"hidden\" name=\"count_question_{$this->question->$pk}\" value=\"$count\">";
 		}
 
-		echo "</table><br/>";
+		echo "</table>";
 
 	}
 
