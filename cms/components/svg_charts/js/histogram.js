@@ -354,6 +354,8 @@ var Histogram = new Class(
 	{
 		var increment = this.max / this.options.ticks;
 		
+		if (increment == 0) return;
+		
 		var tick = 0;
 		var idx = 0;
 		var y = this.options.chartTop + this.options.chartHeight;
