@@ -181,7 +181,7 @@ var ReportTableNavigator = new Class(
 				column.setStyle('display', 'block');
 			});
 			
-			link.set('text', 'Show Commonly Used Columns');
+			link.set('text', 'Show Commonly Used Fields');
 		}
 		else
 		{
@@ -193,7 +193,7 @@ var ReportTableNavigator = new Class(
 				}
 			});
 			
-			link.set('text', 'Show All Columns');
+			link.set('text', 'Show All Fields');
 		}
 	},
 	

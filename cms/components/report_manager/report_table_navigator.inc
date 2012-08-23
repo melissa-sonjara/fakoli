@@ -26,7 +26,7 @@ ENDSCRIPT;
 	{
 		echo "<div id='report_table_navigator'>\n";
 		
-		echo "<h2>Choose your Data Columns</h2>";
+		echo "<h2>Choose Your Data Fields</h2>";
 		
 		foreach($this->tables as $table)
 		{			
@@ -40,7 +40,7 @@ ENDSCRIPT;
 			echo "<input type='checkbox' style='display: none' name='$tableID' value='{$table->class}'$checked/>";
 			echo "<h3>".$table->getTitle()."</h3>\n";
 			echo "<div class='columns'>";
-			echo "<div style='display: inline-block; width: 100%'><a class='select_all' id='{$tableID}_select_all'>Select All</a><a class='show_all' id='{$tableID}_show_all'>Show All Columns</a></div>\n";
+			echo "<div style='display: inline-block; width: 100%'><a class='select_all' id='{$tableID}_select_all'>Select All</a><a class='show_all' id='{$tableID}_show_all'>Show All Fields</a></div>\n";
 
 			foreach($table->columns as $column)
 			{
