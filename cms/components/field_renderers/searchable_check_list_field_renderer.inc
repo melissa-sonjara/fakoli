@@ -45,6 +45,8 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 		{
 			foreach(SearchManager::$map as $component => $searchables)
 			{	
+				Fakoli::using($component);
+				
 				if(count($searchables) > 0 )
 				{
 					foreach($searchables as $searchable)
