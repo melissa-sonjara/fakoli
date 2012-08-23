@@ -211,6 +211,12 @@ class Page extends DataItem implements Searchable
 		
 		if (is_object($params))
 		{
+			$search = clone $params;
+			$search->target = $this;
+			$constraint = $search->generateConstraint();
+			
+			$pages = Query::create(Page, $constraint)
+						  ->execute();
 		}
 		else
 		{
