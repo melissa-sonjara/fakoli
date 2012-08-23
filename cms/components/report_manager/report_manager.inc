@@ -178,7 +178,7 @@ class ReportManager
 		$filterNavigator->drawView();
 		
 		
-		$incomplete = $this->request["__include_incomplete"] ? " checked='checked'" : "";
+		$incomplete = ($this->request["__include_incomplete"] || $this->report_id == 0) ? " checked='checked'" : "";
 		$excel = $this->request["__excel"] ? " checked='checked'": "";
 		
 		echo "<div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'$incomplete/> <strong>Include Incomplete Records in Results</strong>";
