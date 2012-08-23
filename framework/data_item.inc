@@ -1289,6 +1289,14 @@ class DataItem extends AbstractDataItem
 	 * Fields can also be retrieved through a relation from
 	 * the dataitem obj that calls this format function.
 	 * 
+	 * 5. Local method calls
+	 * 
+	 * Syntax: {method()}
+	 * Example: {getFullName()}
+	 * 
+	 * This format calls the specified method on the object and substitutes
+	 * the returned value into the output. Parameters cannot be passed.
+	 * 
 	 * for example:
 	 * "{MyRelation.event_name}"
 	 * 
