@@ -89,7 +89,7 @@ if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCoun
 	echo "<a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a>&nbsp;&nbsp;\n";
 }
 
-if ($survey->allow_anonymous_response)
+if ($survey->allow_anonymous_responses)
 {
 	echo "<a target='_blank' href='anonymous_response?survey_id={$survey_id}' class='button'>Enter an Anonymous Survey Response</a>";
 }
