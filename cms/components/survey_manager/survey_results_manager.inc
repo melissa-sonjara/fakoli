@@ -140,7 +140,10 @@ class SurveyResultsView
 
 				$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 				break;
-					
+
+			case HeadingView:
+				break;
+				
 			default:
 					
 				trace("getAggregateData: Unknown question type", 2);
