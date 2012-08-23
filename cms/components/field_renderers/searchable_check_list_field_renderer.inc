@@ -49,7 +49,10 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 				{
 					foreach($searchables as $searchable)
 					{
-						$options[$searchable] = $searchable;
+						$obj = new $searchable;
+						$name = $obj->prettifyClassName(true);
+						
+						$options[$name] = $searchable;
 					}
 				}
 			}
