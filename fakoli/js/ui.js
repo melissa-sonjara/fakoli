@@ -187,6 +187,16 @@ var Curtain = new Class(
 		{
 			this.curtain.fade(0.0);
 		}
+	},
+	
+	loadingCursor: function()
+	{
+		this.curtain.setStyle('cursor', 'progress');
+	},
+	
+	normalCursor: function()
+	{
+		this.curtain.setStyle('cursor', 'auto');
 	}
 });
 
@@ -336,6 +346,7 @@ var ModalDialog = new Class(
     initialize: function(element, options)
     {
 		this.parent(element, options);
+		this.element.fade('hide');
     },
     	
     center: function()
@@ -391,6 +402,8 @@ var ModalDialog = new Class(
     	
     	if (fragmentURL && this.options.body)
     	{
+    		new Curtain().loadingCursor();
+    		
     		this.disposeOnExit = true;
     		if (!reload) this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
@@ -404,10 +417,16 @@ var ModalDialog = new Class(
     				this.options.body.set('text', '');
     				this.options.body.set('html', html);
     				$exec(script);
+    				this.element.fade('show');
     				this.center();
+    				new Curtain().normalCursor();
     			}.bind(this)
     		});
     		request.send();
+    	}
+    	else
+    	{
+    		this.element.fade('show');
     	}
     	
     	window.lowerCurtain(function() {
