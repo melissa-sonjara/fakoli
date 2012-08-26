@@ -80,6 +80,6 @@ if($forum->allowDelete())
 	$forum->delete();
 }
 
-redirect("restricted/forum_list");
+redirect("/restricted/forum_list");
 
 ?>
