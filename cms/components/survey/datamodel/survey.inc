@@ -106,6 +106,8 @@ class Survey extends DataItem
 
 	function getStatusInfoText()
 	{
+		global $config;
+		
 		switch ($this->status) {
 			case "not sent":
 				$text = "This survey has not yet been sent.";
@@ -120,6 +122,11 @@ class Survey extends DataItem
 				break;
 		}
 
+		if ($this->allow_anonymous_access)
+		{
+			$text .= " This survey can be access anonymously. The anonymous survey link is <a href='http://{$config['http_host']}/anonymous_response?survey_id={$this->survey_id}'>http://{$config['http_host']}/anonymous_response?survey_id={$this->survey_id}</a>";
+		}
+		
 		return $text;
 	}
 
