@@ -82,6 +82,7 @@ class SurveyTableHelper
 		}			
 		else if($status == "closed")
 		{
+			$actions["open"] = "Open Survey";
 			$actions["reopen"] = "Reopen Survey";
 		}
 

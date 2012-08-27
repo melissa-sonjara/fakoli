@@ -57,6 +57,27 @@ var Survey =  (function()
 			this.dialog = modalPopup('Survey Preview', '/action/survey/survey_view?survey_id=' + survey_id, '700px', 'auto', true);
 		},	
 		
+
+		openSurvey: function(survey_id)
+		{
+			var request = new Request(
+			{
+				'url': 		'/action/survey/open_survey?survey_id=' + survey_id, 
+				  'method': 	'get',
+				 'onSuccess': function(response) 
+				 { 
+					if (response == "OK") 
+					{
+						window.location.reload();
+					}
+				},
+					
+				 'onFailure':	function() { alert("Failed to communicate with server");}
+			});
+						
+			request.send();
+		},
+		
 		closeSurvey: function(survey_id)
 		{
 			var request = new Request(
@@ -156,6 +177,10 @@ var Survey =  (function()
 			{
 				go("survey_data?survey_id=" + survey_id);
 			}
+			else if(action == "open")
+			{
+				this.openSurvey(survey_id);
+			}			
 			else if(action == "close")
 			{
 				this.closeSurvey(survey_id);
