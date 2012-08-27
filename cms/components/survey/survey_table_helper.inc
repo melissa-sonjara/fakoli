@@ -82,10 +82,13 @@ class SurveyTableHelper
 		}			
 		else if($status == "closed")
 		{
-			$actions["open"] = "Open Survey";
 			$actions["reopen"] = "Reopen Survey";
 		}
-
+		else if ($status == "not sent")
+		{
+			$actions["open"] = "Open Survey";
+		}
+		
 		if($survey->allowDelete())
 			$actions["delete"] = "Delete";
 
