@@ -46,6 +46,7 @@ class Article extends DataItem implements Searchable
 						"message"		=>	HTML,
 						"created_date"	=>	Date,
 						"archive_date"  =>  Date,
+						"publish_date"  =>  Date,
 						"last_modified"	=>	Timestamp,
 						"published"		=>	Boolean,
 						"allow_comment" =>	Boolean,

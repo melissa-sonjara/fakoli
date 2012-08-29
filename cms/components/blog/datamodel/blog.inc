@@ -77,11 +77,11 @@ class Blog extends DataItem
 			switch($this->default_article_order)
 			{
 				case "DESC":
-					$constraint .= " ORDER BY created_date DESC";
+					$constraint .= " ORDER BY publish_date DESC";
 					break;	
 								
 				case "ASC":
-					$constraint .= " ORDER BY created_date ASC";
+					$constraint .= " ORDER BY publish_date ASC";
 					break;
 					
 				case "SORT":
