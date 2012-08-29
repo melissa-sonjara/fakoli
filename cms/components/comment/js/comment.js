@@ -29,16 +29,16 @@ var Comment =  (function()
 					    {
 					     'url':   '/action/comment/publish_comment?comment_id=' + comment_id, 
 					      'method':  'get',
-					      'onSuccess': function(response) 
-					      { 
-					      if (response == "OK") 
-					      {
-					       window.location.reload();
-					      }
-					      },
-					    
-					      'onFailure': function() { alert("Failed to communicate with server");}
-					     });
+					      onSuccess: function(response) 
+							{ 
+								if(response == "OK")
+								{
+									window.location.reload();
+								}
+								else
+									alert(response);
+							}.bind(this)
+						});
 					    
 					    request.send();
 		},
