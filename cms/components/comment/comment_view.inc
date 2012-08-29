@@ -177,7 +177,16 @@ class CommentView
 		
 		
 		$form->onSaveComplete = array($this, addXrefRecord);
-
+		
+		if(Settings::getValue("comment", "publish_automatically"))
+		{
+			$form->interstitialMessage = "Thank you for your comment. ";
+		}
+		else
+		{
+			$form->interstitialMessage = "Thank you for your comment. Will be reviewed by the moderator ";
+		}
+		
 		if ($user)
 		{
 			$comment->user_id = $user->get($user->primary_key);
