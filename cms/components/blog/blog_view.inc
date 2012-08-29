@@ -83,7 +83,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		$page->page_title = $blog->title;
 		
-		$articles = $blog->Articles("WHERE published=1");	
+		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()");	
 
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
