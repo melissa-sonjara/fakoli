@@ -72,7 +72,8 @@ if (count($uniqueMonths) > 0 OR count($uniqueYears) > 0)
 	{
 		foreach($uniqueMonths as $month)
 		{	
-			echo "<li><a href='blog?year=" . substr($month,0,4) . "&month=" . substr($month,5,2) . "'>$month</a></li>";
+			$month_name = date( 'F', mktime(0, 0, 0, substr($month,5,2)) ) . " " . substr($month,0,4);
+			echo "<li><a href='blog?year=" . substr($month,0,4) . "&month=" . substr($month,5,2) . "'>$month_name</a></li>";
 		}
 	}
 	
