@@ -74,17 +74,28 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		return $view;
 	}
 	
-	function drawArticleList($blog)
+	function drawArticleList($blog, $year = false, $month = false)
 	{
 		global $page;
 		global $script;
-		
+
 		$this->blog = $blog;
 		
 		$page->page_title = $blog->title;
 		
-		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()");	
+		if ($year)
+		{
+			$constraint = " AND YEAR(publish_date)=$year";
 
+			if ($month)
+			{
+				$constraint .= " AND MONTH(publish_date) = $month";
+			}			
+
+		}
+		
+		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
+		
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
@@ -144,7 +155,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		return $view;
 	}
 	
-	function drawArticleList($blog)
+	function drawArticleList($blog, $year = false, $month = false)
 	{
 		global $page;
 		global $script;
@@ -153,8 +164,19 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 		$page->page_title = $blog->title;
 		
-		$articles = $blog->Articles("WHERE published=1");	
+		if ($year)
+		{
+			$constraint = " AND YEAR(publish_date) = $year";
+			
+			if ($month)
+			{
+				$constraint .= " AND MONTH(publish_date) = $month";
+			}			
 
+		}
+		
+		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
+		
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
@@ -179,7 +201,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
 		$out .= "{$article->title}</a></h4>";
-		$out .= $article->format("<strong>{created_date:daylong}</strong>");
+		$out .= $article->format("<strong>{publish_date:daylong}</strong>");
 		if ($article->teaser) $out .= " - ".$article->teaser;
 		$out .= "<br/><a href='{$this->blog->identifier}?article_id={$article->article_id}'>Read More &raquo;</a></div>";
 		return $out;
@@ -210,7 +232,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		return $view;
 	}
 	
-	function drawArticleList($blog)
+	function drawArticleList($blog, $year = false, $month = false)
 	{
 		global $page;
 		global $script;
@@ -218,9 +240,19 @@ class BookBlogViewHandler implements IBlogViewHandler
 		$this->blog = $blog;
 		
 		$page->page_title = $blog->title;
-		
-		$articles = $blog->Articles("WHERE published=1");	
 
+		if ($year)
+		{
+			$constraint = " AND YEAR(publish_date) = $year";
+
+			if ($month)
+			{
+				$constraint .= " AND MONTH(publish_date) = $month";
+			}			
+		}
+		
+		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
+		
 		echo "<div id='blog_description' class='Book'>{$blog->description}</div>";
 		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
@@ -306,12 +338,14 @@ class BlogView
 		$this->handlers[$type] = $handler;
 	}
 	
-	function drawArticleList()
+	function drawArticleList($year = false, $month = false)
 	{
 		$type = $this->blog->blog_type;
 		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
+	
+		trace ("Month is " . $month, 3);
 		
-		$this->handlers[$type]->drawArticleList($this->blog);
+		$this->handlers[$type]->drawArticleList($this->blog, $year, $month);
 	}
 	
 	function drawArticle($article_id)
@@ -435,7 +469,7 @@ class BlogArticlesView
 		$table = new DataListView($articles, "articles");
 		$table->column("Title", array($this, formatTitle), true)
 	  		->column("Author", "{getAuthorName()}", true)
-	  		->column("Date Created", "{created_date}", true)
+	  		->column("Date Published", "{publish_date}", true)
 	  		->column("Published", array($this, showPublished), false, "text-align: center");
 	  
 		$table->sortable = true;

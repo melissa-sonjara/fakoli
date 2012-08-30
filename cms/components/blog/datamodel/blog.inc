@@ -101,7 +101,7 @@ class Blog extends DataItem
 					
 		return $articles;
 	}
-	
+		
 	function countArticles()
 	{
 		return Query::create(Article, "WHERE article_type=:a")

@@ -35,6 +35,8 @@ Fakoli::using("blog");
 
 $id = $_GET["blog"];
 $article_id = checkNumeric($_GET["article_id"]);
+$year = checkNumeric($_GET["year"]);
+$month = checkNumeric($_GET["month"]);
 
 $blog = Blog::findByIdentifier($id);
 
@@ -57,7 +59,7 @@ if ($article_id)
 }
 else
 {
-	$view->drawArticleList();
+	$view->drawArticleList($year, $month);
 }
 
 ?>
