@@ -17,8 +17,7 @@ var Comment =  (function()
 		{
 			if (response == "OK")
 			{
-				this.dialog = modalPopup('Comment', '/action/comment/thankyou_comment', '520px', 'auto', true);
-					
+				window.location.reload();	
 			}
 			else
 				$('EditComment_form__error').set('html', response);
