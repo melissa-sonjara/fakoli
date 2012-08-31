@@ -3,7 +3,7 @@ var Comment =  (function()
 	var CommentSingleton = new Class(
 	{
 		dialog: null,
-			
+		dialog2: null,	
 		initialize: function()
 		{
 		},
@@ -17,7 +17,8 @@ var Comment =  (function()
 		{
 			if (response == "OK")
 			{
-				window.location.reload();
+				this.dialog = modalPopup('Comment', '/action/comment/comment_form', '520px', 'auto', true);
+				
 			}
 			else
 				$('EditComment_form__error').set('html', response);
