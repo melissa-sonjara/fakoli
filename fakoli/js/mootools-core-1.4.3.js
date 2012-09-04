@@ -4714,6 +4714,8 @@ Element.implement({
 
 	getScrolls: function(){
 		var element = this.parentNode, position = {x: 0, y: 0};
+		if (isBody(this)) return this.getScroll();
+		
 		while (element && !isBody(element)){
 			position.x += element.scrollLeft;
 			position.y += element.scrollTop;
