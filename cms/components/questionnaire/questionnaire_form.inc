@@ -119,10 +119,15 @@ class QuestionnaireForm
 			
 			foreach($this->questions as $question)
 			{
+				if (!$question->skipNumbering)
+				{
+					$question->question->question_number = $num++;
+				}
+				
 				if($question->question->required)
+				{
 					array_push($this->validators, $question->getRequiredValidator());
-				if ($question->skipNumbering) continue;
-				$question->question->question_number = $num++;
+				}
 			}
 		}
 	}
