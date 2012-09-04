@@ -115,10 +115,14 @@ class QuestionnaireForm
 				$this->questions[] = QuestionField::create($this, $question);
 			}
 				
+			$num = 1;
+			
 			foreach($this->questions as $question)
 			{
 				if($question->question->required)
 					array_push($this->validators, $question->getRequiredValidator());
+				if ($question->skipNumbering) continue;
+				$question->question->question_number = $num++;
 			}
 		}
 	}
