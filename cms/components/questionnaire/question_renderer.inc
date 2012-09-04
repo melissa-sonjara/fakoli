@@ -309,7 +309,7 @@ class MultipleChoiceView extends QuestionField
 		// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
+		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
 
@@ -583,7 +583,7 @@ class RatingView extends QuestionField
 		// Not empty means this is a view so we have the answer object that was saved.
 		$pk = $this->question->getPrimaryKey();
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
+		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
 
@@ -863,7 +863,7 @@ class CheckListView extends QuestionField
 		// Not empty means this is a view so we have the answer object that was saved.
 		$pk = $this->question->getPrimaryKey();
 		$answer = ($this->parent->readonly) ? $this->answer : "";
-		$question_number = $this->question->hasField("question_number") ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
+		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredCheckListQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $this->question->required, $answer);
 	}
 
