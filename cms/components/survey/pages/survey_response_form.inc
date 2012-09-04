@@ -89,7 +89,7 @@ $script .= $form->writeScript();
 echo "<h3>". $survey->title . "</h3>\n";
 if ($survey->instructions)
 {
-	echo "<p>" . formatAsHTML($survey->instructions) . "</p>\n";
+	echo "<p>" . $survey->instructions . "</p>\n";
 }
 $form->drawForm();
 ?>
