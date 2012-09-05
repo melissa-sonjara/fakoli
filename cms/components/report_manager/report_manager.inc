@@ -304,7 +304,7 @@ class ReportManager
 			}
 		}
 		
-		$results = $this->join->query($this->constraint);
+		$results = $this->join->iteratedQuery($this->constraint);
 		
 		$report = new DataListView($results, "custom_report_results");
 		
