@@ -130,7 +130,7 @@ function uploadFLV($field, $video)
 
 	$folder = Settings::getValue("video", "video_folder");
 	
-	$dir = $config['uploadbase']. DIRECTORY_SEPARATOR . $folder;
+	$dir = $config['homedir']. DIRECTORY_SEPARATOR . $folder;
 	
 	/* Copy across the uploaded file */
 
