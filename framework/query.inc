@@ -31,45 +31,22 @@
 
 *****************************************************************/
 
-/**
- * Query provides an object-oriented interface for database queries.
- * By instantiating Query objects you can specify a full or partial 
- * set of criteria and parameters, and then subsequently execute the query
- * to retrieve the results. You can pass around the constructed Query 
- * object and execute it multiple times, allowing for lazy evaluation
- * and other performance enhancing tricks.
- * @author andy
- *
- */
-class Query
+abstract class AbstractQuery
 {
 	var $class;
 	var $constraints;
-	var $page;
-	var $size;
 	var $filter;
 	var $params;
-	var $tableAlias;
-	
-	/**
-	 * Creates a new Query object.
-	 * @param string $class the DataItem class to be queried
-	 * @param string $constraints [optional] constraint clause for the query
-	 * @return a new Query object
-	 */
-	function Query($class, $constraints = "")
+
+	public function __construct($class, $constraints = "")
 	{
 		$this->class = $class;
 		$this->constraints = $constraints;
-	
-		$this->page = -1;
-		$this->size = -1;
 		
 		$this->filter = null;
 		$this->params = array();
-		$this->tableAlias = "";
 	}
-
+	
 	/**
 	 * Sets the constraint clause for the Query
 	 * @param $constraints the constraint clause;
@@ -78,20 +55,6 @@ class Query
 	function constraints($constraints)
 	{
 		$this->constraints = $constraints;
-		return $this;
-	}
-	
-	/**
-	 * Sets the page number and size for constraining the result set by page.
-	 * By default results are not paged.
-	 * @param $page integer the page number
-	 * @param $size integer the number of items per page
-	 * @return Query reference to the Query object, to allow for call chaining.
-	 */
-	function page($page, $size)
-	{
-		$this->page = $page;
-		$this->size = $size;
 		return $this;
 	}
 	
@@ -119,20 +82,6 @@ class Query
 	}
 	
 	/**
-	 * Sometimes when you are creating abonimable SQL constraints you might need to
-	 * refer back to the main object table by a specific alias. In those cases, set
-	 * the table alias for the main object using this message.
-	 * 
-	 * @param $alias String the table alias name
-	 * @return Query reference to the Query object, to allow for call chaining.
-	 */
-	function tableAlias($alias)
-	{
-		$this->tableAlias = $alias;
-		return $this;
-	}
-	
-	/**
 	 * Binds placeholders to parameter values.
 	 * @return Query reference to the Query object, to allow for call chaining.
 	 */
@@ -144,6 +93,71 @@ class Query
 			$this->params[func_get_arg($i)] = func_get_arg($i + 1);
 		}
 		
+		return $this;
+	}
+	
+	abstract function execute();
+}
+
+/**
+ * Query provides an object-oriented interface for database queries.
+ * By instantiating Query objects you can specify a full or partial 
+ * set of criteria and parameters, and then subsequently execute the query
+ * to retrieve the results. You can pass around the constructed Query 
+ * object and execute it multiple times, allowing for lazy evaluation
+ * and other performance enhancing tricks.
+ * @author andy
+ *
+ */
+class Query extends AbstractQuery
+{
+	var $page;
+	var $size;
+	var $tableAlias;
+	
+	/**
+	 * Creates a new Query object.
+	 * @param string $class the DataItem class to be queried
+	 * @param string $constraints [optional] constraint clause for the query
+	 * @return a new Query object
+	 */
+	public function __construct($class, $constraints = "")
+	{
+		parent::__construct($class, $constraints);
+		
+		$this->page = -1;
+		$this->size = -1;
+		
+		$this->tableAlias = "";
+	}
+
+	
+	/**
+	 * Sets the page number and size for constraining the result set by page.
+	 * By default results are not paged.
+	 * @param $page integer the page number
+	 * @param $size integer the number of items per page
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
+	function page($page, $size)
+	{
+		$this->page = $page;
+		$this->size = $size;
+		return $this;
+	}
+
+	
+	/**
+	 * Sometimes when you are creating abonimable SQL constraints you might need to
+	 * refer back to the main object table by a specific alias. In those cases, set
+	 * the table alias for the main object using this message.
+	 * 
+	 * @param $alias String the table alias name
+	 * @return Query reference to the Query object, to allow for call chaining.
+	 */
+	function tableAlias($alias)
+	{
+		$this->tableAlias = $alias;
 		return $this;
 	}
 	

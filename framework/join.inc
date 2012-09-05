@@ -115,6 +115,82 @@ class JoinResult
 	}
 }
 
+class JoinResultIterator implements Iterator
+{
+	var $join;
+	var $constraints;
+	var $query;
+	var $result;
+	var $current = null;
+	var $position = 0;
+	var $item;
+	
+	public function __construct($join, $constraints)
+	{
+		$this->join = $join;
+		$this->constraints = $constraints;
+		$this->item = new JoinResult();
+		for($i = 0; $i < count($join->classes); ++$i)
+		{
+			$class = $join->classes[$i];
+			$this->item->$class = new $class;	
+		}
+
+		$this->query = $join->generateQuery($constraints);
+	}
+	
+	public function rewind()
+	{
+		$this->current = null;
+		$this->position = 0;
+		
+		if (!$this->query)
+		{
+			$this->query = $this->join->generateQuery($this->constraints);		
+		}
+		
+		try
+		{
+			$db = ConnectionManager::getConnection();
+			$this->result = $db->prepare($this->query);
+			$this->result->execute();
+			$this->current = $this->result->fetch();
+		}
+		catch(PDOException $e)
+		{
+			throw new FakoliException($e->getMessage());
+		}
+	}
+	
+	public function current()
+	{
+		for($i = 0; $i < count($this->join->classes); ++$i)
+		{
+			$class = $this->join->classes[$i];
+			$this->item->$class->populate($this->current, $this->join->aliases[$this->item->$class->table]);
+		}
+		
+		return $this->item;
+	}
+	
+	public function valid()
+	{
+		return ($this->current != null);
+	}
+	
+	public function next()
+	{
+		$this->current = $this->result->fetch();
+		++$this->position;
+	}
+	
+	public function key()
+	{
+		return $this->position;
+	}
+	
+}
+
 /**
  * AbstractJoin is the abstract base class from which concrete join classes
  * can be derived in order to provide support for different styles of relational
@@ -277,7 +353,15 @@ abstract class AbstractJoin
 		}
 	}
 	
-		
+	/**
+	 * Performs a query against the database returning an iterator of JoinResult objects.
+	 * @param string $constraints
+	 */
+	function iteratedQuery($constraints = "")
+	{
+		return new JoinResultIterator($this, $constraints);
+	}
+				
 	/** Performs a query against the database, returning an array of DataItem objects of the specified class,
 	 * indexed by a particular field. If more than one item is found that matches the same value of the indexing field,
 	 * the results entry is promoted to an array automatically. However, in cases where this is common, using

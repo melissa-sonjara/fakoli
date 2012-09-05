@@ -356,9 +356,11 @@ class DataListView
 	 */
 	function drawView()
 	{
+		trace("Number of Items: ".count($this->items), 3);
+		
 		if (count($this->items) > 0)
 		{
-			$this->autoPopulate($this->items[0]); // Autopopulate the column list from the first object, if not specified
+			if (!count($this->columns)) $this->autoPopulate($this->items[0]); // Autopopulate the column list from the first object, if not specified
 			$attrs = "";
 			if ($this->id)
 			{

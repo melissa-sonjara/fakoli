@@ -31,50 +31,18 @@
 
 *****************************************************************/
 
-class IndexedQuery
+require_once realpath(dirname(__FILE__)."/query.inc");
+
+class IndexedQuery extends AbstractQuery
 {
-	var $class;
-	var $constraints;
-	var $filter;
-	var $params;
 	var $indexBy;
 	
-	function IndexedQuery($class, $constraints = "", $indexBy = "")
+	public function __construct($class, $constraints = "", $indexBy = "")
 	{
-		$this->class = $class;
-		$this->constraints = $constraints;
+		parent::__construct($class, $constraints);
 		$this->indexBy = $indexBy;
 	}
 	
-	function constraints($constraints)
-	{
-		$this->constraints = $constraints;
-		return $this;
-	}
-	
-	function filter($filter)
-	{
-		$this->filter = $filter;
-		return $this;
-	}
-	
-	function params($params)
-	{
-		$this->params = $params;
-		return $this;
-	}	
-	
-	function bind()
-	{
-		$num = func_num_args();
-		for($i = 0; $i < $num; $i += 2)
-		{
-			$this->params[func_get_arg($i)] = func_get_arg($i + 1);
-		}
-		
-		return $this;
-	}
-
 	function indexBy($indexBy)
 	{
 		$this->indexBy = $indexBy;
