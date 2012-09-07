@@ -22,3 +22,9 @@ ALTER TABLE `custom_report` CHANGE COLUMN `configuration` `configuration` longte
 ALTER TABLE `custom_report` ADD COLUMN `user_id` int(10) NOT NULL DEFAULT '0';
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE `custom_report` ADD COLUMN `shared` tinyint(3) not null default 0;
+
+-- END Version 1.3
