@@ -294,11 +294,8 @@ class ReportManager
 		{
 			if ($this->selected["table_{$table->class}"])
 			{
-				$this->join->add($table->class);
-				foreach($table->excludedKeys as $excluded)
-				{
-					$this->join->excludeKeyFromJoin($table->class, $excluded);
-				}
+				$table->createJoin($this);
+				
 				
 				$first = false;
 			}
@@ -312,19 +309,11 @@ class ReportManager
 		{
 			if ($this->selected["table_{$table->class}"])
 			{
-				foreach($table->columns as $column)
-				{
-					if ($this->selected["column_".codify($column->title)])
-					{
-						$report->column($column->title, $column->format, $column->sortable, $column->style, $column->type);
-					}
-				}
+				$table->createColumns($this, $report);
 			}
 		}
 		
 		$report->dragColumnReorder = true;
-		
-		$this->setFooterColumns($report);
 		
 		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
 		if(isset($this->request["__excel"]))
@@ -360,45 +349,9 @@ class ReportManager
 		echo "<p><em>Report generated in ".number_format($elapsed, 2)." seconds</em></p>";
 	}
 	
-
-	/**
-	 * If the user set footer columns, set them into the report.
-	 */
-	function setFooterColumns(&$report)
+	function isColumnSelected($column)
 	{
-		$colspan = 0;
-		foreach($this->tables as $table)
-		{
-			if ($this->selected["table_{$table->class}"])
-			{
-				foreach($table->columns as $column)
-				{
-					if ($this->selected["column_".codify($column->title)])
-					{
-						if(array_key_exists($column->title, $table->footerColumns))
-						{
-							$footer = $table->footerColumns[$column->title];
-							$footer->colspan = ++$colspan;
-							$report->footerColumns[] = $footer;
-							if(get_class($footer) == FooterTotalColumn)
-							{
-								$report->totalCallbacks[] = array($footer, onStartRow);
-							}
-							$colspan = 0;
-						}
-						else
-						{
-							$colspan += 1;
-						}
-					}
-				}
-			}	
-		}
-		
-		if($colspan)
-		{
-			$report->footerColumns[] =  new FooterTextColumn("", "", $colspan);
-		}
+		return $this->selected["column_".codify($column->title)];
 	}
 		
 	function writeResultsFormButtons()
@@ -651,6 +604,40 @@ class ReportTable
 		$this->footerColumns[$title] = $column;
 		
 		return $column;
+	}
+	
+	function createJoin($mgr)
+	{
+		$mgr->join->add($this->class);
+		foreach($this->excludedKeys as $excluded)
+		{
+			$mgr->join->excludeKeyFromJoin($this->class, $excluded);
+		}
+	}
+
+	function createColumns($mgr, $report)
+	{
+		foreach($this->columns as $column)
+		{
+			if ($mgr->isColumnSelected($column))
+			{
+				$report->column($column->title, $column->format, $column->sortable, $column->style, $column->type);
+				
+				if(array_key_exists($column->title, $this->footerColumns))
+				{
+					$footer = $table->footerColumns[$column->title];
+					$report->footerColumns[] = $footer;
+					if(get_class($footer) == FooterTotalColumn)
+					{
+						$report->totalCallbacks[] = array($footer, onStartRow);
+					}
+				}
+				else 
+				{
+					$report->footerColumns[] = new FooterTextColumn("&nbsp;");
+				}
+			}
+		}		
 	}
 }
 
