@@ -687,6 +687,9 @@ class SearchParameters
 				
 				$clause = $handler->fullName($field, $value);
 				break;
+				
+			default:
+				break;
 			
 		} // end case statement
 		
