@@ -100,7 +100,7 @@ class QuestionTableHelper
 			$question->question_name = substr($question->question, 0, 79);
 
 		$pk = $question->getPrimaryKey();
-		return $question->format("<input type='text' name=\"question_{$pk}\"
+		return $question->format("<input type='text' name=\"question_{$question->$pk}\"
 		value=\"{question_name}\" size=\"40\"/>");	
 	}
 }
