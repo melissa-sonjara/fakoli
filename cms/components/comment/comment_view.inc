@@ -178,11 +178,11 @@ class CommentView
 		
 		if(Settings::getValue("comment", "publish_automatically"))
 		{
-			$form->interstitialMessage = "Thank you for your comment. ";
+			$form->interstitialMessage = "Thank you for your comment.";
 		}
 		else
 		{
-			$form->interstitialMessage = "Thank you for your comment. Will be reviewed by the moderator ";
+			$form->interstitialMessage = "Thank you. Your comment has been submitted to the moderator.";
 		}
 		
 		if ($user)
