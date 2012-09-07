@@ -765,6 +765,7 @@ var PaginatingList = new Class(
 	initialize: function(list, paginator, options)
 	{
 		this.list = $(list);
+		if (!this.list) return;
 		this.paginator = $(paginator);
 		this.setOptions(options);
 		this.pages = Math.ceil(this.list.getElements("li").length  / this.options.per_page );
