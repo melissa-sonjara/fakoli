@@ -31,7 +31,7 @@ class SurveyQuestionTableHelper
 		}
 		else
 		{
-			$text =  preg_replace("/\n/", "; ", $question->options);
+			$text =  preg_replace("/\s+\n/", "; ", $question->options);
 		}
 
 		if($question->isFreeText())
@@ -69,7 +69,7 @@ class SurveyQuestionTableHelper
 			$question->question_name = substr($question->question, 0, 79);
 
 		$pk = $question->getPrimaryKey();
-		return $question->format("<input type='text' name=\"question_{$pk}\"
+		return $question->format("<input type='text' name=\"question_{$question->$pk}\"
 		value=\"{question_name}\" size=\"40\"/>");	
 	}
 }
