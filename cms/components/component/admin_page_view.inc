@@ -119,6 +119,15 @@ class AdminPageView
 			$template = str_replace($expr, $$name, $template);
 		}
 		
+		preg_match_all("/\{config:(.*?)\}/", $template, $vars, PREG_SET_ORDER);
+		
+		foreach($vars as $var)
+		{		
+			$expr = $var[0];
+			$name = $var[1];	
+			$template = str_replace($expr, $config[$name], $template);
+		}
+		
 		if ($config['prettyURLs'] === false)
 		{
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);

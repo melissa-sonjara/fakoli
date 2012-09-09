@@ -40,6 +40,49 @@ dd
 	margin: 5px;
 }
 
+#nav
+{
+	vertical-align: top;
+	padding: 1px 0 2px;
+	width: 100%;
+	height: 23px;
+	line-height: 22px;
+	background: url(/fakoli/images/table-header.png) top left repeat-x transparent;
+	border-bottom: solid 1px #000;
+}
+
+#nav a:link, 
+#nav a:visited
+{
+	display: inline-block;
+	font-size: 9.5pt;
+	color: #000;
+	text-decoration: none;
+	border: solid 1px transparent;
+	padding: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+	font-family: Segoe UI;
+	margin: 0 20px;
+}
+
+#nav a:hover,
+#nav a:focus
+{
+	border: solid 1px #203040;
+	background-color: #406080;
+	color: #fff;
+}
+
+#nav .sitename
+{
+	display: inline-block;
+	font-weight: bold;
+	font-family: Segoe UI;
+	margin: 0 0 0 80px;
+	font-size: 9.5pt;
+}
+
 #footer
 {
 	clear: both;
