@@ -676,6 +676,39 @@ class Fakoli
        
         return $out;  
     }
+    
+    static function getFileSystemInfo()
+    {
+    	global $config;
+    	
+    	if (isset($config['filesystems']))
+    	{
+    		$fs = explode(",", $config['filesystems']);
+    	}
+    	else if (stristr(PHP_OS, "win"))
+    	{
+    		$fs = array("C:");
+    	}
+    	else
+    	{
+    		$fs = array("/");
+    	}
+    	
+    	$out = "<table class='list'><thead><tr><th>File System</th><th>Size</th><th>Free</th><th>% Free</th></tr></thead><tbody>";
+    	foreach($fs as $f)
+    	{
+    		$free = disk_free_space($f);
+    		$total = disk_total_space($f);
+    		$percent = number_format($free * 100 / $total, 1);
+    		$style = ($percent < 10) ? " style='background-color: #f00;color: #fff'" : ($percent < 20) ? " style='background-color: #ff0'" : "";
+    		$out .= "<tr><td>$f</td><td style='text-align: right'>" . getScaledSize($total) . 
+    				"</td><td style='text-align: right'>" . getScaledSize($free) . 
+    				"</td><td style='text-align: right'>" . $percent . "%</td></tr>";
+    	}
+    	
+    	$out .= "</tbody></table>";
+    	return $out;
+    }
 }
 
 Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting

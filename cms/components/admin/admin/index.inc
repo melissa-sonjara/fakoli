@@ -38,5 +38,6 @@ $title = "Site Administration";
 <br/>
 <br/>
 <strong>Server Load: </strong><?echo Fakoli::getServerLoad()?><br/><br/>
+<strong>Disk Usage:</strong><br/><br/><?echo Fakoli::getFileSystemInfo()?><br/><br/>
 <a class="button" href="/action/component/scan"> Scan for Component Updates </a>&nbsp;&nbsp;
 <a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/php_info", "800px"); return false;' class="button">Show PHP Configuration</a>

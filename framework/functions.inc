@@ -1074,7 +1074,11 @@ function trace($msg, $lvl, $callStack = null)
 function getScaledSize($size)
 {
 	$result = "";
-	if ($size > 1048576)
+	if ($size > 1073741824)
+	{
+		$result = sprintf("%.1fGB", ($size / 1073741824));
+	}
+	else if ($size > 1048576)
 	{
 		$result = sprintf("%.1fMB", ($size / 1048576));
 	}
