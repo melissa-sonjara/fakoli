@@ -694,7 +694,7 @@ class Fakoli
     		$fs = array("/");
     	}
     	
-    	$out = "<table class='list'><thead><tr><th>File System</th><th>Size</th><th>Free</th><th>% Free</th></tr></thead><tbody>";
+    	$out = "<table class='list'><thead><tr><th>File System</th><th>Size</th><th>Available</th><th>% Free</th></tr></thead><tbody>";
     	foreach($fs as $f)
     	{
     		$free = disk_free_space($f);
