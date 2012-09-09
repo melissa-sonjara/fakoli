@@ -9,6 +9,7 @@ $error = new ErrorLog($error_log_id);
 ?>
 <b>Error encountered by <?echo $error->getUserFullName()?> on <?echo $error->timestamp?>.</b>
 <p><b>Session ID: <?echo $error->session?></b></p>
+<p><b>URI:</b> <?echo $error->uri?>, <b>Referer:</b> <?echo $error->referer?></p> 
 <p><?echo $error->message?></p>
 <p><em><?echo $error->file?></em> Line <?echo $error->line?></p>
 <h4>Stack Trace</h4>

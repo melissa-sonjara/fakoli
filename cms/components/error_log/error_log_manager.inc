@@ -66,7 +66,7 @@ class ErrorLogManager
 			$errFile = $exception->getFile();
 			$errLine = $exception->getLine();
 	        $uri = $_SERVER['REQUEST_URI'];
-	        
+	        $referer = $_SERVER['HTTP_REFERER'];
 	        
 			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
 		
@@ -80,6 +80,7 @@ class ErrorLogManager
 			$log->details = $exception->getTraceAsString();
 			$log->user_id = $user ? $user->user_id : 0;
 			$log->uri = $uri;
+			$log->referer = $referer;
 			$log->session = session_id();
 									
 			if (ErrorLogManager::$enableLogging)

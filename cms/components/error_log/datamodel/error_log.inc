@@ -12,6 +12,7 @@ class ErrorLog extends DataItem
 						"details"		=>	HTML,
 						"user_id"		=>	Number,
 						"uri"			=>	String,
+						"referer"		=>	String,
 						"session"		=>	String,
 						"timestamp"		=>	Timestamp);
 	

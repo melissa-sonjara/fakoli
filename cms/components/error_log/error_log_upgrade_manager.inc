@@ -49,7 +49,8 @@ Fakoli::using("error_log", "component");
 class ErrorLogUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added referrer field to capture HTTP Referrer if present"
 	);
 	
 	function ErrorLogUpgradeManager()
