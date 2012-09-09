@@ -633,9 +633,11 @@ class Fakoli
 				ob_end_clean();
 			}
 		
+			$msg = "<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
+			
 			$err = Fakoli::resolveResource("/fakoli/error.tpl");
 			$template = file_get_contents($err);
-			$out = str_replace("{message}", $errMsg, $template);
+			$out = str_replace("{message}", $msg, $template);
 			echo $out;
 		}
 		catch (Exception $ex)
@@ -654,6 +656,44 @@ class Fakoli
 		list ($s, $qs) = explode("?", $_SERVER['REQUEST_URI']);
 		return $s;		
 	}
+	
+	static function getServerLoad()
+	{
+		$out = "";
+		
+		if (stristr(PHP_OS, 'win')) 
+		{			
+            $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
+            
+            $total = $wmi->Get("Win32_PerfRawData_PerfOS_Processor.Name='_Total'");
+            $out .= $total->TimeStamp_Sys100NS;
+            $out .= $total->PercentProcessorTime;
+            
+            $server = $wmi->execquery("SELECT LoadPercentage FROM Win32_Processor");
+           
+            $cpu_num = 0;
+            $load_total = 0;
+           
+            foreach($server as $cpu)
+            {
+            	$out .= "CPU $cpu_num: {$cpu->loadpercentage}% ";
+                $cpu_num++;
+                $load_total += $cpu->LoadPercentage;
+            }
+           
+            $load = round($load_total/$cpu_num);
+            
+            $out .= "Average: {$load}%";
+           
+        } 
+        else 
+        {       
+            $sys_load = sys_getloadavg();
+            $out = "System Load: $sys_load[0] $sys_load[1] $sys_load[2]";       
+        }
+       
+        return $out;  
+    }
 }
 
 Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting
