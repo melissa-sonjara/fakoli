@@ -5,8 +5,8 @@ class ActivityTracker
 {
 	static function logActivity()
 	{
-		global $user;
-		if (!$user) return;
+		//global $user;
+		//if (!$user) return;
 
 		$enabled = Settings::getValue("activity_tracker", "track_activity");
 		$entryPoint = basename($_SERVER['SCRIPT_NAME']);
