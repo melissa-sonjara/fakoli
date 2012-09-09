@@ -48,7 +48,8 @@ class ActivitySession extends DataItem
 	
 	function User()
 	{
-		return $this->getRelated(SiteUser);
+		$mgr = new UserManager();
+		return $mgr->getUser($this->user_id);
 	}
 
 	function Activity($constraint = "")
@@ -60,6 +61,9 @@ class ActivitySession extends DataItem
 	{
 		$this->table = "activity_sessions";
 		$this->primary_key = "session_id";
+		
+		$mgr = new UserManager();
+		$this->relations["User"] = $mgr->getUserClass();
 		
 		$this->DataItem(func_get_args());
 	}	
