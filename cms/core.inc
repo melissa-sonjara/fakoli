@@ -689,7 +689,7 @@ class Fakoli
         else 
         {       
             $sys_load = sys_getloadavg();
-            $out = "System Load: $sys_load[0] $sys_load[1] $sys_load[2]";       
+            $out = "$sys_load[0]&nbsp;&nbsp;&nbsp;$sys_load[1]&nbsp;&nbsp;&nbsp;$sys_load[2]";       
         }
        
         return $out;  
