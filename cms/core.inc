@@ -700,8 +700,8 @@ class Fakoli
     		$free = disk_free_space($f);
     		$total = disk_total_space($f);
     		$percent = number_format($free * 100 / $total, 1);
-    		$style = ($percent < 10) ? " style='background-color: #f00;color: #fff'" : ($percent < 20) ? " style='background-color: #ff0'" : "";
-    		$out .= "<tr><td>$f</td><td style='text-align: right'>" . getScaledSize($total) . 
+    		$style = ($percent < 10) ? " style='background-color: #f00;color: #fff'" : ($percent < 25) ? " style='background-color: #ff0'" : "";
+    		$out .= "<tr$style><td>$f</td><td style='text-align: right'>" . getScaledSize($total) . 
     				"</td><td style='text-align: right'>" . getScaledSize($free) . 
     				"</td><td style='text-align: right'>" . $percent . "%</td></tr>";
     	}
