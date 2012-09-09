@@ -666,25 +666,7 @@ class Fakoli
             $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
             
             $total = $wmi->Get("Win32_PerfRawData_PerfOS_Processor.Name='_Total'");
-            $out .= $total->TimeStamp_Sys100NS;
-            $out .= $total->PercentProcessorTime;
-            
-            $server = $wmi->execquery("SELECT LoadPercentage FROM Win32_Processor");
-           
-            $cpu_num = 0;
-            $load_total = 0;
-           
-            foreach($server as $cpu)
-            {
-            	$out .= "CPU $cpu_num: {$cpu->loadpercentage}% ";
-                $cpu_num++;
-                $load_total += $cpu->LoadPercentage;
-            }
-           
-            $load = round($load_total/$cpu_num);
-            
-            $out .= "Average: {$load}%";
-           
+            $out .= $total->PercentProcessorTime."%";           
         } 
         else 
         {       
