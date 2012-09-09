@@ -33,8 +33,13 @@
  
 $title = "Site Administration";
 
+$signature = sha1(serialize(Fakoli::getComponents()));
+
 ?>
 <b>Welcome <?echo $user->getFullName()?>!</b>
+<br/>
+<br/>
+<strong>Component Configuration Signature:</strong> <?echo $signature?>
 <br/>
 <br/>
 <strong>Server Load: </strong><?echo Fakoli::getServerLoad()?><br/><br/>
