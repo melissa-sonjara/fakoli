@@ -56,7 +56,7 @@ Fakoli::usingFeature("validation");
 class EmailListValidator extends AbstractValidator
 {
 	var $empty = "";
-
+	
 	function EmailListValidator($field, $title)
 	{
 		$this->empty = $empty;
@@ -72,7 +72,7 @@ class EmailListValidator extends AbstractValidator
 	{
 		global $_POST;
 		
-		if (isset($_POST[$this->field]))
+		if (isset($_POST[$this->field]) && $_POST[$this->field] != $this->empty)
 		{
 			$items = $_POST[$this->field];
 			$emails = explode(",", $items);
