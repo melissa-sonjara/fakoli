@@ -13,7 +13,7 @@ if ($feedbackUsers)
 	$constraints .= " AND session_id IN (SELECT DISTINCT session_id from user_activity WHERE uri like '/action/feedback/save%')";
 }
 
-$sessions = Query::create(ActivitySession, "$constraints ORDER BY session_start")->execute();
+$sessions = Query::create(ActivitySession, "$constraints ORDER BY session_start DESC")->execute();
 
 $table = new DataListView($sessions, "session");
 $table->column("Session", "<a href='/admin/session_details?session_id={session_id}'>{User.first_name} {User.last_name}<br/>{session_id}</a>", true, "width: 40%")
