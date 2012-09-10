@@ -370,7 +370,10 @@ class BlogView
 			
 			$script .= $view->writeScript();
 			$view->drawView();
-			$view->drawForm();
+			if(Settings::getValue("comment", "allow_anonymous_commenting"))
+			{
+				$view->drawForm();
+			}
 		}
 	}
 	
