@@ -80,7 +80,7 @@ class ReportFilterNavigator
 	{
 		echo "<div id='report_filter_navigator'>\n";
 		
-		echo "<h2>Filter your Results</h2>";
+		echo "<h2>Filter Your Results</h2>";
 		
 		foreach($this->tables as $table)
 		{
