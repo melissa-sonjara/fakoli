@@ -233,7 +233,7 @@ class QuestionnaireForm
 			return;
 		}
 
-		if($this->requiredText AND !$displayOnly)
+		if($this->requiredText)
 		{
 			if ($this->msg)
 			{
@@ -244,8 +244,7 @@ class QuestionnaireForm
 			echo $this->requiredText;
 		}
 
-		if(!$displayOnly)
-			echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
+		echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
 
 		echo "<dl>\n";
 		
@@ -478,6 +477,27 @@ class QuestionnairePreview extends QuestionnaireForm
 			$this->questions[] = QuestionField::create($this, $question);
 		}
 	}
+	
+	function writeOneQuestion($question, $displayOnly)
+	{
+		$required = $question->getRequired();
+		$qPk = $question->getID();
+		echo " <dt><label for='question_{$qPk}'>";
+		
+		if (!$question->skipNumbering)
+		{
+			echo "<b>{$this->num}.</b> ";
+		}
+		
+		echo "{$question->question->question}{$required}</label></dt>\n";
+
+		echo " <dd>";
+
+		$question->writeHTML();
+
+		echo " <br/></dd>";
+	}
+	
 
 	function writeScript()
 	{
