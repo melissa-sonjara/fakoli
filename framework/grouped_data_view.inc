@@ -353,15 +353,17 @@ class GroupedDataListView
 		
 		$constructor = "";
 
-		if ($this->selectable)
-		{
-			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
-		}
-		
+			
 		if ($this->mode != 'fixed')
 		{
 			$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";
 		}
+
+		if ($this->selectable)
+		{
+			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
+		}
+
 
 		if ($constructor)
 		{
