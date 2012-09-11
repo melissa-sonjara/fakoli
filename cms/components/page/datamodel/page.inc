@@ -258,7 +258,7 @@ class PageSearchResult extends AbstractSearchResult
 	
 	function summary()
 	{
-		return $this->item->format("<h4>{page_title}</h4><p><em>{author} {created_date:short}</em></p><a href='page_view?page_id={page_id}'>Read More</a>");
+		return $this->item->format("<h4>{page_title}</h4><p><em>{author} {created_date:short}</em></p><a href='{identifier}'>Read More</a>");
 	}
 }
 
