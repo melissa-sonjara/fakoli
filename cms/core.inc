@@ -657,6 +657,15 @@ class Fakoli
 		return $s;		
 	}
 	
+	/**
+	 * Retrieves information about the Server CPU load. For Windows systems
+	 * this is reported as percentage CPU. For Linux/UNIX systems the load 
+	 * information is returned in uptime format.
+	 * 
+	 * Note that in order for the system to return correct load values on 
+	 * Windows, the application pool must be running as a user with permission
+	 * to read performance counters (such as NetworkService).
+	 */
 	static function getServerLoad()
 	{
 		$out = "";
@@ -664,9 +673,12 @@ class Fakoli
 		if (stristr(PHP_OS, 'win')) 
 		{			
             $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
-            
-            $total = $wmi->Get("Win32_PerfRawData_PerfOS_Processor.Name='_Total'");
-            $out .= $total->PercentProcessorTime."%";           
+		  	$cpus = $wmi->InstancesOf("Win32_Processor");
+  
+		  	foreach ($cpus as $cpu) 
+		  	{
+		   		$out .=  $cpu->LoadPercentage."% ";
+		  	}
         } 
         else 
         {       
