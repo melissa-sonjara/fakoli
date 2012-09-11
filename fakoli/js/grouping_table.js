@@ -76,7 +76,20 @@ var GroupingTable = new Class({
 	}
 });
 	
+GroupingTable.toggleGroup = function(button)
+{
+	tr = document.id(button).getParent();
+	var state = (button.get('text') == "Select All");
+	tr = tr.getNext();
 	
+	while(tr && !tr.hasClass("subheading"))
+	{
+		tr.getElement("input[type=checkbox]").checked = state;
+		tr.getNext();
+	}
+	
+	button.set('text', state ? "Deselect All" : "Select All");
+};
 	
 	
 	
