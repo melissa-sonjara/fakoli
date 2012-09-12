@@ -409,9 +409,17 @@ class SurveyResultsView
 	 * Applications that don't want to see the the number of
 	 * unsubmitted surveys, should return 0 recipient count from
 	 * the results manager to omit that portion of the heading.
+	 * 
+	 * This is the case for surveys where there is not a set
+	 * of recipients who receive a request.
 	 */
 	function getHeading()
 	{
+		if (is_callable($this->mgr->formatResultsHeading))
+		{
+			return call_user_func($this->mgr->formatResultsHeading);
+		}			
+		
 		$recipientCount = $this->mgr->getRecipientCount();
 
 		$countText = ($this->responseCount) ? $this->responseCount : "0";
@@ -641,6 +649,12 @@ class SurveyReport
 	var $emptyMessage = "There are no results to display.";
 	var $responseCount;
 
+	/**
+	 * 
+	 * @param $mgr obj of class SurveyResultsManager or a class with the following methods:
+	 * getQuestions
+	 * getResponseCount
+	 */
 	function SurveyReport($mgr)
 	{
 		$this->mgr = $mgr;

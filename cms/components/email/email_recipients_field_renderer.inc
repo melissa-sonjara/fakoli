@@ -41,9 +41,13 @@ Fakoli::usingFile("framework/field_renderers/text_field_renderer.inc");
  */
 class EmailListFieldRenderer extends TextFieldRenderer
 {
-	function EmailListFieldRenderer(&$form, $field, $label)
+	var $removeDuplicates = false;
+	
+	function EmailListFieldRenderer(&$form, $field, $label = "")
 	{
 		parent::TextFieldRenderer($form);
+		
+		$label = ($label) ? $label : prettify($field);
 		
 		if ($form->data->hasField($field))
 		{
@@ -88,6 +92,49 @@ class EmailListFieldRenderer extends TextFieldRenderer
 		$replacements = array(",", ",");
 		$recipients =  preg_replace($patterns, $replacements, $recipients);
 
+		if($this->removeDuplicates)
+		{
+			$recipients = implode(",", array_unique(explode(",", $recipients)));
+		}
+		
 		$this->parent->data->set($field, $recipients);
 	}	
+}
+
+
+class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
+{
+	var $cssClass = 'recipient_scrollbox';
+	
+	function EmailRecipientScrollBoxFieldRenderer(&$form, $field, $label = "")
+	{
+		parent::FieldRenderer($form);
+		
+		$label = ($label) ? $label : prettify($field);
+		
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+				$form->overrides[$field]['label'] = $label;
+		}		
+		
+		$this->colspan = 2;
+	}
+	
+	function renderField($field)
+	{
+		$this->_startField($field);
+		
+		echo "<div class='{$this->cssClass}'>\n";
+		
+		
+		echo "</div>\n";
+		
+		$this->_endField($field);
+	}
+	
 }
