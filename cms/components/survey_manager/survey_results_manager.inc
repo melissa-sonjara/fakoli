@@ -415,11 +415,12 @@ class SurveyResultsView
 	 */
 	function getHeading()
 	{
-		if (is_callable($this->mgr->formatResultsHeading))
+		$fn = array($this->mgr, formatResultsHeading);
+		if (is_callable($fn))
 		{
-			return call_user_func($this->mgr->formatResultsHeading);
+			return call_user_func($fn);
 		}			
-		
+
 		$recipientCount = $this->mgr->getRecipientCount();
 
 		$countText = ($this->responseCount) ? $this->responseCount : "0";
