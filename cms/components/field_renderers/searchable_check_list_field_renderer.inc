@@ -36,7 +36,7 @@ Fakoli::using("component", "search");
 
 class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 {
-	function SearchableCheckListFieldRenderer($form, $field, $label, $options, $grouped = false)
+	function SearchableCheckListFieldRenderer($form, $field, $label)
 	{
 				
 		$options = array();
