@@ -113,7 +113,7 @@ class Article extends DataItem implements Searchable
 			
 			$constraint = $search->generateConstraint();
 			
-			$pages = Query::create(Article, $constraint)
+			$articles = Query::create(Article, $constraint)
 						  ->execute();
 		}
 		else
