@@ -554,6 +554,11 @@ class SearchParameters
 		}
 	}
 	
+	function copyField($old, $new)
+	{
+		$this->params[$new] = $this->params[$old];
+	}
+	
 	function toQueryString()
 	{
 		$qs = "";
