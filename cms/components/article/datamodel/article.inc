@@ -88,6 +88,28 @@ class Article extends DataItem implements Searchable
 		return $this->Author()->getFullName();
 	}
 	
+	function getBlog()
+	{
+		$blog = Query::create(Blog, "WHERE title=:type")
+					 ->bind(":type", $this->article_type)
+					 ->executeSingle();
+					 
+		return $blog;
+	}
+	
+	function getViewIdentifier()
+	{
+		try
+		{
+			$blog = $this->getBlog();
+			return $blog->identifier;
+		}
+		catch(DataNotFoundException $e)
+		{
+			return "article_view";
+		}
+	}
+	
 	function Article()
 	{
 		$this->table = "article";
