@@ -64,7 +64,7 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 	}
 
 
-	function renderField($field)
+	function renderSearchField($field)
 	{
 		if (!$this->parent->data->get($field))
 		{
@@ -73,7 +73,7 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 		
 		trace("Options: ".$this->parent->data->get($field), 3);
 		
-		return parent::renderField($field);
+		return parent::renderSearchField($field);
 	}
 }
 		
