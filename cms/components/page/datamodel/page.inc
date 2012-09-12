@@ -220,8 +220,8 @@ class Page extends DataItem implements Searchable
 				$search->copyField("keywords:like", "text:like");
 			}
 
-			$search->remapField("keywords", "meta_tag_keyword");
 			$search->remapField("text", "message");
+			$search->remapField("keywords", "meta_tag_keyword");
 			
 			$constraint = $search->generateConstraint();
 			$constraint .= " AND published=1";
