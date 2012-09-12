@@ -112,6 +112,7 @@ class Article extends DataItem implements Searchable
 			$search->remapField("keywords", "tags");
 			
 			$constraint = $search->generateConstraint();
+			$constraint .= " AND published=1";
 			
 			$articles = Query::create(Article, $constraint)
 						  ->execute();

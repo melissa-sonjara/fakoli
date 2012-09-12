@@ -217,6 +217,7 @@ class Page extends DataItem implements Searchable
 			$search->remapField("title", "page_title");
 			
 			$constraint = $search->generateConstraint();
+			$constraint .= " AND published=1";
 			
 			$pages = Query::create(Page, $constraint)
 						  ->execute();
@@ -224,7 +225,7 @@ class Page extends DataItem implements Searchable
 		else
 		{
 			$params = "%$params%";
-			$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b")
+			$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b AND published=1")
 						  ->bind(":a", $params, ":b", $params)
 						  ->execute();
 		}
