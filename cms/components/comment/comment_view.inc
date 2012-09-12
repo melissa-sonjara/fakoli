@@ -172,6 +172,7 @@ class CommentView
 		$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 		$form->required("description");
+		$form->alias("title", "Subject", "author", "Your Name");
 		$form->alias("description", "Comment");
 		$form->hide(user_id, published);
 		$form->onSaveComplete = array($this, addXrefRecord);
