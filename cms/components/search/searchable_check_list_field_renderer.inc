@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::usingFeature("field_renderers");
+Fakoli::usingFeature("auto_form");
 Fakoli::using("component", "search");
 
 class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
