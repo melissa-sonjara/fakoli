@@ -68,7 +68,7 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 	{
 		if (!$this->parent->data->get($field))
 		{
-			$this->parent->data->set($field, array_keys($this->options));
+			$this->parent->data->set($field, implode(",", array_keys($this->options)));
 		}
 		
 		return parent::renderField($field);
