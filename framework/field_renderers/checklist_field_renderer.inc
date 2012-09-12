@@ -90,6 +90,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
+			if ($label) $form->alias($field, $label);
 		}
 	}
 		
