@@ -177,7 +177,7 @@ class ArticleSearchResult extends AbstractSearchResult
 	
 	function summary()
 	{
-		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p><a href='article_view?article_id={article_id}'>Read More</a>");
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p><a href='{getViewIdentifier()}?article_id={article_id}'>Read More</a>");
 	}
 }
 
