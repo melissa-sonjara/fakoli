@@ -214,13 +214,13 @@ class Page extends DataItem implements Searchable
 			$search = clone $params;
 			$search->target = $this;
 			$search->remapField("title", "page_title");
+			$search->remapField("keywords", "meta_tag_keyword");
 			
 			if (!$search->get("text:like"))
 			{
-				$search->secondaryFields("keywords", "description");
+				$search->secondaryFields("meta_tag_keyword", "description");
 			}
 
-			$search->remapField("keywords", "meta_tag_keyword");
 			
 			$constraint = $search->generateConstraint();
 			$constraint .= " AND published=1";
