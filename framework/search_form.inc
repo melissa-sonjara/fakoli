@@ -451,6 +451,7 @@ class SearchParameters
 	var $handlers;
 	var $joinWith = "AND"; // AND or OR
 	var $paramHandlers = array(); // custom search handlers
+	var $secondaryFields = array();
 	
 	function SearchParameters($target)
 	{
@@ -559,6 +560,25 @@ class SearchParameters
 		$this->params[$new] = $this->params[$old];
 	}
 	
+	/**
+	 * Specifies additional data fields to search when querying for the
+	 * given source field.
+	 * @param string $src name of the primary field
+	 * @param [string] the list of additional fields to search
+	 */
+	function secondaryFields($src)
+	{
+		if (!isset($this->secondaryFields[$src]))
+		{
+			$this->secondaryFields[$src] = array();
+		}
+
+		for($i = 1; $i < func_num_args(); ++i)
+		{
+			$this->secondaryFields[$src][] = func_get_arg($i);
+		}			
+	}
+	
 	function toQueryString()
 	{
 		$qs = "";
@@ -631,6 +651,29 @@ class SearchParameters
 	}
 	
 	function getClause($handler, $modifier, $field, $value)
+	{
+		$clause = array();
+
+		$clause[] = $this->_getClause($handler, $modifier, $field, $value);
+		
+		if (isset($this->secondaryFields[$field]))		
+		{
+			$secondaries = $this->secondaryFields[$field];
+
+			foreach($secondaries as $secondary)
+			{
+				$clause[] = $this->_getClause($handler, $modifier, $field, $value);
+			}
+			
+			return "(".implode(" OR ", $clause).") ";
+		}
+		else
+		{
+			return $clause[0];
+		}		
+	}
+	
+	function _getClause($handler, $modifier, $field, $value)
 	{
 		$clause = "";
 			
