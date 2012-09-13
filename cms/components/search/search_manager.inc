@@ -89,7 +89,6 @@ class SearchManager
 		if (is_object($params))
 		{
 			$class_array = $_REQUEST["searchable_classes:"];
-			var_dump($class_array);
 		}
 		
 		foreach(SearchManager::$map as $component => $searchables)
