@@ -86,6 +86,12 @@ class SearchManager
 		
 		SearchManager::buildSearchMap();
 		
+		if (is_object($params))
+		{
+			$class_array = $params->get("searchable_classes", "");
+			var_dump($class_array);
+		}
+		
 		foreach(SearchManager::$map as $component => $searchables)
 		{
 			Fakoli::using($component);
