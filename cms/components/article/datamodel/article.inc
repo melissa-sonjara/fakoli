@@ -138,6 +138,10 @@ class Article extends DataItem implements Searchable
 			{
 				$search->secondaryFields("tags", "message");
 			}
+			else
+			{
+				$search->remapField("text", "message");
+			}
 			
 			$constraint = $search->generateConstraint();
 			$constraint .= " AND published=1";
