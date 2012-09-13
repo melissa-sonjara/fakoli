@@ -662,7 +662,7 @@ class SearchParameters
 
 			foreach($secondaries as $secondary)
 			{
-				$clause[] = $this->_getClause($handler, $modifier, $field, $value);
+				$clause[] = $this->_getClause($handler, $modifier, $secondary, $value);
 			}
 			
 			return "(".implode(" OR ", $clause).") ";
