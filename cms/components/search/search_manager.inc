@@ -88,7 +88,7 @@ class SearchManager
 		
 		if (is_object($params))
 		{
-			$class_array = $params->get("searchable_classes", "");
+			$class_array = $_REQUEST["searchable_classes:"];
 			var_dump($class_array);
 		}
 		
@@ -98,6 +98,8 @@ class SearchManager
 			
 			foreach($searchables as $searchable)
 			{
+				if ($class_array && !array_key_exists($searchable, $class_array)) continue;
+				
 				$obj = new $searchable;
 				$results = $obj->search($params);
 				$searchResults = array_merge($searchResults, $results);
