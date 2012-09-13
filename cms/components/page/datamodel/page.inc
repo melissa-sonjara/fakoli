@@ -216,7 +216,7 @@ class Page extends DataItem implements Searchable
 			$search->remapField("title", "page_title");
 			$search->remapField("keywords", "meta_tag_keyword");
 			
-			if (!$search->get("text:like"))
+			if (!$search->get("text", "like"))
 			{
 				$search->secondaryFields("meta_tag_keyword", "description");
 			}
