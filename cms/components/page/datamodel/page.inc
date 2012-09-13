@@ -217,10 +217,9 @@ class Page extends DataItem implements Searchable
 			
 			if (!$search->get("text:like"))
 			{
-				$search->copyField("keywords:like", "text:like");
+				$search->secondaryFields("keywords", "description");
 			}
 
-			$search->remapField("text", "message");
 			$search->remapField("keywords", "meta_tag_keyword");
 			
 			$constraint = $search->generateConstraint();
