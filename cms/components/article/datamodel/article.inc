@@ -132,12 +132,13 @@ class Article extends DataItem implements Searchable
 			$search = clone $params;
 			$search->target = $this;
 			
+			$search->remapField("keywords", "tags");
+			
 			if (!$search->get("text:like"))
 			{
-				$search->secondaryFields("keywords", "message");
+				$search->secondaryFields("tags", "message");
 			}
 			
-			$search->remapField("keywords", "tags");
 			$constraint = $search->generateConstraint();
 			$constraint .= " AND published=1";
 			
