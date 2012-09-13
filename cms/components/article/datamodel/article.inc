@@ -144,7 +144,7 @@ class Article extends DataItem implements Searchable
 			}
 			
 			$constraint = $search->generateConstraint();
-			$constraint .= " AND published=1";
+			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
 			
 			$articles = Query::create(Article, $constraint)
 						  ->execute();
