@@ -573,7 +573,7 @@ class SearchParameters
 			$this->secondaryFields[$src] = array();
 		}
 
-		for($i = 1; $i < func_num_args(); ++i)
+		for($i = 1; $i < func_num_args(); ++$i)
 		{
 			$this->secondaryFields[$src][] = func_get_arg($i);
 		}			
