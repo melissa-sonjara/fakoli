@@ -70,10 +70,12 @@ class DataListView
 	var $height;
 	var $scrollable = false;
 	var $resizable  = true;
-	var $rowId = false;				///< whether to include an id tag for each tr row
-	var $dragReorder = false; 		///< Enabled drag & drop reordering
-	var $reorderHandler = null;		///< Handler script that implements reordering records
-	var $dragColumnReorder = false;	///< Enable drag & drop column reordering and show/hide capabilities
+	var $rowId = false;					///< whether to include an id tag for each tr row
+	var $dragReorder = false; 			///< Enabled drag & drop reordering
+	var $reorderHandler = null;			///< Handler script that implements reordering records
+	var $dragColumnReorder = false;		///< Enable drag & drop column reordering and show/hide capabilities
+	var $columnReorderCallback = null;	///< Javascript callback function that is triggered when columns are reordered
+	
 	var $dragText = "";				///< Optional text to display above reorderable table
 	// Selection and Commands
 	
@@ -153,6 +155,25 @@ class DataListView
 		return $this;
 	}
 
+	/**
+	 * Override the column order
+	 * @param array $order An array of column titles in the order they are to be displayed
+	 */
+	function setColumnOrder($order)
+	{
+		$columnsByTitle = reindexList($this->columns, "title");
+		$columns = array();
+		foreach($order as $title)
+		{
+			if (array_key_exists($title, $columnsByTitle))
+			{
+				$columns[] = $columnsByTitle[$title];
+			}
+		}
+		
+		$this->columns = $columns;
+	}
+	
 	/**
 	 * Adds a selector column to the DataListView. If no format is specified
 	 * then selection is handled via a checklist box for the list objects' primary keys.
@@ -340,7 +361,8 @@ class DataListView
 			
 			if ($this->dragColumnReorder)
 			{
-				$script .= "\n\tnew DraggableColumnTable('{$this->id}');";
+				$options = ($this->columnReorderCallback) ? ", {onColumnsReordered: $this->columnReorderCallback}" : "";
+				$script .= "\n\tnew DraggableColumnTable('{$this->id}'$options);";
 			}
 				
 			$script .= "\n\t});\n\t</script>\n";

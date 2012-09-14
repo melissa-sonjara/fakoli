@@ -93,14 +93,15 @@ var DraggableTable = new Class({
 
 var DraggableColumnTable = new Class({
 	
-	Implements: [Options],
+	Implements: [Options, Events],
 	elements: [],
 	table: Class.Empty,
 	clone: Class.Empty,
 	container: Class.Empty,
 	options:
 	{
-		dragDelay: 250
+		dragDelay: 250,
+		onColumnsReordered: Class.Empty
 	},
 	
 	initialize: function(table, options)
@@ -204,5 +205,6 @@ var DraggableColumnTable = new Class({
 			kids[this.dragIndex].inject(kids[this.dropIndex], position);
 		}.bind(this));
 		
+		this.fireEvent('columnsReordered', [this.container.getChildren()]);
 	}
 });
