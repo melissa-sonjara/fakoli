@@ -322,10 +322,10 @@ class ReportManager
 		}
 		
 		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
-		if(isset($this->request["__excel"]))
-		{
+		//if(isset($this->request["__excel"]))
+		//{
 			$report->excelFile = $reportTitle . ".xls";
-		}
+		//}
 		/* to do - pdf output 
 		else
 		{
@@ -424,7 +424,7 @@ class ReportManager
 
 		if ($mode != "save")
 		{
-			$_REQUEST = $proto->request;
+			//$_REQUEST = $proto->request;
 		}
 		
 		$instance = new $cl;
