@@ -369,7 +369,7 @@ class ReportManager
 		$url = $this->request["identifier"];
 		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
 		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
-		echo "&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
+		echo "\n&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
 	}
 	
 	/*
