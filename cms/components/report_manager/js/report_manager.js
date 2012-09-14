@@ -86,3 +86,11 @@ ReportManager.reportSaved = function(response)
 	
 	$('CustomReport_form__error').set('html', response);
 };
+
+ReportManager.setColumnOrder = function(ths)
+{
+	var arr = [];
+	Array.each(ths, function(th) { arr.push(th.get('text').trim()); });
+	ReportManager.columnOrder = arr.join("|");
+	alert(ReportManager.columnOrder);	
+};
