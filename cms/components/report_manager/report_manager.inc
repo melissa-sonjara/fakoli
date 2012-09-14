@@ -344,11 +344,15 @@ class ReportManager
 		}
 				
 		$report->cssClass = "list small";
-		$this->writeResultsFormButtons();
+		$report->hideExcelIcon = true;
+		
+		$excel = $report->getExcelLink();
+		
+		$this->writeResultsFormButtons($excel);
 		
 		$report->drawView();
 		
-		$this->writeResultsFormButtons();
+		$this->writeResultsFormButtons($excel);
 		
 		$t2 = microtime(true);
 		$elapsed = ($t2 - $t1);
@@ -360,10 +364,11 @@ class ReportManager
 		return $this->selected["column_".codify($column->title)];
 	}
 		
-	function writeResultsFormButtons()
+	function writeResultsFormButtons($excel)
 	{
 		$url = $this->request["identifier"];
 		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
+		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
 		echo "&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
 	}
 	

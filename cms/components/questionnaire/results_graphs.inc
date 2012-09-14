@@ -193,7 +193,6 @@ class QuestionnaireResultsGraph
 		$mean = "Average: ".number_format($totalValue / $totalCount, 1);
 		
 		// Setup the graph.
-		$graph = new Histogram(650,300);
 		$graph = new Histogram("histogram_$question_id", count($datax) * 80 + 100, 400, 50, 10, count($datax) * 80, 300, "standard");
 		$graph->setLabels($datax);
 		$graph->ticks = 10;

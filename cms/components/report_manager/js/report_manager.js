@@ -101,3 +101,13 @@ ReportManager.setColumnOrder = function(ths)
 	Array.each(ths, function(th) { arr.push(th.get('text').trim()); });
 	ReportManager.columnOrder = arr.join("|");
 };
+
+ReportManager.exportToExcel = function(url)
+{
+	if (ReportManager.columnOrder)
+	{
+		url += "&__column_order=" + encodeURIComponent(ReportManager.columnOrder);
+	}
+	
+	go(url);	
+};

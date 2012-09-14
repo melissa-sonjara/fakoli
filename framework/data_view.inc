@@ -75,6 +75,7 @@ class DataListView
 	var $reorderHandler = null;			///< Handler script that implements reordering records
 	var $dragColumnReorder = false;		///< Enable drag & drop column reordering and show/hide capabilities
 	var $columnReorderCallback = null;	///< Javascript callback function that is triggered when columns are reordered
+	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
 	
 	var $dragText = "";				///< Optional text to display above reorderable table
 	// Selection and Commands
@@ -271,6 +272,15 @@ class DataListView
 	}
 	
 	/**
+	 * Get the Excel Link
+	 */
+	function getExcelLink()
+	{
+		$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+		return $_SERVER['REQUEST_URI'].$qs;
+	}
+	
+	/**
 	 * Automatically build the table columns from the given DataItem. Not recommended except for quick and dirty
 	 * pages. This method is called automatically if no columns have been defined before drawing the view.
 	 * @param $item the item to use as a template for the columns.
@@ -295,6 +305,11 @@ class DataListView
 	function writeScript()
 	{
 		$this->setID(); // Set to a default ID if none was specified.
+		
+		if ($_REQUEST["__column_order"])
+		{
+			$this->setColumnOrder(explode("|", $_REQUEST["__column_order"]));
+		}
 		
 		if ($this->excelFile && $_REQUEST["__excel"] == $this->id)
 		{
@@ -484,7 +499,7 @@ class DataListView
 						$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
 					}
 
-					if ($this->excelFile && !$this->menu)
+					if ($this->excelFile && !$this->menu && !$this->hideExcelIcon)
 					{
 ?>
 		<a href='<?echo $_SERVER['REQUEST_URI']."$qs"?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
