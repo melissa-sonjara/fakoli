@@ -5,7 +5,7 @@ var ReportManager = new Class(
 
 ReportManager.updateFilters = function()
 {
-	var table = $('custom_report_table');
+	var table = document.id('custom_report_table');
 	
 	var cboxes = table.getElements("input");
 	
@@ -16,11 +16,11 @@ ReportManager.updateFilters = function()
 			var fieldset = c.value;
 			if (c.checked)
 			{
-				$(fieldset).setStyle('display', 'block');
+				document.id(fieldset).setStyle('display', 'block');
 			}
 			else
 			{
-				$(fieldset).setStyle('display', 'none');
+				document.id(fieldset).setStyle('display', 'none');
 			}
 		}
 		else if (c.name.indexOf("column_") == 0)
@@ -29,21 +29,21 @@ ReportManager.updateFilters = function()
 			{
 				var div = findAncestor(c, "div").getParent();
 				var containerID = div.id.replace("_contents", "");
-				div = $(containerID);
+				div = document.id(containerID);
 				var t = div.getElement("input");
 				if (!t.checked) 
 				{
 					t.checked = true;
-					$(t.value).setStyle('display', 'block');
+					document.id(t.value).setStyle('display', 'block');
 				}
 			}
 		}
 	});
 };
 
-ReportManager.saveReport = function()
+ReportManager.saveReport = function(report_id)
 {
-	ReportManager.dialog = modalPopup("Save Custom Report", "/action/report_manager/save_report", null, null, true);
+	ReportManager.dialog = modalPopup("Save Custom Report", "/action/report_manager/save_report?report_id=" + report_id, null, null, true);
 };
 
 /*
@@ -58,9 +58,9 @@ ReportManager.updateReport = function(report_id)
 
 ReportManager.onSaveReport = function()
 {
-	$('custom_report_title').value = $('CustomReport_form_title').value;
-	$('custom_report_description').value = $('CustomReport_form_description').value;
-	$('custom_report_mode').value = 'save';
+	document.id('custom_report_title').value = document.id('CustomReport_form_title').value;
+	document.id('custom_report_description').value = document.id('CustomReport_form_description').value;
+	document.id('custom_report_mode').value = 'save';
 	ReportManager.commitSave.delay(100);
 		
 	return false;
@@ -68,7 +68,13 @@ ReportManager.onSaveReport = function()
 
 ReportManager.commitSave = function()
 {
-	$('custom_report').submit();
+	var form = document.id('custom_report');
+	var action = form.action;
+	form.target = "";
+	form.action = "";
+	document.id('custom_report').submit();
+	form.action = action;
+	form.target = "_blank";
 };
 
 
@@ -80,17 +86,18 @@ ReportManager.reportSaved = function(response)
 	}
 	
 	// We don't need to reload if saving from report results page
-	var table = $('CustomReports');
+	var table = document.id('CustomReports');
 	if(table)
 		window.location.reload();
 	
-	$('CustomReport_form__error').set('html', response);
+	document.id('CustomReport_form__error').set('html', response);
 };
+
+ReportManager.columnOrder = "";
 
 ReportManager.setColumnOrder = function(ths)
 {
 	var arr = [];
 	Array.each(ths, function(th) { arr.push(th.get('text').trim()); });
 	ReportManager.columnOrder = arr.join("|");
-	alert(ReportManager.columnOrder);	
 };

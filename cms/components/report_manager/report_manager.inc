@@ -117,7 +117,7 @@ class ReportManager
 	var $description;		///< Longer description of the report
 	var $resultsPage = "";	///< The page used to display the search results
 	var $target;			///< The target window for the form results
-	
+	var $columnOrder;		///< Override the default column order
 	var $tables;
 	var $join;
 	var $report;
@@ -183,7 +183,7 @@ class ReportManager
 		
 		echo "<div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'$incomplete/> <strong>Include Incomplete Records in Results</strong>";
 		echo "<br/><input type='checkbox' name='__excel' value='custom_report'$excel/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
-		echo "&nbsp;&nbsp;<button class='button' onclick='ReportManager.saveReport(); return false;'>Save Report</button></div></form>";
+		echo "&nbsp;&nbsp;<button class='button' onclick='ReportManager.saveReport($this->report_id); return false;'>Save Report</button></div></form>";
 	}
 	
 	/**
@@ -314,6 +314,12 @@ class ReportManager
 		}
 		
 		$report->dragColumnReorder = true;
+		$report->columnReorderCallback = "ReportManager.setColumnOrder";
+		
+		if ($this->columnOrder)
+		{
+			$report->setColumnOrder(explode("|",$this->columnOrder));
+		}
 		
 		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
 		if(isset($this->request["__excel"]))
@@ -384,6 +390,7 @@ class ReportManager
 			if(!$this->report_id)
 			{
 				$this->title = "";
+				$this->description = "";
 				// $this->report_id is set in save function
 				$this->save();
 			}
@@ -401,25 +408,31 @@ class ReportManager
 		$report->user_id = $user->user_id;
 		$report->configuration = serialize($this);
 		$report->manager_class = get_class($this);
+		$report->column_order = $this->columnOrder;
 		
 		$report->save();
 		
 		$this->report_id = $report->report_id;
 	}
 	
-	static function load($report_id)
+	static function load($report_id, $mode = "")
 	{
 		$report = new CustomReport($report_id);
 
 		$proto = unserialize($report->configuration);
 		$cl = get_class($proto);
 
-		$_REQUEST = $proto->request;
+		if ($mode != "save")
+		{
+			$_REQUEST = $proto->request;
+		}
 		
 		$instance = new $cl;
-		$instance->request = $proto->request;
+		$instance->request = ($mode == "save") ? $_REQUEST : $proto->request;
 		
 		$instance->populateSelected();
+		$instance->columnOrder = $report->column_order;
+		$instance->report_id = $report_id;
 		return $instance;
 
 	}

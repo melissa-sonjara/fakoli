@@ -43,6 +43,7 @@ class CustomReport extends DataItem
 						"title"			=>	String,
 						"description"	=>	Text,
 						"configuration"	=>	Text,
+						"column_order"	=>	String,
 						"user_id"		=>	Number,
 						"shared"		=>	Boolean);
 	

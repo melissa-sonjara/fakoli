@@ -39,7 +39,8 @@ class ReportManagerUpgradeManager extends UpgradeManager
 			"1.0"		=>	"done:Initial Installation",
 			"1.1"		=>	"sql:Added table for persisting custom reports",
 			"1.2"		=>	"sql:change configuration column to longtext; add column user_id",
-			"1.3"		=>	"sql:Added 'shared' field to custom reports"
+			"1.3"		=>	"sql:Added 'shared' field to custom reports",
+			"1.4"		=>	"sql:Added 'column_order' field to custom reports to allow custom column reordering"
 	);
 	
 	function ReportManagerUpgradeManager()

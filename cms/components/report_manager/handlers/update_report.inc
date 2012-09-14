@@ -40,11 +40,12 @@ if(!$report_id)
 	
 $report = new CustomReport($report_id);
 
-$report->filter = new InclusionFilter("title", "description");
+$report->filter = new InclusionFilter("title", "description", "column_order");
 
 $form = new AutoForm($report, "POST", "/action/report_manager/update_report?report_id=$report_id");
 
 $form->required("title");
+$form->hide("column_order");
 
 $form->ajaxSubmit("function(result) {ReportManager.reportSaved(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 	
@@ -64,3 +65,9 @@ echo $form->writeScript();
 $form->drawForm();
 
 ?>
+<script type="text/javascript">
+window.addEvent('domready', function()
+{
+	document.id('CustomReport_form_column_order').value = ReportManager.columnOrder;
+});
+</script>
