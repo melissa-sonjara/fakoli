@@ -162,6 +162,7 @@ class Histogram
 		
 		$animate = $this->animate ? "true" : "false";
 		$shadow = $this->shadow ? "true": "false";	
+		$emboss = $this->emboss? "true" : "false";
 		$legend = $this->legend ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
@@ -194,6 +195,7 @@ window.addEvent('domready', function ()
 		strokeWidth: {$this->strokeWidth},
 		animate: {$animate},
 		shadow: {$shadow},
+		emboss: {$emboss},
 		legend: {$legend},
 		legendX: {$this->legendX},
 		legendY: {$this->legendY},
