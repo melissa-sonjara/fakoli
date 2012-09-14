@@ -487,7 +487,7 @@ class DataListView
 					if ($this->excelFile && !$this->menu)
 					{
 ?>
-		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+		<a href='<?echo $_SERVER['REQUEST_URI']."$qs"?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
 <?									
 					}
 					else if ($this->menu)
