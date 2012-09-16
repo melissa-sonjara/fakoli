@@ -265,6 +265,17 @@ var Histogram = new Class(
 		series.index = this.series.length - 1;
 	},
 	
+	updateSeries: function(index, values)
+	{
+		this.series[index].values = values;
+		this.series[index].morph(this.series[index]);
+	},
+	
+	updateTooltips: function(index, tips)
+	{
+		this.series[index].options.tooltips = tips;
+	},
+	
 	drawChart: function()
 	{
 		this.createChart();
