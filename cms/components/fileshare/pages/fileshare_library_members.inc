@@ -87,9 +87,13 @@ $param = "?document_library_id=$document_library_id";
 ?>
 </div>
 <div id="submit_block">
+<div style="float: left">
 <a class="button" href="fileshare_library_form<?php echo $param ?>">BACK</a>
+</div>
 <div style="float: right">
 <a class="button" href="fileshare_library_files<?php echo $param ?>">CONTINUE</a>
-</div></div>
+</div>
+<div style="clear: both"></div>
+</div>
 </div>
 </td></tr></table></div></div>
