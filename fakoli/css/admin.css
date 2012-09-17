@@ -17,6 +17,11 @@ img
 	border: none;
 }
 
+a
+{
+	outline: none;
+}
+
 table
 {
 	vertical-align: top;
@@ -439,6 +444,11 @@ input, textarea, select
 {
 	border: solid 1px #666;
 	background: #eef;
+}
+
+input.checkbox
+{
+	border: none;
 }
 
 .scrollbox
