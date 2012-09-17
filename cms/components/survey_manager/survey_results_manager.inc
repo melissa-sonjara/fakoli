@@ -535,7 +535,7 @@ class SurveySpreadsheetView extends SurveyResultsView
 	function buildTable($spreadsheetResponses, $questions)
 	{
 		$table = new DataListView($spreadsheetResponses, "surveySpreadsheet");
-		$table->column($this->mgr->getRespondentColumnHeading(), "{name}", true, "width: 40px");
+		$table->column($this->mgr->getRespondentColumnHeading(), "{name:stripHTML}", true, "width: 40px");
 
 		if(count($questions) > 0)
 		{
