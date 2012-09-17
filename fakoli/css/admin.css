@@ -449,6 +449,7 @@ input, textarea, select
 input.checkbox
 {
 	border: none;
+	background: transparent;
 }
 
 .scrollbox
