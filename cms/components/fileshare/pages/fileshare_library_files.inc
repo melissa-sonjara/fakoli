@@ -54,6 +54,10 @@ $mgr = new FileshareManager($library);
 $mgr->width = 640;
 
 $script .= $mgr->writeScript();
+?>
+<div id="fileshare_content">
+<?
+
 if ($tabs) $tabs->writeHTML();
 
 ?>
@@ -63,4 +67,4 @@ if ($tabs) $tabs->writeHTML();
 $mgr->drawView();
 
 ?>
-</div>
+</div></div>

@@ -70,6 +70,9 @@ if ($method == "POST")
 
 
 $script .= $form->writeScript();
+?>
+<div id="fileshare_content">
+<?
 $tabs->writeHTML();
 ?>
 <div id="tab_border">
@@ -80,4 +83,4 @@ function setLibraryIdentifier(&$form)
 {
 	FileshareManager::setLibraryIdentifier($form);
 }
-?></div>
+?></div></div>

@@ -77,6 +77,9 @@ window.addEvent('domready', function()
 });
 </script>
 ENDSCRIPT;
+?>
+<div id="fileshare_content">
+<?
 if($tabs)
 {
 	$tabs->writeHTML();
@@ -124,4 +127,4 @@ if($tabs)
 </div>
 <?php 
 }
-?>
+?></div>
