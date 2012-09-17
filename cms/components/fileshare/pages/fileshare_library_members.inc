@@ -87,10 +87,10 @@ $param = "?document_library_id=$document_library_id";
 ?>
 </div>
 <div id="submit_block">
-<div style="float: left">
+<div style="float: left; padding: 2px 0">
 <a class="button" href="fileshare_library_form<?php echo $param ?>">BACK</a>
 </div>
-<div style="float: right">
+<div style="float: right; padding: 2px 0">
 <a class="button" href="fileshare_library_files<?php echo $param ?>">CONTINUE</a>
 </div>
 <div style="clear: both"></div>
