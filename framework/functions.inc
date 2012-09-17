@@ -826,37 +826,6 @@ function stripHTML($text)
 	return $text;
 }
 
-
-/**
- * Runs a query, returns the first field in each row of the resultset as a comma-delimited list.
- * 
- * @param string $query the query to run.
- * 
- * Deprecated
- */
-function queryList($query)
-{
-	$result = mssql_query($query) or die("Query Failed");
-	
-	$first = true;
-	$text = "";
-	
-	while ($row = mssql_fetch_row($result))
-	{
-		if (!$first)
-		{
-			$text .= ", ";
-		}
-		
-		$text .= $row[0];
-		$first = false;
-	}
-	
-	mssql_free_result($result);
-	
-	return $text; 	
-}
-
 /**
  * Parse out multiple values from the provided collection that have the same
  * root name, and return the results in an array.
