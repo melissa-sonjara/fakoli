@@ -89,7 +89,7 @@ if($tabs)
 }
 ?>
 <table id="library_search" class="layout" style="width: auto"><tr><td>
-<table class="layout">
+<table class="layout" style="width: 100%">
 <tr>
 <td style="width: 40%">
 <h3>Files in <?echo $library->name?></h3>
