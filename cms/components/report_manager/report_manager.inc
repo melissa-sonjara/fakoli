@@ -188,7 +188,8 @@ class ReportManager
 		
 		echo "<div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'$incomplete/> <strong>Include Incomplete Records in Results</strong>";
 		echo "<br/><input type='checkbox' name='__excel' value='custom_report'$excel/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
-		echo "&nbsp;&nbsp;<button class='button' onclick='ReportManager.saveReport($this->report_id); return false;'>Save Report</button></div></form>";
+		//echo "&nbsp;&nbsp;<button class='button' onclick='ReportManager.saveReport($this->report_id); return false;'>Save Report</button>";
+		echo "</div></form>";
 	}
 	
 	/**
