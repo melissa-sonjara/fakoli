@@ -131,6 +131,11 @@ class ReportManager
 		$this->report_id = 0;
 		$this->tables = array();
 		$this->request = $_REQUEST; // For config serialization
+		if ($this->request["custom_report_mode"] == "save")
+		{
+			$this->title = $this->request["custom_report_title"];
+			$this->description = $this->request["custom_report_description"];
+		}		
 	}
 	
 	function __sleep()
