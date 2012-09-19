@@ -94,7 +94,7 @@ if($tabs)
 <td style="width: 40%">
 <h3>Files in <?echo $library->name?></h3>
 </td>
-<td>
+<td style="text-align: right">
 <form id="keyword_search_form" method="GET" action="">
 <label for='keyword'>Keyword</label>
 <input id='LibrarySearch_form_keyword' type='text' name='keyword' autocomplete='off' value='' size='20'/>
