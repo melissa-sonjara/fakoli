@@ -160,7 +160,7 @@ window.addEvent('domready', function ()
 });
 </script>
 ENDSCRIPT;
-		echo "<div id='{$this->id}' style='width: {$containerWidth}; height {$containerHeight}'></div>";
+		echo "<div id='{$this->id}' style='width: {$containerWidth}; height: {$containerHeight}'></div>";
 	}	
 }
 ?>
