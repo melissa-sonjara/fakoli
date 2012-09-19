@@ -374,39 +374,28 @@ class ReportManager
 	function writeResultsFormButtons($excel)
 	{
 		$url = $this->request["identifier"];
-		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
+		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport(\"{$this->report_id}\"); return false;'>Save Report</a>\n";
 		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
 		echo "\n&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
 	}
 	
-	/*
-	 * Save every report each time the user generates
-	 * in case they decide after generate that they
-	 * want to save it. This presave record will have
-	 * a blank title so before saving another, chekc
-	 * if that user already has a saved temp report
-	 * with no title (a report they didn't want to really
-	 * save).
-	 *  
+	/**
+	 * Alternative implementation - presave version of
+	 * report is stored in session with a 
 	 */
 	function preSaveReport()
-	{
+	{		
 		global $user;
 		
-		if(!$this->report_id)
+		if (!$this->report_id)
 		{
-			$this->report_id = Query::create(CustomReport, "WHERE manager_class=:manager_class AND user_id=:user_id AND title=''")
-				->bind(":manager_class", get_class($this), ":user_id", $user->user_id)
-				->executeValue("MAX(report_id)");
+			$sleeper = serialize($this);
+			$mgr = new UserManager();
 			
-			if(!$this->report_id)
-			{
-				$this->title = "";
-				$this->description = "";
-				// $this->report_id is set in save function
-				$this->save();
-			}
-		}
+			$this->report_id = "tmp-" .sha1($user->get($mgr->getUsernameField()) . $sleeper . now());
+			$_SESSION[$this->report_id] = $sleeper;
+			$_SESSION[$this->report_id . "-class"] = get_class($this);				
+		}	
 	}
 		
 	function save()
