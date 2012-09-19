@@ -116,6 +116,7 @@ class ReportManager
 	var $title;				///< Title of the report
 	var $description;		///< Longer description of the report
 	var $resultsPage = "";	///< The page used to display the search results
+	var $editorPage = "";	///< The page used to display the report editor
 	var $target;			///< The target window for the form results
 	var $columnOrder;		///< Override the default column order
 	var $tables;
@@ -373,7 +374,8 @@ class ReportManager
 		
 	function writeResultsFormButtons($excel)
 	{
-		$url = $this->request["identifier"];
+		$url = $this->editorPage;
+		echo "<p><a class='button' href='#' onclick='window.history.back(); return false;'>&laquo; Back to Previous Page</a></p>";
 		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport(\"{$this->report_id}\"); return false;'>Save Report</a>\n";
 		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
 		echo "\n&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
