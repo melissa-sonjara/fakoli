@@ -59,6 +59,8 @@ $article->article_type = $blog->title;
 
 $form = BlogManager::buildBlogArticleForm($article, $blog);
 
+$form->hide("sort_order");
+
 if ($method == "POST")
 {
 	if ($form->save())
