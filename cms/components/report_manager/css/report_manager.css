@@ -34,7 +34,7 @@ div.report_table h3
 
 div.report_table div.columns
 {
-	padding: 0 10px;
+	padding: 5px 10px 10px;
 	background: #fff;
 	border-radius: 0 0 8px 8px;
 	overflow: hidden;
