@@ -383,10 +383,13 @@ class QuestionnaireForm
 				}
 				else
 				{
-					$answer = new $answerClass($answer->$aPk);
-					$answer->filter = new InclusionFilter("value");
-					$answer->value = $valueAnswer;
-					$answer->save();
+					if ($answer->$aPk)
+					{
+						$answer = new $answerClass($answer->$aPk);
+						$answer->filter = new InclusionFilter("value");
+						$answer->value = $valueAnswer;
+						$answer->save();
+					}
 				}
 			}
 		}
