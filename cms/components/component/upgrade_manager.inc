@@ -383,11 +383,14 @@ abstract class UpgradeManager
 	{
 		try
 		{
+			trace("Executing SQL Statements", 2);
+			
 			$db = ConnectionManager::getConnection();
 			$db->beginTransaction();
 	
 			foreach($sqlStatements as $sqlStatement)
 			{
+				trace($sqlStatement, 2);
 				$db->exec($sqlStatement);	
 			}
 
