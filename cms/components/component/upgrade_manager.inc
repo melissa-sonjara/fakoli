@@ -370,7 +370,7 @@ abstract class UpgradeManager
 		{
 			trace("UpgradeManager:: processing update schema line $line", 4);
 			$sqlStatement .= $line;
-			if(preg_match("/;\s$/", $line))
+			if(preg_match("/;\s*$/", $line))
 			{
 				$sqlStatements[] = $sqlStatement;
 				$sqlStatement = "";
