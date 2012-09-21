@@ -10,6 +10,11 @@
 	margin-top: 20px;
 }
 
+body.ie7 #custom_report
+{
+	padding-top: 20px;
+}
+
 #report_table_navigator
 {
 	width: 300px;
