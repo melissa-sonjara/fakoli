@@ -38,9 +38,9 @@ ENDSCRIPT;
 			
 			echo "<div id='$tableID' class='report_table$selected'>\n";
 			echo "<input type='checkbox' style='display: none' name='$tableID' value='{$table->class}'$checked/>";
-			echo "<h3>".$table->getTitle();
+			echo "<h3>";
 			if ($table->help) echo "<a href='#' class='report_table_help_icon'><img src='/fakoli/images/context_help.png' alt='Help'/></a><div class='report_table_help'>{$table->help}</div>";
-			echo "</h3>\n";
+			echo $table->getTitle()."</h3>\n";
 			echo "<div class='columns'>";
 			echo "<div style='display: inline-block; width: 100%'><a class='select_all' id='{$tableID}_select_all'>Select All</a><a class='show_all' id='{$tableID}_show_all'>Show All Fields</a></div>\n";
 
