@@ -17,6 +17,7 @@ var ReportTableNavigator = new Class(
 			var columns = columnContainer.getElements(".column");
 			var selectAll = table.getElement(".select_all");
 			var showAll = table.getElement(".show_all");
+			var helpIcon = table.getElement("a.report_table_help_icon");
 			
 			if (!table.hasClass('selected_table'))
 			{
@@ -43,6 +44,11 @@ var ReportTableNavigator = new Class(
 			table.selectedCheckbox = table.getElement("input[type=checkbox]");
 			table.columnContainer = columnContainer;
 			
+			if (helpIcon)
+			{
+				helpIcon.addEvent('click', function(e) { this.toggleHelp(helpIcon); }.bind(this));
+			}
+			
 		}.bind(this));
 		
 		this.filters = this.container.getElements(".report_filter");
@@ -54,7 +60,7 @@ var ReportTableNavigator = new Class(
 			filter.filterForm = filter.getElement(".filter");
 			var heading = filter.getElement('h3');
 			
-			heading.addEvent('click', function(e) { this.toggleFilter(filter); }.bind(this));			
+			heading.addEvent('click', function(e) { new Event(e).stop(); this.toggleFilter(filter); }.bind(this));			
 		}.bind(this));
 	},
 	
@@ -126,7 +132,7 @@ var ReportTableNavigator = new Class(
 		}
 		else
 		{
-			table.tween('background-color', '#7f94b5');
+			table.tween('background-color', '#AEBFDA');
 			columns.morph({'background-color': '#ffffff', 'color': '#666666'});
 			table.selectedCheckbox.checked = false;
 			fade = new Fx.Tween(table.filter, {property: 'opacity'});
@@ -207,6 +213,20 @@ var ReportTableNavigator = new Class(
 		else
 		{
 			form.dissolve();
+		}
+	},
+	
+	toggleHelp: function(icon)
+	{
+		var help = icon.getElement("div.report_table_help");
+		help.position({relativeTo: icon, position: 'bottomLeft', edge: 'topLeft'});
+		if (help.getStyle('opacity') == 0)
+		{
+			help.fade('in');
+		}
+		else
+		{
+			help.fade('out');
 		}
 	}
 });
