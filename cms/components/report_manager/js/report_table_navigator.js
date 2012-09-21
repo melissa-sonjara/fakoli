@@ -210,10 +210,12 @@ var ReportTableNavigator = new Class(
 		if (form.getStyle('display') == 'none')
 		{
 			form.reveal();
+			filter.removeClass("collapsed");
 		}
 		else
 		{
 			form.dissolve();
+			filter.addClass("collapsed");
 		}
 	},
 	

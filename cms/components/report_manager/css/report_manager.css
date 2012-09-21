@@ -126,11 +126,16 @@ div.report_table .show_all
 div.report_filter
 {
 	border: solid 1px #666;
-	background-color: #444;
+	background: url(/components/report_manager/images/report_filter_open.png) top right no-repeat #444;
 	border-radius: 10px;
 	box-shadow: 1px 1px 5px #666;
 	margin-bottom: 10px;
 	cursor: pointer;
+}
+
+div.report_filter.collapsed
+{
+	background-image: url(/components/report_manager/images/report_filter_closed.png);
 }
 
 div.report_filter h3
