@@ -126,6 +126,16 @@ var ReportTableNavigator = new Class(
 			table.tween('background-color', '#002a6c');
 			columns.morph({'background-color': '#d7dee7', 'color': '#000000'});
 			table.selectedCheckbox.checked = true;
+			
+			this.filters.each(function (f)
+			{
+				if (f != table.filter && f.getStyle("display") == "block" && !f.hasClass("collapsed"))
+				{
+					f.filterForm.dissolve();
+					f.addClass("collapsed");
+				}
+			});
+			
 			if (table.filter.getStyle('display') != 'block')
 			{
 				table.filter.setStyles({'display': 'block', 'opacity': 0}).fade('in');
