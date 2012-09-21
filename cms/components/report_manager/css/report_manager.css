@@ -18,7 +18,7 @@
 div.report_table
 {
 	border: solid 1px #666;
-	background-color: #7f94b5;
+	background-color: #AEBFDA;
 	border-radius: 10px;
 	box-shadow: 1px 1px 5px #666;
 	margin-bottom: 10px;
@@ -30,6 +30,29 @@ div.report_table h3
 	color: #fff;
 	padding: 5px 10px;
 	margin: 0;
+}
+
+a.report_table_help_icon
+{
+	float: right;
+}
+
+div.report_table_help
+{
+	position: absolute;
+	border: solid 1px #000;
+	background-color: #ffffdd;
+	color: #000;
+	white-space: normal;
+	margin: 4px;
+	padding: 4px;
+	font-size: 10pt;
+	z-index: 120;
+	font-weight: normal;
+	-moz-box-shadow: 3px 3px 8px #666; 
+	box-shadow: 3px 3px 8px #666; 
+	border-radius: 5px;
+	visibility: hidden;	
 }
 
 div.report_table div.columns

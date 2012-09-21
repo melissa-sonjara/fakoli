@@ -450,6 +450,7 @@ class ReportTable
 	var $form;
 	var $constraints;
 	var $params;
+	var $help;
 	var $excludedKeys;
 	var $columns = array();
 	var $footerColumns = array();
@@ -472,6 +473,7 @@ class ReportTable
 		$this->params = new SearchParameters($this->proto);
 		
 		$this->excludedKeys = array();
+		$this->help = "";
 	}
 
 	// Control Serialization ----

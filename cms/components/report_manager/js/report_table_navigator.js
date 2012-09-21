@@ -46,7 +46,8 @@ var ReportTableNavigator = new Class(
 			
 			if (helpIcon)
 			{
-				helpIcon.addEvent('click', function(e) { this.toggleHelp(helpIcon); }.bind(this));
+				helpIcon.addEvent('mouseover', function(e) { this.showHelp(helpIcon); }.bind(this));
+				helpIcon.addEvent('mouseout', function(e) { this.hideHelp(helpIcon); }.bind(this));
 			}
 			
 		}.bind(this));
@@ -216,17 +217,16 @@ var ReportTableNavigator = new Class(
 		}
 	},
 	
-	toggleHelp: function(icon)
+	showHelp: function(icon)
 	{
-		var help = icon.getElement("div.report_table_help");
+		var help = icon.getNext();
 		help.position({relativeTo: icon, position: 'bottomLeft', edge: 'topLeft'});
-		if (help.getStyle('opacity') == 0)
-		{
-			help.fade('in');
-		}
-		else
-		{
-			help.fade('out');
-		}
+		help.fade('in');
+	},
+	
+	hideHelp: function(icon)
+	{
+		var help = icon.getNext();
+		help.fade('out');
 	}
 });
