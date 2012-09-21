@@ -150,7 +150,7 @@ class DocumentSearchResult extends AbstractSearchResult
 {
 	var $item;
 	
-	function PageSearchResult($item)
+	function DocumentSearchResult($item)
 	{
 		$this->item = $item;
 	}
