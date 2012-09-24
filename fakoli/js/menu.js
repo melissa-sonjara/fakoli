@@ -85,7 +85,11 @@ var FakoliMenu = new Class({
 							{
 								elt.blockClick = function(event) { new Event(event).stop(); return false; };
 								elt.addEvent('click', elt.blockClick.bind(elt));
-							}
+								elt.getChildren('a').each(function(child)
+								{
+									child.addEvent('touchend', function(event) { new Event(event).stop(); go(child.href); });
+								});
+							}							
 						},
 						
 						'mouseover': function() 
