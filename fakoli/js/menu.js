@@ -82,6 +82,11 @@ var FakoliMenu = new Class({
 					'touchstart': function()
 					{
 						menu.showMenu(elt);
+						if (!elt.blockClick)
+						{
+							elt.blockClick = function(event) { new Event(event).stop(); return true; };
+							elt.addEvent('click', elt.blockClick.bind(elt));
+						}
 					},
 					
 					'mouseover': function() 
