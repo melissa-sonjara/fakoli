@@ -682,6 +682,11 @@ class DataListView
 				if ($retval === false) continue;
 			}
 						
+			foreach($this->totalCallbacks as $cb)
+			{
+				call_user_func($cb, $item);
+			}
+
 			foreach($this->columns as $column)
 			{
 				if($column->onExport)
