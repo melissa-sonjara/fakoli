@@ -75,30 +75,30 @@ var FakoliMenu = new Class({
 					{
 						ul.setStyle('opacity', 0);
 					}
-				}
-				
-				elt.addEvents(
-				{
-					'touchstart': function()
-					{
-						menu.showMenu(elt);
-						if (!elt.blockClick)
-						{
-							elt.blockClick = function(event) { new Event(event).stop(); return true; };
-							elt.addEvent('click', elt.blockClick.bind(elt));
-						}
-					},
 					
-					'mouseover': function() 
-					{ 
-						menu.showMenu(elt);
-					},
-						
-					'mouseout': function() 
+					elt.addEvents(
 					{
-						menu.hideMenu(elt);
-					} 
-				 });
+						'touchstart': function()
+						{
+							menu.showMenu(elt);
+							if (!elt.blockClick)
+							{
+								elt.blockClick = function(event) { new Event(event).stop(); return true; };
+								elt.addEvent('click', elt.blockClick.bind(elt));
+							}
+						},
+						
+						'mouseover': function() 
+						{ 
+							menu.showMenu(elt);
+						},
+							
+						'mouseout': function() 
+						{
+							menu.hideMenu(elt);
+						} 
+					 });
+				}
 			});
 		//}
 	},
