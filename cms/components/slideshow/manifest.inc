@@ -73,13 +73,13 @@ class SlideshowManifest
 	{
 		global $html_editor_extra_buttons;
 
-		$html_editor_extra_buttons[] =
+		/*$html_editor_extra_buttons[] =
 				array("name"	=>	"slideshow_picker",
 					  "image"	=>	"/fakoli/images/slideshow_button.png", 
 					  "tooltip"	=>	"Insert a Slideshow", 
 					  "url"		=>	"/slideshow_picker",
 					  "width"	=>	"500px",
-					  "height"	=>	"400px");
+					  "height"	=>	"400px"); */
 	}
 }
 
