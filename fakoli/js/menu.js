@@ -83,7 +83,7 @@ var FakoliMenu = new Class({
 							menu.showMenu(elt);
 							if (!elt.blockClick)
 							{
-								elt.blockClick = function(event) { new Event(event).stop(); return true; };
+								elt.blockClick = function(event) { new Event(event).stop(); return false; };
 								elt.addEvent('click', elt.blockClick.bind(elt));
 							}
 						},
