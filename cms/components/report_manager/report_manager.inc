@@ -360,7 +360,10 @@ class ReportManager
 		
 		$report->drawView();
 		
-		$this->writeResultsFormButtons($excel);
+		if (count($results))
+		{
+			$this->writeResultsFormButtons($excel);
+		}
 		
 		$t2 = microtime(true);
 		$elapsed = ($t2 - $t1);
