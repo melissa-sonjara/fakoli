@@ -375,7 +375,7 @@ class ReportManager
 	function writeResultsFormButtons($excel)
 	{
 		$url = $this->editorPage;
-		echo "<p><a class='button' href='#' onclick='window.history.back(); return false;'>&laquo; Back to Previous Page</a></p>";
+		echo "<p><a class='button' href='#' onclick='go(\"{$url}?report_id={$this->report_id}&edit=1\"); return false;'>&laquo; Edit Report Settings</a></p>";
 		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport(\"{$this->report_id}\"); return false;'>Save Report</a>\n";
 		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
 		echo "\n&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
@@ -420,24 +420,41 @@ class ReportManager
 	
 	static function load($report_id, $mode = "")
 	{
-		$report = new CustomReport($report_id);
-
-		$proto = unserialize($report->configuration);
-		$cl = get_class($proto);
-
-		if ($mode != "save")
+		if (is_numeric($report_id))
 		{
-			//$_REQUEST = $proto->request;
+			$report = new CustomReport($report_id);
+	
+			$proto = unserialize($report->configuration);
+			$cl = get_class($proto);
+	
+			if ($mode != "save")
+			{
+				//$_REQUEST = $proto->request;
+			}
+			
+			$instance = new $cl;
+			$instance->request = ($mode == "save") ? $_REQUEST : $proto->request;
+			
+			$instance->populateSelected();
+			$instance->columnOrder = $report->column_order;
+			$instance->report_id = $report_id;
+			return $instance;
 		}
-		
-		$instance = new $cl;
-		$instance->request = ($mode == "save") ? $_REQUEST : $proto->request;
-		
-		$instance->populateSelected();
-		$instance->columnOrder = $report->column_order;
-		$instance->report_id = $report_id;
-		return $instance;
-
+		else if (startsWith($report_id, "tmp-"))
+		{
+			$proto = unserialize($_SESSION[$report_id]);
+			$cl = get_class($proto);
+			$instance = new $cl;
+			$instance->request = $proto->request;
+			$instance->populateSelected();
+			$instance->columnOrder = $report->column_order;
+			$instance->report_id = 0;
+			return $instance;
+		}
+		else
+		{
+			throw new FakoliException("Invalid report id");
+		}
 	}
 }
 
