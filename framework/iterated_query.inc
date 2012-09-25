@@ -60,7 +60,7 @@ class DataItemIterator implements Iterator, Countable
 	public function count()
 	{
 		$this->rewind();
-		trace("Row Count: {$this->query->rowCount}", 3);
+		trace("Row Count: {$this->query->rowCount}", 4);
 		return $this->query->rowCount;		
 	}
 	
