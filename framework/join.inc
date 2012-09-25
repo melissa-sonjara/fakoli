@@ -142,7 +142,7 @@ class JoinResultIterator implements Iterator, Countable
 	public function count()
 	{
 		$this->rewind();
-		trace("Number of Rows: {$this->rowCount}", 3);
+		trace("Number of Rows: {$this->rowCount}", 4);
 		
 		return $this->rowCount;
 	}
