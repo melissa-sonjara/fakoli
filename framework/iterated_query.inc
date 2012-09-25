@@ -43,12 +43,12 @@ require_once realpath(dirname(__FILE__)."/query.inc");
  * 
  * @author andy
  */
-class DataItemIterator implements Iterator
+class DataItemIterator implements Iterator, Countable
 {
 	var $query;
 	var $result;
 	var $current = null;
-	var $position = 0;
+	var $position = -1;
 	var $item;
 	
 	public function __construct($query)
@@ -57,8 +57,17 @@ class DataItemIterator implements Iterator
 		$this->item = new $this->query->class;		
 	}
 	
+	public function count()
+	{
+		$this->rewind();
+		trace("Row Count: {$this->query->rowCount}", 3);
+		return $this->query->rowCount;		
+	}
+	
 	public function rewind()
 	{
+		if ($this->position == 0) return;
+		
 		$this->current = null;
 		$this->position = 0;
 		
@@ -158,6 +167,7 @@ class IteratedQuery extends AbstractQuery
 			
 			$result = $db->prepare($query);
 			$result->execute($this->params);
+			$this->rowCount = $result->rowCount();
 			return $result;
 		}
 		catch(PDOException $e)
