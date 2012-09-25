@@ -115,14 +115,14 @@ class JoinResult
 	}
 }
 
-class JoinResultIterator implements Iterator
+class JoinResultIterator implements Iterator, Countable
 {
 	var $join;
 	var $constraints;
 	var $query;
 	var $result;
 	var $current = null;
-	var $position = 0;
+	var $position = -1;
 	var $item;
 	
 	public function __construct($join, $constraints)
@@ -139,8 +139,18 @@ class JoinResultIterator implements Iterator
 		$this->query = $join->generateQuery($constraints);
 	}
 	
+	public function count()
+	{
+		$this->rewind();
+		trace("Number of Rows: {$this->rowCount}", 3);
+		
+		return $this->rowCount;
+	}
+	
 	public function rewind()
 	{
+		if ($this->position == 0) return;
+		
 		$this->current = null;
 		$this->position = 0;
 		
@@ -154,6 +164,7 @@ class JoinResultIterator implements Iterator
 			$db = ConnectionManager::getConnection();
 			$this->result = $db->prepare($this->query);
 			$this->result->execute();
+			$this->rowCount = $this->result->rowCount();
 			$this->current = $this->result->fetch();
 		}
 		catch(PDOException $e)
