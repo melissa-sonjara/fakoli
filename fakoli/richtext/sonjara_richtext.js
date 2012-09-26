@@ -521,8 +521,8 @@ var RichTextEditor = new Class({
 			oRTE.onselectionchange = function() { selectionChangedCallback(name); };
 			setTimeout(function() 
 			{ 	
-				oRTE.body.onbeforepaste = function(evt) { self.ieBeforePaste(evt); };
-				oRTE.body.onpaste = function() { self.iePaste(); };
+				oRTE.body.onbeforepaste = function(evt) { return self.ieBeforePaste(evt); };
+				oRTE.body.onpaste = function() { return self.iePaste(); };
 			}, 1000);
 			
 			$(this.name + "_iframe").removeEvents('load');
@@ -1016,17 +1016,19 @@ var RichTextEditor = new Class({
 		setTimeout(function() { self.cleanPaste(); }, 50);
 	},
 	
-	ieBeforePaste: function()
-	{
+	ieBeforePaste: function(event)
+	{	
 		var oRTE = this.getEditor();
 		var cleaner = oRTE.getElementById('HTMLCleansingNode');
 		if (cleaner) cleaner.parentNode.removeChild(cleaner);
-		
+	
 		this.insertCleaningContainer();
+	
+		return false;
 	},
 	
 	iePaste: function()
-	{
+	{	
 		var self = this;
 		setTimeout(function() { self.cleanPaste(); }, 50);
 	},
@@ -1052,7 +1054,7 @@ var RichTextEditor = new Class({
 	
 	insertCleaningContainer: function()
 	{
-		this.insertAtSelection("<div id='HTMLCleansingNode'>_</div>");
+		this.insertAtSelection("<div id='HTMLCleansingNode' style='display: none'>_</div>");
 		var oRTE = this.getEditor();
 		this.selectNodeContents(oRTE.getElementById('HTMLCleansingNode'));
 	},
