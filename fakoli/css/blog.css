@@ -3,7 +3,6 @@
 .Standard
 {
 	list-style: none;
-	margin-right: 40px;
 }
 
 .Standard li
@@ -55,3 +54,9 @@
 	font-weight: normal;
 }
 
+.blog_timestamp
+{
+	display: block;
+	font-style: italic;
+	margin-top: 8px;
+}

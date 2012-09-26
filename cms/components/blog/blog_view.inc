@@ -121,6 +121,9 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		$out .= "{$article->title}</a></h4>";
 		
 		if ($article->teaser) $out .= $article->teaser;
+		$out .= "<div class='blog_timestamp'>";
+		$out .= "Posted by " . $article->author . " on " . $article->publish_date;
+		$out .= "</div>";
 		$out .= "</div>";
 		return $out;
 	}
@@ -132,6 +135,9 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		$page->page_title = $article->title;
 		
 		echo $article->message;
+		echo "<div class='blog_timestamp'>";
+		echo "Posted by " . $article->author . " on " . $article->publish_date;
+		echo "</div>";
 	}
 }
 

@@ -90,3 +90,9 @@ group by d.document_id;
 ALTER TABLE `document` ADD COLUMN `author` VARCHAR(200) NOT NULL DEFAULT '' AFTER `keywords`;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE `document` ADD COLUMN `publication` VARCHAR(200) AFTER `author`;
+
+-- END Version 1.3

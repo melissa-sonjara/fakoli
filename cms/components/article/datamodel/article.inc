@@ -54,6 +54,7 @@ class Article extends DataItem implements Searchable
 						"tags"			=>	String,
 						"author_id"		=>	Number,
 						"author"		=>	String,
+						"publication"	=>	String,
 						"sort_order"	=>	Number
 			);
 
