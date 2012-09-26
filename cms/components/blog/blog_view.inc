@@ -138,6 +138,10 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		echo "<div class='blog_timestamp'>";
 		echo "Posted by " . $article->author . " on " . $article->publish_date;
 		echo "</div>";
+		if ($article->tags)
+		{
+			echo "<div class='blog_tags'>" . $article->tags . "</div>";
+		}		
 	}
 }
 
