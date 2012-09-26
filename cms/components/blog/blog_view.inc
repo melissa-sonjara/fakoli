@@ -122,7 +122,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		if ($article->teaser) $out .= $article->teaser;
 		$out .= "<div class='blog_timestamp'>";
-		$out .= "Posted by " . $article->author . " on " . $article->publish_date;
+		$out .= "By " . $article->author . ", posted on " . $article->publish_date;
 		$out .= "</div>";
 		$out .= "</div>";
 		return $out;
@@ -136,7 +136,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		echo $article->message;
 		echo "<div class='blog_timestamp'>";
-		echo "Posted by " . $article->author . " on " . $article->publish_date;
+		echo "By " . $article->author . ", posted on " . $article->publish_date;
 		echo "</div>";
 		if ($article->tags)
 		{
