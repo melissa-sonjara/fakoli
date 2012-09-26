@@ -869,6 +869,9 @@ class SearchForm extends AutoForm
 		$this->AutoForm($target, $method, $action, $id);
 		$this->modifiers = array();
 		$this->params = new SearchParameters($target);
+		
+		$this->validator = new ValidationEngine();
+		$this->validator->id = $this->id;
 	}
 	
 	/**
@@ -936,6 +939,8 @@ class SearchForm extends AutoForm
 	function writeScript()
 	{
 		ob_start();
+
+		$this->configureValidators();
 		
 		$obj =& $this->data;
 		$script = "";				
@@ -966,11 +971,115 @@ class SearchForm extends AutoForm
 			$mode = $this->getMatchingMode($field);
 			$renderer->renderSearchScript($field, $mode);
 		}	
+		
+		echo "<script type='text/javascript'>\n";
+		echo $this->validator->writeScript();
+		echo "\n\n";
+		echo "function onSubmit{$this->id}(form)\n{\n";
+		
+		echo "\tif (validate_{$this->id} != null && !validate_{$this->id}(form)) return false;\n";
+		
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($field != $pk && !($filter && $filter->isExcluded($field)))
+			{
+				$renderer = $this->getRenderer($field);
+				if ($renderer)
+				{
+					$renderer->renderOnSubmitHandler($field);
+				}
+			}
+		}
 
+		foreach($this->additional as $r)
+		{
+			$r['renderer']->renderOnSubmitHandler($r['field']);
+		}
+
+		if ($this->onSubmitHandler)
+		{
+			echo "\t if (!{$this->onSubmitHandler}(form)) return false;\n;";
+		}
+		
+		if ($this->interstitialMessage)
+		{
+			echo "\tinterstitial('".jsSafe($this->interstitialMessage)."');\n;";
+		}
+	
+		echo "\treturn true;\n}\n\n";
+		echo "</script>\n";
+	
 		$script = ob_get_contents();
 		ob_end_clean();
 		return $script;
 	}	
+	
+	/**
+	 * Creates default validators for fields in the form. Currently this adds Date format validators
+	 * to all date fields - other fields are not affected.
+	 *
+	 * This method is called automatically before the form is rendered.
+	 *
+	 */
+	function addDefaultValidators()
+	{
+		$filter = $this->data->getFilter();
+		
+		foreach(array_keys($this->fields) as $field)
+		{
+			if ($filter && $filter->isExcluded($field)) continue;
+			if ($this->readonly[$field]) continue; // No need to validate readonly fields
+			
+			$renderer = $this->getRenderer($field);
+			if ($renderer)
+			{
+				// JDG 9/19/2010 - let each renderer supply its own validator
+				$required = (array_search($field, $this->required) === FALSE) ? false : true;
+				$mode = $this->getMatchingMode($field);
+				$renderer->addSearchValidatorsToForm($field, $mode, $required);
+			}
+		}
+
+		foreach($this->additional as $r)
+		{
+			// JDG 5/2012 - check if additional field is required
+			$required = (array_search($r['field'], $this->required) === FALSE) ? false : true;
+			$mode = $this->getMatchingMode($field);
+			$r['renderer']->addSearchValidatorsToForm($r['field'], $mode, $required);
+		}
+	}
+		
+	
+	/**
+	 * After AutoForm configures the validators, modify the field name
+	 * to include the mode with which the tag will drawn in the form.
+	 * For date range, the mode is "from" and an additional validator needs
+	 * to be created for the "to" field.
+	 * 
+	 * @param obj $renderer - field renderer
+	 * @param String $field - field name
+	 * @param String $mode - matching mode
+	 */
+	function setSearchValidator($renderer, $field, $mode)
+	{
+		foreach($this->validator->validators as $v)
+		{
+			if($v->field != $field) continue;
+			if($mode != "range")
+			{
+				$v->field = "{$v->field}:{$mode}";
+			}
+			else
+			{
+				$v->field = "{$v->field}:from";
+				$toLabel = preg_replace("/between|to/i", "To", $v->title);
+				$toV = new DateValidator("{$field}:to", $toLabel);
+				$this->validator->add($toV);
+			}
+		}
+	}
+	
 	
 	/**
 	 * Write out the HTML for the search form.
