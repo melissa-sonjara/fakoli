@@ -252,7 +252,7 @@ class PageSearchResult extends AbstractSearchResult
 	
 	function relevance()
 	{
-		return 1;
+		return 0.2;
 	}
 	
 	function title()
