@@ -557,7 +557,6 @@ class SearchParameters
 			{
 				$this->params["$new:$mode"] = $value;
 				unset($this->params["$old:$mode"]);
-				return;
 			}
 		}
 	}
