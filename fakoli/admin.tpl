@@ -2,10 +2,11 @@
  <html>
  <head>
   <meta name="description" content="Sonjara CMS Administrative Site">
-{var:styles}
-{var:script}
-  <link href="/fakoli/css/admin.css" rel="stylesheet"/>
   <title>{var:title}</title>
+  {var:styles}
+  <link href="/fakoli/css/admin.css" rel="stylesheet"/>
+  {var:script}
+  
  </head>
  <body>
   <div id="curtain"></div>
