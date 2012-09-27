@@ -240,6 +240,21 @@ class DataItem extends AbstractDataItem
 	        	} 
 	        } 
         }
+        
+        if (isset($this->calculatedFields))
+        {
+        	foreach($this->calculatedFields as $field => $expr)
+        	{
+        		if ($alias) 
+        		{
+        			$this->$field = $line[$alias.".".$field];
+        		}
+        		else
+        		{
+        			$this->$field = $line[$field];
+        		}
+        	}
+        }
 	}
 		
 	/**
@@ -273,6 +288,22 @@ class DataItem extends AbstractDataItem
 				$list .= " as `$alias.$field`";
 			}
 			$first = false;
+		}
+		
+		if (isset($this->calculatedFields))
+		{
+			foreach($this->calculatedFields as $field => $expr)
+			{
+				if ($this->filter && $this->filter->isExcluded($field)) continue;
+				if (!$first) $list .= ", ";
+				$list .= $expr . " as ";
+				if ($alias)
+				{
+					$list .= $alias.".";
+				}
+				$list .= $field;
+				
+			}
 		}
 		
 		return $list;
@@ -1321,6 +1352,14 @@ class DataItem extends AbstractDataItem
 			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
 		}
 
+		if (isset($this->calculatedFields))
+		{
+			foreach($this->calculatedFields as $field => $expr)
+			{
+				$template = str_replace("{".$field."}", $this->$field, $template);			
+			}
+		}
+		
 		// Allow drill-down through relation functions
 		$template = $this->formatThroughRelation($template, $separator);
 		

@@ -150,14 +150,7 @@ class IteratedQuery extends AbstractQuery
 		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
 		$this->constraints .= " ".$prototype->getIdentityConstraint();
 		
-		if (is_object($this->filter))
-		{
-			$query = "SELECT ".$prototype->getFieldList()." FROM {$prototype->table} {$this->tableAlias} {$this->constraints} $orderBy";
-		}
-		else
-		{
-			$query = "SELECT * FROM {$prototype->table} {$this->tableAlias} {$this->constraints} $orderBy";
-		}
+		$query = "SELECT ".$prototype->getFieldList()." FROM {$prototype->table} {$this->tableAlias} {$this->constraints} $orderBy";
 		
 		trace("$query", 3);
 		
