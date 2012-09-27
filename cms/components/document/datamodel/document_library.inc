@@ -230,7 +230,8 @@ class DocumentLibrary extends DataItem
 		$this->table = "document_library";
 	
 		$this->default_format = "{name}";
-	
+		$this->cacheLocal = true;
+		
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 
