@@ -440,6 +440,13 @@ class DateSearchParameterHandler extends SearchParameterHandler
 		$from = $this->reformatToSQLDate($from);
 		$to = $this->reformatToSQLDate($to);
 		
+		if ($from > $to)
+		{
+			$tmp = $from;
+			$from = $to;
+			$to = $tmp;
+		}
+		
 		return "($name BETWEEN '$from' AND '$to')";
 	}
 }
