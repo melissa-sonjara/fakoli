@@ -144,6 +144,8 @@ class Article extends DataItem implements Searchable
 				$search->remapField("text", "message");
 			}
 			
+			$search->remapField("publication_date", "publish_date");
+			
 			$constraint = $search->generateConstraint();
 			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
 			
