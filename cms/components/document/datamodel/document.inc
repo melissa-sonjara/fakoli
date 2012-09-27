@@ -178,7 +178,10 @@ class DocumentSearchResult extends AbstractSearchResult
 		$type = getDocType($file);
 		$icon = getDocIcon($file);
 		
-		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a>");
+		$library = $this->item->DocumentLibrary();
+		$size = $library->getFileSize($this->item);
+		
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a> $size");
 	}
 }
 
