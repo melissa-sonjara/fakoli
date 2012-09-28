@@ -161,7 +161,7 @@ class SearchManager
 		
 		if ($num)
 		{
-			echo "<p><em>$num ".pluralize("match", $num)." found.</em></p>";
+			echo "<p style='float: left'><em>$num ".pluralize("match", $num)." found.</em></p>";
 		}
 		
 		$list->drawList();
