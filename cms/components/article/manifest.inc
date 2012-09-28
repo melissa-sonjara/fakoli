@@ -63,9 +63,9 @@ class ArticleManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"ComponentScanComplete" =>	array(ArticleManager, setDefaults),
-				"RegisterSearchables"	=>	array(ArticleManager, registerSearchables),
-				"upgradeComponent"		=>	array(ArticleManager, upgradeComponent)
+				"RegisterCommentAdapters" 	=>	array(ArticleManager, registerCommentAdapter),
+				"RegisterSearchables"		=>	array(ArticleManager, registerSearchables),
+				"upgradeComponent"			=>	array(ArticleManager, upgradeComponent)
 			);
 	}		
 	

@@ -29,7 +29,7 @@ class ArticleManager
 		return $form;
 	}
 	
-	static function setDefaults()
+	static function registerCommentAdapter()
 	{
 		CommentManager::registerAdapter("article", Article, ArticleCommentXref);
 	}

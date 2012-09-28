@@ -86,6 +86,13 @@ class CommentManager
 		Settings::setDefaultValue("comment", "publish_automatically", true, Boolean);
 	}
 	
+	static function onInitialize()
+	{
+		if (!Cache::get("comment_adapters"))
+		{
+			ComponentManager::fireEvent("RegisterCommentAdapters");
+		}
+	}
 	
 	static function upgradeComponent($version)
 	{
