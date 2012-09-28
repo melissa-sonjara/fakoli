@@ -153,7 +153,7 @@ class SearchManager
 		
 		$list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
 		$list->pageSize = $pageSize;
-		$list->emptyMessage = "Your search did not match any items.";
+		$list->emptyList = "Your search did not match any items.";
 		
 		$script .= $list->writeScript();
 		
