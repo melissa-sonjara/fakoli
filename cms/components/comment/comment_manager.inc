@@ -102,6 +102,7 @@ class CommentManager
 	
 	static function registerAdapter($component, $parentClass, $xrefClass)
 	{
+		trace("Registering CommentAdapter for $component", 3);
 		$adapter = new CommentAdapter($component, $parentClass, $xrefClass);
 		
 		$adapters = CommentManager::getAdapters();
