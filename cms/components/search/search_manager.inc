@@ -147,12 +147,12 @@ class SearchManager
 		return $item->summary();
 	}
 	
-	function showResults()
+	function showResults($pageSize = 20)
 	{
 		global $script;
 		
 		$list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
-		$list->pageSize = 20;
+		$list->pageSize = $pageSize;
 		$list->emptyMessage = "Your search did not match any items.";
 		
 		$script .= $list->writeScript();
