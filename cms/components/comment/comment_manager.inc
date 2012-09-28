@@ -31,8 +31,52 @@
 
 *****************************************************************/
 
+class CommentAdapter
+{
+	var $component;
+	var $parentClass;
+	var $xrefClass;
+	var $imported = false;
+	
+	function __construct($component, $parentClass, $xrefClass)
+	{
+		$this->component   = $component;
+		$this->parentClass = $parentClass;
+		$this->xrefClass   = $xrefClass;
+	}
+
+	function importComponent()
+	{
+		if (!$this->imported)
+		{
+			Fakoli::using($this->component);
+			$this->imported = true;
+		}
+	}
+	
+	function createParent()
+	{
+		$this->importComponent();
+		$parent = new $this->parentClass;
+		if (isset($_GET[$parent->getPrimaryKey()]) && checkNumeric($_GET[$parent->getPrimaryKey()]))
+		{
+			$parent->load($_GET[$parent->getPrimaryKey()]);
+		}
+		
+		return $parent; 
+	}
+	
+	function createXref()
+	{
+		$this->importComponent();		
+		return new $this->xrefClass;
+	}	
+}
+
 class CommentManager
 {
+	static $adapters = array();
+	
 	function CommentManager()
 	{
 		
@@ -49,5 +93,37 @@ class CommentManager
 	{
 		$mgr = new CommentUpgradeManager();
 		$mgr->upgrade($version);
+	}
+	
+	static function registerAdapter($component, $parentClass, $xrefClass)
+	{
+		$adapter = new CommentAdapter($component, $parentClass, $xrefClass);
+		
+		$adapters = CommentManager::getAdapters();
+		$proto = $adapter->createParent();
+		$adapters[$proto->getPrimaryKey()] = $adapter;
+		
+		Cache::put("comment_adapters", $adapters);
+	}
+	
+	static function getAdapters()
+	{
+		$adapters = Cache::get("comment_adapters");
+		if (!$adapters) $adapters = array();
+		
+		return $adapters;
+	}
+	
+	static function getAdapter()
+	{
+		$adapters = CommentManager::getAdapters();
+		
+		foreach($_GET as $key => $value)
+		{
+			if (array_key_exists($key, CommentManager::$adapters))
+			{
+				return $adapters[$key];
+			}
+		}
 	}
 }

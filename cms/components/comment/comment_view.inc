@@ -74,6 +74,17 @@ class CommentView
 		$this->form = $this->buildCommentForm();
 	}
 
+	static function fromGET()
+	{
+		$adapter = CommentManager::getAdapter();
+		
+		if ($adapter)
+		{
+			$parent = $adapter->createParent();
+			return new CommentView($parent, $adapter->xrefClass, $adapter->component);
+		}
+	}
+	
 	function buildCommentList($obj)
 	{
 		if(checkRole("admin"))

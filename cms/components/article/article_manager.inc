@@ -1,4 +1,5 @@
 <?php
+Fakoli::using("component", "comment");
 
 class ArticleManager
 {
@@ -26,6 +27,11 @@ class ArticleManager
 		$form->getRenderer("archive_date")->validator->required = false;
 		
 		return $form;
+	}
+	
+	static function setDefaults()
+	{
+		CommentManager::registerAdapter("article", Article, ArticleCommentXref);
 	}
 	
 	static function registerSearchables($searchables)
