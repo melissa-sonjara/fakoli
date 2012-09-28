@@ -607,6 +607,7 @@ var Interstitial = new Class({
 	   	{
     		this.interstitial.setStyle('display', 'block');
     		this.center(); 
+    		Interstitial.current = this;
     	}.bind(this));
 	},
 	
@@ -614,6 +615,7 @@ var Interstitial = new Class({
 	{
     	window.raiseCurtain();
     	this.interstitial.setStyle('display', 'none');
+    	Interstitial.current = null;
 	}
 	
 });

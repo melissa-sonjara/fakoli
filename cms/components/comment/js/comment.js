@@ -17,7 +17,7 @@ var Comment =  (function()
 		{
 			if (response == "OK")
 			{
-				window.location.reload();	
+				this.reloadCommentPanel();
 			}
 			else
 				$('EditComment_form__error').set('html', response);
@@ -33,7 +33,7 @@ var Comment =  (function()
 							{ 
 								if(response == "OK")
 								{
-									window.location.reload();
+									this.reloadCommentPanel();
 								}
 								else
 									alert(response);
@@ -41,6 +41,28 @@ var Comment =  (function()
 						});
 					    
 					    request.send();
+		},
+		
+		reloadCommentPanel: function()
+		{
+			var params = new URI().get('query');
+			var request = new Request.HTML(
+			{
+				url: "/action/comment/comment_panel?" + params,
+				evalScripts: false,
+				evalResponse: false,
+				method: 'get', 
+				onSuccess: function(tree, elements, html, script) 
+				{ 
+					document.id('comment_panel').set('html', html);
+					$exec(script);
+					if (Interstitial.current) 
+					{
+						Interstitial.current.hide();
+					}
+				}
+			});
+			request.send();
 		},
 		
 		closeDialog: function()
