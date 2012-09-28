@@ -139,7 +139,7 @@ class SearchManager
 	
 	static function compareDate($item1, $item2)
 	{
-		return strtotime($item1->date()) - strtotime($item2->date());
+		return strtotime($item2->date()) - strtotime($item1->date());
 	}
 	
 	static function formatSearchResult($item)
