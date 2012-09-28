@@ -371,6 +371,7 @@ class BlogView
 		if ($this->blog->allow_comments && $article_id)
 		{
 			$article = new Article($article_id);
+			echo "<div id='comment_panel'>";
 			$view = new CommentView($article, ArticleCommentXref, "article");
 			
 			if ($method == "POST")
@@ -384,6 +385,7 @@ class BlogView
 			{
 				$view->drawForm();
 			}
+			echo "</div>";
 		}
 	}
 	
