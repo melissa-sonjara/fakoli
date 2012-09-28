@@ -74,9 +74,7 @@ class CommentAdapter
 }
 
 class CommentManager
-{
-	static $adapters = array();
-	
+{	
 	function CommentManager()
 	{
 		
@@ -120,7 +118,7 @@ class CommentManager
 		
 		foreach($_GET as $key => $value)
 		{
-			if (array_key_exists($key, CommentManager::$adapters))
+			if (array_key_exists($key, $adapters))
 			{
 				return $adapters[$key];
 			}
