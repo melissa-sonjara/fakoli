@@ -180,7 +180,7 @@ class CommentView
 			$comment->published = true;
 		}
 		$form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=&xref_class={$this->xrefClass}&key_name=$key_name&key_value=$key_value&xref_component={$this->component}", "Comment_form");
-		$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result, '$key_name=$key_value');}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 		$form->required("description");
 		$form->alias("title", "Subject", "author", "Your Name");
