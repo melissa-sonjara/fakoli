@@ -70,12 +70,17 @@ class DataListView
 	var $height;
 	var $scrollable = false;
 	var $resizable  = true;
+	
+	// Javascript interaction parameters
+	
 	var $rowId = false;					///< whether to include an id tag for each tr row
 	var $dragReorder = false; 			///< Enabled drag & drop reordering
 	var $reorderHandler = null;			///< Handler script that implements reordering records
 	var $dragColumnReorder = false;		///< Enable drag & drop column reordering and show/hide capabilities
 	var $columnReorderCallback = null;	///< Javascript callback function that is triggered when columns are reordered
 	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
+	var $onRowClick = null;				///< Javascript callback function that is triggered with a row is clicked
+	var $onRowHover = null;				///< Javascript callback function that is triggered with a row is hovered over
 	
 	var $dragText = "";				///< Optional text to display above reorderable table
 	// Selection and Commands
@@ -528,7 +533,7 @@ class DataListView
 <?
 			foreach($this->items as $item)
 			{
-				$cl = "";
+				$cl = array();
 				if($this->rowId)
 					$rowId = $this->formatRowId($item);
 					
@@ -536,15 +541,28 @@ class DataListView
 				{
 					$retval = call_user_func($this->onStartRow, $item);
 					if ($retval === false) continue; // return false to indicate row should be skipped
-					if ($retval) $cl = " class='$retval'"; // return a string to indicate a css class for the row
+					if ($retval) $cl[] = $retval; // return a string to indicate a css class for the row
 				}
 				
 				foreach($this->totalCallbacks as $cb)
 				{
 					call_user_func($cb, $item);
 				}
+				
+				$onclick = "";
+				
+				if ($this->onRowClick)
+				{
+					$onclick =  " onclick=\"" . $item->format($this->onRowClick) . "\" onmouseover=\"this.addClass('hover');";
+					if ($this->onRowHover) $onlick .= $item->format($this->onRowHover);
+					$onclick .=" return false;\" onmouseout=\"this.removeClass('hover'); return false;\"";
+					$cl[] = "clickable";
+				}
+				
+				$cl = implode(" ", $cl);
+				if ($cl) $cl = "class='$cl'";
 ?>
-          <tr id='<?php echo $rowId ?>' <?php echo $cl?>>
+          <tr id='<?php echo $rowId ?>' <?php echo $cl?><?echo $onclick?>>
 <?php
 				foreach($this->columns as $column)
 				{
