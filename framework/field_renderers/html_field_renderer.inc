@@ -154,6 +154,9 @@ class HTMLFieldRenderer extends FieldRenderer
 
 	function renderSearchField($field, $mode = "equal")
 	{
+		// AJG - Override default colspan when rendering in a search form
+		$this->colspan = 1;
+		
 		if ($mode == "range")
 		{
 			$from = $this->parent->params->get($field, "from");
