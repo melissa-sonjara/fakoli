@@ -663,9 +663,8 @@ class ReportTable
 				
 				if(array_key_exists($column->title, $this->footerColumns))
 				{
-					$footer = $table->footerColumns[$column->title];
+					$footer = $this->footerColumns[$column->title];
 					$report->footerColumns[] = $footer;
-					var_dump($footer);
 					if(get_class($footer) == FooterTotalColumn)
 					{
 						$report->totalCallbacks[] = array($footer, onStartRow);
