@@ -130,6 +130,9 @@ class TextFieldRenderer extends FieldRenderer
 	
 	function renderSearchField($field, $mode = "like")
 	{
+		// AJG - Override default colspan when rendering in a search form
+		$this->colspan = 1;
+		
 		if ($mode == "range")
 		{
 			$from = htmlspecialchars($this->parent->params->get($field, "from"), ENT_QUOTES, 'UTF-8');
