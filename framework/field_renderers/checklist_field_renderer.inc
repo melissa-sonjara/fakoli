@@ -76,6 +76,7 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $addEntrySize= 20;
 	var $width;
 	var $height;
+	var $resizable = false;
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -89,6 +90,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
+			if ($label) $form->alias($field, $label);
 		}
 	}
 		
@@ -158,7 +160,9 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
 		{
-			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			$resizable = $this->resizable ? " resizable": "";
+			
+			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$idx = 0;
@@ -266,12 +270,14 @@ class CheckListFieldRenderer extends FieldRenderer
 		}
 		
 		$values = explode(",", $rawValue);		
-				
+		$values = array_combine($values, $values);
+		
 		$divider = $this->horizontal ? " " : "<br/>";
 		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
 		{
-			echo "<div class='scrollbox' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			$resizable = $this->resizable ? " resizable": "";
+			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$idx = 0;
@@ -280,7 +286,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		{
 			foreach($this->options as $value => $text)
 			{
-				$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+				$checked = (array_key_exists($value, $values)) ? " checked" : "";
 				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
 				$idx++;
 			}

@@ -45,6 +45,7 @@ class TextFieldRenderer extends FieldRenderer
 	var $colspan = 2;
 	var $limit = 0;
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
+	var $encoding = "ISO-8859-1";
 	
 	function TextFieldRenderer(&$parent)
 	{
@@ -94,7 +95,7 @@ class TextFieldRenderer extends FieldRenderer
 			echo $this->parent->annotations[$field]."<br />";
 		}
 		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $disable $onkeypress>";
-		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
+		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, $this->encoding);
 		echo "</textarea>";
 		
 		if ($this->limit)
@@ -129,6 +130,9 @@ class TextFieldRenderer extends FieldRenderer
 	
 	function renderSearchField($field, $mode = "like")
 	{
+		// AJG - Override default colspan when rendering in a search form
+		$this->colspan = 1;
+		
 		if ($mode == "range")
 		{
 			$from = htmlspecialchars($this->parent->params->get($field, "from"), ENT_QUOTES, 'UTF-8');

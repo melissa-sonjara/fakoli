@@ -115,10 +115,19 @@ class QuestionnaireForm
 				$this->questions[] = QuestionField::create($this, $question);
 			}
 				
+			$num = 1;
+			
 			foreach($this->questions as $question)
 			{
+				if (!$question->skipNumbering)
+				{
+					$question->question->question_number = $num++;
+				}
+				
 				if($question->question->required)
+				{
 					array_push($this->validators, $question->getRequiredValidator());
+				}
 			}
 		}
 	}
@@ -224,7 +233,7 @@ class QuestionnaireForm
 			return;
 		}
 
-		if($this->requiredText AND !$displayOnly)
+		if($this->requiredText)
 		{
 			if ($this->msg)
 			{
@@ -235,22 +244,34 @@ class QuestionnaireForm
 			echo $this->requiredText;
 		}
 
-		if(!$displayOnly)
-			echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
+		echo "<b>{$this->requiredFieldsText}</b><br/><br/>";
 
+		echo "<dl>\n";
+		
 		foreach($this->questions as $question)
 		{
 			$this->writeOneQuestion($question, $displayOnly);
-			$this->num++;
+			if (!$question->skipNumbering)
+			{
+				$this->num++;
+			}
 		}
 
-		echo "</dl>";
+		echo "</dl>\n";
 	}
 
 	function writeOneQuestion($question, $displayOnly)
 	{
 		$required = ($displayOnly) ? "" : $question->getRequired();
-		echo " <dt><label for='question_{$this->num}>'<b>{$this->num}.</b> {$question->question->question}{$required}</label></dt>\n";
+		$qPk = $question->getID();
+		echo " <dt><label for='question_{$qPk}'>";
+		
+		if (!$question->skipNumbering)
+		{
+			echo "<b>{$this->num}.</b> ";
+		}
+		
+		echo "{$question->question->question}{$required}</label></dt>\n";
 
 		echo " <dd>";
 		if(!$displayOnly)
@@ -258,11 +279,10 @@ class QuestionnaireForm
 		else
 			$question->drawView();
 
-		echo " </dd><br/>";
+		echo " <br/></dd>";
 
 		if($displayOnly)
 			echo "<br/>";
-		echo "</dl>";
 	}
 
 
@@ -363,10 +383,13 @@ class QuestionnaireForm
 				}
 				else
 				{
-					$answer = new $answerClass($answer->$aPk);
-					$answer->filter = new InclusionFilter("value");
-					$answer->value = $valueAnswer;
-					$answer->save();
+					if ($answer->$aPk)
+					{
+						$answer = new $answerClass($answer->$aPk);
+						$answer->filter = new InclusionFilter("value");
+						$answer->value = $valueAnswer;
+						$answer->save();
+					}
 				}
 			}
 		}
@@ -457,6 +480,27 @@ class QuestionnairePreview extends QuestionnaireForm
 			$this->questions[] = QuestionField::create($this, $question);
 		}
 	}
+	
+	function writeOneQuestion($question, $displayOnly)
+	{
+		$required = $question->getRequired();
+		$qPk = $question->getID();
+		echo " <dt><label for='question_{$qPk}'>";
+		
+		if (!$question->skipNumbering)
+		{
+			echo "<b>{$this->num}.</b> ";
+		}
+		
+		echo "{$question->question->question}{$required}</label></dt>\n";
+
+		echo " <dd>";
+
+		$question->writeHTML();
+
+		echo " <br/></dd>";
+	}
+	
 
 	function writeScript()
 	{

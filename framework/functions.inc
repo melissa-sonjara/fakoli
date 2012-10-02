@@ -826,37 +826,6 @@ function stripHTML($text)
 	return $text;
 }
 
-
-/**
- * Runs a query, returns the first field in each row of the resultset as a comma-delimited list.
- * 
- * @param string $query the query to run.
- * 
- * Deprecated
- */
-function queryList($query)
-{
-	$result = mssql_query($query) or die("Query Failed");
-	
-	$first = true;
-	$text = "";
-	
-	while ($row = mssql_fetch_row($result))
-	{
-		if (!$first)
-		{
-			$text .= ", ";
-		}
-		
-		$text .= $row[0];
-		$first = false;
-	}
-	
-	mssql_free_result($result);
-	
-	return $text; 	
-}
-
 /**
  * Parse out multiple values from the provided collection that have the same
  * root name, and return the results in an array.
@@ -1074,7 +1043,11 @@ function trace($msg, $lvl, $callStack = null)
 function getScaledSize($size)
 {
 	$result = "";
-	if ($size > 1048576)
+	if ($size > 1073741824)
+	{
+		$result = sprintf("%.1fGB", ($size / 1073741824));
+	}
+	else if ($size > 1048576)
 	{
 		$result = sprintf("%.1fMB", ($size / 1048576));
 	}
@@ -1148,10 +1121,15 @@ function getRemote($url)
 	$url = canonicalizeURL($url);
 	trace("Retrieving $url", 3);
 	$ch = curl_init("$url");
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	$html = curl_exec($ch);
+	
+	if ($html === FALSE) throw new Exception(curl_error($ch));
+	
 	curl_close($ch);
+	
 	return $html;
 }
 
@@ -1164,7 +1142,7 @@ function canonicalizeURL($url)
 {
 	global $config;
 	
-	if (startsWith($url, "http://")) return $url;
+	if (startsWith($url, "http://") || startsWith($url, "https://")) return $url;
 	
 
 	if (!startsWith($url, "/"))
@@ -1244,6 +1222,7 @@ function postRemoteXML($url, $xml, $timeout = 30)
 function getRemoteHeaders($url)
 {
 	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_NOBODY, 1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -1705,5 +1684,15 @@ function getMIMEType($filename)
     	// Prevent other file types (such as source code or configuration files) from being served
         die("");
     }
+}
+
+function array_remove_keys($array)
+{
+	for($i = 1; $i < func_num_args(); ++$i)
+	{
+		unset($array[func_get_arg($i)]);
+	}
+	
+	return $array;
 }
 ?>

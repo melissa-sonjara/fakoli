@@ -36,6 +36,7 @@ require_once realpath(dirname(__FILE__)."/abstract_data_item.inc");
 require_once realpath(dirname(__FILE__)."/query.inc");
 require_once realpath(dirname(__FILE__)."/indexed_query.inc");
 require_once realpath(dirname(__FILE__)."/grouped_query.inc");
+require_once realpath(dirname(__FILE__)."/iterated_query.inc");
 
 /*define("String", 1);	
 define("Number", 2);
@@ -121,6 +122,15 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
+	function __sleep()
+	{
+		// No need to persist class variables, such as field metadata
+		
+		$f = array_keys($this->fields);
+		array_push($f, "primary_key", "table", "filter");
+		return $f;
+	}
+	
 	/**
 	 * Join the DataItem to the specified DataTransaction.
 	 * @param DataTransaction $tx the transaction to join
@@ -186,6 +196,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function populate($line, $alias = false)
 	{
+		global $config;
+		
 		// NOTE - structured for speed, since the general case is no aliasing
 		// therefore we want to reduce the number of tests of the alias 
 		
@@ -201,7 +213,14 @@ class DataItem extends AbstractDataItem
 	        	if (!array_key_exists($field, $this->fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
 	        	
-	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value); 
+	        	if ($config["no_charset_conversions"])
+	        	{
+	        		$this->$field = $value;
+	        	}
+	        	else
+	        	{
+	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	} 
 	       	}
         }
         else
@@ -210,9 +229,31 @@ class DataItem extends AbstractDataItem
 	        {
 	        	if (!array_key_exists($field, $this->fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
-        	
-	            $this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	
+	        	if ($config["no_charset_conversions"])
+	        	{
+	        		$this->$field = $value;
+	        	}
+	        	else
+	        	{
+	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	} 
 	        } 
+        }
+        
+        if (isset($this->calculatedFields))
+        {
+        	foreach($this->calculatedFields as $field => $expr)
+        	{
+        		if ($alias) 
+        		{
+        			$this->$field = $line[$alias.".".$field];
+        		}
+        		else
+        		{
+        			$this->$field = $line[$field];
+        		}
+        	}
         }
 	}
 		
@@ -247,6 +288,22 @@ class DataItem extends AbstractDataItem
 				$list .= " as `$alias.$field`";
 			}
 			$first = false;
+		}
+		
+		if (isset($this->calculatedFields))
+		{
+			foreach($this->calculatedFields as $field => $expr)
+			{
+				if ($this->filter && $this->filter->isExcluded($field)) continue;
+				if (!$first) $list .= ", ";
+				$list .= $expr . " as ";
+				if ($alias)
+				{
+					$list .= $alias.".";
+				}
+				$list .= $field;
+				
+			}
 		}
 		
 		return $list;
@@ -1264,6 +1321,14 @@ class DataItem extends AbstractDataItem
 	 * Fields can also be retrieved through a relation from
 	 * the dataitem obj that calls this format function.
 	 * 
+	 * 5. Local method calls
+	 * 
+	 * Syntax: {method()}
+	 * Example: {getFullName()}
+	 * 
+	 * This format calls the specified method on the object and substitutes
+	 * the returned value into the output. Parameters cannot be passed.
+	 * 
 	 * for example:
 	 * "{MyRelation.event_name}"
 	 * 
@@ -1287,6 +1352,14 @@ class DataItem extends AbstractDataItem
 			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
 		}
 
+		if (isset($this->calculatedFields))
+		{
+			foreach($this->calculatedFields as $field => $expr)
+			{
+				$template = str_replace("{".$field."}", $this->$field, $template);			
+			}
+		}
+		
 		// Allow drill-down through relation functions
 		$template = $this->formatThroughRelation($template, $separator);
 		

@@ -124,6 +124,8 @@ class LoginManager
 			
 			$_SESSION["user"] = $user;
 			
+
+			trace("USER: ".serialize($user), 1);
 			$mgr->loadDefaultSession($user);
 			$mgr->loginRedirect($user);
 		}
@@ -322,7 +324,7 @@ class LoginManager
 		elseif($username)
 		{
 			?>
-			<p><em>We can not find the username you provided in the system.</em></p>
+			<p><em>We cannot find the username you provided in the system.</em></p>
 			<?
 			LoginManager::passwordHelpForm($username);
 		}

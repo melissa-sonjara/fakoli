@@ -69,12 +69,12 @@ class DateFieldRenderer extends FieldRenderer
 	{
 		$script = "";
 		
-		if (!$this->_includedDateScript)
-		{
-			echo "<script src='{$this->parent->componentPath}/calendar/sonjara_calendar.js' type='text/javascript'></script>\n";
-			echo "<link href='{$this->parent->componentPath}/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'>\n";
-			$this->_includedDateScript = true;
-		}
+//		if (!$this->_includedDateScript)
+//		{
+//			echo "<script src='{$this->parent->componentPath}/calendar/sonjara_calendar.js' type='text/javascript'></script>\n";
+//			echo "<link href='{$this->parent->componentPath}/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'>\n";
+//			$this->_includedDateScript = true;
+//		}
 		
 		$calendar = "{$field}_calendar";
 		echo "<script type='text/javascript'>\n";

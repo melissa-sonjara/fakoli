@@ -68,7 +68,8 @@ class SelectFieldRenderer extends FieldRenderer
 	var $onChange; // optional selection change handler
 	var	$max_chars;
 	var $width;
-	var $defaultBlank = true; // whether the drop down includes a blank as the default
+	// JDG 8/12 - set to true after all Fakoli projects have set required fields to required.
+	var $defaultBlank = false; // whether the drop down includes a blank as the default
 	var $defaultText = "Choose One";
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
@@ -126,10 +127,15 @@ class SelectFieldRenderer extends FieldRenderer
 	{
 		if(!$this->defaultBlank || $this->parent->data->get($field)) return;
 		
-		if(!array_key_exists("", $this->options))
+		if(count($this->options) && !array_search("", $this->options))
 		{
+			// want the blank at the top - array_merge causes issues; copy array instead
 			$options[""] = $this->defaultText;
-			$this->options = array_merge($options, $this->options);
+			foreach($this->options as $key => $value)
+			{
+				$options[$key] = $value;
+			}
+			$this->options = $options;
 		}
 	}
 	
@@ -244,7 +250,7 @@ class SelectFieldRenderer extends FieldRenderer
 	
 	function renderSearchField($field, $mode, $value = "")
 	{
-		if ($mode != "equal") return;
+		if ($mode != "equal") $mode = "equal";
 		
 		$searchValue = (!$value) ? $this->parent->params->get($field, $mode) : $value;
 		echo "<tr>\n";

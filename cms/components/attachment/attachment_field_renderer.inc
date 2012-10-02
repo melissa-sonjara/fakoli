@@ -117,7 +117,6 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$xref = new $this->xrefClass;
 	
 		$this->_startField($field);
-		$pkv = $this->parent->data->get($pk);
 		
 		$attachments = $this->getAttachments();
 					

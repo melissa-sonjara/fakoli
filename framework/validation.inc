@@ -467,6 +467,14 @@ class UniqueValidator extends AbstractValidator
 	function UniqueValidator($field, $title, $item, $message, $extraConstraint = "")
 	{
 		$this->class = $item->table;
+		
+		if(!$message)
+		{
+			$className = $item->prettifyClassName();
+			$message = (preg_match("/^[aeiou]/i", $className)) ? "An " : "A ";
+			$fieldName = strtolower($title);
+			$message .= "{$className} already exists with that {$fieldName}. Please choose a different {$fieldName}.";
+		}
 		$this->message = $message;
 		$this->item =& $item;
 		$this->extraConstraint = $extraConstraint;
@@ -507,6 +515,7 @@ class UniqueValidator extends AbstractValidator
 			}
 			
 			$matches = $this->item->queryValue("COUNT(1)", $constraint);
+			trace("***************count matches ". count($matches), 3);
 			if ($matches > 0)
 			{
 				trace("UniqueValidator::validate - found $matches match(es), raising error", 3);

@@ -133,11 +133,47 @@ class FieldRenderer
 			$this->parent->validator->add(new RequiredValidator($field, $label));
 	}
 	
+	/**
+	 * For SearchForm, the validator field needs to match the
+	 * name tag in the form which is in the format field:mode.
+	 * 
+	 * For mode "range" add an additional validator for the "to"
+	 * field.
+	 * 
+	 * @param String $field
+	 * @param String $mode
+	 * @param Boolean $required
+	 */
+	function addSearchValidatorsToForm($field, $mode, $required = false)
+	{
+		if(!isset($this->label))
+		{
+			$this->label = $this->parent->prettifyFieldName($field);
+		}
+	
+		if($mode != "range")
+		{
+			$this->addValidatorsToForm("{$field}:{$mode}", $required);
+		}
+		else
+		{
+			// Store the from label and reset it back into the renderer
+			// after calling addValidatorsToForm.
+			$fromLabel = $this->label;
+			$this->addValidatorsToForm("{$field}:from", $required);
+			$this->label = preg_replace("/between|from/i", "To", $fromLabel);
+			$this->addValidatorsToForm("{$field}:to", $required);
+			$this->label = $fromLabel;
+		}
+	}
 	
 	/**
 	 * Formats the given DataItem based on the supplied format string. This can either
 	 * be a string containing the name of the field to return, or it can be a more
 	 * complex format string using the syntax provided by DataItem::format().
+	 * 
+	 * For class callback formatting, use the syntax:
+	 * "{MyClassName::myFormattingFunction}"
 	 *
 	 * @param DataItem $item the item to format
 	 * @param string $name the name field or format string, as described above.

@@ -70,10 +70,19 @@ class DataListView
 	var $height;
 	var $scrollable = false;
 	var $resizable  = true;
-	var $rowId = false;			///< whether to include an id tag for each tr row
-	var $dragReorder = false; 	///< Enabled drag & drop reordering
-	var $reorderHandler = null;	///< Handler script that implements reordering records
-	var $dragText = "";			///< Optional text to display above reorderable table
+	
+	// Javascript interaction parameters
+	
+	var $rowId = false;					///< whether to include an id tag for each tr row
+	var $dragReorder = false; 			///< Enabled drag & drop reordering
+	var $reorderHandler = null;			///< Handler script that implements reordering records
+	var $dragColumnReorder = false;		///< Enable drag & drop column reordering and show/hide capabilities
+	var $columnReorderCallback = null;	///< Javascript callback function that is triggered when columns are reordered
+	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
+	var $onRowClick = null;				///< Javascript callback function that is triggered with a row is clicked
+	var $onRowHover = null;				///< Javascript callback function that is triggered with a row is hovered over
+	
+	var $dragText = "";				///< Optional text to display above reorderable table
 	// Selection and Commands
 	
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
@@ -152,6 +161,25 @@ class DataListView
 		return $this;
 	}
 
+	/**
+	 * Override the column order
+	 * @param array $order An array of column titles in the order they are to be displayed
+	 */
+	function setColumnOrder($order)
+	{
+		$columnsByTitle = reindexList($this->columns, "title");
+		$columns = array();
+		foreach($order as $title)
+		{
+			if (array_key_exists($title, $columnsByTitle))
+			{
+				$columns[] = $columnsByTitle[$title];
+			}
+		}
+		
+		$this->columns = $columns;
+	}
+	
 	/**
 	 * Adds a selector column to the DataListView. If no format is specified
 	 * then selection is handled via a checklist box for the list objects' primary keys.
@@ -249,6 +277,15 @@ class DataListView
 	}
 	
 	/**
+	 * Get the Excel Link
+	 */
+	function getExcelLink()
+	{
+		$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+		return $_SERVER['REQUEST_URI'].$qs;
+	}
+	
+	/**
 	 * Automatically build the table columns from the given DataItem. Not recommended except for quick and dirty
 	 * pages. This method is called automatically if no columns have been defined before drawing the view.
 	 * @param $item the item to use as a template for the columns.
@@ -273,6 +310,11 @@ class DataListView
 	function writeScript()
 	{
 		$this->setID(); // Set to a default ID if none was specified.
+		
+		if ($_REQUEST["__column_order"])
+		{
+			$this->setColumnOrder(explode("|", $_REQUEST["__column_order"]));
+		}
 		
 		if ($this->excelFile && $_REQUEST["__excel"] == $this->id)
 		{
@@ -327,7 +369,7 @@ class DataListView
 			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
 		}
 		
-		if ($constructor || $this->dragReorder)
+		if ($constructor || $this->dragReorder || $this->dragColumnReorder)
 		{
 			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
 			$script .= $constructor;
@@ -337,6 +379,12 @@ class DataListView
 				$script .= "\n\t\tnew DraggableTable('#{$this->id} tbody', '{$this->reorderHandler}', '{$this->items[0]->primary_key}');";
 			}
 			
+			if ($this->dragColumnReorder)
+			{
+				$options = ($this->columnReorderCallback) ? ", {onColumnsReordered: $this->columnReorderCallback}" : "";
+				$script .= "\n\tnew DraggableColumnTable('{$this->id}'$options);";
+			}
+				
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
@@ -350,9 +398,11 @@ class DataListView
 	 */
 	function drawView()
 	{
+		trace("Number of Items: ".count($this->items), 3);
+		
 		if (count($this->items) > 0)
 		{
-			$this->autoPopulate($this->items[0]); // Autopopulate the column list from the first object, if not specified
+			if (!count($this->columns)) $this->autoPopulate($this->items[0]); // Autopopulate the column list from the first object, if not specified
 			$attrs = "";
 			if ($this->id)
 			{
@@ -454,10 +504,10 @@ class DataListView
 						$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
 					}
 
-					if ($this->excelFile && !$this->menu)
+					if ($this->excelFile && !$this->menu && !$this->hideExcelIcon)
 					{
 ?>
-		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+		<a href='<?echo $_SERVER['REQUEST_URI']."$qs"?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
 <?									
 					}
 					else if ($this->menu)
@@ -483,7 +533,7 @@ class DataListView
 <?
 			foreach($this->items as $item)
 			{
-				$cl = "";
+				$cl = array();
 				if($this->rowId)
 					$rowId = $this->formatRowId($item);
 					
@@ -491,15 +541,28 @@ class DataListView
 				{
 					$retval = call_user_func($this->onStartRow, $item);
 					if ($retval === false) continue; // return false to indicate row should be skipped
-					if ($retval) $cl = " class='$retval'"; // return a string to indicate a css class for the row
+					if ($retval) $cl[] = $retval; // return a string to indicate a css class for the row
 				}
 				
 				foreach($this->totalCallbacks as $cb)
 				{
 					call_user_func($cb, $item);
 				}
+				
+				$onclick = "";
+				
+				if ($this->onRowClick)
+				{
+					$onclick =  " onclick=\"" . $item->format($this->onRowClick) . "\" onmouseover=\"this.addClass('hover');";
+					if ($this->onRowHover) $onlick .= $item->format($this->onRowHover);
+					$onclick .=" return false;\" onmouseout=\"this.removeClass('hover'); return false;\"";
+					$cl[] = "clickable";
+				}
+				
+				$cl = implode(" ", $cl);
+				if ($cl) $cl = "class='$cl'";
 ?>
-          <tr id='<?php echo $rowId ?>' <?php echo $cl?>>
+          <tr id='<?php echo $rowId ?>' <?php echo $cl?><?echo $onclick?>>
 <?php
 				foreach($this->columns as $column)
 				{
@@ -554,14 +617,43 @@ class DataListView
 						}
 					}
 
-					if ($column->colspan != 1)
+					if ($column->colspan > 1)
 					{
-						$attrs .= " colspan='{$column->colspan}'";
-					}
+						if (!$this->dragColumnReorder)
+						{
+							$attrs .= " colspan='{$column->colspan}'";
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?php
-				}
+						}
+						else if (preg_match("/text-align:\\s*right/i", $column->style))
+						{
+							for($i = 1; $i < $column->colspan; ++$i)
+							{
+								echo "<td>&nbsp;</td>";
+							}
+?>
+<td<?echo $attrs?>><?echo $column->format()?></td>
+<?
+						}
+						else
+						{
+?>
+<td<?echo $attrs?>><?echo $column->format()?></td>
+<?
+							for($i = 1; $i < $column->colspan; ++$i)
+							{
+								echo "<td>&nbsp;</td>";
+							}
+						}
+					}
+					else
+					{
+?>
+<td<?echo $attrs?>><?echo $column->format()?></td>
+<?
+					}
+				}						
 ?>
 		  </tr>
 		</tfoot>	
@@ -608,6 +700,11 @@ class DataListView
 				if ($retval === false) continue;
 			}
 						
+			foreach($this->totalCallbacks as $cb)
+			{
+				call_user_func($cb, $item);
+			}
+
 			foreach($this->columns as $column)
 			{
 				if($column->onExport)

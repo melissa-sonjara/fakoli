@@ -81,16 +81,16 @@ class AutoForm
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
 	var $onDelete = "";					///< delete method name
+    var $customSaveHandler = null;		///< Use this field to override the default save behavior of your form.
 	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
 	var $onFormatLabel = null; 			///< Label Processing hook
     var $buttons_at_top = false;
     var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
     var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
     var $onSubmitHandler = null;        ///< Javascript Callback for user-defined onsubmit hook
-    
     var $required = array(); // list of required fields
     var $requiredFieldsText = "* indicates required field";
-
+	var $interstitialMessage = null;	///< Specifies the message to display in an interstitial while the form is being submitted
     var $fields;	///< Local field cache
 
     var $groups = array(); ///< List of field groups
@@ -1175,8 +1175,15 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 
 		$this->preProcessFields($pk, $filter);
 	
-		$obj->save();
-
+		if ($this->customSaveHandler)
+		{
+			if (!call_user_func_array($this->customSaveHandler, array($this))) return false;
+		}
+		else
+		{
+			$obj->save();
+		}
+		
 		$this->postProcessFields($pk, $filter);
 		
 		// onComplete event is fired once all processing has been completed
