@@ -346,3 +346,17 @@
 {
 	color: #000 !important;
 }
+
+body.ie7 #thumbnails,
+body.ie7 #thumbnails,
+body.ie8 #thumbnails
+{
+	width: 520px;
+}
+	
+body.ie6 #thumbnail_strip
+body.ie7 #thumbnail_strip
+body.ie8 #thumbnail_strip
+{
+	width: 480px;
+}

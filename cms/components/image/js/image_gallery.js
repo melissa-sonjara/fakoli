@@ -17,16 +17,16 @@ var ImageGallery = new Class(
 		this.scrollLeft.setStyle('cursor', 'pointer');
 		this.scrollLeft.addEvents(
 		{
-			'mouseover': function(e) { this.scrollLeft.src = "/fakoli/image_gallery/scroll_left_hover.png"; }.bind(this),
-			'mouseout': function(e) { this.scrollLeft.src = "/fakoli/image_gallery/scroll_left.png"; }.bind(this),
+			'mouseover': function(e) { this.scrollLeft.src = "/components/image/images/scroll_left_hover.png"; }.bind(this),
+			'mouseout': function(e) { this.scrollLeft.src = "/components/image/images/scroll_left.png"; }.bind(this),
 			'click': function(e) { new Event(e).stop(); this.scroll(-1); }.bind(this)
 		});
 		
 		this.scrollRight.setStyle('cursor', 'pointer');
 		this.scrollRight.addEvents(
 		{
-			'mouseover': function(e) { this.scrollRight.src = "/fakoli/image_gallery/scroll_right_hover.png"; }.bind(this),
-			'mouseout': function(e) { this.scrollRight.src = "/fakoli/image_gallery/scroll_right.png"; }.bind(this),
+			'mouseover': function(e) { this.scrollRight.src = "/components/image/images/scroll_right_hover.png"; }.bind(this),
+			'mouseout': function(e) { this.scrollRight.src = "/components/image/images/scroll_right.png"; }.bind(this),
 			'click': function(e) { new Event(e).stop(); this.scroll(1); }.bind(this)
 		});
 		

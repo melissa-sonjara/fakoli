@@ -278,12 +278,7 @@ class CalendarView
 	}
 	
 	function drawMiniCalendar()
-	{
-		global $script;
-		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
-ENDSCRIPT;
-		
+	{		
 		$this->calculateMonthRange();
 		
 		$bubbles = "";	
@@ -376,11 +371,6 @@ ENDSCRIPT;
 	
 	function drawMonth()
 	{
-		global $script;
-		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
-ENDSCRIPT;
-
 		global $dialogs;
 		ob_start();
 ?>

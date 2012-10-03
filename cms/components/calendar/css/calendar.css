@@ -204,7 +204,7 @@ body.program .eventprogramtitle
 {
 	display: none;
 	position: absolute;
-	background: url(/fakoli/calendar_view/images/event_bubble_top.png) top left no-repeat transparent;
+	background: url(/components/calendar/images/event_bubble_top.png) top left no-repeat transparent;
 	width: 220px;
 	padding-top: 16px;
 	z-index: 90;
@@ -216,7 +216,7 @@ body.program .eventprogramtitle
 	min-height: 60px;
 	height: auto !important;
 	height: 30px;
-	background: url(/fakoli/calendar_view/images/event_bubble_middle.png) top left repeat-y transparent;
+	background: url(/components/calendar/images/event_bubble_middle.png) top left repeat-y transparent;
 	text-align: left;
 	padding-left: 15px;
 	padding-right: 40px;
@@ -244,5 +244,5 @@ body.program .eventprogramtitle
 {
 	width: 220px;
 	height: 53px;
-	background: url(/fakoli/calendar_view/images/event_bubble_bottom.png) top left no-repeat transparent;
+	background: url(/components/calendar/images/event_bubble_bottom.png) top left no-repeat transparent;
 }

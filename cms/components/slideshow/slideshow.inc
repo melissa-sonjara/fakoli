@@ -92,10 +92,6 @@ class Slideshow
 		
 		ob_start();
 ?>
-<!--[if IE]>
-<link rel="stylesheet" type="text/css" href="/fakoli/slideshow/ie.css"/>
-<![endif]-->
-
 <script type="text/javascript"><!--
 /* <![CDATA[ */
 

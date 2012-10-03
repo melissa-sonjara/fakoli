@@ -32,25 +32,25 @@
 
 function showEventBubble(id, link)
 {
-	$(id).show();
-	$(id).fade('in');
-	var coord = $(link).getCoordinates();
-	$(id).setStyles({'top': coord.top - $(id).getCoordinates().height + 4, 'left': coord.left - 60});
+	document.id(id).show();
+	document.id(id).fade('in');
+	var coord = document.id(link).getCoordinates();
+	document.id(id).setStyles({'top': coord.top - document.id(id).getCoordinates().height + 4, 'left': coord.left - 60});
 }
 
 function hideEventBubble(id)
 {
-	$(id).fade('out');
+	document.id(id).fade('out');
 }
 
 var eventDialog;
 
 window.addEvent('domready', function()
 {
-	var eventDetailDlg = $('eventDetailDlg');
+	var eventDetailDlg = document.id('eventDetailDlg');
 	if (eventDetailDlg)
 	{	
-		eventDialog = new ModalDialog(eventDetailDlg, {handle: $('eventDetailDlgHeader'), draggable: true, body: $('eventDetailDlgBody')});
+		eventDialog = new ModalDialog(eventDetailDlg, {handle: document.id('eventDetailDlgHeader'), draggable: true, body: document.id('eventDetailDlgBody')});
 	}
 });	
 

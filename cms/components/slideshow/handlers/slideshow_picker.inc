@@ -19,7 +19,7 @@ $table->zebra = false;
 
 $script .= $table->writeScript();
 $script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/fakoli/slideshow/slideshow_picker.js"></script>
+<script type="text/javascript" src=""></script>
 <script type="text/javascript">
 var picker;
 window.addEvent('domready', function()
