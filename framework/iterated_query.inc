@@ -115,18 +115,15 @@ class DataItemIterator implements Iterator, Countable
  * wrapped in a DataItemIterator, allowing them to be used in foreach(...)
  * statements, etc.
  * 
- * One limitation of the returned resultset is that count() will not return
- * an accurate count of the number of items, since this cannot be determined
- * reliably until all items have been read. In general it is recommend that
- * IteratedQuery only be used in situations where the result would take up 
- * too much memory to be processed using a standard Query object.
+ * In general it is recommended that IteratedQuery only be used in situations 
+ * where the result would take up too much memory to be processed using a 
+ * standard Query object.
+ * 
  * @author andy
  *
  */
 class IteratedQuery extends AbstractQuery
-{
-	var $indexBy;
-	
+{	
 	public function __construct($class, $constraints = "")
 	{
 		parent::__construct($class, $constraints);
