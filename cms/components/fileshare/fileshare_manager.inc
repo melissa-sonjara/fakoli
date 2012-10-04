@@ -137,8 +137,7 @@ function uploadFileshareFile()
 	
 	static function getStyles()
 	{
-		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
-		$styles .= "<link href=\"/fakoli/css/fileshare.css\" rel=\"stylesheet\"/>\n";
+		$styles .= "<link href=\"/components/fileshare/css/fileshare.css\" rel=\"stylesheet\"/>\n";
 		
 		return $styles;
 	}
