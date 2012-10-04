@@ -56,7 +56,8 @@ if ($method == "POST")
 	if (!$forum_id)
 	{
 		trace("***** CREATING NEW FORUM ******: ".now(), 3);
-		$_POST['owner_id'] = $user->site_user_id;
+
+		$_POST['owner_id'] = $user->get($user->getPrimaryKey());
 		$_POST['created_date'] = now();
 	}	
 
