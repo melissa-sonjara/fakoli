@@ -32,6 +32,7 @@ class CompositeAutoForm
 	var $action;
 	var $containerClass;
 	var $buttonAlignment = "left";
+	var $preset = array();
 	
 	/**
 	 * Creates a new CompositeAutoForm
@@ -98,6 +99,26 @@ function onCompositeFormSubmit(form)
 		
 		return $script;
 	}
+	
+	/**
+	 * Array of fields to be ignored when determining if a 
+	 * record is empty in cases where empty records should not
+	 * trigger an error.
+	 * 
+	 * For example:
+	 * A spreadsheet form has the fields "sort_order" preset.
+	 * The user does not complete any values in a row. If
+	 * the subordinate form has allowEmpty set to true, 
+	 * we don't want the value in the sort_order field to 
+	 * trigger an error message.
+	 */
+	function preset()
+	{
+		foreach(func_get_args() as $preset)
+		{
+			$this->presetFields[$preset] = true;
+		}
+	}	
 	
 	/**
 	 * Draw the sub-forms, with a combined single set of submission buttons.
@@ -378,7 +399,7 @@ class SubordinateAutoForm extends AutoForm
 		
 		foreach($fields as $field => $type)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->form->hidden) && !($filter && $filter->isExcluded($field)))
+			if ($field != $pk && !array_key_exists($field, $this->form->hidden) && !($filter && $filter->isExcluded($field)) && !array_key_exists($field, $this->parent->presetFields))
 			{
 				$value = $obj->$field;
 				if($value)

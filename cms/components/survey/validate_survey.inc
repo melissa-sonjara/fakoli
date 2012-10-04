@@ -56,6 +56,16 @@ class ValidateSurvey extends ValidateTabSet
 
 		return true;
 	}
+	
+	function isValid()
+	{
+		if($this->validateQuestionnaire() && $this->validateEmail())
+		{
+			return true;
+		}
+		
+		return false;
+	}
 
 	function validateQuestionnaire()
 	{

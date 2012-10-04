@@ -73,7 +73,8 @@ class OnlineHelpManifest
 				"ComponentScanComplete"	=>	array(OnlineHelpManager, setDefaults),
 				"upgradeComponent"		=>	array(OnlineHelpManager, upgradeComponent),
 				"Initialize"			=>	array(OnlineHelpManager, onInitialize),
-				"PostProcessPage"		=>	array(OnlineHelpManager, substituteHelpLink)
+				"PostProcessPage"		=>	array(OnlineHelpManager, substituteHelpLink),
+				"RegisterSerializationHandler"	=>	array(OnlineHelpManager, registerSerializationHandler)
 			);
 	}
 	

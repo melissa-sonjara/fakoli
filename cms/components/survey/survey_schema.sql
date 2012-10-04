@@ -44,15 +44,17 @@ CREATE TABLE `survey_question` (
   PRIMARY KEY (`survey_question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
 
+
 CREATE TABLE `survey_question_xref` (
   `survey_question_xref_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `survey_id` int(10) unsigned DEFAULT NULL COMMENT 'if survey question set',
   `survey_template_id` int(10) unsigned DEFAULT NULL COMMENT 'if standard question set',
   `survey_question_id` int(10) unsigned NOT NULL,
   `sort_order` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`survey_question_xref_id`)
+  PRIMARY KEY (`survey_question_xref_id`),
+  KEY `survey_idx` (`survey_id`),
+  KEY `survey_question_idx` (`survey_question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='survey question set or standard set';
-
 
 CREATE TABLE `survey_response` (
   `response_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -60,18 +62,9 @@ CREATE TABLE `survey_response` (
   `token` varchar(10) NOT NULL COMMENT 'assigned response token',
   `email` varchar(100) NOT NULL,
   `last_modified` date DEFAULT NULL COMMENT 'date submitted',
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `status` varchar(20) NOT NULL DEFAULT 'not_started',
   PRIMARY KEY (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `survey_template` (
-  `survey_template_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `introduction` text COMMENT 'instructions to users completing survey',
-  `message` text NOT NULL,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'in progress, published, in review',
-  PRIMARY KEY (`survey_template_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -85,3 +78,49 @@ INSERT INTO `merge_code` (`name`,`description`,`map`,`class_name`) VALUES
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+DROP TABLE IF EXISTS `survey_template`;
+
+ALTER TABLE `survey_question_xref` drop column `survey_template_id`;
+
+ALTER TABLE `survey_question` drop column `locked`;
+
+ALTER TABLE `survey_response` CHANGE COLUMN `status` `status` varchar(20) NOT NULL DEFAULT 'not_started';
+update `survey_response` set status = 'not_started' where status = '0';
+update `survey_response` set status = 'in_progress' where status = '1';
+update `survey_response` set status = 'submitted' where status = '2';
+
+-- END Version 1.1
+
+
+-- START Version 1.2
+
+ALTER TABLE `survey_question` ADD COLUMN `context_help` TEXT;
+
+-- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE `survey` ADD COLUMN `confirmation_message` TEXT after `message`;
+
+-- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE `survey` ADD COLUMN `allow_anonymous_responses` TINYINT(3) DEFAULT 0;
+
+-- END Version 1.4
+
+-- START Version 1.5
+
+ALTER TABLE `survey` ADD COLUMN `instructions` TEXT AFTER `end_date`;
+
+-- END Version 1.5
+
+-- START Version 1.6
+
+ALTER TABLE `survey` ADD COLUMN `show_preview_before_submitting` TINYINT(3) DEFAULT 1;
+
+-- END Version 1.6

@@ -50,7 +50,8 @@ class ComponentUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:add table component_update_log_attachment_xref"
+			"1.1"		=>	"sql:add table component_update_log_attachment_xref",
+			"1.2"		=>	"sql:Increased size of component description field"
 	);
 	
 	function ComponentUpgradeManager()

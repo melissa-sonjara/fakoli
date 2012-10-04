@@ -24,3 +24,9 @@ CREATE TABLE `error_log` (
 ENGINE = InnoDB;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `error_log` ADD COLUMN `referer` VARCHAR(1000) NOT NULL DEFAULT '';
+
+-- END Version 1.1

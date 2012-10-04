@@ -19,3 +19,9 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `comment` ADD COLUMN `published` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 AFTER `author`;
+
+-- END Version 1.1

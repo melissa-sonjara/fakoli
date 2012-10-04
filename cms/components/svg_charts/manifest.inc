@@ -22,7 +22,7 @@ class SvgChartsManifest
 				"/components/svg_charts/js/raphael.dropshadow.js",
 				"/components/svg_charts/js/raphael.emboss.js",
 				"/components/svg_charts/js/canvg.js",
-				"/components/svg_charts/rgbcolor.js",
+				"/components/svg_charts/js/rgbcolor.js",
 				"/components/svg_charts/js/palette.js",
 				"/components/svg_charts/js/chart.js",
 				"/components/svg_charts/js/shape.js",

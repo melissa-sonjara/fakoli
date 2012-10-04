@@ -43,44 +43,40 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 6/23/10
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-redirect("survey_dashboard");
+	redirect("survey_dashboard");
 
-$survey = new survey($survey_id);
+$survey = new Survey($survey_id);
+$page->page_title .= " for {$survey->title}";
 
 $survey->filter = new InclusionFilter("survey_id");
-$form = new AutoForm($survey);
 
 $xrefs = $survey->SurveyQuestionXrefs();
 
 $table = new DataListView($xrefs, "SurveyQuestions");
-$table->column("Question", array(CMSSurveyTableManager, formatSurveyQuestionLink))
-->column("Sort Order", "<input type='text' name=\"xref_{survey_question_xref_id}\"
-		value=\"{sort_order}\" size=\"4\"/>", false, "width: 10%")
-->column("Options", array(CMSSurveyTableManager, formatOptions))
-->column("Required", array(CMSSurveyTableManager, formatRequired))
-->column("Remove", "<a href=\"#\" onclick=\"new Survey().removeSurveyQuestion({survey_question_xref_id}); return false;\">
-			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/delete.gif\"></a>")
+$table->column("Question", "<a href='survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}'>{Question.question}</a>")
+	->column("Options", array(SurveyQuestionTableHelper, formatOptions))
+	->column("Required", array(SurveyQuestionTableHelper, formatRequired))
+	->column("Remove", "<a href=\"#\" onclick=\"new SurveyCreate().removeSurveyQuestion({survey_question_xref_id}); return false;\">
+			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>", false, "text-align: center")
 ;
 
 $table->emptyMessage = "There are no questions defined.";
+$table->enableDragReorder("/action/survey/reorder_survey_questions?survey_id=$survey_id");
+$table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the survey questions</span>";
 $table->sortable = false;
 $table->cssStyle = "width: 100%";
-
-$questionSelect = new DataListFieldRenderer($form, $table, "survey_questions", "Survey Questions");
-$form->submitLabel = "Save Order";
-$questionSelect->onPostProcess = reOrderQuestions;
+$table->rowId = true;
 
 if(count($xrefs) == 0)
-$form->readOnlyForm = true;
+	$form->readOnlyForm = true;
 
-$form->button("Create a New Question", "survey_question_form?survey_id=$survey_id");
-$form->button("Select from Existing Questions", "survey_question_select?survey_id=$survey_id");
+$questionSets = SurveyManager::getQuestionSets($survey_id);
 
 $tabs = SurveyManager::surveyTabs($survey_id, false);
 
@@ -92,60 +88,28 @@ if ($method == "POST")
 	}
 }
 
-$script .= $form->writeScript();
+$script .= $table->writeScript();
 
 $tabs->writeHTML();
 
-
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
+<button id="next_page_button" class="button"
+	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
 <h3><?php echo $survey->title ?></h3>
-<p>Select the questions for this survey. You can select from a list of
-existing questions or create new ones. Removing a question from this
-survey does not delete the question from the database unless the
-question is not linked to any other template or survey.</p>
-<?php
-$form->drawForm();
-
-if(count($xrefs) == 0)
+<div id="inner_border"><?
+$table->drawView();
+?>
+<br><br>
+<a class='button' href='survey_question_form?survey_id=<?php echo $survey_id ?>'>Create a New Question</a>&nbsp;&nbsp;
+<?
+if (count($questionSets))
 {
-	?>
-<p><a class='button'
-	href='survey_question_form?survey_id=<?php echo $survey_id ?>'>Create
-a New Question</a>&nbsp;&nbsp; <a class='button'
-	href="survey_question_select?survey_id=<?php echo $survey_id ?>">Select
-from Existing Questions</a></p>
-	<?php
-}
-?></div>
-<?php
-
-
-
-function reOrderQuestions($tableSelect, $field)
-{
-	global $_POST;
-	// reorder
-	foreach($_POST as $name => $value)
-	{
-		if (!strncmp($name, "xref_", 5))
-		{
-			$id = substr($name, 5);
-			$xref = new SurveyQuestionXref($id);
-			$xref->saveSortOrder($value);
-		}
-	}
-
-	// renumber
-	$value = 1;
-	$xrefs = Query::create(SurveyQuestionXref, "WHERE survey_id=:survey_id ORDER BY sort_order")
-	->bind(":survey_id", $tableSelect->parent->data->survey_id)
-	->execute();
-
-	foreach($xrefs as $xref)
-	{
-		$xref->saveSortOrder($value);
-		$value++;
-	}
+?>
+<a class='button' href="survey_question_select?survey_id=<?php echo $survey_id ?>">Select from Existing Questions</a>
+<?
 }
 ?>
+<br><br>
+</div>
+</div>

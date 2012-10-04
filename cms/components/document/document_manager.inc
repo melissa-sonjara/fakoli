@@ -756,6 +756,16 @@ function deleteFolderResult(result)
 		$roles = DocumentManager::getRoleOptions();
 		return implode(",", array_keys($roles));
 	}	
+	
+	static function registerSearchables($searchables)
+	{
+		trace("DocumentManager registerSearchables", 3);
+		if (!Settings::getSetting("solr", "enabled"))
+		{
+			$searchables["document"] = array(Document);
+		}
+		return $searchables;
+	}
 
 	static function upgradeComponent($version)
 	{

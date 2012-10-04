@@ -40,7 +40,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 5/13/10
  */
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "survey_manager");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -49,14 +49,16 @@ if(!$survey_id)
 	redirect("index");
 
 $survey = new Survey($survey_id);
-$view = new SurveyResultsView(new SurveyManager($survey));
+$page->page_title = "Tabular View of {$survey->title}";
+
+$view = new SurveyResultsView(new SurveyResultsManager($survey));
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 
 $script .= $view->writeScript();
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <h3>Aggregated Survey Results for <?echo $survey->title?></h3>
 <?
 $view->drawView();

@@ -75,32 +75,16 @@ var Calendar = new Class(
 		this.formName = formName;
 		this.ctrlName = ctrlName;
 		this.divID    = varName + "_" + formName + "_" + ctrlName;
-		
-		// For IE5.5+, we need to use an IFRAME shim to ensure that
-		// the calendar overlays SELECT and IFRAME sections properly.
-		// However, for other browsers this can lead to visual artifacts,
-		// plus from a neatness standpoint there's no need to carry
-		// around an extra IFRAME if we don't need it...
 	
-		var body = $(document.body ? document.body : document.documentElement);
-		
-		if (navigator.appVersion.indexOf("MSIE")!=-1)
-		{
-			var temp = navigator.appVersion.split("MSIE");
-			var version = parseFloat(temp[1]);
-			if (version>=5.5)
-			{
-				this.shim = new Element('iframe', {id: this.divID + 'Shim'});
-				this.shim.setStyles({'display': 'none', 'position': 'absolute', 'z-index': 254});
-				body.adopt(this.shim);
-			}
-		}
+		var body = document.id(document.body ? document.body : document.documentElement);
 	
 		this.calendar = new Element('div', {id: this.divID});
-		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'visibility': 'hidden'});
+		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'display': 'none', 'opacity': 0});
 		this.calendar.addEvent('mouseout', function(e) {this.onMouseOut(e);}.bind(this));
+
+		this.shim = new IframeShim(this.calendar);
 		
-		window.addEvent("domready", function() { body.adopt(this.calendar); }.bind(this));
+		window.addEvent("domready", function() { document.body.grab(this.calendar, 'top'); }.bind(this));
 	
 	},
 	
@@ -295,26 +279,19 @@ var Calendar = new Class(
 
 	show: function(parent)
 	{
+		parent = document.id(parent);
+		
 		if (!this.form) this.bindControl();
 		this.draw();
 		
-		var top = getOffsetTop(parent);	
-		var left =  getOffsetLeft(parent) + parent.offsetWidth;
-		
-		this.calendar.style.position="absolute";
-		this.calendar.style.visibility="visible";
-		this.calendar.style.left = left + "px";
-		this.calendar.style.top = top + "px";
+		this.calendar.setStyles({position: "absolute", display: 'block', 'opacity': 0});
+		this.calendar.position({'relativeTo': parent, 'position': 'topRight', 'offset': {'x': 0, 'y': 0} });
+		this.calendar.fade('in');
 		
 		if (this.shim)
 		{
-			this.shim.style.width = this.calendar.offsetWidth;
-			this.shim.style.height = this.calendar.offsetHeight;
-			this.shim.style.top = this.calendar.style.top;
-			this.shim.style.left = this.calendar.style.left;
-			this.shim.style.zIndex =this.calendar.style.zIndex - 1;
-			
-			this.shim.style.display = "block";
+			this.shim.position();
+			this.shim.show();
 		}
 	},
 	
@@ -322,12 +299,12 @@ var Calendar = new Class(
 	hide: function()
 	{
 		if (!this.form) this.bindControl();
-		this.calendar.style.position="absolute";
-		this.calendar.style.visibility = "hidden";
+		this.calendar.fade('out');
+		//this.calendar.setStyles({'position': "absolute", 'display': 'none'});
 		
 		if (this.shim)
 		{
-			this.shim.style.display = "none";
+			this.shim.hide();
 		}
 	},
 	
@@ -336,7 +313,7 @@ var Calendar = new Class(
 		if (!this.form) this.bindControl();
 		
 
-		if (this.calendar.style.visibility == "visible")
+		if (this.calendar.getStyle('opacity') > 0)
 		{
 			this.hide();
 		}
@@ -403,24 +380,6 @@ var Calendar = new Class(
 		
 		var x = event.page.x;
 		var y = event.page.y;
-//		var ie;
-//		
-//		
-//		if (!event.pageX) ie = true;
-//		
-//		var x = (event.pageX > 0) ? event.pageX : event.x + scrollLeft();
-//		var y = (event.pageY > 0) ? event.pageY : event.y + scrollTop();
-		
-		//window.status = (left  +"," + top +" " + width + "x" + height + ": " + x + ", " + y);
-		
-		// Fudge for IE's bad borders
-//		if (ie)
-//		{
-//			coords.left++;
-//			coords.top++;
-//			coords.width--;
-//			coords.height--;
-//		}
 		
 		window.status = "(" + x + "," + y + ") [" + coords.left + ", " + coords.width + "] <" + coords.top + "," + coords.height + ">";
 		
@@ -434,45 +393,3 @@ var Calendar = new Class(
 	{
 	}
 });
-
-function getOffsetLeft (el) 
-{
-  	var ol = el.offsetLeft;
-  	while ((el = el.offsetParent) != null)
-	{
-    	ol += el.offsetLeft;
-    }
-  
-  	return ol;
-}
-
-function getOffsetTop (el) 
-{
-  	var ot = el.offsetTop;
-  	while((el = el.offsetParent) != null)
-  	{
-   		ot += el.offsetTop;
-   	}
-   	
-	return ot;
-}
-
-function scrollTop()
-{
-	if (document.documentElement && document.documentElement.scrollTop)
-		theTop = document.documentElement.scrollTop;
-	else if (document.body)
-		theTop = document.body.scrollTop;
-		
-	return theTop;
-}
-
-function scrollLeft()
-{
-	if (document.documentElement && document.documentElement.scrollLeft)
-		theTop = document.documentElement.scrollLeft;
-	else if (document.body)
-		theTop = document.body.scrollLeft;
-		
-	return theTop;
-}

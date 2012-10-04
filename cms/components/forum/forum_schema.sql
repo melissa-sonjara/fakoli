@@ -72,3 +72,9 @@ CREATE VIEW `forum_summary` AS select `f`.`forum_id` AS `forum_id`,`f`.`title` A
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `forum` ADD COLUMN `identifier` VARCHAR(255) NOT NULL DEFAULT '' AFTER `forum_id`;
+
+-- END Version 1.1

@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "survey_manager");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -51,15 +51,16 @@ if(!$survey_id)
 	redirect("index");
 
 $survey = new Survey($survey_id);
+$page->page_title = "Survey Responses for {$survey->title}";
 
 $responses = $survey->Responses("ORDER BY last_modified DESC");
 $recipientCount = $survey->getRecipientCount();
 $responseCount = $survey->getResponseCount();
 
 $table = new DataListView($responses, "surveyResponses");
-$table->column("Token", "<a href='#' onclick=\"new Survey().showSurveyResponse({response_id}); return false\">{token}</a>", true)
-->column("Status", array(CMSSurveyTableManager, formatResponseStatus), true)
-->column("Date Submitted", array(CMSSurveyTableManager, formatResponseSubmitDate), true)
+$table->column("Token", array(SurveyTableHelper, formatResponseLink), true)
+	->column("Status", "{status:prettify}", true)
+	->column("Date Submitted", array(SurveyTableHelper, formatResponseSubmitDate), true)
 ;
 
 $table->emptyMessage = "There are no responses to this survey.";
@@ -75,12 +76,24 @@ $script .= $table->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <h3>Survey Responses</h3>
 <?
 echo "<h3>".$survey->getTitle() . "</h3>\n";
+echo "<p id='survey_reminder_result' class='error' style='display: 'none'></p>\n";
 
 $table->drawView();
+echo "<p>";
 if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCount)
-echo "<p><a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a></p>\n";
-?></div>
+{
+	echo "<a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a>&nbsp;&nbsp;\n";
+}
+
+if ($survey->allow_anonymous_responses)
+{
+	echo "<a target='_blank' href='anonymous_response?survey_id={$survey_id}' class='button'>Enter an Anonymous Survey Response</a>";
+}
+
+?>
+</p>
+</div>

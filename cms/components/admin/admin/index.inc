@@ -33,8 +33,19 @@
  
 $title = "Site Administration";
 
+
+$signature = ComponentManager::getComponentSignature();
+
 ?>
 <b>Welcome <?echo $user->getFullName()?>!</b>
 <br/>
 <br/>
-<a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/php_info", "800px"); return false;' class="button">Show PHP Configuration</a>
+<strong>Server Load: </strong><?echo Fakoli::getServerLoad()?><br/><br/>
+<strong>Disk Usage:</strong><br/><br/><?echo Fakoli::getFileSystemInfo()?><br/><br/>
+
+<strong>Component Configuration Signature:</strong> <?echo $signature?>
+<br/>
+<br/>
+<a class="button" href="/action/component/scan"> Scan for Component Updates </a>&nbsp;&nbsp;
+<a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/php_info", "800px"); return false;' class="button">Show PHP Configuration</a>&nbsp;&nbsp;
+<a href='/admin/user_form' class='button'>Create a New User</a>

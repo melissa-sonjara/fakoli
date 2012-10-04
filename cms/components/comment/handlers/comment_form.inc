@@ -13,6 +13,7 @@ $xref_class = mysql_escape_string($_GET["xref_class"]);
 $key_name = mysql_escape_string($_GET["key_name"]);
 $key_value = checkNumeric($_GET["key_value"]);
 $xref_component = mysql_escape_string($_GET["xref_component"]);
+global $user;
 
 if ($xref_component) Fakoli::using($xref_component);
 
@@ -25,14 +26,26 @@ if ($comment_id)
 }
 else
 {
-	$comment->user_id = $user->get($user->primary_key);
+        if ($user)
+		{
+			$comment->user_id = $user->get($user->primary_key);
+			
+		}
+		else
+		{
+			$comment->user_id = 0;
+			
+		}
+	
 	$comment->date_posted = today();
 	$newPost = true;
 }
 
 $form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&xref_component=$xref_component", "EditComment_form");
+$form->alias("title", "Subject", "author", "Your Name");
 $form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
+
 $form->data->set("xref_class", $xref_class);
 
 // To do - make it configurable whether to include title?
@@ -61,6 +74,7 @@ $form->allowDelete = true;
 
 if($method == "POST")
 {
+	//echo "<pre>"; print_r($_POST); echo "</pre>";
 	if($form->save())
 	{
 		if ($newPost)
@@ -69,6 +83,10 @@ if($method == "POST")
 			$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
 			$xref->set($key_name, $key_value);
 			$xref->save();
+			if(!Settings::getValue("comment", "publish_automatically"))
+			{
+				sendEmailUsingEmailManager($comment, 'new_comment');
+			}		
 		}
 
 		ajaxReturn("OK");

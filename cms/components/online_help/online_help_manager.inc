@@ -33,6 +33,25 @@
 
 Fakoli::using("settings");
 
+class OnlineHelpSerializationHandler
+{
+	function OnlineHelpSerializationHandler()
+	{
+	}
+
+	function export()
+	{
+		return SerializationManager::serialize(HelpBook, "ORDER BY help_book_id");
+		return SerializationManager::serialize(HelpPage, "ORDER BY help_page_id");
+	}
+	
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(HelpBook, $doc, $tx);
+		SerializationManager::unserialize(HelpPage, $doc, $tx);
+	}	
+}
+
 class OnlineHelpManager
 {	
 	var $book;
@@ -92,6 +111,11 @@ class OnlineHelpManager
 		$mgr = new OnlineHelpUpgradeManager();
 		$mgr->upgrade($version);
 	}	
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("online_help", "Online Help", new OnlineHelpSerializationHandler());
+	}
 	
 	function startFrame($class)
 	{

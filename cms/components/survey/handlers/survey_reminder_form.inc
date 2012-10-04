@@ -40,14 +40,13 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 10/21/2010
  */
 
-Fakoli::using("survey", "email");
+Fakoli::using("survey", "survey_manager", "email", "settings");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
-$rtn = checkNumeric($_GET["rtn"]);
 
 if(!$survey_id)
-	ajaxReturn("unknown survey");
+	ajaxReturn("Survey Reminder Form - unknown survey");
 
 $survey = new Survey($survey_id);
 
@@ -62,7 +61,7 @@ $nonResponsives = $survey->getNonResponders();
 $survey->recipients = formatItems($nonResponsives, "{email}", ", ");
 
 $survey->filter = new InclusionFilter("title", "recipients", "sender_email", "message");
-$form = new AutoForm($survey, "POST", "/action/survey/survey_reminder_form?survey_id=$survey_id&msg=$msg");
+$form = new AutoForm($survey, "POST", "/action/survey/survey_reminder_form?survey_id=$survey_id", "SurveyReminder_form");
 $form->ajaxSubmit("function(result) {new Survey().surveyReminderFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $form->alias("recipients", "Recipients who have not yet responded", "sender_email", "From");
@@ -73,51 +72,40 @@ $form->readOnly("sender_email", "recipients", "title");
 $form->required("message");
 $form->button("Cancel", "new Survey().closeDialog()", null, true);
 
-if($rtn)
-{
-	$form->readOnlyForm = true;
-	$msg = ($rtn == 1) ? "<b>Reminders have been sent.</b>" : "<warning>Reminders could not be sent.</warning>";
-}
-
 if ($method == "POST")
 {
-	// We don't want to save their reminder message
+	$survey =& $form->data;
+	$survey->fromPOST();
+	
 	$form->msg = $form->validator->validate();
 	if(!$form->msg)
 	{
-		$rtn = sendReminderEmails($form, $nonResponsives);
+		$rtn = sendReminderEmails($survey, $nonResponsives);
 		ajaxReturn($rtn);
 	}
 	else
-	ajaxReturn($form->msg);
+	{
+		ajaxReturn($form->msg);
+	}
 }
 
 echo $form->writeScript();
 
-echo $msg;
 $form->drawForm();
 
 
-function sendReminderEmails($form, $nonResponsives)
+function sendReminderEmails($survey, $nonResponsives)
 {
-	global $config;
-	global $_POST;
-	$survey = $form->data;
+	SurveySendManager::buildEmail($survey, $sender_email, $subject, $surveyMessage);
 
-	$sender_email = ($survey->sender_email) ? $survey->sender_email : $survey->getSenderEmail();
-	$subject = Settings::getValue("survey", "email_subject");
-	$message_footer = Settings::getValue("survey", "message_footer");
+	if(count($nonResponsives) == 0)
+		return "OK";
 
-	$message = $_POST["message"] . $message_footer;
-
-	if(count($nonResponsives) > 0)
+	foreach($nonResponsives as $response)
 	{
-		foreach($nonResponsives as $response)
-		{
-			$sent = SurveyManager::sendOneSurveyEmail($survey, $subject, $response, $message, $sender_email);
-		}
+		$sent = SurveySendManager::sendOneSurveyEmail($survey, $subject, $response, $surveyMessage, $sender_email);
 	}
 
-	return ($sent) ? "1" : 2;
+	return ($sent) ? "OK" : "FAIL";
 }
 ?>

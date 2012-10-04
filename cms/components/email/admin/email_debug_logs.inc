@@ -34,6 +34,10 @@
 Fakoli::using("email");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Email Debug Logs";
+
+$title = "Email Debug Logs";
+
 $logs = EmailManager::scanDebugLogs();
 
 $table = new DataListView($logs, "emailDebugLogs");

@@ -39,10 +39,11 @@ $report = new CustomReport();
 
 if ($report_id) $report->load($report_id);
 
-$report->filter = new InclusionFilter("report_id", "title", "description");
+$report->filter = new InclusionFilter("report_id", "title", "description", "column_order");
 
 $form = new AutoForm($report);
 $form->required("title");
+$form->hide("column_order");
 
 $form->onSubmitHandler = "ReportManager.onSaveReport";
 echo $form->writeScript();

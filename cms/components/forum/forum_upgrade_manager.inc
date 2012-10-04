@@ -49,7 +49,8 @@ Fakoli::using("forum", "component");
 class ForumUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added identifier to forum table"
 	);
 	
 	function ForumUpgradeManager()

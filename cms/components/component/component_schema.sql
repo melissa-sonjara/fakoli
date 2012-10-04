@@ -147,3 +147,8 @@ CREATE TABLE  `component_update_log_attachment_xref` (
 
 -- END Version 1.1
 
+-- START Version 1.2
+
+ALTER TABLE `component` MODIFY COLUMN `description` VARCHAR(1000) NOT NULL DEFAULT '';
+
+-- END Version 1.2

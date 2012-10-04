@@ -65,7 +65,7 @@ class ImagePickerManifest
 		
 	static function getScripts()
 	{
-		return array("/components/image_picker/js/image_picker.js");
+		return array("/fakoli/image_picker/image_picker.js");
 	}
 }
 

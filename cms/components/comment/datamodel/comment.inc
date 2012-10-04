@@ -40,6 +40,7 @@ class Comment extends DataItem
 						"author"  		=> String,
 						"date_posted"	=> Timestamp,
 						"description"	=> Text,
+						"published"		=> Boolean
 				);
 	
 // Relations

@@ -63,3 +63,16 @@ CREATE TABLE `article_site_xref` (
 ALTER TABLE `article` ADD COLUMN `sort_order` INT(10) NOT NULL DEFAULT 0;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE `article` ADD COLUMN `publish_date` date DEFAULT NULL AFTER `created_date`;
+UPDATE `article` SET `publish_date`=`created_date`;
+
+-- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE `article` ADD COLUMN `publication` VARCHAR(200) AFTER `author`;
+
+-- END Version 1.3

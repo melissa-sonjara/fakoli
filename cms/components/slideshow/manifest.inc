@@ -53,14 +53,13 @@ class SlideshowManifest
 	
 	function getScripts()
 	{
-		return array("/components/slideshow/js/slideshow.js",
-					 "/components/slideshow/js/slideshow_picker.js");
+		return array("/fakoli/slideshow/slideshow.js");
 	}
 	
 	
 	function getStyles()
 	{
-		return array("/components/slideshow/css/slideshow.css");
+		return array("/fakoli/slideshow/slideshow.css");
 	}
 	
 	static function subscribeToEvents()
@@ -74,13 +73,13 @@ class SlideshowManifest
 	{
 		global $html_editor_extra_buttons;
 
-		$html_editor_extra_buttons[] =
+		/*$html_editor_extra_buttons[] =
 				array("name"	=>	"slideshow_picker",
-					  "image"	=>	"/component/slideshow/images/slideshow_button.png", 
+					  "image"	=>	"/fakoli/images/slideshow_button.png", 
 					  "tooltip"	=>	"Insert a Slideshow", 
-					  "url"		=>	"/action/slideshow/slideshow_picker",
+					  "url"		=>	"/slideshow_picker",
 					  "width"	=>	"500px",
-					  "height"	=>	"400px");
+					  "height"	=>	"400px"); */
 	}
 }
 

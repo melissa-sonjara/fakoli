@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 5/13/10
  */
 
-Fakoli::using("survey", "email");
+Fakoli::using("survey", "email", "survey_manager");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -71,7 +71,14 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("survey_response_preview?survey_id={$survey_id}&token=$token");
+		if ($survey->show_preview_before_submitting)
+		{
+			redirect("survey_response_preview?survey_id={$survey_id}&token=$token");
+		}
+		else
+		{
+			redirect("survey_response_confirmation?survey_id={$survey_id}");
+		}
 	}
 	else // refresh
 		redirect("survey_response_form?survey_id={$survey_id}&token=$token");
@@ -80,7 +87,10 @@ if ($method == "POST")
 $script .= $form->writeScript();
 
 echo "<h3>". $survey->title . "</h3>\n";
-echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
+if ($survey->instructions)
+{
+	echo "<p>" . $survey->instructions . "</p>\n";
+}
 $form->drawForm();
 ?>
 <br>
@@ -89,7 +99,15 @@ $form->drawForm();
 function saveResponse($obj)
 {
 	$response = $obj->mgr->item;
-	$response->setStatus(response_in_progress);
+	$survey = $response->Survey();
+	if ($survey->show_preview_before_submitting)
+	{
+		$response->setStatus("in_progress");
+	}
+	else
+	{
+		$response->setStatus("submitted");
+	}	
 }
 
 ?>

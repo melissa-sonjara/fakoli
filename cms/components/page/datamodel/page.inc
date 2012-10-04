@@ -32,9 +32,9 @@
 *****************************************************************/
 
 Fakoli::usingFile("framework/join.inc");
-Fakoli::using("site");
+Fakoli::using("site", "search");
 
-class Page extends DataItem
+class Page extends DataItem implements Searchable
 {
 	// Fields
 	var $fields = array("page_id" 				=>	Number,
@@ -203,6 +203,71 @@ class Page extends DataItem
 		$this->default_format = "{page_title}";
 		
 		$this->DataItem(func_get_args());
+	}
+	
+	function search($params)
+	{
+		trace("Searching Pages", 3);
+		
+		if (is_object($params))
+		{
+			$search = clone $params;
+			$search->target = $this;
+			$search->remapField("title", "page_title");
+			$search->remapField("keywords", "meta_tag_keyword");			
+			$search->remapField("publication_date", "created_date");
+			
+			if (!$search->get("text", "like"))
+			{
+				$search->secondaryFields("meta_tag_keyword", "description");
+			}
+
+			
+			$constraint = $search->generateConstraint();
+			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
+			
+			$pages = Query::create(Page, $constraint)
+						  ->execute();
+		}
+		else
+		{
+			$params = "%$params%";
+			$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b AND published=1")
+						  ->bind(":a", $params, ":b", $params)
+						  ->execute();
+		}
+							  
+		return SearchManager::wrap($pages, PageSearchResult);
+	}
+}
+
+class PageSearchResult extends AbstractSearchResult
+{
+	var $item;
+	
+	function PageSearchResult($item)
+	{
+		$this->item = $item;
+	}
+	
+	function relevance()
+	{
+		return 0.2;
+	}
+	
+	function title()
+	{
+		return $this->item->page_title;
+	}
+	
+	function date()
+	{
+		return $this->item->created_date;
+	}
+	
+	function summary()
+	{
+		return $this->item->format("<h4>{page_title}</h4><p><em>{author} {created_date:short}</em></p><a href='{identifier}'>Read More</a>");
 	}
 }
 

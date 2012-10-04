@@ -683,5 +683,26 @@ class ComponentManager
 		
 		Settings::setDefaultValue("component", "upgrade_output_path", $defaultPath, "String");
 	}
+	
+	/**
+	 * Retrieves a unique signature for the application's enabled components,
+	 * based on their installed version numbers. This enables the administrator
+	 * to determine at a glance if the configuration of two Fakoli servers is
+	 * the same. 
+	 */
+	static function getComponentSignature()
+	{
+		$str = "";
+		
+		$components = Fakoli::getComponents();
+		foreach($components as $component)
+		{
+			$version = ComponentUpdateLog::getLatestVersion($component->name);
+			$str .= $component->name.":".$version."|";
+		}
+		
+		return sha1($str);
+	}
+	
 }
 ?>

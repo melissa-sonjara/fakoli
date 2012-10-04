@@ -30,6 +30,12 @@
 
 *****************************************************************/
 
+// Annotate the document body with browser info
+window.addEvent('domready', function()
+{
+	$(document.body).addClass(Browser.name).addClass((Browser.name + Browser.version).replace(".", "_"));
+});
+
 window.size = function()
 {
 	var w = 0;
@@ -181,6 +187,16 @@ var Curtain = new Class(
 		{
 			this.curtain.fade(0.0);
 		}
+	},
+	
+	loadingCursor: function()
+	{
+		this.curtain.setStyle('cursor', 'progress');
+	},
+	
+	normalCursor: function()
+	{
+		this.curtain.setStyle('cursor', 'auto');
 	}
 });
 
@@ -330,6 +346,7 @@ var ModalDialog = new Class(
     initialize: function(element, options)
     {
 		this.parent(element, options);
+		this.element.fade('hide');
     },
     	
     center: function()
@@ -385,6 +402,8 @@ var ModalDialog = new Class(
     	
     	if (fragmentURL && this.options.body)
     	{
+    		new Curtain().loadingCursor();
+    		
     		this.disposeOnExit = true;
     		if (!reload) this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
@@ -398,10 +417,16 @@ var ModalDialog = new Class(
     				this.options.body.set('text', '');
     				this.options.body.set('html', html);
     				$exec(script);
+    				this.element.fade('show');
     				this.center();
+    				new Curtain().normalCursor();
     			}.bind(this)
     		});
     		request.send();
+    	}
+    	else
+    	{
+    		this.element.fade('show');
     	}
     	
     	window.lowerCurtain(function() {
@@ -582,6 +607,7 @@ var Interstitial = new Class({
 	   	{
     		this.interstitial.setStyle('display', 'block');
     		this.center(); 
+    		Interstitial.current = this;
     	}.bind(this));
 	},
 	
@@ -589,6 +615,7 @@ var Interstitial = new Class({
 	{
     	window.raiseCurtain();
     	this.interstitial.setStyle('display', 'none');
+    	Interstitial.current = null;
 	}
 	
 });
@@ -740,6 +767,7 @@ var PaginatingList = new Class(
 	initialize: function(list, paginator, options)
 	{
 		this.list = $(list);
+		if (!this.list) return;
 		this.paginator = $(paginator);
 		this.setOptions(options);
 		this.pages = Math.ceil(this.list.getElements("li").length  / this.options.per_page );

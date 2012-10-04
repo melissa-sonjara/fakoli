@@ -61,16 +61,6 @@ class CalendarManifest
 		);
 	}	
 
-	static function getScripts()
-	{
-		return array("/components/calendar/js/calendar.js");
-	} 
-	
-	static function getStyles()
-	{
-		return array("/components/calendar/css/calendar.css");
-	}
-	
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" => array(CalendarManager, displayCalendar),

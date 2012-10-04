@@ -86,12 +86,19 @@ class SearchManager
 		
 		SearchManager::buildSearchMap();
 		
+		if (is_object($params))
+		{
+			$class_array = $_REQUEST["searchable_classes:"];
+		}
+		
 		foreach(SearchManager::$map as $component => $searchables)
 		{
 			Fakoli::using($component);
 			
 			foreach($searchables as $searchable)
 			{
+				if ($class_array && !array_key_exists($searchable, $class_array)) continue;
+				
 				$obj = new $searchable;
 				$results = $obj->search($params);
 				$searchResults = array_merge($searchResults, $results);
@@ -132,7 +139,7 @@ class SearchManager
 	
 	static function compareDate($item1, $item2)
 	{
-		return strtotime($item1->date()) - strtotime($item2->date());
+		return strtotime($item2->date()) - strtotime($item1->date());
 	}
 	
 	static function formatSearchResult($item)
@@ -140,13 +147,13 @@ class SearchManager
 		return $item->summary();
 	}
 	
-	function showResults()
+	function showResults($pageSize = 20)
 	{
 		global $script;
 		
 		$list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
-		$list->pageSize = 20;
-		$list->emptyMessage = "Your search did not match any items.";
+		$list->pageSize = $pageSize;
+		$list->emptyList = "Your search did not match any items.";
 		
 		$script .= $list->writeScript();
 		
@@ -154,7 +161,7 @@ class SearchManager
 		
 		if ($num)
 		{
-			echo "<p><em>$num ".pluralize("match", $num)." found.</em></p>";
+			echo "<p style='float: left'><em>$num ".pluralize("match", $num)." found.</em></p>";
 		}
 		
 		$list->drawList();

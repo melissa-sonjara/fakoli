@@ -43,7 +43,8 @@ class Question extends DataItem
 							"options"				=>	Text,
 							"required"				=>	Number,
 							"char_limit"			=>	Number,
-							"num_rows"				=>	Number
+							"num_rows"				=>	Number,
+							"context_help"			=>	Text
 						);
 						
 	var $relations = array (	
@@ -92,6 +93,21 @@ class Question extends DataItem
 
 		return ($count > 0) ? false : true;
 	}
+	
+	function setDefaultValues()
+	{
+		$this->num_rows = 3;
+		$this->required = 0; 
+			
+		$qTypes = Query::create(QuestionType, "ORDER BY sort_order")
+			->execute();
+			
+		if(count($qTypes) > 0)
+		{
+			$this->question_type_id = $qTypes[0]->question_type_id;
+		}
+	}
+	
 	
 	/* get the list of values the user checked in a checkbox */
 	function getValueList($values)
@@ -148,6 +164,11 @@ class Question extends DataItem
 	function isRatings()
 	{
 		return ($this->question_type_id == 2) ? true : false;	
+	}
+	
+	function isMultiChoice()
+	{
+		return ($this->question_type_id == 1) ? true : false;
 	}
 		
 	function Question()

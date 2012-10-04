@@ -110,7 +110,14 @@ class PageManager
 		RoleManager::deleteRoleFromString($pages, $del_role);
 		
 		return $del_role;		
-	}	
+	}
+
+	static function registerSearchables($searchables)
+	{
+		trace("PageManager registerSearchables", 3);
+		$searchables["page"] = array(Page);
+		return $searchables;
+	}
 	
 	static function upgradeComponent($version)
 	{

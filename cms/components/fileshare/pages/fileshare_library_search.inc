@@ -65,7 +65,7 @@ $table->cssStyles = "width: 640px";
 
 if($library->isOwner() || checkRole("fileshare,admin"))
 	$tabs = FileshareManager::libraryTabs($document_library_id);
-$styles .= FileshareManager::getStyles();
+//$styles .= FileshareManager::getStyles();
 
 $script .= $mgr->writeScript();
 $script .= $table->writeScript();
@@ -77,6 +77,9 @@ window.addEvent('domready', function()
 });
 </script>
 ENDSCRIPT;
+?>
+<div id="fileshare_content">
+<?
 if($tabs)
 {
 	$tabs->writeHTML();
@@ -86,12 +89,12 @@ if($tabs)
 }
 ?>
 <table id="library_search" class="layout" style="width: auto"><tr><td>
-<table class="layout">
+<table class="layout" style="width: 100%">
 <tr>
 <td style="width: 40%">
 <h3>Files in <?echo $library->name?></h3>
 </td>
-<td>
+<td style="text-align: right">
 <form id="keyword_search_form" method="GET" action="">
 <label for='keyword'>Keyword</label>
 <input id='LibrarySearch_form_keyword' type='text' name='keyword' autocomplete='off' value='' size='20'/>
@@ -124,4 +127,4 @@ if($tabs)
 </div>
 <?php 
 }
-?>
+?></div>

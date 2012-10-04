@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("questionnaire", "survey");
+Fakoli::using("questionnaire", "survey", "survey_manager");
 
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_pie.php');

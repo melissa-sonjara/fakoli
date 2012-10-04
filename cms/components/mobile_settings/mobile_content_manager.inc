@@ -40,7 +40,7 @@ class MobileSettingsManager
 		
 		if ($mode != "Dedicated Mobile Section") return;
 		
-		trace ("Using Dedicated Mobile Section", 3);
+		trace ("Using Dedicated Mobile Section", 4);
 		
 		$section = checkIdentifier($_GET["section"]);
 		
@@ -48,7 +48,7 @@ class MobileSettingsManager
 		
 		if ($mobileSection == "") return;
 		
-		trace("Mobile: $mobileSection vs $section", 3);
+		trace("Mobile: $mobileSection vs $section", 4);
 		
 		if ($mobileSection != $section)
 		{
@@ -77,7 +77,7 @@ class MobileSettingsManager
 		$continue = !$mode;
 		$out = $mode ? $site->mobile_template : $template;
 		
-		trace("OverrideTemplate: $template -> $out", 3);
+		trace("OverrideTemplate: $template -> $out", 4);
 		return $out;
 	}
 	
@@ -97,7 +97,7 @@ class MobileSettingsManager
 		}
 		else $mobile = $detect->isMobile(); 
 		
-		trace("useMobile: ".($mobile?'true':'false'), 3);
+		trace("useMobile: ".($mobile?'true':'false'), 4);
 		
 		return $mobile;
 	}

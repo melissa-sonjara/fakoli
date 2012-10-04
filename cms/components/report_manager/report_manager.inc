@@ -96,7 +96,7 @@ class XXReportManager extends ReportManager
  * 
  * new SelectFieldRenderer($this->getTable(Program)->form, "residency_requirement", "Residency Requirement", Program::$residencyTypes);	
  * 
- * If you need to search on a field that is no in the table
+ * If you need to search on a field that is not in the table
  * but is instead in an xref table, such as the obj is linked
  * to a set of states through a item_state_xref table, then
  * create the RelatedItemSelectFieldRenderer but set an 
@@ -112,13 +112,18 @@ class XXReportManager extends ReportManager
  */
 class ReportManager
 {
-	var $report_id;
-	var $title;
-	var $description;
-	
+	var $report_id;			///< ID of the saved report as persisted in the database
+	var $title;				///< Title of the report
+	var $description;		///< Longer description of the report
+	var $resultsPage = "";	///< The page used to display the search results
+	var $editorPage = "";	///< The page used to display the report editor
+	var $target;			///< The target window for the form results
+	var $columnOrder;		///< Override the default column order
 	var $tables;
 	var $join;
 	var $report;
+	var $request;
+	var $interstitialMessage = "";	///< Optional interstitial message to display while report is being generated
 	
 	function ReportManager()
 	{
@@ -126,6 +131,18 @@ class ReportManager
 		
 		$this->report_id = 0;
 		$this->tables = array();
+		$this->request = $_REQUEST; // For config serialization
+		if ($this->request["custom_report_mode"] == "save")
+		{
+			$this->title = $this->request["custom_report_title"];
+			$this->description = $this->request["custom_report_description"];
+		}		
+	}
+	
+	function __sleep()
+	{
+		$this->request = array_remove_keys($this->request, "custom_report_mode", "PHPSESSID", "__utma", "__utmb", "__utmc", "__utmz");		
+		return array('report_id', 'title', 'description', 'request');	
 	}
 	
 	/**
@@ -135,7 +152,7 @@ class ReportManager
 	 */
 	function table($class, $title = "")
 	{
-		$table = new ReportTable($class, $title);
+		$table = new ReportTable($class, $title, $this->request);
 		$this->tables[] = $table;
 		return $table;
 	}
@@ -147,61 +164,34 @@ class ReportManager
 	{
 		global $script;
 		
-		$tree = new TreeControl("custom_report");
-		$tree->scroll = true;
-		$tree->width = 310;
-		$tree->height = 430;
-		$tree->selectMode = "multi";
-		$tree->onSelect = "ReportManager.updateFilters";
+		$tableNavigator = new ReportTableNavigator(&$this->tables);
+		$filterNavigator = new ReportFilterNavigator(&$this->tables);
 		
-		foreach($this->tables as $table)
-		{
-			$tableNode = new TreeNode("table_{$table->class}", $table->getTitle(), $table->class, false, "tree_node_closed", "tree_node_open");
-						
-			foreach($table->columns as $column)
-			{
-				$columnNode = new TreeNode("column_".codify($column->title), $column->title, $column->title, false,  "plain_tree_closed", "plain_tree_open");
-				$columnNode->leafStyle = "file_node_leaf";
-				
-				$tableNode->add($columnNode);
-			}
-			
-			$tree->add($tableNode);
-		}
+		$script .= $tableNavigator->writeScript();
+		$script .= $filterNavigator->writeScript();
 		
-		$script .= $tree->writeScript();
-
+		$action = $this->resultsPage ? $this->resultsPage : Fakoli::scriptName();
+		$target = $this->target ? " target='{$this->target}'" : "";
 		
-		echo "<form method='POST' action='' id='custom_report' onsubmit='interstitial(\"Generating Your Report...\"); return true;'>";
+		$interstitial = $this->interstitialMessage ? " onsubmit='interstitial(\"".jsSafe($this->interstitialMessage).".\"); return true;'" : "";
+		
+		echo "<form method='POST' action='$action?report_id={$_GET['report_id']}'$target id='custom_report'$interstitial>";
 		echo "<input type='hidden' name='report_id' value='{$this->report_id}'/>";
 		echo "<input type='hidden' name='custom_report_mode' value='search' id='custom_report_mode'/>";
 		echo "<input type='hidden' name='custom_report_title' value='' id='custom_report_title'/>";
 		echo "<input type='hidden' name='custom_report_description' value='' id='custom_report_description'/>";
+		$tableNavigator->drawView();
+		$filterNavigator->drawView();
 		
-		echo "<div style='float: left; width: 320px'>";
-		echo "<strong>Select Report Fields</strong><br/><br/>";
-		$tree->writeHTML();
-		echo "</div><div style='float: left: width: 550px'>";
-		echo "<strong>Filter By</strong><br/><br/>";
 		
-		foreach($this->tables as $table)
-		{
-			echo "<fieldset id='{$table->class}' style='display: none'><legend>".$table->getTitle()."</legend>\n";
-			
-			echo "<table ";
-			if ($this->formCSS) echo "class='{$this->formCSS}'"; 
-			echo ">\n";
-
-			$script .= $table->form->writeScript();
-			$table->form->renderSearchFields();
-
-			echo "</table>\n";
-			echo "</fieldset>";
-		}
+		$incomplete = ($this->request["__include_incomplete"] || $this->report_id == 0) ? " checked='checked'" : "";
+		$excel = $this->request["__excel"] ? " checked='checked'": "";
 		
-		echo "</div><div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'/> <strong>Include Incomplete Records in Results</strong>";
-		echo "<br/><input type='checkbox' name='__excel' value='custom_report'/> <strong>Output as Excel</strong><br/><br/><input type='submit' class='button' value='Generate Report'/>";
-		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.saveReport(); return false;'>Save Report</a></div></form>";
+		echo "<div style='clear: left'><br/><input type='checkbox' name='__include_incomplete' value='1'$incomplete/> <strong>Include Incomplete Records in Results</strong>";
+		//echo "<br/><input type='checkbox' name='__excel' value='custom_report'$excel/> <strong>Output as Excel</strong>";
+		echo "<br/><br/><input type='submit' class='button' value='Generate Report'/>";
+		//echo "&nbsp;&nbsp;<button class='button' onclick='ReportManager.saveReport($this->report_id); return false;'>Save Report</button>";
+		echo "</div></form>";
 	}
 	
 	/**
@@ -227,15 +217,16 @@ class ReportManager
 	*/
 	function populateSelected()
 	{
-		if ($_REQUEST["custom_report_title"]) $this->title = $_REQUEST["custom_report_title"];
-		if ($_REQUEST["custom_report_description"]) $this->description = $_REQUEST["custom_report_description"];
+		if ($this->request["custom_report_title"]) $this->title = $this->request["custom_report_title"];
+		if ($this->request["custom_report_description"]) $this->description = $this->request["custom_report_description"];
 		
 		foreach($this->tables as $table)
 		{
-			if ($_REQUEST["table_{$table->class}"])
+			if ($this->request["table_{$table->class}"])
 			{
 				$this->setSelected($table);
 			}
+			$table->load($this->request);
 		}
 		
 		if(count($this->selected) == 0)
@@ -250,15 +241,17 @@ class ReportManager
 	 */
 	function setSelected($table, $checkRequest = true)
 	{
+		$table->selected = true;
 		$this->selected["table_{$table->class}"] = true;
-		$this->constraint .= $table->getConstraint($first);
+		//$this->constraint .= $table->getConstraint($first, $this->request);
 
 		$colCount = 0;
 		foreach($table->columns as $column)
 		{
 			$col = "column_".codify($column->title);
-			if ($_REQUEST[$col] || !$checkRequest)
+			if ($this->request[$col] || !$checkRequest)
 			{
+				$column->selected = true;
 				$this->selected[$col] = true;
 				$colCount ++;			
 			}
@@ -268,8 +261,19 @@ class ReportManager
 			$this->setSelected($table, false);
 	}
 	
-	function generateReport()
+	function generateConstraint()
 	{
+		foreach($this->tables as $table)
+		if ($this->selected["table_{$table->class}"])
+		{
+			$this->constraint .= $table->getConstraint($first, $this->request);
+		}
+	}
+	
+	function generateReport($inlineScript = false)
+	{
+		$t1 = microtime(true);
+		
 		$this->preSaveReport();
 		
 		global $script;
@@ -279,13 +283,15 @@ class ReportManager
 			$this->populateSelected();
 		}
 		
+		$this->generateConstraint();
+		
 		if ($_REQUEST["custom_report_mode"] == "save")
 		{
 			$this->save();
 			return;
 		}
 		
-		$joinClass = ($_REQUEST['__include_incomplete'] == "1") ? LeftOuterJoin : InnerJoin;
+		$joinClass = ($this->request['__include_incomplete'] == "1") ? LeftOuterJoin : InnerJoin;
 		
 		$this->join = new $joinClass;
 		$this->join->unique = true;
@@ -296,135 +302,105 @@ class ReportManager
 		{
 			if ($this->selected["table_{$table->class}"])
 			{
-				$this->join->add($table->class);
-				foreach($table->excludedKeys as $excluded)
-				{
-					$this->join->excludeKeyFromJoin($table->class, $excluded);
-				}
+				$table->createJoin($this);
+				
 				
 				$first = false;
 			}
 		}
 		
-		$results = $this->join->query($this->constraint);
+		$results = $this->join->iteratedQuery($this->constraint);
 		
-		$report = new DataListView($results, "custom_report");
+		$report = new DataListView($results, "custom_report_results");
 		
 		foreach($this->tables as $table)
 		{
 			if ($this->selected["table_{$table->class}"])
 			{
-				foreach($table->columns as $column)
-				{
-					if ($this->selected["column_".codify($column->title)])
-					{
-						$report->column($column->title, $column->format, $column->sortable, $column->style, $column->type);
-					}
-				}
+				$table->createColumns($this, $report);
 			}
 		}
 		
-		$this->setFooterColumns($report);
+		$report->dragColumnReorder = true;
+		$report->columnReorderCallback = "ReportManager.setColumnOrder";
+		
+		if ($this->columnOrder)
+		{
+			$report->setColumnOrder(explode("|",$this->columnOrder));
+		}
 		
 		$reportTitle = ($this->title) ?  codify($this->title)."_".date("Y_m_d_Hi") : "custom_report_".date("Y_m_d_Hi");
-		
-		if(isset($_REQUEST["__excel"]))
-		{
+		//if(isset($this->request["__excel"]))
+		//{
 			$report->excelFile = $reportTitle . ".xls";
-		}
+		//}
 		/* to do - pdf output 
 		else
 		{
-			$identifier = $_REQUEST["identifier"];
+			$identifier = $this->request["identifier"];
 			$pdf = new PDF("/$identifier", false, true, $reportTitle . ".pdf");
 			$pdf->generate();
 		}
 		*/
-		$script .= $report->writeScript();
-		
+		if ($inlineScript)
+		{
+			echo $report->writeScript();
+		}
+		else
+		{
+			$script .= $report->writeScript();
+		}
+				
 		$report->cssClass = "list small";
-		$this->writeResultsFormButtons();
+		$report->hideExcelIcon = true;
+		
+		$excel = $report->getExcelLink();
+		
+		$this->writeResultsFormButtons($excel);
 		
 		$report->drawView();
 		
-		$this->writeResultsFormButtons();
+		if (count($results))
+		{
+			$this->writeResultsFormButtons($excel);
+		}
+		
+		$t2 = microtime(true);
+		$elapsed = ($t2 - $t1);
+		echo "<p><em>Report generated in ".number_format($elapsed, 2)." seconds</em></p>";
 	}
 	
-
+	function isColumnSelected($column)
+	{
+		return $this->selected["column_".codify($column->title)];
+	}
+		
+	function writeResultsFormButtons($excel)
+	{
+		$url = $this->editorPage;
+		echo "<p><a class='button' href='#' onclick='go(\"{$url}?report_id={$this->report_id}&edit=1\"); return false;'>&laquo; Edit Report Settings</a></p>";
+		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport(\"{$this->report_id}\"); return false;'>Save Report</a>\n";
+		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
+		echo "\n&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
+	}
+	
 	/**
-	 * If the user set footer columns, set them into the report.
-	 */
-	function setFooterColumns(&$report)
-	{
-		$colspan = 0;
-		foreach($this->tables as $table)
-		{
-			if ($this->selected["table_{$table->class}"])
-			{
-				foreach($table->columns as $column)
-				{
-					if ($this->selected["column_".codify($column->title)])
-					{
-						if(array_key_exists($column->title, $table->footerColumns))
-						{
-							$footer = $table->footerColumns[$column->title];
-							$footer->colspan = ++$colspan;
-							$report->footerColumns[] = $footer;
-							if(get_class($footer) == FooterTotalColumn)
-							{
-								$report->totalCallbacks[] = array($footer, onStartRow);
-							}
-							$colspan = 0;
-						}
-						else
-						{
-							$colspan += 1;
-						}
-					}
-				}
-			}	
-		}
-		
-		if($colspan)
-		{
-			$report->footerColumns[] =  new FooterTextColumn("", "", $colspan);
-		}
-	}
-		
-	function writeResultsFormButtons()
-	{
-		$url = $_REQUEST["identifier"];
-		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport({$this->report_id}); return false;'>Save Report</a>\n";
-		echo "&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
-	}
-	
-	/*
-	 * Save every report each time the user generates
-	 * in case they decide after generate that they
-	 * want to save it. This presave record will have
-	 * a blank title so before saving another, chekc
-	 * if that user already has a saved temp report
-	 * with no title (a report they didn't want to really
-	 * save).
-	 *  
+	 * Alternative implementation - presave version of
+	 * report is stored in session with a 
 	 */
 	function preSaveReport()
-	{
+	{		
 		global $user;
 		
-		if(!$this->report_id)
+		if (!$this->report_id)
 		{
-			$this->report_id = Query::create(CustomReport, "WHERE manager_class=:manager_class AND user_id=:user_id AND title=''")
-				->bind(":manager_class", get_class($this), ":user_id", $user->user_id)
-				->executeValue("MAX(report_id)");
+			$sleeper = serialize($this);
+			$mgr = new UserManager();
 			
-			if(!$this->report_id)
-			{
-				$this->title = "";
-				// $this->report_id is set in save function
-				$this->save();
-			}
-		}
+			$this->report_id = "tmp-" .sha1($user->get($mgr->getUsernameField()) . $sleeper . now());
+			$_SESSION[$this->report_id] = $sleeper;
+			$_SESSION[$this->report_id . "-class"] = get_class($this);				
+		}	
 	}
 		
 	function save()
@@ -438,18 +414,50 @@ class ReportManager
 		$report->user_id = $user->user_id;
 		$report->configuration = serialize($this);
 		$report->manager_class = get_class($this);
+		$report->column_order = $this->columnOrder;
 		
 		$report->save();
 		
 		$this->report_id = $report->report_id;
 	}
 	
-	static function load($report_id)
+	static function load($report_id, $mode = "")
 	{
-		$report = new CustomReport($report_id);
-
-		$instance = unserialize($report->configuration);
-		return $instance;
+		if (is_numeric($report_id))
+		{
+			$report = new CustomReport($report_id);
+	
+			$proto = unserialize($report->configuration);
+			$cl = get_class($proto);
+	
+			if ($mode != "save")
+			{
+				//$_REQUEST = $proto->request;
+			}
+			
+			$instance = new $cl;
+			$instance->request = ($mode == "save") ? $_REQUEST : $proto->request;
+			
+			$instance->populateSelected();
+			$instance->columnOrder = $report->column_order;
+			$instance->report_id = $report_id;
+			return $instance;
+		}
+		else if (startsWith($report_id, "tmp-"))
+		{
+			$proto = unserialize($_SESSION[$report_id]);
+			$cl = get_class($proto);
+			$instance = new $cl;
+			$instance->request = $proto->request;
+			$instance->populateSelected();
+			$instance->columnOrder = $report->column_order;
+			$instance->report_id = 0;
+			return $instance;
+		}
+		else
+		{
+			throw new FakoliException("Invalid report id");
+		}
 	}
 }
 
@@ -462,18 +470,21 @@ class ReportTable
 	var $form;
 	var $constraints;
 	var $params;
+	var $help;
 	var $excludedKeys;
 	var $columns = array();
 	var $footerColumns = array();
 	var $totalCallbacks = array();
 	
-	function ReportTable($class, $title = "")
+	function ReportTable($class, $title = "", $request = null)
 	{
 		$this->class = $class;
 		$this->proto = new $class;
 		$this->fields = array();
 		$this->title = $title ? $title : $this->proto->prettifyClassName();
 		$this->constraints = $constraints;
+		
+		if ($request) $this->proto->fromDataSet($request);
 		
 		$this->form = new SearchForm($this->proto);
 		$this->form->id = "custom_report";
@@ -482,8 +493,34 @@ class ReportTable
 		$this->params = new SearchParameters($this->proto);
 		
 		$this->excludedKeys = array();
+		$this->help = "";
 	}
 
+	// Control Serialization ----
+	
+	function __sleep()
+	{
+		return array('class', 'fields', 'title', 'constraints', 'params', 'excludedKeys', 'columns', 'footerColumns', 'totalCallbacks');	
+	}
+	
+	function __wakeup()
+	{
+		$this->proto = new $this->class;
+		$this->form = new SearchForm($this->proto);
+	}
+	
+	function load($request)
+	{		
+		if ($request) 
+		{
+			$this->proto->fromDataSet($request);
+			$this->params->fromArray($request);
+			$this->form->params->fromArray($request);
+		}
+	}
+	
+	// ----
+	
 	function column($title, $format, $sortable = true, $style = "", $type = null)
 	{
 		$this->columns[] = new ReportColumn($title, $format, $sortable, $style, $type);
@@ -520,14 +557,31 @@ class ReportTable
 		return $this;
 	}
 	
+	function favoriteColumns()
+	{
+		$args = func_get_args();
+		$favorites = array_combine($args, $args);
+		foreach($this->columns as $column)
+		{
+			if (array_key_exists($column->title, $favorites))
+			{
+				$column->favorite = true;
+			}
+		}	
+		
+		return $this;
+	}
+	
 	function additionalConstraints($constraint)
 	{
 		$this->constraints = $constraint;
+		
+		return $this;
 	}
 	
-	function getConstraint($first)
+	function getConstraint($first, $request)
 	{
-		$this->params->fromArray($_REQUEST);
+		$this->params->fromArray($request);
 		$constraint = $this->params->generateConstraint($first);
 		
 		if ($this->constraints)
@@ -588,6 +642,40 @@ class ReportTable
 		$this->footerColumns[$title] = $column;
 		
 		return $column;
+	}
+	
+	function createJoin($mgr)
+	{
+		$mgr->join->add($this->class);
+		foreach($this->excludedKeys as $excluded)
+		{
+			$mgr->join->excludeKeyFromJoin($this->class, $excluded);
+		}
+	}
+
+	function createColumns($mgr, $report)
+	{
+		foreach($this->columns as $column)
+		{
+			if ($mgr->isColumnSelected($column))
+			{
+				$report->column($column->title, $column->format, $column->sortable, $column->style, $column->type);
+				
+				if(array_key_exists($column->title, $this->footerColumns))
+				{
+					$footer = $this->footerColumns[$column->title];
+					$report->footerColumns[] = $footer;
+					if(get_class($footer) == FooterTotalColumn)
+					{
+						$report->totalCallbacks[] = array($footer, onStartRow);
+					}
+				}
+				else 
+				{
+					$report->footerColumns[] = new FooterTextColumn("&nbsp;");
+				}
+			}
+		}		
 	}
 }
 

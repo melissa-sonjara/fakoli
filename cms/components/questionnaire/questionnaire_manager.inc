@@ -74,7 +74,12 @@ class QuestionnaireManager
 	{
 		return "question_number";
 	}
-	
+
+	function getAnswers()
+	{
+		return $this->item->Answers();
+	}	
+		
 	function reOrderQuestions()
 	{
 		global $_POST;
@@ -119,7 +124,7 @@ class QuestionnaireManager
  * @response - object of DataItem class that links
  * the set of user's responses.
  */
-class QuestionnaireResponseManager
+class QuestionnaireResponseManager extends QuestionnaireManager
 {
 	var $item;
 	
@@ -138,6 +143,9 @@ class QuestionnaireResponseManager
 		return "question_id";
 	}
 	
+	/*
+	 * Called by QuestionnaireForm
+	 */
 	function getAnswerKey()
 	{
 		return "answer_id";
@@ -148,10 +156,33 @@ class QuestionnaireResponseManager
 	{
 		return "Answer";
 	}
-	
-	function getAnswers()
+}
+
+
+/*
+ * Handle getting total results/response counts for one survey for
+ * display of results.
+ */
+class QuestionnaireResultsManager extends QuestionnaireManager
+{
+	function QuestionnaireResultsManager($questionnaire)
 	{
-		return $this->item->Answers();
-	}	
+		$this->item = $questionnaire;
+	}
+
+	function Responses($constraint = "")
+	{
+		return $this->item->Responses();
+	}
+
+	function getResponseManager($response)
+	{
+		return new QuestionnaireResponseManager($response);
+	}
+
+	function getRespondentColumnHeading()
+	{
+		return "Token";
+	}
 }
 ?>

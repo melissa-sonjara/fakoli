@@ -73,7 +73,8 @@ class QuestionnaireManifest
 	
 	static function getScripts()
 	{
-		return array("/fakoli/js/questionnaire.js");
+		return array("/components/questionnaire/js/questionnaire.js",
+			"/components/questionnaire/js/question.js");
 	}	
 }
 

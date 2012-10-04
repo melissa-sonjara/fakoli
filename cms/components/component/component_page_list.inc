@@ -193,7 +193,7 @@ foreach($roles as $role => $name)
 		
 		ob_start();
 ?>
-<script type='text/javascript' src="/components/component/js/component_page_list.js"></script>
+<script type='text/javascript' src="/fakoli/component/component_page_list.js"></script>
 <?
 		$script = ob_get_contents();
 		ob_end_clean();

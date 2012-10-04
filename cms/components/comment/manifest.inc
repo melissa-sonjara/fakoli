@@ -40,7 +40,7 @@ class CommentManifest
 		$component->description = "Commenting functionality for Fakoli/CMS";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 2;
+		$component->priority = 10;
 		$component->enabled = true;
 		
 		return $component;
@@ -55,15 +55,16 @@ class CommentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(CommentManager, setDefaults),
-				"upgradeComponent"		=>	array(CommentManager, upgradeComponent)
+		return array("Initialize"			=>	array(CommentManager, onInitialize),
+					 "ComponentScanComplete" => array(CommentManager, setDefaults),
+					 "upgradeComponent"		=>	array(CommentManager, upgradeComponent)
 			);
 	}	
 
 
 	static function getScripts()
 	{
-		return array("/fakoli/js/comment.js");
+		return array("/components/comment/js/comment.js");
 	} 		
 }
 

@@ -32,11 +32,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 
-define("response_not_started", 0);
-define("response_in_progress", 1);
-define("response_submitted", 2);
-
-
 class SurveyResponse extends DataItem
 {
 	var $fields = array (
@@ -45,22 +40,20 @@ class SurveyResponse extends DataItem
 				"token"				=>	String,
 				"email"				=>	String,
 				"last_modified"		=>	Date,
-				"status"			=>	Number
+				"status"			=>	String,
 	);
 
 	var $relations = array (
 				"Questions"				=>	Questions,
 				"Answers"				=>	SurveyAnswer,
-				"SurveyEmailTemplate"	=>	SurveyEmailTemplate,
 				"Survey"				=>	Survey,
-				"MergeCodes"		=>	MergeCode,
-				"Program"				=>	Program
+				"MergeCodes"			=>	MergeCode,
 	);
 
 	var $statusTypes = array(
-	0	=>	"Not Started",
-	1	=>	"In Progress",
-	2	=>	"Submitted"
+		"not_started"	=>	"Not Started",
+		"in_progress"	=>	"In Progress",
+		"submitted"		=>	"Submitted",
 	);
 
 	function getRequiredText($index, $error = false)
@@ -104,11 +97,6 @@ class SurveyResponse extends DataItem
 		return $answers;
 	}
 
-	function SurveyEmailTemplate()
-	{
-		return $this->crossReference(SurveyEmailTemplate, Survey);
-	}
-
 	function Questionnaire()
 	{
 		return $this->Survey()->Questionnaire();
@@ -117,12 +105,12 @@ class SurveyResponse extends DataItem
 
 	function isSubmitted()
 	{
-		return ($this->status < 2) ? false : true;
+		return ($this->status != "submitted") ? false : true;
 	}
 
 	function isEditable()
 	{
-		return ($this->status != response_submitted) ? true : false;
+		return ($this->status != "submitted") ? true : false;
 	}
 
 	/*
@@ -151,6 +139,7 @@ class SurveyResponse extends DataItem
 				$surveyResponse->token = $code;
 				$surveyResponse->survey_id = $survey_id;
 				$surveyResponse->email = $email;
+				$surveyResponse->status = "not_started";
 			}
 			while(!$surveyResponse->insert());
 		}
@@ -184,7 +173,9 @@ class SurveyResponse extends DataItem
 
 	function MergeCodes()
 	{
-		return query(MergeCode, "WHERE class_name = 'SurveyResponse'");
+		return Query::create(MergeCode, "WHERE class_name = :class_name")
+			->bind(":class_name", get_class($this))
+			->execute();
 	}
 
 

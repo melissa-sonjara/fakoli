@@ -350,10 +350,10 @@ class SelectFieldView extends QuestionField
 
 	function writeHTML()
 	{
-		$pk = $this->question->getPrimaryKey();
 		$options = explode("\n", $this->question->options);
 
-		$valueAnswer = $this->parent->getAnswer($this->question);
+		$num = 1;
+		$value = $this->parent->getAnswer($this->question);
 
 		$readonly = $this->parent->readonly ? " DISABLED" : "";
 
@@ -714,7 +714,7 @@ class FreeTextView extends QuestionField
 		{
 			$tip = " onmouseover=\"showTextToolTip('question_{$this->question->$pk}', event, 'question_help', '".jsSafe($tip)."'); return false;\" onmouseout=\"hideToolTip('question_help');return false\" ";
 		}
-
+		
 		echo "<textarea name='{$field}' cols='75' rows='$rows' $onkeypress $readonly $autocomplete $tip>".htmlsafe($value)."</textarea>";
 
 		echo "<br/><div style='clear: left; float: right'><span id='{$field}_length'>";

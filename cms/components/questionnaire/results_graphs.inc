@@ -33,13 +33,50 @@
 
 Fakoli::using("questionnaire", "svg_charts");
 
+/**
+ * 
+ * Draws a graph of the aggregated answers for a given question.
+ * Uses either the default SurveyCreateManager class or a custom
+ * manager class set in the calling code using the syntax
+ * 
+ * 	QuestionnaireResultsGraph::$surveyManager = MyCustomSurveyManager;		
+ * 
+ * The custom survey manager must contain the following functions in
+ * order to use this graphing function:
+ * 
+ * static function getSurvey($survey_id)
+ * static function getQuestion($question_id)
+ * 
+ * @param String $surveyField - name of the field that has relation
+ * "Answers" so that it can retrieve an array of answer DataItem 
+ * objects with field "value" using the constraint $qField=$question_id
+ * 
+ * @param String $qField - the name of the question_id field (e.g.,
+ * 	question_id or survey_question_id
+ * 
+ * @param Number $survey_id - the key value of the survey or other
+ * object that can instantiate the DataItem object that has relation "Answers"
+ * 
+ * @param Number $question_id - the key value of the questionnaire
+ * or survey question that can instantiate the question DataItem object.
+ */
 class QuestionnaireResultsGraph
 {
+	static $surveyManager;
+	
 	static function drawSelectResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
-		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
-
+		if (!QuestionnaireResultsGraph::$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
+		
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+		
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 
 		$options = explode("\n", $question->options);
@@ -67,15 +104,23 @@ class QuestionnaireResultsGraph
 		$pie->setStrokeWidth(2);
 		$pie->showLegend(true, 375, 20);
 		$pie->shadow = false;
-		$pie->emboss = true;
+		//$pie->emboss = true;
 		$pie->draw();
 	}
 	
 	static function drawChecklistResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
-		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+		if (!QuestionnaireResultsGraph::$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
 		
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+				
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
 		$counts = SurveyResultsView::getCheckListAnswerCounts($answers);
@@ -112,9 +157,17 @@ class QuestionnaireResultsGraph
 	
 	static function drawRatingResults($surveyField, $qField, $survey_id, $question_id)
 	{
-		$question = ComponentManager::fireEvent("QuestionnaireGetQuestion", array($question_id));
-		$survey   = ComponentManager::fireEvent("QuestionnaireGetSurvey", array($survey_id));
+		if (!QuestionnaireResultsGraph::$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
 		
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+				
 		$answers = $survey->Answers("WHERE $qField=$question_id");
 		
 		$answerValues = regroupList($answers, "value");
@@ -140,7 +193,6 @@ class QuestionnaireResultsGraph
 		$mean = "Average: ".number_format($totalValue / $totalCount, 1);
 		
 		// Setup the graph.
-		$graph = new Histogram(650,300);
 		$graph = new Histogram("histogram_$question_id", count($datax) * 80 + 100, 400, 50, 10, count($datax) * 80, 300, "standard");
 		$graph->setLabels($datax);
 		$graph->ticks = 10;

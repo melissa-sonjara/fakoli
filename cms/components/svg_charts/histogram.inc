@@ -54,6 +54,7 @@ class Histogram
 {
 	var $width;
 	var $height;
+	var $cssStyles;
 	var $containerWidth;
 	var $containerHeight;
 	var $chartLeft;
@@ -80,6 +81,7 @@ class Histogram
 	var $startIndex = 0;
 	var $yAxisLabels = array();
 	var $title = "";
+	var $titleSize = 20;
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -162,6 +164,7 @@ class Histogram
 		
 		$animate = $this->animate ? "true" : "false";
 		$shadow = $this->shadow ? "true": "false";	
+		$emboss = $this->emboss? "true" : "false";
 		$legend = $this->legend ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
@@ -194,6 +197,7 @@ window.addEvent('domready', function ()
 		strokeWidth: {$this->strokeWidth},
 		animate: {$animate},
 		shadow: {$shadow},
+		emboss: {$emboss},
 		legend: {$legend},
 		legendX: {$this->legendX},
 		legendY: {$this->legendY},
@@ -201,7 +205,8 @@ window.addEvent('domready', function ()
 		max: {$this->max},
 		startIndex: {$this->startIndex},
 		columnMargin: {$this->columnMargin},
-		title: '{$this->title}'
+		title: '{$this->title}',
+		titleSize: {$this->titleSize}
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
@@ -211,7 +216,7 @@ window.addEvent('domready', function ()
 });
 </script>
 ENDSCRIPT;
-		echo "<div id='{$this->id}' style='width: {$containerWidth}; height {$containerHeight}'></div>";
+		echo "<div id='{$this->id}' style='width: {$containerWidth}; height: {$containerHeight};{$this->cssStyles}'></div>";
 	}	
 }
 ?>

@@ -33,6 +33,9 @@
 
 class CustomReport extends DataItem
 {
+	var	$primary_key = "report_id";
+	var	$table = "custom_report";
+	
 	// Fields
 	
 	var $fields = array("report_id"		=>	Number,
@@ -40,9 +43,9 @@ class CustomReport extends DataItem
 						"title"			=>	String,
 						"description"	=>	Text,
 						"configuration"	=>	Text,
+						"column_order"	=>	String,
 						"user_id"		=>	Number,
-	
-			);
+						"shared"		=>	Boolean);
 	
 	var $relations = array(
 			"User"		=>	"",
@@ -61,14 +64,6 @@ class CustomReport extends DataItem
 		if(!$this->report_id || !$this->title) return false;
 		
 		return true;
-	}
-	
-	function CustomReport()
-	{
-		$this->primary_key = "report_id";
-		$this->table = "custom_report";
-		
-		$this->DataItem(func_get_args());
 	}
 }
 ?>

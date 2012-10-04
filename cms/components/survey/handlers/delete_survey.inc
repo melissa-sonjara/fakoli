@@ -7,7 +7,7 @@
  * date: 5/18/10
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 

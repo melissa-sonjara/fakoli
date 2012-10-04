@@ -47,7 +47,7 @@ if(!$library->isOwner() && !checkRole("fileshare,admin"))
 	redirect("fileshare_libraries");
 
 $tabs = FileshareManager::libraryTabs($document_library_id);
-$styles .= FileshareManager::getStyles();
+//$styles .= FileshareManager::getStyles();
 
 
 $script .= <<<ENDSCRIPT
@@ -66,10 +66,11 @@ $xrefClass = new FileshareUserXref();
 $members = Query::create($class_name, "WHERE user_id in (select user_id from {$xrefClass->table} where document_library_id=:d) ORDER BY last_name, first_name")
 	->bind(":d", $document_library_id)
 	->execute();
-	
-$tabs->writeHTML();
 ?>
 <div id="fileshare_content">
+<?
+$tabs->writeHTML();
+?>
 <div id="tab_border" style="height: auto;">
 <h3>Fileshare Member Community for <?echo $library->name?></h3>
 <table class="layout">
@@ -87,9 +88,13 @@ $param = "?document_library_id=$document_library_id";
 ?>
 </div>
 <div id="submit_block">
+<div style="float: left; padding: 2px 0">
 <a class="button" href="fileshare_library_form<?php echo $param ?>">BACK</a>
-<div style="float: right">
+</div>
+<div style="float: right; padding: 2px 0">
 <a class="button" href="fileshare_library_files<?php echo $param ?>">CONTINUE</a>
-</div></div>
+</div>
+<div style="clear: both"></div>
+</div>
 </div>
 </td></tr></table></div></div>

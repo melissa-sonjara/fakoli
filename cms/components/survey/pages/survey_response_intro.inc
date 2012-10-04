@@ -41,25 +41,25 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 5/18/10
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 $msg = checkNumeric($_GET["msg"]);
 
 if(!$survey_id)
-redirect("index");
+	redirect("index");
 
 $survey = new Survey($survey_id);
 
 $page->page_title = "{$survey->title}";
 
 if($survey->isClosed())
-echo "<p>{$survey->title} closed on ". formatDate($survey->end_date) . "</p>\n";
+	echo $survey->format("<p>{title} closed on {end_date:F d, Y}</p>");
 elseif($msg == 1)
-echo "<p>You have already submitted your survey.</p>\n";
+	echo "<p>You have already submitted your survey.</p>\n";
 else
 {
 	echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
-	echo "<p><a href=\"#\" onclick=\"new Survey().showTokenDialog($survey_id); return false;\">{$survey->title}</a></p>\n";
+	echo "<p><a href=\"#\" onclick=\"new SurveyResponse().showTokenDialog($survey_id); return false;\">{$survey->title}</a></p>\n";
 }
 ?>

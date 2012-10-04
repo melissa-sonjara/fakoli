@@ -39,7 +39,7 @@ if (Settings::getValue("social_media", "Facebook"))
 {
 ?>
  <a title="Share on Facebook" target="new_page" href="http://www.facebook.com/share.php?u=<?echo $url ?>"><img
- src="/components/social_media/images/facebook_share_icon.gif"
+ src="/fakoli/social_media/images/facebook_share_icon.gif"
  alt="Share this page on Facebook" width="16" align="middle" border="0"
  height="16"></a>
 <?
@@ -49,7 +49,7 @@ if (Settings::getValue("social_media", "Twitter"))
 {
 ?>
  <a title="Share on Twitter" target="new_page" href="http://twitter.com/home?status=<?php echo $head_title?>: <?php echo $url ?>"> <img
- src="/components/social_media/images/twitter.png"
+ src="/fakoli/social_media/images/twitter.png"
  alt="Share this page on Twitter" width="16" align="middle" border="0"
  height="16"></a> 
 <?
@@ -59,7 +59,7 @@ if (Settings::getValue("social_media", "Digg"))
 {
 ?>
  <a title="Digg this page" target="new_page" href="http://digg.com/submit?url=<?echo $url ?>">
- <img src="/components/social_media/images/digg.png" alt="Digg this page" width="16"
+ <img src="/fakoli/social_media/images/digg.png" alt="Digg this page" width="16"
  align="middle" border="0" height="14"></a>
 <?
 }
@@ -69,7 +69,7 @@ if (Settings::getValue("social_media", "StumbleUpon"))
 {
 ?>
  <a title="Share on StumbleUpon" target="new_page" href="http://www.stumbleupon.com/submit?url=<?echo $url ?>"><img
- src="/components/social_media/images/stumbleupon_16x16.gif"
+ src="/fakoli/social_media/images/stumbleupon_16x16.gif"
  alt="Share this page on StumbleUpon" width="16" align="middle"
  border="0" height="16"></a>
 <?
@@ -79,7 +79,7 @@ if (Settings::getValue("social_media", "Del.icio.us"))
 {
 ?>
  <a title="Post to Del.icio.us" target="new_page" href="http://del.icio.us/post?v=4%26noui%26jump=close%26url=<?echo $url ?>"><img
- src="/components/social_media/images/delicious.png" alt="Post This Page to Del.icio.us"
+ src="/fakoli/social_media/images/delicious.png" alt="Post This Page to Del.icio.us"
  width="16" align="middle" border="0" height="16"></a>
 <?
 }
@@ -88,7 +88,7 @@ if (Settings::getValue("social_media", "Reddit"))
 {
 ?>
  <a title="Save to Reddit" target="new_page" href="http://reddit.com/submit?url=<?echo $url ?>;"><img
- src="/components/social_media/images/reddit.png" alt="Save this page to Reddit"
+ src="/fakoli/social_media/images/reddit.png" alt="Save this page to Reddit"
  width="16" align="middle" border="0" height="18"></a>
 <?
 }
@@ -97,7 +97,7 @@ if (Settings::getValue("social_media", "Yahoo_MyWeb"))
 {
 ?>
  <a title="Save to Yahoo MyWeb" target="new_page" href="http://myweb.yahoo.com/myresults/bookmarklet?u=<?echo $url ?>&ei=UTF"><img
- src="/components/social_media/images/yahoomyweb.png" alt="Save this page to Yahoo MyWeb"
+ src="/fakoli/social_media/images/yahoomyweb.png" alt="Save this page to Yahoo MyWeb"
  width="16" align="middle" border="0" height="9"></a>
 <?
 }
@@ -106,7 +106,7 @@ if (Settings::getValue("social_media", "Newsvine"))
 {
 ?>
  <a title="Save to Newsvine" target="new_page" href="http://www.newsvine.com/_tools/seed%26save?url=<?echo $url ?>"><img
- src="/components/social_media/images/newsvine.gif" alt="Save this page to Newsvine"
+ src="/fakoli/social_media/images/newsvine.gif" alt="Save this page to Newsvine"
  width="16" align="middle" border="0" height="16"></a>
 <?
 }
@@ -115,7 +115,7 @@ if (Settings::getValue("social_media", "Google_Bookmarks"))
 {
 ?>
  <a title="Save to Google Bookmarks" target="new_page" href="http://www.google.com/bookmarks/mark?op=edit%26bkmk=<?echo $url ?>"><img
- src="/components/social_media/images/google.png" alt="Save this page to Google Bookmarks"
+ src="/fakoli/social_media/images/google.png" alt="Save this page to Google Bookmarks"
  width="16" align="middle" border="0" height="16"></a>
 <?
 }
@@ -124,7 +124,7 @@ if (Settings::getValue("social_media", "Mixx"))
 {
 ?>
  <a title="Save to Mixx" target="new_page" href="http://www.mixx.com/submit?page_url=<?echo $url ?>"><img
- src="/components/social_media/images/mixx.png" alt="Save this page to Mixx" width="16"
+ src="/fakoli/social_media/images/mixx.png" alt="Save this page to Mixx" width="16"
  align="middle" border="0" height="14"></a>
 <?
 }
@@ -133,7 +133,7 @@ if (Settings::getValue("social_media", "Technorati"))
 {
 ?>
  <a title="Save to Technorati" target="new_page" href="http://technorati.com/faves?add=<?echo $url ?>"><img
- src="/components/social_media/images/technorati.png" alt="Save this page to Technorati"
+ src="/fakoli/social_media/images/technorati.png" alt="Save this page to Technorati"
  width="16" align="middle" border="0" height="16"></a>
 <?
 }

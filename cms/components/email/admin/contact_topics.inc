@@ -44,6 +44,10 @@
 Fakoli::using("email");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Contact Topics";
+
+$title = "Contact Topics";
+
 $topics = query(ContactTopic, "ORDER BY sort_order");
 
 $table = new DataListView($topics, "contactTopics");

@@ -64,12 +64,7 @@ class ImageManifest
 	
 	static function getStyles()
 	{
-		return array("/components/image/css/image.css");
-	}
-	
-	static function getScripts()
-	{
-		return array("/components/image/js/image_gallery.js");
+		return array("/fakoli/css/image.css");
 	}
 	
 	static function subscribeToEvents()

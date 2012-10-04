@@ -2,6 +2,10 @@
 Fakoli::using("error_log", "user");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Error Log";
+
+$title = "Error Log";
+
 $errors = Query::create(ErrorLog, "ORDER BY timestamp DESC")->execute();
 
 $table = new DataListView($errors, "error_log");

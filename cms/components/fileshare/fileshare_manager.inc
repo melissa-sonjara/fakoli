@@ -137,7 +137,8 @@ function uploadFileshareFile()
 	
 	static function getStyles()
 	{
-		$styles .= "<link href=\"/components/fileshare/css/fileshare.css\" rel=\"stylesheet\"/>\n";
+		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
+		$styles .= "<link href=\"/fakoli/css/fileshare.css\" rel=\"stylesheet\"/>\n";
 		
 		return $styles;
 	}
@@ -145,7 +146,7 @@ function uploadFileshareFile()
 	static function drawMemberSearchForm($library)
 	{
 ?>
-<div id="role" style="float: right; width: 30%; z-index: 2">
+<div id="role" style="float: right; width: 30%; z-index: 2; padding: 2px 0">
 <a class="button" href="#" onclick="new LibraryManager().openPermissionsDialog(<?php echo $library->document_library_id ?>); return false;">Set Global Access</a>
 </div>
 <div id="member_search_form">

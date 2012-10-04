@@ -2,16 +2,18 @@
  <html>
  <head>
   <meta name="description" content="Sonjara CMS Administrative Site">
-{var:styles}
-{var:script}
-  <link href="/fakoli/css/admin.css" rel="stylesheet"/>
   <title>{var:title}</title>
+  {var:styles}
+  <link href="/fakoli/css/admin.css" rel="stylesheet"/>
+  {var:script}
+  
  </head>
  <body>
   <div id="curtain"></div>
   {var:dialogs}
   <div id="frame">
    <div id="header"><a href="http://www.sonjara.com/" alt="Sonjara, Inc"><h2 style="display: none">Fakoli/CMS Site Administration - a Product of Sonjara, Inc</h2></a></div>
+    <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'>{config:sitename}</span></div>   
     <div id="layout">
      <div id="leftnav">{var:menu}</div>
      <div id="content-admin">

@@ -539,6 +539,7 @@ class Fakoli
 		
 		if (!$sectionIdentifier) $sectionIdentifier = "/";
 		
+		global $config;
 		global $section;
 		
 		$section = Section::createFromIdentifier($sectionIdentifier);
@@ -608,7 +609,7 @@ class Fakoli
 	        throw new DOMException($errMsg);
 	    }
 	    
-		if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+		if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT | E_DEPRECATED)) return;
 		
 		throw new ErrorException($errMsg, $errLevel, $errLevel, $errFile, $errLine);
 	}
@@ -623,7 +624,7 @@ class Fakoli
 			$errFile = $exception->getFile();
 			$errLine = $exception->getLine();
 	        
-			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT | E_DEPRECATED)) return;
 		
 			trace("ZIP: Winding back output buffers from ".ob_get_level(), 3);
 			
@@ -632,9 +633,11 @@ class Fakoli
 				ob_end_clean();
 			}
 		
+			$msg = "<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
+			
 			$err = Fakoli::resolveResource("/fakoli/error.tpl");
 			$template = file_get_contents($err);
-			$out = str_replace("{message}", $errMsg, $template);
+			$out = str_replace("{message}", $msg, $template);
 			echo $out;
 		}
 		catch (Exception $ex)
@@ -647,6 +650,77 @@ class Fakoli
 		/* Don't execute PHP internal error handler */
 	    return true;
 	}
+	
+	static function scriptName()
+	{
+		list ($s, $qs) = explode("?", $_SERVER['REQUEST_URI']);
+		return $s;		
+	}
+	
+	/**
+	 * Retrieves information about the Server CPU load. For Windows systems
+	 * this is reported as percentage CPU. For Linux/UNIX systems the load 
+	 * information is returned in uptime format.
+	 * 
+	 * Note that in order for the system to return correct load values on 
+	 * Windows, the application pool must be running as a user with permission
+	 * to read performance counters (such as NetworkService).
+	 */
+	static function getServerLoad()
+	{
+		$out = "";
+		
+		if (stristr(PHP_OS, 'win')) 
+		{			
+            $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
+		  	$cpus = $wmi->InstancesOf("Win32_Processor");
+  
+		  	foreach ($cpus as $cpu) 
+		  	{
+		   		$out .=  $cpu->LoadPercentage."% ";
+		  	}
+        } 
+        else 
+        {       
+            $sys_load = sys_getloadavg();
+            $out = "$sys_load[0]&nbsp;&nbsp;&nbsp;$sys_load[1]&nbsp;&nbsp;&nbsp;$sys_load[2]";       
+        }
+       
+        return $out;  
+    }
+    
+    static function getFileSystemInfo()
+    {
+    	global $config;
+    	
+    	if (isset($config['filesystems']))
+    	{
+    		$fs = explode(",", $config['filesystems']);
+    	}
+    	else if (stristr(PHP_OS, "win"))
+    	{
+    		$fs = array("C:");
+    	}
+    	else
+    	{
+    		$fs = array("/");
+    	}
+    	
+    	$out = "<table class='list'><thead><tr><th>File System</th><th>Size</th><th>Available</th><th>% Free</th></tr></thead><tbody>";
+    	foreach($fs as $f)
+    	{
+    		$free = disk_free_space($f);
+    		$total = disk_total_space($f);
+    		$percent = number_format($free * 100 / $total, 1);
+    		$style = ($percent < 10) ? " style='background-color: #f00;color: #fff'" : (($percent < 25) ? " style='background-color: #ff0'" : "");
+    		$out .= "<tr$style><td>$f</td><td style='text-align: right'>" . getScaledSize($total) . 
+    				"</td><td style='text-align: right'>" . getScaledSize($free) . 
+    				"</td><td style='text-align: right'>" . $percent . "%</td></tr>";
+    	}
+    	
+    	$out .= "</tbody></table>";
+    	return $out;
+    }
 }
 
 Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting

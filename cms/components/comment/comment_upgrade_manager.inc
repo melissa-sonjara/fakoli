@@ -49,7 +49,8 @@ Fakoli::using("comment", "component");
 class CommentUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>  "sql: added published field"
 	);
 	
 	function CommentUpgradeManager()

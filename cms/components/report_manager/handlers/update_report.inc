@@ -33,18 +33,37 @@
 
 Fakoli::using("report_manager");
 
-$report_id = checkNumeric($_GET["report_id"]);
+$report_id = $_GET["report_id"];
 
-if(!$report_id)
-	ajaxReturn("unknown report");
-	
-$report = new CustomReport($report_id);
+if ($report_id && is_numeric($_GET["report_id"]))
+{
+	try
+	{
+		$report = new CustomReport($report_id);
+	}
+	catch(Exception $e)
+	{
+		ajaxReturn($e->getMessage());
+	}
+}
+else
+{
+	$report = new CustomReport();
+	if (startsWith($report_id, "tmp-"))
+	{
+		$report->configuration = $_SESSION[$report_id];
+		$report->manager_class = $_SESSION[$report_id . "-class"];
+		$report_id = 0;
+		$report->report_id = 0;
+		$report->user_id = $user->get($user->getPrimaryKey());		
+	}	
+}
 
-$report->filter = new InclusionFilter("title", "description");
 
 $form = new AutoForm($report, "POST", "/action/report_manager/update_report?report_id=$report_id");
 
 $form->required("title");
+$form->hide("column_order", "configuration", "manager_class", "shared", "user_id");
 
 $form->ajaxSubmit("function(result) {ReportManager.reportSaved(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 	
@@ -64,3 +83,9 @@ echo $form->writeScript();
 $form->drawForm();
 
 ?>
+<script type="text/javascript">
+window.addEvent('domready', function()
+{
+	document.id('CustomReport_form_column_order').value = ReportManager.columnOrder;
+});
+</script>

@@ -34,7 +34,7 @@ class ComponentUpdateLog extends DataItem
 	
 	static function getLogs($component_name)
 	{
-		return Query::create(ComponentUpdateLog, "WHERE component=:component_name ORDER BY date_updated DESC")
+		return Query::create(ComponentUpdateLog, "WHERE component=:component_name ORDER BY version_number")
 			->bind(":component_name", $component_name)
 			->execute();
 	}

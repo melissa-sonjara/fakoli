@@ -212,13 +212,26 @@ class DocumentLibrary extends DataItem
 		return $role;
 	}
 	
+	function getFileSize($document)
+	{
+		$path = $this->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file;
+		
+		if (file_exists($path))
+		{
+			return getScaledSize(filesize($path));	
+		}
+		
+		return "";
+	}
+	
 	function DocumentLibrary()
 	{
 		$this->primary_key = "document_library_id";
 		$this->table = "document_library";
 	
 		$this->default_format = "{name}";
-	
+		$this->cacheLocal = true;
+		
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 

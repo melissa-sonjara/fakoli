@@ -36,7 +36,7 @@ Fakoli::using("blog", "user");
 /**
  * Defines the Article class.
  */
-class Article extends DataItem
+class Article extends DataItem implements Searchable
 {
 	var $fields = array("article_id"	=>	Number,
 						"title"			=>	String,
@@ -46,6 +46,7 @@ class Article extends DataItem
 						"message"		=>	HTML,
 						"created_date"	=>	Date,
 						"archive_date"  =>  Date,
+						"publish_date"  =>  Date,
 						"last_modified"	=>	Timestamp,
 						"published"		=>	Boolean,
 						"allow_comment" =>	Boolean,
@@ -53,6 +54,7 @@ class Article extends DataItem
 						"tags"			=>	String,
 						"author_id"		=>	Number,
 						"author"		=>	String,
+						"publication"	=>	String,
 						"sort_order"	=>	Number
 			);
 
@@ -87,6 +89,28 @@ class Article extends DataItem
 		return $this->Author()->getFullName();
 	}
 	
+	function getBlog()
+	{
+		$blog = Query::create(Blog, "WHERE title=:type")
+					 ->bind(":type", $this->article_type)
+					 ->executeSingle();
+					 
+		return $blog;
+	}
+	
+	function getViewIdentifier()
+	{
+		try
+		{
+			$blog = $this->getBlog();
+			return $blog->identifier;
+		}
+		catch(DataNotFoundException $e)
+		{
+			return "article_view";
+		}
+	}
+	
 	function Article()
 	{
 		$this->table = "article";
@@ -98,6 +122,75 @@ class Article extends DataItem
 		$this->relations["Owner"] = $mgr->getUserClass(); 		
 				
 		$this->DataItem(func_get_args());
+	}
+	
+	function search($params)
+	{
+		trace("Searching Articles", 3);
+		
+		if (is_object($params))
+		{
+			$search = clone $params;
+			$search->target = $this;
+			
+			$search->remapField("keywords", "tags");
+			
+			if (!$search->get("text", "like"))
+			{
+				$search->secondaryFields("tags", "message");
+			}
+			else
+			{
+				$search->remapField("text", "message");
+			}
+			
+			$search->remapField("publication_date", "publish_date");
+			
+			$constraint = $search->generateConstraint();
+			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
+			
+			$articles = Query::create(Article, $constraint)
+						  ->execute();
+		}
+		else
+		{
+			$params = "%$params%";
+			$articles = Query::create(Article, "WHERE title like :a OR teaser LIKE :b OR message like :c")
+						  ->bind(":a", $params, ":b", $params, ":c", $params)
+						  ->execute();
+		}
+							  
+		return SearchManager::wrap($articles, ArticleSearchResult);
+	}
+}
+
+class ArticleSearchResult extends AbstractSearchResult
+{
+	var $item;
+	
+	function ArticleSearchResult($item)
+	{
+		$this->item = $item;
+	}
+	
+	function relevance()
+	{
+		return 0.5;
+	}
+	
+	function title()
+	{
+		return $this->item->title;
+	}
+	
+	function date()
+	{
+		return $this->item->created_date;
+	}
+	
+	function summary()
+	{
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p><a href='{getViewIdentifier()}?article_id={article_id}'>Read More</a>");
 	}
 }
 

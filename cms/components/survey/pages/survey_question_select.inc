@@ -32,31 +32,44 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 
-Fakoli::using("survey");
+Fakoli::using("survey", "survey_manager");
 Fakoli::usingFeature("grouped_data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-redirect("survey_dashboard");
+	redirect("survey_dashboard");
 
 $redirect = "survey_questions?survey_id=$survey_id";
 $survey = new Survey($survey_id);
+$page->page_title .= " for {$survey->title}";
+
 $survey->filter = new InclusionFilter("survey_id");
 $form = new AutoForm($survey);
 $form->button("Cancel", $redirect);
 
-$templateQuestionSets = SurveyManager::getTemplateQuestionSets();
-	
-$surveyTemplateTable = buildTable($templateQuestionSets, "survey_template_question_sets", "survey_template_id");
-
 $questionSets = SurveyManager::getQuestionSets($survey_id);
-$surveyTable = buildTable($questionSets, "survey_question_sets", "survey_id");
+if(count($questionSets) == 0)
+	redirect("survey_question_form?survey_id=$survey_id");
+	
+$table = new GroupedDataListView($questionSets, "SurveyQuestionSets");
+$table->selector();
+$table->column("Question", "{Question.question}")
+	->column("Options", array(SurveyQuestionTableHelper, formatOptions))
+	->column("Required", array(SurveyQuestionTableHelper, formatRequired))
+	;
+	
+$table->emptyMessage = "There are no survey questions to select.";
+$table->mode = "fixed";
+$table->cssStyle = "width: 100%";
 
-$questionSelect = new DataListFieldRenderer($form, $surveyTemplateTable, "survey_template_question_select", "Select Survey Template Questions");
+foreach(array_keys($questionSets) as $survey_id)
+{
+	$survey = new Survey($survey_id);
+	$table->group($survey->title, $survey_id);
+}
 
-$templateQuestionSelect = new DataListFieldRenderer($form, $surveyTable, "survey_question_select", "Select Survey Questions");
-
+$questionSelect = new DataListFieldRenderer($form, $table, "survey_question_select", " ");
 $form->submitLabel = "Select";
 $questionSelect->onPostProcess = selectQuestions;
 
@@ -75,37 +88,14 @@ if ($method == "POST")
 $script .= $form->writeScript();
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div id="survey_tab_border">
 <h3>Select Survey Questions</h3>
 <?
 $form->drawForm();
 
-function buildTable($sets, $id, $pk)
-{
-	$table = new GroupedDataListView($sets, $id);
-
-	$table->selector();
-	$table->column("Question", "{Question.question}")
-	->column("Options", array(CMSSurveyTableManager, formatOptions))
-	->column("Required", array(CMSSurveyTableManager, formatRequired))
-	;
-	
-	$table->emptyMessage = "There are no survey questions to select.";
-	$table->mode = "fixed";
-	$table->cssStyle = "width: 100%";
-
-	foreach(array_keys($sets) as $value)
-	{
-		$class = ($pk == "survey_template_id") ? "SurveyTemplate" : "Survey";
-		$survey = new $class($value);
-		$table->group($survey->title, $value);
-	}
-
-	return $table;
-}
 
 function selectQuestions($questionSelect, $field)
 {
-	return SurveyManager::saveSelectedQuestions($questionSelect, $field);
+	SurveyManager::saveSelectedQuestions($questionSelect, $field);
 }
 ?></div>
