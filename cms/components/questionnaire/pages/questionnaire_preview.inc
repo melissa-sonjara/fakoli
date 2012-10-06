@@ -47,21 +47,16 @@
 
 Fakoli::using("questionnaire");
 
-require_once realpath(dirname(__FILE__)."/../questionnaire_tabs.inc");
-require_once realpath(dirname(__FILE__)."/../questionnaire_form.inc");
-
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
 
 if (!$questionnaire_id) 
-	redirect("/questionnaire_list");
+	redirect("questionnaire_dashboard");
 
 $questionnaire = new Questionnaire($questionnaire_id);
 
-$questionnaire = new QuestionnairePreview($questionnaire);
+$questionnaire = new QuestionnairePreview(new QuestionnaireCreateManager($questionnaire));
 
-$tabs = questionnaireTabs($questionnaire_id);
-
-$styles .= "<link href=\"/templates/css/tabs.css\" rel=\"stylesheet\"/>";
+$tabs = QuestionnaireCreateManager::getTabs($questionnaire_id);
 
 $tabs->writeHTML();
 ?>

@@ -45,12 +45,7 @@ class QuestionnaireManifest
 		
 		return $component;
 	}
-	
-	static function getStyles()
-	{
-		return array("/fakoli/css/questionnaire.css");
-	}
-	
+		
 	static function getAdminMenu()
 	{
 		return array
@@ -67,15 +62,21 @@ class QuestionnaireManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(QuestionnaireManager, upgradeComponent)
+				"upgradeComponent"		=>	array(QuestionnaireComponentManager, upgradeComponent)
 			);
 	}	
 	
 	static function getScripts()
 	{
-		return array("/components/questionnaire/js/questionnaire.js",
-			"/components/questionnaire/js/question.js");
+		return array("/components/questionnaire/js/question.js");
 	}	
+	
+
+	static function getStyles()
+	{
+		return array("/components/questionnaire/css/questionnaire.css");
+	}
+	
 }
 
 ?>

@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("article", "site", "image", "field_renderers");
+Fakoli::using("article", "site", "image", "field_renderers", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $article = new Article();
@@ -48,6 +48,8 @@ else
 
 $form = ArticleManager::buildArticleForm($article);
 $form->hide("sort_order");
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $redirect = "/admin/articles";
 $form->button("Cancel", $redirect);

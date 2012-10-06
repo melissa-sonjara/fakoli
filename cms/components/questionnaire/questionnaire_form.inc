@@ -54,7 +54,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("questionnaire");
 
-
 /*
  * QuestionnaireForm
  *
@@ -62,7 +61,9 @@ Fakoli::using("questionnaire");
  * or other which provides specific data and values to this form as
  * requested.
  * @param: $readonly - defaults to false - whether questionnaire is
- * being reviewed or answered.
+ * being reviewed or answered. The form may be read only if the responses
+ * are being validated or reviewed. The readonly setting is checked by Question Renderer
+ * objects.
  */
 
 class QuestionnaireForm
@@ -75,10 +76,10 @@ class QuestionnaireForm
 	var $validators = array();
 	var $requiredText = "<b>You must answer all required questions.</b><br/>";
 	var $msg; // validation msg
-	var $num = 1; // starting number for first question; may be set by calling script to
-	// append multiple question sets for review.
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
-
+    var $readOnlyForm;  ///< Specifies whether the entire form is read-only
+    var $id;
+	
 	// AutoForm defaults
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $valueCSS = "";					///< CSS Class to use for field/value cells
@@ -87,7 +88,8 @@ class QuestionnaireForm
 	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
 	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
 	var $onFormatLabel = null; 			///< Label Processing hook
-	var $requiredFieldsText = "* indicates required question";
+ 	var $buttons_at_top = false;
+ 	var $requiredFieldsText = "* indicates required question";
 	var $subordinate = false;
 	var $buttons = array();				///< The custom buttons collection
 	var $allowIncompleteSave = true;	///< Allows users to save partially completed forms
@@ -103,6 +105,7 @@ class QuestionnaireForm
 		{
 			$this->$field = $value;
 		}
+		$this->requiredFieldsText = preg_replace("/field/i", "question", $this->requiredFieldsText);
 
 		$questions = $this->mgr->getQuestions();
 			
@@ -225,7 +228,7 @@ class QuestionnaireForm
 		return $script;
 	}
 
-	function writeHTML($displayOnly = false)
+	function writeHTML()
 	{
 		if(count($this->questions) == 0)
 		{
@@ -250,58 +253,140 @@ class QuestionnaireForm
 		
 		foreach($this->questions as $question)
 		{
-			$this->writeOneQuestion($question, $displayOnly);
-			if (!$question->skipNumbering)
-			{
-				$this->num++;
-			}
+			$this->writeOneQuestion($question);
 		}
 
 		echo "</dl>\n";
 	}
 
-	function writeOneQuestion($question, $displayOnly)
+	function writeOneQuestion($question)
 	{
-		$required = ($displayOnly) ? "" : $question->getRequired();
+		$required = $question->getRequired();
 		$qPk = $question->getID();
+		$num = ($question->question->question_number) ? $question->question->question_number : $this->mgr->getQuestionNumber();
+
 		echo " <dt><label for='question_{$qPk}'>";
 		
 		if (!$question->skipNumbering)
 		{
-			echo "<b>{$this->num}.</b> ";
+			echo "<b>{$num}.</b> ";
 		}
 		
 		echo "{$question->question->question}{$required}</label></dt>\n";
 
 		echo " <dd>";
-		if(!$displayOnly)
-			$question->writeHTML();
-		else
-			$question->drawView();
 
+		$question->writeHTML();
+	
 		echo " <br/></dd>";
-
-		if($displayOnly)
-			echo "<br/>";
 	}
 
+	/**
+	 * Put any updated or new answers in the $_POST array into the
+	 * array of answers that are indexed by question id so that when
+	 * we draw the form, the answers are shown, even if page is not 
+	 * reloaded. Also called from function save.
+	 */
+	function fromPOST()
+	{
+		global $_POST;
+
+		$pk = $this->mgr->item->getPrimaryKey();
+		$qPk = $this->mgr->getQuestionKey();
+		$aPk = $this->mgr->getAnswerKey();
+		$answerClass = $this->mgr->getAnswerClass();
+		
+		foreach($_POST as $name => $value)
+		{			
+			if (!strncmp("question_", $name, 9))
+			{
+				// convert array of checks to comma delimated string
+				$valueAnswer = (is_array($value)) ? implode(",",  array_values($value)) : $value;
+		
+				$question_id = substr($name, 9);
+				
+				if(array_key_exists($question_id, $this->answers))
+				{
+					$this->answers[$question_id]->value = $valueAnswer;
+				}
+				else
+				{
+					$answer = new $answerClass();
+					// e.g., response_id
+					$answer->$pk = $this->mgr->item->$pk;
+					$answer->$qPk = $question_id;
+					$answer->value = $valueAnswer;
+					$this->answers[$question_id] = $answer;
+				}
+			}
+		}
+	
+		// Need to handle deleted checkbox answers which don't appear in $_POST
+		$questions = $this->mgr->getQuestions();
+
+		if(count($questions) > 0)
+		{
+			$indexed = regroupList($questions, "question_type_id");
+			$checkListQuestions = array();
+			// CheckListView
+			if(array_key_exists(5, $indexed))
+			{
+				$checkListQuestions = $indexed[5];
+				if(!is_array($checkListQuestions))
+				{
+					$checkListQuestions = array($checkListQuestions);
+				}
+			}
+			
+			if(count($checkListQuestions) > 0)
+			{
+				foreach($checkListQuestions as $question)
+				{
+					$answer = $this->answers[$question->$qPk];
+					if($answer && $answer->value)
+					{
+						$postAnswer = $_POST["question_{$question->$qPk}"];
+						
+						if(!$postAnswer && !is_array($postAnswer))
+						{
+							$answer->value = "";
+						}
+					}
+				}
+			}
+		}
+			
+	}
 
 	function drawForm()
 	{
+		if ($this->readOnlyForm) return $this->drawReadOnly();
+		
 		echo "<div class='questionnaire_form'>";
 
+		$submitLabel = $this->submitLabel;
+		
+		$id = ($this->id) ? $this->id : "Questionnaire_form";
+		
 		if (!$this->subordinate)
 		{
-			echo "<form id=\"Questionnaire_form\" method=\"POST\" action=\"\" ";
+			echo "<form id=\"{$id}\" method=\"POST\" action=\"\" ";
 			echo "enctype='multipart/form-data' onsubmit='return onSubmitQuestionnaire_form(this);'>";
 		}
-
+		
+		if ($this->buttons_at_top && !$this->subordinate)
+		{
+			$this->drawSubmitButtons($submitLabel);
+			$this->drawButtons();
+			echo "<br/><br/>";
+		}
+		
 		$this->writeHTML();
 
 		if (!$this->subordinate)
 		{
 			echo "<br/>";
-			echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$this->submitLabel}&nbsp;&nbsp;\"/>";
+			$this->drawSubmitButtons($submitLabel);	
 			$this->drawButtons();
 			echo "<br/>";
 			echo "</form>";
@@ -309,12 +394,21 @@ class QuestionnaireForm
 
 		echo "</div>";
 	}
+	
+	function drawSubmitButtons($submitLabel)
+	{
+		echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$submitLabel}&nbsp;&nbsp;\"/>";
+	}
 
+	function drawReadOnly()
+	{
+		$this->writeHTML();
+	}
 
 	// display or preview view
 	function drawView()
 	{
-		$this->writeHTML(true);
+		$this->writeHTML();
 	}
 
 	function getIndexedAnswers()
@@ -326,6 +420,7 @@ class QuestionnaireForm
 			
 		return $answers;
 	}
+	
 
 	function validate()
 	{
@@ -344,89 +439,24 @@ class QuestionnaireForm
 
 	function save()
 	{
-		global $_POST;
-
-		$answers = $this->getIndexedAnswers();
-		$pk = $this->mgr->item->getPrimaryKey();
-		$qPk = $this->mgr->getQuestionKey();
+		$this->fromPOST();
 		$aPk = $this->mgr->getAnswerKey();
-
-		foreach($_POST as $name => $value)
+		$qPk = $this->mgr->getQuestionKey();
+		foreach($this->answers as $question_id => $answer)
 		{
-			// convert array of checks to comma delimated string
-			if (is_array($value))
+			if($answer->$aPk)
 			{
-				$valueAnswer = implode(",",  array_values($value));
+				$answer->filter = new InclusionFilter("value");
 			}
-			else
-			{
-				$valueAnswer = $value;
-			}
-				
-				
-			if (!strncmp("question_", $name, 9))
-			{
-				$question_id = substr($name, 9);
-
-				$answer = $answers[$question_id];
-				$answerClass = $this->mgr->getAnswerClass();
-
-				if(!$answer)
-				{
-					$answer = new $answerClass();
-					trace("QuestionnaireForm::save pk is $pk qPk is $qPk question_id is $question_id", 3);
-					// e.g., response_id
-					$answer->$pk = $this->mgr->item->$pk;
-					$answer->$qPk = $question_id;
-					$answer->value = $valueAnswer;
-					$answer->save();
-				}
-				else
-				{
-					if ($answer->$aPk)
-					{
-						$answer = new $answerClass($answer->$aPk);
-						$answer->filter = new InclusionFilter("value");
-						$answer->value = $valueAnswer;
-						$answer->save();
-					}
-				}
-			}
+			$answer->save();
 		}
-
-		// Need to handle deleted checkbox answers which don't appear in $_POST
-		$questions = $this->mgr->getQuestions();
-
-		if(count($questions) > 0)
-		{
-			$indexed = reindexList($questions, "question_type_id");
-			$checkListType = querySingle(QuestionType, "WHERE class_name = 'CheckListView'");
-			$checkListQuestions = $indexed[$checkListType->question_type_id];
-				
-			if(count($checkListQuestions) < 0)
-			{
-				foreach($checkListQuestions as $question)
-				{
-					$answer = $answers[$question->$qPk];
-					if($answer AND $answer->value)
-					{
-						$postAnswer = $_POST["question_{$question->question_number}"];
-						if(!$postAnswer AND !is_array($postAnswer))
-						{
-							$answer->filter = new InclusionFilter("value");
-							$answer->value = "";
-							$answer->save();
-						}
-					}
-				}
-			}
-		}
-
-
+		
 		// Even if invalid, we still want to save their answers
 		$this->msg = $this->validate();
-		if ($this->msg != "") return false;
-
+		if ($this->msg != "")
+		{
+			return false;
+		}
 
 		// onComplete event is fired once all processing has been completed
 		if ($this->onSaveComplete)
@@ -481,15 +511,17 @@ class QuestionnairePreview extends QuestionnaireForm
 		}
 	}
 	
-	function writeOneQuestion($question, $displayOnly)
+	function writeOneQuestion($question)
 	{
 		$required = $question->getRequired();
 		$qPk = $question->getID();
+		$num = ($question->question->question_number) ? $question->question->question_number : $this->mgr->getQuestionNumber();
+		
 		echo " <dt><label for='question_{$qPk}'>";
 		
 		if (!$question->skipNumbering)
 		{
-			echo "<b>{$this->num}.</b> ";
+			echo "<b>{$num}.</b> ";
 		}
 		
 		echo "{$question->question->question}{$required}</label></dt>\n";
@@ -538,11 +570,19 @@ class QuestionnaireResponseView extends QuestionnaireForm
 		parent::QuestionnaireForm($mgr, true);
 	}
 
-	function writeOneQuestion($question, $displayOnly = false)
+	function writeOneQuestion($question)
 	{
 		$required = $question->getRequired();
-		echo " <dt><b>{$this->num}.</b> {$question->question->question}{$required}</dt>\n";
-		echo " <dd>";
+		$num = ($question->question->question_number) ? $question->question->question_number : $this->mgr->getQuestionNumber();
+	
+		echo " <dt>\n";
+		if (!$question->skipNumbering)
+		{
+			echo "<b>{$num}.</b> ";
+		}
+		
+		echo "{$question->question->question}{$required}</dt>\n";
+		echo " <dd>\n";
 		$question->drawSummaryView();
 		echo " </dd><br/>";
 		echo "</dl>";

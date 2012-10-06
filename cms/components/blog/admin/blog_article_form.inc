@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("article", "site", "image", "field_renderers", "blog");
+Fakoli::using("article", "site", "image", "field_renderers", "blog", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/blog_tabs.inc";
@@ -58,6 +58,7 @@ else
 $article->article_type = $blog->title;
 
 $form = BlogManager::buildBlogArticleForm($article, $blog);
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $form->hide("sort_order");
 

@@ -8,7 +8,7 @@
  */
 
 
-Fakoli::using("questionnaire", "survey", "survey_manager");
+Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -21,20 +21,20 @@ $page->page_title = "Spreadsheet View of {$survey->title}";
 
 $mgr = new SurveyResultsManager($survey);
 
-$view = new SurveySpreadsheetView($mgr);
+$view = new QuestionnaireSpreadsheetView($mgr);
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 
 $script .= $view->writeScript();
+$script .= $mgr->writeScript();
 
 $tabs->writeHTML();
 ?>
 <div id="survey_tab_border">
 <h3>Aggregated Survey Results for <?echo $survey->title?></h3>
-<p><a class="button" href="#"
-	onclick="new SurveyResults().showQuestionNamesDialog(<?php echo $survey_id ?>); return false;">Edit
-Column Headings</a></p>
-<?
+<?php 
+$mgr->drawEditQuestionNamesButton();
+
 $view->drawView();
 ?>
 </div>

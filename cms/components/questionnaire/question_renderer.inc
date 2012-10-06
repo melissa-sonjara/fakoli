@@ -46,7 +46,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 Fakoli::using("questionnaire");
-require_once realpath(dirname(__FILE__)."/validation.inc");
+Fakoli::usingFile("framework/validation.inc");
 
 /*
  * QuestionField
@@ -55,12 +55,11 @@ require_once realpath(dirname(__FILE__)."/validation.inc");
  */
 class QuestionField
 {
-	var $parent;
-	var $question;
-	var $readonly;
-	var $answer;
-	var $answerSeparator = "<br>"; // for list of answers in checklist renderer
-
+	var $parent; 					///< The parent QuestionForm obj
+	var $question; 					///< The question renderer obj
+	var $readonly;					///< Whether the questions should be drawn readonly
+	var $answer;					///< The answer to the question obj
+	var $answerSeparator = "<br>"; ///<  for list of answers in checklist renderer
 
 	function QuestionField($parent, $question)
 	{
@@ -84,9 +83,10 @@ class QuestionField
 	{
 		return "";
 	}
-
-	function writeReportHTML()
+	
+	function drawGraph()
 	{
+		
 	}
 
 	/*
@@ -204,7 +204,7 @@ ENDSCRIPT;
 		else
 		{
 			trace("QuestionField::create(): Unknown question type", 2);
-			die("Unknown question type");
+			die("Unknown question type {$question->question_type_id}");
 		}
 	}
 }
@@ -256,7 +256,7 @@ class MultipleChoiceView extends QuestionField
 		$tips = explode("\n", $this->question->context_help);
 		
 		$valueAnswer = $this->parent->getAnswer($this->question);
-
+	
 		$readonly = $this->parent->readonly ? " DISABLED" : "";
 
 		echo "<table class=\"layout\">";
@@ -312,25 +312,19 @@ class MultipleChoiceView extends QuestionField
 		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
-
-	function writeReportHTML()
+	
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $mgr - object of the Survey/Questionnaire Results manager class
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	function drawGraph($mgr, $answers)
 	{
-		$pk = $this->parent->primary_key;
-		$qPk = $this->question->getPrimaryKey();
-				
-		if (Settings::getValue("survey", "interactive_graphs"))
-		{
-			QuestionnaireResultsGraph::drawSelectResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
-		}
-		else
-		{
-			$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
-			
-?>
-<img src="<?php echo $link ?>" alt="Pie Chart" />
-<?
-		}
+		QuestionnaireResultsGraph::drawSelectGraph($this->question, $mgr, $answers);
 	}
+
 }
 
 
@@ -388,24 +382,18 @@ class SelectFieldView extends QuestionField
 	{
 		return $this->getOptionAnswer();
 	}
-
-	function writeReportHTML()
+	
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $mgr - object of the Survey/Questionnaire Results manager class
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	function drawGraph($mgr, $answers)
 	{
-		$pk = $this->parent->primary_key;
-		$qPk = $this->question->getPrimaryKey();
-		
-		if (Settings::getValue("survey", "interactive_graphs"))
-		{
-			QuestionnaireResultsGraph::drawSelectResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
-		}
-		else
-		{
-			$link ="/action/questionnaire/select_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";			
-?>
-<img src="<?php echo $link ?>" alt="Pie Chart" />
-<?
-		}
-	}
+		QuestionnaireResultsGraph::drawSelectGraph($this->question, $mgr, $answers);
+	}	
 }
 
 class RatingView extends QuestionField
@@ -469,109 +457,6 @@ class RatingView extends QuestionField
 		if (!$steps) $steps = 5;
 	}
 	
-	/**
-	 * Draw results of all answers to one ratings question in
-	 * a histogram.
-	 * 
-	 * Called from an action handler. Handler must include the
-	 * jgraph library:
-	 * 
-	 * require_once ('jpgraph/jpgraph.php');
-	 * require_once ('jpgraph/jpgraph_bar.php');
-	 * 
-	 * The handler would instantiate the survey or questionnaire, 
-	 * the question, and the question renderer and retrieve the
-	 * array of answers grouped by value.
-	 * 
-	 * For example:
-	 * 
-	 * $survey = new Survey($survey_id);
-	 * $question = new SurveyQuestion($survey_question_id);
-	 * 
-	 * $answers = $survey->Answers("WHERE survey_question_id=$survey_question_id");
-	 * $answers = regroupList($answers, "value");
-	 * $renderer = QuestionField::create($survey, $question);
-	 * $renderer->drawJGraphView($answers);
-	 * 
-	 * @param Array $answers - array of answers to one ratings question 
-	 * grouped by field "value"
-	 */
-	function drawJGraphView($answers)
-	{
-		RatingView::drawJGraph($this->question->options, $answers);
-	}
-	
-	/**
-	 * Draw results of all answers to one ratings question in
-	 * a histogram.
-	 * 
-	 * @param String $options - in format label for lowest\nlabel for highest\n number steps
-	 * 	default options will be used if blank
-	 * @param Array $answers - array of answers to one ratings question 
-	 * grouped by field "value"
-	 */
-	static function drawJGraph($options, $answers)
-	{
-		$datay = array();
-
-		$optionAnswers = array();
-		$count = array();
-		$optionText = array();
-	
-		RatingView::getOptions($options, $from, $to, $steps);
-	
-		for($idx = 1; $idx <= $steps; ++$idx)
-		{
-			if($idx > 1 AND $idx < $steps) 
-				$optionText[$idx] = $idx;
-			else
-				$optionText[$idx] = ($idx == 1) ? $from : $to;
-		}	
-
-		$steps = count($optionText);
-
-		for($idx = 1; $idx <= $steps; ++$idx)
-		{
-			$counts[$idx] = count($answers[$idx]);
-			$totalValue += $idx * $counts[$idx];
-			$totalCount += $counts[$idx];
-			$datay[] = $counts[$idx];
-			$datax[] = $optionText[$idx];
-		}
-
-		$mean = "Average: ".number_format($totalValue / $totalCount, 1);
-
-		// Setup the graph.
-		$graph = new Graph(500,300);
-		$graph->img->SetMargin(60,20,35,75);
-		$graph->SetScale("textint");
-		$graph->SetFrame(false); // No border around the graph
-
-		// Setup font for axis
-		$graph->xaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
-		$graph->yaxis->SetFont(FF_VERDANA,FS_NORMAL,10);
-
-		// Show 0 label on Y-axis (default is not to show)
-		$graph->yscale->ticks->SupressZeroLabel(false);
-
-		// Setup X-axis labels
-		$graph->xaxis->SetTickLabels($datax);
-		//$graph->xaxis->SetLabelAngle(50);
-		$graph->xaxis->SetTitle($mean);
-
-		// Create the bar pot
-		$bplot = new BarPlot($datay);
-		$bplot->SetWidth(0.6);
-
-		// Set color for the frame of each bar
-		$bplot->SetColor("black");
-		$graph->Add($bplot);
-		
-		// Finally send the graph to the browser
-		$graph->Stroke();
-	}
-	
-	
 	function drawView()
 	{
 		$this->writeHTML();
@@ -586,24 +471,18 @@ class RatingView extends QuestionField
 		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
-
-	function writeReportHTML()
+	
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $mgr - object of the Survey/Questionnaire Results manager class
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	function drawGraph($mgr, $answers)
 	{
-		$pk = $this->parent->primary_key;
-		$qPk = $this->question->getPrimaryKey();
-
-		if (Settings::getValue("survey", "interactive_graphs"))
-		{
-			QuestionnaireResultsGraph::drawRatingResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
-		}
-		else
-		{
-			$link ="/action/questionnaire/rating_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";			
-?>
-<img src="<?php echo $link ?>" alt="Histogram" />
-<?
-		}
-	}
+		QuestionnaireResultsGraph::drawRatingsGraph($this->question, $mgr, $answers);
+	}	
 }
 
 // JDG 8/4/2011 - change to String rendering
@@ -654,27 +533,28 @@ class ShortTextView extends QuestionField
 		return parent::writeLimitScript();
 	}
 
-	function writeReportHTML()
+	/**
+	 * There is no graphical display for free text questions so
+	 * just display the answers as a list.
+	 * 
+	 * @param obj $mgr - object of the Survey/Questionnaire Results manager class
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */	
+	function drawGraph($mgr, $answers)
 	{
 		$pk = $this->question->getPrimaryKey();
-		$answers = $this->parent->Answers("WHERE $pk={$this->question->$pk}");
-		?>
-<ul>
-<?
-foreach($answers as $answer)
-{
-	if ($answer->value)
-	{
-		?>
-	<li><?echo formatAsHTML(stripHTML($answer->value)) ?></li>
-	<?
-	}
-}
-?>
-</ul>
-<?
-	}
-
+		echo "<ul>\n";
+		
+		foreach($answers as $answer)
+		{
+			if ($answer->value)
+			{
+				echo "<li>" . formatAsHTML(stripHTML($answer->value)) . "</li>\n";
+			}	
+		}
+		echo "</ul>\n";		
+	}	
 }
 
 class FreeTextView extends QuestionField
@@ -740,29 +620,29 @@ class FreeTextView extends QuestionField
 		echo "<em>".$answerVal."</em>";
 	}
 
-
-
-	function writeReportHTML()
+		
+	/**
+	 * There is no graphical display for free text questions so
+	 * just display the answers as a list.
+	 * 
+	 * @param obj $mgr - object of the Survey/Questionnaire Results manager class
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */	
+	function drawGraph($mgr, $answers)
 	{
 		$pk = $this->question->getPrimaryKey();
-		$answers = $this->parent->Answers("WHERE $pk={$this->question->$pk}");
-		?>
-<ul>
-<?
-foreach($answers as $answer)
-{
-	if ($answer->value)
-	{
-		?>
-	<li><?echo formatAsHTML(stripHTML($answer->value))?></li>
-	<?
+		echo "<ul>\n";
+		
+		foreach($answers as $answer)
+		{
+			if ($answer->value)
+			{
+				echo "<li>" . formatAsHTML(stripHTML($answer->value)) . "</li>\n";
+			}	
+		}
+		echo "</ul>\n";		
 	}
-}
-?>
-</ul>
-<?
-	}
-
 }
 
 
@@ -899,22 +779,16 @@ class CheckListView extends QuestionField
 		}
 		return implode($this->answerSeparator, $answers);
 	}
-
-	function writeReportHTML()
+	
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $mgr - object of the Survey/Questionnaire Results manager class
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	function drawGraph($mgr, $answers)
 	{
-		$pk = $this->parent->primary_key;
-		$qPk = $this->question->getPrimaryKey();
-				
-		if (Settings::getValue("survey", "interactive_graphs"))
-		{
-			QuestionnaireResultsGraph::drawChecklistResults($pk, $qPk, $this->parent->get($pk), $this->question->get($qPk));
-		}
-		else
-		{
-			$link ="/action/questionnaire/checklist_graph?$pk={$this->parent->get($pk)}&$qPk={$this->question->$qPk}";
-?>
-<img src="<?php echo $link ?>" alt="Histogram" />
-<?
-		}
+		QuestionnaireResultsGraph::drawChecklistGraph($this->question, $mgr, $answers);
 	}
 }

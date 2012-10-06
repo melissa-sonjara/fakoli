@@ -56,7 +56,8 @@ class DocumentManifest
 					"DeleteRole"			=>	array(DocumentManager, deleteRole),
 					"RegisterSearchables"	=>	array(DocumentManager, registerSearchables),
 					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler)
+					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
+					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses)
 		);
 	}
 	

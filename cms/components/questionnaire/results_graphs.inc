@@ -64,21 +64,21 @@ class QuestionnaireResultsGraph
 {
 	static $surveyManager;
 	
-	static function drawSelectResults($surveyField, $qField, $survey_id, $question_id)
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $question - object of class Question, SurveyQuestion or other question DataItem class
+	 * 
+	 * @param obj $resultsManager - object of the Survey/Questionnaire Results manager class;
+	 * this class is currently not being used but may be used in the future to specify 
+	 * customization options for graphing
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	static function drawSelectGraph($question, $resultsManager, $answers)
 	{
-		if (!QuestionnaireResultsGraph::$surveyManager)
-		{
-			echo "<p><em>Survey Graphs are not available</em></p>";
-			return;
-		}
-		
-		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
-		
-		$question = $surveyManager->getQuestion($question_id);
-		$survey = $surveyManager->getSurvey($survey_id);
-		
-		$answers = $survey->Answers("WHERE $qField=$question_id");
-
+		$pk = $question->getPrimaryKey();
+		$question_id = $question->$pk;
 		$options = explode("\n", $question->options);
 		$idx = 1;
 		$optionAnswers = array();
@@ -108,22 +108,22 @@ class QuestionnaireResultsGraph
 		$pie->draw();
 	}
 	
-	static function drawChecklistResults($surveyField, $qField, $survey_id, $question_id)
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $question - object of class Question, SurveyQuestion or other question DataItem class
+	 * 
+	 * @param obj $resultsManager - object of the Survey/Questionnaire Results manager class;
+ 	 * this class is currently not being used but may be used in the future to specify 
+	 * customization options for graphing
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	static function drawChecklistGraph($question, $resultsManager, $answers)
 	{
-		if (!QuestionnaireResultsGraph::$surveyManager)
-		{
-			echo "<p><em>Survey Graphs are not available</em></p>";
-			return;
-		}
-		
-		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
-		
-		$question = $surveyManager->getQuestion($question_id);
-		$survey = $surveyManager->getSurvey($survey_id);
-				
-		$answers = $survey->Answers("WHERE $qField=$question_id");
-		
-		$counts = SurveyResultsView::getCheckListAnswerCounts($answers);
+		$pk = $question->getPrimaryKey();
+		$question_id = $question->$pk;
+		$counts = QuestionnaireDataView::getCheckListAnswerCounts($answers);
 		
 		$datay = array();
 		
@@ -154,22 +154,21 @@ class QuestionnaireResultsGraph
 		$graph->draw();
 	}
 	
-	
-	static function drawRatingResults($surveyField, $qField, $survey_id, $question_id)
+	/**
+	 * Draws an interactive graphical view of answers to one question.
+	 * 
+	 * @param obj $question - object of class Question, SurveyQuestion or other question DataItem class
+	 * 
+	 * @param obj $resultsManager - object of the Survey/Questionnaire Results manager class;
+ 	 * this class is currently not being used but may be used in the future to specify 
+	 * customization options for graphing
+	 * 
+	 * @param Array $answers - all survey or questionnaire answers to this question
+	 */
+	static function drawRatingsGraph($question, $resultsManager, $answers)
 	{
-		if (!QuestionnaireResultsGraph::$surveyManager)
-		{
-			echo "<p><em>Survey Graphs are not available</em></p>";
-			return;
-		}
-		
-		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
-		
-		$question = $surveyManager->getQuestion($question_id);
-		$survey = $surveyManager->getSurvey($survey_id);
-				
-		$answers = $survey->Answers("WHERE $qField=$question_id");
-		
+		$pk = $question->getPrimaryKey();
+		$question_id = $question->$pk;
 		$answerValues = regroupList($answers, "value");
 		
 		$datay = array();
@@ -202,7 +201,86 @@ class QuestionnaireResultsGraph
 		
 		$series = new HistogramSeries("block", "Ratings", $datay);
 		$graph->addSeries($series);
-		$graph->draw();
+		$graph->draw();	
+	}
+	
+	/**
+	 * Deprecated - call drawGraph from question renderer
+	 * 
+	 * @param String $surveyField
+	 * @param String $qField
+	 * @param Number $survey_id
+	 * @param Number $question_id
+	 */
+	static function drawSelectResults($surveyField, $qField, $survey_id, $question_id)
+	{
+		if (!QuestionnaireResultsGraph::$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
+		
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+		
+		$answers = $survey->Answers("WHERE $qField=$question_id");
+
+		QuestionnaireResultsGraph::drawSelectGraph($question, $surveyManager, $answers);
+	}
+	
+	/**
+	 * Deprecated - call drawGraph from question renderer
+	 * 
+	 * @param String $surveyField
+	 * @param String $qField
+	 * @param Number $survey_id
+	 * @param Number $question_id
+	 */
+	static function drawChecklistResults($surveyField, $qField, $survey_id, $question_id)
+	{
+		if (!QuestionnaireResultsGraph::$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
+		
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+				
+		$answers = $survey->Answers("WHERE $qField=$question_id");
+		
+		QuestionnaireResultsGraph::drawChecklistGraph($question, $surveyManager, $answers);
+	}
+	
+	
+	/**
+	 * Deprecated - call drawGraph from question renderer
+	 * 
+	 * @param String $surveyField
+	 * @param String $qField
+	 * @param Number $survey_id
+	 * @param Number $question_id
+	 */
+	static function drawRatingResults($surveyField, $qField, $survey_id, $question_id)
+	{
+		if (!QuestionnaireResultsGraph::$surveyManager)
+		{
+			echo "<p><em>Survey Graphs are not available</em></p>";
+			return;
+		}
+		
+		$surveyManager = new QuestionnaireResultsGraph::$surveyManager();
+		
+		$question = $surveyManager->getQuestion($question_id);
+		$survey = $surveyManager->getSurvey($survey_id);
+				
+		$answers = $survey->Answers("WHERE $qField=$question_id");
+		
+		QuestionnaireResultsGraph::drawRatingsGraph($question, $surveyManager, $answers);
 		
 	}
 	

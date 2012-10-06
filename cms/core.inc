@@ -377,6 +377,27 @@ class Fakoli
 	}
 	
 	/**
+	 * Utility function to pull in a specific Javascript file for the current page.
+	 * @param string $src the URL of the Javascript file
+	 */
+	static function includeScript($src)
+	{
+		global $script;
+		$script .= "<script type='text/javascript' src='$src'></script>\n";		
+	}
+	
+	/**
+	 * Utility function to pull in a specific CSS Stylesheet for the current page.
+	 * @param string $src the URL of the stylesheet
+	 * @param string $media the target media for the stylesheet (defaults to 'all')
+	 */
+	static function includeStylesheet($src, $media="all")
+	{
+		global $styles;
+		$styles .= "<link href='$src' rel='stylesheet' type='text/css' media='$media'/>\n";
+	}
+	
+	/**
 	 * Sorting callback function that sorts two admin menu items by their specified weights.
 	 * Used during the construction of the admin menu.
 	 * @param array $item1

@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 6/3/2010
  */
 
-Fakoli::using("questionnaire", "survey", "survey_manager");
+Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
 if(!$user)
@@ -63,7 +63,7 @@ $table->column("Survey Title", array(SurveyTableHelper, formatSurveyLink), true,
 	->column("Author", "{User.first_name} {User.last_name}", true, "width: 10%")
 	->column("Status", array(SurveyTableHelper, formatSurveyStatus), true, "width: 10%")
 	->column("Date Sent", array(SurveyTableHelper, formatStartDate), true, "width: 12%")
-	->column("Percentage of Surveys Received", array(SurveyManager, getSurveyProgressBar), true, "width: 20%")
+	->column("Percentage of Surveys Received", array(SurveyTableHelper, getSurveyProgressBar), true, "width: 20%")
  	->column("Actions", array(SurveyTableHelper, formatActions), true, "width: 20%");
 	;
  	

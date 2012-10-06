@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+Fakoli::usingFile("framework/field_renderers/string_field_renderer.inc");
+
 class QuestionTableHelper
 {
 	function QuestionTableHelper()
@@ -103,6 +105,47 @@ class QuestionTableHelper
 		return $question->format("<input type='text' name=\"question_{$question->$pk}\"
 		value=\"{question_name}\" size=\"40\"/>");	
 	}
+	
+	
+	static function formatSortOrder($question)
+	{
+		return $question->format("<input type='text' name=\"question_{question_id}\"value=\"{question_number}\" size=\"4\"/>");
+	}	
+
+	/**
+	 * From question list page, format link to delete a question.
+	 * The js manager class var questionnaireMgr for class 
+	 * QuestionnaireCreateManager is instantiated through
+	 * the function writeScript. This class has the value of the
+	 * item id from the manager.
+	 * 
+	 * @param obj $question - obj of class Question or similar class
+	 */
+	static function formatDelete($question)
+	{
+		$pk = $question->getPrimaryKey();
+		return $question->format("<a href=\"#\" onclick=\"questionnaireMgr.deleteQuestion({{$pk}}); return false;\">
+			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>\n");	
+	}
+	
+	/**
+	 * From question list page, format link to remove a question
+	 * that is linked to the questionnaire item through an xref
+	 * class.
+	 * 
+	 * The js manager class var questionnaireMgr for class 
+	 * QuestionnaireCreateManager is instantiated through
+	 * the function writeScript. This class has the value of the
+	 * item id from the manager.
+	 * 
+	 * @param obj $xref - obj of xref that links question to item e.g., SurveyQuestionXref 
+	 */
+	static function formatRemove($xref)
+	{
+		$xrefPk = $xref->getPrimaryKey();
+		return $xref->format("<a href=\"#\" onclick=\"questionnaireMgr.removeQuestion({{$xrefPk}}); return false;\">
+			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>\n");	
+	}	
 }
 
 
@@ -162,11 +205,11 @@ class QuizQuestionTableHelper extends QuestionTableHelper
 
 
 
-class QuestionFormSetup
+class QuestionFormHelper
 {
-	function QuestionFormSetup()
+	
+	function QuestionFormHelper()
 	{
-
 	}
 
 	/**
@@ -183,12 +226,14 @@ class QuestionFormSetup
 	 * and a field "options" that contains the set options for
 	 * select, checklist, multichoice and ratings questions
 	 * 
-	 * @param boolean $editable - whether the question can be edited
+	 * @param boolean $editable - whether the question type can be changed.
+	 * If not, also options cannot be edited
 	 */
-	static function questionTypeSetup(&$form, $question, $editable)
+	static function questionTypeSetup(&$form, $editable)
 	{
+		$question = $form->data;
 		$pk = $question->getPrimaryKey();
-		
+			
 		if($question->isRatings() || $editable)
 		{
 			$form->add(new RatingQuestionFieldRenderer($form), "label_for_lowest");
@@ -205,12 +250,22 @@ class QuestionFormSetup
 			$form->hide("num_rows", "char_limit");
 
 		if($question->$pk && $question->isRatings())
-			$form =  QuestionFormSetup::setOptionsToRatings($form);
+			$form = QuestionFormHelper::setOptionsToRatings($form);
 		elseif($editable)
-			$form = QuestionFormSetup::setDefaultRatings($form);
+			$form = QuestionFormHelper::setDefaultRatings($form);
 
 		$form->labelCSS = "question_form_label";
-				
+
+		$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
+
+		if($editable)
+		{
+			$typeSelect->onChange = "new Question().onChangeQuestionType";
+		}
+		else
+		{
+			$form->readOnly("question_type_id", "options");
+		}	
 		return $form;
 	}
 
@@ -244,6 +299,65 @@ class QuestionFormSetup
 
 		return $form;
 	}
+	
+	/**
+	 * On the question form, write the script to handle changing
+	 * the form fields based on the question type selected from the
+	 * drop down.
+	 * 
+	 * @param obj $form class AutoForm
+	 */
+	static function writeScript($form)
+	{
+		$question_type_id = $form->data->get("question_type_id");
+		
+		ob_start();
+?>
+<script type="text/javascript" src="/components/questionnaire/js/question.js"></script>
+<script type="text/javascript">
+
+	window.addEvent('domready', function()
+	{
+		 new Question().setup(<?php echo $question_type_id ?>, '<?php echo $form->id ?>');
+	});	
+	</script>
+<?php	
+		$script .= ob_get_contents();
+		ob_end_clean();
+		
+		return $script;
+	}
+	
+	
 }
 
+
+
+/*
+ * Use this custom renderer to copy the pseudo field values 
+ * Label for Lowest, Label for Highest, and Number of Steps 
+ * into the options text field before saving the form.
+ */
+class RatingQuestionFieldRenderer extends StringFieldRenderer
+{
+	function RatingQuestionFieldRenderer(&$parent)
+	{
+		$this->FieldRenderer($parent);
+	}
+	
+	function preProcess($field)
+	{
+		global $_POST;
+		
+		$question = $this->parent->data;
+		if($question->isRatings())
+		{
+			$lowest = $_POST["label_for_lowest"];
+			trace("RatingQuestionFieldRenderer: lowest $lowest", 3);
+			$highest = $_POST["label_for_highest"];
+			$steps = $_POST["number_of_steps"];
+			$this->parent->data->set("options", $lowest . "\n" . $highest . "\n" . $steps);
+		}
+	}
+} // end RatingQuestionFieldRenderer
 ?>

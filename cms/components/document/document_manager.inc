@@ -773,6 +773,12 @@ function deleteFolderResult(result)
 		$mgr->upgrade($version);
 	}	
 	
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Document;
+		return $classes;
+	}
+	
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("document_libraries", "Document Libraries &amp; Document Records (files need to be transferred manually)", new DocumentSerializationHandler());

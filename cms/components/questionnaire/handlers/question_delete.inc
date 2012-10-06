@@ -43,16 +43,24 @@
 
 Fakoli::using("questionnaire");
 
-$question_id = checkNumeric($_GET["question_id"]);
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+$question_id = checkNumeric($_GET["question_id"]);
+
+if(!$questionnaire_id)
+{
+	ajaxReturn("Question Remove Failed - Unknown Questionnaire");	
+}
+	
+$questionnaire = new Questionnaire($questionnaire_id);
+$mgr = new QuestionnaireCreateManager($questionnaire);
 
 if (!$question_id) 
-	redirect("/questionnaire_list");
+{
+	ajaxReturn("Question delete - unknown question");
+}
 
-$question = new Question($question_id);
+$mgr->deleteQuestion($question_id);
 
-$question->delete();
-
-redirect("/question_list?questionnaire_id=$questionnaire_id");
+ajaxReturn("OK");
 
 ?>

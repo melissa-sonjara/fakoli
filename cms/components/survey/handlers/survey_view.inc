@@ -41,7 +41,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  ***************************************************************/
 
-Fakoli::using("survey", "survey_manager");
+Fakoli::using("survey", "questionnaire");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 

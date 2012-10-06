@@ -119,6 +119,12 @@ class PageManager
 		return $searchables;
 	}
 	
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Page;
+		return $classes;
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new PageUpgradeManager();

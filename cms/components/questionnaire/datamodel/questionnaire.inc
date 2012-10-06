@@ -31,24 +31,84 @@
 
 *****************************************************************/
 
+/**
+ * Defines the relations and functions required of a Questionnaire
+ * class that uses Questionnaire form and results classes.
+ * 
+ * @author janice
+ *
+ */
+abstract class AbstractQuestionnaire extends DataItem
+{
+	
+	function AbstractQuestionnaire()
+	{
+		
+	}
+	
+	abstract function Questions();
+	
+	abstract function Answers();
+	
+	abstract function isEditable();
+	
+	abstract function allowDelete();
+	
+	/**
+	 * Set the initial default values in the item
+	 * e.g., user_id = user->user_id
+	 * status = xx
+	 * 
+	 * Used by questionnaire clone and can be used
+	 * on the first form page.
+	 */
+	abstract function setDefaults();
 
+}
 
-class Questionnaire extends DataItem
+class Questionnaire extends AbstractQuestionnaire
 {
 	var $fields = array("questionnaire_id"			=>	Number,
 						"title"						=>	String,
 						"composite_class"			=>	String
 	);
 	
-	var $relations = array("QuestionnaireType"		=>	QuestionnaireType,
-							"Questions"				=>	Question
+	var $relations = array(
+			"Questions"				=>	Question,
+			"Answers"				=>	QuestionnaireAnswer,
 	);
 		
 	function Questions($constraint = "")
 	{
 		return $this->getRelatedList(Question, "questionnaire_id", $constraint);
 	}
+	
+	/**
+	 * Retrieve all answers to the questionnaire.
+	 * 
+	 * for results aggregation
+	 */
+	function Answers($constraint = "")
+	{
+		$query = "WHERE response_id IN (SELECT response_id FROM questionnaire_response WHERE status = 'submitted' AND questionnaire_id=:questionnaire_id)";
+		if($constraint)
+		{
+			$query .= preg_replace("/WHERE/i", " AND", $constraint);
+		}
 		
+		return Query::create(QuestionnaireAnswer, $query)
+			->bind(":questionnaire_id", $this->questionnaire_id)
+			->execute();
+	}
+	
+	/**
+	 * @param $constraint
+	 */
+	function Responses($constraint = "")
+	{
+		return $this->getRelatedList(QuestionnaireResponse, "", $constraint);
+	}
+			
 	function isEditable()
 	{
 		if(!$this->questionnaire_id)
@@ -62,6 +122,21 @@ class Questionnaire extends DataItem
 		return ($count > 0) ? false : true;
 	}
 	
+	function allowDelete()
+	{
+		if(!$this->questionnaire_id)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	function setDefaults()
+	{
+		// nothing to do.
+	}
+		
 	function getNotEditableHTML()
 	{
 		$className = $this->composite_class;
@@ -70,6 +145,7 @@ class Questionnaire extends DataItem
 			{$class->prettifyClassName(true)}. You may edit the questions but be careful not to change their meaning.";
 		return $text;
 	}	
+	
 	
 	function Questionnaire()
 	{

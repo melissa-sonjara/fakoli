@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("document", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $document_id = checkNumeric($_GET["document_id"]);
@@ -58,6 +58,8 @@ $form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$f
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
 $notes->columns = 38;
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {

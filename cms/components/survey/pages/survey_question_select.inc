@@ -32,7 +32,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 
-Fakoli::using("survey", "survey_manager");
+Fakoli::using("survey", "questionnaire");
 Fakoli::usingFeature("grouped_data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -55,8 +55,8 @@ if(count($questionSets) == 0)
 $table = new GroupedDataListView($questionSets, "SurveyQuestionSets");
 $table->selector();
 $table->column("Question", "{Question.question}")
-	->column("Options", array(SurveyQuestionTableHelper, formatOptions))
-	->column("Required", array(SurveyQuestionTableHelper, formatRequired))
+	->column("Options", array(QuestionTableHelper, formatOptions))
+	->column("Required", array(QuestionTableHelper, formatRequired))
 	;
 	
 $table->emptyMessage = "There are no survey questions to select.";

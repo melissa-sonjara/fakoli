@@ -97,7 +97,14 @@ class Component extends DataItem
 	{
 		Fakoli::using($this->name);
 		$cl = Fakoli::getComponentClassRoot($this->name)."Manifest";
-		return new $cl;
+		if (class_exists($cl))
+		{
+			return new $cl;
+		}		
+		else 
+		{
+			return null;
+		}
 	}
 }			
 

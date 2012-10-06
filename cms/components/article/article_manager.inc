@@ -41,6 +41,12 @@ class ArticleManager
 		return $searchables;
 	}
 	
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Article;
+		return $classes;
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new ArticleUpgradeManager();

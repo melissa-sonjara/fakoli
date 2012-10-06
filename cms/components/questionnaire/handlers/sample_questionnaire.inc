@@ -41,7 +41,7 @@ if(count($samples) == 0)
 	
 $sample = $samples[0];	
 
-$mgr = new QuestionnaireManager($sample);
+$mgr = new QuestionnaireCreateManager($sample);
 $view = new QuestionnairePreview($mgr);
 
 ?>

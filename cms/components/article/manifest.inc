@@ -65,7 +65,8 @@ class ArticleManifest
 		return array(
 				"RegisterCommentAdapters" 	=>	array(ArticleManager, registerCommentAdapter),
 				"RegisterSearchables"		=>	array(ArticleManager, registerSearchables),
-				"upgradeComponent"			=>	array(ArticleManager, upgradeComponent)
+				"upgradeComponent"			=>	array(ArticleManager, upgradeComponent),
+				"RegisterTaxonomyClasses"	=>	array(ArticleManager, registerTaxonomyClasses)
 			);
 	}		
 	

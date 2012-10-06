@@ -23,6 +23,11 @@ class SurveyTableHelper
 		return $date;
 	}
 
+	static function getSurveyProgressBar($survey)
+	{
+		$mgr = new SurveyResultsManager($survey);
+		return $mgr->getProgressBar();
+	}	
 
 	static function formatResponseStatus($response)
 	{

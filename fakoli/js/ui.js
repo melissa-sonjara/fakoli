@@ -1036,3 +1036,34 @@ var FocusWatcher = new Class({
 });
     	
 window.addEvent('domready', function() { document.focusWatcher = new FocusWatcher(); });
+
+// Implement reload() for page elements that supply data-url
+window.addEvent('domready', function()
+{
+	$$('[data-url]').each(function(elt)
+	{
+		elt.reload = function(onComplete)
+		{
+			var handler = elt.get('data-url');
+			
+			var request = new Request.HTML(
+			{
+				url: handler,
+				evalScripts: false,
+				evalResponse: false,
+				method: 'get', 
+				onSuccess: function(tree, elements, html, script) 
+				{ 
+					elt.set('html', html);
+					$exec(script);
+					
+					if (typeof onComplete != "undefined")
+					{
+						onComplete();
+					}
+				}
+			});
+			request.send();			
+		};
+	});
+});

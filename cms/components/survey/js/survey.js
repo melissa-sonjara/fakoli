@@ -191,7 +191,7 @@ var Survey =  (function()
 			}
 			else if(action == "send_reminders")
 			{
-				new this.showSurveyReminderDialog(survey_id);
+				this.showSurveyReminderDialog(survey_id);
 			}
 			else if(action == "send")
 			{
@@ -211,7 +211,7 @@ var Survey =  (function()
 	
 		showSurveyResponse: function(response_id)
 		{
-			this.dialog = modalPopup('Survey Response', '/action/survey_manager/survey_response_view?response_id=' + response_id, '700px', 'auto', true);		
+			this.dialog = modalPopup('Survey Response', '/action/survey/survey_response_view?response_id=' + response_id, '700px', 'auto', true);		
 		},	
 	
 		showSurveyReminderDialog: function(survey_id)

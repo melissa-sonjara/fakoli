@@ -38,7 +38,7 @@ class QuestionType extends DataItem
 {
 	var $fields = array(
 			"question_type_id"	=>	Number,
-			"name"				=>	String,
+			"name"	=>	String,
 			"class_name"		=>	String,
 			"sort_order"		=>	Number,
 			"options"			=>	Boolean,

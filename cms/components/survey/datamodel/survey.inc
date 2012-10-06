@@ -233,6 +233,15 @@ class Survey extends DataItem
 		$this->save();
 	}
 
+	function getRecipientCount()
+	{
+		$count = Query::create(SurveyResponse, "WHERE survey_id=:survey_id")
+			->bind(":survey_id", $this->survey_id)
+			->executeValue("COUNT(1)");
+			
+		return $count;
+	}
+	
 	/* for survey aggregation */
 	function getResponseCount()
 	{
@@ -242,19 +251,9 @@ class Survey extends DataItem
 			->bind(":survey_id", $this->survey_id, ":sender_email", $sender_email)
 			->executeValue("COUNT(1)");
 						
-			return $count;
-	}
-
-	function getRecipientCount()
-	{
-		$sender_email = ($this->sender_email) ? $this->sender_email : $this->getSenderEmail();
-
-		$count = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND email != :sender_email")
-			->bind(":survey_id", $this->survey_id, ":sender_email", $sender_email)
-			->executeValue("COUNT(1)");
-						
 		return $count;
 	}
+
 
 	function getNonResponders()
 	{

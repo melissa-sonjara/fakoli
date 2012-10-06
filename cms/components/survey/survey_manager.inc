@@ -32,6 +32,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 Fakoli::using("questionnaire");
+Fakoli::usingFile("/cms/components/questionnaire/questionnaire_manager.inc");
+Fakoli::usingFile("/cms/components/questionnaire/results_graphs.inc");
 
 class SurveyManager
 {
@@ -83,28 +85,6 @@ class SurveyManager
 					
 			return $tabs;
 	}
-	
-	static function getSurveyProgressBar($survey)
-	{
-		$percentage = 0;
-		$total = $survey->getRecipientCount();
-		if($total > 0)
-		{
-			$responseCount = $survey->getResponseCount();
-			$percentage = round($responseCount / $total * 100, 0);
-		}
-
-		$html = "<div class='col2'>\n";
-		$html .= $percentage . "%";
-		if ($responseCount) $html .= " <span style='font-size: 8pt'>($responseCount&nbsp;of&nbsp;$total)</span>";
-		$html .= "</div>\n";
-		$html .= "<div class='progress_bar'>\n";
-		$html .= "<div class='progress' style='width: $percentage%'>\n";
-		$html .= "</div></div>\n";
-
-		return $html;
-	}
-
 
 	/**
 	 * Retrieve all the question set for all surveys but
@@ -298,18 +278,33 @@ class SurveySendManager
  *
  * 10/13/2010
  */
-class SurveyCreateManager
+class SurveyCreateManager extends AbstractQuestionnaireCreateManager
 {
 	var $item;
 
 	/**
-	 * Creates a new QuestionnaireManager object.
+	 * Creates a new SurveyCreateManager object.
 	 */
 	function SurveyCreateManager($survey)
 	{
 		$this->item = $survey;
 	}
-
+	
+	function getQuestionClass()
+	{
+		return SurveyQuestion;
+	}
+	
+	function getComponentName()
+	{
+		return "survey";
+	}
+	
+	function getXrefClass()
+	{
+		return SurveyQuestionXref;
+	}
+	
 	/*
 	 * Called by QuestionnaireForm
 	 */
@@ -318,11 +313,13 @@ class SurveyCreateManager
 		return "survey_question_id";
 	}
 	
+	/* For QuestionnaireResultsGraph */
 	static function getSurvey($survey_id)
 	{
 		return new Survey($survey_id);
 	}
 	
+	/* For QuestionnaireResultsGraph */
 	static function getQuestion($question_id)
 	{
 		return new SurveyQuestion($question_id);
@@ -338,46 +335,19 @@ class SurveyCreateManager
 	 */
 	function getQuestionNumber($question)
 	{
-		$questions = $this->item->Questions();
-		if(count($questions) > 0)
-		{
-			$idx = 1;
-			foreach($questions as $q)
-			{
-				$renderer = QuestionField::create($this->item, $q);
-				
-				if (!$renderer->skipNumbering)
-				{
-					$idx++;
-				}
-				
-				if ($question->question_id == $q->question_id) return $idx;
-			}
-		}
-		return "";
+		return QuestionnaireHelper::getQuestionNumber($this->item, $this->item->Questions(), $question);
 	}
 
 	/*
-	 * Called by QuestionnaireForm and QuestionSetForm
+	 * Called by QuestionnaireForm
+	 * 
+	 * If question_number pseudo field is set here then it won't need to be
+	 * reset by each instance of QuestionRenderer
 	 */
 	function getQuestions()
 	{
-		$questions = $this->item->Questions();
-		if(count($questions) > 0)
-		{
-			$idx = 1;
-			foreach($questions as $question)
-			{
-				$renderer = QuestionField::create($this->item, $question);
-				
-				if (!$renderer->skipNumbering)
-				{
-					$question->question_number = $idx;
-					$idx++;
-				}
-			}
-		}
-		return $questions;
+		$questions = $this->item->Questions("ORDER BY sort_order");
+		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
 	}
 
 	function isEditable()
@@ -399,25 +369,13 @@ class SurveyCreateManager
 
 	function getAnswers()
 	{
-		return $this->item->Answers();
+		return null;
 	}
-
-	/* for survey aggregation */
-	function getResponseCount()
-	{
-		return $this->item->getResponseCount();
-	}
-
-	function getRecipientCount()
-	{
-		return $this->item->getRecipientCount();
-	}
-
 
 } // end class SurveyManager
 
 
-class SurveyResponseManager extends SurveyCreateManager
+class SurveyResponseManager extends AbstractQuestionnaireResponseManager
 {
 	var $item;
 
@@ -425,28 +383,48 @@ class SurveyResponseManager extends SurveyCreateManager
 	{
 		$this->item = $response;
 	}
+	
+	function getComponentName()
+	{
+		return "survey";
+	}
+	
+	function getQuestionClass()
+	{
+		return SurveyQuestion;
+	}
+
+	/*
+	 * Called by QuestionnaireForm
+	 */
+	function getQuestionKey()
+	{
+		return "survey_question_id";
+	}
+	
+
+	function getAnswerKey()
+	{
+		return "survey_answer_id";
+	}
+	
+
+	// The class that stores the answers
+	function getAnswerClass()
+	{
+		return "SurveyAnswer";
+	}
 
 	function getQuestions()
 	{
-		$questions = $this->item->Questions();
-		if(count($questions) > 0)
-		{
-			$idx = 0;
-			foreach($questions as $question)
-			{
-				$renderer = QuestionField::create($this->item, $question);
-				
-				if (!$renderer->skipNumbering)
-				{
-					$question->question_number = $idx;
-					$idx++;
-				}
-			}
-		}
-
-		return $questions;
+		$questions = $this->item->Questions("ORDER BY sort_order");
+		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
 	}
 
+	/**
+	 * When SurveyCreateManager is used to draw the Survey, we are looking
+	 * at a preview so no need to retrieve answers.
+	 */
 	function getAnswers()
 	{
 		return $this->item->Answers();
@@ -459,6 +437,15 @@ class SurveyResponseManager extends SurveyCreateManager
 	{
 		return $this->item->token;
 	}
+	
+	/*
+	 * Called by QuestionRenderer
+	 */
+	function getQuestionNumber($question)
+	{
+		return QuestionnaireHelper::getQuestionNumber($this->item, $this->item->Questions(), $question);
+	}
+	
 }
 
 
@@ -466,13 +453,37 @@ class SurveyResponseManager extends SurveyCreateManager
  * Handle getting total results/response counts for one survey for
  * display of results.
  */
-class SurveyResultsManager extends SurveyCreateManager
+class SurveyResultsManager extends AbstractQuestionnaireResultsManager
 {
 	function SurveyResultsManager($survey)
 	{
 		$this->item = $survey;
 	}
-
+	
+	function getComponentName()
+	{
+		return "survey";
+	}
+		
+	function getQuestionClass()
+	{
+		return SurveyQuestion;
+	}
+	
+	/*
+	 * Called by QuestionnaireForm
+	 */
+	function getQuestionKey()
+	{
+		return "survey_question_id";
+	}
+	
+	function getQuestions()
+	{
+		$questions = $this->item->Questions("ORDER BY sort_order");
+		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
+	}
+	
 	function Responses($constraint = "")
 	{
 		return $this->item->Responses();
@@ -495,6 +506,25 @@ class SurveyResultsManager extends SurveyCreateManager
 	function getRespondentColumnHeading()
 	{
 		return "Token";
+	}
+	
+	/*
+	 * Called by QuestionRenderer
+	 */
+	function getQuestionNumber($question)
+	{
+		return QuestionnaireHelper::getQuestionNumber($this->item, $this->item->Questions(), $question);
+	}
+
+	/* for survey aggregation */
+	function getResponseCount()
+	{
+		return $this->item->getResponseCount();
+	}
+
+	function getRecipientCount()
+	{
+		return $this->item->getRecipientCount();
 	}
 }
 

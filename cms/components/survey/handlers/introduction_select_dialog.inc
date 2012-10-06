@@ -31,7 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("survey", "survey_manager");
+Fakoli::using("survey", "questionnaire");
 Fakoli::usingFeature("data_view", "auto_form");
 
 $surveys = Query::create(Survey, "WHERE introduction != ''")->execute();

@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("page", "menu", "site", "field_renderers", "role");
+Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy");
 
 Fakoli::usingFile("framework/auto_form.inc", "framework/tree.inc");
 
@@ -64,6 +64,8 @@ $codeSelect = new CodeFileSelectFieldRenderer($form, "php_code_file", "PHP Code 
 $templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
 $form->annotate("template", "Fakoli 3 projects use Section Content to set template");
 
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
 

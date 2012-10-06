@@ -37,7 +37,7 @@ class SurveyManifest
 	{
 		$component = new Component();
 		$component->name = "survey";
-		$component->description = "This component is generally used as a template for a developing customized surveys and survey response forms, and presentation of survey results. Custom implementation would override this component and interface with the survey_manager component to use classes that provide survey presentation support.";
+		$component->description = "This component is creates custom questionnaires and allows token-based or anonymous responses.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
 		$component->priority = 5;
@@ -78,7 +78,9 @@ class SurveyManifest
 	static function getScripts()
 	{
 		return array("/components/survey/js/survey.js",
-			);
+			"/components/survey/js/survey_create.js",
+			"/components/survey/js/survey_response.js"			
+		);
 	}
 }
 

@@ -342,7 +342,7 @@ class ComponentManager
 		{
 			$manifest = $component->loadManifest();
 			
-			if (!method_exists($manifest, subscribeToEvents)) continue;
+			if (!$manifest || !method_exists($manifest, subscribeToEvents)) continue;
 	
 			$subscriptions = $manifest->subscribeToEvents();
 			

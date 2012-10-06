@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 5/13/10
  */
 
-Fakoli::using("survey", "email", "survey_manager");
+Fakoli::using("survey", "email", "questionnaire");
 Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);

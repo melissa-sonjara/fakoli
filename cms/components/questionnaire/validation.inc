@@ -81,8 +81,10 @@ ENDSCRIPT;
 		{
 			global $_POST;
 			$value = "";
-			if($_POST AND isset($_POST[$this->field]))
+			if($_POST AND (isset($_POST[$this->field]) || $_POST[$this->field] != ""))
+			{
 				$value = $_POST[$this->field];
+			}
 		}
 		else
 		{

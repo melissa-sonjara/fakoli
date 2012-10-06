@@ -1,4 +1,26 @@
 <?
+Fakoli::using("questionnaire");
+Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
+
+class QuestionnaireDashboardManager extends AbstractQuestionnaireDashboardManager
+{
+	function QuestionnaireDashboardManager($item)
+	{
+		$this->item = $item; // can be empty instance
+	}
+	
+	function getComponentName()
+	{
+		return "questionnaire";
+	}
+	
+	function getCreateManager($item)
+	{
+		return new QuestionnaireCreateManager($item);
+	}
+	
+}
+
 /*
  * Description: provides the more generic questionnaire 
  * classes with the specifics of the questionnaire datamodels and 
@@ -9,122 +31,78 @@
  * 
  * 10/13/2010
  */
-class QuestionnaireManager
+class QuestionnaireCreateManager extends AbstractQuestionnaireCreateManager
 {
-	var $item;
-	
 	/**
-	 * Creates a new QuestionnaireManager object.
+	 * Creates a new QuestionnaireCreateManager object.
 	 */
-	function QuestionnaireManager($questionnaire)
+	function QuestionnaireCreateManager($questionnaire)
 	{
 		$this->item = $questionnaire;
 	}
 	
-	function getQuestions()
+	function getQuestionClass()
 	{
-		return $this->item->Questions("ORDER BY question_number");
+		return Question;
 	}
 	
-	/**
-	 * Returns the field name of the page identifier for 
-	 * add/update of survey questions.
-	 * 
-	 * @return string
-	 */
-	function getQuestionForm()
+	function getComponentName()
 	{
-		return "question_form?questionnaire_id={$this->item->questionnaire_id}";
+		return "questionnaire";
 	}
 	
-	function getQuestionKey()
+	function getXrefClass()
 	{
-		return "question_id";
+		return null;
 	}
-	
-	function isEditable()
+			
+	// The class that stores the answers
+	function getAnswerClass()
 	{
-		return $this->item->isEditable();
-	}
-	
-	function getPrimaryKey()
-	{
-		return $this->item->getPrimaryKey();
-	}
-	
-	function getNotEditableHTML()
-	{
-		return $this->item->getNotEditableHTML();	
-	}
-	
-	function getQuestionDeleteHandler()
-	{
-		return "/action/questionnaire/question_delete";
-	}
-	
-	function drawQuestionDeleteButton($pk)
-	{
-		$confirm = "Are you sure you want to remove this question?";	
-		$url = "/action/questionnaire/question_delete?questionnaire_id={$this->item->questionnaire_id}&question_id=$pk";
-		QuestionSet::drawOneButton($url, "Delete", $confirm);
-	}
-	
-	
-	function getOrderField()
-	{
-		return "question_number";
-	}
-
-	function getAnswers()
-	{
-		return $this->item->Answers();
+		return "QuestionnaireAnswer";
 	}	
-		
-	function reOrderQuestions()
-	{
-		global $_POST;
-		
-		// reorder
-		foreach($_POST as $name => $value)
-		{
-			if (!strncmp($name, "question_", 9))
-			{
-				$id = substr($name, 9);
-				$question = new Question();
-				$question->filter = new InclusionFilter("question_id", "question_number");	
-				$question->questionnaire_id = $this->item->questionnaire_id;
-				$question->question_id = $id;
-				$question->question_number = $value;
-				$question->save();
-			}
-		}
-		// renumber
-		$questionnaire = new Questionnaire($this->item->questionnaire_id);
-		$questions = $questionnaire->Questions("ORDER BY question_number");
-		$value = 1;
 	
-		foreach($questions as $question)
+	static function getTabs($key = "")
+	{
+		$formTitle = "Create a Questionnaire";
+		
+		if($key)
 		{
-			$question->filter = new InclusionFilter("question_number");
-			$question->question_number = $value;
-			$question->save();
-			$value++;
+			$questionnaire = new Questionnaire($key);
+			$formTitle = ($questionnaire->isEditable()) ? "Edit Questionnaire" : "Questionnaire Details";
 		}
 
+		$images[0] = "<img src='/fakoli/images/tab_create_survey.png' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+		$images[1] = "<img src='/fakoli/images/tab_view_results.png' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+
+		$tabs = array(
+		$images[0] . $formTitle	=> array(
+				"Introduction"			=>	"questionnaire_form",
+				"Questions"				=>	"questionnaire_questions",
+				"Preview Questionnaire"	=>	"questionnaire_preview"
+				),
+		
+				$images[1] . "View Results"	=> array(
+				"Questionnaire Responses"	=>	"questionnaire_responses",
+				"Graphical Data"		=>	"questionnaire_graphs",
+				"Tabular View"			=>	"questionnaire_data_table",
+				"Spreadsheet View"		=>	"questionnaire_spreadsheet"
+				),
+			);
+					
+		$qs = ($key) ? "questionnaire_id=$key" : "";
+		$tabBar = new TwoLevelTabBar($tabs, $qs);
+		
+		return $tabBar;
 	}
-	
-	static function upgradeComponent($version)
-	{
-		$mgr = new QuestionnaireUpgradeManager();
-		$mgr->upgrade($version);
-	}	
+
 }
 
 /*
  * @response - object of DataItem class that links
  * the set of user's responses.
  */
-class QuestionnaireResponseManager extends QuestionnaireManager
+class QuestionnaireResponseManager extends AbstractQuestionnaireResponseManager
 {
 	var $item;
 	
@@ -132,30 +110,40 @@ class QuestionnaireResponseManager extends QuestionnaireManager
 	{
 		$this->item = $response;	
 	}
-
-	function getQuestions()
+	
+	function getComponentName()
 	{
-		return $this->item->Questions("ORDER BY question_number");
-	}
-
-	function getQuestionKey()
-	{
-		return "question_id";
+		return "questionnaire";
 	}
 	
-	/*
-	 * Called by QuestionnaireForm
-	 */
-	function getAnswerKey()
+	function getQuestionClass()
 	{
-		return "answer_id";
+		return Question;
 	}
-			
+				
 	// The class that stores the answers
 	function getAnswerClass()
 	{
-		return "Answer";
+		return "QuestionnaireAnswer";
 	}
+	
+	/**
+	 * Called by questionnaire_response_view action handler
+	 */
+	function drawResponseViewHeading()
+	{
+		$response = $this->item;
+		echo $response->format("<h2>{Questionnaire.title}</h2>");
+		echo "<p><label>Respondent: </label>". $this->getRespondent() . "</p>\n";
+		echo $response->format("<p><label>Date Submitted: </label>{date_submitted:F d, Y}</p>\n");
+	}
+	
+	static function formatManagerResponseLink($response)
+	{
+		$mgr = new QuestionnaireResponseManager($response);
+		return $mgr->formatResponseLink();
+	}	
+		
 }
 
 
@@ -163,26 +151,54 @@ class QuestionnaireResponseManager extends QuestionnaireManager
  * Handle getting total results/response counts for one survey for
  * display of results.
  */
-class QuestionnaireResultsManager extends QuestionnaireManager
+class QuestionnaireResultsManager extends AbstractQuestionnaireResultsManager
 {
 	function QuestionnaireResultsManager($questionnaire)
 	{
 		$this->item = $questionnaire;
 	}
-
+	
+	function getComponentName()
+	{
+		return "questionnaire";
+	}
+	
+	function getQuestionClass()
+	{
+		return Question;
+	}	
+	
+	/**
+	 * Called by Spreadsheeet View
+	 * 
+	 * @param $constraint
+	 */
 	function Responses($constraint = "")
 	{
 		return $this->item->Responses();
 	}
 
+	function getAnswerClass()
+	{
+		return "QuestionnaireAnswer";
+	}
+	
 	function getResponseManager($response)
 	{
 		return new QuestionnaireResponseManager($response);
 	}
 
+	/**
+	 * For spreadsheet view
+	 */
 	function getRespondentColumnHeading()
 	{
-		return "Token";
+		return "Respondent";
+	}
+	
+	function getRecipientCount()
+	{
+		return 0;
 	}
 }
 ?>

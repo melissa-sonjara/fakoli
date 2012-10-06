@@ -90,3 +90,30 @@ INSERT INTO `question_type` (`question_type_id`,`name`,`class_name`,`sort_order`
 /*!40000 ALTER TABLE `question_type` ENABLE KEYS */;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+CREATE TABLE `questionnaire_response` (
+  `response_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `questionnaire_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `date_submitted` datetime DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'not_started',
+  PRIMARY KEY (`response_id`),
+  KEY `questionnaire_idx` (`questionnaire_id`),
+  KEY `user_idx` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE  `questionnaire_answer` (
+  `answer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `response_id` int(10) unsigned NOT NULL COMMENT 'references questionnaire_response table',
+  `question_id` int(10) unsigned NOT NULL COMMENT 'references single question in a questionnaire table',
+  `value` text,
+  PRIMARY KEY (`answer_id`),
+  KEY `response_idx` (`response_id`),
+  KEY `question_idx` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+
+
+-- END Version 1.3

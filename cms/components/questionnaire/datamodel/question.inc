@@ -31,29 +31,21 @@
 
 *****************************************************************/
 
-
-class Question extends DataItem
-{
-	var $fields = array (	"question_id"			=>	Number,
-							"questionnaire_id"		=>	Number,
-							"question_number"		=>	Number,
-							"question_type_id"		=>	Number,
-							"question"				=>	HTML,
-							"question_name"			=>	String,
-							"options"				=>	Text,
-							"required"				=>	Number,
-							"char_limit"			=>	Number,
-							"num_rows"				=>	Number,
-							"context_help"			=>	Text
-						);
-						
-	var $relations = array (	
-								"Answer"			=>	Answer,
-								"Questionnaire"		=>	Questionnaire,
-								"QuestionType"		=>	QuestionType
-	);
-	
-	
+/**
+ * Defines the relations and functions required of a Question class
+ * that uses Questionnaire form and results classes.
+ * 
+ * Question classes should contain a sort order field called either
+ * sort_order or
+ * question_number
+ * 
+ * @author janice
+ *
+ */
+abstract class AbstractQuestion extends DataItem
+{		
+	var $editable = true; // pseudo field
+		
 	var $fieldAliases = array(
 		"char_limit"	=>	"Character Limit for Answer",
 		"num_rows"		=>	"Number of Rows for Answer",
@@ -61,39 +53,18 @@ class Question extends DataItem
 		"required"		=>	"Answer	Required",
 	);
 	
-	// Answer to one object's questionnaire's question
-	function Answer()
-	{	
-		$answer = querySingle(Answer, "WHERE question_id = {$this->question_id}");
-		return $answer;
-	}
+	/**
+	 * Returns true if the question can be edited and false
+	 *  if it cannot.
+	 */
+	abstract function isEditable();
 	
-	function Questionnaire()
-	{
-		return $this->getRelated(Questionnaire);
-	}
+	abstract function QuestionType();
 	
-	function QuestionnaireType()
-	{
-		$questionnaire = $this->Questionnaire();
-		return $questionnaire->QuestionnaireType();
-	}
-	
-	function QuestionType()
-	{
-		return $this->getRelated(QuestionType);
-	}
-	
-	function isEditable()
-	{
-		if(!$this->question_id)
-			return true;
-		
-		$count = queryValue(Answer, "COUNT(1)", "WHERE question_id={$this->question_id}");
-
-		return ($count > 0) ? false : true;
-	}
-	
+	/**
+	 * Sets the default values for a question object:
+	 * 
+	 */
 	function setDefaultValues()
 	{
 		$this->num_rows = 3;
@@ -107,45 +78,7 @@ class Question extends DataItem
 			$this->question_type_id = $qTypes[0]->question_type_id;
 		}
 	}
-	
-	
-	/* get the list of values the user checked in a checkbox */
-	function getValueList($values)
-	{
-		$optionArr = explode("\n", $this->options);
-
-		$options = QuestionnaireForm::incrementArray($optionArr);
-
-		// include 0 value, first checkbox
-		if(strlen($values)==1 AND is_numeric($values))
-			$values = array($values);
-		elseif(strlen($values)==0)
-			$values = array();
-		else
-			$values = explode(",", $values);
-
-		$listArr = array();		
-		if(count($options) > 0)
-		{
-			foreach($options as $value => $text)
-			{
-				if(array_search($value, $values) !== FALSE)
-					array_push($listArr, $text);				
-			}
-		}
-			
-		if(count($listArr) > 0)
-			$list = implode($listArr, ",");
 		
-		return $list;
-	}
-	
-	function getNotEditableHTML()
-	{
-		$text = "<i>Note:&nbsp;</i>This question has been answered. You may edit the question but be careful not to change its meaning.";
-		return $text;	
-	}
-	
 	function isFreeText()
 	{
 		return ($this->question_type_id == 4) ? true : false;
@@ -170,7 +103,86 @@ class Question extends DataItem
 	{
 		return ($this->question_type_id == 1) ? true : false;
 	}
+	
+	function formatEditableMessage()
+	{
+		if(!$this->editable)
+		{
+			return "<p><b><i>Note:&nbsp;</i>This question has been answered. You may edit the question but be careful not to change its meaning.</b></p>\n";
+		}
+	}
+	
+	function AbstractQuestion()
+	{
+	}
+
+}
+
+class Question extends AbstractQuestion
+{
+	var $fields = array (	"question_id"			=>	Number,
+							"questionnaire_id"		=>	Number,
+							"question_number"		=>	Number,
+							"question_type_id"		=>	Number,
+							"question"				=>	HTML,
+							"question_name"			=>	String,
+							"options"				=>	Text,
+							"required"				=>	Number,
+							"char_limit"			=>	Number,
+							"num_rows"				=>	Number,
+							"context_help"			=>	Text
+						);
+						
+	var $relations = array (	
+					"Questionnaire"		=>	Questionnaire,
+					"QuestionType"		=>	QuestionType,
+					"Answers"			=>	QuestionnaireAnswer,
+	);
+	
 		
+	function Questionnaire()
+	{
+		return $this->getRelated(Questionnaire);
+	}
+	
+	function QuestionType()
+	{
+		return $this->getRelated(QuestionType);
+	}
+	
+	function Answers($constraint = "")
+	{
+		return $this->getRelatedList(QuestionnaireAnswer, "question_id", $constraint);
+	}	
+		
+	function isEditable()
+	{
+		if(!$this->question_id)
+		{
+			return true;
+		}
+		
+		$count = Query::create(QuestionnaireAnswer, "WHERE question_id=:question_id")
+			->bind(":question_id", $this->question_id)
+			->executeValue("COUNT(1)");
+
+		return ($count > 0) ? false : true;
+	}
+	
+	/**
+	 * Do not allow delete if there are answers linked to the question
+	 */
+	function allowDelete()
+	{
+		if(!$this->question_id)
+		{
+			return false;
+		}
+		
+		$count = count($this->Answers());
+		return ($count > 0) ? false : true;
+	}
+					
 	function Question()
 	{
 		$this->table = "question";

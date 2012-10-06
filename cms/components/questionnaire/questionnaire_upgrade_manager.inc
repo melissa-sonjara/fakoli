@@ -51,7 +51,8 @@ class QuestionnaireUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Added context_help field to question",
-			"1.2"		=>	"sql:Added Heading as a question type"
+			"1.2"		=>	"sql:Added Heading as a question type",
+			"1.3"		=>	"sql:Add tables questionnaire_response and questionnaire_answer",
 	);
 	
 	function QuestionnaireUpgradeManager()

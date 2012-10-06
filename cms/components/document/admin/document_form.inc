@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("document", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 Fakoli::assertRole("admin");
@@ -62,6 +62,8 @@ if ($document->file)
 	$form->annotate("file", "<a href='/download.php?document_id={$document_id}'>{$document->file}</a>");
 }
 $fileupload = new FileUploadFieldRenderer($form, "file", "Upload File", uploadPDF);  
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {

@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
-Fakoli::using("survey", "survey_manager", "questionnaire");
+Fakoli::using("survey", "questionnaire");
 Fakoli::usingFeature("auto_form");
 
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
@@ -76,17 +76,7 @@ $form->required("question");
 $form->annotate("options", "<br><span class='annotate'>List each option on a separate line.</span>");
 $form->getRenderer("question")->height = "100px";
 
-SurveyQuestionForm::questionTypeSetup($form, $question, $editable);
-$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
-
-if($editable)
-{
-	$typeSelect->onChange = "new Question().onChangeQuestionType";
-}
-else
-{
-	$form->readOnly("question_type_id", "options");
-}
+QuestionFormHelper::questionTypeSetup($form, $editable);
 
 if($survey_question_id)
 {
@@ -121,15 +111,7 @@ if ($method == "POST")
 
 
 $script .= $form->writeScript();
-
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-window.addEvent('domready', function()
-{
-	 new Question().setup($question->question_type_id, '{$form->id}');
-});	
-</script>
-ENDSCRIPT;
+$script .= QuestionFormHelper::writeScript($form);
 
 if($survey_id)
 {

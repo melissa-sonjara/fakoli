@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("image");
+Fakoli::using("image", "taxonomy");
 Fakoli::usingFeature("auto_form");
 
 require_once "include/image_gallery_tabs.inc";
@@ -74,6 +74,8 @@ $imageTypeSelect->allowAddEntry();
 
 $redirect = "/admin/images?gallery_id={$image->gallery_id}";
 $form->button("Cancel", $redirect);
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {

@@ -42,8 +42,6 @@
 Fakoli::using("questionnaire");
 Fakoli::usingFeature("auto_form");
 
-require_once realpath(dirname(__FILE__)."/../questionnaire_tabs.inc");
-
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
 
 $questionnaire = new Questionnaire();
@@ -57,7 +55,6 @@ $form = new AutoForm($questionnaire);
 
 $form->required("title");
 $form->hide("composite_class");
-$form->button("Cancel", "/questionnaire_list");
 $form->unique("title", "A questionnaire already exists with that title. Please choose a different title.");
 
 if($questionnaire->isEditable())
@@ -66,7 +63,7 @@ if($questionnaire->isEditable())
 	$form->onDelete = onDeleteCascade;
 }
 
-$tabs = questionnaireTabs($questionnaire_id);
+$tabs = QuestionnaireCreateManager::getTabs($questionnaire_id);
 
 if ($method == "POST")
 {
@@ -91,19 +88,9 @@ $form->drawForm();
 
 function onDeleteCascade(&$questionnaire)
 {
-	$questions = $questionnaire->Questions();
-	
-	if(count($questions) > 0)
-	{
-		foreach($questions as $question)
-		{
-			$question->delete();
-		}
-	}
-	
-	$questionnaire->delete();
-	
-	redirect("/questionnaire_list");
-	
+	$mgr = new QuestionnaireCreateManager($questionnaire);
+	$mgr->deleteQuestionnaire();
+	redirect("questionnaire_dashboard");	
 }
+
 ?>

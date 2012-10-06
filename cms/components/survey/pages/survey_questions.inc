@@ -43,7 +43,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 6/23/10
  */
 
-Fakoli::using("survey", "survey_manager");
+Fakoli::using("survey", "questionnaire");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -58,16 +58,17 @@ $survey->filter = new InclusionFilter("survey_id");
 
 $xrefs = $survey->SurveyQuestionXrefs();
 
+$mgr = new SurveyCreateManager($survey);
+
 $table = new DataListView($xrefs, "SurveyQuestions");
 $table->column("Question", "<a href='survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}'>{Question.question}</a>")
-	->column("Options", array(SurveyQuestionTableHelper, formatOptions))
-	->column("Required", array(SurveyQuestionTableHelper, formatRequired))
-	->column("Remove", "<a href=\"#\" onclick=\"new SurveyCreate().removeSurveyQuestion({survey_question_xref_id}); return false;\">
-			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>", false, "text-align: center")
+	->column("Options", array(QuestionTableHelper, formatOptions))
+	->column("Required", array(QuestionTableHelper, formatRequired))
+	->column("Remove", array(QuestionTableHelper, formatRemove), false, "text-align: center")
 ;
 
 $table->emptyMessage = "There are no questions defined.";
-$table->enableDragReorder("/action/survey/reorder_survey_questions?survey_id=$survey_id");
+$table->enableDragReorder("/action/survey/reorder_questions?survey_id=$survey_id");
 $table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the survey questions</span>";
 $table->sortable = false;
 $table->cssStyle = "width: 100%";
@@ -89,6 +90,7 @@ if ($method == "POST")
 }
 
 $script .= $table->writeScript();
+$script .= $mgr->writeScript();
 
 $tabs->writeHTML();
 

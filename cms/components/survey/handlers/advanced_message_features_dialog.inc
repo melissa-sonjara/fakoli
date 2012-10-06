@@ -41,7 +41,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 5/27/2010
  */
 
-Fakoli::using("survey", "survey_manager", "email");
+Fakoli::using("survey", "questionnaire", "email");
 Fakoli::usingFeature("data_view");
 
 $table = MergeCodeManager::buildMergeCodeTable("SurveyResponse");

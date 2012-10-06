@@ -42,7 +42,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
-Fakoli::using("questionnaire", "survey", "survey_manager");
+Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
@@ -51,7 +51,8 @@ if(!$survey_id)
 	redirect("index");
 
 $survey = new Survey($survey_id);
-$view = new SurveyReport(new SurveyResultsManager($survey));
+$mgr = new SurveyResultsManager($survey);
+$view = new QuestionnaireGraphicalView($mgr);
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 
@@ -64,6 +65,9 @@ $tabs->writeHTML();
 <div id="survey_tab_border">
 <h3>Aggregated Survey Results for <?echo $survey->title?></h3>
 <?
+echo "<h4>Responses Received</h4>";
+echo $mgr->getProgressBar();
+
 $view->drawView();
 ?></div>
 <?
