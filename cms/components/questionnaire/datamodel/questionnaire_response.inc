@@ -53,6 +53,8 @@ abstract class AbstractQuestionnaireResponse extends DataItem
 
 	abstract function isEditable();
 	
+	abstract function setDefaults();
+	
 	/**
 	 * Set the response to submitted and save
 	 */
@@ -105,7 +107,7 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 	{
 		return $this->getRelated(Questionnaire);
 	}
-
+	
 	function Answers($constraint = "")
 	{
 		if(!$this->response_id)
@@ -118,6 +120,11 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 	function isSubmitted()
 	{
 		return ($this->status != "submitted") ? false : true;
+	}
+	
+	function setDefaults()
+	{
+		$this->status = "not_started";
 	}
 
 	function isEditable()

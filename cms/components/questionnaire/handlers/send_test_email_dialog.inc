@@ -31,36 +31,51 @@
 
 *****************************************************************/
 
-/*
- * Description: Nondisplay script to delete a question from a 
- * questionnaire question set.
- * 
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 1/04/10
- * 
+/**
+ * Sample code for sending test email. Questionnaire component does not
+ * use this handler.
  */
-
-Fakoli::using("questionnaire");
+Fakoli::using("questionnaire", "email", "settings");
+Fakoli::usingFeature("auto_form");
 
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
-$question_id = checkNumeric($_GET["question_id"]);
 
 if(!$questionnaire_id)
 {
-	Fakoli::end("Question Remove Failed - Unknown Questionnaire");	
-}
-
-if (!$question_id) 
-{
-	Fakoli::end("Question delete - unknown question");
+	Fakoli::end("unknown questionnaire");
 }
 
 $questionnaire = new Questionnaire($questionnaire_id);
-$mgr = new QuestionnaireCreateManager($questionnaire);
+$mgr = new QuestionnaireSendManager($questionnaire);
 
-$mgr->deleteQuestion($question_id);
+$form = $mgr->buildSendTestEmailForm();
 
-Fakoli::end("OK");
+if ($method == "POST")
+{
+	$obj =& $form->data;
+	$obj->fromPOST();
+	$msg = $form->validator->validate();
+	if ($msg == "")
+	{
+		$sent = $mgr->sendTests($obj->recipients);
+
+		if($sent == 1)
+		{
+			Fakoli::end("OK");
+		}
+		else
+		{
+			Fakoli::end("FAIL");
+		}
+	}	
+	else
+	{
+		Fakoli::end($msg);
+	}
+}
+
+echo $form->writeScript();
+
+$form->drawForm();
 
 ?>

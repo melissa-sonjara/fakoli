@@ -44,7 +44,7 @@ $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
 
 if(!$questionnaire_id)
 {
-	ajaxReturn("unknown questionnaire");
+	Fakoli::end("unknown questionnaire");
 }
 
 $questionnaire = new Questionnaire($questionnaire_id);
@@ -62,11 +62,11 @@ if ($method == "POST")
 	if ($form->msg == "")
 	{
 		$dst = $mgr->cloneQuestionnaire();
-		ajaxReturn("OK|{$dst->questionnaire_id}");		
+		Fakoli::end("OK|{$dst->questionnaire_id}");		
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 	}
 }
 

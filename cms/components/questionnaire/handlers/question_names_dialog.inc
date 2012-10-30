@@ -38,7 +38,7 @@ $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
 
 if(!$questionnaire_id)
 {
-	ajaxReturn("unknown questionnaire");
+	Fakoli::end("unknown questionnaire");
 }
 
 $questionnaire = new Questionnaire($questionnaire_id);
@@ -50,11 +50,11 @@ if ($method == "POST")
 {
 	if($form->save())
 	{
-		ajaxReturn("OK");
+		Fakoli::end("OK");
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 	}
 }
 

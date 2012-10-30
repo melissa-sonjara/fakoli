@@ -46,7 +46,7 @@ $question_xref_id = checkNumeric($_GET["question_xref_id"]);
 
 if(!$questionnaire_id)
 {
-	ajaxReturn("Question Remove Failed - Unknown Questionnaire");	
+	Fakoli::end("Question Remove Failed - Unknown Questionnaire");	
 }
 	
 $questionnaire = new Questionnaire($questionnaire_id);
@@ -64,8 +64,8 @@ else if($question_id)
 }
 else
 {
-	ajaxReturn("Question Remove - Unknown questionnaire/question");	
+	Fakoli::end("Question Remove - Unknown questionnaire/question");	
 }
 
-ajaxReturn("OK");
+Fakoli::end("OK");
 ?>

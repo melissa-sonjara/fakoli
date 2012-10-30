@@ -31,20 +31,36 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("questionnaire");
+/*
+ *
+ * Description: Displays survey message advanced features in a
+ * popup.
+ *
+ * @author: Janice Gallant for Sonjara, Inc.
+ *
+ * date: 5/27/2010
+ */
 
-$response_id = checkNumeric($_GET["response_id"]);
+Fakoli::using("survey", "questionnaire", "email");
+Fakoli::usingFeature("data_view");
 
-if(!$response_id)
-	Fakoli::end("unknown questionnaire response");
+$table = MergeCodeManager::buildMergeCodeTable("SurveyResponse");
 
-$response = new QuestionnaireResponse($response_id);
+$page->page_title = "Advanced Features &ndash; Merge Codes";
+	
+echo $table->writeScript();
 
-$mgr = new QuestionnaireResponseManager($response);
-$view = new QuestionnaireResponseView($mgr);
-
-echo $view->writeScript();
-
-$mgr->drawResponseViewHeading();
-$view->drawView();
 ?>
+<p>Customize your survey email message using the following codes to
+insert survey data from the database. The codes will appear in
+[brackets] while you edit your email template and will be replaced by
+data values when you email your survey.</p>
+<?php
+$table->drawView();
+?>
+<p>Example:</p>
+<p>Please take a few minutes to complete this short [program_name]
+survey. Your feedback will help us know our participants and improve our
+program.</p>
+<p>The survey will be open for responses until [survey_end_date]. We
+appreciate your support.</p>

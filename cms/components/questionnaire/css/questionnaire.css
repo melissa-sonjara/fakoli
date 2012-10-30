@@ -1,0 +1,65 @@
+@CHARSET "ISO-8859-1";
+
+#questionnaire_tab_border
+{
+	border: solid 1px #666; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+	box-shadow: 1px 1px 5px #666;
+}
+.questionnaire_form
+
+{
+	clear: left;
+	border: none; 
+	padding: 4px; 
+	width: 600px;
+}
+
+
+#QuestionSets tr.expanded td
+{
+	background: url(/fakoli/images/open.gif) left center no-repeat transparent;	
+	padding-left: 5px;
+	margin-left: 5px;
+	background: none;
+}
+
+/* 
+need to set fixed width so that when js shows/hides
+fields when question type changes, columns, the label 
+column doesn't change.
+*/
+td.question_form_label {
+	font-weight: bold;
+	text-align: left;
+	vertical-align: top;
+	font-size: 10pt;
+	color: #ooo;
+	border-bottom: 0;
+	width: 35%;
+}
+
+.incorrect_answer label,
+.correct_answer label
+{
+	margin-left: 25px;	
+}
+
+.incorrect_answer,
+.correct_answer
+{
+	padding-top: 5px;	
+}
+
+.incorrect_answer
+{
+	background: url(/fakoli/images/off.png) bottom left no-repeat transparent;
+}
+
+.correct_answer
+{
+	background: url(/fakoli/images/on.png) top left no-repeat transparent;
+}

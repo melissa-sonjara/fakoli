@@ -37,7 +37,7 @@ $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
 
 if(!$questionnaire_id)
 {
-	ajaxReturn("unknown questionnaire");
+	Fakoli::end("unknown questionnaire");
 }
 
 $questionnaire = new Questionnaire($questionnaire_id);
@@ -45,4 +45,4 @@ $questionnaire = new Questionnaire($questionnaire_id);
 $mgr = new QuestionnaireCreateManager($questionnaire);
 $mgr->deleteQuestionnaire();
 
-ajaxReturn("OK");
+Fakoli::end("OK");

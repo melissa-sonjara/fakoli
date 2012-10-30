@@ -63,6 +63,27 @@ abstract class AbstractQuestionnaire extends DataItem
 	 * on the first form page.
 	 */
 	abstract function setDefaults();
+	
+	abstract function isAuthor();
+
+	function getAvailableActions()
+	{
+		return array(
+			""					=>	"",
+			"view"				=>	"View",
+			"edit"				=>	"Edit",
+			"public_view"		=>	"Respondent's View",
+			"clone"				=>	"Save As...",
+			"view_results"		=>	"View Results",
+			"send_test"			=>	"Send Test Email To...",
+			"send"				=>	"Preview &amp; Send",
+			"close"				=>	"Close to Respondents",
+			"reopen"			=>	"Reopen to Respondents",
+			"send_reminders"	=>	"Send Reminders",
+			"delete"			=>	"Delete",
+		);
+		
+	}
 
 }
 
@@ -77,6 +98,7 @@ class Questionnaire extends AbstractQuestionnaire
 			"Questions"				=>	Question,
 			"Answers"				=>	QuestionnaireAnswer,
 	);
+	
 		
 	function Questions($constraint = "")
 	{
@@ -122,6 +144,15 @@ class Questionnaire extends AbstractQuestionnaire
 		return ($count > 0) ? false : true;
 	}
 	
+	function isAuthor()
+	{
+		global $user;
+		
+		if(!$user) return false;
+		
+		return true;
+	}
+	
 	function allowDelete()
 	{
 		if(!$this->questionnaire_id)
@@ -136,6 +167,21 @@ class Questionnaire extends AbstractQuestionnaire
 	{
 		// nothing to do.
 	}
+	
+	function getAvailableActions()
+	{
+		return array(
+			""					=>	"",
+			"view"				=>	"View",
+			"edit"				=>	"Edit",
+			"public_view"		=>	"Respondent's View",
+			"clone"				=>	"Save As...",
+			"view_results"		=>	"View Results",
+			"delete"			=>	"Delete",
+		);
+		
+	}
+	
 		
 	function getNotEditableHTML()
 	{

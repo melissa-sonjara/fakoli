@@ -31,20 +31,46 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("questionnaire");
+/*
+ * Description: Create a list of survey request recipients
+ * that have not yet responded. Send an email reminder.
+ * 
+ * Sample code. Questionnaire component does not
+ * use this handler.
+ */
 
-$response_id = checkNumeric($_GET["response_id"]);
+Fakoli::using("questionnaire", "email", "settings");
+Fakoli::usingFeature("auto_form");
 
-if(!$response_id)
-	Fakoli::end("unknown questionnaire response");
+$questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
 
-$response = new QuestionnaireResponse($response_id);
+if(!$questionnaire_id)
+	Fakoli::end("Questionnaire Reminder Form - unknown questionnaire");
 
-$mgr = new QuestionnaireResponseManager($response);
-$view = new QuestionnaireResponseView($mgr);
+$questionnaire = new Questionnaire($questionnaire_id);
+$mgr = new QuestionnaireSendManager($questionnaire);
 
-echo $view->writeScript();
+$form = $mgr->buildReminderForm();
 
-$mgr->drawResponseViewHeading();
-$view->drawView();
+if ($method == "POST")
+{
+	$obj =& $form->data;
+	$obj->fromPOST();
+	
+	$form->msg = $form->validator->validate();
+	if(!$form->msg)
+	{
+		$rtn = $mgr->sendReminderEmails();
+		Fakoli::end($rtn);
+	}
+	else
+	{
+		Fakoli::end($form->msg);
+	}
+}
+
+echo $form->writeScript();
+
+echo "<h2>{$mgr->nonResponsiveCount} recipients have not yet responded.</h2>\n";
+$form->drawForm();
 ?>

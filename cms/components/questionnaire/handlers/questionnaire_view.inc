@@ -31,36 +31,24 @@
 
 *****************************************************************/
 
-/*
- * Description: Nondisplay script to delete a question from a 
- * questionnaire question set.
- * 
- * author: Janice Gallant for Sonjara, Inc.
- * 
- * date: 1/04/10
- * 
- */
 
 Fakoli::using("questionnaire");
 
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
-$question_id = checkNumeric($_GET["question_id"]);
 
 if(!$questionnaire_id)
-{
-	Fakoli::end("Question Remove Failed - Unknown Questionnaire");	
-}
-
-if (!$question_id) 
-{
-	Fakoli::end("Question delete - unknown question");
-}
-
+	Fakoli::end("Questionnaire View - unknown questionnaire");
+	
 $questionnaire = new Questionnaire($questionnaire_id);
-$mgr = new QuestionnaireCreateManager($questionnaire);
+$questionnaire->filter = new InclusionFilter("title");
 
-$mgr->deleteQuestion($question_id);
+$form = new AutoForm($questionnaire);
+$form->readOnlyForm = true;
+$view = new QuestionnaireView($questionnaire);
 
-Fakoli::end("OK");
+echo $form->writeScript();
+echo $view->writeScript();
 
+$form->drawForm();
+$view->drawView();
 ?>

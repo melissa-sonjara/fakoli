@@ -37,7 +37,7 @@ Fakoli::usingFeature("data_view");
 $samples = Query::create(Questionnaire, "WHERE title = 'Sample Questionnaire'")->execute();
 
 if(count($samples) == 0)
-	ajaxReturn("No questionnaire samples provided");
+	Fakoli::end("No questionnaire samples provided");
 	
 $sample = $samples[0];	
 
