@@ -1,4 +1,109 @@
 <?php
+
+/**
+ * Contains methods used by all 3 classes
+ * 
+ * @author janice
+ *
+ */
+class AbstractQuestionnaireManager
+{
+	function AbstractQuestionnaireManager()
+	{
+	}
+	
+	/**
+	 * Retrieves questions through the questionnaire or survey
+	 * DataItem object.
+	 * 
+	 * Since this method is needed for all 3 managers, classes that
+	 * extend should call shared static method
+	 * 
+	 */
+	function getQuestions()
+	{
+		$sort_field = $this->getSortField();
+		$questions = $this->item->Questions("ORDER BY $sort_field");
+		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
+	}
+	
+	/**
+	 * Retrieves the table that has the question sort order field
+	 * either Question or a QuestionXref
+	 * 
+	 * If the item should have a relation to retrieve the
+	 * questions or xrefs that is the pluralized version of the class
+	 * name.
+	 * e.g., SurveyQuestionXrefs or Questions
+	 * 
+	 * If not, override this function.
+	 */
+	function getSortableItems()
+	{
+		if($this->getXrefClass())
+		{
+			$relation =  pluralize($this->getSortableClass());
+		}
+		else
+		{
+			$relation = "Questions";
+		}
+		$sort_field = $this->getSortField();
+
+		return $this->item->$relation("ORDER BY $sort_field");
+	}
+	
+	function getSortableClass()
+	{
+		return ($this->getXrefClass()) ? $this->getXrefClass() : $this->getQuestionClass();
+	}
+	
+	function getSortableObj()
+	{
+		$class = $this->getSortableClass();
+		return new $class();
+	}
+	
+	function getSortField()
+	{
+		$obj = $this->getSortableObj();
+		return ($obj->hasField("sort_order")) ? "sort_order" : "question_number";
+	}
+	
+	/**
+	 * Returns the primar key name of the question obj
+	 */
+	function getQuestionKey()
+	{
+		$qClass = $this->getQuestionClass();
+		$question = new $qClass();
+		return $question->getPrimaryKey();
+	}
+			
+	/**
+	 * Called by QuestionRenderers from QuestionnaireForm 
+	 * Given an instance of a question, return its number.
+	 * Some renderers need to skip the numbering (headings).
+	 */
+	function getQuestionNumber($question)
+	{
+		return QuestionnaireHelper::getQuestionNumber($this->item, $this->getQuestions(), $question);
+	}	
+
+	function getAnswerKey()
+	{
+		$class = $this->getAnswerClass();
+		$obj = new $class();
+		return $obj->getPrimaryKey();
+	}
+	
+	function getPrimaryKey()
+	{
+		return $this->item->getPrimaryKey();
+	}
+		
+}
+
 /**
  * Questionnaire/Survey Implementation instructions
  * 
@@ -60,7 +165,7 @@
  * @author janice
  *
  */
-abstract class AbstractQuestionnaireDashboardManager
+abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnaireManager
 {
 	var $item;
 	
@@ -81,6 +186,11 @@ abstract class AbstractQuestionnaireDashboardManager
 	 * e.g., return new QuestionnaireCreateManager($item);
 	 */
 	abstract function getCreateManager($item);
+	
+	abstract function getResultsManager($item);
+	
+	// can return null
+	abstract function getSendManager($item);
 	
 	/**
 	 * The title field used for the clone dialog.
@@ -131,6 +241,12 @@ abstract class AbstractQuestionnaireDashboardManager
 		$class = codify(strtolower($this->item->prettifyClassName()));
 		return "clone_{$class}_dialog";
 	}
+	
+	function getQuestionnaireViewDialog()
+	{
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return "{$class}_view";
+	}
 
 	
 	/**
@@ -148,6 +264,18 @@ abstract class AbstractQuestionnaireDashboardManager
 		return  "{$class}_delete";
 	}
 	
+	function getResponseFormIdentifier()
+	{
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return  "{$class}_response_form";	
+	}
+	
+	function getResultsPageIdentifier()
+	{
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return  "{$class}_responses";	
+	}
+		
 	function buildCloneForm()
 	{
 		$item = $this->item;
@@ -185,8 +313,6 @@ abstract class AbstractQuestionnaireDashboardManager
 	 */
 	function cloneQuestionnaire()
 	{
-		trace("******************in mgr cloneQuestionnaire", 3);
-		
 		$mgr = $this->getCreateManager($this->item);
 		return $mgr->cloneQuestionnaire($this->getTitleField(), $this->getCloneFields());
 	}
@@ -206,20 +332,21 @@ abstract class AbstractQuestionnaireDashboardManager
 	 */
 	function formatActions($item)
 	{
+		$mgr = $this->getResultsManager($item);
+		$responseCount = $mgr->getResponseCount();
+		
 		$mgr = $this->getCreateManager($item);
-		$itemPk = $mgr->getPrimaryKey();
+		$actions = $mgr->getActions();
+		
+		if($responseCount == 0)
+		{
+			unset($actions["view_results"]);
+		}
+	
+		$itemPk = $item->getPrimaryKey();
 		
 		$html = $item->format("<select style='width: 80px' onchange=\"questionnaireMgr.handleQuestionnaireAction(this, {$item->$itemPk}); return false;\">");
 		
-		$actions = array(
-			""				=>	"",
-			"edit"			=>	"Edit",
-			"clone"			=>	"Save As...",
-		);
-		
-		if($item->allowDelete())
-			$actions["delete"] = "Delete";
-
 		foreach($actions as $identifier => $label)
 		{
 			$value = htmlSafe($identifier);
@@ -237,15 +364,15 @@ abstract class AbstractQuestionnaireDashboardManager
 		$title_field = $this->getTitleField();
 		
 		return $item->format("<a href=\"/{$form_id}?$itemPk={$item->$itemPk}\">{{$title_field}}</a>\n");	
-	}
-	
+	}	
 	
 	/**
 	 * Instantiate the QuestionnaireDashboardManager js class.
 	 * 
-	 * Requires the following handlers to exist in the questionnaire component:
+	 * References following handlers to exist in the questionnaire component:
 	 * clone_[item_class]_dialog
 	 * [item_class]_delete
+	 * [item_class]_view
 	 * 
 	 * The var $item is an empty instance of the questionnaire class.
 	 */
@@ -258,11 +385,22 @@ abstract class AbstractQuestionnaireDashboardManager
 		$clone_dialog = $this->getCloneDialog();
 		$questionnaire_form_identifier = $this->getQuestionnaireFormIdentifier();
 		$item_delete_handler = $this->getQuestionnaireDeleteHandler();
-
+		$item_view_dialog = $this->getQuestionnaireViewDialog();
+		$response_form_identifier = $this->getResponseFormIdentifier();
+		$results_page_identifier = $this->getResultsPageIdentifier();
+		
+		$sendMgr = $this->getSendManager($this->item);
+		if($sendMgr)
+		{
+			$script .= $sendMgr->writeScript();
+			$setSendMgr = "questionnaireMgr.questionnaireSendMgr = questionnaireSendMgr;";
+		}
+	
 		ob_start();
 ?>
 <script type="text/javascript" src="/components/questionnaire/js/questionnaire_dashboard.js"></script>
 <script type="text/javascript">
+
 var questionnaireMgr;
 
 window.addEvent('domready', function()
@@ -273,7 +411,592 @@ window.addEvent('domready', function()
 		'<?php echo $item_label ?>',
 		'<?php echo $clone_dialog ?>', 
 		'<?php echo $questionnaire_form_identifier ?>', 
-		'<?php echo $item_delete_handler ?>');
+		'<?php echo $item_delete_handler ?>',
+		'<?php echo $item_view_dialog ?>',
+		'<?php echo $response_form_identifier ?>',
+		'<?php echo $results_page_identifier ?>');
+});
+
+		<?php echo $setSendMgr ?>
+</script>
+<?
+		$script .= ob_get_contents();
+		ob_end_clean();
+		
+		return $script;
+	}	
+}
+
+/**
+ * Optional - for surveys/questionnaires that send requests for
+ * responses via email.
+ * 
+ * NOTE: this class is not tested as it has not yet been implemented.
+ * 
+ * To use this class, response DataItem class must have the following fields:
+ * message
+ * 
+ * optional fields:
+ * include_in_results - default true - if have this field, must have function setExcluded
+ * 	that sets a response object to not be included in results.
+ * user_id (but if user_id, must have relation "Author")
+ * sender_email
+ * cc_recipients - defaults to not included
+ * subject - defaults to settings email_subject
+ * additional_recipients - to send a subsequent batch
+ * 
+ * methods questionnaire/survey DataItem class should have:
+ * getNonResponders
+ * 
+ * Relations:
+ * Author
+ * 
+ * @author janice
+ *
+ */
+abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireManager
+{
+	var $item;
+	var $recipients;
+	var $responses = array();
+	var $excludes = array();
+	var $addl_recipients = array();
+	var $msg;
+	var $nonResponsiveCount;
+	
+	function AbstractQuestionnaireSendManager($item)
+	{
+		$this->item = $item;
+	}
+	
+	abstract function getComponentName();
+	
+	/**
+	 * The DataItem class that stores the responses
+	 * (e.g., QuestionnaireResponse)
+	 */
+	abstract function getResponseClass();
+	
+	abstract function getResultsManager();
+	
+	function getSendTestEmailDialog()
+	{
+		return "send_test_email_dialog";
+	}
+	
+	function getSendTestEmailHandler()
+	{
+		return "send_test_email";
+	}
+
+	function getOpenHandler()
+	{
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return "open_{$class}"; 
+	}
+	
+	function getCloseHandler()
+	{
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return "close_{$class}"; 
+	}
+	
+	function getSendPageIdentifier()
+	{
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return "{$class}_preview"; 
+	}
+	
+	function getSenderEmail()
+	{
+		$item = $this->item;
+		
+		global $user;
+		
+		if($item->hasField("sender_email") && $item->sender_email)
+		{
+			return $item->sender_email;
+		}
+		
+		$email = Settings::getValue("survey", "sender_email");
+	
+		if(!$email)
+		{
+			$email = $user->email;
+		}
+	
+		return $email;	
+	}
+	
+	/**
+	 * Get the recipients from the following fields, if in the
+	 * field list for the item:
+	 * recipients (required)
+	 * cc_recipients (optional)
+	 * sender_email (optional)
+	 * user_id (optional)
+	 */
+	function getAllRecipients()
+	{
+		$item = $this->item;
+		$recipients = explode(",", $item->recipients);
+		
+		if($item->hasField("sender_email") && $item->sender_email)
+		{
+			if(array_search($item->sender_email, $recipients === FALSE))
+			{
+				$recipients[] = $item->sender_email;
+			}
+			$this->excludes[] = $item->sender_email;
+		}
+		
+		if($item->hasField("user_id") && $item->user_id)
+		{
+			$user = $item->Author();
+			if(array_search($user->email, $recipients) === FALSE)
+			{
+				$recipients[] = $user->email;
+				$this->excludes[] = $user->email;
+			}
+		}
+		
+		if($item->hasField("cc_recipients") && $item->cc_recipients)
+		{
+			$ccs = explode(",", $item->cc_recipients);
+			foreach($ccs as $cc)
+			{
+				$recipients[] = $cc;
+				$this->excludes[] = $cc;
+			}
+		}
+		
+		return $recipients;
+	}
+	
+	/**
+	 * Given an array of email addresses, either find an existing
+	 * response obj or create a new one.
+	 * 
+	 * @param $recipients
+	 */
+	function generateResponses($recipients)
+	{		
+		$item = $this->item;
+		$responseClass = $this->getResponseClass();
+		$itemPk = $this->getPrimaryKey();
+		$responses = array();
+	
+		$indexedResponses = IndexedQuery::create($responseClass, "WHERE {$itemPk}=:{$itemPk}", "email")
+			->bind(":{$itemPk}", $item->$itemPk)
+			->execute();
+
+		foreach($recipients as $recipient)
+		{
+			if(!array_key_exists($recipient, $responses))
+			{
+				$response = $this->generateToken($recipient);
+				$response->save();
+			}
+			else
+			{
+				$response = $indexedResponses[$recipient];
+			}
+			$responses[] = $response;
+		}	
+		
+		return $responses;
+	}
+	
+	/*
+	 * generateToken
+	 *
+	 * Create a token to grant access to enter responses to
+	 * the questionnaire/survey. Before accepting a generated
+	 * token, we need to make sure that that token does not
+	 * exist already.
+	 */
+	function generateToken($email)
+	{
+		$surveyResponse = null;
+		$itemPk = $this->item->getPrimaryKey();
+		$responseClass = $this->getResponseClass();
+		
+		if(!$response)
+		{
+			$response = new $responseClass();
+
+			do
+			{
+				$code = "";
+
+				for($i = 0; $i < 5; ++$i)
+				{
+					$code .= chr(rand(ord('A'), ord('Z')));
+				}
+					
+				$response->token = $code;
+				// Set any initial default fields (e.g., status)
+				$response->setDefaults();
+				$response->$itemPk = $this->item->$itemPk;
+				$response->email = $email;
+			}
+			while(!$response->insert());
+		}
+
+		return $response;
+	}
+	
+	/**
+	 * Set certain responses to be excluded from results. For example,
+	 * the survey sender or author. If the survey has a cc_recipients field,
+	 * set those to excluded.
+	 */
+	function setExcluded()
+	{
+		$item = $this->item;
+		
+		if(!$item->hasField("include_in_results"))
+		{
+			return;
+		}
+		
+		$indexedResponses = $this->reindexList($this->responses, "email");
+		
+		if(!count($this->excludes))
+		{
+			return;
+		}
+		
+		foreach($this->excludes as $excludeEmail)
+		{
+			if(!array_key_exists($excludeEmail, $indexedResponses)) continue;
+			
+			$response = $indexedResponses[$excludeEmail];
+			$response->setExcluded();
+		}
+	}
+	
+	function sendToRecipients()
+	{	
+		if(!$item->recipients)
+		{
+			return;
+		}
+		
+		$recipients = $this->getAllRecipients();
+		
+		$this->responses = $this->generateResponses($recipients);
+		
+		$this->setExcludes();
+		
+		if(!count($this->responses))
+		{
+			return;
+		}
+
+		$this->sendEmails();
+	}
+	
+	/**
+	 * When sending a 2nd batch, don't send to sender, author, or
+	 * cc recipients.
+	 */
+	function sendToAdditional()
+	{
+		if(!$item->recipients)
+		{
+			return;
+		}
+	
+		if($item->hasField("additional_recipients") && $item->additional_recipients)
+		{
+			$addl_recipients = explode(",", $item->additional_recipients);
+			$addl_recipients = array_unique($addl_recipients);
+			$addl_recipients = array_diff($addl_recipients, $recipients);
+			if(!count($addl_recipients))
+			{
+				return;
+			}
+			$recipients = $addl_recipients;
+			$this->excludes = $recipients;
+			$this->addl_recipients = $recipients;
+		}
+		else
+		{
+			return;
+		}
+		
+		$this->responses = $this->generateResponses($recipients);
+		
+		$this->setExcludes();
+		
+		if(!count($this->responses))
+		{
+			return;
+		}
+
+		$rtn = $this->sendEmails();
+		
+		$this->moveAdditionalToRecipientList();
+		
+		return $rtn;
+	}
+	
+	
+	/**
+	 * Given a survey and a set of recipients, create a response
+	 * record if does not exist for each email already and send the email
+	 * to all recipients.
+	 * 
+	 * @param obj $survey
+	 * @param array $recipients
+	 */
+	function sendEmails()
+	{	
+		$item = $this->item;
+		
+		$message = $this->getMessage();
+		$subject = $this->getSubject();
+		
+		$sender_email = $this->getSenderEmail();
+		
+		foreach($this->responses as $response)
+		{
+			$rtn = $this->sendOneEmail($response->email, $subject, $message, $sender_email);
+		}
+		
+		$this->moveAdditionalToRecipientList();	
+		
+		return $rtn;
+	}
+	
+	function getSubject()
+	{
+		$item = $this->item;
+		
+		if($item && $item->hasField("subject") && $item->subject)
+		{
+			return $item->subject;
+		}
+		
+		return Settings::getValue("survey", "email_subject");		
+	}
+	
+	function getMessage()
+	{
+		$footer = Settings::getValue("survey", "message_footer");
+		$message = $this->item->message;
+		
+		if($footer)
+		{
+			$message .=  "\r\n\r\n{$footer}";
+		}
+		
+		return $message;
+	}
+	
+	function sendOneEmail($email, $subject, $message, $sender_email)
+	{
+		$responseClass = $this->getResponseClass();
+		
+		$mergeMgr = new MergeCodeManager($response, $message, $responseClass);
+		$recipientMessage = $mergeMgr->searchAndReplace($message);
+			
+		$emailHandler = new EmailHandler($response->email, $subject, $recipientMessage, $sender_email);
+		return $emailHandler->send();
+	}	
+	
+	/*
+	* Add the set of additional recipients to the existing recipients
+	* field values. We don't use the item's field value "additional_recipients"
+	* because that may not match the final list which excludes duplicates.
+	*/
+	function moveAdditionalToRecipientList()
+	{
+		$item = $this->item;
+		
+		if(!$item->hasField("additional_recipients"))
+		{
+			return;
+		}
+		
+		if(!count($this->addl_recipients))
+		{
+			return;
+		}
+
+		$recipients = explode(",", $item->recipients);
+		foreach($this->addl_recipients as $ar)
+		{
+			$recipients[] = $ar;
+		}
+		
+		$item->recipients = implode(",", $recipients);
+		$item->additional_recipients = '';
+		$item->filter = new InclusionFilter("recipients", "additional_recipients");
+		$item->save();
+	}
+
+	
+	/**
+	 * Send a test email to the specified email addresses. 
+	 * The email is excluded from results.
+	 *
+	 * @param obj $survey
+	 * @param String $recipients
+	 */
+	function sendTests($recipients)
+	{
+		$recipients = explode(",", $recipients);
+		$recipients = array_unique($recipients);
+		
+		$this->excludes = $recipients;
+		
+		$this->responses = $this->generateResponses($recipients);
+		
+		$this->setExcludes();
+		
+		if(!count($this->responses))
+		{
+			return;
+		}
+
+		$this->sendEmails();
+		
+		return $this->sendEmails();		
+	}
+	
+	/**
+	 * Get the list of recipients who have not responded.
+	 */
+	function getNonResponsives()
+	{
+		
+	}
+	
+	/**
+	 * Called from preview/send page
+	 * 
+	 * @param Array $nonResponsives - recipients who have not yet responded.
+	 */
+	function sendReminderEmails()
+	{
+		if(!count($this->recipients))
+		{
+			$this->msg = "Send Reminders: there are no recipients that have not responded.";
+			return;
+		}
+	
+		$this->responses = $this->generateResponses($this->recipients);
+		
+		if(!count($this->responses))
+		{
+			$this->msg = "Send Reminders: no response objects generated.";
+			return;
+		}
+
+		$sent = $this->sendEmails();
+		
+		return ($sent) ? "OK" : "FAIL";	
+	}
+	
+	/**
+	 * Called from sent_test_email_dialog
+	 */
+	function buildSendTestEmailForm()
+	{
+		$item = $this->item;
+		$component_name = $this->getComponentName();
+		$dialog = $this->getSendTestEmailDialog();
+		$itemPk = $this->getPrimaryKey();
+		
+		$email = new EmailTemplate();
+		$email->filter = new InclusionFilter("recipients");
+		$email->recipients = $user->email;
+
+		$form = new AutoForm($email, "POST", "/action/{$component_name}/{$dialog}?{$itemPk}={$item->$itemPk}", "SendTestEmail_form");
+		$form->ajaxSubmit("function(result) {questionnaireSendMgr.testEmailResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		$form->required("recipients");
+		$recipientRenderer = new EmailListFieldRenderer($form, "recipients");
+		$recipientRenderer->removeDuplicates = true;
+		$form->submitLabel = "Send Test Email";
+		$form->button("Cancel", "questionnaireSendMgr.closeDialog()", null, true);
+		$form->annotate("recipients", "Recipients of a test email will receive a valid response token but their responses will not be counted in the results. (separate email addresses with a comma ',')");
+		
+		return $form;
+	}
+	
+	/**
+	 * Called from send_reminder_dialog handler.
+	 */
+	function buildReminderForm()
+	{
+		$item = $this->item;
+		$mgr = $this->getResultsManager();
+		$nonResponsives = $questionnaire->getNonResponders();
+		$this->nonResponsiveCount = count($nonResponsives);
+		$questionnaire->recipients = formatItems($nonResponsives, "{token}", ", ");
+		// Set the recipient list for use when form is submitted
+		$this->recipients = formatItems($nonResponsives, "{email}", ",");
+
+		$item->filter = new InclusionFilter("title", "recipients", "sender_email", "message", "subject");
+		$form = new AutoForm($item, "POST", "/action/questionnaire/questionnaire_reminder_form?questionnaire_id=$questionnaire_id", "QuestionnaireReminder_form");
+		$form->ajaxSubmit("function(result) {questionnaireSendMgr.reminderDialogResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+
+		$form->getRenderer("message")->rows = 10;
+		$form->submitLabel = "Send Reminders";
+		$form->annotate("message", "You can use the email template message as is or customize it for this reminder.");
+		$form->readOnly("sender_email", "recipients", "title");
+		$form->required("message", "subject");
+		$form->button("Cancel", "questionnaireSendMgr.closeDialog()", null, true);
+		$form->alias("recipients", "Recipient Tokens");
+		
+		return $form;
+	}
+	
+	/**
+	 * Instantiate the QuestionnaireSendManager js class.
+	 * 
+	 * References the following handlers to exist in the questionnaire component.
+	 * Components must either create these handlers or not call the functions that
+	 * call them.
+	 * 
+	 * open_[item_class]
+	 * close_[item_class]
+	 * send_test_email_dialog
+	 * send_test_email
+	 * 
+	 * The var $item is an empty instance of the questionnaire class.
+	 */
+	function writeScript()
+	{
+		$item = $this->item;
+		$itemPk = $item->getPrimaryKey(); 
+		$component_name = $this->getComponentName();
+		$item_label = $item->prettifyClassName();
+		$send_test_email_dialog = $item->getSendTestEmailDialog();
+		$send_test_email_handler = $item->getSendTestEmailHandler();
+		$open_handler = $this->getOpenHandler();
+		$close_handler = $this->getCloseHandler();
+		$send_page_identifier = $this->getSendPageIdentifier();
+	
+		ob_start();
+?>
+<script type="text/javascript" src="/components/questionnaire/js/questionnaire_send.js"></script>
+<script type="text/javascript">
+var questionnaireSendMgr;
+
+window.addEvent('domready', function()
+{
+	questionnaireSendMgr = new QuestionnaireSendManager(
+		'<?php echo $itemPk ?>', 
+		'<?php echo $component_name ?>', 
+		'<?php echo $item_label ?>',
+		'<?php echo $send_test_email_dialog ?>',
+		'<?php echo $send_test_email_handler ?>',
+		'<?php echo $open_handler ?>',
+		'<?php echo $close_handler ?>',
+		'<?php echo $send_page_identifier ?>');
 });
 
 </script>
@@ -282,7 +1005,7 @@ window.addEvent('domready', function()
 		ob_end_clean();
 		
 		return $script;
-	}	
+	}		
 }
 
 /*
@@ -298,7 +1021,7 @@ window.addEvent('domready', function()
  * Instantiating this class requires the questionnaire or
  * survey object.
  */
-abstract class AbstractQuestionnaireCreateManager
+abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaireManager
 {
 	var $item;				//<	The questionnaire or survey object
 	
@@ -326,6 +1049,14 @@ abstract class AbstractQuestionnaireCreateManager
 	abstract function getXrefClass();
 	
 	/**
+	 * The title field used for the clone dialog.
+	 */
+	function getTitleField()
+	{
+		return "title";	
+	}
+	
+	/**
 	 * Called by QuestionnaireForm function getIndexedAnswers
 	 * 
 	 * The CreateManager should return null because this manager is used
@@ -337,13 +1068,7 @@ abstract class AbstractQuestionnaireCreateManager
 	{
 		return null;
 	}
-	
-	function getPrimaryKey()
-	{
-		return $this->item->getPrimaryKey();
-	}
-	
-	
+
 	function getQuestionDeleteHandler()
 	{
 		return "question_delete";
@@ -382,77 +1107,6 @@ abstract class AbstractQuestionnaireCreateManager
 		$class = codify(strtolower($this->item->prettifyClassName()));
 		return "{$class}_question_form";
 	}
-
-	/**
-	 * Retrieves questions through the questionnaire or survey
-	 * DataItem object.
-	 * 
-	 * Since this method is needed for all 3 managers, classes that
-	 * extend should call shared static method
-	 * 
-	 */
-	function getQuestions()
-	{
-		$sort_field = $this->getSortField();
-		$questions = $this->item->Questions("ORDER BY $sort_field");
-		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
-	}
-	
-	/**
-	 * Retrieves the table that has the question sort order field
-	 * either Question or a QuestionXref
-	 * 
-	 * If the item should have a relation to retrieve the
-	 * questions or xrefs that is the pluralized version of the class
-	 * name.
-	 * e.g., SurveyQuestionXrefs or Questions
-	 * 
-	 * If not, override this function.
-	 */
-	function getSortableItems()
-	{
-		$relation =  pluralize($this->getSortableClass());
-		$sort_field = $this->getSortField();
-
-		return $this->item->$relation("ORDER BY $sort_field");
-	}
-	
-	function getSortableClass()
-	{
-		return ($this->getXrefClass()) ? $this->getXrefClass() : $this->getQuestionClass();
-	}
-	
-	function getSortableObj()
-	{
-		$class = $this->getSortableClass();
-		return new $class();
-	}
-	
-	function getSortField()
-	{
-		$obj = $this->getSortableObj();
-		return ($obj->hasField("sort_order")) ? "sort_order" : "question_number";
-	}
-	
-	/**
-	 * Returns the primar key name of the question obj
-	 */
-	function getQuestionKey()
-	{
-		$qClass = $this->getQuestionClass();
-		$question = new $qClass();
-		return $question->getPrimaryKey();
-	}
-			
-	/**
-	 * Called by QuestionRenderers from QuestionnaireForm 
-	 * Given an instance of a question, return its number.
-	 * Some renderers need to skip the numbering (headings).
-	 */
-	function getQuestionNumber($question)
-	{
-		return QuestionnaireHelper::getQuestionNumber($this->item, $this->getQuestions(), $question);
-	}	
 	
 	/**
 	 * From question list page, format the link to edit the question.
@@ -550,7 +1204,7 @@ abstract class AbstractQuestionnaireCreateManager
 		}
 		catch(Exception $e)
 		{
-			ajaxReturn($e->getMessage());
+			Fakoli::end($e->getMessage());
 		}
 		
 		return true;
@@ -574,29 +1228,32 @@ abstract class AbstractQuestionnaireCreateManager
 	 * 
 	 * @param $xref obj of xref class that links questions to questionnaire/survey
 	 */
-	function removeQuestionXref($xref)
+	function removeQuestionXref($xref_id)
 	{
 		$item = $this->item;
 		$itemPk = $item->getPrimaryKey();
-		$xrefPk = $xref->getPrimaryKey();
+		$xref_class = $this->getXrefClass();
 		
 		try
 		{
+			$xref = new $xref_class($xref_id);
+			$xrefPk = $xref->getPrimaryKey();
+			
 			if ($item->$itemPk != $xref->$itemPk)
 			{
 				throw new FakoliException("QuestionnaireManager removeQuestion Data Mismatch");
 			}
-			$xref->delete("WHERE $xrefPk={$xref->$xrefPk}");
+			$xref->delete("WHERE $xrefPk={$xref_id}");
 			$this->reNumberQuestions();
 		}
 		catch(Exception $e)
 		{
-			ajaxReturn($e->getMessage());
+			Fakoli::end($e->getMessage());
 		}	
 		
 		$qPk = $this->getQuestionKey();
 		$qClass = $this->getQuestionClass();
-		$question = new $qClass($qPk);
+		$question = new $qClass($xref->$qPk);
 		$this->deleteOrphanQuestion($question);
 	}
 	
@@ -622,10 +1279,43 @@ abstract class AbstractQuestionnaireCreateManager
 		}
 		catch(Exception $e)
 		{
-			ajaxReturn($e->getMessage());
+			Fakoli::end($e->getMessage());
 		}
 		
 		$this->deleteOrphanQuestion($question);
+	}
+	
+	/**
+	 * Called from question form. On save question, save the
+	 * question xref record.
+	 * 
+	 * @param $question
+	 * @param $sort_order - has a value if adding multiple questions, called from 
+	 * saveSelectedQuestions
+	 */
+	function saveQuestionXref($question, $sort_order = 0)
+	{	
+		$item = $this->item;
+		$xref_class = $this->getXrefClass();
+		$itemPk = $this->getPrimaryKey();
+		$qPk = $question->getPrimaryKey();
+				
+		if(!$xref_class)
+		{
+			return;
+		}
+		
+		$xref = new $xref_class();
+			
+		if($xref->exists("WHERE {$itemPk}={$item->$itemPk} AND {$qPk}={$question->$qPk}"))
+		{
+			return;
+		}
+	
+		$xref->$itemPk = $item->$itemPk;
+		$xref->sort_order = (!$sort_order) ? $this->getNextSortOrder() : $sort_order;
+		$xref->$qPk = $question->$qPk;
+		$xref->save();
 	}
 	
 	/**
@@ -644,8 +1334,8 @@ abstract class AbstractQuestionnaireCreateManager
 			return;
 		}
 		
-		$count = Query::create($xrefClass, "WHERE {$qPk}={$question->$qPk}")
-			->bind()
+		$count = Query::create($xrefClass, "WHERE {$qPk}=:{$qPk}")
+			->bind(":{$qPk}", $question->$qPk)
 			->executeValue("COUNT(1)");
 	
 		if(count == 0)
@@ -669,17 +1359,19 @@ abstract class AbstractQuestionnaireCreateManager
 		$itemPk = $item->getPrimaryKey();
 		$question = new $qClass($question_id);
 		$qPk = $question->getPrimaryKey();
+		$item_class = $this->item->prettifyClassName();
+		$question_class = $question->prettifyClassName();
 		
 		if(!$question->allowDelete())
 		{
-			ajaxReturn("Delete not permitted for question id {$question->$qPk} {$question->question}");
+			Fakoli::end("Delete not permitted for question id {$question->$qPk} {$question->question}");
 		}
 		
 		try
 		{
 			if ($item->$itemPk != $question->$itemPk)
 			{
-				throw new FakoliException("QuestionnaireManager deleteQuestion Data Mismatch");
+				throw new FakoliException("QuestionnaireManager deleteQuestion Data Mismatch $item_class {$itemPk} {$item->$itemPk} does not match question $question_class {$itemPk} {$question->$itemPk} {$qPk} {$question->$qPk}");
 			}
 			
 			$question->delete();
@@ -687,7 +1379,7 @@ abstract class AbstractQuestionnaireCreateManager
 		}
 		catch(Exception $e)
 		{
-			ajaxReturn($e->getMessage());
+			Fakoli::end($e->getMessage());
 		}	
 		
 	}
@@ -792,6 +1484,56 @@ abstract class AbstractQuestionnaireCreateManager
 		return $query->execute();
 	}
 	
+	/**
+	 * Called from question select page for components that link questions
+	 * through an xref
+	 * 
+	 * @param Array $items questionnaires/surveys user can select from. Components
+	 * may have criteria to include/exclude certain records
+	 *  
+	 */
+	function buildQuestionSelectForm($items)
+	{
+		$this->item->filter = new InclusionFilter();
+		$form = new AutoForm($this->item);
+		$itemPk = $this->getPrimaryKey();
+		$title_field = $this->getTitleField();
+		
+		$questionSets = $this->getQuestionSets();
+		
+		$table = new GroupedDataListView($questionSets, "QuestionSets");
+		$table->mode = "fixed";
+		$table->selector();
+		$table->column("Question", "{Question.question}", false)
+	  		->column("Options", array(QuestionTableHelper, formatOptions), false)
+	  		->column("Required", array(QuestionTableHelper, formatRequired), false, "text-align: center")
+			;
+		$table->emptyMessage = "There are no survey questions to select.";
+
+		foreach(array_keys($questionSets) as $item_id)
+		{
+			if(!array_key_exists($item_id, $items)) continue;
+	
+			$item = $items[$item_id];
+			$table->group($item->$title_field, $item_id);
+		}
+
+		$instructions = TextLookup::getText("question_select_instructions");
+		$questionSelect = new DataListFieldRenderer($form, $table, "survey_question_select", "<h3>Select Survey Questions</h3>$instructions");
+		$questionSelect->hideLabel = true;
+		$form->submitLabel = "Select";
+		$form->buttons_at_top = true;
+		
+		if(!count($questionSets))
+		{
+			$form->readOnlyForm = true;
+		}
+
+		$questionSelect->onPostProcess = array($this, saveSelectedQuestions);
+		
+		return $form;
+	}
+	
 	/*
 	 * Called by DataListFieldRenderer onPostProcess
 	 * from the question select page.
@@ -811,41 +1553,27 @@ abstract class AbstractQuestionnaireCreateManager
 			return;
 		}
 		
-		$item = $this->item;
-		$itemPk = $item->getPrimaryKey();
 		$xref = new $xref_class();
 		$xrefPk = $xref->getPrimaryKey();
 		$questionClass = $this->getQuestionClass();
 		$qPk = $this->getQuestionKey();
-		$sort_field = $this->getSortField();
-		
-		$survey_id = $questionSelect->parent->data->survey_id;
-
+	
 		$questionIds = $_POST[$xrefPk];
 
 		if(isset($questionIds) AND count($questionIds) > 0)
 		{
 			$list = implode(",", array_values($questionIds));
+			// Given the set of xref ids selected, retrieve the questions from the question table
 			$questions = Query::create($questionClass, "WHERE {$qPk} IN (SELECT {$qPk} FROM {$xref->table} WHERE {$xrefPk} IN ($list))")
 				->execute();
 
 			if(count($questions) > 0)
 			{
-				$sort_order = $mgr->getNextSortOrder();
+				$sort_order = $this->getNextSortOrder();
 
 				foreach($questions as $question)
 				{
-					$xref = new $xref_class();
-					if($xref->exists("WHERE {$itemPk}={$item->$itemPk} AND {$qPk}={$question->$qPk}"))
-					{
-						continue;
-					}
-					
-					$xref->$itemPk = $item->$itemPk;
-					$xref->$qPk = $question->$qPk;
-					$xref->$sort_field = $sort_order;
-					$sort_order++;
-					$xref->save();
+					$this->saveQuestionXref($question, $sort_order);
 				}
 			}
 		}
@@ -915,7 +1643,7 @@ abstract class AbstractQuestionnaireCreateManager
 		catch(Exception $e)
 		{
 			$tx->rollback();
-			ajaxReturn($e->getMessage());
+			Fakoli::end($e->getMessage());
 		}					
 	}
 	
@@ -938,6 +1666,23 @@ abstract class AbstractQuestionnaireCreateManager
 		return Query::create($sortableClass, "WHERE {$itemPk}=:{$itemPk}")
 			->bind(":{$itemPk}", $item->$itemPk)
 			->executeValue("MAX($sort_field)") + 1;
+	}
+	
+
+	/**
+	 * Define the set of valid actions for the dashboard or any other
+	 * page that provides buttons/links to perform an action on a 
+	 * questionnaire/survey.
+	 * 
+	 * Implementing components may have additional logic to unset from
+	 * available actions those that don't apply to a particular
+	 * questionnaire/survey instance.
+	 */
+	function getActions()
+	{
+		$actions = $this->item->getAvailableActions();
+
+		return $actions;
 	}
 	
 	/**
@@ -1010,7 +1755,7 @@ window.addEvent('domready', function()
  * 
  * @author janice
  */
-abstract class AbstractQuestionnaireResponseManager
+abstract class AbstractQuestionnaireResponseManager extends AbstractQuestionnaireManager
 {
 	var $item;
 	
@@ -1029,6 +1774,14 @@ abstract class AbstractQuestionnaireResponseManager
 	 */
 	abstract function getQuestionClass();
 
+	/**
+	 * If questions are linked to the questionnaire/survey through an xref
+	 * 
+	 * Implementations that link questions directly to the questionnaire/survey
+	 * will return null.
+	 */
+	abstract function getXrefClass();
+	
 	/*
 	 * Called by QuestionnaireForm function save to save the
 	 * resonders answers to the questionnaire.
@@ -1038,37 +1791,24 @@ abstract class AbstractQuestionnaireResponseManager
 	 */
 	abstract function getAnswerClass();
 	
-	/**
-	 * Retrieves questions through the questionnaire or survey
-	 * DataItem object.
-	 * 
-	 * Since this method is needed for all 3 managers, classes that
-	 * extend should call shared static method
-	 * 
-	 */
-	function getQuestions()
+	function getExcludeHandler()
 	{
-		$sort_field = $this->getSortField();
-		$questions = $this->item->Questions("ORDER BY $sort_field");
-		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
+		return "exclude_response";	
 	}
-		
-	
-	/**
-	 * Returns the primar key name of the question obj
-	 */
-	function getQuestionKey()
+
+	function getResponseIntroIdentifier()
 	{
-		$qClass = $this->getQuestionClass();
-		$question = new $qClass();
-		return $question->getPrimaryKey();
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return "{$class}_response_intro";
 	}
 	
-	function getPrimaryKey()
+	function getResponseFormIdentifier()
 	{
-		return $this->item->getPrimaryKey();
+		$class = codify(strtolower($this->item->prettifyClassName()));
+		return "{$class}_response_form";
 	}
-	
+
+
 	/**
 	 * Return the questionnaire or survey obj that the response obj
 	 * (this class's "item") is linked to.
@@ -1087,24 +1827,8 @@ abstract class AbstractQuestionnaireResponseManager
 		}
 		else
 		{
-			ajaxReturn("No relation from response to questionnaire/survey");
+			Fakoli::end("No relation from response to questionnaire/survey");
 		}
-	}
-	
-	/*
-	 * Called by QuestionnaireForm function save to save the
-	 * resonders answers to the questionnaire.
-	 * 
-	 * Return the primary key of the table that stores the answers
-	 * e.g., "answer_id"
-	 * 
-	 * Called by QuestionnaireForm
-	 */
-	function getAnswerKey()
-	{
-		$class = $this->getAnswerClass();
-		$obj = new $class();
-		return $obj->getPrimaryKey();
 	}
 	
 	/**
@@ -1134,6 +1858,23 @@ abstract class AbstractQuestionnaireResponseManager
 	{
 		return $this->item->format();
 	}
+	
+	/**
+	 * reinitialize token for a test user.
+	 */
+	function resetToken()
+	{
+		$response = $this->item;
+		$responsePk = $response->getPrimaryKey();
+		$answerClass = $this->getAnswerClass();
+
+		if(!$response->$responsePk) return;
+		
+		$response->setDefaults();
+		
+		$answer = new $answerClass();
+		$answer->delete("WHERE {$responsePk}={$response->$responsePk}");
+	}
 			
 	/**
 	 * Called by QuestionRenderers from QuestionnaireForm 
@@ -1162,7 +1903,10 @@ abstract class AbstractQuestionnaireResponseManager
 		$item_id = $questionnaire->$itemPk;
 		$responsePk = $this->item->getPrimaryKey(); 
 		$component_name = $this->getComponentName();
-
+		$exclude_handler = $item->getExcludeHandler();
+		$response_intro_identifier = $this->getResponseIntroIdentifier();
+		$response_form_identifier = $this->getResponseFormIdentifier();
+		
 		ob_start();
 ?>
 <script type="text/javascript" src="/components/questionnaire/js/questionnaire_response.js"></script>
@@ -1173,7 +1917,11 @@ window.addEvent('domready', function()
 {
 	questionnaireMgr = new QuestionnaireResponseManager('<?php echo $itemPk ?>', 
 		'<?php echo $item_id ?>', '<?php echo $responsePk ?>',  
-		'<?php echo $component_name ?>');
+		'<?php echo $component_name ?>',
+		'<?php echo $exclude_handler ?>',
+		'<?php echo $response_intro_identifier ?>',
+		'<?php echo $response_form_identifier ?>'
+		);
 });
 
 </script>
@@ -1199,7 +1947,7 @@ window.addEvent('domready', function()
  * 
  * @author janice
  */
-abstract class AbstractQuestionnaireResultsManager
+abstract class AbstractQuestionnaireResultsManager extends AbstractQuestionnaireManager
 {
 	var $item;
 	
@@ -1217,6 +1965,14 @@ abstract class AbstractQuestionnaireResultsManager
 	 * The DataItem class name for the Question class
 	 */
 	abstract function getQuestionClass();
+
+	/**
+	 * If questions are linked to the questionnaire/survey through an xref
+	 * 
+	 * Implementations that link questions directly to the questionnaire/survey
+	 * will return null.
+	 */
+	abstract function getXrefClass();
 	
 	/**
 	 * Returns an array of responses to the questionnaire.
@@ -1225,20 +1981,6 @@ abstract class AbstractQuestionnaireResultsManager
 	 */
 	abstract function Responses();
 
-	/**
-	 * Retrieves questions through the questionnaire or survey
-	 * DataItem object.
-	 * 
-	 * Since this method is needed for all 3 managers, classes that
-	 * extend should call shared static method
-	 * 
-	 */
-	function getQuestions()
-	{
-		$sort_field = $this->getSortField();
-		$questions = $this->item->Questions("ORDER BY $sort_field");
-		return QuestionnaireHelper::setQuestionNumbers($this->item, $questions);
-	}
 		
 	/**
 	 * 
@@ -1262,21 +2004,6 @@ abstract class AbstractQuestionnaireResultsManager
 	abstract function getRecipientCount();
 	
 	/**
-	 * Returns the primar key name of the question obj
-	 */
-	function getQuestionKey()
-	{
-		$qClass = $this->getQuestionClass();
-		$question = new $qClass();
-		return $question->getPrimaryKey();
-	}
-	
-	function getPrimaryKey()
-	{
-		return $this->item->getPrimaryKey();
-	}
-	
-	/**
 	 * Called by QuestionnaireForm function getIndexedAnswers
 	 * 
 	 * Should return all answers to the survey.
@@ -1289,13 +2016,6 @@ abstract class AbstractQuestionnaireResultsManager
 	function getQuestionNamesHandler()
 	{
 		return "question_names_dialog";
-	}
-	
-	function getAnswerKey()
-	{
-		$class = $this->getAnswerClass();
-		$obj = new $class();
-		return $obj->getPrimaryKey();
 	}
 	
 	function getResponseViewDialog()

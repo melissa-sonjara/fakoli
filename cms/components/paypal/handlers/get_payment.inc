@@ -58,7 +58,7 @@ $merchant_id = Settings::getValue("paypal", "merchant_id");
 $paypal_url = Settings::getValue("paypal", "paypal_url");
 
 if(!$transaction_id || !$merchant_id || !$paypal_url)
-	ajaxReturn("invalid parameters");
+	Fakoli::end("invalid parameters");
 
 /*
  * These variables are broken out from the parameter string to

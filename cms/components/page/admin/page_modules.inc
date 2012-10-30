@@ -42,16 +42,16 @@ $page_id = checkNumeric($_GET["page_id"]);
 
 if (!$page_id) redirect("/index");
 
-$page = new Page($page_id);
+$cmspage = new Page($page_id);
 
 $tabs = pageTabs($page_id);
 $tabs->page = "page_modules";
 
-$title = "Position Modules for {$page->page_title}";
+$title = "Position Modules for {$cmspage->page_title}";
 
-$modulePositions = reindexList($page->PageModuleXrefs(), "module_id");
+$modulePositions = reindexList($cmspage->PageModuleXrefs(), "module_id");
 $modules = query(Module, "ORDER BY title");
-$positions = $page->getPositions();
+$positions = $cmspage->getPositions();
 
 if ($method == "POST")
 {

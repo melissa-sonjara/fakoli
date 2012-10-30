@@ -124,8 +124,17 @@ class QuestionTableHelper
 	static function formatDelete($question)
 	{
 		$pk = $question->getPrimaryKey();
-		return $question->format("<a href=\"#\" onclick=\"questionnaireMgr.deleteQuestion({{$pk}}); return false;\">
+		
+		if($question->allowDelete())
+		{
+			$out =  $question->format("<a href=\"delete_question?{$pk}={$question->$pk}\" onclick=\"questionnaireMgr.deleteQuestion({{$pk}}); return false;\">
 			<img class=\"icon\" alt=\"delete\" src=\"/fakoli/images/icon_delete_red.gif\"></a>\n");	
+		}
+		else
+		{
+			$out = "";
+		}
+		return $out;
 	}
 	
 	/**

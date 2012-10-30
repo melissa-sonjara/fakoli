@@ -26,11 +26,7 @@ if (!$noChange)
 {	
 	$content = Cache::get("script_cache");
 	
-	if (Settings::getValue("optimize", "compress_javascript") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
-	{
-		ob_start("ob_gzhandler");
-	}
-	else
+	if (!Settings::getValue("optimize", "compress_javascript") || !substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 	{
 		header("Content-Length: ".strlen($content));
 	}

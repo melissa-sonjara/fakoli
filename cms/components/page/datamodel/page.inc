@@ -232,7 +232,7 @@ class Page extends DataItem implements Searchable
 		else
 		{
 			$params = "%$params%";
-			$pages = Query::create(Page, "WHERE page_title like :a OR description LIKE :b AND published=1")
+			$pages = Query::create(Page, "WHERE (page_title like :a OR description LIKE :b) AND published=1")
 						  ->bind(":a", $params, ":b", $params)
 						  ->execute();
 		}
@@ -266,8 +266,10 @@ class PageSearchResult extends AbstractSearchResult
 	}
 	
 	function summary()
-	{
-		return $this->item->format("<h4>{page_title}</h4><p><em>{author} {created_date:short}</em></p><a href='{identifier}'>Read More</a>");
+	{		
+		$teaser = Settings::getValue("search", "show_text_fragment") ? "{description:300}<br/>" : "";
+		
+		return $this->item->format("<h4>{page_title}</h4><p></p>$teaser<a href='{identifier}'>Read More</a>");
 	}
 }
 

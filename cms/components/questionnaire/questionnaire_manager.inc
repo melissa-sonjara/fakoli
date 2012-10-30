@@ -19,6 +19,16 @@ class QuestionnaireDashboardManager extends AbstractQuestionnaireDashboardManage
 		return new QuestionnaireCreateManager($item);
 	}
 	
+	function getResultsManager($item)
+	{
+		return new QuestionnaireResultsManager($item);
+	}
+	
+	function getSendManager($item)
+	{
+		return null;
+	}
+	
 }
 
 /*
@@ -120,6 +130,12 @@ class QuestionnaireResponseManager extends AbstractQuestionnaireResponseManager
 	{
 		return Question;
 	}
+	
+
+	function getXrefClass()
+	{
+		return null;
+	}	
 				
 	// The class that stores the answers
 	function getAnswerClass()
@@ -188,6 +204,11 @@ class QuestionnaireResultsManager extends AbstractQuestionnaireResultsManager
 		return new QuestionnaireResponseManager($response);
 	}
 
+	function getXrefClass()
+	{
+		return null;
+	}	
+	
 	/**
 	 * For spreadsheet view
 	 */

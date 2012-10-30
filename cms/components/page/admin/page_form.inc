@@ -43,13 +43,13 @@ $menu_item = "Pages";
 
 $page_id = checkNumeric($_GET["page_id"]);
 
-$page = new Page();
-$page->filter = new ExclusionFilter("menu_id");
+$cmspage = new Page();
+$cmspage->filter = new ExclusionFilter("menu_id");
 
-$page->created_date = date("Y-m-d");
+$cmspage->created_date = date("Y-m-d");
 
-$page->archive_date = strftime('%Y-%m-%d', '0000-00-00');
-$form = new AutoForm($page);
+$cmspage->archive_date = strftime('%Y-%m-%d', '0000-00-00');
+$form = new AutoForm($cmspage);
 $form->alias("menu_id", "Menu");
 $form->markRequiredFields = true;
 
@@ -92,8 +92,8 @@ if ($method == "POST")
 
 if ($page_id)
 {
-	$page->load($page_id);
-	$title = "Edit Page Details for {$page->page_title}";
+	$cmspage->load($page_id);
+	$title = "Edit Page Details for {$cmspage->page_title}";
 }
 else
 {

@@ -442,12 +442,15 @@ class QuestionnaireForm
 		$this->fromPOST();
 		$aPk = $this->mgr->getAnswerKey();
 		$qPk = $this->mgr->getQuestionKey();
+		
 		foreach($this->answers as $question_id => $answer)
 		{
+			// If saved answer, just update value
 			if($answer->$aPk)
 			{
 				$answer->filter = new InclusionFilter("value");
 			}
+			// new answer - save all fields
 			$answer->save();
 		}
 		
