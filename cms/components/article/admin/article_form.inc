@@ -34,6 +34,8 @@
 Fakoli::using("article", "site", "image", "field_renderers", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
+$menu_item = "Articles";
+
 $article = new Article();
 $article_id = checkNumeric($_GET["article_id"]);
 	

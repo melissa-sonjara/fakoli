@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2011 Sonjara, Inc
+ Copyright (c) 2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,57 +31,45 @@
 
 *****************************************************************/
 
-class ActivityTrackerManifest
+Fakoli::using("admin");
+Fakoli::assertRole("admin");
+
+$src = $_GET["src"];
+$page = $_GET["page"];
+
+$component = Fakoli::getComponent($src);
+
+$page = basename($page);
+
+$helpDir = $component->component_path . DIRECTORY_SEPARATOR . "help";
+
+if (!$page)
 {
-	static function getComponentDefinition()
+	$helpMap = $helpDir . DIRECTORY_SEPARATOR . "help.inc";
+	if (file_exists($helpMap))
 	{
-		$component = new Component();
-		$component->name = "activity_tracker";
-		$component->description = "User tracking and feedback module";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 10;
-		$component->enabled = true;
-		
-		return $component;
+		include($helpMap);
+		$page = $help_map['default'];
 	}
-	
-	static function subscribeToEvents()
-	{
-		return array("Initialize"	 			=> array(ActivityTracker, logActivity),
-					 "ComponentScanComplete"	=> array(ActivityTracker, setDefaults),
-					 "upgradeComponent"			=> array(ActivityTracker, upgradeComponent),
-					"PostProcessContent"		=> array(ActivityTracker, postProcessContent),
-				);
-	}
-		
-	static function getAdminMenu()
-	{
-			return array("User Management"	=> array
-			(
-
-				"Activity Report"	=>	array("page"	=>	"/admin/activity_report",
-											  "role"	=>	"admin",
-									  		  "weight"	=>	10
-											),
-											
-				"Feedback"			=>	array("page"	=>	"/admin/feedback",
-										  	  "role"	=>	"admin",
-									  	  	  "weight"	=>	11
-											)
-			)
-		);		
-	}
-
-	static function getScripts()
-	{
-		return array("/components/activity_tracker/js/feedback.js");
-	}
-	
-	static function getStyles()
-	{
-		return array("/components/activity_tracker/css/feedback.css");
-	}
+	else $page = "index";
 }
+
+$path = $helpDir . DIRECTORY_SEPARATOR . $page . ".inc";
+
+if (!file_exists($path))
+{
+	throw new FakoliException("Unknown help page");
+}
+
+ob_start();
+include($path);
+$out = ob_get_contents();
+ob_end_clean();
+
+AdminManager::startFrame("page");
+
+echo $out;
+
+AdminManager::endFrame();
 
 ?>

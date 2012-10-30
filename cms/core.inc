@@ -35,7 +35,22 @@ require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../framework/cache.inc");
 require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
 
+/**
+ * FakoliException is the base exception class for all
+ * Fakoli errors.
+ * 
+ * @author andy
+ */
 class FakoliException extends Exception {}
+
+/**
+ * FakoliEarlyExit is an internal exception class used to
+ * provide for controlled early exits during page and handler 
+ * execution.
+ * 
+ * @author andy
+ */
+class FakoliEarlyExit extends Exception {}
 
 /**
  * This class provides the Fakoli CMS core. It contains basic utility functions
@@ -554,6 +569,13 @@ class Fakoli
 		return null;
 	}
 	
+	/**
+	 * Serves the page with the specified section and identifier.
+	 * 
+	 * @param string $sectionIdentifier the identifier of the section
+	 * @param string $identifier the identifier of the page
+	 * @param int $page_id numeric page identifier (deprecated)
+	 */
 	static function sendPage($sectionIdentifier, $identifier, $page_id = null)
 	{
 		trace("Send Page: '$sectionIdentifier', '$identifier', '$page_id'", 2);
@@ -622,6 +644,16 @@ class Fakoli
 		}
 	}
 	
+	/**
+	 * Use this method to terminate execution of a script instead
+	 * of using the php keywords exit() or die().
+	 * @param unknown_type $message
+	 */
+	static function end($message)
+	{
+		throw new FakoliEarlyExit($message);
+	}
+	
 	static function errorHandler($errLevel, $errMsg, $errFile, $errLine)
 	{
 		// Transform XML DOM warning messages into exceptions for easier handling
@@ -672,6 +704,9 @@ class Fakoli
 	    return true;
 	}
 	
+	/**
+	 * Returns the name of the currently executing script
+	 */
 	static function scriptName()
 	{
 		list ($s, $qs) = explode("?", $_SERVER['REQUEST_URI']);
@@ -743,6 +778,10 @@ class Fakoli
     	return $out;
     }
 }
+
+
+$isAction = basename($_SERVER["SCRIPT_FILENAME"]) == "action.php";
+$isResource = basename($_SERVER["SCRIPT_FILENAME"]) == "resource.php";
 
 Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting
 

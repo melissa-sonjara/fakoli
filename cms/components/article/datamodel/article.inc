@@ -86,7 +86,11 @@ class Article extends DataItem implements Searchable
 	
 	function getAuthorName()
 	{
-		return $this->Author()->getFullName();
+		if ($this->author_id)
+		{
+			return $this->Author()->getFullName();
+		}
+		else return $this->author;
 	}
 	
 	function getBlog()
@@ -155,7 +159,7 @@ class Article extends DataItem implements Searchable
 		else
 		{
 			$params = "%$params%";
-			$articles = Query::create(Article, "WHERE title like :a OR teaser LIKE :b OR message like :c")
+			$articles = Query::create(Article, "WHERE (title like :a OR teaser LIKE :b OR message like :c) AND published=1")
 						  ->bind(":a", $params, ":b", $params, ":c", $params)
 						  ->execute();
 		}
@@ -190,7 +194,8 @@ class ArticleSearchResult extends AbstractSearchResult
 	
 	function summary()
 	{
-		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p><a href='{getViewIdentifier()}?article_id={article_id}'>Read More</a>");
+		$teaser = Settings::getValue("search", "show_text_fragment") ? "{teaser}<br/>" : "";
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p>$teaser<a href='{getViewIdentifier()}?article_id={article_id}'>Read More</a>");
 	}
 }
 

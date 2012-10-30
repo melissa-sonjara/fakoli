@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2011 Sonjara, Inc
+ Copyright (c) 2010 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,57 +31,24 @@
 
 *****************************************************************/
 
-class ActivityTrackerManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "activity_tracker";
-		$component->description = "User tracking and feedback module";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 10;
-		$component->enabled = true;
-		
-		return $component;
-	}
-	
-	static function subscribeToEvents()
-	{
-		return array("Initialize"	 			=> array(ActivityTracker, logActivity),
-					 "ComponentScanComplete"	=> array(ActivityTracker, setDefaults),
-					 "upgradeComponent"			=> array(ActivityTracker, upgradeComponent),
-					"PostProcessContent"		=> array(ActivityTracker, postProcessContent),
-				);
-	}
-		
-	static function getAdminMenu()
-	{
-			return array("User Management"	=> array
-			(
+Fakoli::using("admin");
 
-				"Activity Report"	=>	array("page"	=>	"/admin/activity_report",
-											  "role"	=>	"admin",
-									  		  "weight"	=>	10
-											),
-											
-				"Feedback"			=>	array("page"	=>	"/admin/feedback",
-										  	  "role"	=>	"admin",
-									  	  	  "weight"	=>	11
-											)
-			)
-		);		
-	}
+Fakoli::assertRole("admin");
 
-	static function getScripts()
-	{
-		return array("/components/activity_tracker/js/feedback.js");
-	}
-	
-	static function getStyles()
-	{
-		return array("/components/activity_tracker/css/feedback.css");
-	}
-}
+$component = $_GET["src"];
+$page = $_GET["page"];
+
+$left = "/action/admin/tree?src={$component}&page={$page}";
+$view = "/action/admin/page?src={$component}&page={$page}";
+$banner = "/action/admin/banner?src={$component}&page={$page}";
 
 ?>
+<html>
+<frameset rows="35px,*" border="1">
+	<frame src="<?echo $banner?>" name="One" scrolling="no" marginwidth="0" marginheight="0" noresize="noresize">
+	<frameset cols="30%,70%" border="3">
+		<frame src="<?echo $left?>" name="left_nav" scrolling="auto" marginwidth="0" marginheight="0">
+		<frame src="<?echo $view?>" name="Two" scrolling="auto" marginwidth="0" marginheight="0">
+	</frameset>
+</frameset>
+</html>

@@ -1,7 +1,7 @@
 <?php
 Fakoli::using("activity_tracker");
 
-if (!$user) ajaxReturn("0");
+if (!$user) Fakoli::end("0");
 
 $msg = $_POST["feedback"];
 
@@ -14,5 +14,5 @@ $feedback->session		= session_id();
 
 $feedback->save();
 
-ajaxReturn("1");
+Fakoli::end("1");
 ?>
