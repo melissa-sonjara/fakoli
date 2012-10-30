@@ -461,13 +461,43 @@ class ComponentManager
 	
 	/**
 	 * Dispatch an incoming user action to the appropriate component handler script.
+	 * 
+	 * @param string $process (optional) process identifier if running as a background process
 	 */
 	function dispatchAction($process = null)
+	{
+		global $script;
+		global $isAction;
+		$isAction = true;
+		
+		$component = $this->getComponent($_REQUEST["component"]);
+		$action = $_REQUEST["action"];
+			
+		if (!preg_match("/^[\\w\\d_\\.]+$/", $action))
+		{
+			throw new FakoliException("Invalid action");
+		}
+				
+		$this->fireEventTo("PreAction", $component->name, $action);
+		
+		ob_start();
+		
+		$this->dispatchActionInternal($process);
+		
+		$out = ob_get_contents();
+		ob_end_clean();
+		
+		echo $script;
+		echo $out;
+	}
+	
+	private function dispatchActionInternal($process = null)
 	{
 		global $method;
 		global $user;
 		global $config;
-				
+		global $script;
+		
 		$action = $_REQUEST["action"];
 		
 		trace("ComponentManager::dispatchAction action: $action", 3);
@@ -484,7 +514,7 @@ class ComponentManager
 		{
 			throw new FakoliException("Session Expired");
 		}
-		
+
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
 		trace("ComponentManager::dispatchAction handler: $handler", 3);
 		
@@ -495,9 +525,17 @@ class ComponentManager
 			throw new FakoliException("Invalid action");
 		}
 		
-		include $handler;
+		try
+		{
+			include $handler;
+		}
+		catch(FakoliEarlyExit $exit)
+		{
+			echo $exit->getMessage();
+		}		
 		
 		$config["trace_level"] = Settings::getValue("debug", "trace_level");
+		
 	}
 	
 	function dispatchLocalAction($action, $process = null)
@@ -519,9 +557,11 @@ class ComponentManager
 			throw new FakoliException("Malformed action handler");
 		}
 
-		$oldGET = $_GET;
-		$oldREQUEST = $_REQUEST;
-		$oldMethod = $method;
+		$context = array(
+			"_GET" => $_GET, 
+			"_REQUEST" => $_REQUEST, 
+			"method" => $method
+		);
 		
 		parse_str($queryString, $_GET);
 		
@@ -537,7 +577,7 @@ class ComponentManager
 		
 		try
 		{
-			$this->dispatchAction($process);
+			$this->dispatchActionInternal($process);
 		}
 		catch(Exception $e)
 		{
@@ -547,10 +587,11 @@ class ComponentManager
 		
 		$output = ob_get_contents();
 		ob_end_clean();
-		
-		$_GET = $oldGET;
-		$_REQUEST = $oldREQUEST;
-		$method = $oldMethod;
+
+		foreach($context as $name => $value)
+		{
+			$$name = $value;
+		}
 		
 		return $output;
 	}

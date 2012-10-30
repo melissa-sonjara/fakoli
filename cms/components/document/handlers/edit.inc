@@ -65,12 +65,12 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		ajaxReturn("1");
+		Fakoli::end("1");
 		return;
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 		return;
 	}
 }

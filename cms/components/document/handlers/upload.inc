@@ -37,7 +37,7 @@ Fakoli::usingFile("framework/auto_form.inc");
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 if (!$document_library_id)
 {
-	ajaxReturn("Invalid Parameter");
+	Fakoli::end("Invalid Parameter");
 }
 
 global $library;
@@ -46,7 +46,7 @@ $library = new DocumentLibrary($document_library_id);
 
 if (!checkRole($library->allow_access) && !$library->allowAccess())
 {
-	ajaxReturn("Access Denied");
+	Fakoli::end("Access Denied");
 }
 
 $document = new Document();
@@ -76,11 +76,11 @@ if ($method == "POST")
 	
 	if ($form->save())
 	{
-		ajaxReturn("1");
+		Fakoli::end("1");
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 	}
 }
 

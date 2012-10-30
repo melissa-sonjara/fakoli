@@ -54,7 +54,7 @@ else
 
 if (!checkRole($calendar->writeAccess))
 {
-	ajaxReturn("Access Denied");
+	Fakoli::end("Access Denied");
 }
 
 $form = new AutoForm($event, "POST", "/action/calendar/event_edit?event_id=$event_id");
@@ -107,7 +107,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{	
-		ajaxReturn("1");
+		Fakoli::end("1");
 	}
 	else
 	{

@@ -37,7 +37,7 @@ Fakoli::assertRole("admin");
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
-if (!$document_library_id) ajaxReturn("No library specified");
+if (!$document_library_id) Fakoli::end("No library specified");
 
 try
 {
@@ -46,10 +46,10 @@ try
 	$mgr = new DocumentManager($library);
 	$mgr->rescan();
 	
-	ajaxReturn("OK");
+	Fakoli::end("OK");
 }
 catch(Exception $e)
 {
-	ajaxReturn($e->getMessage());
+	Fakoli::end($e->getMessage());
 }
 ?>

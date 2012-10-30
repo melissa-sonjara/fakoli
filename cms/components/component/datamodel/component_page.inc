@@ -56,7 +56,7 @@ class ComponentPage extends DataItem
 	
 	function Component()
 	{
-		return $this->getRelated(Component);
+		return Component::getComponent($this->component);
 	}
 	
 	function Site()

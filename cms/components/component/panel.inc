@@ -46,8 +46,9 @@ class Panel
 {
 	var $id;
 	var $handler;
+	var $attrs;
 	
-	function __construct($id, $handler)
+	function __construct($id, $handler, $attrs="")
 	{
 		$this->id = $id;
 		$this->handler = $handler;
@@ -56,7 +57,7 @@ class Panel
 	function draw()
 	{
 		$mgr = new ComponentManager();
-		echo "<div id='{$this->id}' data-url='{$this->handler}'>";
+		echo "<div id='{$this->id}' $attrs data-url='{$this->handler}'>";
 		echo $mgr->dispatchLocalAction($this->handler);
 		echo "</div>";
 	}

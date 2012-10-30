@@ -27,11 +27,11 @@ else
 
 if ($comment->save())
 {
-	ajaxReturn("OK");
+	Fakoli::end("OK");
 }
 else
 {
-	ajaxReturn("save failed");
+	Fakoli::end("save failed");
 }
 
 ?>

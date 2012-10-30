@@ -89,12 +89,12 @@ if($method == "POST")
 			}		
 		}
 
-		ajaxReturn("OK");
+		Fakoli::end("OK");
 			
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 	}
 }
 

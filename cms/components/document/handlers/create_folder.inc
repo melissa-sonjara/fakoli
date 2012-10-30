@@ -37,7 +37,7 @@ Fakoli::usingFeature("validation");
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 if (!$document_library_id)
 {
-	ajaxReturn("Invalid Parameter");
+	Fakoli::end("Invalid Parameter");
 }
 
 global $library;
@@ -54,7 +54,7 @@ $validator->add(new RegularExpressionValidator("folder_name", "Folder Name", "^[
 
 if (!checkRole($library->allow_access) && !$library->allowManageFiles())
 {
-	ajaxReturn("Access Denied");
+	Fakoli::end("Access Denied");
 }
 
 if ($method == "POST")
@@ -63,7 +63,7 @@ if ($method == "POST")
 	if ($errors)
 	{
 		// Throw the validation error back to the calling AJAX script
-		ajaxReturn($errors);
+		Fakoli::end($errors);
 	}
 	
 	$parent_folder = sanitizePath($_POST["parent_folder_value"]);
@@ -74,12 +74,12 @@ if ($method == "POST")
 	
 	if (file_exists($path))
 	{
-		ajaxReturn("A file or directory already exists with that name");
+		Fakoli::end("A file or directory already exists with that name");
 	}
 
 	mkdir($path);
 	chmod($path, 0755);
-	ajaxReturn("1");
+	Fakoli::end("1");
 }
 else
 {

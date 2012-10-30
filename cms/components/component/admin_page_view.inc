@@ -128,6 +128,12 @@ class AdminPageView
 			$template = str_replace($expr, $config[$name], $template);
 		}
 		
+		$component = $page->Component();
+		
+		$help = "<a href='#' onclick='popup(\"/action/admin/help?src={$component->name}&page={$page->identifier}\", \"help\", 940, 500, \"toolbar=0,location=0,scrollbars=1,resizable=1\"); return false;'> Help </a>";
+		
+	 	$template = str_replace("{help}", $help, $template);
+	 	
 		if ($config['prettyURLs'] === false)
 		{
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);

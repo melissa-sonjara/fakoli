@@ -41,7 +41,7 @@ $library = $document->DocumentLibrary();
 
 if (!checkRole($library->allow_access) && !$library->allowAccess())
 {
-	ajaxReturn("Access Denied");
+	Fakoli::end("Access Denied");
 }
 
 $d = new DocumentDownload();

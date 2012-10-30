@@ -37,7 +37,7 @@ Fakoli::usingFile("framework/auto_form.inc");
 $document_id = checkNumeric($_GET["document_id"]);
 if (!$document_id)
 {
-	ajaxReturn("Invalid Parameter");
+	Fakoli::end("Invalid Parameter");
 }
 
 $document = new Document($document_id);
@@ -45,11 +45,11 @@ $library = $document->DocumentLibrary();
 
 if (!checkRole($library->allow_access && !$document->fileshareAllowDelete()))
 {
-	ajaxReturn("Access Denied");
+	Fakoli::end("Access Denied");
 }
 
 $mgr = new DocumentManager($library);
 $mgr->deleteDocument($document);
 
-ajaxReturn("1");
+Fakoli::end("1");
 ?>
