@@ -43,6 +43,7 @@ class Blog extends DataItem
 						"read_access"			=>	String,
 						"write_access"			=>	String,					
 						"default_article_order"	=>	String,
+						"articles_per_page"		=>	Number,
 						"blog_type"				=>	String,
 						"allow_comments"		=>	Boolean,
 						"published"				=>	Boolean,

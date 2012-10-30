@@ -49,7 +49,8 @@ Fakoli::using("blog", "component");
 class BlogUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added articles_per_page to blog table"
 	);
 	
 	function BlogUpgradeManager()

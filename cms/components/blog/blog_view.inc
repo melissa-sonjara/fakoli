@@ -192,7 +192,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
-		$list->pageSize = 10;
+		$list->pageSize = $blog->articles_per_page;
 		
 		$script .= $list->writeScript();
 		$list->drawList();
@@ -267,8 +267,8 @@ class BookBlogViewHandler implements IBlogViewHandler
 		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
-		$list->styles = "clear: both";
-		$list->pageSize = 5;
+		$list->styles = "clear: both; width: 100%";
+		$list->pageSize = $blog->articles_per_page;
 		
 		$script .= $list->writeScript();
 		$list->drawList();

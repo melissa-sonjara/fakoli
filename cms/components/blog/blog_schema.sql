@@ -26,3 +26,9 @@ CREATE TABLE `blog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `blog` ADD COLUMN `articles_per_page` INT(10) unsigned not null default 10;
+
+-- END Version 1.1

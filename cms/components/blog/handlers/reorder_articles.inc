@@ -55,7 +55,7 @@ try
 	}
 		
 	$tx->commit();
-	ajaxReturn("OK");
+	Fakoli::end("OK");
 }
 catch(Exception $e)
 {

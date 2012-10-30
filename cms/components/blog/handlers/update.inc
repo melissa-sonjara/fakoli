@@ -38,7 +38,7 @@ Fakoli::assertRole("admin,content");
 $blog_id = checkNumeric($_GET["blog_id"]);
 
 if (!$blog_id) 
-	ajaxReturn("invalid parameters");
+	Fakoli::end("invalid parameters");
 
 $blog = new Blog($blog_id);
 
