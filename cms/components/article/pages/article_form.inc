@@ -50,6 +50,8 @@ else
 $form = ArticleManager::buildArticleForm($article);
 $redirect = "/articles";
 $form->button("Cancel", $redirect);
+$form->button("Preview", "javascript:modalPopup(\\'Preview\\', \\'/blog?article_id=$article_id\\', 800, \\'auto\\')");
+
 
 if ($method == "POST")
 {

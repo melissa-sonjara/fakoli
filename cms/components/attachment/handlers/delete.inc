@@ -36,7 +36,7 @@ Fakoli::using("attachment");
 $attachment_id = checkNumeric($_GET["attachment_id"]);
 if (!$attachment_id)
 {
-	ajaxReturn("Invalid Parameter");
+	Fakoli::end("Invalid Parameter");
 }
 
 $attachment = new Attachment($attachment_id);
@@ -53,5 +53,5 @@ if (file_exists($file))
 
 $attachment->delete();
 
-ajaxReturn("OK");
+Fakoli::end("OK");
 ?>

@@ -100,7 +100,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		ob_end_clean();
 ?>
 	<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
-	<script type="text/javascript" src="/fakoli/attachment/attachment_uploader.js"></script>
+	<script type="text/javascript" src="/components/attachment/js/attachment_uploader.js"></script>
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{

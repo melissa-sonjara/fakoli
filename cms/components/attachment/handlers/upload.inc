@@ -37,12 +37,12 @@ $attachment = new Attachment();
 
 if (!$_FILES['attachmentFile']) 
 {
-	ajaxReturn("No upload record found.");
+	Fakoli::end("No upload record found.");
 }
 
 if ($_FILES['attachmentFile']["name"]=="") 
 {
-	ajaxReturn("Upload name is empty");
+	Fakoli::end("Upload name is empty");
 }
 
 /* Copy across the uploaded file */
@@ -91,5 +91,5 @@ $attachment->save();
 
 $icon = DocumentHandler::getDocIcon($name);
 
-ajaxReturn("$attachment->attachment_id:$name:$icon:$size");
+Fakoli::end("$attachment->attachment_id:$name:$icon:$size");
 ?>
