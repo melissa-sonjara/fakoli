@@ -42,3 +42,9 @@ CREATE TABLE `menu_item` (
 ALTER TABLE `menu_item` ADD COLUMN `permissions` varchar(200) NOT NULL DEFAULT '' AFTER `role`;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE `menu_item` ADD COLUMN `required_parameters` varchar(200) NOT NULL DEFAULT '';
+
+-- END Version 1.2

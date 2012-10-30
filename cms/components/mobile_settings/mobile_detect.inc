@@ -36,7 +36,7 @@ class MobileDetect
             'Sony' => 'E10i|SonyEricsson|SonyEricssonLT15iv',
             'Asus' => 'Asus.*Galaxy',
             'Palm' => 'PalmSource|Palm', // avantgo|blazer|elaine|hiptop|plucker|xiino
-            'GenericPhone' => '(mmp|pocket|psp|symbian|Smartphone|smartfon|treo|up.browser|up.link|vodafone|wap|nokia|Series40|Series60|S60|SonyEricsson|N900|\bPPC\b|MAUI.*WAP.*Browser|LG\-P500)'
+            'GenericPhone' => '(mmp|pocket|psp|symbian|Smartphone|smartfon|treo|up.browser|up.link|vodafone|wap|nokia|Series40|Series60|S60|SonyEricsson|N900|MAUI.*WAP.*Browser|LG\-P500)'
     );
     // List of tablet devices.
     protected $tabletDevices = array(

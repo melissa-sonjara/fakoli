@@ -53,7 +53,8 @@ class OptimizeManifest
 		return array("ComponentScanComplete" => array(OptimizeManager, clearCache),
 					 "PreProcessScripts"	 =>	array(OptimizeManager, preProcessScripts),
 					 "PreProcessStyles"		 =>	array(OptimizeManager, preProcessStyles),
-					 "PreProcessPage"		 =>	array(OptimizeManager, preProcessPage));	
+					 "PreProcessPage"		 =>	array(OptimizeManager, preProcessPage),
+					 "PreAction"			 =>	array(OptimizeManager, preAction));	
 	}
 }
 

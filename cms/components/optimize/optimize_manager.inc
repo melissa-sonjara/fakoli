@@ -132,4 +132,27 @@ class OptimizeManager
 		}
 		return $template;
 	}
+	
+	static function preAction($action)
+	{
+		switch($action)
+		{
+			case "script":
+				if (Settings::getValue("optimize", "compress_javascript") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+				{
+					ob_start("ob_gzhandler"); 
+				}
+				break;
+	
+			case "styles":
+					
+				if (Settings::getValue("optimize", "compress_styles") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+				{
+					ob_start("ob_gzhandler");
+				}
+				break;
+				
+			default:
+		}
+	}
 }

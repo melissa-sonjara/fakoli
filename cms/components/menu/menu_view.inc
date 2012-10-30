@@ -71,8 +71,28 @@ class MenuView
 	{
 		if (!checkRole($menuItem->role) || !Settings::checkPermissions($menuItem->permissions)) return null;
 		
+		if ($menuItem->required_parameters)
+		{
+			$params = explode(",", $menuItem->required_parameters);
+			
+			foreach($params as $param)
+			{
+				if (!isset($_GET[$param])) return null;
+			}
+		}
+		
 		// If the URL field is set explicitly, use that
-		if ($menuItem->url) return $menuItem->url;
+		if ($menuItem->url) 
+		{
+			if (startsWith($menuItem->url, "http://") || startsWith($menuItem->url, "https://"))
+			{
+				return $menuItem->url;
+			}
+			
+			$link = $menuItem->url;
+			if ($this->queryString) $link .= $this->queryString;
+			return $link;
+		}		
 		
 		if ($menuItem->identifier)
 		{

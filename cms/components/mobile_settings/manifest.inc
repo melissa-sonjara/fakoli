@@ -14,6 +14,8 @@ class MobileSettingsManifest
 		return $component;
 	}
 
+	var $allow_sessionless_handlers = true;
+	
 	static function subscribeToEvents()
 	{
 		return array(

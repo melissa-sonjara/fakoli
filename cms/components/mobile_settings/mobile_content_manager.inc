@@ -38,7 +38,7 @@ class MobileSettingsManager
 			$auto_form_defaults["default_layout"] = "mobile";
 		}
 		
-		if ($mode != "Dedicated Mobile Section") return;
+		if ($mode != "Dedicated Mobile Section" || !$useMobile) return;
 		
 		trace ("Using Dedicated Mobile Section", 4);
 		
