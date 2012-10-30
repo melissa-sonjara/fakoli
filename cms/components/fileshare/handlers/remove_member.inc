@@ -44,7 +44,7 @@ $user_id = checkNumeric($_GET["user_id"]);
 trace("Remove_member:: document_library_id $document_library_id", 3);
 
 if(!$document_library_id)
-	ajaxReturn("invalid parameters");
+	Fakoli::end("invalid parameters");
 
 $library = new DocumentLibrary($document_library_id);
 

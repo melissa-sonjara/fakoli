@@ -46,7 +46,7 @@ $document_library_id = checkNumeric($_GET["document_library_id"]);
 $field = mysql_escape_string($_GET["field"]);
 
 if(!$document_library_id)
-	ajaxReturn("User Search Handler: no document library id");
+	Fakoli::end("User Search Handler: no document library id");
 
 /*
  * Given any characters entered into the input box, search for a

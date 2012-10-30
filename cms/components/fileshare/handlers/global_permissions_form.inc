@@ -48,7 +48,7 @@ Fakoli::usingFile("framework/auto_form.inc");
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
 if(!$document_library_id)
-	ajaxReturn("invalid parameters");
+	Fakoli::end("invalid parameters");
 
 $library = new DocumentLibrary($document_library_id);
 $library->filter = new InclusionFilter("");

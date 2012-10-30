@@ -49,7 +49,7 @@ if(!$class_name)
 $classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
 
 if(!array_search($class_name, $classes))
-	ajaxReturn("No relations available for this class");
+	Fakoli::end("No relations available for this class");
 
 $obj = new $class_name();
 $relations = $obj->relations;

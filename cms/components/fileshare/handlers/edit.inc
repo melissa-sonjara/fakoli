@@ -37,7 +37,7 @@ Fakoli::usingFile("framework/auto_form.inc");
 $document_id = checkNumeric($_GET["document_id"]);
 if (!$document_id)
 {
-	ajaxReturn("Invalid Parameter");
+	Fakoli::end("Invalid Parameter");
 }
 
 $document = new Document($document_id);
@@ -67,12 +67,12 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		ajaxReturn("OK");
+		Fakoli::end("OK");
 		return;
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 		return;
 	}
 }

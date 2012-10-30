@@ -36,7 +36,7 @@ Fakoli::assertRole("admin,content");
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
 if (!$gallery_id) 
-	ajaxReturn("invalid parameters");
+	Fakoli::end("invalid parameters");
 
 $gallery = new ImageGallery($gallery_id);
 

@@ -45,10 +45,10 @@ $document_library_id = checkNumeric($_GET["document_library_id"]);
 $user_id = checkNumeric($_GET["user_id"]);
 
 if(!$document_library_id)
-	ajaxReturn("Add Member: no document_library_id");
+	Fakoli::end("Add Member: no document_library_id");
 	
 if(!$user_id)
-	ajaxReturn("Add Member: no user_id");
+	Fakoli::end("Add Member: no user_id");
 
 $count = Query::create(FileshareUserXref, "WHERE user_id=:u and document_library_id=:l")
 		->bind(":u", $user_id, ":l", $document_library_id)
