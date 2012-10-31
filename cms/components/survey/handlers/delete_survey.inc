@@ -12,12 +12,12 @@ Fakoli::using("survey", "questionnaire");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	ajaxReturn("unknown survey");
+	Fakoli::end("unknown survey");
 
 $survey = new Survey($survey_id);
 
 if(!$survey->isAuthor() OR $survey->status == "open")
-	ajaxReturn("cannot delete survey");
+	Fakoli::end("cannot delete survey");
 
 if($survey->status == "not sent")
 {
@@ -31,4 +31,4 @@ elseif($survey->status == "closed")
 	SurveyManager::deleteSurvey($survey);
 }
 
-ajaxReturn("OK");
+Fakoli::end("OK");

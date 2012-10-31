@@ -55,7 +55,7 @@ $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_question_id AND !$survey_id)
-	ajaxReturn("unknown question or survey");
+	Fakoli::end("unknown question or survey");
 
 $question = new SurveyQuestion($survey_question_id);
 

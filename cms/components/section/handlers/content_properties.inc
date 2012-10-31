@@ -83,7 +83,7 @@ if ($method == "POST")
 		$sectionContent->save();
 	}
 	
-	ajaxReturn("OK");
+	Fakoli::end("OK");
 	return;
 }
 

@@ -50,7 +50,9 @@ class SettingsUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:move trace from settings to debug"
+			"1.1"		=>	"sql:move trace from settings to debug",
+			"1.2"		=>	"sql:Increase size of column value to 2000",
+			"1.3"		=>	"sql:Remove google_analytics and set size of value column back to 500",
 	);
 	
 	function SettingsUpgradeManager()

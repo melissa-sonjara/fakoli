@@ -394,6 +394,11 @@ class SurveyResponseManager extends AbstractQuestionnaireResponseManager
 		return SurveyQuestion;
 	}
 
+	function getXrefClass()
+	{
+		return SurveyQuestionXref;
+	}
+	
 	/*
 	 * Called by QuestionnaireForm
 	 */
@@ -469,6 +474,12 @@ class SurveyResultsManager extends AbstractQuestionnaireResultsManager
 	{
 		return SurveyQuestion;
 	}
+	
+
+	function getXrefClass()
+	{
+		return SurveyQuestionXref;
+	}	
 	
 	/*
 	 * Called by QuestionnaireForm

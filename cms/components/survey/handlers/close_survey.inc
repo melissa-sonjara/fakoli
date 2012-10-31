@@ -13,10 +13,10 @@ Fakoli::using("survey");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	ajaxReturn("unknown survey");
+	Fakoli::end("unknown survey");
 
 $survey = new Survey($survey_id);
 if($survey->isAuthor())
 	$survey->setStatus("closed");
 
-ajaxReturn("OK");
+Fakoli::end("OK");

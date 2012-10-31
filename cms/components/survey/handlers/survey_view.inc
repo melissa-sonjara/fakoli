@@ -46,7 +46,7 @@ Fakoli::using("survey", "questionnaire");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	ajaxReturn("Survey View - unknown survey");
+	Fakoli::end("Survey View - unknown survey");
 	
 $survey = new Survey($survey_id);
 $survey->filter = new InclusionFilter("title", "introduction", "message");

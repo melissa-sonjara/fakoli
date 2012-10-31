@@ -19,5 +19,5 @@ foreach($ids as $id)
 	$sectionContent->save();
 }
 	
-ajaxReturn("OK");
+Fakoli::end("OK");
 ?>

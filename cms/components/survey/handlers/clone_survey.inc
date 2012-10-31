@@ -4,7 +4,7 @@ Fakoli::using("survey", "questionnaire");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	ajaxReturn("Clone Survey - unknown survey");
+	Fakoli::end("Clone Survey - unknown survey");
 	
 $src = new Survey($survey_id);
 
@@ -39,5 +39,5 @@ foreach($xrefs as $xref)
 	$newXref->save();
 }
 
-ajaxReturn("OK");
+Fakoli::end("OK");
 ?>

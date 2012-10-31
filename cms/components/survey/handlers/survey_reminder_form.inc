@@ -46,15 +46,15 @@ Fakoli::usingFeature("auto_form");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	ajaxReturn("Survey Reminder Form - unknown survey");
+	Fakoli::end("Survey Reminder Form - unknown survey");
 
 $survey = new Survey($survey_id);
 
 if(!$survey->isAuthor())
-	ajaxReturn("insufficient privileges to send reminder");
+	Fakoli::end("insufficient privileges to send reminder");
 
 if($survey->isClosed())
-	ajaxReturn("unable to send reminders - survey is closed");
+	Fakoli::end("unable to send reminders - survey is closed");
 
 
 $nonResponsives = $survey->getNonResponders();
@@ -81,11 +81,11 @@ if ($method == "POST")
 	if(!$form->msg)
 	{
 		$rtn = sendReminderEmails($survey, $nonResponsives);
-		ajaxReturn($rtn);
+		Fakoli::end($rtn);
 	}
 	else
 	{
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 	}
 }
 

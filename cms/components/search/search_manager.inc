@@ -59,6 +59,7 @@ class SearchManager
 	{
 		Settings::setDefaultValue("search", "search_result_format", "Combined List", "String", "Specifies the display format to use when displaying results", "", "Combined List\nGrouped by Type");
 		Settings::setDefaultValue("search", "results_per_page", "20", "Number", "Specifies the number of results to show per page. Set to zero for no pagination.");
+		Settings::setDefaultValue("search", "show_text_fragment", false, "Boolean", "Specifies whether to show with the search results. Note that not all search types will return a text fragment"); 
 		
 		SearchManager::buildSearchMap();
 	}
@@ -147,9 +148,11 @@ class SearchManager
 		return $item->summary();
 	}
 	
-	function showResults($pageSize = 20)
+	function showResults($pageSize = 0)
 	{
 		global $script;
+		
+		if ($pageSize == 0) $pageSize = Settings::getValue("search", "results_per_page");
 		
 		$list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
 		$list->pageSize = $pageSize;

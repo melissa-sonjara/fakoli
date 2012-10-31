@@ -47,7 +47,7 @@ Fakoli::using("questionnaire", "survey", "email");
 $response_id = checkNumeric($_GET["response_id"]);
 
 if(!$response_id)
-	ajaxReturn("unknown survey response");
+	Fakoli::end("unknown survey response");
 
 $response = new SurveyResponse($response_id);
 

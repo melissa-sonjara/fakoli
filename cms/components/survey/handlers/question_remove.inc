@@ -71,10 +71,10 @@ else if($survey_id && $survey_question_id)
 }
 else
 {
-	ajaxReturn("Survey Question Remove - unknown SurveyQuestionXref");
+	Fakoli::end("Survey Question Remove - unknown SurveyQuestionXref");
 }
 
 
-ajaxReturn("OK");
+Fakoli::end("OK");
 
 ?>

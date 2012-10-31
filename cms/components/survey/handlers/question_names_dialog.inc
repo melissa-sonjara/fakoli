@@ -43,7 +43,7 @@ Fakoli::usingFeature("data_view");
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	ajaxReturn("unknown survey");
+	Fakoli::end("unknown survey");
 
 $survey = new Survey($survey_id);
 
@@ -53,9 +53,9 @@ $form = $mgr->buildQuestionNamesForm();
 if ($method == "POST")
 {
 	if($form->save())
-		ajaxReturn("OK");
+		Fakoli::end("OK");
 	else
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 }
 
 echo $form->writeScript();
