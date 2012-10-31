@@ -43,7 +43,7 @@ if ($report_id && is_numeric($_GET["report_id"]))
 	}
 	catch(Exception $e)
 	{
-		ajaxReturn($e->getMessage());
+		Fakoli::end($e->getMessage());
 	}
 }
 else
@@ -73,9 +73,9 @@ $form->allowDelete = $report->allowDelete();
 if ($method == "POST")
 {
 	if($form->save())
-		ajaxReturn("OK");
+		Fakoli::end("OK");
 	else
-		ajaxReturn($form->msg);
+		Fakoli::end($form->msg);
 }
 
 echo $form->writeScript();

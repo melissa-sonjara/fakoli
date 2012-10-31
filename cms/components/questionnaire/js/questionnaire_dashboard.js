@@ -8,19 +8,27 @@ var QuestionnaireDashboardManager =  new Class
 ({
 	dialog: null, 
 	
-	itemPk: null,	//< the id of the questionnaire or survey table (e.g., questionnaire_id)
+	itemPk: null,	///< the id of the questionnaire or survey table (e.g., questionnaire_id)
 	
-	component_name: null,	//< the name of the component (e.g., questionnaire)
-	//< some component may have more than one questionnaire so item class is needed
+	component_name: null,	///< the name of the component (e.g., questionnaire)
+	///< some component may have more than one questionnaire so item class is needed
 
 	item_label: null, 	//< the item pretty class name or label for delete confirmation
 
-	clone_dialog: null, 	//< the name of the clone dialog handler
+	clone_dialog: null, 	///< the name of the clone dialog handler
 	
 	questionnaire_form_identifier: null, //< the identifier of the questionnaire create/update form
-							//< where user is redirected after clone action. 
+							///< where user is redirected after clone action. 
 						
-	item_delete_handler: null, //< the handler that deletes a questionnaire
+	item_delete_handler: null, ///< the handler that deletes a questionnaire
+	
+	item_view_dialog: null, 	///< handler to display view of the survey/questionnaire
+	
+	response_form_identifier: null,		///< identifier of response form
+	
+	results_page_identifier: null,		///< identifier of first page of results tab set
+	
+	questionnaireSendMgr: null,		///< the var for the send manager js file, if used
 	
 	initialize: function(
 			itemPk, 
@@ -28,7 +36,10 @@ var QuestionnaireDashboardManager =  new Class
 			item_label, 
 			clone_dialog, 
 			questionnaire_form_identifier, 
-			item_delete_handler
+			item_delete_handler,
+			item_view_dialog,
+			response_form_identifier,
+			results_page_identifier
 			)
 	{
 		this.itemPk = itemPk;
@@ -37,6 +48,9 @@ var QuestionnaireDashboardManager =  new Class
 		this.clone_dialog = clone_dialog;
 		this.questionnaire_form_identifier = questionnaire_form_identifier;
 		this.item_delete_handler = item_delete_handler;
+		this.item_view_dialog = item_view_dialog;
+		this.response_form_identifier = response_form_identifier;
+		this.results_page_identifier = results_page_identifier;
 	},
 	
 	/*
@@ -52,22 +66,79 @@ var QuestionnaireDashboardManager =  new Class
 	{
 		var action = elt.value;
 		
-		if(action == 'edit')
+		switch(action)
 		{
+			case 'view':
+			this.showQuestionnaireViewDialog(item_id);
+			break;
+			
+			case 'edit':
 			go(this.questionnaire_form_identifier + '?' + this.itemPk + '=' + item_id);
-		}
-		else if(action == 'delete')
-		{
-			this.deleteQuestionnaire(item_id);
-		}
-		else if(action == 'clone')
-		{
-			this.showCloneQuestionnaireDialog(item_id);
+			break;
+			
+			case 'public_view':
+			go(this.response_form_identifier + '?' + this.itemPk + '=' + item_id);
+			break;
+			
+			case 'clone':
+			this.showCloneQuestionnaireDialog(item_id);	
+			break;
+			
+			case 'view_results':
+			go(this.results_page_identifier + '?' + this.itemPk + '=' + item_id);		
+			break;
+		
+			case 'delete':
+			this.deleteQuestionnaire(item_id);	
+			break;
+			
+			/*
+			 * Actions applicable if QuestionnaireSendManager is implemented
+			 */
+			case 'send_test':
+			if(this.questionnaireSendMgr)
+			{
+				this.questionnaireSendMgr.showTestEmailDialog(item_id);
+			}
+			break;
+		
+			case 'close':
+			if(this.questionnaireSendMgr)
+			{
+				this.questionnaireSendMgr.closeToRespondents(item_id);
+			}
+			break;
+		
+			case 'reopen':
+			if(this.questionnaireSendMgr)
+			{
+				this.questionnaireSendMgr.openToRespondents(item_id);
+			}
+			break;
+		
+			case 'send_reminders':
+			if(this.questionnaireSendMgr)
+			{
+				this.questionnaireSendMgr.showReminderDialog(item_id);
+			}
+			break;
+			
+			case 'send':
+			if(this.questionnaireSendMgr)
+			{
+				go(this.questionnaireSendMgr.send_page_identifier + '?' + this.itemPk + '=' + item_id);	
+			}
+			break;		
 		}
 					
 		elt.set('value', '');
 	},
 
+	
+	showQuestionnaireViewDialog: function(item_id)
+	{
+		this.dialog = modalPopup(this.item_label + ' View', '/action/' + this.component_name + '/' + this.item_view_dialog + '?' + this.itemPk + '=' + item_id, '700px', 'auto', true);		
+	},
 
 	deleteQuestionnaire: function(item_id)
 	{

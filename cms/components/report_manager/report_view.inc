@@ -42,7 +42,7 @@ Fakoli::usingFeature("data_view");
  * and supplies the tables, fields and format templates for
  * the report (e.g., ProgramReportManager)
  * 
- * @param identifier - the identifier of that page that displayes
+ * @param identifier - the identifier of that page that displays
  * the report form and generated results (e.g., custom_program_report).
  */
 class ReportListView
@@ -51,16 +51,16 @@ class ReportListView
 	var $table;
 	var $identifier; // report url
 	var $resultsPage;
+	var $buttons_at_top = true;
 	
-	function ReportListView($manager_class, $identifier, $resultsPage)
+	function ReportListView($manager_class, $identifier)
 	{
 		// blank title means throw-away record presaved on generate page
-		$this->reports = Query::create(CustomReport, "WHERE manager_class=:manager_class AND title != ''")
+		$this->reports = Query::create(CustomReport, "WHERE manager_class=:manager_class AND title != '' ORDER BY title")
 			->bind(":manager_class", $manager_class)
 			->execute();
 			
 		$this->identifier = $identifier;
-		$this->resultsPage = $resultsPage;
 		$this->table = $this->buildTable($reports);	
 	}
 	
@@ -70,7 +70,7 @@ class ReportListView
 		$table = new DataListView($this->reports, "CustomReports");
 		$table->column("Title",  "<a href='{$this->identifier}?report_id={report_id}&edit=1'>{title}</a>", true)
 			  ->column("Description", "{description}")
-			  ->column("Actions", "<a target='_blank' class='button' href='{$this->resultsPage}?report_id={report_id}'>Run Report</a>&nbsp;<a class='button' href='{$this->identifier}?report_id={report_id}&edit=1'>Edit</a>");
+			  ->column("Actions", "<a class='button' href='{$this->identifier}?report_id={report_id}'>Run</a>&nbsp;<a class='button' href='{$this->identifier}?report_id={report_id}&edit=1'>Edit</a>");
 			
 		$table->pageSize=20;
 		$table->emptyMessage = "There are no custom reports.";
@@ -88,8 +88,13 @@ class ReportListView
 	
 	function drawView()
 	{
+		if($this->buttons_at_top)
+		{
+			echo "<p><a class='button' href='{$this->identifier}'>Create a New Report</a></p>\n";
+		}
+		
 		$this->table->drawView();
-?><p><a class='button' href='<?php echo $this->identifier ?>'>Create a New Report</a></p>
-<?php	
+		
+		echo "<p><a class='button' href='{$this->identifier}'>Create a New Report</a></p>\n";
 	}
 }
