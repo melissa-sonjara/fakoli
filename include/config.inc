@@ -4,37 +4,33 @@
  */
 $config = array(
 
-	"sitename"		=> "New Sonjara Website",
-	"homedir"		=> "/srv/www/vhosts/v2.sonjara.com",
-	"uploadbase"	=> "/srv/www/vhosts/v2.sonjara.com",
+	"sitename"		=> "%{SITENAME}",
+	"homedir"		=> "%{HOMEDIR}",
+	"uploadbase"	=> "%{UPLOADBASE}",
 	"uploaddir" 	=> "documents", 			/* Directory for uploads */
-	"tmp"			=> "/tmp",					/* Scratch Directory */
-	"email_from" 	=> "sonja@sonjara.com", 		/* From address for generated emails */
-    "http_host"		=> "v2.sonjara.com",		/* URL for this server */
+	"email_from" 	=> "%{EMAIL_FROM}", 		/* From address for generated emails */
+    "http_host"		=> "%{HTTP_HOST}",			/* URL for this server */
 
-    "email_contact" => "Sonja@sonjara.com", 		/* Email Address for contact */
-    "email_name" 	=> "Sonja Hubbard", 			/* Name of contact */
+    "email_contact" => "%{EMAIL_CONTACT}",	 	/* Email Address for contact */
+    "email_name" 	=> "%{EMAIL_NAME}", 		/* Name of contact */
     
-    "trace_path"	=> "/share/cms_trace.log",	/* File path to trace output log */
+    "trace_path"	=> "%{TRACE_PATH}",			/* File path to trace output log */
     "trace_level"	=> 3,						/* Debugging trace level (0-5) */
-	"trace_detail"	=>	TraceDetailHigh,		/* Detail level for trace output */
+	"trace_detail"	=> TraceDetailHigh,			/* Detail level for trace output */
 
-	"admin_templates_dir"	=>	"C:/code/cms/cms/admin/templates",
-
-	// Application specific settings
-	"latest_addition_count"	=>	3,
-	"news_item_count"		=>	3,
+	// Application specific settings - migrate to ApplicationSettings?
 	"enable_user_login"		=>	true,
 	"allow_pdf_download"	=>  true,
-	"thumbnail_size"		=>	75
+	"thumbnail_size"		=>	75,
+	"prettyURLs"			=>	true,
+	"admin_SSL"				=>	false
 );
 
 $auto_form_defaults = array(
 
 	"labelCSS"	=>	"label",
 	"buttonCSS"	=>	"button",
-	"componentPath"	=> "/fakoli",
-	"markRequiredFields"		=>	true
+	"componentPath"	=> "/fakoli"
 );
 
 

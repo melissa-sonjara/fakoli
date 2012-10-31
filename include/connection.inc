@@ -8,15 +8,8 @@
 
 require_once "framework/connection_manager.inc";
 
-ConnectionManager::$dsn = "mysql:dbname=v2;host=localhost";
-ConnectionManager::$user = "v2";
-ConnectionManager::$password = "v2";
-
-//$conn = array(
-//	"dbhost"   => "localhost",
-//	"dbuser"   => "projects",
-//	"dbpasswd" => "!happy!",
-//	"dbname"   => "projects",
-//	 );
+ConnectionManager::$dsn = "mysql:dbname=%{DB_SCHEMA};host=%{DB_HOST}";
+ConnectionManager::$user = "%{DB_USER}";
+ConnectionManager::$password = "%{DB_PASSWORD}";
 	 
 ?>
