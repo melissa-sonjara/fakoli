@@ -63,13 +63,19 @@ class CurrencyTypeRenderer extends AbstractTypeRenderer
 	{
 		$template = trim($template);
 	
-		if ($value == "" || !is_numeric($value))
-			$text = "0";				
-		elseif($template != "" && is_numeric($template))
+		if ($value == "" || !isset($value) || !is_numeric($value))
+		{
+			$value = "0";
+		}				
+		
+		if($template != "" && is_numeric($template))
+		{
 			$text = number_format($value, $template);
-
-		if(!$text)
+		}
+		else
+		{
 			$text = number_format($value, 2);
+		}
 		
 		return $text; 
 	}

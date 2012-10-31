@@ -77,6 +77,7 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $width;
 	var $height;
 	var $resizable = false;
+	var $nobr = false;
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -177,6 +178,8 @@ class CheckListFieldRenderer extends FieldRenderer
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					
+					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
+					
 					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
 					$idx++;
 				}
@@ -192,6 +195,7 @@ class CheckListFieldRenderer extends FieldRenderer
 				foreach($this->options as $value => $text)
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
 					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
 					$idx++;
 				}
@@ -274,7 +278,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		$divider = $this->horizontal ? " " : "<br/>";
 		
-		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
+		if ($this->width && $this->height && ($this->getOptionCount() > $this->scrollAfter || $this->grouped))
 		{
 			$resizable = $this->resizable ? " resizable": "";
 			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
@@ -282,13 +286,37 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		$idx = 0;
 
-		if(count($this->options) > 0)
+		
+		if ($this->grouped)
 		{
-			foreach($this->options as $value => $text)
+			echo "<dl>\n";
+			foreach($this->options as $groupName => $group)
 			{
-				$checked = (array_key_exists($value, $values)) ? " checked" : "";
-				echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
-				$idx++;
+				echo "<dt>$groupName</dt>\n<dd>\n";
+				foreach($group as $value => $text)
+				{
+					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+					
+					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
+					
+					echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					$idx++;
+				}
+				
+				echo "</dd>";
+			}
+			echo "</dl>";
+		}
+		else
+		{
+			if(count($this->options) > 0)
+			{
+				foreach($this->options as $value => $text)
+				{
+					$checked = (array_key_exists($value, $values)) ? " checked" : "";
+					echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
+					$idx++;
+				}
 			}
 		}
 				

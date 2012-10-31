@@ -45,12 +45,18 @@ class NumberTypeRenderer extends AbstractTypeRenderer
 		$template = trim($template);
 	
 		if ($value == "" || !is_numeric($value))
-			$text = "0";
-		elseif($template != "" && is_numeric($template))
-			$text = number_format($value, $template);
+		{
+			$value = "0";
+		}
 		
-		if(!$text)
+		if($template != "" && is_numeric($template))
+		{
+			$text = number_format($value, $template);
+		}
+		else
+		{
 			$text = $value;
+		}
 			
 		return $text; 
 	}

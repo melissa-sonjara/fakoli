@@ -43,7 +43,7 @@ require_once realpath(dirname(__FILE__)."/query.inc");
  * 
  * @author andy
  */
-class DataItemIterator implements Iterator, Countable
+class DataItemIterator implements Iterator, Countable, ArrayAccess
 {
 	var $query;
 	var $result;
@@ -104,6 +104,41 @@ class DataItemIterator implements Iterator, Countable
 		return $this->position;
 	}
 	
+	public function offsetExists($offset)
+	{
+		if (!is_numeric($offset)) return false;
+		return ($offset >= 0 && $offset < $this->query->rowCount);		
+	}
+	
+	public function offsetGet ($offset)
+	{
+		if ($offset == $this->position) return $this->item;
+		
+		if ($offset < $this->position)
+		{
+			$this->rewind();
+		}
+		else
+		{
+			$offset -= $this->position;
+		}
+		
+		while($offset--)
+		{
+			$this->next();
+		}
+		return $this->item;
+	}
+	
+	public function offsetSet($offset, $value )
+	{
+		throw new FakoliException("Attempt to write to iterated data query");
+	}
+	
+	public function offsetUnset($offset)
+	{
+		throw new FakoliException("Attempt to write to iterated data query");
+	}
 }
 
 /**

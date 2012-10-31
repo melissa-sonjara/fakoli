@@ -1599,8 +1599,15 @@ function arrayFilterKey( $input, $callback )
  */
 function ajaxReturn($msg = null)
 {
-	session_write_close();
-	die($msg);
+	if (class_exists(FakoliEarlyExit))
+	{
+		throw new FakoliEarlyExit($msg);
+	}
+	else
+	{
+		session_write_close();
+		die($msg);
+	}
 }
 
 /**

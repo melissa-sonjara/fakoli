@@ -43,68 +43,61 @@ var FakoliMenu = new Class({
 	
 	initialize: function(elt, options)
 	{
-		this.root = $(elt);
-		//this.options = this.setOptions(options);
+		this.root = document.id(elt);
+		this.setOptions(options);
 		var menu = this;
 		
-		document.focusWatcher.addEvent('focusChanged', function() { if (!this.root.hasChild(document.focusWatcher.focus)) this.clearFocus(); }.bind(menu));
+		document.focusWatcher.addEvent('focusChanged', function() 
+		{ 
+			this.updateFocus(document.focusWatcher.focus);
+		}.bind(menu));
 		
-		// Extension of suckerfish to allow keyboard navigation of dropdowns.
+		// Suckerfish style dropdown implementation for mouseovers.
 		
-		$$("#" + this.root.id + " > ul > li > a").each(function(elt) 
+		$$("#" + this.root.id + " > ul > li").each(function (elt)
 		{
-			elt.addEvents({'focus': function(e) 
-									{
-										var event = new Event(e).stop();
-										this.updateFocus(event, elt);
-									}.bind(menu)
-			});
-		});
-		
-		//if (Browser.Engine.trident)
-		//{
-			// Suckerfish style dropdown implementation for IE6 mouseovers.
+			var ul = elt.getElement('ul');
 			
-			$$("#" + this.root.id + " > ul > li").each(function (elt)
+			if (ul)
 			{
-				var ul = elt.getElement('ul');
-				
-				if (ul)
+				if (menu.options.effect == 'fade')
 				{
-					if (menu.options.effect == 'fade')
-					{
-						ul.setStyle('opacity', 0);
-					}
-					
-					elt.addEvents(
-					{
-						'touchstart': function()
-						{
-							menu.showMenu(elt);
-							if (!elt.blockClick)
-							{
-								elt.blockClick = function(event) { new Event(event).stop(); return false; };
-								elt.addEvent('click', elt.blockClick.bind(elt));
-								ul.getElements('a').each(function(child)
-								{
-									child.addEvent('touchend', function(event) { new Event(event).stop(); go(child.href); });
-								});
-							}							
-						},
-						
-						'mouseover': function() 
-						{ 
-							menu.showMenu(elt);
-						},
-							
-						'mouseout': function() 
-						{
-							menu.hideMenu(elt);
-						} 
-					 });
+					ul.setStyle('opacity', 0);
 				}
-			});
-		//}
+				
+				elt.addEvents(
+				{
+					'touchstart': function(event)
+					{
+						new Event(event).stop();
+						
+						menu.clearFocus();
+						menu.showMenu(elt);
+						if (!elt.blockClick)
+						{
+							elt.blockClick = function(event) { new Event(event).stop(); return false; };
+							elt.addEvent('click', elt.blockClick.bind(elt));
+							
+							ul.getElements('a').each(function(child)
+							{
+								child.addEvent('touchend', function(event) { new Event(event).stop(); this.clearFocus(); go(child.href);}.bind(menu));
+							});
+						}							
+					},
+					
+					'mouseover': function() 
+					{ 
+						menu.showMenu(elt);
+					},
+						
+					'mouseout': function() 
+					{
+						menu.hideMenu(elt);
+					} 
+				 });
+			}
+		});
+
 	},
 	
 	showMenu: function(elt)
@@ -136,7 +129,7 @@ var FakoliMenu = new Class({
 		}
 	},
 	
-	updateFocus: function(event, elt)
+	updateFocus: function(elt)
 	{
 		this.clearFocus();
 		
@@ -145,6 +138,6 @@ var FakoliMenu = new Class({
 	
 	clearFocus: function()
 	{
-		this.root.getElements("ul > li").each(function(elt) { this.hideMenu(elt); }.bind(this));
+		this.root.getElements("ul > li").each(function(elt) { if (!elt.contains(document.focusWatcher.focus)) this.hideMenu(elt); }.bind(this));
 	}
 });

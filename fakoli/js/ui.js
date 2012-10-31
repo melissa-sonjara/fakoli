@@ -1008,6 +1008,55 @@ var Splitter = new Class({
 	
 });
 
+var CrossFader = new Class(
+{	
+	Implements : [Options],
+	container: Class.Empty,
+	options:
+	{
+		duration: 5000,
+		transition: 1000
+	},
+	idx: 0,
+	elements: Class.Empty,
+	
+	initialize: function(container, options)
+	{
+		this.container = document.id(container);
+		this.setOptions(options);
+		
+		if (!this.container) return;
+		
+		this.elements = this.container.getChildren();
+		
+		if (this.elements.length == 0) return;
+		
+		this.elements[0].setStyles({display: 'block', visibility: 'visible', opacity: 1});
+		
+		this.start();
+	},
+	
+	start: function()
+	{
+		if (this.duration == 0) return;
+		this.timer = this.next.periodical(this.options.duration, this);
+	},
+	
+	next: function()
+	{
+		if (this.idx >= 0)
+		{
+			this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('out');
+		}
+		
+		++this.idx;
+		if (this.idx >= this.elements.length) this.idx = 0;
+		
+		this.elements[this.idx].setStyles({'opacity': 0});
+		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
+	}
+});
+
 var FocusWatcher = new Class({
 	
 	Implements : [Options, Events],

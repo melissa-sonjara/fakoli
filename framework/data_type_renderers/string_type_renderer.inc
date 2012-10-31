@@ -82,6 +82,11 @@ class StringTypeRenderer extends AbstractTypeRenderer
 			{
 				return ellipsis(stripHTML($value), $template, true);
 			}
+			else if (strpos($template, "|") !== false)
+			{
+				$options = explode("|", $template);
+				return $value ? $options[0] : $options[1];
+			}
 		}
 		
 		return $value; 

@@ -186,6 +186,11 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 	function any($name, $value)
 	{
 		trace("NUMBER: ANY!!!", 3);
+
+		if (strpos($value, ",") !== FALSE)
+		{
+			$value = explode(",", $value);
+		}
 		
 		checkNumeric($value);
 		
