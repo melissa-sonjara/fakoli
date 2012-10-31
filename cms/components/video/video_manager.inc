@@ -50,6 +50,9 @@ class VideoManager
 	
 	static function onInitialize()
 	{
+		global $isAction;
+		global $isResource;
+		
 		global $html_editor_extra_buttons;
 		global $script;
 		
@@ -59,7 +62,11 @@ class VideoManager
 					  "tooltip"	=>	"Insert Video",
 					  "handler"	=>	"videoPicker");
 			
+				
 		$flowPlayerScript = Settings::getValue("video", "flowplayer_script");
+		
+		if ($isAction || $isResource) return;
+		
 		if ($flowPlayerScript)
 		{
 			$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";

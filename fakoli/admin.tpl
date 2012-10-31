@@ -13,7 +13,7 @@
   {var:dialogs}
   <div id="frame">
    <div id="header"><a href="http://www.sonjara.com/" alt="Sonjara, Inc"><h2 style="display: none">Fakoli/CMS Site Administration - a Product of Sonjara, Inc</h2></a></div>
-    <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'>{config:sitename}</span></div>   
+    <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'>{config:sitename}</span><div style='float: right'>{help}</div></div>   
     <div id="layout">
      <div id="leftnav">{var:menu}</div>
      <div id="content-admin">
