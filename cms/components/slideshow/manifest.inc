@@ -53,13 +53,13 @@ class SlideshowManifest
 	
 	function getScripts()
 	{
-		return array("/fakoli/slideshow/slideshow.js");
+		return array("/components/slideshow/js/slideshow.js");
 	}
 	
 	
 	function getStyles()
 	{
-		return array("/fakoli/slideshow/slideshow.css");
+		return array("/components/slideshow/css/slideshow.css");
 	}
 	
 	static function subscribeToEvents()
