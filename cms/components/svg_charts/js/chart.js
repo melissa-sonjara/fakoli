@@ -1,5 +1,6 @@
 var Chart = new Class(
 {
+	Implements: [Options, Events],
 	id:			"",
 	container:	Class.Empty,
 	paper: 		Class.Empty,
@@ -50,16 +51,26 @@ var Chart = new Class(
 		{
 			var x = this.options.legendX;
 			var y = this.options.legendY;
+			var s = this.options.legendSwatchSize || 20;
+			var h = this.options.legendLineHeight || 30;
 			
 			this.labels.each(function(text, index)
 			{
-				var rect = this.paper.rect(x, y, 20, 20, 3);
+				var rect = this.paper.rect(x, y, s, s, 3);
 				rect.attr({fill:this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth});
 				
-				var text = this.paper.text(x + 30, y + 10, text);
+				var text = this.paper.text(x + h, y + 10, text);
 				text.attr({"text-anchor": "start", fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.labelSize});
-							
-				y+=30;
+					
+				rect.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				rect.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				rect.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
+				
+				text.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				text.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				text.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
+
+				y+= h;
 			}.bind(this));
 		}
 	},

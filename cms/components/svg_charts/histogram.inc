@@ -28,6 +28,9 @@ class HistogramSeries
 		$options = array();
 		foreach ($this->options as $opt => $val)
 		{
+			if ($val === false) $val = "false";
+			if ($val === true) $val = "true";
+			
 			$options[] = "'$opt': $val";
 		}
 
@@ -76,6 +79,7 @@ class Histogram
 	var $series = array();
 	var $ticks = 10;
 	var $max = 0;
+	var $min = 0;
 	var $columnMargin = 0.2;
 	var $morphing = false;
 	var $startIndex = 0;
@@ -203,6 +207,7 @@ window.addEvent('domready', function ()
 		legendY: {$this->legendY},
 		ticks: {$this->ticks},
 		max: {$this->max},
+		min: {$this->min},
 		startIndex: {$this->startIndex},
 		columnMargin: {$this->columnMargin},
 		title: '{$this->title}',

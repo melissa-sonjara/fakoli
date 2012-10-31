@@ -52,9 +52,13 @@ class PieChart
 	var $legend = false;
 	var $legendX = 0;
 	var $legendY = 0;
+	var $legendSwatchSize = 20;
+	var $legendLineHeight = 30;
 	var $percentages = true;
 	var $percentagesSize = 16;
 	var $percentagesDistance = 0.75;
+	var $onSectorOver = "null";
+	var $onSectorOut = "null";
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -150,8 +154,15 @@ window.addEvent('domready', function ()
 		legend: {$legend},
 		legendX: {$this->legendX},
 		legendY: {$this->legendY},
-		percentages: {$this->percentages},
-		percentagesSize: {$this->percentagesSize}
+		legendSwatchSize: {$this->legendSwatchSize},
+		legendLineHeight: {$this->legendLineHeight},
+		percentages: {$percentages},
+		percentagesSize: {$this->percentagesSize},
+		onSectorOver: {$this->onSectorOver},
+		onSectorOut: {$this->onSectorOut},
+		onLegendOver: {$this->onLegendOver},
+		onLegendOut: {$this->onLegendOut},
+		
 	});
 	{$this->id}.values = [ $values ];
 	{$this->id}.labels = [ $labels ];

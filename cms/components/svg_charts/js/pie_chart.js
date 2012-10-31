@@ -1,7 +1,7 @@
 var PieChart = new Class(
 {
 	Extends: 	Chart,
-	Implements: [Options],
+	Implements: [Options, Events],
 	
 	values: 	[],
 	labels: 	[],
@@ -23,7 +23,9 @@ var PieChart = new Class(
 		percentages: true,
 		percentagesSize: 16,
 		percentagesDistance: 0.75,
-		animatePercentages: true
+		animatePercentages: true,
+		onSectorOver: Class.Empty,
+		onSectorOut: Class.Empty
 	},
 	
 	sectors: [],
@@ -63,7 +65,7 @@ var PieChart = new Class(
 			}
 			
 			var p = Class.Empty;
-			if (val != 0)
+			if (val != 0 && this.options.percentages)
 			{
 				p = this.percentage(center, val * 100 / total);
 			}
@@ -71,17 +73,21 @@ var PieChart = new Class(
 			
 			if (this.options.animate)
 			{
-				s.mouseover(function () 
+				s.mouseover(function (event) 
 				{
 	                s.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, "elastic");
 	                if (p && animatePercentages) p.stop().animate({opacity: 1}, 500, "elastic");
-	            });
+	                this.fireEvent('sectorOver', [event, idx]);
+	            }.bind(this));
+				
+				s.mousemove(function(event) { this.fireEvent('sectorOver', [event, idx]); }.bind(this));
 				
 				s.mouseout(function () 
 				{
 	                s.stop().animate({transform: ""}, 500, "elastic");
 	                if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, "elastic");
-	            });				
+	                this.fireEvent('sectorOut', [event, idx]);
+	            }.bind(this));				
 			}
 			
 			angle = end; 
@@ -114,7 +120,7 @@ var PieChart = new Class(
 
         var params = { fill: this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth};
 
-        if (Math.abs(x1 - x2) < 1 && Math.abs(y1 - y2) < 1)
+        if (Math.abs(x1 - x2) < 1 && Math.abs(y1 - y2) < 1 && Math.round(startAngle) != Math.round(endAngle))
         {
         	return this.paper.circle(cx, cy, r).attr(params);
         }
