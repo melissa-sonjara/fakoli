@@ -91,9 +91,9 @@ var HistogramSeries = new Class(
 	{
 		if (!this.options.toolTips) return false;
 		
-		if (idx > this.options.tooltips.length) return false;
+		if (idx > this.options.toolTips.length) return false;
 		
-		var text = this.options.tooltips[idx];
+		var text = this.options.toolTips[idx];
 		if (text == '') return false;
 		
 		return true;
@@ -101,12 +101,12 @@ var HistogramSeries = new Class(
 	
 	showToolTip: function(evt, idx)
 	{
-		if (idx > this.options.tooltips.length) return;
+		if (idx > this.options.toolTips.length) return;
 		
-		var text = this.options.tooltips[idx];
+		var text = this.options.toolTips[idx];
 		if (text == '') return;
 		
-		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", this.options.tooltips[idx]);		
+		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", this.options.toolTips[idx]);		
 	},
 	
 	hideToolTip: function()
