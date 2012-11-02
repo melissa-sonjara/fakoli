@@ -161,7 +161,7 @@ window.addEvent('domready', function ()
 		onSectorOver: {$this->onSectorOver},
 		onSectorOut: {$this->onSectorOut},
 		onLegendOver: {$this->onLegendOver},
-		onLegendOut: {$this->onLegendOut},
+		onLegendOut: {$this->onLegendOut}
 		
 	});
 	{$this->id}.values = [ $values ];
