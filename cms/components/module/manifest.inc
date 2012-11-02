@@ -50,7 +50,7 @@ class ModuleManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Modules"	=>	array("page"	=>	"/admin/modules",

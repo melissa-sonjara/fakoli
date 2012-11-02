@@ -65,7 +65,7 @@ class DocumentManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Documents"	=>	array("page"	=>	"/admin/document_libraries",

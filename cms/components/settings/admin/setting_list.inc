@@ -61,7 +61,7 @@ $table->pageSize = 10;
 $table->emptyMessage = "There are no application settings defined.";
 $script .= $table->writeScript();
 ?>
-<h4>This features allows you to define the system's application setting options. It is designed for use by systems administrators. CMS Users can modify <a href="/admin/settings">Application Settings</a> under CMS Web Site Configuration.</h4>
+<h4>This features allows you to define the system's application setting options. It is designed for use by systems administrators. CMS Users can modify <a href="/admin/settings">Application Settings</a> under CMS Site Configuration.</h4>
 <p>To create a new setting, perform the following steps:</p>
 <ul>
 <li>In your component's manifest, subscribe to the event "ComponentScanComplete", calling a function in your component's manager class called "setDefaults"</li>

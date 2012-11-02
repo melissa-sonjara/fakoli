@@ -50,7 +50,7 @@ class PageManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Pages"	=>	array("page"	=>	"/admin/pages",

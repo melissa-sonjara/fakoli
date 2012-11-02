@@ -52,7 +52,7 @@ class ImageManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Images"	=>	array("page"	=>	"/admin/image_galleries",

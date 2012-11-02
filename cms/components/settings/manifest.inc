@@ -50,7 +50,7 @@ class SettingsManifest
 	{
 		return array
 		(
-			"Web Site Configuration"	=> array
+			"Site Configuration"	=> array
 			(
 
 				"Application Settings"	=>	array("page"	=>	"/admin/settings",

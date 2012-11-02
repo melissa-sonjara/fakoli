@@ -283,8 +283,8 @@ class Fakoli
 		$menu = Cache::get("fakoli_admin_menu");
 		if ($menu) return $menu;
 		
-		$menu = array("Web Site Content"		=> array(),
-					  "Web Site Configuration"	=> array(),
+		$menu = array("Site Content"		=> array(),
+					  "Site Configuration"	=> array(),
 					  "Collaboration"			=> array(),	
 					  "Classification"			=> array(),
 					  "User Management"			=> array());		

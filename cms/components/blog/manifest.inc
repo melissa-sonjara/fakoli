@@ -48,7 +48,7 @@ class BlogManifest
 	
 	static function getAdminMenu()
 	{
-		return array("Web Site Content"	=> array
+		return array("Site Content"	=> array
 			(
 
 				"Blogs"	=>	array("page"	=>	"/admin/blogs",

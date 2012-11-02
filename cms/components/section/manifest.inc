@@ -50,7 +50,7 @@ class SectionManifest
 	{
 		return array
 		(
-			"Web Site Configuration"	=> array
+			"Site Configuration"	=> array
 			(
 
 				"Sections"	=>	array("page"	=>	"/admin/sections",

@@ -4,7 +4,7 @@ with all the screens you need to maintain the content and configuration
 of your Fakoli web application.</p>
 <p>On the left hand side you will see an accordian menu that groups
 the administration screens by category. Clicking on a category (such
-as <b>Web Site Content</b>) will display the options available within
+as <b>Site Content</b>) will display the options available within
 that category. Please note that since Fakoli is a component-based system
 both the options and the categories available can differ between sites
 depending on the installed components.</p>

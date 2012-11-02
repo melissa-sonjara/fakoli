@@ -50,7 +50,7 @@ class ArticleManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Articles"	=>	array("page"	=>	"/admin/articles",

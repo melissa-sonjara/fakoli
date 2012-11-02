@@ -55,7 +55,7 @@ class OnlineHelpManifest
 	{
 		return array
 		(
-			"Web Site Configuration"	=> array
+			"Site Configuration"	=> array
 			(
 
 				"Online Help"	=>	array("page"	=>	"/admin/help_books",

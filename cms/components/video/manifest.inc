@@ -52,7 +52,7 @@ class VideoManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Videos"	=>	array("page"	=>	"/admin/video_galleries",

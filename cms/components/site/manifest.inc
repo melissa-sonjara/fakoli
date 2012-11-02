@@ -50,7 +50,7 @@ class SiteManifest
 	{
 		return array
 		(
-			"Web Site Configuration"	=> array
+			"Site Configuration"	=> array
 			(
 
 				"Sites"	=>	array("page"	=>	"/admin/sites",

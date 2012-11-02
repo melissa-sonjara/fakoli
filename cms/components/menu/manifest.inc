@@ -50,7 +50,7 @@ class MenuManifest
 	{
 		return array
 		(
-			"Web Site Content"	=> array
+			"Site Content"	=> array
 			(
 
 				"Menus"	=>	array("page"	=>	"/admin/menus",

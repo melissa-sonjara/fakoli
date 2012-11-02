@@ -52,7 +52,7 @@ class ComponentManifest
 	{
 		return array
 		(
-			"Web Site Configuration"	=> array
+			"Site Configuration"	=> array
 			(
 
 				"Components"	=>	array("page"	=>	"/admin/components",
