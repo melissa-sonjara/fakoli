@@ -82,7 +82,7 @@ var PieChart = new Class(
 				
 				s.mousemove(function(event) { this.fireEvent('sectorOver', [event, idx]); }.bind(this));
 				
-				s.mouseout(function () 
+				s.mouseout(function (event) 
 				{
 	                s.stop().animate({transform: ""}, 500, "elastic");
 	                if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, "elastic");
