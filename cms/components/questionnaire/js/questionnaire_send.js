@@ -26,6 +26,8 @@ var QuestionnaireSendManager =  new Class
 	
 	send_page_identifier: null,		///< the page to preview/send survey requests
 	
+	recipients_dialog: null,		
+	
 	initialize: function(itemPk, component_name,
 			item_label,
 			send_test_email_dialog,
@@ -33,7 +35,8 @@ var QuestionnaireSendManager =  new Class
 			open_handler,
 			close_handler,
 			reminder_dialog,
-			send_page_identifier
+			send_page_identifier,
+			recipients_dialog,
 			)
 	{
 		this.itemPk = itemPk;
@@ -44,6 +47,7 @@ var QuestionnaireSendManager =  new Class
 		this.close_handler = close_handler;
 		this.reminder_dialog = reminder_dialog;
 		this.send_page_identifier = send_page_identifier;
+		this.recipients_dialog = recipients_dialog;
 	},
 	
 	openToRespondents: function(item_id)

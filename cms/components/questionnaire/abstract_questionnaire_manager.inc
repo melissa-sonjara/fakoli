@@ -488,6 +488,11 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 	{
 		return "send_test_email";
 	}
+	
+	function getRecipientsDialog()
+	{
+		return "recipients_dialog";
+	}
 
 	function getOpenHandler()
 	{
@@ -979,6 +984,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		$open_handler = $this->getOpenHandler();
 		$close_handler = $this->getCloseHandler();
 		$send_page_identifier = $this->getSendPageIdentifier();
+		$recipients_dialog = $this->getRecipientsDialog();
 	
 		ob_start();
 ?>
@@ -996,7 +1002,8 @@ window.addEvent('domready', function()
 		'<?php echo $send_test_email_handler ?>',
 		'<?php echo $open_handler ?>',
 		'<?php echo $close_handler ?>',
-		'<?php echo $send_page_identifier ?>');
+		'<?php echo $send_page_identifier ?>',
+		'<?php echo $recipients_dialog ?>');
 });
 
 </script>
