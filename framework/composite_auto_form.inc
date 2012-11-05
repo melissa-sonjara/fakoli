@@ -33,6 +33,8 @@ class CompositeAutoForm
 	var $containerClass;
 	var $buttonAlignment = "left";
 	var $preset = array();
+	var $readOnlyForm;  ///< Specifies whether the entire form is read-only
+	
 	
 	/**
 	 * Creates a new CompositeAutoForm
@@ -125,10 +127,17 @@ function onCompositeFormSubmit(form)
 	 */
 	function drawForm()
 	{
+		if ($this->readOnlyForm) return $this->drawReadOnly();
+		
 		echo "<form id='composite_auto_form' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		echo " onsubmit='return onCompositeFormSubmit(this);'";
 		echo ">\n";
 
+		if ($this->buttons_at_top) 
+		{
+			$this->drawButtons();
+		}
+		
 		foreach($this->forms as $form)
 		{
 			ob_start();

@@ -60,7 +60,7 @@ Fakoli::using("questionnaire");
  * @param: $mgr - an object of class QuestionnnaireManager, SurveyManager,
  * or other which provides specific data and values to this form as
  * requested.
- * @param: $readonly - defaults to false - whether questionnaire is
+ * @param: $readonlyForm - defaults to false - whether questionnaire is
  * being reviewed or answered. The form may be read only if the responses
  * are being validated or reviewed. The readonly setting is checked by Question Renderer
  * objects.
@@ -71,7 +71,6 @@ class QuestionnaireForm
 	var $mgr; // the object that links to the questions and answers: questionnaire, survey, quiz, etc.
 	var $questions;
 	var $answers;
-	var $readonly;
 	var $submitLabel = "Save";
 	var $validators = array();
 	var $requiredText = "<b>You must answer all required questions.</b><br/>";
@@ -94,12 +93,12 @@ class QuestionnaireForm
 	var $buttons = array();				///< The custom buttons collection
 	var $allowIncompleteSave = true;	///< Allows users to save partially completed forms
 	
-	function QuestionnaireForm($mgr, $readonly = false)
+	function QuestionnaireForm($mgr, $readOnlyForm = false)
 	{
 		global $auto_form_defaults;
 
 		$this->mgr = $mgr;
-		$this->readonly = $readonly;
+		$this->readOnlyForm = $readOnlyForm;
 
 		foreach($auto_form_defaults as $field => $value)
 		{
@@ -188,7 +187,7 @@ class QuestionnaireForm
 		$answer = $this->answers[$question->$qPk];
 		return ($answer) ? $answer->value : "";
 	}
-
+	
 	function writeScript()
 	{
 		$script = "";
@@ -502,7 +501,7 @@ class QuestionnairePreview extends QuestionnaireForm
 	function QuestionnairePreview($mgr)
 	{
 		$this->mgr = $mgr;
-		$this->readonly = true;
+		$this->readOnlyForm = true;
 
 		$questions = $this->mgr->getQuestions();
 

@@ -153,7 +153,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	 * Draw each form (row).
 	 */
 	function drawForm()
-	{
+	{		
 		echo "<form id='composite_auto_form' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		echo " onsubmit='return onCompositeFormSubmit(this);'";
 		echo ">\n";
@@ -164,7 +164,14 @@ class SpreadsheetForm extends CompositeAutoForm
 	
 		$filter = $obj->getFilter();
 		$fields = $obj->getFields();
-			
+
+		if ($this->buttons_at_top) 
+		{
+			echo "<p>";
+			$this->drawButtons();
+			echo "</p>";
+		}
+		
 		if ($form->markRequiredFields && $form->validator->hasRequiredFields())
 		{
 			$this->layout->requiredFields($form->requiredFieldsText);

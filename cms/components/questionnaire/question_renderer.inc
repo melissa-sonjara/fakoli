@@ -189,7 +189,7 @@ ENDSCRIPT;
 		// empty answer signals to validate from form and $_POST
 		$pk = $this->question->getPrimaryKey();
 
-		$answer = ($this->parent->readonly) ? $this->answer : "";
+		$answer = ($this->parent->readOnlyForm) ? $this->answer : "";
 		$question_number = ($this->question->question_number) ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", "", $answer);
 	}
@@ -257,7 +257,7 @@ class MultipleChoiceView extends QuestionField
 		
 		$valueAnswer = $this->parent->getAnswer($this->question);
 	
-		$readonly = $this->parent->readonly ? " DISABLED" : "";
+		$readonly = $this->parent->readOnlyForm ? " DISABLED" : "";
 
 		echo "<table class=\"layout\">";
 
@@ -308,7 +308,7 @@ class MultipleChoiceView extends QuestionField
 		$pk = $this->question->getPrimaryKey();
 		// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
-		$answer = ($this->parent->readonly) ? $this->answer : "";
+		$answer = ($this->parent->readOnlyForm) ? $this->answer : "";
 		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
@@ -349,7 +349,7 @@ class SelectFieldView extends QuestionField
 		$num = 1;
 		$value = $this->parent->getAnswer($this->question);
 
-		$readonly = $this->parent->readonly ? " DISABLED" : "";
+		$readonly = $this->parent->readOnlyForm ? " DISABLED" : "";
 
 		if(count($options) > 0)
 		{
@@ -357,8 +357,10 @@ class SelectFieldView extends QuestionField
 			$pk = $this->question->getPrimaryKey();
 			echo "<select name='question_{$this->question->$pk}'>\n";
 			if(!$readonly)
-			echo "<option value=''></option>"; // blank
-				
+			{
+				echo "<option value=''></option>"; // blank
+			}
+			
 			foreach($options as $option)
 			{
 				$selected = ($value == $num) ? " selected" : "";
@@ -411,7 +413,7 @@ class RatingView extends QuestionField
 		if (!$steps) $steps = 5;
 
 
-		$readonly = $this->parent->readonly ? " disabled='disabled'" : "";
+		$readonly = $this->parent->readOnlyForm ? " disabled='disabled'" : "";
 		$valueAnswer = $this->parent->getAnswer($this->question);
 
 		$qPk = $this->question->getPrimaryKey();
@@ -467,7 +469,7 @@ class RatingView extends QuestionField
 		// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
 		$pk = $this->question->getPrimaryKey();
-		$answer = ($this->parent->readonly) ? $this->answer : "";
+		$answer = ($this->parent->readOnlyForm) ? $this->answer : "";
 		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredRadioButtonQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $answer);
 	}
@@ -496,7 +498,7 @@ class ShortTextView extends QuestionField
 	function writeHTML()
 	{
 		$value = $this->parent->getAnswer($this->question);
-		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
+		$readonly = $this->parent->readOnlyForm ? " readonly='readonly'": "";
 		$autocomplete = "autocomplete='off'";
 
 		$pk = $this->question->getPrimaryKey();
@@ -586,7 +588,7 @@ class FreeTextView extends QuestionField
 
 		$value = $this->parent->getAnswer($this->question);
 
-		$readonly = $this->parent->readonly ? " readonly='readonly'": "";
+		$readonly = $this->parent->readOnlyForm ? " readonly='readonly'": "";
 		$autocomplete = "autocomplete='off'";
 		
 		$tip =  $this->question->context_help;
@@ -676,7 +678,7 @@ class CheckListView extends QuestionField
 
 		$values = $this->getValues();
 
-		$readonly = $this->parent->readonly ? " DISABLED" : "";
+		$readonly = $this->parent->readOnlyForm ? " DISABLED" : "";
 
 		// to do - put the font style into css
 		echo "<table class=\"layout\ style=\"color: #003366; font-style: normal; font-size:9; font-family: Arial,Geneva,sans-serif;\">";
@@ -742,7 +744,7 @@ class CheckListView extends QuestionField
 		// Empty question object signals to validator to validate from form and $_POST.
 		// Not empty means this is a view so we have the answer object that was saved.
 		$pk = $this->question->getPrimaryKey();
-		$answer = ($this->parent->readonly) ? $this->answer : "";
+		$answer = ($this->parent->readOnlyForm) ? $this->answer : "";
 		$question_number = $this->question->question_number ? $this->question->question_number : $this->parent->mgr->getQuestionNumber($this->question);
 		return new RequiredCheckListQuestionValidator("question_{$this->question->$pk}", "Question {$question_number}", $this->question->required, $answer);
 	}
