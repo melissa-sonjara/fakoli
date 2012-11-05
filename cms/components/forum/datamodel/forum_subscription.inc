@@ -38,7 +38,7 @@ class ForumSubscription extends DataItem
 	function User()
 	{
 		$mgr = new UserManager();
-		return $this->getRelated($mgr->getUserClass());
+		return $this->getRelated($mgr->getUserClass(), "user_id");
 	}
 	
 	function ForumSubscription()
