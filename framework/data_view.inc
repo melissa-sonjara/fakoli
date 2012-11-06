@@ -773,7 +773,9 @@ class DataListView
 		}
 				
 		$x->send();
-		ajaxReturn();
+		
+		session_write_close();
+		exit();
 	}
 }
 ?>
