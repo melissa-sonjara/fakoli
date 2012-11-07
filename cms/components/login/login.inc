@@ -105,6 +105,7 @@ class LoginManager
 
 	function validateLogin()
 	{
+		trace("LoginManager validatLogin", 3);
 		global $user;
 		
 		$mgr = new UserManager();
@@ -112,6 +113,7 @@ class LoginManager
 		$username = $_POST[$mgr->getUsernameField()];
 		$password = $_POST["password"];
 		
+		trace("LoginManager validatLogin username $username", 3);
 		// JDG - guard against data not found exception
 		if(!$username OR !$password)
 			return LoginManager::$error = "Incorrect user name or password.";			
