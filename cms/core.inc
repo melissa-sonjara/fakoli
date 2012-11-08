@@ -283,8 +283,8 @@ class Fakoli
 		$menu = Cache::get("fakoli_admin_menu");
 		if ($menu) return $menu;
 		
-		$menu = array("Site Content"		=> array(),
-					  "Site Configuration"	=> array(),
+		$menu = array("Web Site Content"		=> array(),
+					  "Web Site Configuration"	=> array(),
 					  "Collaboration"			=> array(),	
 					  "Classification"			=> array(),
 					  "User Management"			=> array());		
@@ -800,8 +800,10 @@ ComponentManager::fireEvent("RegisterSessionPersistance");
 
 session_start();
 
+
 if (isset($_SESSION["user"]))
 {
+	trace("in core.inc session is set", 3);
 	if ($_POST["Logout"])
 	{
 		session_destroy();
@@ -814,10 +816,14 @@ if (isset($_SESSION["user"]))
 }
 else
 {
+	trace("in core.inc session is not set", 3);
+
 
 	if ($method == "POST" && $_POST["Login"])
 	{	
+		trace("in core.inc about to call login manager", 3);
 		$mgr = new LoginManager();
+		trace("in core.inc instantiated manager", 3);
 		$mgr->validateLogin();
 		
 	}
