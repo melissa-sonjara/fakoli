@@ -56,12 +56,6 @@ $filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR .
 $mimeType = DocumentHandler::getDocMimeType($video->video_file);
 	
 trace("Download: opening video with filepath {$filepath} and mimeType {$mimeType}", 3);
-
-while(ob_get_level() > Fakoli::$outputBufferLevel); // Clear all output buffers.
-{
-	ob_end_clean();
-}
-		
 			
 $f = fopen($filepath, "r");
 $size = filesize($filepath);
@@ -78,4 +72,6 @@ fpassthru($f);
 fclose($f);
 
 session_write_close();
+
+exit();
 ?>
