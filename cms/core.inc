@@ -477,10 +477,7 @@ class Fakoli
 	        }
 	    }
 
-		header("Content-Type: $mimeType");
-	    
-
-		
+		header("Content-Type: $mimeType");	
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
 		header("Pragma: private");
