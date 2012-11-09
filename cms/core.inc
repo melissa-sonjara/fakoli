@@ -506,15 +506,9 @@ class Fakoli
 	
 	static function detectXSendFileSupport()
 	{
-		$support = Cache::get("x-sendfile_support");
-		
-		if ($support === null)
+		if (function_exists("apache_get_modules"))
 		{
-			if (function_exists("apache_get_modules"))
-			{
-				$support = in_array('mod_xsendfile', apache_get_modules());
-				Cache::put("x-sendfile_support", $support);
-			}				
+			$support = in_array('mod_xsendfile', apache_get_modules());
 		}
 		
 		return $support;
