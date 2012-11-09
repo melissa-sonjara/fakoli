@@ -65,6 +65,7 @@ class Fakoli
 	static $componentsUsed = array();	///< Array of the components that have been referenced in this page request
 	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
 	static $outputBufferLevel = 0;		///< Records the level at which gzip output buffering began
+	
 	/**
 	 * Import the datamodels, views and manifest for the specified component(s).
 	 * More than one component can be specified in the call.
@@ -476,9 +477,16 @@ class Fakoli
 	        }
 	    }
 
+		header("Content-Type: $mimeType");
+	    
+		if (Fakoli::detectXSendFileSupport())
+		{
+			header("X-SendFile: $resource");
+			return;	
+		}
+		
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
-		header("Content-Type: $mimeType");
 		header("Pragma: private");
 		header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 	    
@@ -492,6 +500,22 @@ class Fakoli
 			fpassthru($f);
 			fclose($f);
 		}
+	}
+	
+	static function detectXSendFileSupport()
+	{
+		$support = Cache::get("x-sendfile_support");
+		
+		if ($support === null)
+		{
+			if (function_exists("apache_get_modules"))
+			{
+				$support = in_array('mod_xsendfile', apache_get_modules());
+				Cache::put("x_sendfile_support", $support);
+			}				
+		}
+		
+		return $support;
 	}
 	
 	/**

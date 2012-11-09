@@ -173,38 +173,39 @@ class ImageManager
 			imagedestroy($src);
 		}
 
-		$last_modified = filemtime($cacheFile);
-		
-		$mimeType = DocumentHandler::getMIMEType($cacheFile);
-
-		header("Last-Modified: ".date('r', $last_modified));
-		header("Cache-Control: max-age=300, must-revalidate");
-		header("Content-Type: $mimeType");
-		
-	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
-	    {
-			trace("renderThumbnail:: array_key_exists(HTTP_IF_MODIFIED_SINCE,_SERVER", 3);
-	    	
-	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
-	        
-	        if($if_modified_since >= $last_modified)
-	        {
-				trace("renderThumbnail:: if_modified_since >= last_modified", 3);
-	            header("HTTP/1.0 304 Not Modified");
-	            exit();
-	        }
-	    }
-
-	    $f = fopen($cacheFile, "r");
-
-	    $size = filesize($cacheFile);
-		header("Content-Length: $size");
-		header("Pragma: cache");
-		header("Expires:");
-		
-		fpassthru($f);
-		fclose($f);
-		trace("renderThumbnail:: exiting", 3);
+		Fakoli::sendFile($cacheFile);
+//		$last_modified = filemtime($cacheFile);
+//		
+//		$mimeType = DocumentHandler::getMIMEType($cacheFile);
+//
+//		header("Last-Modified: ".date('r', $last_modified));
+//		header("Cache-Control: max-age=300, must-revalidate");
+//		header("Content-Type: $mimeType");
+//		
+//	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
+//	    {
+//			trace("renderThumbnail:: array_key_exists(HTTP_IF_MODIFIED_SINCE,_SERVER", 3);
+//	    	
+//	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
+//	        
+//	        if($if_modified_since >= $last_modified)
+//	        {
+//				trace("renderThumbnail:: if_modified_since >= last_modified", 3);
+//	            header("HTTP/1.0 304 Not Modified");
+//	            exit();
+//	        }
+//	    }
+//
+//	    $f = fopen($cacheFile, "r");
+//
+//	    $size = filesize($cacheFile);
+//		header("Content-Length: $size");
+//		header("Pragma: cache");
+//		header("Expires:");
+//		
+//		fpassthru($f);
+//		fclose($f);
+//		trace("renderThumbnail:: exiting", 3);
 	}
 	
 	/**
@@ -225,35 +226,37 @@ class ImageManager
 
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		
-		$last_modified = filemtime($imageFile);
+		Fakoli::sendFile($imageFile);
 		
-		$mimeType = DocumentHandler::getMIMEType($imageFile);
-
-		header("Last-Modified: ".date('r', $last_modified));
-		header("Cache-Control: max-age=300, must-revalidate");
-		header("Content-Type: $mimeType");
-		
-	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
-	    {
-	    	
-	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
-	        
-	        if($if_modified_since >= $last_modified)
-	        {
-	            header("HTTP/1.0 304 Not Modified");
-	            exit();
-	        }
-	    }
-
-	    $f = fopen($imageFile, "r");
-
-	    $size = filesize($imageFile);
-		header("Content-Length: $size");
-		header("Pragma: cache");
-		header("Expires:");
-		
-		fpassthru($f);
-		fclose($f);
+//		$last_modified = filemtime($imageFile);
+//		
+//		$mimeType = DocumentHandler::getMIMEType($imageFile);
+//
+//		header("Last-Modified: ".date('r', $last_modified));
+//		header("Cache-Control: max-age=300, must-revalidate");
+//		header("Content-Type: $mimeType");
+//		
+//	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
+//	    {
+//	    	
+//	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
+//	        
+//	        if($if_modified_since >= $last_modified)
+//	        {
+//	            header("HTTP/1.0 304 Not Modified");
+//	            exit();
+//	        }
+//	    }
+//
+//	    $f = fopen($imageFile, "r");
+//
+//	    $size = filesize($imageFile);
+//		header("Content-Length: $size");
+//		header("Pragma: cache");
+//		header("Expires:");
+//		
+//		fpassthru($f);
+//		fclose($f);
 		
 	}
 		
