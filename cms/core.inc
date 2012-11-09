@@ -479,13 +479,7 @@ class Fakoli
 
 		header("Content-Type: $mimeType");
 	    
-		if (Fakoli::detectXSendFileSupport())
-		{
-			trace("Using X-SendFile", 3);
-			
-			header("X-SendFile: $resource");
-			return;	
-		}
+
 		
 		header("Last-Modified: ".date('r', $last_modified));
 		header("Cache-Control: max-age=300, must-revalidate");
@@ -494,13 +488,23 @@ class Fakoli
 	    
 		if (!$noChange)
 		{
-		    $f = fopen($resource, "r");
-	
-		    $size = filesize($resource);
-			header("Content-Length: $size");
-					
-			fpassthru($f);
-			fclose($f);
+			if (Fakoli::detectXSendFileSupport())
+			{
+				trace("Using X-SendFile", 3);
+			
+				header("X-SendFile: $resource");
+				return;	
+			}
+			else
+			{
+				$f = fopen($resource, "r");
+		
+			    $size = filesize($resource);
+				header("Content-Length: $size");
+						
+				fpassthru($f);
+				fclose($f);
+			}
 		}
 	}
 	
