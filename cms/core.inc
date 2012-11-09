@@ -513,7 +513,7 @@ class Fakoli
 			if (function_exists("apache_get_modules"))
 			{
 				$support = in_array('mod_xsendfile', apache_get_modules());
-				Cache::put("x_sendfile_support", $support);
+				Cache::put("x-sendfile_support", $support);
 			}				
 		}
 		
