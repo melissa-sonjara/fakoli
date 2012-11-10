@@ -246,6 +246,7 @@ class DocumentHandler
         	'mp3' => 'audio/mpeg',
        		'qt' => 'video/quicktime',
        		'mov' => 'video/quicktime',
+			'mp4' => 'video/mp4',
 
        		// adobe
        		'pdf' => 'application/pdf',
