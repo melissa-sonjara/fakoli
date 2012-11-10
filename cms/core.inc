@@ -459,6 +459,8 @@ class Fakoli
 	 */
 	static function sendFile($resource)
 	{
+		trace("Sending Resource: $resource", 4);
+		
 	    $last_modified = filemtime($resource);
 
 		
