@@ -47,7 +47,7 @@ var AttachmentUploader = (function()
 	
 		setup: function(form, list, control, cssClass, deleteIcon)
 		{
-			form = $(form);
+			form = document.id(form);
 			
 			form.iFrameFormRequest(
 			{
@@ -56,12 +56,12 @@ var AttachmentUploader = (function()
 			});
 			
 			this.form = form;
-			this.list = $(list);
-			this.control = $(control);
+			this.list = document.id(list);
+			this.control = document.id(control);
 			this.cssClass = cssClass;
 			this.deleteIcon = deleteIcon;
 			
-			this.uploadDialog = new ModalDialog($("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
+			this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
 		},
 		
 		addAttachment: function()
@@ -72,7 +72,7 @@ var AttachmentUploader = (function()
 		
 		postStart: function()
 		{
-			$('attachmentDialogMessage').innerHTML = "Uploading file...";
+			document.id('attachmentDialogMessage').innerHTML = "Uploading file...";
 		},
 		
 		postComplete: function(response)
@@ -99,7 +99,7 @@ var AttachmentUploader = (function()
 			}
 			else
 			{
-				$('attachmentDialogMessage').innerHTML = response;
+				document.id('attachmentDialogMessage').innerHTML = response;
 			}
 		},
 		
@@ -115,7 +115,7 @@ var AttachmentUploader = (function()
 				{ 
 					if (responseText == "OK") 
 					{
-						$('attachment_' + id).dispose();
+						document.id('attachment_' + id).dispose();
 						
 						if (this.control.value)
 						{
