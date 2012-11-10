@@ -512,6 +512,8 @@ class Fakoli
 			$support = in_array('mod_xsendfile', apache_get_modules());
 		}
 		
+		trace("X-SendFile Support? $support", 2);
+		
 		return $support;
 	}
 	
