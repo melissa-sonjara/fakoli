@@ -123,7 +123,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$ids = displayFieldAsList($attachments, "attachment_id");
 ?>
 	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
-	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
+	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>" style='display: table-cell'>
 	<?
 
  		foreach($attachments as $attachment)
