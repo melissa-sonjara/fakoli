@@ -485,6 +485,8 @@ class Fakoli
 		header("Pragma: private");
 		header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 	    
+		trace("noChange: $noChange", 2);
+		
 		if (!$noChange)
 		{
 			if (Fakoli::detectXSendFileSupport())
