@@ -53,25 +53,8 @@ trace("Download: video filename to download {$video->video_file}", 3);
 
 $filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $video->video_file);
 
-$mimeType = DocumentHandler::getDocMimeType($video->video_file);
-	
-trace("Download: opening video with filepath {$filepath} and mimeType {$mimeType}", 3);
-			
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
-trace("Download: opened video {$video_id}", 3);
-
-header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($video->video_file) . "\"");
-header("Cache-Control: must-revalidate");
-header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
+Fakoli::sendFile($filepath);
 
 session_write_close();
-
 exit();
 ?>
