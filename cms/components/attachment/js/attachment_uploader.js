@@ -141,5 +141,5 @@ var AttachmentUploader = (function()
 	return function()
 	{
 		return instance ? instance : instance = new AttachmentUploaderSingleton();
-	}
+	};
 })();
