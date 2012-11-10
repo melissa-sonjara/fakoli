@@ -487,8 +487,8 @@ class Fakoli
 		{
 			if (Fakoli::detectXSendFileSupport())
 			{
-				trace("Using X-SendFile", 3);
-			
+				trace("X-SendFile: $resource", 2);
+				
 				header("X-SendFile: $resource");
 				return;	
 			}
