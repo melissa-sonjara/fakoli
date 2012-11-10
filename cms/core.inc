@@ -484,14 +484,12 @@ class Fakoli
 		header("Cache-Control: max-age=300, must-revalidate");
 		header("Pragma: private");
 		header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
-	    
-		trace("noChange: $noChange", 2);
 		
 		if (!$noChange)
 		{
 			if (Fakoli::detectXSendFileSupport())
 			{
-				trace("X-SendFile: $resource", 2);
+				trace("X-SendFile: $resource", 4);
 				
 				header("X-SendFile: $resource");
 				return;	
@@ -516,7 +514,7 @@ class Fakoli
 			$support = in_array('mod_xsendfile', apache_get_modules());
 		}
 		
-		trace("X-SendFile Support = $support", 2);
+		trace("X-SendFile Support = $support", 4);
 		
 		return $support;
 	}
