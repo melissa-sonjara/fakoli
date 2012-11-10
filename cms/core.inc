@@ -459,10 +459,7 @@ class Fakoli
 	 */
 	static function sendFile($resource)
 	{
-		trace("Sending Resource: $resource", 4);
-		
 	    $last_modified = filemtime($resource);
-
 		
 		$mimeType = DocumentHandler::getMIMEType($resource);
 		
@@ -489,8 +486,6 @@ class Fakoli
 		{
 			if (Fakoli::detectXSendFileSupport())
 			{
-				trace("X-SendFile: $resource", 4);
-				
 				header("X-SendFile: $resource");
 				return;	
 			}
@@ -513,8 +508,6 @@ class Fakoli
 		{
 			$support = in_array('mod_xsendfile', apache_get_modules());
 		}
-		
-		trace("X-SendFile Support = $support", 4);
 		
 		return $support;
 	}
