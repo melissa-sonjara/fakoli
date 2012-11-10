@@ -51,7 +51,7 @@ $videoDownload->save();
 
 trace("Download: video filename to download {$video->video_file}", 3);
 
-$filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $video->video_file);
+$filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . url_encode($video->video_file));
 
 Fakoli::sendFile($filepath);
 
