@@ -115,4 +115,48 @@ class DateUtils
 			return formatDateShort($start) . " $s_time &ndash; $e_time";
 		}	
 	}
+	
+/**
+	 * DateTime will fail to increment month correctly when current date
+	 * is last day of 31 day month. Use addMonths instead.
+	 * 
+	 * @param DateTime object $date
+	 * @param Number $months (can be positive or negative)
+	 */
+  	static function addMonths(&$date, $months)
+  	{
+        $init = clone $date;
+        $modifier = $months.' months';
+        $back_modifier = -$months.' months';
+       
+        $date->modify($modifier);
+        $back_to_init = clone $date;
+        $back_to_init->modify($back_modifier);
+       
+        while($init->format('m') != $back_to_init->format('m'))
+        {
+        	$date->modify('-1 day');
+        	$back_to_init = clone $date;
+        	$back_to_init->modify($back_modifier);   
+		}
+  	}
+  	
+    /**
+	 * DateTime will fail to increment year correctly in some
+	 * instances.
+	 * 
+	 * @param DateTime object $date
+	 * @param Number $years (can be positive or negative)
+	 */
+    static function addYears(&$date, $years)
+    {   
+        $init = clone $date;
+        $modifier = $years.' years';
+        $date->modify($modifier);
+       
+        while($date->format('m')!=$init->format('m'))
+        {
+        	$date->modify('-1 day');
+        }
+    }	
 }

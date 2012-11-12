@@ -973,7 +973,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			
 		if ($renderer)
 		{
-			if ($this->readonly[$field])
+			if ($this->readonly[$field] || $this->readOnlyForm)
 			{
 				$renderer->renderReadOnly($field);
 			}
@@ -1003,7 +1003,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			if(array_key_exists($field, $this->renderedFields))
 				continue;
 					
-			if ($this->readonly[$field])
+			if ($this->readonly[$field] || $this->readOnlyForm)
 			{
 				$renderer->renderReadOnly($field);
 			}
@@ -1044,38 +1044,13 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 	 */
 	function drawReadOnly()
 	{
-		echo "<table";
-		if ($this->formCSS) echo " class='{$this->formCSS}'";
-		if ($this->style) echo " style='{$this->style}'";
-		echo ">\n";
-
-		$obj =& $this->data;
-		$pk = $obj->getPrimaryKey();
-		$filter = $obj->getFilter();
+		$this->layout->startUngrouped();
 		
-		$fields = $obj->getFields();
-		foreach(array_keys($fields) as $field)
-		{
-			$val = $obj->get($field);
-			if ($field != $pk && $obj->get($field) != "" && !array_key_exists($field, $this->hidden) &&
-			!($filter && $filter->isExcluded($field)))
-			{
-				$renderer = $this->getRenderer($field);
-				if ($renderer)
-				{
-					$renderer->renderReadOnly($field);
-				}
-			}
-		}
-			
-		foreach($this->additional as $r)
-		{
-			$renderer = $r['renderer'];
-			$field = $r['field'];
-			$renderer->renderReadOnly($field);
-		}
-
-		echo "</table>";
+		$obj =& $this->data;
+		
+		$this->renderAllFields($obj);
+		
+		$this->layout->endUngrouped();	
 	}
 
 	/**
