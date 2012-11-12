@@ -2005,6 +2005,24 @@ abstract class AbstractQuestionnaireResultsManager extends AbstractQuestionnaire
 	abstract function getRespondentColumnHeading();
 	
 	/**
+	 * Returns the format string or callback for the respondent column.
+	 * @return string
+	 */
+	function getRespondentColumnFormat()
+	{
+		return "{name}";
+	}
+	
+	/**
+	 * Override this method to provide additional columns to display after the respondent token,
+	 * but before the response data.
+	 */
+	function addRespondentAdditionalColumns($table)
+	{
+		return $table;
+	}
+	
+	/**
 	 * Return the number of recipients. This is not valid
 	 * for all questionnaires/surveys. When no valid, return 0.
 	 */

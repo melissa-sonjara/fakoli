@@ -104,8 +104,10 @@ class QuestionnaireSpreadsheetView
 	function buildTable($spreadsheetResponses, $questions)
 	{
 		$table = new DataListView($spreadsheetResponses, "questionnaireSpreadsheet");
-		$table->column($this->mgr->getRespondentColumnHeading(), "{name}", true, "width: 40px");
+		$table->column($this->mgr->getRespondentColumnHeading(), $this->mgr->getRespondentColumnFormat(), true, "width: 40px");
 
+		$this->mgr->addRespondentAdditionalColumns($table);
+		
 		if(count($questions) > 0)
 		{
 			$idx = 1;
