@@ -24,6 +24,6 @@ CREATE TABLE `module` (
   `global` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `global_position` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`module_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 -- END Version 1.0

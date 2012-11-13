@@ -17,6 +17,6 @@ CREATE TABLE `site_map` (
   `parent_identifier` varchar(100) DEFAULT NULL,
   `published` tinyint(3) unsigned DEFAULT '0' COMMENT 'whether to display this page in a site map view',
   PRIMARY KEY (`site_map_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='defines the site hierarchy';
+) ENGINE=InnoDB COMMENT='defines the site hierarchy';
 
 -- END Version 1.0

@@ -13,7 +13,7 @@ CREATE TABLE `fileshare_user_xref` (
   `document_library_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`fileshare_user_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Shares document library acces with users';
+) ENGINE=InnoDB COMMENT='Shares document library acces with users';
 
 
 -- END Version 1.0

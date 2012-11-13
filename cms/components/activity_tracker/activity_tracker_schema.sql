@@ -10,7 +10,7 @@ CREATE TABLE  `user_activity` (
   `referer` varchar(2000) DEFAULT NULL,
   `activity_time` datetime NOT NULL,
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 ALTER TABLE `user_activity` ADD INDEX `activity_by_session`(`session_id`, `activity_time`);
 
@@ -22,7 +22,7 @@ CREATE TABLE `feedback` (
   `feedback` text NOT NULL,
   `created_date` datetime NOT NULL,
   PRIMARY KEY (`feedback_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE OR REPLACE VIEW `activity_sessions` AS 
 select `a`.`session_id` AS `session_id`, count(1) AS `page_views`,

@@ -24,7 +24,7 @@ CREATE TABLE `page` (
   `php_code_file` varchar(100) NOT NULL DEFAULT '',
   `site_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`page_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 /*!40000 ALTER TABLE `page` DISABLE KEYS */;
 INSERT INTO `page` (`page_id`,`page_title`,`description`,`author`,`created_date`,`edited_date`,`meta_tag_description`,`meta_tag_keyword`,`role`,`published`,`template`,`identifier`,`php_code_file`,`site_id`) VALUES 
@@ -38,6 +38,6 @@ CREATE TABLE `page_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

@@ -14,13 +14,13 @@ CREATE TABLE `grp` (
   `Description` text NOT NULL,
   `active` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `topic` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `topic` varchar(100) NOT NULL,
   PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `document_topic_xref` (
   `document_topic_xref_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -28,13 +28,13 @@ CREATE TABLE `document_topic_xref` (
   `topic_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`document_topic_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `grp_topic_xref` (
   `group_topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` int(10) unsigned NOT NULL,
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`group_topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

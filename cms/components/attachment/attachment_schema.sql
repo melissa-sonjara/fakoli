@@ -16,6 +16,6 @@ CREATE TABLE `attachment` (
   `last_modified` datetime DEFAULT NULL,
   `file_size` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`attachment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

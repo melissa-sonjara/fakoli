@@ -21,7 +21,7 @@ CREATE TABLE `survey` (
   `status` varchar(15) NOT NULL DEFAULT 'not sent',
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links a questionnaire to an email template';
+) ENGINE=InnoDB COMMENT='Links a questionnaire to an email template';
 
 CREATE TABLE `survey_answer` (
   `survey_answer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -29,7 +29,7 @@ CREATE TABLE `survey_answer` (
   `survey_question_id` int(10) unsigned NOT NULL COMMENT 'references single question in a questionnaire table',
   `value` text,
   PRIMARY KEY (`survey_answer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 CREATE TABLE `survey_question` (
   `survey_question_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -42,7 +42,7 @@ CREATE TABLE `survey_question` (
   `num_rows` tinyint(3) unsigned DEFAULT '0' COMMENT 'number of input rows to display on freetext',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'whether this is a standard, multi-reuse question',
   PRIMARY KEY (`survey_question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+) ENGINE=InnoDB COMMENT='questions for questionnaires: surveys, applications, etc';
 
 
 CREATE TABLE `survey_question_xref` (
@@ -54,7 +54,7 @@ CREATE TABLE `survey_question_xref` (
   PRIMARY KEY (`survey_question_xref_id`),
   KEY `survey_idx` (`survey_id`),
   KEY `survey_question_idx` (`survey_question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='survey question set or standard set';
+) ENGINE=InnoDB COMMENT='survey question set or standard set';
 
 CREATE TABLE `survey_response` (
   `response_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -65,7 +65,7 @@ CREATE TABLE `survey_response` (
   `status` varchar(20) NOT NULL DEFAULT 'not_started',
   PRIMARY KEY (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 INSERT INTO `merge_code` (`name`,`description`,`map`,`class_name`) VALUES

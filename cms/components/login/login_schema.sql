@@ -15,6 +15,6 @@ CREATE TABLE `login_token` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`token_id`),
   UNIQUE KEY `token_idx` (`token`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

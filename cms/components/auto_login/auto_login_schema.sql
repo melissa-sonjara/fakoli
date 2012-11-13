@@ -15,7 +15,7 @@ CREATE TABLE `authentication_token` (
   `enabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `ip_address` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`authentication_token_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0
 

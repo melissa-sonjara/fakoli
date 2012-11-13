@@ -15,6 +15,6 @@ CREATE TABLE `php_session` (
   `id` varchar(200) NOT NULL,
   PRIMARY KEY (`session_id`),
   KEY `session_idx` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

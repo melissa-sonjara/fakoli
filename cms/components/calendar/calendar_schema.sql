@@ -18,7 +18,7 @@ CREATE TABLE `calendar` (
   `write_access` varchar(100) DEFAULT NULL,
   `identifier` varchar(100) NOT NULL,
   PRIMARY KEY (`calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `event` (
   `event_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -50,14 +50,14 @@ CREATE TABLE  `event_type` (
   `event_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`event_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `calendar_event_type_xref` (
   `calendar_event_type_xref_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `calendar_id` int(10) unsigned NOT NULL DEFAULT '0',
   `event_type_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`calendar_event_type_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.1
 

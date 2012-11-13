@@ -23,7 +23,7 @@ CREATE TABLE `site_role` (
   `name` varchar(45) NOT NULL,
   `description` text,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 /*!40000 ALTER TABLE `site_role` DISABLE KEYS */;
 INSERT INTO `site_role` (`role_id`,`role`,`name`,`description`) VALUES 
@@ -44,7 +44,7 @@ CREATE TABLE `site_user` (
    `language` varchar(60) DEFAULT NULL,
   `composite_class` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 /*!40000 ALTER TABLE `site_user` DISABLE KEYS */;
@@ -64,7 +64,7 @@ CREATE TABLE `component` (
   `component_path` varchar(300) NOT NULL,
   PRIMARY KEY (`component_id`),
   KEY `components_by_name` (`name`,`enabled`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `admin_page` (
   `admin_page_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -73,7 +73,7 @@ CREATE TABLE `admin_page` (
   `component_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`admin_page_id`),
   KEY `admin_page_identifier_idx` (`identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `component_page` (
   `component_page_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -88,7 +88,7 @@ CREATE TABLE `component_page` (
   `site_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`component_page_id`),
   KEY `component_page_idx` (`identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE  `settings` (
@@ -102,7 +102,7 @@ CREATE TABLE  `settings` (
   `field_type` varchar(40) default NULL COMMENT 'Number, String, Boolean, Text, etc.',
   PRIMARY KEY  (`settings_id`),
   KEY `settings_by_name_idx` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE  `component_update_log` (
   `component_update_log_id` int(10) unsigned NOT NULL auto_increment,
@@ -111,7 +111,7 @@ CREATE TABLE  `component_update_log` (
   `date_updated` datetime NOT NULL,
   `description` text,
   PRIMARY KEY  USING BTREE (`component_update_log_id`,`version_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 -- END Version 0 (bootstrap)
@@ -128,7 +128,7 @@ CREATE TABLE `component_page_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 -- END Version 1.0
@@ -143,7 +143,7 @@ CREATE TABLE  `component_update_log_attachment_xref` (
   `component_update_log_id` int(10) unsigned NOT NULL,
   `attachment_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`log_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.1
 

@@ -20,7 +20,7 @@ CREATE TABLE `image_gallery` (
   `write_access` varchar(500) DEFAULT NULL,
   `published` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`gallery_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `image` (
   `image_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -38,6 +38,6 @@ CREATE TABLE `image` (
   `owner_id` int(10) unsigned NOT NULL DEFAULT '0',
   `sort_order` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`image_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

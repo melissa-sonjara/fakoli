@@ -23,7 +23,7 @@ CREATE TABLE `blog` (
   `image_id` int(10) unsigned NOT NULL DEFAULT '0',
   `blog_type` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`blog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0
 

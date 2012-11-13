@@ -17,6 +17,6 @@ CREATE TABLE `context_help` (
   `title` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`help_id`),
   KEY `help_by_class_idx` (`class_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0

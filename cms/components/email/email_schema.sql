@@ -14,14 +14,14 @@ CREATE TABLE `contact_topic` (
   `recipients` text COMMENT 'one or more admin users to receive email',
   `sort_order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`contact_topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Topics for Contact Us form';
+) ENGINE=InnoDB COMMENT='Topics for Contact Us form';
 
 CREATE TABLE `contact_topic_site_xref` (
   `contact_topic_site_xref_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `contact_topic_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`contact_topic_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `email_template` (
   `email_template_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -32,7 +32,7 @@ CREATE TABLE `email_template` (
   `message` text NOT NULL COMMENT 'text of the message',
   `class_name` varchar(100) NOT NULL,
   PRIMARY KEY (`email_template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email messages';
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC COMMENT='email messages';
 
 
 INSERT INTO `email_template` (`name`,`sender_email`,`recipients`,`subject`,`message`,`class_name`) VALUES 
@@ -47,7 +47,7 @@ CREATE TABLE  `merge_code` (
   `map` varchar(80) DEFAULT NULL COMMENT 'how the code maps through relations to the value',
   `class_name` varchar(50) NOT NULL COMMENT 'class name that can map this code',
   PRIMARY KEY (`merge_code_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
 
 INSERT INTO `merge_code` (`name`,`function`,`map`,`description`,`class_name`) VALUES
 ('relation_field',0,'EmailManagerTestRelation.string','','EmailManagerTest'),
@@ -69,7 +69,7 @@ CREATE TABLE `email_manager_test` (
   `date` date default NULL,
   `email` varchar(50) default NULL,
   PRIMARY KEY  USING BTREE (`test_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=2 ROW_FORMAT=DYNAMIC;
 
 INSERT INTO `email_manager_test` (`test_id`,`string`,`relation_id`,`date`,`email`) VALUES 
  (1,'test_string',1,'2011-03-12','janice@sonjara.com');
@@ -79,7 +79,7 @@ CREATE TABLE `email_manager_test_relation` (
   `relation_id` int(10) unsigned NOT NULL auto_increment,
   `string` varchar(20) default NULL,
   PRIMARY KEY  USING BTREE (`relation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=2 ROW_FORMAT=DYNAMIC;
 
 
 INSERT INTO `email_manager_test_relation` (`relation_id`,`string`) VALUES

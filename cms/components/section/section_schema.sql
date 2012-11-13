@@ -18,7 +18,7 @@ CREATE TABLE `section` (
   `use_SSL` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `default_page` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`section_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
 INSERT INTO `section` (`section_id`,`section`,`default_template`,`default_role`,`section_title`,`site_id`,`use_SSL`,`default_page`) VALUES 
@@ -33,7 +33,7 @@ CREATE TABLE `section_content` (
   `role` varchar(255) DEFAULT NULL,
   `use_SSL` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`section_content_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 /*!40000 ALTER TABLE `section_content` DISABLE KEYS */;
 INSERT INTO `section_content` (`section_content_id`,`section_id`,`identifier`,`template`,`role`,`use_SSL`) VALUES 
@@ -51,7 +51,7 @@ CREATE TABLE  `section_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.1
 

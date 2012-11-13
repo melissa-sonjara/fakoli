@@ -14,7 +14,7 @@ CREATE TABLE `text_lookup` (
   `text` text NOT NULL,
   `class_name` varchar(50) NOT NULL COMMENT 'class name that can access merge code values, if used',
   PRIMARY KEY  (`text_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE  `text_translation` (
   `text_translation_id` int(10) unsigned NOT NULL auto_increment,
@@ -22,7 +22,7 @@ CREATE TABLE  `text_translation` (
   `language` varchar(50) NOT NULL COMMENT 'references language table',
   `text` text NOT NULL,
   PRIMARY KEY  (`text_translation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 -- END Version 1.0

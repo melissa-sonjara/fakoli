@@ -16,7 +16,7 @@ CREATE TABLE `comment` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `author` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0
 

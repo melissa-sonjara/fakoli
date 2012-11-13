@@ -14,7 +14,7 @@ CREATE TABLE `answer` (
   `value` text,
 `composite_class` varchar(100) default NULL,
   PRIMARY KEY  (`answer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 CREATE TABLE `question_type` (
   `question_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -25,7 +25,7 @@ CREATE TABLE `question_type` (
   `char_limit` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'whether this type can have a char limit; 0 if not',
   `num_rows` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'default number of rows, if applicable to type; 0 if not',
   PRIMARY KEY (`question_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Question types available for questionnaires';
+) ENGINE=InnoDB COMMENT='Question types available for questionnaires';
 
 -- Default question types
 /*!40000 ALTER TABLE `question_type` DISABLE KEYS */;
@@ -43,7 +43,7 @@ CREATE TABLE  `questionnaire` (
   `title` varchar(100) NOT NULL COMMENT 'title of the individiual questionnaire: e.g., Course 312 Evaluation',
   `composite_class` varchar(100) default NULL,
   PRIMARY KEY  (`questionnaire_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='user-defined questionnaire';
+) ENGINE=InnoDB COMMENT='user-defined questionnaire';
 
 INSERT INTO `questionnaire` (`questionnaire_id`,`title`) VALUES
   (1,'Sample Questionnaire');
@@ -61,7 +61,7 @@ CREATE TABLE `question` (
   `char_limit` int(8) unsigned default '0' COMMENT 'character limit for free text fields',
   `num_rows` tinyint(3) unsigned default '0' COMMENT 'number of input rows to display on freetext',
   PRIMARY KEY  (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+) ENGINE=InnoDB COMMENT='questions for questionnaires: surveys, applications, etc';
 
 INSERT INTO `question` (`questionnaire_id`,`question_type_id`,`question`,`question_number`,`question_name`,`options`,`required`,`char_limit`,`num_rows`) VALUES
   (1,4,'This is a Free Text question. The respondent is provided a text field for the answer. The answer may be several sentences. You can limit the number of characters in their answer if you wish and specify the height of the text box as the number of rows.\r\n\r\nFor example: Please let us know how we can improve our service.',3,'','',0,0,3),
@@ -102,7 +102,7 @@ CREATE TABLE `questionnaire_response` (
   PRIMARY KEY (`response_id`),
   KEY `questionnaire_idx` (`questionnaire_id`),
   KEY `user_idx` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE  `questionnaire_answer` (
@@ -113,7 +113,7 @@ CREATE TABLE  `questionnaire_answer` (
   PRIMARY KEY (`answer_id`),
   KEY `response_idx` (`response_id`),
   KEY `question_idx` (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 
 -- END Version 1.3

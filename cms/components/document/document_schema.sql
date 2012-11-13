@@ -20,7 +20,7 @@ CREATE TABLE `document` (
   `document_library_id` int(10) unsigned NOT NULL,
   `owner_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`document_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE  `document_folder` (
   `folder_id` int(10) unsigned NOT NULL auto_increment,
@@ -28,7 +28,7 @@ CREATE TABLE  `document_folder` (
   `permissions` varchar(100) NOT NULL,
   `document_library_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`folder_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `document_library` (
   `document_library_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -43,7 +43,7 @@ CREATE TABLE `document_library` (
   `allow_access` varchar(200) NOT NULL DEFAULT '',
   `identifier` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`document_library_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 -- END Version 1.0

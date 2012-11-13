@@ -21,7 +21,7 @@ CREATE TABLE `site` (
   `home_page` varchar(200) DEFAULT NULL,
   `default_site` tinyint(3) unsigned DEFAULT '0',
   PRIMARY KEY (`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `site`

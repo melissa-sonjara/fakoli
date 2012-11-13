@@ -31,7 +31,7 @@ CREATE TABLE `article` (
   `author` varchar(200) DEFAULT NULL,
   `tags` varchar(400) NOT NULL DEFAULT '',
   PRIMARY KEY (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Definition of table `article_comment_xref`
@@ -42,7 +42,7 @@ CREATE TABLE `article_comment_xref` (
   `article_id` int(10) unsigned DEFAULT NULL,
   `comment_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`article_comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 --
@@ -54,7 +54,7 @@ CREATE TABLE `article_site_xref` (
   `article_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`article_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0
 

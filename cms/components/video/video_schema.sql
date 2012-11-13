@@ -21,7 +21,7 @@ CREATE TABLE `video` (
   `image_file` varchar(200) DEFAULT NULL,
   `video_gallery_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`video_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `video_gallery`;
 CREATE TABLE  `video_gallery` (
@@ -36,7 +36,7 @@ CREATE TABLE  `video_gallery` (
   `write_access` varchar(500) DEFAULT NULL,
   `published` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`video_gallery_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- END Version 1.0
 
@@ -55,7 +55,7 @@ CREATE TABLE  `video_download` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`download_id`),
   KEY `downloads_by_video` (`video_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 

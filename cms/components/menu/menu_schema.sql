@@ -18,7 +18,7 @@ CREATE TABLE `menu` (
   `highlight_current_item` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `highlight_current_section` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `menu_item` (
   `menu_item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -32,7 +32,7 @@ CREATE TABLE `menu_item` (
   `menu_id` int(10) unsigned NOT NULL,
   `identifier` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`menu_item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 -- END Version 1.0
