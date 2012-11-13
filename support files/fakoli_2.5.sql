@@ -50,7 +50,7 @@ CREATE TABLE `admin_page` (
   `component_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`admin_page_id`),
   KEY `admin_page_identifier_idx` (`identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `admin_page`
@@ -70,7 +70,7 @@ CREATE TABLE  `answer` (
   `value` text,
 `composite_class` varchar(100) default NULL,
   PRIMARY KEY  (`answer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 
 
@@ -104,7 +104,7 @@ CREATE TABLE `article` (
   `author` varchar(200) DEFAULT NULL,
   `tags` varchar(400) NOT NULL DEFAULT '',
   PRIMARY KEY (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `article`
@@ -124,7 +124,7 @@ CREATE TABLE `article_comment_xref` (
   `article_id` int(10) unsigned DEFAULT NULL,
   `comment_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`article_comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `article_comment_xref`
@@ -144,7 +144,7 @@ CREATE TABLE `article_site_xref` (
   `article_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`article_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `article_site_xref`
@@ -167,7 +167,7 @@ CREATE TABLE `attachment` (
   `last_modified` datetime DEFAULT NULL,
   `file_size` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`attachment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `attachment`
@@ -189,7 +189,7 @@ CREATE TABLE `authentication_token` (
   `enabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `ip_address` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`authentication_token_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `authentication_token`
@@ -219,7 +219,7 @@ CREATE TABLE `blog` (
   `image_id` int(10) unsigned NOT NULL DEFAULT '0',
   `blog_type` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`blog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `blog`
@@ -244,7 +244,7 @@ CREATE TABLE `calendar` (
   `write_access` varchar(100) DEFAULT NULL,
   `identifier` varchar(100) NOT NULL,
   PRIMARY KEY (`calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `calendar`
@@ -267,7 +267,7 @@ CREATE TABLE `comment` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `author` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `comment`
@@ -294,7 +294,7 @@ CREATE TABLE `component` (
   `component_path` varchar(300) NOT NULL,
   PRIMARY KEY (`component_id`),
   KEY `components_by_name` (`name`,`enabled`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `component`
@@ -322,7 +322,7 @@ CREATE TABLE `component_page` (
   `site_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`component_page_id`),
   KEY `component_page_idx` (`identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `component_page`
@@ -344,7 +344,7 @@ CREATE TABLE `component_page_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `component_page_module_xref`
@@ -365,7 +365,7 @@ CREATE TABLE `contact_topic` (
   `recipients` text COMMENT 'one or more admin users to receive email',
   `sort_order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`contact_topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Topics for Contact Us form';
+) ENGINE=InnoDB COMMENT='Topics for Contact Us form';
 
 --
 -- Dumping data for table `contact_topic`
@@ -385,7 +385,7 @@ CREATE TABLE `contact_topic_site_xref` (
   `contact_topic_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`contact_topic_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `contact_topic_site_xref`
@@ -409,7 +409,7 @@ CREATE TABLE `context_help` (
   `title` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`help_id`),
   KEY `help_by_class_idx` (`class_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `context_help`
@@ -436,7 +436,7 @@ CREATE TABLE `document` (
   `document_library_id` int(10) unsigned NOT NULL,
   `owner_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`document_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `document`
@@ -457,7 +457,7 @@ CREATE TABLE `document_folder` (
   `permissions` varchar(100) NOT NULL,
   `document_library_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`folder_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `document_folder`
@@ -485,7 +485,7 @@ CREATE TABLE `document_library` (
   `allow_access` varchar(200) NOT NULL DEFAULT '',
   `identifier` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`document_library_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `document_library`
@@ -506,7 +506,7 @@ CREATE TABLE `document_topic_xref` (
   `topic_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`document_topic_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `document_topic_xref`
@@ -530,7 +530,7 @@ CREATE TABLE `email_template` (
   `message` text NOT NULL COMMENT 'text of the message',
   `class_name` varchar(100) NOT NULL,
   PRIMARY KEY (`email_template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email messages';
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC COMMENT='email messages';
 
 --
 -- Dumping data for table `email_template`
@@ -598,7 +598,7 @@ CREATE TABLE `fileshare_user_xref` (
   `document_library_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`fileshare_user_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Shares document library acces with users';
+) ENGINE=InnoDB COMMENT='Shares document library acces with users';
 
 --
 -- Dumping data for table `fileshare_user_xref`
@@ -623,7 +623,7 @@ CREATE TABLE `forum` (
   `title` varchar(200) NOT NULL,
   `teaser` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`forum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `forum`
@@ -650,7 +650,7 @@ CREATE TABLE `forum_message` (
   `forum_id` int(10) unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `forum_message`
@@ -670,7 +670,7 @@ CREATE TABLE `forum_message_attachment_xref` (
   `message_id` int(10) unsigned NOT NULL,
   `attachment_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`forum_message_attachment_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `forum_message_attachment_xref`
@@ -690,7 +690,7 @@ CREATE TABLE `forum_site_xref` (
   `forum_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`forum_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `forum_site_xref`
@@ -712,7 +712,7 @@ CREATE TABLE `forum_subscription` (
   `user_id` int(10) unsigned NOT NULL,
   `subscription_type` tinyint(3) unsigned NOT NULL COMMENT 'daily digest or new item notification',
   PRIMARY KEY (`forum_subscription_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links forums and forum topics to subscribed users';
+) ENGINE=InnoDB COMMENT='Links forums and forum topics to subscribed users';
 
 --
 -- Dumping data for table `forum_subscription`
@@ -735,7 +735,7 @@ CREATE TABLE `forum_topic` (
   `forum_id` int(10) unsigned NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `forum_topic`
@@ -756,7 +756,7 @@ CREATE TABLE `grp` (
   `Description` text NOT NULL,
   `active` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `grp`
@@ -776,7 +776,7 @@ CREATE TABLE `grp_topic_xref` (
   `group_id` int(10) unsigned NOT NULL,
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`group_topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `grp_topic_xref`
@@ -807,7 +807,7 @@ CREATE TABLE `image` (
   `owner_id` int(10) unsigned NOT NULL DEFAULT '0',
   `sort_order` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`image_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `image`
@@ -834,7 +834,7 @@ CREATE TABLE `image_gallery` (
   `write_access` varchar(500) DEFAULT NULL,
   `published` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`gallery_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `image_gallery`
@@ -856,7 +856,7 @@ CREATE TABLE `login_token` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`token_id`),
   UNIQUE KEY `token_idx` (`token`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `login_token`
@@ -881,7 +881,7 @@ CREATE TABLE `menu` (
   `highlight_current_item` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `highlight_current_section` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `menu`
@@ -908,7 +908,7 @@ CREATE TABLE `menu_item` (
   `menu_id` int(10) unsigned NOT NULL,
   `identifier` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`menu_item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `menu_item`
@@ -933,7 +933,7 @@ CREATE TABLE `menus` (
   `menu_type` varchar(100) NOT NULL,
   `url` varchar(200) NOT NULL,
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `menus`
@@ -956,7 +956,7 @@ CREATE TABLE `merge_code` (
   `map` varchar(80) DEFAULT NULL COMMENT 'how the code maps through relations to the value',
   `class_name` varchar(50) NOT NULL COMMENT 'class name that can map this code',
   PRIMARY KEY (`merge_code_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
 
 --
 -- Dumping data for table `merge_code`
@@ -987,7 +987,7 @@ CREATE TABLE `module` (
   `global` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `global_position` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`module_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `module`
@@ -1018,7 +1018,7 @@ CREATE TABLE `page` (
   `php_code_file` varchar(100) NOT NULL DEFAULT '',
   `site_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`page_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `page`
@@ -1042,7 +1042,7 @@ CREATE TABLE `page_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `page_module_xref`
@@ -1062,7 +1062,7 @@ CREATE TABLE  `paypal_sandbox_transaction` (
   `payment_type` varchar(30) default NULL,
   `status` varchar(30) default NULL,
   PRIMARY KEY  (`transaction_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Definition of table `php_session`
@@ -1076,7 +1076,7 @@ CREATE TABLE `php_session` (
   `id` varchar(200) NOT NULL,
   PRIMARY KEY (`session_id`),
   KEY `session_idx` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `php_session`
@@ -1103,7 +1103,7 @@ CREATE TABLE  `question` (
   `char_limit` int(8) unsigned default '0' COMMENT 'character limit for free text fields',
   `num_rows` tinyint(3) unsigned default '0' COMMENT 'number of input rows to display on freetext',
   PRIMARY KEY  (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+) ENGINE=InnoDB COMMENT='questions for questionnaires: surveys, applications, etc';
 
 
 --
@@ -1128,7 +1128,7 @@ CREATE TABLE `question_type` (
   `char_limit` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'whether this type can have a char limit; 0 if not',
   `num_rows` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'default number of rows, if applicable to type; 0 if not',
   PRIMARY KEY (`question_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Question types available for questionnaires';
+) ENGINE=InnoDB COMMENT='Question types available for questionnaires';
 
 --
 -- Dumping data for table `question_type`
@@ -1161,7 +1161,7 @@ CREATE TABLE  `questionnaire` (
   `title` varchar(100) NOT NULL COMMENT 'title of the individiual questionnaire: e.g., Course 312 Evaluation',
   `composite_class` varchar(100) default NULL,
   PRIMARY KEY  (`questionnaire_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='user-defined questionnaire';
+) ENGINE=InnoDB COMMENT='user-defined questionnaire';
 
 --
 -- Dumping data for table `questionnaire`
@@ -1186,7 +1186,7 @@ CREATE TABLE `section` (
   `use_SSL` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `default_page` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`section_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `section`
@@ -1211,7 +1211,7 @@ CREATE TABLE `section_content` (
   `role` varchar(255) DEFAULT NULL,
   `use_SSL` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`section_content_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `section_content`
@@ -1239,7 +1239,7 @@ CREATE TABLE  `settings` (
   `field_type` varchar(40) default NULL COMMENT 'Number, String, Boolean, Text, etc.',
   PRIMARY KEY  (`settings_id`),
   KEY `settings_by_name_idx` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 --
 -- Dumping data for table `settings`
 --
@@ -1275,7 +1275,7 @@ CREATE TABLE `site` (
   `home_page` varchar(200) DEFAULT NULL,
   `default_site` tinyint(3) unsigned DEFAULT '0',
   PRIMARY KEY (`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `site`
@@ -1301,7 +1301,7 @@ CREATE TABLE `site_map` (
   `parent_identifier` varchar(100) DEFAULT NULL,
   `published` tinyint(3) unsigned DEFAULT '0' COMMENT 'whether to display this page in a site map view',
   PRIMARY KEY (`site_map_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='defines the site hierarchy';
+) ENGINE=InnoDB COMMENT='defines the site hierarchy';
 
 --
 -- Dumping data for table `site_map`
@@ -1322,7 +1322,7 @@ CREATE TABLE `site_role` (
   `name` varchar(45) NOT NULL,
   `description` text,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `site_role`
@@ -1353,7 +1353,7 @@ CREATE TABLE `site_user` (
    `language` varchar(60) DEFAULT NULL,
   `composite_class` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `site_user`
@@ -1383,7 +1383,7 @@ CREATE TABLE `survey` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links a questionnaire to an email template';
+) ENGINE=InnoDB COMMENT='Links a questionnaire to an email template';
 
 --
 -- Dumping data for table `survey`
@@ -1404,7 +1404,7 @@ CREATE TABLE `survey_answer` (
   `survey_question_id` int(10) unsigned NOT NULL COMMENT 'references single question in a questionnaire table',
   `value` text,
   PRIMARY KEY (`survey_answer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 --
 -- Dumping data for table `survey_answer`
@@ -1430,7 +1430,7 @@ CREATE TABLE `survey_question` (
   `num_rows` tinyint(3) unsigned DEFAULT '0' COMMENT 'number of input rows to display on freetext',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'whether this is a standard, multi-reuse question',
   PRIMARY KEY (`survey_question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+) ENGINE=InnoDB COMMENT='questions for questionnaires: surveys, applications, etc';
 
 --
 -- Dumping data for table `survey_question`
@@ -1452,7 +1452,7 @@ CREATE TABLE `survey_question_xref` (
   `survey_question_id` int(10) unsigned NOT NULL,
   `sort_order` tinyint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`survey_question_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='survey question set or standard set';
+) ENGINE=InnoDB COMMENT='survey question set or standard set';
 
 --
 -- Dumping data for table `survey_question_xref`
@@ -1476,7 +1476,7 @@ CREATE TABLE `survey_response` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `survey_response`
@@ -1506,7 +1506,7 @@ CREATE TABLE `survey_template` (
   `message` text NOT NULL,
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'in progress, published, in review',
   PRIMARY KEY (`survey_template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `survey_template`
@@ -1525,7 +1525,7 @@ CREATE TABLE `topic` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `topic` varchar(100) NOT NULL,
   PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `topic`

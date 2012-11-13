@@ -6,7 +6,7 @@ CREATE TABLE  `admin_page` (
   `component_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`admin_page_id`),
   KEY `admin_page_identifier_idx` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47;
 
 DROP TABLE IF EXISTS `component`;
 CREATE TABLE  `component` (
@@ -21,7 +21,7 @@ CREATE TABLE  `component` (
   `component_path` varchar(300) NOT NULL,
   PRIMARY KEY (`component_id`),
   KEY `components_by_name` (`name`,`enabled`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21;
 
 ALTER TABLE `news_item` RENAME TO `article`,
  CHANGE COLUMN `news_item_id` `article_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,

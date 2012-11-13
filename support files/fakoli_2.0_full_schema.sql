@@ -6,7 +6,7 @@ CREATE TABLE  `admin_page` (
   `component_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`admin_page_id`),
   KEY `admin_page_identifier_idx` (`identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE  `article` (
@@ -25,7 +25,7 @@ CREATE TABLE  `article` (
   `author_id` int(10) unsigned NOT NULL default '0',
   `tags` varchar(400) NOT NULL default '',
   PRIMARY KEY  (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `article_comment_xref`;
 CREATE TABLE  `article_comment_xref` (
@@ -33,7 +33,7 @@ CREATE TABLE  `article_comment_xref` (
   `article_id` int(10) unsigned DEFAULT NULL,
   `comment_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`article_comment_id`) 
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `article_site_xref`;
 CREATE TABLE  `article_site_xref` (
@@ -41,7 +41,7 @@ CREATE TABLE  `article_site_xref` (
   `article_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`article_site_xref_id`) 
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `attachment`;
 CREATE TABLE  `attachment` (
@@ -52,7 +52,7 @@ CREATE TABLE  `attachment` (
   `last_modified` datetime DEFAULT NULL,
   `file_size` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`attachment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `blog`;
 CREATE TABLE  `blog` (
@@ -70,7 +70,7 @@ CREATE TABLE  `blog` (
   `image_id` int(10) unsigned NOT NULL default '0',
   `blog_type` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`blog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `calendar`;
 CREATE TABLE  `calendar` (
@@ -83,7 +83,7 @@ CREATE TABLE  `calendar` (
   `write_access` varchar(100) default NULL,
   `identifier` varchar(100) NOT NULL,
   PRIMARY KEY  (`calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE  `comment` (
   `comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -93,7 +93,7 @@ CREATE TABLE  `comment` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `author` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 
@@ -104,7 +104,7 @@ CREATE TABLE  `contact_topic` (
   `recipients` text COMMENT 'one or more admin users to receive email',
   `sort_order` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`contact_topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Topics for Contact Us form';
+) ENGINE=InnoDB COMMENT='Topics for Contact Us form';
 
 INSERT INTO  `contact_topic` (`topic`,`sort_order`) VALUES
 ("Website Question/Comment", 1),
@@ -116,7 +116,7 @@ CREATE TABLE  `contact_topic_site_xref` (
   `contact_topic_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`contact_topic_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `component`;
 CREATE TABLE  `component` (
@@ -131,7 +131,7 @@ CREATE TABLE  `component` (
   `component_path` varchar(300) NOT NULL,
   PRIMARY KEY (`component_id`),
   KEY `components_by_name` (`name`,`enabled`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `component_page`;
 CREATE TABLE  `component_page` (
@@ -147,7 +147,7 @@ CREATE TABLE  `component_page` (
   `site_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`component_page_id`),
   KEY `component_page_idx` (`identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 DROP TABLE IF EXISTS `component_page_module_xref`;
@@ -158,7 +158,7 @@ CREATE TABLE  `component_page_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `contact_topic`;
@@ -168,7 +168,7 @@ CREATE TABLE  `contact_topic` (
   `recipients` text COMMENT 'one or more admin users to receive email',
   `site_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`contact_topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Topics for Contact Us form';
+) ENGINE=InnoDB COMMENT='Topics for Contact Us form';
 
 DROP TABLE IF EXISTS `context_help`;
 CREATE TABLE  `context_help` (
@@ -180,7 +180,7 @@ CREATE TABLE  `context_help` (
   `title` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`help_id`),
   KEY `help_by_class_idx` (`class_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `document`;
 CREATE TABLE  `document` (
@@ -195,7 +195,7 @@ CREATE TABLE  `document` (
   `document_library_id` int(10) unsigned NOT NULL,
   `owner_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`document_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `document_folder`;
 CREATE TABLE  `document_folder` (
@@ -204,7 +204,7 @@ CREATE TABLE  `document_folder` (
   `permissions` varchar(100) NOT NULL,
   `document_library_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`folder_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `document_library`;
 CREATE TABLE  `document_library` (
@@ -219,7 +219,7 @@ CREATE TABLE  `document_library` (
   `allow_access` varchar(200) NOT NULL,
   `identifier` varchar(100) NOT NULL,
   PRIMARY KEY (`document_library_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `document_topic_xref`;
 CREATE TABLE  `document_topic_xref` (
@@ -228,7 +228,7 @@ CREATE TABLE  `document_topic_xref` (
   `topic_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`document_topic_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `email_template`;
 CREATE TABLE  `email_template` (
@@ -240,7 +240,7 @@ CREATE TABLE  `email_template` (
   `message` text NOT NULL COMMENT 'text of the message',
   `class_name` varchar(100) NOT NULL,
   PRIMARY KEY  (`email_template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email messages';
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC COMMENT='email messages';
 
 
 DROP TABLE IF EXISTS `event`;
@@ -278,7 +278,7 @@ CREATE TABLE  `forum` (
   `title` varchar(200) NOT NULL,
   `teaser` varchar(300) NOT NULL,
   PRIMARY KEY (`forum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `forum_message`;
 CREATE TABLE  `forum_message` (
@@ -293,7 +293,7 @@ CREATE TABLE  `forum_message` (
   `forum_id` int(10) unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `forum_message_attachment_xref`;
 CREATE TABLE  `forum_message_attachment_xref` (
@@ -301,7 +301,7 @@ CREATE TABLE  `forum_message_attachment_xref` (
   `message_id` int(10) unsigned NOT NULL,
   `attachment_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`forum_message_attachment_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `forum_site_xref`;
 CREATE TABLE  `forum_site_xref` (
@@ -309,7 +309,7 @@ CREATE TABLE  `forum_site_xref` (
   `forum_id` int(10) unsigned NOT NULL,
   `site_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`forum_site_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `forum_subscription`;
 CREATE TABLE  `forum_subscription` (
@@ -319,7 +319,7 @@ CREATE TABLE  `forum_subscription` (
   `user_id` int(10) unsigned NOT NULL,
   `subscription_type` tinyint(3) unsigned NOT NULL COMMENT 'daily digest or new item notification',
   PRIMARY KEY  (`forum_subscription_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links forums and forum topics to subscribed users';
+) ENGINE=InnoDB COMMENT='Links forums and forum topics to subscribed users';
 
 
 DROP TABLE IF EXISTS `forum_topic`;
@@ -331,7 +331,7 @@ CREATE TABLE  `forum_topic` (
   `forum_id` int(10) unsigned NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `grp`;
 CREATE TABLE  `grp` (
@@ -340,7 +340,7 @@ CREATE TABLE  `grp` (
   `Description` text NOT NULL,
   `active` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `grp_topic_xref`;
 CREATE TABLE  `grp_topic_xref` (
@@ -348,7 +348,7 @@ CREATE TABLE  `grp_topic_xref` (
   `group_id` int(10) unsigned NOT NULL,
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`group_topic_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `image`;
 CREATE TABLE  `image` (
@@ -366,7 +366,7 @@ CREATE TABLE  `image` (
   `published` tinyint(3) unsigned NOT NULL default '0',
   `owner_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`image_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `image_gallery`;
 CREATE TABLE  `image_gallery` (
@@ -381,7 +381,7 @@ CREATE TABLE  `image_gallery` (
   `write_access` varchar(500) default NULL,
   `published` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`gallery_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `login_token`;
 CREATE TABLE  `login_token` (
@@ -391,7 +391,7 @@ CREATE TABLE  `login_token` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`token_id`) ,
   UNIQUE KEY `token_idx` (`token`) 
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE  `menu` (
@@ -402,7 +402,7 @@ CREATE TABLE  `menu` (
   `description` text NOT NULL,
   `css_class` varchar(100) NOT NULL,
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `menu_item`;
 CREATE TABLE  `menu_item` (
@@ -417,7 +417,7 @@ CREATE TABLE  `menu_item` (
   `menu_id` int(10) unsigned NOT NULL,
   `identifier` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`menu_item_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM ROW_FORMAT=DYNAMIC;
 
 
 DROP TABLE IF EXISTS `merge_code`;
@@ -429,7 +429,7 @@ CREATE TABLE  `merge_code` (
   `map` varchar(80) default NULL COMMENT 'how the code maps through relations to the value',
   `class_name` varchar(50) NOT NULL COMMENT 'class name that can map this code',
   PRIMARY KEY  USING BTREE (`merge_code_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC COMMENT='email msg map field names to their values';
 
 -- codes for survey feature
 INSERT INTO `merge_code` (`name`,`description`,`function`,`map`,`class_name`) VALUES
@@ -458,7 +458,7 @@ CREATE TABLE  `module` (
   `global` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `global_position` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`module_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 DROP TABLE IF EXISTS `page`;
@@ -478,7 +478,7 @@ CREATE TABLE  `page` (
   `php_code_file` varchar(100) NOT NULL DEFAULT '',
   `site_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`page_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `page_module_xref`;
 CREATE TABLE  `page_module_xref` (
@@ -488,7 +488,7 @@ CREATE TABLE  `page_module_xref` (
   `position` varchar(45) NOT NULL,
   `sort_order` int(10) unsigned NOT NULL,
   PRIMARY KEY (`join_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `site`;
 CREATE TABLE  `site` (
@@ -504,7 +504,7 @@ CREATE TABLE  `site` (
   `home_page` varchar(200) default NULL,
   `default_site` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`site_id`,`description`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `site_map`;
 CREATE TABLE  `site_map` (
@@ -516,7 +516,7 @@ CREATE TABLE  `site_map` (
   `parent_identifier` varchar(100) default NULL,
   `published` tinyint(3) unsigned default '0' COMMENT 'whether to display this page in a site map view',
   PRIMARY KEY  USING BTREE (`site_map_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='defines the site hierarchy';
+) ENGINE=InnoDB COMMENT='defines the site hierarchy';
 
 DROP TABLE IF EXISTS `site_role`;
 CREATE TABLE  `site_role` (
@@ -525,7 +525,7 @@ CREATE TABLE  `site_role` (
   `name` varchar(45) NOT NULL,
   `description` text,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `site_user`;
@@ -542,14 +542,14 @@ CREATE TABLE  `site_user` (
   `notes` text NOT NULL,
   `composite_class` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `topic`;
 CREATE TABLE  `topic` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `topic` varchar(100) NOT NULL,
   PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 -- Tables for Questionnaire
@@ -562,7 +562,7 @@ CREATE TABLE  `answer` (
   `question_id` int(10) unsigned NOT NULL COMMENT 'references single question in a questionnaire table',
   `value` text,
   PRIMARY KEY  (`answer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 DROP TABLE IF EXISTS `question`;
 CREATE TABLE  `question` (
@@ -576,7 +576,7 @@ CREATE TABLE  `question` (
   `char_limit` int(8) unsigned default '0' COMMENT 'character limit for free text fields',
   `num_rows` tinyint(3) unsigned default '0' COMMENT 'number of input rows to display on freetext',
   PRIMARY KEY  (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+) ENGINE=InnoDB COMMENT='questions for questionnaires: surveys, applications, etc';
 
 DROP TABLE IF EXISTS `question_type`;
 CREATE TABLE  `question_type` (
@@ -588,14 +588,14 @@ CREATE TABLE  `question_type` (
   `char_limit` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this type can have a char limit; 0 if not',
   `num_rows` tinyint(3) unsigned NOT NULL default '0' COMMENT 'default number of rows, if applicable to type; 0 if not',
   PRIMARY KEY  USING BTREE (`question_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Question types available for questionnaires';
+) ENGINE=InnoDB COMMENT='Question types available for questionnaires';
 
 DROP TABLE IF EXISTS `questionnaire`;
 CREATE TABLE  `questionnaire` (
   `questionnaire_id` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(100) NOT NULL COMMENT 'title of the individiual questionnaire: e.g., Course 312 Evaluation',
   PRIMARY KEY  (`questionnaire_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='links a questionnaire to its container class';
+) ENGINE=InnoDB COMMENT='links a questionnaire to its container class';
 
 
 DROP TABLE IF EXISTS `question_type`;
@@ -608,7 +608,7 @@ CREATE TABLE  `question_type` (
   `char_limit` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this type can have a char limit; 0 if not',
   `num_rows` tinyint(3) unsigned NOT NULL default '0' COMMENT 'default number of rows, if applicable to type; 0 if not',
   PRIMARY KEY  USING BTREE (`question_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Question types available for questionnaires';
+) ENGINE=InnoDB COMMENT='Question types available for questionnaires';
 
 
 /*!40000 ALTER TABLE `question_type` DISABLE KEYS */;
@@ -640,7 +640,7 @@ CREATE TABLE  `survey` (
   `status` tinyint(3) unsigned NOT NULL default '0',
   `deleted` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Links a questionnaire to an email template';
+) ENGINE=InnoDB COMMENT='Links a questionnaire to an email template';
 
 DROP TABLE IF EXISTS `survey_answer`;
 CREATE TABLE  `survey_answer` (
@@ -649,7 +649,7 @@ CREATE TABLE  `survey_answer` (
   `survey_question_id` int(10) unsigned NOT NULL COMMENT 'references single question in a questionnaire table',
   `value` text,
   PRIMARY KEY  USING BTREE (`survey_answer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Answer to a question';
+) ENGINE=InnoDB COMMENT='Answer to a question';
 
 
 DROP TABLE IF EXISTS `survey_question`;
@@ -663,7 +663,7 @@ CREATE TABLE  `survey_question` (
   `num_rows` tinyint(3) unsigned default '0' COMMENT 'number of input rows to display on freetext',
   `locked` tinyint(3) unsigned NOT NULL default '0' COMMENT 'whether this is a standard, multi-reuse question',
   PRIMARY KEY  USING BTREE (`survey_question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='questions for questionnaires: surveys, applications, etc';
+) ENGINE=InnoDB COMMENT='questions for questionnaires: surveys, applications, etc';
 
 
 DROP TABLE IF EXISTS `survey_question_xref`;
@@ -674,7 +674,7 @@ CREATE TABLE  `survey_question_xref` (
   `survey_question_id` int(10) unsigned NOT NULL,
   `sort_order` tinyint(4) unsigned NOT NULL default '0',
   PRIMARY KEY  (`survey_question_xref_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='survey question set or standard set';
+) ENGINE=InnoDB COMMENT='survey question set or standard set';
 
 
 DROP TABLE IF EXISTS `survey_response`;
@@ -687,7 +687,7 @@ CREATE TABLE  `survey_response` (
   `status` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`response_id`),
   UNIQUE KEY `token_idx` (`token`,`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `survey_setting`;
@@ -697,7 +697,7 @@ CREATE TABLE  `survey_setting` (
   `email_subject` varchar(200) NOT NULL,
   `message_footer` text NOT NULL,
   PRIMARY KEY  (`survey_setting_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='setting and options or survey email messages';
+) ENGINE=InnoDB COMMENT='setting and options or survey email messages';
 
 
 DROP TABLE IF EXISTS `survey_template`;
@@ -708,7 +708,7 @@ CREATE TABLE  .`survey_template` (
   `message` text NOT NULL,
   `status` tinyint(3) unsigned NOT NULL default '0' COMMENT 'in progress, published, in review',
   PRIMARY KEY  USING BTREE (`survey_template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- end survey tables
 
