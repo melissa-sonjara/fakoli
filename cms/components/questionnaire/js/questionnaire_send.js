@@ -36,9 +36,10 @@ var QuestionnaireSendManager =  new Class
 			close_handler,
 			reminder_dialog,
 			send_page_identifier,
-			recipients_dialog,
+			recipients_dialog
 			)
 	{
+		
 		this.itemPk = itemPk;
 		this.component_name = component_name;
 		this.send_test_email_dialog = send_test_email_dialog;
@@ -48,6 +49,7 @@ var QuestionnaireSendManager =  new Class
 		this.reminder_dialog = reminder_dialog;
 		this.send_page_identifier = send_page_identifier;
 		this.recipients_dialog = recipients_dialog;
+		
 	},
 	
 	openToRespondents: function(item_id)
@@ -94,10 +96,14 @@ var QuestionnaireSendManager =  new Class
 			'method': 	'get',
 			'onSuccess': function(response) 
 			{ 
-			 }
-			 else
-			 {
-				 alert(response);
+			  if(response == "OK" || response == "FAIL")
+			    {
+			     this.closeDialog();
+			    }
+			    else
+			    {
+			     alert(response);
+			    }
 			 }.bind(this),
 				
 			'onFailure':	function() { alert("Failed to communicate with server");}
@@ -125,6 +131,11 @@ var QuestionnaireSendManager =  new Class
 		{
 			$('SendTestEmail_form__error').set('html', response);
 		}
+	},
+	
+	showRecipientsDialog: function(item_id)
+	{
+		this.dialog = modalPopup('Survey Recipients', '/action/' + this.component_name + '/' + this.recipients_dialog + '?' + this.itemPk + '=' + item_id, '530px', 'auto', true);			
 	},
 
 	showReminderDialog: function(item_id)
