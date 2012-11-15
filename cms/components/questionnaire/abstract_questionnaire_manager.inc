@@ -489,6 +489,11 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		return "send_test_email";
 	}
 	
+ 	function getReminderDialog()
+ 	{
+  		return "reminder_dialog";
+ 	}
+ 	
 	function getRecipientsDialog()
 	{
 		return "recipients_dialog";
@@ -979,9 +984,10 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		$itemPk = $item->getPrimaryKey(); 
 		$component_name = $this->getComponentName();
 		$item_label = $item->prettifyClassName();
-		$send_test_email_dialog = $item->getSendTestEmailDialog();
-		$send_test_email_handler = $item->getSendTestEmailHandler();
+		$send_test_email_dialog = $this->getSendTestEmailDialog();
+		$send_test_email_handler = $this->getSendTestEmailHandler();
 		$open_handler = $this->getOpenHandler();
+		$reminder_dialog = $this->getReminderDialog();
 		$close_handler = $this->getCloseHandler();
 		$send_page_identifier = $this->getSendPageIdentifier();
 		$recipients_dialog = $this->getRecipientsDialog();
@@ -1002,10 +1008,11 @@ window.addEvent('domready', function()
 		'<?php echo $send_test_email_handler ?>',
 		'<?php echo $open_handler ?>',
 		'<?php echo $close_handler ?>',
-		'<?php echo $send_page_identifier ?>',
-		'<?php echo $recipients_dialog ?>');
+		  '<?php echo $reminder_dialog ?>',
+		  '<?php echo $send_page_identifier ?>',
+		  '<?php echo $recipients_dialog ?>');
+	
 });
-
 </script>
 <?
 		$script .= ob_get_contents();
