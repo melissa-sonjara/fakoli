@@ -61,7 +61,7 @@ class Comment extends DataItem
 		if(!$user)
 			return false;
 		
-		return ((checkRole("admin") || $comment->user_id == $user->user_id)) ? true : false;
+		return ((checkRole("admin") || $this->user_id == $user->user_id)) ? true : false;
 	}
 		
 	// Constructor
