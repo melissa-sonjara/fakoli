@@ -40,7 +40,7 @@ class CommentFieldRenderer extends FieldRenderer
 	var $xrefClass;
 	var $component;
 	
-	function CommentFieldRenderer(&$parent, $field, $xrefClass, $component, $comments = null)
+	function CommentFieldRenderer(&$parent, $field, $xrefClass, $component, $comments = null, $readOnly = false)
 	{
 		$this->FieldRenderer($parent);
 		$this->hideLabel = true;
@@ -51,11 +51,14 @@ class CommentFieldRenderer extends FieldRenderer
 		
 		$this->list = $this->buildCommentList($comments);
 		$this->comment = $this->createComment();	
-		
 		$this->addField($this->field);
-		$this->addTitleField();
-		$this->addAuthorField();
-		$this->addCommentField();	
+		
+		if(!$readOnly)
+		{
+			$this->addTitleField();
+			$this->addAuthorField();
+			$this->addCommentField();	
+		}
 	}
 	
 	function createComment()
@@ -240,7 +243,7 @@ window.addEvent('domready', function()
 </script>
 <?
 	}
-	
+		
 	function renderField($field)
 	{
 		$this->list->listCSS = $this->listCSS;
@@ -249,7 +252,6 @@ window.addEvent('domready', function()
 		{
 			$this->list->drawList();
 		}
-		
 		// title and comment fields rendered by parent
 	}
 	
