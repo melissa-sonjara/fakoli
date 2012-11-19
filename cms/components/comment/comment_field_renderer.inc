@@ -39,8 +39,10 @@ class CommentFieldRenderer extends FieldRenderer
 	var $list;
 	var $xrefClass;
 	var $component;
-	
-	function CommentFieldRenderer(&$parent, $field, $xrefClass, $component, $comments = null, $readOnly = false)
+	var $publishedFormat = "published/unpublished";
+	var $publishRoles = "admin";
+
+	function CommentFieldRenderer(&$parent, $field, $xrefClass, $component, $comments = null)
 	{
 		$this->FieldRenderer($parent);
 		$this->hideLabel = true;
@@ -53,12 +55,11 @@ class CommentFieldRenderer extends FieldRenderer
 		$this->comment = $this->createComment();	
 		$this->addField($this->field);
 		
-		if(!$readOnly)
-		{
-			$this->addTitleField();
-			$this->addAuthorField();
-			$this->addCommentField();	
-		}
+		$this->addTitleField();
+		$this->addAuthorField();
+		$this->addCommentField();
+		
+		$this->getPublishedFormat();
 	}
 	
 	function createComment()
@@ -81,7 +82,7 @@ class CommentFieldRenderer extends FieldRenderer
 	
 	function addTitleField()
 	{
-		$field = $this->getTitleField();
+		$field = "comment_title";
 		$this->addField($field);
 		$this->parent->add(new StringFieldRenderer($this->parent), $field);
 	}
@@ -94,8 +95,8 @@ class CommentFieldRenderer extends FieldRenderer
 	 */
 	function subjectSelectField($options, $label = "Subject")
 	{
-		$field = $this->getTitleField();
-		$this->parent->override($field, $label = "", new SelectFieldRenderer($this->parent, $field, $label, $options));
+		$field = "comment_title";
+		$this->parent->override($field, $label, new SelectFieldRenderer($this->parent, $field, $label, $options));
 	}
 	
 	function addField($field)
@@ -116,7 +117,7 @@ class CommentFieldRenderer extends FieldRenderer
 	
 	function addCommentField()
 	{
-		$field = $this->getCommentField();
+		$field = "comment_message";
 		$this->parent->add(new TextFieldRenderer($this->parent), $field);
 		$this->parent->alias($field, "Comment");
 		$this->addField($field);
@@ -124,7 +125,7 @@ class CommentFieldRenderer extends FieldRenderer
 	
 	function addAuthorField()
 	{
-		$field = $this->getAuthorField();
+		$field = "comment_author";
 		global $user;
 		
 		if(!$user)
@@ -134,30 +135,23 @@ class CommentFieldRenderer extends FieldRenderer
 		}
 	}
 	
+	function addPublishedField(&$form, $label = "Publish")
+	{
+		$rend = new BooleanFieldRenderer($form);
+		$form->add($rend, "comment_published");
+		$form->override("comment_published", $label, $rend);
+		$this->addField("comment_published");
+	}
+	
 	function addGroup($title = "")
 	{
 		if(!$title) $title = "Comments";
-		$this->parent->group("Comments", $this->field, $this->getTitleField(), $this->getCommentField());
+		$this->parent->group("Comments", $this->field, "comment_title", "comment_message", "comment_published");
 	}
 	
 	function getCommentDialog()
 	{
 		return "comment_dialog";	
-	}
-	
-	function getTitleField()
-	{
-		return "comment_title";
-	}
-	
-	function getCommentField()
-	{
-		return "comment_description";
-	}
-	
-	function getAuthorField()
-	{
-		return "comment_author";
 	}
 	
 	function buildCommentList($comments)
@@ -166,7 +160,7 @@ class CommentFieldRenderer extends FieldRenderer
 		{
 			$comments = $this->getComments();
 		}
-		
+
 		$field = $this->field;
 		$list = new PagedList($comments, "{$this->parent->id}_{$field}", array($this, formatComment));
 		$list->styles = "clear: both";
@@ -185,6 +179,27 @@ class CommentFieldRenderer extends FieldRenderer
 		return $this->parent->data->Comments("$constraint ORDER BY date_posted DESC");
 	}
 	
+	/**
+	 * Retrieve custom field aliases from the xref class.
+	 */
+	function getPublishedFormat()
+	{
+		$fn = array($this->xrefClass, getPublishedFormat);
+		if(is_callable($fn))
+		{
+			$this->publishedFormat = call_user_func($fn);
+		}
+	}
+	
+	function getPublishRoles()
+	{
+		$fn = array($this->xrefClass, getPublishRoles);
+		if(is_callable($fn))
+		{
+			$this->publishRoles = call_user_func($fn);
+		}
+	}	
+	
 	function formatComment($comment)
 	{
 		$field = $this->field;
@@ -199,7 +214,8 @@ class CommentFieldRenderer extends FieldRenderer
 			$out .= "<strong><span id='comment_{comment_id}_title'>{title:prettify}</span></strong><br/>\n";
 		}
 
-		$out .= "<span class='small'>Posted by $author at {date_posted:short}</span>\n </div>\n";
+		$published = (checkRole($this->publishRoles)) ? "{published:{$this->publishedFormat}}" : "";
+		$out .= "<span class='small'>Posted by $author at {date_posted:short}</span>&nbsp;&nbsp{$published}&nbsp;\n </div>\n";
 		$out .= "<div class='message_content'><span id='comment_{comment_id}_message'>{description:stripHTML}</span>";
 		
 		if($comment->isEditable() && !$this->parent->isReadOnly($field))
@@ -268,9 +284,9 @@ window.addEvent('domready', function()
 
 	function postProcess($field = "")
 	{
-		$commentField = $this->getCommentField();
-		$titleField = $this->getTitleField();
-		$authorField = $this->getAuthorField();
+		$commentField = "comment_message";
+		$titleField = "comment_title";
+		$authorField = "comment_author";
 		trace("CommentFieldRenderer postProcess title field $titleField value ". $_POST[$titleField], 3);
 		
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($commentField) || array_key_exists($commentField, $this->parent->hidden)) return "";
@@ -290,6 +306,15 @@ window.addEvent('domready', function()
 		$comment = $this->comment;
 		$comment->title = $_POST[$titleField];
 		$comment->description = $commentMessage;
+		
+		if(isset($_POST["comment_published"]))
+		{
+			$comment->published = $_POST["comment_published"];
+		}
+		else
+		{
+			$comment->published = $comment->published;
+		}
 		
 		$author = $_POST[$authorField];
 		if($author)
