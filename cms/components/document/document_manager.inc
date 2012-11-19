@@ -714,29 +714,35 @@ function deleteFolderResult(result)
 		
 		while($values = fgetcsv($fp))
 		{
-			$path = "documents" . DIRECTORY_SEPARATOR . $values[$fileIdx];
-			
-			trace($path, 3);
-			
-			if (!array_key_exists($path, $this->indexedDocuments)) continue;
-			
-			$doc = $this->indexedDocuments[$path];
-			
-			$i = 0;
-			
-			foreach($fields as $field)
+			$files = explode(";", $values[$fileIdx]);
+			foreach($files as $f)
 			{
-				if ($field == "file")
-				{
-					$i++;
-					break;
-				}
+				$f = trim($f);
 				
-				$doc->set($field, $values[$i]);
-				$i++;
-			}
+				$path = "documents" . DIRECTORY_SEPARATOR . $f;
+				
+				trace($path, 3);
+				
+				if (!array_key_exists($path, $this->indexedDocuments)) continue;
+				
+				$doc = $this->indexedDocuments[$path];
+				
+				$i = 0;
+				
+				foreach($fields as $field)
+				{
+					if ($field == "file")
+					{
+						$i++;
+						break;
+					}
+					
+					$doc->set($field, $values[$i]);
+					$i++;
+				}
 			
-			$doc->save();
+				$doc->save();
+			}
 		}
 	}
 	
