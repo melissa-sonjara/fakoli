@@ -975,27 +975,33 @@ $script = <<<ENDSCRIPT
 		var max = form["count_{$this->field}"].value;
 		var fieldName;
 
-		for(i=0; i < max; i++)
+		var pattern = new RegExp("^{$this->field}\\\\[.*?\\\\]$");
+		
+		for(i=0; i < form.elements.length; i++)
 		{
-			fieldName = form["{$this->field}["+i+"]"];
-			if(fieldName.checked == true)
-				countChecked += 1;
+			ctrl = form.elements[i];
+			if (pattern.test(ctrl.name))
+			{
+				if (ctrl.checked == true)
+				{
+					countChecked++;
+				}
+			}
 		}
 
-	var addEntry = form["{$this->field}_addEntry"];
-	
-	if(addEntry && addEntry.value != "")
-	{
-		countChecked += 1;
-	}
-	
-	if ({$this->min} > 0 && countChecked < {$this->min})
-	{
-		alert("You must check at least {$this->min} {$this->msgText} for {$this->title}.");
-		return false;
-	}
+		var addEntry = form["{$this->field}_addEntry"];
 		
-	
+		if(addEntry && addEntry.value != "")
+		{
+			countChecked += 1;
+		}
+		
+		if ({$this->min} > 0 && countChecked < {$this->min})
+		{
+			alert("You must check at least {$this->min} {$this->msgText} for {$this->title}.");
+			return false;
+		}
+		
 ENDSCRIPT;
 
 		return $script;
