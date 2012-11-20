@@ -433,12 +433,12 @@ class DataListView
 			 * &, apply that width style to the filter and paginator to avoid 
 			 * formatting problems. 
 			 */
-			$width = '100%';
-			if (preg_match("/^\\width:.*?\\d{1,3}px|width:.*?\\d{1,3}%/", $this->cssStyle, $matches))
+			$width = 'width: 100%';
+			if (preg_match("/^\\width:.*?\\d{1,5}px|width:.*?\\d{1,3}%/", $this->cssStyle, $matches))
 				$width = $matches[0]; 
 		
 ?>			
-		<div style="width: <?echo $width ?>">
+		<div style="<?echo $width ?>">
 		<?php 
 		if($this->pageSize)
 		{
