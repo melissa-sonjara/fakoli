@@ -338,8 +338,9 @@ class LoginManager
 			LoginManager::passwordHelpForm();	
 		}
 		
+		$login = Settings::getValue("login", "main_login_page");		
 ?>
-<h4><a href="/login">Return to the login page</a></h4>
+<h4><a href="<?php echo $login?>">Return to the login page</a></h4>
 <?
 	}
 	
