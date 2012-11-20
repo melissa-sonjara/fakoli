@@ -2,34 +2,37 @@ var SessionTimer =  (function()
 {
 	var SessionTimerSingleton = new Class(
 	{
+		Implements: [Options],
+		
+		options:
+		{
+			message: "We haven't heard from you in a while. Do you want to extend your session?",
+			timeout: 8000
+		},
+		
 		dialog: null,
 		timer: null,
 		//timeout: null, 
 			
-		initialize: function()
+		initialize: function(options)
 		{
-		  timer = 8000;
+			this.setOptions(options);
 		},
 			
 		showExtendSessionDialog: function()
 		{
-			var msg = "You have been inactive, do you want to extend your session?";
-			
-			if (confirm(msg))
+			if (confirm(this.options.message))
 			{		
 				var request = new Request(
 				{
 					'url': 		'/action/session_extender/extend_session', 
 					 'method': 	'get',
 					 'onSuccess': function(response) 
-					{ 
-					if (response == "OK") 
-					{
-						window.location.reload();
-					}
-				 },
+					 {
+						 this.resetTimer();
+					 }.bind(this),
 				
-				 'onFailure':	function() { alert("Failed to communicate with server");}
+					 'onFailure':	function() { alert("Failed to communicate with server");}
 				 });
 				
 				request.send();				
@@ -44,7 +47,7 @@ var SessionTimer =  (function()
 		resetTimer: function()
 		{
 			//clearTimeout(timer);
-			timer = this.showExtendSessionDialog.delay(8000);
+			timer = this.showExtendSessionDialog.delay(this.options.timeout);
 			
 		},
 			
