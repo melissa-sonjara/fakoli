@@ -3,21 +3,16 @@ var CommentManager =  new Class
 ({
 	dialog: null, 
 
-	itemPk: null,	//< the id of the table linked to comment through xref 
-	item_id: null, //< the id value of the record
-
 	component_name: null,	//< the name of the component 	
 	comment_dialog: null, 	
 	comment_id: null,
 	
-	initialize: function(itemPk, item_id, 
+	initialize: function(
 			component_name,
 			comment_dialog
 			)
 	{
 
-		this.itemPk = itemPk;
-		this.item_id = item_id;
 		this.component_name = component_name;
 		this.comment_dialog = comment_dialog;
 	},
@@ -47,6 +42,7 @@ var CommentManager =  new Class
 		}
 		else if(response == "DELETE")
 		{
+			this.closeDialog();
 			elt = $('comment_' + this.comment_id);
 			if(elt)
 			{

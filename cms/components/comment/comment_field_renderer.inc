@@ -33,6 +33,38 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::usingFile("framework/field_renderers.inc");
 
+/**
+ * Display a list of saved comments and a form for entering
+ * a new comment. 
+ * 
+ * The fields from the comment table are added to the form with 
+ * the following names:
+ * 
+ * comment_title
+ * comment_message
+ * comment_published
+ * comment_author
+ * 
+ * The "comment" is prefixed to the field name to avoid conflicts
+ * with other fields in the AutoForm object with which it is displayed.
+ * 
+ * @author janice
+ *
+ * @param obj parent - the AutoForm object
+ * 
+ * @param String field - the name of the comment list field (e.g., comment_list)
+ * 
+ * @param String xrefClass - the DataItem class that links the comment table
+ * to the object in the parent.
+ * 
+ * @param String component - the name of the component using this
+ * renderer - used to build a path to the custom comment dialog for
+ * editing comments
+ * 
+ * @param Array comments - array of comments to be displayed in the list.
+ * Use when the logic of function getComments does not match what
+ * is needed for your implementation.
+ */
 class CommentFieldRenderer extends FieldRenderer
 {
 	var $comment;
@@ -54,12 +86,17 @@ class CommentFieldRenderer extends FieldRenderer
 		$this->list = $this->buildCommentList($comments);
 		$this->comment = $this->createComment();	
 		$this->addField($this->field);
+
+		$this->addCommentFields();
 		
+		$this->getPublishedFormat();
+	}
+	
+	function addCommentFields()
+	{
 		$this->addTitleField();
 		$this->addAuthorField();
 		$this->addCommentField();
-		
-		$this->getPublishedFormat();
 	}
 	
 	function createComment()
@@ -96,9 +133,16 @@ class CommentFieldRenderer extends FieldRenderer
 	function subjectSelectField($options, $label = "Subject")
 	{
 		$field = "comment_title";
+		$this->addField($field);
 		$this->parent->override($field, $label, new SelectFieldRenderer($this->parent, $field, $label, $options));
 	}
 	
+	/**
+	 * Add a field to the inclusion filter or remove from
+	 * the exclusion filter.
+	 * 
+	 * @param String $field
+	 */
 	function addField($field)
 	{
 		$filter = $this->parent->data->filter;
@@ -135,11 +179,11 @@ class CommentFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	function addPublishedField(&$form, $label = "Publish")
+	function addPublishedField($label = "Publish")
 	{
-		$rend = new BooleanFieldRenderer($form);
-		$form->add($rend, "comment_published");
-		$form->override("comment_published", $label, $rend);
+		$rend = new BooleanFieldRenderer($this->parent);
+		$this->parent->add($rend, "comment_published");
+		$this->parent->override("comment_published", $label, $rend);
 		$this->addField("comment_published");
 	}
 	
@@ -236,9 +280,6 @@ class CommentFieldRenderer extends FieldRenderer
 
 		//echo $this->list->writeScript();
 		
-		$item = $this->parent->data;
-		$itemPk = $item->getPrimaryKey(); 
-		$item_id = $item->$itemPk;
 		$commentDialog = $this->getCommentDialog();
 
 ?>
@@ -249,8 +290,6 @@ var commentMgr;
 window.addEvent('domready', function()
 {
 	commentMgr = new CommentManager(
-			'<?php echo $itemPk ?>',
-			<?php echo $item_id ?>,
 			'<?php echo $this->component ?>',
 			'<?php echo $commentDialog ?>'			 
 	);
