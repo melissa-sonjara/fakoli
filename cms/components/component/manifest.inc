@@ -86,7 +86,6 @@ class ComponentManifest
 		return array("/fakoli/css/tree.css", 
 					 "/fakoli/css/tables.css",
 					 "/fakoli/css/dialogs.css",
-					 "/fakoli/css/calendar.css",
 					 "/fakoli/css/textarea-resizer.css",
 					 "/fakoli/css/context_menu.css",
 					 "/fakoli/calendar/sonjara_calendar.css");

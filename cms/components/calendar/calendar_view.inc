@@ -281,7 +281,7 @@ class CalendarView
 	{
 		global $script;
 		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
+<script type="text/javascript" src="/components/calendar/js/calendar.js"></script>
 ENDSCRIPT;
 		
 		$this->calculateMonthRange();
@@ -379,7 +379,7 @@ ENDSCRIPT;
 	{
 		global $script;
 		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/fakoli/calendar_view/calendar.js"></script>
+<script type="text/javascript" src="/components/calendar/js/calendar.js"></script>
 ENDSCRIPT;
 
 		global $dialogs;

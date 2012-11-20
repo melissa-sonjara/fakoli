@@ -46,6 +46,11 @@ class CalendarManifest
 		return $component;
 	}
 	
+	static function getStyles()
+	{
+		return array("/components/calendar/css/calendar.css");
+	}
+	
 	static function getAdminMenu()
 	{
 		return array
