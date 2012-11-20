@@ -277,8 +277,9 @@ class QuestionnaireDataView
 				
 			foreach($options as $option)
 			{
-				$count = $answerValues[$idx];
-				$optionAnswer = new OptionAnswer($question->$qPk, $idx, $option, $answerCounts[$idx]);
+				$count = $answerCounts[$idx];
+				if (!isset($count)) $count = 0;
+				$optionAnswer = new OptionAnswer($question->$qPk, $idx, $option, $count);
 				array_push($optionAnswers, $optionAnswer);
 				$idx++;
 			}
