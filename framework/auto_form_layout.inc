@@ -38,6 +38,10 @@ abstract class AutoFormLayout
 	    return $label;
 	}
 	
+	function getLabelID($field)
+	{
+		return "{$this->form->id}_{$field}_label";		
+	}
 	
 	abstract function startUngrouped();
 	abstract function endUngrouped();
@@ -163,7 +167,7 @@ class TableBasedFormLayout extends AutoFormLayout
 		if ($styles) echo " style='$styles'";
 		echo ">";
 		
-		if (!$renderer->hideLabel) echo "<label for='$field'>$label</label> ";
+		if (!$renderer->hideLabel) echo "<label id='".$this->getLabelID($field)."' for='$field'>$label</label> ";
 		
 		echo "$annotation</td>\n";
 	}
@@ -288,7 +292,7 @@ class TableRowFormLayout extends AutoFormLayout
 		if ($styles) echo " style='$styles'";
 		echo ">";
 		
-		if (!$renderer->hideLabel) echo "<label for='$field'>$label</label> ";
+		if (!$renderer->hideLabel) echo "<label id='".$this->getLabelID($field)."' for='$field'>$label</label> ";
 		
 		echo "$annotation</th>\n";
 	}
@@ -499,7 +503,7 @@ class MobileFormLayout extends AutoFormLayout
 		
 		if (!$renderer->hideLabel)
 		{
-			echo "<label for='$field'";
+			echo "<label id='".$this->getLabelID($field)."' for='$field'";
 			if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
 			if ($styles) echo " style='$styles'";
 		
@@ -629,7 +633,7 @@ class SimpleFormLayout extends AutoFormLayout
 		
 		if (!$renderer->hideLabel)
 		{
-			echo "<label for='$field'";
+			echo "<label id='".$this->getLabelID($field)."' for='$field'";
 			if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
 			if ($styles) echo " style='$styles'";
 		
@@ -734,7 +738,7 @@ class FilterFormLayout extends AutoFormLayout
 		
 		$label = $this->getLabel($field, $renderer);
 		
-		if (!$renderer->hideLabel) echo "<label for='$field'>$label</label> ";
+		if (!$renderer->hideLabel) echo "<label id='".$this->getLabelID($field)."' for='$field'>$label</label> ";
 	}
 
 	function startUngrouped()
