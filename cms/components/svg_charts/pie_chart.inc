@@ -59,6 +59,8 @@ class PieChart
 	var $percentagesDistance = 0.75;
 	var $onSectorOver = "null";
 	var $onSectorOut = "null";
+	var $onLegendOver = "null";
+	var $onLegendOut = "null";
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
