@@ -59,6 +59,7 @@ $tabs = imageGalleryTabs($gallery_id);
 $form = new AutoForm($gallery);
 $form->allowDelete = $allowDelete;
 $form->hide("owner_id");
+$form->unique("identifier");
 
 if ($method == "POST")
 {
