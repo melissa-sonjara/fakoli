@@ -83,6 +83,19 @@ class OptimizeManager
 		return $scripts;
 	}
 		
+	static function getScriptsContent()
+	{
+		$content = Cache::get("script_cache");
+		if (!$content)
+		{
+			$scripts = Fakoli::loadScripts();
+			OptimizeManager::preprocessScripts($scripts);	
+			$content = Cache::get("script_cache");
+		}
+		
+		return $content;
+	}
+	
 	static function preProcessStyles($styles)
 	{
 		if (Settings::getValue("optimize", "optimize_styles"))
@@ -119,6 +132,20 @@ class OptimizeManager
 		}
 			
 		return $styles;
+	}
+	
+	static function getStylesContent()
+	{
+		$cachedStyles = Cache::get("css_cache");
+			
+		if (!$cachedStyles)
+		{
+			$styles = Fakoli::loadStyles();
+			OptimizeManager::preprocess($styles);
+			$cachedStyles = Cache::get("css_cache");			
+		}
+		
+		return $cachedStyles;
 	}
 	
 	static function preProcessPage($template)

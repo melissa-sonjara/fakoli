@@ -24,7 +24,7 @@ header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 
 if (!$noChange)
 {	
-	$content = Cache::get("script_cache");
+	$content = OptimizeManager::getScriptsContent();
 	
 	if (!Settings::getValue("optimize", "compress_javascript") || !substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 	{

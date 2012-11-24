@@ -333,18 +333,7 @@ class Fakoli
 		$scripts = Cache::get("fakoli_scripts");
 		if ($scripts) return $scripts;
 		
-		$scriptArray = array();
-		
-		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
-		foreach($components as $component)
-		{
-			$manifest = $component->loadManifest();		
-			if (method_exists($manifest, getScripts))
-			{
-				// Calculate union of scripts
-				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts(), $scriptArray));  
-			}
-		}
+		$scriptArray = Fakoli::loadScripts();
 
 		$scriptArray = ComponentManager::fireEvent("PreProcessScripts", $scriptArray);
 		
@@ -359,6 +348,28 @@ class Fakoli
 	}
 	
 	/**
+	 * Load the list of JS scripts from the manifests of all registered, active components.
+	 * @return array an array containing all the script paths in the correct include order.
+	 */
+	static function loadScripts()
+	{
+		$scriptArray = array();
+		
+		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		foreach($components as $component)
+		{
+			$manifest = $component->loadManifest();
+			if (method_exists($manifest, getScripts))
+			{
+				// Calculate union of scripts
+				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts(), $scriptArray));
+			}
+		}
+		
+		return $scriptArray;
+	}
+	
+	/**
 	 * Returns the HTML link tags for CSS files specified by
 	 * the registered components in their manifest files.
 	 */
@@ -366,20 +377,8 @@ class Fakoli
 	{
 		$styles = Cache::get("fakoli_styles");
 		if ($styles) return $styles;
-		
-		$styleArray = array();
-		
-		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
-		foreach($components as $component)
-		{
-			$manifest = $component->loadManifest();		
-			if (method_exists($manifest, getStyles))
-			{
-				// Calculate union of styles
-				$styleArray = array_merge($styleArray, array_diff($manifest->getStyles(), $styleArray));  
-			}
-		}
 
+		$styleArray = Fakoli::loadStyles();		
 		$styleArray = ComponentManager::fireEvent("PreProcessStyles", $styleArray);
 		
 		$styles = "";
@@ -390,6 +389,28 @@ class Fakoli
 		
 		Cache::put("fakoli_styles", $styles);
 		return $styles;		
+	}
+	
+	/**
+	 * Load the list of CSS files from the manifests of all registered, active components.
+	 * @return array an array containing all the file paths in the correct include order.
+	 */
+	static function loadStyles()
+	{
+		$styleArray = array();
+		
+		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		foreach($components as $component)
+		{
+			$manifest = $component->loadManifest();
+			if (method_exists($manifest, getStyles))
+			{
+				// Calculate union of styles
+				$styleArray = array_merge($styleArray, array_diff($manifest->getStyles(), $styleArray));
+			}
+		}
+		
+		return $styleArray;
 	}
 	
 	/**

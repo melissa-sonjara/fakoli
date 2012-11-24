@@ -23,7 +23,7 @@ header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 		
 if (!$noChange)
 {
-	$content = Cache::get("css_cache");
+	$content = OptimizeManager::getStylesContent();
 	
 	if (!Settings::getValue("optimize", "compress_styles") || !substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 	{
