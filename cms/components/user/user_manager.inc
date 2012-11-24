@@ -166,7 +166,7 @@ class UserManager
 	 */
 	function getPasswordResetPage()
 	{
-		return "/password_help";
+		return "/password_reset";
 	}
 	
 	function getPasswordHelpText()
