@@ -52,7 +52,7 @@ class ImageGalleryView
 		global $script;
 		
 		$script .= <<<ENDSCRIPT
-	<script type="text/javascript" src="/fakoli/image_gallery/image_gallery.js"></script>
+	<script type="text/javascript" src="/components/image/js/image_gallery.js"></script>
 	<script type="text/javascript">
 	var gallery;
 	window.addEvent('domready', function()
@@ -67,13 +67,13 @@ ENDSCRIPT;
 		$this->listView->spacing = $this->spacing;
 		
 ?>
-<div id="<?echo $this->id?>__left" style="width: 32px; float: left;<?echo $this->styles?>"><img id="<?echo $this->id?>_scroll_left" src="/fakoli/image_gallery/scroll_left.png" style="margin-top: 160px"/>&nbsp;</div>
+<div id="<?echo $this->id?>__left" style="width: 32px; float: left;<?echo $this->styles?>"><img id="<?echo $this->id?>_scroll_left" src="/components/image/images/scroll_left.png" style="margin-top: 160px"/>&nbsp;</div>
 <div id="<?echo $this->id?>" style="width: 560px; height: 450px; position: relative; overflow: hidden; float: left">
 <?
 		$this->listView->drawGrid();
 ?>
 </div>
-<div id="<?echo $this->id?>_right" style="width: 32px; float: left"><img id="<?echo $this->id?>_scroll_right" src="/fakoli/image_gallery/scroll_right.png" style="margin-top: 160px"/>&nbsp;</div>
+<div id="<?echo $this->id?>_right" style="width: 32px; float: left"><img id="<?echo $this->id?>_scroll_right" src="/components/image/images/scroll_right.png" style="margin-top: 160px"/>&nbsp;</div>
 </div>
 <?
 	}
