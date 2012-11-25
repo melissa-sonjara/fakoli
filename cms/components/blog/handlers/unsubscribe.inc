@@ -41,4 +41,6 @@ $blogSubscriber = new BlogSubscriber();
 $blogSubscriber->load($blog_subscriber_id);
 
 $blogSubscriber->delete();
+
+redirect("/index");
 ?>
