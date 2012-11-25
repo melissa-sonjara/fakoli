@@ -32,3 +32,15 @@ CREATE TABLE `blog` (
 ALTER TABLE `blog` ADD COLUMN `articles_per_page` INT(10) unsigned not null default 10;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+CREATE TABLE `blog_subscriber` (
+  `blog_subscriber_id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `blog_id` INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  `subscriber_email` VARCHAR(100) NOT NULL DEFAULT '',
+  PRIMARY KEY(`blog_subscriber_id`)
+)
+ENGINE = InnoDB;
+
+-- END Version 1.2

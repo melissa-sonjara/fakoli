@@ -50,7 +50,8 @@ class BlogUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added articles_per_page to blog table"
+			"1.1"		=>	"sql:Added articles_per_page to blog table",
+			"1.2"		=>  "done: Added Blog Subscriber table"
 	);
 	
 	function BlogUpgradeManager()
