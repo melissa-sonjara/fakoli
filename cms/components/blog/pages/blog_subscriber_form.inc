@@ -50,7 +50,7 @@ if ($method == "POST")
 	{
 		sendEmailUsingEmailManager($blogSubscriber, 'blog_subscription');
 	}
-	redirect("/blog_subscriber_form");
+	redirect("/blog_subscriber_form/blog_id=1");
 }
 
 $script .= $form->writeScript();
