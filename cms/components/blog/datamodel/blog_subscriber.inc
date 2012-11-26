@@ -40,7 +40,7 @@ class BlogSubscriber extends DataItem
 	
 	// Relations
 	
-	var $relations = array("blog"		=>	"Blog"
+	var $relations = array("Blog"		=>	"Blog"
 						   );
 						   
 	function Blog()
