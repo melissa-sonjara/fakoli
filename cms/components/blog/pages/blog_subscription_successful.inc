@@ -1,4 +1,5 @@
 <?php
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -30,36 +31,13 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-
-Fakoli::using("blog");
-Fakoli::usingFeature("auto_form");
-
-$blog_id = checkNumeric($_GET["blog_id"]);
-
-$blogSubscriber = new BlogSubscriber();
-
-$blogSubscriber->blog_id = $blog_id;
-
-$form = new AutoForm($blogSubscriber);
-$form->hide("blog_id");
-$form->submitLabel = "Subscribe";
-
-if ($method == "POST")
-{
-	if ($form->save())
-	{
-		sendEmailUsingEmailManager($blogSubscriber, 'blog_subscription');
-	}
-	redirect("/blog_subscription_successful?blog_id={$blog_id}");
-}
-
-$script .= $form->writeScript();
 ?>
 
 <div id="tab_border">
 
-<?
-$form->drawForm();
-?>
-<br/>
+<h4>Your subscription has been processed.</h4>
+
+<a href=http://<?echo $config['http_host']?>/index>Go to the Home Page.</a>
+
 </div>
+
