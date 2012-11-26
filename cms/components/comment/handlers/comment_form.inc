@@ -85,7 +85,7 @@ if($method == "POST")
 			$xref->save();
 			if(!Settings::getValue("comment", "publish_automatically"))
 			{
-				sendEmailUsingEmailManager($comment, 'new_comment');
+				sendEmailUsingEmailManager($xref, 'new_comment_posted');
 			}		
 		}
 
