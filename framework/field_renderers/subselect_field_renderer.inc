@@ -108,14 +108,21 @@ class SubSelectFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
+		$super_id = $this->parent->data->get($this->super);
+		
+		if (!array_key_exists($super_id, $this->options)) return;
+		
 		echo "<tr>\n";
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
 		echo ">";
-		if (array_key_exists($this->parent->data->get($field), $this->options))
+		
+		$item = findItem($this->options[$super_id], $field, $this->parent->data->get($field));
+		
+		if ($item)
 		{
-			echo $this->options[$this->parent->data->get($field)];
+			echo $item->format($this->format);
 		}
 		else
 		{
@@ -138,7 +145,7 @@ window.addEvent('domready', function()
 		foreach($this->options as $key => $options)
 		{
 			$pk = $options[0]->getPrimaryKey();			
-			$values = formatItems($options, "{'name': '{name}', 'value': {{$pk}} }", ", ");
+			$values = formatItems($options, "{'name': '{$this->format}', 'value': {{$pk}} }", ", ");
 ?>
 	<?echo $mgr?>.addOptions(<?echo $key?>, [{'name': '', 'value': 0}, <?echo $values?>]);
 <?
