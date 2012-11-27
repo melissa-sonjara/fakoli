@@ -225,9 +225,12 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		$this->getRelatedItems();
 		
+		if($this->width)
+			$style = "style='width: {$this->width}'";
+		
 		echo "<tr>\n";
 		$this->_printLabel($field);
-		echo "<td><select name='{$field}:$mode'>\n";
+		echo "<td><select name='{$field}:$mode' $style>\n";
 		echo "<option value=''></option>\n";
 		$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
 		//trace("valueField: $valueField", 3);
