@@ -296,12 +296,12 @@ class DataItem extends AbstractDataItem
 			{
 				if ($this->filter && $this->filter->isExcluded($field)) continue;
 				if (!$first) $list .= ", ";
-				$list .= $expr . " as ";
+				$list .= $expr . " as `";
 				if ($alias)
 				{
 					$list .= $alias.".";
 				}
-				$list .= $field;
+				$list .= $field."`";
 				
 			}
 		}
