@@ -258,7 +258,7 @@ class SelectFieldRenderer extends FieldRenderer
 		echo "<td><select id='$field' name='$field:$mode'><option value=''></option>\n";
 		foreach($this->options as $value => $name)
 		{
-			$selected = ($searchValue == $value) ? " selected" : "";
+			$selected = ($searchValue === $value) ? " selected" : "";
 			
 			echo "<option value='".htmlSafe($value)."'$selected>$name</option>";
 		}
