@@ -618,6 +618,16 @@ class InnerJoin extends AbstractJoin
 			{
 				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $constraints);
 			}
+			
+			foreach($p->calculatedFields as $field => $expr)
+			{
+				foreach($p->fields as $f => $type)
+				{
+					$expr = preg_replace("/([\s\(])(".$f.")\\b/", "$1t$i.$2", $expr);
+				}
+			
+				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", " $expr", $constraints);
+			}
 		}
 		
 		// Handle XRefs
@@ -804,6 +814,16 @@ class LeftOuterJoin extends AbstractJoin
 			foreach($p->fields as $field => $type)
 			{
 				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $constraints);
+			}
+										
+			foreach($p->calculatedFields as $field => $expr)
+			{
+				foreach($p->fields as $f => $type)
+				{
+					$expr = preg_replace("/([\s\(])(".$f.")\\b/", "$1t$i.$2", $expr);
+				}
+			
+				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", " $expr", $constraints);
 			}
 		}
 		
