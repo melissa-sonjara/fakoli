@@ -375,7 +375,14 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	{
 		$values = $set;
 		if(is_array($set))
+		{
 			$values = "'". implode("','", array_keys($set)) . "'";
+		}
+		else
+		{
+			$values = "'".implode("','", explode(",", $set))."'";
+		}
+		
 		return "$name IN ($values)";
 	}
 }
@@ -639,10 +646,10 @@ class SearchParameters
 			{
 				$fields = $this->target->getFields();
 				$handler = $this->handlers[$fields[$field]];
-				if ($handler)
-				{
-					$clause = $this->getClause($handler, $modifier, $field, $value);			
-				}
+				
+				//AJG: Default to String if field type is not known
+				if (!$handler) $handler = new StringSearchParameterHandler();
+				$clause = $this->getClause($handler, $modifier, $field, $value);			
 			}
 			else
 			{
