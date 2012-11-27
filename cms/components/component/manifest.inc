@@ -113,7 +113,8 @@ class ComponentManifest
 					 "/fakoli/js/grouping_table.js",
 					 "/fakoli/js/scrolling_table.js",
 					 "/fakoli/js/draggable_table.js",
-					 "/fakoli/js/scrolling_tabs.js");
+					 "/fakoli/js/scrolling_tabs.js",
+					 "/fakoli/js/subselect_manager.js");
 	}
 }
 
