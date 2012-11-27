@@ -157,6 +157,16 @@ window.addEvent('domready', function()
 <?
 	} 
 			
+	function preProcess($field)
+	{
+		$super_id = $this->parent->data->get($this->super);
+		
+		if (!array_key_exists($super_id, $this->options))
+		{
+			$this->parent->data->set($field, 0);
+		}		
+	}
+	
 } // end class SubSelectFieldRenderer
 
 ?>
