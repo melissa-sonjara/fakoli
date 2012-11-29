@@ -296,6 +296,15 @@ class DataItem extends AbstractDataItem
 			{
 				if ($this->filter && $this->filter->isExcluded($field)) continue;
 				if (!$first) $list .= ", ";
+				
+				if ($alias)
+				{
+					foreach($this->fields as $f => $type)
+					{
+						$expr = preg_replace("/([\s\(])(".$f.")\\b/", "$1$alias.$2", $expr);
+					}
+				}
+				
 				$list .= $expr . " as `";
 				if ($alias)
 				{
