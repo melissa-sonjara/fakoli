@@ -160,15 +160,15 @@ abstract class AbstractDataImportManager
 		// Use for indexing warnings
 		$class_name = $this->class_name;
 		$pk = $this->getPrimaryKey();
-		$key = Query::create($class_name, "")->executeValue("MAX($pk)") + 1;
+		$row_number = 1;
 		
 		while (($row = fgetcsv($fp)) !== FALSE)
 		{
-			$obj = $this->importOneRow($row, $key);
+			$obj = $this->importOneRow($row, $row_number);
 			if($obj)
 			{
-				$this->objs[$obj->key] = $obj;
-				$key ++;
+				$this->objs[$obj->row_number] = $obj;
+				$row_number++;
 			}
 		}	
 	}
@@ -194,9 +194,9 @@ abstract class AbstractDataImportManager
 		
 		if(count($this->warnings))
 		{
-			foreach($this->warnings as $key => $warning)
+			foreach($this->warnings as $row_number => $warning)
 			{
-				echo "$name $key<br>";
+				echo "$name $row_number<br>";
 				echo $warning;
 			}
 		}
@@ -212,8 +212,8 @@ abstract class AbstractDataImportManager
 	 */
 	function warning($obj, $text)
 	{
-		$key = $obj->get("key");
-		$this->warnings[$key] .= $text . "</br></br>";
+		$row_number = $obj->get("row_number");
+		$this->warnings[$row_number] .= $text . "</br></br>";
 	}
 	
 	/**
@@ -221,14 +221,14 @@ abstract class AbstractDataImportManager
 	 * DataItem object.
 	 * 
 	 * @param $row
-	 * @param $key
+	 * @param $row_number
 	 */
-	function importOneRow($row, $key)
+	function importOneRow($row, $row_number)
 	{
 		$class_name = $this->class_name;
 		$obj = new $class_name;
 		
-		$this->init($obj, $key);
+		$this->init($obj, $row_number);
 	
 		$position = 0;
 		foreach($this->columns as $column)
@@ -248,10 +248,10 @@ abstract class AbstractDataImportManager
 	 * Initialize any fields that may not get a value
 	 * in the import.
 	 */
-	function init(&$obj, $key)
+	function init(&$obj, $row_number)
 	{
-		// use for indexing	
-		$obj->set("key", $key);
+		// use for indexing			
+		$obj->set("row_number", $row_number);
 	}
 	
 	function save()
@@ -261,7 +261,7 @@ abstract class AbstractDataImportManager
 			return;
 		}
 		
-		foreach($this->objs as $key => $obj)
+		foreach($this->objs as $row_number => $obj)
 		{
 			$obj->save();
 			$pk = $this->getPrimaryKey();
@@ -397,6 +397,7 @@ abstract class AbstractDataImportManager
 	function buildPreviewTable()
 	{
 		$table = new DataListView($this->objs, "ImportedData");
+		$table->column("Row", array($this, formatRowIndex));
 		
 		$position = 0;
 		foreach($this->columns as $column)
@@ -429,6 +430,11 @@ abstract class AbstractDataImportManager
 		{
 			return $obj->format("{{$field}}");
 		}
+	}
+	
+	function formatRowIndex($obj)
+	{
+		return $obj->row_number;
 	}
 	
 	function formatColumnValue_0($obj)
@@ -498,10 +504,10 @@ abstract class AbstractDataImportManager
 	
 	function formatWarnings($obj)
 	{
-		$key = $obj->get("key");
-		if(array_key_exists($key, $this->warnings))
+		$row_number = $obj->get("row_number");
+		if(array_key_exists($row_number, $this->warnings))
 		{
-			$warning = $this->warnings[$key];
+			$warning = $this->warnings[$row_number];
 			return "<span style='font-size: 8px'>$warning</span>";
 		}
 	}
