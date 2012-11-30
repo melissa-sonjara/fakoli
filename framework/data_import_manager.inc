@@ -1,4 +1,66 @@
 <?php
+/**************************************************************
+
+ Copyright (c) 2007-2010 Sonjara, Inc
+
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+
+ Except as contained in this notice, the name(s) of the above 
+ copyright holders shall not be used in advertising or otherwise 
+ to promote the sale, use or other dealings in this Software 
+ without prior written authorization.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+*****************************************************************/
+
+/**
+ * Import data from a cvs file.
+ * 
+ * Instantiating classes must specify the details of
+ * the columns in the spreadsheet in function buildColumnList
+ * and any additional default values to be set inbto the
+ * object in function init.
+ * 
+ * The page using the manager should contain the following code:
+
+$mgr = new MyImportManager();
+
+if ($method == "POST")
+{
+	if($_POST["import"])
+	{
+		$mgr->import();
+	}
+	else
+	{
+		$mgr->preview();		
+	}
+}
+else
+{
+	$script .= $mgr->writeScript();
+	$mgr->drawForm();
+}
+
+ */
 require_once realpath(dirname(__FILE__))."/data_view.inc";
 
 abstract class AbstractDataImportManager
@@ -12,6 +74,11 @@ abstract class AbstractDataImportManager
 	var $class_name;
 	var $preview = false;
 
+	/**
+	 * 
+	 * @param String $class_name - name of the DataItem
+	 * class being imported
+	 */
 	function AbstractDataImportManager($class_name)
 	{	
 		$this->class_name = $class_name;
@@ -24,10 +91,28 @@ abstract class AbstractDataImportManager
 	 * the order the columns appear in the cvs file to be inported.
 	 * 
 	 * e.g.,
+	 * if the input column will provide a name value and the import
+	 * manager will retrieve its key value, then instantiate the
+	 * column as follows:
+	 * 
 	 * $this->columns[] = new DataImportColumn($obj, "grade_id", 1, "Grade", $this->formatList($grades, "grade_name"));
+	 * 
+	 * If the input column provides the value to be stored (e.g., "name") then
+	 * instantiate the column as follows:
+	 * 
+	 * $this->columns[] = new DataImportColumn($obj, "name", 2));
+	 * 
 	 */	
 	abstract function buildColumnList();
 	
+	/**
+	 * Use this function to build an array of option key/value
+	 * pairs for lookup.
+	 * 
+	 * @param Array $items - array of DataItem objects in the lookup table
+	 * @param String $nameField - the field in the table that supplies the name
+	 * that is meant to match the input value of the spreadsheet.
+	 */
 	function formatList($items, $nameField)
 	{
 		if(count($items) == 0)
@@ -45,12 +130,33 @@ abstract class AbstractDataImportManager
 		return $out;
 	}
 		
+	/**
+	 * Import and save the data.
+	 */
 	function import()
 	{
 		$fp = fopen($_FILES["import"]["tmp_name"], 'r');
 	
-		if (fgetcsv($fp) === FALSE) ajaxReturn("BARF!");
+		if (fgetcsv($fp) !== FALSE)
+		{
+			$this->loadData($fp);
 	
+			$this->save();
+		
+			$this->writeLog();
+		}
+		else
+		{
+			echo "<div class='error'>Cannot open data file.</div>\n";
+		}
+	}
+	
+	/**
+	 * Load the data from the spreadsheet (cvs file) into the 
+	 * DataItem objects.
+	 */
+	function loadData($fp)
+	{
 		// Use for indexing warnings
 		$class_name = $this->class_name;
 		$pk = $this->getPrimaryKey();
@@ -64,14 +170,22 @@ abstract class AbstractDataImportManager
 				$this->objs[$obj->key] = $obj;
 				$key ++;
 			}
-		}
+		}	
 	}
 		
+	/**
+	 * Store info, errors, and warnings in a log file and ouput.
+	 * 
+	 * @param $text
+	 */
 	function log($text)
 	{
 		$this->log .= $text . "</br></br>";
 	}
 	
+	/**
+	 * Output the log.
+	 */
 	function writeLog()
 	{
 		echo $this->log;
@@ -88,12 +202,27 @@ abstract class AbstractDataImportManager
 		}
 	}
 	
+	/**
+	 * Store warnings such as lookup string not found in this
+	 * array that groups warnings by the object key so we can
+	 * output all warnings for a specific record as a group.
+	 * 
+	 * @param $obj
+	 * @param $text
+	 */
 	function warning($obj, $text)
 	{
 		$key = $obj->get("key");
 		$this->warnings[$key] .= $text . "</br></br>";
 	}
 	
+	/**
+	 * Given a data row, set the value into each field of the
+	 * DataItem object.
+	 * 
+	 * @param $row
+	 * @param $key
+	 */
 	function importOneRow($row, $key)
 	{
 		$class_name = $this->class_name;
@@ -127,12 +256,12 @@ abstract class AbstractDataImportManager
 	
 	function save()
 	{
-		if(count($this->standards) == 0)
+		if(count($this->objs) == 0)
 		{
 			return;
 		}
 		
-		foreach($this->standards as $key => $obj)
+		foreach($this->objs as $key => $obj)
 		{
 			$obj->save();
 			$pk = $this->getPrimaryKey();
@@ -155,6 +284,18 @@ abstract class AbstractDataImportManager
 		return $obj->prettifyClassName();	
 	}
 	
+	/**
+	 * Given the input value read in, set the value
+	 * into the field of the object.
+	 * 
+	 * If this data column is set using the options
+	 * lookup and the value is not found, save the
+	 * warning to display in the DataListView row.
+	 * 
+	 * @param $obj
+	 * @param $column
+	 * @param $value
+	 */
 	function setColumnValue(&$obj, $column, $value)
 	{
 		if(!$value) return;
@@ -185,6 +326,10 @@ abstract class AbstractDataImportManager
 		$obj->$field = $outValue;
 	}
 
+	/**
+	 * Describe the expected columns to the user above
+	 * the Browse File form.
+	 */
 	function buildInputTable()
 	{
 		$table = new DataListView($this->columns, "ImportColumns");
@@ -205,8 +350,10 @@ abstract class AbstractDataImportManager
 	{
 		if($this->inputTable)
 		{
-			$this->inputTable->writeScript();
+			$script .= $this->inputTable->writeScript();
 		}
+		
+		return $script;
 	}
 	
 	function drawForm()
@@ -223,11 +370,30 @@ abstract class AbstractDataImportManager
 	function preview()
 	{
 		$this->preview = true;
-		$this->import();
 		
-		$this->table = $this->buildPreviewTable();
+		$fp = fopen($_FILES["import"]["tmp_name"], 'r');
+	
+		if (fgetcsv($fp) !== FALSE)
+		{
+			$this->loadData($fp);
+
+			$table = $this->buildPreviewTable();
+		
+			echo $this->log;
+	
+			$table->drawView();
+		}
+		else
+		{
+			echo "<div class='error'>Cannot open data file.</div>\n";
+		}	
 	}
 	
+	/**
+	 * Display in a DataListView the values read in and set into the 
+	 * data objects and show a Warnings column to list values
+	 * not found in the lookup table.
+	 */
 	function buildPreviewTable()
 	{
 		$table = new DataListView($this->objs, "ImportedData");
@@ -320,6 +486,15 @@ abstract class AbstractDataImportManager
 		return $this->formatColumnValue($obj, 10);
 	}
 	
+	function formatColumnValue_11($obj)
+	{
+		return $this->formatColumnValue($obj, 11);
+	}
+
+	function formatColumnValue_12($obj)
+	{
+		return $this->formatColumnValue($obj, 12);
+	}
 	
 	function formatWarnings($obj)
 	{
@@ -348,7 +523,7 @@ abstract class AbstractDataImportManager
 			$out = implode("<br>", $out);
 		}
 
-		return "<span style='font-size: 10px'>$out</span>";
+		return "<div class='scrollbox' style='height: 200px; overflow: scroll; border: none'>$out</div>";
 	}
 	
 }
