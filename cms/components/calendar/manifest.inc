@@ -51,6 +51,11 @@ class CalendarManifest
 		return array("/components/calendar/css/calendar.css");
 	}
 	
+	static function getScripts()
+	{
+		return array("/components/calendar/js/calendar.js");
+	}
+	
 	static function getAdminMenu()
 	{
 		return array
