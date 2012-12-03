@@ -294,7 +294,7 @@ a.list_member
 
 
 /* box border under tab bar */
-#tab_border {
+#fileshare_content #tab_border {
 	clear: left;
 	border: solid 1px #000; 
 	padding-left: 4px;
