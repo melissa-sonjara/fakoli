@@ -383,6 +383,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function get($field)
 	{
+		if (!$field) throw new FakoliException("Cannot access empty field");
 		return $this->$field;
 	}
 	
@@ -393,6 +394,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function set($field, $value)
 	{
+		if (!$field) throw new FakoliException("Cannot access empty field");
 		$this->$field = $value;
 	}
 	
