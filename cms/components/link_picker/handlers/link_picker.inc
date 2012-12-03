@@ -38,7 +38,6 @@ $editor = $_GET["Editor"];
 
 $itemsByType = array();
 $itemsByType = ComponentManager::fireEvent("EnumerateItems", &$itemsByType);
-$types = categorizeItemTypes($itemsByType);
 
 $tree = new TreeControl("items");
 $tree->width = "100%";
@@ -90,25 +89,9 @@ ENDSCRIPT;
 
 $tree->writeHTML();
 
-function categorizeItemTypes($itemsByType)
-{
-	$types = array();
-	
-	foreach($itemsByType as $type => $items)
-	{
-		foreach($items as $item)
-		{
-			$types[$item->identifier] = $type;
-		}
-	}
-
-	return $types;
-}
-
 function getLink($section, $identifier)
 {
-	$url = "/{$section->section}/$identifier";
-	$url = str_replace("//", "/", $url);
+	$url = ($section->section == "/") ? "/$identifier" : "/{$section->section}/$identifier";
 	
 	return $url;
 }
