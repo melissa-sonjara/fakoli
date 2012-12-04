@@ -684,6 +684,30 @@ class Fakoli
 	}
 	
 	/**
+	 * Find the component containing the specified class.
+	 */
+	static function getComponentForClass($class)
+	{
+		$reflector = new ReflectionClass($class);
+		$file = $reflector->getFileName();
+		trace("File for $class: $file", 3);
+		
+		if ($file)
+		{
+			$file = str_replace(DIRECTORY_SEPARATOR, "/", $file);
+			
+			$matches = array();
+			if (preg_match("/components\\/(.*?)\\//", $file, $matches))
+			{
+				trace("Component for $class is {$matches[1]}", 3);				
+				return $matches[1];
+			}
+		}
+		
+		throw new FakoliException("Failed to determine component for $class");
+	}
+	
+	/**
 	 * Use this method to terminate execution of a script instead
 	 * of using the php keywords exit() or die().
 	 * @param unknown_type $message
