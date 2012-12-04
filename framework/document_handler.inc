@@ -47,6 +47,7 @@ $doc_types = array( "application/msword",
 		    "text/rtf",
 			"audio/mpeg",
 			"video/flv",
+			"audio/wav",
 		);
 
 /**
@@ -68,6 +69,7 @@ $doc_extensions = array(
 		".docx" => "Microsoft Word Document",
 		".mp3"	=> "MP3 Audio File",
 		".flv"	=>	"Flash Video",
+		".wav"	=>	"Audio",
         );
 
 $doc_mime_types = array(
@@ -86,6 +88,7 @@ $doc_mime_types = array(
 		".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		".mp3" => "audio/mpeg",
 		".flv"	=>	"video/x-flv",
+		".wav"	=>	"audio/wav",
 );
 
 $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
