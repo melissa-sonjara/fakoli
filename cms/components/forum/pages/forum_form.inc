@@ -49,6 +49,7 @@ else
 
 
 $form = new AutoForm($forum);
+$form->required("identifier", "title", "teaser", "description");
 $form->hide("created_date", "owner_id");
 
 if ($method == "POST")
