@@ -78,7 +78,7 @@ var SessionTimer =  (function()
 		resetTimer: function()
 		{
 			//clearTimeout(timer);
-			timer = this.showExtendSessionDialog.delay(this.options.timeout);
+			timer = this.showExtendSessionDialog.delay(this.options.timeout, this);
 			
 		},
 			
