@@ -34,17 +34,19 @@
 class Site extends DataItem
 {
 	// Fields
-	var $fields = array("site_id"			=> Number,
-						"site_name"			=> String,
-						"domain"			=> String,
-						"home_page"			=> String,
-						"description"		=> Text,
-						"default_template"	=> String,
-						"print_template"	=> String,
-						"popup_template"	=> String,
-						"mobile_template"	=> String,
-						"enabled"			=> Boolean,
-						"default_site"		=> Boolean);
+	var $fields = array("site_id"				=> Number,
+						"site_name"				=> String,
+						"domain"				=> String,
+						"home_page"				=> String,
+						"description"			=> Text,
+						"meta_tag_description"	=> Text,
+						"meta_tag_keyword"		=> String,				
+						"default_template"		=> String,
+						"print_template"		=> String,
+						"popup_template"		=> String,
+						"mobile_template"		=> String,
+						"enabled"				=> Boolean,
+						"default_site"			=> Boolean);
 	
 // Relations
 	

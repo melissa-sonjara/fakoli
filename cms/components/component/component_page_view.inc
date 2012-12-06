@@ -111,6 +111,8 @@ class ComponentPageView
 		if (!$title) $title = $page->page_title;
 		if (!$title) $title = prettify($this->page->identifier);
 		$template = str_replace("{page_title}", $title, $template);
+		$template = str_replace("{meta_tag_description}", $site->meta_tag_description, $template);
+		$template = str_replace("{meta_tag_keyword}", $site->meta_tag_keyword, $template);
 		
 		$qs = $_SERVER['QUERY_STRING'];
 		$identifier = $_REQUEST["identifier"];

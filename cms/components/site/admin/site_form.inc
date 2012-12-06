@@ -49,6 +49,9 @@ $form->required("title");
 $form->allowDelete = true;
 $redirect = "/admin/sites";
 $form->button("Cancel", $redirect);
+$form->annotate("meta_tag_description", "Default content for the description meta-tag");
+$form->annotate("meta_tag_keyword", "Default content for the keywords meta-tag");
+
 $templateSelect       = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "templates");
 $printTemplateSelect  = new TemplateSelectFieldRenderer($form, "print_template", "Print Template", "templates");
 $popupTemplateSelect  = new TemplateSelectFieldRenderer($form, "popup_template", "Popup Template", "templates");

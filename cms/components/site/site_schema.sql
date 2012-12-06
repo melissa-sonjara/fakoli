@@ -33,3 +33,10 @@ INSERT INTO `site` (`site_id`,`site_name`,`domain`,`enabled`,`description`,`defa
 /*!40000 ALTER TABLE `site` ENABLE KEYS */;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE `site` ADD COLUMN `meta_tag_description` varchar(200) DEFAULT NULL;
+ALTER TABLE `site` ADD COLUMN `meta_tag_keyword` varchar(200) DEFAULT NULL;
+
+-- END Version 1.1
