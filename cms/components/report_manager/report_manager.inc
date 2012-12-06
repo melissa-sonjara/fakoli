@@ -124,6 +124,7 @@ class ReportManager
 	var $report;
 	var $request;
 	var $interstitialMessage = "";	///< Optional interstitial message to display while report is being generated
+	var $limit;						///< Optional limit to number of records retrieved, depending on acceptable load times for results
 	
 	function ReportManager()
 	{
@@ -268,6 +269,11 @@ class ReportManager
 		{
 			$this->constraint .= $table->getConstraint($first, $this->request);
 		}
+		
+		if($this->limit && is_numeric($this->limit))
+		{
+			$this->constraint .= "LIMIT {$this->limit}";
+		}
 	}
 	
 	function generateReport($inlineScript = false)
@@ -355,6 +361,11 @@ class ReportManager
 		$report->hideExcelIcon = true;
 		
 		$excel = $report->getExcelLink();
+		
+		if($this->limit && count($results))
+		{
+			echo "<p class='report_limit'>Results are limited to the first {$this->limit} records.</p>\n";
+		}
 		
 		$this->writeResultsFormButtons($excel);
 		
