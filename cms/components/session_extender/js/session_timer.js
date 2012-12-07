@@ -38,7 +38,7 @@ var SessionTimer =  (function()
 		options:
 		{
 			message: "We haven't heard from you in a while. Do you want to extend your session?",
-			timeout: 8000
+			timeout: 20000
 		},
 		
 		dialog: null,
