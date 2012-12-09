@@ -5,6 +5,7 @@ var Chart = new Class(
 	container:	Class.Empty,
 	paper: 		Class.Empty,
 	palette:	Class.Empty,
+	saveIcon:	Class.Empty,
 	
 	initialize: function(id)
 	{
@@ -37,12 +38,24 @@ var Chart = new Class(
 	
 	draw: function()
 	{
-		if (!this.testSVG())
-		{
-			
-		}
-		
 		this.drawChart();		
+		
+		if (this.testSVG())
+		{
+			this.saveIcon = new Element("img", {src: "/components/svg_charts/images/save_icon.png", 
+												alt: "Save Chart as PNG",
+												title: "Save Chart as PNG",
+												id:  this.id + "_saveIcon"});
+			this.saveIcon.setStyles({'cursor': 'pointer'});
+			
+			document.body.adopt(this.saveIcon);
+			this.saveIcon.position({relativeTo: this.container, position: 'topRight', edge: 'topRight'});
+			this.saveIcon.addEvent('click', function() { this.saveImage(); }.bind(this));
+			this.saveIcon.addEvent('mouseover', function(){ this.saveIcon.set('src', "/components/svg_charts/images/save_icon_hover.png"); });
+			this.saveIcon.addEvent('mouseout', function(){ this.saveIcon.set('src', "/components/svg_charts/images/save_icon_hover.png"); });
+			//this.container.addEvent('mouseover', function() { this.saveIcon.fade('in');}.bind(this));
+			//this.container.addEvent('mouseout', function() { this.saveIcon.fade('out');}.bind(this));
+		}
 	},
 	
 	drawLegend: function()
@@ -82,22 +95,28 @@ var Chart = new Class(
 	
 	saveImage: function()
 	{	
-		this.canvas = new Element("canvas", {id: this.id + "_canvas"});
-		this.canvas.setStyles({width: this.container.getWidth(), height: this.container.getHeight(), display: 'none'});
-		document.body.adopt(this.canvas);
+		if (!this.canvas)
+		{
+			this.canvas = new Element("canvas", {id: this.id + "_canvas"});
+			this.canvas.setStyles({width: this.container.getWidth(), height: this.container.getHeight(), display: 'none'});
+			document.body.adopt(this.canvas);
+		}
 		svg = this.container.get('html');
 
-	    canvg('diagram_canvas', svg, {renderCallback: this.saveImageCallback.bind(this), ignoreMouse: true, ignoreAnimation: true});
+	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), ignoreMouse: true, ignoreAnimation: true});
 	},
 	
 	saveImageCallback: function()
 	{
 		if (!this.form)
 		{
-			this.form = new Element("form", {method: 'post', action: '/components/svg_charts/save_image', display: 'none'});
+			this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_image', display: 'none'});
 			var input = new Element("input", {type: 'hidden', name: 'img', value: ''});
+			var filename = new Element("input", {type: 'hidden', name: 'filename', value: this.id});
+			
 			this.form.adopt(input);
-			document.body.adopt(form);
+			this.form.adopt(filename);
+			document.body.adopt(this.form);
 		}
 		
 		var img = document.getElementById(this.id + "_canvas").toDataURL("image/png");
