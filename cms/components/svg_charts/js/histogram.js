@@ -310,7 +310,8 @@ var Histogram = new Class(
 		titleSize: 20,
 		title: '',
 		max: 0,
-		min: 0
+		min: 0,
+		enableDownload: true
 	},
 	
 	initialize: function(id, options, labels)

@@ -11,6 +11,7 @@ var MorphingHistogram = new Class({
 	initialize: function(id, options, labels)
 	{
 		this.options.startIndex = 0;
+		this.options.enableDownload = false;
 		
 		this.parent(id, options, labels);
 	},

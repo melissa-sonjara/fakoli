@@ -25,7 +25,8 @@ var PieChart = new Class(
 		percentagesDistance: 0.75,
 		animatePercentages: true,
 		onSectorOver: Class.Empty,
-		onSectorOut: Class.Empty
+		onSectorOut: Class.Empty,
+		enableDownload: true
 	},
 	
 	sectors: [],

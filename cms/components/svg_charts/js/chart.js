@@ -40,7 +40,7 @@ var Chart = new Class(
 	{
 		this.drawChart();		
 		
-		if (this.testSVG())
+		if (this.testSVG() && this.options.enableDownload)
 		{
 			this.saveIcon = new Element("img", {src: "/components/svg_charts/images/save_icon.png", 
 												alt: "Save Chart as PNG",
