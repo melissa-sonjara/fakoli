@@ -46,15 +46,15 @@ var Chart = new Class(
 												alt: "Save Chart as PNG",
 												title: "Save Chart as PNG",
 												id:  this.id + "_saveIcon"});
-			this.saveIcon.setStyles({'cursor': 'pointer'});
+			this.saveIcon.setStyles({'cursor': 'pointer', 'opacity': 0});
 			
-			document.body.adopt(this.saveIcon);
+			this.container.adopt(this.saveIcon);
 			this.saveIcon.position({relativeTo: this.container, position: 'topRight', edge: 'topRight'});
 			this.saveIcon.addEvent('click', function() { this.saveImage(); }.bind(this));
-			this.saveIcon.addEvent('mouseover', function(){ this.saveIcon.set('src', "/components/svg_charts/images/save_icon_hover.png"); });
-			this.saveIcon.addEvent('mouseout', function(){ this.saveIcon.set('src', "/components/svg_charts/images/save_icon_hover.png"); });
-			//this.container.addEvent('mouseover', function() { this.saveIcon.fade('in');}.bind(this));
-			//this.container.addEvent('mouseout', function() { this.saveIcon.fade('out');}.bind(this));
+			this.saveIcon.addEvent('mouseover', function(){ this.saveIcon.set('src', "/components/svg_charts/images/save_icon_hover.png"); }.bind(this));
+			this.saveIcon.addEvent('mouseout', function(){ this.saveIcon.set('src', "/components/svg_charts/images/save_icon.png"); }.bind(this));
+			this.container.addEvent('mouseover', function() { this.saveIcon.position({relativeTo: this.container, position: 'topRight', edge: 'topRight'}); this.saveIcon.fade('in');}.bind(this));
+			this.container.addEvent('mouseout', function() { this.saveIcon.fade('out');}.bind(this));
 		}
 	},
 	
@@ -101,8 +101,13 @@ var Chart = new Class(
 			this.canvas.setStyles({width: this.container.getWidth(), height: this.container.getHeight(), display: 'none'});
 			document.body.adopt(this.canvas);
 		}
-		svg = this.container.get('html');
-
+		
+		var s = this.container.getElement('svg').clone();
+		var tmp = new Element('div');
+		tmp.adopt(s);
+		svg = tmp.get('html');
+		tmp.destroy();
+		
 	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), ignoreMouse: true, ignoreAnimation: true});
 	},
 	

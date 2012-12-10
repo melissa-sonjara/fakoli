@@ -1,7 +1,7 @@
 <?php
 
 $image = $_POST["img"];
-
+$filename = checkIdentifier($_POST["filename"]);
 
 trace($image, 3);
 
@@ -16,7 +16,7 @@ if ($encoding == "base64")
 }
 
 header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"diagram.png\"");
+header("Content-Disposition: attachment;filename=\"{$filename}.png\"");
 header("Cache-Control: must-revalidate");
 header("Content-Type: $mimeType");
 echo $data;
