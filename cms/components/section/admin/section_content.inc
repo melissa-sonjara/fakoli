@@ -120,7 +120,7 @@ foreach($content as $item)
 	$properties = $contentByIdentifier[$item->identifier];
 	
 	$child = new TreeNode("content['{$item->identifier}']", $item->identifier, $item->section_content_id, false, "plain_tree_closed", "plain_tree_open");
-	$child->leafStyle = ($properties->template || $properties->role || $properties->use_SSL) ? "flagged_node_leaf" : "file_node_leaf";
+	$child->leafStyle = ($properties->template || $properties->role || $properties->permissions || $properties->use_SSL) ? "flagged_node_leaf" : "file_node_leaf";
 	$categories[$type]->add($child);
 }
 
