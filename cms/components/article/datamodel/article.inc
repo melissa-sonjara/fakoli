@@ -40,10 +40,10 @@ class Article extends DataItem implements Searchable
 {
 	var $fields = array("article_id"	=>	Number,
 						"title"			=>	String,
-						"image_id"		=>	Number,
-						"article_type"	=>	String,
-						"teaser"		=>	HTML,
 						"message"		=>	HTML,
+						"article_type"	=>	String,
+						"image_id"		=>	Number,
+						"teaser"		=>	HTML,
 						"created_date"	=>	Date,
 						"archive_date"  =>  Date,
 						"publish_date"  =>  Date,
@@ -62,6 +62,8 @@ class Article extends DataItem implements Searchable
 							"Sites"		=> Site,
 							"Comments"	=> Comment,
 							"Author"	=> "");
+	
+	var $fieldAliases = array("message"	=>	"Article Content");
 	
 	function Image()
 	{

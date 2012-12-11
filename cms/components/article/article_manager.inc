@@ -10,6 +10,14 @@ class ArticleManager
 	
 	static function buildArticleForm($article)
 	{
+		if (!$article->article_id)
+		{
+			global $user;
+			
+			$mgr = new UserManager();
+			$article->author = (method_exists($mgr, getUserFullName)) ? $mgr->getUserFullName($user) : "";
+		}
+
 		$form = new AutoForm($article);
 		$form->required("title");
 		$form->allowDelete = true;
@@ -20,11 +28,15 @@ class ArticleManager
 		$articleTypeSelect = new SelectFieldRenderer($form, "article_type", "Article Type");
 		$articleTypeSelect->allowAddEntry();
 
+		$form->getRenderer("message")->height = "480px";
+		$form->getRenderer("teaser")->height = "120px";
+		
 		$sites = query(Site, "ORDER BY site_name");
 	
 		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
 
 		$form->getRenderer("archive_date")->validator->required = false;
+		
 		
 		return $form;
 	}
