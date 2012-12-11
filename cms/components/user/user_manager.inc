@@ -112,6 +112,15 @@ class UserManager
 	}
 
 	/**
+	 * Return the user's full name
+	 * @param string $user the user object to be queried
+	 */
+	function getUserFullName($user)
+	{
+		return $user->getFullName();
+	}
+	
+	/**
 	 * Validates the user's username and password, returning the matching user.
 	 * @param $username the user's username
 	 * @param $password the supplied password
