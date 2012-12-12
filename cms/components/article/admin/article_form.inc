@@ -46,6 +46,7 @@ if ($article_id)
 else
 {
 	$article->created_date = now();
+	$article->publish_date = today();
 }
 
 $form = ArticleManager::buildArticleForm($article);
@@ -58,6 +59,7 @@ $form->button("Cancel", $redirect);
 
 if ($method == "POST")
 {
+	
 	if ($form->save())
 	{
 		if($form->data->published)
