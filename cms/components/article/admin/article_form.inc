@@ -48,6 +48,8 @@ else
 	$article->created_date = now();
 }
 
+$a = $article->getBlogSubscribers();
+trace("reshma".$a, 3);
 $form = ArticleManager::buildArticleForm($article);
 $form->hide("sort_order");
 
@@ -60,6 +62,10 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
+		if($form->data->published)
+		{
+			sendEmailUsingEmailManager($article, 'blog_published');	
+		}
 		redirect("/admin/articles");
 	}
 }
