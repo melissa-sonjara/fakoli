@@ -104,6 +104,21 @@ class Article extends DataItem implements Searchable
 		return $blog;
 	}
 	
+	function getBlogSubscribers()
+	{
+		$blogSubscribers = Query::create(BlogSubscriber, "where blog_id=:blog_id")
+								->bind(":blog_id", $this->getBlog()->blog_id)
+								->execute();
+		$email_list_array = array();
+		foreach($blogSubscribers as $blogSubscriber)
+		{
+			$email_list_array[] = $blogSubscriber->subscriber_email;
+		}
+		$email_list = implode(",", $email_list_array);
+		
+		return $email_list;
+	}
+	
 	function getViewIdentifier()
 	{
 		try
