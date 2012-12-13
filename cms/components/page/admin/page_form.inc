@@ -33,11 +33,9 @@
 
 Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy");
 
-Fakoli::usingFile("framework/auto_form.inc", "framework/tree.inc");
+Fakoli::usingFeature("auto_form", "tree");
 
-Fakoli::assertRole("admin");
-
-require_once "include/page_tabs.inc";
+Fakoli::assertRole("admin,editor");
 
 $menu_item = "Pages";
 
@@ -72,7 +70,7 @@ $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRoles
 $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
 
 
-$tabs = pageTabs($page_id);
+$tabs = PageManager::pageTabs($page_id);
 $tabs->page = "page_form";
 
 if ($method == "POST")

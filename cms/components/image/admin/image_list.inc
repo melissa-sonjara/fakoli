@@ -36,7 +36,9 @@ Fakoli::usingFeature("tab_bar", "data_view");
 
 require_once "include/image_gallery_tabs.inc";
 
-Fakoli::assertRole("admin");
+$menu_item = "Images";
+
+Fakoli::assertRole("admin,editor");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 

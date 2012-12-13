@@ -69,7 +69,7 @@ class DocumentManifest
 			(
 
 				"Documents"	=>	array("page"	=>	"/admin/document_libraries",
-									  "role"	=>	"admin",
+									  "role"	=>	"admin,editor",
 									  "weight"	=>	3)
 			)
 		);

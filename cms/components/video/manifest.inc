@@ -56,7 +56,7 @@ class VideoManifest
 			(
 
 				"Videos"	=>	array("page"	=>	"/admin/video_galleries",
-									  "role"	=>	"admin",
+									  "role"	=>	"admin,editor",
 								  	  "weight"	=>	9)
 			)
 		);		

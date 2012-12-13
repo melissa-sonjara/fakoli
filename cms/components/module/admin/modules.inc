@@ -32,9 +32,9 @@
 *****************************************************************/
 
 Fakoli::using("module");
-Fakoli::usingFile("framework/data_view.inc");
+Fakoli::usingFeature("data_view");
 
-Fakoli::assertRole("admin");
+Fakoli::assertRole("admin,editor");
 
 $menu_item = "Modules";
 

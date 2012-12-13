@@ -32,9 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("page", "menu", "module");
-Fakoli::usingFile("framework/auto_form.inc");
-
-require_once "include/page_tabs.inc";
+Fakoli::usingFeature("auto_form");
 
 $menu_item = "Pages";
 
@@ -44,7 +42,7 @@ if (!$page_id) redirect("/index");
 
 $cmspage = new Page($page_id);
 
-$tabs = pageTabs($page_id);
+$tabs = PageManager::pageTabs($page_id);
 $tabs->page = "page_modules";
 
 $title = "Position Modules for {$cmspage->page_title}";

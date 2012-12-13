@@ -54,7 +54,7 @@ class ModuleManifest
 			(
 
 				"Modules"	=>	array("page"	=>	"/admin/modules",
-									  "role"	=>	"admin",
+									  "role"	=>	"admin,editor",
 									  "weight"	=>	2)
 			)
 		);		

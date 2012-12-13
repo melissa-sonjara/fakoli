@@ -57,6 +57,17 @@ class PageSerializationHandler
 
 class PageManager
 {
+
+	static function pageTabs($key)
+	{
+		$tabs = array(	"Content"	=>	"/admin/page_form",
+						"Modules"	=>	"/admin/page_modules"
+		);
+	
+		$qs = ($key) ? "page_id=$key" : "";
+		return new TabBar("tabs", $tabs, $qs);
+	}
+	
 	static function displayPage($identifier, &$continue)
 	{
 		global $page_role;

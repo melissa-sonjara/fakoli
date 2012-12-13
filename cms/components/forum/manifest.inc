@@ -54,7 +54,7 @@ class ForumManifest
 			(
 
 				"Forums"	=>	array("page"	=>	"/admin/forums",
-									  "role"	=>	"admin",
+									  "role"	=>	"admin,editor",
 								  	  "weight"	=>	2)
 			)
 		);		

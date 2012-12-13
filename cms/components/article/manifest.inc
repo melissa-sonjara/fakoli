@@ -54,7 +54,7 @@ class ArticleManifest
 			(
 
 				"Articles"	=>	array("page"	=>	"/admin/articles",
-								  	  "role"	=>	"admin",
+								  	  "role"	=>	"admin,editor",
 								  	  "weight"	=>	5)
 			)
 		);		

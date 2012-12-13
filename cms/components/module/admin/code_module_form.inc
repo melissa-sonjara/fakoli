@@ -35,7 +35,7 @@ Fakoli::using("module", "field_renderers");
 
 Fakoli::usingFile("framework/auto_form.inc");
 
-Fakoli::assertRole("admin");
+Fakoli::assertRole("admin,editor");
 
 $menu_item = "Modules";
 $module_id = checkNumeric($_GET["module_id"]);

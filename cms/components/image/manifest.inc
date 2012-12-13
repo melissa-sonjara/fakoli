@@ -56,7 +56,7 @@ class ImageManifest
 			(
 
 				"Images"	=>	array("page"	=>	"/admin/image_galleries",
-									  "role"	=>	"admin",
+									  "role"	=>	"admin,editor",
 								  	  "weight"	=>	4)
 			)
 		);		

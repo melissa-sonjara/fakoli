@@ -52,7 +52,7 @@ class BlogManifest
 			(
 
 				"Blogs"	=>	array("page"	=>	"/admin/blogs",
-										  "role"	=>	"admin",
+										  "role"	=>	"admin,editor",
 								  		  "weight"	=>	9)
 			)
 		);

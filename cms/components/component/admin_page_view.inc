@@ -164,10 +164,9 @@ class AdminPageView
 		
 		foreach($admin_menu as $section => $items)
 		{
-?>
- <h4 class="toggler atStart"><?echo $section ?></h4>
- <div class="atStart">
-<?			
+			$found = false;
+			$submenu = " <h4 class=\"toggler atStart\">{$section}</h4>\n <div class=\"atStart\">\n";
+
 			foreach($items as $item => $properties)
 			{
 				if ($item == $menu_item) 
@@ -181,14 +180,16 @@ class AdminPageView
 				}
 				if (checkRole($properties["role"]))
 				{
-					echo "<a class='$class' href='{$properties['page']}{$menu_params}'>{$item}</a>\n";
+					$submenu .= "<a class='$class' href='{$properties['page']}{$menu_params}'>{$item}</a>\n";
+					$found = true;
 				}
 			}
 			
 			++$menuSectionIdx;
-?>
-</div>
-<?
+			
+			$submenu .= "</div>";
+			
+			if ($found) echo $submenu;
 		}
 ?>
 </div>

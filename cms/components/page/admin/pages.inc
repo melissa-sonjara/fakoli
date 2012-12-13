@@ -34,7 +34,7 @@
 Fakoli::using("page");
 Fakoli::using("site");
 
-Fakoli::assertRole("admin");
+Fakoli::assertRole("admin,editor");
 
 Fakoli::usingFeature("data_view", "data_tabs");
 
