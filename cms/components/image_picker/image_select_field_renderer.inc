@@ -41,6 +41,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 	var $field;
 	var $onPreProcess;
 	var $onPostProcess;
+	var $size;
 	
 	function ImageSelectFieldRenderer(&$form, $field = "", $required = false)
 	{
@@ -67,18 +68,18 @@ class ImageSelectFieldRenderer extends FieldRenderer
 
 	}
 	
-	function renderField($field = "")
+	function renderField($field = "", $readonly = false)
 	{
 		if (!$field) $field = $this->field;
 		
 		$this->_startField($field);
 
 		$key = $this->parent->data->get($field);
-		
+
 		if ($key)
 		{
 			$item = new ImageRecord($key);
-			$src = $item->getThumbnail();
+			$src = $item->getThumbnail($this->size);
 		}
 		else
 		{
@@ -90,13 +91,25 @@ class ImageSelectFieldRenderer extends FieldRenderer
  <tr>
   <td><img id='<?echo $field ?>_preview' src='<?echo $src ?>'/></td>
  </tr>
+ <?php 
+ 		if(!$readonly)
+ 		{
+ ?>
  <tr>
   <td><button class='button' style='width: 100%' onclick="new ImagePicker().showSelectImageDialog('<?echo urlencode($field) ?>'); return false;"> Select Image </button></td>
  </tr>
+ <?php 
+ 		}
+ ?>
 </table>
 <?
 		$this->_endField($field);
 	}
+	
+	function renderReadOnly($field = "")
+	{
+		$this->renderField($field, true);
+	}	
 	
 	function preProcess($field = "")
 	{
