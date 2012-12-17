@@ -266,7 +266,7 @@ abstract class AbstractDataImportManager
 			$obj->save();
 			$pk = $this->getPrimaryKey();
 			$name = $this->getClassName();
-			$this->log("Saved $name {$obj->standard_id} {$obj->name}");
+			$this->log("Saved $name {$obj->$pk}");
 		}
 	}
 		
