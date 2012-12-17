@@ -341,7 +341,6 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		}
 			
 		?>
- 		<label for='<?php echo $field?>' class="<?php echo $this->parent->labelCSS ?>"><?php echo $label ?></label>		
     	<select name="<?php echo $field ?>" <?echo $style?> onchange="this.form.submit();">
     	<?php 
     	if($this->all)

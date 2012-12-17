@@ -116,7 +116,7 @@ class SearchParameterHandler
 	}
 	
 	
-	/* 
+	/** 
 	 * Generate the constraint expression for set membership matching
 	 * paramters, matching values in a comma delimite set.
 	 * 
@@ -129,7 +129,7 @@ class SearchParameterHandler
 	}
 	
 
-	/* 
+	/**
 	 * Generate the constraint expression for matching any
 	 * word in a group of words.
 	 * 
@@ -141,7 +141,7 @@ class SearchParameterHandler
 	{	
 	}
 	
-	/* 
+	/** 
 	 * Generate the constraint expression for matching all
 	 * words in a group of words but allowing other words
 	 * in between.
@@ -154,7 +154,7 @@ class SearchParameterHandler
 	{	
 	}
 	
-	/*
+	/**
 	 * Generate the constraint expression for matching
 	 * the f_name and l_name fields to a given value.
 	 * 
@@ -463,6 +463,13 @@ class DateSearchParameterHandler extends SearchParameterHandler
 	}
 }
 
+/**
+ * The SearchParameters class interprets the set of input parameters for a search
+ * and generates the corresponding SQL constraints to perform the search against
+ * the database.
+ * 
+ * @author andy
+ */
 class SearchParameters
 {
 	var $target;
@@ -496,7 +503,7 @@ class SearchParameters
 		return $value;
 	}
 	
-	/*
+	/**
 	 * Override default handling by setting
 	 * a custom callback to generate the
 	 * constraint for a field.
@@ -615,7 +622,7 @@ class SearchParameters
 		return $qs;
 	}
 	
-	/*
+	/**
 	 * generateConstraint
 	 * 
 	 * @first: whether this set of clauses is the first in a group
@@ -762,7 +769,7 @@ class SearchParameters
 		return $clause;
 	}	
 	
-/*
+/**
  * joinClauses
  * 
  * @first: whether this is the first clause; if so start with "WHERE"
