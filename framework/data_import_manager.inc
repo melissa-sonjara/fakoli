@@ -362,7 +362,7 @@ abstract class AbstractDataImportManager
 		
 		echo "</br></br><form method='POST' action='' enctype='multipart/form-data'>
 		<label>CSV file to import: </label><input type='file' name='import'/><br/><br/>
-		<input type='submit' class='button' value='Import File'/>
+		<input type='submit' name='import' class='button' value='Import File'/>
 		<input type='submit' name='preview' class='button' value='Preview Import'/>
 		</form>";	
 	}
