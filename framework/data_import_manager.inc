@@ -135,7 +135,7 @@ abstract class AbstractDataImportManager
 	 */
 	function import()
 	{
-		$fp = fopen($_FILES["import"]["tmp_name"], 'r');
+		$fp = fopen($_FILES["csv_file"]["tmp_name"], 'r');
 	
 		if (fgetcsv($fp) !== FALSE)
 		{
@@ -361,7 +361,7 @@ abstract class AbstractDataImportManager
 		$this->inputTable->drawView();
 		
 		echo "</br></br><form method='POST' action='' enctype='multipart/form-data'>
-		<label>CSV file to import: </label><input type='file' name='import'/><br/><br/>
+		<label>CSV file to import: </label><input type='file' name='csv_file'/><br/><br/>
 		<input type='submit' name='import' class='button' value='Import File'/>
 		<input type='submit' name='preview' class='button' value='Preview Import'/>
 		</form>";	
@@ -371,7 +371,7 @@ abstract class AbstractDataImportManager
 	{
 		$this->preview = true;
 		
-		$fp = fopen($_FILES["import"]["tmp_name"], 'r');
+		$fp = fopen($_FILES["csv_file"]["tmp_name"], 'r');
 	
 		if (fgetcsv($fp) !== FALSE)
 		{
