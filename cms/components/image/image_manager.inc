@@ -174,38 +174,6 @@ class ImageManager
 		}
 
 		Fakoli::sendFile($cacheFile);
-//		$last_modified = filemtime($cacheFile);
-//		
-//		$mimeType = DocumentHandler::getMIMEType($cacheFile);
-//
-//		header("Last-Modified: ".date('r', $last_modified));
-//		header("Cache-Control: max-age=300, must-revalidate");
-//		header("Content-Type: $mimeType");
-//		
-//	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
-//	    {
-//			trace("renderThumbnail:: array_key_exists(HTTP_IF_MODIFIED_SINCE,_SERVER", 3);
-//	    	
-//	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
-//	        
-//	        if($if_modified_since >= $last_modified)
-//	        {
-//				trace("renderThumbnail:: if_modified_since >= last_modified", 3);
-//	            header("HTTP/1.0 304 Not Modified");
-//	            exit();
-//	        }
-//	    }
-//
-//	    $f = fopen($cacheFile, "r");
-//
-//	    $size = filesize($cacheFile);
-//		header("Content-Length: $size");
-//		header("Pragma: cache");
-//		header("Expires:");
-//		
-//		fpassthru($f);
-//		fclose($f);
-//		trace("renderThumbnail:: exiting", 3);
 	}
 	
 	/**
@@ -217,49 +185,96 @@ class ImageManager
 	{
 		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
+		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		
+		Fakoli::sendFile($imageFile);
+	}
+		
+	function resizeAndCropToFit($image_id, $width, $height)
+	{
+		global $config;
+		
+		$image = new ImageRecord($image_id);
+		$gallery = $image->Gallery();
+		
+		trace("resizeAndCropToFit:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
 		//TODO: Fix this
 		//if (!checkRole($gallery->read_access))
 		//{
 		//	throw new FakoliException("Access Denied");
 		//}
-
+		
+		if (!$width || !$height) $size = $config['thumbnail_size'];
+		
+		$suffix = "cropTo_{$width}x{$height}";
+		
+		$nameParts = explode(".",$image->image_file);
+		$ext = ".".strtolower($nameParts[1]);
+		
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
+		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . ".png";
+		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
 		
-		Fakoli::sendFile($imageFile);
+		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
+		{
+			switch($ext)
+			{
+				case ".jpg":
+					$src = imagecreatefromjpeg($imageFile);
+					break;
 		
-//		$last_modified = filemtime($imageFile);
-//		
-//		$mimeType = DocumentHandler::getMIMEType($imageFile);
-//
-//		header("Last-Modified: ".date('r', $last_modified));
-//		header("Cache-Control: max-age=300, must-revalidate");
-//		header("Content-Type: $mimeType");
-//		
-//	    if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
-//	    {
-//	    	
-//	        $if_modified_since=strtotime(preg_replace('/;.*$/','',$_SERVER["HTTP_IF_MODIFIED_SINCE"]));
-//	        
-//	        if($if_modified_since >= $last_modified)
-//	        {
-//	            header("HTTP/1.0 304 Not Modified");
-//	            exit();
-//	        }
-//	    }
-//
-//	    $f = fopen($imageFile, "r");
-//
-//	    $size = filesize($imageFile);
-//		header("Content-Length: $size");
-//		header("Pragma: cache");
-//		header("Expires:");
-//		
-//		fpassthru($f);
-//		fclose($f);
+				case ".jpeg":
+					$src = imagecreatefromjpeg($imageFile);
+					break;
 		
+				case ".png":
+					$src = imagecreatefrompng($imageFile);
+					break;
+			}
+		
+			// If the thumbnail hasn't been generated yet, or is out-of-date, create it.
+			$fullWidth = imagesx($src);
+			$fullHeight = imagesy($src);
+
+			$aspect = $width / $height;
+			
+			$srcHeight = $fullWidth / $aspect;
+			$offset = ($fullHeight - $srcHeight) / 2;
+			
+			$dst = imagecreatetruecolor($width, $height);
+			imagealphablending($dst, false);
+			imagesavealpha($dst, true);
+			
+			$trans = imagecolorallocatealpha($dst, 255, 255, 255, 127);
+			imagecolortransparent($dst, $trans);
+			
+			imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
+			
+			imagecopyresampled($dst, $src, 0, 0, 0, $offset, $width, $height, $fullWidth, $srcHeight);
+				
+			if (!file_exists($cacheDir))
+			{
+				trace("renderThumbnail:: creating cachedir", 3);
+				mkdir($cacheDir);
+			}
+				
+			if (file_exists($cacheFile))
+			{
+				// If a previous copy of the file already exists, remove it
+				trace("renderThumbnail:: unlinking cachefile", 3);
+				unlink($cacheFile);
+			}
+			
+			imagepng($dst, $cacheFile);
+		
+			imagedestroy($dst);
+			imagedestroy($src);
+		}
+		
+		Fakoli::sendFile($cacheFile);
 	}
-		
+	
 	/**
 	 * Returns the URI that can be used to access the specified image at the given size.
 	 * @param $image_id the ID of the image
