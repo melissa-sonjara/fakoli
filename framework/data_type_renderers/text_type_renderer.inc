@@ -64,6 +64,12 @@ class TextTypeRenderer extends AbstractTypeRenderer
 		case "stripHTML":
 			return stripHTML($value);
 			
+		case "jsSafe":
+			return jsSafe($value);
+		
+		case "html":
+			return formatAsHTML($value);
+
 		case "HTML":
 			return formatAsHtml($value);
 			
