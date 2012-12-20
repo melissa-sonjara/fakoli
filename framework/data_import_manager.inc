@@ -241,6 +241,21 @@ abstract class AbstractDataImportManager
 			$position++;
 		}
 
+		$obj = $this->preProcessRow($obj);
+	
+		return $obj;
+	}
+	
+	/**
+	 * If implementing classes which to check if the imported
+	 * row should be kept or discarded. For example, check if
+	 * the record already exists in the db. To discard, return 
+	 * null.
+	 * 
+	 * @param $obj
+	 */
+	function preProcessRow($obj)
+	{
 		return $obj;
 	}
 
@@ -424,12 +439,20 @@ abstract class AbstractDataImportManager
 		if($column->options)
 		{
 			if(!$obj->$field) return "";
-			return $column->options[$obj->$field] . " ({$obj->$field})";
-		}
+			return $column->options[$obj->$field] . " (" . $this->format($column, $obj) . ")";		}
 		else
 		{
-			return $obj->format("{{$field}}");
+			return $this->format($column, $obj);
 		}
+	}
+	
+	function format($column, $obj)
+	{
+		if (is_callable($column->template))
+		{
+			return call_user_func($column->template, $obj);
+		}
+		else return $obj->format($column->template);
 	}
 	
 	function formatRowIndex($obj)
@@ -544,13 +567,23 @@ class DataImportColumn extends DataItem
 	
 	var $options = array();
 	
-	function DataImportColumn($obj, $field, $position, $label = "", $options = array())
+	/**
+	 * 
+	 * @param $obj
+	 * @param $field - column name for table imported to
+	 * @param $position - column order/position in import
+	 * @param $label - label for the column
+	 * @param $options - set of valid options for the imported data, if lookup is used
+	 * @param $template - the formatting template or formatter function for the column
+	 */
+	function DataImportColumn($obj, $field, $position, $label = "", $options = array(), $template = "")
 	{
 		$this->primary_key = "field";
 		$this->table = "import_column";
 			
 		$this->field = $field;
 		$this->position = $position;
+		$this->template = ($template) ? $template : "{{$field}}";
 		
 		$this->label = ($label) ? $label : $obj->prettifyFieldName($field);
 		$this->options = $options;
