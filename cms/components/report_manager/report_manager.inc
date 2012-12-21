@@ -126,6 +126,9 @@ class ReportManager
 	var $interstitialMessage = "";	///< Optional interstitial message to display while report is being generated
 	var $limit;						///< Optional limit to number of records retrieved, depending on acceptable load times for results
 	
+	/**
+	 * Creates a new ReportManager instance.
+	 */
 	function ReportManager()
 	{
 		$this->selected = null;
@@ -140,6 +143,11 @@ class ReportManager
 		}		
 	}
 	
+	/**
+	 * Tidy up the request data and limit the fields returned when serializing a ReportManager.
+	 * 
+	 * @return array
+	 */
 	function __sleep()
 	{
 		$this->request = array_remove_keys($this->request, "custom_report_mode", "PHPSESSID", "__utma", "__utmb", "__utmc", "__utmz");		
@@ -151,9 +159,9 @@ class ReportManager
 	 * @param string $class the DataItem class representing the table in the datamodel
 	 * @param string $title (optional) the title to present to the user in the configuration interface
 	 */
-	function table($class, $title = "")
+	function table($class, $title = "", $useOutputFilter = false)
 	{
-		$table = new ReportTable($class, $title, $this->request);
+		$table = new ReportTable($class, $title, $this->request, $useOutputFilter);
 		$this->tables[] = $table;
 		return $table;
 	}
@@ -237,8 +245,11 @@ class ReportManager
 		
 	}
 	
-	/*
+	/**
 	 * Set the given table as selected
+	 * 
+	 * @param ReportTable $table the table to select
+	 * @param boolean $checkRequest the check request flag
 	 */
 	function setSelected($table, $checkRequest = true)
 	{
@@ -262,6 +273,11 @@ class ReportManager
 			$this->setSelected($table, false);
 	}
 	
+	/**
+	 * Generate the search constraint for the current report configuration.
+	 * 
+	 * @return string the SQL constraint for the search 
+	 */
 	function generateConstraint()
 	{
 		foreach($this->tables as $table)
@@ -486,11 +502,19 @@ class ReportTable
 	var $columns = array();
 	var $footerColumns = array();
 	var $totalCallbacks = array();
+	var $outputFilter = null;
 	
-	function ReportTable($class, $title = "", $request = null)
+	function ReportTable($class, $title = "", $request = null, $outputFilter = false)
 	{
 		$this->class = $class;
 		$this->proto = new $class;
+		
+		if ($outputFilter) 
+		{
+			$this->outputFilter = new InclusionFilter();
+			$this->outputFilter->add($this->proto->getPrimaryKey());
+		}
+		
 		$this->fields = array();
 		$this->title = $title ? $title : $this->proto->prettifyClassName();
 		$this->constraints = $constraints;
@@ -532,9 +556,10 @@ class ReportTable
 	
 	// ----
 	
-	function column($title, $format, $sortable = true, $style = "", $type = null)
+	function column($title, $format, $sortable = true, $style = "", $type = null, $outputFields = null)
 	{
-		$this->columns[] = new ReportColumn($title, $format, $sortable, $style, $type);
+		$this->columns[] = new ReportColumn($title, $format, $sortable, $style, $type, $outputFields);
+			
 		return $this;
 	}
 
@@ -658,12 +683,33 @@ class ReportTable
 	function createJoin($mgr)
 	{
 		$mgr->join->add($this->class);
+		$this->filterOutput($mgr, $this->class);
+		
 		foreach($this->excludedKeys as $excluded)
 		{
 			$mgr->join->excludeKeyFromJoin($this->class, $excluded);
 		}
 	}
 
+	function filterOutput($mgr, $class)
+	{
+		if ($this->outputFilter)
+		{
+			foreach($this->columns as $column)
+			{
+				if ($mgr->isColumnSelected($column) && is_array($column->outputFields))
+				{
+					foreach($column->outputFields as $field)
+					{
+						$this->outputFilter->add($field);
+					}
+				}
+			}
+		
+			$mgr->join->setFilter($class, $this->outputFilter);
+		}
+	}
+		
 	function createColumns($mgr, $report)
 	{
 		foreach($this->columns as $column)
@@ -697,14 +743,16 @@ class ReportColumn
 	var $style;
 	var $sortable;
 	var $type;
+	var $outputFields;
 	
-	function ReportColumn($title, $format,  $sortable = true, $style = "", $type = null)
+	function ReportColumn($title, $format,  $sortable = true, $style = "", $type = null, $outputFields = null)
 	{
 		$this->title = $title;
 		$this->format = $format;
 		$this->sortable = $sortable;
 		$this->style = $style;
 		$this->type = $type;
+		$this->outputFields = $outputFields;
 	}
 }
 
