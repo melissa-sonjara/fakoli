@@ -111,7 +111,7 @@ class CSVImport
 			
 			if ($this->disablePrimaryKey)
 			{
-				$proto->disablePrimaryKes();
+				$proto->disablePrimaryKey();
 			}
 			
 			$indexed = array();
