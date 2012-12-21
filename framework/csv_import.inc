@@ -78,6 +78,7 @@ class CSVImport
 	var $truncate = false;
 	var $update = false;
 	var $ignoreUnknown = false;
+	var $disablePrimaryKey = false;
 	var $onPreImport = null;
 	var $onPostImport = null;
 	var $lines = 0;
@@ -89,8 +90,13 @@ class CSVImport
 		$this->class = $class;
 	}
 	
-	function import($file)
+	function import($file = null)
 	{
+		if (!$file)
+		{
+			$file = $_FILES["importFile"]["tmp_name"];
+		}
+		
 		$tx = new DataTransaction();
 		
 		try
@@ -101,6 +107,11 @@ class CSVImport
 			if ($this->truncate)
 			{
 				$proto->deleteAll();
+			}
+			
+			if ($this->disablePrimaryKey)
+			{
+				$proto->disablePrimaryKes();
 			}
 			
 			$indexed = array();
@@ -202,6 +213,12 @@ class CSVImport
 				}
 			}
 			
+			
+			if ($this->disablePrimaryKey)
+			{
+				$proto->enablePrimaryKey();
+			}
+				
 			trace ("No more values from CSV", 3);		
 		
 			$tx->commit();
