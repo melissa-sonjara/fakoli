@@ -42,10 +42,10 @@ require_once realpath(dirname(__FILE__)."/date_utils.inc");
 
 /**
  * Check whether the user has one of a specified set of roles
- * @param $role the role(s) to check against, as a comma-delimited list
- * @param $account (optional) the account object to check (must have a 'role' property). 
+ * @param string $role the role(s) to check against, as a comma-delimited list
+ * @param object $account (optional) the account object to check (must have a 'role' property). 
  * If not provided, the default user account is used (assumed to be in the global $user variable).
- * @return true if the user has one of the roles, false otherwise.
+ * @return boolean true if the user has one of the roles, false otherwise.
  */
 function checkRole($role, $account = null)
 {
@@ -70,11 +70,29 @@ function checkRole($role, $account = null)
 }
 
 /**
+ * Determine whether a user has a specific role explicitly set.
+ * Unlike checkRole() this does not always return true if a user is super or admin. 
+ * @param string $role
+ * @param object $account
+ * @return boolean true if the user has the specified role explicitly set, false otherwise.
+ */
+function hasRole($role, $account = null)
+{
+	global $user;
+	
+	if (!$account) $account = $user;
+	if (!$role) return false;
+
+	$expr = "/\\b{$role}\\b/";
+	return (preg_match($expr, $account->role) > 0) ? true : false;
+}
+
+/**
  * Filter the given list, retaining only the objects that match the current
  * user's role profile in the given parameter.
  * 
- * @param $items the array of items to be filtered
- * @param $field the name of the field defining the role restriction
+ * @param string $items the array of items to be filtered
+ * @param string $field the name of the field defining the role restriction
  * @return array the filtered array
  */
 function filterByRole($items, $field)
