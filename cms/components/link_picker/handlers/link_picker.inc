@@ -76,16 +76,6 @@ foreach($sections as $section)
 }
 
 $script .= $tree->writeScript();
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-
-function insertLink(url)
-{
-	window.opener.theEditors['$editor'].formatSelection("<a href=\"" + url + "\">");
-	window.close();
-}
-</script>
-ENDSCRIPT;
 
 $tree->writeHTML();
 

@@ -51,7 +51,8 @@ $script .= <<<ENDSCRIPT
 
 function insertLink(url)
 {
-	theEditors['$editor'].formatSelection("<a href=\"" + url + "\">");
+	var target = document.id('target').value;
+	theEditors['$editor'].formatSelection("<a href=\"" + url + "\" target=\"" + target + "\">");
 	closeLinkPicker();
 }
 </script>
@@ -60,6 +61,12 @@ ENDSCRIPT;
 $script .= $tabs->writeScript();
 
 echo $script;
-
+?>
+<label>Open Link in </label>
+<select id='target'>
+ <option value="_self">Same Window</option>
+ <option value="_blank">New Window</option>
+</select><br/>
+<?
 $tabs->writeHTML();
 ?><div style="clear: left" id="link_picker_panel"><?echo $tree->writeHTML()?></div>

@@ -54,7 +54,12 @@ class LinkPickerManifest
 	
 	static function getScripts()
 	{
-		return array("/fakoli/link_picker/link_picker.js");
+		return array("/components/link_picker/js/link_picker.js");
+	}
+	
+	static function getStyles()
+	{
+		return array("/components/link_picker/css/link_picker.css");
 	}
 	
 	static function onInitialize()
