@@ -52,7 +52,7 @@ var ImagePicker =  (function()
 		    			url: '/action/image_picker/list_images?gallery_id=' + gallery_id, 
 		    			onSuccess: function(tree, elements, html, script) 
 		    			{ 
-		    				$('image_list').set('html', html);
+		    				document.id('image_list').set('html', html);
 		    				$exec(script);
 		    			}.bind(this)
 		    		});
@@ -64,7 +64,7 @@ var ImagePicker =  (function()
 			this.selectedTitle = title;
 			this.selectedKey = image_id;
 			
-			$('preview').innerHTML = "<img src='/action/image/thumbnail?image_id=" + image_id + "&size=150' width='150' border='0' alt='" + title + "'/>";
+			document.id('preview').innerHTML = "<img src='/action/image/thumbnail?image_id=" + image_id + "&size=150' width='150' border='0' alt='" + title + "'/>";
 			if (this.mode != "select")
 			{
 				this.getImageSize();
@@ -88,12 +88,12 @@ var ImagePicker =  (function()
 			else
 			{   
 				var align = 0;
-			    var align_elt = $('alignment');
+			    var align_elt = document.id('alignment');
 			    if(align_elt)
 			    	align = align_elt.value;
 			    
-			    var width = $('width');
-			    var height = $('height');
+			    var width = document.id('width');
+			    var height = document.id('height');
 			    var w = 0;
 			    var h = 0;
 			    
@@ -138,8 +138,8 @@ var ImagePicker =  (function()
 	
 		getImageSize: function()
 		{
-			var width = $('width');
-			var height = $('height');
+			var width = document.id('width');
+			var height = document.id('height');
 
 			var request = new Request({
 					method: 'get', 
@@ -149,9 +149,9 @@ var ImagePicker =  (function()
 						if (!result.match(/^\d+,\d+/))
 						{
 							if(width)
-								$('width').value = "";
+								document.id('width').value = "";
 							if(height)
-								$('height').value = "";
+								document.id('height').value = "";
 						}
 			
 						var dimensions = result.split(",");
@@ -169,30 +169,30 @@ var ImagePicker =  (function()
 
 		changeWidth: function()
 		{
-			if (!$('aspect').checked) return;
+			if (!document.id('aspect').checked) return;
 			
-			var width = $('width').value;
+			var width = document.id('width').value;
 			if (width == "") 
 			{
 				width = 0;
-				$('width').value = "0";
+				document.id('width').value = "0";
 			}	
 			
-			$('height').value = (width/this.originalWidth * this.originalHeight).toFixed(0);
+			document.id('height').value = (width/this.originalWidth * this.originalHeight).toFixed(0);
 		},
 		
 		changeHeight: function()
 		{
-			if (!$('aspect').checked) return;
+			if (!document.id('aspect').checked) return;
 		
-			var height = $('height').value;
+			var height = document.id('height').value;
 			if (height == "") 
 			{
 				height = 0;
-				$('height').value = "0";
+				document.id('height').value = "0";
 			}	
 			
-			$('width').value = (height/this.originalHeight * this.originalWidth).toFixed(0);
+			document.id('width').value = (height/this.originalHeight * this.originalWidth).toFixed(0);
 		},
 	
 		maskInput: function(e)
@@ -233,7 +233,7 @@ var ImagePicker =  (function()
 	
 		uploadImage: function()
 		{
-			var gallery_id = $('gallery_id').value;
+			var gallery_id = document.id('gallery_id').value;
 			this.popup = modalPopup("Upload Image", "/action/image_picker/image_upload?gallery_id=" + gallery_id, 'auto', 'auto', true);
 		},
 		
@@ -246,11 +246,11 @@ var ImagePicker =  (function()
 		{
 			if (this.selectedKey == 0) return;
 	
-			var imageField = $(field);
+			var imageField = document.id(field);
 			if(imageField)
 				imageField.set("value", this.selectedKey)
 				
-			var preview = $(field + '_preview');
+			var preview = document.id(field + '_preview');
 			if(preview)
 				preview.src = "/action/image/thumbnail?image_id=" + this.selectedKey + "&size=150";
 			this.dialog.hide();
