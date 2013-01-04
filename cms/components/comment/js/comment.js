@@ -55,11 +55,13 @@ var Comment =  (function()
 				onSuccess: function(tree, elements, html, script) 
 				{ 
 					document.id('comment_panel').set('html', html);
-					$exec(script);
+
 					if (Interstitial.current) 
 					{
 						Interstitial.current.hide();
 					}
+				
+					$exec(script);
 				}
 			});
 			request.send();
