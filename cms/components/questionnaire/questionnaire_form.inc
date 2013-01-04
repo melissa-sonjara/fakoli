@@ -82,7 +82,7 @@ class QuestionnaireForm
 	// AutoForm defaults
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $valueCSS = "";					///< CSS Class to use for field/value cells
-	var $buttonCSS = "";				///< CSS Class to use for buttons
+	var $buttonCSS = "button";			///< CSS Class to use for buttons
 	var $inputCSS = "";					///< CSS Class to use for input fields
 	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
 	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
@@ -396,7 +396,7 @@ class QuestionnaireForm
 	
 	function drawSubmitButtons($submitLabel)
 	{
-		echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"button\" value=\"&nbsp;&nbsp;{$submitLabel}&nbsp;&nbsp;\"/>";
+		echo "<input type=\"submit\" style=\"float: left\" name=\"save\" class=\"{$this->buttonCSS}\" value=\"&nbsp;&nbsp;{$submitLabel}&nbsp;&nbsp;\"/>";
 	}
 
 	function drawReadOnly()
