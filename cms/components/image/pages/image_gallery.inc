@@ -50,7 +50,7 @@ if (!$gallery->published)
 	return;
 }
 
-$images = $gallery->Images();
+$images = $gallery->Images("ORDER BY sort_order");
 
 $page->page_title = $gallery->gallery_name . " Image Gallery";
 
