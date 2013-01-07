@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("user", "email", "site");
+Fakoli::using("user", "email", "site", "settings");
 Fakoli::usingFeature("auto_form");
 
 $msg = checkNumeric($_GET["msg"]);
@@ -79,19 +79,31 @@ if ($method == "POST")
 	$contactUs->fromPOST();
 
 	$contactTopic = $contactUs->ContactTopic();
-
+	$emailContact =  Settings::getValue('email', 'email_from');
+	
 	if(!$contactTopic OR ($contactTopic AND !$contactTopic->recipients))
-		$recipients = array($config["email_contact"]);
-	else
+	{
+		$recipients = array($emailContact);
+	}
+	else 
+	{
 		$recipients = explode(",", $contactTopic->recipients);
-
+	}
+	
 	if($contactTopic)
+	{
 		$subject = $contactTopic->topic . " ";
+	}
 		
 	$subject .= $contactUs->subject;
 	
-	foreach($recipients as $recipient)	
-		$handler = new Mail($contactUs->email, $recipient, $subject, $contactUs->message);
+	$emailContact =  Settings::getValue('email', 'email_from');
+	$headers .= "Reply-To: ". $contactUs->email . "\r\n";
+	
+	foreach($recipients as $recipient)
+	{
+		$handler = new Mail($emailContact, $recipient, $subject, $contactUs->message, $headers);
+	}
 			
 	$rtn = $handler->send();
 	$msg = ($rtn==true) ? 1 : 2;
