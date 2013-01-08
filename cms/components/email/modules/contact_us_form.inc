@@ -95,9 +95,7 @@ if ($method == "POST")
 		$subject = $contactTopic->topic . " ";
 	}
 		
-	$subject .= $contactUs->subject;
-	
-	$emailContact =  Settings::getValue('email', 'email_from');
+	$subject .= $contactUs->subject;	
 	$headers .= "Reply-To: ". $contactUs->email . "\r\n";
 	
 	foreach($recipients as $recipient)
