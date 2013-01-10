@@ -101,7 +101,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
-		$list->pageSize = 5;
+		$list->pageSize = $blog->articles_per_page;
 		
 		$script .= $list->writeScript();
 		$list->drawList();
