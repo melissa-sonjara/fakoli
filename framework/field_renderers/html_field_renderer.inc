@@ -65,6 +65,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			|| array_key_exists($field, $this->parent->hidden)) return "";
 		
 		global $html_editor_extra_buttons;
+		global $html_editor_override_buttons;
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
@@ -105,6 +106,14 @@ class HTMLFieldRenderer extends FieldRenderer
 				$this->addEditorButton($editor, $button);
 			}
 		}
+		
+		if (is_array($html_editor_override_buttons))
+		{
+			foreach($html_editor_override_buttons as $button)
+			{
+				$this->overrideEditorButton($editor, $button);
+			}
+		}
 		echo "\nwindow.addEvent('domready', function() {\n";
 		echo "theEditors.$editor.draw();\n";
 		echo "});\n";
@@ -123,6 +132,11 @@ class HTMLFieldRenderer extends FieldRenderer
 		}		
 	}
 	
+	function overrideEditorButton($editor, $button)
+	{
+		echo "theEditors.$editor.overrideToolbarButton('{$button['name']}', {$button['handler']});\n";
+	}
+		
 	function renderField($field)
 	{
 		
