@@ -73,6 +73,7 @@ class ImageManifest
 					 "EnumerateItems"	 => array(ImageManager, enumerateItems),
 					"ComponentScanComplete" => array(ImageManager, setDefaults),
 					"upgradeComponent"		=>	array(ImageManager, upgradeComponent),
+					"RegisterSerializationHandler"	=>	array(ImageManager, registerSerializationHandler),
 					"RegisterTaxonomyClasses"	=>	array(ImageManager, registerTaxonomyClasses)
 		
 		);

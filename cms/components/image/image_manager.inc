@@ -31,6 +31,30 @@
 
 *****************************************************************/
 
+class ImageSerializationHandler
+{
+	function ImageSerializationHandler()
+	{
+	}
+
+
+	function export()
+	{
+		$xml  = "\n<ImageMap>";
+		$xml .= SerializationManager::serialize(ImageGallery, "ORDER BY gallery_id");
+		$xml .= SerializationManager::serialize(ImageRecord, "ORDER BY image_id");
+		$xml .= "</ImageMap>";
+
+		return $xml;
+	}
+
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(ImageGallery, $doc, $tx);
+		SerializationManager::unserialize(ImageRecord, $doc, $tx);
+	}
+}
+
 /**
  * The ImageManager class provides basic Image manipulation functions
  * that are useful when working with Image objects.
@@ -500,5 +524,10 @@ class ImageManager
 		$mgr = new ImageUpgradeManager();
 		$mgr->upgrade($version);
 	}	
-	
+
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("image_galleries", "Image Galleries &amp; Image Records (files need to be transferred manually)", new ImageSerializationHandler());
+		return true;
+	}
 }
