@@ -1194,6 +1194,38 @@ var RichTextEditor = new Class({
         this.toolbar.push(new Button(this, name, image, tooltip, fn));
 	},
 	
+	overrideToolbarButton: function(name, handler)
+	{
+		this.toolbar.filter(function(button) { return button.name == name;})
+					.each(function(button)
+					{
+					    var fn = "onButton" + name;
+						if (typeof handler == 'function')
+						{
+							this[fn] = function()
+							{
+								handler(this);
+							};
+						}
+						else
+						{
+							url = handler;
+							url += (url.indexOf("?") > -1) ? "&" : "?";
+							url += "Editor=" + this.name;
+					    
+						    this[fn] =  function() 
+						                { 
+						                    var w = window.open(url, name, 
+						                                        'width='+width+',height='+height+',toolbar=0,scrollbars=1,resizable=1,status=0');
+						                    w.focus();
+						                };
+						}
+						
+						button.fn = fn;
+						
+					}.bind(this));
+	},
+	
 	addStyle: function(name, defn)
 	{
 	    this.stylebar[2].entries.push(new DropDownEntry(name, defn, '', '', false));
