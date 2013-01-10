@@ -127,12 +127,18 @@ class CodeModuleView extends ModuleView
 		$cssClass = trim("module {$this->module->css_class} $cssClass");
 		
 		global $config;
+		global $method;
+		global $user;
 		global $script;
 		global $styles;
+		global $breadcrumbs;
 		global $dialogs;
 		global $page;
 		global $site;
-		global $user;
+		global $section;
+		global $menu_identifier;
+		global $identifier;
+		global $section;
 		
 		
 		if ($this->module->php_code_file)
