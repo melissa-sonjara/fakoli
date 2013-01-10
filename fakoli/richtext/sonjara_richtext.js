@@ -263,6 +263,7 @@ function selectionChangedCallback(editor)
 
 var RichTextEditor = new Class({
 	
+	Implements:		[Options, Events],
 	name:			"",
 	clientID:		"",
 	html:			"",
@@ -278,8 +279,85 @@ var RichTextEditor = new Class({
 	toolbar: 		[],
 	stylebar: 		[],		
 		
-	initialize: function(name, clientID, html, width, height, buttons, readOnly)
+	options:
 	{
+		onSetupToolbar: function(editor) { return editor.setupDefaultToolbar();},
+		onSetupStylebar: function(editor) { return editor.setupDefaultStylebar();}
+	},
+		
+
+	setupDefaultToolbar: function()
+	{
+		this.toolbar = [
+			 	new Button(this, 'bold', 'bold.gif', 'Bold', 'onBold'),
+				new Button(this, 'italic', 'italic.gif', 'Italic', 'onItalic'),
+				new Button(this, 'underline', 'underline.gif', 'Underline', 'onUnderline'),
+				new Separator(this),
+				new Button(this, 'alignleft', 'left_just.gif', 'Align Left', 'onAlignLeft'),
+				new Button(this, 'aligncenter', 'centre.gif', 'Center', 'onAlignCenter'),
+				new Button(this, 'alignright', 'right_just.gif', 'Align Right', 'onAlignRight'),
+				new Button(this, 'justify', 'justifyfull.gif', 'Justify', 'onJustify'),
+				new Separator(this),
+				new Button(this, 'hr', 'hr.gif', 'Horizontal Rule', 'onHorizontalRule'),
+				new Separator(this),
+				new Button(this, 'orderedlist', 'numbered_list.gif', 'Numbered List', 'onNumberedList'),
+				new Button(this, 'bulletList', 'list.gif', 'Bullet List', 'onBulletList'),
+				new Separator(this),
+				new Button(this, 'outdent', 'outdent.gif', 'Decrease Indent', 'onOutdent'),
+				new Button(this, 'indent', 'indent.gif', 'Increase Indent', 'onIndent'),
+				/*new Button(this, 'textcolor', 'textcolor.gif', 'Text Color', 'onTextColor'),
+				new Button(this, 'backcolor', 'bgcolor.gif', 'Background Color', 'onBackgroundColor'),*/
+				new Separator(this),
+				new Button(this, 'clear', 'clear.gif', 'Clear All Formatting', 'onClearFormatting'),
+				new Button(this, 'link', 'hyperlink.gif', 'Insert Link', 'onInsertLink'),
+				new Button(this, 'image', 'image.gif', 'Insert Image', 'onInsertImage')/*,
+				new Button(this, 'table', 'insert_table.gif', 'Insert Table', 'onInsertTable')*/
+			];
+
+	},
+
+	setupDefaultStylebar: function()
+	{
+		this.stylebar = 	
+		[
+
+			new DropDown(this, 'Font', 'font', 'onFontChange',
+			[
+				new DropDownEntry('Arial', 'Arial', 'font-family: Arial; font-size:10pt', '', true),
+				new DropDownEntry('Courier New', 'Courier New', 'font-family: Courier New; font-size:10pt', '', false),
+				new DropDownEntry('Tahoma', 'Tahoma', 'font-family: Tahoma; font-size:10pt', '', false),
+				new DropDownEntry('Times New Roman', 'Times New Roman', 'font-family: Times New Roman; font-size:10pt', '', false),
+				new DropDownEntry('Trebuchet MS', 'Trebuchet MS', 'font-family: Trebuchet MS; font-size:10pt', '', false),
+				new DropDownEntry('Verdana', 'Verdana', 'font-family: Verdana; font-size:10pt', '', false)
+			]),
+			
+			new DropDown(this, 'Size', 'fontsize', 'onFontChange',
+			[
+				new DropDownEntry('6pt', '6pt', '', '', false),
+				new DropDownEntry('8pt', '8pt', '', '', false),
+				new DropDownEntry('10pt', '10pt', '', '', true),
+				new DropDownEntry('12pt', '12pt', '', '', false),
+				new DropDownEntry('14pt', '14pt', '', '', false),
+				new DropDownEntry('16pt', '16pt', '', '', false),
+				new DropDownEntry('24pt', '24pt', '', '', false),
+				new DropDownEntry('36pt', '36pt', '', '', false)
+			]),
+			new DropDown(this, 'Style', 'style', 'onStyleChange',
+			[
+				new DropDownEntry('Paragraph', '<p>', '', '', false),
+				new DropDownEntry('Heading 1', '<h1>', '', '', true),
+				new DropDownEntry('Heading 2', '<h2>', '', '', false),
+				new DropDownEntry('Heading 3', '<h3>', '', '', false),
+				new DropDownEntry('Heading 4', '<h4>', '', '', false)
+			])					
+		];
+		
+	},
+	
+	initialize: function(name, clientID, html, width, height, buttons, readOnly, options)
+	{
+		this.setOptions(options);
+		
 		this.name	      = name;
 		this.clientID     = clientID;
 		this.html	      = html;
@@ -298,70 +376,8 @@ var RichTextEditor = new Class({
 		
 		this.hasSelection = false;
 		
-		this.toolbar = [
-				 	new Button(this, 'bold', 'bold.gif', 'Bold', 'onBold'),
-					new Button(this, 'italic', 'italic.gif', 'Italic', 'onItalic'),
-					new Button(this, 'underline', 'underline.gif', 'Underline', 'onUnderline'),
-					new Separator(this),
-					new Button(this, 'alignleft', 'left_just.gif', 'Align Left', 'onAlignLeft'),
-					new Button(this, 'aligncenter', 'centre.gif', 'Center', 'onAlignCenter'),
-					new Button(this, 'alignright', 'right_just.gif', 'Align Right', 'onAlignRight'),
-					new Button(this, 'justify', 'justifyfull.gif', 'Justify', 'onJustify'),
-					new Separator(this),
-					new Button(this, 'hr', 'hr.gif', 'Horizontal Rule', 'onHorizontalRule'),
-					new Separator(this),
-					new Button(this, 'orderedlist', 'numbered_list.gif', 'Numbered List', 'onNumberedList'),
-					new Button(this, 'bulletList', 'list.gif', 'Bullet List', 'onBulletList'),
-					new Separator(this),
-					new Button(this, 'outdent', 'outdent.gif', 'Decrease Indent', 'onOutdent'),
-					new Button(this, 'indent', 'indent.gif', 'Increase Indent', 'onIndent'),
-					/*new Button(this, 'textcolor', 'textcolor.gif', 'Text Color', 'onTextColor'),
-					new Button(this, 'backcolor', 'bgcolor.gif', 'Background Color', 'onBackgroundColor'),*/
-					new Separator(this),
-					new Button(this, 'clear', 'clear.gif', 'Clear All Formatting', 'onClearFormatting'),
-					new Button(this, 'link', 'hyperlink.gif', 'Insert Link', 'onInsertLink'),
-					new Button(this, 'image', 'image.gif', 'Insert Image', 'onInsertImage')/*,
-					new Button(this, 'table', 'insert_table.gif', 'Insert Table', 'onInsertTable')*/
-				];
-				
-		this.stylebar =
-			[
-
-				new DropDown(this, 'Font', 'font', 'onFontChange',
-				[
-					new DropDownEntry('Arial', 'Arial', 'font-family: Arial; font-size:10pt', '', true),
-					new DropDownEntry('Courier New', 'Courier New', 'font-family: Courier New; font-size:10pt', '', false),
-					new DropDownEntry('Tahoma', 'Tahoma', 'font-family: Tahoma; font-size:10pt', '', false),
-					new DropDownEntry('Times New Roman', 'Times New Roman', 'font-family: Times New Roman; font-size:10pt', '', false),
-					new DropDownEntry('Trebuchet MS', 'Trebuchet MS', 'font-family: Trebuchet MS; font-size:10pt', '', false),
-					new DropDownEntry('Verdana', 'Verdana', 'font-family: Verdana; font-size:10pt', '', false)
-				]),
-				
-				new DropDown(this, 'Size', 'fontsize', 'onFontChange',
-				[
-					new DropDownEntry('6pt', '6pt', '', '', false),
-					new DropDownEntry('8pt', '8pt', '', '', false),
-					new DropDownEntry('10pt', '10pt', '', '', true),
-					new DropDownEntry('12pt', '12pt', '', '', false),
-					new DropDownEntry('14pt', '14pt', '', '', false),
-					new DropDownEntry('16pt', '16pt', '', '', false),
-					new DropDownEntry('24pt', '24pt', '', '', false),
-					new DropDownEntry('36pt', '36pt', '', '', false)
-				]),
-				new DropDown(this, 'Style', 'style', 'onStyleChange',
-				[
-					new DropDownEntry('Paragraph', '<p>', '', '', false),
-					new DropDownEntry('Heading 1', '<h1>', '', '', true),
-					new DropDownEntry('Heading 2', '<h2>', '', '', false),
-					new DropDownEntry('Heading 3', '<h3>', '', '', false),
-					new DropDownEntry('Heading 4', '<h4>', '', '', false)
-				])					
-			];
-
-		//this.draw();
-		//this.enableDesignMode();
-
-		//window.theEditors[name] = this;
+		this.fireEvent('setupToolbar', this);				
+		this.fireEvent('setupStylebar', this);
 	},
 	
 	
@@ -1195,48 +1211,6 @@ var RichTextEditor = new Class({
             	  "hasSelection = " + this.hasSelection;
     }
 });
-
-function getOffsetLeft (el) 
-{
-  	var ol = el.offsetLeft;
-  	while ((el = el.offsetParent) != null)
-	{
-    	ol += el.offsetLeft;
-    }
-  
-  	return ol;
-}
-
-function getOffsetTop (el) 
-{
-  	var ot = el.offsetTop;
-  	while((el = el.offsetParent) != null)
-  	{
-   		ot += el.offsetTop;
-   	}
-   	
-	return ot;
-}
-
-function scrollTop()
-{
-	if (document.documentElement && document.documentElement.scrollTop)
-		theTop = document.documentElement.scrollTop;
-	else if (document.body)
-		theTop = document.body.scrollTop;
-		
-	return theTop;
-}
-
-function scrollLeft()
-{
-	if (document.documentElement && document.documentElement.scrollLeft)
-		theTop = document.documentElement.scrollLeft;
-	else if (document.body)
-		theTop = document.body.scrollLeft;
-		
-	return theTop;
-}
 
 function getNumericSize(s)
 {
