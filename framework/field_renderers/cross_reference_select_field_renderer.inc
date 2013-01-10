@@ -155,7 +155,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		$itempk = $this->getMatchingPK($xref, $rc);
 		$pk = $this->getMatchingPK($xref, $obj);
 		
-		$selected = ($obj->get($pk) != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->get($pk)}", $rc->getPrimaryKey()) : array();
+		$selected = $this->getSelected($obj, $rc, $pk);
 		
 		if ($this->showSelectAll)
 		{
@@ -207,6 +207,12 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		$this->_endField($field);
 	}
+
+	function getSelected($obj, $rc, $pk)
+	{
+		return ($obj->get($pk) != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->get($pk)}", $rc->getPrimaryKey()) : array();
+	}	
+	
 	
 	function renderCheckboxes($field, $items, $itempk, $selected)
 	{
