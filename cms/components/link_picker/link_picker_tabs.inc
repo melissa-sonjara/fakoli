@@ -35,9 +35,10 @@ Fakoli::usingFeature("tab_bar");
 
 function linkPickerTabs($qs)
 {
-	$tabs = array(	"Pages"		=>	"/action/link_picker/link_picker",
-					"Documents"	=>	"/action/link_picker/document_picker",
-					"Articles"	=>	"/action/link_picker/article_picker"
+	$tabs = array(	"Pages"			=>	"/action/link_picker/link_picker",
+					"Documents"		=>	"/action/link_picker/document_picker",
+					"Articles"		=>	"/action/link_picker/article_picker",
+					"External URL"	=>	"/action/link_picker/external_url_picker"
 					);
 
 	$bar = new TabBar("popup_tabs", $tabs, $qs);
