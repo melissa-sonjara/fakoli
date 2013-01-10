@@ -65,12 +65,18 @@ class LinkPickerManifest
 	static function onInitialize()
 	{
 		global $html_editor_extra_buttons;
+		global $html_editor_override_buttons;
 
 		$html_editor_extra_buttons[] =
 				array("name"	=>	"link_picker",
 					  "image"	=>	"/fakoli/richtext/images/document_link.gif", 
 					  "tooltip"	=>	"Link to Page or Document", 
 					  "handler"	=>	"linkPicker");
+		
+		$html_editor_override_buttons[] =
+				array("name"	=>	"link",
+					  "handler"	=>	"linkPickerExternal");
+					  
 	}
 		
 }

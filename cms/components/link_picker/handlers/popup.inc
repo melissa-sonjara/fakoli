@@ -34,9 +34,10 @@
 Fakoli::usingFeature("tree");
 
 $editor = $_GET["Editor"];
+$chooser = checkIdentifier($_GET["chooser"]);
 
 $tabs = linkPickerTabs("Editor=$editor");
-$tabs->page = "/action/link_picker/link_picker";
+$tabs->page = $chooser ? "/action/link_picker/$chooser" : "/action/link_picker/link_picker";
 $tabs->dynamicLoad("link_picker_panel");
 
 

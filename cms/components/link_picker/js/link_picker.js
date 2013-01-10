@@ -41,11 +41,14 @@ var LinkPicker =  (function()
 		{
 		},
 		
-		show: function(editor)
+		show: function(editor, chooser)
 		{
+			if (!chooser) chooser = "link_picker";
+			
 			this.editor = editor;
-			this.dialog = modalPopup("Link Picker", "/action/link_picker/popup?Editor=" + this.editor.name, 500, 400, true, false); 
+			this.dialog = modalPopup("Link Picker", "/action/link_picker/popup?Editor=" + this.editor.name + "&chooser=" + chooser, 500, 400, true, false); 
 		},
+		
 		
 		hide: function()
 		{
@@ -90,6 +93,11 @@ var picker;
 function linkPicker(editor)
 {
 	picker = new LinkPicker().show(editor);
+}
+
+function linkPickerExternal(editor)
+{
+	picker = new LinkPicker().show(editor, "external_url_picker");
 }
 
 function closeLinkPicker()
