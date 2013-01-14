@@ -1460,7 +1460,7 @@ class DataItem extends AbstractDataItem
 	function formatThroughRelation($template, $separator = ", ")
 	{
 		$matches = array();
-		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_\\(\\)]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 		
 		foreach($matches as $match)
 		{
