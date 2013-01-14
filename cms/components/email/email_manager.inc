@@ -51,28 +51,46 @@ class EmailHandler
 	var $mail;
 	var $onSendComplete; // optional user callback function after mail is sent
 
+	/**
+	 * 
+	 * @param String $toAddr
+	 * @param String $subject 
+	 * @param String $message
+	 * @param String $emailFrom - if blank, use settings email_from; if not blank and != settings, set this value into Reply To header instead
+	 * @param String $emailName - same as above
+	 */
 	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "")
 	{
 		global $config;
 
-		if(!$emailFrom) 
+		$site_email_from =  Settings::getValue('email', 'email_from');
+		$site_email_name =  Settings::getValue('email', 'email_name');
+		
+		$replyTo = $site_email_from;
+		$replyTo = $site_email_name;
+		
+		if($emailFrom)
 		{
-			$emailFrom =  Settings::getValue('email', 'email_from');
-			$emailName =  Settings::getValue('email', 'email_name');
+			$replyTo = $emailFrom;
 		}
+		
+		if($emailName)
+		{
+			$replyToName = $emailName;
+		}
+		
 		// Use the MD5 algorithm to generate a random hash
 		$random_hash = md5(date('r', time()));
-		$headers = "From: ". $emailName . " <" . $emailFrom . ">\r\n";
-		//$headers = "From: $emailFrom\r\n";
-		$headers .= "Return-Path: ". $emailFrom . "\r\n";
-		$headers .= "Reply-To: ". $emailFrom . "\r\n";
+		$headers = "From: ". $site_email_name . " <" . $site_email_from . ">\r\n";
+		$headers .= "Return-Path: ". $site_email_name . "\r\n";
+		$headers .= "Reply-To: ". $replyTo . " <" . $replyToName . ">\r\n";
 		$headers .= "Mime-Version: 1.0\r\n";
 
 		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
 		$message = $this->getMessageScript($message, $random_hash);
 			
-		$this->mail = new Mail($emailFrom, $toAddr, $subject, $message, $headers);
+		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
 	}
 
 	/*
