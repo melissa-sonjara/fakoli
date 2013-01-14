@@ -51,7 +51,7 @@ define("valid_token_login", 2);
 define("invalid_username", 3); // 0 matches found 
 define("invalid_password", 4); 
 
-Fakoli::using("user", "email");
+Fakoli::using("user", "email", "settings");
 
 class LoginManager
 {
@@ -90,7 +90,7 @@ class LoginManager
 		$message .=  "Please note that the password is CASE SENSITIVE.";
 		$message = wordwrap($message, 80);
 		
-		$emailFrom = $config["email_from"];
+		$emailFrom = Settings::getValue("email", "email_from");
 		
 		$headers = "From: $emailFrom\r\n";
 		$headers .= "Return-Path: ". $emailFrom . "\r\n";
