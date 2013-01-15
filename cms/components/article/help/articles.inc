@@ -1,5 +1,6 @@
 <?php
 ?>
+<h2>Articles</h2>
 <p>This page displays the articles that have been written for the web site. 
 To edit an article, click on its title. The publication status is shown in the last column. A green checkmark icon signifies
 that the article is published; a red cross icon signifies the article is not published. 
