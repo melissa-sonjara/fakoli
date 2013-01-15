@@ -67,7 +67,7 @@ class EmailHandler
 		$site_email_name =  Settings::getValue('email', 'email_name');
 		
 		$replyTo = $site_email_from;
-		$replyTo = $site_email_name;
+		$replyToName = $site_email_name;
 		
 		if($emailFrom)
 		{
@@ -90,6 +90,7 @@ class EmailHandler
 
 		$message = $this->getMessageScript($message, $random_hash);
 			
+		trace("Calling Mail: site_email_from $site_email_from toAddr $toAddr headers $headers", 3);
 		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
 	}
 
