@@ -90,7 +90,7 @@ class EmailHandler
 
 		$message = $this->getMessageScript($message, $random_hash);
 			
-		trace("Calling Mail: site_email_from $site_email_from toAddr $toAddr headers $headers", 3);
+		trace("Instantiating Mail: site_email_from $site_email_from toAddr $toAddr headers $headers", 3);
 		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
 	}
 
@@ -148,6 +148,7 @@ Content-Transfer-Encoding: 8bit
 	{
 		$rtn = $this->mail->send();
 		
+		trace("EmailHandler send rtn $rtn", 3);
 		// Call the callback whether successful or not; calling script
 		// decides how to handle either way. 
 		if ($this->onSendComplete AND is_callable($this->onSendComplete))
