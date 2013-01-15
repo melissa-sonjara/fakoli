@@ -90,7 +90,6 @@ class EmailHandler
 
 		$message = $this->getMessageScript($message, $random_hash);
 			
-		trace("Instantiating Mail: site_email_from $site_email_from toAddr $toAddr headers $headers", 3);
 		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
 	}
 

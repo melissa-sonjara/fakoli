@@ -81,7 +81,6 @@ class Mail
 				return false;
 			}
 			
-			trace("Mail: wrote to debug log $debugPath {$this->to}", 3);
 	        fclose($fp);
 	        return true;
 		}
