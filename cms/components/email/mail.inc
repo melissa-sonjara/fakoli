@@ -68,12 +68,20 @@ class Mail
 				return false;
 			}
 			
-			fwrite($fp, "From: $this->from\n".
+			$rtn = fwrite($fp, "From: $this->from\n".
 	                "To: $this->to\n".
 	                $this->headers.
 	                "Subject: $this->subject\n".
 	                "\n".
 	                "$this->body\n\n");
+			
+			if($rtn === FALSE)
+			{
+				trace("Mail: unable to write to debug log file in $debugPath name {$this->to}", 3);
+				return false;
+			}
+			
+			trace("Mail: wrote to debug log $debugPath {$this->to}", 3);
 	        fclose($fp);
 	        return true;
 		}
