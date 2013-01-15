@@ -62,6 +62,12 @@ class Mail
 		if ($debug)
 		{
 			$fp = fopen($debugPath . DIRECTORY_SEPARATOR . $this->to, 'a');
+			if($fp === FALSE)
+			{
+				trace("Mail: unable to open debug log file in $debugPath name {$this->to}", 3);
+				return false;
+			}
+			
 			fwrite($fp, "From: $this->from\n".
 	                "To: $this->to\n".
 	                $this->headers.
