@@ -173,8 +173,8 @@ class ReportManager
 	{
 		global $script;
 		
-		$tableNavigator = new ReportTableNavigator(&$this->tables);
-		$filterNavigator = new ReportFilterNavigator(&$this->tables);
+		$tableNavigator = new ReportTableNavigator($this->tables);
+		$filterNavigator = new ReportFilterNavigator($this->tables);
 		
 		$script .= $tableNavigator->writeScript();
 		$script .= $filterNavigator->writeScript();
