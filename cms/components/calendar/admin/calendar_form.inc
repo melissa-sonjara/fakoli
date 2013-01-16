@@ -36,8 +36,6 @@ Fakoli::usingFeature("auto_form");
 
 $menu_item = "Calendars";
 
-require_once "include/calendar_tabs.inc";
-
 $calendar_id = checkNumeric($_GET["calendar_id"]);
 
 $eventTypes = query(EventType, "order by name");
@@ -61,7 +59,7 @@ $calendar_event_type_list = new CrossReferenceSelectFieldRenderer($form, "event_
 $readList = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
 $writeList = new CheckListFieldRenderer($form, "write_access", "Write Access", SiteRole::getRolesArray());
 
-$tabs = calendarTabs($calendar_id);
+$tabs = CalendarManager::getTabs($calendar_id);
 
 if ($method == "POST")
 {

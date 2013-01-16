@@ -32,6 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("component");
+Fakoli::usingFeature("tab_bar");
 
 class CalendarManager
 {
@@ -79,6 +80,17 @@ class CalendarManager
 		array_push($classes, "Event");
 		
 		return $classes;
+	}
+	
+	static function getTabs($key)
+	{
+		$tabs = array(	"Details"			=>	"/admin/calendar_form",
+				"Calendar"			=>	"/admin/calendar_view",
+				"Event List"		=>	"/admin/calendar_events"
+		);
+	
+		$qs = ($key) ? "calendar_id=$key" : "";
+		return new TabBar("tabs", $tabs, $qs);
 	}
 	
 	static function upgradeComponent($version)

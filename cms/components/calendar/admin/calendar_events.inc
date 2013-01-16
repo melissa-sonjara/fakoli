@@ -35,10 +35,7 @@ Fakoli::using("calendar");
 
 $menu_item = "Calendars";
 
-require_once "include/calendar_tabs.inc";
-
 $calendar_id = checkNumeric($_GET["calendar_id"]);
-
 
 if (!$calendar_id) redirect("/admin/calendars");
 
@@ -90,7 +87,7 @@ $view->addHandler(Event, new StandardEventHandler());
 $view->year = $year;
 $view->month = $month;
 
-$tabs = calendarTabs($calendar_id);
+$tabs = CalendarManager::getTabs($calendar_id);
 
 $tabs->writeHTML();
 ?>

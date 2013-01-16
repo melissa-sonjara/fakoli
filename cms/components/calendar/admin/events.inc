@@ -32,33 +32,39 @@
 *****************************************************************/
 
 Fakoli::using("calendar");
-Fakoli::usingFile("framework/data_view.inc");
+Fakoli::usingFeature("data_view", "filter_form");
+
+$menu_item = "Calendar Events";
 
 function formatEvent($event)
 {
 	return "<a href='/admin/event_form?event_id={$event->event_id}'>{$event->title}</a><em> {$event->event_type}</em><p>".ellipsis($event->description, 120)."</p>";
 }
 
+
+$filter = CalendarHelper::eventFilterSetup();
+
 $title = "Events";
-
-$events = query(Event, "ORDER BY start_date");
+$constraint .= $filter->getConstraint();
+$events = query(Event, "$constraint ORDER BY start_date");
 $lastUpdated = "";
-
-$menu_item = "Calendars";
 
 $table = new DataListView($events, "events");
 $table->column("Event", formatEvent, true, "width: 30%")
-	  ->column("Location", "{location}", true, "width: 30%")
-	  ->column("Start Date", "{start_date}", true, "width: 20%")
-	  ->column("End Date", "{end_date}", true, "width: 20%");
+	  ->column("Calendar", "{Calendar.name}", true, "width: 15%")
+	  ->column("Location", "{location}", true, "width: 25%")
+	  ->column("Start Date", "{start_date}", true, "width: 15%")
+	  ->column("End Date", "{end_date}", true, "width: 15%");
 	  
 $table->sortable = true;
 $table->filter = true;
 $table->pageSize = 20;
 $table->emptyMessage = "No Events defined";
 
+$script .= $filter->writeScript();
 $script .= $table->writeScript();
 
+$filter->drawForm();
 $table->drawView();
 ?>
 <br/>

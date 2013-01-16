@@ -123,7 +123,7 @@ class CalendarView
 {
 	var $current_day;
 	var $events;
-	var $id;
+	var $id; 		///< The HTML tag id for the calendar view
 	var	$month;
 	var $year;
 	var $handlerMap = array(); // key is event class, value is handler class name
@@ -491,6 +491,13 @@ ENDSCRIPT;
   <td><p><a href="<? echo $link ?>">View <? echo $altTitle ?></a></p></td>
   <td align="right">
    <form method="get" action="">
+    <?php
+    $calendar_id = htmlSafe(checkNumeric($_GET["calendar_id"]));
+    if($calendar_id)
+    {
+   		echo "<input id='calendar_id' type='hidden' name='calendar_id' value='$calendar_id'/>\n";
+    }
+   	?>
     <select name="month">
 <?
 	for($i = 1; $i <= 12; ++$i)
@@ -501,9 +508,10 @@ ENDSCRIPT;
 ?>
     </select>&nbsp;<select name="year">
 <?
-	for($i = 2006; $i < 2012; ++$i)
+	$endYear = date("Y") + 2;
+	for($i = 2006; $i <= $endYear; ++$i)
 	{
-		option($i, $i, $i == $this->year);
+		option($i, $i, (int)$this->year);
 	}
 ?>
     </select>
