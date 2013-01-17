@@ -327,7 +327,6 @@ ENDSCRIPT;
 				$eventBubbleID = "event_bubble_".str_replace("-", "_", $currentDay);
 				$dayTitle = date("F jS Y", strtotime($currentDay));
 				
-				trace("****************list link {$this->listLink}", 3);
 				$link = $this->formatEventListLink($this->listLink, $this->listDialog, $currentDay, $eventBubbleID, $i);
 				
 				$bubbles .= 
@@ -529,7 +528,6 @@ ENDSCRIPT;
 	 */
 	function formatEventListLink($link, $dLink, $currentDay, $eventBubbleID, $idx)
 	{
-		trace("***************formatEventListLink $link", 3);
 		if($link)
 		{
 			$link .= (preg_match("/\?/", $link)) ? "&" : "?";
@@ -546,7 +544,6 @@ ENDSCRIPT;
 				$dLink .= "('$currentDay')";
 			$onclick = "onclick=\"$dLink; return false;\"";
 		}
-		trace("***************2formatEventListLink $link", 3);
 		
 		return "<a class='eventlink' href=\"{$link}\" $onclick; 
 		onmouseover='showEventBubble(\"$eventBubbleID\", this);' onmouseout='hideEventBubble(\"$eventBubbleID\");'>{$idx}</a>";
