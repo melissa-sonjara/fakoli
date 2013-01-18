@@ -181,9 +181,12 @@ var SymbolTable = new Class(
 			a.addEvent('click', function(e) { new Event(e).stop(); this.editor.insertAtSelection(e.target.get('html')); this.div.fade('out'); return false; }.bind(this));
 		}
 		
+		this.div.addEvent('mouseleave', function(e) { this.div.fade('out'); }.bind(this));
 		var doc = $(document.body ? document.body : document.documentElement);
 		
 		doc.adopt(this.div);
+		
+		this.shim = new IframeShim(this.div);
 	},
 	
 	show: function()
