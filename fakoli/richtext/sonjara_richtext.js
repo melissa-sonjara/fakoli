@@ -151,7 +151,7 @@ var DropDown = new Class(
 	    var ctrl = document.getElementById(this.parent.name + "_" + this.name);
 	    if (ctrl == null) return;
 	    
-	    for(i = 1; i < ctrl.options.length; ++i)
+	    for(var i = 1; i < ctrl.options.length; ++i)
 	    {
 	        ctrl.options[i].selected = false;
 	    }
@@ -159,6 +159,40 @@ var DropDown = new Class(
 	    ctrl.options[0].selected = true;
 	}
 	
+});
+
+var SymbolTable = new Class(
+{
+	div:	Class.Empty,
+	editor:	Class.Empty,
+	shim:	Class.Empty,
+	
+	initialize: function(editor)
+	{
+		this.editor = editor;
+		
+		this.div = new Element('div', {'class': 'rte_symbol_table'});
+		this.div.setStyles({position: 'absolute', display: 'none', zIndex: 255});
+		
+		for (var i = 160; i < 256; ++i)
+		{
+			var a = new Element('a', {'html': "&#" + i + ";", 'href': '#'});
+			a.inject(this.div);
+			a.addEvent('click', function(e) { new Event(e).stop(); this.editor.insertAtSelection(e.target.get('html')); this.div.fade('out'); return false; }.bind(this));
+		}
+		
+		var doc = $(document.body ? document.body : document.documentElement);
+		
+		doc.adopt(this.div);
+	},
+	
+	show: function()
+	{
+		var button = document.id(this.editor.getID() + "_symbol");
+		this.div.setStyles({display: 'block', opacity: 0});
+		this.div.position({relativeTo: button, edge: 'topLeft', position: 'bottomLeft'});
+		this.div.fade('in');
+	}
 });
 
 var isIE;
@@ -275,7 +309,7 @@ var RichTextEditor = new Class({
 	cssFile:		"",
 	showStyleBar:	true,
 	hasSelection: 	false,
-	
+	symbolTable:	Class.Empty,
 	toolbar: 		[],
 	stylebar: 		[],		
 		
@@ -308,6 +342,7 @@ var RichTextEditor = new Class({
 				/*new Button(this, 'textcolor', 'textcolor.gif', 'Text Color', 'onTextColor'),
 				new Button(this, 'backcolor', 'bgcolor.gif', 'Background Color', 'onBackgroundColor'),*/
 				new Separator(this),
+				new Button(this, 'symbol', 'symbols.gif', 'Insert Symbol', 'onInsertSymbol'),
 				new Button(this, 'clear', 'clear.gif', 'Clear All Formatting', 'onClearFormatting'),
 				new Button(this, 'link', 'hyperlink.gif', 'Insert Link', 'onInsertLink'),
 				new Button(this, 'image', 'image.gif', 'Insert Image', 'onInsertImage')/*,
@@ -376,6 +411,7 @@ var RichTextEditor = new Class({
 		
 		this.hasSelection = false;
 		
+		this.symbolTable = new SymbolTable(this);
 		this.fireEvent('setupToolbar', this);				
 		this.fireEvent('setupStylebar', this);
 	},
@@ -681,6 +717,15 @@ var RichTextEditor = new Class({
 			}
 			oHdnField.value = doc.body.innerHTML;
 		}
+
+		var val = oHdnField.value;
+		// Escape entities
+		for(var i = 160; i < 256; ++i)
+		{
+			val = val.replace(String.fromCharCode(i), "&#" + i + ";");
+		}
+		
+		oHdnField.value = val.trim();
 		
 		//alert(oHdnField.value);
 		
@@ -947,7 +992,7 @@ var RichTextEditor = new Class({
 		
 		var elt = null;
 		
-		if (matches == null || matches.length == 0) return null;
+		if (matches == null || matches.length == 0) return document.createTextNode(tag);
 		
 		elt = document.createElement(matches[1]);
 		
@@ -955,7 +1000,7 @@ var RichTextEditor = new Class({
 		
     	if (attrs)
 		{
-			for(i = 0; i < attrs.length; ++i)
+			for(var i = 0; i < attrs.length; ++i)
 			{
 				var attrMatches = attrPattern.exec(attrs[i]);
 				elt.setAttribute(attrMatches[1], attrMatches[2]);
@@ -983,6 +1028,11 @@ var RichTextEditor = new Class({
 			//alert(html);
 			$(this.name + "_iframe").contentWindow.document.body.innerHTML = html;
 		}
+	},
+	
+	onInsertSymbol: function()
+	{
+		this.symbolTable.show();
 	},
 	
 	onTextColor: function()
@@ -1241,6 +1291,8 @@ var RichTextEditor = new Class({
             	  "baseHref = " + this.baseHref + "\n" +
             	  "cssFile = " + this.cssFile  + "\n" +
             	  "hasSelection = " + this.hasSelection;
+	    
+	    return str;
     }
 });
 
