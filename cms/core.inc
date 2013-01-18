@@ -35,6 +35,9 @@ require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../framework/cache.inc");
 require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
 
+// Ensure that short open tags are enabled.
+ini_set("short_open_tag", 1);
+
 /**
  * FakoliException is the base exception class for all
  * Fakoli errors.
@@ -791,13 +794,20 @@ class Fakoli
 		
 		if (stristr(PHP_OS, 'win')) 
 		{			
-            $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
-		  	$cpus = $wmi->InstancesOf("Win32_Processor");
-  
-		  	foreach ($cpus as $cpu) 
-		  	{
-		   		$out .=  $cpu->LoadPercentage."% ";
-		  	}
+			if (class_exists("COM"))
+			{
+	            $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
+			  	$cpus = $wmi->InstancesOf("Win32_Processor");
+	  
+			  	foreach ($cpus as $cpu) 
+			  	{
+			   		$out .=  $cpu->LoadPercentage."% ";
+			  	}
+			}
+			else
+			{
+				$out .= "Not Available";
+			}			
         } 
         else 
         {       
