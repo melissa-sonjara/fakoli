@@ -37,7 +37,7 @@ Fakoli::using("section");
 $editor = $_GET["Editor"];
 
 $itemsByType = array();
-$itemsByType = ComponentManager::fireEvent("EnumerateItems", &$itemsByType);
+$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
 
 $tree = new TreeControl("items");
 $tree->width = "100%";
