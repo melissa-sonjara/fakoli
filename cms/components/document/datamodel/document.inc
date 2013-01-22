@@ -138,6 +138,7 @@ class Document extends DataItem implements Searchable
 		}
 		else
 		{
+			$params = preg_replace('/[^\w]+/', ' ', $params);
 			$params = "%$params%";
 			$documents = Query::create(Document, "WHERE (title like :a OR keywords LIKE :b OR notes Like :c) and public=1")
 						  ->bind(":a", $params, ":b", $params, ":c", $params)
