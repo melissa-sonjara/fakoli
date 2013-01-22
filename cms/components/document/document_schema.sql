@@ -96,3 +96,9 @@ ALTER TABLE `document` ADD COLUMN `author` VARCHAR(200) NOT NULL DEFAULT '' AFTE
 ALTER TABLE `document` ADD COLUMN `publication` VARCHAR(200) AFTER `author`;
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE `document` ADD COLUMN `allow_access` VARCHAR(200) NOT NULL DEFAULT '' AFTER `owner_id`;
+
+-- END Version 1.4

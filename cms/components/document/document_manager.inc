@@ -288,6 +288,9 @@ function deleteFolderResult(result)
 				
 		foreach($this->documents as $doc)
 		{
+			// Do not list files to which the user does not have access
+			if (!checkRole($doc->allow_access)) continue;
+			
 			$file = str_replace("/", DIRECTORY_SEPARATOR, $doc->file);
 			$file = str_replace("\\", DIRECTORY_SEPARATOR, $file);
 			

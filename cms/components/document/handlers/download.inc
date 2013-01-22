@@ -44,6 +44,11 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 	Fakoli::end("Access Denied");
 }
 
+if (!checkRole($doc->allow_access))
+{
+	Fakoli::end("Access Denied");
+}
+
 $d = new DocumentDownload();
 $d->document_id = $document_id;
 $d->user_id = ($user) ? $user->user_id : 0;

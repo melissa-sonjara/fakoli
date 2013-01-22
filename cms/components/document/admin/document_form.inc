@@ -62,6 +62,7 @@ if ($document->file)
 	$form->annotate("file", "<a href='/download.php?document_id={$document_id}'>{$document->file}</a>");
 }
 $fileupload = new FileUploadFieldRenderer($form, "file", "Upload File", uploadPDF);  
+$allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 

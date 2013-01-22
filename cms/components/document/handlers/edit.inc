@@ -48,7 +48,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 	die("Access Denied");
 }
 
-$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file");
+$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "allow_access");
 
 $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
 $form->readonly("file");
@@ -60,6 +60,7 @@ $notes->colspan = 1;
 $notes->columns = 38;
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
+$allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
 if ($method == "POST")
 {

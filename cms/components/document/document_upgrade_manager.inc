@@ -52,7 +52,8 @@ class DocumentUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Add document download tracking table",
 			"1.2"		=>	"sql:Added author field to document table",
-			"1.3"		=>	"sql:Added publication field to document table"
+			"1.3"		=>	"sql:Added publication field to document table",
+			"1.4"		=>	"sql:Added allow_access field to document table"
 	);
 	
 	function DocumentUpgradeManager()

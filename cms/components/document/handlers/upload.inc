@@ -51,7 +51,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 
 $document = new Document();
 
-$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "publication_date", "document_library_id", "owner_id");
+$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "publication_date", "document_library_id", "owner_id", "allow_access");
 
 $form = new AutoForm($document, "POST", "/action/document/upload?document_library_id=$document_library_id");
 $form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
@@ -67,6 +67,7 @@ $notes->columns = 38;
 
 $folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
 $fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
+$allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
 if ($method == "POST")
 {

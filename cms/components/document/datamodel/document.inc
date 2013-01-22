@@ -49,7 +49,8 @@ class Document extends DataItem implements Searchable
 						"public"				=>	Boolean,
 						"last_modified"			=>	Timestamp,
 						"document_library_id"	=>	Number,
-						"owner_id"				=>	Number
+						"owner_id"				=>	Number,
+						"allow_access"			=>	String
 	);
 						
 	// Relations
