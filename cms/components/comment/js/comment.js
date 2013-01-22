@@ -62,7 +62,8 @@ var Comment =  (function()
 					}
 				
 					$exec(script);
-				}
+					this.closeDialog();
+				}.bind(this)
 			});
 			request.send();
 		},
