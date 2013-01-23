@@ -62,6 +62,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	var $colCount = 0;
 	var $subform;
 	var $columnWidths = array();
+	var $msg;		///< Text to appear below buttons at top and above table
 	
 	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="")
 	{
@@ -170,6 +171,11 @@ class SpreadsheetForm extends CompositeAutoForm
 			echo "<p>";
 			$this->drawButtons();
 			echo "</p>";
+		}
+			
+		if($this->msg)
+		{
+			echo $this->msg;
 		}
 		
 		if ($form->markRequiredFields && $form->validator->hasRequiredFields())
