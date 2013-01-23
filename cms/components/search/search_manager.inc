@@ -96,6 +96,12 @@ class SearchManager
 			$params = trim($params);
 		}
 		
+		if (!$params)
+		{
+			$this->searchResults = array();
+			return this;
+		}
+		
 		foreach(SearchManager::$map as $component => $searchables)
 		{
 			Fakoli::using($component);
