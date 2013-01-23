@@ -91,6 +91,10 @@ class SearchManager
 		{
 			$class_array = $_REQUEST["searchable_classes:"];
 		}
+		else
+		{
+			$params = trim($params);
+		}
 		
 		foreach(SearchManager::$map as $component => $searchables)
 		{
