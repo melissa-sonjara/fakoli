@@ -116,6 +116,7 @@ class BlogManager
 		$form->alias("image_id", "Image");
 		$form->alias("enable_rss_feed", "Enable RSS Feed");
 		$form->alias("max_rss_articles", "Max # of Articles in RSS Feed");	
+		$form->annotate("max_rss_articles", "(A value of zero means no limit)");
 		return $form;
 	}
 	
