@@ -58,6 +58,8 @@ class BlogManifest
 		);
 	}	
 	
+	var $allow_sessionless_handlers = array("rss"); // Allow anonymous access to the rss action handler
+	
 	static function getStyles()
 	{
 		return array("/fakoli/css/blog.css");

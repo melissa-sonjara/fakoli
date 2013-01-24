@@ -47,14 +47,16 @@ class Blog extends DataItem
 						"blog_type"				=>	String,
 						"allow_comments"		=>	Boolean,
 						"published"				=>	Boolean,
-						"created_date"			=>	DateTime);
+						"created_date"			=>	DateTime,
+						"enable_rss_feed"		=>	String,
+						"max_rss_articles"		=>	Number);
 	
 	// Relations
 	
 	var $relations = array("Owner"		=>	"",
 						   "Articles"	=>	Article,
 						   "Image"		=>	ImageRecord);
-						
+					
 	function Owner()
 	{
 		$mgr = new UserManager();
@@ -65,7 +67,7 @@ class Blog extends DataItem
 	{
 		return $this->Owner()->getFullName();
 	}
-	
+		
 	function Image()
 	{
 		return $this->getRelated(ImageRecord);
@@ -126,6 +128,30 @@ class Blog extends DataItem
 					  ->executeSingle();
 
 		return $match;
+	}
+	
+
+	/**
+	 * Determines the URL for the blog
+	 */
+	function getURL()
+	{
+		global $config;
+		
+		$url = "";
+		
+		if ($this->identifier)
+		{
+			$contents = SectionContent::getMappedContent($this->identifier);
+			if (count($contents))
+			{
+				$section = $contents[0]->Section();
+				
+				$url = $section->getSectionURL() . $this->identifier;
+			}
+		}
+		
+		return $url;
 	}
 	
 	function Blog()

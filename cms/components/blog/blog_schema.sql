@@ -44,3 +44,10 @@ CREATE TABLE `blog_subscriber` (
 ENGINE = InnoDB;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE `blog` ADD COLUMN `enable_rss_feed` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `blog` ADD COLUMN `max_rss_articles` INT(10) UNSIGNED NOT NULL DEFAULT 0;
+
+-- END Version 1.3
