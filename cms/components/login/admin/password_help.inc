@@ -68,9 +68,7 @@ if($username)
 		$match = $matches[0];
 }
 
-?>
-<h3>Password Help</h3>
-<?
+
 if($match)
 {
 	$sent = emailToken($match);
@@ -109,8 +107,6 @@ else
 ?>
 <h4><a href="/login">Return to the login page</a></h4>
 <?
-
-require_once realpath(dirname(__FILE__))."/../../templates/end_page.inc";
 
 function passwordHelpForm($username = "")
 {
