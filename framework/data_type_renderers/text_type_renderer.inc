@@ -72,6 +72,9 @@ class TextTypeRenderer extends AbstractTypeRenderer
 
 		case "HTML":
 			return formatAsHtml($value);
+
+		case "xml":
+			return htmlentities($value, ENT_XML1);
 			
 		default:
 			
