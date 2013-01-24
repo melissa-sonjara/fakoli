@@ -46,6 +46,8 @@ class PagedList
 	var $CSSclass = null;						///< CSS class(es) to be applied to the list
 	var $styles = null;							///< Specific CSS styles to be applied to the list
 	var $emptyList = "No items in the list";	///< Message to display when the list is empty
+	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
+	var $writeIdTag = false;					///< whether to include an id tag for each li item
 	
 	/**
 	 * Creates a new PagedList control.
@@ -62,12 +64,14 @@ class PagedList
 	
 	function writeScript()
 	{
-		ob_start();
+		if(!$this->paginate) return "";
+		
+		ob_start();				
 ?>
 	<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		var <?echo $this->id?> = new PaginatingList('<?echo $this->id?>', '<?echo $this->id?>_paginator', {per_page: <?echo $this->pageSize?>});
+		var <?echo $this->id?> = new PaginatingList('<?echo $this->id ?>', '<?echo $this->id?>_paginator', {per_page: <?echo $this->pageSize ?>});
 	});
 	</script>
 <?
@@ -87,13 +91,25 @@ class PagedList
 		$attrs = "";
 		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
+		if($this->paginate)
+		{
 ?>
-			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
+			<div style="float: right;" class="paginator">
+			<ul id="<?echo $this->id?>_paginator"></ul>
+			</div>
+		<?php 
+		}
+		?>
 			<<?echo $this->listTag?> id="<?echo $this->id?>"<?echo $attrs?>>
 <?
 		foreach($this->items as $item)
 		{
-			echo "<li>";
+			if($this->writeIdTag)
+			{
+				$idTag = $this->formatIdTag($item);	
+			}
+			
+			echo "<li id={$idTag}>";
 			
 			if (is_callable($this->format))
 			{
@@ -104,6 +120,12 @@ class PagedList
 			echo "</li>\n";
 		}
 		echo "</{$this->listTag}>\n";
+	}
+	
+	function formatIdTag($item)
+	{
+		$pk = $item->getPrimaryKey();
+		return "{$pk}_{$item->$pk}";
 	}
 }
 ?>
