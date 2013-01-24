@@ -50,7 +50,7 @@ else
 	$blog = Blog::findByIdentifier($identifier);
 }
 
-if (!$blog->published || !checkRole($blog->allow_read))
+if (!$blog->published || !$blog->enable_rss_feed || !checkRole($blog->allow_read))
 {
 	throw new FakoliException("Access Denied");
 }
