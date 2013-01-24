@@ -510,7 +510,8 @@ class ComponentManager
 		}
 		
 		$manifest = $component->loadManifest();
-		if (!isset($user) && !$manifest->allow_sessionless_handlers && !$process)
+		if (!isset($user) && !$process && (!$manifest->allow_sessionless_handlers || 
+				(is_array($manifest->allow_sessionless_handlers) && array_search($action, $manifest->allow_sessionless_handlers) === FALSE)))
 		{
 			throw new FakoliException("Session Expired");
 		}
