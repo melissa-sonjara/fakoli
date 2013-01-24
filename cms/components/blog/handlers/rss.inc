@@ -70,7 +70,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 ?>
 <rss version="2.0">
 <channel>
-        <title><?echo $blog->title?></title>
+        <title><?echo $blog->format("{title:xml}")?></title>
         <description><?echo $blog->format("{description:xml}")?></description>
         <link><?echo $url?></link>
         <lastBuildDate><?echo $timestamp?></lastBuildDate>
