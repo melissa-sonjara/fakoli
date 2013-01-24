@@ -48,7 +48,7 @@ class Blog extends DataItem
 						"allow_comments"		=>	Boolean,
 						"published"				=>	Boolean,
 						"created_date"			=>	DateTime,
-						"enable_rss_feed"		=>	String,
+						"enable_rss_feed"		=>	Boolean,
 						"max_rss_articles"		=>	Number);
 	
 	// Relations
