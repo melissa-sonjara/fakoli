@@ -169,6 +169,22 @@ class Section extends DataItem
 	}
 	
 	/**
+	 * Returns the Section URL
+	 */
+	
+	function getSectionURL()
+	{
+		global $config;
+	
+		$url = "http" . (($this->use_SSL) ? "s" : "") . "://{$config['http_host']}/";
+		if ($this->section != "/")
+		{
+			$url .= $this->section . "/";
+		}
+		return $url;
+	}
+	
+	/**
 	 * Loads the default template associated with this section.
 	 * @return string the contents of the template for this section.
 	 */
@@ -196,7 +212,7 @@ class Section extends DataItem
 		sort($positions);
 		return $positions;
 	}
-	
+
 	
 	function Section()
 	{
@@ -227,6 +243,16 @@ class SectionContent extends DataItem
 	function Section()
 	{
 		return $this->getRelated(Section);
+	}
+	
+
+	static function getMappedContent($identifier)
+	{
+		$content = Query::create(SectionContent, "WHERE identifier=:i")
+						->bind(":i", $identifier)
+						->execute();
+		
+		return $content;
 	}
 	
 	function SectionContent()
