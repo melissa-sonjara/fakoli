@@ -1711,6 +1711,11 @@ function getMIMEType($filename)
     }
 }
 
+/**
+ * Remove specified keys from the given array
+ * @param array $array the array to strip
+ * @return stripped array
+ */
 function array_remove_keys($array)
 {
 	for($i = 1; $i < func_num_args(); ++$i)
@@ -1719,5 +1724,30 @@ function array_remove_keys($array)
 	}
 	
 	return $array;
+}
+
+/**
+ * Function to provide html to XML entity renaming.
+ * Provides fallback for PHP versions earlier than 5.4 that
+ * do not have the ENT_XML1 format available for the htmlentities() call.
+ * 
+ * @param string $string the string to convert
+ * @return string
+ */
+function xmlEntities($string)
+{
+	if (defined(ENT_XML1)) return htmlentities($value, ENT_XML1);
+
+	$result = '';
+	foreach (str_split(utf8_decode(htmlspecialchars($string))) as $char)
+	{
+		$num = ord($char);
+		if ($num > 127) {
+			$result .= '&#' . $num . ';';
+		} else {
+			$result .= $char;
+		}
+	}
+	return $result;
 }
 ?>
