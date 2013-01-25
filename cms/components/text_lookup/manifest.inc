@@ -40,7 +40,7 @@ class TextLookupManifest
 		$component->description = "Text data repository and lookup with multilanguage support.";
 		$component->author = "Janice Gallant";
 		$component->version = "1.0";
-		$component->priority = 20;
+		$component->priority = 2;
 		$component->enabled = true;
 		
 		return $component;
