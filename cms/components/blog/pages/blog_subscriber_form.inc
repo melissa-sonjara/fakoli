@@ -31,10 +31,8 @@
 
 *****************************************************************/
 
+Fakoli::using("blog");
 Fakoli::usingFeature("auto_form");
-Fakoli::using("blog, text_lookup");
-
-$page->page_title = "Subscribe to News Updates";
 
 $blog_id = checkNumeric($_GET["blog_id"]);
 
@@ -44,8 +42,6 @@ $blogSubscriber->blog_id = $blog_id;
 
 $form = new AutoForm($blogSubscriber);
 $form->hide("blog_id");
-
-$form->alias(subscriber_email, "Email");
 $form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b", "Please supply a valid email address containing a domain name.");
 		
 $form->submitLabel = "Subscribe";
@@ -63,15 +59,8 @@ $script .= $form->writeScript();
 ?>
 
 <div id="tab_border">
+
 <?
-
-$subscription_instructions = TextLookup::getText("blog_subscriber_form_instructions");
-
-if ($subscription_instructions)
-	echo $subscription_instructions;
-else
-	echo "<p>Enter your email address to receive an email notification when a new article is posted.</p>";
-	
 $form->drawForm();
 ?>
 <br/>
