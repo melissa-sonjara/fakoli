@@ -109,7 +109,6 @@ var FakoliMenu = new Class({
 			ul.position({'relativeTo': elt, 'position': this.options.position});
 			if (this.options.effect == 'fade')
 			{
-				var ul = elt.getElement('ul');
 				ul.fade('in');
 			}
 			else if (this.options.effect == 'reveal')
