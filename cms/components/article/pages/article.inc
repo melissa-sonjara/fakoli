@@ -36,6 +36,11 @@ Fakoli::usingFeature("auto_form");
 
 $article_id = checkNumeric($_GET["article_id"]);
 
+if (!$article_id)
+{
+	throw new FakoliException("No article specified");
+}
+
 $article = new Article($article_id);
 
 $page->page_title = $article->title;
