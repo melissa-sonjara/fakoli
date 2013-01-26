@@ -43,28 +43,23 @@
 
 
 Fakoli::using("email");
-Fakoli::usingFeature("grouped_data_view");
+Fakoli::usingFeature("data_view");
 
-$emailTemplates = groupedQuery(EmailTemplate, "ORDER BY name", "class_name");
+$emailTemplates = query(EmailTemplate, "ORDER BY name");
 
 $menu_item = "Email Templates";
 
-$classes = indexedQuery(EmailTemplate, "ORDER BY class_name", "class_name");
-
-$table = new GroupedDataListView($emailTemplates, "templates");
+$table = new DataListView($emailTemplates, "templates");
 $table->column("Name", formatEmailTemplateLink, true)
-		->column("Recipients", "{recipients}", true)
-		->column("Subject", "{subject}", true)
-	  	->column("Message", formatEmailMessage, true);
+//	  ->column("Class Name", "{class_name}", true)
+	  ->column("Recipients", "{recipients}", true)
+	  ->column("Subject", "{subject}", true)
+	  ->column("Message", formatEmailMessage, true);
 	  	
 $table->emptyMessage = "There are no email templates defined.";
 $table->mode = "tree";
 $table->cssStyle = "width: 100%";
-
-foreach(array_keys($classes) as $class_name)
-{
-	$table->group($class_name, $class_name);
-}
+$table->cssClass = "list small";
 
 $script .= $table->writeScript();
 
