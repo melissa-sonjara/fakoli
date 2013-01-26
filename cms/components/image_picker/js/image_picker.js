@@ -256,6 +256,18 @@ var ImagePicker =  (function()
 			this.dialog.hide();
 		},
 		
+		clearImage: function(field)
+		{
+			var imageField = document.id(field);
+			if(imageField)
+				imageField.set("value", 0);
+				
+			var preview = document.id(field + '_preview');
+			if(preview)
+				preview.src = "/fakoli/images/noimage.gif";
+			this.dialog.hide();
+		},
+		
 		hideUploadPopup: function()
 		{
 			this.popup.hide();
