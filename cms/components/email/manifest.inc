@@ -50,7 +50,7 @@ class EmailManifest
 	{
 		return array
 		(
-			"Classification"	=> array
+			"Email Management"	=> array
 			(
 
 				"Email Templates"	=>	array("page"	=>	"/admin/email_template_list",
