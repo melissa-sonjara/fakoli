@@ -291,6 +291,7 @@ class Fakoli
 					  "Site Configuration"		=> array(),
 					  "Collaboration"			=> array(),	
 					  "Classification"			=> array(),
+					  "Email Management"		=> array(),
 					  "User Management"			=> array());		
 		
 		$components = Fakoli::getComponents();
