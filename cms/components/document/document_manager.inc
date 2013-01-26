@@ -501,7 +501,7 @@ function deleteFolderResult(result)
 	{
 		$documents = Query::create(DocumentLibrary, "ORDER BY name")->execute();
 		
-		$items["Document Library"] = $documents;
+		$items["Document Libraries"] = $documents;
 		return $items;
 	}
 	
