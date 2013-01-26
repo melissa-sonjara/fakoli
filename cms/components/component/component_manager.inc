@@ -603,8 +603,15 @@ class ComponentManager
 		
 		try
 		{
-			$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
+			checkIdentifier($identifier);
+			
+			$page = ComponentPage::findByIdentifier($identifier);
 
+			if (!$page->enabled)
+			{
+				throw new FakoliException("Component Page '$identifier' is disabled");
+			}
+			
 			// JDG 11/2011 - are templates ever stored with tpl at the end?? 
 			$page_template = (preg_match("/tpl$/", $page->template)) ? $page->template : "{$page->template}.tpl";
 			$pageView = new ComponentPageView($page, $page_template);
