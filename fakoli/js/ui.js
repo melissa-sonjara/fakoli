@@ -770,7 +770,7 @@ var PaginatingList = new Class(
 		if (!this.list) return;
 		this.paginator = $(paginator);
 		this.setOptions(options);
-		this.pages = Math.ceil(this.list.getElements("li").length  / this.options.per_page );
+		this.pages = Math.ceil(this.list.getChildren("li").length  / this.options.per_page );
 		
 		this.createPagination();
 		
