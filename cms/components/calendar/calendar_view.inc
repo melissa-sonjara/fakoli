@@ -232,7 +232,7 @@ class CalendarView
 		
 		$identifier = $_REQUEST["identifier"];
 		
-		if ($isAdmin) $identifier = "admin/$identifier";
+		if ($isAdmin) $identifier = "/admin/$identifier";
 		
 		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$qs = preg_replace("/{$this->yearParam}=\\d+&*/", "", $qs);
