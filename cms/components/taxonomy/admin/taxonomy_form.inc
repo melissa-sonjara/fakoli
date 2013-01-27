@@ -20,7 +20,7 @@ $form->allowDelete = true;
 
 $classes =  TaxonomyManager::getRegisteredClassOptions();
 
-new CheckListFieldRenderer($form, "associated_classes", "Associated Classes", $classes);
+new CheckListFieldRenderer($form, "associated_classes", "Associated Content Items", $classes);
 
 $tabs = TaxonomyManager::getTabs($taxonomy_id);
 

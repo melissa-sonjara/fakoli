@@ -104,7 +104,12 @@ class CalendarManager
 		$calendarHandler = new CalendarHandler();
 		return $calendarHandler;
 	}
-	
+
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Event;
+		return $classes;
+	}
 }
 
 ?>

@@ -324,7 +324,12 @@ class VideoManager
 		$items["Video Galleries"] = $galleries;
 		return $items;
 	}
-	
+
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Video;
+		return $classes;
+	}
 		
 }
 ?>

@@ -80,7 +80,8 @@ class VideoManifest
 					 "ComponentScanComplete"	=> array(VideoManager, setDefaults),
 					 "Initialize" 				=> array(VideoManager, onInitialize),
 					 "RegisterBlogViewHandlers" => array(VideoBlogHandler, register),
-					 "upgradeComponent"			=> array(VideoManager, upgradeComponent));
+					 "upgradeComponent"			=> array(VideoManager, upgradeComponent),
+					 "RegisterTaxonomyClasses"	=>	array(VideoManager, registerTaxonomyClasses));
 	}
 }
 

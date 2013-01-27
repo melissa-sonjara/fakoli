@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("video");
+Fakoli::using("video", "taxonomy");
 Fakoli::usingFeature("auto_form", "tab_bar");
 
 $menu_item = "Videos";
@@ -62,6 +62,8 @@ $form->annotate("width", "<em>Natural width of video in pixels</em>");
 $form->annotate("height", "<em>Natural height of video in pixels</em>");
 $form->annotate("video_file", "<em>Video File in FLV format</em>");
 $form->annotate("image_file", "<em>First Frame in PNG or JPG format</em>");
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($video_id && $video->video_file)
 {
