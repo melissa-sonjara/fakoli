@@ -84,7 +84,8 @@ class CalendarManifest
 					 "EnumerateItems"	 => array(CalendarManager, enumerateItems),
 					 "EnumerateContextHelpClasses" => array(CalendarManager, enumerateContextHelpClasses),		
 					 "upgradeComponent"		=>	array(CalendarManager, upgradeComponent),
-					 "calendarGetHandler"      =>    array(CalendarManager, calendarGetHandler)
+					 "calendarGetHandler"      =>    array(CalendarManager, calendarGetHandler),
+					 "RegisterTaxonomyClasses"	=>	array(CalendarManager, registerTaxonomyClasses)
 		);
 	}
 }
