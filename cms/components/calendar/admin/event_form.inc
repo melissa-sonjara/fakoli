@@ -39,7 +39,7 @@ Fakoli::assertRole("admin");
 
 $calendar_id = checkNumeric($_GET["calendar_id"]);
 
-$menu_item = "Events";
+$menu_item = "Calendar Events";
 
 $event = new Event();
 
