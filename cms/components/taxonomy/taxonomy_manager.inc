@@ -40,7 +40,7 @@ class TaxonomySerializationHandler
 		$xml .= SerializationManager::serialize(Taxonomy, "ORDER BY taxonomy_id");
 		$xml .= SerializationManager::serialize(TaxonomyTerm, "ORDER BY term_id");
 		$xml .= SerializationManager::serialize(TaxonomyTermAssociation, "ORDER BY term_association_id");
-		$xml .= "</ArticleMap>";
+		$xml .= "</TaxonomyMap>";
 		
 		return $xml;
 	}
