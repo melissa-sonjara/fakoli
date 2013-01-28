@@ -104,6 +104,18 @@ class Article extends DataItem implements Searchable
 		return $blog;
 	}
 	
+	function getURL()
+	{
+		try
+		{
+			return $this->getBlog()->getURL() . "?article_id=" . $this->article_id;
+		}
+		catch(DataNotFoundException $e)
+		{
+			return "/article?article_id=" . $this->article_id;
+		}		
+	}
+	
 	function getBlogSubscribers()
 	{
 		$blogSubscribers = Query::create(BlogSubscriber, "where blog_id=:blog_id")
