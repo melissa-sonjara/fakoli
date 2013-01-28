@@ -50,7 +50,7 @@ foreach($articlesByType as $type => $items)
 	
 	foreach($items as $item)
 	{
-		$itemNode = new TreeNode("{$type}_{$item->article_id}", $item->title, null, false, "tree_node_closed", "tree_node_open", "javascript:insertLink(\"/article?article_id={$item->article_id}\")");
+		$itemNode = new TreeNode("{$type}_{$item->article_id}", $item->title, null, false, "tree_node_closed", "tree_node_open", "javascript:insertLink(\"". $item->getURL() . "\")");
 		$itemNode->leafStyle = "file_node_leaf";
 		$typeNode->add($itemNode);
 	}
