@@ -381,8 +381,10 @@ class ComponentManager
 	 * Fire an event to all subscribers as detailed in their manifests.
 	 * @param string $event the name of the event
 	 * @param array $parameter any parameters being passed to the event
+	 * @param boolean $mustBeConsumed if set to true, throws FakoliEventNotConsumed if no event handler
+	 * has indicated consumption of the event by setting $continue to false
 	 */
-	static function fireEvent($event, $parameter = null)
+	static function fireEvent($event, $parameter = null, $mustBeConsumed = false)
 	{
 		trace("** Firing event '$event'", 4);
 		 
@@ -411,6 +413,11 @@ class ComponentManager
 					
 			$parameter = call_user_func_array($subscription["handler"], array($parameter, &$continue));
 			if (!$continue) break;
+		}
+		
+		if ($mustBeConsumed && $continue)
+		{
+			throw new FakoliEventNotConsumed("'$event' not handled by any subscriber");
 		}
 		
 		return $parameter;
@@ -609,7 +616,7 @@ class ComponentManager
 
 			if (!$page->enabled)
 			{
-				throw new FakoliException("Component Page '$identifier' is disabled");
+				return $identifier;
 			}
 			
 			// JDG 11/2011 - are templates ever stored with tpl at the end?? 

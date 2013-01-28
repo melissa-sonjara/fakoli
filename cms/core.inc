@@ -55,6 +55,13 @@ class FakoliException extends Exception {}
  */
 class FakoliEarlyExit extends Exception {}
 
+
+/**
+ * FakoliEventNotConsumed is thrown when no subscriber has handled
+ * an event that was fired with $mustBeConsumed set to true.
+ */
+class FakoliEventNotConsumed extends Exception {}
+
 /**
  * This class provides the Fakoli CMS core. It contains basic utility functions
  * used by components and modules to access the component map, and provides facilities
@@ -683,7 +690,14 @@ class Fakoli
 				redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
 			}
 		
-			ComponentManager::fireEvent("ResolveIdentifier", $identifier);
+			try
+			{
+				ComponentManager::fireEvent("ResolveIdentifier", $identifier, true);
+			}
+			catch(FakoliEventNotConsumed $e)
+			{
+				throw new FakoliException("The resource '$identifier' is disabled");
+			}
 		}
 	}
 	
