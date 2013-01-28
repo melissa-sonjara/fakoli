@@ -52,7 +52,10 @@ else
 $form = new AutoForm($token);
 $form->allowDelete = true;
 
-$userSelect = new RelatedItemSelectFieldRenderer($form, "user_id", "User", SiteUser, "ORDER BY username", "username", "user_id");
+$mgr = new UserManager();
+$userclass = $mgr->getUserClass();
+$proto_user = new $userclass;
+$userSelect = new RelatedItemSelectFieldRenderer($form, "user_id", "User", $userclass, "ORDER BY ".$mgr->getUsernameField(), $mgr->getUsernameField(), $proto_user->getPrimaryKey());
 $form->alias("ip_address", "IP Address");
 $form->annotate("ip_address", "Restrict login to a given IP address. You can use wildcards to specify IP address ranges.");
 $form->required("user_id", "token");
