@@ -248,8 +248,8 @@ var ImagePicker =  (function()
 	
 			var imageField = document.id(field);
 			if(imageField)
-				imageField.set("value", this.selectedKey)
-				
+				imageField.set("value", this.selectedKey);
+			
 			var preview = document.id(field + '_preview');
 			if(preview)
 				preview.src = "/action/image/thumbnail?image_id=" + this.selectedKey + "&size=150";
