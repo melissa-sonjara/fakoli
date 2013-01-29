@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("document");
+Fakoli::using("document", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
@@ -64,6 +64,8 @@ $form->getRenderer("title")->autocomplete = false;
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
 $notes->columns = 38;
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
 $fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
