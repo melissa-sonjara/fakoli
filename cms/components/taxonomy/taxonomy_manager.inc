@@ -121,6 +121,33 @@ class TaxonomyManager
 		}
 	}
 	
+	static function getAssociatedTaxonomies($classes)
+	{
+		if (!is_array($classes))
+		{
+			$classes = array($classes);
+		}
+		
+		$matched = array();
+		
+		$taxonomies = Query::create(Taxonomy, "")->execute();
+		
+		foreach($taxonomies as $taxonomy)
+		{
+			$taxonomy_classes = explode(",", $taxonomy->associated_classes);
+			foreach($classes as $class)
+			{
+				if (array_search($class, $taxonomy_classes) !== FALSE)
+				{
+					$matched[] = $taxonomy;
+					break;
+				}
+			}
+		}	
+		
+		return $matched;	
+	}
+	
 	static function importTerms($taxonomy, $file)
 	{
 		$indexedTerms = reindexList($taxonomy->Terms(), "term");
@@ -181,6 +208,21 @@ class TaxonomyManager
 		}
 		
 		fclose($fp);
+	}
+	
+	static function addFacets($manager)
+	{
+		$classes = array();
+		for($i = 1; $i < func_num_args(); ++$i)
+		{
+			$classes[] = func_get_arg($i);
+		}
+		
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($classes);
+		foreach($taxonomies as $taxonomy)
+		{
+			$manager->addFacet($taxonomy->taxonomy_name, new TaxonomyFacetFilter($taxonomy));
+		}
 	}
 	
 	static function upgradeComponent($version)

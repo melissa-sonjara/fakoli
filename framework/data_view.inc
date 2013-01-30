@@ -34,6 +34,7 @@
 require_once realpath(dirname(__FILE__))."/data_column.inc";
 require_once realpath(dirname(__FILE__))."/join.inc";
 require_once realpath(dirname(__FILE__))."/excel.inc";
+require_once realpath(dirname(__FILE__))."/facet_manager.inc";
 
 /**
  * DataListView displays a list of DataItems (or InnerJoinResults) in tabular format.
@@ -47,7 +48,7 @@ require_once realpath(dirname(__FILE__))."/excel.inc";
  * @author andy
  *
  */
-class DataListView
+class DataListView implements FacetFilterable
 {
 	var $columns;		///< The column definitions for the table.
 	var $footerColumns;	///< The footer column definitions for the table.
@@ -59,12 +60,14 @@ class DataListView
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
+	var $tagRowCallbacks; ///< Array of callbacks for adding extra attributes to each row
 	var $totalCallbacks;///< Array of callbacks for totalling columns
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
 	var $excelFile;		///< Filename for automatic Excel export
 	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
 	var $summary;		  ///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	var $zebra;			///< Specifies whether alternate rows in the table should be striped
+
 	// Scrolling Table parameters
 	
 	var $height;
@@ -114,10 +117,17 @@ class DataListView
 		$this->summary = null;
 		$this->zebra = true;
 		$this->totalCallbacks = array();
+		$this->tagRowCallbacks = array();
 		
 		return $this;
 	}
 
+
+	function getID()
+	{
+		return $this->id;
+	}
+	
 	function scrollable($height = 300, $resizable = true)
 	{
 		$this->scrollable = true;
@@ -274,6 +284,15 @@ class DataListView
 		}
 		
 		$this->id = makeRandomString(6);
+	}
+	
+	/**
+	 * Adds a row tagging handler. This function will receive the data item
+	 * for each row and can add custom attributes to the row tag.
+	 */
+	function addFacetTaggingHandler($handler)
+	{
+		$this->tagRowCallbacks[] = $handler;
 	}
 	
 	/**
@@ -544,6 +563,18 @@ class DataListView
 					if ($retval) $cl[] = $retval; // return a string to indicate a css class for the row
 				}
 				
+				$dataAttrs = array();
+				foreach($this->tagRowCallbacks as $cb)
+				{
+					$attrs = call_user_func($cb, $dataAttrs);
+				}
+				
+				$rowAttrs = "";
+				foreach($dataAttrs as $name => $value)
+				{
+					$rowAttrs .= " ".$name."='".$value."'";
+				}
+				
 				foreach($this->totalCallbacks as $cb)
 				{
 					call_user_func($cb, $item);
@@ -561,8 +592,9 @@ class DataListView
 				
 				$cl = implode(" ", $cl);
 				if ($cl) $cl = "class='$cl'";
+				if ($rowId) $rowId = "id='$rowId' ";
 ?>
-          <tr id='<?php echo $rowId ?>' <?php echo $cl?><?echo $onclick?>>
+          <tr <?echo $rowId?><?php echo $cl?><?echo $onclick?><?echo $rowAttrs?>>
 <?php
 				foreach($this->columns as $column)
 				{

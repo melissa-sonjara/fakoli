@@ -40,6 +40,9 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 	var $field;
 	var $label;
 	var $taxonomy;
+	var $dropdown;
+	var $dropdownMaxWidth = "340px";
+	var $dropdownMessage = "Click to Select Terms";
 	var $options;
 	var $showSelectAll;
 	var $resizable = true;
@@ -50,6 +53,7 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 		$this->field = $taxonomy->identifier;
 		$this->label = $taxonomy->taxonomy_name;
 		$this->options = $taxonomy->Terms("ORDER BY term");
+		$this->dropdown = true;
 		
 		$this->showSelectAll = true;
 		
@@ -88,24 +92,35 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 
 function <?echo $this->field ?>_toggleSelectAll(link)
 {
+	link = document.id(link);
+	
 	var value = (link.innerHTML == "Select All");
 
-	var inputs = document.getElementsByTagName("INPUT");
-
-	for(var i = 0; i < inputs.length; ++i)
+	var container = document.id('<?echo $this->field?>_container');
+	
+	container.getElements("input[type=checkbox]").each(function(cbox)
 	{
-		var input = inputs[i];
-		if (input.attributes['id'] && input.attributes['id'].value.indexOf('checkbox_<?echo $this->field?>') == 0)
-		{
-			input.checked = value;
-		}
-	}
+		cbox.set('checked', value);
+	});
 
 	link.innerHTML = (value) ? "Deselect All" : "Select All";
+	if (container.multiSelect) container.multiSelect.selectionChanged();
 	return false;
 }
 
 </script>
+<?
+		}
+		
+		if ($this->dropdown)
+		{
+?>
+<script type='text/javascript'>
+window.addEvent('domready', function()
+{
+	new MultiSelect('<?echo $this->field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+});
+</script> 			
 <?
 		}
 	}
@@ -138,7 +153,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		if ($this->width && $this->height)
 		{
 			$resizable = $this->resizable ? " resizable": "";
-			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$countOptions = count($this->options);
@@ -175,7 +191,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 				echo " checked";
 			}
 			echo ">&nbsp;";
-			echo $item->term;
+			echo "<label for='checkbox_{$field}_$p'>".$item->term."</label>";
 			echo "<br/>";
 		}
 	}

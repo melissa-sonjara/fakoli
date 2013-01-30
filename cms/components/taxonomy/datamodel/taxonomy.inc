@@ -62,6 +62,31 @@ class Taxonomy extends DataItem
 				    ->bind(":taxonomy", $this->taxonomy_id)
 				    ->executeValue("COUNT(1)");
 	}
+	
+	function getAssociatedTerms($item)
+	{
+		return Query::create(Term, "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:t and class=:c and id=:i")
+					 ->bind(":t", $this->taxonomy_id,
+					 		":c", get_class($item),
+					 		":i", $item->get($item->getPrimaryKey()))
+					 ->execute();
+	}
+	
+	function getAssociatedTermIds($item)
+	{
+		try
+		{
+			return Query::create(TaxonomyTermAssociationSummary, "WHERE taxonomy_id=:t and class=:c and id=:i")
+						 ->bind(":t", $this->taxonomy_id,
+						 		":c", get_class($item),
+						 		":i", $item->get($item->getPrimaryKey()))
+						 ->executeValue("term_ids");
+		}
+		catch(DataNotFoundException $e)
+		{
+			return null;
+		}		
+	}
 }
 
 ?>

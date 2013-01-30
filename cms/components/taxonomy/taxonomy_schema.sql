@@ -71,3 +71,11 @@ ALTER TABLE `taxonomy_term_association` CHANGE COLUMN `primary_key` `id` int(10)
 ALTER TABLE `taxonomy_term` CHANGE COLUMN `description` `definition` text;
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+CREATE OR REPLACE VIEW `taxonomy_term_association_summary` AS
+SELECT group_concat(cast(term_id as char(7))) as term_ids, class, id, taxonomy_id 
+FROM taxonomy_term_association group by class, id, taxonomy_id;
+
+-- END Version 1.6

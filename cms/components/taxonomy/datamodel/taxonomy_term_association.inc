@@ -57,4 +57,31 @@ class TaxonomyTermAssociation extends DataItem
 	}
 }
 
+class TaxonomyTermAssociationSummary extends DataItem
+{
+	var $table = "taxonomy_term_association_summary";
+	
+	var $fields = array(
+			"taxonomy_id"			=>	Number,
+			"term_ids"				=>	String,
+			"class"					=>	String,
+			"id"					=>	Number);
+	
+	var $relations = array("Terms"	=>	TaxonomyTerm);
+
+			
+	function Terms()
+	{
+		if (!$this->term_ids) return array();
+		
+		return Query::create(TaxonomyTerm, "WHERE term_id in ({$this->term_ids})")->execute();
+	}
+	
+	function getAssociatedItem()
+	{
+		$instance = new $this->class;
+		$instance->load($this->primary_key);
+		return $instance;
+	}
+}
 ?>

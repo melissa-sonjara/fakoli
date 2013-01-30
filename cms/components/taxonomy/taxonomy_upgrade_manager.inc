@@ -19,7 +19,8 @@ class TaxonomyUpgradeManager extends UpgradeManager
 		"1.2"	=>	"sql:Updated taxonomy_term table to link it to taxonomy (doh!)",
 		"1.3"	=>	"sql:Added taxonomy_id foreign key to taxonomy_term_association table",
 		"1.4"	=>	"sql:Change column name from `primary_key` to `id` in taxonomy_term_association table to avoid naming conflict",
-		"1.5"	=>	"sql:Change description to definition in taxonomy_term"
+		"1.5"	=>	"sql:Change description to definition in taxonomy_term",
+		"1.6"	=>	"sql:Added taxonomy_term_association_summary view to efficiently query term_id summaries for items"
 	);
 
 	function TaxonomyUpgradeManager()
