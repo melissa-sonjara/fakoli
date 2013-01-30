@@ -1,0 +1,28 @@
+@CHARSET "ISO-8859-1";
+
+.multi_select_dropdown
+{
+	display: inline-block;
+	border: solid 1px #333;
+	border-radius: 5px;
+	box-shadow: inset -2px -2px 3px #888;
+	padding: 2px 20px 2px 5px;
+	color: #333;
+	text-decoration: none;
+	background: url(/fakoli/images/open.gif) right 5px center no-repeat #e8e8e8;
+	margin-right: 5px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.multi_select_dropdown_list
+{
+	position: absolute;
+	display: none;
+}
+
+.multi_select_dropdown_list label
+{
+	font-weight: normal;
+}

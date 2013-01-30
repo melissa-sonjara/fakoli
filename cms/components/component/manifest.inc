@@ -88,7 +88,8 @@ class ComponentManifest
 					 "/fakoli/css/dialogs.css",
 					 "/fakoli/css/textarea-resizer.css",
 					 "/fakoli/css/context_menu.css",
-					 "/fakoli/calendar/sonjara_calendar.css");
+					 "/fakoli/calendar/sonjara_calendar.css",
+					 "/fakoli/css/multi_select.css");
 	}
 	
 	static function getScripts()
@@ -114,7 +115,8 @@ class ComponentManifest
 					 "/fakoli/js/scrolling_table.js",
 					 "/fakoli/js/draggable_table.js",
 					 "/fakoli/js/scrolling_tabs.js",
-					 "/fakoli/js/subselect_manager.js");
+					 "/fakoli/js/subselect_manager.js",
+					 "/fakoli/js/multi_select.js");
 	}
 }
 
