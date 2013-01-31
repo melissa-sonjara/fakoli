@@ -413,11 +413,11 @@ class DateRangeValidator extends AbstractValidator
 			}
 			else if($this->min)
 			{
-				$this->message = "$title must be greater than {$labelMin}.";
+				$this->message = "$title must be greater than or equal to the {$labelMin}.";
 			}
 			else if($this->max)
 			{
-				$this->message = "$title must be less than {$labelMax}.";
+				$this->message = "$title must be less than or equal to the {$labelMax}.";
 			}
 		}
 
