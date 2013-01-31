@@ -771,6 +771,13 @@ var PaginatingList = new Class(
 		this.paginator = $(paginator);
 		this.setOptions(options);
 		this.pages = Math.ceil(this.list.getChildren("li").length  / this.options.per_page );
+
+		if (this.list.facetManager)
+		{
+			this.list.facetManager.addEvent('filterChanged', function() { this.filterChanged()}.bind(this));
+			this.list.facetManager.addEvent('filterCleared', function() { this.filterCleared()}.bind(this));
+			this.preprocessFacets();
+		}
 		
 		this.createPagination();
 		
@@ -822,10 +829,24 @@ var PaginatingList = new Class(
 	     return li;	    
 	},
 	
+	countRows: function()
+	{
+		  var filtered = this.list.getElements(".filtered").length;
+		  var all = this.list.getChildren().length;
+		  return all - filtered;
+	},
+	  
+	updatePageCount: function()
+	{
+		this.pages = Math.ceil(this.countRows() / this.options.per_page );
+		this.current_page = 1;
+		this.updatePage();
+	},
+	
 	updatePage: function()
 	{
 		var pagers = this.paginator.getElements("a.goto-page");
-    	pagers.each(function(p) { p.innerHTML = 'Page ' + (this.current_page || 1) + " of " + this.pages; }.bind(this));    	
+    	pagers.each(function(p) { p.innerHTML = 'Page ' + ((this.pages > 0) ? (this.current_page || 1) : "0") + " of " + this.pages; }.bind(this));    	
 	},
 	
 	toPrevPage: function()
@@ -864,6 +885,50 @@ var PaginatingList = new Class(
 	    }
 	    
 	    this.updatePage();
+	},
+
+	preprocessFacets: function()
+	{
+		this.list.getElements('li').each(function(elt)
+		{
+			this.list.facetManager.preprocess(elt);
+		}.bind(this));
+	},
+	
+	filterChanged: function()
+	{
+		this.list.getElements('li').each(function(elt)
+		{
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+			
+			var match = this.list.facetManager.filter(elt);
+			
+			if (match)
+			{
+				elt.addClass('filtermatch');
+				elt.reveal();
+			}
+			else
+			{
+				elt.addClass('filtered');
+				elt.dissolve();
+			}
+		}.bind(this));
+		
+ 	    this.updatePageCount();
+	},
+	
+	filterCleared: function()
+	{
+		this.list.getElements('li').each(function(elt)
+		{
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+			elt.reveal();
+		});
+		
+  	    this.updatePageCount();
 	}
 });
 
