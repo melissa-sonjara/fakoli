@@ -550,7 +550,8 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		$this->horizontal = true;
 		
 		$value = $this->parent->data->get($field);
-		if(!$value && !isset($_GET["{$field}_submitted"]) && $defaults)
+		trace("**************CheckListFilterFieldRenderer value $value and submitted ". $_GET["{$field}_submitted"], 3);
+		if(!$value && !is_numeric($value) && ((!isset($_GET["{$field}_submitted"]) || !$_GET["{$field}_submitted"])) && $defaults)
 		{
 			$defaults = explode(",", preg_replace("/,\s*/", ",", $defaults));
 			$first = $defaults[0];
