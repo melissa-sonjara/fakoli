@@ -36,7 +36,7 @@
  * to allow pagination of HTML lists of DataItems. 
  * @author andy
  */
-class PagedList
+class PagedList implements FacetFilterable
 {
 	var $items;									///< The items to be displayed in the list
 	var $id;									///< The HTML id of the list
@@ -48,6 +48,7 @@ class PagedList
 	var $emptyList = "No items in the list";	///< Message to display when the list is empty
 	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
 	var $writeIdTag = false;					///< whether to include an id tag for each li item
+	var $tagRowCallbacks; ///< Array of callbacks for adding extra attributes to each row
 	
 	/**
 	 * Creates a new PagedList control.
@@ -60,6 +61,20 @@ class PagedList
 		$this->items = $items;
 		$this->id = $id;
 		$this->format = $format;
+	}
+	
+	function getID()
+	{
+		return $this->id;
+	}
+	
+	/**
+	 * Adds a row tagging handler. This function will receive the data item
+	 * for each row and can add custom attributes to the row tag.
+	 */
+	function addFacetTaggingHandler($handler)
+	{
+		$this->tagRowCallbacks[] = $handler;
 	}
 	
 	function writeScript()
@@ -106,10 +121,22 @@ class PagedList
 		{
 			if($this->writeIdTag)
 			{
-				$idTag = $this->formatIdTag($item);	
+				$idTag = "id='".$this->formatIdTag($item)."'";	
 			}
 			
-			echo "<li id={$idTag}>";
+			$dataAttrs = array();
+			foreach($this->tagRowCallbacks as $cb)
+			{
+				$dataAttrs = call_user_func($cb, $item, $dataAttrs);
+			}
+			
+			$rowAttrs = "";
+			foreach($dataAttrs as $name => $value)
+			{
+				$rowAttrs .= " ".$name."='".$value."'";
+			}
+			
+			echo "<li {$idTag}{$rowAttrs}>";
 			
 			if (is_callable($this->format))
 			{

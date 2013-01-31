@@ -31,8 +31,8 @@
 
 *****************************************************************/
 
-Fakoli::using("search", "component");
-Fakoli::usingFeature("paged_list");
+Fakoli::using("search", "component", "taxonomy");
+Fakoli::usingFeature("paged_list", "facet_manager");
 /**
  * The SearchManager class provides a simple API for searching across
  * all Searchable records in the application database.
@@ -44,6 +44,7 @@ class SearchManager
 	static $map;
 	
 	var $searchResults;
+	var $useFacetFilter = false;
 	
 	function SearchManager($results = null)
 	{
@@ -79,7 +80,6 @@ class SearchManager
 			SearchManager::$map = $map;
 		}
 	}
-	
 	
 	function search($params)
 	{
@@ -119,6 +119,28 @@ class SearchManager
 		$this->searchResults = $searchResults;
 		return $this;
 	}
+	
+	function getSearchableClasses()
+	{
+		if (isset($_REQUEST["searchable_classes:"]))
+		{
+			$class_array = $_REQUEST["searchable_classes:"];
+		}
+		
+		$cl = array();
+		
+		foreach(SearchManager::$map as $component => $searchables)
+		{		
+			foreach($searchables as $searchable)
+			{
+				if ($class_array && !array_key_exists($searchable, $class_array)) continue;
+				$cl[] = $searchable;
+			}
+		}
+		
+		return $cl;
+	}
+	
 	
 	function sortByRelevance()
 	{
@@ -167,6 +189,19 @@ class SearchManager
 		$list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
 		$list->pageSize = $pageSize;
 		$list->emptyList = "Your search did not match any items.";
+		
+		if ($this->enableFacetFilter)
+		{
+			$this->facetManager = new FacetManager('facet_manager', $list);
+			$classes = $this->getSearchableClasses();
+			trace("Facet Classes: ".implode(", ", $classes), 3);
+			foreach($classes as $class)
+			{
+				TaxonomyManager::addFacets($this->facetManager, $class);
+			}
+			$script .= $this->facetManager->writeScript();
+			echo $this->facetManager->drawForm();
+		}
 		
 		$script .= $list->writeScript();
 		

@@ -206,6 +206,9 @@ class ArticleSearchResult extends AbstractSearchResult
 		$this->item = $item;
 	}
 	
+	function getPrimaryKey() { return $this->item->getPrimaryKey(); }
+	function get($field) { return $this->item->get($field); }
+	
 	function relevance()
 	{
 		return 0.5;

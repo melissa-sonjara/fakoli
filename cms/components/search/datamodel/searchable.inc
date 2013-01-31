@@ -39,6 +39,10 @@ interface Searchable
 
 abstract class AbstractSearchResult
 {
+	// Provide access to the properties of the underlying class
+	abstract function getPrimaryKey();
+	abstract function get($field);
+	
 	abstract function relevance();
 	abstract function title();
 	abstract function date();
