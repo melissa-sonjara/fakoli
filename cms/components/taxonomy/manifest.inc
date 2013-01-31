@@ -26,6 +26,11 @@ class TaxonomyManifest
 		);		
 	}
 
+	static function getScripts()
+	{
+		return array("/components/taxonomy/js/taxonomy_facet_handler.js");
+	}
+	
 	static function subscribeToEvents()
 	{
 		return array(

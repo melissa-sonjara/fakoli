@@ -115,6 +115,7 @@ class ComponentManifest
 					 "/fakoli/js/scrolling_table.js",
 					 "/fakoli/js/draggable_table.js",
 					 "/fakoli/js/scrolling_tabs.js",
+					 "/fakoli/js/facet_manager.js",
 					 "/fakoli/js/subselect_manager.js",
 					 "/fakoli/js/multi_select.js");
 	}

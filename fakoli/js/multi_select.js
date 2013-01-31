@@ -8,7 +8,8 @@ var MultiSelect = new Class(
 	options:
 	{
 		message:  "Click to Select",
-		maxWidth: "400px"
+		maxWidth: "400px",
+		onSelectionChanged: function() {}
 	},
 	
 	initialize: function(container, options)
@@ -24,8 +25,6 @@ var MultiSelect = new Class(
 		
 	buildDropdown: function()
 	{
-		var p = this.container.getParent();
-		
 		this.dropdown = new Element('a', 
 		{
 			'class': 'multi_select_dropdown',
@@ -35,7 +34,7 @@ var MultiSelect = new Class(
 		
 		this.dropdown.setStyle("max-width", this.options.maxWidth);
 		
-		this.dropdown.inject(p, 'top');
+		this.dropdown.inject(this.container, 'before');
 
 
 		this.container.setStyles({display: 'none', opacity: 0});
@@ -65,9 +64,15 @@ var MultiSelect = new Class(
 		
 	},
 	
+	getCheckboxes: function()
+	{
+		return this.container.getElements("input[type=checkbox]");
+		
+	},
+	
 	selectionChanged: function()
 	{
-		var selected = this.container.getElements('input[type=checkbox]');
+		var selected = this.getCheckboxes();
 		
 		var message = [];
 		var self = this;
@@ -89,6 +94,8 @@ var MultiSelect = new Class(
 		{
 			this.dropdown.set('text', message.join(", "));			
 		}
+		
+		this.fireEvent("selectionChanged");
 	}
 });
 

@@ -62,6 +62,7 @@ class FacetManager
 	function addFacet($title, $facet)
 	{
 		$this->facets[$title] = $facet;
+		$facet->manager = $this;
 	}
 	
 	function onTagItem($item, $attrs)
@@ -76,6 +77,15 @@ class FacetManager
 	
 	function writeScript()
 	{
+		$script = "<script type=\"text/javascript\">\nwindow.addEvent('domready', function()\n{\n\tvar {$this->target->getID()}_facet_manager = new FacetManager('{$this->target->getID()}');\n";
+		
+		foreach($this->facets as $facet)
+		{
+			$script .= $facet->writeScript();
+		}
+		
+		$script .= "\n});\n</script>";
+		return $script;
 	}
 
 	function drawForm()

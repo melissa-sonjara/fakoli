@@ -37,6 +37,12 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 {
 	var $taxonomy;
 	
+	var $width = "200px";
+	var $height = "100px";
+	var $dropdown = true;
+	var $dropdownMaxWidth = "200px";
+	var $dropdownMessage = "Click to Select Terms";
+	
 	function __construct($taxonomy)
 	{
 		$this->taxonomy = $taxonomy;
@@ -60,9 +66,57 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 
 	function writeScript()
 	{
+		ob_start();
+
+		if ($this->dropdown)
+		{
+?>
+	var <?echo $this->taxonomy->identifier?>_select =  new MultiSelect('<?echo $this->taxonomy->identifier?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+	var <?echo $this->taxonomy->identifier?>_handler = new TaxonomyFacetHandler('<?echo $this->taxonomy->identifier?>', <?echo $this->taxonomy->identifier?>_select, <?echo $this->manager->target->getID()?>_facet_manager);
+<?
+		}
+		
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
 	}
 	
 	function drawFacet()
 	{
+		$items = $this->taxonomy->Terms("ORDER BY term");
+		
+		if (count($items) == 0) return;
+		
+		if ($this->width && $this->height)
+		{
+			$resizable = $this->resizable ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->taxonomy->identifier}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}; height: {$this->height}; overflow: auto'>\n";
+		}
+									
+		$this->renderCheckBoxes($items);  
+
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+
+	}
+	
+	function renderCheckboxes($items)
+	{
+		foreach($items as $item)
+		{
+			$p = $item->term_id;
+			
+			echo "<input type='checkbox' class='checkbox' name='{$this->taxonomy->identifier}[$p]' id='checkbox_{$this->taxonomy->identifier}_$p' value='$p'";
+			if (array_key_exists($p, $selected))
+			{
+				echo " checked";
+			}
+			echo ">&nbsp;";
+			echo "<label for='checkbox_{$this->taxonomy->identifier}_$p'>".$item->term."</label>";
+			echo "<br/>";
+		}
 	}
 }

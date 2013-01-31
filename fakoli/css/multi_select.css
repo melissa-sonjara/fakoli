@@ -1,6 +1,6 @@
 @CHARSET "ISO-8859-1";
 
-.multi_select_dropdown
+a.multi_select_dropdown
 {
 	display: inline-block;
 	border: solid 1px #333;
@@ -14,12 +14,17 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	vertical-align: middle;
 }
 
 .multi_select_dropdown_list
 {
 	position: absolute;
 	display: none;
+	border: solid 1px #666;
+	background: #fff;
+	box-shadow: 2px 2px 5px #333;
+	z-index: 700;
 }
 
 .multi_select_dropdown_list label
