@@ -47,81 +47,19 @@
  * date: 4/19/10
  * 
  */
+
+
 Fakoli::using("login");
 
-$username = $_GET['username'];
+$username = $_REQUEST["username"];
 
-$mgr = new UserManager();
-$usernameField = $mgr->getUsernameField();
-$emailField = $mgr->getEmailField();
-
-if (!$usernameField || !$emailField)
+if ($method == "POST")
 {
-	throw new FakoliException("Unable to provide password help");
+	LoginManager::passwordHelp($username);
 }
-
-if($username)
-{
-	$matches = query(SiteUser, "WHERE username='$username'");
-
-	if(count($matches) > 0)
-		$match = $matches[0];
-}
-
-
-if($match)
-{
-	$sent = emailToken($match);
-	
-	if($sent)
-	{
-		?>
-		<br/>
-		<p>Your temporary password has been sent to your email address: <?echo $match->email ?>. The email might
-				take a few minutes to reach you.</p><br/>
-		<?
-	}
-	else
-	{	
-		?>
-		<br/>
-		<p>Mail could not be sent. Please contact <a href="<? echo $config["email_contact"]?>"><? echo $config["email_name"]?></a> for help.</p><br/>
-		<?	
-	} 
-} // end if match
-
-elseif($username)
-{
-	?>
-	<p><em>We can not find the email address you provided in the system.</em></p>
-	<?
-	passwordHelpForm($username);
-}
-/*
- * Let the user enter their email address to request their password
- */
 else
 {
-	passwordHelpForm();	
-}
-?>
-<h4><a href="/login">Return to the login page</a></h4>
-<?
-
-function passwordHelpForm($username = "")
-{
-	?>
-	<br/>
-	<p>If you have an account on this system, please enter your email username and we will email a temporary password to you.</p>
-	<form name='form1' method='GET' action=''>
-	<p><label for="email">Email:</label>
-	<input name="username" type="text" value="<?=$username?>"/>
-	</p>
-	<br/>
-	<p><input name="Submit" type="submit" value="  Email Me  " class="button" /></p>
-	<br/>
-	</form>
-	<? 	
+	LoginManager::passwordHelpForm($username);
 }
 
 ?>

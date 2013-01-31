@@ -103,17 +103,27 @@ class LoginManager
 	}
 
 
+	/**
+	 * Validate the Login from the login page. The login page may be the
+	 * standard Fakoli login page built from the login module in component
+	 * login or it may be a custom page. All login forms MUST tag the
+	 * username/email input field as "username", regardless of what
+	 * the field represents:
+	 * <input name='username'...
+	 * 
+	 * @return string
+	 */
 	function validateLogin()
 	{
-		trace("LoginManager validatLogin", 3);
+		trace("LoginManager validateLogin", 3);
 		global $user;
 		
 		$mgr = new UserManager();
 
-		$username = $_POST[$mgr->getUsernameField()];
+		$username = $_POST["username"];
 		$password = $_POST["password"];
 		
-		trace("LoginManager validatLogin username $username", 3);
+		trace("Fakoli LoginManager validateLogin username $username", 3);
 		// JDG - guard against data not found exception
 		if(!$username OR !$password)
 			return LoginManager::$error = "Incorrect user name or password.";			
@@ -125,7 +135,6 @@ class LoginManager
 			session_start();
 			
 			$_SESSION["user"] = $user;
-			
 
 			trace("USER: ".serialize($user), 1);
 			$mgr->loadDefaultSession($user);
