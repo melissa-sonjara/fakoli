@@ -585,8 +585,6 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		{
 			$searchValues = array();
 		}
-
-		trace("*************searchValues " . implode(",", $searchValues), 3);
 		
 		$idx = 0;
 
@@ -597,7 +595,6 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 				echo "<li>\n";
 				$onchange = " onchange='this.form.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
-				trace("*************value $value text $text and checked $checked", 3);
 				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
 				$idx++;
 				echo "</li>\n";
