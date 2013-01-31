@@ -33,19 +33,26 @@
 
 Fakoli::using("document");
 Fakoli::usingFile("framework/data_view.inc");
+require_once "include/document_library_tabs.inc";
 
 Fakoli::assertRole("admin");
 
 $menu_item = "Documents";
 $title = "Manage Documents";
 
-$documents = query(Document, "ORDER BY title DESC");
+$document_library_id = checkNumeric($_GET["document_library_id"]);
+
+if (!$document_library_id)
+{
+	redirect("/admin/document_libraries");
+}
+
+$library = new DocumentLibrary($document_library_id);
+$documents = $library->Documents("ORDER BY title DESC");
 
 $table = new DataListView($documents, "documents");
-$table->column("Title", "<b><a href='document_form?document_id={document_id}'>{title}</b></a>", true, "width: 40%")
-	  ->column("Pub Date", "{publication_date}", true, "width: 10%")
-	  ->column("Author", "{author}", true, "width: 35%")
-	  ->column("Published?", "{public}", true);
+$table->column("Title", "<b><a href='#' onclick='editFile({document_id});return false'>{title}</b></a>", true, "width: 40%")
+	  ->column("Author", "{author}", true, "width: 35%");
 	 
 $table->filter = true;
 $table->sortable = true;
@@ -53,16 +60,42 @@ $table->pageSize = 20;
 $table->excelFile = "documents";
 $table->emptyMessage = "No Documents have been added yet.";
 
+ob_start();
+?>
+<script type="text/javascript">
+function editFile(id)
+{
+	modalPopup("Edit Document Properties",  "/action/document/edit?document_id=" + id, 500);
+}
+
+function editResult(result)
+{
+	if (result == "1")
+	{
+		window.location.reload();
+	}
+	else
+	{
+		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+	}
+}
+</script>
+<?
+$script .= ob_get_contents();
+ob_end_clean();
+
 $script .= $table->writeScript();
+$tabs = documentLibraryTabs($document_library_id);
 
-
-
+$tabs->writeHTML();
+?>
+<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<h3>Documents in <?echo $library->name?></h3>
+<?
 $table->drawView();
 ?>
 <br/>
 <br/>
 <a href="document_form" class="button"> Add a New Document </a>
 <br/>
-<?
-
-?>
+</div>
