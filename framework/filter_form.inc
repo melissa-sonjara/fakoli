@@ -581,6 +581,10 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		{
 			$searchValues = explode(",", implode(",", array_keys($searchValues)));
 		}
+		else
+		{
+			$searchValues = array();
+		}
 
 		trace("*************searchValues " . implode(",", $searchValues), 3);
 		
