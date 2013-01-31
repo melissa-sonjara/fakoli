@@ -396,6 +396,11 @@ class DateRangeValidator extends AbstractValidator
 			$this->min = $fields[2]."/".$fields[3]."/".$fields[1];
 		}
 
+		if($this->max && preg_match("|^(\\d{4})-(\\d\\d)-(\\d\\d)$|", $this->max, $fields))
+		{
+			$this->max = $fields[2]."/".$fields[3]."/".$fields[1];
+		}
+		
 		$this->message = $message;
 
 		trace("DateRangeValidator field $field min {$this->min} max {$this->max}", 3);
