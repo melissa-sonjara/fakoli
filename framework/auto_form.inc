@@ -662,7 +662,28 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			$this->validator->add(new RegularExpressionValidator($field, $this->prettifyFieldName($field), $expr, $message));
 		}
 	}
-
+	
+	/**
+	 * @param string $field
+	 * @param string, Date, or DateTime $min
+	 * @param string, Date or DateTime $max
+	 * @param string $message
+	 * 
+	 * Min can be either a static date min that the field's value
+	 * must be set to or the name of a field whose value will be
+	 * compared to the given field.
+	 * 
+	 * E.g., start_date must be no earlier than today
+	 * or start_date must be no earlier than end_date
+	 */
+	function dateRange($field, $min = "", $max = "", $message = null)
+	{
+		if ($this->data->hasField($field))
+		{
+			$this->validator->add(new DateRangeValidator($field, $this->prettifyFieldName($field), $min, $max, $message));
+		}
+	}
+	
 	/**
 	 * Adds a uniqueness validator to the specified field(s). This is a server-side only validator
 	 * that checks that the supplied value for the field is not present for any row in the underlying

@@ -367,6 +367,136 @@ ENDSCRIPT;
 
 
 /**
+ * @param string $field
+ * @param string $title
+ * @param string or Date $min
+ * @param string or Date $max
+ * @param string $message
+ *
+ * Min can be either a static date min that the field's value
+ * must be set to or the name of a field whose value will be
+ * compared to the given field. Date strings can be in either
+ * format '2000-01-01' or '01/01/2000'
+ * 
+ * e.g.
+ * static date param: today() or '2000-01-01'
+ * field date: "end_date" where end_date is the tag for
+ * a date input field displayed on the form
+ */
+class DateRangeValidator extends AbstractValidator
+{
+	function DateRangeValidator($field, $title, $min, $max, $message = null)
+	{
+		$this->min = $min;
+		$this->max = $max;
+		
+		$fields = array();
+		if($this->min && preg_match("|^(\\d{4})-(\\d\\d)-(\\d\\d)$|", $this->min, $fields))
+		{
+			$this->min = $fields[2]."/".$fields[3]."/".$fields[1];
+		}
+
+		$this->message = $message;
+
+		trace("DateRangeValidator field $field min {$this->min} max {$this->max}", 3);
+		if (!$message)
+		{
+			$labelMin = ($this->min && preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $this->min)) ?
+				$this->min : prettify($this->min);
+			
+			$labelMax = ($this->max && preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $this->max)) ?
+				$this->max : prettify($this->max);
+			
+			if($this->min && $this->max)
+			{
+				$this->message = "$title must be in the range {$labelMin} to {$labelMax}.";
+			}
+			else if($this->min)
+			{
+				$this->message = "$title must be greater than {$labelMin}.";
+			}
+			else if($this->max)
+			{
+				$this->message = "$title must be less than {$labelMax}.";
+			}
+		}
+
+		$this->AbstractValidator($field, $title);
+	}
+	
+	/**
+	 * If min or max set and it is a date string then validate
+	 * as a date, if set and it is not a date string, then get the
+	 * value from the form's field.
+	 */
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+
+
+		$min = "'{$this->min}'";
+		$max = "'{$this->max}'";
+		
+		$script .= <<<ENDSCRIPT
+
+		var min = $min;
+		var max = $max;
+		
+		// These errors are checked by DateValidator
+		if ((form["{$this->field}"].value == "") ||
+		!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		{
+			return;
+		}
+				
+		if((min && min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->field}"].value < min) ||
+		 	(min && !min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->min}"].value && form["{$this->min}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
+		 	form["{$this->field}"].value < form["{$this->min}"].value) ||
+		 	(max && max.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
+		 	form["{$this->field}"].value > max) ||
+		 	(max && !max.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->max}"].value && form["{$this->max}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
+		 	form["{$this->field}"].value > form["{$this->max}"].value))
+		{
+			alert("{$this->message}");
+			return false;
+		}
+	
+ENDSCRIPT;
+
+		return $script;
+	}
+
+	function validate()
+	{
+		global $_POST;
+
+		if ($this->readOnly) return "";
+
+		$min = $this->min;
+		$max = $this->max;
+		
+		if($min && !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $min))
+		{
+			$min = $_POST[$this->min];
+		}
+		
+		if(!preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $max))
+		{
+			$max = $_POST[$this->max];
+		}
+			
+		if ($_POST[$this->field] != "" AND (!preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]) ||
+		(($min && $_POST[$this->field] < $min) || ($max && $_POST[$this->field] > $max))))
+		{
+			$result = $this->message;
+		}
+		
+		return $result;
+	}
+}
+
+
+/**
  * TimeValidator.
  * 
  * If the user enters a value in a time field, check
@@ -743,7 +873,7 @@ class RangeValidator extends AbstractValidator
 	
 	function writeClient()
 	{
-		trace("RegularExpressionValidator::writeClient", 3);
+		trace("RangeValidator::writeClient", 3);
 		if ($this->readOnly) return "";
 		
 		$min = is_numeric($this->min) ? $this->min : "'{$this->min}'";
@@ -1167,7 +1297,6 @@ ENDSCRIPT;
 	}
 	
 }
-
 
 
 /**

@@ -550,7 +550,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		$this->horizontal = true;
 		
 		$value = $this->parent->data->get($field);
-		if(!$value && !is_numeric($value) && $defaults)
+		if(!$value && !isset($_GET["{$field}_submitted"]) && $defaults)
 		{
 			$defaults = explode(",", preg_replace("/,\s*/", ",", $defaults));
 			$first = $defaults[0];
@@ -595,6 +595,14 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 				$idx++;
 				echo "</li>\n";
 			}
+			
+			/**
+			 * We need to use this hidden field to distinguish between when 
+			 * this field is not set in $_GET because the page has just loaded
+			 * and no values because the users specifically chose
+			 * to deselect any defaults.
+			 */
+			echo "<input type='hidden' name='{$field}_submitted' value='1' />";
 		}
 
 		$this->_endField($field);	
