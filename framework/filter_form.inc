@@ -550,9 +550,9 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		$this->horizontal = true;
 		
 		$value = $this->parent->data->get($field);
-		trace("**************CheckListFilterFieldRenderer value $value and submitted ". $_GET["{$field}_submitted"], 3);
 		if(!$value && !is_numeric($value) && ((!isset($_GET["{$field}_submitted"]) || !$_GET["{$field}_submitted"])) && $defaults)
 		{
+			trace("**************CheckListFilterFieldRenderer use defaults: value $value and submitted ". $_GET["{$field}_submitted"] . " and defaults $defaults", 3);
 			$defaults = explode(",", preg_replace("/,\s*/", ",", $defaults));
 			$first = $defaults[0];
 			if(!is_numeric($first) && !preg_match("/^'/", $first))
@@ -563,6 +563,10 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 			// The form's data value is used to set the selected checkboxes and cannot contain the "'" around the string values
 			$this->parent->data->set($field, array_flip(explode(",", preg_replace("/'/", "", $defaults))));
 			$value = $defaults;
+		}
+		else
+		{
+			trace("**************CheckListFilterFieldRenderer do not use defaults: value $value and submitted ". $_GET["{$field}_submitted"] . " and defaults $defaults", 3);
 		}
 		
 		// The search parameter's value is used in the constraint and must contain "'" around each string value
