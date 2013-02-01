@@ -75,7 +75,27 @@ class Fakoli
 	static $componentsUsed = array();	///< Array of the components that have been referenced in this page request
 	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
 	static $outputBufferLevel = 0;		///< Records the level at which gzip output buffering began
+	static $storage = array();
 	
+	/**
+	 * Stores a value or object at the given key. This storage is volatile and 
+	 * limited to the scope of the current page request. This mechanism can be
+	 * used to store information that needs to be communicated between modules
+	 * rendering on the same page, or for other, similar purposes.
+	 * @param string $key the key to store the data under
+	 * @param unknown $obj the object or value to be stored.
+	 */
+	static function put($key, $obj) { Fakoli::$storage[$key] = $obj; }
+	
+	/**
+	 * Retrieves the value or object at the given key. This storage is volatile and 
+	 * limited to the scope of the current page request. This mechanism can be
+	 * used to store information that needs to be communicated between modules
+	 * rendering on the same page, or for other, similar purposes.
+	 * @param string $key the key for the data to be retrieved
+	 * @return multitype:
+	 */
+	static function get($key) { return Fakoli::$storage[$key]; }
 	/**
 	 * Import the datamodels, views and manifest for the specified component(s).
 	 * More than one component can be specified in the call.
