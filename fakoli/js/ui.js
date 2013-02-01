@@ -907,12 +907,12 @@ var PaginatingList = new Class(
 			if (match)
 			{
 				elt.addClass('filtermatch');
-				elt.reveal();
+				elt.show();
 			}
 			else
 			{
 				elt.addClass('filtered');
-				elt.dissolve();
+				elt.hide();
 			}
 		}.bind(this));
 		
