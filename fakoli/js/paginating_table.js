@@ -76,6 +76,14 @@ var PaginatingTable = new Class({
       this.options.per_page = this.options.per_page * 2;
     }
  
+
+	if (this.table.facetManager)
+	{
+		this.table.facetManager.addEvent('filterChanged', function() { this.filterChanged()}.bind(this));
+		this.table.facetManager.addEvent('filterCleared', function() { this.filterCleared()}.bind(this));
+		this.preprocessFacets();
+	}
+
     this.update_pages();
   },
  
@@ -164,7 +172,50 @@ var PaginatingTable = new Class({
     var li = new Element( 'li' );
     span.injectInside( a.injectInside( li ) );
     return li;
-  }
+  },
+  
+	preprocessFacets: function()
+	{
+		this.tbody.getChildren('tr').each(function(elt)
+		{
+			this.table.facetManager.preprocess(elt);
+		}.bind(this));
+		
+		this.table.facetManager.preprocessComplete();
+	},
+	
+	filterChanged: function()
+	{
+		this.tbody.getChildren('tr').each(function(elt)
+		{
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+			
+			var match = this.table.facetManager.filter(elt);
+			
+			if (match)
+			{
+				elt.addClass('filtermatch');
+			}
+			else
+			{
+				elt.addClass('filtered');
+			}
+		}.bind(this));
+		
+ 	    this.update_pages();
+	},
+	
+	filterCleared: function()
+	{
+		this.tbody.getChildren('tr').each(function(elt)
+		{
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+		});
+		
+  	    this.update_pages();
+	}
  
 });
  

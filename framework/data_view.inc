@@ -566,7 +566,7 @@ class DataListView implements FacetFilterable
 				$dataAttrs = array();
 				foreach($this->tagRowCallbacks as $cb)
 				{
-					$attrs = call_user_func($cb, $dataAttrs);
+					$dataAttrs = call_user_func($cb, $item, $dataAttrs);
 				}
 				
 				$rowAttrs = "";
