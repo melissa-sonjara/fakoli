@@ -839,7 +839,7 @@ var PaginatingList = new Class(
 	updatePageCount: function()
 	{
 		this.pages = Math.ceil(this.countRows() / this.options.per_page );
-		this.current_page = 1;
+		this.toPage(1);
 		this.updatePage();
 	},
 	
@@ -867,7 +867,7 @@ var PaginatingList = new Class(
 	    this.low_limit = this.options.per_page * ( this.current_page - 1 );
 	    this.high_limit = this.options.per_page * this.current_page;
 	    
-	    var kids = this.list.getChildren();
+	    var kids = this.list.getChildren(":not(.filtered)");
 	    
 	    for(var i = 0; i < this.low_limit; ++i)
 	    {
@@ -919,7 +919,6 @@ var PaginatingList = new Class(
 		}.bind(this));
 		
  	    this.updatePageCount();
- 	    this.toPage(1);
 	},
 	
 	filterCleared: function()
@@ -932,7 +931,6 @@ var PaginatingList = new Class(
 		});
 		
   	    this.updatePageCount();
-  	    this.toPage(1);
 	}
 });
 
