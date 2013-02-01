@@ -925,7 +925,7 @@ var PaginatingList = new Class(
 		{
 			elt.removeClass("filtered");
 			elt.removeClass("filtermatch");
-			elt.reveal();
+			elt.show();
 		});
 		
   	    this.updatePageCount();
