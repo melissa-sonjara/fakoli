@@ -55,6 +55,9 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 	
 	function onTagItem($item, $attrs)
 	{
+		// Need to work with underlying object if passed is a search result container
+		if ($item instanceof AbstractSearchResult) $item = $item->item;
+		
 		$term_ids = $this->taxonomy->getAssociatedTermIds($item);
 		if ($term_ids)
 		{
