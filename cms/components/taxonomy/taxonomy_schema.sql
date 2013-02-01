@@ -79,3 +79,9 @@ SELECT group_concat(cast(term_id as char(7))) as term_ids, class, id, taxonomy_i
 FROM taxonomy_term_association group by class, id, taxonomy_id;
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE `taxonomy` ADD COLUMN `enable_facet_filter` TINYINT(3) UNSIGNED DEFAULT 1;
+
+-- END Version 1.7

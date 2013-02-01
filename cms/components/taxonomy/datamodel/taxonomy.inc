@@ -42,7 +42,8 @@ class Taxonomy extends DataItem
 						"taxonomy_name"			=>	String,
 						"description"			=>	HTML,
 						"associated_classes"	=>	String,
-						"published"				=>	Boolean);
+						"published"				=>	Boolean,
+						"enable_facet_filter"	=>	Boolean);
 	
 	var $relations = array("Terms"			=>	TaxonomyTerm);
 	

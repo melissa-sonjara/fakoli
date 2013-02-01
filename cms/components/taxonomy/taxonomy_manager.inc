@@ -121,7 +121,7 @@ class TaxonomyManager
 		}
 	}
 	
-	static function getAssociatedTaxonomies($classes)
+	static function getAssociatedTaxonomies($classes, $facet_filter_only = false)
 	{
 		if (!is_array($classes))
 		{
@@ -134,6 +134,8 @@ class TaxonomyManager
 		
 		foreach($taxonomies as $taxonomy)
 		{
+			if ($facet_filter_only and !$taxonomy->enable_facet_filter) continue;
+			
 			$taxonomy_classes = explode(",", $taxonomy->associated_classes);
 			foreach($classes as $class)
 			{
@@ -218,7 +220,7 @@ class TaxonomyManager
 			$classes[] = func_get_arg($i);
 		}
 		
-		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($classes);
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($classes, true);
 		foreach($taxonomies as $taxonomy)
 		{
 			$manager->addFacet($taxonomy->taxonomy_name, new TaxonomyFacetFilter($taxonomy));

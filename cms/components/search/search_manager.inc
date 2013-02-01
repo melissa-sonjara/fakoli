@@ -117,6 +117,22 @@ class SearchManager
 		}
 		
 		$this->searchResults = $searchResults;
+		
+		$this->list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
+		$this->list->emptyList = "Your search did not match any items.";
+		$this->list->writeIdTag = true;
+		
+		if ($this->enableFacetFilter)
+		{
+			$this->facetManager = new FacetManager('facet_manager', $this->list);
+			$classes = $this->getSearchableClasses();
+			trace("Facet Classes: ".implode(", ", $classes), 3);
+			foreach($classes as $class)
+			{
+				TaxonomyManager::addFacets($this->facetManager, $class);
+			}
+		}
+		
 		return $this;
 	}
 	
@@ -180,31 +196,25 @@ class SearchManager
 		return $item->summary();
 	}
 	
+	function drawFacets()
+	{
+		global $script;
+		if ($this->drawnFacets) return;
+		
+		$script .= $this->facetManager->writeScript();
+		echo $this->facetManager->drawForm();
+		
+		$this->drawnFacets = true;
+	}
 	function showResults($pageSize = 0)
 	{
 		global $script;
 		
 		if ($pageSize == 0) $pageSize = Settings::getValue("search", "results_per_page");
 		
-		$list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
-		$list->pageSize = $pageSize;
-		$list->emptyList = "Your search did not match any items.";
-		$list->writeIdTag = true;
+		$this->list->pageSize = $pageSize;
 		
-		if ($this->enableFacetFilter)
-		{
-			$this->facetManager = new FacetManager('facet_manager', $list);
-			$classes = $this->getSearchableClasses();
-			trace("Facet Classes: ".implode(", ", $classes), 3);
-			foreach($classes as $class)
-			{
-				TaxonomyManager::addFacets($this->facetManager, $class);
-			}
-			$script .= $this->facetManager->writeScript();
-			echo $this->facetManager->drawForm();
-		}
-		
-		$script .= $list->writeScript();
+		$script .= $this->list->writeScript();
 		
 		$num = count($this->searchResults);
 		
@@ -213,7 +223,8 @@ class SearchManager
 			echo "<p style='float: left'><em>$num ".pluralize("match", $num)." found.</em></p>";
 		}
 		
-		$list->drawList();
+		$this->drawFacets();
+		$this->list->drawList();
 	}
 	
 	static function wrap($items, $resultClass)
