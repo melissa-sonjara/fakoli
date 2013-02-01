@@ -919,6 +919,7 @@ var PaginatingList = new Class(
 		}.bind(this));
 		
  	    this.updatePageCount();
+ 	    this.toPage(1);
 	},
 	
 	filterCleared: function()
@@ -931,6 +932,7 @@ var PaginatingList = new Class(
 		});
 		
   	    this.updatePageCount();
+  	    this.toPage(1);
 	}
 });
 
