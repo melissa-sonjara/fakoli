@@ -61,6 +61,7 @@ class PagedList implements FacetFilterable
 		$this->items = $items;
 		$this->id = $id;
 		$this->format = $format;
+		$this->tagRowCallbacks = array();
 	}
 	
 	function getID()
