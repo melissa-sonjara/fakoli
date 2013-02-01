@@ -68,13 +68,20 @@ var Comment =  (function()
 		{
 			if(!confirmation_message) return;
 			
-			var list = $('comment_list');
+			var elt = $('comment_list');
+			var pos = 'bottom';
 			
-			if(!list) return;
+			if(!elt)
+			{
+				elt = $('comment_panel');
+				pos = 'top';
+			}
+			
+			if(!elt) return;
 			
 			var div = new Element('div', {'id': '', 'class': 'comment_confirmation'});
 			div.set('html', confirmation_message);
-			div.inject(list, 'bottom');
+			div.inject(elt, pos);
 		},
 		
 		closeDialog: function()
