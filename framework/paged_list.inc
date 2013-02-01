@@ -153,7 +153,7 @@ class PagedList implements FacetFilterable
 	function formatIdTag($item)
 	{
 		$pk = $item->getPrimaryKey();
-		return "{$pk}_{$item->$pk}";
+		return "{$pk}_{$item->get($pk)}";
 	}
 }
 ?>
