@@ -37,6 +37,8 @@ class Taxonomy extends DataItem
 	var $primary_key = "taxonomy_id";
 	var $cacheLocal = true;
 	
+	var $_termCache = array();
+	
 	var $fields = array("taxonomy_id"			=>	Number,
 						"identifier"			=>	String,
 						"taxonomy_name"			=>	String,
@@ -75,18 +77,17 @@ class Taxonomy extends DataItem
 	
 	function getAssociatedTermIds($item)
 	{
-		try
+		$cl = get_class($item);
+		
+		if (!isset($this->_termCache[$cl]))
 		{
-			return Query::create(TaxonomyTermAssociationSummary, "WHERE taxonomy_id=:t and class=:c and id=:i")
-						 ->bind(":t", $this->taxonomy_id,
-						 		":c", get_class($item),
-						 		":i", $item->get($item->getPrimaryKey()))
-						 ->executeValue("term_ids");
+			$this->_termCache[$cl] = IndexedQuery::create(TaxonomyTermAssociationSummary, "WHERE taxonomy_id=:t and class=:c", "id")
+												 ->bind(":t", $this->taxonomy_id,
+												 		":c", get_class($item))
+												 ->execute();
 		}
-		catch(DataNotFoundException $e)
-		{
-			return null;
-		}		
+		
+		return $this->_termCache[$cl][$item->get($item->getPrimaryKey())]->term_ids;
 	}
 }
 
