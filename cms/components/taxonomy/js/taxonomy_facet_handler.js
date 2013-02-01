@@ -33,6 +33,10 @@ var TaxonomyFacetHandler = new Class(
 		}
 	},
 	
+	preprocessComplete: function()
+	{
+	},
+	
 	filter: function(item)
 	{
 		var id = item.get('id');
