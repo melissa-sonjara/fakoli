@@ -893,6 +893,8 @@ var PaginatingList = new Class(
 		{
 			this.list.facetManager.preprocess(elt);
 		}.bind(this));
+		
+		this.list.facetManager.preprocessComplete();
 	},
 	
 	filterChanged: function()

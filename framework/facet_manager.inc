@@ -67,6 +67,11 @@ class FacetManager
 	
 	function onTagItem($item, $attrs)
 	{
+		if ($item instanceof AbstractSearchResult)
+		{
+			$item = $item->item;
+		}
+		
 		foreach ($this->facets as $title => $facet)
 		{
 			$attrs = $facet->onTagItem($item, $attrs);
@@ -140,4 +145,73 @@ class FieldFacetFilter extends AbstractFacetFilter
 <input type='text' name='<?echo $this->field?>' value=''/>
 <?		
 	}
+}
+
+
+class MultiSelectFacetFilter extends AbstractFacetFilter
+{
+	var $formatAdapters;
+	var $id;
+	
+	var $width = "200px";
+	var $height = "100px";
+	var $dropdown = true;
+	var $dropdownMaxWidth = "200px";
+	var $dropdownMessage = "Click to Select Terms";
+	
+	function __construct($id, $formatAdapters)
+	{
+		$this->id = $id;
+		$this->formatAdapters = $formatAdapters;	
+	}
+
+	function getID()
+	{
+		return $this->id;
+	}
+	
+	function onTagItem($item, $attrs)
+	{
+		$cl = get_class($item);
+		
+		if (array_key_exists($cl, $this->formatAdapters))
+		{
+			$value = $item->format($this->formatAdapters[$cl]);
+		} 
+			
+		if ($value)
+		{
+			$attrs["data-{$this->id}"] = $value;
+		}
+		
+		return $attrs;
+	}
+	
+	function writeScript()
+	{
+		ob_start();
+		
+		if ($this->dropdown)
+		{
+			?>
+			var <?echo $this->id?>_select =  new MultiSelect('<?echo $this->id?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+			var <?echo $this->id?>_handler = new MultiSelectFacetHandler('<?echo $this->id?>', <?echo $this->id?>_select, <?echo $this->manager->target->getID()?>_facet_manager);
+		<?
+		}
+		
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
+		
+	}
+	
+	function drawFacet()
+	{
+		if ($this->width && $this->height)
+		{
+			$resizable = (!$this->dropdown && $this->resizable) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->id}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}; height: {$this->height}; overflow: auto'></div>\n";
+		}		
+	}	
 }

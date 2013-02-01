@@ -70,6 +70,21 @@ var MultiSelect = new Class(
 		
 	},
 	
+	addCheckbox: function(text, value)
+	{
+		var id = "cbox_" + String.uniqueID();
+		
+		var cbox = new Element('input', {'type': 'checkbox', 'id': id, 'value': value});
+		var label = new Element('label', {'for': id, 'text': text});
+		var brk = new Element("br");
+		
+		cbox.inject(this.container);
+		label.inject(this.container);
+		brk.inject(this.container);
+		
+		cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
+	},
+	
 	selectionChanged: function()
 	{
 		var selected = this.getCheckboxes();
@@ -82,7 +97,7 @@ var MultiSelect = new Class(
 			{
 				var label = self.container.getElement('label[for="' + cbox.id + '"]');
 				if (label)
-				message.push(label.get('text'));
+					message.push(label.get('text'));
 			}
 		});
 

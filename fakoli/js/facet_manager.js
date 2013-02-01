@@ -59,6 +59,14 @@ var FacetManager = new Class(
 		});
 	},
 	
+	preprocessComplete: function()
+	{
+		this.handlers.each(function(handler)
+		{
+			handler.preprocessComplete();
+		});
+	},
+	
 	filter: function(element)
 	{
 		for(var i = 0; i < this.handlers.length; ++i)
@@ -70,4 +78,74 @@ var FacetManager = new Class(
 		return false;
 	}
 	
+});
+
+
+var MultiSelectFacetHandler = new Class(
+{
+	id: "",
+	select: Class.Empty,
+	checkboxes: Class.Empty,
+	manager: Class.Empty,
+	
+	termLookup: {},
+	
+	initialize: function(id, select, manager)
+	{
+		this.id = id;
+		this.select = select;
+		this.checkboxes = this.select.getCheckboxes();
+		this.manager = manager;
+		this.manager.registerHandler(this);
+		
+		this.select.addEvent('selectionChanged', function()
+		{
+			this.manager.filterChanged();
+		}.bind(this));
+	},
+	
+	preprocess: function(item)
+	{
+		var term = item.get("data-" + this.id);
+
+		if (term)
+		{
+			this.termLookup[term] = true;
+		}
+	},
+	
+	preprocessComplete: function()
+	{
+		var terms = Object.keys(this.termLookup).sort();
+		
+		terms.each(function(term)
+		{
+			this.select.addCheckbox(term, term);
+		}.bind(this));
+
+		this.checkboxes = this.select.getCheckboxes();
+	},
+	
+	filter: function(item)
+	{
+		var term = item.get("data-" + this.id);
+		
+		for(var i = 0; i < this.checkboxes.length; ++i)
+		{
+			if (this.checkboxes[i].checked && term == this.checkboxes[i].value)
+			{
+				return true;
+			}
+		}
+	},
+	
+	isClear: function()
+	{
+		for(var i = 0; i < this.checkboxes.length; ++i)
+		{
+			if (this.checkboxes[i].checked) return false;
+		}
+		
+		return true;
+	}		
 });
