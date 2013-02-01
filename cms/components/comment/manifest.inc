@@ -65,7 +65,13 @@ class CommentManifest
 	static function getScripts()
 	{
 		return array("/components/comment/js/comment.js");
-	} 		
+	} 	
+
+	static function getStyles()
+	{
+		return array("/components/comment/css/comment.css");
+	}
+	
 }
 
 ?>

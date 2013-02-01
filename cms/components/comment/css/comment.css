@@ -1,0 +1,11 @@
+@CHARSET "ISO-8859-1";
+
+.comment_confirmation
+{
+	background-color: #FFFF99;
+    border: none;
+    border-radius: 8px 8px 8px 8px;
+    color: #000000;
+    padding: 5px 5px;
+    width: 400px;
+}

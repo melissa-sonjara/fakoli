@@ -5,7 +5,7 @@
  * To do - Delete the comment_id in the xref table.
  */
 
-Fakoli::using("comment");
+Fakoli::using("comment", "settings");
 Fakoli::usingFeature("auto_form");
 
 $comment_id = checkNumeric($_GET["comment_id"]);
@@ -77,6 +77,8 @@ if($method == "POST")
 	//echo "<pre>"; print_r($_POST); echo "</pre>";
 	if($form->save())
 	{
+		$confirmationMessage = "";
+		
 		if ($newPost)
 		{
 			$xref = new $xref_class;
@@ -86,11 +88,12 @@ if($method == "POST")
 			if(!Settings::getValue("comment", "publish_automatically"))
 			{
 				sendEmailUsingEmailManager($xref, 'new_comment');
-			}		
+			}
+			$confirmationMessage = (Settings::getValue("comment", "publish_automatically")) ?
+				"Thank you for your comment." : "Thank you. Your comment has been submitted to the moderator.";
 		}
 
-		Fakoli::end("OK");
-			
+		Fakoli::end("OK|$confirmationMessage");
 	}
 	else
 	{

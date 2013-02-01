@@ -3,7 +3,7 @@ var Comment =  (function()
 	var CommentSingleton = new Class(
 	{
 		dialog: null,
-		dialog2: null,	
+		
 		initialize: function()
 		{
 		},
@@ -15,12 +15,14 @@ var Comment =  (function()
 			
 		commentFormResult: function(response)
 		{
-			if (response == "OK")
+			if (response.indexOf("OK") == 0)
 			{
-				this.reloadCommentPanel();
+				var responseFields = response.split("|");
+
+				this.reloadCommentPanel(responseFields[1]);
 			}
 			else
-				$('EditComment_form__error').set('html', response);
+				$('Comment_form__error').set('html', response);
 		},
 	
 		commentPublish: function(comment_id)
@@ -33,7 +35,7 @@ var Comment =  (function()
 							{ 
 								if(response == "OK")
 								{
-									this.reloadCommentPanel();
+									this.reloadCommentPanel("");
 								}
 								else
 									alert(response);
@@ -43,7 +45,7 @@ var Comment =  (function()
 					    request.send();
 		},
 		
-		reloadCommentPanel: function()
+		reloadCommentPanel: function(confirmation_message)
 		{
 			var params = new URI().get('query');
 			var request = new Request.HTML(
@@ -55,17 +57,24 @@ var Comment =  (function()
 				onSuccess: function(tree, elements, html, script) 
 				{ 
 					document.id('comment_panel').set('html', html);
-
-					if (Interstitial.current) 
-					{
-						Interstitial.current.hide();
-					}
-				
 					$exec(script);
-					this.closeDialog();
+					this.showConfirmationMessage(confirmation_message);
 				}.bind(this)
 			});
 			request.send();
+		},
+		
+		showConfirmationMessage: function(confirmation_message)
+		{
+			if(!confirmation_message) return;
+			
+			var list = $('comment_list');
+			
+			if(!list) return;
+			
+			var div = new Element('div', {'id': '', 'class': 'comment_confirmation'});
+			div.set('html', confirmation_message);
+			div.inject(list, 'bottom');
 		},
 		
 		closeDialog: function()
