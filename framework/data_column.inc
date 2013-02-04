@@ -37,26 +37,27 @@
  */
 class DataColumn
 {
-	var $template;	///< The formatting template or formatter function for this data column
-	var $sortable;	///< Boolean value indicating whether this column is sortable
-	var $title;		///< The title text for this column
-	var $style;		///< Any CSS styles to be applied to this column
-	var $typeHint;
-	var $onExport; ///< Optional user callback function for exporting the column.
-	
+	var $template;		///< The formatting template or formatter function for this data column
+	var $sortable;		///< Boolean value indicating whether this column is sortable
+	var $title;			///< The title text for this column
+	var $style;			///< Any CSS styles to be applied to this column
+	var $typeHint;		///< Hint to the Excel formatter about the data type to export
+	var $onExport; 		///< Optional user callback function for exporting the column.
+	var $sortFormat;	///< Optional explicit format to use as the basis for sorting
 	/**
 	 * Creates a new DataColumn. Generally this function should not be invoked directly,
 	 * but should be accessed through the DataListView::column() method.
-	 * @param unknown_type $title the title for the colum
-	 * @param unknown_type $template the formatting template or formatter function for the column
-	 * @param unknown_type $sortable boolean indicating whether the column is sortable
-	 * @param unknown_type $style any CSS styles to be appled to the column
-	 * @param $typeHint hint for cell type to use when exporting to Excel
-	 * @param $onExport optional callback function to format value for Excel 
-
+	 * @param string $title the title for the colum
+	 * @param mixed  $template the formatting template or formatter function for the column
+	 * @param boolean $sortable boolean indicating whether the column is sortable
+	 * @param string $style any CSS styles to be appled to the column
+	 * @param string $typeHint hint for cell type to use when exporting to Excel
+	 * @param mixed $onExport optional callback function to format value for Excel 
+	 * @param string $sortFormat Optional explicit format to use as the basis for sorting
+	 *
 	 * @return DataColumn a new DataColumn instance
 	 */
-	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null, $onExport = null)
+	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null, $onExport = null, $sortFormat = null)
 	{
 		$this->template = $template;
 		$this->sortable = $sortable;
@@ -64,6 +65,7 @@ class DataColumn
 		$this->style = $style;
 		$this->typeHint = $typeHint;
 		$this->onExport = $onExport;
+		$this->sortFormat = $sortFormat;
 	}
 	
 	/**

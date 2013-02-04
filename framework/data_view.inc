@@ -163,11 +163,12 @@ class DataListView implements FacetFilterable
 	 * @param $style any inline styles specific to this column
 	 * @param $typeHint hint for cell type to use when exporting to Excel
 	 * @param $onExport optional callback function to format value for Excel
+	 * @param string $sortFormat Optional explicit format to use as the basis for sorting
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function column($title, $format, $sortable = false, $style = null, $typeHint = null, $onExport = null)
+	function column($title, $format, $sortable = false, $style = null, $typeHint = null, $onExport = null, $sortFormat = null)
 	{
-		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint, $onExport);
+		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint, $onExport, $sortFormat);
 		return $this;
 	}
 
@@ -353,10 +354,12 @@ class DataListView implements FacetFilterable
 		{
 			return "";
 		}
+
+		$zebra = $this->zebra ? "true" : "false";
 		
 		if ($this->pageSize > 0 AND $this->paginate)
 		{
-			$constructor = "\n\t\tvar {$this->id}_paginator = new PaginatingTable('{$this->id}', '{$this->id}_paginator', {per_page: {$this->pageSize}});";
+			$constructor = "\n\t\tvar {$this->id}_paginator = new PaginatingTable('{$this->id}', '{$this->id}_paginator', {per_page: {$this->pageSize}, zebra: $zebra});";
 		}
 		else
 		{
@@ -374,7 +377,6 @@ class DataListView implements FacetFilterable
 
 		if ($this->sortable)
 		{
-			$zebra = $this->zebra ? "true" : "false";
 			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter, zebra: $zebra});";
 		}
 		
@@ -512,6 +514,8 @@ class DataListView implements FacetFilterable
 				{
 					$attrs .= " style='{$matches[0]}'";
 				} 
+					
+				if ($column->sortFormat) $attrs .= " data-sort='true'";
 ?>
 			<th<?echo $attrs?>>
 <?php
@@ -614,6 +618,8 @@ class DataListView implements FacetFilterable
 					{
 						$attrs .= " class='$cssClass'";
 					}
+					
+					if ($column->sortFormat) $attrs .= " data-sort='".htmlentities($item->format($column->sortFormat))."'";
 ?>
 		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
 <?php

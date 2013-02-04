@@ -56,7 +56,8 @@ var PaginatingTable = new Class({
     offset_el: false,
     cutoff_el: false,
     details: false,
-    link_count: 10
+    link_count: 10,
+    zebra: false
   },
   
   initialize: function( table, ids, options ) {
@@ -97,6 +98,7 @@ var PaginatingTable = new Class({
   update_pages: function(){
     this.pages = Math.ceil( this.countRows() / this.options.per_page );
     this.create_pagination();
+    this.restripeTable();
     this.to_page( 1 );
   },
  
@@ -173,6 +175,22 @@ var PaginatingTable = new Class({
     span.injectInside( a.injectInside( li ) );
     return li;
   },
+  
+    restripeTable: function () 
+    {
+	  if (!this.options.zebra) return;
+	  
+	  var tr_elements = this.tbody.getChildren('tr');
+	  var counter = 0;
+  
+	  tr_elements.each( function( tr ) 
+	  { 
+		  if ( tr.hasClass('filtered')) return;
+		  if ( !tr.hasClass('collapsed') ) counter++;
+		  tr.removeClass('alt');
+		  if (counter % 2) tr.addClass( 'alt' );
+	  });
+    },
   
 	preprocessFacets: function()
 	{
