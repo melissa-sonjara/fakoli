@@ -63,6 +63,25 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 		$this->CheckListFieldRenderer($form, $field, $label, $options, false);		
 	}
 
+	/**
+	 * To modify the displayed label for a searchable class name, send
+	 * parameter string in the format
+	 * class_name, myLabel, class_name2, myLabel2...
+	 * e.g.
+	 * "Article", "News" will change the option label form Articles to News
+	 */
+	function alias()
+	{
+		for($i = 0; $i < func_num_args(); $i += 2)
+		{
+			$class_name = func_get_arg($i);
+			$label = func_get_arg($i + 1);
+			if(array_key_exists($class_name, $this->options))
+			{
+				$this->options[$class_name] = $label;			
+			}
+		}
+	}
 
 	function renderSearchField($field)
 	{
