@@ -16,7 +16,7 @@ var FacetManager = new Class(
 		this.container = document.id(container);
 		this.setOptions(options);
 		
-		this.container.facetManager = this; // public back reference
+		if (this.container) this.container.facetManager = this; // public back reference
 	},
 	
 	filterChanged: function()

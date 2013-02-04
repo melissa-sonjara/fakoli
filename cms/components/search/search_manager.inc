@@ -99,25 +99,26 @@ class SearchManager
 		if (!$params)
 		{
 			$this->searchResults = array();
-			return this;
 		}
-		
-		foreach(SearchManager::$map as $component => $searchables)
+		else
 		{
-			Fakoli::using($component);
-			
-			foreach($searchables as $searchable)
+			foreach(SearchManager::$map as $component => $searchables)
 			{
-				if ($class_array && !array_key_exists($searchable, $class_array)) continue;
+				Fakoli::using($component);
 				
-				$obj = new $searchable;
-				$results = $obj->search($params);
-				$searchResults = array_merge($searchResults, $results);
+				foreach($searchables as $searchable)
+				{
+					if ($class_array && !array_key_exists($searchable, $class_array)) continue;
+					
+					$obj = new $searchable;
+					$results = $obj->search($params);
+					$searchResults = array_merge($searchResults, $results);
+				}
 			}
+			
+			$this->searchResults = $searchResults;
 		}
-		
-		$this->searchResults = $searchResults;
-		
+					
 		$this->list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
 		$this->list->emptyList = "Your search did not match any items.";
 		$this->list->writeIdTag = true;
