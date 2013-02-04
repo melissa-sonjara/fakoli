@@ -200,18 +200,17 @@ var SortingTable = new Class(
 	    	if (row.detail) this.tbody.appendChild(row.detail);
 	    	if ( this.options.zebra && !row.row.hasClass('filtered')) 
 	    	{
-	    		row.row.className = row.row.className.replace( this.removeAltClassRe, '$1').clean();
-	    		if (row.detail)
-	    		{
-	    			row.detail.className = row.detail.className.replace( this.removeAltClassRe, '$1').clean();
-	    		}
+	    		row.row.removeClass('alt');
+	    		if (row.detail) row.detail.removeClass('alt');
+	    		
 	    		if (index % 2) 
 	    		{
 	    			row.row.addClass( 'alt' );
 	    			if (row.detail) row.detail.addClass( 'alt' );
 	    		}
+		    
+	    		index++;
 	    	}
-	    	index++;
 	    }
 	
 	    this.tbody.inject(before, 'after');

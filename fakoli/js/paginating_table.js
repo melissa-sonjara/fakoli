@@ -80,8 +80,8 @@ var PaginatingTable = new Class({
 
 	if (this.table.facetManager)
 	{
-		this.table.facetManager.addEvent('filterChanged', function() { this.filterChanged()}.bind(this));
-		this.table.facetManager.addEvent('filterCleared', function() { this.filterCleared()}.bind(this));
+		this.table.facetManager.addEvent('filterChanged', function() { this.filterChanged(); }.bind(this));
+		this.table.facetManager.addEvent('filterCleared', function() { this.filterCleared(); }.bind(this));
 		this.preprocessFacets();
 	}
 
