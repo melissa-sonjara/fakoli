@@ -86,7 +86,7 @@ var SortingTable = new Class(
 	    	{
 	    		if (evt.target != header) return;
 	    		this.sortByHeader( evt.target );
-	    		if ( this.options.paginator) this.options.paginator.to_page( 1 );
+	    		if ( this.options.paginator) this.options.paginator.update_pages();
 	    	}.bind( this ) );
 	    }, this);
  
