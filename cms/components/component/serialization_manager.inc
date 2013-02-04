@@ -111,7 +111,7 @@ class SerializationManager
 		$o = new $class;
 		$o->joinTransaction();
 		$o->deleteAll();
-		$o->disablePrimaryKey();
+		//$o->disablePrimaryKey();
 		
 		foreach($objects as $object)
 		{
@@ -120,7 +120,7 @@ class SerializationManager
 			$object->save();
 		}
 			
-		$o->enablePrimaryKey();
+		//$o->enablePrimaryKey();
 	}
 	
 	static function serialize($class, $constraint = "")
