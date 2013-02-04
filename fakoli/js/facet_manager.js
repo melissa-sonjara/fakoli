@@ -68,14 +68,20 @@ var FacetManager = new Class(
 	},
 	
 	filter: function(element)
-	{
+	{	
+		clear = true;
+		var found = true;
+		
 		for(var i = 0; i < this.handlers.length; ++i)
 		{
-			var found = this.handlers[i].filter(element);
-			if (found) return true;
+			if (!this.handlers[i].isClear())
+			{
+				clear = false;
+				found &= this.handlers[i].filter(element);
+			}
 		}
 		
-		return false;
+		return clear || found;
 	}
 	
 });
@@ -87,7 +93,6 @@ var MultiSelectFacetHandler = new Class(
 	select: Class.Empty,
 	checkboxes: Class.Empty,
 	manager: Class.Empty,
-	
 	termLookup: {},
 	
 	initialize: function(id, select, manager)
