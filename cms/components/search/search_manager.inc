@@ -45,6 +45,7 @@ class SearchManager
 	
 	var $searchResults;
 	var $useFacetFilter = false;
+	var $displayMode = "list";
 	
 	function SearchManager($results = null)
 	{
@@ -118,10 +119,23 @@ class SearchManager
 			
 			$this->searchResults = $searchResults;
 		}
-					
-		$this->list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
-		$this->list->emptyList = "Your search did not match any items.";
-		$this->list->writeIdTag = true;
+
+		switch($this->displayMode)
+		{
+			case "table":
+				$this->list = new DataListView($this->extractDataItems(), "search_results");
+				$this->list->emptyMessage = "Your search did not match any items.";
+				$this->list->writeIdTag = true;
+				$this->list->sortable = true;
+				$this->list->filter = false;
+				break;
+				
+			case "list":
+			default:
+				$this->list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
+				$this->list->emptyList = "Your search did not match any items.";
+				$this->list->writeIdTag = true;
+		}
 		
 		if ($this->enableFacetFilter)
 		{
@@ -158,6 +172,17 @@ class SearchManager
 		return $cl;
 	}
 	
+	function extractDataItems()
+	{
+		$items = array();
+		
+		foreach($this->searchResults as $result)
+		{
+			$items[] = $result->item;
+		}
+		
+		return $items;
+	}
 	
 	function sortByRelevance()
 	{
@@ -207,6 +232,7 @@ class SearchManager
 		
 		$this->drawnFacets = true;
 	}
+	
 	function showResults($pageSize = 0)
 	{
 		global $script;
@@ -225,7 +251,18 @@ class SearchManager
 		}
 		
 		$this->drawFacets();
-		$this->list->drawList();
+		
+		switch($this->displayMode)
+		{
+			case "table":
+				$this->list->drawView();
+				break;
+				
+			case "list":
+			default:
+				$this->list->drawList();
+				break;
+		}
 	}
 	
 	static function wrap($items, $resultClass)
