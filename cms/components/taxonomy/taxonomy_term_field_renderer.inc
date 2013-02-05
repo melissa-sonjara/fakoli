@@ -152,7 +152,7 @@ window.addEvent('domready', function()
 		}
 		if ($this->width && $this->height)
 		{
-			$resizable = $this->resizable ? " resizable": "";
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
 			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
 			echo "<div id='{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
