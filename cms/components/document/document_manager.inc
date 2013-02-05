@@ -722,29 +722,29 @@ function deleteFolderResult(result)
 			{
 				$f = trim($f);
 				
-				$path = "documents" . DIRECTORY_SEPARATOR . $f;
-				
 				trace($path, 3);
 				
-				if (!array_key_exists($path, $this->indexedDocuments)) continue;
-				
-				$doc = $this->indexedDocuments[$path];
-				
-				$i = 0;
-				
-				foreach($fields as $field)
+				foreach($this->indexedDocuments as $path => $doc)
 				{
-					if ($field == "file")
+					if (basename($path) == $f)
 					{
-						$i++;
-						break;
-					}
+						$i = 0;
+						
+						foreach($fields as $field)
+						{
+							if ($field == "file")
+							{
+								$i++;
+								break;
+							}
+							
+							$doc->set($field, $values[$i]);
+							$i++;
+						}
 					
-					$doc->set($field, $values[$i]);
-					$i++;
+						$doc->save();
+					}
 				}
-			
-				$doc->save();
 			}
 		}
 	}
