@@ -304,7 +304,7 @@ abstract class UpgradeManager
 		}
 		
 		$fp = fopen($this->sqlFile, 'r');
-		$version_id = str_replace(".", "\\.", "version " . $version_number); // case insensitive
+		$version_id = str_ireplace(".", "\\.", "version " . $version_number); // case insensitive
 		trace("UpgradeManager::version id: $version_id file $this->sqlFile", 3);
 		
 		if(!$fp)
