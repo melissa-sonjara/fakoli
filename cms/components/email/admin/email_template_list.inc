@@ -60,6 +60,7 @@ $table->emptyMessage = "There are no email templates defined.";
 $table->mode = "tree";
 $table->cssStyle = "width: 100%";
 $table->cssClass = "list small";
+$table->filter = true;
 
 $script .= $table->writeScript();
 
