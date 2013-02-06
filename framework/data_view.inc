@@ -92,6 +92,8 @@ class DataListView implements FacetFilterable
 	var $menu = null;			///< Context menu for selection-based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	
+	static $includesWritten = false;
+	
 	/**
 	 * Creates a new DataListView object.
 	 * 
@@ -343,12 +345,17 @@ class DataListView implements FacetFilterable
 		
 		if (count($this->items) == 0) return;
 		
-		$script = 
-		"\t<script type='text/javascript' src='/fakoli/js/sorting_table.js'></script>\n".
-	   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".  
-		"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n".
-		"\t<script type='text/javascript' src='/fakoli/js/scrolling_table.js'></script>\n";
-		
+		if (!DataListView::$includesWritten)
+		{
+			$script = 
+			"\t<script type='text/javascript' src='/fakoli/js/sorting_table.js'></script>\n".
+		   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".  
+			"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n".
+			"\t<script type='text/javascript' src='/fakoli/js/scrolling_table.js'></script>\n";
+			
+			DataListView::$includesWritten = true;
+		}
+				
 		$constructor = "";
 		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter && !$this->dragReorder)
 		{
