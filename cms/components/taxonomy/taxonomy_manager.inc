@@ -210,18 +210,18 @@ class TaxonomyManager
 		fclose($fp);
 	}
 	
-	static function addFacets($manager)
+	static function addFacets($manager, $classes, $dropdown = true, $max_width = "200px", $width = "200px", $height = "120px")
 	{
-		$classes = array();
-		for($i = 1; $i < func_num_args(); ++$i)
-		{
-			$classes[] = func_get_arg($i);
-		}
+		if (!is_array($classes) && $classes) $classes = array($classes);
 		
 		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($classes, true);
 		foreach($taxonomies as $taxonomy)
 		{
-			$manager->addFacet($taxonomy->taxonomy_name, new TaxonomyFacetFilter($taxonomy));
+			$facet = $manager->addFacet($taxonomy->taxonomy_name, new TaxonomyFacetFilter($taxonomy));
+			$facet->dropdown = $dropdown;
+			$facet->dropdownMaxWidth = $max_width;
+			$facet->width = $width;
+			$facet->height = $height;
 		}
 	}
 	

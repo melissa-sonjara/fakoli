@@ -47,6 +47,12 @@ class SearchManager
 	var $useFacetFilter = false;
 	var $displayMode = "list";
 	
+	// Facet dimensions
+	var $facetDropdown = true;
+	var $facetMaxWidth = "200px";
+	var $facetWidth = "200px";
+	var $facetHeight = "120px";
+	
 	function SearchManager($results = null)
 	{
 		$this->searchResults = $results;
@@ -141,11 +147,8 @@ class SearchManager
 		{
 			$this->facetManager = new FacetManager('facet_manager', $this->list);
 			$classes = $this->getSearchableClasses();
-			trace("Facet Classes: ".implode(", ", $classes), 3);
-			foreach($classes as $class)
-			{
-				TaxonomyManager::addFacets($this->facetManager, $class);
-			}
+			trace("Facet Classes: ".implode(", ", $classes), 3);				
+			TaxonomyManager::addFacets($this->facetManager, $classes, $this->facetDropdown, $this->facetMaxWidth, $this->facetWidth, $this->facetHeight);
 		}
 		
 		return $this;

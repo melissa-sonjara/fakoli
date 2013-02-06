@@ -63,6 +63,8 @@ class FacetManager
 	{
 		$this->facets[$title] = $facet;
 		$facet->manager = $this;
+		
+		return $facet;
 	}
 	
 	function onTagItem($item, $attrs)
