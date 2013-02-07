@@ -57,6 +57,12 @@ $form->hide("is_local", "document_library_id", "owner_id");
 $form->allowDelete=true;
 $redirect = "admin/documents";
 $form->button("Cancel", $redirect);
+
+if (!$document->owner_id)
+{
+	$document->owner_id = $user->get($user->getPrimaryKey());
+}
+
 if ($document->file)
 {
 	$form->annotate("file", "<a href='/download.php?document_id={$document_id}'>{$document->file}</a>");
