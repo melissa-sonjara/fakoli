@@ -62,7 +62,7 @@ $library = new DocumentLibrary($document->document_library_id);
 $tabs = documentTabs($document_id);
 
 $form = new AutoForm($document);
-$form->required("title", "abstract");
+$form->required("title", "abstract", "publication_date");
 $form->hide("is_local", "document_library_id", "owner_id");
 $form->allowDelete=true;
 $redirect = "admin/documents";
