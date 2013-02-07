@@ -75,7 +75,6 @@ TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {
-	$_POST["publication_date"] = now();
 	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
 	$_POST["document_library_id"] = $document_library_id;
 	
