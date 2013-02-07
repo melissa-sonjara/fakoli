@@ -55,6 +55,10 @@ else
 	$document->owner_id = $user->get($user->getPrimaryKey());
 }
 
+global $library;
+
+$library = new DocumentLibrary($document->document_library_id);
+
 $tabs = documentTabs($document_id);
 
 $form = new AutoForm($document);
@@ -68,7 +72,7 @@ if ($document->file)
 {
 	$form->annotate("file", "<a href='/download.php?document_id={$document_id}'>{$document->file}</a>");
 }
-$fileupload = new FileUploadFieldRenderer($form, "file", "Upload File", uploadPDF);  
+$fileupload = new FileUploadFieldRenderer($form, "file", "Upload File", uploadLibraryFile);  
 $allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
@@ -110,50 +114,12 @@ $form->drawForm();
 
 
 
-function uploadPDF($field, $document)
+function uploadLibraryFile($field, $document)
 {
-	global $config;
-	
-	trace("uploadPDF() called for $field", 3);
-	
-	if (!$_FILES[$field]) 
-	{
-		trace("No upload record for $field", 2);
-		return false;
-	}
-	if ($_FILES[$field]["name"]=="") 
-	{
-		trace("Upload name is empty", 2);
-		return false;
-	}
+	global $library;
+	global $form;
 
-  	/* Copy across the uploaded file */
-
-	trace("Upload Base: {$config['uploadbase']}", 3);
-	trace("Upload Directory: {$config['uploaddir']}", 3);
-	
-	$dir = $config["uploaddir"];
-	$name = $_FILES[$field]["name"];
-	$file = "$dir/$name";
-	
-	trace ("Uploading file to {$config['uploadbase']}/$file", 3);
-	
-	if (!file_exists("{$config['uploadbase']}/$dir"))
-	{
-		// If the directory does not exist, create it 
-		mkdir("{$config['uploadbase']}/$dir");
-	}
-	else if (file_exists("{$config['uploadbase']}/$file"))
-	{
-		// If a previous copy of the file already exists, remove it
-		unlink("{$config['uploadbase']}/$file");
-	}
-
-  	move_uploaded_file($_FILES[$field]["tmp_name"], "{$config['uploadbase']}/$file");
-  	chmod("{$config['uploadbase']}/$file", 0755);
- 
-  	$document->file = "$file";
-  	
-  	return true;
+	$mgr = new DocumentManager($library);
+	$document->file = $mgr->uploadFile($field, $_POST["folder_value"]);
 }
 ?>
