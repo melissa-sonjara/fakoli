@@ -40,6 +40,7 @@ require_once "include/document_tabs.inc";
 
 $menu_item = "Documents";
 
+$document_library_id = checkNumeric($_GET["document_library_id"]);
 $document_id = checkNumeric($_GET["document_id"]);
 
 $document = new Document();
@@ -47,6 +48,11 @@ $document = new Document();
 if ($document_id)
 {
 	$document->load($document_id);
+}
+else
+{
+	$document->document_library_id = $document_library_id;
+	$document->owner_id = $user->get($user->getPrimaryKey());
 }
 
 $tabs = documentTabs($document_id);
