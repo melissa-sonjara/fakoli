@@ -58,11 +58,6 @@ $form->allowDelete=true;
 $redirect = "admin/documents";
 $form->button("Cancel", $redirect);
 
-if (!$document->owner_id)
-{
-	$document->owner_id = $user->get($user->getPrimaryKey());
-}
-
 if ($document->file)
 {
 	$form->annotate("file", "<a href='/download.php?document_id={$document_id}'>{$document->file}</a>");
@@ -74,6 +69,10 @@ TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {
+	$_POST["publication_date"] = now();
+	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
+	$_POST["document_library_id"] = $document_library_id;
+	
 	if ($form->save())
 	{
 		$tabs->queryString = "document_id={$form->data->document_id}";
