@@ -96,6 +96,6 @@ $table->drawView();
 ?>
 <br/>
 <br/>
-<a href="document_form" class="button"> Add a New Document </a>
+<a href="document_form?document_library_id=<?echo $document_library_id?>" class="button"> Add a New Document </a>
 <br/>
 </div>
