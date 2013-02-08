@@ -1,6 +1,6 @@
 <?php
 $help_map = array(
-				"title"		=>	"Activity Report",
+				"title"		=>	"Activity Tracking and Feedback",
 				"default"	=>	"index",
 				"pages"		=>	array(
 					"activity_report"		=>	"Activity Report",
