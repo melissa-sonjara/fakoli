@@ -78,7 +78,7 @@ class ErrorLogManager
 			$log->file = $errFile;
 			$log->line = $errLine;
 			$log->details = $exception->getTraceAsString();
-			$log->user_id = $user ? $user->user_id : 0;
+			$log->user_id = $user ? $user->get($user->getPrimaryKey()) : 0;
 			$log->uri = $uri;
 			$log->referer = $referer;
 			$log->session = session_id();
