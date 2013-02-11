@@ -100,7 +100,8 @@ if ($method == "POST")
 	
 	foreach($recipients as $recipient)
 	{
-		$handler = new Mail($emailContact, $recipient, $subject, $contactUs->message, $headers);
+		$sender = "From: {$contactUs->full_name} {$contactUs->email}\r\n";
+		$handler = new Mail($emailContact, $recipient, $subject, $sender . $contactUs->message, $headers);
 	}
 			
 	$rtn = $handler->send();
