@@ -373,16 +373,19 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	 */
 	function member($name, $set)
 	{
+		if(!$set || !isset($set)) return "";
+		
 		$values = $set;
 		if(is_array($set))
 		{
 			$values = "'". implode("','", array_keys($set)) . "'";
 		}
-		else
+		else if($set)
 		{
-			$values = "'".implode("','", explode(",", $set))."'";
+			$values = " ".implode("','", explode(",", $set))."'";
+			$values = preg_replace("/''/", "'", $values);
 		}
-		
+	
 		return "$name IN ($values)";
 	}
 }

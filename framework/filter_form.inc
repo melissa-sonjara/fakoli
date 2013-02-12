@@ -552,18 +552,22 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		$value = $this->parent->data->get($field);
 		if(!$value && !is_numeric($value) && ((!isset($_GET["{$field}_submitted"]) || !$_GET["{$field}_submitted"])) && $defaults)
 		{
-			$defaults = explode(",", preg_replace("/,\s*/", ",", $defaults));
-			$first = $defaults[0];
-			if(!is_numeric($first) && !preg_match("/^'/", $first))
-			{
-				$defaults = "'" . implode("','", $defaults) . "'";
-			}
+			$defaults = preg_replace("/'/", "", $defaults);
+			$defaults = array_flip(explode(",", preg_replace("/,\s*/", ",", $defaults)));
 			
 			// The form's data value is used to set the selected checkboxes and cannot contain the "'" around the string values
-			$this->parent->data->set($field, array_flip(explode(",", preg_replace("/'/", "", $defaults))));
-			$value = $defaults;
+			$this->parent->data->set($field, $defaults);
+			
+			if(!is_numeric(array_flip($defaults[0])))
+			{
+				$value = "'" . implode("','", array_keys($defaults)) . "'";
+			}
+			else
+			{
+				$value = implode(",", array_keys($defaults));
+			}
 		}
-		
+				
 		// The search parameter's value is used in the constraint and must contain "'" around each string value
 		$this->parent->search->setParam($field, "member", $value);
 	}
@@ -585,13 +589,14 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		{
 			$searchValues = array();
 		}
-		
+
 		$idx = 0;
 
 		if(count($this->options) > 0)
 		{
 			foreach($this->options as $value => $text)
 			{
+				trace("CheckListFieldRenderer value $value and text $text", 3);
 				echo "<li>\n";
 				$onchange = " onchange='this.form.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
