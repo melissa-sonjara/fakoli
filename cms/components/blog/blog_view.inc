@@ -370,6 +370,7 @@ class BlogView
 	{		
 		global $script;
 		global $method;
+		global $user;
 			
 		$type = $this->blog->blog_type;
 		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
@@ -389,7 +390,7 @@ class BlogView
 			
 			$script .= $view->writeScript();
 			$view->drawView();
-			if(Settings::getValue("comment", "allow_anonymous_commenting"))
+			if($user || Settings::getValue("comment", "allow_anonymous_commenting"))
 			{
 				$view->drawForm();
 			}
