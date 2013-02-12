@@ -228,7 +228,7 @@ class SearchManager
 	function drawFacets()
 	{
 		global $script;
-		if ($this->drawnFacets) return;
+		if ($this->drawnFacets || !$this->facetManager) return;
 		
 		$script .= $this->facetManager->writeScript();
 		echo $this->facetManager->drawForm();
