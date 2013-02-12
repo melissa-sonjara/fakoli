@@ -447,14 +447,24 @@ class DateRangeValidator extends AbstractValidator
 		var min = $min;
 		var max = $max;
 		
-		// These errors are checked by DateValidator
-		if ((form["{$this->field}"].value == "") ||
-		!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		if(form["{$this->field}"].value != "" && form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
 		{
-			return;
+			form["{$this->field}"].value = Date.parse(form["{$this->field}"].value).format('%x');
 		}
 				
-		if((min && min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->field}"].value < min) ||
+		if(max && form["{$this->max}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		{
+			form["{$this->max}"].value = Date.parse(form["{$this->max}"].value).format('%x');
+		}
+		
+		if(min && form["{$this->min}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		{
+			form["{$this->min}"].value = Date.parse(form["{$this->min}"].value).format('%x');
+		}
+		
+		if((form["{$this->field}"].value != "") &&
+			form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
+			(min && min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->field}"].value < min) ||
 		 	(min && !min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->min}"].value && form["{$this->min}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
 		 	form["{$this->field}"].value < form["{$this->min}"].value) ||
 		 	(max && max.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
