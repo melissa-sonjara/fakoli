@@ -87,6 +87,17 @@ class UserManager
 	{
 		return new SiteUser($user_id);
 	}
+	
+	/**
+	 * Return a clause that constrains records on those that
+	 * are active.
+	 * 
+	 * @return string
+	 */
+	function getActiveClause()
+	{
+		return "active=true";
+	}
 		
 	function getUserByName($username)
 	{
