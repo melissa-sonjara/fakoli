@@ -612,7 +612,7 @@ class ComponentManager
 		{
 			checkIdentifier($identifier);
 			
-			$page = ComponentPage::findByIdentifier($identifier);
+			$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
 
 			if (!$page->enabled)
 			{
