@@ -613,11 +613,6 @@ class ComponentManager
 			checkIdentifier($identifier);
 			
 			$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
-
-			if (!$page->enabled)
-			{
-				return $identifier;
-			}
 			
 			// JDG 11/2011 - are templates ever stored with tpl at the end?? 
 			$page_template = (preg_match("/tpl$/", $page->template)) ? $page->template : "{$page->template}.tpl";
