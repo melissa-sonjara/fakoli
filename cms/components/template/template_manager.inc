@@ -163,19 +163,40 @@ function selectionChanged()
 {
 	var file = $('files_value').value;
 	var node = $($('files_node').value + "_link");
-
 	
 	if (file != "")
 	{
-		$('edit').disabled = node.hasClass("folder") || !file.match(/(\.css|\.tpl)$/);
-		$('deleteButton').disabled = node.hasClass("folder");
-		$('deleteFolder').disabled = node.hasClass("file");
+		if(node.hasClass("folder") || !file.match(/(\.css|\.tpl)$/))
+		{
+			$('edit').addProperty("disabled", "disabled");
+		}
+		else
+		{
+			$('edit').removeProperty("disabled");
+		}
+		if(node.hasClass("folder"))
+		{
+			$('deleteButton').addProperty("disabled", "disabled");
+		}
+		else
+		{
+			$('deleteButton').removeProperty("disabled");
+		}
+		
+		if(node.hasClass("file")
+		{
+			$('deleteFolder').addProperty("disabled", "disabled");
+		}
+		else
+		{
+			$('deleteFolder').removeProperty("disabled");
+		}
 	}
 	else
 	{
-		$('edit').disabled = true;
-		$('deleteButton').disabled = true;
-	}
+		$('edit').addProperty("disabled", "disabled");
+		$('deleteButton').addProperty("disabled", "disabled");
+	}	
 }
 
 function createFolder()
