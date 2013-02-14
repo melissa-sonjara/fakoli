@@ -6,5 +6,6 @@ $help_map = array(
 					"blogs"				=>	"Blogs",
 					"blog_form"			=>	"Configuring a Blog",
 					"blog_articles"		=>	"Managing Your Blog Articles",
-					"blog_article_form"	=>	"Editing a Blog Article"));
+					"blog_article_form"	=>	"Editing a Blog Article",
+					"blog_subscriber_form" => "Blog Subscription Form"));
 ?>
