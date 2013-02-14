@@ -175,17 +175,18 @@ function deleteFile()
 		var request = new Request({'url': 		'/action/document/delete?document_id=' + id, 
 								   'method': 	'get',
 								   'onSuccess': function(responseText) 
-								   { 
-								   		if (responseText == "1") 
-								   		{
-								   			window.location.reload();
-								   		}
-								   		else
-								   		{
-								   			alert(responseText);
-								   		}
-								   },
-								   'onFailure':	function() { alert("Failed to communicate with server");}});
+		{ 
+			if (responseText == "1") 
+			{
+				window.location.reload();
+			}
+			else
+			{
+				alert(responseText);
+			}
+		},
+		'onFailure':	function() { alert("Failed to communicate with server");}});
+
 		request.send();
 	}
 }	
@@ -193,18 +194,19 @@ function deleteFile()
 function selectionChanged()
 {
 	var id = $('files_value').value;
-	
+
 	if (id > 0)
 	{
-		$('download').disabled = false;
-		$('edit').disabled = false;
-		$('deleteButton').disabled = false;
+		$('download').removeProperty("disabled");
+		if($('edit')) $('edit').removeProperty("disabled");
+		$('deleteButton').removeProperty("disabled");
+		
 	}
 	else
 	{
-		$('download').disabled = true;
-		$('edit').disabled = true;
-		$('deleteButton').disabled = true;
+		$('download').addProperty("disabled", "disabled");
+		if($('edit')) $('edit').addProperty("disabled", "disabled");
+		$('deleteButton').addProperty("disabled", "disabled");
 	}
 }
 
@@ -469,10 +471,11 @@ function deleteFolderResult(result)
 				
 				if ($folderNode != null)
 				{
-					trace("Found Folder {$folderNode->id}", 4);
+					trace("Found Folder {$folderNode->id} for document {$doc->document_id}", 4);
 					$id = str_replace(DIRECTORY_SEPARATOR, "_", $file);
+					$fileNode = new FileNode($id, basename($file), $doc->document_id);
 				
-					$folderNode->add(new FileNode($id, basename($file), $doc->document_id));
+					$folderNode->add($fileNode);
 				}
 				else
 				{
