@@ -4,6 +4,9 @@ $help_map = array(
 				"pages"		=>	array(
 					
 					"menus"					=>	"Menus",
+					"menu_form"		=>    "Menu Form",
+					"menu_items"		=>    "Menu Items",
+					"menu_item_form" => "Menu Item Form"
 					)
 				);
 
