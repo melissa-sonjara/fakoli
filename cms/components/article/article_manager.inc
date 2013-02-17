@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("component", "comment");
+Fakoli::using("component", "comment", "blog");
 
 class ArticleManager
 {
@@ -25,8 +25,8 @@ class ArticleManager
 		$form->alias("image_id", "Associated Image");
 		$form->readonly("created_date");
 		$form->hide("author_id"); //TODO - allow author selection/re-assignment?
-		$articleTypeSelect = new SelectFieldRenderer($form, "article_type", "Article Type");
-		$articleTypeSelect->allowAddEntry();
+		$articleTypeSelect = new SelectFieldRenderer($form, "article_type", "Article Type", Blog::getArticleTypeOptions());
+		//$articleTypeSelect->allowAddEntry();
 
 		$form->getRenderer("message")->height = "480px";
 		$form->getRenderer("teaser")->height = "120px";

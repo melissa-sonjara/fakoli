@@ -154,6 +154,19 @@ class Blog extends DataItem
 		return $url;
 	}
 	
+	static function getArticleTypeOptions()
+	{
+		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		$options = array();
+		foreach($blogs as $blog)
+		{
+			$options[$blog->title] = $blog->title;
+		}
+		
+		return $options;
+	}
+		
+		
 	function Blog()
 	{
 		$this->primary_key = "blog_id";
