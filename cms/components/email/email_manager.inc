@@ -50,7 +50,7 @@ class EmailHandler
 {
 	var $mail;
 	var $onSendComplete; // optional user callback function after mail is sent
-
+	
 	/**
 	 * 
 	 * @param String $toAddr
@@ -58,8 +58,9 @@ class EmailHandler
 	 * @param String $message
 	 * @param String $emailFrom - if blank, use settings email_from; if not blank and != settings, set this value into Reply To header instead
 	 * @param String $emailName - same as above
+	 * @param Array $attachments - optional array of full file paths to attach.
 	 */
-	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "")
+	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "", $attachments = array())
 	{
 		global $config;
 
@@ -88,8 +89,10 @@ class EmailHandler
 
 		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
-		$message = $this->getMessageScript($message, $random_hash);
-			
+		if($attachments && !is_array($attachments)) $attachments = array($attachments);
+
+		$message = $this->getMessageScript($message, $random_hash, $attachments);
+		
 		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
 	}
 
@@ -97,7 +100,7 @@ class EmailHandler
 	 * This isn't working on zither; works locally - zither can't determine
 	 * which view to send and sends both but shows the html as text with tags
 	 */
-	function getMessageScript($msg, $random_hash)
+	function getMessageScript($msg, $random_hash, $attachments)
 	{
 		global $config;
 		
@@ -112,7 +115,9 @@ class EmailHandler
 		else
 		{
 			$html = $msg;
-		}		
+		}
+
+		$fileAttachments = $this->formatAttachments($attachments, $random_hash);
 		
 		//define the body of the message.
 		ob_start(); //Turn on output buffering
@@ -133,6 +138,8 @@ Content-Transfer-Encoding: 8bit
 
 <?php echo $html ?>
 
+<?php echo $fileAttachments ?>
+
 ----PHP-alt-<?php echo $random_hash; ?>--
 		<?php
 		//copy current buffer contents into $message variable
@@ -140,8 +147,36 @@ Content-Transfer-Encoding: 8bit
 		$message = ob_get_clean();
 
 		return $message;
-
 	}
+	
+	/**
+	 * 
+	 * @param HTML $message
+	 * @param Array $files - files to attach
+	 */
+	function formatAttachments($attachments, $random_hash)
+	{
+		if(!count($attachments)) return "";
+		
+		foreach($attachments as $attachment)
+		{
+			if(is_file($attachment))
+			{
+				$fileAttachments .= "----PHP-alt-{$random_hash}\n";
+				$fp =  @fopen($attachment, "rb");
+				$fileContents = @fread($fp, filesize($attachment));
+				@fclose($fp);
+				$fileContents = chunk_split(base64_encode($fileContents));
+				$fileAttachments .= "Content-Type: application/octet-stream; name=\"".basename($attachment)."\"\n" .
+						"Content-Description: ".basename($attachment)."\n" .
+						"Content-Disposition: attachment;\n" . " filename=\"".basename($attachment)."\"; size=".filesize($attachment).";\n" .
+						"Content-Transfer-Encoding: base64\n\n" .$fileContents . "\n\n";
+			}
+			$fileAttachments .= "----PHP-alt-{$random_hash}\n";
+		}
+		
+		return $fileAttachments;
+	}	
 
 	function send()
 	{
@@ -198,7 +233,8 @@ class EmailManager
 	var $emailFrom;
 	var $emailName;
 	var $onSendComplete; // optional user-defined callback function after send is successful
-
+	var $attachments; ///< optional - array of files to attach to the email
+	
 	function EmailManager($item, $emailTemplate, $onSendComplete = "")
 	{
 		$this->item = clone($item);
@@ -278,8 +314,8 @@ class EmailManager
 	{
 		trace("EmailManager:: sending email to recipient $recipient", 3);
 				
-		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom, $this->emailName);
-				
+		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom, $this->emailName, $this->attachments);
+			
 		$rtn = $email->send();
 			
 		if ($this->onSendComplete AND is_callable($this->onSendComplete))
@@ -326,8 +362,6 @@ class EmailManager
 		Settings::setDefaultValue("email", "email_contact", "andy@sonjara.com", "String", "To address for generated emails");
 		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Name of email contact");
 		Settings::setDefaultValue("email", "mail_server", "timpani.sonjara.com", "String");
-		Settings::setDefaultValue("email", "alt_text_email", false, "Boolean", "Whether the mail server can send html-formatted email messages");
-		
 	}	
 	
 	static function upgradeComponent($version)
