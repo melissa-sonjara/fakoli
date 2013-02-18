@@ -109,10 +109,10 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 	{
 		if (!$field) $field = $this->field;
 		
-		trace("EmailAttachmentFieldRenderer postProcess field $field value ". $_POST[$field], 3);
+		trace("EmailAttachmentFieldRenderer preProcess field $field value ". $_POST[$field], 3);
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
 		
-		if (isset($_POST[$field]))
+		if (isset($_POST[$field]) && $_POST[$field] != "")
 		{
 			$ids = explode(",", $_POST[$field]);
 			
@@ -122,7 +122,6 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 				$library = $document->DocumentLibrary();
 				$attachments[] = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
 			}
-			
 			$this->parent->data->set($field, $attachments);
 		}
 	}
