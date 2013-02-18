@@ -1,7 +1,7 @@
 <?php
 ?>
 <h2>Templates</h2>
-The site now uses full page templates to generate a page with substitution points in the code. Pages are associated with templates, and the associated template is used to generate the page. 
+The site uses full page templates to generate a page with substitution points in the code. Pages are associated with templates, and the associated template is used to generate the page. 
 
 The templates are basically the plain HTML for the page, and can be edited in Dreamweaver, Notepad++ or whatever. Substitution points are denoted with {}s. 
 <ul>
