@@ -62,6 +62,14 @@ abstract class EventHandler
 
 class StandardEventHandler extends EventHandler
 {
+	/**
+	 * If an event spans over more than 5 days, only
+	 * show it on the first day. If a multiday event
+	 * starts before the first of the month, then 
+	 * show it on the first of the month only.
+	 * 
+	 * @see EventHandler::filter()
+	 */
 	function filter($event, $date)
 	{
 		$start = explode(" ", $event->start_date);
@@ -70,19 +78,26 @@ class StandardEventHandler extends EventHandler
 		$startTimeStamp = strtotime($start[0]);
 		$endTimeStamp = strtotime($end[0]);
 		$dateTimeStamp = strtotime($date);
-		 
+
 		$diff = abs($endTimeStamp - $startTimeStamp);
-        $days=getdate($diff);
-        $diff_dates = $days[mday] + 1;
-       
-		
-		if($diff_dates <= 5) 
+		$days = floor($diff/(60*60*24));
+
+		$inDate = new DateTime($date."T00:00:00");
+		$startDate = new DateTime($event->start_date);
+	   
+		$showEvent = false;
+		if($inDate->format("j") == 1 && ($startDate->format("Y-m-d") <= $inDate->format("Y-m-d")))
 		{
-			return ($dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp);
+			$showEvent = true;
+		}
+	    
+		if($days <= 5 || $showEvent) 
+		{
+  			return ($dateTimeStamp >= $startTimeStamp && $dateTimeStamp <= $endTimeStamp);
 		}
 		else 
 		{
-			return  ($dateTimeStamp == $startTimeStamp);
+  			return ($dateTimeStamp == $startTimeStamp);
 		}
 	}
 
