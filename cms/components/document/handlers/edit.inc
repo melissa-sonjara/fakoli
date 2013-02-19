@@ -55,6 +55,7 @@ $form->readonly("file");
 $form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->allowDelete = true;
+$form->onDelete = onDeleteDocument;
 
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
@@ -79,4 +80,11 @@ if ($method == "POST")
 
 echo $form->writeScript();
 $form->drawForm();
+
+function onDeleteDocument(&$document)
+{
+	$library = $document->DocumentLibrary();
+	$mgr = new DocumentManager($library);
+	$mgr->deleteDocument($document);
+}
 ?>
