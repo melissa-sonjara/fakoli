@@ -54,6 +54,7 @@ $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$docu
 $form->readonly("file");
 $form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->allowDelete = true;
 
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
