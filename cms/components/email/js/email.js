@@ -55,7 +55,7 @@ var EmailManager =  (function()
 		showAdvancedFeatures: function()
 		{
 			var class_name = $('EmailTemplate_form_class_name').value;
-			this.dialog = modalPopup('Advanced Features', '/action/email/advanced_email_features?class_name=' + class_name, '500px', 'auto')	
+			this.dialog = floatingPopup('Advanced Features', '/action/email/advanced_email_features?class_name=' + class_name, '500px', 'auto', true);
 		},
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * *

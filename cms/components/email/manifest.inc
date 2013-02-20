@@ -91,7 +91,7 @@ class EmailManifest
 	
 	static function getScripts()
 	{
-		return array("/fakoli/js/email.js");
+		return array("/components/email/js/email.js");
 	} 	
 	
 }

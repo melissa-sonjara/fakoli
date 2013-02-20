@@ -153,6 +153,9 @@ class SettingAutoForm extends AutoForm
 		
 		trace("Settings auto form returning true", 3);
 		
+		ComponentManager::fireEventTo($this->component->name, "ClearCache");
+		
+		
 		return true;
 	}
 }
