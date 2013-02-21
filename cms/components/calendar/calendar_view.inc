@@ -149,6 +149,7 @@ class CalendarView
 	var $detailLink = "/event_detail";
 	var $yearParam = "year";
 	var $monthParam = "month";
+	var $maxEventsPerDay = null; ///< The maximum number of events to display per day on monthly view
 	
 	function CalendarView($events, $id = null)
 	{
@@ -403,7 +404,7 @@ ENDSCRIPT;
  <div class="dialog_header" id="eventDetailDlgHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeEventDetailDlg' href="javascript:eventDialog.hide();">Close &times;</a></div>
-   <span"style="font-weight: bold" id="eventDetailDlgTitle">Event Detail</span>
+   <span style="font-weight: bold" id="eventDetailDlgTitle">Event Detail</span>
   </div>	
  </div>
  <div id="eventDetailDlgBody" class="dialog_body">
@@ -452,9 +453,16 @@ ENDSCRIPT;
 			if (count($eventsToday) > 0)
 			{
 				$class = "event";
-
+				$idx = 0;
+				$showMoreLink = false;
+	
 				foreach($eventsToday as $event)
 				{
+					if($this->maxEventsPerDay && $idx >= $this->maxEventsPerDay)
+					{
+						$showMoreLink = true;
+						break;
+					}
 					$handler = $this->getHandler($event);
 					
 					// JDG 2/24/2011 send handler class to event details
@@ -463,8 +471,16 @@ ENDSCRIPT;
 					$content .= "<div class='event_summary' onclick='showEventDetail({$event->$pk}, \"{$handler_class}\")'>";
 					$content .= $handler->summary($event);
 					$content .= "</div>";
+					
+					$idx++;
 				}
-
+				
+				if($showMoreLink)
+				{
+					$event_ids = formatItems(reindexList($eventsToday, "{$pk}"), "{{$pk}}", ":");
+					$content .= "<div class='events_more'><a href='#' onclick=\"showEventList('$event_ids', '$handler_class'); return false;\">more...</a></div>\n";
+				}
+				
 				$link = $i;
 			}
 			else
@@ -500,7 +516,7 @@ ENDSCRIPT;
 		$link = $this->rewriteQueryString($this->year, $this->month, $alt);
 		$altTitle = ($alt == event_display) ? "List of Events" : "Calendar";
 ?>		
-<table width="100%" class="layout">
+<table style='width: 100%' class="layout">
  <tr>
   <td><p><a href="<? echo $link ?>">View <? echo $altTitle ?></a></p></td>
   <td align="right">

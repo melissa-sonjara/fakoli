@@ -246,3 +246,15 @@ body.program .eventprogramtitle
 	height: 53px;
 	background: url(/components/calendar/images/event_bubble_bottom.png) top left no-repeat transparent;
 }
+
+.events_more
+{
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.event_list_detail .event_details .event_contents
+{
+	border-bottom: dashed 1px #CCC;
+}
+

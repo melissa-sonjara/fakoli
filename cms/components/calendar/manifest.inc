@@ -46,6 +46,8 @@ class CalendarManifest
 		return $component;
 	}
 	
+	var $allow_sessionless_handlers = true;
+	
 	static function getStyles()
 	{
 		return array("/components/calendar/css/calendar.css");
@@ -76,7 +78,7 @@ class CalendarManifest
 					  								  "weight"	=>	10)
 												     )
 		);
-	}	
+	}
 
 	static function subscribeToEvents()
 	{
@@ -85,7 +87,9 @@ class CalendarManifest
 					 "EnumerateContextHelpClasses" => array(CalendarManager, enumerateContextHelpClasses),		
 					 "upgradeComponent"		=>	array(CalendarManager, upgradeComponent),
 					 "calendarGetHandler"      =>    array(CalendarManager, calendarGetHandler),
-					 "RegisterTaxonomyClasses"	=>	array(CalendarManager, registerTaxonomyClasses)
+					 "RegisterTaxonomyClasses"	=>	array(CalendarManager, registerTaxonomyClasses),
+					 "ComponentScanComplete" => array(CalendarManager, setDefaults),
+				
 		);
 	}
 }

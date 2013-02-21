@@ -110,6 +110,15 @@ class CalendarManager
 		$classes[] = Event;
 		return $classes;
 	}
+	
+	
+	/**
+	 * params to setDefaultValue: component, name, value, field_type, annotation, category, options
+	 */
+	static function setDefaults()
+	{
+		Settings::setDefaultValue("calendar", "max_events_per_day", 5, Number, "Set to 0 if no maximum");
+	}
 }
 
 ?>

@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("calendar");
+Fakoli::using("calendar", "settings");
 Fakoli::usingFeature("auto_form", "data_view", "filter_form");
 
 $identifier = $_GET["cal"];
@@ -88,6 +88,12 @@ $calendarHandler->drawFilter();
 $view = new CalendarView($calendarHandler->getEvents($calendar, $constraint), "fullcalendar");
 $view->year = $year;
 $view->month = $month;
+
+$max = Settings::getValue("calendar", "max_events_per_day");
+if($max)
+{
+	$view->maxEventsPerDay = $max;
+}
 $view->drawMonth();
 
 $calendarHandler->addButtonsAtBottom($calendar);

@@ -73,3 +73,9 @@ function editEventResult(result)
 {
 	window.location.reload();
 }
+
+function showEventList(event_ids, handler_class)
+{
+	eventDialog.show(null, '/action/calendar/event_list?event_ids=' +event_ids + '&handler_class=' + handler_class);	
+}
+
