@@ -325,6 +325,11 @@ ENDSCRIPT;
 /**
  * Date Validator.
  * 
+ * Does not throw error if date field is empty - that is done by RequiredValidator.
+ * 
+ * Error if the date does not match the format mm/dd/yyyy or if either the
+ * month, day, or year evaluates to an integer value of 0 (e.g., user enters
+ * 00/00/0000).
  */
 class DateValidator extends AbstractValidator
 {
@@ -338,13 +343,17 @@ class DateValidator extends AbstractValidator
 		if ($this->readOnly) return "";
 		
 		$script .= <<<ENDSCRIPT
+	 	var d = form["{$this->field}"].value.split(/\D+/);
+
 	 if (form["{$this->field}"].value != "" &&
-		!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		(!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) ||
+		(form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && 
+		(parseInt(d[0]) == 0 || parseInt(d[1]) == 0 || parseInt(d[2]) == 0))))
 	{
 		alert("{$this->title} must be in the format MM/DD/YYYY");
 		return false;
 	}
-		
+
 ENDSCRIPT;
 
 		return $script;
@@ -356,7 +365,11 @@ ENDSCRIPT;
 		
 		if ($this->readOnly) return "";
 		
-		if ($_POST[$this->field] != "" AND !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
+		list($dd,$mm,$yyyy) = explode('/', $_POST[$this->field]);
+		
+		if ($_POST[$this->field] != "" AND !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]) ||
+		(preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]) && 
+		(intval($dd) == 0 || intval($mm) == 0 || intval($yyyy) == 0)))
 		{
 			$result = "{$this->title} must be in the format MM/DD/YYYY";
 		}	
