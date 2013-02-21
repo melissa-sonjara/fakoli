@@ -46,7 +46,8 @@ class CalendarManifest
 		return $component;
 	}
 	
-	var $allow_sessionless_handlers = true;
+	// Allow anonymous access to view event details
+	var $allow_sessionless_handlers = array("event_details", "event_list"); 
 	
 	static function getStyles()
 	{
