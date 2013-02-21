@@ -117,7 +117,7 @@ class CalendarManager
 	 */
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("calendar", "max_events_per_day", 5, Number, "Set to 0 if no maximum");
+		Settings::setDefaultValue("calendar", "max_events_per_day", 5, Number, "For calendar monthly display; set to 0 if no maximum");
 	}
 }
 
