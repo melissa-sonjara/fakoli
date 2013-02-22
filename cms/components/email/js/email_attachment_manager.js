@@ -51,7 +51,8 @@ var EmailAttachmentManager =  new Class
 	
 	/**
 	 * Since email attachments are not saved, we only need to remove
-	 * the element from the document.
+	 * the element from the document and update the field that is 
+	 * read in $_POST.
 	 * 
 	 * @param filename
 	 * @param id
@@ -64,6 +65,17 @@ var EmailAttachmentManager =  new Class
 		if(elt)
 		{
 			elt.dispose();
+		}
+		
+		if (this.control.value)
+		{
+			var regexp = new RegExp("\\b" + id + "\\b");
+			// remove the id from the field value
+			this.control.value = this.control.value.replace(regexp, "");	
+			// clean up the commas
+			this.control.value = this.control.value.replace(/,,/, ",");
+			this.control.value = this.control.value.replace(/,$/, "");	
+			this.control.value = this.control.value.replace(/^,/, "");	
 		}
 	},	
 	
