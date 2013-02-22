@@ -84,6 +84,8 @@ class SubSelectFieldRenderer extends FieldRenderer
 			
 		echo ">\n";			
 		echo "</select>\n";
+		
+		$this->_endField($field);
 	}
 	
 	function renderSearchField($field, $mode, $value = "")
