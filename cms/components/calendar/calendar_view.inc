@@ -309,7 +309,7 @@ ENDSCRIPT;
 <div id="minicalendar">
 <table>
  <tr>
- <td colspan="7" class="month"><?echo date("F Y", $this->start)?><a class="calendar_nav" href="<?echo $this->prevLink?>"><img src="/cms/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a>&nbsp; <a class="calendar_nav" href="<?echo $this->nextLink?>"><img src="/cms/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a> </td>
+ <td colspan="7" class="month"><?echo date("F Y", $this->start)?><a class="calendar_nav" href="<?echo $this->prevLink?>">&lt;</a>&nbsp; <a class="calendar_nav" href="<?echo $this->nextLink?>">&gt;</a> </td>
   </tr>
  <tr>
   <th width="14%">Su</th>
@@ -419,9 +419,9 @@ ENDSCRIPT;
 <div id="fullcalendar">
 <table>
  <tr>
-  <td class="month"><a class="calendar_nav" href="<?echo $this->prevLink?>">&lt;</a></td>
+  <td class="month"><a class="calendar_nav" href="<?echo $this->prevLink?>"><img src="/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a></td>
   <td class="month" colspan="5"><?echo date("F Y", $this->start)?></td>
-  <td class="month"><a class="calendar_nav" href="<?echo $this->nextLink?>">&gt;</a></td>
+  <td class="month"><a class="calendar_nav" href="<?echo $this->nextLink?>"><img src="/components/calendar/images/calendar_arrow_r.png" alt="right" width="25" height="25" border="0"></a></td>
  </tr>
  <tr>
   <th width="14.28%">Su</th>
