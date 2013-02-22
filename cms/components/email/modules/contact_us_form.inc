@@ -80,6 +80,7 @@ if ($method == "POST")
 
 	$contactTopic = $contactUs->ContactTopic();
 	$emailContact =  Settings::getValue('email', 'email_from');
+	$emailName = Settings::getValue("email", "email_name");
 	
 	if(!$contactTopic OR ($contactTopic AND !$contactTopic->recipients))
 	{
@@ -100,7 +101,7 @@ if ($method == "POST")
 	
 	foreach($recipients as $recipient)
 	{
-		$sender = "{$contactUs->full_name} <{$contactUs->email}>";
+		$sender = "{$emailName} <{$emailContact}>";
 		$handler = new Mail($emailContact, $recipient, $subject, $contactUs->message, $headers, $sender);
 	}
 			
