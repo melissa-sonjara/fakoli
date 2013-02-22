@@ -63,7 +63,6 @@ class SubSelectFieldRenderer extends FieldRenderer
 			// JDG 7/22/2011 - allow "additional" fields to override label
 			$form->overrides[$field]['label'] = $label;
 		}
-		
 	}
 	
 	function renderField($field)
@@ -138,6 +137,7 @@ class SubSelectFieldRenderer extends FieldRenderer
 		$mgr = "{$this->parent->id}_{$field}_mgr";
 		$super_id = "{$this->parent->id}_{$this->super}";
 		$value = $this->parent->data->get($field);
+		$this->setFormatTemplate();
 ?>
 <script type="text/javascript">
 window.addEvent('domready', function()
@@ -147,7 +147,7 @@ window.addEvent('domready', function()
 		foreach($this->options as $key => $options)
 		{
 			$pk = $options[0]->getPrimaryKey();			
-			$values = formatItems($options, "{'name': '{$this->format}', 'value': {{$pk}} }", ", ");
+			$values = formatItems($options, "{'name': '{SubSelectFieldRenderer::formatOption}', 'value': {{$pk}} }", ", ");
 ?>
 	<?echo $mgr?>.addOptions(<?echo $key?>, [{'name': '', 'value': 0}, <?echo $values?>]);
 <?
@@ -158,6 +158,29 @@ window.addEvent('domready', function()
 </script>
 <?
 	} 
+	
+	/**
+	 * We need to save the class var format into the object for
+	 * use in the static call to formatOption. We can't call
+	 * formatOption using the class instance $this through the
+	 * formatItems function.
+	 */
+	function setFormatTemplate()
+	{
+		foreach($this->options as $key => $options)
+		{
+			foreach($options as $option)
+			{
+				$option->set("_formatTemplate", $this->format);
+			}
+		}	
+	}	
+	
+	static function formatOption($option)
+	{
+		$template = $option->get("_formatTemplate");
+		return jsSafe($option->format("{$template}"));
+	}	
 			
 	function preProcess($field)
 	{
