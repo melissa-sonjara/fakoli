@@ -38,8 +38,9 @@
 	height: 20px;
 	text-align: center;
 	vertical-align: middle;
-	background: url(/fakoli/images/button-strip.gif) top left repeat-x transparent;
+	background: #FFF;
 	font-weight: bold;
+	font-size: 14px;
 }
 
 #fullcalendar td.empty

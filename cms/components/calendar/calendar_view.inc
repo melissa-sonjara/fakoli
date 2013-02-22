@@ -282,6 +282,7 @@ class CalendarView
 		$this->nextMonth = $this->month + 1;
 		$this->nextYear = $this->year;
 		if ($this->nextMonth > 12)
+
 		{
 			$this->nextMonth = 1;
 			$this->nextYear++;
@@ -308,18 +309,16 @@ ENDSCRIPT;
 <div id="minicalendar">
 <table>
  <tr>
-  <td class="month"><a class="calendar_nav" href="<?echo $this->prevLink?>">&lt;</a></td>
-  <td class="month" colspan="5"><?echo date("F Y", $this->start)?></td>
-  <td class="month"><a class="calendar_nav" href="<?echo $this->nextLink?>">&gt;</a></td>
- </tr>
+ <td colspan="7" class="month"><?echo date("F Y", $this->start)?><a class="calendar_nav" href="<?echo $this->prevLink?>"><img src="/cms/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a>&nbsp; <a class="calendar_nav" href="<?echo $this->nextLink?>"><img src="/cms/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a> </td>
+  </tr>
  <tr>
-  <th width="14.28%">Su</th>
-  <th width="14.28%">Mo</th>
-  <th width="14.28%">Tu</th>
-  <th width="14.28%">We</th>
-  <th width="14.28%">Th</th>
-  <th width="14.28%">Fr</th>
-  <th width="14.28%">Sa</th>
+  <th width="14%">Su</th>
+  <th width="14%">Mo</th>
+  <th width="14%">Tu</th>
+  <th width="14%">We</th>
+  <th width="14%">Th</th>
+  <th width="14%">Fr</th>
+  <th width="14%">Sa</th>
  </tr>
  <tr>
 <?
