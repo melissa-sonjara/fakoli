@@ -85,7 +85,7 @@ class EmailHandler
 		//$headers = "From: ". $site_email_from . " <" . $site_email_name . ">\r\n";
 		$headers .= "Return-Path: ". $site_email_from . "\r\n";
 		$headers .= "Reply-To: ". $replyTo . " <" . $replyToName . ">\r\n";
-		$headers .= "Mime-Version: 1.0\r\n";
+		$headers .= "MIME-Version: 1.0\r\n";
 
 		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
