@@ -37,12 +37,13 @@ class Mail
 	var $port;
 	var $from;
 	var $to;
+	var $fullFrom;
 	
 	var $subject;
 	var $body;
 	var $headers;
 	
-	function Mail($from, $to, $subject, $body = "", $headers = "")
+	function Mail($from, $to, $subject, $body = "", $headers = "", $fullFrom = "")
 	{
 		$this->server = ini_get("SMTP");
 		$this->port   = ini_get("smtp_port");
@@ -52,6 +53,7 @@ class Mail
 		$this->subject = $subject;
 		$this->body = $body;	
 		$this->headers = $headers;	
+		$this->fullFrom = $fullFrom;
 	}
 
 	function send()
@@ -104,9 +106,11 @@ class Mail
 	    # NOTE: this does _not_ add to: or cc: headers to the email
 	    $smtp->Recipient($this->to);
 	
+	    if (!$this->fullFrom) $this->fullFrom = $this->from;
+	    
 	    # send the message including headers (headers must be followed by an
 	    # empty newline
-	    $smtp->Data("From: $this->from\n".
+	    $smtp->Data("From: $this->fullFrom\n".
 	                "To: $this->to\n".
 	                $this->headers.
 	                "Subject: $this->subject\n".

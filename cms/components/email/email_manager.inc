@@ -95,7 +95,7 @@ class EmailHandler
 
 		$message = $this->getMessageScript($message, $random_hash, $attachments);
 		
-		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
+		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers, $from);
 	}
 
 	/*
