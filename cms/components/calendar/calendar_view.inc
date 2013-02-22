@@ -419,7 +419,7 @@ ENDSCRIPT;
 <div id="fullcalendar">
 <table>
  <tr>
-  <td colspan="7"><?echo date("F Y", $this->start)?> <a class="calendar_nav" href="<?echo $this->prevLink?>"><img src="/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a> <a class="calendar_nav" href="<?echo $this->nextLink?>"> &nbsp;<img src="/components/calendar/images/calendar_arrow_r.png" alt="right" width="25" height="25" border="0"></a> </td>
+  <td class="month" colspan="7"><?echo date("F Y", $this->start)?> <a class="calendar_nav" href="<?echo $this->prevLink?>"><img src="/components/calendar/images/calendar_arrow_l.png" alt="left" width="25" height="25" border="0"></a> <a class="calendar_nav" href="<?echo $this->nextLink?>"><img src="/components/calendar/images/calendar_arrow_r.png" alt="right" width="25" height="25" border="0"></a> </td>
  </tr>
  <tr>
   <th width="14.28%">Su</th>
