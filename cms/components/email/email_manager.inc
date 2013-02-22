@@ -80,6 +80,8 @@ class EmailHandler
 			$replyToName = $emailName;
 		}
 		
+		$toAddr = trim($toAddr);
+		
 		// Use the MD5 algorithm to generate a random hash
 		$random_hash = md5(date('r', time()));
 		$from = $site_email_name . " <" . $site_email_from . ">";
