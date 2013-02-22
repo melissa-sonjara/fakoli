@@ -96,12 +96,12 @@ if ($method == "POST")
 	}
 		
 	$subject .= $contactUs->subject;	
-	$headers .= "Reply-To: ". $contactUs->email . " <{$contactUs->full_name}>\r\n";
+	$headers .= "Reply-To: ". $contactUs->full_name . " <{$contactUs->email}>\r\n";
 	
 	foreach($recipients as $recipient)
 	{
-		$sender = "From: {$contactUs->full_name} ({$contactUs->email})\r\n";
-		$handler = new Mail($emailContact, $recipient, $subject, $sender . $contactUs->message, $headers);
+		$sender = "{$contactUs->full_name} <{$contactUs->email}>";
+		$handler = new Mail($emailContact, $recipient, $subject, $contactUs->message, $headers, $sender);
 	}
 			
 	$rtn = $handler->send();
