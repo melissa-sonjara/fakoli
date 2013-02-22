@@ -82,9 +82,9 @@ class EmailHandler
 		
 		// Use the MD5 algorithm to generate a random hash
 		$random_hash = md5(date('r', time()));
-		//$headers = "From: ". $site_email_from . " <" . $site_email_name . ">\r\n";
+		$from = "From: ".  $site_email_name . " <" . $site_email_from . ">\r\n";
 		$headers .= "Return-Path: ". $site_email_from . "\r\n";
-		$headers .= "Reply-To: ". $replyTo . " <" . $replyToName . ">\r\n";
+		$headers .= "Reply-To: ". $replyToName . " <" . $replyTo  . ">\r\n";
 		$headers .= "MIME-Version: 1.0\r\n";
 
 		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
@@ -93,7 +93,7 @@ class EmailHandler
 
 		$message = $this->getMessageScript($message, $random_hash, $attachments);
 		
-		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers);
+		$this->mail = new Mail($from, $toAddr, $subject, $message, $headers);
 	}
 
 	/*
