@@ -99,13 +99,15 @@ if ($method == "POST")
 	$subject .= $contactUs->subject;	
 	$headers .= "Reply-To: ". $contactUs->full_name . " <{$contactUs->email}>\r\n";
 	
+	$rtn = true;
+	
 	foreach($recipients as $recipient)
 	{
 		$sender = "{$emailName} <{$emailContact}>";
 		$handler = new Mail($emailContact, $recipient, $subject, $contactUs->message, $headers, $sender);
+		$rtn &= $handler->send();
 	}
 			
-	$rtn = $handler->send();
 	$msg = ($rtn==true) ? 1 : 2;
 	redirect("/$identifier?msg=$msg");
 }
