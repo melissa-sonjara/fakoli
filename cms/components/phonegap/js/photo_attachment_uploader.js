@@ -111,14 +111,14 @@ var PhotoAttachmentUploader = (function()
 		
 		capturePhoto: function()
 		{
-			navigator.camera.getPicture(onPhotoDataSuccess.bind(this), onFail.bind(this), { quality: 50,
+			navigator.camera.getPicture(function(imageData) { new PhotoAttachmentUploader().onPhotoDataSuccess(imageData);}, function() { new PhotoAttachmentUploader().onFail(message); }, { quality: 50,
 				destinationType: destinationType.DATA_URL });
 		},
 		
 		choosePhoto: function() 
 		{
 			// Retrieve image file location from specified source
-			navigator.camera.getPicture(onPhotoURISuccess.bind(this), onFail.bind(this), { quality: 50,
+			navigator.camera.getPicture(function(imageURI) { new PhotoAttachmentUploader().onPhotoURISuccess(imageURI);}, function() { new PhotoAttachmentUploader().onFail(message); }, { quality: 50,
 			destinationType: destinationType.FILE_URI,
 			sourceType: pictureSource.PHOTOLIBRARY });
 		},
@@ -136,6 +136,13 @@ var PhotoAttachmentUploader = (function()
 		onPhotoURISuccess: function(imageURI) 
 		{
 			alert("Photo Chosen!");
+		},
+
+		// Called if something bad happens.
+		//
+	    onFail: function(message) 
+	    {
+	    	alert(message);
 		},
 
 		postStart: function()
