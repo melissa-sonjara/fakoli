@@ -111,8 +111,8 @@ var PhotoAttachmentUploader = (function()
 		
 		capturePhoto: function()
 		{
-			navigator.camera.getPicture(function(imageData) { new PhotoAttachmentUploader().onPhotoDataSuccess(imageData);}, function() { new PhotoAttachmentUploader().onFail(message); }, { quality: 50,
-				destinationType: destinationType.DATA_URL });
+			navigator.camera.getPicture(function(imageData) { new PhotoAttachmentUploader().onPhotoURISuccess(imageData);}, function() { new PhotoAttachmentUploader().onFail(message); }, { quality: 50,
+				destinationType: destinationType.FILE_URI });
 		},
 		
 		choosePhoto: function() 
@@ -135,7 +135,7 @@ var PhotoAttachmentUploader = (function()
 		//
 		onPhotoURISuccess: function(imageURI) 
 		{
-			alert("Photo Chosen!");
+			alert(imageURI);
 		},
 
 		// Called if something bad happens.
