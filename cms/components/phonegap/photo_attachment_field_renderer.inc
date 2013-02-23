@@ -49,7 +49,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	
 	function __construct($form, $field, $xrefClass)
 	{
-		parent::__construct($form, $field, $xrefClss);
+		parent::__construct($form, $field, $xrefClass);
 	}
 	
 	function renderScript($field)
