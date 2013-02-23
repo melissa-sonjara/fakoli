@@ -30,6 +30,9 @@
 
 *****************************************************************/
 
+var pictureSource;
+var destinationType;
+
 document.addEventListener("deviceready",onDeviceReady,false);
 
 // Cordova is ready to be used!
@@ -59,32 +62,6 @@ function onPhotoURISuccess(imageURI)
 	// The inline CSS rules are used to resize the image
 	//
 	largeImage.src = imageURI;
-}
-
-// A button will call this function
-//
-function capturePhoto() {
-		alert(window.cordova);
-	// Take picture using device camera and retrieve image as base64-encoded string
-	navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
-	destinationType: destinationType.DATA_URL });
-}
-
-// A button will call this function
-//
-function capturePhotoEdit() {
-	// Take picture using device camera, allow edit, and retrieve image as base64-encoded string
-	navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
-	destinationType: destinationType.DATA_URL });
-}
-
-// A button will call this function
-//
-function getPhoto(source) {
-	// Retrieve image file location from specified source
-	navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-	destinationType: destinationType.FILE_URI,
-	sourceType: source });
 }
 
 // Called if something bad happens.
@@ -138,7 +115,7 @@ var PhotoAttachmentUploader = (function()
 				destinationType: destinationType.DATA_URL });
 		},
 		
-		choosePhoto: function(source) 
+		choosePhoto: function() 
 		{
 			// Retrieve image file location from specified source
 			navigator.camera.getPicture(onPhotoURISuccess.bind(this), onFail.bind(this), { quality: 50,
