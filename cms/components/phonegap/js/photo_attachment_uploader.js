@@ -43,39 +43,10 @@ function onDeviceReady()
 	destinationType=navigator.camera.DestinationType;		
 }
 
-// Called when a photo is successfully retrieved
-//
-function onPhotoURISuccess(imageURI) 
-{
-	// Uncomment to view the image file URI
-	// console.log(imageURI);
-
-	// Get image handle
-	//
-	var largeImage = document.getElementById('largeImage');
-
-	// Unhide image elements
-	//
-	largeImage.style.display = 'block';
-
-	// Show the captured photo
-	// The inline CSS rules are used to resize the image
-	//
-	largeImage.src = imageURI;
-}
-
-// Called if something bad happens.
-//
-function onFail(message) {
-alert('Failed because: ' + message);
-}
-
 var PhotoAttachmentUploader = (function()
 {
 	var PhotoAttachmentUploaderSingleton = new Class(
 	{
-		uploadDialog: Class.Empty,
-		form: Class.Empty,
 		list: Class.Empty,
 		cssClass: "",
 		deleteIcon: "",
@@ -84,52 +55,35 @@ var PhotoAttachmentUploader = (function()
 		{
 		},
 	
-		setup: function(form, list, control, cssClass, deleteIcon)
+		setup: function(list, control, cssClass, deleteIcon)
 		{
-			form = document.id(form);
-			
-			form.iFrameFormRequest(
-			{
-				'onRequest': function() { this.postStart(); return true; }.bind(this),
-				'onComplete': function(response) { this.postComplete(response);}.bind(this)
-			});
-			
-			this.form = form;
 			this.list = document.id(list);
 			this.control = document.id(control);
 			this.cssClass = cssClass;
-			this.deleteIcon = deleteIcon;
-			
-			this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
-		},
-		
-		addAttachment: function()
-		{
-			this.form.reset();
-			this.uploadDialog.show();
+			this.deleteIcon = deleteIcon;		
 		},
 		
 		capturePhoto: function()
 		{
-			navigator.camera.getPicture(function(imageData) { new PhotoAttachmentUploader().onPhotoURISuccess(imageData);}, function() { new PhotoAttachmentUploader().onFail(message); }, { quality: 50,
-				destinationType: destinationType.FILE_URI });
+			navigator.camera.getPicture(function(imageData) { new PhotoAttachmentUploader().onPhotoURISuccess(imageData);}, 
+										function() { new PhotoAttachmentUploader().onFail(message); },
+										{ 
+											quality: 50,
+											destinationType: destinationType.FILE_URI
+										});
 		},
 		
 		choosePhoto: function() 
 		{
 			// Retrieve image file location from specified source
-			navigator.camera.getPicture(function(imageURI) { new PhotoAttachmentUploader().onPhotoURISuccess(imageURI);}, function() { new PhotoAttachmentUploader().onFail(message); }, { quality: 50,
-			destinationType: destinationType.FILE_URI,
-			sourceType: pictureSource.PHOTOLIBRARY });
+			navigator.camera.getPicture(function(imageURI) { new PhotoAttachmentUploader().onPhotoURISuccess(imageURI);}, 
+										function() { new PhotoAttachmentUploader().onFail(message); }, 
+										{
+											quality: 50,
+											destinationType: destinationType.FILE_URI,
+											sourceType: pictureSource.PHOTOLIBRARY 
+										});
 		},
-		
-		// Called when a photo is successfully retrieved
-		//
-		onPhotoDataSuccess: function(imageData) 
-		{
-			alert("Photo Captured!");
-		},
-
 
 		// Called when a photo is successfully retrieved
 		//
@@ -144,6 +98,35 @@ var PhotoAttachmentUploader = (function()
 	    {
 	    	alert(message);
 		},
+
+        uploadPhoto: function(imageURI) 
+        {
+            var options = new FileUploadOptions();
+            options.fileKey="attachmentFile";
+            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+            options.mimeType="image/jpeg";
+
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI("/action/attachment/upload"), 
+            		  function(r) { new PhotoAttachmentUploader().onUploadSuccess(r); },
+            		  function(error) { new PhotoAttachmentUpload().onUploadFail(error); },
+            		  options);
+        },
+
+        onUploadSuccess: function(r) 
+        {
+            console.log("Code = " + r.responseCode);
+            console.log("Response = " + r.response);
+            console.log("Sent = " + r.bytesSent);
+            this.postComplete(r.response);
+        },
+
+        onUploadFail: function(error) 
+        {
+            alert("An error has occurred: Code = " + error.code);
+            console.log("upload error source " + error.source);
+            console.log("upload error target " + error.target);
+        },
 
 		postStart: function()
 		{
