@@ -22,6 +22,8 @@ class PhonegapManager
 		if ($_POST["phonegap"])
 		{
 			$_SESSION["phonegap"] = true;
+			
+			trace(2, "PhoneGap enabled");
 		}
 	}
 	
