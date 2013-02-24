@@ -60,7 +60,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
-		new PhotoAttachmentUploader().setup('<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
+		new PhotoAttachmentUploader().setup('<?echo $this->parent->id?>_<?echo $this->field?>_list', '<?echo $this->parent->id?>_<?echo $this->field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
 	});
 	</script>
 <?
