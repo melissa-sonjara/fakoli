@@ -14,14 +14,14 @@ class PhonegapManager
 
 	static function setDefaults()
 	{
-		//TODO: Set default configuration parameters here
+		Settings::setDefaultValue("phonegap", "enable_phonegap_debugging", false, Boolean, "Enables PhoneGap debugging mode - append phonegap=1 to any URL in your desktop browser to turn on PhoneGap mode");		
 	}
 
 	static function detectPhonegap()
 	{
 		trace(1, "Detecting PhoneGap");
 		
-		if ($_POST["phonegap"])
+		if ($_POST["phonegap"] || (Settings::getValue("phonegap", "enable_phonegap_debugging") && $_GET["phonegap"]))
 		{
 			$_SESSION["phonegap"] = true;
 			
