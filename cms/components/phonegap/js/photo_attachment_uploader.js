@@ -97,7 +97,7 @@ var PhotoAttachmentUploader = (function()
 		//
 	    onFail: function(message) 
 	    {
-	    	alert(message);
+	    	messagePopup("Error", message);
 		},
 
         uploadPhoto: function(imageURI) 
@@ -127,7 +127,7 @@ var PhotoAttachmentUploader = (function()
 
         onUploadFail: function(error) 
         {
-            alert("Upload Failed");
+        	messagePopup("Error", "Upload Failed");
             console.log("upload error code " + error.code);
             console.log("upload error source " + error.source);
             console.log("upload error target " + error.target);
@@ -156,13 +156,11 @@ var PhotoAttachmentUploader = (function()
 					"<img src='" + this.deleteIcon + "' style='display:inline-block; vertical-align: middle' alt='Delete this Photo'/></a></span></li>";
 				
 				if (this.control.value) this.control.value += ",";
-				this.control.value += id;
-				
-				this.uploadDialog.hide();
+				this.control.value += id;				
 			}
 			else
 			{
-				document.id('attachmentDialogMessage').innerHTML = response;
+				messagePopup("Photo Upload Failed", response);
 			}
 		},
 		
@@ -189,10 +187,10 @@ var PhotoAttachmentUploader = (function()
 					}
 					else
 					{
-						alert(responseText);
+						messagePopup("Error", responseText);
 					}
-				}.bind(new AttachmentUploader()),
-				'onFailure':	function() { alert("Failed to communicate with server"); }
+				}.bind(new PhotoAttachmentUploader()),
+				'onFailure':	function() { messagePopup("Network Error", "Failed to communicate with server"); }
 			});
 			
 			request.send();
