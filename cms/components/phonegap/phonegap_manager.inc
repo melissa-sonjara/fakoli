@@ -19,11 +19,13 @@ class PhonegapManager
 
 	static function detectPhonegap()
 	{
+		trace(1, "Detecting PhoneGap");
+		
 		if ($_POST["phonegap"])
 		{
 			$_SESSION["phonegap"] = true;
 			
-			trace(2, "PhoneGap enabled");
+			trace(1, "PhoneGap enabled");
 		}
 	}
 	
