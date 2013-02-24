@@ -107,7 +107,7 @@ var PhotoAttachmentUploader = (function()
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
 
-            var url = document.location.href.URI();
+            var url = document.location.href.toURI();
             
             var ft = new FileTransfer();
             ft.upload(imageURI, encodeURI(url.get('scheme') + "://" + url.get('host') + "/action/attachment/upload"), 
