@@ -96,6 +96,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 		}
 	?>
 	</ul>
+	<br/>
 	<a href="#" onclick="new PhotoAttachmentUploader().capturePhoto(); return false" class="button"> Take a Photo </a>&nbsp;&nbsp;
 	<a href="#" onclick="new PhotoAttachmentUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
 <?
