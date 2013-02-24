@@ -107,8 +107,10 @@ var PhotoAttachmentUploader = (function()
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
 
+            var url = document.location.href.URI();
+            
             var ft = new FileTransfer();
-            ft.upload(imageURI, encodeURI("/action/attachment/upload"), 
+            ft.upload(imageURI, encodeURI(url.get('scheme') + "://" + url.get('host') + "/action/attachment/upload"), 
             		  function(r) { new PhotoAttachmentUploader().onUploadSuccess(r); },
             		  function(error) { new PhotoAttachmentUploader().onUploadFail(error); },
             		  options);
