@@ -100,6 +100,9 @@ $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
 					".pptx"		=>	"/fakoli/images/ppt_icon.png",
 					".mp3"		=>	"/fakoli/images/mp3.png",
 					".flv"		=>	"/fakoli/images/icon_video.png",
+					".jpg"		=>	"/fakoli/images/jpeg_icon.png",
+					".jpeg"		=>	"/fakoli/images/jpeg_icon.png",
+					".png"		=>	"/fakoli/images/image_icon.png",
 					"default"	=>	"/fakoli/images/file_icon.png");
 
 
