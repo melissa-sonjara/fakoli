@@ -89,7 +89,7 @@ var PhotoAttachmentUploader = (function()
 		//
 		onPhotoURISuccess: function(imageURI) 
 		{
-			alert(imageURI);
+			this.uploadPhoto(imageURI);
 		},
 
 		// Called if something bad happens.
@@ -101,6 +101,7 @@ var PhotoAttachmentUploader = (function()
 
         uploadPhoto: function(imageURI) 
         {
+        	console.log("Uploading Photo");
             var options = new FileUploadOptions();
             options.fileKey="attachmentFile";
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
