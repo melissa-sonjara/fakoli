@@ -60,7 +60,8 @@ var PhotoAttachmentUploader = (function()
 			this.list = document.id(list);
 			this.control = document.id(control);
 			this.cssClass = cssClass;
-			this.deleteIcon = deleteIcon;		
+			this.deleteIcon = deleteIcon;	
+			console.log("PhotoAttachmentUploader::setup complete");
 		},
 		
 		capturePhoto: function()
@@ -126,7 +127,8 @@ var PhotoAttachmentUploader = (function()
 
         onUploadFail: function(error) 
         {
-            alert("An error has occurred: Code = " + error.code);
+            alert("Upload Failed");
+            console.log("upload error code " + error.code);
             console.log("upload error source " + error.source);
             console.log("upload error target " + error.target);
         },
