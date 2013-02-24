@@ -109,7 +109,7 @@ var PhotoAttachmentUploader = (function()
             var ft = new FileTransfer();
             ft.upload(imageURI, encodeURI("/action/attachment/upload"), 
             		  function(r) { new PhotoAttachmentUploader().onUploadSuccess(r); },
-            		  function(error) { new PhotoAttachmentUpload().onUploadFail(error); },
+            		  function(error) { new PhotoAttachmentUploader().onUploadFail(error); },
             		  options);
         },
 
