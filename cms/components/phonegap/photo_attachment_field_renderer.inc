@@ -56,12 +56,11 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	{
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";		
 ?>
-	<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
 	<script type="text/javascript" src="/components/phonegap/js/photo_attachment_uploader.js"></script>
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
-		new PhotoAttachmentUploader().setup('attachmentForm', '<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
+		new PhotoAttachmentUploader().setup('<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
 	});
 	</script>
 <?
