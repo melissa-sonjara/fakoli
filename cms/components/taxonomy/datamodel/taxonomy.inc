@@ -49,6 +49,13 @@ class Taxonomy extends DataItem
 	
 	var $relations = array("Terms"			=>	TaxonomyTerm);
 	
+	static function fromIdentifier($identifier)
+	{
+		return Query::create(Taxonomy, "WHERE identifier=:i")
+					->bind(":i", $identifier)
+					->executeSingle();
+	}
+		
 	function Associations($constraint = "")
 	{
 		return $this->getRelatedList(TaxonomyAssociation, "", $constraint);
