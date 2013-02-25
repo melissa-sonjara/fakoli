@@ -68,6 +68,11 @@ function editFile(id)
 	modalPopup("Edit Document Properties",  "/action/document/edit?document_id=" + id, 500);
 }
 
+function addFile()
+{
+	modalPopup("Add a New Document", "/action/document/upload?document_library_id=<?echo $document_library_id?>", 500);
+}
+
 function editResult(result)
 {
 	if (result == "1")
@@ -96,6 +101,6 @@ $table->drawView();
 ?>
 <br/>
 <br/>
-<a href="document_form?document_library_id=<?echo $document_library_id?>" class="button"> Add a New Document </a>
+<a href="#" class="button" onclick="addFile(); return false"> Add a New Document </a>
 <br/>
 </div>
