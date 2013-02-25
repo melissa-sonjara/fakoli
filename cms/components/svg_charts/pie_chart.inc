@@ -59,6 +59,7 @@ class PieChart
 	var $percentagesDistance = 0.75;
 	var $onSectorOver = "null";
 	var $onSectorOut = "null";
+	var $onSectorClick = "null";
 	var $onLegendOver = "null";
 	var $onLegendOut = "null";
 	
@@ -162,6 +163,7 @@ window.addEvent('domready', function ()
 		percentagesSize: {$this->percentagesSize},
 		onSectorOver: {$this->onSectorOver},
 		onSectorOut: {$this->onSectorOut},
+		onSectorClick: {$this->onSectorClick},
 		onLegendOver: {$this->onLegendOver},
 		onLegendOut: {$this->onLegendOut}
 		
