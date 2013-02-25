@@ -47,6 +47,20 @@ class TaxonomyTerm extends DataItem
 	{
 		return $this->getRelated(Taxonomy);
 	}
+	
+	function getAssociatedItems($class, $constraint = "")
+	{
+		$constraint = str_replace("WHERE ", "AND ", $constraint);
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+		
+		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM taxonomy_term_association WHERE term_id=:term_id AND class=:cl) $constraint")
+					  ->bind(":term_id", $this->term_id,
+					  		 ":cl", $class)
+					  ->execute();
+					  			 
+		return $items;
+	}
 }
 
 ?>
