@@ -35,12 +35,13 @@
 
 #fullcalendar td.month
 {
-	height: 20px;
+	border:none;
+	height: 30px;
 	text-align: center;
 	vertical-align: middle;
 	background: #FFF;
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 18px;
 }
 
 #fullcalendar td.empty
