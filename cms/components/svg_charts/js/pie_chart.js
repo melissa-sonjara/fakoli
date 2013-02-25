@@ -92,7 +92,7 @@ var PieChart = new Class(
 	            }.bind(this));				
 			}
 			
-			if (this.option.onSectorClick)
+			if (this.options.onSectorClick)
 			{
 				s.attr({cursor: "pointer"});
 				s.click(function(event) { this.fireEvent('sectorClick', [event, idx]); }.bind(this));
