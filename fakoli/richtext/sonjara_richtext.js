@@ -630,6 +630,7 @@ var RichTextEditor = new Class({
 	
 	findFrame: function()
 	{
+		if(!document.frames) return null;
 		return document.frames[this.name];
 	},
 	
@@ -933,16 +934,30 @@ var RichTextEditor = new Class({
 	    
 	formatSelection: function(tag)
 	{
-		if (window.getSelection)
+		/**
+		 * This will work for IE9 and other browsers except when the user did not
+		 * select anything. In that case, IE9 fails.
+		 */
+		if (window.getSelection && (($(this.name + "_iframe").contentWindow.getSelection() != '') ||
+				($(this.name + "_iframe").contentWindow.getSelection() == '') && !this.findFrame()))
 		{
 			var elt = this.parseTag(tag);
 			var selection = $(this.name + "_iframe").contentWindow.getSelection();
 			
 			selection.getRangeAt(0).surroundContents(elt);
 		}
-		else
+		/**
+		 * Handling for IE. IE < 9 will return false on window.getSelection. IE9 will
+		 * return true but will fail on contentWindow.getSelection() if nothing selected.
+		 */
+		else if(this.findFrame())
 		{
-			var selection = this.findFrame().document.selection;
+			var doc = this.findFrame().document;
+		    
+		    //Workaround for bug in IE8
+			doc.body.focus();	   
+			
+			var selection = doc.selection;
 			var range = selection.createRange();
 			var html = range.htmlText;
 			html = tag + html;
