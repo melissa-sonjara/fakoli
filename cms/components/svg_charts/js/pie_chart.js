@@ -26,6 +26,7 @@ var PieChart = new Class(
 		animatePercentages: true,
 		onSectorOver: Class.Empty,
 		onSectorOut: Class.Empty,
+		onSectorClick: Class.Empty,
 		enableDownload: true
 	},
 	
@@ -89,6 +90,12 @@ var PieChart = new Class(
 	                if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, "elastic");
 	                this.fireEvent('sectorOut', [event, idx]);
 	            }.bind(this));				
+			}
+			
+			if (this.option.onSectorClick)
+			{
+				s.attr({cursor: "pointer"});
+				s.click(function(event) { this.fireEvent('sectorClick', [event, idx]); }.bind(this));
 			}
 			
 			angle = end; 
