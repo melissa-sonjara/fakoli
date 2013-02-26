@@ -132,6 +132,8 @@ var FakoliMenu = new Class({
 	{
 		this.clearFocus();
 		
+		if (!this.root.contains(elt)) return;
+		
 		this.showMenu(elt.getParent());
 	},
 	
