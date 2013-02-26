@@ -336,8 +336,8 @@ if (/msie/i.test (navigator.userAgent)) //only override IE
 	};
 }
 
-//Mock console object to prevent debugging calls from causing errors in IE.
-
+// Mock console object to prevent debugging calls from causing errors in IE.
+// Thanks to http://skysanders.net/subtext/archive/2010/07/10/javascript-console-and-firebug-mocks.aspx
 if ("undefined" === typeof window.console)
 {
     window.console = {
