@@ -65,27 +65,32 @@ $uniqueYears = array_unique($blogYears);
 				
 if (count($uniqueMonths) > 0 OR count($uniqueYears) > 0)
 {
-	echo "<h3>Archives</h3>";
-	echo "<ul class='recent_articles'>";
-	
 	if (count($uniqueMonths) > 0)
 	{
+		echo "<h3>Recent Articles</h3>";
+		echo "<ul class='recent_articles'>";
+		
 		foreach($uniqueMonths as $month)
 		{	
 			$month_name = date( 'F', mktime(0, 0, 0, substr($month,5,2)) ) . " " . substr($month,0,4);
-			echo "<li><a href='blog?year=" . substr($month,0,4) . "&month=" . substr($month,5,2) . "'>$month_name</a></li>";
+			echo "<li><a href='" . $blogname . "?year=" . substr($month,0,4) . "&month=" . substr($month,5,2) . "'>$month_name</a></li>";
 		}
 	}
 	
+	echo "</ul>";
+	
 	if (count($uniqueYears) > 0)
 	{
+		echo "<h3>Archives</h3>";
+		echo "<ul class='recent_articles'>";
+		
 		foreach($uniqueYears as $year)
 		{
-			echo "<li><a href='blog?year=" . substr($year,0,4) . "'>$year</a></li>";
+			echo "<li><a href='" . $blogname . "?year=" . substr($year,0,4) . "'>$year</a></li>";
 		}
+		
+		echo "</ul>";
 	}
-
-	echo "</ul>";
 }
 
 ?>

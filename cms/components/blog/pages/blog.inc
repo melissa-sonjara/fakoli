@@ -51,6 +51,19 @@ if (!$blog->published)
 	return;
 }
 
+if ($year)
+{
+	echo "<h3>Archives: ";
+
+	if ($month)
+	{
+		$month_name = date ("F", mktime(0,0,0,$month,1,0));
+		echo $month_name . "&nbsp;";
+	}
+		echo $year;
+		echo "</h3>";
+}
+
 $view = new BlogView($blog);
 
 if ($article_id)
