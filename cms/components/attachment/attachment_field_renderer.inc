@@ -214,18 +214,18 @@ class AttachmentFieldRenderer extends FieldRenderer
 	
 	function postProcess($field = "")
 	{
-		trace("AttachmentFieldRenderer postProcess field $field value ". $_POST[$field], 3);
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-		
 		if (!$field) $field = $this->field;
 		
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+		trace("AttachmentFieldRenderer postProcess field $field value ". $_POST[$field], 3);
+					
 		$xref = new $this->xrefClass;
 		
 		$obj = $this->parent->data;
 		$pk =  $this->getMatchingPK($xref, $obj);
 		
 		// Clear out current relations
-		
+	
 		$xref = new $this->xrefClass;
 		$xref->delete("WHERE {$pk}=".$obj->get($pk));
 		
