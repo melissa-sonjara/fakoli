@@ -256,6 +256,14 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		trace("RelatedItemSelectFieldRenderer renderReadOnly name field is {$this->nameField} field is $field and item is {$item->role}", 3);
 		$name = $this->formatName($item, $this->nameField);
+		
+		if (!$this->parent->readOnlyForm)
+		{
+			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
+			$value = $item->get($valueField);
+			echo "<input type='hidden' id='{$this->parent->id}_{$field}' name='$field' value='$value'/>";
+		}
+		
 		echo $name;
 		
 		$this->_endField($field);
