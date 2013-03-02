@@ -143,12 +143,11 @@ class StringFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->format($field)."</td>\n";		
-		echo "</tr>\n";	
+		$this->_startField($field);
+		
+		echo $this->format($field);
+		
+		$this->_endField($field);
 	}
 
 	function renderSearchField($field, $mode = "equal")
