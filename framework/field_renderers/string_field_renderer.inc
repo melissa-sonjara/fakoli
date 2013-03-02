@@ -145,6 +145,11 @@ class StringFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
+		if (!$this->parent->readOnlyForm)
+		{
+			echo "<input id='{$this->parent->id}_{$field}' type='$inputTypehidden' name='$field' value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."'/>";
+		}
+		
 		echo $this->format($field);
 		
 		$this->_endField($field);
