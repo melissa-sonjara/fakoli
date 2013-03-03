@@ -348,7 +348,7 @@ class DateValidator extends AbstractValidator
 	 if (form["{$this->field}"].value != "" &&
 		(!form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) ||
 		(form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && 
-		(parseInt(d[0]) == 0 || parseInt(d[1]) == 0 || parseInt(d[2]) == 0))))
+		(parseInt(d[0], 10) == 0 || parseInt(d[1], 10) == 0 || parseInt(d[2], 10) == 0))))
 	{
 		alert("{$this->title} must be in the format MM/DD/YYYY");
 		return false;
