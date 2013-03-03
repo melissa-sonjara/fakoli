@@ -90,7 +90,7 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 ?>
 <script type="text/javascript">
 
-function <?echo $this->field ?>_toggleSelectAll(link)
+function <?echo $this->parent->id?>_<?echo $this->field ?>_toggleSelectAll(link)
 {
 	link = document.id(link);
 	
@@ -118,7 +118,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 <script type='text/javascript'>
 window.addEvent('domready', function()
 {
-	new MultiSelect('<?echo $this->field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+	new MultiSelect('<?echo $this->parent->id?>_<?echo $this->field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
 });
 </script> 			
 <?
@@ -148,13 +148,13 @@ window.addEvent('domready', function()
 		
 		if ($this->showSelectAll)
 		{
-			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			echo "<a href='#' onclick='return <?echo $this->parent->id?>_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		if ($this->width && $this->height)
 		{
 			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
 			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
-			echo "<div id='{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$countOptions = count($this->options);
