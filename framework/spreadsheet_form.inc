@@ -146,7 +146,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	{
 		$this->columnWidths[$field] = $width;
 	}
-	
+
 	/*
 	 * Draw the table headings using the labels set by the
 	 * renderers in the template form. 
@@ -160,6 +160,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		echo ">\n";
 			
 		$form = $this->subform;
+		$form->layout = AutoFormLayout::create("table_header", $form);
 		$obj =& $form->getData();
 		$pk = $obj->getPrimaryKey();
 	
