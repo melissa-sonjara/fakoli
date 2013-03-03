@@ -78,6 +78,10 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $height;
 	var $resizable = false;
 	var $nobr = false;
+	var $dropdown;
+	var $dropdownMaxWidth = "340px";
+	var $dropdownMessage = "Click to Select Terms";
+	var $showSelectAll = false;
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -94,28 +98,7 @@ class CheckListFieldRenderer extends FieldRenderer
 			if ($label) $form->alias($field, $label);
 		}
 	}
-		
-	function _startField($field, $styles = "")
-	{
-		if ($this->colspan > 1) $styles = "vertical-align: top; text-align: left;$styles";
-		echo "<tr style='vertical-align:top'>\n";
-		$this->_printLabel($field, $this->colspan, $styles, ($this->colspan > 1) ? $this->parent->annotations[$field] : "");
-		
-		if ($this->colspan > 1)
-		{
-			echo "</tr>\n";
-			echo "<tr>\n";
-		}
-		echo "<td colspan='{$this->colspan}'";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-		
-		if ($this->annotateBefore && $this->parent->annotations[$field] && $this->colspan == 1)
-		{
-			echo $this->parent->annotations[$field]."<br/>";
-		}
-	}
-	
+			
 	function allowAddEntry($text = "or add new", $size = 40)
 	{
 		$this->addEntry = true;
@@ -159,11 +142,16 @@ class CheckListFieldRenderer extends FieldRenderer
 				
 		$divider = $this->horizontal ? " " : "<br/>";
 		
+		if ($this->showSelectAll)
+		{
+			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+		}
+		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
 		{
-			$resizable = $this->resizable ? " resizable": "";
-			
-			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		
 		$idx = 0;
@@ -176,11 +164,12 @@ class CheckListFieldRenderer extends FieldRenderer
 				echo "<dt>$groupName</dt>\n<dd>\n";
 				foreach($group as $value => $text)
 				{
+					$text = "<label for='{$this->parent->id}_{$field}[$idx]'>$text</label>";
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
 					
-					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
 					$idx++;
 				}
 				
@@ -194,9 +183,10 @@ class CheckListFieldRenderer extends FieldRenderer
 			{
 				foreach($this->options as $value => $text)
 				{
+					$text = "<label for='{$this->parent->id}_{$field}[$idx]'>$text</label>";
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
-					echo "<input type='checkbox' class='checkbox' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
 					$idx++;
 				}
 
@@ -232,7 +222,49 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		$this->_endField($field);
 	}
+		
+	function renderScript($field)
+	{
+		if ($this->showSelectAll)
+		{
+			?>
+	<script type="text/javascript">
 	
+	function <?echo $this->parent->id?>_<?echo $field ?>_toggleSelectAll(link)
+	{
+		link = document.id(link);
+		
+		var value = (link.innerHTML == "Select All");
+	
+		var container = document.id('<?echo $this->field?>_container');
+		
+		container.getElements("input[type=checkbox]").each(function(cbox)
+		{
+			cbox.set('checked', value);
+		});
+	
+		link.innerHTML = (value) ? "Deselect All" : "Select All";
+		if (container.multiSelect) container.multiSelect.selectionChanged();
+		return false;
+	}
+	
+	</script>
+	<?
+		}
+			
+		if ($this->dropdown)
+		{
+	?>
+	<script type='text/javascript'>
+	window.addEvent('domready', function()
+	{
+		new MultiSelect('<?echo $this->parent->id?>_<?echo $field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+	});
+	</script> 			
+	<?
+		}
+	}		
+
 	function renderReadOnly($field)
 	{
 		echo "<tr>\n";
