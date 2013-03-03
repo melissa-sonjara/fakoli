@@ -89,7 +89,7 @@ class FieldRenderer
 
 	function _getLabel($field, $addSuffix = true)
 	{
-		return $this->parent->layout->getLabel($field, $addSuffix);
+		return $this->parent->layout->getLabel($field, $this, $addSuffix);
 	}
 	
 	/**
