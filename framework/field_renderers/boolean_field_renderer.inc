@@ -44,7 +44,9 @@ class BooleanFieldRenderer extends FieldRenderer
 	
 	function BooleanFieldRenderer(&$parent)
 	{
-		$this->FieldRenderer($parent);		
+		$this->FieldRenderer($parent);	
+		$this->colspan = 2;	
+		$this->hideLabel = true;
 	}
 	
 	function addValidatorsToForm($field, $required = false)
@@ -61,17 +63,10 @@ class BooleanFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{		
-		if ($this->annotateBefore && $this->parent->annotations[$field])
-		{
-			echo "<tr><td colspan='{$this->colspan}'>". $this->parent->annotations[$field] ."</td></tr>";
-		}
-
+		$this->_startField($field);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
-	
-		echo "<tr>\n";	
-		echo "<td colspan='2' style='text-align: left'";
-		if ($this->parent->labelCSS) echo " class='{$this->parent->labelCSS}'";
-		echo "><input id='{$this->parent->id}_{$field}' type='checkbox' class='checkbox' value='1' name='$field'";
+
+		echo "<input id='{$this->parent->id}_{$field}' type='checkbox' class='checkbox' value='1' name='$field'";
 		if ($this->parent->data->get($field))
 		{
 			echo " checked";
@@ -79,11 +74,8 @@ class BooleanFieldRenderer extends FieldRenderer
 		echo " $disable>&nbsp;<label for='$field'>";
 		echo $this->_getLabel($field, false);
 		echo "</label>";
-		if (!$this->annotateBefore && $this->parent->annotations[$field])
-		{
-			echo "<br/>{$this->parent->annotations[$field]}";
-		}
-		echo "</td>\n</tr>\n";
+
+		$this->_endField($field);
 	}
 	
 	function renderSearchField($field, $mode = "match")
@@ -103,13 +95,12 @@ class BooleanFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		echo $this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+		$this->colspan = 1;
+		$this->hideLabel = false;
+		
+		$this->_startField($field);
 		echo $this->format($field);
-		echo "</td>\n</tr>\n";
+		$this->_endField($field);
 	}
 	
 	function format($field)
