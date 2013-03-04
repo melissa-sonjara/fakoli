@@ -208,11 +208,14 @@ var LineSeriesRenderer = new Class(
 		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
 		this.coords.each(function(c, i) {
-			var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor, 'cursor': 'pointer'});
-			dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
-			dot.mouseout(function(e) {dot.animate({'r': this.series.options.symbolSize}, 250, "backout");  this.series.fireEvent('mouseOut', [e, i]); this.series.hideToolTip();}.bind(this));
-			dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
-			this.dots.push(dot);
+			if (c !== null)
+			{
+				var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor, 'cursor': 'pointer'});
+				dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
+				dot.mouseout(function(e) {dot.animate({'r': this.series.options.symbolSize}, 250, "backout");  this.series.fireEvent('mouseOut', [e, i]); this.series.hideToolTip();}.bind(this));
+				dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
+				this.dots.push(dot);
+			}
 		}.bind(this));	
 	},
 	
@@ -233,30 +236,38 @@ var LineSeriesRenderer = new Class(
 		var p = "";
 		var cmd = "M";
 		this.coords = [];
-		var startX = 0;
+		var startX = -999;
+		var lastX = -999;
 		
 		series.values.each(function(val, i)
 		{
-			var columnWidth = this.chart.blockWidth;
-
-			var columnOffset = this.chart.columnWidth / 2;
-			var columnCenter = this.chart.columnWidth * i + columnOffset;
-			
-			
-			var x = this.chart.options.chartLeft + columnCenter;
-			var columnHeight = this.chart.options.chartHeight * val / this.chart.range() + this.chart.xAxisOffset;
-			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
-			
-			this.coords.push({'x': x, 'y': y});
-			p += cmd + x + "," + y;
-			cmd = "L";			
-			
-			if (i == 0) startX = x;
+			if (val !== null)
+			{
+				var columnOffset = this.chart.getColumnOffset();
+				var columnCenter = this.chart.columnWidth * i + columnOffset;
+				
+				
+				var x = this.chart.options.chartLeft + columnCenter;
+				var columnHeight = this.chart.options.chartHeight * val / this.chart.range() + this.chart.xAxisOffset;
+				var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
+				
+				this.coords.push({'x': x, 'y': y});
+				p += cmd + x + "," + y;
+				cmd = "L";			
+				
+				if (startX == -999) startX = x;
+				lastX = x;			
+			}
+			else
+			{
+				this.coords.push(null);
+				cmd = "M";
+			}		
 			
 			if (i == series.values.length - 1 && closed)
 			{
 				y = this.chart.options.chartTop + this.chart.options.chartHeight - this.chart.xAxisOffset;
-				p += "L" + x + "," + y + "L" + startX + "," + y + "Z";
+				p += "L" + lastX + "," + y + "L" + startX + "," + y + "Z";
 			}
 			
 		}.bind(this));
@@ -289,6 +300,7 @@ var Histogram = new Class(
 	max: 0,
 	min: 0,
 	xAxisOffset: 0,
+	linearOnly: true,
 	
 	options:
 	{
@@ -369,7 +381,7 @@ var Histogram = new Class(
 		if (this.labels.length == 0)
 		{
 			count = this.series[0].length;
-			for(i = 1; i <= count; ++i)
+			for(var i = 1; i <= count; ++i)
 			{
 				this.labels.push(i);
 			}
@@ -382,6 +394,7 @@ var Histogram = new Class(
 		{
 			if (s.max > this.max) this.max = s.max;
 			if (s.min < this.min) this.min = s.min;
+			if (s.type != 'line') this.linearOnly = false;
 		}.bind(this));
 		
 		this.max = Math.ceil(this.max / this.options.ticks) * this.options.ticks;
@@ -410,10 +423,16 @@ var Histogram = new Class(
 		}
 		
 		var count = this.labels.length;
+		if (this.linearOnly) count -= 1;
 		
 		this.columnWidth = this.options.chartWidth / count;
 		
-		var grid = this.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, this.labels.length, this.options.ticks, this.palette.strokeColor);
+		var grid = this.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
+	},
+	
+	getColumnOffset: function()
+	{
+		return this.linearOnly ? 0 : this.columnWidth / 2;
 	},
 	
 	drawBlocks: function()
@@ -435,7 +454,7 @@ var Histogram = new Class(
 	{
 		this.labels.each(function(text, index)
 		{
-			var x = this.options.chartLeft + this.columnWidth * index + (this.columnWidth / 2);
+			var x = this.options.chartLeft + this.columnWidth * index + (this.getColumnOffset());
 			var y = this.options.chartTop + this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
 			
 			var label = this.paper.text(x, y, text);
@@ -493,7 +512,41 @@ var Histogram = new Class(
 		if (this.options.title == '') return;
 		this.title = this.paper.text(this.options.chartWidth / 2 + this.options.chartLeft, this.options.chartTop - 30, this.options.title);
     	this.title.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize});
-	}
+	},
+	
+	
+	drawLegend: function()
+	{
+		if (this.options.legend)
+		{
+			var x = this.options.legendX;
+			var y = this.options.legendY;
+			var s = this.options.legendSwatchSize || 20;
+			var h = this.options.legendLineHeight || 30;
+			
+			this.series.each(function(series, index)
+			{
+				var title = series.title;
+				
+				var rect = this.paper.rect(x, y, s, s, 3);
+				rect.attr({fill:this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth});
+				
+				var text = this.paper.text(x + h, y + h / 2, title);
+				
+				text.attr({"text-anchor": "start", fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.labelSize});
+					
+				rect.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				rect.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				rect.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
+				
+				text.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				text.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
+				text.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
+
+				y+= h;
+			}.bind(this));
+		}
+	},
 	
 });
 		

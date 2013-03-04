@@ -24,7 +24,15 @@ class HistogramSeries
 	
 	function toScript()
 	{
-		$values = implode(", ", $this->values);
+		$v = array();
+		
+		foreach($this->values as $value)
+		{
+			if ($value === "" || !isset($value)) $value = "null";
+			$v[] = $value;
+		}
+		 
+		$values = implode(", ", $v);
 		$options = array();
 		foreach ($this->options as $opt => $val)
 		{
@@ -74,6 +82,7 @@ class Histogram
 	var $legend = false;
 	var $legendX = 0;
 	var $legendY = 0;
+	var $legendSwatchSize = 20;
 	var $xAxisTitle = "";
 	var $yAxisTitle = "";
 	var $series = array();
@@ -86,6 +95,7 @@ class Histogram
 	var $yAxisLabels = array();
 	var $title = "";
 	var $titleSize = 20;
+	var $enabledDownload = true;
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -170,6 +180,7 @@ class Histogram
 		$shadow = $this->shadow ? "true": "false";	
 		$emboss = $this->emboss? "true" : "false";
 		$legend = $this->legend ? "true" : "false";
+		$enableDownload = $this->enableDownload ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
@@ -205,13 +216,16 @@ window.addEvent('domready', function ()
 		legend: {$legend},
 		legendX: {$this->legendX},
 		legendY: {$this->legendY},
+		legendSwatchSize: {$this->legendSwatchSize},
+		legendLineHeight: {$this->legendLineHeight},
 		ticks: {$this->ticks},
 		max: {$this->max},
 		min: {$this->min},
 		startIndex: {$this->startIndex},
 		columnMargin: {$this->columnMargin},
 		title: '{$this->title}',
-		titleSize: {$this->titleSize}
+		titleSize: {$this->titleSize},
+		enableDownload: {$enableDownload}
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
