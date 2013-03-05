@@ -144,7 +144,7 @@ class ExpandingList
 		foreach($this->items as $group => $items)
 		{
 ?>
-		<<?echo $this->groupTag?>><?echo $group?></<?echo $this->groupTag?>>		
+		<<?echo $this->groupTag?> class='expanding_list_group'><?echo $group?></<?echo $this->groupTag?>>		
 			<dl id="<?echo $this->id?>_<?echo codify($group)?>"<?echo $attrs?>>
 <?
 			foreach($items as $item)

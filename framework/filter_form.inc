@@ -341,7 +341,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		}
 			
 		?>
-    	<select name="<?php echo $field ?>" <?echo $style?> onchange="this.form.submit();">
+    	<select name="<?php echo $field ?>" <?echo $styles?> onchange="this.form.submit();">
     	<?php 
     	if($this->all)
     	{
