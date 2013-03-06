@@ -84,6 +84,18 @@ function editResult(result)
 		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
 	}
 }
+
+function uploadResult(result)
+{
+	if (result == "1")
+	{
+		window.location.reload();
+	}
+	else
+	{
+		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+	}
+}
 </script>
 <?
 $script .= ob_get_contents();
