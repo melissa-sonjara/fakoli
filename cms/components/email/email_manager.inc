@@ -174,7 +174,6 @@ Content-Transfer-Encoding: 8bit
 						"Content-Disposition: attachment;\n" . " filename=\"".basename($attachment)."\"; size=".filesize($attachment).";\n" .
 						"Content-Transfer-Encoding: base64\n\n" .$fileContents . "\n\n";
 			}
-			$fileAttachments .= "----PHP-alt-{$random_hash}\n";
 		}
 		
 		return $fileAttachments;
