@@ -149,7 +149,7 @@ window.addEvent('domready', function()
 		
 		if ($this->showSelectAll)
 		{
-			echo "<a href='#' onclick='return <?echo $this->parent->id?>_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			echo "<a href='#' onclick='return {$this->parent->id}_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		if ($this->width && $this->height)
 		{
