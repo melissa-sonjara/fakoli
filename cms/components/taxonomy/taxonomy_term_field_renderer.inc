@@ -31,6 +31,7 @@
 
 *****************************************************************/
 
+Fakoli::usingFeature("field_renderers");
 
 /**
  * Field renderer for handling taxonomy term relationships.
