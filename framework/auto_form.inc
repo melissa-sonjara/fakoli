@@ -1050,6 +1050,8 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 	 */
 	function drawReadOnly()
 	{
+		$this->readOnlyForm = true;
+		
 		$this->layout->startUngrouped();
 		
 		$obj =& $this->data;
