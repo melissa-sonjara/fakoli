@@ -973,24 +973,9 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 		}
 	}
 
-	/*
-	 * JDG 1/2012 - add handling of field that
-	 * is an additional field
-	 */
 	function renderOneField($field)
 	{
 		$renderer = $this->getRenderer($field);
-		
-		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
-		{
-			foreach($this->additional as $r)
-			{
-				$renderer = $r['renderer'];
-				$field = $r['field'];
-				if(!$field)
-					$field = $renderer->field;
-			}
-		}
 			
 		if ($renderer)
 		{
