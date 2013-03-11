@@ -545,7 +545,7 @@ var Histogram = new Class(
 				y+= h;
 			}.bind(this));
 		}
-	},
+	}
 	
 });
 		
