@@ -222,7 +222,6 @@ var LineSeriesRenderer = new Class(
 	drawFill: function()
 	{
 		var lineColor = this.chart.palette.swatches[this.index];
-		var fillColor = this.chart.palette.swatches[this.index];
 		
 		if (this.series.options.areaFill)
 		{
@@ -381,9 +380,9 @@ var Histogram = new Class(
 		if (this.labels.length == 0)
 		{
 			count = this.series[0].length;
-			for(var i = 1; i <= count; ++i)
+			for(var idx = 1; idx <= count; ++idx)
 			{
-				this.labels.push(i);
+				this.labels.push(idx);
 			}
 		}
 		
@@ -427,7 +426,7 @@ var Histogram = new Class(
 		
 		this.columnWidth = this.options.chartWidth / count;
 		
-		var grid = this.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
+		this.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
 	},
 	
 	getColumnOffset: function()
