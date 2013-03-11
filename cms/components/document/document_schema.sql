@@ -102,3 +102,9 @@ ALTER TABLE `document` ADD COLUMN `publication` VARCHAR(200) AFTER `author`;
 ALTER TABLE `document` ADD COLUMN `allow_access` VARCHAR(200) NOT NULL DEFAULT '' AFTER `owner_id`;
 
 -- END Version 1.4
+
+-- START Version 1.5
+
+ALTER TABLE `document` MODIFY COLUMN `publication_date` DATE NOT NULL DEFAULT '0000-00-00';
+
+-- END Version 1.5
