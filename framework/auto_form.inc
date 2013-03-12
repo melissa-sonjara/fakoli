@@ -973,7 +973,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 		}
 	}
 
-	function renderOneField($field)
+	function renderOneField($field, $renderScript = false)
 	{
 		$renderer = $this->getRenderer($field);
 			
@@ -985,6 +985,10 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			}
 			else
 			{
+				if ($renderScript)
+				{
+					$renderer->renderScript($field);
+				}
 				$renderer->renderField($field);
 			}
 			
