@@ -28,8 +28,6 @@ class PhonegapManager
 			$_SESSION["phonegap"] = true;
 			
 			trace(1, "PhoneGap enabled");
-			
-			$script .= "<script type='text/javascript' src='/components/phonegap/js/cordova-2.4.0.js'></script>";
 		}
 	}
 	
@@ -37,6 +35,16 @@ class PhonegapManager
 	{
 		return (isset($_SESSION["phonegap"]) && $_SESSION["phonegap"] == true) || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false;
 	}	
+	
+	static function addScript($script)
+	{
+		if (PhonegapManager::hasPhonegap())
+		{
+			$script .= "<script type='text/javascript' src='/components/phonegap/js/cordova-2.4.0.js'></script>";
+		}
+		
+		return $script;
+	}
 }
 
 ?>
