@@ -192,7 +192,9 @@ class ComponentPageView
 		
 		$script = Fakoli::getScripts() . $script;
 		$styles = Fakoli::getStyles() . $styles;		
-			
+
+		$script = ComponentManager::fireEvent("PostProcessScript", $script);
+		
 		// Populate global variable references
 		
 		$vars = array();
