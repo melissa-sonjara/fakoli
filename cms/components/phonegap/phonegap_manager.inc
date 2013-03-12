@@ -19,6 +19,7 @@ class PhonegapManager
 
 	static function detectPhonegap()
 	{
+		global $script;
 		trace(1, "Detecting PhoneGap");
 		
 		if ($_POST["phonegap"] || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false || 
@@ -27,6 +28,8 @@ class PhonegapManager
 			$_SESSION["phonegap"] = true;
 			
 			trace(1, "PhoneGap enabled");
+			
+			$script .= "<script type='text/javascript' src='/component/phonegap/js/cordova-2.4.0.js'></script>";
 		}
 	}
 	
