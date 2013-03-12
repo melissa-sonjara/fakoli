@@ -1407,7 +1407,7 @@ class DataItem extends AbstractDataItem
 	{
 		$matches = array();
 		
-		preg_match_all("/\\{([\\w\\d_]+)(::?|\\|)?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)(::?|\\(\\)|\\|)?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 
 		foreach($matches as $match)
 		{
@@ -1436,6 +1436,11 @@ class DataItem extends AbstractDataItem
 			case "::":
 				
 				$sub = call_user_func(array($field, $fieldFormat), $this);
+				break;
+				
+			case "()":
+				
+				$sub = $this->$field();
 				break;
 				
 			case ":":
@@ -1500,7 +1505,7 @@ class DataItem extends AbstractDataItem
 			}
 			else
 			{
-				if ($relations) $sub = $relations->formatFieldValue($field, $fieldTemplate);
+				if ($relations) $sub = $relations->formatField("{{$field}:{$fieldTemplate}}");
 			}
 			
 			trace("format using relations: Replacing {$match[0]} [ $format ] with '$sub'", 5);
