@@ -38,9 +38,12 @@ class PhonegapManager
 	
 	static function addScript($script)
 	{
+		global $phonegap;
+		
 		if (PhonegapManager::hasPhonegap())
 		{
-			$script .= "<script type='text/javascript' src='/components/phonegap/js/cordova-2.4.0.js'></script>";
+			$script .= "<script type='text/javascript' src='/components/phonegap/js/cordova-2.4.0.js'></script>\n";
+			$script .= $phonegap;
 		}
 		
 		return $script;

@@ -54,7 +54,12 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	
 	function renderScript($field)
 	{
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($this->field) || array_key_exists($field, $this->parent->hidden)) return "";		
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($this->field) || array_key_exists($field, $this->parent->hidden)) return "";	
+
+		global $phonegap;
+		
+		ob_start();
+		
 ?>
 	<script type="text/javascript" src="/components/phonegap/js/photo_attachment_uploader.js"></script>
 	<script type="text/javascript">
@@ -64,6 +69,9 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	});
 	</script>
 <?
+		$phonegap .= ob_get_contents();
+		ob_end_clean();
+		
 	}
 	
 	function renderField($field = "")
