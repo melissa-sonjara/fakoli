@@ -21,7 +21,8 @@ class PhonegapManager
 	{
 		trace(1, "Detecting PhoneGap");
 		
-		if ($_POST["phonegap"] || (Settings::getValue("phonegap", "enable_phonegap_debugging") && $_GET["phonegap"]))
+		if ($_POST["phonegap"] || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false || 
+			(Settings::getValue("phonegap", "enable_phonegap_debugging") && $_GET["phonegap"]))
 		{
 			$_SESSION["phonegap"] = true;
 			
