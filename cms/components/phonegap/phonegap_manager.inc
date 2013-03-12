@@ -29,7 +29,7 @@ class PhonegapManager
 			
 			trace(1, "PhoneGap enabled");
 			
-			$script .= "<script type='text/javascript' src='/component/phonegap/js/cordova-2.4.0.js'></script>";
+			$script .= "<script type='text/javascript' src='/components/phonegap/js/cordova-2.4.0.js'></script>";
 		}
 	}
 	
