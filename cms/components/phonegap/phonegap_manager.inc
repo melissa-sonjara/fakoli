@@ -32,7 +32,7 @@ class PhonegapManager
 	
 	static function hasPhonegap()
 	{
-		return (isset($_SESSION["phonegap"]) && $_SESSION["phonegap"] == true);
+		return (isset($_SESSION["phonegap"]) && $_SESSION["phonegap"] == true) || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false;
 	}	
 }
 
