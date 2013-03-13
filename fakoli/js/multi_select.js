@@ -56,12 +56,16 @@ var MultiSelect = new Class(
 				this.container.fade('out');
 			}
 		}.bind(this));
-		
+
+		this.connectCheckboxes();
+	},
+	
+	connectCheckboxes: function()
+	{		
 		this.container.getElements('input[type=checkbox]').each(function(cbox)
 		{
 			cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
-		}.bind(this));
-		
+		}.bind(this));	
 	},
 	
 	getCheckboxes: function()

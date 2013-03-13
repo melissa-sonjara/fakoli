@@ -49,9 +49,12 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $field;
 	var $label;
 	var $options;
-	var $showSelectAll;
 	var $groupBy;
 	var $resizable = false;
+	var $dropdown;
+	var $dropdownMaxWidth = "340px";
+	var $dropdownMessage = "Click to Select Terms";
+	var $showSelectAll = false;
 	
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -117,6 +120,20 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 </script>
 <?
 		}
+		
+
+		if ($this->dropdown)
+		{
+			?>
+			<script type='text/javascript'>
+			window.addEvent('domready', function()
+			{
+				new MultiSelect('<?echo $this->parent->id?>_<?echo $field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+			});
+			</script> 			
+			<?
+		}
+				
 	}
 	
 	function getMatchingPK($xref, $obj)
@@ -162,9 +179,14 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		if ($this->width && $this->height)
+		{			
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+		}
+		else
 		{
-			$resizable = $this->resizable ? " resizable": "";
-			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			echo "<div class='selectbox'>\n";
 		}
 		
 		$countOptions = count($this->options);
@@ -197,11 +219,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			$this->renderCheckBoxes($field, $this->options, $itempk, $selected);  
 		}
 		
-		if ($this->width && $this->height)
-		{
-			echo "</div>\n";
-		}
-
+		echo "</div>\n";
+		
 		// Save this count to loop through checkboxes on required validation
 		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";		
 		
@@ -220,13 +239,15 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		{
 			$p = $item->$itempk;
 			
+
 			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
 			if (array_key_exists($item->$itempk, $selected))
 			{
 				echo " checked";
 			}
 			echo ">&nbsp;";
-			echo $this->formatName($item, $this->nameField);
+
+			echo "<label for='checkbox_{$field}_$p'>".$this->formatName($item, $this->nameField)."</label>";
 			echo "<br/>";
 		}
 	}

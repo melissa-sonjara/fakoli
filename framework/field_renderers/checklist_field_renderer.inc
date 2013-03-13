@@ -153,6 +153,10 @@ class CheckListFieldRenderer extends FieldRenderer
 			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
 			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
+		else
+		{
+			echo "<div class='selectbox'>";
+		}
 		
 		$idx = 0;
 		
@@ -214,11 +218,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		// Save this count to loop through checkboxes on required validation
 		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"".$idx."\">";		
 		
-			
-		if ($this->width && $this->height)
-		{
-			echo "</div>\n";
-		}
+		echo "</div>\n";
 		
 		$this->_endField($field);
 	}
