@@ -31,3 +31,8 @@ a.multi_select_dropdown
 {
 	font-weight: normal;
 }
+
+.selectbox label, .scrollbox label {
+  font-size: 10pt;
+  font-weight: normal;
+}
