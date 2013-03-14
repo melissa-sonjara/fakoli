@@ -1758,22 +1758,6 @@ function xmlEntities($string)
  */
 function encode7bit($text)
 {
-	$ret = '';
-	$data = str_split($text);
-	$mask = 0xFF;
-	$shift = 0;
-	$len = count($data);
-	for ($i = 0; $i < $len; $i++) 
-	{
-		$char = ord($data[$i]) & 0x7F; // only 7bits
-		$nextChar = ($i+1 < $len) ? (ord($data[$i+1]) & 0x7F) : 0; // only 7bits
-		if ($shift == 7) { $shift = 0; continue; }
-		$carry  = ($nextChar & ((($mask << ($shift+1)) ^ 0xFF) & 0xFF));
-		$digit = (($carry << (7-$shift)) | ($char >> $shift) ) & 0xFF;
-		$ret .= chr($digit);
-		$shift++;
-	}
-	$str = unpack('H*', $ret);
-	return strtoupper($str[1]);
+	return mb_encode_mimeheader($text, "iso-8859-1", "Q");
 }
 ?>
