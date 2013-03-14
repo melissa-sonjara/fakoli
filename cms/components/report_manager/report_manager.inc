@@ -288,7 +288,7 @@ class ReportManager
 		
 		if($this->limit && is_numeric($this->limit))
 		{
-			$this->constraint .= "LIMIT {$this->limit}";
+			$this->constraint .= " LIMIT {$this->limit}";
 		}
 	}
 	
@@ -331,6 +331,7 @@ class ReportManager
 			}
 		}
 		
+		echo "constraint {$this->constraint}<br>";
 		$results = $this->join->iteratedQuery($this->constraint);
 		
 		$report = new DataListView($results, "custom_report_results");
