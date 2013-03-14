@@ -48,13 +48,12 @@ class Mail
 		$this->server = ini_get("SMTP");
 		$this->port   = ini_get("smtp_port");
 		
-		// Make sure headers are 7-bit clean
-		$this->from = encode7bit($from);
-		$this->to = encode7bit($to);
-		$this->subject = encode7bit($subject);
+		$this->from = $from;
+		$this->to = $to;
+		$this->subject = $subject;
 		$this->body = $body;	
-		$this->headers = encode7bit($headers);	
-		$this->fullFrom = encode7bit($fullFrom);
+		$this->headers = $headers;	
+		$this->fullFrom = $fullFrom;
 	}
 
 	function send()
