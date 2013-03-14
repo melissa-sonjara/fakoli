@@ -89,7 +89,7 @@ class EmailHandler
 		$headers .= "Reply-To: ". $replyToName . " <" . $replyTo  . ">\r\n";
 		$headers .= "MIME-Version: 1.0\r\n";
 
-		$headers .= "Content-Type: multipart/mixed; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
+		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
 		if($attachments && !is_array($attachments)) $attachments = array($attachments);
 

@@ -50,10 +50,10 @@ class Mail
 		
 		$this->from = $from;
 		$this->to = $to;
-		$this->subject = $subject;
+		$this->subject = encode7bit($subject);
 		$this->body = $body;	
 		$this->headers = $headers;	
-		$this->fullFrom = $fullFrom;
+		$this->fullFrom = encode7bit($fullFrom);
 	}
 
 	function send()
