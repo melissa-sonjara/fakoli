@@ -3,6 +3,8 @@
 abstract class AutoFormLayout
 {	
 	var $form;
+
+	var $externalErrorBox = false; ///< Flag indicating whether the error box should be rendered inside the form grouping
 	
 	function AutoFormLayout($form)
 	{
@@ -355,6 +357,8 @@ class TableHeaderFormLayout extends AutoFormLayout
  */
 class TableRowFormLayout extends AutoFormLayout
 {
+	var $externalErrorBox = true;
+	
 	function TableRowFormLayout($form)
 	{
 		$this->AutoFormLayout($form);

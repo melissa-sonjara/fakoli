@@ -218,9 +218,9 @@ class SpreadsheetForm extends CompositeAutoForm
 			
 			$output = preg_replace("/\\bname=(['\"])([^'\"]*?)['\"]/", "name=$1{$form->id}__$2$1", $output);
 
-			$form->form->layout->startUngrouped();
+			//$form->form->layout->startUngrouped();
 			echo $output;
-			$form->form->layout->endUngrouped();
+			//$form->form->layout->endUngrouped();
 		}
 
 		$this->layout->endUngrouped();

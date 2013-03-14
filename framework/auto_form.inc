@@ -850,6 +850,8 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
 
+		if ($this->layout->externalErrorBox) $this->layout->errorBox();
+		
 		$this->layout->startUngrouped();
 		
 		if ($this->buttons_at_top && !$this->subordinate) 
@@ -863,8 +865,8 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			$this->layout->endButtonLine();
 		}
 
-		$this->layout->errorBox();
-
+		if (!$this->layout->externalErrorBox) $this->layout->errorBox();
+		
 		if ($this->markRequiredFields && $this->validator->hasRequiredFields())
 		{
 			$this->layout->requiredFields($this->requiredFieldsText);
