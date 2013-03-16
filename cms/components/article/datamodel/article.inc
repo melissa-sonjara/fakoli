@@ -267,6 +267,21 @@ class ArticleCommentXref extends DataItem
 	var $relations = array(	"Article"	=>	Article,
 							"Comment"		=>	Comment);
 	
+	function verifyEnabled($article_id)
+	{
+		if (!$article_id) return false;
+		
+		try
+		{
+			$blog = Article::getBlog($article_id);
+			return $blog->allow_comments;
+		}
+		catch(DataNotFoundException $e)
+		{
+			return false;
+		}	
+	}
+	
 	function Article()
 	{
 		return $this->getRelated(Article);
