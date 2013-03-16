@@ -82,6 +82,14 @@ if($method == "POST")
 		if ($newPost)
 		{
 			$xref = new $xref_class;
+			
+			if (has_method($xref, "verifyEnabled"))
+			{
+				if (!$xref->verifyEnabled($key_name, $key_value))
+				{
+					Fakoli::end("No SPAM for you today, Mister!");
+				}				
+			}
 			$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
 			$xref->set($key_name, $key_value);
 			$xref->save();
