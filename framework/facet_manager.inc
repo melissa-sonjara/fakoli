@@ -139,16 +139,64 @@ class FieldFacetFilter extends AbstractFacetFilter
 
 	function writeScript()
 	{
+		ob_start();
+?>
+		var <?echo $this->getID()?>_handler = new StringFacetHandler('<?echo $this->getID()?>', '<?echo $this->getID()?>_facet', <?echo $this->manager->target->getID()?>_facet_manager);
+<?
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
 	}
 
 	function drawFacet()
 	{
 ?>
-<input type='text' name='<?echo $this->field?>' value=''/>
+<input type='text' name='<?echo $this->field?>' id='<?echo $this->getID()?>_facet' value='' autocomplete='off'/>
 <?		
 	}
 }
 
+class ExpressionFacetFilter extends AbstractFacetFilter
+{
+	var $field;
+	var $expression;
+	
+	function __construct($field, $expression)
+	{
+		$this->field = $field;
+		$this->expression = $expression;
+	}
+
+	function getID()
+	{
+		return $this->field;
+	}
+
+	function onTagItem($item, $attrs)
+	{
+		$attrs["data-{$this->field}"] = $item->format($this->expression);
+
+		return $attrs;
+	}
+
+	function writeScript()
+	{
+		ob_start();
+?>
+		var <?echo $this->getID()?>_handler = new StringFacetHandler('<?echo $this->getID()?>', '<?echo $this->getID()?>_facet', <?echo $this->manager->target->getID()?>_facet_manager);
+<?
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
+	}
+
+	function drawFacet()
+	{
+		?>
+<input type='text' name='<?echo $this->field?>' id='<?echo $this->getID()?>_facet' value='' autocomplete='off'/>
+<?		
+	}
+}
 
 class MultiSelectFacetFilter extends AbstractFacetFilter
 {
