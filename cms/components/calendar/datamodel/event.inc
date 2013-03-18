@@ -36,22 +36,26 @@
  */
 class Event extends DataItem
 {
-	var $fields = array("event_id"			=>	Number,
-						"title"				=>	String,
-						"calendar_id"		=>	Number,
-						"start_date"		=>	DateTime,
-						"end_date"			=>	DateTime,
-						"location"			=>	String,
-						"event_type"		=>	String,
-						"description"		=>	HTML,
-						"published"			=>	Boolean,
-						"last_modified"		=>	Timestamp,
-						"composite_class"	=>	String,);
+	var $fields = array("event_id"				=>	Number,
+						"title"					=>	String,
+						"calendar_id"			=>	Number,
+						"start_date"			=>	DateTime,
+						"end_date"				=>	DateTime,
+						"location"				=>	String,
+						"event_type"			=>	String,
+						"description"			=>	HTML,
+						"published"				=>	Boolean,
+						"last_modified"			=>	Timestamp,
+						"event_invitation_id"	=>	Number,
+						"composite_class"		=>	String,);
 						
 	// Relations
 	
 	var $relations = array("Sites"		=>	Site,
-						   "Calendar"	=>	Calendar);
+						   "Calendar"	=>	Calendar,
+							"Invitation"	=>	EventInvitation,
+			
+				);
 
 	function Sites($constraint = "")
 	{
@@ -61,6 +65,13 @@ class Event extends DataItem
 	function Calendar()
 	{
 		return $this->getRelated(Calendar);
+	}
+	
+	function Invitation()
+	{
+		if(!$this->event_invitation_id) return null;
+		
+		return $this->getRelated(EventInvitation);
 	}
 	
 	function Event()

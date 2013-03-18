@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+Fakoli::using("settings");
+
 abstract class EventHandler
 {
 	
@@ -41,6 +43,12 @@ abstract class EventHandler
 	
 	abstract function summary($event);
 	abstract function details($event);
+	
+	/**
+	 * format an event for sending through email as iCal event.
+	 * @param obj $event
+	 */
+	abstract function formatiCalendar($event);
 	
 	function getEventClass()
 	{
@@ -131,6 +139,11 @@ class StandardEventHandler extends EventHandler
 		$out = ob_get_contents();
 		ob_end_clean();
 		return $out;
+	}
+	
+	function formatiCalendar($event, $sequence_id = 0)
+	{
+		return new iCalendarEventManager($event->event_id, $event->start_date, $event->end_date, $event->title, $event->description, $event->location, $sequence_id);
 	}
 }
 

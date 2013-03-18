@@ -67,3 +67,26 @@ CREATE TABLE `calendar_event_type_xref` (
 -- Fakoli should not have any data specific to just one of our websites.
  
  --END Version 1.2
+ 
+-- START Version 1.3
+
+
+CREATE TABLE  `event_invitation` (
+  `event_invitation_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `event_id` int(10) unsigned NOT NULL,
+  `sender_email` varchar(40) NOT NULL,
+  `sender_name` varchar(100) NOT NULL,
+  `subject` varchar(150) NOT NULL,
+  `message` text,
+  `sequence_id` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`event_invitation_id`),
+  KEY `event_idx` (`event_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `event` change column `start_date` `start_date` DATETIME DEFAULT NULL;
+ALTER TABLE `event` change column `end_date` `end_date` DATETIME DEFAULT NULL;
+ALTER TABLE `event` add column `event_invitation_id` int(10) NOT NULL DEFAULT '0';
+
+ALTER TABLE `event` ADD INDEX `event_invitation_idx`(`event_invitation_id`);
+
+-- END Version 1.3
