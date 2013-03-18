@@ -154,3 +154,44 @@ var MultiSelectFacetHandler = new Class(
 		return true;
 	}		
 });
+
+var StringFacetHandler = new Class(
+{
+	id: "",
+	textField: Class.Empty,
+	manager: Class.Empty,
+	
+	initialize: function(id, textField, manager)
+	{
+		this.id = id;
+		this.textField = document.id(textField);
+		this.manager = manager;
+		this.manager.registerHandler(this);
+		
+		this.textField.addEvent('input', function(e) { this.manager.filterChanged();}.bind(this));
+	},
+	
+	preprocess: function(item)
+	{
+
+	},
+	
+	preprocessComplete: function()
+	{
+
+	},
+	
+	filter: function(item)
+	{
+		var value = this.textField.value.toLowerCase();		
+		var term = item.get("data-" + this.id).toLowerCase();
+		
+		return (term.indexOf(value) != -1);
+	},
+	
+	isClear: function()
+	{
+		return this.textField.value.length == 0;
+	}
+
+});
