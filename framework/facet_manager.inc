@@ -131,7 +131,7 @@ class FieldFacetFilter extends AbstractFacetFilter
 	{
 		if ($item->hasField($this->field)) 
 		{
-			$attrs["data-{$this->field}"] = $item->format("{".$this->field.":xml}");
+			$attrs["data-{$this->field}"] = strtolower($item->format("{".$this->field.":xml}"));
 		}
 
 		return $attrs;
@@ -174,7 +174,7 @@ class ExpressionFacetFilter extends AbstractFacetFilter
 
 	function onTagItem($item, $attrs)
 	{
-		$attrs["data-{$this->field}"] = $item->format($this->expression);
+		$attrs["data-{$this->field}"] = strtolower($item->format($this->expression));
 
 		return $attrs;
 	}

@@ -160,6 +160,7 @@ var StringFacetHandler = new Class(
 	id: "",
 	textField: Class.Empty,
 	manager: Class.Empty,
+	currentValue: "",
 	
 	initialize: function(id, textField, manager)
 	{
@@ -168,7 +169,13 @@ var StringFacetHandler = new Class(
 		this.manager = manager;
 		this.manager.registerHandler(this);
 		
-		this.textField.addEvent('input', function(e) { this.manager.filterChanged();}.bind(this));
+		this.textField.addEvent('input', function(e) 
+		{
+			var value = this.textField.value.toLowerCase();
+			if (value == this.currentValue) return;
+			this.currentValue = value;
+			this.manager.filterChanged();
+		}.bind(this));
 	},
 	
 	preprocess: function(item)
@@ -183,10 +190,9 @@ var StringFacetHandler = new Class(
 	
 	filter: function(item)
 	{
-		var value = this.textField.value.toLowerCase();		
-		var term = item.get("data-" + this.id).toLowerCase();
+		var term = item.get("data-" + this.id);
 		
-		return (term.indexOf(value) != -1);
+		return (term.indexOf(currentValue) != -1);
 	},
 	
 	isClear: function()
