@@ -19,10 +19,11 @@ class iCalendarEventManager
 		$this->setValue("BEGIN", "VCALENDAR");
 		$this->setValue("PRODID", "-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN");
 		$this->setValue("VERSION", "2.0");
-		$this->setValue("METHOD", "PUBLISH");
+		$this->setValue("METHOD", "REQUEST");
 		$this->setValue("BEGIN_2", "VEVENT");
 		
 		$this->setOrganizer("");
+		$this->setAttendee();
 		$this->setStart($start);
 		$this->setEnd($end);
 		$this->setLocation($location);
@@ -87,6 +88,11 @@ class iCalendarEventManager
 		{
 			$this->setRSVP($replyTo);
 		}
+	}
+	
+	function setAttendee($mail_to)
+	{
+		$this->setValue("ATTENDEE:mailto", $mail_to);
 	}
 	
 	function setOrganizer($replyTo)

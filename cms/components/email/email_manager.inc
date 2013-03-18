@@ -94,7 +94,12 @@ class EmailHandler
 
 		if($attachments && !is_array($attachments)) $attachments = array($attachments);
 		
-		$message = $this->getMessageScript($message, $random_hash, $attachments, $iCalMgr, $replyTo);
+		if($iCalMgr)
+		{
+			$iCalMgr->setOrganizer($replyTo);
+			$iCalMgr->setAttendee($toAddr);
+		}
+		$message = $this->getMessageScript($message, $random_hash, $attachments, $iCalMgr);
 		
 		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers, $from);
 	}
@@ -103,7 +108,7 @@ class EmailHandler
 	 * This isn't working on zither; works locally - zither can't determine
 	 * which view to send and sends both but shows the html as text with tags
 	 */
-	function getMessageScript($msg, $random_hash, $attachments, $iCalMgr, $replyTo)
+	function getMessageScript($msg, $random_hash, $attachments, $iCalMgr)
 	{
 		global $config;
 		
@@ -124,7 +129,7 @@ class EmailHandler
 		
 		if($iCalMgr)
 		{
-			$iCal = $this->formatiCalendar($iCalMgr, $replyTo, $random_hash);
+			$iCal = $this->formatiCalendar($iCalMgr, $random_hash);
 		}
 		
 		//define the body of the message.
@@ -194,15 +199,12 @@ Content-Transfer-Encoding: 8bit
 	 * Here we provide the organizer's email if not already
 	 * set, based on the reply to email and format the header for this block.
 	 */
-	function formatiCalendar($iCalMgr, $replyTo, $random_hash)
-	{
-		if(!$iCalMgr->getValue("ORGANIZER:MAILTO"))
-		{
-			$iCalMgr->setValue("ORGANIZER:MAILTO", $replyTo);
-		}
-	
+	function formatiCalendar($iCalMgr, $random_hash)
+	{	
+		$method = $iCalMgr->getValue("METHOD");
+		
 		$cal_message = "----PHP-alt-{$random_hash}\n";			
-		$cal_message .= 'Content-Type: text/calendar;name="meeting.ics";method=REQUEST\n';
+		$cal_message .= 'Content-Type: text/calendar;name="meeting.ics";method=' .$method. '\n';
 		$cal_message .= "Content-Transfer-Encoding: 8bit\n\n";
 				
 		$cal_message .= $iCalMgr->format(); 
