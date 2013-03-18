@@ -94,6 +94,10 @@ class EmailManifest
 		return array("/components/email/js/email.js");
 	} 	
 	
+	static function getStyles()
+	{
+		return array("/components/email/css/email.css");
+	}	
 }
 
 

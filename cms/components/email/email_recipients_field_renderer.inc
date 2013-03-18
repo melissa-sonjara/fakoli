@@ -102,12 +102,26 @@ class EmailListFieldRenderer extends TextFieldRenderer
 }
 
 
+/**
+ * Displays email recipients in mail client type of bubble inside a scrollbox.
+ * 
+ * @author janice
+ *
+ */
 class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 {
-	var $cssClass = 'recipient_scrollbox';
+	var $cssClass = 'email_recipient_scrollbox';
+	var $field;
+	var $nameField;
+	var $recipients;
+	var $fn;
 	
-	function EmailRecipientScrollBoxFieldRenderer(&$form, $field, $label = "")
+	function EmailRecipientScrollBoxFieldRenderer(&$form, $field, $label = "",  $recipients, $nameField, $fn = "")
 	{
+		$this->recipients = $recipients;
+		$this->field = $field;
+		$this->nameField = $nameField;
+		
 		parent::FieldRenderer($form);
 		
 		$label = ($label) ? $label : prettify($field);
@@ -122,6 +136,7 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 				$form->overrides[$field]['label'] = $label;
 		}		
 		
+		$this->fn = $fn;	
 		$this->colspan = 2;
 	}
 	
@@ -129,12 +144,55 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
-		echo "<div class='{$this->cssClass}'>\n";
+		$recipients = $this->recipients;
 		
+		echo "<div id='email_recipients'>\n";
+		echo "<div id='{$this->parent->id}_{$field}' class='{$this->cssClass}' name='$field'>\n";
 		
+		echo $this->formatRecipients($recipients);
+		
+		echo "</div>\n";
 		echo "</div>\n";
 		
 		$this->_endField($field);
 	}
 	
+	function renderReadOnly($field)
+	{
+		$this->fn = "";
+		$this->renderField($field);
+	}
+		
+	function formatRecipients($recipients)
+	{
+		if(!count($recipients)) return "";
+		
+		foreach($recipients as $recipient)
+		{
+			$html .= $this->formatOneRecipient($recipient);
+		}		
+		
+		return $html;
+	}
+	
+	
+	/**
+	 * Construct a list member using the id and value, such as
+	 * id: "user_id_7"
+	 * value "Sam Jones"
+	 * 
+	 * @param String $id
+	 * @param String $value
+	 */
+	function formatOneRecipient($recipient)
+	{
+		$pk = $recipient->getPrimaryKey();
+		$nameField = $this->nameField;
+		if($this->fn)
+		{
+			$removeLink = "<a class='remove_recipient' href='#' onclick='{$this->fn}({{$pk}}); return false;'>x</a>";
+		}
+		
+		return $recipient->format("<div id='{$pk}_{{$pk}}' class='email_recipient'>{$nameField}{$removeLink}</div>");
+	}
 }

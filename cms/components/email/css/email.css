@@ -1,0 +1,33 @@
+@CHARSET "ISO-8859-1";
+
+#email_recipients .email_recipient_scrollbox 
+{
+    border: 1px solid #81B1C7;
+    border-radius: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 0;
+    overflow: auto;
+    padding: 5px;
+    text-decoration: none;
+}
+
+#email_recipients .email_recipient_scrollbox .email_recipient
+{
+    background-color: #EFF2F7;
+    border: 1px solid #BCBCE9;
+    border-radius: 5px 5px 5px 5px;
+    cursor: default;
+    float: left;
+    margin: 5px;
+    padding: 0px 7px 5px 4px;
+    text-decoration: none;	
+}
+
+#email_recipients .email_recipient_scrollbox .email_recipient a.remove_recipient
+{
+    text-decoration: none;	
+    font-weight: bold;
+    padding-left: 7px;
+    padding-right: 0px;
+    font-size: 11px;
+    vertical-align: super;
+}
