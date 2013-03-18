@@ -192,7 +192,7 @@ var StringFacetHandler = new Class(
 	{
 		var term = item.get("data-" + this.id);
 		
-		return (term.indexOf(currentValue) != -1);
+		return (term.indexOf(this.currentValue) != -1);
 	},
 	
 	isClear: function()
