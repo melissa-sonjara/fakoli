@@ -786,6 +786,8 @@ var PaginatingList = new Class(
 	
 	createPagination: function()
 	{
+		if (!this.paginator) return;
+		
 		this.paginator.empty();
 	    this.createPaginationNode( '&#60;&#60;&#32;&#80;&#114;&#101;&#118;', function(evt)
 	    {
@@ -845,6 +847,8 @@ var PaginatingList = new Class(
 	
 	updatePage: function()
 	{
+		if (!this.paginator) return;
+		
 		var pagers = this.paginator.getElements("a.goto-page");
     	pagers.each(function(p) { p.innerHTML = 'Page ' + ((this.pages > 0) ? (this.current_page || 1) : "0") + " of " + this.pages; }.bind(this));    	
 	},
@@ -861,6 +865,7 @@ var PaginatingList = new Class(
 	
 	toPage: function(page_num)
 	{
+		if (!this.paginator) return;
 	    page_num = page_num.toInt();
 	    if (page_num > this.pages || page_num < 1) return;
 	    this.current_page = page_num;
