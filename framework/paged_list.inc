@@ -80,7 +80,7 @@ class PagedList implements FacetFilterable
 	
 	function writeScript()
 	{
-		if(!$this->paginate) return "";
+		if(!$this->paginate && count($this->tagRowCallbacks) == 0) return "";
 		
 		ob_start();				
 ?>
