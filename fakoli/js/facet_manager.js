@@ -197,7 +197,7 @@ var StringFacetHandler = new Class(
 	
 	isClear: function()
 	{
-		return this.textField.value.length == 0;
+		return this.textField.value.length < 3;
 	}
 
 });
