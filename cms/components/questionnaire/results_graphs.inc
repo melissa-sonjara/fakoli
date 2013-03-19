@@ -85,31 +85,37 @@ class QuestionnaireResultsGraph
 		$legends = array();
 		
 		$total = 0;
-		
+		foreach($options as $option)
+		{
+			$count = count($answerValues[$idx]);
+
+			$total += $count;
+			$idx++;
+		}
+
+		$idx = 1;
 		if(count($options) > 0)
 		{
 			$answerValues = regroupList($answers, "value");
 						
 			foreach($options as $option)
-			{	
-				$legends[] = trim($option);
+			{
+				if ($total > 0)
+				{
+					$percent = number_format($count / $total, 1);
+					$legeds[] = trim($option) . " $percent%";
+				}
+				else
+				{
+					$legends[] = trim($option);
+				}
 				$count = count($answerValues[$idx]);
 				$optionAnswers[] = $count;
 				$idx++;	
-				$total += $count;
 			}
 		}		
 		
-		if ($total > 0)
-		{
-			$idx = 1;
-			foreach($legends as $legend)
-			{
-				$count = count($answerValues[$idx]);
-				$percent = number_format($count / $total, 1);
-				$legend .= " $percent%";
-			}
-		}
+
 
 		$pie = new PieChart("results_$question_id", 650, 400, $optionAnswers, $legends, "standard");
 		$pie->setRadius(150);
