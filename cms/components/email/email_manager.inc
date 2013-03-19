@@ -97,7 +97,6 @@ class EmailHandler
 		if($iCalMgr)
 		{
 			$iCalMgr->setOrganizer($replyTo);
-			$iCalMgr->setAttendee($toAddr);
 		}
 		$message = $this->getMessageScript($message, $random_hash, $attachments, $iCalMgr);
 		
@@ -204,8 +203,9 @@ Content-Transfer-Encoding: 8bit
 		$method = $iCalMgr->getValue("METHOD");
 		
 		$cal_message = "----PHP-alt-{$random_hash}\n";			
-		$cal_message .= 'Content-Type: text/calendar;name="meeting.ics";method=' .$method. '\n';
-		$cal_message .= "Content-Transfer-Encoding: 8bit\n\n";
+		$cal_message .= "Content-Type: text/calendar; charset=utf-8;method={$method}\n";
+		$cal_message .= "Content-Disposition: inline; filename=meeting.ics\n";
+		$cal_message .= "Content-Transfer-Encoding: 8bit\n";
 				
 		$cal_message .= $iCalMgr->format(); 
 	
