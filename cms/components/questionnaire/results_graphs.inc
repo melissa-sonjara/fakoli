@@ -103,7 +103,7 @@ class QuestionnaireResultsGraph
 				if ($total > 0)
 				{
 					$percent = number_format($count / $total, 1);
-					$legends[] = trim($option) . " $percent%";
+					$legends[] = trim($option) . " ( $percent% )";
 				}
 				else
 				{
