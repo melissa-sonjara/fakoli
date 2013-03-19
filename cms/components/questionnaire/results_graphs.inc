@@ -84,6 +84,8 @@ class QuestionnaireResultsGraph
 		$optionAnswers = array();
 		$legends = array();
 		
+		$answerValues = regroupList($answers, "value");
+		
 		$total = 0;
 		foreach($options as $option)
 		{
@@ -95,9 +97,7 @@ class QuestionnaireResultsGraph
 
 		$idx = 1;
 		if(count($options) > 0)
-		{
-			$answerValues = regroupList($answers, "value");
-						
+		{				
 			foreach($options as $option)
 			{
 				if ($total > 0)
