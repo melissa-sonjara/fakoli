@@ -45,7 +45,7 @@ $event = new Event();
 
 $form = new AutoForm($event);
 $form->required("title", "start_date", "end_date");
-$form->hide("composite_class", "event_invitation_id");
+$form->hide("composite_class", "event_invitation_id", "allow_access");
 
 $form->allowDelete = true;
 

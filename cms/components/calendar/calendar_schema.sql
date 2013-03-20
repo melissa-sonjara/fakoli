@@ -90,3 +90,9 @@ ALTER TABLE `event` add column `event_invitation_id` int(10) NOT NULL DEFAULT '0
 ALTER TABLE `event` ADD INDEX `event_invitation_idx`(`event_invitation_id`);
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+alter table `event` add column `allow_access` varchar(200) NOT NULL DEFAULT '' AFTER `event_type`;
+
+-- END Version 1.4

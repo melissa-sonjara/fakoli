@@ -53,6 +53,7 @@ class CalendarUpgradeManager extends UpgradeManager
 			"1.1"		=>	"sql:Add the table event_type and calendar_event_type_xref",
 			"1.2"    	=>	"sql: insert data into the event_type table",
 			"1.3"		=>	"sql:Add table event_invitation; add event_invitation_id to event table; change event start and end dates to be datetime",
+			"1.4"		=>	"sql:Add field allow_access to event table",
 	);
 	
 	function CalendarUpgradeManager()

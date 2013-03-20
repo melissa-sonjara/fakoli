@@ -45,6 +45,7 @@ class Event extends DataItem
 						"event_type"			=>	String,
 						"description"			=>	HTML,
 						"published"				=>	Boolean,
+						"allow_access"			=>	String,
 						"last_modified"			=>	Timestamp,
 						"event_invitation_id"	=>	Number,
 						"composite_class"		=>	String,);
