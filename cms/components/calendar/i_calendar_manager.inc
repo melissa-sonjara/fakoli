@@ -1,8 +1,6 @@
 <?php
 
 // dummy datamodel
-
-
 class iCalendarData extends DataItem
 {
 	var $fields = array(
@@ -194,6 +192,12 @@ class iCalendarEventManager
 		$this->replyToName = $replyToName;
 	}
 		
+	/**
+	 * Called from EmailHandler to set the attendee email address. The code that
+	 * calls the EmailHandler can set the attendee name if known.
+	 * 
+	 * @param String $mailTo
+	 */
 	function setAttendee($mailTo)
 	{
 		$this->mailTo = $mailTo;;
@@ -205,8 +209,14 @@ class iCalendarEventManager
 	}
 		
 	/**
+	 * We wait until final formatting of the iCalendar data to
+	 * set the organizer properties because values can be set
+	 * after the iCalendar object is instantiated.
+	 * 
+	 * EmailHandler calls setOrganizer to set the replyTo
+	 * email address and replyToName
+	 * 
 	 * Example: ORGANIZER;CN=John Smith:MAILTO:jsmith@host1.com
-	 * @param unknown $properties
 	 */
 	function formatOrganizer()
 	{
