@@ -96,7 +96,8 @@ class EmailHandler
 		
 		if($iCalMgr)
 		{
-			$iCalMgr->setOrganizer($replyTo);
+			$iCalMgr->setOrganizer($replyTo, $replyToName);
+			$iCalMgr->setAttendee($toAddr);
 		}
 		$message = $this->getMessageScript($message, $random_hash, $attachments, $iCalMgr);
 		
@@ -200,7 +201,7 @@ Content-Transfer-Encoding: 8bit
 	 */
 	function formatiCalendar($iCalMgr, $random_hash)
 	{	
-		$method = $iCalMgr->getValue("METHOD");
+		$method = $iCalMgr->data->get("method");
 		
 		$cal_message = "----PHP-alt-{$random_hash}\n";			
 		$cal_message .= "Content-Type: text/calendar; charset=utf-8;method={$method}\n";
