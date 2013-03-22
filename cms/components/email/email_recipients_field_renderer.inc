@@ -114,9 +114,11 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 	var $field;
 	var $nameField;
 	var $recipients;
-	var $fn;
+	var $delete_fn;				///< js function to delete selected recipient using "x"
+	var $delete_all_fn;			///< js function to delete all recipients
+	var $deleteLabel = "Clear All";
 	
-	function EmailRecipientScrollBoxFieldRenderer(&$form, $field, $label = "",  $recipients, $nameField, $fn = "")
+	function EmailRecipientScrollBoxFieldRenderer(&$form, $field, $label = "",  $recipients, $nameField, $delete_fn = "", $delete_all_fn)
 	{
 		$this->recipients = $recipients;
 		$this->field = $field;
@@ -136,7 +138,8 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 				$form->overrides[$field]['label'] = $label;
 		}		
 		
-		$this->fn = $fn;	
+		$this->delete_fn = $delete_fn;	
+		$this->delete_all_fn = $delete_all_fn;
 		$this->colspan = 2;
 	}
 	
@@ -147,6 +150,13 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 		$recipients = $this->recipients;
 		
 		echo "<div id='email_recipients'>\n";
+			
+		if($this->delete_all_fn)
+		{
+			$pk = $this->parent->data->getPrimaryKey();
+			$id = $this->parent->data->$pk;
+			echo "<a class='button' href='' onclick=\"{$this->delete_all_fn}($id); return false;\">{$this->deleteLabel}</a>\n";
+		}
 		echo "<div id='{$this->parent->id}_{$field}' class='{$this->cssClass}' name='$field'>\n";
 		
 		echo $this->formatRecipients($recipients);
@@ -159,7 +169,8 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		$this->fn = "";
+		$this->delete_fn = "";
+		$this->delete_all_fn = "";
 		$this->renderField($field);
 	}
 		
