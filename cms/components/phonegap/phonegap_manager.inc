@@ -23,7 +23,7 @@ class PhonegapManager
 	static function detectPhonegap()
 	{
 		global $script;
-		trace(1, "Detecting PhoneGap");
+		trace("Detecting PhoneGap", 1);
 		
 		if ($_SESSION["phonegap"]) return;
 		
@@ -34,7 +34,7 @@ class PhonegapManager
 			$_SESSION["phonegap_os"] = $matches[1];
 			$_SESSION["phonegap_version"] = $matches[2];
 
-			trace(1, "PhoneGap {$_SESSION["phonegap_version"]} enabled via User Agent");
+			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled via User Agent", 1);
 			return;
 		}
 					
@@ -44,7 +44,7 @@ class PhonegapManager
 			$_SESSION["phonegap_version"] = $_POST["phonegap_version"];
 			$_SESSION["phonegap_os"] = $_POST["phonegap_os"];
 			
-			trace(1, "PhoneGap {$_SESSION["phonegap_version"]} enabled via POST");
+			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled via POST", 1);
 			return;
 		}	
 		
@@ -54,7 +54,7 @@ class PhonegapManager
 			$_SESSION["phonegap_version"] = Settings::getValue("phonegap", "phonegap_debug_version");
 			$_SESSION["phonegap_os"] = Settings::getValue("phonegap", "phonegap_debug_os");
 			
-			trace(1, "PhoneGap {$_SESSION["phonegap_version"]} enabled in debugging mode");
+			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled in debugging mode", 1);
 		}
 	}
 	
