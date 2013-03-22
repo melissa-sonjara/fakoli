@@ -199,9 +199,9 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 	{
 		$pk = $recipient->getPrimaryKey();
 		$nameField = $this->nameField;
-		if($this->fn)
+		if($this->delete_fn)
 		{
-			$removeLink = "<a class='remove_recipient' href='#' onclick='{$this->fn}({{$pk}}); return false;'>x</a>";
+			$removeLink = "<a class='remove_recipient' href='#' onclick='{$this->delete_fn}({{$pk}}); return false;'>x</a>";
 		}
 		
 		return $recipient->format("<div id='{$pk}_{{$pk}}' class='email_recipient'>{$nameField}{$removeLink}</div>");
