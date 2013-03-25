@@ -48,7 +48,10 @@ abstract class EventHandler
 	 * format an event for sending through email as iCal event.
 	 * @param obj $event
 	 */
-	abstract function formatiCalendar($event);
+	function formatiCalendar($event)
+	{
+		throw new FakoliException("No iCal formatter provided");
+	}
 	
 	function getEventClass()
 	{
