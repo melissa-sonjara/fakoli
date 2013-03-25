@@ -187,9 +187,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 	function preProcess($field)
 	{		
 		$hh = checkNumeric($_POST["{$field}_hh"]);
-		if(!$hh) $hh = "00";
 		$mm = checkNumeric($_POST["{$field}_mm"]);
-		if($mm) $mm = "00";
 		$aa = $_POST["{$field}_aa"];
 		$dd = $_POST["{$field}"];
 		
@@ -198,7 +196,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 			$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("00/00/0000 00:00:00"));
 			return;
 		}
-		if($hh == "00" && $mm == "00")
+		if(!$hh)
 		{
 			$this->parent->data->set($field, $this->parent->data->reformatToSQLDate("$dd"));
 			return;
