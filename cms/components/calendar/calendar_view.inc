@@ -325,7 +325,7 @@ ENDSCRIPT;
 <div id="minicalendar">
 <table>
  <tr>
- <td colspan="7" class="month"><a class="calendar_nav" href="<?echo $this->prevLink?>">&lt;</a>&nbsp; <?echo date("F Y", $this->start)?><a class="calendar_nav" href="<?echo $this->nextLink?>">&gt;</a> </td>
+ <td colspan="7" class="month"><a class="calendar_nav" href="<?echo $this->prevLink?>">&lt;</a>&nbsp; <?echo date("F Y", $this->start)?>&nbsp;<a class="calendar_nav" href="<?echo $this->nextLink?>">&gt;</a> </td>
   </tr>
  <tr>
   <th width="14%">Su</th>
