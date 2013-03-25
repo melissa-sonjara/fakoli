@@ -239,7 +239,7 @@ var ImagePicker =  (function()
 		
 		showSelectImageDialog: function(field)
 		{
-			this.dialog = modalPopup("Select Image", "/action/image_picker/image_picker?Mode=select&Field=" + field + "&Preview=" + field + "_preview", '700', '600', true);			
+			this.dialog = modalPopup("Select Image", "/action/image_picker/image_picker?Mode=select&Field=" + field + "&Preview=" + field + "_preview", '625px', '500px', true);			
 		},
 		
 		setSelectedImage: function(field)
