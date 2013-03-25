@@ -214,6 +214,13 @@ body.program .eventprogramtitle
 	z-index: 90;
 }
 
+body.ie7 .event_bubble,
+body.ie8 .event_bubble,
+body.ie9 .event_bubble
+{
+	background: url(/components/calendar/images/event_bubble_top.png) top left no-repeat;
+}
+
 .event_bubble_content
 {
 	width: 180px;
@@ -224,6 +231,13 @@ body.program .eventprogramtitle
 	text-align: left;
 	padding-left: 15px;
 	padding-right: 40px;
+}
+
+body.ie7 .event_bubble_content,
+body.ie8 .event_bubble_content,
+body.ie9 .event_bubble_content
+{
+	background: url(/components/calendar/images/event_bubble_middle.png) top left repeat-y;
 }
 
 .event_bubble_content h4
@@ -249,6 +263,13 @@ body.program .eventprogramtitle
 	width: 220px;
 	height: 53px;
 	background: url(/components/calendar/images/event_bubble_bottom.png) top left no-repeat transparent;
+}
+
+body.ie7 .event_bubble_bottom,
+body.ie8 .event_bubble_bottom,
+body.ie9 .event_bubble_bottom
+{
+	background: url(/components/calendar/images/event_bubble_bottom.png) top left no-repeat;
 }
 
 .events_more
