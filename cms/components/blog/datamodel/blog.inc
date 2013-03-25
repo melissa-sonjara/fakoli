@@ -73,6 +73,20 @@ class Blog extends DataItem
 		return $this->getRelated(ImageRecord);
 	}
 	
+	function allowDelete()
+	{
+		if(!checkRole("admin"))
+		{
+			return false;
+		}
+		
+		$articles = Query::create(Article, "WHERE article_type=:article_type")
+			->bind(":article_type", $this->title)
+			->executeValue("COUNT(1)");
+		
+		return $articles > 0 ? false : true;
+	}
+	
 	function Articles($constraint = "")
 	{
 		if (!$constraint || stripos($constraint, "ORDER") === false)

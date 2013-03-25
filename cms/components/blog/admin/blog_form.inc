@@ -61,6 +61,8 @@ $tabs = blogTabs($blog_id);
 
 $blogView = new BlogView($blog);
 $form = BlogManager::buildBlogForm($blog, $redirect, $blogView);
+$form->allowDelete = $blog->allowDelete();
+$form->onDelete = onDeleteCascade;
 
 if ($method == "POST")
 {
@@ -77,6 +79,12 @@ $tabs->writeHTML();
 <div id="tab_border">
 <?
 $form->drawForm();
+
+function onDeleteCascade($blog)
+{
+	$blog->delete();
+	redirect("/admin/blogs");
+}
 ?>
 <br/>
 </div>
