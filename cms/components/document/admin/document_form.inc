@@ -70,7 +70,7 @@ $form->button("Cancel", $redirect);
 
 if ($document->file)
 {
-	$form->annotate("file", "<a href='/download.php?document_id={$document_id}'>{$document->file}</a>");
+	$form->annotate("file", "<a href='/action/document/download?document_id={$document_id}'>{$document->file}</a>");
 }
 $fileupload = new FileUploadFieldRenderer($form, "file", "Upload File", uploadLibraryFile);  
 $allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
