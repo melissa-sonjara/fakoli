@@ -83,6 +83,7 @@ class Histogram
 	var $legendX = 0;
 	var $legendY = 0;
 	var $legendSwatchSize = 20;
+	var $legendLineHeight = 30;
 	var $xAxisTitle = "";
 	var $yAxisTitle = "";
 	var $series = array();
