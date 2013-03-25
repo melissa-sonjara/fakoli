@@ -6,6 +6,7 @@ var Question =  (function()
 		question_count: null,
 		form: null,
 		form_id: null,
+		requiredNumber: Class.Empty,
 			
 		initialize: function()
 		{
@@ -15,7 +16,15 @@ var Question =  (function()
 		{
 			this.form_id = form_id;
 			this.form = $(form_id);
+			this.createRequired();
 			this.setQuestionTypeFields(question_type_id);
+		},
+		
+		createRequired: function()
+		{
+			var elt = $(this.form_id + '_required');	
+
+			this.requiredNumber = elt.clone(true, true);
 		},
 		
 		setQuestionTypeOptions: function()
@@ -35,7 +44,7 @@ var Question =  (function()
 					this.hide_tr(this.form_id + '_num_rows');
 					this.hideRatingsFields();
 					this.hide_tr(this.form_id + '_char_limit');
-					this.renderRequiredCheckbox();
+					this.renderRequired("checkbox");
 					break;
 
 				case 2: // rating
@@ -43,7 +52,7 @@ var Question =  (function()
 					this.hide_tr(this.form_id + '_num_rows');
 					this.showRatingsFields();
 					this.hide_tr(this.form_id + '_char_limit');
-					this.renderRequiredCheckbox();
+					this.renderRequired("checkbox");
 					break;
 			
 				case 3: // short text
@@ -51,7 +60,7 @@ var Question =  (function()
 					this.hide_tr(this.form_id + '_num_rows');
 					this.hideRatingsFields();
 					this.show_tr(this.form_id + '_char_limit');
-					this.renderRequiredCheckbox();
+					this.renderRequired("checkbox");
 					break;
 					
 				case 4: // free text
@@ -59,7 +68,7 @@ var Question =  (function()
 					this.show_tr(this.form_id + '_num_rows');
 					this.hideRatingsFields();
 					this.show_tr(this.form_id + '_char_limit');
-					this.renderRequiredCheckbox();
+					this.renderRequired("checkbox");
 					break;
 				
 				case 5: // checklist
@@ -67,7 +76,7 @@ var Question =  (function()
 					this.hide_tr(this.form_id + '_num_rows');
 					this.hideRatingsFields();
 					this.hide_tr(this.form_id + '_char_limit');
-					this.renderRequiredNumber();
+					this.renderRequired("text");
 					break;
 					
 				case 6: // drop down list
@@ -75,7 +84,7 @@ var Question =  (function()
 					this.hide_tr(this.form_id + '_num_rows');
 					this.hideRatingsFields();
 					this.hide_tr(this.form_id + '_char_limit');
-					this.renderRequiredCheckbox();
+					this.renderRequired("checkbox");
 					break;
 					
 				case 7: // heading only
@@ -111,10 +120,10 @@ var Question =  (function()
 		getOptionsLabel: function()
 		{
 			var option_label_tr;			
-			var option_label = this.form.getElements("label[for='options']").each(function(label) 
+			this.form.getElements("label[for='options']").each(function(label) 
 			{ 
 				option_label_tr = findAncestor(label, "tr");
-			});
+			}.bind(this));
 			
 			return option_label_tr;
 		},
@@ -145,89 +154,85 @@ var Question =  (function()
 		},
 		
 		// Render the required field as a boolean checkbox
-		renderRequiredCheckbox: function()
+		/**
+		 * IE does not allow changing type from checkbox to input
+		 * field through javascript. So instead when we want input
+		 * rather than checkbox or checkbox rather than input, we create 
+		 * a new field and append to the form and drop the old field.
+		 * 
+		 * @param String type: checkbox or text
+		 */
+		renderRequired: function(type)
 		{
-			var requiredElt = $(this.form_id + '_required');		
-			var required_label;
+			var elt = $(this.form_id + '_required');	
+	
+			value = elt.get("value");
+			var labelText = "Number Required";
+			var new_elt = Class.Empty;
 			
-			var required_label = this.form.getElements("label[for='required']").each(function(label) 
-			{ 
-				label.set("html", "Answer Required");
-			});
-
-			var value;
-			value = this.getRequiredValue(requiredElt);
-						
-			requiredElt.set("type", "checkbox");
-			requiredElt.set("size", "");
-			requiredElt.set("value", 1);
-			if(value > 0)
-				requiredElt.checked = true;
-			requiredElt.set("onkeypress", "");			
-		},
-		
-		getRequiredValue: function(requiredElt)
-		{
-			var value;
-			
-			if(requiredElt.get("type") == "checkbox")
+			if(type == "checkbox")
 			{
-				 if(requiredElt.checked == true)
-					 value = 1;
-				 else
-					 value = 0;
+				if(value > 1)
+				{
+					value = 1;
+				}
+
+				new_elt = new Element('input', {'id': elt.get("id"), 'class': elt.get("class")});
+				new_elt.setAttribute("type", "checkbox");
+				new_elt.set("size", "");
+				new_elt.setAttribute("name", elt.get("name"));
+				new_elt.setAttribute("onkeypress", "");
+				labelText = "Answer Required";
 			}
 			else
-				value = requiredElt.value;
-		
-			return value;
-		},
-		
-		// render the Required field as a number
-		renderRequiredNumber: function()
-		{
-			var requiredElt = $(this.form_id + '_required');
+			{
+				new_elt = this.requiredNumber.clone();
+			}
 			
-			var required_label;		
-			var required_label = this.form.getElements("label[for='required']").each(function(label) 
+			this.form.getElements("label[for='required']").each(function(label) 
 			{ 
-				label.set("html", "Number Required");
-			});
-
-			var value;
-			value = this.getRequiredValue(requiredElt);
+				label.set("html", labelText);
+			}.bind(this));
+			
+			new_elt.set("value", value);
+			// Doesn't work if checkbox set in above block.
+			if(type == "checkbox" && value == 1) 
+			{
+				new_elt.checked = true;
+			}
+			new_elt.set("id", elt.get("id"));
+			new_elt.setAttribute("name", "required");
+			new_elt.replaces(elt);
 	
-			requiredElt.set("type", "text");
-			requiredElt.set("size", 5);
-			requiredElt.set("value", value);
-			requiredElt.set("onkeypress", "return maskInput(event, 0);");
 		},
-
-		
+	
 		hide_tr: function(id)
 		{
 			var elt = $(id);
-			if(elt)
-				var tr = findAncestor(elt, "tr");
-			if(tr)
-				tr.setStyle("display", "none");		
+			if(!elt) return;
+		
+			var tr = findAncestor(elt, "tr");
+			
+			if(!tr) return;
+			tr.setStyle("display", "none");		
 		},
 	
 		show_tr: function(id)
 		{
 			var elt = $(id);
-			if(elt)
-				var tr = findAncestor(elt, "tr");
-			if(tr)
-				tr.setStyle("display", "");		
+			if(!elt) return;
+						
+			var tr = findAncestor(elt, "tr");
+			if(!tr) return;
+			tr.setStyle("display", "");		
 		},
 	
 		hideRequired: function()
 		{
 			var requiredElt = $(this.form_id + '_required');
 			requiredElt.setStyle('display', 'none');
-			var required_label;		
-			var required_label = this.form.getElements("label[for='required']").each(function(label) 
+	
+			this.form.getElements("label[for='required']").each(function(label) 
 			{ 
 				label.set("html", "");
 			});
