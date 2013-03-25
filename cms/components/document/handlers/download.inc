@@ -44,7 +44,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 	Fakoli::end("Access Denied");
 }
 
-if (!checkRole($doc->allow_access))
+if (!checkRole($document->allow_access))
 {
 	Fakoli::end("Access Denied");
 }
