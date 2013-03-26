@@ -153,8 +153,9 @@ var Question =  (function()
 			this.hide_tr(this.form_id + '_number_of_steps');
 		},
 		
-		// Render the required field as a boolean checkbox
 		/**
+		 * Render the required field as a boolean checkbox
+		 * 
 		 * IE does not allow changing type from checkbox to input
 		 * field through javascript. So instead when we want input
 		 * rather than checkbox or checkbox rather than input, we create 
@@ -176,12 +177,12 @@ var Question =  (function()
 				{
 					value = 1;
 				}
-
 				new_elt = new Element('input', {'id': elt.get("id"), 'class': elt.get("class")});
 				new_elt.setAttribute("type", "checkbox");
 				new_elt.set("size", "");
 				new_elt.setAttribute("name", elt.get("name"));
 				new_elt.setAttribute("onkeypress", "");
+				new_elt.set("value", 1);
 				labelText = "Answer Required";
 			}
 			else
@@ -192,18 +193,17 @@ var Question =  (function()
 			this.form.getElements("label[for='required']").each(function(label) 
 			{ 
 				label.set("html", labelText);
+				new_elt.set("value", value);
 			}.bind(this));
 			
-			new_elt.set("value", value);
 			// Doesn't work if checkbox set in above block.
 			if(type == "checkbox" && value == 1) 
 			{
-				new_elt.checked = true;
+				new_elt.setAttribute("checked", "checked");
 			}
 			new_elt.set("id", elt.get("id"));
 			new_elt.setAttribute("name", "required");
 			new_elt.replaces(elt);
-	
 		},
 	
 		hide_tr: function(id)
