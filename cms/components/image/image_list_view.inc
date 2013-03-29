@@ -112,7 +112,7 @@ ENDSCRIPT;
 	
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
-window.addEvent('domready', function() { document.id('image_box').resizable(); });
+window.addEvent('domready', function() { document.id('images_box').resizable(); });
 </script>
 ENDSCRIPT;
 
