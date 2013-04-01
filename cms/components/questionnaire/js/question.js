@@ -7,6 +7,7 @@ var Question =  (function()
 		form: null,
 		form_id: null,
 		requiredNumber: Class.Empty,
+		requiredType: null,			///< The last used required type: checkbox or text
 			
 		initialize: function()
 		{
@@ -22,8 +23,11 @@ var Question =  (function()
 		
 		createRequired: function()
 		{
-			var elt = $(this.form_id + '_required');	
-
+			var elt = $(this.form_id + '_required');
+			
+			// Save the last used requiredType to know how to retrieved checked or count values
+			this.requiredType = elt.get("type");
+	
 			this.requiredNumber = elt.clone(true, true);
 		},
 		
@@ -166,8 +170,17 @@ var Question =  (function()
 		renderRequired: function(type)
 		{
 			var elt = $(this.form_id + '_required');	
-	
-			value = elt.get("value");
+			var value = 0;
+			
+			if(this.requiredType == "checkbox")
+			{
+				if(elt.get("checked")) value = 1;
+			}
+			else
+			{
+				value = elt.get("value");
+			}
+			
 			var labelText = "Number Required";
 			var new_elt = Class.Empty;
 			
@@ -182,7 +195,6 @@ var Question =  (function()
 				new_elt.set("size", "");
 				new_elt.setAttribute("name", elt.get("name"));
 				new_elt.setAttribute("onkeypress", "");
-				new_elt.set("value", 1);
 				labelText = "Answer Required";
 			}
 			else
@@ -197,13 +209,21 @@ var Question =  (function()
 			}.bind(this));
 			
 			// Doesn't work if checkbox set in above block.
-			if(type == "checkbox" && value == 1) 
+			if(type == "checkbox")
 			{
-				new_elt.setAttribute("checked", "checked");
+				new_elt.set("value", "1");	
+				if(value == "1")
+				{
+					new_elt.setAttribute("checked", "checked");		
+				}
 			}
+		
 			new_elt.set("id", elt.get("id"));
 			new_elt.setAttribute("name", "required");
+	
 			new_elt.replaces(elt);
+			
+			this.requiredType = type;
 		},
 	
 		hide_tr: function(id)
