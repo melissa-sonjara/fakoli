@@ -66,7 +66,7 @@ CREATE TABLE `calendar_event_type_xref` (
 -- JDG 10/27/2011 removed event types
 -- Fakoli should not have any data specific to just one of our websites.
  
- --END Version 1.2
+--END Version 1.2
  
 -- START Version 1.3
 
