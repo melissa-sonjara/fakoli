@@ -100,6 +100,9 @@ class QuestionnaireResultsGraph
 		{				
 			foreach($options as $option)
 			{
+				$count = count($answerValues[$idx]);
+				$optionAnswers[] = $count;
+				
 				if ($total > 0)
 				{
 					$percent = number_format(100 * ($count / $total), 1);
@@ -109,8 +112,6 @@ class QuestionnaireResultsGraph
 				{
 					$legends[] = trim($option);
 				}
-				$count = count($answerValues[$idx]);
-				$optionAnswers[] = $count;
 				$idx++;	
 			}
 		}		
