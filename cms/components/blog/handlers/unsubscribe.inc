@@ -42,5 +42,5 @@ $blogSubscriber->load($blog_subscriber_id);
 
 $blogSubscriber->delete();
 
-redirect("/index");
+redirect("/blog_unsubscription_successful");
 ?>

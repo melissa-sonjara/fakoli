@@ -554,3 +554,39 @@ class AdminBlogArticlesView extends BlogArticlesView
 	}	
 	
 }
+
+class BlogSubscriberListView
+{
+	var $blog;
+	var $table;
+	
+	function BlogSubscriberListView ($blog_id)
+	{
+		$blog = new Blog ($blog_id);
+		
+		$constraint = " WHERE blog_id = {$blog_id}";
+		
+		$blog_subscribers = query(BlogSubscriber, $constraint);
+		
+		$this->table = new DataListView($blog_subscribers, "blogSubscribers");
+		$this->table->column("Subscriber Email", "{subscriber_email}", true)
+			->column("Remove", array(BlogSubscriberListView, formatUnsubscribeLink), true, "width: 40%; text-align: center");
+			
+		$this->table->emptyMessage = "Currently there are no subscribers to this blog.";
+		$this->table->zebra = 1;
+	}
+
+	function formatUnsubscribeLink($blog_subscriber)
+	{
+		$blog_id = $blog_subscriber->blog_id;
+		$blog_subscriber_id = $blog_subscriber->blog_subscriber_id;
+		
+		$unsubscribeLink = "<a href='/action/blog/unsubscribe?blog_id={$blog_id}&blog_subscriber_id={$blog_subscriber_id}'>Remove</a>";
+		return $unsubscribeLink ;
+	}
+	
+	function drawView()
+	{
+		$this->table->drawView();
+	}
+}
