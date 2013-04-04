@@ -92,8 +92,7 @@ class LoginManager
 		
 		$emailFrom = Settings::getValue("email", "email_from");
 		
-		$headers = "From: $emailFrom\r\n";
-		$headers .= "Return-Path: ". $emailFrom . "\r\n";
+		$headers  = "Return-Path: ". $emailFrom . "\r\n";
 		$headers .= "Reply-To: ". $emailFrom . "\r\n";	
 		$headers .= "Content-type: text;\r\n";
 		$headers .= "Mime-Version: 1.0\r\n";
