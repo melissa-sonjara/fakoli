@@ -266,7 +266,7 @@ class EmailManager
 	var $message;
 	var $subject;
 	var $emailFrom;
-	var $emailName;
+	var $emailTemplateName;			///< The name of the email template
 	var $onSendComplete; // optional user-defined callback function after send is successful
 	var $attachments; ///< optional - array of files to attach to the email
 	
@@ -275,7 +275,7 @@ class EmailManager
 		$this->item = clone($item);
 		$this->item->filter = null;
 		$this->emailTemplate = $emailTemplate;
-		$this->emailName = $emailTemplate->name;
+		$this->emailTemplateName = $emailTemplate->name;
 		$this->emailFrom = $emailTemplate->sender_email;
 		$this->mergeEmail();
 		$this->onSendComplete = $onSendComplete;
@@ -349,7 +349,7 @@ class EmailManager
 	{
 		trace("EmailManager:: sending email to recipient $recipient", 3);
 				
-		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom, $this->emailName, $this->attachments);
+		$email = new EmailHandler($recipient, $this->subject, $this->message, $this->emailFrom, "", $this->attachments);
 			
 		$rtn = $email->send();
 			
