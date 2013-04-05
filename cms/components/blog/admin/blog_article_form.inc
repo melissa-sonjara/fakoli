@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("article", "site", "image", "field_renderers", "blog", "taxonomy");
+Fakoli::using("article", "site", "image", "field_renderers", "blog", "taxonomy", "email");
 Fakoli::usingFile("framework/auto_form.inc");
 
 require_once "include/blog_tabs.inc";
@@ -59,6 +59,10 @@ $article->article_type = $blog->title;
 
 $form = BlogManager::buildBlogArticleForm($article, $blog);
 TaxonomyManager::addTaxonomyFieldRenderers($form);
+if(!$article->article_id || !$article->published)
+{
+	$form->onSaveComplete = sendEmailToSubscribers;
+}
 
 $form->hide("sort_order");
 
@@ -91,6 +95,11 @@ $tabs->writeHTML();
 <div id="tab_border">
 <?
 $form->drawForm();
+
+function sendEmailToSubscribers(&$form)
+{
+	ArticleManager::sendEmailToSubscribers($form->data, 'blog_published');
+}
 ?>
 </div>
 <br/>

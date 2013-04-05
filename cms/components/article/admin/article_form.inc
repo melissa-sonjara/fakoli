@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("article", "site", "image", "field_renderers", "taxonomy");
+Fakoli::using("article", "site", "image", "field_renderers", "taxonomy", "email");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $menu_item = "Articles";
@@ -52,20 +52,19 @@ else
 $form = ArticleManager::buildArticleForm($article);
 $form->hide("sort_order");
 
+if(!$article_id || !$article->published)
+{
+	$form->onSaveComplete = sendEmailToSubscribers;
+}
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $redirect = "/admin/articles";
 $form->button("Cancel", $redirect);
 
 if ($method == "POST")
-{
-	
+{	
 	if ($form->save())
 	{
-		if($form->data->published)
-		{
-			sendEmailUsingEmailManager($article, 'blog_published');	
-		}
 		redirect("/admin/articles");
 	}
 }
@@ -83,7 +82,10 @@ else
 
 $script = $form->writeScript();
 
-
 $form->drawForm();
 
+function sendEmailToSubscribers(&$form)
+{
+	ArticleManager::sendEmailToSubscribers($form->data, 'blog_published');
+}
 ?>

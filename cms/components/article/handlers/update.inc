@@ -31,9 +31,11 @@
 
 *****************************************************************/
 
+Fakoli::using("email");
 Fakoli::assertRole("admin,content");
 
 $article_id = checkNumeric($_GET["article_id"]);
+$published = checkNumeric($_GET["published"]);
 
 if (!$article_id) die("");
 
@@ -44,7 +46,11 @@ $filter = new InclusionFilter("article_id");
 if (isset($_GET["published"]))
 {
 	$filter->add("published");
-	$article->published = checkNumeric($_GET["published"]);
+	$article->published = $published;
+	if($published)
+	{
+		ArticleManager::sendEmailToSubscribers($article, 'blog_published');
+	}
 }
 
 $article->filter = $filter;

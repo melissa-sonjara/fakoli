@@ -41,6 +41,40 @@ class ArticleManager
 		return $form;
 	}
 	
+	/**
+	 * When an article is published, send an email to subscribers.
+	 * 
+	 * @param obj $article class Article
+	 * @param String $email_template_name (e.g., 'blog_published')
+	 * 
+	 * @return Number $rtn true if sent; false if could not be sent
+	 */
+	static function sendEmailToSubscribers($article, $email_template_name)
+	{
+		if(!$article->published) return;
+
+		$blog = $article->Blog();
+		if(!$blog) return;
+
+		$subscribers = $blog->Subscribers();
+		
+		if(!count($subscribers)) return;
+		
+		$emailTemplate = EmailTemplate::getEmailTemplate($email_template_name);
+
+		if(!$emailTemplate) return;
+		
+		// Get the article id now before sending to email manager which won't be able to get it
+		// from the subscriber obj.
+		$emailTemplate->message = str_replace("[article_id]", $article->article_id, $emailTemplate->message);
+		
+		foreach($subscribers as $subscriber)
+		{
+			$mgr = new EmailManager($subscriber, $emailTemplate);
+			$rtn = $mgr->sendEmail();
+		}
+	}
+	
 	static function registerCommentAdapter()
 	{
 		CommentManager::registerAdapter("article", Article, ArticleCommentXref);

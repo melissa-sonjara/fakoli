@@ -53,9 +53,12 @@ class Blog extends DataItem
 	
 	// Relations
 	
-	var $relations = array("Owner"		=>	"",
-						   "Articles"	=>	Article,
-						   "Image"		=>	ImageRecord);
+	var $relations = array(
+			"Owner"			=>	"",
+			"Articles"		=>	Article,
+			"Image"			=>	ImageRecord,
+			"Subscribers"	=>	BlogSubscriber
+			);
 					
 	function Owner()
 	{
@@ -71,6 +74,11 @@ class Blog extends DataItem
 	function Image()
 	{
 		return $this->getRelated(ImageRecord);
+	}
+	
+	function Subscribers($constraint = "")
+	{
+		return $this->getRelatedList(BlogSubscriber, "", $constraint);
 	}
 	
 	function allowDelete()

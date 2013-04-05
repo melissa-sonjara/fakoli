@@ -52,6 +52,10 @@ $redirect = "/articles";
 $form->button("Cancel", $redirect);
 $form->button("Preview", "javascript:modalPopup(\\'Preview\\', \\'/blog?article_id=$article_id\\', 800, \\'auto\\')");
 
+if(!$article_id || !$article->published)
+{
+	$form->onSaveComplete = sendEmailToSubscribers;
+}
 
 if ($method == "POST")
 {
@@ -77,4 +81,8 @@ $script = $form->writeScript();
 
 $form->drawForm();
 
+function sendEmailToSubscribers(&$form)
+{
+	ArticleManager::sendEmailToSubscribers($form->data, 'blog_published');
+}
 ?>
