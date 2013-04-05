@@ -1,42 +1,93 @@
 <?php
 
-// dummy datamodel
+/**
+ * Dummy datamodel to helper manage the calendar data values.
+ * 
+ * For most of the fields, the field name converted to upper case
+ * is the label that should be ouput to icalendar
+ * e.g., "prodid"  becomes "PRODID"
+ * 
+ * For others, we use fieldAliases to get the label.
+ * 
+ * Data filtering can be used to exclude one ore fields if desired.
+ * 
+ * @author janice
+ *
+ */
+
 class iCalendarData extends DataItem
 {
 	var $fields = array(
-		"begin_calendar"	=>	String,
-		"prodid"			=>	String,
-		"version"			=>	String,
-		"method"			=>	String,
-		"begin_event"		=>	String,
-		"organizer"			=>	String,
-		"attendee"			=>	String,
-		"dtstart"			=>	String,
-		"dtend"				=>	String,
-		"location"			=>	String,
-		"transp"			=>	String,
-		"event_status"		=>	String,
-		"display_status"	=>	String,
-		"uid"				=>	String,
-		"sequence"			=>	Number,
-		"dtstamp"			=>	String,
-		"last_modified"		=>	String,
-		"description"		=>	HTML,
-		"summary"			=>	String,
-		"priority"			=>	Number,
-		"class"				=>	String,
-		"end_event"			=>	String,
-		"end_calendar"		=>	String,
+		"begin_calendar"		=>	String,
+		"prodid"				=>	String,
+		"version"				=>	String,
+		"method"				=>	String,
+		"begin_timezone"		=>	String,
+		"tzid"					=>	String,
+		"begin_standard"		=>	String,
+		"standard_start"		=>	String,
+		"standard_offset"		=>	String,
+		"standard_dst_offset"	=>	String,
+		"standard_rrule"		=>	String,
+		"standard_name"			=>	String,
+		"end_standard"			=>	String,
+		"begin_daylight"		=>	String,
+		"daylight_start"		=>	String,
+		"daylight_offset"		=>	String,
+		"daylight_dst_offset"	=>	String,
+		"daylight_rrule"		=>	String,
+		"daylight_name"			=>	String,
+		"end_daylight"			=>	String,
+		"end_timezone"			=>	String,
+		"begin_event"			=>	String,
+		"organizer"				=>	String,
+		"attendee"				=>	String,
+		"dtstart"				=>	String,
+		"dtend"					=>	String,
+		"location"				=>	String,
+		"transp"				=>	String,
+		"event_status"			=>	String,
+		"display_status"		=>	String,
+		"uid"					=>	String,
+		"sequence"				=>	Number,
+		"dtstamp"				=>	String,
+		"last_modified"			=>	String,
+		"description"			=>	HTML,
+		"summary"				=>	String,
+		"priority"				=>	Number,
+		"class"					=>	String,
+		"end_event"				=>	String,
+		"end_calendar"			=>	String,
 			);
 	
 	var $fieldAliases = array(
-			"begin_calendar"	=>	"BEGIN",
-			"begin_event"		=>	"BEGIN",
-			"event_status"		=>	"STATUS",
-			"display_status"	=> "X-MICROSOFT-CDO-INTENDEDSTATUS",
-			"last_modified" 	=> "LAST-MODIFIED",
-			"end_event"			=>	"END",
-			"end_calendar"		=>	"END",
+			"begin_calendar"		=>	"BEGIN",
+			"begin_event"			=>	"BEGIN",
+			"event_status"			=>	"STATUS",
+			"display_status"		=> "X-MICROSOFT-CDO-INTENDEDSTATUS",
+			"last_modified" 		=> "LAST-MODIFIED",
+			"end_event"				=>	"END",
+			"end_calendar"			=>	"END",
+			
+			"begin_timezone"		=>	"BEGIN",
+			
+			"begin_standard"		=>	"BEGIN",
+			"standard_start"		=>	"DTSTART",
+			"standard_offset"		=>	"TZOFFSETFROM",
+			"standard_dst_offset"	=>	"TZOFFSETTO",
+			"standard_rrule"		=>	"RRULE",
+			"standard_name"			=>	"TZNAME",
+			"end_standard"			=>	"END",
+			
+			"begin_daylight"		=>	"BEGIN",
+			"daylight_start"		=>	"DTSTART",
+			"daylight_offset"		=>	"TZOFFSETFROM",
+			"daylight_dst_offset"	=>	"TZOFFSETTO",
+			"daylight_rrule"		=>	"RRULE",
+			"daylight_name"			=>	"TZNAME",
+			"end_daylight"			=>	"END",
+				
+			"end_timezone"			=>	"END",
 		);
 
 	function __construct()
@@ -69,8 +120,8 @@ class iCalendarData extends DataItem
 
 class iCalendarEventManager
 {
-	var $replyTo;
-	var $replyToName;
+	var $replyTo;					///< organizer email set in EmailHandler
+	var $replyToName;				///< organizer name set in EmailHandler
 	var $mailTo;					///< Attendee email address
 	var $attendeeName; 				///< optionally include display name of recipient
 	var $rsvp = true;				///< organizer wants reply
@@ -81,6 +132,14 @@ class iCalendarEventManager
 	var $aliases = array();			///< field aliases or labels
 	
 	/**
+	 * The iCalendarManager obj is typically instantiated through the EventHandler
+	 * for an event. E.g., the StandardEventHandler class can all formatiCalendar
+	 * to instantiate an iCalendarManager obj by providing its event details
+	 * such as start_date, end_date, location, etc.
+	 * 
+	 * After the obj is created, the calling code can set other configurable values
+	 * such as attendee name, if known. It can also override default values set
+	 * in the constructor, such as method.
 	 * 
 	 * @param Number $id - event id or other unique identifier for the invitation
 	 * @param DATE or DATETIME $start
@@ -89,18 +148,21 @@ class iCalendarEventManager
 	 * @param HTML $description
 	 * @param String $location
 	 * @param Number $sequence_id - increment sequence id when event is updated
+	 * @param obj $timeZone - instance of TimeZone, optional. If provided, set timezone properties
 	 */
-	function __construct($id, $start, $end, $title, $description = "", $location = "", $sequence_id = 0)
+	function __construct($id, $start, $end, $title, $description = "", $location = "", $sequence_id = 0, $timeZone = null)
 	{
 		global $config;
 				
 		$this->data = new iCalendarData();
-		$this->data->summary = $title;
-		$this->data->description = $description;
-		$this->data->location = $location;
+		$this->data->set("summary", $title);
+		$this->data->set("description", $description);
+		$this->data->set("location", $location);
 
+		// The uid must be globally unique thus is includes the http_host
+		// and the event id.
 		$uid = $id . $config["http_host"];
-		$this->data->uid = $uid;
+		$this->data->set("uid", $uid);
 		
 		$this->data->set("sequence", $sequence_id);
 		
@@ -110,7 +172,7 @@ class iCalendarEventManager
 		$today = new DateTime(now());	
 		$this->data->set("dtstamp", $today->format('Ymd\THis'));
 		
-		$this->data->filter = new ExclusionFilter("last_modified");
+		$this->data->filter = new ExclusionFilter("last_modified", "standard_rrule", "daylight_rrule");	
 		// is last modified needed?
 		//$this->data->last_modified = $today;
 			
@@ -127,9 +189,9 @@ class iCalendarEventManager
 		$this->data->set("end_calendar", "VCALENDAR");
 		$this->data->set("method", "REQUEST");
 		$this->data->set("event_status",  "CONFIRMED");
-		
-		$this->setEventDates($start, $end);
-		
+				
+		$this->setEventDates($start, $end, $timeZone);
+
 		$this->setAliases();
 	}
 	
@@ -151,7 +213,7 @@ class iCalendarEventManager
 	 * DTSTART;VALUE=DATE:20100101
 	 * DTEND;VALUE=DATE:20100101
 	 */
-	function setEventDates($start, $end)
+	function setEventDates($start, $end, $timeZone)
 	{
 		$startObj = new DateTime($start);
 		$endObj = new DateTime($end);
@@ -167,8 +229,122 @@ class iCalendarEventManager
 			$end_value = $endObj->format('Ymd\THis');
 		}
 		
-		$this->data->set("dtstart", $start_value);
-		$this->data->set("dtend", $end_value);
+		if($timeZone)
+		{
+			$this->setTimeZone($timeZone, $start_value);
+			$this->data->set("dtstart", ";TZID=" . $timeZone->time_zone_name . ":". $start_value);
+			$this->data->set("dtend", ";TZID=" . $timeZone->time_zone_name . ":". $end_value);
+		}
+		else
+		{
+			$this->excludeTimeZoneFields();
+			$this->data->set("dtstart", $start_value);
+			$this->data->set("dtend", $end_value);
+		}
+	}
+	
+	/**
+	 * If time zone is not provided, exlcude the time zone fields
+	 * so they are not included in the output.
+	 * 
+	 * If provided, set the values.
+	 * 
+	 * @param obj $timeZone class TimeZone
+	 */
+	function setTimeZone($timeZone, $start_value)
+	{
+		$this->data->set("begin_timezone", "VTIMEZONE");
+		$this->data->set("begin_standard", "STANDARD");
+		$this->data->set("end_standard", "STANDARD");
+		$this->data->set("begin_daylight", "DAYLIGHT");
+		$this->data->set("end_daylight", "DAYLIGHT");
+		$this->data->set("end_timezone", "VTIMEZONE");
+		
+		$this->data->set("tzid", $timeZone->get("time_zone_name"));
+		
+		$standard_offset = $this->formatTimeZoneHours($timeZone->standard_offset);
+		$daylight_offset = $this->formatTimeZoneHours($timeZone->daylight_offset);
+		
+		$this->data->set("standard_name", "EST");
+		$this->data->set("daylight_name", "EDT");
+		$this->data->set("standard_offset", $standard_offset);
+		$this->data->set("standard_dst_offset", $daylight_offset);
+		$this->data->set("daylight_offset", $daylight_offset);
+		$this->data->set("daylight_dst_offset", $standard_offset);	
+		
+		$this->data->set("standard_start", $start_value);
+		$this->data->set("daylight_start", $start_value);
+	}
+	
+	/**
+	 * Given the numeric time zone value (pos or neg), convert to
+	 * hour format for iCalendar such as
+	 * "-0700"
+	 * 
+	 * Noninteger time zones offset are rare and none are segments
+	 * other than the half hour. If non integer, set the min to 30
+	 * regardless of the entered value.
+	 * 
+	 * @param Number $offset
+	 * 
+	 * @return String
+	 */
+	function formatTimeZoneHours($offset)
+	{
+		$neg = false;
+		if($offset < 0)
+		{
+			$neg = true;
+			$offset = abs($offset);
+		}
+
+		$hour = $offset;
+		$min = "00";
+		if(!is_int($offset))
+		{
+			$hour = floor($offset);
+			$min = "30";
+		}
+		
+		$out = str_pad($hour, 2, STR_PAD_LEFT) . $min;
+		
+		if($neg)
+		{
+			$out = "-" . $out;
+		}
+		
+		return $out;
+	}
+	
+	/**
+	 * If no time zone provided, exclude all fields between
+	 * begin_timezone through end_timezone.
+	 */
+	function excludeTimeZoneFields()
+	{
+		$filter = $this->data->getFilter();
+		if(!$filter)
+		{
+			$filter = new ExlcusionFilter();
+		}
+			
+		$fields = $this->data->getFields();
+		$tz_field = false;
+		foreach($fields as $name => $type)
+		{
+			if($name == "begin_timezone")
+			{
+				$tz_field = true;
+			}
+			if($tz_field)
+			{
+				$filter->excludeField($name);
+			}
+			if($name == "end_timezone")
+			{
+				$tz_field = false;
+			}
+		}
 	}
 	
 	function isAllDay($date)
@@ -266,7 +442,40 @@ class iCalendarEventManager
 		return $attendee;
 	}
 	
-	
+	/**
+	 * Given the icalendar data values and the var settings,
+	 * format the iCalendar data into a list of properties
+	 * and values in the field order of the iCalendarData object
+	 * values. This format function is called from the EmailHandler
+	 * when formatting the message.
+	 * 
+	 * Example:
+	 * 
+	 * BEGIN:VCALENDAR
+	 * PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
+	 * VERSION:2.0
+	 * METHOD:METHOD
+	 * BEGIN:VEVENT
+	 * ORGANIZER;CN=Web Site Administrator:MAILTO:andy@sonjara.com
+	 * ATTENDEE;RSVP=true;CN=Janice Gallant:MAILTO:janice@sonjara.com
+	 * DTSTART;VALUE=DATE:20130328
+	 * DTEND;VALUE=DATE:20130328
+	 * LOCATION:test
+	 * TRANSP:OPAQUE
+	 * STATUS:CONFIRMED
+	 * X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+	 * UID:243stem2stern
+	 * SEQUENCE:2
+	 * DTSTAMP:20130321T120233
+	 * DESCRIPTION:test
+	 * SUMMARY:test all day
+	 * PRIORITY:5
+	 * CLASS:PUBLIC
+	 * END:VEVENT
+	 * END:VCALENDAR
+	 * 
+	 * @return string
+	 */
 	function format()
 	{	
 		$this->data->organizer = $this->formatOrganizer();

@@ -146,7 +146,7 @@ class StandardEventHandler extends EventHandler
 	
 	function formatiCalendar($event, $sequence_id = 0)
 	{
-		return new iCalendarEventManager($event->event_id, $event->start_date, $event->end_date, $event->title, $event->description, $event->location, $sequence_id);
+		return new iCalendarEventManager($event->event_id, $event->start_date, $event->end_date, $event->title, $event->description, $event->location, $sequence_id, $event->TimeZone());
 	}
 }
 

@@ -41,6 +41,7 @@ class Event extends DataItem
 						"calendar_id"			=>	Number,
 						"start_date"			=>	DateTime,
 						"end_date"				=>	DateTime,
+						"time_zone_id"			=>	Number,
 						"location"				=>	String,
 						"event_type"			=>	String,
 						"description"			=>	HTML,
@@ -52,10 +53,11 @@ class Event extends DataItem
 						
 	// Relations
 	
-	var $relations = array("Sites"		=>	Site,
-						   "Calendar"	=>	Calendar,
-							"Invitation"	=>	EventInvitation,
-			
+	var $relations = array(
+			"Sites"			=>	Site,
+			"Calendar"		=>	Calendar,
+			"Invitation"	=>	EventInvitation,
+			"TimeZone"		=>	TimeZone
 				);
 
 	function Sites($constraint = "")
@@ -73,6 +75,13 @@ class Event extends DataItem
 		if(!$this->event_invitation_id) return null;
 		
 		return $this->getRelated(EventInvitation);
+	}
+	
+	function TimeZone()
+	{
+		if(!$this->time_zone_id) return null;
+		
+		return $this->getRelated(TimeZone);
 	}
 	
 	function Event()

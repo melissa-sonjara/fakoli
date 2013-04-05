@@ -63,7 +63,7 @@ $desc = $form->getRenderer("description");
 $desc->width = "450px";
 $desc->height = "100px";
 $form->required("title", "start_date", "end_date");
-$form->hide("composite_class", "event_invitation_id", "allow_access");
+$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id");
 
 if (!checkRole("admin"))
 {

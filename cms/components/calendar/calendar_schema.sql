@@ -96,3 +96,28 @@ ALTER TABLE `event` ADD INDEX `event_invitation_idx`(`event_invitation_id`);
 alter table `event` add column `allow_access` varchar(200) NOT NULL DEFAULT '' AFTER `event_type`;
 
 -- END Version 1.4
+
+-- START Version 1.5
+
+CREATE TABLE `time_zone` (
+  `time_zone_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `time_zone_name` varchar(80) NOT NULL,
+  `standard_offset` double NOT NULL default '0',
+  `daylight_offset` double NOT NULL default '0',
+  PRIMARY KEY (`time_zone_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `time_zone` (`time_zone_name`,`standard_offset`,`daylight_offset`) VALUES 
+ ('US/Eastern',-5,-4),
+ ('US/Pacific',-8,-7),
+ ('US/Mountain',-7,-6),
+ ('US/Indiana-Starke',-6,-5),
+ ('US/East-Indiana',-5,-4),
+ ('US/Central',-6,-5),
+ ('US/Arizona',-7,-7),
+ ('US/Hawaii',-10,-10),
+ ('US/Alaska',-9,-8);
+
+alter table `event` add column `time_zone_id` int(10) NOT NULL DEFAULT '0' AFTER `end_date`;
+
+-- END Version 1.5

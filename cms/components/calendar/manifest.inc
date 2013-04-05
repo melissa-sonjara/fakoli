@@ -70,7 +70,12 @@ class CalendarManifest
 					
 					"Calendar Events"	=>	array("page"	=>	"/admin/events",
 							"role"	=>	"admin,editor",
-							"weight"	=>	3)
+							"weight"	=>	3),
+					
+					"Time Zones"	=>	array("page"	=>	"/admin/time_zones",
+							"role"	=>	"admin,editor",
+							"weight"	=>	5)
+					
 					),
 					
 				
