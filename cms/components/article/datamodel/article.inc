@@ -61,7 +61,9 @@ class Article extends DataItem implements Searchable
 	var $relations = array(	"Image" 	=> ImageRecord,
 							"Sites"		=> Site,
 							"Comments"	=> Comment,
-							"Author"	=> "");
+							"Author"	=> "",
+							"Blog"		=>	Blog,
+			);
 	
 	var $fieldAliases = array("message"	=>	"Article Content");
 	
@@ -78,6 +80,22 @@ class Article extends DataItem implements Searchable
 	function Comments($constraint = "")
 	{
 		return $this->crossReference(Comment, ArticleCommentXref, $constraint);
+	}
+	
+	/**
+	 * We retrieve the blog related to the article by matching the
+	 * article_type field to the blog's title field. This function
+	 * may return null as an article may not be related to any blog.
+	 * 
+	 * Used for merge codes
+	 */
+	function Blog()
+	{
+		$blogs = Query::create(Blog, "WHERE title=:article_type")
+			->bind(":article_type", $this->article_type)
+			->execute();
+				
+		return count($blogs) ? $blogs[0] : null;
 	}
 	
 	function Author()
