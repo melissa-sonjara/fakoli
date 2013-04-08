@@ -279,9 +279,16 @@ class ForumTopic extends DataItem
 		return $this->getRelatedList(ForumMessage, "", $constraint);
 	}
 	
+	/**
+	 * When counting forum message replies to a topic, exclude the forum message
+	 * that has a parent id of 0, that is the topic message, the initial post
+	 * to which others may reply.
+	 */
 	function countReplies()
 	{
-		return queryValue(ForumMessage, "COUNT(1)", "WHERE topic_id={$this->topic_id} and deleted=0");
+		return Query::create(ForumMessage, "WHERE topic_id=:topic_id and parent_id > 0 and deleted=0")
+			->bind(":topic_id", $this->topic_id)
+			->executeValue("COUNT(1)");
 	}
 	
 	function ForumTopic()
