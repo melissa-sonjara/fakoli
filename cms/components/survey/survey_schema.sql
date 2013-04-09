@@ -124,3 +124,11 @@ ALTER TABLE `survey` ADD COLUMN `instructions` TEXT AFTER `end_date`;
 ALTER TABLE `survey` ADD COLUMN `show_preview_before_submitting` TINYINT(3) DEFAULT 1;
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+alter table `survey_response` add column `include_in_results` tinyint(3) not null default '1';
+alter table `survey` add column `cc_recipients` text after `recipients`;
+alter table `survey` add column `additional_recipients` text after `cc_recipients`;
+
+-- END Version 1.7

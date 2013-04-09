@@ -31,23 +31,28 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
+Fakoli::using("questionnaire");
 
-class SurveyResponse extends DataItem
+class SurveyResponse extends AbstractQuestionnaireResponse
 {
 	var $fields = array (
-				"response_id"		=>	Number,
-				"survey_id"			=>	Number,
-				"token"				=>	String,
-				"email"				=>	String,
-				"last_modified"		=>	Date,
-				"status"			=>	String,
+				"response_id"			=>	Number,
+				"survey_id"				=>	Number,
+				"token"					=>	String,
+				"email"					=>	String,
+				"last_modified"			=>	Date,
+				"status"				=>	String,
+				"include_in_results"	=>	Boolean,
+	);
+	
+	var $fieldAliases = array(
+			"include_in_results"	=>	"Include in Reslts",
 	);
 
 	var $relations = array (
 				"Questions"				=>	Questions,
 				"Answers"				=>	SurveyAnswer,
 				"Survey"				=>	Survey,
-				"MergeCodes"			=>	MergeCode,
 	);
 
 	var $statusTypes = array(
@@ -55,18 +60,6 @@ class SurveyResponse extends DataItem
 		"in_progress"	=>	"In Progress",
 		"submitted"		=>	"Submitted",
 	);
-
-	function getRequiredText($index, $error = false)
-	{
-		static $text = array (1	=>	"You must answer all required questions.",
-		);
-
-		$html = ($error) ? "<p><warning>{$text[$index]}</warning></p>"
-		: "<p><b>$text[$index]</b></p>";
-
-		return $html;
-	}
-
 
 	function Questions()
 	{
@@ -102,7 +95,6 @@ class SurveyResponse extends DataItem
 		return $this->Survey()->Questionnaire();
 	}
 
-
 	function isSubmitted()
 	{
 		return ($this->status != "submitted") ? false : true;
@@ -113,39 +105,6 @@ class SurveyResponse extends DataItem
 		return ($this->status != "submitted") ? true : false;
 	}
 
-	/*
-	 * generateToken
-	 *
-	 * Create a token to grant access to enter responses to
-	 * the questionnaire/survey. Before accepting a generated
-	 * token, we need to make sure that that token does not
-	 * exist already.
-	 */
-	static function generateToken($survey_id, $email)
-	{
-		if(!$surveyResponse)
-		{
-			$surveyResponse = new SurveyResponse();
-
-			do
-			{
-				$code = "";
-
-				for($i = 0; $i < 5; ++$i)
-				{
-					$code .= chr(rand(ord('A'), ord('Z')));
-				}
-					
-				$surveyResponse->token = $code;
-				$surveyResponse->survey_id = $survey_id;
-				$surveyResponse->email = $email;
-				$surveyResponse->status = "not_started";
-			}
-			while(!$surveyResponse->insert());
-		}
-
-		return $surveyResponse;
-	}
 
 	function setStatus($status)
 	{
@@ -154,41 +113,74 @@ class SurveyResponse extends DataItem
 		$this->status = $status;
 		$rtn = $this->save();
 	}
+	
+	static function findResponseByToken($survey_id, $token)
+	{
+		$responses = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND token=:token")
+		->bind(":survey_id", $survey_id, ":token", $token)
+		->execute();
+			
+		return (count($responses) > 0) ? $responses[0] : null;
+	}
+	
+	
+	function setDefaults()
+	{
+		$this->status = "not_started";
+		$this->include_in_results = true;
+	}
 
 	/*
+	 * merge_code
+	 * 
 	 * Allow a user to get to a survey landing page with just the survey_id
 	 * and they can enter the token from there.
+	 * 
+	 * Called by merge code and response tester block
 	 */
 	function getEditUrl()
 	{
-		global $config;
-
-		// need full url for links placed inside email messages
-		$link = "http://". $config["http_host"] . "/survey_response_form?survey_id={$this->survey_id}";
-		if($this->token)
-			$link .= "&token={$this->token}";
-			
-		return $link;
+		$mgr = new SurveyResponseManager($this);		
+		return $mgr->getEditUrl($this->Survey());
 	}
 
-	function MergeCodes()
-	{
-		return Query::create(MergeCode, "WHERE class_name = :class_name")
-			->bind(":class_name", get_class($this))
-			->execute();
-	}
-
-
-	/* merge code */
+	/**
+	 * 	Called by merge code and response tester block
+	 * 
+	 * @return string
+	 */
 	function getIntroUrl()
 	{
-		global $config;
-
-		// need full url for links placed inside email messages
-		$link = "http://". $config["http_host"] . "/survey_response_intro?survey_id={$this->survey_id}";
-			
-		return $link;
+		$mgr = new SurveyResponseManager($this);		
+		return $mgr->getIntroUrl($this->Survey());
 	}
+	
+	function isTester()
+	{
+		return ($this->include_in_results) ? false : true;
+	}
+	
+	function excludeResponse($include_in_results = false)
+	{
+		$this->include_in_results = false;
+		$this->filter = new InclusionFilter("include_in_results");
+		$this->save();
+	}
+
+	
+	/**
+	 * reinitialize token for a test user.
+	 */
+	function reset()
+	{
+		if(!$this->response_id) return;
+		if(!$this->isTester()) return;
+	
+		$this->setStatus("not_started");
+		$answer = new SurveyAnswer();
+		$answer->delete("WHERE response_id={$this->response_id}");
+	}
+	
 
 	function SurveyResponse()
 	{

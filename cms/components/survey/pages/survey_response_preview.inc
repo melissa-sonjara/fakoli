@@ -59,18 +59,22 @@ if(!$token)
 	redirect("survey_response_intro?survey_id={$survey_id}");
 }
 
-$response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
+$response = SurveyResponse::findResponseByToken($survey_id, $token);
 
 if(!$response)
-redirect("survey_response_intro?survey_id={$survey_id}");
+{
+	redirect("survey_response_intro?survey_id={$survey_id}");
+}
 
 $survey = $response->Survey();
 if(!$survey->isOpen() OR !$response->isEditable())
-redirect("survey_response_intro?survey_id=$survey_id");
+{
+	redirect("survey_response_intro?survey_id=$survey_id");
+}
 
-$validate = new ValidateSurveyResponse($response);
-$view = new SurveyResponseView($response);
-$response->filter = new ExclusionFilter("last_modified");
+$view = new QuestionnaireForm(new SurveyResponseManager($response), true);
+
+$response->filter = new ExclusionFilter("last_modified", "include_in_results");
 $form = new AutoForm($response);
 $form->hide("survey_id", "token", "email", "last_modified", "status");
 $form->submitLabel = "Submit";
@@ -79,12 +83,9 @@ $form->onSaveComplete = updateStatus;
 
 if ($method == "POST")
 {
-	if($validate->Validate())
+	if ($form->save())
 	{
-		if ($form->save())
-		{
-			redirect("survey_response_confirmation?survey_id={$survey_id}");
-		}
+		redirect("survey_response_confirmation?survey_id={$survey_id}");
 	}
 }
 
@@ -93,6 +94,7 @@ $script .= $form->writeScript();
 <p>A preview of your responses is shown below. To submit your survey,
 scroll to the bottom of the page and click the "Submit" button.</p>
 <?
+echo "<h3>". $response->Survey()->title . "</h3>\n";
 $view->drawView();
 $form->drawForm();
 

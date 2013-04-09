@@ -54,13 +54,15 @@ $survey = new Survey($survey_id);
 $page->page_title = "Survey Responses for {$survey->title}";
 
 $responses = $survey->Responses("ORDER BY last_modified DESC");
-$recipientCount = $survey->getRecipientCount();
-$responseCount = $survey->getResponseCount();
+
+$mgr = new SurveyResultsManager($survey);
+$sendMgr = new SurveySendManager($survey);
 
 $table = new DataListView($responses, "surveyResponses");
-$table->column("Token", array(SurveyTableHelper, formatResponseLink), true)
+$table->column("Token", array($mgr, formatResponseLink), true)
 	->column("Status", "{status:prettify}", true)
-	->column("Date Submitted", array(SurveyTableHelper, formatResponseSubmitDate), true)
+	->column("Date Submitted", "{last_modified|N/A}", true)
+	->column("Include In Results", array($mgr, formatIncludeInResultsLink), true, "text-align: center; width: 20px");
 ;
 
 $table->emptyMessage = "There are no responses to this survey.";
@@ -69,10 +71,13 @@ $table->pageSize = 20;
 $table->filter = false;
 $table->cssStyle = "width: 100%";
 $table->excelFile = "surveyResults.xls";
+$table->rowId = true;
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 
 $script .= $table->writeScript();
+$script .= $mgr->writeScript();
+$script .= $sendMgr->writeScript();
 
 $tabs->writeHTML();
 ?>
@@ -80,20 +85,12 @@ $tabs->writeHTML();
 <h3>Survey Responses</h3>
 <?
 echo "<h3>".$survey->getTitle() . "</h3>\n";
-echo "<p id='survey_reminder_result' class='error' style='display: 'none'></p>\n";
+// Use to show result of reminders & sent param from preview/manage page.
+echo "<p id='action_result' class='questionnaire_action_result' style='display: none'></p>\n";
 
 $table->drawView();
-echo "<p>";
-if($survey->isOpen() AND $recipientCount > 0 AND $responseCount < $recipientCount)
-{
-	echo "<a class=\"button\" href='#' onclick=\"new Survey().showSurveyReminderDialog($survey_id); return false;\">Send Survey Reminders</a>&nbsp;&nbsp;\n";
-}
 
-if ($survey->allow_anonymous_responses)
-{
-	echo "<a target='_blank' href='anonymous_response?survey_id={$survey_id}' class='button'>Enter an Anonymous Survey Response</a>";
-}
-
+// anonymous response and send reminders, if applicable
+echo $sendMgr->getResultsPageButtons();
 ?>
-</p>
 </div>

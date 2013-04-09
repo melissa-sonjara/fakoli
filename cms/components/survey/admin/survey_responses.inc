@@ -42,7 +42,7 @@ Fakoli::usingFeature("data_view");
 $responses = Query::create(SurveyResponse, "WHERE status='submitted' AND survey_id NOT IN (SELECT survey_id FROM survey WHERE deleted=true)")->execute();
 
 $table = new DataListView($responses, "surveyResponses");
-$table->column("Token", array(SurveyTableHelper, formatResponseLink), true)
+$table->column("Token", "{token}", true)
 	->column("Survey", "{Survey.title}", true)
 	->column("Status", "{status:prettify}", true)
 	->column("Date Submitted", "{last_modified:short}", true)

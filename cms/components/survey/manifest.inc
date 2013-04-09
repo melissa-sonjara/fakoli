@@ -69,19 +69,6 @@ class SurveyManifest
 		);
 	}
 
-	static function getStyles()
-	{
-		return array("/components/survey/css/survey.css");
-	}
-
-
-	static function getScripts()
-	{
-		return array("/components/survey/js/survey.js",
-			"/components/survey/js/survey_create.js",
-			"/components/survey/js/survey_response.js"			
-		);
-	}
 }
 
 ?>

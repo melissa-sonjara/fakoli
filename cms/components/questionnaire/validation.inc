@@ -250,3 +250,90 @@ ENDSCRIPT;
 		}
 	}
 }
+
+/**
+ * If a survey allows anonymous responses, then email message is only
+ * required if the user enters a recipient, additional recipient, or 
+ * cc recipient.
+ * 
+ * This validator is only used in the case of survey
+ * allow_anonymous_responses == true.
+ * 
+ * @author janice
+ *
+ */
+class RequiredQuestionnaireMessageValidator extends RequiredValidator
+{
+	var $conditionalFields = array();
+	
+	function __construct($form, $field, $title = "", $message = "")
+	{
+		$this->AbstractValidator($field, $title);
+		$this->conditionalFields[] = "recipients";
+		
+		if($form->data->hasField("additional_recipients"))
+		{
+			$this->conditionalFields[] = "additional_recipients";
+		}
+		
+		if($form->data->hasField("cc_recipients"))
+		{
+			$this->conditionalFields[] = "cc_recipients";
+		}	
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		if(count($this->conditionalFields) > 0)
+		{
+			$conditions = array();
+			foreach($this->conditionalFields as $field)
+			{
+				$conditions[] = "form[\"{$field}\"].value != \"{$this->empty}\"";
+			}
+			$conditions = "(" . implode(" || ", $conditions) . ") && ";
+		}
+		
+		$script = <<<ENDSCRIPT
+		
+	if ({$conditions}form["{$this->field}"].value == "{$this->empty}")
+	{
+		alert("{$this->title} is a required field. Please supply a value.");
+		return false;
+	}
+ENDSCRIPT;
+		
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if ($this->readOnly) return "";
+
+		$empty = true;
+		if(count($this->conditionalFields) > 0)
+		{
+			foreach($this->conditionalFields as $field)
+			{
+				if(isset($_POST[$this->field]) && $_POST[$this->field] !== $this->empty)
+				{
+					$emtpy = false;
+				}
+			}
+		}
+			
+		if ((!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty) 
+				&& (!count($this->conditionalFields) || !$empty))
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+}

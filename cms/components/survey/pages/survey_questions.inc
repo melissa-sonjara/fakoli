@@ -77,7 +77,7 @@ $table->rowId = true;
 if(count($xrefs) == 0)
 	$form->readOnlyForm = true;
 
-$questionSets = SurveyManager::getQuestionSets($survey_id);
+$questionSets = $mgr->getQuestionSets();
 
 $tabs = SurveyManager::surveyTabs($survey_id, false);
 

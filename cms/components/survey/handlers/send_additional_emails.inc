@@ -31,30 +31,26 @@
 
 *****************************************************************/
 
-/**
- * Sample code for sending test email. Questionnaire component does not
- * use this handler.
- */
-Fakoli::using("questionnaire", "email", "settings");
+Fakoli::using("survey", "questionnaire", "email", "settings");
 
-$questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+$survey_id = checkNumeric($_GET["survey_id"]);
 
-if(!$questionnaire_id)
+if(!$survey_id)
 {
-	Fakoli::end("cannot send test email - unknown questionnaire");
+	ajaxReturn("cannot send emails - unknown survey");
 }
 
-if(!$user)
+$survey = new Survey($survey_id);
+
+if(!$survey->isAuthor())
 {
-	Fakoli::end("cannot send test email - user not logged in");
+	ajaxReturn("insufficient privileges to send survey emails");
 }
 
-$questionnaire = new Questionnaire($questionnaire_id);
-$mgr = new QuestionnaireSendManager($questionnaire);
-
-$rtn = $mgr->sendTests($user->email);
+$mgr = new SurveySendManager($survey);
+$rtn = $mgr->sendToAdditional();
 
 $sent = ($rtn) ? "OK" : "FAIL";
-$send_result = ($rtn) ? questionnaire_test_sent : questionnaire_test_failed;
-Fakoli::end("{$sent}|" .$mgr->getInfoMsg($send_result));
+$send_result = ($rtn) ? questionnaire_sent : questionnaire_send_failed;
+Fakoli::end("{$sent}|{$send_result}");
 ?>

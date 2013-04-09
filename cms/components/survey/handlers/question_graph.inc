@@ -31,21 +31,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/**
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 5/18/10
+
+/*
+ * Show the graph to all answers to one question across all its surveys.
  */
 
-Fakoli::using("survey");
+Fakoli::using("survey", "questionnaire");
 
-$survey_id = checkNumeric($_GET["survey_id"]);
+$survey_question_id = checkNumeric($_GET["survey_question_id"]);
 
-if(!$survey_id)
-	Fakoli::end("unknown survey");
+$question = new SurveyQuestion($survey_question_id);
 
-$survey = new Survey($survey_id);
-if($survey->isAuthor())
-	$survey->setStatus("open");
+$constraint = "WHERE survey_question_id=:survey_question_id AND response_id IN (SELECT response_id FROM survey_response WHERE status = 'submitted')";	
+$answers = Query::create(SurveyAnswer, $constraint)
+	->bind(":survey_question_id", $survey_question_id)
+	->execute();
 
-Fakoli::end("OK");
+$survey = new Survey();
+$mgr = new SurveyResultsManager($survey);
+
+$renderer = QuestionField::create($survey, $question);
+echo "<h4>{$question->question_number}. {$question->question}</h4>\n";
+$renderer->drawGraph($mgr, $answers);
+
+?>

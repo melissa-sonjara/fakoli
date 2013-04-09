@@ -44,34 +44,11 @@ $redirect = "survey_questions?survey_id=$survey_id";
 $survey = new Survey($survey_id);
 $page->page_title .= " for {$survey->title}";
 
-$survey->filter = new InclusionFilter("survey_id");
-$form = new AutoForm($survey);
-$form->button("Cancel", $redirect);
+$mgr = new SurveyCreateManager($survey);
 
-$questionSets = SurveyManager::getQuestionSets($survey_id);
-if(count($questionSets) == 0)
-	redirect("survey_question_form?survey_id=$survey_id");
-	
-$table = new GroupedDataListView($questionSets, "SurveyQuestionSets");
-$table->selector();
-$table->column("Question", "{Question.question}")
-	->column("Options", array(QuestionTableHelper, formatOptions))
-	->column("Required", array(QuestionTableHelper, formatRequired))
-	;
-	
-$table->emptyMessage = "There are no survey questions to select.";
-$table->mode = "fixed";
-$table->cssStyle = "width: 100%";
+$surveys = IndexedQuery::create(Survey, "WHERE deleted=false", "survey_id")->execute();
 
-foreach(array_keys($questionSets) as $survey_id)
-{
-	$survey = new Survey($survey_id);
-	$table->group($survey->title, $survey_id);
-}
-
-$questionSelect = new DataListFieldRenderer($form, $table, "survey_question_select", " ");
-$form->submitLabel = "Select";
-$questionSelect->onPostProcess = selectQuestions;
+$form = $mgr->buildQuestionSelectForm($surveys);
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 $tabs->page = "survey_questions";
@@ -92,10 +69,4 @@ $tabs->writeHTML();
 <h3>Select Survey Questions</h3>
 <?
 $form->drawForm();
-
-
-function selectQuestions($questionSelect, $field)
-{
-	SurveyManager::saveSelectedQuestions($questionSelect, $field);
-}
 ?></div>

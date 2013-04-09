@@ -61,4 +61,5 @@ echo "<p><label>Respondent: </label>". $mgr->getRespondent() . "</p>\n";
 echo "<p><label>Date Submitted: </label>". $response->format("{last_modified:F d, Y}") . "</p>\n";
 
 $view->drawView();
+
 ?>

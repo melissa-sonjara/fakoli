@@ -31,28 +31,26 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("survey", "questionnaire");
-Fakoli::usingFeature("data_view", "auto_form");
+Fakoli::using("survey");
 
-$surveys = Query::create(Survey, "WHERE introduction != ''")->execute();
-$surveys = removeDuplicates($surveys, "introduction");
+$response_id = checkNumeric($_GET["response_id"]);
+$include_in_results = checkNumeric($_GET["include_in_results"]);
 
-$table = new DataListView($surveys, "surveys");
+if(!$user)
+{
+	ajaxReturn("insufficient privileges to include/exclude a survey response");	
+}
 
-$table->column("", "<input  style='border: none' type='radio' class='radio' name='survey_id[]' id='survey_id_{survey_id}' value='{survey_id}' onchange=\"new Survey().introductionSelectResult('{introduction}');\" />", false, "width: 10%")
-	->column("Title", "{title}", false, "width: 25%")	
-	->column("Introduction", "{introduction}", false, "width: 50%");
+if(!$response_id)
+{
+	ajaxReturn("unknown survey response");
+}
 
-$table->emptyMessage = "There are no survey introductions defined.";
-$table->sortable = false;
-$table->pageSize = 0;
-$table->paginate = false;
-$table->filter = false;
-$table->cssStyle = "width: 90%";
+$response = new SurveyResponse($response_id);
 
+$response->include_in_results = $include_in_results;
+$response->filter = new InclusionFilter("include_in_results");
+$response->save();
 
-echo $table->writeScript();
-
-$table->drawView();
-
+Fakoli::end("OK");
 ?>

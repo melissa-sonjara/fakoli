@@ -72,7 +72,8 @@ else
 	
 	if ($method == "POST")
 	{
-		$response = SurveyResponse::generateToken($survey->survey_id, $recipient);
+		$sendMgr = new SurveySendManager($survey);
+		$response = $sendMgr->generateToken($recipient);
 		$response->save();
 		redirect("survey_response_form?survey_id={$survey->survey_id}&token={$response->token}");
 	}

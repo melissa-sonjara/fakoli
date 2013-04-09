@@ -24,6 +24,11 @@ class QuestionnaireDashboardManager extends AbstractQuestionnaireDashboardManage
 		return new QuestionnaireResultsManager($item);
 	}
 	
+	function getQuestionnaireFormIdentifier()
+	{
+		return "questionnaire_form";	
+	}
+	
 	function getSendManager($item)
 	{
 		return null;
@@ -197,6 +202,11 @@ class QuestionnaireResultsManager extends AbstractQuestionnaireResultsManager
 	function getAnswerClass()
 	{
 		return "QuestionnaireAnswer";
+	}
+	
+	function getResponseClass()
+	{
+		return "QuestionnaireResponse";
 	}
 	
 	function getResponseManager($response)

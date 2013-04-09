@@ -31,21 +31,36 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/**
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 5/18/10
- */
-
-Fakoli::using("survey");
+Fakoli::using("survey", "questionnaire", "email", "settings");
+Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
+$type = checkNumeric($_GET["type"]);
 
 if(!$survey_id)
-	Fakoli::end("unknown survey");
+{
+	ajaxReturn("unknown survey");
+}
 
 $survey = new Survey($survey_id);
-if($survey->isAuthor())
-	$survey->setStatus("open");
 
-Fakoli::end("OK");
+if(!$type)
+{
+	$recipients = $survey->recipients;
+}
+else
+{
+	$recipients =  $survey->additional_recipients;
+}
+
+$recipients = explode(",", $recipients);
+?>
+<div id="recipient_scrollbox" style="height: 200px;">
+<?php 
+foreach($recipients as $recipient)
+{
+	echo "<div class=\"member\">&nbsp;{$recipient}&nbsp;";
+	echo "</div>\n";
+}
+?>
+</div>

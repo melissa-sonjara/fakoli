@@ -41,9 +41,10 @@ OTHER DEALINGS IN THE SOFTWARE.
  * date: 2/18/10
  *
  */
+Fakoli::using("questionnaire");
 
 
-class Survey extends DataItem
+class Survey extends AbstractQuestionnaire
 {
 	var $fields = array(
 				"survey_id"							=>	Number,
@@ -55,6 +56,8 @@ class Survey extends DataItem
 				"user_id"							=>	Number,
 				"sender_email"						=>	String,
 				"recipients"						=>	Text,
+				"cc_recipients"						=>	Text,
+				"additional_recipients"				=>	Text,
 				"allow_anonymous_responses"			=>	Boolean,
 				"show_preview_before_submitting"	=>	Boolean,
 				"message"							=>	Text,
@@ -67,9 +70,13 @@ class Survey extends DataItem
 				"Responses"				=>	SurveyResponse,
 				"Questions"				=>	SurveyQuestion,
 				"SurveyQuestionXrefs"	=>	SurveyQuestionXref,
-				"User"					=>	""
+				"User"					=>	"",
+				"Author"				=>	"",
 				);
 
+	var $fieldAliases = array(
+			"cc_recipients"	=>	"CC Recipients",
+			);
 
 	static $statusTypes = array(
 		"not sent"	=>	"Not Sent",
@@ -92,6 +99,11 @@ class Survey extends DataItem
 			->execute();
 		return (count($authors) > 0) ? $authors[0] : null;
 	}
+	
+	function Author()
+	{
+		return $this->User();
+	}
 
 	function SurveyQuestionXrefs($constraint = "ORDER BY sort_order")
 	{
@@ -104,45 +116,31 @@ class Survey extends DataItem
 			return $this->crossReference(SurveyQuestion, SurveyQuestionXref, $constraint);
 	}
 
-	function getStatusInfoText()
-	{
-		global $config;
-		
-		switch ($this->status) {
-			case "not sent":
-				$text = "This survey has not yet been sent.";
-				break;
-								
-			case "open":
-				$text = $this->format("This survey was opened on {start_date:F d, Y}.");
-				break;
-
-			case "closed":
-				$text = $this->format("This survey was opened on {start_date:F d, Y} and closed on {end_date:F d, Y}.");
-				break;
-		}
-
-		if ($this->allow_anonymous_responses)
-		{
-			$text .= " This survey can be access anonymously. The anonymous survey link is <a href='http://{$config['http_host']}/anonymous_response?survey_id={$this->survey_id}'>http://{$config['http_host']}/anonymous_response?survey_id={$this->survey_id}</a>";
-		}
-		
-		return $text;
-	}
-
 	function Responses($constraint = "")
 	{
-		return $this->getRelatedList(SurveyResponse, "", "WHERE email != '{$this->sender_email}'");
+		return $this->getRelatedList(SurveyResponse);
 	}
 
 	/* for results aggregation */
 	function Answers($constraint = "")
 	{
-		$query = "WHERE response_id IN (SELECT response_id FROM survey_response WHERE status = 'submitted' AND survey_id={$this->survey_id} AND email != '{$this->sender_email}')";
+		$query = "WHERE response_id IN (SELECT response_id FROM survey_response WHERE status = 'submitted' AND survey_id=:survey_id AND include_in_results=true)";
 		if($constraint)
 		{
 			$query .= preg_replace("/WHERE/i", " AND", $constraint);
 		}
+		
+		if($constraint)
+		{
+			$constraint = preg_replace("/WHERE/i", " AND", $constraint);
+			$constraint =  preg_replace("/ question_id/", " survey_question_id", $constraint);
+			$query .= $constraint;
+		}
+		
+		trace("Email survey answers constraint ". $query, 3);
+		return Query::create(SurveyAnswer, $query)
+		->bind(":survey_id", $this->survey_id)
+		->execute();
 		
 		$answers = query(SurveyAnswer, $query);
 		return $answers;
@@ -154,16 +152,6 @@ class Survey extends DataItem
 		$title .= ($this->start_date > 0) ? " &ndash; " . $this->format("{start_date:F d, Y}") : "";
 
 		return $title;
-	}
-
-	function getEditUrl()
-	{
-		return "survey_form?survey_id={$this->survey_id}";
-	}
-
-	function getViewUrl()
-	{
-		return "survey_manage?survey_id={$this->survey_id}";
 	}
 
 	function isEditable()
@@ -182,6 +170,14 @@ class Survey extends DataItem
 	function isOpen()
 	{
 		return ($this->status == "open") ? true : false;
+	}
+	
+	function setDefaults()
+	{
+		global $user;
+		
+		$this->status = "not sent";
+		$this->user_id = $user->user_id;
 	}
 
 	/* set to closed if end_date is greater than today  */
@@ -212,7 +208,7 @@ class Survey extends DataItem
 
 		if($status == "open")
 		{
-			$this->filter = new InclusionFilter("start_date", "end_date", "status", "program_id");
+			$this->filter = new InclusionFilter("start_date", "end_date", "status");
 							
 			if($this->start_date > 0)
 			{
@@ -225,58 +221,58 @@ class Survey extends DataItem
 		}
 		elseif($status == "closed")
 		{
-			$this->filter = new InclusionFilter("end_date", "status", "program_id");
+			$this->filter = new InclusionFilter("end_date", "status");
 			$this->end_date = $today;
 		}
 
 		$this->status = $status;
 		$this->save();
 	}
-
+	
+	/**
+	 * Called by SurveyResultsManager
+	 * 
+	 * @return Number
+	 */
 	function getRecipientCount()
 	{
-		$count = Query::create(SurveyResponse, "WHERE survey_id=:survey_id")
+		$count = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND include_in_results=true")
 			->bind(":survey_id", $this->survey_id)
 			->executeValue("COUNT(1)");
 			
 		return $count;
 	}
 	
-	/* for survey aggregation */
+	/**
+	 * Called by SurveyResultsManager
+	 * 
+	 * for survey aggregation
+	 * 
+	 * @return Number
+	 */
 	function getResponseCount()
 	{
-		$sender_email = ($this->sender_email) ? $this->sender_email : $this->getSenderEmail();
-			
-		$count = Query::create(SurveyResponse, "WHERE status = 'submitted' AND survey_id=:survey_id AND email != :sender_email")	
-			->bind(":survey_id", $this->survey_id, ":sender_email", $sender_email)
+		$count = Query::create(SurveyResponse, "WHERE status = 'submitted' AND survey_id=:survey_id AND include_in_results=true")	
+			->bind(":survey_id", $this->survey_id)
 			->executeValue("COUNT(1)");
 						
 		return $count;
 	}
 
-
+	/**
+	 * Called by SurveyResultsManager
+	 * 
+	 * @return array of SurveyResponse objects
+	 */
 	function getNonResponders()
 	{
-		$sender_email = ($this->sender_email) ? $this->sender_email : $this->getSenderEmail();
-
-		$nonResponders = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND status != 'submitted' AND email != :sender_email")
-			->bind(":survey_id", $this->survey_id, ":sender_email", $sender_email)
+		$nonResponders = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND status != 'submitted' AND include_in_results=true")
+			->bind(":survey_id", $this->survey_id)
 			->execute();
 
-			return $nonResponders;
-		}
-
-	static function getSenderEmail()
-	{
-		$email = Settings::getValue("survey", "sender_email");
-		if(!$email)
-			$email = Settings::getValue("settings", "email_contact");
-		if(!$email)
-			$email = Settings::getValue("settings", "email_from");
-
-		return $email;
+		return $nonResponders;
 	}
-
+	
 	function allowDelete()
 	{
 		if(!$this->survey_id)

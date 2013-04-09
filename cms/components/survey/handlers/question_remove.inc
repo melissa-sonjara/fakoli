@@ -49,32 +49,28 @@ $survey_question_xref_id = checkNumeric($_GET["survey_question_xref_id"]);
 $survey_id = checkNumeric($_GET["survey_id"]);
 $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 
-$xref = new SurveyQuestionXref();
+if(!$survey_id)
+{
+	Fakoli::end("Question Remove Failed - Unknown Survey");	
+}
+	
+$survey = new Survey($survey_id);
+$mgr = new SurveyCreateManager($survey);
 
+// from question list page
 if($survey_question_xref_id)
 {
-	$xref->load($survey_question_xref_id);
-	$question = $xref->Question();
-	$survey = $xref->Survey();
-
-	// only delete if not linked to any other survey
-	if($question && $question->allowDelete())
-		$question->delete();
-	$xref->delete();
-	SurveyManager::updateSortOrder($survey);
+	$mgr->removeQuestionXref($survey_question_xref_id);
 }
-else if($survey_id && $survey_question_id)
+// from question form
+else if($survey_question_id)
 {
-	$survey = new Survey($survey_id);
-	$xref->delete("WHERE survey_id=$survey_id AND survey_question_id=$survey_question_id");
-	SurveyManager::updateSortOrder($survey);
+	$mgr->removeQuestion($survey_question_id);
 }
 else
 {
-	Fakoli::end("Survey Question Remove - unknown SurveyQuestionXref");
+	Fakoli::end("Question Remove - Unknown survey question");	
 }
 
-
 Fakoli::end("OK");
-
 ?>

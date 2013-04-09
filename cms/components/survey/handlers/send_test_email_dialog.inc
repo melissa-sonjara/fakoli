@@ -31,21 +31,43 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/**
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 5/18/10
- */
-
-Fakoli::using("survey");
+Fakoli::using("survey", "questionnaire", "email", "settings");
+Fakoli::usingFeature("auto_form");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
+$dashboard = checkNumeric($_GET["dashboard"]);
 
 if(!$survey_id)
-	Fakoli::end("unknown survey");
+{
+	ajaxReturn("unknown survey");
+}
 
 $survey = new Survey($survey_id);
-if($survey->isAuthor())
-	$survey->setStatus("open");
 
-Fakoli::end("OK");
+$mgr = new SurveySendManager($survey);
+
+$form = $mgr->buildSendTestEmailForm($dashboard);
+
+if ($method == "POST")
+{
+	$obj =& $form->data;
+	$obj->fromPOST();
+	$msg = $form->validator->validate();
+	if ($msg == "")
+	{
+		$rtn = $mgr->sendTests($obj->recipients);
+		$sent = ($rtn) ? "OK" : "FAIL";
+		$send_result = ($rtn) ? questionnaire_test_sent : questionnaire_test_failed;
+		Fakoli::end("{$sent}|" .$mgr->getInfoMsg($send_result, $dashboard));
+	}	
+	else
+	{
+		Fakoli::end($msg);
+	}
+}
+
+echo $form->writeScript();
+
+$form->drawForm();
+
+?>

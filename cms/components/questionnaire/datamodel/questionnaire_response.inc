@@ -38,9 +38,6 @@ abstract class AbstractQuestionnaireResponse extends DataItem
 		
 	}
 	
-
-	abstract function Respondent();
-
 	abstract function Questions();
 
 	/**
@@ -56,9 +53,9 @@ abstract class AbstractQuestionnaireResponse extends DataItem
 	abstract function setDefaults();
 	
 	/**
-	 * Set the response to submitted and save
+	 * Set the response status and save
 	 */
-	abstract function setSubmitted();
+	abstract function setStatus($status);
 	
 	
 }
@@ -77,7 +74,6 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 				"Questions"				=>	Questions,
 				"Answers"				=>	QuestionnaireAnswer,
 				"Questionnaire"			=>	Questionnaire,
-				"Respondent"			=>	"",
 	);
 
 	var $statusTypes = array(
@@ -87,12 +83,6 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 	);
 
 	
-	function Respondent()
-	{
-		$mgr = new UserManager();
-		return $mgr->getUser($this->user_id);
-	}
-
 	function Questions()
 	{
 		$questionnaire = $this->Questionnaire();
@@ -132,10 +122,10 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 		return ($this->status != "submitted") ? true : false;
 	}
 
-	function setSubmitted()
+	function setStatus($status)
 	{
 		$this->date_submitted = date('Y-m-d');
-		$this->status = "submitted";
+		$this->status = $status;
 		$this->filter = new InclusionFilter("status", "date_submitted");
 		$this->save();
 	}

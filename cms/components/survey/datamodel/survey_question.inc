@@ -31,10 +31,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-define("survey_question_answered", 1);
-define("survey_question_template", 2);
+Fakoli::using("questionnaire");
 
-class SurveyQuestion extends DataItem
+
+class SurveyQuestion extends AbstractQuestion
 {
 	var $fields = array (	"survey_question_id"	=>	Number,
 							"question_type_id"		=>	Number,
@@ -50,159 +50,72 @@ class SurveyQuestion extends DataItem
 	var $relations = array (
 					"Answer"				=>	Answer,
 					"Survey"				=>	Survey,
-					"SurveyQuestionXref"	=>	SurveyQuestionXref
+					"SurveyQuestionXref"	=>	SurveyQuestionXref,
+					"QuestionType"			=>	QuestionType
 	);
 
-	var $fieldAliases = array(
-		"char_limit"	=>	"Character Limit for Answer", 
-		"num_rows"		=> "Number of Rows for Answer",
-		"options"		=> "Options for Answer",
-		"required"		=> "Answer Required"
-		);
+	// Answer to one object's survey question
+	function Answer($response_id)
+	{
+		$answer = Query::create(SurveyAnswer, "WHERE response_id=:response_id AND survey_question_id=:survey_question_id")
+			->bind(":response_id", $response_id, ":survey_question_id", $this->survey_question_id)
+			->executeSingle();
 
-		// Answer to one object's questionnaire's question
-		function Answer($response_id)
-		{
-			$answer = querySingle(Answer, "WHERE response_id = $response_id AND survey_question_id = {$this->survey_question_id}");
-			return $answer;
-		}
+		return $answer;
+	}
 
-		function Survey()
-		{
-			return $this->crossReference(Survey, SurveyQuestionXref);
-		}
+	function Survey()
+	{
+		return $this->crossReference(Survey, SurveyQuestionXref);
+	}
 
-		function SurveyQuestionXref($survey_id)
-		{
-			if($this->survey_question_id)
-				return querySingle(SurveyQuestionXref, "WHERE survey_question_id = {$this->survey_question_id} AND survey_id = $survey_id");
-		}
-
-		function isEditable()
-		{
-			if(!$this->survey_question_id)
-				return true;
-
-			$count = queryValue(SurveyAnswer, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
-
-			return ($count > 0) ? false : true;
-		}
-
-
-		/*
-		 * If the question is editable and is linked only to this survey or
-		 * survey template, then allow delete. This function is called
-		 * from survey_question_form to determine if a user can delete his/her
-		 * own question.
-		 */
-		function allowDelete()
-		{
-			if(!$this->survey_question_id)
-				return true;
-				
-			if(!$this->isEditable())
-				return false;
-				
-			$count = queryValue(SurveyQuestionXref, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
-
-			return ($count > 1) ? false : true;
-		}
-
-		function isFreeText()
-		{
-			return ($this->question_type_id == 4) ? true : false;
-		}
-
-		function isShortText()
-		{
-			return ($this->question_type_id == 3) ? true : false;
-		}
-
-		function isCheckList()
-		{
-			return ($this->question_type_id == 5) ? true : false;
-		}
+	function QuestionType()
+	{
+		return $this->getRelated(QuestionType);
+	}
 		
-		function isRatings()
-		{
-			return ($this->question_type_id == 2) ? true : false;	
-		}
+	function SurveyQuestionXref($survey_id)
+	{
+		if($this->survey_question_id)
+			return querySingle(SurveyQuestionXref, "WHERE survey_question_id = {$this->survey_question_id} AND survey_id = $survey_id");
+	}
+
+	function isEditable()
+	{
+		if(!$this->survey_question_id)
+			return true;
+
+		$count = queryValue(SurveyAnswer, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
+
+		return ($count > 0) ? false : true;
+	}
 
 
-		/*
-		 * Called from CMS?
-		 */
-		function allowLogicalDelete()
-		{
-
-		}
-		
-		
-		function setDefaultValues()
-		{
-			$this->num_rows = 3;
-			$this->required = 0; 
-			
-			$qTypes = Query::create(QuestionType, "ORDER BY sort_order")
-				->execute();
+	/*
+	 * If the question is editable and is linked only to this survey or
+	 * survey template, then allow delete. This function is called
+	 * from survey_question_form to determine if a user can delete his/her
+	 * own question.
+	 */
+	function allowDelete()
+	{
+		if(!$this->survey_question_id)
+			return true;
 				
-			if(count($qTypes) > 0)
-			{
-				$this->question_type_id = $qTypes[0]->question_type_id;
-			}
-		}
-
-		/* get the list of values the user checked in a checkbox */
-		function getValueList($values)
-		{
-			$optionArr = explode("\n", $this->options);
-
-			$options = QuestionnaireForm::incrementArray($optionArr);
-
-			// include 0 value, first checkbox
-			if(strlen($values)==1 AND is_numeric($values))
-				$values = array($values);
-			elseif(strlen($values)==0)
-				$values = array();
-			else
-				$values = explode(",", $values);
-
-			$listArr = array();
-			if(count($options) > 0)
-			{
-				foreach($options as $value => $text)
-				{
-					if(array_search($value, $values) !== FALSE)
-						array_push($listArr, $text);
-				}
-			}
+		if(!$this->isEditable())
+			return false;
 				
-			if(count($listArr) > 0)
-				$list = implode($listArr, ",");
+		$count = queryValue(SurveyQuestionXref, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
 
-			return $list;
-		}
+		return ($count > 1) ? false : true;
+	}
 
+	function SurveyQuestion()
+	{
+		$this->table = "survey_question";
+		$this->primary_key = "survey_question_id";
 
-		function getInfoText($index)
-		{
-			static $text = array(
-			1	=>	"<i>Note:&nbsp;</i>This question has been answered. You may edit the question but be careful not to change its meaning.",
-			2	=>	"This question belongs to a survey template and cannot be edited."
-			);
-
-			$html = "<p>$text[$index]</p>\n";
-
-			return $html;
-		}
-
-
-		function SurveyQuestion()
-		{
-			$this->table = "survey_question";
-			$this->primary_key = "survey_question_id";
-
-			$this->DataItem(func_get_args());
-		}
+		$this->DataItem(func_get_args());
+	}
 }
 

@@ -56,58 +56,58 @@ if (!$survey_id)
 
 $survey = new Survey($survey_id);
 
-$page->page_title = ($survey->status != "not sent") ? "View" : "Preview/Send";
-$page->page_title .= " {$survey->title}";
+$sendMgr = new SurveySendManager($survey);
+$view = new QuestionnaireSendView($sendMgr);
 
-$validate = new ValidateSurvey($survey);
-$view = new SurveyPreviewSendView($survey);
-
-if($survey->status == "not sent")
+if(($survey->isEditable() && $sendMgr->isValid()))
 {
-	// need program_id for query
-	$survey->filter = new InclusionFilter("status", "start_date", "program_id", "sender_email");
+	$survey->filter = new InclusionFilter("status", "start_date", "sender_email");
 	$form = new AutoForm($survey);
-	$form->hide("status", "start_date", "program_id", "sender_email");
-	$form->onSaveComplete = sendEmails;
+	$form->hide("status", "start_date", "sender_email");
 	$form->submitLabel = "Send Survey Emails";
+	$form->button("Send Test Email to {$user->email}", "questionnaireSendMgr.sendTestEmail()", null, true);
+	$form->submitLabel = $sendMgr->getSendSubmitLabel();
+	$form->customSaveHandler = array($sendMgr, sendRequests);
 }
+
+$page->page_title = (!$survey->isSent()) ? "Preview " : "Manage ";
+$page->page_title .= "Survey {$survey->title}";
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 
 if ($method == "POST")
 {
-	if($validate AND $validate->Validate())
+	$send_result = $form->save();
 	{
-		if($form->save())
-		{
-			$tabs->next();
-		}
+		$tabs->queryString .= "&sent={$send_result}";
+		$tabs->next();
 	}
 }
 
-if($form)
-$script .= $form->writeScript();
+if($form) $script .= $form->writeScript();
+$script .= $sendMgr->writeScript();
+$script .= $view->writeScript();
 
 $tabs->writeHTML();
 ?>
 <div id="survey_tab_border">
-<button id="next_page_button" class="button"
-	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
-<h3>Survey Preview &amp; Send</h3>
-<p><? echo $survey->getStatusInfoText(); ?></p>
-<?
-if($form)
-	$form->drawForm();
-?>
-<div id="inner_border"><?
-$view->drawView();
-?></div>
-</div>
-<?
+<?php
+echo "<p id='action_result' class='questionnaire_action_result' style='display: none'></p>\n";
 
-function sendEmails($obj)
+// Next page link, set page title; set info text based on status;
+// progress bar
+echo $sendMgr->getSendPageHeading($tabs);
+
+if($form)
 {
-	SurveySendManager::sendSurveyEmails($obj->data);
+	$form->drawForm();
+}
+else
+{
+	// if sent, draw manage links
+	echo $sendMgr->getManageLinks();
 }
 
-?>
+$view->drawView();
+
+?></div>

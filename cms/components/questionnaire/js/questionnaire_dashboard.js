@@ -66,6 +66,28 @@ var QuestionnaireDashboardManager =  new Class
 	{
 		var action = elt.value;
 		
+		/*
+		 * Actions applicable if QuestionnaireSendManager is implemented
+		 */
+		if(this.questionnaireSendMgr && (action == "send" || action == "send_test" ||
+				action == "close" || action == "reopen" || action == "send_reminders" ||
+				action == "send_additional"))
+		{
+			this.questionnaireSendMgr.item_id = item_id;
+			this.questionnaireSendMgr.dashboard_action = 1;
+			this.questionnaireSendMgr.handleSendAction(action);
+		}
+		else
+		{
+			this.handleDashboardAction(action, item_id);
+		}
+					
+		elt.set('value', '');
+	},
+
+
+	handleDashboardAction: function(action, item_id)
+	{
 		switch(action)
 		{
 			case 'view':
@@ -91,49 +113,9 @@ var QuestionnaireDashboardManager =  new Class
 			case 'delete':
 			this.deleteQuestionnaire(item_id);	
 			break;
-			
-			/*
-			 * Actions applicable if QuestionnaireSendManager is implemented
-			 */
-			case 'send_test':
-			if(this.questionnaireSendMgr)
-			{
-				this.questionnaireSendMgr.showTestEmailDialog(item_id);
-			}
-			break;
 		
-			case 'close':
-			if(this.questionnaireSendMgr)
-			{
-				this.questionnaireSendMgr.closeToRespondents(item_id);
-			}
-			break;
-		
-			case 'reopen':
-			if(this.questionnaireSendMgr)
-			{
-				this.questionnaireSendMgr.openToRespondents(item_id);
-			}
-			break;
-		
-			case 'send_reminders':
-			if(this.questionnaireSendMgr)
-			{
-				this.questionnaireSendMgr.showReminderDialog(item_id);
-			}
-			break;
-			
-			case 'send':
-			if(this.questionnaireSendMgr)
-			{
-				go(this.questionnaireSendMgr.send_page_identifier + '?' + this.itemPk + '=' + item_id);	
-			}
-			break;		
-		}
-					
-		elt.set('value', '');
+		}		
 	},
-
 	
 	showQuestionnaireViewDialog: function(item_id)
 	{

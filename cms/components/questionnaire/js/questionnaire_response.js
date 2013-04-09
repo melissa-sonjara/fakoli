@@ -21,11 +21,14 @@ var QuestionnaireResponseManager =  new Class
 	
 	response_form_identifier: null,			///< the response form page identifier
 	
+	reset_token_handler: null, 				///< reset tester token to not started
+	
 	initialize: function(itemPk, item_id, responsePk, 
 			component_name,
+			exclude_handler,
 			response_intro_identifier,
-			response_form_identifier
-			)
+			response_form_identifier,
+			reset_token_handler)
 	{
 		this.itemPk = itemPk;
 		this.item_id = item_id;
@@ -34,19 +37,20 @@ var QuestionnaireResponseManager =  new Class
 		this.exclude_handler = exclude_handler;
 		this.response_intro_identifier = response_intro_identifier;
 		this.response_form_identifier = response_form_identifier;
+		this.reset_token_handler = reset_token_handler;
 	},
 
 	resetToken: function(response_id)
 	{
 		var request = new Request(
 		{
-			'url': 		'/action/' + this.component_name + '/' + reset_token_handler + '?' + this.responsePk + '=' + response_id, 
+			'url': 		'/action/' + this.component_name + '/' + this.reset_token_handler + '?' + this.responsePk + '=' + response_id, 
 			'method': 	'get',
 			'onSuccess': function(response) 
 			{ 
 				if (response == "OK")
 				{
-					go(this.response_intro_identifier + '?' + this.itemPk + '=' + this.item_id);
+					window.location.reload();
 				}
 				else
 				{

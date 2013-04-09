@@ -38,18 +38,23 @@ $survey_id = checkNumeric($_GET["survey_id"]);
 if($survey_id)
 {
 	$survey = new Survey($survey_id);
-	$message = $survey->confirmation_message;
-}
-
-echo "<h2>{$survey->title}</h2>";
-
-if($message)
-{
-	echo $survey->format("{confirmation_message}");
+	
+	if($survey->confirmation_message)
+	{
+		$message = $survey->format("{confirmation_message}");
+	}
+	else
+	{
+		$mgr = new SurveySendManager($survey);
+		$message = $mgr->formatDefaultConfirmationMessage();
+	}
 }
 else
 {
 	$sitename = Settings::getValue("settings", "sitename");
-	echo "<p>Thank you for submitting your survey.</p><p>Continue to the <a href='/'>{$sitename} home page.</a></p>";
+	$message = "<p>Thank you for submitting your survey.</p><p>Continue to the <a href='/'>{$sitename} home page.</a></p>";
 }
+
+echo "<h2>{$survey->title}</h2>";
+echo $message;
 ?>

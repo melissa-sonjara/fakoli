@@ -50,18 +50,21 @@ $survey_id = checkNumeric($_GET["survey_id"]);
 
 $question = new SurveyQuestion();
 
-if(!$survey_question_id AND !$survey_id)
-	redirect("/index");
+if(!$survey_id)
+{
+	redirect("survey_dashboard");
+}
+
+$survey = new Survey($survey_id);
 
 if($survey_question_id)
 {
 	$question->load($survey_question_id);
-	$survey = $question->Survey();
 }
 else
 {
-	$survey = new Survey($survey_id);
 	$question->setDefaultValues();
+	
 }
 
 $page->page_title .= " for {$survey->title}";
@@ -76,22 +79,22 @@ $form->required("question");
 $form->annotate("options", "<br><span class='annotate'>List each option on a separate line.</span>");
 $form->getRenderer("question")->height = "100px";
 
+$mgr = new SurveyCreateManager($survey);
 QuestionFormHelper::questionTypeSetup($form, $editable);
 
 if($survey_question_id)
 {
-	$form->button("Remove", "new SurveyCreate().removeSurveyQuestionFromForm($survey_id, $survey_question_id)", "Are you sure you want to remove this question?", true);
+	$form->button("Remove", "questionnaireMgr.removeQuestionFromForm($survey_question_id)", "Are you sure you want to remove this question?", true);
 }
 $form->button("Cancel", $redirect);
 $form->hide("question_name");
 $form->data->set("survey_id", $survey_id);
 
 if(!$editable)
-	$infoText = $question->getInfoText(survey_question_answered);
+{
+	$infoText = "<i>Note:&nbsp;</i>This question has been answered. You may edit the question but be careful not to change its meaning.";
+}
 	
-if(!$question->survey_question_id)
-	$form->onSaveComplete = saveSurveyQuestionXref;
-
 if(!$survey_question_id)
 {
 	$form->onSaveComplete = saveSurveyQuestionXref;
@@ -111,6 +114,7 @@ if ($method == "POST")
 
 
 $script .= $form->writeScript();
+$script .= $mgr->writeScript();
 $script .= QuestionFormHelper::writeScript($form);
 
 if($survey_id)
@@ -127,11 +131,7 @@ $form->drawForm();
 
 function saveSurveyQuestionXref(&$form)
 {
-	$question = $form->data;
-	$xref = new SurveyQuestionXref();
-	$xref->survey_id = $question->get("survey_id");
-	$xref->sort_order = $xref->getDefaultSortOrder();
-	$xref->survey_question_id = $question->survey_question_id;
-	$xref->save();
+	$mgr = new SurveyCreateManager(new Survey($form->data->get("survey_id")));
+	$mgr->saveQuestionXref($form->data);
 }
 ?></div>

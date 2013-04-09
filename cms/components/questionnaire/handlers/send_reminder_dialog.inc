@@ -43,6 +43,7 @@ Fakoli::using("questionnaire", "email", "settings");
 Fakoli::usingFeature("auto_form");
 
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+$dashboard = checkNumeric($_GET["dashboard"]);
 
 if(!$questionnaire_id)
 	Fakoli::end("Questionnaire Reminder Form - unknown questionnaire");
@@ -50,7 +51,7 @@ if(!$questionnaire_id)
 $questionnaire = new Questionnaire($questionnaire_id);
 $mgr = new QuestionnaireSendManager($questionnaire);
 
-$form = $mgr->buildReminderForm();
+$form = $mgr->buildReminderForm($dashboard);
 
 if ($method == "POST")
 {
@@ -61,7 +62,9 @@ if ($method == "POST")
 	if(!$form->msg)
 	{
 		$rtn = $mgr->sendReminderEmails();
-		Fakoli::end($rtn);
+		$sent = ($rtn) ? "OK" : "FAIL";
+		$send_result = ($rtn) ? questionnaire_reminder_sent : questionnaire_reminder_failed;
+		Fakoli::end("{$sent}|". $mgr->getInfoMsg($send_result, $dashboard));
 	}
 	else
 	{
@@ -71,6 +74,6 @@ if ($method == "POST")
 
 echo $form->writeScript();
 
-echo "<h2>{$mgr->nonResponsiveCount} recipients have not yet responded.</h2>\n";
+echo "<h2>" . $form->data->get("nonresponsive_count") ." recipients have not yet responded.</h2>\n";
 $form->drawForm();
 ?>

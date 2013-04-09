@@ -117,3 +117,10 @@ CREATE TABLE  `questionnaire_answer` (
 
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+INSERT INTO `question_type` (`name`,`class_name`,`sort_order`) VALUES
+ ('Number','NumberView',7);
+
+-- END Version 1.4

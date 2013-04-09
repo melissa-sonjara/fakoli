@@ -63,3 +63,265 @@ td.question_form_label {
 {
 	background: url(/fakoli/images/on.png) top left no-repeat transparent;
 }
+
+
+.questionnaire_tester_block,
+	.questionnaire_tester_block_intro
+{
+	background-color: #DCDCDC;
+	width: 70%;
+	margin: 25px;
+	padding: 8px;
+	box-shadow: 1px 1px 5px #666;		
+	-moz-border-radius: 5px;
+}
+
+.questionnaire_tester_block_intro
+{
+	background-color: #DCDCDC;
+	padding: 3px;
+	margin: 10px;
+	box-shadow: 1px 1px 5px #666;		
+	-moz-border-radius: 5px;		
+}
+
+.questionnaire_tester_block .error
+{
+	color: red;
+}
+
+.questionnaire_tester_block .button_row
+{
+	padding-left: 40%;
+	padding-top: 10px;
+}
+
+.questionnaire_tester_block p a:link
+ .questionnaire_tester_block p a:visited,
+ .questionnaire_tester_block p a:hover
+{
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.questionnaire_tester_block a:link
+{
+	text-decoration: underline;
+	font-weight: bold;	
+}
+
+.questionnaire_tester_block .button
+{
+  background-color: #5c6a82;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a3afc1 0%), to(#5c6a82 50%));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(top, #a3afc1 0%, #97a0af 50%, #8f9bb0 50%, #5c6a82 100%);
+  background-image: -moz-linear-gradient(top, #a3afc1 0%, #97a0af 50%, #8f9bb0 50%, #5c6a82 100%);
+  background-image: -ms-linear-gradient(top, #a3afc1 0%, #97a0af 50%, #8f9bb0 50%, #5c6a82 100%);
+  background-image: -o-linear-gradient(top, #a3afc1 0%, #97a0af 50%, #8f9bb0 50%, #5c6a82 100%);
+  background-image: linear-gradient(top, #a3afc1 0%, #97a0af 50%, #8f9bb0 50%, #5c6a82 100%);
+  border: 1px solid #666;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  color: #fff;
+  font: normal 11pt calibri, helvetica,arial,sans-serif;
+  padding: 1px 6px;
+  text-decoration: none;
+  text-align: center;
+  text-shadow: 0 -1px 1px #5C6A82;
+  box-shadow: none;
+}
+
+
+.questionnaire_action_result
+{
+	background-color: #DCDCDC;
+	margin: 5px;
+	padding: 8px;
+	box-shadow: 2px 2px 5px #AAAAAA;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 5px #AAAAAA;
+	-webkit-box-shadow: 2px 2px 5px #AAAAAA;
+	width: 400px;
+}
+
+.dashboard_action_result
+{
+	font-size: 10px;
+	width: auto;
+	color: green;
+}
+
+
+#warning {
+	font-size: 10pt;
+	color: #CC0000;
+	font-weight: bold;
+	padding-left: 20px;
+	background-image: url(/fakoli/images/warning_icon.gif);
+	background-repeat: no-repeat;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.default_confirmation
+{
+	width: 57%;
+	background-color: #FFFFFF;
+	border: solid 1px  #81b1c7;
+	margin: 7px;
+	border-radius: 5px;
+	padding: 5px;
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 2px 2px 5px #CCC;
+	
+}
+
+
+/* Questionnaire/Survey Preview */
+
+.questionnaire_preview
+{
+	padding-top: 15px;
+}
+
+.questionnaire_preview legend
+{
+ 	padding-top: 5px;
+}
+
+.questionnaire_preview table.form td.label
+{
+	width: 200px;
+}
+
+#content .questionnaire_preview a:link
+{
+	text-decoration: none;	
+	font-size: 12px;
+	font-weith: normal;
+	text-decoration: none;
+	color: rgb(0, 42, 108);
+}
+
+#content .questionnaire_preview a.button
+{
+	color: #fff;
+}
+
+.label_email
+{
+	width: 30px;
+	text-align: right;
+	vertical-align: top;
+}
+
+.questionnaire_preview table.email_preview tr
+{
+	vertical-align: top;
+	height: 25px;
+	font-family: Courier;
+}
+
+.questionnaire_preview table.email_preview td .value_email
+{
+	width: 900px;
+	vertical-align: top;	
+}
+
+.questionnaire_preview fieldset {
+    background: url("/fakoli/images/widget_heading_background.gif") repeat-x scroll left top #EEEEEE;
+    border: 1px solid;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 1px 1px 3px #666666;
+    margin: 0 0 10px;
+    padding: 35px 10px 15px;
+    position: relative;
+}
+
+.questionnaire_preview legend 
+{
+    color: #002A6C;
+    font-size: 12pt;
+    font-weight: bold;
+    position: absolute;
+    top: 2px;
+}
+ /* end Questionnaire/Survey Preview */
+ 
+ 
+/* Start Survey */
+#SurveyQuestionSets .list tr.expanded td
+{
+	padding-left: 80px;
+	margin-left: 80px;
+	background: url();
+}
+
+#survey_tab_border
+{
+	border: solid 1px #666; 
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 4px;
+	box-shadow: 1px 1px 5px #666;
+}
+
+table.survey {
+	background-color: transparent;
+	border: solid 1px #666;
+	border-collapse: collapse;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width: 100%;
+	vertical-align: top;
+	line-height: 20px
+}
+
+table.survey th {
+	background-color: #eeeeee;
+	color: #000;
+	font-weight: bold;
+	text-align: left;
+	padding: 4px;
+	border: 0;
+}
+
+table.survey td {
+	padding: 4px;
+	border: 0;
+}
+
+table.survey tr.alt {
+	background-color: transparent;
+	border: 0;
+}
+
+/* survey dashboard progress bar */
+.progress_bar {
+	width: 70%;
+	border: 1px solid #666;
+	background-color: #eeeeee;
+	height: 15px;
+}
+
+.progress_bar .progress {
+	background-color: #00CD00;
+	height: 15px;
+}
+
+table.survey div.col2 {
+	float: right;
+	background-color: #fff;
+	width: 25%;
+	height: auto;
+	z-index: 2;
+	margin-right: 5px;
+	padding-right: 10px;
+	text-align: center;
+}
+/* end survey dashboard progress bar */

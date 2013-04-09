@@ -54,41 +54,62 @@ if(!$survey_id)
 $survey = new Survey($survey_id);
 $page->page_title .= " for {$survey->title}";
 
-$survey->filter = new InclusionFilter("sender_email", "recipients", "message");
+$survey->filter = new InclusionFilter("sender_email", "recipients",  "cc_recipients", "additional_recipients", "message");
+
+$sendMgr = new SurveySendManager($survey);
 
 if(!$survey->sender_email)
-	$survey->sender_email = Survey::getSenderEmail();
+	$survey->sender_email = $sendMgr->getSenderEmail();
 
 $form = new AutoForm($survey);
 
 $form->annotate("recipients", "(separate email addresses with a comma ',')");
-$form->required("sender_email", "recipients", "message");
+$form->required("sender_email");
+
+if(!$survey->allow_anonymous_responses)
+{
+	$form->required("recipients", "message");
+}
+else
+{
+	$form->validator->add(new RequiredQuestionnaireMessageValidator($form, "message"));
+}
+
 $form->getRenderer("message")->rows = 10;
 $form->submitLabel = "Save Survey Email";
 $form->regexp("sender_email", "\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", "Please supply a valid email address containing a domain name.");
-$recipientRenderer = new EmailListFieldRenderer($form, "recipients");
+$form->getRenderer("message")->columns = 80;
 
-if($survey->isEditable())
+$sendMgr->setOneRecipientField($form, "recipients");
+$sendMgr->setOneRecipientField($form, "cc_recipients", "CC Recipients");
+$sendMgr->setOneRecipientField($form, "additional_recipients");
+$form->annotate("cc_recipients", $sendMgr->getCCRecipientsAnnotation());
+$form->annotate("additional_recipients", "Send additional survey request emails (separate email addresses with a comma ',').");
+
+if($survey->isAuthor() && !$survey->isClosed())
 {
-	$form->annotate("message", "Select from a set of boilerplate messages which you can then customize <br>for this survey.
-	<button onclick=\"new Survey().showMessageSelectDialog(); return false\">Select a Message</button>&nbsp&nbsp;
-	<button onclick=\"new Survey().showAdvancedFeaturesDialog(); return false\">Advanced Features</button>
-	");
+	$form->annotate("message", $sendMgr->getMessageAnnotation());
+	if($survey->isSent())
+	{
+		$survey->recipients = implode(", ", explode(",", $survey->recipients));
+		$form->readOnly("recipients");
+	}
 }
 else
 {
 	$form->readOnlyForm = true;
+	$form->valueCSS = 'ro_value';
 }
 
-if($error)
+if(!$survey->isAuthor() || !$survey->isSent())
 {
-	$validate = new ValidateSurvey($survey);
-	$validate->validateEmail();
+	$form->hide("additional_recipients");
 }
 
 $tabs = SurveyManager::surveyTabs($survey_id);
 
 $script .= $form->writeScript();
+$script .= $sendMgr->writeScript();
 
 if ($method == "POST")
 {
@@ -105,9 +126,10 @@ $tabs->writeHTML();
 <button id="next_page_button" class="button"
 	onclick="go('<?echo $tabs->getNextPage() ?>')">Next Page &raquo;</button>
 <h3>Survey Email</h3>
-<div id="inner_border"><?
-if($validate)
-	echo $validate->warning();
+<div id="inner_border">
+<?php
+echo $sendMgr->getEmailPageHeading();
+
 $form->drawForm();
 ?></div>
 </div>

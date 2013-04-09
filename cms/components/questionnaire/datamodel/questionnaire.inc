@@ -65,26 +65,6 @@ abstract class AbstractQuestionnaire extends DataItem
 	abstract function setDefaults();
 	
 	abstract function isAuthor();
-
-	function getAvailableActions()
-	{
-		return array(
-			""					=>	"",
-			"view"				=>	"View",
-			"edit"				=>	"Edit",
-			"public_view"		=>	"Respondent's View",
-			"clone"				=>	"Save As...",
-			"view_results"		=>	"View Results",
-			"send_test"			=>	"Send Test Email To...",
-			"send"				=>	"Preview &amp; Send",
-			"close"				=>	"Close to Respondents",
-			"reopen"			=>	"Reopen to Respondents",
-			"send_reminders"	=>	"Send Reminders",
-			"delete"			=>	"Delete",
-		);
-		
-	}
-
 }
 
 class Questionnaire extends AbstractQuestionnaire
@@ -167,21 +147,6 @@ class Questionnaire extends AbstractQuestionnaire
 	{
 		// nothing to do.
 	}
-	
-	function getAvailableActions()
-	{
-		return array(
-			""					=>	"",
-			"view"				=>	"View",
-			"edit"				=>	"Edit",
-			"public_view"		=>	"Respondent's View",
-			"clone"				=>	"Save As...",
-			"view_results"		=>	"View Results",
-			"delete"			=>	"Delete",
-		);
-		
-	}
-	
 		
 	function getNotEditableHTML()
 	{

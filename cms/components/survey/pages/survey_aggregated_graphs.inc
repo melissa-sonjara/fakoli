@@ -32,20 +32,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 /**
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 5/18/10
+ * Shows the answers for each question, regardless of which survey(s)
+ * the question was used in.
  */
 
-Fakoli::using("survey");
 
-$survey_id = checkNumeric($_GET["survey_id"]);
+Fakoli::using("questionnaire", "survey");
 
-if(!$survey_id)
-	Fakoli::end("unknown survey");
+$mgr = new SurveyAggregatedResultsManager(new Survey());
+$view = new QuestionnaireGraphicalView($mgr);
 
-$survey = new Survey($survey_id);
-if($survey->isAuthor())
-	$survey->setStatus("open");
+$tabs = SurveyManager::surveyTabs($survey_id);
 
-Fakoli::end("OK");
+$page->page_title = "Graphical Data Aggregated across Surveys";
+
+$script .= $view->writeScript();
+
+$view->drawView();
+?>

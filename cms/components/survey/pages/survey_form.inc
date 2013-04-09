@@ -67,7 +67,7 @@ else
 	$survey->status = "not sent";
 }
 
-$survey->filter = new InclusionFilter("title", "introduction", "instructions", "confirmation_message", "start_date", "end_date", "user_id", "status", "allow_anonymous_responses", "show_preview_before_submitting");
+$survey->filter = new InclusionFilter("title", "introduction", "instructions", "start_date", "end_date", "user_id", "status", "allow_anonymous_responses", "show_preview_before_submitting");
 $form = new AutoForm($survey);
 $form->required("title");
 $form->hide("user_id", "status");

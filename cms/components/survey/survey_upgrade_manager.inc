@@ -55,7 +55,8 @@ class SurveyUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Add confirmation_message to survey table",
 			"1.4"		=>	"sql:Added allow_anonymous_responses flag to survey table",
 			"1.5"		=>	"sql:Added instructions field to survey table",
-			"1.6"		=>	"sql:Added show_preview_before_submitting to survey table"
+			"1.6"		=>	"sql:Added show_preview_before_submitting to survey table",
+			"1.7"		=>	"sql:Add include_in_results to survey_response and to survey add additional_recipients and cc_recipients; add survey_group and survey_group_xref",
 			);
 	
 	function SurveyUpgradeManager()

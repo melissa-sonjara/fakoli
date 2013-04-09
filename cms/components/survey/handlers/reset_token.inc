@@ -31,21 +31,24 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/**
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 5/18/10
- */
-
 Fakoli::using("survey");
 
-$survey_id = checkNumeric($_GET["survey_id"]);
+$response_id = checkNumeric($_GET["response_id"]);
+$rtn = checkNumeric($_GET["rtn"]);
 
-if(!$survey_id)
-	Fakoli::end("unknown survey");
+if(!$response_id)
+{
+	ajaxReturn("unknown survey response");
+}
 
-$survey = new Survey($survey_id);
-if($survey->isAuthor())
-	$survey->setStatus("open");
+$response = new SurveyResponse($response_id);
+
+if(!$response->isTester())
+{
+	ajaxReturn("token reset not allowed.");
+}
+
+$response->reset();
 
 Fakoli::end("OK");
+?>

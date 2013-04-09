@@ -39,13 +39,12 @@ $surveys = removeDuplicates($surveys, "message");
 
 $table = new DataListView($surveys, "surveys");
 
-$table->column("", "<input  style='border: none' type='radio' class='radio' name='survey_id[]' id='survey_id_{survey_id}' value='{survey_id}' onchange=\"new Survey().messageSelectResult('{message}');\" />", false, "width: 10%")
+$table->column("", "<input  style='border: none' type='radio' class='radio' name='survey_id[]' id='survey_id_{survey_id}' value='{survey_id}' onchange=\"questionnaireSendMgr.messageSelectResult('{message}');\" />", false, "width: 10%")
 	->column("Title", "{title}", false, "width: 25%")	
 	->column("Message", "{message}", false, "width: 50%");
 
 $table->emptyMessage = "There are no survey messages defined.";
 $table->sortable = false;
-$table->pageSize = 0;
 $table->paginate = false;
 $table->filter = false;
 $table->cssStyle = "width: 80%";

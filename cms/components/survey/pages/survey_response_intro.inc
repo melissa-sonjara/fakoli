@@ -44,22 +44,43 @@ OTHER DEALINGS IN THE SOFTWARE.
 Fakoli::using("survey", "questionnaire");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
+$token = mysql_escape_string($_GET["token"]);
 $msg = checkNumeric($_GET["msg"]);
 
 if(!$survey_id)
 	redirect("index");
 
+// check if test user was redirected here from survey_response_form or survey_response_preview
+if($survey_id && $token)
+{
+	$response = SurveyResponse::findResponseByToken($survey_id, $token);
+}
+
 $survey = new Survey($survey_id);
+$mgr = new SurveySendManager($survey);
+$responseMgr = SurveyResponseManager::create($survey_id);
 
 $page->page_title = "{$survey->title}";
 
+$script .= $mgr->writeScript();
+$script .= $responseMgr->writeScript();
+
 if($survey->isClosed())
+{
 	echo $survey->format("<p>{title} closed on {end_date:F d, Y}</p>");
-elseif($msg == 1)
+}
+elseif($response && $response->isSubmitted())
+{
 	echo "<p>You have already submitted your survey.</p>\n";
+}
 else
 {
 	echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
-	echo "<p><a href=\"#\" onclick=\"new SurveyResponse().showTokenDialog($survey_id); return false;\">{$survey->title}</a></p>\n";
+	echo "<p><a href=\"#\" onclick=\"questionnaireMgr.showTokenDialog($survey_id); return false;\">{$survey->title}</a></p>\n";
+}
+
+if(($user && $survey->isAuthor()) || ($response && $response->isTester()))
+{
+	echo $mgr->getTesterIntro($response);
 }
 ?>

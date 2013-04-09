@@ -31,55 +31,29 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-
-/* survey_dashboard.inc
- *
- * Description: Survey management dashboard; Survey tab
- * of logged in user interface
- *
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 6/3/2010
+/**
+ * Show graphical view of aggregated results for each question across all the
+ * surveys the question was used in.
  */
 
 Fakoli::using("questionnaire", "survey");
-Fakoli::usingFeature("data_view");
 
-if(!$user)
-	redirect("/login");
+$questions = Query::create(SurveyQuestion, "WHERE question_type_id != 7 AND survey_question_id IN (SELECT survey_question_id FROM survey_question_xref WHERE survey_id IN (SELECT survey_id FROM survey where deleted=false))")->execute();
 
-$constraint = "WHERE deleted=0 ";
-if(!checkRole("admin"))
-{
-	$pk = $user->getPrimaryKey();
-	$constraint .= "AND user_id={$user->$pk} ";
-}
-
-// instance can be empty - script instantiates js class QuestionnaireDashboardManager
-$mgr = new SurveyDashboardManager(new Survey());
-
-$surveys = Query::create(Survey, "$constraint  ORDER BY status, start_date DESC")
-	->execute();
-
-$table = new DataListView($surveys, "surveys");
-$table->column("Survey Title", array($mgr, formatTitleLink), true, "width: 15%")
-	->column("Author", "{User.first_name} {User.last_name}", true, "width: 10%")
-	->column("Status", "<span id='status_{survey_id}'>{status:prettify}</span>", true, "width: 10%")
-	->column("Date Sent", "{start_date|-- / -- / ----}", true, "width: 12%")
-	->column("Percentage of Surveys Received", array($mgr, getProgressBar), true, "width: 20%")
- 	->column("Actions", array($mgr, formatActions), true, "width: 20%");
+$table = new DataListView($xrefs, "SurveyQuestions");
+$table->column("Question", "{Question.question}")
+	->column("Question Type", "{QuestionType.name}", false, "width: 15%")
+	->column("Options", array(QuestionTableHelper, formatOptions))
+	->column("Answers", "")
+	->column("Graph", "")
 	;
- 	
-$table->emptyMessage = "There are no surveys.";
+
+$table->emptyMessage = "There are no questions defined.";
 $table->sortable = true;
-$table->pageSize = 10;
-$table->filter = true;
-$table->cssStyle = "width: 98%";
+$table->cssStyle = "width: 100%";
 
 $script .= $table->writeScript();
-$script .= $mgr->writeScript();
 
 $table->drawView();
+
 ?>
-<br>
-<a class="button" href="survey_form">Create a Survey</a>

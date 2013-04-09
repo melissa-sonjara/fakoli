@@ -54,16 +54,26 @@ if(!$survey_id)
 if(!$token)
 	redirect("survey_response_intro?survey_id={$survey_id}");
 
-$response = querySingle(SurveyResponse, "WHERE survey_id={$survey_id} AND token='{$token}'");
+$response = SurveyResponse::findResponseByToken($survey_id, $token);
 
 if(!$response)
 	redirect("survey_response_intro?survey_id={$survey_id}");
 
 $survey = $response->Survey();
 
-if(!$survey->isOpen() OR !$response->isEditable())
-	redirect("survey_response_intro?survey_id=$survey_id&msg=1");
+/**
+ * Some users may not have excluded their responses from the results.
+ */
+if($survey->isClosed() && !$response->isTester() && (!$survey->isAuthor()))
+{
+	redirect("survey_response_intro?survey_id=$survey_id");
+}
+else if(!$response->isEditable())
+{
+	redirect("survey_response_intro?survey_id=$survey_id&token=$token");
+}
 
+$response->filter = new ExclusionFilter("include_in_results");
 $form = new QuestionnaireForm(new SurveyResponseManager($response));
 $form->onSaveComplete = saveResponse;
 

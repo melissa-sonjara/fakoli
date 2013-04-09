@@ -31,8 +31,10 @@
 
 *****************************************************************/
 
+Fakoli::using("questionnaire");
 
-class SurveyAnswer extends DataItem
+
+class SurveyAnswer extends AbstractQuestionnaireAnswer
 {
 	var $fields = array (	"survey_answer_id"		=>	Number,
 							"response_id"			=>	Number, 
@@ -40,12 +42,19 @@ class SurveyAnswer extends DataItem
 							"value"					=>	String
 						);
 						
-	var $relations = array ("Question"	=>	SurveyQuestion
-							);
+	var $relations = array (
+			"Question"	=>	SurveyQuestion,
+			"Response"	=>	QuestionnaireResponse
+		);
 
 	function Question()
 	{
 		return $this->getRelated(SurveyQuestion, "survey_question_id");
+	}
+	
+	function Response()
+	{
+		return $this->getRelated(SurveyResponse);
 	}
 	
 	function SurveyAnswer()

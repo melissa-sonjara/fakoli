@@ -39,6 +39,7 @@ Fakoli::using("questionnaire", "email", "settings");
 Fakoli::usingFeature("auto_form");
 
 $questionnaire_id = checkNumeric($_GET["questionnaire_id"]);
+$dashboard = checkNumeric($_GET["dashboard"]);
 
 if(!$questionnaire_id)
 {
@@ -48,25 +49,20 @@ if(!$questionnaire_id)
 $questionnaire = new Questionnaire($questionnaire_id);
 $mgr = new QuestionnaireSendManager($questionnaire);
 
-$form = $mgr->buildSendTestEmailForm();
+$form = $mgr->buildSendTestEmailForm($dashboard);
 
 if ($method == "POST")
 {
 	$obj =& $form->data;
 	$obj->fromPOST();
 	$msg = $form->validator->validate();
+		
 	if ($msg == "")
 	{
-		$sent = $mgr->sendTests($obj->recipients);
-
-		if($sent == 1)
-		{
-			Fakoli::end("OK");
-		}
-		else
-		{
-			Fakoli::end("FAIL");
-		}
+		$rtn = $mgr->sendTests($obj->recipients);
+		$sent = ($rtn) ? "OK" : "FAIL";
+		$send_result = ($rtn) ? questionnaire_test_sent : questionnaire_test_failed;
+		Fakoli::end("{$sent}|" .$mgr->getInfoMsg($send_result, $dashboard));
 	}	
 	else
 	{

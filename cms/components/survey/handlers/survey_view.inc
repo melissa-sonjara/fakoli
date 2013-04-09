@@ -50,7 +50,8 @@ if(!$survey_id)
 	
 $survey = new Survey($survey_id);
 $survey->filter = new InclusionFilter("title", "introduction", "message");
-$view = new SurveyView($survey);
+$mgr = new SurveyCreateManager($survey);
+$view = new QuestionnaireView($mgr);
 
 echo $view->writeScript();
 $view->drawView();

@@ -31,21 +31,26 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-/**
- * author: Janice Gallant for Sonjara, Inc.
- *
- * date: 5/18/10
- */
-
-Fakoli::using("survey");
+Fakoli::using("survey", "questionnaire", "email", "settings");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
 
 if(!$survey_id)
-	Fakoli::end("unknown survey");
+{
+	ajaxReturn("cannot send test email - unknown survey");
+}
 
 $survey = new Survey($survey_id);
-if($survey->isAuthor())
-	$survey->setStatus("open");
 
-Fakoli::end("OK");
+if(!$survey->isAuthor())
+{
+	ajaxReturn("insufficient privileges to send test survey email");
+}
+
+$mgr = new SurveySendManager($survey);
+$rtn = $mgr->sendTests($user->email);
+
+$sent = ($rtn) ? "OK" : "FAIL";
+$send_result = ($rtn) ? questionnaire_test_sent : questionnaire_test_failed;
+Fakoli::end("{$sent}|" . $mgr->getInfoMsg($send_result));
+?>
