@@ -153,6 +153,7 @@ td.question_form_label {
 	font-size: 10px;
 	width: auto;
 	color: green;
+	display: block;
 }
 
 
