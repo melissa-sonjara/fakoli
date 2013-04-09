@@ -1,6 +1,7 @@
 <?
 Fakoli::using("questionnaire");
 Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
+Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_dashboard_manager.inc");
 
 class QuestionnaireDashboardManager extends AbstractQuestionnaireDashboardManager
 {
