@@ -132,3 +132,11 @@ alter table `survey` add column `cc_recipients` text after `recipients`;
 alter table `survey` add column `additional_recipients` text after `cc_recipients`;
 
 -- END Version 1.7
+
+-- START Version 1.8
+
+-- Site set up before upgrade manager had different status
+
+alter table `survey` change column `status` `status` varchar(15) NOT NULL DEFAULT 'not sent';
+
+-- END Version 1.8

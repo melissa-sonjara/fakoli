@@ -57,6 +57,7 @@ class SurveyUpgradeManager extends UpgradeManager
 			"1.5"		=>	"sql:Added instructions field to survey table",
 			"1.6"		=>	"sql:Added show_preview_before_submitting to survey table",
 			"1.7"		=>	"sql:Add include_in_results to survey_response and to survey add additional_recipients and cc_recipients; add survey_group and survey_group_xref",
+			"1.8"		=>	"sql:Change survey field status to varchar for sites setup prior to upgrade manager",
 			);
 	
 	function SurveyUpgradeManager()
