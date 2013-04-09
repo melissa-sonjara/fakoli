@@ -53,7 +53,7 @@ $mgr = new FileshareManager($library, $keyword);
 
 $table = new DataListView($mgr->documents, "library_documents");
 $table->column("Document", array($mgr, formatDocumentTitle), true, "width: 45%")
-	->column("Author", array($mgr, getDocumentAuthor), true, "width: 20%") 
+	->column("Uploaded By", array($mgr, getDocumentAuthor), true, "width: 20%") 
 	->column("Publication Date", "{publication_date}", true, "width: 15%")
 	->column("Last Modified", "{last_modified:short}", true, "width: 20%")
 	;
