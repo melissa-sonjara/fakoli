@@ -38,8 +38,6 @@ Fakoli::using("fileshare", "document");
 
 $libraries = FileshareManager::getSharedLibraries();
 
-//$styles .= FileshareManager::getStyles();
-
 ?>	
 <div id="fileshare_list">
 <h3 class="fileshare_list"><img alt="library" src="/fakoli/images/icon_library.png"><a class="heading" href="/fileshare_libraries">Fileshare Libraries</a></h3>
@@ -51,7 +49,7 @@ if(count($libraries) > 0)
 	{
 ?>
 <li>
-<a href="fileshare_library_search?document_library_id=<? echo $library->document_library_id ?>"><?php echo $library->name ?></a>
+<a href="fileshare_library_files?document_library_id=<? echo $library->document_library_id ?>"><?php echo $library->name ?></a>
 </li>
 <?php		
 	}

@@ -36,8 +36,6 @@ Fakoli::usingFile("framework/data_view.inc");
 
 $libraries = FileshareManager::getSharedLibraries();
 
-//$styles .= FileshareManager::getStyles();
-
 $table = new DataListView($libraries, "libraries");
 $table->column("Library", "<a href='fileshare_library_files?document_library_id={document_library_id}'>{name}</a> {description}", true)
 	->column("Last Modified By", array(FileshareManager, getLibraryLastModifiedBy), true)

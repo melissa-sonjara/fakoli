@@ -54,6 +54,11 @@ var LibraryManager =  (function()
 			
 		},
 		
+		uploadFileshareFile: function(document_library_id)
+		{
+			this.dialog = modalPopup('Upload File', '/action/fileshare/upload?document_library_id=' + document_library_id, '550px', 'auto', true);
+		},
+		
 		uploadFile: function(document_library_id)
 		{
 			this.dialog = modalPopup('Upload File', '/action/document/upload?document_library_id=' + document_library_id, '550px', 'auto', true);

@@ -59,74 +59,12 @@ class FileshareManager extends DocumentManager
 		}
 	}
 	
-	function folderPermission($folder)
-	{
-		$permission = false;
-		
-		if($this->library->allowAccess())
-			$permission = true;
-			
-		trace("folderPermission: $folder ($permission)", 3);
-		
-		return $permission;
-	}
-	
-	/*
-	 * Override DocumentManager's permissions.
-	 */
-	function drawButtons()
-	{
-?>		<div id="buttons">
-		<button id="download" class="button" disabled="disabled"  onclick="downloadFile()"> Download File </button>&nbsp;&nbsp;
-		
-<?php
-if(!checkRole("visitor"))
-{ 
-?>
-		<button id="edit" class="button" disabled="disabled" onclick="editFile()">Edit Details...</button>&nbsp;&nbsp;
-		<button id="upload" class="button" onclick="uploadFile()">Upload a File...</button>
-<?
-}		
-		if ($this->library->isOwner() || checkRole("fileshare,admin"))
-		{
-?>
-		<button id="deleteButton" class="button" disabled="disabled" onclick="deleteFile()">Delete File</button>&nbsp;&nbsp;
-		<br><br>
-		<button id="createFolder" class="button" onclick="createFolder()">Create Folder...</button>&nbsp;&nbsp;
-		<button id="deleteFolder" class="button" onclick="deleteFolder()">Delete Folder</button>
-<?php			
-		}
-?></div><?php
-	}
-	
-	
-	function writeScript()
-	{
-		ob_start();
-?>
-<script type="text/javascript">
-
-function uploadFileshareFile()
-{
-	docManagerDlg.show(function() {}, "/action/document/upload?document_library_id=<?echo $this->library->document_library_id?>");
-}
-
-</script>
-<?
-		$script .= ob_get_contents();
-		ob_end_clean();
-		$script .= parent::writeScript();
-		
-		return $script;		
-	}	
-
 	static function libraryTabs($key = "")
 	{
 		$tabs = array(
 			"Details"			=>	"fileshare_library_form",
 			"Add Members"		=>	"fileshare_library_members",
-			"Manage Files"		=>	"fileshare_library_files",
-			"Find Files"		=>	"fileshare_library_search"
+			"Files"				=>	"fileshare_library_files"
 			);
 
 		$qs = ($key) ? "document_library_id=$key" : ""; 
@@ -135,14 +73,11 @@ function uploadFileshareFile()
 		return $tabs;
 	}
 	
-	static function getStyles()
-	{
-		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
-		$styles .= "<link href=\"/fakoli/css/fileshare.css\" rel=\"stylesheet\"/>\n";
-		
-		return $styles;
-	}
-	
+	/**
+	 * For Members tab
+	 * 
+	 * @param unknown $library
+	 */
 	static function drawMemberSearchForm($library)
 	{
 ?>
@@ -186,43 +121,24 @@ function uploadFileshareFile()
 
 	function formatDocumentTitle($document)
 	{
-		$document_id = $document->document_id;
+		$file = $document->file;
 		
-		$link .= "<a href=\"/action/document/download?document_id={$document->title}\">{$file}
-		</a>&nbsp;&nbsp;\n";
+		$type = getDocType($file);
+		$icon = getDocIcon($file);
 		
-		// Doc edit icon after the title
-		$link .= "<a href=\"#\" onclick=\"new LibraryManager().editDocumentDetailsDialog($document_id); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
-
-		// Doc delete link
+		$library = $document->DocumentLibrary();
+		$size = $library->getFileSize($document);
+		
+		// All users who can view and access the details dialog. Only users with edit access
+		// can edit it; otherwise read only.
+		$details_link  = "<a href=\"edit_document?document_id={document_id}\" onclick=\"new LibraryManager().editDocumentDetailsDialog({document_id}); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
+			
 		if($document->fileshareAllowDelete())
-			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"><a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"></a>\n";
-					
-		return $link;
-	}	
-	
-	/*
-	 * If the document file path is very long, substitute
-	 * "..." in the middle, rather than the end b/c the
-	 * file name is that most important.
-	 */
-	function formatDocumentFileLink($document)
-	{
-		$document_id = $document->document_id;
-
-		$file = basename($document->file);
-		$icon = DocumentHandler::getDocIcon($document->file);
-		$link = "<img src=\"{$icon}\" alt=\"Icon\" style=\"display:inline-block;vertical-align:middle\"/>&nbsp;"; 
-		$link .= "<a href=\"/action/document/download?document_id={$document_id}\">{$document->title}
-		</a>&nbsp;&nbsp;\n";
+		{
+			$delete_link .= "<a href=\"delete_document?document_id={document_id}\" onclick=\"new LibraryManager().deleteFile({document_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"></a>\n";
+		}
 		
-		$link .= "<a href=\"#\" onclick=\"new LibraryManager().editDocumentDetailsDialog($document_id); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
-
-		// delete link
-		if($document->fileshareAllowDelete())
-			$link .= "<a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"><a href=\"#\" onclick=\"new LibraryManager().deleteFile($document_id); return false;\"></a>\n";
-		
-		return $link;
+		return $document->format("<strong>{title}</strong>&nbsp;{$details_link}&nbsp;{$delete_link}<br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a> $size");
 	}	
 	
 	/*
@@ -271,12 +187,6 @@ function uploadFileshareFile()
 			
 		return (count($documents) > 0) ? $documents[0]->format("{last_modified:short}") : null;
 	}		
-	
-	static function getDocumentLastModified($document)
-	{
-		return $document->format("{last_modified:short}");
-	}		
-	
 	
 	static function getLibraryLastModifiedBy($library)
 	{

@@ -80,7 +80,7 @@ if(count($keywords) > 0)
 	foreach($keywords as $keyword)
 	{			
 ?>
-<div><a href="/fileshare_library_search?document_library_id=<?php echo $document_library_id ?>&keyword=<?php echo $keyword ?>"><b><?echo "{$keyword}" ?></b><br/></a>
+<div><a href="/fileshare_library_files?document_library_id=<?php echo $document_library_id ?>&keyword=<?php echo $keyword ?>"><b><?echo "{$keyword}" ?></b><br/></a>
 </div>
 <?php 				
 	}

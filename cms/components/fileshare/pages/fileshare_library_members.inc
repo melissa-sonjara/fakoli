@@ -47,8 +47,6 @@ if(!$library->isOwner() && !checkRole("fileshare,admin"))
 	redirect("fileshare_libraries");
 
 $tabs = FileshareManager::libraryTabs($document_library_id);
-//$styles .= FileshareManager::getStyles();
-
 
 $script .= <<<ENDSCRIPT
 <script type='text/javascript'>

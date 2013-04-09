@@ -32,26 +32,34 @@
 *****************************************************************/
 
 Fakoli::using("document", "fileshare", "taxonomy");
-Fakoli::usingFile("framework/auto_form.inc");
+Fakoli::usingFeature("auto_form");
 
-$document_id = checkNumeric($_GET["document_id"]);
-if (!$document_id)
+$document_library_id = checkNumeric($_GET["document_library_id"]);
+if (!$document_library_id)
 {
 	Fakoli::end("Invalid Parameter");
 }
 
-$document = new Document($document_id);
-$library = $document->DocumentLibrary();
+global $library;
 
-$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "author");
+$library = new DocumentLibrary($document_library_id);
 
-$form = new AutoForm($document, "POST", "/action/fileshare/edit?document_id=$document_id", "DocumentDetails_form");
-$form->readonly("file");
+if (!checkRole($library->allow_access) && !$library->allowAccess())
+{
+	Fakoli::end("Access Denied");
+}
+
+$document = new Document();
+
+$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "author", "publication_date", "document_library_id", "owner_id", "allow_access");
+
+$form = new AutoForm($document, "POST", "/action/fileshare/upload?document_library_id=$document_library_id");
+$form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->hide("publication_date", "document_library_id", "owner_id");
 $form->required("title");
-$form->getRenderer("title")->autocomplete = false;
+$form->validator->add(new RequiredFileValidator("file", "File", "You must select a file to upload."));
 $form->annotate("keywords", "Separate keywords with a comma");
-$form->ajaxSubmit("function(result) {new LibraryManager().editDocumentDetailsResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->button("Cancel", "new LibraryManager().closeEditDocumentDetails()", null, true);
+$form->getRenderer("title")->autocomplete = false;
 
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
@@ -59,16 +67,18 @@ $notes->columns = 38;
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
-if (!$document->fileshareAllowEdit())
-{
-	$form->readOnlyForm = true;
-}
+$fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
+$allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
 if ($method == "POST")
 {
+	$_POST["publication_date"] = now();
+	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
+	$_POST["document_library_id"] = $document_library_id;
+	
 	if ($form->save())
 	{
-		Fakoli::end("OK");
+		Fakoli::end("1");
 	}
 	else
 	{
@@ -78,4 +88,13 @@ if ($method == "POST")
 
 echo $form->writeScript();
 $form->drawForm();
+
+function uploadLibraryFile($field, $document)
+{
+	global $library;
+	global $form;
+	
+	$mgr = new DocumentManager($library);
+	$document->file = $mgr->uploadFile($field, "");
+}
 ?>
