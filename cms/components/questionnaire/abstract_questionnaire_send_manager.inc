@@ -1,5 +1,6 @@
 <?php
 Fakoli::using("questionnaire", "settings");
+Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
 
 /**
  * Optional - for surveys/questionnaires that send requests for
