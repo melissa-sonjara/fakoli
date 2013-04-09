@@ -1140,16 +1140,15 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 
 		return "CC Recipients will receive a copy of the email with a valid survey response token but their responses
 		will not be counted in the results. (separate email addresses with a comma ',')</br>
-		<a style='line-height: 30px' class='button' onclick=\"questionnaireSendMgr.addEmailToCCRecipients('{$user->email}'); return false;\">
-		<span style='margin-top: 5px'>Add Me To CC Recipients</span></a>&nbsp;&nbsp;
-		<a class='button' onclick=\"questionnaireSendMgr.addEmailToCCRecipients('sender'); return false;\">Add Sender Email to CC Recipients</a>";
+		<div class='button_row'>\n<a class='button' onclick=\"questionnaireSendMgr.addEmailToCCRecipients('{$user->email}'); return false;\">Add Me To CC Recipients</a>&nbsp;&nbsp;
+		<a class='button' onclick=\"questionnaireSendMgr.addEmailToCCRecipients('sender'); return false;\">Add Sender Email to CC Recipients</a>\n</div>\n";
 		}
 
 	function getMessageAnnotation()
 	{
 		return "Select from a set of boilerplate messages which you can then customize for this survey.<br>
-		<a style='line-height: 30px' href='#' class='button' onclick=\"questionnaireSendMgr.showMessageSelectDialog(); return false;\"><span style='margin-top: 5px'>Select a Message</span></a>&nbsp&nbsp;
-		<a href='#' class='button' onclick=\"questionnaireSendMgr.showAdvancedFeaturesDialog(); return false\"><span style='margin-top: 5px'>Advanced Features</span></a>\n";
+		<div class='button_row'>\n<a href='#' class='button' onclick=\"questionnaireSendMgr.showMessageSelectDialog(); return false;\">Select a Message</span></a>&nbsp&nbsp;
+		<a href='#' class='button' onclick=\"questionnaireSendMgr.showAdvancedFeaturesDialog(); return false\">Advanced Features</a>\n</div>\n";
 	}
 
 	/*

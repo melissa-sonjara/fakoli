@@ -96,6 +96,12 @@ td.question_form_label {
 	padding-top: 10px;
 }
 
+td.value .button_row
+{
+	padding-top: 5px; 
+	line-height: normal;
+}
+
 .questionnaire_tester_block p a:link
  .questionnaire_tester_block p a:visited,
  .questionnaire_tester_block p a:hover
