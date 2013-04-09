@@ -500,8 +500,8 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		$query = GroupedQuery::create($xref_class, "", "{$itemPk}");
 		if($this->item->$itemPk)
 		{
-			$query->constraints = "WHERE {$qPk} NOT IN (SELECT {$qPk} FROM {$xref->table} WHERE {$qPk} = :{$qPk})";
-			$query->bind(":{$qPk}", $this->item->$itemPk);
+			$query->constraints = "WHERE {$qPk} NOT IN (SELECT {$qPk} FROM {$xref->table} WHERE {$itemPk} = :{$itemPk})";
+			$query->bind(":{$itemPk}", $this->item->$itemPk);
 		}
 
 		return $query->execute();
