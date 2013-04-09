@@ -480,6 +480,13 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 			if(!array_key_exists($excludeEmail, $indexedResponses)) continue;
 				
 			$response = $indexedResponses[$excludeEmail];
+			
+			// In case user puts same email in recipients and additional or cc recipients
+			if(is_array($response))
+			{
+				$response = $response[0];
+			}
+				
 			$response->excludeResponse();
 		}
 	}
