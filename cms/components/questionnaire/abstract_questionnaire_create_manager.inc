@@ -195,7 +195,8 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 	}
 
 	/**
-	 * Delete a questionnaire item and all its questions.
+	 * Delete a questionnaire item and either all its questions
+	 * or all its question xrefs.
 	 */
 	function deleteQuestionnaire()
 	{
@@ -207,8 +208,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		}
 		$itemPk = $item->getPrimaryKey();
 		$obj = $this->getSortableObj();
-		$pk = $obj->getPrimaryKey();
-
+	
 		$questions = $this->getQuestions();
 		$qPk = $this->getQuestionKey();
 
@@ -218,6 +218,8 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		{
 			if(count($questions) > 0)
 			{
+				// Either deleting all questions linked to the questionnaire or all
+				// question xrefs linked to the questionnaire
 				$obj->delete("WHERE {$itemPk}={$item->$itemPk}");
 				foreach($questions as $question)
 				{
@@ -363,10 +365,10 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		}
 
 		$count = Query::create($xrefClass, "WHERE {$qPk}=:{$qPk}")
-		->bind(":{$qPk}", $question->$qPk)
-		->executeValue("COUNT(1)");
+			->bind(":{$qPk}", $question->$qPk)
+			->executeValue("COUNT(1)");
 
-		if(count == 0)
+		if($count == 0)
 		{
 			$question->delete();
 		}
