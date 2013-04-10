@@ -435,6 +435,11 @@ class SurveyResultsManager extends AbstractQuestionnaireResultsManager
 	{
 		return "Token";
 	}
+
+	function getResponseViewDialog()
+	{
+		return "survey_response_view";
+	}
 	
 	/*
 	 * Called by QuestionRenderer
