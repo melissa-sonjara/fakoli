@@ -59,7 +59,7 @@ $table->column("Document", array($mgr, formatDocumentTitle), true, "width: 60%")
 		  
 $table->sortable = true;
 $table->filter = false;
-$table->paginate = false;
+$table->pageSize = 10;
 $table->emptyMessage = $mgr->emptyMessage;
 $table->cssStyles = "width: 95%";
 
@@ -82,7 +82,7 @@ window.addEvent('domready', function()
 </script>
 ENDSCRIPT;
 ?>
-<div id="fileshare_content">
+<div id="fileshare_content" style='float: left'>
 <?
 if($tabs)
 {
@@ -112,7 +112,9 @@ if($tabs)
 <?
 $facetManager->drawForm();
 
-echo "<br>";
+?>
+<div style='padding-top: 5px;'>
+<?php
 $table->drawView();
 
 if($library->fileshareAllowUpload())
@@ -134,4 +136,4 @@ if($tabs)
 </div>
 <?php 
 }
-?></div>
+?></div></div>
