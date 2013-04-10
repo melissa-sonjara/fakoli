@@ -58,7 +58,7 @@ $table->column("Document", array($mgr, formatDocumentTitle), true, "width: 60%")
 	;
 		  
 $table->sortable = true;
-$table->filter = true;
+$table->filter = false;
 $table->pageSize = 10;
 $table->emptyMessage = $mgr->emptyMessage;
 $table->cssStyles = "width: 95%";
