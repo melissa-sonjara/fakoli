@@ -1148,6 +1148,8 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 
 	function getCCRecipientsAnnotation()
 	{
+		if($this->item->isClosed()) return "";
+		
 		global $user;
 
 		return "CC Recipients will receive a copy of the email with a valid survey response token but their responses
@@ -1158,6 +1160,8 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 
 	function getMessageAnnotation()
 	{
+		if($this->item->isClosed()) return "";
+		
 		return "Select from a set of boilerplate messages which you can then customize for this survey.<br>
 		<div class='button_row'>\n<a href='#' class='button' onclick=\"questionnaireSendMgr.showMessageSelectDialog(); return false;\">Select a Message</span></a>&nbsp&nbsp;
 		<a href='#' class='button' onclick=\"questionnaireSendMgr.showAdvancedFeaturesDialog(); return false\">Advanced Features</a>\n</div>\n";
