@@ -84,6 +84,7 @@ class FileshareManager extends DocumentManager
 		return $tabs;
 	}
 	
+	
 	/**
 	 * For Members tab
 	 * 
