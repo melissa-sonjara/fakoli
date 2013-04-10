@@ -70,7 +70,6 @@ $facetManager = new FacetManager('facet_manager', $table);
 TaxonomyManager::addFacets($facetManager, Document, true, "160px", "200px", "200px");
 $facetManager->addFacet("Uploaded By", $mgr->createUploadedByFacet());
 
-
 $script .= $facetManager->writeScript();
 $script .= $mgr->writeScript();
 $script .= $table->writeScript();
