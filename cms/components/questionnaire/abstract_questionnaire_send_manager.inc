@@ -653,7 +653,19 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		
 		$addl_recipients = explode(",", $item->additional_recipients);
 		$addl_recipients = array_unique($addl_recipients);
-		$addl_recipients = array_diff($addl_recipients, explode(",", $item->recipients));
+		
+		// array_diff not providing expected result
+		$new_recipients = array();
+		foreach($addl_recipients as $addl_recipient)
+		{
+			if(!preg_match("/$addl_recipient/", $item->recipients))
+			{
+				$new_recipients[] = $addl_recipient;
+			}
+		}
+		
+		$addl_recipients = $new_recipients;
+
 		if(!count($addl_recipients))
 		{
 			$item->additional_recipients = '';
@@ -661,11 +673,11 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 			$item->save();
 			return questionnaire_no_additional;
 		}
-		$recipients = $addl_recipients;
-		$this->excludes = $recipients;
-		$this->addl_recipients = $recipients;
 
-		$this->responses = $this->generateResponses($recipients);
+		$this->excludes = $addl_recipients;
+		$this->addl_recipients = $addl_recipients;
+
+		$this->responses = $this->generateResponses($addl_recipients);
 
 		$this->setExcluded();
 
@@ -678,7 +690,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 
 		$this->moveAdditionalToRecipientList();
 
-		return $rtn;
+		return ($rtn) ? questionnaire_sent : questionnaire_send_failed;
 	}
 
 
@@ -981,7 +993,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		}
 		$out .= "</p>";
 		
-		$out .= "<div class='button_row' style='padding-left: 15%'>\n";
+		$out .= "<div class='button_row' style='text-align: middle;'>\n";
 		if(!$response && $user && $item->isAuthor())
 		{
 			$out .= "<a class='button' href='#' onclick=\"questionnaireSendMgr.sendTestEmail(); return false;\">Send Test Email to {$user->email}</a>\n";

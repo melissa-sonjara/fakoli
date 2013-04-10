@@ -87,34 +87,31 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 
 	/**
 	 * Creates a default name for the questionnaire list page
-	 * from the item class name.
+	 * from the item table name.
 	 *
-	 * E.g., class name Survey results in list page
+	 * E.g., table name survey results in list page
 	 * survey_questions
 	 */
 	function getQuestionListIdentifier()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "{$class}_questions";
+		return "{$this->item->table}_questions";
 	}
 
 	/**
 	 * Creates a default name for the questionnaire question form
 	 * page.
-	 *
+	 * e.g., questionnaire_question_form
 	 */
 	function getQuestionForm()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "{$class}_question_form";
+		return "{$this->item->table}_question_form";
 	}
 
 	/**
 	 * Creates a default name for the questionnaire form
-	 * or detail first tab from the item class name.
+	 * or detail first tab from the item table name.
 	 *
-	 * E.g., class name Survey results in list page
-	 * survey_form
+	 * e.g., questionnaire_form
 	 */
 	function getQuestionnaireFormIdentifier()
 	{
@@ -122,8 +119,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		{
 			return;
 		}
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "{$class}_form";
+		return "{$this->item->table}_form";
 	}
 
 	/**
@@ -171,17 +167,30 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		$questions = $this->getQuestions();
 		if(count($questions) == 0) return;
 
+		$xref_class = $this->getXrefClass();	
+		$sort_field = $this->getSortField();
+		$sort_order = 1;
+		
 		$qPk = $questions[0]->getPrimaryKey();
 		$itemPk = $dst->getPrimaryKey();
-
+			
+		/**
+		 * If questionnaire uses xref, save new xref record linking
+		 * it to the question; otherwise, save question record.
+		 */
 		foreach($questions as $question)
 		{
-			$qs = clone $question;
-			$qs->$qPk = null;
-			$qs->$itemPk = $dst->$itemPk;
-			$qs->save();
+			$obj = ($xref_class) ? new $xref_class() : clone $question;
+			$obj->$qPk = ($xref_class) ? $question->$qPk : null;
+			if($xref_class)
+			{
+				$obj->$sort_field = $sort_order;
+			}
+			$obj->$itemPk = $dst->$itemPk;
+			$obj->save();
+			$sort_order++;
 		}
-			
+				
 		return $dst;
 	}
 
@@ -740,6 +749,12 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		echo "<div id='warning'>{$msg}</div>\n";
 	}
 	
+	/**
+	 * Allow managers to override the default questionnaire mgr name -
+	 * needed if multiple managers would be on same page.
+	 * 
+	 * @return string
+	 */
 	function getJSManagerName()
 	{
 		return "questionnaireMgr";

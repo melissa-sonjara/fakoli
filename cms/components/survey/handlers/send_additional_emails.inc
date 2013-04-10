@@ -50,7 +50,7 @@ if(!$survey->isAuthor())
 $mgr = new SurveySendManager($survey);
 $rtn = $mgr->sendToAdditional();
 
-$sent = ($rtn) ? "OK" : "FAIL";
-$send_result = ($rtn) ? questionnaire_sent : questionnaire_send_failed;
-Fakoli::end("{$sent}|{$send_result}");
+$sent = ($rtn == questionnaire_sent) ? "OK" : "FAIL";
+
+Fakoli::end("{$sent}|{$rtn}");
 ?>

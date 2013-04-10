@@ -76,7 +76,7 @@ elseif($response && $response->isSubmitted())
 else
 {
 	echo "<p>" . formatAsHTML($survey->introduction) . "</p>\n";
-	echo "<p><a href=\"#\" onclick=\"questionnaireMgr.showTokenDialog($survey_id); return false;\">{$survey->title}</a></p>\n";
+	echo "<p><a href=\"#\" onclick=\"questionnaireMgr.showResponseTokenDialog(); return false;\">{$survey->title}</a></p>\n";
 }
 
 if(($user && $survey->isAuthor()) || ($response && $response->isTester()))

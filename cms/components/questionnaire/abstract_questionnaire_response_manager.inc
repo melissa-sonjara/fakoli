@@ -71,8 +71,7 @@ abstract class AbstractQuestionnaireResponseManager extends AbstractQuestionnair
 	 */
 	function getResponseFormIdentifier()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "{$class}_form";
+		return "{$this->item->table}_form";
 	}
 
 	function getResetTokenHandler()

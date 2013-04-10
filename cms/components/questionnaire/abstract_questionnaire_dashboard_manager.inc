@@ -63,8 +63,7 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 	 */
 	function getQuestionnaireFormIdentifier()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "{$class}_form";
+		return "{$this->item->table}_form";
 	}
 	
 
@@ -84,14 +83,12 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 	 */
 	function getCloneDialog()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "clone_{$class}_dialog";
+		return "clone_{$this->item->table}_dialog";
 	}
 
 	function getQuestionnaireViewDialog()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return "{$class}_view";
+		return "{$this->item->table}_view";
 	}
 
 
@@ -100,8 +97,8 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 	 * would be called from a questionnaire list
 	 * page to delete the questionnaire.
 	 *
-	 * E.g., class name Survey results in delete
-	 * handler name survey_delete
+	 * E.g., pretty class name Survey results in delete
+	 * handler name survey_delete.
 	 *
 	 */
 	function getQuestionnaireDeleteHandler()
@@ -112,14 +109,12 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 
 	function getResponseFormIdentifier()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return  "{$class}_response_form";
+		return  "{$this->item->table}_response_form";
 	}
 
 	function getResultsPageIdentifier()
 	{
-		$class = codify(strtolower($this->item->prettifyClassName()));
-		return  "{$class}_responses";
+		return  "{$this->item->table}_responses";
 	}
 
 	function buildCloneForm()
