@@ -47,28 +47,29 @@ $page->page_title = "Fileshare Library Files";
 $library = new DocumentLibrary($document_library_id);
 
 if(!$library->allowAccess())
-	redirect("/fileshare_libraries");
+	redirect("fileshare_libraries");
 
 $mgr = new FileshareManager($library, $keyword);
 
 $table = new DataListView($mgr->documents, "library_documents");
-$table->column("Document", array($mgr, formatDocumentTitle), true, "width: 45%")
-	->column("Uploaded By", array($mgr, getDocumentAuthor), true, "width: 20%") 
-	->column("Publication Date", "{publication_date}", true, "width: 15%")
-	->column("Last Modified", "{last_modified:short}", true, "width: 20%")
+$table->column("Document", array($mgr, formatDocumentTitle), true, "width: 60%")
+	->column("Uploaded By", array($mgr, getDocumentAuthor), true, "width: 20%; text-align: center") 
+	->column("Last Modified", "{last_modified:short}", true, "width: 20%; text-align: center")
 	;
 		  
 $table->sortable = true;
 $table->filter = true;
 $table->pageSize = 10;
-$table->emptyMessage = "There are no documents in this library.";
-$table->cssStyles = "width: 640px";
+$table->emptyMessage = $mgr->emptyMessage;
+$table->cssStyles = "width: 95%";
 
 if($library->isOwner() || checkRole("fileshare,admin"))
 	$tabs = FileshareManager::libraryTabs($document_library_id);
 
 $facetManager = new FacetManager('facet_manager', $table);
 TaxonomyManager::addFacets($facetManager, Document, true, "160px", "200px", "200px");
+$facetManager->addFacet("Uploaded By", $mgr->createUploadedByFacet());
+
 
 $script .= $facetManager->writeScript();
 $script .= $mgr->writeScript();
@@ -92,7 +93,7 @@ if($tabs)
 <?php 
 }
 ?>
-<table id="library_search" class="layout" style="width: auto"><tr><td>
+<div style='width: 95%'>
 <table class="layout" style="width: 100%">
 <tr>
 <td style="width: 40%">
@@ -124,7 +125,7 @@ if($library->fileshareAllowUpload())
 <?php
 }
 ?>
-</td></tr></table>
+</div>
 <?php 
 
 if($tabs)

@@ -44,6 +44,7 @@ class FileshareManager extends DocumentManager
 	function FileshareManager($library, $keyword = "")
 	{	
 		$this->library = $library;
+		
 		if($keyword)
 		{
 			$keyword = strtolower($keyword);
@@ -56,6 +57,16 @@ class FileshareManager extends DocumentManager
 		else
 		{
 			$this->documents = array();
+		}
+		
+		if(!count($this->documents))
+		{
+			$this->emptyMessage = "There are no documents in {$this->library->name}";
+			if($keyword)
+			{
+				$this->emptyMessage .= " that match the keyword search '{$keyword}'</i>";
+			}
+			$this->emptyMessage .= ".";
 		}
 	}
 	
@@ -108,6 +119,17 @@ class FileshareManager extends DocumentManager
 		}		
 	}
 	
+	function createUploadedByFacet()
+	{
+		$facet = new MultiSelectFacetFilter("owner_id", array(Document	=>	"{Owner.first_name} {Owner.last_name}"));
+	
+		$facet->dropdownMaxWidth = "160px";
+		$facet->width = "200px";
+		$facet->height = "240px";
+	
+		return $facet;
+	}
+	
 
 	static function constructListMember($member, $document_library_id)
 	{
@@ -131,11 +153,12 @@ class FileshareManager extends DocumentManager
 		
 		// All users who can view and access the details dialog. Only users with edit access
 		// can edit it; otherwise read only.
-		$details_link  = "<a href=\"edit_document?document_id={document_id}\" onclick=\"new LibraryManager().editDocumentDetailsDialog({document_id}); return false;\"><img src=\"/templates/images/icon_edit.gif\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
+		$details_icon = ($document->fileshareAllowEdit()) ? "icon_edit.png" : "icon_view.png"; 
+		$details_link  = "<a href=\"edit_document?document_id={document_id}\" onclick=\"new LibraryManager().editDocumentDetailsDialog({document_id}); return false;\"><img src=\"/fakoli/images/{$details_icon}\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
 			
 		if($document->fileshareAllowDelete())
 		{
-			$delete_link .= "<a href=\"delete_document?document_id={document_id}\" onclick=\"new LibraryManager().deleteFile({document_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/delete.gif\"></a>\n";
+			$delete_link .= "<a href=\"delete_document?document_id={document_id}\" onclick=\"new LibraryManager().deleteFile({document_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/icon_delete_trash.png\"></a>\n";
 		}
 		
 		return $document->format("<strong>{title}</strong>&nbsp;{$details_link}&nbsp;{$delete_link}<br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a> $size");
