@@ -98,6 +98,7 @@ if($survey->isAuthor() && !$survey->isClosed())
 else
 {
 	$form->readOnlyForm = true;
+	$form->hide("additional_recipients");
 	$form->valueCSS = 'ro_value';
 }
 
