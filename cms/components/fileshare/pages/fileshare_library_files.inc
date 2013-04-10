@@ -59,7 +59,7 @@ $table->column("Document", array($mgr, formatDocumentTitle), true, "width: 60%")
 		  
 $table->sortable = true;
 $table->filter = false;
-$table->pageSize = 10;
+$table->paginate = false;
 $table->emptyMessage = $mgr->emptyMessage;
 $table->cssStyles = "width: 95%";
 
@@ -112,6 +112,7 @@ if($tabs)
 <?
 $facetManager->drawForm();
 
+echo "<br>";
 $table->drawView();
 
 if($library->fileshareAllowUpload())
