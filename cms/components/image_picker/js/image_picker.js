@@ -36,7 +36,6 @@ var ImagePicker =  (function()
 	
 		setMode: function( mode, selectModeField, selectModePreview)
 		{
-			this.editor = editor;
 			this.mode = mode;
 			this.selectModeField = selectModeField;
 			this.selectModePreview = selectModePreview;
