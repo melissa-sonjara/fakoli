@@ -741,6 +741,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 	
 	var $stepLabel; // e.g., Next/Previous Month 
 	var $dateRangeLabel = "Reporting Period";
+	var $subTitle;			// Calling code can optionally output a text description of the date range by calling this renderer through the form.
 	
 	var $handler; // custom parameter handler if override to getConstraint needed
 	
@@ -799,11 +800,11 @@ class DateRangeFilterRenderer extends FieldRenderer
 			if ($this->startDate) $this->startDate = new DateTime($this->startDate);
 			if ($this->endDate) $this->endDate = new DateTime($this->endDate);
 			
-			if ($this->startDate && $this->endDate) $this->subTitle = $this->startDate->format("jS F Y")." to ".$this->endDate->format("jS F Y");
+			if ($this->startDate && $this->endDate) 
+			{
+				$this->subTitle = $this->startDate->format("jS F Y")." to ".$this->endDate->format("jS F Y");
+			}
 		
-			$this->subTitle = $this->startDate->format("F d, Y") . " &ndash; " .
-				 $this->endDate->format("F d, Y");
-
 			// JDG 2/12 - remove "inclusive of last day"
 	
 			// JDG 11/2011 - Need to set this for stepping with Prev Next
@@ -898,7 +899,9 @@ class DateRangeFilterRenderer extends FieldRenderer
 		}
 
 		if(!$this->subTitle)
+		{
 			$this->subTitle = $this->startDate->format("F Y");	
+		}
 	}
 	
 	function setStepModeYear($startMonth = 1)
