@@ -41,13 +41,22 @@ $menu_item = "Sections";
 $section_id = checkNumeric($_GET["section_id"]);
 
 $section = new Section();
+$allowDelete = false;
 
 if ($section_id)
 {
 	$section->load($section_id);
+	
+	$contentCount = Query::create(SectionContent, "WHERE section_id=:id")
+						->bind(":id", $section_id)
+						->executeValue("COUNT(1)");
+
+	$allowDelete = ($contentCount == 0);
+	
 }
 
 $form = new AutoForm($section);
+$form->allowDelete = $allowDelete;
 
 $form->alias("section", "Section Identifier");
 
