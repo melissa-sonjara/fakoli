@@ -82,7 +82,6 @@ ENDSTYLES;
 
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
-var new ImagePicker();
 window.addEvent('domready', function()
 {
 	new ImagePicker().setMode('$mode', '$field', '$preview');
