@@ -1,7 +1,6 @@
 <?php
 Fakoli::using("questionnaire", "text_lookup");
-
-require_once "abstract_questionnaire_manager.inc";
+Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
 
 /*
  * Provides an interface between a custom questionnaire

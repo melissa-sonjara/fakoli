@@ -1,5 +1,6 @@
 <?php
 Fakoli::using("questionnaire");
+Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
 
 /**
  * Manages options from questionnaire list or dashboard page.

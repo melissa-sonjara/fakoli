@@ -1,5 +1,6 @@
 <?php
 Fakoli::using("questionnaire");
+Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
 
 
 /**
