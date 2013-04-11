@@ -640,6 +640,23 @@ function deleteFolderResult(result)
 		
 		return $form;
 	}	
+	
+	function formatLinkPickerTitle($document)
+	{
+		$file = $document->file;
+		
+		$type = getDocType($file);
+		$icon = getDocIcon($file);
+		
+		$library = $document->DocumentLibrary();
+		$file_size = $library->getFileSize($document);
+		if($file_size)
+		{
+			$size = "($file_size)";
+		}
+			
+		return $document->format("<a style='display: inline' id='document_id_{document_id}' href='#' ondblclick=\"new LinkPicker().documentPickerInsertLink({document_id})\" onclick=\"new LinkPicker().toggleDocumentSelected(this, {document_id}); return false;\">{title}</a>&nbsp;<img style='display:inline; vertical-align: middle' src='$icon' alt='$type'/>&nbsp;$size");
+	}
 
 	static function getStyles()
 	{

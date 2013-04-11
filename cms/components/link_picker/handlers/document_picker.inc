@@ -31,7 +31,8 @@
 
 *****************************************************************/
 
-Fakoli::usingFeature("tree");
+Fakoli::using("document");
+Fakoli::usingFeature("data_view");
 
 $editor = $_GET["Editor"];
 $document_library_id = checkNumeric($_GET["document_library_id"]);
@@ -48,6 +49,22 @@ if ($document_library_id) $library->load($document_library_id);
 
 $docMgr = new DocumentManager($library);
 
+$table = new DataListView($docMgr->documents, "library_documents");
+
+$table->column("Title", array($docMgr, formatLinkPickerTitle), false, "width: 60%")
+->column("Author", "{author}", false, "width: 20%; text-align: center")
+->column("Uploaded By", "{Owner.first_name} {Owner.last_name}", false, "width: 20%; text-align: center")
+->column("Last Modified", "{last_modified:short}", false, "width: 20%; text-align: center")
+;
+
+$table->sortable = false;
+$table->filter = false;
+$table->paginate = false;
+$table->emptyMessage = "There are no files in {$library->name}.";
+$table->cssStyle = "width: 100%; padding-top: 8px;";
+
+echo $docMgr->writeScript();
+echo $table->writeScript();
 ?>
 <div style="border: solid 1px #666; background: url(/fakoli/images/table-header.png); width: 100%;padding: 2px 0px">
  <strong>&nbsp;Document Library: </strong>
@@ -60,11 +77,13 @@ $docMgr = new DocumentManager($library);
 ?>
  </select>
 </div>
-<div style="clear: left">
+<div style="clear: left; width: 100%;">
 <?
-$docMgr->drawSelectView("new LinkPicker().documentSelected()", "new LinkPicker().linkToDocument()", "100%", 240);
+echo "<div id='link_picker_document_list' class='scrollbox'>\n";
+$table->drawView();
+
+echo "</div>\n";
 ?>
-<br/>
-<button id="linkButton" onclick="new LinkPicker().linkToDocument()" disabled="disabled" class="button">Link to Document</button>
-<br/>
 </div>
+<p><button id="linkButton" onclick="new LinkPicker().documentPickerLinkToDocument()" disabled="disabled" class="button">Link to Document</button>
+</p>

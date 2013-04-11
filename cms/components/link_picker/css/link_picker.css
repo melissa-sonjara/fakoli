@@ -4,3 +4,39 @@
 {
 	border: solid 1px #333
 }
+
+#link_picker_panel .scrollbox
+{
+	height: 250px; 
+	overflow: scroll; 
+	border: none;	
+}
+
+#link_picker_panel .facet_form
+{
+	padding-top: 5px;
+}
+
+#link_picker_document_list a:hover
+{
+	color: #fff;
+	background-color: #325E9E;
+}
+
+#link_picker_document_list a:focus
+{
+	background-color: #666;
+	color: #fff;
+}
+
+#link_picker_document_list a.selected, 
+#link_picker_document_list tr.selected a:hover,
+#link_picker_document_list tr.selected a:focus,
+#link_picker_document_list tr.selected a,
+#link_picker_document_list tr.selected:hover,
+#link_picker_document_list tr.selected
+{
+	background-color: #BFE0EE; 
+	color: #000000;
+	text-decoration: none;
+}

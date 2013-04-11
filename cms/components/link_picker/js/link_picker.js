@@ -36,6 +36,8 @@ var LinkPicker =  (function()
 	{
 		editor: "",
 		dialog: Class.Empty,
+		document_id: null,
+		tr: null,
 		
 		initialize: function()
 		{
@@ -71,7 +73,37 @@ var LinkPicker =  (function()
 		{
 			$('linkButton').disabled = false;
 		},
-
+		
+		toggleDocumentSelected: function(elt, document_id)
+		{
+			// clear out old selected row
+			if(this.tr)
+			{
+				this.tr.removeClass('selected');
+			}
+			
+			// select new row
+			var tr = findAncestor(elt, 'tr');
+			
+			tr.addClass('selected');
+			this.tr = tr;
+			this.document_id = document_id;
+	
+			$('linkButton').set("disabled", "");
+		},
+		
+		documentPickerLinkToDocument: function()
+		{
+			if(!this.document_id) return;
+			this.insertLink("/action/document/download?document_id=" + this.document_id);
+		},
+		
+		documentPickerInsertLink: function(document_id)
+		{
+			this.document_id = document_id;
+			this.documentPickerLinkToDocument();
+		},
+	
 		linkToDocument: function()
 		{
 			id = $('files_value').value;
