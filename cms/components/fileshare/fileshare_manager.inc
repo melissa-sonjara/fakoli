@@ -162,7 +162,7 @@ class FileshareManager extends DocumentManager
 			$delete_link .= "<a href=\"delete_document?document_id={document_id}\" onclick=\"new LibraryManager().deleteFile({document_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/icon_delete_trash.png\"></a>\n";
 		}
 		
-		return $document->format("<span class='document_title'>{title}</span><span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span><br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a> $size");
+		return $document->format("<span class='document_title'>{title}</span><br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a>&nbsp;$size&nbsp;<span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span>");
 	}	
 	
 	/*
