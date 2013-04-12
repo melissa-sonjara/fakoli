@@ -315,10 +315,6 @@ a.list_member
 	margin-top: 10px;
 }
 
-table.tree
-{
-	border: none;
-}
 
 #tabs.fileshare
 {
@@ -328,4 +324,10 @@ table.tree
 #library_documents.list
 {
 	width: 636px;
+}
+
+#library_documents .document_title
+{
+	font-size: 120%;
+	font-weight: bold;
 }
