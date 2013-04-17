@@ -731,7 +731,7 @@ class DataListView implements FacetFilterable
 		$c = 0;
 		foreach($this->columns as $column)
 		{
-			$x->writeText(0, $c, stripHTMLTags(stripHTML($column->title)));
+			$x->writeText(0, $c, stripHTML($column->title));
 			++$c;
 		}
 		
@@ -761,7 +761,7 @@ class DataListView implements FacetFilterable
 				{
 				case String:
 
-					$x->writeText($r, $c, stripHTMLTags(stripHTMLTags(stripHTML($val))));
+					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
 					break;
 					
 				case Number:
@@ -786,7 +786,7 @@ class DataListView implements FacetFilterable
 					else
 					{
 						// No HTML required in Excel output
-						$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
+						$x->writeText($r, $c, stripHTML($val));
 					}
 				}
 				
