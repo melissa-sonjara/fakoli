@@ -837,10 +837,10 @@ function firstSentence($text)
 function stripHTML($text)
 {
 	/*$text = preg_replace("/<.*?>/", "", $text);*/
-
+	$text = strip_tags($text);
+	
 	// JDG 5/19/2011 - remove &ndash, &nbsp;
 	$text = html_entity_decode($text);
-	$text = strip_tags($text);
 	return $text;
 }
 
