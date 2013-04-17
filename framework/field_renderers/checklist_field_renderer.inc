@@ -82,6 +82,7 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $dropdownMaxWidth = "340px";
 	var $dropdownMessage = "Click to Select Terms";
 	var $showSelectAll = false;
+	var $separator = ", "; 				///< The separator between values in read only list
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -283,7 +284,7 @@ class CheckListFieldRenderer extends FieldRenderer
 			$answers[] = array_key_exists($item, $this->options) ? $this->options[$item] : $item;
 		}
 		
-		$value = implode(", ", $answers);
+		$value = implode($this->separator, $answers);
 		
 		echo $value;
 		
