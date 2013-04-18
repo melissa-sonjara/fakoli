@@ -841,6 +841,7 @@ function stripHTML($text)
 	
 	// JDG 5/19/2011 - remove &ndash, &nbsp;
 	$text = html_entity_decode($text);
+	$text = trim($text);
 	return $text;
 }
 
