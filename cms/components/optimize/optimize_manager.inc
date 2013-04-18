@@ -164,7 +164,7 @@ class OptimizeManager
 	{
 		switch($action)
 		{
-			case "script":
+			case "scripts":
 				if (Settings::getValue("optimize", "compress_javascript") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 				{
 					ob_start("ob_gzhandler"); 
