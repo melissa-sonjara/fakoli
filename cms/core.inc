@@ -891,6 +891,23 @@ class Fakoli
 $isAction = basename($_SERVER["SCRIPT_FILENAME"]) == "action.php";
 $isResource = basename($_SERVER["SCRIPT_FILENAME"]) == "resource.php";
 
+if ($isAction)
+{
+	registerURLRewriteParameters("component", "identifier");
+}
+else if ($isResource)
+{
+	registerURLRewriteParameters("component", "path");
+}
+else if ($isAdmin)
+{
+	registerURLRewriteParameters("identifier");
+}
+else
+{
+	registerURLRewriteParameters("section", "identifier");
+}
+
 Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer nesting
 
 set_error_handler(array("Fakoli", "errorHandler"));

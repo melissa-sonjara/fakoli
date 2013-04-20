@@ -1479,6 +1479,22 @@ function appendToQueryString($qs, $params)
 	return $qs;
 }
 
+$__urlRewriteParams = array();
+
+/**
+ * Register any URL rewrite parameters that should be excluded
+ * from query string reformatting.
+ */
+function registerURLRewriteParameters()
+{
+	global $__urlRewriteParams;
+	
+	for($i = 0; $i < func_num_args(); ++$i)
+	{
+		$__urlRewriteParams[func_get_arg($i)] = true;
+	}		
+}
+
 /**
  * Generates a query string containg the full set of values
  * passed to this page both as GET and POST parameters.
@@ -1486,11 +1502,15 @@ function appendToQueryString($qs, $params)
  */
 function getFullQueryString()
 {
+	global $__urlRewriteParams;
+	
 	$qs = "";
 	$sep = "?";
 	
 	foreach($_GET as $name => $value)
 	{
+		if (array_key_exists($name, $__urlRewriteParams)) continue;
+		 
 		if (is_array($value))
 		{
 			foreach($value as $key => $val)
