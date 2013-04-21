@@ -218,6 +218,21 @@ class CompositeDataItem extends AbstractDataItem
 	}
 
 	/**
+	 * Finds and returns the sub-object that contains the given field.
+	 * 
+	 * @param string $field the field for which to search
+	 */
+	function findSubObject($field)
+	{
+		foreach($this->__objects as $obj)
+		{
+			if ($obj->hasField($field)) return $obj;
+		}
+		
+		throw new FakoliException("Cannot locate field '$field' in sub-objects");
+	}
+	
+	/**
 	 * Retrieves the primary key field name
 	 */
 	function getPrimaryKey()
@@ -618,7 +633,7 @@ class CompositeDataItem extends AbstractDataItem
 			
 			$template = str_replace($match[0], $value, $template);
 		}
-		
+
 		return $template;
 	}
 		
