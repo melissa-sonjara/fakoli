@@ -85,6 +85,10 @@ class DateFieldRenderer extends FieldRenderer
 	function renderField($field)
 	{
 		$obj = $this->parent->data;
+		if ($obj instanceof CompositeDataItem)
+		{
+			$obj = $obj->findSubObject($field);
+		}
 		$date = $obj->format("{{$field}:m/d/Y}");
 		
 		$this->_startField($field);
