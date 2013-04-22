@@ -689,8 +689,15 @@ class Fakoli
 				throw new FakoliException("The page you were attempting to access could not be found.");
 			}
 			
-			if (!checkRole($section->getRole($content)) ||
-				!Settings::checkPermissions($section->getPermissions($content)))
+			$permissions = $section->getPermissions($content);
+			if ($permissions)
+			{
+				if (!Settings::checkPermissions($section->getPermissions($content)))
+				{
+					LoginManager::redirectToLogin();		
+				}
+			}
+			else if (!checkRole($section->getRole($content)))
 			{
 				LoginManager::redirectToLogin();		
 			}
