@@ -744,12 +744,13 @@ class DateRangeFilterRenderer extends FieldRenderer
 	var $subTitle;			// Calling code can optionally output a text description of the date range by calling this renderer through the form.
 	
 	var $handler; // custom parameter handler if override to getConstraint needed
+	var $cssClass = "date_range";
 	
 	function DateRangeFilterRenderer(&$parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1)
 	{
 		$this->stepMode = $stepMode;
 		$this->field = $field;
-		
+
 		$this->endDateField = ($endDateField == $field) ? $field : $endDateField;
 		$this->fiscal_year_start = $fiscal_year_start;
 		$this->calculateDateRange();
@@ -971,11 +972,44 @@ ENDSCRIPT;
 		echo $script;
 	}
 	
+	/**
+	 * If the user hides the startParm field, then don't display
+	 * the calendar picker and input fields for dates.
+	 * 
+	 * If we don't display the input fields for start and end dates,
+	 * then write them as hidden fields so the values are in
+	 * $_GET.
+	 */
 	function renderSearchField($field)
 	{
 		if (!array_key_exists($this->startParam, $this->parent->hidden)) 
+		{
 			$this->writeFilter();
+		}
+		else
+		{
+			$this->writeDateHiddenFields();
+		}
+		
 		$this->writeButtons();
+	}
+	
+	function writeDateHiddenFields()
+	{
+		if(!$_REQUEST["month"] || !$_REQUEST["year"])
+		{
+		?>
+		<input type="hidden" name="<?php echo $this->startParam ?>" value="<?echo $this->startDate->format("m/d/Y")?>">
+		<input type="hidden" name="<?php echo $this->endParam ?>" value="<?echo $this->endDate->format("m/d/Y")?>">
+		<?php
+		}
+		else
+		{
+		?>
+		<input type="hidden" name="year" value="<? echo $this->year ?>">
+		<input type="hidden" name="month" value="<? echo $this->month ?>">
+		<?php	
+		}
 	}
 
 	function writeFilter()
@@ -1012,7 +1046,7 @@ ENDSCRIPT;
 		
 		$stepLabel = ($this->stepLabel) ? $this->stepLabel : prettify($this->stepMode);
 ?>
-<div style="clear: both; display: block; width: 100%; padding-bottom: 10px;">
+<div class="<?php echo $this->cssClass ?>">
 <div style="float: right; z-index:2; padding-bottom: 10px;">
 <input type="button" class="button" value="  Next <?echo $stepLabel ?> &raquo;  " onclick="go('<?echo $nextLink?>');">
 </div>
