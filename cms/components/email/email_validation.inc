@@ -40,6 +40,7 @@
  */
 
 Fakoli::usingFeature("validation");
+Fakoli::usingFile("/cms/components/email/email_recipient_field_renderer.inc");
 
 
 /**
@@ -74,8 +75,9 @@ class EmailListValidator extends AbstractValidator
 		
 		if (isset($_POST[$this->field]) && $_POST[$this->field] != $this->empty)
 		{
-			$items = $_POST[$this->field];
-			$emails = explode(",", $items);
+			$emails = EmailListFieldRenderer::cleanup($_POST[$this->field]);
+			$emails = explode(",", $emails);
+			
 			if(count($emails) > 0)
 			{
 				foreach($emails as $email)

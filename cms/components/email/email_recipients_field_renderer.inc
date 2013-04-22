@@ -86,19 +86,31 @@ class EmailListFieldRenderer extends TextFieldRenderer
 	{
 		if(!$field) $field = "recipients";
 		
-		$recipients = $this->parent->data->get($field);
-
-		$patterns = array("/,\s+/", "/;\s+/");
-		$replacements = array(",", ",");
-		$recipients =  preg_replace($patterns, $replacements, $recipients);
-
+		$recipients = EmailListFieldRenderer::cleanup($this->parent->data->get($field));
+		
 		if($this->removeDuplicates)
 		{
 			$recipients = implode(",", array_unique(explode(",", $recipients)));
 		}
 		
 		$this->parent->data->set($field, $recipients);
-	}	
+	}
+
+	/**
+	 * Given a string of emails, clean up the list, removing any ";" or extra spaces,
+	 * or trailing punctuation.
+	 * 
+	 * @param String $recipients
+	 */
+	static function cleanup($recipients)
+	{
+		$patterns = array("/,\s+/", "/;\s+/");
+		$replacements = array(",", ",");
+		$recipients = preg_replace($patterns, $replacements, $recipients);
+		$recipients = rtrim($recipients, ",;");
+		
+		return $recipients;
+	}
 }
 
 
