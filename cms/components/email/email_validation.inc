@@ -40,7 +40,7 @@
  */
 
 Fakoli::usingFeature("validation");
-Fakoli::usingFile("cms/components/email/email_recipient_field_renderer.inc");
+Fakoli::usingFile("cms/components/email/email_recipients_field_renderer.inc");
 
 
 /**
