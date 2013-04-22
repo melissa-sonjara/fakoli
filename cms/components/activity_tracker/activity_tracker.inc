@@ -92,4 +92,41 @@ class ActivityTracker
 	}	
 }
 
+class ActivityReportFilterHelper
+{
+	function __construct()
+	{
+		
+	}
+	
+	function setup()
+	{
+		$session = new ActivitySession();
+		$session->filter = new InclusionFilter("session_start", "session_end", "feedback_user");
+		$session->fields["feedback_user"] = Boolean;
+		$session->fromGET();
+		
+		$filterForm = new FilterForm($session);
+		$filterForm->hide("startDate", "session_end");
+		$dateRangeFilter = new DateRangeFilterRenderer($filterForm, "session_start", "session_end", "month");
+		$userCheckBox = new BooleanFilterFieldRenderer($filterForm, "feedback_user", "Show only users that provided feedback", 1);
+		$filterForm->setHandler("feedback_user", array($this, getFeedbackUserClause));
+		
+		return $filterForm;
+	}
+	
+	/**
+	 * For activity report filter
+	 *
+	 * @param String $name
+	 * @param Boolean $value
+	 * @return string
+	 */
+	static function getFeedbackUserClause($name, $value)
+	{
+		if(!$value) return;
+		return "session_id IN (SELECT DISTINCT session_id from user_activity WHERE uri like '/action/feedback/save%')";
+	}	
+}
+
 ?>

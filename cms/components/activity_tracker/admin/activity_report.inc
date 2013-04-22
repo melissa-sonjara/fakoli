@@ -1,19 +1,17 @@
 <?php
 Fakoli::using("activity_tracker");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("data_view", "filter_form");
 
 $feedbackUsers = checkNumeric($_GET["feedbackUsers"]);
 
 $menu_item = "Activity Report";
 
-$constraints = "WHERE 1=1";
+$helper = new ActivityReportFilterHelper();
+$filterForm = $helper->setup();
 
-if ($feedbackUsers)
-{
-	$constraints .= " AND session_id IN (SELECT DISTINCT session_id from user_activity WHERE uri like '/action/feedback/save%')";
-}
+$constraint = $filterForm->getConstraint();
 
-$sessions = Query::create(ActivitySession, "$constraints ORDER BY session_start DESC")->execute();
+$sessions = IteratedQuery::create(ActivitySession, "$constraint ORDER BY session_start DESC")->execute();
 
 $table = new DataListView($sessions, "session");
 $table->column("Session", "<a href='/admin/session_details?session_id={session_id}'>{User.first_name} {User.last_name}<br/>{session_id}</a>", true, "width: 40%")
@@ -28,11 +26,10 @@ $table->filter = true;
 $table->excelFile = "activity_report.xls";
 
 $script .= $table->writeScript();
-?>
-<form method="GET" action="">
-<input type="checkbox" class="checkbox" name="feedbackUsers" id="feedbackUsers" value="1"<?echo $feedbackUsers ? " checked='checked'" : ""?>/> Show only users that provided feedback&nbsp;&nbsp;
-<input type="submit" class="button" value=" GO "/>
-</form>
-<?
+$script .= $filterForm->writeScript();
+
+$filterForm->drawForm();
+echo "<strong>" . $filterForm->getRenderer("session_start")->subTitle . "</strong>";
 $table->drawView();
+
 ?>
