@@ -45,19 +45,19 @@ $parent_id = checkNumeric($_GET["parent_id"]);
 $helpBook = new HelpBook($help_book_id);
 $title = "Help Page for {$helpBook->title}";
 
-$page = new HelpPage();
+$helpPage = new HelpPage();
 
 if ($help_page_id)
 {
-	$page->load($help_page_id);
+	$helpPage->load($help_page_id);
 }
 else
 {
-	$page->parent_id = $parent_id;
-	$page->help_book_id = $help_book_id;
+	$helpPage->parent_id = $parent_id;
+	$helpPage->help_book_id = $help_book_id;
 }
 
-$form = new AutoForm($page);
+$form = new AutoForm($helpPage);
 $form->required("title", "identifier");
 $form->hide("help_book_id", "parent_id");
 
@@ -85,9 +85,9 @@ if ($method == "POST")
 
 if ($help_page_id)
 {
-	$title = "Edit Help Page Details for {$page->title}";
+	$title = "Edit Help Page Details for {$helpPage->title}";
 	
-	$subpages = $page->Children();
+	$subpages = $helpPage->Children();
 	if(count($subpages) > 0) 
 	{
 		$form->allowDelete = false;
