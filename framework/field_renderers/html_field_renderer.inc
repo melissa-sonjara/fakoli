@@ -154,7 +154,7 @@ class HTMLFieldRenderer extends FieldRenderer
 	{
 		if ($this->colspan > 1) $style = "text-align: left";
 		echo "<tr>\n";
-		$this->_printLabel($field, $this->colspan, $style);
+		$this->_printLabel($field, $this->colspan, $style, $this->parent->annotations[$field]);
 		if ($this->colspan > 1)
 		{
 			echo "</tr>\n";
