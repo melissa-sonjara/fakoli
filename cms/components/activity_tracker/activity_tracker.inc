@@ -29,6 +29,7 @@ class ActivityTracker
 	{		
 		Settings::setDefaultValue("activity_tracker", "track_activity", "", Boolean, "Track user activity. Use this for usage statistics and troubleshooting. For better performance, disable this on sites with heavy traffic.");
 		Settings::setDefaultValue("activity_tracker", "enable_feedback", "", Boolean, "Enable the user feedback feature. You will also need to assign the feedback module to a position in your template.");
+		Settings::setDefaultValue("activity_tracker", "feedback_title", "Provide Feedback", String, "Title text for the user feedback module"); 
 		Settings::setDefaultValue("activity_tracker", "google_analytics_tracking_id", "", String, "Leave blank if tracking is not desired.");
 	}
 	
