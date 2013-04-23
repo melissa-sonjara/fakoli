@@ -612,14 +612,14 @@ class Fakoli
 			
 		foreach($roots as $root)
 		{
-			$file = $root . DIRECTORY_SEPARATOR . $resource;
+			$file = sanitizePath($root . DIRECTORY_SEPARATOR . $resource);
 			if (file_exists($file))
 			{
 				Cache::put("resource:$resource", $file);
 				return $file;
 			}
 			
-			$file = $root . DIRECTORY_SEPARATOR . "cms" . DIRECTORY_SEPARATOR . $resource;
+			$file = sanitizePath($root . DIRECTORY_SEPARATOR . "cms" . DIRECTORY_SEPARATOR . $resource);
 			if (file_exists($file))
 			{
 				Cache::put("resource:$resource", $file);
@@ -629,7 +629,7 @@ class Fakoli
 
 		foreach($components as $name => $c)
 		{
-			$file = $c->component_path . DIRECTORY_SEPARATOR . $resource;
+			$file = sanitizePath($c->component_path . DIRECTORY_SEPARATOR . $resource);
 			if (file_exists($file))
 			{				
 				Cache::put("resource:$resource", $file);
@@ -637,6 +637,8 @@ class Fakoli
 			}
 		}
 				
+		trace("Cannot resolve $file", 2);
+		
 		return null;
 	}
 	
