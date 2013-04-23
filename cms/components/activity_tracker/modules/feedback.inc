@@ -6,7 +6,7 @@ $enabled = Settings::getValue("activity_tracker", "enable_feedback");
 if ($enabled)
 {
 	
-$scenario_title = "Provide Feedback";
+$scenario_title = Settings::getValue("activity_tracker", "feedback_title");
 
 ?>
  <div id="feedback_closed"><?echo $scenario_title?></div>
