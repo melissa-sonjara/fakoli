@@ -134,6 +134,9 @@ class SubSelectFieldRenderer extends FieldRenderer
 
 	function renderScript($field)
 	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)
+			|| array_key_exists($field, $this->parent->hidden)) return "";
+
 		$mgr = "{$this->parent->id}_{$field}_mgr";
 		$super_id = "{$this->parent->id}_{$this->super}";
 		$value = $this->parent->data->get($field);
