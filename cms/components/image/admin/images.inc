@@ -58,7 +58,7 @@ $tabs->writeHTML();
 
 $script .= ImageListView::writeResizeScript();
 
-echo "<div id=\"image_grid\">\n<div id=\"image_box\">\n";
+echo "<div id=\"image_grid\">\n<div id=\"images_box\">\n";
 
 if (count($images) > 0)
 {
