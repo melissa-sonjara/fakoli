@@ -579,6 +579,12 @@ class Fakoli
 			throw new FakoliException("Attempt to resolve illegal resource path");
 		}
 		
+		if (endsWith($resource, ".inc") || endsWith($resource, ".php"))
+		{
+			header("HTTP/1.0 403 Forbidden");
+			throw new FakoliException("Access Forbidden");			
+		}
+		
 		$resource = sanitizePath($resource);
 		
 		$dir = dirname($resource);
