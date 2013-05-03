@@ -5,7 +5,7 @@
  * To do - Delete the comment_id in the xref table.
  */
 
-Fakoli::using("comment", "settings");
+Fakoli::using("comment", "settings", "email");
 Fakoli::usingFeature("auto_form");
 
 $comment_id = checkNumeric($_GET["comment_id"]);
@@ -26,17 +26,7 @@ if ($comment_id)
 }
 else
 {
-        if ($user)
-		{
-			$comment->user_id = $user->get($user->primary_key);
-			
-		}
-		else
-		{
-			$comment->user_id = 0;
-			
-		}
-	
+	$comment->user_id = ($user) ? $user->get($user->primary_key) : 0;
 	$comment->date_posted = today();
 	$newPost = true;
 }
@@ -46,8 +36,6 @@ $form->alias("title", "Subject", "author", "Your Name");
 $form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
 
-$form->data->set("xref_class", $xref_class);
-
 // To do - make it configurable whether to include title?
 $form->hide("title");
 
@@ -55,6 +43,14 @@ $posted = new DateTimeFieldRenderer($form);
 $posted->template = "m/d/Y";
 $form->override("date_posted", "Date Posted", $posted);
 $form->readOnly("date_posted");
+
+if(!$comment_id)
+{
+	$form->onSaveComplete = array(CommentView, onSaveNewComment);
+	$form->data->set("xref_class", $xref_class);
+	$form->data->set("key_name", $key_name);
+	$form->data->set("key_value", $key_value);
+}
 
 if($comment->user_id)
 {
@@ -77,30 +73,8 @@ if($method == "POST")
 	//echo "<pre>"; print_r($_POST); echo "</pre>";
 	if($form->save())
 	{
-		$confirmationMessage = "";
-		
-		if ($newPost)
-		{
-			$xref = new $xref_class;
+		$confirmationMessage = $form->data->get("confirmation_message");
 			
-			if (has_method($xref, "verifyEnabled"))
-			{
-				if (!$xref->verifyEnabled($key_name, $key_value))
-				{
-					Fakoli::end("No SPAM for you today, Mister!");
-				}				
-			}
-			$xref->set($form->data->primary_key, $form->data->get($form->data->primary_key));
-			$xref->set($key_name, $key_value);
-			$xref->save();
-			if(!Settings::getValue("comment", "publish_automatically"))
-			{
-				sendEmailUsingEmailManager($xref, 'new_comment');
-			}
-			$confirmationMessage = (Settings::getValue("comment", "publish_automatically")) ?
-				"Thank you for your comment." : "Thank you. Your comment has been submitted to the moderator.";
-		}
-
 		Fakoli::end("OK|$confirmationMessage");
 	}
 	else

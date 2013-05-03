@@ -87,7 +87,7 @@ class Article extends DataItem implements Searchable
 	 * article_type field to the blog's title field. This function
 	 * may return null as an article may not be related to any blog.
 	 * 
-	 * Used for merge codes
+	 * Used for merge codes and for comment xref function verifyEnabled
 	 */
 	function Blog()
 	{
@@ -115,11 +115,11 @@ class Article extends DataItem implements Searchable
 	
 	function getBlog()
 	{
-		$blog = Query::create(Blog, "WHERE title=:type")
+		$blogs = Query::create(Blog, "WHERE title=:type")
 					 ->bind(":type", $this->article_type)
-					 ->executeSingle();
+					 ->execute();
 					 
-		return $blog;
+		return count($blogs) ? $blogs[0] : null;
 	}
 	
 	function getURL()
@@ -288,11 +288,14 @@ class ArticleCommentXref extends DataItem
 	function verifyEnabled($article_id)
 	{
 		if (!$article_id) return false;
-		
+				
 		try
 		{
-			$blog = Article::getBlog($article_id);
-			return $blog->allow_comments;
+			$article = new Article($article_id);			
+			// returns null if no related blog
+			$blog = $article->getBlog();
+				
+			return ($blog) ? $blog->allow_comments : $article->allow_comment;
 		}
 		catch(DataNotFoundException $e)
 		{

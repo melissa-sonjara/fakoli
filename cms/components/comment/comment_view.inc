@@ -59,10 +59,10 @@ class CommentView
 
 	/**
 	 *
-	 * @param unknown_type $obj
-	 * @param unknown_type $xrefClass
-	 * @param unknown_type $title
-	 * @param unknown_type $component
+	 * @param obj $obj any DataItem class that can link to Comment
+	 * @param String $xrefClass DataItem xref class that links obj to Comment
+	 * @param String $component
+	 * @param String $title
 	 */
 	function CommentView($obj, $xrefClass, $component, $title = "")
 	{
@@ -124,29 +124,41 @@ class CommentView
 		}
 
 		$out .= "<span class='small'>Posted by $author at {$comment->date_posted}</span>\n </div>\n <div class='message_content'>";
+		
+		if($comment->isEditable() || (checkRole("admin") && !Settings::getValue("comment","publish_automatically")))
+		{
+			$edit .= $this->drawButtons($comment);
+		}
+		
+		$out .= $comment->format("{description:stripHTML}$edit");
+		$out .= "</div></div></a>";
+		return $out;
+	}
+
+	function drawButtons($comment)
+	{
+		$edit = "<div class='button_row'>\n";
+
 		if($comment->isEditable())
 		{
-			$edit = "<br/><br/><a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}', '{$this->component}'); return false\"> Edit </a>&nbsp;&nbsp;";
+			$edit .= "<a href='#' class='button' onclick=\"new Comment().showCommentDialog({comment_id}, '{$this->xrefClass}', '{$this->component}'); return false\"> Edit </a>&nbsp;&nbsp;";
 		}
 		if(checkRole("admin") && !Settings::getValue("comment","publish_automatically"))
 		{
 			if($comment->published)
 			{
-				$edit .= "<a href='#' class='button' onclick=\"new Comment().commentPublish({comment_id}); return false;\"> Un-Publish </a>
-						<div style='clear:both'></div>";
+				$edit .= "<a href='#' class='button' onclick=\"new Comment().commentPublish({comment_id}); return false;\"> Un-Publish </a>\n";
 			}
 			else
 			{
-				$edit .= "<a href='#' class='button' onclick=\"new Comment().commentPublish({comment_id}); return false;\"> Publish </a>
-			<div style='clear:both'></div>";
+				$edit .= "<a href='#' class='button' onclick=\"new Comment().commentPublish({comment_id}); return false;\"> Publish </a>\n";
 			}
 		}
-		$out .= $comment->format("{description:stripHTML}$edit");
-
-		$out .= "</div></div></a>";
-		return $out;
+		$edit .= "<div style='clear:both'></div></div>\n";
+		
+		return $edit;
 	}
-
+	
 	function writeScript()
 	{
 		$script .= $this->list->writeScript();
@@ -215,10 +227,9 @@ class CommentView
 		$form = $this->form;
 
 		if($form->save())
-		{
-			
+		{		
 			$xref = new $this->xrefClass;
-
+				
 			$obj = $this->obj;
 			$pk =  $this->getMatchingPK($xref, $obj);
 				
@@ -227,6 +238,50 @@ class CommentView
 			$xref->save();
 			return true;
 		}
+	}
+	
+	/**
+	 * Called by comment_form handler to save xref and send email
+	 * for new comments.
+	 * 
+	 * AutoForm's obj can by any obj that links to Comment (e.g,
+	 * Article)
+	 * 
+	 * @param obj $form AutoForm
+	 */
+	static function onSaveNewComment(&$form)
+	{
+		$xref_class = $form->data->get("xref_class");
+		$xref = new $xref_class;
+		
+		$obj = $form->data;
+		
+		// The primary key name of the parent obj (e.g., Article)
+		$key_name = $obj->get("key_name");
+		$key_value =  $obj->get("key_value");
+		
+		$xref->set($key_name, $key_value);
+		$xref->set("comment_id", $obj->get("comment_id"));
+		
+		if (method_exists($xref, verifyEnabled))
+		{
+			if (!$xref->verifyEnabled($key_value))
+			{
+				Fakoli::end("No SPAM for you today, Mister!");
+			}
+		}
+		
+		// Wait until after verified, if applicable, to save
+		$xref->save();
+
+		$confirmation_message = "Thank you for your comment.";
+		if(!Settings::getValue("comment", "publish_automatically"))
+		{
+			sendEmailUsingEmailManager($xref, 'new_comment');
+			$confimation_message = "Thank you. Your comment has been submitted to the moderator.";
+		}
+
+		$form->data->set("confirmation_message", $confirmation_message);
 	}
 
 	function getMatchingPK($xref, $obj)

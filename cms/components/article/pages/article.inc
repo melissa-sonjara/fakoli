@@ -44,45 +44,46 @@ if (!$article_id)
 $article = new Article($article_id);
 
 $page->page_title = $article->title;
+
+if($article->allow_comment)
+{
+	$view = new CommentView($article, ArticleCommentXref, "article");
+	
+	$script .= $view->writeScript();
+}
+
+
+if ($view && $method == "POST")
+{
+	if($view->save())
+	{
+		redirect("article?article_id=$article_id");			
+	}
+}
+
+
 ?>
-<div id="article"><? 
+<div id="article" style="padding-bottom: 20px;"><? 
 if ($article->image_id)
 {
 	?><img align="left" style="margin-right: 20px;"
 	src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=320" alt="<?echo $image->ALT_tag?>" /> <?
 }
 ?> <? echo $article->message ?></div>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
 <?
-if($article->allow_comment) {
-
-	?>
-<h3>Comment on this article</h3>
-
-<div id="comment"><?php 
-
-
-$cv = new CommentsView();
-
-$cv->CommentForm($article_id, $user->site_user_id);
-
-if ($method == POST && $_POST['title']) {
-	$cv->saveComments();
+if($view) 
+{
+	echo "<div id='comment_panel'>";
+	
+	$view->drawView();
+	if($user || Settings::getValue("comment", "allow_anonymous_commenting"))
+	{
+		$view->drawForm();
+	}
+	echo "</div>\n"; // end div comment_panel
 }
-
-$cv->displayComments();
-
-?>
-</div>
-<?
-}
-?>
+?></div>
 
 
 
