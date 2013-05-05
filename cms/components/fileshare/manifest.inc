@@ -55,7 +55,8 @@ class FileshareManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(FileshareManager, upgradeComponent)
+				"upgradeComponent"		=>	array(FileshareManager, upgradeComponent),
+				"DeleteUser"			=>	array(FileshareManager, deleteUser),
 			);
 	}
 			
