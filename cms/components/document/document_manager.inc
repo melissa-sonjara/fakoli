@@ -359,6 +359,57 @@ function deleteFolderResult(result)
 	}
 	
 	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component document is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$libraries = Query::create(DocumentLibrary, "WHERE owner_id=:owner_id")
+			->bind(":owner_id", $user_id)
+			->execute();
+				
+			if(count($libraries))
+			{
+				foreach($libraries as $library)
+				{
+					$library->joinTransaction($tx);
+					$mgr = new DocumentManager($library);
+					$mgr->deleteDocumentLibrary();
+				}
+			}
+			
+			$document = new Document();
+			$document->joinTransaction($tx);
+			$document->delete("WHERE owner_id={$user_id}");
+			
+			$download = new DocumentDownload();
+			$download->joinTransaction($tx);
+			$download->delete("WHERE user_id={$user_id}");
+				
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+		
+		return $user;
+	}
+	
+	/**
 	 * Upload a file from the specified form field to the specified folder within the current document library.
 	 * @param string $field the form field containing the record for uploaded file
 	 * @param string $folder the folder within the document library to which the file is to be uploaded

@@ -57,7 +57,8 @@ class DocumentManifest
 					"RegisterSearchables"	=>	array(DocumentManager, registerSearchables),
 					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
 					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
-					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses)
+					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses),
+					"DeleteUser"			=>	array(DocumentManager, deleteUser)
 		);
 	}
 	
