@@ -57,8 +57,9 @@ class CommentManifest
 	{
 		return array("Initialize"			=>	array(CommentManager, onInitialize),
 					 "ComponentScanComplete" => array(CommentManager, setDefaults),
-					 "upgradeComponent"		=>	array(CommentManager, upgradeComponent)
-			);
+					 "upgradeComponent"		=>	array(CommentManager, upgradeComponent),
+					"DeleteUser"			=>	array(CommentManager, deleteUser)
+		);
 	}	
 
 
