@@ -66,8 +66,9 @@ class ArticleManifest
 				"RegisterCommentAdapters" 	=>	array(ArticleManager, registerCommentAdapter),
 				"RegisterSearchables"		=>	array(ArticleManager, registerSearchables),
 				"upgradeComponent"			=>	array(ArticleManager, upgradeComponent),
-				"RegisterTaxonomyClasses"	=>	array(ArticleManager, registerTaxonomyClasses)
-			);
+				"RegisterTaxonomyClasses"	=>	array(ArticleManager, registerTaxonomyClasses),
+				"DeleteUser"			=>	array(ArticleManager, deleteUser)		
+		);
 	}		
 	
 }
