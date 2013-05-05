@@ -34,7 +34,8 @@ class AutoLoginManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(AutoLoginManager, upgradeComponent)
+				"upgradeComponent"		=>	array(AutoLoginManager, upgradeComponent),
+				"DeleteUser"			=>	array(AutoLoginManager, deleteUser)
 			);
 	}		
 	
