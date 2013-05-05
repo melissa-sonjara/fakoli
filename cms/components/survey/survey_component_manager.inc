@@ -82,6 +82,112 @@ class SurveyComponentManager
 		return $classes;
 	}
 
+	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component survey is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$surveys = Query::create(Survey, "WHERE user_id=:user_id")
+				->bind(":user_id", $user_id)
+				->execute();
+			
+			foreach($surveys as $survey)
+			{
+				$survey->joinTransaction($tx);
+				SurveyComponentManager::deleteSurvey($survey);
+			}
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+				
+		return $user;
+	}
+	
+	static function deleteSurvey($survey)
+	{
+		$survey_id = $survey->survey_id;
+		$questions = $survey->Questions();
+		
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$xref = new SurveyQuestionXref();
+			$xref->joinTransaction($tx);
+			$xref->delete("WHERE survey_id={$survey_id}");
+			
+			$responses = $survey->Responses();
+			
+			if(count($responses))
+			{
+				foreach($responses as $response)
+				{
+					$response->joinTransaction($tx);
+					SurveyComponentManager::deleteSurveyResponse($response);
+				}
+			}
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+		
+		// Delete any questions that are now not linked to any survey
+		foreach($questions as $question)
+		{
+			$count = Query::create(SurveyQuestionXref, "WHERE survey_question_id=:survey_question_id")
+			->bind(":survey_question_id", $question->survey_question_id)
+			->executeValue("COUNT(1)");
+			
+			if($count == 0)
+			{
+				$question->delete();
+			}		
+		}
+	}
+	
+	static function deleteSurveyResponse($response)
+	{
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$response->joinTransaction($tx);
+			
+			$answer = new SurveyAnswer();
+			$answer->joinTransaction($tx);
+			$answer->delete("WHERE response_id={$response->response_id}");
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new SurveyUpgradeManager();

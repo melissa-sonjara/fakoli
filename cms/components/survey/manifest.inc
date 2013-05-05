@@ -65,7 +65,9 @@ class SurveyManifest
 					 "EnumerateContextHelpClasses" => array(SurveyComponentManager, enumerateContextHelpClasses),
 				 	"EnumerateDataItemClasses" => array(SurveyComponentManager, enumerateDataItemClasses),		
 					"ComponentScanComplete" => array(SurveyComponentManager, setDefaults),
-					"upgradeComponent"		=>	array(SurveyComponentManager, upgradeComponent)
+					"upgradeComponent"		=>	array(SurveyComponentManager, upgradeComponent),
+					"DeleteUser"			=>	array(SurveyComponentManager, deleteUser),
+				
 		);
 	}
 
