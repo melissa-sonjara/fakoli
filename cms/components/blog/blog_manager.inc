@@ -166,6 +166,26 @@ class BlogManager
 		$mgr->upgrade($version);
 	}	
 	
+	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component blog is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$blog = new Blog();
+		$blog->delete("WHERE owner_id={$user_id}");
+	
+		return $user;
+	}
+	
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("blog", "Articles and Blogs", new BlogSerializationHandler());
