@@ -25,6 +25,42 @@ class ActivityTracker
 		$activity->save();
 	}	
 	
+	/**
+	 * Respond to fired event DeleteUser
+	 * 
+	 * Delete any records in this component that have dependencies on user object.
+	 * 
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		
+		$user_id = $user->$pk;
+		trace("Component activity_tracker is deleting objects dependent on user_id {$user_id}", 3);
+		
+		$tx = new DataTransaction();
+
+		try
+		{
+			$feedback = new UserFeedback();
+			$feedback->joinTransaction();
+			$feedback->delete("WHERE user_id={$user_id}");
+					
+			$userActivity = new UserActivity();
+			$userActivity->joinTransaction();
+			$userActivity->delete("WHERE user_id={$user_id}");
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+		return $user;
+	}
+	
 	static function setDefaults()
 	{		
 		Settings::setDefaultValue("activity_tracker", "track_activity", "", Boolean, "Track user activity. Use this for usage statistics and troubleshooting. For better performance, disable this on sites with heavy traffic.");

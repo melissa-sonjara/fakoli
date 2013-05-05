@@ -52,6 +52,7 @@ class ActivityTrackerManifest
 					 "ComponentScanComplete"	=> array(ActivityTracker, setDefaults),
 					 "upgradeComponent"			=> array(ActivityTracker, upgradeComponent),
 					"PostProcessContent"		=> array(ActivityTracker, postProcessContent),
+					"DeleteUser"			=>	array(ActivityTracker, deleteUser)		
 				);
 	}
 		

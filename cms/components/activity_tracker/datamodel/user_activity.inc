@@ -32,6 +32,7 @@ class UserActivity extends DataItem
 	}
 }
 
+// view
 class ActivitySession extends DataItem
 {
 	// Fields
@@ -59,6 +60,7 @@ class ActivitySession extends DataItem
 
 	function ActivitySession()
 	{
+		// view
 		$this->table = "activity_sessions";
 		$this->primary_key = "session_id";
 		
