@@ -300,6 +300,89 @@ class VideoManager
 		return $identifier;
 	}
 	
+	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component video is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$galleries = Query::create(VideoGallery, "WHERE owner_id=:owner_id")
+				->bind(":owner_id", $user_id)
+				->execute();
+			
+			if(count($galleries))
+			{
+				foreach($galleries as $gallery)
+				{
+					$gallery->joinTransaction($tx);
+					VideoManager::deleteGallery($gallery);
+				}
+			}
+			
+			$video = new Video();
+			$video->joinTransaction($tx);
+			$video->delete("WHERE user_id={$user_id}");
+			
+			$download = new VideoDownload();
+			$download->joinTransaction($tx);
+			$download->delete("WHERE user_id={$user_id}");
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+		
+		return $user;
+	}
+	
+	/**
+	 * When deleting a video gallery, we must also delete all videos linked to the
+	 * gallery and any downloads of those videos.
+	 * 
+	 * @param obj $gallery class VideoGallery
+	 */
+	static function deleteGallery($gallery)
+	{
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$videos = $gallery->Videos();
+			
+			if(count($videos))
+			{
+				$download = new VideoDownload();
+				foreach($videos as $video)
+				{
+					$download->joinTransaction($tx);
+					$video->joinTransaction($tx);
+					$download->delete("WHERE video_id={$video->video_id}");
+					$video->delete();
+				}
+			}
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}		
+	}
+	
 	static function videoGalleryTabs($key)
 	{
 		$tabs = array(	

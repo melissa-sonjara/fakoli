@@ -81,7 +81,10 @@ class VideoManifest
 					 "Initialize" 				=> array(VideoManager, onInitialize),
 					 "RegisterBlogViewHandlers" => array(VideoBlogHandler, register),
 					 "upgradeComponent"			=> array(VideoManager, upgradeComponent),
-					 "RegisterTaxonomyClasses"	=>	array(VideoManager, registerTaxonomyClasses));
+					 "RegisterTaxonomyClasses"	=>	array(VideoManager, registerTaxonomyClasses),
+					 "DeleteUser"				=>	array(VideoManager, deleteUser),
+				
+			);
 	}
 }
 
