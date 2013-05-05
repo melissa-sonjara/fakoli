@@ -32,7 +32,10 @@ $yesterday = date('Y/m/d H:i:s', mktime(date("H"), date("i"), date("s"), date("m
 $messages = groupedQuery(ForumMessage, "WHERE last_modified BETWEEN '$yesterday' AND '$today' ORDER BY last_modified", "topic_id");
 
 if(count($messages) == 0)
+{
+	trace("Send Daily Digest, no new messages", 3);
 	return;
+}
 	
 $topics = indexedQuery(ForumTopic, "", "topic_id");
 

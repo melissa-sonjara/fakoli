@@ -79,6 +79,144 @@ class ForumManager
 		return $items;
 	}
 
+	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component forum is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$forums = Query::create(Forum, "WHERE owner_id=:owner_id")
+					->bind(":owner_id", $user_id)
+					->execute();
+			
+			if(count($forums))
+			{
+				foreach($forums as $forum)
+				{
+					$forum->joinTransaction($tx);
+					ForumManager::deleteForum($forum);
+				}
+			}
+			
+			$messages = Query::create(ForumMessage, "WHERE author_id=:author_id")
+				->bind(":author_id", $user_id)
+				->execute();
+			
+			if(count($messages))
+			{
+				foreach($messages as $message)
+				{				
+					$message->joinTransaction($tx);
+					ForumManager::deleteForumMessage($message);
+				}
+			}	
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+		
+		return $user;
+	}
+	
+	/**
+	 * When deleting a forum, we must delete topics, messages, attachments and
+	 * site xrefs.
+	 * 
+	 * @param unknown $forum
+	 * @throws Exception
+	 */
+	static function deleteForum($forum)
+	{
+		$forum_id = $forum->forum_id;
+		
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$forum->joinTransaction($tx);
+			
+			$topic = new ForumTopic();
+			$topic->joinTransaction($tx);
+			$topic->delete("WHERE forum_id={$forum_id}");
+			
+			$messages = $forum->Messages();
+			
+			if(count($messages))
+			{
+				foreach($messages as $message)
+				{
+					$message->joinTransaction($tx);
+					ForumManager::deleteForumMessage($message);
+				}
+			}
+			
+			$xref = new ForumSiteXref();
+			$xref->joinTransaction($tx);
+			$xref->delete("WHERE forum_id={$forum_id}");
+			
+			$summary = new ForumSummary();
+			$summary->joinTransaction($tx);
+			$summary->delete("WHERE forum_id={$forum_id}");
+					
+			$forum->delete();
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+	}
+	
+	static function deleteForumMessage($message)
+	{
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$message->joinTransaction($tx);
+			
+			$attachments = $message->Attachments();
+			if(count($attachments))
+			{
+				$xref = new ForumMessageAttachmentXref();
+				$xref->joinTransaction($tx);
+				
+				foreach($attachments as $attachment)
+				{
+					$attachment->joinTransaction($tx);
+					$attachment->delete();
+					$xref->delete("WHERE attachment_id={$attachment->attachment_id}");
+				}		
+			}
+			$message->delete();		
+				
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}				
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new ForumUpgradeManager();
