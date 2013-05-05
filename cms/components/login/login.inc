@@ -201,7 +201,27 @@ class LoginManager
 		}
 	}
 	
-
+	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component login is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$token = new LoginToken();
+		$token->delete("WHERE user_id={$user_id}");
+		
+		return $user;
+	}
+	
+	
 	/*
 	 * JDG 2/18/20. If the password does not match, check if the login was
 	 * a valid temporary token login

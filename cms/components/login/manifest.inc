@@ -56,8 +56,8 @@ class LoginManifest
 	static function subscribeToEvents()
 	{
 		return array("ComponentScanComplete" => array(LoginManager, setDefaults),
-					"upgradeComponent"		=>	array(LoginManager, upgradeComponent)
-		
+					"upgradeComponent"		=>	array(LoginManager, upgradeComponent),
+					"DeleteUser"			=>	array(LoginManager, deleteUser),
 		);
 	}
 	
