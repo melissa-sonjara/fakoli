@@ -71,9 +71,24 @@ class LinkLibraryManager
 	
 	static function deleteLinkLibrary($library)
 	{
-		$link = new LinkRecord();
-		$link->delete("WHERE library_id={$library->library_id}");
-		$library->delete();
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$library->joinTransaction($tx);
+			
+			$link = new LinkRecord();
+			$link->joinTransaction($tx);
+			$link->delete("WHERE link_library_id={$library->link_library_id}");
+			$library->delete();
+		
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}	
 		
 		return true;
 	}
@@ -82,6 +97,52 @@ class LinkLibraryManager
 	{
 		$mgr = new LinkLibraryUpgradeManager();
 		$mgr->upgrade($version);
+	}
+
+	/**
+	 * Respond to fired event DeleteUser
+	 *
+	 * Delete any records in this component that have dependencies on user object.
+	 *
+	 * @param obj $user - class SiteUser or custom user class
+	 */
+	static function deleteUser($user)
+	{
+		$pk = $user->getPrimaryKey();
+		$user_id = $user->$pk;
+		
+		trace("Component link_library is deleting objects dependent on user_id {$user_id}", 3);
+	
+		$tx = new DataTransaction();
+		
+		try
+		{
+			$libraries = Query::create(LinkLibrary, "WHERE owner_id=:owner_id")
+				->bind(":owner_id", $user_id)
+				->execute();
+			
+			if(count($libraries))
+			{
+				foreach($libraries as $library)
+				{
+					$library->joinTransaction($tx);
+					LinkLibraryManager::deleteLinkLibrary($library);
+				}
+			}
+			
+			$record = new LinkRecord();
+			$record->joinTransaction($tx);
+			$record->delete("WHERE owner_id={$user_id}");
+			
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+		
+		return $user;
 	}
 	
 	/**

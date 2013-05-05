@@ -51,7 +51,8 @@ class LinkLibraryManifest
 					"upgradeComponent"	=>	array(LinkLibraryManager, upgradeComponent),
 					"ComponentScanComplete"	=>	array(LinkLibraryManager, setDefaults),
 					"RegisterSerializationHandler"	=>	array(LinkLibraryManager, registerSerializationHandler),
-					"RegisterTaxonomyClasses"	=>	array(LinkLibraryManager, registerTaxonomyClasses)
+					"RegisterTaxonomyClasses"	=>	array(LinkLibraryManager, registerTaxonomyClasses),
+					"DeleteUser"			=>	array(LinkLibraryManager, deleteUser),
 		);
 	}
 }
