@@ -16,24 +16,22 @@ var DocumentManager =  new Class
 		this.dialog = modalPopup('Edit Document Details', '/action/document/edit?document_id=' + document_id, '550px', 'auto', true);
 	},
 	
-	showDocumentDetailsDialog: function(document_id)
+	editResult: function(result)
 	{
-		this.dialog = modalPopup('Document Details', '/action/document/document_details_dialog?document_id=' + document_id, '550px', 'auto', true);		
-	},
-	
-	editDocumentDetailsResult: function(response)
-	{
-		if(response == "OK")
+		if (result == "1")
 		{
 			this.closeDialog();
 			window.location.reload();
 		}
 		else
 		{
-			var err = $('Document_form__error');
-			err.set('html', response);
-			err.setStyle('display', 'table-cell');
-		}		
+			$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+		}
+	},
+	
+	showDocumentDetailsDialog: function(document_id)
+	{
+		this.dialog = modalPopup('Document Details', '/action/document/document_details_dialog?document_id=' + document_id, '550px', 'auto', true);		
 	},
 	
 	closeEditDocumentDetails: function()
@@ -67,6 +65,18 @@ var DocumentManager =  new Class
 	uploadFile: function()
 	{
 		this.dialog = modalPopup('Upload File', '/action/document/upload?document_library_id=' + this.document_library_id + '&folder_select=0', '550px', 'auto', true);
+	},
+	
+	uploadResult: function(responseText)
+	{
+		if (responseText == "1") 
+		{
+			window.location.reload();
+		}
+		else
+		{
+			alert(responseText);
+		}	
 	},
 
 	rescanLibrary: function()

@@ -72,7 +72,6 @@ class DocumentLibraryView
 	function writeScript()
 	{
 		$script .= $this->facetManager->writeScript();
-		$script .= $this->mgr->writeScript();
 		$script .= $this->table->writeScript();
 		
 		ob_start();
@@ -83,11 +82,20 @@ class DocumentLibraryView
 		
 		window.addEvent('domready', function()
 		{
-			documentMgr = new DocumentManager(
-					<?php echo $this->library->document_library_id ?>
-					);
+			documentMgr = new DocumentManager(<?php echo $this->library->document_library_id ?>);
 		});
-		
+
+		// For compatibility with tree view - this function called from edit.inc
+		function editResult(result)
+		{
+			documentMgr.editResult(result);
+		}
+
+		// For compatibility with tree view - this function called from upload.inc
+		function uploadResult(responseText)
+		{
+			documentMgr.uploadResult(responseText);
+		}	
 		</script>
 		<?
 		$script .= ob_get_contents();
