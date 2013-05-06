@@ -1,4 +1,142 @@
 <?php
+Fakoli::using("document", "advance_search");
+Fakoli::usingFeature("facet_manager");
+
+class DocumentLibraryView
+{
+	var $mgr;
+	var $library;
+	var $table;
+	var $facetManager;
+	
+	function __construct($mgr)
+	{
+		$this->mgr = $mgr;	
+		$this->library = $mgr->library;
+		$this->table = $this->buildDocumentTable();
+		
+		$this->facetManager = new FacetManager('facet_manager', $this->table);
+		TaxonomyManager::addFacets($this->facetManager, Document, true, "160px", "200px", "200px");
+		$this->facetManager->addFacet("Uploaded By", $this->createUploadedByFacet());
+	}
+	
+	function buildDocumentTable()
+	{
+		$table = new DataListView($this->mgr->documents, "document_library");
+		$table->column("Document", array($this, formatDocumentTitle), true, "width: 40%", String, null, "{title:lower}")
+		->column("Author", "{author}", true, "width: 20%")
+		->column("Uploaded By", "{Owner.first_name} {Owner.last_name}", false, "width: 20%; text-align: center")
+		->column("Last Modified", "{last_modified:short}", false, "width: 30%; text-align: center")
+		;
+			
+		$table->pageSize = 10;
+		$table->emptyMessage = "There are no matching documents";
+		$table->sortable = true;
+		$table->filter = false;
+		
+		$table->writeIdTag = true;
+		
+		return $table;
+	}
+	
+	function formatDocumentTitle($document)
+	{
+		$file = $document->file;
+		
+		$type = getDocType($file);
+		$icon = getDocIcon($file);
+		
+		$size = $this->library->getFileSize($document);
+		
+		if(checkRole($this->library->upload_files))
+		{
+			$details_icon = "icon_edit.png";
+			$fn = "editDocumentDetailsDialog";
+		}
+		else
+		{
+			$details_icon = "icon_view.png";
+			$fn = "showDocumentDetailsDialog";
+		}
+
+		$details_link  = "<a href=\"edit_document?document_id={document_id}\" onclick=\"documentMgr.{$fn}({document_id}); return false;\"><img src=\"/fakoli/images/{$details_icon}\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
+			
+		if(checkRole($this->library->delete_files))
+		{
+			$delete_link .= "<a href=\"delete_document?document_id={document_id}\" onclick=\"documentMgr.deleteFile({document_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/icon_delete_trash.png\"></a>\n";
+		}
+		
+		return $document->format("<span class='document_title'>{title}</span><br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a>&nbsp;$size&nbsp;<span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span>");
+	}
+	
+	function writeScript()
+	{
+		$script .= $this->facetManager->writeScript();
+		$script .= $this->mgr->writeScript();
+		$script .= $this->table->writeScript();
+		
+		ob_start();
+		?>
+		<script type="text/javascript" src="/components/document/js/document_manager.js"></script>
+		<script type="text/javascript">
+		var documentMgr;
+		
+		window.addEvent('domready', function()
+		{
+			documentMgr = new DocumentManager(
+					<?php echo $this->library->document_library_id ?>
+					);
+		});
+		
+		</script>
+		<?
+		$script .= ob_get_contents();
+		ob_end_clean();
+		
+		return $script;
+	}
+	
+	function drawView()
+	{
+		$this->facetManager->drawForm();
+		$this->table->drawView();
+		
+		$this->drawButtons();
+	}
+	
+	function drawButtons()
+	{
+		if(!checkRole("admin") && !checkRole($this->library->upload_files))
+		{
+			return;
+		}
+		
+		echo "<div id='document_library_button_row'>\n";
+		if (checkRole($this->library->upload_files))
+		{
+			echo "<button id='upload' class='button' onclick='documentMgr.uploadFile()'>Upload a File...</button>\n";
+		}
+				
+		if (checkRole("admin"))
+		{
+			echo "<button id='rescan' class='button' onclick='documentMgr.rescanLibrary()'>Rescan</button>\n";
+		}
+		
+		echo "</div>\n";
+	}
+	
+	function createUploadedByFacet()
+	{
+		$facet = new MultiSelectFacetFilter("owner_id", array(Document	=>	"{Owner.first_name} {Owner.last_name}"));
+	
+		$facet->dropdownMaxWidth = "160px";
+		$facet->width = "200px";
+		$facet->height = "240px";
+	
+		return $facet;
+	}
+	
+}
 
 class DocumentLibraryListView
 {

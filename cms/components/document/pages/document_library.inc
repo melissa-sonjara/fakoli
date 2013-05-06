@@ -31,6 +31,12 @@
 
 *****************************************************************/
 
+/**
+ * Renders the documents within a library for the given library
+ * identifier via ComponentPageView using the fired event
+ * "ResolveIdentifier".
+ */
+
 Fakoli::using("document");
 
 $identifier = $_GET["library"];
@@ -39,13 +45,12 @@ $library = DocumentLibrary::findByIdentifier($identifier);
 
 if (!checkRole($library->allow_access)) redirect("/");
 
-$title = "{$library->name}";
+$page->page_title = "{$library->name}";
 
 $mgr = new DocumentManager($library);
+$view = new DocumentLibraryView($mgr);
 
-$script .= $mgr->writeScript();
+$script .= $view->writeScript();
 
-echo "<br/>";
-
-$mgr->drawView();
+$view->drawView();
 ?>

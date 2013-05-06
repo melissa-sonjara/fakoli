@@ -30,57 +30,37 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
+/**
+ * Display document details. No editing allowed.
+ * 
+ */
 
-class DocumentManifest
+Fakoli::using("document", "taxonomy");
+Fakoli::usingFile("framework/auto_form.inc");
+
+$document_id = checkNumeric($_GET["document_id"]);
+if (!$document_id)
 {
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "document";
-		$component->description = "Document management for Fakoli/CMS";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 2;
-		$component->enabled = true;
-		
-		return $component;
-	}
-	
-	var $allow_sessionless_handlers = true;
-	
-	static function subscribeToEvents()
-	{
-		return array(
-					"EnumerateItems"	 => array(DocumentManager, enumerateItems),
-					"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
-					"DeleteRole"			=>	array(DocumentManager, deleteRole),
-					"RegisterSearchables"	=>	array(DocumentManager, registerSearchables),
-					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
-					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses),
-					"DeleteUser"			=>	array(DocumentManager, deleteUser)
-		);
-	}
-	
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Site Content"	=> array
-			(
-
-				"Documents"	=>	array("page"	=>	"/admin/document_libraries",
-									  "role"	=>	"admin,editor",
-									  "weight"	=>	3)
-			)
-		);
-	}	
-	
-
-	static function getStyles()
-	{
-		return array("/components/document/css/document.css");
-	}	
+	Fakoli::end("document_details_dialog - Invalid Parameter");
 }
 
+$document = new Document($document_id);
+$library = $document->DocumentLibrary();
+
+if (!checkRole($library->allow_access) && !$library->allowAccess())
+{
+	Fakoli::end("document_details_dialog - Access Denied");
+}
+
+$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "author", "file", "publication_date", "publication");
+
+$form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
+
+$form->readOnlyForm = true;
+
+echo $form->writeScript();
+
+$form->drawForm();
 ?>

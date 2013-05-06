@@ -35,6 +35,9 @@ Fakoli::using("document", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
+$folder_select = checkNumeric($_GET["folder_select"]);
+
+
 if (!$document_library_id)
 {
 	Fakoli::end("Invalid Parameter");
@@ -67,7 +70,10 @@ $notes->columns = 38;
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
-$folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
+if($folder_select)
+{
+	$folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
+}
 $fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
 $allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
