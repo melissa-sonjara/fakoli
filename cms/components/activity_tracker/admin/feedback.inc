@@ -8,8 +8,10 @@ $feedback = Query::create(UserFeedback, "ORDER BY created_date DESC")->execute()
 
 $table = new DataListView($feedback, "feedback_table");
 $table->column("Date", "{created_date}", true, "width: 15%")
-	  ->column("User & Session", "<a href='/admin/session_details?session_id={session}'>{User.first_name} {User.last_name}<br/>{session}</a>", true, "width:35%")
-	  ->column("Feedback", "{feedback}", false, "width: 50%");
+	  ->column("User & Session", "<a href='/admin/session_details?session_id={session}'>{User.first_name} {User.last_name}<br/>{session}</a>", true, "width:25%")
+	  ->column("Feedback", "{feedback}", false, "width: 35%")
+	  ->column("URI", "{referer}", false, "width: 25%")
+	  ;
 
 $table->filter = true;
 $table->pageSize = 20;
