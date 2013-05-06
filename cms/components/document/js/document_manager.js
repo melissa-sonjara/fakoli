@@ -71,6 +71,7 @@ var DocumentManager =  new Class
 	{
 		if (responseText == "1") 
 		{
+			this.closeDialog();
 			window.location.reload();
 		}
 		else
