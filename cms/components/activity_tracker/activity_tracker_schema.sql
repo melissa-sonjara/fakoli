@@ -33,3 +33,9 @@ max(`a`.`activity_time`) AS `session_end`,
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+alter table `feedback` add column `referer` varchar(2000) DEFAULT NULL after `feedback`;
+
+-- END Version 1.1

@@ -49,7 +49,8 @@ Fakoli::using("activity_tracker", "component");
 class ActivityTrackerUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Add field referrer to feedback table",
 	);
 	
 	function ActivityTrackerUpgradeManager()

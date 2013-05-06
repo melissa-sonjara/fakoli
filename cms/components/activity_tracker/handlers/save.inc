@@ -10,6 +10,7 @@ $feedback = new UserFeedback();
 $feedback->user_id 		= $user->user_id;
 $feedback->feedback		= $msg;
 $feedback->created_date = now();
+$feedback->referer = $_SERVER['HTTP_REFERER'];
 $feedback->session		= session_id();
 
 $feedback->save();

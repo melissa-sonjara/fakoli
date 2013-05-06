@@ -8,6 +8,7 @@ class UserFeedback extends DataItem
 						"user_id"		=>	Number,
 						"session"		=>	String,
 						"feedback"		=>	Text,
+						"referer"		=>	String,
 						"created_date"	=>	DateTime);
 	
 	// Relations
