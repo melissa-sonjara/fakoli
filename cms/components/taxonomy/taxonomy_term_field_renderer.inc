@@ -200,34 +200,37 @@ window.addEvent('domready', function()
 	function renderReadOnly($field = "")
 	{
 		if (count($this->options) == 0) return;
-//		
-//		$xref = new $this->xrefClass;
-//		
-//		$obj = $this->parent->data;
-//		$pk = $this->getMatchingPK($xref, $obj);
-//		
-//		if ($obj->get($pk) == "") return;
-//		
-//		$optpk = $this->getMatchingPK($xref, $this->options[0]);
-//		
-//		$items = indexedQuery($this->xrefClass, "WHERE {$pk}=".$obj->get($pk), $optpk);
-//		
-//		echo "<tr>\n";
-//		$this->_printLabel($this->label);
-//
-//		echo "<td";
-//		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-//		echo ">";
-//
-//		foreach($this->options as $item)
-//		{
-//			if (array_key_exists($item->$optpk, $items))
-//			{
-//				echo $this->formatName($item, $this->nameField)."<br/>";
-//			}
-//		}
-//		
-//		echo "</td></tr>\n";
+		
+		$field = $this->field;
+		
+		$obj = $this->parent->data;
+				
+		$class = get_class($obj);
+		$pk = $obj->get($obj->getPrimaryKey());
+		
+		$selected = IndexedQuery::create(TaxonomyTermAssociation, "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
+								->bind(":id", $this->taxonomy->taxonomy_id, ":class", $class, ":pk", $pk)
+								->execute();
+								
+		foreach($this->options as $option)
+		{
+			$p = $option->term_id;
+				
+			if (array_key_exists($p, $selected))
+			{
+				$answers[] = $option->term;
+			}
+		}
+		
+		/**
+		 * Don't display the taxonomy if nothing selected
+		 */
+		if(count($answers))
+		{
+			$this->_startField($field);
+			echo implode("<br>", $answers);
+			$this->_endField($field);
+		}
 	}
 	
 	function postProcess($field = "")
