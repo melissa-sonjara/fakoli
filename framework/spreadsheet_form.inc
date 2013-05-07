@@ -63,10 +63,12 @@ class SpreadsheetForm extends CompositeAutoForm
 	var $subform;
 	var $columnWidths = array();
 	var $msg;		///< Text to appear below buttons at top and above table
+	var $onStartRow; ///< Callback hook to determine row style or suppression of row.
 	
-	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="")
+	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null)
 	{
 		$this->subform = $subform;
+		$this->onStartRow = $onStartRow;
 		
 		// Create one instance of AutoForm to apply certain setting
 		// for all forms, e.g., aliases and hiddens
@@ -113,10 +115,20 @@ class SpreadsheetForm extends CompositeAutoForm
 	
 	function createOneSpreadsheetRow($item, $row, $validator, $idx)
 	{
+		if ($this->onStartRow) 
+		{
+			$ret = call_user_func($this->onStartRow, $item);
+		}
+		
+		// If the row callback explicitly returns false, omit this row
+		if ($ret === false) return;
+		
 		$row->data =& $item;
 		$row->id = $this->id . "_$idx";
 		$row->validator = $validator;
 		$row->validator->id = $row->id;
+		
+		
 		$fields = $row->data->getFields();
 		// clone a new instance of each field renderer
 		// created for the template subform.
@@ -133,7 +145,11 @@ class SpreadsheetForm extends CompositeAutoForm
 		//$form = SubordinateAutoForm::create($this, $row, true);
 		$subform = new SubordinateAutoForm($this, $row, true);
 		$subform->form->layout = AutoFormLayout::create("table_row", $subform);
-		
+
+		if ($ret)
+		{
+			$subform->containerClass = trim($this->containerClass. " " . $ret);
+		}
 	}
 	
 	/**
