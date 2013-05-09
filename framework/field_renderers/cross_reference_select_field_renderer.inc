@@ -267,13 +267,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		$items = indexedQuery($this->xrefClass, "WHERE {$pk}=".$obj->get($pk), $optpk);
 		
-		echo "<tr>\n";
-		$this->_printLabel($this->label);
-
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-
+		$this->_startField($field);
+	
 		foreach($this->options as $item)
 		{
 			if (array_key_exists($item->$optpk, $items))
@@ -282,7 +277,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			}
 		}
 		
-		echo "</td></tr>\n";
+		$this->_endField($field);
 	}
 	
 	function postProcess($field = "")
