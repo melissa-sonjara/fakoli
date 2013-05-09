@@ -249,7 +249,7 @@ class CommentView
 	 * 
 	 * @param obj $form AutoForm
 	 */
-	static function onSaveNewComment(&$form)
+	static function onSaveNewComment($form)
 	{
 		$xref_class = $form->data->get("xref_class");
 		$xref = new $xref_class;
