@@ -64,11 +64,13 @@ class SpreadsheetForm extends CompositeAutoForm
 	var $columnWidths = array();
 	var $msg;		///< Text to appear below buttons at top and above table
 	var $onStartRow; ///< Callback hook to determine row style or suppression of row.
+	var $isRowSelected;  ///< Callback hook to determine whether a given row is selected. Assigning a callback to this hook turns on selection mode. Only selected sub-forms are saved.
 	
-	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null)
+	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null, $isRowSelected = null)
 	{
 		$this->subform = $subform;
 		$this->onStartRow = $onStartRow;
+		$this->isRowSelected = $isRowSelected;
 		
 		// Create one instance of AutoForm to apply certain setting
 		// for all forms, e.g., aliases and hiddens
@@ -115,6 +117,8 @@ class SpreadsheetForm extends CompositeAutoForm
 	
 	function createOneSpreadsheetRow($item, $row, $validator, $idx)
 	{
+		$layout = "table_row";
+		
 		if ($this->onStartRow) 
 		{
 			$ret = call_user_func($this->onStartRow, $item);
@@ -127,6 +131,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		$row->id = $this->id . "_$idx";
 		$row->validator = $validator;
 		$row->validator->id = $row->id;
+
 		
 		
 		$fields = $row->data->getFields();
@@ -134,6 +139,8 @@ class SpreadsheetForm extends CompositeAutoForm
 		// created for the template subform.
 		foreach($fields as $field => $type)
 		{
+			if ($item->filter && $item->filter->isExcluded($field)) continue;
+			
 			$r = $row->getRenderer($field);
 			if($r)
 			{
@@ -144,7 +151,14 @@ class SpreadsheetForm extends CompositeAutoForm
 		}
 		//$form = SubordinateAutoForm::create($this, $row, true);
 		$subform = new SubordinateAutoForm($this, $row, true);
-		$subform->form->layout = AutoFormLayout::create("table_row", $subform);
+
+		if ($this->isRowSelected)
+		{
+			$layout = "selectable_table_row";
+			$subform->isSelected = call_user_func($this->isRowSelected, $item);
+		}	
+		
+		$subform->form->layout = AutoFormLayout::create($layout, $subform);
 
 		if ($ret)
 		{
@@ -170,13 +184,16 @@ class SpreadsheetForm extends CompositeAutoForm
 	 * Draw each form (row).
 	 */
 	function drawForm()
-	{		
-		echo "<form id='composite_auto_form' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+	{	
+		$id = $this->id ? $this->id : "composite_auto_form";
+			
+		echo "<form id='$id' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		echo " onsubmit='return onCompositeFormSubmit(this);'";
 		echo ">\n";
 			
+		$layout = ($this->isRowSelected) ? "selectable_table_header" : "table_header";
 		$form = $this->subform;
-		$form->layout = AutoFormLayout::create("table_header", $form);
+		$form->layout = AutoFormLayout::create($layout, $form);
 		$obj =& $form->getData();
 		$pk = $obj->getPrimaryKey();
 	
@@ -204,6 +221,12 @@ class SpreadsheetForm extends CompositeAutoForm
 	
 		// Draw headings
 		echo "<thead><tr>\n";
+		
+		if ($this->isRowSelected)
+		{
+			echo "<th>&nbsp;</th>";
+		}
+		
 		foreach($fields as $field => $type)
 		{
 			if ($field != $pk && !array_key_exists($field, $form->hidden) && !($filter && $filter->isExcluded($field)))
@@ -244,6 +267,56 @@ class SpreadsheetForm extends CompositeAutoForm
 		echo "</form>\n";
 	}
 	
+	/**
+	 * Overrides CompositeAutoForm::save() to provide support for selectable spreadsheet forms.
+	 * @see CompositeAutoForm::save()
+	 */
+	function save()
+	{
+		global $method;
+	
+		// Do magic
+	
+		$valid = true;
+
+		
+		foreach($this->forms as $form)
+		{
+			if ($this->isRowSelected != null)
+			{
+				// Selectable mode - skip form save if not selected
+
+				if (!$_POST[$form->id."__#selected"]) 					
+				{
+					trace("SKIPPING {$form->id}", 3);
+					continue;
+				}
+			}
+			
+			foreach($_POST as $name => $value)
+			{
+				if (strpos($name, "__") === false)
+				{
+					unset($_POST[$name]);
+				}
+			}
+				
+			$prefix = $form->id."__";
+			$len = strlen($prefix);
+				
+			foreach($_POST as $name => $value)
+			{
+				if (!strncmp($name, $prefix, $len))
+				{
+					$_POST[substr($name, $len)] = $value;
+				}
+			}
+				
+			if (!$form->save()) $valid = false;
+		}
+	
+		return $valid;
+	}
 	/*
 	 * Create a queryString containing all the
 	 * keys of the objects that saved successfully

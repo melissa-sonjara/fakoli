@@ -66,6 +66,13 @@ abstract class AutoFormLayout
 			
 		case "table_row":
 			return new TableRowFormLayout($form);
+		
+		case "selectable_table_header":
+			return new SelectableTableHeaderFormLayout($form);
+			
+		case "selectable_table_row":
+			return new SelectableTableRowFormLayout($form);
+			
 			
 		case "spreadsheet":
 			return new SpreadsheetFormLayout($form);
@@ -351,6 +358,27 @@ class TableHeaderFormLayout extends AutoFormLayout
 }
 
 
+/**
+ * Overrides the default table-row form layout to provide a selection checkbox
+ * for SpreadsheetForms with selectable sub-forms.
+ * @author andy
+ */
+class SelectableTableHeaderFormLayout extends TableHeaderFormLayout
+{
+	function SelectableTableHeaderFormLayout($form)
+	{
+		$this->TableHeaderFormLayout($form);
+	}
+
+	function startUngrouped()
+	{
+		echo "<tr id='{$this->form->id}_container' class='{$this->form->containerClass}'><th style='text-align: center'>&nbsp;</th>\n";
+	}
+
+}
+
+
+
 /*
  * Used for each subordinate form row in 
  * SpreadSheetAutoForm.
@@ -439,6 +467,27 @@ class TableRowFormLayout extends AutoFormLayout
 	{
 		echo "<tr>\n <td colspan='{$this->form->parent->colCount}' id='{$this->form->id}__error' class='error' style='display: ".($this->form->msg ? 'table-cell' : 'none')."'>{$this->form->msg}</td></tr>\n";
 	}	
+}
+
+/**
+ * Overrides the default table-row form layout to provide a selection checkbox
+ * for SpreadsheetForms with selectable sub-forms.
+ * @author andy
+ */
+class SelectableTableRowFormLayout extends TableRowFormLayout
+{
+	function SelectableTableRowFormLayout($form)
+	{
+		$this->TableRowFormLayout($form);
+	}
+	
+	function startUngrouped()
+	{
+		$selected = $this->form->isSelected ? " checked='checked'" : "";
+		
+		echo "<tr id='{$this->form->id}_container' class='{$this->form->containerClass}'><td style='text-align: center'><input type='checkbox' class='checkbox selector'$selected id='{$this->form->id}__selected' name='#selected' value='1'/></td>\n";
+	}
+	
 }
 
 /*
