@@ -98,7 +98,7 @@ class CommentView
 		$list = new PagedList($comments, "comment_list", array($this, formatComment));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
-		$list->pageSize = 5;
+		$list->paginate = false;
 
 		return $list;
 	}
