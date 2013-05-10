@@ -224,7 +224,7 @@ function onCompositeFormSubmit(form)
 		}
 		else
 		{
-			echo "<input type='submit' class='{$this->buttonCSS}' name='submit' value='$submitLabel'/>";
+			echo "<input type='submit' class='{$this->buttonCSS}' value='$submitLabel'/>";
 		}
 		
 		foreach($this->buttons as $button)
