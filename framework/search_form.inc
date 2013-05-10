@@ -382,7 +382,7 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		}
 		else if($set)
 		{
-			$values = " ".implode("','", explode(",", $set))."'";
+			$values = "'".implode("','", explode(",", $set))."'";
 			$values = preg_replace("/''/", "'", $values);
 		}
 	
