@@ -451,7 +451,6 @@ class DateRangeValidator extends AbstractValidator
 	{
 		if ($this->readOnly) return "";
 
-
 		$min = "'{$this->min}'";
 		$max = "'{$this->max}'";
 		
@@ -459,31 +458,40 @@ class DateRangeValidator extends AbstractValidator
 
 		var min = $min;
 		var max = $max;
+		var minDate = ""; 
+		var maxDate = "";
+		var fieldDate = "";
 		
+			
 		if(form["{$this->field}"].value != "" && form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
 		{
 			form["{$this->field}"].value = Date.parse(form["{$this->field}"].value).format('%x');
+			fieldDate = new Date(form["{$this->field}"].value);
 		}
-				
-		if(max && form["{$this->max}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		
+		if(max && max.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		{
+			maxDate = new Date(max);
+		}
+		else if(max && form["{$this->max}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
 		{
 			form["{$this->max}"].value = Date.parse(form["{$this->max}"].value).format('%x');
+			maxDate = new Date(form["{$this->max}"].value);
 		}
-		
-		if(min && form["{$this->min}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+
+		if(min && min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
+		{
+			minDate = new Date(min);
+		}
+		else if(min && form["{$this->min}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/))
 		{
 			form["{$this->min}"].value = Date.parse(form["{$this->min}"].value).format('%x');
+			minDate = new Date(form["{$this->min}"].value);
 		}
 		
-		if((form["{$this->field}"].value != "") &&
-			form["{$this->field}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
-			(min && min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->field}"].value < min) ||
-		 	(min && !min.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->min}"].value && form["{$this->min}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
-		 	form["{$this->field}"].value < form["{$this->min}"].value) ||
-		 	(max && max.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
-		 	form["{$this->field}"].value > max) ||
-		 	(max && !max.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) && form["{$this->max}"].value && form["{$this->max}"].value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/) &&
-		 	form["{$this->field}"].value > form["{$this->max}"].value))
+		if(fieldDate && 
+			(minDate && fieldDate.valueOf() < minDate.valueOf()) ||
+		 	(maxDate && fieldDate.valueOf() > maxDate.valueOf()) )
 		{
 			alert("{$this->message}");
 			return false;
@@ -502,6 +510,8 @@ ENDSCRIPT;
 
 		$min = $this->min;
 		$max = $this->max;
+		$minDate = "";
+		$maxDate = "";
 		
 		if($min && !preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $min))
 		{
@@ -512,9 +522,24 @@ ENDSCRIPT;
 		{
 			$max = $_POST[$this->max];
 		}
-			
+
+		if($min && preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $min))
+		{
+			$minDate = new DateTime($min."00:00:00");
+		}
+		
+		if($max && preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $max))
+		{
+			$maxDate = new DateTime($max."00:00:00");
+		}
+		
+		if($_POST[$this->field] != "" AND preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]))
+		{
+			$fieldDate = new DateTime($_POST[$this->field]);
+		}
+		
 		if ($_POST[$this->field] != "" AND (!preg_match("|^\\d{1,2}\/\\d{1,2}\/\\d{4}$|", $_POST[$this->field]) ||
-		(($min && $_POST[$this->field] < $min) || ($max && $_POST[$this->field] > $max))))
+		(($minDate && $fieldDate && $fieldDate < $minDate) || ($maxDate && $fieldDate && $fieldDate > $maxDate))))
 		{
 			$result = $this->message;
 		}
