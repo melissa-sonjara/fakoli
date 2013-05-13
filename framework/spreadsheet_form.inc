@@ -288,7 +288,7 @@ class SpreadsheetForm extends CompositeAutoForm
 
 				if (!$_POST[$form->id."__#selected"]) 					
 				{
-					trace("SKIPPING {$form->id}", 3);
+					trace("SKIPPING {$form->id}", 4);
 					continue;
 				}
 			}
