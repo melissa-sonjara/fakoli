@@ -167,7 +167,7 @@ class BlogSubscriptionManager
 	static function renderSubscriptionTypeSelect($blogSubscriber)
 	{
 		$subscriptionTypes = BlogSubscriber::$subscriptionTypes;
-		$subscriptionTypes["unsubcribe"] = "Unsubscribe";
+		$subscriptionTypes["unsubscribe"] = "Unsubscribe";
 		
 		if(!Settings::getValue("blog", "allow_subscription_options"))
 		{
