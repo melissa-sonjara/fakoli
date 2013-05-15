@@ -7,7 +7,6 @@ class BlogSubscriptionManager
 	var $weekly_digest = array();		///< Array of formatted blog articles new since last week indexed by blog_id
 	var $subscribers;
 	var $blogs;
-	var $start_of_week = "Mon";		///< The day of the week to send updates to weekly subscribers
 	
 	function BlogSubscriptionManager()
 	{
@@ -46,9 +45,10 @@ class BlogSubscriptionManager
 
 	function getWeeklyDigest()
 	{
-		$today = new DateTime(now());
-		
-		if($today->format("D") != $this->start_of_week)
+		$today = new DateTime(now());		
+		$start_of_week = Settings::getValue("blog", "weekly_digest_day");
+
+		if($today->format("D") != $start_of_week)
 		{
 			return;
 		}
