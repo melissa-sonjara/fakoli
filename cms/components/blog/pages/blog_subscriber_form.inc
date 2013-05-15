@@ -36,7 +36,6 @@ Fakoli::usingFeature("auto_form");
 
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-$blog = new Blog($blog_id);
 $blogSubscriber = new BlogSubscriber();
 
 $blogSubscriber->blog_id = $blog_id;
@@ -76,7 +75,7 @@ $script .= $form->writeScript();
 <div id="tab_border">
 
 <?
-echo TextLookup::getText("blog_subscriber_form_instructions", $blog);
+echo TextLookup::getText("blog_subscriber_form_instructions");
 $form->drawForm();
 ?>
 <br/>
