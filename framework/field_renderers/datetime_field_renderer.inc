@@ -180,7 +180,19 @@ class DateTimeFieldRenderer extends FieldRenderer
 		$this->_printLabel($field);
 		echo "<td";
 		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->format($field)."</td>\n";		
+		echo ">".$this->format($field);
+		
+		// AJG - if the field is read-only but the form is not, add a hidden field to
+		// retain the field value upon submission.
+		
+		if (!$this->parent->readOnlyForm)
+		{
+			$obj = $this->parent->data;
+			$value = $obj->get($field);
+			echo "<input type='hidden' name='$field' value='{$value}'/>";
+		}
+		
+		"</td>\n";		
 		echo "</tr>\n";	
 	}
 	
