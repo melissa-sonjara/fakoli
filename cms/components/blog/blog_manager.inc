@@ -166,6 +166,11 @@ class BlogManager
 		$mgr->upgrade($version);
 	}	
 	
+	static function setDefaults()
+	{
+		Settings::setDefaultValue("blog", "allow_subscription_options", "0", Boolean, "Whether to allow users to choose subscription type options. Cron job must be setup for the website to call handler file 'send_digest'.");
+	}
+	
 	/**
 	 * Respond to fired event DeleteUser
 	 *

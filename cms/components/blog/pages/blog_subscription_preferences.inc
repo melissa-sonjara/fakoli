@@ -31,53 +31,48 @@
 
 *****************************************************************/
 
-class BlogManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "blog";
-		$component->description = "Basic blog functionality for Fakoli/CMS";
-		$component->author = "Andy Green";
-		$component->version = "1.0";
-		$component->priority = 2;
-		$component->enabled = true;
-		
-		return $component;
-	}
-	
-	static function getAdminMenu()
-	{
-		return array("Site Content"	=> array
-			(
+/*
+ * Description: Allows users to edit their forum subscriptions.
+ * 
+ * @author: Janice Gallant for Sonjara, Inc.
+ * 
+ * 10/28/2010
+ */
 
-				"Blogs"	=>	array("page"	=>	"/admin/blogs",
-										  "role"	=>	"admin,editor",
-								  		  "weight"	=>	9)
-			)
-		);
-	}	
-	
-	var $allow_sessionless_handlers = array("rss", "send_digest"); // Allow anonymous access to the rss action handler
-	
-	static function getStyles()
-	{
-		return array("/fakoli/css/blog.css");
-	}
-	 
-	static function subscribeToEvents()
-	{
-		return array("ResolveIdentifier" => array(BlogManager, displayBlog),
-					 "EnumerateItems"	 => array(BlogManager, enumerateItems),
-					 "RegisterBlogViewHandlers" => array(BlogView, registerStandardHandlers),
-					 "upgradeComponent"		=>	array(BlogManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(BlogManager, registerSerializationHandler),
-					"DeleteUser"			=>	array(BlogManager, deleteUser),
-					"ComponentScanComplete"	=> array(BlogManager, setDefaults)
-				
-				
-		);
-	}
+Fakoli::using("blog", "settings");
+Fakoli::usingFeature("data_view");
+
+$blog_subscriber_id = checkNumeric($_GET["blog_subscriber_id"]);
+
+if(!$blog_subscriber_id)
+{
+	redirect("/index");
 }
+
+$subscriber = new BlogSubscriber($blog_subscriber_id);
+
+$subscriptions = Query::create(BlogSubscriber, "WHERE subscriber_email=:email")
+	->bind(":email", $subscriber->subscriber_email)
+	->execute();
+
+$div_id = "blog_subscription_preferences";
+
+$script .= BlogSubscriptionManager::writeSubscriptionPreferenceScript($div_id);
+
+echo "<div id='{$div_id}'>";
+
+if(count($subscriptions))
+{
+	echo "<p><b>You are subscribed to the following blogs:</b></p>\n";
+	foreach($subscriptions as $subscription)
+	{
+		echo $subscription->format("<fieldset>\n<legend>{BlogSubscriptionManager::formatTitleLink}</legend>\n<div class='subscription_options'>{BlogSubscriptionManager::renderSubscriptionTypeSelect}</div>\n</fieldset>\n");
+	}	
+}
+else
+{
+	echo "<p><i>You are not subscribed to any blogs.</i></p>\n";
+}
+echo "</div>\n";
 
 ?>

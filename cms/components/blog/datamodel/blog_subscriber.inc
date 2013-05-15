@@ -36,12 +36,23 @@ class BlogSubscriber extends DataItem
 	// Fields
 	var $fields = array("blog_subscriber_id"	=>  Number,
 						"blog_id"				=>	Number,
-						"subscriber_email"		=>  String);
+						"subscriber_email"		=>  String,
+						"subscription_type"		=>	String,
+			
+			);
 	
 	// Relations
 	
 	var $relations = array("Blog"		=>	"Blog"
 						   );
+	
+	// Subscription type options are only available to web sites that set up a cron job
+	// and verify this using CMS Application Settings.
+	static $subscriptionTypes = array(
+			"instant"	=>	"Instant Notification",
+			"daily"		=>  "Daily Digest",
+			"weekly"	=>	"Weekly Digest",
+	);	
 						   
 	function Blog()
 	{

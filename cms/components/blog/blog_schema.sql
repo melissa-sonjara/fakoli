@@ -51,3 +51,9 @@ ALTER TABLE `blog` ADD COLUMN `enable_rss_feed` TINYINT(3) UNSIGNED NOT NULL DEF
 ALTER TABLE `blog` ADD COLUMN `max_rss_articles` INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE `blog_subscriber` add column `subscription_type` varchar(20) NOT NULL DEFAULT 'instant';
+
+-- END Version 1.4
