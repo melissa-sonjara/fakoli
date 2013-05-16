@@ -1416,7 +1416,7 @@ class DataItem extends AbstractDataItem
 			$separator = ($match[2]) ? $match[2] : ":";
 		
 			$fieldFormat = $match[3];
-			trace("formatField, field $field, separator $separator and fieldFormat $fieldFormat", 5);
+			trace("formatField, template $template, field $field, separator $separator and fieldFormat $fieldFormat", 5);
 			
 			$format = "{".$field.$separator.$fieldFormat."}";
 			
@@ -1465,7 +1465,7 @@ class DataItem extends AbstractDataItem
 	function formatThroughRelation($template, $separator = ", ")
 	{
 		$matches = array();
-		preg_match_all("/\\{([\\w\\d_]+)\.([\\w\\d_\\(\\)]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)\\.([\\w\\d_\\(\\)]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 		
 		foreach($matches as $match)
 		{
