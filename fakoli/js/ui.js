@@ -1187,5 +1187,11 @@ window.addEvent('domready', function()
 			});
 			request.send();			
 		};
+		
+		elt.load = function(url, onComplete)
+		{
+			elt.set('data-url', url);
+			elt.reload(onComplete);
+		};
 	});
 });
