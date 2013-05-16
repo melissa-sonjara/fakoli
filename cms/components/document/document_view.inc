@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("document", "advance_search");
+Fakoli::using("document");
 Fakoli::usingFeature("facet_manager");
 
 class DocumentLibraryView
