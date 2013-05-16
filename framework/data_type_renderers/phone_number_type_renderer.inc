@@ -56,7 +56,7 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 	
 	static function format($value, $template = "")
 	{			
-		trace("PhoneNumberTypeRenderer function format value is $value", 3);
+		trace("PhoneNumberTypeRenderer function format value is $value", 4);
 		switch($template)
 		{
 
@@ -73,7 +73,7 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 	
 	static function standard($value)
 	{
-		trace("PhoneNumberTypeRenderer function standard value is $value", 3);
+		trace("PhoneNumberTypeRenderer function standard value is $value", 4);
 		$valueParts = PhoneNumberTypeRenderer::getValueParts($value);
 		
 		$phone = implode($valueParts, "-");
