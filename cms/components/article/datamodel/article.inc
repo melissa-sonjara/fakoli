@@ -124,14 +124,15 @@ class Article extends DataItem implements Searchable
 	
 	function getURL()
 	{
-		try
+		$blog = $this->getBlog();
+		if($blog)
 		{
-			return $this->getBlog()->getURL() . "?article_id=" . $this->article_id;
+			return $blog->getURL() . "?article_id=" . $this->article_id;
 		}
-		catch(DataNotFoundException $e)
+		else
 		{
-			return "/article?article_id=" . $this->article_id;
-		}		
+			return "article?article_id=" . $this->article_id
+		}
 	}
 	
 	function getBlogSubscribers()
@@ -288,10 +289,15 @@ class ArticleCommentXref extends DataItem
 	function verifyEnabled($article_id)
 	{
 		if (!$article_id) return false;
-				
+
 		try
 		{
-			$article = new Article($article_id);			
+			$article = new Article($article_id);
+			if($identifier == "article")
+			{
+				return $article->allow_comment;
+			}	
+					
 			// returns null if no related blog
 			$blog = $article->getBlog();
 				
