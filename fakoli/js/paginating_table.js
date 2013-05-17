@@ -159,6 +159,15 @@ var PaginatingTable = new Class({
         evt.stop();
         return false;
       }).injectInside( paginator );
+     
+     if (this.pages < 2)
+     {
+    	 paginator.setStyle('display', 'none');
+     }
+     else
+     {
+    	 paginator.setStyle('display', 'block');
+     }
     }.bind( this ));
   },
  
