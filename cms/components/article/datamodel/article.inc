@@ -292,12 +292,6 @@ class ArticleCommentXref extends DataItem
 
 		try
 		{
-			$article = new Article($article_id);
-			if($identifier == "article")
-			{
-				return $article->allow_comment;
-			}	
-					
 			// returns null if no related blog
 			$blog = $article->getBlog();
 				
