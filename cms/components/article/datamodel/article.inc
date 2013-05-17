@@ -131,7 +131,7 @@ class Article extends DataItem implements Searchable
 		}
 		else
 		{
-			return "article?article_id=" . $this->article_id
+			return "article?article_id=" . $this->article_id;
 		}
 	}
 	
