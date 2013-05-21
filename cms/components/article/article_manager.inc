@@ -42,7 +42,8 @@ class ArticleManager
 	}
 	
 	/**
-	 * When an article is published, send an email to subscribers.
+	 * When an article is published, send an email to instant
+	 * notification subscribers.
 	 * 
 	 * @param obj $article class Article
 	 * @param String $email_template_name (e.g., 'blog_published')
@@ -53,7 +54,7 @@ class ArticleManager
 	{
 		if(!$article->published) return;
 
-		$blog = $article->Blog();
+		$blog = $article->Blog("WHERE subscription_type='instant'");
 		if(!$blog) return;
 
 		$subscribers = $blog->Subscribers();
