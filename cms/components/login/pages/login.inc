@@ -49,7 +49,7 @@ echo TextLookup::getText("login_text", null, true);
 
 // Login form goes here
 ?>
-<form name='form1' method='POST' action=''>
+<form id="login_form" name='form1' method='POST' action=''>
 <table id="login">
 <?
 	if (LoginManager::$error)
