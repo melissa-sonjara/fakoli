@@ -183,7 +183,7 @@ function selectionChanged()
 			$('deleteButton').removeProperty("disabled");
 		}
 		
-		if(node.hasClass("file")
+		if(node.hasClass("file"))
 		{
 			$('deleteFolder').addProperty("disabled", "disabled");
 		}
