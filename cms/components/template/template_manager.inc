@@ -88,13 +88,13 @@ var templateManagerDlg;
 
 window.addEvent('domready', function()
 {
-	templateManagerDlg = new ModalDialog($('templateManagerDlg'), {width: '690px', handle: $('templateManagerDlgHeader'), draggable: true, body: $('templateManagerDlgBody')});
+	templateManagerDlg = new ModalDialog(document.id('templateManagerDlg'), {width: '690px', handle: document.id('templateManagerDlgHeader'), draggable: true, body: document.id('templateManagerDlgBody')});
 });		
 
 function editFile()
 {
-	file = $('files_value').value;
-	$('templateManagerDlgTitle').set('text', file);
+	file = document.id('files_value').value;
+	document.id('templateManagerDlgTitle').set('text', file);
 	templateManagerDlg.show(function() {}, "/action/template/edit?file=" + encodeURIComponent(file));
 }
 
@@ -106,16 +106,16 @@ function editResult(result)
 	}
 	else
 	{
-		//$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+		//document.id('Document_form__error').set({'text': result, 'display': 'table-cell'});
 	}
 }
 
 
 function uploadFile()
 {
-	selected = $('files_value').value;
+	selected = document.id('files_value').value;
 
-	node = $($('files_node').value + "_link");
+	node = document.id(document.id('files_node').value + "_link");
 
 	var parent_folder = "templates";
 	
@@ -139,7 +139,7 @@ function deleteFile()
 {
 	if (confirm("Are you sure you want to delete this file?"))
 	{
-		file = $('files_value').value;
+		file = document.id('files_value').value;
 		
 		var request = new Request({'url': 		'/action/template/delete?file=' + encodeURIComponent(file), 
 								   'method': 	'get',
@@ -161,41 +161,40 @@ function deleteFile()
 
 function selectionChanged()
 {
-	var file = $('files_value').value;
-	var node = $($('files_node').value + "_link");
+	var file = document.id('files_value').value;
+	var node = document.id(document.id('files_node').value + "_link");
 	
 	if (file != "")
 	{
-		if(node.hasClass("folder") || !file.match(/(\.css|\.tpl)$/))
+		if (node.hasClass("folder") || !file.match(/(\.css|\.tpl)$/))
 		{
-			$('edit').addProperty("disabled", "disabled");
+			document.id('edit').addProperty("disabled", "disabled");
 		}
 		else
 		{
-			$('edit').removeProperty("disabled");
+			document.id('edit').removeProperty("disabled");
 		}
-		if(node.hasClass("folder"))
+		if (node.hasClass("folder"))
 		{
-			$('deleteButton').addProperty("disabled", "disabled");
-		}
-		else
-		{
-			$('deleteButton').removeProperty("disabled");
-		}
-		
-		if(node.hasClass("file"))
-		{
-			$('deleteFolder').addProperty("disabled", "disabled");
+			document.id('deleteButton').addProperty("disabled", "disabled");
 		}
 		else
 		{
-			$('deleteFolder').removeProperty("disabled");
+			document.id('deleteButton').removeProperty("disabled");
+		}		
+		if (node.hasClass("file"))
+		{
+			document.id('deleteFolder').addProperty("disabled", "disabled");
+		}
+		else
+		{
+			document.id('deleteFolder').removeProperty("disabled");
 		}
 	}
 	else
 	{
-		$('edit').addProperty("disabled", "disabled");
-		$('deleteButton').addProperty("disabled", "disabled");
+		document.id('edit').addProperty("disabled", "disabled");
+		document.id('deleteButton').addProperty("disabled", "disabled");
 	}	
 }
 
