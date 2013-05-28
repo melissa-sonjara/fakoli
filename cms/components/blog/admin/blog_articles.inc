@@ -56,10 +56,11 @@ $tabs->writeHTML();
 ?>
 <div id="tab_border">
 <?
+$view->drawAddButton();
+
 $view->drawView();
+
+$view->drawAddButton();
 ?>
-<br/>
-<a class="button" href="/admin/blog_article_form?blog_id=<?echo $blog_id?>">Add an Article</a>
-<br/>
 </div>
 <br/>

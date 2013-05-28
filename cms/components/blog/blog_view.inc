@@ -530,6 +530,10 @@ class BlogArticlesView
 		return "<a title=\"{$item->title}\" href=\"blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 	}
 	
+	function drawAddButton()
+	{
+		echo "<br/>\n<a class='button' href=\"blog_article_form?blog_id={$this->blog->blog_id}\">Add an Article</a>\n<br/>\n";
+	}
 }
 
 class AdminBlogArticlesView extends BlogArticlesView
@@ -553,6 +557,10 @@ class AdminBlogArticlesView extends BlogArticlesView
 		return "<a title=\"{$item->title}\" href=\"/admin/blog_article_form?blog_id={$blog->blog_id}&article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 	}	
 	
+	function drawAddButton()
+	{
+		echo "<p>\n<a class='button' href=\"/admin/blog_article_form?blog_id={$this->blog->blog_id}\">Add an Article</a>\n</p>\n";
+	}
 }
 
 class BlogSubscriberListView
