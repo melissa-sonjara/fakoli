@@ -1,0 +1,7 @@
+@CHARSET "ISO-8859-1";
+
+#search_results img.search_result_icon
+{
+	display: inline-block;
+	vertical-align: middle;
+}

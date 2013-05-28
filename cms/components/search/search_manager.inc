@@ -250,7 +250,7 @@ class SearchManager
 		
 		if ($num)
 		{
-			echo "<p style='float: left'><em>$num ".pluralize("match", $num)." found.</em></p>";
+			echo "<p><em>$num ".pluralize("match", $num)." found.</em></p>";
 		}
 		
 		$this->drawFacets();

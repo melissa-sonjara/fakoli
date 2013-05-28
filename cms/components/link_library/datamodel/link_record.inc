@@ -127,10 +127,9 @@ class LinkSearchResult extends AbstractSearchResult
 	{
 		$url = $this->item->url;
 		
-		$type = getDocType($url);
-		$icon = getDocIcon($url);
+		$img = $this->formatIcon(getDocIcon($url), getDocType($url));
 		
-		return $this->item->format("<h4>{title}</h4><p><em>{description}</em></p><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='{url}' target='_blank'>Read More</a>");
+		return $this->item->format("{$img}<h4><a href='{url}' target='_blank'>{title}</a></h4><p><em>{description}</em></p>");
 	}
 }
 

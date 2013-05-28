@@ -242,11 +242,20 @@ class ArticleSearchResult extends AbstractSearchResult
 	{
 		return $this->item->created_date;
 	}
-	
+		
 	function summary()
 	{
-		$teaser = Settings::getValue("search", "show_text_fragment") ? "{teaser}<br/>" : "";
-		return $this->item->format("<h4>{title}</h4><p><em>{author} {created_date:short}</em></p>$teaser<a href='{getViewIdentifier()}?article_id={article_id}'>Read More</a>");
+		$details = "<p><em>{author} {created_date:short}</em></p>";
+		$href = "href='{getViewIdentifier()}?article_id={article_id}'";
+		
+		if(Settings::getValue("search", "show_text_fragment"))
+		{
+			return $this->item->format("<h4>{title}</h4>{$details}{teaser}<a {$href}>Read More</a>");
+		}
+		else
+		{
+			return $this->item->format("<h4><a {$href}>{title}</a></h4>{$details}");
+		}
 	}
 }
 

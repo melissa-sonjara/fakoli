@@ -267,12 +267,20 @@ class PageSearchResult extends AbstractSearchResult
 	{
 		return $this->item->created_date;
 	}
-	
+		
 	function summary()
 	{		
-		$teaser = Settings::getValue("search", "show_text_fragment") ? "{description:300}<br/>" : "";
+		$img = $this->formatIcon('/fakoli/richtext/images/hyperlink.gif', 'cms_page');
 		
-		return $this->item->format("<h4>{page_title}</h4><p></p>$teaser<a href='{identifier}'>Read More</a>");
+		if(Settings::getValue("search", "show_text_fragment"))
+		{
+			return $this->item->format("{$img}<h4>{page_title}</h4><p>{description:300}</p><a href='{identifier}'>Read More</a>");
+				
+		}
+		else
+		{
+			return $this->item->format("{$img}<h4><a href='{identifier}'>{page_title}</a></h4>");
+		}
 	}
 }
 

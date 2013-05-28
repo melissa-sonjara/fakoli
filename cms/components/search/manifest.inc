@@ -53,7 +53,12 @@ class SearchManifest
 				"ComponentScanComplete"	=>	array(SearchManager, setDefaults),
 				"upgradeComponent"		=>	array(SearchManager, upgradeComponent)
 			);
-	}		
+	}	
+
+	static function getStyles()
+	{
+		return array("/components/search/css/search.css");
+	}	
 }
 
 ?>

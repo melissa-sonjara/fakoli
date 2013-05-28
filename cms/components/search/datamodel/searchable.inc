@@ -46,7 +46,21 @@ abstract class AbstractSearchResult
 	abstract function relevance();
 	abstract function title();
 	abstract function date();
+	
+	/**
+	 * Display the item title and any other essential details for
+	 * the item such as author and a create date.
+	 * 
+	 * If Application Settings is set to show text fragment, display
+	 * the teaser and a Read More link; otherwise, put the link to the
+	 * full item' details directly on the title.
+	 */
 	abstract function summary();
+	
+	function formatIcon($icon, $alt)
+	{
+		return "<img class='search_result_icon' src='$icon' alt='$alt'/>\n";
+	}
 }
 
 ?>
