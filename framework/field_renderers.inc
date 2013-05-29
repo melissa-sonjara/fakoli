@@ -289,6 +289,7 @@ require_once realpath(dirname(__FILE__))."/field_renderers/rating_field_renderer
 require_once realpath(dirname(__FILE__))."/field_renderers/related_image_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/related_item_radio_button_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/related_item_select_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/related_item_checklist_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/string_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/text_field_renderer.inc";
