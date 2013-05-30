@@ -186,7 +186,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		}
 		else
 		{
-			echo "<div class='selectbox'>\n";
+			echo "<div id='{$this->parent->id}_{$field}' class='selectbox'>\n";
 		}
 		
 		$countOptions = count($this->options);
