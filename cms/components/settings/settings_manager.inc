@@ -53,6 +53,18 @@ class SettingsSerializationHandler
 
 class SettingsManager
 {
+	static $extensionMap = array();
+	
+	static function registerExtension($component, $handler)
+	{
+		SettingsManager::$extensionMap[$component] = $handler;
+	}
+	
+	static function getExtension($component)
+	{
+		return isset(SettingsManager::$extensionMap[$component]) ? SettingsManager::$extensionMap[$component] : null;
+	}
+	
 	function SettingsManager()
 	{
 		

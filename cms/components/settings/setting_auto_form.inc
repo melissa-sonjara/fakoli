@@ -40,6 +40,8 @@ class SettingAutoForm extends AutoForm
 	
 	function SettingAutoForm($component)
 	{
+		ComponentManager::fireEvent("RegisterSettingsFormExtension");
+		
 		$this->component = $component;
 		
 		$this->settings = Query::create(Settings, "WHERE component=:component ORDER BY category, name")
@@ -47,6 +49,7 @@ class SettingAutoForm extends AutoForm
 				->execute();
 
 		$this->buildForm($component->component_id);
+		
 	}
 	
 	function buildForm($component_id = 0)
@@ -96,6 +99,12 @@ class SettingAutoForm extends AutoForm
 			}
 		}
 
+		$extension = SettingsManager::getExtension($this->component->name);
+		if ($extension)
+		{
+			call_user_func($extension, $this);
+		}
+		
 		$this->submitLabel = "Save Changes";					
 	}
 	
