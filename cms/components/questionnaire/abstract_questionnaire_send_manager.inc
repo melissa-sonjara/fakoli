@@ -890,7 +890,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		$mgr = $this->getResultsManager();
 		$nonResponsives = $item->getNonResponders();
 		// displayed in modal dialog
-		$form->data->set("nonresponsive_count", count($nonResponsives));
+		$item->set("nonresponsive_count", count($nonResponsives));
 		$item->recipients = formatItems($nonResponsives, "{token}", ", ");
 		// Set the recipient list for use when form is submitted
 		$this->recipients = formatItems($nonResponsives, "{email}", ",");
