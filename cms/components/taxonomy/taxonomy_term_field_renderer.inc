@@ -97,7 +97,7 @@ function <?echo $this->parent->id?>_<?echo $this->field ?>_toggleSelectAll(link)
 	
 	var value = (link.innerHTML == "Select All");
 
-	var container = document.id('<?echo $this->field?>_container');
+	var container = document.id('<?echo $this->parent->id?>_<?echo $this->field?>_container');
 	
 	container.getElements("input[type=checkbox]").each(function(cbox)
 	{

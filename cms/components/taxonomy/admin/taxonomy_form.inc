@@ -18,6 +18,11 @@ $form = new AutoForm($taxonomy);
 $form->required("identifier", "taxonomy_name");
 $form->allowDelete = true;
 
+if ($taxonomy_id)
+{
+	$form->button("Clone this Taxonomy", "TaxonomyAdmin.cloneTaxonomyDialog({$taxonomy_id}); return false;", null, true);
+}
+
 $classes =  TaxonomyManager::getRegisteredClassOptions();
 
 new CheckListFieldRenderer($form, "associated_classes", "Associated Content Items", $classes);
@@ -28,9 +33,21 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		$tabs->next();
+		if ($form->deleted)
+		{
+			redirect("/admin/taxonomies");
+		}
+		else
+		{
+			$tabs->queryString = "taxonomy_id=".$form->data->taxonomy_id;
+			$tabs->next();
+		}
 	}
 }
+
+$script .= <<<ENDSCRIPT
+<script type='text/javascript' src='/components/taxonomy/js/taxonomy_admin.js'></script>
+ENDSCRIPT;
 
 $script .= $form->writeScript();
 

@@ -225,6 +225,52 @@ class TaxonomyManager
 		}
 	}
 	
+	static function cloneTaxonomy($form)
+	{
+		$tx = new DataTransaction();
+		
+		try 
+		{
+			$clone = $form->data;
+			
+			$clone->joinTransaction($tx);
+			
+			$clone->filter = null;
+			$name = $clone->taxonomy_name;
+			$ident = $clone->identifier;
+			
+			$taxonomy_id = checkNumeric($_GET["taxonomy_id"]);
+			$src = new Taxonomy($taxonomy_id);
+			$clone->copy($src);
+			unset($clone->taxonomy_id);
+			$clone->taxonomy_name = $name;
+			$clone->identifier = $ident;
+			$clone->published = false;
+			$clone->save();
+	
+			$terms = $src->Terms();
+
+			foreach($terms as $term)
+			{
+				$cloneTerm = new TaxonomyTerm();
+				$cloneTerm->copy($term);
+				$cloneTerm->taxonomy_id = $clone->taxonomy_id;
+				unset($cloneTerm->term_id);
+				$cloneTerm->joinTransaction($tx);
+				$cloneTerm->save();
+			}
+			
+			$tx->commit();
+			return true;
+		}
+		catch (Exception $e)
+		{
+			$tx->rollback();
+			$form->msg = $e->getMessage();
+			return false;
+		}
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new TaxonomyUpgradeManager();

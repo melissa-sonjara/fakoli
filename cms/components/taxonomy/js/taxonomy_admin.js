@@ -41,3 +41,22 @@ var TaxonomyAdmin = new Class
 	}
 	
 });
+
+TaxonomyAdmin.cloneTaxonomyDialog = function(taxonomy_id)
+{
+	TaxonomyAdmin.cloneDialog = modalPopup("Clone this Taxonomy", "/action/taxonomy/clone_taxonomy?taxonomy_id=" + taxonomy_id, '600px', 'auto', true);	
+};
+
+TaxonomyAdmin.cloneTaxonomyResponse = function(response)
+{
+	if (response.match(/^\d+$/))
+	{
+		go('?taxonomy_id=' + response);
+	}
+
+};
+
+TaxonomyAdmin.closeCloneDialog = function()
+{
+	TaxonomyAdmin.cloneDialog.hide();
+};
