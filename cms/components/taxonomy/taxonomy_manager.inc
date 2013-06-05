@@ -101,7 +101,7 @@ class TaxonomyManager
 		return $options;
 	}
 	
-	static function addTaxonomyFieldRenderers($form)
+	static function addTaxonomyFieldRenderers($form, $showSelectAll = true)
 	{
 		$class = get_class($form->data);
 		
@@ -115,6 +115,7 @@ class TaxonomyManager
 				$renderer = new TaxonomyTermFieldRenderer($form, $taxonomy);
 				$renderer->setSize(400, 125);
 				$renderer->resizable = true;
+				$renderer->showSelectAll = $showSelectAll;
 			}
 		}
 	}
