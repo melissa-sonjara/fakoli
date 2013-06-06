@@ -86,6 +86,16 @@ class Event extends DataItem
 		$this->owner_id = $user->$pk;
 	}
 	
+	function isOwner()
+	{
+		global $user;
+		if(!$user) return false;
+		
+		$pk = $user->getPrimaryKey();
+		
+		return (checkRole("admin") || $user->$pk == $this->owner_id) ? true : false;
+	}
+	
 	function Invitation()
 	{
 		if(!$this->event_invitation_id) return null;
