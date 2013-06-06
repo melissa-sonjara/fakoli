@@ -45,7 +45,7 @@ $event = new Event();
 
 $form = new AutoForm($event);
 $form->required("title", "start_date", "end_date");
-$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id");
+$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id", "owner_id");
 
 $form->allowDelete = true;
 
@@ -80,6 +80,7 @@ else
 	else
 	{
 		$event->calendar_id = $calendar_id;
+		$event->setOwner();
 	}
 }
 

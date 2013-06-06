@@ -55,6 +55,7 @@ class CalendarUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Add table event_invitation; add event_invitation_id to event table; change event start and end dates to be datetime",
 			"1.4"		=>	"sql:Add field allow_access to event table",
 			"1.5"		=>	"sql:Add time_zone table and US time zone data; add field time_zone_id to event table",
+			"1.6"		=>	"sql:Add column owner_id to event table",
 	);
 	
 	function CalendarUpgradeManager()

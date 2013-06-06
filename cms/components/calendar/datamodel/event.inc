@@ -47,6 +47,7 @@ class Event extends DataItem
 						"description"			=>	HTML,
 						"published"				=>	Boolean,
 						"allow_access"			=>	String,
+						"owner_id"				=>	Number,			
 						"last_modified"			=>	Timestamp,
 						"event_invitation_id"	=>	Number,
 						"composite_class"		=>	String,);
@@ -57,7 +58,8 @@ class Event extends DataItem
 			"Sites"			=>	Site,
 			"Calendar"		=>	Calendar,
 			"Invitation"	=>	EventInvitation,
-			"TimeZone"		=>	TimeZone
+			"TimeZone"		=>	TimeZone,
+			"Owner"			=>	"", 		// person who created the event
 				);
 
 	function Sites($constraint = "")
@@ -68,6 +70,20 @@ class Event extends DataItem
 	function Calendar()
 	{
 		return $this->getRelated(Calendar);
+	}
+	
+	function Owner()
+	{
+		$mgr = new UserManager();
+		return $mgr->getUser($this->owner_id);
+	}
+	
+	function setOwner()
+	{
+		global $user;
+		
+		$pk = $user->getPrimaryKey();
+		$this->owner_id = $user->$pk;
 	}
 	
 	function Invitation()

@@ -121,3 +121,10 @@ INSERT INTO `time_zone` (`time_zone_name`,`standard_offset`,`daylight_offset`) V
 alter table `event` add column `time_zone_id` int(10) NOT NULL DEFAULT '0' AFTER `end_date`;
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+alter table `event` add column `owner_id` int(10) NOT NULL DEFAULT '0' AFTER `allow_access`;
+
+
+-- END Version 1.6

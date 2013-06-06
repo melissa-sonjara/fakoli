@@ -63,11 +63,16 @@ $desc = $form->getRenderer("description");
 $desc->width = "450px";
 $desc->height = "100px";
 $form->required("title", "start_date", "end_date");
-$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id");
+$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id", "owner_id");
 
 if (!checkRole("admin"))
 {
 	$form->hide("published");
+}
+
+if(!checkRole("admin"))
+{
+	$form->hide("owner_id");
 }
 
 $form->allowDelete = true;
@@ -123,6 +128,7 @@ else
 	else
 	{
 		$event->calendar_id = $calendar_id;
+		$event->setOwner();
 	}
 }
 

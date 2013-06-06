@@ -24,7 +24,7 @@ class CalendarHelper
 		}
 		else
 		{
-			$form->hide("calendar_id");
+			$filterForm->hide("calendar_id");
 		}
 		$dateRangeRenderer = new DateRangeFilterRenderer($filterForm, "start_date", "start_date", "year");
 		$dateRangeRenderer->dateRangeLabel = "Event Date";
