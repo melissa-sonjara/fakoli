@@ -131,7 +131,7 @@ class TreeNode
 		if ($c == 0 && !$this->onDemand)
 		{
 			// Leaf node
-			echo "<div class='{$this->leafStyle}'>";
+			echo "<div id='{$this->id}' class='{$this->leafStyle}'>";
 
 			if (isset($this->value) && $this->value !== "" && $_activeTree->selectMode != 'navigation')
 			{
@@ -193,7 +193,7 @@ class TreeNode
 ?>
 		<div id='<?echo $this->id?>' class='<?echo $style?>' onclick="<?echo $cmd ?>">
 <?
-			if (isset($this->value) && $this->value !== "")
+			if (isset($this->value) && $this->value !== "" && $_activeTree->selectMode != 'navigation')
 			{
 ?>
 			<input type="checkbox" class="checkbox" name="<? echo $this->id?>" value="<? echo $this->value?>" <? 
