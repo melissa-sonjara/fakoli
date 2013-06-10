@@ -48,7 +48,7 @@ class DocumentTotalDownloadsView
 		$results = $join->query("WHERE document_library_id={$this->library->document_library_id} ORDER BY title");
 		
 		$this->table = new DataListView($results, "document_download_stats_total");
-		$this->table->column("File", "<a href='document_form?document_id={Document.document_id}'>{Document.title}</a>", true, "width: 80%")
+		$this->table->column("File", "<a href='#' onclick='docManager.editDocumentDetailsDialog({Document.document_id})'>{Document.title}</a>", true, "width: 80%")
 					->column("# Downloads", "{DocumentDownloadTotalStats.download_count:0}", true, "width: 20%; text-align: right");
 					
 		$this->table->filter = true;
@@ -62,7 +62,18 @@ class DocumentTotalDownloadsView
 	
 	function writeScript()
 	{
-		return $this->table->writeScript();
+		$script = $this->table->writeScript();
+		$script .= <<<ENDSCRIPT
+<script type='text/javascript' src='/components/document/js/document_manager.js'></script>
+<script type='text/javascript'>
+var docManager;
+window.addEvent('domready', function()
+{
+	docManager = new DocumentManager({$this->library->document_library_id});
+});
+</script>
+ENDSCRIPT;
+		return $script;
 	}
 	
 	function drawView()
