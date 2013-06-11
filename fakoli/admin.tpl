@@ -2,6 +2,7 @@
  <html xmlns="http://www.w3.org/1999/xhtml">
  <head>
   <meta name="description" content="Sonjara CMS Administrative Site">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <title>{var:title}</title>
   {var:styles}
   <link href="/fakoli/css/admin.css" rel="stylesheet"/>

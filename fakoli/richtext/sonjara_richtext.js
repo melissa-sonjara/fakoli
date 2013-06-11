@@ -319,7 +319,8 @@ var RichTextEditor = new Class({
 	options:
 	{
 		onSetupToolbar: function(editor) { return editor.setupDefaultToolbar();},
-		onSetupStylebar: function(editor) { return editor.setupDefaultStylebar();}
+		onSetupStylebar: function(editor) { return editor.setupDefaultStylebar();},
+		absoluteLinks: false
 	},
 		
 
@@ -566,7 +567,14 @@ var RichTextEditor = new Class({
 			oRTE.close();
 			if (!this.readOnly) 
 			{
-				oRTE.designMode = "On";
+				if (Browser.version < 9)
+				{
+					oRTE.designMode = "On";
+				}
+				else
+				{
+					oRTE.body.contentEditable = true;
+				}
 				//this.findFrame().document.attachEvent("onkeypress", this.evt_ie_keypress = function(event) {ieKeyPress(event, rte);});
 			}
 			
