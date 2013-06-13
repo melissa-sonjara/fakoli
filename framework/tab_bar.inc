@@ -549,6 +549,30 @@ class TwoLevelTabBar extends TabBar
 			
 	}
 
+	/**
+	 * Finds the tab containing the specified URL
+	 * @param $page The page to find
+	 * @return mixed returns the name of the tab if found, false otherwise
+	 */
+	function findPage($page)
+	{
+		// remove query string if given;
+		$page = preg_replace('/\?.*/', '', $page);
+
+		foreach($this->tabs as $text => $entry)
+		{
+			if (get_class($entry) == "TabBar")
+			{
+				$found = $entry->findPage($page);	
+				if($found)
+				{
+					return $found;
+				}
+			}
+		}
+		
+		return false;
+	}
 	
 		
 	function drawHorizontalCheckList()
