@@ -660,6 +660,7 @@ input.button
 {
   float:left;
   background-color: #CFCFEE;
+  background-image: none;
   margin:0 2px 0 0;
   padding: 0;
   padding-left: 10px;
@@ -672,8 +673,11 @@ input.button
   
   border-radius: 5px 5px 0 0;
 }
-  #tabs a, #popup_tabs a {
+  
+#tabs a, #popup_tabs a 
+{
   background-color: #CFCFEE;
+  background-image: none;
   border-radius: 0 5px 0 0;
   color: #000000;
   display: block;
@@ -716,7 +720,8 @@ input.button
 #tabs .current,
 #popup_tabs .current 
 {
-  background-color: #322E69;
+  	background-color: #322E69;
+  	background-image: none;
     color: #fff;
     border-color: #666;
 }
@@ -724,9 +729,10 @@ input.button
 #tabs .current a,
 #popup_tabs .current a
 {
-  background-color: #322E69;
-  padding-bottom:3px;
-  color: #fff;
+	background-color: #322E69;
+	background-image: none;
+	padding-bottom:3px;
+	color: #fff;
 }  
 
 
