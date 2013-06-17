@@ -301,6 +301,7 @@ class ArticleCommentXref extends DataItem
 
 		try
 		{
+			$article = $this->Article();
 			// returns null if no related blog
 			$blog = $article->getBlog();
 				
