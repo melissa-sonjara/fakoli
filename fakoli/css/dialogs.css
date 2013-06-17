@@ -27,7 +27,10 @@
 	font-weight: bold;
 }
 
-.dialog_header a
+.dialog_header a,
+.dialog_header a:link,
+.dialog_header a:hover,
+.dialog_header a:visited
 {
 	color: #fff; 
 	text-decoration: none; 
