@@ -54,7 +54,7 @@ $form->hide("sort_order");
 
 if(!$article_id || !$article->published)
 {
-	$form->onSaveComplete = sendEmailToSubscribers;
+	$form->onSaveComplete = onPublishArticle;
 }
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
@@ -84,8 +84,8 @@ $script = $form->writeScript();
 
 $form->drawForm();
 
-function sendEmailToSubscribers(&$form)
+function onPublishArticle($form)
 {
-	ArticleManager::sendEmailToSubscribers($form->data, 'blog_published');
+	ArticleManager::onPublishArticle($form->data);
 }
 ?>

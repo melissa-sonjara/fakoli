@@ -18,10 +18,12 @@ class BlogSubscriptionManager
 	
 	function getDailyDigest()
 	{
-		$today = new DateTime(now());
+		$today = new DateTime(today() . "00:00:00");
+		$yesterday = clone($today);
+		$yesterday->modify("-1 days");
 		
-		$articles = Query::create(Article, "WHERE published=true AND publish_date=:today")
-			->bind(":today", $today->format("Y-m-d"))
+		$articles = Query::create(Article, "WHERE published=true AND publish_date=:yesterday")
+			->bind(":yesterday", $yesterday->format("Y-m-d H:i:s"))
 			->execute();
 	
 		if(!count($articles)) return null;
@@ -42,7 +44,7 @@ class BlogSubscriptionManager
 		
 		return $daily_digest;
 	}
-
+	
 	function getWeeklyDigest()
 	{
 		$today = new DateTime(now());		
@@ -121,7 +123,7 @@ class BlogSubscriptionManager
 		global $config;
 						
 		$url =  "http://" . $config["http_host"]  . "/blog_subscription_preferences?blog_subscriber_id={blog_subscriber_id}";
-		$messageFooter = $subscriber->format("<br></br>To unsubscribe to these messages or change your subscription preferences, go to $url\n\n");
+		$messageFooter = $subscriber->format("</br></br>To unsubscribe to these messages or change your subscription preferences, go to $url\n\n");
 		
 		return $messageFooter;
 	}

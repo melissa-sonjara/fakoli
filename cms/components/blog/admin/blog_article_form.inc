@@ -61,7 +61,7 @@ $form = BlogManager::buildBlogArticleForm($article, $blog);
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 if(!$article->article_id || !$article->published)
 {
-	$form->onSaveComplete = sendEmailToSubscribers;
+	$form->onSaveComplete = onPublishArticle;
 }
 
 $form->hide("sort_order");
@@ -96,9 +96,9 @@ $tabs->writeHTML();
 <?
 $form->drawForm();
 
-function sendEmailToSubscribers(&$form)
+function onPublishArticle($form)
 {
-	ArticleManager::sendEmailToSubscribers($form->data, 'blog_published');
+	ArticleManager::onPublishArticle($form->data);
 }
 ?>
 </div>

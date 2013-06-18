@@ -42,6 +42,28 @@ class ArticleManager
 	}
 	
 	/**
+	 * If an article is marked published but no publish date set
+	 * (user may wish to set a future publish date) then set the
+	 * date to today.
+	 * 
+	 * @param obj $article
+	 */
+	static function onPublishArticle($article)
+	{
+		if($article->published && !$article->publish_date)
+		{
+			$article->publish_date = today();
+			$article->filter = new InclusionFilter("publish_date");
+			$article->save();
+		}
+		
+		if($article->published)
+		{
+			ArticleManager::sendEmailToSubscribers('blog_published');
+		}
+	}
+	
+	/**
 	 * When an article is published, send an email to instant
 	 * notification subscribers.
 	 * 

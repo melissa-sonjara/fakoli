@@ -57,7 +57,7 @@ $article->article_type = $blog->title;
 $form = BlogManager::buildBlogArticleForm($article, $blog);
 if(!$article->article_id || !$article->published)
 {
-	$form->onSaveComplete = sendEmailToSubscribers;
+	$form->onSaveComplete = onPublishArticle;
 }
 
 if ($method == "POST")
@@ -92,9 +92,9 @@ $tabs->writeHTML();
 <?
 $form->drawForm();
 
-function sendEmailToSubscribers(&$form)
+function onPublishArticle($form)
 {
-	ArticleManager::sendEmailToSubscribers($form->data, 'blog_published');
+	ArticleManager::onPublishArticle($form->data);
 }
 ?>
 </div>

@@ -49,7 +49,7 @@ if (isset($_GET["published"]))
 	$article->published = $published;
 	if($published)
 	{
-		ArticleManager::sendEmailToSubscribers($article, 'blog_published');
+		ArticleManager::onPublishArticle($article);
 	}
 }
 
