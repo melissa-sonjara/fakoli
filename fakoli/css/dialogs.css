@@ -72,3 +72,16 @@
 {
 	background-color: #ddd;
 }
+
+.notification
+{
+	border: solid 1px #666;
+	border-radius: 5px;
+	font-size: 12pt;
+	font-weight: bold;
+	background-color: #ffd;
+	color: #333;
+	box-shadow: 1px 1px 5px #ccc;
+	z-index: 400;
+	padding: 20px;
+}

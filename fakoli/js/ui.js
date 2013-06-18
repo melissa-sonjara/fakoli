@@ -631,6 +631,78 @@ function interstitial(message)
 	return int;
 }
 
+
+var Notification = new Class({
+	
+	Implements: Options,
+	
+	options:
+	{
+		cssClass:	'notification',
+		width:		400,
+		height:		'auto',
+		wait:		5000		
+	},
+
+	message: "",
+	notification: Class.Empty,
+	
+	initialize: function(message, options)
+	{
+		this.setOptions(options);
+		this.message = message;
+		
+		this.notification = this.createNotification();
+		this.center();
+		
+		this.show();
+		this.hide.delay(this.options.wait, this);
+	},
+
+	createNotification: function()
+	{
+		var div = new Element('div', {'class': this.options.cssClass});
+									  
+		div.setStyles({'max-width': this.options.width, 
+					   'height': this.options.height,
+					   'display': 'block',
+					   'opacity': 0});
+
+		div.set('html', this.message);
+		var doc = $(document.body ? document.body : document.documentElement);
+
+		doc.adopt(div);
+		return div;
+	},
+	
+	center: function()
+	{
+	   	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+	   	
+	   	var size = window.size();
+	   	var coords = this.notification.getCoordinates();
+	   	var x = (size.width - coords.width) / 2;
+	   	var y = (size.height - coords.height) / 2;
+
+	   	this.notification.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});	   	
+	},
+	
+	show: function()
+	{
+		this.notification.fade('in');
+	},
+	
+	hide: function()
+	{
+		this.notification.fade('out');
+	}
+});
+
+function notification(message, options)
+{
+	new Notification(message, options);
+}
+
 var ProgressiveSearch = new Class({
 	
 	Implements: Options,
