@@ -641,7 +641,7 @@ var Notification = new Class({
 		cssClass:	'notification',
 		width:		400,
 		height:		'auto',
-		wait:		5000		
+		wait:		3000		
 	},
 
 	message: "",
