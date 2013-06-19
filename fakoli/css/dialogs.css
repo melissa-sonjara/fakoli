@@ -85,3 +85,32 @@
 	z-index: 400;
 	padding: 20px;
 }
+
+.crossfader_nav
+{
+	margin: 10px;
+}
+
+.crossfader_nav_item,
+.crossfader_nav_item:link,
+.crossfader_nav_item:visited
+{
+	background-color: #ccc;
+	padding: 4px 8px;
+	border-radius: 30px;
+	margin: 5px;
+	color: #000;
+	text-decoration: none;
+}
+
+.crossfader_highlight,
+.crossfader_highlight:link,
+.crossfader_highlight:visited,
+.crossfader_current,
+.crossfader_current:link,
+.crossfader_current:visited,
+.crossfader_nav_item:hover,
+.crossfader_nav_item:focus
+{
+	background-color: #fff;
+}

@@ -1160,10 +1160,19 @@ var CrossFader = new Class(
 	options:
 	{
 		duration: 5000,
-		transition: 1000
+		transition: 1000,
+		navigation: false,
+		navigationPosition: 'bottomLeft',
+		navigationContainerClass: 'crossfader_nav',
+		navigationClass: 'crossfader_nav_item',
+		navigationCurrentClass: 'crossfader_current',
+		navigationHighlightClass: 'crossfader_highlight',
+		navigationShowNumbers: false
 	},
 	idx: 0,
 	elements: Class.Empty,
+	navigationContainer: Class.Empty,
+	navigationLinks: [],
 	
 	initialize: function(container, options)
 	{
@@ -1177,8 +1186,46 @@ var CrossFader = new Class(
 		if (this.elements.length == 0) return;
 		
 		this.elements[0].setStyles({display: 'block', visibility: 'visible', opacity: 1});
+	
+		this.createNavigation();
 		
 		this.start();
+	},
+	
+	createNavigation: function()
+	{
+		if (!this.options.navigation) return;
+		
+		this.navigationContainer = new Element('div', {'class': 'crossfader_nav'});
+		this.navigationContainer.setStyles({'position': 'absolute'});
+		
+		this.elements.each(function(elt, idx)
+		{
+			console.log("Element: " + idx);
+			
+			var blob = new Element('a', {href: '#', 'class': this.options.navigationClass});
+			
+			if (this.options.navigationShowNumbers) 
+			{
+				blob.set('text', idx + 1);
+			}
+			else
+			{
+				blob.set('html', '&nbsp;');
+			}
+			blob.addEvent('mouseenter', function(e) { blob.addClass(this.options.navigationHighlightClass);}.bind(this));
+			blob.addEvent('mouseleave', function(e) { blob.removeClass(this.options.navigationHighlightClass);}.bind(this));
+			blob.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
+			blob.inject(this.navigationContainer);
+			
+			this.navigationLinks.push(blob);
+			
+		}.bind(this));
+		
+		this.navigationContainer.inject(document.body);
+		this.navigationContainer.position({	relativeTo: this.container, 
+			position: this.options.navigationPosition, 
+			edge: this.options.navigationPosition});
 	},
 	
 	start: function()
@@ -1189,9 +1236,15 @@ var CrossFader = new Class(
 	
 	next: function()
 	{
+		if (this.paused) return;
+		
 		if (this.idx >= 0)
 		{
 			this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('out');
+			if (this.options.navigation)
+			{
+				this.navigationLinks[this.idx].removeClass(this.options.navigationCurrentClass);
+			}
 		}
 		
 		++this.idx;
@@ -1199,6 +1252,32 @@ var CrossFader = new Class(
 		
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
+		if (this.options.navigation)
+		{
+			this.navigationLinks[this.idx].addClass(this.options.navigationCurrentClass);
+		}
+	},
+	
+	goTo: function(idx)
+	{
+		this.paused = true;
+		
+		if (this.idx == idx) return;
+
+		if (this.idx >= 0 && this.options.navigation)
+		{
+			this.navigationLinks[this.idx].removeClass(this.options.navigationCurrentClass);
+		}
+
+		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('out');
+		this.idx = idx;
+		this.elements[this.idx].setStyles({'opacity': 0});
+		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
+		
+		if (this.options.navigation)
+		{
+			this.navigationLinks[this.idx].addClass(this.options.navigationCurrentClass);
+		}
 	}
 });
 
