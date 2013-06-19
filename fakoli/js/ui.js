@@ -1163,6 +1163,7 @@ var CrossFader = new Class(
 		transition: 1000,
 		navigation: false,
 		navigationPosition: 'bottomLeft',
+		navigationEdge: 'bottomLeft',
 		navigationContainerClass: 'crossfader_nav',
 		navigationClass: 'crossfader_nav_item',
 		navigationCurrentClass: 'crossfader_current',
@@ -1225,7 +1226,7 @@ var CrossFader = new Class(
 		this.navigationContainer.inject(document.body);
 		this.navigationContainer.position({	relativeTo: this.container, 
 			position: this.options.navigationPosition, 
-			edge: this.options.navigationPosition});
+			edge: this.options.navigationEdge});
 	},
 	
 	start: function()
