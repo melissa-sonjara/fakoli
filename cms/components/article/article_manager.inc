@@ -76,10 +76,10 @@ class ArticleManager
 	{
 		if(!$article->published) return;
 
-		$blog = $article->Blog("WHERE subscription_type='instant'");
+		$blog = $article->Blog();
 		if(!$blog) return;
 
-		$subscribers = $blog->Subscribers();
+		$subscribers = $blog->Subscribers("WHERE subscription_type='instant'");
 		
 		if(!count($subscribers)) return;
 		
