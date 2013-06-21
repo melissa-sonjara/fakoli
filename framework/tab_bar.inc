@@ -94,7 +94,7 @@ class TabBar
 	<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		$('{$this->id}').getElements("a").each(function(a)
+		document.id('{$this->id}').getElements("a").each(function(a)
 		{
 			a.loadTab = function(override)
 			{
@@ -106,7 +106,7 @@ class TabBar
 					url: override ? override : this.href, 
 					onSuccess: function(tree, elements, html, script) 
 					{ 
-						var container = $('{$this->container}');
+						var container = document.id('{$this->container}');
 						container.set('text', '');
 						container.adopt(tree);
 		
@@ -123,14 +123,14 @@ class TabBar
 				new Event(e).stop();
 				var url = a.href;
 				var parent = a.getParent();
-				$('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
+				document.id('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
 				parent.addClass('current');
 				
 				a.loadTab();			
 			});
 		});
 		
-		$('{$this->id}').getElements("li.current a").each(function(a)
+		document.id('{$this->id}').getElements("li.current a").each(function(a)
 		{
 			a.loadTab();
 		});
