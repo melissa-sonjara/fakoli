@@ -46,8 +46,9 @@ class ExpandingList
 	var $CSSclass = "expanding_list";			///< CSS class(es) to be applied to the list
 	var $styles = null;							///< Specific CSS styles to be applied to the list
 	var $emptyMessage = "No items in the list";	///< Message to display when the list is empty
-	var $groupTag = "h4";
-	var $grouped = false;
+	var $groupTag = "h4";						///< Grouping tag type
+	var $grouped = false;						///< Flag indicating whether list should be grouped
+	var $dynamicLoad = false;					///< Flag indicating whether list should load content on demand. If set to true, bodyFormat should provide the URL for each item
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -55,13 +56,15 @@ class ExpandingList
 	 * @param string $id the HTML id of the list
 	 * @param mixed $titleFormat The formatter used to display the list item titles (either a format string or a callback function or method)
 	 * @param mixes $bodyFormat The formatter used to display the list item bodies (either a format string or a callback function or method)
+	 * @param boolean $dynamicLoad Specifies whether to load the contents of each list element on demand. If set to true, the $bodyFormat parameter should provide the URL for each item
 	 */
-	function ExpandingList($items, $id = "expanding_list", $titleFormat = null, $bodyFormat = null)
+	function ExpandingList($items, $id = "expanding_list", $titleFormat = null, $bodyFormat = null, $dynamicLoad = false)
 	{
 		$this->items = $items;
 		$this->id = $id;
 		$this->titleFormat = $titleFormat;
 		$this->bodyFormat  = $bodyFormat;
+		$this->dynamicLoad = $dynamicLoad;
 	}
 	
 	function writeScript()
@@ -73,6 +76,7 @@ class ExpandingList
 	{
 		elt = document.id(elt);
 		var body = elt.getNext("dd");
+		
 		if (elt.hasClass("expanded"))
 		{
 			body.dissolve();
@@ -80,8 +84,24 @@ class ExpandingList
 		}
 		else
 		{
-			body.reveal();
-			elt.addClass("expanded");
+			if (body.get('data-url') && body.get('html') == '')
+			{
+				var cursor = elt.getStyle('cursor');
+
+				elt.setStyle('cursor', 'progress');
+				
+				body.reload(function() 
+				{ 
+					body.reveal();
+					elt.addClass("expanded");
+					elt.setStyle('cursor', cursor);
+				});
+			}
+			else
+			{
+				body.reveal();
+				elt.addClass("expanded");
+			}
 		}		
 	}
 	
@@ -124,13 +144,20 @@ class ExpandingList
 			
 			echo "</dt>\n";
 			
-			echo "<dd style='display: none'>";
 			if (is_callable($this->bodyFormat))
 			{
-				echo call_user_func($this->bodyFormat, $item);
+				$body = call_user_func($this->bodyFormat, $item);
 			}
-			else echo $item->format($this->bodyFormat);
-			echo "</dd>\n";
+			else $body = $item->format($this->bodyFormat);
+			
+			if ($this->dynamicLoad)
+			{
+				echo "<dd style='display: none' data-url='{$body}'></dd>";
+			}
+			else
+			{
+				echo "<dd style='display: none'>{$body}</dd>";				
+			}	
 		}
 		echo "</dl>\n";
 	}
@@ -159,13 +186,20 @@ class ExpandingList
 				
 				echo "</dt>\n";
 				
-				echo "<dd style='display: none'>";
 				if (is_callable($this->bodyFormat))
 				{
-					echo call_user_func($this->bodyFormat, $item);
+					$body = call_user_func($this->bodyFormat, $item);
 				}
-				else echo $item->format($this->bodyFormat);
-				echo "</dd>\n";
+				else $body = $item->format($this->bodyFormat);
+				
+				if ($this->dynamicLoad)
+				{
+					echo "<dd style='display: none' data-url='{$body}'></dd>";
+				}
+				else
+				{
+					echo "<dd style='display: none'>{$body}</dd>";				
+				}	
 			}
 			echo "</dl>\n";
 		}
