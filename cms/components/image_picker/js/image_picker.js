@@ -25,7 +25,7 @@ var ImagePicker =  (function()
 		show: function(editor)
 		{
 			this.editor = editor;
-			this.dialog = modalPopup("Link Picker", "/action/image_picker/image_picker?Editor=" + this.editor.name, 800, 500, true, false); 
+			this.dialog = modalPopup("Link Picker", "/action/image_picker/image_picker?Editor=" + this.editor.name, 800, 'auto', true, false); 
 		},
 		
 		hide: function()
@@ -238,7 +238,7 @@ var ImagePicker =  (function()
 		
 		showSelectImageDialog: function(field)
 		{
-			this.dialog = modalPopup("Select Image", "/action/image_picker/image_picker?Mode=select&Field=" + field + "&Preview=" + field + "_preview", '625px', '500px', true);			
+			this.dialog = modalPopup("Select Image", "/action/image_picker/image_picker?Mode=select&Field=" + field + "&Preview=" + field + "_preview", '625px', 'auto', true);			
 		},
 		
 		setSelectedImage: function(field)
