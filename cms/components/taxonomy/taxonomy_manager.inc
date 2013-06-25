@@ -272,6 +272,23 @@ class TaxonomyManager
 		}
 	}
 	
+	/**
+	 * Generates a search constraint matching the supplied text against taxonomy terms that might be associated
+	 * with the given class
+	 * @param string $text the search text 
+	 * @param string $class the DataItem class that is being search
+	 * @param string $placeholder true if $text is a placeholder variable, false, 
+	 * @return string a SQL constraint that can be used to perform the taxonomy text match
+	 */
+	static function generateSearchConstraint($text, $class, $placeholder = false)
+	{		
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+		$text = $placeholder ? $text : "'$text'";
+		
+		return "$pk in (select id from taxonomy_term_association a, taxonomy_term t where t.term like {$text} and a.term_id=t.term_id and a.class='{$class}')";
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new TaxonomyUpgradeManager();

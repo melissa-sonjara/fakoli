@@ -48,6 +48,8 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 	var $showSelectAll;
 	var $resizable = true;
 	
+	static $readOnlyTermSeparator = "<br>";
+	
 	function TaxonomyTermFieldRenderer(&$form, $taxonomy)
 	{
 		$this->taxonomy = $taxonomy;
@@ -228,7 +230,7 @@ window.addEvent('domready', function()
 		if(count($answers))
 		{
 			$this->_startField($field);
-			echo implode("<br>", $answers);
+			echo implode(TaxonomyTermFieldRenderer::$readOnlyTermSeparator, $answers);
 			$this->_endField($field);
 		}
 	}
