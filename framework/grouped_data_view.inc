@@ -114,6 +114,7 @@ class GroupedDataListView
 	var $rowId = false; // whether to include an id tag for each tr row
 	var $groupFooterColumns = array(); // subtotal footer for group
 	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
+	var $groupAsWorksheets = false; ///< Format groups as separate worksheets when exporting to Excel (requires PHPExcel)
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -586,21 +587,48 @@ class GroupedDataListView
 	function writeExcelFile($file)
 	{
 		$x = ExcelFileWriter::create($file);
+
+		$writeColumnHeadings = true;
+		$firstGroup = true;
 		
-		$c = 0;
-		foreach($this->columns as $column)
-		{
-			$x->writeText(0, $c, $column->title);
-			++$c;
-		}
-		
-		$r = 1;
 		foreach($this->groups as $group)
 		{
+			if ($this->groupAsWorksheets)
+			{
+				if ($firstGroup)
+				{
+					$x->setWorksheetTitle($group->title);
+				}
+				else
+				{
+					$x->addWorksheet($group->title);
+				}
+				
+				$writeColumnHeadings = true;
+				$firstGroup = false;
+			}
+
+			$c = 0;
+
+			if ($writeColumnHeadings)
+			{
+				foreach($this->columns as $column)
+				{
+					$x->writeText(0, $c, $column->title);
+					++$c;
+				}
+				
+				$r = 1;
+				$writeColumnHeadings = false;				
+			}
+			
 			if (array_key_exists($group->key, $this->items))
 			{
-				$x->writeText($r, 0, stripHTML($group->title));
-				$r++;
+				if (!$this->groupAsWorksheets)
+				{				
+					$x->writeText($r, 0, stripHTML($group->title));
+					$r++;
+				}
 				
 				foreach($this->items[$group->key] as $item)
 				{

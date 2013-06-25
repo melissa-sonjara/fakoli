@@ -76,6 +76,18 @@ interface IExcelFile
 	 * @param string $value the string to insert
 	 */
 	function writeText($row, $col, $value );
+		
+	/**
+	 * Set the title of the currently active worksheet.
+	 * @param string $title the title text.
+	 */
+	function setWorksheetTitle($title);
+	
+	/**
+	 * Adds a new worksheet to the Excel file
+	 * @param string $title the title of the new worksheet
+	 */
+	function addWorksheet($title);
 	
 	/**
 	 * Abort processing, output the specified error string
@@ -154,6 +166,16 @@ class ExcelFile implements IExcelFile
     	$len = strlen($value);
     	echo pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len);
     	echo $value;
+	}
+	
+	function setWorksheetTitle($title)
+	{
+		throw new Exception("Multiple worksheets are not supported with the built-in Excel writer. Install PHPExcel.");
+	}
+		
+	function addWorksheet($title)
+	{
+		throw new Exception("Multiple worksheets are not supported with the built-in Excel writer. Install PHPExcel.");	
 	}
 	
 	function abort($error)
