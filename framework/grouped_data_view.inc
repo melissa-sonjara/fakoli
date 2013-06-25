@@ -647,13 +647,13 @@ class GroupedDataListView
 						{
 							if (preg_match("/^[\\d\\.]+$/", $val))
 							{
-								trace("($r,$c): $val (Number)", 3);
+								//trace("($r,$c): $val (Number)", 3);
 								$x->writeNumber($r, $c, $val);
 							}
 							else
 							{
 								// No HTML required in Excel output
-								trace("($r,$c): $val (Text)", 3);
+								//trace("($r,$c): $val (Text)", 3);
 								$x->writeText($r, $c, stripHTML($val));
 							}
 						}
