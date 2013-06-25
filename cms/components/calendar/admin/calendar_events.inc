@@ -82,7 +82,6 @@ $constraint = "WHERE end_date >= '$startStr' AND start_date < '$endStr' AND publ
 $events = $calendar->Events($constraint);
 
 $view = new CalendarView($events, "fullcalendar");
-$view->addHandler(Event, new StandardEventHandler());
 
 $view->year = $year;
 $view->month = $month;

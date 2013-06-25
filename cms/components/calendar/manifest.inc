@@ -92,7 +92,6 @@ class CalendarManifest
 					 "EnumerateItems"	 => array(CalendarManager, enumerateItems),
 					 "EnumerateContextHelpClasses" => array(CalendarManager, enumerateContextHelpClasses),		
 					 "upgradeComponent"		=>	array(CalendarManager, upgradeComponent),
-					 "calendarGetHandler"      =>    array(CalendarManager, calendarGetHandler),
 					 "RegisterTaxonomyClasses"	=>	array(CalendarManager, registerTaxonomyClasses),
 					 "ComponentScanComplete" => array(CalendarManager, setDefaults),
 					"DeleteUser"			=>	array(CalendarManager, deleteUser),

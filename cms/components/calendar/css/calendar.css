@@ -272,6 +272,11 @@ body.ie9 .event_bubble_bottom
 	background: url(/components/calendar/images/event_bubble_bottom.png) top left no-repeat;
 }
 
+#fullcalendar .filtered
+{
+	display: none;	
+}
+
 .events_more
 {
 	padding-top: 4px;
@@ -283,3 +288,7 @@ body.ie9 .event_bubble_bottom
 	border-bottom: dashed 1px #CCC;
 }
 
+#fullcalendar .over_max
+{
+	display: none;
+}

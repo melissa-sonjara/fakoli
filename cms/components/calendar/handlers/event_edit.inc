@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("calendar");
+Fakoli::using("calendar", "taxonomy");
 Fakoli::using("site");
 Fakoli::usingFeature("auto_form");
 
@@ -64,6 +64,8 @@ $desc->width = "450px";
 $desc->height = "100px";
 $form->required("title", "start_date", "end_date");
 $form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id", "owner_id");
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if (!checkRole("admin"))
 {

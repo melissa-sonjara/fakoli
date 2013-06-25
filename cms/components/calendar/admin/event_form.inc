@@ -38,26 +38,30 @@ Fakoli::usingFeature("auto_form");
 Fakoli::assertRole("admin");
 
 $calendar_id = checkNumeric($_GET["calendar_id"]);
+$event_id = checkNumeric($_GET["event_id"]);
 
 $menu_item = "Calendar Events";
+$section = "Calendar";
 
 $event = new Event();
 
-$form = new AutoForm($event);
-$form->required("title", "start_date", "end_date");
-$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id", "owner_id");
+$helper = new CalendarHelper();
 
-$form->allowDelete = true;
-
-$sites = query(Site, "ORDER BY site_name");
-if (count($sites) > 1)
+if ($event_id)
 {
-	$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);
+	$event->load($event_id);	
+	$title = "Edit Event";
+}
+else
+{
+	$event->calendar_id = $calendar_id;
+	$event->setOwner();
+	$title =  "Add New Event";
 }
 
-$calendarSelect = new RelatedItemSelectFieldRenderer($form, "calendar_id", "Calendar", Calendar, "ORDER BY name", "{name}", "calendar_id", false, false, 80);
-$eventTypeSelect = new SelectFieldRenderer($form, "event_type", "Event Type");
-$eventTypeSelect->allowAddEntry();
+$handler = $helper->getHandler($event);
+
+$form = $handler->buildForm($event);
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
@@ -69,35 +73,8 @@ if ($method == "POST")
 		redirect("/admin/events");
 	}
 }
-else
-{
-	$event_id = checkNumeric($_GET["event_id"]);
-	
-	if ($event_id)
-	{
-		$form->load($event_id);
-	}
-	else
-	{
-		$event->calendar_id = $calendar_id;
-		$event->setOwner();
-	}
-}
 
-if ($event->event_id)
-{
-	$title = "Edit Event";
-}
-else
-{
-	$title =  "Add New Event";
-}
 $script = $form->writeScript();
-$section = "Calendar";
-
-
 
 $form->drawForm();
-
-
 ?>

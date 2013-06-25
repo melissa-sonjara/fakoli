@@ -41,8 +41,12 @@ abstract class EventHandler
 		return (strncmp($event->start_date, $date, strlen($date)) == 0);
 	}
 	
+	abstract function formatSummary($event, $tagRowCallbacks);
+
+	abstract function formatFilteringTags($event, $tagRowCallbacks);
 	abstract function summary($event);
 	abstract function details($event);
+	abstract function buildForm($event);
 	
 	/**
 	 * format an event for sending through email as iCal event.
@@ -111,6 +115,27 @@ class StandardEventHandler extends EventHandler
   			return ($dateTimeStamp == $startTimeStamp);
 		}
 	}
+	
+	function formatFilteringTags($event, $tagRowCallbacks)
+	{
+		$pk = $event->getPrimaryKey();
+		if(!count($tagRowCallbacks)) return "";
+		
+		$id = $event->format("id='{$pk}_{{$pk}}'");
+		
+		foreach($tagRowCallbacks as $cb)
+		{
+			$dataAttrs = call_user_func($cb, $event, $dataAttrs);
+		}
+		
+		$attrs = "";
+		foreach($dataAttrs as $name => $value)
+		{
+			$attrs .= " ".$name."='".$value."'";
+		}
+		
+		return "{$id}{$attrs}";
+	}
 
 	function summary($event)
 	{
@@ -148,9 +173,43 @@ class StandardEventHandler extends EventHandler
 	{
 		return new iCalendarEventManager($event->event_id, $event->start_date, $event->end_date, $event->title, $event->description, $event->location, $sequence_id, $event->TimeZone());
 	}
+	
+	function buildForm($event)
+	{
+		$form = new AutoForm($event);
+		$form->required("title", "start_date", "end_date");
+		$form->hide("composite_class", "event_invitation_id", "allow_access", "time_zone_id", "owner_id");
+		
+		$form->allowDelete = true;
+		
+		$sites = query(Site, "ORDER BY site_name");
+		if (count($sites) > 1)
+		{
+			$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);
+		}
+		
+		$calendarSelect = new RelatedItemSelectFieldRenderer($form, "calendar_id", "Calendar", Calendar, "ORDER BY name", "{name}", "calendar_id", false, false, 80);
+		$eventTypeSelect = new SelectFieldRenderer($form, "event_type", "Event Type");
+		$eventTypeSelect->allowAddEntry();
+		
+		return $form;
+	}
+	
+	function formatSummary($event, $tagRowCallacks)
+	{
+		$handler_class = get_class($this);
+		$pk = $event->getPrimaryKey();
+		$tags = $this->formatFilteringTags($event, $tagRowCallacks);
+		$content .= "<div {$tags} class='event_summary' onclick='showEventDetail({$event->$pk}, \"{$handler_class}\")'>";
+		$content .= $this->summary($event);
+		$content .= "</div>";
+	
+		return $content;
+	}
+	
 }
 
-class CalendarView
+class CalendarView implements FacetFilterable
 {
 	var $current_day;
 	var $events;
@@ -158,7 +217,6 @@ class CalendarView
 	var	$month;
 	var $year;
 	var $handlerMap = array(); // key is event class, value is handler class name
-	var $eventHandlers = array(); // deprecated method
 	var $calendarLink = "/calendar";
 	var $listLink = "/event_list";
 	var $listDialog = ""; // javascript function for bubble popup
@@ -166,6 +224,7 @@ class CalendarView
 	var $yearParam = "year";
 	var $monthParam = "month";
 	var $maxEventsPerDay = null; ///< The maximum number of events to display per day on monthly view
+	var $tagRowCallbacks; ///< Array of callbacks for adding extra attributes to each row
 	
 	function CalendarView($events, $id = null)
 	{
@@ -173,16 +232,31 @@ class CalendarView
 		$this->id = $id;
 		$this->month = date("n");
 		$this->year = date("Y");
+		$this->tagRowCallbacks = array();
 		$this->addHandler(Event, new StandardEventHandler());
 		ComponentManager::fireEvent("RegisterCalendarEventHandlers", $this);
+		
+		$max = Settings::getValue("calendar", "max_events_per_day");
+		if($max)
+		{
+			$this->maxEventsPerDay = $max;
+		}
 	}
 
-	// deprecated - registered event handlers should send
-	// string of handler class name instead
+	function getID()
+	{
+		return $this->id;
+	}
+		
+	/**
+	 * 
+	 * @param String $class composite event class or data item class name
+	 * @param obj $handler instance of a class inherits from either
+	 * StandardEventHandler or EventHandler
+	 */
 	function addHandler($class, $handler)
 	{
-		$this->eventHandlers[$class] = $handler;
-		$handler->view = $this;
+		$this->handlerMap[$class] = $handler;
 	}
 	
 	/*
@@ -191,44 +265,43 @@ class CalendarView
 	 * a handler class. Example:
 	 * 	static function registerCalendarEventHandlers(&$view)
 	 *  {
-	 * 		$view->handlerMap["CompositeRegistrationEvent"] = "RegistrationEventHandler";
+	 *  	$view->addHandler(CompositeRegistrationEvent, new RegistrationEventHandler());
 	 * 		return $view;
 	 *  }
-	 *
-	 * For backwards compatibility, if not found, we will attempt to 
-	 * retrieve a custom handler from the array "eventHandlers" with
-	 * index composite class or event class.
 	 *
 	 */
 	function getHandler($event)
 	{
-		// Event can be class other than "event" e.g., TrainingEvent
 		if(get_class($event) == "Event" && $event->composite_class)
+		{
 			$event_class = $event->composite_class;
-		else // Can be class "Event" or any other obj that is calendar-based
+		}
+		else
+		{
 			$event_class = get_class($event);
-
-		trace("getting event handler for $event_class", 3);
-				
+		}
+	
 		if(array_key_exists($event_class, $this->handlerMap))
 		{
-			$handler_class = $this->handlerMap[$event_class];
-			$handler = new $handler_class($event);
+			$handler = $this->handlerMap[$event_class];
 		}
-		// deprecated method of supplying an event handler
-		elseif(array_key_exists($event_class, $this->eventHandlers))
+		else
 		{
-			$handler = $this->eventHandlers[$event_class];
+			$handler = new StandardEventHandler();
 		}
-		else // event is not class or base class "Event" and no handler supplied
-		{
-			$pk = $event->getPrimaryKey();
-			trace("CalendarView:: no event handler for event {$event->$pk} class " . get_class($event), 3);
-		}
-		return $handler;
+			
+		return $handler;	
 	}
 	
-	
+	/**
+	 * Adds a row tagging handler. This function will receive the data item
+	 * for each row and can add custom attributes to the row tag.
+	 */
+	function addFacetTaggingHandler($handler)
+	{
+		$this->tagRowCallbacks[] = $handler;
+	}
+		
 	function summary($event)
 	{
 		return $this->getHandler($event)->summary($event);
@@ -350,7 +423,7 @@ ENDSCRIPT;
 			
 			$currentDay = sprintf("%d-%02d-%02d", $this->year, $this->month, $i);
 			$eventsToday = $this->filterEvents($this->events, $currentDay);
-			
+
 			if (count($eventsToday) > 0)
 			{
 				$class = "event";
@@ -433,7 +506,7 @@ ENDSCRIPT;
 		$this->calculateMonthRange();
 ?>		
 <div id="fullcalendar">
-<table>
+<table id=<?php echo $this->id ?>>
  <tr>
   <td class="month" colspan="7"><?echo date("F Y", $this->start)?> <a class="calendar_nav" href="<?echo $this->prevLink?>"><img src="/components/calendar/images/calendar_arrow_l.png" alt="left" width="22" height="22" border="0"></a> <a class="calendar_nav" href="<?echo $this->nextLink?>"><img src="/components/calendar/images/calendar_arrow_r.png" alt="right" width="22" height="22" border="0"></a> </td>
  </tr>
@@ -460,40 +533,17 @@ ENDSCRIPT;
 			
 			$currentDay = sprintf("%d-%02d-%02d", $this->year, $this->month, $i);
 			$eventsToday = $this->filterEvents($this->events, $currentDay);
-			
 			$content = "";
 			
 			if (count($eventsToday) > 0)
 			{
 				$class = "event";
-				$idx = 0;
-				$showMoreLink = false;
-	
 				foreach($eventsToday as $event)
 				{
-					if($this->maxEventsPerDay && $idx >= $this->maxEventsPerDay)
-					{
-						$showMoreLink = true;
-						break;
-					}
 					$handler = $this->getHandler($event);
-					
-					// JDG 2/24/2011 send handler class to event details
-					$handler_class = get_class($handler);
-					$pk = $event->getPrimaryKey();
-					$content .= "<div class='event_summary' onclick='showEventDetail({$event->$pk}, \"{$handler_class}\")'>";
-					$content .= $handler->summary($event);
-					$content .= "</div>";
-					
-					$idx++;
+					$content .= $handler->formatSummary($event, $this->tagRowCallbacks);
 				}
-				
-				if($showMoreLink)
-				{
-					$event_ids = formatItems(reindexList($eventsToday, "{$pk}"), "{{$pk}}", ":");
-					$content .= "<div class='events_more'><a href='#' onclick=\"showEventList('$event_ids', '$handler_class'); return false;\">more...</a></div>\n";
-				}
-				
+
 				$link = $i;
 			}
 			else
@@ -504,7 +554,7 @@ ENDSCRIPT;
 			
 			if ($currentDay == $today) $class="today";
 ?>
- <td class="<?echo $class ?>" ><?echo $link ?><? echo $content?></td>
+ <td class="<?echo $class ?>" data-day="<?php echo $i ?>"><?echo $link ?><? echo $content?></td>
 <?
 			 ++$c;
 			 if (($c % 7) == 0) echo "</tr><tr>";
@@ -524,6 +574,31 @@ ENDSCRIPT;
 <?
 	}
 		
+	function writeScript()
+	{
+		if(!count($this->tagRowCallbacks) || !$this->maxEventsPerDay) return;
+	
+		$options = "{}";
+		if($this->maxEventsPerDay)
+		{
+			$options = "{per_day: {$this->maxEventsPerDay}}";
+		}
+
+		ob_start();
+		?>
+		<script type="text/javascript" src="/components/calendar/js/filtering_calendar.js"></script>
+		<script type="text/javascript">
+		window.addEvent('domready', function()
+		{
+			var <?echo $this->id?> = new FilteringCalendar('<?echo $this->id ?>', <?php echo $options ?>);
+		});
+		</script>
+	<?
+			$script = ob_get_contents();
+			ob_end_clean();
+			return $script;
+	}
+	
 	function header($alt = event_display)
 	{
 		$link = $this->rewriteQueryString($this->year, $this->month, $alt);

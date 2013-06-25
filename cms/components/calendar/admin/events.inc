@@ -31,8 +31,8 @@
 
 *****************************************************************/
 
-Fakoli::using("calendar");
-Fakoli::usingFeature("data_view", "filter_form");
+Fakoli::using("calendar", "taxonomy");
+Fakoli::usingFeature("data_view", "filter_form", "facet_manager");
 
 $menu_item = "Calendar Events";
 
@@ -41,11 +41,11 @@ function formatEvent($event)
 	return "<a href='/admin/event_form?event_id={$event->event_id}'>{$event->title}</a><em> {$event->event_type}</em><p>".ellipsis($event->description, 120)."</p>";
 }
 
+$title = "Events";
 
 $filter = CalendarHelper::eventFilterSetup();
-
-$title = "Events";
 $constraint .= $filter->getConstraint();
+
 $events = query(Event, "$constraint ORDER BY start_date");
 $lastUpdated = "";
 
@@ -61,9 +61,14 @@ $table->filter = true;
 $table->pageSize = 20;
 $table->emptyMessage = "No Events defined";
 
+$facetManager = new FacetManager('facet_manager', $table);
+TaxonomyManager::addFacets($facetManager, Event, true, "160px", "200px", "200px");
+
+$script .= $facetManager->writeScript();
 $script .= $filter->writeScript();
 $script .= $table->writeScript();
 
+$facetManager->drawForm();
 $filter->drawForm();
 $table->drawView();
 ?>

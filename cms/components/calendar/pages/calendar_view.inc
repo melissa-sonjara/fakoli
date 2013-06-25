@@ -31,12 +31,10 @@
 
 *****************************************************************/
 
-Fakoli::using("calendar", "settings");
-Fakoli::usingFeature("auto_form", "data_view", "filter_form");
+Fakoli::using("calendar", "settings", "taxonomy");
+Fakoli::usingFeature("auto_form", "data_view", "facet_manager");
 
 $identifier = $_GET["cal"];
-
-$event_type = $_GET["event_type"];
 
 $calendar = Calendar::findByIdentifier($identifier);
 
@@ -81,21 +79,23 @@ $endStr = sprintf("%d-%02d-01", $nextYear, $nextMonth);
 
 $constraint = "WHERE 1=1 AND end_date >= '$startStr' AND start_date < '$endStr' AND published=1";
 
-$calendarHandler = ComponentManager::fireEvent("calendarGetHandler", $identifier);
-
-$calendarHandler->drawFilter();
-
-$view = new CalendarView($calendarHandler->getEvents($calendar, $constraint), "fullcalendar");
+$events = $calendar->Events("$constraint ORDER BY start_date");
+$view = new CalendarView($events, "fullcalendar");
 $view->year = $year;
 $view->month = $month;
 
-$max = Settings::getValue("calendar", "max_events_per_day");
-if($max)
-{
-	$view->maxEventsPerDay = $max;
-}
+$facetManager = new FacetManager('facet_manager', $view);
+TaxonomyManager::addFacets($facetManager, Event, true, "160px", "200px", "200px");
+
+$script .= $facetManager->writeScript();
+$script .= $view->writeScript();
+
+$facetManager->drawForm();
+
 $view->drawMonth();
 
-$calendarHandler->addButtonsAtBottom($calendar);
-
+if ($user && checkRole($calendar->write_access))
+{
+	echo "<p><a href='' onclick=\"newEvent({$calendar->calendar_id}); return false;\" class='button'>Add an Event</a></p>\n";
+}
 ?>

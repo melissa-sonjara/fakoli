@@ -38,34 +38,31 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("calendar", "component");
 
-$event_ids = mysql_escape_string($_GET["event_ids"]);
-$handler_class = mysql_escape_string($_GET["handler_class"]);
+$identifier = $_GET["cal"];
 
-//echo "current day $current_day and handler class $handler_class<br>";
+$calendar = Calendar::findByIdentifier($identifier);
 
-if (!$event_ids) 
-{
-	Fakoli::end("Event List handler - no events specified");
-}
+if (!checkRole($calendar->read_access)) redirect("/");
 
-if(!$handler_class)
-	$handler = new StandardEventHandler();
-else
-	$handler = ComponentManager::fireEvent("CalendarGetEventHandler", $handler_class);
+$year = checkNumeric($_REQUEST["year"]);
+$month = checkNumeric($_REQUEST["month"]);
+$day = checkNumeric($_REQUEST["day"]);
 
-if(!is_object($handler))
-	$handler = new StandardEventHandler();
+$date = new DateTime("{$year}-{$month}-{$day} 00:00:00");
+$dateStr = $date->format("Y-m-d");
 
-// Usually "Event" but could be other class
-$event_class = $handler->getEventClass();
+$constraint = "WHERE 1=1 AND end_date >= '$dateStr' AND start_date < '$dateStr' AND published=1";
 
-$event_ids = explode(":", $event_ids);
+$events = $calendar->Events("$constraint ORDER BY start_date");
 
+$helper = new CalendarHelper();
 echo "<div class='event_list_detail'>\n";
-foreach($event_ids as $idx => $event_id)
+foreach($events as $event)
 {
-	$event = new $event_class($event_id);
-	$handler->drawEditButton($event_id);
+	$handler = $helper->getHandler($event);
+	$event_class = $handler->getEventClass();
+	$event = new $event_class($event->event_id);
+	$handler->drawEditButton($event->event_id);
 	echo $handler->details($event);
 }
 

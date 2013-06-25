@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("calendar");
+Fakoli::using("calendar", "taxonomy");
 
 $menu_item = "Calendars";
 

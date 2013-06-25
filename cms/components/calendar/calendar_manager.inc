@@ -98,12 +98,6 @@ class CalendarManager
 		$mgr = new CalendarUpgradeManager();
 		$mgr->upgrade($version);
 	}	
-	
-	static function calendarGetHandler()
-	{
-		$calendarHandler = new CalendarHandler();
-		return $calendarHandler;
-	}
 
 	/**
 	 * Respond to fired event DeleteUser

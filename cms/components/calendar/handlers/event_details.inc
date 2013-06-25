@@ -33,24 +33,18 @@
 
 Fakoli::using("calendar", "component");
 
-// Event id could be id to a different table than "Event"
 $event_id = checkNumeric($_GET["event_id"]);
 $handler_class = mysql_escape_string($_GET["handler_class"]);
 
-if (!$event_id) die("Invalid Parameter");
+if (!$event_id)
+{
+	Fakoli::end("Event details - unknown event");
+}
 
-trace("EventDetails handler class $handler_class", 3);
-if(!$handler_class)
-	$handler = new StandardEventHandler();
-else
-	$handler = ComponentManager::fireEvent("CalendarGetEventHandler", $handler_class);
-	
-if(!is_object($handler))
-	$handler = new StandardEventHandler();
+$event = new Event($event_id);
 
-// Usually "Event" but could be other class
-$event_class = $handler->getEventClass();
-$event = new $event_class($event_id);
+$helper = new CalendarHelper();
+$handler = $helper->getHandler($event);
 	
 echo $handler->details($event);
 
