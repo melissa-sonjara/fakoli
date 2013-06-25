@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("forum", "site");
+Fakoli::using("forum", "site", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $menu_item = "Forums";
@@ -52,6 +52,8 @@ else
 
 $form = new AutoForm($forum);
 $form->hide("created_date", "owner_id");
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if (!$site)
 {

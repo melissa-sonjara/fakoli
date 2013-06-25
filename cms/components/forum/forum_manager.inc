@@ -221,5 +221,11 @@ class ForumManager
 	{
 		$mgr = new ForumUpgradeManager();
 		$mgr->upgrade($version);
-	}		
+	}
+
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Forum;
+		return $classes;
+	}
 }

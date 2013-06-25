@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("forum");
+Fakoli::using("forum", "taxonomy");
 Fakoli::usingFile("framework/auto_form.inc");
 
 $forum_id = checkNumeric($_GET["forum_id"]);
@@ -51,6 +51,8 @@ else
 $form = new AutoForm($forum);
 $form->required("identifier", "title", "teaser", "description");
 $form->hide("created_date", "owner_id");
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {
