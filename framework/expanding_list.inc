@@ -49,6 +49,8 @@ class ExpandingList
 	var $groupTag = "h4";						///< Grouping tag type
 	var $grouped = false;						///< Flag indicating whether list should be grouped
 	var $dynamicLoad = false;					///< Flag indicating whether list should load content on demand. If set to true, bodyFormat should provide the URL for each item
+	var $titleIDFormat = null;					///< Format template for title ID field
+	var $bodyIDFormat = null;					///< Format template for body ID field
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -134,7 +136,10 @@ class ExpandingList
 <?
 		foreach($this->items as $item)
 		{
-			echo "<dt onclick='return {$this->id}_toggleDD(this);'>";
+			$titleID = ($this->titleIDFormat) ? $item->format(" id='{$this->titleIDFormat}'") : "";
+			$bodyID =  ($this->bodyIDFormat) ? $item->format(" id='{$this->bodyIDFormat}'") : "";
+			
+			echo "<dt{$titleID} onclick='return {$this->id}_toggleDD(this);'>";
 			
 			if (is_callable($this->titleFormat))
 			{
@@ -152,11 +157,11 @@ class ExpandingList
 			
 			if ($this->dynamicLoad)
 			{
-				echo "<dd style='display: none' data-url='{$body}'></dd>";
+				echo "<dd{$bodyID} style='display: none' data-url='{$body}'></dd>";
 			}
 			else
 			{
-				echo "<dd style='display: none'>{$body}</dd>";				
+				echo "<dd{$bodyID} style='display: none'>{$body}</dd>";				
 			}	
 		}
 		echo "</dl>\n";
@@ -176,7 +181,10 @@ class ExpandingList
 <?
 			foreach($items as $item)
 			{
-				echo "<dt onclick='return {$this->id}_toggleDD(this);'>";
+				$titleID = ($this->titleIDFormat) ? $item->format(" id='{$this->titleIDFormat}'") : "";
+				$bodyID =  ($this->bodyIDFormat) ? $item->format(" id='{$this->bodyIDFormat}'") : "";
+					
+				echo "<dt{$titleID} onclick='return {$this->id}_toggleDD(this);'>";
 				
 				if (is_callable($this->titleFormat))
 				{
@@ -194,11 +202,11 @@ class ExpandingList
 				
 				if ($this->dynamicLoad)
 				{
-					echo "<dd style='display: none' data-url='{$body}'></dd>";
+					echo "<dd{$bodyID} style='display: none' data-url='{$body}'></dd>";
 				}
 				else
 				{
-					echo "<dd style='display: none'>{$body}</dd>";				
+					echo "<dd{$bodyID} style='display: none'>{$body}</dd>";				
 				}	
 			}
 			echo "</dl>\n";
