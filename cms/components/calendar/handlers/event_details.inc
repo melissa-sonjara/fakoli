@@ -47,6 +47,4 @@ $helper = new CalendarHelper();
 $handler = $helper->getHandler($event);
 	
 echo $handler->details($event);
-
-$handler->drawEditButton($event_id);
 ?>

@@ -60,9 +60,6 @@ echo "<div class='event_list_detail'>\n";
 foreach($events as $event)
 {
 	$handler = $helper->getHandler($event);
-	$event_class = $handler->getEventClass();
-	$event = new $event_class($event->event_id);
-	$handler->drawEditButton($event->event_id);
 	echo $handler->details($event);
 }
 

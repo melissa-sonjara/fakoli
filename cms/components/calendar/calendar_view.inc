@@ -62,16 +62,21 @@ abstract class EventHandler
 		return Event;
 	}
 	
-	
-	function drawEditButton($event_id)
+	/**
+	 * Called by function details
+	 * 
+	 * @param obj $event
+	 */
+	function formatButtons($event)
 	{
+		$event_id = $event->get("event_id");
+	
 		if(checkRole("admin"))
 		{
-?>
-<br/>
-<button class='button' onclick='editEvent(<?echo $event_id?>)'>Edit this Event</button>
-<?
+			$out = "<br/><button class='button' onclick='editEvent($event_id)'>Edit this Event</button>\n";
 		}	
+		
+		return $out;
 	}	
 }
 
@@ -161,11 +166,16 @@ class StandardEventHandler extends EventHandler
 		}
 ?>
 <p><?echo $event->description?></p>
-</div>
-</div>
 <?
+
+	echo $this->formatButtons($event);
+?>
+</div>
+</div>
+<?		
 		$out = ob_get_contents();
 		ob_end_clean();
+		
 		return $out;
 	}
 	
@@ -385,6 +395,8 @@ class CalendarView implements FacetFilterable
 	
 	function drawMiniCalendar()
 	{
+		$this->createEventDialog();
+		
 		global $script;
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript" src="/components/calendar/js/calendar.js"></script>
@@ -477,8 +489,7 @@ ENDSCRIPT;
 <?	
 	}
 	
-	
-	function drawMonth()
+	function createEventDialog()
 	{
 		global $script;
 		$script .= <<<ENDSCRIPT
@@ -502,6 +513,11 @@ ENDSCRIPT;
 <?
 		$dialogs .= ob_get_contents();
 		ob_end_clean();
+	}
+	
+	function drawMonth()
+	{
+		$this->createEventDialog();
 		
 		$this->calculateMonthRange();
 ?>		
@@ -671,6 +687,8 @@ ENDSCRIPT;
 	
 	function drawEventList()
 	{
+		$this->createEventDialog();
+		
 		$this->calculateMonthRange();
 		
 		$this->header(calendar_display);
