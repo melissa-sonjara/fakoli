@@ -229,7 +229,7 @@ class ServerPagedList
 			$prev = $this->page - 1;
 			if ($prev < 1) $prev = 1;
 			$next = $this->page + 1;
-			$total = intval(count($this->items) / $this->pageSize + 1);
+			$total = intval(count($this->items - 1) / $this->pageSize + 1);
 			if ($next > $total) $next = $total;
 			?>			
 				<div style="float: right;" class="paginator">
