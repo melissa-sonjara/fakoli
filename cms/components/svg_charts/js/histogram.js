@@ -159,6 +159,8 @@ var BlockSeriesRenderer = new Class(
 			
 			if (this.series.options.showValues)
 			{
+				if (!val) val = 0;
+				
 				this.chart.paper.text(x + columnWidth / 2, y - 8, val);
 			}
 			
