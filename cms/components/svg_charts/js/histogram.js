@@ -20,7 +20,8 @@ var HistogramSeries = new Class(
 		toolTips: [],
 		indicateTooltips: false,
 		areaFill: false,
-		areaFillOpacity: 0
+		areaFillOpacity: 0,
+		showValues: false
 	},
 	columns: [],
 	renderer: Class.Empty,
@@ -154,6 +155,11 @@ var BlockSeriesRenderer = new Class(
 			if (this.series.options.shadow)
 			{
 				column.dropShadow(5, 1, 1, 0.1);
+			}
+			
+			if (this.series.options.showValues)
+			{
+				this.chart.paper.text(x, y - 20, text);
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));

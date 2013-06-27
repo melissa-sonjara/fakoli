@@ -182,6 +182,7 @@ class Histogram
 		$emboss = $this->emboss? "true" : "false";
 		$legend = $this->legend ? "true" : "false";
 		$enableDownload = $this->enableDownload ? "true" : "false";
+		$showBarValues = $this->showBarValues ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
@@ -226,7 +227,8 @@ window.addEvent('domready', function ()
 		columnMargin: {$this->columnMargin},
 		title: '{$this->title}',
 		titleSize: {$this->titleSize},
-		enableDownload: {$enableDownload}
+		enableDownload: {$enableDownload},
+		showBarValues: {$showBarValues}
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
