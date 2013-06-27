@@ -46,9 +46,9 @@ class PagedList implements FacetFilterable
 	var $CSSclass = null;						///< CSS class(es) to be applied to the list
 	var $styles = null;							///< Specific CSS styles to be applied to the list
 	var $emptyList = "No items in the list";	///< Message to display when the list is empty
-	var $paginate = true; ///< Specifies whether table should be paginated (false for view only pages)
+	var $paginate = true;						///< Specifies whether list should be paginated (false for view only pages)
 	var $writeIdTag = false;					///< whether to include an id tag for each li item
-	var $tagRowCallbacks; ///< Array of callbacks for adding extra attributes to each row
+	var $tagRowCallbacks; 						///< Array of callbacks for adding extra attributes to each row
 	
 	/**
 	 * Creates a new PagedList control.
@@ -150,6 +150,123 @@ class PagedList implements FacetFilterable
 		echo "</{$this->listTag}>\n";
 	}
 	
+	function formatIdTag($item)
+	{
+		$pk = $item->getPrimaryKey();
+		return "{$pk}_{$item->get($pk)}";
+	}
+}
+
+/**
+ * ServerPagedList provides the same interface and functionality as PagedList,
+ * with the difference that paging is handled at the server. This results in a
+ * less responsive UI for the user, and no support for filtering or facets, but
+ * it does preserve the page when navigating back via the back button.
+ * 
+ * @author andy
+ */
+class ServerPagedList
+{
+	var $items;
+	var $id;
+	var $format;
+	var $pageSize = 10;							///< The number of items per page
+	var $listTag = "ul";						///< The HTML list tag type
+	var $CSSclass = null;						///< CSS class(es) to be applied to the list
+	var $styles = null;							///< Specific CSS styles to be applied to the list
+	var $emptyList = "No items in the list";	///< Message to display when the list is empty
+	var $paginate = true; 						///< Specifies whether list should be paginated
+	var $page = -1;
+	var $writeIdTag = false;					///< whether to include an id tag for each li item
+	
+	function __construct($items, $id = "paged_list", $format = null)
+	{
+		$this->items = $items;
+		$this->id = $id;
+		$this->format = $format;
+	}
+	
+
+	function writeScript()
+	{
+	}
+	
+	function drawList()
+	{
+		if (!count($this->items))
+		{
+			echo "<p>{$this->emptyList}</p>";
+			return;
+		}
+	
+		if ($this->page == -1)
+		{
+			$this->page = checkNumeric($_GET["page"]);
+			if (!$this->page) $this->page = 1;
+		}
+		
+		if ($this->paginate)
+		{
+			$start = ($this->page - 1) * $this->pageSize;
+			if ($start < 0) $start = 0;
+			
+			$end = $start + $this->pageSize;
+			if ($end > count($this->items)) $end = count($this->items);
+		}
+		else
+		{
+			$start = 0;
+			$end = count($this->items);
+		}
+		
+		$attrs = "";
+		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
+		if ($this->styles) $attrs .= " style='{$this->styles}'";
+	
+		if($this->paginate)
+		{
+
+			$prev = $this->page - 1;
+			if ($prev < 1) $prev = 1;
+			$next = $this->page + 1;
+			$total = intval(count($this->items) / $this->pageSize + 1);
+			if ($next > $total) $next = $total;
+			?>			
+				<div style="float: right;" class="paginator">
+				<ul id="<?echo $this->id?>_paginator">
+				  <li><a href="?page=<?echo $prev?>" class="paginate"><span>&lt;&lt; Prev</span></a></li>
+				  <li class="pager"><a href="#" class="goto-page">Page <?echo $this->page?> of <?echo $total?></a></li>
+				  <li><a href="?page=<?echo $next?>" class="paginate"><span>Next &gt;&gt;</span></a></li>
+				</ul>
+				</div>
+			<?php 
+		}
+			?>
+		<<?echo $this->listTag?> id="<?echo $this->id?>"<?echo $attrs?>>
+<?
+		for($i = $start; $i < $end; ++$i)
+		{
+			$item = $this->items[$i];
+			
+			if($this->writeIdTag)
+			{
+				$idTag = " id='".$this->formatIdTag($item)."'";	
+			}
+			
+			echo "<li{$idTag}>";
+			
+			if (is_callable($this->format))
+			{
+				echo call_user_func($this->format, $item);
+			}
+			else echo $item->format($this->format);
+			
+			echo "</li>\n";
+		}
+		echo "</{$this->listTag}>\n";
+	}
+
+
 	function formatIdTag($item)
 	{
 		$pk = $item->getPrimaryKey();
