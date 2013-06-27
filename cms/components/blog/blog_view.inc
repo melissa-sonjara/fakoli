@@ -98,7 +98,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
-		$list = new PagedList($articles, "article_list", array($this, formatArticle));
+		$list = new ServerPagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		
@@ -197,7 +197,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
-		$list = new PagedList($articles, "article_list", array($this, formatArticle));
+		$list = new ServerPagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		$list->pageSize = $blog->articles_per_page;
