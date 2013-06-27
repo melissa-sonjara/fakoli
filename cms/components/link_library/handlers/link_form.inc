@@ -1,4 +1,6 @@
 <?php
+Fakoli::using("link_library", "taxonomy");
+
 $link_library_id = checkNumeric($_GET["link_library_id"]);
 $link_id = checkNumeric($_GET["link_id"]);
 
@@ -28,6 +30,8 @@ $form = new AutoForm($link, "POST", "/action/link_library/link_form?link_id={$li
 $form->hide("link_library_id", "owner_id", "last_modified");
 $form->ajaxSubmit("function(result) {LinkLibraryManager.linkEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->allowDelete = true;
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if ($method == "POST")
 {
