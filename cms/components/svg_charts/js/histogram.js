@@ -159,7 +159,7 @@ var BlockSeriesRenderer = new Class(
 			
 			if (this.series.options.showValues)
 			{
-				this.chart.paper.text(x, y - 20, val);
+				this.chart.paper.text(x + columnWidth / 2, y - 10, val);
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
