@@ -48,60 +48,9 @@ if (!$document_library_id)
 }
 
 $library = new DocumentLibrary($document_library_id);
-$documents = $library->Documents("ORDER BY title DESC");
 
-$table = new DataListView($documents, "documents");
-$table->column("Title", "<b><a href='#' onclick='editFile({document_id});return false'>{title}</b></a>", true, "width: 40%")
-	  ->column("Author", "{author}", true, "width: 35%");
-	 
-$table->filter = true;
-$table->sortable = true;
-$table->pageSize = 20;
-$table->excelFile = "documents";
-$table->emptyMessage = "No Documents have been added yet.";
+$view = new DocumentFileView($library);
 
-ob_start();
-?>
-<script type="text/javascript">
-function editFile(id)
-{
-	modalPopup("Edit Document Properties",  "/action/document/edit?document_id=" + id, 500);
-}
-
-function addFile()
-{
-	modalPopup("Add a New Document", "/action/document/upload?document_library_id=<?echo $document_library_id?>", 500);
-}
-
-function editResult(result)
-{
-	if (result == "1")
-	{
-		window.location.reload();
-	}
-	else
-	{
-		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
-	}
-}
-
-function uploadResult(result)
-{
-	if (result == "1")
-	{
-		window.location.reload();
-	}
-	else
-	{
-		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
-	}
-}
-</script>
-<?
-$script .= ob_get_contents();
-ob_end_clean();
-
-$script .= $table->writeScript();
 $tabs = documentLibraryTabs($document_library_id);
 
 $tabs->writeHTML();
@@ -109,10 +58,6 @@ $tabs->writeHTML();
 <div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
 <h3>Documents in <?echo $library->name?></h3>
 <?
-$table->drawView();
+$view->drawView();
 ?>
-<br/>
-<br/>
-<a href="#" class="button" onclick="addFile(); return false"> Add a New Document </a>
-<br/>
 </div>
