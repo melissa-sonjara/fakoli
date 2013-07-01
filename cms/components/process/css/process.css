@@ -2,7 +2,7 @@
 
 .process_progress_bar
 {
-	border: solid 1px #00;
+	border: solid 1px #000;
 	border-radius: 3px;
 	background-image: linear-gradient(bottom, rgb(11,78,192) 39%, rgb(38,110,231) 70%, rgb(65,143,255) 85%);
 	background-image: -o-linear-gradient(bottom, rgb(11,78,192) 39%, rgb(38,110,231) 70%, rgb(65,143,255) 85%);
