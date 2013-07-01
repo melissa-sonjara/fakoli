@@ -35,6 +35,7 @@ class TaxonomyTerm extends DataItem
 {
 	var $table = "taxonomy_term";
 	var $primary_key = "term_id";
+	var $cacheLocal = true;
 	
 	var $fields = array("term_id"		=>	Number,
 						"taxonomy_id"	=>	Number,
