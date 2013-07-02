@@ -1179,8 +1179,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 
 		if ($this->onSaveComplete)
 		{
-			$onComplete = $this->onSaveComplete;
-			$onComplete($this);
+			if (!call_user_func_array($this->onSaveComplete, array($this))) return false;
 		}
 
 		return true;
