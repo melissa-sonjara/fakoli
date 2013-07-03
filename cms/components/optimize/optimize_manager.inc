@@ -141,7 +141,7 @@ class OptimizeManager
 		if (!$cachedStyles)
 		{
 			$styles = Fakoli::loadStyles();
-			OptimizeManager::preprocess($styles);
+			OptimizeManager::preProcessStyles($styles);
 			$cachedStyles = Cache::get("css_cache");			
 		}
 		
