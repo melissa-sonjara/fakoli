@@ -701,6 +701,7 @@ input.button
 #tabs a:hover,
 #popup_tabs a:hover
 {
+  background-color: #CFCFEE;
   text-decoration: underline;
 }
 
@@ -734,7 +735,6 @@ input.button
 	padding-bottom:3px;
 	color: #fff;
 }  
-
 
 #subtabs
 {
