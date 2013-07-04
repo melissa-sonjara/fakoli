@@ -34,6 +34,169 @@
 Fakoli::using("attachment", "document");
 Fakoli::usingFile("framework/field_renderers.inc");
 
+
+/**
+ * Used on email forms to attach one or more files to an 
+ * email. Does not store the selected documents so no documents 
+ * are retrieved. The object displayed in the AutoForm would be 
+ * an email form that is not retrieved or stored.
+ *
+ * @author janice
+ *
+ */
+class EmailAttachmentFieldRenderer extends FieldRenderer
+{
+	var $colspan = 2;
+	var $field;
+	var $label;
+	var $cssClass = "attachment";
+	var $deleteIcon = "/fakoli/images/delete.gif";
+	
+	function __construct(&$form, $field, $label)
+	{
+		$this->field = $field;
+	
+		$this->FieldRenderer($form);
+		$this->label = ($label) ? $label : $form->prettifyFieldName($field);
+
+		if($form->hasAdditional($field))
+		{
+			die("field $field already exists in form");
+		}
+		$form->add($this);
+	
+		if (isset($form->attachment_css_class)) $this->cssClass = $form->attachment_css_class;
+		if (isset($form->attachment_delete_icon)) $this->deleteIcon = $form->attachment_delete_icon;
+	}
+	
+	function renderField($field = "")
+	{
+		if (!$field) $field = $this->field;
+
+		$this->_startField($field);
+
+		echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='{$field}' value='' />\n";
+		echo "<ul id='{$this->parent->id}_{$field}_list' class='{$this->cssClass}' style='display: table-cell'>\n</ul>\n";
+		echo "<a href='#' onclick='emailAttachmentMgr.showAddAttachmentDialog(); return false'>Add an Attachment</a>\n";
+
+		$this->_endField($field);
+	}
+
+	function renderScript($field)
+	{
+		if (!$field) $field = $this->field;
+
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+	
+		global $dialogs;
+	
+		ob_start();
+		?>
+	<div class="dialog" id="attachmentDialog" style="width: 260px">
+	 <div class="dialog_header" id="attachmentDialogHeader">
+	  <div style="padding: 4px;">
+	   <div style="float: right">&nbsp;<a id='closeAttachmentDialog'>Close &times;</a></div>
+	   <span"style="font-weight: bold" id="attachmentDialogTitle">Add an Attachment</span>
+	  </div>	
+	 </div>
+	 <div class="dialog_body">
+	  <p id="attachmentDialogMessage"></p>
+	  <form id="attachmentForm" method="POST" enctype="multipart/form-data" action="/action/attachment/upload" >
+	   <br/>
+	   <label>Attachment File</label><br/>
+	   <input type="file" name="attachmentFile"/>
+	   <br/>
+	   <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"/>
+	  </form>
+	 </div>
+	</div>
+	<?
+			$dialogs .= ob_get_contents();
+			ob_end_clean();
+	?>
+		<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
+	<?
+		echo "<script type='text/javascript' src='/components/email/js/email_attachment_manager.js'></script>\n";
+		echo "<script type='text/javascript'>\n";
+		echo "var emailAttachmentMgr;\n";
+		echo "window.addEvent('load', function()\n";
+		echo "{\n";
+		echo "\temailAttachmentMgr = new EmailAttachmentManager('{$this->parent->id}_{$field}_list', '{$this->parent->id}_{$field}', '{$this->cssClass}', '{$this->deleteIcon}');\n";
+		echo "});\n";
+		echo "</script>\n";
+	
+	}
+	
+	/**
+	 * Setting the attachments is done in preprocess b/c no object is
+	 * saved for email and b/c a call to AutoForm's custom save hander
+	 * (where email is sent) would be done before postProcess.
+	 *
+	 * @see FieldRenderer::preProcess()
+	 */
+	function preProcess($field = "")
+	{
+		if (!$field) $field = $this->field;
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+	
+		if (isset($_POST[$field]) && $_POST[$field] != "")
+		{
+			$ids = explode(",", $_POST[$field]);
+	
+			foreach($ids as $id)
+			{
+				$attachment = new Attachment($id);
+				$file = sanitizePath($this->formatFilePath($attachment));
+				$attachments[$attachment->filename] = $file;
+			}
+			$this->parent->data->set($field, $attachments);
+		}
+	}
+
+
+	/**
+	 * Once we have sent the email, we can delete the attachment
+	 * records.
+	 *
+	 * (non-PHPdoc)
+	 * @see FieldRenderer::postProcess()
+	 */
+	function postProcess($field)
+	{
+		if (!$field) $field = $this->field;
+	
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+		
+		if (isset($_POST[$field]) && $_POST[$field] != "")
+		{
+			$ids = explode(",", $_POST[$field]);
+			
+			foreach($ids as $id)
+			{
+				$attachment = new Attachment($id);			
+				$file = $this->formatFilePath($attachment);
+				if (file_exists($file))
+				{
+					unlink($file);
+				}
+				$attachment->delete();	
+			}
+		}
+	}	
+	
+	function formatFilePath($attachment)
+	{
+		global $config;
+		
+		$dir = $config["attachmentdir"];
+		$base = $config['uploadbase'];
+			
+		$file = "$base/$dir{$attachment->local_filename}";
+		
+		return $file;	
+	}
+} // end EmailAttachmentFieldRenderer
+
 /**
  * Used on email forms to attach documents from document
  * libraries to an email. Does not store the selected
@@ -45,7 +208,7 @@ Fakoli::usingFile("framework/field_renderers.inc");
  *
  */
 class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
-{
+{	
 	var $colspan = 2;
 	var $field;
 	var $label;
@@ -54,30 +217,25 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 	
 	function __construct(&$form, $field, $label)
 	{
-		$this->field = $field;	
-		
+		$this->field = $field;
+	
 		$this->FieldRenderer($form);
 		$this->label = ($label) ? $label : $form->prettifyFieldName($field);
+
+		if($form->hasAdditional($field))
+		{
+			die("field $field already exists in form");
+		}
 		$form->add($this);
-		
+	
 		if (isset($form->attachment_css_class)) $this->cssClass = $form->attachment_css_class;
 		if (isset($form->attachment_delete_icon)) $this->deleteIcon = $form->attachment_delete_icon;
 	} 
+	
 
-	function renderScript($field)
+	function getAttachmentType()
 	{
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-		
-		if (!$field) $field = $this->field;
-
-		echo "<script type='text/javascript' src='/components/email/js/email_attachment_manager.js'></script>\n";
-		echo "<script type='text/javascript'>\n";
-		echo "var emailAttachmentMgr;\n";
-		echo "window.addEvent('load', function()\n";
-		echo "{\n";
-		echo "\temailAttachmentMgr = new EmailAttachmentManager('{$this->parent->id}_{$field}_list', '{$this->parent->id}_{$field}', '{$this->cssClass}', '{$this->deleteIcon}');\n";
-		echo "});\n";
-		echo "</script>\n";
+		return "document";
 	}
 	
 	function renderField($field = "")
@@ -88,7 +246,7 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
  
 		echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='{$field}' value='' />\n";
 		echo "<ul id='{$this->parent->id}_{$field}_list' class='{$this->cssClass}' style='display: table-cell'>\n</ul>\n";
-		echo "<a href='#' onclick='emailAttachmentMgr.showDocumentSelectDialog(); return false'>Add an Attachment</a>\n";
+		echo "<a href='#' onclick='emailDocAttachmentMgr.showDocumentSelectDialog(); return false'>Add an Attachment</a>\n";
 		
 		$this->_endField($field);
 	}
@@ -102,29 +260,48 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 	 * Setting the attachments is done in preprocess b/c no object is
 	 * saved for email and b/c a call to AutoForm's custom save hander
 	 * (where email is sent) would be done before postProcess.
-	 * 
+	 *
 	 * @see FieldRenderer::preProcess()
 	 */
 	function preProcess($field = "")
 	{
 		if (!$field) $field = $this->field;
-		
+	
 		trace("EmailAttachmentFieldRenderer preProcess field $field value ". $_POST[$field], 3);
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-		
+	
 		if (isset($_POST[$field]) && $_POST[$field] != "")
 		{
 			$ids = explode(",", $_POST[$field]);
-			
+	
 			foreach($ids as $id)
 			{
 				$document = new Document($id);
 				$library = $document->DocumentLibrary();
-				$attachments[] = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
+				$file = sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $document->file);
+				$attachments[basename($document->file)] = $file;			
 			}
 			$this->parent->data->set($field, $attachments);
 		}
 	}
+	
+
+	function renderScript($field)
+	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+	
+		if (!$field) $field = $this->field;
+	
+		echo "<script type='text/javascript' src='/components/email/js/email_attachment_manager.js'></script>\n";
+		echo "<script type='text/javascript'>\n";
+		echo "var emailDocAttachmentMgr;\n";
+		echo "window.addEvent('load', function()\n";
+		echo "{\n";
+		echo "\temailDocAttachmentMgr = new EmailDocumentAttachmentManager('{$this->parent->id}_{$field}_list', '{$this->parent->id}_{$field}', '{$this->cssClass}', '{$this->deleteIcon}');\n";
+		echo "});\n";
+		echo "</script>\n";
+	}
+		
 	
 	/**
 	 * Called by document_select_dialog.inc

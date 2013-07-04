@@ -58,7 +58,9 @@ class EmailHandler
 	 * @param String $message
 	 * @param String $emailFrom - if blank, use settings email_from; if not blank and != settings, set this value into Reply To header instead
 	 * @param String $emailName - same as above
-	 * @param Array $attachments - optional array of full file paths to attach.
+	 * @param Array $attachments - optional array of full file paths to attach. Key is display name of file 
+	 * 				(which may be the same as the basename of the file path), value is santized file path.
+	 * 				If a string is received, it will be conerted to an array with the key the basename of the path
 	 * @param iCalendarEventManager obj $iCalMgr
 	 */
 	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "", $attachments = array(), $iCalMgr = null)
@@ -92,7 +94,10 @@ class EmailHandler
 
 		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
 
-		if($attachments && !is_array($attachments)) $attachments = array($attachments);
+		if($attachments && !is_array($attachments)) 
+		{
+			$attachments = array_combine(basename($attachments), $attachments);
+		}
 		
 		if($iCalMgr)
 		{
@@ -173,18 +178,20 @@ Content-Transfer-Encoding: 8bit
 	{
 		if(!count($attachments)) return "";
 		
-		foreach($attachments as $attachment)
+		foreach($attachments as $display_name => $attachment)
 		{
 			if(is_file($attachment))
 			{
+				$base_filename = basename($attachment);
+				
 				$fileAttachments .= "----PHP-alt-{$random_hash}\n";
 				$fp =  @fopen($attachment, "rb");
 				$fileContents = @fread($fp, filesize($attachment));
 				@fclose($fp);
 				$fileContents = chunk_split(base64_encode($fileContents));
-				$fileAttachments .= "Content-Type: application/octet-stream; name=\"".basename($attachment)."\"\n" .
-						"Content-Description: ".basename($attachment)."\n" .
-						"Content-Disposition: attachment;\n" . " filename=\"".basename($attachment)."\"; size=".filesize($attachment).";\n" .
+				$fileAttachments .= "Content-Type: application/octet-stream; name=\"". $base_filename ."\"\n" .
+						"Content-Description: ".$base_filename."\n" .
+						"Content-Disposition: attachment;\n" . " filename=\"".$display_name ."\"; size=".filesize($attachment).";\n" .
 						"Content-Transfer-Encoding: base64\n\n" .$fileContents . "\n\n";
 			}
 		}

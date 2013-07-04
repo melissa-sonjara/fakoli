@@ -31,3 +31,22 @@
     font-size: 11px;
     vertical-align: super;
 }
+
+
+#message_send_result
+{
+	margin-top: 10px;
+    border: none;
+    border-radius: 8px 8px 8px 8px;
+    color: #000000;
+    padding: 5px 5px 5px 5px;
+    width: auto;
+    display: inline-block;
+   	background-color: #FFFF99; 
+}
+
+#message_send_result.fail
+{
+	background-color: red;
+}
+

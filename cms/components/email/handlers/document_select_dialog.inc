@@ -39,8 +39,8 @@ $email = new Email();
 $email->filter = new InclusionFilter();
 
 $form = new AutoForm($email, "POST", "/action/email/document_select_dialog", "DocumentSelect_form");
-$form->ajaxSubmit("function(result) {emailAttachmentMgr.documentAttachmentResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->button("Cancel", "emailAttachmentMgr.closeDialog()", null, true);
+$form->ajaxSubmit("function(result) {emailDocAttachmentMgr.documentAttachmentResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->button("Cancel", "emailDocAttachmentMgr.closeDialog()", null, true);
 $form->submitLabel = "Select Document";
 
 $librarySelect = new SelectFieldRenderer($form, "document_library_id", "Library", EmailLibraryAttachmentFieldRenderer::getLibraryOptions());

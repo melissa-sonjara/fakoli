@@ -31,6 +31,10 @@
 
 *****************************************************************/
 
+/**
+ * Contact us form with attachment field
+ */
+
 Fakoli::using("user", "email", "site", "settings");
 Fakoli::usingFeature("auto_form");
 
@@ -41,6 +45,8 @@ $contactUs = new ContactUs();
 $form = new AutoForm($contactUs);
 	
 $form = EmailHelper::buildContactUsForm($form);
+
+$attachment = new EmailAttachmentFieldRenderer($form, "attachment", "Attach Files");
 
 EmailHelper::displaySendResultMessage($msg);
 
@@ -58,6 +64,7 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
+
 
 if(!$msg)
 {
