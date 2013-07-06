@@ -84,7 +84,6 @@ class DataImportManager
 	var $id;
 	var $log;
 	var $objs = array();		///< Contains data read in from the input file
-	var $warnings = array();	
 	var $preview = false;		///< whether we are in preview mode
 	var $matches = array();		///< Field(s) to use to check for a match in db - can be empty
 	var $savedObjs = array();	///< Matches found in the db for data in the import file, indexed by primary key
@@ -92,7 +91,8 @@ class DataImportManager
 	var $filepath = null;		///< optionally set known file path for csv file; otherwise provide form for user to specify
 	var $validateDataFile;		///< optional callback to validate data contents of the file
 	var $buttons = array();		///< The custom buttons collection
-	var $msg = "";
+	var $onSaveComplete = null;	///< Callback event handler that is fired after all the imported rows are saved
+	
 	/**
 	 * 
 	 * @param String $class_name - name of the DataItem
@@ -111,16 +111,16 @@ class DataImportManager
 	 * @param number $position - column order/position in import
 	 * @param string $label - label for the column
 	 * @param array $options - set of valid options for the imported data, if lookup is used
-	 * @param callback or string $template - the formatting template or formatter function for the column
+	 * @param callback $importer - optional custom import function for the column
 	 */
-	function column($field, $position, $label = "", $options = array(), $template = "", $update_empty = true)
+	function column($field, $position, $label = "", $options = array(), $importer = "", $update_empty = true)
 	{
 		if(!$label)
 		{
 			$obj = new $this->class_name;
 			$label =  $obj->prettifyFieldName($field);
 		}
-		$this->columns[] = new DataImportColumn($field, $position, $label, $options, $template, $update_empty);
+		$this->columns[] = new DataImportColumn($field, $position, $label, $options, $importer, $update_empty);
 		
 		return $this;
 	}	
@@ -156,8 +156,8 @@ class DataImportManager
 	}
 	
 	/**
-	 * Use this function to build an array of option key/value
-	 * pairs for lookup.
+	 * When instantiating a DataImportColumn, use this function to build an array of 
+	 * option key/value pairs for lookup.
 	 * 
 	 * @param Array $items - array of DataItem objects in the lookup table
 	 * @param String $nameField - the field in the table that supplies the name
@@ -254,31 +254,6 @@ class DataImportManager
 	function writeLog()
 	{
 		echo $this->log;
-		
-		$name = $this->getClassName();
-		
-		if(count($this->warnings))
-		{
-			foreach($this->warnings as $row_number => $warning)
-			{
-				echo "$name $row_number<br>";
-				echo $warning;
-			}
-		}
-	}
-	
-	/**
-	 * Store warnings such as lookup string not found in this
-	 * array that groups warnings by the object key so we can
-	 * output all warnings for a specific record as a group.
-	 * 
-	 * @param $obj
-	 * @param $text
-	 */
-	function warning($obj, $text)
-	{
-		$row_number = $obj->get("row_number");
-		$this->warnings[$row_number] .= $text . "</br></br>";
 	}
 	
 	/**
@@ -299,7 +274,7 @@ class DataImportManager
 		{
 			$position = $column->position;
 			if($position == 0) continue;
-			$this->setColumnValue($obj, $column, $row[$position-1]);
+			$this->importCell($column, $obj, $row[$position-1]);
 		}
 		
 		// Load additional columns after in case their value depends on rows
@@ -307,7 +282,7 @@ class DataImportManager
 		foreach($this->columns as $column)
 		{
 			if($column->position > 0) continue;
-			$this->setAdditionalValue($obj, $column);	
+			$this->importCell($column, $obj, 0);	
 		}
 				
 		$obj = $this->preProcessRow($obj);
@@ -316,10 +291,9 @@ class DataImportManager
 	}
 	
 	/**
-	 * If implementing classes may wish to check if the imported
-	 * row should be kept or discarded. For example, check if
-	 * the record already exists in the db. To discard, return 
-	 * null.
+	 * If implementing classes may wish to add custom logic
+	 * for handling a row before it is saved or displayed in
+	 * preview.
 	 * 
 	 * @param $obj
 	 */
@@ -340,12 +314,20 @@ class DataImportManager
 		
 		if ($this->onPreProcessRow)
 		{
-			call_user_func($this->onPreProcessRow, $obj);
+			call_user_func($this->onPreProcessRow, $obj, $savedObj);
 		}
 	
 		return $obj;
 	}
 	
+	/**
+	 * Called by the build preview table method.
+	 * If during import, a record was found in the db that matched the
+	 * given object, that match was saved to the savedObjs array.
+	 * 
+	 * @param obj $obj
+	 * @return multitype:|NULL
+	 */
 	function getSavedObj($obj)
 	{
 		$pk = $this->getPrimaryKey();
@@ -472,6 +454,13 @@ class DataImportManager
 			$obj->save();
 			$this->log($this->formatSaveLogText($row_number, $obj, $new));
 		}
+
+		if ($this->onSaveComplete)
+		{
+			if (!call_user_func_array($this->onSaveComplete, array($this))) return false;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -512,6 +501,15 @@ class DataImportManager
 			$text = "<b>Inserted</b> into $name from row number $row_number $pk {$obj->$pk} " . implode(" ", $out);
 		}
 		
+		foreach($this->columns as $column)
+		{
+			$warning = $column->getWarning($obj);
+			if($warning)
+			{
+				$text .= "<span class='warning'>{$warning}</warning>";
+			}
+		}
+		
 		return $text;
 	}
 		
@@ -522,67 +520,17 @@ class DataImportManager
 		return $obj->getPrimaryKey();
 	}
 	
+	/**
+	 * Get the display (prettified) version of the class name
+	 * for the import.
+	 */
 	function getClassName()
 	{
 		$class_name = $this->class_name;
 		$obj = new $class_name;
 		return $obj->prettifyClassName();	
 	}
-	
-	/**
-	 * Given the input value read in, set the value
-	 * into the field of the object.
-	 * 
-	 * If this data column is set using the options
-	 * lookup and the value is not found, save the
-	 * warning to display in the DataListView row.
-	 * 
-	 * @param $obj
-	 * @param $column
-	 * @param $value
-	 */
-	function setColumnValue(&$obj, $column, $value)
-	{
-		if(!$value) return;
-		$field = $column->field;
-			
-		if(!$column->options && !is_callable($column->template))
-		{
-			$obj->$field = $value;
-			return;
-		}
-		else if(!$column->options && is_callable($column->template))
-		{
-			$obj->$field = $value;
-			$obj->$field = $this->format($column, $obj);
-		}
 		
-		$options = $column->options;
-		if(!count($column->options)) return;
-		$label = $column->label;
-		
-		$options = array_flip($column->options);	
-		
-		if(array_key_exists($value, $options))
-		{
-			$outValue = $options[$value];
-		}
-		else
-		{
-			$this->warning($obj, "{$label} $value not found");
-			return;
-		}
-	
-		$obj->$field = $outValue;
-	}
-	
-	function setAdditionalValue($obj, $column)
-	{
-		$field = $column->field;
-		$obj->$field = $this->format($column, $obj);
-	}
-
-	
 	/**
 	 * Describe the expected columns to the user above
 	 * the Browse File form.
@@ -592,7 +540,7 @@ class DataImportManager
 		$table = new DataListView($this->columns, $this->id);
 		$table->column("Column Name", "{field}")
 			->column("Title/Label", "{label}")
-			->column("Options", array($this, formatColumnValueOptions))
+			->column("Options", "{formatOptions()}")
 			->column("Position", "{position}")
 			;
 		
@@ -712,15 +660,13 @@ class DataImportManager
 		$pk = $this->getPrimaryKey();
 		$table = new DataListView($pObjs, $this->id);
 		$table->column("Row", array($this, formatRowIndex));
-		$table->column($pk, "{{$pk}}");
+		$table->column(prettify($pk), "{{$pk}}");
 		
 		foreach($this->columns as $column)
 		{
 			$field = $column->field;
 			$table->column($column->label, "{{$field}}");
 		}
-			
-		$table->column("Warnings", array($this, formatWarnings));
 		
 		$table->onStartRow = array($this, previewRowStyle);		
 		$table->emptyMessage = "No data to be imported.";
@@ -765,7 +711,7 @@ class DataImportManager
 				foreach($this->columns as $column)
 				{
 					$pObj->filter->add($column->field);
-					$pObj->set($column->field, $this->formatPreviewValue($pObj, $column));
+					$pObj->set($column->field, $this->formatPreviewCell($pObj, $column));
 				}
 				
 				$pObjs[] = $pObj;
@@ -775,103 +721,55 @@ class DataImportManager
 		return $pObjs;
 	}
 	
-	function formatPreviewValue($obj, $column)
-	{
-		$field = $column->field;
-		$value = "";
-		$oldValue = $this->getOldValue($obj, $field);
-		
-		if($oldValue)
-		{
-			$obj->fields[$field] = HTML;
-			$value = "<b>";
-		}
-		
-		if($column->options)
-		{
-			if(!$obj->$field) return "";
-			$value .= $column->options[$obj->$field] . " (" . $this->format($column, $obj) . ")";
-		}
-		else
-		{
-			$value .= $this->format($column, $obj);
-		}
-		
-		if($oldValue)
-		{
-			$value .= "</b></br><i>{$oldValue}</i>";
-		}
-		
-		return $value;
-	}
-	
 	/**
-	 * If we found a saved obj in the db that matches the row to be imported,
-	 * and the field's value has changed, return the old value.
+	 * When building the preview table, format the column using the
+	 * supplied DataImportColumn preview template callback.
 	 * 
 	 * @param obj $obj
-	 * @param string $field
-	 * @return string
+	 * @param obj $column
+	 * @return mixed
 	 */
-	function getOldValue($obj, $field)
+	function formatPreviewCell($obj, $column)
 	{
 		$old = $this->getSavedObj($obj);
-		if($old)
+				
+		if(is_callable($column->preview_template))
 		{
-			$filter = $old->getFilter();
-			if($filter && !$filter->isExcluded($field))
-			{
-				$oldValue .= $old->$field;
-			}
+			return call_user_func($column->preview_template, $obj, $old);
 		}
-			
-		return $oldValue;
 	}
 	
-	function format($column, $obj)
+	
+	/**
+	 * Given the input value read in, set the value
+	 * into the field of the object.
+	 *
+	 * If this data column is set using the options
+	 * lookup and the value is not found, save the
+	 * warning to display in the DataListView row.
+	 *
+	 * @param $obj
+	 * @param $column
+	 * @param $value
+	 */	
+	function importCell($column, $obj, $value)
 	{
-		if (is_callable($column->template))
+		if (is_callable($column->importer) && $column->position > 0)
 		{
-			return call_user_func($column->template, $obj);
+			return call_user_func($column->importer, $obj, $value);
 		}
-		else return $obj->format($column->template);
+		else if (is_callable($column->importer) && $column->position == 0)
+		{
+			return call_user_func($column->importer, $obj);
+		}
+		
+		else $column->import($obj, $value);
 	}
 	
 	function formatRowIndex($obj)
 	{
 		return $obj->row_number;
 	}
-		
-	function formatWarnings($obj)
-	{
-		$row_number = $obj->get("row_number");
-		if(array_key_exists($row_number, $this->warnings))
-		{
-			$warning = $this->warnings[$row_number];
-			return "<span style='font-size: 8px'>$warning</span>";
-		}
-	}
-	
-	function formatColumnValueOptions($objColumn)
-	{
-		$options = $objColumn->options;
-		
-		if(count($options) == 0)
-		{
-			return "N/A";
-		}
-		else
-		{
-			foreach($options as $key => $value)
-			{
-				$out[] = $value;
-			}
-			$out = implode("<br>", $out);
-		}
-
-		return "<div class='scrollbox' style='height: 200px; overflow: scroll; border: none'>$out</div>";
-	}
-	
 }
 
 class DataImportColumn extends DataItem
@@ -883,8 +781,11 @@ class DataImportColumn extends DataItem
 		"update_empty"	=>	Boolean,
 	);
 	
-	var $options = array();
-	var $template;
+	var $options = array();		///< optional - from related table or DataItem array whose value must match imported value
+	var $importer;				///< optional callback to handle customized login on import of a column
+	var $template;				///< formatting template for preview display of the data item field
+	var $preview_template;		///< formatting template for preview display of the entire cell
+	var $warnings = array();	///< store warnings indexed by the object row number pseudo field
 		
 	/**
 	 * Creates a data import column definition
@@ -893,10 +794,10 @@ class DataImportColumn extends DataItem
 	 * @param number $position - column order/position in import
 	 * @param string $label - label for the column
 	 * @param array $options - optional set of valid options for the imported data, if lookup is used
-	 * @param callback or string $template - optional the formatting template or formatter function for the column
+	 * @param callback $importer - optional for handling customizezd data import logic for the column
 	 * @param boolean update_empty - whether to save updated values that are empty, overriding existing nonempty values
 	 */
-	function DataImportColumn($field, $position, $label = "", $options, $template, $update_empty = true)
+	function __construct($field, $position, $label = "", $options, $importer, $update_empty = true)
 	{
 		$this->primary_key = "field";
 		$this->table = "import_column";
@@ -904,9 +805,205 @@ class DataImportColumn extends DataItem
 		$this->field = $field;
 		$this->label = $label;
 		$this->position = $position;
-		$this->template = ($template) ? $template : "{{$field}}";
+		$this->importer = $importer;
 		$this->options = $options;
 		$this->update_empty = $update_empty;
+		
+		if($this->options && !$importer)
+		{
+			$this->importer = array($this, importOption);
+		}
+		
+		if($this->options)
+		{
+			$this->preview_template = array($this, formatOptionPreview);	
+		}
+		else
+		{
+			$this->preview_template = array($this, formatPreview);
+		}
+		
+		$this->template = "{{$field}}";
 	}
 
+	/**
+	 * For fields whose value is derived from a provided options array, 
+	 * format the display of the column in the preview table.
+	 * 
+	 * @param obj $obj
+	 * @param obj $old
+	 * @return string
+	 */
+	function formatOptionPreview($obj, $old)
+	{
+		$field = $this->field;
+	
+		$value = $this->startFormatPreview($obj, $old, $field);
+		
+		if(!$value)
+		{
+			$value .= $this->options[$obj->$field] . " (" . $obj->format($this->template) . ")";
+		}
+		
+		$value .= $this->endFormatPreview($old, $field);
+		
+		return $value;	
+	}
+	
+	/**
+	 * If the value has changed, show the new value in bold.
+	 * If we have a warning for this object and this column,
+	 * display it in the preview.
+	 * 
+	 * @param obj $obj
+	 * @param obj $old
+	 * @param string $field
+	 * @return string
+	 */
+	function startFormatPreview($obj, $old, $field)
+	{
+		$warning = $this->getWarning($obj);
+		if($warning)
+		{
+			$obj->fields[$field] = HTML;
+			$value = "<span class='warning'>{$warning}</warning>\n";	
+		}
+	
+		if($this->isChanged($old, $field))
+		{
+			$obj->fields[$field] = HTML;
+			$value .= "<b>";
+		}
+		
+		return $value;
+	}
+	
+	function getWarning($obj)
+	{
+		if(array_key_exists($obj->row_number, $this->warnings))
+		{
+			return 	$this->warnings[$obj->row_number];	
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * If the value has changed, show the old value in the table
+	 * preview.
+	 * 
+	 * @param obj $old
+	 * @param string $field
+	 * @return string
+	 */
+	function endFormatPreview($old, $field)
+	{
+		if($this->isChanged($old, $field))
+		{
+			$value .= "</b></br><i>" . $old->format($this->template) . "</i>";
+		}	
+	
+		return $value;
+	}
+	
+	/**
+	 * Determine if the value has changed. We can discern this using
+	 * the filter b/c for objects for which a match in the db was found,
+	 * we include in the inclusion filter only those fields whose value
+	 * has changed.
+	 * 
+	 * @param obj $old
+	 * @param string $field
+	 * @return boolean
+	 */
+	function isChanged($old, $field)
+	{
+		if(!$old) return false;
+
+		$filter = $old->getFilter();
+		if($filter && !$filter->isExcluded($field))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Default preview table formatter.
+	 * 
+	 * @param obj $obj
+	 * @param obj $old
+	 * @return string
+	 */
+	function formatPreview($obj, $old)
+	{
+		$field = $this->field;
+
+		$value = $this->startFormatPreview($obj, $old, $field);
+	
+		$value .= $obj->format($this->template);
+		
+		$value .= $this->endFormatPreview($old, $field);
+	
+		return $value;
+	}
+	
+	/**
+	 * If no customized callback function for setting the columns value
+	 * on import is provided for a column with options, use this import
+	 * logic.
+	 * 
+	 * @param obj $obj
+	 * @param string $value
+	 */
+	function importOption($obj, $value)
+	{
+		$options = $this->options;
+		if(!count($options)) return;
+		$label = $this->label;
+		
+		$options = array_flip($this->options);
+		
+		if(array_key_exists($value, $options))
+		{
+			$obj->$field = $options[$value];
+		}
+		else
+		{
+			$this->warning[$obj->row_number] = "{$label} $value not found";
+		}
+	}
+	
+	/**
+	 * Called by input table - show the set of options that represent
+	 * valid input for the column.
+	 */
+	function formatOptions()
+	{
+		if(!count($this->options))
+		{
+			return "N/A";
+		}
+
+		foreach($this->options as $key => $value)
+		{
+			$out[] = $value;
+		}
+		$out = implode("<br>", $out);
+		
+		return "<div class='scrollbox' style='height: 200px; overflow: scroll; border: none'>$out</div>";
+	}
+	
+	/**
+	 * Default importer for columns
+	 * 
+	 * @param obj $obj
+	 * @param string $value
+	 */
+	function import($obj, $value)
+	{
+		$field = $this->field;
+		$obj->$field = $value;
+	}
 }
