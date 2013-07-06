@@ -35,13 +35,28 @@
  * Import data from a cvs file.
  * 
  * Instantiating classes must specify the details of
- * the columns in the spreadsheet in function buildColumnList
- * and any additional default values to be set inbto the
- * object in function init.
+ * the columns in the spreadsheet and any additional default 
+ * values to be set into the object in function init.
+ * 
+ * Create an array of columns as instances of DataImportColumn in
+ * 
+ * e.g.,
+ * if the input column will provide a name value and the import
+ * manager will retrieve its key value, then instantiate the
+ * column as follows:
+ * 
+ * $this->column("grade_id", 1, "Grade", $this->formatList($grades, "grade_name"));
+ * 
+ * If the input column provides the value to be stored (e.g., "name") then
+ * instantiate the column as follows:
+ * 
+ * $this->column("name", 2));
  * 
  * The page using the manager should contain the following code:
 
-$mgr = new MyImportManager();
+$mgr = new DataImportManager(class_name);
+$mgr->column("name", 2);
+etc. for each column
 
 if ($method == "POST")
 {
@@ -63,47 +78,82 @@ else
  */
 require_once realpath(dirname(__FILE__))."/data_view.inc";
 
-abstract class AbstractDataImportManager
+class DataImportManager
 {
+	var $class_name;			///< name of data item class to be updated
+	var $id;
 	var $log;
-	var $objs = array();
-	var $table;
-	var $warnings = array();
-	var $columns = array();
-	var $inputTable;
-	var $class_name;
-	var $preview = false;
-
+	var $objs = array();		///< Contains data read in from the input file
+	var $warnings = array();	
+	var $preview = false;		///< whether we are in preview mode
+	var $matches = array();		///< Field(s) to use to check for a match in db - can be empty
+	var $savedObjs = array();	///< Matches found in the db for data in the import file, indexed by primary key
+	var $onPreProcessRow = null;	///< callback for after each row of data is loaded and before it is saved or displayed in preview table
+	var $filepath = null;		///< optionally set known file path for csv file; otherwise provide form for user to specify
+	var $validateDataFile;		///< optional callback to validate data contents of the file
+	var $buttons = array();		///< The custom buttons collection
+	var $msg = "";
 	/**
 	 * 
 	 * @param String $class_name - name of the DataItem
 	 * class being imported
 	 */
-	function AbstractDataImportManager($class_name)
+	function __construct($class_name, $id = "")
 	{	
 		$this->class_name = $class_name;
-		$this->buildColumnList();
-		$this->inputTable = $this->buildInputTable();
+		$this->id = ($id) ? $id : codify(strtolower($this->class_name)) . "_data_import";
 	}
 	
 	/**
-	 * Create an array of columns as instances of DataImportColumn in
-	 * the order the columns appear in the cvs file to be inported.
+	 * Adds a data import column definition
 	 * 
-	 * e.g.,
-	 * if the input column will provide a name value and the import
-	 * manager will retrieve its key value, then instantiate the
-	 * column as follows:
+	 * @param string $field - column name for table imported to
+	 * @param number $position - column order/position in import
+	 * @param string $label - label for the column
+	 * @param array $options - set of valid options for the imported data, if lookup is used
+	 * @param callback or string $template - the formatting template or formatter function for the column
+	 */
+	function column($field, $position, $label = "", $options = array(), $template = "", $update_empty = true)
+	{
+		if(!$label)
+		{
+			$obj = new $this->class_name;
+			$label =  $obj->prettifyFieldName($field);
+		}
+		$this->columns[] = new DataImportColumn($field, $position, $label, $options, $template, $update_empty);
+		
+		return $this;
+	}	
+	
+	/**
+	 * If values are set using logic that does not refer to data in a particular column,
+	 * use additional with a callback function as the template.
 	 * 
-	 * $this->columns[] = new DataImportColumn($obj, "grade_id", 1, "Grade", $this->formatList($grades, "grade_name"));
-	 * 
-	 * If the input column provides the value to be stored (e.g., "name") then
-	 * instantiate the column as follows:
-	 * 
-	 * $this->columns[] = new DataImportColumn($obj, "name", 2));
-	 * 
-	 */	
-	abstract function buildColumnList();
+	 * @param string $field
+	 * @param string $label
+	 * @param string $template
+	 * @param unknown $update_empty
+	 * @return DataImportManager
+	 */
+	function additional($field, $label = "", $template = "", $update_empty)
+	{
+		if(!$label)
+		{
+			$obj = new $this->class_name;
+			$label =  $obj->prettifyFieldName($field);
+		}
+		$this->columns[] = new DataImportColumn($field, 0, $label, null, $template, $update_empty);
+		
+		return $this;
+	}
+	
+	function match()
+	{
+		foreach(func_get_args() as $field)
+		{
+			$this->matches[$field] = true;
+		}
+	}
 	
 	/**
 	 * Use this function to build an array of option key/value
@@ -135,21 +185,30 @@ abstract class AbstractDataImportManager
 	 */
 	function import()
 	{
-		$fp = fopen($_FILES["csv_file"]["tmp_name"], 'r');
-	
-		if (fgetcsv($fp) !== FALSE)
-		{
-			$this->loadData($fp);
-	
-			$this->save();
+		$fp = $this->openFile();		
+		if(!$fp) return;
 		
-			$this->writeLog();
-		}
-		else
+		if($this->loadData($fp))
 		{
-			echo "<div class='error'>Cannot open data file.</div>\n";
+			$this->save();
+			$this->drawButtons();
+			$this->writeLog();	
 		}
 	}
+	
+	/**
+	 * Adds a custom button to the form.
+	 *
+	 * @param string $text the button label text
+	 * @param string $url the URL to handle the button press
+	 * @param string $confirm optional confirmation message
+	 * @param boolean $isScript true if the url is javascript code to execute,
+	 * 		false if it is a URL to redirect to
+	 */
+	function button($text, $url, $confirm = null, $isScript = false)
+	{
+		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm, 'isScript' => $isScript);
+	}	
 	
 	/**
 	 * Load the data from the spreadsheet (cvs file) into the 
@@ -158,12 +217,16 @@ abstract class AbstractDataImportManager
 	function loadData($fp)
 	{
 		// Use for indexing warnings
-		$class_name = $this->class_name;
-		$pk = $this->getPrimaryKey();
 		$row_number = 1;
+		$first = true;
 		
 		while (($row = fgetcsv($fp)) !== FALSE)
 		{
+			if($first && $this->validateDataFile && !call_user_func($this->validateDataFile, $row))
+			{
+				return false;
+			}
+			$first = false;
 			$obj = $this->importOneRow($row, $row_number);
 			if($obj)
 			{
@@ -171,6 +234,8 @@ abstract class AbstractDataImportManager
 				$row_number++;
 			}
 		}	
+		
+		return true;
 	}
 		
 	/**
@@ -230,24 +295,28 @@ abstract class AbstractDataImportManager
 		
 		$this->init($obj, $row_number);
 	
-		$position = 0;
 		foreach($this->columns as $column)
 		{
-			if(!$this->preview)
-			{
-				$this->log("Input for {$column->field}: " . $row[$position]);
-			}
-			$this->setColumnValue($obj, $column, $row[$position]);
-			$position++;
+			$position = $column->position;
+			if($position == 0) continue;
+			$this->setColumnValue($obj, $column, $row[$position-1]);
 		}
-
+		
+		// Load additional columns after in case their value depends on rows
+		// loaded from spreadsheet
+		foreach($this->columns as $column)
+		{
+			if($column->position > 0) continue;
+			$this->setAdditionalValue($obj, $column);	
+		}
+				
 		$obj = $this->preProcessRow($obj);
-	
+		
 		return $obj;
 	}
 	
 	/**
-	 * If implementing classes which to check if the imported
+	 * If implementing classes may wish to check if the imported
 	 * row should be kept or discarded. For example, check if
 	 * the record already exists in the db. To discard, return 
 	 * null.
@@ -256,12 +325,127 @@ abstract class AbstractDataImportManager
 	 */
 	function preProcessRow($obj)
 	{
+		if(count($this->matches))
+		{
+			$savedObj = $this->findMatch($obj);
+			if($savedObj)
+			{			
+				$pk = $this->getPrimaryKey();
+				$this->savedObjs[$savedObj->$pk] = $savedObj;
+				$obj->$pk = $savedObj->$pk;
+				$this->setFilter($obj, $savedObj);
+				if(!$obj->getFilter()) return null;	
+			}
+		}
+		
+		if ($this->onPreProcessRow)
+		{
+			call_user_func($this->onPreProcessRow, $obj);
+		}
+	
 		return $obj;
 	}
+	
+	function getSavedObj($obj)
+	{
+		$pk = $this->getPrimaryKey();
+	
+		if(array_key_exists($obj->$pk, $this->savedObjs))
+		{
+			return $this->savedObjs[$obj->$pk];
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Check the db for a record that matches the values for the
+	 * field(s) given in the matches array.
+	 * 
+	 * @param obj $obj
+	 */
+	function findMatch($obj)
+	{
+		if(!count($this->matches))
+		{
+			return null;
+		}
 
+		foreach($this->matches as $field => $dump)
+		{
+			$constraint[] = $field . "=:$field";
+		}
+		
+		$query = Query::create($this->class_name, "WHERE " . implode(" AND ", $constraint));
+		
+		foreach($this->matches as $field => $dump)
+		{
+			$query->bind(":$field", $obj->$field);
+		}
+		
+		$foundObjs = $query->execute();
+
+		return (count($foundObjs)) ? $foundObjs[0] : null;
+	}
+	
+	/**
+	 * If a match to a saved obj is found, set the filter to include
+	 * only those fields that have changed.
+	 * 
+	 * @param obj $obj
+	 * @param obj $old
+	 * @return obj
+	 */
+	function setFilter($obj, $old)
+	{
+		$fields = $obj->getFields();
+		$changed = false;
+	
+		$obj->filter = new InclusionFilter();
+		$old->filter = new InclusionFilter();
+		foreach($fields as $field => $type)
+		{
+			$column = $this->getColumn($field);
+			if(!$column) continue;
+			$value = $obj->$field;
+			if(($value || $column->update_empty) && $obj->$field != $old->$field)
+			{
+				$changed = true;
+				$obj->filter->add($field);
+				$old->filter->add($field);
+			}
+		}
+	
+		if(!$changed)
+		{
+			$obj->filter = null;
+			$old->filter = null;
+		}
+	}
+	
+	function getColumn($field)
+	{
+		if(!count($this->columns)) return false;
+		
+		if(count($this->columns))
+		{
+			foreach($this->columns as $column)
+			{
+				if($column->field == $field)
+				{
+					return $column;
+				}
+			}
+		}
+			
+		return null;
+	}
+	
 	/*
 	 * Initialize any fields that may not get a value
 	 * in the import.
+	 * 
+	 * e.g. set user_id, date_created, etc.
 	 */
 	function init(&$obj, $row_number)
 	{
@@ -275,14 +459,60 @@ abstract class AbstractDataImportManager
 		{
 			return;
 		}
-		
+
 		foreach($this->objs as $row_number => $obj)
 		{
-			$obj->save();
 			$pk = $this->getPrimaryKey();
-			$name = $this->getClassName();
-			$this->log("Saved $name {$obj->$pk}");
+			$new = false;
+			
+			if(!$obj->$pk)
+			{
+				$new = true;
+			}
+			$obj->save();
+			$this->log($this->formatSaveLogText($row_number, $obj, $new));
 		}
+	}
+	
+	/**
+	 * For each row saved, output text stating the row was updated and
+	 * which fields set. If new row, write inserted.
+	 * 
+	 * @param number $row_number
+	 * @param obj $obj
+	 * @param boolean $new
+	 * @returns string
+	 */
+	function formatSaveLogText($row_number, $obj, $new)
+	{
+		$pk = $this->getPrimaryKey();
+		$name = $this->getClassName();
+		$fields = $obj->getFields();
+		$out = array();
+		
+		if(!$new)
+		{
+			$filter = $obj->getFilter();
+			foreach($fields as $field => $type)
+			{
+				if($filter && !$filter->isExcluded($field))
+				{
+					$out[] = $field . " " . $obj->$field;
+				}
+			}
+			$text = "<b>Updated</b> $name from row number $row_number $pk {$obj->$pk} " . implode(" ", $out);
+		}
+		else
+		{
+			foreach($fields as $field => $type)
+			{
+				$out[] = $field . " " . $obj->$field;
+			}
+				
+			$text = "<b>Inserted</b> into $name from row number $row_number $pk {$obj->$pk} " . implode(" ", $out);
+		}
+		
+		return $text;
 	}
 		
 	function getPrimaryKey()
@@ -316,10 +546,15 @@ abstract class AbstractDataImportManager
 		if(!$value) return;
 		$field = $column->field;
 			
-		if(!$column->options)
+		if(!$column->options && !is_callable($column->template))
 		{
 			$obj->$field = $value;
 			return;
+		}
+		else if(!$column->options && is_callable($column->template))
+		{
+			$obj->$field = $value;
+			$obj->$field = $this->format($column, $obj);
 		}
 		
 		$options = $column->options;
@@ -340,19 +575,26 @@ abstract class AbstractDataImportManager
 	
 		$obj->$field = $outValue;
 	}
+	
+	function setAdditionalValue($obj, $column)
+	{
+		$field = $column->field;
+		$obj->$field = $this->format($column, $obj);
+	}
 
+	
 	/**
 	 * Describe the expected columns to the user above
 	 * the Browse File form.
 	 */
 	function buildInputTable()
 	{
-		$table = new DataListView($this->columns, "ImportColumns");
+		$table = new DataListView($this->columns, $this->id);
 		$table->column("Column Name", "{field}")
-		->column("Title/Label", "{label}")
-		->column("Options", array($this, formatColumnValueOptions))
-		->column("Position", "{position}")
-		;
+			->column("Title/Label", "{label}")
+			->column("Options", array($this, formatColumnValueOptions))
+			->column("Position", "{position}")
+			;
 		
 		$table->sortable = false;
 		$table->paginate = false;
@@ -363,17 +605,17 @@ abstract class AbstractDataImportManager
 	
 	function writeScript()
 	{
-		if($this->inputTable)
-		{
-			$script .= $this->inputTable->writeScript();
-		}
-		
-		return $script;
+		return "";
 	}
 	
+	/**
+	 * Display the expected input column layout and show a File upload
+	 * renderer for the user to select the csv file to be imported.
+	 */
 	function drawForm()
 	{
-		$this->inputTable->drawView();
+		$table = $this->buildInputTable();
+		$table->drawView();
 		
 		echo "</br></br><form method='POST' action='' enctype='multipart/form-data'>
 		<label>CSV file to import: </label><input type='file' name='csv_file'/><br/><br/>
@@ -382,26 +624,80 @@ abstract class AbstractDataImportManager
 		</form>";	
 	}
 	
+	/**
+	 * Load the data into preview objects and display in a table.
+	 */
 	function preview()
 	{
 		$this->preview = true;
 		
-		$fp = fopen($_FILES["csv_file"]["tmp_name"], 'r');
-	
-		if (fgetcsv($fp) !== FALSE)
-		{
-			$this->loadData($fp);
-
-			$table = $this->buildPreviewTable();
+		$fp = $this->openFile();		
+		if(!$fp) return;
 		
+		if($this->loadData($fp))
+		{
+			$table = $this->buildPreviewTable();
+			$this->drawButtons();
 			echo $this->log;
-	
 			$table->drawView();
 		}
-		else
+	}
+	
+
+	/**
+	 * Draws any additional buttons specified in the calling script.
+	 *
+	 */
+	function drawButtons()
+	{
+		$buttons = array();
+		
+		foreach($this->buttons as $button)
 		{
-			echo "<div class='error'>Cannot open data file.</div>\n";
-		}	
+			$url = ($button['isScript']) ? $button['url'] : "go('{$button['url']}');";
+			
+			if ($button['confirm'])
+			{
+				$link = "if (confirm('".jsSafe($button['confirm'])."')) $url; return false;";
+			}
+			else
+			{
+				$link = "$url; return false;";
+			}
+			
+			if(preg_match("/import=1/", $url) && !count($this->objs))
+			{
+				continue;
+			}
+			$buttons[] = "<input type='button' class='{$this->buttonCSS}' onclick=\"$link\" value=\"{$button['text']}\"/>";
+		}
+
+		echo "<div class='button_row'>" . implode("&nbsp;&nbsp;", $buttons) . "</div>";
+	}
+		
+	function openFile()
+	{
+		$filepath = $this->getFilePath();
+		$fp = fopen($filepath, 'r');
+		
+		if (fgetcsv($fp) == FALSE)
+		{
+			echo "<div class='error'>Cannot open data file {$filepath}.</div>\n";
+			return null;
+		}
+		
+		return $fp;
+	}
+	
+	/**
+	 * Implementing classes may wish to retrieve differently
+	 * (e.g., document library)
+	 * 
+	 * @returns String
+	 */
+	function getFilePath()
+	{
+		return (!$this->filepath) ? $_FILES["csv_file"]["tmp_name"] : $this->filepath;
 	}
 	
 	/**
@@ -411,19 +707,23 @@ abstract class AbstractDataImportManager
 	 */
 	function buildPreviewTable()
 	{
-		$table = new DataListView($this->objs, "ImportedData");
+		$pObjs = $this->createPreviewData();
+			
+		$pk = $this->getPrimaryKey();
+		$table = new DataListView($pObjs, $this->id);
 		$table->column("Row", array($this, formatRowIndex));
+		$table->column($pk, "{{$pk}}");
 		
-		$position = 0;
 		foreach($this->columns as $column)
 		{
-			$table->column($column->label, array($this, "formatColumnValue_{$position}"));
-			$position++;			
+			$field = $column->field;
+			$table->column($column->label, "{{$field}}");
 		}
 			
 		$table->column("Warnings", array($this, formatWarnings));
 		
-		$table->emptyMessage = "No data was imported.";
+		$table->onStartRow = array($this, previewRowStyle);		
+		$table->emptyMessage = "No data to be imported.";
 		$table->sortable = false;
 		$table->paginate = false;
 		$table->filter = false;
@@ -431,19 +731,101 @@ abstract class AbstractDataImportManager
 		return $table;
 	}
 	
-	function formatColumnValue($obj, $position)
+	function previewRowStyle($obj)
 	{
-		$column = $this->columns[$position];
+		$pk = $this->getPrimaryKey();
+		if(!$obj->$pk)
+		{
+			return "data_import_row_new";
+		}
+	}
+	
+	/**
+	 * Clone each of the objs that would be saved to the db on import
+	 * and set into a preview object that has the formatted value for
+	 * each field and any warning info or other details for display.
+	 * 
+	 * @return array of objects
+	 */
+	function createPreviewData()
+	{
+		$filter = new InclusionFilter();
+		foreach($this->columns as $column)
+		{
+			$filter->add($column->field);
+		}
+
+		$pObjs = array();
+		if(count($this->objs))
+		{
+			foreach($this->objs as $obj)
+			{
+				$pObj = clone $obj;
+				$pObj->filter = $filter;
+				foreach($this->columns as $column)
+				{
+					$pObj->filter->add($column->field);
+					$pObj->set($column->field, $this->formatPreviewValue($pObj, $column));
+				}
+				
+				$pObjs[] = $pObj;
+			}
+		}
+		
+		return $pObjs;
+	}
+	
+	function formatPreviewValue($obj, $column)
+	{
 		$field = $column->field;
+		$value = "";
+		$oldValue = $this->getOldValue($obj, $field);
+		
+		if($oldValue)
+		{
+			$obj->fields[$field] = HTML;
+			$value = "<b>";
+		}
 		
 		if($column->options)
 		{
 			if(!$obj->$field) return "";
-			return $column->options[$obj->$field] . " (" . $this->format($column, $obj) . ")";		}
+			$value .= $column->options[$obj->$field] . " (" . $this->format($column, $obj) . ")";
+		}
 		else
 		{
-			return $this->format($column, $obj);
+			$value .= $this->format($column, $obj);
 		}
+		
+		if($oldValue)
+		{
+			$value .= "</b></br><i>{$oldValue}</i>";
+		}
+		
+		return $value;
+	}
+	
+	/**
+	 * If we found a saved obj in the db that matches the row to be imported,
+	 * and the field's value has changed, return the old value.
+	 * 
+	 * @param obj $obj
+	 * @param string $field
+	 * @return string
+	 */
+	function getOldValue($obj, $field)
+	{
+		$old = $this->getSavedObj($obj);
+		if($old)
+		{
+			$filter = $old->getFilter();
+			if($filter && !$filter->isExcluded($field))
+			{
+				$oldValue .= $old->$field;
+			}
+		}
+			
+		return $oldValue;
 	}
 	
 	function format($column, $obj)
@@ -459,72 +841,7 @@ abstract class AbstractDataImportManager
 	{
 		return $obj->row_number;
 	}
-	
-	function formatColumnValue_0($obj)
-	{
-		return $this->formatColumnValue($obj, 0);
-	}
-
-	function formatColumnValue_1($obj)
-	{
-		return $this->formatColumnValue($obj, 1);
-	}
-
-	function formatColumnValue_2($obj)
-	{
-		return $this->formatColumnValue($obj, 2);
-	}
-	
-	function formatColumnValue_3($obj)
-	{
-		return $this->formatColumnValue($obj, 3);
-	}
-	
-	function formatColumnValue_4($obj)
-	{
-		return $this->formatColumnValue($obj, 4);
-	}
-	
-	function formatColumnValue_5($obj)
-	{
-		return $this->formatColumnValue($obj, 5);
-	}
-	
-	function formatColumnValue_6($obj)
-	{
-		return $this->formatColumnValue($obj, 6);
-	}
-	
-	function formatColumnValue_7($obj)
-	{
-		return $this->formatColumnValue($obj, 7);
-	}
-	
-	function formatColumnValue_8($obj)
-	{
-		return $this->formatColumnValue($obj, 8);
-	}
-	
-	function formatColumnValue_9($obj)
-	{
-		return $this->formatColumnValue($obj, 9);
-	}
-
-	function formatColumnValue_10($obj)
-	{
-		return $this->formatColumnValue($obj, 10);
-	}
-	
-	function formatColumnValue_11($obj)
-	{
-		return $this->formatColumnValue($obj, 11);
-	}
-
-	function formatColumnValue_12($obj)
-	{
-		return $this->formatColumnValue($obj, 12);
-	}
-	
+		
 	function formatWarnings($obj)
 	{
 		$row_number = $obj->get("row_number");
@@ -563,30 +880,33 @@ class DataImportColumn extends DataItem
 		"field"		=>	String,
 		"label"		=>	String,
 		"position"	=>	Number,
+		"update_empty"	=>	Boolean,
 	);
 	
 	var $options = array();
-	
+	var $template;
+		
 	/**
+	 * Creates a data import column definition
 	 * 
-	 * @param $obj
-	 * @param $field - column name for table imported to
-	 * @param $position - column order/position in import
-	 * @param $label - label for the column
-	 * @param $options - set of valid options for the imported data, if lookup is used
-	 * @param $template - the formatting template or formatter function for the column
+	 * @param string $field - column name for table imported to
+	 * @param number $position - column order/position in import
+	 * @param string $label - label for the column
+	 * @param array $options - optional set of valid options for the imported data, if lookup is used
+	 * @param callback or string $template - optional the formatting template or formatter function for the column
+	 * @param boolean update_empty - whether to save updated values that are empty, overriding existing nonempty values
 	 */
-	function DataImportColumn($obj, $field, $position, $label = "", $options = array(), $template = "")
+	function DataImportColumn($field, $position, $label = "", $options, $template, $update_empty = true)
 	{
 		$this->primary_key = "field";
 		$this->table = "import_column";
-			
+
 		$this->field = $field;
+		$this->label = $label;
 		$this->position = $position;
 		$this->template = ($template) ? $template : "{{$field}}";
-		
-		$this->label = ($label) ? $label : $obj->prettifyFieldName($field);
 		$this->options = $options;
+		$this->update_empty = $update_empty;
 	}
 
 }
