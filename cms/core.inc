@@ -771,6 +771,36 @@ class Fakoli
 		throw new FakoliEarlyExit($message);
 	}
 	
+	/**
+	 * Return a DataItem to the client in JSON format
+	 * @param DataItem $object the object to be returned
+	 */
+	static function JSONreturn($object)
+	{
+		throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
+	}
+	
+	/**
+	 * Return an error code to the client in JSON format, as an object
+	 * with the single property 'error'.
+	 * @param String $error the error message to be converted to an object and returned
+	 */
+	static function JSONerror($error)
+	{
+		$errorObject = (object)array('error' => $error);
+		
+		throw new FakoliEarlyExit(json_encode($errorObject));
+	}
+	 
+	/**
+	 * Customer Error Handler
+	 * @param unknown $errLevel
+	 * @param unknown $errMsg
+	 * @param unknown $errFile
+	 * @param unknown $errLine
+	 * @throws DOMException
+	 * @throws ErrorException
+	 */
 	static function errorHandler($errLevel, $errMsg, $errFile, $errLine)
 	{
 		// Transform XML DOM warning messages into exceptions for easier handling
@@ -784,6 +814,11 @@ class Fakoli
 		throw new ErrorException($errMsg, $errLevel, $errLevel, $errFile, $errLine);
 	}
 
+	/**
+	 * Custom Exception Handler
+	 * @param unknown $exception
+	 * @return void|boolean
+	 */
 	static function exceptionHandler($exception)
 	{
 		try 
