@@ -49,7 +49,16 @@ class NumberTypeRenderer extends AbstractTypeRenderer
 			$value = "0";
 		}
 		
-		if($template != "" && is_numeric($template))
+			if ($template == "numeric")
+		{
+			$text = number_format($value, 2, ".", "");
+		}
+		else if (startsWith($template, "numeric,"))
+		{
+			$places =  substr($template, 8);
+			$text = number_format($value, 2, ".", "");
+		}
+		else if ($template != "" && is_numeric($template))
 		{
 			$text = number_format($value, $template);
 		}
@@ -57,6 +66,7 @@ class NumberTypeRenderer extends AbstractTypeRenderer
 		{
 			$text = $value;
 		}
+
 			
 		return $text; 
 	}
