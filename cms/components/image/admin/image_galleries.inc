@@ -36,10 +36,23 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Images";
 
-$view = new AdminImageGalleriesView();
+$hidden = checkNumeric($_GET["hidden"]);
+
+if (!$hidden)
+{
+	$checked = "";
+}
+else
+{
+	$checked = "checked='checked'";
+}
+
+$view = new AdminImageGalleriesView($hidden);
 
 $script .= $view->writeScript();
-
+?>
+<input type='checkbox' class='checkbox' value='1' name='hidden' <?echo $checked?> onchange='go("?hidden=" + (this.checked ? "1" : "0")); return false'/>&nbsp;Show Hidden Image Galleries<br/><br/>
+<?
 $view->drawView();
 ?>
 <br/>

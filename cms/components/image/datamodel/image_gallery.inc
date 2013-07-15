@@ -40,6 +40,7 @@ class ImageGallery extends DataItem
 						"identifier"	=>	String,
 						"description"	=>	HTML,
 						"keywords"		=>	String,
+						"hidden"		=>	Boolean,
 						"owner_id"		=>	Number,
 						"read_access"	=>	String,
 						"write_access"	=>	String,

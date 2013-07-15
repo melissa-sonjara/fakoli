@@ -166,10 +166,11 @@ class ImageGalleriesView
 {
 	var $table;
 	
-	function ImageGalleriesView()
+	function ImageGalleriesView($showHidden = false)
 	{
+		if (!$showHidden) $constraint = "WHERE hidden=0";
 		
-		$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
+		$galleries = Query::create(ImageGallery, "$constraint ORDER BY gallery_name")->execute();
 		
 		$this->table = $this->buildTable($galleries);
 	}
@@ -216,9 +217,9 @@ class ImageGalleriesView
 
 class AdminImageGalleriesView extends ImageGalleriesView
 {
-	function AdminImageGalleriesView()
+	function AdminImageGalleriesView($showHidden = false)
 	{
-		parent::ImageGalleriesView();	
+		parent::ImageGalleriesView($showHidden);	
 	}
 	
 	function formatTitleLink($gallery)

@@ -49,7 +49,8 @@ Fakoli::using("image", "component");
 class ImageUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added hidden flag to image_gallery"
 	);
 	
 	function ImageUpgradeManager()
