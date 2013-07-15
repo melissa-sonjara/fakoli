@@ -43,6 +43,7 @@ class LinkLibrary extends DataItem
 						"name"				=>	String,
 						"identifier"		=>	String,
 						"description"		=>	HTML,
+						"hidden"			=>	Boolean,
 						"owner_id"			=>	Number,
 						"read_access"		=>	String,
 						"write_access"		=>	String,

@@ -36,12 +36,26 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Links";
 
-$libraries = Query::create(LinkLibrary, "ORDER BY name")->execute();
+$hidden = checkNumeric($_GET["hidden"]);
+
+if (!$hidden)
+{
+	$constraint = "WHERE hidden=0";
+	$checked = "";
+}
+else
+{
+	$checked = "checked='checked'";
+}
+
+$libraries = Query::create(LinkLibrary, "$constraint ORDER BY name")->execute();
 
 $view = new AdminLinkLibraryListView($libraries);
 
 $script .= $view->writeScript();
-
+?>
+<input type='checkbox' class='checkbox' value='1' name='hidden' <?echo $checked?> onchange='go("?hidden=" + (this.checked ? "1" : "0")); return false'/>&nbsp;Show Hidden Link Libraries<br/><br/>
+<?
 $view->drawView();
 ?>
 <br/>

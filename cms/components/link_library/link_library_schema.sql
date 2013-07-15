@@ -44,3 +44,9 @@ CREATE TABLE `link_library`
 ALTER TABLE `link_library` ADD COLUMN `enabled` tinyint(3) not null default 0;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE link_library ADD COLUMN hidden TINYINT(3) NOT NULL DEFAULT 0 AFTER description;
+
+-- END Version 1.3
