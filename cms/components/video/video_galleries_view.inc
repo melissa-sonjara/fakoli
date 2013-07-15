@@ -35,10 +35,11 @@ class VideoGalleriesView
 {
 	var $table;
 	
-	function VideoGalleriesView()
+	function VideoGalleriesView($showHidden = false)
 	{
+		if (!$showHidden) $constraint = "WHERE hidden=0";
 		
-		$galleries = Query::create(VideoGallery, "ORDER BY gallery_name")->execute();
+		$galleries = Query::create(VideoGallery, "$constraint ORDER BY gallery_name")->execute();
 		
 		$this->table = $this->buildTable($galleries);
 	}
@@ -86,9 +87,9 @@ class VideoGalleriesView
 
 class AdminVideoGalleriesView extends VideoGalleriesView
 {
-	function AdminVideoGalleriesView()
+	function AdminVideoGalleriesView($showHidden = false)
 	{
-		parent::VideoGalleriesView();	
+		parent::VideoGalleriesView($showHidden);	
 	}
 	
 	function formatTitleLink($gallery)

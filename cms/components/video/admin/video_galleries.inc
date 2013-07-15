@@ -36,10 +36,23 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Videos";
 
-$view = new VideoGalleriesView();
+$hidden = checkNumeric($_GET["hidden"]);
+
+if (!$hidden)
+{
+	$checked = "";
+}
+else
+{
+	$checked = "checked='checked'";
+}
+
+$view = new VideoGalleriesView($hidden);
 
 $script .= $view->writeScript();
-
+?>
+<input type='checkbox' class='checkbox' value='1' name='hidden' <?echo $checked?> onchange='go("?hidden=" + (this.checked ? "1" : "0")); return false'/>&nbsp;Show Hidden Video Galleries<br/><br/>
+<?
 $view->drawView();
 ?>
 <br/>

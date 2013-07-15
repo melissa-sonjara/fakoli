@@ -121,7 +121,7 @@ class VideoGalleryList
 	{
 		if (count($this->videos) == 0)
 		{
-			echo "<p>No photos have been published on this site.</p>";
+			echo "<p>No videos have been published on this site.</p>";
 			return;
 		}
 		
@@ -132,7 +132,7 @@ class VideoGalleryList
 	{
 		if (count($this->videos) == 0)
 		{
-			echo "<p>No photos have been published on this site.</p>";
+			echo "<p>No videos have been published on this site.</p>";
 			return;
 		}
 		

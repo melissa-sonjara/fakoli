@@ -88,3 +88,9 @@ where ((`vd`.`video_id` = `v`.`video_id`) and
 group by `vd`.`video_id`;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE video_gallery ADD COLUMN hidden TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.3

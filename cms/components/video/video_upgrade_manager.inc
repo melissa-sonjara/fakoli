@@ -52,6 +52,7 @@ class VideoUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Added missing sort_order field to video table",
 			"1.2"		=>	"sql:Add video_download table and views video_download_daily_stats and video_download_total_stats",
+			"1.3"		=>	"sql:Added hidden flasg to video_gallery"
 	);
 	
 	function VideoUpgradeManager()
