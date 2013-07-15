@@ -23,7 +23,7 @@ var DataSyncManager = new Class(
 		nonmatchingCount = this.nonmatching ? this.nonmatching.length : 0;
 		
 		this.statistics = new Element('p');
-		this.statistics.set('html', matchingCount + " Matching Records. " + nonmatchingCount + " New Records.");
+		this.statistics.set('html', matchingCount + " Matching Records. " + nonmatchingCount + " New Records.<br/>");
 		this.statistics.inject(this.container);
 		
 		this.matchingButton = new Element('a', {'class': 'button', 'text': "Select Matching Records"});

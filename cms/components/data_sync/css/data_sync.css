@@ -1,0 +1,29 @@
+
+table.list tr.matching 
+{
+  background-color: #CBE5CB;
+}
+
+table.list tr.new
+{
+	background-color: #ffe;	
+}
+
+#sync_controls
+{
+	border: solid 1px #666;
+	border-radius: 3px;
+	background-color: #ffffe7;
+	white-space: normal;
+	padding: 4px;
+	margin: 20px 0;
+	font-weight: normal;
+	-moz-box-shadow: 1px 1px 5px #888; 
+	box-shadow: 1px 1px 5px #888; 
+}
+
+#sync_controls *
+{
+	display: inline-block;
+	margin: 10px;
+}

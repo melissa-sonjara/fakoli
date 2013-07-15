@@ -14,6 +14,13 @@ class DataSyncManifest
 		return $component;
 	}
 
+	static function getStyles()
+	{
+		return array(
+				"/components/data_sync/css/data_sync.css"
+		);
+	}
+		
 	static function getScripts()
 	{
 		return array(

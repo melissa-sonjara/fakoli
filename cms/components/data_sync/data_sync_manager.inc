@@ -1,25 +1,37 @@
 <?php
+
+
+interface IDataSyncHelper
+{
+	function getAdditionalColumns($columns);
+	function processRecord($record);
+	function extendForm($form);
+}
+
 /**
  *
  * Provides a central management class for event handlers and 
  * common functionality for the data_sync component.
  */
-
-Fakoli::using("client", "project", "biz_dev");
-
-class DataSyncManager
+ class DataSyncManager
 {
+	static $helpers = null;
+	
 	function DataSyncManager()
 	{
-
 	}
 
+	static function registerSyncHelper($class, $helper)
+	{
+		DataSyncManager::$helpers[$class] = $helper;
+	}
+	
 	static function setDefaults()
 	{
 		//TODO: Set default configuration parameters here
 	}
 
-
+	
 	static function getImportTabs()
 	{
 		$tabs = array(
@@ -50,8 +62,10 @@ class DataSyncManager
 	
 	}
 	
-	static function getImportColumns($file = "")
+	function getImportColumns($class, $file = "")
 	{
+		ComponentManager::fireEvent("RegisterSyncHelpers");
+		
 		if (!$file)
 		{
 			$file = $_SESSION["data_import_file"];
@@ -70,10 +84,26 @@ class DataSyncManager
 			if ($field) $columns[] = $field;
 		}
 	
+		if (array_key_exists($class, DataSyncManager::$helpers))
+		{
+			$helper = DataSyncManager::$helpers[$class];
+			$columns = $helper->getAdditionalColumns($columns);
+		}
+		
 		return $columns;
 	}
 
-	static function getFieldMappings($class)
+	function extendForm($form)
+	{
+		$class = get_class($form->data);
+		if (array_key_exists($class, DataSyncManager::$helpers))
+		{
+			$helper = DataSyncManager::$helpers[$class];
+			$helper->extendForm($form);
+		}
+	}
+	
+	function getFieldMappings($class)
 	{
 		DataSyncManager::getSyncTargets();
 		
@@ -88,7 +118,7 @@ class DataSyncManager
 			$obj = new $class();
 			foreach($obj->fields as $field => $type)
 			{
-				if ($field == $obj->getPrimaryKey() || endsWith($field, "_id")) continue;
+				if ($field == $obj->getPrimaryKey()) continue;
 	
 				$mapping = new DataImportFieldMapping();
 				$mapping->class = $class;
@@ -111,6 +141,15 @@ class DataSyncManager
 	static function createImportItems($class, $file = "")
 	{
 		global $user;
+
+		ComponentManager::fireEvent("RegisterSyncHelpers");
+		
+		if (array_key_exists($class, DataSyncManager::$helpers))
+		{
+			$helper = DataSyncManager::$helpers[$class];
+		}
+		
+		trace("HELPER ".print_r($helper, true), 3);
 		
 		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl and matching=1")
 							   ->bind(":cl", $class)
@@ -151,14 +190,20 @@ class DataSyncManager
 	
 		$fields = fgetcsv($fp);
 	
-		$c = 0;
 		foreach($fields as $field)
 		{
-			$columns[$field] = $c++;
+			$columns[] = $field;
 		}
 	
 		while($record = fgetcsv($fp))
 		{
+			$record = array_combine($columns, $record);
+			
+			if ($helper)
+			{
+				$record = $helper->processRecord($record);
+			}
+			
 			$item = new $class();
 			$skip = false;
 			
@@ -178,13 +223,13 @@ class DataSyncManager
 	
 				foreach($cols as $col)
 				{
-					if ($record[$columns[$col]])
+					if ($record[$col])
 					{
-						$vals[] = $record[$columns[$col]];
+						$vals[] = $record[$col];
 					}
 				}
 	
-				$separator = ($contact->fields[$field] == Text) ? "\n" : " ";
+				$separator = ($item->fields[$field] == Text) ? "\n" : " ";
 	
 				$value = trim(implode($separator, $vals));
 				

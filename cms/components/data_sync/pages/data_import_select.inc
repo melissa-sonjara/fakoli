@@ -2,6 +2,8 @@
 Fakoli::using("data_sync");
 Fakoli::usingFeature("spreadsheet_form");
 
+DataSyncManager::getSyncTargets();
+
 $class = $_SESSION["data_import_class"];
 
 $obj = new $class;
@@ -34,6 +36,8 @@ if (is_array($obj->spreadsheetFieldSizes))
 		$form->getRenderer($field)->size = $size;	
 	}
 }
+
+DataSyncManager::extendForm($form);
 
 /*
 $form->getRenderer("telephone")->size = 15;
@@ -79,7 +83,8 @@ $tabs->writeHTML();
 ?>
 <div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
 <div id="sync_controls"></div>
+<div style='margin-top: 10px; width: 100%; overflow-y: auto'>
 <?
 $spreadsheet->drawForm();
 ?>
-</div>
+</div></div>

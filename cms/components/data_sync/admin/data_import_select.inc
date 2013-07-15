@@ -39,6 +39,8 @@ if (is_array($obj->spreadsheetFieldSizes))
 	}
 }
 
+DataSyncManager::extendForm($form);
+
 /*
 $form->getRenderer("telephone")->size = 15;
 $form->getRenderer("alt_phone")->size = 15;
@@ -55,7 +57,6 @@ $spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array(DataS
 $spreadsheet->formCSS = "list spreadsheet small";
 
 $spreadsheet->submitLabel = "Import $name";
-$spreadsheet->buttons_at_top = true;
 
 $tabs = DataSyncManager::getAdminImportTabs();
 
