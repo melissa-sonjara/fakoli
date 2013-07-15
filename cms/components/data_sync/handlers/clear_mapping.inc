@@ -8,4 +8,4 @@ if ($class)
 	$doomed->delete("WHERE class='$class'");
 }
 
-redirect("data_import_field_mapping");
+redirect("/admin/data_import_field_mapping");
