@@ -43,7 +43,9 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 		
 	function renderScript($field)
 	{
-			$script .= <<<ENDSCRIPT
+		if ($this->parent->isReadOnly($field)) return;
+		
+		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 function {$this->parent->id}_{$field}_showList(e)
 {
@@ -127,7 +129,31 @@ ENDSCRIPT;
 	
 	function renderReadOnly($field)
 	{
-		//TODO: Implement this
+		$this->_startField($field);
+		
+		$value = $this->parent->data->get($field);
+		$text = "";
+		if ($value)
+		{
+			$document = new Document($value);
+			$text = $this->formatDocument($document);
+		}
+		else
+		{
+			$text = $this->emptyMessage;
+		}
+		
+		if ($this->parent->readOnlyForm)
+		{
+			echo $text;
+		}
+		else
+		{
+			echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='$field' value='".htmlspecialchars($value, ENT_QUOTES, 'UTF-8')."'/>";
+			echo "<span id='{$this->parent->id}_{$field}_text' class='document_select_text'>".$text."</span>";
+		}
+		
+		$this->_endField($field);
 	}
 }
 	
