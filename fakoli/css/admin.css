@@ -126,7 +126,7 @@ a, a:active
 
 #frame
 {
-	background: url(/fakoli/images/fakoli_cms_banner.jpg) top left no-repeat #fff;
+	background-color: #fff;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-moz-box-shadow: 2px 2px 12px #666;
@@ -144,6 +144,10 @@ a, a:active
 	margin: 0;
 	padding: 0;
     border-bottom: solid 1px #000;
+    position: relative;
+    background: url(/fakoli/images/fakoli_cms_banner.jpg) top left no-repeat #322E69;
+    border-radius: 10px 10px 0 0;
+    
 }
 
 #header a
@@ -156,7 +160,6 @@ a, a:active
 #layout
 {
 	position: relative;
-	width: 960px;
 	margin: 0;
 	padding: 0;
 	background: url(/fakoli/images/divider.png)  192px 0px repeat-y #ffffff;
@@ -1090,4 +1093,14 @@ warning
 h4.expanding_list_group {
   margin: 0;
   padding: 0;
+}
+
+#sproinger
+{
+	position: absolute;
+	top: -2px;
+	right: 0;
+	outline: none;
+	cursor: pointer;
+	margin: 8px 6px;
 }
