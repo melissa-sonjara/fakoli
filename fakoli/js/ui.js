@@ -1227,6 +1227,13 @@ var CrossFader = new Class(
 		this.navigationContainer.position({	relativeTo: this.container, 
 			position: this.options.navigationPosition, 
 			edge: this.options.navigationEdge});
+		
+		window.addEvent('resize', function()
+		{	
+			this.navigationContainer.position({	relativeTo: this.container, 
+				position: this.options.navigationPosition, 
+				edge: this.options.navigationEdge});
+		}.bind(this));
 	},
 	
 	start: function()
