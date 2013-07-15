@@ -34,14 +34,28 @@
 Fakoli::using("document");
 Fakoli::usingFile("framework/data_view.inc");
 
+$hidden = checkNumeric($_GET["hidden"]);
+
+if (!$hidden) 
+{
+	$constraint = "WHERE hidden=0";
+ 	$checked = "";
+}
+else
+{
+	$checked = "checked='checked'";
+}
+
 $menu_item = "Documents";
 
-$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+$libraries = Query::create(DocumentLibrary, "$constraint ORDER BY name")->execute();
 
 $view = new AdminDocumentLibraryListView($libraries);
 
 $script .= $view->writeScript();
-
+?>
+<input type='checkbox' class='checkbox' value='1' name='hidden' <?echo $checked?> onchange='go("?hidden=" + (this.checked ? "1" : "0")); return false'/>&nbsp;Show Hidden Document Libraries<br/><br/>
+<?
 $view->drawView();
 ?>
 <br/>

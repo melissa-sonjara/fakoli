@@ -108,3 +108,9 @@ ALTER TABLE `document` ADD COLUMN `allow_access` VARCHAR(200) NOT NULL DEFAULT '
 ALTER TABLE `document` MODIFY COLUMN `publication_date` DATE NOT NULL DEFAULT '0000-00-00';
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+ALTER TABLE document_library ADD COLUMN hidden TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.6

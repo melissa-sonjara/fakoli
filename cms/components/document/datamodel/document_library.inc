@@ -41,6 +41,7 @@ class DocumentLibrary extends DataItem
 						"name"					=>	String,
 						"identifier"			=>	String,
 						"description"			=>	Text,
+						"hidden"				=>	Boolean,
 						"owner_id"				=>	Number,
 						"allow_access"			=>	String,
 						"manage_folders"		=>	String,
