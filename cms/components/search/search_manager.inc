@@ -232,7 +232,7 @@ class SearchManager
 		
 		if ($id)
 		{
-			$this->facetManager = $id;
+			$this->facetManager->id = $id;
 		}
 		
 		$script .= $this->facetManager->writeScript();
