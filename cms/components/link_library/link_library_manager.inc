@@ -60,7 +60,7 @@ class LinkLibraryManager
 		$form->hide("owner_id", "create_date");
 		$form->required("name", "identifier");
 		$form->allowDelete = true;
-		$form->onDelete = array(LinkLibraryManager, deleteLinkLibary);
+		$form->onDelete = array(LinkLibraryManager, deleteLinkLibrary);
 		
 
 		$readOnlyAccessList = new CheckListFieldRenderer($form, "read_access", "Allow Read Access", SiteRole::getRolesArray());
