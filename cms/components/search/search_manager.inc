@@ -225,10 +225,15 @@ class SearchManager
 		return $item->summary();
 	}
 	
-	function drawFacets()
+	function drawFacets($id = null)
 	{
 		global $script;
 		if ($this->drawnFacets || !$this->facetManager) return;
+		
+		if ($id)
+		{
+			$this->facetManager = $id;
+		}
 		
 		$script .= $this->facetManager->writeScript();
 		echo $this->facetManager->drawForm();
