@@ -71,6 +71,8 @@ class LinkLibraryManager
 	
 	static function deleteLinkLibrary($library)
 	{
+		trace("Deleting Link Library {$library->link_library_id}", 3);
+		
 		$tx = new DataTransaction();
 		
 		try
