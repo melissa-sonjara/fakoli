@@ -61,8 +61,15 @@ if ($method == "POST")
 	
 	if ($form->save())
 	{
-		$tabs->queryString = "link_library_id=".$form->data->link_library_id;
-		$tabs->next();
+		if ($form->deleted)
+		{
+			redirect("link_libraries");
+		}
+		else
+		{
+			$tabs->queryString = "link_library_id=".$form->data->link_library_id;
+			$tabs->next();
+		}
 	}
 }
 
