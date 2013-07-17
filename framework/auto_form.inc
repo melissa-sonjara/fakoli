@@ -1149,11 +1149,12 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 		if ($_POST["{$this->id}_delete"])
 		{
 			if(!$this->onDelete)
-			$obj->delete(); // no callback function defined
+			{
+				$obj->delete(); // no callback function defined
+			}
 			else
 			{
-				$deleteHandler = $this->onDelete;
-				$deleteHandler($obj); // callback function
+				call_user_func_array($this->onDelete, array($obj));	
 			}
 			$this->deleted = true;
 			return true;
