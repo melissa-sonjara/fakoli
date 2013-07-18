@@ -39,7 +39,7 @@ $tx = new DataTransaction();
 
 try
 {
-	foreach($_GET["_id"] as $id => $sort_order)
+	foreach($_GET["forum_id"] as $id => $sort_order)
 	{
 		checkNumeric($id);
 		checkNumeric($sort_order);
@@ -47,7 +47,7 @@ try
 		$forum = new Forum();
 		$forum->joinTransaction($tx);
 		
-		$forum->filter = new InclusionFilter("_id", "sort_order");
+		$forum->filter = new InclusionFilter("forum_id", "sort_order");
 		
 		$forum->load($id);
 		$forum->sort_order = $sort_order;
