@@ -53,7 +53,7 @@ $view->drawView();
 if($user)
 {
 	?>	
-	<button style="float: left; margin-left: 425px" class="button" onclick="go('forum_message_form?forum_id=<?echo $topic->forum_id?>&topic_id=<? echo $topic->topic_id ?>&parent_id=<?echo $topic->message_id?>')"> Reply to this topic </button>
+	<button style="float: right" class="button" onclick="go('forum_message_form?forum_id=<?echo $topic->forum_id?>&topic_id=<? echo $topic->topic_id ?>&parent_id=<?echo $topic->message_id?>')"> Reply to this topic </button>
 	<?php 
 }
 	?>
