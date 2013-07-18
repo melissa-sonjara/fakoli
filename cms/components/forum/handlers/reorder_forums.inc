@@ -31,34 +31,34 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Forum
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("forum");
 
-Fakoli::using("forum", "component");
+Fakoli::assertRole("admin");
 
-class ForumUpgradeManager extends UpgradeManager
+$tx = new DataTransaction();
+
+try
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added identifier to forum table",
-			"1.2"		=>	"sql:Added sort_order to forum table"
-	);
-	
-	function ForumUpgradeManager()
+	foreach($_GET["_id"] as $id => $sort_order)
 	{
-		$this->component_name = "forum";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		checkNumeric($id);
+		checkNumeric($sort_order);
+		
+		$forum = new Forum();
+		$forum->joinTransaction($tx);
+		
+		$forum->filter = new InclusionFilter("_id", "sort_order");
+		
+		$forum->load($id);
+		$forum->sort_order = $sort_order;
+		$forum->save();
 	}
+		
+	$tx->commit();
+	Fakoli::end("OK");
 }
+catch(Exception $e)
+{
+	$tx->rollback();
+}	
+?>

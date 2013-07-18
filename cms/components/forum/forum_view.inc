@@ -40,8 +40,9 @@ class ForumListView
 	var $table;
 	var $forumLink;
 	var $messageLink;
+	var $reorder;
 	
-	function ForumListView($fora, $forumLink, $messageLink, $id = "forum_list")
+	function ForumListView($fora, $forumLink, $messageLink, $id = "forum_list", $reorder = false)
 	{
 		$this->fora = $fora;
 		$this->id = $id;
@@ -51,14 +52,22 @@ class ForumListView
 		
 		$this->table = new DataListView($fora, $id);
 		
-		$this->table->pageSize = 20;
-		$this->table->filter = true;
 		
 		$this->table->column("Title", array($this, formatTitle), true, "width: 40%")
 			 		->column("Last Post", array($this, formatLastPost), true, "width: 40%")
 			 		->column("Topics", "{topics}", true, "width: 10%;text-align: center")
 			 		->column("Posts", "{posts}", true, "width: 10%;text-align: center");
 			 		
+		if (checkRole("admin") && $reorder)
+		{
+			$this->table->enableDragReorder("/action/forum/reorder_forums");
+		}
+		else
+		{
+			$this->table->pageSize = 20;
+			$this->table->filter = true;
+		}
+		
 		$this->table->emptyMessage = "No fora have been created";
 	}
 	

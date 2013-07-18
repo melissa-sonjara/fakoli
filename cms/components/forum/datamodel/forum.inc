@@ -322,7 +322,7 @@ class ForumSummary extends DataItem
 	
 	function LastPost()
 	{
-		$messages = $this->getRelatedList(ForumMessage, "", "ORDER BY date_posted DESC LIMIT 1");
+		$messages = $this->getRelatedList(ForumMessage, "", "WHERE deleted!=1 ORDER BY date_posted DESC LIMIT 1");
 		return (count($messages) > 0) ? $messages[0] : null;
 	}
 	

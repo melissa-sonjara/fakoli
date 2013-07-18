@@ -78,3 +78,9 @@ CREATE VIEW `forum_summary` AS select `f`.`forum_id` AS `forum_id`,`f`.`title` A
 ALTER TABLE `forum` ADD COLUMN `identifier` VARCHAR(255) NOT NULL DEFAULT '' AFTER `forum_id`;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE forum ADD COLUMN sort_order INT(10) NOT NULL DEFAULT 0;
+
+-- END Version 1.2
