@@ -75,7 +75,7 @@ class Taxonomy extends DataItem
 	
 	function getAssociatedTerms($item)
 	{
-		return Query::create(Term, "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:t and class=:c and id=:i")
+		return Query::create(TaxonomyTerm, "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:t and class=:c and id=:i)")
 					 ->bind(":t", $this->taxonomy_id,
 					 		":c", get_class($item),
 					 		":i", $item->get($item->getPrimaryKey()))
