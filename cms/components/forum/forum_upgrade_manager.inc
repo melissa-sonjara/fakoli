@@ -51,7 +51,8 @@ class ForumUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Added identifier to forum table",
-			"1.2"		=>	"sql:Added sort_order to forum table"
+			"1.2"		=>	"sql:Added sort_order to forum table",
+			"1.3"		=>	"sql:Added sort_order to forum_summary view"
 	);
 	
 	function ForumUpgradeManager()
