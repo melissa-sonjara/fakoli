@@ -145,7 +145,7 @@ class ForumDetailsView
 		$user = $message->Author();
 		$userProfile = ForumManager::formatUserProfile($user);
 		
-		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$userProfile.")</span>";
+		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><br/><span class='small'>(Created by ".$userProfile.")</span>";
 	}
 	
 	function formatLastPost($topic)
