@@ -65,7 +65,7 @@ class ForumTopicView
 			{
 				$author = $message->Author();
 
-				$userProfile = ForumManager::formatUserProfile($user);
+				$userProfile = ForumManager::formatUserProfile($author);
 				$class = $alt ? "message alt" : "message"
 ?>
 	<a name="message<?echo $message->message_id?>"></a>
