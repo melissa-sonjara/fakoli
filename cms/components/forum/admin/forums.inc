@@ -38,7 +38,7 @@ $title = "Forums";
 
 $menu_item = "Forums";
 
-$fora = query(ForumSummary, "ORDER BY title");
+$fora = query(ForumSummary, "ORDER BY sort_order, title");
 
 $table = new DataListView($fora, "fora");
 $table->column("Forum", "<a href='forum_form?forum_id={forum_id}'>{title}</a>{teaser}", true)
