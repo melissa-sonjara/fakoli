@@ -79,6 +79,13 @@ class ForumManager
 		return $items;
 	}
 
+	static function setDefaults()
+	{
+		Settings::setDefaultValue("forum", "forum_list_items_per_page", 0, Number, "Number of items per page on the forum list (0 for no pagination)");
+		Settings::setDefaultValue("forum", "forum_topics_per_page", 0, Number, "Number of topics per page on the forum list (0 for no pagination)");
+	}
+	
+	
 	/**
 	 * Respond to fired event DeleteUser
 	 *

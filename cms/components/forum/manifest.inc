@@ -68,6 +68,7 @@ class ForumManifest
 	static function subscribeToEvents()
 	{
 		return array(
+			"ComponentScanComplete" 	=>  array(ForumManager, setDefaults),
 			"ResolveIdentifier" 		=> 	array(ForumManager, displayForum),
 			"EnumerateItems"			=> 	array(ForumManager, enumerateFora),
 			"upgradeComponent"			=>	array(ForumManager, upgradeComponent),

@@ -64,7 +64,7 @@ class ForumListView
 		}
 		else
 		{
-			$this->table->pageSize = 20;
+			$this->table->pageSize = Settings::getValue("forum", "forum_list_items_per_page");
 			$this->table->filter = true;
 		}
 		
@@ -130,7 +130,7 @@ class ForumDetailsView
 					->column("Replies", "{countReplies()}", true, "width: 10%; text-align: center");
 		$this->table->emptyMessage = "No topics have been started in this discussion forum";
 		$this->table->filter = true;
-		$this->table->pageSize = 20;
+		$this->table->pageSize = Settings::getValue("forum", "forum_topics_per_page");
 		
 		$this->subscriptionView = new ForumSubscriptionView($this->forum, $this->topics);
 		
