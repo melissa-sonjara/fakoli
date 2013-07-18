@@ -151,7 +151,7 @@ class ForumDetailsView
 		if (!$lastPost) return "<em>No posts</em>";
 		$user = $lastPost->Author();
 		
-		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a>".
+		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a><br/>".
 			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
 	}
 	
