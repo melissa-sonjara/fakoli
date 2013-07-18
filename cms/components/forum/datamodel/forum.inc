@@ -45,7 +45,8 @@ class Forum extends DataItem
 						"created_date"	=>	Date,
 						"last_modified"	=>	Timestamp,
 						"owner_id"		=>	Number,
-						"published"		=>	Boolean);
+						"published"		=>	Boolean,
+						"sort_order"	=>	Number);
 	
 	// Relations
 	
@@ -309,7 +310,8 @@ class ForumSummary extends DataItem
 						"teaser"		=>	String,
 						"topics"		=>	Number,
 						"posts"			=>	Number,
-						"published"		=>	Boolean);
+						"published"		=>	Boolean,
+						"sort_order"	=>	Number);
 	
 	// Relations
 	var $relations = array("Forum"		=>	Forum,
