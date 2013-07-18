@@ -64,7 +64,8 @@ class ForumTopicView
 			foreach($this->messages as $message)
 			{
 				$author = $message->Author();
-				
+
+				$userProfile = ForumManager::formatUserProfile($user);
 				$class = $alt ? "message alt" : "message"
 ?>
 	<a name="message<?echo $message->message_id?>"></a>
@@ -79,7 +80,7 @@ class ForumTopicView
 				}
 ?>
 	  <strong><?echo $message->title?></strong><br/>
-	  <span class="small">Posted by <?echo $author->getFullName()?> at <?echo $message->date_posted?></span>
+	  <span class="small">Posted by <?echo $userProfile?> at <?echo $message->date_posted?></span>
 	 </div>
 	 <div class="message_content">
 	  <?echo $message->message?>
