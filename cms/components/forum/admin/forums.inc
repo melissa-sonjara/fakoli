@@ -41,11 +41,12 @@ $menu_item = "Forums";
 $fora = query(ForumSummary, "ORDER BY sort_order, title");
 
 $table = new DataListView($fora, "fora");
-$table->column("Forum", "<a href='forum_form?forum_id={forum_id}'>{title}</a>{teaser}", true)
-	  ->column("Topics", "{topics}", true)
-	  ->column("Posts", "{posts}", true);
+$table->column("Forum", "<a href='forum_form?forum_id={forum_id}'>{title}</a>{teaser}")
+	  ->column("Topics", "{topics}")
+	  ->column("Posts", "{posts}");
 	 
 $table->enableDragReorder("/action/forum/reorder_forums");
+$table->dragText = "<span style='font-size: 10px'>Click and drag to reorder forums</span>";
 $table->writeScript();
 
 $table->drawView();
