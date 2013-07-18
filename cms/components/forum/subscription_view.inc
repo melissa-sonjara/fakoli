@@ -82,6 +82,7 @@ class ForumSubscriptionView
 	 */
 	function writeScript()
 	{
+		global $dialogs;
 		global $user;
 		if(!$user) return;
 		ob_start();
@@ -102,7 +103,7 @@ class ForumSubscriptionView
 </div>
 <?php 
 
-		$script .= ob_get_contents();
+		$dialogs .= ob_get_contents();
 		ob_end_clean();
 		
 		ob_start();

@@ -86,9 +86,10 @@ class ForumListView
 		$lastPost = $item->LastPost();
 		if (!$lastPost) return "<em>No posts</em>";
 		$user = $lastPost->Author();
+		$userProfile = ForumManager::formatUserProfile($user);
 		
 		return "<a href='{$this->messageLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a><br/>".
-			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
+			   "<span class='small'>by ".$userProfile." ({$lastPost->date_posted})</span>";
 		
 	}
 	
@@ -142,7 +143,9 @@ class ForumDetailsView
 	
 		$message = $this->messages[$topic->topic_id];
 		$user = $message->Author();
-		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$user->getFullName().")</span>";
+		$userProfile = ForumManager::formatUserProfile($user);
+		
+		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><span class='small'>(Created by ".$userProfile.")</span>";
 	}
 	
 	function formatLastPost($topic)
@@ -151,8 +154,10 @@ class ForumDetailsView
 		if (!$lastPost) return "<em>No posts</em>";
 		$user = $lastPost->Author();
 		
+		$userProfile = ForumManager::formatUserProfile($user);
+		
 		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a><br/>".
-			   "<span class='small'>by ".$user->getFullName()." ({$lastPost->date_posted})</span>";
+			   "<span class='small'>by ".$userProfile." ({$lastPost->date_posted})</span>";
 	}
 	
 	function writeScript()

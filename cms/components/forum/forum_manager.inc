@@ -39,6 +39,33 @@ class ForumManager
 		
 	}
 	
+	static $userProfileHandler = null;
+	
+	static function initializeUserProfileHandler()
+	{
+		if (!ForumManager::$userProfileHandler)
+		{
+			ForumManager::$userProfileHandler = array(ForumManager, defaultUserProfileHandler);
+			ComponentManager::fireEvent("RegisterForumUserProfileHandler");
+		}
+	}
+	
+	static function registerUserProfileHandler($handler)
+	{
+		ForumManager::$userProfileHandler = $handler;
+	}
+	
+	static function formatUserProfile($u)
+	{
+		ForumManager::initializeUserProfileHandler();
+		return call_user_func_array(ForumManager::$userProfileHandler, array($u));
+	}
+		
+	static function defaultUserProfileHandler($user)
+	{
+		return $user->getFullName();
+	}
+	
 	static function displayForum($identifier, &$continue)
 	{
 		global $page_role;
