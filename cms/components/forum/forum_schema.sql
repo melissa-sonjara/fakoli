@@ -84,3 +84,9 @@ ALTER TABLE `forum` ADD COLUMN `identifier` VARCHAR(255) NOT NULL DEFAULT '' AFT
 ALTER TABLE forum ADD COLUMN sort_order INT(10) NOT NULL DEFAULT 0;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+CREATE OR REPLACE VIEW `forum_summary` AS select `f`.`forum_id` AS `forum_id`,`f`.`title` AS `title`,`f`.`teaser` AS `teaser`,`f`.`published` AS `published`, f.sort_order as sort_order, (select count(1) AS `count(1)` from `forum_topic` where (`forum_topic`.`forum_id` = `f`.`forum_id`)) AS `topics`,(select count(1) AS `count(1)` from `forum_message` where ((`forum_message`.`forum_id` = `f`.`forum_id`) and (`forum_message`.`deleted` = 0))) AS `posts` from `forum` `f`;
+
+-- END Version 1.3
