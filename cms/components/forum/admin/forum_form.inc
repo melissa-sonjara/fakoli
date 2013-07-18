@@ -51,7 +51,7 @@ else
 
 
 $form = new AutoForm($forum);
-$form->hide("created_date", "owner_id");
+$form->hide("created_date", "owner_id", "sort_order");
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
