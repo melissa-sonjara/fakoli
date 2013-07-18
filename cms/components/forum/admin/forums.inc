@@ -47,7 +47,7 @@ $table->column("Forum", "<a href='forum_form?forum_id={forum_id}'>{title}</a>{te
 	 
 $table->enableDragReorder("/action/forum/reorder_forums");
 $table->dragText = "<span style='font-size: 10px'>Click and drag to reorder forums</span>";
-$table->writeScript();
+$script .= $table->writeScript();
 
 $table->drawView();
 
