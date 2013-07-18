@@ -140,7 +140,6 @@ class StringFieldRenderer extends FieldRenderer
 		}	
 	}
 	
-	
 	function renderReadOnly($field)
 	{
 		$this->_startField($field);
@@ -170,10 +169,9 @@ class StringFieldRenderer extends FieldRenderer
 		else
 		{
 			$value =  htmlspecialchars($this->parent->params->get($field, $mode), ENT_QUOTES, 'UTF-8');
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td><input type='text' id='$field' name='$field:$mode' value='{$value}' size='50'></td>\n";		
-			echo "</tr>\n";
+			$this->_startField($field);
+			echo "<input type='text' id='$field' name='$field:$mode' value='{$value}' size='{$this->size}' >\n";		
+			$this->_endField($field);
 		}		
 	}
 	

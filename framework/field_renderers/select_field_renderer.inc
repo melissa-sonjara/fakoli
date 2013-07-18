@@ -253,37 +253,46 @@ class SelectFieldRenderer extends FieldRenderer
 		if ($mode != "equal") $mode = "equal";
 		
 		$searchValue = (!$value) ? $this->parent->params->get($field, $mode) : $value;
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td><select id='$field' name='$field:$mode'><option value=''></option>\n";
+		
+		$this->_startField($field);
+
+		if($this->width)
+		{
+			$style = "style='width: {$this->width}'";
+		}
+		
+		echo "<select $style id='$field' name='$field:$mode'><option value=''></option>\n";
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($searchValue === $value) ? " selected" : "";
 			
 			echo "<option value='".htmlSafe($value)."'$selected>$name</option>";
 		}
-		echo "</select></td></tr>\n";
+		echo "</select>\n";
 		
-		echo "</select>";
+		$this->_endField($field);
 	}
 	
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-		if (array_key_exists($this->parent->data->get($field), $this->options))
+		$this->_startField($field);
+
+		$value = $this->parent->data->get($field);
+		if (array_key_exists($value, $this->options))
 		{
-			echo $this->options[$this->parent->data->get($field)];
+			echo $this->options[$value];
+		}
+		elseif($value)
+		{
+			echo $value;
 		}
 		else
 		{
 			echo "Not specified";
 		}
-		echo "</td></tr>\n";
+		
+		$this->_endField($field);
 	}
 	
 	function preProcess($field)
