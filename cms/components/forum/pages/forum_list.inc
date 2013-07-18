@@ -33,7 +33,7 @@
 
 Fakoli::using("forum");
 
-$constraint = checkRole("admin") || checkRole("moderator") ? "ORDER BY title" : "WHERE published=1 ORDER BY title";
+$constraint = checkRole("admin") || checkRole("moderator") ? "ORDER BY sort_order, title" : "WHERE published=1 ORDER BY sort_order, title";
 
 $forumSummaries = $site->ForumSummaries($constraint);
 
