@@ -51,7 +51,7 @@ class TaxonomyTerm extends DataItem
 	
 	function getAssociatedItems($class, $constraint = "")
 	{
-		$constraint = preg_replace("/^WHERE/i", "AND", $constraint);
+		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
 		$obj = new $class;
 		$pk = $obj->getPrimaryKey();
 		
