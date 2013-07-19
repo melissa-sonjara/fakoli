@@ -94,6 +94,11 @@ class EmailHelper
 		$mgr->attachments = $contactUs->get("attachment");
 		$rtn = $mgr->sendEmail();
 		
+		if(!$rtn)
+		{
+			$form->msg = "Email send failed.";
+		}
+		
 		return $rtn;		
 	}
 }

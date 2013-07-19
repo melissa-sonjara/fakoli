@@ -83,6 +83,42 @@ var EmailManager =  (function()
 			this.dialog.hide();
 		},
 		
+		contactUsResult: function(response)
+		{
+			if (response == "OK")
+			{
+				this.closeDialog();
+				notification("Your message has been sent");
+			}
+			else
+			{
+				var err = $('ContactOrganizer_form__error');
+				err.set('html', response);
+				err.setStyle('display', 'table-cell');
+			}
+		},	
+		
+		showContactUsDialog: function()
+		{
+			this.dialog = modalPopup('Contact Us', '/action/email/contact_us_dialog', '600px', 'auto', true);		
+		},
+		
+	
+		contactUsResult: function(response)
+		{
+			if (response == "OK")
+			{
+				this.closeDialog();
+				notification("Your message has been sent");
+			}
+			else
+			{
+				var err = $('ContactUs_form__error');
+				err.set('html', response);
+				err.setStyle('display', 'table-cell');
+			}
+		},	
+	
 		mailto: function(to, subject, message)
 		{
 			if(!to)
@@ -92,8 +128,16 @@ var EmailManager =  (function()
 			if(!message)
 				message = "";
 			this.dialog = modalPopup('Send an Email', '/action/email/mail_to?to=' + to + "&subject=" + subject + "&message=" + message, '520px', 'auto', true);
+		},
+		
+		closeDialog: function()
+		{
+			if(this.popup)
+				this.popup.hide();
+			else if(this.dialog)
+				this.dialog.hide();
 		}
-		  
+	
 		});
 
 	var instance;

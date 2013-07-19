@@ -34,33 +34,26 @@
 Fakoli::using("user", "email", "site", "settings");
 Fakoli::usingFeature("auto_form");
 
-$msg = checkNumeric($_GET["msg"]);
-$identifier = $_REQUEST["identifier"];
-
 $contactUs = new ContactUs();
-$form = new AutoForm($contactUs);
+$form = new AutoForm($contactUs, "POST", "/action/email/contact_us_dialog", "ContactUs_form");
 	
 $form = EmailHelper::buildContactUsForm($form);
-
-EmailHelper::displaySendResultMessage($msg);
+$form->ajaxSubmit("function(result) {new EmailManager().contactUsResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->button("Cancel", "new EmailManager().closeDialog()", null, true);
 
 if ($method == "POST") 
 {
-	// save success means message sent successfully
 	if($form->save())
 	{
-		redirect("{$identifier}?msg=1");
+		Fakoli::end("OK");
 	}
 	else
 	{
-		redirect("$identifier?msg=2");
+		Fakoli::end($form->msg);
 	}
 }
 
-$script .= $form->writeScript();
+echo $form->writeScript();
 
-if(!$msg)
-{
-	$form->drawForm();
-}
+$form->drawForm();
 ?>

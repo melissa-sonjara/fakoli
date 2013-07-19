@@ -54,7 +54,7 @@ if ($method == "POST")
 {
 	if($form->save())
 	{
-		$msg = ($rtn==true) ? 1 : 2;
+		// save success means message sent successfully
 		redirect("{$identifier}?msg=1");
 	}
 	else
