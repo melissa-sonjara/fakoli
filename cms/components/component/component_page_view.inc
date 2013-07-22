@@ -102,15 +102,16 @@ class ComponentPageView
 		
 		// Populate template fields from the Page object.
 		
+		$this->page->page_title = $this->page->getTitle();
+		
 		foreach($this->page->fields as $field => $type)
 		{
-			$template = str_replace("{".$field."}", $this->page->$field, $template);
+			$template = str_replace("{".$field."}", $this->page->get($field), $template);
 		}		
 		
 		$template = str_replace("{description}", $output, $template);
-		if (!$title) $title = $page->page_title;
-		if (!$title) $title = prettify($this->page->identifier);
-		$template = str_replace("{page_title}", $title, $template);
+		//if (!$title) $title = $this->page->getTitle();
+		//$template = str_replace("{page_title}", $title, $template);
 		$template = str_replace("{meta_tag_description}", $site->meta_tag_description, $template);
 		$template = str_replace("{meta_tag_keyword}", $site->meta_tag_keyword, $template);
 		

@@ -109,6 +109,25 @@ class ComponentPage extends DataItem
 		return $modules;
 	}
 	
+	function getTitle()
+	{
+		trace("TITLE: $this->page_title", 3);
+		global $section;
+
+		$title = $this->page_title;
+		
+		if ($section)
+		{
+			$content = $section->getContent($this->identifier);
+			if ($content && $content->override_page_title) $title = $content->override_page_title;
+		}
+		
+		if (!$title) $title = prettify($this->page->identifier);
+		
+		trace("TITLE: $title", 3);
+		return $title;
+	}
+	
 	/**
 	 * Loads the template associated with this page.
 	 * @return string the contents of the template for this page.
