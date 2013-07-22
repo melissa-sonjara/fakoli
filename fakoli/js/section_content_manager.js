@@ -46,7 +46,15 @@ var SectionContentManager = new Class(
 
 		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=ssl&" + this.getQueryParams(), '450px', 'auto', true);		
 	},
+	
+	setPageTitle: function()
+	{
+		this.getValues();
+		if (this.values.length == 0) return;
 
+		this.popup = modalPopup("Content Properties", "/action/section/content_properties?scope=override_page_title&" + this.getQueryParams(), '450px', 'auto', true);		
+	},
+	
 	cancel: function()
 	{
 		this.popup.hide();
