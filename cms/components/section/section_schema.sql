@@ -61,3 +61,9 @@ ALTER TABLE `section_content` ADD COLUMN `permissions` varchar(200) NOT NULL DEF
 ALTER TABLE `section` ADD COLUMN `default_permissions` varchar(200) NOT NULL DEFAULT '' AFTER `default_role`;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE section_content ADD COLUMN override_page_title varchar(500) NULL;
+
+-- END Version 1.3

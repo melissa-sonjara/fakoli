@@ -233,6 +233,7 @@ class SectionContent extends DataItem
 						"role"					=>	String,
 						"permissions"			=>	String,
 						"template"				=>	String,
+						"override_page_title"	=>  String,
 						"use_SSL"				=>	Boolean);
 	
 	var $relations = array(

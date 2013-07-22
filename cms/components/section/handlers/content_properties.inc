@@ -33,6 +33,11 @@ if ($scope == "ssl" || $scope == "all")
 	$filter->add("use_SSL");
 }
 
+if ($scope == "override_page_title" || $scope == "all")
+{
+	$filter->add("override_page_title");
+}
+
 $sectionContent->filter = $filter;
 
 // Default dialog to properties for first selected item
