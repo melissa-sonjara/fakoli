@@ -43,7 +43,7 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 		
 	function formatDocumentLink($document)
 	{
-		$library = $$document->DocumentLibrary();
+		$library = $document->DocumentLibrary();
 		$size = $library->getFileSize($this->item);
 		$img = DocumentHandler::getDocIcon($document->file);
 	
