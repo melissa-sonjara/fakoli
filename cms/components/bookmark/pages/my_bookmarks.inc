@@ -6,18 +6,24 @@ $bookmarks = GroupedQuery::create(Bookmark, "WHERE user_id=:u ORDER BY category,
 						 ->bind(":u", $user->get($user->getPrimaryKey()))
 						 ->execute();
 
-foreach($bookmarks as $category => $links)
+if (count($bookmarks) > 0)
 {
-	if (!$category) $category = "Unclassified";
-
-	echo "<h3>$category</h3>";
-	echo "<ul>";
-
-	foreach($links as $link)
+	foreach($bookmarks as $category => $links)
 	{
-		echo $link->format("<li><a href='{url}'>{title}</a>&nbsp;<img src='/fakoli/images/icon_edit.png' alt='Edit' style='cursor: pointer' onclick='BookmarkManager.editBookmark({bookmark_id}); return false'/>");
+		if (!$category) $category = "Unclassified";
+	
+		echo "<h3>$category</h3>";
+		echo "<ul>";
+	
+		foreach($links as $link)
+		{
+			echo $link->format("<li><a href='{url}'>{title}</a>&nbsp;<img src='/fakoli/images/icon_edit.png' alt='Edit' style='cursor: pointer' onclick='BookmarkManager.editBookmark({bookmark_id}); return false'/>");
+		}
+		
+		echo "</ul>";
 	}
-	
-	echo "</ul>";
 }
-	
+else
+{
+	echo "<em>You haven't recorded any bookmarks.</em>";
+}
