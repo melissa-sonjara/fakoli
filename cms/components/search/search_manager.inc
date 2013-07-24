@@ -147,7 +147,13 @@ class SearchManager
 		{
 			$this->facetManager = new FacetManager('facet_manager', $this->list);
 			$classes = $this->getSearchableClasses();
-			trace("Facet Classes: ".implode(", ", $classes), 3);				
+			trace("Facet Classes: ".implode(", ", $classes), 3);		
+
+			if ($this->searchResultTypeFacet)
+			{
+				$this->facetManager->addFacet("Search Result Types", new SearchResultTypeFacetFilter($this->searchResults));
+			}
+			
 			TaxonomyManager::addFacets($this->facetManager, $classes, $this->facetDropdown, $this->facetMaxWidth, $this->facetWidth, $this->facetHeight);
 		}
 		
@@ -281,7 +287,12 @@ class SearchManager
 		{
 			foreach($items as $item)
 			{
-				$results[] = new $resultClass($item);
+				$result = new $resultClass($item);
+				// Store some class metadata in the wrapper record
+				$result->innerClass = get_class($item);
+				$result->prettyClassName = $item->prettifyClassName(true);
+				
+				$results[] = $result;
 			}
 		}
 				
