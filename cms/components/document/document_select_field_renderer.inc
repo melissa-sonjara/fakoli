@@ -145,7 +145,7 @@ ENDSCRIPT;
 		
 		if ($this->parent->readOnlyForm)
 		{
-			echo "<a href='/action/document/dowload?document_id={$value}'>$text<a>";
+			echo "<a href='/action/document/download?document_id={$value}'>$text<a>";
 		}
 		else
 		{
