@@ -41,6 +41,14 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 		return "<img src='$img' alt='' style='display: inline-block; vertical-align: middle'>&nbsp;{$document->title}";
 	}
 		
+	function formatDocumentLink($document)
+	{
+		$img = DocumentHandler::getDocIcon($document->file);
+		$size = DocumentHandler::getDocSize($document->file);
+		return "<img src='$img' alt='' style='display: inline-block; vertical-align: middle'>&nbsp;".
+			   "<a href='/action/document/download?document_id={$value}'>{$document->title}</a>&nbsp;$size";
+	}
+	
 	function renderScript($field)
 	{
 		if ($this->parent->isReadOnly($field)) return;
@@ -136,7 +144,7 @@ ENDSCRIPT;
 		if ($value)
 		{
 			$document = new Document($value);
-			$text = $this->formatDocument($document);
+			$text = $this->formatDocumentLink($document);
 		}
 		else
 		{
@@ -145,7 +153,7 @@ ENDSCRIPT;
 		
 		if ($this->parent->readOnlyForm)
 		{
-			echo "<a href='/action/document/download?document_id={$value}'>$text<a>";
+			echo $text;
 		}
 		else
 		{
