@@ -44,7 +44,7 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 	function formatDocumentLink($document)
 	{
 		$library = $document->DocumentLibrary();
-		$size = $library->getFileSize($this->item);
+		$size = $library->getFileSize($document);
 		$img = DocumentHandler::getDocIcon($document->file);
 	
 		return "<img src='$img' alt='' style='display: inline-block; vertical-align: middle'>&nbsp;".
