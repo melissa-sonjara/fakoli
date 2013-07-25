@@ -32,7 +32,7 @@ var ImageGrid = new Class({
 	{
 		div = elt.getElement('div');
 		img = elt.getElement('img');
-		elt.setStyles({'width': this.size + 30, 'height': this.size + 60, margin: 10});
+		elt.setStyles({'width': this.size + 30, 'height': this.size + 60, margin: 0});
 		div.setStyles({'width': this.size + 20, 'height': this.size + 60});
 		img.setStyles({'width': this.size + 20, height: this.size + 20});
 	},
@@ -41,7 +41,7 @@ var ImageGrid = new Class({
 	{	
 		div = elt.getElement('div');
 		img = elt.getElement('img');
-		elt.setStyles({'width': this.size + 10, 'height': this.size + 40, margin: 20});
+		elt.setStyles({'width': this.size + 10, 'height': this.size + 40, margin: 10});
 		div.setStyles({'width': this.size, 'height': this.size + 40});
 		img.setStyles({'width': this.size, height: this.size});
 	},
