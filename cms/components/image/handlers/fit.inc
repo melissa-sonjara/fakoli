@@ -36,6 +36,12 @@ Fakoli::using("image");
 $image_id = checkNumeric($_GET["image_id"]);
 $width = checkNumeric($_GET["width"]);
 $height = checkNumeric($_GET["height"]);
+$size = checkNumeric($_GET["size"]);
+if ($size)
+{
+	$width = $size;
+	$height = $size;
+}
 
 if (!$image_id)
 {
