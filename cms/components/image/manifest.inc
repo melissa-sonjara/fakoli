@@ -62,6 +62,11 @@ class ImageManifest
 		);		
 	}
 	
+	static function getScripts()
+	{
+		return array("/components/image/js/image_grid.js");
+	}
+	
 	static function getStyles()
 	{
 		return array("/components/image/css/image.css");
