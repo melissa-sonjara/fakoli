@@ -74,7 +74,7 @@ class ImageGrid implements FacetFilterable
 <script type="text/javascript">
 window.addEvent('domready', function() 
 {
-	new ZoomGrid('<?echo $this->id?>', <?echo $this->size?>);
+	new ImageGrid('<?echo $this->id?>', <?echo $this->size?>);
 });
 </script>
 <?
