@@ -20,7 +20,7 @@ class ImageGridItem
 	
 	function draw($size, $attrs)
 	{
-		$src = $this->image_id ? "/action/image/fit?image_id={$this->image_id}&size=$size" : "/fakoli/images/noimage.gif";
+		$src = $this->image_id ? "/action/image/iconize?image_id={$this->image_id}&size=$size" : "/fakoli/images/noimage.gif";
 		
 		$dataAttrs = "";
 		foreach($attrs as $name => $value)
