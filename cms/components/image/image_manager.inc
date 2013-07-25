@@ -299,6 +299,136 @@ class ImageManager
 		Fakoli::sendFile($cacheFile);
 	}
 	
+
+	function iconize($image_id, $size)
+	{
+		global $config;
+	
+		$image = new ImageRecord($image_id);
+		$gallery = $image->Gallery();
+	
+		trace("iconize:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
+		//TODO: Fix this
+		//if (!checkRole($gallery->read_access))
+		//{
+		//	throw new FakoliException("Access Denied");
+		//}
+	
+		if (!$size) $size = $config['thumbnail_size'];
+	
+		$suffix = "icon_$size";
+	
+			$nameParts = explode(".",$image->image_file);
+		$ext = ".".strtolower($nameParts[1]);
+
+		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
+		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . $ext;
+		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
+		
+		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
+		{
+		 	switch($ext)
+ 			{
+ 			case ".jpg":
+ 				$src = imagecreatefromjpeg($imageFile);
+ 				break;
+
+ 			case ".jpeg":
+ 				$src = imagecreatefromjpeg($imageFile);
+ 				break;
+				
+ 			case ".png":
+ 				$src = imagecreatefrompng($imageFile);
+ 				break;
+ 			}
+ 			
+			// If the thumbnail hasn't been generated yet, or is out-of-date, create it.
+			$fullWidth = imagesx($src);
+			$fullHeight = imagesy($src);
+			
+			if ($size)
+			{
+				if ($fullWidth > $fullHeight)
+				{
+					$newWidth = $size;
+					$newHeight = intval(($fullHeight * $size) / $fullWidth);
+					
+				}
+				else
+				{
+					$newWidth = intval(($fullWidth * $size) / $fullHeight);
+					$newHeight = $size;
+				}
+			}
+			else if ($width)
+			{
+				$newWidth = $width;
+				$newHeight = intval(($fullHeight * $width) / $fullWidth);
+			}
+			else if ($height)
+			{
+				$newHeight = $height;
+				$newWidth = intval(($fullWidth * $height) / $fullHeight);
+			}
+			else
+			{
+				$newWidth = $fullWidth;
+				$newHeight = $fullHeight;
+			}
+						
+			$offsetX = ($size - $newWidth) / 2;
+			$offsetY = ($size - $newHeight) / 2;
+			
+			$dst = imagecreatetruecolor($size, $size);
+			
+
+			$trans = imagecolorallocatealpha($dst, 255, 255, 255, 127);
+			imagecolortransparent($dst, $trans);
+				
+			imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
+				
+			
+			imagecopyresampled($dst, $src, 0, 0, $offsetX, $offsetY, $newWidth, $newHeight, $fullWidth, $fullHeight);
+			
+			if (!file_exists($cacheDir))
+			{
+				trace("iconize:: creating cachedir", 3);
+				mkdir($cacheDir);
+			}
+			
+			if (file_exists($cacheFile))
+			{
+				// If a previous copy of the file already exists, remove it
+				trace("iconize:: unlinking cachefile", 3);
+				unlink($cacheFile);
+			}
+			
+			switch($ext)
+			{
+			case ".jpg":
+				
+				imagejpeg($dst, $cacheFile, 85);
+				break;
+				
+			case ".jpeg":
+				
+				imagejpeg($dst, $cacheFile, 85);
+				break;
+
+			case ".png":
+				
+				imagepng($dst, $cacheFile);
+				break;
+			}
+
+			imagedestroy($dst);
+			imagedestroy($src);
+		}
+
+		Fakoli::sendFile($cacheFile);
+	}
+	
 	/**
 	 * Returns the URI that can be used to access the specified image at the given size.
 	 * @param $image_id the ID of the image
