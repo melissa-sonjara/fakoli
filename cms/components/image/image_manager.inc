@@ -388,7 +388,7 @@ class ImageManager
 			
 			imagecolortransparent($dst, $trans);
 				
-			imagefilledrectangle($dst, 0, 0, $width, $height, $white);
+			imagefilledrectangle($dst, 0, 0, $size, $size, $white);
 				
 			
 			imagecopyresampled($dst, $src, $offsetX, $offsetY, 0, 0, $newWidth, $newHeight, $fullWidth, $fullHeight);
