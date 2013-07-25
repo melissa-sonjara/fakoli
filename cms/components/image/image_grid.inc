@@ -54,7 +54,7 @@ class ImageGrid implements FacetFilterable
 	
 	function addItem($image_id, $title, $text)
 	{
-		$this->items[] = new ZoomGridItem($image_id, $title, $text);
+		$this->items[] = new ImageGridItem($image_id, $title, $text);
 	}
 	
 	/**
