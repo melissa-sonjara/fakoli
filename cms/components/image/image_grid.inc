@@ -28,7 +28,7 @@ class ImageGridItem
 			$dataAttrs .= "$name='$value' ";
 		}		
 ?>
-		<li data-details='<?echo $this->id?>' <?echo $dataAttrs?>style='width: <?echo $size + 10?>px; height: <?echo $size + 40?>px'><div onclick='<?echo $this->onclick?>' style='width: <?echo $size ?>px; height: <?echo $size + 40?>px'><img src="<?echo $src?>" alt="<?echo $this->title?>" style='width: <?echo $size?>px; height: <?echo $size?>px'></img><br/><?echo $this->title?></div></li>
+		<li data-details='<?echo $this->id?>' <?echo $dataAttrs?>style='width: <?echo $size + 10?>px; height: <?echo $size + 40?>px; margin: 20px'><div onclick='<?echo $this->onclick?>' style='width: <?echo $size ?>px; height: <?echo $size + 40?>px'><img src="<?echo $src?>" alt="<?echo $this->title?>" style='width: <?echo $size?>px; height: <?echo $size?>px'></img><br/><?echo $this->title?></div></li>
 <?
 	}
 }
