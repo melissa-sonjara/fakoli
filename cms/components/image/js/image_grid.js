@@ -8,11 +8,7 @@ var ImageGrid = new Class({
 		this.size = size;
 		this.grid = document.id(grid);
 		
-		this.grid.zoom = function(id)
-		{
-			elt = this.getElement("li[data-details='" + id + "']");
-			me.showDetails(elt);
-		};
+		if (!this.grid) return;
 		
 		this.grid.getElements('li').each(function(elt)
 		{
