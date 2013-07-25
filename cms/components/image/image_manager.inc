@@ -270,14 +270,10 @@ class ImageManager
 			imagealphablending($dst, false);
 			imagesavealpha($dst, true);
 			
-			$white = imagecolorallocate($dst, 255, 255, 255);
 			$trans = imagecolorallocatealpha($dst, 255, 255, 255, 127);
 			imagecolortransparent($dst, $trans);
-
-			imagefilledrectangle($dst, 0, 0, $width, $height, $white);
-			//imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
 			
-			trace("offset: $offset, srcHeight: $srcHeight", 3);
+			imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
 			
 			imagecopyresampled($dst, $src, 0, 0, 0, $offset, $width, $height, $fullWidth, $srcHeight);
 				
