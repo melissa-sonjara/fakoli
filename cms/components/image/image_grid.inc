@@ -86,7 +86,7 @@ window.addEvent('domready', function()
 	function drawView()
 	{
 ?>
-		<ul id="<?echo $this->id?>" class='zoom_grid'>
+		<ul id="<?echo $this->id?>" class='image_grid'>
 <?
 		foreach($this->items as $item)
 		{
