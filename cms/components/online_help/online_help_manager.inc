@@ -145,6 +145,7 @@ class OnlineHelpManager
  </head>
  <body class='<?echo $class?>'>
 <?
+		$script = "";
 	}
 	
 	function endFrame()
