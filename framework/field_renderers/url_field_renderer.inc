@@ -36,6 +36,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
 class URLFieldRenderer extends StringFieldRenderer
 {
+	static $urlExpression = "^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%\$#_]*)?$";
 	function URLFieldRenderer(&$parent)
 	{
 		$this->StringFieldRenderer($parent);
@@ -45,7 +46,7 @@ class URLFieldRenderer extends StringFieldRenderer
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 	
-		$this->parent->regexp($field, "^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%\$#_]*)?$", "Please supply a valid URL.");
+		$this->parent->regexp($field, URLFieldRenderer::$urlExpression, "Please supply a valid URL.");
 		
 		if($required)
 		{
@@ -66,7 +67,7 @@ class URLFieldRenderer extends StringFieldRenderer
 			echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='$field' value='".$escaped."'/>";
 		}
 	
-		if ($value)
+		if (preg_match(URLFieldRenderer::$urlExpression, $value))
 		{
 			echo "<a href='$value'>$safe</a>";
 		}
