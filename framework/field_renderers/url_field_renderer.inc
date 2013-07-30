@@ -72,8 +72,6 @@ class URLFieldRenderer extends StringFieldRenderer
 		{
 			echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='$field' value='".$escaped."'/>";
 		}
-	
-		trace("EXPRESSION: ".URLFieldRenderer::$urlExpression.", $value", 3);
 		
 		if (preg_match(URLFieldRenderer::$urlExpression, $value))
 		{
