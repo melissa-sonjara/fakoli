@@ -37,6 +37,9 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class URLFieldRenderer extends StringFieldRenderer
 {
 	static $urlExpression = "/^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%\$#_]*)?$/";
+	
+	var $checkSyntax = false;	///< Set to true to force users to only enter valid URLs
+	
 	function URLFieldRenderer(&$parent)
 	{
 		$this->StringFieldRenderer($parent);
@@ -46,7 +49,10 @@ class URLFieldRenderer extends StringFieldRenderer
 	{
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 	
-		$this->parent->regexp($field, URLFieldRenderer::$urlExpression, "Please supply a valid URL.");
+		if ($this->checkSyntax)
+		{
+			$this->parent->regexp($field, URLFieldRenderer::$urlExpression, "Please supply a valid URL.");
+		}
 		
 		if($required)
 		{
