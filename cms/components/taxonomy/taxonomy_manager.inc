@@ -101,11 +101,13 @@ class TaxonomyManager
 		return $options;
 	}
 	
-	static function addTaxonomyFieldRenderers($form, $showSelectAll = true)
+	static function addTaxonomyFieldRenderers($form, $showSelectAll = true, $group = null)
 	{
 		$class = get_class($form->data);
 		
 		$taxonomies = Query::create(Taxonomy, "")->execute();
+		
+		$renderers = array();
 		
 		foreach($taxonomies as $taxonomy)
 		{
@@ -116,8 +118,17 @@ class TaxonomyManager
 				$renderer->setSize(400, 125);
 				$renderer->resizable = true;
 				$renderer->showSelectAll = $showSelectAll;
+				
+				if ($group)
+				{
+					$form->group($group, $taxonomy->identifier);
+				}
+				
+				$renderers[] = $renderer;
 			}
 		}
+		
+		return $renderers;
 	}
 	
 	static function getAssociatedTaxonomies($classes, $facet_filter_only = false)
