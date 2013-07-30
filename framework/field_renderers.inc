@@ -303,5 +303,6 @@ require_once realpath(dirname(__FILE__))."/field_renderers/data_list_field_rende
 require_once realpath(dirname(__FILE__))."/field_renderers/phone_number_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/subselect_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/compound_select_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/url_field_renderer.inc";
 
 ?>
