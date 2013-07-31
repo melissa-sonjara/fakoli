@@ -64,19 +64,28 @@ $mimeType = DocumentHandler::getDocMimeType($document->file);
 	
 trace("Download: opening document with filepath {$filepath} and mimeType {$mimeType}", 3);
 
-$f = fopen($filepath, "r");
-$size = filesize($filepath);
-	
 trace("Download: opened document {$document_id}", 3);
 
 header("Pragma: private");
 header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
 header("Cache-Control: must-revalidate");
 header("Content-Type: $mimeType");
-header("Content-Length: $size");
-	
-fpassthru($f);
-fclose($f);
+
+if (Fakoli::detectXSendFileSupport())
+{
+	header("X-SendFile: $filepath");
+	return;	
+}
+else
+{
+	$f = fopen($filepath, "r");
+
+    $size = filesize($filepath);
+	header("Content-Length: $size");
+			
+	fpassthru($f);
+	fclose($f);
+}
 
 session_write_close();
 ?>
