@@ -65,6 +65,8 @@ var MultiSelect = new Class(
 		this.container.getElements('input[type=checkbox]').each(function(cbox)
 		{
 			cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
+			label = cbox.getNext('label');
+			label.addEvent('click', function(e) {cbox.click();});
 		}.bind(this));	
 	},
 	
