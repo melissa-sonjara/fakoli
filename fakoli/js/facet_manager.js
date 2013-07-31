@@ -121,7 +121,8 @@ var MultiSelectFacetHandler = new Class(
 	
 	preprocessComplete: function()
 	{
-		var terms = Object.keys(this.termLookup).sort();
+		var terms = Object.keys(this.termLookup;
+		terms.sort();
 		
 		terms.each(function(term)
 		{
