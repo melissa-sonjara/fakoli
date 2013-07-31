@@ -67,7 +67,10 @@ var MultiSelect = new Class(
 			cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
 			label = cbox.getNext('label');
 			label.removeEvents('click');
-			label.addEvent('click', function(e) {cbox.click();});
+			label.addEvent('click', function(e) 
+			{
+				cbox.click();
+			});
 		}.bind(this));	
 	},
 	
@@ -91,7 +94,10 @@ var MultiSelect = new Class(
 		
 		cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
 		label.removeEvents('click');
-		label.addEvent('click', function(e) {cbox.click();});
+		label.addEvent('click', function(e) 
+		{
+			cbox.click();
+		});
 	},
 	
 	selectionChanged: function()
