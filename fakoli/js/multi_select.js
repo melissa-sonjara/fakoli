@@ -90,6 +90,8 @@ var MultiSelect = new Class(
 		brk.inject(this.container);
 		
 		cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
+		label.removeEvents('click');
+		label.addEvent('click', function(e) {cbox.click();});
 	},
 	
 	selectionChanged: function()
