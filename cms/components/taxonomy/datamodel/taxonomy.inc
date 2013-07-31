@@ -63,7 +63,7 @@ class Taxonomy extends DataItem
 	
 	function Terms($constraint = "")
 	{
-		return $this->getRelatedList(TaxonomyTerm);
+		return $this->getRelatedList(TaxonomyTerm, "", $constraint);
 	}
 	
 	function countTerms()
