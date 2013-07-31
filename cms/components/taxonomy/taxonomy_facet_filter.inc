@@ -92,9 +92,12 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 		
 		if ($this->width && $this->height)
 		{
+			$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+			$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
+				
 			$resizable = (!$this->dropdown && $this->resizable) ? " resizable": "";
 			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
-			echo "<div id='{$this->taxonomy->identifier}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}; height: {$this->height}; overflow: auto'>\n";
+			echo "<div id='{$this->taxonomy->identifier}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$width}; height: {$height}; overflow: auto'>\n";
 		}
 									
 		$this->renderCheckBoxes($items);  
