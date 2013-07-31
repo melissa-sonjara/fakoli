@@ -155,9 +155,13 @@ window.addEvent('domready', function()
 		}
 		if ($this->width && $this->height)
 		{
+			$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+			$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
+			$padding = ($width == "auto") ? "padding-right: 20px; " : "";
+			
 			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
 			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
-			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$width}; height: {$height}; $padding overflow: auto'>\n";
 		}
 		
 		$countOptions = count($this->options);
@@ -188,13 +192,13 @@ window.addEvent('domready', function()
 		{
 			$p = $item->term_id;
 			
-			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
+			echo "<span style='white-space: nowrap'><input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
 			if (array_key_exists($p, $selected))
 			{
 				echo " checked";
 			}
 			echo ">&nbsp;";
-			echo "<label for='checkbox_{$field}_$p'>".$item->term."</label>";
+			echo "<label for='checkbox_{$field}_$p'>".$item->term."</label></span>";
 			echo "<br/>";
 		}
 	}
