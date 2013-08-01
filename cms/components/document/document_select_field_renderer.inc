@@ -48,7 +48,7 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 		$img = DocumentHandler::getDocIcon($document->file);
 	
 		return "<img src='$img' alt='' style='display: inline-block; vertical-align: middle'>&nbsp;".
-			   "<a href='/action/document/download?document_id={$value}'>{$document->title}</a>&nbsp;$size";
+			   "<a href='/action/document/download?document_id={$document->document_id}'>{$document->title}</a>&nbsp;$size";
 	}
 	
 	function renderScript($field)
