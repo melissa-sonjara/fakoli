@@ -738,6 +738,29 @@ class Fakoli
 	}
 	
 	/**
+	 * Send the admin page for the given identifier
+	 * @param string $identifier the admin page to be sent to the client
+	 */
+	static function sendAdminPage($identifier)
+	{
+		if ($identifier != "login" && $identifier != "password_help") 
+		{
+			Fakoli::assertRole("admin", "/admin/login");
+		}
+		
+		$https = $_SERVER['HTTPS'];
+		if ($https == "off") $https = false; // For IIS
+		
+		if ($config['admin_SSL'] && !$https )
+		{
+			redirect("https://".$config['http_host'].$_SERVER['REQUEST_URI']);
+		}
+		
+		$view = new AdminPageView($identifier);
+		$view->drawView();
+	}
+	
+	/**
 	 * Find the component containing the specified class.
 	 */
 	static function getComponentForClass($class)
