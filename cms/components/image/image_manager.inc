@@ -160,6 +160,15 @@ class ImageManager
 			}
 						
 			$dst = imagecreatetruecolor($newWidth, $newHeight);
+
+			$trans = imagecolorallocatealpha($dst, 255, 255, 255, 127);
+			$white = imagecolorallocate($dst, 255, 255, 255);
+				
+			imagecolortransparent($dst, $trans);
+			
+			imagefilledrectangle($dst, 0, 0, $size, $size, $white);
+			imagefilledrectangle($dst, 0, 0, $size, $size, $trans);
+			
 			imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $fullWidth, $fullHeight);
 			
 			if (!file_exists($cacheDir))
