@@ -50,3 +50,9 @@ ALTER TABLE `link_library` ADD COLUMN `enabled` tinyint(3) not null default 0;
 ALTER TABLE link_library ADD COLUMN hidden TINYINT(3) NOT NULL DEFAULT 0 AFTER description;
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE link_record ADD COLUMN sort_order INT(10) NOT NULL DEFAULT 0;
+
+-- END Version 1.4

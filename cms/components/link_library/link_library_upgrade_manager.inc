@@ -16,7 +16,8 @@ class LinkLibraryUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 		"1.1" => "sql:Create tables",
 		"1.2" => "sql:Add enabled flag to link_library",
-		"1.3" => "sql:Added hidden field to link_library"
+		"1.3" => "sql:Added hidden field to link_library",
+		"1.4" => "sql:Added sort_order to link_record"
 	);
 
 	function LinkLibraryUpgradeManager()

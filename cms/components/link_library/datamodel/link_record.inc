@@ -49,7 +49,8 @@ class LinkRecord extends DataItem implements Searchable
 						"published"			=>	Boolean,
 						"last_modified"		=>	Timestamp,
 						"link_library_id"	=>	Number,
-						"owner_id"			=>	Number);
+						"owner_id"			=>	Number,
+						"sort_order"		=>	Number);
 
 	// Relations
 
