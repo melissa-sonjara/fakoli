@@ -160,7 +160,9 @@ class ImageManager
 			}
 						
 			$dst = imagecreatetruecolor($newWidth, $newHeight);
-
+			imagealphablending($dst, false);
+			imagesavealpha($dst, true);
+				
 			$trans = imagecolorallocatealpha($dst, 255, 255, 255, 127);
 			$white = imagecolorallocate($dst, 255, 255, 255);
 				
