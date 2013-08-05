@@ -40,7 +40,7 @@ $library = LinkLibrary::findByIdentifier($libraryIdentifier);
 
 $page->page_title = $library->name;
 
-$links = $library->Links("WHERE published=1 ORDER BY title, url");
+$links = $library->Links("WHERE published=1 ORDER BY sort_order, title, url");
 
 $list = new PagedList($links, "library_links", "{LinkLibraryManager::formatLink}");
 $list->pageSize = 20;
