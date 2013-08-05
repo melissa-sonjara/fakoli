@@ -69,6 +69,10 @@ class ExpandingList
 		$this->dynamicLoad = $dynamicLoad;
 	}
 	
+	/**
+	 * Writes the supporting Javascript for an expanding list control
+	 * @return string
+	 */
 	function writeScript()
 	{
 		ob_start();
@@ -114,6 +118,9 @@ class ExpandingList
 		return $script;
 	}
 	
+	/**
+	 * Generates the HTML for the expanding list
+	 */
 	function drawList()
 	{
 		if (!count($this->items))
@@ -167,6 +174,9 @@ class ExpandingList
 		echo "</dl>\n";
 	}
 	
+	/**
+	 * Draws a set of grouped expanding lists.
+	 */
 	function drawGroupedList()
 	{
 		$attrs = "";
