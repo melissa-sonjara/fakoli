@@ -132,7 +132,7 @@ class DataImportManager
 	 * @param string $field
 	 * @param string $label
 	 * @param string $template
-	 * @param unknown $update_empty
+	 * @param boolean $update_empty
 	 * @return DataImportManager
 	 */
 	function additional($field, $label = "", $template = "", $update_empty)
@@ -457,7 +457,7 @@ class DataImportManager
 
 		if ($this->onSaveComplete)
 		{
-			if (!call_user_func_array($this->onSaveComplete, array($this))) return false;
+			call_user_func_array($this->onSaveComplete, array($this));
 		}
 		
 		return true;
