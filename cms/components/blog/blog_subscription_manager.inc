@@ -110,12 +110,34 @@ class BlogSubscriptionManager
 			
 		$url = $blog->getURL();
 			
-		$message .= formatItems($articles, "<h3>{title}</h3><br>{message}<br><br>{$url}?article_id={article_id}<br><label>Published </label> {publish_date:short}","\n");
+		$message .= formatItems($articles, "{BlogSubscriptionManager::formatArticleMessage}","\n");
 		$message .= $this->formatUnsubscribeMessageFooter($subscriber);
 			
 		$emailHandler = new EmailHandler($subscriber->subscriber_email, $subject, $message);
-		$emailHandler->send();
+		$emailHandler->send();	
+	}
+
+	/**
+	 * Format the article for inclusion in the email message. Only include author name and
+	 * publisher if provided.
+	 * 
+	 * @param obj $article class Article
+	 */
+	static function formatArticleMessage($article)
+	{
+		$authorName = $article->getAuthorName();
+	
+		if($authorName)
+		{
+			$author = "<br><label>Author </label>$authorName";
+		}
 		
+		if($article->publication)
+		{
+			$publisher = " {$article->publication}";
+		}
+		
+		return $article->format("<h3>{title}</h3><br>{message}<br><br>{$url}?article_id={article_id}{$author}<br><label>Published </label> {publish_date:short}{$publisher}");
 	}
 	
 	function formatUnsubscribeMessageFooter($subscriber)
