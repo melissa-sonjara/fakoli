@@ -31,6 +31,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
+Fakoli::using("search");
+
 /**
  * This class maps the publication table.
 */
