@@ -179,16 +179,17 @@ class FooterTotalColumn extends FooterColumn
 	 * @param string $style 
 	 * @param number $colspan 
 	 */
-	function FooterTotalColumn($field, $template = "", $style = "", $colspan = 1)
+	function FooterTotalColumn($field, $template = "", $style = "", $colspan = 1, $typeHint = Number)
 	{
 		$this->field = $field;
+		$this->typeHint = $typeHint;
 		
 		/*
 		 * If the calling function puts a "$" before the
 		 * field name, then mark this as type currency and
 		 * output the "$" before the total.
 		 */
-		if(strpos($this->field, "$", 0) !== FALSE)
+		if (!is_callable($this->field) && strpos($this->field, "$", 0) !== FALSE)
 		{
 			$this->typeHint = Currency;
 			$this->field = substr($this->field, 1); 
@@ -212,10 +213,17 @@ class FooterTotalColumn extends FooterColumn
 	
 	function onStartRow($item)
 	{
-		$val = $item->format($this->field);
-	
+		if (is_callable($this->field))
+		{
+			$val = call_user_func($this->field, $item);
+		}
+		else 
+		{
+			$val = $item->format($this->field);
+		}
+		
 		// Make the number a raw number value before adding
-		$val =  str_replace(",", "", $val);
+		$val = str_replace(",", "", $val);
 		
 		$this->total += $val;
 	}

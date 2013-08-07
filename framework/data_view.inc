@@ -262,11 +262,12 @@ class DataListView implements FacetFilterable
 	 * @param $field the field to total in the format "{field}"
 	 * @param $style any CSS classes or inline styles to apply
 	 * @param $colspan the colspan for the column
+	 * @param $typeHint type hint for formatting the output
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function footerTotal($field, $style = "text-align: right", $colspan = 1)
+	function footerTotal($field, $style = "text-align: right", $colspan = 1, $typeHint = Number)
 	{
-		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
+		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan, $typeHint);
 		$this->footerColumns[] = $column;
 		$this->totalCallbacks[] = array($column, onStartRow);
 		
