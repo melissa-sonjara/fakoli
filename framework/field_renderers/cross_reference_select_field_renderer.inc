@@ -59,7 +59,8 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
 		$this->field = $field;
-		$this->label = $label;
+		$this->label = ($label) ? $label : $form->overrides[$field]['label'];
+
 		$this->options = $options;
 		$this->nameField = $nameField;
 		$this->xrefClass = $xrefClass;
