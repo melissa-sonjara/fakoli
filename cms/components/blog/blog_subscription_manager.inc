@@ -111,7 +111,7 @@ class BlogSubscriptionManager
 		$url = $blog->getURL();
 		
 		// set pseudo field for use in formatArticleMessage
-		if(count($articles))
+		if (count($articles))
 		{
 			foreach($articles as $article)
 			{
