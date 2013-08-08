@@ -10,7 +10,7 @@ class ImageGridItem
 	var $text;
 	var $onclick;
 	
-	function __construct($image_id, $title, $onclick = "return false;")
+	function __construct($image_id, $title, $text, $onclick = "return false;")
 	{
 		$this->image_id = $image_id;
 		$this->title = $title;
@@ -52,9 +52,9 @@ class ImageGrid implements FacetFilterable
 		return $this->id;
 	}
 	
-	function addItem($image_id, $title, $text)
+	function addItem($image_id, $title, $text, $onclick = "return false;")
 	{
-		$this->items[] = new ImageGridItem($image_id, $title, $text);
+		$this->items[] = new ImageGridItem($image_id, $title, $text, $onclick);
 	}
 	
 	/**

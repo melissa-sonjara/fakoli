@@ -159,6 +159,7 @@ body.ie8 .imageGrid .caption
 	cursor: pointer;
 	width: 210px;
 	height: 250px;
+	padding: 0 0 5px;
 }
 
 .image_grid div
@@ -171,4 +172,5 @@ body.ie8 .imageGrid .caption
 	box-shadow: 1px 1px 12px #666;
 	cursor: pointer;
 	line-height: 1.2;
+	overflow: hidden;
 }

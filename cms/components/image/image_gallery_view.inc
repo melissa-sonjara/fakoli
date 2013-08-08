@@ -44,38 +44,22 @@ class ImageGalleryView
 	function ImageGalleryView($images, $linkFormat, $id = "images")
 	{
 		$this->id = $id;
-		$this->listView = new ImageListView($images, $linkFormat, $id . "_listView");
+		$this->grid = new ImageGrid($id . "_gallery", 125);
+		$this->images = $images;
+		$this->linkFormat = $linkFormat;
 	}
 
 	function drawGallery()
 	{
+		foreach($this->images as $image)
+		{
+			$this->grid->addItem($image->image_id, $image->title, $image->caption, $image->format($this->linkFormat));
+		}
+		
 		global $script;
 		
-		$script .= <<<ENDSCRIPT
-	<script type="text/javascript" src="/components/image/js/image_gallery.js"></script>
-	<script type="text/javascript">
-	var gallery;
-	window.addEvent('domready', function()
-	{
-		gallery = new ImageGallery('$this->id');
-	});
-	</script>	
-ENDSCRIPT;
-
-		$width = intval((count($this->listView->images)  / 2) + 1) * 185;
-		$this->listView->styles="position: absolute; width: {$width}px";
-		$this->listView->spacing = $this->spacing;
-		
-?>
-<div id="<?echo $this->id?>__left" style="width: 32px; float: left;<?echo $this->styles?>"><img id="<?echo $this->id?>_scroll_left" src="/components/image/images/scroll_left.png" style="margin-top: 160px"/>&nbsp;</div>
-<div id="<?echo $this->id?>" style="width: 560px; height: 450px; position: relative; overflow: hidden; float: left">
-<?
-		$this->listView->drawGrid();
-?>
-</div>
-<div id="<?echo $this->id?>_right" style="width: 32px; float: left"><img id="<?echo $this->id?>_scroll_right" src="/components/image/images/scroll_right.png" style="margin-top: 160px"/>&nbsp;</div>
-</div>
-<?
+		$script .= $this->grid->writeScript();
+		$this->grid->drawView();
 	}
 }
 
@@ -134,7 +118,7 @@ class ImageGalleryList
 			return;
 		}
 		
-		$this->galleryView->listView->drawGrid();	
+		$this->galleryView->drawGallery();	
 	}	
 }
 	

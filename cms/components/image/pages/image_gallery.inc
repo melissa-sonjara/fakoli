@@ -63,7 +63,7 @@ function lightbox(id)
 </script>
 ENDSCRIPT;
 
-$view = new ImageGalleryView($images, "javascript:lightbox({image_id})");
+$view = new ImageGalleryView($images, "lightbox({image_id}); return false");
 $view->spacing = "6px";
 $view->styles = "margin-left: 40px";
 $view->drawGallery();
