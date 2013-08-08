@@ -109,6 +109,15 @@ class BlogSubscriptionManager
 		$subject = "{$sitename} $label Digest for {$blog->title}";
 			
 		$url = $blog->getURL();
+		
+		// set pseudo field for use in formatArticleMessage
+		if(count($articles))
+		{
+			foreach($articles as $article)
+			{
+				$article->set("url", $url);
+			}
+		}
 			
 		$message .= formatItems($articles, "{BlogSubscriptionManager::formatArticleMessage}","\n");
 		$message .= $this->formatUnsubscribeMessageFooter($subscriber);
@@ -136,6 +145,9 @@ class BlogSubscriptionManager
 		{
 			$publisher = " {$article->publication}";
 		}
+
+		// pseudo field
+		$url = $article->get("url");
 		
 		return $article->format("<h3>{title}</h3><br>{message}<br><br>{$url}?article_id={article_id}{$author}<br><label>Published </label> {publish_date:short}{$publisher}");
 	}
