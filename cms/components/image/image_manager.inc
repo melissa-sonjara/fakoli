@@ -334,7 +334,7 @@ class ImageManager
 
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
-		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . $ext;
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . "png";
 		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
 		
 		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
@@ -418,23 +418,7 @@ class ImageManager
 				unlink($cacheFile);
 			}
 			
-			switch($ext)
-			{
-			case ".jpg":
-				
-				imagejpeg($dst, $cacheFile, 85);
-				break;
-				
-			case ".jpeg":
-				
-				imagejpeg($dst, $cacheFile, 85);
-				break;
-
-			case ".png":
-				
-				imagepng($dst, $cacheFile);
-				break;
-			}
+			imagepng($dst, $cacheFile);
 
 			imagedestroy($dst);
 			imagedestroy($src);
