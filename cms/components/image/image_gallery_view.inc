@@ -33,13 +33,14 @@
  
 class ImageGalleryView
 {
-	var $listView;
+	var $grid;
 	var $id;
 	
 	var $images;
 	var $linkFormat;
 	var $spacing = 0;
 	var $styles;
+	var $titleFormat = "{title}";
 	
 	function ImageGalleryView($images, $linkFormat, $id = "images")
 	{
@@ -53,7 +54,7 @@ class ImageGalleryView
 	{
 		foreach($this->images as $image)
 		{
-			$this->grid->addItem($image->image_id, $image->title, $image->caption, $image->format($this->linkFormat));
+			$this->grid->addItem($image->image_id, $image->format($this->titleFormat), $image->caption, $image->format($this->linkFormat));
 		}
 		
 		global $script;
@@ -78,7 +79,7 @@ class ImageGalleryList
 		
 		$this->id = $id;
 		$this->galleryView = new ImageGalleryView($this->collateImages(), $this->linkFormat, $this->id);
-		$this->galleryView->listView->titleFormat = "{Gallery.gallery_name}";
+		$this->galleryView->titleFormat = "{Gallery.gallery_name}";
 	}
 	
 	function collateImages()
