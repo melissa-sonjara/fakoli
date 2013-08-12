@@ -189,18 +189,21 @@ class GroupedDataListView
 	
 	/**
 	 * Adds a column definition to the DataListView.
-	 * @param $title the tilte of the column
-	 * @param $format the formatter for the column, either as a formatting string or callback function
+	 * @param $title the title of the column
+	 * @param $format the formatter for the column, either as a formatting string or callback function.
+	 * (For details on format template specifications, see comments above class DataItem function format.)
 	 * @param $sortable whether this column is sortable
 	 * @param $style any inline styles specific to this column
+	 * @param $typeHint hint for cell type to use when exporting to Excel
+	 * @param $onExport optional callback function to format value for Excel
+	 * @param string $sortFormat Optional explicit format to use as the basis for sorting
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function column($title, $format, $sortable = false, $style = null)
+	function column($title, $format, $sortable = false, $style = null, $typeHint = null, $onExport = null, $sortFormat = null)
 	{
-		$this->columns[] = new DataColumn($title, $format, $sortable, $style);
+		$this->columns[] = new DataColumn($title, $format, $sortable, $style, $typeHint, $onExport, $sortFormat);
 		return $this;
 	}
-	
 
 	/**
 	 * Adds a selector column to the DataListView. If no format is specified
@@ -641,23 +644,49 @@ class GroupedDataListView
 					foreach($this->columns as $column)
 					{
 						
-						$val = $column->format($item);
+						if ($column->onExport)
+							$val = call_user_func($column->onExport, $item, $column);
+						else
+							$val = $column->format($item);
 						
-						if ($val !== "")
+						switch($column->typeHint)
 						{
-							if (preg_match("/^[\\d\\.]+$/", $val))
+						case String:
+		
+							$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
+							break;
+							
+						case Number:
+							
+							$x->writeNumber($r, $c, $val);
+							break;
+							
+						case Currency:
+							
+							$val = str_replace(array("$", ","), array("", ""), $val);
+							$x->writeCurrency($r, $c, $val);
+							break;
+							
+						case Percentage:
+							
+							$x->writePercentage($r, $c, $val);
+							break;
+								
+						default:
+							
+							/* JDG 5/11/10 currency export fix */
+							if (preg_match("/^[\\d\\,\\.\\$]+$/", $val))
 							{
-								//trace("($r,$c): $val (Number)", 3);
+								$val = str_replace(array("$", ","), array("", ""), $val);
 								$x->writeNumber($r, $c, $val);
 							}
 							else
 							{
 								// No HTML required in Excel output
-								//trace("($r,$c): $val (Text)", 3);
 								$x->writeText($r, $c, stripHTML($val));
 							}
 						}
-												
+									
 						++$c;
 					}
 					++$r;

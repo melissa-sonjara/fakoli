@@ -78,6 +78,24 @@ interface IExcelFile
 	function writeText($row, $col, $value );
 		
 	/**
+	 * Write a number to the cell at the specified row and column
+	 * and format as a percentage.
+	 * @param integer $row
+	 * @param integer $col
+	 * @param number $value
+	 */
+	function writePercentage($row, $col, $value);
+	
+	/**
+	 * Write a number to the cell at the specified row and column
+	 * with currency formatting.
+	 * @param integer $row
+	 * @param integer $col
+	 * @param number $value
+	 */
+	function writeCurrency($row, $col, $value);
+	
+	/**
 	 * Set the title of the currently active worksheet.
 	 * @param string $title the title text.
 	 */
@@ -166,6 +184,16 @@ class ExcelFile implements IExcelFile
     	$len = strlen($value);
     	echo pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len);
     	echo $value;
+	}
+	
+	function writePercentage($row, $col, $value)
+	{
+		$this->writeText($row, $col, $value);
+	}
+	
+	function writeCurrency($row, $col, $value)
+	{
+		$this->writeNumber($row, $col, $value);		
 	}
 	
 	function setWorksheetTitle($title)

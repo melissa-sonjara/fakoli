@@ -158,7 +158,7 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Adds a column definition to the DataListView.
-	 * @param $title the tilte of the column
+	 * @param $title the title of the column
 	 * @param $format the formatter for the column, either as a formatting string or callback function.
 	 * (For details on format template specifications, see comments above class DataItem function format.)
 	 * @param $sortable whether this column is sortable
@@ -773,9 +773,14 @@ class DataListView implements FacetFilterable
 				case Currency:
 					
 					$val = str_replace(array("$", ","), array("", ""), $val);
-					$x->writeNumber($r, $c, $val);
+					$x->writeCurrency($r, $c, $val);
 					break;
 					
+				case Percentage:
+					
+					$x->writePercentage($r, $c, $val);
+					break;
+						
 				default:
 					
 					/* JDG 5/11/10 currency export fix */
