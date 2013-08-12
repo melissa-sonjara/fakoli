@@ -17,6 +17,7 @@ var Comment =  (function()
 		{
 			if (response.indexOf("OK") == 0)
 			{
+				this.closeDialog();
 				var responseFields = response.split("|");
 
 				this.reloadCommentPanel(responseFields[1]);
