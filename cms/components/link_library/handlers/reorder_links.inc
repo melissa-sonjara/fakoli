@@ -47,7 +47,7 @@ try
 		$link = new LinkRecord();
 		$link->joinTransaction($tx);
 		
-		$link->filter = new InclusionFilter("forum_id", "sort_order");
+		$link->filter = new InclusionFilter("link_id", "sort_order");
 		
 		$link->load($id);
 		$link->sort_order = $sort_order;
