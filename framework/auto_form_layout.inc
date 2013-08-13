@@ -86,6 +86,10 @@ abstract class AutoFormLayout
 			return new TableBasedFormLayout($form);
 		}
 	}
+	
+	function finalizeLayout()
+	{
+	}
 }
 
 class TableBasedFormLayout extends AutoFormLayout
@@ -914,5 +918,131 @@ class FilterFormLayout extends AutoFormLayout
 	function requiredFields($text)
 	{
 		// nothing to do
+	}
+}
+
+/**
+ * TemplateFormLayout provides support for custom form layouts.
+ * @author andy
+ */
+class TemplateFormLayout extends AutoFormLayout
+{
+	var $template;
+	var $output;
+
+	function TemplateFormLayout($form, $template)
+	{
+		$this->template = file_get_contents($template);
+		$this->AutoFormLayout($form);
+	}
+
+	function startGroup($name, $collapsible = false, $collapsed = false)
+	{
+		// Groups are ignored when dealing with template form layouts
+		$this->startUngrouped();
+	}
+
+	function endGroup()
+	{
+		$this->endUngrouped();
+	}
+
+	function startField($field, $renderer, $colspan = 1, $styles = "")
+	{
+		ob_start();
+	}
+
+	function endField($field, $renderer)
+	{
+		$fieldContent = ob_get_contents();
+		
+		ob_end_clean();
+		
+		if (!$renderer->annotateBefore && $renderer->colspan == 1 && $renderer->parent->annotations[$field])
+		{
+			if ($renderer->annotateNextLine)
+			{
+				$fieldContent .= "<br/>";
+			}
+			else
+			{
+				$fieldContent .= "&nbsp;&nbsp;";
+			}
+			
+			$fieldContent .= $renderer->parent->annotations[$field];
+		}
+		
+		$this->template = str_replace("{".$field."}", $fieldContent, $this->template);		
+	}
+
+	/**
+	 * Internal method to generate the HTML for the field label
+	 *
+	 * @param string $field the field name
+	 * @param int $colspan the number of columns to span
+	 * @param string $styles optional special styles that need to be applied
+	 * @param string $annotation annotation text for the field
+	 */
+	function printLabel($field, $renderer, $styles = "", $annotation = "")
+	{
+		/*$colspan = $renderer->colspan;
+		if ($renderer->hideLabel && $colspan > 1 && !$annotation) return;
+
+		$label = $this->getLabel($field, $renderer);
+
+		echo "<td colspan='$colspan'";
+		if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
+		if ($styles) echo " style='$styles'";
+		echo ">";
+
+		if (!$renderer->hideLabel) echo "<label id='".$this->getLabelID($field)."' for='$field'>$label</label> ";
+
+		echo "$annotation</td>\n";*/
+	}
+
+	function startUngrouped()
+	{
+		if (!$this->renderingForm)
+		{
+			$this->output .= "{FORM}";
+			$this->renderingForm = true;
+		}
+	}
+
+	function endUngrouped()
+	{
+	}
+
+	function startButtonLine()
+	{
+		$this->output .= "<br/>\n";
+		$this->output .= " <div class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";
+		
+		ob_start();
+		
+	}
+	
+	function endButtonLine()
+	{
+		$this->output .= ob_get_contents();
+		ob_end_clean();
+		
+		$this->output .=  "</div><br/>";
+	}
+	
+	function errorBox()
+	{
+		$this->output .=  "<div id='{$this->form->id}__error' class='error' style='display: ".($this->form->msg ? 'table-cell' : 'none')."'>{$this->form->msg}</div>\n";
+	}
+	
+	function requiredFields($text)
+	{
+		$this->output .=  "<p style='font-weight: bold'>{$text}</p>\n";
+	}
+	
+	function finalizeLayout()
+	{
+		$this->output = str_replace("{FORM}", $this->template, $this->output);
+		echo $this->output;
 	}
 }

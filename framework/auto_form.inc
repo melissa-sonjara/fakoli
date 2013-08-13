@@ -887,10 +887,13 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 
 		$this->layout->endUngrouped();
 		
+		$this->layout->finalizeLayout();
+		
 		if (!$this->subordinate)
 		{
 			echo "</form>\n";
 		}
+		
 	}
 	
 	/*
