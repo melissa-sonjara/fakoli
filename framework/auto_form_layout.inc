@@ -949,6 +949,8 @@ class TemplateFormLayout extends AutoFormLayout
 
 	function startField($field, $renderer, $colspan = 1, $styles = "")
 	{
+		$this->printLabel($field, $renderer, $styles, ($renderer->colspan > 1) ? $this->parent->annotations[$field] : "");
+		
 		ob_start();
 	}
 
@@ -985,19 +987,24 @@ class TemplateFormLayout extends AutoFormLayout
 	 */
 	function printLabel($field, $renderer, $styles = "", $annotation = "")
 	{
-		/*$colspan = $renderer->colspan;
-		if ($renderer->hideLabel && $colspan > 1 && !$annotation) return;
-
+		if ($renderer->hideLabel && !$annotation) return;
+		
 		$label = $this->getLabel($field, $renderer);
-
-		echo "<td colspan='$colspan'";
-		if ($renderer->parent->labelCSS) echo " class='{$renderer->parent->labelCSS}'";
-		if ($styles) echo " style='$styles'";
-		echo ">";
-
-		if (!$renderer->hideLabel) echo "<label id='".$this->getLabelID($field)."' for='$field'>$label</label> ";
-
-		echo "$annotation</td>\n";*/
+		
+		$labelHTML = "";
+		
+		if (!$renderer->hideLabel)
+		{
+			$labelHTML .= "<label id='".$this->getLabelID($field)."' for='$field'";
+			if ($renderer->parent->labelCSS) $labelHTML .=  " class='{$renderer->parent->labelCSS}'";
+			if ($styles) $labelHTML .=  " style='$styles'";
+		
+			$labelHTML .=  ">$label</label> ";
+		}
+		
+		$labelHTML .=  "$annotation\n";
+		
+		$this->template = str_replace("{label:".$field."}", $labelHTML, $this->template);		
 	}
 
 	function startUngrouped()
