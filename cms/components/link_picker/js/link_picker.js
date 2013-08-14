@@ -48,7 +48,7 @@ var LinkPicker =  (function()
 			if (!chooser) chooser = "link_picker";
 			
 			this.editor = editor;
-			this.dialog = modalPopup("Link Picker", "/action/link_picker/popup?Editor=" + this.editor.name + "&chooser=" + chooser, 500, 400, true, false); 
+			this.dialog = modalPopup("Link Picker", "/action/link_picker/popup?Editor=" + this.editor.name + "&chooser=" + chooser, 500, "auto", true, false); 
 		},
 		
 		
