@@ -41,7 +41,7 @@ $gallery_id = checkNumeric($_GET["gallery_id"]);
 
 $title = ($mode == "insert") ? "Insert Images" : "Select an Image";
 
-$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
+$galleries = Query::create(ImageGallery, "WHERE hidden=0 ORDER BY gallery_name")->execute();
 
 if (!$gallery_id && count($galleries) > 0)
 {
