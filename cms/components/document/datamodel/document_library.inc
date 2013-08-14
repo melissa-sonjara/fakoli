@@ -101,7 +101,17 @@ class DocumentLibrary extends DataItem
 	{
 		global $config;
 		
-		return $config['uploadbase'] . DIRECTORY_SEPARATOR . "library_{$this->document_library_id}";
+		$d = $config['uploadbase'] . DIRECTORY_SEPARATOR . "library_{$this->document_library_id}";
+		
+		if (!is_dir($d) && !file_exists($d))
+		{
+			$docs = $d.DIRECTORY_SEPARATOR."documents";
+			mkdir($d);
+			mkdir($docs);
+			chmod($docs, 0777);
+		}		
+		
+		return $d;
 	}
 	
 	function getFolders($constraint = "")

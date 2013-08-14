@@ -618,13 +618,6 @@ function deleteFolderResult(result)
 	static function createLibrary($form)
 	{
 		$d = $form->data->getLibraryDirectory();
-		if (!is_dir($d) && !file_exists($d))
-		{
-			$docs = $d.DIRECTORY_SEPARATOR."documents";
-			mkdir($d);
-			mkdir($docs);
-			chmod($docs, 0777);
-		}
 	}
 	
 	function deleteDocumentLibrary()
