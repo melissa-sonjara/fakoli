@@ -709,6 +709,16 @@ function deleteFolderResult(result)
 		return $document->format("<a style='display: inline' id='document_id_{document_id}' href='#' ondblclick=\"new LinkPicker().documentPickerInsertLink({document_id})\" onclick=\"new LinkPicker().toggleDocumentSelected(this, {document_id}); return false;\">{title}</a>&nbsp;<img style='display:inline; vertical-align: middle' src='$icon' alt='$type'/>&nbsp;$size");
 	}
 
+	static function formatDocumentLink($document)
+	{
+		$library = $document->DocumentLibrary();
+		$size = $library->getFileSize($document);
+		$img = DocumentHandler::getDocIcon($document->file);
+	
+		return "<img src='$img' alt='' style='display: inline-block; vertical-align: middle'>&nbsp;".
+			   "<a href='/action/document/download?document_id={$document->document_id}'>{$document->title}</a>&nbsp;$size";
+	}
+	
 	static function getStyles()
 	{
 		$styles .= "<link href=\"/fakoli/css/tabs.css\" rel=\"stylesheet\"/>\n";
