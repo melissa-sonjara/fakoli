@@ -37,7 +37,7 @@ Fakoli::usingFeature("data_view");
 $editor = $_GET["Editor"];
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
-$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+$libraries = Query::create(DocumentLibrary, "WHERE hidden=0 ORDER BY name")->execute();
 
 if (!$document_library_id && count($libraries) > 0)
 {
