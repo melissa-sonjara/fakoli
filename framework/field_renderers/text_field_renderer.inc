@@ -46,6 +46,7 @@ class TextFieldRenderer extends FieldRenderer
 	var $limit = 0;
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $encoding = "ISO-8859-1";
+	var $style;
 	
 	function TextFieldRenderer(&$parent)
 	{
@@ -94,7 +95,10 @@ class TextFieldRenderer extends FieldRenderer
 		{
 			echo $this->parent->annotations[$field]."<br />";
 		}
-		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $disable $onkeypress>";
+		
+		if ($style) $style = "style='$style'";
+		
+		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $style $disable $onkeypress>";
 		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, $this->encoding);
 		echo "</textarea>";
 		
