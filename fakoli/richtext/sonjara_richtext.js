@@ -182,7 +182,7 @@ var SymbolTable = new Class(
 		}
 		
 		this.div.addEvent('mouseleave', function(e) { this.div.fade('out'); }.bind(this));
-		var doc = $(document.body ? document.body : document.documentElement);
+		var doc = document.id(document.body ? document.body : document.documentElement);
 		
 		doc.adopt(this.div);
 		
@@ -450,7 +450,7 @@ var RichTextEditor = new Class({
 		doc += "</div>";
 		//alert(doc);
 		
-		var container = $(this.clientID + '_container');
+		var container = document.id(this.clientID + '_container');
 		if (!container)
 		{
 			document.write(doc);
@@ -461,7 +461,7 @@ var RichTextEditor = new Class({
 		}
 		
 		
-		var rte = $(this.name + "_iframe");
+		var rte = document.id(this.name + "_iframe");
 		if (rte.resizable) rte.resizable();
 		rte.addEvent('load', function() { this.enableDesignMode(); }.bind(this));
 	},
@@ -588,7 +588,7 @@ var RichTextEditor = new Class({
 				oRTE.body.onpaste = function() { return self.iePaste(); };
 			}, 1000);
 			
-			$(this.name + "_iframe").removeEvents('load');
+			document.id(this.name + "_iframe").removeEvents('load');
 			this.loading = false;
 		} 
 		else 
@@ -597,12 +597,12 @@ var RichTextEditor = new Class({
 			{
 				if (!this.readOnly) 
 				{
-					$(this.name + "_iframe").contentDocument.designMode = "on";
+					document.id(this.name + "_iframe").contentDocument.designMode = "on";
 				}
 				
 				try 
 				{
-					var oRTE = $(this.name + "_iframe").contentWindow.document;
+					var oRTE = document.id(this.name + "_iframe").contentWindow.document;
 					
 					//alert(oRTE);
 					oRTE.open();
@@ -638,17 +638,17 @@ var RichTextEditor = new Class({
 	
 	findFrame: function()
 	{
-		return document.id(this.name + "_iframe");
+		return document.frames[this.name];
 	},
 	
 	toggleHTMLSrc: function() 
 	{
-		var oHdnField = $(this.clientID);
-		var toolbar = $(this.name + "_toolbar");
-		var stylebar = $(this.name + "_stylebar");
-		var rte = $(this.name + "_iframe");
-		var src = $(this.clientID);
-		var chkSrc = $("chkSrc" + this.name);
+		var oHdnField = document.id(this.clientID);
+		var toolbar = document.id(this.name + "_toolbar");
+		var stylebar = document.id(this.name + "_stylebar");
+		var rte = document.id(this.name + "_iframe");
+		var src = document.id(this.clientID);
+		var chkSrc = document.id("chkSrc" + this.name);
 		if (chkSrc.checked) 
 		{
 			this.setToolbarVisibility("stylebar", "hidden");
@@ -685,7 +685,7 @@ var RichTextEditor = new Class({
 		}
 		else
 		{
-			return $(this.name + "_iframe").contentWindow.document;
+			return document.id(this.name + "_iframe").contentWindow.document;
 		}
 	},
 	
@@ -701,7 +701,7 @@ var RichTextEditor = new Class({
 		} 
 		else 
 		{
-			var oRTE = $(this.name + "_iframe").contentWindow.document;
+			var oRTE = document.id(this.name + "_iframe").contentWindow.document;
 			oRTE.body.innerHTML = html;
 		}
     },
@@ -709,7 +709,7 @@ var RichTextEditor = new Class({
 	setHiddenVal: function() 
 	{
 		//set hidden form field value for current rte
-		var oHdnField = $(this.clientID);
+		var oHdnField = document.id(this.clientID);
 		
 		if (oHdnField.value == null) oHdnField.value = "";
 		
@@ -720,7 +720,7 @@ var RichTextEditor = new Class({
 		else 
 		{
 			// Strip errant <br> tags in Firefox
-			var doc = $(this.name + "_iframe").contentWindow.document;
+			var doc = document.id(this.name + "_iframe").contentWindow.document;
 			var preBlocks = doc.getElementsByTagName("PRE");
 			for(var i = 0; i < preBlocks.length; ++i)
 			{
@@ -808,7 +808,7 @@ var RichTextEditor = new Class({
 		} 
 		else 
 		{
-			oRTE = $(this.name + "_iframe").contentWindow;
+			oRTE = document.id(this.name + "_iframe").contentWindow;
 		}
 		
 		try 
@@ -944,7 +944,7 @@ var RichTextEditor = new Class({
 		if (window.getSelection)
 		{
 			var elt = this.parseTag(tag);
-			var selection = $(this.name + "_iframe").contentWindow.getSelection();
+			var selection = document.id(this.name + "_iframe").contentWindow.getSelection();
 			
 			selection.getRangeAt(0).surroundContents(elt);
 		}
@@ -967,7 +967,7 @@ var RichTextEditor = new Class({
 		if (window.getSelection)
 		{
 			var elt = this.parseTag(tag);
-			var selection = $(this.name + "_iframe").contentWindow.getSelection();
+			var selection = document.id(this.name + "_iframe").contentWindow.getSelection();
 			
 			var range = selection.getRangeAt(0);
 			range.deleteContents();
@@ -1033,11 +1033,11 @@ var RichTextEditor = new Class({
 		}
 		else
 		{
-			var html = $(this.name + "_iframe").contentWindow.document.body.innerHTML;
+			var html = document.id(this.name + "_iframe").contentWindow.document.body.innerHTML;
 			//alert(html);
 			html = html.replace(pattern, "</$1>");
 			//alert(html);
-			$(this.name + "_iframe").contentWindow.document.body.innerHTML = html;
+			document.id(this.name + "_iframe").contentWindow.document.body.innerHTML = html;
 		}
 	},
 	
@@ -1172,7 +1172,7 @@ var RichTextEditor = new Class({
 		{
 			range = oRTE.createRange();
 			range.selectNodeContents(node);
-			var selection = $(this.name + "_iframe").contentWindow.getSelection();
+			var selection = document.id(this.name + "_iframe").contentWindow.getSelection();
 			selection.removeAllRanges();
 			selection.addRange(range);
 		}
