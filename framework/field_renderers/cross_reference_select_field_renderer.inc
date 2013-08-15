@@ -183,7 +183,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		{			
 			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
 			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
-			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		else
 		{
