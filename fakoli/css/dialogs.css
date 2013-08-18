@@ -16,6 +16,7 @@
 	-moz-box-shadow: 2px 2px 12px #444;
 	-webkit-box-shadow: 2px 2px 12px #444;
 	box-shadow: 2px 2px 12px #444;
+	border-radius: 8px;
 }
 
 .dialog_header
@@ -23,8 +24,9 @@
 	background: #406080; 
 	font-size: 10pt; 
 	color: #fff;  
-	width: 100%;
 	font-weight: bold;
+	border-radius: 6px 6px 0 0;
+	padding: 6px;
 }
 
 .dialog_header a,
@@ -41,7 +43,7 @@
 
 .dialog_body
 {
-	padding: 4px;
+	padding: 8px;
 }
 
 .dialog_body label
