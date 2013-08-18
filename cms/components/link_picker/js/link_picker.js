@@ -60,7 +60,19 @@ var LinkPicker =  (function()
 		insertLink: function(url)
 		{
 			var target = document.id('target').value;
-			this.editor.formatSelection("<a href=\"" + url + "\" target=\"" + target + "\">");
+			var link = "<a href=\"" + url + "\" target=\"" + target + "\">";
+			var selection = this.editor.selection;
+			
+			if (selection.isCollapsed())
+			{
+				this.editor.insertContent(link + url + "</a>");
+			}
+			else
+			{
+				content = selection.getContent();
+				selection.setContent(link + content + "</a>");
+			}
+
 			this.hide();
 		},
 		

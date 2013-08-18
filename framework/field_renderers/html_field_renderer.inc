@@ -61,6 +61,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
+		global $config;
+		
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)
 			|| array_key_exists($field, $this->parent->hidden)) return "";
 		
@@ -69,16 +71,32 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
-			//echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
+/*			//echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
 			echo "<link href='{$this->parent->componentPath}/richtext/sonjara_richtext.css' type='text/css' rel='stylesheet'></link>\n";
 			echo "<script type='text/javascript'>\n";
 			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/', '{$this->parent->componentPath}/richtext/');\n";
-			echo "</script>\n";
-
+			echo "</script>\n";*/
+?>
+	<script src="/fakoli/tinymce/tinymce.full.min.js"></script>
+	<script src="/components/image_picker/js/image_picker_tinymce_plugin.js"></script>
+	<script src="/components/link_picker/js/link_picker_tinymce_plugin.js"></script>
+	<script src="/components/video/js/video_picker_tinymce_plugin.js"></script>
+	<script>
+		tinymce.init(
+		{
+			selector:'textarea.richtext', 
+			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker', 
+			skin: 'fakoli',
+			relative_urls: false,
+			menubar: false,
+			toolbar: "undo redo | cut copy paste | styleselect | bold italic | bullist numlist outdent indent | table | linkpicker imagepicker videopicker | code visualblocks",
+			tools: 'inserttable' });
+	</script>
+<?		
 			HTMLFieldRenderer::$_includedRTEScript = true;
 		}
 				
-		echo "<script type='text/javascript'>\n";
+		/*echo "<script type='text/javascript'>\n";
 		$editor = $field."_editor";
 		echo "theEditors.$editor = new RichTextEditor('$editor', '$field', '";
 		echo trim(jsSafe($this->parent->data->get($field)));
@@ -118,6 +136,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		echo "theEditors.$editor.draw();\n";
 		echo "});\n";
 		echo "</script>";
+		*/
 	}
 	
 	function addEditorButton($editor, $button)
@@ -141,11 +160,12 @@ class HTMLFieldRenderer extends FieldRenderer
 	{
 		
 		global $html_editor_extra_buttons;
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+		echo "<div id='{$field}_container'></div>";
 		
 		$this->_startField($field);
 
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-			echo "<div id='{$field}_container'></div>";
+		echo "<textarea id='{$this->parent->id}_{$field}' name='{$field}' class='richtext'>".htmlSafe($this->parent->data->get($field))."</textarea>\n";
 		
 		$this->_endField($field);
 	}
@@ -198,7 +218,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		$editor = $field."_editor";
 		
-		echo "\ttheEditors.$editor.prepareForSubmit();\n";
+		//echo "\ttheEditors.$editor.prepareForSubmit();\n";
 	}
 }
 

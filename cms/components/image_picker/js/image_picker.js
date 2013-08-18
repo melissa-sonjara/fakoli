@@ -130,7 +130,7 @@ var ImagePicker =  (function()
 			    var img  = "<img image_id=\"" + this.selectedKey + "\" src=\"" + src + "\" " + s + "border=\"0\"" + " alt=\"" + this.selectedTitle + "\"" + a + ">";
 			    
 			    if(this.editor)
-			    	this.editor.insertAtSelection(img);
+			    	this.editor.insertContent(img);
 			    this.hide();
 			}
 		},
