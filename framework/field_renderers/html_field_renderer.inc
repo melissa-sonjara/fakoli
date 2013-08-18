@@ -84,6 +84,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	<script>
 		tinymce.init(
 		{
+			width: '<?echo $this->width?>',
+			height: '<?echo $this->height?>',
 			selector:'textarea.richtext', 
 			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu', 
 		    contextmenu: "cut copy paste pastetext | linkpicker imagepicker videopicker | inserttable cell row column deletetable",

@@ -48,38 +48,6 @@ if (!$gallery_id && count($galleries) > 0)
 	$gallery_id = $galleries[0]->gallery_id;
 }
 
-$styles .= <<<ENDSTYLES
-<style type="text/css">
-body
-{
-	text-align: left;
-}
-
-#preview
-{
-border:1px inset #888;
-display:table-cell;
-height:200px;
-text-align:center;
-vertical-align:middle;
-width:200px;
-margin-left: 20px;
--moz-border-radius: 8px;
-border-radius: 8px;
-background-color: #eee;
-}
-#searchblock
-{
-	width: 95%;
-	height: 250px;
-	border: solid 1px #000;
-	overflow: auto;
-	clear: left;
-}
-
-</style>
-ENDSTYLES;
-
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function()
@@ -103,7 +71,7 @@ else
 $view = new ImageListView($images, "javascript:new ImagePicker().selectImage({image_id}, '{title}')");
 
 ?>
-<div style="border: solid 1px #666; background: url(/fakoli/images/table-header.png); width: 95%;margin-left: 10px; padding: 2px;">
+<div class='image_picker_header'>
 <div style="float: left; width: auto"><strong>Gallery </strong>
  <select name="gallery_id" id="gallery_id" onchange="new ImagePicker().showImages(this.value)">
 <?
@@ -124,7 +92,7 @@ $view->drawGrid();
 </div>
 <table border="0" style="width: 100%" class="layout">
  <tr>
-  <td style="width: 50%"><div style="display: block; float: right; margin: 10px"><div id="preview"></div></div></td>
+  <td style="width: 50%"><div style="display: block; float: right; margin: 10px"><div id="image_picker_preview"></div></div></td>
   <td style="width: 50%">
   <table class="layout">
   

@@ -25,7 +25,8 @@ var ImagePicker =  (function()
 		show: function(editor)
 		{
 			this.editor = editor;
-			this.dialog = modalPopup("Link Picker", "/action/image_picker/image_picker?Editor=" + this.editor.name, 800, 'auto', true, false); 
+			title = this.mode == 'insert' ? "Insert an Image" : "Select an Image";
+			this.dialog = modalPopup(title, "/action/image_picker/image_picker?Editor=" + this.editor.name, 800, 'auto', true, false); 
 		},
 		
 		hide: function()
@@ -63,7 +64,7 @@ var ImagePicker =  (function()
 			this.selectedTitle = title;
 			this.selectedKey = image_id;
 			
-			document.id('preview').innerHTML = "<img src='/action/image/thumbnail?image_id=" + image_id + "&size=150' width='150' border='0' alt='" + title + "'/>";
+			document.id('image_picker_preview').innerHTML = "<img src='/action/image/iconize?image_id=" + image_id + "&size=150' width='150' border='0' alt='" + title + "'/>";
 			if (this.mode != "select")
 			{
 				this.getImageSize();
@@ -81,7 +82,7 @@ var ImagePicker =  (function()
 				srcdoc.getElementById(this.selectModeField).value = this.selectedKey;
 				
 				var preview = srcdoc.getElementById(this.selectModePreview);
-				preview.src = "/action/image/thumbnail?image_id=" + this.selectedKey + "&size=150";
+				preview.src = "/action/image/iconize?image_id=" + this.selectedKey + "&size=150";
 				window.close();
 			}
 			else

@@ -67,6 +67,11 @@ class ImagePickerManifest
 	{
 		return array("/components/image_picker/js/image_picker.js");
 	}
+	
+	static function getStyles()
+	{
+		return array("/components/image_picker/css/image_picker.css");
+	}
 }
 
 ?>
