@@ -839,6 +839,7 @@ define("tinymce/pasteplugin/Plugin", [
 
 		editor.addMenuItem('pastetext', {
 			text: 'Paste as text',
+			icon: 'pastetext',
 			selectable: true,
 			active: clipboard.pasteFormat,
 			onclick: togglePlainTextPaste

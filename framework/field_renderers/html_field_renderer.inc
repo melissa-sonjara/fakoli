@@ -77,7 +77,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/', '{$this->parent->componentPath}/richtext/');\n";
 			echo "</script>\n";*/
 ?>
-	<script src="/fakoli/tinymce/tinymce.full.min.js"></script>
+	<script src="/fakoli/tinymce/tinymce.min.js"></script>
 	<script src="/components/image_picker/js/image_picker_tinymce_plugin.js"></script>
 	<script src="/components/link_picker/js/link_picker_tinymce_plugin.js"></script>
 	<script src="/components/video/js/video_picker_tinymce_plugin.js"></script>
@@ -85,11 +85,12 @@ class HTMLFieldRenderer extends FieldRenderer
 		tinymce.init(
 		{
 			selector:'textarea.richtext', 
-			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker', 
+			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu', 
+		    contextmenu: "cut copy paste pastetext | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
 			menubar: false,
-			toolbar: "undo redo | cut copy paste | styleselect | bold italic | bullist numlist outdent indent | table | linkpicker imagepicker videopicker | code visualblocks",
+			toolbar: "undo redo | cut copy paste pastetext | styleselect | bold italic | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks",
 			tools: 'inserttable' });
 	</script>
 <?		

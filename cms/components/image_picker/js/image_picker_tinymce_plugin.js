@@ -7,4 +7,15 @@ tinymce.PluginManager.add('imagepicker', function(editor, url) {
         	imagePicker(editor);
         }
     });
+    
+    editor.addMenuItem('imagepicker', {
+    	text: 'Insert Image',
+    	icon:  'imagepicker',
+        image: '/fakoli/tinymce/skins/fakoli/img/insertimage.png',
+        onclick: function() {
+        	imagePicker(editor);
+        }
+
+    });
+
 });

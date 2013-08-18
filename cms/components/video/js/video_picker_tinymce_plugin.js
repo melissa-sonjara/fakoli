@@ -7,4 +7,14 @@ tinymce.PluginManager.add('videopicker', function(editor, url) {
         	videoPicker(editor);
         }
     });
+    
+    editor.addMenuItem('videopicker', {
+    	text: 'Insert Video',
+    	icon:  'videopicker',
+        image: '/fakoli/tinymce/skins/fakoli/img/insertvideo.png',
+        onclick: function() {
+        	videoPicker(editor);
+        }
+    });
+
 });
