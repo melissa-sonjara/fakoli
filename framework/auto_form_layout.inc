@@ -949,7 +949,8 @@ class TemplateFormLayout extends AutoFormLayout
 
 	function startField($field, $renderer, $colspan = 1, $styles = "")
 	{
-		$this->printLabel($field, $renderer, $styles, ($renderer->colspan > 1) ? $this->parent->annotations[$field] : "");
+		$annotations = $renderer->annotateBefore ? $renderer->parent->annotations[$field] : "";
+		$this->printLabel($field, $renderer, $styles, $annotations);
 		
 		ob_start();
 	}
@@ -960,7 +961,7 @@ class TemplateFormLayout extends AutoFormLayout
 		
 		ob_end_clean();
 		
-		if (!$renderer->annotateBefore && $renderer->colspan == 1 && $renderer->parent->annotations[$field])
+		if (!$renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			if ($renderer->annotateNextLine)
 			{
