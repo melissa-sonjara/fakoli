@@ -303,9 +303,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		$optpk = $this->getMatchingPK($xref, $rc);
 		
 		// Clear out current relations
-		
-		$xref = new $this->xrefClass;
-		$xref->delete("WHERE {$pk}=".$obj->get($pk));
+		$this->clearOutRelations($obj, $pk);
 		
 		if (isset($_POST[$this->field]))
 		{
@@ -318,6 +316,18 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			}
 		}
 	}
+	
+	/**
+	 * Clear out the current relations stored in the xref class.
+	 * 
+	 * @param Object $obj
+	 * @param String $pk
+	 */
+	function clearOutRelations($obj, $pk)
+	{
+		$xref = new $this->xrefClass;
+		$xref->delete("WHERE {$pk}=".$obj->get($pk));
+	}		
 }
 
 
