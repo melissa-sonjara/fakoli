@@ -40,7 +40,7 @@ $libraries = FileshareManager::getSharedLibraries();
 
 ?>	
 <div id="fileshare_list">
-<h3 class="fileshare_list"><img alt="library" src="/fakoli/images/icon_library.png"><a class="heading" href="/fileshare_libraries">Fileshare Libraries</a></h3>
+<h3 class="fileshare_list"><img alt="library" src="/fakoli/images/icon_library.png"><a class="heading" href="fileshare_libraries">Fileshare Libraries</a></h3>
 <ul>
 <?php 
 if(count($libraries) > 0)
