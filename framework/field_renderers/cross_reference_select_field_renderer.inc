@@ -55,6 +55,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $dropdownMaxWidth = "340px";
 	var $dropdownMessage = "Click to Select Terms";
 	var $showSelectAll = false;
+	var $disable = false;
 	
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -240,8 +241,9 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		{
 			$p = $item->$itempk;
 			
-
-			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
+			$disable = ($this->disable) ? "disabled='disabled'" : "";
+				
+			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' $disable value='1'";
 			if (array_key_exists($item->$itempk, $selected))
 			{
 				echo " checked";
@@ -302,7 +304,6 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		$optpk = $this->getMatchingPK($xref, $rc);
 		
-		// Clear out current relations
 		$this->clearOutRelations($obj, $pk);
 		
 		if (isset($_POST[$this->field]))
