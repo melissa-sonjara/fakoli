@@ -161,6 +161,16 @@ class DocumentLibrary extends DataItem
 		return false;
 	}
 	
+	/**
+	 * Can only delete an empty library.
+	 * 
+	 * @return boolean
+	 */
+	function allowDelete()
+	{
+		return (!count($this->Documents()) && checkRole($this->delete_files)) ? true : false;
+	}
+	
 	function allowManageFiles()
 	{
 		global $user;

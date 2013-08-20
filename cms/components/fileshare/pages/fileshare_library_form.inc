@@ -52,13 +52,16 @@ $form = new AutoForm($library);
 $form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files", "create_date", "identifier");
 $form->required("name");
 $form->onSaveComplete = setLibraryIdentifier;
+$form->allowDelete = $library->allowDelete();
+$form->onDelete = array(FileshareManager, onDeleteFileshareLibary);
+
 $form->unique("name", "A library already exists with that name. Please choose a different name.");
 
 $tabs = FileshareManager::libraryTabs($document_library_id);
 
 if ($method == "POST")
 {
-	if ($form->save())
+	if ($form->save() && !$form->deleted);
 	{
 		DocumentManager::createLibrary($form);
 				
@@ -66,7 +69,6 @@ if ($method == "POST")
 		redirect("fileshare_library_members?document_library_id=".$form->data->document_library_id);
 	}
 }
-
 
 $script .= $form->writeScript();
 ?>
@@ -78,8 +80,9 @@ $tabs->writeHTML();
 <?php
 $form->drawForm();
 
-function setLibraryIdentifier(&$form)
+function setLibraryIdentifier($form)
 {
 	FileshareManager::setLibraryIdentifier($form);
 }
+
 ?></div></div>

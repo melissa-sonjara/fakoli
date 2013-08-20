@@ -238,6 +238,13 @@ class FileshareManager extends DocumentManager
 		$library->filter = new InclusionFilter("identifier");
 		$library->save();
 	}
+	
+	static function onDeleteFileshareLibary($library)
+	{
+		$mgr = new DocumentManager($library);
+		$mgr->deleteDocumentLibrary();
+		redirect("fileshare_libraries");
+	}	
 
 	static function getDocumentAuthor($document)
 	{
