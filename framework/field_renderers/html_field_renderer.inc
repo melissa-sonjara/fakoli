@@ -87,12 +87,13 @@ class HTMLFieldRenderer extends FieldRenderer
 			width: '<?echo $this->width?>',
 			height: '<?echo $this->height?>',
 			selector:'textarea.richtext', 
-			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu', 
-		    contextmenu: "cut copy paste pastetext | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
+			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace', 
+		    contextmenu: "cut copy paste pastetext searchreplace | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
+			document_base_url: 'http://<?echo $config['http_host']?>',
 			menubar: false,
-			toolbar: "undo redo | cut copy paste pastetext | styleselect | bold italic | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks",
+			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks",
 			tools: 'inserttable' });
 	</script>
 <?		
