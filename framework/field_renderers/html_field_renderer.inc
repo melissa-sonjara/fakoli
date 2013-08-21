@@ -86,6 +86,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		{
 			width: '<?echo $this->width?>',
 			height: '<?echo $this->height?>',
+			valid_elements: '*[*]',
 			selector:'textarea.richtext', 
 			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace', 
 		    contextmenu: "cut copy paste pastetext searchreplace | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
