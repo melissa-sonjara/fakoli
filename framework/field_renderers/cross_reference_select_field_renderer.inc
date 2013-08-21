@@ -242,15 +242,15 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			$p = $item->$itempk;
 			
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
-				
+			echo "<label for='checkbox_{$field}_$p'>";
 			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' $disable value='1'";
 			if (array_key_exists($item->$itempk, $selected))
 			{
 				echo " checked";
 			}
-			echo ">&nbsp;";
+			echo "/>";
 
-			echo "<label for='checkbox_{$field}_$p'>".$this->formatName($item, $this->nameField)."</label>";
+			echo $this->formatName($item, $this->nameField)."</label>";
 			echo "<br/>";
 		}
 	}

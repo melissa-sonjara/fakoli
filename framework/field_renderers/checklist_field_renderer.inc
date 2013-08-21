@@ -173,12 +173,11 @@ class CheckListFieldRenderer extends FieldRenderer
 				echo "<dt>$groupName</dt>\n<dd>\n";
 				foreach($group as $value => $text)
 				{
-					$text = "<label for='{$this->parent->id}_{$field}[$idx]'>$text</label>";
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
 					
-					echo "<input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<label for='{$this->parent->id}_{$field}[$idx]'><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
 					$idx++;
 				}
 				
@@ -192,10 +191,9 @@ class CheckListFieldRenderer extends FieldRenderer
 			{
 				foreach($this->options as $value => $text)
 				{
-					$text = "<label for='{$this->parent->id}_{$field}[$idx]'>$text</label>";
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
-					echo "<input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<label for='{$this->parent->id}_{$field}[$idx]'><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
 					$idx++;
 				}
 
