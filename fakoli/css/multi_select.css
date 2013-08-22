@@ -35,4 +35,23 @@ a.multi_select_dropdown
 .selectbox label, .scrollbox label {
   font-size: 10pt;
   font-weight: normal;
+  border-radius: 2px 2px 2px 2px;
+  display: inline-block;
+  font-weight: normal;
+  margin: 2px 2px 4px 24px;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.selectbox input, .scrollbox input {
+  display: inline-block;
+  float: left;
+  margin-left: -20px;
+  margin-top: 2px;
+}
+
+.selectbox label:hover,
+.scrollbox label:hover
+{
+	background-color: #ddd;
 }
