@@ -117,13 +117,13 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 		{
 			$p = $item->term_id;
 			
-			echo "<span style='white-space: nowrap'><input type='checkbox' class='checkbox' name='{$this->taxonomy->identifier}[$p]' id='checkbox_{$this->taxonomy->identifier}_$p' value='$p'";
+			echo "<label for='checkbox_{$this->taxonomy->identifier}_$p'>".$item->term."</label><input type='checkbox' class='checkbox' name='{$this->taxonomy->identifier}[$p]' id='checkbox_{$this->taxonomy->identifier}_$p' value='$p'";
 			if (array_key_exists($p, $selected))
 			{
 				echo " checked";
 			}
 			echo ">&nbsp;";
-			echo "<label for='checkbox_{$this->taxonomy->identifier}_$p'>".$item->term."</label></span>";
+			echo "</label>";
 			echo "<br/>";
 		}
 	}
