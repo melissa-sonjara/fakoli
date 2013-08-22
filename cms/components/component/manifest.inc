@@ -100,6 +100,7 @@ class ComponentManifest
 					 //"/fakoli/js/mootools-core-1.4.3.js",
 					 "/fakoli/js/mootools-core-1.4.5.js",
 					 "/fakoli/js/mootools-more-1.4.0.1.js",
+					 "/fakoli/tinymce/tinymce.min.js",
 					 "/fakoli/js/ui.js",
 					 "/fakoli/js/iFrameFormRequest.js",
 					 "/fakoli/js/mootools-textarea-resizer.js",
