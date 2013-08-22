@@ -65,7 +65,8 @@ class ImagePickerManifest
 		
 	static function getScripts()
 	{
-		return array("/components/image_picker/js/image_picker.js");
+		return array("/components/image_picker/js/image_picker.js",
+					 "/components/image_picker/js/image_picker_tinymce_plugin.js");
 	}
 	
 	static function getStyles()

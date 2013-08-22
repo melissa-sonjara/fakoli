@@ -65,7 +65,8 @@ class VideoManifest
 	static function getScripts()
 	{
 		return array("/components/video/js/video_picker.js",
-					 "/components/video/js/video.js");
+					 "/components/video/js/video.js",
+					 "/components/video/js/video_picker_tinymce_plugin.js");
 	}
 	
 	static function getStyles()

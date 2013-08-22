@@ -261,6 +261,7 @@ var AbstractDialog = new Class(
 	},
 	
     element: Class.Empty,
+    remoteURL: null,
     
     initialize: function(element, options)
     {
@@ -339,6 +340,20 @@ var AbstractDialog = new Class(
 });
 
 AbstractDialog.closeButtonHTML = "Close &times;";
+AbstractDialog.onClose = null;
+
+AbstractDialog.onClose = function(dialog)
+{
+	if (dialog.remoteURL)
+	{
+		dialog.element.getElements("textarea.richtext").each(function(rte)
+		{
+		    tinyMCE.execCommand('mceFocus', false, rte.id);
+		    tinyMCE.execCommand('mceRemoveControl', false, rte.id);
+		});
+	}
+};
+
 
 var ModalDialog = new Class(
 {
@@ -380,6 +395,8 @@ var ModalDialog = new Class(
     show: function(onComplete, fragmentURL)
     {
     	var reload = this.element.getStyle('display') != 'none';
+    	
+    	this.remoteURL = fragmentURL;
     	
     	if (this.options.draggable)
     	{
@@ -441,6 +458,8 @@ var ModalDialog = new Class(
     {
     	window.raiseCurtain();
     	this.element.setStyle('display', 'none');
+    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
+    	if (this.remoteURL) this.element.dispose();
     }
 });
 
@@ -511,7 +530,9 @@ var FloatingDialog = new Class(
     	}
     	
     	this.position();
-    	
+    	 	
+    	this.remoteURL = fragmentURL;
+
     	if (fragmentURL && this.options.body)
     	{
        		this.disposeOnExit = true;
@@ -539,7 +560,7 @@ var FloatingDialog = new Class(
     
     hide: function()
     {
-    	new Fx.Tween(this.element).start('opacity', 0).chain(function() { this.element.setStyle('display', 'none');}.bind(this));
+    	new Fx.Tween(this.element).start('opacity', 0).chain(function() { if (AbstractDialog.onClose) { AbstractDialog.onClose(this); } this.element.setStyle('display', 'none');}.bind(this));
     }
 });
 

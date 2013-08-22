@@ -54,7 +54,8 @@ class LinkPickerManifest
 	
 	static function getScripts()
 	{
-		return array("/components/link_picker/js/link_picker.js");
+		return array("/components/link_picker/js/link_picker.js",
+					 "/components/link_picker/js/link_picker_tinymce_plugin.js");
 	}
 	
 	static function getStyles()

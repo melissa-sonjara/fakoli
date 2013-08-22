@@ -69,27 +69,40 @@ class HTMLFieldRenderer extends FieldRenderer
 		global $html_editor_extra_buttons;
 		global $html_editor_override_buttons;
 		
+		$https = $_SERVER['HTTPS'];
+		if ($https == "off") $https = false;
+		
+		$protocol = $https ? "https" : "http";
+		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
 /*			//echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
 			echo "<link href='{$this->parent->componentPath}/richtext/sonjara_richtext.css' type='text/css' rel='stylesheet'></link>\n";
 			echo "<script type='text/javascript'>\n";
 			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/', '{$this->parent->componentPath}/richtext/');\n";
-			echo "</script>\n";*/
-?>
+			echo "</script>\n";
 	<script src="/fakoli/tinymce/tinymce.min.js"></script>
-	<script src="/components/image_picker/js/image_picker_tinymce_plugin.js"></script>
+		<script src="/components/image_picker/js/image_picker_tinymce_plugin.js"></script>
 	<script src="/components/link_picker/js/link_picker_tinymce_plugin.js"></script>
-	<script src="/components/video/js/video_picker_tinymce_plugin.js"></script>
-	<script>
+	<script src="/components/video/js/video_picker_tinymce_plugin.js"></script>*/
+?>
+
+	<script type='text/javascript'>
+		tinymce.baseURL = "<?echo $protocol?>://<?echo $config['http_host']?>/fakoli/tinymce/";
+	</script>
+<?		
+			HTMLFieldRenderer::$_includedRTEScript = true;
+		}
+?>		
+	<script type='text/javascript'>
 		tinymce.init(
 		{
 			width: '<?echo $this->width?>',
 			height: '<?echo $this->height?>',
 			valid_elements: '*[*]',
-			selector:'textarea.richtext', 
-			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace', 
-		    contextmenu: "cut copy paste pastetext searchreplace | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
+			selector: '#<?echo "{$this->parent->id}_{$field}"?>',
+			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace',
+			contextmenu: "cut copy paste pastetext searchreplace | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
 			document_base_url: 'http://<?echo $config['http_host']?>',
@@ -98,9 +111,6 @@ class HTMLFieldRenderer extends FieldRenderer
 			tools: 'inserttable' });
 	</script>
 <?		
-			HTMLFieldRenderer::$_includedRTEScript = true;
-		}
-				
 		/*echo "<script type='text/javascript'>\n";
 		$editor = $field."_editor";
 		echo "theEditors.$editor = new RichTextEditor('$editor', '$field', '";
