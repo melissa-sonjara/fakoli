@@ -86,12 +86,10 @@ var MultiSelect = new Class(
 		
 		var cbox = new Element('input', {'type': 'checkbox', 'id': id, 'value': value});
 		var label = new Element('label', {'for': id});
-		var brk = new Element("br");
-		
+
 		cbox.inject(label, 'top');
 		label.inject(this.container);
 		label.appendText(text);
-		brk.inject(this.container);
 		
 		cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
 		label.removeEvents('click');
