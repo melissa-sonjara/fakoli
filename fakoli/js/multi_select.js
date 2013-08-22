@@ -88,7 +88,7 @@ var MultiSelect = new Class(
 		var label = new Element('label', {'for': id, 'text': text});
 		var brk = new Element("br");
 		
-		cbox.inject(this.container);
+		cbox.inject(label);
 		label.inject(this.container);
 		brk.inject(this.container);
 		
