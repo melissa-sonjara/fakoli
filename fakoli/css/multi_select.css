@@ -36,11 +36,12 @@ a.multi_select_dropdown
   font-size: 10pt;
   font-weight: normal;
   border-radius: 2px 2px 2px 2px;
-  display: inline-block;
+  display: block;
   font-weight: normal;
   margin: 2px 2px 4px 24px;
   vertical-align: top;
   cursor: pointer;
+  line-height: 1.2;
 }
 
 .selectbox input, .scrollbox input {
