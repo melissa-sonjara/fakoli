@@ -91,7 +91,7 @@ var MultiSelect = new Class(
 		label.inject(this.container);
 		label.appendText(text);
 		
-		cbox.addEvent('click', function(e) { new Event(e).stop(); this.selectionChanged(); }.bind(this));
+		cbox.addEvent('click', function(e) { new Event(e).stop(); this.selectionChanged(); return true; }.bind(this));
 		label.removeEvents('click');
 		label.addEvent('click', function(e) 
 		{
