@@ -192,14 +192,13 @@ window.addEvent('domready', function()
 		{
 			$p = $item->term_id;
 			
-			echo "<span style='white-space: nowrap'><input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
+			echo "<label for='checkbox_{$field}_$p'><input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
 			if (array_key_exists($p, $selected))
 			{
 				echo " checked";
 			}
-			echo ">&nbsp;";
-			echo "<label for='checkbox_{$field}_$p'>".$item->term."</label></span>";
-			echo "<br/>";
+			echo ">";
+			echo $item->term."</label>";
 		}
 	}
 	
