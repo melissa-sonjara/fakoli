@@ -124,7 +124,6 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 			}
 			echo ">".$item->term."";
 			echo "</label>";
-			echo "<br/>";
 		}
 	}
 }
