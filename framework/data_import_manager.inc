@@ -600,7 +600,6 @@ class DataImportManager
 			echo "<form method='POST' action='' enctype='multipart/form-data'>\n";
 			echo "<input type='hidden' name='{$this->field}' value='{$this->filepath}'/>\n";
 			$this->drawButtons();
-			echo "</form>\n";
 		}
 		
 		echo $this->log;
@@ -612,6 +611,11 @@ class DataImportManager
 		}
 
 		$this->drawButtons();
+		
+		if(count($this->table->items))
+		{
+			echo "</form>\n";
+		}
 	}
 	
 	/**
