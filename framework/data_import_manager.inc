@@ -34,47 +34,39 @@
 /**
  * Import data from a cvs file.
  * 
- * Instantiating classes must specify the details of
- * the columns in the spreadsheet and any additional default 
- * values to be set into the object in function init.
+ * Requires specifying the columns to be imported and their
+ * position in the csv file.
  * 
- * Create an array of columns as instances of DataImportColumn in
+ * You may wish to instantiate a helper file for custom
+ * handling.
  * 
  * e.g.,
- * if the input column will provide a name value and the import
+ *  
+$helper = new UserImportHelper();
+
+$mgr = new DataImportManager(SiteUser, "import_users");
+$mgr->column("first_name", 1);
+$mgr->column("last_name", 2);
+$mgr->column("email", 3);
+$mgr->column("role", 4);
+
+$mgr->match("email");
+
+$mgr->onPreProcessRow = array($helper, preProcessRow);
+$mgr->onSaveComplete = array($helper, sendEmail);
+
+$script .= $mgr->writeScript();
+$mgr->drawView();
+
+ * If a column needs special handling such as finding a key based on
+ * a text string in a reference table, use a callback.
+ * 
+ * If the input column will provide a name value and the import
  * manager will retrieve its key value, then instantiate the
  * column as follows:
  * 
  * $this->column("grade_id", 1, "Grade", $this->formatList($grades, "grade_name"));
  * 
- * If the input column provides the value to be stored (e.g., "name") then
- * instantiate the column as follows:
- * 
- * $this->column("name", 2));
- * 
- * The page using the manager should contain the following code:
-
-$mgr = new DataImportManager(class_name);
-$mgr->column("name", 2);
-etc. for each column
-
-if ($method == "POST")
-{
-	if($_POST["import"])
-	{
-		$mgr->import();
-	}
-	else
-	{
-		$mgr->preview();		
-	}
-}
-else
-{
-	$script .= $mgr->writeScript();
-	$mgr->drawForm();
-}
-
  */
 require_once realpath(dirname(__FILE__))."/data_view.inc";
 
@@ -84,6 +76,7 @@ class DataImportManager
 	var $id;
 	var $log;
 	var $objs = array();		///< Contains data read in from the input file
+	var $import = false;
 	var $preview = false;		///< whether we are in preview mode
 	var $matches = array();		///< Field(s) to use to check for a match in db - can be empty
 	var $savedObjs = array();	///< Matches found in the db for data in the import file, indexed by primary key
@@ -92,6 +85,9 @@ class DataImportManager
 	var $validateDataFile;		///< optional callback to validate data contents of the file
 	var $buttons = array();		///< The custom buttons collection
 	var $onSaveComplete = null;	///< Callback event handler that is fired after all the imported rows are saved
+	var $field = "csv_file";
+	var $cssClass = "";
+	var $table;
 	
 	/**
 	 * 
@@ -102,6 +98,11 @@ class DataImportManager
 	{	
 		$this->class_name = $class_name;
 		$this->id = ($id) ? $id : codify(strtolower($this->class_name)) . "_data_import";
+		
+		if($_POST["import"])
+		{
+			$this->import = true;
+		}
 	}
 	
 	/**
@@ -556,20 +557,26 @@ class DataImportManager
 		return "";
 	}
 	
-	/**
-	 * Display the expected input column layout and show a File upload
-	 * renderer for the user to select the csv file to be imported.
-	 */
-	function drawForm()
+	function drawView()
 	{
-		$table = $this->buildInputTable();
-		$table->drawView();
+		$file = $this->getFilePath();
 		
-		echo "</br></br><form method='POST' action='' enctype='multipart/form-data'>
-		<label>CSV file to import: </label><input type='file' name='csv_file'/><br/><br/>
-		<input type='submit' name='import' class='button' value='Import File'/>
-		<input type='submit' name='preview' class='button' value='Preview Import'/>
-		</form>";	
+		$class = ($this->cssClass) ? " class='{$this->cssClass}'" : "";
+		echo "<div id='data_import'{$class}>\n";
+		
+		if(!$file)
+		{
+			$this->drawForm();
+		}
+		else if(!$this->import)
+		{
+			$this->preview();
+		}
+		else 
+		{
+			$this->import();
+		}
+		echo "</div>\n";
 	}
 	
 	/**
@@ -578,19 +585,77 @@ class DataImportManager
 	function preview()
 	{
 		$this->preview = true;
-		
-		$fp = $this->openFile();		
+		$this->uploadDataImportFile();
+
+		$fp = $this->openFile();
 		if(!$fp) return;
 		
 		if($this->loadData($fp))
 		{
-			$table = $this->buildPreviewTable();
-			$this->drawButtons();
-			echo $this->log;
-			$table->drawView();
+			$this->table = $this->buildPreviewTable();
 		}
+		
+		if(count($this->table->items))
+		{
+			echo "<form method='POST' action='' enctype='multipart/form-data'>\n";
+			echo "<input type='hidden' name='{$this->field}' value='{$this->filepath}'/>\n";
+			$this->drawButtons();
+			echo "</form>\n";
+		}
+		
+		echo $this->log;
+		$this->table->drawView();
+		
+		if(!count($this->table->items) && !$this->filepath)
+		{
+			$this->drawForm();
+		}
+
+		$this->drawButtons();
 	}
 	
+	/**
+	 * Display the expected input column layout and show a File upload
+	 * renderer for the user to select the csv file to be imported.
+	 */
+	function drawForm()
+	{
+		$table = $this->buildInputTable();
+		echo "<p><label>Description of columns expected in import file:</label></p>\n";
+		$table->drawView();
+		
+		echo "</br></br><form method='POST' action='' enctype='multipart/form-data'>
+		<label>CSV file to import: </label><input type='file' name='{$this->field}'/><br/><br/>
+		<input type='submit' name='import' class='button' value='Import File'/>
+		<input type='submit' name='preview' class='button' value='Preview Import'/>
+		</form>";	
+	}
+	
+	function uploadDataImportFile()
+	{
+		global $config;
+		
+		$file = $_FILES[$this->field]["tmp_name"];
+		
+		if(!$file)
+		{
+			return;
+		}
+		
+		$fullpath = $config["uploadbase"] . DIRECTORY_SEPARATOR . basename($file);
+	
+		if (file_exists($fullpath))
+		{
+			unlink($fullpath);
+		}
+	
+		trace("Uploading $file to $fullpath", 3);
+	
+		move_uploaded_file($file, $fullpath);
+		chmod($fullpath, 0755);
+	
+		$this->filepath = $fullpath;
+	}	
 
 	/**
 	 * Draws any additional buttons specified in the calling script.
@@ -619,10 +684,15 @@ class DataImportManager
 			}
 			$buttons[] = "<input type='button' class='{$this->buttonCSS}' onclick=\"$link\" value=\"{$button['text']}\"/>";
 		}
+		
+		if($this->preview && $this->table && count($this->table->items))
+		{
+			array_unshift($buttons, "<input type='submit' name='import' class='button' value='Import File'/>\n");
+		}
 
 		echo "<div class='button_row'>" . implode("&nbsp;&nbsp;", $buttons) . "</div>";
 	}
-		
+			
 	function openFile()
 	{
 		$filepath = $this->getFilePath();
@@ -645,7 +715,20 @@ class DataImportManager
 	 */
 	function getFilePath()
 	{
-		return (!$this->filepath) ? $_FILES["csv_file"]["tmp_name"] : $this->filepath;
+		if($this->filepath)
+		{
+			return $this->filepath;
+		}
+		else if($_FILES[$this->field]["tmp_name"])
+		{
+			return $_FILES[$this->field]["tmp_name"];
+		}
+		else if($_POST[$this->field])
+		{
+			return $_POST[$this->field];
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -654,9 +737,9 @@ class DataImportManager
 	 * not found in the lookup table.
 	 */
 	function buildPreviewTable()
-	{
+	{			
 		$pObjs = $this->createPreviewData();
-			
+
 		$pk = $this->getPrimaryKey();
 		$table = new DataListView($pObjs, $this->id);
 		$table->column("Row", array($this, formatRowIndex));
