@@ -508,7 +508,7 @@ function <? echo $selChanged ?>(elt)
 		{
 			echo " checked='checked'";
 		}
-		echo " onchange='selChanged_{$field}_box(this);'/>\n";
+		echo " onclick='selChanged_{$field}_box(this);'/>\n";
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
