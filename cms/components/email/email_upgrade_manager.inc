@@ -49,7 +49,8 @@ Fakoli::using("email", "component");
 class EmailUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added contact_us table"
 	);
 	
 	function EmailUpgradeManager()

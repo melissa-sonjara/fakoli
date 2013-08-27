@@ -99,6 +99,7 @@ class EmailHelper
 			$form->msg = "Email send failed.";
 		}
 		
+		$contactUs->save();
 		return $rtn;		
 	}
 }

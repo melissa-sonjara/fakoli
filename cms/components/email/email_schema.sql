@@ -87,3 +87,17 @@ INSERT INTO `email_manager_test_relation` (`relation_id`,`string`) VALUES
 
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+CREATE TABLE contact_us (
+	contact_us_id		int(10) unsigned not null auto_increment,
+	full_name			varchar(1000) not null,
+	email				varchar(300) not null,
+	contact_topic_id	int(10) unsigned not null default 0,
+	subject				varchar(1000),
+	message				LONGTEXT,
+	PRIMARY KEY(contact_us_id)
+) ENGINE=InnoDB;
+
+-- EMD Versopm 1.1
