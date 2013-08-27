@@ -348,8 +348,7 @@ AbstractDialog.onClose = function(dialog)
 	{
 		dialog.element.getElements("textarea.richtext").each(function(rte)
 		{
-		    tinyMCE.execCommand('mceFocus', false, rte.id);
-		    tinyMCE.execCommand('mceRemoveControl', false, rte.id);
+			tinymce.remove("#" + rte.id);
 		});
 	}
 };
@@ -456,9 +455,9 @@ var ModalDialog = new Class(
     
     hide: function()
     {
+    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
     	window.raiseCurtain();
     	this.element.setStyle('display', 'none');
-    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
     	if (this.remoteURL) this.element.dispose();
     }
 });
@@ -560,7 +559,8 @@ var FloatingDialog = new Class(
     
     hide: function()
     {
-    	new Fx.Tween(this.element).start('opacity', 0).chain(function() { if (AbstractDialog.onClose) { AbstractDialog.onClose(this); } this.element.setStyle('display', 'none');}.bind(this));
+    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
+    	new Fx.Tween(this.element).start('opacity', 0).chain(function() {  this.element.setStyle('display', 'none');}.bind(this));
     }
 });
 
