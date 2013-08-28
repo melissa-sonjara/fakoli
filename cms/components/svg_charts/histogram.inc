@@ -165,6 +165,32 @@ class Histogram
 		$this->series[] = $series;
 	}
 	
+	function autoScale()
+	{
+		$max = 0;
+		$min = 0;
+		
+		foreach($this->series as $series)
+		{
+			foreach($series->values as $value)
+			{
+				if ($max === null || $value > $max) $max = $value;
+				if ($min === null || $value < $min) $min = $value;
+			}
+		}
+		
+		$logMax = intval(log10($max));
+		$logMin = intval(log10($min));
+		$log = max($logMax, $logMin);
+		
+		$max = round($max, -$log); 
+		
+		$min = round($min, -$log);
+		
+		$this->max = $max;
+		$this->min = $min;
+	}
+		
 	function draw()
 	{
 		global $script;
