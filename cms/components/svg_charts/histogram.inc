@@ -183,9 +183,17 @@ class Histogram
 		$logMin = intval(log10($min));
 		$log = max($logMax, $logMin);
 		
-		$max = round($max, -$log); 
+		$denom = pow(10, $log);
 		
-		$min = round($min, -$log);
+		if ($max != 0)
+		{
+			$max = floor(($max / $denom) + 1) * $denom; 
+		}
+		
+		if ($min != 0)
+		{
+			$min = floor(($min / $denom) - 1) * $denom; 
+		}
 		
 		$this->max = $max;
 		$this->min = $min;
