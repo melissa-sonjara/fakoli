@@ -96,7 +96,7 @@ class Histogram
 	var $yAxisLabels = array();
 	var $title = "";
 	var $titleSize = 20;
-	var $enabledDownload = true;
+	var $enableDownload = true;
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
