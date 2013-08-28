@@ -9,7 +9,7 @@ var HistogramSeries = new Class(
 	options:
 	{
 		shadow: false,
-		emboss: true,
+		emboss: false,
 		styles: {},
 		strokeWidth: 2,
 		symbolSize: 4,
