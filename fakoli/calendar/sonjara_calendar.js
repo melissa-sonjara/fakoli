@@ -76,8 +76,6 @@ var Calendar = new Class(
 		this.ctrlName = ctrlName;
 		this.divID    = varName + "_" + formName + "_" + ctrlName;
 	
-		var body = document.id(document.body ? document.body : document.documentElement);
-	
 		this.calendar = new Element('div', {id: this.divID});
 		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'display': 'none', 'opacity': 0});
 		this.calendar.addEvent('mouseout', function(e) {this.onMouseOut(e);}.bind(this));
