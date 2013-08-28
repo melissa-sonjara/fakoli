@@ -362,6 +362,8 @@ var ModalDialog = new Class(
     {
 		this.parent(element, options);
 		this.element.fade('hide');
+		
+		ModalDialog.activeDialogs.push(this);
     },
     	
     center: function()
@@ -456,12 +458,14 @@ var ModalDialog = new Class(
     hide: function()
     {
     	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
-    	window.raiseCurtain();
+    	ModalDialog.activeDialogs.pop();
+    	if (ModalDialog.activeDialogs.length == 0) window.raiseCurtain();
     	this.element.setStyle('display', 'none');
     	if (this.remoteURL) this.element.dispose();
     }
 });
 
+ModalDialog.activeDialogs = [];
 
 var FloatingDialog = new Class(
 {
