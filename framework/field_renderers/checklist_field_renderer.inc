@@ -141,8 +141,8 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		$values = explode(",", $rawValue);		
 				
-		$divider = $this->horizontal ? " " : "<br/>";
-		
+		$divider = $this->horizontal ? " " : "";
+		$layout = $this->horizontal ? " style='display: inline'" : "";
 		if ($this->showSelectAll)
 		{
 			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
@@ -177,7 +177,7 @@ class CheckListFieldRenderer extends FieldRenderer
 					
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
 					
-					echo "<label for='{$this->parent->id}_{$field}[$idx]'><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
+					echo "<label for='{$this->parent->id}_{$field}[$idx]'$layout><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
 					$idx++;
 				}
 				
@@ -193,7 +193,7 @@ class CheckListFieldRenderer extends FieldRenderer
 				{
 					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
-					echo "<label for='{$this->parent->id}_{$field}[$idx]'><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
+					echo "<label for='{$this->parent->id}_{$field}[$idx]'$layout><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
 					$idx++;
 				}
 
