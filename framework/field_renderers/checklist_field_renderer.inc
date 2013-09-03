@@ -143,6 +143,7 @@ class CheckListFieldRenderer extends FieldRenderer
 				
 		$divider = $this->horizontal ? " " : "";
 		$layout = $this->horizontal ? " style='display: inline'" : "";
+		
 		if ($this->showSelectAll)
 		{
 			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
