@@ -187,6 +187,8 @@ window.addEvent('domready', function()
 			
 	function preProcess($field)
 	{
+		if(!$this->parent->data->hasField($this->super)) return;
+		
 		$super_id = $this->parent->data->get($this->super);
 		
 		if (!array_key_exists($super_id, $this->options))
