@@ -251,7 +251,6 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo "/>";
 
 			echo $this->formatName($item, $this->nameField)."</label>";
-			echo "<br/>";
 		}
 	}
 	
