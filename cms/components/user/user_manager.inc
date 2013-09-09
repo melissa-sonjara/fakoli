@@ -98,7 +98,16 @@ class UserManager
 	{
 		return "active=true";
 	}
-		
+
+	/**
+	 * Determine if the specified user account is active
+	 * @param SiteUser $user
+	 */
+	function isActive($user)
+	{
+		return $user->active;
+	}
+	
 	function getUserByName($username)
 	{
 		$usernameField = $this->getUsernameField();
