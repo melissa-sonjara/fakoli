@@ -273,6 +273,18 @@ class Fakoli
 	}
 	
 	/**
+	 * Checks if the given user is active
+	 * @param Object $user
+	 */
+	static function isUserActive($user)
+	{
+		$mgr = new UserManager();
+		if (method_exists($mgr, "isActive")) return $mgr->isActive($user);
+		if ($user->hasField("active")) return $user->active;
+		return false;
+	}
+	
+	/**
 	 * Uses the specified framework file(s) from the framework directory.
 	 */
 	static function usingFile()

@@ -51,7 +51,7 @@ class AutoLoginManager
 
 			if ($user)
 			{
-				if ($user->user_id == $authToken->user_id && $user->active)
+				if ($user->user_id == $authToken->user_id && Fakoli::isUserActive($user))
 				{
 					$uri = $authToken->redirect_on_success;
 					if (!$uri) $uri = "/index";
@@ -63,7 +63,7 @@ class AutoLoginManager
 				
 			$user = $authToken->User();
 		
-			if (!$user->active) return false;
+			if (!Fakoli::isUserActive($user)) return false;
 			
 			if ($authToken->ip_address)
 			{
