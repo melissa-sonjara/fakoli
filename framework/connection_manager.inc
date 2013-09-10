@@ -60,9 +60,12 @@ class ConnectionManager
 		{
 			if (!ConnectionManager::$conn)
 			{
-				trace("Opening Connection", 3);
+				$startTime = microtime(true);
 				ConnectionManager::$conn = new PDO(ConnectionManager::$dsn, ConnectionManager::$user, ConnectionManager::$password);
 				ConnectionManager::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$endTime = microtime(true);
+				trace("Connection opened in ".number_format($endTime-$startTime, 3)." seconds", 3);
+					
 			}
 			return ConnectionManager::$conn;
 		}
@@ -81,9 +84,11 @@ class ConnectionManager
 	{
 		try
 		{
-			trace("Opening Connection", 3);
+			$startTime = microtime(true);
 			$conn = new PDO(ConnectionManager::$dsn, ConnectionManager::$user, ConnectionManager::$password);
 			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$endTime = microtime(true);
+			trace("New connection opened in ".number_format($endTime-$startTime, 3)." seconds", 3);
 			return $conn;
 		}
 		catch(PDOException $e)
