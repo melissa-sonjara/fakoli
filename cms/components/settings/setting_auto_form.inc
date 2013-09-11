@@ -166,7 +166,6 @@ class SettingAutoForm extends AutoForm
 		
 		ComponentManager::fireEventTo($this->component->name, "ClearCache");
 		
-		
 		return true;
 	}
 }
