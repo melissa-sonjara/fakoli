@@ -100,4 +100,10 @@ CREATE TABLE contact_us (
 	PRIMARY KEY(contact_us_id)
 ) ENGINE=InnoDB;
 
--- EMD Versopm 1.1
+-- END Versopm 1.1
+
+-- START Version 1.2
+
+ALTER TABLE contact_us ADD COLUMN date_sent DATETIME NULL;
+
+-- END Version 1.2

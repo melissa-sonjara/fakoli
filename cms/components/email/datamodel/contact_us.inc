@@ -31,24 +31,20 @@
 
 *****************************************************************/
 
-/*
- * Dummy datamodel to build contact us form. No db table
- * - data is not retreived or stored. 
- * 
- * Janice Gallant for Sonjara, Inc.
- * 
- * 9/24/2010
- */
-
 class ContactUs extends DataItem
 {
+	var $table = "contact_us";
+	var $primary_key = "contact_us_id";
+	var $pretty_class_name = "Contact Us Message";
+	
 	var $fields = array(
 					"contact_us_id"		=>	Number,
 					"full_name"			=>	String,
 					"email"				=>	String,
 					"contact_topic_id"	=>	String,
 					"subject"			=>	String,
-					"message"			=>	Text
+					"message"			=>	Text,
+					"date_sent"			=>	Timestamp
 	);
 	
 	var $relations = array(
@@ -61,19 +57,14 @@ class ContactUs extends DataItem
 			return $this->getRelated(ContactTopic);
 	}
 	
-	function ContactUs()
-	{
-		$this->primary_key = "contact_us_id";
-		$this->table = "contact_us";
-
-		$this->DataItem(func_get_args());
-	}
-	
 }
 
 
 class ContactTopic extends DataItem
 {
+	var $primary_key = "contact_topic_id";
+	var $table = "contact_topic";
+	
 	var $fields = array(
 					"contact_topic_id"	=>	Number,
 					"topic"				=>	String,
@@ -124,31 +115,17 @@ class ContactTopic extends DataItem
 	{
 		return $this->crossReference(Site, ContactTopicSiteXref);
 	}
-	
-	function ContactTopic()
-	{
-		$this->primary_key = "contact_topic_id";
-		$this->table = "contact_topic";
-
-		$this->DataItem(func_get_args());
-	}
 }
 
 class ContactTopicSiteXref extends DataItem
 {
+	var $primary_key = "contact_topic_site_xref_id";
+	var $table = "contact_topic_site_xref";
+	
 	var $fields = array(
 			"contact_topic_site_xref_id"	=>	Number,
 			"contact_topic_id"				=>	Number,
 			"site_id"						=> 	Number
-	);
-	
-	function ContactTopicSiteXref()
-	{
-		$this->primary_key = "contact_topic_site_xref_id";
-		$this->table = "contact_topic_site_xref";
-
-		$this->DataItem(func_get_args());
-	}
-	
+	);	
 }
 

@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2013 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,34 +31,25 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Context Help
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("email");
+Fakoli::usingFeature("data_view");
 
-Fakoli::using("email", "component");
+$menu_item = "Contact Us Log";
 
-class EmailUpgradeManager extends UpgradeManager
-{
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added contact_us table",
-			"1.2"		=>	"sql:Added date_sent field to contact_us table"
-	);
-	
-	function EmailUpgradeManager()
-	{
-		$this->component_name = "email";
+$messages = Query::create(ContactUs, "ORDER BY date_sent DESC")->execute();
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
-}
+$table = new DataListView($messages, "contact_us_messages");
+$table->column("Subject", "<a href='contact_us_message?contact_us_id={contact_us_id}'>{subject|<em>No Subject</em>}", true, 'width: 25%')
+	  ->column("From", "{full_name} &lt;{email}&gt;", true, "width: 25%")
+	  ->column("Contact Topic", "{ContactTopic.topic}", true, "width: 25%")
+	  ->column("Date", "{date_sent}", true, "width: 20%");
+
+$table->pageSize = 25;
+$table->filter = true;
+$table->sortable = true;
+$table->emptyMessage = "No Contact Us messages have been received";
+$table->excelFile = "contact_us_log.xls";
+
+$script .= $table->writeScript();
+$table->drawView();
+?>

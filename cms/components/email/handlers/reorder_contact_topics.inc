@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2013 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,34 +31,34 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Context Help
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("menu");
 
-Fakoli::using("email", "component");
+Fakoli::assertRole("admin");
 
-class EmailUpgradeManager extends UpgradeManager
+$tx = new DataTransaction();
+
+try
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added contact_us table",
-			"1.2"		=>	"sql:Added date_sent field to contact_us table"
-	);
-	
-	function EmailUpgradeManager()
+	foreach($_GET["contact_topic_id"] as $id => $sort_order)
 	{
-		$this->component_name = "email";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		checkNumeric($id);
+		checkNumeric($sort_order);
+		
+		$contactTopic = new ContactTopic();
+		$contactTopic->joinTransaction($tx);
+		
+		$contactTopic->filter = new InclusionFilter("contact_topic_id", "sort_order");
+		
+		$contactTopic->load($id);
+		$contactTopic->sort_order = $sort_order;
+		$contactTopic->save();
 	}
+		
+	$tx->commit();
+	Fakoli::end("OK");
 }
+catch(Exception $e)
+{
+	$tx->rollback();
+}	
+?>

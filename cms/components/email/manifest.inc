@@ -71,7 +71,11 @@ class EmailManifest
 			(
 				"Contact Topics"	=>	array("page"	=>	"/admin/contact_topics",
 									  "role"	=>	"admin",
-									  "weight"	=>	25)
+									  "weight"	=>	25),
+				
+				"Contact Us Log"	=>	array("page"	=>	"/admin/contact_us_log",
+											  "role"	=>	"admin",
+											  "weight"	=>	26)
 			)
 				
 			

@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2013 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -31,34 +31,34 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Context Help
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("email");
 
-Fakoli::using("email", "component");
-
-class EmailUpgradeManager extends UpgradeManager
+$contact_us_id = checkNumeric($_GET["contact_us_id"]);
+if (!$contact_us_id)
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added contact_us table",
-			"1.2"		=>	"sql:Added date_sent field to contact_us table"
-	);
-	
-	function EmailUpgradeManager()
-	{
-		$this->component_name = "email";
+	redirect("contact_us_log");
+}
 
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+$contactUs = new ContactUS($contact_us_id);
+
+$form = new AutoForm($contactUs);
+$topicSelect = new RelatedItemSelectFieldRenderer($form, "contact_topic_id", "Topic", ContactTopic, "", "{topic}", "contact_topic_id");
+$form->alias("full_name", "Sender Name");
+$form->alias("email", "Sender Email");
+
+$form->readonly("full_name", "email", "contact_topic_id", "subject", "message");
+$form->submitLabel = " &laquo; Back to Contact Us Log ";
+$form->allowDelete = true;
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		redirect("contact_us_log");
 	}
 }
+?>
+<h4>Received <?echo $contactUs->date_sent?></h4>
+<?
+$script .= $form->writeScript();
+$form->drawForm();
+

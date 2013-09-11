@@ -52,7 +52,6 @@ $topics = query(ContactTopic, "ORDER BY sort_order");
 
 $table = new DataListView($topics, "contactTopics");
 $table->column("Code Name", "<a href=\"/admin/contact_topic_form?contact_topic_id={contact_topic_id}\">{topic}</a>")
-		->column("Sort Order", formatSortOrderInputField)
 		->column("Topic", "{topic}")
 	  	->column("Recipients", "{recipients}");
 	  	
@@ -63,6 +62,8 @@ if(count($sites) > 1)
 $table->emptyMessage = "There are no contact topics defined.";
 $table->sortable = false;
 $table->cssStyle = "width: 100%";
+$table->enableDragReorder("/action/email/reorder_contact_topics");
+$table->dragText = "<span style='font-size: 10px'>Click and drag to reorder contact topics</span>";
 
 
 if ($method == "POST")
