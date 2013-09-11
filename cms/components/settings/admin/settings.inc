@@ -56,8 +56,10 @@ $form = new SettingAutoForm($component);
 
 if ($method == "POST")
 {
-	if($form->save())
-		redirect("/admin/settings?component_id=$component_id");
+	if ($form->save())
+	{
+	}
+	Fakoli::notify("Settings have been saved");
 }
 
 $tabs = new DataItemTabBar("tabs", $components);
