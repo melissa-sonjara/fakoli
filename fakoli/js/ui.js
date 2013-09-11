@@ -361,9 +361,7 @@ var ModalDialog = new Class(
     initialize: function(element, options)
     {
 		this.parent(element, options);
-		this.element.fade('hide');
-		
-		ModalDialog.activeDialogs.push(this);
+		this.element.fade('hide');		
     },
     	
     center: function()
@@ -398,7 +396,9 @@ var ModalDialog = new Class(
     	var reload = this.element.getStyle('display') != 'none';
     	
     	this.remoteURL = fragmentURL;
-    	
+
+		ModalDialog.activeDialogs.push(this);
+		
     	if (this.options.draggable)
     	{
     		var options = 
