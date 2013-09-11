@@ -828,6 +828,27 @@ class Fakoli
 	}
 	 
 	/**
+	 * Utility method to display a notification message to the user when the
+	 * page has finished loading. This is useful for displaying information after a form has
+	 * been saved, etc.
+	 */
+	static function notify($message)
+	{
+		$message = jsSafe($message);
+		
+		global $script;
+		$script .= 
+<<<ENDSCRIPT
+		<script type='text/javascript'>
+		window.addEvent('load', function()
+		{
+			notification("$message");
+		});
+		</script>
+ENDSCRIPT;
+	}
+	
+	/**
 	 * Customer Error Handler
 	 * @param unknown $errLevel
 	 * @param unknown $errMsg
