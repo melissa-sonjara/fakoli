@@ -375,7 +375,8 @@ abstract class AbstractDataItem
 	 */
 	function quoteFieldValue($field, $type)
 	{
-
+		if (!$type) $type = $this->getType($field);
+		
 		$val = $this->get($field);
 		
 		return $this->quoteValue($val, $type);
