@@ -180,6 +180,22 @@ class JoinResultIterator implements Iterator, Countable
 			$class = $this->join->classes[$i];
 			$this->item->$class->populate($this->current, $this->join->aliases[$this->item->$class->table]);
 		}
+
+		foreach($this->join->pseudos as $class => $lookup)
+		{
+			foreach($this->join->aliases as $table => $prefix)
+			{
+				$keyAlias = "{$prefix}.{$lookup['index']}";
+				
+				$key = $this->current[$keyAlias];
+				
+				if (array_key_exists($key, $lookup['items']))
+				{
+					$this->item->$class = $lookup['items'][$key];
+					break;
+				}
+			}
+		}
 		
 		return $this->item;
 	}
@@ -225,6 +241,7 @@ abstract class AbstractJoin
 	var $tag = "join";				///< XML tag name
 
 	var $excludedKeys = array();
+	var $pseudos = array();			///< Pseudo-join lookup tables
 	
 	/**
 	 * Adds a class to the join definition. Classes added using this method
@@ -307,6 +324,11 @@ abstract class AbstractJoin
 		}
 	}
 	
+	function pseudo($class, $items, $indexField)
+	{
+		$this->pseudos[$class] = array("index" => $indexField, "items" => $items);
+	}
+	
 	abstract function generateQuery($constraint = "");
 
 	
@@ -347,6 +369,22 @@ abstract class AbstractJoin
 					$item->$class = new $class;	
 					$item->$class->populate($line, $this->aliases[$item->$class->table]);
 				
+					foreach($this->pseudos as $class => $lookup)
+					{
+						foreach($this->aliases as $table => $prefix)
+						{
+							$keyAlias = "{$prefix}.{$lookup['index']}";
+					
+							$key = $line[$keyAlias];
+							
+							if (array_key_exists($key, $lookup['items']))
+							{
+								$item->$class = $lookup['items'][$key];
+								break;
+							}
+						}
+					}
+					
 					--$size;
 					if ($size == 0) break;
 				}
@@ -417,6 +455,22 @@ abstract class AbstractJoin
 					$class = $this->classes[$i];
 					$item->$class = new $class;	
 					$item->$class->populate($line, $this->aliases[$item->$class->table]);
+
+					foreach($this->pseudos as $class => $lookup)
+					{
+						foreach($this->aliases as $table => $prefix)
+						{
+							$keyAlias = "{$prefix}.{$lookup['index']}";
+					
+							$key = $line[$keyAlias];
+					
+							if (array_key_exists($key, $lookup['items']))
+							{
+								$item->$class = $lookup['items'][$key];
+								break;
+							}
+						}
+					}
 				}
 	
 				$idx = $item->$idxClass->$field;
@@ -488,6 +542,22 @@ abstract class AbstractJoin
 					$class = $this->classes[$i];
 					$item->$class = new $class;	
 					$item->$class->populate($line, $this->aliases[$item->$class->table]);
+
+					foreach($this->pseudos as $class => $lookup)
+					{
+						foreach($this->aliases as $table => $prefix)
+						{
+							$keyAlias = "{$prefix}.{$lookup['index']}";
+					
+							$key = $line[$keyAlias];
+					
+							if (array_key_exists($key, $lookup['items']))
+							{
+								$item->$class = $lookup['items'][$key];
+								break;
+							}
+						}
+					}
 				}
 	
 				$idx = $item->$idxClass->$field;
