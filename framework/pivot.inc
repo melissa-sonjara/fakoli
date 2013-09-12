@@ -214,7 +214,7 @@ abstract class AbstractPivotQuery extends AbstractQuery
 				$expression = $defn["expression"];
 				$alias = $defn["alias"];
 	
-				$expressionMap[$fieldName] = "$expression(IF (p.{$pivot}=".$item->get($pivot).", IFNULL(p.{$value}, 0), 0))";
+				$expressionMap[$fieldName] = "$expression(IF (p.{$pivot}=".$item->quoteFieldValue($pivot).", IFNULL(p.{$value}, 0), 0))";
 				$this->fields[$fieldName] = $defn["type"];
 				$this->fieldAliases[$fieldName] = $item->format($alias);
 			}
@@ -250,16 +250,16 @@ abstract class AbstractPivotQuery extends AbstractQuery
 			$first = false;
 		}
 	
-		$query .= "\nFROM {$pivot->table} p, {$base->table} b\n";
+		$query .= "\nFROM {$base->table} b left outer join {$pivot->table} p \n";
 	
-		$query .= "WHERE p.{$basePK}=b.{$basePK} ";
+		$query .= "ON (p.{$basePK}=b.{$basePK} ";
 	
 		$constraint = preg_replace("/^\\s*WHERE /i", "AND ", $this->pivotConstraint);
 		$query .= " ".$constraint;
 	
 		$constraint = preg_replace("/^\\s*WHERE /i", "AND ", $this->baseConstraint);
 		$query .= " ".$constraint;
-		$query .= " GROUP BY $groupByFields";
+		$query .= ") GROUP BY $groupByFields";
 		$query .= " ".$this->orderBy;
 		
 		$this->query = $query;
@@ -620,10 +620,11 @@ class PivotTableHelper
 	 * @param string $sortFormat sorting format for the column (optional)
 	 * @return PivotTableHelper
 	 */
-	function column($pattern, $format, $sortable = true, $style = "", $typeHint = null, $onExport = null, $sortFormat = null)
+	function column($pattern, $format, $sortable = true, $style = "", $typeHint = null, $onExport = null, $sortFormat = null, $footerTotal = false)
 	{
 		$this->columnSpecs[$pattern] = array("format" => $format, "sortable" => $sortable, "style" => $style, 
-											 "typeHint" => $typeHint, "onExport" => $onExport, "sortFormat" => $sortFormat);
+											 "typeHint" => $typeHint, "onExport" => $onExport, "sortFormat" => $sortFormat, 
+											 "footerTotal" => $footerTotal);
 		return $this;
 	}
 	
@@ -645,6 +646,10 @@ class PivotTableHelper
 					$format = str_replace("%FIELD%", $field, $details["format"]);
 					$this->table->column($item->prettifyFieldName($field), $format, $details["sortable"], $details["style"], 
 										 $details["typeHint"], $details["onExport"], $details["sortFormat"]);
+					if ($details["footerTotal"])
+					{
+						$this->table->footerTotal($format);
+					}
 					break;
 				}
 			}
