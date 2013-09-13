@@ -100,7 +100,7 @@ CREATE TABLE contact_us (
 	PRIMARY KEY(contact_us_id)
 ) ENGINE=InnoDB;
 
--- END Versopm 1.1
+-- END Version 1.1
 
 -- START Version 1.2
 
