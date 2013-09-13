@@ -54,18 +54,18 @@ class SurveyManager
 
 	static function getSurveyTabs($key)
 	{
-		$formTitle = "Create a Survey";
+		$formTitle = "Create a Survey";	
+		$viewTitle = "Preview/Send";
 		
 		if($key)
 		{
 			$survey = new Survey($key);
 			$formTitle = ($survey->isEditable()) ? "Edit Survey" : "Survey Details";
-			if($survey->status != "not sent") $previewTitle = "View";
 			$viewTitle = (!$survey->isSent()) ? "Preview/Send" : "Manage Survey";
 		}
-
-		$images[0] = "<img src='/fakoli/images/tab_create_survey.png' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
-		$images[1] = "<img src='/fakoli/images/tab_view_results.png' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+	
+		$images[0] = "<img src='/fakoli/images/tab_create_survey.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
+		$images[1] = "<img src='/fakoli/images/tab_view_results.gif' style='display: inline-block;vertical-align: middle; border: none'/>&nbsp;";
 
 		$tabs = array(
 		$images[0] . $formTitle	=> array(
@@ -116,7 +116,7 @@ class SurveySendManager extends AbstractQuestionnaireSendManager
 	{
 		return "survey_reminder_form";
 	}
-	
+		
 	function getCreateManager()
 	{
 		return new SurveyCreateManager($this->item);
@@ -222,6 +222,12 @@ class SurveyCreateManager extends AbstractQuestionnaireCreateManager
 			$item->setStatus("closed");
 		}
 		parent::logicalDeleteQuestionnaire();
+	}
+	
+	function getCloneFields()
+	{
+		return array("introduction", "instructions", "sender_email", "user_id", "message", "confirmation_message",
+				"allow_anonymous_responses", "show_preview_before_submitting");
 	}
 
 } // end class SurveyManager
@@ -459,7 +465,12 @@ class SurveyResultsManager extends AbstractQuestionnaireResultsManager
 	{
 		return $this->item->getRecipientCount();
 	}
-}
+	
+	function getSendManager()
+	{
+		return new SurveySendManager($this->item);
+	}	
+} // end AbstractQuestionnaireResultsManager
 
 class SurveyAggregatedResultsManager //extends AbstractQuestionnaireAggregatedResultsManager
 {
