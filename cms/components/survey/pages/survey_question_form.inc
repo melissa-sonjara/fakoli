@@ -129,7 +129,7 @@ echo "<b>{$infoText}</b>";
 
 $form->drawForm();
 
-function saveSurveyQuestionXref(&$form)
+function saveSurveyQuestionXref($form)
 {
 	$mgr = new SurveyCreateManager(new Survey($form->data->get("survey_id")));
 	$mgr->saveQuestionXref($form->data);
