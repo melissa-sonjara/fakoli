@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("blog", "field_renderers");
+Fakoli::using("blog", "field_renderers", "taxonomy");
 Fakoli::usingFeature("auto_form");
 
 require_once "include/blog_tabs.inc";
@@ -61,6 +61,9 @@ $tabs = blogTabs($blog_id);
 
 $blogView = new BlogView($blog);
 $form = BlogManager::buildBlogForm($blog, $redirect, $blogView);
+
+TaxonomyManager::addTaxonomyFieldRenderers($form);
+
 $form->allowDelete = $blog->allowDelete();
 $form->onDelete = onDeleteCascade;
 

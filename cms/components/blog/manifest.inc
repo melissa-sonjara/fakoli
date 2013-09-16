@@ -71,9 +71,10 @@ class BlogManifest
 					 "EnumerateItems"	 => array(BlogManager, enumerateItems),
 					 "RegisterBlogViewHandlers" => array(BlogView, registerStandardHandlers),
 					 "upgradeComponent"		=>	array(BlogManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(BlogManager, registerSerializationHandler),
-					"DeleteUser"			=>	array(BlogManager, deleteUser),
-					"ComponentScanComplete"	=> array(BlogManager, setDefaults)
+					 "RegisterSerializationHandler"	=>	array(BlogManager, registerSerializationHandler),
+					 "RegisterTaxonomyClasses"	=>	array(BlogManager, registerTaxonomyClasses),
+					 "DeleteUser"			=>	array(BlogManager, deleteUser),
+					 "ComponentScanComplete"	=> array(BlogManager, setDefaults)
 				
 				
 		);

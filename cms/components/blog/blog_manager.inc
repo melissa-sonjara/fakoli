@@ -171,6 +171,12 @@ class BlogManager
 		Settings::setDefaultValue("blog", "allow_subscription_options", "0", Boolean, "Whether to allow users to choose subscription type options. Cron job must be setup for the website to call handler file 'send_digest'.");
 		Settings::setDefaultValue("blog", "weekly_digest_day", "Mon", String, "The day of the week when the weekly digest will be sent for sites that allow that option.", "", "Sun\nMon\nTue\nWed\nThu\nFri\nSat");
 	}
+
+	static function registerTaxonomyClasses($classes)
+	{
+		$classes[] = Blog;
+		return $classes;
+	}
 	
 	/**
 	 * Respond to fired event DeleteUser
