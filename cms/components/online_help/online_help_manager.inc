@@ -121,6 +121,21 @@ class OnlineHelpManager
 	{
 		global $script;
 		$script = Fakoli::getScripts() . $script;
+
+		// Ensure that video player is configured.
+		
+		$flowPlayerScript = Settings::getValue("video", "flowplayer_script");
+		
+		if ($flowPlayerScript)
+		{
+			$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";
+		}
+		
+		$flowPlayer = Settings::getValue("video", "flowplayer_player");
+		
+		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
+		
+		
 		$styles = Fakoli::getStyles();
 		
 		$css = explode(",", Settings::getValue("online_help", "help_css"));
