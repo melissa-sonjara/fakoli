@@ -94,21 +94,20 @@ class NumberFieldRenderer extends FieldRenderer
 
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->parent->data->get($field)."</td>\n";		
-		echo "</tr>\n";	
+		$this->_startField($field);
+
+		echo $this->parent->data->get($field);
+		
+		$this->_endField($field);
 	}
 	
 	// if users enter negatives where they shouldn't (any position other than first,
 	// strip them out
 	function preProcess($field)
 	{
-		$value= $_POST[$field];
-		
-		$value = str_replace(",", "", $value);
+		$current = $this->parent->data->get($field);
+				
+		$value = str_replace(",", "", $current);
 		
 		if($this->allowNegative)
 		{			
@@ -118,9 +117,7 @@ class NumberFieldRenderer extends FieldRenderer
 				$value = str_replace("-", "", $value);
 		}
 		$this->parent->data->$field = $value;
-	}
-	
-	
+	}	
 }
 
 ?>
