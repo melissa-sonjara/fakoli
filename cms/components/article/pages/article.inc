@@ -47,9 +47,7 @@ $page->page_title = $article->title;
 
 if($article->allow_comment)
 {
-	$view = new CommentView($article, ArticleCommentXref, "article");
-	
-	$script .= $view->writeScript();
+	CommentView::addCommentPanel();
 }
 
 

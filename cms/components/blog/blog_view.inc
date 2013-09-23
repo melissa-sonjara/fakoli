@@ -379,22 +379,7 @@ class BlogView
 
 		if ($this->blog->allow_comments && $article_id)
 		{
-			$article = new Article($article_id);
-			echo "<div id='comment_panel'>";
-			$view = new CommentView($article, ArticleCommentXref, "article");
-			
-			if ($method == "POST")
-			{
-				$view->save();
-			}
-			
-			$script .= $view->writeScript();
-			$view->drawView();
-			if($user || Settings::getValue("comment", "allow_anonymous_commenting"))
-			{
-				$view->drawForm();
-			}
-			echo "</div>";
+			CommentView::addCommentPanel();
 		}
 	}
 	
