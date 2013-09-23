@@ -36,6 +36,6 @@ Fakoli::using("site_map");
 
 SiteMapManager::updateSiteMap();
 
-//redirect("/admin/site_map");
+redirect("/admin/site_map");
 
 ?>
