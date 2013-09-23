@@ -31,33 +31,34 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Site Map
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("site_map");
 
-Fakoli::using("site_map", "component");
+Fakoli::assertRole("admin,content");
 
-class SiteMapUpgradeManager extends UpgradeManager
+$tx = new DataTransaction();
+
+try
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Update site_map to work with sections",
-	);
-	
-	function SiteMapUpgradeManager()
+	foreach($_GET["site_map_id"] as $id => $sort_order)
 	{
-		$this->component_name = "site_map";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		checkNumeric($id);
+		checkNumeric($sort_order);
+		
+		$siteMap = new SiteMap();
+		$siteMap->joinTransaction($tx);
+		
+		$siteMap->filter = new InclusionFilter("site_map_id", "sort_order");
+		
+		$siteMap->load($id);
+		$siteMap->sort_order = $sort_order;
+		$siteMap->save();
 	}
+		
+	$tx->commit();
+	Fakoli::end("OK");
 }
+catch(Exception $e)
+{
+	$tx->rollback();
+}	
+?>

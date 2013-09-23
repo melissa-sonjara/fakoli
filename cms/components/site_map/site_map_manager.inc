@@ -53,82 +53,56 @@
 
 Fakoli::using("component", "page", "menu", "site_map");
 
+/**
+ * Scans the application home directory and PHP include path
+ * and builds the component and administration page map that
+ * describe the configuration of the application..
+ */
+
 class SiteMapManager
 {
-
+	var $pages = array();
+	var $map = array();
+	var $currentContent = array();
+	
+	static $titleFields = array(
+		"Blogs"					=>	"title",
+		"Calendars"				=>	"name",
+		"Document Libraries"	=>	"name",
+		"Component Pages"		=>	"page_title",	
+		"Forums"				=>	"title",
+		"Image Galleries"		=>	"gallery_name",
+		"Link Libraries"		=>	"name",
+		"Pages"					=>	"page_title",
+		"Video Galleries"		=>	"gallery_name",
+			);
+	
 	/**
 	 * Creates a new ComponentManager object
 	 */
-	function SiteMapManager()
+	function __construct()
 	{
-	}
-	
-	/**
-	 * Retrieve all pages. Search for new pages that are not
-	 * in the site map. Get the module pages first because
-	 * they can override component pages.
-	 *
-	 */
-	function getModuleAndComponentPageUpdates()
-	{
-		$indexedMap = $this->getIndexedMap();
-			
-		$this->pages = query(Page, "WHERE published = 1");
-		$indexedMap = $this->getPageUpdates($this->pages, $indexedMap);
+		$this->map = IndexedQuery::create(SiteMap, "", "url")->execute();
 		
-		$this->componentPages = query(ComponentPage, "WHERE enabled = 1");
-		$this->getPageUpdates($this->componentPages, $indexedMap);
-	}
-	
-	function getIndexedMap()
-	{
-		$siteMapPages = query(SiteMap, "", "identifier");
-		
-		$indexedMap = array();
-		if(count($siteMapPages) > 0)
-			$indexedMap = reindexList($siteMapPages, "identifier");
-		
-		return $indexedMap;
-	}
-	
-	function getPageUpdates($pages, $indexedMap)
-	{
-		if(count($pages) > 0)
+		if(!is_array($this->map))
 		{
-			foreach($pages as $l_page)
-			{
-				$found = $indexedMap[$l_page->identifier];
-				if(!$found)
-					$indexedMap = $this->savePage($l_page, $indexedMap);
-				else
-					$this->updatePage($found, $l_page);
-			}
+			$this->map = array();			
 		}
-		
-		return $indexedMap;
 	}
 	
-	function savePage($l_page, $indexedMap)
+	static function updateSiteMap()
 	{
-		$found = new SiteMap();
-		$found->identifier = $l_page->identifier;
-		$found->page_title = $l_page->page_title;
-		$found->role = $l_page->role;
-		$found->save();
-		$indexedMap[$l_page->identifier] = $found;
+		trace("SiteMapManager processing method updateSiteMap", 3);
 		
-		return $indexedMap;
+		$mgr = new SiteMapManager();
+		$mgr->update();
 	}
 	
-	function updatePage($found, $l_page)
+	function update()
 	{
-		if($found->page_title == $l_page->page_title AND $found->role == $l_page->role)
-			return;
-			
-		$found->page_title = $l_page->page_title;
-		$found->role = $l_page->role;
-		$found->filter = new InclusionFilter("page_title", "role");
-		$found->save();	
+		$this->saveNewContentToSiteMap();
+		$this->removeOldContentFromSiteMap();
+		$this->setHierarchyFromMenuItems();
 	}
 
 	/*
@@ -141,7 +115,7 @@ class SiteMapManager
 	 * the children to its parent.
 	 * 
 	 * If the page has no parent but does have children,
-	 * set the parent_identifier of its children to blank.
+	 * set the parent_url of its children to blank.
 	 */
 	function deleteSiteMapPage($siteMapPage)
 	{
@@ -152,78 +126,159 @@ class SiteMapManager
 		{
 			foreach($children as $child)
 			{
-				$child->parent_identifier = ($parent AND $parent->identifier) ? 
-					$parent->identifier : "";
+				$child->parent_url = ($parent AND $parent->url) ? 
+					$parent->url : "";
 				$child->save();
 			}
 		}		
 		$siteMapPage->delete();
 	}
 	
-	
+	/**
+	 * Default the hierarchy of pages to the global menu's
+	 * hierarchy.
+	 */
 	function setHierarchyFromMenuItems()
 	{
-		$indexedMap = $this->getIndexedMap();
+		$indexedMap = $this->map;
 		
-		$menuItems = query(MenuItem, "WHERE published = 1 ORDER BY menu_id DESC", "identifier");
-		if(count($menuItems) > 0)
+		$menuItems = GroupedQuery::create(MenuItem, "WHERE menu_id IN (SELECT menu_id FROM menu WHERE identifier='global')", "url")
+			->execute();
+		
+		if(!count($menuItems)) return;
+		
+		foreach($menuItems as $url => $urlItems)
 		{
-			foreach($menuItems as $menuItem)
+			if(array_key_exists($url, $indexedMap))
 			{
-				if(array_key_exists($menuItem->identifier, $indexedMap))
+				$siteMapPage = $indexedMap[$url];
+				
+				if(!is_array($urlItems)) $urlItems = array($urlItems);
+				
+				foreach($urlItems as $menuItem)
 				{
-					$siteMapPage = $indexedMap[$menuItem->identifier];
 					$parent = $menuItem->Parent();
-					if($parent AND $parent->identifier != $siteMapPage->identifier)
+					if(!$parent) continue;
+					
+					if($parent AND $parent->url != $siteMapPage->url)
 					{
-						$siteMapPage->parent_identifier = $parent->identifier;
-					}
-						
-					$siteMapPage->sort_order = $menuItem->sort_order;
-					$siteMapPage->published = true;
-					$siteMapPage->filter = new InclusionFilter("parent_identifier", "sort_order", "published");
-					$siteMapPage->save();
+						$siteMapPage->parent_url = $parent->url;
+						$siteMapPage->published = true;
+						$siteMapPage->sort_order = $menuItem->sort_order;
+						$siteMapPage->filter = new InclusionFilter("parent_url", "published");
+						$siteMapPage->save();
+						break;
+					}		
 				}
 			}
-		}		
-	}
+		}
+	}		
 	
-
-	function checkForRemovedModuleAndComponentPages()
+	/**
+	 * Check if the SiteMap contains records of content that
+	 * has been removed from the site.
+	 */
+	function removeOldContentFromSiteMap()
 	{
-		$mPages = query(Page, "WHERE published = 1");
-		if(count($mPages) == 0) $mPages = array();
-		$cPages = query(ComponentPage, "WHERE enabled = 1");
-		if(count($cPages) == 0) $cPages = array();
-		$sitePages = array_merge($mPages, $cPages);
-		
-		if(count($sitePages) > 0)
+		foreach($this->map as $url => $siteMapPage)
 		{
-			$indexed = reindexList($sitePages, "identifier");
-		}	
-			
-		$siteMapPages = query(SiteMap);
-		foreach($siteMapPages as $siteMapPage)
-		{
-			if(!array_key_exists($siteMapPage->identifier, $indexed))
+			if(array_search($url, $this->currentContent) === FALSE)
 			{
 				$this->deleteSiteMapPage($siteMapPage);
-			}			
+			}
 		}
 	}
 	
+
+	/**
+	 * Given an instance of a CMS content item,
+	 * get the title.
+	 */
+	function getTitle($content, $type, $item)
+	{	
+		if ($content->override_page_title) 
+		{
+			$title = $content->override_page_title;
+		}
+		else if(array_key_exists($type, SiteMapManager::$titleFields))
+		{
+			$field = SiteMapManager::$titleFields[$type];
+			$title = $item->$field;
+		}
+		else
+		{
+			$title = prettify($item->identifier);
+		}
+
+		return $title;
+	}
 	
 	/**
-	 * Scans the application home directory and PHP include path
-	 * and builds the component and administration page map that
-	 * describe the configuration of the application..
+	 * Gather all CMS content and if an item is not already in the site
+	 * map, add it.
 	 */
-	function scan()
+	function saveNewContentToSiteMap()
 	{
-		$this->getModuleAndComponentPageUpdates();
-		$this->checkForRemovedModuleAndComponentPages();
-		$this->setHierarchyFromMenuItems();		
+		$indexedMap = $this->map;
+
+		$itemsByType = array();
+		$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
+	
+		$sections = Query::create(Section, "ORDER BY section")->execute();
+		
+		foreach($sections as $section)
+		{
+			$content = $section->Content("ORDER BY identifier");
+			$contentByIdentifier = reindexList($content, "identifier");
+				
+			// e.g., type is Component Pages and items are all component pages 
+			foreach($itemsByType as $type => $items)
+			{
+				foreach($items as $item)
+				{
+					if (!array_key_exists($item->identifier, $contentByIdentifier)) continue;
+						
+					$content = $contentByIdentifier[$item->identifier];
+					$siteMapPage = new SiteMap();			
+					$siteMapPage->url = $this->getLink($section, $item->identifier);
+					$siteMapPage->page_title = $this->getTitle($content, $type, $item);
+					$siteMapPage->published = true;
+					if(!array_key_exists($siteMapPage->url, $indexedMap))
+					{
+						$siteMapPage->save();
+						$indexedMap[$siteMapPage->url] = $siteMapPage;
+					}
+					$this->currentContent[] = $siteMapPage->url;
+				}
+			}					
+		}
 	}
+	
+	function categorizeItemTypes($itemsByType)
+	{
+		$types = array();
+	
+		foreach($itemsByType as $type => $items)
+		{
+			foreach($items as $item)
+			{
+				$types[$item->identifier] = $type;
+			}
+		}
+	
+		return $types;
+	}
+	
+	function getLink($section, $identifier)
+	{
+		if ($section->section == "/")
+			$url = "/$identifier";
+		else
+			$url = "/{$section->section}/$identifier";
+	
+		return $url;
+	}
+	
 	
 	static function upgradeComponent($version)
 	{

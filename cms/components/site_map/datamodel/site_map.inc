@@ -45,41 +45,68 @@
 class SiteMap extends DataItem
 {
 	var $fields = array(
-					"site_map_id"		=>	Number,
-					"identifier"		=>	String,
-					"page_title"		=>	String,
-					"sort_order"		=>	Number,
-					"role"				=>	String,
-					"parent_identifier"	=>	String,
-					"published"			=>	Boolean
+					"site_map_id"			=>	Number,
+					"url"					=>	String,
+					"page_title"			=>	String,
+					"sort_order"			=>	String,
+					"role"					=>	String,
+					"parent_url"			=>	String,
+					"published"				=>	Boolean
 	);
 	
 	function Parent()
 	{
-		return querySingle(SiteMap, "WHERE identifier='{$this->parent_identifier}'");	
+		$parents = Query::create(SiteMap, "WHERE url=:parent_url")
+			->bind("parent_url", $this->parent_url)
+			->execute();	
+		
+		return count($parents) ? $parents[0] : null;
 	}
 	
-	function Children()
+	function Children($constraint = "")
 	{
-		return query(SiteMap, "WHERE parent_identifier='{$this->identifier}' ORDER BY sort_order");
+		$query = "WHERE parent_url=:url";
+		if($constraint)
+		{
+			$query .= preg_replace("/^WHERE/i", " AND", $constraint);
+		}
+		return Query::create(SiteMap, $query)
+			->bind(":url", $this->url)
+			->execute();
 	}
+		
 	
-	function isSibling($identifier)
+	/**
+	 * Is the given url a sibling of this SiteMap obj.
+	 * 
+	 * @param String $url
+	 * @return boolean
+	 */
+	function isSibling($url)
 	{
 		$sibling = false;
+
+		$siteMap = SiteMap::findSiteMapPage($url);
 		
-		if($identifier)
-		{
-			$siteMap = querySingle(SiteMap, "WHERE identifier='{$this->identifier}'");
-			$sibling = ($siteMap AND ($siteMap->parent_identifier == $this->parent_identifier)) ? true : false;
-		}
+		$sibling = ($siteMap AND ($siteMap->parent_url == $this->parent_url)) ? true : false;
+		
 		return $sibling;
+	}
+	
+	static function findSiteMapPage($url)
+	{
+		if(!$url) return null;
+		$siteMaps = Query::create(SiteMap, "WHERE url=:url")
+			->bind(":url", $url)
+			->execute();
+		
+		return count($siteMaps) ? $siteMaps[0] : null;
 	}
 	
 	// allow delete if the page has no sub or child pages
 	function allowDelete()
 	{
-		$count = queryValue(SiteMap, "COUNT(1)", "WHERE parent_identifier={$this->identifier}");
+		$count = queryValue(SiteMap, "COUNT(1)", "WHERE parent_url={$this->url}");
 		return ($count > 0) ? false : true;
 	}
 	
@@ -93,13 +120,13 @@ class SiteMap extends DataItem
 	 */
 	static function getSiteMapPageList()
 	{
-		$siteMapPages = query(SiteMap, "ORDER BY identifier");
+		$siteMapPages = query(SiteMap, "ORDER BY url");
 				
 		if(count($siteMapPages) > 0)
 		{
 			foreach($siteMapPages as $sPage)
 			{
-				$pageList[$sPage->identifier] = $sPage->identifier . ": " . $sPage->page_title;
+				$pageList[$sPage->url] = $sPage->url . ": " . $sPage->page_title;
 			}
 		}
 		

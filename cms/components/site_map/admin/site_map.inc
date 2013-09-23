@@ -48,7 +48,7 @@ $menu_item = "Site Map";
 
 $title = "Site Map";
 
-$siteMapPages = query(SiteMap, "ORDER BY identifier");
+$siteMapPages = Query::create(SiteMap, "ORDER BY url")->execute();
 
 $siteTree = new TreeControl("site_tree");
 
@@ -61,7 +61,7 @@ if (count($siteMapPages) > 0)
 	{
 		$parent = $l_page->Parent();		
 		$node = new TreeNode("siteMapPage_{$l_page->site_map_id}", 
-	    	$l_page->identifier, null, false, "tree_node_closed", 
+	    	$l_page->url, null, false, "tree_node_closed", 
 	    	"tree_node_open", "site_map_form?site_map_id={$l_page->site_map_id}&parent_site_map_id={$parent->site_map_id}");
 	    $node->leafStyle = "file_node_leaf";
 	    $tmp = array( 

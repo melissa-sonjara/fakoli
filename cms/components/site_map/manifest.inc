@@ -63,8 +63,8 @@ class SiteMapManifest
 	static function subscribeToEvents()
 	{
 		return array("PreProcessPage" 	=> array(Breadcrumbs, getBreadcrumbs),
-					"upgradeComponent"	=>	array(SiteMapManager, upgradeComponent)
-		
+					"upgradeComponent"	=>	array(SiteMapManager, upgradeComponent),
+				"ComponentScanComplete"	=>	array(SiteMapManager, updateSiteMap)
 		);
 	}	
 }

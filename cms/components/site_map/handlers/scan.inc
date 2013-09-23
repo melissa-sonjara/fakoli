@@ -34,9 +34,8 @@
 Fakoli::assertRole("admin");
 Fakoli::using("site_map");
 
-$mgr = new SiteMapManager();
-$mgr->scan();
+SiteMapManager::updateSiteMap();
 
-redirect("/admin/site_map");
+//redirect("/admin/site_map");
 
 ?>

@@ -51,76 +51,157 @@ Fakoli::using("site_map");
 
 class Breadcrumbs
 {	
+	var $breadcrumbs;
+	var $qs;
+	var $url;
+	
+	function __construct()
+	{		
+		$qs = $_SERVER['QUERY_STRING'];
+		$this->url = $this->getLink();
+		
+		trace("Breadcrumb url $this->url", 3);
+		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
+		$this->qs = preg_replace("/_style=\\w+&*/", "", $qs);
+		
+		$this->breadcrumbs = $this->getTrail();
+	}
+	
+	/**
+	 * Gather the breadcrumb trail.
+	 * 1) Find the page the user is on in the SiteMap table
+	 * 2) Traverse the site map tree to find the root node
+	 * 3) Walk down the tree to format the trail from the root to the current page
+	 * for display.
+	 */
+	function getTrail()
+	{
+		$currentSiteMapPage = $this->findPage();
+		trace("Breadcrumbs:: currentSiteMapPage id {$currentSiteMapPage->url}", 3);
+		
+		if(!$currentSiteMapPage)
+		{
+			return "";
+		}
+			
+		$upTreePages = $this->walkUpTree($currentSiteMapPage);
+		
+		$breadcrumbs = $this->walkDownTree($upTreePages);
+		
+		return $breadcrumbs;
+	}
+	
+
+	/**
+	 * Get the server's url and query the SiteMap
+	 * table for a match.
+	 * 
+	 * @return instance of SiteMap or null
+	 */
+	function findPage()
+	{
+		$pages = Query::create(SiteMap, "WHERE url =:url")
+			->bind(":url", $this->url)
+			->execute();
+		
+		return (count($pages)) ? $pages[0] : null;
+	}
+			
+	/**
+	 * Traverse up the tree through each parent url to find
+	 * the root.
+	 * 
+	 * @param obj $currentSiteMapPage instance of SiteMap
+	 * @return array of SiteMap objects
+	 */
+	function walkUpTree($currentSiteMapPage)
+	{
+		$upTreePages = array();	
+		if(!$currentSiteMapPage) return $upTreePages;
+		
+		$currPage = clone $currentSiteMapPage;
+		// walk up the tree to get all parents of the page
+		while(isset($currPage))
+		{
+			array_push($upTreePages, $currPage);
+			$currPage = $currPage->Parent();
+		} 
+
+		return $upTreePages;
+	}
+
+	/**
+	 * No need to show breadcrumbs if there is just one single
+	 * node in the tree path.
+	 * 
+	 * @param array $upTreePages array of SiteMap objects
+	 * @return String breadcrumbs
+	 */
+	function walkDownTree($upTreePages)
+	{
+		$breadcrumbs = "";
+		
+		if(count($upTreePages) < 2) return $breadcrumbs;
+		
+		$downTreePages = array_reverse($upTreePages);
+		
+		$idx = 0;
+		$last = count($downTreePages) - 1;
+
+		foreach($downTreePages as $downTreePage)
+		{
+			// Only need qs if this is not the first page
+			// and not the last. Last page is just title, not link
+			if($idx < $last)
+			{
+				$link = ($idx > 0 AND $this->qs) ? "$downTreePage->url?{$this->qs}" : $downTreePage->url;
+				$title = $downTreePage->page_title;
+				$breadcrumbs .= "<a href=\"{$link}\">{$title}</a> &raquo;\n";
+			}
+			else
+			{
+				$breadcrumbs .= $downTreePage->page_title . "\n";
+			}
+				
+			$idx++;
+		}
+
+		return $breadcrumbs;
+	}
+	
+	function getLink($identifier)
+	{
+		global $section;
+		
+		$identifier = $_REQUEST["identifier"];
+		
+		if ($section->section == "/")
+			$url = "/$identifier";
+		else
+			$url = "/{$section->section}/$identifier";
+	
+		return $url;
+	}
+	
+	
+
+	/**
+	 * Called by PreProcessPage to gather the breadcrumbs.
+	 * 
+	 * @param obj $page 
+	 * @return String
+	 */
 	static function getBreadcrumbs($page)
 	{
 		global $breadcrumbs;
-
-		$qs = $_SERVER['QUERY_STRING'];
-		$identifier = $_REQUEST["identifier"];
-		
-		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
-		$qs = preg_replace("/_style=\\w+&*/", "", $qs);
-		
-		$currentSiteMapPages = query(SiteMap, "WHERE identifier = '{$identifier}'");
-		if(count($currentSiteMapPages) > 0)
-			$currentSiteMapPage = $currentSiteMapPages[0];
-		else
-			return $page;
-			
-		trace("Breadcrumbs:: currentSiteMapPage id {$currentSiteMapPage->identifier}", 3);
-		
-		if(!$currentSiteMapPage)
-			return $page;
-			
-		$upTreePages = Breadcrumbs::getUpTreePages($currentSiteMapPage);
+		$breadcrumbs = "";
 	
-		/*
-		 * No need to show breadcrumbs if there is just one single
-		 * node in the tree path.
-		 */
-		if(count($upTreePages) > 1)
-		{
-			$downTreePages = array_reverse($upTreePages);
-			
-			$idx = 0;	
-			$last = count($downTreePages) - 1;
-			$breadcrumbs = "";
+		$mgr = new Breadcrumbs();
 	
-			foreach($downTreePages as $downTreePage)
-			{
-				// Only need qs if this is not the first page
-				// and not the last. Last page is just title, not link
-				if($idx < $last)
-				{
-					$link = ($idx > 0 AND $qs) ? "$downTreePage->identifier?$qs" : $downTreePage->identifier;
-					$breadcrumbs .= "<a href=\"{$link}\">{$downTreePage->page_title}</a> &raquo;\n";
-				}
-				else
-					$breadcrumbs .= $downTreePage->page_title . "\n";
-			
-				$idx++;
-			}
-		}
-				
+		$breadcrumbs = $mgr->breadcrumbs;
+	
 		return $page;
 	}
-			
-	static function getUpTreePages($currentSiteMapPage)
-	{
-		if($currentSiteMapPage)
-		{	
-			$upTreePages = array();	
-			$currPage = $currentSiteMapPage;
-	
-			// walk up the tree to get all parents of the page
-			while(isset($currPage))
-			{
-				array_push($upTreePages, $currPage);
-				$currPage = $currPage->Parent();
-			} 
-		}
-		return $upTreePages;
-	}	
 }
 
 ?>

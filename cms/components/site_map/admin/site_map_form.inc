@@ -58,7 +58,7 @@ if(!$site_map_id)
 	
 $siteMapPage = new SiteMap($site_map_id);
 
-$title = "Edit Details for {$siteMapPage->identifier}";
+$title = "Edit Details for {$siteMapPage->url}";
 
 $form = new AutoForm($siteMapPage);
 
@@ -66,35 +66,26 @@ $redirect = "/admin/site_map";
 
 $form->button("Cancel", $redirect);
 $form->submitLabel = "Save Changes";
-$form->readOnly("identifier", "page_title", "role");
-$identifierSelect = new SelectFieldRenderer($form, "parent_identifier", "Parent Identifier", SiteMap::getSiteMapPageList());
+$form->hide("role", "page_title", "sort_order");
+$form->readOnly("url");
 
+$urlSelect = new CMSLinkSelectFieldRenderer($form, "parent_url", "Parent Page");
 
-if($_POST['update_order']) 
-{  
-	$sortOrders = checkNumeric($_POST["subpage"]);
-	foreach($sortOrders as $key => $sortOrder)
-	{
-		$site_map_pg = new SiteMap();
-		$site_map_pg->load($key);
-		$site_map_pg->save();
-	}
+$subpages = $siteMapPage->Children("ORDER BY sort_order");
+if(count($subpages) > 1)
+{
+	$table = new DataListView($subpages, "site_map_subpages");
+	$table->column("URL", "{url}", false);
 	
-	// renumber
-	$subpages = $siteMapPage->Children();
-	$value = 1;
-	if(count($subpages) > 0)
-	{
-		foreach($subpages as $subpage)
-		{
-			$subpage->filter = new InclusionFilter("sort_order");
-			$subpage->sort_order = $value;
-			$subpage->save();
-			$value++;
-		}
-	}	
+	$table->filter = false;
+	$table->sortable = false;
+	$table->paginate = false;
+	$table->cssStyle = "width: 50%";
+	$table->enableDragReorder("/action/site_map/reorder_site_map");
+	$table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the pages</span>";
 }
-elseif ($method == "POST") 
+
+if ($method == "POST") 
 {
 	if(validateSiteMapTree($siteMapPage))
 	{  
@@ -108,42 +99,18 @@ elseif ($method == "POST")
 
 $script = $form->writeScript();
 
+if($table)
+{
+	$script .= $table->writeScript();
+}
+
 $form->drawForm();
 
-$subpages = $siteMapPage->Children();
-if(count($subpages) > 0) 
-{	
-?>		
-	<form name="re-order form" method="post" action="">
-<!--  <div style="clear:left;border:solid 1px #000;padding: 4px;width:600px;">  -->
-<h3>Sub Pages </h3>
-<table class="list" width="600">
- <tr>
-  <th>Sort Order</th>
-  <th>Title</th>
- </tr>
-<? foreach($subpages as $subpage) 
-	{
-		$parent = $subpage->Parent();  
-?>
-<tr>                                                                                                                                                   
-  <td style="text-align: center; vertical-align: middle; width: 80px">
-  <input type="text" style="width: 40px" name="subpage[<? echo $subpage->site_map_id ?>]" value="<? echo $subpage->sort_order ?>"/></td>
-  <td>
-  <a href="site_page_form.php?page_key=<?echo $subpage->site_map_id ?>&parent_site_map_id=<?echo $parent->site_map_id ?>">
-  <?echo $subpage->identifier ?></a></td>	
-</tr>	
-<? 
-	} 
-?>
-</table>
-<!--  </div> -->
-<input type="submit" name="update_order" class="button" value="Update Order"/>
-<? 
-	} 
-?>
-</form>
-<?php 
+if($table)
+{
+	echo "<h4>SubPages</h4>\n";
+	$table->drawView();
+}
 
 /*
  * Validate that the tree ancestry and descendents are valid. That is,
@@ -156,12 +123,12 @@ function validateSiteMapTree($siteMapPage)
 	global $_POST;
 	$valid = true;
 	
-	$newParent = $_POST["parent_identifier"];
+	$newParent = $_POST["parent_url"];
 
 	// don't check if no change in parent
 	if($siteMapPage->parent != $newParent)
 	{	
-		if($siteMapPage->parent_identifier == $newParent)
+		if($siteMapPage->parent_url == $newParent)
 			$valid = false;
 		else
 			$valid = validateDescendents($siteMapPage, $newParent, $valid);

@@ -20,3 +20,12 @@ CREATE TABLE `site_map` (
 ) ENGINE=InnoDB COMMENT='defines the site hierarchy';
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+alter table `site_map` change column `identifier` `url` varchar(200) NOT NULL DEFAULT '';
+
+update `site_map` set `parent_identifier` = '' WHERE parent_identifier IS NULL; 
+alter table `site_map` change column `parent_identifier` `parent_url` varchar(200) NOT NULL DEFAULT '';
+
+-- END Version 1.1
