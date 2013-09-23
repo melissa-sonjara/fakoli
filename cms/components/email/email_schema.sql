@@ -100,10 +100,12 @@ CREATE TABLE contact_us (
 	PRIMARY KEY(contact_us_id)
 ) ENGINE=InnoDB;
 
+-- AJG: Moved into 1.1 to resolve update issues due to a typo in a previous version of this schema
+ALTER TABLE contact_us ADD COLUMN date_sent DATETIME NULL;
+
 -- END Version 1.1
 
 -- START Version 1.2
 
-ALTER TABLE contact_us ADD COLUMN date_sent DATETIME NULL;
 
 -- END Version 1.2
