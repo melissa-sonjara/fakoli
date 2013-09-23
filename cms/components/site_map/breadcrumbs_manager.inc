@@ -182,26 +182,7 @@ class Breadcrumbs
 	
 		return $url;
 	}
-	
-	
 
-	/**
-	 * Called by PreProcessPage to gather the breadcrumbs.
-	 * 
-	 * @param obj $page 
-	 * @return String
-	 */
-	static function getBreadcrumbs($page)
-	{
-		global $breadcrumbs;
-		$breadcrumbs = "";
-	
-		$mgr = new Breadcrumbs();
-	
-		$breadcrumbs = $mgr->breadcrumbs;
-	
-		return $page;
-	}
 }
 
 ?>

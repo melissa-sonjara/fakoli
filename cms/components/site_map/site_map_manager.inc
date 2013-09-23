@@ -285,5 +285,33 @@ class SiteMapManager
 		$mgr = new SiteMapUpgradeManager();
 		$mgr->upgrade($version);
 	}	
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("site_map", "Site Map", new SiteMapSerializationHandler());
+		return true;
+	}	
 }
+
+
+class SiteMapSerializationHandler
+{
+	function __construct()
+	{
+	}
+
+	function export()
+	{
+		$xml .= "\n<SiteMapMap>";
+		$xml .= SerializationManager::serialize(SiteMap, "ORDER BY site_map_id");
+		$xml .= "\n</SiteMapMap>";
+		return $xml;
+	}
+
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(SiteMap, $doc, $tx);
+	}
+}
+
 ?>

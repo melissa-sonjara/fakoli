@@ -31,43 +31,13 @@
 
 *****************************************************************/
 
-class SiteMapManifest
-{
-	static function getComponentDefinition()
-	{
-		$component = new Component();
-		$component->name = "site_map";
-		$component->description = "Maps the site hierarchy of pages";
-		$component->author = "Janice Gallant";
-		$component->version = "1.0";
-		$component->priority = 0;
-		$component->enabled = true;
-		
-		return $component;
-	}
+/**
+ * Draw breadcrumbs using the defined site map hierarchy.
+ */
+
+Fakoli::using("site_map");
+
+$mgr = new Breadcrumbs();	
+echo "<div id='breadcrumbs'>" . $mgr->breadcrumbs . "</div>\n";
 	
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Site Configuration"	=> array
-			(
-
-				"Site Map"	=>	array("page"	=>	"/admin/site_map",
-								  "role"	=>	"admin",
-								  "weight"	=>	10)
-			)
-		);		
-	}
-
-	static function subscribeToEvents()
-	{
-		return array("upgradeComponent"	=>	array(SiteMapManager, upgradeComponent),
-				"ComponentScanComplete"	=>	array(SiteMapManager, updateSiteMap),
-				"RegisterSerializationHandler"	=> array(SiteMapManager, registerSerializationHandler)
-				
-		);
-	}	
-}
-
 ?>
