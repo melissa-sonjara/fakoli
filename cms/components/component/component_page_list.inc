@@ -67,9 +67,8 @@ class ComponentPageListView
 		}
 			
 		$this->table->column("Page", "<a href='/admin/component_page_form?component_page_id={component_page_id}'>{identifier}</a>", true, "width: 50%")
-			 		//->column("Template", array($this, formatTemplate), true)
-			 		//->column("Role(s)", array($this, formatRole), true, "vertical-align: middle")
-			 		->column("Enabled", array($this, formatEnabled), false, "width: 10%; text-align: center");
+			->column("Page Title", "{page_title}")
+	 		->column("Enabled", array($this, formatEnabled), false, "width: 10%; text-align: center");
 		$this->table->sortable = true;
 		$this->table->filter = true;
 		$this->table->pageSize = 20;		
