@@ -33,6 +33,12 @@
 
 /**
  * Draw breadcrumbs using the defined site map hierarchy.
+ * 
+ * To add breadcrumbs to your pages:
+ * 1) Add {position:breadcrumbs} to your template, if not already there.
+ * 2) Create code module "Breadcrumbs" linked to site_map module
+ * breadcrumbs, set to global position "breadcrumbs"
+ * 
  */
 
 Fakoli::using("site_map");

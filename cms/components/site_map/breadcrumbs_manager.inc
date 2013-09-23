@@ -39,7 +39,12 @@
  * based on the calling script's identifier and its match
  * to the site hierarchy chart as specified in site_map
  * table.
-
+ * 
+ * To add breadcrumbs to your pages:
+ * 1) Add {position:breadcrumbs} to your template, if not already there.
+ * 2) Create code module "Breadcrumbs" linked to site_map module
+ * breadcrumbs, set to global position "breadcrumbs"
+ * 
  * author: Janice Gallant for Sonjara, Inc.
  * 
  * date: 10/9/10
