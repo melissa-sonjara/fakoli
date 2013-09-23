@@ -160,7 +160,7 @@ class SiteMapManager
 					$parent = $menuItem->Parent();
 					if(!$parent) continue;
 					
-					if($parent AND $parent->url != $siteMapPage->url)
+					if($parent AND $parent->url != $siteMapPage->parent_url)
 					{
 						$siteMapPage->parent_url = $parent->url;
 						$siteMapPage->published = true;
@@ -219,8 +219,6 @@ class SiteMapManager
 	 */
 	function saveNewContentToSiteMap()
 	{
-		$indexedMap = $this->map;
-
 		$itemsByType = array();
 		$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
 	
@@ -243,9 +241,9 @@ class SiteMapManager
 					$page_title = $this->getTitle($content, $type, $item);
 					
 					$siteMapPage = new SiteMap();			
-					if(array_key_exists($url, $indexedMap))
+					if(array_key_exists($url, $this->map))
 					{
-						$siteMapPage = $indexedMap[$url];
+						$siteMapPage = $this->map[$url];
 						if($page_title != $siteMapPage->page_title)
 						{
 							$siteMapPage->page_title = $page_title;
@@ -259,7 +257,7 @@ class SiteMapManager
 						$siteMapPage->published = true;
 						$siteMapPage->page_title = $page_title;
 						$siteMapPage->save();
-						$indexedMap[$siteMapPage->url] = $siteMapPage;
+						$this->map[$siteMapPage->url] = $siteMapPage;
 					}
 		
 					$this->currentContent[] = $siteMapPage->url;
