@@ -239,15 +239,29 @@ class SiteMapManager
 					if (!array_key_exists($item->identifier, $contentByIdentifier)) continue;
 						
 					$content = $contentByIdentifier[$item->identifier];
+					$url = $this->getLink($section, $item->identifier);
+					$page_title = $this->getTitle($content, $type, $item);
+					
 					$siteMapPage = new SiteMap();			
-					$siteMapPage->url = $this->getLink($section, $item->identifier);
-					$siteMapPage->page_title = $this->getTitle($content, $type, $item);
-					$siteMapPage->published = true;
-					if(!array_key_exists($siteMapPage->url, $indexedMap))
+					if(array_key_exists($url, $indexedMap))
 					{
+						$siteMapPage = $indexedMap[$url];
+						if($page_title != $siteMapPage->page_title)
+						{
+							$siteMapPage->page_title = $page_title;
+							$siteMapPage->filter = new InclusionFilter("page_title");
+							$siteMapPage->save();
+						}	
+					}
+					else
+					{
+						$siteMapPage->url = $url;
+						$siteMapPage->published = true;
+						$siteMapPage->page_title = $page_title;
 						$siteMapPage->save();
 						$indexedMap[$siteMapPage->url] = $siteMapPage;
 					}
+		
 					$this->currentContent[] = $siteMapPage->url;
 				}
 			}					
