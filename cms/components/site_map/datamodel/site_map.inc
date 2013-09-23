@@ -106,7 +106,10 @@ class SiteMap extends DataItem
 	// allow delete if the page has no sub or child pages
 	function allowDelete()
 	{
-		$count = queryValue(SiteMap, "COUNT(1)", "WHERE parent_url={$this->url}");
+		$count = Query::create(SiteMap, "WHERE parent_url=:url")
+			->bind(":url", $this->url)
+			->executeValue("COUNT(1)");
+		
 		return ($count > 0) ? false : true;
 	}
 	

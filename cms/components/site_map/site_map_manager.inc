@@ -328,4 +328,22 @@ class SiteMapSerializationHandler
 	}
 }
 
+
+class SiteMapHelper
+{
+	/**
+	 * 
+	 * @param obj $siteMapPage class SiteMap
+	 */
+	static function formatURL($siteMapPage)
+	{
+		if(!$siteMapPage->isLeaf())
+		{
+			return $siteMapPage->format("<b>{url}</b>");
+		}
+		
+		return $siteMapPage->format("{url}");
+	}
+}
+
 ?>
