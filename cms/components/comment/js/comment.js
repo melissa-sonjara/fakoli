@@ -17,15 +17,31 @@ var Comment =  (function()
 		{
 			if (response.indexOf("OK") == 0)
 			{
-				this.closeDialog();
 				var responseFields = response.split("|");
 
 				this.reloadCommentPanel(responseFields[1]);
 			}
 			else
-				$('Comment_form__error').set('html', response);
+			{
+				document.id('Comment_form__error').set('html', response).setStyle('display', 'table-cell');
+			}
 		},
 	
+		
+		editCommentFormResult: function(response)
+		{
+			if (response.indexOf("OK") == 0)
+			{
+				var responseFields = response.split("|");
+
+				this.reloadCommentPanel(responseFields[1]);
+			}
+			else
+			{
+				document.id('EditComment_form__error').set('html', response).setStyle('display', 'table-cell');
+			}
+		},
+		
 		commentPublish: function(comment_id)
 		{
 			  var request = new Request(
@@ -48,46 +64,22 @@ var Comment =  (function()
 		
 		reloadCommentPanel: function(confirmation_message)
 		{
-			var params = new URI().get('query');
-			var request = new Request.HTML(
-			{
-				url: "/action/comment/comment_panel?" + params,
-				evalScripts: false,
-				evalResponse: false,
-				method: 'get', 
-				onSuccess: function(tree, elements, html, script) 
-				{ 
-					document.id('comment_panel').set('html', html);
-					$exec(script);
-					this.showConfirmationMessage(confirmation_message);
-				}.bind(this)
-			});
-			request.send();
+			document.id('comment_panel').reload(function() {this.closeDialog(); this.showConfirmationMessage(confirmation_message);}.bind(this));
 		},
 		
 		showConfirmationMessage: function(confirmation_message)
 		{
 			if(!confirmation_message) return;
-			
-			var elt = $('comment_list');
-			var pos = 'bottom';
-			
-			if(!elt)
-			{
-				elt = $('comment_panel');
-				pos = 'top';
-			}
-			
-			if(!elt) return;
-			
-			var div = new Element('div', {'id': '', 'class': 'comment_confirmation'});
-			div.set('html', confirmation_message);
-			div.inject(elt, pos);
+			notification(confirmation_message);
 		},
 		
 		closeDialog: function()
 		{
-			this.dialog.hide();
+			if (this.dialog)
+			{
+				this.dialog.hide();
+				this.dialog = null;
+			}			
 		}
 		  
 	});

@@ -31,7 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("comment", "email");
+Fakoli::using("comment", "email", "captcha");
 Fakoli::usingFeature("auto_form", "paged_list");
 
 /*
@@ -74,6 +74,13 @@ class CommentView
 		$this->form = $this->buildCommentForm();
 	}
 
+	static function addCommentPanel()
+	{
+		$qs = getCleanQueryString();
+		$panel = new Panel("comment_panel", "/action/comment/comment_panel?$qs");
+		$panel->draw();		
+	}
+	
 	static function fromGET()
 	{
 		$adapter = CommentManager::getAdapter();
@@ -211,6 +218,13 @@ class CommentView
 			$form->required("author");
 		}
 
+		$captchaMode = Settings::getValue("comment", "use_captcha");
+		if ($captchaMode == "Always" || ($captchaMode == "Anonymous Only" && !$user))
+		{
+			$captchaMgr = new CaptchaManager();
+			$captchaMgr->addCaptchaToForm($form);
+		}
+		
 		return $form;
 	}
 

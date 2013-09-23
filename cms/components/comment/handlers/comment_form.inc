@@ -5,7 +5,7 @@
  * To do - Delete the comment_id in the xref table.
  */
 
-Fakoli::using("comment", "settings", "email");
+Fakoli::using("comment", "settings", "email", "captcha");
 Fakoli::usingFeature("auto_form");
 
 $comment_id = checkNumeric($_GET["comment_id"]);
@@ -23,22 +23,28 @@ if ($comment_id)
 {
 	$comment->load($comment_id);
 	$newPost = false;
+	$returnFn = "editCommentFormResult";
 }
 else
 {
 	$comment->user_id = ($user) ? $user->get($user->primary_key) : 0;
 	$comment->date_posted = today();
 	$newPost = true;
+	$returnFn = "commentFormResult";
 }
 
 $form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&xref_component=$xref_component", "EditComment_form");
-$form->alias("title", "Subject", "author", "Your Name");
-$form->ajaxSubmit("function(result) {new Comment().commentFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->alias("title", "Subject");
+$form->ajaxSubmit("function(result) {new Comment().{$returnFn}(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
 
 // To do - make it configurable whether to include title?
-$form->hide("title");
-
+//$form->hide("title");
+if (!$comment_id)
+{
+	$form->alias("author", "Your Name");
+}
+	
 $posted = new DateTimeFieldRenderer($form);
 $posted->template = "m/d/Y";
 $form->override("date_posted", "Date Posted", $posted);
@@ -66,6 +72,13 @@ else
 	$form->readOnly("author");
 }
 	
+$captchaMode = Settings::getValue("comment", "use_captcha");
+if (!$comment_id && ($captchaMode == "Always" || ($captchaMode == "Anonymous Only" && !$user)))
+{
+	$captchaMgr = new CaptchaManager();
+	$captchaMgr->addCaptchaToForm($form);
+}
+
 $form->allowDelete = true;
 
 if($method == "POST")

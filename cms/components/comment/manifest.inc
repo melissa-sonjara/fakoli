@@ -55,10 +55,10 @@ class CommentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("Initialize"			=>	array(CommentManager, onInitialize),
+		return array("Initialize"			 =>	array(CommentManager, onInitialize),
 					 "ComponentScanComplete" => array(CommentManager, setDefaults),
-					 "upgradeComponent"		=>	array(CommentManager, upgradeComponent),
-					"DeleteUser"			=>	array(CommentManager, deleteUser)
+					 "upgradeComponent"		 =>	array(CommentManager, upgradeComponent),
+					 "DeleteUser"			 =>	array(CommentManager, deleteUser)
 		);
 	}	
 

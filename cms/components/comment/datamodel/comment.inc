@@ -33,6 +33,10 @@
 
 class Comment extends DataItem
 {
+	var $table = "comment";
+	var $primary_key = "comment_id";
+	var $default_format = "{title}";
+	
 	// Fields
 	var $fields = array("comment_id"	=> Number,
 						"title"			=> String,
@@ -43,7 +47,9 @@ class Comment extends DataItem
 						"published"		=> Boolean
 				);
 	
-// Relations
+	var $fieldAliases = array("description" => "Comment");
+	
+	// Relations
 	
 	var $relations = array(	"User"		=>	"");
 				
@@ -62,15 +68,6 @@ class Comment extends DataItem
 			return false;
 		
 		return ((checkRole("admin") || $this->user_id == $user->user_id)) ? true : false;
-	}
-		
-	// Constructor
-	function Comment()
-	{
-		$this->primary_key = "comment_id";
-		$this->table = "comment";
-		$this->default_format = "{title}";
-		$this->DataItem(func_get_args());
 	}
 }
 	

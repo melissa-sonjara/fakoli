@@ -84,6 +84,7 @@ class CommentManager
 	{		
 		Settings::setDefaultValue("comment", "allow_anonymous_commenting", false, Boolean);
 		Settings::setDefaultValue("comment", "publish_automatically", true, Boolean);
+		Settings::setDefaultValue("comment", "use_captcha", "Never", String, "Specify when to use a Captcha to verify the user", "", "Never\nAnonymous Only\nAlways");
 	}
 	
 	static function onInitialize()
