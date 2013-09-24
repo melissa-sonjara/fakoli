@@ -1,8 +1,19 @@
-RewriteEngine on
-RewriteRule ^([0-9]+)$      page.php?page_id=$1     [QSA]
-RewriteRule ^([a-zA-Z0-9_\-]+)$ page.php?identifier=$1  [QSA]
-RewriteRule ^admin/([a-zA-Z0-9_\-]+)$   admin/page.php?identifier=$1    [QSA]
-RewriteRule ^action/([a-zA-Z0-9_\-]+)/([a-zA-Z0-9_\-]+)$ action.php?component=$1&action=$2 [QSA]
-RewriteRule ^components/([a-zA-Z0-9_\-]+)/([a-zA-Z0-9_\-/\.]+)$ resource.php?component=$1&path=$2 [QSA]
-RewriteRule ^fakoli/.*$ resource.php?path=$0 [QSA]
+Options -Indexes Includes +FollowSymLinks
 
+<DirectoryMatch \.svn>
+   Order allow,deny
+   Deny from all
+</DirectoryMatch>
+
+
+RewriteEngine on
+
+RewriteRule ^([0-9]+)$ page.php?page_id=$1 [QSA]
+RewriteRule ^([a-zA-Z0-9_\-]+)$ page.php?identifier=$1 [QSA]
+RewriteRule ^admin/([a-zA-Z0-9_\-]*)$ admin/page.php?identifier=$1 [QSA]
+RewriteRule ^action/([a-zA-Z0-9_\-]+)/([a-zA-Z0-9_\-]+)$ action.php?component=$1&action=$2 [QSA]
+RewriteRule ^fakoli/.*$ resource.php?path=$0 [QSA]
+RewriteRule ^components/([a-zA-Z0-9_\-]+)/([a-zA-Z0-9_\-/\.]+)$ resource.php?component=$1&path=$2 [QSA]
+RewriteRule ^([a-zA-Z0-9_\-]+)/([a-zA-Z0-9_\-]*)$ page.php?section=$1&identifier=$2 [QSA]
+
+RewriteRule \.svn/ - [F]

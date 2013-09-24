@@ -1,51 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
- <html>
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
  <head>
-  <meta name="description" content="{page_title}: {metadescription}"/>
-  <meta name="keywords" content="{page_title}: {keywords}"/>
-  <meta http-equiv="content-language" content="en">
-  <link href="/templates/css/default.css" rel="stylesheet"/>
+  <meta name="description" content="{meta_tag_description}" />
+  <meta name="keywords" content="{meta_tag_keyword}" />
+  <meta property="og:title" content="{page_title}"/>
   <title>{page_title}</title>
-  {var:script}
   {var:styles}
+  <link href="/templates/css/default.css" rel="stylesheet" />
+ {var:script}
+ <script>
+  window.addEvent('domready', function()
+  {
+  	new FakoliMenu('global');
+  });
+ </script>
  </head>
  <body>
-  <div id="container" align="center">
-  <table cellpadding="0" cellspacing="0" id="frame">
-   <tr>
-   <td colspan="2" id="header"><a href="/">Banner goes here</a></td>
-   </tr>
-   <tr>
-    <td id="leftnav">
-    
-    {menu:global}
- 
-    {position:login}
-    {position:left}
-    </td>    
-   <td id="content_cell">
-    {position:right}
+  <div id="curtain"></div>
+  {var:dialogs}
+  <div id="frame">
+   <div id="header">
+    <a href="/index" alt="Fakoli" id="banner"><h2 style="display: none">Fakoli - a PHP Framework &amp; CMS</h2></a>
+    {position:login_box}
+   </div>
+   <div id="layout">
+    <div id="nav">{menu:global}</div>    
     <div id="content">
-	{position:callout}
-    <h2>{page_title}</h2>
-    {description} 
-    {position:additional_content}   
+      <h2>{page_title}</h2>
+      {description}
+    </div>   
+   </div>
+    <div id="footer">
+     {position:footer_content}
     </div>
-	 </td>
-     
-    </tr>
-    <tr>
-   <td id="content_cell">
-   <div id="content">
-     {position:bottom_boxes}
-	 </div>
-     </td>
-    </tr>
-    <tr>
-     <td colspan="2">  
-     	<div id="footer"><p class="footer">{position:footer}</div>
-     </td>
-    </tr>
-  </table> 
+   </div>
  </body>
 </html>

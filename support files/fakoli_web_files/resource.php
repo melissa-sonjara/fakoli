@@ -1,4 +1,5 @@
 <?php
+$isResource = true;
 
 require_once "include/config.inc";
 require_once "cms/core.inc";
