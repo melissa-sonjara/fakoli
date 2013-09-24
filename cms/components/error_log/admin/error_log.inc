@@ -1,15 +1,23 @@
 <?php
 Fakoli::using("error_log", "user");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("data_view", "filter_form");
 
 $menu_item = "Error Log";
 
 $title = "Error Log";
 
-$errors = Query::create(ErrorLog, "ORDER BY timestamp DESC")->execute();
+$err = new ErrorLog();
+$err->filter = new InclusionFilter("timestamp");
+
+$filterForm = new FilterForm($err);
+$range = new DateRangeFilterRenderer($filterForm, "timestamp", "timestamp");
+
+$errors = Query::create(ErrorLog, $filterForm->getConstraint()." ORDER BY timestamp DESC")->execute();
+
+$filterForm->drawForm();
 
 $table = new DataListView($errors, "error_log");
-$table->column("Date &amp Time", "<a href='error_details?error_log_id={error_log_id}'>{timestamp}</a>", true)
+$table->column("Date", "<a href='error_details?error_log_id={error_log_id}'>{timestamp}</a>", true)
 	  ->column("User", "{getUserFullName()}", true)
 	  ->column("URI", "{uri}", true)
 	  ->column("Message", "{message}", true);

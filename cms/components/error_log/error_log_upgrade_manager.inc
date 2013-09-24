@@ -50,7 +50,8 @@ class ErrorLogUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added referrer field to capture HTTP Referrer if present"
+			"1.1"		=>	"sql:Added referrer field to capture HTTP Referrer if present",
+			"1.2"		=>	"sql:Added indexes to error_log table"
 	);
 	
 	function ErrorLogUpgradeManager()
