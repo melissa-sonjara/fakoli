@@ -34,6 +34,19 @@ CREATE TABLE `menu_item` (
   PRIMARY KEY (`menu_item_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+INSERT INTO `menu` (`menu_id`,`site_id`,`name`,`identifier`,`description`,`css_class`,`highlight_current_item`,`highlight_current_section`) VALUES 
+ (1,1,'global','global','','',0,0);
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+
+/*!40000 ALTER TABLE `menu_item` DISABLE KEYS */;
+INSERT INTO `menu_item` (`menu_item_id`,`parent_id`,`title`,`published`,`page_id`,`sort_order`,`role`,`url`,`menu_id`,`identifier`) VALUES 
+ (1,0,'HOME',1,0,1,'','/index',1,''),
+ (2,0,'ADMIN',1,0,2,'','/admin',1,''),
+ (3,0,'PAGE',1,0,3,'','/second_page',1,''),
+ (4,0,'HELP',1,0,4,'','http://www.fakoli.org/documentation',1,'');
+/*!40000 ALTER TABLE `menu_item` ENABLE KEYS */;
+
 
 -- END Version 1.0
 
