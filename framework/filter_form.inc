@@ -39,7 +39,7 @@ require_once realpath(dirname(__FILE__)."/field_renderers/boolean_field_renderer
 require_once realpath(dirname(__FILE__)."/field_renderers/checklist_field_renderer.inc");
 
 
-/*
+/**
  * Filter form adds a select field renderer to a page that allows
  * the user to select one item from the filter and the page reloads,
  * querying the list of items using the filter selection.
