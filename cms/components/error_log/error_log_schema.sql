@@ -33,7 +33,7 @@ ALTER TABLE error_log ADD COLUMN referer VARCHAR(1000) NOT NULL DEFAULT '';
 
 -- START Version 1.2
 
-ALTER TABLE fakoli_default.error_log
+ALTER TABLE error_log
  ADD INDEX error_log_session_idx(user_id, session),
  ADD INDEX error_log_timestamp_idx(timestamp, user_id);
 
