@@ -168,6 +168,8 @@ class DocumentLibrary extends DataItem
 	 */
 	function allowDelete()
 	{
+		if(!$this->document_library_id) return false;
+		
 		return (!count($this->Documents()) && checkRole($this->delete_files)) ? true : false;
 	}
 	

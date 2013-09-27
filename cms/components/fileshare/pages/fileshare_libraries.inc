@@ -51,7 +51,7 @@ $script .= $table->writeScript();
 
 $table->drawView();
 
-if ($user && !checkRole("visitor"))
+if ($user && !preg_match("/\\bvisitor\\b/", $user->role))
 {
 ?>
 <br/>
