@@ -122,7 +122,7 @@ class ContextHelpManager
 	
 	function getContextHelpRecords($obj)
 	{
-		$cl = get_class($obj);
+		$cl = $obj->contextHelpProxy ? $obj->contextHelpProxy : get_class($obj);
 		
 		if ($this->nonmatches[$cl]) return null;
 		
