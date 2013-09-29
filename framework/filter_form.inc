@@ -746,7 +746,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 	var $handler; // custom parameter handler if override to getConstraint needed
 	var $cssClass = "date_range";
 	
-	function DateRangeFilterRenderer(&$parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1)
+	function DateRangeFilterRenderer($parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1)
 	{
 		$this->stepMode = $stepMode;
 		$this->field = $field;
