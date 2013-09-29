@@ -128,7 +128,7 @@ class TableBasedFormLayout extends AutoFormLayout
 		
 		echo "<tr>\n";
 		
-		$this->printLabel($field, $renderer, $styles, ($renderer->colspan > 1) ? $this->parent->annotations[$field] : "");
+		$this->printLabel($field, $renderer, $styles, ($renderer->colspan > 1) ? "<br/>".$renderer->parent->annotations[$field] : "");
 		
 		if ($renderer->colspan > 1)
 		{
