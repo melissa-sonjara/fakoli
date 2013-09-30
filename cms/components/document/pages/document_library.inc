@@ -52,5 +52,6 @@ $view = new DocumentLibraryView($mgr);
 
 $script .= $view->writeScript();
 
+echo "<p>{$library->description}</p>";
 $view->drawView();
 ?>
