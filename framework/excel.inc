@@ -44,6 +44,8 @@ class ExcelFileWriter
 	
 	static function create($filename)
 	{
+		// Discard any previously generated output
+		ob_clean();
 		trace("Creating new Excel Handler: ".ExcelFileWriter::$handler, 3);
 		return new ExcelFileWriter::$handler($filename);
 	}
