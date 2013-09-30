@@ -1753,6 +1753,40 @@ function removeDuplicates($list, $field = "")
 	return $filtered;
 }
 
+/**
+ * Simple field comparator to support sorting arrays of DataItems
+ * by the values in a specified field.
+ */
+class DataItemFieldComparator
+{
+	var $field;
+	
+	function __construct($field)
+	{
+		$this->field = $field;
+	}
+	
+	function compare($a, $b)
+	{
+		return ($a->get($this->field) < $b->get($this->field)) ? -1 : 1;
+	}
+}
+
+/**
+ * Sorts an array of DataItems based on the values in the specified field
+ * @param array $list an array of DataItems
+ * @param string $field the field to sort by
+ * @return the sorted list
+ */
+function sortList(&$list, $field)
+{
+	$cmp = new DataItemFieldComparator($field);
+	
+	usort($list, array($cmp, "compare"));
+	
+	return $list;
+}
+
 function toXML($tag, $objects, $header = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>")
 {
 	$xml = "$header\n<$tag>\n";
