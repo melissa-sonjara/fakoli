@@ -468,12 +468,16 @@ class GroupedDataListView
 
 					foreach($this->items[$group->key] as $item)
 					{
+						$cl = "";
+						
 						if($this->rowId)
 							$rowId = $this->formatRowId($item);
 	
 						if ($this->onStartRow)
 						{
-							call_user_func($this->onStartRow, $item);
+							$retval = call_user_func($this->onStartRow, $item);
+							if ($retval === false) continue; // return false to indicate row should be skipped
+							if ($retval) $cl = $retval; // return a string to indicate a css class for the row
 						}
 						
 						foreach($this->totalCallbacks as $cb)
@@ -481,8 +485,9 @@ class GroupedDataListView
 							call_user_func($cb, $item);
 						}
 						
+						if ($cl) $cl = "class='$cl' ";
 ?>
-          <tr <?php echo $rowId ?>>
+          <tr <?php echo $cl.$rowId ?>>
 <?
 						foreach($this->columns as $column)
 						{
