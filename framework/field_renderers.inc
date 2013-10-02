@@ -301,6 +301,7 @@ require_once realpath(dirname(__FILE__))."/field_renderers/zipcode_field_rendere
 require_once realpath(dirname(__FILE__))."/field_renderers/select_field_view_source_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/data_list_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/phone_number_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/start_date_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/subselect_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/compound_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/url_field_renderer.inc";
