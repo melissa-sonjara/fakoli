@@ -41,6 +41,7 @@ class EmailHelper
 		$form->formCSS = "form";
 		$form->regexp("email", "\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", "Please supply a valid email address containing a domain name.");
 		
+		$form->alias("email", "Your Email");
 		$topicList = ContactTopic::formatList();
 		if(count($topicList) > 0)
 		{
