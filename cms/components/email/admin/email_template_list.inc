@@ -51,11 +51,12 @@ $menu_item = "Email Templates";
 
 $table = new DataListView($emailTemplates, "templates");
 $table->column("Name", formatEmailTemplateLink, true)
-//	  ->column("Class Name", "{class_name}", true)
 	  ->column("Recipients", "{recipients}", true)
 	  ->column("Subject", "{subject}", true)
-	  ->column("Message", formatEmailMessage, true);
-	  	
+	  ->column("Message", formatEmailMessage, true)
+	  ->column("Class Name", "{class_name}", true)
+	;
+
 $table->emptyMessage = "There are no email templates defined.";
 $table->mode = "tree";
 $table->cssStyle = "width: 100%";
