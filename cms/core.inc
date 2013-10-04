@@ -755,6 +755,8 @@ class Fakoli
 	 */
 	static function sendAdminPage($identifier)
 	{
+		global $config;
+		
 		if ($identifier != "login" && $identifier != "password_help") 
 		{
 			Fakoli::assertRole("admin", "/admin/login");
