@@ -64,7 +64,7 @@ else
 
 $form = new AutoForm($menuItem);
 
-$form->hide("title", "page_id", "sort_order", "identifier", "menu_id", "url");
+$form->hide("title", "page_id", "sort_order", "identifier", "menu_id", "url", "role", "permissions", "required_parameters");
 $form->alias("parent_id", "Move Menu Item To: ");
 $form->onSaveComplete = UpdateRolesToMatchNewParent;
 

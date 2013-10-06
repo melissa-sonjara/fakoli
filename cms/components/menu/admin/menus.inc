@@ -31,9 +31,8 @@
 
 *****************************************************************/
 
-Fakoli::using("menu");
-Fakoli::using("site");
-
+Fakoli::using("menu", "site");
+Fakoli::usingFeature("grouped_data_view");
 Fakoli::assertRole("admin");
 
 $menu_item = "Menus";
@@ -44,42 +43,17 @@ $menusBySite = groupedQuery(Menu, "ORDER BY name", "site_id");
 
 $title = "Menus";
 
+$table = new GroupedDataListView($menusBySite, "menu_list");
+$table->column("Menu", "<a href='menu_form?menu_id={menu_id}'>{name}</a>{description}", true)
+	  ->column("Identifier", "{identifier}")
+	  ->column("Action", "<a class='button' href='menu_items?menu_id={menu_id}'>Manage Menu Items</a>");
 
+$table->groupBy($sites, "{site_name}");
+$table->emptyMessage = "No menus have been defined";
 
-foreach($sites as $site)
-{
-?>
-<h3><?echo $site->site_name?> (<a href="<?echo $site->domain?>" target="_blank"><?echo $site->domain?>)</a></h3>
-<?
-	if (array_key_exists($site->site_id, $menusBySite))
-	{
-		$menus = $menusBySite[$site->site_id];
-?>
-<dl>
-<?
-		foreach($menus as $menu)
-		{
-			
-?>
-	<dt><a href="/admin/menu_form?menu_id=<?echo $menu->menu_id?>"><?echo $menu->name?> (<?echo $menu->identifier?>)</a></dt>
-	<dd><?echo $menu->description?></dd>
-<?		
-		}
+$script .= $table->writeScript();
+$table->drawView();
 
-?>
-</dl>
-<?
-	}
-	else
-	{
-?>
-<p><em>No menus have been defined for this site.</em></p>
-<?
-	} 
-}
 ?>
 <br/>
 <a class="button" href="/admin/menu_form">Add a Menu</a>
-<?
-
-?>
