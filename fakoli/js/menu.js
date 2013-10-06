@@ -38,7 +38,8 @@ var FakoliMenu = new Class({
 	options: 
 	{
 		position: 'bottomLeft',
-		effect: 'fade'
+		effect: 'fade',
+		subMenuPosition: 'topRight'
 	},
 	
 	initialize: function(elt, options)
@@ -56,27 +57,30 @@ var FakoliMenu = new Class({
 		
 		$$("#" + this.root.id + " > ul > li").each(function (elt)
 		{
-			var ul = elt.getElement('ul');
+			var uls = elt.getElements('ul');
 			
-			if (ul)
+			uls.each(function(ul)
 			{
 				if (menu.options.effect == 'fade')
 				{
 					ul.setStyle('opacity', 0);
 				}
 				
-				elt.addEvents(
+				var parent = ul.getParent();
+				parent.addClass(parent.getParent().getParent().id == menu.root.id ? "submenu" : "subsubmenu");
+				
+				parent.addEvents(
 				{
 					'touchstart': function(event)
 					{
 						new Event(event).stop();
 						
 						menu.clearFocus();
-						menu.showMenu(elt);
-						if (!elt.blockClick)
+						menu.showMenu(parent);
+						if (!parent.blockClick)
 						{
-							elt.blockClick = function(event) { new Event(event).stop(); return false; };
-							elt.addEvent('click', elt.blockClick.bind(elt));
+							parent.blockClick = function(event) { new Event(event).stop(); return false; };
+							parent.addEvent('click', elt.blockClick.bind(elt));
 							
 							ul.getElements('a').each(function(child)
 							{
@@ -87,15 +91,15 @@ var FakoliMenu = new Class({
 					
 					'mouseover': function() 
 					{ 
-						menu.showMenu(elt);
+						menu.showMenu(parent);
 					},
 						
 					'mouseout': function() 
 					{
-						menu.hideMenu(elt);
+						menu.hideMenu(parent);
 					} 
 				 });
-			}
+			});
 		});
 
 	},
@@ -104,9 +108,11 @@ var FakoliMenu = new Class({
 	{
 		var ul = elt.getElement('ul');
 		elt.addClass("sfhover"); 
+		var offset = elt.hasClass("subsubmenu") ? this.options.subMenuPosition: this.options.position;
+		
 		if (ul) 
 		{
-			ul.position({'relativeTo': elt, 'position': this.options.position});
+			ul.position({'relativeTo': elt, 'position': offset});
 			if (this.options.effect == 'fade')
 			{
 				ul.fade('in');
