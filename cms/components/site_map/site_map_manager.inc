@@ -158,7 +158,7 @@ class SiteMapManager
 				foreach($urlItems as $menuItem)
 				{
 					$parent = $menuItem->Parent();
-					if(!$parent) continue;
+					if(!$parent || $parent->url == $siteMapPage->url) continue;
 					
 					if($parent AND $parent->url != $siteMapPage->parent_url)
 					{
