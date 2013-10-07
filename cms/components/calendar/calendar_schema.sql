@@ -128,3 +128,13 @@ alter table `event` add column `owner_id` int(10) NOT NULL DEFAULT '0' AFTER `al
 
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE `event` ADD INDEX `start_date_idx` (`start_date`);
+ALTER TABLE `event` ADD INDEX `end_date_idx` (`end_date`);
+ALTER TABLE `event` ADD INDEX `time_zone_idx` (`time_zone_id`);
+ALTER TABLE `event` ADD INDEX `owner_idx` (`owner_id`);
+ALTER TABLE `event` ADD INDEX `calendar_idx` (`calendar_id`);
+
+-- END Version 1.7
