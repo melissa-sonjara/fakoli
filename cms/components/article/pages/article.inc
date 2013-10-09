@@ -64,8 +64,9 @@ if ($view && $method == "POST")
 <div id="article" style="padding-bottom: 20px;"><? 
 if ($article->image_id)
 {
+	$image = $article->Image();
 	?><img align="left" style="margin-right: 20px;"
-	src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=320" alt="<?echo $image->ALT_tag?>" /> <?
+	src="/action/image/thumbnail?image_id=<?echo $image->image_id?>&size=320" alt="<?echo $image->ALT_tag?>" /> <?
 }
 ?> <? echo $article->message ?></div>
 
