@@ -91,10 +91,6 @@ class TextFieldRenderer extends FieldRenderer
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
 		}
 		$disable = ($this->disable) ? "disabled='disabled'" : "";	
-		if ($this->annotateBefore && $this->parent->annotations[$field])
-		{
-			echo $this->parent->annotations[$field]."<br />";
-		}
 		
 		if ($style) $style = "style='$style'";
 		
@@ -114,22 +110,13 @@ class TextFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		if ($this->colspan > 1) $style = "text-align: left";
-		echo "<tr>\n";
-		$this->_printLabel($field, $this->colspan, $style, $this->parent->annotations[$field]);
-		
-		if ($this->colspan > 1)
-		{
-			echo "</tr>\n";
-			echo "<tr>\n";
-		}
-		echo "<td colspan='{$this->colspan}'";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+		$this->_startField($field);
+
 		$text = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8');
 		$text = str_replace("\n", "<br/>", $text);
 		echo $text;
-		echo "</td>\n</tr>\n";		
+
+		$this->_endField($field);
 	}
 	
 	function renderSearchField($field, $mode = "like")
