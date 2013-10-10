@@ -60,7 +60,9 @@ if ($menu_item_id)
 	$title = "Move Menu Item: {$menuItem->title}";
 }
 else
-	$title = "Add a new Menu Item";
+{
+	redirect("menus");
+}
 
 $form = new AutoForm($menuItem);
 
@@ -74,7 +76,9 @@ $form->button("Cancel", $redirect);
 if($parent_id)
 	$form->submitLabel = "Move Page";
 
-$menuItems = query(MenuItem, "ORDER BY sort_order");
+$menuItems = Query::create(MenuItem, "WHERE menu_id=:m ORDER BY sort_order")
+				  ->bind(":m", $menuItem->menu_id)
+			      ->execute();
 
 $menuItemTree = new TreeControl("parent_id");
 $menuItemTree->width = 500;
