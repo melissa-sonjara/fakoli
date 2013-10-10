@@ -80,8 +80,6 @@ if($help_page_id && !count($subpages))
 }
 
 $parentSelect = new SelectFieldRenderer($form, "parent_id", "Parent Page", OnlineHelpHelper::formatParentOptions($helpBook, $helpPage));
-$parentSelect->defaultBlank = true;
-$parentSelect->defaultText = "";
 
 $form->layout = new UngroupedFormLayout($form);
 $form->group("all", "title", "identifier", "parent_id");
