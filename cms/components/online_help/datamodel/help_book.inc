@@ -42,7 +42,14 @@ class HelpBook extends DataItem
 						"url"					=>	String,
 						"additional_css_files"	=>	String);
 	
-	var $relations = array();
+	var $relations = array("Pages"		=>	HelpPage,
+			);
+	
+	
+	function Pages($constraint = "ORDER BY sort_order")
+	{
+		return $this->getRelatedList(HelpPage, "", $constraint);	
+	}
 	
 	static function findByIdentifier($identifier)
 	{

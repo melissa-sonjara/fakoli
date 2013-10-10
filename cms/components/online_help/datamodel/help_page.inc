@@ -66,6 +66,28 @@ class HelpPage extends DataItem
 					->bind(":id", $this->help_page_id)
 					->execute();
 	}
+	
+	/**
+	 * Whether this page is a child of the given page.
+	 * 
+	 * @param obj $helpPage
+	 */
+	function isChildOf($helpPage)
+	{
+		$child = false;
+		$currPage = clone $this;
+		// walk up the tree to get all parents of the page
+		while(isset($currPage) && !$child)
+		{
+			$currPage = $currPage->Parent();
+			if($currPage->identifier == $helpPage->identifier)
+			{
+				$child = true;
+			}
+		}
+		
+		return $child;
+	}
 		
 	function HelpPage()
 	{

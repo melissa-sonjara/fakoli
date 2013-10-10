@@ -44,7 +44,7 @@ $title = "Help Pages for {$helpBook->title}";
 
 $tabs = OnlineHelpManager::getAdminTabs($help_book_id);
 
-$helppages = Query::create(HelpPage, "ORDER BY sort_order")->execute();
+$helppages = $helpBook->Pages("ORDER BY sort_order");
 
 $helpTree = new TreeControl("help_tree");
 
@@ -75,16 +75,27 @@ if (count($helppages) > 0)
 	}
 }
 
+$table = OnlineHelpHelper::buildRootPageTable($helppages, $help_book_id);
+$table->emptyMessage = "There are no help pages.";
 
-$script = $helpTree->writeScript();
+$script .= $helpTree->writeScript();
+$script .= $table->writeScript();
+
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
-<h3><?echo $helpBook->title?></h3>
-<?
+<div id="tab_border">
+<?php
+echo "<p><a class='button' href='help_page_form?help_book_id=$help_book_id&parent_id=0'>Add a New Help Page</a></p>\n";
+
+echo "<h3><{$helpBook->title}</h3>\n";
+
 $helpTree->writeHTML();
 
+echo "<h3>Table View of {$helpBook->title}</h3>\n";
+
+$table->drawView();
+
+echo "<p><a class='button' href='help_page_form?help_book_id=$help_book_id&parent_id=0'>Add a New Help Page</a></p>\n";
+
 ?>
-<br/>
-<a class="button" href="help_page_form?help_book_id=<?echo $help_book_id?>&parent_id=0">Add a New Help Page</a>
 </div>

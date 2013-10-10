@@ -32,7 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("online_help");
-Fakoli::usingFeature("auto_form", "tab_bar");
+Fakoli::usingFeature("auto_form", "tab_bar", "data_view");
 
 $menu_item = "Online Help";
 
@@ -46,64 +46,58 @@ $helpBook = new HelpBook($help_book_id);
 $title = "Help Page for {$helpBook->title}";
 
 $helpPage = new HelpPage();
+$subpage = array();
 
 if ($help_page_id)
 {
 	$helpPage->load($help_page_id);
+	$title = "Edit Help Page Details for {$helpPage->title}";
+	$subpages = $helpPage->Children();
 }
 else
 {
-	$helpPage->parent_id = $parent_id;
+	if($parent_id)
+	{
+		$helpPage->parent_id = $parent_id;
+	}
+	$helpPage->sort_order = Query::create(HelpPage, "WHERE help_book_id=:help_book_id")
+		->bind(":help_book_id", $help_book_id)
+		->executeValue("MAX(sort_order)") + 1;
 	$helpPage->help_book_id = $help_book_id;
+	$title = "Add a new Help Page";
 }
+
 
 $form = new AutoForm($helpPage);
 $form->required("title", "identifier");
-$form->hide("help_book_id", "parent_id");
+$form->hide("help_book_id", "sort_order");
+
+$form->allowDelete = count($subpages) ? false : true;
+	
+if($help_page_id && !count($subpages))
+{
+	$form->button("Add a Subpage", "help_page_form?help_book_id=$help_book_id&parent_id=$help_page_id");
+}
+
+$parentSelect = new SelectFieldRenderer($form, "parent_id", "Parent Page", OnlineHelpHelper::formatParentOptions($helpBook, $helpPage));
+$parentSelect->defaultBlank = true;
+$parentSelect->defaultText = "";
+
+$form->layout = new UngroupedFormLayout($form);
+$form->group("all", "title", "identifier", "parent_id");
+
+$form->button("Cancel", $redirect);
+
+$table = OnlineHelpHelper::buildPageTable($subpages, $help_book_id);
+$table->emptyMessage = "There are no subpages.";
+
 
 if ($method == "POST")
 {
-	if ($_POST["reorder_subitems"])
-	{
-	   	$sort_nums = checkNumeric($_POST["m"]);
-		
-		foreach($sort_nums as $key => $sort_num)
-		{
-			$p = new HelpPage();
-			$p->filter = new InclusionFilter("help_page_id", "sort_order");
-			$p->load($key);
-			$p->sort_order = $sort_num;
-			$p->save();
-		}		
-	}
-	else if ($form->save())
+	if ($form->save())
 	{
 		redirect("help_pages?help_book_id={$help_book_id}");
 	}
-}
-
-
-if ($help_page_id)
-{
-	$title = "Edit Help Page Details for {$helpPage->title}";
-	
-	$subpages = $helpPage->Children();
-	if(count($subpages) > 0) 
-	{
-		$form->allowDelete = false;
-	}
-	else 
-	{ 
-		$form->allowDelete = true; 
-	}
-	
-	$form->button("Move Help Page", "/admin/help_page_move_form?help_book_id={$help_book_id}&help_page_id={$help_page_id}&parent_id={$parent_id}");
-	$form->button("Cancel", $redirect);
-}
-else
-{
-	$title = "Add a new Help Page";
-	$form->button("Cancel", $redirect);
 }
 
 
@@ -111,55 +105,19 @@ $tabs = OnlineHelpManager::getAdminTabs($help_book_id);
 $tabs->page = "/admin/help_pages";
 
 $script = $form->writeScript();
+$script .= $table->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div id="tab_border">
 <?
 $form->drawForm();
 
-if ($help_page_id)
+if(count($subpages))
 {
-?>
-<h4>Sub-pages</h4>
-<?
-	if ($subpages)
-	{
-?>
-
-<form name='help_page_order_form' method="POST" action="">
-<input type="hidden" name="reorder_subitems" value="1"/>
-<table class="list" style='width: 90%; margin-left: 4%'>
- <tr>
-  <th>Sort Order</th>
-  <th>Help Page</th>
- </tr>
-<?
-		foreach($subpages as $p)
-		{
-?>
- <tr>
-  <td style="text-align: center; vertical-align: middle; width: 80px"><input type="text" style="width: 60px" name="m[<?echo $p->help_page_id ?>]" value="<?echo $p->sort_order ?>"/></td>
-  <td><a href="/admin/help_page_form?help_page_id=<?echo $p->help_page_id?>"><?echo $p->title ?></a></td>
- </tr>
-<?
-		}
-?>
-</table>
-
-<br/>
-
-<input type="submit" class="button" value="Update Page Order"/>&nbsp;&nbsp;<a href="help_page_form?help_book_id=<?echo $helpBook->help_book_id?>&parent_id=<?echo $help_page_id?>" class="button">Add a new Sub-page</a>
-
-</form>
-<?
-	}
-	else
-	{
-?><p><i>There are no sub-pages associated with this help page.</i></p>
-<a href="/admin/help_page_form?help_book_id=<?echo $helpBook->help_book_id?>&parent_id=<?echo $help_page_id?>" class="button">Add a new Sub-page</a>
-<?
-	}
+	echo "<h3>Subpages</h3>\n";
+	$table->drawView();
+	echo "<p><a class='button' href='help_page_form?help_book_id=$help_book_id&parent_id=$help_page_id'>Add a Subpage</a></p>\n";
 }
 ?>
 </div>
