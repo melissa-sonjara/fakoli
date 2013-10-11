@@ -61,6 +61,7 @@ $redirect = "/admin/text_lookup_list";
 
 $form = new AutoForm($text);
 $form->unique("code", "Text already exists with that code.");
+$form->required("code");
 
 $classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
 if (count($classes) > 0)
