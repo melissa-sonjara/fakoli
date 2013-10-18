@@ -311,11 +311,13 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		$values = explode(",", $rawValue);		
 		$values = array_combine($values, $values);
-		
+
 		$divider = $this->horizontal ? " " : "<br/>";
+		$layout = $this->horizontal ? " style='display: inline'" : "";
 		
 		if ($this->width && $this->height && ($this->getOptionCount() > $this->scrollAfter || $this->grouped))
 		{
+			$divider = $this->horizontal ? " " : "";
 			$resizable = $this->resizable ? " resizable": "";
 			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
@@ -335,7 +337,8 @@ class CheckListFieldRenderer extends FieldRenderer
 					
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
 					
-					echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$idx]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<label for='{$this->parent->id}_{$field}_$idx'$layout><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}_$idx' name='{$field}:{$mode}[$idx]' value='$value'$checked/>$text</label>$divider";
+						
 					$idx++;
 				}
 				
@@ -350,7 +353,8 @@ class CheckListFieldRenderer extends FieldRenderer
 				foreach($this->options as $value => $text)
 				{
 					$checked = (array_key_exists($value, $values)) ? " checked" : "";
-					echo "<input type='checkbox' class='checkbox' name='{$field}:{$mode}[$value]' value='$value'$checked/>&nbsp;$text$divider";
+					echo "<label for='{$this->parent->id}_{$field}_$value'$layout><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}_$value' name='{$field}:{$mode}[$value]' value='$value'$checked/>$text</label>$divider";
+						
 					$idx++;
 				}
 			}
