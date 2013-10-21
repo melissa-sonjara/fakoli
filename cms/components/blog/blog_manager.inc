@@ -198,6 +198,34 @@ class BlogManager
 		return $user;
 	}
 	
+	/**
+	 * Custom save handlerf or blog_subscription_form. Avoid saving duplicate
+	 * subscriptions (same email and blog_id).
+	 * 
+	 * @param unknown $form
+	 */
+	static function saveBlogSubscription($form)
+	{
+		$blogSubscriber = $form->data;
+		
+		$subscriptions = Query::create(BlogSubscriber, "WHERE subscriber_email=:email AND blog_id=:blog_id")
+			->bind(":email", $blogSubscriber->subscriber_email, ":blog_id", $blogSubscriber->blog_id)
+			->execute();
+		
+		$subscription = (count($subscriptions)) ? $subscriptions[0] : null;
+		
+		if($subscription && $subscription->subscription_type != $blogSubscriber->subscription_type)
+		{
+			$subscription->subscription_type = $blogSubscriber->subscription_type;
+			$subscription->filter = new InclusionFilter("subscription_type");
+			$subscription->save();
+		}
+		else if(!$subscription)
+		{
+			$blogSubscriber->save();
+		}
+	}
+	
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("blog", "Articles and Blogs", new BlogSerializationHandler());

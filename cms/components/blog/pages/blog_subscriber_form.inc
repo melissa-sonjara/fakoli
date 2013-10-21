@@ -57,6 +57,7 @@ else
 {
 	$form->hide("subscription_type");
 }
+$form->customSaveHandler = array(BlogManager, saveBlogSubscription);
 
 $form->submitLabel = "Subscribe";
 
