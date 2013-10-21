@@ -880,6 +880,7 @@ class SearchForm extends AutoForm
 	var $params;
 	var $hasSearchCriteria = false;
 	var $emptyMessage = "No search criteria was provided.";
+	var $preserveQueryString = false;
 	
 	var $searchModeTypes = array("like"	=>  "exact phrase match",
 								 "all"	=>	"match all words in any order",
@@ -1119,6 +1120,11 @@ class SearchForm extends AutoForm
 		
 		$obj =& $this->data;
 		$pk = $obj->primary_key;
+
+		if ($this->preserveQueryString)
+		{
+			$obj->fromREQUEST();
+		}
 		
 		$submitLabel = $this->submitLabel;
 		if ($submitLabel == "")
@@ -1142,6 +1148,16 @@ class SearchForm extends AutoForm
 		{
 			echo "<input id='{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}	
+		
+		if ($this->preserveQueryString)
+		{
+			foreach($_GET as $key => $value)
+			{
+				if ($key == "identifier" || $key == "section" || $key == "submit" || array_key_exists($this->hidden, $key) || $obj->hasField($key)) continue;
+				echo "<input id='{$this->id}_{$key}' type='hidden' name='$key' value='".htmlSafe($value)."'/>\n";
+			}
+		}
+		
 		
 		$this->layout->startUngrouped();
 		
