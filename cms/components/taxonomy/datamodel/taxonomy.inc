@@ -96,6 +96,13 @@ class Taxonomy extends DataItem
 		
 		return $this->_termCache[$cl][$item->get($item->getPrimaryKey())]->term_ids;
 	}
+	
+	function getAssociatedTermsByClass($class)
+	{
+		return Query::create(TaxonomyTerm, "WHERE term_id in (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:id AND class=:cl) ORDER BY term")
+					->bind(":id", $this->taxonomy_id, ":cl", $class)
+					->execute();
+	}
 }
 
 ?>
