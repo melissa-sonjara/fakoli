@@ -74,7 +74,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		return $view;
 	}
 	
-	function drawArticleList($blog, $year = false, $month = false)
+	function drawArticleList($blog, $year = false, $month = false, $term_id = null)
 	{
 		global $page;
 		global $script;
@@ -92,6 +92,11 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 				$constraint .= " AND MONTH(publish_date) = $month";
 			}			
 
+		}
+		
+		if ($term_id)
+		{
+			$constraint .= " AND article_id IN (SELECT id FROM taxonomy_term_association where class='Article' AND term_id=$term_id)";
 		}
 		
 		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
@@ -173,7 +178,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		return $view;
 	}
 	
-	function drawArticleList($blog, $year = false, $month = false)
+	function drawArticleList($blog, $year = false, $month = false, $term = null)
 	{
 		global $page;
 		global $script;
@@ -191,6 +196,11 @@ class NewsBlogViewHandler implements IBlogViewHandler
 				$constraint .= " AND MONTH(publish_date) = $month";
 			}			
 
+		}
+		
+		if ($term_id)
+		{
+			$constraint .= " AND article_id IN (SELECT id FROM taxonomy_term_association where class='Article' AND term_id=$term_id)";
 		}
 		
 		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
@@ -250,7 +260,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		return $view;
 	}
 	
-	function drawArticleList($blog, $year = false, $month = false)
+	function drawArticleList($blog, $year = false, $month = false, $term_id = null)
 	{
 		global $page;
 		global $script;
@@ -268,6 +278,12 @@ class BookBlogViewHandler implements IBlogViewHandler
 				$constraint .= " AND MONTH(publish_date) = $month";
 			}			
 		}
+		
+		if ($term_id)
+		{
+			$constraint .= " AND article_id IN (SELECT id FROM taxonomy_term_association where class='Article' AND term_id=$term_id)";
+		}
+		
 		
 		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
 		
@@ -356,14 +372,14 @@ class BlogView
 		$this->handlers[$type] = $handler;
 	}
 	
-	function drawArticleList($year = false, $month = false)
+	function drawArticleList($year = false, $month = false, $term_id = null)
 	{
 		$type = $this->blog->blog_type;
 		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
 	
 		trace ("Month is " . $month, 3);
 		
-		$this->handlers[$type]->drawArticleList($this->blog, $year, $month);
+		$this->handlers[$type]->drawArticleList($this->blog, $year, $month, $term_id);
 	}
 	
 	function drawArticle($article_id)
