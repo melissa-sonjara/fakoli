@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("blog");
+Fakoli::using("blog", "email");
 Fakoli::usingFeature("auto_form");
 
 $blog_id = checkNumeric($_GET["blog_id"]);
@@ -41,6 +41,8 @@ $blogSubscriber = new BlogSubscriber();
 $blogSubscriber->load($blog_subscriber_id);
 
 $blogSubscriber->delete();
+
+EmailManager::send($blogSubscriber, 'blog_unsubscribe_confirmation');
 
 redirect("/blog_unsubscription_successful");
 ?>
