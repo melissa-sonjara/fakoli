@@ -34,7 +34,7 @@
 
 require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
-/*
+/**
  * Add a DataListView table to an AutoForm.
  * 
  * syntax:
