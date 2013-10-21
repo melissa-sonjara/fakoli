@@ -37,6 +37,7 @@ $id = $_GET["blog"];
 $article_id = checkNumeric($_GET["article_id"]);
 $year = checkNumeric($_GET["year"]);
 $month = checkNumeric($_GET["month"]);
+$term_id = checkNumeric($_GET["term_id"]);
 
 $blog = Blog::findByIdentifier($id);
 
@@ -72,7 +73,7 @@ if ($article_id)
 }
 else
 {
-	$view->drawArticleList($year, $month);
+	$view->drawArticleList($year, $month, $term_id);
 }
 
 ?>
