@@ -44,7 +44,7 @@ $form->button("Cancel", "emailDocAttachmentMgr.closeDialog()", null, true);
 $form->submitLabel = "Select Document";
 
 $librarySelect = new SelectFieldRenderer($form, "document_library_id", "Library", EmailLibraryAttachmentFieldRenderer::getLibraryOptions());
-$documentSelect = new SubSelectFieldRenderer($form, "document_id", "Document", "document_library_id", EmailLibraryAttachmentFieldRenderer::getDocumentOptions(), "{title}");
+$documentSelect = new SubSelectFieldRenderer($form, "document_id", "Document", "document_library_id", EmailLibraryAttachmentFieldRenderer::getDocumentOptions(), "{title:70}");
 $form->required("document_id");
 // $form->validator->getValidator("document_id, RequiredValidator) is not retrieving validator class here.
 // validator needs to set empty to 0 or doesn't validate
