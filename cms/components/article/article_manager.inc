@@ -59,7 +59,7 @@ class ArticleManager
 		
 		if($article->published)
 		{
-			ArticleManager::sendEmailToSubscribers('blog_published');
+			ArticleManager::sendEmailToSubscribers($article, 'blog_published');
 		}
 	}
 	
