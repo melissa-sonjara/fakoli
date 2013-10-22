@@ -170,6 +170,50 @@ class BlogManager
 	{
 		Settings::setDefaultValue("blog", "allow_subscription_options", "0", Boolean, "Whether to allow users to choose subscription type options. Cron job must be setup for the website to call handler file 'send_digest'.");
 		Settings::setDefaultValue("blog", "weekly_digest_day", "Mon", String, "The day of the week when the weekly digest will be sent for sites that allow that option.", "", "Sun\nMon\nTue\nWed\nThu\nFri\nSat");
+		
+		BlogManager::setDefaultEmailTemplates();
+		BlogManager::setDefaultMergeCodes();
+	}
+	
+	/**
+	 * For blog, need default templates:
+	 * blog_subscription
+	 * blog_published
+	 * blog_unsubscribe_confirmation
+	 */
+	static function setDefaultEmailTemplates()
+	{
+		global $config;
+
+		$sitename = $config["sitename"];
+		
+		$message = "This is an automated message from {$sitename}. You have successfully subscribed to the [blog_title].<br><br>To unsubscribe, <a href='[unsubscribe_url]'>click here</a> or follow this link: [unsubscribe_url].";
+		EmailTemplate::setDefaultTemplate("blog_subscription", "[subscriber_email]", "{$sitename} Blog Subscription: [blog_title]", $message, "BlogSubscriber");
+		
+		$message = "Greetings. This is an automated message from {$sitename}. A new post has been published on [blog_title]. Click the link below to read it.<br><br>[blog_url]?article_id=[article_id]<br><br>You are receiving this message because you subscribed to [blog_title]. To unsubscribe, please follow this link: [unsubscribe_url]";
+		EmailTemplate::setDefaultTemplate("blog_published", "[subscriber_email]", "{$sitename} post: [blog_title]", $message, "BlogSubscriber");
+	
+		$message = "This is an automated message from {$sitename}. You have successfully unsubscribed to the [blog_title].";
+		EmailTemplate::setDefaultTemplate("blog_unsubscribe_confirmation", "[subscriber_email]", "{$sitename} Blog Subscription: [blog_title]", $message, "BlogSubscriber");
+	
+	}
+	
+	/**
+	 * Merge codes:
+	 * blog_title
+	 * article_id
+	 * blog_identifier
+	 * unsubscribe_url
+	 * blog_url
+	 * 
+	 */	
+	static function setDefaultMergeCodes()
+	{
+		MergeCode::setDefaultMergeCode("blog_title", "Blog.title", "BlogSubscriber", "Blog Title");
+		MergeCode::setDefaultMergeCode("article_id", "", "BlogSubscriber", "ID of the article whose publication is the cause of the subscriber email being sent. This value is provided in the calling code b/c it can't be accessed through the blog subscriber.");
+		MergeCode::setDefaultMergeCode("blog_identifier", "Blog.identifier", "BlogSubscriber", "The CMS page identifier of the blog.");
+		MergeCode::setDefaultMergeCode("unsubscribe_url", "getUnsubscribeUrl", "BlogSubscriber", "The url to unsubscribe from a blog.");
+		MergeCode::setDefaultMergeCode("blog_url", "getBlogUrl", "BlogSubscriber", "The url to view blog posts.");
 	}
 
 	static function registerTaxonomyClasses($classes)

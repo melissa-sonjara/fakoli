@@ -58,6 +58,34 @@ class BlogSubscriber extends DataItem
 	{
 		return $this->getRelated(Blog);
 	}
+	
+	/**
+	 * Merge Code 'unsubscribe_url'
+	 * 
+	 * @return string
+	 */
+	function getUnsubscribeUrl()
+	{
+		global $config;
+		$url = ($_SERVER['HTTPS']) ? "https://" : "http://";
+	
+		return $url . $config["http_host"] . "/action/blog/unsubscribe?blog_subscriber_id={$this->blog_subscriber_id}";
+	}	
+	
+	/**
+	 * Merge code 'blog_url'
+	 * 
+	 * article_id is supplied in the calling code.
+	 * 
+	 * @return string
+	 */
+	function getBlogUrl()
+	{
+		global $config;
+		$url = ($_SERVER['HTTPS']) ? "https://" : "http://";
+	
+		return $url . $config["http_host"].  "/". $this->format("{Blog.identifier}");
+	}
 						
 	function BlogSubscriber()
 	{
