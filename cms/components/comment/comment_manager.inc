@@ -85,6 +85,40 @@ class CommentManager
 		Settings::setDefaultValue("comment", "allow_anonymous_commenting", false, Boolean);
 		Settings::setDefaultValue("comment", "publish_automatically", true, Boolean);
 		Settings::setDefaultValue("comment", "use_captcha", "Never", String, "Specify when to use a Captcha to verify the user", "", "Never\nAnonymous Only\nAlways");
+
+		CommentManager::setDefaultEmailTemplates();
+		CommentManager::setDefaultMergeCodes();
+	}
+	
+
+	/**
+	 * For comment, need default template:
+	 * new_comment
+	 */
+	static function setDefaultEmailTemplates()
+	{
+		global $config;
+	
+		$sitename = $config["sitename"];
+		$contact = $config["email_contact"];
+		
+		$message = "This is an automated message from the {$sitename}.<br><br>A new comment has been posted. To review and publish this comment, click the link below:<br><br>[article_url]";
+		EmailTemplate::setDefaultTemplate("new_comment", $contact, "[article_title] Comment ([comment_title])", $message, "ArticleCommentXref");
+	}
+		
+	/**
+	 * Merge codes for ArticleCommentXref:
+	 * comment_article_id
+	 * comment_title 
+	 * article_title
+	 * article_url
+	 */
+	static function setDefaultMergeCodes()
+	{
+		MergeCode::setDefaultMergeCode("comment_article_id", "Article.article_id", "ArticleCommentXref", "Comment Article ID");
+		MergeCode::setDefaultMergeCode("comment_title", "Comment.title", "ArticleCommentXref", "Comment Title");
+		MergeCode::setDefaultMergeCode("article_title", "Article.title", "ArticleCommentXref", "Article Title");
+		MergeCode::setDefaultMergeCode("article_comment_url", "Article.getUrl", "ArticleCommentXref", "URL of article with list of comments");
 	}
 	
 	static function onInitialize()
