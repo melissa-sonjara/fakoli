@@ -83,7 +83,10 @@ class DateTimeTypeRenderer extends AbstractTypeRenderer
 		trace("DateTimeTypeRenderer template is $template and value is $datetime", 5);
 		
 		if($datetime)
-			$text = date($template, strtotime($datetime));
+		{
+			$dateObj = new DateTime($datetime);
+			$text = $dateObj->format($template);
+		}
 		// else if no date return "";
 			
 		return $text; 

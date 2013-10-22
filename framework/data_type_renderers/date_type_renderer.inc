@@ -70,8 +70,11 @@ class DateTypeRenderer extends AbstractTypeRenderer
 		if (!strncmp("0000-00-00", $date, 10)) return "";
 		
 		if($date)
-			$text = date($template, strtotime($date));
-			
+		{
+			$dateObj = new DateTime($date);
+			$text = $dateObj->format($template);
+		}
+		
 		// return blank if no date
 		return $text; 
 	}
