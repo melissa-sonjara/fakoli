@@ -54,6 +54,37 @@ class EmailTemplate extends DataItem
 		
 	}
 	
+	/**
+	 * Create a default template for emails that are sent through Fakoli
+	 * components (e.g., blog_published)
+	 * 
+	 * @param string $name
+	 * @param string $recipients
+	 * @param string $subject
+	 * @param string $message
+	 * @param string $class_name
+	 * @param string $sender_email
+	 */
+	static function setDefaultTemplate($name, $recipients, $subject, $message, $class_name, $sender_email = "")
+	{
+		$emailTemplates = Query::create(EmailTemplate, "WHERE name=:name")
+			->bind(":name", $name)
+			->execute();
+		
+		if(count($emailTemplates))
+		{
+			return;
+		}
+		
+		$emailTemplate = new EmailTemplate();
+		$emailTemplate->name = $name;
+		$emailTemplate->class_name = $class_name;
+		$emailTemplate->recipients = $recipients;
+		$emailTemplate->subject = $subject;
+		$emailTemplate->message = $message;
+		$emailTemplate->save();
+	}
+		
 	function EmailTemplate()
 	{
 		$this->table = "email_template";
