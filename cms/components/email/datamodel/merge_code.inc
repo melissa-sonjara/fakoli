@@ -42,6 +42,33 @@ class MergeCode extends DataItem
 			"function"			=>	Boolean // deprecated
 	);
 
+	/**
+	 * Create a default merge codes for emails that are sent through Fakoli
+	 * components (e.g., blog_title)
+	 * 
+	 * @param string $name
+	 * @param string $map
+	 * @param string $class_name
+	 * @param string $description
+	 */
+	static function setDefaultMergeCode($name, $map, $class_name, $description = "")
+	{
+		$mergeCodes = Query::create(MergeCode, "WHERE name=:name AND class_name=:class_name")
+			->bind(":name", $name, ":class_name", $class_name)
+			->execute();
+		
+		if(count($mergeCodes))
+		{
+			return;
+		}
+		
+		$mergeCode = new MergeCode();
+		$mergeCode->name = $name;
+		$mergeCode->map = $map;
+		$mergeCode->class_name = $class_name;
+		$mergeCode->description = $description;
+		$mergeCode->save();
+	}
 	
 	function MergeCode()
 	{
