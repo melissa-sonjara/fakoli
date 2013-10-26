@@ -339,6 +339,15 @@ class GroupedDataListView
 	}
 	
 	/**
+	 * Get the Excel Link
+	 */
+	function getExcelLink()
+	{
+		$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+		return getBaseURI().$qs;
+	}
+	
+	/**
 	 * Write the Javascript to implement the table output.
 	 * @return string containing the required Javascript.
 	 */
@@ -444,7 +453,7 @@ class GroupedDataListView
 <?
 				if ($this->excelFile && $first)
 				{
-					$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
+					$qs = $this->getExcelLink();
 ?>
 		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
 <?			
