@@ -305,7 +305,7 @@ class DataListView implements FacetFilterable
 	function getExcelLink()
 	{
 		$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
-		return getBaseURI().$qs;
+		return baseURI().$qs;
 	}
 	
 	/**
