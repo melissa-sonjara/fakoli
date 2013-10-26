@@ -1457,6 +1457,17 @@ function formatCheckListItemsforView($options, $items)
 }
 
 /**
+ * Returns the base URI for the current script, with the query string removed.
+ * string @param $uri (optional) the URI to truncate - if not specified, the URI
+ * for the currently executing script is used.
+ */
+function baseURI($uri = null)
+{
+	if (!$uri) $uri = $_SERVER['REQUEST_URI'];
+	return preg_replace("/\\?.*$/", "", $uri);
+}
+
+/**
  * Appends the specified parameters to the supplied query string.
  * @param string $qs the query string
  * @param string $params parameters to append in query string format
