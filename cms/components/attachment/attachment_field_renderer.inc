@@ -81,7 +81,7 @@ class AttachmentFieldRenderer extends FieldRenderer
  <div class="dialog_header" id="attachmentDialogHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeAttachmentDialog'>Close &times;</a></div>
-   <span"style="font-weight: bold" id="attachmentDialogTitle">Add an Attachment</span>
+   <span style="font-weight: bold" id="attachmentDialogTitle">Add an Attachment</span>
   </div>	
  </div>
  <div class="dialog_body">
@@ -206,6 +206,13 @@ class AttachmentFieldRenderer extends FieldRenderer
 	<a href='/action/attachment/download?attachment_id=<?echo $attachment->attachment_id?>'><?echo $attachment->filename?></a>&nbsp;
 	(<?echo $attachment->file_size?>)
 <?			
+	}
+	
+	static function formatAttachment($attachment)
+	{
+		$icon = getDocIcon($attachment->filename);
+	
+		return $attachment->format("<img src='{$icon}' alt='Icon' style='display:inline-block;vertical-align:middle'/>&nbsp;<a href='/action/attachment/download?attachment_id={attachment_id}'>{filename}</a>&nbsp;({file_size})");
 	}
 	
 	function postProcess($field = "")
