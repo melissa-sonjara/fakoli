@@ -568,14 +568,17 @@ class ComponentManager
 		}
 
 		$context = array(
-			"_GET" => $_GET, 
-			"_REQUEST" => $_REQUEST, 
-			"method" => $method
+			"_GET" 		=> $_GET, 
+			"_REQUEST" 	=> $_REQUEST, 
+			"_SERVER"	=> $_SERVER,
+			"method" 	=> $method
 		);
 		
 		parse_str($queryString, $_GET);
 		
 		trace("\$_GET: " . json_encode($_GET), 3);
+		
+		$_SERVER["REQUEST_URI"] = $uri;
 		
 		$_GET["component"] = $component;
 		$_GET["action"] = $action;
