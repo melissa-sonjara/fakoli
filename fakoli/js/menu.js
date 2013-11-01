@@ -108,11 +108,18 @@ var FakoliMenu = new Class({
 	{
 		var ul = elt.getElement('ul');
 		elt.addClass("sfhover"); 
-		var offset = elt.hasClass("subsubmenu") ? this.options.subMenuPosition: this.options.position;
+		var offset = this.options.position;
 		
 		if (ul) 
 		{
+			if (elt.hasClass("subsubmenu"))
+			{
+				offset = this.options.subMenuPosition;
+			}
+
 			ul.position({'relativeTo': elt, 'position': offset});
+
+			
 			if (this.options.effect == 'fade')
 			{
 				ul.fade('in');
@@ -130,7 +137,7 @@ var FakoliMenu = new Class({
 		elt.removeClass("sfhover");  
 		if (ul) 
 		{
-			ul.setStyle('left', -2000);
+			ul.setStyle('left', -10000);
 		}
 	},
 	
