@@ -1829,6 +1829,14 @@ function displayFieldAsList($items, $field, $separator = ", ")
 	return formatItems($items, "{".$field."}", $separator);
 }	
 
+/**
+ * Format a list of DataItems using the specified templated. The list
+ * is returned as a string with the specifed separator between records.
+ * @param array $items the DataItems to format
+ * @param string $template the format template
+ * @param string $separator the separator to use between records
+ * @return string
+ */
 function formatItems($items, $template, $separator = "")
 {
 	$list = "";
@@ -1842,6 +1850,17 @@ function formatItems($items, $template, $separator = "")
 		$first = false;
 	}
 	
+	return $list;
+}
+
+function extractItems($items, $indexFormat, $valueFormat)
+{
+	$list = array();
+	foreach($items as $item)
+	{
+		$list[$item->format($indexFormat)] = $item->format($valueFormat);
+	}
+
 	return $list;
 }
 
