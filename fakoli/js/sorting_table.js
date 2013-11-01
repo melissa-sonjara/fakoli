@@ -296,9 +296,9 @@ var SortingTable = new Class(
 				return '00000000000000000000000000000000'.substr(0,32-cell.length).concat(cell);
 			}
 		},
-		// YYYY-MM-DD, YYYY-m-d
+		// YYYY-MM-DD, YYYY-m-d, YYYY/MM/DD, YYYY/m/d
 		{ 
-			matcher: /(\d{4})-(\d{1,2})-(\d{1,2})/,
+			matcher: /(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/,
 			conversion_function: function( row ) 
 			{
 				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
@@ -308,6 +308,19 @@ var SortingTable = new Class(
                  '00'.substr(0,2-d[3].length).concat(d[3]) : cell;
 			}
 		},
+		// MM/DD/YYYY, MM-DD-YYYY, m/d/YYYY, m-d-YYYY
+		{ 
+			matcher: /(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})/,
+			conversion_function: function( row ) 
+			{
+				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var d = this.conversion_matcher.exec( cell );
+				return d ? d[3]+
+                 '00'.substr(0,2-d[1].length).concat(d[1])+
+                 '00'.substr(0,2-d[2].length).concat(d[2]) : cell;
+			}
+		},
+		// 
 		// Numbers
 		{ 
 			matcher: /^\d+$/,
