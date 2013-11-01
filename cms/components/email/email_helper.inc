@@ -24,7 +24,7 @@ class EmailHelper
 		}
 	}
 	
-	static function buildContactUsForm($form)
+	static function buildContactUsForm($form, $requiredMessage = true)
 	{
 		global $user;
 		
@@ -35,7 +35,8 @@ class EmailHelper
 			$form->readOnly("full_name", "email");				
 		}
 		
-		$form->required("full_name", "email", "subject", "message");
+		$form->required("full_name", "email", "subject");
+		if ($requiredMessage) $form->required("message");
 		
 		$form->submitLabel = "Send";
 		$form->formCSS = "form";
