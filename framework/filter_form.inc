@@ -227,7 +227,7 @@ class FilterForm extends SearchForm
 			$field = $r['field'];
 			if(!$field)
 				$field = $renderer->field;
-			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			if (!array_key_exists($field, $this->renderedFields))
 			{
 				if(get_class($renderer) == DateRangeFilterRenderer)
 				{
