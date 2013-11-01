@@ -165,6 +165,8 @@ class SelectFieldRenderer extends FieldRenderer
 			
 			if ($this->grouped)
 			{
+				$this->addDefaultOption($field);	
+				
 				foreach($this->options as $groupName => $group)
 				{
 					if ($groupName == "")
