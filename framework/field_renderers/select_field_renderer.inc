@@ -78,14 +78,14 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->onChange = $onChange;
 		$this->grouped = $grouped;
 		$this->FieldRenderer($form);
-		if ($form->data->hasField($field))
+		if ($form->getData()->hasField($field))
 		{
 			// JDG 5/30/11 - don't crash on additiona/psuedo fields
 			// only query if real field
 			$form->override($field, $label, $this);
 			if ($this->options == null)
 			{
-				$opt = $form->data->distinctValues($field, true);
+				$opt = $form->getData()->distinctValues($field, true);
 				if (count($opt) > 0)
 				{
 					$this->options = array_combine($opt, $opt);
