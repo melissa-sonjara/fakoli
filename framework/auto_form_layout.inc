@@ -316,7 +316,7 @@ class TableHeaderFormLayout extends AutoFormLayout
 	function getLabel($field, $renderer, $styles, $annotation)
 	{
 		$obj = $renderer->parent->getData();
-		 $label = isset($renderer->label) ? $renderer->label : $obj->prettifyFieldName($field);
+		 $label = isset($renderer->label) ? $renderer->label : $renderer->parent->prettifyFieldName($field);
 
 		if ($renderer->parent->markRequiredFields &&
 				$renderer->parent->isRequired($field))

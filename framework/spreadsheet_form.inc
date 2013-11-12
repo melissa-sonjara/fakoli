@@ -65,6 +65,9 @@ class SpreadsheetForm extends CompositeAutoForm
 	var $msg;		///< Text to appear below buttons at top and above table
 	var $onStartRow; ///< Callback hook to determine row style or suppression of row.
 	var $isRowSelected;  ///< Callback hook to determine whether a given row is selected. Assigning a callback to this hook turns on selection mode. Only selected sub-forms are saved.
+	var $rowLabelFormat = null;
+	var $rowLabelTitle = null;
+	var $rowLabelDefaultText = "";
 	
 	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null, $isRowSelected = null)
 	{
@@ -89,6 +92,13 @@ class SpreadsheetForm extends CompositeAutoForm
 
 		$this->createSpreadsheetRowForms($items, $subform);
 	}	
+	
+	function showRowLabels($columnTitle, $format, $defaultText)
+	{
+		$this->rowLabelTitle = $columnTitle;
+		$this->rowLabelFormat = $format;
+		$this->rowLabelDefaultText = $defaultText;
+	}
 	
 	function createSpreadsheetRowForms($items, $subform)
 	{
@@ -131,7 +141,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		$row->id = $this->id . "_$idx";
 		$row->validator = $validator;
 		$row->validator->id = $row->id;
-
+		if ($ret) $row->formCSS = $ret;
 		
 		
 		$fields = $row->data->getFields();
@@ -227,6 +237,11 @@ class SpreadsheetForm extends CompositeAutoForm
 			echo "<th>&nbsp;</th>";
 		}
 		
+		if ($this->rowLabelTitle)
+		{
+			echo "<th>{$this->rowLabelTitle}</th>";
+		}
+		
 		foreach($fields as $field => $type)
 		{
 			if ($field != $pk && !array_key_exists($field, $form->hidden) && !($filter && $filter->isExcluded($field)))
@@ -257,6 +272,11 @@ class SpreadsheetForm extends CompositeAutoForm
 			
 			$output = preg_replace("/\\bname=(['\"])([^'\"]*?)['\"]/", "name=$1{$form->id}__$2$1", $output);
 
+			if ($this->rowLabelTitle)
+			{
+				$output = preg_replace("/<tr id=(.*?)>/", "<tr id=$1><td>".($form->getData()->format($this->rowLabelFormat))."</td>", $output);
+			}
+			
 			//$form->form->layout->startUngrouped();
 			echo $output;
 			//$form->form->layout->endUngrouped();
