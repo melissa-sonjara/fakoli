@@ -1379,3 +1379,19 @@ window.addEvent('domready', function()
 		};
 	});
 });
+
+// Mix-in a reloadPanel() method for all elements - easily reload the innermost containing panel.
+Element.implement('reloadPanel', function(onComplete)
+{
+	var element = document.id(this);
+	do
+	{
+		if (element.reload) 
+		{
+			element.reload(onComplete);
+			return;
+		}
+		element = element.getParent();
+	}
+	while(element);		
+});
