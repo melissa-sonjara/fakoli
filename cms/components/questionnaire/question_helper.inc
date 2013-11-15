@@ -267,11 +267,7 @@ class QuestionFormHelper
 
 		$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
 
-		if($editable)
-		{
-			$typeSelect->onChange = "new Question().onChangeQuestionType";
-		}
-		else
+		if(!$editable)
 		{
 			$form->readOnly("question_type_id", "options");
 		}	
@@ -325,9 +321,11 @@ class QuestionFormHelper
 <script type="text/javascript" src="/components/questionnaire/js/question.js"></script>
 <script type="text/javascript">
 
+	var questionMgr;
+	
 	window.addEvent('domready', function()
 	{
-		 new Question().setup(<?php echo $question_type_id ?>, '<?php echo $form->id ?>');
+		 questionMgr = new QuestionManager(<?php echo $question_type_id ?>, '<?php echo $form->id ?>');
 	});	
 	</script>
 <?php	
