@@ -132,7 +132,7 @@ class RelatedItemCheckListFieldRenderer extends FieldRenderer
 		
 		if ($this->width && $this->height)
 		{			
-			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
 		}
 		else
 		{
@@ -218,14 +218,16 @@ class RelatedItemCheckListFieldRenderer extends FieldRenderer
 		if (count($this->options) == 0) return;
 			
 		$obj = $this->parent->data;
-		$pk = $relatedClassObj->getPrimaryKey();
-		$selected = $this->getSelected($obj, $pk);
+		$itempk = $this->getMatchingPK($this->options[0], $obj);
+		$related_pk = $this->options[0]->getPrimaryKey();
+		$selected = $this->getSelected($obj, $itempk, $related_pk);
+		
 		
 		$this->_startField($field);
 		
 		foreach($this->options as $item)
 		{
-			if (array_key_exists($item->$pk, $selected))
+			if (array_key_exists($item->$related_pk, $selected))
 			{
 				echo $this->formatName($item, $this->nameField)."<br/>";
 			}
