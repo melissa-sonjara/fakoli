@@ -65,6 +65,7 @@ abstract class AbstractPivotQuery extends AbstractQuery
 	var $groupByFields = array();
 	
 	var $orderBy;
+	var $totalField = null;
 	
 	/**
 	 * Constructs a new AbstractPivotQuery
@@ -257,9 +258,8 @@ abstract class AbstractPivotQuery extends AbstractQuery
 		$constraint = preg_replace("/^\\s*WHERE /i", "AND ", $this->pivotConstraint);
 		$query .= " ".$constraint;
 	
-		$constraint = preg_replace("/^\\s*WHERE /i", "AND ", $this->baseConstraint);
-		$query .= " ".$constraint;
-		$query .= ") GROUP BY $groupByFields";
+		$constraint = $this->baseConstraint ? $this->baseConstraint : "";
+		$query .= ") $constraint GROUP BY $groupByFields";
 		$query .= " ".$this->orderBy;
 		
 		$this->query = $query;
@@ -581,6 +581,21 @@ class PivotItem extends DataItem
         {
         	return $this->getRelated($this->baseClass);
         }        
+	}
+	
+	function getTotal()
+	{
+		$total = 0.0;
+		
+		foreach($this->fields as $field => $type)
+		{
+			if ($field != $this->primary_key)
+			{
+				$total += $this->get($field);
+			}
+		}
+
+		return $total;
 	}
 }
 
