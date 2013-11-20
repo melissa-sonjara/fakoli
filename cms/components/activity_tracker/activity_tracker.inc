@@ -15,13 +15,17 @@ class ActivityTracker
 		
 		$activity = new UserActivity();
 
-		$activity->user_id = $user->user_id;
+		$activity->user_id = $user->get($user->primary_key);
 		
+		$response_time = number_format(microtime(true) - Fakoli::$timestamp, 3);
+		trace("Request completed in {$response_time}s");
 		$activity->uri = $_SERVER['REQUEST_URI'];
 		$activity->method = $_SERVER['REQUEST_METHOD'];
 		$activity->referer = $_SERVER['HTTP_REFERER'];
 		$activity->session_id = session_id();
-
+		$activity->activity_time = Fakoli::$requestStartTime;
+		$activity->response_time = $response_time;
+		
 		$activity->save();
 	}	
 	
