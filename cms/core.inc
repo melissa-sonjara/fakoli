@@ -75,7 +75,10 @@ class Fakoli
 	static $componentsUsed = array();	///< Array of the components that have been referenced in this page request
 	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
 	static $outputBufferLevel = 0;		///< Records the level at which gzip output buffering began
-	static $storage = array();
+	static $storage = array();			///< General storage (volatile). See Fakoli::put and Fakoli::get
+	static $timestamp;		  			///< Microsectond Timestamp for start of request
+	static $requestStartTime; 			///< Start of request in DateTime format
+	static $requestURI; 				///< The initiali request URI
 	
 	/**
 	 * Stores a value or object at the given key. This storage is volatile and 
@@ -564,6 +567,8 @@ class Fakoli
 				fclose($f);
 			}
 		}
+		
+		ComponentManager::fireEvent("RequestComplete");
 	}
 	
 	static function detectXSendFileSupport()
@@ -747,6 +752,8 @@ class Fakoli
 				throw new FakoliException("The resource '$identifier' is disabled");
 			}
 		}
+		
+		ComponentManager::fireEvent("RequestComplete");
 	}
 	
 	/**
@@ -771,7 +778,7 @@ class Fakoli
 		}
 		
 		$view = new AdminPageView($identifier);
-		$view->drawView();
+		$view->drawView();		
 	}
 	
 	/**
@@ -902,6 +909,8 @@ ENDSCRIPT;
 			$template = file_get_contents($err);
 			$out = str_replace("{message}", $msg, $template);
 			echo $out;
+
+			Fakoli::fireEvent("RequestComplete");
 		}
 		catch (Exception $ex)
 		{
@@ -996,8 +1005,11 @@ ENDSCRIPT;
     }
 }
 
+Fakoli::$timestamp = microtime(true);
+Fakoli::$requestStartTime = now();
+Fakoli::$requestURI = $_SERVER["REQUEST_URI"];
 
-$isAction = basename($_SERVER["SCRIPT_FILENAME"]) == "action.php";
+$isAction = (basename($_SERVER["SCRIPT_FILENAME"]) == "action.php" || php_sapi_name == "cli");
 $isResource = basename($_SERVER["SCRIPT_FILENAME"]) == "resource.php";
 
 if ($isAction)
