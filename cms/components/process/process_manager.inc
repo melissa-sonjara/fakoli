@@ -65,6 +65,7 @@ class ProcessManager
 	function run($action)
 	{
 		global $config;
+		global $user;
 		
 		$this->id = sha1(now() . $action);
 		$launch  = stristr(PHP_OS, "WIN") ? "start " : "";
@@ -72,7 +73,9 @@ class ProcessManager
 		$run = Settings::getValue("process", "PHP_executable")." ".sanitizePath(Fakoli::getComponent("process")->component_path) . DIRECTORY_SEPARATOR . "run.php";
 		$home = $config['homedir'];
 		
-		$cmd = "$launch$run ".escapeshellarg($home)." ".escapeshellarg($this->id)." ".escapeshellarg($action).$bg;
+		$userPK = $user ? $user->get($user->primary_key) : "";
+		
+		$cmd = "$launch$run ".escapeshellarg($home)." ".escapeshellarg($this->id)." ".escapeshellarg($action)." ".$userPK." ".$bg;
 		
 		$this->put("status", "Starting");
 		$this->put("error", "");

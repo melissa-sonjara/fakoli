@@ -31,9 +31,10 @@
 
 *****************************************************************/
 
-$home   = $argv[1];
-$id     = $argv[2];
-$action = $argv[3];
+$home    = $argv[1];
+$id      = $argv[2];
+$action  = $argv[3];
+$user_id = $argv[4];
 
 set_include_path($home . PATH_SEPARATOR . get_include_path());
 
@@ -42,6 +43,9 @@ require_once "cms/core.inc";
 
 Fakoli::using("process");
 
+$mgr = new UserManager();
+if ($user_id) $user = $mgr->getUser($user_id);
+ 
 $process = new ProcessManager($id);
 
 $mgr = new ComponentManager();
