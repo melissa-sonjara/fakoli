@@ -146,6 +146,8 @@ class AdminPageView
 		//$template = ComponentManager::fireEvent("PostProcessPage", $template);
 		
 		echo $template;		
+
+		ComponentManager::fireEvent("RequestComplete");	
 	}
 
 	function formatMenu($admin_menu)

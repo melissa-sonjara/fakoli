@@ -51,6 +51,9 @@ class ActivityTrackerUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Add field referrer to feedback table",
+			"1.2"		=>	"sql:Added response_time to user_activity table",
+			"1.3"		=>	"sql:Create user_activity_session table",
+			"1.4"		=>	"sql:Added indexes to user_activity_session"
 	);
 	
 	function ActivityTrackerUpgradeManager()

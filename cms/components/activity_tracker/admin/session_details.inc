@@ -2,24 +2,26 @@
 Fakoli::using("activity_tracker");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Activity Report";
+
 $session_id = $_GET["session_id"];
 $showImages = checkNumeric($_GET["showImages"]);
 
-$title = "Session Details for $session_id";
+$title = "Session Details";
 if (!$showImages)
 {
 	$constraints .= "AND uri NOT LIKE '/action/image/%'";
 }
 
+$session = new UserActivitySession($session_id);
 
-$activity = Query::create(UserActivity, "WHERE session_id=:id $constraints ORDER BY activity_time ASC")
-				 ->bind(":id", $session_id)
-				 ->execute();
+$activity = ActivityTracker::loadSession($session);
 
 $table = new DataListView($activity, "activity_table");
 $table->column("Date", "{activity_time}", true, "width: 20%")
 	  ->column("Method", "{method}", true, "width: 10%; text-align: center")
-	  ->column("URI", "{uri}", true);
+	  ->column("URI", "{uri}", true)
+	  ->column("Response Time (s)", "{response_time}", true, "text-align: right");
 	  
 $table->filter = true;
 $table->pageSize = 50;

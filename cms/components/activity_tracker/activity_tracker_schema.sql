@@ -39,3 +39,33 @@ max(`a`.`activity_time`) AS `session_end`,
 alter table `feedback` add column `referer` varchar(2000) DEFAULT NULL after `feedback`;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+--ALTER TABLE user_activity ADD COLUMN response_time DECIMAL(10,3) NOT NULL DEFAULT 0.0;
+
+-- END Version 1.2
+
+-- START Version 1.3
+
+CREATE TABLE user_activity_session (
+	session_id	int(10) unsigned not null auto_increment,
+	session_identifier varchar(200) not null,
+	user_id	int(10) unsigned not null default 0,
+	session_start datetime not null,
+	session_end datetime not null,
+	request_count int(10) unsigned not null default 0,
+	feedback_count int(10) unsigned not null default 0,
+	ip_address VARCHAR(40) NOT NULL DEFAULT '',
+	user_agent VARCHAR(1000) NOT NULL DEFAULT '',
+	action_count  int(10) unsigned not null default 0,
+	page_views  int(10) unsigned not null default 0,
+	PRIMARY KEY (session_id)
+) ENGINE=InnoDB;
+
+ALTER TABLE user_activity_session
+ADD INDEX session_start_idx (session_start, feedback_count),
+ADD INDEX session_user_idx (user_id, session_start, feedback_count);
+
+-- END Version 1.3
+

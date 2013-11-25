@@ -498,6 +498,8 @@ class ComponentManager
 		
 		echo $script;
 		echo $out;
+		
+		ComponentManager::fireEvent("RequestComplete");
 	}
 	
 	private function dispatchActionInternal($process = null)
@@ -601,6 +603,8 @@ class ComponentManager
 		$output = ob_get_contents();
 		ob_end_clean();
 
+		trace(print_r($context, true), 3);
+		
 		foreach($context as $name => $value)
 		{
 			$$name = $value;

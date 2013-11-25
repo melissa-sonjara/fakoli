@@ -48,11 +48,11 @@ class ActivityTrackerManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("Initialize"	 			=> array(ActivityTracker, logActivity),
+		return array("RequestComplete" 			=> array(ActivityTracker, logActivity),
 					 "ComponentScanComplete"	=> array(ActivityTracker, setDefaults),
 					 "upgradeComponent"			=> array(ActivityTracker, upgradeComponent),
-					"PostProcessContent"		=> array(ActivityTracker, postProcessContent),
-					"DeleteUser"			=>	array(ActivityTracker, deleteUser)		
+					 "PostProcessContent"		=> array(ActivityTracker, postProcessContent),
+					 "DeleteUser"				=> array(ActivityTracker, deleteUser)		
 				);
 	}
 		
