@@ -599,6 +599,20 @@ abstract class AbstractDataItem
 	 */
 	abstract function fromXML($node);
 	
+	/**
+	 * Populate from the supplied JSON object 
+	 * @param unknown $json
+	 */
+	function fromJSON($json)
+	{
+		$obj = json_decode($json, true);
+		$fields = $this->getFields();
+		foreach($fields as $field => $type)
+		{
+			$this->set($field, $obj[$field]);
+		}
+	}
+	
 	abstract function format($template = "", $separator = ", ");
 	
 	abstract function prettifyFieldName($field);
