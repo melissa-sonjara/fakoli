@@ -64,6 +64,8 @@ class ActivityTracker
 		{
 			// Create the activity session record
 			$sessionLog = new UserActivitySession();
+			if (!$sessionLog->tableExists()) return;
+			
 			$sessionLog->session_identifier = session_id();
 			$sessionLog->user_id = $activity->user_id;
 			$sessionLog->session_start = $activity->activity_time;
