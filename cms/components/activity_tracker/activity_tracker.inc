@@ -335,7 +335,7 @@ class ActivityReportFilterHelper
 	static function getFeedbackUserClause($name, $value)
 	{
 		if(!$value) return;
-		return "session_id IN (SELECT DISTINCT session_id from user_activity WHERE uri like '/action/feedback/save%')";
+		return "feedback_count > 0";
 	}
 }
 
