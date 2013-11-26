@@ -234,7 +234,7 @@ class ActivityTracker
 	 */
 	static function loadSession($session)
 	{
-		$log = ActivityTracker::getLogFile($session->session_identifier, date("Y-m-d", strtotime($session->start_time)));
+		$log = ActivityTracker::getLogFile($session->session_identifier, date("Y-m-d", strtotime($session->session_start)));
 		
 		trace("Opening session log $log", 3);
 		
