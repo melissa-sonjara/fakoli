@@ -26,7 +26,7 @@ $table->column("Date", "{activity_time}", true, "width: 20%")
 $table->filter = true;
 $table->pageSize = 50;
 $table->sortable = true;
-$table->onStartRow = array(new SessionDetailHelper(), onStartRow);
+$table->onStartRow = array(new SessionDetailsHelper(), onStartRow);
 $table->excelFile = "session_{$session_id}.xls";
 
 $script .= $table->writeScript();
