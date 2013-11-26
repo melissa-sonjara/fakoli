@@ -22,7 +22,7 @@ else
 		
 		$process->setProgress("Running", "Retrieving Session summaries", 10);
 		
-		$sessions = Query::create(ActivitySession, "")->execute();
+		$sessions = IteratedQuery::create(ActivitySession, "")->execute();
 		
 		$max = count($sessions);
 		$count = 1;
