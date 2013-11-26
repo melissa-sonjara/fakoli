@@ -78,6 +78,13 @@ var BackgroundProcess = new Class(
 					this.dialog.hide();
 					this.fireEvent("complete");
 					break;
+					
+				case "Error":
+
+					clearInterval(this.timer);
+					this.dialog.hide();
+					messagePopup("An Error Ocurred", progress.message);
+					break;
 				}
 			}.bind(this)
 		});	
