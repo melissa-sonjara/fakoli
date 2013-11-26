@@ -258,7 +258,7 @@ class ActivityTracker
 	 */
 	static function migrateData($session)
 	{
-		$records = IteratedQuery::create(UserActivity, "WHERE user_id=:u AND session_id=:s ORDER BY activity_id")
+		$records = Query::create(UserActivity, "WHERE user_id=:u AND session_id=:s ORDER BY activity_id")
 								->bind(":u", $session->user_id, ":s", $session->session_id)
 								->execute();
 		
