@@ -260,6 +260,7 @@ class ActivityTracker
 	{
 		$records = Query::create(UserActivity, "WHERE user_id=:u AND session_id=:s ORDER BY activity_id")
 								->bind(":u", $session->user_id, ":s", $session->session_id)
+								->filter(new ExclusionFilter("response_time")) // Not captured in previous version
 								->execute();
 		
 		$start = date("Y-m-d", strtotime($session->session_start));
