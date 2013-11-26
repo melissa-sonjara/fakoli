@@ -339,4 +339,19 @@ class ActivityReportFilterHelper
 	}
 }
 
+class SessionDetailsHelper
+{
+	var $showImages = false;
+	
+	function __construct()
+	{
+		$this->showImages = checkNumeric($_GET["showImages"]);		
+	}
+	
+	function filterImages($record)
+	{
+		if (!$this->showImages && startsWith($record->uri, "/action/image/")) return false;
+		return "";
+	}
+}
 ?>
