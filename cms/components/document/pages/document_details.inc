@@ -32,7 +32,7 @@
 *****************************************************************/
 
 Fakoli::using("document", "taxonomy");
-Fakoli::usingFeature("auto_form.inc");
+Fakoli::usingFeature("auto_form");
 
 $document_id = checkNumeric($_GET["document_id"]);
 if (!$document_id)
