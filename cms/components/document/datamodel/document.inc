@@ -45,7 +45,7 @@ class Document extends DataItem implements Searchable
 						"keywords"				=>  String,
 						"author"				=>	String,
 						"publication"			=>	String,
-						"notes"					=>	Text,
+						"notes"					=>	HTML,
 						"public"				=>	Boolean,
 						"last_modified"			=>	Timestamp,
 						"document_library_id"	=>	Number,
