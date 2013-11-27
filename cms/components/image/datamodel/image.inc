@@ -47,11 +47,16 @@ class ImageRecord extends DataItem
 						"include_in_slideshow"	=> Boolean,
 						"sort_order"			=> Number,
 						"image_type"			=> String,
-						"gallery_id"			=> Number);
+						"gallery_id"			=> Number,
+						"owner_id"				=> Number
+			);
 	
 	// Relations
 	
-	var $relations = array("Gallery"	=>	ImageGallery);
+	var $relations = array(
+			"Gallery"	=>	ImageGallery,
+			"Owner"				=>	"",			
+			);
 	
 	function Gallery()
 	{
@@ -119,7 +124,7 @@ class ImageRecord extends DataItem
 		return $mgr->thumbnailLink($this->image_id, $size);
 	}
 	
-function getCaption()
+	function getCaption()
 	{
 		return $this->title;
 	}
@@ -129,5 +134,20 @@ function getCaption()
 		//this is used to create the correct citation for a library item
 		return $this->credits;
 	}
+
+	function Owner()
+	{
+		$mgr = new UserManager();
+		return $mgr->getUser($this->owner_id);
+	}
+	
+	function isOwner()
+	{
+		global $user;
+		$owner = $this->Owner();
+	
+		return ($owner->user_id == $user->user_id) ? true : false;
+	}
+	
 }
 ?>

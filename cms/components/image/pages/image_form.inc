@@ -52,6 +52,7 @@ else
 	$gallery = new ImageGallery($gallery_id);
 	$title = "Add a New Image to {$gallery->gallery_name}";
 	$image->gallery_id = $gallery_id;
+	$image->owner_id = $user->get($user->getPrimaryKey());
 }
 
 $tabs = ImageManager::imageGalleryTabs($gallery_id);
@@ -64,10 +65,17 @@ $imageUpload = new FileUploadFieldRenderer($form, "image_file", "Image File", ar
 $imageUpload->size = 60;
 
 $form->required( "title");
-$form->hide("thumbnail", "gallery_id");
+$form->hide("thumbnail", "gallery_id", "owner_id");
 
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
+
+if($image->owner_id)
+{
+	$form->add(new StringFieldRenderer($form), "owner");
+	$form->data->set("owner", $image->Owner()->format("{first_name} {last_name}"));
+	$form->readOnly("owner");
+}
 
 $redirect = "images?gallery_id={$image->gallery_id}";
 $form->button("Cancel", $redirect);

@@ -30,32 +30,34 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
+
+/**
+ * Search the directory that contains images for the specified gallery
+ * for image files that are not yet stored in the image table. When
+ * a new image file is found, save a record to the image table linked to
+ * this gallery.
+ */
+
+
 Fakoli::using("image");
 
-$image_id = checkNumeric($_GET["image_id"]);
-$size = checkNumeric($_GET["size"]);
-$width = checkNumeric($_GET["width"]);
-$height = checkNumeric($_GET["height"]);
+Fakoli::assertRole("admin");
 
-trace("*************thumbnail image id $image_id", 3);
-if (!$image_id)
+$gallery_id = checkNumeric($_GET["gallery_id"]);
+
+if (!$gallery_id) Fakoli::end("No image gallery specified");
+
+try
 {
-	$img = $_GET["img"];
-	if ($img)
-	{
-		$image = ImageRecord::findByFilename($img);
-		if ($image) 
-		{
-			$image_id = $image->image_id;
-		}
-		else
-		{
-			throw new FakoliException("Unknown Image");
-		}
-	}
+	$gallery = new ImageGallery($gallery_id);
+	
+	$mgr = new ImageGalleryScanManager($gallery);
+	$mgr->rescan();
+	
+	Fakoli::end("OK");
 }
-$mgr = new ImageManager();
-$mgr->renderThumbnail($image_id, $size, $width, $height);
-
+catch(Exception $e)
+{
+	Fakoli::end($e->getMessage());
+}
 ?>

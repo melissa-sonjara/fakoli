@@ -68,9 +68,10 @@ else
 {
 	echo "<p style=\"margin: 8px\"><br/><i>No images have been added to this gallery</i></p>\n";
 }
+
+echo "</div>\n<br/><div style='padding: 8px'>\n";
+echo "<a class='button' href=\"/admin/image_form?gallery_id={$gallery_id}\">Add a New Image</a>\n";
+echo "&nbsp;&nbsp;<a class='button' href='#' onclick=\"ImageManager.rescanGallery({$gallery_id}); return false;\">Rescan</a>\n";
+echo "</div>\n</div>\n";
+
 ?>
-</div>
-<br/>
-<div style="padding: 8px">
-<a class="button" href="/admin/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
-</div></div>

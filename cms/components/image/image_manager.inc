@@ -679,3 +679,48 @@ class ImageManager
 		return true;
 	}
 }
+
+class ImageGalleryScanManager
+{
+	var $gallery;
+	var $indexedImages = array();
+	
+	function __construct($gallery)
+	{
+		$this->gallery = $gallery;
+		
+		$images = $this->gallery->Images();
+		if(count($images))
+		{
+			$this->indexedImages = reindexList($images, "image_file");
+		}
+		else
+		{
+			$this->indexedImages = array();
+		}			
+	}
+	
+	function rescan()
+	{
+		global $user;
+	
+		$base = sanitizePath($this->gallery->getGalleryDirectory());
+	
+		$files = scandir($base);
+		foreach($files as $file)
+		{
+			if ($file == "." || $file == "..") continue;
+	
+			if ($this->indexedImages[$file]) continue;
+	
+			$image = new ImageRecord();
+			$image->title = $file;
+			$image->image_file = $file;
+			$image->ALT_tag = "";
+			$image->published = true;
+			$image->gallery_id = $this->gallery->gallery_id;
+			$image->owner_id= $user->get($user->getPrimaryKey());
+			$image->save();
+		}
+	}
+}

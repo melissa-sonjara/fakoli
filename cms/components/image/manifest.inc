@@ -64,7 +64,9 @@ class ImageManifest
 	
 	static function getScripts()
 	{
-		return array("/components/image/js/image_grid.js");
+		return array("/components/image/js/image_grid.js",
+				"/components/image/js/image_manager.js"
+				);
 	}
 	
 	static function getStyles()
