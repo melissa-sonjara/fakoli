@@ -65,13 +65,8 @@ if($question_id)
 }
 else
 {
-	$question->questionnaire_id = $questionnaire_id;
-	$question->question_number = queryValue(Question, "MAX(question_number)", "WHERE questionnaire_id=$questionnaire_id") + 1;
-	$question->question_type_id = 4; // free text
-	$question->num_rows = 3; // default
-	$question->required = 0; // default
+	$question->setDefaultValues();
 }
-
 
 $questionnaire = new Questionnaire($questionnaire_id);
 // check if question has been answered
@@ -85,17 +80,13 @@ $form->hide("question_id", "questionnaire_id", "question_name");
 $form->required("question_number", "question");
 $form->annotate("options", "<br><span class='annotate'>List each option on a separate line.</span>");
 $form->button("Cancel", $redirect);
+QuestionFormHelper::questionTypeSetup($form, $editable);
 
 $form->getRenderer("question")->height = "100px";
 
 if($editable)
 {
 	$form->allowDelete = true;
-	$form->add(new  RatingQuestionFieldRenderer($form), "label_for_lowest");
-	$form->add(new StringFieldRenderer($form), "label_for_highest");
-	$form->add(new NumberFieldRenderer($form), "number_of_steps");	
-	$typeSelect = new SelectFieldRenderer($form, "question_type_id", "Question Type", QuestionType::getQuestionTypeList());
-	$typeSelect->onChange = "new Question().onChangeQuestionType";
 }
 
 $tabs = questionnaireTabs($questionnaire_id);
@@ -111,15 +102,7 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
-
-$script .= <<<ENDSCRIPT
-	<script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		 new Question().setup($question->question_type_id, '{$form->id}');
-	});	
-	</script>
-ENDSCRIPT;
+$script .= QuestionFormHelper::writeScript($form);
 
 $tabs->writeHTML();
 
