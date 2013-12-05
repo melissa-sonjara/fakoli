@@ -57,6 +57,8 @@ class FieldRenderer
 	var $annotateBefore = false;
 	var $annotateNextLine = true;
 	var $hideLabel = false;
+	var $onPreProcess = null;		///< callback hook for processing prior to saving the form's data object - individual renderers may override with custom processing
+	var $onPostProcess = null;		///< callback hook for processing after saving the form's data object - individual renderers may override with custom processing
 	
 	/**
 	 * Constructor
@@ -259,7 +261,11 @@ class FieldRenderer
 	 */
 	function preProcess($field = "")
 	{
-		// Nothing to do by default
+		if ($this->onPreProcess != null)
+		{
+			$callback = $this->onPreProcess;			
+			call_user_func($callback, $this, $field);
+		}
 	}
 	
 	/**
@@ -267,11 +273,15 @@ class FieldRenderer
 	 * target object has been saved to the database. For example, the CrossReferenceSelectFieldRenderer
 	 * overrides this method to update crossference tables based on the user's selection.
 	 *
-	 * @param unknown_type $field
+	 * @param string $field
 	 */
 	function postProcess($field = "")
 	{
-		// Nothing to do by default
+		if ($this->onPostProcess != null)
+		{
+			$callback = $this->onPostProcess;
+			call_user_func($callback, $this, $field);
+		}	
 	}
 }
 
