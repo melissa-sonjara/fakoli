@@ -104,6 +104,16 @@ abstract class AbstractQuestion extends DataItem
 		return ($this->question_type_id == 1) ? true : false;
 	}
 	
+	function isDropDown()
+	{
+		return ($this->question_type_id == 6) ? true : false;
+	}
+	
+	function isHeading()
+	{
+		return ($this->question_type_id == 7) ? true : false;
+	}
+	
 	function formatEditableMessage()
 	{
 		if(!$this->editable)
