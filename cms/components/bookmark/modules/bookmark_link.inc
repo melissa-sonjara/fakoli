@@ -1,6 +1,8 @@
 <?
 Fakoli::using("bookmark");
 
+if(!$user) return;
+
 if (Bookmark::findBookmark())
 {
 ?>
