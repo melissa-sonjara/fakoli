@@ -99,6 +99,11 @@ class TextLookup extends DataItem
 		}
 	}
 	
+	static function getValue($code, $obj = null, $blank = false)
+	{
+		return TextLookup::getText($code, $obj, $blank);
+	}
+		
 	/*
 	 * Given a text record, find the remaining languages
 	 * for which this text has NOT yet been translated.
@@ -121,7 +126,43 @@ class TextLookup extends DataItem
 		return $options;
 	}
 	
+	/**
+	 * Called from a component manager fired event setDefaults to set the
+	 * default value for a text lookup code. If the value has already been
+	 * set, then return.
+	 * 
+	 * @param string $code
+	 * @param string $value
+	 * @param string $class_name
+	 */
+	static function setDefaultValue($code, $value, $class_name = "")
+	{
+		$texts = Query::create(TextLookup, "WHERE code=:c")
+			->bind(":c", $code)
+			->execute();
+		
+		if(count($texts)) return;
+		
+		TextLookup::setValue($code, $value, $class_name);
+	}
 
+	/**
+	 * Set the string (or html) value of a lookup text code.
+	 * 
+	 * @param string $code
+	 * @param string $value
+	 * @param string $class_name
+	 */
+	static function setValue($code, $value, $class_name = "")
+	{
+		$text = new TextLookup();
+		$text->code = $code;
+		$text->text = $value;
+		$text->class_name = $class_name;
+		$text->save();
+	}
+	
+	
 	function TextLookup()
 	{
 		$this->primary_key = "text_id";
