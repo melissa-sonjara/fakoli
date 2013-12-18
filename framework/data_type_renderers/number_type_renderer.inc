@@ -49,7 +49,11 @@ class NumberTypeRenderer extends AbstractTypeRenderer
 			$value = "0";
 		}
 		
-			if ($template == "numeric")
+		if ($template == "blankZero" && $value == 0.0)
+		{
+			$text = "";
+		}
+		else if ($template == "numeric")
 		{
 			$text = number_format($value, 2, ".", "");
 		}

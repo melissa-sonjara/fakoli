@@ -659,14 +659,15 @@ function interstitial(message)
 
 var Notification = new Class({
 	
-	Implements: Options,
+	Implements: [Options, Events],
 	
 	options:
 	{
 		cssClass:	'notification',
 		width:		400,
 		height:		'auto',
-		wait:		3000		
+		wait:		3000,
+		onHide:		function () {}
 	},
 
 	message: "",
@@ -682,6 +683,7 @@ var Notification = new Class({
 		
 		this.show();
 		this.hide.delay(this.options.wait, this);
+		this.fireEvent('hide', this, this.options.wait + 1000);
 	},
 
 	createNotification: function()
