@@ -119,7 +119,7 @@ class SiteMapManager
 	 */
 	function deleteSiteMapPage($siteMapPage)
 	{
-		$parent = $siteMapPage->parent();
+		$parent = $siteMapPage->Parent();
 
 		$children = $siteMapPage->Children();
 		if(count($children) > 0)
