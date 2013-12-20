@@ -204,10 +204,6 @@ class ForumManager
 			$xref->joinTransaction($tx);
 			$xref->delete("WHERE forum_id={$forum_id}");
 			
-			$summary = new ForumSummary();
-			$summary->joinTransaction($tx);
-			$summary->delete("WHERE forum_id={$forum_id}");
-					
 			$forum->delete();
 			
 			$tx->commit();
