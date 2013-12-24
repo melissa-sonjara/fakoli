@@ -9,7 +9,7 @@ $table = new DataListView($taxonomies, "taxonomies");
 
 $table->column("Taxonomy", "<a href='taxonomy_form?taxonomy_id={taxonomy_id}'>{taxonomy_name}</a>", true)
 	  ->column("Identifier", "<a href='taxonomy_form?taxonomy_id={taxonomy_id}'>{identifier}</a>", true)
-	  ->column("Associated Classes", "{associated_classes}", true)
+	  ->column("Associated Classes", "{associated_classes:/,/, /}", true)
 	  ->column("# of Terms", "{countTerms()}", true, "text-align: right");
 	  
 $table->pageSize = 20;
