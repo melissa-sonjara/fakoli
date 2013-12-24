@@ -44,6 +44,25 @@ class TextTypeRenderer extends AbstractTypeRenderer
 	{			
 		if (!$template) return $value;
 		
+	
+		if ($template[0] == '/')
+		{
+			$clauses = array();
+			if (preg_match("/(\\/.*?\\/)(.*?)\\//", $template, $clauses))
+			{
+				return preg_replace($clauses[1], $clauses[2], $value);
+			}
+		}
+
+		if ($template[0] == '|')
+		{
+			$clauses = array();
+			if (preg_match("/(|.*?|)(.*?)|/", $template, $clauses))
+			{
+				return preg_replace($clauses[1], $clauses[2], $value);
+			}
+		}
+
 		switch($template)
 		{
 		case "codify":
