@@ -90,6 +90,8 @@ class ArticleManager
 		// Get the article id now before sending to email manager which won't be able to get it
 		// from the subscriber obj.
 		$emailTemplate->message = str_replace("[article_id]", $article->article_id, $emailTemplate->message);
+		$emailTemplate->message = str_replace("[article_title]", $article->title, $emailTemplate->message);
+		$emailTemplate->message = str_replace("[teaser]", $article->teaser, $emailTemplate->message);
 		
 		foreach($subscribers as $subscriber)
 		{
