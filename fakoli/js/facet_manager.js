@@ -82,8 +82,26 @@ var FacetManager = new Class(
 		}
 		
 		return clear || found;
-	}
+	},
+
+	getSelectedValues: function()
+	{
+		var values = {};
+		this.handlers.each(function(handler)
+		{
+			values[handler.getName()] = handler.getSelectedValue();
+		});
+		
+		return values;
+	},
 	
+	getQueryString: function()
+	{
+		var values = this.getSelectedValues();
+		var uri = new URI();
+		uri.setData(values);
+		return uri.get('query');
+	}
 });
 
 
@@ -107,6 +125,11 @@ var MultiSelectFacetHandler = new Class(
 		{
 			this.manager.filterChanged();
 		}.bind(this));
+	},
+	
+	getName: function()
+	{
+		return this.id;
 	},
 	
 	preprocess: function(item)
@@ -153,7 +176,26 @@ var MultiSelectFacetHandler = new Class(
 		}
 		
 		return true;
-	}		
+	},
+	
+	getSelectedValue: function()
+	{
+		var values = "";
+		
+		for(var i = 0; i < this.checkboxes.length; ++i)
+		{
+			if (this.checkboxes[i].checked)
+			{
+				if (values != "")
+				{
+					values += ",";
+				}
+				values += this.checkboxes[i].value;
+			}
+		}
+		
+		return values;
+	}
 });
 
 var StringFacetHandler = new Class(
@@ -179,6 +221,11 @@ var StringFacetHandler = new Class(
 		}.bind(this));
 	},
 	
+	getName: function()
+	{
+		return this.id;
+	},
+	
 	preprocess: function(item)
 	{
 
@@ -199,6 +246,11 @@ var StringFacetHandler = new Class(
 	isClear: function()
 	{
 		return this.textField.value.length < 3;
+	},
+	
+	getSelectedValue: function()
+	{
+		return this.textField.value;
 	}
 
 });
