@@ -21,6 +21,11 @@ var TaxonomyFacetHandler = new Class(
 		}.bind(this));
 	},
 	
+	getName: function()
+	{
+		return this.taxonomy;
+	},
+	
 	preprocess: function(item)
 	{
 		var terms = item.get("data-taxonomy-" + this.taxonomy);
@@ -58,5 +63,24 @@ var TaxonomyFacetHandler = new Class(
 		}
 		
 		return true;
+	},
+	
+	getSelectedValue: function()
+	{
+		var values = "";
+		
+		for(var i = 0; i < this.checkboxes.length; ++i)
+		{
+			if (this.checkboxes[i].checked)
+			{
+				if (values != "")
+				{
+					values += ",";
+				}
+				values += this.checkboxes[i].value;
+			}
+		}
+		
+		return values;
 	}
 });
