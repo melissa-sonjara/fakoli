@@ -237,6 +237,32 @@ class TaxonomyManager
 		}
 	}
 	
+	static function getRequestTerms($classes)
+	{
+		$ids = array();
+		
+		if (!is_array($classes) && $classes) $classes = array($classes);
+		
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($classes, true);
+		foreach($taxonomies as $taxonomy)
+		{
+			if (isset($_REQUEST[$taxonomy->identifier]))
+			{
+				$term_ids = explode(",", $_REQUEST[$taxonomy->identifier]);
+				checkNumeric($term_ids);
+				foreach($term_ids as $term_id)
+				{
+					if ($term_id) $ids[] = $term_id;
+				}
+			}
+		}
+
+		if (count($ids) == 0) return array();
+		$idString = implode(", ", $ids);
+		
+		return Query::create(TaxonomyTerm, "WHERE term_id IN ($idString)")->execute();
+	}
+	
 	static function cloneTaxonomy($form)
 	{
 		$tx = new DataTransaction();
