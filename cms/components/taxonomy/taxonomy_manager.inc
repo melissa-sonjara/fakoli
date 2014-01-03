@@ -263,6 +263,34 @@ class TaxonomyManager
 		return Query::create(TaxonomyTerm, "WHERE term_id IN ($idString)")->execute();
 	}
 	
+	static function getRequestFilterConstraint($class)
+	{
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($class, true);
+		
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+		
+		$clauses = array();
+		
+		foreach($taxonomies as $taxonomy)
+		{
+			if (isset($_REQUEST[$taxonomy->identifier]))
+			{
+				$term_ids = $_REQUEST[$taxonomy->identifier];
+				
+				if (!$term_ids) continue;
+				if (!preg_match("/^[\\d,]+/", $term_ids))
+				{
+					throw new FakoliException("Invalid facet filter terms");
+				}
+				
+				$clauses[] = "$pk IN (SELECT id FROM taxonomy_term_association WHERE class='$class' AND term_id IN ($term_ids))";
+			}
+		}
+		
+		return implode(" AND ", $clauses);
+	}
+	
 	static function cloneTaxonomy($form)
 	{
 		$tx = new DataTransaction();
