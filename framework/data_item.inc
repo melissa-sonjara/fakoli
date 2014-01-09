@@ -1285,9 +1285,9 @@ class DataItem extends AbstractDataItem
 				continue;
 			}
 			
-			$val = $this->get($field);
+			$val = str_replace("\\'", "'", jsSafe($this->get($field)));
 			
-			$out[] = "\"{$field}\": \"".(jsSafe($this->get($field)))."\"";			
+			$out[] = "\"{$field}\": \"".$val."\"";			
 		}	
 		
 		return "{".implode(", ", $out)."}";		
