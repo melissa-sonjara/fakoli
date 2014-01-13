@@ -170,7 +170,7 @@ function videoLightbox(element, id)
 
 	var size = httpRequest('/action/video/video_size?video_id=' + id);
 	var dimensions = size.split('x');
-	modalPopup(title, "/action/video/video?video_id=" + id, (Number(dimensions[0]) + 8),(Number(dimensions[1]) + 36));
+	modalPopup(title, "/action/video/video?video_id=" + id, (Number(dimensions[0]) + 16),(Number(dimensions[1]) + 52));
 }
 
 function videoTranscript(id)

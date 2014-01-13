@@ -30,16 +30,31 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
+
+Fakoli::using("video", "user");
+
 $video_id = checkNumeric($_GET["video_id"]);
+
 $video = new Video($video_id);
 
-$width = $video->width;
-$height = $video->height;
-$swf = VideoManager::getVideoURI($video);
+$gallery = $video->VideoGallery();
 
+// Clear output buffers
+while(!ob_end_clean());
+
+// no permissions check
+
+$videoDownload = new VideoDownload();
+$videoDownload->video_id = $video_id;
+$videoDownload->user_id = ($user) ? $user->user_id : 0;
+$videoDownload->save();
+
+trace("Download: video filename to download {$video->video_file}", 3);
+
+$filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $video->video_file);
+
+Fakoli::sendFile($filepath);
+
+session_write_close();
+exit();
 ?>
-<a class='video autoplay' href='<?echo $swf?>' style='display: block; width: <?echo $width?>px; height: <?echo $height?>px;'></a>
-<script type='text/javascript'>
-installFlowplayer();
-</script>

@@ -48,8 +48,15 @@ $view = new VideoTotalDownloadsView($gallery);
 
 $script .= $view->writeScript();
 
+$tabs = VideoManager::videoGalleryTabs($video_gallery_id);
+
+$tabs->writeHTML();
+?>
+<div id="tab_border" style="margin-right: -2px">
+<?
 ?>
 <h3>Download Statistics for <?echo $gallery->gallery_name?></h3>
 <?
 $view->drawView();
 ?>
+</div>

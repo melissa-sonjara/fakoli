@@ -42,10 +42,11 @@ class VideoManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("video", "video_folder", "videos", String, "Directory inside the web folder that is used to store the video files");
-		Settings::setDefaultValue("video", "flowplayer_script", "", String, "URI for the Flowplayer script");
-		Settings::setDefaultValue("video", "flowplayer_player", "", String, "URI for the Flowplayer SWF file");
-		Settings::setDefaultValue("video", "ffmpeg_path", "", String, "Directory containing the ffmpeg binary executables");
+		Settings::setDefaultValue("video", "video_folder", "videos", String, "Directory inside the web folder that is used to store the video files", "Video Uploads");
+		Settings::setDefaultValue("video", "video_upload_location", "Web Folder", String, "Indicate whether videos should be stored under the Web Folder or in the document upload area. If you do not have mod_xsendfile installed, then Web Folder is strongly recommended", "Video Uploads", "Web Folder\nDocument Upload Folder");
+		Settings::setDefaultValue("video", "flowplayer_script", "", String, "URI for the Flowplayer script", "Video Player");
+		Settings::setDefaultValue("video", "flowplayer_player", "", String, "URI for the Flowplayer SWF file", "Video Player");
+		Settings::setDefaultValue("video", "ffmpeg_path", "", String, "Directory containing the ffmpeg binary executables", "Video Transcoder");
 	}
 	
 	static function onInitialize()
@@ -77,6 +78,53 @@ class VideoManager
 		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
 	}
 	
+	static function getVideoFolder()
+	{
+		global $config;
+		
+		$location = Settings::getValue("video", "video_upload_location");
+		$folder = Settings::getValue("video", "video_folder");
+		
+		if ($location == "Web Folder")
+		{
+			$dir = $config['homedir']. DIRECTORY_SEPARATOR . $folder;
+			if (!file_exists($dir))
+			{
+				throw new FakoliException("Video Folder does not exist");
+			}
+		}
+		else
+		{
+			$dir = $config['uploadbase']. DIRECTORY_SEPARATOR . $folder;
+			if (!file_exists($dir))
+			{
+				if (!mkdir($dir))
+				{
+					throw new FakoliException("Could not create video upload folder");
+				}
+			}
+		}
+		
+		return $dir;
+	}
+	
+	static function getVideoURI($video)
+	{
+		
+		$location = Settings::getValue("video", "video_upload_location");
+		
+		if ($location == "Web Folder")
+		{
+			$folder = Settings::getValue("video", "video_folder");			
+			$gallery = $video->VideoGallery();
+			return "/".$folder."/gallery_".$video->video_gallery_id."/".$video->video_file;
+		}
+		else
+		{
+			return "/action/video/stream?video_id=".$video->video_id;
+		}
+	}	
+			
 	static function upgradeComponent($version)
 	{
 		$mgr = new VideoUpgradeManager();

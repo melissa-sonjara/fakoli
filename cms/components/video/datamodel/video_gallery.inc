@@ -85,9 +85,7 @@ class VideoGallery extends DataItem
 	
 	function getGalleryDirectory()
 	{
-		global $config;
-		
-		return $config['uploadbase'] . DIRECTORY_SEPARATOR . "gallery_{$this->video_gallery_id}";
+		return VideoManager::getVideoFolder() . DIRECTORY_SEPARATOR . "gallery_{$this->video_gallery_id}";
 	}
 	
 	static function findByIdentifier($identifier)

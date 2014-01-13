@@ -51,8 +51,8 @@ class Video extends DataItem
 	
 	// Relationships
 	
-	var $relations = array("User"		=>	"",
-						   "Gallery"	=>	VideoGallery);
+	var $relations = array("User"			=>	"",
+						   "VideoGallery"	=>	VideoGallery);
 	
 	function User()
 	{
@@ -71,7 +71,7 @@ class Video extends DataItem
 		$this->primary_key = "video_id";
 		
 		$mgr = new UserManager();
-		$this->relations["Owner"] = $mgr->getUserClass(); 		
+		$this->relations["User"] = $mgr->getUserClass(); 		
 		
 		$this->DataItem(func_get_args());
 	}

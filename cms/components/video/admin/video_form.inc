@@ -130,9 +130,8 @@ function uploadFLV($field, $video)
 		return false;
 	}
 
-	$folder = Settings::getValue("video", "video_folder");
-	
-	$dir = $config['homedir']. DIRECTORY_SEPARATOR . $folder;
+	$gallery = $video->VideoGallery();
+	$dir = $gallery->getGalleryDirectory();
 	
 	/* Copy across the uploaded file */
 
@@ -199,9 +198,8 @@ function uploadImage($field, $video)
 		return false;
 	}
 
-	$folder = Settings::getValue("video", "video_folder");
-	
-	$dir = $config['uploadbase']. DIRECTORY_SEPARATOR . $folder;
+	$gallery = $video->VideoGallery();
+	$dir = $gallery->getGalleryDirectory();
 	
 	/* Copy across the uploaded file */
 
