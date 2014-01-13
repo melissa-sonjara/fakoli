@@ -214,8 +214,7 @@ class VideoManager
 		
 		$suffix = $size ? "$size" : ($width ? "{$width}w" : ($height ? "{$height}h" : ""));
 		
-		$folder = Settings::getValue("video", "video_folder");
-		$dir = $config['homedir']. DIRECTORY_SEPARATOR . $folder;
+		$dir = $video->VideoGallery()->getGalleryDirectory();
 		
 		$imageFile = $dir . DIRECTORY_SEPARATOR . $video->image_file;
 		$cacheFile = $dir . DIRECTORY_SEPARATOR . $video->video_id . "_" . $suffix .".png";
