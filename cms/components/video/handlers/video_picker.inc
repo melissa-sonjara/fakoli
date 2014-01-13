@@ -40,7 +40,7 @@ $table = new DataListView($videos, "videos");
 
 $videoPath = Settings::getValue("video", "video_folder");
 
-$table->column("Title", "<a href='#' onclick='new VideoPicker().selectVideo(this, {video_id}, \"/$videoPath/{video_file}\", \"/$videoPath/{image_file}\");'>{title}</a><span class='image_id'>{image_id}</span>", true, "width: 35%")
+$table->column("Title", "<a href='#' onclick='new VideoPicker().selectVideo(this, {video_id}, \"{VideoManager::getVideoURI}\", \"/action/video/thumbnail?video_id={video_id}\");'>{title}</a><span class='image_id'>{image_id}</span>", true, "width: 35%")
 	  ->column("Resolution", "{width} x {height}", true, "width: 10%")
 	  ->column("Owner", "{User.first_name} {User.last_name}", true, "width: 25%")
 	  ->column("Last Modified", "{last_modified}", true, "width: 20%");
