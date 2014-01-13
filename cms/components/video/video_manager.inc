@@ -215,7 +215,12 @@ class VideoManager
 		
 		$video = new Video($video_id);
 
-		if (!$size && !$width && !$height) $size = $config['thumbnail_size'];
+		//AJG - default to natural size if not specified
+		if (!$size && !$width && !$height) 
+		{
+			$width = $video->width;
+			$height = $video->height;
+		}
 		
 		$suffix = $size ? "$size" : ($width ? "{$width}w" : ($height ? "{$height}h" : ""));
 		
