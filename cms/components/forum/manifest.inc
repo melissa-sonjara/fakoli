@@ -46,6 +46,8 @@ class ForumManifest
 		return $component;
 	}
 	
+	var $allow_sessionless_handlers = array("send_daily_digest");
+	
 	static function getAdminMenu()
 	{
 		return array
