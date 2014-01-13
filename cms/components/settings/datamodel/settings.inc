@@ -150,11 +150,10 @@ class Settings extends DataItem
 		$setting = Settings::getSetting($component, $name);
 		if ($setting) 
 		{
-			if ($category != $setting->category)
-			{
-				$setting->category = $category;
-				$setting->save();
-			}
+			$setting->annotation = $annotation;
+			$setting->category = $category;
+			$setting->options = $options;
+			$setting->save();
 			return;
 		}
 		
