@@ -63,9 +63,13 @@ CREATE TABLE user_activity_session (
 	PRIMARY KEY (session_id)
 ) ENGINE=InnoDB;
 
+-- END Version 1.3
+
+-- START Version 1.4
+
 ALTER TABLE user_activity_session
 ADD INDEX session_start_idx (session_start, feedback_count),
 ADD INDEX session_user_idx (user_id, session_start, feedback_count);
 
--- END Version 1.3
+-- END Version 1.4
 
