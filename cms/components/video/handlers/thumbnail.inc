@@ -37,7 +37,7 @@ $video_id = checkNumeric($_GET["video_id"]);
 $size = checkNumeric($_GET["size"]);
 $width = checkNumeric($_GET["width"]);
 $height = checkNumeric($_GET["height"]);
-
+	
 $mgr = new VideoManager();
 $mgr->renderThumbnail($video_id, $size, $width, $height);
 
