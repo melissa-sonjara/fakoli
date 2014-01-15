@@ -25,11 +25,23 @@ LinkLibraryManager.linkEdited = function(result)
 {
 	if (result == "OK")
 	{
-		document.id('library_link_list').reload(function() { LinkLibraryManager.closeDialog(); });
+		location.reload();
 	}
 	else
 	{
 		document.id("LinkRecord__error").set('html', result);
+	}
+};
+
+LinkLibraryManager.deleteLink = function(link_id)
+{
+	if (confirm("Are you sure you want to delete this link?"))
+	{
+		result = httpRequest("/action/link_library/delete_link?link_id=" + link_id);
+		if (result == "OK")
+		{
+			location.reload();
+		}
 	}
 };
 

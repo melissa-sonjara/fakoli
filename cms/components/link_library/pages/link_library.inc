@@ -40,11 +40,5 @@ $library = LinkLibrary::findByIdentifier($libraryIdentifier);
 
 $page->page_title = $library->name;
 
-$links = $library->Links("WHERE published=1 ORDER BY sort_order, title, url");
-
-$list = new PagedList($links, "library_links", "{LinkLibraryManager::formatLink}");
-$list->pageSize = 20;
-$list->emptyList = "No links have been added to this library";
-
-$script .= $list->writeScript();
-$list->drawList();
+$view = LinkLibraryView::create($library);
+$view->drawView();
