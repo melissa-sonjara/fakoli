@@ -50,7 +50,8 @@ class Settings extends DataItem
 						"annotation"	=>	Text,
 						"options"		=>	Text,
 						"value"			=>	String,
-						"field_type"	=>	String
+						"field_type"	=>	String,
+						"weight"		=>	Number
 					);
 	
 	// relationships
@@ -76,23 +77,18 @@ class Settings extends DataItem
 	
 	static function getSetting($component, $name)
 	{
-		$setting = Cache::get("setting_{$component}_{$name}");
-		
-		if (!$setting)
+		try
 		{
-			try
-			{
-				$setting = Query::create(Settings, "WHERE component=:component AND name=:name")
-								->bind(":component", $component, ":name", $name)
-								->executeSingle();
-				Cache::put("setting_{$component}_{$name}", $setting);
-			}
-			catch(DataNotFoundException $e)
-			{
-				return null;
-			}		
+			$setting = Query::create(Settings, "WHERE component=:component AND name=:name")
+							->bind(":component", $component, ":name", $name)
+							->executeSingle();
+			Cache::put("setting_{$component}_{$name}", $setting->value);
+			return $setting;
 		}
-		return $setting;
+		catch(DataNotFoundException $e)
+		{
+			return null;
+		}		
 	}
 	
 	/**
@@ -102,13 +98,38 @@ class Settings extends DataItem
 	 */
 	static function getValue($component, $name)
 	{
-		$setting = Settings::getSetting($component, $name);
+		$value = Cache::get("setting_{$component}_{$name}");
+		if ($value !== null) return $value;
 		
-		return $setting ? $setting->value : null;
+		try 
+		{
+			$setting = Query::create(Setting, "WHERE component=:c and name=:n")
+						->filter(new InclusionFilter("value"))
+					    ->bind(":c", $component, ":n", $name)
+						->executeSingle();
+			Cache::put("setting_{$component}_{$name}", $setting->value);
+			return $setting->value;
+		}
+		catch (DataNotFoundException $e) 
+		{
+			return null;
+		}
 	}
-
 	
-	static function setValue($component, $name, $value, $field_type, $annotation, $category, $options)
+	/**
+	 * Sets the value of the given component setting. 
+	 * 
+	 * @param string component the name of the component that owns the setting
+	 * @param string $name the name of the setting (this will be automatically prettified when presented to the user)
+	 * @param mixed  $value the default value for the setting. The value will be overwritten, even if previously set
+	 * @param string $field_type the type of field renderer to use to display the setting in the admin interface
+	 * @param string $annotation any help annotation to display on the form (optional)
+	 * @param string $category the sub-category within the form to which the setting belongs. Settings with the same
+	 *               category name are grouped together into fieldsets.
+	 * @param number $weight a weighting factor to control display order on the Application Settings form. Controls
+	 *               are sorted (within categories) first by weight, then alphabetically (optional).
+	 */
+	static function setValue($component, $name, $value, $field_type, $annotation, $category, $options, $weight = 0)
 	{
 		$setting = Settings::getSetting($component, $name);
 		if (!$setting)
@@ -120,32 +141,31 @@ class Settings extends DataItem
 			$setting->annotation = $annotation;
 			$setting->options = $options;
 			$setting->category = $category;
+			$setting->weight = $weight;
 		}
 		
 		$setting->value = $value;
 		$setting->save();
-		Cache::put("setting_{$component}_{$name}", $setting);
+		Cache::put("setting_{$component}_{$name}", $setting->value);
 	}
 	
-	/*
-	 * 1) component
+	/**
+	 * Sets the default value of the given component setting. Creating settings for a component using this
+	 * method will generate a tab under the Application Settings area of the site administration interface,
+	 * allowing your users to control your component's behavior.
 	 * 
-	 * 2) name
-	 * 
-	 * 3) value
-	 * 
-	 * 4) field_type: Number, String, Boolean, Currency, Date, Text
-	 * 
-	 * 5) annotation: explanatory text about the use of this setting to be 
-	 * written as a field annotation
-	 * 
-	 * 6) category: optional subcategory - usefull if the list of settings for a component is very larg
-	 * 
-	 * 7) options: optional return delimited "\n" list of options, if the field has a set
-	 * of options for the user to select from. 
-	 * 
+	 * @param string component the name of the component that owns the setting
+	 * @param string $name the name of the setting (this will be automatically prettified when presented to the user)
+	 * @param mixed  $value the default value for the setting. If the setting has already been defined, the value
+	 *                will not be overwritten
+	 * @param string $field_type the type of field renderer to use to display the setting in the admin interface
+	 * @param string $annotation any help annotation to display on the form (optional)
+	 * @param string $category the sub-category within the form to which the setting belongs. Settings with the same
+	 *               category name are grouped together into fieldsets.
+	 * @param number $weight a weighting factor to control display order on the Application Settings form. Controls
+	 *               are sorted (within categories) first by weight, then alphabetically (optional).
 	 */
-	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "", $category = "", $options = "")
+	static function setDefaultValue($component, $name, $value, $field_type = "String", $annotation = "", $category = "", $options = "", $weight = 0)
 	{
 		$setting = Settings::getSetting($component, $name);
 		if ($setting) 
@@ -153,11 +173,12 @@ class Settings extends DataItem
 			$setting->annotation = $annotation;
 			$setting->category = $category;
 			$setting->options = $options;
+			$setting->weight = $weight;
 			$setting->save();
 			return;
 		}
 		
-		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options);
+		Settings::setValue($component, $name, $value, $field_type, $annotation, $category, $options, $weight);
 	}
 	
 	/**
@@ -166,10 +187,11 @@ class Settings extends DataItem
 	 * @param string $name the unique name of the permission
 	 * @param string $annotation short description of the permission 
 	 * @param string $value comma-separated list of roles that have the permission
+	 * @param int $weight optional weight parameter to control display order
 	 */
-	static function setPermission($component, $name, $annotation, $value)
+	static function setPermission($component, $name, $annotation, $value, $weight)
 	{
-		Settings::setValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions");		
+		Settings::setValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions", $weight);		
 	}
 	
 	/**
@@ -178,10 +200,11 @@ class Settings extends DataItem
 	 * @param string $name the unique name of the permission
 	 * @param string $annotation short description of the permission 
 	 * @param string $value comma-separated list of roles that have the permission
+	 * @param int $weight optional weight parameter to control display order
 	 */
-	static function setDefaultPermission($component, $name, $annotation, $value)
+	static function setDefaultPermission($component, $name, $annotation, $value, $weight)
 	{
-		Settings::setDefaultValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions");		
+		Settings::setDefaultValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions", $weight);		
 	} 
 	
 	/**

@@ -145,7 +145,9 @@ class SettingsManager
 		if (!$afDefaults)
 		{
 			$afDefaults = array();
-			$autoFormSettings = Query::create(Settings, "WHERE component='settings' AND category='AutoForm'")->execute();
+			$autoFormSettings = Query::create(Settings, "WHERE component='settings' AND category='AutoForm'")
+									 ->filter(new InclusionFilter("name", "value"))
+									 ->execute();
 			
 			foreach($autoFormSettings as $setting)
 			{

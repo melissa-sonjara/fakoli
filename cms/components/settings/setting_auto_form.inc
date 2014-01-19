@@ -44,7 +44,7 @@ class SettingAutoForm extends AutoForm
 		
 		$this->component = $component;
 		
-		$this->settings = Query::create(Settings, "WHERE component=:component ORDER BY category, name")
+		$this->settings = Query::create(Settings, "WHERE component=:component ORDER BY category, weight, name")
 				->bind(":component", $component->name)
 				->execute();
 
