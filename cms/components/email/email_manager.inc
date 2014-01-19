@@ -394,17 +394,20 @@ class EmailManager
 		
 		global $config;
 		
-		Settings::setDefaultValue("email", "use_debugging_mode", false, "Boolean");
+		Settings::setDefaultValue("email", "use_debugging_mode", false, "Boolean", "Enable local logging of generated emails (instead of sending via SMTP)", "Debugging Mode", null, 0);
 		
 		$defaultPath = $config['uploadbase'] . DIRECTORY_SEPARATOR . "email_debug_logs";
 		
 		if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
-		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath, "String");
-		Settings::setDefaultValue("email", "email_from", "andy@sonjara.com", "String", "From address for generated emails");
-		Settings::setDefaultValue("email", "email_contact", "andy@sonjara.com", "String", "To address for generated emails");
-		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Name of email contact");
-		Settings::setDefaultValue("email", "mail_server", "timpani.sonjara.com", "String");
+		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath, "String", "Folder that will store the logged emails in debugging mode", "Debugging Mode", null, 1);
+		Settings::setDefaultValue("email", "email_from", "andy@sonjara.com", "String", "Default From address for generated emails", "Contact Details");
+		Settings::setDefaultValue("email", "email_contact", "andy@sonjara.com", "String", "Default To address for generated emails", "Contact Details");
+		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Default Name of email contact for generated emails", "Contact Details");
+		Settings::setDefaultValue("email", "mail_server", "localhost", "String", "Host name or IP address of your upstream SMTP server", "Server Settings", "", 0);
+		Settings::setDefaultValue("email", "username", "", String, "SMTP Account username (if authentication is required)", "Server Settings", "", 1);
+		Settings::setDefaultValue("email", "password", "", String, "SMTP Account password (if authentication is required)", "Server Settings", "", 2);
+		
 	}	
 	
 	static function upgradeComponent($version)

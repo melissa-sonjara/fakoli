@@ -99,6 +99,19 @@ class Mail
 	    # say hello so we all know who we are
 	    $smtp->Hello();
 	
+	    $username = Settings::getValue("email", "username");
+	    $password = Settings::getValue("email", "password");
+	    
+	    if ($username && $password)
+	    {
+	    	if (!$smtp->Authenticate($username, $password))
+	    	{
+	    		$err = $smtp->error;
+	    		$smtp->quit();
+	    		throw new FakoliException($err);
+	    	}
+	    }
+	    
 	    # start the mail transaction with with the return path address
 	    $smtp->Mail($this->from);
 	
