@@ -910,7 +910,7 @@ ENDSCRIPT;
 			$out = str_replace("{message}", $msg, $template);
 			echo $out;
 
-			Fakoli::fireEvent("RequestComplete");
+			ComponentManager::fireEvent("RequestComplete");
 		}
 		catch (Exception $ex)
 		{
