@@ -230,7 +230,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 			{
 				if (!val) val = 0;
 				
-				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val);
+				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val).attr({'text-anchor': 'start'});
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
