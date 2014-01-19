@@ -65,6 +65,7 @@ class Histogram
 {
 	var $width;
 	var $height;
+	var $orientation = "vertical";
 	var $cssStyles;
 	var $containerWidth;
 	var $containerHeight;
@@ -237,6 +238,7 @@ window.addEvent('domready', function ()
 	{
 		width: {$this->width}, 
 		height: {$this->height}, 
+		orientation: '{$this->orientation}',
 		chartLeft: {$this->chartLeft}, 
 		chartTop: {$this->chartTop}, 
 		chartWidth: {$this->chartWidth},
