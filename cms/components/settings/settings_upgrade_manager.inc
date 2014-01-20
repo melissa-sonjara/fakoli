@@ -56,6 +56,7 @@ class SettingsUpgradeManager extends UpgradeManager
 			"1.4"		=>	"sql:Added weight field to settings table"
 	);
 	
+	
 	function SettingsUpgradeManager()
 	{
 		$this->component_name = "settings";
