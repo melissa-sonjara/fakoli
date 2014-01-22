@@ -43,6 +43,7 @@ class ImageRecord extends DataItem
 						"credits" 				=> String,
 						"caption" 				=> String,
 						"keywords" 				=> String,
+						"related_resource"		=> String,
 						"published"				=> Boolean,
 						"include_in_slideshow"	=> Boolean,
 						"sort_order"			=> Number,

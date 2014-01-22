@@ -73,6 +73,8 @@ $form->hide("thumbnail", "gallery_id", "owner_id");
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
 
+$urlSelect = new CMSLinkSelectFieldRenderer($form, "related_resource", "Related Resource");
+
 if($image->owner_id)
 {
 	$form->add(new StringFieldRenderer($form), "owner");

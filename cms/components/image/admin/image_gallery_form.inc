@@ -57,6 +57,13 @@ $gallery->filter = new ExclusionFilter("read_access", "write_access");
 $tabs = imageGalleryTabs($gallery_id);
 
 $form = new AutoForm($gallery);
+$form->group("Gallery Properties", "gallery_name", "identifier", "description", "keywords", "hidden");
+$form->group("Display Options", "image_link_mode", "thumbnail_size", "published");
+$form->annotate("thumbnail_size", "Size of thumbnail images in the gallery display. Set as zero to use the site default thumbnail size");
+$form->annotate("image_link_mode", "Specifies the behavior for image links in the gallery display");
+
+$linkModes = new SelectFieldRenderer($form, "image_link_mode", "Image Link Mode", ImageGallery::$imageLinkModes);
+
 $form->allowDelete = $allowDelete;
 $form->hide("owner_id");
 $form->unique("identifier");

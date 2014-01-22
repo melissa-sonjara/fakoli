@@ -41,7 +41,6 @@ if (!$gallery_id)
 	return;
 }
 
-
 $gallery = new ImageGallery($gallery_id);
 
 if (!$gallery->published)
@@ -54,6 +53,15 @@ $images = $gallery->Images("ORDER BY sort_order");
 
 $page->page_title = $gallery->gallery_name . " Image Gallery";
 
+if ($gallery->image_link_mode == "Thumbnail")
+{
+	$linkFormat = "go('{related_resource}'); return false";
+}
+else
+{
+	$linkFormat = "lightbox({image_id}); return false";
+}
+
 $script .= <<<ENDSCRIPT
 <script type="text/javascript">
 function lightbox(id)
@@ -63,7 +71,10 @@ function lightbox(id)
 </script>
 ENDSCRIPT;
 
-$view = new ImageGalleryView($images, "lightbox({image_id}); return false");
+$thumbnail_size = $gallery->thumbnail_size;
+if ($thumbnail_size) $thumbnail_size = 125;
+
+$view = new ImageGalleryView($images, $linkFormat, "images", $thumbnail_size);
 $view->spacing = "6px";
 $view->styles = "margin-left: 40px";
 $view->drawGallery();

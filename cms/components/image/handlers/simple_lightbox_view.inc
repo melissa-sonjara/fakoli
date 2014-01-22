@@ -57,11 +57,17 @@ else
 	$image = new ImageRecord($image_id);
 }
 
+$gallery = $image->Gallery();
+if ($gallery->image_link_mode == "Lightbox" && $image->related_resources)
+{
+	$link = " onclick=\"go('{$image->related_resource}');return false;\"";
+}
+
 $width = 100;
 $height = 100;
 $mgr = new ImageManager();
 $mgr->getScaledSize($image_id, 600, $width, $height);
 ?>
 <div style="width: <?echo $width?>px; height: <?echo $height?>px;background: url(/fakoli/images/loader.gif) center center no-repeat #fff">
-<img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px" alt="<?echo $image->ALT_tag?>"/>
+<img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px"<?echo $link?> alt="<?echo $image->ALT_tag?>"/>
 </div>

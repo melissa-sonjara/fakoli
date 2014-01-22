@@ -42,10 +42,10 @@ class ImageGalleryView
 	var $styles;
 	var $titleFormat = "{title}";
 	
-	function ImageGalleryView($images, $linkFormat, $id = "images")
+	function ImageGalleryView($images, $linkFormat, $id = "images", $size = 125)
 	{
 		$this->id = $id;
-		$this->grid = new ImageGrid($id . "_gallery", 125);
+		$this->grid = new ImageGrid($id . "_gallery", $size);
 		$this->images = $images;
 		$this->linkFormat = $linkFormat;
 	}

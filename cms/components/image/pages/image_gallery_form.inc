@@ -53,6 +53,10 @@ $tabs = ImageManager::imageGalleryTabs($gallery_id);
 $styles .= ImageManager::getStyles();
 
 $form = new AutoForm($gallery);
+$form->group("Gallery Properties", "gallery_name", "identifier", "description", "hidden");
+$form->group("Display Options", "image_link_mode", "thumbnail_size", "published");
+
+$linkModes = ChecklistFieldRenderer($form, "image_link_mode", "Image Link Mode", ImageGallery::$imageLinkModes);
 
 $form->hide("owner_id");
 

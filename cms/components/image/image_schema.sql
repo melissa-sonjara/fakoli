@@ -47,3 +47,16 @@ CREATE TABLE `image` (
 ALTER TABLE image_gallery ADD COLUMN hidden TINYINT(3) NOT NULL DEFAULT 0;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE image ADD COLUMN related_resource VARCHAR(200) NOT NULL DEFAULT '';
+
+-- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE image_gallery ADD COLUMN thumbnail_size INT(10) NOT NULL DEFAULT 0;
+ALTER TABLE image_gallery ADD COLUMN image_link_mode VARCHAR(20) NOT NULL DEFAULT 'None';
+
+-- END Version 1.3

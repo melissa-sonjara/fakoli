@@ -35,23 +35,28 @@ class ImageGallery extends DataItem
 {
 	// Fields
 	
-	var $fields = array("gallery_id"	=>	Number,
-						"gallery_name"	=>	String,
-						"identifier"	=>	String,
-						"description"	=>	HTML,
-						"keywords"		=>	String,
-						"hidden"		=>	Boolean,
-						"owner_id"		=>	Number,
-						"read_access"	=>	String,
-						"write_access"	=>	String,
-						"published"		=>	Boolean,
-						"last_modified"	=>	Timestamp);
+	var $fields = array("gallery_id"		=>	Number,
+						"gallery_name"		=>	String,
+						"identifier"		=>	String,
+						"description"		=>	HTML,
+						"keywords"			=>	String,
+						"thumbnail_size" 	=>  Number,
+					  	"image_link_mode"	=>	String,
+						"hidden"			=>	Boolean,
+						"owner_id"			=>	Number,
+						"read_access"		=>	String,
+						"write_access"		=>	String,
+						"published"			=>	Boolean,
+						"last_modified"		=>	Timestamp);
 	
 	// Relations
 	
 	var $relations = array(	"Images"	=>	ImageRecord,
 							"Owner"		=>	"");
 
+	static $imageLinkModes = array("None"		=>	"No Resource Link",
+								   "Thumbnail"	=>	"Link from Thumbnail",
+								   "Lightbox"	=>	"Link from Lightbox");
 	
 	function Images($constraint = "")
 	{
