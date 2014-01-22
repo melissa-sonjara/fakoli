@@ -55,7 +55,7 @@ $page->page_title = $gallery->gallery_name . " Image Gallery";
 
 if ($gallery->image_link_mode == "Thumbnail")
 {
-	$linkFormat = "go('{related_resource}'); return false";
+	$linkFormat = "go(\"{related_resource}\"); return false";
 }
 else
 {
@@ -72,7 +72,7 @@ function lightbox(id)
 ENDSCRIPT;
 
 $thumbnail_size = $gallery->thumbnail_size;
-if ($thumbnail_size) $thumbnail_size = 125;
+if (!$thumbnail_size) $thumbnail_size = 125;
 
 $view = new ImageGalleryView($images, $linkFormat, "images", $thumbnail_size);
 $view->spacing = "6px";

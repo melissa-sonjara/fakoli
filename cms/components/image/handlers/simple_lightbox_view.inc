@@ -60,7 +60,8 @@ else
 $gallery = $image->Gallery();
 if ($gallery->image_link_mode == "Lightbox" && $image->related_resource)
 {
-	$link = " onclick=\"go('{$image->related_resource}');return false;\"";
+	$link = "<a href='{$image->related_resource}'>";
+	$closeLink = "</a>";
 }
 
 $width = 100;
@@ -69,5 +70,5 @@ $mgr = new ImageManager();
 $mgr->getScaledSize($image_id, 600, $width, $height);
 ?>
 <div style="width: <?echo $width?>px; height: <?echo $height?>px;background: url(/fakoli/images/loader.gif) center center no-repeat #fff">
-<img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px"<?echo $link?> alt="<?echo $image->ALT_tag?>"/>
+<?echo $link?><img src="/action/image/thumbnail?image_id=<?echo $image_id?>&size=600" style="width: <?echo $width?>px; height: <?echo $height?>px" alt="<?echo $image->ALT_tag?>"/><?echo $closeLink?>
 </div>
