@@ -58,7 +58,7 @@ else
 }
 
 $gallery = $image->Gallery();
-if ($gallery->image_link_mode == "Lightbox" && $image->related_resources)
+if ($gallery->image_link_mode == "Lightbox" && $image->related_resource)
 {
 	$link = " onclick=\"go('{$image->related_resource}');return false;\"";
 }
