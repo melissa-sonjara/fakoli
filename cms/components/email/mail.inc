@@ -106,7 +106,7 @@ class Mail
 	    {
 	    	if (!$smtp->Authenticate($username, $password))
 	    	{
-	    		$err = $smtp->error;
+	    		$err = $smtp->error->error;
 	    		$smtp->quit();
 	    		throw new FakoliException($err);
 	    	}
