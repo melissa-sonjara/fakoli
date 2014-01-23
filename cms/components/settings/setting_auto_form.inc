@@ -155,7 +155,7 @@ class SettingAutoForm extends AutoForm
 				$setting->value = $obj->$name;
 				$setting->filter = new InclusionFilter("value");
 				$setting->save();
-				Cache::put("setting_{$setting->component}_{$setting->name}", $setting);
+				Cache::put("setting_{$setting->component}_{$setting->name}", $setting->value);
 				
 			}
 		}
