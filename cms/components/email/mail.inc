@@ -107,6 +107,7 @@ class Mail
 	    	if (!$smtp->Authenticate($username, $password))
 	    	{
 	    		$err = $smtp->error->error;
+	    		trace("SMTP Authentication failed: $err", 1);
 	    		$smtp->quit();
 	    		throw new FakoliException($err);
 	    	}
