@@ -119,7 +119,10 @@ class Fakoli
 			$includes = Cache::get("fakoli_includes_$component");
 			if ($includes)
 			{
-				eval($includes);
+				foreach($includes as $include)
+				{
+					require_once $include;
+				}
 				continue;
 			}
 	
@@ -130,6 +133,8 @@ class Fakoli
 				trace("Attempt to reference unknown or disabled component '$component'", 2);
 				continue;
 			}
+			
+			$includes = array();
 			
 			$c = $components[$component];
 			
@@ -142,14 +147,15 @@ class Fakoli
 		    		if (endsWith($file, ".inc"))
 		    		{
 			    		$f = $dm . DIRECTORY_SEPARATOR . $file;
-			    		
-			    		$includes .= "require_once '{$f}';\n";
+
+			    		$includes[] = $f;
+			    		require_once $f;
 		    		}
 		    	}
 		    	
 		    	closedir($handle);
 			}
-	
+			
 			trace($c->component_path, 4);
 			
 			$handle = opendir($c->component_path);
@@ -161,15 +167,15 @@ class Fakoli
 	    		if (endsWith($file, ".inc"))
 	    		{
 		    		$f = $c->component_path . DIRECTORY_SEPARATOR . $file;
-		    		
-		    		$includes .= "require_once '{$f}';\n";
+
+		    		$includes[] = $f;
+		    		require_once $f;
 	    		}
 	    	}
 	    	
 	    	closedir($handle);
 	    	
-	    	Cache::put("fakoli_includes_$component", $includes);
-	    	eval($includes);    	
+	    	Cache::put("fakoli_includes_$component", $includes);    	
 		}
 	}
 	
@@ -298,7 +304,8 @@ class Fakoli
 		{
 			$file = func_get_arg($i);
 			
-			require_once realpath(dirname(__FILE__)."/../$file");
+			$f = realpath(dirname(__FILE__)."/../$file");
+			require_once $f;
 		}
 	}
 	
@@ -316,7 +323,8 @@ class Fakoli
 		{
 			$file = func_get_arg($i);
 			
-			require_once realpath(dirname(__FILE__)."/../framework/{$file}.inc");
+			$f = realpath(dirname(__FILE__)."/../framework/{$file}.inc");
+			require_once $f;
 		}
 	}	
 
