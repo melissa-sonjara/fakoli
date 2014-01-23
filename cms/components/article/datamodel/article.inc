@@ -313,6 +313,15 @@ class ArticleCommentXref extends DataItem
 		}	
 	}
 	
+	function getURL()
+	{
+		if(!$this->article_id) return "";
+		
+		$url = $this->Article()->getUrl();
+		
+		return $url . $this->format("#comment{comment_id}");
+	}
+	
 	function Article()
 	{
 		return $this->getRelated(Article);
