@@ -103,7 +103,7 @@ class Settings extends DataItem
 		
 		try 
 		{
-			$setting = Query::create(Setting, "WHERE component=:c and name=:n")
+			$setting = Query::create(Settings, "WHERE component=:c and name=:n")
 						->filter(new InclusionFilter("value"))
 					    ->bind(":c", $component, ":n", $name)
 						->executeSingle();
