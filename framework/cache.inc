@@ -135,6 +135,14 @@ class Cache
 	{
 		return Cache::getInstance()->clear();
 	}
+	
+	/**
+	 * Output a dump of the cache for debugging purposes
+	 */
+	static function dump()
+	{
+		return Cache::getInstance()->dump();
+	}
 }
 
 
@@ -192,6 +200,11 @@ class SimpleMemoryCache
 	{
 		$this->cache = array();
 	}
+	
+	function dump()
+	{
+		throw new FakoliException("Not implemented");
+	}
 }
 	
 
@@ -239,6 +252,19 @@ class APCCache
 	function clear()
 	{
 		apc_clear_cache('user');
+	}
+	
+	function dump()
+	{
+		echo "<table class='list'><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>\n";
+		foreach (new APCIterator('user', '/.*/') as $kvp) 
+		{
+			$key = str_replace(ConnectionManager::$dsn."_".Cache::$app_name."_", "", $kvp['key']);
+			$value = htmlSafe($kvp['value']);
+			
+			echo "<tr><td><b>$key</b></td><td>{$value}</td></tr>\n";
+		}
+		echo "</tbody></table>";
 	}
 }
 
@@ -302,6 +328,20 @@ class WCCache
 	{
 		wincache_ucache_clear();
 	}
+	
+	function dump()
+	{
+		$info = wincache_ucache_info();
+		
+		echo "<table class='list'><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>\n";
+		foreach ($info['ucache_entries'] as $kvp)
+		{
+			$key = str_replace(ConnectionManager::$dsn."_".Cache::$app_name."_", "", $kvp['key_name']);
+			
+			echo "<tr><td><b>{$key}</b></td><td>".htmlSafe(wincache_ucache_get($kvp['key_name']))."</td></tr>\n";
+		}
+		echo "</tbody></table>";
+	}		
 }
 
 /**
