@@ -222,6 +222,7 @@ class APCCache
 	
 	function get($key)
 	{
+		$success = true;
 		
 		$s = apc_fetch($key, $success);
 		if (!$success) return null;
