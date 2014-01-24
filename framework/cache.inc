@@ -223,7 +223,7 @@ class APCCache
 	function get($key)
 	{
 		
-		$s = apc_fetc($key, $success);
+		$s = apc_fetch($key, $success);
 		if (!$success) return null;
 		
 		return unserialize($s);
