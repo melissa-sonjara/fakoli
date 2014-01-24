@@ -222,7 +222,11 @@ class APCCache
 	
 	function get($key)
 	{
-		return unserialize(apc_fetch($key));
+		
+		$s = apc_fetc($key, $success);
+		if (!$success) return null;
+		
+		return unserialize($s);
 	}
 	
 	function put($key, $obj, $ttl = 0)
