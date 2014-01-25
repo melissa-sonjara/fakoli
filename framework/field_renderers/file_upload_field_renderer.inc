@@ -46,6 +46,7 @@ class FileUploadFieldRenderer extends FieldRenderer
 	var $handler;
 	var $size;
 	var $field;
+	var $accept;
 	
 	function FileUploadFieldRenderer(&$form, $field, $label, $handler)
 	{
@@ -70,7 +71,9 @@ class FileUploadFieldRenderer extends FieldRenderer
 	function renderField($field)
 	{
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}' type='file' name='$field' value='".$this->parent->data->get($field)."' size='{$this->size}'>";
+		
+		$accept = $this->accept ? " accept='{$this->accept}'" : "";
+		echo "<input id='{$this->parent->id}_{$field}' type='file' name='$field' value='".$this->parent->data->get($field)."' size='{$this->size}'{$accept}>";
 		$this->_endField($field);
 	}
 	
