@@ -62,11 +62,10 @@ class Breadcrumbs
 	
 	function __construct()
 	{		
-		$qs = $_SERVER['QUERY_STRING'];
+		$qs = getCleanQueryString();
 		$this->url = $this->getLink();
 		
 		trace("Breadcrumb url $this->url", 3);
-		$qs = preg_replace("/identifier=[\\w_]+&*/", "", $qs);
 		$this->qs = preg_replace("/_style=\\w+&*/", "", $qs);
 		
 		$this->breadcrumbs = $this->getTrail();
