@@ -189,6 +189,18 @@ class Blog extends DataItem
 	}
 		
 		
+	function enumerateContentLinks()
+	{
+		$articles = $this->Articles("WHERE published=1 ORDER BY sort_order, title");
+		$links = array();
+		foreach($articles as $article)
+		{
+			$links[$article->title] = $this->identifier."?article_id=".$article->article_id;
+		}
+		
+		return $links;
+	}
+	
 	function Blog()
 	{
 		$this->primary_key = "blog_id";
