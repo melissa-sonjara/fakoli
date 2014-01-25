@@ -71,7 +71,7 @@ $tabs->writeHTML();
 ?>
 <div id="tab_border" style="height: auto;">
 <h3>Fileshare Member Community for <?echo $library->name?></h3>
-<table class="layout">
+<table class="layout" style="width: 95%">
 <tr><td>
 <?
 FileshareManager::drawMemberSearchForm($library);

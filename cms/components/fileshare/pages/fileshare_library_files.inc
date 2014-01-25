@@ -58,7 +58,7 @@ $table->column("Document", array($mgr, formatDocumentTitle), true, "width: 60%")
 	;
 		  
 $table->sortable = true;
-$table->filter = false;
+$table->filter = true;
 $table->pageSize = 10;
 $table->emptyMessage = $mgr->emptyMessage;
 $table->cssStyles = "width: 95%";
@@ -68,7 +68,7 @@ if($library->isOwner() || checkRole("fileshare,admin"))
 
 $facetManager = new FacetManager('facet_manager', $table);
 TaxonomyManager::addFacets($facetManager, Document, true, "160px", "200px", "200px");
-$facetManager->addFacet("Uploaded By", $mgr->createUploadedByFacet());
+//$facetManager->addFacet("Uploaded By", $mgr->createUploadedByFacet());
 
 $script .= $facetManager->writeScript();
 $script .= $mgr->writeScript();
@@ -82,7 +82,7 @@ window.addEvent('domready', function()
 </script>
 ENDSCRIPT;
 ?>
-<div id="fileshare_content" style='float: left'>
+<div id="fileshare_content">
 <?
 if($tabs)
 {
