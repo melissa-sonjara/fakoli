@@ -53,9 +53,26 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 				{
 					if (!array_key_exists($item->identifier, $contentByIdentifier)) continue;
 					
-					$child = new TreeNode("available[{$item->identifier}]", $item->identifier, $this->getLink($section, $item->identifier), false, "plain_tree_closed", "plain_tree_open");
-					$child->leafStyle = "file_node_leaf";
 					
+					if (method_exists($item, enumerateContentLinks))
+					{
+						$child = new TreeNode("available[{$item->identifier}]", $item->identifier, $this->getLink($section, $item->identifier), false, "tree_node_closed", "tree_node_open");
+						
+						$subItems = $item->enumerateContentLinks();
+						$count = 1;
+						foreach($subItems as $subItemTitle => $subItemLink)
+						{
+							$grandchild = new TreeNode("available[{$item->identifier}.{$count}]", $subItemTitle, $this->getLink($section, $subItemLink), false, "plain_tree_closed", "plain_tree_open");
+							$grandchild->leafStyle = "file_node_leaf";
+							$child->add($grandchild);
+							$count++;
+						}
+					}
+					else
+					{
+						$child = new TreeNode("available[{$item->identifier}]", $item->identifier, $this->getLink($section, $item->identifier), false, "plain_tree_closed", "plain_tree_open");	
+						$child->leafStyle = "file_node_leaf";
+					}
 					$category->add($child);
 				}
 				
