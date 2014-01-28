@@ -98,6 +98,7 @@ class Histogram
 	var $title = "";
 	var $titleSize = 20;
 	var $enableDownload = true;
+	var $units = "";
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -262,7 +263,8 @@ window.addEvent('domready', function ()
 		columnMargin: {$this->columnMargin},
 		title: '{$this->title}',
 		titleSize: {$this->titleSize},
-		enableDownload: {$enableDownload}
+		enableDownload: {$enableDownload},
+		units: '{$this->units}'
 	});
 	
 	{$this->id}.labels = [ {$labels} ];

@@ -152,7 +152,7 @@ var VerticalBlockSeriesRenderer = new Class(
 			{
 				if (!val) val = 0;
 				
-				this.chart.paper.text(x + columnWidth / 2, y - 8, val);
+				this.chart.paper.text(x + columnWidth / 2, y - 8, val + this.chart.options.units);
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
@@ -230,7 +230,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 			{
 				if (!val) val = 0;
 				
-				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val).attr({'text-anchor': 'start'});
+				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val + this.chart.options.units).attr({'text-anchor': 'start'});
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
@@ -412,7 +412,7 @@ var VerticalHistogramAxisRenderer = new Class(
 			}
 			else
 			{
-				label = number_format(tick, 0);
+				label = number_format(tick, 0) + chart.options.units;
 			}
 			var text = chart.paper.text(chart.options.chartLeft - 10, y, label);
 			text.attr({stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "end"});
@@ -487,7 +487,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 			}
 			else
 			{
-				label = number_format(tick, 0);
+				label = number_format(tick, 0) + chart.options.units;
 			}
 			var text = chart.paper.text(x, chart.options.chartTop - 10, label);
 			text.attr({stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "middle"});
