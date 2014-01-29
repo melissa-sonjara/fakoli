@@ -51,7 +51,7 @@ if (!$gallery->published)
 
 $images = $gallery->Images("ORDER BY sort_order");
 
-$page->page_title = $gallery->gallery_name . " Image Gallery";
+$page->page_title = $gallery->gallery_name;
 
 if ($gallery->image_link_mode == "Thumbnail")
 {
