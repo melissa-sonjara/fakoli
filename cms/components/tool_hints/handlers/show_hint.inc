@@ -35,12 +35,9 @@ Fakoli::using("tool_hints");
 
 $code = checkIdentifier($_GET["code"]);
 $hint = ToolHint::findToolHint($code);
-if (!$hint->isHidden())
-{
-	echo $hint->hint;
-}
+echo $hint->hint;
 
-if ($user)
+if ($user && !$hint->isHidden())
 {
 ?>
 <br/><input type='checkbox' class='checkbox' onchange='ToolHint.hide("<?echo $code?>"); return false'><label>&nbsp;Hide this popup from now on</label>
