@@ -435,7 +435,7 @@ var VerticalHistogramAxisRenderer = new Class(
 	    {
 	        path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
 	    }
-	    return this.paper.path(path.join(",")).attr({stroke: color});
+	    return this.chart.paper.path(path.join(",")).attr({stroke: color});
 	},
 });
 
