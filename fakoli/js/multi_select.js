@@ -15,6 +15,8 @@ var MultiSelect = new Class(
 	initialize: function(container, options)
 	{
 		this.container = document.id(container);
+		if (!this.container) return;
+		
 		this.setOptions(options);
 		
 		this.container.multiSelect = this; // back reference
