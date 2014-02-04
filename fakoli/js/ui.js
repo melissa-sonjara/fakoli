@@ -1422,4 +1422,4 @@ Element.implement("fitText", function()
 window.addEvent('load', function()
 {
 	$$(".fitText").fitText();
-}
+});
