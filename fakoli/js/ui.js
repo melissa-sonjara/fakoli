@@ -1397,3 +1397,29 @@ Element.implement('reloadPanel', function(onComplete)
 	}
 	while(element);		
 });
+
+Element.implement("fitText", function() 
+{
+    var e = this.getParent();
+    var maxWidth = e.getSize().x;
+    var maxHeight = e.getSize().y;
+    var sizeX = this.getSize().x;
+    var sizeY = this.getSize().y;
+    if (sizeY <= maxHeight && sizeX <= maxWidth)
+        return;
+
+    var fontSize = this.getStyle("font-size").toInt();
+    while( (sizeX > maxWidth || sizeY > maxHeight) && fontSize > 4 ) 
+    {
+        fontSize -= .5;
+        this.setStyle("font-size", fontSize + "px");
+        sizeX = this.getSize().x;
+        sizeY = this.getSize().y;
+    }
+    return this;
+});
+
+window.addEvent('load', function()
+{
+	$$(".fitText").fitText();
+}
