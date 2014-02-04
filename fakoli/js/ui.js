@@ -1419,7 +1419,7 @@ Element.implement("fitText", function()
     return this;
 });
 
-window.addEvent('load', function()
+window.addEvent('domready', function()
 {
 	$$(".fitText").fitText();
 });
