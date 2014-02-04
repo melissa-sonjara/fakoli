@@ -58,6 +58,7 @@ $form->alias("file", "Download");
 new RelatedItemSelectFieldRenderer($form, "document_library_id", "Document Library", DocumentLibrary, "WHERE document_library_id={$document->document_library_id}", "<a href='{$library->identifier}'>{name}</a>", "document_library_id");
 
 $form->readOnlyForm = true;
+$form->hideEmptyFields = true;
 
 if(checkRole($document->allow_access) && checkRole($library->allow_access))
 {
