@@ -61,7 +61,7 @@ if ($method == "POST")
 if ($user_id)
 {
 	$siteUser->load($user_id);
-	$title = "Edit Account for {$siteUser->first_name} {$siteUser->last_name}";
+	$title = htmlSafe("Edit Account for {$siteUser->first_name} {$siteUser->last_name}");
 }
 else
 {
