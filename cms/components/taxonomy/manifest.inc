@@ -22,7 +22,11 @@ class TaxonomyManifest
 
 				"Taxonomies"		=>	array("page"	=>	"/admin/taxonomies",
 											  "role"	=>	"admin",
-											  "weight"	=>	3))
+											  "weight"	=>	3),
+				
+				"Bindings"			=>	array("page"	=>	"/admin/bindings",
+											  "role"	=>	"admin",
+											  "weight"	=>	4))
 		);		
 	}
 

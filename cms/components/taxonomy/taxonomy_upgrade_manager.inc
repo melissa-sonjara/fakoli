@@ -21,7 +21,10 @@ class TaxonomyUpgradeManager extends UpgradeManager
 		"1.4"	=>	"sql:Change column name from `primary_key` to `id` in taxonomy_term_association table to avoid naming conflict",
 		"1.5"	=>	"sql:Change description to definition in taxonomy_term",
 		"1.6"	=>	"sql:Added taxonomy_term_association_summary view to efficiently query term_id summaries for items",
-		"1.7"	=>	"sql:Added enable_facet_filter flag to taxonomy table"
+		"1.7"	=>	"sql:Added enable_facet_filter flag to taxonomy table",
+		"1.8"	=>	"sql:Added binding_target and binding tables",
+		"1.9"	=>	"sql:Added indexes for binding table",
+		"2.0"	=>	"sql:Added binding_summary view"
 	);
 
 	function TaxonomyUpgradeManager()

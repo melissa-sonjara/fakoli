@@ -58,6 +58,8 @@ class TaxonomySerializationHandler
  */
 class TaxonomyManager
 {
+	static $bindableClasses = null;
+	
 	function TaxonomyManager()
 	{
 
@@ -101,13 +103,67 @@ class TaxonomyManager
 		return $options;
 	}
 	
+	static function getBindableClasses()
+	{
+		if (!TaxonomyManager::$bindableClasses)
+		{
+			$bindableClasses = array();
+			ComponentManager::fireEvent("RegisterBindableClasses");
+		}
+		
+		return TaxonomyManager::$bindableClasses;
+	}
+	
+	static function registerBindableClass($class, $format, $constraint = "")
+	{
+		TaxonomyManager::$bindableClasses[$class] = array("format" => $format, "constraint" => $constraint);
+	}
+	
+	static function getBindableClassOptions()
+	{
+		$classes = TaxonomyManager::getBindableClasses();
+	
+		$options = array();
+	
+		foreach($classes as $class => $format)
+		{
+			$proto = new $class;
+			$options[$class] = $proto->prettifyClassName();
+		}
+	
+		return $options;
+	}
+		
+	static function getBindingOptions($bindingTarget)
+	{
+		TaxonomyManager::getBindableClasses();
+		
+		$class = is_object($bindingTarget) ? get_class($bindingTarget) : $bindingTarget;
+		$bindingDetails = TaxonomyManager::$bindableClasses[$class];
+		if (!$bindingDetails) 
+		{
+			trace("## $class is not registered as a binding target", 1);
+			return array();
+		}
+		
+		$targets = Query::create($class, $bindingDetails["constraint"])->execute();
+		
+		return $targets;
+	}
+	
+	static function getBindingOptionFormat($bindingTarget)
+	{
+		$classes = TaxonomyManager::getBindableClasses();
+		return $classes[$bindingTarget->target_class]["format"];
+	}
+	
 	static function addTaxonomyFieldRenderers($form, $showSelectAll = true, $group = null)
 	{
+		$renderers = TaxonomyManager::addBindingFieldRenderers($form, $showSelectAll, $group);
+		
 		$class = get_class($form->data);
 		
 		$taxonomies = Query::create(Taxonomy, "")->execute();
-		
-		$renderers = array();
 		
 		foreach($taxonomies as $taxonomy)
 		{
@@ -124,6 +180,43 @@ class TaxonomyManager
 					$form->group($group, $taxonomy->identifier);
 				}
 				
+				$renderers[] = $renderer;
+			}
+		}
+		
+		return $renderers;
+	}
+	
+	static function addBindingFieldRenderers($form, $showSelectAll = true, $group = null)
+	{
+		TaxonomyManager::getBindableClasses();
+		
+		$class = get_class($form->data);
+		
+		$targets = Query::create(BindingTarget, "")->execute();
+		
+		trace("### Found ".count($targets)." binding targets", 3);
+		$renderers = array();
+		
+		foreach($targets as $target)
+		{
+			trace("## Checking {$target->target_class} - {$target->associated_classes}", 3);
+			
+			$classes = explode(",", $target->associated_classes);
+			if (array_search($class, $classes) !== FALSE)
+			{
+				trace("## Found a match", 3);
+				
+				$renderer = new BindingFieldRenderer($form, $target);
+				$renderer->setSize(400, 125);
+				$renderer->resizable = true;
+				$renderer->showSelectAll = $showSelectAll;
+		
+				if ($group)
+				{
+					$form->group($group, $class);
+				}
+		
 				$renderers[] = $renderer;
 			}
 		}
@@ -152,6 +245,35 @@ class TaxonomyManager
 				if (array_search($class, $taxonomy_classes) !== FALSE)
 				{
 					$matched[] = $taxonomy;
+					break;
+				}
+			}
+		}	
+		
+		return $matched;	
+	}
+	
+	static function getBindingTargets($classes, $facet_filter_only = false)
+	{
+		if (!is_array($classes))
+		{
+			$classes = array($classes);
+		}
+		
+		$matched = array();
+		
+		$bindingTargets = Query::create(BindingTarget, "")->execute();
+		
+		foreach($bindingTargets as $bindingTarget)
+		{
+			if ($facet_filter_only and !$bindingTarget->enable_facet_filter) continue;
+			
+			$assoc_classes = explode(",", $bindingTarget->associated_classes);
+			foreach($classes as $class)
+			{
+				if (array_search($class, $assoc_classes) !== FALSE)
+				{
+					$matched[] = $bindingTarget;
 					break;
 				}
 			}
@@ -226,6 +348,16 @@ class TaxonomyManager
 	{
 		if (!is_array($classes) && $classes) $classes = array($classes);
 		
+		$bindingTargets = TaxonomyManager::getBindingTargets($classes, true);
+		foreach($bindingTargets as $target)
+		{
+			$facet = $manager->addFacet($target->target_class, new BindingTargetFacetFilter($target));
+			$facet->dropdown = $dropdown;
+			$facet->dropdownMaxWidth = $max_width;
+			$facet->width = $width;
+			$facet->height = $height;
+		}
+			
 		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($classes, true);
 		foreach($taxonomies as $taxonomy)
 		{
@@ -335,6 +467,21 @@ class TaxonomyManager
 			$form->msg = $e->getMessage();
 			return false;
 		}
+	}
+	
+	static function getBoundItems($target, $class, $constraint = "")
+	{
+
+		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+		
+		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM taxonomy_term_association WHERE target_id=:target_id AND target_class=:cl) $constraint")
+					  ->bind(":target_id", $target->get($target->getPrimaryKey()),
+							  ":cl", get_class($target))
+					  ->execute();
+		 
+		return $items;
 	}
 	
 	/**

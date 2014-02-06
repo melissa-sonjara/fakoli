@@ -265,4 +265,241 @@ window.addEvent('domready', function()
 }
 
 
+
+
+/**
+ * Field renderer for handling taxonomy term relationships.
+ */
+class BindingFieldRenderer extends FieldRenderer
+{
+	var $field;
+	var $label;
+	var $bindingTarget;
+	var $dropdown;
+	var $dropdownMaxWidth = "340px";
+	var $dropdownMessage = "Click to Select Terms";
+	var $options;
+	var $showSelectAll;
+	var $resizable = true;
+
+	static $readOnlyTermSeparator = "<br>";
+
+	function BindingFieldRenderer(&$form, $bindingTarget)
+	{
+		trace("## Creating BindingFieldRenderer for {$bindingTarget->target_class}", 3);
+		
+		$this->bindingTarget = $bindingTarget;
+		$this->field = $bindingTarget->target_class;
+		$proto = new $bindingTarget->target_class;
+		$this->label = $proto->prettifyClassName(true);
+		
+		$this->options = TaxonomyManager::getBindingOptions($bindingTarget->target_class);
+		$this->format = TaxonomyManager::$bindableClasses[$bindingTarget->target_class]["format"];
+		
+		trace("## Found ".count($this->options)," options");
+		
+		$this->dropdown = true;
+
+		$this->showSelectAll = true;
+
+		$this->FieldRenderer($form);
+
+		$field = $this->field;
+		$label = $this->label;
+		
+		// JDG 7/31/2011 - allow override
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;
+		}
+	}
+	
+	function setSize($width, $height)
+	{
+		$this->width = $width;
+		$this->height = $height;
+	}
+
+	function renderScript($field)
+	{
+		if ($this->showSelectAll)
+		{
+			?>
+<script type="text/javascript">
+
+function <?echo $this->parent->id?>_<?echo $this->field ?>_toggleSelectAll(link)
+{
+	link = document.id(link);
+	
+	var value = (link.innerHTML == "Select All");
+
+	var container = document.id('<?echo $this->parent->id?>_<?echo $this->field?>_container');
+	
+	container.getElements("input[type=checkbox]").each(function(cbox)
+	{
+		cbox.set('checked', value);
+	});
+
+	link.innerHTML = (value) ? "Deselect All" : "Select All";
+	if (container.multiSelect) container.multiSelect.selectionChanged();
+	return false;
+}
+
+</script>
+<?
+		}
+		
+		if ($this->dropdown)
+		{
+?>
+<script type='text/javascript'>
+window.addEvent('domready', function()
+{
+	new MultiSelect('<?echo $this->parent->id?>_<?echo $this->field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+});
+</script> 			
+<?
+		}
+	}
+	
+	function getMatchingPK($xref, $obj)
+	{
+		$pks = $obj->getPrimaryKeyList();
+		foreach($pks as $pk)
+		{
+			if ($xref->hasField($pk)) return $pk;
+		}
+		
+		throw new DataItemException("No matching foreign key in xref table");
+	}
+	
+	function renderField($field = "")
+	{
+		if (count($this->options) == 0) return;
+		
+		$field = $this->field;
+		
+		$this->_startField($field);
+		
+		$obj = $this->parent->data;
+		
+		if ($this->showSelectAll)
+		{
+			echo "<a href='#' onclick='return {$this->parent->id}_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
+		}
+		if ($this->width && $this->height)
+		{
+			$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+			$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
+			$padding = ($width == "auto") ? "padding-right: 20px; overflow-x: hidden" : "";
+			
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$width}; height: {$height};overflow: auto; $padding'>\n";
+		}
+		
+		$countOptions = count($this->options);
+		
+		$class = get_class($obj);
+		$pk = $obj->get($obj->getPrimaryKey());
+		
+		$selected = IndexedQuery::create(BindingRecord, "WHERE target_class=:tc AND class=:class AND id=:pk", "target_id")
+								->bind(":tc", $this->bindingTarget->target_class, ":class", $class, ":pk", $pk)
+								->execute();
+								
+		$this->renderCheckBoxes($field, $this->options, $selected);  
+
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";		
+		
+		$this->_endField($field);
+	}
+	
+	function renderCheckboxes($field, $items, $selected)
+	{
+		foreach($items as $item)
+		{
+			$p = $item->get($item->getPrimaryKey());
+			
+			echo "<label for='checkbox_{$field}_$p'><input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
+			if (array_key_exists($p, $selected))
+			{
+				echo " checked";
+			}
+			echo ">";
+			echo $item->format($this->format)."</label>";
+		}
+	}
+	
+	function renderReadOnly($field = "")
+	{
+		if (count($this->options) == 0) return;
+		
+		$field = $this->field;
+		
+		$obj = $this->parent->data;
+				
+		$class = get_class($obj);
+		$pk = $obj->get($obj->getPrimaryKey());
+		
+		$selected = IndexedQuery::create(BindingRecord, "WHERE target_class=:tc AND class=:class AND id=:pk", "target_id")
+								->bind(":tc", $this->bindingTarget->target_class, ":class", $class, ":pk", $pk)
+								->execute();
+								
+		foreach($this->options as $option)
+		{
+			$p = $option->get($option->getPrimaryKey());
+				
+			if (array_key_exists($p, $selected))
+			{
+				$answers[] = $option->format($this->format);
+			}
+		}
+		
+		/**
+		 * Don't display the taxonomy if nothing selected
+		 */
+		if(count($answers))
+		{
+			$this->_startField($field);
+			echo implode(TaxonomyTermFieldRenderer::$readOnlyTermSeparator, $answers);
+			$this->_endField($field);
+		}
+	}
+	
+	function postProcess($field = "")
+	{
+		if (count($this->options) == 0) return;
+		
+		$obj = $this->parent->data;
+		$class = get_class($obj);
+		$pk = $obj->get($obj->getPrimaryKey());
+		
+		$assoc = new BindingRecord();
+		$assoc->delete("WHERE target_class='{$this->bindingTarget->target_class}' AND class='$class' AND id=$pk");
+		
+		if (isset($_POST[$this->field]))
+		{
+			foreach($_POST[$this->field] as $target_id => $dummy)
+			{
+				$assoc = new BindingRecord();
+				$assoc->class = $class;
+				$assoc->target_class = $this->bindingTarget->target_class;
+				$assoc->id = $pk;
+				$assoc->target_id = $target_id;
+				$assoc->save();
+			}
+		}
+	}
+}
 ?>

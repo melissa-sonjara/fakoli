@@ -127,3 +127,107 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 		}
 	}
 }
+
+
+
+
+class BindingTargetFacetFilter extends AbstractFacetFilter
+{
+	var $bindingTarget;
+
+	var $width = "200px";
+	var $height = "100px";
+	var $dropdown = true;
+	var $dropdownMaxWidth = "200px";
+	var $dropdownMessage = "Click to Select Terms";
+
+	function __construct($bindingTarget)
+	{
+		$this->bindingTarget = $bindingTarget;
+	}
+
+	function getID()
+	{
+		return $this->bindingTarget->target_class;
+	}
+
+	function onTagItem($item, $attrs)
+	{
+		// Need to work with underlying object if passed is a search result container
+		if ($item instanceof AbstractSearchResult) $item = $item->item;
+
+		$target_ids = $this->bindingTarget->getBoundItemIds($item);
+		if ($target_ids)
+		{
+			$attrs["data-taxonomy-{$this->bindingTarget->target_class}"] = $target_ids;
+		}
+
+		return $attrs;
+	}
+
+	function writeScript()
+	{
+		ob_start();
+
+		if ($this->dropdown)
+		{
+			?>
+	var <?echo $this->bindingTarget->target_class?>_select =  new MultiSelect('<?echo $this->bindingTarget->target_class?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+	var <?echo $this->bindingTarget->target_class?>_handler = new TaxonomyFacetHandler('<?echo $this->bindingTarget->target_class?>', <?echo $this->bindingTarget->target_class?>_select, <?echo $this->manager->target->getID()?>_facet_manager);
+<?
+		}
+		
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
+	}
+	
+	function drawFacet()
+	{
+		$items = TaxonomyManager::getBindingOptions($this->bindingTarget->target_class);
+		
+		if (count($items) == 0) 
+		{
+			trace("## No items found for bound facet - {$this->bindingTarget->target_class}", 2);
+			return;
+		}
+		
+		if ($this->width && $this->height)
+		{
+			$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+			$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
+
+			$padding = ($width == "auto") ? "padding-right: 20px; overflow-x: hidden" : "";
+			
+			$resizable = (!$this->dropdown && $this->resizable) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->bindingTarget->target_class}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$width}; height: {$height};overflow: auto;  $padding'>\n";
+		}
+									
+		$this->renderCheckBoxes($items);  
+
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+
+	}
+	
+	function renderCheckboxes($items)
+	{
+		$format = TaxonomyManager::getBindingOptionFormat($this->bindingTarget);
+		
+		foreach($items as $item)
+		{
+			$p = $item->get($item->getPrimaryKey());
+			
+			echo "<label for='checkbox_{$this->bindingTarget->target_class}_$p'><input type='checkbox' class='checkbox' name='{$this->bindingTarget->target_class}[$p]' id='checkbox_{$this->bindingTarget->target_class}_$p' value='$p'";
+			if (array_key_exists($p, $selected))
+			{
+				echo " checked";
+			}
+			echo ">".$item->format($format)."";
+			echo "</label>";
+		}
+	}
+}
