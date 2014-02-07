@@ -2,8 +2,9 @@ var MultiSelect = new Class(
 {
 	Implements: [Options, Events],
 	
-	container: Class.Empty,
-	dropdown:  Class.Empty,
+	container: 	Class.Empty,
+	dropdown:  	Class.Empty,
+	mode:	 	"list",
 	
 	options:
 	{
@@ -17,6 +18,10 @@ var MultiSelect = new Class(
 		this.container = document.id(container);
 		if (!this.container) return;
 		
+		if (this.container.hasClass("tree"))
+		{
+			this.mode = "tree";
+		}
 		this.setOptions(options);
 		
 		this.container.multiSelect = this; // back reference
@@ -68,11 +73,6 @@ var MultiSelect = new Class(
 		{
 			cbox.addEvent('click', function(e) { this.selectionChanged(); }.bind(this));
 			label = cbox.getNext('label');
-//			label.removeEvents('click');
-//			label.addEvent('click', function(e) 
-//			{
-//				cbox.click();
-//			});
 		}.bind(this));	
 	},
 	
@@ -94,11 +94,6 @@ var MultiSelect = new Class(
 		label.appendText(text);
 		
 		cbox.addEvent('click', function(e) { this.selectionChanged();}.bind(this));
-		//label.removeEvents('click');
-		//label.addEvent('click', function(e) 
-		//{
-		//	cbox.click();
-		//});
 	},
 	
 	selectionChanged: function()
@@ -111,7 +106,16 @@ var MultiSelect = new Class(
 		{
 			if (cbox.checked)
 			{
-				var label = self.container.getElement('label[for="' + cbox.id + '"]');
+				var label;
+				if (this.mode == "list")
+				{
+					label = self.container.getElement('label[for="' + cbox.id + '"]');
+				}
+				else
+				{
+					label = cbox.getNext('a');
+				}
+				
 				if (label)
 					message.push(label.get('text'));
 			}
