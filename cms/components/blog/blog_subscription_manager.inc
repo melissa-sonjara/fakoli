@@ -56,7 +56,7 @@ class BlogSubscriptionManager
 		}
 		
 		$last_week = clone $today;
-		$last_week->modify("-6 days");
+		$last_week->modify("-7 days");
 	
 		$articles = Query::create(Article, "WHERE published=true AND publish_date BETWEEN :last_week AND :today")
 			->bind(":last_week", $last_week->format("Y-m-d"), ":today", $today->format("Y-m-d"))
