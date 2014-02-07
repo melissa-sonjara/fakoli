@@ -13,7 +13,7 @@ var DocumentManager =  new Class
 	
 	editDocumentDetailsDialog: function(document_id)
 	{
-		this.dialog = modalPopup('Edit Document Details', '/action/document/edit?document_id=' + document_id, '750px', 'auto', true);
+		this.dialog = modalPopup('Edit Document Details', '/action/document/edit?document_id=' + document_id, '800px', 'auto', true);
 	},
 	
 	editResult: function(result)
@@ -31,7 +31,7 @@ var DocumentManager =  new Class
 	
 	showDocumentDetailsDialog: function(document_id)
 	{
-		this.dialog = modalPopup('Document Details', '/action/document/document_details_dialog?document_id=' + document_id, '750px', 'auto', true);		
+		this.dialog = modalPopup('Document Details', '/action/document/document_details_dialog?document_id=' + document_id, '800px', 'auto', true);		
 	},
 	
 	closeEditDocumentDetails: function()
@@ -64,7 +64,7 @@ var DocumentManager =  new Class
 	
 	uploadFile: function()
 	{
-		this.dialog = modalPopup('Upload File', '/action/document/upload?document_library_id=' + this.document_library_id + '&folder_select=0', '750px', 'auto', true);
+		this.dialog = modalPopup('Upload File', '/action/document/upload?document_library_id=' + this.document_library_id + '&folder_select=0', '800px', 'auto', true);
 	},
 	
 	uploadResult: function(responseText)

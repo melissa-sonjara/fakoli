@@ -114,9 +114,10 @@ class TaxonomyManager
 		return TaxonomyManager::$bindableClasses;
 	}
 	
-	static function registerBindableClass($class, $format, $constraint = "")
+	static function registerBindableClass($class, $format, $constraint = "", $fieldRenderer = BindingTargetFieldRenderer, $facetFilter = BindingTargetFacetFilter)
 	{
-		TaxonomyManager::$bindableClasses[$class] = array("format" => $format, "constraint" => $constraint);
+		TaxonomyManager::$bindableClasses[$class] = array("format" => $format, "constraint" => $constraint, 
+														  "field_renderer" => $fieldRenderer, "facet_filter" => $facetFilter);
 	}
 	
 	static function getBindableClassOptions()
@@ -157,6 +158,18 @@ class TaxonomyManager
 		return $classes[$bindingTarget->target_class]["format"];
 	}
 	
+	static function getBindingFieldRendererClass($bindingTarget)
+	{
+		$classes = TaxonomyManager::getBindableClasses();
+		return $classes[$bindingTarget->target_class]["field_renderer"];
+	}
+	
+	static function getBindingFacetFilterClass($bindingTarget)
+	{
+		$classes = TaxonomyManager::getBindableClasses();
+		return $classes[$bindingTarget->target_class]["facet_filter"];
+	}
+		
 	static function addTaxonomyFieldRenderers($form, $showSelectAll = true, $group = null)
 	{
 		$renderers = TaxonomyManager::addBindingFieldRenderers($form, $showSelectAll, $group);
@@ -207,7 +220,9 @@ class TaxonomyManager
 			{
 				trace("## Found a match", 3);
 				
-				$renderer = new BindingFieldRenderer($form, $target);
+				$fieldRenderer = TaxonomyManager::getBindingFieldRendererClass($target);
+				
+				$renderer = new $fieldRenderer($form, $target);
 				$renderer->setSize(400, 125);
 				$renderer->resizable = true;
 				$renderer->showSelectAll = $showSelectAll;
@@ -351,7 +366,9 @@ class TaxonomyManager
 		$bindingTargets = TaxonomyManager::getBindingTargets($classes, true);
 		foreach($bindingTargets as $target)
 		{
-			$facet = $manager->addFacet($target->target_class, new BindingTargetFacetFilter($target));
+			$facetFilter = TaxonomyManager::getBindingFacetFilterClass($target);
+			
+			$facet = $manager->addFacet($target->target_class, new $facetFilter($target));
 			$facet->dropdown = $dropdown;
 			$facet->dropdownMaxWidth = $max_width;
 			$facet->width = $width;
