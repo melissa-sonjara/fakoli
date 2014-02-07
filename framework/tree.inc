@@ -376,10 +376,12 @@ class TreeControl
 		 </tr>
 		 <?
 		 }
+		 
+		 $w = $width ? $width : "100%";
 		 ?>
 		 <tr>
 		  <td>
-		   <div style="padding: 0; margin: 0; width: 100%;<? if ($this->height > 0) { ?> height: <?echo $this->height?>px;<? } ?><?if ($this->scroll) echo "overflow: auto"?>">
+		   <div style="padding: 0; margin: 0; width: <? echo $w?>;<? if ($this->height > 0) { ?> height: <?echo $this->height?>px;<? } ?><?if ($this->scroll) echo "overflow: auto"?>">
 <?
 		$this->writeNodes();
 ?>
