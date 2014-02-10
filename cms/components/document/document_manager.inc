@@ -870,6 +870,6 @@ function deleteFolderResult(result)
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("document", "show_upload_details", Boolean, true, "Include upload details on the document library view");
+		Settings::setDefaultValue("document", "show_upload_details",  true, Boolean, "Include upload details on the document library view");
 	}
 }
