@@ -22,13 +22,20 @@ class DocumentLibraryView
 	
 	function buildDocumentTable()
 	{
+		$showUploadDetails = Settings::getValue("document", "show_upload_details");
+		
+		$docWidth = $showUploadDetails ? "40%" : "80%";
+		
 		$table = new DataListView($this->mgr->documents, "document_library");
-		$table->column("Document", array($this, formatDocumentTitle), true, "width: 40%", String, null, "{title:lower}")
-		->column("Author", "{author}", true, "width: 20%")
-		->column("Uploaded By", "{Owner.first_name} {Owner.last_name}", false, "width: 20%; text-align: center")
-		->column("Last Modified", "{last_modified:short}", false, "width: 30%; text-align: center")
-		;
-			
+		$table->column("Document", array($this, formatDocumentTitle), true, "width: {$docWidth}", String, null, "{title:lower}")
+			  ->column("Author", "{author}", true, "width: 20%");
+		
+		if ($showUploadDetails)
+		{
+			$table->column("Uploaded By", "{Owner.first_name} {Owner.last_name}", false, "width: 20%; text-align: center")
+				  ->column("Last Modified", "{last_modified:short}", false, "width: 30%; text-align: center");
+		}
+		
 		$table->pageSize = 10;
 		$table->emptyMessage = "There are no matching documents";
 		$table->sortable = true;

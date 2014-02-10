@@ -867,4 +867,9 @@ function deleteFolderResult(result)
 		SerializationManager::registerHandler("document_libraries", "Document Libraries &amp; Document Records (files need to be transferred manually)", new DocumentSerializationHandler());
 		return true;
 	}
+	
+	static function setDefaults()
+	{
+		Settings::setDefaultValue("document", "show_upload_details", Boolean, true, "Include upload details on the document library view");
+	}
 }

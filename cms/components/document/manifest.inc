@@ -58,7 +58,8 @@ class DocumentManifest
 					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
 					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
 					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses),
-					"DeleteUser"			=>	array(DocumentManager, deleteUser)
+					"DeleteUser"			=>	array(DocumentManager, deleteUser),
+					"ComponentScanComplete"	=>	array(DocumentManager, setDefaults)
 		);
 	}
 	
