@@ -108,6 +108,11 @@ class QuestionField
 		return $this->parent->getAnswer($this->question);
 	}
 
+	function getSpreadsheetAnswer()
+	{
+		return $this->getAnswer();
+	}
+	
 	// Get single answer from a set of options
 	// (SelectField and Multichoice)
 	function getOptionAnswer()
@@ -449,6 +454,14 @@ class RatingView extends QuestionField
 			$answer = "{$valueAnswer} rating on scale of $steps $from &ndash; $to";
 
 		return $answer;
+	}
+	
+	function getSpreadsheetAnswer()
+	{
+		$this->getOptions($this->question->options, $from, $to, $steps);
+		$valueAnswer = $this->parent->getAnswer($this->question);
+		
+		return $valueAnswer;
 	}
 	
 	static function getOptions($options, &$from, &$to, &$steps)

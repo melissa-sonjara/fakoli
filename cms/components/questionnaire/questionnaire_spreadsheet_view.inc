@@ -87,7 +87,7 @@ class QuestionnaireSpreadsheetView
 			foreach($view->questions as $question)
 			{
 				$fields["answer_{$idx}"] = String;
-				$values["answer_{$idx}"] = $question->getAnswer();
+				$values["answer_{$idx}"] = $question->getSpreadSheetAnswer();
 				$idx++;
 			}
 			$spreadsheetResponse->fields = $fields;
