@@ -24,7 +24,8 @@ class TaxonomyUpgradeManager extends UpgradeManager
 		"1.7"	=>	"sql:Added enable_facet_filter flag to taxonomy table",
 		"1.8"	=>	"sql:Added binding_target and binding tables",
 		"1.9"	=>	"sql:Added indexes for binding table",
-		"2.0"	=>	"sql:Added binding_summary view"
+		"2.0"	=>	"sql:Added binding_summary view",
+		"2.1"	=>	"sql:Additional index on taxonomy_term_association to improve performance"
 	);
 
 	function TaxonomyUpgradeManager()

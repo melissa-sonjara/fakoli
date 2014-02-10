@@ -122,3 +122,9 @@ SELECT class, id, target_class, group_concat(cast(target_id as char(7))) as targ
 FROM binding group by target_class, id, class;
 
 -- END Version 2.0
+
+-- START Version 2.1
+
+ALTER TABLE taxonomy_term_association ADD INDEX class_idx (class ASC, id ASC, term_id ASC);
+
+-- END Version 2.1
