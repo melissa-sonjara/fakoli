@@ -126,7 +126,6 @@ class CommentManager
 	
 	static function onInitialize()
 	{
-		ComponentManager::fireEvent("RegisterCommentAdapters");
 	}
 	
 	static function upgradeComponent($version)
