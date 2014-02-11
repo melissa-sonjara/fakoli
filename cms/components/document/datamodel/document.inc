@@ -57,12 +57,18 @@ class Document extends DataItem implements Searchable
 	
 	var $relations = array(	"Topics"			=>	Topic,
 							"Owner"				=>	"",
-							"DocumentLibrary"	=>	DocumentLibrary
+							"DocumentLibrary"	=>	DocumentLibrary,
+							"Comments"			=>	Comment
 	);
 	
 	function Topics($constraint = "")
 	{
 		return $this->crossReference(Topic, DocumentTopicXref, $constraint);
+	}
+
+	function Comments($constraint = "")
+	{
+		return $this->crossReference(Comment, DocumentCommentXref, $constraint);
 	}
 
 	function Owner()
@@ -188,4 +194,54 @@ class DocumentSearchResult extends AbstractSearchResult
 	}
 }
 
+
+
+class DocumentCommentXref extends DataItem
+{
+	var $table = "document_comment_xref";
+	var $primary_key = "document_comment_id";
+	
+	var $fields = array("document_comment_id"	=>	Number,
+						"document_id"				=>	Number,
+						"comment_id"				=>	Number);
+
+	var $relations = array(	"Document"	=>	Document,
+							"Comment"	=>	Comment);
+
+	function verifyEnabled($document_id)
+	{
+		if (!$document_id) return false;
+		checkNumeric($document_id);
+		
+		try
+		{
+			$document = new Document($document_id);
+			$library = $document->DocumentLibrary();
+			return $library->allow_comments;
+		}
+		catch(DataNotFoundException $e)
+		{
+			return false;
+		}
+	}
+
+	function getURL()
+	{
+		if(!$this->document_id) return "";
+
+		$url = "document_details?document_id={$this->document_id}";
+		return $url . $this->format("#comment{comment_id}");
+	}
+
+	function Document()
+	{
+		return $this->getRelated(Document);
+	}
+
+	function Comment()
+	{
+		return $this->getRelated(Comment);
+	}
+
+}
 ?>

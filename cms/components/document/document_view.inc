@@ -66,6 +66,9 @@ class DocumentLibraryView
 			$fn = "showDocumentDetailsDialog";
 		}
 
+		$titleText = Settings::getValue("document", "link_to_details") ? "<a class='document_title' href='document_details?document_id={document_id}'>{title}</a>" :
+																		 "<span class='document_title'>{title}</span>";
+		
 		$details_link  = "<a href=\"edit_document?document_id={document_id}\" onclick=\"documentMgr.{$fn}({document_id}); return false;\"><img src=\"/fakoli/images/{$details_icon}\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";
 			
 		if(checkRole($this->library->delete_files))
@@ -73,7 +76,7 @@ class DocumentLibraryView
 			$delete_link .= "<a href=\"delete_document?document_id={document_id}\" onclick=\"documentMgr.deleteFile({document_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/icon_delete_trash.png\"></a>\n";
 		}
 		
-		return $document->format("<span class='document_title'>{title}</span><br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a>&nbsp;$size&nbsp;<span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span>");
+		return $document->format("$titleText<br/><img style='display:inline-block;vertical-align: middle' src='$icon' alt='$type'/> <a href='/action/document/download?document_id={document_id}'>Download</a>&nbsp;$size&nbsp;<span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span>");
 	}
 	
 	function writeScript()

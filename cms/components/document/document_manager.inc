@@ -858,6 +858,11 @@ function deleteFolderResult(result)
 		$mgr->upgrade($version);
 	}	
 	
+	static function registerCommentAdapter()
+	{
+		CommentManager::registerAdapter("document", Document, DocumentCommentXref);
+	}
+	
 	static function registerTaxonomyClasses($classes)
 	{
 		$classes[] = Document;
@@ -873,5 +878,6 @@ function deleteFolderResult(result)
 	static function setDefaults()
 	{
 		Settings::setDefaultValue("document", "show_upload_details",  true, Boolean, "Include upload details on the document library view");
+		Settings::setDefaultValue("document", "link_to_details", false, Boolean, "Link to the document details page for each document from the library view");
 	}
 }

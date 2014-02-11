@@ -59,7 +59,8 @@ class DocumentManifest
 					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
 					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses),
 					"DeleteUser"			=>	array(DocumentManager, deleteUser),
-					"ComponentScanComplete"	=>	array(DocumentManager, setDefaults)
+					"ComponentScanComplete"	=>	array(DocumentManager, setDefaults),
+					"RegisterCommentAdapters" 	=>	array(DocumentManager, registerCommentAdapter)
 		);
 	}
 	

@@ -56,7 +56,8 @@ class DocumentUpgradeManager extends UpgradeManager
 			"1.4"		=>	"sql:Added allow_access field to document table",
 			"1.5"		=>  "sql: Document publication date field changed type to Date",
 			"1.6"		=>	"sql:Added hidden flag to DocumentLibrary",
-			"1.7"		=>	"sql:Added allow_comments flag to DocumentLibrary"
+			"1.7"		=>	"sql:Added allow_comments flag to DocumentLibrary",
+			"1.8"		=>	"sql:Added document_comment_xref table"
 	);
 	
 	function DocumentUpgradeManager()
