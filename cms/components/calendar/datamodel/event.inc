@@ -81,7 +81,7 @@ class Event extends DataItem
 
 	function Comments($constraint = "")
 	{
-		return $this->crossReference(Event, EventCommentXref, $constraint);
+		return $this->crossReference(Comment, EventCommentXref, $constraint);
 	}
 	
 	function setOwner()
