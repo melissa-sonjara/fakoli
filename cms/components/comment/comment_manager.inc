@@ -75,6 +75,8 @@ class CommentAdapter
 
 class CommentManager
 {	
+	static $adapters = null;
+	
 	function CommentManager()
 	{
 		
@@ -124,10 +126,7 @@ class CommentManager
 	
 	static function onInitialize()
 	{
-		if (!Cache::get("comment_adapters"))
-		{
-			ComponentManager::fireEvent("RegisterCommentAdapters");
-		}
+		ComponentManager::fireEvent("RegisterCommentAdapters");
 	}
 	
 	static function upgradeComponent($version)
@@ -144,10 +143,6 @@ class CommentManager
 		$adapters = CommentManager::getAdapters();
 		$proto = $adapter->createParent();
 		$adapters[$proto->getPrimaryKey()] = $adapter;
-		
-		Cache::put("comment_adapters", $adapters);
-		
-		trace(print_r($adapters, true), 3);
 	}
 	
 	/**
@@ -172,10 +167,11 @@ class CommentManager
 	
 	static function getAdapters()
 	{
-		$adapters = Cache::get("comment_adapters");
-		if (!$adapters) $adapters = array();
-		
-		return $adapters;
+		if (!CommentManager::$adapters)
+		{
+			ComponentManager::fireEvent("RegisterCommentAdapters");
+		}
+		return CommentManager::$adapters;
 	}
 	
 	static function getAdapter()
