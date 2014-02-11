@@ -44,6 +44,15 @@
 
 Fakoli::using("login", "text_lookup");
 
+if ($user)
+{
+	$redirect = Settings::getValue("login", "default_login_redirect");
+	if ($redirect)
+	{
+		redirect($redirect);
+	}
+}
+
 //optional login text here
 echo TextLookup::getText("login_text", null, true);
 
