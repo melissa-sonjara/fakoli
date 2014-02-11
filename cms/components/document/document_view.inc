@@ -17,7 +17,11 @@ class DocumentLibraryView
 		
 		$this->facetManager = new FacetManager('facet_manager', $this->table);
 		TaxonomyManager::addFacets($this->facetManager, Document, true, "160px", "200px", "200px");
-		$this->facetManager->addFacet("Uploaded By", $this->createUploadedByFacet());
+		
+		if (Settings::getValue("document", "show_upload_details"))
+		{
+			$this->facetManager->addFacet("Uploaded By", $this->createUploadedByFacet());
+		}
 	}
 	
 	function buildDocumentTable()
