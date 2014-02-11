@@ -399,6 +399,7 @@ class LoginManager
 
 		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users");
 		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)");
+		Settings::setDefaultValue("login", "default_login_redirect", "", String, "The page to which users are redirected when they attempt to access the login page when logged in");
 	}
 	
 	static function upgradeComponent($version)
