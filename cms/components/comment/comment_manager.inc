@@ -167,10 +167,6 @@ class CommentManager
 	
 	static function getAdapters()
 	{
-		if (!CommentManager::$adapters)
-		{
-			ComponentManager::fireEvent("RegisterCommentAdapters");
-		}
 		return CommentManager::$adapters;
 	}
 	
