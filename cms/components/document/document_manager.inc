@@ -679,6 +679,8 @@ function deleteFolderResult(result)
 		$form = new AutoForm($library);
 		$form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delete_files", "create_date");
 		$form->required("name", "identifier");
+		$form->annotate("allow_comments", "Allow users to comment on documents from the document details page (if commenting is enabled).");
+		
 		$form->allowDelete = true;
 		$form->onDelete = deleteDocumentLibary;
 		

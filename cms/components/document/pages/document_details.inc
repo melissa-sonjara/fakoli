@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("document", "taxonomy");
+Fakoli::using("document", "taxonomy", "comment");
 Fakoli::usingFeature("auto_form");
 
 $document_id = checkNumeric($_GET["document_id"]);
@@ -70,5 +70,10 @@ TaxonomyManager::addTaxonomyFieldRenderers($form);
 $script .= $form->writeScript();
 
 $form->drawForm();
+
+if($library->allow_comments)
+{
+	CommentView::addCommentPanel();
+}
 
 ?>

@@ -114,3 +114,9 @@ ALTER TABLE `document` MODIFY COLUMN `publication_date` DATE NOT NULL DEFAULT '0
 ALTER TABLE document_library ADD COLUMN hidden TINYINT(3) NOT NULL DEFAULT 0;
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE document_library ADD COLUMN allow_comments TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.7
