@@ -140,7 +140,7 @@ class CommentManager
 		trace("Registering CommentAdapter for $component", 3);
 		$adapter = new CommentAdapter($component, $parentClass, $xrefClass);		
 		$proto = $adapter->createParent();
-		CommentManager:$adapters[$proto->getPrimaryKey()] = $adapter;
+		CommentManager::$adapters[$proto->getPrimaryKey()] = $adapter;
 	}
 	
 	/**
