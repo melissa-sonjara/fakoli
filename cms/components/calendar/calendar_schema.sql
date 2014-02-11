@@ -138,3 +138,14 @@ ALTER TABLE `event` ADD INDEX `owner_idx` (`owner_id`);
 ALTER TABLE `event` ADD INDEX `calendar_idx` (`calendar_id`);
 
 -- END Version 1.7
+
+-- START Version 1.8
+
+CREATE TABLE event_comment_xref (
+  event_comment_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  event_id int(10) unsigned DEFAULT NULL,
+  comment_id int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (event_comment_id)
+) ENGINE=InnoDB;
+
+-- END Version 1.8

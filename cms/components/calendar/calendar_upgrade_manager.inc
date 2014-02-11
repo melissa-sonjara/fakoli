@@ -57,6 +57,7 @@ class CalendarUpgradeManager extends UpgradeManager
 			"1.5"		=>	"sql:Add time_zone table and US time zone data; add field time_zone_id to event table",
 			"1.6"		=>	"sql:Add column owner_id to event table",
 			"1.7"		=>	"sql:Add indexes",
+			"1.8"		=>	"sql:Added event_comment_xref table"
 	);
 	
 	function CalendarUpgradeManager()

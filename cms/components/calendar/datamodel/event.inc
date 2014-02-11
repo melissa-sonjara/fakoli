@@ -59,6 +59,7 @@ class Event extends DataItem
 			"Calendar"		=>	Calendar,
 			"Invitation"	=>	EventInvitation,
 			"TimeZone"		=>	TimeZone,
+			"Comments"		=>	Comment,
 			"Owner"			=>	"", 		// person who created the event
 				);
 
@@ -76,6 +77,11 @@ class Event extends DataItem
 	{
 		$mgr = new UserManager();
 		return $mgr->getUser($this->owner_id);
+	}
+
+	function Comments($constraint = "")
+	{
+		return $this->crossReference(Event, EventCommentXref, $constraint);
 	}
 	
 	function setOwner()
@@ -148,4 +154,43 @@ class EventSiteXref extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
+
+
+class EventCommentXref extends DataItem
+{
+	var $table = "event_comment_xref";
+	var $primary_key = "event_comment_id";
+
+	var $fields = array("event_comment_id"	=>	Number,
+						"event_id"			=>	Number,
+						"comment_id"		=>	Number);
+
+	var $relations = array(	"Event"	=>	Event,
+							"Comment"	=>	Comment);
+
+	function verifyEnabled($event_id)
+	{
+		return Settings::getValue("calendar", "allow_comments");
+	}
+
+	function getURL()
+	{
+		if(!$this->event_id) return "";
+
+		$url = "event_details?event_id={$this->event_id}";
+		return $url . $this->format("#comment{comment_id}");
+	}
+
+	function Event()
+	{
+		return $this->getRelated(Event);
+	}
+
+	function Comment()
+	{
+		return $this->getRelated(Comment);
+	}
+
+}
+
 ?>

@@ -95,6 +95,7 @@ class CalendarManifest
 					 "RegisterTaxonomyClasses"	=>	array(CalendarManager, registerTaxonomyClasses),
 					 "ComponentScanComplete" => array(CalendarManager, setDefaults),
 					"DeleteUser"			=>	array(CalendarManager, deleteUser),
+					"RegisterCommentAdapters" 	=>	array(CalendarManager, registerCommentAdapter)
 		);
 	}
 }

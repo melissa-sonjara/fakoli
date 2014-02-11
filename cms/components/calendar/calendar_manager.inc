@@ -124,7 +124,11 @@ class CalendarManager
 		$classes[] = Event;
 		return $classes;
 	}
-	
+
+	static function registerCommentAdapter()
+	{
+		CommentManager::registerAdapter("calendar", Event, EventCommentXref);
+	}
 	
 	/**
 	 * params to setDefaultValue: component, name, value, field_type, annotation, category, options
@@ -135,6 +139,7 @@ class CalendarManager
 		// There does not seem to be any use in a "view_events" since this would be controlled by 
 		// page role and menu role access to the calendar pages.
 		Settings::setDefaultPermission("calendar", "edit_events", "Add or Edit Events", "admin");
+		Settings::setDefaultValue("calendar", "allow_comments", false, Boolean, "Allow users to comment on events");
 	}
 }
 
