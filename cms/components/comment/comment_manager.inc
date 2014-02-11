@@ -146,6 +146,8 @@ class CommentManager
 		$adapters[$proto->getPrimaryKey()] = $adapter;
 		
 		Cache::put("comment_adapters", $adapters);
+		
+		trace(print_r($adapters, true), 3);
 	}
 	
 	/**
