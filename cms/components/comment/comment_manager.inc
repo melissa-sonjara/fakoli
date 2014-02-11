@@ -165,6 +165,10 @@ class CommentManager
 	
 	static function getAdapters()
 	{
+		if (count(CommentManager::$adapters) == 0)
+		{
+			ComponentManager::fireEvent("RegisterCommentAdapters");
+		}
 		return CommentManager::$adapters;
 	}
 	
