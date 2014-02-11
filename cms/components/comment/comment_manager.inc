@@ -180,6 +180,8 @@ class CommentManager
 	{
 		$adapters = CommentManager::getAdapters();
 		
+		trace(print_r($adapters, true), 3);
+		
 		foreach($_GET as $key => $value)
 		{
 			if (array_key_exists($key, $adapters))
