@@ -289,7 +289,10 @@ class WCCache
 	
 	function get($key)
 	{
-		return unserialize(wincache_ucache_get($key));
+		$value = wincache_ucache_get($key, $success);
+		if (!$success) return null;
+		
+		return unserialize($value);
 	}
 	
 	function put($key, $obj, $ttl = 0)
