@@ -31,7 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("comment", "email", "captcha");
+Fakoli::using("comment", "email", "captcha", "rating");
 Fakoli::usingFeature("auto_form", "paged_list");
 
 /*
@@ -176,6 +176,11 @@ class CommentView
 
 	function drawView()
 	{
+		if (Settings::getValue("comment", "enable_item_rating"))
+		{
+			RatingManager::drawRatingWidget($this->obj);
+		}
+			
 		echo "<h3>{$this->title}</h3>\n";
 		if(count($this->list->items) > 0)
 		$this->list->drawList();
