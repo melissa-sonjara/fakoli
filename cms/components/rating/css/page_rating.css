@@ -1,0 +1,10 @@
+#page_rating_widget {
+  display: block;
+  float: right;
+  width: auto;
+}
+
+.page_rating_title {
+  display: inline-block;
+  margin: 2px 4px 0;
+}
