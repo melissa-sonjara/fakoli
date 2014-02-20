@@ -32,6 +32,6 @@ GROUP BY url;
 -- START Version 1.1
 
 ALTER TABLE rating 
-ADD INDEX url_idx (url ASC, user_id ASC);
+ADD INDEX url_idx (url(200) ASC, user_id ASC);
 
 -- END Version 1.1
