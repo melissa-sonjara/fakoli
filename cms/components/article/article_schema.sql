@@ -76,3 +76,9 @@ UPDATE `article` SET `publish_date`=`created_date`;
 ALTER TABLE `article` ADD COLUMN `publication` VARCHAR(200) AFTER `author`;
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE article ADD COLUMN post_date DATE DEFAULT NULL;
+
+-- END Version 1.4

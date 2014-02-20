@@ -45,6 +45,7 @@ class Article extends DataItem implements Searchable
 						"image_id"		=>	Number,
 						"teaser"		=>	HTML,
 						"created_date"	=>	Date,
+						"post_date"		=>	Date,
 						"archive_date"  =>  Date,
 						"publish_date"  =>  Date,
 						"last_modified"	=>	Timestamp,
@@ -161,6 +162,21 @@ class Article extends DataItem implements Searchable
 		{
 			return "article_view";
 		}
+	}
+	
+	function formatPostDate()
+	{
+		if ($this->post_date)
+		{
+			return $this->format("{post_date:daylong}");
+		}
+		
+		if ($this->publish_date)
+		{
+			return $this->format("{publish_date:daylong}");
+		}
+		
+		return $this->format("{created_date:daylong}");
 	}
 	
 	function Article()

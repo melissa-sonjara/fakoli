@@ -135,7 +135,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		if ($article->teaser) $out .= $article->teaser;
 		$out .= "<div class='blog_timestamp'>";
-		$out .= "By " . $article->author . ", posted on " . $article->publish_date;
+		$out .= "By " . $article->author . ", posted on " . $article->formatPostDate();
 		$out .= "</div>";
 		$out .= "</div>";
 		return $out;
@@ -149,7 +149,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		echo $article->message;
 		echo "<div class='blog_timestamp'>";
-		echo "By " . $article->author . ", posted on " . $article->publish_date;
+		echo "By " . $article->author . ", posted on " .$article->formatPostDate();
 		echo "</div>";
 		if ($article->tags)
 		{
@@ -229,7 +229,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		
 		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
 		$out .= "{$article->title}</a></h4>";
-		$out .= $article->format("<strong>{publish_date:daylong}</strong>");
+		$out .= $article->format("<strong>{formatPostDate()}</strong>");
 		if ($article->teaser) $out .= " - ".$article->teaser;
 		$out .= "<br/><a href='{$this->blog->identifier}?article_id={$article->article_id}'>Read More &raquo;</a></div>";
 		return $out;

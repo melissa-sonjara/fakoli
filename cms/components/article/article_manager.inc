@@ -28,6 +28,10 @@ class ArticleManager
 		$articleTypeSelect = new SelectFieldRenderer($form, "article_type", "Article Type", Blog::getArticleTypeOptions());
 		//$articleTypeSelect->allowAddEntry();
 
+		$form->annotate("post_date", "The date that will be displayed in the article's tagline.");
+		$form->annotate("publish_date", "The date the article will be published on the site.");
+		$form->annotate("archive_date", "The date the article will be archived from the site.");
+		
 		$form->getRenderer("message")->height = "480px";
 		$form->getRenderer("teaser")->height = "120px";
 		
