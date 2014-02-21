@@ -44,6 +44,9 @@ $form = new AutoForm($role);
 $redirect = "/admin/roles";
 $form->unique("role", "That role has already been defined");
 $form->required("role", "name");
+$form->annotate("role", "The identifier for the role, used by the application code when determining access to features.");
+$form->annotate("name", "The display name for the role (shown in forms and tables).");
+
 $form->allowDelete = true;
 $form->onDelete = deleteRole;
 
