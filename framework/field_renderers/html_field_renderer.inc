@@ -97,8 +97,23 @@ class HTMLFieldRenderer extends FieldRenderer
 	<script type='text/javascript'>
 		tinymce.init(
 		{
-			width: '<?echo $this->width?>',
-			height: '<?echo $this->height?>',
+<?
+			if (endsWith($this->width, "px"))
+			{
+				$w = substr($this->width, 0, -2);
+?>
+			width: <?echo $w?>,
+<?
+			}
+			
+			if (endsWith($this->height, "px"))
+			{
+				$h = substr($this->height, 0, -2);
+?>
+			height: <?echo $h?>,
+<?
+			}
+?>
 			valid_elements: '*[*]',
 			selector: '#<?echo "{$this->parent->id}_{$field}"?>',
 			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace,fullscreen',
