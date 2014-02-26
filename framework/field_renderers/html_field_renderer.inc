@@ -180,7 +180,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 
-		echo "<textarea id='{$this->parent->id}_{$field}' name='{$field}' class='richtext'>".htmlSafe($this->parent->data->get($field))."</textarea>\n";
+		echo "<textarea id='{$this->parent->id}_{$field}' name='{$field}' style='width: {$this->width}; height: {$this->height}' class='richtext'>".htmlSafe($this->parent->data->get($field))."</textarea>\n";
 		
 		$this->_endField($field);
 	}
