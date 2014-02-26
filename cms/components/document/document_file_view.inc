@@ -19,12 +19,12 @@ class DocumentFileView
 		<script type="text/javascript">
 		function editFile(id)
 		{
-			modalPopup("Edit Document Properties",  "/action/document/edit?document_id=" + id, 850);
+			modalPopup("Edit Document Properties",  "/action/document/edit?document_id=" + id, 900);
 		}
 		
 		function addFile()
 		{
-			modalPopup("Add a New Document", "/action/document/upload?document_library_id=<?echo $this->library->document_library_id?>", 850);
+			modalPopup("Add a New Document", "/action/document/upload?document_library_id=<?echo $this->library->document_library_id?>", 900);
 		}
 		
 		function editResult(result)
@@ -35,7 +35,7 @@ class DocumentFileView
 			}
 			else
 			{
-				$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+				document.id('Document_form__error').set({'text': result, 'display': 'table-cell'});
 			}
 		}
 		
@@ -47,7 +47,7 @@ class DocumentFileView
 			}
 			else
 			{
-				$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+				document.id('Document_form__error').set({'text': result, 'display': 'table-cell'});
 			}
 		}
 		</script>
