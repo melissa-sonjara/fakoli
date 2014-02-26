@@ -100,7 +100,7 @@ class DocumentManager
 		
 		ob_start();
 ?>
-<div class="dialog" id="documentManagerDlg" style="width: 740px">
+<div class="dialog" id="documentManagerDlg" style="width: 760px">
  <div class="dialog_header" id="documentManagerDlgHeader">
   <div style="padding: 4px;">
    <div style="float: right">&nbsp;<a id='closeDocumentManagerDlg' href="javascript:docManagerDlg.hide();">Close &times;</a></div>
