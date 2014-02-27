@@ -43,7 +43,7 @@ class DocumentLibraryView
 		$table->pageSize = 10;
 		$table->emptyMessage = "There are no matching documents";
 		$table->sortable = true;
-		$table->filter = false;
+		$table->filter = Settings::getValue("document", "show_table_filter");
 		
 		$table->writeIdTag = true;
 		

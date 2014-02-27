@@ -879,5 +879,6 @@ function deleteFolderResult(result)
 	{
 		Settings::setDefaultValue("document", "show_upload_details",  true, Boolean, "Include upload details on the document library view");
 		Settings::setDefaultValue("document", "link_to_details", false, Boolean, "Link to the document details page for each document from the library view");
+		Settings::setDefaultValue("document", "show_table_filter", false, Boolean, "Show the generic column filter controls for the document table view");
 	}
 }
