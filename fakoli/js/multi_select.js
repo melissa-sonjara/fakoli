@@ -119,7 +119,7 @@ var MultiSelect = new Class(
 				if (label)
 					message.push(label.get('text'));
 			}
-		});
+		}.bind(this));
 
 		if (message.length == 0)
 		{
