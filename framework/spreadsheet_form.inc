@@ -40,35 +40,46 @@ require_once realpath(dirname(__FILE__)."/composite_auto_form.inc");
  * where each row is a subform containing one dataitem
  * object's field renderers.
  * 
- * @param subform - an instance of AutoForm containing
- * the target DataItem object. The target should have 
- * the filters set as desired and those filters will
- * apply to all objects displayed in the spreadsheet.
- * The "template" form should have any field aliases,
- * hidden fields, and any other options set. The
- * template form will be used for all the items displayed. 
- * 
- * @param items - array of dataitem objects to be
- * displayed in an editable table row. If you wish 
- * to display only empty rows, send an empty array.
- *  
- * @param blanks - the number of blank rows desired,
- * 0 if only previously saved dataitem objects supplied
- * in the items array will be displayed.
  *   
  */
 class SpreadsheetForm extends CompositeAutoForm
 {	
 	var $colCount = 0;
-	var $subform;
-	var $columnWidths = array();
+	var $subform;	///< The prototype subform used to model each row in the spreadsheet.
+	var $columnWidths = array(); ///< Array of column widths, used to control relative cell sizes in the table output.
 	var $msg;		///< Text to appear below buttons at top and above table
 	var $onStartRow; ///< Callback hook to determine row style or suppression of row.
 	var $isRowSelected;  ///< Callback hook to determine whether a given row is selected. Assigning a callback to this hook turns on selection mode. Only selected sub-forms are saved.
 	var $rowLabelFormat = null;
 	var $rowLabelTitle = null;
 	var $rowLabelDefaultText = "";
+	var $emptyMessage = "The spreadsheet is empty"; ///< The message to display if the item list is empty and the number of blank rows is set to zero
 	
+	/**
+	 * Creates a new SpreadsheetForm
+	
+	 * @param AutoForm $subform an instance of AutoForm containing
+	 * the target DataItem object. The target should have 
+	 * the filters set as desired and those filters will
+	 * apply to all objects displayed in the spreadsheet.
+	 * The "template" form should have any field aliases,
+	 * hidden fields, and any other options set. The
+	 * template form will be used for all the items displayed. 
+	 * 
+	 * @param array $items array of dataitem objects to be
+	 * displayed in an editable table row. If you wish 
+	 * to display only empty rows, send an empty array.
+	
+	 * @param number $blanks the number of blank rows desired,
+	 * 0 if only previously saved dataitem objects supplied
+	 * in the items array will be displayed.
+	 * 
+	 * @param string $method the form submission method (i.e. GET or POST)
+	 * @param string $action the target action URI (leave blank for default post-back processing)
+	 * @param string $id the DOM id for the spreadsheet 
+	 * @param string $onStartRow callback to be called before generating each row
+	 * @param string $isRowSelected callback to determine the selection status for each row
+	 */
 	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null, $isRowSelected = null)
 	{
 		$this->subform = $subform;
@@ -187,14 +198,18 @@ class SpreadsheetForm extends CompositeAutoForm
 		$this->columnWidths[$field] = $width;
 	}
 
-	/*
-	 * Draw the table headings using the labels set by the
-	 * renderers in the template form. 
-	 * 
-	 * Draw each form (row).
+	/**
+	 * Draws the spreadsheet. Each row is a subordinate form instance with the renderers 
+	 * cloned from the prototype row form supplied in the constructor.
 	 */
 	function drawForm()
 	{	
+		if (!count($this->forms))
+		{
+			echo $this->emptyMessage;
+			return;
+		}
+		
 		$id = $this->id ? $this->id : "composite_auto_form";
 			
 		echo "<form id='$id' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
