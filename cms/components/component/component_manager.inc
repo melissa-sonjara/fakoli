@@ -100,7 +100,7 @@ class ComponentManager
 			    		
 			    		$manifest = new $cl;
 			    		$component = $manifest->getComponentDefinition();
-			    		$component->component_path = $f;
+			    		$component->component_path = sanitizePath($f);
 			    		$component->joinTransaction($this->tx);
 			    		$component->save();
 			    		
