@@ -234,6 +234,8 @@ interface IDataSyncHelper
 		$isChunked = Settings::getValue("data_sync", "import_in_chunks");
 		$counter = Settings::getValue("data_sync", "records_per_page");
 		
+		$lastItem = null;
+		
 		while($record = fgetcsv($fp))
 		{	
 			if ($isChunked && $counter <= 0) break;
@@ -273,13 +275,18 @@ interface IDataSyncHelper
 				$separator = ($item->fields[$field] == Text) ? "\n" : " ";
 	
 				$value = trim(implode($separator, $vals));
+
+				if (!$value && $mapping->grouping && $lastItem)
+				{
+					$value = $lastItem->get($field);
+				}
 				
 				if (!$value && $mapping->required)
 				{
 					$skip = true;
 					break;
 				}
-				
+
 				$item->set($field, $value);
 			}
 			
@@ -297,6 +304,7 @@ interface IDataSyncHelper
 				}
 											
 				$items[] = $item;
+				$lastItem = $item;
 			}
 			
 			$counter--;

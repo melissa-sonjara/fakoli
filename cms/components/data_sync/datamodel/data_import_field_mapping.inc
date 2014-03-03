@@ -9,6 +9,7 @@ class DataImportFieldMapping extends DataItem
 						"client_field"	=>	String,
 						"import_column"	=>	String,
 						"matching"		=>	Boolean,
-						"required"		=>	Boolean);
+						"required"		=>	Boolean,
+						"grouping"		=>	Boolean);
 	
 }

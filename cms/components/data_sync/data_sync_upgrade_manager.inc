@@ -15,7 +15,8 @@ class DataSyncUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 		"1.0"	=>	"sql:Added data_import_field_mapping table",
-		"1.1"	=>	"sql:Added required column to data_import_field_mapping"
+		"1.1"	=>	"sql:Added required column to data_import_field_mapping",
+		"1.2"	=>	"sql:Added grouping column to data_import_field_mapping"
 	);
 
 	function DataSyncUpgradeManager()
