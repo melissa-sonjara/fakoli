@@ -967,13 +967,16 @@ warning
 
 
 /* box border under tab bar */
-#tab_border {
+#tab_border, .tab_border
+{
 	clear: left;
 	border: solid 1px #322E69; 
 	padding-left: 4px;
 	padding-right: 4px;
 	padding-top: 10px;
 	padding-bottom: 4px;
+	background-color: #fff;
+	border-radius: 0;
 }
 
 #error_report
@@ -1127,4 +1130,12 @@ legend a:link, legend a:visited {
 }
 body.firefox4 legend, body.firefox5 legend, body.firefox6 legend, body.firefox7 legend, body.firefox8 legend, body.firefox9 legend {
     top: -35px;
+}
+
+table.small label, table.small input, table.small select, table.small textarea {
+  font-size: 8pt;
+}
+
+table.spreadsheet td {
+  white-space: nowrap;
 }

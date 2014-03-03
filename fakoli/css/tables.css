@@ -404,3 +404,8 @@ tr.dragRow
 {
 	box-shadow: 1px 1px 15px #666;
 }	
+
+table.spreadsheet td 
+{
+  white-space: nowrap;
+}
