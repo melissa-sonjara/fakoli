@@ -2,6 +2,8 @@
 Fakoli::using("data_sync");
 Fakoli::usingFeature("spreadsheet_form");
 
+$menu_item = "Data Import";
+
 DataSyncManager::getSyncTargets();
 
 $class = $_SESSION["data_import_class"];
@@ -15,6 +17,7 @@ $mappedFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND impor
 					 ->execute();
 
 $filter = new InclusionFilter();
+$filter->add($obj->primary_key);
 foreach($mappedFields as $field)
 {
 	$filter->add($field->client_field);
@@ -23,10 +26,11 @@ foreach($mappedFields as $field)
 
 $obj->filter = $filter;
 
-$page->page_title = "Select $name to Import";
+$page_title = "Select $name to Import";
 
 $items = DataSyncManager::createImportItems($class);
 
+trace("Mapping ".count($items)." items", 3);
 $form = new AutoForm($obj);
 
 if (is_array($obj->spreadsheetFieldSizes))
@@ -39,22 +43,20 @@ if (is_array($obj->spreadsheetFieldSizes))
 
 DataSyncManager::extendForm($form);
 
-/*
-$form->getRenderer("telephone")->size = 15;
-$form->getRenderer("alt_phone")->size = 15;
-$form->getRenderer("email_address")->size = 25;
-$form->getRenderer("contact_name")->size = 25;
-$form->getRenderer("client")->size = 30;
 
-
-$externalRefAlias = Settings::getValue("griot_settings", "external_reference_alias");
-$form->alias("external_reference", $externalRefAlias);
-*/
+$isChunked = Settings::getValue("data_sync", "import_in_chunks") ? "true" : "false";
+$pageSize = Settings::getValue("data_sync", "records_per_page");
+$totalRecords = DataSyncManager::countRecords();
+$offset = checkNumeric($_GET["offset"]);
+if ($offset == '') $offset = 0;
+if ($pageSize == '') $pageSize = 0;
+if ($totalRecords == '') $totalRecords = 0;
 
 $spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array(DataSyncManager, onItemRow), array(DataSyncManager, isRowSelected));
 $spreadsheet->formCSS = "list spreadsheet small";
 
 $spreadsheet->submitLabel = "Import $name";
+$spreadsheet->emptyMessage = "<strong>No valid records were found in the import file</strong>";
 
 $tabs = DataSyncManager::getImportTabs();
 
@@ -62,7 +64,14 @@ if ($method == "POST")
 {
 	if ($spreadsheet->save())
 	{
-		$tabs->next();
+		Fakoli::notify("Records imported");
+
+		$spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array(DataSyncManager, onItemRow), array(DataSyncManager, isRowSelected));
+		$spreadsheet->formCSS = "list spreadsheet small";
+		
+		$spreadsheet->submitLabel = "Import $name";
+		$spreadsheet->emptyMessage = "<strong>No valid records were found in the import file</strong>";
+		
 	}
 }
 
@@ -74,15 +83,22 @@ var syncManager;
 		
 window.addEvent('domready', function()
 {
-	syncManager = new DataSyncManager('{$spreadsheet->id}', 'sync_controls');
+	syncManager = new DataSyncManager('{$spreadsheet->id}', 'sync_controls', {chunked: $isChunked, offset: $offset, pageSize: $pageSize, totalRecords: $totalRecords});
 });
 </script>
 ENDSCRIPT;
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div class="tab_border">
+<?
+if (count($spreadsheet->forms))
+{
+?>
 <div id="sync_controls"></div>
+<?
+}
+?>
 <div style='margin-top: 10px; width: 100%; overflow-y: auto'>
 <?
 $spreadsheet->drawForm();

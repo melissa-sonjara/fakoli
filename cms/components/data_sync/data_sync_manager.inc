@@ -1,6 +1,10 @@
 <?php
 
-
+/**
+ * IDataSyncHelper defines the interface that application should implement
+ * when providing sync helpers to handle specific import logic.
+ * @author andy
+ */
 interface IDataSyncHelper
 {
 	function getAdditionalColumns($columns);
@@ -28,7 +32,8 @@ interface IDataSyncHelper
 	
 	static function setDefaults()
 	{
-		//TODO: Set default configuration parameters here
+		Settings::setDefaultValue("data_sync", "import_in_chunks", false, Boolean, "Specifies whether to limit the number of records being imported at one time.");
+		Settings::setDefaultValue("data_sync", "records_per_page", 500, Number, "The number of records to import at one time when chunked import is enabled.");
 	}
 
 	
@@ -62,7 +67,40 @@ interface IDataSyncHelper
 	
 	}
 	
-	function getImportColumns($class, $file = "")
+	static function countRecords($file = "")
+	{
+		if (!$file)
+		{
+			$file = $_SESSION["data_import_file"];
+		}
+		
+		$fp = fopen($file, "r");
+
+		$counter = -1;
+		while(fgetcsv($fp))
+		{
+			$counter++;
+		}
+		
+		fclose($fp);
+		
+		return $counter;
+	}
+	
+	static function skipToOffset($fp, $offset = -1)
+	{
+		if ($offset == -1)
+		{
+			$offset = checkNumeric($_GET["offset"]);
+		}
+		
+		while($offset-- > 0)
+		{
+			fgetcsv($fp);
+		}
+	}
+	
+	static function getImportColumns($class, $file = "")
 	{
 		ComponentManager::fireEvent("RegisterSyncHelpers");
 		
@@ -93,7 +131,7 @@ interface IDataSyncHelper
 		return $columns;
 	}
 
-	function extendForm($form)
+	static function extendForm($form)
 	{
 		$class = get_class($form->data);
 		if (array_key_exists($class, DataSyncManager::$helpers))
@@ -103,7 +141,7 @@ interface IDataSyncHelper
 		}
 	}
 	
-	function getFieldMappings($class)
+	static function getFieldMappings($class)
 	{
 		DataSyncManager::getSyncTargets();
 		
@@ -137,7 +175,6 @@ interface IDataSyncHelper
 		return $fieldMappings;
 	}
 	
-
 	static function createImportItems($class, $file = "")
 	{
 		global $user;
@@ -148,8 +185,6 @@ interface IDataSyncHelper
 		{
 			$helper = DataSyncManager::$helpers[$class];
 		}
-		
-		trace("HELPER ".print_r($helper, true), 3);
 		
 		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl and matching=1")
 							   ->bind(":cl", $class)
@@ -195,8 +230,14 @@ interface IDataSyncHelper
 			$columns[] = $field;
 		}
 	
+		DataSyncManager::skipToOffset($fp);
+		$isChunked = Settings::getValue("data_sync", "import_in_chunks");
+		$counter = Settings::getValue("data_sync", "records_per_page");
+		
 		while($record = fgetcsv($fp))
-		{
+		{	
+			if ($isChunked && $counter <= 0) break;
+			
 			$record = array_combine($columns, $record);
 			
 			if ($helper)
@@ -241,7 +282,7 @@ interface IDataSyncHelper
 				
 				$item->set($field, $value);
 			}
-				
+			
 			if (!$skip) 
 			{
 				if ($item->hasField("owner_id")) $item->set("owner_id", $user->person_id);	
@@ -257,6 +298,8 @@ interface IDataSyncHelper
 											
 				$items[] = $item;
 			}
+			
+			$counter--;
 		}
 	
 		fclose($fp);
@@ -284,6 +327,11 @@ interface IDataSyncHelper
 		foreach($targets as $component => $classes)
 		{
 			Fakoli::using($component);
+			if (!is_array($classes))
+			{
+				$syncTargets[] = $classes;
+			}
+			
 			foreach($classes as $class)
 			{
 				$syncTargets[] = $class;

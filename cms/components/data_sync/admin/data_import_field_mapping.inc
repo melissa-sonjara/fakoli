@@ -42,7 +42,7 @@ $script .= $spreadsheet->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div class="tab_border">
 <?
 $spreadsheet->drawForm();
 ?>

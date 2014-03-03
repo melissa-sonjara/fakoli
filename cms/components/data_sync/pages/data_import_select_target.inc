@@ -1,6 +1,8 @@
 <?php
 Fakoli::using("data_sync");
 
+$menu_item = "Data Import";
+
 $targets = DataSyncManager::getSyncTargets();
 
 $options = array();
@@ -16,7 +18,7 @@ foreach($targets as $target)
 $dummy = new DataImportFieldMapping();
 $dummy->filter = new InclusionFilter("mapping_id");
 
-$page->page_title = "Select Data Type for Import";
+$page_title = "Select Data Type for Import";
 
 $form = new AutoForm($dummy);
 
@@ -39,7 +41,7 @@ $script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div style="clear:left; border: solid 1px #000; width: 100%; margin: 0; padding: 4px;">
+<div class="tab_border">
 <?
 $form->drawForm();
 ?>
