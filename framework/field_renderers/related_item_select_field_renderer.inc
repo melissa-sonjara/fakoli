@@ -57,6 +57,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $onChange;
 	var $width;
 	
+	static $optionsCache = array();
+	
 /**
  * Create drop down list of item names in one table based on the key
  * stored in another.
@@ -272,7 +274,18 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 
 	function getRelatedItems()
 	{
-		$this->items = query($this->relatedClass, $this->constraint);
+		$cacheKey = "$this->relatedClass, $this->constraint";
+		
+		if (array_key_exists($cacheKey, RelatedItemSelectFieldRenderer::$optionsCache))
+		{
+			$this->items = RelatedItemSelectFieldRenderer::$optionsCache[$cacheKey];
+		}
+		else
+		{
+			$this->items = query($this->relatedClass, $this->constraint);
+			RelatedItemSelectFieldRenderer::$optionsCache[$cacheKey] = $this->items;
+		}
+		
 		if ($this->allowNone)
 		{
 			$none = new $this->relatedClass;
