@@ -8,4 +8,6 @@ if ($class)
 	$doomed->delete("WHERE class='$class'");
 }
 
-redirect("/admin/data_import_field_mapping");
+$redirect = $_SERVER["HTTP_REFERER"];
+if (!$redirect) $redirect = "/admin/data_import_field_mapping";
+redirect($redirect);
