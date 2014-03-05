@@ -46,7 +46,8 @@ DataSyncManager::extendForm($form);
 
 $isChunked = Settings::getValue("data_sync", "import_in_chunks") ? "true" : "false";
 $pageSize = Settings::getValue("data_sync", "records_per_page");
-$totalRecords = DataSyncManager::countRecords();
+$totalRecords = DataSyncManager::$totalRecords;
+
 $offset = checkNumeric($_GET["offset"]);
 if ($offset == '') $offset = 0;
 if ($pageSize == '') $pageSize = 0;

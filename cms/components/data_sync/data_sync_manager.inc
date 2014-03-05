@@ -20,6 +20,7 @@ interface IDataSyncHelper
  class DataSyncManager
 {
 	static $helpers = null;
+	static $totalRecords = 0;
 	
 	function DataSyncManager()
 	{
@@ -230,16 +231,15 @@ interface IDataSyncHelper
 			$columns[] = $field;
 		}
 	
-		DataSyncManager::skipToOffset($fp);
+		//DataSyncManager::skipToOffset($fp);
 		$isChunked = Settings::getValue("data_sync", "import_in_chunks");
 		$counter = Settings::getValue("data_sync", "records_per_page");
+		$offset = $isChunked ? checkNumeric($_GET["offset"]) : 0;
 		
 		$lastItem = null;
 		
 		while($record = fgetcsv($fp))
 		{	
-			if ($isChunked && $counter <= 0) break;
-			
 			$record = array_combine($columns, $record);
 			
 			if ($helper)
@@ -292,6 +292,19 @@ interface IDataSyncHelper
 			
 			if (!$skip) 
 			{
+				DataSyncManager::$totalRecords++;
+				
+				if ($isChunked && $offset > 0)
+				{
+					$offset--;
+					continue;
+				}
+				
+				if ($counter <= 0)
+				{
+					continue;
+				}
+				
 				if ($item->hasField("owner_id")) $item->set("owner_id", $user->person_id);	
 				
 				if ($matchingFormat)
@@ -305,9 +318,9 @@ interface IDataSyncHelper
 											
 				$items[] = $item;
 				$lastItem = $item;
+				$counter--;
 			}
 			
-			$counter--;
 		}
 	
 		fclose($fp);
