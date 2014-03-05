@@ -824,9 +824,9 @@ var ProgressiveSearch = new Class({
 		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'max-height': this.options.height, 'display': 'block'});
 	},
 	
-	hideList: function()
+	hideList: function(override)
 	{
-		if (!this.allowHide) return;
+		if (!this.allowHide && !override) return;
 		
 		this.list.setStyle('display', 'none');
 	},
