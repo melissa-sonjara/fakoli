@@ -41,7 +41,9 @@ class SiteRole extends DataItem
 	var $fields = array("role_id"		=>	Number,
 						"role"			=>	String,
 						"name"			=>	String,
-						"description"	=>	Text);
+						"description"	=>	Text,
+						"priority"		=>	Number,
+						"home_page"		=>	String);
 	
 	
 	// Relations
@@ -67,7 +69,7 @@ class SiteRole extends DataItem
 	 */
 	static function getRolesArray()
 	{
-		$roles = query(SiteRole, "WHERE role!='super' ORDER BY name");
+		$roles = query(SiteRole, "WHERE role!='super' ORDER BY priority, name");
 		
 		$rarr = array();
 		
@@ -85,6 +87,22 @@ class SiteRole extends DataItem
 		$names = query(SiteRole, "WHERE role='$role'");
 		if(count($names) > 0)
 			return $names[0];
+	}
+	
+	static function getRoleLookup()
+	{
+		return IndexedQuery::create(SiteRole, "ORDER by priority, name", "role")->execute();
+	}
+	
+	static function getHomePage()
+	{
+		$roles = SiteRole::getRoleLookup();
+		foreach($roles as $role => $details)
+		{
+			if (checkRole($role)) return $details->home_page;
+		}
+		
+		return "";
 	}
 	
 	/*

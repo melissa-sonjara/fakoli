@@ -31,8 +31,8 @@
 
 *****************************************************************/
 
-Fakoli::using("role");
-Fakoli::usingFile("framework/auto_form.inc");
+Fakoli::using("role", "field_renderers");
+Fakoli::usingFeature("auto_form");
 Fakoli::assertRole("admin");
 
 $menu_item = "Roles";
@@ -46,6 +46,9 @@ $form->unique("role", "That role has already been defined");
 $form->required("role", "name");
 $form->annotate("role", "The identifier for the role, used by the application code when determining access to features.");
 $form->annotate("name", "The display name for the role (shown in forms and tables).");
+
+
+$homePageSelect = new CMSLinkSelectFieldRenderer($form, "home_page", "Home Page");
 
 $form->allowDelete = true;
 $form->onDelete = deleteRole;
