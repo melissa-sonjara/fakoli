@@ -88,8 +88,6 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		if (!$field) $field = $this->field;
 		
-		$xref = new $this->xrefClass;
-	
 		$this->_startField($field);
 		
 		$id = $this->get($field);
