@@ -33,23 +33,31 @@
 
 Fakoli::using("image");
 
-class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
+class PhotoUploadFieldRenderer extends FieldRenderer
 {
 	static function create($form, $field, $xrefClass)
 	{
 		if (PhonegapManager::hasPhonegap())
 		{
-			return new PhotoAttachmentFieldRenderer($form, $field, $xrefClass);
-		}
-		else
-		{
-			return new AttachmentFieldRenderer($form, $field, $xrefClass);
+			return new PhotoUploadFieldRenderer($form, $field, $xrefClass);
 		}
 	}
 	
-	function PhotoAttachmentFieldRenderer($form, $field, $xrefClass)
+	var $gallery_id;
+	
+	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
 	{
-		$this->AttachmentFieldRenderer($form, $field, $xrefClass);
+		$this->FieldRenderer($form);
+		
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;
+		}	
 	}
 	
 	function renderScript($field)
