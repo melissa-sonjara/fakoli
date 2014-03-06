@@ -90,7 +90,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 		
-		$id = $this->get($field);
+		$id = $this->parent->data->get($field);
 		
 		if ($id) $img = "<img src='/action/image/thumbnail?size=300' alt='Patient Record'/>";
 ?>
