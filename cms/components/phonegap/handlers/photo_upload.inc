@@ -17,7 +17,7 @@ if (!isset($_FILES["photo"]))
 
 $gallery = new ImageGallery($gallery_id);
 
-if ($owner_id != $user->get($user->getPrimaryKey()))
+if ($gallery->owner_id != $user->get($user->getPrimaryKey()))
 {
 	Fakoli::end("Permission Denied");
 }
