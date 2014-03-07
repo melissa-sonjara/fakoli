@@ -48,6 +48,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
 	{
 		$this->FieldRenderer($form);
+		$this->gallery_id = $gallery_id;
 		
 		if ($form->data->hasField($field))
 		{
@@ -62,6 +63,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
+		
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($this->field) || array_key_exists($field, $this->parent->hidden)) return "";	
 
 		if (!$field) $field = $this->field;
@@ -75,7 +77,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
-		new PhotoUploader().setup('<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->parent->id?>_<?echo $field?>_thumbnail', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
+		new PhotoUploader().setup('<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->parent->id?>_<?echo $field?>_thumbnail', '<?echo $this->parent->id?>_<?echo $field?>_status', '<?echo $this->gallery_id?>');
 	});
 	</script>
 <?
