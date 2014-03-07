@@ -42,7 +42,6 @@ window.addEvent('load', function()
 //
 function onDeviceReady() 
 {
-	alert("Device Ready");
 	pictureSource=navigator.camera.PictureSourceType;
 	destinationType=navigator.camera.DestinationType;		
 }
@@ -75,7 +74,7 @@ var PhotoUploader = (function()
 		capturePhoto: function()
 		{
 			navigator.camera.getPicture(function(imageData) { new PhotoUploader().onPhotoURISuccess(imageData);}, 
-										function() { new PhotoUploader().onFail(message); },
+										function(message) { new PhotoUploader().onFail(message); },
 										{ 
 											quality: 50,
 											destinationType: Camera.DestinationType.FILE_URI,
@@ -87,7 +86,7 @@ var PhotoUploader = (function()
 		{
 			// Retrieve image file location from specified source
 			navigator.camera.getPicture(function(imageURI) { new PhotoUploader().onPhotoURISuccess(imageURI);}, 
-										function() { new PhotoUploader().onFail(message); }, 
+										function(message) { new PhotoUploader().onFail(message); }, 
 										{
 											quality: 50,
 											destinationType: Camera.DestinationType.FILE_URI,
@@ -113,7 +112,7 @@ var PhotoUploader = (function()
         {
         	console.log("Uploading Photo");
             var options = new FileUploadOptions();
-            options.fileKey="attachmentFile";
+            options.fileKey="photo";
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
             options.mimeType="image/jpeg";
 
@@ -150,23 +149,14 @@ var PhotoUploader = (function()
 		postComplete: function(response)
 		{
 			
-			var match = response.match(/^(.*?):(.*?):(.*?):(.*)$/);
+			var match = response.match(/^(\d+)$/);
 			
 			if (match)
 			{
 				var id = match[1];
-				var name = match[2];
-				var icon = match[3];
-				var size = match[4];
-				
-				this.list.innerHTML += 
-					"<li id='attachment_" +id + "' class='" + this.cssClass + "'><span><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
-					"<a href='/action/attachment/download?attachment_id=" + id + "'>" + name + "</a>&nbsp;(" + size + ")&nbsp;" +
-					"<a href='#' onclick='new PhotoUploader().deleteAttachment(\"" + name + "\", " + id + "); return false' title='Delete this Photo'>" +
-					"<img src='" + this.deleteIcon + "' style='display:inline-block; vertical-align: middle' alt='Delete this Photo'/></a></span></li>";
-				
-				if (this.control.value) this.control.value += ",";
-				this.control.value += id;				
+
+				this.thumbnail.set('html', '<img src="/action/image/thumbnail?image_id=' + id + '&size=300" alt="Uploaded Photo"/>');
+				this.control.value = id;				
 			}
 			else
 			{
