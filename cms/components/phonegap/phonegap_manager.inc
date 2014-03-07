@@ -63,6 +63,18 @@ class PhonegapManager
 		return (isset($_SESSION["phonegap"]) && $_SESSION["phonegap"] == true) || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false;
 	}	
 	
+	static function showVersion()
+	{
+		if ($_SESSION["phonegap"])
+		{
+			echo "<p>Using Phonegap version ".$_SESSION["phonegap_version"]." on ".$_SESSION["phonegap_os"]."</p>";
+		}
+		else
+		{
+			echo "<p>Not using Phonegap</p>";
+		}
+	}
+	
 	static function addScript($script)
 	{
 		global $phonegap;
