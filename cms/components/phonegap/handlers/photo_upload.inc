@@ -3,6 +3,8 @@ Fakoli::using("image");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
+trace(print_r($_FILES, true), 2);
+
 if (!$gallery_id)
 {
 	Fakoli::end("Invalid Parameter");
