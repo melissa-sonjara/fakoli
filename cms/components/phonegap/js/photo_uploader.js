@@ -74,7 +74,8 @@ var PhotoUploader = (function()
 										function() { new PhotoUploader().onFail(message); },
 										{ 
 											quality: 50,
-											destinationType: destinationType.FILE_URI
+											destinationType: Camera.DestinationType.FILE_URI,
+											sourceType: Camera.PictureSourceType.CAMERA
 										});
 		},
 		
@@ -85,8 +86,8 @@ var PhotoUploader = (function()
 										function() { new PhotoUploader().onFail(message); }, 
 										{
 											quality: 50,
-											destinationType: destinationType.FILE_URI,
-											sourceType: pictureSource.PHOTOLIBRARY 
+											destinationType: Camera.destinationType.FILE_URI,
+											sourceType: Camera.PictureSourceType.PHOTOLIBRARY 
 										});
 		},
 
