@@ -87,8 +87,7 @@ class PhonegapManager
 			
 			$file = PhonegapManager::getPhonegapFile($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
 			
-			$script .= "<script type='text/javascript' src='{$file}'></script>\n";
-			$script .= $phonegap;
+			$phonegap = "<script type='text/javascript' src='{$file}'></script>\n".$phonegap;
 		}
 		
 		return $script;
