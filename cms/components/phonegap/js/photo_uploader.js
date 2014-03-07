@@ -30,22 +30,11 @@
 
 *****************************************************************/
 
-var pictureSource;
-var destinationType;
-
 window.addEvent('load', function()
 {
-	document.addEventListener("deviceready",onDeviceReady,false);
+	document.addEventListener("deviceready", function() { new PhotoUploader().onDeviceReady(); },false);
 });
 
-// Cordova is ready to be used!
-//
-function onDeviceReady() 
-{
-	pictureSource=navigator.camera.PictureSourceType;
-	destinationType=navigator.camera.DestinationType;		
-	new PhotoUploader().statusLabel.setText('Camera is ready');
-}
 
 var PhotoUploader = (function()
 {
@@ -57,11 +46,21 @@ var PhotoUploader = (function()
 		deleteIcon: "",
 		statusLabel: Class.Empty,
 		galleryID: 0,
+		statusText: "Waiting for Camera...",
 		
 		initialize: function()
 		{
 		},
 	
+		// Cordova is ready to be used!
+		//
+	    onDeviceReady: function() 
+		{
+			pictureSource=navigator.camera.PictureSourceType;
+			destinationType=navigator.camera.DestinationType;		
+			this.setStatusText('Camera is ready');
+		},
+
 		setup: function(control, thumbnail, statusLabel, galleryID)
 		{
 			this.thumbnail = document.id(thumbnail);
@@ -69,9 +68,15 @@ var PhotoUploader = (function()
 			this.statusLabel = document.id(statusLabel);
 			this.galleryID = galleryID;
 			
-			this.statusLabel.set('text', "Waiting for Camera...");
+			this.statusLabel.set('text', this.statusText);
 			
 			console.log("PhotoUploader::setup complete");
+		},
+		
+		setStatusText: function(text)
+		{
+			this.statusText = text;
+			if (this.statusLabel) this.statusLabel.set('text', text);
 		},
 		
 		capturePhoto: function()
