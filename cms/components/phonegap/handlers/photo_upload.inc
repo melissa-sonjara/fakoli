@@ -37,7 +37,7 @@ $image->sort_order = 0;
 $image->image_type = $_FILES["photo"]["type"];
 $image->owner_id = $user->get($user->getPrimaryKey());
 
-ImageManager::imageUploadHandlers("photo", $image);
+ImageManager::imageUploadHandler("photo", $image);
 
 $image->save();
 
