@@ -60,7 +60,7 @@ var PhotoUploader = (function()
 	
 		setup: function(control, thumbnail, statusLabel, galleryID)
 		{
-			this.list = document.id(list);
+			this.thumbnail = document.id(thumbnail);
 			this.control = document.id(control);
 			this.statusLabel = document.id(statusLabel);
 			this.galleryID = galleryID;
