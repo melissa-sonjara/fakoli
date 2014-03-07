@@ -44,6 +44,7 @@ function onDeviceReady()
 {
 	pictureSource=navigator.camera.PictureSourceType;
 	destinationType=navigator.camera.DestinationType;		
+	new PhotoUploader().statusLabel.setText('Camera is ready');
 }
 
 var PhotoUploader = (function()
@@ -67,6 +68,8 @@ var PhotoUploader = (function()
 			this.control = document.id(control);
 			this.statusLabel = document.id(statusLabel);
 			this.galleryID = galleryID;
+			
+			this.statusLabel.set('text', "Waiting for Camera...");
 			
 			console.log("PhotoUploader::setup complete");
 		},
