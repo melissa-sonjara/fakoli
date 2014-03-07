@@ -8,6 +8,11 @@ if (!$gallery_id)
 	Fakoli::end("Invalid Parameter");
 }
 
+if (!isset($_FILES["photo"]))
+{
+	Fakoli::end("No photo present in upload");
+}
+
 $gallery = new ImageGallery($gallery_id);
 
 if ($owner_id != $user->get($user->getPrimaryKey()))
