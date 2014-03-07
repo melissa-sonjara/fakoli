@@ -157,7 +157,7 @@ var PhotoUploader = (function()
 				this.list.innerHTML += 
 					"<li id='attachment_" +id + "' class='" + this.cssClass + "'><span><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
 					"<a href='/action/attachment/download?attachment_id=" + id + "'>" + name + "</a>&nbsp;(" + size + ")&nbsp;" +
-					"<a href='#' onclick='new PhotoAttachmentUploader().deleteAttachment(\"" + name + "\", " + id + "); return false' title='Delete this Photo'>" +
+					"<a href='#' onclick='new PhotoUploader().deleteAttachment(\"" + name + "\", " + id + "); return false' title='Delete this Photo'>" +
 					"<img src='" + this.deleteIcon + "' style='display:inline-block; vertical-align: middle' alt='Delete this Photo'/></a></span></li>";
 				
 				if (this.control.value) this.control.value += ",";
@@ -194,7 +194,7 @@ var PhotoUploader = (function()
 					{
 						messagePopup("Error", responseText);
 					}
-				}.bind(new PhotoAttachmentUploader()),
+				}.bind(new PhotoUploader()),
 				'onFailure':	function() { messagePopup("Network Error", "Failed to communicate with server"); }
 			});
 			
