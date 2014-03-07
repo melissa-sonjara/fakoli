@@ -205,7 +205,9 @@ class ComponentPageView
 		foreach($vars as $var)
 		{		
 			$expr = $var[0];
-			$name = $var[1];	
+			$name = $var[1];
+			global $$name;
+				
 			$template = str_replace($expr, $$name, $template);
 		}
 		
