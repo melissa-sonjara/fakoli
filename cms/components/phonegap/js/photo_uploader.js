@@ -33,7 +33,10 @@
 var pictureSource;
 var destinationType;
 
-document.addEventListener("deviceready",onDeviceReady,false);
+window.addEvent('load', function()
+{
+	document.addEventListener("deviceready",onDeviceReady,false);
+});
 
 // Cordova is ready to be used!
 //
