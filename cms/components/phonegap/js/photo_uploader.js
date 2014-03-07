@@ -39,6 +39,7 @@ document.addEventListener("deviceready",onDeviceReady,false);
 //
 function onDeviceReady() 
 {
+	alert("Device Ready");
 	pictureSource=navigator.camera.PictureSourceType;
 	destinationType=navigator.camera.DestinationType;		
 }
