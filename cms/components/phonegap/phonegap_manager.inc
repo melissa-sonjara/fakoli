@@ -5,6 +5,8 @@
  * common functionality for the phonegap component.
  */
 
+global $phonegap;
+
 class PhonegapManager
 {
 	static $phonegapFiles = array();
