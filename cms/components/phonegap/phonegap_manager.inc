@@ -7,6 +7,8 @@
 
 class PhonegapManager
 {
+	static $phonegapFiles = array();
+	
 	function PhonegapManager()
 	{
 
@@ -81,11 +83,33 @@ class PhonegapManager
 		
 		if (PhonegapManager::hasPhonegap())
 		{
-			$script .= "<script type='text/javascript' src='/components/phonegap/js/{$_SESSION["phonegap_os"]}/cordova-{$_SESSION["phonegap_version"]}.js'></script>\n";
+			ComponentManager::fireEvent("RegisterPhonegapFiles");
+			
+			$file = PhonegapManager::getPhonegapFile($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
+			
+			$script .= "<script type='text/javascript' src='{$file}'></script>\n";
 			$script .= $phonegap;
 		}
 		
 		return $script;
+	}
+	
+	static function registerPhonegapFile($platform, $version, $file)
+	{
+		PhonegapManager::$phonegapFiles["{$platform}-{$version}"] = $file;
+	}
+	
+	static function getPhonegapFile($platform, $version)
+	{
+		$key = "{$platform}-{$version}";
+		if (array_key_exists($key, PhonegapManager::$phonegapFiles))
+		{
+			// Send the registered configured file for the platform and version
+			return PhonegapManager::$phonegapFiles[$key];
+		}
+		
+		// Send default file with no plugins
+		return "/components/phonegap/js/{$platform}/cordova-{$version}.js";
 	}
 }
 
