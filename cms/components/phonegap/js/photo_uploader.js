@@ -203,9 +203,9 @@ var PhotoUploader = (function()
 		
 	});
 	
-	var instance;
+	var instance = null;
 	return function()
 	{
-		return instance ? instance : instance = new PhotoAttachmentUploaderSingleton();
+		return instance ? instance : instance = new PhotoUploaderSingleton();
 	};
 })();
