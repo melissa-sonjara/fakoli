@@ -64,6 +64,8 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	{
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($this->field) || array_key_exists($field, $this->parent->hidden)) return "";	
 
+		if (!$field) $field = $this->field;
+		
 		global $phonegap;
 		
 		ob_start();
@@ -73,7 +75,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
-		new PhotoUploader().setup('<?echo $this->parent->id?>_<?echo $this->field?>', '<?echo $this->parent->id?>_<?echo $this->field?>_thumbnail', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
+		new PhotoUploader().setup('<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->parent->id?>_<?echo $field?>_thumbnail', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
 	});
 	</script>
 <?
@@ -94,9 +96,9 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		if ($id) $img = "<img src='/action/image/thumbnail?size=300' alt='Patient Record'/>";
 ?>
-	<input type="hidden" value="<?echo $ids?>" name="<?echo $this->parent->id?>_" id="<?echo $this->parent->id?>_<?echo $field?>"/>
-	<div id="<?echo $this->parent->id?>_<?echo $this->field?>_thumbnail"><?echo $img?></div>
-	<div id="<?echo $this->parent->id?>_<?echo $this->field?>_status"></div>
+	<input type="hidden" value="<?echo $ids?>" name="<?echo $this->parent->id?>_<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
+	<div id="<?echo $this->parent->id?>_<?echo $field?>_thumbnail"><?echo $img?></div>
+	<div id="<?echo $this->parent->id?>_<?echo $field?>_status"></div>
 	<br/>
 	<a href="#" onclick="new PhotoUploader().capturePhoto(); return false" class="button"> Take a Photo </a>&nbsp;&nbsp;
 	<a href="#" onclick="new PhotoUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
