@@ -108,109 +108,25 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	// JDG 5/24/11 - add readonly handling
 	function renderReadOnly($field = "")
 	{
 		if (!$field) $field = $this->field;
-	
-		$attachments = $this->getAttachments();
-		if(count($attachments) < 2) $this->colspan = 1;
-		
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";		
-		
-		// Omit ul li list if only one
-		if(count($attachments) == 1)
-		{
-			$this->drawOneAttachment($attachments[0]);
-		}
-		elseif(count($attachments) > 0)
-		{
-?>	
-	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
-<?	
-		foreach($attachments as $attachment)
-		{
- ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'><span>
- <?php
- 			$this->drawOneAttachment($attachment);
- ?>
-	 </span></li>
-<?
-		}
-?></ul><?php			
-		}
 
-		echo "</td></tr>\n";
-	}
-	
-	function getAttachments()
-	{
-		$xref = new $this->xrefClass;
+		$id = $this->parent->data->get($field);
+		$this->_startField($field);
 		
-		$pk = $this->getMatchingPK($xref, $this->parent->data);
-		$pkv = $this->parent->data->get($pk);
-		
-		if ($pkv)
+		if ($id) 
 		{
-			$attachments = query(Attachment, "WHERE attachment_id in (select attachment_id from {$xref->table} where $pk=$pkv) ORDER BY attachment_id");
+			echo "<img src='/action/image/thumbnail?image_id=".$this->parent->get($field)."&size=300' alt=''/>";
 		}
 		else
 		{
-			$attachments = array();
+			echo "No image uploaded";
 		}
-				
-		return $attachments;
-	}	
-	
-	function drawOneAttachment($attachment)
-	{
- 			$icon = getDocIcon($attachment->filename);
-?>
-	<img src="<?echo $icon?>" alt="Icon" style="display:inline-block;vertical-align:middle"/>&nbsp;
-	<a href='/action/attachment/download?attachment_id=<?echo $attachment->attachment_id?>'><?echo $attachment->filename?></a>&nbsp;
-	(<?echo $attachment->file_size?>)
-<?			
+		
+		$this->_endField($field);
 	}
-	
-	function postProcess($field = "")
-	{
-		trace("AttachmentFieldRenderer postProcess field $field value ". $_POST[$field], 3);
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-		
-		if (!$field) $field = $this->field;
-		
-		$xref = new $this->xrefClass;
-		
-		$obj = $this->parent->data;
-		$pk =  $this->getMatchingPK($xref, $obj);
-		
-		// Clear out current relations
-		
-		$xref = new $this->xrefClass;
-		$xref->delete("WHERE {$pk}=".$obj->get($pk));
-		
-		if (isset($_POST[$field]))
-		{
-			trace("AttachmentFieldRenderer postProcess _POST attachment field is ". $_POST[$field], 3);
-			$ids = explode(",", $_POST[$field]);
-			
-			foreach($ids as $id)
-			{
-				$xref = new $this->xrefClass;
-				$xref->set($pk, $obj->get($pk));
-				$xref->set("attachment_id", $id);
-				$xref->save();
-			}
-		}
-		else
-		{
-			trace("AttachmentFieldRenderer postProcess _POST attachment field is empty", 3);			
-		}	
-	}
+
 }
 
 ?>
