@@ -742,7 +742,8 @@ var ProgressiveSearch = new Class({
 		width:			Class.Empty,
 		cssClass:		'',
 		parameter:		'',
-		defaultSearch:	Class.Empty		
+		defaultSearch:	Class.Empty,
+		browse:			false
 	},
   
 	element:	Class.Empty,
@@ -784,6 +785,13 @@ var ProgressiveSearch = new Class({
 		this.element.setProperty('autocomplete', 'off');
 		this.list.addEvent('mouseover', function() { this.allowHide = false; }.bind(this));
 		this.list.addEvent('mouseout', function() { this.allowHide = true; }.bind(this));
+		
+		if (this.options.browse)
+		{
+			this.browseButton = new Element('a', {'href': '#', 'class': 'button'});
+			this.browseButton.addEvent('click', function(e) { new Event(e).stop(); this.container.search('');}.bind(this));
+			this.browseButton.inject(this.element, 'after');
+		}
 	},
 	
 	onKeyPress: function()
