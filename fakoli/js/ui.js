@@ -790,7 +790,7 @@ var ProgressiveSearch = new Class({
 		{
 			this.browseButton = new Element('a', {'href': '#', 'class': 'button', 'text': 'Browse'});
 			this.browseButton.setStyle('margin-left', 5);
-			this.browseButton.addEvent('click', function(e) { new Event(e).stop(); this.container.search('');}.bind(this));
+			this.browseButton.addEvent('click', function(e) { new Event(e).stop(); this.browse();}.bind(this));
 			this.browseButton.inject(this.element, 'after');
 		}
 	},
@@ -812,6 +812,20 @@ var ProgressiveSearch = new Class({
 	    		{
 	    			method: 'get', 
 	    			url: appendQueryString(this.options.search, name + "=" + encodeURIComponent(val)), 
+	    			onSuccess: function(html) 
+	    			{ 
+	    				this.showList(html);
+	    			}.bind(this)
+	    		});
+   		request.send();
+	},
+	
+	browse: function()
+	{
+		var request = new Request(
+	    		{
+	    			method: 'get', 
+	    			url: appendQueryString(this.options.search, "browse=1"), 
 	    			onSuccess: function(html) 
 	    			{ 
 	    				this.showList(html);
