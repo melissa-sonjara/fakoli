@@ -164,7 +164,8 @@ var PhotoUploader = (function()
 				var id = match[1];
 
 				this.thumbnail.set('html', '<img src="/action/image/thumbnail?image_id=' + id + '&size=300" alt="Uploaded Photo"/>');
-				this.control.value = id;				
+				this.control.value = id;	
+				this.setStatusText("Photo Uploaded");
 			}
 			else
 			{
