@@ -23,7 +23,7 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "m/d/Y");
 		
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}' type='datetime' name='$field' value='$value' size='12'>";
+		echo "<input id='{$this->parent->id}_{$field}' type='datetime-local' name='$field' value='$value' size='12'>";
 		$this->_endField($field);
 	}
 	
