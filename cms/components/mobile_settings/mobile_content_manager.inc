@@ -62,7 +62,10 @@ class MobileSettingsManager
 		}
 		else
 		{
-			$auto_form_defaults["default_layout"] = "mobile";
+			if (!MobileSettingsManager::isTablet())
+			{
+				$auto_form_defaults["default_layout"] = "mobile";
+			}
 		}
 	}
 	
@@ -100,6 +103,12 @@ class MobileSettingsManager
 		trace("useMobile: ".($mobile?'true':'false'), 4);
 		
 		return $mobile;
+	}
+	
+	static function isTablet()
+	{		
+		$detect = new MobileDetect();
+		return $detect->isTablet();
 	}
 }
 
