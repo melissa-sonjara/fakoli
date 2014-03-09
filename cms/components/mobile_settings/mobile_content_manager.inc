@@ -33,7 +33,7 @@ class MobileSettingsManager
 		
 		$useMobile = MobileSettingsManager::useMobile();
 		
-		if ($useMobile) 
+		if ($useMobile && !MobileSettingsManager::isTablet()) 
 		{
 			$auto_form_defaults["default_layout"] = "mobile";
 		}
