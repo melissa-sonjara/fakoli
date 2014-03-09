@@ -19,8 +19,13 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 		
 		// JDG 10/1/2010 check for empty saved string
 		$date = "";
+		$time = "";
+		
 		if($value AND $value != '0000-00-00 00:00:00')
-			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "m/d/Y");
+		{
+			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "M j, Y");
+			$time = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "h:i A");
+		}
 		
 		$this->_startField($field);
 		echo "<input id='{$this->parent->id}_{$field}_date' type='date' name='{$this->parent->id}_{$field}_date' value='$date' size='12'>";
