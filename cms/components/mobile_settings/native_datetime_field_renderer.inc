@@ -24,7 +24,7 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 		
 		$this->_startField($field);
 		echo "<input id='{$this->parent->id}_{$field}_date' type='date' name='{$this->parent->id}_{$field}_date' value='$date' size='12'>";
-		echo "<input id='{$this->parent->id}_{$field}_time' type='time' name='{$this->parent->id}_{$field}_time' value='$time' size='12'>";
+		echo "&nbsp;<input id='{$this->parent->id}_{$field}_time' type='time' name='{$this->parent->id}_{$field}_time' value='$time' size='12'>";
 		$this->_endField($field);
 	}
 	
