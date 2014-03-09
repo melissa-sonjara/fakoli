@@ -18,6 +18,7 @@ class MobileSettingsManager
 		Settings::setDefaultValue("mobile_settings", "mobile_content_mode", "Deliver Full Content", String, "Sets the content delivery mode for mobile content", "", "Deliver Full Content\nUse Mobile Template\nDedicated Mobile Section");
 		Settings::setDefaultValue("mobile_settings", "mobile_content_section", "", String, "The identifier of the section providing dedicated mobile content");
 		Settings::setDefaultValue("mobile_settings", "send_mobile_content_to_tablets", false, Boolean);
+		Settings::setDefaultValue("mobile_settings", "use_native_form_controls", false, Boolean, "Use native HTML 5 controls for date and time fields (when available on mobile device)");
 	}
 
 	static function onInitialize()
@@ -28,6 +29,7 @@ class MobileSettingsManager
 		
 		
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
+		$useNative = Settings::getValue("mobile_settings", "use_native_form_controls");
 		
 		if ($isResource || $isAction || $mode == "Deliver Full Content") return;
 		
@@ -36,6 +38,16 @@ class MobileSettingsManager
 		if ($useMobile && !MobileSettingsManager::isTablet()) 
 		{
 			$auto_form_defaults["default_layout"] = "mobile";
+		}
+		
+		if ($useMobile && $useNative)
+		{
+			$detect = new MobileDetect();
+			if ($detect->isiPhone() || $detect->isiPad)
+			{
+				Fakoli::using("auto_form");
+				AutoForm::registerFieldRendererClass(DateTime, NativeDateTimeFieldRenderer);
+			}
 		}
 		
 		if ($mode != "Dedicated Mobile Section" || !$useMobile) return;
