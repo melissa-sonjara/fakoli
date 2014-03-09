@@ -23,7 +23,7 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 		
 		if($value AND $value != '0000-00-00 00:00:00')
 		{
-			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "M j, Y");
+			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "Y-m-d");
 			$time = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "h:i A");
 		}
 		
