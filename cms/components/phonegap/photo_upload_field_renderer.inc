@@ -98,7 +98,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		if ($id) $img = "<img src='/action/image/thumbnail?image_id=".$this->parent->get($field)."&size=300' alt='Patient Record'/>";
 ?>
-	<input type="hidden" value="<?echo $id?>" name="<<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
+	<input type="hidden" value="<?echo $id?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
 	<div id="<?echo $this->parent->id?>_<?echo $field?>_thumbnail"><?echo $img?></div>
 	<div id="<?echo $this->parent->id?>_<?echo $field?>_status"></div>
 	<br/>
