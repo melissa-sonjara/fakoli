@@ -43,7 +43,7 @@ class MobileSettingsManager
 		if ($useMobile && $useNative)
 		{
 			$detect = new MobileDetect();
-			if ($detect->isiPhone() || $detect->isiPad)
+			if ($detect->isiPhone() || $detect->isiPad())
 			{
 				Fakoli::using("auto_form");
 				AutoForm::registerFieldRendererClass(DateTime, NativeDateTimeFieldRenderer);
