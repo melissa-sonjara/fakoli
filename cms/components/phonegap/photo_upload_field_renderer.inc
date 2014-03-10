@@ -117,7 +117,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		if ($id) 
 		{
-			echo "<img src='/action/image/thumbnail?image_id=".$this->parent->get($field)."&size=300' alt=''/>";
+			echo "<img src='/action/image/thumbnail?image_id=".$this->parent->data->get($field)."&size=300' alt=''/>";
 		}
 		else
 		{
