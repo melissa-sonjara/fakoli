@@ -47,6 +47,7 @@ class MobileSettingsManager
 			{
 				Fakoli::using("auto_form");
 				AutoForm::registerFieldRendererClass(DateTime, NativeDateTimeFieldRenderer);
+				AutoForm::registerFieldRendererClass(DateTime, NativeDateFieldRenderer);
 			}
 		}
 		

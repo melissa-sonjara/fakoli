@@ -1,11 +1,11 @@
 <?php
 Fakoli::usingFeature("field_renderers");
 
-class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
+class NativeDateFieldRenderer extends DateFieldRenderer
 {
-	function NativeDateTimeFieldRenderer(&$parent)
+	function NativeDateFieldRenderer(&$parent)
 	{
-		$this->DateTimeFieldRenderer($parent);
+		$this->DateFieldRenderer($parent);
 	}
 	
 	function renderScript($field)
@@ -19,17 +19,14 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 		
 		// JDG 10/1/2010 check for empty saved string
 		$date = "";
-		$time = "";
 		
-		if($value AND $value != '0000-00-00 00:00:00')
+		if ($value AND $value != '0000-00-00')
 		{
 			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "Y-m-d");
-			$time = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "H:i");
 		}
 		
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}_date' type='date' name='{$field}_date' value='$date'>";
-		echo "&nbsp;<input id='{$this->parent->id}_{$field}_time' type='time' name='{$field}_time' value='$time'>";
+		echo "<input id='{$this->parent->id}_{$field}' type='date' name='{$field}_date' value='$date'/>";
 		$this->_endField($field);
 	}
 	
@@ -46,8 +43,8 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 			
 			$this->_startField($field);
 			
-			echo "<input type='datetime' name='$field:from' value='$date_from'>";
-			echo " to <input type='datetime' name='$field:to' value='$date_to'>\n";
+			echo "<input type='date' name='$field:from' value='$date_from'/>";
+			echo " to <input type='date' name='$field:to' value='$date_to'/>\n";
 			
 			$this->_endField($field);
 		}
@@ -56,7 +53,7 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 			$date = $this->parent->params->get($field, $mode);
 			
 			$this->_startField($field);
-			echo "<input type='datetime' name='$field:$mode' value='$date'>";
+			echo "<input type='date' name='$field:$mode' value='$date'/>";
 			$this->_endField($field);
 		}
 	}
