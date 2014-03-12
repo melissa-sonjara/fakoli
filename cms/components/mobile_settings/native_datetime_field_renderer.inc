@@ -12,7 +12,18 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 	function renderScript($field)
 	{
 	}
-
+	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+			
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredValidator($field."_date", $label . " Date"));
+			$this->parent->validator->add(new RequiredTimeValidator($field."_time", $label . " Time"));
+		}
+	}
+	
 	function renderField($field)
 	{
 		$obj = $this->parent->data;
