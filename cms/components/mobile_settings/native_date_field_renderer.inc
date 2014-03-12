@@ -13,6 +13,17 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 	{
 	}
 
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+	
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredValidator($field, $label));
+		}
+	
+	}
+
 	function renderField($field)
 	{
 		$obj = $this->parent->data;
