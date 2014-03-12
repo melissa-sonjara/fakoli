@@ -83,6 +83,6 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 	function preProcess($field)
 	{		
 		$this->parent->data->set($field, trim($_REQUEST["{$field}_date"]." ".$_REQUEST["{$field}_time"]));
-		trace("DateTime: ".$this->parent->data->get($field), 3);
+		trace("DateTime: ".$this->parent->data->get($field), 1);
 	}
 }
