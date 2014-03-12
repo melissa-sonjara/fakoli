@@ -71,16 +71,18 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 	}
 	
 	function renderReadOnly($field)
-	{				
+	{	
+
+		$obj = $this->parent->data;
+		
 		$this->_startField($field);
-		echo $this->format($field);
+		echo $this->format($obj->get($field));
 		
 		// AJG - if the field is read-only but the form is not, add a hidden field to
 		// retain the field value upon submission.
 		
 		if (!$this->parent->readOnlyForm)
 		{
-			$obj = $this->parent->data;
 			$value = $obj->get($field);
 			echo "<input type='hidden' name='$field' value='{$value}'/>";
 		}
