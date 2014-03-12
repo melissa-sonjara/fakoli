@@ -3,9 +3,9 @@ Fakoli::usingFeature("field_renderers");
 
 class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 {
-	function NativeDateTimeFieldRenderer(&$parent)
+	function NativeDateTimeFieldRenderer(&$parent, $field)
 	{
-		trace("Instantiating NativeDateTimeFieldRenderer", 1);
+		trace("Instantiating NativeDateTimeFieldRenderer for $field", 1);
 		$this->DateTimeFieldRenderer($parent);
 		
 		trace(print_r(AutoForm::$fieldRendererMap, true), 1);
