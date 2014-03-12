@@ -3,10 +3,10 @@ Fakoli::usingFeature("field_renderers");
 
 class NativeDateFieldRenderer extends DateFieldRenderer
 {
-	function NativeDateFieldRenderer(&$parent)
+	function NativeDateFieldRenderer(&$parent, $field)
 	{
-		trace("Instantiating NativeDateFieldRenderer", 1);
-		$this->DateFieldRenderer($parent);
+		trace("Instantiating NativeDateFieldRenderer for $field", 1);
+		$this->DateFieldRenderer($parent, $field);
 	}
 	
 	function renderScript($field)
