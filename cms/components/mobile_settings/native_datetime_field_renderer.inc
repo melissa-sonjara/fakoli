@@ -5,6 +5,7 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 {
 	function NativeDateTimeFieldRenderer(&$parent)
 	{
+		trace("Instantiating NativeDateTimeFieldRenderer", 1);
 		$this->DateTimeFieldRenderer($parent);
 	}
 	
