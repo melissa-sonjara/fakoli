@@ -34,7 +34,7 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 		
 		if ($value AND $value != '0000-00-00')
 		{
-			$date = DateTimeTypeRenderer::format($obj->reformatFromSQLDate($value), "Y-m-d");
+			$date = DateTypeRenderer::format($obj->reformatFromSQLDate($value), "Y-m-d");
 		}
 		
 		$this->_startField($field);
