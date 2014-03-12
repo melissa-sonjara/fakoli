@@ -270,7 +270,7 @@ window.addEvent('domready', function()
 /**
  * Field renderer for handling taxonomy term relationships.
  */
-class BindingFieldRenderer extends FieldRenderer
+class BindingTargetFieldRenderer extends FieldRenderer
 {
 	var $field;
 	var $label;
@@ -284,9 +284,9 @@ class BindingFieldRenderer extends FieldRenderer
 
 	static $readOnlyTermSeparator = "<br>";
 
-	function BindingFieldRenderer(&$form, $bindingTarget)
+	function BindingTargetFieldRenderer(&$form, $bindingTarget)
 	{
-		trace("## Creating BindingFieldRenderer for {$bindingTarget->target_class}", 3);
+		trace("## Creating BindingTargetFieldRenderer for {$bindingTarget->target_class}", 3);
 		
 		$this->bindingTarget = $bindingTarget;
 		$this->field = $bindingTarget->target_class;
