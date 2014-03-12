@@ -7,6 +7,8 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 	{
 		trace("Instantiating NativeDateTimeFieldRenderer", 1);
 		$this->DateTimeFieldRenderer($parent);
+		
+		trace(print_r(AutoForm::$fieldRendererMap, true), 1);
 	}
 	
 	function renderScript($field)
