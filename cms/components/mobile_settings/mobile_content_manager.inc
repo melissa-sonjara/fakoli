@@ -67,7 +67,16 @@ class MobileSettingsManager
 		{
 			if ($useMobile)
 			{
-				$uri = ($mobileSection == "/") ? "/" : "/{$mobileSection}/";
+				$mobileSectionObject = Section::findSection($mobileSection);
+				if ($mobileSectionObject->getContent($identifier))
+				{
+					$uri = preg_replace("#/^{$section}/#", "/{$mobileSection}/", $_SERVER["REQUEST_URI"]);
+				}
+				else
+				{
+					
+					$uri = ($mobileSection == "/") ? "/" : "/{$mobileSection}/";
+				}
 				
 				trace("Redirecting to mobile section at $uri", 3);
 				redirect($uri);
