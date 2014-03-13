@@ -26,8 +26,8 @@ class MobileSettingsManager
 		global $isResource;
 		global $isAction;
 		global $auto_form_defaults;
-		
-		
+		global $identifier;
+				
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 		$useNative = Settings::getValue("mobile_settings", "use_native_form_controls");
 		
