@@ -71,7 +71,8 @@ class MobileSettingsManager
 				$mobileSectionObject = Section::findSection($mobileSection);
 				if ($mobileSectionObject->getContent($identifier))
 				{
-					$uri = preg_replace("#/^{$section}/#", "/{$mobileSection}/", $_SERVER["REQUEST_URI"]);
+					$pattern = ($section == "/") ? "#^/#" : "#/^{$section}/#";
+					$uri = preg_replace($pattern, "/{$mobileSection}/", $_SERVER["REQUEST_URI"]);
 				}
 				else
 				{
