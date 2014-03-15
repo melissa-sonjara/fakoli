@@ -609,12 +609,60 @@ class ImageManager
 		}
 		
 	  	move_uploaded_file($_FILES[$field]["tmp_name"], $target);
-	  	chmod($target, 0755);
+	  	
+	  	if ($gallery->fix_orientation && $ext == ".jpg")
+	  	{
+	  		$filename = basename(ImageManager::fixOrientation($target));
+	  	}
+	  	else
+	  	{
+		  	chmod($target, 0755);
+	  	}
+	  	
 		$image->set("image_file", $filename);  	
 	  	return true;
 	}
 	
+	/**
+	 * Rotates the image to match the correct orientation when orientation information
+	 * is included in the image file. Currently this only works for JPEGs. The target file
+	 * is converted to a PNG in the rotation process so that the transformation is lossless.
+	 * 
+	 * @param string $photo path to the photo that is to be re-oriented
+	 * @return the path to the reoriented photo
+	 */
+	static function fixOrientation($photo)
+	{
+		$exif = read_exif_data($photo);
 
+		switch($exif['Orientation'])
+		{
+		case 6:
+			$angle = -90;
+			break;
+			
+		case 3:
+			$angle = 180;
+			break;
+			
+		case 8:
+			$angle = 90;
+			
+		default:
+			
+			// No transform
+			return $photo;
+		}
+
+		$source = imagecreatefromjpeg($photo);
+		$rotated = imagerotate($source, $angle, 0);
+
+		$photo = preg_replace("/\.jpg\$/", ".png");
+		
+		imagepng($rotated, $photo);
+		return $photo;
+	}
+	
 	static function imageGalleryTabs($key)
 	{
 		$tabs = array(
