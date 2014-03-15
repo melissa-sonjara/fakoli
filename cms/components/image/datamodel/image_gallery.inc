@@ -42,6 +42,7 @@ class ImageGallery extends DataItem
 						"keywords"			=>	String,
 						"thumbnail_size" 	=>  Number,
 					  	"image_link_mode"	=>	String,
+						"fix_orientation"	=>	Boolean,
 						"hidden"			=>	Boolean,
 						"owner_id"			=>	Number,
 						"read_access"		=>	String,

@@ -52,7 +52,8 @@ class ImageUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Added hidden flag to image_gallery",
 			"1.2"		=>	"sql:Added related_resource field to image_record",
-			"1.3"		=>	"sql:Added image_link_mode and thumbnail_size parameters to image_gallery"
+			"1.3"		=>	"sql:Added image_link_mode and thumbnail_size parameters to image_gallery",
+			"1.4"		=>	"sql:Added fix_orientation flag to image_gallery"
 	);
 	
 	function ImageUpgradeManager()
