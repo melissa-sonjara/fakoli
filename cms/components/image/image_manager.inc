@@ -612,7 +612,13 @@ class ImageManager
 	  	
 	  	if ($gallery->fix_orientation && $ext == ".jpg")
 	  	{
-	  		$filename = basename(ImageManager::fixOrientation($target));
+	  		$rotated = ImageManager::fixOrientation($target);
+	  		if ($rotated != $target)
+	  		{
+	  			$target = $rotated;
+	  			$filename = basename($rotated);
+	  			$image->set("image_type", "image/png");
+	  		}
 	  	}
 	  	else
 	  	{
