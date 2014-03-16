@@ -639,6 +639,8 @@ class ImageManager
 	 */
 	static function fixOrientation($photo)
 	{
+		trace("Checking Photo Orientation", 3);
+		
 		$exif = read_exif_data($photo);
 
 		switch($exif['Orientation'])
@@ -657,13 +659,18 @@ class ImageManager
 		default:
 			
 			// No transform
+			trace("No rotation required", 3);
 			return $photo;
 		}
 
 		$source = imagecreatefromjpeg($photo);
 		$rotated = imagerotate($source, $angle, 0);
 
-		$photo = preg_replace("/\.jpg\$/", ".png");
+		trace("Rotating $angle degrees", 3);
+		
+		$photo = preg_replace("/\.jpg\$/", ".png", $photo);
+		
+		trace("Saving to $photo");
 		
 		imagepng($rotated, $photo);
 		return $photo;
