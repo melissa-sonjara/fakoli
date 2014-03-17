@@ -52,15 +52,21 @@ class TaxonomySerializationHandler
 }
 
 /**
- *
- * Provides a central management class for event handlers and 
- * common functionality for the taxonomy component.
+ * TaxonomyManager provides the internal API for working with taxonomies,
+ * facets and bindings. These methods are designed to bridge the gap between
+ * the user-extensible taxonomy schemas and the defined items in your data model.
+ * TaxonomyManager also provides event handlers and common functionality for the 
+ * taxonomy component.
  */
 class TaxonomyManager
 {
 	static $bindableClasses = null;
 	
-	function TaxonomyManager()
+	/**
+	 * Create a new TaxonomyManager instance. Generally not required as all methods are
+	 * static.
+	 */
+	function __construct()
 	{
 
 	}
@@ -79,6 +85,10 @@ class TaxonomyManager
 		return new TabBar("tabs", $tabs, $qs);
 	}
 	
+	/**
+	 * Retrieved the list of DataItem classes that have registered as supporting taxonomy term associations.
+	 * @return array of class names
+	 */
 	static function getRegisteredClasses()
 	{
 		$registeredClasses = array();
@@ -88,6 +98,11 @@ class TaxonomyManager
 		return $registeredClasses;
 	}
 	
+	/**
+	 * Retrieves the list of DataItem classes that have registered as supporting taxonomy term associations
+	 * in an associated array format suitable for use with a SelectFieldRenderer or CheckListFieldRenderer.
+	 * @return array
+	 */
 	static function getRegisteredClassOptions()
 	{
 		$classes = TaxonomyManager::getRegisteredClasses();
@@ -486,6 +501,13 @@ class TaxonomyManager
 		}
 	}
 	
+	/**
+	 * Retrieve items of the specified class that are bound to the target
+	 * @param DataItem $target the target item
+	 * @param string $class the class of bound items to retrieve
+	 * @param string $constraint optional extra constraint or ordering
+	 * @return array any items of the specified class that are bound to the target
+	 */
 	static function getBoundItems($target, $class, $constraint = "")
 	{
 
@@ -493,9 +515,10 @@ class TaxonomyManager
 		$obj = new $class;
 		$pk = $obj->getPrimaryKey();
 		
-		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM taxonomy_term_association WHERE target_id=:target_id AND target_class=:cl) $constraint")
+		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM binding WHERE target_id=:target_id AND target_class=:target_class and class=:class) $constraint")
 					  ->bind(":target_id", $target->get($target->getPrimaryKey()),
-							  ":cl", get_class($target))
+							 ":target_class", get_class($target),
+							 ":class", $class)
 					  ->execute();
 		 
 		return $items;
