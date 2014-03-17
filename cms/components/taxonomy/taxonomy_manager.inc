@@ -502,23 +502,23 @@ class TaxonomyManager
 	}
 	
 	/**
-	 * Retrieve items of the specified class that are bound to the target
-	 * @param DataItem $target the target item
+	 * Retrieve items of the specified class that are bound to the specified source object
+	 * @param DataItem $source the source item
 	 * @param string $class the class of bound items to retrieve
 	 * @param string $constraint optional extra constraint or ordering
 	 * @return array any items of the specified class that are bound to the target
 	 */
-	static function getBoundItems($target, $class, $constraint = "")
+	static function getBoundItems($source, $class, $constraint = "")
 	{
 
 		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
 		$obj = new $class;
 		$pk = $obj->getPrimaryKey();
 		
-		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM binding WHERE target_id=:target_id AND target_class=:target_class and class=:class) $constraint")
-					  ->bind(":target_id", $target->get($target->getPrimaryKey()),
-							 ":target_class", get_class($target),
-							 ":class", $class)
+		$items = Query::create($class, "WHERE $pk IN (SELECT target_id FROM binding WHERE id=:source_id and class=:source_class AND target_class=:target_class) $constraint")
+					  ->bind(":source_id", $source->get($target->getPrimaryKey()),
+							 ":target_class", $class,
+							 ":source_class", get_class($source))
 					  ->execute();
 		 
 		return $items;
