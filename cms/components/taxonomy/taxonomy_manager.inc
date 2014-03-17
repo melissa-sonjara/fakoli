@@ -516,7 +516,7 @@ class TaxonomyManager
 		$pk = $obj->getPrimaryKey();
 		
 		$items = Query::create($class, "WHERE $pk IN (SELECT target_id FROM binding WHERE id=:source_id and class=:source_class AND target_class=:target_class) $constraint")
-					  ->bind(":source_id", $source->get($target->getPrimaryKey()),
+					  ->bind(":source_id", $source->get($source->getPrimaryKey()),
 							 ":target_class", $class,
 							 ":source_class", get_class($source))
 					  ->execute();
