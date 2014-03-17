@@ -3,6 +3,8 @@
 Fakoli::using("binding");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Bindings";
+
 $bindings = Query::create(BindingTarget, "ORDER BY target_class")->execute();
 
 $table = new DataListView($bindings, "bindings");
