@@ -3,7 +3,15 @@ ToolHint.popup = null;
 
 ToolHint.show = function(code, title)
 {
-	ToolHint.popup = modalPopup(title, '/action/tool_hints/show_hint?code=' + code, "auto", "auto", true);
+	var url = '/action/tool_hints/show_hint?code=' + code;
+	if (!ToolHint.popup)
+	{
+		ToolHint.popup = modalPopup(title, url, "auto", "auto", true);
+	}
+	else
+	{
+		ToolHint.popup.show(null, url);
+	}
 };
 
 ToolHint.hide = function(code)
