@@ -244,7 +244,7 @@ function floatingPopup(id, title, url, width, height, returnPopup, draggable)
 
 var AbstractDialog = new Class(
 {
-    Implements: [Options],
+    Implements: [Options, Events],
     
     options: 
     {
@@ -257,7 +257,8 @@ var AbstractDialog = new Class(
 		title:		Class.Empty,
 		top: 	   Class.Empty,
 		left:	   Class.Empty,
-		position:  Class.Empty
+		position:  Class.Empty,
+		onHide:		function() {}
 	},
 	
     element: Class.Empty,
@@ -457,6 +458,7 @@ var ModalDialog = new Class(
     
     hide: function()
     {
+    	this.fireEvent('hide', this);
     	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
     	ModalDialog.activeDialogs.pop();
     	if (ModalDialog.activeDialogs.length == 0) window.raiseCurtain();

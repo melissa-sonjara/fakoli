@@ -7,6 +7,7 @@ ToolHint.show = function(code, title)
 	if (!ToolHint.popup)
 	{
 		ToolHint.popup = modalPopup(title, url, "auto", "auto", true);
+		ToolHint.popup.addEvent('hide', function() { ToolHint.popup = null; });
 	}
 	else
 	{
