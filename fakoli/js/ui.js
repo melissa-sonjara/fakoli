@@ -398,8 +398,11 @@ var ModalDialog = new Class(
     	
     	this.remoteURL = fragmentURL;
 
-		ModalDialog.activeDialogs.push(this);
-		
+    	if (!reload)
+    	{
+    		ModalDialog.activeDialogs.push(this);
+    	}
+    	
     	if (this.options.draggable)
     	{
     		var options = 
