@@ -41,12 +41,26 @@ $library = $document->DocumentLibrary();
 
 if (!checkRole($library->allow_access) && !$library->allowAccess())
 {
-	Fakoli::end("Access Denied");
+	if (!$user)
+	{
+		LoginManager::redirectToLogin();
+	}
+	else
+	{
+		Fakoli::end("Access Denied");
+	}
 }
 
 if (!checkRole($document->allow_access))
 {
-	Fakoli::end("Access Denied");
+	if (!$user)
+	{
+		LoginManager::redirectToLogin();
+	}
+	else
+	{
+		Fakoli::end("Access Denied");
+	}
 }
 
 $d = new DocumentDownload();
