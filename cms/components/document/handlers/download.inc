@@ -41,7 +41,7 @@ $library = $document->DocumentLibrary();
 
 if (!checkRole($library->allow_access) && !$library->allowAccess())
 {
-	if (!$user)
+	if (!$user || !$user->user_id)
 	{
 		LoginManager::redirectToLogin();
 	}
@@ -53,7 +53,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 
 if (!checkRole($document->allow_access))
 {
-	if (!$user)
+	if (!$user || !$user->user_id)
 	{
 		LoginManager::redirectToLogin();
 	}
