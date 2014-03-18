@@ -260,7 +260,7 @@ class LoginManager
 	 * Store the page from which a user has been redirected when prompted 
 	 * to login or create an account.
 	 */
-	function storeRedirectPage()
+	static function storeRedirectPage()
 	{
 		global $_SESSION;
 	
@@ -273,7 +273,7 @@ class LoginManager
 	 * If the user was on a page in the system when they were sent to login,
 	 * then redirect back to that from page.
 	 */
-	function redirectToFromPage()
+	static function redirectToFromPage()
 	{
 		global $_SESSION;
 	
@@ -293,7 +293,7 @@ class LoginManager
 	 * in with a mobile device then redirect to the mobile login page
 	 * if one is defined.
 	 */
-	function redirectToLogin()
+	static function redirectToLogin()
 	{
 		LoginManager::storeRedirectPage();
 		
