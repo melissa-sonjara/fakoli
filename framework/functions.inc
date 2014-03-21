@@ -34,10 +34,12 @@
 require_once realpath(dirname(__FILE__)."/document_handler.inc");
 require_once realpath(dirname(__FILE__)."/date_utils.inc");
 
-/*
+/**
+ * @package Fakoli Framework
+ * @file
+ * @addtogroup functions Utility Functions
  * Library of commonly used functions.
- * 
- * @package Sonjara-Tools
+ * @{
  */
 
 /**
@@ -1815,4 +1817,8 @@ function plainGUID()
 {
 	return str_replace(array("{", "}", "-"), array("", "", ""), GUID());
 }
+
+/**
+ * @}
+ */
 ?>
