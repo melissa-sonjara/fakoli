@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2014 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -110,7 +110,7 @@ class Taxonomy extends DataItem
 	
 	function getAssociatedTermsByClass($class)
 	{
-		return Query::create(TaxonomyTerm, "WHERE term_id in (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:id AND class=:cl) ORDER BY term")
+		return Query::create(TaxonomyTerm, "WHERE term_id in (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:id AND class=:cl) ORDER BY sort_order, term")
 					->bind(":id", $this->taxonomy_id, ":cl", $class)
 					->execute();
 	}

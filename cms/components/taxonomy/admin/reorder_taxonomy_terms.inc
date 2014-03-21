@@ -45,33 +45,34 @@ if (!$taxonomy_id)
 	redirect("taxonomies");
 }
 
-$panel = new Panel("taxonomy_terms", "/action/taxonomy/taxonomy_terms_list?taxonomy_id=$taxonomy_id");
+$taxonomy_id = checkNumeric($_GET["taxonomy_id"]);
+
+if (!$taxonomy_id) Fakoli::end("No taxonomy specified");
+
+$taxonomy = new Taxonomy($taxonomy_id);
+$terms = $taxonomy->Terms("ORDER BY sort_order, term");
+
+$table = new DataListView($terms, "terms");
+$table->column("Term", "<strong>{term}</a>", true)
+	  ->column("Definition", "{definition:200}", true);
+
+$table->enableDragReorder("/action/taxonomy/reorder_terms");
+$table->dragText = "<span style='font-size: 10px'>Click and drag to change the display order for terms in this taxonomy</span>";
+$table->emptyMessage = "No terms have been added to this taxonomy";
+ 
+$script .= $table->writeScript();
 
 $tabs = TaxonomyManager::getTabs($taxonomy_id);
+$tabs->page = "/admin/taxonomy_terms";
 
 $tabs->writeHTML();
-
-Fakoli::includeScript("/components/taxonomy/js/taxonomy_admin.js");
-$script .= <<<ENDSCRIPT
-<script type='text/javascript'>
-var taxonomyAdmin;
-
-window.addEvent('domready', function() 
-{
-	taxonomyAdmin = new TaxonomyAdmin('taxonomy_terms', $taxonomy_id);
-});
-</script>
-ENDSCRIPT;
-
 ?>
 <div id="tab_border">
 <?
-echo $panel->draw();
+$table->drawView();
 ?>
 <br/>
-<a class='button' href='#' onclick='taxonomyAdmin.openTermDialog(); return false'>Add a Taxonomy Term</a>&nbsp;&nbsp;
-<a class='button' href='#' onclick='taxonomyAdmin.importTermsDialog(); return false;'>Import Taxonomy Terms</a>&nbsp;&nbsp;
-<a class='button' href='reorder_taxonomy_terms?taxonomy_id=<?echo $taxonomy_id?>'>Reorder Taxonomy Terms</a>
+<a class='button' href='taxonomy_terms?taxonomy_id=<?echo $taxonomy_id?>'>Finished Reordering Taxonomy Terms</a>
 <br/>
 <br/>
 </div>

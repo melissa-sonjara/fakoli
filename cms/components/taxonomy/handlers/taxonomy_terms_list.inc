@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2014 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -41,7 +41,7 @@ $taxonomy_id = checkNumeric($_GET["taxonomy_id"]);
 if (!$taxonomy_id) Fakoli::end("No taxonomy specified");
 
 $taxonomy = new Taxonomy($taxonomy_id);
-$terms = $taxonomy->Terms("ORDER BY term");
+$terms = $taxonomy->Terms("ORDER BY sort_order, term");
 
 $table = new DataListView($terms, "terms");
 $table->column("Term", "<a href='#' onclick='taxonomyAdmin.openTermDialog({term_id}); return false'>{term}</a>", true)

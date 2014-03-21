@@ -128,3 +128,9 @@ FROM binding group by target_class, id, class;
 ALTER TABLE taxonomy_term_association ADD INDEX class_idx (class ASC, id ASC, term_id ASC);
 
 -- END Version 2.1
+
+-- START Version 2.2
+
+ALTER TABLE taxonomy_term ADD COLUMN sort_order int(11) not null default 0;
+
+-- END Version 2.2

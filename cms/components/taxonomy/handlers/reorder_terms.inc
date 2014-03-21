@@ -31,38 +31,34 @@
 
 *****************************************************************/
 
-class TaxonomyTerm extends DataItem
-{
-	var $table = "taxonomy_term";
-	var $primary_key = "term_id";
-	var $cacheLocal = true;
-	
-	var $fields = array("term_id"		=>	Number,
-						"taxonomy_id"	=>	Number,
-						"term"			=>	String,
-						"definition"	=>	Text,
-						"sort_order"	=>	Number);
-	
-	var $relations = array("Taxonomy"	=>	Taxonomy);
-	
-	function Taxonomy()
-	{
-		return $this->getRelated(Taxonomy);
-	}
-	
-	function getAssociatedItems($class, $constraint = "")
-	{
-		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
-		$obj = new $class;
-		$pk = $obj->getPrimaryKey();
-		
-		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM taxonomy_term_association WHERE term_id=:term_id AND class=:cl) $constraint")
-					  ->bind(":term_id", $this->term_id,
-					  		 ":cl", $class)
-					  ->execute();
-					  			 
-		return $items;
-	}
-}
+Fakoli::using("taxonomy");
 
+Fakoli::assertRole("admin");
+
+$tx = new DataTransaction();
+
+try
+{
+	foreach($_GET["term_id"] as $id => $sort_order)
+	{
+		checkNumeric($id);
+		checkNumeric($sort_order);
+		
+		$term = new TaxonomyTerm();
+		$term->joinTransaction($tx);
+		
+		$term->filter = new InclusionFilter("term_id", "sort_order");
+		
+		$term->load($id);
+		$term->sort_order = $sort_order;
+		$term->save();
+	}
+		
+	$tx->commit();
+	Fakoli::end("OK");
+}
+catch(Exception $e)
+{
+	$tx->rollback();
+}	
 ?>
