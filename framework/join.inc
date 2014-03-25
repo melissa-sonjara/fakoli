@@ -236,6 +236,7 @@ abstract class AbstractJoin
 	
 	var $aliases = array();			///< Field aliases for output
 	var $xrefAliases = array();     ///< Cross-reference table aliases
+	var $constraints = array();		///< Class-specific constraints add via the constrain() method
 	
 	var $unique = false;			///< true to output distinct rows only
 	var $tag = "join";				///< XML tag name
@@ -283,6 +284,17 @@ abstract class AbstractJoin
 		$this->protos[$class]->filter = $filter;
 		return $this;
 	}
+
+	/**
+	 * Sets a query constraint on the given class
+	 * @param string $class the class to be constrained
+	 * @param string $constraint the SQL constraint to be applied
+	 */
+	function constrain($class, $constraint)
+	{
+		$this->constraints[$class] = $constraint;
+	}
+	
 	
 	/**
 	 * By default joins are generated following the "most restrictive search" principle.
@@ -616,6 +628,20 @@ class InnerJoin extends AbstractJoin
 			$alias = "t$i";
 			$this->aliases[$proto->table] = $alias;
 			
+			if (array_key_exists($class, $this->constraints))
+			{
+				$c = $this->constraints[$class];
+				
+				foreach($proto->fields as $field => $type)
+				{
+					$c = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $c);
+				}
+
+				$c = "(".preg_replace("/^\\s*(WHERE\\s+|AND\\s+|OR\\s+)/i", "", $c).")";
+				
+				$this->constraints[$class] = $c;			
+			}
+			
 			if ($tables) $tables .= ", ";
 			$tables .= "{$proto->table} $alias";
 			
@@ -637,9 +663,17 @@ class InnerJoin extends AbstractJoin
 		
 		if ($this->unique) $fields = "DISTINCT $fields";
 		
+		$classConstraints = implode(" AND ", array_values($this->constraints));
+
 		if (strncmp($constraints, "WHERE", 5))
 		{
-			$constraints = "WHERE 1=1 $constraints";
+			if ($classConstraints) $classConstraints = " AND ".$classConstraints;
+			$constraints = "WHERE 1=1 $classConstraints $constraints";
+		}
+		else
+		{
+			if ($classConstraints) $classConstraints = $classConstraints." AND ";
+			$constraints = preg_replace("/^\\s*WHERE/i", "WHERE $classConstraints", $constraints);
 		}
 		
 		$join = "";
@@ -758,6 +792,9 @@ class LeftOuterJoin extends AbstractJoin
 		$tables = "";
 		$fields = "";
 		$alias  = "";
+		
+		trace(print_r($this->constraints, true), 3);
+		
 		for($i = 0; $i < count($this->classes); ++$i)
 		{
 			$class =  $this->classes[$i];
@@ -769,6 +806,20 @@ class LeftOuterJoin extends AbstractJoin
 			if ($tables) $tables .= ", ";
 			$tables .= "{$proto->table} $alias";
 			
+			if (array_key_exists($class, $this->constraints))
+			{
+				$c = $this->constraints[$class];
+				
+				foreach($proto->fields as $field => $type)
+				{
+					$c = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $c);
+				}
+
+				$c = "(".preg_replace("/^\\s*(WHERE\\s+|AND\\s+|OR\\s+)/i", "", $c).")";
+				
+				$this->constraints[$class] = $c;			
+			}
+
 			$f = $proto->getFieldList($alias); 
 			if ($fields && $f) $fields .=", ";
 			$fields .= $f;
@@ -787,11 +838,19 @@ class LeftOuterJoin extends AbstractJoin
 		
 		if ($this->unique) $fields = "DISTINCT $fields";
 		
+		$classConstraints = implode(" AND ", array_values($this->constraints));
+
 		if (strncmp($constraints, "WHERE", 5))
 		{
-			$constraints = "WHERE 1=1 $constraints";
+			if ($classConstraints) $classConstraints = " AND ".$classConstraints;
+			$constraints = "WHERE 1=1 $classConstraints $constraints";
 		}
-		
+		else
+		{
+			if ($classConstraints) $classConstraints = $classConstraints." AND ";
+			$constraints = preg_replace("/^\\s*WHERE/i", "WHERE $classConstraints", $constraints);
+		}
+				
 		$join = "";
 		$join = $this->protos[$this->classes[0]]->table . " t0";
 		
