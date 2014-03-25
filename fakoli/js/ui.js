@@ -1451,3 +1451,49 @@ window.addEvent('domready', function()
 {
 	$$(".fitText").fitText();
 });
+
+var CountIndicator = new Class(
+{
+	Implements: Options,
+	container: Class.Empty,
+	
+	options:
+	{
+		class: 'count_indicator',
+		position: 'bottomRight',
+		edge:	  'bottomRight',
+		showZero: false,
+		maximum: 99
+	},
+	
+	initialize: function(container, options)
+	{
+		this.setOptions(options);
+		this.container = document.id(container);
+		this.refresh();
+	},
+	
+	refresh: function()
+	{
+		this.container.getElements('[data-count]').each(function(element)
+		{
+			if (!element.countDisplay)
+			{
+				var div = new Element('div', {'class': this.options.class});
+				div.setStyles({display: 'block', width: 'auto', position: 'absolute'});
+				document.body.adopt(div);
+				element.countDisplay = div;
+			}
+			
+			var count = element.get('data-count');
+			element.countDisplay.set('text', (count > this.options.maximum) ? this.options.maximum + "+" : count);
+			if (count == 0 && this.options.showZero == false)
+			{
+				element.countDisplay.setStyle('display', 'none');
+			}
+			
+			element.countDisplay.position({relativeTo: element, position: this.options.position, edge: this.options.edge});
+			
+		}.bind(this));
+	}
+});
