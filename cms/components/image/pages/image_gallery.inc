@@ -74,6 +74,8 @@ ENDSCRIPT;
 $thumbnail_size = $gallery->thumbnail_size;
 if (!$thumbnail_size) $thumbnail_size = 125;
 
+echo $gallery->description;
+
 $view = new ImageGalleryView($images, $linkFormat, "images", $thumbnail_size);
 $view->spacing = "6px";
 $view->styles = "margin-left: 40px";
