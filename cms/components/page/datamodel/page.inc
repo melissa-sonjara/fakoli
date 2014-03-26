@@ -86,6 +86,7 @@ class Page extends DataItem implements Searchable
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
 		global $section;
+		global $identifier;
 		
 		$join = new InnerJoin();
 		$join->add(Module);
