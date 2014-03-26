@@ -93,8 +93,14 @@ class Page extends DataItem implements Searchable
 		
 		$result = $join->groupedQuery("WHERE page_id={$this->page_id} $constraint", "PageModuleXref.position");
 		$modules = extractGroupedJoinResults(Module, $result);
-		
+
 		// If no modules have been set, use the section defaults
+		if (count($modules) == 0 && $section)
+		{
+			$content = $section->getContent($identifier);
+			if ($content) $modules = $content->getModulesByPosition($constraint);
+		}
+		
 		if (count($modules) == 0 && $section)
 		{
 			$modules = $section->getModulesByPosition($constraint);
