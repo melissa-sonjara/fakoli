@@ -67,3 +67,17 @@ ALTER TABLE `section` ADD COLUMN `default_permissions` varchar(200) NOT NULL DEF
 ALTER TABLE section_content ADD COLUMN override_page_title varchar(500) NULL;
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+CREATE TABLE section_content_module_xref
+(
+	`join_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	`section_content_id` int(10) unsigned NOT NULL,
+	`module_id` int(10) unsigned NOT NULL,
+	`position` varchar(45) NOT NULL,
+	`sort_order` int(10) unsigned NOT NULL,
+  	PRIMARY KEY (`join_id`)
+) ENGINE=InnoDB;
+
+-- END Version 1.4

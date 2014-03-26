@@ -78,6 +78,7 @@ class ComponentPage extends DataItem
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
 		global $section;
+		global $identifier;
 		
 		$join = new InnerJoin();
 		$join->add(Module);
@@ -87,6 +88,12 @@ class ComponentPage extends DataItem
 		$modules = extractGroupedJoinResults(Module, $result);
 		
 		// If no modules have been set, use the section defaults
+		if (count($modules) == 0 && $section)
+		{
+			$content = $section->getContent($identifier);
+			if ($content) $modules = $content->getModulesByPosition($constraint);
+		}
+
 		if (count($modules) == 0 && $section)
 		{
 			$modules = $section->getModulesByPosition($constraint);

@@ -33,6 +33,9 @@
 
 class Section extends DataItem
 {
+	var $primary_key = "section_id";
+	var $table = "section";
+	
 	// Fields
 	
 	var $fields = array("section_id"			=>	Number,
@@ -211,20 +214,14 @@ class Section extends DataItem
 		$positions = $positionMatches[1];		
 		sort($positions);
 		return $positions;
-	}
-
-	
-	function Section()
-	{
-		$this->primary_key = "section_id";
-		$this->table = "section";
-		
-		$this->DataItem(func_get_args());
-	}
+	}	
 }
 
 class SectionContent extends DataItem
 {
+	var $primary_key = "section_content_id";
+	var $table       = "section_content";
+	
 	// Fields
 	
 	var $fields = array("section_content_id"	=>	Number,
@@ -246,7 +243,40 @@ class SectionContent extends DataItem
 		return $this->getRelated(Section);
 	}
 	
+	
 
+	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
+	{
+		$modules = Cache::get("section_content_module_map_{$this->section_content_id}");
+		if (!$modules)
+		{
+			$join = new InnerJoin();
+			$join->add(Module);
+			$join->add(SectionContentModuleXref);
+				
+			$result = $join->groupedQuery("WHERE section_content_id={$this->section_content_id} $constraint", "SectionContentModuleXref.position");
+			$modules = extractGroupedJoinResults(Module, $result);
+				
+			// Merge in global modules
+			$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+			foreach($globals as $position => $modulesAtPosition)
+			{
+				if (array_key_exists($position, $modules))
+				{
+					$modules[$position] = removeDuplicates(array_merge($modulesAtPosition, $modules[$position]));
+				}
+				else
+				{
+					$modules[$position] = $modulesAtPosition;
+				}
+			}
+				
+			Cache::put("section_module_map_{$this->section_id}", $modules);
+		}
+	
+		return $modules;
+	}
+	
 	static function getMappedContent($identifier)
 	{
 		$content = Query::create(SectionContent, "WHERE identifier=:i")
@@ -255,19 +285,14 @@ class SectionContent extends DataItem
 		
 		return $content;
 	}
-	
-	function SectionContent()
-	{
-		$this->primary_key = "section_content_id";
-		$this->table=  "section_content";
-		
-		$this->DataItem(func_get_args());
-	}
 }
 
 
 class SectionModuleXref extends DataItem
 {
+	var $table = "section_module_xref";
+	var $primary_key = "join_id";
+	
 	// Fields
 	var $fields = array("join_id"		=>	Number,
 						"section_id"	=>	Number,
@@ -289,13 +314,35 @@ class SectionModuleXref extends DataItem
 	{
 		return $this->getRelated(Module);
 	}
+}
+
+
+
+class SectionContentModuleXref extends DataItem
+{
+	var $table = "section_content_module_xref";
+	var $primary_key = "join_id";
 	
-	function SectionModuleXref()
+	// Fields
+	var $fields = array("join_id"		=>	Number,
+						"section_content_id"	=>	Number,
+						"module_id"		=>	Number,
+						"position"		=>	String,
+						"sort_order"	=>	Number);
+
+	// Relations
+
+	var $relations = array(	"SectionContent"	=>	SectionContent,
+							"Module"			=>	Module);
+
+	function SectionContent()
 	{
-		$this->table = "section_module_xref";
-		$this->primary_key = "join_id";
-		
-		$this->DataItem(func_get_args());
+		return $this->getRelated(SectionContent);
+	}
+
+	function Module()
+	{
+		return $this->getRelated(Module);
 	}
 }
 
