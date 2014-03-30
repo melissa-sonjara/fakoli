@@ -117,12 +117,12 @@ class HTMLFieldRenderer extends FieldRenderer
 			valid_elements: '*[*]',
 			selector: '#<?echo "{$this->parent->id}_{$field}"?>',
 			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace,fullscreen',
-			contextmenu: "cut copy paste pastetext searchreplace | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
+			contextmenu: "cut copy paste pastetext searchreplace removeformat | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
 			document_base_url: 'http://<?echo $config['http_host']?>',
 			menubar: false,
-			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks fullscreen",
+			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks fullscreen",
 			tools: 'inserttable' });
 	</script>
 <?		
