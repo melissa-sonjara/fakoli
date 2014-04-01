@@ -86,7 +86,7 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 	
 	function drawFacet()
 	{
-		$items = $this->taxonomy->Terms("ORDER BY term");
+		$items = $this->getTerms();
 		
 		if (count($items) == 0) return;
 		
@@ -109,6 +109,11 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 			echo "</div>\n";
 		}
 
+	}
+	
+	function getTerms()
+	{
+		return $this->taxonomy->Terms("ORDER BY term");
 	}
 	
 	function renderCheckboxes($items)
