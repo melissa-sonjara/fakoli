@@ -202,18 +202,11 @@ class HTMLFieldRenderer extends FieldRenderer
 
 	function renderReadOnly($field)
 	{
-		if ($this->colspan > 1) $style = "text-align: left";
-		echo "<tr>\n";
-		$this->_printLabel($field, $this->colspan, $style, $this->parent->annotations[$field]);
-		if ($this->colspan > 1)
-		{
-			echo "</tr>\n";
-			echo "<tr>\n";
-		}
-		echo "<td colspan='$this->colspan'";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->parent->data->get($field)."</td>\n";		
-		echo "</tr>\n";	
+		$this->_startField($field);
+
+		echo $this->parent->data->get($field);
+		
+		$this->_endField($field);
 	}	
 
 	function renderSearchField($field, $mode = "equal")

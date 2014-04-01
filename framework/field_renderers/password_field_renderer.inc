@@ -119,12 +119,11 @@ function <?echo $this->parent->id?>_showPassword()
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo "><i>Password is hidden</i></td>\n";
-		echo "</tr>\n";
+		$this->_startField($field);
+
+		echo "<i>Password is hidden</i>\n";
+		
+		$this->_endField($field);
 	}
 	
 	function preProcess($field = "")

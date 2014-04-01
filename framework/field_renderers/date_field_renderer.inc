@@ -158,12 +158,11 @@ class DateFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->format($this->parent->data->get($field))."</td>\n";		
-		echo "</tr>\n";	
+		$this->_startField($field);
+
+		echo $this->format($this->parent->data->get($field));
+
+		$this->_endField($field);
 	}
 	
 	function renderDateRangeReadOnly($field, $date_from, $date_to)
