@@ -23,7 +23,14 @@ else
 $form = new AutoForm($bookmark, "POST", "/action/bookmark/bookmark_popup?booknark_id={$bookmark_id}", "Bookmark_form");
 $form->ajaxSubmit("function(result) {BookmarkManager.handleResponse(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
-$form->readonly("url");
+if (Settings::getValue("bookmark", "show_url"))
+{
+	$form->readonly("url");
+}
+else
+{
+	$form->hide("url");
+}
 
 $form->required("title");
 $form->hide("user_id");
