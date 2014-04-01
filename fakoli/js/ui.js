@@ -859,6 +859,12 @@ var ProgressiveSearch = new Class({
 		this.list.setStyle('display', 'none');
 	},
 	
+	reset: function()
+	{
+		this.hideList(true);
+		this.element.value = "";
+	},
+		
 	showDefaultList: function()
 	{
 		if (this.element.value == '' && this.options.defaultSearch)
