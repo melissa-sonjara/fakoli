@@ -120,12 +120,8 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{		
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-		
+		$this->_startField($field);
+				
 		foreach($this->items as $item)
 		{
 			$valueField = $this->valueField ? $this->valueField : $item->getPrimaryKey();
@@ -136,12 +132,9 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 				echo $name;
 				break;
 			}
-		}
-		
-		echo "</td>\n";
-		echo "</tr>\n";
-	}
-	
+		}	
+		$this->_endField($field);
+	}	
 }
 
 ?>

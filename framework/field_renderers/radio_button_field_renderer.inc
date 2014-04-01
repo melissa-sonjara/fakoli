@@ -122,11 +122,8 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+		$this->_startField($field);
+
 		if (array_key_exists($this->parent->data->get($field), $this->options))
 		{
 			echo $this->options[$this->parent->data->get($field)];
@@ -135,7 +132,7 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		{
 			echo "Not specified";
 		}
-		echo "</td></tr>\n";
+		$this->_endField($field);
 	}
 }
 
