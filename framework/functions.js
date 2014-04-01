@@ -203,6 +203,51 @@ function isDefined(obj)
 	 if(typeof(obj) !="undefined") return true; else return false; 
 }
 
+/**
+function ellipsis($txt, $max, $wholeWord = false)
+{
+	if (strlen($txt) > $max)
+	{
+		if (!$wholeWord)
+		{
+			$txt = substr($txt, 0, $max)."...";
+		}
+		else
+		{
+			$txt = substr($txt, 0, $max);
+			$pos = strrpos($txt, " ");
+			if ($pos)
+			{
+				while($pos && $txt[$pos - 1] == '.')
+				{
+					$pos--;
+				}
+			}
+			$txt = substr($txt, 0, $pos)."...";
+		}
+	}
+	
+	return $txt;
+}
+ * @param str
+ */
+function ellipsis(txt, max)
+{
+	
+	if(txt.length > max)
+	{
+		txt = txt.substr(0,max);
+
+		if(!wholeWord)
+		{
+			txt = txt.substr(0,max) + '...';
+		}
+		else
+		{
+			
+		}
+	}
+}
 
 function number_format (number, decimals, dec_point, thousands_sep) {
     // Formats a number with grouped thousands  
