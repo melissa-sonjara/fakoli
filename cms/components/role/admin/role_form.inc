@@ -43,6 +43,7 @@ $role = new SiteRole();
 $form = new AutoForm($role);
 $redirect = "/admin/roles";
 $form->unique("role", "That role has already been defined");
+$form->annotate("role", "<i>WARNING</i> changes may require code updates.");
 $form->required("role", "name");
 $form->annotate("role", "The identifier for the role, used by the application code when determining access to features.");
 $form->annotate("name", "The display name for the role (shown in forms and tables).");
