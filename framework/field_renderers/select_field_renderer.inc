@@ -219,7 +219,9 @@ class SelectFieldRenderer extends FieldRenderer
 					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 					
 					if($current == $value)
+					{
 						$selected = " selected";
+					}
 					else
 						$selected = "";
 						
