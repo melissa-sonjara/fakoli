@@ -101,13 +101,13 @@ class TimeFieldRenderer extends FieldRenderer
 	
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		echo $this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
-		echo date('h:i A', strttotime($this->parent->data->get($field)));
-		echo "</td>\n</tr>\n";
+		$this->_startField($field);
+
+		//echo date('h:i A', strttotime($this->parent->data->get($field)));
+
+		echo $this->parent->data->format("{{$field}:h:i A}");
+		
+		$this->_endField($field);
 	}
 	
 	function preProcess($field)
