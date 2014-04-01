@@ -69,6 +69,7 @@ var EmailManager =  (function()
 			if (response == "OK")
 			{
 				this.closeMailToDialog();
+				notification("Your message has been sent.");
 			}
 			else
 			{
