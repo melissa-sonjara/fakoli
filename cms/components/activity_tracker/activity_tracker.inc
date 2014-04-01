@@ -110,11 +110,11 @@ class ActivityTracker
 		try
 		{
 			$feedback = new UserFeedback();
-			$feedback->joinTransaction();
+			$feedback->joinTransaction($tx);
 			$feedback->delete("WHERE user_id={$user_id}");
 					
 			$userActivity = new UserActivity();
-			$userActivity->joinTransaction();
+			$userActivity->joinTransaction($tx);
 			$userActivity->delete("WHERE user_id={$user_id}");
 			
 			$tx->commit();
