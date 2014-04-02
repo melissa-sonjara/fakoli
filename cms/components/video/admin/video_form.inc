@@ -88,6 +88,12 @@ $form->allowDelete = true;
 
 $redirect = "/admin/videos?video_gallery_id=$video_gallery_id";
 $form->button("Cancel", $redirect);
+
+if ($video_id)
+{
+	$form->button("Download Video", "/action/video/download?video_id=$video_id");
+}
+
 $form->onSaveComplete = processVideo;
 
 if ($method == "POST")
