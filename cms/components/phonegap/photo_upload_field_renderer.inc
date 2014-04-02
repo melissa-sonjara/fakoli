@@ -102,9 +102,14 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	<div id="<?echo $this->parent->id?>_<?echo $field?>_thumbnail"><?echo $img?></div>
 	<div id="<?echo $this->parent->id?>_<?echo $field?>_status"></div>
 	<br/>
+<?
+		if (PhonegapManager::hasPhonegap())
+		{
+?>
 	<a href="#" onclick="new PhotoUploader().capturePhoto(); return false" class="button"> Take a Photo </a>&nbsp;&nbsp;
 	<a href="#" onclick="new PhotoUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
 <?
+		}
 		$this->_endField($field);
 	}
 	
