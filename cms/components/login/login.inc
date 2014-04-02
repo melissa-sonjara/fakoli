@@ -121,6 +121,7 @@ class LoginManager
 
 		$username = $_POST["username"];
 		$password = $_POST["password"];
+		$remember = checkNumeric($_POST["remember_me"]);
 		
 		trace("Fakoli LoginManager validateLogin username $username", 3);
 		// JDG - guard against data not found exception
@@ -136,6 +137,20 @@ class LoginManager
 			$_SESSION["user"] = $user;
 
 			trace("USER: ".serialize($user), 1);
+
+			if (Settings::getValue("login", "enable_username_cookie") && $remember)
+			{
+				$expiry = time() + 86400 * Settings::getValue("login", "remember_me_cookie_expiration");
+				setcookie("site_user", $username, $expiry);
+			}
+			else
+			{
+				if ($_COOKIE["site_user"])
+				{
+					setcookie("site_user", "", time() - 3600);
+				}
+			}
+				
 			$mgr->loadDefaultSession($user);
 			$mgr->loginRedirect($user);
 		}
@@ -145,6 +160,7 @@ class LoginManager
 			
 			if ($user)
 			{
+				
 				$_SESSION["user"] = $user;
 				$mgr->loadDefaultSession($user);
 				redirect($mgr->getPasswordResetPage());
@@ -395,11 +411,14 @@ class LoginManager
 	{
 		trace("Setting Login defaults", 4);
 		
-		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean");
-
-		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users");
-		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)");
-		Settings::setDefaultValue("login", "default_login_redirect", "", String, "The page to which users are redirected when they attempt to access the login page when logged in");
+		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean", "Turns on or off user authentication. When turned off, no users can access the site except for admins", "Access Control");
+		Settings::setDefaultValue("login", "enable_username_cookie", false, Boolean, "Enables or disables the 'Remember my username' option on the default login page", "Username Cookie");
+		Settings::setDefaultValue("login", "remember_me_text", "Remember my Username", String, "The text to display next to the 'remember me' checkbox on the default login page", "Username Cookie");
+		Settings::setDefaultValue("login", "remember_me_cookie_expiration", 15, Number, "The number of days for which the username is to be remembered", "Username Cookie");
+		
+		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users", "Login Redirects");
+		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)", "Login Redirects");
+		Settings::setDefaultValue("login", "default_login_redirect", "", String, "The page to which users are redirected when they attempt to access the login page when logged in", "Login Redirects");
 	}
 	
 	static function upgradeComponent($version)

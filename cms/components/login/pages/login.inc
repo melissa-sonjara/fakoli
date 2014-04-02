@@ -56,6 +56,15 @@ if ($user)
 //optional login text here
 echo TextLookup::getText("login_text", null, true);
 
+$enableCookie = Settings::getValue("login", "enable_username_cookie");
+$rememberText = Settings::getValue("login", "remember_me_text");
+
+if ($enableCookie && !$username)
+{
+	$username = $_COOKIE["site_user"];
+	if ($username) $checked = " checked='checked'";
+}
+
 // Login form goes here
 ?>
 <form id="login_form" name='form1' method='POST' action=''>
@@ -83,6 +92,16 @@ echo TextLookup::getText("login_text", null, true);
 	<a href="/password_help?username=<?=$username?>&amp;redirect=<?=$redirect?>">Forgotten Password?</a>
    </td>
   </tr>
+<?
+	if ($enableCookie)
+	{
+?>
+  <tr>
+   <td colspan='2'><input type='checkbox' name='remember_me' value='1'<?echo $checked?>/> <?echo $rememberText?></td>
+  </tr>
+<?
+	}
+?>
   <tr>
    <td colspan="2" style="text-align: right">
 	<input name="Login" type="submit" value="  Login  " class="button" />
