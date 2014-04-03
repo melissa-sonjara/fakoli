@@ -97,10 +97,19 @@ function <?echo $field ?>_keyup(event)
 	var ctrl = $('<?echo "{$this->parent->id}_{$field}" ?>');
 	if(!ctrl) return;
 		
-	if (ctrl.value.length >= <?echo $limit ?>) 
+	if(ctrl.value.length == <?php echo $limit ?>)
+	{
+		var next = ctrl.getNext("input");
+		if(next && next.getAttribute('data-name') == ctrl.getAttribute('data-name'))
+		{
+			next.focus();
+		}
+	}
+	else if (ctrl.value.length >= <?echo $limit ?>) 
 	{
 		ctrl.value = ctrl.value.substring(0, <?echo $limit ?>);
 	}
+	
 }
 <?php
 	}
@@ -134,7 +143,7 @@ function <?echo $field ?>_keyup(event)
 			
 			$onkeypress = " onkeyup='{$partField}_keyup(event);'";	
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
-			echo "$pre<input id='{$this->parent->id}_{$partField}' type='text' name='{$partField}' value='".htmlspecialchars($valueParts[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp;";
+			echo "$pre<input id='{$this->parent->id}_{$partField}' data-name='{$field}' type='text' name='{$partField}' value='".htmlspecialchars($valueParts[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp;";
 			$idx++;	
 		}
 		
@@ -144,13 +153,11 @@ function <?echo $field ?>_keyup(event)
 	
 	function renderReadOnly($field)
 	{
-		trace("PhoneNumberFieldRenderer::renderReadOnly $field", 3);
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">".$this->format($field)."</td>\n";		
-		echo "</tr>\n";	
+		$this->_startField($field);
+
+		echo $this->format($field);
+
+		$this->_endField($field);
 	}
 
 	function renderSearchField($field, $mode = "equal")
