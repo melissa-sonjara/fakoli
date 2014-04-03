@@ -95,16 +95,9 @@ if (count($siteMapPages) > 0)
 }
 
 
-?>
-<h3>The Site Hierarchy maps the location of pages within the site.</h3>
-<table border="0">
- <tr>
-  <td colspan="2">
-<?
+echo "<h3>The Site Hierarchy maps the location of pages within the site.</h3>\n";
+
 $siteTree->writeHTML();
+
+echo "<p><a class='button' href='/action/site_map/scan'> Scan for Page Updates </a></p>\n";
 ?>
-  </td>
- </tr>
-</table>
-<br/>
-<a class="button" href="/action/site_map/scan"> Scan for Page Updates </a>
