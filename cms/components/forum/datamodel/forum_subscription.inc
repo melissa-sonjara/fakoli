@@ -19,11 +19,10 @@ class ForumSubscription extends DataItem
 			"User"			=>	""
 	);
 	
-	var $subscriptionTypes = array(
+	static $subscriptionOptions = array(
 			1		=>  "Daily Digest",
 			2		=>	"Instant Notification"
-	);
-	
+			);
 	
 	function Forum()
 	{
@@ -39,6 +38,32 @@ class ForumSubscription extends DataItem
 	{
 		$mgr = new UserManager();
 		return $this->getRelated($mgr->getUserClass(), "user_id");
+	}
+	
+	static function findUserSubscription($forum_id, $topic_id = 0)
+	{
+		global $user;
+		
+		if(!$user) return null;
+		$pk = $user->getPrimaryKey();
+		
+		trace("***************findUserSubscription user id {$user->$pk} forum_id $forum_id topic_id $topic_id", 3);
+		$subscriptions = Query::create(ForumSubscription, "WHERE user_id=:user_id AND forum_id=:forum_id AND topic_id=:topic_id")
+			->bind(":user_id",  $user->$pk, ":forum_id", $forum_id, ":topic_id", $topic_id)
+			->execute();
+
+		return count($subscriptions) ? $subscriptions[0] : null;
+	}
+	
+	static function getUserTopicSubscriptions($forum_id)
+	{
+		global $user;
+		if(!$user) return null;
+		$pk = $user->getPrimaryKey();
+		
+		return Query::create(ForumSubscription, "WHERE user_id=:user_id AND forum_id=:forum_id AND topic_id > 0")
+			->bind(":user_id",  $user->$pk, ":forum_id", $forum_id)
+			->execute();
 	}
 	
 	function ForumSubscription()

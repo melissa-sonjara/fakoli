@@ -49,7 +49,7 @@ $subscriptions = query(ForumSubscription, "WHERE user_id = {$user->user_id}");
 $table = new DataListView($subscriptions, "forumSubscriptions");
 $table->column("Forum Title", "{Forum.title}", true, "width: 40%")
 		->column("Topic Title", getTopicTitle, true, "width: 35%")
-		->column("Subscription Type", renderSubscriptionType, false, "width: 25%");
+		->column("Subscription Type", array(SubscriptionManager, renderSubscriptionType), false, "width: 25%");
 	
 $table->emptyMessage = "You are not subscribed to any forums or topics.";
 $table->sortable = true;
@@ -93,31 +93,11 @@ function getTopicTitle($subscription)
 	return $title; 	
 }
 
-function renderSubscriptionType($subscription)
-{
-	$subscriptionTypes = $subscription->subscriptionTypes;
-	$current = $subscription->subscription_type;
-	$forum_subscription_id = $subscription->forum_subscription_id;
-	
-	foreach($subscriptionTypes as $value => $name)
-	{
-		$selected = ($current == $value) ? " checked" : "";
-		$html .= "<input style='border: none' type='radio' id='subscription[{$forum_subscription_id}]' name='subscription[{$forum_subscription_id}]' value='$value' $selected>$name</option><br>\n";
-	}
-	
-	$html .= "<input style='border: none' type='radio' id='subscription[{$forum_subscription_id}]' name='subscription[{$forum_subscription_id}]' value='". subscription_unsubscribe ."'>Unsubscribe</option><br>\n";
-	
-	return $html;
-}
-
 function saveForm()
 {
 	global $_POST;
 		
 	$subscriptions = $_POST["subscription"];
-	
-	echo "<pre>"; print_r($_POST); echo "</pre>";
-		echo "<pre>"; print_r($subscriptions); echo "</pre>";
 	
 	if(count($subscriptions) > 0)
 	{

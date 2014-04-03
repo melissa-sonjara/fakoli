@@ -133,7 +133,7 @@ class ForumDetailsView
 		$this->table->filter = true;
 		$this->table->pageSize = Settings::getValue("forum", "forum_topics_per_page");
 		
-		$this->subscriptionView = new ForumSubscriptionView($this->forum, $this->topics);
+		$this->subscriptionView = new ForumSubscriptionHelper($this->forum);
 		
 	}
 	

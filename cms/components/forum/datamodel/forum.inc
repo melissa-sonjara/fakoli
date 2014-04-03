@@ -50,12 +50,16 @@ class Forum extends DataItem
 	
 	// Relations
 	
-	var $relations = array("Sites"		=>	Site,
-						   "Owner"		=>	"",
-						   "Messages"	=>	ForumMessage,
-						   "Topics"		=>	ForumTopic,
-						   "LastPost"	=>	ForumMessage,
-						   "Summary"	=>	ForumSummary);
+	var $relations = array(
+			"Sites"			=>	Site,
+			"Owner"			=>	"",
+			"Messages"		=>	ForumMessage,
+			"Topics"		=>	ForumTopic,
+			"LastPost"		=>	ForumMessage,
+			"Summary"		=>	ForumSummary,
+			"Subscriptions"	=>	ForumSubscription,
+			"UserSubscriptions"	=>	ForumSubscription,
+						);
 	
 	function Sites($constraint = "")
 	{
@@ -87,6 +91,26 @@ class Forum extends DataItem
 	function Summary()
 	{
 		return $this->getRelated(ForumSummary);
+	}
+	
+	function Subscriptions($constraint = "")
+	{
+		return $this->getRelatedList(ForumSubscription, "", $constraint);
+	}
+	
+	/**
+	 * Get the subscriptions to this forum for this user. There should at
+	 * most one per user.
+	 * 
+	 * @return obj class ForumSubscription
+	 */
+	function UserSubscription()
+	{
+		global $user;
+		$pk = $user->getPrimaryKey();
+		
+		$subscriptions = $this->Subscriptions("WHERE user_id={$user->$pk}");
+		return count($subscriptions) ? $subscriptions[0] : null;
 	}
 	
 	function allowDelete()
@@ -273,6 +297,11 @@ class ForumTopic extends DataItem
 	function Forum()
 	{
 		return $this->getRelated(Forum);
+	}
+	
+	function getTitle()
+	{
+		return $this->FirstPost()->title;
 	}
 	
 	function Messages($constraint = "")

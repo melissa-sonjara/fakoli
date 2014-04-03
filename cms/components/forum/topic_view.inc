@@ -33,16 +33,17 @@
 
 class ForumTopicView
 {
+	var $forum;
 	var $topic;
 	var $subscriptionView;
 	
 	function ForumTopicView($topic, $id = "topic_view")
 	{
 		$this->topic = $topic;
-	
+		$this->forum = $topic->Forum();
 		$this->messages = $this->topic->Messages("WHERE deleted=0 ORDER BY date_posted");
 
-		$this->subscriptionView = new TopicSubscriptionView($this->topic);		
+		$this->subscriptionView = new ForumSubscriptionHelper($this->forum, $this->topic);		
 	}
 	
 	function writeScript()
