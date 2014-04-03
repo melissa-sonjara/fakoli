@@ -147,7 +147,7 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 		else
 		{
 			$form->add($this, $field);
-				$form->overrides[$field]['label'] = $label;
+			$form->overrides[$field]['label'] = $label;
 		}		
 		
 		$this->delete_fn = $delete_fn;	
@@ -178,6 +178,19 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 		
 		$this->_endField($field);
 	}
+	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+	
+		$this->parent->validator->add(new EmailListValidator($field, $label));
+	
+		if($required)
+		{
+			$this->parent->validator->add(new RequiredValidator($field, $label));
+		}
+	}
+		
 	
 	function renderReadOnly($field)
 	{
