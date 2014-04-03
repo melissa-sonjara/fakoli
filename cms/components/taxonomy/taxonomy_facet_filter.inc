@@ -113,7 +113,7 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 	
 	function getTerms()
 	{
-		return $this->taxonomy->Terms("ORDER BY term");
+		return $this->taxonomy->Terms("ORDER BY sort_order, term");
 	}
 	
 	function renderCheckboxes($items)
