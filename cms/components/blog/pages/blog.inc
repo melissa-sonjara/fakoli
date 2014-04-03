@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("blog");
+Fakoli::using("blog", "login");
 
 $id = $_GET["blog"];
 $article_id = checkNumeric($_GET["article_id"]);
@@ -63,6 +63,12 @@ if ($year)
 	}
 		echo $year;
 		echo "</h3>";
+}
+
+if(!$user)
+{
+	$mgr = new LoginManager();
+	$mgr->storeRedirectPage();
 }
 
 $view = new BlogView($blog);
