@@ -1251,22 +1251,30 @@ class RequiredCrossReferenceSelectValidator extends AbstractValidator
 	}
 	
 	function writeClient()
-	{		
+	{	
+		if($this->min == 0) return;
+			
 $script = <<<ENDSCRIPT
 		
 		var i = 1;
 		var countChecked = 0;
 		var max = form["count_{$this->field}"].value;
-		var elt;
 	
-		for(i=1; i <= max; i++)
+		var pattern = new RegExp("^{$this->field}\\\\[.*?\\\\]$");
+		
+		for(i=0; i < form.elements.length; i++)
 		{
-			elt = form["{$this->field}["+i+"]"];
-			if(elt.checked == true)
-				countChecked += 1;
+			ctrl = form.elements[i];
+			if (pattern.test(ctrl.name))
+			{
+				if (ctrl.checked == true)
+				{
+					countChecked++;
+				}
+			}
 		}
-	
-	if ({$this->min} > 0 && countChecked < {$this->min})
+		
+	if (countChecked < {$this->min})
 	{
 		alert("You must check at least {$this->min} {$this->msgText} for {$this->title}.");
 		return false;
