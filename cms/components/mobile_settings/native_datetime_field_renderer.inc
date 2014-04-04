@@ -67,7 +67,7 @@ window.addEvent('domready', function()
 		
 		if ($this->pushToSet)
 		{
-			echo "&nbsp;&nbsp;<a class='button' href='#'><img src='/components/mobile_settings/images/stopwatch_icon.png' alt='Push to Set'/></a>";
+			echo "&nbsp;&nbsp;<a id='{$this->parent->id}_{$field}_button' class='button' href='#'><img src='/components/mobile_settings/images/stopwatch_icon.png' alt='Push to Set'/></a>";
 		}
 		
 		$this->_endField($field);
