@@ -3,6 +3,8 @@ Fakoli::usingFeature("field_renderers");
 
 class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 {
+	var $pushToSet = false;
+	
 	function NativeDateTimeFieldRenderer(&$parent, $field)
 	{
 		trace("Instantiating NativeDateTimeFieldRenderer for $field", 1);
@@ -13,6 +15,23 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 	
 	function renderScript($field)
 	{
+		if ($this->pushToSet)
+		{
+			$script = <<<ENDSCRIPT
+<script type='text/javascript'>
+window.addEvent('domready', function()
+{
+	document.id('{$this->parent->id}_{$field}_button').addEvent('click', function()
+	{
+		var now = new Date();
+		var date = now.toISOString().split("T")[0];
+		var time = now.toTimeString().split(" ")[0];
+		document.id('{$this->parent->id}_{$field}_date').value = date;
+		document.id('{$this->parent->id}_{$field}_time').value = time;
+	});
+}		
+ENDSCRIPT;
+		}
 	}
 	
 	function addValidatorsToForm($field, $required = false)
@@ -44,6 +63,12 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 		$this->_startField($field);
 		echo "<input id='{$this->parent->id}_{$field}_date' type='date' name='{$field}_date' value='$date'>";
 		echo "&nbsp;<input id='{$this->parent->id}_{$field}_time' type='time' name='{$field}_time' value='$time'>";
+		
+		if ($this->pushToSet)
+		{
+			echo "&nbsp;&nbsp;<a class='button' href='#'><img src='/components/mobile_settings/images/stopwatch_icon.png' alt='Push to Set'/></a>";
+		}
+		
 		$this->_endField($field);
 	}
 	
