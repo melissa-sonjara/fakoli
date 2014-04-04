@@ -28,6 +28,7 @@ window.addEvent('domready', function()
 		var time = now.toTimeString().split(" ")[0];
 		document.id('<?echo $this->parent->id?>_<?echo $field?>_date').value = date;
 		document.id('<?echo $this->parent->id?>_<?echo $field?>_time').value = time;
+		return false;
 	});
 });
 </script>
