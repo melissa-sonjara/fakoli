@@ -557,6 +557,16 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 	}
 	
 	/**
+	 * Remove the specified field grouping from the form. Any fields within the group
+	 * will be displayed ungrouped if they are not hidden.
+	 * @param string $name the legend of the group
+	 */
+	function removeGroup($name)
+	{
+		unset($this->groups[$name]);
+	}
+	
+	/**
 	 * Use this method to hide the labels for the specified fields in the form.
 	 */
 	function hideLabel()
