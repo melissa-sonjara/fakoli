@@ -17,20 +17,21 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 	{
 		if ($this->pushToSet)
 		{
-			$script = <<<ENDSCRIPT
+?>
 <script type='text/javascript'>
 window.addEvent('domready', function()
 {
-	document.id('{$this->parent->id}_{$field}_button').addEvent('click', function()
+	document.id('<?echo $this->parent->id?>_<?echo $field?>_button').addEvent('click', function()
 	{
 		var now = new Date();
 		var date = now.toISOString().split("T")[0];
 		var time = now.toTimeString().split(" ")[0];
-		document.id('{$this->parent->id}_{$field}_date').value = date;
-		document.id('{$this->parent->id}_{$field}_time').value = time;
+		document.id('<?echo $this->parent->id?>_<?echo $field?>_date').value = date;
+		document.id('<?echo $this->parent->id?>_<?echo $field?>_time').value = time;
 	});
-}		
-ENDSCRIPT;
+});
+</script>
+<?
 		}
 	}
 	
