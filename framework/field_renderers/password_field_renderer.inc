@@ -42,8 +42,9 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class PasswordFieldRenderer extends FieldRenderer
 {
-	var $encryptor;
-	var $forceReset = false; // true if user logged in with a temporary token
+	var $encryptor;	//< Custom encryptor
+	var $forceReset = false; ///< true if user logged in with a temporary token
+	var $numeric = false; //< numeric code (PIN)
 	
 	function PasswordFieldRenderer(&$parent)
 	{
@@ -60,11 +61,11 @@ class PasswordFieldRenderer extends FieldRenderer
 ?>
 <script type='text/javascript'>
 <!--
-function <?echo $this->parent->id?>_showPassword()
+function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 {
-	var link = document.getElementById("<?echo $this->parent->id?>_link");
-	var block = document.getElementById("<?echo $this->parent->id?>_password_block");
-	document.forms['<?echo $this->parent->id ?>'].<?echo $this->parent->id ?>_reset_password.value = 1;
+	var link = document.getElementById("<?echo $this->parent->id?>_<?echo $field?>_link");
+	var block = document.getElementById("<?echo $this->parent->id?>_<?echo $field?>_password_block");
+	document.forms['<?echo $this->parent->id ?>'].<?echo $this->parent->id ?>_<?echo $field?>_reset_password.value = 1;
 	
 	link.style.display = "none";
 	block.style.display = "block";
@@ -79,17 +80,18 @@ function <?echo $this->parent->id?>_showPassword()
 	{
 		$enter = $this->parent->passwordEnterLabel;
 		$confirm = $this->parent->passwordConfirmLabel;
-	
+		$size = $this->numeric ? "6" : "20";
+		$onKeyPress = $this->numeric ? " onkeypress='return maskInput(event, $allowneg);'" : ""
 ?>
-			 <input type="hidden" name="<?echo $field ?>" value="">
-			 <table border="0" cellspacing="0" cellpadding="0" id="<?echo $this->parent->id ?>_password_block" style="padding: 0px; display: <?echo $display ?>">
+			 <input type="hidden" name="<?echo $field ?>" id="<?echo $this->parent->id?>_<?echo $this->field?>" value="">
+			 <table border="0" cellspacing="0" cellpadding="0" id="<?echo $this->parent->id ?>_<?echo $field?>_password_block" style="padding: 0px; display: <?echo $display ?>">
 			  <tr>
   				<td style="vertical-align: top; text-align: left"><?echo $enter?>&nbsp;</td>
-  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $this->parent->id?>_password" size="20" value=""/></td>
+  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $this->parent->id?>_<?echo $field?>_password" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
  			  </tr>
  			  <tr>
   				<td style="vertical-align: top; text-align: left"><?echo $confirm?>&nbsp;</td>
-  				<td><input type="password" name="<?echo $this->parent->id?>_confirm" size="20" value=""/></td>
+  				<td><input type="password" name="<?echo $this->parent->id?>_<?echo $field?>_confirm" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
  			  </tr>
  			 </table>		
 <?
@@ -103,14 +105,14 @@ function <?echo $this->parent->id?>_showPassword()
 		
 		if ($this->parent->data->get($pk) && !$this->forceReset)
 		{
-			echo "<a id='{$this->parent->id}_link' href='#' onclick='{$this->parent->id}_showPassword();return false;'>Click to reset password</a>\n";
+			echo "<a id='{$this->parent->id}_{$field}_link' href='#' onclick='{$this->parent->id}_{$field}_showPassword();return false;'>Click to reset password</a>\n";
 			$this->renderPasswordBlock($field, "none");
-			echo "<input type='hidden' name='{$this->parent->id}_reset_password' value=''/>\n";
+			echo "<input type='hidden' name='{$this->parent->id}_{$field}_reset_password' value=''/>\n";
 		}
 		else
 		{
 			$this->renderPasswordBlock($field);
-			echo "<input type='hidden' name='{$this->parent->id}_reset_password' value='1'/>\n";
+			echo "<input type='hidden' name='{$this->parent->id}_{$field}_reset_password' value='1'/>\n";
 		}
 		
 		$this->_endField($field);
@@ -130,9 +132,9 @@ function <?echo $this->parent->id?>_showPassword()
 	{
 		$pk = $this->parent->data->getPrimaryKey();
 		
-		if (!$this->parent->data->$pk || $_POST["{$this->parent->id}_reset_password"])
+		if (!$this->parent->data->$pk || $_POST["{$this->parent->id}_{$field}_reset_password"])
 		{
-			$password = $_POST["{$this->parent->id}_password"];
+			$password = $_POST["{$this->parent->id}_{$field}_password"];
 		}
 		else
 		{
