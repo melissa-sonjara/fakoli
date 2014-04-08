@@ -53,9 +53,22 @@ define("invalid_password", 4);
 
 Fakoli::using("user", "email", "settings");
 
+interface LoginExtension
+{
+	function draw();
+	function validate($user);
+	function getError();
+}
+
 class LoginManager
 {
 	static $error;
+	static $extension = null;
+	
+	static function registerLoginExtension($extension)
+	{
+		LoginManager::$extension = $extension;
+	}
 	
 	static function emailToken($siteUser)
 	{
@@ -130,6 +143,15 @@ class LoginManager
 	
 		$user = $mgr->validatePassword($username, $password);
 
+		if (LoginManager::$extension)
+		{
+			if (!$LoginManager::$extension->validate($user))
+			{
+				LoginManager::$error = $LoginManager::$extension->getError();
+				$user = null;
+			}
+		}
+		
 		if ($user)
 		{
 			session_start();

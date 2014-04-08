@@ -101,6 +101,11 @@ if ($enableCookie && !$username)
   </tr>
 <?
 	}
+	
+	if (LoginManager::$extension)
+	{
+		LoginManager::$extension->draw();
+	}
 ?>
   <tr>
    <td colspan="2" style="text-align: right">
