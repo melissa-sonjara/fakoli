@@ -137,6 +137,8 @@ class LoginManager
 		$remember = checkNumeric($_POST["remember_me"]);
 		
 		trace("Fakoli LoginManager validateLogin username $username", 3);
+		trace(print_r($_POST, true), 3);
+		
 		// JDG - guard against data not found exception
 		if(!$username OR !$password)
 			return LoginManager::$error = "Incorrect user name or password.";			
