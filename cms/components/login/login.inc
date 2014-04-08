@@ -147,7 +147,7 @@ class LoginManager
 		{
 			if (!LoginManager::$extension->validate($user))
 			{
-				LoginManager::$error = $LoginManager::$extension->getError();
+				LoginManager::$error = LoginManager::$extension->getError();
 				$user = null;
 			}
 		}
