@@ -145,7 +145,7 @@ class LoginManager
 	
 		$user = $mgr->validatePassword($username, $password);
 
-		if (LoginManager::$extension)
+		if ($user && LoginManager::$extension)
 		{
 			if (!LoginManager::$extension->validate($user))
 			{
