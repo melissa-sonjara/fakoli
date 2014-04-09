@@ -51,7 +51,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 $document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "author", "file", "allow_access", "publication_date", "publication");
 
 $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
-$form->readonly("file");
+//$form->readonly("file");
 $form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->allowDelete = true;
