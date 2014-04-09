@@ -39,7 +39,8 @@ class ToolHint extends DataItem
 	var $fields = array("hint_id"		=>	Number,
 						"code"			=>	String,
 						"title"			=>	String,
-						"hint"			=>	HTML);
+						"hint"			=>	HTML,
+						"can_be_hidden"	=>	Boolean);
 
 	static function findToolHint($code)
 	{

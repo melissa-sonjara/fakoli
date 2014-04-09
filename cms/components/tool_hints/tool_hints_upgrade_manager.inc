@@ -14,7 +14,8 @@ Fakoli::using("tool_hints", "component");
 class ToolHintsUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-		"1.0"	=>	"sql:Create tool_hint and tool_hint_user_status tables"
+		"1.0"	=>	"sql:Create tool_hint and tool_hint_user_status tables",
+		"1.1"	=>	"sql:Added can_be_hidden flag to tool_hint table"
 	);
 
 	function ToolHintsUpgradeManager()

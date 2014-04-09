@@ -30,3 +30,9 @@ create table tool_hint_user_status
 ) Engine=InnoDB;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE tool_hint ADD COLUMN can_be_hidden TINYINT(3) NOT NULL DEFAULT 1;
+
+-- END Version 1.1

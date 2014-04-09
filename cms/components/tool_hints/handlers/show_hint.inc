@@ -37,7 +37,7 @@ $code = checkIdentifier($_GET["code"]);
 $hint = ToolHint::findToolHint($code);
 echo $hint->hint;
 
-if ($user && !$hint->isHidden())
+if ($user && $hint->can_be_hidden && !$hint->isHidden())
 {
 ?>
 <br/><input type='checkbox' class='checkbox' onchange='ToolHint.hide("<?echo $code?>"); return false'><label>&nbsp;Hide this popup from now on</label>
