@@ -49,7 +49,7 @@ class ToolHintsManifest
 	{
 		return array
 		(
-			"Classification"	=> array
+			"Site Content"	=> array
 			(
 
 				"Tool Hints"	=>	array("page"	=>	"/admin/tool_hints",
