@@ -979,6 +979,10 @@ ENDSCRIPT;
         return $out;  
     }
     
+    /**
+     * Returns formatted summary information regarding usage of the server's filesystem.
+     * @return string 
+     */
     static function getFileSystemInfo()
     {
     	global $config;
