@@ -857,6 +857,15 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			echo "<input type='hidden' name='#FORMID#' value='{$this->id}'/>";
 		}
 		
+		$csrfToken = $_SESSION["csrfToken"];
+		if (!$csrfToken)
+		{
+			$csrfToken = plainGUID();
+			$_SESSION["csrfToken"] = $csrfToken;
+		}
+		
+		echo "<input type='hidden' name='#SESSIONTIE#' value='{$csrfToken}'/>\n";
+		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
@@ -1164,6 +1173,11 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			$this->id = $_POST["#FORMID#"];
 		}
 
+		if (!isset($_REQUEST["#SESSIONTIE#"]) || $_REQUEST["#SESSIONTIE#"] != $_SESSION["csrfToken"])
+		{
+			throw new FakoliException("Invalid Session Token");
+		}
+		
 		if ($_POST["{$this->id}_delete"])
 		{
 			if(!$this->onDelete)
