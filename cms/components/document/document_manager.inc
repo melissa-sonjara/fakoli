@@ -825,6 +825,67 @@ function deleteFolderResult(result)
 		}
 	}
 	
+	/**
+	 * Generate a ZIP archive of all the documents in the specified library.
+	 * @param integer $library_id the ID of the library to be zipped
+	 */
+	static function zipLibrary($library_id, $process = null)
+	{
+		global $config;
+		
+		Fakoli::assertRole("admin");
+		$library = new DocumentLibrary($library_id);
+		
+		if ($process)
+		{
+			$process->setProgress("Running", "Scanning files", 0);
+		}
+		
+		$files = $library->Documents("ORDER BY file");
+		
+		$libraryFileName = $library->format("library_{document_library_id}.zip");
+		$libraryDir = $library->getLibraryDirectory();
+		$libraryZipFile = $config['uploadbase'] . DIRECTORY_SEPARATOR . $libraryFileName;
+		if (file_exists($libraryZipFile))
+		{
+			unlink($libraryZipFile);
+		}
+		
+
+		$zip = new ZipArchive();
+		
+		// open archive
+		if ($zip->open($libraryZipFile, ZIPARCHIVE::CREATE) !== TRUE) 
+		{
+			if ($process)
+			{
+				$process->setProgress("Error", "Could not create ZIP archive");
+				throw new FakoliException("Could not create ZIP archive");
+			}
+		}
+
+		$max = count($files);
+		$c = 0;
+		
+		foreach($files as $file)
+		{
+			$fullPath = $libraryDir . DIRECTORY_SEPARATOR . $file->file;
+			$zip->addFile($fullPath, $file->file);
+	
+			if ($process)
+			{
+				$process->setProgress("Running", "Added $c of $max ".pluralize("file", $max), number_format(100 * $c / $max, 0));
+			}
+		}
+		
+		$zip->close();
+		
+		if ($process)
+		{
+			$process->setProgress("Completed", "Zip archive created", 100);
+		}
+	}
+	
 	/*
 	 * Read  or allow_access roles, include
 	 * visitor (nonuser) option.

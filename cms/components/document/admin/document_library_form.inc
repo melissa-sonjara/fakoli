@@ -57,6 +57,14 @@ $form = DocumentManager::buildDocumentLibraryForm($library);
 
 $form->button("Import Metadata...", "document_library_metadata_import?document_library_id={$document_library_id}");
 
+if ($document_library_id)
+{
+	$form->button("Download ZIP Archive", 
+		"new BackgroundProcess('Creating ZIP Archive', '/action/document/zip_library?document_library_id={$document_library_id}', ".
+        "{onComplete: function() { window.location.href = '/action/document/zip_library_download?document_library_id={$document_library_id}'; } });". 
+        "return false;", false, true);
+}
+
 if ($method == "POST")
 {
 	if ($form->save())
