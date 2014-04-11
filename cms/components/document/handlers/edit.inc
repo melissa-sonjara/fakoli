@@ -48,7 +48,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 	die("Access Denied");
 }
 
-$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "author", "file", "allow_access", "publication_date", "publication");
+$document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "image_id", "author", "file", "allow_access", "publication_date", "publication");
 
 $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
 $fileUpload = new FileUploadFieldRenderer($form, "file_upload", "Replace File", replaceLibraryFile);

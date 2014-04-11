@@ -131,3 +131,9 @@ CREATE TABLE document_comment_xref (
 ) ENGINE=InnoDB;
 
 -- END Version 1.8
+
+-- START Version 1.9
+
+ALTER TABLE document ADD COLUMN image_id int(11) not null default 0 AFTER keywords;
+
+-- END Version 1.9

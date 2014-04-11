@@ -45,6 +45,7 @@ class Document extends DataItem implements Searchable
 						"keywords"				=>  String,
 						"author"				=>	String,
 						"publication"			=>	String,
+						"image_id"				=>	Image,
 						"notes"					=>	HTML,
 						"public"				=>	Boolean,
 						"last_modified"			=>	Timestamp,
@@ -58,8 +59,11 @@ class Document extends DataItem implements Searchable
 	var $relations = array(	"Topics"			=>	Topic,
 							"Owner"				=>	"",
 							"DocumentLibrary"	=>	DocumentLibrary,
-							"Comments"			=>	Comment
+							"Comments"			=>	Comment,
+							"Image"				=>	ImageRecord
 	);
+	
+	var $fieldAliases = array("image_id"	=>	"Image");
 	
 	function Topics($constraint = "")
 	{
@@ -71,6 +75,11 @@ class Document extends DataItem implements Searchable
 		return $this->crossReference(Comment, DocumentCommentXref, $constraint);
 	}
 
+	function Image()
+	{
+		return $this->getRelated(ImageRecord);
+	}
+	
 	function Owner()
 	{
 		$mgr = new UserManager();
