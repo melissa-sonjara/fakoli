@@ -105,7 +105,7 @@ class DashboardView
 	function drawView()
 	{
 ?>
-		<div id="<?echo $this->id?>">
+		<div id="<?echo $this->id?>" class="dashboard">
 		 <div class="dashboard_top" style="width: 100%">
 <?
 		foreach($this->topWidgets as $w) $w->drawWidget();
