@@ -52,12 +52,13 @@ class Panel
 	{
 		$this->id = $id;
 		$this->handler = $handler;
+		$this->attrs = $attrs;
 	}
 	
 	function draw()
 	{
 		$mgr = new ComponentManager();
-		echo "<div id='{$this->id}' $attrs data-url='{$this->handler}'>";
+		echo "<div id='{$this->id}' $this->attrs data-url='{$this->handler}'>";
 		echo $mgr->dispatchLocalAction($this->handler);
 		echo "</div>";
 	}
