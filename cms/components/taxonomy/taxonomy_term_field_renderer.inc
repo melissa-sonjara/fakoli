@@ -55,7 +55,7 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 		$this->taxonomy = $taxonomy;
 		$this->field = $taxonomy->identifier;
 		$this->label = $taxonomy->taxonomy_name;
-		$this->options = $taxonomy->Terms("ORDER BY term");
+		$this->options = $taxonomy->Terms("ORDER BY sort_order, term");
 		$this->dropdown = true;
 		
 		$this->showSelectAll = true;
