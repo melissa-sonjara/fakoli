@@ -257,20 +257,23 @@ class SectionContent extends DataItem
 			$result = $join->groupedQuery("WHERE section_content_id={$this->section_content_id} $constraint", "SectionContentModuleXref.position");
 			$modules = extractGroupedJoinResults(Module, $result);
 				
-			// Merge in global modules
-			$globals = groupedQuery(Module, "WHERE global=1", "global_position");
-			foreach($globals as $position => $modulesAtPosition)
+			if (count($modules) > 0)
 			{
-				if (array_key_exists($position, $modules))
+				// Merge in global modules
+				$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+				foreach($globals as $position => $modulesAtPosition)
 				{
-					$modules[$position] = removeDuplicates(array_merge($modulesAtPosition, $modules[$position]));
-				}
-				else
-				{
-					$modules[$position] = $modulesAtPosition;
+					if (array_key_exists($position, $modules))
+					{
+						$modules[$position] = removeDuplicates(array_merge($modulesAtPosition, $modules[$position]));
+					}
+					else
+					{
+						$modules[$position] = $modulesAtPosition;
+					}
 				}
 			}
-				
+							
 			Cache::put("section_module_map_{$this->section_id}", $modules);
 		}
 	
