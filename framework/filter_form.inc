@@ -118,6 +118,8 @@ class FilterForm extends SearchForm
 {	
 	var $search;
 	var $preserveQueryString = false;
+ 	var $navigationFunction = "go('{url}')";
+ 	var $navigationMode = "form"; ///< Mode used for navigating after filter changed - either "form" or "panel"
  	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
@@ -127,6 +129,39 @@ class FilterForm extends SearchForm
 		$this->setFilterParameters();
 	}
 		
+	function getLink($url)
+	{
+		return str_replace("{url}", $url, $this->navigationFunction);
+	}
+	
+	function setNavigationMode($mode)
+	{
+		$this->navigationMode = $mode;
+		if ($mode == "panel")
+		{
+			$this->navigationFunction = "loadPanel(form, '{url}');";
+			$this->onSubmitHandler = "{$this->id}_loadPanel";
+		}
+	}
+	
+	function writeScript()
+	{
+		if ($this->navigationMode == "panel")
+		{
+			$script = <<<ENDSCRIPT
+<script type="text/javascript">
+function {$this->id}_loadPanel(form)
+{
+	var form = new Element(form);
+	var url = form.action + "?" + form.toQueryString();
+	form.loadPanel(url);
+	return false;
+}
+</script>		
+ENDSCRIPT;
+		}
+		return $script . parent::writeScript();	
+	}
 		
 	function drawForm()
 	{
@@ -137,7 +172,10 @@ class FilterForm extends SearchForm
 			$obj->fromREQUEST();
 		}
 		
-		echo "<form id='{$this->id}_filter' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'>\n";
+		echo "<form id='{$this->id}_filter' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+		if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+		echo ">\n";
+		
 		echo "<div";
  		if ($this->formCSS) echo " class='{$this->formCSS}'";
 		if ($this->style) echo " style='{$this->style}'";
@@ -341,7 +379,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		}
 			
 		?>
-    	<select name="<?php echo $field ?>" <?echo $styles?> onchange="this.form.submit();">
+    	<select name="<?php echo $field ?>" <?echo $styles?> onchange="if (onSubmit<?echo $this->parent->id?>(this.form)) this.form.submit();">
     	<?php 
     	if($this->all)
     	{
