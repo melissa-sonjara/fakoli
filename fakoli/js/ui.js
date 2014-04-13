@@ -1432,6 +1432,29 @@ Element.implement('reloadPanel', function(onComplete)
 	while(element);		
 });
 
+Element.implement('loadPanel', function(url, onComplete)
+{
+	var element = document.id(this);
+	do
+	{
+		if (element.match('[data-url]') && element.load) 
+		{
+			element.load(url, onComplete);
+			return;
+		}
+		element = element.getParent();
+	}
+	while(element);
+	
+	// No panels present - navigate page to URL.
+	go(url);
+});
+
+function loadPanel(elt, url, onComplete)
+{
+	new Element(elt).loadPanel(url, onComplete);
+}
+
 Element.implement("fitText", function() 
 {
     var e = this.getParent();
