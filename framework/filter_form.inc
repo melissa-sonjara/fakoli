@@ -141,6 +141,7 @@ class FilterForm extends SearchForm
 		{
 			$this->navigationFunction = "loadPanel(form, '{url}');";
 			$this->onSubmitHandler = "{$this->id}_loadPanel";
+			$this->action = Fakoli::scriptName();
 		}
 	}
 	
