@@ -172,8 +172,9 @@ class DocumentLibraryListView
 	function buildTable($libraries)
 	{
 		$table = new DataListView($libraries, "libraries");
-		$table->column("Library", array($this, formatTitleLink), true, "width: 55%")
-	  		->column("Owner", "{getOwnerName()}", true, "width: 30%")
+		$table->column("Library", array($this, formatTitleLink), true, "width: 50%")
+			  ->column("Identifier", "{identifier}", true, "width: 15%")
+	  		->column("Owner", "{getOwnerName()}", true, "width: 20%")
 	  		->column("# Docs", "{countDocuments()}", true, "width: 15%;text-align: right");
 	  
 		$table->sortable = true;
