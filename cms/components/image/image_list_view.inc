@@ -178,8 +178,9 @@ class ImageGalleriesView
 	function buildTable($galleries)
 	{
 		$table = new DataListView($galleries, "galleries");
-		$table->column("Image Gallery", array($this, formatTitleLink), true, "width: 55%")
-	  		->column("Owner", "{getOwnerName()}", true, "width: 30%")
+		$table->column("Image Gallery", array($this, formatTitleLink), true, "width: 45%")
+			->column("Identifier", "{identifier}", true, "width: 15%")
+	  		->column("Owner", "{getOwnerName()}", true, "width: 25%")
 	  		->column("# Images", "{countImages()}", true, "width: 15%;text-align: right")
 	  		->column("Published", array($this, showPublished), false, "text-align: center");
 	  
