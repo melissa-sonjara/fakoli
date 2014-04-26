@@ -127,7 +127,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		if ($article->image_id)
 		{
 			$image = $article->Image();
-			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
+			$out .= "<img src='/action/image/iconize?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
 		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
@@ -224,7 +224,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		if ($article->image_id)
 		{
 			$image = $article->Image();
-			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
+			$out .= "<img src='/action/image/iconize?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
 		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
@@ -305,7 +305,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 		if ($article->image_id)
 		{
 			$image = $article->Image();
-			$out .= "<img src='/action/image/thumbnail?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
+			$out .= "<img src='/action/image/iconize?image_id={$article->image_id}&size=120' alt='{$image->ALT_tag}' align='left'/>";
 		}
 		
 		$out .= "<h4><a href='{$this->blog->identifier}?article_id={$article->article_id}'>";
