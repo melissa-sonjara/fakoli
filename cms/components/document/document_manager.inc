@@ -913,6 +913,11 @@ function deleteFolderResult(result)
 		return $searchables;
 	}
 
+	static function registerSolrAdapter()
+	{
+		SolrManager::registerSolrAdapter(Document, new DocumentSolrAdapter());
+	}
+
 	static function upgradeComponent($version)
 	{
 		$mgr = new DocumentUpgradeManager();
