@@ -213,6 +213,7 @@ class SearchManager
 	
 	function sortByRelevance()
 	{
+		trace("Sorting ".count($this->searchResults)." items by relevance", 3);
 		usort($this->searchResults, array(SearchManager, compareRelevance));
 		return $this;
 	}
@@ -224,6 +225,7 @@ class SearchManager
 	
 	function sortByTitle()
 	{
+		trace("Sorting ".count($this->searchResults)." items by title", 3);
 		usort($this->searchResults, array(SearchManager, compareTitle));
 		return $this;
 	}
@@ -235,6 +237,7 @@ class SearchManager
 	
 	function sortByDate()
 	{
+		trace("Sorting ".count($this->searchResults)." items by date", 3);
 		usort($this->searchResults, array(SearchManager, compareDate));
 		return $this;
 	}
