@@ -225,7 +225,7 @@ class SearchManager
 	
 	static function compareRelevance($item1, $item2)
 	{
-		return ($item1->relevance() < $item2->relevance())?-1:1;
+		return ($item1->relevance() > $item2->relevance())?-1:1;
 	}
 	
 	function sortByTitle()
