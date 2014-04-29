@@ -116,6 +116,11 @@ class ArticleManager
 		return $searchables;
 	}
 	
+	static function registerSolrAdapter()
+	{
+		SolrManager::registerSolrAdapter(Article, new ArticleSolrAdapter());
+	}
+	
 	static function registerTaxonomyClasses($classes)
 	{
 		$classes[] = Article;

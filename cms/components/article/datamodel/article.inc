@@ -192,9 +192,14 @@ class Article extends DataItem implements Searchable
 		$this->DataItem(func_get_args());
 	}
 	
-	function search($params)
+	function search($params, $range = null)
 	{
 		trace("Searching Articles", 3);
+		
+		if ($range)
+		{
+			$range = " AND {$this->primary_key} IN (".implode($range, ", ").")";
+		}
 		
 		if (is_object($params))
 		{
@@ -217,13 +222,15 @@ class Article extends DataItem implements Searchable
 			$constraint = $search->generateConstraint();
 			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
 			
+			$constraint .= $range;
+			
 			$articles = Query::create(Article, $constraint)
 						  ->execute();
 		}
 		else
 		{
 			$params = "%$params%";
-			$articles = Query::create(Article, "WHERE (title like :a OR teaser LIKE :b OR message like :c) AND published=1")
+			$articles = Query::create(Article, "WHERE (title like :a OR teaser LIKE :b OR message like :c) AND published=1 $range")
 						  ->bind(":a", $params, ":b", $params, ":c", $params)
 						  ->execute();
 		}
@@ -243,6 +250,7 @@ class ArticleSearchResult extends AbstractSearchResult
 	
 	function getPrimaryKey() { return $this->item->getPrimaryKey(); }
 	function get($field) { return $this->item->get($field); }
+	function prettifyClassName($plural = false) { return $this->item->prettifyClassName($plural); }
 	
 	function relevance()
 	{
@@ -353,6 +361,46 @@ class ArticleCommentXref extends DataItem
 		$this->table = "article_comment_xref";
 		$this->primary_key = "article_comment_xref_id";
 		$this->DataItem(func_get_args());
+	}
+}
+
+
+class ArticleSolrAdapter // Implements ISolrAdapter
+{
+
+	function getClass()
+	{
+		return Article;
+	}
+
+	function getFilter()
+	{
+		return "WHERE published=1";
+	}
+
+	function getTitleFormat()
+	{
+		return "{title:xml}";
+	}
+
+	function getContentFormat()
+	{
+		return "{teaser:xml} {message:xml}";
+	}
+
+	function getAuthorFormat()
+	{
+		return "{author:xml}";
+	}
+
+	function getKeywordFormat()
+	{
+		return "{tags:xml}";
+	}
+	
+	function wrap($item)
+	{
+		return new ArticleSearchResult($item);
 	}
 }
 

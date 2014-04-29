@@ -31,9 +31,19 @@
 
 *****************************************************************/
 
+/**
+ * The Searchable interface must be implemented by any DataItem classes that 
+ * want to be searchable via the unified site search.
+ * @author andy
+ */
 interface Searchable
 {
-	function search($params);
+	/**
+	 * DataItems must implement this method to provide search functionality
+	 * @param mixed $params either search text or a SearchParameters object
+	 * @param array $range an array of primary key IDs to which the search must be constrained
+	 */
+	function search($params, $range = null);
 }
 
 
@@ -42,6 +52,7 @@ abstract class AbstractSearchResult
 	// Provide access to the properties of the underlying class
 	abstract function getPrimaryKey();
 	abstract function get($field);
+	abstract function prettifyClassName($plural = false);
 	
 	abstract function relevance();
 	abstract function title();

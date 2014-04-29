@@ -68,7 +68,8 @@ class PageManifest
 					 "RegisterSearchables"			=> array(PageManager, registerSearchables),
 					 "RegisterTaxonomyClasses"		=> array(PageManager, registerTaxonomyClasses),
 					 "upgradeComponent"				=> array(PageManager, upgradeComponent),
-					 "RegisterSerializationHandler"	=> array(PageManager, registerSerializationHandler)
+					 "RegisterSerializationHandler"	=> array(PageManager, registerSerializationHandler),
+					 "RegisterSolrAdapters"			=> array(PageManager, registerSolrAdapter)
 		
 				);
 	}

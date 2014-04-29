@@ -74,9 +74,9 @@ class BlogManifest
 					 "RegisterSerializationHandler"	=>	array(BlogManager, registerSerializationHandler),
 					 "RegisterTaxonomyClasses"	=>	array(BlogManager, registerTaxonomyClasses),
 					 "DeleteUser"			=>	array(BlogManager, deleteUser),
-					 "ComponentScanComplete"	=> array(BlogManager, setDefaults)
-				
-				
+					 "ComponentScanComplete"	=> array(BlogManager, setDefaults),
+					"RegisterSearchables"		=>	array(BlogManager, registerSearchables),
+					"RegisterSolrAdapters"		=>	array(BlogManager, registerSolrAdapter)
 		);
 	}
 }

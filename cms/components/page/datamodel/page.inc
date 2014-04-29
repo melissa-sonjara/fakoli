@@ -212,9 +212,14 @@ class Page extends DataItem implements Searchable
 		$this->DataItem(func_get_args());
 	}
 	
-	function search($params)
+	function search($params, $range = null)
 	{
 		trace("Searching Pages", 3);
+		
+		if ($range)
+		{
+			$range = " AND {$this->primary_key} IN (".implode($range, ", ").")";
+		}
 		
 		if (is_object($params))
 		{
@@ -232,6 +237,7 @@ class Page extends DataItem implements Searchable
 			
 			$constraint = $search->generateConstraint();
 			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
+			$constraint .= $range;
 			
 			$pages = Query::create(Page, $constraint)
 						  ->execute();
@@ -239,7 +245,7 @@ class Page extends DataItem implements Searchable
 		else
 		{
 			$params = "%$params%";
-			$pages = Query::create(Page, "WHERE (page_title like :a OR description LIKE :b) AND published=1")
+			$pages = Query::create(Page, "WHERE (page_title like :a OR description LIKE :b) AND published=1 $range")
 						  ->bind(":a", $params, ":b", $params)
 						  ->execute();
 		}
@@ -259,6 +265,7 @@ class PageSearchResult extends AbstractSearchResult
 
 	function getPrimaryKey() { return $this->item->getPrimaryKey(); }
 	function get($field) { return $this->item->get($field); }
+	function prettifyClassName($plural = false) { return $this->item->prettifyClassName($plural = false); }
 	
 	function relevance()
 	{
@@ -321,6 +328,45 @@ class PageModuleXref extends DataItem
 		$this->primary_key = "join_id";
 		
 		$this->DataItem(func_get_args());
+	}
+}
+
+class PageSolrAdapter // Implements ISolrAdapter
+{
+
+	function getClass()
+	{
+		return Page;
+	}
+	
+	function getFilter()
+	{
+		return "WHERE published=1";
+	}
+	
+	function getTitleFormat()
+	{
+		return "{page_title:xml}";
+	}
+	
+	function getContentFormat()
+	{
+		return "{description:xml}";
+	}
+	
+	function getAuthorFormat()
+	{
+		return "{author:xml}";
+	}
+	
+	function getKeywordFormat()
+	{
+		return "{meta_tag_keyword:xml}";
+	}
+	
+	function wrap($item)
+	{
+		return new PageSearchResult($item);
 	}
 }
 ?>

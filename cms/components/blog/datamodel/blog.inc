@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-class Blog extends DataItem
+class Blog extends DataItem // implements Searchable
 {
 	// Fields
 	var $fields = array("blog_id"				=>	Number,
@@ -214,6 +214,122 @@ class Blog extends DataItem
 		
 		$this->DataItem(func_get_args());
 	}
+
+	// Searchable
+	
+	function search($params, $range = null)
+	{
+		trace("Searching Blogs", 3);
+		
+		if ($range)
+		{
+			$range = " AND {$this->primary_key} IN (".implode($range, ", ").")";
+		}
+		
+		if (is_object($params))
+		{
+			$search = clone $params;
+			$search->target = $this;
+			
+			$search->remapField("text", "description");
+			
+			$constraint = $search->generateConstraint();
+			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
+			
+			$constraint .= $range;
+			
+			$blogs = Query::create(Blog, $constraint)->execute();
+		}
+		else
+		{
+			$params = "%$params%";
+			$blogs = Query::create(Blog, "WHERE (title like :a OR description LIKE :b) AND published=1 $range")
+						  ->bind(":a", $params, ":b", $params)
+						  ->execute();
+		}
+							  
+		return SearchManager::wrap($blogs, BlogSearchResult);
+	}
 }
 
+class BlogSearchResult extends AbstractSearchResult
+{
+	var $item;
+	
+	function BlogSearchResult($item)
+	{
+		$this->item = $item;
+	}
+	
+	function getPrimaryKey() { return $this->item->getPrimaryKey(); }
+	function get($field) { return $this->item->get($field); }
+	function prettifyClassName($plural = false) { return $this->item->prettifyClassName($plural); }
+	
+	function relevance()
+	{
+		return 0.5;
+	}
+	
+	function title()
+	{
+		return $this->item->title;
+	}
+	
+	function date()
+	{
+		return $this->item->created_date;
+	}
+		
+	function summary()
+	{
+		if(Settings::getValue("search", "show_text_fragment"))
+		{
+			return $this->item->format("<h4>{title}</h4><p>{description:200}</p><a href='{getURL()}'>Read More</a>");
+		}
+		else
+		{
+			return $this->item->format("<h4><a href='{getURL()}'>{title}</a></h4>");
+		}
+	}
+}
+
+
+class BlogSolrAdapter // Implements ISolrAdapter
+{
+
+	function getClass()
+	{
+		return Blog;
+	}
+
+	function getFilter()
+	{
+		return "WHERE published=1";
+	}
+
+	function getTitleFormat()
+	{
+		return "{title:xml}";
+	}
+
+	function getContentFormat()
+	{
+		return "{description:xml}";
+	}
+
+	function getAuthorFormat()
+	{
+		return "{Owner.last_name:xml}";
+	}
+
+	function getKeywordFormat()
+	{
+		return "";
+	}
+
+	function wrap($item)
+	{
+		return new BlogSearchResult($item);
+	}
+}
 ?>

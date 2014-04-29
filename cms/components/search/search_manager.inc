@@ -91,7 +91,54 @@ class SearchManager
 	function search($params)
 	{
 		$searchResults = array();
+
+		$searchHandler = ComponentManager::fireEvent("OverrideSearchHandler");
 		
+		if ($searchHandler)
+		{
+			$this->searchResults = $searchHandler->search($params);
+		}
+		else
+		{		
+			$this->doSearch($params);
+		}
+		
+		switch($this->displayMode)
+		{
+			case "table":
+				$this->list = new DataListView($this->extractDataItems(), "search_results");
+				$this->list->emptyMessage = "Your search did not match any items.";
+				$this->list->writeIdTag = true;
+				$this->list->sortable = true;
+				$this->list->filter = false;
+				break;
+		
+			case "list":
+			default:
+				$this->list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
+				$this->list->emptyList = "Your search did not match any items.";
+				$this->list->writeIdTag = true;
+		}
+		
+		if ($this->enableFacetFilter)
+		{
+			$this->facetManager = new FacetManager('facet_manager', $this->list);
+			$classes = $this->getSearchableClasses();
+			trace("Facet Classes: ".implode(", ", $classes), 3);
+		
+			if ($this->searchResultTypeFacet)
+			{
+				$this->facetManager->addFacet("Search Result Types", new SearchResultTypeFacetFilter($this->searchResults));
+			}
+				
+			TaxonomyManager::addFacets($this->facetManager, $classes, $this->facetDropdown, $this->facetMaxWidth, $this->facetWidth, $this->facetHeight);
+		}
+		
+		return $this;
+	}	
+		
+	function doSearch($params)
+	{
 		SearchManager::buildSearchMap();
 		
 		if (is_object($params))
@@ -125,43 +172,14 @@ class SearchManager
 			
 			$this->searchResults = $searchResults;
 		}
-
-		switch($this->displayMode)
-		{
-			case "table":
-				$this->list = new DataListView($this->extractDataItems(), "search_results");
-				$this->list->emptyMessage = "Your search did not match any items.";
-				$this->list->writeIdTag = true;
-				$this->list->sortable = true;
-				$this->list->filter = false;
-				break;
-				
-			case "list":
-			default:
-				$this->list = new PagedList($this->searchResults, "search_results", array(SearchManager, formatSearchResult));
-				$this->list->emptyList = "Your search did not match any items.";
-				$this->list->writeIdTag = true;
-		}
 		
-		if ($this->enableFacetFilter)
-		{
-			$this->facetManager = new FacetManager('facet_manager', $this->list);
-			$classes = $this->getSearchableClasses();
-			trace("Facet Classes: ".implode(", ", $classes), 3);		
-
-			if ($this->searchResultTypeFacet)
-			{
-				$this->facetManager->addFacet("Search Result Types", new SearchResultTypeFacetFilter($this->searchResults));
-			}
-			
-			TaxonomyManager::addFacets($this->facetManager, $classes, $this->facetDropdown, $this->facetMaxWidth, $this->facetWidth, $this->facetHeight);
-		}
-		
-		return $this;
+		return $searchResults;
 	}
+		
 	
 	function getSearchableClasses()
 	{
+		SearchManager::buildSearchMap();
 		if (isset($_REQUEST["searchable_classes:"]))
 		{
 			$class_array = $_REQUEST["searchable_classes:"];
@@ -259,6 +277,8 @@ class SearchManager
 		
 		$num = count($this->searchResults);
 		
+		trace(print_r($this->searchResults, true), 3);
+		
 		if ($num)
 		{
 			echo "<p><em>$num ".pluralize("match", $num)." found.</em></p>";
@@ -290,7 +310,7 @@ class SearchManager
 				$result = new $resultClass($item);
 				// Store some class metadata in the wrapper record
 				$result->innerClass = get_class($item);
-				$result->prettyClassName = $item->prettifyClassName(true);
+				$result->prettyClassName = $result->prettifyClassName(true);
 				
 				$results[] = $result;
 			}

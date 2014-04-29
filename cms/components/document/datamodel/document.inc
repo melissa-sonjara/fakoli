@@ -144,9 +144,15 @@ class Document extends DataItem implements Searchable
 		$this->DataItem(func_get_args());
 	}
 	
-	function search($params)
+	function search($params, $range = null)
 	{
 		trace("Searching Documents", 3);
+		
+
+		if ($range)
+		{
+			$range = " AND {$this->primary_key} IN (".implode($range, ", ").")";
+		}
 		
 		if (is_object($params))
 		{
@@ -155,7 +161,7 @@ class Document extends DataItem implements Searchable
 		{
 			$params = preg_replace('/[^\w]+/', ' ', $params);
 			$params = "%$params%";
-			$documents = Query::create(Document, "WHERE (title like :a OR keywords LIKE :b OR notes Like :c) and public=1")
+			$documents = Query::create(Document, "WHERE (title like :a OR keywords LIKE :b OR notes Like :c) and public=1 $range")
 						  ->bind(":a", $params, ":b", $params, ":c", $params)
 						  ->execute();
 		}
@@ -175,6 +181,7 @@ class DocumentSearchResult extends AbstractSearchResult
 
 	function getPrimaryKey() { return $this->item->getPrimaryKey(); }
 	function get($field) { return $this->item->get($field); }
+	function prettifyClassName($plural = false) { return $this->item->prettifyClassName($plural = false); }
 	
 	function relevance()
 	{

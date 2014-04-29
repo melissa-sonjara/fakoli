@@ -130,6 +130,11 @@ class PageManager
 		return $searchables;
 	}
 	
+	static function registerSolrAdapter()
+	{
+		SolrManager::registerSolrAdapter(Page, new PageSolrAdapter());
+	}
+	
 	static function registerTaxonomyClasses($classes)
 	{
 		$classes[] = Page;

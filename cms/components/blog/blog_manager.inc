@@ -97,6 +97,20 @@ class BlogManager
 		return $items;
 	}
 	
+
+	static function registerSearchables($searchables)
+	{
+		trace("BlogManager registerSearchables", 3);
+		$searchables["blog"] = array(Blog);
+		return $searchables;
+	}
+	
+	static function registerSolrAdapter()
+	{
+		SolrManager::registerSolrAdapter(Blog, new BlogSolrAdapter());
+	}
+	
+	
 	static function buildBlogForm($blog, $redirect, $blogView)
 	{
 		$form = new AutoForm($blog);
