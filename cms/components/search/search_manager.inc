@@ -103,6 +103,11 @@ class SearchManager
 			$this->doSearch($params);
 		}
 		
+		return $this;
+	}	
+		
+	function formatResults()
+	{
 		switch($this->displayMode)
 		{
 			case "table":
@@ -130,13 +135,13 @@ class SearchManager
 			{
 				$this->facetManager->addFacet("Search Result Types", new SearchResultTypeFacetFilter($this->searchResults));
 			}
-				
+		
 			TaxonomyManager::addFacets($this->facetManager, $classes, $this->facetDropdown, $this->facetMaxWidth, $this->facetWidth, $this->facetHeight);
 		}
 		
 		return $this;
-	}	
-		
+	}
+	
 	function doSearch($params)
 	{
 		SearchManager::buildSearchMap();
@@ -271,6 +276,11 @@ class SearchManager
 	function showResults($pageSize = 0)
 	{
 		global $script;
+		
+		if (!$this->list)
+		{
+			$this->formatResults();
+		}
 		
 		if ($pageSize == 0) $pageSize = Settings::getValue("search", "results_per_page");
 		
