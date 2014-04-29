@@ -277,8 +277,6 @@ class SearchManager
 		
 		$num = count($this->searchResults);
 		
-		trace(print_r($this->searchResults, true), 3);
-		
 		if ($num)
 		{
 			echo "<p><em>$num ".pluralize("match", $num)." found.</em></p>";
