@@ -260,4 +260,45 @@ class DocumentCommentXref extends DataItem
 	}
 
 }
+
+
+class DocumentSolrAdapter // Implements ISolrAdapter
+{
+
+	function getClass()
+	{
+		return Document;
+	}
+
+	function getFilter()
+	{
+		return "WHERE public=1";
+	}
+
+	function getTitleFormat()
+	{
+		return "{title:xml}";
+	}
+
+	function getContentFormat()
+	{
+		return "";
+	}
+
+	function getAuthorFormat()
+	{
+		return "{author:xml}";
+	}
+
+	function getKeywordFormat()
+	{
+		return "{keywords:xml}";
+	}
+
+	function wrap($item)
+	{
+		return new DocumentSearchResult($item);
+	}
+}
+
 ?>
