@@ -51,7 +51,7 @@ class DocumentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"EnumerateItems"	 			=> array(DocumentManager, enumerateItems),
+					"EnumerateItems"	 			=> 	array(DocumentManager, enumerateItems),
 					"ResolveIdentifier"	 			=>	array(DocumentManager, displayLibrary),
 					"DeleteRole"					=>	array(DocumentManager, deleteRole),
 					"RegisterSearchables"			=>	array(DocumentManager, registerSearchables),
