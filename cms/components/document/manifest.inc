@@ -51,16 +51,17 @@ class DocumentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"EnumerateItems"	 => array(DocumentManager, enumerateItems),
-					"ResolveIdentifier"	 =>	array(DocumentManager, displayLibrary),
-					"DeleteRole"			=>	array(DocumentManager, deleteRole),
-					"RegisterSearchables"	=>	array(DocumentManager, registerSearchables),
-					"upgradeComponent"		=>	array(DocumentManager, upgradeComponent),
+					"EnumerateItems"	 			=> array(DocumentManager, enumerateItems),
+					"ResolveIdentifier"	 			=>	array(DocumentManager, displayLibrary),
+					"DeleteRole"					=>	array(DocumentManager, deleteRole),
+					"RegisterSearchables"			=>	array(DocumentManager, registerSearchables),
+					"upgradeComponent"				=>	array(DocumentManager, upgradeComponent),
 					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
-					"RegisterTaxonomyClasses"	=>	array(DocumentManager, registerTaxonomyClasses),
-					"DeleteUser"			=>	array(DocumentManager, deleteUser),
-					"ComponentScanComplete"	=>	array(DocumentManager, setDefaults),
-					"RegisterCommentAdapters" 	=>	array(DocumentManager, registerCommentAdapter)
+					"RegisterTaxonomyClasses"		=>	array(DocumentManager, registerTaxonomyClasses),
+					"DeleteUser"					=>	array(DocumentManager, deleteUser),
+					"ComponentScanComplete"			=>	array(DocumentManager, setDefaults),
+					"RegisterCommentAdapters" 		=>	array(DocumentManager, registerCommentAdapter),
+					"RegisterSolrAdapters"			=>	array(DocumentManager, registerSolrAdapter)
 		);
 	}
 	
