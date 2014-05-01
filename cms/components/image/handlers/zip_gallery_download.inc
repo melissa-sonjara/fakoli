@@ -47,5 +47,6 @@ if (!file_exists($file))
 	throw new FakoliException("Zip Archive not found");
 }
 
+header("Content-Disposition: attachment;filename=\"" . $zipFile . "\"");
 Fakoli::sendFile($file);
 ?>
