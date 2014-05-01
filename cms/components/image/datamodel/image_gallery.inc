@@ -35,20 +35,21 @@ class ImageGallery extends DataItem
 {
 	// Fields
 	
-	var $fields = array("gallery_id"		=>	Number,
-						"gallery_name"		=>	String,
-						"identifier"		=>	String,
-						"description"		=>	HTML,
-						"keywords"			=>	String,
-						"thumbnail_size" 	=>  Number,
-					  	"image_link_mode"	=>	String,
-						"fix_orientation"	=>	Boolean,
-						"hidden"			=>	Boolean,
-						"owner_id"			=>	Number,
-						"read_access"		=>	String,
-						"write_access"		=>	String,
-						"published"			=>	Boolean,
-						"last_modified"		=>	Timestamp);
+	var $fields = array("gallery_id"			=>	Number,
+						"gallery_name"			=>	String,
+						"identifier"			=>	String,
+						"description"			=>	HTML,
+						"keywords"				=>	String,
+						"thumbnail_size" 		=>  Number,
+						"thumbnail_format"		=>	String,
+					  	"image_link_mode"		=>	String,
+						"fix_orientation"		=>	Boolean,
+						"hidden"				=>	Boolean,
+						"owner_id"				=>	Number,
+						"read_access"			=>	String,
+						"write_access"			=>	String,
+						"published"				=>	Boolean,
+						"last_modified"			=>	Timestamp);
 	
 	// Relations
 	
@@ -58,6 +59,10 @@ class ImageGallery extends DataItem
 	static $imageLinkModes = array("None"		=>	"No Resource Link",
 								   "Thumbnail"	=>	"Link from Thumbnail",
 								   "Lightbox"	=>	"Link from Lightbox");
+	
+	static $thumbnailFormats = array(""	   => "Use Default",
+									 "png" => "PNG",
+									 "jpg" => "JPEG");
 	
 	function Images($constraint = "")
 	{
@@ -75,6 +80,11 @@ class ImageGallery extends DataItem
 		return $this->Owner()->getFullName();
 	}
 	
+	function getThumbnailFormat()
+	{
+		return ($this->thumbnail_format) ? $this->thumbnail_format : Settings::getValue("image", "thumbnail_format");
+	}
+				
 	function countImages($constraint = "")
 	{
 		if ($constraint)

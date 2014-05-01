@@ -1,7 +1,7 @@
 <?php
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2014 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -30,51 +30,26 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
- 
-Fakoli::using("image");
-Fakoli::usingFeature("tab_bar");
 
-require_once "include/image_gallery_tabs.inc";
+Fakoli::using("document", "process");
 
-Fakoli::assertRole("admin,editor");
+Fakoli::assertRole("admin");
 
 $gallery_id = checkNumeric($_GET["gallery_id"]);
 
-if (!$gallery_id) redirect("/admin/image_galleries");
+if (!$gallery_id) Fakoli::end("No gallery specified");
 
-$gallery = new ImageGallery($gallery_id);
-$images = $gallery->Images("ORDER BY title");
-
-$tabs = imageGalleryTabs($gallery_id);
-
-$menu_item = "Images";
-
-$count = 0;
-
-$title = "Images in {$gallery->gallery_name}";
-
-$grid = new ImageListView($images, "image_form?gallery_id={gallery_id}&image_id={image_id}");
-$tabs->writeHTML();
-
-$script .= ImageListView::writeResizeScript();
-
-echo "<div id=\"image_grid\">\n<div id=\"images_box\">\n";
-
-if (count($images) > 0)
+if (!$process)
 {
-	$grid->drawGrid();
+	// We are in a user request - spawn the background process and return the ID
+
+	$process = new ProcessManager();
+	echo $process->run("/action/image/zip_gallery?gallery_id=$gallery_id");
 }
 else
 {
-	echo "<p style=\"margin: 8px\"><br/><i>No images have been added to this gallery</i></p>\n";
-}
+	// We are in the spawned background process - begin indexing the gallery
 
+	ImageManager::zipLibrary($gallery_id, $process);
+}
 ?>
-</div>
- <br/>
- <div style='padding: 8px'>
-  <a class='button' href="/admin/image_form?gallery_id=<?echo $gallery_id?>">Add a New Image</a>
-  &nbsp;&nbsp;<a class='button' href='#' onclick="ImageManager.rescanGallery(<?echo $gallery_id?>); return false;">Rescan</a>
-  &nbsp;&nbsp;<a class='button' href='#' onclick="new BackgroundProcess('Creating ZIP Archive', '/action/image/zip_gallery?gallery_id=<?echo $gallery_id?>', {onComplete: function() { window.location.href = '/action/image/zip_gallery_download?gallery_id=<?echo $gallery_id?>'; } }); return false;">Download Zip Archive</a>
- </div>
-</div>

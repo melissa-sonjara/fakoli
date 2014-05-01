@@ -66,3 +66,9 @@ ALTER TABLE image_gallery ADD COLUMN image_link_mode VARCHAR(20) NOT NULL DEFAUL
 ALTER TABLE image_gallery ADD COLUMN fix_orientation TINYINT(3) NOT NULL DEFAULT 0;
 
 -- END Version 1.4 
+
+-- START Version 1.5
+
+ALTER TABLE image_gallery ADD COLUMN thumbnail_format VARCHAR(5) DEFAULT '';
+
+-- END Version 1.5

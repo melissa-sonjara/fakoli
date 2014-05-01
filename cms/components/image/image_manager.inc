@@ -248,7 +248,7 @@ class ImageManager
 		
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
-		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . ".png";
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . "." . $gallery->getThumbnailFormat();
 		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
 		
 		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
@@ -301,8 +301,18 @@ class ImageManager
 				unlink($cacheFile);
 			}
 			
-			imagepng($dst, $cacheFile);
-		
+			switch($gallery->getThumbnailFormat())
+			{
+			case "jpg":
+
+				imagejpeg($dst, $cacheFile, 85);
+				break;
+				
+			case "png":
+			default:
+				imagepng($dst, $cacheFile);
+			}
+			
 			imagedestroy($dst);
 			imagedestroy($src);
 		}
@@ -334,7 +344,7 @@ class ImageManager
 
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
-		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . ".png";
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . $gallery->getThumbnailFormat();
 		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
 		
 		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
@@ -417,9 +427,19 @@ class ImageManager
 				trace("iconize:: unlinking cachefile", 3);
 				unlink($cacheFile);
 			}
-			
-			imagepng($dst, $cacheFile);
 
+			switch($gallery->getThumbnailFormat())
+			{
+				case "jpg":
+			
+					imagejpeg($dst, $cacheFile, 85);
+					break;
+			
+				case "png":
+				default:
+					imagepng($dst, $cacheFile);
+			}
+			
 			imagedestroy($dst);
 			imagedestroy($src);
 		}
@@ -675,6 +695,68 @@ class ImageManager
 		imagepng($rotated, $photo);
 		return $photo;
 	}
+
+
+	/**
+	 * Generate a ZIP archive of all the images in the specified gallery.
+	 * @param integer $gallery_id the ID of the gallery to be zipped
+	 */
+	static function zipGallery($gallery_id, $process = null)
+	{
+		global $config;
+	
+		Fakoli::assertRole("admin");
+		$gallery = new ImageGallery($gallery_id);
+	
+		if ($process)
+		{
+			$process->setProgress("Running", "Scanning files", 0);
+		}
+	
+		$files = $gallery->Images("ORDER BY image_file");
+	
+		$galleryFileName = $gallery->identifier ? $gallery->format("{identifier}.zip") : $gallery->format("gallery_{gallery_id}.zip");
+		$galleryDir = $gallery->getGalleryDirectory();
+		$galleryZipFile = $config['uploadbase'] . DIRECTORY_SEPARATOR . $galleryFileName;
+		if (file_exists($galleryZipFile))
+		{
+			unlink($galleryZipFile);
+		}
+	
+	
+		$zip = new ZipArchive();
+	
+		// open archive
+		if ($zip->open($galleryZipFile, ZIPARCHIVE::CREATE) !== TRUE)
+		{
+			if ($process)
+			{
+				$process->setProgress("Error", "Could not create ZIP archive");
+				throw new FakoliException("Could not create ZIP archive");
+			}
+		}
+	
+		$max = count($files);
+		$c = 0;
+	
+		foreach($files as $file)
+		{
+			$fullPath = $galleryDir . DIRECTORY_SEPARATOR . $file->file;
+			$zip->addFile($fullPath, $file->file);
+	
+			if ($process)
+			{
+				$process->setProgress("Running", "Added $c of $max ".pluralize("file", $max), number_format(100 * $c / $max, 0));
+			}
+		}
+	
+		$zip->close();
+	
+		if ($process)
+		{
+			$process->setProgress("Completed", "Zip archive created", 100);
+		}
+	}
 	
 	static function imageGalleryTabs($key)
 	{
@@ -700,6 +782,7 @@ class ImageManager
 		trace("ImageManager::setDefaults", 3);
 		
 		Settings::setDefaultValue("image", "thumbnail_size", 75, "Number", "");	
+		Settings::setDefaultValue("image", "thumbnail_format", "png", "String", "Use PNG for high quality thumbnails (default) or JPG for fast, low bandwidth thumbnails. JPG files will have lower image quality and do not support transparency", "", "png\njpg");
 	}
 	
 	static function registerTaxonomyClasses($classes)
