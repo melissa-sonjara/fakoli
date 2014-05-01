@@ -741,7 +741,7 @@ class ImageManager
 	
 		foreach($files as $file)
 		{
-			$fullPath = $galleryDir . DIRECTORY_SEPARATOR . $file->file;
+			$fullPath = $galleryDir . DIRECTORY_SEPARATOR . $file->image_file;
 			$zip->addFile($fullPath, $file->file);
 	
 			if ($process)
