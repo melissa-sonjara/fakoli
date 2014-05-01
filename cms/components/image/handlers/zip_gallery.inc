@@ -50,6 +50,6 @@ else
 {
 	// We are in the spawned background process - begin indexing the gallery
 
-	ImageManager::zipLibrary($gallery_id, $process);
+	ImageManager::zipGallery($gallery_id, $process);
 }
 ?>
