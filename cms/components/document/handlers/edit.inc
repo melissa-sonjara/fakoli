@@ -52,6 +52,9 @@ $document->filter = new InclusionFilter("document_id", "title", "notes", "keywor
 
 $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
 $fileUpload = new FileUploadFieldRenderer($form, "file_upload", "Replace File", replaceLibraryFile);
+
+$form->annotate("file_upload", "The maximum allowed file size is ".DocumentManager::getMaxUploadSize());
+
 $form->readonly("file");
 $form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");

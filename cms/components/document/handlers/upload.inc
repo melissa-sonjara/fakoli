@@ -64,6 +64,8 @@ $form->validator->add(new RequiredFileValidator("file", "File", "You must select
 $form->annotate("keywords", "Separate keywords with a comma");
 $form->getRenderer("title")->autocomplete = false;
 
+$form->annotate("file", "The maximum allowed file size is ".DocumentManager::getMaxUploadSize());
+
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
 $notes->columns = 38;
