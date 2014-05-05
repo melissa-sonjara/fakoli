@@ -955,7 +955,7 @@ function deleteFolderResult(result)
 	 */
 	static function getMaxUploadSize()
 	{
-		return getScaledSize(DocumentManager::getMaxUploadBytes());
+		return getScaledSize(DocumentManager::getMaxUploadBytes(), 0);
 	}
 	
 	static function registerSearchables($searchables)
