@@ -57,6 +57,11 @@ class DocumentSerializationHandler
 	}			
 }
 	
+/**
+ * The DocumentManager class provides the core API and management functions for uploading documents
+ * and managing document libraries.
+ * @author Andy Green
+ */
 class DocumentManager
 {
 	var $library;
@@ -65,6 +70,10 @@ class DocumentManager
 	var $width = 700;
 	var $height = 400;
 	
+	/**
+	 * Creates a new DocumentManager for the specified library
+	 * @param DocumentLibrary $library the library to be managed
+	 */
 	function DocumentManager($library)
 	{		
 		$this->library = $library;
@@ -902,6 +911,52 @@ function deleteFolderResult(result)
 		$roles = DocumentManager::getRoleOptions();
 		return implode(",", array_keys($roles));
 	}	
+	
+	/**
+	 * Calculate the maximum allowed file upload size in bytes.
+	 */
+	static function getMaxUploadBytes()
+	{
+		$max = ini_get("upload_max_filesize");
+		
+		if (endsWith($max, "M"))
+		{
+			$max *= 1024 * 1024;
+		}
+		else if (endsWith($max, "K"))
+		{
+			$max *= 1024;
+		}
+		else if (endsWidth($max, "G"))
+		{
+			$max *= 1024 * 1024 * 1024;
+		}
+		
+		$postMax = ini_get("post_max_size");
+		
+		if (endsWith($postMax, "M"))
+		{
+			$postMax *= 1024 * 1024;
+		}
+		else if (endsWith($postMax, "K"))
+		{
+			$postMax *= 1024;
+		}
+		else if (endsWidth($postMax, "G"))
+		{
+			$postMax *= 1024 * 1024 * 1024;
+		}
+		
+		return min($max, $postMax);
+	}
+	
+	/**
+	 * Returns the maximum allowed file upload size in human-readable format.
+	 */
+	static function getMaxUploadSize()
+	{
+		return getScaledSize(DocumentManager::getMaxUploadBytes());
+	}
 	
 	static function registerSearchables($searchables)
 	{
