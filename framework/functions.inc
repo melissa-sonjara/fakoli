@@ -1059,18 +1059,19 @@ function trace($msg, $lvl, $callStack = null)
 /**
  * Get human-readable file size from raw number of bytes
  * @param $size the size of the file in bytes
+ * @param $decimal_places the number of decimal places in the output (default is 1)
  * @return string human-readable file size in appropriate units
  */	
-function getScaledSize($size)
+function getScaledSize($size, $decimal_places = 1)
 {
 	$result = "";
 	if ($size > 1073741824)
 	{
-		$result = sprintf("%.1fGB", ($size / 1073741824));
+		$result = sprintf("%.{$decimal_places}fGB", ($size / 1073741824));
 	}
 	else if ($size > 1048576)
 	{
-		$result = sprintf("%.1fMB", ($size / 1048576));
+		$result = sprintf("%.{$decimal_places}fMB", ($size / 1048576));
 	}
 	else if ($size > 1024)
 	{
