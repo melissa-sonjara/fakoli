@@ -200,6 +200,10 @@ class Article extends DataItem implements Searchable
 		{
 			$range = " AND {$this->primary_key} IN (".implode($range, ", ").")";
 		}
+		else
+		{
+			$range = "";
+		}
 		
 		if (is_object($params))
 		{
