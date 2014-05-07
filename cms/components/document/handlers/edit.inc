@@ -94,6 +94,8 @@ function onDeleteDocument(&$document)
 
 function replaceLibraryFile($field, $document)
 {
+	if (!$_FILES[$field]  || !$_FILES[$field]["name"]) return;
+	
 	$library = $document->DocumentLibrary();
 	
 	$mgr = new DocumentManager($library);
