@@ -204,9 +204,18 @@ class DocumentSearchResult extends AbstractSearchResult
 			
 		$library = $this->item->DocumentLibrary();
 		$size = $library->getFileSize($this->item);
-			
+
+		if (Settings::getValue("document", "link_to_details"))
+		{
+			$link = "/document_details";	
+		}
+		else
+		{
+			$link = "/action/document/download";
+		}
+		
 		$img = $this->formatIcon(getDocIcon($file), getDocType($file));
-		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p>{$img} <a href='/action/document/download?document_id={document_id}'>Download</a> $size");
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p>{$img} <a href='{$link}?document_id={document_id}'>Download</a> $size");
 	}
 }
 
