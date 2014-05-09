@@ -428,6 +428,8 @@ class ImageManager
 				unlink($cacheFile);
 			}
 
+			trace("Writing $cacheFile", 3);
+			
 			switch($gallery->getThumbnailFormat())
 			{
 				case "jpg":
