@@ -66,6 +66,14 @@ class Taxonomy extends DataItem
 		return $this->getRelatedList(TaxonomyTerm, "", $constraint);
 	}
 	
+	function getTerm($term)
+	{
+		return Query::create(TaxonomyTerm, "WHERE taxonomy_id=:taxonomy AND term=:term")
+					->bind(":taxonomy", $this->taxonomy_id,
+						   ":term", $term)
+					->executeSingle();
+	}
+	
 	function countTerms()
 	{
 		return Query::create(TaxonomyTerm, "WHERE taxonomy_id=:taxonomy")
