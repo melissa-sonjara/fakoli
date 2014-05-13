@@ -60,6 +60,11 @@ class PageManifest
 		);		
 	}	
 	
+	static function getScripts()
+	{
+		return array("/components/page/js/page_manager.js");
+	}
+	
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" 			=> array(PageManager, displayPage),

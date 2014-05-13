@@ -742,6 +742,8 @@ class ComponentManager
 		if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
 		Settings::setDefaultValue("component", "upgrade_output_path", $defaultPath, "String");
+		Settings::setDefaultValue("settings", "enable_inline_editing", false, "Boolean", "Turns on or off inline editing capabilities (for those components that support this option)", "General");
+		Settings::setDefaultPermission("settings", "editor_roles", "Roles for whom inline editing controls are to be shown", "admin"); 
 	}
 	
 	/**

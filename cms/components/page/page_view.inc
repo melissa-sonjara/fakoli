@@ -121,6 +121,11 @@ class PageView
 		*/
 		$this->page->description = ComponentManager::fireEvent("PostProcessContent", $this->page->description);
 		
+		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
+		{
+			$this->page->description .= "<p><a href='#' onclick='new PageManager().editPage({$this->page->page_id}); return false;'>Edit</a></p>";
+		}
+		
 		// Populate template fields from the Page object.
 		
 		foreach($this->page->fields as $field => $type)
