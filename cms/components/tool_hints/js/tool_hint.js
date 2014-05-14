@@ -1,12 +1,14 @@
 var ToolHint = new Class({});
 ToolHint.popup = null;
 
-ToolHint.show = function(code, title)
+ToolHint.show = function(code, title, width)
 {
+	if (!width) width="auto";
+	
 	var url = '/action/tool_hints/show_hint?code=' + code;
 	if (!ToolHint.popup)
 	{
-		ToolHint.popup = modalPopup(title, url, "auto", "auto", true);
+		ToolHint.popup = modalPopup(title, url, width, "auto", true);
 		ToolHint.popup.addEvent('hide', function() { ToolHint.popup = null; });
 	}
 	else
