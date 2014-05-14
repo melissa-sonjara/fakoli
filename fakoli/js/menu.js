@@ -143,6 +143,8 @@ var FakoliMenu = new Class({
 	
 	updateFocus: function(elt)
 	{
+		if (!this.root) return;
+		
 		this.clearFocus();
 		
 		if (!this.root.contains(elt)) return;
@@ -152,6 +154,7 @@ var FakoliMenu = new Class({
 	
 	clearFocus: function()
 	{
+		if (!this.root) return;
 		this.root.getElements("ul > li").each(function(elt) { if (!elt.contains(document.focusWatcher.focus)) this.hideMenu(elt); }.bind(this));
 	}
 });
