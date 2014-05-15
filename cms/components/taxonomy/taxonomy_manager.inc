@@ -185,9 +185,9 @@ class TaxonomyManager
 		return $classes[$bindingTarget->target_class]["facet_filter"];
 	}
 		
-	static function addTaxonomyFieldRenderers($form, $showSelectAll = true, $group = null)
+	static function addTaxonomyFieldRenderers($form, $showSelectAll = true, $group = null, $limitTo = null)
 	{
-		$renderers = TaxonomyManager::addBindingFieldRenderers($form, $showSelectAll, $group);
+		$renderers = TaxonomyManager::addBindingFieldRenderers($form, $showSelectAll, $group, $limitTo);
 		
 		$class = get_class($form->data);
 		
@@ -198,6 +198,11 @@ class TaxonomyManager
 			$classes = explode(",", $taxonomy->associated_classes);
 			if (array_search($class, $classes) !== FALSE)
 			{
+				if (is_array($limitTo) && !array_search($taxonomy->identifier, $limitTo))
+				{
+					continue;
+				}
+				
 				$renderer = new TaxonomyTermFieldRenderer($form, $taxonomy);
 				$renderer->setSize(400, 125);
 				$renderer->resizable = true;
