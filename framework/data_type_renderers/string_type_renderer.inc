@@ -91,6 +91,9 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "xml":
 			return xmlEntities($value);
 			
+		case "url":
+			return url_encode($value);
+			
 		case "phone":
 			return StringTypeRenderer::phone($value);
 			
