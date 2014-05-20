@@ -31,51 +31,45 @@
 
 *****************************************************************/
 
-Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy");
-
-Fakoli::usingFeature("auto_form", "tree");
+Fakoli::using("blog", "field_renderers", "taxonomy");
+Fakoli::usingFeature("auto_form");
 
 if (!Settings::checkPermission("settings", "editor_roles"))
 {
 	Fakoli::end("Access Denied");
 }
 
-$page_id = checkNumeric($_GET["page_id"]);
+$blog_id = checkNumeric($_GET["blog_id"]);
 
-$cmspage = new Page();
-$cmspage->filter = new ExclusionFilter("menu_id", "identifier", "site_id", "template", "php_code_file");
-$cmspage->created_date = date("Y-m-d");
-$cmspage->archive_date = strftime('%Y-%m-%d', '0000-00-00');
+$blog = new Blog();
 
-if ($page_id)
+$menu_item = "Blogs";
+
+if ($blog_id)
 {
-	$cmspage->load($page_id);
+	$blog->load($blog_id);
+	$title = "Editing Blog Definition for $blog->title";
+}
+else
+{
+	$title = "Add a new Blog";
+	
+	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
+	$_POST["created_date"] = now();
 }
 
-$form = new AutoForm($cmspage, "POST", "/action/page/edit?page_id={$page_id}");
-$form->markRequiredFields = true;
-
-$form->required("page_title");
-
-$form->readonly("created_date");
-$form->allowDelete = true;
-
-//$codeSelect = new CodeFileSelectFieldRenderer($form, "php_code_file", "PHP Code File", "modules");
-//$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
-$form->annotate("template", "Fakoli 3 projects use Section Content to set template");
-$form->ajaxSubmit("function(result) {new PageManager().editResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$blogView = new BlogView($blog);
+$form = BlogManager::buildBlogForm($blog, $redirect, $blogView);
+$form->ajaxSubmit("function(result) {new BlogManager().editResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->action = "/action/blog/edit?blog_id={$blog_id}";
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
-$roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
-
-
-$redirect = "/admin/pages";
-$form->button("Cancel", "new PageManager().closeDialog(); return false", null, true);
+$form->allowDelete = $blog->allowDelete();
+$form->onDelete = onDeleteCascade;
 
 if ($method == "POST")
 {
-
 	if ($form->save())
 	{
 	    if ($form->deleted)
@@ -91,4 +85,9 @@ if ($method == "POST")
 
 $script .= $form->writeScript();
 $form->drawForm();
-?>
+
+function onDeleteCascade($blog)
+{
+	$blog->delete();
+	redirect("/admin/blogs");
+}

@@ -103,6 +103,8 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
 		
+		BlogManager::inlineEditingControls($blog);
+		
 		$list = new ServerPagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
@@ -206,7 +208,9 @@ class NewsBlogViewHandler implements IBlogViewHandler
 		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
 		
 		echo "<div id='blog_description' class='Standard'>{$blog->description}</div>";
-		
+	
+		BlogManager::inlineEditingControls($blog);
+				
 		$list = new ServerPagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
@@ -288,6 +292,8 @@ class BookBlogViewHandler implements IBlogViewHandler
 		$articles = $blog->Articles("WHERE published=1 AND publish_date <= curdate()" . $constraint);	
 		
 		echo "<div id='blog_description' class='Book'>{$blog->description}</div>";
+
+		BlogManager::inlineEditingControls($blog);
 		
 		$list = new PagedList($articles, "article_list", array($this, formatArticle));
 		$list->CSSclass = "Standard";
@@ -393,6 +399,11 @@ class BlogView
 		
 		$this->handlers[$type]->drawArticle($this->blog, $article_id);
 
+		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
+		{
+			echo "<p id='inline_editing'><a href='#' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a></p>";
+		}
+		
 		if ($this->blog->allow_comments && $article_id)
 		{
 			CommentView::addCommentPanel();

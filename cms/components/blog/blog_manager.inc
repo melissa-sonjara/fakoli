@@ -89,6 +89,15 @@ class BlogManager
 		return $identifier;
 	}
 	
+	static function inlineEditingControls($blog)
+	{
+
+		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
+		{
+			echo "<p id='inline_editing'><a href='#' onclick='new BlogManager().editBlog({$blog->blog_id}); return false;'>Edit</a>&nbsp;&nbsp;<a href='#' onclick='new ArticleManager().editArticle(\"\", {$blog->blog_id}); return false;'>Add an Article</a></p>";
+		}		
+	}
+	
 	static function enumerateItems($items)
 	{
 		$blogs = Query::create(Blog, "ORDER BY title")->execute();

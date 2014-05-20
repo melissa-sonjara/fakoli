@@ -65,6 +65,11 @@ class BlogManifest
 		return array("/fakoli/css/blog.css");
 	}
 	 
+	static function getScripts()
+	{
+		return array("/components/blog/js/blog_manager.js");
+	}
+	
 	static function subscribeToEvents()
 	{
 		return array("ResolveIdentifier" => array(BlogManager, displayBlog),

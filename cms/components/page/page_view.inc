@@ -123,7 +123,7 @@ class PageView
 		
 		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
 		{
-			$this->page->description .= "<p><a href='#' onclick='new PageManager().editPage({$this->page->page_id}); return false;'>Edit</a></p>";
+			$this->page->description .= "<p id='inline_editing'><a href='#' onclick='new PageManager().editPage({$this->page->page_id}); return false;'>Edit</a></p>";
 		}
 		
 		// Populate template fields from the Page object.

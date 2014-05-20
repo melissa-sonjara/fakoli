@@ -60,6 +60,11 @@ class ArticleManifest
 		);		
 	}
 
+	static function getScripts()
+	{
+		return array("/components/article/js/article_manager.js");
+	}
+	
 	static function subscribeToEvents()
 	{
 		return array(
