@@ -1820,6 +1820,26 @@ function plainGUID()
 }
 
 /**
+ * Returns a formatted backtrace suitable for debugging output.
+ */
+function getBacktrace($ignore = 2)
+{
+	$trace = '';
+	foreach (debug_backtrace() as $k => $v) {
+		if ($k < $ignore) {
+			continue;
+		}
+
+		array_walk($v['args'], function (&$item, $key) {
+			$item = var_export($item, true);
+		});
+
+			$trace .= '#' . ($k - $ignore) . ' ' . $v['file'] . '(' . $v['line'] . '): ' . (isset($v['class']) ? $v['class'] . '->' : '') . $v['function'] . '(' . implode(', ', $v['args']) . ')' . "\n";
+	}
+
+	return $trace;
+}
+/**
  * @}
  */
 ?>
