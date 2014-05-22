@@ -259,6 +259,9 @@ class SearchManager
 	
 	function drawFacets($id = null)
 	{
+		trace("Drawing Facets", 3);
+		trace(getBacktrace(), 3);
+		
 		global $script;
 		if ($this->drawnFacets || !$this->facetManager) return;
 		
