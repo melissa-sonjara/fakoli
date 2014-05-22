@@ -48,7 +48,7 @@ class SearchResultTypeFacetFilter extends AbstractFacetFilter
 	{
 		foreach($items as $item)
 		{
-			$className = ($item instanceof AbstractSearchResult) ? $item->prettyClassName : $item->prettifyClassName(true);
+			$className = $item->prettifyClassName(true);
 			$this->classes[$className] = true;
 		}
 	}
@@ -61,7 +61,7 @@ class SearchResultTypeFacetFilter extends AbstractFacetFilter
 	function onTagItem($item, $attrs)
 	{
 		// Need to work with underlying object if passed is a search result container
-		$className = ($item instanceof AbstractSearchResult) ? $item->prettyClassName : $item->prettifyClassName(true);
+		$className = $item->prettifyClassName(true);
 		
 		$attrs["data-search_result_type"] = $className;
 
