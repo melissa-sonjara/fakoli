@@ -1173,7 +1173,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			$this->id = $_POST["#FORMID#"];
 		}
 
-		if (!isset($_REQUEST["#SESSIONTIE#"]) || $_REQUEST["#SESSIONTIE#"] != $_SESSION["csrfToken"])
+		if (!isset($_POST["#SESSIONTIE#"]) || $_POST["#SESSIONTIE#"] != $_SESSION["csrfToken"])
 		{
 			throw new FakoliException("Invalid Session Token");
 		}
