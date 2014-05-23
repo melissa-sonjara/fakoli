@@ -8,12 +8,28 @@ DataSyncManager::getSyncTargets();
 
 $class = $_SESSION["data_import_class"];
 
+$profile_id = $_SESSION["import_profile_id"];
+
+$multiProfile = Settings::getValue("data_sync", "multiple_import_profiles");
+
+if ($multiProfile)
+{
+	if (!$profile_id)
+	{
+		redirect("data_import_field_mapping");
+	}
+}
+else
+{
+	$profile_id = 0;
+}
+
 $obj = new $class;
 
 $name = $obj->prettifyClassName(true);
 
-$mappedFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_column != ''")
-					 ->bind(":cl", $class)
+$mappedFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND import_column != ''")
+					 ->bind(":cl", $class, ":pr", $profile_id)
 					 ->execute();
 
 $filter = new InclusionFilter();
