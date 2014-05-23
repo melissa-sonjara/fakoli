@@ -164,12 +164,13 @@ interface IDataSyncHelper
 				$mapping->class = $class;
 				$mapping->client_field = $field;
 				$mapping->import_column = "";
-	
+				$mapping->import_profile_id = $profile_id;
+				
 				$mapping->save();
 			}
 				
-			$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl")
-							  ->bind(":cl", $class)
+			$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
+							  ->bind(":cl", $class, ":pr", $profile_id)
 							  ->execute();
 	
 		}
