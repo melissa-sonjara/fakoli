@@ -35,6 +35,7 @@ interface IDataSyncHelper
 	{
 		Settings::setDefaultValue("data_sync", "import_in_chunks", false, Boolean, "Specifies whether to limit the number of records being imported at one time.");
 		Settings::setDefaultValue("data_sync", "records_per_page", 500, Number, "The number of records to import at one time when chunked import is enabled.");
+		Settings::setDefaultValue("data_sync", "multiple_import_profiles", false, Boolean, "Turn on support for configuring multiple import profile for each sync target.");
 	}
 
 	
@@ -142,12 +143,12 @@ interface IDataSyncHelper
 		}
 	}
 	
-	static function getFieldMappings($class)
+	static function getFieldMappings($class, $profile_id = 0)
 	{
 		DataSyncManager::getSyncTargets();
 		
-		$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl")
-							  ->bind(":cl", $class)
+		$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
+							  ->bind(":cl", $class, ":pr", $profile_id)
 							  ->execute();
 	
 		if (count($fieldMappings) == 0)

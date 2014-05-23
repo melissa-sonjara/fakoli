@@ -31,3 +31,23 @@ ALTER TABLE data_import_field_mapping ADD COLUMN required TINYINT(3) UNSIGNED NO
 ALTER TABLE data_import_field_mapping ADD COLUMN grouping TINYINT(3) UNSIGNED NOT NULL DEFAULT 0;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE data_import_field_mapping ADD COLUMN import_profile_id int(10) NOT NULL DEFAULT 0;
+
+CREATE TABLE data_import_profile
+(
+	import_profile_id	int(10) not null auto_increment,
+	profile				varchar(200) not null,
+	notes				text,
+	PRIMARY KEY(import_profile_id)
+) ENGINE=InnoDB;
+
+-- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE data_import_profile ADD COLUMN class VARCHAR(255) NOT NULL AFTER profile;
+
+-- END Version 1.4
