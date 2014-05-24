@@ -307,7 +307,7 @@ interface IDataSyncHelper
 					continue;
 				}
 				
-				if ($item->hasField("owner_id")) $item->set("owner_id", $user->person_id);	
+				if ($item->hasField("owner_id")) $item->set("owner_id", $user->get($user->getPrimaryKey()));	
 				
 				if ($matchingFormat)
 				{
