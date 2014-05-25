@@ -12,7 +12,8 @@ var BackgroundProcess = new Class(
 		height: 'auto',
 		period:	2000,
 		onComplete: Class.Empty,
-		hideOnComplete: true
+		hideOnComplete: true,
+		closeAction: function() {}
 	},
 	timer:	0,
 	
@@ -33,6 +34,7 @@ var BackgroundProcess = new Class(
 		this.id = result;
 		
 		this.dialog = modalPopup(this.title, null, this.options.width, this.options.height, true, false);
+		this.dialog.addEvent('hide', this.options.closeAction);
 		
 		this.container = new Element('div', {'class': 'process_container'});
 		this.message = new Element('div', {'class': 'process_message'});
@@ -76,7 +78,10 @@ var BackgroundProcess = new Class(
 				case "Completed":
 					
 					clearInterval(this.timer);
+					this.message.set('text', progress.message);
 					this.progressBar.addClass('completed');
+					this.percentage.set('text', '100%');
+					
 					if (this.options.hideOnComplete)
 					{
 						this.dialog.hide();

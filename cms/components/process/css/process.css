@@ -26,30 +26,30 @@
 
 .process_progress_bar.completed
 {
-	background: #0bbf0b; /* Old browsers */
+	background: #42ff42; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIzOSUiIHN0b3AtY29sb3I9IiMwYmJmMGIiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI3MCUiIHN0b3AtY29sb3I9IiMyN2U1MjciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI4NSUiIHN0b3AtY29sb3I9IiM0MmZmNDIiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-	background: -moz-linear-gradient(top,  #0bbf0b 39%, #27e527 70%, #42ff42 85%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(39%,#0bbf0b), color-stop(70%,#27e527), color-stop(85%,#42ff42)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #0bbf0b 39%,#27e527 70%,#42ff42 85%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #0bbf0b 39%,#27e527 70%,#42ff42 85%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #0bbf0b 39%,#27e527 70%,#42ff42 85%); /* IE10+ */
-	background: linear-gradient(to bottom,  #0bbf0b 39%,#27e527 70%,#42ff42 85%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0bbf0b', endColorstr='#42ff42',GradientType=0 ); /* IE6-8 */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIxNSUiIHN0b3AtY29sb3I9IiM0MmZmNDIiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIzMCUiIHN0b3AtY29sb3I9IiMyN2U1MjciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI2MSUiIHN0b3AtY29sb3I9IiMwYmJmMGIiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #42ff42 15%, #27e527 30%, #0bbf0b 61%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(15%,#42ff42), color-stop(30%,#27e527), color-stop(61%,#0bbf0b)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #42ff42 15%,#27e527 30%,#0bbf0b 61%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #42ff42 15%,#27e527 30%,#0bbf0b 61%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #42ff42 15%,#27e527 30%,#0bbf0b 61%); /* IE10+ */
+	background: linear-gradient(to bottom,  #42ff42 15%,#27e527 30%,#0bbf0b 61%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42ff42', endColorstr='#0bbf0b',GradientType=0 ); /* IE6-8 */
 }
 
 .process_progress_bar.error
 {
-	background: #ba0000; /* Old browsers */
+	background: #ff0000; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIzOSUiIHN0b3AtY29sb3I9IiNiYTAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI3MCUiIHN0b3AtY29sb3I9IiNlMDAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI4NSUiIHN0b3AtY29sb3I9IiNmZjAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-	background: -moz-linear-gradient(top,  #ba0000 39%, #e00000 70%, #ff0000 85%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(39%,#ba0000), color-stop(70%,#e00000), color-stop(85%,#ff0000)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #ba0000 39%,#e00000 70%,#ff0000 85%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #ba0000 39%,#e00000 70%,#ff0000 85%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #ba0000 39%,#e00000 70%,#ff0000 85%); /* IE10+ */
-	background: linear-gradient(to bottom,  #ba0000 39%,#e00000 70%,#ff0000 85%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ba0000', endColorstr='#ff0000',GradientType=0 ); /* IE6-8 */	
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIxNSUiIHN0b3AtY29sb3I9IiNmZjAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIyOCUiIHN0b3AtY29sb3I9IiNlMDAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI0MiUiIHN0b3AtY29sb3I9IiNiYTAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #ff0000 15%, #e00000 28%, #ba0000 42%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(15%,#ff0000), color-stop(28%,#e00000), color-stop(42%,#ba0000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ff0000 15%,#e00000 28%,#ba0000 42%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ff0000 15%,#e00000 28%,#ba0000 42%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ff0000 15%,#e00000 28%,#ba0000 42%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ff0000 15%,#e00000 28%,#ba0000 42%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff0000', endColorstr='#ba0000',GradientType=0 ); /* IE6-8 */
 }
 .process_message
 {
