@@ -76,6 +76,7 @@ var BackgroundProcess = new Class(
 				case "Completed":
 					
 					clearInterval(this.timer);
+					this.progressBar.addClass('complete');
 					if (this.options.hideOnComplete)
 					{
 						this.dialog.hide();
@@ -86,8 +87,8 @@ var BackgroundProcess = new Class(
 				case "Error":
 
 					clearInterval(this.timer);
-					this.dialog.hide();
-					messagePopup("An Error Ocurred", progress.message);
+					this.progressBar.addClass('error');
+					this.message.set("html", progress.message);
 					break;
 				}
 			}.bind(this)
