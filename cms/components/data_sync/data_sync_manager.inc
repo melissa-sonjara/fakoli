@@ -101,6 +101,16 @@ interface IDataSyncHelper
 			fgetcsv($fp);
 		}
 	}
+
+	static function getHelper($class)
+	{
+		if (array_key_exists($class, DataSyncManager::$helpers))
+		{
+			$helper = DataSyncManager::$helpers[$class];
+		}
+		
+		return $helper;
+	}
 	
 	static function getImportColumns($class, $file = "")
 	{
@@ -124,9 +134,9 @@ interface IDataSyncHelper
 			if ($field) $columns[] = $field;
 		}
 	
-		if (array_key_exists($class, DataSyncManager::$helpers))
+		$helper = DataSyncManager::getHelper($class);
+		if ($helper)
 		{
-			$helper = DataSyncManager::$helpers[$class];
 			$columns = $helper->getAdditionalColumns($columns);
 		}
 		
@@ -136,9 +146,10 @@ interface IDataSyncHelper
 	static function extendForm($form)
 	{
 		$class = get_class($form->data);
-		if (array_key_exists($class, DataSyncManager::$helpers))
+		$helper = DataSyncManager::getHelper($class);
+		
+		if ($helper)
 		{
-			$helper = DataSyncManager::$helpers[$class];
 			$helper->extendForm($form);
 		}
 	}
@@ -178,30 +189,32 @@ interface IDataSyncHelper
 		return $fieldMappings;
 	}
 	
-	static function createImportItems($class, $file = "")
+	private static function getMatchingFormat($class, $import_profile_id = 0)
 	{
-		global $user;
 
-		ComponentManager::fireEvent("RegisterSyncHelpers");
-		
-		if (array_key_exists($class, DataSyncManager::$helpers))
-		{
-			$helper = DataSyncManager::$helpers[$class];
-		}
-		
-		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl and matching=1")
-							   ->bind(":cl", $class)
+		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
+							   ->bind(":cl", $class, ":pr", $import_profile_id)
 							   ->execute();
-		
+								
 		$mf = array();
 		
 		foreach($matchingFields as $matchingField)
 		{
-			 $mf[] = "{".$matchingField->client_field."}";
+			$mf[] = "{".$matchingField->client_field."}";
 		}
 		
 		$matchingFormat = implode("##", $mf);
 		
+		return $matchingFormat;
+	}
+	
+	/**
+	 * Retrieves an array of the existing items, indexed according to the configured matching fields.
+	 * @param string $class the target import class
+	 * @return array
+	 */
+	private static function getExistingItemIDs($class, $matchingFormat)
+	{
 		$existingItems = IteratedQuery::create($class)->execute();
 		
 		$existingItemIDs = array();
@@ -211,27 +224,137 @@ interface IDataSyncHelper
 			$existingItemIDs[$item->format($matchingFormat)] = $item->get($item->getPrimaryKey());
 		}
 		
-		$fieldMapping = IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl and import_column != ''", "client_field")
-									->bind(":cl", $class)
+		return $existingItemIDs;
+	}
+
+	
+	static function getFieldMapping($class, $import_profile_id)
+	{
+		trace("Retrieving field mapping for $class profile $import_profile_id", 3);
+		
+		$fieldMapping = IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND import_column != ''", "client_field")
+									->bind(":cl", $class, ":pr", $import_profile_id)
 									->execute();
-	
-		$columns = array();
-	
-		$items = array();
-	
+		
+		return $fieldMapping;
+	}
+
+	static function generateFilter($fieldMapping)
+	{
+		$filter = new InclusionFilter();
+		
+		foreach($fieldMapping as $field => $mapping)
+		{
+			$filter->add($field);
+		}
+		
+		return $filter;
+	}
+			
+	private static function openImportFile($file, &$columns)
+	{
 		if (!$file)
 		{
 			$file = $_SESSION["data_import_file"];
 		}
-	
+		
+		if (!file_exists($file))
+		{
+			throw new FakoliException("Data Import File does not exist");
+		}
+		
+		trace("Opening import file $file", 3);
+		
 		$fp = fopen($file, "r");
-	
+		
 		$fields = fgetcsv($fp);
-	
+		
 		foreach($fields as $field)
 		{
 			$columns[] = $field;
 		}
+		
+		return $fp;
+	}
+		
+	private static function getRecord($fp, $columns, $helper = null)
+	{
+		$record = fgetcsv($fp);
+
+		if ($record)
+		{
+			$record = array_combine($columns, $record);
+				
+			if ($helper)
+			{
+				$record = $helper->processRecord($record);
+			}
+		}
+		
+		return $record;
+	}
+	
+	private static function populateItem($item, $record, $fieldMapping, $lastItem = null)
+	{
+		$skip = false;
+		
+		foreach($fieldMapping as $field => $mapping)
+		{
+			if (!$mapping->import_column) continue;
+			
+			$cols = $mapping->getColumns();
+
+			$vals = array();
+		
+			foreach($cols as $col)
+			{
+				if ($record[$col])
+				{
+					$vals[] = $record[$col];
+				}
+			}
+		
+			$separator = ($item->fields[$field] == Text) ? "\n" : " ";
+		
+			$value = trim(implode($separator, $vals));
+		
+			if (!$value && $mapping->grouping && $lastItem)
+			{
+				$value = $lastItem->get($field);
+			}
+		
+			if (!$value && $mapping->required)
+			{
+				trace("Required field $field not set in record. Skipping", 3);
+				
+				$skip = true;
+				break;
+			}
+		
+			$item->set($field, $value);
+		}
+		
+		return $skip;
+	}
+	
+	static function createImportItems($class, $import_profile_id = 0, $file = "")
+	{
+		global $user;
+
+		ComponentManager::fireEvent("RegisterSyncHelpers");
+
+		$helper = DataSyncManager::getHelper($class);
+
+		$columns = array();
+		
+		$matchingFormat = DataSyncManager::getMatchingFormat($class, $import_profile_id);
+		$existingItemIDs = DataSyncManager::getExistingItemIDs($class, $matchingFormat);
+		$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
+		$filter = DataSyncManager::generateFilter($fieldMapping);
+		
+		$fp = DataSyncManager::openImportFile($file, $columns);
+		
+		$items = array();
 	
 		//DataSyncManager::skipToOffset($fp);
 		$isChunked = Settings::getValue("data_sync", "import_in_chunks");
@@ -240,57 +363,14 @@ interface IDataSyncHelper
 		
 		$lastItem = null;
 		
-		while($record = fgetcsv($fp))
+		while($record = DataSyncManager::getRecord($fp, $columns, $helper))
 		{	
-			$record = array_combine($columns, $record);
-			
-			if ($helper)
-			{
-				$record = $helper->processRecord($record);
-			}
-			
 			$item = new $class();
 			$skip = false;
 			
-			$item->filter = new InclusionFilter();
-			
-			foreach($fieldMapping as $field => $mapping)
-			{
-				$item->filter->add($field);
-				
-				$cols = $mapping->import_column;
-	
-				if (!$cols) continue;
-	
-				$cols = explode(",", $cols);
-	
-				$vals = array();
-	
-				foreach($cols as $col)
-				{
-					if ($record[$col])
-					{
-						$vals[] = $record[$col];
-					}
-				}
-	
-				$separator = ($item->fields[$field] == Text) ? "\n" : " ";
-	
-				$value = trim(implode($separator, $vals));
+			$item->filter = $filter;
 
-				if (!$value && $mapping->grouping && $lastItem)
-				{
-					$value = $lastItem->get($field);
-				}
-				
-				if (!$value && $mapping->required)
-				{
-					$skip = true;
-					break;
-				}
-
-				$item->set($field, $value);
-			}
+			$skip = DataSyncManager::populateItem($item, $record, $fieldMapping, $lastItem);
 			
 			if (!$skip) 
 			{
@@ -328,6 +408,129 @@ interface IDataSyncHelper
 		fclose($fp);
 	
 		return $items;
+	}
+	
+	
+	static function batchImportItems($class, $import_profile_id, $file, $importMatching, $importNew, $process)
+	{
+		trace("Batching importing $class profile $import_profile_id from $file", 3);
+		
+		global $user;
+		
+		if (!$process)
+		{
+			throw new FakoliException("DataSyncManager::batchImportItems cannot be used within a browser request");
+		}
+		
+		try
+		{
+			ComponentManager::fireEvent("RegisterSyncHelpers");
+			
+			$helper = DataSyncManager::getHelper($class);
+			
+			$columns = array();
+	
+			$process->setProgress("Running", "Scanning file", 0);
+			
+			$numRecords = DataSyncManager::countRecords($file);
+			
+			$process->setProgress("Running", pluralize("$numRecords record")." found", 0);
+			
+			$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
+			$filter = DataSyncManager::generateFilter($fieldMapping);
+	
+			$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
+									->bind(":cl", $class, ":pr", $import_profile_id)
+									->execute();
+			
+			$c = 1;
+			$matchingConstraint = "";
+			
+			foreach($matchingFields as $mf)
+			{
+				if ($matchingConstraint) $matchingConstraint .= " AND ";
+				$matchingConstraint .= "{$mf->client_field}=:{$c}";
+				$c++;
+			}
+	
+			trace("Matching Constraint: $matchingConstraint", 3);
+			
+			$item = new $class();
+			
+			$fp = DataSyncManager::openImportFile($file, $columns);
+			
+			$lastItem = null;
+			
+			$imported = 0;
+			$skipped = 0;
+			
+			$matchingQuery = Query::create($class, "WHERE $matchingConstraint");
+			$matchingQuery->filter = new InclusionFilter($item->getPrimaryKey());
+			
+			while($record = DataSyncManager::getRecord($fp, $columns, $helper))
+			{
+				
+				$item = new $class();
+				$skip = false;
+					
+				$item->filter = $filter;
+			
+				$skip = DataSyncManager::populateItem($item, $record, $fieldMapping, $lastItem);
+					
+				if (!$skip)
+				{
+					$c = 1;
+						
+					foreach($matchingFields as $mf)
+					{
+						$matchingQuery->bind(":{$c}", $item->get($mf->client_field));
+						$c++;
+					}
+					
+					$match = null;
+					try
+					{
+						$match = $matchingQuery->executeSingle();
+						
+						$item->set($item->getPrimaryKey(), $match->get($match->getPrimaryKey()));
+					}
+					catch(DataNotFoundException $e)
+					{
+					}
+					
+					if (($match && !$importMatching) || (!$match && !$importNew)) 
+					{
+						$skipped++;
+					}
+					else
+					{
+						$item->save();
+						$imported++;
+						$lastItem = $item;
+					}
+				}
+				else
+				{
+					$skipped++;
+				}
+	
+				$counter = $skipped + $imported;
+				
+				$percentage = intval((100 * $counter) / $numRecords);
+				
+				$process->setProgress("Running", "Processed record $counter of $numRecords", $percentage);
+					
+			}
+			
+			fclose($fp);
+	
+			$process->setProgress("Completed", "$imported records imported, $skipped records skipped");
+			
+		}
+		catch(Exception $e)
+		{
+			$process->setProgress("Error", $exception->getMessage());
+		}
 	}
 	
 	static function onItemRow($item)

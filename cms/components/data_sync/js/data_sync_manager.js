@@ -9,6 +9,9 @@ var DataSyncManager = new Class(
 	matchingButton: Class.Empty,
 	nonMatchingButton: Class.Empty,
 	submitButton: Class.Empty,
+	batchButton: Class.Empty,
+	batchMatchingButton: Class.Empty,
+	batchNewButton: Class.Empty,
 	
 	matching: [],
 	nonmatching: [],
@@ -57,28 +60,43 @@ var DataSyncManager = new Class(
 				html += "&nbsp;<a class='button' href='?offset=" + (this.options.offset + this.options.pageSize) + "'>Next &raquo;</a>";
 			}
 			
+			html += "&nbsp;";
+				
 			this.importPosition.set('html', html);
 			this.importPosition.inject(this.container);
+			
+			this.batchButton = new Element('a', {'class': 'button', 'text': 'Import All Records...'});
+			this.batchButton.addEvent('click', function() {this.batchImport(); return false;}.bind(this));
+			this.batchButton.inject(this.container);
+			
+			this.batchMatchingButton = new Element('a', {'class': 'button', 'text': 'Update All Matching Records...'});
+			this.batchMatchingButton.addEvent('click', function() {this.batchImportMatching(); return false;}.bind(this));
+			this.batchMatchingButton.inject(this.container);
+			
+			this.batchNewButton = new Element('a', {'class': 'button', 'text': 'Import All New Records...'});
+			this.batchNewButton.addEvent('click', function() {this.batchImportNew(); return false;}.bind(this));
+			this.batchNewButton.inject(this.container);
+		
 		}
 		
 		this.statistics = new Element('p');
-		this.statistics.set('html', matchingCount + " Matching Records. " + nonmatchingCount + " New Records.<br/>");
+		this.statistics.set('html', matchingCount + " Matching Records. " + nonmatchingCount + " New Records.&nbsp;");
 		this.statistics.inject(this.container);
 		
 		this.matchingButton = new Element('a', {'class': 'button', 'text': "Select Matching Records"});
 		
 		this.matchingButton.addEvent('click', function() { this.toggleSelectMatching(); }.bind(this));
-		this.matchingButton.inject(this.container);
+		this.matchingButton.inject(this.statistics);
 		
 		this.nonMatchingButton = new Element('a', {'class': 'button', 'text': "Select New Records"});
 		
 		this.nonMatchingButton.addEvent('click', function() { this.toggleSelectNonMatching(); }.bind(this));
-		this.nonMatchingButton.inject(this.container);
+		this.nonMatchingButton.inject(this.statistics);
 		
 		this.submitButton = new Element('a', {'class': 'button important', 'text': "Import Selected Records"});
 		this.submitButton.addEvent('click', function() { this.form.submit(); }.bind(this));
 		
-		this.submitButton.inject(this.container);
+		this.submitButton.inject(this.statistics);
 	},
 	
 	toggleSelectMatching: function()
@@ -115,5 +133,21 @@ var DataSyncManager = new Class(
 		}
 		
 		this.nonMatchingButton.set('text', text);
-	}	
+	},
+	
+	
+	batchImport: function()
+	{
+		new BackgroundProcess("Importing Records", "/action/data_sync/batch_import?matching=1&new=1", {hideOnComplete: false, closeAction: function() { window.location.reload();} });
+	},
+	
+	batchImportMatching: function()
+	{
+		new BackgroundProcess("Importing Records", "/action/data_sync/batch_import?matching=1&new=0", {hideOnComplete: false, closeAction: function() { window.location.reload();} });
+	},
+	
+	batchImportNew: function()
+	{
+		new BackgroundProcess("Importing Records", "/action/data_sync/batch_import?matching=0&new=1", {hideOnComplete: false, closeAction: function() { window.location.reload();} });
+	}
 });
