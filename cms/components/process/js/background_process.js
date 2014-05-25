@@ -11,7 +11,8 @@ var BackgroundProcess = new Class(
 		width:  400,
 		height: 'auto',
 		period:	2000,
-		onComplete: Class.Empty
+		onComplete: Class.Empty,
+		hideOnComplete: true
 	},
 	timer:	0,
 	
@@ -75,7 +76,10 @@ var BackgroundProcess = new Class(
 				case "Completed":
 					
 					clearInterval(this.timer);
-					this.dialog.hide();
+					if (this.options.hideOnComplete)
+					{
+						this.dialog.hide();
+					}
 					this.fireEvent("complete");
 					break;
 					
