@@ -76,7 +76,7 @@ var BackgroundProcess = new Class(
 				case "Completed":
 					
 					clearInterval(this.timer);
-					this.progressBar.addClass('complete');
+					this.progressBar.addClass('completed');
 					if (this.options.hideOnComplete)
 					{
 						this.dialog.hide();
