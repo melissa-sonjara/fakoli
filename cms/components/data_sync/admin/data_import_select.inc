@@ -8,43 +8,35 @@ DataSyncManager::getSyncTargets();
 
 $class = $_SESSION["data_import_class"];
 
-$profile_id = $_SESSION["import_profile_id"];
+$import_profile_id = $_SESSION["import_profile_id"];
 
 $multiProfile = Settings::getValue("data_sync", "multiple_import_profiles");
 
 if ($multiProfile)
 {
-	if (!$profile_id)
+	if (!$import_profile_id)
 	{
 		redirect("data_import_field_mapping");
 	}
 }
 else
 {
-	$profile_id = 0;
+	$import_profile_id = 0;
 }
 
 $obj = new $class;
 
 $name = $obj->prettifyClassName(true);
 
-$mappedFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND import_column != ''")
-					 ->bind(":cl", $class, ":pr", $profile_id)
-					 ->execute();
-
-$filter = new InclusionFilter();
+$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
+$filter = DataSyncManager::generateFilter($fieldMapping);
 $filter->add($obj->primary_key);
-foreach($mappedFields as $field)
-{
-	$filter->add($field->client_field);
-}
-
 
 $obj->filter = $filter;
 
 $page_title = "Select $name to Import";
 
-$items = DataSyncManager::createImportItems($class);
+$items = DataSyncManager::createImportItems($class, $import_profile_id);
 
 trace("Mapping ".count($items)." items", 3);
 $form = new AutoForm($obj);
