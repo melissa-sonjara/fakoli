@@ -65,6 +65,16 @@ class SubSelectFieldRenderer extends FieldRenderer
 		}
 	}
 	
+	/**
+	 * Override this function to provide extra editing controls that follow the visibility
+	 * rules of the main control.
+	 * @param string $field
+	 */
+	function extraControls($field)
+	{
+		
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
@@ -74,6 +84,7 @@ class SubSelectFieldRenderer extends FieldRenderer
 			$style = "style='width: {$this->width}'";
 		}
 
+		echo "<span class='subselect_container'>";
 		echo "<select $style name='$field' id='{$this->parent->id}_{$field}'";
 		
 		if ($this->onChange != "")
@@ -83,6 +94,10 @@ class SubSelectFieldRenderer extends FieldRenderer
 			
 		echo ">\n";			
 		echo "</select>\n";
+		
+		$this->extraControls();
+		
+		echo "</span>";
 		
 		$this->_endField($field);
 	}

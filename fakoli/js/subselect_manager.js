@@ -3,6 +3,7 @@ var SubSelectManager = new Class(
 	select: Class.Empty,
 	subSelect: Class.Empty,
 	subSelectLabel: Class.Empty,
+	subSelectVisibility: Class.Empty,
 	value: 0,
 	selectOptions: {},
 	
@@ -11,6 +12,10 @@ var SubSelectManager = new Class(
 		this.select = document.id(select);
 		this.subSelect = document.id(subSelect);
 		this.subSelectLabel = document.id(subSelect + "_label");
+		
+		var container = this.subSelect.getParent();
+		
+		this.subselectVisibility = container.hasClass('subselect_container') ? container : this.subSelect;
 		
 		this.value = value;
 		
@@ -32,7 +37,7 @@ var SubSelectManager = new Class(
 		
 		if (typeof opts === 'undefined' || !isArray(opts))
 		{
-			this.subSelect.setStyle('display', 'none');
+			this.subselectVisibility.setStyle('display', 'none');
 			this.subSelectLabel.setStyle('display', 'none');
 			return;
 		}
@@ -45,14 +50,14 @@ var SubSelectManager = new Class(
 		
 		if (fade)
 		{
-			this.subSelect.setStyles({'display': 'inline', 'opacity': 0});
+			this.subselectVisibility.setStyles({'display': 'inline', 'opacity': 0});
 			this.subSelectLabel.setStyles({'display': 'inline', 'opacity': 0});
-			this.subSelect.fade('in');
+			this.subselectVisibility.fade('in');
 			this.subSelectLabel.fade('in');
 		}
 		else
 		{
-			this.subSelect.setStyles({'display': 'inline', 'opacity': 1});
+			this.subselectVisibility.setStyles({'display': 'inline', 'opacity': 1});
 			this.subSelectLabel.setStyles({'display': 'inline', 'opacity': 1});			
 		}
 	},
