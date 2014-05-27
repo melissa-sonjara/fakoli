@@ -69,13 +69,16 @@ class ZipCodeFieldRenderer extends FieldRenderer
 		
 		if($required)
 		{
-			$this->parent->regexp($field, "^\\d{5}$", "Please supply a valid zip code.");
+			$expr = $this->includePlus4 ? "^\\d{5}(?:-\\d{4})?$" : "^\\d{5}$";
+			
+			$this->parent->regexp($field, $expr, "Please supply a valid zip code.");
 			$this->parent->validator->add(new RequiredValidator($field, $label));
 		}	
 	}
 		
 	function renderScript($field)
 	{
+		$size = $this->includePlus4 ? 10 : 5;
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -83,10 +86,10 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	{
 		var ctrl = $('<? echo "{$this->parent->id}_$field" ?>');
 		var len = ctrl.value.length;
-		if (len >= 5) 
+		if (len >= <?echo $size?>) 
 		{
-			ctrl.value = ctrl.value.substring(0, 5);
-			len = 5;
+			ctrl.value = ctrl.value.substring(0, <?echo $size?>);
+			len = <?echo $size?>;
 		}
 		
 		var count = ctrl.length;
@@ -103,6 +106,8 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 
+		$size = $this->includePlus4 ? 10 : 5;
+		
 		$onkeyup = " onkeyup='{$field}_keyup(event);'";
 		$onkeypress=" onkeypress='return maskInput(event)'";
 		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";	
@@ -112,7 +117,7 @@ class ZipCodeFieldRenderer extends FieldRenderer
 		echo "<input id='{$this->parent->id}_{$field}' 
 		type='text' name='$field' $onchange $autocomplete 
 		value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' 
-		size='5' $disable $onkeypress $onkeyup/>";
+		size='{$size}' $disable $onkeypress $onkeyup/>";
 		$this->_endField($field);
 	}
 	
