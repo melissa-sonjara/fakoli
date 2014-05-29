@@ -45,6 +45,7 @@ class DataSyncManifest
 	{
 		return array(
 					"upgradeComponent"	=>	array(DataSyncManager, upgradeComponent),
+					"RegisterSerializationHandler"	=>	array(DataSyncManager, registerSerializationHandler),
 					"ComponentScanComplete"	=>	array(DataSyncManager, setDefaults)
 					//TODO: Add Event Registrations here
 		);

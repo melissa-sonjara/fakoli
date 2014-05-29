@@ -1,6 +1,34 @@
 <?php
 
 /**
+ * Serialization handler for Link Libraries and Link Records.
+ * @author andy
+ *
+ */
+class DataSyncSerializationHandler
+{
+	function __construct()
+	{
+	}
+
+	function export()
+	{
+		$xml  = "\n<DataSyncMap>";
+		$xml .= SerializationManager::serialize(DataImportProfile, "ORDER BY import_profile_id");
+		$xml .= SerializationManager::serialize(DataImportFieldMapping, "ORDER BY mapping_id");
+		$xml .= "</DataSyncMap>";
+
+		return $xml;
+	}
+
+	function import($doc, $tx)
+	{
+		SerializationManager::unserialize(DataImportProfile, $doc, $tx);
+		SerializationManager::unserialize(DataImportFieldMapping, $doc, $tx);
+	}
+}
+
+/**
  * IDataSyncHelper defines the interface that application should implement
  * when providing sync helpers to handle specific import logic.
  * @author andy
@@ -37,7 +65,12 @@ interface IDataSyncHelper
 		Settings::setDefaultValue("data_sync", "records_per_page", 500, Number, "The number of records to import at one time when chunked import is enabled.");
 		Settings::setDefaultValue("data_sync", "multiple_import_profiles", false, Boolean, "Turn on support for configuring multiple import profile for each sync target.");
 	}
-
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("data_sync", "Data Import Profiles and Field Mappings", new DataSyncSerializationHandler());
+		return true;
+	}
 	
 	static function getImportTabs()
 	{
