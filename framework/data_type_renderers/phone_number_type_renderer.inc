@@ -96,6 +96,9 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 	 */
 	static function getValueParts($value)
 	{
+		//AJG - Remove any non-numeric formatting before slicing up
+		$value = preg_replace("/\\D/", "", $value);
+		
 		$parts = PhoneNumberTypeRenderer::$parts;
 		
 		$valueParts = array();
