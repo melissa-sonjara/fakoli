@@ -8,6 +8,7 @@ class ConnectableNavigator
 	var $source;
 	var $panel;
 	var $handler;
+	var $enabled = true;
 	
 	function __construct($id, $title, $source, $handler)
 	{
@@ -31,9 +32,10 @@ class ConnectableNavigator
 		$script = <<<ENDSCRIPT
 <script type="text/javascript" src="/components/connectable/js/connectable_navigator.js"></script>
 <script type="text/javascript">
+var {$this->id}_ConnectableNavigator;
 window.addEvent('load', function()
 {
-	new ConnectableNavigator('{$this->id}');
+	{$this->id}_ConnectableNavigator = new ConnectableNavigator('{$this->id}');
 });
 </script>
 ENDSCRIPT;
@@ -46,6 +48,16 @@ ENDSCRIPT;
 		
 		$obj = new $target;
 		$name = $obj->prettifyClassName(true);
+		
+		if (!$this->enabled)
+		{
+			$icon = $obj->getConnectableDisabledIcon();
+?>
+			<li><img src="<?echo $icon?>" alt="<?echo $name?>" title="<?echo $name?>" class="disabled"/>
+<?
+			return;
+		}
+		
 		$icon = $obj->getConnectableIcon();
 		
 		$items = ConnectableManager::getConnectedItems($this->source, $target, $obj->getConnectableConstraint());
@@ -71,7 +83,7 @@ ENDSCRIPT;
 		$createURL = ConnectableManager::$contextRouter . "?from=$from&to=$target";
 ?>
 	<br/>
-	<a class='button small' href='#'>Select...</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button small' href='<?echo $createURL?>'>Create...</a>
+	<a class='button small' href='#' onclick='ConnectableNavigator.selectConnectables("<?echo $from?>", "<?echo $target?>", "<?echo $name?>"); return false'>Select...</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button small' href='<?echo $createURL?>'>Create...</a>
   </div>
   </li>
 <?
@@ -80,7 +92,8 @@ ENDSCRIPT;
 	function drawNavigator()
 	{
 		$targets = ConnectableManager::getTargetClasses($this->source);
-		
+
+		if (!$this->source->get($this->source->getPrimaryKey())) $this->enabled = false;
 ?>
 <div id="<?echo $this->id?>" class="connectable_navigator">
 <span class="title"><?echo $this->title?></span>

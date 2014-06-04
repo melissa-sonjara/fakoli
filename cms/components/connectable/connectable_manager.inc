@@ -3,10 +3,12 @@
 interface Connectable
 {
 	function getConnectableIcon();
+	function getConnectableDisabledIcon();
 	function getConnectableConstraint();
 	function getConnectableLink();
 	function getConnectableTitle();
 	function getConnectableHome();
+	function populateSelectionTable($table);
 }
 
 /**
@@ -167,9 +169,9 @@ class ConnectableManager
 			// Also insert back-link
 			$record = new ConnectionRecord();
 			$record->source_class = $sourceClass;
-			$record->source_id = $source->get($source->getPrimaryKey());
+			$record->source_id = $target->get($target->getPrimaryKey());
 			$record->target_class = $targetClass;
-			$record->target_id = $target->get($target->getPrimaryKey());
+			$record->target_id = $source->get($source->getPrimaryKey());
 			
 			$record->save();
 		}		
@@ -190,8 +192,24 @@ class ConnectableManager
 		$sourceClass = get_class($source);
 		$targetClass = get_class($target);
 		
-		$record->delete("WHERE (source_class='{$sourceClass}' AND source_id={$sourceID} AND target_class='{$targetClass}' AND target_id={$targetID}')" .
-						"OR (source_class='{$targetClass}' AND source_id={$targetID} AND target_class='{$sourceClass}' AND target_id={$sourceID}')");
+		$record->delete("WHERE (source_class='{$sourceClass}' AND source_id={$sourceID} AND target_class='{$targetClass}' AND target_id={$targetID}') " .
+						"OR (source_class='{$targetClass}' AND source_id={$targetID} AND target_class='{$sourceClass}' AND target_id={$sourceID})");
+	}
+	
+	/**
+	 * Remove any connection that exists between the source and objects of the specified target class
+	 * (including back-links if they were created).
+	 * @param DataItem $source the source object
+	 * @param DataItem $targetClass the target class
+	 */
+	static function removeConnections($source, $targetClass)
+	{
+		$record = new ConnectionRecord();
+		$sourceClass = get_class($source);
+		$sourceID = checkNumeric($source->get($source->getPrimaryKey()));
+
+		$record->delete("WHERE (source_class='{$sourceClass}' AND source_id={$sourceID} AND target_class='{$targetClass}') " .
+						"OR (source_class='{$targetClass}' AND target_class='{$sourceClass}' AND target_id={$sourceID})");
 	}
 	
 	/**
@@ -238,12 +256,36 @@ class ConnectableManager
 	 */
 	static function getConnectedItems($sourceItem, $targetClass, $constraint = "")
 	{
+		$query = ConnectableManager::generateConnectedQuery($sourceItem, $targetClass, $constraint);		
+		return Query::create($targetClass, $query)
+					->bind(":sc", get_class($sourceItem), ":si", $sourceItem->get($sourceItem->getPrimaryKey()), ":tc", $targetClass)
+					->execute();
+	}
+	
+	/**
+	 * Returns the number of connected items for the specified source that are of the specified class
+	 * 
+	 * @param Connectable $sourceItem the source DataItem (must implement the Connectable interface)
+	 * @param string $targetClass The class of DataItem Connectable objects that are to be returned
+	 * @param string $constraint additional constraints to be applied
+	 * @throws FakoliException
+	 */
+	static function getConnectedItemCount($sourceItem, $targetClass, $constraint = "")
+	{
+		$query = ConnectableManager::generateConnectedQuery($sourceItem, $targetClass, $constraint);		
+		return Query::create($targetClass, $query)
+					->bind(":sc", get_class($sourceItem), ":si", $sourceItem->get($sourceItem->getPrimaryKey()), ":tc", $targetClass)
+					->executeValue("COUNT(1)");
+	}
+	
+	private static function generateConnectedQuery($sourceItem, $targetClass, $constraint)
+	{
 		$constraint = preg_replace("/^\\s*WHERE/i", " AND", $constraint);
 		
 		$sourceClass = get_class($sourceItem);
-
+		
 		$targetClasses = ConnectableManager::getTargetClasses($sourceItem);
-
+		
 		trace(print_r($targetClasses, true), 3);
 		
 		if (!ConnectableManager::canConnect($sourceClass, $targetClass))
@@ -254,11 +296,8 @@ class ConnectableManager
 		$obj = new $targetClass;
 		$pk = $obj->getPrimaryKey();
 		
-		return Query::create($targetClass, "WHERE $pk in (SELECT target_id FROM connection_record WHERE source_class=:sc AND source_id=:si AND target_class = :tc) $constraint")
-					->bind(":sc", $sourceClass, ":si", $sourceItem->get($sourceItem->getPrimaryKey()), ":tc", $targetClass)
-					->execute();
+		return "WHERE $pk in (SELECT target_id FROM connection_record WHERE source_class=:sc AND source_id=:si AND target_class = :tc) $constraint";
 	}
-	
 	static function upgradeComponent($version)
 	{
 		$mgr = new ConnectableUpgradeManager();
