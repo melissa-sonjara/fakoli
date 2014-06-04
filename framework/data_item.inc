@@ -262,7 +262,22 @@ class DataItem extends AbstractDataItem
 	 */
 	function getFields()
 	{
-		return $this->fields;
+		if (is_array($this->fields)) return $this->fields;
+		$class = get_class($this);
+		if (is_array($class::$fields)) return $class::$fields;
+		
+		throw new FakoliException("DataItem does not contain any fields");
+	}
+	
+	/**
+	 * Override the type for the specified field
+	 * @param string $field
+	 * @param string $type
+	 */
+	function overrideFieldType($field, $type)
+	{
+		$fields = $this->getFields();
+		$fields[$field] = $type;
 	}
 	
 	/**
@@ -274,7 +289,7 @@ class DataItem extends AbstractDataItem
 		$list = "";
 		$first = true;
 		
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (!$first) $list .= ", ";
