@@ -265,7 +265,12 @@ class SelectFieldRenderer extends FieldRenderer
 			$style = "style='width: {$this->width}'";
 		}
 		
-		echo "<select $style id='$field' name='$field:$mode'><option value=''></option>\n";
+		echo "<select $style id='$field' name='$field:$mode'";
+		
+		if ($this->onChange != "")
+			echo " onchange='$this->onChange(this)'";
+		
+		echo "><option value=''></option>\n";
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($searchValue === $value) ? " selected" : "";

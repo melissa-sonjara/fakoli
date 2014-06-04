@@ -128,6 +128,8 @@ class DateFieldRenderer extends FieldRenderer
 	
 	function renderSearchField($field, $mode)
 	{
+		$this->_startField($field);
+		
 		if ($mode == "range")
 		{
 			$label = $this->parent->layout->getLabel($field, $this);
@@ -135,25 +137,18 @@ class DateFieldRenderer extends FieldRenderer
 			
 			$date_from = $this->parent->params->get($field, "from");
 			$date_to = $this->parent->params->get($field, "to");
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td>";
 			echo "<input type='text' name='$field:from' value='$date_from' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)'>";
 			echo "&nbsp;<label for='date_to'>$toLabel</label>&nbsp;";
-			echo "<input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'></td>\n";
-			echo "</td>\n";
-			echo "</tr>\n";	
+			echo "<input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'>\n";
 		}
 		else
 		{
 			$date = $this->parent->params->get($field, $mode);
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td>";
-			echo "<input type='text' name='$field:$mode' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_{$mode}.toggle(this)'></td>\n";
-			echo "</td>\n";
-			echo "</tr>\n";			
+
+			echo "<input type='text' name='$field:$mode' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_{$mode}.toggle(this)'>\n";
 		}
+		
+		$this->_endField($field);
 	}
 	
 	function renderReadOnly($field)

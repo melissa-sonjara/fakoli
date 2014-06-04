@@ -133,24 +133,26 @@ class ZipCodeFieldRenderer extends FieldRenderer
 
 	function renderSearchField($field, $mode = "equal")
 	{
+		$this->_startField($field);
+		
+		$onkeyup = " onkeyup='{$field}_keyup(event);'";
+		$onkeypress=" onkeypress='return maskInput(event)'";
+		
 		if ($mode == "range")
 		{
 			$from = htmlspecialchars($this->parent->params->get($field, "from"), ENT_QUOTES, 'UTF-8');
 			$to =  htmlspecialchars($this->parent->params->get($field, "to"), ENT_QUOTES, 'UTF-8');
 			
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td>From <input type='text' id='$field' name='$field:from' value='{$from}' size='25'> to <input type='text' name='$field:to' value='{$to}' size='25'></td>\n";		
-			echo "</tr>\n";
+			echo "From <input type='text' id='$field' name='$field:from' value='{$from}' size='10'$onkeypress$onkeyup> to <input type='text' name='$field:to' value='{$to}' size='10'$onkeypress$onkeyup>";
 		}
 		else
 		{
 			$value =  htmlspecialchars($this->parent->params->get($field, $mode), ENT_QUOTES, 'UTF-8');
-			echo "<tr>\n";
-			$this->_printLabel($field);
-			echo "<td><input type='text' id='$field' name='$field:$mode' value='{$value}' size='50'></td>\n";		
-			echo "</tr>\n";
-		}		
+			echo "<input type='text' id='$field' name='$field:$mode' value='{$value}' size='10'$onkeypress$onkeyup>";
+		}
+
+		$this->_endField($field);
+		
 	}
 	
 }

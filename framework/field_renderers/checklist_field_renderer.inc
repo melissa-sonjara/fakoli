@@ -294,6 +294,11 @@ class CheckListFieldRenderer extends FieldRenderer
 		echo "</td></tr>\n";
 	}
 
+	function renderSearchScript($field, $mode)
+	{
+		$this->renderScript($field);
+	}
+	
 	/*
 	 * Only implemented for ungrouped option set
 	 */
@@ -312,16 +317,28 @@ class CheckListFieldRenderer extends FieldRenderer
 		$values = explode(",", $rawValue);		
 		$values = array_combine($values, $values);
 
-		$divider = $this->horizontal ? " " : "<br/>";
+		$divider = $this->horizontal ? " " : "";
 		$layout = $this->horizontal ? " style='display: inline'" : "";
 		
-		if ($this->width && $this->height && ($this->getOptionCount() > $this->scrollAfter || $this->grouped))
+		if ($this->showSelectAll)
 		{
-			$divider = $this->horizontal ? " " : "";
-			$resizable = $this->resizable ? " resizable": "";
-			echo "<div class='scrollbox$resizable' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		
+		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
+		{
+			$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+			$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
+			$padding = ($width == "auto") ? "padding-right: 20px; " : "";
+			
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox scrollbox{$resizable}{$dropdown}' style='width: {$width}; height: {$height}; $padding overflow: auto'>\n";
+		}
+		else
+		{
+			echo "<div class='selectbox'>";
+		}		
 		$idx = 0;
 
 		
@@ -367,7 +384,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		$this->_endField($field);
 	}
-
+	
 	function preProcess($field)
 	{		
 		$value = ($this->parent->method == "POST") ? $_POST[$field] : $_GET[$field];
