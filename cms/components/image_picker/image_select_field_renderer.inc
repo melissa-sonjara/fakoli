@@ -70,12 +70,16 @@ class ImageSelectFieldRenderer extends FieldRenderer
 	
 	function renderField($field = "", $readonly = false)
 	{
+		global $config;
+		
 		if (!$field) $field = $this->field;
 		
 		$this->_startField($field);
 
 		$key = $this->parent->data->get($field);
 
+		if (!$this->size) $this->size = $config["thumbnail_size"];
+		
 		if ($key)
 		{
 			$item = new ImageRecord($key);
