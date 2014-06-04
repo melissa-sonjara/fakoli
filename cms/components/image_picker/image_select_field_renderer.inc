@@ -79,7 +79,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 		if ($key)
 		{
 			$item = new ImageRecord($key);
-			$src = $item->getThumbnail($this->size);
+			$src = $item->getThumbnail($this->size, true);
 		}
 		else
 		{
@@ -89,7 +89,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 <input type='text' name='<?echo $field ?>' id='<?echo $field ?>' value='<?echo $key ?>' style='display: none'>
 <table style='border: solid 1px #000'>
  <tr>
-  <td><img id='<?echo $field ?>_preview' src='<?echo $src ?>'/></td>
+  <td><img id='<?echo $field ?>_preview' src='<?echo $src ?>' style='width:<?echo $this->size?>px; height:<?echo $this->size?>px'/></td>
  </tr>
  <?php 
  		if(!$readonly)
