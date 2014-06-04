@@ -119,10 +119,10 @@ class ImageRecord extends DataItem
 		return $img;
 	}
 	
-	function getThumbnail($size = 0)
+	function getThumbnail($size = 0, $iconize = false)
 	{
 		$mgr = new ImageManager();
-		return $mgr->thumbnailLink($this->image_id, $size);
+		return $mgr->thumbnailLink($this->image_id, $size, $iconize);
 	}
 	
 	function getCaption()
