@@ -116,7 +116,6 @@ require_once realpath(dirname(__FILE__)."/field_renderers/checklist_field_render
  */
 class FilterForm extends SearchForm
 {	
-	var $search;
 	var $preserveQueryString = false;
  	var $navigationFunction = "go('{url}')";
  	var $navigationMode = "form"; ///< Mode used for navigating after filter changed - either "form" or "panel"
@@ -184,6 +183,8 @@ ENDSCRIPT;
 		
 		foreach(array_keys($this->hidden) as $hidden)
 		{
+			if ($obj->filter && $obj->filter->isExcluded($hidden)) continue;
+			
 			echo "<input id='{$this->id}_{$hidden}' type='hidden' name='$hidden' value='".htmlSafe($obj->get($hidden))."'/>\n";
 		}
 		
@@ -201,6 +202,8 @@ ENDSCRIPT;
 		$this->renderSearchFields();
 
 		$this->layout->endUngrouped();
+		
+		$this->layout->finalizeLayout();
 		
 		echo "</div>\n";
 		echo "</form>\n";
@@ -292,7 +295,7 @@ ENDSCRIPT;
 	 */
 	function setHandler($field, $handler)
 	{
-		$this->search->paramHandlers[$field] = $handler;
+		$this->params->paramHandlers[$field] = $handler;
 	}
 	
 	
@@ -300,7 +303,7 @@ ENDSCRIPT;
 	 * Default for all parameters included in filter is equal
 	 * Additional search parameters can be added by calling script with
 	 * the syntax:
-	 * $filterForm->search->setParam("round_id", "member", implode(",", array_keys($rounds)));
+	 * $filterForm->params->setParam("round_id", "member", implode(",", array_keys($rounds)));
 	 * Do not include these additional parameters in the object filter.
 	 */
 	function setFilterParameters()
@@ -309,7 +312,7 @@ ENDSCRIPT;
 		
 		// JDG 9/2011 handle CompositeDataItems
 		$fields = $obj->getFields();
-		$this->search = new SearchParameters($obj);
+		$this->params = new SearchParameters($obj);
 
 		foreach(array_keys($fields) as $field)
 		{
@@ -321,19 +324,19 @@ ENDSCRIPT;
 				if($value && !is_int($value))
 					$value = urlencode($value);
 				if($value)
-					$this->search->setParam($field, "equal", $value);
+					$this->params->setParam($field, "equal", $value);
 			}
 		}
 	}
 	
 	function getConstraint($first = true, $firstText = "WHERE")
 	{
-		return $this->search->generateConstraint($first, $firstText);
+		return $this->params->generateConstraint($first, $firstText);
 	}
 	
 	function setParam($field, $mode, $value)
 	{
-		$this->search->setParam($field, $mode, $value);
+		$this->params->setParam($field, $mode, $value);
 	}
 	
 }
@@ -503,7 +506,7 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 		}
 		
 		// The search parameter value is used for the constraint
-		$this->parent->search->setParam($field, "equal", $this->parent->data->get($field));
+		$this->parent->params->setParam($field, "equal", $this->parent->data->get($field));
 	}
 	
 	/*
@@ -608,7 +611,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		}
 				
 		// The search parameter's value is used in the constraint and must contain "'" around each string value
-		$this->parent->search->setParam($field, "member", $value);
+		$this->parent->params->setParam($field, "member", $value);
 	}
 	
 	/*
@@ -785,13 +788,17 @@ class DateRangeFilterRenderer extends FieldRenderer
 	var $handler; // custom parameter handler if override to getConstraint needed
 	var $cssClass = "date_range";
 	
-	function DateRangeFilterRenderer($parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1)
+	function __construct($parent, $field, $endDateField = "", $stepMode = "month", $fiscal_year_start = 1, $startParam = null, $endParam = null)
 	{
 		$this->stepMode = $stepMode;
 		$this->field = $field;
 
-		$this->endDateField = ($endDateField == $field) ? $field : $endDateField;
+		$this->endDateField = (!$endDateField) ? $field : $endDateField;
 		$this->fiscal_year_start = $fiscal_year_start;
+		
+		if ($startParam) $this->startParam = $startParam;
+		if ($endParam) $this->endParam = $endParam;
+		
 		$this->calculateDateRange();
 		
 		$this->label = "";
@@ -1002,8 +1009,8 @@ class DateRangeFilterRenderer extends FieldRenderer
 <script src='/fakoli/calendar/sonjara_calendar.js' type='text/javascript'></script>
 <link href='/fakoli/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'></link>
 <script type="text/javascript">
-var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}_filter', 'startDate');
-var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}_filter', 'endDate');
+var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}_filter', '{$this->startParam}');
+var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}_filter', '{$this->endParam}');
 </script>
 
 ENDSCRIPT;
@@ -1021,6 +1028,9 @@ ENDSCRIPT;
 	 */
 	function renderSearchField($field)
 	{
+
+		$this->_startField($field);
+		
 		if (!array_key_exists($this->startParam, $this->parent->hidden)) 
 		{
 			$this->writeFilter();
@@ -1031,6 +1041,8 @@ ENDSCRIPT;
 		}
 		
 		$this->writeButtons();
+		
+		$this->_endField($field);
 	}
 	
 	function writeDateHiddenFields()
@@ -1070,6 +1082,8 @@ ENDSCRIPT;
 	
 	function writeButtons()
 	{
+		if ($this->stepMode == "none") return;
+		
 		if (!$this->calculated) $this->calculateDateRange();
 		
 		$queryString = $_SERVER["QUERY_STRING"];
