@@ -453,11 +453,13 @@ class ImageManager
 	 * Returns the URI that can be used to access the specified image at the given size.
 	 * @param $image_id the ID of the image
 	 * @param $size the size of the major axis in pixels
+	 * @param $iconize if set to true, the image is squared of with the edge length being the specified size.
 	 * @return string URI that can be used in an <img> tag to view this image.
 	 */
-	function thumbnailLink($image_id, $size)
+	function thumbnailLink($image_id, $size, $iconize = false)
 	{
-		return "/action/image/thumbnail?image_id=$image_id&size=$size";
+		$handler = $iconize ? "iconize" : "thumbnail";
+		return "/action/image/{$handler}?image_id=$image_id&size=$size";
 	}
 	
 	function imageLink($image_id)
