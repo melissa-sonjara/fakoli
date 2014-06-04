@@ -222,19 +222,26 @@ interface IDataSyncHelper
 		return $fieldMappings;
 	}
 	
-	private static function getMatchingFormat($class, $import_profile_id = 0)
-	{
 
+	private static function getMatchingFields($class, $import_profile_id = 0)
+	{
 		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
-							   ->bind(":cl", $class, ":pr", $import_profile_id)
-							   ->execute();
-								
+		->bind(":cl", $class, ":pr", $import_profile_id)
+		->execute();
+	
 		$mf = array();
-		
+	
 		foreach($matchingFields as $matchingField)
 		{
-			$mf[] = "{".$matchingField->client_field."}";
+			$mf[] = $matchingField->client_field;
 		}
+	
+		return $mf;
+	}
+	
+	private static function getMatchingFormat($class, $import_profile_id = 0)
+	{
+		$mf = DataSyncManager::getMatchingFields($class, $import_profile_id);
 		
 		$matchingFormat = implode("##", $mf);
 		
@@ -246,9 +253,21 @@ interface IDataSyncHelper
 	 * @param string $class the target import class
 	 * @return array
 	 */
-	private static function getExistingItemIDs($class, $matchingFormat)
+	private static function getExistingItemIDs($class, $import_profile_id = 0)
 	{
-		$existingItems = IteratedQuery::create($class)->execute();
+		$matchingFields = DataSyncManager::getMatchingFields($class, $import_profile_id);
+		
+		$item = new $class;
+		$filter = new InclusionFilter();
+		$filter->add($item->getPrimaryKey());
+		foreach($matchingFields as $field)
+		{
+			$filter->add($field);
+		}
+		
+		$existingItems = IteratedQuery::create($class)
+									  ->filter($filter)
+									  ->execute();
 		
 		$existingItemIDs = array();
 		
@@ -381,7 +400,7 @@ interface IDataSyncHelper
 		$columns = array();
 		
 		$matchingFormat = DataSyncManager::getMatchingFormat($class, $import_profile_id);
-		$existingItemIDs = DataSyncManager::getExistingItemIDs($class, $matchingFormat);
+		$existingItemIDs = DataSyncManager::getExistingItemIDs($class, $import_profile_id);
 		$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
 		$filter = DataSyncManager::generateFilter($fieldMapping);
 		
