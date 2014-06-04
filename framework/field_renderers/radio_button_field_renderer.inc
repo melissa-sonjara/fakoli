@@ -45,7 +45,8 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	var $horizontal = false;
 	var $onChange = ""; // optional callback on data input change
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
-	
+	var $tabular = false; // Horizontal table-based layout
+	var $regular = false;
 	
 	function RadioButtonFieldRenderer(&$form, $field, $label, $options)
 	{
@@ -78,11 +79,37 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{
-		if($this->horizontal)
+		if (!count($this->options)) return;
+		
+		if($this->horizontal || $this->tabular)
 			$this->colspan = 2;
 		$this->_startField($field);
 		
 		$current = $this->parent->data->get($field);
+		
+		$separator = "<br/>";
+		
+		if ($this->tabular)
+		{
+			if ($this->regular)
+			{
+				$width = 100 / count($this->options);
+				$tdStyle = " style='width: {$width}%'";
+			}
+			else
+			{
+				$tdStyle = "";
+			}
+				
+			echo "<table class='radio_button_options'><tr><td{$tdStyle}>";
+			$separator = "</td><td>";
+		}
+		else if ($this->horizontal)
+		{
+			 $separator = "&nbsp;&nbsp;";
+		}
+		
+		$out = array();
 		
 		foreach($this->options as $value => $name)
 		{
@@ -91,9 +118,16 @@ class RadioButtonFieldRenderer extends FieldRenderer
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			echo "<input id='{$this->parent->id}_$field' style='border: none' type='radio' name='$field' value='$value'$selected $onchange $disable/>&nbsp;$name";
-			echo ($this->horizontal) ? "&nbsp;&nbsp;" : "<br/>";
+			$out[] = "<label for='{$this->parent->id}_{$field}_{$value}'><input id='{$this->parent->id}_{$field}_{$value}' style='border: none' type='radio' name='$field' value='$value'$selected $onchange $disable/>&nbsp;$name</label>";
 		}
+
+		$radios = implode($separator, $out);
+		if ($this->tabular)
+		{
+			$radios .= "</td></tr></table>";
+		}
+		
+		echo $radios;
 		
 		$this->_endField($field);
 	}
