@@ -58,7 +58,7 @@ $document->filter = new InclusionFilter("document_id", "title", "notes", "keywor
 
 $form = new AutoForm($document, "POST", "/action/document/upload?document_library_id=$document_library_id");
 $form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->hide("publication_date", "document_library_id", "owner_id");
+$form->hide("document_library_id", "owner_id");
 $form->required("title");
 $form->validator->add(new RequiredFileValidator("file", "File", "You must select a file to upload."));
 $form->annotate("keywords", "Separate keywords with a comma");
