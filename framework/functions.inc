@@ -1064,6 +1064,8 @@ function trace($msg, $lvl, $callStack = null)
  */	
 function getScaledSize($size, $decimal_places = 1)
 {
+	if (!$size) return "";
+	
 	$result = "";
 	if ($size > 1073741824)
 	{
