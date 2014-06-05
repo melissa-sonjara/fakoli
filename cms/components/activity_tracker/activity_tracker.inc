@@ -25,7 +25,8 @@ class ActivityTracker
 		$activity->session_id = session_id();
 		$activity->activity_time = Fakoli::$requestStartTime;
 		$activity->response_time = $response_time;
-
+		$activity->memory_usage = memory_get_peak_usage();
+		
 		$start = $_SESSION["ActivityTracker::session_start"];
 		if (!$start)
 		{
@@ -89,6 +90,11 @@ class ActivityTracker
 		if (!file_exists($dir)) mkdir($dir);
 		
 		return $dir.DIRECTORY_SEPARATOR.$session_identifier.".json";
+	}
+	
+	static function formatMemoryUsage($activity)
+	{
+		return getScaledSize($activity->memory_usage, 2);
 	}
 	
 	/**
@@ -313,7 +319,7 @@ class ActivityReportFilterHelper
 	{
 		$session = new UserActivitySession();
 		$session->filter = new InclusionFilter("session_start", "session_end", "feedback_user");
-		$session->fields["feedback_user"] = Boolean;
+		$session->overrideFieldType("feedback_user", Boolean);
 		$session->fromGET();
 		
 		$filterForm = new FilterForm($session);
