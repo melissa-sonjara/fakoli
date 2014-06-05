@@ -264,7 +264,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function getFields()
 	{
-		if (is_array($this->fields)) return $this->fields;
+		if ($this->fields) return $this->fields;
 		$class = get_class($this);
 		if (is_array($class::$fields)) return $class::$fields;
 		
