@@ -399,8 +399,6 @@ interface IDataSyncHelper
 
 		$columns = array();
 		
-		$matchingFormat = DataSyncManager::getMatchingFormat($class, $import_profile_id);
-		$existingItemIDs = DataSyncManager::getExistingItemIDs($class, $import_profile_id);
 		$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
 		$filter = DataSyncManager::generateFilter($fieldMapping);
 		
@@ -415,6 +413,22 @@ interface IDataSyncHelper
 		
 		$lastItem = null;
 		
+		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
+								->bind(":cl", $class, ":pr", $import_profile_id)
+								->execute();
+									
+		$c = 1;
+		$matchingConstraint = "";
+			
+		foreach($matchingFields as $mf)
+		{
+			if ($matchingConstraint) $matchingConstraint .= " AND ";
+			$matchingConstraint .= "{$mf->client_field}=:{$c}";
+			$c++;
+		}
+		$matchingQuery = Query::create($class, "WHERE $matchingConstraint");
+		$matchingQuery->filter = new InclusionFilter($item->getPrimaryKey());
+			
 		while($record = DataSyncManager::getRecord($fp, $columns, $helper))
 		{	
 			$item = new $class();
@@ -441,13 +455,15 @@ interface IDataSyncHelper
 				
 				if ($item->hasField("owner_id")) $item->set("owner_id", $user->get($user->getPrimaryKey()));	
 				
-				if ($matchingFormat)
+				$match = null;
+				try
 				{
-					$mf = $item->format($matchingFormat);
-					if (array_key_exists($mf, $existingItemIDs))
-					{
-						$item->set($item->getPrimaryKey(), $existingItemIDs[$mf]);
-					}
+					$match = $matchingQuery->executeSingle();
+					
+					$item->set($item->getPrimaryKey(), $match->get($match->getPrimaryKey()));
+				}
+				catch(DataNotFoundException $e)
+				{
 				}
 											
 				$items[] = $item;
