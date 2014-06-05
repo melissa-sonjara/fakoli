@@ -126,7 +126,7 @@ class DataItem extends AbstractDataItem
 	{
 		// No need to persist class variables, such as field metadata
 		
-		$f = array_keys($this->fields);
+		$f = array_keys($this->getFields());
 		array_push($f, "primary_key", "table", "filter");
 		return $f;
 	}
@@ -201,6 +201,8 @@ class DataItem extends AbstractDataItem
 		// NOTE - structured for speed, since the general case is no aliasing
 		// therefore we want to reduce the number of tests of the alias 
 		
+		$fields = $this->getFields();
+		
     	if ($alias)
         {
         	$offset = strlen($alias) + 1;
@@ -210,7 +212,7 @@ class DataItem extends AbstractDataItem
         		if (!startsWith($field, $alias)) continue;
         		$field = substr($field, $offset);
         	
-	        	if (!array_key_exists($field, $this->fields)) continue;
+	        	if (!array_key_exists($field, $fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
 	        	
 	        	if ($config["no_charset_conversions"])
@@ -227,7 +229,7 @@ class DataItem extends AbstractDataItem
         {
 			foreach ($line as $field => $value)
 	        {
-	        	if (!array_key_exists($field, $this->fields)) continue;
+	        	if (!array_key_exists($field, $fields)) continue;
 	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
 	        	
 	        	if ($config["no_charset_conversions"])
@@ -276,8 +278,12 @@ class DataItem extends AbstractDataItem
 	 */
 	function overrideFieldType($field, $type)
 	{
-		$fields = $this->getFields();
-		$fields[$field] = $type;
+		if (!is_array($this->fields))
+		{
+			throw new FakoliException("Cannot override field types for statically defined DataItems");
+		}
+		
+		$this->fields[$field] = $type;
 	}
 	
 	/**
@@ -314,7 +320,7 @@ class DataItem extends AbstractDataItem
 				
 				if ($alias)
 				{
-					foreach($this->fields as $f => $type)
+					foreach($this->getFields() as $f => $type)
 					{
 						$expr = preg_replace("/([\s\(])(".$f.")\\b/", "$1$alias.$2", $expr);
 					}
@@ -340,7 +346,7 @@ class DataItem extends AbstractDataItem
 	function getFieldArray()
 	{
 		$arr = array();
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
 			$arr[] = $field;
@@ -358,7 +364,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function hasField($field)
 	{
-		if (!array_key_exists($field, $this->fields)) return false;
+		if (!array_key_exists($field, $this->getFields())) return false;
 		if ($this->filter && $this->filter->isExcluded($field)) return false;
 		return true;
 	}
@@ -420,7 +426,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function getType($field)
 	{
-		return $this->fields[$field];
+		return $this->getFields()[$field];
 	}
 	
 	/**
@@ -587,11 +593,11 @@ class DataItem extends AbstractDataItem
 		$first = true;
 		$found = false;
 		
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{			
 			if ($field == $this->primary_key) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
-			if (!isset($this->$field) && $this->fields[$field] != Timestamp && $this->fields[$field] != Boolean) continue;
+			if (!isset($this->$field) && $this->getType($field) != Timestamp && $this->getType($field) != Boolean) continue;
 			
 			if (!$first) $query .= ", ";
 			
@@ -682,11 +688,11 @@ class DataItem extends AbstractDataItem
 		$first = true;
 		
 		
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($field == $pk && !$this->_disablePK) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
-			if (!isset($this->$field) && $this->fields[$field] != Timestamp && $this->fields[$field] != Boolean) continue;
+			if (!isset($this->$field) && $this->getType($field) != Timestamp && $this->getType($field) != Boolean) continue;
 			
 			if (!$first)
 			{
@@ -865,12 +871,12 @@ class DataItem extends AbstractDataItem
 	 */
 	function fromGET()
 	{
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (array_key_exists($field, $_GET))
 			{
-				$this->$field = $_GET[$field];
+				$this->set($field, $_GET[$field]);
 			}
 		}
 	}
@@ -883,12 +889,12 @@ class DataItem extends AbstractDataItem
 	 */
 	function fromPOST()
 	{
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
        	if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (array_key_exists($field, $_POST))
 			{
-				$this->$field = $_POST[$field];
+				$this->set($field, $_POST[$field]);
 			}
 			elseif (!array_key_exists($field, $_POST) AND ($type == Boolean))
 			{
@@ -921,7 +927,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function fromDataSet($params)
 	{
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
     	   	if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (array_key_exists($field, $params))
@@ -944,7 +950,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function compare($to)
 	{
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if ($to->$field != $this->$field)
@@ -965,7 +971,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function copy($from)
 	{
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
 			$this->$field = $from->$field;
@@ -1012,7 +1018,7 @@ class DataItem extends AbstractDataItem
 			
 		}
 		
-		if (array_key_exists($field, $this->fields))
+		if (array_key_exists($field, $this->getFields()))
 		{
 			$pk = $obj->primary_key;
 			$val = $this->get($field);
@@ -1082,7 +1088,7 @@ class DataItem extends AbstractDataItem
 		
 		if ($orderBy != "")
 		{
-			foreach($obj->fields as $field => $type)
+			foreach($obj->getFields() as $field => $type)
 			{
 				$orderBy = preg_replace("/\\b".$field."\\b/i", "a.$field", $orderBy);
 			}
@@ -1189,7 +1195,7 @@ class DataItem extends AbstractDataItem
 		
 		$xml = str_repeat(" ", $indent) . "<" . get_class($this) . ">\n";
 		
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (isset($this->$field))
@@ -1293,7 +1299,7 @@ class DataItem extends AbstractDataItem
 	{
 		$out = array();
 				
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field))
 			{
@@ -1373,7 +1379,7 @@ class DataItem extends AbstractDataItem
 	{
 		if ($template == "") $template = $this->default_format;
 		
-		foreach($this->fields as $field => $type)
+		foreach($this->getFields() as $field => $type)
 		{
 			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
 		}

@@ -1051,7 +1051,7 @@ class TemplateFormLayout extends AutoFormLayout
 	function finalizeLayout()
 	{
 		// Clear any unmapped fields
-		foreach($this->form->data->fields as $field => $type)
+		foreach($this->form->data->getFields() as $field => $type)
 		{
 			$this->template = str_replace(array("{{$field}}", "{label:{$field}}"), array("", ""), $this->template);
 		}

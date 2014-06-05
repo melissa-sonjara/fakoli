@@ -769,7 +769,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 		
 		if ($numArgs == 0)
 		{
-			foreach($this->data->fields as $field => $type)
+			foreach($this->data->getFields() as $field => $type)
 			{
 				if ($this->data->hasField($field))
 				{

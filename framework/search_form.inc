@@ -525,7 +525,7 @@ class SearchParameters
 		
 	function fromArray($array)
 	{
-		$fields = array_keys($this->target->fields);
+		$fields = array_keys($this->target->getFields());
 		foreach($array as $field => $value)
 		{
 			list($fieldname, $mode) = explode(":", $field);
@@ -973,7 +973,7 @@ class SearchForm extends AutoForm
 		
 		$obj =& $this->data;
 		$script = "";				
-		foreach(array_keys($obj->fields) as $field)
+		foreach(array_keys($obj->getFields()) as $field)
 		{
 			trace("SearchForm writeScript field $field", 3);
 			if ($field != $pk&& 
@@ -1266,7 +1266,7 @@ class SearchForm extends AutoForm
 		$mode = $this->getMatchingMode($field);
 		$renderer = $this->getRenderer($field);
 			
-		if(!$renderer && !$this->data->hasField($field) && $this->data->fields[$field] != "Timestamp")
+		if(!$renderer && !$this->data->hasField($field) && $this->data->getType($field) != "Timestamp")
 		{
 			foreach($this->additional as $r)
 			{

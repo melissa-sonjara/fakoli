@@ -79,7 +79,7 @@ abstract class AbstractPivotQuery extends AbstractQuery
 	
 		$this->baseItem = new $this->baseClass;
 	
-		foreach($this->baseItem->fields as $field => $type)
+		foreach($this->baseItem->getFields() as $field => $type)
 		{
 			$this->baseConstraint = preg_replace("/\\b".$field."\\b/i", "b.$field", $this->baseConstraint);
 		}
@@ -118,7 +118,7 @@ abstract class AbstractPivotQuery extends AbstractQuery
 	
 		$this->pivotItem = new $this->pivotClass;
 	
-		foreach($this->pivotItem->fields as $field => $type)
+		foreach($this->pivotItem->getFields() as $field => $type)
 		{
 			$this->pivotConstraint = preg_replace("/\\b".$field."\\b/i", "p.$field", $this->pivotConstraint);
 		}

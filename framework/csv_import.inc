@@ -182,7 +182,7 @@ class CSVImport
 					if ($this->update)
 					{
 						$src = $indexed[$values[$fileIdx]];
-						foreach($item->fields as $f)
+						foreach($item->getFields() as $f)
 						{
 							if (!isset($item->$f)) $item->set($f, $src->get($f));
 						} 

@@ -97,7 +97,7 @@ class APIExcelFormatter extends APIFormatter
 		{
 			$obj = $items[0];
 				
-			foreach($obj->fields as $field => $type)
+			foreach($obj->getFields() as $field => $type)
 			{
 				if ($obj->filter && $obj->filter->isExcluded($field)) continue;
 				$view->column($field, "{".$field."}");
@@ -122,7 +122,7 @@ class APICSVFormatter extends APIFormatter
 		{
 			$obj = $items[0];
 			$columns = array();
-			foreach($obj->fields as $field => $type)
+			foreach($obj->getFields() as $field => $type)
 			{
 				if ($obj->filter && $obj->filter->isExcluded($field)) continue;
 				$columns[] = $field;
@@ -133,7 +133,7 @@ class APICSVFormatter extends APIFormatter
 			foreach($items as $obj)
 			{
 				$values = array();
-				foreach($obj->fields as $field => $type)
+				foreach($obj->getFields() as $field => $type)
 				{
 					if ($obj->filter && $obj->filter->isExcluded($field)) continue;
 					$values[] = $obj->get($field);

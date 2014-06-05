@@ -141,7 +141,7 @@ class CompositeDataItem extends AbstractDataItem
 		$num = count($this->__objects);
 		for($i = $num - 1; $i >= 0; ++$i)
 		{
-			$of = $this->__objects[$i]->fields;
+			$of = $this->__objects[$i]->getFields();
 			$fields = array_merge($fields, $of);			
 		}
 		
@@ -160,7 +160,7 @@ class CompositeDataItem extends AbstractDataItem
 		$num = count($this->__objects);
 		for($i = $num - 1; $i >= 0; --$i)
 		{
-			$of = $this->__objects[$i]->fields;
+			$of = $this->__objects[$i]->getFields();
 			$fields = array_merge($fields, $of);			
 		}
 		

@@ -69,7 +69,7 @@ if(count($relations) > 0)
 		{	
 			$relationNode = new TreeNode("relation_$name", $name, null, false, "bare_node_closed", "bare_node_open");
 			$relObj = new $class_name();
-			$fields = $relObj->fields;
+			$fields = $relObj->getFields();
 			if(count($fields) > 0)
 			{	
 				foreach($fields as $f_name => $type)

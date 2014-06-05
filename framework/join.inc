@@ -632,7 +632,7 @@ class InnerJoin extends AbstractJoin
 			{
 				$c = $this->constraints[$class];
 				
-				foreach($proto->fields as $field => $type)
+				foreach($proto->getFields() as $field => $type)
 				{
 					$c = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $c);
 				}
@@ -696,14 +696,14 @@ class InnerJoin extends AbstractJoin
 					continue;
 				}
 				
-				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 5);
-				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 5);
+				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->getFields()), 5);
+				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->getFields()), 5);
 				
-				if (array_key_exists($p->primary_key, $q->fields))
+				if (array_key_exists($p->primary_key, $q->getFields()))
 				{
 					$join .= " AND t$i.{$p->primary_key}=t$j.{$p->primary_key}";
 				}
-				else if (array_key_exists($q->primary_key, $p->fields))
+				else if (array_key_exists($q->primary_key, $p->getFields()))
 				{
 					$join .= " AND t$i.{$q->primary_key}=t$j.{$q->primary_key}";
 				}
@@ -718,14 +718,14 @@ class InnerJoin extends AbstractJoin
 		{
 			$c = $this->classes[$i];
 			$p = $this->protos[$c];
-			foreach($p->fields as $field => $type)
+			foreach($p->getFields() as $field => $type)
 			{
 				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $constraints);
 			}
 			
 			foreach($p->calculatedFields as $field => $expr)
 			{
-				foreach($p->fields as $f => $type)
+				foreach($p->getFields() as $f => $type)
 				{
 					$expr = preg_replace("/([\s\(])(".$f.")\\b/", "$1t$i.$2", $expr);
 				}
@@ -810,7 +810,7 @@ class LeftOuterJoin extends AbstractJoin
 			{
 				$c = $this->constraints[$class];
 				
-				foreach($proto->fields as $field => $type)
+				foreach($proto->getFields() as $field => $type)
 				{
 					$c = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $c);
 				}
@@ -871,10 +871,10 @@ class LeftOuterJoin extends AbstractJoin
 				
 
 				
-				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->fields), 5);
-				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->fields), 5);
+				trace($p->primary_key." ".array_key_exists($p->primary_key, $q->getFields()), 5);
+				trace($q->primary_key." ".array_key_exists($q->primary_key, $p->getFields()), 5);
 				
-				if (array_key_exists($p->primary_key, $q->fields))
+				if (array_key_exists($p->primary_key, $q->getFields()))
 				{
 					if ($this->excludedKeys[$d][$p->primary_key] ||
 				    	$this->excludedKeys[$c][$p->primary_key])
@@ -902,7 +902,7 @@ class LeftOuterJoin extends AbstractJoin
 					$joined[$idx] = true;
 					
 				}
-				else if (array_key_exists($q->primary_key, $p->fields))
+				else if (array_key_exists($q->primary_key, $p->getFields()))
 				{
 					if ($this->excludedKeys[$d][$q->primary_key] ||
 				    	$this->excludedKeys[$c][$q->primary_key])
@@ -940,14 +940,14 @@ class LeftOuterJoin extends AbstractJoin
 		{
 			$c = $this->classes[$i];
 			$p = $this->protos[$c];
-			foreach($p->fields as $field => $type)
+			foreach($p->getFields() as $field => $type)
 			{
 				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $constraints);
 			}
 										
 			foreach($p->calculatedFields as $field => $expr)
 			{
-				foreach($p->fields as $f => $type)
+				foreach($p->getFields() as $f => $type)
 				{
 					$expr = preg_replace("/([\s\(])(".$f.")\\b/", "$1t$i.$2", $expr);
 				}

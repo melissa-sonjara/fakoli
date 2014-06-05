@@ -104,7 +104,7 @@ class ComponentPageView
 		
 		$this->page->page_title = $this->page->getTitle();
 		
-		foreach($this->page->fields as $field => $type)
+		foreach($this->page->getFields() as $field => $type)
 		{
 			$template = str_replace("{".$field."}", $this->page->get($field), $template);
 		}		

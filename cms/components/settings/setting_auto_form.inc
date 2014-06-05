@@ -147,7 +147,7 @@ class SettingAutoForm extends AutoForm
 	
 		$indexedSettings = reindexList($this->settings, "name");
 		
-		foreach($obj->fields as $name => $type)
+		foreach($obj->getFields() as $name => $type)
 		{
 			if(array_key_exists($name, $indexedSettings))
 			{

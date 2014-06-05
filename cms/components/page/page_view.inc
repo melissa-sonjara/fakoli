@@ -128,7 +128,7 @@ class PageView
 		
 		// Populate template fields from the Page object.
 		
-		foreach($this->page->fields as $field => $type)
+		foreach($this->page->getFields() as $field => $type)
 		{
 			$template = str_replace("{_{_[".$field."]_}_}", $this->page->$field, $template);
 		}		

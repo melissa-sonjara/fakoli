@@ -103,7 +103,7 @@ if(count($classes) > 0)
 	{
 		$classObj = new $class();
 		$prettyClassName = $classObj->prettifyClassName();
-		$fields = $classObj->fields;
+		$fields = $classObj->getFields();
 		$savedFields = $savedHelp[$class];
 		if(count($savedFields) == 0) $savedFields = array();
 		if(is_array($classObj->additionalFields))

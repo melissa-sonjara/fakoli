@@ -200,7 +200,7 @@ interface IDataSyncHelper
 			// Create default entries
 				
 			$obj = new $class();
-			foreach($obj->fields as $field => $type)
+			foreach($obj->getFields() as $field => $type)
 			{
 				if ($field == $obj->getPrimaryKey()) continue;
 	
@@ -366,7 +366,7 @@ interface IDataSyncHelper
 				}
 			}
 		
-			$separator = ($item->fields[$field] == Text) ? "\n" : " ";
+			$separator = ($item->getType($field) == Text) ? "\n" : " ";
 		
 			$value = trim(implode($separator, $vals));
 		

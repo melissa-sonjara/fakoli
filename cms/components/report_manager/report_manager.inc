@@ -575,6 +575,8 @@ class ReportTable
 		}
 	}
 	
+	function getFields() { return $this->fields; }
+	
 	// ----
 	
 	function column($title, $format, $sortable = true, $style = "", $type = null, $outputFields = null)
