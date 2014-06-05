@@ -266,7 +266,7 @@ class DataItem extends AbstractDataItem
 	{
 		if ($this->fields) return $this->fields;
 		$class = get_class($this);
-		if (is_array($class::$fields)) return $class::$fields;
+		if ($class::$fields) return $class::$fields;
 		
 		throw new FakoliException("DataItem does not contain any fields");
 	}
