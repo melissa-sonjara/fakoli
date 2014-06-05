@@ -393,6 +393,8 @@ interface IDataSyncHelper
 	{
 		global $user;
 
+		$item = new $class();
+			
 		ComponentManager::fireEvent("RegisterSyncHelpers");
 
 		$helper = DataSyncManager::getHelper($class);
