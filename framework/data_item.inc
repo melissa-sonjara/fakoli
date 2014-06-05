@@ -426,7 +426,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function getType($field)
 	{
-		return $this->getFields()[$field];
+		$fields = $this->getFields();
+		return $fields[$field];
 	}
 	
 	/**
