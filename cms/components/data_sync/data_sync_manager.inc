@@ -428,6 +428,7 @@ interface IDataSyncHelper
 			$matchingConstraint .= "{$mf->client_field}=:{$c}";
 			$c++;
 		}
+		
 		$matchingQuery = Query::create($class, "WHERE $matchingConstraint");
 		$matchingQuery->filter = new InclusionFilter($item->getPrimaryKey());
 			
@@ -456,6 +457,14 @@ interface IDataSyncHelper
 				}
 				
 				if ($item->hasField("owner_id")) $item->set("owner_id", $user->get($user->getPrimaryKey()));	
+				
+				$c = 1;
+				
+				foreach($matchingFields as $mf)
+				{
+					$matchingQuery->bind(":{$c}", $item->get($mf->client_field));
+					$c++;
+				}
 				
 				$match = null;
 				try
