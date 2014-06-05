@@ -21,7 +21,8 @@ $table = new DataListView($activity, "activity_table");
 $table->column("Date", "{activity_time}", true, "width: 20%")
 	  ->column("Method", "{method}", true, "width: 10%; text-align: center")
 	  ->column("URI", "{uri}", true)
-	  ->column("Response Time (s)", "{response_time}", true, "text-align: right");
+	  ->column("Response Time (s)", "{response_time}", true, "text-align: right")
+	  ->column("Memory Usage", "{ActivityTracker::formatMemoryUsage}", true, "text-align:right", Number, null, "{memory_usage}");
 	  
 $table->filter = true;
 $table->pageSize = 50;

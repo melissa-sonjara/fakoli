@@ -11,7 +11,8 @@ class UserActivity extends DataItem
 						"method"		=>	String,
 						"referer"		=>	String,
 						"activity_time"	=>	DateTime,
-						"response_time"	=>	Number);
+						"response_time"	=>	Number,
+					    "memory_usage"	=>	Number);
 	
 	var $relations = array("User"	=>	SiteUser);
 	
