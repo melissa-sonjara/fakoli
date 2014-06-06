@@ -262,7 +262,7 @@ class Fakoli
 		
 	/**
 	 * Assert that the user has one of the specified roles.
-	 * @param string $role
+	 * @param string $role comma-separated list of acceptable roles
 	 * @param string $redirect the page to which the user is to be redirected on failure
 	 */
 	static function assertRole($role, $redirect = "/index")
@@ -279,6 +279,21 @@ class Fakoli
 
 			redirect($redirect);
 		}
+	}
+	
+	/**
+	 * Check that the user has one of the specified roles. If the $msg parameter is set and the
+	 * user does not have the right role, that message is thrown in an exception.
+	 * @param string $role comma-separated list of acceptable roles
+	 * @param string $msg optional error message to be displayed on failure. If not specified, then false is returned on failure
+	 * @throws FakoliException
+	 * @return true if the user has one of the specified roles, false otherwise
+	 */
+	static function checkRole($role, $msg = null)
+	{
+		$access = checkRole($role);
+		if (!$access && $msg) throw new FakoliException($msg);
+		return $access;
 	}
 	
 	/**
