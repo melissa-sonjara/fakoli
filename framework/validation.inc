@@ -809,7 +809,7 @@ class PasswordValidator extends RequiredValidator
 	{
 		if ($this->readOnly) return "";
 		
-		$pswField = "{$this->field}_block";
+		$pswField = "{$this->form_id}_{$this->field}_block";
 	$script = <<<ENDSCRIPT
 	
 	var block = document.getElementById("$pswField");

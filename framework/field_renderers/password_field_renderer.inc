@@ -50,8 +50,12 @@ class PasswordFieldRenderer extends FieldRenderer
 	{
 		$this->FieldRenderer($parent);
 		
-		$this->parent->match("{$this->parent->id}_password", "Password", "{$this->parent->id}_confirm", "Confirmation");
-		$this->parent->password("{$this->parent->id}_password", "Password");
+	}
+	
+	function addValidatorsToForm($field, $required = false)
+	{
+		$this->parent->match($field, "Password", "{$field}_confirm", "Confirmation");
+		$this->parent->password($field, "Password");	
 	}
 	
 	function renderScript($field)
@@ -83,15 +87,14 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 		$size = $this->numeric ? "6" : "20";
 		$onKeyPress = $this->numeric ? " onkeypress='return maskInput(event, $allowneg);'" : ""
 ?>
-			 <input type="hidden" name="<?echo $field ?>" id="<?echo $this->parent->id?>_<?echo $this->field?>" value="">
-			 <table border="0" cellspacing="0" cellpadding="0" id="<?echo $this->parent->id ?>_<?echo $field?>_password_block" style="padding: 0px; display: <?echo $display ?>">
+			 <table border="0" cellspacing="0" cellpadding="0" id="<?echo $this->parent->id ?>_<?echo $field?>_block" style="padding: 0px; display: <?echo $display ?>">
 			  <tr>
   				<td style="vertical-align: top; text-align: left"><?echo $enter?>&nbsp;</td>
-  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $this->parent->id?>_<?echo $field?>_password" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
+  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
  			  </tr>
  			  <tr>
   				<td style="vertical-align: top; text-align: left"><?echo $confirm?>&nbsp;</td>
-  				<td><input type="password" name="<?echo $this->parent->id?>_<?echo $field?>_confirm" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
+  				<td><input type="password" name="<?echo $field?>_confirm" id="<?echo $this->parent->id?>_<?echo $field?>_confirm" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
  			  </tr>
  			 </table>		
 <?
@@ -134,7 +137,7 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 		
 		if (!$this->parent->data->$pk || $_POST["{$this->parent->id}_{$field}_reset_password"])
 		{
-			$password = $_POST["{$this->parent->id}_{$field}_password"];
+			$password = $_POST[$field];
 		}
 		else
 		{
