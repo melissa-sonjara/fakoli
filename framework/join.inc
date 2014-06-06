@@ -341,9 +341,33 @@ abstract class AbstractJoin
 		$this->pseudos[$class] = array("index" => $indexField, "items" => $items);
 	}
 	
-	abstract function generateQuery($constraint = "");
+	abstract function generateQuery($constraint = "", $count = false);
 
-	
+	function count($constraints = "", $countExpr = true)
+	{
+		$query = $this->generateQuery($constraints, $countExpr);
+		try
+		{
+			$db = ConnectionManager::getConnection();
+				
+			$result = $db->prepare($query);
+			$result->execute($this->params);
+				
+			if ($row = $result->fetch())
+			{
+				$value = $row['result'];
+			}
+		
+			unset($result);
+		}
+		catch(PDOException $e)
+		{
+			throw FakoliException($e->getMessage());
+		}
+		
+		return $value;		
+	}
+
 	/**
 	 * Performs a query against the database returning an array of JoinResult objects.
 	 * @param string $constraints
@@ -615,7 +639,7 @@ class InnerJoin extends AbstractJoin
 		$this->tag = $tag;
 	}
 	
-	function generateQuery($constraints = "")
+	function generateQuery($constraints = "", $countOnly = false)
 	{
 		$tables = "";
 		$fields = "";
@@ -764,6 +788,8 @@ class InnerJoin extends AbstractJoin
 			$orderBy = $matches[2];
 		}
 		
+		if ($countOnly) $fields = (is_bool($countOnly)) ? "COUNT(1) as result" : "COUNT($countOnly) as result";
+				
 		$query = "SELECT $fields FROM $tables $constraints $join $orderBy";
 		
 		trace("InnerJoin::generateQuery() - $query", 3);
@@ -787,7 +813,7 @@ class LeftOuterJoin extends AbstractJoin
 		$this->tag = $tag;
 	}
 	
-	function generateQuery($constraints = "")
+	function generateQuery($constraints = "", $countOnly = false)
 	{
 		$tables = "";
 		$fields = "";
@@ -985,6 +1011,8 @@ class LeftOuterJoin extends AbstractJoin
 			$constraints = $matches[1];
 			$orderBy = $matches[2];
 		}
+		
+		if ($countOnly) $fields = (is_bool($countOnly)) ? "COUNT(1) as result" : "COUNT($countOnly) as result";
 		
 		$query = "SELECT $fields FROM $join $constraints $orderBy";
 		
