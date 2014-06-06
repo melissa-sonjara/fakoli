@@ -809,8 +809,13 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 	 * @param string $success the Javascript callback function for success
 	 * @param string $failure the Javascript callback function for failure
 	 */
-	function ajaxSubmit($success, $failure)
+	function ajaxSubmit($success, $failure = null)
 	{
+		if ($failure == null)
+		{
+			$failure = "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }";
+		}
+		
 		$this->ajaxSubmitHandler = $success;
 		$this->ajaxFailureHandler = $failure;
 	}
