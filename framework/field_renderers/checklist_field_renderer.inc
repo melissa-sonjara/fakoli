@@ -146,7 +146,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		if ($this->showSelectAll)
 		{
-			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			echo "<a href='#' onclick='return {$this->parent->id}_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
@@ -240,7 +240,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		var value = (link.innerHTML == "Select All");
 	
-		var container = document.id('<?echo $this->field?>_container');
+		var container = document.id('<?echo $this->parent->id?>_<?echo $field?>_container');
 		
 		container.getElements("input[type=checkbox]").each(function(cbox)
 		{
@@ -322,7 +322,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		if ($this->showSelectAll)
 		{
-			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			echo "<a href='#' onclick='return {$this->parent->id}_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
