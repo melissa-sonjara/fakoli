@@ -787,6 +787,11 @@ class InnerJoin extends AbstractJoin
 			$constraints = $matches[1];
 			$orderBy = $matches[2];
 		}
+		else if (preg_match("/^(.*?)(LIMIT.*)/i", $constraints, $matches))
+		{
+			$constraints = $matches[1];
+			$orderBy = $matches[2];
+		}
 		
 		if ($countOnly) $fields = (is_bool($countOnly)) ? "COUNT(1) as result" : "COUNT($countOnly) as result";
 				
@@ -1007,6 +1012,11 @@ class LeftOuterJoin extends AbstractJoin
 
 		$orderBy = "";
 		if (preg_match("/^(.*?)(ORDER\\s+BY.*)/i", $constraints, $matches))
+		{
+			$constraints = $matches[1];
+			$orderBy = $matches[2];
+		}
+		else if (preg_match("/^(.*?)(LIMIT.*)/i", $constraints, $matches))
 		{
 			$constraints = $matches[1];
 			$orderBy = $matches[2];
