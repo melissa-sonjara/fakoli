@@ -929,10 +929,12 @@ class TemplateFormLayout extends AutoFormLayout
 {
 	var $template;
 	var $output;
-
-	function TemplateFormLayout($form, $template)
+	var $showButtons = true;
+	
+	function TemplateFormLayout($form, $template, $showButtons = true)
 	{
 		$this->template = file_get_contents($template);
+		$this->showButtons = $showButtons;
 		$this->AutoFormLayout($form);
 	}
 
@@ -1032,7 +1034,10 @@ class TemplateFormLayout extends AutoFormLayout
 	
 	function endButtonLine()
 	{
-		$this->output .= ob_get_contents();
+		if ($this->showButtons) 
+		{
+			$this->output .= ob_get_contents();
+		}
 		ob_end_clean();
 		
 		$this->output .=  "</div><br/>";
