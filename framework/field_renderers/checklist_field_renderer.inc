@@ -271,11 +271,7 @@ class CheckListFieldRenderer extends FieldRenderer
 
 	function renderReadOnly($field)
 	{
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+		$this->_startField($field);
 		
 		$value = $this->parent->data->get($field);
 		
@@ -290,8 +286,8 @@ class CheckListFieldRenderer extends FieldRenderer
 		$value = implode($this->separator, $answers);
 		
 		echo $value;
-		
-		echo "</td></tr>\n";
+
+		$this->_endField($field);
 	}
 
 	function renderSearchScript($field, $mode)
