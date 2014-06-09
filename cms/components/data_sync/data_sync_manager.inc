@@ -329,7 +329,7 @@ interface IDataSyncHelper
 		return $fp;
 	}
 		
-	private static function getRecord($fp, $columns, $helper = null)
+	private static function getRecord($fp, $columns, $helper = null, $performLookups = true)
 	{
 		$record = fgetcsv($fp);
 
@@ -339,7 +339,7 @@ interface IDataSyncHelper
 				
 			if ($helper)
 			{
-				$record = $helper->processRecord($record);
+				$record = $helper->processRecord($record, $performLookups);
 			}
 		}
 		
@@ -432,7 +432,7 @@ interface IDataSyncHelper
 		$matchingQuery = Query::create($class, "WHERE $matchingConstraint");
 		$matchingQuery->filter = new InclusionFilter($item->getPrimaryKey());
 			
-		while($record = DataSyncManager::getRecord($fp, $columns, $helper))
+		while($record = DataSyncManager::getRecord($fp, $columns, $helper, ((!$isChunked) || $counter >= 0)))
 		{	
 			$item = new $class();
 			$skip = false;
