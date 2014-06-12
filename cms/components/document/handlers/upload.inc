@@ -81,7 +81,7 @@ $allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Acce
 
 if ($method == "POST")
 {
-	if (!$_POST["publication_date"]) $_POST["publication_date"] = today();
+	if (!$_POST["publication_date"]) $_POST["publication_date"] = date("m/d/Y");
 	$_POST["owner_id"] = $user->get($user->getPrimaryKey());
 	$_POST["document_library_id"] = $document_library_id;
 	
