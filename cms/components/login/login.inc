@@ -317,6 +317,7 @@ class LoginManager
 				
 				$_SESSION["user"] = $user;
 				$mgr->loadDefaultSession($user);
+				LoginManager::recordLoginAttempt($username, "token", null, "success");
 				redirect($mgr->getPasswordResetPage());
 			}
 			else
@@ -350,6 +351,8 @@ class LoginManager
 			session_start();
 			
 			$_SESSION["user"] = $user;
+
+			LoginManager::recordLoginAttempt($username, "ajax", null, "success");
 			
 			$mgr->loadDefaultSession($user);
 			return "OK|".$mgr->getLoginRedirect($user);
@@ -362,11 +365,13 @@ class LoginManager
 			{
 				$_SESSION["user"] = $user;
 				$mgr->loadDefaultSession($user);
+				LoginManager::recordLoginAttempt($username, "token", null, "success");
 				return "OK|".$mgr->getPasswordResetPage();
 			}
 			else
 			{	
 				LoginManager::$error = "Incorrect user name or password.";
+				LoginManager::recordLoginAttempt($username, "ajax", null, "failure");
 				return "ERROR|".LoginManager::$error;
 			}
 		}
