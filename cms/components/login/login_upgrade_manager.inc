@@ -49,7 +49,9 @@ Fakoli::using("login", "component");
 class LoginUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added login_attempt table to provide login audit trail",
+			"1.2"		=>	"sql:Added login_account_lock table to provide account locking"
 	);
 	
 	function LoginUpgradeManager()

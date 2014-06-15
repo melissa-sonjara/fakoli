@@ -53,23 +53,140 @@ define("invalid_password", 4);
 
 Fakoli::using("user", "email", "settings");
 
+/**
+ * Defines the interface for applications to provide extensions to the default login form.
+ * These extensions can (but are not required to) provide additional authentication factors
+ * that are validated during the login request.
+ * @author Andy Green
+ */
 interface LoginExtension
 {
+	/**
+	 * Draw the user interface for the login extension
+	 */
 	function draw();
+	
+	/**
+	 * Validates the login request for the specified user.
+	 * @param string $user
+	 * @return boolean
+	 */
 	function validate($user);
+	
+	/**
+	 * Returns the error message describing the validation failure 
+	 * that occurred in the last called to validate().
+	 */
 	function getError();
 }
 
+/**
+ * LoginManager provides the authentication workflow for logging users into the system. 
+ * Validation is generally deferred to the user component, which applications can override
+ * to provide application-specific login validation.
+ * @author Andy Green
+ */
 class LoginManager
 {
 	static $error;
 	static $extension = null;
 	
+	/**
+	 * Registers an extension to the application's login form
+	 * @param LoginExtension $extension
+	 */
 	static function registerLoginExtension($extension)
 	{
 		LoginManager::$extension = $extension;
 	}
 	
+	/**
+	 * Records a login attempt in the login audit trail. If account locking is enabled,
+	 * the account may be locked by this method as a result of a failed authentication.
+	 * @param string $username the username of the account that is attempting to log in
+	 * @param string $mode the authentication mode ('login', 'token', etc.)
+	 * @param string $token supplementary login token (if provided)
+	 * @param string $result the result of the authentication attempt ('success', 'failure')
+	 */
+	static function recordLoginAttempt($username, $mode, $token, $result)
+	{
+		$attempt = new LoginAttempt();
+		$attempt->username = $username;
+		$attempt->ip_address = $_SERVER['REMOTE_ADDR'];
+		$attempt->login_mode = $mode;
+		$attempt->login_token = $token;
+		$attempt->result = $result;
+		$attempt->date_received = now();
+		$attempt->save();
+		
+		if (Settings::getValue("login", "enable_account_locking"))
+		{
+			if ($result == "failure")
+			{
+				$window = Settings::getValue("login", "login_attempt_window");
+				
+				$from = new DateTime();
+				$from->modify("-{$window} minutes");
+				$fromStr = $from->format("Y-m-d H:i:s");
+				
+				$failed = Query::create(LoginAttempt, "WHERE username=:u AND date_received > :f and result='failure'")
+							   ->bind(":u", $username, ":f", $fromStr)
+							   ->executeValue("COUNT(1)");
+				
+				if ($failed >= Settings::getValue("login", "maximum_failed_attempts"))
+				{
+					LoginManager::lockAccount($username);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Locks the specified user account
+	 * @param string $username the username for the account that is to be locked.
+	 */
+	static function lockAccount($username)
+	{
+		$lockFrom = new DateTime();
+		$lockTo = new DateTime();
+		
+		$duration = Settings::getValue("login", "lockout_duration");
+		
+		$lockTo->modify("+{$duration} minutes");
+		
+		$lock = new LoginAccountLock();
+		$lock->username = $username;
+		$lock->lock_date = $lockFrom->format("Y-m-d H:i:s");
+		$lock->locked_until = $lockTo->format("Y-m-d H:i:s");
+		$lock->active = true;
+		$lock->save();
+	}
+	
+	/**
+	 * Retrieve any current account lock for the specified user account
+	 * @param string $username the user name for the account
+	 * @return LoginAccountLock|NULL
+	 */
+	static function getAccountLock($username)
+	{
+		try
+		{
+			$lock = Query::create(LoginAccountLock, "WHERE username=:u AND locked_until > :c AND active=1 ORDER BY locked_until DESC LIMIT 1")
+						  ->bind(":u", $username, ":c", now())
+						  ->executeSingle();
+			
+			return $lock;
+		}
+		catch(DataNotFoundException $e)
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * Emails a temporary login token to the specified user
+	 * @param unknown $siteUser
+	 */
 	static function emailToken($siteUser)
 	{
 		global $config;
@@ -129,26 +246,38 @@ class LoginManager
 	{
 		trace("LoginManager validateLogin", 3);
 		global $user;
-		
+
 		$mgr = new UserManager();
 
 		$username = $_POST["username"];
 		$password = $_POST["password"];
 		$remember = checkNumeric($_POST["remember_me"]);
+
+		if (Settings::getValue("login", "enable_account_locking"))
+		{
+			if (LoginManager::getAccountLock($username))
+			{
+				return LoginManager::$error = "Access to this account has been temporarily locked";
+			}
+		}
 		
 		trace("Fakoli LoginManager validateLogin username $username", 3);
 		trace(print_r($_POST, true), 3);
 		
 		// JDG - guard against data not found exception
 		if(!$username OR !$password)
+		{
+			LoginManager::recordLoginAttempt($username, "login", null, "failure");
 			return LoginManager::$error = "Incorrect user name or password.";			
-	
+		}
+		
 		$user = $mgr->validatePassword($username, $password);
 
 		if ($user && LoginManager::$extension)
 		{
 			if (!LoginManager::$extension->validate($user))
 			{
+				LoginManager::recordLoginAttempt($username, "login", null, "failure");
 				LoginManager::$error = LoginManager::$extension->getError();
 				$user = null;
 			}
@@ -175,6 +304,7 @@ class LoginManager
 				}
 			}
 				
+			LoginManager::recordLoginAttempt($username, "login", null, "success");
 			$mgr->loadDefaultSession($user);
 			$mgr->loginRedirect($user);
 		}
@@ -191,6 +321,7 @@ class LoginManager
 			}
 			else
 			{	
+				LoginManager::recordLoginAttempt($username, "login", null, "failure");
 				LoginManager::$error = "Incorrect user name or password.";
 			}
 		}
@@ -443,6 +574,11 @@ class LoginManager
 		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users", "Login Redirects");
 		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)", "Login Redirects");
 		Settings::setDefaultValue("login", "default_login_redirect", "", String, "The page to which users are redirected when they attempt to access the login page when logged in", "Login Redirects");
+
+		Settings::setDefaultValue("login", "enable_account_locking", false, Boolean, "Turns on or off automatic account locking after a given number of failed login attempts", "Account Locking", null, 1);
+		Settings::setDefaultValue("login", "maximum_failed_attempts", 3, Number, "The maximum number of failed attempts before the account is locked", "Account Locking", null, 2);
+		Settings::setDefaultValue("login", "login_attempt_window", 20, Number, "The window within which the number of failed login attempts is counted (in minutes)", "Account Locking", null, 3);
+		Settings::setDefaultValue("login", "lockout_duration", 60, Number, "The duration for which the account will be locked (in minutes)", "Account Locking", null, 4);
 	}
 	
 	static function upgradeComponent($version)
