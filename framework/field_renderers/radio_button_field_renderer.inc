@@ -81,7 +81,7 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	{
 		if (!count($this->options)) return;
 		
-		if($this->horizontal || $this->tabular)
+		if(($this->horizontal || $this->tabular) && count($this->options) > 2)
 			$this->colspan = 2;
 		$this->_startField($field);
 		
