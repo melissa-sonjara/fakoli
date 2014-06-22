@@ -93,8 +93,11 @@ class AutoForm
 	var $interstitialMessage = null;	///< Specifies the message to display in an interstitial while the form is being submitted
     var $fields;	///< Local field cache
 
-    var $groups = array(); ///< List of field groups
-    var $collapsibleGroups = array(); //< List of collapsible groups and their default states
+    var $groups = array(); 				///< List of field groups
+    var $collapsibleGroups = array(); 	///< List of collapsible groups and their default states
+    var $groupDescriptions = array();	///< List of group descriptions
+    
+    var $groupDescriptionCSS = "group_description";	///< CSS class for group description blocks
     
     var $readOnlyForm;  ///< Specifies whether the entire form is read-only
     var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
@@ -544,6 +547,26 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 		
 		$this->groups[$name] = $group;
 		return $group;
+	}
+	
+	/**
+	 * Add a description block to a group. This will be displayed within the group,
+	 * after then title (if displayed) but before any fields.
+	 * @param string $name the name of the group
+	 * @param string $description the description to display for that group
+	 */
+	function groupDescription($name, $description)
+	{
+		$this->groupDescriptions[$name] = $description;
+	}
+	
+	/**
+	 * Retrieves the group description for the specified group.
+	 */
+	function getGroupDescription($name)
+	{
+		if (array_key_exists($name, $this->groupDescriptions)) return $this->groupDescriptions[$name];
+		return "";
 	}
 	
 	/**

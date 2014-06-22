@@ -113,6 +113,12 @@ class TableBasedFormLayout extends AutoFormLayout
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
 		echo "<fieldset id='$id'$class><legend>$name</legend>";
+		
+		$desc = $this->form->getGroupDescription($name);
+		if ($desc)
+		{
+			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
+		}
 		$this->startUngrouped();
 	}
 	
@@ -594,6 +600,14 @@ class MobileFormLayout extends AutoFormLayout
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
 		echo "<fieldset id='$id'$class><legend>$name</legend>";
+		
+		$desc = $this->form->getGroupDescription($name);
+		if ($desc)
+		{
+			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
+		}
+		$this->startUngrouped();
+		
 		$this->startUngrouped();
 	}
 	
@@ -724,6 +738,14 @@ class SimpleFormLayout extends AutoFormLayout
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
 		echo "<fieldset id='$id'$class><legend>$name</legend>";
+
+		$desc = $this->form->getGroupDescription($name);
+		if ($desc)
+		{
+			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
+		}
+		$this->startUngrouped();
+		
 		$this->startUngrouped();
 	}
 	
