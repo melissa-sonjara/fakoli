@@ -50,7 +50,7 @@ class TextLookupManifest
 	{
 		return array
 		(
-			"Classification"	=> array
+			"Site Content"	=> array
 			(
 
 				"Text Lookup"	=>	array("page"	=>	"/admin/text_lookup_list",
