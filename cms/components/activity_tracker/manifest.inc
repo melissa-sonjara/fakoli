@@ -46,6 +46,8 @@ class ActivityTrackerManifest
 		return $component;
 	}
 	
+	var $allow_sessionless_handlers = array("save");
+	
 	static function subscribeToEvents()
 	{
 		return array("RequestComplete" 			=> array(ActivityTracker, logActivity),

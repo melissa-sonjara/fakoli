@@ -1,13 +1,13 @@
 <?php
 Fakoli::using("activity_tracker");
 
-if (!$user) Fakoli::end("0");
+//if (!$user) Fakoli::end("0");
 
 $msg = $_POST["feedback"];
 
 $feedback = new UserFeedback();
 
-$feedback->user_id 		= $user->user_id;
+$feedback->user_id 		= $user ? $user->user_id : 0;
 $feedback->feedback		= $msg;
 $feedback->created_date = now();
 $feedback->referer = $_SERVER['HTTP_REFERER'];
