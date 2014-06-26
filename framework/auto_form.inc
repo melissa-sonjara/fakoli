@@ -123,7 +123,8 @@ class AutoForm
 		Rating		=>	RatingFieldRenderer,
 		ZipCode		=>	ZipCodeFieldRenderer,
 		PhoneNumber	=>	PhoneNumberFieldRenderer,
-    	URL			=>	URLFieldRenderer
+    	URL			=>	URLFieldRenderer,
+    	DateOfBirth	=>	DateOfBirthFieldRenderer
 		);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.

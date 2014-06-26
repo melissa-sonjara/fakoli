@@ -315,5 +315,6 @@ require_once realpath(dirname(__FILE__))."/field_renderers/start_date_field_rend
 require_once realpath(dirname(__FILE__))."/field_renderers/subselect_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/compound_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/url_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/date_of_birth_field_renderer.inc";
 
 ?>
