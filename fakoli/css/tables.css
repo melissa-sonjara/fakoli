@@ -302,8 +302,7 @@ table.list tfoot td
 tr.expanded td
 {
 	background: url(/fakoli/images/open.gif) left center no-repeat transparent;
-	padding-left: 80px;
-	margin-left: 80px;
+	padding-left: 20px;
 }
 
 tr.collapsed td
