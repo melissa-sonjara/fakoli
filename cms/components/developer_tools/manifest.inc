@@ -25,7 +25,11 @@ class DeveloperToolsManifest
 				
 				"Event Map"			=>	array("page"	=>	"/admin/event_map",
 											  "role"	=>	"admin",
-											  "weight"	=>	2)
+											  "weight"	=>	2),
+				
+				"Test PHP CLI"		=>	array("page"	=>	"/admin/test_php_cli",
+											  "role"	=>	"admin",
+											  "weight"	=>	3)
 			)
 		);
 	}
