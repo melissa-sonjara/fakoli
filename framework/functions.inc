@@ -1166,6 +1166,8 @@ function getRemote($url)
  */
 function saveRemote($url, $saveAs)
 {
+	trace("Downloading $url to $saveAs", 3);
+	
 	$ch = curl_init ($url);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -1173,6 +1175,8 @@ function saveRemote($url, $saveAs)
 	
 	$bytes = curl_exec($ch);
 	curl_close ($ch);
+	
+	trace(count($bytes)." bytes recieved", 3);
 	
 	if(file_exists($saveAs))
 	{
