@@ -44,6 +44,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	}
 	
 	var $gallery_id;
+	var $imageSize = 300;
 	
 	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
 	{
@@ -96,7 +97,9 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		$id = $this->parent->data->get($field);
 		
-		if ($id) $img = "<img src='/action/image/thumbnail?image_id={$id}&size=300' alt=''/>";
+		if ($id) 
+		{
+			$img = "<img src='/action/image/thumbnail?image_id={$id}&size={$this->imageSize}' alt=''/>";
 ?>
 	<input type="hidden" value="<?echo $id?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
 	<div id="<?echo $this->parent->id?>_<?echo $field?>_thumbnail"><?echo $img?></div>
