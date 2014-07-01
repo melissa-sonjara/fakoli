@@ -133,8 +133,15 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		$mm = checkNumeric($_POST["{$field}_mm"]);
 		$dd = checkNumeric($_POST["{$field}_dd"]);
 		$yy = checkNumeric($_POST["{$field}_yy"]);
+
+		if ($mm < 10) $mm = "0{$mm}";
+		if ($dd < 10) $dd = "0{$dd}";
 		
-		$this->parent->data->set($field, "$mm/$dd/$yy");
+		$dob = "$yy-$mm-$dd";
+		
+		trace("** Preprocessing date of birth: $dob", 3);
+		
+		$this->parent->data->set($field, $dob);
 	}
 	
 }
