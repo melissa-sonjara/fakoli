@@ -1158,6 +1158,31 @@ function getRemote($url)
 }
 
 /**
+ * Retreive the contents of the remote file at the given URL 
+ * and save it to the specified location on the local disk.
+ * 
+ * @param $url the URL to retrieve
+ * @param $saveAs the path and file name where the downloaded file should be stored.
+ */
+function saveRemote($url, $saveAs)
+{
+	$ch = curl_init ($url);
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+	
+	$bytes = curl_exec($ch);
+	curl_close ($ch);
+	
+	if(file_exists($saveAs))
+	{
+		unlink($saveAs);
+	}
+	
+	file_put_contents($saveAs, $bytes);
+}
+
+/**
  * Takes a URL and converts relative URLs to absolute URLs for the current site.
  * @param string $url the URL to convert
  * @return string full canonical form for the URL
