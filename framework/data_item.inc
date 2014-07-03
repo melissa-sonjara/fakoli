@@ -73,7 +73,7 @@ class DataItem extends AbstractDataItem
 		"Timestamp"		=>	TimestampTypeRenderer,
 		"Timezone"		=>	TimezoneTypeRenderer,
 		"PhoneNumber"	=>	PhoneNumberTypeRenderer,
-	
+		"DateOfBirth"	=>	DateTypeRenderer
 	);
 	
 	
