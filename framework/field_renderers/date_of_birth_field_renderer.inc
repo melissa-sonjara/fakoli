@@ -76,7 +76,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		$day = $obj->format("{{$field}:d}");
 		$year = $obj->format("{{$field}:Y}");
 		
-		trace("Month: $month, Day: $day, Year: $year, Field: {$obj->$field}", 3);
+		trace("** Month: $month, Day: $day, Year: $year, Field: {$obj->$field}", 3);
 		
 		$this->_startField($field);
 		
