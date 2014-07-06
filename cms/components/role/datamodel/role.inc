@@ -94,12 +94,12 @@ class SiteRole extends DataItem
 		return IndexedQuery::create(SiteRole, "ORDER by priority, name", "role")->execute();
 	}
 	
-	static function getHomePage()
+	static function getHomePage($account = null)
 	{
 		$roles = SiteRole::getRoleLookup();
 		foreach($roles as $role => $details)
 		{
-			if (checkRole($role)) return $details->home_page;
+			if (checkRole($role, $account)) return $details->home_page;
 		}
 		
 		return "";
