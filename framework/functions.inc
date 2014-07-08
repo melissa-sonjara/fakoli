@@ -1240,7 +1240,7 @@ function sanitizePath($path)
  * @param $timeout the amount of time to wait for the POST to complete
  * @return string the results of the POST request
  */
-function postRemote($url, $data, $timeout = 30)
+function postRemote($url, $data = null, $timeout = 30)
 {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
