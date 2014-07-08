@@ -1163,6 +1163,8 @@ function getRemote($url)
  * 
  * @param $url the URL to retrieve
  * @param $saveAs the path and file name where the downloaded file should be stored.
+ * 
+ * @return returns the content type of the retrieved file as specified by the server
  */
 function saveRemote($url, $saveAs)
 {
@@ -1175,6 +1177,7 @@ function saveRemote($url, $saveAs)
 	curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	
+	$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 	$bytes = curl_exec($ch);
 	curl_close ($ch);
 	
@@ -1186,6 +1189,8 @@ function saveRemote($url, $saveAs)
 	}
 	
 	file_put_contents($saveAs, $bytes);
+	
+	return $contentType;
 }
 
 /**
