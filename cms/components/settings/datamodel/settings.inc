@@ -112,6 +112,7 @@ class Settings extends DataItem
 		}
 		catch (DataNotFoundException $e) 
 		{
+			trace("Setting not found for $component $name", 3);
 			return null;
 		}
 	}
