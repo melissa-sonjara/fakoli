@@ -844,6 +844,7 @@ class Fakoli
 	 */
 	static function JSONreturn($object)
 	{
+		header("Content-Type: application/json");
 		throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
 	}
 	
@@ -854,6 +855,8 @@ class Fakoli
 	 */
 	static function JSONerror($error)
 	{
+		header("Content-Type: application/json");
+		
 		$errorObject = (object)array('error' => $error);
 		
 		throw new FakoliEarlyExit(json_encode($errorObject));
