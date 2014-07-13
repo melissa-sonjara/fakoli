@@ -1247,7 +1247,7 @@ var CrossFader = new Class(
 		
 		if (this.elements.length == 0) return;
 		
-		this.elements[0].setStyles({display: 'block', visibility: 'visible', opacity: 1});
+		this.elements[0].setStyles({display: 'block', position: 'static', visibility: 'visible', opacity: 1});
 	
 		this.createNavigation();
 		
