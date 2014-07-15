@@ -191,9 +191,12 @@ class ComponentPageView
 		
 		// Pull in the script and style dependencies defined by the components
 		
-		$script = Fakoli::getScripts() . $script;
-		$styles = Fakoli::getStyles() . $styles;		
-
+		if ($_GET["_style"] != "nude")
+		{
+			$script = Fakoli::getScripts() . $script;
+			$styles = Fakoli::getStyles() . $styles;		
+		}
+		
 		$script = ComponentManager::fireEvent("PostProcessScript", $script);
 		
 		// Populate global variable references
