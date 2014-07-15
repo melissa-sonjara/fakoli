@@ -164,7 +164,7 @@ class ComponentPage extends DataItem
 			$templateFile = $site->mobile_template;
 			
 		case 'nude':
-			return "{description}";
+			return "{var:script}\n{description}";
 		}
 
 		if ($section)
