@@ -191,7 +191,7 @@ class ComponentPageView
 		
 		// Pull in the script and style dependencies defined by the components
 		
-		if ($_GET["_style"] != "nude")
+		if ($_REQUEST["_style"] != "nude")
 		{
 			$script = Fakoli::getScripts() . $script;
 			$styles = Fakoli::getStyles() . $styles;		
