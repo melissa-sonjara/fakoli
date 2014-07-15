@@ -49,7 +49,7 @@ class PagedList implements FacetFilterable
 	var $paginate = true;						///< Specifies whether list should be paginated (false for view only pages)
 	var $writeIdTag = false;					///< whether to include an id tag for each li item
 	var $tagRowCallbacks; 						///< Array of callbacks for adding extra attributes to each row
-	
+	var	$onStartRow;							///< Callback for setting the CSS class / visibility of each item in the list
 	/**
 	 * Creates a new PagedList control.
 	 * @param array $items the array of DataItems to be displayed in the list
@@ -120,6 +120,17 @@ class PagedList implements FacetFilterable
 <?
 		foreach($this->items as $item)
 		{
+			$css = "";
+			
+			
+			if ($this->onStartRow)
+			{
+				$css = call_user_founc($$this->onStartRow, $item);
+				if ($css === false) continue; // Skip this record if false returned
+			}
+
+			if ($css) $css = " class='$css'";
+			
 			if($this->writeIdTag)
 			{
 				$idTag = "id='".$this->formatIdTag($item)."'";	
@@ -137,7 +148,7 @@ class PagedList implements FacetFilterable
 				$rowAttrs .= " ".$name."='".$value."'";
 			}
 			
-			echo "<li {$idTag}{$rowAttrs}>";
+			echo "<li {$idTag}{$css}{$rowAttrs}>";
 			
 			if (is_callable($this->format))
 			{
