@@ -125,7 +125,7 @@ class PagedList implements FacetFilterable
 			
 			if ($this->onStartRow)
 			{
-				$css = call_user_founc($$this->onStartRow, $item);
+				$css = call_user_func($$this->onStartRow, $item);
 				if ($css === false) continue; // Skip this record if false returned
 			}
 
