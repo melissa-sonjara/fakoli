@@ -208,14 +208,16 @@ class DocumentSearchResult extends AbstractSearchResult
 		if (Settings::getValue("document", "link_to_details"))
 		{
 			$link = "/document_details";	
+			$linkText = "View Details";
 		}
 		else
 		{
 			$link = "/action/document/download";
+			$linkText = "Download";
 		}
 		
 		$img = $this->formatIcon(getDocIcon($file), getDocType($file));
-		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p>{$img} <a href='{$link}?document_id={document_id}'>Download</a> $size");
+		return $this->item->format("<h4>{title}</h4><p><em>{author} {publication_date:short}</em></p>{$img} <a href='{$link}?document_id={document_id}'>{$linkText}</a> $size");
 	}
 }
 
