@@ -1229,7 +1229,8 @@ var CrossFader = new Class(
 		navigationClass: 'crossfader_nav_item',
 		navigationCurrentClass: 'crossfader_current',
 		navigationHighlightClass: 'crossfader_highlight',
-		navigationShowNumbers: false
+		navigationShowNumbers: false,
+		firstElementPosition: 'absolute'
 	},
 	idx: 0,
 	elements: Class.Empty,
@@ -1247,7 +1248,7 @@ var CrossFader = new Class(
 		
 		if (this.elements.length == 0) return;
 		
-		this.elements[0].setStyles({display: 'block', position: 'static', visibility: 'visible', opacity: 1});
+		this.elements[0].setStyles({display: 'block', position: this.options.firstElementPosition, visibility: 'visible', opacity: 1});
 	
 		this.createNavigation();
 		
