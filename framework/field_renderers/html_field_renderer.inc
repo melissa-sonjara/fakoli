@@ -76,15 +76,6 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
-/*			//echo "<script type='text/javascript' src='{$this->parent->componentPath}/richtext/sonjara_richtext.js'></script>\n";
-			echo "<link href='{$this->parent->componentPath}/richtext/sonjara_richtext.css' type='text/css' rel='stylesheet'></link>\n";
-			echo "<script type='text/javascript'>\n";
-			echo "setRichTextEnv('{$this->parent->componentPath}/richtext/sonjara_richtext.css', '{$this->parent->componentPath}/richtext/images/', '{$this->parent->componentPath}/richtext/');\n";
-			echo "</script>\n";
-	<script src="/fakoli/tinymce/tinymce.min.js"></script>
-		<script src="/components/image_picker/js/image_picker_tinymce_plugin.js"></script>
-	<script src="/components/link_picker/js/link_picker_tinymce_plugin.js"></script>
-	<script src="/components/video/js/video_picker_tinymce_plugin.js"></script>*/
 ?>
 
 	<script type='text/javascript'>
@@ -126,47 +117,6 @@ class HTMLFieldRenderer extends FieldRenderer
 			tools: 'inserttable' });
 	</script>
 <?		
-		/*echo "<script type='text/javascript'>\n";
-		$editor = $field."_editor";
-		echo "theEditors.$editor = new RichTextEditor('$editor', '$field', '";
-		echo trim(jsSafe($this->parent->data->get($field)));
-		echo "', '{$this->width}', '{$this->height}', false, false";
-		if ($this->parent->HTMLEditorCSSPath) echo ", '{$this->parent->HTMLEditorCSSPath}'";
-		echo ");\n";
-		
-		if ($this->hideStyleBar)
-		{
-			echo "theEditors.$editor.showStyleBar = false;\n";
-		}
-		
-		if(is_array($this->featureButtons))
-		{
-			foreach($this->featureButtons as $button)
-			{
-				$this->addEditorButton($editor, $button);
-			}
-		}
-		
-		if (is_array($html_editor_extra_buttons))
-		{
-			foreach($html_editor_extra_buttons as $button)
-			{
-				$this->addEditorButton($editor, $button);
-			}
-		}
-		
-		if (is_array($html_editor_override_buttons))
-		{
-			foreach($html_editor_override_buttons as $button)
-			{
-				$this->overrideEditorButton($editor, $button);
-			}
-		}
-		echo "\nwindow.addEvent('domready', function() {\n";
-		echo "theEditors.$editor.draw();\n";
-		echo "});\n";
-		echo "</script>";
-		*/
 	}
 	
 	function addEditorButton($editor, $button)
