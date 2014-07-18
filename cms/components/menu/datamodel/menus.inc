@@ -75,6 +75,7 @@ class MenuItem extends DataItem
 	// Fields
 	var $fields = array("menu_item_id"	=> Number,
 						"title"			=> String,
+						"custom_format"	=> String,
 						"menu_id"		=> Number,
 						"parent_id" 	=> Number,
 						"identifier"	=> String,

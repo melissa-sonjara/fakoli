@@ -51,7 +51,8 @@ class MenuUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Added permissions field to menu_item",
-			"1.2"		=>	"sql:Added required_parameters field to menu_item"
+			"1.2"		=>	"sql:Added required_parameters field to menu_item",
+			"1.3"		=>	"sql:Added custom_format field to menu_item"	
 	);
 	
 	function MenuUpgradeManager()

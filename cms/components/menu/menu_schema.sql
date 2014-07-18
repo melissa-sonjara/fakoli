@@ -61,3 +61,9 @@ ALTER TABLE `menu_item` ADD COLUMN `permissions` varchar(200) NOT NULL DEFAULT '
 ALTER TABLE `menu_item` ADD COLUMN `required_parameters` varchar(200) NOT NULL DEFAULT '';
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE menu_item ADD COLUMN custom_format varchar(500) not null default '';
+
+-- END Version 1.3

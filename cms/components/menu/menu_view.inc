@@ -191,32 +191,38 @@ ENDSCRIPT;
 			$link = $this->getLink($m);
 			if ($link) $found = true;
 			
+			$mTitle = $m->custom_format ? $m->format($m->custom_format) : $m->title;
+			
 			if(!$gmenus[$m->menu_item_id]) 
 			{
-				if ($link) echo "<li".$this->getItemCSS($m)."><a href='$link'>$m->title</a></li>"; // has et
+				if ($link) echo "<li".$this->getItemCSS($m)."><a href='$link'>$mTitle</a></li>"; // has et
 			}
 			else 
 			{
 			     if ($link)
 			     {
-			     	echo "<li".$this->getItemCSS($m)."><a href='$link'>$m->title</a>"; // no li et
+			     	echo "<li".$this->getItemCSS($m)."><a href='$link'>$mTitle</a>"; // no li et
 				    if (array_key_exists($m->menu_item_id, $gmenus))
 				    {
 				     	echo "<ul>"; // no ul et
 					    foreach ($gmenus[$m->menu_item_id] as $submenu) 
 					    {
 					    	$link = $this->getLink($submenu);
-					    	
+					  
+							$smTitle = $submenu->custom_format ? $submenu->format($submenu->custom_format) : $submenu->title;
+							
 					    	if ($link)
 					    	{
-				            	echo "<li".$this->getItemCSS($submenu)."><a href='$link'>$submenu->title</a>";  // only one level; 
+				            	echo "<li".$this->getItemCSS($submenu)."><a href='$link'>$smTitle</a>";  // only one level; 
 					            if($gmenus[$submenu->menu_item_id]) 
 					            {
 					             	echo "<ul>";
 					             	foreach ($gmenus[$submenu->menu_item_id] as $subsubmenu) 
 					             	{
 					             		$link = $this->getLink($subsubmenu);
-					             		if ($link) echo "<li".$this->getItemCSS($subsubmenu)."><a href='$link'>$subsubmenu->title</a></li>"; // level 3 menus GOOD
+					             		$ssmTitle = $subsubmenu->custom_format ? $subsubmenu->format($subsubmenu->custom_format) : $subsubmenu->title;
+					             			
+					             		if ($link) echo "<li".$this->getItemCSS($subsubmenu)."><a href='$link'>$ssmTitle</a></li>"; // level 3 menus GOOD
 					             	}
 					             	echo "</ul>"; // end ul for level 3 //GOOD
 					             }
