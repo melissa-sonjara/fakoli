@@ -47,6 +47,7 @@ class HTMLFieldRenderer extends FieldRenderer
 	var $width = "540px";
 	var $height = "200px";
 	var $featureButtons;
+	var $rootBlock = "p";
 
 	static $_includedRTEScript = false;
 	
@@ -73,6 +74,20 @@ class HTMLFieldRenderer extends FieldRenderer
 		if ($https == "off") $https = false;
 		
 		$protocol = $https ? "https" : "http";
+		
+		$rootBlock = "";
+		
+		if ($this->rootBlock != "p")
+		{
+			if (!$this->rootBlock) 
+			{ 
+				$rootBlock = "forced_root_block: false,\n"; 
+			}
+			else
+			{
+				$rootBlock = "forced_root_block: '{$this->rootBlock}',\n";
+			}
+		}
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
@@ -113,6 +128,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			relative_urls: false,
 			document_base_url: 'http://<?echo $config['http_host']?>',
 			menubar: false,
+			<?echo $rootBlock?>
 			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks fullscreen",
 			tools: 'inserttable' });
 	</script>
