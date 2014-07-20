@@ -1,7 +1,11 @@
 <?php
-Fakoli::using("activity_tracker");
+Fakoli::using("activity_tracker", "email");
 
-//if (!$user) Fakoli::end("0");
+$enabled = Settings::getValue("activity_tracker", "enable_feedback");
+$require_login = Settings::getValue("activity_tracker", "require_login");
+$sendEmail = Settings::getValue("activity_tracker", "send_email");
+
+if (!$enabled || (!$user && $require_login)) Fakoli::end("0");
 
 $msg = $_POST["feedback"];
 
@@ -14,6 +18,11 @@ $feedback->referer = $_SERVER['HTTP_REFERER'];
 $feedback->session		= session_id();
 
 $feedback->save();
+
+if ($sendEmail)
+{
+	sendEmailUsingEmailManager($feedback, "feedback_notification");
+}
 
 Fakoli::end("1");
 ?>
