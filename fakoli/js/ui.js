@@ -760,6 +760,7 @@ var ProgressiveSearch = new Class({
 	{
 		this.setOptions(options);
 		this.element = $(element);
+		this.element.search = this;
 		this.list = new Element('div', {'id': this.element.id + '_progressive_search', 'class': 'progressive_search'});
 		this.list.setStyles({'display': 'none', 'position': 'absolute', 'max-height': this.options.height, 'overflow-y': 'auto'});
 		this.container = new Element('div');
