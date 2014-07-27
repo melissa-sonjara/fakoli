@@ -137,7 +137,7 @@ function <?echo $fn?>(element)
 		
 		$containerId = "{$this->parent->id}_{$field}_container";
 		
-		$values = explode(",", $this->parent->data->get($field));
+		$values = explode(",", $current);
 		
 		if ($this->tabular)
 		{
@@ -178,7 +178,7 @@ function <?echo $fn?>(element)
 		$count = 0;
 		foreach($this->options as $value => $name)
 		{
-			$selected = (array_search($current, $values) !== FALSE) ? " selected" : "";
+			$selected = (array_search($value, $values) !== FALSE) ? " selected" : "";
 			$onchange = ($this->onChange) ? "{$this->onChange}(this);" : "";
 	
 			$position = "";
