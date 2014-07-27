@@ -47,7 +47,7 @@ class PushButtonFieldRenderer extends FieldRenderer
 	var $tabular = false; // Horizontal table-based layout
 	var $regular = false;
 	
-	function PushButtonSelectFieldRenderer(&$form, $field, $label, $options)
+	function PushButtonFieldRenderer(&$form, $field, $label, $options)
 	{
 		$this->options = $options;
 				
