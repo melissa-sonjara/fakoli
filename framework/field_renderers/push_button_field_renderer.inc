@@ -102,8 +102,6 @@ function <?echo $fn?>(element, value)
 	{
 		if (!count($this->options)) return;
 		
-		if(($this->horizontal) && count($this->options) > 3)
-			$this->colspan = 2;
 		$this->_startField($field);
 		
 		$current = $this->parent->data->get($field);
@@ -189,10 +187,7 @@ function <?echo $fn?>(element, value)
 		if ($mode != "equal") return;
 		
 		$searchValue = $this->parent->params->get($field, $mode);
-
-		if(($this->horizontal) && count($this->options) > 3)
-			$this->colspan = 2;
-		
+	
 		$this->_startField($field);
 		
 		$this->renderButtons($field, $mode);
