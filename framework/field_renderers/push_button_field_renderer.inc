@@ -171,7 +171,7 @@ function <?echo $fn?>(element, value)
 			if ($count == $max) $position .= " last";
 				
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' onclick='{$this->parent->id}_{$field}_update(this, '$value');{$onChange}return false' {$disable}/>{$name}</a>";
+			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' onclick='{$this->parent->id}_{$field}_update(this, \"{$value}\");{$onChange}return false' {$disable}/>{$name}</a>";
 	
 			$count++;
 		}
