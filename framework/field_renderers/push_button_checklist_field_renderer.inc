@@ -35,10 +35,10 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
 /**
  * Field renderer for data fields that must be displayed as a list
- * of choices. Renders as a set of radio buttons from which the user
- * can choose only one response.
+ * of choices. Renders as a set of buttons from which the user
+ * can choose one or more responses.
  */
-class PushButtonFieldRenderer extends FieldRenderer
+class PushButtonCheckListFieldRenderer extends FieldRenderer
 {
 	var $options;
 	var $horizontal = false;
@@ -47,7 +47,7 @@ class PushButtonFieldRenderer extends FieldRenderer
 	var $tabular = false; // Horizontal table-based layout
 	var $regular = false;
 	
-	function PushButtonFieldRenderer(&$form, $field, $label, $options)
+	function PushButtonCheckListFieldRenderer(&$form, $field, $label, $options)
 	{
 		$this->options = $options;
 				
