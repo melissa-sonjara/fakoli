@@ -317,4 +317,5 @@ require_once realpath(dirname(__FILE__))."/field_renderers/compound_select_field
 require_once realpath(dirname(__FILE__))."/field_renderers/url_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/date_of_birth_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/push_button_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/push_button_checklist_field_renderer.inc";
 ?>
