@@ -104,7 +104,6 @@ function <?echo $fn?>(element, value)
 		
 		$this->_startField($field);
 		
-		$current = $this->parent->data->get($field);
 		
 		$this->renderButtons($field);
 		
@@ -114,6 +113,8 @@ function <?echo $fn?>(element, value)
 
 	function renderButtons($field, $mode = null)
 	{
+		$current = $this->parent->data->get($field);
+		
 		$separator = "";
 		
 		if ($this->regular && !$this->tabular)
