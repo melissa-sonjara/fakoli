@@ -83,14 +83,14 @@ class PushButtonFieldRenderer extends FieldRenderer
 		$id = "{$this->parent->id}_{$field}";
 ?>
 <script type='text/javascript'>
-function <?echo $fn?>(elt, value)
+function <?echo $fn?>(element, value)
 {
 	var container = document.id('<?echo $containerId?>');
 	container.getElements("a.selected").each(function(elt)
 	{
 		elt.removeClass('selected');
 	});
-	elt.addClass('selected');
+	document.id(element).addClass('selected');
 	document.id('<?echo $id?>').value = value;
 	return false;
 }
@@ -173,7 +173,7 @@ function <?echo $fn?>(elt, value)
 			if ($count == $max) $position .= " last";
 				
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' onclick='{$this->parent->id}_{$field}_update($value);{$onChange}return false' {$disable}/>{$name}</a>";
+			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' onclick='{$this->parent->id}_{$field}_update(this, $value);{$onChange}return false' {$disable}/>{$name}</a>";
 	
 			$count++;
 		}
