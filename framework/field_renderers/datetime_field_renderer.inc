@@ -105,7 +105,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 			list($hh, $mm, $aa) = explode("/", $text);
 		}
 		
-		echo "<div id='{$this->parent->id}_{$field}_block' style='display: inline;white-space: nowrap'>\n";
+		echo "<div id='{$this->parent->id}_{$field}_block' style='display: inline'>\n";
 		echo "&nbsp;&nbsp;<input type='text' value='$hh' name='{$field}_hh' size='2' maxlength='2' onkeydown='return maskInput(event);'>
 		&nbsp;:&nbsp;<input type='text' value='$mm' name='{$field}_mm' size='2' maxlength='2' onkeydown='return maskInput(event);'>";
 		echo "&nbsp;<select name='{$field}_aa'><option";
