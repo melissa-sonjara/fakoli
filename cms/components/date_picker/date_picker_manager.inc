@@ -29,7 +29,7 @@ class DatePickerManager
 			AutoForm::registerFieldRendererClass(DateTime, MooToolsDateTimeFieldRenderer);
 		}
 		
-		$theme = strtolower(Settings::getValue("date_picker_theme"));
+		$theme = strtolower(Settings::getValue("date_picker", "date_picker_theme"));
 		
 		$styles .= "<link href='/components/datepicker/css/datepicker_{$theme}/datepicker_{$theme}.css' rel='stylesheet'/>\n";
 	}
