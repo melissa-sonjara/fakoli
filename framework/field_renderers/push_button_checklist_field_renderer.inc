@@ -180,7 +180,7 @@ function <?echo $fn?>(element)
 		foreach($this->options as $value => $name)
 		{
 			$selected = (array_search($value, $values) !== FALSE) ? " selected" : "";
-			$onchange = ($this->onChange) ? "{$this->onChange}(this);" : "";
+			$onChange = ($this->onChange) ? "{$this->onChange}(this);" : "";
 	
 			$position = "";
 			if ($count == 0) $position .= " first";
