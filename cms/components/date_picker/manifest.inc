@@ -27,7 +27,6 @@ class DatePickerManifest
 	static function getStyles()
 	{
 		return array(
-			"/components/date_picker/css/datepicker_bootstrap/datepicker_bootstrap.css"
 		);
 	}
 	
