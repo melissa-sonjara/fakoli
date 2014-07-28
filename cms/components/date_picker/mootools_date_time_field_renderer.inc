@@ -81,7 +81,7 @@ window.addEvent('domready', function(){
 	{
 		timePicker: true,
 		positionOffset: {x: 5, y: 0},
-		pickerClass: '$theme',
+		pickerClass: 'datepicker_{$theme}',
 		useFadeInOut: !Browser.ie
 	});
 });
