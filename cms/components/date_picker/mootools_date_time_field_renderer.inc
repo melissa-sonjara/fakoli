@@ -32,7 +32,7 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
+Fakoli::usingFeature("field_renderers");
 
 /**
  * Field renderer for date data fields. Renders with date format
