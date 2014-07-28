@@ -70,7 +70,7 @@ class MooToolsDateTimeFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
-		$theme = strtolower(Settings::getValue("date_picker_theme"));
+		$theme = strtolower(Settings::getValue("date_picker", "date_picker_theme"));
 		
 		$script = <<<ENDSCRIPT
 		
