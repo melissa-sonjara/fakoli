@@ -166,7 +166,7 @@ function <?echo $fn?>(element, value)
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($current == $value) ? " selected" : "";
-			$onchange = ($this->onChange) ? "{$this->onChange}(this);" : "";
+			$onChange = ($this->onChange) ? "{$this->onChange}(this);" : "";
 	
 			$position = "";
 			if ($count == 0) $position .= " first";
