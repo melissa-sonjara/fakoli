@@ -75,20 +75,18 @@ class MooToolsDateTimeFieldRenderer extends FieldRenderer
 <script type="text/javascript">
 
 window.addEvent('domready', function(){
-		new Picker.Date(document.id('{$this->parent->id}_{$field}', 
-		{
-			timePicker: true,
-			positionOffset: {x: 5, y: 0},
-			pickerClass: 'datepicker_bootstrap',
-			useFadeInOut: !Browser.ie
-		});
-		
+	new Picker.Date(document.id('{$this->parent->id}_{$field}'), 
+	{
+		timePicker: true,
+		positionOffset: {x: 5, y: 0},
+		pickerClass: 'datepicker_bootstrap',
+		useFadeInOut: !Browser.ie
+	});
+});
+</script>		
 ENDSCRIPT;
 		
 		echo $script;
-	});
-
-	</script>
 	}
 
 	function renderField($field)
