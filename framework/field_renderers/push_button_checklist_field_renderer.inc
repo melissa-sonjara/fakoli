@@ -41,16 +41,17 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class PushButtonCheckListFieldRenderer extends FieldRenderer
 {
 	var $options;
-	var $horizontal = false;
+	var $horizontal = true;
 	var $onChange = ""; // optional callback on data input change
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $tabular = false; // Horizontal table-based layout
 	var $regular = false;
 	
-	function PushButtonCheckListFieldRenderer(&$form, $field, $label, $options)
+	function PushButtonCheckListFieldRenderer(&$form, $field, $label, $options, $onChange = "")
 	{
 		$this->options = $options;
-				
+		$this->onChange = $onChange;
+		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
