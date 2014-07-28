@@ -70,6 +70,8 @@ class MooToolsDateTimeFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
+		$theme = strtolower(Settings::getValue("date_picker_theme"));
+		
 		$script = <<<ENDSCRIPT
 		
 <script type="text/javascript">
@@ -79,7 +81,7 @@ window.addEvent('domready', function(){
 	{
 		timePicker: true,
 		positionOffset: {x: 5, y: 0},
-		pickerClass: 'datepicker_bootstrap',
+		pickerClass: '$theme',
 		useFadeInOut: !Browser.ie
 	});
 });
