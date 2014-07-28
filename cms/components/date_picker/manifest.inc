@@ -34,7 +34,8 @@ class DatePickerManifest
 	{
 		return array(
 					"ComponentScanComplete"	=>	array(DatePickerManager, setDefaults),
-					"Initialize"			=>	array(DatePickerManager, registerFieldRenderers)
+					"Initialize"			=>	array(DatePickerManager, registerFieldRenderers),
+					"PreProcessPage"		=>	array(DatePickerManager, addTheme)
 		);
 	}
 }
