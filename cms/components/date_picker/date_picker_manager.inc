@@ -36,6 +36,7 @@ class DatePickerManager
 
 		$theme = strtolower(Settings::getValue("date_picker", "date_picker_theme"));
 		
+		$styles .= "<link href='/components/date_picker/css/datepicker.css' rel='stylesheet'/>\n";
 		$styles .= "<link href='/components/date_picker/css/datepicker_{$theme}/datepicker_{$theme}.css' rel='stylesheet'/>\n";
 		
 		return $template;
