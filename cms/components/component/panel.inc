@@ -59,7 +59,7 @@ class Panel
 	{
 		$mgr = new ComponentManager();
 		echo "<div id='{$this->id}' $this->attrs data-url='{$this->handler}'>";
-		echo $mgr->dispatchLocalAction($this->handler);
+		if ($this->handler) echo $mgr->dispatchLocalAction($this->handler);
 		echo "</div>";
 	}
 }
