@@ -47,6 +47,7 @@ class OptimizeManager
 		Settings::setDefaultValue("optimize", "compress_javascript", "", Boolean);
 		Settings::setDefaultValue("optimize", "compress_styles", "", Boolean);
 		Settings::setDefaultValue("optimize", "compress_page_content", "", Boolean);
+		Settings::setDefaultValue("optimize", "append_timestamp", false, Boolean, "Specifies whether to include a timestamp in the generated link for optimized scripts and styles");
 	}
 	
 	static function preprocessScripts($scripts)
@@ -77,7 +78,9 @@ class OptimizeManager
 				Cache::put("script_cache_timestamp", $last_modified);
 			}
 			
-			$scripts = array("/action/optimize/scripts");
+			$scriptLink = Settings::getValue("optimize", "append_timestamp") ? "/action/optimize/scripts?".Cache::get("css_cache_timestamp") : "/action/optimize/scripts";
+				
+			$scripts = array($scriptLink);
 		}
 			
 		return $scripts;
@@ -127,8 +130,10 @@ class OptimizeManager
 				Cache::put("css_cache", $cachedStyles);
 				Cache::put("css_cache_timestamp", $last_modified);
 			}
-						
-			$styles = array("/action/optimize/styles");
+			
+			$styleLink = Settings::getValue("optimize", "append_timestamp") ? "/action/optimize/styles?".Cache::get("css_cache_timestamp") : "/action/optimize/styles";
+			
+			$styles = array($styleLink);
 		}
 			
 		return $styles;
