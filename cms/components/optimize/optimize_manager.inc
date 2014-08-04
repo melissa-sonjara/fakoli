@@ -78,7 +78,7 @@ class OptimizeManager
 				Cache::put("script_cache_timestamp", $last_modified);
 			}
 			
-			$scriptLink = Settings::getValue("optimize", "append_timestamp") ? "/action/optimize/scripts?".Cache::get("css_cache_timestamp") : "/action/optimize/scripts";
+			$scriptLink = Settings::getValue("optimize", "append_timestamp") ? "/action/optimize/scripts?".Cache::get("script_cache_timestamp") : "/action/optimize/scripts";
 				
 			$scripts = array($scriptLink);
 		}
