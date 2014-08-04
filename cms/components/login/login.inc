@@ -584,6 +584,23 @@ class LoginManager
 		Settings::setDefaultValue("login", "maximum_failed_attempts", 3, Number, "The maximum number of failed attempts before the account is locked", "Account Locking", null, 2);
 		Settings::setDefaultValue("login", "login_attempt_window", 20, Number, "The window within which the number of failed login attempts is counted (in minutes)", "Account Locking", null, 3);
 		Settings::setDefaultValue("login", "lockout_duration", 60, Number, "The duration for which the account will be locked (in minutes)", "Account Locking", null, 4);
+		
+		Settings::setDefaultValue("login", "enable_password_complexity_rules", true, Boolean, "", "Password Complexity", null, 1);
+		Settings::setDefaultValue("login", "minimum_password_length", 6, Number, "", "Password Complexity", null, 2);
+		Settings::setDefaultValue("login", "maximum_password_length", 128, Number, "", "Password Complexity", null, 3);
+		Settings::setDefaultValue("login", "require_digits", true, Boolean, "Require at least one numeric character", "Password Complexity", null, 4);
+		Settings::setDefaultValue("login", "require_uppercase", true, Boolean, "Require at least one uppercase character", "Password Complexity", null, 5);
+		Settings::setDefaultValue("login", "require_special", true, Boolean, "Require at least one special (punctuation or whitespace) character", "Password Complexity", null, 6);
+	}
+	
+	static function registerFieldRenderers()
+	{
+		global $styles;
+	
+		if (Settings::getValue("login", "enable_password_complexity_rules"))
+		{
+			AutoForm::registerFieldRendererClass(Password, PasswordComplexityFieldRenderer);
+		}
 	}
 	
 	static function upgradeComponent($version)
