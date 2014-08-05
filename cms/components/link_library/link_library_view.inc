@@ -117,14 +117,14 @@ class TabularLinkLibraryView extends LinkLibraryView
 
 	function formatLinkTitle($link)
 	{
-		if(checkRole($this->library->upload_files))
+		if(checkRole($this->library->write_access))
 		{
 			$details_icon = "icon_edit.png";
 			$fn = "LinkLibraryManager.editLink";
 			$details_link  = "<a href=\"#\" onclick=\"LinkLibraryManager.editLink({link_id}); return false;\"><img src=\"/fakoli/images/{$details_icon}\" style=\"border: none;display: inline-block;vertical-align: middle;padding-right: 4px\"></a>\n";		
 		}
 	
-		if(checkRole($this->library->delete_files))
+		if(checkRole($this->library->write_access))
 		{
 			$delete_link .= "<a href=\"#\" onclick=\"LinkLibraryManager.deleteLink({link_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/icon_delete_trash.png\"></a>\n";
 		}
