@@ -31,12 +31,10 @@ class MobileSettingsManager
 				
 		$mode = Settings::getValue("mobile_settings", "mobile_content_mode");
 		$useNative = Settings::getValue("mobile_settings", "use_native_form_controls");
-		
-		if ($isResource || $isAction || $mode == "Deliver Full Content") return;
-		
+
 		$useMobile = MobileSettingsManager::useMobile();
 		
-		if ($useMobile && !MobileSettingsManager::isTablet()) 
+		if ($useMobile && !MobileSettingsManager::isTablet())
 		{
 			$auto_form_defaults["default_layout"] = "mobile";
 		}
@@ -51,6 +49,8 @@ class MobileSettingsManager
 				AutoForm::registerFieldRendererClass(Date, NativeDateFieldRenderer);
 			}
 		}
+		
+		if ($isResource || $isAction || $mode == "Deliver Full Content") return;
 		
 		if ($mode != "Dedicated Mobile Section" || !$useMobile) return;
 		
