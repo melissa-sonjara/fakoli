@@ -36,7 +36,7 @@ Fakoli::using("search");
 /**
  * This class maps the publication table.
 */
-class LinkRecord extends DataItem implements Searchable
+class LinkRecord extends DataItem // implements Searchable
 {
 	var $table = "link_record";
 	var $primary_key = "link_id";
