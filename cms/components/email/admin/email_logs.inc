@@ -1,7 +1,7 @@
 <?php
 Fakoli::using("email");
 Fakoli::usingFeature("filter_form");
-
+/*
 $menu_item = "Email Logs";
 
 $emailLog = new EmailLog();
@@ -35,5 +35,5 @@ $script .= $table->writeScript();
 
 $filterForm->drawForm();
 $table->drawView();
-
+*/
 ?>

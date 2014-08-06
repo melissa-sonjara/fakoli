@@ -1,5 +1,5 @@
 <?php
-
+/*
 class EmailLog extends DataItem
 {
 	var $table = "email_log";
@@ -23,7 +23,7 @@ class EmailLog extends DataItem
 	 * @param string $toAddr
 	 * @param boolean $rtn
 	 */
-	static function emailManagerSendComplete($mgr, $toAddr, $rtn)
+/*	static function emailManagerSendComplete($mgr, $toAddr, $rtn)
 	{
 		// don't save log if email no sent.
 		if(!$rtn) return;
@@ -40,4 +40,4 @@ class EmailLog extends DataItem
 		$log->save();
 	}
 	
-}
+}*/
