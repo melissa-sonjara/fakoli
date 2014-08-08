@@ -49,7 +49,8 @@ Fakoli::using("text_lookup", "component");
 class TextLookupUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added enabled flag to text_lookup table"
 	);
 	
 	function TextLookupUpgradeManager()

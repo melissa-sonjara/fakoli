@@ -39,7 +39,8 @@ class TextLookup extends DataItem
 			"text_id"	=>	Number,
 			"code"		=>	String,
 			"text"		=>	HTML, // default language English
-			"class_name"	=>	String
+			"class_name"	=>	String,
+			"enabled"	=>	Boolean
 	);
 	
 
@@ -72,7 +73,7 @@ class TextLookup extends DataItem
 	 */
 	static function getText($code, $obj = null, $blank = false)
 	{
-		$texts = Query::create(TextLookup, "WHERE code=:c")
+		$texts = Query::create(TextLookup, "WHERE code=:c AND enabled=1")
 			->bind(":c", $code)
 			->execute();
 			

@@ -55,6 +55,10 @@ if ($text_id)
 {
 	$text->load($text_id);
 }
+else
+{
+	$text->enabled = true;
+}
 
 
 $redirect = "/admin/text_lookup_list";
