@@ -1070,6 +1070,10 @@ ComponentManager::fireEvent("ConfigurationBootstrap");
 
 $user = null;
 
+// Import Standard Features
+Fakoli::usingFeature("data_item", "auto_form", "field_renderers", "cache", "data_view", "grouped_data_view", "filter_form", "search_form", 
+					 "paged_list", "grouped_list", "facet_manager", "join", "tab_bar", "tree");
+
 $config["trace_level"] = Settings::getValue("debug", "trace_level");
 					
 ComponentManager::fireEvent("RegisterSessionPersistance");
