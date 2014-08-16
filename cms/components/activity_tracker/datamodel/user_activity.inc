@@ -68,6 +68,13 @@ class UserActivitySession extends DataItem
 	
 		$this->DataItem(func_get_args());
 	}	
+	
+	static function fromIdentifier($identifier)
+	{
+		return Query::create(UserActivitySession, "WHERE session_identifier=:i")
+					->bind(":i", $identifier)
+					->executeSingle();
+	}
 }
 	
 // view

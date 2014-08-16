@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("error_log", "user");
+Fakoli::using("error_log", "user", "activity_tracker");
 Fakoli::usingFeature("auto_form");
 
 $error_log_id = checkNumeric($_GET["error_log_id"]);
@@ -8,8 +8,16 @@ $error = new ErrorLog($error_log_id);
 
 $tracking = Settings::getValue("activity_tracker", "track_activity");
 
-$sid = $tracking ? "<a href='session_details?session_id={$error->session}'>{$error->session}</a>" : $error->session;
-
+if ($tracking)
+{
+	$session = UserActivitySession::fromIdentifier($error->session);
+	
+	$sid = "<a href='session_details?session_id={$session}'>$session}</a>"
+}
+else
+{
+	$sid = $error->session;
+}
 ?>
 <b>Error encountered by <?echo $error->getUserFullName()?> on <?echo $error->timestamp?>.</b>
 <p><b>Session ID: <?echo $sid?></b></p>
