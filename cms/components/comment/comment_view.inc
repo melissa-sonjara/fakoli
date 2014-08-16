@@ -94,6 +94,8 @@ class CommentView
 	
 	function buildCommentList($obj)
 	{
+		trace("Building Comment List", 3);
+		
 		if(checkRole("admin"))
 		{
 			$comments = $obj->Comments("ORDER BY date_posted DESC");	
@@ -193,6 +195,8 @@ class CommentView
 
 	function buildCommentForm()
 	{
+		trace("Building Comment Form", 3);
+		
 		global $user;
 
 		$key_name = $this->obj->getPrimaryKey();
