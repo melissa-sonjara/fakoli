@@ -38,7 +38,7 @@ $hint = ToolHint::findToolHint($code);
 
 if (!$user || !checkRole($hint->read_access))
 {
-	return;
+	Fakoli::end("OK");
 }
 
 $hint->setHidden();
