@@ -36,3 +36,9 @@ create table tool_hint_user_status
 ALTER TABLE tool_hint ADD COLUMN can_be_hidden TINYINT(3) NOT NULL DEFAULT 1;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE tool_hint ADD COLUMN read_access VARCHAR(200) NOT NULL DEFAULT '';
+
+-- END Version 1.2

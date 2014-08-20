@@ -15,7 +15,8 @@ class ToolHintsUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 		"1.0"	=>	"sql:Create tool_hint and tool_hint_user_status tables",
-		"1.1"	=>	"sql:Added can_be_hidden flag to tool_hint table"
+		"1.1"	=>	"sql:Added can_be_hidden flag to tool_hint table",
+		"1.2"	=>	"sql:Added read_access parameter to tool_hint table"
 	);
 
 	function ToolHintsUpgradeManager()

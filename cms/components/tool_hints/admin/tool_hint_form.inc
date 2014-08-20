@@ -55,6 +55,7 @@ if ($hint_id)
 	$hint->load($hint_id);
 }
 
+$roleList = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
 
 $redirect = "/admin/tool_hints";
 

@@ -35,6 +35,12 @@ Fakoli::using("tool_hints");
 
 $code = checkIdentifier($_GET["code"]);
 $hint = ToolHint::findToolHint($code);
+
+if (!checkRole($hint->read_access))
+{
+	return;
+}
+
 echo $hint->hint;
 
 if ($user && $hint->can_be_hidden && !$hint->isHidden())

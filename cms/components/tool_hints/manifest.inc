@@ -59,6 +59,8 @@ class ToolHintsManifest
 		);
 	}
 	
+	var $allow_sessionless_handlers = true;
+	
 	static function getScripts()
 	{
 		return array("/components/tool_hints/js/tool_hint.js");
