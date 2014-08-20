@@ -119,7 +119,7 @@ class BlogSubscriptionManager
 			}
 		}
 			
-		$message .= formatItems($articles, "{BlogSubscriptionManager::formatArticleMessage}","\n");
+		$message .= formatItems($articles, "{BlogSubscriptionManager::formatArticleMessage}","\n<br/><hr/><br/>\n");
 		$message .= $this->formatUnsubscribeMessageFooter($subscriber);
 			
 		$emailHandler = new EmailHandler($subscriber->subscriber_email, $subject, $message);
