@@ -57,6 +57,8 @@ abstract class AbstractSearchResult
 	abstract function relevance();
 	abstract function title();
 	abstract function date();
+
+	abstract function format($format);
 	
 	/**
 	 * Display the item title and any other essential details for
@@ -72,6 +74,7 @@ abstract class AbstractSearchResult
 	{
 		return "<img class='search_result_icon' src='$icon' alt='$alt'/>\n";
 	}
+		
 }
 
 ?>
