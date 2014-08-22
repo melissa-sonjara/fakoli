@@ -266,6 +266,7 @@ class PageSearchResult extends AbstractSearchResult
 	function getPrimaryKey() { return $this->item->getPrimaryKey(); }
 	function get($field) { return $this->item->get($field); }
 	function prettifyClassName($plural = false) { return $this->item->prettifyClassName($plural = false); }
+	function format($format) { return $this->item->format($format); }
 	
 	function relevance()
 	{
