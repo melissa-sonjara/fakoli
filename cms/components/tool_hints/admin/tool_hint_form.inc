@@ -55,8 +55,6 @@ if ($hint_id)
 	$hint->load($hint_id);
 }
 
-$roleList = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
-
 $redirect = "/admin/tool_hints";
 
 $form = new AutoForm($hint);
@@ -65,6 +63,8 @@ $form->required("code", "title", "hint");
 
 $form->button("Cancel", $redirect);
 $form->allowDelete = true;
+
+$roleList = new CheckListFieldRenderer($form, "read_access", "Read Access", SiteRole::getRolesArray());
 
 if($hint_id)
 {
