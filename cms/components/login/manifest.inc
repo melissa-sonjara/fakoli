@@ -48,6 +48,11 @@ class LoginManifest
 	
 	var $allow_sessionless_handlers = true;
 	
+	static function getScripts()
+	{
+		return array("/components/login/js/ajax_login_manager.js");
+	}
+	
 	static function getAdminMenu()
 	{
 		return null;	
