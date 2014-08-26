@@ -198,6 +198,7 @@ class ComponentPageView
 		}
 		
 		$script = ComponentManager::fireEvent("PostProcessScript", $script);
+		$styles = ComponentManager::fireEvent("PostProcessStyles", $styles);
 		
 		// Populate global variable references
 		
