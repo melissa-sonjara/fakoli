@@ -60,29 +60,29 @@ var Slideshow = (function()
 		{
 	    	this.setOptions(options);
 	    	
-			this.slideshow= $('slideshow');
-			this.viewport = $('viewport');
-			this.gallery = $('gallery');
-			this.progress = $('progress');
+			this.slideshow= document.id('slideshow');
+			this.viewport = document.id('viewport');
+			this.gallery = document.id('gallery');
+			this.progress = document.id('progress');
 			this.bar = $$('#progress .bar')[0];
 			this.progressText = $$('#progress .text')[0];
 			this.progressBorder = $$('#progress .border')[0];
-			this.progressCount = $('progress_count');
-			this.strip = $('thumbnail_strip');
-			this.scroller = $('thumbnail_scroll');
-			this.caption = $('caption');
-			this.credit = $('credit');
-			this.creditText = $('creditText');
-			this.highlight = $('thumbnail_highlight');
-			this.playButton = $('play_button');
-			this.infoButton = $('info_button');
+			this.progressCount = document.id('progress_count');
+			this.strip = document.id('thumbnail_strip');
+			this.scroller = document.id('thumbnail_scroll');
+			this.caption = document.id('caption');
+			this.credit = document.id('credit');
+			this.creditText = document.id('creditText');
+			this.highlight = document.id('thumbnail_highlight');
+			this.playButton = document.id('play_button');
+			this.infoButton = document.id('info_button');
 			
-			this.scrollLeftButton = $('scroll_left');
-			this.scrollRightButton = $('scroll_right');
+			this.scrollLeftButton = document.id('scroll_left');
+			this.scrollRightButton = document.id('scroll_right');
 			
-			this.zoomOverlay = $('zoom_overlay');
-			this.zoomIn = $('zoom_in');
-			this.zoomOut = $('zoom_out');
+			this.zoomOverlay = document.id('zoom_overlay');
+			this.zoomIn = document.id('zoom_in');
+			this.zoomOut = document.id('zoom_out');
 								   
 			this.scrollLeftButton.addEvent('mouseover', function() 	{ new Fx.Tween(this.scrollLeftButton, {duration: 400}).start('background-color', '#ccc', '#e8ac1c');}.bind(this));
 			this.scrollLeftButton.addEvent('mouseout', 	function() 	{ new Fx.Tween(this.scrollLeftButton,  {duration: 400}).start('background-color', '#e8ac1c', '#ccc');}.bind(this));
@@ -109,7 +109,7 @@ var Slideshow = (function()
 			
 			this.scroller.setStyles({'position': 'absolute'});
 			
-			this.zoomSlider = new Slider($('zoom_scale'), $('zoom_thumb'), { steps: 100, 
+			this.zoomSlider = new Slider(document.id('zoom_scale'), document.id('zoom_thumb'), { steps: 100, 
 																	mode: 'vertical', 
 																	onChange: function(step) {this.setZoomPercent(step); }.bind(this) 
 																  }).set(100);

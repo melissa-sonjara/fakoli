@@ -38,7 +38,7 @@ $contactUs = new ContactUs();
 $form = new AutoForm($contactUs, "POST", "/action/email/contact_us_dialog", "ContactUs_form");
 	
 $form = EmailHelper::buildContactUsForm($form);
-$form->ajaxSubmit("function(result) {new EmailManager().contactUsResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {new EmailManager().contactUsResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "new EmailManager().closeDialog()", null, true);
 
 if ($method == "POST") 

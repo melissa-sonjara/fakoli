@@ -120,7 +120,7 @@ var EmailAttachmentManager =  new Class
 	
 	disposeElt: function(id)
 	{
-		var elt = $(this.idTagName + '_' + id);
+		var elt = document.id(this.idTagName + '_' + id);
 		if(elt)
 		{
 			elt.dispose();
@@ -174,7 +174,7 @@ var EmailDocumentAttachmentManager =  new Class
 		}
 		else
 		{
-			$("DocumentSelect_form__error").set('html', response);
+			document.id("DocumentSelect_form__error").set('html', response);
 		}		
 	},
 });

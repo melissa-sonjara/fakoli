@@ -11,8 +11,8 @@ var VideoGallery = new Class(
 	initialize: function(id)
 	{
 		this.id = id;
-		this.scrollLeft = $(id + '_scroll_left');
-		this.scrollRight = $(id + '_scroll_right');
+		this.scrollLeft = document.id(id + '_scroll_left');
+		this.scrollRight = document.id(id + '_scroll_right');
 	
 		this.scrollLeft.setStyle('cursor', 'pointer');
 		this.scrollLeft.addEvents(
@@ -30,8 +30,8 @@ var VideoGallery = new Class(
 			'click': function(e) { new Event(e).stop(); this.scroll(1); }.bind(this)
 		});
 		
-		this.gallery = $(id);
-		this.listView = $(id + "_listView");
+		this.gallery = document.id(id);
+		this.listView = document.id(id + "_listView");
 		this.normalizePosition();
 	},
 	

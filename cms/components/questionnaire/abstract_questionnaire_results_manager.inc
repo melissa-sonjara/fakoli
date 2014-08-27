@@ -203,7 +203,7 @@ abstract class AbstractQuestionnaireResultsManager extends AbstractQuestionnaire
 
 	$item->filter = new InclusionFilter();
 	$form = new AutoForm($item, "POST", "/action/{$component}/{$handler}?$pk={$item->$pk}", "QuestionNames_form");
-		$form->ajaxSubmit("function(result) {new questionnaireMgr.questionNamesFormResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		$form->ajaxSubmit("function(result) {new questionnaireMgr.questionNamesFormResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 		$questions = $this->getQuestions();
 		$table = new DataListView($questions, "QuestionnaireQuestions");

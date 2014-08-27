@@ -25,9 +25,9 @@ var EmailManager =  (function()
 			
 		createMergeCode: function(relation, field)
 		{
-			var map = $('MergeCode_form_map');
-			var name = $('MergeCode_form_name');
-			var description = $('MergeCode_form_description');
+			var map = document.id('MergeCode_form_map');
+			var name = document.id('MergeCode_form_name');
+			var description = document.id('MergeCode_form_description');
 			
 			if(map)
 				map.value = relation + '.' + field;
@@ -54,7 +54,7 @@ var EmailManager =  (function()
 		
 		showAdvancedFeatures: function()
 		{
-			var class_name = $('EmailTemplate_form_class_name').value;
+			var class_name = document.id('EmailTemplate_form_class_name').value;
 			this.dialog = floatingPopup('advanced_feature_popup', 'Advanced Features', '/action/email/advanced_email_features?class_name=' + class_name, '500px', 'auto', true, true);
 		},
 		
@@ -73,7 +73,7 @@ var EmailManager =  (function()
 			}
 			else
 			{
-				var err = $('MailTo_form__error');
+				var err = document.id('MailTo_form__error');
 				err.set('html', response);
 				err.setStyle('display', 'table-cell');
 			}
@@ -93,7 +93,7 @@ var EmailManager =  (function()
 			}
 			else
 			{
-				var err = $('ContactOrganizer_form__error');
+				var err = document.id('ContactOrganizer_form__error');
 				err.set('html', response);
 				err.setStyle('display', 'table-cell');
 			}
@@ -114,7 +114,7 @@ var EmailManager =  (function()
 			}
 			else
 			{
-				var err = $('ContactUs_form__error');
+				var err = document.id('ContactUs_form__error');
 				err.set('html', response);
 				err.setStyle('display', 'table-cell');
 			}

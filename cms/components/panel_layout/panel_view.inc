@@ -153,13 +153,13 @@ class PanelView
 		
 		$this->script .= <<<ENDSCRIPT
 <script type="text/javascript">
-var {$this->id}_body = $('{$this->id}_body');
+var {$this->id}_body = document.id('{$this->id}_body');
 if ({$this->id}_body.panel)
 {
 	var panel = {$this->id}_body.panel;
 	
 	panel.body = {$this->id}_body;
-	panel.header = $('{$this->id}_header');
+	panel.header = document.id('{$this->id}_header');
 }
 </script>
 ENDSCRIPT;

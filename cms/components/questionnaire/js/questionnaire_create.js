@@ -64,7 +64,7 @@ var QuestionnaireCreateManager =  new Class
 			{ 
 				if (response == "OK") 
 				{
-					var tr = $(this.qPk + '_' + question_id);
+					var tr = document.id(this.qPk + '_' + question_id);
 					tr.setStyle("display", "none");
 				}
 				else
@@ -96,7 +96,7 @@ var QuestionnaireCreateManager =  new Class
 				 { 
 					if (response == "OK") 
 					{
-						var tr = $(this.xrefPk + '_' + xref_id);
+						var tr = document.id(this.xrefPk + '_' + xref_id);
 						tr.setStyle("display", "none");
 					}
 					else

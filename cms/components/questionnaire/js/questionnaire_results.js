@@ -55,7 +55,7 @@ var QuestionnaireResultsManager =  new Class
 			window.location.reload();
 		}
 
-		$('QuestionNames_form__error').set('html', response);
+		document.id('QuestionNames_form__error').set('html', response);
 	},
 
 	/**
@@ -74,7 +74,7 @@ var QuestionnaireResultsManager =  new Class
 			{ 
 				if (response == "OK")
 				{
-					var elt = $('response_id_' + response_id);
+					var elt = document.id('response_id_' + response_id);
 					var tr = findAncestor(elt, "tr");
 					var td = tr.getChildren("td")[3];
 					var a = td.getChildren("a")[0];

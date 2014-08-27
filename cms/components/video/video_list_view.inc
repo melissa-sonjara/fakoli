@@ -115,7 +115,7 @@ ENDSCRIPT;
 	
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
-window.addEvent('domready', function() { $('videos_box').resizable(); });
+window.addEvent('domready', function() { document.id('videos_box').resizable(); });
 </script>
 ENDSCRIPT;
 

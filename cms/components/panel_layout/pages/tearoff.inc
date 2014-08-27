@@ -17,7 +17,7 @@ function stretch()
 			((document.documentElement.clientHeight == 0) ? document.body.clientHeight : document.documentElement.clientHeight)
 											 : window.innerHeight;
 
-	$('tearoff').setStyles({width: cw, height: ch});
+	document.id('tearoff').setStyles({width: cw, height: ch});
 	layout.calculateLayout(); 
 }
 
@@ -27,7 +27,7 @@ window.addEvent('domready', function()
 	layout.setup('tearoff', {stretch: true, replace: true, 
 		onLoad: function()
 		{
-			var titleField = $('tearoff').getElement(".tearoff_title");
+			var titleField = document.id('tearoff').getElement(".tearoff_title");
 			if (titleField != null) document.title = titleField.get('text');	
 		} 
 	});

@@ -80,7 +80,7 @@ var QuestionnaireSendManager =  new Class
 	{
 		if(!msg) return;
 		
-		var div = $('questionnaire_heading');
+		var div = document.id('questionnaire_heading');
 		if(!div) return;
 		var elt = new Element('div', {'id': 'warning'}); 
 		
@@ -95,7 +95,7 @@ var QuestionnaireSendManager =  new Class
 	{
 		if(!msg) return;
 		
-		var elt = $('action_result');
+		var elt = document.id('action_result');
 		if(!elt) return;
 		
 		var success = "OK";
@@ -174,12 +174,12 @@ var QuestionnaireSendManager =  new Class
 	 */
 	updateStatus: function(status)
 	{
-		var elt = $('status_' + this.item_id);
+		var elt = document.id('status_' + this.item_id);
 		if(!elt) return;
 		
 		elt.set("html", status);
 		
-		elt = $('action_' + this.item_id);
+		elt = document.id('action_' + this.item_id);
 		if(!elt) return;
 			
 		elt.getChildren("option").each(function(option)
@@ -216,7 +216,7 @@ var QuestionnaireSendManager =  new Class
 			{			
 				var responseFields = response.split("|");	
 				
-				var elt = $('action_result');
+				var elt = document.id('action_result');
 				if(!elt) return;
 			    var msg = responseFields[1];
 				this.showActionResult(msg, responseFields[0]);
@@ -254,7 +254,7 @@ var QuestionnaireSendManager =  new Class
 		}
 		else
 		{
-			$('SendTestEmail_form__error').set('html', response);
+			document.id('SendTestEmail_form__error').set('html', response);
 		}
 	},
 	
@@ -273,11 +273,11 @@ var QuestionnaireSendManager =  new Class
 		var elt = "";
 		if(!this.dashboard_action)
 		{
-			elt = $('action_result');
+			elt = document.id('action_result');
 		}
 		else
 		{
-			elt = $('action_result_' + this.item_id);	
+			elt = document.id('action_result_' + this.item_id);	
 		}
 		
 		if(!elt) return;
@@ -319,7 +319,7 @@ var QuestionnaireSendManager =  new Class
 		}
 		else
 		{
-			$('Reminder_form__error').set('html', response);
+			document.id('Reminder_form__error').set('html', response);
 		}
 	},
 	

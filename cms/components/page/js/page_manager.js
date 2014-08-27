@@ -27,7 +27,7 @@ var PageManager = (function()
 			}
 			else
 			{
-				$('Page_form__error').set({'text': result, 'display': 'table-cell'});
+				document.id('Page_form__error').set({'text': result, 'display': 'table-cell'});
 			}
 		},
 		

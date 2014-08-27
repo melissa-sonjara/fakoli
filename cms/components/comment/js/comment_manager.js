@@ -29,12 +29,12 @@ var CommentManager =  new Class
 		{
 			this.closeDialog();
 			var responseFields = response.split("|");	
-			var elt = $('comment_' + this.comment_id + '_title');
+			var elt = document.id('comment_' + this.comment_id + '_title');
 			if(elt)
 			{
 				elt.set("text", responseFields[1]);
 			}
-			elt = $('comment_' + this.comment_id + '_message');
+			elt = document.id('comment_' + this.comment_id + '_message');
 			if(elt)
 			{
 				elt.set("text", responseFields[2]);
@@ -43,14 +43,14 @@ var CommentManager =  new Class
 		else if(response == "DELETE")
 		{
 			this.closeDialog();
-			elt = $('comment_' + this.comment_id);
+			elt = document.id('comment_' + this.comment_id);
 			if(elt)
 			{
 				elt.setStyle('display', 'none');
 			}
 		}
 		else
-			$('EditComment_form__error').set('html', response);
+			document.id('EditComment_form__error').set('html', response);
 	},
 
 

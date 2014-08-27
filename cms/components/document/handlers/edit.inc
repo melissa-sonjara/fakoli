@@ -57,7 +57,7 @@ $form->annotate("file_upload", "The maximum allowed file size is ".DocumentManag
 
 $form->readonly("file");
 $form->annotate("keywords", "Separate keywords with a comma");
-$form->ajaxSubmit("function(result) {editResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {editResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->allowDelete = true;
 $form->onDelete = onDeleteDocument;
 

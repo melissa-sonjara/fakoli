@@ -20,7 +20,7 @@ var LibraryManager =  (function()
 				window.location.reload();
 			else
 			{
-				var err = $('DocumentDetails_form__error');
+				var err = document.id('DocumentDetails_form__error');
 				err.set('html', response);
 				err.setStyle('display', 'table-cell');
 			}		
@@ -81,7 +81,7 @@ var LibraryManager =  (function()
 				window.location.reload();
 			else
 			{
-				var err = $('Fileshare_form__error');
+				var err = document.id('Fileshare_form__error');
 				err.set('html', response);
 				err.setStyle('display', 'table-cell');
 			}
@@ -106,7 +106,7 @@ var LibraryManager =  (function()
 				
 				onSuccess: function(response) 
 				{ 
-					var box = $('member_scrollbox');
+					var box = document.id('member_scrollbox');
 
 					var children = box.getChildren();
 								
@@ -131,9 +131,9 @@ var LibraryManager =  (function()
 		 */
 		closeProgressiveSearch: function()
 		{
-			var list = $('LibraryGroupMembers_form_name_progressive_search');
+			var list = document.id('LibraryGroupMembers_form_name_progressive_search');
 			list.setStyles({'display': 'none'});	
-			var input = $('LibraryGroupMembers_form_name');
+			var input = document.id('LibraryGroupMembers_form_name');
 			if(input)
 			{
 				input.set('value', '');
@@ -161,7 +161,7 @@ var LibraryManager =  (function()
 				
 				onSuccess: function(response) 
 				{ 
-					var box = $('member_scrollbox');
+					var box = document.id('member_scrollbox');
 					
 					var divId = "user_id_" + user_id;
 					var div = new Element('div', {'id': divId, 'class': ''});
@@ -186,7 +186,7 @@ var LibraryManager =  (function()
 				this.closeDialog();
 			else
 			{
-				var err = $('RolePermission_form__error');
+				var err = document.id('RolePermission_form__error');
 				err.set('html', response);
 				err.setStyle('display', 'table-cell');
 			}	

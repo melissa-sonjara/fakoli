@@ -59,7 +59,7 @@ if(count($roles) > 0)
 	$allRoles = implode(",", array_keys(reindexList($roles, "role")));
 
 $form = new AutoForm($library, "POST", "/action/fileshare/global_permissions_form?document_library_id={$document_library_id}", "RolePermission_form");
-$form->ajaxSubmit("function(result) {new LibraryManager().permissionsEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {new LibraryManager().permissionsEdited(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $permissionsSelect = new RadioButtonFieldRenderer($form, "read_access", "Permissions", FileshareManager::getGlobalPermissionOptions());
 

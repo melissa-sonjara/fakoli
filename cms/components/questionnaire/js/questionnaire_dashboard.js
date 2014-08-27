@@ -169,7 +169,7 @@ var QuestionnaireDashboardManager =  new Class
 			go(this.questionnaire_form_identifier + '?' + this.itemPk + '=' + responseFields[1]);
 		}
 
-		$('CloneQuestionnaire_form__error').set('html', response);
+		document.id('CloneQuestionnaire_form__error').set('html', response);
 	},
 	
 	closeDialog: function()

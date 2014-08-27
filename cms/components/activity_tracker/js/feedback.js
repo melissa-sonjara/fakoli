@@ -11,14 +11,14 @@ var FeedbackPanel = (function()
 		
 		initialize: function()
 		{
-			this.openPanel = $('feedback_open');
+			this.openPanel = document.id('feedback_open');
 			if (!this.openPanel) return;
 			
-			this.closedPanel = $('feedback_closed');
-			this.closePanelLink = $('feedback_open_title');
-			this.sendLink = $('feedback_send_button');
-			this.textarea = $('feedback_textarea');
-			this.thanks = $('feedback_thanks');
+			this.closedPanel = document.id('feedback_closed');
+			this.closePanelLink = document.id('feedback_open_title');
+			this.sendLink = document.id('feedback_send_button');
+			this.textarea = document.id('feedback_textarea');
+			this.thanks = document.id('feedback_thanks');
 			
 			this.closePanelLink.addEvent('click', function(e) { new Event(e).stop(); this.closeFeedback(); }.bind(this));
 			this.closedPanel.addEvent('click', function(e) { new Event(e).stop(); this.openFeedback(); }.bind(this));

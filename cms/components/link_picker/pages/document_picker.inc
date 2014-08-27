@@ -58,12 +58,12 @@ function showLibrary(id)
 
 function documentSelected()
 {
-	$('linkButton').disabled = false;
+	document.id('linkButton').disabled = false;
 }
 
 function linkToDocument()
 {
-	id = $('files_value').value;
+	id = document.id('files_value').value;
 	insertLink("/action/document/download?document_id=" + id);
 	window.close();
 }

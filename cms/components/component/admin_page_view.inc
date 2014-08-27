@@ -217,7 +217,7 @@ window.addEvent('domready', function() {
 		onBackground: function(toggler, element){
 			toggler.setStyles({'background-image': 'url(/fakoli/images/section_closed.png)'});
 		}
-	}, $('accordion'));
+	}, document.id('accordion'));
 
 	});
 </script>

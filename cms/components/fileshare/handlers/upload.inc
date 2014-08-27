@@ -54,7 +54,7 @@ $document = new Document();
 $document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "file", "author", "publication_date", "document_library_id", "owner_id", "allow_access");
 
 $form = new AutoForm($document, "POST", "/action/fileshare/upload?document_library_id=$document_library_id");
-$form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {uploadResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->hide("publication_date", "document_library_id", "owner_id");
 $form->required("title");
 $form->validator->add(new RequiredFileValidator("file", "File", "You must select a file to upload."));

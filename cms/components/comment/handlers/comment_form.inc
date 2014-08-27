@@ -35,7 +35,7 @@ else
 
 $form = new AutoForm($comment, "POST", "/action/comment/comment_form?comment_id=$comment_id&xref_class=$xref_class&key_name=$key_name&key_value=$key_value&xref_component=$xref_component", "EditComment_form");
 $form->alias("title", "Subject");
-$form->ajaxSubmit("function(result) {new Comment().{$returnFn}(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {new Comment().{$returnFn}(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->required("description");
 
 // To do - make it configurable whether to include title?

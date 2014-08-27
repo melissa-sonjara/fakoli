@@ -44,7 +44,7 @@ $sectionContent->filter = $filter;
 $sectionContent->load($ids[0]); 
 
 $form = new AutoForm($sectionContent, "POST", "/action/section/content_properties?$qs&scope=$scope", "SectionContent_form");
-$form->ajaxSubmit("function(result) {sectionContentManager.propertiesChanged(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {sectionContentManager.propertiesChanged(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "sectionContentManager.cancel()", null, true);
 
 

@@ -83,7 +83,7 @@ var LinkPicker =  (function()
 
 		documentSelected: function()
 		{
-			$('linkButton').disabled = false;
+			document.id('linkButton').disabled = false;
 		},
 		
 		toggleDocumentSelected: function(elt, document_id)
@@ -101,7 +101,7 @@ var LinkPicker =  (function()
 			this.tr = tr;
 			this.document_id = document_id;
 	
-			$('linkButton').set("disabled", "");
+			document.id('linkButton').set("disabled", "");
 		},
 		
 		documentPickerLinkToDocument: function()
@@ -118,7 +118,7 @@ var LinkPicker =  (function()
 	
 		linkToDocument: function()
 		{
-			id = $('files_value').value;
+			id = document.id('files_value').value;
 			this.insertLink("/action/document/download?document_id=" + id);
 		}
 		

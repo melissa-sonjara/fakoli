@@ -26,8 +26,8 @@ var ForumSubscriptionManager = new Class(
 		}
 		else
 		{
-			$('ForumSubscription_form__error').set('html', response);		
-			$('ForumSubscription_form__error').setStyle('display', 'table-cell');		
+			document.id('ForumSubscription_form__error').set('html', response);		
+			document.id('ForumSubscription_form__error').setStyle('display', 'table-cell');		
 		}
 	},
 	

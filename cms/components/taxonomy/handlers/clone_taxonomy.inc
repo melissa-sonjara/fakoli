@@ -51,7 +51,7 @@ $clone->filter = new InclusionFilter("taxonomy_id", "taxonomy_name", "identifier
 $form = new AutoForm($clone, "POST", "/action/taxonomy/clone_taxonomy?taxonomy_id=$taxonomy_id", "CloneTaxonomy_form");
 $form->required("taxonomy_name", "identifier");
 
-$form->ajaxSubmit("function(result) {TaxonomyAdmin.cloneTaxonomyResponse(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {TaxonomyAdmin.cloneTaxonomyResponse(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "TaxonomyAdmin.closeCloneDialog()", null, true);
 $form->customSaveHandler = array(TaxonomyManager, cloneTaxonomy);
 

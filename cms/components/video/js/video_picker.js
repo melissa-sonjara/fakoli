@@ -84,7 +84,7 @@ var VideoPicker =  (function()
 		
 		updateUI: function()
 		{
-			var button = $('insert_video_button');
+			var button = document.id('insert_video_button');
 			
 			if (!button) return;
 			
@@ -100,8 +100,8 @@ var VideoPicker =  (function()
 		
 		insert: function()
 		{
-			var mode = $('insert_mode').value;
-			var transcript = $('transcript').checked;
+			var mode = document.id('insert_mode').value;
+			var transcript = document.id('transcript').checked;
 			
 			var insertion = "";
 			

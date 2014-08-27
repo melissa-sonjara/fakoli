@@ -44,7 +44,7 @@ $taxonomy = new Taxonomy($taxonomy_id);
 $taxonomy->filter = new InclusionFilter("taxonomy_id");
 $form = new AutoForm($taxonomy, "POST", "/action/taxonomy/taxonomy_terms_import?taxonomy_id=$taxonomy_id");
 
-$form->ajaxSubmit("function(result) {taxonomyAdmin.onSave(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {taxonomyAdmin.onSave(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $form->submitLabel = "Import Taxonomy Terms";
 

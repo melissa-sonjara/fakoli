@@ -865,7 +865,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 		$email->recipients = $user->email;
 
 		$form = new AutoForm($email, "POST", "/action/{$component_name}/{$dialog}?{$itemPk}={$item->$itemPk}&dashboard=$dashboard", "SendTestEmail_form");
-		$form->ajaxSubmit("function(result) {questionnaireSendMgr.testEmailResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		$form->ajaxSubmit("function(result) {questionnaireSendMgr.testEmailResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 		$form->required("recipients");
 		$recipientRenderer = new EmailListFieldRenderer($form, "recipients");
 		$recipientRenderer->removeDuplicates = true;
@@ -897,7 +897,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 
 		$item->filter = new InclusionFilter("title", "recipients", "sender_email", "message", "subject");
 		$form = new AutoForm($item, "POST", "/action/{$component_name}/{$handler}?{$pk}={$id}&dashboard=$dashboard", "Reminder_form");
-		$form->ajaxSubmit("function(result) {questionnaireSendMgr.reminderDialogResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		$form->ajaxSubmit("function(result) {questionnaireSendMgr.reminderDialogResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 		$form->getRenderer("message")->rows = 10;
 		$form->submitLabel = "Send Reminders";

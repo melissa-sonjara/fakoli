@@ -58,7 +58,7 @@ $form = new AutoForm($email);
 $form = new AutoForm($email, "POST", "/action/email/mail_to?to=$to&subject=$subject&message=$message", "MailTo_form");
 
 $form->hide("sender_email", "class_name", "name");
-$form->ajaxSubmit("function(result) {new EmailManager().sendMailTo(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {new EmailManager().sendMailTo(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "new EmailManager().closeMailToDialog()", null, true);
 $form->submitLabel = "Send Email";
 $form->validator->add(new EmailListValidator("recipients", "Recipients"));

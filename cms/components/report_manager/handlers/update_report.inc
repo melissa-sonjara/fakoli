@@ -65,7 +65,7 @@ $form = new AutoForm($report, "POST", "/action/report_manager/update_report?repo
 $form->required("title");
 $form->hide("column_order", "configuration", "manager_class", "shared", "user_id");
 
-$form->ajaxSubmit("function(result) {ReportManager.reportSaved(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {ReportManager.reportSaved(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 	
 $form->submitLabel = "Save Report";
 $form->allowDelete = $report->allowDelete();

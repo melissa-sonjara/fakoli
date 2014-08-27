@@ -99,7 +99,7 @@ $topic = ($topic_id) ? new ForumTopic($topic_id) : null;
 $helper = new ForumSubscriptionHelper($forum, $topic);
 
 $form = new AutoForm($forumSubscription, "POST", "/action/forum/subscription_dialog?forum_id=$forum_id&topic_id=$topic_id&forum_subscription_id={$form->data->forum_subscription_id}");
-$form->ajaxSubmit("function(result) {forumSubscriptionMgr.subscriptionDialogResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {forumSubscriptionMgr.subscriptionDialogResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 $form->hide("user_id", "forum_id", "topic_id");
 $typeSelect = new RadioButtonFieldRenderer($form, "subscription_type", "", $helper->formatSubscriptionOptions());

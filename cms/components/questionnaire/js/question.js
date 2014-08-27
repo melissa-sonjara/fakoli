@@ -10,18 +10,18 @@ var QuestionManager =  new Class
 	initialize: function(question_type_id, form_id)
 	{
 		this.form_id = form_id;
-		this.form = $(form_id);
+		this.form = document.id(form_id);
 		this.createRequired();
 		this.setQuestionTypeFields(question_type_id);
 		
 		me = this;
-		$(this.form_id + "_question_type_id").addEvent('change', function(e) {me.onChangeQuestionType(this); });
+		document.id(this.form_id + "_question_type_id").addEvent('change', function(e) {me.onChangeQuestionType(this); });
 
 	},
 		
 	createRequired: function()
 	{
-		var elt = $(this.form_id + '_required');
+		var elt = document.id(this.form_id + '_required');
 			
 		// Save the last used requiredType to know how to retrieved checked or count values
 		this.requiredType = elt.get("type");
@@ -31,7 +31,7 @@ var QuestionManager =  new Class
 		
 	setQuestionTypeOptions: function()
 	{
-		var typeElt = $('question_type_id');
+		var typeElt = document.id('question_type_id');
 		this.onChangeQuestionType(typeElt);
 	},
 	
@@ -202,7 +202,7 @@ var QuestionManager =  new Class
 	 */
 	renderRequired: function(type)
 	{
-		var elt = $(this.form_id + '_required');	
+		var elt = document.id(this.form_id + '_required');	
 		var value = 0;
 		
 		if(this.requiredType == "checkbox")
@@ -261,7 +261,7 @@ var QuestionManager =  new Class
 	
 	hide_tr: function(id)
 	{
-		var elt = $(id);
+		var elt = document.id(id);
 		if(!elt) return;
 	
 		var tr = findAncestor(elt, "tr");
@@ -272,7 +272,7 @@ var QuestionManager =  new Class
 	
 	show_tr: function(id)
 	{
-		var elt = $(id);
+		var elt = document.id(id);
 		if(!elt) return;
 						
 		var tr = findAncestor(elt, "tr");
@@ -282,7 +282,7 @@ var QuestionManager =  new Class
 	
 	hideRequired: function()
 	{
-		var requiredElt = $(this.form_id + '_required');
+		var requiredElt = document.id(this.form_id + '_required');
 		requiredElt.setStyle('display', 'none');
 	
 		this.form.getElements("label[for='required']").each(function(label) 

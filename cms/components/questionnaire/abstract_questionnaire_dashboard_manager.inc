@@ -137,7 +137,7 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 
 		$item->filter = new InclusionFilter($title_field);
 		$form = new AutoForm($item, "POST", "/action/{$component_name}/{$cloneDialog}?{$itemPk}={$item->$itemPk}", "CloneQuestionnaire_form");
-		$form->ajaxSubmit("function(result) {questionnaireMgr.cloneQuestionnaireResult(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+		$form->ajaxSubmit("function(result) {questionnaireMgr.cloneQuestionnaireResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 		$form->required($title_field);
 		$form->unique($title_field);
 		$form->button("Cancel", "questionnaireMgr.closeDialog()", null, true);

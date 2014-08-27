@@ -58,7 +58,7 @@ $form->hide("taxonomy_id");
 $form->required("term");
 $form->allowDelete = true;
 
-$form->ajaxSubmit("function(result) {taxonomyAdmin.onSave(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {taxonomyAdmin.onSave(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "taxonomyAdmin.closeTermDialog()", null, true);
 
 if ($method == "POST")

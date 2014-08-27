@@ -60,27 +60,27 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 function {$this->parent->id}_{$field}_showList(e)
 {
 	new Event(e).stop();
-	var popup = $('{$this->parent->id}_{$field}_list_popup');
-	var txt = $('{$this->parent->id}_{$field}');
+	var popup = document.id('{$this->parent->id}_{$field}_list_popup');
+	var txt = document.id('{$this->parent->id}_{$field}');
 	var coords = txt.getCoordinates();
 	popup.setStyles({'display': 'block'});
-	var doc = $(document.body ? document.body : document.documentElement);
+	var doc = document.id(document.body ? document.body : document.documentElement);
 	doc.addEvent('click', {$this->parent->id}_{$field}_hideList);
 }
 	
 function {$this->parent->id}_{$field}_hideList()
 {
-	var popup = $('{$this->parent->id}_{$field}_list_popup');
+	var popup = document.id('{$this->parent->id}_{$field}_list_popup');
 	popup.setStyles({'display': 'none'});
-	var doc = $(document.body ? document.body : document.documentElement);
+	var doc = document.id(document.body ? document.body : document.documentElement);
 	doc.removeEvent('click', {$this->parent->id}_{$field}_hideList);
 }
 	
 function {$this->parent->id}_{$field}_selectItem(elt, id)
 {
-	var hidden = $('{$this->parent->id}_{$field}');
+	var hidden = document.id('{$this->parent->id}_{$field}');
 	
-	var txt = $('{$this->parent->id}_{$field}_text');
+	var txt = document.id('{$this->parent->id}_{$field}_text');
 	hidden.set('value', id);
 	
 	if (id)
@@ -93,7 +93,7 @@ function {$this->parent->id}_{$field}_selectItem(elt, id)
 	
 window.addEvent('domready', function()
 {
-	var popup = $('{$this->parent->id}_{$field}_list_popup');
+	var popup = document.id('{$this->parent->id}_{$field}_list_popup');
 	popup.addEvent('click', function(e) { new Event(e).stop(); });
 });
 </script>

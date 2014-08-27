@@ -95,7 +95,7 @@ else
 <script type="text/javascript">
 <? echo $validator->writeScript(); ?>
 
-$('folder_form').iFrameFormRequest({'onRequest': function() { return validate_folder_form($('folder_form')); }, 'onComplete': createFolderResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
+document.id('folder_form').iFrameFormRequest({'onRequest': function() { return validate_folder_form(document.id('folder_form')); }, 'onComplete': createFolderResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
 
 </script>
 <form name="folder_form" id="folder_form" method="POST" action="/action/document/create_folder?document_library_id=<?echo $document_library_id?>">

@@ -116,32 +116,32 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 function {$this->parent->id}_{$field}_showTree(e)
 {
 	new Event(e).stop();
-	var popup = $('{$this->parent->id}_{$field}_tree_popup');
-	var txt = $('{$this->parent->id}_{$field}');
+	var popup = document.id('{$this->parent->id}_{$field}_tree_popup');
+	var txt = document.id('{$this->parent->id}_{$field}');
 	var coords = txt.getCoordinates();
 	popup.setStyles({'display': 'block'});
-	var doc = $(document.body ? document.body : document.documentElement);
+	var doc = document.id(document.body ? document.body : document.documentElement);
 	doc.addEvent('click', {$this->parent->id}_{$field}_hideTree);
 }	
 
 function {$this->parent->id}_{$field}_hideTree()
 {
-	var popup = $('{$this->parent->id}_{$field}_tree_popup');
+	var popup = document.id('{$this->parent->id}_{$field}_tree_popup');
 	popup.setStyles({'display': 'none'});
-	var doc = $(document.body ? document.body : document.documentElement);
+	var doc = document.id(document.body ? document.body : document.documentElement);
 	doc.removeEvent('click', {$this->parent->id}_{$field}_hideTree);
 }	
 	
 function {$this->parent->id}_{$field}_selectItem(url)
 {
-	var txt = $('{$this->parent->id}_{$field}');
+	var txt = document.id('{$this->parent->id}_{$field}');
 	txt.set('value', url);
 	{$this->parent->id}_{$field}_hideTree();
 }
 
 window.addEvent('domready', function()
 {
-	var popup = $('{$this->parent->id}_{$field}_tree_popup');
+	var popup = document.id('{$this->parent->id}_{$field}_tree_popup');
 	popup.addEvent('click', function(e) { new Event(e).stop(); });
 });
 </script>

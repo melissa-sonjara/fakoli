@@ -57,9 +57,9 @@ class ComponentPageListView
 		$contextMenu = $this->table->commandMenu();
 		$contextMenu->command("component_enable", "Enable Pages", "new ComponentPageList().setEnabled(1)", false)
 					->command("component_disable", "Disable Pages", "new ComponentPageList().setEnabled(0)", false);
-					//->command("component_site",	"Set Page Template", "new ComponentPageList().templatePopup($('component_pages').getSelectedValues())", false)
-					//->command("component_roles", "Set Page Roles", "new ComponentPageList().rolePopupMulti($('component_pages').getSelectedValues())", false)
-					//->command("component_site",	"Set Page Site", "new ComponentPageList().sitePopup($('component_pages').getSelectedValues())", false);
+					//->command("component_site",	"Set Page Template", "new ComponentPageList().templatePopup(document.id('component_pages').getSelectedValues())", false)
+					//->command("component_roles", "Set Page Roles", "new ComponentPageList().rolePopupMulti(document.id('component_pages').getSelectedValues())", false)
+					//->command("component_site",	"Set Page Site", "new ComponentPageList().sitePopup(document.id('component_pages').getSelectedValues())", false);
 		
 		if (!$component)
 		{

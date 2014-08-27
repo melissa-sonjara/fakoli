@@ -28,7 +28,7 @@ if (!$library->allowWriteAccess())
 
 $form = new AutoForm($link, "POST", "/action/link_library/link_form?link_id={$link_id}&link_library_id={$link_library_id}");
 $form->hide("link_library_id", "owner_id", "last_modified", "sort_order");
-$form->ajaxSubmit("function(result) {LinkLibraryManager.linkEdited(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {LinkLibraryManager.linkEdited(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->allowDelete = true;
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);

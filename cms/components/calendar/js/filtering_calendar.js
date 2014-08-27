@@ -45,7 +45,7 @@ var FilteringCalendar = new Class(
 
 	initialize: function(calendar_id, options)
 	{
-		this.list = $(calendar_id);
+		this.list = document.id(calendar_id);
 		this.setOptions(options);
 		   
 		if (!this.list) return;
@@ -164,7 +164,7 @@ var FilteringCalendar = new Class(
 		var day_num = day.get("data-day");
 		var id = 'show_all_' + day_num;
 	
-		return $(id);
+		return document.id(id);
 	},
 
 	toggleShowMoreLink: function(day, unfiltered_count)

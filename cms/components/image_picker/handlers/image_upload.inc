@@ -66,7 +66,7 @@ $form->hide("thumbnail", "gallery_id");
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
 
-$form->ajaxSubmit("function(result) {var imagePicker = new ImagePicker(); imagePicker.hideUploadPopup(); imagePicker.showImages($gallery_id);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {var imagePicker = new ImagePicker(); imagePicker.hideUploadPopup(); imagePicker.showImages($gallery_id);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 if ($method == "POST")
 {

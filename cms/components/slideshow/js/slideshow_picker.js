@@ -6,7 +6,7 @@ var SlideshowPicker = new Class(
 	
 	initialize: function(table, editor)
 	{
-		this.table = $(table);
+		this.table = document.id(table);
 		this.editor = editor;
 	},
 	
@@ -21,8 +21,8 @@ var SlideshowPicker = new Class(
 	
 	insertSlideshow: function()
 	{
-		var width = $('width').value;
-		var height = $('height').value;
+		var width = document.id('width').value;
+		var height = document.id('height').value;
 		
 		if (!width) width = 500;
 		if (!height) height = 400;

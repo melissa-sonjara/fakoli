@@ -8,7 +8,7 @@ var BlogSubscriberPreferenceManager =  new Class
 	{		
 		var me = this;
 		
-		var div = $(div_id);
+		var div = document.id(div_id);
 		var radiobuttons = div.getElements('input');
 		
 		radiobuttons.each(function(radio)

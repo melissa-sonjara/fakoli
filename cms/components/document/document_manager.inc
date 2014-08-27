@@ -129,18 +129,18 @@ class DocumentManager
 
 window.addEvent('domready', function()
 {
-	docManagerDlg = new ModalDialog($('documentManagerDlg'), {handle: $('documentManagerDlgHeader'), draggable: true, body: $('documentManagerDlgBody')});
+	docManagerDlg = new ModalDialog(document.id('documentManagerDlg'), {handle: document.id('documentManagerDlgHeader'), draggable: true, body: document.id('documentManagerDlgBody')});
 });		
 
 function downloadFile()
 {
-	id = $('files_value').value;
+	id = document.id('files_value').value;
 	go("/action/document/download?document_id=" + id);
 }
 
 function editFile()
 {
-	id = $('files_value').value;
+	id = document.id('files_value').value;
 	docManagerDlg.show(function() {}, "/action/document/edit?document_id=" + id);
 }
 
@@ -152,14 +152,14 @@ function editResult(result)
 	}
 	else
 	{
-		$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+		document.id('Document_form__error').set({'text': result, 'display': 'table-cell'});
 	}
 }
 
 
 function uploadFile()
 {
-	id = $('files_value').value;
+	id = document.id('files_value').value;
 	docManagerDlg.show(function() {}, "/action/document/upload?document_library_id=<?echo $this->library->document_library_id?>");
 }
 
@@ -179,7 +179,7 @@ function deleteFile()
 {
 	if (confirm("Are you sure you want to delete this file?"))
 	{
-		id = $('files_value').value;
+		id = document.id('files_value').value;
 		
 		var request = new Request({'url': 		'/action/document/delete?document_id=' + id, 
 								   'method': 	'get',
@@ -202,20 +202,20 @@ function deleteFile()
 
 function selectionChanged()
 {
-	var id = $('files_value').value;
+	var id = document.id('files_value').value;
 
 	if (id > 0)
 	{
-		$('download').removeProperty("disabled");
-		if($('edit')) $('edit').removeProperty("disabled");
-		$('deleteButton').removeProperty("disabled");
+		document.id('download').removeProperty("disabled");
+		if(document.id('edit')) document.id('edit').removeProperty("disabled");
+		document.id('deleteButton').removeProperty("disabled");
 		
 	}
 	else
 	{
-		$('download').addProperty("disabled", "disabled");
-		if($('edit')) $('edit').addProperty("disabled", "disabled");
-		$('deleteButton').addProperty("disabled", "disabled");
+		document.id('download').addProperty("disabled", "disabled");
+		if(document.id('edit')) document.id('edit').addProperty("disabled", "disabled");
+		document.id('deleteButton').addProperty("disabled", "disabled");
 	}
 }
 

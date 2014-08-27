@@ -25,7 +25,7 @@ var DocumentManager =  new Class
 		}
 		else
 		{
-			$('Document_form__error').set({'text': result, 'display': 'table-cell'});
+			document.id('Document_form__error').set({'text': result, 'display': 'table-cell'});
 		}
 	},
 	

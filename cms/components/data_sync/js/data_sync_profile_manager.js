@@ -30,7 +30,7 @@ var DataImportProfileManager = new Class
 		}
 		else
 		{
-			$('DataImportProfile_form__error').set({'text': result, 'display': 'table-cell'});
+			document.id('DataImportProfile_form__error').set({'text': result, 'display': 'table-cell'});
 		}
 	},
 	

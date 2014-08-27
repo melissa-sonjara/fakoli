@@ -26,7 +26,7 @@ var BlogManager = (function()
 			}
 			else
 			{
-				$('Blog_form__error').set({'text': result, 'display': 'table-cell'});
+				document.id('Blog_form__error').set({'text': result, 'display': 'table-cell'});
 			}
 		},
 		

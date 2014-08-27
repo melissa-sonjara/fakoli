@@ -42,7 +42,7 @@ var ComponentPageList = (function()
 
 		setEnabled: function(enable)
 		{
-			var ids = $('component_pages').getSelectedValues();
+			var ids = document.id('component_pages').getSelectedValues();
 			
 			var action = this.constructAction(ids, "enabled=" + enable);
 			var request = new Request({
@@ -54,7 +54,7 @@ var ComponentPageList = (function()
 					{
 						ids.each(function(id) 
 						{
-							var img = $('enable_' + id);
+							var img = document.id('enable_' + id);
 							img.src = enable ? "/fakoli/images/on.png" : "/fakoli/images/off.png";
 							img.alt = enable ? "Enabled" : "Disabled";
 						});
@@ -93,20 +93,20 @@ var ComponentPageList = (function()
 
 		rolePopup: function(roles, id, source)
 		{
-			var popup = $('rolePopup');
+			var popup = document.id('rolePopup');
 			
 			if (!this.rolePopupDialog)
 			{
-				this.rolePopupDialog = new FloatingDialog('rolePopup', {'closeLink': $('closeRolePopup'), 'position': 'absolute', 'width': 200});
+				this.rolePopupDialog = new FloatingDialog('rolePopup', {'closeLink': document.id('closeRolePopup'), 'position': 'absolute', 'width': 200});
 			}
 
 			popup.getElements("input[type='checkbox']").each(function(e) { e.checked = false; });
 
-			roles = $(roles);
+			roles = document.id(roles);
 			var val = roles.get('text');
 			var tokens = val.split(',');
 
-			tokens.each(function(t) { if (t != '') $('role_' + t).checked = true; });
+			tokens.each(function(t) { if (t != '') document.id('role_' + t).checked = true; });
 
 			this.rolesMulti = false;
 			
@@ -119,11 +119,11 @@ var ComponentPageList = (function()
 
 		rolePopupMulti: function()
 		{
-			var popup = $('rolePopup');
+			var popup = document.id('rolePopup');
 			
 			if (!this.rolePopupModalDialog)
 			{
-				this.rolePopupModalDialog = new ModalDialog('rolePopup', {'closeLink': $('closeRolePopup'), 'width': 200});
+				this.rolePopupModalDialog = new ModalDialog('rolePopup', {'closeLink': document.id('closeRolePopup'), 'width': 200});
 			}
 
 			popup.getElements("input[type='checkbox']").each(function(e) { e.checked = false; });
@@ -143,7 +143,7 @@ var ComponentPageList = (function()
 			
 			var id = this.rolePopupDialog.targetID;
 				
-			var popup = $('rolePopup');
+			var popup = document.id('rolePopup');
 
 			var roles = [];
 			
@@ -172,8 +172,8 @@ var ComponentPageList = (function()
 		
 		updateRolesMulti: function()
 		{
-			var ids = $('component_pages').getSelectedValues();
-			var popup = $('rolePopup');
+			var ids = document.id('component_pages').getSelectedValues();
+			var popup = document.id('rolePopup');
 
 			var roles = [];
 			
@@ -191,7 +191,7 @@ var ComponentPageList = (function()
 					{
 						ids.each(function(id) 
 						{
-							var span = $('roles_' + id);
+							var span = document.id('roles_' + id);
 							span.set('text', role);
 						});
 					}
@@ -209,7 +209,7 @@ var ComponentPageList = (function()
 			
 			if (!this.sitePopupDialog)
 			{
-				this.sitePopupDialog = new ModalDialog('sitePopup', {'closeLink': $('closeSitePopup')});
+				this.sitePopupDialog = new ModalDialog('sitePopup', {'closeLink': document.id('closeSitePopup')});
 			}
 
 			this.sitePopupDialog.targetID = id;
@@ -218,12 +218,12 @@ var ComponentPageList = (function()
 		
 		updateSites: function()
 		{
-			var popup = $('sitePopup');
+			var popup = document.id('sitePopup');
 
 			var action = "/action/component/update_page?";
 			this.sitePopupDialog.targetID.each(function(id) { action += "component_page_id[]=" + id + "&"; });
 			
-			action += "site_id=" + $('site_id').value;
+			action += "site_id=" + document.id('site_id').value;
 			
 			var request = new Request({
 				url: action,
@@ -249,7 +249,7 @@ var ComponentPageList = (function()
 			
 			if (!this.templatePopupDialog)
 			{
-				this.templatePopupDialog = new ModalDialog('templatePopup', {'closeLink': $('closeTemplatePopup')});
+				this.templatePopupDialog = new ModalDialog('templatePopup', {'closeLink': document.id('closeTemplatePopup')});
 			}
 
 			this.templatePopupDialog.targetID = id;
@@ -258,8 +258,8 @@ var ComponentPageList = (function()
 		
 		updateTemplates: function()
 		{
-			var ids = $('component_pages').getSelectedValues();
-			var template = $('template_id').value;
+			var ids = document.id('component_pages').getSelectedValues();
+			var template = document.id('template_id').value;
 			
 			var action = this.constructAction(ids, "template=" + template);
 			var request = new Request({
@@ -271,7 +271,7 @@ var ComponentPageList = (function()
 					{
 						ids.each(function(id) 
 						{
-							var select = $('template_' + id);
+							var select = document.id('template_' + id);
 							select.value = template;
 						});
 					}

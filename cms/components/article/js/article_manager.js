@@ -27,7 +27,7 @@ var ArticleManager = (function()
 			}
 			else
 			{
-				$('Article_form__error').set({'text': result, 'display': 'table-cell'});
+				document.id('Article_form__error').set({'text': result, 'display': 'table-cell'});
 			}
 		},
 		

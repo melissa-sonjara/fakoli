@@ -21,7 +21,7 @@ else
 }
 
 $form = new AutoForm($bookmark, "POST", "/action/bookmark/bookmark_popup?booknark_id={$bookmark_id}", "Bookmark_form");
-$form->ajaxSubmit("function(result) {BookmarkManager.handleResponse(result);}", "function() {\$('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->ajaxSubmit("function(result) {BookmarkManager.handleResponse(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
 if (Settings::getValue("bookmark", "show_url"))
 {

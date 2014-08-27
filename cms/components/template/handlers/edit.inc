@@ -65,8 +65,8 @@ else
 	<input type="submit" value=" Save Changes " class="button"/>	
 	</form>
 	<script type='text/javascript'>
-	$('content').resizable();
-	$('edit_form').iFrameFormRequest({'onComplete': editResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
+	document.id('content').resizable();
+	document.id('edit_form').iFrameFormRequest({'onComplete': editResult, 'onFailure': function() { alert("Failed to communicate with server"); }});
 	</script>
 <?
 }
