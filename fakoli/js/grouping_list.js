@@ -20,7 +20,7 @@ var GroupingList = new Class({
 	
 	initialize: function(div, options) 
 	{
-		this.div = $('grouped_list');
+		this.div = document.id('grouped_list');
 		this.setOptions(options);
 
 		this.subheadings = this.div.getElements("h2");

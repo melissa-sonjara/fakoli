@@ -132,7 +132,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 		// JDG 3/2/2011., no js for readonly field
 		if ($this->parent->isReadOnly($field)) return "";
 		
-		echo "\t\$('{$this->parent->id}_{$field}').value = rawNumber($('{$this->parent->id}_{$field}').value);\n";
+		echo "\tdocument.id('{$this->parent->id}_{$field}').value = rawNumber(document.id('{$this->parent->id}_{$field}').value);\n";
 	}
 	
 	function format($field)

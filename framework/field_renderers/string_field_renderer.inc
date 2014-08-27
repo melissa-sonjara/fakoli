@@ -81,7 +81,7 @@ class StringFieldRenderer extends FieldRenderer
 /* <![CDATA[ */
 	function <?echo $field ?>_keyup(event)
 	{
-		var form = $('<?echo $this->parent->id ?>');
+		var form = document.id('<?echo $this->parent->id ?>');
 		
 		var ctrl = form['<?echo $field ?>'];
 		var len = ctrl.value.length;

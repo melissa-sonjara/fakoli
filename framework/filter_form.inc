@@ -522,7 +522,7 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 
 function <? echo $selChanged ?>(elt)
 {
-  	var value_field = $('<?php echo $field ?>');
+  	var value_field = document.id('<?php echo $field ?>');
   	var new_value = "0";
 
   	if(value_field && elt)

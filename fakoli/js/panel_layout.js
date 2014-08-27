@@ -30,7 +30,7 @@ var PanelLayout = (function()
 			
 		setup: function(container, options)
 		{
-			this.container = $(container);
+			this.container = document.id(container);
 			
 			this.setOptions(options);
 		},
@@ -40,7 +40,7 @@ var PanelLayout = (function()
 		 */
 		addSlot: function(slot)
 		{
-			slot = $(slot);
+			slot = document.id(slot);
 			this.slots[slot.id] = slot;
 			this.panels[slot.id] = new Hash({});
 		},
@@ -86,7 +86,7 @@ var PanelLayout = (function()
 		 */
 		dock: function(panel, slot)
 		{
-			slot = $(slot);
+			slot = document.id(slot);
 			
 			slot.adopt(panel.getContent());
 	
@@ -108,7 +108,7 @@ var PanelLayout = (function()
 		 */
 		dockAndLoad: function(id, panelURL, slot, options)
 		{
-			slot = $(slot);
+			slot = document.id(slot);
 			slot.addClass("background-spinner");
 			if (this.options.replace)
 			{

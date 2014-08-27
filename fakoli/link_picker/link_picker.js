@@ -65,12 +65,12 @@ var LinkPicker =  (function()
 
 		documentSelected: function()
 		{
-			$('linkButton').disabled = false;
+			document.id('linkButton').disabled = false;
 		},
 
 		linkToDocument: function()
 		{
-			id = $('files_value').value;
+			id = document.id('files_value').value;
 			this.insertLink("/action/document/download?document_id=" + id);
 		}
 		

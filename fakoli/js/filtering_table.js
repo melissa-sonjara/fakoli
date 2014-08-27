@@ -56,8 +56,8 @@ var FilteringTable = new Class({
 	
 	initialize: function(table, filterElement, options ) 
 	{
-		this.table = $(table);
-		this.filterElement = $(filterElement);
+		this.table = document.id(table);
+		this.filterElement = document.id(filterElement);
 		this.setOptions(options);
     
 		this.thead = this.table.getElement('thead');

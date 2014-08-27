@@ -33,7 +33,7 @@
 // Annotate the document body with browser info
 window.addEvent('domready', function()
 {
-	$(document.body).addClass(Browser.name).addClass((Browser.name + Browser.version).replace(".", "_"));
+	document.id(document.body).addClass(Browser.name).addClass((Browser.name + Browser.version).replace(".", "_"));
 });
 
 window.size = function()
@@ -112,11 +112,11 @@ var Curtain = new Class(
 	
 	initialize: function()
 	{
-		this.curtain = $('curtain');
+		this.curtain = document.id('curtain');
 		if (!this.curtain)
 		{
 			this.curtain = new Element('div', {'id': 'curtain'});
-			var doc = $(document.body ? document.body : document.documentElement);
+			var doc = document.id(document.body ? document.body : document.documentElement);
 			
 			doc.adopt(this.curtain);
 		}
@@ -266,7 +266,7 @@ var AbstractDialog = new Class(
     
     initialize: function(element, options)
     {
-    	this.element = $(element);
+    	this.element = document.id(element);
     	this.setOptions(options);
     	
     	if (!this.element)
@@ -277,16 +277,16 @@ var AbstractDialog = new Class(
     	if (this.element) this.element.setStyle('display', 'none');
     	if (this.options.body) 
     	{
-    		this.options.body = $(this.options.body);
+    		this.options.body = document.id(this.options.body);
     	}
     	else
     	{
-    		this.options.body = $(this.element.id + "Body");
+    		this.options.body = document.id(this.element.id + "Body");
     	}
     	
     	if (this.options.closeLink)
     	{
-    		$(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); if (this.disposeOnExit) { this.options.body.set('text', ''); } }.bind(this));
+    		document.id(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); if (this.disposeOnExit) { this.options.body.set('text', ''); } }.bind(this));
     	}
     	
     	if (this.options.title)	this.setTitle(this.options.title);
@@ -298,7 +298,7 @@ var AbstractDialog = new Class(
     	this.options.title = title;
     	if (this.element)
     	{
-    		$(this.element.id + 'Title').set('text', title);
+    		document.id(this.element.id + 'Title').set('text', title);
     	}
     },	
     
@@ -333,7 +333,7 @@ var AbstractDialog = new Class(
     	padding.inject(dialog_header);    	
     	dialog_header.inject(dialog, 'top');
     	body.inject(dialog, 'bottom');
-		var doc = $(document.body ? document.body : document.documentElement);
+		var doc = document.id(document.body ? document.body : document.documentElement);
 		
 		doc.adopt(dialog);
 		return dialog;
@@ -374,7 +374,7 @@ var ModalDialog = new Class(
     		this.options.body.setStyle('height', 'auto');
     	}
     	
-    	var curtain = $('curtain');
+    	var curtain = document.id('curtain');
     	var windowSize = window.size();
     	
     	if (this.element.offsetWidth > windowSize.width)
@@ -614,7 +614,7 @@ var Interstitial = new Class({
 		var text = new Element('span', {'html': this.message});
 		text.inject(div, 'bottom');
 		
-		var doc = $(document.body ? document.body : document.documentElement);
+		var doc = document.id(document.body ? document.body : document.documentElement);
 
 		doc.adopt(div);
 		return div;
@@ -701,7 +701,7 @@ var Notification = new Class({
 					   'opacity': 0});
 
 		div.set('html', this.message);
-		var doc = $(document.body ? document.body : document.documentElement);
+		var doc = document.id(document.body ? document.body : document.documentElement);
 
 		doc.adopt(div);
 		return div;
@@ -759,7 +759,7 @@ var ProgressiveSearch = new Class({
 	initialize: function(element, options)
 	{
 		this.setOptions(options);
-		this.element = $(element);
+		this.element = document.id(element);
 		this.element.search = this;
 		this.list = new Element('div', {'id': this.element.id + '_progressive_search', 'class': 'progressive_search'});
 		this.list.setStyles({'display': 'none', 'position': 'absolute', 'max-height': this.options.height, 'overflow-y': 'auto'});
@@ -782,7 +782,7 @@ var ProgressiveSearch = new Class({
 		
 		if (this.options.cssClass) this.list.addClass(this.options.cssClass);
 		
-		var body = $(document.body ? document.body : document.documentElement);
+		var body = document.id(document.body ? document.body : document.documentElement);
 		body.adopt(this.list);
 		
 		this.element.addEvent('keyup', function() { this.onKeyPress();}.bind(this));
@@ -901,9 +901,9 @@ var PaginatingList = new Class(
 
 	initialize: function(list, paginator, options)
 	{
-		this.list = $(list);
+		this.list = document.id(list);
 		if (!this.list) return;
-		this.paginator = $(paginator);
+		this.paginator = document.id(paginator);
 		this.setOptions(options);
 		this.pages = Math.ceil(this.list.getChildren("li").length  / this.options.per_page );
 
@@ -1095,7 +1095,7 @@ var Splitter = new Class({
 	
 	initialize: function(element, options)
 	{
-		this.container = $(element);
+		this.container = document.id(element);
 		this.setOptions(options);
 		
 		this.panes = this.container.getChildren();

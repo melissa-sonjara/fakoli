@@ -109,7 +109,7 @@ class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 <script type="text/javascript">
 function <?echo $fn ?>_preview()
 {
-	var elt = $('<? echo $fn ?>');
+	var elt = document.id('<? echo $fn ?>');
 
 	if (elt.value)
 	{
@@ -119,7 +119,7 @@ function <?echo $fn ?>_preview()
 
 function <? echo $selChanged ?>(elt)
 {
-  	var button = $('view_<? echo $field ?>_button');
+  	var button = document.id('view_<? echo $field ?>_button');
    	if (elt.value)
 		button.disabled = "";		
 	else
@@ -128,7 +128,7 @@ function <? echo $selChanged ?>(elt)
 
 window.addEvent('load', function()
 {
-   	var elt = $('<? echo $field ?>');
+   	var elt = document.id('<? echo $field ?>');
    <? echo $selChanged ?>(elt);	
  });
 </script>

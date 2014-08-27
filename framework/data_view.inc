@@ -390,7 +390,7 @@ class DataListView implements FacetFilterable
 		
 		if ($this->selectable)
 		{
-			$constructor .= "\n\t\t$('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
+			$constructor .= "\n\t\tdocument.id('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
 		}
 
 		if ($this->scrollable) 

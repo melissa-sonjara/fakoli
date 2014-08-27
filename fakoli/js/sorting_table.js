@@ -68,7 +68,7 @@ var SortingTable = new Class(
  
 	initialize: function( table, options ) 
 	{
-		this.table = $(table);
+		this.table = document.id(table);
 		this.setOptions(options);
 
 		this.tbody = this.table.getElement('tbody');
@@ -160,7 +160,7 @@ var SortingTable = new Class(
 		    		this.conversion_function = false;
 		    		rows.some(function(row)
 		    		{
-		    			var to_match = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+		    			var to_match = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 		    			if (to_match == '') return false;
 		    			this.conversions.some(function(conversion)
 		    			{
@@ -225,7 +225,7 @@ var SortingTable = new Class(
 			matcher: /([0-9.]{1,8}).*([KMGT]{1})B/,
 			conversion_function: function( row ) 
 			{
-				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var cell = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 				cell = this.conversion_matcher.exec( cell );
 				if (!cell) { return '0'; }
 				if (cell[2] == 'M') 
@@ -265,7 +265,7 @@ var SortingTable = new Class(
 			matcher: /(\d{1,2}) (.{3,6}) ago/,
 			conversion_function: function( row ) 
 			{
-				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var cell = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 				cell = this.conversion_matcher.exec( cell );
 				if (!cell) { return '0'; }
 				var sort_val;
@@ -289,7 +289,7 @@ var SortingTable = new Class(
 			matcher: /^[^\d]?((\d+|,\d{3})*(\.\d{1,2})?)$/,
 			conversion_function: function( row ) 
 			{
-				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var cell = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 				cell = parseFloat(cell.replace(/^[^\d]/, "").replace(/,/g, ""));
 				if (isNaN(cell)) { cell = 0; }
 				cell = Math.round((cell * 100)).toString();
@@ -301,7 +301,7 @@ var SortingTable = new Class(
 			matcher: /(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/,
 			conversion_function: function( row ) 
 			{
-				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var cell = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 				var d = this.conversion_matcher.exec( cell );
 				return d ? d[1]+
                  '00'.substr(0,2-d[2].length).concat(d[2])+
@@ -313,7 +313,7 @@ var SortingTable = new Class(
 			matcher: /(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})/,
 			conversion_function: function( row ) 
 			{
-				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var cell = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 				var d = this.conversion_matcher.exec( cell );
 				return d ? d[3]+
                  '00'.substr(0,2-d[1].length).concat(d[1])+
@@ -326,7 +326,7 @@ var SortingTable = new Class(
 			matcher: /^\d+$/,
 			conversion_function: function( row ) 
 			{
-				var cell = $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				var cell = document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 				return '00000000000000000000000000000000'.substr(0,32-cell.length).concat(cell);
 			}
 		},
@@ -335,7 +335,7 @@ var SortingTable = new Class(
 			matcher: /.*/,
 			conversion_function: function( row ) 
 			{
-				return $(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
+				return document.id(row.row.getElementsByTagName('td')[this.sort_column]).get('text');
 			}
 		}]);
 	}

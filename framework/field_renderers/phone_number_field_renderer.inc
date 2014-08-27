@@ -94,7 +94,7 @@ class PhoneNumberFieldRenderer extends FieldRenderer
 ?>
 function <?echo $field ?>_keyup(event)
 {
-	var ctrl = $('<?echo "{$this->parent->id}_{$field}" ?>');
+	var ctrl = document.id('<?echo "{$this->parent->id}_{$field}" ?>');
 	if(!ctrl) return;
 		
 	if(ctrl.value.length == <?php echo $limit ?>)

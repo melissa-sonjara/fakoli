@@ -207,7 +207,7 @@ function isDefined(obj)
 
 function findAncestor(element, tag)
 {
-	element = $(element);
+	element = document.id(element);
 	tag = tag.toUpperCase();
 	do
 	{

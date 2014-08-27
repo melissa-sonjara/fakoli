@@ -39,10 +39,10 @@ var DirectoryTree = new Class({
 
 DirectoryTree.toggleDirectoryFolder = function(id, openStyle, closedStyle)
 {
-	var div = $(id + "_contents");
-	var link = $(id);
-	var toggle = $(id + "_toggle");
-	var folder = $(id + "_folder");
+	var div = document.id(id + "_contents");
+	var link = document.id(id);
+	var toggle = document.id(id + "_toggle");
+	var folder = document.id(id + "_folder");
 
 	if (div.style.display == "none" || div.style.display == "")
 	{
@@ -65,13 +65,13 @@ DirectoryTree.toggleDirectoryFolder = function(id, openStyle, closedStyle)
 DirectoryTree.selectItem = function(treeID, itemID, itemValue)
 {
 	DirectoryTree._clearSelectionImpl(treeID);
-	var hidden = $(treeID + "_value");
+	var hidden = document.id(treeID + "_value");
 	hidden.value = itemValue;
 
-	var node = $(treeID + "_node");
+	var node = document.id(treeID + "_node");
 	node.value = itemID;
 	
-	var item = $(itemID + "_link");
+	var item = document.id(itemID + "_link");
 	item.addClass("selected");
 	eval(treeID + "_onSelectItem('" + itemID + "', '" + itemValue + "');");
 };
@@ -85,9 +85,9 @@ DirectoryTree.clearSelection = function(treeID)
 
 DirectoryTree._clearSelectionImpl = function(treeID)
 {
-	var hidden = $(treeID + "_value");
+	var hidden = document.id(treeID + "_value");
 	hidden.value = "";
-	var tree = $(treeID);
+	var tree = document.id(treeID);
 	var elts = tree.getElements("a");
 	for (i = 0; i < elts.length; ++i)
 	{

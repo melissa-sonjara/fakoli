@@ -80,8 +80,8 @@ class StartDateTimeFieldRenderer extends DateTimeFieldRenderer
 		echo "<script type='text/javascript'>\n";
 		echo "window.addEvent('domready', function()\n";
 		echo "{\n";
-		echo "\t\t$('{$startField}').addEvent('blur', function(e) { {$field}_onChangeStartDate(); });\n";
-		echo "\t\t$('{$endField}').addEvent('focus', function(e) { {$field}_onChangeStartDate(); });\n";
+		echo "\t\tdocument.id('{$startField}').addEvent('blur', function(e) { {$field}_onChangeStartDate(); });\n";
+		echo "\t\tdocument.id('{$endField}').addEvent('focus', function(e) { {$field}_onChangeStartDate(); });\n";
 		echo "\n";
 		echo "});\n";
 			
@@ -89,9 +89,9 @@ class StartDateTimeFieldRenderer extends DateTimeFieldRenderer
 		start_date_calendar.calendar.addEvent('mouseout', function(e) { <?php echo $field ?>_onChangeStartDate(); });
 		function <?echo $field ?>_onChangeStartDate()
 		{
-			var start_date_elt = $('<?php echo $startField ?>');		
+			var start_date_elt = document.id('<?php echo $startField ?>');		
 			if(!start_date_elt || !start_date_elt.get("value")) return;
-			var end_date_elt = $('<?php echo $endField ?>');
+			var end_date_elt = document.id('<?php echo $endField ?>');
 			if(!end_date_elt) return;
 			var startObj = new Date(start_date_elt.get("value"));
 			var endObj = null;

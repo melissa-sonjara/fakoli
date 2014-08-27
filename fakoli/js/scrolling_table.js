@@ -4,7 +4,7 @@ var ScrollingTable = new Class(
 	
 	initialize: function(table)
 	{
-		table = $('table');
+		table = document.id('table');
 		if (!table) return;
 		
 		this.table = table;

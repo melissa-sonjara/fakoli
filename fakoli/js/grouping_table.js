@@ -19,7 +19,7 @@ var GroupingTable = new Class({
 	
 	initialize: function(table, options ) 
 	{
-		this.table = $(table);
+		this.table = document.id(table);
 		this.setOptions(options);
 
 		this.thead = this.table.getElement('thead');

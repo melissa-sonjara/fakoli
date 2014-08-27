@@ -77,7 +77,7 @@ var iFrameFormRequest = new Class({
 					}
 				}.pass(this)
 			}
-		}).inject($(document.body));
+		}).inject(document.id(document.body));
 	},
 
 	toElement: function(){

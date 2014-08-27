@@ -61,17 +61,17 @@ var PaginatingTable = new Class({
   },
   
   initialize: function( table, ids, options ) {
-    this.table = $(table);
+    this.table = document.id(table);
     this.setOptions(options);
     
     this.tbody = this.table.getElement('tbody');
     
     if (this.options.offset_el)
-      this.options.offset_el = $(this.options.offset_el);
+      this.options.offset_el = document.id(this.options.offset_el);
     if (this.options.cutoff_el)
-      this.options.cutoff_el = $(this.options.cutoff_el);
+      this.options.cutoff_el = document.id(this.options.cutoff_el);
  
-    this.paginators = ($type(ids) == 'array') ? ids.map($) : [$(ids)];
+    this.paginators = ($type(ids) == 'array') ? ids.map($) : [document.id(ids)];
  
     if (this.options.details) {
       this.options.per_page = this.options.per_page * 2;

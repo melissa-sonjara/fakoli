@@ -363,7 +363,7 @@ function onChange_<?echo $fn?>(elt)
 {
 	if(!elt.value == '')
 	{
-		var addEntry = $('<?php echo $addEntry ?>');
+		var addEntry = document.id('<?php echo $addEntry ?>');
 		if(addEntry)
 			addEntry.value = '';		
 	}
@@ -380,7 +380,7 @@ function onChange_<?echo "{$fn}_addEntry" ?>(elt)
 {
 	if(elt.value)
 	{
-		var selected = $('<?php echo $field ?>');
+		var selected = document.id('<?php echo $field ?>');
 		if(selected)
 			selected.value = '';		
 	}

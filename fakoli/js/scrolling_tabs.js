@@ -13,7 +13,7 @@ var ScrollingTabs = new Class(
 	
 	initialize: function(tabContainer)
 	{
-		this.tabContainer = $(tabContainer);
+		this.tabContainer = document.id(tabContainer);
 		this.tabList = this.tabContainer.getElement("ul");
 		this.tabs = this.tabList.getChildren("li");
 		
@@ -107,7 +107,7 @@ var ScrollingTabs = new Class(
 			this.dropdownList = this.tabList.clone().erase('style');
 			this.dropdownList.inject(this.dropdown);
 			
-			var doc = $(document.body ? document.body : document.documentElement);			
+			var doc = document.id(document.body ? document.body : document.documentElement);			
 			doc.adopt(this.dropdown);
 		}
 		

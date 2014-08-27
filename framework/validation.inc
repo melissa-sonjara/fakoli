@@ -141,7 +141,7 @@ class RequiredTreeValidator extends AbstractValidator
 		
 		$script = <<<ENDSCRIPT
 
-		var div = $("{$this->field}_table");
+		var div = document.id("{$this->field}_table");
 		var valid = false;
 
 		div.getElements("input").each(function(box)

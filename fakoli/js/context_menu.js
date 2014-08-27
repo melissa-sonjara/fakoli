@@ -14,7 +14,7 @@ var ContextMenu = new Class(
 	
 	initialize: function(menu, elementSelector, trigger, options)
 	{
-		this.menu = $(menu);
+		this.menu = document.id(menu);
 
 		if (!this.menu) return;
 
@@ -37,7 +37,7 @@ var ContextMenu = new Class(
 			});
 		});
 		
-		var doc = $(document.body ? document.body : document.documentElement);
+		var doc = document.id(document.body ? document.body : document.documentElement);
 		
 		doc.addEvent('click', function(e) { me.hide(); });
 		
@@ -49,7 +49,7 @@ var ContextMenu = new Class(
 	show: function(event)
 	{
 		var coords = ContextMenu.root.getCoordinates();		
-		var bc = $(document.body).getCoordinates();
+		var bc = document.id(document.body).getCoordinates();
 		
 		var left = (event && this.options.position == 'pointer') ? event.page.x : coords.left;
 		var top =  (event && this.options.position == 'pointer') ? event.page.y : coords.bottom - bc.top;

@@ -4,7 +4,7 @@ var SectionContentManager = new Class(
 		
 	initialize: function(tree)
 	{
-		this.tree = $(tree);
+		this.tree = document.id(tree);
 	},
 	
 	allProperties: function()
@@ -83,8 +83,8 @@ var SectionContentManager = new Class(
 		}
 		else
 		{
-			$("SectionContent_form__error").set('html', response);
-			$("SectionContent_form__error").setStyle('display', 'table-cell');
+			document.id("SectionContent_form__error").set('html', response);
+			document.id("SectionContent_form__error").setStyle('display', 'table-cell');
 		}
 	},
 	

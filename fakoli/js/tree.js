@@ -44,8 +44,8 @@ var Tree = new Class({
 
 Tree.toggleFolder = function(id, openStyle, closedStyle)
 {
-	var div  = $(id + "_contents");
-	var link = $(id);
+	var div  = document.id(id + "_contents");
+	var link = document.id(id);
 
 	if (div.style.display == "none" || div.style.display == "")
 	{
@@ -61,8 +61,8 @@ Tree.toggleFolder = function(id, openStyle, closedStyle)
 
 Tree.loadOnDemand = function(id, fragmentURL, force)
 {
-	var link = $(id );
-	var div = $(id + "_contents");
+	var link = document.id(id );
+	var div = document.id(id + "_contents");
 	var cursor = link.getStyle('cursor');
 	
 	if (!div.loaded || force)
@@ -92,7 +92,7 @@ Tree.loadOnDemand = function(id, fragmentURL, force)
 		
 Tree.clearCheckBoxes = function(id, except)
 {
-	var div = $(id + "_table");
+	var div = document.id(id + "_table");
 	div.getElements("input").each(function(box)
 	{
 		if (box != except)

@@ -84,7 +84,7 @@ class ZipCodeFieldRenderer extends FieldRenderer
 /* <![CDATA[ */
 	function <?echo $field ?>_keyup(event)
 	{
-		var ctrl = $('<? echo "{$this->parent->id}_$field" ?>');
+		var ctrl = document.id('<? echo "{$this->parent->id}_$field" ?>');
 		var len = ctrl.value.length;
 		if (len >= <?echo $size?>) 
 		{

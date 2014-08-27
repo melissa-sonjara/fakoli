@@ -20,8 +20,8 @@ var Sproing = new Class(
 	
 	initialize: function(element, button, options)
 	{
-		this.element = $(element);
-		this.button = $(button);
+		this.element = document.id(element);
+		this.button = document.id(button);
 		this.setOptions(options);
 		
 		this.button.addEvent('click', function() { this.toggleSproing(); }.bind(this));
