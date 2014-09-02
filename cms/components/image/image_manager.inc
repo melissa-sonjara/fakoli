@@ -468,6 +468,9 @@ class ImageManager
 		$gallery = $image->Gallery();
 				
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
+
+		$nameParts = explode(".",$image->image_file);
+		$ext = ".".strtolower($nameParts[1]);
 		
 		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
 		{
