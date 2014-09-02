@@ -450,6 +450,61 @@ class ImageManager
 	}
 	
 	/**
+	 * Crop the image to the specified dimensions. This operation is destructive - it overwrites the 
+	 * source file with the resulting crop.
+	 * @param integer $id the ID of the image to be cropped
+	 * @param integer $x the left-hand coordinate to crop from
+	 * @param integer $y the top coordinate to crop from
+	 * @param integer $w the width to crop to
+	 * @param integer $h the height to crop to
+	 */
+	function crop($id, $x, $y, $w, $h)
+	{
+		global $config;
+		
+		trace("Cropping image $id, starting at ($x, $y) dimensions ($w, $h)", 3);
+		 
+		$image = new ImageRecord($image_id);
+		$gallery = $image->Gallery();
+				
+		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
+		
+		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
+		{
+			switch($ext)
+			{
+				case ".jpg":
+				case ".jpeg":
+					$src = imagecreatefromjpeg($imageFile);
+					break;
+		
+				case ".png":
+					$src = imagecreatefrompng($imageFile);
+					break;
+			}
+		}
+		
+		$dst = ImageCreateTrueColor( $w, $h );
+		
+		imagecopy($dst, $src, 0, 0, $x, $y, $w, $h);
+		
+		switch($ext)
+		{
+			case ".jpg":
+			case ".jpeg":
+				imagejpeg($dst, $imageFile, 85);
+				break;
+					
+			case "png":
+			default:
+				imagepng($dst, $imageFile);
+		}
+			
+		imagedestroy($dst);
+		imagedestroy($src);
+	}
+	
+	/**
 	 * Returns the URI that can be used to access the specified image at the given size.
 	 * @param $image_id the ID of the image
 	 * @param $size the size of the major axis in pixels
