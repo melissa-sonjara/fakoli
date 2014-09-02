@@ -464,7 +464,7 @@ class ImageManager
 		
 		trace("Cropping image $id, starting at ($x, $y) dimensions ($w, $h)", 3);
 		 
-		$image = new ImageRecord($image_id);
+		$image = new ImageRecord($id);
 		$gallery = $image->Gallery();
 				
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
