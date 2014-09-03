@@ -148,6 +148,7 @@ class ActivityTracker
 		Settings::setDefaultValue("activity_tracker", "send_email", false, Boolean, "Send a notification email when feedback is submitted. If you set this to true, configure recipient and message via the 'feedback_notification' email template", "User Feedback", null, 5);
 		  
 		Settings::setDefaultValue("activity_tracker", "google_analytics_tracking_id", "", String, "Leave blank if tracking is not desired.", "Google Analytics");
+		Settings::setDefaultValue("activity_tracker", "google_analytics_version", "Classic", String, "Specifies the API Version of Google Analytics to use. Select this based on your site's analytics configuration on google.com", "Google Analytics", "Classic\nUniversal");
 		
 		Settings::setDefaultValue("activity_tracker", "logging_directory", $base, String, "Specifies the directory to which user activity logs will be written", "Activity Tracking");		
 		
@@ -184,9 +185,14 @@ class ActivityTracker
 	 */
 	static function getGoogleAnalyticsScript($id)
 	{
+		$trackingMode = Settings::getValue("activity_tracker", "google_analytics_version");
+		
 		$script = "";
-			
+
 		ob_start();
+		
+		if ($trackingMode == "Classic")
+		{
 ?>		
  <script type="text/javascript">
 
@@ -203,6 +209,24 @@ class ActivityTracker
 
 </script> 
 <?php		
+		}
+		else if ($trackingMode == "Universal")
+		{
+?>
+<script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '<?php echo $id ?>', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<?
+		}
+		
 		$script .= ob_get_contents();
 		ob_end_clean();
 		
