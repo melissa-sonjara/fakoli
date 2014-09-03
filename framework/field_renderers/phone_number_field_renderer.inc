@@ -143,7 +143,7 @@ function <?echo $field ?>_keyup(event)
 			
 			$onkeypress = " onkeyup='{$partField}_keyup(event);'";	
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
-			echo "$pre<input id='{$this->parent->id}_{$partField}' data-name='{$field}' type='text' name='{$partField}' value='".htmlspecialchars($valueParts[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp;";
+			echo "$pre<input id='{$this->parent->id}_{$partField}' style='width: auto' data-name='{$field}' type='text' name='{$partField}' value='".htmlspecialchars($valueParts[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp;";
 			$idx++;	
 		}
 		
