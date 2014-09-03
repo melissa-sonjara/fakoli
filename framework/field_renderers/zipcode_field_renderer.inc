@@ -115,7 +115,7 @@ class ZipCodeFieldRenderer extends FieldRenderer
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
 		
 		echo "<input id='{$this->parent->id}_{$field}' 
-		type='text' name='$field' $onchange $autocomplete 
+		type='text' style='width: auto' name='$field' $onchange $autocomplete 
 		value='".htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8')."' 
 		size='{$size}' $disable $onkeypress $onkeyup/>";
 		$this->_endField($field);
