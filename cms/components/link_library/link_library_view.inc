@@ -102,8 +102,8 @@ class TabularLinkLibraryView extends LinkLibraryView
 	{
 		$table = new DataListView($this->links, "library_link_list");
 		$table->column("Link", array($this, formatLinkTitle), true, "width: 40%", String, null, "{title:lower}")
-			  ->column("Description", "{description}", true, "width: 40%")
-			  ->column("Last Modified", "{last_modified:short}", false, "width: 20%; text-align: center");
+			  ->column("Description", "{description}", true, "width: 40%");
+			//  ->column("Last Modified", "{last_modified:short}", false, "width: 20%; text-align: center"); fk: 
 				
 		$table->pageSize = 10;
 		$table->emptyMessage = "No links have been added to this library.";
