@@ -129,7 +129,7 @@ class TabularLinkLibraryView extends LinkLibraryView
 			$delete_link .= "<a href=\"#\" onclick=\"LinkLibraryManager.deleteLink({link_id}); return false;\"><img alt=\"delete\" src=\"/fakoli/images/icon_delete_trash.png\"></a>\n";
 		}
 	
-		return $link->format("<span class='document_title'>{title}</span><br/><img style='display:inline-block;vertical-align: middle' src='/fakoli/images/file_icon.png' alt='External Link'/> <a href='{url}'> View Web Page </a><span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span>");
+		return $link->format("<span class='document_title'>{title}</span><br/><img style='display:inline-block;vertical-align: middle' src='/fakoli/images/file_icon.png' alt='External Link'/> <a target = '_blank' href='{url}'> View Web Page </a><span style='display: inline-block'>&nbsp;{$details_link}&nbsp;{$delete_link}</span>");
 	}
 
 	function drawView()
