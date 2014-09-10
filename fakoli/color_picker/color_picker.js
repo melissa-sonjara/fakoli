@@ -18,8 +18,8 @@ var ColorPicker = new Class(
 	
 	initialize: function(valueField, button, options)
 	{
-		this.valueField = $(valueField);
-		this.button = $(button);
+		this.valueField = document.id(valueField);
+		this.button = document.id(button);
 
 		this.setOptions(options);
 		
@@ -32,7 +32,7 @@ var ColorPicker = new Class(
 	
 	buildPanel: function()
 	{
-		var doc = $(document.body ? document.body : document.documentElement);
+		var doc = document.id(document.body ? document.body : document.documentElement);
 				
 		this.panel = new Element('div', {'class': 'color_picker'});
 		this.panel.setStyles({'width': this.options.width, 
