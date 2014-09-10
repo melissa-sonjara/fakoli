@@ -83,7 +83,7 @@ class NumberFieldRenderer extends FieldRenderer
 		
 		if ($this->unitsPosition == "before") echo $this->units." ";
 		
-		echo "<input id='{$this->parent->id}_$field' type='text' name='$field' 
+		echo "<input id='{$this->parent->id}_$field' type='text' style='width: auto' name='$field' 
 		value='".$this->parent->data->get($field)."' $autocomplete
 		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
 		
