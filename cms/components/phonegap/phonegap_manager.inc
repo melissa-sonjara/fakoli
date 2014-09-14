@@ -91,6 +91,10 @@ class PhonegapManager
 			
 			$phonegap = "<script type='text/javascript' src='{$file}'></script>\n".$phonegap;
 		}
+		else
+		{
+			$phonegap = "";
+		}
 		
 		return $script;
 	}
