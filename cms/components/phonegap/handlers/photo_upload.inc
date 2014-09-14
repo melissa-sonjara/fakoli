@@ -17,7 +17,7 @@ if (!isset($_FILES["photo"]))
 
 $gallery = new ImageGallery($gallery_id);
 
-if ($gallery->owner_id != $user->get($user->getPrimaryKey()))
+if ($gallery->owner_id != $user->get($user->getPrimaryKey()) && !checkRole($gallery->write_access))
 {
 	Fakoli::end("Permission Denied");
 }
