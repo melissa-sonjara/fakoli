@@ -7,9 +7,14 @@
 
 global $phonegap;
 
+/**
+ * Provides support for managing Phonegap apps.
+ * @author andy
+ */
 class PhonegapManager
 {
 	static $phonegapFiles = array();
+	static $appScripts = array();
 	
 	function PhonegapManager()
 	{
@@ -24,6 +29,9 @@ class PhonegapManager
 		
 	}
 
+	/**
+	 * Detects whether a phonegap / cordova app is being used to access the current page.
+	 */
 	static function detectPhonegap()
 	{
 		global $script;
@@ -86,8 +94,15 @@ class PhonegapManager
 		if (PhonegapManager::hasPhonegap())
 		{
 			ComponentManager::fireEvent("RegisterPhonegapFiles");
-			
+			ComponentManager::fireEvent("RegisterPhonegapAppScripts");
+					
 			$file = PhonegapManager::getPhonegapFile($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
+			$app  = PhonegapManager::getPhonegapAppScript($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
+			
+			if ($app)
+			{
+				$phonegap = "<script type='text/javascript' src='{$app}'></script>\n".$phonegap;
+			}
 			
 			$phonegap = "<script type='text/javascript' src='{$file}'></script>\n".$phonegap;
 		}
@@ -115,6 +130,33 @@ class PhonegapManager
 		
 		// Send default file with no plugins
 		return "/components/phonegap/js/{$platform}/cordova-{$version}.js";
+	}
+	
+	static function registerPhonegapAppScript($platform, $version, $file)
+	{
+		PhonegapManager::$appScripts["{$platform}-{$version}"] = $file;
+	}
+	
+	static function getPhonegapAppScript($platform, $version)
+	{
+		$key = "{$platform}-{$version}";
+		if (array_key_exists($key, PhonegapManager::$appScripts))
+		{
+			return PhonegapManager::$appScripts[$key];
+		}
+		
+		$key = "*-{$version}";
+		if (array_key_exists($key, PhonegapManager::$appScripts))
+		{
+			return PhonegapManager::$appScripts[$key];
+		}
+		
+		if (array_key_exists("*-*", PhonegapManager::$appScripts))
+		{
+			return PhonegapManager::$appScripts["*-*"];
+		}
+		
+		return "";
 	}
 }
 
