@@ -96,6 +96,8 @@ class PhonegapManager
 			ComponentManager::fireEvent("RegisterPhonegapFiles");
 			ComponentManager::fireEvent("RegisterPhonegapAppScripts");
 					
+			trace(print_r(PhonegapManager::$appScripts, true), 3);
+			
 			$file = PhonegapManager::getPhonegapFile($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
 			$app  = PhonegapManager::getPhonegapAppScript($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
 			
