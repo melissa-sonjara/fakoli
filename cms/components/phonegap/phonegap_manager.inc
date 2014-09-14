@@ -118,6 +118,8 @@ class PhonegapManager
 	
 	static function registerPhonegapFile($platform, $version, $file)
 	{
+		trace("Registering Phonegap file for $platform $version: $file", 3);
+		
 		PhonegapManager::$phonegapFiles["{$platform}-{$version}"] = $file;
 	}
 	
@@ -136,6 +138,7 @@ class PhonegapManager
 	
 	static function registerPhonegapAppScript($platform, $version, $file)
 	{
+		trace("Registering Phonegap App Script for $platform $version: $file", 3);
 		PhonegapManager::$appScripts["{$platform}-{$version}"] = $file;
 	}
 	
