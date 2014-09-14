@@ -578,7 +578,7 @@ class ComponentManager
 		
 		parse_str($queryString, $_GET);
 		
-		trace("\$_GET: " . json_encode($_GET), 3);
+		//trace("\$_GET: " . json_encode($_GET), 3);
 		
 		$_SERVER["REQUEST_URI"] = $uri;
 		
@@ -603,7 +603,7 @@ class ComponentManager
 		$output = ob_get_contents();
 		ob_end_clean();
 
-		trace(print_r($context, true), 3);
+		//trace(print_r($context, true), 3);
 		
 		foreach($context as $name => $value)
 		{
