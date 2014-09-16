@@ -112,8 +112,8 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		if (PhonegapManager::hasPhonegap())
 		{
 ?>
-	<a href="#" onclick="new PhotoUploader().capturePhoto(); return false" class="button"><?echo $this->takePhotoLabel?></a>&nbsp;&nbsp;
-	<a href="#" onclick="new PhotoUploader().choosePhoto(); return false" class="button"><?echo $this->uploadPhotoLabel?></a>
+	<a href="#" onclick="new PhotoUploader().capturePhoto(); return false" class="button"><i class='icon-camera'></i> <?echo $this->takePhotoLabel?></a>&nbsp;&nbsp;
+	<a href="#" onclick="new PhotoUploader().choosePhoto(); return false" class="button"><i class='icon-picture'></i> <?echo $this->uploadPhotoLabel?></a>
 <?
 		}
 		$this->_endField($field);
