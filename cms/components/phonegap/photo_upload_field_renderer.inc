@@ -45,6 +45,8 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	
 	var $gallery_id;
 	var $imageSize = 300;
+	var $takePhotoLabel = "Take a Photo";
+	var $uploadPhotoLabel = "Choose a Photo";
 	
 	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
 	{
@@ -110,8 +112,8 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		if (PhonegapManager::hasPhonegap())
 		{
 ?>
-	<a href="#" onclick="new PhotoUploader().capturePhoto(); return false" class="button"> Take a Photo </a>&nbsp;&nbsp;
-	<a href="#" onclick="new PhotoUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
+	<a href="#" onclick="new PhotoUploader().capturePhoto(); return false" class="button"><?echo $this->takePhotoLabel?></a>&nbsp;&nbsp;
+	<a href="#" onclick="new PhotoUploader().choosePhoto(); return false" class="button"><?echo $this->uploadPhotoLabel?></a>
 <?
 		}
 		$this->_endField($field);
