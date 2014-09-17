@@ -47,6 +47,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	var $imageSize = 300;
 	var $takePhotoLabel = "Take a Photo";
 	var $uploadPhotoLabel = "Choose a Photo";
+	var $uploadRedirect = false;
 	
 	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
 	{
@@ -75,12 +76,13 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		ob_start();
 		
+		$redirect = $this->uploadRedirect ? "'{$this->uploadRedirect}'", "false";
 ?>
 	<script type="text/javascript" src="/components/phonegap/js/photo_uploader.js"></script>
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{
-		new PhotoUploader().setup('<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->parent->id?>_<?echo $field?>_thumbnail', '<?echo $this->parent->id?>_<?echo $field?>_status', '<?echo $this->gallery_id?>');
+		new PhotoUploader().setup('<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->parent->id?>_<?echo $field?>_thumbnail', '<?echo $this->parent->id?>_<?echo $field?>_status', '<?echo $this->gallery_id?>', <?echo $redirect?>);
 	});
 	</script>
 <?
