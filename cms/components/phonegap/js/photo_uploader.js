@@ -179,7 +179,7 @@ var PhotoUploader = (function()
 				{
 					var redirect = "";
 					
-					if (this.postCompleteRedirect.indexOf("?"))
+					if (this.postCompleteRedirect.indexOf("?") != -1)
 					{
 						redirect = this.postCompleteRedirect + "&image_id=" + id;
 					}
