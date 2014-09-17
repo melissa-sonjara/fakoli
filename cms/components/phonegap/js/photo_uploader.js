@@ -127,6 +127,15 @@ var PhotoUploader = (function()
             var url = document.location.href.toURI();
             
             var ft = new FileTransfer();
+            ft.onprogress = function(progressEvent)
+            {
+            	if (progressEvent.lengthComputable)
+            	{
+            		percentage = (100 * progressEvent.loaded / progressEvent.total).toPrecision(0);
+            		this.setStatusText("Uploading " + percentage + "%");
+            	}
+            }.bind(this);
+            
             ft.upload(imageURI, encodeURI(url.get('scheme') + "://" + url.get('host') + "/action/phonegap/photo_upload?gallery_id=" + this.galleryID), 
             		  function(r) { new PhotoUploader().onUploadSuccess(r); },
             		  function(error) { new PhotoUploader().onUploadFail(error); },
