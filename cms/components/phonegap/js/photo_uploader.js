@@ -133,7 +133,8 @@ var PhotoUploader = (function()
             {
             	if (progressEvent.lengthComputable)
             	{
-            		percentage = (100 * progressEvent.loaded / progressEvent.total).toPrecision(0);
+            		var percentage = (100 * progressEvent.loaded / progressEvent.total);
+            		percentage = percentage.toFixed();
             		this.setStatusText("Uploading " + percentage + "%");
             	}
             }.bind(this);
