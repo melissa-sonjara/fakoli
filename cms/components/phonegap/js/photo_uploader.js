@@ -47,6 +47,7 @@ var PhotoUploader = (function()
 		statusLabel: Class.Empty,
 		galleryID: 0,
 		statusText: "Waiting for Camera...",
+		postCompleteRedirect: false,
 		
 		initialize: function()
 		{
@@ -61,12 +62,13 @@ var PhotoUploader = (function()
 			this.setStatusText('Camera is ready');
 		},
 
-		setup: function(control, thumbnail, statusLabel, galleryID)
+		setup: function(control, thumbnail, statusLabel, galleryID, redirect)
 		{
 			this.thumbnail = document.id(thumbnail);
 			this.control = document.id(control);
 			this.statusLabel = document.id(statusLabel);
 			this.galleryID = galleryID;
+			this.postCompleteRedirect = redirect;
 			
 			this.statusLabel.set('text', this.statusText);
 			
@@ -172,6 +174,22 @@ var PhotoUploader = (function()
 			{
 				var id = match[1];
 
+				if (this.postCompleteRedirect)
+				{
+					var redirect = "";
+					
+					if (this.postCompleteRedirect.indexOf("?"))
+					{
+						redirect = this.postCompleteRedirect + "&image_id=" + id;
+					}
+					else
+					{
+						redirect = this.postCompleteRedirect + "?image_id=" + id;
+					}
+					
+					go(redirect);
+				}
+				
 				this.thumbnail.set('html', '<img src="/action/image/thumbnail?image_id=' + id + '&size=300" alt="Uploaded Photo"/>');
 				this.control.value = id;	
 				this.setStatusText("Photo Uploaded");
