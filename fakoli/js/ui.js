@@ -716,6 +716,12 @@ var Notification = new Class({
 	   	var x = (size.width - coords.width) / 2;
 	   	var y = (size.height - coords.height) / 2;
 
+	   	if (coords.width > size.width * 0.8)
+	   	{
+	   		this.notification.setStyle('width', size.width * 0.8);
+	   		x = size.width * 0.1;
+	   	}
+	   	
 	   	this.notification.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});	   	
 	},
 	
