@@ -48,7 +48,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	var $height = "200px";
 	var $featureButtons;
 	var $rootBlock = "p";
-
+	var $baseURL = null;
+	
 	static $_includedRTEScript = false;
 	
 	function HTMLFieldRenderer(&$parent)
@@ -88,6 +89,8 @@ class HTMLFieldRenderer extends FieldRenderer
 				$rootBlock = "forced_root_block: '{$this->rootBlock}',\n";
 			}
 		}
+
+		$baseURL = ($this->baseURL !== null) ? $this->baseURL : "http://{$config['http_host]']}";
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
@@ -126,7 +129,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			contextmenu: "cut copy paste pastetext searchreplace removeformat | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
-			document_base_url: 'http://<?echo $config['http_host']?>',
+			document_base_url: 'http://<?echo $baseURL?>',
 			menubar: false,
 			<?echo $rootBlock?>
 			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks fullscreen",
