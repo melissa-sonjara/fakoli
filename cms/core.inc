@@ -756,12 +756,14 @@ class Fakoli
 			
 			$https = $_SERVER['HTTPS'];
 			if ($https == "off") $https = false; // For IIS
+		
+			$useSSL = $section->use_SSL || $content->use_SSL;
 			
-			if ($section->use_SSL && !$https )
+			if ($useSSL && !$https )
 			{
 				redirect("https://".$config['http_host'].$_SERVER['REQUEST_URI']);
 			}
-			else if (!$section->use_SSL && $https && $identifier != "login" && !isset($_REQUEST["login"]))
+			else if (!$useSSL && $https && $identifier != "login" && !isset($_REQUEST["login"]))
 			{
 				redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
 			}
