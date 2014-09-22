@@ -129,7 +129,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			contextmenu: "cut copy paste pastetext searchreplace removeformat | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
-			document_base_url: 'http://<?echo $baseURL?>',
+			document_base_url: '<?echo $baseURL?>',
 			menubar: false,
 			<?echo $rootBlock?>
 			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks fullscreen",
