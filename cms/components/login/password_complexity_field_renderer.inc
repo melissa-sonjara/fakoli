@@ -131,74 +131,77 @@ ENDSCRIPT;
 	
 		$reset = $_POST["{$this->form_id}_reset_password"];
 	
-		if ($reset == 1 AND (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty))
+		if ($reset == 1)
 		{
-			return "{$this->title} is a required field.";
-		}
-		else
-		{
-			$password = $_POST[$this->field];
-			
-			$minLength = Settings::getValue("login", "minimum_password_length");
-			$maxLength = Settings::getValue("login", "maximum_password_length");
-			
-			$requireDigits = Settings::getValue("login", "require_digits");
-			$requireUppercase = Settings::getValue("login", "require_uppercase");
-			$requireSpecial = Settings::getValue("login", "require_special");
-			
-			$passLength = false;
-				
-			if ($minLength == 0 || strlen(password) >= $minLength)
+			if (!isset($_POST[$this->field]) || $_POST[$this->field] === $this->empty)
 			{
-				if ($minLength == 0 || strlen($password) <= $maxLength)
-				{
-					$passLength = true;
-				}
+				return "{$this->title} is a required field.";
 			}
-				
-			$passDigits = false;
-				
-			if ($requireDigits)
+			else
 			{
-				if (preg_match("/\d/", $password)) 
+				$password = $_POST[$this->field];
+				
+				$minLength = Settings::getValue("login", "minimum_password_length");
+				$maxLength = Settings::getValue("login", "maximum_password_length");
+				
+				$requireDigits = Settings::getValue("login", "require_digits");
+				$requireUppercase = Settings::getValue("login", "require_uppercase");
+				$requireSpecial = Settings::getValue("login", "require_special");
+				
+				$passLength = false;
+					
+				if ($minLength == 0 || strlen(password) >= $minLength)
+				{
+					if ($minLength == 0 || strlen($password) <= $maxLength)
+					{
+						$passLength = true;
+					}
+				}
+					
+				$passDigits = false;
+					
+				if ($requireDigits)
+				{
+					if (preg_match("/\d/", $password)) 
+					{
+						$passDigits = true;
+					}
+				}
+				else
 				{
 					$passDigits = true;
 				}
-			}
-			else
-			{
-				$passDigits = true;
-			}
-				
-			$passUppercase = false;
-				
-			if ($requireUppercase)
-			{
-				if (preg_match("/[A-Z]/", $password) && preg_match("/[a-z]/", $password))
+					
+				$passUppercase = false;
+					
+				if ($requireUppercase)
+				{
+					if (preg_match("/[A-Z]/", $password) && preg_match("/[a-z]/", $password))
+					{
+						$passUppercase = true;
+					}
+				}
+				else
 				{
 					$passUppercase = true;
 				}
-			}
-			else
-			{
-				$passUppercase = true;
-			}
-				
-			$passSpecial = false;
-				
-			if ($requireSpecial)
-			{
-				if (preg_match("/[^A-Za-z0-9]/", $password))
+					
+				$passSpecial = false;
+					
+				if ($requireSpecial)
+				{
+					if (preg_match("/[^A-Za-z0-9]/", $password))
+					{
+						$passSpecial = true;
+					}
+				}
+				else
 				{
 					$passSpecial = true;
 				}
+				
+				return ($passLength && $passUppercase && $passDigits && $passSpecial) ? "" : "Please ensure that {$this->title} conforms to the password complexity rules";
 			}
-			else
-			{
-				$passSpecial = true;
-			}
-			
-			return ($passLength && $passUppercase && $passDigits && $passSpecial) ? "" : "Please ensure that {$this->title} conforms to the password complexity rules";
 		}
 	}
 }
