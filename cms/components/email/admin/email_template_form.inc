@@ -76,6 +76,9 @@ $classSelect->allowAddEntry();
 
 $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
+$messageRenderer = $form->getRenderer("message");
+$messageRenderer->baseURL = "";
+
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
 	$warning = " <b><i>Warning</i></b>: name changes to templates require code updates.";
