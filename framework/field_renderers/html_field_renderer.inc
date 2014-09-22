@@ -49,6 +49,7 @@ class HTMLFieldRenderer extends FieldRenderer
 	var $featureButtons;
 	var $rootBlock = "p";
 	var $baseURL = null;
+	var $convertURLs = true;
 	
 	static $_includedRTEScript = false;
 	
@@ -91,6 +92,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		}
 
 		$baseURL = ($this->baseURL !== null) ? $this->baseURL : "http://{$config['http_host]']}";
+		$convertURLs = ($this->convertURLs) ? "true" : "false";
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
@@ -129,6 +131,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			contextmenu: "cut copy paste pastetext searchreplace removeformat | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
 			skin: 'fakoli',
 			relative_urls: false,
+			convert_urls: <?echo $convertURLs?>,
 			document_base_url: '<?echo $baseURL?>',
 			menubar: false,
 			<?echo $rootBlock?>
