@@ -78,6 +78,7 @@ $form->validator->add(new EmailListValidator("recipients", "Recipients"));
 
 $messageRenderer = $form->getRenderer("message");
 $messageRenderer->baseURL = "";
+$messageRenderer->convertURLs = false;
 
 // Name is used to find the template - do not change once saved
 if($emailTemplate->email_template_id)
