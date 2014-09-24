@@ -53,6 +53,8 @@ var FakoliMenu = new Class({
 			this.updateFocus(document.focusWatcher.focus);
 		}.bind(menu));
 		
+		if (!this.root) return;
+		
 		// Suckerfish style dropdown implementation for mouseovers.
 		
 		$$("#" + this.root.id + " > ul > li").each(function (elt)
