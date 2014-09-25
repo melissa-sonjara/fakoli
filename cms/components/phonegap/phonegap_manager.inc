@@ -87,6 +87,15 @@ class PhonegapManager
 		}
 	}
 	
+	/**
+	 * Retrieve the current client device's OS (assuming it is running in Phonegap / Cordova)
+	 * @return string the device OS
+	 */
+	static function getOS()
+	{
+		return $_SESSION["phonegap_os"];
+	}
+	
 	static function addScript($script)
 	{
 		global $phonegap;
