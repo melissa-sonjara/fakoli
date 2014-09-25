@@ -22,6 +22,23 @@ if ($gallery->owner_id != $user->get($user->getPrimaryKey()) && !checkRole($gall
 	Fakoli::end("Permission Denied");
 }
 
+//Fudge: Deal with uploads that have no file extension
+if (strpos(".", $_FILES["photo"]["name"]) === false)
+{
+	if ($_FILES["photo"]["type"] == "image/jpeg")
+	{
+		$_FILES["photo"]["name"] .= ".jpg";
+	}
+	else if ($_FILES["photo"]["type"] == "image/png")
+	{
+		$_FILES["photo"]["name"] .= ".png";
+	}
+	else
+	{
+		Fakoli::end("Unsupported image format");
+	}
+}
+
 $image = new ImageRecord();
 $image->gallery_id = $gallery_id;
 $image->title = $_FILES["photo"]["name"];
