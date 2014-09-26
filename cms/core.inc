@@ -914,6 +914,8 @@ ENDSCRIPT;
 	 */
 	static function exceptionHandler($exception)
 	{
+		global $isAction;
+		
 		try 
 		{
 	    	//Getting exception information
@@ -933,11 +935,18 @@ ENDSCRIPT;
 		
 			$msg = "<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
 			
-			$err = Fakoli::resolveResource("/fakoli/error.tpl");
-			$template = file_get_contents($err);
-			$out = str_replace("{message}", $msg, $template);
-			echo $out;
-
+			if ($isAction)
+			{
+				echo $msg;
+			}
+			else
+			{
+				$err = Fakoli::resolveResource("/fakoli/error.tpl");
+				$template = file_get_contents($err);
+				$out = str_replace("{message}", $msg, $template);
+				echo $out;
+			}
+				
 			ComponentManager::fireEvent("RequestComplete");
 		}
 		catch (Exception $ex)
