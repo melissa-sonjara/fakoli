@@ -57,6 +57,7 @@ class ErrorLogManager
 	static function exceptionHandler($exception)
 	{
 		global $user;
+		global $isAction;
 		
 		try 
 		{
@@ -115,7 +116,7 @@ class ErrorLogManager
 			
 			$err = Fakoli::resolveResource(ErrorLogManager::$errorPageTemplate);
 			$template = file_get_contents($err);
-			$out = $log->format($template);
+			$out = $isAction ? $log->format($template) : $log->message;
 			echo $out;
 		}
 		catch (Exception $ex)
