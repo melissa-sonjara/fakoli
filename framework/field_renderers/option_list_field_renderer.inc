@@ -39,7 +39,7 @@ class OptionListFieldRenderer extends FieldRenderer
 	var $options = array();
 	var $cssClass = "options_list";
 	
-	function CheckListFieldRenderer(&$form, $field, $label, $options)
+	function OptionListFieldRenderer(&$form, $field, $label, $options)
 	{
 		$this->options = $options;
 		$this->FieldRenderer($form);
