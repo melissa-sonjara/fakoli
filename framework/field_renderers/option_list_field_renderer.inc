@@ -67,10 +67,17 @@ class OptionListFieldRenderer extends FieldRenderer
 		
 		$$('#<?echo $id?>_list > li').each(function(elt) 
 		{ 
-			elt.removeClass('selected'); 
+			var v = elt.get('data-value');
+			if (v == value)
+			{
+				elt.addClass('selected');
+			}
+			else
+			{
+				elt.removeClass('selected'); 
+			}
 		});
 
-		sel.getParent().addClass('selected');
 		document.id('<?echo $id?>').value = value;
 	}
 	</script>
@@ -90,7 +97,7 @@ class OptionListFieldRenderer extends FieldRenderer
 		foreach($this->options as $option => $description)
 		{
 			$selected = ($value == $option) ? " class='selected'" : "";
-			echo "<li{$selected}><div data-value='{$option}' onclick='{$id}_update(this); return false;'>{$description}</div></li>\n";	
+			echo "<li{$selected} data-value='{$option}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
 		}
 		echo "</ul>";
 		$this->_endField($field);
