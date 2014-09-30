@@ -1370,7 +1370,10 @@ class CreditCardNumberValidator extends AbstractValidator
 	{		
 $script = <<<ENDSCRIPT
 
-		if (form["{$this->field}"].value && !luhnCheck(form["count_{$this->field}"].value))
+		if (form["{$this->field}"].value && 
+			(!luhnCheck(form["{$this->field}"].value) || 
+			form["{$this->field}"].value.length < 13 || 
+			form["{$this->field}"].value.length > 19))
 		{
 			alert("{$this->title} is not valid.");
 			return false;
@@ -1387,7 +1390,10 @@ ENDSCRIPT;
 
 		if ($this->readOnly) return "";
 		
-		if (!luhnTest($_POST[$this->field]))
+		$val = $_POST[$this->field];
+		$len = strlen($val);
+		
+		if (!luhnTest($len) || $len < 13 || $len > 19)
 		{
 			return "{$this->title} is not valid.";
 		}
