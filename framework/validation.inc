@@ -1359,6 +1359,40 @@ ENDSCRIPT;
 	
 }
 
+class CreditCardNumberValidator extends AbstractValidator
+{
+	function CreditCardNumberValidator($field, $title)
+	{
+		$this->AbstractValidator($field, $title);
+	}
+	
+	function writeClient()
+	{		
+$script = <<<ENDSCRIPT
+
+		if (form["{$this->field}"].value && !luhnCheck(form["count_{$this->field}"].value))
+		{
+			alert("{$this->title} is not valid.");
+			return false;
+		}
+		
+ENDSCRIPT;
+
+		return $script;
+	}
+	
+	function validate()
+	{
+		global $_POST;
+
+		if ($this->readOnly) return "";
+		
+		if (!luhnTest($_POST[$this->field]))
+		{
+			return "{$this->title} is not valid.";
+		}
+	}
+}
 
 /**
  * The ValidationEngine takes an array of validator objects in its constructor,
@@ -1514,7 +1548,7 @@ ENDSCRIPT;
 
 
 
-/*
+/**
  * When the data entry interface contains multiple tabs (pages)
  * that the user can move around freely (e.g., not required to 
  * complete tab c before moving on to tab d) then we validate on 
@@ -1543,7 +1577,7 @@ abstract class ValidateTabSet
 	{	
 	}
 	
-	/*
+	/**
 	 * Called when user clicks submit: validate each tab page and 
 	 * redirect to first page that is invalid or returns true.
 	 */
@@ -1566,7 +1600,7 @@ abstract class ValidateTabSet
 	 */
 	
 	
-	/*
+	/**
 	 * Called from summary view class for each section if
 	 * the section is invalid.
 	 * 
@@ -1581,7 +1615,7 @@ abstract class ValidateTabSet
 		}	
 	}	
 	
-	/*
+	/**
 	 * Show the validation issue/error as an informative message 
 	 * instead of a warning.
 	 */
@@ -1593,7 +1627,7 @@ abstract class ValidateTabSet
 		}	
 	}	
 	
-	/*
+	/**
 	 * When system returns user to a tab b/c not
 	 * valid or completed, show a popup message
 	 * for the error.
