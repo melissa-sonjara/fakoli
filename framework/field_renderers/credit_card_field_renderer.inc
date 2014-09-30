@@ -36,7 +36,7 @@ class CreditCardNumberFieldRenderer extends FieldRenderer
 <script type='text/javascript'>
 function <?echo $id?>_checkValid(input)
 {
-	if (luhnCheck(input.value) && input.value.length > 12)
+	if (luhnCheck(input.value) && input.value.length > 12 && input.value.length < 20)
 	{
 		input.addClass('valid');
 	}
