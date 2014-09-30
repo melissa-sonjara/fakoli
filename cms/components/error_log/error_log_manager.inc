@@ -116,7 +116,7 @@ class ErrorLogManager
 			
 			$err = Fakoli::resolveResource(ErrorLogManager::$errorPageTemplate);
 			$template = file_get_contents($err);
-			$out = $isAction ? $log->format($template) : $log->message;
+			$out = (!$isAction) ? $log->format($template) : $log->message;
 			echo $out;
 		}
 		catch (Exception $ex)
