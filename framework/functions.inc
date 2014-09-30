@@ -1877,6 +1877,30 @@ function getBacktrace($ignore = 2)
 
 	return $trace;
 }
+
+/**
+ * Performs a Luhn validity test for credit card or IMEI numbers
+ * @param string $num credit card or IMEI number
+ * @return boolean true if valid, false otherwise
+ */
+function luhnTest($num) 
+{
+	$len = strlen($num);
+	for ($i = $len-1; $i >= 0; $i--) 
+	{
+		$ord = ord($num[$i]);
+		if (($len - 1) & $i) 
+		{
+			$sum += $ord;
+		} 
+		else 
+		{
+			$sum += $ord / 5 + (2 * $ord) % 10;
+		}
+	}
+	return $sum % 10 == 0;
+}
+
 /**
  * @}
  */
