@@ -1901,6 +1901,21 @@ function luhnTest($num)
 	return $sum % 10 == 0;
 }
 
+
+/**
+ * Determines the number of items that two comma-separated lists have in common.
+ * Useful for determining matches between checklist fields or roles.
+ * @param string $a the first string to test
+ * @param string $b the second string to test
+ * @return integer the number of elements they have in common
+ */
+function countMatchingElements($a, $b)
+{
+	$arr1 = explode(",", $a);
+	$arr2 = explode(",", $b);
+	return count(array_intersect($arr1, $arr2));
+}
+
 /**
  * @}
  */
