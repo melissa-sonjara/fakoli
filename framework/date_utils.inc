@@ -165,7 +165,7 @@ class DateUtils
      * @param unknown $date
      * @return string
      */
-    function fuzzyDate($date)
+    static function fuzzyDate($date)
     {
     	$time = strtotime($date);
     	$now = time();
