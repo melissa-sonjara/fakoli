@@ -5,7 +5,7 @@ interface Connectable
 	function getConnectableIcon();
 	function getConnectableDisabledIcon();
 	function getConnectableConstraint();
-	function getConnectableLink();
+	function getConnectableLink($source);
 	function getConnectableTitle();
 	function getConnectableHome();
 	function populateSelectionTable($table);

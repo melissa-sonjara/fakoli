@@ -71,7 +71,7 @@ ENDSCRIPT;
 		{
 			foreach($items as $item)
 			{
-				echo $item->getConnectableLink()."<br/>";
+				echo $item->getConnectableLink($this->source)."<br/>";
 			}
 		}
 		else
@@ -81,9 +81,17 @@ ENDSCRIPT;
 		
 		$from = get_class($this->source).":".$this->source->get($this->source->getPrimaryKey());
 		$createURL = ConnectableManager::$contextRouter . "?from=$from&to=$target";
+		$createHandler = "";
+		
+		if (method_exists($obj, getConnectableCreateHandler))
+		{
+			$createHandler = $obj->getConnectableCreateHandler();
+			$createHandler = " onclick='{$createHandler}(\"{$createURL}\"); return false;'";
+			$createURL = "#";
+		}
 ?>
 	<br/>
-	<a class='button small' href='#' onclick='ConnectableNavigator.selectConnectables("<?echo $from?>", "<?echo $target?>", "<?echo $name?>"); return false'>Select...</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button small' href='<?echo $createURL?>'>Create...</a>
+	<a class='button small' href='#' onclick='ConnectableNavigator.selectConnectables("<?echo $from?>", "<?echo $target?>", "<?echo $name?>"); return false'>Select...</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class='button small' href='<?echo $createURL?>'<?echo $createHandler?>>Create...</a>
   </div>
   </li>
 <?
