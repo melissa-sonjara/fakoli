@@ -634,6 +634,7 @@ class ImageManager
 		// check if the file exists
 		if (!file_exists($filename)) 
 		{
+			trace("Cannot find $filename", 2);
 			return false;
 		}
 	
@@ -670,10 +671,11 @@ class ImageManager
 		// check if the file exists
 		if (!file_exists($filename)) 
 		{
+			trace("Cannot find $filename", 2);
 			return false;
 		}
 	
-		// define the array of first 8 png bytes
+		// define the array of first 3 JPEG bytes
 		$png_header = array(0xFF, 0xD8, 0xFF);
 	
 		// open file for reading
