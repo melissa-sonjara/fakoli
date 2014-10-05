@@ -25,11 +25,11 @@ if ($gallery->owner_id != $user->get($user->getPrimaryKey()) && !checkRole($gall
 //Fudge: Deal with uploads that have no file extension
 if (!preg_match("/\\.\\w+$/", $_FILES["photo"]["name"]))
 {
-	if ($_FILES["photo"]["type"] == "image/jpeg")
+	if (ImageManager::isJPG($_FILES["photo"]["tmp_name"]))
 	{
 		$_FILES["photo"]["name"] .= ".jpg";
 	}
-	else if ($_FILES["photo"]["type"] == "image/png")
+	else if (ImageManager::isPNG($_FILES["photo"]["tmp_name"]))
 	{
 		$_FILES["photo"]["name"] .= ".png";
 	}
