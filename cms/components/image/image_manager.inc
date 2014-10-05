@@ -624,6 +624,74 @@ class ImageManager
 		return $items;
 	}
 	
+	/**
+	 * Test the contents of the specified file, returning true if a PNG header signature is found.
+	 * @param string $file full path to the file
+	 * @return boolean true if the file is a PNG
+	 */
+	static function isPNG($file)
+	{
+		// check if the file exists
+		if (!file_exists($filename)) 
+		{
+			return false;
+		}
+	
+		// define the array of first 8 png bytes
+		$png_header = array(0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A);
+	
+		// open file for reading
+		$f = fopen($filename, 'r');
+	
+		// read first 8 bytes from the file and close the resource
+		$header = fread($f, 8);
+		fclose($f);
+	
+		// convert the string to an array
+		$chars = preg_split('//', $header, -1, PREG_SPLIT_NO_EMPTY);
+	
+		// convert each charater to its ascii value
+		$chars = array_map('ord', $chars);
+	
+		// return true if there are no differences or false otherwise
+		return (count(array_diff($png_header, $chars)) === 0);
+	}
+	
+	/**
+	 * Test the contents of the specified file, returning true if a JPEG header signature is found.
+	 * This is very rough and ready - only use it if you are pretty sure that the file you are being
+	 * passed is an image.
+	 * 
+	 * @param string $file full path to the file
+	 * @return boolean true if the file is a JPG
+	 */
+	static function isJPG($file)
+	{
+		// check if the file exists
+		if (!file_exists($filename)) 
+		{
+			return false;
+		}
+	
+		// define the array of first 8 png bytes
+		$png_header = array(0xFF, 0xD8, 0xFF);
+	
+		// open file for reading
+		$f = fopen($filename, 'r');
+	
+		// read first 3 bytes from the file and close the resource
+		$header = fread($f, 3);
+		fclose($f);
+	
+		// convert the string to an array
+		$chars = preg_split('//', $header, -1, PREG_SPLIT_NO_EMPTY);
+	
+		// convert each charater to its ascii value
+		$chars = array_map('ord', $chars);
+	
+		// return true if there are no differences or false otherwise
+		return (count(array_diff($png_header, $chars)) === 0);
+	}
 	
 	/**
 	 * Upload the image file specified in the given field. 
