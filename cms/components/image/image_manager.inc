@@ -626,10 +626,10 @@ class ImageManager
 	
 	/**
 	 * Test the contents of the specified file, returning true if a PNG header signature is found.
-	 * @param string $file full path to the file
+	 * @param string $filename full path to the file
 	 * @return boolean true if the file is a PNG
 	 */
-	static function isPNG($file)
+	static function isPNG($filename)
 	{
 		// check if the file exists
 		if (!file_exists($filename)) 
@@ -666,7 +666,7 @@ class ImageManager
 	 * @param string $file full path to the file
 	 * @return boolean true if the file is a JPG
 	 */
-	static function isJPG($file)
+	static function isJPG($filename)
 	{
 		// check if the file exists
 		if (!file_exists($filename)) 
