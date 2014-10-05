@@ -23,7 +23,7 @@ if ($gallery->owner_id != $user->get($user->getPrimaryKey()) && !checkRole($gall
 }
 
 //Fudge: Deal with uploads that have no file extension
-if (strpos(".", $_FILES["photo"]["name"]) === false)
+if (!preg_match("/\\.\\w+$/", $_FILES["photo"]["name"]))
 {
 	if ($_FILES["photo"]["type"] == "image/jpeg")
 	{
