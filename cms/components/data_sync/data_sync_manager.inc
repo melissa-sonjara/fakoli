@@ -189,6 +189,8 @@ interface IDataSyncHelper
 	
 	static function getFieldMappings($class, $profile_id = 0)
 	{
+		if (!$class) return null;
+		
 		DataSyncManager::getSyncTargets();
 		
 		$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
