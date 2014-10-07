@@ -653,9 +653,11 @@ var Interstitial = new Class({
 
 Asset.image('/fakoli/images/loader.gif');
 
-function interstitial(message)
+function interstitial(message, image)
 {
-	var int = new Interstitial(message);
+	if (!image) image = '/fakoli/images/loader.gif';
+	
+	var int = new Interstitial(message, {spinner: image});
 	int.show();
 	
 	return int;
