@@ -91,6 +91,8 @@ class AutoForm
     var $required = array(); // list of required fields
     var $requiredFieldsText = "* indicates required field";
 	var $interstitialMessage = null;	///< Specifies the message to display in an interstitial while the form is being submitted
+	var $interstitialSpinner = '/fakoli/images/loader.gif'; ///< Set this property to override the default interstitial spinner animation
+	
     var $fields;	///< Local field cache
 
     var $groups = array(); 				///< List of field groups
@@ -372,7 +374,7 @@ class AutoForm
 		
 		if ($this->interstitialMessage)
 		{
-			echo "\tinterstitial('".jsSafe($this->interstitialMessage)."');\n;";
+			echo "\tinterstitial('".jsSafe($this->interstitialMessage)."', '".jsSafe($this->interstitialSpinner)."');\n;";
 		}
 		
 		echo "\treturn true;\n}\n\n";
