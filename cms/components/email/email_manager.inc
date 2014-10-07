@@ -236,7 +236,7 @@ Content-Transfer-Encoding: 8bit
 }
 
 
-/*
+/**
  * Takes an email template and an obj of any DataItem class
  * and sends email to a list of recipients after substituting
  * merge codes for values from the obj.
@@ -290,7 +290,7 @@ class EmailManager
 	}
 
 
-	/*	
+	/**	
 	 * Use MergeCodeManager, which shares functionality
 	 * with TextLookup.  
 	 */
