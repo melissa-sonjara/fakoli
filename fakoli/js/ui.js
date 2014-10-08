@@ -663,6 +663,13 @@ function interstitial(message, image)
 	return int;
 }
 
+function hideInterstitial()
+{
+	if (Interstitial.current)
+	{
+		Interstitial.current.hide();
+	}
+}
 
 var Notification = new Class({
 	
