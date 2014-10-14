@@ -126,7 +126,8 @@ class AutoForm
 		ZipCode		=>	ZipCodeFieldRenderer,
 		PhoneNumber	=>	PhoneNumberFieldRenderer,
     	URL			=>	URLFieldRenderer,
-    	DateOfBirth	=>	DateOfBirthFieldRenderer
+    	DateOfBirth	=>	DateOfBirthFieldRenderer,
+    	CreditCardNumber => CreditCardNumberFieldRenderer
 		);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
