@@ -17,7 +17,13 @@ class RssFeedManifest
 	static function getAdminMenu()
 	{
 		return array(
-				//TODO: Admin Menu Item definitions
+			"Classification"	=> array
+			(
+
+				"RSS Feeds"	=>	array("page"	=>	"/admin/rss_feed",
+							"role"	=>	"admin,editor",
+							"weight"	=>	10)
+			)
 		);
 	}
 
