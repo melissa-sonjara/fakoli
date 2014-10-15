@@ -1,0 +1,20 @@
+<?php
+class RSSFeedArticles extends DataItem
+{
+	var $table = "rss_feed_articles";
+	var $primary_key = "rss_feed_id";
+	
+	var $fields = array(
+		"rss_article_id"		=>	Number,
+		"rss_title"				=>	Text,
+		"rss_feed_id"			=>	Number,
+		"rss_article_author"	=>	String,
+		"rss_article_newsStory"	=>	Text,
+		"date_added"			=>	Timestamp
+		);
+	
+	var $relations = array(
+			
+			);
+
+}
