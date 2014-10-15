@@ -137,7 +137,7 @@ var Curtain = new Class(
 		}
 		
 		var windowSize = window.size();
-		var cw = window.innerWidth == undefined ?
+		/*var cw = window.innerWidth == undefined ?
 				((document.documentElement.clientWidth == 0) ? document.body.clientWidth : document.documentElement.clientWidth)
 												 : window.innerWidth;
 		var ch = window.innerHeight == undefined ? 
@@ -151,12 +151,22 @@ var Curtain = new Class(
 		var h = dh;
 		var l = document.left;
 		
-		if (ch > h) h = ch;
+		if (ch > h) h = ch;*/
 		
+		if (document.body.hasClass('full_height'))
+		{
+			 w = "100%";
+			 h = "100%";
+		}
+		else
+		{
+			w = windowSize.width;
+			h = windowSize.height;
+		}
 		this.curtain.setStyles({top: 0,
 								left: 0,
-								width: windowSize.width,
-								height: windowSize.height,
+								width: w,
+								height: h,
 								display: 'block',
 								opacity: 0,
 								position: (noFixed) ? 'absolute' : 'fixed',
