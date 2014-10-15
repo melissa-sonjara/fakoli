@@ -644,18 +644,35 @@ var Interstitial = new Class({
 	   	this.interstitial.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});	   	
 	},
 	
+    addResizeHook: function()
+    {
+    	this.resizeHook = function() { this.center(); }.bind(this);
+    	window.addEvent('resize', this.resizeHook);
+    },
+    
+    removeResizeHook: function()
+    {
+    	if (this.resizeHook)
+    	{
+    		window.removeEvent('resize', this.resizeHook);
+    		this.resizeHook = null;
+    	}
+    },
+    
 	show: function()
 	{
 	   	window.lowerCurtain(function() 
 	   	{
     		this.interstitial.setStyle('display', 'block');
     		this.center(); 
+    		this.addResizeHook();
     		Interstitial.current = this;
     	}.bind(this));
 	},
 	
 	hide: function()
 	{
+    	this.removeResizeHook();
     	window.raiseCurtain();
     	this.interstitial.setStyle('display', 'none');
     	Interstitial.current = null;
