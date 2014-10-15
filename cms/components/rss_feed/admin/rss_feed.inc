@@ -7,8 +7,8 @@ $menu_item="RSS Feeds";
 $rssFeeds = Query::create(RSSFeed, "ORDER BY rss_feed_id")->execute();
 
 $table = new DataListView($rssFeeds, "rss_feeds");
-$table->column("Title", "<a href='/admin/rss_feed_form?rss_feed_id={rss_feed_id}'>{rss_title}</a>", true)
-	->column("URL", "{rss_url}", true)
+$table->column("Feed Title", "<a href='/admin/rss_feed_form?rss_feed_id={rss_feed_id}'>{rss_title}</a>", true)
+	->column("Articles", "<a href='/admin/rss_feed_articles?rss_feed_id={rss_feed_id}'>View Stored Articles</a>", true)
 	->column("Last Updated", "{last_updated}", true)
 	;
 
@@ -22,4 +22,4 @@ $table->drawView();
 ?>
 <br/>
 <a href='/admin/rss_feed_form' class='button'>New RSS Feed</a>
-<a href='/admin/pull_feeds' class='button'>Pull Feed Contents</a>
+<a href='/admin/pull_feeds' class='button'>Update Feeds</a>
