@@ -18,8 +18,8 @@ foreach($rssFeeds as $feed){
 		
 		$rss->rss_feed_id			= $feed->rss_feed_id;;
 		$rss->rss_title		 		= $item->title;
-		$rss->rss_article_author 	= $item->children('http://purl.org/dc/elements/1.1/');
-		$rss->rss_article_newsStory = $item->description;
+		$rss->date_added		 	= $item->pubDate;
+		$rss->rss_article_URL		= $item->link;
 		
 		$rss->save(); 
 	}

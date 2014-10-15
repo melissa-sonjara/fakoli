@@ -20,7 +20,7 @@ else
 
 $form = new AutoForm($RSSFeedArticles);
 $form->required("rss_title");
-$form->hide("last_updated","date_added","rss_article_id","rss_feed_id","rss_article_newsStory","rss_article_author");
+$form->hide("last_updated","date_added","rss_article_id","rss_feed_id","rss_article_URL","rss_article_author");
 
 $form->allowDelete = true;
 $form->button("Cancel", "/admin/rss_feed_articles?rss_feed_id=$feed_id");

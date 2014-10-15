@@ -9,7 +9,7 @@ class RSSFeedArticles extends DataItem
 		"rss_title"				=>	Text,
 		"rss_feed_id"			=>	Number,
 		"rss_article_author"	=>	String,
-		"rss_article_newsStory"	=>	Text,
+		"rss_article_URL"		=>	Text,
 		"publish_status"		=>	Boolean,
 		"date_added"			=>	Timestamp
 		);
