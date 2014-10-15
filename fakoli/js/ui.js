@@ -137,22 +137,7 @@ var Curtain = new Class(
 		}
 		
 		var windowSize = window.size();
-		/*var cw = window.innerWidth == undefined ?
-				((document.documentElement.clientWidth == 0) ? document.body.clientWidth : document.documentElement.clientWidth)
-												 : window.innerWidth;
-		var ch = window.innerHeight == undefined ? 
-				((document.documentElement.clientHeight == 0) ? document.body.clientHeight : document.documentElement.clientHeight)
-												 : window.innerHeight;
-		
-		var dw = document.width == undefined ? document.body.offsetWidth: document.width;
-		var dh = document.height == undefined ? document.body.offsetHeight: document.height;
-		 
-		var w = dw;
-		var h = dh;
-		var l = document.left;
-		
-		if (ch > h) h = ch;*/
-		
+
 		if (document.body.hasClass('full-height'))
 		{
 			 w = "100%";
@@ -465,8 +450,24 @@ var ModalDialog = new Class(
     	window.lowerCurtain(function() {
     		this.element.setStyle('display', 'block');
     		this.center();
+    		this.addResizeHook();
     		if (onComplete) onComplete(this);
     	}.bind(this));
+    },
+    
+    addResizeHook: function()
+    {
+    	this.resizeHook = function() { this.center(); }.bind(this);
+    	window.addEvent('resize', this.resizeHook);
+    },
+    
+    removeResizeHook: function()
+    {
+    	if (this.resizeHook)
+    	{
+    		window.removeEvent('resize', this.resizeHook);
+    		this.resizeHook = null;
+    	}
     },
     
     hide: function()
@@ -477,6 +478,7 @@ var ModalDialog = new Class(
     	if (ModalDialog.activeDialogs.length == 0) window.raiseCurtain();
     	this.element.setStyle('display', 'none');
     	if (this.remoteURL) this.element.dispose();
+    	this.removeResizeHook();
     }
 });
 
