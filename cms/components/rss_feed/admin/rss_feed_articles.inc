@@ -9,8 +9,9 @@ $rssFeeds = Query::create(RSSFeedArticles, "WHERE rss_feed_id=:f")
 	->execute();
 
 $table = new DataListView($rssFeeds, "rss_feeds");
-$table->column("Feed Title", "{rss_title}", true)
+$table->column("Feed Title","<a href='/admin/rss_article_form?rss_article_id={rss_article_id}&feed_id=$feed_id'>{rss_title}</a>", true)
 	->column("Author", "{rss_article_author}", true)
+	->column("Publish Status", "{publish_status}", true)
 	->column("Date Added", "{date_added}", true)
 	;
 
