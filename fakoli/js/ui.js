@@ -153,7 +153,7 @@ var Curtain = new Class(
 		
 		if (ch > h) h = ch;*/
 		
-		if (document.body.hasClass('full_height'))
+		if (document.body.hasClass('full-height'))
 		{
 			 w = "100%";
 			 h = "100%";
