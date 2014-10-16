@@ -6,7 +6,7 @@ Fakoli::using("rss_feed");
 ?>
 <div id="rss_feed_container">
 <?php 
-$rssFeeds = RSSFeedArticles::getPublishedArticles(10);
+$rssFeeds = RSSFeedArticles::getPublishedArticles(15);
 
 if(count($rssFeeds))
 {
