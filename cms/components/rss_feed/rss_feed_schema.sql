@@ -45,3 +45,9 @@ ADD COLUMN article_date DATETIME,
 ADD COLUMN rss_article_URL VARCHAR(500) NULL AFTER date_added;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE rss_feed_articles ADD COLUMN publish_status TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.2
