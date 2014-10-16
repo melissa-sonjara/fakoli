@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("rss_feed_articles");
+Fakoli::using("rss_feed");
 Fakoli::usingFeature("auto_form");
 
 $menu_item="rss Feeds";

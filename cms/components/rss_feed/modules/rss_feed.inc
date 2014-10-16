@@ -2,7 +2,7 @@
 /**
  * Display links to various twitter feeds.
  */
-Fakoli::using("rss_feed_articles");
+Fakoli::using("rss_feed");
 ?>
 <div id="twitter_feed_container">
 <?php 
