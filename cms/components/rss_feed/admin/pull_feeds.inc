@@ -17,7 +17,7 @@ foreach($rssFeeds as $feed)
 	{			
 		try
 		{
-			$rss = new $feed->findArticleByURL($item->link);
+			$rss = $feed->findArticleByURL($item->link);
 		}
 		catch(DataNotFoundException $e)
 		{
