@@ -18,7 +18,8 @@ class RSSFeed extends DataItem
 			);
 	
 	var $fieldAliases = array(
-		"feed_status"	=>	"Active"
+		"feed_status"	=>	"Active",
+		"rss_trusted"	=>	"Trusted Feed"
 			);
 	
 	function Articles($constraint = "")
