@@ -9,13 +9,22 @@ class RSSFeedArticles extends DataItem
 		"rss_title"				=>	Text,
 		"rss_feed_id"			=>	Number,
 		"rss_article_author"	=>	String,
+		"rss_article_newsStory"	=>	Text,
 		"rss_article_URL"		=>	String,
+		"article_date"			=>	DateTime,
 		"publish_status"		=>	Boolean,
 		"date_added"			=>	Timestamp
 		);
 	
-	var $relations = array(
-			
-			);
+	var $relations = array("RSSFeed"	=>	RSSFeed);
 
+	function RSSFeed()
+	{
+		return $this->getRelated(RSSFeed);
+	}
+	
+	static function getPublishedArticles($limit = 10)
+	{
+		return Query::create(RSSFeedArticles, "WHERE publish_status=1 ORDER BY article_date DESC LIMIT $limit")->execute();
+	}
 }

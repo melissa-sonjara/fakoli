@@ -4,23 +4,17 @@
  */
 Fakoli::using("rss_feed");
 ?>
-<div id="twitter_feed_container">
+<div id="rss_feed_container">
 <?php 
-$rssFeeds = Query::create(RSSFeedArticles, "WHERE publish_status=1")
-	->execute();
+$rssFeeds = RSSFeedArticles::getPublishedArticles(10);
 
 if(count($rssFeeds))
 {
-	echo "<div>\n";
 	foreach($rssFeeds as $rssFeed)
 	{
-		echo "<a href='{$rssFeed->rss_URL}'>{$rssFeed->rss_title}</a></br>";  
-		echo "{$rssFeed->date_added} </br>"; //Date - URL
-		echo "<p>";
+		echo $rssFeed->format("<div><a href='{rss_article_URL}'>{rss_title}</a></br>{RSSFeed.title} {article_date}</div>");  
 	}
-	echo "</div>\n";
 }
 
 ?>
-
 </div>

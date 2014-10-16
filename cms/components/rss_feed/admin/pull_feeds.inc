@@ -15,10 +15,12 @@ foreach($rssFeeds as $feed){
 		
 		$rss = new RSSFeedArticles();
 		
-		$rss->rss_feed_id			= $feed->rss_feed_id;;
+		$rss->rss_feed_id			= $feed->rss_feed_id;
 		$rss->rss_title		 		= $item->title;
-		$rss->date_added		 	= $item->pubDate;
+		$rss->article_date		 	= $item->pubDate;
 		$rss->rss_article_URL		= $item->link;
+		
+		$rss->publish_status = $rss->trusted_feed;
 		
 		$rss->save(); 
 	}

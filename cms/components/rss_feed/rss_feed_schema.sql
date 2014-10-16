@@ -30,3 +30,18 @@ CREATE TABLE rss_feed_articles (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE rss_feed 
+CHANGE COLUMN rss_title rss_title VARCHAR(255) NOT NULL DEFAULT '',
+CHANGE COLUMN rss_url rss_url VARCHAR(255) NOT NULL DEFAULT '' ;
+
+ALTER TABLE rss_feed_articles 
+CHANGE COLUMN rss_title rss_title VARCHAR(255) NOT NULL DEFAULT '' ,
+CHANGE COLUMN rss_article_author rss_article_author VARCHAR(255) NOT NULL DEFAULT '' ,
+CHANGE COLUMN rss_article_newsStory rss_article_newsStory LONGTEXT NOT NULL ,
+ADD COLUMN article_date DATETIME,
+ADD COLUMN rss_article_URL VARCHAR(500) NULL AFTER date_added;
+
+-- END Version 1.1

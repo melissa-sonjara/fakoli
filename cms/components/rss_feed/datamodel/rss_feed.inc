@@ -14,13 +14,18 @@ class RSSFeed extends DataItem
 		);
 	
 	var $relations = array(
-			
+			"Articles"	=> RSSFeedArticles
 			);
 	
 	var $fieldAliases = array(
-		"rss_widget_id"	=>	"rss Widget ID",
+		"feed_status"	=>	"Active"
 			);
 	
+	function Articles($constraint = "")
+	{
+		return $thi->getRelatedList(RSSFeedArticles, "", $constraint);
+	}
+
 	static function getrssFeedsForUser($user_id)
 	{
 		$feeds = Query::create(rssFeed, "WHERE rss_feed_id in (SELECT rss_feed_id FROM rss_feed_articles where user_id=:u) ORDER BY sort_order")
