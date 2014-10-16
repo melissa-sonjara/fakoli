@@ -20,9 +20,11 @@ foreach($rssFeeds as $feed){
 		$rss->article_date		 	= $item->pubDate;
 		$rss->rss_article_URL		= $item->link;
 		
-		$rss->publish_status = $rss->trusted_feed;
+		$rss->publish_status = $feed->trusted_feed;
 		
 		$rss->save(); 
 	}
 }	
 ?>
+<br/>
+<a class='button' href='rss_feed'>&laquo; Back to RSS Feed List</a>
