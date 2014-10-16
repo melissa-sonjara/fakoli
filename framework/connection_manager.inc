@@ -71,8 +71,8 @@ class ConnectionManager
 		}
 		catch(PDOException $e)
 		{
-			trace("Database connection failed1 - " . $e->getMessage(), 1);
-			throw new DataItemException("Database connection failed2 - " . $e->getMessage());
+			trace("Database connection failed - " . $e->getMessage(), 1);
+			throw new DataItemException("Database connection failed - " . $e->getMessage());
 		}
 	}
 	
@@ -93,8 +93,8 @@ class ConnectionManager
 		}
 		catch(PDOException $e)
 		{
-			trace("Database connection failed1 - " . $e->getMessage(), 1);
-			throw new DataItemException("Database connection failed2 - " . $e->getMessage());
+			trace("Database connection failed - " . $e->getMessage(), 1);
+			throw new DataItemException("Database connection failed - " . $e->getMessage());
 		}
 	}
 	
