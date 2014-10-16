@@ -23,7 +23,7 @@ foreach($rssFeeds as $feed)
 		$rss->rss_title		 		= $item->title;
 		$rss->article_date		 	= date("Y-m-d H:i:s", strtotime($item->pubDate));
 		$rss->rss_article_URL		= $item->link;
-		
+		$rss->rss_article_newsStory = $item->description;
 		$rss->publish_status = $feed->trusted_feed;
 		
 		$rss->save(); 
