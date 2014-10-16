@@ -2,7 +2,7 @@
 Fakoli::using("rss_feed");
 Fakoli::usingFeature("auto_form");
 
-$menu_item="rss Feeds";
+$menu_item = "RSS Feeds";
 
 $rss_feed_id = checkNumeric($_GET["rss_feed_id"]);
 
