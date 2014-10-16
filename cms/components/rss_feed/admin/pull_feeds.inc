@@ -13,11 +13,16 @@ foreach($rssFeeds as $feed)
 	
 	$rssurl = simplexml_load_file($feed->rss_url,"SimpleXMLElement", LIBXML_NOCDATA);
 	
-	foreach ($rssurl->channel->item as $item) {		
-		
-		var_dump($item);
-		
-		$rss = new RSSFeedArticles();
+	foreach ($rssurl->channel->item as $item) 
+	{			
+		try
+		{
+			$rss = new $feed->findArticleByURL($item->link);
+		}
+		catch(DataNotFoundException $e)
+		{
+			$rss = new RSSFeedArticles();
+		}
 		
 		$rss->rss_feed_id			= $feed->rss_feed_id;
 		$rss->rss_title		 		= $item->title;

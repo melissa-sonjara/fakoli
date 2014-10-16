@@ -41,4 +41,11 @@ class RSSFeed extends DataItem
 		return $feeds;
 	}
 
+	function findArticleByURL($url)
+	{
+		return Query::create(RSSFeedArticles, "WHERE rss_feed_id=:f AND rss_article_URL=:u")
+					->bind(":f", $this->rss_feed_id, ":u", $url)
+					->executeSingle();
+	}
+		
 }
