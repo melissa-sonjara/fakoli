@@ -15,6 +15,8 @@ foreach($rssFeeds as $feed)
 	
 	foreach ($rssurl->channel->item as $item) {		
 		
+		var_dump($item);
+		
 		$rss = new RSSFeedArticles();
 		
 		$rss->rss_feed_id			= $feed->rss_feed_id;
