@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("rss_feed_articles");
+Fakoli::using("rss_feed");
 Fakoli::usingFeature("data_view");
 
 $feed_id = checkNumeric($_GET["rss_feed_id"]);
