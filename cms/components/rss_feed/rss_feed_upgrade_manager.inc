@@ -14,7 +14,7 @@ Fakoli::using("rss_feed", "component");
 class RssFeedUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-		//"x.x"	=>	"description"
+		"1.0"	=>	"sql:Create rss_feed and rss_feed_article tables"
 	);
 
 	function RssFeedUpgradeManager()
