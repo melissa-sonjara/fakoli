@@ -51,3 +51,9 @@ ADD COLUMN rss_article_URL VARCHAR(500) NULL AFTER date_added;
 ALTER TABLE rss_feed_articles ADD COLUMN publish_status TINYINT(3) NOT NULL DEFAULT 0;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE rss_feed_articles ADD INDEX rss_article_url_idx (rss_article_URL ASC);
+
+-- END Version 1.3
