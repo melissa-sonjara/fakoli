@@ -21,7 +21,7 @@ foreach($rssFeeds as $feed)
 		
 		$rss->rss_feed_id			= $feed->rss_feed_id;
 		$rss->rss_title		 		= $item->title;
-		$rss->article_date		 	= $item->pubDate;
+		$rss->article_date		 	= date("Y-m-d H:i:s", strtotime($item->pubDate));
 		$rss->rss_article_URL		= $item->link;
 		
 		$rss->publish_status = $feed->trusted_feed;
