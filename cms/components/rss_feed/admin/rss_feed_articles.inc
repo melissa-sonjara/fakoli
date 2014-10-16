@@ -2,6 +2,8 @@
 Fakoli::using("rss_feed");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "RSS Feeds";
+
 $feed_id = checkNumeric($_GET["rss_feed_id"]);
 
 $rssFeeds = Query::create(RSSFeedArticles, "WHERE rss_feed_id=:f")

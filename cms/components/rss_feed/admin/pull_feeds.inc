@@ -2,6 +2,8 @@
 Fakoli::using("rss_feed");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "RSS Feeds";
+
 $rssFeeds = Query::create(RSSFeed, "ORDER BY rss_feed_id")->execute();
 echo "The following feed content have been updated:</br>";
 
