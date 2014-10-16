@@ -24,7 +24,7 @@ foreach($rssFeeds as $feed)
 		$rss->article_date		 	= date("Y-m-d H:i:s", strtotime($item->pubDate));
 		$rss->rss_article_URL		= $item->link;
 		$rss->rss_article_newsStory = $item->description;
-		$rss->publish_status = $feed->trusted_feed;
+		$rss->publish_status 		= $feed->rss_trusted;
 		
 		$rss->save(); 
 	}
