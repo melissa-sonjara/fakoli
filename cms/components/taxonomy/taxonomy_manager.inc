@@ -515,7 +515,6 @@ class TaxonomyManager
 	 */
 	static function getBoundItems($source, $class, $constraint = "")
 	{
-
 		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
 		$obj = new $class;
 		$pk = $obj->getPrimaryKey();
@@ -527,6 +526,29 @@ class TaxonomyManager
 					  ->execute();
 		 
 		return $items;
+	}
+
+	/**
+	 * Same as TaxonomyManager::getBoundItems, but with the reverse relationship
+	 * @param DataItem $target the target item
+	 * @param string $class the class of bound items to retrieve
+	 * @param string $constraint optional extra constraint or ordering
+	 * @return array any items of the specified class that are bound to the target
+	 */
+	static function getBoundItemsReverse($target, $class, $constraint = "")
+	{
+		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+		
+		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM binding WHERE target_id=:target_id and class=:source_class AND target_class=:target_class) $constraint")
+		->bind(":target_id", $source->get($target->getPrimaryKey()),
+				":target_class", get_class($target),
+				":source_class", $class)
+				->execute();
+			
+		return $items;
+		
 	}
 	
 	/**
