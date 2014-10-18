@@ -1946,5 +1946,35 @@ function restoreHTML($text)
 	return $v;
 }
 
+/**
+ * Dump a raw representation of a list of DataItems to CSV (one column per field, default format only)
+ * @param $items the items to dump
+ * @param $filepath the output file path
+ */
+function dumpCSV($items, $filepath)
+{
+	if (!is_array($items)) $items = array($items);
+	if (count($items) == 0) return;
 
+	$fp = fopen(filepath, "w");
+	
+	$cols = array();
+	
+	$fields = $item->getFields();
+	foreach($fields as $name => $type)
+	{
+		$cols[] = $name;
+	}
+	fputcsv($fp, $cols);
+	
+	foreach($items as $item)
+	{
+		$vals = array();
+		foreach($fields as $name => $type)
+		{
+			$vals[] = $item->get($name);
+		}
+		fputcsv($fp, $vals);
+	}
+	fclose($fp);
 ?>
