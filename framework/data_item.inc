@@ -1948,18 +1948,19 @@ function restoreHTML($text)
 
 /**
  * Dump a raw representation of a list of DataItems to CSV (one column per field, default format only)
+ * @param $class class name of the items to be dumped
  * @param $items the items to dump
  * @param $filepath the output file path
  */
-function dumpCSV($items, $filepath)
+function dumpCSV($class, $items, $filepath)
 {
-	if (count($items) == 0) return;
-
+	$obj = new $class;
+	
 	$fp = fopen(filepath, "w");
 	
 	$cols = array();
 	
-	$fields = $items[0]->getFields();
+	$fields = $obj->getFields();
 	foreach($fields as $name => $type)
 	{
 		$cols[] = $name;
