@@ -1956,23 +1956,17 @@ function dumpCSV($class, $items, $filepath)
 {
 	$obj = new $class;
 	
-	$fp = fopen(filepath, "w");
+	$fp = fopen($filepath, "w");
 	
-	$cols = array();
-	
-	$fields = $obj->getFields();
-	foreach($fields as $name => $type)
-	{
-		$cols[] = $name;
-	}
-	fputcsv($fp, $cols);
+	$fields = $obj->getFieldArray();
+	fputcsv($fp, $fields);
 	
 	foreach($items as $item)
 	{
 		$vals = array();
-		foreach($fields as $name => $type)
+		foreach($fields as $field)
 		{
-			$vals[] = $item->get($name);
+			$vals[] = $item->get($field);
 		}
 		fputcsv($fp, $vals);
 	}
