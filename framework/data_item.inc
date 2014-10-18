@@ -1960,7 +1960,7 @@ function dumpCSV($items, $filepath)
 	
 	$cols = array();
 	
-	$fields = $item->getFields();
+	$fields = $item[0]->getFields();
 	foreach($fields as $name => $type)
 	{
 		$cols[] = $name;
