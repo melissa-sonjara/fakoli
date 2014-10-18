@@ -1953,7 +1953,6 @@ function restoreHTML($text)
  */
 function dumpCSV($items, $filepath)
 {
-	if (!is_array($items)) $items = array($items);
 	if (count($items) == 0) return;
 
 	$fp = fopen(filepath, "w");
