@@ -1977,4 +1977,4 @@ function dumpCSV($items, $filepath)
 		fputcsv($fp, $vals);
 	}
 	fclose($fp);
-?>
+}
