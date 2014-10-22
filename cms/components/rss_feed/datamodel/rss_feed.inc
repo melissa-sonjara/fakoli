@@ -24,7 +24,7 @@ class RSSFeed extends DataItem
 	
 	function Articles($constraint = "")
 	{
-		return $thi->getRelatedList(RSSFeedArticles, "", $constraint);
+		return $this->getRelatedList(RSSFeedArticles, "", $constraint);
 	}
 
 	static function getrssFeedsForUser($user_id)
@@ -45,7 +45,6 @@ class RSSFeed extends DataItem
 	{
 		return Query::create(RSSFeedArticles, "WHERE rss_feed_id=:f AND rss_article_URL=:u")
 					->bind(":f", $this->rss_feed_id, ":u", $url)
-					->executeSingle();
-	}
+					->executeSingle();}
 		
 }

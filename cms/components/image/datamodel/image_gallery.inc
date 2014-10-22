@@ -44,6 +44,7 @@ class ImageGallery extends DataItem
 						"thumbnail_format"		=>	String,
 					  	"image_link_mode"		=>	String,
 						"fix_orientation"		=>	Boolean,
+						"randomize_filenames"	=>	Boolean,
 						"hidden"				=>	Boolean,
 						"owner_id"				=>	Number,
 						"read_access"			=>	String,

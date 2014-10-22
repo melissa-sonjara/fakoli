@@ -72,3 +72,9 @@ ALTER TABLE image_gallery ADD COLUMN fix_orientation TINYINT(3) NOT NULL DEFAULT
 ALTER TABLE image_gallery ADD COLUMN thumbnail_format VARCHAR(5) DEFAULT '';
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+ALTER TABLE image_gallery ADD COLUMN randomize_filenames tinyint(3) not null default 0;
+
+-- END Version 1.6
