@@ -41,7 +41,7 @@ if (!preg_match("/\\.\\w+$/", $_FILES["photo"]["name"]))
 
 $image = new ImageRecord();
 $image->gallery_id = $gallery_id;
-$image->title = $_FILES["photo"]["name"];
+$image->title = "Uploaded Photo";
 $image->ALT_tag = "Uploaded Photo";
 $image->date_taken = now();
 $image->credits = $user->getFullName();
