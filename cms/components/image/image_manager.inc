@@ -750,6 +750,11 @@ class ImageManager
 			throw new FakoliException("Unsupported image format");
 		}
 		
+		if ($gallery->randomize_filenames)
+		{
+			$filename = plainGUID() . $ext;
+		}
+		
 		$target = $dir . DIRECTORY_SEPARATOR . $filename;
 		
 		trace ("Uploading file to $target", 3);
