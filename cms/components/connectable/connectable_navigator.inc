@@ -35,7 +35,7 @@ class ConnectableNavigator
 var {$this->id}_ConnectableNavigator;
 window.addEvent('load', function()
 {
-	{$this->id}_ConnectableNavigator = new ConnectableNavigator('{$this->id}');
+	{$this->id}_ConnectableNavigator = new ConnectableNavigator('{$this->id}_panel');
 });
 </script>
 ENDSCRIPT;
