@@ -12,7 +12,7 @@ if ($tracking)
 {
 	$session = UserActivitySession::fromIdentifier($error->session);
 	
-	$sid = "<a href='session_details?session_id={$session}'>{$session}</a>";
+	$sid = "<a href='session_details?session_id={$error->session}'>{$error->session}</a>";
 }
 else
 {
