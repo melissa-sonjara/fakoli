@@ -24,7 +24,7 @@ class ConnectableNavigator
 		$url = $this->handler."?".($this->source->getPrimaryKey())."=".($this->source->get($this->source->getPrimaryKey()));
 		
 		trace($url, 3);
-		$this->panel = new Panel($this->id, $url);
+		$this->panel = new Panel($this->id."_panel", $url);
 	}
 	
 	function writeScript()
