@@ -3,7 +3,8 @@ Fakoli::using("login");
 
 if ($user)
 {
-	Fakoli::end("ERROR|Already logged in");
+	session_destroy();
+	unset($user);
 }
 
 $mgr = new LoginManager();
