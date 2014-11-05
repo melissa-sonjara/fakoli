@@ -36,6 +36,14 @@ if (!checkRole("admin") && $_SERVER["REMOTE_ADDR"] != $_SERVER["SERVER_ADDR"] &&
 	throw new FakoliException("Anonymous component scans cannot be run from {$_SERVER["REMOTE_ADDR"]}");
 }
 
+if ($_SERVER["REMOTE_ADDR"] == "127.0.0.1" && array_key_exists("clear", $_GET))
+{
+	$db = ConnectionManager::getConnection();
+	$db->exec("TRUNCATE TABLE component");
+
+	Cache::invalidate("fakoli_components");
+}
+
 $mgr = new ComponentManager();
 $mgr->scan();
 

@@ -23,6 +23,21 @@ $form->ajaxSubmit("function(result) { ConnectableNavigator.selectResult(result);
 
 $form->submitLabel = "Save";
 
+$target = new $to;
+
+$from = get_class($source).":".$source->get($source->getPrimaryKey());
+$createURL = ConnectableManager::$contextRouter . "?from=$from&to=$to";
+$isScript = false;;
+
+if (method_exists($target, getConnectableCreateHandler))
+{
+	$createHandler = $target->getConnectableCreateHandler();
+	$createURL = "{$createHandler}('{$createURL}'); return false;";
+	$isScript = true;
+}
+
+$form->button("Create New ".$target->prettifyClassName(), $createURL, null, $isScript);
+
 $selectFieldRenderer = new ConnectableTableFieldRenderer($form, "related_items", "Related Items", $to);
 
 if ($method == "POST")
