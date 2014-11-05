@@ -16,7 +16,7 @@ var ConnectableNavigator = new Class(
 	
 	refresh: function()
 	{
-		this.container.reload();
+		this.container.reload(function() { this.countIndicator.refresh(); }.bind(this));
 	}
 });
 
