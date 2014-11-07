@@ -545,7 +545,7 @@ class DataListView implements FacetFilterable
 					{
 						if ($this->excelFile)
 						{
-							$this->menu->command($this->id."_excel", "Save as Excel...", $_SERVER['REQUEST_URI']."$qs", "/fakoli/images/msexcel_icon_small.png");
+							$this->menu->command($this->id."_excel", "Save as Excel...", $qs, "/fakoli/images/msexcel_icon_small.png");
 						}
 ?>
 		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
