@@ -1,6 +1,6 @@
 <?php
 Fakoli::using("data_sync");
-Fakoli::using("auto_form");
+Fakoli::usingFeature("auto_form");
 
 $class = checkIdentifier($_GET["class"]);
 $import_profile_id = checkNumeric($_GET["import_profile_id"]);
