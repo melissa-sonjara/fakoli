@@ -99,6 +99,7 @@ class Histogram
 	var $titleSize = 20;
 	var $enableDownload = true;
 	var $units = "";
+	var $scaleToFit = false;
 	
 	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -274,7 +275,17 @@ window.addEvent('domready', function ()
 });
 </script>
 ENDSCRIPT;
-		echo "<div id='{$this->id}' style='width: {$containerWidth}; height: {$containerHeight};{$this->cssStyles}'></div>";
+	
+		if ($this->scaleToFit)
+		{
+			$dimensions = "width: 100%; height: auto";
+		}
+		else
+		{
+			$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
+		}
+		
+		echo "<div id='{$this->id}' style='{$this->cssStyles}'></div>";
 	}	
 }
 ?>
