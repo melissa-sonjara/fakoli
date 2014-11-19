@@ -61,6 +61,7 @@ $tabs = blogTabs($blog_id);
 
 $blogView = new BlogView($blog);
 $form = BlogManager::buildBlogForm($blog, $redirect, $blogView);
+$form->unique("identifier");
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
