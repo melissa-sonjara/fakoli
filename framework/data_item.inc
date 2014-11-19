@@ -1952,9 +1952,10 @@ function restoreHTML($text)
  * @param $items the items to dump
  * @param $filepath the output file path
  */
-function dumpCSV($class, $items, $filepath)
+function dumpCSV($class, $items, $filepath, $filter = null)
 {
 	$obj = new $class;
+	$obj->filter = $filter;
 	
 	$fp = fopen($filepath, "w");
 	
