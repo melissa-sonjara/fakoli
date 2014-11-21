@@ -313,7 +313,7 @@ abstract class UpgradeManager
 			return;
 		}
 		
-		while (($buffer = fgets($fp)) !== false && !preg_match("/^--\s.*?$version_id/i", $buffer)) 
+		while (($buffer = fgets($fp)) !== false && !preg_match("/^--.*?$version_id/i", $buffer)) 
 			continue;
 				
 		// Found start of this verson's update section in the sql file
