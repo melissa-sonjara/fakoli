@@ -886,6 +886,31 @@ ENDSCRIPT;
 	}
 	
 	/**
+	 * Schedules a notification message to be displayed to the user at the next full page load.
+	 * Use this when you need to display a notification after a redirect.
+	 * @param string $message
+	 */
+	static function notifyOnNextPage($message)
+	{
+		$_SESSION["notification_pending"] = $message;
+	}
+	
+	/**
+	 * Display any previously scheduled notification message.
+	 */
+	static function showPendingNotification()
+	{
+		global $isAction;
+		global $isResource;
+		
+		if (!$isAction &&  !$isResource && isset($_SESSION["notification_pending"]))
+		{
+			Fakoli::notify($_SESSION["notification_pending"]);
+			unset($_SESSION["notification_pending"]);
+		}
+	}
+	
+	/**
 	 * Customer Error Handler
 	 * @param unknown $errLevel
 	 * @param unknown $errMsg
@@ -1115,6 +1140,7 @@ else
 	}
 }
 
+Fakoli::showPendingNotification();
 ComponentManager::fireEvent("Initialize");
 
 ?>
