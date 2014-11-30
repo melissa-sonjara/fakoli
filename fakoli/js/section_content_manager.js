@@ -110,6 +110,35 @@ var SectionContentManager = new Class(
 			}.bind(this)
 		});
 		request.send();
-	}
+	},
+	
+
+	positionModules: function()
+	{
+		this.getValues();
+		if (this.values.length == 0) return;
+
+		this.popup = modalPopup("Position Modules", "/action/section/content_modules?" + this.getQueryParams(), '750px', 'auto', true);		
+	},
+	
+	modulesChanged: function(response)
+	{
+		if (response == "OK")
+		{
+			this.popup.hide();
+			this.tree.getElements("input:checked").each(function(input)
+			{
+				var div = findAncestor(input, "div");
+				div.set('class', 'flagged_node_leaf');
+			});
+		}
+		else
+		{
+			document.id("SectionContentModules_form__error").set('html', response);
+			document.id("SectionContentModules_form__error").setStyle('display', 'table-cell');
+		}
+	},
+	
+	
 });
 
