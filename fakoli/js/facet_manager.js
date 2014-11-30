@@ -254,3 +254,59 @@ var StringFacetHandler = new Class(
 	}
 
 });
+
+var SelectFacetHandler = new Class(
+{
+	id: "",
+	select: Class.Empty,
+	manager: Class.Empty,
+	currentValue: "",
+	
+	initialize: function(id, textField, manager)
+	{
+		this.id = id;
+		this.select = document.id(textField);
+		this.manager = manager;
+		this.manager.registerHandler(this);
+		
+		this.select.addEvent('change', function(e) 
+		{
+			var value = this.select.value;
+			if (value == this.currentValue) return;
+			this.currentValue = value;
+			this.manager.filterChanged();
+		}.bind(this));
+	},
+	
+	getName: function()
+	{
+		return this.id;
+	},
+	
+	preprocess: function(item)
+	{
+
+	},
+	
+	preprocessComplete: function()
+	{
+
+	},
+	
+	filter: function(item)
+	{
+		var term = item.get("data-" + this.id);
+		
+		return (term.indexOf(this.currentValue) != -1);
+	},
+	
+	isClear: function()
+	{
+		return this.select.selectedIndex == -1;
+	},
+	
+	getSelectedValue: function()
+	{
+		return this.select.value;
+	}			
+});
