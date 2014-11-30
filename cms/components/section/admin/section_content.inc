@@ -151,7 +151,9 @@ $contextMenu->command("set_template", "Set Template...", "sectionContentManager.
 			->command("set_page_title", "Override Page Title...", "sectionContentManager.setPageTitle()", false)
 			->command("set_all", "All Properties...", "sectionContentManager.allProperties()", "", false)
 			->separator()
-			->command("use_defaults", "Use Section Defaults", "sectionContentManager.clearProperties()", "", false);
+			->command("use_defaults", "Use Section Defaults", "sectionContentManager.clearProperties()", "", false)
+			->separator()
+			->command("position_modules", "Position Modules", "sectionContentManager.positionModules()", "", false);
 
 $script .= $contextMenu->writeScript();
 $dialogs .= $contextMenu->writeMenu();

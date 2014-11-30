@@ -234,16 +234,20 @@ class SectionContent extends DataItem
 						"use_SSL"				=>	Boolean);
 	
 	var $relations = array(
-						"Section"	=>	Section
+						"Section"					=>	Section,
+						"SectionContentModuleXrefs"	=>	SectionContentModuleXref
 	);
-	
 
 	function Section()
 	{
 		return $this->getRelated(Section);
 	}
 	
-	
+
+	function SectionContentModuleXrefs($constraint = "ORDER BY position, sort_order")
+	{
+		return $this->getRelatedList(SectionContentModuleXref, "", $constraint);
+	}
 
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
@@ -287,6 +291,44 @@ class SectionContent extends DataItem
 						->execute();
 		
 		return $content;
+	}
+	
+
+	/**
+	 * Loads the default template associated with this section.
+	 * @return string the contents of the template for this section.
+	 */
+	function getTemplate()
+	{
+		global $config;
+		
+		if ($this->template)
+		{
+			$template = file_get_contents("{$config['homedir']}/templates/{$this->template}");
+		}
+		else
+		{
+			$template = $this->Section()->getDefaultTemplate();
+		}
+		
+		return $template;
+	}
+	
+	/**
+	 * Retrieves an array of the position names defined in the template for this page.
+	 * @return array the positions defined in the template (sorted alphabetically)
+	 */
+	function getPositions()
+	{
+		$template = $this->getTemplate();
+	
+		$positionMatches = array();
+	
+		preg_match_all("/\{position:(.*?)\}/", $template, $positionMatches, PREG_PATTERN_ORDER);
+	
+		$positions = $positionMatches[1];
+		sort($positions);
+		return $positions;
 	}
 }
 
