@@ -483,6 +483,11 @@ var ModalDialog = new Class(
 });
 
 ModalDialog.activeDialogs = [];
+ModalDialog.recenterActiveDialog = function()
+{
+	if (ModalDialog.activeDialogs.length == 0) return;
+	ModalDialog.activeDialogs[ModalDialog.activeDialogs.length - 1].center();
+};
 
 var FloatingDialog = new Class(
 {
