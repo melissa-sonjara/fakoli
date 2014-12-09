@@ -394,10 +394,20 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 		
 		foreach($this->collapsibleGroups as $group => $toggle)
 		{
-			$groupID = $this->id . "_" . codify($group) . "_group";
-			$toggleID = $this->id . "_" . $toggle;
-			
-			echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+			if (is_bool($toggle))
+			{
+				$groupID = $this->id . "_" . codify($group) . "_group";
+				echo "\tdocument.id('$groupID').getElement('legend').addEvent.addEvent('click', function(e) { var g = document.id('$groupID'); if (g.hasClass('collapsed')) { g.removeClass('collapsed'); g.addClass('expanded'); } else { g.removeClass('expanded'); g.addClass('collapsed'); } });\n";
+				echo "\tdocument.id('$groupID').addClass('toggleSelf');\n";
+			}
+			else
+			{	
+				$groupID = $this->id . "_" . codify($group) . "_group";
+				$toggleID = $this->id . "_" . $toggle;
+				
+				echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+				echo "\tdocument.id('$toggleID').addEvent('change', function(e) { if (this.value != '0') {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+			}
 		}
 		echo "\t});\n";
 		echo "</script>\n";
@@ -1002,7 +1012,8 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 				if ($collapsible)
 				{
 					$cf = $this->collapsibleGroups[$legend];
-					$collapsed = !$this->data->$cf;
+					//AJG: Allow direct specification of boolean for collapsed group state
+					$collapsed = is_bool($cf) ? $cf : !$this->data->$cf;
 				}
 				
 				$this->layout->startGroup($legend, $collapsible, $collapsed);
