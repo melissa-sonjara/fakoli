@@ -397,7 +397,7 @@ document.id('<?echo $this->id?>').iFrameFormRequest({'onRequest': function() { r
 			if (is_bool($toggle))
 			{
 				$groupID = $this->id . "_" . codify($group) . "_group";
-				echo "\tdocument.id('$groupID').getElement('legend').addEvent.addEvent('click', function(e) { var g = document.id('$groupID'); if (g.hasClass('collapsed')) { g.removeClass('collapsed'); g.addClass('expanded'); } else { g.removeClass('expanded'); g.addClass('collapsed'); } });\n";
+				echo "\tdocument.id('$groupID').getElement('legend').addEvent('click', function(e) { var g = document.id('$groupID'); if (g.hasClass('collapsed')) { g.removeClass('collapsed'); g.addClass('expanded'); } else { g.removeClass('expanded'); g.addClass('collapsed'); } });\n";
 				echo "\tdocument.id('$groupID').addClass('toggleSelf');\n";
 			}
 			else
