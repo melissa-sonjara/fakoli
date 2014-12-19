@@ -11,7 +11,8 @@ class ScheduledTask extends DataItem
 						"active"		=>	Boolean,
 						"next_run"		=>	DateTime);
 	
-	var $relations = array("LogEntries"	=>	ScheduledTaskLogEntry);
+	var $relations = array("LogEntries"	=>	ScheduledTaskLogEntry,
+						   "LastRun"	=>	ScheduledTaskLogEntry);
 	
 	function LogEntries($constraint = "")
 	{
@@ -23,6 +24,14 @@ class ScheduledTask extends DataItem
 		return Query::create(ScheduledTask, "WHERE component=:c AND task_name=:t")
 				    ->bind(":c", $component, ":t", $task_name)
 				    ->executeSingle();
+	}
+	
+	function LastRun()
+	{
+		if ($this->_lastRun) return $this->_lastRun;
+		$lastRun = $this->LogEntries("ORDER BY log_date DESC limit 1");
+		$this->_lastRun = $lastRun;
+		return $lastRun;
 	}
 }	
 
