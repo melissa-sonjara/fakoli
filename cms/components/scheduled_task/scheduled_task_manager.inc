@@ -9,7 +9,7 @@ class ScheduledTaskManager
 {
 	static $workers = array();
 	
-	function ScheduledTaskManager()
+	function __construct()
 	{
 		ComponentManager::fireEvent("RegisterScheduledTaskWorkers");
 	}
@@ -37,6 +37,15 @@ class ScheduledTaskManager
 		}
 	}
 
+	static function getTabs($key)
+	{
+		$tabs = array("Task Schedule"	=>	"/admin/scheduled_task_form",
+					  "Execution Logs"	=>	"/admin/scheduled_task_logs");
+	
+		$qs = ($key) ? "task_id=$key" : "";
+		return new TabBar("tabs", $tabs, $qs);
+	}
+	
 	function getTasks()
 	{
 		return Query::create(ScheduledTask, "ORDER BY component, task_name")->execute();
