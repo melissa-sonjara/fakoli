@@ -1,7 +1,7 @@
 
 table.task_schedule {
   background: none repeat scroll 0 0 #ddd;
-  border: medium none;
+  border: 1px solid #888;
   box-shadow: 1px 1px 3px #888;
   padding: 4px;
   width: auto;
@@ -21,6 +21,7 @@ table.task_schedule th.schedule_day {
 }
 
 table.task_schedule td.period {
+  border: 1px solid #888;
   height: 20px;
   transition: all 0.5s ease 0s;
 }
