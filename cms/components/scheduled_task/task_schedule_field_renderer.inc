@@ -49,7 +49,7 @@ class TaskScheduleFieldRenderer extends FieldRenderer
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)) return;
 		$id = "{$this->parent->id}_{$field}";
 ?>
-	<script type="text/javascript" src="/components/scheduled_tasks/js/task_schedule_selector.js"></script>
+	<script type="text/javascript" src="/components/scheduled_task/js/task_schedule_selector.js"></script>
 	<script type='text/javascript'>
 	window.addEvent('load', function()
 	{
