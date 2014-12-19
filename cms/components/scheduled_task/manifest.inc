@@ -17,7 +17,13 @@ class ScheduledTaskManifest
 	static function getAdminMenu()
 	{
 		return array(
-				//TODO: Admin Menu Item definitions
+			"Site Configuration"	=> array
+			(
+
+				"Scheduled Tasks"	=>	array("page"	=>	"/admin/scheduled_tasks",
+											  "role"	=>	"admin",
+								  			  "weight"	=>	2)
+			)
 		);
 	}
 
