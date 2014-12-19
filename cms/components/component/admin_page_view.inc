@@ -71,6 +71,9 @@ class AdminPageView
 		global $menu_item;
 		global $isAdmin;
 		
+		global $auto_form_defaults;
+		$auto_form_defaults["default_layout"] = "table";
+		
 		$page = $this->page; // Pass through to code include
 		
 		$template = file_get_contents(Fakoli::resolveResource("/fakoli/admin.tpl"));
