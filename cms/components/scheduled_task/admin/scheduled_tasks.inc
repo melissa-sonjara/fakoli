@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("scheduled_tasks");
+Fakoli::using("scheduled_task");
 Fakoli::usingFeature("data_view");
 
 $mgr = new ScheduledTaskManager();
