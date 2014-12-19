@@ -37,6 +37,11 @@ class ScheduledTaskManager
 		}
 	}
 
+	function getTasks()
+	{
+		return Query::create(ScheduledTask, "ORDER BY component, task_name")->execute();
+	}
+	
 	function executeTask($component, $task_name)
 	{
 		$task = ScheduledTask::getInstance($component, $task_name);
