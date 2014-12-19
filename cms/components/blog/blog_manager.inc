@@ -293,10 +293,22 @@ class BlogManager
 		}
 	}
 	
+	static function sendDigests()
+	{
+		$mgr = new BlogSubscriptionManager();
+		
+		$mgr->sendDigests();
+	}
+	
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("blog", "Articles and Blogs", new BlogSerializationHandler());
 		return true;
+	}
+	
+	static function registerScheduledTaskWorkers()
+	{
+		ScheduledTaskManager::registerWorker("blog", "Send Digests", array(BlogManager, sendDigests));
 	}
 }
 

@@ -72,16 +72,17 @@ class BlogManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" => array(BlogManager, displayBlog),
-					 "EnumerateItems"	 => array(BlogManager, enumerateItems),
-					 "RegisterBlogViewHandlers" => array(BlogView, registerStandardHandlers),
-					 "upgradeComponent"		=>	array(BlogManager, upgradeComponent),
+		return array("ResolveIdentifier"			=> array(BlogManager, displayBlog),
+					 "EnumerateItems"				=> array(BlogManager, enumerateItems),
+					 "RegisterBlogViewHandlers"		=> array(BlogView, registerStandardHandlers),
+					 "upgradeComponent"				=>	array(BlogManager, upgradeComponent),
 					 "RegisterSerializationHandler"	=>	array(BlogManager, registerSerializationHandler),
-					 "RegisterTaxonomyClasses"	=>	array(BlogManager, registerTaxonomyClasses),
-					 "DeleteUser"			=>	array(BlogManager, deleteUser),
-					 "ComponentScanComplete"	=> array(BlogManager, setDefaults),
-					"RegisterSearchables"		=>	array(BlogManager, registerSearchables),
-					"RegisterSolrAdapters"		=>	array(BlogManager, registerSolrAdapter)
+					 "RegisterTaxonomyClasses"		=>	array(BlogManager, registerTaxonomyClasses),
+					 "DeleteUser"					=>	array(BlogManager, deleteUser),
+					 "ComponentScanComplete"		=> array(BlogManager, setDefaults),
+					 "RegisterSearchables"			=>	array(BlogManager, registerSearchables),
+					 "RegisterSolrAdapters"			=>	array(BlogManager, registerSolrAdapter),
+					 "RegisterScheduledTaskWorkers"	=>	array(BlogManager, registerScheduledTaskWorkers)
 		);
 	}
 }

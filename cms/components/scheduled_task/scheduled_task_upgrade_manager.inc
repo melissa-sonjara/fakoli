@@ -14,7 +14,7 @@ Fakoli::using("scheduled_task", "component");
 class ScheduledTaskUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-		//"x.x"	=>	"description"
+		"1.0"	=>	"sql:Created scheduled_task and scheduled_task_log_entry tables"
 	);
 
 	function ScheduledTaskUpgradeManager()
