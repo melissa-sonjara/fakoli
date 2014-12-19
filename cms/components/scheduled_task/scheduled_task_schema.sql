@@ -16,7 +16,7 @@ CREATE TABLE scheduled_task
 	component	varchar(200) not null,
 	task_name	varchar(200) not null,
 	schedule 	varchar(1000) not null default '',
-	active		tinyint(3) not null defalut 0,
+	active		tinyint(3) not null default 0,
 	next_run	datetime,
 	PRIMARY KEY(task_id)
 ) ENGINE=InnoDB;
