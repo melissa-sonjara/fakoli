@@ -21,8 +21,7 @@ table.task_schedule th.schedule_day {
 }
 
 table.task_schedule td.period {
-  box-shadow: 1px 1px 5px #aaa inset;
-  height: 25px;
+  height: 20px;
   transition: all 0.5s ease 0s;
 }
 
