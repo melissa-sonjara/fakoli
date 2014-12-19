@@ -18,7 +18,7 @@ if ($method == "POST")
 	}
 }
 
-$tabs = ScheduledTaskManager::getTabs();
+$tabs = ScheduledTaskManager::getTabs($task_id);
 
 $script .= $form->writeScript();
 
