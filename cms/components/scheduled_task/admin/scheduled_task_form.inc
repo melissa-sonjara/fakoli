@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("scheduled_tasks");
+Fakoli::using("scheduled_task");
 Fakoli::usingFeature("tab_bar", "auto_form");
 
 $task_id = checkNumeric($_GET["task_id"]);
