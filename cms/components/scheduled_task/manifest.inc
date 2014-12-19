@@ -22,7 +22,7 @@ class ScheduledTaskManifest
 
 				"Scheduled Tasks"	=>	array("page"	=>	"/admin/scheduled_tasks",
 											  "role"	=>	"admin",
-								  			  "weight"	=>	99)
+								  			  "weight"	=>	13)
 			)
 		);
 	}
