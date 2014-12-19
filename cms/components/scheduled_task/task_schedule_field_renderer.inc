@@ -5,7 +5,7 @@ class TaskScheduleHelper
 {	
 	static function drawScheduleBox($id, $value, $readOnly = false)
 	{
-		echo "<table id='{$id}' class='schedule'><thead><tr><th>&nbsp;</th>";
+		echo "<table id='{$id}' class='task_schedule'><thead><tr><th>&nbsp;</th>";
 		for($i = 0; $i < 7; ++$i)
 		{
 		$day = jddayofweek($i, 2);
