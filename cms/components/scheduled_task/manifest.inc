@@ -14,6 +14,13 @@ class ScheduledTaskManifest
 		return $component;
 	}
 
+	static function getStyles()
+	{
+		return array(
+				"/components/scheduled_task/css/scheduled_task.css"
+				);
+	}
+	
 	static function getAdminMenu()
 	{
 		return array(
