@@ -7,7 +7,7 @@ class ScheduledTask extends DataItem
 	var $fields = array("task_id"		=>	Number,
 						"component"		=>	String,
 						"task_name"		=>	String,
-						"schedule"		=>	String,
+						"schedule"		=>	TaskSchedule,
 						"active"		=>	Boolean,
 						"next_run"		=>	DateTime);
 	
