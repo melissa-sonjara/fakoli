@@ -2,6 +2,8 @@
 Fakoli::using("scheduled_task");
 Fakoli::usingFeature("data_view");
 
+$menu_item = "Scheduled Tasks";
+
 $mgr = new ScheduledTaskManager();
 $tasks = $mgr->getTasks();
 
