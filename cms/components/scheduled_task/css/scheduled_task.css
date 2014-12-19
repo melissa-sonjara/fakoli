@@ -1,17 +1,15 @@
 
-table.task_schedule 
-{
-  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+table.task_schedule {
+  background: none repeat scroll 0 0 #f5f5f5;
   border: medium none;
-  border-radius: 10px;
-  box-shadow: 1px 1px 5px #888;
+  box-shadow: 1px 1px 3px #888;
   padding: 4px;
   width: auto;
 }
 
 table.task_schedule th {
-  font-size: 83.3%;
-  font-weight: normal;
+  font-size: 10pt;
+  font-weight: bold;
 }
 
 table.task_schedule th.schedule_day {
@@ -21,7 +19,7 @@ table.task_schedule th.schedule_day {
 
 table.task_schedule td.period {
   box-shadow: 1px 1px 5px #aaa inset;
-  height: 45px;
+  height: 25px;
   transition: all 0.5s ease 0s;
 }
 
