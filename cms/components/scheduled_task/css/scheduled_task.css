@@ -1,0 +1,36 @@
+
+table.task_schedule 
+{
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+  border: medium none;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px #888;
+  padding: 4px;
+  width: auto;
+}
+
+table.task_schedule th {
+  font-size: 83.3%;
+  font-weight: normal;
+}
+
+table.task_schedule th.schedule_day {
+  text-align: center;
+  width: 50px;
+}
+
+table.task_schedule td.period {
+  box-shadow: 1px 1px 5px #aaa inset;
+  height: 45px;
+  transition: all 0.5s ease 0s;
+}
+
+table.task_schedule td.period.selected 
+{
+  background-color: #90a0b2;
+}
+
+table.task_schedule td
+{
+	background-color: #fff;
+}
