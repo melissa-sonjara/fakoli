@@ -7,7 +7,7 @@ $tasks = $mgr->getTasks();
 
 $table = new DataListView($tasks, "scheduled_tasks");
 
-$table->column("Task", "<a c{component:prettify}: {task_name}", true, "width: 40%")
+$table->column("Task", "<a href='scheduled_task_form?task_id={task_id}'>{component:prettify}: {task_name}</a>", true, "width: 40%")
 	  ->column("Last Run", "{last_run}", true, "width: 15%")
 	  ->column("Status", "", true, "width: 20%")
 	  ->column("Next Run", "{next_run}", true, "width: 15%")
