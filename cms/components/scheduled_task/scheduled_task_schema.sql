@@ -40,3 +40,9 @@ ALTER TABLE scheduled_task_log_entry ADD INDEX log_entry_idx (task_id ASC, log_d
 ALTER TABLE scheduled_task DROP COLUMN next_run;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE scheduled_task CHANGE COLUMN schedule schedule VARCHAR(2000) not null default '';
+
+-- END Version 1.2
