@@ -14,9 +14,8 @@ $task = new ScheduledTask($task_id);
 $logEntries = $task->LogEntries("ORDER BY log_date DESC");
 
 $table = new DataListView($logEntries, "log_entries");
-$table->column("Execution Date", "{log_date}", true)
-	  ->column("Status", "{status}", true)
-	  ->column("", "<a class='button' href='#' onclick='showTaskLog({log_entry_id}); return false'>Show Log</a>");
+$table->column("Execution Date", "{log_date}", true, "width: 15%")
+	  ->column("Status", "<a class='button' style='float: right' href='#' onclick='showTaskLog({log_entry_id}); return false'>Show Log</a> {status}", true);
 
 $table->paginate = true;
 $table->filter = true;
