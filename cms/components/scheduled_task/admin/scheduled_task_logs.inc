@@ -15,7 +15,7 @@ $logEntries = $task->LogEntries("ORDER BY log_date DESC");
 
 $table = new DataListView($logEntries, "log_entries");
 $table->column("Execution Date", "{log_date}", true, "width: 20%")
-	  ->column("Status", "<a class='button' style='float: right' href='#' onclick='showTaskLog({log_entry_id}); return false'>Show Log</a> {status}", true);
+	  ->column("Status", "<a class='button' style='float: right' href='#' onclick='showTaskLog({task_id}, {log_entry_id}, '{log_date}'); return false'>Show Log</a> {status}", true);
 
 $table->paginate = true;
 $table->filter = true;
@@ -26,7 +26,14 @@ $table->emptyMessage = "There are no log files for this task.";
 $tabs = ScheduledTaskManager::getTabs($task_id);
 
 $script .= $table->writeScript();
-
+$script .= <<<ENDSCRIPT
+<script type='text/javascript'>
+function showTaskLog(task_id, log_entry_id, log_date)
+{
+	modalPopup("Task Log for " + log_date, "/action/scheduled_task/show_log?task_id=" + task_id + "&log_entry_id=" + log_entry_id, '800px', 'auto');
+}
+</script>
+ENDSCRIPT;
 $tabs->writeHTML();
 ?>
 <div class='tab_border'>
