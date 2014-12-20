@@ -76,8 +76,6 @@ class ScheduledTaskManager
 		$log->log = $output;
 		$log->status = $result;
 		$log->save();
-		
-		//$task->recordRun();
 	}
 	
 	function runTasks()
