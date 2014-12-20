@@ -34,3 +34,9 @@ CREATE TABLE scheduled_task_log_entry
 ALTER TABLE scheduled_task_log_entry ADD INDEX log_entry_idx (task_id ASC, log_date DESC);
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE scheduled_task DROP COLUMN next_run;
+
+-- END Version 1.1
