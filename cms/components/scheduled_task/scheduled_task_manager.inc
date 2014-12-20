@@ -53,6 +53,8 @@ class ScheduledTaskManager
 	
 	function executeTask($component, $task_name)
 	{
+		trace("-- Executing Task '{$component}: $task_name'", 3);
+		
 		$task = ScheduledTask::getInstance($component, $task_name);
 		
 		if (!$task)
@@ -80,6 +82,22 @@ class ScheduledTaskManager
 	
 	function runTasks()
 	{
+		$currentPeriod = TaskScheduleHelper::calculatePeriod();
+		trace("** Running tasks for period $currentPeriod", 3);
+		
+		$tasks = $this->getTasks();
+		$count = 0;
+		
+		foreach($tasks as $task)
+		{
+			if (strpos($task->schedule, $currentPeriod) !== false)
+			{
+				$this->executeTask($task->component, $task->task_name);
+				++$count;
+			}
+		}
+		
+		trace("$count ".pluralize("task", $count)." executed", 3);
 	}
 	
 	static function upgradeComponent($version)
