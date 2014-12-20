@@ -33,6 +33,21 @@ class TaskScheduleHelper
 
 		echo "</tbody></table>";
 	}
+	
+	static function calculatePeriod($datetime = null)
+	{
+		$d = new DateTime($datetime);
+	
+		$day = $d->format("N") - 1;
+	
+		$hour = $d->format("H");
+	
+		$sp = "{$day}:{$hour}:00";
+		
+		trace("Schedule Period for $datetime is $sp", 3);
+	
+		return $sp;
+	}
 }
 
 class TaskScheduleFieldRenderer extends FieldRenderer
