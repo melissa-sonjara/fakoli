@@ -8,8 +8,7 @@ class ScheduledTask extends DataItem
 						"component"		=>	String,
 						"task_name"		=>	String,
 						"schedule"		=>	TaskSchedule,
-						"active"		=>	Boolean,
-						"next_run"		=>	DateTime);
+						"active"		=>	Boolean);
 	
 	var $relations = array("LogEntries"	=>	ScheduledTaskLogEntry,
 						   "LastRun"	=>	ScheduledTaskLogEntry);
