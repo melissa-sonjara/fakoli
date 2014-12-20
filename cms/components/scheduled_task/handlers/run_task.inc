@@ -15,4 +15,4 @@ if (!$task_id)
 $task = new ScheduledTask($task_id);
 $task->run();
 
-redirect("scheduled_task_logs?task_id={$task_id}");
+redirect("/admin/scheduled_task_logs?task_id={$task_id}");
