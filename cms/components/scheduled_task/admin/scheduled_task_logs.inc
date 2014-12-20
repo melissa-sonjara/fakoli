@@ -35,4 +35,6 @@ $tabs->writeHTML();
 <?
 $table->drawView();
 ?>
+<br/>
+<a class='button' href='/action/scheduled_task/run_task?task_id=<?echo $task_id?>'>Run Now</a>
 </div>
