@@ -33,6 +33,12 @@ class ScheduledTask extends DataItem
 		$this->_lastRun = $lastRun;
 		return $lastRun;
 	}
+	
+	function run()
+	{
+		$mgr = new ScheduledTaskManager();
+		$mgr->executeTask($this->component, $this->task_name);
+	}
 }	
 
 
