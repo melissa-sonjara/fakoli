@@ -15,4 +15,4 @@ if ($log->task_id != $task_id)
 	Fakoli::end("Parameter mismatch");
 }
 
-echo $log->log;
+echo formatAsHTML($log->log);
