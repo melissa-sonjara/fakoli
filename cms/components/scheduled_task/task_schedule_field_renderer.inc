@@ -47,7 +47,7 @@ class TaskScheduleHelper
 		trace("Schedule Period for $datetime is $sp", 3);
 	
 		return $sp;
-	}
+	}	
 }
 
 class TaskScheduleFieldRenderer extends FieldRenderer
