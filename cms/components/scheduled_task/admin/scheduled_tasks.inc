@@ -13,7 +13,7 @@ $table->column("Task", "<a href='scheduled_task_form?task_id={task_id}'>{compone
 	  ->column("Last Run", "{LastRun.log_date}", true, "width: 15%")
 	  ->column("Status", "{LastRun.status}", true, "width: 20%")
 	  ->column("Next Run", "{next_run}", true, "width: 15%")
-	  ->column("Active", "<img src='/fakoli/images/{active:on/off}.gif' alt='{active:Yes/No}'/>", true, "width: 10%; text-align: center");
+	  ->column("Active", "<img src='/fakoli/images/{active:on/off}.png' alt='{active:Yes/No}'/>", true, "width: 10%; text-align: center");
 
 $table->paginate = true;
 $table->filter = true;
