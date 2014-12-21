@@ -2,6 +2,8 @@
 Fakoli::using("scheduled_task");
 Fakoli::usingFeature("tab_bar", "auto_form");
 
+$menu_item = "Scheduled Tasks";
+
 $task_id = checkNumeric($_GET["task_id"]);
 
 if (!$task_id) redirect("scheduled_tasks");
