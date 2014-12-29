@@ -10,9 +10,12 @@ $tracking = Settings::getValue("activity_tracker", "track_activity");
 
 if ($tracking)
 {
-	$session = UserActivitySession::fromIdentifier($error->session);
-	
-	$sid = "<a href='session_details?session_id={$error->session}'>{$error->session}</a>";
+	$sessions = UserActivitySession::getSessions($error->session);
+	$sid = "";
+	foreach($sessions as $s)
+	{
+		$sid .= "<a href='session_details?session_id={$s->session_id}'>{$error->session}</a><br/>";
+	}
 }
 else
 {
