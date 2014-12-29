@@ -75,6 +75,17 @@ class UserActivitySession extends DataItem
 					->bind(":i", $identifier)
 					->executeSingle();
 	}
+	
+	// We have an issue where multiple UserActivitySessions have been created for the same identifier.
+	// This method helps work around that in the error log.
+	
+	static function getSessions($identifier)
+	{
+		return Query::create(UserActivitySession, "WHERE session_identifier=:i")
+					->bind(":i", $identifier)
+					->executeSingle();
+	}
+	
 }
 	
 // view
