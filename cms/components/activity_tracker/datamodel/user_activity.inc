@@ -83,7 +83,7 @@ class UserActivitySession extends DataItem
 	{
 		return Query::create(UserActivitySession, "WHERE session_identifier=:i")
 					->bind(":i", $identifier)
-					->executeSingle();
+					->execute();
 	}
 	
 }
