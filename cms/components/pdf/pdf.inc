@@ -54,7 +54,7 @@ class PDF
 		$footer = ($this->footer) ?  $this->footer : "";
 	
 		$output = $this->output ? $this->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
-		$cmd = "$exe $footer -q $url $output";
+		$cmd = "$exe $footer -q \"$url\" $output";
 		
 		trace($cmd, 3);
 		
