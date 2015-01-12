@@ -91,7 +91,9 @@ class PhonegapManager
 	 */
 	static function getOS()
 	{
-		return $_SESSION["phonegap_os"];
+		$os = $_SESSION["phonegap_os"];
+		if ($os == "droid") $os = "android";
+		return $os;
 	}
 	
 	static function addScript($script)
