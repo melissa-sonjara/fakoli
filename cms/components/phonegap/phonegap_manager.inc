@@ -68,6 +68,8 @@ class PhonegapManager
 			
 			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled in debugging mode", 3);
 		}
+		
+		if ($_SESSION["phonegap_os"] == "droid") $_SESSION["phonegap_os"] = "android";
 	}
 	
 	static function hasPhonegap()
