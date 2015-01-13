@@ -694,7 +694,7 @@ class CheckListView extends QuestionField
 		$readonly = $this->parent->readOnlyForm ? " DISABLED" : "";
 
 		// to do - put the font style into css
-		echo "<table class=\"layout\ style=\"color: #003366; font-style: normal; font-size:9; font-family: Arial,Geneva,sans-serif;\">";
+		echo "<table class=\"layout\">";
 		$idx = 1;
 
 		$count = count($options);
