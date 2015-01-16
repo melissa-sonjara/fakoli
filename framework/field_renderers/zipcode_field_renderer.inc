@@ -57,10 +57,17 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	var $onChange = ""; // optional callback on data input change
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
 	var $includePlus4 = true;
-
+	var $international = false;
+	var $internationalLabel = "Postal Code";
+	
 	function ZipCodeFieldRenderer(&$form)
 	{	
 		$this->FieldRenderer($form);
+	}
+
+	function setInternational($label = "Postal Code")
+	{
+		$this->international = true;
 	}
 	
 	function addValidatorsToForm($field, $required = false)
@@ -69,9 +76,13 @@ class ZipCodeFieldRenderer extends FieldRenderer
 		
 		if($required)
 		{
-			$expr = $this->includePlus4 ? "^\\d{5}(?:-\\d{4})?$" : "^\\d{5}$";
+			if (!$this->international)
+			{
+				$expr = $this->includePlus4 ? "^\\d{5}(?:-\\d{4})?$" : "^\\d{5}$";
+				
+				$this->parent->regexp($field, $expr, "Please supply a valid zip code.");
+			}
 			
-			$this->parent->regexp($field, $expr, "Please supply a valid zip code.");
 			$this->parent->validator->add(new RequiredValidator($field, $label));
 		}	
 	}
@@ -106,10 +117,18 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 
-		$size = $this->includePlus4 ? 10 : 5;
 		
-		$onkeyup = " onkeyup='{$field}_keyup(event);'";
-		$onkeypress=" onkeypress='return maskInput(event)'";
+		if (!$this->international)
+		{	
+			$size = $this->includePlus4 ? 10 : 5;
+			$onkeyup = " onkeyup='{$field}_keyup(event);'";
+			$onkeypress=" onkeypress='return maskInput(event)'";
+		}
+		else
+		{
+			$size = 12;
+		}
+		
 		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";	
 		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
