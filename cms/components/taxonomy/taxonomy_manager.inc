@@ -552,6 +552,51 @@ class TaxonomyManager
 	}
 	
 	/**
+	 * Returns the number of items of the specified class that are bound to the specified source object
+	 * @param DataItem $source the source item
+	 * @param string $class the class of bound items to retrieve
+	 * @param string $constraint optional extra constraint or ordering
+	 * @return array any items of the specified class that are bound to the target
+	 */
+	static function countBoundItems($target, $class, $constraint = "")
+	{
+		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+		
+		$items = Query::create($class, "WHERE $pk IN (SELECT target_id FROM binding WHERE id=:source_id and class=:source_class AND target_class=:target_class) $constraint")
+					  ->bind(":source_id", $source->get($source->getPrimaryKey()),
+							 ":target_class", $class,
+							 ":source_class", get_class($source))
+					  ->executeValue("COUNT(1)");
+		 
+		return $items;
+	}
+
+	/**
+	 * Same as TaxonomyManager::countBoundItems, but with the reverse relationship
+	 * @param DataItem $target the target item
+	 * @param string $class the class of bound items to retrieve
+	 * @param string $constraint optional extra constraint or ordering
+	 * @return array any items of the specified class that are bound to the target
+	 */
+	static function countBoundItemsReverse($target, $class, $constraint = "")
+	{
+		$constraint = preg_replace("/^\\s*WHERE/i", "AND", $constraint);
+		$obj = new $class;
+		$pk = $obj->getPrimaryKey();
+	
+		$items = Query::create($class, "WHERE $pk IN (SELECT id FROM binding WHERE target_id=:target_id and class=:source_class AND target_class=:target_class) $constraint")
+		->bind(":target_id", $target->get($target->getPrimaryKey()),
+				":target_class", get_class($target),
+				":source_class", $class)
+				->executeValue("COUNT(1)");
+			
+		return $items;
+	
+	}
+	
+	/**
 	 * Generates a search constraint matching the supplied text against taxonomy terms that might be associated
 	 * with the given class
 	 * @param string $text the search text 
