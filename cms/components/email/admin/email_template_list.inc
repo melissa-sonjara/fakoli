@@ -80,6 +80,6 @@ function formatEmailTemplateLink($emailTemplate)
 
 function formatEmailMessage($message)
 {
-	return ellipsis($message->message, 300, true);	
+	return ellipsis(stripHTML($message->message), 300, true);	
 }
 ?>
