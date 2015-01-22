@@ -73,7 +73,7 @@ class ForumListView
 	
 	function formatTitle($item)
 	{
-		$text = "<a href='{$this->forumLink}?forum_id={$item->forum_id}'>{$item->title}</a>";
+		$text = $item->format("<a href='{$this->forumLink}?forum_id={forum_id}'>{title|No Title}</a>");
 		if ($item->teaser)
 		{
 			$text .= "<br/><span class='small'>{$item->teaser}</span>";
@@ -88,7 +88,9 @@ class ForumListView
 		$user = $lastPost->Author();
 		$userProfile = ForumManager::formatUserProfile($user);
 		
-		return "<a href='{$this->messageLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a><br/>".
+		$title = $lastPost->title ? $lastPost->title : "No Title";
+		
+		return "<a href='{$this->messageLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$title}</a><br/>".
 			   "<span class='small'>by ".$userProfile." ({$lastPost->date_posted})</span>";
 		
 	}
@@ -144,8 +146,10 @@ class ForumDetailsView
 		$message = $this->messages[$topic->topic_id];
 		$user = $message->Author();
 		$userProfile = ForumManager::formatUserProfile($user);
+
+		$title = $message->title ? $message->title : "No Title";
 		
-		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$message->title}</a><br/><span class='small'>(Created by ".$userProfile.")</span>";
+		return "<a href='{$this->topicLink}?forum_id={$topic->forum_id}&topic_id={$topic->topic_id}'>{$title}</a><br/><span class='small'>(Created by ".$userProfile.")</span>";
 	}
 	
 	function formatLastPost($topic)
@@ -155,8 +159,10 @@ class ForumDetailsView
 		$user = $lastPost->Author();
 		
 		$userProfile = ForumManager::formatUserProfile($user);
+
+		$title = $lastPost->title ? $lastPost->title : "No Title";
 		
-		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$lastPost->title}</a><br/>".
+		return "<a href='{$this->topicLink}?forum_id={$lastPost->forum_id}&topic_id={$lastPost->topic_id}'>{$title}</a><br/>".
 			   "<span class='small'>by ".$userProfile." ({$lastPost->date_posted})</span>";
 	}
 	
