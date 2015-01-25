@@ -83,7 +83,7 @@ class EmailListValidator extends AbstractValidator
 				foreach($emails as $email)
 				{
 					// ignore format specifiers
-					if (preg_match('/\\{.*?\\}/', $email) continue;
+					if (preg_match('/\\{.*?\\}/', $email)) continue;
 					
 					// ignore merge codes
 					if(preg_match('/\\[+[a-zA-Z0-9_-]+\\]/', $email))
