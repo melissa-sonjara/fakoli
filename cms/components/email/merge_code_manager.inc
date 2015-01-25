@@ -236,6 +236,8 @@ class MergeCodeManager
 	
 	function searchAndReplace($text)
 	{
+		$text = $this->item->format($text);
+		
 		if(count($this->patterns) == 0)
 			return $text;
 		else	
