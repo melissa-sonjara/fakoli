@@ -35,6 +35,10 @@ Fakoli::usingFile("framework/join.inc");
 
 class Forum extends DataItem
 {
+	var $primary_key = "forum_id";
+	var $table = "forum";
+	var $default_format = "{title}";
+	
 	// Fields
 	
 	var $fields = array("forum_id"		=>	Number,
@@ -126,23 +130,20 @@ class Forum extends DataItem
 					->executeSingle();
 	}
 	
-	function Forum()
+	function __construct()
 	{
-		$this->primary_key = "forum_id";
-		$this->table = "forum";	
-		$this->default_format = "{title}";
-
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 
-		
-		$this->DataItem(func_get_args());
 	}
 }
 
 
 class ForumSiteXref extends DataItem
 {
+	var	$primary_key = "forum_site_xref_id";
+	var $table = "forum_site_xref";
+	
 	// Fields
 	
 	var $fields = array("forum_site_xref_id"	=>	Number,
@@ -163,18 +164,14 @@ class ForumSiteXref extends DataItem
 	{
 		return $this->getRelated(Site);
 	}
-	
-	function ForumSiteXref()
-	{
-		$this->primary_key = "forum_site_xref_id";
-		$this->table = "forum_site_xref";
-
-		$this->DataItem(func_get_args());
-	}
 }
 
 class ForumMessage extends DataItem
 {
+	var	$primary_key = "message_id";
+	var $table = "forum_message";
+	var	$default_format = "{title}";
+	
 	// Fields
 
 	var $fields = array("message_id"		=>	Number,
@@ -222,23 +219,20 @@ class ForumMessage extends DataItem
 		return $this->crossReference(Attachment, ForumMessageAttachmentXref, $constraint);
 	}
 	
-	function ForumMessage()
+	function __construct()
 	{
-		$this->primary_key = "message_id";
-		$this->table = "forum_message";
-		$this->default_format = "{title}";
-		
-
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Author"] = $mgr->getUserClass(); 		
-		$this->DataItem(func_get_args());
 	}	
 }
 
 
 class ForumMessageAttachmentXref extends DataItem
 {
+	var	$primary_key = "forum_message_attachment_xref_id";
+	var	$table = "forum_message_attachment_xref";
+	
 	// Fields
 	var $fields = array("forum_message_attachment_xref_id"	=>	Number,
 						"message_id"						=>	Number,
@@ -257,18 +251,14 @@ class ForumMessageAttachmentXref extends DataItem
 	{
 		return $this->getRelated(Attachment);
 	}
-	
-	function ForumMessageAttachmentXref()
-	{
-		$this->primary_key = "forum_message_attachment_xref_id";
-		$this->table = "forum_message_attachment_xref";
-		$this->DataItem(func_get_args());
-	}
 }
 
 	
 class ForumTopic extends DataItem
 {
+	var	$primary_key = "topic_id";
+	var	$table = "forum_topic";
+	
 	// Fields
 	var $fields = array("topic_id"		=>	Number,
 						"message_id"	=>	Number,
@@ -320,19 +310,14 @@ class ForumTopic extends DataItem
 			->bind(":topic_id", $this->topic_id)
 			->executeValue("COUNT(1)");
 	}
-	
-	function ForumTopic()
-	{
-		$this->primary_key = "topic_id";
-		$this->table = "forum_topic";
-		
-		$this->DataItem(func_get_args());
-	}
 }
 
 	
 class ForumSummary extends DataItem
 {
+	var	$primary_key = "forum_id";
+	var	$table = "forum_summary";
+		
 	// Fields
 	var $fields = array("forum_id"		=>	Number,
 						"title"			=>	String,
@@ -355,14 +340,6 @@ class ForumSummary extends DataItem
 	{
 		$messages = $this->getRelatedList(ForumMessage, "", "WHERE deleted!=1 ORDER BY date_posted DESC LIMIT 1");
 		return (count($messages) > 0) ? $messages[0] : null;
-	}
-	
-	function ForumSummary()
-	{
-		$this->primary_key = "forum_id";
-		$this->table = "forum_summary";
-		
-		$this->DataItem(func_get_args());		
 	}
 }
 ?>
