@@ -130,9 +130,9 @@ class Forum extends DataItem
 					->executeSingle();
 	}
 	
-	function __construct()
+	function __construct($forum_id)
 	{
-		parent::__construct();
+		parent::__construct($forum_id);
 		
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
@@ -220,15 +220,6 @@ class ForumMessage extends DataItem
 	{
 		return $this->crossReference(Attachment, ForumMessageAttachmentXref, $constraint);
 	}
-	
-	function __construct()
-	{
-		parent::__construct();
-		
-		// Patch in the user class, since this can be overridden by the application
-		$mgr = new UserManager();
-		$this->relations["Author"] = $mgr->getUserClass(); 		
-	}	
 }
 
 
