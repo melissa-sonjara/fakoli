@@ -372,6 +372,11 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		}		
 	}
 	
+	function setDefault($title, $value)
+	{
+		$this->default = $title;
+		$this->defaultValue = $value;
+	}
 	
 	function renderField($field)
 	{
@@ -385,6 +390,13 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		?>
     	<select name="<?php echo $field ?>" <?echo $styles?> onchange="if (onSubmit<?echo $this->parent->id?>(this.form)) this.form.submit();">
     	<?php 
+    	if ($this->default)
+    	{
+   ?>
+		<option value="<?php echo $this->defaultValue ?>"><?echo $this->default?></option>     
+   <?
+    	}
+    	
     	if($this->all)
     	{
     	?>
