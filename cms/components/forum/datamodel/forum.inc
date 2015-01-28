@@ -129,15 +129,6 @@ class Forum extends DataItem
 					->bind(":identifier", $identifier)
 					->executeSingle();
 	}
-	
-	function __construct($forum_id)
-	{
-		parent::__construct($forum_id);
-		
-		// Patch in the user class, since this can be overridden by the application
-		$mgr = new UserManager();
-		$this->relations["Owner"] = $mgr->getUserClass(); 
-	}
 }
 
 
