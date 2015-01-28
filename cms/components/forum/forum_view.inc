@@ -177,6 +177,12 @@ class ForumDetailsView
 	function drawView()
 	{		
 		echo "<div style='width: {$this->width}'>";
+?>
+	<form method="get" action="forum_search_by_author">
+	<input type="hidden" name="forum_id" value="<?echo $this->forum->forum_id?>"/>
+	<label for="author">Search by Author</label> <input type="text" name="author" style="width: 200px"> <input class='button' type='submit' value="Search"/>
+	</form>
+<?		
 		$this->subscriptionView->drawLink();
 		$this->table->drawView();
 		echo "</div>";

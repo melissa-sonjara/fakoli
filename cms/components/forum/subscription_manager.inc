@@ -270,7 +270,7 @@ class ForumSubscriptionHelper
 		$button = ($this->topics_page) ? $this->buttons["topic"] : $this->buttons["forum"];
 		
 		$img = "<img src='$button' style='border: none'>";
-		echo "<p style=\"text-align: right\"><a id='subscription_link' href=\"#\" onclick=\"forumSubscriptionMgr.showSubscriptionDialog(); return false\">$img</a></p>\n";
+		echo "<div style=\"display: inline-block; float: right\"><a id='subscription_link' href=\"#\" onclick=\"forumSubscriptionMgr.showSubscriptionDialog(); return false\">$img</a></div>\n";
 	}
 
 	function drawHeaderText()
