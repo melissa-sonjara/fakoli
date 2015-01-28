@@ -53,6 +53,9 @@ class ForumSearchResultsView
 		$first = true;
 		$alt = false;
 	
+		$forum_id = checkNumeric($_GET["forum_id"]);
+		$forum = new Forum($forum_id);
+			
 ?>
 <p><label>Search Results for</label> <?echo htmlSafe($this->searchText)?>
 <a class='button' style='float: right' href='<?echo $forum->identifier?>'>&laquo; Back to Forum</a>
