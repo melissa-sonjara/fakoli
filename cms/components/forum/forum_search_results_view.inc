@@ -54,7 +54,9 @@ class ForumSearchResultsView
 		$alt = false;
 	
 ?>
-<p><label>Search Results for</label> <?echo htmlSafe($this->searchText)?></p>
+<p><label>Search Results for</label> <?echo htmlSafe($this->searchText)?>
+<a class='button' style='float: right' href='<?echo $forum->identifier?>'>&laquo; Back to Forum</a>
+</p>
 <?
 		if (count($this->messages) > 0)
 		{
