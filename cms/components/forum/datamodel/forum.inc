@@ -132,6 +132,8 @@ class Forum extends DataItem
 	
 	function __construct()
 	{
+		parent::__construct();
+		
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 
@@ -221,6 +223,8 @@ class ForumMessage extends DataItem
 	
 	function __construct()
 	{
+		parent::__construct();
+		
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["Author"] = $mgr->getUserClass(); 		
