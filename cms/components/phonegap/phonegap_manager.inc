@@ -37,7 +37,18 @@ class PhonegapManager
 		global $script;
 		trace("Detecting PhoneGap", 4);
 		
-		if ($_SESSION["phonegap"]) return;
+		if ($_SESSION["phonegap"]) 
+		{
+			if ($_SESSION["phonegap_os"] != "" && $_SESSION["phonegap_version"] != "") 
+			{
+				return;
+			}
+			else
+			{
+				trace("Phonegap flag without OS or version detected in session for {$_SERVER["REMOTE_ADDR"]} - resetting", 2);
+				$_SESSION["phonegap"] = false;
+			}
+		}
 		
 		$matches = array();
 		if (preg_match("/PhoneGap\\/Cordova (\\w+) (\\d+\\.\\d+\\.\\d+)/", $_SERVER['HTTP_USER_AGENT'], $matches))
