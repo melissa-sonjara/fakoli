@@ -46,15 +46,15 @@ class PhonegapManager
 			$_SESSION["phonegap_os"] = $matches[1];
 			$_SESSION["phonegap_version"] = $matches[2];
 
-			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled via User Agent", 3);
+			trace("PhoneGap {$_SESSION["phonegap_version"]} for {$_SESSION["phonegap_os"]} enabled for {$_SERVER["REMOTE_ADDR"]} via User Agent", 2);
 		}
-		else if ($_POST["phonegap"])
+		else if ($_POST["phonegap"] && $_POST["phonegap_version"] != "" && $_POST["phonegap_os"] != "")
 		{
 			$_SESSION["phonegap"] = true;
 			$_SESSION["phonegap_version"] = $_POST["phonegap_version"];
 			$_SESSION["phonegap_os"] = $_POST["phonegap_os"];
 			
-			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled via POST", 3);
+			trace("PhoneGap {$_SESSION["phonegap_version"]} for {$_SESSION["phonegap_os"]} enabled for {$_SERVER["REMOTE_ADDR"]} via POST", 2);
 		}	
 		else if (Settings::getValue("phonegap", "enable_phonegap_debugging") && $_GET["phonegap"])
 		{
@@ -62,7 +62,7 @@ class PhonegapManager
 			$_SESSION["phonegap_version"] = Settings::getValue("phonegap", "phonegap_debug_version");
 			$_SESSION["phonegap_os"] = Settings::getValue("phonegap", "phonegap_debug_os");
 			
-			trace("PhoneGap {$_SESSION["phonegap_version"]} enabled in debugging mode", 3);
+			trace("PhoneGap {$_SESSION["phonegap_version"]} for {$_SESSION["phonegap_os"]} enabled for {$_SERVER["REMOTE_ADDR"]} in debugging mode", 2);
 		}
 		
 		if ($_SESSION["phonegap_os"] == "droid") $_SESSION["phonegap_os"] = "android";
@@ -105,10 +105,15 @@ class PhonegapManager
 			ComponentManager::fireEvent("RegisterPhonegapFiles");
 			ComponentManager::fireEvent("RegisterPhonegapAppScripts");
 					
+			$os = PhonegapManager::getOS();
+			
+			//AJG: Do not add phonegap script references if we do not definitively know the OS
+			if (!$os) return $script;
+			
 			trace(print_r(PhonegapManager::$appScripts, true), 3);
 			
-			$file = PhonegapManager::getPhonegapFile($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
-			$app  = PhonegapManager::getPhonegapAppScript($_SESSION["phonegap_os"], $_SESSION["phonegap_version"]);
+			$file = PhonegapManager::getPhonegapFile($os, $_SESSION["phonegap_version"]);
+			$app  = PhonegapManager::getPhonegapAppScript($os, $_SESSION["phonegap_version"]);
 			
 			if ($app)
 			{
