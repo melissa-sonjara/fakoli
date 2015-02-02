@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * AutoFormLayout provides the abstract base class for form layout engine classes. When a form is constructed
+ * as an AutoForm object, the layout engine provides the HTML structure that the form fields are rendered within.
+ * Fakoli provides a number of layout engines for different application styles. You can specify a default layout
+ * in your applications config or settings, and can override this value on any AutoForm via the AutoForm::setLayout()
+ * method.
+ *  
+ * @author andy
+ *
+ */
 abstract class AutoFormLayout
 {	
 	var $form;
@@ -92,6 +102,9 @@ abstract class AutoFormLayout
 	}
 }
 
+/**
+ * Lays out the AutoForm using table-based layout. 
+ */
 class TableBasedFormLayout extends AutoFormLayout
 {
 	function TableBasedFormLayout($form)
@@ -251,10 +264,10 @@ class UngroupedFormLayout extends TableBasedFormLayout
 	}	
 }
 
-/*
+/**
  * Used for the header row in
-* SpreadSheetAutoForm.
-*/
+ * SpreadSheetAutoForm.
+ */
 class TableHeaderFormLayout extends AutoFormLayout
 {
 	function TableHeaderFormLayout($form)
@@ -389,7 +402,7 @@ class SelectableTableHeaderFormLayout extends TableHeaderFormLayout
 
 
 
-/*
+/**
  * Used for each subordinate form row in 
  * SpreadSheetAutoForm.
  */
@@ -500,7 +513,7 @@ class SelectableTableRowFormLayout extends TableRowFormLayout
 	
 }
 
-/*
+/**
  * Used for the overall layout handling of SpreadsheetAutoForm
  * instance.
  */
@@ -619,7 +632,7 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function startField($field, $renderer, $colspan = 1, $styles = "")
 	{	
-		echo "<br/>\n";
+		echo "<div class='field' id='{$this->parent->id}_{$field}_field'>\n";
 		
 		$this->printLabel($field, $renderer, $styles, $this->parent->annotations[$field]);
 		
@@ -646,7 +659,7 @@ class MobileFormLayout extends AutoFormLayout
 			echo $renderer->parent->annotations[$field];
 		}
 		
-		echo "<br/>\n";
+		echo "</div>\n";
 	}
 	
 	/**
