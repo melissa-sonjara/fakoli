@@ -32,7 +32,7 @@ var AutoFormManager = new Class(
 		var clazz = "." + this.form.id + '_' + field + '_field';
 		this.form.getElements(clazz).each(function(element)
 		{
-			element.setStyle('display', (element.tagName.toLower() == "tr") ? 'table-row' : 'block');
+			element.setStyle('display', (element.tagName.toLowerCase() == "tr") ? 'table-row' : 'block');
 		});
 	}	
 });
