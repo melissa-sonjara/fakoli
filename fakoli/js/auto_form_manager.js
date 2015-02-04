@@ -34,5 +34,12 @@ var AutoFormManager = new Class(
 		{
 			element.setStyle('display', (element.tagName.toLowerCase() == "tr") ? 'table-row' : 'block');
 		});
-	}	
+	},
+	
+	setLabel: function(field, text)
+	{
+		var id = this.form.id + "_" + field + "_label";
+		var label = document.id(id);
+		label.set('text', text);
+	}
 });
