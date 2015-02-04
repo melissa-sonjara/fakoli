@@ -345,6 +345,7 @@ class AutoForm
 		}
 		
 		echo "<script type='text/javascript'>\n";
+		echo "\tnew AutoFormManager('{$this->id}');\n";
 		echo $this->validator->writeScript();
 		echo "\n\n";
 		echo "function onSubmit{$this->id}(form)\n{\n";
