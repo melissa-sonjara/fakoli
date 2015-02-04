@@ -95,9 +95,6 @@ class ComponentManifest
 	static function getScripts()
 	{
 		return array("/fakoli/js/functions.js",
-					 //"/fakoli/js/mootools-1.2.5-core.js",
-					 //"/fakoli/js/mootools-1.2.5.1-more.js",
-					 //"/fakoli/js/mootools-core-1.4.3.js",
 					 "/fakoli/js/mootools-core-1.4.5.js",
 					 "/fakoli/js/mootools-more-1.4.0.1.js",
 					 "/fakoli/tinymce/tinymce.min.js",
@@ -119,7 +116,8 @@ class ComponentManifest
 					 "/fakoli/js/scrolling_tabs.js",
 					 "/fakoli/js/facet_manager.js",
 					 "/fakoli/js/subselect_manager.js",
-					 "/fakoli/js/multi_select.js");
+					 "/fakoli/js/multi_select.js",
+					 "/fakoli/js/auto_form_manager.js");
 	}
 }
 
