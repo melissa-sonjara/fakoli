@@ -145,14 +145,14 @@ class TableBasedFormLayout extends AutoFormLayout
 	{
 		if ($renderer->colspan > 1) $styles = "text-align: left;$styles";
 		
-		echo "<tr>\n";
+		echo "<tr class='{$this->parent->id}_{$field}_field'>\n";
 		
 		$this->printLabel($field, $renderer, $styles, ($renderer->annotateBefore && $renderer->colspan > 1) ? "<br/>".$renderer->parent->annotations[$field] : "");
 		
 		if ($renderer->colspan > 1)
 		{
 			echo "</tr>\n";
-			echo "<tr>\n";
+			echo "<tr class='{$this->parent->id}_{$field}_field'>\n";
 		}
 		echo "<td colspan='{$renderer->colspan}'";
 		if ($renderer->parent->valueCSS) echo " class='{$renderer->parent->valueCSS}'";
@@ -632,7 +632,7 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function startField($field, $renderer, $colspan = 1, $styles = "")
 	{	
-		echo "<div class='field' id='{$this->parent->id}_{$field}_field'>\n";
+		echo "<div class='field {$this->parent->id}_{$field}_field'>\n";
 		
 		$this->printLabel($field, $renderer, $styles, $this->parent->annotations[$field]);
 		
