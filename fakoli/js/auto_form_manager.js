@@ -20,7 +20,7 @@ var AutoFormManager = new Class(
 	
 	hideField: function(field)
 	{
-		this.form.getElements("." + form.id + '_' + field + '_field').each(function(element)
+		this.form.getElements("." + this.form.id + '_' + field + '_field').each(function(element)
 		{
 			element.setStyle('display', 'none');
 		});
@@ -28,7 +28,7 @@ var AutoFormManager = new Class(
 	
 	showField: function(field)
 	{
-		this.form.getElements("." + form.id + '_' + field + '_field').each(function(element)
+		this.form.getElements("." + this.form.id + '_' + field + '_field').each(function(element)
 		{
 			element.setStyle('display', (element.tagName.toLower() == "tr") ? 'table-row' : 'block');
 		});
