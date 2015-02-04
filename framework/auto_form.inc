@@ -345,7 +345,6 @@ class AutoForm
 		}
 		
 		echo "<script type='text/javascript'>\n";
-		echo "\tnew AutoFormManager('{$this->id}');\n";
 		echo $this->validator->writeScript();
 		echo "\n\n";
 		echo "function onSubmit{$this->id}(form)\n{\n";
@@ -382,6 +381,8 @@ class AutoForm
 		echo "\treturn true;\n}\n\n";
 		
 		echo "\twindow.addEvent('domready', function() {\n";
+
+		echo "\tnew AutoFormManager('{$this->id}');\n";
 		
 		if ($this->ajaxSubmitHandler)
 		{
