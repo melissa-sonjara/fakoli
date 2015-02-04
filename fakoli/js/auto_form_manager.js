@@ -11,6 +11,8 @@ var AutoFormManager = new Class(
 		this.form = document.id(form);
 		this.setOptions(options);
 		this.form.manager = this;
+		
+		if (this.form.onInitalize) this.form.onInitialize();
 	},
 	
 	hideField: function(field)
