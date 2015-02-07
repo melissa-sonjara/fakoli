@@ -31,7 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("comment", "email", "captcha", "rating");
+Fakoli::using("comment", "email", "captcha", "rating", "text_lookup");
 Fakoli::usingFeature("auto_form", "paged_list");
 
 /*
@@ -56,6 +56,7 @@ class CommentView
 	var $xrefClass;
 	var $component;
 	var $title;
+	var $usernameFormat = "{User.first_name} {User.last_name}";
 
 	/**
 	 *
@@ -72,6 +73,12 @@ class CommentView
 		$this->title = ($title) ? $title : "Comments";
 		$this->list = $this->buildCommentList($obj);
 		$this->form = $this->buildCommentForm();
+		
+		if (Settings::getValue("comment", "username_format") == "Username")
+		{
+			$mgr = new UserManager();
+			$this->usernameFormat = "{User.".$mgr->getUsernameField()."}";
+		}
 	}
 
 	static function addCommentPanel()
@@ -115,7 +122,7 @@ class CommentView
 
 	function formatComment($comment)
 	{
-		$author = ($comment->user_id) ? $comment->format("{User.first_name} {User.last_name}") : $comment->author;
+		$author = ($comment->user_id) ? $comment->format($this->usernameFormat) : $comment->author;
 
 		if($comment->published)
 		{
@@ -190,6 +197,14 @@ class CommentView
 
 	function drawForm()
 	{
+		global $user;
+		
+		$preambleIdentifier = $user ? Settings::getValue("comment", "logged_in_preamble_text") : Settings::getValue("comment", "anonymous_preamble_text");
+		
+		$text = TextLookup::getText($preambleIdentifier);
+		
+		echo $text;
+		
 		$this->form->drawForm();
 	}
 
@@ -233,6 +248,8 @@ class CommentView
 			$captchaMgr = new CaptchaManager();
 			$captchaMgr->addCaptchaToForm($form);
 		}
+		
+		if (!Settings::getValue("comment", "show_subject_field")) $form->hide("title");
 		
 		return $form;
 	}
