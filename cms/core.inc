@@ -1071,6 +1071,12 @@ ENDSCRIPT;
     }
 }
 
+
+/**
+ * Pull out a simple reference to the request method
+ */
+$method = $_SERVER["REQUEST_METHOD"];
+
 Fakoli::$timestamp = microtime(true);
 Fakoli::$requestStartTime = now();
 Fakoli::$requestURI = $_SERVER["REQUEST_URI"];
