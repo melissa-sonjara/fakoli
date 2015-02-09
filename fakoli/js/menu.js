@@ -35,11 +35,15 @@ var FakoliMenu = new Class({
 	Implements: [Options],
 	
 	root:	Class.Empty,
+	toggle: Class.Empty,
 	options: 
 	{
 		position: 'bottomLeft',
 		effect: 'fade',
-		subMenuPosition: 'topRight'
+		subMenuPosition: 'topRight',
+		responsiveToggle: '',
+		responsivePosition: 'bottomRight',
+		responsiveEdge: 'topRight'
 	},
 	
 	initialize: function(elt, options)
@@ -47,6 +51,12 @@ var FakoliMenu = new Class({
 		this.root = document.id(elt);
 		this.setOptions(options);
 		var menu = this;
+		
+		if (this.options.responsiveToggle)
+		{
+			this.toggle = document.id(this.options.responsiveToggle);
+			this.toggle.addEvent('click', function() {this.toggleResponsiveMenu(); }.bind(this));
+		}
 		
 		document.focusWatcher.addEvent('focusChanged', function() 
 		{ 
@@ -158,5 +168,29 @@ var FakoliMenu = new Class({
 	{
 		if (!this.root) return;
 		this.root.getElements("ul > li").each(function(elt) { if (!elt.contains(document.focusWatcher.focus)) this.hideMenu(elt); }.bind(this));
+	},
+	
+	toggleResponsiveMenu: function()
+	{
+		if (this.root.hasClass("sfhover"))
+		{
+			this.root.removeClass("sfhover");
+			this.root.setStyle('display', 'none');
+;		}
+		else
+		{
+			this.root.addClass("sfhover");
+			this.root.position({'relativeTo': this.toggle, 'position': this.options.responsivePosition, 'edge': this.options.responsiveEdge});
+
+			this.root.setStyle('display', 'block');
+			if (this.options.effect == 'fade')
+			{
+				this.root.fade('in');
+			}
+			else if (this.options.effect == 'reveal')
+			{
+				this.root.reveal();
+			}
+		}
 	}
 });
