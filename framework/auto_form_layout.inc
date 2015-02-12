@@ -636,7 +636,7 @@ class MobileFormLayout extends AutoFormLayout
 		
 		$this->printLabel($field, $renderer, $styles, $this->parent->annotations[$field]);
 		
-		echo "<br/>\n";
+		if (!$renderer->hideLabel) echo "<br/>\n";
 		
 		if ($renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
