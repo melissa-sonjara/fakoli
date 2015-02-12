@@ -65,11 +65,20 @@ class ContextHelpManager
 		return ContextHelpManager::$_instance;
 	}
 
+	static function setDefaults()
+	{
+		Settings::setDefaultValue("context_help", "context_help_label", "(?)", String, "Text to display for context help links (HTML is ok)");
+		Settings::setDefaultValue("context_help", "criteria_help_label", "(criteria)", String, "Text to display for criteria help links (HTML is ok)");
+		Settings::setDefaultValue("context_help", "show_title", true, Boolean, "Show the title heading in context help popups");
+	}
 	
 	function ContextHelpManager()
 	{
 		$this->classes = array();
 		$this->nonmatches = array();	
+		$this->contextHelpLabel = Settings::getValue("context_help", "context_help_label");
+		$this->criteriaHelpLabel = Settings::getValue("context_help", "criterial_help_label");
+		$this->showTitle = Settings::getValue("context_help", "show_title");
 	}
 	
 	function getHelp($form, $field)
@@ -154,18 +163,24 @@ class ContextHelpManager
 				
 		if ($help)
 		{
-			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('help-{$field}');\" onmouseover=\"showContextHelp('help-{$field}');\" onmouseout=\"hideContextHelp('help-{$field}');\">(?)</a>&nbsp;";
+			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('help-{$field}');\" onmouseover=\"showContextHelp('help-{$field}');\" onmouseout=\"hideContextHelp('help-{$field}');\">{$this->contextHelpLabel}</a>&nbsp;";
 			$text  .= "<div id=\"help-$field\" class=\"contexthelp\">\n";
-			$text  .= "<p id=\"heading-$field\">$title Help</p>\n";
+			if ($this->showTitle) 
+			{
+				$text  .= "<p id=\"heading-$field\">$title Help</p>\n";
+			}
 			$text  .= $help;
 			$text  .= "</div>\n";
 		}
 		
 		if ($criteria)
 		{
-			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('criteria-{$field}');\" onmouseover=\"showContextHelp('criteria-{$field}');\" onmouseout=\"hideContextHelp('criteria-{$field}');\">(criteria)</a>";
+			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('criteria-{$field}');\" onmouseover=\"showContextHelp('criteria-{$field}');\" onmouseout=\"hideContextHelp('criteria-{$field}');\">{$this->contextHelpLabel}</a>";
 			$text  .= "<div id=\"criteria-$field\" class=\"contexthelp\">\n";
-			$text  .= "<h2 id=\"heading-$field\">$title Criteria</h2>\n";
+			if ($this->showTitle)
+			{
+				$text  .= "<h2 id=\"heading-$field\">$title Criteria</h2>\n";
+			}
 			$text  .= $criteria;
 			$text  .= "</div>\n";
 		}

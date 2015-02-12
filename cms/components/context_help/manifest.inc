@@ -75,7 +75,8 @@ class ContextHelpManifest
 		return array(
 					"upgradeComponent"				=>	array(ContextHelpManager, upgradeComponent),
 					"Initialize"					=>	array(ContextHelpManager, onInitialize),
-					"RegisterSerializationHandler"	=>	array(ContextHelpManager, registerSerializationHandler)
+					"RegisterSerializationHandler"	=>	array(ContextHelpManager, registerSerializationHandler),
+					"ComponentScanComplete"			=>	array(ContextHelpManager, setDefaults)
 			);
 	}		
 }
