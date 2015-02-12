@@ -175,7 +175,7 @@ class ContextHelpManager
 		
 		if ($criteria)
 		{
-			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('criteria-{$field}');\" onmouseover=\"showContextHelp('criteria-{$field}');\" onmouseout=\"hideContextHelp('criteria-{$field}');\">{$this->contextHelpLabel}</a>";
+			$links .= "<a class=\"context_link\" href=\"javascript:toggleContextHelp('criteria-{$field}');\" onmouseover=\"showContextHelp('criteria-{$field}');\" onmouseout=\"hideContextHelp('criteria-{$field}');\">{$this->criteriaHelpLabel}</a>";
 			$text  .= "<div id=\"criteria-$field\" class=\"contexthelp\">\n";
 			if ($this->showTitle)
 			{
