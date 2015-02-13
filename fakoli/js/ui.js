@@ -1577,3 +1577,57 @@ var CountIndicator = new Class(
 		}.bind(this));
 	}
 });
+
+var ToggleManager = new Class(
+{
+	Implements: Options,
+	
+	container: null,
+	
+	options:
+	{
+		container: 	null,
+		show:	  	function(elt) { elt.reveal(); },
+		hide:	  	function(elt) { elt.dissolve(); },
+		selector: 	'.toggle',
+		cssOpen:	'open',
+		cssClosed:	'closed',
+		event:		'click'
+	},
+	
+	initialize: function(options)
+	{
+		this.setOptions(options);
+	
+		this.container = this.options.container ? document.id(this.options.container) : document.body;
+		
+		this.container.getElements(this.options.selector).each(function(toggle)
+		{
+			toggle.addEvent(this.options.event, function(event)
+			{
+				var elt = new Event(event).target;
+				
+				var target = elt.get('data-target');
+				if (!target) return;
+				target = document.id(target);
+				
+				if (elt.hasClass(this.options.cssOpen))
+				{
+					this.options.hide(target);
+					elt.removeClass(this.options.cssOpen);
+					elt.addClass(this.options.cssClosed);
+				}
+				else
+				{
+					this.options.show(target);
+					elt.removeClass(this.options.cssClosed);
+					elt.addClass(this.options.cssOpen);
+				}
+				
+				return false;
+				
+			}.bind(this));
+		}.bind(this));
+	}
+});		
+		
