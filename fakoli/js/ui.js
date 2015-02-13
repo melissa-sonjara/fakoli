@@ -1607,8 +1607,10 @@ var ToggleManager = new Class(
 			{
 				var elt = new Event(event).target;
 				
-				var target = elt.get('data-target');
+				var target = elt.get('target');
+				if (!target) elt.get('data-target');
 				if (!target) return;
+				
 				target = document.id(target);
 				
 				if (elt.hasClass(this.options.cssOpen))
