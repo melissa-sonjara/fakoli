@@ -107,6 +107,7 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "prettyUrls", true, "Boolean", "Whether urls are translated to CMS identifiers", "General");		
 		Settings::setDefaultValue("settings", "allow_pdf_download", true, "Boolean", "", "General");
 		Settings::setDefaultValue("settings", "sitename", $sitename, "String", "", "General");
+		Settings::setDefaultValue("settings", "wrap_modules", true, Boolean, "Specifies whether to wrap module output in a div tag, or render them bare", "General");
 		
 		Settings::setDefaultValue("settings", "formCSS", "form", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "labelCSS", "label", "String", "", "AutoForm");

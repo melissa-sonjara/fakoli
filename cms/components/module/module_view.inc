@@ -70,6 +70,14 @@ abstract class ModuleView
 	}
 	
 	abstract function drawView();
+	
+	function wrap($output)
+	{
+		if (!Settings::getValue("settings", "wrap_modules")) return $output;
+		
+		$cssClass = trim("module {$this->module->css_class} $cssClass");
+		return ($output !== '') ? "<div class='$cssClass'>".$output."</div>" : "";
+	}
 }
 
 class QueryModuleView extends ModuleView
@@ -111,7 +119,7 @@ class QueryModuleView extends ModuleView
     	
     	ob_end_clean();
     			
-    	return ($template !== '') ? "<div class='$cssClass'>".$template."</div>" : "";
+    	return $this->wrap($template);
 	}
 }
 
@@ -124,8 +132,6 @@ class CodeModuleView extends ModuleView
 	
 	function drawView($cssClass = "")
 	{
-		$cssClass = trim("module {$this->module->css_class} $cssClass");
-		
 		global $config;
 		global $method;
 		global $user;
@@ -176,7 +182,7 @@ class CodeModuleView extends ModuleView
     		$output = trim(ob_get_contents());
  			ob_end_clean();
     		
- 			$output = ($output !== '') ? "<div class='$cssClass'>".$output."</div>" : "";
+ 			$output = $this->wrap($output);
 		}	
 
 		return $output;
@@ -192,8 +198,7 @@ class HTMLModuleView extends ModuleView
 	
 	function drawView($cssClass = "")
 	{
-		$cssClass = trim("module {$this->module->css_class} $cssClass");
-		return "<div class='$cssClass'>{$this->module->template}</div>";
+		return $this->wrap($this->module->template);
 	}
 }
 
@@ -227,7 +232,7 @@ class MenuModuleView extends ModuleView
 		
 		$menuView = new MenuView($menu);
 		$menuView->queryString = $qs;
-		return "<div class='$cssClass'>".$menuView->drawView()."</div>";
+		return $this->wrap($menuView->drawView());
 	}
 }
 ?>
