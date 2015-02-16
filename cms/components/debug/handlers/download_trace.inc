@@ -38,6 +38,11 @@ if (!checkRole("admin"))
 	throw new FakoliException("Permission Denied");
 }
 
+if (!Settings::getValue("debug", "enable_trace_file_downloads"))
+{
+	throw new FakoliException("Feature disabled");	
+}
+
 $filename = Settings::getValue("debug", "trace_path");
 
 $filepath = sanitizePath($filename);
