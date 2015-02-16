@@ -530,7 +530,7 @@ class ComponentManager
 		$handler = $component->component_path . DIRECTORY_SEPARATOR . "handlers" . DIRECTORY_SEPARATOR . $action . ".inc";
 		trace("ComponentManager::dispatchAction handler: $handler", 3);
 		
-		$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+		Fakoli::applicationTraceLevel();
 			
 		if (!is_file($handler))
 		{
@@ -545,8 +545,8 @@ class ComponentManager
 		{
 			echo $exit->getMessage();
 		}		
-		
-		$config["trace_level"] = Settings::getValue("debug", "trace_level");
+
+		Fakoli::coreTraceLevel();
 		
 	}
 	

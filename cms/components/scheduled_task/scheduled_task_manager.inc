@@ -85,6 +85,10 @@ class ScheduledTaskManager
 	
 	function runTasks()
 	{
+		global $config;
+		
+		Fakoli::scheduledTaskTraceLevel();
+		
 		$currentPeriod = TaskScheduleHelper::calculatePeriod();
 		trace("** Running tasks for period $currentPeriod", 3);
 		
@@ -101,6 +105,8 @@ class ScheduledTaskManager
 		}
 		
 		trace("$count ".pluralize("task", $count)." executed", 3);
+
+		Fakoli::coreTraceLevel();
 	}
 	
 	static function testTask()

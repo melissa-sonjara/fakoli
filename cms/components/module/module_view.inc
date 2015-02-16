@@ -160,11 +160,11 @@ class CodeModuleView extends ModuleView
 				if (array_key_exists($name, $components))
 				{
 					$path = $components[$name]->component_path;
-					$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+					Fakoli::applicationTraceLevel();
 					
 					include $path."/{$php_code_file}";
-					
-					$config["trace_level"] = Settings::getValue("debug", "trace_level");
+
+					Fakoli::coreTraceLevel();
 				}
 				else
 				{
@@ -173,11 +173,11 @@ class CodeModuleView extends ModuleView
 			}
 			else
 			{
-				$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+				Fakoli::applicationTraceLevel();
 				
 				include $config['homedir']."/{$this->module->php_code_file}";
 				
-				$config["trace_level"] = Settings::getValue("debug", "trace_level");
+				Fakoli::coreTraceLevel();
 			}
     		$output = trim(ob_get_contents());
  			ob_end_clean();

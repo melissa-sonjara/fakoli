@@ -83,7 +83,7 @@ class ComponentPageView
 		
 		$template = $this->page->getTemplate();
 		
-		$config["trace_level"] = Settings::getValue("debug", "application_trace_level");
+		Fakoli::applicationTraceLevel();
 		
 		$template = ComponentManager::fireEvent("PreProcessPage", $template);
 		
@@ -97,8 +97,8 @@ class ComponentPageView
 		$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		
 		$this->page->description .= $output;
-		
-		$config["trace_level"] = Settings::getValue("debug", "trace_level");
+
+		Fakoli::coreTraceLevel();
 		
 		// Populate template fields from the Page object.
 		
