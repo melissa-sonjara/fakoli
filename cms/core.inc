@@ -911,6 +911,39 @@ ENDSCRIPT;
 	}
 	
 	/**
+	 * Set the trace log level. 
+	 */
+	static function setTraceLevel($level)
+	{
+		global $config;
+		$config["trace_level"] = $level;		
+	}
+	
+	/**
+	 * Change to the configured trace level for application code
+	 */
+	static function applicationTraceLevel()
+	{
+		Fakoli::setTraceLevel(Settings::getValue("debug", "application_trace_level"));
+	}
+	
+	/**
+	 * Change to the configured trace level for Fakoli core code
+	 */
+	static function coreTraceLevel()
+	{
+		Fakoli::setTraceLevel(Settings::getValue("debug", "trace_level"));
+	}
+	
+	/**
+	 * Changed to the configured trace level for scheduled task worker code
+	 */
+	static function scheduledTaskTraceLevel()
+	{
+		Fakoli::setTraceLevel(Settings::getValue("debug", "scheduled_task_trace_level"));
+	}
+	
+	/**
 	 * Customer Error Handler
 	 * @param unknown $errLevel
 	 * @param unknown $errMsg
