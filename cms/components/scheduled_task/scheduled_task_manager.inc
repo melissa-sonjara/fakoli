@@ -1,10 +1,10 @@
 <?php
+Fakoli::using("email");
+
 /**
- *
  * Provides a central management class for event handlers and 
  * common functionality for the scheduled_task component.
  */
-
 class ScheduledTaskManager
 {
 	static $workers = array();
@@ -14,6 +14,11 @@ class ScheduledTaskManager
 		ComponentManager::fireEvent("RegisterScheduledTaskWorkers");
 	}
 
+	static function registerScheduledTaskWorkers()
+	{
+		ScheduledTaskManager::registerWorker("scheduled_task", "Validate Configuration", array(ScheduledTaskManager, testTask));
+	}
+	
 	static function setDefaults()
 	{
 		//TODO: Set default configuration parameters here
@@ -98,6 +103,32 @@ class ScheduledTaskManager
 		trace("$count ".pluralize("task", $count)." executed", 3);
 	}
 	
+	static function testTask()
+	{
+		global $config;
+		
+		trace("Running Validation Configuration task", 3);
+		
+		$email = Settings::getValue("settings", "system_notification_email");
+
+		$site_email_from =  Settings::getValue('email', 'email_from');
+		$site_email_name =  Settings::getValue('email', 'email_name');
+		
+		if (!$email) return;
+		
+		trace("Sending confirmation email to {$email}", 3);
+		
+		$mail = new EmailHandler($email, "Scheduled Task Notification from {$config['site_name']}", 
+								"This message confirms that the Validate Configuration schedule task worker was trigger at ".now(), 
+								$site_email_form, 
+								$site_email_name);
+		$mail->send();
+ 			
+		echo "Confirmation email sent";
+		
+		return "Success";
+	}
+		
 	static function upgradeComponent($version)
 	{
 		$mgr = new ScheduledTaskUpgradeManager();

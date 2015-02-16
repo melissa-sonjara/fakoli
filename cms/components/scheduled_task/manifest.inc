@@ -38,7 +38,8 @@ class ScheduledTaskManifest
 	{
 		return array(
 					"upgradeComponent"	=>	array(ScheduledTaskManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(ScheduledTaskManager, setDefaults)
+					"ComponentScanComplete"	=>	array(ScheduledTaskManager, setDefaults),
+					 "RegisterScheduledTaskWorkers"	=>	array(ScheduledTaskManager, registerScheduledTaskWorkers)
 					//TODO: Add Event Registrations here
 		);
 	}
