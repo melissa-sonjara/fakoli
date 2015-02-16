@@ -5,7 +5,7 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 {
 	function NativeDateFieldRenderer(&$parent, $field)
 	{
-		trace("Instantiating NativeDateFieldRenderer for $field", 1);
+		trace("Instantiating NativeDateFieldRenderer for $field", 3);
 		$this->DateFieldRenderer($parent, $field);
 	}
 	
