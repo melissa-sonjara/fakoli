@@ -33,6 +33,11 @@
 
 Fakoli::using("debug", "settings");
 
+if (!checkRole("admin"))
+{
+	throw new FakoliException("Permission Denied");
+}
+
 $filename = Settings::getValue("debug", "trace_path");
 
 $filepath = sanitizePath($filename);
