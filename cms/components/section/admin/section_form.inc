@@ -39,6 +39,7 @@ require_once "include/section_tabs.inc";
 $menu_item = "Sections";
 
 $section_id = checkNumeric($_GET["section_id"]);
+$site_id = checkNumeric($_GET["site_id"]);
 
 $section = new Section();
 $allowDelete = false;
@@ -53,6 +54,10 @@ if ($section_id)
 
 	$allowDelete = ($contentCount == 0);
 	
+}
+else
+{
+	$section->site_id = $site_id;
 }
 
 $form = new AutoForm($section);

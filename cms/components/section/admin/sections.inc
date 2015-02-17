@@ -32,11 +32,22 @@
 *****************************************************************/
 
 Fakoli::using("section");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("data_view", "data_tabs");
 
 $menu_item = "Sections";
 
-$sections = Query::create(Section, "ORDER BY section")->execute();
+$site_id = checkNumeric($_GET["site_id"]);
+
+$sites = query(Site, "ORDER BY site_name");
+
+
+if (!$site_id) $site_id = $sites[0]->site_id;
+
+$tabs = new DataItemTabBar("tabs", $sites);
+
+$sections = Query::create(Section, "WHERE site_id=:s ORDER BY section")
+				 ->bind(":s", $site_id)
+				 ->execute();
 
 $table = new DataListView($sections, "sections");
 $table->column("Section", "<a href='/admin/section_form?section_id={section_id}'>{section}</a>", true)
@@ -50,7 +61,13 @@ $table->emptyMessage = "No sections have been created.";
 
 $script .= $table->writeScript();
 
+$tabs->writeHTML();
+?>
+<div class='tab_border'>
+<?
+
 $table->drawView();
 ?>
 <br/>
-<a class='button' href='/admin/section_form'>Add a New Section</a>&nbsp;&nbsp;<a class='button' href='/action/section/export'>Export Section Layout</a>&nbsp;&nbsp;<a class='button' href='section_import'>Import Section Layout</a>
+<a class='button' href='/admin/section_form?site_id=<?echo $site_id?>'>Add a New Section</a>&nbsp;&nbsp;<a class='button' href='/action/section/export'>Export Section Layout</a>&nbsp;&nbsp;<a class='button' href='section_import'>Import Section Layout</a>
+</div>
