@@ -125,7 +125,7 @@ class ScheduledTaskManager
 		trace("Sending confirmation email to {$email}", 3);
 		
 		$mail = new EmailHandler($email, "Scheduled Task Notification from {$config['site_name']}", 
-								"This message confirms that the Validate Configuration schedule task worker was trigger at ".now(), 
+								"This message confirms that the Validate Configuration schedule task worker was triggered at ".now(), 
 								$site_email_form, 
 								$site_email_name);
 		$mail->send();
