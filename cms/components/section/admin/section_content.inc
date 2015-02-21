@@ -149,6 +149,7 @@ $contextMenu->command("set_template", "Set Template...", "sectionContentManager.
 			->command("set_permissions", "Set Permissions...", "sectionContentManager.setPermissions()", false)
 			->command("set_ssl", "Configure SSL...", "sectionContentManager.setSSL()", false)
 			->command("set_page_title", "Override Page Title...", "sectionContentManager.setPageTitle()", false)
+			->command("set_body_class", "Set Body Class...", "sectionContentManager.setBodyClass()", false)
 			->command("set_all", "All Properties...", "sectionContentManager.allProperties()", "", false)
 			->separator()
 			->command("use_defaults", "Use Section Defaults", "sectionContentManager.clearProperties()", "", false)

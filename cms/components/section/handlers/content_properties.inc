@@ -38,6 +38,11 @@ if ($scope == "override_page_title" || $scope == "all")
 	$filter->add("override_page_title");
 }
 
+if ($scope == "body_class" || $scope == "all")
+{
+	$filter->add("body_class");
+}
+
 $sectionContent->filter = $filter;
 
 // Default dialog to properties for first selected item

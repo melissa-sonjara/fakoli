@@ -135,6 +135,20 @@ class ComponentPage extends DataItem
 		return $title;
 	}
 	
+	function getBodyClass()
+	{
+		if (Fakoli::$bodyClass) return Fakoli::$bodyClass;
+		
+		global $section;
+		if ($section)
+		{
+			$content = $section->getContent($this->identifier);
+			if ($content) return $content->body_class ? $content->body_class : $section->default_body_class;
+		}
+		
+		return "";
+	}
+	
 	/**
 	 * Loads the template associated with this page.
 	 * @return string the contents of the template for this page.

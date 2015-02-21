@@ -45,6 +45,7 @@ class Section extends DataItem
 						"default_role"			=>	String,
 						"default_permissions"	=>	String,
 						"default_page"			=>	String,
+						"default_body_class"	=>	String,
 						"site_id"				=>	Number,
 						"use_SSL"				=>	Boolean);
 	
@@ -230,6 +231,7 @@ class SectionContent extends DataItem
 						"role"					=>	String,
 						"permissions"			=>	String,
 						"template"				=>	String,
+						"body_class"			=>	String,
 						"override_page_title"	=>  String,
 						"use_SSL"				=>	Boolean);
 	
@@ -329,6 +331,14 @@ class SectionContent extends DataItem
 		$positions = $positionMatches[1];
 		sort($positions);
 		return $positions;
+	}
+	
+	/**
+	 * Returns any custom body CSS classes defined for this section content.
+	 */
+	function getBodyClass()
+	{
+		return $this->body_class ? $this->body_class : $this->Section()->default_body_class;
 	}
 }
 

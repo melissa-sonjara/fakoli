@@ -70,9 +70,13 @@ class PageView
 		if(!$site)
 			$site = Site::getSite(); // Pass through to code include
 		
+		$bodyClass = $this->page->getBodyClass();
+		
 		$template = $this->page->getTemplate();
 		
 		$template = ComponentManager::fireEvent("PreProcessPage", $template);
+		
+		$template = str_replace("{body_class}", $bodyClass, $template);
 		
 		$template = preg_replace("/\\{([\w\d:_]+)\\}/", "{_{_[$1]_}_}", $template);
 		

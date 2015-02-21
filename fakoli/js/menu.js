@@ -39,8 +39,10 @@ var FakoliMenu = new Class({
 	options: 
 	{
 		position: 'bottomLeft',
+		edge: 'topLeft',
 		effect: 'fade',
 		subMenuPosition: 'topRight',
+		subMenuEdge: 'topLeft',
 		responsiveToggle: '',
 		responsivePosition: 'bottomRight',
 		responsiveEdge: 'topRight'
@@ -103,14 +105,37 @@ var FakoliMenu = new Class({
 					
 					'mouseover': function() 
 					{ 
-						menu.showMenu(parent);
+						if (!menu.reduced) 
+						{
+							menu.showMenu(parent);
+						}
+						else
+						{
+							style = ul.getStyle('display');
+							if (style == "none")
+							{
+								
+								menu.opening = true;
+							}
+						}
 					},
 						
 					'mouseout': function() 
 					{
-						menu.hideMenu(parent);
-					} 
+						menu.opening = false;
+						if (!menu.reduced) menu.hideMenu(parent);
+					}
 				 });
+				
+				parent.getChildren("a").addEvents(
+				{
+						
+					"click": function()
+					{
+						style = ul.getStyle('display');
+						return (style != 'none' && !menu.opening);
+					}
+				});
 			});
 		});
 
@@ -120,16 +145,20 @@ var FakoliMenu = new Class({
 	{
 		var ul = elt.getElement('ul');
 		elt.addClass("sfhover"); 
-		var offset = this.options.position;
 		
+		if (this.reduced) return;
+		
+		var offset = this.options.position;
+		var edge = this.options.edge;
 		if (ul) 
 		{
 			if (elt.hasClass("subsubmenu"))
 			{
 				offset = this.options.subMenuPosition;
+				edge = this.options.subMenuEdge;
 			}
 
-			ul.position({'relativeTo': elt, 'position': offset});
+			ul.position({'relativeTo': elt, 'position': offset, 'edge': edge});
 
 			
 			if (this.options.effect == 'fade')
@@ -172,6 +201,8 @@ var FakoliMenu = new Class({
 	
 	toggleResponsiveMenu: function()
 	{
+		this.reduced = true;
+		
 		if (this.root.hasClass("sfhover"))
 		{
 			this.root.removeClass("sfhover");

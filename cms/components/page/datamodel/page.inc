@@ -187,7 +187,21 @@ class Page extends DataItem implements Searchable
 		sort($positions);
 		return $positions;
 	}
+
+	function getBodyClass()
+	{
+		if (Fakoli::$bodyClass) return Fakoli::$bodyClass;
+		
+		global $section;
+		if ($section)
+		{
+			$content = $section->getContent($this->identifier);
+			if ($content) return $content->body_class ? $content->body_class : $section->default_body_class;
+		}
 	
+		return "";
+	}
+		
 	/*var $relations = array(	"Region"	=> 	Region,
 							"Users"		=>	SiteUser);
 	
