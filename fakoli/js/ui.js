@@ -1539,7 +1539,7 @@ var CountIndicator = new Class(
 	
 	options:
 	{
-		class: 'count_indicator',
+		cssClass: 'count_indicator',
 		position: 'bottomRight',
 		edge:	  'bottomRight',
 		showZero: false,
@@ -1559,7 +1559,7 @@ var CountIndicator = new Class(
 		{
 			if (!element.countDisplay)
 			{
-				var div = new Element('div', {'class': this.options.class});
+				var div = new Element('div', {'class': this.options.cssClass});
 				div.setStyles({display: 'block', width: 'auto', position: 'absolute'});
 				document.body.adopt(div);
 				element.countDisplay = div;
