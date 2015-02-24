@@ -33,6 +33,8 @@
 
 class Site extends DataItem
 {
+	private static $currentSite = null;
+	
 	// Fields
 	var $fields = array("site_id"				=> Number,
 						"site_name"				=> String,
@@ -54,7 +56,8 @@ class Site extends DataItem
 							"Articles"			=>	Article,
 							"Events"			=>	Event,
 							"Fora"				=>	Forum,
-							"ForumSummaries"	=>	ForumSummary);
+							"ForumSummaries"	=>	ForumSummary,
+							"Sections"			=>	Section);
 	
 	function Pages($constraint = "")
 	{
@@ -81,16 +84,34 @@ class Site extends DataItem
 		return $this->crossReference(ForumSummary, ForumSiteXref, $constraint);
 	}
 	
+	function Sections($constraint = "")
+	{
+		return $this->getRelatedList(Section, "", $constraint);
+	}
+	
 	static function getSite()
 	{
+		if (Site::$currentSite)
+		{
+			return Site::$currentSite;
+		}
+		
 		$sites = Query::create(Site, "WHERE domain=:d and enabled=1 ORDER BY default_site DESC")
 				->bind(":d", $_SERVER['SERVER_NAME'])
 				->execute();
-		if (count($sites) > 0) return $sites[0];
+		if (count($sites) > 0) 
+		{
+			Site::$currentSite = $sites[0];
+			return Site::$currentSite;
+		}
 		
 		$sites = Query::create(Site, "WHERE enabled=1 ORDER BY default_site DESC, site_name ASC")->execute();
 		
-		if (count($sites) > 0) return $sites[0];
+		if (count($sites) > 0) 
+		{
+			Site::$currentSite = $sites[0];
+			return Site::$currentSite;
+		}
 		
 		throw new FakoliException("No site defined");
 	}
