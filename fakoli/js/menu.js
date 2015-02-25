@@ -177,15 +177,15 @@ var FakoliMenu = new Class({
 	{
 		var ul = elt.getElement('ul');
 		elt.removeClass("sfhover");  
-		if (this.options.effect == 'fade' || this.options.effect == 'reveal')
+		if (ul)
 		{
-			ul.setStyle('opacity', '0');
-		}
-		
-		if (this.reduced) return;
-		
-		if (ul) 
-		{
+			if (this.options.effect == 'fade' || this.options.effect == 'reveal')
+			{
+				ul.setStyle('opacity', '0');
+			}
+			
+			if (this.reduced) return;
+
 			ul.setStyle('left', -10000);
 		}
 	},
