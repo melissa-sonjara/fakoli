@@ -101,11 +101,11 @@ class Site extends DataItem
 			return Site::$currentSite;
 		}
 		
-		$domain = $_SERVER['SERVER_NAME'];
+		$domain = $_SERVER['HTTP_HOST'];
 		trace("Accessed via domain: $domain", 3);
 		
 		$sites = Query::create(Site, "WHERE domain=:d and enabled=1 ORDER BY default_site DESC")
-				->bind(":d", $_SERVER['SERVER_NAME'])
+				->bind(":d", $domain)
 				->execute();
 		if (count($sites) > 0) 
 		{
