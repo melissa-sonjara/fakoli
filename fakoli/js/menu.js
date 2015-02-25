@@ -179,7 +179,7 @@ var FakoliMenu = new Class({
 		elt.removeClass("sfhover");  
 		if (ul)
 		{
-			if (this.options.effect == 'fade' || this.options.effect == 'reveal')
+			if (this.reduced && (this.options.effect == 'fade' || this.options.effect == 'reveal'))
 			{
 				ul.setStyle('opacity', '0');
 			}
