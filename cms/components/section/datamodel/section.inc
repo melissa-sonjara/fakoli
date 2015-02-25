@@ -128,8 +128,10 @@ class Section extends DataItem
 	
 	static function findSection($section_name)
 	{
-		$sections = Query::create(Section, "WHERE section=:section")
-			->bind(":section", $section_name)
+		$site = Site::getSite();
+		
+		$sections = Query::create(Section, "WHERE section=:section AND site_id=:site")
+			->bind(":section", $section_name, ":site", $site->site_id)
 			->execute();
 		
 		return (count($sections) > 0) ? $sections[0] : null;

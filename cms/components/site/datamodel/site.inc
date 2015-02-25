@@ -89,6 +89,11 @@ class Site extends DataItem
 		return $this->getRelatedList(Section, "", $constraint);
 	}
 	
+	/**
+	 * Returns the Site object that describes the currently active site (i.e. the site
+	 * associated with the domain the user is currently accessing).
+	 * @throws FakoliException
+	 */
 	static function getSite()
 	{
 		if (Site::$currentSite)
