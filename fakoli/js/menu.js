@@ -146,7 +146,6 @@ var FakoliMenu = new Class({
 		var ul = elt.getElement('ul');
 		elt.addClass("sfhover"); 
 		
-		if (this.reduced) return;
 		
 		var offset = this.options.position;
 		var edge = this.options.edge;
@@ -158,8 +157,10 @@ var FakoliMenu = new Class({
 				edge = this.options.subMenuEdge;
 			}
 
-			ul.position({'relativeTo': elt, 'position': offset, 'edge': edge});
-
+			if (!this.reduced)
+			{
+				ul.position({'relativeTo': elt, 'position': offset, 'edge': edge});
+			}
 			
 			if (this.options.effect == 'fade')
 			{
