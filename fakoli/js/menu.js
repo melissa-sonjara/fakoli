@@ -176,6 +176,8 @@ var FakoliMenu = new Class({
 	{
 		var ul = elt.getElement('ul');
 		elt.removeClass("sfhover");  
+		if (this.reduced) return;
+		
 		if (ul) 
 		{
 			ul.setStyle('left', -10000);
