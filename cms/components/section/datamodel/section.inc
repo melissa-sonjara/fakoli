@@ -83,7 +83,7 @@ class Section extends DataItem
 		
 		try
 		{
-			return Query::create(Section, "WHERE section=:identifier AND site=:site")
+			return Query::create(Section, "WHERE section=:identifier AND site_id=:site")
 						->bind(":identifier", $identifier, ":site", $site->site_id)
 						->executeSingle();
 		}
