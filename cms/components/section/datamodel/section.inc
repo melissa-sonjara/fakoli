@@ -78,11 +78,13 @@ class Section extends DataItem
 	static function createFromIdentifier($identifier)
 	{
 		if (!$identifier) return null;
+
+		$site = Site::getSite();
 		
 		try
 		{
-			return Query::create(Section, "WHERE section=:identifier")
-						->bind(":identifier", $identifier)
+			return Query::create(Section, "WHERE section=:identifier AND site=:site")
+						->bind(":identifier", $identifier, ":site", $site->site_id)
 						->executeSingle();
 		}
 		catch(Exception $e)
