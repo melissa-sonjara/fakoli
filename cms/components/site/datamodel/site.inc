@@ -118,8 +118,8 @@ class Site extends DataItem
 		
 		if (count($sites) > 0) 
 		{
-			trace("Using default Site record", 3);
 			Site::$currentSite = $sites[0];
+			trace("Using default Site record with domain ".Site::$currentSite->domain, 3);
 			return Site::$currentSite;
 		}
 		
