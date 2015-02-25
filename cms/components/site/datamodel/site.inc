@@ -101,11 +101,15 @@ class Site extends DataItem
 			return Site::$currentSite;
 		}
 		
+		$domain = $_SERVER['SERVER_NAME'];
+		trace("Accessed via domain: $domain", 3);
+		
 		$sites = Query::create(Site, "WHERE domain=:d and enabled=1 ORDER BY default_site DESC")
 				->bind(":d", $_SERVER['SERVER_NAME'])
 				->execute();
 		if (count($sites) > 0) 
 		{
+			trace("Matching Site record found", 3);
 			Site::$currentSite = $sites[0];
 			return Site::$currentSite;
 		}
@@ -114,6 +118,7 @@ class Site extends DataItem
 		
 		if (count($sites) > 0) 
 		{
+			trace("Using default Site record", 3);
 			Site::$currentSite = $sites[0];
 			return Site::$currentSite;
 		}
