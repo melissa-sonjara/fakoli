@@ -52,7 +52,8 @@ require_once realpath(dirname(__FILE__)."/../component/upgrade_manager.inc");
 class PageUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation"
+			"1.0"		=>	"sql:Initial Installation",
+			"1.1"		=>	"sql:Added exclude_from_search flag to page table"
 	);
 	
 	function PageUpgradeManager()

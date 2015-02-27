@@ -42,3 +42,9 @@ CREATE TABLE page_module_xref (
 ) ENGINE=InnoDB;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE page ADD COLUMN exclude_from_search TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.1

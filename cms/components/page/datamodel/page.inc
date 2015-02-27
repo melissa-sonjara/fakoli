@@ -48,6 +48,7 @@ class Page extends DataItem implements Searchable
 						"php_code_file"			=>	String,
 						"role"  				=> 	String,
 						"published"				=> 	Boolean,
+						"exclude_from_search"	=>	Boolean,
 						"created_date" 			=>	Date,
 						"edited_date"			=>	Timestamp,
 						"author" 				=>  String
@@ -250,7 +251,7 @@ class Page extends DataItem implements Searchable
 
 			
 			$constraint = $search->generateConstraint();
-			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
+			$constraint .= $constraint ? " AND published=1 AND exclude_from_search=0" : " WHERE published=1 AND exclude_from_search=0";
 			$constraint .= $range;
 			
 			$pages = Query::create(Page, $constraint)
@@ -259,7 +260,7 @@ class Page extends DataItem implements Searchable
 		else
 		{
 			$params = "%$params%";
-			$pages = Query::create(Page, "WHERE (page_title like :a OR description LIKE :b) AND published=1 $range")
+			$pages = Query::create(Page, "WHERE (page_title like :a OR description LIKE :b) AND published=1 AND exclude_from_search=0 $range")
 						  ->bind(":a", $params, ":b", $params)
 						  ->execute();
 		}
@@ -356,7 +357,7 @@ class PageSolrAdapter // Implements ISolrAdapter
 	
 	function getFilter()
 	{
-		return "WHERE published=1";
+		return "WHERE published=1 AND exclude_from_search=0";
 	}
 	
 	function getTitleFormat()
