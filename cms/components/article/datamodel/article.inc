@@ -380,7 +380,7 @@ class ArticleSolrAdapter // Implements ISolrAdapter
 
 	function getFilter()
 	{
-		return "WHERE published=1";
+		return "WHERE published=1 AND publish_date <= curdate()";
 	}
 
 	function getTitleFormat()
