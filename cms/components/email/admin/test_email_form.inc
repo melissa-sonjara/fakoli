@@ -38,7 +38,7 @@ $menu_item = "Send Test Email";
 
 $email = new Email();
 $email->sender_email = $config["email_from"];
-$email->subject = "Test message from {$config["site_name"]}";
+$email->subject = "Test message from {$config["sitename"]}";
 $email->message = "Test message.";
 
 $form = new AutoForm($email);
