@@ -80,7 +80,7 @@ class EmailManifest
 				
 			"Developer Tools"	=>	array
 			(
-				"Send Test Emai"	=>	array("page"	=>	"/admin/test_email_form",
+				"Send Test Email"	=>	array("page"	=>	"/admin/test_email_form",
 											  "role"	=>	"admin",
 											  "weight"	=>	4)
 			)	
