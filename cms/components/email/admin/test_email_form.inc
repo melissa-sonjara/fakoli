@@ -45,7 +45,7 @@ $form = new AutoForm($email);
 $form->submitLabel = "Send Email";
 $form->readonly("sender_email");
 $form->hide("sender_name");
-$form->annotate("recipient", "Provide one or more recipient email address, separated by commas");
+$form->annotate("recipient", "Provide one or more recipient email addresses, separated by commas");
 $form->alias("recipient", "Recipient(s)");
 
 if ($method == "POST")
