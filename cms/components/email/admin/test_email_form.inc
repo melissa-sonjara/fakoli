@@ -34,16 +34,20 @@
 Fakoli::using("email");
 Fakoli::usingFeature("auto_form");
 
+$menu_item = "Send Test Email";
+
 $email = new Email();
+$email->sender_email = $config["email_from"];
 
 $form = new AutoForm($email);
 $form->submitLabel = "Send Email";
+$form->readonly("sender_email");
 
 if ($method == "POST")
 {
 	$email->fromPOST();
 	
-	$handler = new EmailHandler($email->recipient, $email->subject, $email->message, $email->sender_email);
+	$handler = new EmailHandler($email->recipient, $email->subject, $email->message, $config["email_from"]);
 	$handler->send();
 }
 

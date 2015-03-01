@@ -76,10 +76,14 @@ class EmailManifest
 				"Contact Us Log"	=>	array("page"	=>	"/admin/contact_us_log",
 											  "role"	=>	"admin",
 											  "weight"	=>	26)
-			)
+			),
 				
-			
-			
+			"Developer Tools"	=>	array
+			(
+				"Send Test Emai"	=>	array("page"	=>	"/admin/test_email_form",
+											  "role"	=>	"admin",
+											  "weight"	=>	4)
+			)	
 		);
 	}
 
