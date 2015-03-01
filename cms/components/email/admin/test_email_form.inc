@@ -54,6 +54,8 @@ if ($method == "POST")
 	
 	$handler = new EmailHandler($email->recipient, $email->subject, $email->message, $config["email_from"]);
 	$handler->send();
+	
+	Fakoli::notify("Message Sent");
 }
 
 $script .= $form->writeScript();
