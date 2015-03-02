@@ -205,7 +205,7 @@ class LoginManager
 		if(is_callable(array($mgr, emailToken)))
 			return $mgr->emailToken($siteUser);
 		
-		$subject = $config["sitename"];
+		$subject = "Password help for ".$config["sitename"];
 		
 		$userNameField = $mgr->getUsernameField();
 		$userNameField = $siteUser->hasField($userNameField) ? $userNameField : $mgr->getEmailField();
