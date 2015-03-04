@@ -736,6 +736,8 @@ class Fakoli
 			$content = $section->getContent($identifier);
 			if (!$content)
 			{
+				ComponentManager::fireEvent("ResourceNotFound", $identifier);
+				
 				throw new FakoliException("The page you were attempting to access could not be found.");
 			}
 			
