@@ -54,7 +54,7 @@ var FakoliMenu = new Class({
 		this.setOptions(options);
 		var menu = this;
 		
-		if (this.options.responsiveToggle)
+		if (this.options.responsiveToggle != '')
 		{
 			this.toggle = document.id(this.options.responsiveToggle);
 			this.toggle.addEvent('click', function() {this.toggleResponsiveMenu(); }.bind(this));
