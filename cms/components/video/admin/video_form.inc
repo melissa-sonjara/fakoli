@@ -60,7 +60,7 @@ $form->hide("user_id", "video_gallery_id");
 $form->required("title", "width", "height");
 $form->annotate("width", "<em>Natural width of video in pixels</em>");
 $form->annotate("height", "<em>Natural height of video in pixels</em>");
-$form->annotate("video_file", "<em>Video File in FLV format</em>");
+$form->annotate("video_file", "<em>Video File in FLV, F4V or MP4 format</em>");
 $form->annotate("image_file", "<em>First Frame in PNG or JPG format</em>");
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
@@ -148,7 +148,7 @@ function uploadFLV($field, $video)
 	
 	trace("Video format: $ext", 3);
 	
-	if ($ext != ".flv") 
+	if ($ext != ".flv" && $ext != ".f4v" && $ext != ".mp4") 
 	{
 		throw new FakoliException("Unsupported video format");
 	}
