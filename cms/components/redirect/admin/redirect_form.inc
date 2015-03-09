@@ -23,7 +23,7 @@ if ($method == "POST")
 	$_POST["user_id"] = $user->user_id;
 	if ($form->save())
 	{
-		Fakoli::notifyOnNextPage("Redirect added");
+		Fakoli::notifyOnNextPage($form->deleted ? "Redirect remoted" : "Redirect added");
 		redirect("/admin/redirects");
 	}
 }
