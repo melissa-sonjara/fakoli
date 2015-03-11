@@ -79,6 +79,8 @@ function installVideoJS()
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
 		srcElt.set('type', 'video/mp4');
+		v.href='#';
+		v.addEvent('click', function() { return true; });
 		
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
