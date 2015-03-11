@@ -78,7 +78,7 @@ function installVideoJS()
 		
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
-		srcElement.set('type', 'video/mp4');
+		srcElt.set('type', 'video/mp4');
 		
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
