@@ -55,12 +55,14 @@ else
 	$video->video_gallery_id = $video_gallery_id;
 }
 
+$useHTML5 = Settings::getValue("video", "use_HTML5_video");
+
 $form = new AutoForm($video);
 $form->hide("user_id", "video_gallery_id");
 $form->required("title", "width", "height");
 $form->annotate("width", "<em>Natural width of video in pixels</em>");
 $form->annotate("height", "<em>Natural height of video in pixels</em>");
-$form->annotate("video_file", "<em>Video File in FLV, F4V or MP4 format</em>");
+$form->annotate("video_file", $useHTML5 ? "<em>Video File in MP4 format</em>" : "<em>Video File in FLV format</em>");
 $form->annotate("image_file", "<em>First Frame in PNG or JPG format</em>");
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
