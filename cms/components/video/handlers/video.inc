@@ -41,5 +41,7 @@ $swf = VideoManager::getVideoURI($video);
 ?>
 <a class='video autoplay' href='<?echo $swf?>' style='display: block; width: <?echo $width?>px; height: <?echo $height?>px;'></a>
 <script type='text/javascript'>
+window.addEvent('domready', function() {
 installVideoPlayer();
+});
 </script>
