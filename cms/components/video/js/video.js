@@ -1,7 +1,22 @@
 window.addEvent('load', function()
 {
-	installFlowplayer();	
+	installVideoPlayer();	
 });
+
+function installVideoPlayer()
+{
+	if (typeof flowplayerPath != 'undefined' && flowplayerPath) 
+	{
+		installFlowplayer();
+		return;
+	}
+	
+	if (typeof videojs == 'function')
+	{
+		installVideoJS();
+		return;
+	}
+}
 
 function installFlowplayer()
 {
@@ -45,5 +60,30 @@ function installFlowplayer()
 		{
 			flowplayer(v.id, flowplayerPath, {clip: { autoPlay: play, autoBuffering: true}});
 		}
+	});
+}
+
+function installVideoJS()
+{
+	var videos = $$('a.video');
+	
+	videos.each(function(v)
+	{
+		var videoElt = v.getElement('video');
+		if (videoElt != null) return;
+		
+		videoElt = new Element('video');
+		videoElt.addClass('video-js').addClass('vjs-default-skin');
+		videoElt.setStyles({'width': v.getWidth(), 'height': v.getHeight()});
+		
+		srcElt = new Element('source');
+		srcElt.set('src', v.href);
+		srcElement.set('type', 'video/mp4');
+		
+		videoElt.adopt(srcElt);
+		v.adopt(videoElt);
+		
+		videojs(videoElt, {}, function() {});
+		
 	});
 }
