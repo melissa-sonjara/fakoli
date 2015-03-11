@@ -77,6 +77,7 @@ function installVideoJS()
 		
 		var w = v.getWidth();
 		var h = v.getHeight();
+		var auto = v.hasClass('autoplay');
 		
 		videoElt.setStyles({'width': w, 'height': h});
 		
@@ -89,7 +90,7 @@ function installVideoJS()
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
 		
-		videojs(videoElt, {controls: true, width: w, height: h}, function() {});
+		videojs(videoElt, {controls: true, width: w, height: h, autoplay: auto}, function() {});
 		
 	});
 }
