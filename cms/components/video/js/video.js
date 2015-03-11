@@ -83,7 +83,7 @@ function installVideoJS()
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
 		
-		videojs(videoElt, {}, function() {});
+		videojs(videoElt, {controls: true}, function() {});
 		
 	});
 }
