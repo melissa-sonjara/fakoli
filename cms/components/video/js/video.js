@@ -74,7 +74,11 @@ function installVideoJS()
 		
 		videoElt = new Element('video');
 		videoElt.addClass('video-js').addClass('vjs-default-skin');
-		videoElt.setStyles({'width': v.getWidth(), 'height': v.getHeight()});
+		
+		var w = v.getWidth();
+		var h = v.getHeight();
+		
+		videoElt.setStyles({'width': w, 'height': h});
 		
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
@@ -85,7 +89,7 @@ function installVideoJS()
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
 		
-		videojs(videoElt, {controls: true}, function() {});
+		videojs(videoElt, {controls: true, width: w, height: h}, function() {});
 		
 	});
 }
