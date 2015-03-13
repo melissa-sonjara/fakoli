@@ -45,7 +45,8 @@ var FakoliMenu = new Class({
 		subMenuEdge: 'topLeft',
 		responsiveToggle: '',
 		responsivePosition: 'bottomRight',
-		responsiveEdge: 'topRight'
+		responsiveEdge: 'topRight',
+		mode: 'pulldown'
 	},
 	
 	initialize: function(elt, options)
@@ -157,7 +158,7 @@ var FakoliMenu = new Class({
 				edge = this.options.subMenuEdge;
 			}
 
-			if (!this.reduced)
+			if (!this.reduced && this.options.mode == 'pulldown')
 			{
 				ul.position({'relativeTo': elt, 'position': offset, 'edge': edge});
 			}
@@ -179,12 +180,12 @@ var FakoliMenu = new Class({
 		elt.removeClass("sfhover");  
 		if (ul)
 		{
-			if (this.reduced && (this.options.effect == 'fade' || this.options.effect == 'reveal'))
+			if ((this.reduced || this.options.mode == 'accordion') && (this.options.effect == 'fade' || this.options.effect == 'reveal'))
 			{
 				ul.setStyle('opacity', '0');
 			}
 			
-			if (this.reduced) return;
+			if (this.reduced || this.options.mode == 'accordion') return;
 
 			ul.setStyle('left', -10000);
 		}
