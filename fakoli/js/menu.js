@@ -106,7 +106,7 @@ var FakoliMenu = new Class({
 					
 					'mouseover': function() 
 					{ 
-						if (!menu.reduced) 
+						if (!menu.reduced && menu.options.mode == 'pulldown') 
 						{
 							menu.showMenu(parent);
 						}
@@ -124,7 +124,7 @@ var FakoliMenu = new Class({
 					'mouseout': function() 
 					{
 						menu.opening = false;
-						if (!menu.reduced) menu.hideMenu(parent);
+						if (!menu.reduced && menu.options.mode == 'pulldown') menu.hideMenu(parent);
 					}
 				 });
 				
