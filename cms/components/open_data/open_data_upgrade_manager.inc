@@ -9,17 +9,19 @@
  */
 
 
-Fakoli::using("open_data", "component");
+Fakoli::using("OpenData", "component");
 
 class OpenDataUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 		//"x.x"	=>	"description"
+		
+			"1.1"	=>	"created the open_data table"
 	);
 
 	function OpenDataUpgradeManager()
 	{
-		$this->component_name = "open_data";
+		$this->component_name = "OpenData";
 
 		// sets the sqlFile name according to default
 		parent::UpgradeManager();
