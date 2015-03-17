@@ -93,7 +93,14 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		{
 			if ($this->regular)
 			{
-				$width = 100 / count($this->options);
+				if (this->horizontal)
+				{
+					$width = 100 / count($this->options);
+				}
+				else
+				{
+					$width = 100;
+				}
 				$tdStyle = " style='width: {$width}%'";
 			}
 			else
@@ -102,7 +109,7 @@ class RadioButtonFieldRenderer extends FieldRenderer
 			}
 				
 			echo "<table class='radio_button_options'><tr><td{$tdStyle}>";
-			$separator = "</td><td>";
+			$separator = $this->horizontal ? "</td><td>" : "</td></tr><tr><td>";
 		}
 		else if ($this->horizontal)
 		{
