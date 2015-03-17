@@ -93,7 +93,7 @@ class RadioButtonFieldRenderer extends FieldRenderer
 		{
 			if ($this->regular)
 			{
-				if (this->horizontal)
+				if ($this->horizontal)
 				{
 					$width = 100 / count($this->options);
 				}
