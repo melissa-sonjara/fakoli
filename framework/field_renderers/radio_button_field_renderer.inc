@@ -125,7 +125,7 @@ class RadioButtonFieldRenderer extends FieldRenderer
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			$out[] = "<label for='{$this->parent->id}_{$field}_{$value}'><input id='{$this->parent->id}_{$field}_{$value}' style='border: none' type='radio' name='$field' value='$value'$selected $onchange $disable/>&nbsp;$name</label>";
+			$out[] = "<label class='radio' for='{$this->parent->id}_{$field}_{$value}'><input id='{$this->parent->id}_{$field}_{$value}' style='border: none' type='radio' name='$field' value='$value'$selected $onchange $disable/>&nbsp;$name</label>";
 		}
 
 		$radios = implode($separator, $out);
