@@ -115,7 +115,7 @@ class Site extends DataItem
 			Site::$currentSite = $sites[0];
 			
 			// Store in $config
-			$config['http_host'] = $sites[0];
+			$config['http_host'] = $sites[0]->domain;
 			
 			return Site::$currentSite;
 		}
