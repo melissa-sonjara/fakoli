@@ -711,7 +711,7 @@ class Fakoli
 		
 		if (!$page_id && !$identifier)
 		{
-			redirect("/{$section->section}/$section->default_page");
+			redirect($section->getDefaultPage());
 		}
 		
 		if ($page_id)
