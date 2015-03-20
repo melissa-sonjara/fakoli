@@ -205,6 +205,15 @@ class Section extends DataItem
 	}
 	
 	/**
+	 * Returns the path to the default page for this section
+	 */
+	function getDefaultPage()
+	{
+		$url = $this->getSectionURL();
+		return $url . $this->default_page;
+	}
+	
+	/**
 	 * Retrieves an array of the position names defined in the template for this page.
 	 * @return array the positions defined in the template (sorted alphabetically)
 	 */
