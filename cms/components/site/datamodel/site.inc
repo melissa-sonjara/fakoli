@@ -96,6 +96,8 @@ class Site extends DataItem
 	 */
 	static function getSite()
 	{
+		global $config;
+		
 		if (Site::$currentSite)
 		{
 			return Site::$currentSite;
@@ -111,6 +113,10 @@ class Site extends DataItem
 		{
 			trace("Matching Site record found", 3);
 			Site::$currentSite = $sites[0];
+			
+			// Store in $config
+			$config['http_host'] = $sites[0];
+			
 			return Site::$currentSite;
 		}
 		
@@ -119,7 +125,7 @@ class Site extends DataItem
 		if (count($sites) > 0) 
 		{
 			Site::$currentSite = $sites[0];
-			trace("Using default Site record with domain ".Site::$currentSite->domain, 3);
+			trace("Using default Site record with domain ".Site::$currentSite->domain, 3);			
 			return Site::$currentSite;
 		}
 		
