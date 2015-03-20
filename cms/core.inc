@@ -700,6 +700,8 @@ class Fakoli
 	{
 		trace("Send Page: '$sectionIdentifier', '$identifier', '$page_id'", 2);
 		
+		$site = Site::getSite();
+		
 		if (!$sectionIdentifier) $sectionIdentifier = "/";
 		
 		global $config;
