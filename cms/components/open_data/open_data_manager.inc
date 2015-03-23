@@ -17,7 +17,12 @@ class OpenDataManager
 		//TODO: Set default configuration parameters here
 	}
 
-
+	static function getOpenDataClasses()
+	{
+		$classes = array();
+		$classes = ComponentManager::fireEvent("EnumerateOpenDataClasses");
+		return $classes;
+	}
 
 	static function upgradeComponent($version)
 	{

@@ -17,7 +17,7 @@ class OpenData extends DataItem
 						"source"			=>	String,
 						"data_standard"		=>	String,
 						"description"		=>	HTML,
-						"ignore"			=>  Boolean
+						"ignored"			=>  Boolean
 	);
 	
 	

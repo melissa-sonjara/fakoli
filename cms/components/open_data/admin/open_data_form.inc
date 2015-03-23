@@ -36,14 +36,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 Fakoli::using("OpenData");
 Fakoli::usingFeature("data_view");
 
+OpenDataManager::getOpenDataClasses();
+
 $menu_item = "Open Data";
 $open_data_id = checkNumeric($_GET["open_data_id"]);
+$class = checkIdentifier($_GET["class"]);
+$field = checkIdentifier($_GET["field"]);
+
 $openData = new OpenData();
 
 if ($open_data_id)
 {
 	$openData->load($open_data_id);
 	$title = "Edit Open Data Details for {$openData->field}";
+}
+else
+{
+	$obj = new $class;
+	
+	$openData->class = $class;
+	$openData->field = $field;
+	$openData->field_type = $obj->getType($field);
 }
 
 $form = new AutoForm($openData);

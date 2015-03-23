@@ -37,7 +37,7 @@ class OpenDataManifest
 	static function getComponentDefinition()
 	{
 		$component = new Component();
-		$component->name = "OpenData";
+		$component->name = "open_data";
 		$component->description = "Provides support for Open Data compliance and publishing";
 		$component->author = "Siobhan Green";
 		$component->version = "1.0";
@@ -63,9 +63,9 @@ class OpenDataManifest
 
 	static function subscribeToEvents()
 	{
-		return array("EnumerateContextHelpClasses"=>  array(OpenDataManager, enumerateContextHelpClasses),
-					"upgradeComponent"	=>	array(OpenDataManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(OpenDataManager, setDefaults)
+		return array("EnumerateContextHelpClasses"	=>  array(OpenDataManager, enumerateContextHelpClasses),
+					 "upgradeComponent"				=>	array(OpenDataManager, upgradeComponent),
+					 "ComponentScanComplete"		=>	array(OpenDataManager, setDefaults)
 					//TODO: Add Event Registrations here
 		);
 	}

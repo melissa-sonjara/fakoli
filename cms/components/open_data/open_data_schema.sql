@@ -25,8 +25,9 @@ CREATE TABLE open_data (
 
 --END Version 1.1
 
---START version 1.2
+--START Version 1.2
 
-ALTER TABLE open_data ADD COLUMN ignore TINYINT(1) NULL DEFAULT 0 ;
-ALTER TABLE open_data ADD COLUMN field_type VARCHAR(500) ;
+ALTER TABLE open_data ADD COLUMN ignored TINYINT(1) NOT NULL DEFAULT 0;
+ALTER TABLE open_data ADD COLUMN field_type VARCHAR(500) NOT NULL DEFAULT '';
+
 --END Version 1.2

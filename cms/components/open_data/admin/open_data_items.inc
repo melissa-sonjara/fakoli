@@ -32,28 +32,78 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 Fakoli::using("OpenData");
-Fakoli::usingFeature("data_view");
+Fakoli::usingFeature("grouped_data_view");
 
 $menu_item = "Open Data";
 
-$openData = Query::create(OpenData, "ORDER BY class")->execute();
+$classes = OpenDataManager::getOpenDataClasses();
 
-$table = new DataListView($openData, "open_data");
+$savedOpenData = GroupedQuery::create(OpenData, "ORDER BY field", "class")->execute();
 
-$table->column("Class", "<a href='open_data_form?open_data_id={open_data_id}'>{class}</a>", true)
-	   ->column("Field", "{field}", true)
+$openData = array();
+
+/*
+ * Build an array of context help objects grouped by class.
+* If we have one saved, then use that; if not, create an
+* new one and set the field and class name but don't save it.
+* Help items are only saved when the user enters help on the form.
+*/
+if(count($classes) > 0)
+{
+	foreach($classes as $class)
+	{
+		$classObj = new $class();
+		$prettyClassName = $classObj->prettifyClassName();
+		$fields = $classObj->getFields();
+		$savedFields = $savedOpenData[$class];
+		if(count($savedFields) == 0) $savedFields = array();
+		if(is_array($classObj->additionalFields))
+			$fields = array_merge($fields, array_combine($classObj->additionalFields, $classObj->additionalFields));
+
+		$savedFields = reindexList($savedFields, "field");
+
+		if(count($fields) > 0)
+		{
+			foreach($fields as $fieldName => $fieldType)
+			{
+				if(!array_key_exists($fieldName, $savedFields))
+				{
+					$openDataRecord = new OpenData();
+					$openDataRecord->class = $class;
+					$openDataRecord->field = $fieldName;
+				}
+				else
+				{
+					$openDataRecord = $savedFields[$fieldName];
+				}
+
+				$openDataRecord->pretty_class_name = $prettyClassName;
+				array_push($openData, $openDataRecord);
+			}
+		}
+	}
+}
+
+$openData = OpenDataHelper::sortItems($openData);
+$groupedOpenData = regroupList($openData, "pretty_class_name");
+
+$table = new GroupedDataListView($groupedOpenData, "open_data");
+$table->column("Field", "{OpenDataHelper::formatFieldLink}")
 	  ->column("Open Data Level", "{open_data_level}", true)
 	  ->column("Source", "{source}", true)
-	  ->column("Data Standard", "{data_standard}", true, "text-align: right");
-	  
-$table->pageSize = 20;
-$table->sortable = true;
-$table->filter = true;
+	  ->column("Data Standard", "{data_standard}", true);
+
+$table->mode = "tree";
+$table->cssStyle = "width: 90%";
+
+foreach(array_keys($groupedOpenData) as $class_name)
+{
+	$table->group($class_name, $class_name);
+}
+
 $table->emptyMessage = "No open data meta tags have been created yet.";
 
 $script .= $table->writeScript();
 
 $table->drawView();
 ?>
-<br/>
-<a class='button' href='open_data_form'>Add a New Open Data Meta Tag</a>
