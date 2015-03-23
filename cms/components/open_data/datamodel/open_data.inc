@@ -8,6 +8,7 @@ class OpenData extends DataItem
 	var $fields = array("open_data_id"		=>	Number,
 						"class"				=>	String,
 						"field"				=>	String,
+						"field_type"		=>	String,
 						"open_data_level"	=>	String,
 						"redacted_field"	=>	Boolean,
 						"redacted_record"	=>  Boolean,
@@ -15,7 +16,8 @@ class OpenData extends DataItem
 						"protected"			=>  Boolean,
 						"source"			=>	String,
 						"data_standard"		=>	String,
-						"description"		=>	HTML
+						"description"		=>	HTML,
+						"ignore"			=>  Boolean
 	);
 	
 	
