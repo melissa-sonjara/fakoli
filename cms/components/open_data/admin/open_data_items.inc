@@ -89,12 +89,14 @@ if(count($classes) > 0)
 $openData = OpenDataHelper::sortItems($openData);
 $groupedOpenData = regroupList($openData, "pretty_class_name");
 
+
+
 $table = new GroupedDataListView($groupedOpenData, "open_data");
 $table->column("Field", "{OpenDataHelper::formatFieldLink}")
 	  ->column("Open Data Level", "{open_data_level}", true)
 	  ->column("Source", "{source}", true)
 	  ->column("Data Standard", "{data_standard}", true)
-	  ->column("Ignored", array($this, Ignored), false, "text-align: center");
+	  ->column("Ignored","{ignored}", true, "text-align: center");
 
 $table->mode = "tree";
 $table->cssStyle = "width: 90%";
