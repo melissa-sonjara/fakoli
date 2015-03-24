@@ -31,7 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
 
-Fakoli::using("OpenData");
+Fakoli::using("open_data");
 Fakoli::usingFeature("grouped_data_view");
 
 $menu_item = "Open Data";
