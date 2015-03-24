@@ -33,7 +33,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 *****************************************************************/
 
 
-Fakoli::using("OpenData");
+Fakoli::using("open_data");
 Fakoli::usingFeature("data_view");
 
 OpenDataManager::getOpenDataClasses();
