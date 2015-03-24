@@ -62,15 +62,16 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class SelectFieldRenderer extends FieldRenderer
 {
-	var $options;
-	var $addEntry;
-	var $addEntryText;
-	var $onChange; // optional selection change handler
-	var	$max_chars;
-	var $width;
-	// JDG 8/12 - set to true after all Fakoli projects have set required fields to required.
-	var $defaultBlank = false; // whether the drop down includes a blank as the default
-	var $defaultText = "Choose One";
+	var $options;		///< The array of options (ungrouped or grouped) that will displayed in the select box
+	var $addEntry;		///< Set to true to show an "Add New" button
+	var $addEntryText;	///< Text for the "Add New" button
+	var $onChange; 		///< optional selection change handler
+	var	$max_chars;		///< Maximum number of characters to display
+	var $width;			///< Width of the select box, using CSS units (px, %, em, etc)
+
+	var $defaultBlank = false; 		 	///< Whether the drop down includes an empty line as the default, indicating no selection has been made
+	var $defaultText = "Choose One";	///< Text to display when no selection has been made.
+	var $CSSclass;		///< Additional CSS class(es) to apply to the select box
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
@@ -105,11 +106,20 @@ class SelectFieldRenderer extends FieldRenderer
 		
 	}
 	
+	/**
+	 * Sets the maximum number of characters to display in the select box (per entry)
+	 * @param int $max the maximum number of characters to display in the select box
+	 */
 	function setMaxChars($max)
 	{
 		$this->max_chars = $max;
 	}
 	
+	/**
+	 * Enables the "Add New" button that allows users to create new options when
+	 * the option they require is not present.
+	 * @param string $text the text to display next to the Add New button (optional)
+	 */
 	function allowAddEntry($text = "or add new")
 	{
 		$this->addEntry = true;
@@ -145,9 +155,10 @@ class SelectFieldRenderer extends FieldRenderer
 			
 		if (count($this->options) > 0 || !$this->addEntry)
 		{			
+			$cssClass = $this->CSSclass ? " class='{$this->CSSclass}'" : "";
 			if($this->width)
 				$style = "style='width: {$this->width}'";
-			echo "<select $style name='$field' id='{$this->parent->id}_{$field}'";
+			echo "<select {$class}{$style} name='$field' id='{$this->parent->id}_{$field}'";
 			
 			if ($this->onChange != "")
 				echo " onchange='$this->onChange(this)'";
@@ -340,7 +351,7 @@ class SelectFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	/*
+	/**
 	 * If the calling script is using addEntry and
 	 * does not supply its own onChange function,
 	 * then write this onChange function to remove
@@ -391,9 +402,7 @@ function onChange_<?echo "{$fn}_addEntry" ?>(elt)
 	} // end function renderScript
 	
 	
-	/*
-	 * addOtherOption
-	 * 
+	/**
 	 * If the user enables addEntryText, then add a "Other" option to the 
 	 * options array if one does not already exist. Can also add a 
 	 * blank option.
