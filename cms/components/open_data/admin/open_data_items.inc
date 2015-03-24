@@ -60,13 +60,7 @@ if(count($classes) > 0)
 		if(is_array($classObj->additionalFields))
 			$fields = array_merge($fields, array_combine($classObj->additionalFields, $classObj->additionalFields));
 
-		function Ignored($fields)
-		{
-			$img = $fields->ignored ?  "off.png": "on.png" ;
-			$alt = $fields->ignored ? "Ignored" : "Used";
-		
-			return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
-		}
+
 		
 		$savedFields = reindexList($savedFields, "field");
 
