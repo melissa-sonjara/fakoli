@@ -662,7 +662,7 @@ class DataItem extends AbstractDataItem
 		{
 			$db = $this->getConnection();
 			$stmt = $db->prepare($query);
-			$success = $stmt->execute($cmd);
+			$success = $stmt->execute($params);
 			if ($success === FALSE)
 			{
 				trace("DataItem::updateExplicit failed - $query", 2);
