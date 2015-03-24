@@ -29,6 +29,18 @@ class OpenDataManager
 		$mgr = new OpenDataUpgradeManager();
 		$mgr->upgrade($version);
 	}
+
+
+
+
+	function Ignored($openData)
+	{
+		$img = $openData->ignored ?  "off.png": "on.png" ;
+		$alt = $openData->ignored ? "Ignored" : "Used";
+	
+		return "<img src='/fakoli/images/$img' alt='$alt' style='display: inline-block; vertical-align: middle; border: none; cursor: pointer'/>";
+	}
+
 }
 
 ?>
