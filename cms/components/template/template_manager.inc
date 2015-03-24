@@ -257,7 +257,7 @@ function deleteFolderResult(result)
 		$tree->buildFolderTree($this->folder, $this->base);
 		$tree->addFiles($this->folder, $this->base, array($this, fileFilter));
 				
-		$tree->children["templates"]->open = true;
+		$tree->children[$this->folder]->open = true;
 		$tree->writeHTML();
 		
 ?>

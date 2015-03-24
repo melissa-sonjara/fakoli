@@ -61,7 +61,7 @@ $form->readonly("created_date");
 $form->allowDelete = true;
 
 //$codeSelect = new CodeFileSelectFieldRenderer($form, "php_code_file", "PHP Code File", "modules");
-//$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
+//$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "site");
 $form->annotate("template", "Fakoli 3 projects use Section Content to set template");
 $form->ajaxSubmit("function(result) {new PageManager().editResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 

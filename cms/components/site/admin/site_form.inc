@@ -52,10 +52,11 @@ $form->button("Cancel", $redirect);
 $form->annotate("meta_tag_description", "Default content for the description meta-tag");
 $form->annotate("meta_tag_keyword", "Default content for the keywords meta-tag");
 
-$templateSelect       = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "templates");
-$printTemplateSelect  = new TemplateSelectFieldRenderer($form, "print_template", "Print Template", "templates");
-$popupTemplateSelect  = new TemplateSelectFieldRenderer($form, "popup_template", "Popup Template", "templates");
-$mobileTemplateSelect = new TemplateSelectFieldRenderer($form, "mobile_template", "Mobile Template", "templates");
+$themeSelect 		  = new SelectFieldRenderer($form, "theme", "Theme", SiteManager::getThemeOptions());
+$templateSelect       = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "theme");
+$printTemplateSelect  = new TemplateSelectFieldRenderer($form, "print_template", "Print Template", "theme");
+$popupTemplateSelect  = new TemplateSelectFieldRenderer($form, "popup_template", "Popup Template", "theme");
+$mobileTemplateSelect = new TemplateSelectFieldRenderer($form, "mobile_template", "Mobile Template", "theme");
 
 if ($method == "POST")
 {

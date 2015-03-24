@@ -45,7 +45,8 @@ $sites = query(Site, "ORDER BY site_id");
 $table = new DataListView($sites, "sites");
 $table->column("Title", "<a href='/admin/site_form?site_id={site_id}'>{site_name}</a>", true)
 	  ->column("Domain", "{domain}", true)
-	  ->column("Home Page", "<a target='_blank' href='{home_page}'>{home_page}</a>", true);
+	  ->column("Home Page", "<a target='_blank' href='{home_page}'>{home_page}</a>", true)
+	  ->column("Theme", "{SiteManager::formatThemeName}", true);
 	  
 $table->sortable = true;
 

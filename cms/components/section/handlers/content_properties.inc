@@ -55,7 +55,7 @@ $form->button("Cancel", "sectionContentManager.cancel()", null, true);
 
 if ($scope == "template" || $scope == "all")
 {
-	$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "templates");
+	$templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "none");
 }
 
 if ($scope == "role" || $scope == "all")

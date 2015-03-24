@@ -35,10 +35,85 @@ Fakoli::using("site");
 
 class SiteManager
 {
+	static $themes = null;
+	
 	function SiteManager()
 	{
 		
 	}
+	
+	static function registerTheme($component, $name, $description)
+	{
+		$component = ComponentManager::getComponent($component);
+		
+		SiteManager::$themes[$component->name] = array("name" => $name, 
+													   "description" => $description, 
+												       "directory" => $component->component_path);
+	}
+	
+	static function registerThemes()
+	{
+		SiteManager::$themes = array();
+		ComponentManager::fireEvent("RegisterTheme");
+		Cache::put("registered_themes", SiteManager::$themes);
+		return SiteManager::$themes;
+	}
+	
+	static function getThemes()
+	{
+		$themes = Cache::get("registered_themes");
+		
+		if (!$themes)
+		{
+			$themes = SiteManager::registerThemes();
+		}
+		return $themes;
+	}
+	
+	static function getThemeDirectory($theme = "")
+	{
+		global $config;
+		
+		if ($theme == "")
+		{
+			return $config['homedir'] . DIRECTORY_SEPARATOR . "templates";
+		}	
+		
+		$themes = SiteManager::getThemes();
+		
+		if (!array_key_exists($theme, $themes))
+		{
+			trace("Unknown theme '$theme' - using default", 2);
+			return $config['homedir'] . DIRECTORY_SEPARATOR . "templates";
+		}
+		return $themes[$theme]["directory"];
+	}
+	
+	static function getThemeOptions()
+	{
+		$themes = SiteManager::getThemes();
+		
+		$options = array("" => "Default");
+		foreach($themes as $component => $theme)
+		{
+			$options[$component] = $theme["name"];
+		}
+		
+		return $options;
+	}
+	
+	static function formatThemeName($site)
+	{
+		if (!$site->theme) return "Default";
+		$themes = SiteManager::getThemes();
+		
+		if (!array_key_exists($site->theme, $themes))
+		{
+			return "ERROR";
+		}
+		
+		return $themes[$site->theme]["name"];
+	}		
 	
 	static function upgradeComponent($version)
 	{

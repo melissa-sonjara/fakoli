@@ -31,12 +31,17 @@
 
 *****************************************************************/
 
-Fakoli::using("template");
+Fakoli::using("template", "site");
 Fakoli::usingFeature("directory_tree");
 
 $menu_item = "Templates";
 
-$mgr = new TemplateManager($config["homedir"], "templates");
+$site = Site::getSite();
+$base = SiteManager::getThemeDirectory($site->theme);
+$folder = basename($base);
+$parent = dirname($base);
+
+$mgr = new TemplateManager($parent, $folder);
 
 $script .= $mgr->writeScript();
 

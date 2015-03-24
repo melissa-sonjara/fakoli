@@ -160,10 +160,13 @@ class ComponentPage extends DataItem
 		
 		$style = $_REQUEST["_style"];
 		$site = $this->Site();
-		if(!$site) Site::getSite();
+		if(!$site) 
+		{
+			$site = Site::getSite();
+		}
 		
 		$templateFile = "";
-		
+
 		switch($style)
 		{
 		case 'print':
@@ -191,7 +194,9 @@ class ComponentPage extends DataItem
 		
 		$templateFile = ComponentManager::fireEvent("OverrideTemplate", $templateFile);
 		
-		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
+		$base = $site->getThemeDirectory();
+		trace("{$base}/{$templateFile}", 3);
+		$template = file_get_contents("{$base}/{$templateFile}");
 
 		return $template;
 	}

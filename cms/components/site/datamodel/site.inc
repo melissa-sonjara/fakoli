@@ -43,6 +43,7 @@ class Site extends DataItem
 						"description"			=> Text,
 						"meta_tag_description"	=> Text,
 						"meta_tag_keyword"		=> String,				
+						"theme"					=> String,
 						"default_template"		=> String,
 						"print_template"		=> String,
 						"popup_template"		=> String,
@@ -135,6 +136,11 @@ class Site extends DataItem
 	static function getSites()
 	{
 		return Query::create(Site, "ORDER BY site_name")->execute();
+	}
+	
+	function getThemeDirectory()
+	{
+		return SiteManager::getThemeDirectory($this->theme);
 	}
 	
 	// Constructor

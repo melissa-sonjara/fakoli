@@ -65,7 +65,7 @@ $form->allowDelete = $allowDelete;
 
 $form->alias("section", "Section Identifier");
 
-$templateSelect = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "templates");
+$templateSelect = new TemplateSelectFieldRenderer($form, "default_template", "Default Template", "site");
 
 $roleList = new CheckListFieldRenderer($form, "default_role", "Default Role", SiteRole::getRolesArray());
 

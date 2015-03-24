@@ -53,7 +53,8 @@ class SiteUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added meta_tag_keyword and meta_tag_description to site table"
+			"1.1"		=>	"sql:Added meta_tag_keyword and meta_tag_description to site table",
+			"1.2"		=>	"sql:Added theme field to site table"
 	);
 	
 	function SiteUpgradeManager()

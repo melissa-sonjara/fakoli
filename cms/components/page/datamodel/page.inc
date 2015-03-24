@@ -137,6 +137,10 @@ class Page extends DataItem implements Searchable
 		
 		$style = $_REQUEST["_style"];
 		$site = $this->Site();
+		if (!$site)
+		{
+			$site = Site::getSite();
+		}
 		
 		$templateFile = "";
 		
@@ -166,8 +170,9 @@ class Page extends DataItem implements Searchable
 		if (!$templateFile) $templateFile = $site->default_template;
 				
 		$templateFile = ComponentManager::fireEvent("OverrideTemplate", $templateFile);
-		
-		$template = file_get_contents("{$config['homedir']}/templates/{$templateFile}");
+
+		$base = $site->getThemeDirectory();
+		$template = file_get_contents("{$base}/{$templateFile}");
 
 		return $template;
 	}

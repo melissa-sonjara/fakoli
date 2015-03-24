@@ -31,21 +31,88 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__))."/../../../framework/field_renderers.inc";
+
+Fakoli::usingFeature("field_renderers");
+Fakoli::using("site");
 
 class TemplateSelectFieldRenderer extends SelectFieldRenderer
 {
-	function TemplateSelectFieldRenderer(&$form, $field, $label, $directory, $onChange="")
-	{
-		global $config;
-		$path = $config["homedir"]."/".$directory;
+	static $templateMapWritten = false;
+	var $mode = "site"; ///< Dynamic update mode, either 'site', 'theme' or 'none'
+	var $site_id = 0;
 	
-		$options = array();
-		$options = array_merge($options, $this->readFiles("{$config["homedir"]}/$directory", ""));
-		
+	function TemplateSelectFieldRenderer(&$form, $field, $label, $mode = "site", $onChange = "")
+	{
+		$this->mode = $mode;
+		$this->site_id = $site_id;
+			
+		$options = $this->getInitialOptions($form);
+			
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
 	}
 	
+	private function getInitialOptions($form)
+	{
+		$site = $this->getSite($form);
+		$directory = $site->getThemeDirectory();
+		$options = $this->readFiles($directory, "");
+		
+		return $options;
+	}
+	
+	private function getSite($form = null)
+	{
+		if (!$form) $form = $this->parent;
+		
+		if ($form->data->hasField("site_id"))
+		{
+			$site_id = $form->data->get("site_id");
+			if ($site_id)
+			{
+				$site = new Site($site_id);
+				return $site;
+			}
+		}
+		
+		$site = Site::getSite();
+		return $site;
+	}
+	
+	private function buildTemplateMap()
+	{
+		$map = array();
+
+		switch($this->mode)
+		{
+		case "site":
+
+			$sites = Query::create(Site, "")->execute();
+	
+			foreach($sites as $site)
+			{
+				$directory = $site->getThemeDirectory();
+			
+				$map[$site->site_id] = $this->readFiles($directory, "");
+			}
+			break;
+
+		case "theme":
+			
+			$themes = SiteManager::getThemes();
+			
+			$map[""] = $this->readFiles(SiteManager::getThemeDirectory(""));
+			
+			foreach($themes as $component => $theme)
+			{
+				$map[$component] = $this->readFiles($theme["directory"]);
+			}
+			
+			break;
+		}
+		
+		return $map;
+	}
+		
 	function readFiles($home, $dir)
 	{
 		trace("Scanning Templates", 3);
@@ -86,6 +153,104 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 	    	closedir($handle);
 		}
 	    return $options;
+	}
+	
+	function renderScript($field)
+	{
+		if (!TemplateSelectFieldRenderer::$templateMapWritten)
+		{
+?>
+<script type='text/javascript'>
+var TemplateSelectFieldRenderer_templateMap = <?echo json_encode($this->buildTemplateMap());?>;
+</script>
+<?
+			TemplateSelectFieldRenderer::$templateMapWritten = true;
+		}
+		
+		switch($this->mode)
+		{
+		case "site":
+				
+			if ($this->parent->data->hasField("site_id"))
+			{
+?>
+<script type='text/javascript'>
+window.addEvent('domready', function()
+{
+	var siteSelect = document.id("<?echo $this->parent->id?>_site_id");
+	siteSelect.addEvent('change', function()
+	{
+		var site_id = siteSelect.value;
+		var templateSelect = document.id("<?echo $this->parent->id?>_<?echo $field?>");
+		var val = templateSelect.value;
+
+		var html = "";
+		
+		var options = TemplateSelectFieldRenderer_templateMap[site_id];
+		for (var o in options)
+		{
+			if (o == val)
+			{
+				html += "<option value='" + o + "' selected='selected'>" + o + "</option>";
+			}
+			else
+			{
+				html += "<option value='" + o + "'>" + o + "</option>";
+			}
+		}
+			
+		templateSelect.set('html', html);
+	});
+});
+</script>			
+<?
+			}
+			break;
+
+		case "theme":
+			
+			if ($this->parent->data->hasField("theme"))
+			{
+?>
+<script type='text/javascript'>
+window.addEvent('domready', function()
+{
+	var themeSelect = document.id("<?echo $this->parent->id?>_theme");
+	themeSelect.addEvent('change', function()
+	{
+		var theme = themeSelect.value;
+		var templateSelect = document.id("<?echo $this->parent->id?>_<?echo $field?>");
+		var val = templateSelect.value;
+
+		var html = "";
+		
+		var options = TemplateSelectFieldRenderer_templateMap[theme];
+		for (var o in options)
+		{
+			if (o == val)
+			{
+				html += "<option value='" + o + "' selected='selected'>" + o + "</option>";
+			}
+			else
+			{
+				html += "<option value='" + o + "'>" + o + "</option>";
+			}
+		}
+			
+		templateSelect.set('html', html);
+	});
+});
+</script>			
+<?
+			}
+			break;
+			
+		case "none":
+		default:
+			break;
+		}
+		
+		return parent::renderScript(field);
 	}
 }
 ?>
