@@ -43,7 +43,11 @@ class VideoManager
 	static function setDefaults()
 	{
 		Settings::setDefaultValue("video", "video_folder", "videos", String, "Directory inside the web folder that is used to store the video files", "Video Uploads");
-		Settings::setDefaultValue("video", "video_upload_location", "Web Folder", String, "Indicate whether videos should be stored under the Web Folder or in the document upload area. If you do not have mod_xsendfile installed, then Web Folder is strongly recommended", "Video Uploads", "Web Folder\nDocument Upload Folder");
+		Settings::setDefaultValue("video", "video_upload_location", "Web Folder", String, 
+								  "Indicate whether videos should be stored under the Web Folder or in the document upload area.".
+								  "If you do not have mod_xsendfile installed, then Web Folder is strongly recommended", 
+								  "Video Uploads", "Web Folder\nDocument Upload Folder\nOther");
+		Settings::setDefaultValue("video","video_upload_other_location", "", String, "Full path to alternate video location", "Video Uploads");
 		Settings::setDefaultValue("video", "use_HTML5_video", false, Boolean, "Check to use HTML5 video, leave unchecked for old-style FLV (requires Flowplayer Flash)", "Video Player", null, 1);
 		Settings::setDefaultValue("video", "flowplayer_script", "", String, "URI for the Flowplayer script", "Video Player", null, 2);
 		Settings::setDefaultValue("video", "flowplayer_player", "", String, "URI for the Flowplayer SWF file", "Video Player", null, 3);
@@ -95,7 +99,11 @@ class VideoManager
 		$location = Settings::getValue("video", "video_upload_location");
 		$folder = Settings::getValue("video", "video_folder");
 		
-		if ($location == "Web Folder")
+		if ($location == "Other")
+		{
+			$dir = sanitizePath(Settings::getValue("video", "video_upload_other_location") . DIRECTORY_SEPARATOR . $folder);
+		}
+		else if ($location == "Web Folder")
 		{
 			$dir = $config['homedir']. DIRECTORY_SEPARATOR . $folder;
 			if (!file_exists($dir))
