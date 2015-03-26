@@ -64,6 +64,7 @@ $table->drawView();
  <option value="button">Lightbox button</option>
  <option value="link">Lightbox link</option>
  <option value="thumbnail">Thumbnail w/ Lightbox</option>
+ <option value="download">Download Link</option>
 </select>
 &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="checkbox" id="transcript" value="1"/>&nbsp;<label for="transcript">Insert Link to Transcript</label>
 <br/>

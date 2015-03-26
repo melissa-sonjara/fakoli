@@ -126,6 +126,12 @@ var VideoPicker =  (function()
 				
 				insertion = "<a class='video' href='" + this.selectedVideo + "' style='display: block; width:" + this.selectedVideoWidth + "px; height: " + this.selectedVideoHeight +"px; background-image: url(" + this.selectedVideoImage + ")'></a>";
 				break;
+				
+			case "download":
+				var download = this.selectedVideo.replace("/stream", "/download");
+				
+				insertion = "<a href='" + download + "'>Download Video</a>";
+				break;
 			}
 			
 			if (transcript)
