@@ -102,6 +102,10 @@ class VideoManager
 		if ($location == "Other")
 		{
 			$dir = sanitizePath(Settings::getValue("video", "video_upload_other_location") . DIRECTORY_SEPARATOR . $folder);
+			if (!file_exists($dir))
+			{
+				throw new FakoliException("Video Folder does not exist");
+			}
 		}
 		else if ($location == "Web Folder")
 		{
