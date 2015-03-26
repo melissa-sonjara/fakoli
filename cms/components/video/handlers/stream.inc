@@ -39,6 +39,8 @@ $video = new Video($video_id);
 
 $gallery = $video->VideoGallery();
 
+ComponentManager::fireEvent("OverrideVideoStream", $video);
+
 // Clear output buffers
 while(!ob_end_clean());
 
