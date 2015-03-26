@@ -105,7 +105,7 @@ class VideoManager
 			trace($dir, 3);
 			if (!file_exists($dir))
 			{
-				throw new FakoliException("Video Folder does not exist");
+				//throw new FakoliException("Video Folder does not exist");
 			}
 		}
 		else if ($location == "Web Folder")
