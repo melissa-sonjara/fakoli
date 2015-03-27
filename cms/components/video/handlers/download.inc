@@ -53,6 +53,8 @@ trace("Download: video filename to download {$video->video_file}", 3);
 
 $filepath = sanitizePath($gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $video->video_file);
 
+trace("Download: $filepath", 3);
+		
 header("Content-Disposition: attachment;filename=\"" . basename($video->video_file) . "\"");
 Fakoli::sendFile($filepath);
 
