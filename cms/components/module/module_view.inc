@@ -185,7 +185,7 @@ class CodeModuleView extends ModuleView
 			}
 			catch(Exception $e)
 			{
-				$output = $e->getMessage();
+				$output = $e->__toString();
 			}
 
 			ob_end_clean();
