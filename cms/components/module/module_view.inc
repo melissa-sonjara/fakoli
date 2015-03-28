@@ -151,38 +151,45 @@ class CodeModuleView extends ModuleView
 		{
 			ob_start();
 			
-			$codePath = explode(",", $this->module->php_code_file);
-			if (count($codePath) == 2)
+			try
 			{
-				$name = $codePath[0];
-				$php_code_file = $codePath[1];
-				$components = Fakoli::getComponents();
-				if (array_key_exists($name, $components))
+				$codePath = explode(",", $this->module->php_code_file);
+				if (count($codePath) == 2)
 				{
-					$path = $components[$name]->component_path;
-					Fakoli::applicationTraceLevel();
-					
-					include $path."/{$php_code_file}";
-
-					Fakoli::coreTraceLevel();
+					$name = $codePath[0];
+					$php_code_file = $codePath[1];
+					$components = Fakoli::getComponents();
+					if (array_key_exists($name, $components))
+					{
+						$path = $components[$name]->component_path;
+						Fakoli::applicationTraceLevel();
+						
+						include $path."/{$php_code_file}";
+	
+						Fakoli::coreTraceLevel();
+					}
+					else
+					{
+						throw new FakoliException("Unknown component");
+					}
 				}
 				else
 				{
-					throw new FakoliException("Unknown component");
+					Fakoli::applicationTraceLevel();
+					
+					include $config['homedir']."/{$this->module->php_code_file}";
+					
+					Fakoli::coreTraceLevel();
 				}
+	    		$output = trim(ob_get_contents());
 			}
-			else
+			catch(Exception $e)
 			{
-				Fakoli::applicationTraceLevel();
-				
-				include $config['homedir']."/{$this->module->php_code_file}";
-				
-				Fakoli::coreTraceLevel();
+				$output = $e->toString();
 			}
-    		$output = trim(ob_get_contents());
- 			ob_end_clean();
-    		
- 			$output = $this->wrap($output);
+
+			ob_end_clean();
+			$output = $this->wrap($output);
 		}	
 
 		return $output;
