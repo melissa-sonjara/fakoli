@@ -1601,6 +1601,8 @@ var ToggleManager = new Class(
 	
 		this.container = this.options.container ? document.id(this.options.container) : document.body;
 		
+		if (!this.container) return;
+		
 		this.container.getElements(this.options.selector).each(function(toggle)
 		{
 			toggle.addEvent(this.options.event, function(event)
