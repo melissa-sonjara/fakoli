@@ -43,7 +43,8 @@ Fakoli::usingFeature("tab_bar");
  */
 class WizardBar extends TabBar
 {
-	var $spacer = "&nbsp;&raquo;&nbsp;";
+	var $spacer = "&nbsp;&raquo;&nbsp;";  	///< Spacer that appears between wizard steps
+	var $strict = false; 					///< When strict is set to true, navigation to future steps is always disabled
 	
 	/**
 	 * Construct a new WizardBar control.
@@ -98,6 +99,7 @@ class WizardBar extends TabBar
 	        	$future = true;	        
 	        }
      		elseif (($this->disabled || 
+     				($future && $this->strict) ||
      				($future && ($this->queryString == "" && $this->useQueryString)) && $count > 1) 
      				|| $this->states[$url] == 'disable')
 	        {
