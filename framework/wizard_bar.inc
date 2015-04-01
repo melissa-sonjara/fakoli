@@ -113,7 +113,7 @@ class WizardBar extends TabBar
          	}
          	else
          	{
-         		$dest = ($url == $this->page) ? "#" : $url;
+         		$dest = ($url == $this->page || $this->disabled) ? "#" : $url;
          	}
         
          	if ($this->anchor)
