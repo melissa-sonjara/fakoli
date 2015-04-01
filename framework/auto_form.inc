@@ -841,10 +841,11 @@ class AutoForm
 	 * @param string $confirm optional confirmation message
 	 * @param boolean $isScript true if the url is javascript code to execute, 
 	 * 							false if it is a URL to redirect to
+	 * @param string $cssClass optional CSS class(es) to apply to the button
 	 */
-	function button($text, $url, $confirm = null, $isScript = false)
+	function button($text, $url, $confirm = null, $isScript = false, $cssClass = null)
 	{
-		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm, 'isScript' => $isScript);
+		$this->buttons[] = array('text' => $text, 'url' => $url, 'confirm' => $confirm, 'isScript' => $isScript, 'cssClass' => $cssClass);
 	}
 
 	/**
@@ -1122,7 +1123,13 @@ class AutoForm
 				$link = "$url; return false;";
 			}
 
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' class='{$this->buttonCSS}' onclick=\"$link\" value=\"{$button['text']}\"/>";
+			$css = $this->buttonCSS;
+			if ($button['cssClass'])
+			{
+				$css .= " ".$button['cssClass'];
+			}
+			
+			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' class='{$css}' onclick=\"$link\" value=\"{$button['text']}\"/>";
 		}
 
 	}
