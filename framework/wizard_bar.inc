@@ -97,8 +97,7 @@ class WizardBar extends TabBar
 	        	$style .= "current";
 	        	$future = true;	        
 	        }
-     		elseif (($future AND ($this->queryString == "" && 
-     			$this->useQueryString && $count > 1)) OR $this->states[$url] == 'disable')
+     		elseif (($future AND (($this->disabled || ($this->queryString == "" && $this->useQueryString)) && $count > 1)) OR $this->states[$url] == 'disable')
 	        {
 	     		$active = " class='disabled'";
 	     		$style .= "disabled";

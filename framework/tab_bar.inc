@@ -54,6 +54,8 @@ class TabBar
 	var $dynamic = false;
 	var $container = "";
 	
+	var $disabled = true;
+	
 	/**
 	 * Construct a new TabBar control.
 	 * 
@@ -203,7 +205,7 @@ ENDSCRIPT;
 	        	$style = " class='current'";
 	        }
 
-        	if ($this->queryString == "" && $this->useQueryString && $count > 1)
+        	if (($this->disabled || ($this->queryString == "" && $this->useQueryString)) && $count > 1)
         	{
         		$active = " class='disabled'";
 	        }
