@@ -38,23 +38,23 @@
  */
 class TabBar
 {
-	var $id;	///< The DOM ID of the TabBar container element.
-	var $tabs  = array();
-	var $queryString = null;
-	var $useQueryString = true;
-	var $page = "";
-	var $showNumber;
-	var $states = array();
-	var $flags = array();
-	var $anchor = "";
-	var $cssClass = "";
-	var $defaultStateImage;
-	var $showStates = true;
+	var $id;					///< The DOM ID of the TabBar container element.
+	var $tabs  = array();		///< The tab records in this tab bar
+	var $queryString = null;	///< The query string parameters to append to the navigation links
+	var $useQueryString = true;	///< Whether a query string is being used as the navigation key
+	var $page = "";				///< The current page (for display purposes). This can be set explicitly to force the correct tab display when in a sub-page, for instance
+	var $showNumber;			///< True to display the step number, false if not
+	var $states = array();		///< Array of display states to apply, indexed by tab
+	var $flags = array();		///< Array of flags to apply, indexed by tab
+	var $anchor = "";			///< Anchor name to generate (leave empty for no anchor tag)
+	var $cssClass = "";			///< CSS class to apply to the top level container for the tabs
+	var $defaultStateImage;		///< Image to show in the default tab state
+	var $showStates = true;		///< true to show tab states, false to ignore them
 	
-	var $dynamic = false;
-	var $container = "";
+	var $dynamic = false;		///< true to indicate dynamic (AJAX-based) loading
+	var $container = "";		///< The DOM ID of the container that will contain dynamically loaded content
 	
-	var $disabled = true;
+	var $disabled = false;		///< Set to true to generate disabled tab navigation
 	
 	/**
 	 * Construct a new TabBar control.
