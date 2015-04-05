@@ -1109,6 +1109,8 @@ ENDSCRIPT;
     }
 }
 
+// Automatically import commonly used features
+Fakoli::usingFeature("auto_form", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
 
 /**
  * Pull out a simple reference to the request method
