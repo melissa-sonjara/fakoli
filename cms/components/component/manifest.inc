@@ -89,7 +89,9 @@ class ComponentManifest
 					 "/fakoli/css/textarea-resizer.css",
 					 "/fakoli/css/context_menu.css",
 					 "/fakoli/calendar/sonjara_calendar.css",
-					 "/fakoli/css/multi_select.css");
+					 "/fakoli/css/multi_select.css",
+				     "/fakoli/css/options_list.css"
+		);
 	}
 	
 	static function getScripts()
