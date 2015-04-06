@@ -1,0 +1,32 @@
+@CHARSET "ISO-8859-1";
+
+
+a.pushbutton,
+a.pushbutton:visited,
+a.pushbutton:hover,
+a.pushbutton:active
+{
+	display: inline-block;
+	background-color: #ddd;
+	border: solid 1px #888;
+	border-left: none;
+	color: #111;
+	padding: 4px 10px;
+}
+
+a.pushbutton.first
+{
+	border-radius: 5px 0 0 5px;
+	border-left: solid 1px #888;
+}
+
+a.pushbutton.last
+{
+	border-radius: 0 5px 5px 0;
+}
+
+a.pushbutton.selected
+{
+	color: #fff;
+	background-color: #3F51B5;
+}
