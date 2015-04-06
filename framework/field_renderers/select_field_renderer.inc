@@ -72,6 +72,7 @@ class SelectFieldRenderer extends FieldRenderer
 	var $defaultBlank = false; 		 	///< Whether the drop down includes an empty line as the default, indicating no selection has been made
 	var $defaultText = "Choose One";	///< Text to display when no selection has been made.
 	var $CSSclass;		///< Additional CSS class(es) to apply to the select box
+	var $stripHTML = false; ///< Set to true to strip HTML from option text
 	
 	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
@@ -190,7 +191,7 @@ class SelectFieldRenderer extends FieldRenderer
 					
 					foreach($group as $value => $name)
 					{
-						$name = htmlSafe($name);
+						$name = ($this->stripHTML) ? stripHTML($name) : htmlSafe($name);
 						$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 						
 						if($current == $value)
@@ -226,7 +227,7 @@ class SelectFieldRenderer extends FieldRenderer
 		
 				foreach($this->options as $value => $name)
 				{
-					$name = htmlSafe($name);
+					$name = ($this->stripHTML) ? stripHTML($name) : htmlSafe($name);
 					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 					
 					if($current == $value)
@@ -285,7 +286,8 @@ class SelectFieldRenderer extends FieldRenderer
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($searchValue === $value) ? " selected" : "";
-			
+			$name = ($this->stripHTML) ? stripHTML($name) : htmlSafe($name);
+				
 			echo "<option value='".htmlSafe($value)."'$selected>$name</option>";
 		}
 		echo "</select>\n";
