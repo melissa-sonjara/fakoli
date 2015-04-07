@@ -52,7 +52,7 @@ if ($method == "POST")
 {
 	$email->fromPOST();
 	
-	$handler = new EmailHandler($email->recipient, $email->subject, $email->message, $config["email_from"]);
+	$handler = new EmailHandler($email->recipient, $email->subject, $email->message, $email->sender_email);
 	$handler->send();
 	
 	Fakoli::notify("Message Sent");
