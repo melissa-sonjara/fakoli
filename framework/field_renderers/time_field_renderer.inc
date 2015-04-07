@@ -84,7 +84,7 @@ class TimeFieldRenderer extends FieldRenderer
 		}		
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 		echo "<tr>\n";
 		echo "<td colspan='2'";
