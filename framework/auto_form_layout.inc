@@ -332,7 +332,7 @@ class TableHeaderFormLayout extends AutoFormLayout
 		echo "$annotation</th>\n";
 	}
 
-	function getLabel($field, $renderer, $styles, $annotation)
+	function getLabel($field, $renderer, $addSuffix = true)
 	{
 		$obj = $renderer->parent->getData();
 		 $label = isset($renderer->label) ? $renderer->label : $renderer->parent->prettifyFieldName($field);
@@ -461,7 +461,7 @@ class TableRowFormLayout extends AutoFormLayout
 		// Nothing to do
 	}
 	
-	function getLabel($field, $renderer, $styles, $annotation)
+	function getLabel($field, $renderer, $addSuffix = true)
 	{
 		return "";
 	}
@@ -554,7 +554,7 @@ class SpreadsheetFormLayout extends AutoFormLayout
 		// nothing to do		
 	}
 	
-	function getLabel($field, $renderer, $styles, $annotation)
+	function getLabel($field, $renderer, $addSuffix = true)
 	{
 		return ""; // nothing to do
 	}
