@@ -77,7 +77,7 @@ class TableSelectFieldRenderer extends FieldRenderer
 		return $item->format("<input type='{$control}' class='{$control}' name='{$name}' id='{$this->field}_{{$pk}}' value='{{$pk}}'{$checked}/>");
 	}
 
-	function renderScript()
+	function renderScript($field)
 	{
 		if (!$field) $field = $this->field;
 		

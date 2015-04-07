@@ -77,7 +77,7 @@ class DataListFieldRenderer extends FieldRenderer
 		$this->colspan = 2;
 	}
 	
-	function renderScript()
+	function renderScript($field)
 	{
 		return $this->table->writeScript();
 	}
@@ -87,7 +87,7 @@ class DataListFieldRenderer extends FieldRenderer
 		$this->renderField();
 	}
 	
-	function renderField()
+	function renderField($field)
 	{
 		if (!$field) $field = $this->field;
 		
