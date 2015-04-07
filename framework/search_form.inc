@@ -339,7 +339,7 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	}
 	
 
-	function fullName($name, $value)
+	function fullName($f_name, $l_name, $value)
 	{
 		$value = mysql_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
@@ -355,8 +355,8 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		{
 			if (!$first) $query .= " OR (";
 					
-			$query .= "first_name LIKE '{$words[$idx]}%' 
-			AND last_name LIKE '{$words[$idx+1]}%'";
+			$query .= "{$f_name} LIKE '{$words[$idx]}%' 
+			AND {$l_name} LIKE '{$words[$idx+1]}%'";
 
 			$idx += 1;
 			$query .= ") ";
@@ -1311,7 +1311,7 @@ class SearchForm extends AutoForm
 		}
 	}
 	
-	function renderAdditionalFields()
+	function renderAdditionalFields($obj)
 	{
 		foreach($this->additional as $r)
 		{
