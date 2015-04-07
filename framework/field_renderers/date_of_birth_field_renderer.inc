@@ -130,7 +130,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		return DateTypeRenderer::format($value, $this->template);
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		$mm = checkNumeric($_POST["{$field}_mm"]);
 		$dd = checkNumeric($_POST["{$field}_dd"]);

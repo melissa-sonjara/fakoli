@@ -167,7 +167,7 @@ class CompoundSelectFieldRenderer extends FieldRenderer
 		return "";
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{		
 		$obj = $this->parent->data;
 		

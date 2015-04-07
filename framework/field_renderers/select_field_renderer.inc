@@ -317,7 +317,7 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		$found = false;
 		

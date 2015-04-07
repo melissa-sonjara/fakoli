@@ -90,7 +90,7 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 		$this->_endField();
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{		
 		//TODO
 	}

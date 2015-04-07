@@ -352,7 +352,7 @@ class RatingQuestionFieldRenderer extends StringFieldRenderer
 		$this->FieldRenderer($parent);
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		global $_POST;
 		

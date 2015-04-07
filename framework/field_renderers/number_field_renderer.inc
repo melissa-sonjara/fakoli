@@ -103,7 +103,7 @@ class NumberFieldRenderer extends FieldRenderer
 	
 	// if users enter negatives where they shouldn't (any position other than first,
 	// strip them out
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		$current = $this->parent->data->get($field);
 				

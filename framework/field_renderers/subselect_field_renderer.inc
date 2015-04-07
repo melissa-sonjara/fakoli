@@ -200,7 +200,7 @@ window.addEvent('domready', function()
 		return jsSafe($option->format("{$template}"));
 	}	
 			
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		if(!$this->parent->data->hasField($this->super)) return;
 		

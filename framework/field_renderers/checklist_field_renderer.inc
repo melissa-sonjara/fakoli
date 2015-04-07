@@ -381,7 +381,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{		
 		$value = ($this->parent->method == "POST") ? $_POST[$field] : $_GET[$field];
 		$addEntry = ($this->parent->method == "POST") ? $_POST["{$field}_addEntry"] : $_GET["{$field}_addEntry"];

@@ -182,7 +182,7 @@ function <?echo $field ?>_keyup(event)
 		}		
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{		
 		$parts = PhoneNumberTypeRenderer::$parts;
 		

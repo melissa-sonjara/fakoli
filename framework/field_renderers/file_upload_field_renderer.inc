@@ -86,7 +86,7 @@ class FileUploadFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		call_user_func($this->handler, $field, $this->parent->data);
 	}

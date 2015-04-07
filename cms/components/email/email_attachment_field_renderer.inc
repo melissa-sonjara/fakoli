@@ -161,7 +161,7 @@ class EmailAttachmentFieldRenderer extends FieldRenderer
 	 * (non-PHPdoc)
 	 * @see FieldRenderer::postProcess()
 	 */
-	function postProcess($field)
+	function postProcess($field = "")
 	{
 		if (!$field) $field = $this->field;
 	

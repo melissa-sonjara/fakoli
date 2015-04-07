@@ -94,7 +94,7 @@ class ImageUploadFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		global $user;
 		

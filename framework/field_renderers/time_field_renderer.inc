@@ -110,7 +110,7 @@ class TimeFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function preProcess($field)
+	function preProcess($field = "")
 	{
 		$hh = checkNumeric($_POST["{$field}_hh"]);
 		$mm = checkNumeric($_POST["{$field}_mm"]);
