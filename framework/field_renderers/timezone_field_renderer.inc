@@ -159,7 +159,7 @@ class TimezoneFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 		$this->renderField($field);
 	}
