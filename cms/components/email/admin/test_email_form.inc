@@ -52,7 +52,7 @@ if ($method == "POST")
 {
 	$email->fromPOST();
 	
-	$recipients = explode(",", $email->recipients);
+	$recipients = explode(",", $email->recipient);
 	foreach($recipients as $recipient)
 	{
 		$handler = new EmailHandler($recipient, $email->subject, $email->message, $email->sender_email);
