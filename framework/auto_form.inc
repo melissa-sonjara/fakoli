@@ -1227,6 +1227,7 @@ class AutoForm
 		
 		if (isset($_POST["#FORMID#"]))
 		{
+			trace("FORM ID: {$this->id} - {$_POST["#FORMID#"]}", 3);
 			$this->id = $_POST["#FORMID#"];
 		}
 
