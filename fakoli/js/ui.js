@@ -1454,7 +1454,7 @@ var ScrollWatcher = new Class(
 	
 	onScroll: function(element, position, above, below)
 	{
-		if (element.scrollTop > position)
+		if (this.container.scrollTop > position)
 		{
 			if (typeof below === "function")
 			{
