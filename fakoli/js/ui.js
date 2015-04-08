@@ -1430,18 +1430,8 @@ var FocusWatcher = new Class({
     	
 var ScrollWatcher = new Class(
 {
-	container: null,
-	
-	initialize: function(container)
+	initialize: function()
 	{
-		if (container)
-		{
-			this.container = document.id(container);
-		}
-		else
-		{
-			this.container = document.body;
-		}
 	},
 	
 	watch: function(element, position, above, below)
@@ -1454,7 +1444,7 @@ var ScrollWatcher = new Class(
 	
 	onScroll: function(element, position, above, below)
 	{
-		if (this.container.scrollTop > position)
+		if (window.getScroll().y > position)
 		{
 			if (typeof below === "function")
 			{
