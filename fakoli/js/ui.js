@@ -1440,7 +1440,7 @@ var ScrollWatcher = new Class(
 		}
 		else
 		{
-			this.container = window;
+			this.container = document.body;
 		}
 	},
 	
