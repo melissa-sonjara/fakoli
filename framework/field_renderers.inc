@@ -319,6 +319,7 @@ require_once realpath(dirname(__FILE__))."/field_renderers/date_of_birth_field_r
 require_once realpath(dirname(__FILE__))."/field_renderers/push_button_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/push_button_checklist_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/option_list_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/option_checklist_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/credit_card_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/table_select_field_renderer.inc";
 ?>
