@@ -1634,4 +1634,44 @@ var ToggleManager = new Class(
 		}.bind(this));
 	}
 });		
+	
+var ScrollWatcher = new Class(
+{
+	container: null,
+	
+	initialize: function(container)
+	{
+		this.container = document.id(container);
+	},
+	
+	watch: function(element, position, above, below)
+	{
+		this.container.addEvent('scroll', function() { this.onScroll(element, position, above, below);}.bind(this));
+	},
+	
+	onScroll: function(element, position, above, below)
+	{
+		if (element.scrollTop > position)
+		{
+			if (typeof below === "function")
+			{
+				below(element);
+			}
+			else
+			{
+				element.removeClass(above).addClass(below);
+			}
+			
+			return;
+		}
 		
+		if (typeof above === "function")
+		{
+			above(element);
+		}
+		else
+		{
+			element.removeClass(below).addClass(above);
+		}
+	}
+});
