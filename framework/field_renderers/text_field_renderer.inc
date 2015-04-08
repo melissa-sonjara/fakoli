@@ -100,7 +100,7 @@ class TextFieldRenderer extends FieldRenderer
 		
 		if ($this->limit)
 		{
-			echo "<br /><div style='clear: left; float: right'><span id='{$field}_length'>";
+			echo "<br /><div class='character_count' style='clear: left; float: right'><span id='{$field}_length'>";
 			echo strlen(trim($this->parent->data->get($field)));
 			echo "</span> of $this->limit characters</div></div>";
 		}
