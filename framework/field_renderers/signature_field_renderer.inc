@@ -68,6 +68,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		$this->StringFieldRenderer($parent);
 		$this->msg = $msg;
 		$this->password = true;
+		$this->autocomplete = false;
 	}
 
 	function addValidatorsToForm($field, $required = false)
