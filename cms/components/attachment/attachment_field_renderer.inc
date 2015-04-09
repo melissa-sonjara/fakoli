@@ -42,6 +42,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	var $cssClass = "attachment";
 	var $deleteIcon = "/fakoli/images/delete.gif";
 	var $useCamera = false;
+	var $addLabel = "Add an Attachment";
 	
 	function AttachmentFieldRenderer(&$form, $field, $xrefClass)
 	{
@@ -139,7 +140,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		}
 	?>
 	</ul>
-	<a href="#" onclick="new AttachmentUploader().addAttachment(); return false"> Add an Attachment </a>
+	<a class='add_attachment_label' href="#" onclick="new AttachmentUploader().addAttachment(); return false"> <?echo $this->addLabel?> </a>
 <?
 		$this->_endField($field);
 	}
