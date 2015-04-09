@@ -62,11 +62,10 @@ class SignatureValidator extends AbstractValidator
  */
 class SignatureFieldRenderer extends StringFieldRenderer
 {
-	var $msg;
-	function SignatureFieldRenderer(&$parent, $msg = "Your signature does not match your password. Please try again.")
+	var $msg = "Your signature does not match your password. Please try again.";
+	function SignatureFieldRenderer(&$parent)
 	{
 		$this->StringFieldRenderer($parent);
-		$this->msg = $msg;
 		$this->password = true;
 		$this->autocomplete = false;
 	}
