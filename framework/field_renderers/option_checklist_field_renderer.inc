@@ -38,7 +38,8 @@ class OptionCheckListFieldRenderer extends FieldRenderer
 {
 	var $options = array();
 	var $cssClass = "options_list";
-
+	var $separator = ", ";
+	
 	function OptionCheckListFieldRenderer(&$form, $field, $label, $options)
 	{
 		$this->options = $options;
@@ -115,11 +116,15 @@ class OptionCheckListFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
+		$values = array();
 		$value = $this->parent->data->get($field);
 		if ($value)
 		{
-			echo $this->options[$value];	
+			$values[] = $this->options[$value];	
 		}
+		
+		echo implode($this->separator, $values);
+		
 		$this->_endField($field);
 	}
 }
