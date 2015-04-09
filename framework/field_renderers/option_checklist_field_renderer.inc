@@ -116,14 +116,16 @@ class OptionCheckListFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
-		$values = array();
+		$text = array();
 		$value = $this->parent->data->get($field);
-		if ($value)
+		$values = explode(",", $value);
+		
+		foreach($values as $v)
 		{
-			$values[] = $this->options[$value];	
+			$text[] = $this->options[$v];	
 		}
 		
-		echo implode($this->separator, $values);
+		echo implode($this->separator, $text);
 		
 		$this->_endField($field);
 	}
