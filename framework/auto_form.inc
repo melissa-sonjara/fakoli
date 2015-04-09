@@ -111,23 +111,24 @@ class AutoForm
     // When adding new renderers, must also update
     // DataItem $dataTypeRendererMap
     static $fieldRendererMap = array (
-    	String		=>	StringFieldRenderer,
-    	HTML		=>	HTMLFieldRenderer,
-		Date		=>	DateFieldRenderer,
-    	DateTime	=>	DateTimeFieldRenderer,
-    	Number		=>	NumberFieldRenderer,
-    	Currency	=>	CurrencyFieldRenderer,
-		Boolean		=>	BooleanFieldRenderer,
-		TimeZone	=>	TimezoneFieldRenderer,
-		Password	=>	PasswordFieldRenderer,
-		Text		=>	TextFieldRenderer,
-		Time		=>	TimeFieldRenderer,
-		Rating		=>	RatingFieldRenderer,
-		ZipCode		=>	ZipCodeFieldRenderer,
-		PhoneNumber	=>	PhoneNumberFieldRenderer,
-    	URL			=>	URLFieldRenderer,
-    	DateOfBirth	=>	DateOfBirthFieldRenderer,
-    	CreditCardNumber => CreditCardNumberFieldRenderer
+    	String			 =>	StringFieldRenderer,
+    	HTML			 =>	HTMLFieldRenderer,
+		Date			 =>	DateFieldRenderer,
+    	DateTime		 =>	DateTimeFieldRenderer,
+    	Number			 =>	NumberFieldRenderer,
+    	Currency		 =>	CurrencyFieldRenderer,
+		Boolean			 =>	BooleanFieldRenderer,
+		TimeZone		 =>	TimezoneFieldRenderer,
+		Password		 =>	PasswordFieldRenderer,
+		Text			 =>	TextFieldRenderer,
+		Time			 =>	TimeFieldRenderer,
+		Rating		 	 =>	RatingFieldRenderer,
+		ZipCode			 =>	ZipCodeFieldRenderer,
+		PhoneNumber		 =>	PhoneNumberFieldRenderer,
+    	URL				 =>	URLFieldRenderer,
+    	DateOfBirth		 =>	DateOfBirthFieldRenderer,
+    	CreditCardNumber => CreditCardNumberFieldRenderer,
+    	Signature		 =>	SignatureFieldRenderer
 		);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
