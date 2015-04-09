@@ -21,6 +21,7 @@ class SignatureValidator extends AbstractValidator
 	{
 		$this->AbstractValidator($field, $title);
 		$this->msg = $msg;
+		$this->password = true;
 	}
 
 	function writeScript()
