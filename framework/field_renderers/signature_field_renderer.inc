@@ -21,7 +21,6 @@ class SignatureValidator extends AbstractValidator
 	{
 		$this->AbstractValidator($field, $title);
 		$this->msg = $msg;
-		$this->password = true;
 	}
 
 	function writeScript()
@@ -68,6 +67,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	{
 		$this->StringFieldRenderer($parent);
 		$this->msg = $msg;
+		$this->password = true;
 	}
 
 	function addValidatorsToForm($field, $required = false)
