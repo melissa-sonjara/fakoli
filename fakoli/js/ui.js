@@ -1434,16 +1434,16 @@ var ScrollWatcher = new Class(
 	{
 	},
 	
-	watch: function(element, position, above, below)
+	watch: function(position, element, above, below)
 	{
 		element = document.id(element);
 		if (!element) return;
 		
-		window.addEvent('scroll', function() { this.onScroll(element, position, above, below);}.bind(this));
+		window.addEvent('scroll', function() { this.onScroll(position, element, above, below);}.bind(this));
 		return this;
 	},
 	
-	onScroll: function(element, position, above, below)
+	onScroll: function(position, element, above, below)
 	{
 		if (window.getScroll().y > position)
 		{
