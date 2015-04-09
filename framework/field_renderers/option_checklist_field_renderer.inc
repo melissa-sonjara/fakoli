@@ -95,13 +95,16 @@ class OptionCheckListFieldRenderer extends FieldRenderer
 				
 		$value = $this->parent->data->get($field);
 		
+		$values = explode(",", $value);
+		$values = array_combine($values, $values);
+		
 		$id = "{$this->parent->id}_{$field}";
 		
 		echo "<input type='hidden' id='{$id}' name='{$field}' value='{$value}'/>";
 		echo "<ul id='{$id}_list' class='{$this->cssClass}'>";
 		foreach($this->options as $option => $description)
 		{
-			$selected = ($value == $option) ? " class='selected'" : "";
+			$selected = ($values[$option] == $option) ? " class='selected'" : "";
 			echo "<li{$selected} data-value='{$option}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
 		}
 		echo "</ul>";
