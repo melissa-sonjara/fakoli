@@ -51,7 +51,7 @@ $menu_item = "Email Templates";
 
 $table = new DataListView($emailTemplates, "templates");
 $table->column("Name", formatEmailTemplateLink, true)
-	  ->column("Recipients", "{recipients}", true)
+	  ->column("Recipients", formatEmailTemplateRecipients, true)
 	  ->column("Subject", "{subject}", true)
 	  ->column("Message", formatEmailMessage, true)
 	  ->column("Class Name", "{class_name}", true)
@@ -81,5 +81,10 @@ function formatEmailTemplateLink($emailTemplate)
 function formatEmailMessage($message)
 {
 	return ellipsis(stripHTML($message->message), 300, true);	
+}
+
+function formatEmailTemplateRecipients($message)
+{
+	return $message->recipients;
 }
 ?>
