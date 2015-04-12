@@ -1029,7 +1029,9 @@ function trace($msg, $lvl, $callStack = null)
 			else
 			{
 				$callingFn = $callStack[0];
-			}			$file = str_replace($config["homedir"], "", $callingFn["file"]);
+			}			
+			
+			$file = str_replace($config["homedir"], "", $callingFn["file"]);
 			$ref = $file.":".$callingFn["line"]." ";
 			if ($callingFn["class"])
 			{
