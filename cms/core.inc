@@ -1114,7 +1114,7 @@ ENDSCRIPT;
     /**
      * Custom shutdown handler
      */
-    function shutdownHandler()
+    static function shutdownHandler()
     {
     	global $config;
     	$error = error_get_last();
