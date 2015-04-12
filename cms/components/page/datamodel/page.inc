@@ -32,7 +32,7 @@
 *****************************************************************/
 
 Fakoli::usingFile("framework/join.inc");
-Fakoli::using("site", "search");
+Fakoli::using("search");
 
 class Page extends DataItem implements Searchable
 {
