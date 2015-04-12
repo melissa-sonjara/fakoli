@@ -12,6 +12,7 @@ a.pushbutton:active
 	border-left: none;
 	color: #111;
 	padding: 4px 10px;
+	text-decoration: none;
 }
 
 a.pushbutton.first
@@ -28,5 +29,5 @@ a.pushbutton.last
 a.pushbutton.selected
 {
 	color: #fff;
-	background-color: #3F51B5;
+	background-color: #002a6c;
 }
