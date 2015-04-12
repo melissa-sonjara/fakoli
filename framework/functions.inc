@@ -1917,6 +1917,19 @@ function countMatchingElements($a, $b)
 }
 
 /**
+ * Outputs a list of all included files. This is provided as a tool for troubleshooting.
+ */
+function printIncludes()
+{
+	$includes = get_included_files();
+	echo "<ul>\n";
+	foreach($includes as $include)
+	{
+		echo "<li>$include</li>";
+	}
+	echo "</ul>";
+}
+/**
  * @}
  */
 ?>
