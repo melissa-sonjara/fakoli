@@ -1117,10 +1117,11 @@ ENDSCRIPT;
     function shutdownHandler()
     {
     	global $config;
+    	$error = error_get_last();
     	
     	trace("## Shutdown", 3);
     	
-	    if ($error = error_get_last())
+	    if ($error)
 	    {
 	    	trace($error['message']." at ".$error['file'].":".$error['line'], 1);
 	    	 
