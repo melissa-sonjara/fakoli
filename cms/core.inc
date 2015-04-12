@@ -31,6 +31,9 @@
 
 *****************************************************************/
 
+
+register_shutdown_function(array(Fakoli, shutdownHandler));
+
 require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../framework/cache.inc");
 require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
@@ -1132,9 +1135,6 @@ ENDSCRIPT;
 	    }   
     }
 }
-
-
-register_shutdown_function(array(Fakoli, shutdownHandler));
 
 // Automatically import commonly used features
 Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
