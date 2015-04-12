@@ -31,9 +31,9 @@
 
 *****************************************************************/
 
-require_once realpath(dirname(__FILE__)."/field_renderers.inc");
 require_once realpath(dirname(__FILE__)."/auto_form_layout.inc");
 require_once realpath(dirname(__FILE__)."/validation.inc");
+require_once realpath(dirname(__FILE__)."/field_renderers.inc");
 
 /**
  * AutoForm automatically creates a form based on an underlying DataItem.
