@@ -1120,6 +1120,8 @@ ENDSCRIPT;
     	
 	    if ($error = error_get_last())
 	    {
+	    	trace($error['message']." at ".$error['file'].":".$error['line'], 1);
+	    	 
 	    	switch($error['type'])
 	    	{
 	        case E_ERROR:
