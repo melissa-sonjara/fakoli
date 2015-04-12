@@ -1107,7 +1107,34 @@ ENDSCRIPT;
     	$out .= "</tbody></table>";
     	return $out;
     }
+    
+    /**
+     * Custom shutdown handler
+     */
+    function shutdownHandler()
+    {
+    	global $config;
+    	
+	    if ($error = error_get_last())
+	    {
+	    	switch($error['type'])
+	    	{
+	        case E_ERROR:
+	        case E_CORE_ERROR:
+	        case E_COMPILE_ERROR:
+	        case E_USER_ERROR:
+	            if ($config["dump_includes"]) 
+	            {
+	            	printIncludes();
+	            }
+	            break;
+	        }
+	    }   
+    }
 }
+
+
+register_shutdown_function(array(Fakoli, shutdownHandler));
 
 // Automatically import commonly used features
 Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
