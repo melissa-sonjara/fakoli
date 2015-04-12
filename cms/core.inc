@@ -1118,6 +1118,8 @@ ENDSCRIPT;
     {
     	global $config;
     	
+    	trace("## Shutdown", 3);
+    	
 	    if ($error = error_get_last())
 	    {
 	    	trace($error['message']." at ".$error['file'].":".$error['line'], 1);
