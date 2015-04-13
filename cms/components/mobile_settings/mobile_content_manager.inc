@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("settings", "section");
+Fakoli::using("settings", "section", "menu");
 
 /**
  *
@@ -33,8 +33,12 @@ class MobileSettingsManager
 		$useNative = Settings::getValue("mobile_settings", "use_native_form_controls");
 
 		$useMobile = MobileSettingsManager::useMobile();
+		$isTablet = MobileSettingsManager::isTablet();
 		
-		if ($useMobile && !MobileSettingsManager::isTablet())
+		MenuManager::setDisplayFlag("mobile", $useMobile);
+		MenuManager::setDisplayFlag("tablet", $isTablet);
+		
+		if ($useMobile && !$isTablet)
 		{
 			$auto_form_defaults["default_layout"] = "mobile";
 		}
