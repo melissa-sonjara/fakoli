@@ -1473,7 +1473,7 @@ var ScrollWatcher = new Class(
 		else
 		{
 			// Negative positions are relative to the bottom of the page
-			if (window.getScroll().y > (window.getScrollSize().y + position))
+			if (window.getScroll().y > (window.getScrollSize().y + position - element.getHeight()))
 			{
 				if (typeof below === "function")
 				{
