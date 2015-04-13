@@ -1445,27 +1445,56 @@ var ScrollWatcher = new Class(
 	
 	onScroll: function(position, element, above, below)
 	{
-		if (window.getScroll().y > position)
+		if (position >= 0)
 		{
-			if (typeof below === "function")
+			if (window.getScroll().y > position)
 			{
-				below(element);
+				if (typeof below === "function")
+				{
+					below(element);
+				}
+				else
+				{
+					element.removeClass(above).addClass(below);
+				}
+				
+				return;
+			}
+			
+			if (typeof above === "function")
+			{
+				above(element);
 			}
 			else
 			{
-				element.removeClass(above).addClass(below);
+				element.removeClass(below).addClass(above);
 			}
-			
-			return;
-		}
-		
-		if (typeof above === "function")
-		{
-			above(element);
 		}
 		else
 		{
-			element.removeClass(below).addClass(above);
+			// Negative positions are relative to the bottom of the page
+			if (window.getScroll().y > (window.getScrollSize().y + position))
+			{
+				if (typeof below === "function")
+				{
+					below(element);
+				}
+				else
+				{
+					element.removeClass(above).addClass(below);
+				}
+				
+				return;
+			}
+			
+			if (typeof above === "function")
+			{
+				above(element);
+			}
+			else
+			{
+				element.removeClass(below).addClass(above);
+			}
 		}
 	}
 });
