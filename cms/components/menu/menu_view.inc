@@ -81,6 +81,8 @@ class MenuView
 			}
 		}
 		
+		if (!MenuManager::testFlags($menuItem->display_flags)) return null;
+		
 		// If the URL field is set explicitly, use that
 		if ($menuItem->url) 
 		{
