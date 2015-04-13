@@ -67,3 +67,9 @@ ALTER TABLE `menu_item` ADD COLUMN `required_parameters` varchar(200) NOT NULL D
 ALTER TABLE menu_item ADD COLUMN custom_format varchar(500) not null default '';
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE menu_item ADD COLUMN display_flags varchar(200) not null default '';
+
+-- END Version 1.4

@@ -58,6 +58,8 @@ class MenuSerializationHandler
 
 class MenuManager
 {
+	static $displayFlags = array();
+	
 	function MenuManager()
 	{
 		
@@ -74,6 +76,28 @@ class MenuManager
 		return $del_role;
 	}	
 
+	static function setDisplayFlag($name, $value = true)
+	{
+		MenuManager::$displayFlags[$name] = $value;
+	}
+	
+	static function testFlags($flags)
+	{
+		if (!$flags) return true;
+		$flags = explode(",", $flags);
+		
+		foreach($flags as $flag)
+		{
+			if (startsWith($flag, "!"))
+			{
+				$flag = substr($flag, 1);
+				if (MenuManager::$displayFlags[$flag] == true) return false;
+			}
+			else if (!MenuManager::$displayFlags[$flag]) return false;
+		}
+		
+		return true;
+	}
 	static function upgradeComponent($version)
 	{
 		$mgr = new MenuUpgradeManager();

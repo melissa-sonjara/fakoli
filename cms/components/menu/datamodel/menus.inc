@@ -85,7 +85,8 @@ class MenuItem extends DataItem
 						"role"		 	=> String,
 						"permissions"	=> String,
 						"published"		=> Boolean,
-						"required_parameters"		=>	String);
+						"required_parameters"	=>	String,
+						"display_flags"			=>	String);
 	
 	// Relations
 	
