@@ -81,6 +81,37 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		}
 	}
 	
+	function renderReadOnly($field = "")
+	{
+		if (!$field) $field = $this->field;
+		$value = $this->parent->data->get($field);
+		list($signature,$user_id,$date) = explode(":", $value);
+		
+		if ($user_id)
+		{
+			try
+			{
+				$mgr = new UserManager();
+				$u = $mgr->getUser($user_id);
+				$msg = "Signed by ".$mgr->getUserFullName($u)." on $date";
+			}
+			catch(Exception $e)
+			{
+				$msg = "Invalid Signature";
+			}
+		}
+		else
+		{
+			$msg = "Not signed";
+		}
+		
+		$this->_startField($field);
+
+		echo $msg;
+		
+		$this->_endField($field);
+	}
+	
 	function preProcess($field = "")
 	{
 		global $user;
