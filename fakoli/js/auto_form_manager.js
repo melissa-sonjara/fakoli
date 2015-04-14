@@ -10,6 +10,9 @@ var AutoFormManager = new Class(
 		
 		this.form = document.id(form);
 		this.setOptions(options);
+		
+		if (!this.form) return;
+		
 		this.form.manager = this;
 		
 		if (this.form.onInitialize) 
