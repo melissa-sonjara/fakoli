@@ -85,7 +85,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	{
 		if (!$field) $field = $this->field;
 		$value = $this->parent->data->get($field);
-		list($signature,$user_id,$date) = explode(":", $value);
+		list($signature,$date,$user_id) = explode(":", $value);
 		
 		if ($user_id)
 		{
