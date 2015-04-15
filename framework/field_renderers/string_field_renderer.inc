@@ -118,7 +118,7 @@ class StringFieldRenderer extends FieldRenderer
 		$disable = ($this->disable) ? "disabled='disabled'" : "";		
 		$inputType = (!$this->password) ? "text" : "password";
 		$style = ($this->width) ? " style='width: {$this->width}'" : "";
-		$class = ($this->CSSclass) ? "style='{$this->CSSClass}'" : "";
+		$class = ($this->CSSclass) ? "class='{$this->CSSclass}'" : "";
 		$value = (!$this->password) ? htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8') : "";
 		
 		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $onchange $autocomplete $class $style value='$value' size='{$this->size}' $disable $onkeypress/>";
