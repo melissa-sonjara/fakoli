@@ -43,6 +43,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	var $deleteIcon = "/fakoli/images/delete.gif";
 	var $useCamera = false;
 	var $addLabel = "Add an Attachment";
+	var $emptyMessage = "No files have been attached";
 	
 	function AttachmentFieldRenderer(&$form, $field, $xrefClass)
 	{
@@ -155,12 +156,17 @@ class AttachmentFieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 				
-		// Omit ul li list if only one
-		if(count($attachments) == 1)
+		if (count($attachments) == 0)
 		{
+			echo "<p>{$this->emptyMessage}</p>";
+		}
+		else if(count($attachments) == 1)
+		{
+			// Omit ul li list if only one
+					
 			$this->drawOneAttachment($attachments[0]);
 		}
-		elseif(count($attachments) > 0)
+		else if(count($attachments) > 0)
 		{
 ?>	
 	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
