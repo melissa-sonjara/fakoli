@@ -100,9 +100,9 @@ class PasswordComplexityValidator extends PasswordValidator
 	{
 		if ($this->readOnly) return "";
 	
-	/*	$pswField = "{$this->form_id}_{$this->field}";
-		$pswBlock = "{$pswBlock}_block";
-	
+		$pswField = "{$this->form_id}_{$this->field}";
+		$pswBlock = "{$pswField}_block";
+		/*
 	var block = document.getElementById("$pswBlock");
 	if (block.style.display != "none" && form["{$this->field}"].value == "{$this->empty}")
 	{
