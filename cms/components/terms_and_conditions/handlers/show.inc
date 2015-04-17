@@ -7,5 +7,5 @@ $title = Settings::getValue("terms_and_conditions", "title");
 $page = Page::findByIdentifier($identifier);
 
 ?>
-<div style="width: 790px; height: 440px; overflow-y: scroll"><?echo $page->description?></div>
+<div style="width: 790px; height: 440px; overflow-y: scroll;margin-bottom: 4px"><?echo $page->description?></div>
 <button class="button" onclick="TermsAndConditions.approve()">I Agree to the <?echo $title?> as Shown Above</button>
