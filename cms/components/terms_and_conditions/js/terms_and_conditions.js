@@ -15,7 +15,7 @@ TermsAndConditions.showTerms = function()
 	if (acceptedTerms.value != "0" &&
 		acceptedTerms.value != "") return true;
 	
-	TermsAndConditions.Dialog = modalPopup(TermsAndConditions.title, "/action/terms_and_conditions/show", 800, 500, true, false);
+	TermsAndConditions.Dialog = modalPopup(TermsAndConditions.title, "/action/terms_and_conditions/show", 800, 550, true, false);
 
 	return false;
 };
