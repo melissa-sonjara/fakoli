@@ -45,7 +45,8 @@ class WizardBar extends TabBar
 {
 	var $spacer = "&nbsp;&raquo;&nbsp;";  	///< Spacer that appears between wizard steps
 	var $strict = false; 					///< When strict is set to true, navigation to future steps is always disabled
-	
+	var $rootSteps = 1;						///< The number of steps that can be reached without a query string when useQueryString is true
+		
 	/**
 	 * Construct a new WizardBar control.
 	 * 
@@ -100,7 +101,7 @@ class WizardBar extends TabBar
 	        }
      		elseif (($this->disabled || 
      				($future && $this->strict) ||
-     				($future && ($this->queryString == "" && $this->useQueryString)) && $count > 1) 
+     				($future && ($this->queryString == "" && $this->useQueryString)) && $count > $this->rootSteps) 
      				|| $this->states[$url] == 'disable')
 	        {
 	     		$active = " class='disabled'";
