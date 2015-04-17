@@ -112,7 +112,7 @@ class WizardBar extends TabBar
          
          	if ($this->useQueryString)
          	{
-	        	$dest = ($this->queryString!="" || ($this->rootSteps > 1 && $count < $this->rootSteps)) ? $this->appendQueryString($url, $this->queryString) :"#";
+	        	$dest = ($this->queryString!="" || ($this->rootSteps > 1 && $count <= $this->rootSteps)) ? $this->appendQueryString($url, $this->queryString) :"#";
          	}
          	else
          	{
