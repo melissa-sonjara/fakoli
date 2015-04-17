@@ -100,16 +100,17 @@ class PasswordComplexityValidator extends PasswordValidator
 	{
 		if ($this->readOnly) return "";
 	
-		$pswField = "{$this->form_id}_{$this->field}";
+	/*	$pswField = "{$this->form_id}_{$this->field}";
 		$pswBlock = "{$pswBlock}_block";
-		$script = <<<ENDSCRIPT
 	
 	var block = document.getElementById("$pswBlock");
 	if (block.style.display != "none" && form["{$this->field}"].value == "{$this->empty}")
 	{
 		alert("{$this->title} is a required field. Please supply a value.");
 		return false;
-	}
+	}*/
+
+	$script = <<<ENDSCRIPT
 	
 	var control = document.id("$pswField");
 	if (control.hasClass("password_fail"))
