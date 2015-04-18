@@ -59,7 +59,7 @@ var AutoFormManager = new Class(
 	{
 		var container = document.id(this.options.partialSaveContainer);
 		var button = new Element('a', {class: 'button partial_save', html: this.options.partialSaveLabel});
-		button.addEvent('click', function() { this.partialSave();});
+		button.addEvent('click', function() { this.partialSave();}.bind(this));
 		container.adopt(button);
 	},
 	
