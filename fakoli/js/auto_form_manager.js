@@ -106,6 +106,12 @@ var AutoFormManager = new Class(
 				{
 					this.partialSaveButton.removeClass('dirty').removeClass('saving');
 					this.partialSaveButton.addClass('saved');
+					
+					var pkfield = this.form.getElement("input[name='" + responseJSON.primary_key + "']");
+					if (pkfield && pkfield.value == '') 
+					{
+						pkfield.value = reponseJSON.primary_key_value;
+					}
 				}
 				else
 				{
