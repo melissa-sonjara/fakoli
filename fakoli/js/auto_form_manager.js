@@ -67,7 +67,7 @@ var AutoFormManager = new Class(
 		{
 			elt.addEvent('change', function ()
 			{
-				this.partialSaveButton.addClass('dirty');
+				this.partialSaveButton.removeClass('saved').addClass('dirty');
 			}.bind(this));
 		}.bind(this));
 		
@@ -75,7 +75,7 @@ var AutoFormManager = new Class(
 		{
 			elt.addEvent('keypress', function ()
 			{
-				this.partialSaveButton.addClass('dirty');
+				this.partialSaveButton.removeClass('saved').addClass('dirty');
 			}.bind(this));
 		}.bind(this));
 	},
