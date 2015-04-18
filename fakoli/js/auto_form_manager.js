@@ -71,7 +71,7 @@ var AutoFormManager = new Class(
 			}.bind(this));
 		}.bind(this));
 		
-		this.form.getElements("input,select,textarea").each(function(elt)
+		this.form.getElements("input,textarea").each(function(elt)
 		{
 			elt.addEvent('keypress', function ()
 			{
