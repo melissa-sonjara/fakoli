@@ -20,14 +20,14 @@ var AutoFormManager = new Class(
 		
 		this.form.manager = this;
 		
-		if (this.options.partialSaveContainer)
-		{
-			this.addPartialSaveButton();
-		}
-		
 		if (this.form.onInitialize) 
 		{
 			this.form.onInitialize();
+		}
+		
+		if (this.options.partialSaveContainer)
+		{
+			this.addPartialSaveButton();
 		}
 	},
 	
