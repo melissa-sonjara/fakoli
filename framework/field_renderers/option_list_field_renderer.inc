@@ -78,7 +78,14 @@ class OptionListFieldRenderer extends FieldRenderer
 			}
 		});
 
-		document.id('<?echo $id?>').value = value;
+		var hidden = document.id('<?echo $id?>');
+		var v = hidden.value;
+		hidden.value = values.join(",");
+		var f = document.id('<?echo $this->parent->id?>');
+		if (v != hidden.value && f && f.manager)
+		{
+			f.manager.dirty();
+		}
 	}
 	</script>
 <?
