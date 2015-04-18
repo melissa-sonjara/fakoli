@@ -110,7 +110,7 @@ var AutoFormManager = new Class(
 					var pkfield = this.form.getElement("input[name='" + responseJSON.primary_key + "']");
 					if (pkfield && pkfield.value == '') 
 					{
-						pkfield.value = reponseJSON.primary_key_value;
+						pkfield.value = responseJSON.primary_key_value;
 					}
 				}
 				else
