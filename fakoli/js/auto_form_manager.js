@@ -65,10 +65,10 @@ var AutoFormManager = new Class(
 		
 		this.form.getElements("input,select,textarea").each(function(elt)
 		{
-			elt.addEvent('change')
+			elt.addEvent('change', function ()
 			{
 				this.partialSaveButton.addClass('dirty');
-			}
+			}.bind(this));
 		}.bind(this));
 	},
 	
