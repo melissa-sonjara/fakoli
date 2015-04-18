@@ -1326,7 +1326,7 @@ class AutoForm
 					$result["error"] = $this->msg;
 				}	
 				
-				Fakoli::JSONreturn($result);
+				ajaxReturn(json_encode($result));
 			}
 		}
 		
