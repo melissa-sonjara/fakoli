@@ -2,6 +2,7 @@ var AutoFormManager = new Class(
 {
 	Implements: Options,
 	form: Class.Empty,
+	partialSaveButton: Class.Empty,
 	options: 
 	{
 		partialSaveContainer:	'',
@@ -58,15 +59,17 @@ var AutoFormManager = new Class(
 	addPartialSaveButton: function()
 	{
 		var container = document.id(this.options.partialSaveContainer);
-		var button = new Element('a', {class: 'button partial_save', html: this.options.partialSaveLabel});
-		button.addEvent('click', function() { this.partialSave();}.bind(this));
-		container.adopt(button);
+		this.partialSaveButton = new Element('a', {class: 'button partial_save', html: this.options.partialSaveLabel});
+		this.partialSaveButton.addEvent('click', function() { this.partialSave();}.bind(this));
+		container.adopt(this.partialSaveButton);
 	},
 	
 	partialSave: function()
 	{
 		var uri = new URI();
 		var action = this.form.action + "?" + uri.get("query");
+
+		this.partialSaveButton.addClass('saving');
 		
 		var request = new Request.JSON(
 		{
@@ -75,7 +78,17 @@ var AutoFormManager = new Class(
 			headers: {'X-Partial-Save': 'true'},
 			onSuccess: function(responseJSON, responseText)
 			{
-				alert(responseText);
+				if (responseJSON.status == 'success')
+				{
+					this.partialSaveButton.removeClass('dirty saving');
+					this.partialSaveButton.addClass('saved');
+				}
+				else
+				{
+					this.partialSaveButton.removeClass('saving');
+					this.partialSaveButton.addClass('error');
+					notification(repsonseJSON.error);
+				}
 			},
 			onError: function(error)
 			{
