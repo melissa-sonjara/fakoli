@@ -80,7 +80,7 @@ var AutoFormManager = new Class(
 			{
 				if (responseJSON.status == 'success')
 				{
-					this.partialSaveButton.removeClass('dirty saving');
+					this.partialSaveButton.removeClass('dirty').removeClass('saving');
 					this.partialSaveButton.addClass('saved');
 				}
 				else
