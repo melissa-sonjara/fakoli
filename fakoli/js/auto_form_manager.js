@@ -73,7 +73,13 @@ var AutoFormManager = new Class(
 			onSuccess: function(responseJSON, responseText)
 			{
 				alert(responseText);
+			},
+			onError: function()
+			{
+				notification("Error contacting server");
 			}
 		});
+		
+		request.post();
 	}
 });
