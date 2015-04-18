@@ -56,6 +56,14 @@ var AutoFormManager = new Class(
 		label.set('text', text);
 	},
 	
+	dirty: function()
+	{
+		if (this.partialSaveButton)
+		{
+			this.partialSaveButton.removeClass('saved').addClass('dirty');
+		}
+	},
+	
 	addPartialSaveButton: function()
 	{
 		var container = document.id(this.options.partialSaveContainer);
