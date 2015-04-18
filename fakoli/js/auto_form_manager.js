@@ -70,6 +70,14 @@ var AutoFormManager = new Class(
 				this.partialSaveButton.addClass('dirty');
 			}.bind(this));
 		}.bind(this));
+		
+		this.form.getElements("input,select,textarea").each(function(elt)
+		{
+			elt.addEvent('keypress', function ()
+			{
+				this.partialSaveButton.addClass('dirty');
+			}.bind(this));
+		}.bind(this));
 	},
 	
 	partialSave: function()
