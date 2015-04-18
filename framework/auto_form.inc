@@ -1318,8 +1318,9 @@ class AutoForm
 			
 			if ($headers["X-Partial-Save"])
 			{
-				$result = array("status" 		=> $success ? 'success' : 'error',
-							    "primary_key"	=>	$this->data->get($this->data->getPrimaryKey()));
+				$result = array("status" 			=> $success ? 'success' : 'error',
+								"primary_key"		=> $this->data->getPrimaryKey(),
+							    "primary_key_value"	=> $this->data->get($this->data->getPrimaryKey()));
 
 				if (!$success)
 				{
