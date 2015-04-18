@@ -103,7 +103,7 @@ var AutoFormManager = new Class(
 				{
 					this.partialSaveButton.removeClass('saving');
 					this.partialSaveButton.addClass('error');
-					notification(repsonseJSON.error);
+					notification(responseJSON.error);
 				}
 			}.bind(this),
 			onError: function(error)
