@@ -89,11 +89,11 @@ var AutoFormManager = new Class(
 					this.partialSaveButton.addClass('error');
 					notification(repsonseJSON.error);
 				}
-			},
+			}.bind(this),
 			onError: function(error)
 			{
 				notification("Error contacting server");
-			}
+			}.bind(this)
 		});
 		
 		request.post();
