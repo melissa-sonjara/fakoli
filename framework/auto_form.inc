@@ -1313,7 +1313,7 @@ class AutoForm
 		// Handle partial saves - return results via AJAX and exit immediately
 		if ($this->allowPartialSave)
 		{
-			$headers = http_get_request_headers();
+			$headers = getallheaders();
 			trace(print_r($headers, true), 3);
 			
 			if ($headers["X-Partial-Save"])
