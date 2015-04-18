@@ -65,16 +65,19 @@ var AutoFormManager = new Class(
 	
 	partialSave: function()
 	{
+		var uri = new URI();
+		var action = this.form.action + "?" + uri.get("query");
+		
 		var request = new Request.JSON(
 		{
-			url: this.form.action,
+			url: action,
 			data: this.form,
 			headers: {'X-Partial-Save': 'true'},
 			onSuccess: function(responseJSON, responseText)
 			{
 				alert(responseText);
 			},
-			onError: function()
+			onError: function(error)
 			{
 				notification("Error contacting server");
 			}
