@@ -1314,6 +1314,8 @@ class AutoForm
 		if ($this->allowPartialSave)
 		{
 			$headers = get_headers();
+			trace(print_r($headers, true), 3);
+			
 			if ($headers["X-Partial-Save"])
 			{
 				$result = array("status" 		=> $success ? 'success' : 'error',
