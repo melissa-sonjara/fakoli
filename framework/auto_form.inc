@@ -88,8 +88,8 @@ class AutoForm
     var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
     var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
     var $onSubmitHandler = null;        ///< Javascript Callback for user-defined onsubmit hook
-    var $required = array(); // list of required fields
-    var $requiredFieldsText = "* indicates required field";
+    var $required = array(); 			///< List of required fields
+    var $requiredFieldsText = "* indicates required field";	///< Text prompt to display when a form contains required fields
 	var $interstitialMessage = null;	///< Specifies the message to display in an interstitial while the form is being submitted
 	var $interstitialSpinner = '/fakoli/images/loader.gif'; ///< Set this property to override the default interstitial spinner animation
 	
@@ -107,6 +107,10 @@ class AutoForm
     
     var $layout; ///< Layout handler object
     var $default_layout = "table";
+    
+    var $allowPartialSave = false; 	///< Whether to allow partial (i.e. in-progress) saves via AJAX
+	var $partialSaveContainerID;	///< DOM ID for the element that will contain the partial save button
+	var $partialSaveLabel = "Save";	///< Label text for the partial save button
     
     // When adding new renderers, must also update
     // DataItem $dataTypeRendererMap
@@ -383,7 +387,16 @@ class AutoForm
 		
 		echo "\twindow.addEvent('domready', function() {\n";
 
-		echo "\tnew AutoFormManager('{$this->id}');\n";
+		if ($this->allowPartialSave)
+		{
+			$managerOptions = "{partialSaveContainer: '{$this->partialSaveContainerID}', partialSaveLabel: '{$this->partialSaveLabel}'}";
+		}
+		else
+		{
+			$managerOptions = "{}";
+		}
+		
+		echo "\tnew AutoFormManager('{$this->id}', {$managerOptions});\n";
 		
 		if ($this->ajaxSubmitHandler)
 		{
@@ -867,6 +880,21 @@ class AutoForm
 	}
 	
 	/**
+	 * Activate partial saves for this form. A control will be added to the page that will
+	 * allow users to save their progress without fully submitting the form. This is useful for
+	 * long forms that required large amounts of text entry.
+	 * 
+	 * @param string $containerID DOM ID of the element that will contain the partial save button
+	 * @param string $label	Text to display on the partial save button
+	 */
+	function partialSaveButton($containerID, $label = "Save")
+	{
+		$this->allowPartialSave = true;
+		$this->partialSaveContainerID = $containerID;
+		$this->partialSaveLabel = $label;
+	}
+	 
+	/**
 	 * Determine if this form is the one that was submitted. Useful for managing pages
 	 * with multiple forms.
 	 */
@@ -1252,13 +1280,16 @@ class AutoForm
 		}
 
 		$this->msg = $this->validator->validate();
-		if ($this->msg != "") return false;
+		if ($this->msg != "") return $this->handlePartialSave(false);
 
 		$this->preProcessFields($pk, $filter);
 	
 		if ($this->customSaveHandler)
 		{
-			if (!call_user_func_array($this->customSaveHandler, array($this))) return false;
+			if (!call_user_func_array($this->customSaveHandler, array($this))) 
+			{
+				return $this->handlePartialSave(false);
+			}
 		}
 		else
 		{
@@ -1274,9 +1305,32 @@ class AutoForm
 			call_user_func_array($this->onSaveComplete, array($this));
 		}
 
-		return true;
+		return $this->handlePartialSave(true);
 	}
 
+	function handlePartialSave($success)
+	{
+		// Handle partial saves - return results via AJAX and exit immediately
+		if ($this->allowPartialSave)
+		{
+			$headers = get_headers();
+			if ($headers["X-Partial-Save"])
+			{
+				$result = array("status" 		=> $success ? 'success' : 'error',
+							    "primary_key"	=>	$this->data->get($this->data->getPrimaryKey()));
+
+				if (!$success)
+				{
+					$result["error"] = $this->msg;
+				}	
+				
+				Fakoli::JSONreturn($result);
+			}
+		}
+		
+		return $success;
+	}
+	
 	function preProcessFields($pk, $filter)
 	{
 		foreach (array_keys($this->fields) as $field)
