@@ -91,8 +91,10 @@ var AutoFormManager = new Class(
 	partialSave: function()
 	{
 		var uri = new URI();
-		var action = this.form.action + "?" + uri.get("query");
+		var action = this.form.action;
 
+		if (!action) action = uri.toString();
+		
 		this.partialSaveButton.removeClass('error').addClass('saving');
 		
 		var request = new Request.JSON(
