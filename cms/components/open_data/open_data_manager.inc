@@ -30,10 +30,11 @@ class OpenDataManager
 		$mgr->upgrade($version);
 	}
 
-
-
-
-
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("open_data", "Open Data Definitions", new SimpleSerializationHandler(OpenData));
+		return true;
+	}
 }
 
 ?>
