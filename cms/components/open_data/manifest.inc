@@ -65,7 +65,8 @@ class OpenDataManifest
 	{
 		return array("EnumerateContextHelpClasses"	=>  array(OpenDataManager, enumerateContextHelpClasses),
 					 "upgradeComponent"				=>	array(OpenDataManager, upgradeComponent),
-					 "ComponentScanComplete"		=>	array(OpenDataManager, setDefaults)
+					 "ComponentScanComplete"		=>	array(OpenDataManager, setDefaults),
+					"RegisterSerializationHandler"	=>	array(OpenDataManager, registerSerializationHandler)
 					//TODO: Add Event Registrations here
 		);
 	}
