@@ -54,9 +54,10 @@ $pagesBySite = Query::create(Page, "WHERE site_id=:site ORDER BY page_title")
 
 
 $pageTable = new DataListView($pagesBySite, "pages");
-$pageTable->column("Title", "<a href='/admin/page_form?page_id={page_id}'>{page_title}</a>", true, "width: 40%")
+$pageTable->column("Title", "<a href='/admin/page_form?page_id={page_id}'>{page_title}</a>", true, "width: 30%")
 		  ->column("Page Identifier", "{identifier}", true, "width: 20%")
-		  ->column("Code File", "{php_code_file}", true, "width: 40%");
+		  ->column("Code File", "{php_code_file}", true, "width: 30%")
+		  ->column("Last Edited", "{edit_date}", true, "width: 20%");
 		  
 $pageTable->sortable = true;
 $pageTable->filter = true;
