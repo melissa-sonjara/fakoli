@@ -17,6 +17,7 @@ class SerializationManager
 		{
 			SerializationManager::$map = array();
 			ComponentManager::fireEvent("RegisterSerializationHandler");
+			asort(SerializationManager::$map);
 		}
 	}
 	
