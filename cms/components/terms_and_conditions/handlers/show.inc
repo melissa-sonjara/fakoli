@@ -10,5 +10,5 @@ if (!$button) $button = "I Agree to the {$title} as Shown Above";
 $page = Page::findByIdentifier($identifier);
 
 ?>
-<div style="width: 790px; height: 440px; overflow-y: scroll;margin-bottom: 4px"><?echo $page->description?></div>
+<div style="width: 100%; height: 440px; overflow-y: scroll;margin-bottom: 4px;padding:0 10px"><?echo $page->description?></div>
 <button class="button" onclick="TermsAndConditions.approve()"><?echo $button?></button>
