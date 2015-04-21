@@ -1148,9 +1148,6 @@ ENDSCRIPT;
     }
 }
 
-// Automatically import commonly used features
-Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
-
 /**
  * Pull out a simple reference to the request method
  */
@@ -1185,9 +1182,12 @@ Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer n
 set_error_handler(array("Fakoli", "errorHandler"));
 set_exception_handler(array("Fakoli", "exceptionHandler"));
 
-Fakoli::using("field_renderers", "user", "login", "component");
+Fakoli::using("user", "login", "component");
 
 ComponentManager::fireEvent("ConfigurationBootstrap");
+
+// Automatically import commonly used features
+Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
 
 $user = null;
 
