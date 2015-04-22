@@ -28,7 +28,6 @@ $table->excelFile = "activity_report.xls";
 
 $script .= $table->writeScript();
 
-echo "<strong>" . $filterForm->getRenderer("session_start")->subTitle . "</strong>";
 $table->drawView();
 
 $count = Query::create(UserActivity, "")->executeValue("COUNT(1)");
