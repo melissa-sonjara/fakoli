@@ -31,7 +31,7 @@
 
 *****************************************************************/
  
-Fakoli::using("image", "taxonomy");
+Fakoli::using("image", "taxonomy", "field_renderers");
 Fakoli::usingFeature("auto_form");
 
 require_once "include/image_gallery_tabs.inc";
