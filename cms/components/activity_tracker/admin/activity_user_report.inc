@@ -27,7 +27,6 @@ $table->filter = true;
 $table->excelFile = "activity_report.xls";
 
 $script .= $table->writeScript();
-$script .= $filterForm->writeScript();
 
 echo "<strong>" . $filterForm->getRenderer("session_start")->subTitle . "</strong>";
 $table->drawView();
