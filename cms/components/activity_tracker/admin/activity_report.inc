@@ -3,6 +3,7 @@ Fakoli::using("activity_tracker");
 Fakoli::usingFeature("data_view", "filter_form");
 
 $feedbackUsers = checkNumeric($_GET["feedbackUsers"]);
+$user_id = checkNumeric($_GET["user_id"]);
 
 $menu_item = "Activity Report";
 
@@ -10,6 +11,11 @@ $helper = new ActivityReportFilterHelper();
 $filterForm = $helper->setup();
 
 $constraint = $filterForm->getConstraint();
+
+if ($user_id)
+{
+	$constraint .= " AND user_id={$user_id}";
+}
 
 $sessions = IteratedQuery::create(UserActivitySession, "$constraint ORDER BY session_start DESC")->execute();
 
