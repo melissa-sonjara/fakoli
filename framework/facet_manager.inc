@@ -150,6 +150,7 @@ class PanelFacetManager
 		{
 			document.id('{$mgr}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
 		}.bind({$mgr}_facet_manager);
+		
 ENDSCRIPT;
 		
 		foreach($this->facets as $facet)
