@@ -150,7 +150,7 @@ class PanelFacetManager
 		{
 			onFilterChanged: function()
 			{
-				document.id('{$panel}').loadPanel('{$this->panel->handler}?' + {$mgr}.getQueryString());
+				document.id('{$panel}').loadPanel('{$this->target->handler}?' + {$mgr}.getQueryString());
 			}
 		});
 		
