@@ -122,9 +122,9 @@ class PanelFacetManager
 	var $target;
 	var $facets;
 	
-	function __construct($id, $target)
+	function __construct($target)
 	{
-		$this->id = $id;
+		$this->id = $target->getID()."_facet_manager";
 		$this->target = $target;
 		$this->facets = array();
 	}
