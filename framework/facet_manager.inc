@@ -143,11 +143,11 @@ class PanelFacetManager
 <script type=\"text/javascript\">
 window.addEvent('domready', function()
 {
-	var {$this->panel->id}_facet_manager = new FacetManager();
-	{$this->panel->id}_facet_manager.options.onFilterChanged = function()
+	var {$this->id} = new FacetManager();
+	{$this->id}.options.onFilterChanged = function()
 	{
 		document.id('{$this->panel->id}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
-	}.bind({$this->panel->id}_facet_manager);
+	}.bind({$this->id});
 ENDSCRIPT;
 		
 		foreach($this->facets as $facet)
