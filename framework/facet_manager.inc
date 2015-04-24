@@ -142,7 +142,7 @@ class PanelFacetManager
 		$mgr = $this->target->getID()."_facet_manager";
 		
 		$script = <<<ENDSCRIPT
-<script type=\"text/javascript\">
+<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
 		var {$mgr}_facet_manager = new FacetManager();
@@ -150,7 +150,6 @@ class PanelFacetManager
 		{
 			document.id('{$mgr}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
 		}.bind({$mgr}_facet_manager);
-	});
 ENDSCRIPT;
 		
 		foreach($this->facets as $facet)
