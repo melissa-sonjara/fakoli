@@ -119,13 +119,13 @@ class FacetManager
 class PanelFacetManager
 {
 	var $id;
-	var $panel;
+	var $target;
 	var $facets;
 	
-	function __construct($id, $panel)
+	function __construct($id, $target)
 	{
 		$this->id = $id;
-		$this->panel = $panel;
+		$this->target = $target;
 		$this->facets = array();
 	}
 	
@@ -139,15 +139,18 @@ class PanelFacetManager
 
 	function writeScript()
 	{
+		$mgr = $this->target->getID()."_facet_manager";
+		
 		$script = <<<ENDSCRIPT
 <script type=\"text/javascript\">
-window.addEvent('domready', function()
-{
-	var {$this->id} = new FacetManager();
-	{$this->id}.options.onFilterChanged = function()
+	window.addEvent('domready', function()
 	{
-		document.id('{$this->panel->id}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
-	}.bind({$this->id});
+		var {$mgr}_facet_manager = new FacetManager();
+		{$mgr}_facet_manager.options.onFilterChanged = function()
+		{
+			document.id('{$mgr}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
+		}.bind({$mgr}_facet_manager);
+	});
 ENDSCRIPT;
 		
 		foreach($this->facets as $facet)
