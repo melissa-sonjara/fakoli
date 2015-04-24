@@ -55,6 +55,11 @@ class Panel
 		$this->attrs = $attrs;
 	}
 	
+	function getID()
+	{
+		return $this->id;
+	}
+	
 	function draw()
 	{
 		$mgr = new ComponentManager();
