@@ -116,6 +116,70 @@ class FacetManager
 	}
 }
 
+class PanelFacetManager
+{
+	var $id;
+	var $panel;
+	var $facets;
+	
+	function __construct($id, $panel)
+	{
+		$this->id = $id;
+		$this->panel = $panel;
+		$this->facets = array();
+	}
+	
+	function addFacet($title, $facet)
+	{
+		$this->facets[$title] = $facet;
+		$facet->manager = $this;
+		
+		return $facet;
+	}	
+
+	function writeScript()
+	{
+		$script = <<<ENDSCRIPT
+<script type=\"text/javascript\">
+window.addEvent('domready', function()
+{
+	var {$this->panel->id}_facet_manager = new FacetManager();
+	{$this->panel->id}_facet_manager.options.onFilterChanged = function()
+	{
+		document.id('{$this->panel->id}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
+	}.bind({$this->panel->id}_facet_manager);
+ENDSCRIPT;
+		
+		foreach($this->facets as $facet)
+		{
+			$script .= $facet->writeScript();
+		}
+		
+		$script .= "\n});\n</script>";
+		return $script;
+	}
+	
+	function drawForm()
+	{
+?>
+<div id='<?echo $this->id?>' class='facet_form'>
+<?
+		foreach($this->facets as $title => $facet)
+		{
+?>
+<span style='display: inline-block'><label for='<?echo $facet->getID()?>'><?echo $title?></label>&nbsp;
+<?
+			$facet->drawFacet();
+?>
+</span>
+<?
+		}
+?>		
+</div>	
+<?
+	}
+}
+
 class FieldFacetFilter extends AbstractFacetFilter
 {
 	var $field;
