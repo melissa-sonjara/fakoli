@@ -140,16 +140,19 @@ class PanelFacetManager
 	function writeScript()
 	{
 		$mgr = $this->target->getID()."_facet_manager";
+		$panel = $this->target->getID();
 		
 		$script = <<<ENDSCRIPT
 <script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		var {$mgr} = new FacetManager();
-		{$mgr}.options.onFilterChanged = function()
+		var {$mgr} = new FacetManager(null, 
 		{
-			document.id('{$mgr}').loadPanel('{$this->panel->handler}?' + this.getQueryString());
-		}.bind({$mgr});
+			onFilterChanged: function()
+			{
+				document.id('{$panel}').loadPanel('{$this->panel->handler}?' + {$mgr}.getQueryString());
+			}
+		});
 		
 ENDSCRIPT;
 		
