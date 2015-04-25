@@ -1130,15 +1130,16 @@ ENDSCRIPT;
     	
 	    if ($error)
 	    {
-	    	trace($error['message']." at ".$error['file'].":".$error['line'], 1);
-	    	 
 	    	switch($error['type'])
 	    	{
 	        case E_ERROR:
 	        case E_CORE_ERROR:
 	        case E_COMPILE_ERROR:
 	        case E_USER_ERROR:
-	            if ($config["dump_includes"]) 
+			
+		    	trace($error['message']." at ".$error['file'].":".$error['line'], 1);
+
+	    	 	if ($config["dump_includes"]) 
 	            {
 	            	printIncludes();
 	            }
