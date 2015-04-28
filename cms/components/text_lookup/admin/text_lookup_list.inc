@@ -41,7 +41,7 @@ $texts = Query::create(TextLookup, "ORDER BY code")->execute();
 
 $table = new DataListView($texts, "textLookup");
 $table->column("Code", "<a href='/admin/text_lookup_form?text_id={text_id}'>{code}</a>", true)
-	->column("Text", "{text}", true)
+	->column("Text", textLookupPlainText, true)
 	->column("Class Name", "{class_name}", true)
 	->column("", "<a href='/admin/text_translations?text_id={text_id}'>Translations</a>", true)
 	;
@@ -53,6 +53,12 @@ $table->emptyMessage = "No text lookups have been defined.";
 
 $script .= $table->writeScript();
 $table->drawView();
+
+function textLookupPlainText($textLookup)
+{
+	return $textLookup->text;
+}
+
 ?>
 <br/>
 <a class='button' href='/admin/text_lookup_form'>Add a Text Lookup</a>
