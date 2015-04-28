@@ -285,7 +285,14 @@ class ComponentManager
 			
 			Fakoli::$scanning = false;
 			
-			throw $e;
+			if (ComponentManager::$verbosityLevel > 0)
+			{
+				echo $e->toString();
+			}
+			else
+			{
+				throw $e;
+			}
 		}
 	}
 
