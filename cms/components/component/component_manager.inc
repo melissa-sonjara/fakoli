@@ -45,6 +45,17 @@
 class ComponentManager
 {
 	var $found = array();
+	static $verbosityLevel = 0;
+	
+	static function scanTrace($message, $level)
+	{
+		if ($level <= ComponentManager::$verbosityLevel)
+		{
+			echo $message."<br/>";
+		}
+		
+		trace($message, $level);
+	}
 	
 	/**
 	 * Creates a new ComponentManager object
@@ -65,7 +76,7 @@ class ComponentManager
 		
 		$path = $root . DIRECTORY_SEPARATOR . str_replace("/", DIRECTORY_SEPARATOR, $subdir);
 	
-		trace("Scanning $path", 3);
+		ComponentManager::scanTrace("Scanning $path", 2);
 		
 		if (is_dir($path))
 		{
@@ -77,16 +88,16 @@ class ComponentManager
 		    	
 		    	if (is_dir($f))
 		    	{
-		    		trace("== Found component '$file'", 3);
+		    		ComponentManager::scanTrace("== Found component '$file'", 3);
 		    		if ($this->found[$file])
 		    		{
-		    			trace("---- already defined - skipping", 3);
+		    			ComponentManager::scanTrace("---- already defined - skipping", 3);
 		    			continue;
 		    		}
 		    		
 		    		if (!is_file($m))
 		    		{
-		    			trace("== No manifest found. Skipping...", 3);
+		    			ComponentManager::scanTrace("== No manifest found. Skipping...", 3);
 		    			continue;
 		    		}
 		    		
@@ -96,7 +107,7 @@ class ComponentManager
 		    		
 		    		try
 		    		{
-			    		trace("== Instantiating $cl", 3);
+			    		ComponentManager::scanTrace("== Instantiating $cl", 3);
 			    		
 			    		$manifest = new $cl;
 			    		$component = $manifest->getComponentDefinition();
@@ -112,7 +123,7 @@ class ComponentManager
 		    		}
 		    		catch(Exception $e)
 		    		{
-		    			trace("-- Failed to instantiate manifest class. Skipping...", 3);	    		
+		    			ComponentManager::scanTrace("-- Failed to instantiate manifest class. Skipping...", 3);	    		
 		    		}
 	
 		    		Cache::invalidate("fakoli_includes_$file");
@@ -133,7 +144,7 @@ class ComponentManager
 		
 		if (!is_dir($admin)) return;
 		
-		trace("== Scanning $admin", 3);
+		ComponentManager::scanTrace("== Scanning $admin", 3);
 		
 		$handle = opendir($admin);
 		
@@ -162,7 +173,7 @@ class ComponentManager
 		$pages = $component->component_path . DIRECTORY_SEPARATOR . "pages";
 		
 		if (!is_dir($pages)) return;
-		trace("== Scanning $pages", 3);
+		ComponentManager::scanTrace("== Scanning $pages", 3);
 		
 		$handle = opendir($pages);
 		
@@ -239,7 +250,7 @@ class ComponentManager
 			{
 				if ($root == ".") continue;
 				
-				trace("Scanning $root for components", 3);
+				ComponentManager::scanTrace("Scanning $root for components", 2);
 				$this->scanComponents($root, "cms/components");
 				$this->scanComponents($root, "components");
 			}

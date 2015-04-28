@@ -44,6 +44,9 @@ if ($_SERVER["REMOTE_ADDR"] == "127.0.0.1" && array_key_exists("clear", $_GET))
 	Cache::invalidate("fakoli_components");
 }
 
+$verbosity = checkNumeric($_GET["verbosity"]);
+if ($verbosity) ComponentManager::$verbosityLevel = $verbosity;
+
 $mgr = new ComponentManager();
 $mgr->scan();
 

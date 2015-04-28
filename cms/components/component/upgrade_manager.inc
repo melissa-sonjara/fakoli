@@ -222,11 +222,11 @@ abstract class UpgradeManager
 	{					
 		if ($upgrade_to)
 		{
-			trace("Upgrading {$this->component_name} to version $upgrade_to", 3);
+			ComponentManager::scanTrace("Upgrading {$this->component_name} to version $upgrade_to", 2);
 		}
 		
 		$latest_version = ComponentUpdateLog::getLatestVersion($this->component_name);
-		trace("UpgradeManager:: upgrade: latest version in db for component {$this->component_name} is $latest_version", 3);
+		ComponentManager::scanTrace("UpgradeManager:: upgrade: latest version in db for component {$this->component_name} is $latest_version", 3);
 					
 		if(count($this->updateMap) > 0)
 		{
@@ -294,12 +294,12 @@ abstract class UpgradeManager
 	 */	
 	function executeVersionSql($version_number)
 	{
-		trace("** Upgrade {$this->component_name} to Version $version_number", 3);
+		ComponentManager::scanTrace("** Upgrade {$this->component_name} to Version $version_number", 2);
 		
 		$lines = array();
 		if(!file_exists($this->sqlFile))
 		{
-			trace("UpgradeManager:: sql file does not exists {$this->sqlFile}", 2);
+			ComponentManager::scanTrace("UpgradeManager:: sql file does not exists {$this->sqlFile}", 2);
 			return;
 		}
 		
@@ -309,7 +309,7 @@ abstract class UpgradeManager
 		
 		if(!$fp)
 		{
-			trace("Error: executeVersionSql failed to open file", 3);
+			ComponentManager::scanTrace("Error: executeVersionSql failed to open file", 2);
 			return;
 		}
 		
@@ -342,7 +342,7 @@ abstract class UpgradeManager
 
 		if(count($sqlStatements) == 0)
 		{
-			trace("UpgradeManager:: no query statements found for version $version_number", 3);
+			ComponentManager::scanTrace("UpgradeManager:: no query statements found for version $version_number", 3);
 			return true;
 		}
 
@@ -353,6 +353,7 @@ abstract class UpgradeManager
 		}
 		catch(Exception $e)
 		{
+			ComponentManager::scanTrace("Failed to upgrade {$this->component_name} to version $version_number - ". $e->getMessage(), 2);
 			throw new FakoliException("Failed to upgrade {$this->component_name} to version $version_number - ". $e->getMessage());
 		}
 	}
@@ -368,7 +369,7 @@ abstract class UpgradeManager
 			
 		foreach($lines as $line)
 		{
-			trace("UpgradeManager:: processing update schema line $line", 4);
+			ComponentManager::scanTrace("UpgradeManager:: processing update schema line $line", 4);
 			$sqlStatement .= $line;
 			if(preg_match("/;\s*$/", $line))
 			{
@@ -419,11 +420,11 @@ abstract class UpgradeManager
 	{
 		global $config;
 		
-		trace("** Upgrade {$this->component_name} to Version $version_number", 3);
+		ComponentManager::scanTrace("** Upgrade {$this->component_name} to Version $version_number", 3);
 		
 		if (preg_match("/\\b{$this->component_name}\\b/", $config["ignore_xml_updates"]))
 		{
-			trace("** Ignoring this upgrade as specified in config", 3);
+			ComponentManager::scanTrace("** Ignoring this upgrade as specified in config", 3);
 			return true;
 		}
 		
