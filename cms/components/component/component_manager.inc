@@ -45,13 +45,16 @@
 class ComponentManager
 {
 	var $found = array();
-	static $verbosityLevel = 0;
+	
+	static $verbosityLevel = 0;		///< Verbosity level for component scan (same as trace level)
+	static $plainOutput = false;	///< Set to true for plain text output during component scan
 	
 	static function scanTrace($message, $level)
 	{
 		if ($level <= ComponentManager::$verbosityLevel)
 		{
-			echo $message."<br/>";
+			echo $message;
+			echo (ComponentManager::$plainOutput) ? "\n" : "<br/>";
 		}
 		
 		trace($message, $level);
