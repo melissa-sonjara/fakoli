@@ -229,11 +229,12 @@ class ComponentManager
 	 * and builds the component and administration page map that
 	 * describe the configuration of the application..
 	 */
-	function scan()
+	function scan($verbosity = 0)
 	{
 		global $config;
 		
 		Fakoli::$scanning = true;
+		ComponentManager::$verbosityLevel = $verbosity;
 		
 		$this->tx = new DataTransaction();
 		
