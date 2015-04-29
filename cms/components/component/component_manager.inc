@@ -56,7 +56,7 @@ class ComponentManager
 		{
 			if (!ComponentManager::$scanLog)
 			{
-				ComponentManager::$scanLog = $config['uploaddir'].DIRECTORY_SEPARATOR."component_scan_".date("Ymd-His").".log";
+				ComponentManager::$scanLog = $config['uploadbase'].DIRECTORY_SEPARATOR."component_scan_".date("Ymd-His").".log";
 			}
 			
 			error_log($message."\n", ComponentManager::$scanLog);
