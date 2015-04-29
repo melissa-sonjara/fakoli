@@ -48,11 +48,19 @@ class ComponentManager
 	
 	static $verbosityLevel = 0;		///< Verbosity level for component scan (same as trace level)
 	static $plainOutput = false;	///< Set to true for plain text output during component scan
+	private static $scanLog = "";
 	
 	static function scanTrace($message, $level)
 	{
 		if ($level <= ComponentManager::$verbosityLevel)
 		{
+			if (!ComponentManager::$scanLog)
+			{
+				ComponentManager::$scanLog = $config['uploaddir'].DIRECTORY_SEPARATOR."component_scan_".date("Ymd-His").".log";
+			}
+			
+			error_log($message."\n", ComponentManager::$scanLog);
+			
 			echo $message;
 			echo (ComponentManager::$plainOutput) ? "\n" : "<br/>";
 		}
