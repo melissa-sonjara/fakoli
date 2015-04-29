@@ -1010,7 +1010,7 @@ ENDSCRIPT;
 			
 			if ($isAction)
 			{
-				echo $msg;
+				echo $exception->getMessage().$msg;
 			}
 			else
 			{
