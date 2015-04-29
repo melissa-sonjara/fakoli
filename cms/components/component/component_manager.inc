@@ -301,7 +301,7 @@ class ComponentManager
 			
 			if (ComponentManager::$verbosityLevel > 0)
 			{
-				echo $e->toString();
+				echo $e->__toString();
 			}
 			else
 			{
