@@ -78,12 +78,13 @@ class Fakoli
 	static $componentsUsed = array();	///< Array of the components that have been referenced in this page request
 	static $scanning = false;			///< Semaphore indicating that a component scan is in progress
 	static $outputBufferLevel = 0;		///< Records the level at which gzip output buffering began
+	static $rollbackBuffers = true;		///< Specifies whether to rollback output buffers when there is an unhandled exception. 
 	static $storage = array();			///< General storage (volatile). See Fakoli::put and Fakoli::get
 	static $timestamp;		  			///< Microsectond Timestamp for start of request
 	static $requestStartTime; 			///< Start of request in DateTime format
 	static $requestURI; 				///< The initiali request URI
 	static $bodyClass = "";				///< Override for the body class of the page currently being served
-	
+
 	/**
 	 * Stores a value or object at the given key. This storage is volatile and 
 	 * limited to the scope of the current page request. This mechanism can be
@@ -1001,11 +1002,14 @@ ENDSCRIPT;
 		
 			trace("ZIP: Winding back output buffers from ".ob_get_level(), 3);
 			
-			while(ob_get_level() > Fakoli::$outputBufferLevel); // Clear all output buffers.
+			if (Fakoli::$rollbackBuffers)
 			{
-				ob_end_clean();
+				while(ob_get_level() > Fakoli::$outputBufferLevel); // Clear all output buffers.
+				{
+					ob_end_clean();
+				}
 			}
-		
+					
 			$msg = "<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
 			
 			if ($isAction)
