@@ -59,7 +59,7 @@ class ComponentManager
 				ComponentManager::$scanLog = $config['uploadbase'].DIRECTORY_SEPARATOR."component_scan_".date("Ymd-His").".log";
 			}
 			
-			error_log($message."\n", ComponentManager::$scanLog);
+			error_log($message."\n", 3, ComponentManager::$scanLog);
 			
 			echo $message;
 			echo (ComponentManager::$plainOutput) ? "\n" : "<br/>";
