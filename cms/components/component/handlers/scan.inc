@@ -49,6 +49,8 @@ if ($verbosity) ComponentManager::$verbosityLevel = $verbosity;
 $plain = checkNumeric($_GET["plain"]);
 if ($plain) ComponentManager::$plainOutput = true;
 
+Fakoli::$rollbackBuffers = false;
+
 try
 {
 	$mgr = new ComponentManager();
