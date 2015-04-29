@@ -52,6 +52,8 @@ class ComponentManager
 	
 	static function scanTrace($message, $level)
 	{
+		global $config;
+		
 		if ($level <= ComponentManager::$verbosityLevel)
 		{
 			if (!ComponentManager::$scanLog)
