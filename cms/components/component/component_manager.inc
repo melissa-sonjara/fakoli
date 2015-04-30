@@ -445,7 +445,21 @@ class ComponentManager
 				trace("Handling $event with {$subscription["handler"]}", 4);
 			}
 					
-			$parameter = call_user_func_array($subscription["handler"], array($parameter, &$continue));
+			if (!is_callable($subscription["handler"]))
+			{
+				if (is_array($subscription["handler"]))
+				{
+					trace("Subscription handler {$subscription["handler"][0]}::{$subscription["handler"][1]} for $event is invalid", 2);
+				}
+				else
+				{
+					trace("Subscription handler $event with {$subscription["handler"]} for $event is invalid", 2);
+				}
+			}
+			else
+			{
+				$parameter = call_user_func_array($subscription["handler"], array($parameter, &$continue));
+			}
 			if (!$continue) break;
 		}
 		
