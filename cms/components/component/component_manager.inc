@@ -367,7 +367,7 @@ class ComponentManager
 		$eventMap = Cache::get("fakoli_event_map");
 		if ($eventMap) return $eventMap;
 		
-		trace("Mapping Event Handlers", 3);
+		ComponentManager::scanTrace("Mapping Event Handlers", 3);
 		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
 		
 		$eventMap = array();
@@ -384,7 +384,7 @@ class ComponentManager
 			{
 				$handlerRecord = array("component" => $component->name, "priority" => $component->priority, "handler" => $handler);
 				
-				trace("  $component->name is subscribing to $event", 3);
+				ComponentManager::scanTrace("  $component->name is subscribing to $event", 3);
 				if (array_key_exists($event, $eventMap))
 				{
 					$eventMap[$event][] = $handlerRecord;
