@@ -241,10 +241,10 @@ class Fakoli
 	{
 		global $config;
 		
-		require_once "cms/components/component/datamodel/component.inc";
-		require_once "cms/components/component/datamodel/component_page.inc";
-		require_once "cms/components/component/datamodel/admin_page.inc";
-		require_once "cms/components/component/component_manager.inc";
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component_page.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/admin_page.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/component_manager.inc");
 		
 		$mgr = new ComponentManager();
 		$mgr->scan($config["scan_verbosity"]);
@@ -256,12 +256,12 @@ class Fakoli
 	 */
 	static function bootstrap()
 	{
-		require_once "cms/components/component/datamodel/component.inc";
-		require_once "cms/components/component/datamodel/component_page.inc";
-		require_once "cms/components/component/datamodel/admin_page.inc";
-		require_once "cms/components/component/component_manager.inc";
-		require_once "cms/components/component/upgrade_manager.inc";
-		require_once "cms/components/component/component_upgrade_manager.inc";
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component_page.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/admin_page.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/component_manager.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/upgrade_manager.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/component_upgrade_manager.inc");
 		
 		$mgr = new ComponentUpgradeManager();
 		$mgr->bootstrap();
@@ -1189,11 +1189,9 @@ Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer n
 set_error_handler(array("Fakoli", "errorHandler"));
 set_exception_handler(array("Fakoli", "exceptionHandler"));
 
-Fakoli::using("component");
-
 ComponentManager::fireEvent("ConfigurationBootstrap");
 
-Fakoli::using("user", "login");
+Fakoli::using("user", "component", "login");
 
 // Automatically import commonly used features
 Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
