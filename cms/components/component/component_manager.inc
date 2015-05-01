@@ -455,6 +455,8 @@ class ComponentManager
 				{
 					trace("Subscription handler $event with {$subscription["handler"]} for $event is invalid", 2);
 				}
+
+				trace(printIncludes(false, true), 3);
 			}
 			else
 			{
