@@ -1189,9 +1189,10 @@ Fakoli::$outputBufferLevel = ob_get_level(); // Initial level of output buffer n
 set_error_handler(array("Fakoli", "errorHandler"));
 set_exception_handler(array("Fakoli", "exceptionHandler"));
 
+Fakoli::using("component", "user", "login");
+
 ComponentManager::fireEvent("ConfigurationBootstrap");
 
-Fakoli::using("user", "component", "login");
 
 // Automatically import commonly used features
 Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
