@@ -1920,16 +1920,24 @@ function countMatchingElements($a, $b)
 
 /**
  * Outputs a list of all included files. This is provided as a tool for troubleshooting.
+ * @param boolean $html whether to include HTML formatting in the output (default true)
  */
-function printIncludes()
+function printIncludes($html = true)
 {
 	$includes = get_included_files();
-	echo "<ul>\n";
+	if ($html) echo "<ul>\n";
 	foreach($includes as $include)
 	{
-		echo "<li>$include</li>";
+		if ($html)
+		{
+			echo "<li>$include</li>";
+		}
+		else
+		{
+			echo $include."\n";
+		}
 	}
-	echo "</ul>";
+	if ($html) echo "</ul>";
 }
 /**
  * @}
