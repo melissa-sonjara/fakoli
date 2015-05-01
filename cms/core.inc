@@ -259,6 +259,7 @@ class Fakoli
 		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
 		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component_page.inc");
 		require_once realpath(dirname(__FILE__)."/components/component/datamodel/admin_page.inc");
+		require_once realpath(dirname(__FILE__)."/components/component/datamodel/component_update_log.inc");
 		require_once realpath(dirname(__FILE__)."/components/component/component_manager.inc");
 		require_once realpath(dirname(__FILE__)."/components/component/upgrade_manager.inc");
 		require_once realpath(dirname(__FILE__)."/components/component/component_upgrade_manager.inc");
