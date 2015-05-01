@@ -1921,9 +1921,15 @@ function countMatchingElements($a, $b)
 /**
  * Outputs a list of all included files. This is provided as a tool for troubleshooting.
  * @param boolean $html whether to include HTML formatting in the output (default true)
+ * @param boolean $return set to true to return the list as the return value, false to print to the output buffer
  */
-function printIncludes($html = true)
+function printIncludes($html = true, $return = false)
 {
+	if ($return)
+	{
+		ob_start();
+	}
+	
 	$includes = get_included_files();
 	if ($html) echo "<ul>\n";
 	foreach($includes as $include)
@@ -1938,6 +1944,13 @@ function printIncludes($html = true)
 		}
 	}
 	if ($html) echo "</ul>";
+	
+	if ($return)
+	{
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
 }
 /**
  * @}
