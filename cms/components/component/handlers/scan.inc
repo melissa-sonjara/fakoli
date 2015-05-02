@@ -64,7 +64,7 @@ catch(Exception $e)
 	}
 	else
 	{
-		echo $e->toString();
+		echo $e->__toString();
 	}
 }
 
