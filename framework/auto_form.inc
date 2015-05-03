@@ -1178,6 +1178,8 @@ class AutoForm
 		$this->renderAllFields($obj);
 		
 		$this->layout->endUngrouped();	
+
+		$this->layout->finalizeLayout();
 	}
 
 	/**
