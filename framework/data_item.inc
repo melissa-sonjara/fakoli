@@ -1528,7 +1528,7 @@ class DataItem extends AbstractDataItem
 			else
 			{
 				if ($fieldTemplate) $fieldTemplate = ":{$fieldTemplate}";
-				if ($relations) $sub = $relations->formatField("{{$field}{$fieldTemplate}}");
+				if ($relations) $sub = $relations->format("{{$field}{$fieldTemplate}}");
 			}
 			
 			trace("format using relations: Replacing {$match[0]} [ $format ] with '$sub'", 5);
