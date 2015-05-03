@@ -968,6 +968,7 @@ class TemplateFormLayout extends AutoFormLayout
 	
 	function TemplateFormLayout($form, $template, $showButtons = true)
 	{
+		trace("Using form template {$template}", 3);
 		$this->template = file_get_contents($template);
 		$this->showButtons = $showButtons;
 		$this->AutoFormLayout($form);
