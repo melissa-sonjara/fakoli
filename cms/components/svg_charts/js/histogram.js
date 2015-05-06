@@ -157,6 +157,7 @@ var VerticalBlockSeriesRenderer = new Class(
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
 			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]); }.bind(this));
+			column.click(function() { this.series.fireEvent('click', i); }.bind(this));
 			
 			this.series.columns.push(column);
 			
@@ -235,6 +236,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
 			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]); }.bind(this));
+			column.click(function() { this.series.fireEvent('click', i); }.bind(this));
 			
 			this.series.columns.push(column);
 			
