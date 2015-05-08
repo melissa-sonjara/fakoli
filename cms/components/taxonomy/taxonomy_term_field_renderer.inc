@@ -63,14 +63,14 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 		$this->FieldRenderer($form);
 		
 		// JDG 7/31/2011 - allow override
-		if ($form->data->hasField($field))
+		if ($form->data->hasField($this->field))
 		{
-			$form->override($field, $label, $this);
+			$form->override($this->field, $label, $this);
 		}
 		else
 		{
-			$form->add($this, $field);
-			$form->overrides[$field]['label'] = $label;
+			$form->add($this, $this->field);
+			$form->overrides[$this->field]['label'] = $label;
 		}	
 	}
 	
