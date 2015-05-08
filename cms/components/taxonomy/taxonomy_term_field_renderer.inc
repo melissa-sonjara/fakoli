@@ -128,6 +128,21 @@ window.addEvent('domready', function()
 		}
 	}
 	
+	function renderSearchScript($field, $mode)
+	{
+
+		if ($this->dropdown)
+		{
+			?>
+		<script type='text/javascript'>
+		window.addEvent('domready', function()
+		{
+			new MultiSelect('<?echo $this->parent->id?>_<?echo $this->field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+		});
+		</script> 			
+		<?
+		}
+	}
 	function getMatchingPK($xref, $obj)
 	{
 		$pks = $obj->getPrimaryKeyList();
