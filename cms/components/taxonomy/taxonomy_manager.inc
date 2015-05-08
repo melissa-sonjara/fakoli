@@ -67,7 +67,7 @@ class TaxonomySearchParameterHandler extends SearchParameterHandler
 		if(is_array($set))
 			$values = implode(",", array_keys($set));
 
-		trace("-- Generating taxonomy terms clause for $name using values ($values)", 3);
+		trace("## Generating taxonomy terms clause for $name using values ($values)", 3);
 		
 		return "$name IN (SELECT id FROM taxonomy_term_association WHERE class='{$this->cl}' AND term_id IN ($set))";
 	}
