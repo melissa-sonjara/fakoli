@@ -532,11 +532,12 @@ class SearchParameters
 		{
 			list($fieldname, $mode) = explode(":", $field);
 
+			$skip = false;
+			
 			if ($this->target->filter && $this->target->filter->isExcluded($fieldname) &&
 				(!$this->form || !$this->form->hasAdditional($fieldname))) 
 			{
-					trace("## Skipping $fieldname", 3);
-					trace(print_r($this->form->additional, true), 3);
+					trace("## Skipping $fieldname", 4);
 					continue;
 			}
 			if (!$mode) continue;
