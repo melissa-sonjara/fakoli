@@ -54,9 +54,19 @@ class TaxonomySerializationHandler
 
 class TaxonomySearchParameterHandler extends SearchParameterHandler
 {
-	function member($name, $set)
+	var $cl;
+	
+	function __construct($class)
 	{
-		trace("*** $name: $set", 3);
+		$this->cl = $class;
+	}
+	
+	function member($name, $set)
+	{		
+		$values = $set;
+		if(is_array($set))
+			$values = implode(",", array_keys($set));
+		return "$name IN (SELECT id FROM taxonomy_term_association WHERE class='{$this->cl}' AND term_id IN ($set))";
 	}
 }
 
@@ -225,7 +235,7 @@ class TaxonomyManager
 				
 				if ($form instanceof SearchForm)
 				{
-					$form->params->setHandler($taxonomy->identifier, new TaxonomySearchParameterHandler());
+					$form->params->setHandler($taxonomy->identifier, new TaxonomySearchParameterHandler($class));
 					$form->setMatchingMode($taxonomy->identifier, "member");
 				}
 				
