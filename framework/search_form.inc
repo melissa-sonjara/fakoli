@@ -475,6 +475,7 @@ class DateSearchParameterHandler extends SearchParameterHandler
  */
 class SearchParameters
 {
+	var $form;
 	var $target;
 	var $params;
 	var $handlers;
@@ -482,9 +483,10 @@ class SearchParameters
 	var $paramHandlers = array(); // custom search handlers
 	var $secondaryFields = array();
 	
-	function SearchParameters($target)
+	function SearchParameters($target, $form = null)
 	{
 		$this->target = $target;
+		$this->form = $form;
 		$this->params = array();
 		
 		$this->handlers = array();
@@ -530,7 +532,8 @@ class SearchParameters
 		{
 			list($fieldname, $mode) = explode(":", $field);
 
-			if ($this->target->filter && $this->target->filter->isExcluded($fieldname)) continue;
+			if ($this->target->filter && $this->target->filter->isExcluded($fieldname) &&
+				(!$this->form || !$this->form->hasAdditional($fieldname))) continue;
 			if (!$mode) continue;
 			if ($value != "")
 			{
@@ -897,7 +900,7 @@ class SearchForm extends AutoForm
 	{
 		$this->AutoForm($target, $method, $action, $id);
 		$this->modifiers = array();
-		$this->params = new SearchParameters($target);
+		$this->params = new SearchParameters($target, $this);
 		
 		$this->validator = new ValidationEngine();
 		$this->validator->id = $this->id;
