@@ -201,13 +201,15 @@ window.addEvent('domready', function()
 		$this->_endField($field);
 	}
 	
-	function renderCheckboxes($field, $items, $selected)
+	function renderCheckboxes($field, $items, $selected, $mode = null)
 	{
 		foreach($items as $item)
 		{
 			$p = $item->term_id;
 			
-			echo "<label for='checkbox_{$field}_$p'><input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' value='1'";
+			$name = $mode ? "{$field}:{$mode}" : $field;
+			
+			echo "<label for='checkbox_{$field}_$p'><input type='checkbox' class='checkbox' name='{$name}[$p]' id='checkbox_{$field}_$p' value='1'";
 			if (array_key_exists($p, $selected))
 			{
 				echo " checked";
@@ -281,7 +283,7 @@ window.addEvent('domready', function()
 								->bind(":id", $this->taxonomy->taxonomy_id, ":class", $class, ":pk", $pk)
 								->execute();
 		
-		$this->renderCheckBoxes($field, $this->options, $selected);
+		$this->renderCheckBoxes($field, $this->options, $selected, $mode);
 
 		if ($this->width && $this->height)
 		{
