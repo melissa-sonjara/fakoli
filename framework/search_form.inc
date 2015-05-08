@@ -533,7 +533,11 @@ class SearchParameters
 			list($fieldname, $mode) = explode(":", $field);
 
 			if ($this->target->filter && $this->target->filter->isExcluded($fieldname) &&
-				(!$this->form || !$this->form->hasAdditional($fieldname))) continue;
+				(!$this->form || !$this->form->hasAdditional($fieldname))) 
+			{
+					trace("## Skipping $fieldname", 3);
+					continue;
+			}
 			if (!$mode) continue;
 			if ($value != "")
 			{
