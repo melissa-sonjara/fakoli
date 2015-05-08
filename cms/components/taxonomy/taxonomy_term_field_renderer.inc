@@ -208,8 +208,9 @@ window.addEvent('domready', function()
 			$p = $item->term_id;
 			
 			$name = $mode ? "{$field}:{$mode}" : $field;
+			$val = $mode ? $p : "1";
 			
-			echo "<label for='checkbox_{$field}_$p'><input type='checkbox' class='checkbox' name='{$name}[$p]' id='checkbox_{$field}_$p' value='1'";
+			echo "<label for='checkbox_{$field}_$p'><input type='checkbox' class='checkbox' name='{$name}[$p]' id='checkbox_{$field}_$p' value='{$val}'";
 			if (array_key_exists($p, $selected))
 			{
 				echo " checked";
