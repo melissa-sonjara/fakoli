@@ -1248,6 +1248,9 @@ class SearchForm extends AutoForm
 			$field = $r['field'];
 			if(!$field)
 				$field = $renderer->field;
+			
+			trace("Rendering additional field $field", 3);
+			
 			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$this->renderOneSearchField($field);
