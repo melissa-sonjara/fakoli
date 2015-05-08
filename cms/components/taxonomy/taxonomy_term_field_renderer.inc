@@ -238,6 +238,47 @@ window.addEvent('domready', function()
 		}
 	}
 	
+	
+	function renderSearchField($field, $mode)
+	{
+		$this->_startField($field);
+		
+
+		$obj = $this->parent->data;
+		
+		if ($this->width && $this->height)
+		{
+			$width = is_numeric($this->width) ? "{$this->width}px" : $this->width;
+			$height = is_numeric($this->height) ? "{$this->height}px" : $this->height;
+			$padding = ($width == "auto") ? "padding-right: 20px; overflow-x: hidden" : "";
+		
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$width}; height: {$height};overflow: auto; $padding'>\n";
+		}
+		
+		$countOptions = count($this->options);
+		
+		$class = get_class($obj);
+		$pk = $obj->get($obj->getPrimaryKey());
+		
+		$selected = IndexedQuery::create(TaxonomyTermAssociation, "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
+								->bind(":id", $this->taxonomy->taxonomy_id, ":class", $class, ":pk", $pk)
+								->execute();
+		
+		$this->renderCheckBoxes($field, $this->options, $selected);
+
+		if ($this->width && $this->height)
+		{
+			echo "</div>\n";
+		}
+
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";		
+
+		$this->_endField($field);
+	}
+	
 	function postProcess($field = "")
 	{
 		if (count($this->options) == 0) return;
