@@ -203,6 +203,7 @@ class TaxonomyManager
 					continue;
 				}
 				
+				trace("Adding TaxonomyTermFieldRenderer for {$taxonomy->identifier}", 3);
 				$renderer = new TaxonomyTermFieldRenderer($form, $taxonomy);
 				$renderer->setSize(400, 125);
 				$renderer->resizable = true;
