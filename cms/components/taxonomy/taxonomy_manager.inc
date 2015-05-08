@@ -239,7 +239,7 @@ class TaxonomyManager
 				if ($form instanceof SearchForm)
 				{
 					$form->params->setHandler($taxonomy->identifier, new TaxonomySearchParameterHandler($class));
-					$form->setMatchingMode($taxonomy->identifier, "member");
+					$form->setMatchingMode("member", $taxonomy->identifier);
 				}
 				
 				$renderers[] = $renderer;
