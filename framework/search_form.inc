@@ -1251,7 +1251,7 @@ class SearchForm extends AutoForm
 			
 			trace("Rendering additional field $field", 3);
 			
-			if (!array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			if (!array_key_exists($field, $this->renderedFields))
 			{
 				$this->renderOneSearchField($field);
 			}	
