@@ -683,6 +683,7 @@ class AutoForm
 		{
 			$renderer = $r['renderer'];
 			$rField = $r['field'];
+			trace("## $field == $rField", 3);
 			if($rField == $field)
 				return true;
 		}
