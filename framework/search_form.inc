@@ -536,6 +536,7 @@ class SearchParameters
 				(!$this->form || !$this->form->hasAdditional($fieldname))) 
 			{
 					trace("## Skipping $fieldname", 3);
+					trace(print_r($this->form->additional, true), 3);
 					continue;
 			}
 			if (!$mode) continue;
