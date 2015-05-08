@@ -69,7 +69,9 @@ class TaxonomySearchParameterHandler extends SearchParameterHandler
 
 		trace("## Generating taxonomy terms clause for $name using values ($values)", 3);
 		
-		return "$name IN (SELECT id FROM taxonomy_term_association WHERE class='{$this->cl}' AND term_id IN ($set))";
+		$obj = new $this->cl;
+		$pl = $obj->getPrimaryKey();
+		return "$pk IN (SELECT id FROM taxonomy_term_association WHERE class='{$this->cl}' AND term_id IN ($set))";
 	}
 }
 
