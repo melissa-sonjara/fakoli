@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("search_form");
+Fakoli::usingFeature("search_form");
 
 class TaxonomySerializationHandler
 {	
