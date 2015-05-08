@@ -31,6 +31,7 @@
 
 *****************************************************************/
 
+Fakoli::using("search_form");
 
 class TaxonomySerializationHandler
 {	
@@ -49,6 +50,14 @@ class TaxonomySerializationHandler
 		SerializationManager::unserialize(Taxonomy, $doc, $tx);
 		SerializationManager::unserialize(TaxonomyTerm, $doc, $tx);		
 	}		
+}
+
+class TaxonomySearchParameterHandler extends SearchParameterHandler
+{
+	function member($name, $set)
+	{
+		trace("*** $name: $set", 3);
+	}
 }
 
 /**
@@ -212,6 +221,12 @@ class TaxonomyManager
 				if ($group)
 				{
 					$form->group($group, $taxonomy->identifier);
+				}
+				
+				if ($form instanceof SearchForm)
+				{
+					$form->params->setHandler($taxonomy->identifier, new TaxonomySearchParameterHandler());
+					$form->setMatchingMode($taxonomy->identifier, "member");
 				}
 				
 				$renderers[] = $renderer;
