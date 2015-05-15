@@ -732,7 +732,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 	}	
 }
 
-/*
+/**
  * Adds a Date Range Filter with start and end dates
  * and Next and Previous buttons to a FilterForm.
  * 
