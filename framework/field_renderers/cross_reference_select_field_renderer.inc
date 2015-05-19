@@ -281,86 +281,83 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 
 	function renderSearchField($field = "", $mode = "member")
 	{
-		function renderField($field = "")
-		{
-			if (count($this->options) == 0) return;
+		if (count($this->options) == 0) return;
 		
-			$field = $this->field;
-		
-			$this->_startField($field);
-		
-			$obj = $this->parent->data;
-		
-			if (is_array($this->groupBy) && count($this->groupBy) > 0)
-			{
-				$keys = array_keys($this->options);
-				$rc = $this->options[$keys[0]][0];
-			}
-			else
-			{
-				$rc = $this->options[0];
-			}
-		
-			$xref = new $this->xrefClass;
-		
-			$itempk = $this->getMatchingPK($xref, $rc);
-			$pk = $this->getMatchingPK($xref, $obj);
-		
-			$selected = $this->getSelected($obj, $rc, $pk);
-		
-			if ($this->showSelectAll)
-			{
-				echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
-			}
-			if ($this->width && $this->height)
-			{
-				$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
-				$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
-				echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
-			}
-			else
-			{
-				echo "<div id='{$this->parent->id}_{$field}' class='selectbox'>\n";
-			}
-		
-			$countOptions = count($this->options);
-		
-			if (is_array($this->groupBy) && count($this->groupBy) > 0)
-			{
-				$gpk = $this->groupBy[0]->getPrimaryKey();
-			
-				foreach($this->groupBy as $group)
-				{
-					if (array_key_exists($group->get($gpk), $this->options))
-					{
-						echo $group->format($this->groupByFormat);
-						$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected);
-					}
-				}
-			}
-			else if (is_string($this->groupBy))
-			{
-				$options = regroupList($this->options, $this->groupBy);
-			
-				foreach($options as $group => $choices)
-				{
-					echo "<br/><h4>$group</h4>";
-					$this->renderCheckboxes($field, $choices, $itempk, $selected);
-				}
-			}
-			else
-			{
-				$this->renderCheckBoxes($field, $this->options, $itempk, $selected);
-			}
-		
-			echo "</div>\n";
-		
-			// Save this count to loop through checkboxes on required validation
-			echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";
+		$field = $this->field;
 	
-			$this->_endField($field);
-		}		
-	}
+		$this->_startField($field);
+	
+		$obj = $this->parent->data;
+	
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
+		{
+			$keys = array_keys($this->options);
+			$rc = $this->options[$keys[0]][0];
+		}
+		else
+		{
+			$rc = $this->options[0];
+		}
+	
+		$xref = new $this->xrefClass;
+	
+		$itempk = $this->getMatchingPK($xref, $rc);
+		$pk = $this->getMatchingPK($xref, $obj);
+	
+		$selected = $this->getSelected($obj, $rc, $pk);
+	
+		if ($this->showSelectAll)
+		{
+			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+		}
+		if ($this->width && $this->height)
+		{
+			$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+		}
+		else
+		{
+			echo "<div id='{$this->parent->id}_{$field}' class='selectbox'>\n";
+		}
+	
+		$countOptions = count($this->options);
+	
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
+		{
+			$gpk = $this->groupBy[0]->getPrimaryKey();
+		
+			foreach($this->groupBy as $group)
+			{
+				if (array_key_exists($group->get($gpk), $this->options))
+				{
+					echo $group->format($this->groupByFormat);
+					$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected);
+				}
+			}
+		}
+		else if (is_string($this->groupBy))
+		{
+			$options = regroupList($this->options, $this->groupBy);
+		
+			foreach($options as $group => $choices)
+			{
+				echo "<br/><h4>$group</h4>";
+				$this->renderCheckboxes($field, $choices, $itempk, $selected);
+			}
+		}
+		else
+		{
+			$this->renderCheckBoxes($field, $this->options, $itempk, $selected);
+		}
+	
+		echo "</div>\n";
+	
+		// Save this count to loop through checkboxes on required validation
+		echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";
+
+		$this->_endField($field);
+	}		
 	
 	function renderReadOnly($field = "")
 	{
