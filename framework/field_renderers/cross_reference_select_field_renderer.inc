@@ -79,6 +79,13 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 			$form->add($this, $field);
 			$form->overrides[$field]['label'] = $label;
 		}	
+		
+		if ($form instanceof SearchForm)
+		{
+			$class = get_class($form->data);
+			$form->params->setHandler($field, new CrossReferenceSearchParameterHandler($class, $xrefClass));
+			$form->setMatchingMode("member", $field);
+		}
 	}
 	
 	function setSize($width, $height)
@@ -138,6 +145,24 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 				
 	}
 	
+
+	function renderSearchScript($field, $mode)
+	{
+	
+		if ($this->dropdown)
+		{
+			?>
+			<script type='text/javascript'>
+			window.addEvent('domready', function()
+			{
+				new MultiSelect('<?echo $this->parent->id?>_<?echo $this->field?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+			});
+			</script> 			
+			<?
+			}
+		}
+	}
+
 	function getMatchingPK($xref, $obj)
 	{
 		$pks = $obj->getPrimaryKeyList();
@@ -252,6 +277,89 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 
 			echo $this->formatName($item, $this->nameField)."</label>";
 		}
+	}
+
+	function renderSearchField($field = "", $mode = "member")
+	{
+		function renderField($field = "")
+		{
+			if (count($this->options) == 0) return;
+		
+			$field = $this->field;
+		
+			$this->_startField($field);
+		
+			$obj = $this->parent->data;
+		
+			if (is_array($this->groupBy) && count($this->groupBy) > 0)
+			{
+				$keys = array_keys($this->options);
+				$rc = $this->options[$keys[0]][0];
+			}
+			else
+			{
+				$rc = $this->options[0];
+			}
+		
+			$xref = new $this->xrefClass;
+		
+			$itempk = $this->getMatchingPK($xref, $rc);
+			$pk = $this->getMatchingPK($xref, $obj);
+		
+			$selected = $this->getSelected($obj, $rc, $pk);
+		
+			if ($this->showSelectAll)
+			{
+				echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			}
+			if ($this->width && $this->height)
+			{
+				$resizable = ($this->resizable && !$this->dropdown) ? " resizable": "";
+				$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+				echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox scrollbox{$resizable}{$dropdown}' style='width: {$this->width}px; height: {$this->height}px; overflow: auto'>\n";
+			}
+			else
+			{
+				echo "<div id='{$this->parent->id}_{$field}' class='selectbox'>\n";
+			}
+		
+			$countOptions = count($this->options);
+		
+			if (is_array($this->groupBy) && count($this->groupBy) > 0)
+			{
+				$gpk = $this->groupBy[0]->getPrimaryKey();
+			
+				foreach($this->groupBy as $group)
+				{
+					if (array_key_exists($group->get($gpk), $this->options))
+					{
+						echo $group->format($this->groupByFormat);
+						$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected);
+					}
+				}
+			}
+			else if (is_string($this->groupBy))
+			{
+				$options = regroupList($this->options, $this->groupBy);
+			
+				foreach($options as $group => $choices)
+				{
+					echo "<br/><h4>$group</h4>";
+					$this->renderCheckboxes($field, $choices, $itempk, $selected);
+				}
+			}
+			else
+			{
+				$this->renderCheckBoxes($field, $this->options, $itempk, $selected);
+			}
+		
+			echo "</div>\n";
+		
+			// Save this count to loop through checkboxes on required validation
+			echo "<input type=\"hidden\" name=\"count_{$field}\" value=\"$countOptions\">";
+	
+			$this->_endField($field);
+		}		
 	}
 	
 	function renderReadOnly($field = "")
