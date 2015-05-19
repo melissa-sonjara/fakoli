@@ -259,15 +259,17 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	}	
 	
 	
-	function renderCheckboxes($field, $items, $itempk, $selected)
+	function renderCheckboxes($field, $items, $itempk, $selected, $mode = null)
 	{
+		$name = $mode ? "$field:$mode" : $field;
+		
 		foreach($items as $item)
 		{
 			$p = $item->$itempk;
 			
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
 			echo "<label for='checkbox_{$field}_$p'>";
-			echo "<input type='checkbox' class='checkbox' name='{$field}[$p]' id='checkbox_{$field}_$p' $disable value='1'";
+			echo "<input type='checkbox' class='checkbox' name='{$name}[$p]' id='checkbox_{$field}_$p' $disable value='1'";
 			if (array_key_exists($item->$itempk, $selected))
 			{
 				echo " checked";
@@ -331,7 +333,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 				if (array_key_exists($group->get($gpk), $this->options))
 				{
 					echo $group->format($this->groupByFormat);
-					$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected);
+					$this->renderCheckboxes($field, $this->options[$group->get($gpk)], $itempk, $selected, $mode);
 				}
 			}
 		}
@@ -342,12 +344,12 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			foreach($options as $group => $choices)
 			{
 				echo "<br/><h4>$group</h4>";
-				$this->renderCheckboxes($field, $choices, $itempk, $selected);
+				$this->renderCheckboxes($field, $choices, $itempk, $selected, $mode);
 			}
 		}
 		else
 		{
-			$this->renderCheckBoxes($field, $this->options, $itempk, $selected);
+			$this->renderCheckBoxes($field, $this->options, $itempk, $selected, $mode);
 		}
 	
 		echo "</div>\n";
