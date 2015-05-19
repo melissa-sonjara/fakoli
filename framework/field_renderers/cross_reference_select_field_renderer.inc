@@ -159,7 +159,6 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			});
 			</script> 			
 			<?
-			}
 		}
 	}
 
