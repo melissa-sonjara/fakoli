@@ -83,6 +83,9 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		if ($form instanceof SearchForm)
 		{
 			$class = get_class($form->data);
+
+			trace("## Adding CrossReferenceSearchParameterHandler for $class via $xrefClass", 3);
+			
 			$form->params->setHandler($field, new CrossReferenceSearchParameterHandler($class, $xrefClass));
 			$form->setMatchingMode("member", $field);
 		}
