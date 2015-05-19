@@ -466,6 +466,34 @@ class DateSearchParameterHandler extends SearchParameterHandler
 	}
 }
 
+
+class CrossReferenceSearchParameterHandler extends SearchParameterHandler
+{
+	var $cl;
+	var $xref;
+
+	function __construct($class, $xref)
+	{
+		$this->cl = $class;
+		$this->xref = $xref;
+	}
+
+	function member($name, $set)
+	{
+		$values = $set;
+		if(is_array($set))
+			$values = implode(",", array_keys($set));
+
+		trace("## Generating cross reference terms for $name using values ($values)", 3);
+
+		$xref = new $this->xref;
+		$obj = new $this->cl;
+		$pk = $obj->getPrimaryKey();
+
+		return "$pk IN (SELECT id FROM {$xref->table} WHERE {$pk} IN ($set))";
+	}
+}
+
 /**
  * The SearchParameters class interprets the set of input parameters for a search
  * and generates the corresponding SQL constraints to perform the search against
