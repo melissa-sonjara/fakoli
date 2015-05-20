@@ -64,6 +64,7 @@ class DataItem extends AbstractDataItem
 	static $dataTypeRendererMap = array(
 		"Boolean"		=>	BooleanTypeRenderer,	
 		"Currency"		=>	CurrencyTypeRenderer,
+		"Currency3"		=>	CurrencyTypeRenderer,
 		"Date"			=>	DateTypeRenderer,
 		"DateTime"		=>	DateTimeTypeRenderer,
 		"Number"		=>	NumberTypeRenderer,	

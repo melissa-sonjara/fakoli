@@ -121,6 +121,7 @@ class AutoForm
     	DateTime		 =>	DateTimeFieldRenderer,
     	Number			 =>	NumberFieldRenderer,
     	Currency		 =>	CurrencyFieldRenderer,
+    	Currency3		 =>	Currency3FieldRenderer,
 		Boolean			 =>	BooleanFieldRenderer,
 		TimeZone		 =>	TimezoneFieldRenderer,
 		Password		 =>	PasswordFieldRenderer,

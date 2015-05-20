@@ -141,3 +141,17 @@ class CurrencyFieldRenderer extends FieldRenderer
 	}
 	
 }
+
+/**
+ * Use Currency3 if you want to have 3 decimal places displayed.
+ * @author andy
+ *
+ */
+class Currency3FieldRenderer extends CurrencyFieldRenderer
+{
+	function Currency3FieldRenderer(&$parent)
+	{
+		$this->CurrencyFieldRenderer($parent);
+		$this->template = 3;
+	}
+}
