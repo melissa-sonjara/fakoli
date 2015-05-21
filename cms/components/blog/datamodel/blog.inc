@@ -30,6 +30,7 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
+Fakoli::using("search");
 
 class Blog extends DataItem // implements Searchable
 {
