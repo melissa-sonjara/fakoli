@@ -63,7 +63,8 @@ class RoleManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(RoleManager, upgradeComponent)
+				"upgradeComponent"		=>	array(RoleManager, upgradeComponent),
+					"RegisterSerializationHandler"	=>	array(RoleManager, registerSerializationHandler)
 			);
 	}		
 }
