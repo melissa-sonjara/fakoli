@@ -711,11 +711,14 @@ var Notification = new Class({
 	
 	options:
 	{
-		cssClass:	'notification',
-		width:		400,
-		height:		'auto',
-		wait:		3000,
-		onHide:		function () {}
+		cssClass:		'notification',
+		width:			400,
+		height:			'auto',
+		wait:			3000,
+		onHide:			function () {},
+		blocking:		false,
+		buttonClass:	'button',
+		buttonText:		'OK'
 	},
 
 	message: "",
@@ -730,8 +733,11 @@ var Notification = new Class({
 		this.center();
 		
 		this.show();
-		this.hide.delay(this.options.wait, this);
-		this.fireEvent('hide', this, this.options.wait + 1000);
+		if (!this.options.blocking)
+		{
+			this.hide.delay(this.options.wait, this);
+			this.fireEvent('hide', this, this.options.wait + 1000);
+		}
 	},
 
 	createNotification: function()
@@ -747,6 +753,15 @@ var Notification = new Class({
 		var doc = document.id(document.body ? document.body : document.documentElement);
 
 		doc.adopt(div);
+		
+		if (this.options.blocking)
+		{
+			var button = new Element('a', {'class': this.options.buttonClass});
+			button.set('html', this.options.buttonText);
+			button.addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
+			
+			div.adopt(button);
+		}
 		return div;
 	},
 	

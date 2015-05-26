@@ -889,18 +889,25 @@ class Fakoli
 	 * Utility method to display a notification message to the user when the
 	 * page has finished loading. This is useful for displaying information after a form has
 	 * been saved, etc.
+	 * @param string $message the notification message to be displayed
+	 * @param boolean $blocking (optional) true if the user has to dismiss the message manually, false (default) if it should disappear automatically
+	 * @param string $button  (optional) button text to show for blocking notifications
 	 */
-	static function notify($message)
+	static function notify($message, $blocking = false, $button = "OK")
 	{
 		$message = jsSafe($message);
 		
+		if ($blocking)
+		{
+			$options = ", {blocking: true, buttonText: '$button'}";
+		}
 		global $script;
 		$script .= 
 <<<ENDSCRIPT
 		<script type='text/javascript'>
 		window.addEvent('load', function()
 		{
-			notification("$message");
+			notification("$message"$options);
 		});
 		</script>
 ENDSCRIPT;
@@ -911,9 +918,11 @@ ENDSCRIPT;
 	 * Use this when you need to display a notification after a redirect.
 	 * @param string $message
 	 */
-	static function notifyOnNextPage($message)
+	static function notifyOnNextPage($message, $blocking = false, $button = "OK")
 	{
 		$_SESSION["notification_pending"] = $message;
+		$_SESSION["notification_pending_blocking"] = $blocking;
+		$_SESSION["notification_pending_button"] = $button;
 	}
 	
 	/**
@@ -926,8 +935,10 @@ ENDSCRIPT;
 		
 		if (!$isAction &&  !$isResource && isset($_SESSION["notification_pending"]))
 		{
-			Fakoli::notify($_SESSION["notification_pending"]);
+			Fakoli::notify($_SESSION["notification_pending"], $_SESSION["notification_pending_block"], $_SESSION["notification_pending_button"]);
 			unset($_SESSION["notification_pending"]);
+			unset($_SESSION["notification_pending_blocking"]);
+			unset($_SESSION["notification_pending_button"]);
 		}
 	}
 	
