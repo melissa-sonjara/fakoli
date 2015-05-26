@@ -301,6 +301,7 @@ require_once realpath(dirname(__FILE__))."/field_renderers/related_item_radio_bu
 require_once realpath(dirname(__FILE__))."/field_renderers/related_item_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/related_item_checklist_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/select_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/slider_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/string_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/text_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/time_field_renderer.inc";
