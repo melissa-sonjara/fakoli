@@ -510,6 +510,7 @@ function cleanQuotes($str)
 	$chr = array_keys  ($chr_map); // but: for efficiency you should
 	$rpl = array_values($chr_map); // pre-calculate these two arrays
 	$str = str_replace($chr, $rpl, html_entity_decode($str, ENT_QUOTES, "UTF-8"));	
+	return $str;
 }
 
 /**
