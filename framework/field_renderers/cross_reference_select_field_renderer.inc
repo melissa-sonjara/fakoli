@@ -270,12 +270,12 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	function renderCheckboxes($field, $items, $itempk, $selected, $mode = null)
 	{
 		$name = $mode ? "$field:$mode" : $field;
-		$v = $mode ? $p : "1";
 		
 		foreach($items as $item)
 		{
 			$p = $item->$itempk;
-			
+			$v = $mode ? $p : "1";
+				
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
 			echo "<label for='checkbox_{$field}_$p'>";
 			echo "<input type='checkbox' class='checkbox' name='{$name}[$p]' id='checkbox_{$field}_$p' $disable value='{$v}'";
