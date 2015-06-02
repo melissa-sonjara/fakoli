@@ -723,6 +723,8 @@ class SearchParameters
 				$joinWith = (!$first) ? $this->joinWith : "";
 									
 				$handler = $this->paramHandlers[$field];
+				$modifier = $this->form->getMatchingMode($field);
+				
 				if(is_array($handler) && method_exists($handler[0], $handler[1]))
 					$clause = call_user_func($handler, $field, $value);
 				elseif(method_exists($handler, $modifier))
