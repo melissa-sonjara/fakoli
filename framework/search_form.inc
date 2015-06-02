@@ -717,6 +717,7 @@ class SearchParameters
 		
 		foreach($this->additional as $field)
 		{
+			trace("Processing $field", 3);
 			if (array_key_exists($field, $this->paramHandlers))
 			{
 				$joinWith = (!$first) ? $this->joinWith : "";
