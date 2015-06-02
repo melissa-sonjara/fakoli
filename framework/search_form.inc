@@ -494,7 +494,7 @@ class CrossReferenceSearchParameterHandler extends SearchParameterHandler
 		$obj = new $this->cl;
 		$pk = $obj->getPrimaryKey();
 
-		return "$pk IN (SELECT {$this->foreignKey} FROM {$xref->table} WHERE {$pk} IN ($set))";
+		return "$pk IN (SELECT {$pk} FROM {$xref->table} WHERE {$this->foreignKey} IN ($set))";
 	}
 }
 
