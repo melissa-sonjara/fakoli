@@ -471,11 +471,13 @@ class CrossReferenceSearchParameterHandler extends SearchParameterHandler
 {
 	var $cl;
 	var $xref;
-
-	function __construct($class, $xref)
+	var $foreignKey;
+	
+	function __construct($class, $xref, $foreignKey)
 	{
 		$this->cl = $class;
 		$this->xref = $xref;
+		$this->foreignKey = $foreignKey;
 	}
 
 	function member($name, $set)
@@ -490,7 +492,7 @@ class CrossReferenceSearchParameterHandler extends SearchParameterHandler
 		$obj = new $this->cl;
 		$pk = $obj->getPrimaryKey();
 
-		return "$pk IN (SELECT id FROM {$xref->table} WHERE {$pk} IN ($set))";
+		return "$pk IN (SELECT {$this->foreignKey} FROM {$xref->table} WHERE {$pk} IN ($set))";
 	}
 }
 
