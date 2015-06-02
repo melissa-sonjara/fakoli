@@ -510,6 +510,7 @@ class SearchParameters
 	var $joinWith = "AND"; // AND or OR
 	var $paramHandlers = array(); // custom search handlers
 	var $secondaryFields = array();
+	var $additional = array();
 	
 	function SearchParameters($target, $form = null)
 	{
@@ -551,6 +552,10 @@ class SearchParameters
 	function setHandler($field, $handler)
 	{
 		$this->paramHandlers[$field] = $handler;	
+		if (!$this->target->hasField($field))
+		{
+			$this->additional[] = $field;
+		}	
 	}
 		
 	function fromArray($array)
@@ -708,6 +713,22 @@ class SearchParameters
 			}
 	
 			$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
+		}
+		
+		foreach($this->additional as $field)
+		{
+			if (array_key_exists($field, $this->paramHandlers))
+			{
+				$joinWith = (!$first) ? $this->joinWith : "";
+									
+				$handler = $this->paramHandlers[$field];
+				if(is_array($handler) && method_exists($handler[0], $handler[1]))
+					$clause = call_user_func($handler, $field, $value);
+				elseif(method_exists($handler, $modifier))
+				$clause = $handler->$modifier($field, $value);
+				
+				$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
+			}
 		}
 		
 		$this->closeClause($constraint, $firstText);
@@ -986,11 +1007,12 @@ class SearchForm extends AutoForm
 		$this->params->fromArray($_REQUEST);
 	}
 	
-	/*
+	/**
 	 * Override an existing SearchParameter constraint
 	 * clause handler or add one. 
 	 * 
-	 * @handler - callback function that creates the
+	 * @param $field string name of the field
+	 * @param $handler callable callback function that creates the
 	 * constraint clause for the given field
 	 */
 	function setHandler($field, $handler)
