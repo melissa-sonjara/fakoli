@@ -486,6 +486,8 @@ class CrossReferenceSearchParameterHandler extends SearchParameterHandler
 		if(is_array($set))
 			$values = implode(",", array_keys($set));
 
+		if (!$set) return "";
+		
 		trace("## Generating cross reference terms for $name using values ($values)", 3);
 
 		$xref = new $this->xref;
