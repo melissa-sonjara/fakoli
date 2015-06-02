@@ -715,25 +715,6 @@ class SearchParameters
 			$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
 		}
 		
-		foreach($this->additional as $field)
-		{
-			trace("Processing $field", 3);
-			if (array_key_exists($field, $this->paramHandlers))
-			{
-				$joinWith = (!$first) ? $this->joinWith : "";
-									
-				$handler = $this->paramHandlers[$field];
-				$modifier = $this->form->getMatchingMode($field);
-				
-				if(is_array($handler) && method_exists($handler[0], $handler[1]))
-					$clause = call_user_func($handler, $field, $value);
-				elseif(method_exists($handler, $modifier))
-				$clause = $handler->$modifier($field, $value);
-				
-				$constraint .= $this->joinClauses($first, $clause, $joinWith, $firstText);
-			}
-		}
-		
 		$this->closeClause($constraint, $firstText);
 		
 		return $constraint;
