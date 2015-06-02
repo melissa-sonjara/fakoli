@@ -57,7 +57,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $showSelectAll = false;
 	var $disable = false;
 	
-	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass, $foreignKey = null)
+	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
 		$this->field = $field;
 		$this->label = ($label) ? $label : $form->overrides[$field]['label'];
@@ -82,17 +82,17 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		
 		if ($form instanceof SearchForm)
 		{
-			if (!$foreignKey)
+			if (count($options))
 			{
-				$foreignKey = $field;
+				$foreignKey = $options[0]->getPrimaryKey();
+			
+				$class = get_class($form->data);
+	
+				trace("## Adding CrossReferenceSearchParameterHandler for $class via $xrefClass", 3);
+				
+				$form->params->setHandler($field, new CrossReferenceSearchParameterHandler($class, $xrefClass, $foreignKey));
+				$form->setMatchingMode("member", $field);
 			}
-			
-			$class = get_class($form->data);
-
-			trace("## Adding CrossReferenceSearchParameterHandler for $class via $xrefClass", 3);
-			
-			$form->params->setHandler($field, new CrossReferenceSearchParameterHandler($class, $xrefClass, $foreignKey));
-			$form->setMatchingMode("member", $field);
 		}
 	}
 	
