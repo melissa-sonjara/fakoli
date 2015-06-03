@@ -6,6 +6,7 @@ $menu_item = "Activity Report";
 
 $session_id = $_GET["session_id"];
 $showImages = checkNumeric($_GET["showImages"]);
+$sessionIdentifier = checkIdentifier($_GET["session"]);
 
 $title = "Session Details";
 if (!$showImages)
@@ -13,7 +14,14 @@ if (!$showImages)
 	$constraints .= "AND uri NOT LIKE '/action/image/%'";
 }
 
-$session = new UserActivitySession($session_id);
+if ($session_id)
+{
+	$session = new UserActivitySession($session_id);
+}
+else if ($sessionIdentifier)
+{
+	$session = UserActivitySession::fromIdentifier($sessionIdentifier);
+}
 
 $activity = ActivityTracker::loadSession($session);
 
