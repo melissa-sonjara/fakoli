@@ -67,6 +67,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $confirm = false;		///< Render a second field for the user to confirm their entry (for email addresses, etc)
 	var $width = "";			///< Optionally specify a CSS width for the field
 	var $CSSclass = "";			///< Optionally specify a CSS class for the field
+	var $numeric = false;		///< Restrict to numeric input
 	
 	function StringFieldRenderer(&$parent)
 	{
@@ -121,7 +122,9 @@ class StringFieldRenderer extends FieldRenderer
 		$class = ($this->CSSclass) ? "class='{$this->CSSclass}'" : "";
 		$value = (!$this->password) ? htmlspecialchars($this->parent->data->get($field), ENT_QUOTES, 'UTF-8') : "";
 		
-		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $onchange $autocomplete $class $style value='$value' size='{$this->size}' $disable $onkeypress/>";
+		$keyPress = $this->numeric ? "onkeypress='return maskInput(event, false);'" : "";
+		
+		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $keyPress $onchange $autocomplete $class $style value='$value' size='{$this->size}' $disable $onkeypress/>";
 
 		if ($this->limit)
 		{
