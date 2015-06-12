@@ -54,7 +54,7 @@ class PasswordFieldRenderer extends FieldRenderer
 	
 	function addValidatorsToForm($field, $required = false)
 	{
-		$label = $this->parent->prettifyFieldName($field);
+		$label = str_replace("*", "", $this->parent->prettifyFieldName($field));
 		$this->parent->match($field, $label, "{$field}_confirm", "Confirmation");
 		$this->parent->password($field, $label);	
 	}
