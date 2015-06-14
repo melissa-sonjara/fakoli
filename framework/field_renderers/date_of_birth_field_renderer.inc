@@ -98,7 +98,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		
 		echo "</select> / <select id='{$this->parent_id}_{$field}_yy' type='text' name='{$field}_yy'><option value=''></option>";
 		
-		for($i = 1900; $i < 2014; ++$i)
+		for($i = 1900; $i <= date('Y'); ++$i)
 		{
 			option($i, $i, $year);
 		}
