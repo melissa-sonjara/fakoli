@@ -860,7 +860,7 @@ var ProgressiveSearch = new Class({
 		{
 			this.browseButton = new Element('a', {'href': '#', 'class': 'button', 'text': 'Browse'});
 			this.browseButton.setStyle('margin-left', 5);
-			this.browseButton.addEvent('click', function(e) { new Event(e).stop(); this.browse();}.bind(this));
+			this.browseButton.addEvent('click', function(e) { new Event(e).stop(); this.element.focus(); this.browse();}.bind(this));
 			this.browseButton.inject(this.element, 'after');
 		}
 	},
