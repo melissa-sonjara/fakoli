@@ -1514,7 +1514,11 @@ var ScrollWatcher = new Class(
 	}
 });
 
-window.addEvent('domready', function() { document.focusWatcher = new FocusWatcher(); document.scrollWatcher = new ScrollWatcher(); });
+window.addEvent('domready', function() 
+{ 
+	document.focusWatcher = new FocusWatcher(); 
+	document.scrollWatcher = new ScrollWatcher(); 
+});
 
 // Implement reload() for page elements that supply data-url
 window.addEvent('domready', function()
