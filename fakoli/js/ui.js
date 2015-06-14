@@ -1452,7 +1452,7 @@ var ScrollWatcher = new Class(
 	watch: function(position, element, above, below)
 	{
 		element = document.id(element);
-		if (!element) return;
+		if (!element) return this;
 		
 		window.addEvent('scroll', function() { this.onScroll(position, element, above, below);}.bind(this));
 		return this;
