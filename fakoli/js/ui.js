@@ -470,7 +470,7 @@ var ModalDialog = new Class(
     	}
     },
     
-    hide: function()
+    hide: function(whenDone)
     {
     	this.fireEvent('hide', this);
     	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
@@ -479,6 +479,7 @@ var ModalDialog = new Class(
     	this.element.setStyle('display', 'none');
     	if (this.remoteURL) this.element.dispose();
     	this.removeResizeHook();
+    	if (whenDone) whenDone();
     }
 });
 
