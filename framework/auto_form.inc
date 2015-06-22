@@ -78,6 +78,7 @@ class AutoForm
 	var $passwordEnterLabel = "Enter";		///< Text for Password Enter label
 	var $passwordConfirmLabel = "Confirm";	///< Text for Password Confirm label
 	
+	var $onSavePreProcess = null; ///< Callback event handler that is fired after field have been preprocessed, but before the data has been saved to the database.
 	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
 	var $onDelete = "";					///< delete method name
@@ -1288,6 +1289,14 @@ class AutoForm
 
 		$this->preProcessFields($pk, $filter);
 	
+		if ($this->onSavePreProcess)
+		{
+			if (!call_user_func_array($this->onSavePreProcess, array($this))) 
+			{
+				return $this->handlePartialSave(false);
+			}
+		}
+		
 		if ($this->customSaveHandler)
 		{
 			if (!call_user_func_array($this->customSaveHandler, array($this))) 
