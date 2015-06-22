@@ -181,10 +181,12 @@ function showToolTip(link, evt, id, handlerURL, width)
 	tip.show(link, evt, handlerURL);
 };
 
-function showTextToolTip(link, evt, id, text, width)
+function showTextToolTip(link, evt, id, text, width, position, edge)
 {
 	var tip = ToolTip.getToolTip(id);
 	if (width) tip.options.width = width;
+	if (position) tip.options.position = position;
+	if (edge) tip.options.edge = edge;
 	tip.showText(link, evt, text);
 }
 
