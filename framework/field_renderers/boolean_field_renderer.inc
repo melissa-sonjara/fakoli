@@ -70,7 +70,7 @@ class BooleanFieldRenderer extends FieldRenderer
 	{		
 		$this->_startField($field);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
-		$onClick = ($this->onClick) ? " onclick='return {$this->onClick)(this.checked);'" : "";
+		$onClick = ($this->onClick) ? " onclick='return {$this->onClick}(this.checked);'" : "";
 		echo "<input id='{$this->parent->id}_{$field}' type='checkbox' class='checkbox' value='1' name='$field'";
 		if ($this->parent->data->get($field))
 		{
