@@ -151,7 +151,7 @@ var AutoFormManager = new Class(
 	
 	setSubmitEnabled: function(enabled)
 	{
-		var submitButton = this.getSubmitButton();
+		var submitButton = this.getSubmitButton(); 
 		submitButton.disabled = !enabled;
 	}
 });
