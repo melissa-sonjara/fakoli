@@ -1693,11 +1693,7 @@ class SignatureValidator extends AbstractValidator
 
 		$value = $_POST[$this->field];
 
-		if (!isset($value) || $value === $this->empty)
-		{
-			return "{$this->title} is a required field.";
-		}
-		else
+		if (isset($value) && $value !== $this->empty)
 		{
 			$hash = $user->hashPassword($value, $user->password);
 
