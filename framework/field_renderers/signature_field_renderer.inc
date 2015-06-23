@@ -63,6 +63,8 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	{
 		global $user;
 		
+		if (!$_POST[$field]) return;
+		
 		$obj = $this->parent->data;
 		$obj->set($field, $user->hashPassword($_POST[$field]).":".today().":".$user->get($user->getPrimaryKey()));
 	}
