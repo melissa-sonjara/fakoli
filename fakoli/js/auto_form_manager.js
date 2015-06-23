@@ -127,5 +127,31 @@ var AutoFormManager = new Class(
 		});
 		
 		request.post();
+	},
+	
+	getSubmitButton: function()
+	{
+		var submitID = this.form.id + "_submitButton";
+		var submitButton = document.id(submitID);
+		return submitButton;
+	},
+	
+	setSubmitLabel: function(text)
+	{
+		var submitButton = this.getSubmitButton();
+		if (submitButton.tagName == 'A' || submitButton.tagName == "BUTTON")
+		{
+			submitButton.set('html', text);
+		}
+		else
+		{
+			submitButton.set('value', text);
+		}
+	},
+	
+	setSubmitEnabled: function(enabled)
+	{
+		var submitButton = this.getSubmitButton();
+		submitButton.disabled = !enabled;
 	}
 });
