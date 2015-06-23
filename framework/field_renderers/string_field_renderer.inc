@@ -117,7 +117,7 @@ class StringFieldRenderer extends FieldRenderer
 		
 		if (!$onkeypress && $this->onKeyPress)
 		{
-			$onkeypress = " onkeypress='{$this->onKeyPress}(this);'";
+			$onkeypress = " onkeyup='return {$this->onKeyPress}(this);'";
 		}
 		
 		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";		
