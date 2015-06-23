@@ -1011,7 +1011,7 @@ class AutoForm
 		}
 		else
 		{
-			echo "<input type='submit' id='{$submitID]' class='{$this->buttonCSS}' name='Submit' value='$submitLabel' ondblclick='return false;'/>";
+			echo "<input type='submit' id='{$submitID}' class='{$this->buttonCSS}' name='Submit' value='$submitLabel' ondblclick='return false;'/>";
 		}
 
 		if ($obj->get($pk) && $this->allowDelete)
