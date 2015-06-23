@@ -68,6 +68,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $width = "";			///< Optionally specify a CSS width for the field
 	var $CSSclass = "";			///< Optionally specify a CSS class for the field
 	var $numeric = false;		///< Restrict to numeric input
+	var $onKeyPress = null;		///< Optional key press javascript callback. Note that if $limit is set, it will override this.
 	
 	function StringFieldRenderer(&$parent)
 	{
@@ -112,6 +113,11 @@ class StringFieldRenderer extends FieldRenderer
 		{
 			echo "<div>";
 			$onkeypress = " onkeyup='{$field}_keyup(event);'";
+		}
+		
+		if (!$onkeypress && $this->onKeyPress)
+		{
+			$onkeypress = " onkeypress='{$this->onKeyPress}(this);'";
 		}
 		
 		$autocomplete = (!$this->autocomplete) ? "autocomplete='off' " : "";		
