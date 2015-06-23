@@ -39,9 +39,14 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class BooleanFieldRenderer extends FieldRenderer
 {
-	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
-	var $template = "Yes/No"; // How to format read only
+	var $disable = false; ///, alternative to readonly; field can be reenabled thru javascript
+	var $template = "Yes/No"; ///< How to format read only
+	var $onClick = null; ///< Name of Javascript function to be called when checkbox is toggled
 	
+	/**
+	 * Create a new BooleanFieldRenderer
+	 * @param AutoForm $parent the parent form
+	 */
 	function BooleanFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);	
@@ -65,13 +70,13 @@ class BooleanFieldRenderer extends FieldRenderer
 	{		
 		$this->_startField($field);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
-
+		$onClick = ($this->onClick) ? " onclick='return {$this->onClick)(this.checked);'" : "";
 		echo "<input id='{$this->parent->id}_{$field}' type='checkbox' class='checkbox' value='1' name='$field'";
 		if ($this->parent->data->get($field))
 		{
 			echo " checked";
 		}
-		echo " $disable>&nbsp;<label for='$field'>";
+		echo " {$disable}{$onClick}>&nbsp;<label for='$field'>";
 		echo $this->_getLabel($field, false);
 		echo "</label>";
 
