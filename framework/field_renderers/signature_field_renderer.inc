@@ -32,7 +32,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	{
 		if ($this->parent->data->get($field))
 		{
-			$this-renderReadOnly($field);
+			$this->renderReadOnly($field);
 		}
 		else
 		{
