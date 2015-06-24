@@ -24,7 +24,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		$this->parent->validator->add(new SignatureValidator($field, $label, $this->errorMessage));
 		if ($required)
 		{
-			$this->parent->required($field);
+			$this->parent->validator->add(new RequiredValidator($field, $label));
 		}
 	}
 	
