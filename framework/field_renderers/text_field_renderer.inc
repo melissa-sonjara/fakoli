@@ -98,7 +98,7 @@ class TextFieldRenderer extends FieldRenderer
 		if ($style) $style = "style='$style'";
 		
 		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $style $disable $onkeypress>";
-		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_SUBSTITUTE, $this->encoding);
+		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_IGNORE, $this->encoding);
 		echo "</textarea>";
 		
 		if ($this->limit)
@@ -115,7 +115,7 @@ class TextFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 
-		$text = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		$text = htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_IGNORE, 'UTF-8');
 		$text = str_replace("\n", "<br/>", $text);
 		echo $text;
 
