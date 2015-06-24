@@ -472,7 +472,7 @@ function htmlsafe($str)
 
 function cleanHTMLTags($str)
 {
-	return str_replace(array("<", ">", array("&lt;", "&gt;"), $str);
+	return str_replace(array("<", ">"), array("&lt;", "&gt;"), $str);
 }
 
 function HTMLToText($html)
