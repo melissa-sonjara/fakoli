@@ -28,6 +28,18 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		}
 	}
 	
+	function renderField($field = "")
+	{
+		if ($this->parent->data->get($field))
+		{
+			$this-renderReadOnly($field);
+		}
+		else
+		{
+			parent::renderField($field);
+		}
+	}
+	
 	function renderReadOnly($field = "")
 	{
 		if (!$field) $field = $this->field;
