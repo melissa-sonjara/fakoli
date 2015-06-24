@@ -45,7 +45,7 @@ class TextFieldRenderer extends FieldRenderer
 	var $colspan = 2;
 	var $limit = 0;
 	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
-	var $encoding = "ISO-8859-1";
+	var $encoding = "UTF-8";
 	var $style;
 	
 	function TextFieldRenderer(&$parent)
