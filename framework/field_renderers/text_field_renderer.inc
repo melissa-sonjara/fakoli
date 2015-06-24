@@ -55,7 +55,7 @@ class TextFieldRenderer extends FieldRenderer
 		$this->FieldRenderer($parent);
 		
 		$this->annotateBefore = true;
-		if ($config["encoding"]) $this->encoding = $config["encoding"]);
+		if ($config["encoding"]) $this->encoding = $config["encoding"];
 	}
 	
 	function renderScript($field)
