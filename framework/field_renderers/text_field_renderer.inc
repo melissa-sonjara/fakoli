@@ -98,7 +98,8 @@ class TextFieldRenderer extends FieldRenderer
 		if ($style) $style = "style='$style'";
 		
 		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $style $disable $onkeypress>";
-		echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_IGNORE, $this->encoding);
+		echo cleanHTMLTags($this->parent->data->get($field));
+		//echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_IGNORE, $this->encoding);
 		echo "</textarea>";
 		
 		if ($this->limit)
