@@ -586,6 +586,7 @@ var FloatingDialog = new Class(
     
     hide: function()
     {
+    	this.fireEvent('hide', this);
     	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
     	new Fx.Tween(this.element).start('opacity', 0).chain(function() {  this.element.setStyle('display', 'none');}.bind(this));
     }
