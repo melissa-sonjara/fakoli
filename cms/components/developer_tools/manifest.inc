@@ -22,14 +22,18 @@ class DeveloperToolsManifest
 				"Content Inventory"	=>	array("page"	=>	"/admin/content_inventory",
 										  	  "role"	=>	"admin",
 										  	  "weight"	=>	1),
-				
-				"Event Map"			=>	array("page"	=>	"/admin/event_map",
+					
+				"Section Map"		=>	array("page"	=>	"/admin/section_map",
 											  "role"	=>	"admin",
 											  "weight"	=>	2),
+					
+				"Event Map"			=>	array("page"	=>	"/admin/event_map",
+											  "role"	=>	"admin",
+											  "weight"	=>	3),
 				
 				"Test PHP CLI"		=>	array("page"	=>	"/admin/test_php_cli",
 											  "role"	=>	"admin",
-											  "weight"	=>	3)
+											  "weight"	=>	4)
 			)
 		);
 	}
