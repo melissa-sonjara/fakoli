@@ -206,6 +206,28 @@ class GroupedDataListView
 	}
 
 	/**
+	 * Adds a column definition to the DataListView that is only output when exporting the table to Excel.
+	 * Use this method for extended detail columns when space is constrained on the page but more details might
+	 * be useful in an exported spreadsheet
+	 * @param $title the title of the column
+	 * @param $format the formatter for the column, either as a formatting string or callback function.
+	 * (For details on format template specifications, see comments above class DataItem function format.)
+	 * @param $sortable whether this column is sortable
+	 * @param $style any inline styles specific to this column
+	 * @param $typeHint hint for cell type to use when exporting to Excel
+	 * @param $onExport optional callback function to format value for Excel
+	 * @param string $sortFormat Optional explicit format to use as the basis for sorting
+	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
+	 */
+	function exportColumn($title, $format, $sortable = false, $style = null, $typeHint = null, $onExport = null, $sortFormat = null)
+	{
+		$column = new DataColumn($title, $format, $sortable, $style, $typeHint, $onExport, $sortFormat);
+		$column->exportOnly = true;
+		$this->columns[] = $column;
+		return $this;
+	}
+	
+	/**
 	 * Adds a selector column to the DataListView. If no format is specified
 	 * then selection is handled via a checklist box for the list objects' primary keys.
 	 * @param $format (optional) format to use for the selector
@@ -430,6 +452,8 @@ class GroupedDataListView
 			
 			foreach($this->columns as $column)
 			{
+				if ($column->exportOnly) continue;
+				
 				$attrs = "";
 				$cssClass = "nosort";
 				if ($column->style)
@@ -500,6 +524,8 @@ class GroupedDataListView
 <?
 						foreach($this->columns as $column)
 						{
+							if ($column->exportOnly) continue;
+				
 							$attrs = "";
 							if ($column->style)
 							{
