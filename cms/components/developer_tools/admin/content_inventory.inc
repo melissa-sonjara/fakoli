@@ -21,7 +21,7 @@ foreach(array_keys($itemsByType) as $group)
 
 $table->mode = "tree";
 $table->groupAsWorksheets = true;
-$table->excelFile = codify($config['site_name']."_content_inventory").".xls";
+$table->excelFile = codify($config['sitename']."_content_inventory").".xls";
 
 $script .= $table->writeScript();
 $table->drawView();

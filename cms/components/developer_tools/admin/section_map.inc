@@ -36,7 +36,7 @@ foreach($sections as $section)
 
 $table->mode = "tree";
 $table->groupAsWorksheets = true;
-$table->excelFile = codify($config['site_name']."_section_map").".xls";
+$table->excelFile = codify($config['sitename']."_section_map").".xls";
 
 $script .= $table->writeScript();
 
