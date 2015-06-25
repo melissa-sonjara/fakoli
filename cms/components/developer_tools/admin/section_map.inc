@@ -18,7 +18,7 @@ $sections = Query::create(Section, "WHERE site_id=:s ORDER BY section")
 				 ->bind(":s", $site_id)
 				 ->execute();
 
-$itemsByType = IndexedQuery::create(SectionContent, "WHERE section_id IN (SELECT section_id FROM section WHERE site_id=:s", "section_id")
+$itemsByType = IndexedQuery::create(SectionContent, "WHERE section_id IN (SELECT section_id FROM section WHERE site_id=:s)", "section_id")
 						   ->bind(":s", $site_id)
 						   ->execute();
 
