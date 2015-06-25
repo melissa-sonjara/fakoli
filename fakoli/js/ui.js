@@ -384,7 +384,7 @@ var ModalDialog = new Class(
     	
     	var x = (windowSize.width - this.element.offsetWidth) / 2;
     	var y = (windowSize.height - this.element.offsetHeight) / 2;
-    	this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});
+    	this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 10000});
     },
     
     show: function(onComplete, fragmentURL)
