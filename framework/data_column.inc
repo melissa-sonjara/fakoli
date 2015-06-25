@@ -37,13 +37,15 @@
  */
 class DataColumn
 {
-	var $template;		///< The formatting template or formatter function for this data column
-	var $sortable;		///< Boolean value indicating whether this column is sortable
-	var $title;			///< The title text for this column
-	var $style;			///< Any CSS styles to be applied to this column
-	var $typeHint;		///< Hint to the Excel formatter about the data type to export
-	var $onExport; 		///< Optional user callback function for exporting the column.
-	var $sortFormat;	///< Optional explicit format to use as the basis for sorting
+	var $template;				///< The formatting template or formatter function for this data column
+	var $sortable;				///< Boolean value indicating whether this column is sortable
+	var $title;					///< The title text for this column
+	var $style;					///< Any CSS styles to be applied to this column
+	var $typeHint;				///< Hint to the Excel formatter about the data type to export
+	var $onExport; 				///< Optional user callback function for exporting the column.
+	var $sortFormat;			///< Optional explicit format to use as the basis for sorting
+	var $exportOnly = false;	///< Boolean value indicating that the column should only be rendered when exporting to Excel
+	
 	/**
 	 * Creates a new DataColumn. Generally this function should not be invoked directly,
 	 * but should be accessed through the DataListView::column() method.
