@@ -195,6 +195,7 @@ class DataListView implements FacetFilterable
 		$this->columns[] = $column;
 		return $this;
 	}
+	
 	/**
 	 * Override the column order
 	 * @param array $order An array of column titles in the order they are to be displayed
