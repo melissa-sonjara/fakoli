@@ -24,7 +24,7 @@ $itemsByType = IndexedQuery::create(SectionContent, "WHERE section_id IN (SELECT
 
 $table = new GroupedDataListView($itemsByType, "items_by_type");
 $table->column("Identifier", "<strong>{identifier}</strong>", true, "width: 20%")
-	  ->column("Roles", "{roles:/,/, /}", true, "width: 40%")
+	  ->column("Roles", "{role:/,/, /}", true, "width: 40%")
 	  ->column("Permissions", "{permissions:/,/, /}", true)
 	  ->column("Template", "{template}", true)
 	  ->column("SSL", "{use_SSL:Yes/No}", true);
