@@ -304,7 +304,8 @@ var AbstractDialog = new Class(
     	
     	dialog.setStyles({'display': 'none',
     					  'width': this.options.width,
-    					  'height': this.options.height});
+    					  'height': this.options.height,
+    					  'zIndex': 10000});
     	
     	var dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
     	
