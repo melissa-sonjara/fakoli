@@ -304,8 +304,7 @@ var AbstractDialog = new Class(
     	
     	dialog.setStyles({'display': 'none',
     					  'width': this.options.width,
-    					  'height': this.options.height,
-    					  'zIndex': 10000});
+    					  'height': this.options.height});
     	
     	var dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
     	
@@ -531,7 +530,7 @@ var FloatingDialog = new Class(
 			pos = (this.draggable || noFixed) ? 'absolute' : 'fixed';
 		}
 		
-		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 150});
+		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 10000});
     },
     
     
