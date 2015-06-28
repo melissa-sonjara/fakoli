@@ -30,7 +30,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	
 	function renderField($field = "")
 	{
-		if ($form->msg)
+		if ($this->parent->msg)
 		{
 			//Clear out field if the form is in error, to force user to re-enter
 			$this->parent->data->set($field, '');
