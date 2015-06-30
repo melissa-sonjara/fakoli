@@ -209,9 +209,9 @@ Window.implement(
 
 });
 
-function modalPopup(title, url, width, height, returnPopup, draggable)
+function modalPopup(title, url, width, height, returnPopup, draggable, clazz)
 {
-	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable});
+	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz});
 	popup.show(null, url);
 	if (returnPopup) return popup;
 }
@@ -221,18 +221,18 @@ function hideModalPopup(popup)
 	if (popup) popup.hide();
 }
 
-function messagePopup(title, message, width, height, returnPopup, draggable)
+function messagePopup(title, message, width, height, returnPopup, draggable, clazz)
 {
-	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable});
+	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz});
 	popup.options.body.set('html', message);
 	popup.show();
 	if (returnPopup) return popup; 
 }
 
 
-function floatingPopup(id, title, url, width, height, returnPopup, draggable)
+function floatingPopup(id, title, url, width, height, returnPopup, draggable, clazz)
 {
-	var popup = new FloatingDialog(id, {'title': title, 'width': width, 'height': height, 'draggable': draggable});
+	var popup = new FloatingDialog(id, {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz});
 	popup.show(null, url);
 	if (returnPopup) return popup;
 }
@@ -253,7 +253,8 @@ var AbstractDialog = new Class(
 		top: 	   Class.Empty,
 		left:	   Class.Empty,
 		position:  Class.Empty,
-		onHide:		function() {}
+		onHide:		function() {},
+		'class':	null
 	},
 	
     element: Class.Empty,
@@ -267,6 +268,11 @@ var AbstractDialog = new Class(
     	if (!this.element)
     	{
     		this.element = this.createDialog(element);
+    	}
+    	
+    	if (this.options.class)
+    	{
+    		this.element.addClass(class);
     	}
     	
     	if (this.element) this.element.setStyle('display', 'none');
