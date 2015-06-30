@@ -272,7 +272,7 @@ var AbstractDialog = new Class(
     	
     	if (this.options.class)
     	{
-    		this.element.addClass(class);
+    		this.element.addClass(this.options.class);
     	}
     	
     	if (this.element) this.element.setStyle('display', 'none');
