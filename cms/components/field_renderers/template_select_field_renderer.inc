@@ -56,6 +56,7 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 		$site = $this->getSite($form);
 		$directory = $site->getThemeDirectory();
 		$options = $this->readFiles($directory, "");
+		$options = array_merge(array("" => ""), $options);
 		
 		return $options;
 	}
