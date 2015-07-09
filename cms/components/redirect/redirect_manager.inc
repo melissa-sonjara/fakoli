@@ -67,7 +67,7 @@ class RedirectManager
 			Cache::put("resource_overrides", $overrides);
 		}
 		
-		if (array_key_exists($overrides, $path))
+		if (array_key_exists($path, $overrides))
 		{
 			$redirect = $overrides[$path];
 			redirect($redirect->redirect_to);
