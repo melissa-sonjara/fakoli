@@ -50,6 +50,29 @@ class RedirectManager
 		return $identifier;
 	}
 		
+	static function handleOverrides($identifier)
+	{
+		global $section;
+		$path = "";
+		if ($section->section != "/") $path .= "/" . $section->section;
+		$path .= "/" . $identifier;
+	
+		trace("Redirect: $path", 3);
+	
+		$overrides = Cache::get("resource_overrides");
+		
+		if (!$overrides)
+		{
+			$overrides = IndexedQuery::create(Redirect, "WHERE override=1", "redirect_from")->execute();
+			Cache::put("resource_overrides", $overrides);
+		}
+		
+		if (array_key_exists($overrides, $path))
+		{
+			$redirect = $overrides[$path];
+			redirect($redirect->redirect_to);
+		}
+	}
 }
 
 ?>

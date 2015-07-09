@@ -9,6 +9,7 @@ class Redirect extends DataItem
 						"redirect_to"	=>	String,
 						"user_id"		=>	Number,
 						"active"		=>	Boolean,
+						"override"		=>	Boolean,
 						"last_modified"	=>	Timestamp);
 	
 	var $relations = array("User"	=>	"");

@@ -22,3 +22,9 @@ CREATE TABLE redirect
 ) ENGINE=InnoDB;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE redirect ADD COLUMN override tinyint(3) not null default 0;
+
+-- END Version 1.1

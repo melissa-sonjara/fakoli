@@ -719,7 +719,9 @@ class Fakoli
 		try
 		{
 			$section = Section::createFromIdentifier($sectionIdentifier);
-			
+
+			ComponentManager::fireEvent("OverrideResource", $identifier);
+					
 			if (!$page_id && !$identifier)
 			{
 				redirect($section->getDefaultPage());

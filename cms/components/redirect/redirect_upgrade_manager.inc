@@ -14,7 +14,8 @@ Fakoli::using("redirect", "component");
 class RedirectUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
-		"1.0"	=>	"sql:Added redirect table"
+		"1.0"	=>	"sql:Added redirect table",
+		"1.1"	=>	"sql:Added override field to redirect table"
 	);
 
 	function RedirectUpgradeManager()

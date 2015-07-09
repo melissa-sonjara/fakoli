@@ -24,6 +24,7 @@ if ($method == "POST")
 	if ($form->save())
 	{
 		Fakoli::notifyOnNextPage($form->deleted ? "Redirect remoted" : "Redirect added");
+		Cache::invalidate("resource_overrides");
 		redirect("/admin/redirects");
 	}
 }

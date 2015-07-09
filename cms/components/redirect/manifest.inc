@@ -33,7 +33,8 @@ class RedirectManifest
 		return array(
 					"upgradeComponent"		=>	array(RedirectManager, upgradeComponent),
 					"ComponentScanComplete"	=>	array(RedirectManager, setDefaults),
-					"ResourceNotFound"	 	=>	array(RedirectManager, handleRedirects)
+					"ResourceNotFound"	 	=>	array(RedirectManager, handleRedirects),
+					"OverrideResource"		=>	array(RedirectManager, handleOverrides)
 		);
 	}
 }
