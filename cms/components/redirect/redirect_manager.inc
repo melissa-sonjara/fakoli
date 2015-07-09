@@ -73,6 +73,13 @@ class RedirectManager
 			redirect($redirect->redirect_to);
 		}
 	}
+	
+
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("redirect", "Redirect Rules", new SimpleSerializationHandler(Redirect));
+		return true;
+	}
 }
 
 ?>
