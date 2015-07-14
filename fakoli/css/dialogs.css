@@ -58,7 +58,7 @@
 	background-color: #fff;
 	text-align: left;
 	border: solid 1px #666;
-	z-index: 250;
+	z-index: 11000;
 }
 
 .progressive_search a
