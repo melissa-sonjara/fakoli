@@ -109,6 +109,7 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "sitename", $sitename, "String", "", "General");
 		Settings::setDefaultValue("settings", "wrap_modules", true, Boolean, "Specifies whether to wrap module output in a div tag, or render them bare", "General");
 		Settings::setDefaultValue("settings", "system_notification_email", $config["email_contact"], String, "The email address to which system notifications should be sent", "General");
+		Settings::setDefaultValue("settings", "local_IP_address", "", String, "Specifies the server's local IP address for environments (such as Microsoft Azure) where this cannot be determined automatically", "General");
 		
 		Settings::setDefaultValue("settings", "formCSS", "form", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "labelCSS", "label", "String", "", "AutoForm");

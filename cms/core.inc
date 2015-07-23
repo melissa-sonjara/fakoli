@@ -319,6 +319,15 @@ class Fakoli
 	}
 	
 	/**
+	 * Returns the local IP address for the server
+	 */
+	static function getLocalIP()
+	{
+		$ip = Settings::getValue("settings", "local_IP_address");
+		return ($ip) ? $ip : $_SERVER["SERVER_ADDR"];
+	}
+	
+	/**
 	 * Uses the specified framework file(s) from the framework directory.
 	 */
 	static function usingFile()
