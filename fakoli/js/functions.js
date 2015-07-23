@@ -236,6 +236,19 @@ function findAncestor(element, tag)
 	return null;		
 }
 
+function calculateZIndex(element)
+{
+	var zIndex = element.getComputedStyle('z-index');
+	if (zIndex != 'auto' && zIndex != 0)
+	{
+		return zIndex;
+	}
+	
+	var parent = element.getParent();
+	if (!parent) return 0;
+	return calculateZIndex(parent)
+}
+
 function appendQueryString(url, params)
 {
 	url += url.indexOf("?") >= 0 ? "&" : "?";
