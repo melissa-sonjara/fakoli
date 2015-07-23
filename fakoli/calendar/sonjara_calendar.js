@@ -279,7 +279,7 @@ var Calendar = new Class(
 	{
 		parent = document.id(parent);
 		
-		var zIndex = parent.getStyle('z-index') + 5;
+		var zIndex = calculateZIndex(parent) + 1;
 		
 		if (!this.form) this.bindControl();
 		this.draw();
