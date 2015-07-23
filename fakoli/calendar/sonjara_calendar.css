@@ -38,7 +38,7 @@ TD.calday
 	text-align: right;
 	font-size: 8pt;
 	width: 13%;
-	height: 8pt;
+	height: 20px;
 	background-color: white;
 }
 
@@ -48,7 +48,7 @@ TD.caltoday
 	text-align: right;
 	font-size: 8pt;
 	width: 13%;
-	height: 8pt;
+	height: 20px;
 	background-color: yellow;
 }
 
@@ -102,7 +102,7 @@ TD.calday A
   padding-left: 1px;  
   display: block;
   width: 100%;
-  height: 8pt;
+  height: 20px;
 }
 
 TD.calday A:link
@@ -142,6 +142,6 @@ TD.calselday
 	text-align: right;
 	font-size: 8pt;
 	width: 13%;
-	height: 8pt;	
+	height: 20px;	
 }
 
