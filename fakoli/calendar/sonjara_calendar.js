@@ -279,10 +279,12 @@ var Calendar = new Class(
 	{
 		parent = document.id(parent);
 		
+		var zIndex = parent.getStyle('z-index') + 5;
+		
 		if (!this.form) this.bindControl();
 		this.draw();
 		
-		this.calendar.setStyles({position: "absolute", display: 'block', 'opacity': 0});
+		this.calendar.setStyles({position: "absolute", display: 'block', 'opacity': 0, 'z-index': zIndex});
 		this.calendar.position({'relativeTo': parent, 'position': 'topRight', 'offset': {'x': 0, 'y': 0} });
 		this.calendar.fade('in');
 		
