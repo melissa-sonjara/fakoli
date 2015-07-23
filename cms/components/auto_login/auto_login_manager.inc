@@ -84,6 +84,7 @@ class AutoLoginManager
 				
 				if (!$match) 
 				{
+					trace("Unauthorized IP Address: {$_SERVER["REMOTE_ADDR"]}", 1);
 					throw new FakoliException("Access Denied");
 				}
 			}
