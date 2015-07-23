@@ -127,7 +127,7 @@ class AutoLoginManager
 	{
 		global $user;
 
-		if (!$ip_addr) $ip_addr = $_SERVER["SERVER_ADDR"];
+		if (!$ip_addr) $ip_addr = Fakoli::getLocalIP();
 		
 		$token = new AuthenticationToken();
 		
