@@ -109,6 +109,7 @@ class AutoLoginManager
 		}
 		catch(Exception $e)
 		{
+			trace("Authentication Failed: ".$e->getMessage(), 1);
 			throw new FakoliException("Authentication Failed");
 		}
 	}
