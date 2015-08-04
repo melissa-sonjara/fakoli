@@ -415,11 +415,12 @@ abstract class AbstractJoin
 							
 							$key = $line[$keyAlias];
 							
-							trace("$keyAlias = {$key}", 3);
+							//trace("$keyAlias = {$key}", 3);
 							//trace(print_r(array_keys($line), true), 3);
 							
 							if (array_key_exists($key, $lookup['items']))
 							{
+								trace("Pseudo Match found for $keyAlias = $key",3);
 								$item->$class = $lookup['items'][$key];
 								break;
 							}
