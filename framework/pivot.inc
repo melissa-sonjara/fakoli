@@ -277,6 +277,19 @@ abstract class AbstractPivotQuery extends AbstractQuery
 	{
 		return new PivotItem($this->fields, $this->baseClass, $this->baseItem->getPrimaryKey(), $this->fieldAliases);
 	}
+	
+	/**
+	 * Register additional fields from the base to be included in the PivotItem output
+	 */
+	function additionalFields()
+	{
+		for($i = 0; $i < func_num_args(); ++$i)
+		{
+			$field = func_get_arg($i);
+			$this->additionalFields[] = "b.{$field} as {$field}";
+		}
+		return $this;
+	}
 }
 
 /**
