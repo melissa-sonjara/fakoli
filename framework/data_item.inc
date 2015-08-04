@@ -981,7 +981,7 @@ class DataItem extends AbstractDataItem
 		
 		if (isset($this->calculatedFields))
 		{
-			foreach($this->calculateFields as $field => $expr)
+			foreach($this->calculatedFields as $field => $expr)
 			{
 				$this->$field = $from->$field;
 			}
