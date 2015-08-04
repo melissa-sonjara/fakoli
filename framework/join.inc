@@ -420,7 +420,7 @@ abstract class AbstractJoin
 							
 							if (array_key_exists($key, $lookup['items']))
 							{
-								trace("Pseudo Match found for $keyAlias = $key",3);
+								//trace("Pseudo Match found for $keyAlias = $key",3);
 								$item->$class = $lookup['items'][$key];
 								break;
 							}
