@@ -978,6 +978,14 @@ class DataItem extends AbstractDataItem
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
 			$this->$field = $from->$field;
 		}
+		
+		if (isset($this->calculatedFields))
+		{
+			foreach($this->calculateFields as $field => $expr)
+			{
+				$this->$field = $from->$field;
+			}
+		}	
 	}
 	
 	function cacheLookup($id)
