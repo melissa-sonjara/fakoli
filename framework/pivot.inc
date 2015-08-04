@@ -286,7 +286,12 @@ abstract class AbstractPivotQuery extends AbstractQuery
 		for($i = 0; $i < func_num_args(); ++$i)
 		{
 			$field = func_get_arg($i);
-			$this->additionalFields[] = "b.{$field} as {$field}";
+			$type = $this->baseItem->getType($field);
+			if ($type)
+			{
+				$this->fields[$field] = $type;
+				$this->additionalFields[] = "b.{$field} as {$field}";
+			}
 		}
 		return $this;
 	}
