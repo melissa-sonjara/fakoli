@@ -413,6 +413,8 @@ abstract class AbstractJoin
 					
 							$key = $line[$keyAlias];
 							
+							trace("$keyAlias = {$key}", 3);
+							
 							if (array_key_exists($key, $lookup['items']))
 							{
 								$item->$class = $lookup['items'][$key];
