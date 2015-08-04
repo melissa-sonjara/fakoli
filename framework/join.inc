@@ -96,7 +96,7 @@ class JoinResult
 			$class = $match[1];
 			$subtemplate = $match[2];
 	
-			$value = $this->$class->format("{".$subtemplate."}");
+			$value = is_object($this->$class) ? $this->$class->format("{".$subtemplate."}") : "";
 			
 			$template = str_replace($match[0], $value, $template);
 		}
