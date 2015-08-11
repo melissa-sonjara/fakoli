@@ -1819,6 +1819,50 @@ function sortList(&$list, $field)
 	return $list;
 }
 
+/**
+ * Utility method to update sort order for the selected class of objects based
+ * on an array that maps primary keys to sort order values. This method is designed
+ * to make drag and drop sorting easier to implement.
+ * @param string $class the class of DataItem that is being resorted
+ * @param string $field the field that contains the sort order value
+ * @return true if the reordering is successful, false if an error was encountered
+ */
+function updateSortOrder($class, $field = "sort_order", $params = null)
+{
+	if (!$params) $params = $_GET;
+	$obj = new $class;
+	$pk = $obj->getPrimaryKey();
+	
+
+	$tx = new DataTransaction();
+	
+	try
+	{
+		foreach($params[$pk] as $id => $sort_order)
+		{
+			checkNumeric($id);
+			checkNumeric($sort_order);
+	
+			$item = new $class();
+			$item->joinTransaction($tx);
+	
+			$item->filter = new InclusionFilter($pk, $field);
+	
+			$item->load($id);
+			$item->set($field, $sort_order);
+			$item->save();
+		}
+	
+		$tx->commit();
+		return true;
+	}
+	catch(Exception $e)
+	{
+		$tx->rollback();
+		return false;
+	}
+}
+
 function toXML($tag, $objects, $header = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>")
 {
 	$xml = "$header\n<$tag>\n";
