@@ -1825,7 +1825,6 @@ function sortList(&$list, $field)
  * to make drag and drop sorting easier to implement.
  * @param string $class the class of DataItem that is being resorted
  * @param string $field the field that contains the sort order value
- * @return true if the reordering is successful, false if an error was encountered
  */
 function updateSortOrder($class, $field = "sort_order", $params = null)
 {
@@ -1833,7 +1832,6 @@ function updateSortOrder($class, $field = "sort_order", $params = null)
 	$obj = new $class;
 	$pk = $obj->getPrimaryKey();
 	
-
 	$tx = new DataTransaction();
 	
 	try
@@ -1854,12 +1852,11 @@ function updateSortOrder($class, $field = "sort_order", $params = null)
 		}
 	
 		$tx->commit();
-		return true;
 	}
 	catch(Exception $e)
 	{
 		$tx->rollback();
-		return false;
+		throw $e;
 	}
 }
 
