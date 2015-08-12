@@ -134,7 +134,23 @@ var FakoliMenu = new Class({
 					"click": function()
 					{
 						style = ul.getStyle('display');
-						return (style != 'none' && !menu.opening);
+						if (Browser.name == 'safari' && menu.options.mode == 'accordion')
+						{
+							// Safari can't handle focus changes on links (!)
+							// so handle navigation via clicks instead
+							if (style == 'none')
+							{
+								menu.showMenu(this);
+							}
+							else
+							{
+								menu.hideMenu(this);
+							}
+						}
+						else
+						{
+							return (style != 'none' && !menu.opening);
+						}
 					}
 				});
 			});
