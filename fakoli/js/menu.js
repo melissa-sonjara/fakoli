@@ -138,16 +138,7 @@ var FakoliMenu = new Class({
 						{
 							// Safari can't handle focus changes on links (!)
 							// so handle navigation via clicks instead
-							if (style == 'none')
-							{
-								menu.showMenu(this.getParent());
-								return false;
-							}
-							else
-							{
-								menu.hideMenu(this.getParent());
-								return false;
-							}
+							menu.updateFocus(this);
 						}
 						else
 						{
