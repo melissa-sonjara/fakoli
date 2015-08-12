@@ -140,11 +140,11 @@ var FakoliMenu = new Class({
 							// so handle navigation via clicks instead
 							if (style == 'none')
 							{
-								menu.showMenu(this);
+								menu.showMenu(this.getParent());
 							}
 							else
 							{
-								menu.hideMenu(this);
+								menu.hideMenu(this.getParent());
 							}
 						}
 						else
