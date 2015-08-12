@@ -141,10 +141,12 @@ var FakoliMenu = new Class({
 							if (style == 'none')
 							{
 								menu.showMenu(this.getParent());
+								return false;
 							}
 							else
 							{
 								menu.hideMenu(this.getParent());
+								return false;
 							}
 						}
 						else
