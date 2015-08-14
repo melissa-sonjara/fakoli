@@ -27,7 +27,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	{		
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
-		$this->parent->validator->add(new SignatureValidator($field, $label, $this->errorMessage, $signatureField));
+		$this->parent->validator->add(new SignatureValidator($field, $label, $this->errorMessage, $this->signatureField));
 		if ($required)
 		{
 			$this->parent->validator->add(new RequiredValidator($field, $label));
