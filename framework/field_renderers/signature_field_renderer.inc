@@ -10,7 +10,12 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class SignatureFieldRenderer extends StringFieldRenderer
 {
 	var $errorMessage = "Your signature does not match your password. Please try again.";
-	function SignatureFieldRenderer(&$parent)
+	
+	var $password = true; 				///< Whether to mask the input in the signature field
+	var $autocomplete = false; 			///< Whether to allow autocomplete
+	var $signatureField = "password";	///< The field to check for a match when signing
+	
+	function SignatureFieldRenderer(&$parent, $signatureField = "password")
 	{
 		$this->StringFieldRenderer($parent);
 		$this->password = true;
@@ -21,11 +26,22 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	{		
 		$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
 		
-		$this->parent->validator->add(new SignatureValidator($field, $label, $this->errorMessage));
+		$this->parent->validator->add(new SignatureValidator($field, $label, $this->errorMessage, $signatureField));
 		if ($required)
 		{
 			$this->parent->validator->add(new RequiredValidator($field, $label));
 		}
+	}
+	
+	/**
+	 * Overrides the default field used to match when signing.
+	 * @param string $signatureField the field that is to be match (i.e. email, username)
+	 * @param string $errorMessage the error message to display when the match fails
+	 */
+	function setSignatureField($signatureField, $errorMessage)
+	{
+		$this->signatureField = $signatureField;
+		$this->errorMessage = $errorMessage;
 	}
 	
 	function renderField($field = "")
@@ -84,6 +100,13 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		if (!$_POST[$field]) return;
 		
 		$obj = $this->parent->data;
-		$obj->set($field, $user->hashPassword($_POST[$field]).":".today().":".$user->get($user->getPrimaryKey()));
+		if ($this->signatureField == "password")
+		{
+			$obj->set($field, $user->hashPassword($_POST[$field]).":".today().":".$user->get($user->getPrimaryKey()));
+		}
+		else
+		{
+			$obj->set($field, $_POST[$field]).":".today().":".$user->get($user->getPrimaryKey());
+		}
 	}
 }

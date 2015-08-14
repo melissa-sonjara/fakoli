@@ -1666,19 +1666,21 @@ ENDSCRIPT;
  */
 class SignatureValidator extends AbstractValidator
 {
-	var $msg;	///< The error message to report if there is a mismatch
-	var $empty = "";	///< Empty value for the control
-
+	var $msg;					///< The error message to report if there is a mismatch
+	var $empty = "";			///< Empty value for the control
+	var $test = "password";		///< Field to match
+	
 	/**
 	 * Create a new SignatureValidator
 	 * @param string $field
 	 * @param string $title
 	 * @param string $msg
 	 */
-	function SignatureValidator($field, $title, $msg)
+	function SignatureValidator($field, $title, $msg, $test = "password")
 	{
 		$this->AbstractValidator($field, $title);
 		$this->msg = $msg;
+		$this->test = $test;
 	}
 
 	function writeScript()
@@ -1695,13 +1697,21 @@ class SignatureValidator extends AbstractValidator
 
 		if (isset($value) && $value !== $this->empty)
 		{
-			$hash = $user->hashPassword($value, $user->password);
-
-			if($user->password == $hash)
-				return "";
+			if ($this->test == "password")
+			{
+				$hash = $user->hashPassword($value, $user->password);
+	
+				if($user->password == $hash)
+					return "";
+				else
+				{
+					trace("Signature Validator::invalid signature", 3);
+					return $this->msg;
+				}
+			}
 			else
 			{
-				trace("Signature Validator::invalid signature", 3);
+				if ($user->get($this->test) == $value) return "";
 				return $this->msg;
 			}
 		}
