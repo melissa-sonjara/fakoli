@@ -964,7 +964,8 @@ var PaginatingList = new Class(
   
 	options: 
 	{
-    	per_page: 10
+    	per_page: 10,
+    	display_mode: 'list-item'
 	},
 	
 	list: 			Class.Empty,
@@ -1088,7 +1089,7 @@ var PaginatingList = new Class(
 	    
 	    for(var i = this.low_limit; i < this.high_limit && i < kids.length; ++i)
 	    {
-	    	kids[i].setStyle('display', 'list-item');
+	    	kids[i].setStyle('display', this.options.display_mode);
 	    }
 	    
 	    for(var i = this.high_limit; i < kids.length; ++i)

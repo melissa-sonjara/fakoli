@@ -50,6 +50,8 @@ class PagedList implements FacetFilterable
 	var $writeIdTag = false;					///< whether to include an id tag for each li item
 	var $tagRowCallbacks; 						///< Array of callbacks for adding extra attributes to each row
 	var	$onStartRow;							///< Callback for setting the CSS class / visibility of each item in the list
+	var $displayMode = "list-item";				///< CSS display type for visible items.
+	
 	/**
 	 * Creates a new PagedList control.
 	 * @param array $items the array of DataItems to be displayed in the list
@@ -87,7 +89,7 @@ class PagedList implements FacetFilterable
 	<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		var <?echo $this->id?> = new PaginatingList('<?echo $this->id ?>', '<?echo $this->id?>_paginator', {per_page: <?echo $this->pageSize ?>});
+		var <?echo $this->id?> = new PaginatingList('<?echo $this->id ?>', '<?echo $this->id?>_paginator', {per_page: <?echo $this->pageSize ?>, display_mode: '<?echo $this->displayMode?>'});
 	});
 	</script>
 <?
