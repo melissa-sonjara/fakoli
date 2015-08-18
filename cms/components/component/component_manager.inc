@@ -153,6 +153,8 @@ class ComponentManager
 	 */
 	function scanAdminPages($component)
 	{
+		if (!$component->enabled) return;
+		
 		$admin = $component->component_path . DIRECTORY_SEPARATOR . "admin";
 		
 		if (!is_dir($admin)) return;
