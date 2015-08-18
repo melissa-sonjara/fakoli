@@ -63,7 +63,7 @@ class BooleanTypeRenderer extends AbstractTypeRenderer
 				$text = ($value) ? $true : $false;
 		}
 		
-		if($text === $null)
+		if($text === null)
 			$text = ($value) ? "True" : "False";
 				
 		return $text; 
