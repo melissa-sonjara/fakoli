@@ -54,6 +54,8 @@ class BooleanTypeRenderer extends AbstractTypeRenderer
 	{
 		trace("BooleanTypeRenderer template is $template and value is $value", 5);
 
+		$text = null;
+		
 		if($template)
 		{
 			list($true, $false) = explode("/", $template);
@@ -61,7 +63,7 @@ class BooleanTypeRenderer extends AbstractTypeRenderer
 				$text = ($value) ? $true : $false;
 		}
 		
-		if(!$text)
+		if($text === $null)
 			$text = ($value) ? "True" : "False";
 				
 		return $text; 
