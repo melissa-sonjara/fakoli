@@ -1960,7 +1960,6 @@ function extractFieldValues($items, $field)
  * @param $field the name of the field to extract
  * @return array an array of the field values indexed by the primary key values from the DataItem list.
  */
-
 function extractIndexedFieldValues($items, $field)
 {
 	$out = array();
@@ -1968,6 +1967,8 @@ function extractIndexedFieldValues($items, $field)
 	{
 		$out[$item->get($item->getPrimaryKey())] = $item->get($field);
 	}
+	
+	return $out;
 }
 
 
