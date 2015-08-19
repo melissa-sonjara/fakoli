@@ -1948,10 +1948,28 @@ function extractFieldValues($items, $field)
 	$out = array();
 	foreach($items as $item)
 	{
-		$out[] = $item->$field;
+		$out[] = $item->get($field);
 	}
 	return $out;
 }
+
+/**
+ * Extract the field values for the specified field from a list of DataItems and return
+ * them in an array indexed by the primary key values of the source DataItems
+ * @param $items the DataItems on which to perform the extraction
+ * @param $field the name of the field to extract
+ * @return array an array of the field values indexed by the primary key values from the DataItem list.
+ */
+
+function extractIndexedFieldValues($items, $field)
+{
+	$out = array();
+	foreach($items as $item)
+	{
+		$out[$item->get($item->getPrimaryKey())] = $item->get($field);
+	}
+}
+
 
 /**
  * Find the first item in the array that matches the supplied value for the specified field.
