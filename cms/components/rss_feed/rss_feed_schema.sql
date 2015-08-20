@@ -57,3 +57,9 @@ ALTER TABLE rss_feed_articles ADD COLUMN publish_status TINYINT(3) NOT NULL DEFA
 ALTER TABLE rss_feed_articles ADD INDEX rss_article_url_idx (rss_article_URL ASC);
 
 -- END Version 1.3
+
+-- START Version 1.4
+
+ALTER TABLE rss_feed_articles ADD COLUMN rss_article_content LONGTEXT NOT NULL ;
+
+-- END Version 1.4
