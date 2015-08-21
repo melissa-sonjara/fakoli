@@ -1331,6 +1331,8 @@ class SearchForm extends AutoForm
 			
 		if ($renderer)
 		{
+			$mode = $this->modifiers[$field];
+			
 			if(!$this->readOnlyForm)
 			{
 				$renderer->renderSearchField($field, $mode);
