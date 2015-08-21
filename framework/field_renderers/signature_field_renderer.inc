@@ -15,12 +15,11 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	var $autocomplete = false; 			///< Whether to allow autocomplete
 	var $signatureField = "password";	///< The field to check for a match when signing
 	
-	function SignatureFieldRenderer(&$parent, $signatureField = "password")
+	function SignatureFieldRenderer(&$parent)
 	{
 		$this->StringFieldRenderer($parent);
 		$this->password = true;
 		$this->autocomplete = false;
-		$this->signatureField = $signatureField;
 	}
 
 	function addValidatorsToForm($field, $required = false)
