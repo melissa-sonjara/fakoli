@@ -266,7 +266,7 @@ class SelectFieldRenderer extends FieldRenderer
 	
 	function renderSearchField($field, $mode, $value = "")
 	{
-		if ($mode != "equal") $mode = "equal";
+		if ($mode != "equal" && $mode != "member") $mode = "equal";
 		
 		$searchValue = (!$value) ? $this->parent->params->get($field, $mode) : $value;
 		
