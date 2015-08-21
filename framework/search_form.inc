@@ -1268,7 +1268,8 @@ class SearchForm extends AutoForm
 				
 				foreach($fields as $field)
 				{
-					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && 
+							($this->hasAdditional($field) || !($filter && $filter->isExcluded($field))))
 					{
 						$this->renderOneSearchField($field);
 					}					
@@ -1283,7 +1284,8 @@ class SearchForm extends AutoForm
 		
 		foreach(array_keys($this->fields) as $field)
 		{
-			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) &&
+					($this->hasAdditional($field) || !($filter && $filter->isExcluded($field))))
 			{
 				$this->renderOneSearchField($field);
 			}
