@@ -1063,7 +1063,7 @@ class AutoForm
 				foreach($fields as $field)
 				{
 					if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && 
-							(array_key_exists($field, $this->additional || !($filter && $filter->isExcluded($field))))
+							($this->hasAdditional($field) || !($filter && $filter->isExcluded($field))))
 					{
 						$this->renderOneField($field);
 					}					
@@ -1079,7 +1079,7 @@ class AutoForm
 		foreach(array_keys($this->fields) as $field)
 		{
 			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) &&
-					(array_key_exists($field, $this->additional || !($filter && $filter->isExcluded($field))))
+					($this->hasAdditional($field) || !($filter && $filter->isExcluded($field))))
 			{
 				$this->renderOneField($field);
 			}
