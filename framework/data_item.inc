@@ -325,7 +325,7 @@ class DataItem extends AbstractDataItem
 					{
 						trace('/([\s\(])'.$this->table.'\.'.$f.'\b/', 1);
 						$expr = preg_replace('/([\s\(])('.$f.')\b/', "$1{$alias}.$2", $expr);
-						$expr = preg_replace('/\b)'.$this->table.'\.'.$f.'\b/', "{$alias}.{$f}", $expr);
+						$expr = preg_replace('/\b'.$this->table.'\.'.$f.'\b/', "{$alias}.{$f}", $expr);
 					}
 				}
 				
