@@ -158,6 +158,11 @@ class AutoForm
 			$this->$field = $value;
 		}
 
+		if (!$target)
+		{
+			throw new FakoliException("Form has no target object");
+		}
+		
 		$this->data =& $target;
 		$this->method = $method;
 		$this->action = $action;
