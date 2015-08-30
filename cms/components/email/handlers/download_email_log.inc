@@ -33,6 +33,11 @@
 
 Fakoli::using("email", "settings");
 
+if (!checkRole("admin"))
+{
+	throw new FakoliException("Permission Denied");
+}
+
 $filename = mysql_escape_string($_GET["filename"]);
 
 $dir = Settings::getValue("email", "debugging_mode_output_path") . DIRECTORY_SEPARATOR;
@@ -46,7 +51,7 @@ trace("component update log download: filepath:" . $filepath, 3);
 $f = fopen($filepath, "r");
 $size = filesize($filepath);
 	
-header("Content-Disposition: attachment;filename=\"" . basename($filename) . "\"");
+header("Content-Disposition: attachment;filename=\"" . basename($filename) . ".txt\"");
 header("Content-Type: $mimeType");
 header("Content-Length: $size");
 	
