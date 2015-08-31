@@ -42,15 +42,47 @@ Fakoli::using("page", "menu", "module");
  */
 class ComponentPageView
 {
+	/**
+	 * Renders the component page that matches the specified identifier.
+	 * Automatically redirects to login if the user doesn't have correct permissions.
+	 * 
+	 * @param string $identifier the identifier of the component page
+	 */
+	static function renderPage()
+	{
+		$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
+
+		$pageView = new ComponentPageView($page, "{$page->template}.tpl");
+
+		$page_role = $page->role;
+
+		if (!checkRole($page->role))
+		{
+			LoginManager::storeRedirectPage();
+			redirect("/login");
+		}
+
+		echo $pageView->drawView();
+	}
+	
 	var $page; 		///< The ComponentPage object that we are viewing
 	var $template; 	///< The layout template used to render the page.
 	
-	function ComponentPageView($page, $template = "")
+	/**
+	 * Creates a new ComponentPageView object.
+	 * @param ComponentPage $page the page to be displayed
+	 * @param string $template the template to use (default is to use the template specified
+	 * by the ComponentPage object)
+	 */
+	function __construct($page, $template = "")
 	{
 		$this->page = $page;
 		$this->template = $template;	
 	}
 	
+	/**
+	 * Renders the page.
+	 */
 	function drawView()
 	{
 		global $config;
