@@ -1158,6 +1158,12 @@ legend {
     position: absolute;
     top: 2px;
 }
+
+fieldset.collapsed
+{
+	display: none;
+}
+
 legend a:link, legend a:visited {
     font-size: 12px;
 }
