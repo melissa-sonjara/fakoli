@@ -336,6 +336,13 @@ abstract class AbstractJoin
 		}
 	}
 	
+	/**
+	 * Registers a class and indexed array as a pseudo-join item. Pseudo-joins are joined into
+	 * the result set based on the supplied index field.
+	 * @param string $class Class name for the items being joined
+	 * @param array $items array of DataItems indexed by the joining key (usually the primary key)
+	 * @param string $indexField the field to be joined on
+	 */
 	function pseudo($class, $items, $indexField)
 	{
 		$this->pseudos[$class] = array("index" => $indexField, "items" => $items);
