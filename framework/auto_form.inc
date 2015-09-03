@@ -434,7 +434,7 @@ class AutoForm
 				$toggleID = $this->id . "_" . $toggle;
 				
 				$renderer = $this->getRenderer($toggle);
-				if ($render instanceof BooleanFieldRenderer)
+				if ($renderer instanceof BooleanFieldRenderer)
 				{
 					echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
 				}
