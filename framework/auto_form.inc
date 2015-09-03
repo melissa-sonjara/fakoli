@@ -433,8 +433,15 @@ class AutoForm
 				$groupID = $this->id . "_" . codify($group) . "_group";
 				$toggleID = $this->id . "_" . $toggle;
 				
-				echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
-				echo "\tdocument.id('$toggleID').addEvent('change', function(e) { if (this.value != '0') {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+				$renderer = $this->getRenderer($toggle);
+				if ($render instanceof BooleanFieldRenderer)
+				{
+					echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+				}
+				else
+				{
+					echo "\tdocument.id('$toggleID').addEvent('change', function(e) { if (this.value != '0') {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+				}
 			}
 		}
 		echo "\t});\n";
