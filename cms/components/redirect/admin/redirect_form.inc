@@ -17,6 +17,13 @@ $form = new AutoForm($redirect);
 $form->hide("user_id");
 $form->required("redirect_from", "redirect_to");
 $form->allowDelete = true;
+$form->annotate("exemption_flag", "Specifies the name of a flag that can be set on a user's session to exempt them from the redirect");
+$roleSelect = new CheckListFieldRenderer($form, "exempt_roles", "Exempt Roles", SiteRole::getRolesArray());
+$roleSelect->setSize(350, 150, 10);
+
+$form->group("Redirect Settings", "redirect_from", "redirect_to", "user_id", "active", "override");
+$form->group("Exemptions", "exemption_flag", "exempt_roles");
+$form->makeGroupCollapsible("Exemptions", "override");
 
 if ($method == "POST")
 {

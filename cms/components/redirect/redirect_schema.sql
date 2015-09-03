@@ -28,3 +28,10 @@ CREATE TABLE redirect
 ALTER TABLE redirect ADD COLUMN override tinyint(3) not null default 0;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE redirect ADD COLUMN exemption_flag varchar(50) not null default '';
+ALTER TABLE redirect ADD COLUMN exempt_roles varchar(1000) not null default '';
+
+-- END Version 1.2

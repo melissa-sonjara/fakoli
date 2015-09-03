@@ -15,7 +15,8 @@ class RedirectUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 		"1.0"	=>	"sql:Added redirect table",
-		"1.1"	=>	"sql:Added override field to redirect table"
+		"1.1"	=>	"sql:Added override field to redirect table",
+		"1.2"	=>	"sql:Added exemption_flag and exemption_roles fields to redirect table"
 	);
 
 	function RedirectUpgradeManager()

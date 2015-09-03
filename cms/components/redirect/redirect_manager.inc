@@ -70,6 +70,10 @@ class RedirectManager
 		if (array_key_exists($path, $overrides))
 		{
 			$redirect = $overrides[$path];
+			
+			if ($redirect->exempt_roles && checkRole($redirect->exempt_roles)) return;
+			if ($redirect->exemption_flag && $_SESSION[$redirect->exemption_flag]) return;
+			
 			redirect($redirect->redirect_to);
 		}
 	}
