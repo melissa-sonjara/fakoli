@@ -577,6 +577,11 @@ interface IDataSyncHelper
 					}
 					catch(DataNotFoundException $e)
 					{
+						// Data not found
+					}
+					catch(FakoliException $fe)
+					{
+						// Ambiguous singleton, most likely
 					}
 					
 					if (($match && !$importMatching) || (!$match && !$importNew)) 
