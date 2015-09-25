@@ -72,6 +72,10 @@ class OptimizeManager
 						$cachedScripts .= file_get_contents($resource);
 						$cachedScripts .= "\r\n";
 					}
+					else
+					{
+						trace("Could not resolve script $script", 2);
+					}
 				}
 				
 				Cache::put("script_cache", $cachedScripts);
