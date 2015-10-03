@@ -86,6 +86,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 					
 		$ids = displayFieldAsList($attachments, "attachment_id");
 ?>
+	<div class='photo_attachment_handler'>
 	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
 	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>" style='display: table-cell'>
 	<?
@@ -106,6 +107,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	<br/>
 	<a href="#" onclick="new PhotoAttachmentUploader().capturePhoto(); return false" class="button"> Take a Photo </a>&nbsp;&nbsp;
 	<a href="#" onclick="new PhotoAttachmentUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
+	</div>
 <?
 		$this->_endField($field);
 	}
