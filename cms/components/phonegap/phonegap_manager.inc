@@ -51,7 +51,7 @@ class PhonegapManager
 		}
 		
 		$matches = array();
-		if (preg_match("/PhoneGap\\/Cordova (\\w+) (\\d+\\.\\d+\\.\\d+)/", $_SERVER['HTTP_USER_AGENT'], $matches))
+		if (preg_match("/PhoneGap\\/Cordova (\\w+) (\\d+\\.\\d+\\.\\d+)/i", $_SERVER['HTTP_USER_AGENT'], $matches))
 		{
 			$_SESSION["phonegap"] = true;	
 			$_SESSION["phonegap_os"] = $matches[1];
