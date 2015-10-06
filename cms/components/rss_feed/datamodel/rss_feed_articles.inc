@@ -12,6 +12,7 @@ class RSSFeedArticles extends DataItem
 		"rss_article_newsStory"	=>	Text,
 		"rss_article_content"	=>	Text,
 		"rss_article_URL"		=>	String,
+		"rss_thumbnail"			=>	String,
 		"article_date"			=>	DateTime,
 		"publish_status"		=>	Boolean,
 		"date_added"			=>	Timestamp

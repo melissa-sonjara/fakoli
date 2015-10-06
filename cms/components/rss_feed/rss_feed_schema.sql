@@ -63,3 +63,7 @@ ALTER TABLE rss_feed_articles ADD INDEX rss_article_url_idx (rss_article_URL ASC
 ALTER TABLE rss_feed_articles ADD COLUMN rss_article_content LONGTEXT NOT NULL ;
 
 -- END Version 1.4
+
+-- START Version 1.5
+ALTER TABLE rss_feed_articles ADD COLUMN rss_thumbnail VARCHAR(255) NULL ;
+-- END Version 1.5

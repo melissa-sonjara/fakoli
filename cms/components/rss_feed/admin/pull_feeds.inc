@@ -25,11 +25,12 @@ foreach($rssFeeds as $feed)
 		}
 		
 		$rss->rss_feed_id			= $feed->rss_feed_id;
-		$rss->rss_title		 		= $item->title;
+		$rss->rss_title		 		= utf8_encode($item->title);
 		$rss->article_date		 	= date("Y-m-d H:i:s", strtotime($item->pubDate));
 		$rss->rss_article_URL		= $item->link;
 		$rss->rss_article_newsStory = $item->description;
 		$rss->rss_article_content	= $item->children('content',true)->encoded;
+		$rss->rss_thumbnail			= $item->children('media', true)->content->attributes();
 		$rss->publish_status 		= $feed->rss_trusted;
 		
 		$rss->save(); 
