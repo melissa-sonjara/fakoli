@@ -37,17 +37,27 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for text data fields. Renders as a multi-line text 
  * box area, with optional javascript character count display.
+ * 
+ * Example for $form= new autoform($document)
+ * 
+ * $fieldname=$form->getRenderer('field_name');
+ * $fieldname->rows=3;
+ * 
  */
 class TextFieldRenderer extends FieldRenderer
 {
-	var $rows = 2;
-	var $columns = 60;
-	var $colspan = 2;
-	var $limit = 0;
-	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
-	var $encoding = "UTF-8";
-	var $style;
+	var $rows = 2;			//!< The number of rows to display in the text area
+	var $columns = 60;		//!< The number of columns to display in the text area
+	var $colspan = 2;		//!< The number of table columns to display across
+	var $limit = 0;			//!< Optional limit on the number of characters allowed to be entered (enforced by Javascript). Note - make sure you have at least this many characters in your database field!
+	var $disable = false; 	//!< Alternative to readonly; field can be reenabled thru javascript
+	var $encoding = "UTF-8";//!< Overrides the default text encoding.
+	var $style;				//!< Inline styles for the text area element
 	
+	/**
+	 * Constructs a new TextFieldRenderer object.
+	 * @param AutoForm $parent the parent AutoForm
+	 */
 	function TextFieldRenderer(&$parent)
 	{
 		global $config;
