@@ -26,6 +26,8 @@ function installFlowplayer()
 	
 	videos.each(function(v)
 	{
+		if (v.tagName == "HTML") return;
+		
 		if (!v.id)
 		{
 			v.id = 'video_' + Math.floor(Math.random()*1E8);
