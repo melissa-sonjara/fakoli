@@ -274,13 +274,43 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 		
 		$value = $this->parent->data->get($field);
-		
-		// JDG 3/12 - show option value, if found, instead of key
+
 		$items = explode(",", $value);
-	
-		foreach($items as $item)
+		
+		if ($this->grouped)
 		{
-			$answers[] = array_key_exists($item, $this->options) ? $this->options[$item] : $item;
+			foreach($this->options as $category => $options)
+			{
+				$out = "";
+			
+				foreach($items as $item)
+				{
+					if (array_key_exists($item, $options))
+					{
+						if (!$out) 
+						{
+							$out = "$category: ";
+						}
+						else
+						{
+							$out .= $this->separator;
+						}
+						
+						$out .= $options[$item];
+					}
+				}
+				
+				if ($out) $answers[] = $out;
+			}
+		}
+		else
+		{
+			// JDG 3/12 - show option value, if found, instead of key
+		
+			foreach($items as $item)
+			{
+				$answers[] = array_key_exists($item, $this->options) ? $this->options[$item] : $item;
+			}
 		}
 		
 		$value = implode($this->separator, $answers);
