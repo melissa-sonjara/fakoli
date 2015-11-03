@@ -2027,6 +2027,8 @@ function dumpCSV($class, $items, $filepath, $filter = null, $append = false)
 {
 	$obj = new $class;
 	$obj->filter = $filter;
+
+	$fields = $obj->getFieldArray();
 	
 	if ($append)
 	{
@@ -2034,9 +2036,7 @@ function dumpCSV($class, $items, $filepath, $filter = null, $append = false)
 	}
 	else
 	{
-		$fp = fopen($filepath, "w");
-		
-		$fields = $obj->getFieldArray();
+		$fp = fopen($filepath, "w");	
 		fputcsv($fp, $fields);
 	}
 	
