@@ -2023,15 +2023,22 @@ function restoreHTML($text)
  * @param $items the items to dump
  * @param $filepath the output file path
  */
-function dumpCSV($class, $items, $filepath, $filter = null)
+function dumpCSV($class, $items, $filepath, $filter = null, $append = false)
 {
 	$obj = new $class;
 	$obj->filter = $filter;
 	
-	$fp = fopen($filepath, "w");
-	
-	$fields = $obj->getFieldArray();
-	fputcsv($fp, $fields);
+	if ($append)
+	{
+		$fp = fopen($filepath, "a");
+	}
+	else
+	{
+		$fp = fopen($filepath, "w");
+		
+		$fields = $obj->getFieldArray();
+		fputcsv($fp, $fields);
+	}
 	
 	foreach($items as $item)
 	{
