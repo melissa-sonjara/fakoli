@@ -45,6 +45,7 @@ $doc_types = array( "application/msword",
 		    "application/mspowerpoint",
 		    "text/html",
 		    "text/rtf",
+			"text/csv",
 			"audio/mpeg",
 			"video/flv",
 			"audio/wav",
@@ -70,6 +71,7 @@ $doc_extensions = array(
 		".mp3"	=> "MP3 Audio File",
 		".flv"	=>	"Flash Video",
 		".wav"	=>	"Audio",
+		".csv"	=>	"Comma-Separated Values"
         );
 
 $doc_mime_types = array(
@@ -89,6 +91,7 @@ $doc_mime_types = array(
 		".mp3" => "audio/mpeg",
 		".flv"	=>	"video/x-flv",
 		".wav"	=>	"audio/wav",
+		".csv"	=>	"text/csv"
 );
 
 $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
