@@ -291,6 +291,14 @@ abstract class AbstractDataItem
 	abstract function get($field);
 	
 	/**
+	 * Retrieves the primary key value
+	 */
+	function getPrimaryKeyValue()
+	{
+		return $this->get($this->getPrimaryKey());
+	}
+	
+	/**
 	 * Set the value of the specified field
 	 * @param $field the field to set
 	 * @param $value the value to which the field is to be set
