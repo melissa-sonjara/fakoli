@@ -92,7 +92,14 @@ class HTMLFieldRenderer extends FieldRenderer
 		}
 
 		$baseURL = ($this->baseURL !== null) ? $this->baseURL : "http://{$config['http_host]']}";
-		$convertURLs = ($this->convertURLs) ? "true" : "false";
+		if (isset($config["convertURLs"]))
+		{
+			$convertURLs = $config["convertURLs"];
+		}
+		else
+		{			
+			$convertURLs = ($this->convertURLs) ? "true" : "false";
+		}
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
 		{
