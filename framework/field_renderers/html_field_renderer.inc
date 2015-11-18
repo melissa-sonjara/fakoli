@@ -94,7 +94,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		$baseURL = ($this->baseURL !== null) ? $this->baseURL : "http://{$config['http_host]']}";
 		if (isset($config["convertURLs"]))
 		{
-			$convertURLs = $config["convertURLs"];
+			$convertURLs = $config["convertURLs"] ? "true" : "false";
 		}
 		else
 		{			
