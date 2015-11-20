@@ -117,7 +117,7 @@ class TextLookup extends DataItem
 	 */
 	static function getPlainText($code, $obj = null, $blank = false)
 	{
-		return trim(stripHTML(TextLookup::getText($code, $obj, $blank)))l
+		return trim(stripHTML(TextLookup::getText($code, $obj, $blank)));
 	}	
 	
 	/**
