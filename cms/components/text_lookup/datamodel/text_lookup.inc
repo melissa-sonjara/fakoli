@@ -35,6 +35,9 @@ Fakoli::using("email", "settings");
 
 class TextLookup extends DataItem
 {
+	var $primary_key = "text_id";
+	var $table = "text_lookup";
+	
 	var $fields = array(
 			"text_id"	=>	Number,
 			"code"		=>	String,
@@ -54,20 +57,20 @@ class TextLookup extends DataItem
 		return $this->getRelatedList(TextTranslation, "", $constraint);
 	}
 	
-	/*
+	/**
 	 * Retrieves text for display on a page, given the
 	 * code. If an object is passed, then attempt to
 	 * retrieve any merge codes values for codes used in the 
 	 * text that have been saved to merge_code table under 
 	 * the same class name as the $obj.
 	 * 
-	 * $code - the value of the code field of the text object
+	 * @param string $code the value of the code field of the text object
 	 * 
-	 * $obj - a data item instance that can retrieve values
+	 * @param DataItem $obj a data item instance that can retrieve values
 	 * for merge codes used in the block of text (the text
 	 * field value of table text_lookup.
 	 * 
-	 * @param blank - whether blank is ok; if ok, then return blank when
+	 * @param $blank whether blank is ok; if ok, then return blank when
 	 * no match found; if not, return the text string to signal to the
 	 * developer the value is missing from the db.
 	 */
@@ -104,8 +107,20 @@ class TextLookup extends DataItem
 	{
 		return TextLookup::getText($code, $obj, $blank);
 	}
-		
-	/*
+	
+	/**
+	 * Retrieve the plain text value of the text field, with any HTML and leading or trailing
+	 * whitespace removed.
+	 * @param string $code the lookup code for the text item
+	 * @param DataItem $obj optional DataItem object to use as a merge code value source
+	 * @param boolean $blank true to return an empty string when blank, false to return the item's code
+	 */
+	static function getPlainText($code, $obj = null, $blank = false)
+	{
+		return trim(stripHTML(TextLookup::getText($code, $obj, $blank)))l
+	}	
+	
+	/**
 	 * Given a text record, find the remaining languages
 	 * for which this text has NOT yet been translated.
 	 */
@@ -161,15 +176,6 @@ class TextLookup extends DataItem
 		$text->text = $value;
 		$text->class_name = $class_name;
 		$text->save();
-	}
-	
-	
-	function TextLookup()
-	{
-		$this->primary_key = "text_id";
-		$this->table = "text_lookup";
-
-		$this->DataItem(func_get_args());
 	}
 }
 
