@@ -365,7 +365,7 @@ class CompoundSerializationHandler
 		for($i = 1; $i < func_num_args(); ++$i)
 		{
 			$arg = func_get_arg($i);
-			if (isarray($arg))
+			if (is_array($arg))
 			{
 				$this->classes[] = $arg;
 			}
