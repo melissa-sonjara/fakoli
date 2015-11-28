@@ -1,17 +1,53 @@
 <?php
 Fakoli::using("component");
 
+/**
+ * Defines the basic interface contract for a SerializationHandler.
+ * @author Andy Green
+ *
+ */
 interface SerializationHandler
 {
+	/**
+	 * Export the serialized objects.
+	 * @return string XML serialization of the exported objects
+	 */
 	function export();
+	
+	/**
+	 * Import from a serialized XML document
+	 * @param DOMDocument $doc The document to be used as the source of the import
+	 * @param DataTransaction $tx The database transaction to join when creating imported objects
+	 */
 	function import($doc, $tx);
 }
 
+/**
+ * SerializationManager handles import/export of DataItems via an XML file. This allows data to be 
+ * transferred between Fakoli instances that provide the same data model (for instance, between development
+ * and production versions of the same application).
+ * 
+ * To implement serialization for your Fakoli component, add a line to your manifest specifying that you
+ * can recieve the RegisterSerializationHandler event. Your callback for this event you then use the 
+ * SerializationManager::registerHandler method to register the serialization handler in charge of 
+ * serializing your data model. Two standard serializers are provided - SimpleSerializationHandler will
+ * serialize a single DataItem class. CompoundSerializationHandler serializes a set of classes grouped together
+ * in the XML format under a common tag. You can provide custom serialization handlers for more complex
+ * needs (should they arise) by implementing the SerializationHandler interface and providing your own
+ * implementation.
+ * 
+ * @author Andy Green
+ *
+ */
 class SerializationManager
 {
 	static $map;
 	
-	function SerializationManager()
+	/**
+	 * Creates a SerializationManager, building the serialization map from the registered components
+	 * via the RegisterSerializationHandler event.
+	 */
+	function __construct()
 	{
 		if (!SerializationManager::$map)
 		{
@@ -21,11 +57,22 @@ class SerializationManager
 		}
 	}
 	
+	/**
+	 * Registers a serialization handler for a component.
+	 * @param string $component the component for which the handler is being registered (i.e. "blog")
+	 * @param string $title the display title describing the data that is serialized for this component (i.e. "Blogs and Articles")
+	 * @param SerializationHandler $handler the serialization handler object providing the implementation
+	 */
 	function registerHandler($component, $title, $handler)
 	{
 		SerializationManager::$map[$component] = array('title' => $title, 'handler' => $handler);
 	}
 	
+	/**
+	 * Exports data for the specified components
+	 * @param string $components a comma-separated list of the components for which data is to be exported
+	 * @return string the serialized XML data representation
+	 */
 	function export($components)
 	{
 		$components = explode(",", $components);
@@ -43,12 +90,24 @@ class SerializationManager
 		return $xml;
 	}
 	
+	/**
+	 * Export data for all registered components
+	 * @return string the serialized XML data representation
+	 */
 	function exportAll()
 	{
 		$components = implode(",", array_keys(SerializationManager::$map));
 		return $this->export($components);
 	}
 	
+	/**
+	 * Imports data from the specified XML document for the specified components. Any other data
+	 * in the XML document is ignored.
+	 * @param string $xml the file path of the XML document containing the serialized data
+	 * @param string $components a comma-separated list of the components for which data is to be exported
+	 * @throws FakoliException
+	 * @throws Exception
+	 */
 	function import($xml, $components)
 	{
 		$components = explode(",", $components);
@@ -78,13 +137,24 @@ class SerializationManager
 		}
 	}
 	
+	/**
+	 * Import data for all registered components
+     * @param string $xml the file path of the XML document containing the serialized data
+	 */
 	function importAll($xml)
 	{
 		$components = implode(",", array_keys(SerializationManager::$map));
 		return $this->import($xml, $components);
 	}
 	
-	
+	/**
+	 * Instantiates DataItems from the supplied XML document and stores them in the database. 
+	 * This utility method is provided to simplify the implementation of SerializationHandlers.
+	 * 
+	 * @param string $class the target DataItem class
+	 * @param DOMDocument $doc the source XML document
+	 * @param DataTransaction $tx The database transaction to join when creating imported objects
+	 */
 	static function unserialize($class, $doc, $tx)
 	{
 		trace("== Instantiating $class Records", 3);
@@ -124,6 +194,13 @@ class SerializationManager
 		//$o->enablePrimaryKey();
 	}
 	
+	/**
+	 * Serializes the specified DataItems to XML.
+	 * This utility method is provided to simplify the implementation of SerializationHandlers.
+	 * @param string $class the target DataItem class
+	 * @param string $constraint optional database constraint for the objects to be serialized
+	 * @return string serialized XML representation of the DataItems
+	 */
 	static function serialize($class, $constraint = "")
 	{
 		$objects = Query::create($class, $constraint)->execute();
@@ -132,6 +209,10 @@ class SerializationManager
 	
 }
 
+/**
+ * SerializationForm implements the custom form used in the Fakoli admin section import and export pages.
+ * @author Andy Green
+ */
 class SerializationForm
 {
 	var $mgr;
@@ -196,12 +277,23 @@ class SerializationForm
 	}
 }
 
+/**
+ * Provides a simple implementation of a SerializationHandler that can serialize a single DataItem class.
+ * 
+ * @author Andy Green
+ *
+ */
 class SimpleSerializationHandler
 {
 	var $class;
 	var $constraint;
 	
-	function SimpleSerializationHandler($class, $constraint = "")
+	/**
+	 * Creates a new SimpleSerializationHandler 
+	 * @param string $class the target DataItem class
+	 * @param string $constraint optional database constraint to use when exporting
+	 */
+	function __construct($class, $constraint = "")
 	{
 		$this->class = $class;
 		
@@ -216,15 +308,111 @@ class SimpleSerializationHandler
 		}
 	}
 	
+	/**
+	 * Exports the DataItems to XML
+	 * @return string the serialized XML representation
+	 */
 	function export()
 	{
 		return SerializationManager::serialize($this->class, $this->constraint);
 	}
 	
+	/**
+	 * Imports the DataItems from XML
+	 * @param DOMDocument $doc the source XML document
+	 * @param DataTransaction $tx The database transaction to join when creating imported objects
+	 */
 	function import($doc, $tx)
 	{
 		SerializationManager::unserialize($this->class, $doc, $tx);
 	}		
 }
+
+/**
+ * Provides serialization for a number of DataItem classes, grouped under a common tag in the
+ * serialized XML. Use this when your component needs to serialize a number of related objects
+ * under the same transaction.
+ * 
+ * To serialize two or more items, you would create the handler like this:
+ * new ComponentSerializationHandler("GroupTag", Class1, Class2)
+ * 
+ * You can provide database constraints for export for each class by passing an array containing
+ * the class name and the constraint:
+ * 
+ * new CompoundSerializationHandler("GroupTag", array(Class1, "WHERE active=1"), Class2)
+ * 
+ * @author Andy Green
+ */
+class CompoundSerializationHandler
+{
+	var $groupTag;
+	var $classes = array();
+	var $constraints = array();
 	
+	/**
+	 * Creates the CompoundSerializationHandler
+	 * @param string $groupTag the tag name to be used to group the XML output
+	 * @throws FakoliException
+	 */
+	function __construct($groupTag)
+	{
+		if (!$groupTag)
+		{
+			throw new FakoliException("No group tag specified for compound serialization handler");
+		}
+		
+		$this->groupTag = $groupTag;
+		for($i = 1; $i < func_num_args(); ++$i)
+		{
+			$arg = func_get_arg($i);
+			if (isarray($arg))
+			{
+				$this->classes[] = $arg;
+			}
+			else
+			{
+				$this->classes[] = array($arg, "");
+			}
+		}
+	}
+
+	/**
+	 * Add a target DataItem with optional constraint
+	 * @param string $class the target DataItem class
+	 * @param string $constraint optional database constraint to use for export
+	 */
+	function addTarget($class, $constraint = "")
+	{
+		$this->classes[] = array($class, $constraint);
+	}
+	
+	/**
+	 * Exports the target DataItems to XML
+	 * @return string the XML serialization of the objects
+	 */
+	function export()
+	{
+		$xml  = "\n<{$this->groupTag}>";
+		foreach($this->classes as $class)
+		{
+			$xml.= SerializationManager::serialize($class[0], $class[1]);
+		}
+		
+		$xml .= "\n</{$this->groupTag}>";
+		return $xml;
+	}
+
+	/**
+	 * Import from a serialized XML document
+	 * @param DOMDocument $doc The document to be used as the source of the import
+	 * @param DataTransaction $tx The database transaction to join when creating imported objects
+	 */
+	function import($doc, $tx)
+	{
+		foreach($this->classes as $class)
+		{
+			SerializationManager::unserialize($class, $doc, $tx);
+		}
+	}
+}
 ?>
