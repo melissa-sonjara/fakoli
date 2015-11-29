@@ -411,7 +411,7 @@ class CompoundSerializationHandler
 	{
 		foreach($this->classes as $class)
 		{
-			SerializationManager::unserialize($class, $doc, $tx);
+			SerializationManager::unserialize($class[0], $doc, $tx);
 		}
 	}
 }
