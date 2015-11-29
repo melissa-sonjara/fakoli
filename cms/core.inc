@@ -727,7 +727,7 @@ class Fakoli
 		
 		if ($sectionIdentifier == "/" && $identifier == "admin")
 		{
-			return Fakoli::sendAdminPage("index");
+			redirect("/admin/index");
 		}
 		
 		global $config;
