@@ -324,4 +324,6 @@ require_once realpath(dirname(__FILE__))."/field_renderers/option_checklist_fiel
 require_once realpath(dirname(__FILE__))."/field_renderers/credit_card_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/table_select_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/signature_field_renderer.inc";
+require_once realpath(dirname(__FILE__))."/field_renderers/option_cross_reference_field_renderer.inc";
+
 ?>
