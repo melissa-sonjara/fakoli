@@ -92,7 +92,9 @@ function <?echo $fn?>(element, value)
 		elt.removeClass('selected');
 	});
 	document.id(element).addClass('selected');
-	document.id('<?echo $id?>').value = value;
+	var ctrl = 	document.id('<?echo $id?>');
+	ctrl.value = value;
+	ctrl.fireEvent('change');
 	return false;
 }
 </script>
