@@ -3,5 +3,9 @@
 
 session_destroy();
 
-redirect("/index");
+$section = Section::findSection("/");
+$url = $section->getSectionURL();
+if (!$url) $url = "/index";
+
+redirect($url);
 ?>
