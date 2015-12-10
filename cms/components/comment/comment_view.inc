@@ -205,7 +205,12 @@ class CommentView
 		
 		echo $text;
 		
-		$this->form->drawForm();
+		if ($user || Settings::getValue("comment", "allow_anonymous_commenting"))
+		{
+		
+			$this->form->drawForm();
+		
+		}
 	}
 
 	function buildCommentForm()
