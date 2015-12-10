@@ -177,8 +177,14 @@ class CommentView
 	
 	function writeScript()
 	{
+		global $user;
+		
 		$script .= $this->list->writeScript();
-		$script .= $this->form->writeScript();
+		
+		if ($user || Settings::getValue("comment", "allow_anonymous_commenting"))
+		{
+			$script .= $this->form->writeScript();
+		}
 
 		return $script;
 	}
