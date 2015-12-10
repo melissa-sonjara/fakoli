@@ -197,19 +197,21 @@ class CommentView
 		}
 			
 		echo "<h3>{$this->title}</h3>\n";
-		if(count($this->list->items) > 0)
-		$this->list->drawList();
-	}
-
-	function drawForm()
-	{
-		global $user;
-		
 		$preambleIdentifier = $user ? Settings::getValue("comment", "logged_in_preamble_text") : Settings::getValue("comment", "anonymous_preamble_text");
 		
 		$text = TextLookup::getText($preambleIdentifier);
 		
 		echo $text;
+		
+		if(count($this->list->items) > 0)
+		{
+			$this->list->drawList();
+		}
+	}
+
+	function drawForm()
+	{
+		global $user;
 		
 		if ($user || Settings::getValue("comment", "allow_anonymous_commenting"))
 		{
