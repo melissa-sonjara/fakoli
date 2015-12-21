@@ -693,11 +693,17 @@ var Interstitial = new Class({
 	
 });
 
-Asset.image('/fakoli/images/loader.gif');
+Interstitial.setDefaultSpinner = function(spinner)
+{
+	Interstitial.defaultSpinner = spinner;
+	Asset.image(spinner);
+}
+
+Interstitial.setDefaultSpinner('/fakoli/images/loader.gif');
 
 function interstitial(message, image)
 {
-	if (!image) image = '/fakoli/images/loader.gif';
+	if (!image) image = Interstitial.defaultSpinner;
 	
 	var int = new Interstitial(message, {spinner: image});
 	int.show();
