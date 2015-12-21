@@ -129,6 +129,7 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "passwordEnterLabel", "Confirm", "String", "The text of the password confirmation field label", "AutoForm");
 		Settings::setDefaultValue("settings", "buttons_at_top", false, "Boolean", "Whether the form's save/cancel buttons appear at the top of the form in addition to the bottom.", "AutoForm");
 		Settings::setDefaultValue("settings", "default_layout", "table", String, "Specifies the default layout manager to use when rendering forms", "AutoForm", "table\nsimple\nmobile");
+		Settings::setDefaultValue("settings", "interstitialSpinner", "/fakoli/images/spinner.gif", String, "Specifies the default spinner animation to use with interstitials", "AutoForm");
 	}
 	
 	/**
