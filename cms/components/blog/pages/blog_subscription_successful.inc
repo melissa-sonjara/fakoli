@@ -37,7 +37,7 @@
 
 <h4>Your subscription request has been processed.</h4>
 
-<a href=http://<?echo $config['http_host']?>/index>Go to the Home Page.</a>
+<a href="http://<?echo $config['http_host']?>/index">Go to the Home Page.</a>
 
 </div>
 
