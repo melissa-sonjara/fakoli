@@ -72,12 +72,9 @@ if ($method == "POST")
 
 $script .= $form->writeScript();
 ?>
-
-<div id="tab_border">
-
+<h2 style="line-height: 10px;">Subscribe</h2>
+<p>Subscribe to receive an email when a new article is posted.</p>
 <?
 echo TextLookup::getText("blog_subscriber_form_instructions");
 $form->drawForm();
 ?>
-<br/>
-</div>
