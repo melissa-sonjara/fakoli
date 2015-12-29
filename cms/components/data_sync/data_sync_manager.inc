@@ -193,34 +193,31 @@ interface IDataSyncHelper
 		
 		DataSyncManager::getSyncTargets();
 		
-		$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
-							  ->bind(":cl", $class, ":pr", $profile_id)
-							  ->execute();
+		$fieldMappings = IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr", "client_field")
+									 ->bind(":cl", $class, ":pr", $profile_id)
+									 ->execute();
 	
-		if (count($fieldMappings) == 0)
+		// Check for missing fields and create default entries
+				
+		$obj = new $class();
+		foreach($obj->getFields() as $field => $type)
 		{
-			// Create default entries
-				
-			$obj = new $class();
-			foreach($obj->getFields() as $field => $type)
-			{
-				if ($field == $obj->getPrimaryKey()) continue;
+			if ($field == $obj->getPrimaryKey()) continue;
+			if (array_key_exists($field, $fieldMappings)) continue;
 	
-				$mapping = new DataImportFieldMapping();
-				$mapping->class = $class;
-				$mapping->client_field = $field;
-				$mapping->import_column = "";
-				$mapping->import_profile_id = $profile_id;
-				
-				$mapping->save();
-			}
-				
-			$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
-							  ->bind(":cl", $class, ":pr", $profile_id)
-							  ->execute();
-	
+			$mapping = new DataImportFieldMapping();
+			$mapping->class = $class;
+			$mapping->client_field = $field;
+			$mapping->import_column = "";
+			$mapping->import_profile_id = $profile_id;
+			
+			$mapping->save();
 		}
-	
+				
+		$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
+						  ->bind(":cl", $class, ":pr", $profile_id)
+						  ->execute();
+		
 		return $fieldMappings;
 	}
 	
