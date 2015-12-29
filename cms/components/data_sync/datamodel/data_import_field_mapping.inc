@@ -13,7 +13,8 @@ class DataImportFieldMapping extends DataItem
 						"matching"			=>	Boolean,
 						"required"			=>	Boolean,
 						"grouping"			=>	Boolean,
-						"import_profile_id"	=>	String);
+						"import_profile_id"	=>	String,
+						"notes"				=>	String);
 	
 	function ImportProfile()
 	{
