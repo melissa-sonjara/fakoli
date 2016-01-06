@@ -47,8 +47,10 @@ class Blog extends DataItem // implements Searchable
 						"articles_per_page"		=>	Number,
 						"blog_type"				=>	String,
 						"allow_comments"		=>	Boolean,
+						"comment_moderators"	=>	String,
 						"published"				=>	Boolean,
 						"created_date"			=>	DateTime,
+					    "allow_subscriptions"	=>	Boolean,
 						"enable_rss_feed"		=>	Boolean,
 						"max_rss_articles"		=>	Number);
 	

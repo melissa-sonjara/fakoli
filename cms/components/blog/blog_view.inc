@@ -378,6 +378,16 @@ class BlogView
 		$this->handlers[$type] = $handler;
 	}
 	
+	function drawSubscribeButton()
+	{
+		if (!Settings::getValue("blog", "allow_subscription_options")) return;
+		
+		if ($this->blog->allow_subscriptions)
+		{
+			echo $this->blog->format("<a id='blog_subscription_button' class='button' href='#' onclick='new BlogManager().showSubscriptionDialog({blog_id},\"{title:jsSafe}\"); return false;'>Subscribe to {title}</a>");
+		}
+	}
+	
 	function drawArticleList($year = false, $month = false, $term_id = null)
 	{
 		$type = $this->blog->blog_type;
@@ -385,6 +395,8 @@ class BlogView
 	
 		trace ("Month is " . $month, 3);
 		
+		$this->drawSubscribeButton();
+
 		$this->handlers[$type]->drawArticleList($this->blog, $year, $month, $term_id);
 	}
 	
@@ -403,6 +415,8 @@ class BlogView
 		{
 			echo "<p id='inline_editing'><a href='#' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a></p>";
 		}
+
+		$this->drawSubscribeButton();
 		
 		if ($this->blog->allow_comments && $article_id)
 		{

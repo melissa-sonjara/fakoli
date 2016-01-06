@@ -31,37 +31,60 @@
 
 *****************************************************************/
 
-/*
- * Manage component upgrades/updates to Blog
- * component.
- * 
- * See parent class component/upgrade_manager.inc
- * for instructions on usage.
- *   
- * @author Janice Gallant for Sonjara, Inc.
- * 
- * 6/2/2011
- * 
- */
+Fakoli::using("blog", "text_lookup", "settings");
+Fakoli::usingFeature("auto_form");
 
-Fakoli::using("blog", "component");
+$blog_id = checkNumeric($_GET["blog_id"]);
 
-class BlogUpgradeManager extends UpgradeManager
+$blogSubscriber = new BlogSubscriber();
+
+$blogSubscriber->blog_id = $blog_id;
+$blogSubscriber->subscription_type = 'instant';
+
+$page->page_title = "Subscribe to Updates";
+
+$form = new AutoForm($blogSubscriber);
+$form->ajaxSubmit();
+
+$form->hide("blog_id");
+$form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b", "Please supply a valid email address containing a domain name.");
+$form->required("subscriber_email");
+
+if(Settings::getValue("blog", "allow_subscription_options"))
 {
-	var $updateMap = array(
-			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added articles_per_page to blog table",
-			"1.2"		=>  "sql: Added Blog Subscriber table",
-			"1.3"		=>	"sql:Added RSS parameters to blog table",
-			"1.4"		=>	"sql:Add column subscription_type to blog_subscriber table",
-			"1.5"		=>	"sql:Added comment_moderators and allow_subscriptions fields to blog table"
-	);
-	
-	function BlogUpgradeManager()
-	{
-		$this->component_name = "blog";
-
-		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
-	}
+	$typeSelect = new RadioButtonFieldRenderer($form, "subscription_type", "Subscription Type", BlogSubscriber::$subscriptionTypes);
+	$form->required("subscription_type");
 }
+else
+{
+	$form->hide("subscription_type");
+}
+$form->customSaveHandler = array(BlogManager, saveBlogSubscription);
+
+$form->submitLabel = "Subscribe";
+
+if ($method == "POST")
+{
+	if ($form->save())
+	{
+		sendEmailUsingEmailManager($blogSubscriber, 'blog_subscription');
+		Fakoli::end("OK");
+	}
+	else
+	{
+		Fakoli::end($form->msg);
+	}
+		
+}
+
+$script .= $form->writeScript();
+?>
+
+<div id="tab_border">
+
+<?
+echo TextLookup::getText("blog_subscriber_form_instructions");
+$form->drawForm();
+?>
+<br/>
+</div>

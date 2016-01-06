@@ -57,3 +57,12 @@ ALTER TABLE `blog` ADD COLUMN `max_rss_articles` INT(10) UNSIGNED NOT NULL DEFAU
 ALTER TABLE `blog_subscriber` add column `subscription_type` varchar(20) NOT NULL DEFAULT 'instant';
 
 -- END Version 1.4
+
+-- START Version 1.5
+
+ALTER TABLE blog ADD COLUMN comment_moderators TEXT;
+ALTER TABLE blog ADD COLUMN allow_subscriptions tinyint(3) not null default 0;
+
+UPDATE blog SET allow_subscriptions = (SELECT max(value) FROM settings where component='blog' and name='allow_subscription_options');
+
+-- END Version 1.5
