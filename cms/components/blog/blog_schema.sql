@@ -65,11 +65,12 @@ ALTER TABLE blog ADD COLUMN allow_subscriptions tinyint(3) not null default 0;
 
 UPDATE blog SET allow_subscriptions = (SELECT max(value) FROM settings where component='blog' and name='allow_subscription_options');
 
+ALTER TABLE blog_subscriber ADD COLUMN subscription_token varchar(50);
+
 -- END Version 1.5
 
 -- START Version 1.6
 
-ALTER TABLE blog_subscriber ADD COLUMN subscription_token varchar(50);
 UPDATE blog_subscriber SET subscription_token=(select md5(UUID()));
 
 -- END Version 1.6
