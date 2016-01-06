@@ -35,6 +35,16 @@ var BlogManager = (function()
 			this.dialog.hide();		
 		},
 		
+		showSubscriptionDialog: function(blog_id, blog_title)
+		{
+			this.dialog = modalPopup("Subscribe to " + blog_title, "/action/blog/subscribe_dialog?blog_id=" + blog_id, 600, 'auto', true);
+		},
+		
+		subscriptionDialog: function(response)
+		{
+			
+		}
+		
 	});
 	
 	var instance = null;
