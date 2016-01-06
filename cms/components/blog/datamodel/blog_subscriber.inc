@@ -38,7 +38,7 @@ class BlogSubscriber extends DataItem
 						"blog_id"				=>	Number,
 						"subscriber_email"		=>  String,
 						"subscription_type"		=>	String,
-			
+						"subscription_token"	=>	String
 			);
 	
 	// Relations
