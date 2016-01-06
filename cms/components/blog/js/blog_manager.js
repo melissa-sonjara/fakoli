@@ -40,9 +40,16 @@ var BlogManager = (function()
 			this.dialog = modalPopup("Subscribe to " + blog_title, "/action/blog/subscribe_dialog?blog_id=" + blog_id, 600, 'auto', true);
 		},
 		
-		subscriptionDialog: function(response)
+		subscriptionDialog: function(result)
 		{
-			
+			if (result == "OK")
+			{
+				this.closeDialog(function () { notification("Subscription Updated"); });
+			}
+			else
+			{
+				document.id('BlogSubscriber_form__error').set({'text': result, 'display': 'table-cell'});
+			}
 		}
 		
 	});

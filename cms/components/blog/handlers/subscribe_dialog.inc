@@ -43,8 +43,8 @@ $blogSubscriber->subscription_type = 'instant';
 
 $page->page_title = "Subscribe to Updates";
 
-$form = new AutoForm($blogSubscriber);
-$form->ajaxSubmit();
+$form = new AutoForm($blogSubscriber, "POST", "/action/blog/subscribe_dialog?blog_id={$blog_id}");
+$form->ajaxSubmit("function(response) { new BlogManager().subscriptionDialogResponse(response); }");
 
 $form->hide("blog_id");
 $form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b", "Please supply a valid email address containing a domain name.");
@@ -78,13 +78,6 @@ if ($method == "POST")
 }
 
 $script .= $form->writeScript();
-?>
 
-<div id="tab_border">
-
-<?
 echo TextLookup::getText("blog_subscriber_form_instructions");
 $form->drawForm();
-?>
-<br/>
-</div>
