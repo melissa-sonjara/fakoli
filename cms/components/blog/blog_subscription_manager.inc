@@ -16,6 +16,11 @@ class BlogSubscriptionManager
 		$this->weekly_digest = $this->getWeeklyDigest();	
 	}
 	
+	static function generateToken()
+	{
+		return md5(guid());
+	}
+	
 	function getDailyDigest()
 	{
 		$today = new DateTime(today() . "00:00:00");

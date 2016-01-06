@@ -63,6 +63,11 @@ $form->submitLabel = "Subscribe";
 
 if ($method == "POST")
 {
+	if (!$blogSubscriber->subscription_token) 
+	{
+		$blogSubscriber->subscription_token = BlogSubscriberManager::generateToken();
+	}
+	
 	if ($form->save())
 	{
 		sendEmailUsingEmailManager($blogSubscriber, 'blog_subscription');
