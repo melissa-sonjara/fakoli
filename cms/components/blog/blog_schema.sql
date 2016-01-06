@@ -70,6 +70,6 @@ UPDATE blog SET allow_subscriptions = (SELECT max(value) FROM settings where com
 -- START Version 1.6
 
 ALTER TABLE blog_subscriber ADD COLUMN subscription_token varchar(50);
-UPDATE TABLE blog_subscriber SET subscription_token=(select md5(UUID()));
+UPDATE blog_subscriber SET subscription_token=(select md5(UUID()));
 
 -- END Version 1.6
