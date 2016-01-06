@@ -71,6 +71,6 @@ ALTER TABLE blog_subscriber ADD COLUMN subscription_token varchar(50);
 
 -- START Version 1.6
 
-UPDATE blog_subscriber SET subscription_token=(select md5(UUID()));
+UPDATE blog_subscriber SET subscription_token=(select md5(UUID())) where subscription_token is null;
 
 -- END Version 1.6
