@@ -40,7 +40,7 @@ var BlogManager = (function()
 			this.dialog = modalPopup("Subscribe to " + blog_title, "/action/blog/subscribe_dialog?blog_id=" + blog_id, 600, 'auto', true);
 		},
 		
-		subscriptionDialog: function(result)
+		subscriptionDialogResponse: function(result)
 		{
 			if (result == "OK")
 			{
