@@ -161,7 +161,7 @@ class BlogSubscriptionManager
 	{
 		global $config;
 						
-		$url =  "http://" . $config["http_host"]  . "/blog_subscription_preferences?blog_subscriber_id={blog_subscriber_id}";
+		$url =  "http://" . $config["http_host"]  . "/blog_subscription_preferences?subscription_token={subscription_token}";
 		$messageFooter = $subscriber->format("</br></br>To unsubscribe to these messages or change your subscription preferences, go to $url\n\n");
 		
 		return $messageFooter;

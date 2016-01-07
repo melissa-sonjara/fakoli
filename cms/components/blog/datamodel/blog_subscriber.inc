@@ -33,6 +33,9 @@
 
 class BlogSubscriber extends DataItem
 {
+	var $table = "blog_subscriber";
+	var $primary_key = "blog_subscriber_id";
+	
 	// Fields
 	var $fields = array("blog_subscriber_id"	=>  Number,
 						"blog_id"				=>	Number,
@@ -56,7 +59,19 @@ class BlogSubscriber extends DataItem
 			"daily"		=>  "Daily Digest",
 			"weekly"	=>	"Weekly Digest",
 	);	
-						   
+			
+	/**
+	 * Retreive the blog subscriber record from the token
+	 * @param string $token the token identifying the subscriber record
+	 */
+	static function fromToken($token)
+	{
+		$subscriber = Query::create(BlogSubscriber, "WHERE subscription_token=:s")
+						   ->bind(":s", $token)
+						   ->executeSingle();
+		return $subscriber;
+	}
+	
 	function Blog()
 	{
 		return $this->getRelated(Blog);
@@ -72,7 +87,7 @@ class BlogSubscriber extends DataItem
 		global $config;
 		$url = ($_SERVER['HTTPS']) ? "https://" : "http://";
 	
-		return $url . $config["http_host"] . "/action/blog/unsubscribe?blog_subscriber_id={$this->blog_subscriber_id}";
+		return $url . $config["http_host"] . "/action/blog/unsubscribe?subscription_token={$this->subscription_token}";
 	}	
 	
 	/**
@@ -88,14 +103,6 @@ class BlogSubscriber extends DataItem
 		$url = ($_SERVER['HTTPS']) ? "https://" : "http://";
 	
 		return $url . $config["http_host"].  "/". $this->format("{Blog.identifier}");
-	}
-						
-	function BlogSubscriber()
-	{
-		$this->primary_key = "blog_subscriber_id";
-		$this->table = "blog_subscriber";
-		
-		$this->DataItem(func_get_args());
 	}
 }
 

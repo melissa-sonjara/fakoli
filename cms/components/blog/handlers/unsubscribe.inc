@@ -34,13 +34,24 @@
 Fakoli::using("blog", "email");
 Fakoli::usingFeature("auto_form");
 
-$blog_id = checkNumeric($_GET["blog_id"]);
+
+$token = checkIdentifier($_GET["subscription_token"]);
+if(!$token)
+{
+	throw new FakoliException("Missing Token");
+}
+
 $blog_subscriber_id = checkNumeric($_GET["blog_subscriber_id"]);
 
-$blogSubscriber = new BlogSubscriber();
-$blogSubscriber->load($blog_subscriber_id);
-
-$blogSubscriber->delete();
+try
+{
+	$blogSubscriber = BlogSubscriber::fromToken($token);
+	$blogSubscriber->delete();
+}
+catch(DataNotFoundException $e)
+{
+	// Previously unsubscribed? Nothing to do.
+}
 
 EmailManager::send($blogSubscriber, 'blog_unsubscribe_confirmation');
 
