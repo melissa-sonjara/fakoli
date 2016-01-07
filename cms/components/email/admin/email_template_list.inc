@@ -52,7 +52,7 @@ $menu_item = "Email Templates";
 $table = new DataListView($emailTemplates, "templates");
 $table->column("Name", formatEmailTemplateLink, true)
 	  ->column("Recipients", formatEmailTemplateRecipients, true)
-	  ->column("Subject", "{subject}", true)
+	  ->column("Subject", formatEmailTemplateSubject, true)
 	  ->column("Message", formatEmailMessage, true)
 	  ->column("Class Name", "{class_name}", true)
 	;
@@ -77,6 +77,10 @@ function formatEmailTemplateLink($emailTemplate)
 	return $text;
 }
 
+function formatEmailTemplateSubject($message)
+{
+	return $message->subject;
+}
 
 function formatEmailMessage($message)
 {
