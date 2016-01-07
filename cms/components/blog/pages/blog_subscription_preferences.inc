@@ -42,14 +42,13 @@
 Fakoli::using("blog", "settings");
 Fakoli::usingFeature("data_view");
 
-$blog_subscriber_id = checkNumeric($_GET["blog_subscriber_id"]);
-
-if(!$blog_subscriber_id)
+$token = checkIdentifier($_GET["subscription_token"]);
+if(!$token)
 {
 	redirect("/index");
 }
 
-$subscriber = new BlogSubscriber($blog_subscriber_id);
+$subscriber = BlogSubscriber::fromToken($token);
 
 $subscriptions = Query::create(BlogSubscriber, "WHERE subscriber_email=:email")
 	->bind(":email", $subscriber->subscriber_email)
