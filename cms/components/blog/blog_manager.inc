@@ -287,6 +287,8 @@ class BlogManager
 			$subscription->subscription_type = $blogSubscriber->subscription_type;
 			$subscription->filter = new InclusionFilter("subscription_type");
 			$subscription->save();
+
+			$form->data = $subscription;
 		}
 		else if(!$subscription)
 		{
