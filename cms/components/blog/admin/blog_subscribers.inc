@@ -21,6 +21,7 @@ $tabs = new DataItemTabBar("tabs", $blogs);
 
 $blogSubscriberListView = new BlogSubscriberListView($blog_id);
 
+$script .= $tabs->writeScript();
 
 $tabs->writeHTML();
 ?>
