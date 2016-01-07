@@ -44,7 +44,7 @@ var BlogManager = (function()
 		{
 			if (result == "OK")
 			{
-				this.closeDialog(function () { notification("Subscription Updated"); });
+				this.dialog.hide(function () { notification("Subscription Updated"); });
 			}
 			else
 			{
