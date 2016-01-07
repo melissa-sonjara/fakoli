@@ -64,7 +64,7 @@ class BlogManifest
 		);
 	}	
 	
-	var $allow_sessionless_handlers = array("rss", "send_digest", "unsubscribe"); // Allow anonymous access to the rss action handler
+	var $allow_sessionless_handlers = array("rss", "send_digest", "unsubscribe", "subscribe_dialog"); // Allow anonymous access to the rss action handler
 	
 	static function getStyles()
 	{
