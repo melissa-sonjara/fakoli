@@ -191,6 +191,8 @@ class CommentView
 
 	function drawView()
 	{
+		global $user;
+		
 		if (Settings::getValue("comment", "enable_item_rating"))
 		{
 			RatingManager::drawRatingWidget($this->obj);
