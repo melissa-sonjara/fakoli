@@ -292,6 +292,10 @@ class BlogManager
 		}
 		else if(!$subscription)
 		{
+			if (!$blogSubscriber->subscription_token) 
+			{
+				$blogSubscriber->subscription_token = BlogSubscriptionManager::generateToken();
+			}
 			$blogSubscriber->save();
 		}
 		
