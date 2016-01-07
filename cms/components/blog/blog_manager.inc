@@ -211,14 +211,14 @@ class BlogManager
 
 		$sitename = $config["sitename"];
 		
-		$message = "This is an automated message from {$sitename}. You have successfully subscribed to the [blog_title].<br><br>To unsubscribe, <a href='[unsubscribe_url]'>click here</a> or follow this link: [unsubscribe_url].";
-		EmailTemplate::setDefaultTemplate("blog_subscription", "[subscriber_email]", "{$sitename} Blog Subscription: [blog_title]", $message, "BlogSubscriber");
+		$message = "This is an automated message from {$sitename}. You have successfully subscribed to the {Blog.title}.<br><br>To unsubscribe, <a href='{getUnsubscribeUrl()}'>click here</a> or follow this link: {getUnsubscribeUrl()}.";
+		EmailTemplate::setDefaultTemplate("blog_subscription", "{subscriber_email}", "{$sitename} Blog Subscription: {Blog.title}", $message, "BlogSubscriber");
 		
-		$message = "Greetings. This is an automated message from {$sitename}. A new post has been published on [blog_title]. Click the link below to read it.<br><br>[blog_url]?article_id=[article_id]<br><br>You are receiving this message because you subscribed to [blog_title]. To unsubscribe, please follow this link: [unsubscribe_url]";
-		EmailTemplate::setDefaultTemplate("blog_published", "[subscriber_email]", "{$sitename} post: [blog_title]", $message, "BlogSubscriber");
+		$message = "Greetings. This is an automated message from {$sitename}. A new post has been published on {Blog.title}. Click the link below to read it.<br><br>{getBlogUrl()}?article_id=[article_id]<br><br>You are receiving this message because you subscribed to {Blog.title}. To unsubscribe, please follow this link: {getUnsubscribeUrl()}";
+		EmailTemplate::setDefaultTemplate("blog_published", "{subscriber_email}", "{$sitename} post: {Blog.title}", $message, "BlogSubscriber");
 	
-		$message = "This is an automated message from {$sitename}. You have successfully unsubscribed to the [blog_title].";
-		EmailTemplate::setDefaultTemplate("blog_unsubscribe_confirmation", "[subscriber_email]", "{$sitename} Blog Subscription: [blog_title]", $message, "BlogSubscriber");
+		$message = "This is an automated message from {$sitename}. You have successfully unsubscribed to the {Blog.title}.";
+		EmailTemplate::setDefaultTemplate("blog_unsubscribe_confirmation", "{subscriber_email}", "{$sitename} Blog Subscription: {Blog.title}", $message, "BlogSubscriber");
 	
 	}
 	

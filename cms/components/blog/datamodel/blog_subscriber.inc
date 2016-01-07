@@ -99,10 +99,7 @@ class BlogSubscriber extends DataItem
 	 */
 	function getBlogUrl()
 	{
-		global $config;
-		$url = ($_SERVER['HTTPS']) ? "https://" : "http://";
-	
-		return $url . $config["http_host"].  "/". $this->format("{Blog.identifier}");
+		return $this->Blog()->getURL();
 	}
 }
 
