@@ -54,6 +54,12 @@ class BlogManifest
 				"Blogs"	=>	array("page"	=>	"/admin/blogs",
 										  "role"	=>	"admin,editor",
 								  		  "weight"	=>	9)
+			),
+					 "Email Management"	=>	array
+			(
+				"Blog Subscribers"	=>	array("page"	=>	"/admin/blog_subscribers",
+											  "role"	=>	"admin",
+											  "weight"	=>	10)
 			)
 		);
 	}	
