@@ -274,7 +274,7 @@ class BlogManager
 	 */
 	static function saveBlogSubscription($form)
 	{
-		$blogSubscriber = $form->data;
+		$blogSubscriber = &$form->data;
 		
 		$subscriptions = Query::create(BlogSubscriber, "WHERE subscriber_email=:email AND blog_id=:blog_id")
 			->bind(":email", $blogSubscriber->subscriber_email, ":blog_id", $blogSubscriber->blog_id)
