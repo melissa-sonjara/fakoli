@@ -48,7 +48,7 @@ var BlogManager = (function()
 			}
 			else
 			{
-				document.id('BlogSubscriber_form__error').set({'text': result, 'display': 'table-cell'});
+				document.id('BlogSubscriber_form__error').set('text', result).setStyle('display', 'table-cell');
 			}
 		}
 		
