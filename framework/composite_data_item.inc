@@ -201,6 +201,19 @@ class CompositeDataItem extends AbstractDataItem
 		return false;
 	}	
 	
+	function getHiddenFields()
+	{
+		$hiddenFields = array();
+		
+		foreach($this->__objects as $obj)
+		{
+			$hidden = $obj->getHiddenFields();
+			if ($hidden) array_merge($hiddenFields, $hidden);
+		}
+		
+		return $hiddenFields;
+	}
+			
 	/**
 	 * Returns true if this DataItem contains a relation with the specified name.
 	 *

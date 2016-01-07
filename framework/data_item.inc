@@ -187,6 +187,11 @@ class DataItem extends AbstractDataItem
 		}			
 	}
 	
+	function getHiddenFields()
+	{
+		return $this->hiddenFields;
+	}
+	
 	/**
 	 * Populates the object using the supplied associative array (field -> value).
 	 * Only values that match the definition of the sub-classed object will be copied.

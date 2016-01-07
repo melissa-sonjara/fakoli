@@ -313,6 +313,14 @@ abstract class AbstractDataItem
 	abstract function getType($field);
 	
 	/**
+	 * Retrieves the list of hidden fields. These will be automatically hidden
+	 * in any AutoForm.
+	 * 
+	 * @return array of names of hidden fields.
+	 */
+	abstract function getHiddenFields();
+	
+	/**
 	 * Returns the filter set on this object. 
 	 */
 	abstract function getFilter();

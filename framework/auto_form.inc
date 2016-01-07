@@ -198,6 +198,12 @@ class AutoForm
 			$this->hide($p);
 		}
 		
+		$hiddenFields = $this->data->getHiddenFields();
+		foreach($hiddenFields as $h)
+		{
+			$this->hide($h);
+		}
+		
 		$this->layout = AutoFormLayout::create($this->default_layout, $this);
 	}
 	
