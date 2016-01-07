@@ -65,7 +65,7 @@ if ($method == "POST")
 {
 	if (!$blogSubscriber->subscription_token) 
 	{
-		$blogSubscriber->subscription_token = BlogSubscriberManager::generateToken();
+		$blogSubscriber->subscription_token = BlogSubscriptionManager::generateToken();
 	}
 	
 	if ($form->save())
