@@ -72,7 +72,7 @@ if ($method == "POST")
 	
 	if ($form->save())
 	{
-		sendEmailUsingEmailManager($blogSubscriber, 'blog_subscription');
+		sendEmailUsingEmailManager($form->data, 'blog_subscription');
 		Fakoli::end("OK");
 	}
 	else
