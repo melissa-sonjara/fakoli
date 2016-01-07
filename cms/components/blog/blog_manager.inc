@@ -291,6 +291,8 @@ class BlogManager
 		{
 			$blogSubscriber->save();
 		}
+		
+		return true;
 	}
 	
 	static function sendDigests()
