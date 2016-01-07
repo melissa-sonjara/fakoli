@@ -384,7 +384,9 @@ class BlogView
 		
 		if ($this->blog->allow_subscriptions)
 		{
-			echo $this->blog->format("<a id='blog_subscription_button' class='button' href='#' onclick='new BlogManager().showSubscriptionDialog({blog_id},\"{title:jsSafe}\"); return false;'>Subscribe to {title}</a>");
+			$buttonFormat = Settings::getValue("blog", "subscribe_button_format");
+			
+			echo $this->blog->format("<a id='blog_subscription_button' class='button' href='#' onclick='new BlogManager().showSubscriptionDialog({blog_id},\"{title:jsSafe}\"); return false;'>$buttonFormat</a>");
 		}
 	}
 	
