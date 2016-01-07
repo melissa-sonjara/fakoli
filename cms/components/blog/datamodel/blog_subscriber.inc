@@ -41,6 +41,9 @@ class BlogSubscriber extends DataItem
 						"subscription_token"	=>	String
 			);
 	
+	// Hidden Fields
+	var $hiddenFields = array("subscription_token");
+	
 	// Relations
 	
 	var $relations = array("Blog"		=>	"Blog"
