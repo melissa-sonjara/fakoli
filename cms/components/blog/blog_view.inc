@@ -623,6 +623,9 @@ class BlogSubscriberListView
 	
 	function drawView()
 	{
+		global $script;
+		$script .= $this->table->writeScript();
+		
 		$this->table->drawView();
 	}
 }
