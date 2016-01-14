@@ -54,18 +54,18 @@ $view->drawView();
 if($user)
 {
 ?>
-<a class="button" href="forum_message_form?forum_id=<?echo $forum_id?>">Create a Topic</a>
+<a class="button" href="forum_message_form?forum_id=<?echo $forum_id?>">Create Topic</a>
 <?
 }
 if (checkRole("admin,moderator"))
 {
 ?>
-&nbsp;&nbsp;<a class="button" href="forum_form?forum_id=<?echo $forum_id?>">Edit this Discussion Forum</a>
+&nbsp;&nbsp;<a class="button" href="forum_form?forum_id=<?echo $forum_id?>">Edit Forum</a>
 <?
 	if($forum->allowDelete())
 	{
 ?>
-&nbsp;&nbsp;<a class="button" href="/action/forum/forum_delete?forum_id=<?echo $forum_id?>" onclick="return confirm('Are you sure you want to delete this forum?');">Delete this Discussion Forum</a>
+&nbsp;&nbsp;<a class="button" href="/action/forum/forum_delete?forum_id=<?echo $forum_id?>" onclick="return confirm('Are you sure you want to delete this forum?');">Delete Forum</a>
 <?php		
 	}		
 }

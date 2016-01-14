@@ -44,7 +44,7 @@ if ($forum_id)
 else
 {
 	$forum = new Forum();
-	$page->page_title = "Add a New Discussion Forum";
+	$page->page_title = "Add New Forum";
 }
 
 
