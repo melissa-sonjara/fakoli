@@ -411,7 +411,7 @@ class AutoForm
 		
 		echo "\tnew AutoFormManager('{$this->id}', {$managerOptions});\n";
 		
-		if ($this->ajaxSubmitHandler)
+		if ($this->ajaxSubmitHandler && !$this->readOnlyForm)
 		{
 ?>
 	document.id('<?echo $this->id?>').iFrameFormRequest(
