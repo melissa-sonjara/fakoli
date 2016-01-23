@@ -110,3 +110,24 @@
 {
 	border: solid 1px #888;
 }
+
+#inline_editing a.pushbutton.first {
+    border-left: 1px solid #888;
+    border-radius: 5px 0 0 5px;
+}
+
+#inline_editing a.pushbutton.last {
+    border-radius: 0 5px 5px 0;
+}
+
+#inline_editing a.pushbutton.selected {
+    background: #316b14;
+    color: #fff;
+}
+
+#inline_editing span.version {
+  display: inline-block;
+  font-size: 10pt;
+  margin: 0 10px;
+  vertical-align: middle;
+}

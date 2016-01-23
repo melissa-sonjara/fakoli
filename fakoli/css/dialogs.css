@@ -116,3 +116,20 @@
 {
 	background-color: #fff;
 }
+
+
+div.dialog.maximized .dialog_header 
+{
+    border-radius: 0;
+}
+
+div.dialog.maximized 
+{
+    border-radius: 0;
+}
+
+div.dialog.lightbox .dialog_body
+{
+	height: 100% !important;
+	position: relative;
+}

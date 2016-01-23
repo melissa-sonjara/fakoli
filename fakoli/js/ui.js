@@ -211,7 +211,7 @@ Window.implement(
 
 function modalPopup(title, url, width, height, returnPopup, draggable, clazz)
 {
-	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz});
+	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz, 'maximized': (width=='100%' && height=='100%')});
 	popup.show(null, url);
 	if (returnPopup) return popup;
 }
@@ -223,7 +223,7 @@ function hideModalPopup(popup)
 
 function messagePopup(title, message, width, height, returnPopup, draggable, clazz)
 {
-	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz});
+	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz, 'maximized': (width=='100%' && height=='100%')});
 	popup.options.body.set('html', message);
 	popup.show();
 	if (returnPopup) return popup; 
@@ -232,7 +232,7 @@ function messagePopup(title, message, width, height, returnPopup, draggable, cla
 
 function floatingPopup(id, title, url, width, height, returnPopup, draggable, clazz)
 {
-	var popup = new FloatingDialog(id, {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz});
+	var popup = new FloatingDialog(id, {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz, 'maximized': (width=='100%' && height=='100%')});
 	popup.show(null, url);
 	if (returnPopup) return popup;
 }
@@ -254,7 +254,8 @@ var AbstractDialog = new Class(
 		left:	   Class.Empty,
 		position:  Class.Empty,
 		onHide:		function() {},
-		'class':	null
+		'class':	null,
+		maximized:	false
 	},
 	
     element: Class.Empty,
@@ -370,10 +371,20 @@ var ModalDialog = new Class(
     {
     	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
     	
+    	
     	if (this.options.body)
     	{
     		this.options.body.setStyle('height', 'auto');
     	}
+
+    	if (this.options.maximized)
+    	{
+    		this.element.addClass('maximized');
+    		this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: 0, left: 0, width: '100%', height: '100%', 'z-index': 10000});
+    		return;
+    	}
+    	
+    	this.element.removeClass('maximized');
     	
     	var curtain = document.id('curtain');
     	var windowSize = window.size();
