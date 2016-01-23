@@ -33,53 +33,39 @@
  
 Fakoli::using("image");
 
-$gallery_id = checkNumeric($_GET["gallery_id"]);
+$image_id = checkNumeric($_GET["image_id"]);
 
-if (!$gallery_id)
+
+if (!$image_id)
 {
-	redirect("/index");
-	return;
-}
-
-$gallery = new ImageGallery($gallery_id);
-
-if (!$gallery->published)
-{
-	redirect("/index");
-	return;
-}
-
-$images = $gallery->Images("ORDER BY sort_order");
-
-$page->page_title = $gallery->gallery_name;
-
-if ($gallery->image_link_mode == "Thumbnail")
-{
-	$linkFormat = "go(\"{related_resource}\"); return false";
+	$img = $_GET["img"];
+	if ($img)
+	{
+		$image = ImageRecord::findByFilename($img);
+		if ($image) 
+		{
+			$image_id = $image->image_id;
+		}
+		else
+		{
+			throw new FakoliException("Unknown Image");
+		}
+	}
 }
 else
 {
-	$linkFormat = "lightbox({image_id}); return false";
+	$image = new ImageRecord($image_id);
 }
 
-$galleryName = $gallery->format("{gallery_name:jsSafe}");
-
-$script .= <<<ENDSCRIPT
-<script type="text/javascript">
-function lightbox(id)
-{	
-	modalPopup('{$galleryName}', '/action/image/fullsize_lightbox_view?image_id=' + id, '100%', '100%', false, false, 'lightbox');	
+$gallery = $image->Gallery();
+if ($gallery->image_link_mode == "Lightbox" && $image->related_resource)
+{
+	$link = "<a href='{$image->related_resource}'>";
+	$closeLink = "</a>";
 }
-</script>
-ENDSCRIPT;
-
-$thumbnail_size = $gallery->thumbnail_size;
-if (!$thumbnail_size) $thumbnail_size = 125;
-
-echo $gallery->description;
-
-$view = new ImageGalleryView($images, $linkFormat, "images", $thumbnail_size);
-$view->spacing = "6px";
-$view->styles = "margin-left: 40px";
-$view->drawGallery();
 ?>
+<div style="width:100%; height:100%; vertical-align: middle; background: url(/fakoli/images/loader.gif) center center no-repeat #fff">
+<?echo $link?><img src="/action/image/show?image_id=<?echo $image_id?>&size=600" 
+				   style="max-height:100%;max-width:100%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)" 
+				   alt="<?echo $image->ALT_tag?>"/><?echo $closeLink?>
+</div>
