@@ -132,7 +132,7 @@ class FilterForm extends SearchForm
 	{
 		return str_replace("{url}", $url, $this->navigationFunction);
 	}
-	
+		
 	function setNavigationMode($mode)
 	{
 		$this->navigationMode = $mode;
@@ -142,6 +142,11 @@ class FilterForm extends SearchForm
 			$this->onSubmitHandler = "{$this->id}_loadPanel";
 			$this->action = Fakoli::scriptName();
 		}
+	}
+	
+	function getOnSubmitFunction()
+	{
+		return "onSubmit{$this->id}";
 	}
 	
 	function writeScript()
@@ -286,7 +291,7 @@ ENDSCRIPT;
 		}
 	}
 
-	/*
+	/**
 	 * Override an existing SearchParameter constraint
 	 * clause handler or add one. 
 	 * 
@@ -299,7 +304,7 @@ ENDSCRIPT;
 	}
 	
 	
-	/*
+	/**
 	 * Default for all parameters included in filter is equal
 	 * Additional search parameters can be added by calling script with
 	 * the syntax:
@@ -387,9 +392,9 @@ class FilterFieldRenderer extends SelectFieldRenderer
 			$styles .= "style='width: {$this->width}'";
 		}
 			
-		?>
-    	<select name="<?php echo $field ?>" <?echo $styles?> onchange="if (onSubmit<?echo $this->parent->id?>(this.form)) this.form.submit();">
-    	<?php 
+		$onSubmit = $this->parent->getOnSubmitFunction();
+		echo "<select name='{$field}' {$styles} onchange='if ({$onSubmit}(this.form)) this.form.submit();'>";
+    	
     	if ($this->default)
     	{
    ?>
@@ -415,9 +420,8 @@ class FilterFieldRenderer extends SelectFieldRenderer
   			
 			echo "<option value='{$value}' $selected>$trunced</option>\n";
 		}
-		?>
-   		</select>&nbsp;
-  		<?		
+		
+		echo "</select>&nbsp;";
   		
   		$this->_endField($field);
   	}
@@ -528,7 +532,7 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 	function renderSearchScript($field)
 	{
 		$selChanged = "selChanged_" . $field . "_box";
-
+		$onSubmit = $this->parent->getOnSubmitFunction();
 ?>
 <script type="text/javascript">
 
@@ -544,7 +548,7 @@ function <? echo $selChanged ?>(elt)
    	 	
    	  	value_field.set("value", new_value);
   	}
-	elt.form.submit();
+  	if (<?php echo $onSubmit?>(elt.form)) elt.form.submit();
 }
 </script>
 <?	
@@ -646,13 +650,14 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 
 		$idx = 0;
 
+		$onSubmit = $this->parent->getOnSubmitFunction();
 		if(count($this->options) > 0)
 		{
 			foreach($this->options as $value => $text)
 			{
 				trace("CheckListFieldRenderer value $value and text $text", 3);
 				echo "<li>\n";
-				$onchange = " onchange='this.form.submit();'";
+				$onchange = " onchange='if ({$onSubmitFunction})(this.form)) this.form.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
 				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
 				$idx++;
@@ -702,7 +707,8 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 	{
 		$this->_startField($field, $this->styles);
 		
-		$onchange = " onchange='this.form.submit();'";		
+		$onSubmit = $this->parent->getOnSubmitFunction();
+		$onchange = " onchange='if ({$onSubmit})(this.form)) this.form.submit();'";		
 		
 		$searchValue = $this->parent->data->get($field);
 
