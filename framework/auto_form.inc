@@ -78,8 +78,11 @@ class AutoForm
 	var $passwordEnterLabel = "Enter";		///< Text for Password Enter label
 	var $passwordConfirmLabel = "Confirm";	///< Text for Password Confirm label
 	
-	var $onSavePreProcess = null; ///< Callback event handler that is fired after field have been preprocessed, but before the data has been saved to the database.
-	var $onSaveComplete = null;	///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
+	var $onDrawStart = null; 			///< Callback event handler that is fired just prior to drawing the form
+	var $onDrawComplete = null; 		///< Callback event handler that is fired just after the form been drawn
+	
+	var $onSavePreProcess = null; 		///< Callback event handler that is fired after field have been preprocessed, but before the data has been saved to the database.
+	var $onSaveComplete = null;			///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
 	var $onDelete = "";					///< delete method name
     var $customSaveHandler = null;		///< Use this field to override the default save behavior of your form.
@@ -930,7 +933,15 @@ class AutoForm
 	 */
 	function drawForm()
 	{
-		if ($this->readOnlyForm) return $this->drawReadOnly();
+		if ($this->readOnlyForm) return $this->drawReadOnly();		
+
+		if ($this->onDrawStart)
+		{
+			if (call_user_func_array($this->onDrawStart, array($this)) === false)
+			{
+				return;
+			}
+		}
 		
 		$obj =& $this->data;
 		$pk = $obj->getPrimaryKey();
@@ -1013,7 +1024,11 @@ class AutoForm
 		{
 			echo "</form>\n";
 		}
-		
+
+		if ($this->onDrawComplete)
+		{
+			call_user_func_array($this->onDrawComplete, array($this));
+		}
 	}
 	
 	/*
