@@ -4,13 +4,15 @@ var PageManager = (function()
 	{
 		dialog: null,
 		document_library_id: null,
+		versioned: false,
 		
 		initialize: function()
 		{
 		},
 		
-		editPage: function(page_id)
+		editPage: function(page_id, versioned)
 		{
+			this.versioned = versioned;
 			this.dialog = modalPopup('Edit Page Details', '/action/page/edit?page_id=' + page_id, '900px', 'auto', true);
 		},
 		
@@ -19,7 +21,16 @@ var PageManager = (function()
 			if (result == "OK")
 			{
 				this.closeDialog();
-				window.location.reload();
+				if (this.versioned)
+				{
+					var url = new URI();
+					url.setData('version', 'draft');
+					window.location.href = url.toString();
+				}
+				else
+				{
+					window.location.reload();
+				}
 			}
 			else if (result == "DELETED")
 			{

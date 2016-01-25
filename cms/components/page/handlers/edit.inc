@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy");
+Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy", "versioned_content");
 
 Fakoli::usingFeature("auto_form", "tree");
 
@@ -68,6 +68,8 @@ $form->ajaxSubmit("function(result) {new PageManager().editResult(result);}", "f
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
+
+VersionedContentManager::enableVersioning($form);
 
 
 $redirect = "/admin/pages";

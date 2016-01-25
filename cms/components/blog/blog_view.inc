@@ -415,7 +415,9 @@ class BlogView
 
 		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
 		{
-			echo "<p id='inline_editing'><a href='#' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a></p>";
+			$article = new Article($article_id);
+			$versioningControls = ComponentManager::fireEvent("RenderVersioningControls", $article);
+			echo "<p id='inline_editing'><a href='#' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a>$versioningControls</p>";
 		}
 
 		$this->drawSubscribeButton();

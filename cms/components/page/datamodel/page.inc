@@ -60,6 +60,8 @@ class Page extends DataItem implements Searchable
 						   "Modules"			=>	Module,
 						   "Site"				=>	Site);
 	
+	var $versioned_fields = array("page_title", "description", "meta_tag_description", "meta_tag_keyword", "author");
+	
 	function PageModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
 		return $this->getRelatedList(PageModuleXref, "", $constraint);

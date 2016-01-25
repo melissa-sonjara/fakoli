@@ -67,6 +67,8 @@ class Article extends DataItem implements Searchable
 			);
 	
 	var $fieldAliases = array("message"	=>	"Article Content");
+
+	var $versioned_fields = array("title", "message", "image_id", "teaser", "tags", "author", "publication");
 	
 	function Image()
 	{

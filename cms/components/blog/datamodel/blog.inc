@@ -54,6 +54,8 @@ class Blog extends DataItem // implements Searchable
 						"enable_rss_feed"		=>	Boolean,
 						"max_rss_articles"		=>	Number);
 	
+	var $versioned_fields = array("title", "description", "image_id");
+	
 	// Relations
 	
 	var $relations = array(

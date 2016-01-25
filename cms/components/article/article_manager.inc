@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("component", "comment", "blog");
+Fakoli::using("component", "comment", "blog", "versioned_content");
 
 class ArticleManager
 {
@@ -39,8 +39,9 @@ class ArticleManager
 	
 		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
 
-		$form->getRenderer("archive_date")->validator->required = false;
-		
+		$form->getRenderer("archive_date")->validator->required = false;		
+
+		VersionedContentManager::enableVersioning($form);
 		
 		return $form;
 	}

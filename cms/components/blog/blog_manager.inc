@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("component");
+Fakoli::using("component", "versioned_content");
 
 class BlogSerializationHandler
 {
@@ -140,6 +140,10 @@ class BlogManager
 		$form->alias("enable_rss_feed", "Enable RSS Feed");
 		$form->alias("max_rss_articles", "Max # of Articles in RSS Feed");	
 		$form->annotate("max_rss_articles", "(A value of zero means no limit)");
+		
+
+		VersionedContentManager::enableVersioning($form);
+		
 		return $form;
 	}
 	

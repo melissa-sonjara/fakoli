@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy");
+Fakoli::using("page", "menu", "site", "field_renderers", "role", "taxonomy", "versioned_content");
 
 Fakoli::usingFeature("auto_form", "tree");
 
@@ -43,6 +43,16 @@ $page_id = checkNumeric($_GET["page_id"]);
 
 $cmspage = new Page();
 $cmspage->filter = new ExclusionFilter("menu_id");
+
+if ($page_id)
+{
+	$cmspage->load($page_id);
+	$title = "Edit Page Details for {$cmspage->page_title}";
+}
+else
+{
+	$title = "Add a New Page";
+}
 
 $cmspage->created_date = date("Y-m-d");
 
@@ -62,12 +72,13 @@ $codeSelect = new CodeFileSelectFieldRenderer($form, "php_code_file", "PHP Code 
 $templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template", "site");
 $form->annotate("template", "Fakoli 3 projects use Section Content to set template");
 
-
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
 
 $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
+
+VersionedContentManager::enableVersioning($form);
 
 
 $tabs = PageManager::pageTabs($page_id);
@@ -86,16 +97,6 @@ if ($method == "POST")
 		$tabs->queryString = "page_id={$form->data->page_id}";
 		$tabs->next();
 	}
-}
-
-if ($page_id)
-{
-	$cmspage->load($page_id);
-	$title = "Edit Page Details for {$cmspage->page_title}";
-}
-else
-{
-	$title = "Add a New Page";
 }
 
 $redirect = "/admin/pages";

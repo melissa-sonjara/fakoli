@@ -31,7 +31,7 @@
 
 *****************************************************************/
 
-Fakoli::using("page");
+Fakoli::using("page", "versioned_content");
 
 class PageSerializationHandler
 {
@@ -77,6 +77,8 @@ class PageManager
 			$page = Query::create(Page, "WHERE identifier=:i")
 						->bind(":i", $identifier)
 						->executeSingle();
+			
+			VersionedContentManager::selectDisplayVersion($page);
 			
 			if (!$page->published && !checkRole("admin")) throw new FakoliException("Unrecognized page '$identifier'");
 
