@@ -611,8 +611,8 @@ class BlogSubscriberListView
 		
 		if (Settings::getValue("blog", "enable_extended_subscription_fields"))
 		{
-			$this->table("Name", "{first_name} {last_name}", true);
-			$this->table("Organization", "{organization}", true);
+			$this->table->column("Name", "{first_name} {last_name}", true);
+			$this->table->column("Organization", "{organization}", true);
 		}
 		
 		$this->table->column("Remove", array(BlogSubscriberListView, formatUnsubscribeLink), true, "width: 40%; text-align: center");
