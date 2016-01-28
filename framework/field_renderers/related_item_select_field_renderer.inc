@@ -41,21 +41,23 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class RelatedItemSelectFieldRenderer extends FieldRenderer
 {
-	var $items; 
-	var $default;
-	var $field;
-	var $nameField;
-	var $valueField;
-	var $allowAdd;
-	var $relatedClass;
-	var $constraint;	
-	var $max_chars;
-	var $allowNone;
-	var $templateItem;
-	var $sorted;
-	var $otherField;
-	var $onChange;
-	var $width;
+	var $items; 				///< The related item choices (populated by the control)
+	var $default;				///< The default selected value
+	var $field;					///< The field name
+	var $nameField;				///< The name field or field format
+	var $valueField;			///< The value field
+	var $allowAdd;				///< True to allow items to be added when entering the form
+	var $relatedClass;			///< The DataItem class of the related items
+	var $constraint;			///< Constraint to apply when populating the item choice list
+	var $max_chars;				///< The maximum number of characters to display in the select choices (0 for no limit)
+	var $allowNone;				///< Set to true to provide an option for no selection
+	var $templateItem;			///< The template of a DataItem to use when adding items is enabled in the form via the allowAdd parameter
+	var $sorted;				///< Set to true to sort the items alphabetically (independent of any sort order in the constraint field)
+	var $otherField;			///< Name of a field in the form to allow the user to specify specific "Other" value that is not in the item list
+	var $onChange;				///< Name of a Javascript handler function to be called when the selection changes
+	var $width;					///< Width of the control (in CSS format)
+	var $defaultText;			///< Text to display in the 'no selection' option when allowNone is enabled
+	var $defaultReadOnlyText;	///< Text to display when the control is read-only and the is no selected value;
 	
 	static $optionsCache = array();
 	
@@ -227,20 +229,25 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		$this->getRelatedItems();
 		
+		$this->_startField($field);
+		
 		if($this->width)
 			$style = "style='width: {$this->width}'";
 		
-		echo "<tr>\n";
 		$this->_printLabel($field);
-		echo "<td><select name='{$field}:$mode' $style>\n";
-		echo "<option value=''></option>\n";
-		$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
-		//trace("valueField: $valueField", 3);
+		echo "<select name='{$field}:$mode' $style>\n";
+		
+		//AJG: Don't add double empty slots when allowNone is true
+		if (!$this->allowNone) 
+		{
+			echo "<option value=''></option>\n";
+		}
 		
 		$value = $this->parent->params->get($field, $mode);
 		
 		foreach($this->items as $item)
 		{
+			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
 			$name = $this->formatName($item, $this->nameField);
 
 			echo "<option value='{$item->get($valueField)}'";
@@ -248,6 +255,8 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
 		}
 		echo "</select>";
+		
+		$this->_endField($field);
 	}
 	
 	function renderReadOnly($field)
@@ -257,7 +266,15 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 		
 		trace("RelatedItemSelectFieldRenderer renderReadOnly name field is {$this->nameField} field is $field and item is {$item->role}", 3);
-		$name = $this->formatName($item, $this->nameField);
+		if (!$item->getPrimaryKeyValue())
+		{
+			trace("Using default readonly text '{$this->defaultReadOnlyText}'", 3);
+			$name = $this->defaultReadOnlyText;
+		}
+		else
+		{
+			$name = $this->formatName($item, $this->nameField);
+		}
 		
 		if (!$this->parent->readOnlyForm)
 		{
@@ -272,7 +289,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 	}
 
-	function getRelatedItems()
+	function getRelatedItems($readonly = false)
 	{
 		$cacheKey = "$this->relatedClass, $this->constraint";
 		
@@ -292,7 +309,18 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 			if (is_string($this->allowNone))
 			{
 				$nameField = $this->nameField;
-				$none->$nameField = $this->allowNone;
+				if ($readonly)
+				{
+					$none->set($nameField, $this->defaultReadOnlyText);
+				}
+				else if ($this->defaultText)
+				{
+					$none->set($nameField, $this->defaultText);
+				}
+				else
+				{
+					$none->set($nameField, $this->allowNone);
+				}
 			}
 			$this->items = array_merge(array($none), $this->items);
 		}
