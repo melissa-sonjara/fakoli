@@ -117,8 +117,8 @@ require_once realpath(dirname(__FILE__)."/field_renderers/checklist_field_render
 class FilterForm extends SearchForm
 {	
 	var $preserveQueryString = false;
- 	var $navigationFunction = "go('{url}')";
- 	var $navigationMode = "form"; ///< Mode used for navigating after filter changed - either "form" or "panel"
+ 	var $navigationFunction = "go('{url}')";	///< Format specifier for the default javascript navigation function to be used by fields in the FilterForm
+ 	var $navigationMode = "form"; 				///< Mode used for navigating after filter changed - either "form" or "panel"
  	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
@@ -133,6 +133,10 @@ class FilterForm extends SearchForm
 		return str_replace("{url}", $url, $this->navigationFunction);
 	}
 		
+	/**
+	 * Sets the navigation mode for the FilterForm. 
+	 * @param string $mode Use 'form' for page reloads, or 'panel' for AJAX panel reloads
+	 */
 	function setNavigationMode($mode)
 	{
 		$this->navigationMode = $mode;
@@ -657,7 +661,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 			{
 				trace("CheckListFieldRenderer value $value and text $text", 3);
 				echo "<li>\n";
-				$onchange = " onchange='if ({$onSubmitFunction})(this.form)) this.form.submit();'";
+				$onchange = " onchange='if ({$onSubmitFunction}(this.form)) this.form.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
 				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
 				$idx++;
@@ -708,7 +712,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 		$this->_startField($field, $this->styles);
 		
 		$onSubmit = $this->parent->getOnSubmitFunction();
-		$onchange = " onchange='if ({$onSubmit})(this.form)) this.form.submit();'";		
+		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.submit();'";		
 		
 		$searchValue = $this->parent->data->get($field);
 
@@ -1186,6 +1190,45 @@ window.addEvent('domready', function()
 	function renderField($field)
 	{
 		$this->renderSearchField($field);
+	}
+}
+
+class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRenderer
+{
+	function __construct(&$form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", $maxChars = 80)
+	{	
+		$this->RelatedItemSelectFieldRenderer($form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", false, true, $maxChars);
+	}	
+	
+	
+	function renderSearchField($field)
+	{
+		$onSubmit = $this->parent->getOnSubmitFunction();
+		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.submit();'";
+		
+		$this->getRelatedItems();
+		
+		if($this->width)
+			$style = "style='width: {$this->width}'";
+		
+		echo "<tr>\n";
+		$this->_printLabel($field);
+		echo "<td><select name='{$field}'$onchange $style>\n";
+		echo "<option value=''></option>\n";
+		//trace("valueField: $valueField", 3);
+		
+		$value = $this->parent->data->get($field);
+		
+		foreach($this->items as $item)
+		{
+			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
+			$name = $this->formatName($item, $this->nameField);
+
+			echo "<option value='{$item->get($valueField)}'";
+			if ($item->get($valueField) == $value) echo " selected";
+			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
+		}
+		echo "</select>&nbsp;";
 	}
 }
 ?>
