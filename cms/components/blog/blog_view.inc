@@ -611,7 +611,8 @@ class BlogSubscriberListView
 		
 		if (Settings::getValue("blog", "enable_extended_subscription_fields"))
 		{
-			$this->table->column("Name", "{first_name} {last_name}", true);
+			$this->table->column("First Name", "{first_name}", true);
+			$this->table->column("Last Name", "{last_name}", true);
 			$this->table->column("Organization", "{organization}", true);
 		}
 		
