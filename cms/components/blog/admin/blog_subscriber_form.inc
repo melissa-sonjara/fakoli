@@ -46,6 +46,11 @@ $form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{
 $blogSelect = new RelatedItemSelectFieldRenderer($form, "blog_id", "Select a Blog to Subscribe", Blog, "ORDER BY title", "title", "blog_id");
 $blogSelect->allowNone = true;
 
+if (!Settings::getValue("blog", "enable_extended_subscription_fields"))
+{
+	$blogSubscriber->filter = new ExclusionFilter("first_name", "last_name", "organization");
+}
+
 $form->submitLabel = "Subscribe";
 
 if ($method == "POST")
