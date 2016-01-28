@@ -55,7 +55,8 @@ class BlogUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added RSS parameters to blog table",
 			"1.4"		=>	"sql:Add column subscription_type to blog_subscriber table",
 			"1.5"		=>	"sql:Added comment_moderators and allow_subscriptions fields to blog table",
-			"1.6"		=>	"sql:Added subscription_token to blog_subscriber table"
+			"1.6"		=>	"sql:Added subscription_token to blog_subscriber table",
+			"1.7"		=>	"sql:Added first_name, last_name and organization to blog_subscriber table"
 	);
 	
 	function BlogUpgradeManager()

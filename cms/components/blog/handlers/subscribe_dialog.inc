@@ -41,6 +41,11 @@ $blogSubscriber = new BlogSubscriber();
 $blogSubscriber->blog_id = $blog_id;
 $blogSubscriber->subscription_type = 'instant';
 
+if (!Settings::getValue("blog", "enable_extended_subscription_fields"))
+{
+	$blogSubscriber->filter = new ExclusionFilter("first_name", "last_name", "organization");
+}
+
 $page->page_title = "Subscribe to Updates";
 
 $form = new AutoForm($blogSubscriber, "POST", "/action/blog/subscribe_dialog?blog_id={$blog_id}");

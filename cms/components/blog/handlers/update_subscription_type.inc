@@ -49,6 +49,8 @@ if(!$subscription_type)
 
 $blogSubscriber = new BlogSubscriber($blog_subscriber_id);
 
+$blogSubscriber->filter = new ExclusionFilter("first_name", "last_name", "organization");
+
 if($subscription_type != "unsubscribe")
 {
 	$blogSubscriber->subscription_type = $subscription_type;

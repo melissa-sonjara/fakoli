@@ -74,3 +74,11 @@ ALTER TABLE blog_subscriber ADD COLUMN subscription_token varchar(50);
 UPDATE blog_subscriber SET subscription_token=(select md5(UUID())) where subscription_token is null;
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE blog_subscriber ADD COLUMN first_name VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE blog_subscriber ADD COLUMN last_name VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE blog_subscriber ADD COLUMN organization VARCHAR(255) NOT NULL DEFAULT '';
+
+-- END Version 1.7
