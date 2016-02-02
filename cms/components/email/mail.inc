@@ -45,8 +45,16 @@ class Mail
 	
 	function Mail($from, $to, $subject, $body = "", $headers = "", $fullFrom = "")
 	{
-		$this->server = ini_get("SMTP");
-		$this->port   = ini_get("smtp_port");
+		if (Settings::getValue("email", "override_PHP_settings"))
+		{
+			$this->server = Settings::getValue("email", "mail_server");
+			$this->port = Settings::getValue("email", "smtp_port");
+		}
+		else
+		{
+			$this->server = ini_get("SMTP");
+			$this->port   = ini_get("smtp_port");
+		}
 		
 		$this->from = $from;
 		$this->to = $to;
