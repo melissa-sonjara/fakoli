@@ -74,7 +74,8 @@ class PageManifest
 					 "RegisterTaxonomyClasses"		=> array(PageManager, registerTaxonomyClasses),
 					 "upgradeComponent"				=> array(PageManager, upgradeComponent),
 					 "RegisterSerializationHandler"	=> array(PageManager, registerSerializationHandler),
-					 "RegisterSolrAdapters"			=> array(PageManager, registerSolrAdapter)
+					 "RegisterSolrAdapters"			=> array(PageManager, registerSolrAdapter),
+					 "RegisterVersionedContent"		=> array(PageManager, registerVersionedContent)
 		
 				);
 	}

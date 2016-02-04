@@ -12,6 +12,13 @@ class VersionedContentManager
 
 	}
 
+	static $versionedContentClasses = array();
+	
+	static function onInitialize()
+	{
+		ComponentManager::fireEvent("RegisterVersionedContent");
+	}
+	
 	static function setDefaults()
 	{
 		Settings::setDefaultValue("settings", "enable_content_versioning", false, Boolean, "Enables content versioning for supported content items", "Content Versioning");
@@ -27,6 +34,14 @@ class VersionedContentManager
 		$form->onDrawStart = array(VersionedContentManager, "onDrawForm");
 		$form->onSavePreProcess = array(VersionedContentManager, 'onSavePreProcess');
 		
+	}
+	
+	static function registerVersionedContent()
+	{
+		for($i = 0; $i < func_num_args(); ++$i)
+		{
+			VersionedContentManager::$versionedContentClasses[] = func_get_arg($i);
+		}
 	}
 	
 	static function onSavePreProcess($form)

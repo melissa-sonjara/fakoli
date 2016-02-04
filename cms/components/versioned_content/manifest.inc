@@ -30,10 +30,10 @@ class VersionedContentManifest
 
 	static function subscribeToEvents()
 	{
-		return array(
-					"upgradeComponent"	=>	array(VersionedContentManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(VersionedContentManager, setDefaults),
-					"RenderVersioningControls"	=>	array(VersionedContentManager, onDrawInlineControls)
+		return array("Initialize"				 =>	array(VersionedContentManager, onInitialize),
+					 "upgradeComponent"			=>	array(VersionedContentManager, upgradeComponent),
+					 "ComponentScanComplete"	=>	array(VersionedContentManager, setDefaults),
+					 "RenderVersioningControls"	=>	array(VersionedContentManager, onDrawInlineControls)
 					//TODO: Add Event Registrations here
 		);
 	}

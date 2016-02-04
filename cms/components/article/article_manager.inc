@@ -128,6 +128,11 @@ class ArticleManager
 		return $classes;
 	}
 
+	static function registerVersionedContent()
+	{
+		VersionedContentManager::registerVersionedContent(Article);
+	}
+	
 	/**
 	 * Respond to fired event DeleteUser
 	 *

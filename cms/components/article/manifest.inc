@@ -73,7 +73,8 @@ class ArticleManifest
 				"upgradeComponent"			=>	array(ArticleManager, upgradeComponent),
 				"RegisterTaxonomyClasses"	=>	array(ArticleManager, registerTaxonomyClasses),
 				"DeleteUser"				=>	array(ArticleManager, deleteUser),
-				"RegisterSolrAdapters"		=>	array(ArticleManager, registerSolrAdapter)
+				"RegisterSolrAdapters"		=>	array(ArticleManager, registerSolrAdapter),
+				"RegisterVersionedContent"	=>	array(ArticleManager, registerVersionedContent)
 		);
 	}		
 	

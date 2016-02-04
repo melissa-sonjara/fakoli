@@ -142,6 +142,11 @@ class PageManager
 		$classes[] = Page;
 		return $classes;
 	}
+
+	static function registerVersionedContent()
+	{
+		VersionedContentManager::registerVersionedContent(Page);
+	}
 	
 	static function upgradeComponent($version)
 	{

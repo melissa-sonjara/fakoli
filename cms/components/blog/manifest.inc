@@ -88,7 +88,8 @@ class BlogManifest
 					 "ComponentScanComplete"		=> array(BlogManager, setDefaults),
 					 "RegisterSearchables"			=>	array(BlogManager, registerSearchables),
 					 "RegisterSolrAdapters"			=>	array(BlogManager, registerSolrAdapter),
-					 "RegisterScheduledTaskWorkers"	=>	array(BlogManager, registerScheduledTaskWorkers)
+					 "RegisterScheduledTaskWorkers"	=>	array(BlogManager, registerScheduledTaskWorkers),
+					 "RegisterVersionedContent"		=>	array(BlogManager, registerVersionedContent)
 		);
 	}
 }

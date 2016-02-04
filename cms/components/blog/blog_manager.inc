@@ -251,6 +251,11 @@ class BlogManager
 		return $classes;
 	}
 	
+	static function registerVersionedContent()
+	{
+		VersionedContentManager::registerVersionedContent(Blog);
+	}
+	
 	/**
 	 * Respond to fired event DeleteUser
 	 *
