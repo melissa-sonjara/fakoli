@@ -174,20 +174,28 @@ class UserManager
 	 */
 	function loginRedirect($user)
 	{
+		$page = $this->getLoginRedirect($user);
+		redirect($page);
+	}
+	/**
+	 * Redirect the user after a valid login.
+	 * @param $user the user object
+	 */
+	function getLoginRedirect($user)
+	{
 		global $isAdmin;
 		global $_SESSION;
-
+	
 		$page = $_SESSION["login_redirect"];
 		unset($_SESSION["login_redirect"]);
 	
 		if (!$page || startsWith($page, "components/login"))
 		{
-			$page = ($isAdmin) ? "/admin/index" : "/index";
-		}	
-		
-		redirect($page);
+			$page = ($isAdmin) ? "/admin/index" : SiteRole::getHomePage($user);
+		}
+	
+		return $page;
 	}
-
 
 	/**
 	 * Returns the identifier of the password reset page.
