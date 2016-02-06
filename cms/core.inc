@@ -1132,7 +1132,7 @@ ENDSCRIPT;
     	{
     		$fs = explode(",", $config['filesystems']);
     	}
-    	else if (stristr(PHP_OS, "win"))
+    	else if (strtolower(substr(PHP_OS, 0, 3)) == "win")
     	{
     		$fs = array("C:");
     	}
