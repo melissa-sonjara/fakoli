@@ -234,8 +234,10 @@ class SiteMapManager
 			{
 				foreach($items as $item)
 				{
-					if (!array_key_exists($item->identifier, $contentByIdentifier)) continue;
+					if (!$item->identifier || !array_key_exists($item->identifier, $contentByIdentifier)) continue;
 						
+					trace(get_class($item). " - ".$item->identifier, 3);
+					
 					$content = $contentByIdentifier[$item->identifier];
 					$url = $this->getLink($section, $item->identifier);
 					$page_title = $this->getTitle($content, $type, $item);
