@@ -71,6 +71,7 @@ $thumbnailFormats = new SelectFieldRenderer($form, "thumbnail_format", "Thumbnai
 $form->allowDelete = $allowDelete;
 $form->hide("owner_id");
 $form->unique("identifier");
+$form->required("gallery_name", "identifier");
 
 if ($method == "POST")
 {
