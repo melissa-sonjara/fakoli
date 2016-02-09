@@ -1114,7 +1114,10 @@ ENDSCRIPT;
         else 
         {       
             $sys_load = sys_getloadavg();
-            $out = "$sys_load[0]&nbsp;&nbsp;&nbsp;$sys_load[1]&nbsp;&nbsp;&nbsp;$sys_load[2]";       
+            $load0 = number_format($sys_load[0], 2);
+            $load1 = number_format($sys_load[1], 2);
+            $load3 = number_format($sys_load[2], 2);
+            $out = "$load0&nbsp;&nbsp;&nbsp;$load1&nbsp;&nbsp;&nbsp;$load2";       
         }
        
         return $out;  
