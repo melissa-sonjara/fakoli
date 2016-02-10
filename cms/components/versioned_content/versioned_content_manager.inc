@@ -75,7 +75,10 @@ class VersionedContentManager
 	{
 		$class = get_class($target);
 		$reversion = new $class;
-		$reversion->load($target->getPrimaryKeyValue());
+		$id = $target->getPrimaryKeyValue();
+		if (!$id) return;
+		
+		$reversion->load($id);
 		
 		foreach($reversion->versioned_fields as $field)
 		{
