@@ -265,6 +265,26 @@ class UngroupedFormLayout extends TableBasedFormLayout
 }
 
 /**
+ * Mobile version of UngroupedFormLayout
+ */
+class MobileUngroupedFormLayout extends MobileFormLayout
+{
+	function MobileUngroupedFormLayout($form)
+	{
+		$this->MobileFormLayout($form);
+	}
+	
+	function startGroup($name)
+	{
+		//$this->startUngrouped();
+	}
+	
+	function endGroup()
+	{
+		//$this->endUngrouped();
+	}
+}
+/**
  * Used for the header row in
  * SpreadSheetAutoForm.
  */
