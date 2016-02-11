@@ -67,7 +67,8 @@ class AutoForm
 	var $readonly = array();			///< The read-only fields collection
 	var $annotations = array();			///< The field annotations collection
 	var $buttons = array();				///< The custom buttons collection
-
+	var $fieldOrder = array();			///< The order in which to display ungrouped fields
+	
 	var $validator;						///< The ValidationEngine for this form
 	var $useLinkSubmit = false;			///< Flag to indicate whether the submit button for the form should be rendered as a link (not common).
 
@@ -230,6 +231,17 @@ class AutoForm
 	function setLayout($layout)
 	{
 		$this->layout = $layout;
+	}
+	
+	/**
+	 * Override the display order for ungrouped field
+	 */
+	function setFieldOrder()
+	{
+		for($i = 0; $i < func_num_args(); ++$i)
+		{
+			$this->fieldOrder[] = func_get_arg($i);
+		}
 	}
 	
 	/**
@@ -1107,6 +1119,15 @@ class AutoForm
 			
 			$this->layout->startUngrouped();
 			
+		}
+		
+		foreach($this->fieldOrder as $field)
+		{
+			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) &&
+				($this->hasAdditional($field) || !($filter && $filter->isExcluded($field))))
+			{
+				$this->renderOneField($field);
+			}
 		}
 		
 		foreach(array_keys($this->fields) as $field)
