@@ -224,6 +224,19 @@ class ComponentPageView
 			$template = str_replace($position[0], $output, $template);
 		}
 		
+		// Direct inclusion of module by path
+		// Generally discouraged, but sometimes the best solution
+		
+		$inclusions = array();
+		preg_match_all("/\{include:(.*?\.inc)\}/", $template, $inclusions, PREG_SET_ORDER);
+		
+		foreach($inclusions as $inclusion)
+		{
+			trace("Substituting include $inclusion[1]",3);
+			$output = Fakoli::evaluateFile($inclusion[1]);
+			$template = str_replace($inclusion[0], $output, $template);
+		}
+		
 		// Pull in the script and style dependencies defined by the components
 		
 		if ($_REQUEST["_style"] != "nude")

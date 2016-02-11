@@ -84,45 +84,11 @@ class PageView
 
 		if ($this->page->php_code_file)
 		{
-			ob_start();
-			
-			$codePath = explode(",", $this->page->php_code_file);
-			if (count($codePath) == 2)
-			{
-				$name = $codePath[0];
-				$php_code_file = $codePath[1];
-				$components = Fakoli::getComponents();
-				if (array_key_exists($name, $components))
-				{
-					$path = $components[$name]->component_path;
-					include $path."/{$php_code_file}";
-				}
-				else
-				{
-					throw new FakoliException("Unknown component");
-				}
-			}
-			else
-			{
-				include $config['homedir']."/{$this->page->php_code_file}";
-			}
-    		$output = ob_get_contents();
- 			ob_end_clean();
+			$output = Fakoli::evaluateFile($this->page->php_code_file);
  			$this->page->description .= $output;
 	
 		}	
-				
-		/*
-		if ($this->page->php_code_file)
-		{
-			ob_start();
-			include $config['homedir']."/{$this->page->php_code_file}";
-			$output = ob_get_contents();
-			ob_end_clean();
-			
-			$this->page->description .= $output;
-		}
-		*/
+
 		$this->page->description = ComponentManager::fireEvent("PostProcessContent", $this->page->description);
 		
 		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
@@ -210,6 +176,18 @@ class PageView
 			}
 			
 			$template = str_replace($position[0], $output, $template);
+		}
+
+		// Direct inclusion of module by path
+		// Generally discouraged, but sometimes the best solution
+		
+		$inclusions = array();
+		preg_match_all("/\{include:(.*?\.inc)\}/", $template, $inclusions, PREG_SET_ORDER);
+		
+		foreach($inclusions as $inclusion)
+		{
+			$output = Fakoli::evaluateFile($inclusion);
+			$template = str_replace($inclusion[0], $output, $template);
 		}
 		
 		// Pull in the script and style dependencies defined by the components
