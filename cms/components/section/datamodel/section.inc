@@ -198,8 +198,10 @@ class Section extends DataItem
 	 */
 	function getDefaultTemplate()
 	{
-		global $config;
-		$template = file_get_contents("{$config['homedir']}/templates/{$this->default_template}");
+		$directory = $this->Site()->getThemeDirectory();
+		$file = $directory . DIRECTORY_SEPARATOR . $this->default_template;
+		trace("Template File: $file", 3);
+		$template = file_get_contents($file);
 
 		return $template;
 	}
