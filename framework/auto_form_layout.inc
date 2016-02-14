@@ -724,7 +724,6 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function startButtonLine()
 	{
-		echo "<br/>\n";
 		echo " <div class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
 	}
 	
