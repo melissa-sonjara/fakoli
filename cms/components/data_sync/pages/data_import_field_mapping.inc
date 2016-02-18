@@ -64,6 +64,7 @@ $form->readonly("client_field");
 $form->getRenderer("client_field")->template = "prettify";
 
 $spreadsheet = new SpreadsheetForm($form, $fieldMappings, 0);
+$spreadsheet->formCss = "list spreadsheet small";
 
 $spreadsheet->submitLabel = "Save Field Mapping";
 $spreadsheet->button("Clear Field Mapping", "/action/data_sync/clear_mapping?import_profile_id={$profile_id}");
