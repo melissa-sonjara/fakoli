@@ -678,4 +678,12 @@ interface IDataSyncHelper
 	}
 }
 
+class FieldMappingHelper
+{
+	static function onItemRow($mapping)
+	{
+		return ($mapping->import_column) ? "mapped" : "";
+	}
+}
+
 ?>
