@@ -51,6 +51,8 @@ interface IDataSyncHelper
 	static $totalRecords = 0;
 	static $fieldMappings = array();
 	
+	static $import_profile_id = 0;
+	
 	function DataSyncManager()
 	{
 	}
@@ -314,6 +316,11 @@ interface IDataSyncHelper
 		return DataSyncManager::$fieldMappings[$import_profile_id];
 	}
 
+	static function getActiveFieldMapping($class)
+	{
+		return DataSyncManager::getFieldMapping($class, DataSyncManager::$import_profile_id);	
+	}
+	
 	static function generateFilter($fieldMapping)
 	{
 		$filter = new InclusionFilter();
@@ -417,6 +424,8 @@ interface IDataSyncHelper
 	{
 		global $user;
 
+		DataSyncManager::$import_profile_id = $import_profile_id;
+		
 		$item = new $class();
 			
 		ComponentManager::fireEvent("RegisterSyncHelpers");
@@ -519,6 +528,8 @@ interface IDataSyncHelper
 		trace("Batching importing $class profile $import_profile_id from $file", 3);
 		
 		global $user;
+		
+		DataSyncManager::$import_profile_id = $import_profile_id;
 		
 		if (!$process)
 		{
