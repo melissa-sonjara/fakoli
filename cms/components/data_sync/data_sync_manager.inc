@@ -214,9 +214,29 @@ interface IDataSyncHelper
 			$mapping->save();
 		}
 				
-		$fieldMappings = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr")
+		$fieldMappings = IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr", "client_field")
 						  ->bind(":cl", $class, ":pr", $profile_id)
 						  ->execute();
+		
+		// Sort field mappings
+		$filled = array();
+		$empty = array();
+		foreach($obj->getFields() as $field => $type)
+		{
+			if ($field == $obj->getPrimaryKey()) continue;
+			if (!array_key_exists($field, $fieldMappings)) continue;
+		
+			if ($fieldMappings[$field]->import_column)
+			{
+				$filled[] = $fieldMappings[$field];
+			}
+			else
+			{
+				$empty[] = $fieldMappings[$field];
+			}
+		}
+		
+		$fieldMappings = array_merge($filled, $empty);
 		
 		return $fieldMappings;
 	}
