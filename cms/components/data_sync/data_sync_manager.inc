@@ -302,16 +302,16 @@ interface IDataSyncHelper
 	
 	static function getFieldMapping($class, $import_profile_id)
 	{
-		if (array_key_exists($import_profile_id, DataSyncManager::$fieldMapping)) return DataSyncManager::$fieldMapping[$import_profile_id];
+		if (array_key_exists($import_profile_id, DataSyncManager::$fieldMappings)) return DataSyncManager::$fieldMappings[$import_profile_id];
 		
 		trace("Retrieving field mapping for $class profile $import_profile_id", 3);
 		
-		DataSyncManager::$fieldMapping[$import_profile_id] = 
+		DataSyncManager::$fieldMappings[$import_profile_id] = 
 						IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND import_column != ''", "client_field")
 									->bind(":cl", $class, ":pr", $import_profile_id)
 									->execute();
 		
-		return DataSyncManager::$fieldMapping[$import_profile_id];
+		return DataSyncManager::$fieldMappings[$import_profile_id];
 	}
 
 	static function generateFilter($fieldMapping)
