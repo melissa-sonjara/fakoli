@@ -1220,7 +1220,7 @@ ENDSCRIPT;
     	global $config;
     	$error = error_get_last();
     	
-    	trace("## Shutdown", 3);
+    	trace("## Shutdown", 4);
     	
 	    if ($error)
 	    {
