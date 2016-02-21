@@ -368,7 +368,7 @@ var LineSeriesRenderer = new Class(
 			}
 			else
 			{
-				var f = this.calculatePath(this.series, true);
+				var f = this.calculatePath(series, true);
 				this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, "<>");
 			}
 		}
