@@ -354,7 +354,7 @@ class ComponentManager
 		
 		if (!array_key_exists($component, $components))
 		{
-			throw new FakoliException("Unrecognized or disable component '$component'");
+			throw new FakoliException("Unrecognized or disabled component '$component'");
 		}
 		return $components[$component];
 	}	
