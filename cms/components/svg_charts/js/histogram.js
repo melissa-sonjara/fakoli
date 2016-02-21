@@ -362,8 +362,15 @@ var LineSeriesRenderer = new Class(
 		
 		if (this.series.options.areaFill)
 		{
-			var f = this.calculatePath(this.series, true);
-			this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, "<>");
+			if (!this.fill) 
+			{
+				this.drawFill();
+			}
+			else
+			{
+				var f = this.calculatePath(this.series, true);
+				this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, "<>");
+			}
 		}
 		
 		this.dots.each(function(dot, i) 
