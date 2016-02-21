@@ -63,6 +63,7 @@ var MorphingHistogram = new Class({
 	
 	drawBlocks: function()
 	{
+		this.series[this.index].drawFill(this, 0);
 		this.series[this.index].draw(this, 0);
 		this.columns = this.series[this.index].columns;
 	},
