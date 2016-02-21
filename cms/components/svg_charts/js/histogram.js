@@ -278,7 +278,7 @@ var LineSeriesRenderer = new Class(
 	
 	draw: function()
 	{
-		var lineColor = this.chart.palette.swatches[this.index];
+		var lineColor = this.chart.palette.swatches[(this.series.options.colorMode == 'fixed') ? 0 : this.index];
 		var fillColor = this.chart.options.chartBackground;
 		var p = this.calculatePath(this.series, false);
 
@@ -299,7 +299,7 @@ var LineSeriesRenderer = new Class(
 	
 	drawFill: function()
 	{
-		var lineColor = this.chart.palette.swatches[this.index];
+		var lineColor = this.chart.palette.swatches[(this.series.options.colorMode == 'fixed') ? 0 : this.index];
 		
 		if (this.series.options.areaFill)
 		{
@@ -356,7 +356,7 @@ var LineSeriesRenderer = new Class(
 	morph: function(series)
 	{
 		var p = this.calculatePath(series);
-		var lineColor = this.chart.palette.swatches[series.index];
+		var lineColor = this.chart.palette.swatches[(this.series.options.colorMode == 'fixed') ? 0 : series.index];
 		var fillColor = this.chart.options.chartBackground;
 		this.path.animate({'path': p, 'stroke': lineColor}, 1000, "<>");
 		
