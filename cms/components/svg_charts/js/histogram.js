@@ -360,6 +360,12 @@ var LineSeriesRenderer = new Class(
 		var fillColor = this.chart.options.chartBackground;
 		this.path.animate({'path': p, 'stroke': lineColor}, 1000, "<>");
 		
+		if (this.series.options.areaFill)
+		{
+			var f = this.calculatePath(this.series, true);
+			this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, "<>");
+		}
+		
 		this.dots.each(function(dot, i) 
 		{
 			dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, "<>");
