@@ -5,15 +5,27 @@ var Palette = new Class(
 	strokeColor: '',
 	buttonColor: '',
 	swatches: Class.Empty,
+	namedColors: {},
 	
-	initialize: function(name, background, stroke, button, palette)
+	initialize: function(name, background, stroke, button, palette, namedColors)
 	{
 		this.name = name;
 		this.backgroundColor = background;
 		this.strokeColor = stroke;
 		this.buttonColor = button;
 		this.swatches = palette;
+		if (namedColors) this.namedColors = namedColors;
 		Palette.palettes[name] = this;
+	},
+	
+	getColor: function(color)
+	{
+		if (this.namedColors && color in this.namedColors)
+		{
+			return this.namedColors[color];
+		}
+		
+		return this.swatches[color];
 	}
 });
 
