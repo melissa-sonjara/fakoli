@@ -9,7 +9,7 @@ class HistogramSeries
 	var $onClick;
 	var $tooltips = array();
 	
-	function HistogramSeries($type, $title, $values)
+	function __construct($type, $title, $values)
 	{
 		$this->type = $type;
 		$this->title = $title;
@@ -61,6 +61,36 @@ class HistogramSeries
 	}
 }
 
+class GroupedHistogramSeries
+{
+	var $type;
+	var $title;
+	var $children = array();
+
+	function __construct($type, $title)
+	{
+		$this->type = $type;
+		$this->title = $title;
+	}
+
+	function addSeries($series)
+	{
+		$this->children[] = $series;
+	}
+	
+	function toScript()
+	{
+		$out = "(new GroupedHistogramSeries('{$this->type}', '". jsSafe($this->title) ."'))";
+		foreach($this->children as $child)
+		{
+			$kid = $child->toScript();
+			$out .= ".addSeries({$kid})";
+		}
+		
+		return $out;
+	}
+}
+
 class Histogram
 {
 	var $width;
@@ -101,7 +131,7 @@ class Histogram
 	var $units = "";
 	var $scaleToFit = false;
 	
-	function Histogram($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
+	function __construct($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
 		$this->id = $id;
 		$this->setSize($width, $height);

@@ -21,11 +21,15 @@ var HistogramSeries = new Class(
 		indicateTooltips: false,
 		areaFill: false,
 		areaFillOpacity: 0,
-		showValues: false
+		showValues: false,
+		color: 0,
+		applyOffset: true,
+		joinPrevious: false
 	},
 	columns: [],
 	renderer: Class.Empty,
 	chart: Class.Empty,
+	group: Class.Empty,
 	
 	initialize: function(type, title, values, options)
 	{
@@ -71,6 +75,12 @@ var HistogramSeries = new Class(
 	{
 		var renderer = this.getRenderer(chart, index);
 		if (renderer) renderer.drawFill();
+	},
+	
+	drawDots: function(chart, index)
+	{
+		var renderer = this.getRenderer(chart, index);
+		if (renderer) renderer.drawDots();
 	},
 	
 	morph: function(series)
@@ -120,15 +130,25 @@ var VerticalBlockSeriesRenderer = new Class(
 		this.index = index;
 	},
 	
+	getColor: function(i)
+	{
+		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
+		return (this.series.options.colorMode == 'series') ? this.index : i;
+	},
+	
 	draw: function()
 	{
 		this.series.values.each(function(val, i)
 		{
-			var fillSwatch = this.chart.palette.swatches[(this.series.options.colorMode == 'series') ? this.index : i];			
+			var fillSwatch = this.getColor(i);			
 
 			var columnWidth = this.chart.blockWidth;
 
-			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth) + (this.chart.blockSeriesDrawn * columnWidth);
+			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth);
+			if (this.series.applyOffset)
+			{
+				columnOffset += this.chart.blockSeriesDrawn * columnWidth;
+			}
 			var columnLeft = this.chart.columnWidth * i + columnOffset;
 			
 			var x = this.chart.options.chartLeft + columnLeft;
@@ -166,6 +186,10 @@ var VerticalBlockSeriesRenderer = new Class(
 		this.chart.blockSeriesDrawn++;
 	},
 	
+	drawDots: function()
+	{	
+	},
+	
 	drawFill: function()
 	{
 	},
@@ -197,15 +221,26 @@ var HorizontalBlockSeriesRenderer = new Class(
 		this.index = index;
 	},
 	
+	getColor: function(i)
+	{
+		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
+		return (this.series.options.colorMode == 'series') ? this.index : i;
+	},
+	
 	draw: function()
 	{
 		this.series.values.each(function(val, i)
 		{
-			var fillSwatch = this.chart.palette.swatches[(this.series.options.colorMode == 'series') ? this.index : i];			
+			var fillSwatch = this.getColor(i);			
 
 			var columnWidth = this.chart.blockWidth;
 
-			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth) + (this.chart.blockSeriesDrawn * columnWidth);
+			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth);
+			if (this.series.options.applyOffset)
+			{
+				columnOffset += this.chart.blockSeriesDrawn * columnWidth;
+			}
+			
 			var columnTop = this.chart.columnWidth * i + columnOffset;
 			
 			var x = this.chart.options.chartLeft;
@@ -245,6 +280,11 @@ var HorizontalBlockSeriesRenderer = new Class(
 		this.chart.blockSeriesDrawn++;
 	},
 	
+	drawDots: function()
+	{
+		
+	},
+	
 	drawFill: function()
 	{
 	},
@@ -276,15 +316,36 @@ var LineSeriesRenderer = new Class(
 		this.index = index;
 	},
 	
+	getColor: function(i)
+	{
+		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
+		return (this.series.options.colorMode == 'series') ? this.index : i;
+	},
+	
 	draw: function()
 	{
-		var lineColor = this.chart.palette.swatches[(this.series.options.colorMode == 'fixed') ? 0 : this.index];
+		this.drawLine();
+		if (this.series.group === null) 
+		{
+			this.drawDots();	
+		}
+	},
+	
+	drawLine: function()
+	{
+		var lineColor = this.getColor(this.index);
 		var fillColor = this.chart.options.chartBackground;
 		var p = this.calculatePath(this.series, false);
 
 		
 		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
 		
+	},
+	
+	drawDots: function()
+	{
+		var lineColor = this.getColor(this.index);
+		var fillColor = this.chart.options.chartBackground;
 		this.coords.each(function(c, i) {
 			if (c !== null)
 			{
@@ -294,12 +355,16 @@ var LineSeriesRenderer = new Class(
 				dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
 				this.dots.push(dot);
 			}
+			else
+			{
+				this.dots.push(null);
+			}
 		}.bind(this));	
 	},
 	
 	drawFill: function()
 	{
-		var lineColor = this.chart.palette.swatches[(this.series.options.colorMode == 'fixed') ? 0 : this.index];
+		var lineColor = this.getColor(this.index);
 		
 		if (this.series.options.areaFill)
 		{
@@ -316,7 +381,25 @@ var LineSeriesRenderer = new Class(
 		var startX = -999;
 		var lastX = -999;
 		
-		series.values.each(function(val, i)
+		var values = Array.clone(series.values);
+		if (series.group !== null && series.options.joinPrevious)
+		{
+			for(var i = 0; i < values.length; ++i)
+			{
+				if (values[i] !== null)
+				{
+					if (i > 0)
+					{
+						values[i-1] = series.group.getValue(i-1);
+					}
+					break;
+				}
+			}
+		}
+		
+		var first = true;
+		
+		values.each(function(val, i)
 		{
 			if (val !== null)
 			{
@@ -328,7 +411,16 @@ var LineSeriesRenderer = new Class(
 				var columnHeight = this.chart.options.chartHeight * val / this.chart.range() + this.chart.xAxisOffset;
 				var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 				
-				this.coords.push({'x': x, 'y': y});
+				if (!first || !this.series.options.joinPrevious)
+				{
+					this.coords.push({'x': x, 'y': y});
+				}
+				else
+				{
+					this.coords.push(null);
+				}
+				
+				first = false;
 				p += cmd + x + "," + y;
 				cmd = "L";			
 				
@@ -356,7 +448,8 @@ var LineSeriesRenderer = new Class(
 	morph: function(series)
 	{
 		var p = this.calculatePath(series);
-		var lineColor = this.chart.palette.swatches[(this.series.options.colorMode == 'fixed') ? 0 : series.index];
+		var lineColor =  this.getColor(series.index);
+		
 		var fillColor = this.chart.options.chartBackground;
 		this.path.animate({'path': p, 'stroke': lineColor}, 1000, "<>");
 		
@@ -375,7 +468,10 @@ var LineSeriesRenderer = new Class(
 		
 		this.dots.each(function(dot, i) 
 		{
-			dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, "<>");
+			if (this.coords[i] !== null)
+			{
+				dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, "<>");
+			}
 		}.bind(this));
 	}		
 });
@@ -383,6 +479,7 @@ var LineSeriesRenderer = new Class(
 var VerticalHistogramAxisRenderer = new Class(
 {
 	chart: Class.Empty,
+	ticks: [],
 	
 	initialize: function(chart)
 	{
@@ -431,6 +528,7 @@ var VerticalHistogramAxisRenderer = new Class(
 			}
 			var text = chart.paper.text(chart.options.chartLeft - 10, y, label);
 			text.attr({stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "end"});
+			this.ticks.push(text);
 			y -= ystep;
 			++idx;
 		}
@@ -457,7 +555,8 @@ var VerticalHistogramAxisRenderer = new Class(
 var HorizontalHistogramAxisRenderer = new Class(
 {
 	chart: Class.Empty,
-	
+	ticks: [],
+
 	initialize: function(chart)
 	{
 		this.chart = chart;
@@ -506,6 +605,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 			}
 			var text = chart.paper.text(x, chart.options.chartTop - 10, label);
 			text.attr({stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "middle"});
+			this.ticks.push(text);
 			x += xstep;
 			++idx;
 		}
@@ -776,4 +876,106 @@ var Histogram = new Class(
 	}
 	
 });
+
+var GroupedHistogramSeries = new Class({
+	Implements: [Options, Events],
+	type: 'block',
+	title: '',
+	children: [],
+	max: 0,
+	min: 0,
+	
+
+	initialize: function(type, title, options)
+	{
+		this.type = type;
+		this.title = title;
 		
+		this.setOptions(options);
+	},
+	
+	addSeries: function(series)
+	{
+		series.group = this;
+		this.children.push(series);
+		this.children.each(function(child)
+		{
+			if (child.max > this.max) this.max = child.max;
+			if (child.min < this.min) this.min = child.min;
+		}.bind(this));
+		
+		return this;
+	},
+	
+	getValue: function(idx)
+	{
+		var value = null;
+		this.children.each(function(child)
+		{
+			if (value !== null) return;
+			value = child.values[idx];
+		});
+		
+		return value;
+	},
+	
+	draw: function(chart, index)
+	{
+		this.children.each(function(child)
+		{
+			child.draw(chart, index);
+		});
+		
+		this.drawDots(chart, index);
+	},
+	
+	drawFill: function(chart, index)
+	{
+		this.children.each(function(child)
+		{
+			child.drawFill(chart, index);
+		});
+	},
+	
+	drawDots: function(chart, index)
+	{
+		this.children.each(function(child)
+		{
+			child.drawDots(chart, index);
+		});
+	},
+	
+	morph: function(series)
+	{
+		this.children.each(function(child, idx)
+		{
+			child.morph(series.children[idx]);
+		});
+	},
+	
+	hasTooltip: function(idx)
+	{
+		var found = false;
+		
+		this.children.each(function(child)
+		{
+			if (child.hasTooltip(idx)) found = true;
+		});
+		
+		return found;
+	},
+	
+	showToolTip: function(evt, idx)
+	{
+		this.children.each(function(child)
+		{
+			child.showTooltip(evt, idx);
+		});
+		if (idx > this.options.toolTips.length) return;
+		},
+	
+	hideToolTip: function()
+	{
+		hideToolTip(this.chart.id + "_tooltip");
+	}
+});
