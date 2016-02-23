@@ -763,6 +763,17 @@ class Fakoli
 	}
 	
 	/**
+	 * Load the specified resource into memory. 
+	 * @param string $resource
+	 */
+	static function loadResource($resource, $component = "")
+	{
+		$path = Fakoli::resolveResource($resource, $component);
+		if ($path) return file_get_contents($path);
+		return null;
+	}
+	
+	/**
 	 * Serves the page with the specified section and identifier.
 	 * 
 	 * @param string $sectionIdentifier the identifier of the section
