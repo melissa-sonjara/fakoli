@@ -32,14 +32,14 @@
 *****************************************************************/
 
 
+// Ensure that short open tags are enabled.
+ini_set("short_open_tag", 1);
+
 register_shutdown_function(array(Fakoli, shutdownHandler));
 
 require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../framework/cache.inc");
 require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
-
-// Ensure that short open tags are enabled.
-ini_set("short_open_tag", 1);
 
 /**
  * FakoliException is the base exception class for all
@@ -562,6 +562,7 @@ class Fakoli
 	 */
 	static function includeScript($src)
 	{
+		global $isResource;
 		global $script;
 		$script .= "<script type='text/javascript' src='$src'></script>\n";		
 	}
