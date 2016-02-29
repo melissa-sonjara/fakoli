@@ -549,6 +549,8 @@ class ComponentManager
 		echo $script;
 		echo $out;
 		
+		$this->fireEventTo("PostAction", $component->name, $action);
+		
 		ComponentManager::fireEvent("RequestComplete");
 	}
 	
