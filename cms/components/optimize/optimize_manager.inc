@@ -36,6 +36,8 @@ Fakoli::usingFeature("cache");
 
 class OptimizeManager
 {
+	static $zipped = false;
+	
 	static function clearCache()
 	{
 		Cache::invalidate("script_cache");
@@ -178,6 +180,7 @@ class OptimizeManager
 				if (Settings::getValue("optimize", "compress_javascript") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 				{
 					trace("Compressing scripts", 3);
+					OptimizeManager::$zipped = true;
 					ob_start("ob_gzhandler"); 
 				}
 				break;
@@ -187,11 +190,20 @@ class OptimizeManager
 				if (Settings::getValue("optimize", "compress_styles") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 				{
 					trace("Compressing styles", 3);
+					OptimizeManager::$zipped = true;
 					ob_start("ob_gzhandler");
 				}
 				break;
 				
 			default:
+		}
+	}
+	
+	static function postAction($action)
+	{
+		if (OptimizeManager::$zipped)
+		{
+			ob_end_flush();
 		}
 	}
 }
