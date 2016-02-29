@@ -180,8 +180,7 @@ class OptimizeManager
 				if (Settings::getValue("optimize", "compress_javascript") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 				{
 					trace("Compressing scripts", 3);
-					OptimizeManager::$zipped = true;
-					ob_start("ob_gzhandler"); 
+					OptimizeManager::startZip();	
 				}
 				break;
 	
@@ -190,13 +189,19 @@ class OptimizeManager
 				if (Settings::getValue("optimize", "compress_styles") && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
 				{
 					trace("Compressing styles", 3);
-					OptimizeManager::$zipped = true;
-					ob_start("ob_gzhandler");
+					OptimizeManager::startZip();	
 				}
 				break;
 				
 			default:
 		}
+	}
+	
+	static function startZip()
+	{
+		ob_end_clean();
+		OptimizeManager::$zipped = true;
+		ob_start("ob_gzhandler");
 	}
 	
 	static function postAction($action)
