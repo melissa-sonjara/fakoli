@@ -203,6 +203,7 @@ class OptimizeManager
 	{
 		if (OptimizeManager::$zipped)
 		{
+			trace("Flushing zipped content", 3);
 			ob_end_flush();
 		}
 	}
