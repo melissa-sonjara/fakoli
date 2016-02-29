@@ -171,6 +171,7 @@ class OptimizeManager
 	
 	static function preAction($action)
 	{
+		trace("PreAction: $action", 3);
 		switch($action)
 		{
 			case "scripts":
