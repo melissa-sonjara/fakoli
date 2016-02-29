@@ -63,7 +63,7 @@ class RedirectManager
 		
 		if (!$overrides)
 		{
-			$overrides = IndexedQuery::create(Redirect, "WHERE override=1", "redirect_from")->execute();
+			$overrides = IndexedQuery::create(Redirect, "WHERE override=1 and active=1", "redirect_from")->execute();
 			Cache::put("resource_overrides", $overrides);
 		}
 		
