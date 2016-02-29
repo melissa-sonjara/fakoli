@@ -204,7 +204,7 @@ class OptimizeManager
 		if (OptimizeManager::$zipped)
 		{
 			trace("Flushing zipped content", 3);
-			trace(print_r(ob_list_handlers, true), 3);
+			trace(print_r(ob_list_handlers(), true), 3);
 			ob_end_flush();
 		}
 	}
