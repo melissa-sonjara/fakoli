@@ -1,6 +1,9 @@
 <?php
 Fakoli::usingFeature("cache");
 
+while( ob_get_level() )
+{ ob_end_clean(); }
+
 $last_modified = Cache::get("script_cache_timestamp");
 
 if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
