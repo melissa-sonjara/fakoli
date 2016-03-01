@@ -24,9 +24,11 @@ header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 
 if (!$noChange)
 {	
+	OptimizeManager::startZip();
 	$content = OptimizeManager::getScriptsContent();
+	OptimizeManager::flushZip();
 	
-	if (!Settings::getValue("optimize", "compress_javascript") || !substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+	if (!OptimizeManager::$zipped) 
 	{
 		header("Content-Length: ".strlen($content));
 	}
