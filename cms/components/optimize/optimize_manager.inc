@@ -212,6 +212,7 @@ class OptimizeManager
 			trace(print_r(ob_list_handlers(), true), 3);
 			ob_end_flush();
 			trace(print_r(ob_list_handlers(), true), 3);
+			exit();
 		}
 	}
 }
