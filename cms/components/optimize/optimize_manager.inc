@@ -201,7 +201,10 @@ class OptimizeManager
 	{
 		ob_end_clean();
 		OptimizeManager::$zipped = true;
-		ob_start("ob_gzhandler");
+		if (!ob_start("ob_gzhandler"))
+		{
+			trace("Zip handler ignored", 3);
+		}
 	}
 	
 	static function postAction($action)
