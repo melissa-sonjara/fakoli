@@ -199,7 +199,7 @@ class OptimizeManager
 	
 	static function startZip()
 	{
-		ob_end_clean();
+		ob_start();
 		OptimizeManager::$zipped = true;
 		if (!ob_start("ob_gzhandler"))
 		{
@@ -213,6 +213,8 @@ class OptimizeManager
 		{
 			trace("Flushing zipped content", 3);
 			trace(print_r(ob_list_handlers(), true), 3);
+			ob_end_flush();
+			header("Content-Length: ".ob_get_length();
 			ob_end_flush();
 			trace(print_r(ob_list_handlers(), true), 3);
 		}
