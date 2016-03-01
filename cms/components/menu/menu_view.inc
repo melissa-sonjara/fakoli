@@ -171,7 +171,7 @@ window.addEvent('domready', function() { new FakoliMenu('{$this->m->identifier}'
 </script>
 ENDSCRIPT;
 */
-		$gmenus = regroupList($this->m->MenuItems("ORDER BY sort_order"), "parent_id");
+		$gmenus = regroupList($this->m->MenuItems("WHERE published=1 ORDER BY sort_order"), "parent_id");
 		if (count($gmenus) == 0) return;
 		
 		ob_start();
