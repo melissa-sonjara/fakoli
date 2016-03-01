@@ -26,6 +26,7 @@ if (!$noChange)
 {	
 	OptimizeManager::startZip();
 	$content = OptimizeManager::getScriptsContent();
+	echo $content;
 	OptimizeManager::flushZip();
 	
 	if (!OptimizeManager::$zipped) 
