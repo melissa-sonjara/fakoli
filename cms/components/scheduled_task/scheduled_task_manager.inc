@@ -24,7 +24,7 @@ class ScheduledTaskManager
 		//TODO: Set default configuration parameters here
 	}
 
-	static function registerWorker($component, $task_name, $handler)
+	static function registerWorker($component, $task_name, $handler, $hourly = false)
 	{
 		ScheduledTaskManager::$workers[$component.":".$task_name] = $handler;
 		
@@ -38,6 +38,7 @@ class ScheduledTaskManager
 			$task->component = $component;
 			$task->task_name = $task_name;
 			$task->active = false;
+			$taks->run_every_hour = $hourly;
 			$task->save();
 		}
 	}
