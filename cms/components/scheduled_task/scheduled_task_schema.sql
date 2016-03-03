@@ -46,3 +46,9 @@ ALTER TABLE scheduled_task DROP COLUMN next_run;
 ALTER TABLE scheduled_task CHANGE COLUMN schedule schedule VARCHAR(2000) not null default '';
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE scheduled_task ADD COLUMN run_every_hour tinyint(3) not null default 0;
+
+-- END Version 1.3

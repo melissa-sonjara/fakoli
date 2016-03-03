@@ -4,11 +4,12 @@ class ScheduledTask extends DataItem
 	var $table = "scheduled_task";
 	var $primary_key = "task_id";
 	
-	var $fields = array("task_id"		=>	Number,
-						"component"		=>	String,
-						"task_name"		=>	String,
-						"schedule"		=>	TaskSchedule,
-						"active"		=>	Boolean);
+	var $fields = array("task_id"			=>	Number,
+						"component"			=>	String,
+						"task_name"			=>	String,
+						"run_every_hour"	=>	Boolean,
+						"schedule"			=>	TaskSchedule,
+						"active"			=>	Boolean);
 	
 	var $relations = array("LogEntries"	=>	ScheduledTaskLogEntry,
 						   "LastRun"	=>	ScheduledTaskLogEntry);

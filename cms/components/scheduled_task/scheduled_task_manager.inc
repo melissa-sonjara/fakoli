@@ -97,7 +97,7 @@ class ScheduledTaskManager
 		
 		foreach($tasks as $task)
 		{
-			if (strpos($task->schedule, $currentPeriod) !== false)
+			if ($task->run_every_hour || strpos($task->schedule, $currentPeriod) !== false)
 			{
 				$this->executeTask($task->component, $task->task_name);
 				++$count;
