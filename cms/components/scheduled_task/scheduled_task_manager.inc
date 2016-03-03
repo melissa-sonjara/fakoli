@@ -2,18 +2,28 @@
 Fakoli::using("email");
 
 /**
- * Provides a central management class for event handlers and 
- * common functionality for the scheduled_task component.
+ * Manages scheduled task registration and execution. Scheduled tasks are tasks
+ * that can be run periodically without user initiation, triggered by a cron job
+ * or Windows scheduled task. Components can register tasks by subscribing to
+ * the RegisterScheduledTaskWorkers event. Registered tasks can then be 
+ * configured for scheduled execution via the admin screens.
  */
 class ScheduledTaskManager
 {
 	static $workers = array();
 	
+	/**
+	 * Creates a ScheduledTaskManager.
+	 */
 	function __construct()
 	{
 		ComponentManager::fireEvent("RegisterScheduledTaskWorkers");
 	}
 
+	/**
+	 * Registers a simple task that sends an email when triggered. This can be used
+	 * to validate the configuration of the cron job / scheduled task environment.
+	 */
 	static function registerScheduledTaskWorkers()
 	{
 		ScheduledTaskManager::registerWorker("scheduled_task", "Validate Configuration", array(ScheduledTaskManager, testTask));
@@ -24,6 +34,16 @@ class ScheduledTaskManager
 		//TODO: Set default configuration parameters here
 	}
 
+	/**
+	 * Registers a Scheduled Task worker method. This method should be called from within 
+	 * the component's RegisterScheduledTaskWorkers event handler. Components are free to 
+	 * register as many scheduled task workers as they need. 
+	 * @param string $component the name of the component that owns the worker
+	 * @param string $task_name the display name of the task
+	 * @param callback $handler the handler method to call to execute the task
+	 * @param boolean $hourly true if this task should always be executed every hour, false if
+	 * the task should be explicitly scheduled by the user
+	 */
 	static function registerWorker($component, $task_name, $handler, $hourly = false)
 	{
 		ScheduledTaskManager::$workers[$component.":".$task_name] = $handler;
@@ -52,11 +72,19 @@ class ScheduledTaskManager
 		return new TabBar("tabs", $tabs, $qs);
 	}
 	
+	/**
+	 * Retrieves all the registered scheduled tasks
+	 */
 	function getTasks()
 	{
 		return Query::create(ScheduledTask, "ORDER BY component, task_name")->execute();
 	}
 	
+	/**
+	 * Executes the specified scheduled task
+	 * @param string $component the name of the component that owns the task
+	 * @param string $task_name the name of the task to be executed
+	 */
 	function executeTask($component, $task_name)
 	{
 		trace("-- Executing Task '{$component}: $task_name'", 3);
@@ -84,6 +112,9 @@ class ScheduledTaskManager
 		$log->save();
 	}
 	
+	/**
+	 * Runs all the tasks that are scheduled to be run for the current period (day and hour).
+	 */
 	function runTasks()
 	{
 		global $config;
@@ -110,6 +141,10 @@ class ScheduledTaskManager
 		Fakoli::coreTraceLevel();
 	}
 	
+	/**
+	 * Provides the implementation of the test task, that can be used to validate the 
+	 * scheduled task server configuration (cron job, etc)
+	 */
 	static function testTask()
 	{
 		global $config;
