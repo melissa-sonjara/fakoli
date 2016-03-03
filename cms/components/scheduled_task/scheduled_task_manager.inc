@@ -38,7 +38,7 @@ class ScheduledTaskManager
 			$task->component = $component;
 			$task->task_name = $task_name;
 			$task->active = false;
-			$taks->run_every_hour = $hourly;
+			$task->run_every_hour = $hourly;
 			$task->save();
 		}
 	}
