@@ -107,7 +107,10 @@ window.center = function()
 window.scrollToElement = function(element, offset)
 {
 	element = document.id(element);
-	new Fx.Scroll(document.body, {'offset': {'x': 0, 'y': offset}}).toElement(element, 'y');
+	var coords = element.getCoordinates();
+	var scroll = element.getScroll();
+	
+	new Fx.Scroll(document.body).start({'x': scroll.x, 'y': coords.top + offset});
 };
 
 var Curtain = new Class(
