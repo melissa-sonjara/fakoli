@@ -133,7 +133,7 @@ var VerticalBlockSeriesRenderer = new Class(
 	getColor: function(i)
 	{
 		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return (this.series.options.colorMode == 'series') ? this.index : i;
+		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
 	},
 	
 	draw: function()
@@ -224,7 +224,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 	getColor: function(i)
 	{
 		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return (this.series.options.colorMode == 'series') ? this.index : i;
+		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
 	},
 	
 	draw: function()
@@ -319,13 +319,13 @@ var LineSeriesRenderer = new Class(
 	getColor: function(i)
 	{
 		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return (this.series.options.colorMode == 'series') ? this.index : i;
+		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
 	},
 	
 	draw: function()
 	{
 		this.drawLine();
-		if (this.series.group === null) 
+		if (this.series.group === null || this.series.group === undefined) 
 		{
 			this.drawDots();	
 		}
