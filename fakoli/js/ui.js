@@ -104,6 +104,11 @@ window.center = function()
 	return{x:_x,y:_y};
 };
 
+window.scrollTo = function(element, offset)
+{
+	element = document.id(element);
+	new Fx.Scroll(document.body, {'offset': {'x': 0, 'y': offset}}).toElement(element, 'y');
+};
 
 var Curtain = new Class(
 {
