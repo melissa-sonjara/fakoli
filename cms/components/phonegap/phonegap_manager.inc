@@ -23,6 +23,7 @@ class PhonegapManager
 
 	static function setDefaults()
 	{
+		Settings::setDefaultValue("phonegap", "enable_phonegap", true, Boolean, "Enables support for Phonegap/Cordova applications");
 		Settings::setDefaultValue("phonegap", "enable_phonegap_debugging", false, Boolean, "Enables PhoneGap debugging mode - append phonegap=1 to any URL in your desktop browser to turn on PhoneGap mode");		
 		Settings::setDefaultValue("phonegap", "phonegap_debug_version", "2.4.0", String, "The version of Phonegap that is assumed in debugging mode");
 		Settings::setDefaultValue("phonegap", "phonegap_debug_os", "android", String, "The OS of Phonegap that is assumed in debugging mode");
@@ -81,6 +82,7 @@ class PhonegapManager
 	
 	static function hasPhonegap()
 	{
+		if (!Setting::getValue("phonegap", "enable_phonegap")) return false;
 		return (isset($_SESSION["phonegap"]) && $_SESSION["phonegap"] == true) || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false;
 	}	
 	
