@@ -82,7 +82,7 @@ class PhonegapManager
 	
 	static function hasPhonegap()
 	{
-		if (!Setting::getValue("phonegap", "enable_phonegap")) return false;
+		if (!Settings::getValue("phonegap", "enable_phonegap")) return false;
 		return (isset($_SESSION["phonegap"]) && $_SESSION["phonegap"] == true) || stripos($_SERVER['HTTP_USER_AGENT'], "PhoneGap/Cordova") !== false;
 	}	
 	
