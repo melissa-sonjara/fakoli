@@ -1,0 +1,2 @@
+<?php
+Fakoli::end("OK");
