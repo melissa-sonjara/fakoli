@@ -118,7 +118,7 @@ class PhonegapManager
 		{
 			ComponentManager::fireEvent("RegisterPhonegapFiles");
 			ComponentManager::fireEvent("RegisterPhonegapAppScripts");
-			ComponentManager::fireEvent("RegisterPhonegappSupportScripts");
+			ComponentManager::fireEvent("RegisterPhonegapSupportScripts");
 			
 			$os = PhonegapManager::getOS();
 			
