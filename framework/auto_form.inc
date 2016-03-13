@@ -971,7 +971,14 @@ class AutoForm
 		if (!$this->subordinate)
 		{
 			echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
-			if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
+			if (!$this->ajaxSubmitHandler) 
+			{
+				echo " onsubmit='return onSubmit{$this->id}(this);'";
+			}
+			else
+			{
+				echo " data-mode='ajax'";
+			}
 			echo ">\n";
 		}
 		
