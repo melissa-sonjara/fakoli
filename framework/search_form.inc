@@ -1084,6 +1084,22 @@ class SearchForm extends AutoForm
 		}
 	
 		echo "\treturn true;\n}\n\n";
+		
+		
+		echo "\twindow.addEvent('domready', function() {\n";
+
+		if ($this->allowPartialSave)
+		{
+			$managerOptions = "{partialSaveContainer: '{$this->partialSaveContainerID}', partialSaveLabel: '{$this->partialSaveLabel}'}";
+		}
+		else
+		{
+			$managerOptions = "{}";
+		}
+		
+		echo "\tnew AutoFormManager('{$this->id}', {$managerOptions});\n";
+		echo "});\n";
+		
 		echo "</script>\n";
 	
 		$script = ob_get_contents();

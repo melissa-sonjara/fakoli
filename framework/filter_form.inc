@@ -181,7 +181,7 @@ ENDSCRIPT;
 			$obj->fromREQUEST();
 		}
 		
-		echo "<form id='{$this->id}_filter' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
+		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		if (!$this->ajaxSubmitHandler) echo " onsubmit='return onSubmit{$this->id}(this);'";
 		echo ">\n";
 		
@@ -397,7 +397,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		}
 			
 		$onSubmit = $this->parent->getOnSubmitFunction();
-		echo "<select name='{$field}' {$styles} onchange='if ({$onSubmit}(this.form)) this.form.submit();'>";
+		echo "<select name='{$field}' {$styles} onchange='if ({$onSubmit}(this.form)) this.form.manager.submit();'>";
     	
     	if ($this->default)
     	{
@@ -552,7 +552,7 @@ function <? echo $selChanged ?>(elt)
    	 	
    	  	value_field.set("value", new_value);
   	}
-  	if (<?php echo $onSubmit?>(elt.form)) elt.form.submit();
+  	if (<?php echo $onSubmit?>(elt.form)) elt.form.manager.submit();
 }
 </script>
 <?	
@@ -661,7 +661,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 			{
 				trace("CheckListFieldRenderer value $value and text $text", 3);
 				echo "<li>\n";
-				$onchange = " onchange='if ({$onSubmitFunction}(this.form)) this.form.submit();'";
+				$onchange = " onchange='if ({$onSubmitFunction}(this.form)) this.form.manager.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
 				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
 				$idx++;
@@ -712,7 +712,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 		$this->_startField($field, $this->styles);
 		
 		$onSubmit = $this->parent->getOnSubmitFunction();
-		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.submit();'";		
+		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.manager.submit();'";		
 		
 		$searchValue = $this->parent->data->get($field);
 
@@ -1031,8 +1031,8 @@ class DateRangeFilterRenderer extends FieldRenderer
 <script src='/fakoli/calendar/sonjara_calendar.js' type='text/javascript'></script>
 <link href='/fakoli/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'></link>
 <script type="text/javascript">
-var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}_filter', '{$this->startParam}');
-var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}_filter', '{$this->endParam}');
+var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}', '{$this->startParam}');
+var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}', '{$this->endParam}');
 </script>
 
 ENDSCRIPT;
@@ -1204,7 +1204,7 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 	function renderSearchField($field)
 	{
 		$onSubmit = $this->parent->getOnSubmitFunction();
-		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.submit();'";
+		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.manager.submit();'";
 		
 		$this->getRelatedItems();
 		
