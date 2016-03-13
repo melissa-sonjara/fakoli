@@ -26,7 +26,8 @@ class PhonegapManifest
 		return array(
 					"ComponentScanComplete"	=>	array(PhonegapManager, setDefaults),
 					"Initialize"			=>	array(PhonegapManager, detectPhonegap),
-					"PostProcessScript"		=>	array(PhonegapManager, addScript)
+					"PostProcessScript"		=>	array(PhonegapManager, addScript),
+					"RegisterPhonegapSupportScripts"	=>	array(PhonegapManager, defaultSupportScripts)
 		);
 	}
 }

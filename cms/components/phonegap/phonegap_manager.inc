@@ -15,6 +15,7 @@ class PhonegapManager
 {
 	static $phonegapFiles = array();
 	static $appScripts = array();
+	static $supportScripts = array();
 	
 	function PhonegapManager()
 	{
@@ -117,7 +118,8 @@ class PhonegapManager
 		{
 			ComponentManager::fireEvent("RegisterPhonegapFiles");
 			ComponentManager::fireEvent("RegisterPhonegapAppScripts");
-					
+			ComponentManager::fireEvent("RegisterPhonegappSupportScripts");
+			
 			$os = PhonegapManager::getOS();
 			
 			//AJG: Do not add phonegap script references if we do not definitively know the OS
@@ -134,6 +136,11 @@ class PhonegapManager
 			}
 			
 			$phonegap = "<script type='text/javascript' src='{$file}'></script>\n".$phonegap;
+			
+			foreach(PhonegapManager::$supportScripts as $supportScript => $dummy)
+			{
+				$phonegap .= "<script type='text/javascript' src='{$supportScript}'></script>\n";
+			}
 		}
 		else
 		{
@@ -189,6 +196,17 @@ class PhonegapManager
 		}
 		
 		return "";
+	}
+	
+	static function registerPhonegapSupportScript($s)
+	{
+		PhonegapManager::$supportScripts[$s] = $s;
+	}
+	
+	static function defaultSupportScripts()
+	{
+		PhonegapManager::registerPhonegapSupportScript("/components/phonegap/js/photo_uploader.js");
+		PhonegapManager::registerPhonegapSupportScript("/components/phonegap/js/photo_attachment_uploader.js");	
 	}
 }
 
