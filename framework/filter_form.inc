@@ -187,7 +187,7 @@ ENDSCRIPT;
 			echo " onsubmit='return onSubmit{$this->id}(this);'";
 		}
 		
-		if (this->navigationMode == 'panel')
+		if ($this->navigationMode == 'panel')
 		{
 			echo " data-mode='ajax'";
 		}
