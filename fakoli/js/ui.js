@@ -1556,10 +1556,9 @@ window.addEvent('domready', function()
 	document.scrollWatcher = new ScrollWatcher(); 
 });
 
-// Implement reload() for page elements that supply data-url
-window.addEvent('domready', function()
+function addReloadHandlers(container)
 {
-	$$('[data-url]').each(function(elt)
+	container.getElements('[data-url]').each(function(elt)
 	{
 		elt.reload = function(onComplete)
 		{
@@ -1591,6 +1590,12 @@ window.addEvent('domready', function()
 			elt.reload(onComplete);
 		};
 	});
+
+}
+// Implement reload() for page elements that supply data-url
+window.addEvent('domready', function()
+{
+	addReloadHandlers(document.body);
 });
 
 // Mix-in a reloadPanel() method for all elements - easily reload the innermost containing panel.
@@ -1761,3 +1766,81 @@ var ToggleManager = new Class(
 	}
 });		
 	
+var ConnectivityChecker = new Class(
+{
+    Implements: [Options, Events],
+    onlineFlag: true,
+    timerID: null,
+    options:
+    {
+        onOnline:   function() {},
+        onOffline:  function() {},
+        timeout:    2000,
+        period:     5000, 
+        url:        "/action/component/ping"
+    },
+
+    initialize: function(options)
+    {
+        this.setOptions(options);
+        this.start();
+    },
+
+    start: function()
+    {
+        if (this.timerID) return;
+        this.checkConnectivity();
+        this.timerID = this.checkConnectivity.periodical(this.options.period, this);
+    },
+
+    stop: function()
+    {
+        if (this.timerID)
+        {
+            clearInterval(this.timerID);
+            this.timerID = null;
+        }
+    },
+
+    checkConnectivity: function()
+    {
+        var online = true;
+
+        var request = new Request(
+        {
+            url: this.options.url,
+            timeout: this.options.timeout,
+            onSuccess: function(response)
+            {
+                online = (response == "OK");
+                this.updateConnectivity(online);
+            }.bind(this),
+            onFailure: function()
+            {
+                this.updateConnectivity(false);
+            }.bind(this),
+            onTimeout: function()
+            {
+                this.updateConnectivity(false);
+            }.bind(this)
+        });
+        request.send();
+    },
+
+    updateConnectivity: function(online)
+    {
+        if (online != this.onlineFlag)
+        {
+            if (!online)
+            {
+                this.fireEvent('offline');
+            }
+            else
+            {
+                this.fireEvent('online');
+            }
+
+            this.onlineFlag = online;
+        }        
+    }
+});
