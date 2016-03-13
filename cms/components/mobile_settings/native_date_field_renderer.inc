@@ -38,7 +38,7 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 		}
 		
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}' type='date' name='{$field}_date' value='$date'/>";
+		echo "<input id='{$this->parent->id}_{$field}' type='date' name='{$field}' value='$date'/>";
 		$this->_endField($field);
 	}
 	
