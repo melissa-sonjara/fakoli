@@ -48,7 +48,7 @@ class AttachmentManifest
 	
 	static function getScripts()
 	{
-		return array("/components/attachments/js/attachment_uploader.js");
+		return array("/components/attachment/js/attachment_uploader.js");
 	}
 	
 	static function getAdminMenu()
