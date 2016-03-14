@@ -73,7 +73,7 @@ var MorphingHistogram = new Class({
 		if (this.options.legend && this.series.length >0)
 		{
 			var series = this.series[0];
-			if (typeof $this.series[0] != 'GroupedHistogramSeries') return;
+			if (typeof this.series[0] != 'GroupedHistogramSeries') return;
 			
 			var x = this.options.legendX;
 			var y = this.options.legendY;
