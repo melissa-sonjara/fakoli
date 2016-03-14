@@ -40,10 +40,15 @@ class AttachmentManifest
 		$component->description = "Attachment handling for Fakoli/CMS components";
 		$component->author = "Andy Green";
 		$component->version = "1.0";
-		$component->priority = 0;
+		$component->priority = 10;
 		$component->enabled = true;
 		
 		return $component;
+	}
+	
+	static function getScripts()
+	{
+		return array("/components/attachments/js/attachment_uploader.js");
 	}
 	
 	static function getAdminMenu()
