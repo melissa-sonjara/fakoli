@@ -104,7 +104,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
 	<script type="text/javascript" src="/components/attachment/js/attachment_uploader.js"></script>
 	<script type="text/javascript">
-	window.addEvent('load', function()
+	window.addEvent('domready', function()
 	{
 		new AttachmentUploader().setup('attachmentForm', '<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
 	});
