@@ -42,7 +42,7 @@ $components = Query::create(Component, "WHERE enabled=1 ORDER BY name")->execute
 
 $helpTree = new TreeControl("help_tree");
 $helpTree->scroll = false;
-$helpTree->width = 0;
+$helpTree->width = "100%";
 $helpTree->style = "help_tree";
 
 foreach($components as $component)
