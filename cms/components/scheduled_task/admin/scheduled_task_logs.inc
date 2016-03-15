@@ -11,13 +11,23 @@ if (!$task_id)
 }
 
 $task = new ScheduledTask($task_id);
-$logEntries = $task->LogEntries("ORDER BY log_date DESC");
+
+$log = new ScheduledTaskLogEntry();
+$log->filter = new InclusionFilter("log_date");
+$filterForm = new FilterForm($log);
+
+$dateRangeFilter = new DateRangeFilterRenderer($filterForm, "log_date", "", "month");
+
+		
+$constraint = $filterForm->getConstraint();
+$logEntries = $task->LogEntries("$constraint ORDER BY log_date DESC");
 
 $table = new DataListView($logEntries, "log_entries");
 $table->column("Execution Date", "{log_date}", true, "width: 20%")
 	  ->column("Status", "<a class='button' style='float: right' href='#' onclick='showTaskLog({task_id}, {log_entry_id}, \"{log_date}\"); return false'>Show Log</a> {status}", true);
 
 $table->paginate = true;
+$table->pageSize = 20;
 $table->filter = true;
 $table->sortable = true;
 $table->excelFile = "scheduled_task_log.xls";
@@ -25,6 +35,7 @@ $table->emptyMessage = "There are no log files for this task.";
 
 $tabs = ScheduledTaskManager::getTabs($task_id);
 
+$script .= $filterForm->writeScript();
 $script .= $table->writeScript();
 $script .= <<<ENDSCRIPT
 <script type='text/javascript'>
@@ -39,6 +50,7 @@ $tabs->writeHTML();
 <div class='tab_border'>
 <h4><?echo $task->format("{component:prettify}: {task_name}");?></h4>
 <?
+$filterForm->drawForm();
 $table->drawView();
 ?>
 <br/>
