@@ -68,9 +68,15 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)
 			|| array_key_exists($field, $this->parent->hidden)) return "";
+
+		global $tiny_mce_application_plugins;
+		global $tiny_mce_application_toolbar_section;
+		global $tiny_mce_application_context_menu_section;
 		
-		global $html_editor_extra_buttons;
-		global $html_editor_override_buttons;
+		$plugins = "advlist,code,visualblocks,table,charmap,paste,contextmenu,searchreplace,fullscreen";
+		if ($tiny_mce_application_plugins) $plugins .= ",".$tiny_mce_application_plugins;
+		$contextMenu = "cut copy paste pastetext searchreplace removeformat | {$tiny_mce_application_context_menu_section} inserttable cell row column deletetable";
+		$toolbar = "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | {$tiny_mce_application_toolbar_section} code visualblocks fullscreen";
 		
 		$https = $_SERVER['HTTPS'];
 		if ($https == "off") $https = false;
@@ -134,15 +140,15 @@ class HTMLFieldRenderer extends FieldRenderer
 ?>
 			valid_elements: '*[*]',
 			selector: '#<?echo "{$this->parent->id}_{$field}"?>',
-			plugins: 'advlist,code,visualblocks,table,imagepicker,linkpicker,videopicker,charmap,paste,contextmenu,searchreplace,fullscreen',
-			contextmenu: "cut copy paste pastetext searchreplace removeformat | linkpicker imagepicker videopicker | inserttable cell row column deletetable",
+			plugins: '<?echo $plugins?>',
+			contextmenu: "<?echo $contextMenu?>",
 			skin: 'fakoli',
 			relative_urls: false,
 			convert_urls: <?echo $convertURLs?>,
 			document_base_url: '<?echo $baseURL?>',
 			menubar: false,
 			<?echo $rootBlock?>
-			toolbar: "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | linkpicker imagepicker videopicker | code visualblocks fullscreen",
+			toolbar: "<?echo $toolbar?>",
 			tools: 'inserttable' });
 	</script>
 <?		
@@ -167,8 +173,6 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 	function renderField($field)
 	{
-		
-		global $html_editor_extra_buttons;
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
 		echo "<div id='{$field}_container'></div>";
 		

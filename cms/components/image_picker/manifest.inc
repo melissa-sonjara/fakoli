@@ -48,9 +48,14 @@ class ImagePickerManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("Initialize" => array(ImagePickerManifest, onInitialize));
+		return array("Initialize" => array(ImagePickerManifest, onInitialize),
+					 "RegisterHTMLEditorPlugins" => array(ImagePickerManifest, registerPlugins));
 	}	
 
+	static function registerPlugins()
+	{
+		HtmlEditorManager::registerPlugin("Image Picker", "imagepicker");
+	}
 	
 	static function onInitialize()
 	{

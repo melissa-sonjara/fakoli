@@ -73,18 +73,23 @@ class VideoManifest
 	{
 		return array("/components/video/css/video.css");
 	}
+
+	static function registerPlugins()
+	{
+		HtmlEditorManager::registerPlugin("Video Picker", "videopicker");
+	}
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" 		=> array(VideoManager, displayVideoGallery),
-					 "EnumerateItems"	 		=> array(VideoManager, enumerateItems),
-					 "ComponentScanComplete"	=> array(VideoManager, setDefaults),
-					 "Initialize" 				=> array(VideoManager, onInitialize),
-					 "RegisterBlogViewHandlers" => array(VideoBlogHandler, register),
-					 "upgradeComponent"			=> array(VideoManager, upgradeComponent),
-					 "RegisterTaxonomyClasses"	=>	array(VideoManager, registerTaxonomyClasses),
-					 "DeleteUser"				=>	array(VideoManager, deleteUser),
-				
+		return array("ResolveIdentifier" 		 => array(VideoManager, displayVideoGallery),
+					 "EnumerateItems"	 		 => array(VideoManager, enumerateItems),
+					 "ComponentScanComplete"	 => array(VideoManager, setDefaults),
+					 "Initialize" 				 => array(VideoManager, onInitialize),
+					 "RegisterBlogViewHandlers"	 => array(VideoBlogHandler, register),
+					 "upgradeComponent"			 => array(VideoManager, upgradeComponent),
+					 "RegisterTaxonomyClasses"	 =>	array(VideoManager, registerTaxonomyClasses),
+					 "DeleteUser"				 =>	array(VideoManager, deleteUser),
+					 "RegisterHTMLEditorPlugins" => array(VideoManifest, registerPlugins)
 			);
 	}
 }

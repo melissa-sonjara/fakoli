@@ -48,7 +48,9 @@ class LinkPickerManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("Initialize" => array(LinkPickerManifest, onInitialize));
+		return array("Initialize" => array(LinkPickerManifest, onInitialize),
+					 "RegisterHTMLEditorPlugins" => array(LinkPickerManifest, registerPlugins)
+		);
 	}	
 
 	
@@ -61,6 +63,11 @@ class LinkPickerManifest
 	static function getStyles()
 	{
 		return array("/components/link_picker/css/link_picker.css");
+	}
+	
+	static function registerPlugins()
+	{
+		HtmlEditorManager::registerPlugin("Link Picker", "linkpicker");
 	}
 	
 	static function onInitialize()
