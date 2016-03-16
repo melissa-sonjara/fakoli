@@ -1129,6 +1129,34 @@ function getScaledSize($size, $decimal_places = 1)
 	return $result;
 }
 
+function roundFormat($num,$abbrev = false)
+{
+	if (!$num) return "";
+	
+	$result = "";
+	if ($abbrev == false) {
+		if ($num >= 1000000000) {
+			$result = ($num / 1000000000).toFixed(1).replace(/\.0$/, '') + ' billion';
+		}
+		if ($num >= 1000000) {
+			$result = ($num / 1000000).toFixed(1).replace(/\.0$/, '') + ' million';
+		}
+		if ($num >= 1000) {
+			$result = ($num / 1000).toFixed(0).replace(/\.0$/, '') + ',000';
+		}
+	} else {
+		if ($num >= 1000000000) {
+			$result = ($num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'bn';
+		}
+		if ($num >= 1000000) {
+			$result = ($num / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
+		}
+		if ($num >= 1000) {
+			$result = ($num / 1000).toFixed(0).replace(/\.0$/, '') + ',000';
+		}
+	}
+	return $result;
+}
 
 $_icons = array(".doc"		=>	"/images/msword_icon.png",
 				".xls"		=>	"/images/msexcel_icon.png",
