@@ -1136,23 +1136,23 @@ function roundFormat($num,$abbrev = false)
 	$result = "";
 	if ($abbrev == false) {
 		if ($num >= 1000000000) {
-			$result = ($num / 1000000000).toFixed(1).replace('/.0$/', '') + ' billion';
+			$result = sprintf("%1.f billion", ($num / 1000000000));
 		}
 		if ($num >= 1000000) {
-			$result = ($num / 1000000).toFixed(1).replace('/.0$/', '') + ' million';
+			$result = sprintf("%1.f million", ($num / 1000000));;
 		}
 		if ($num >= 1000) {
-			$result = ($num / 1000).toFixed(0).replace('/.0$/', '') + ',000';
+			$result = sprintf("%1.f ,000", ($num / 1000));;
 		}
 	} else {
 		if ($num >= 1000000000) {
-			$result = ($num / 1000000000).toFixed(1).replace('/.0$/', '') + 'bn';
+			$result = sprintf("%1.f bn", ($num / 1000000000));
 		}
 		if ($num >= 1000000) {
-			$result = ($num / 1000000).toFixed(1).replace('/.0$/', '') + 'm';
+			$result = sprintf("%1.f m", ($num / 1000000));;
 		}
 		if ($num >= 1000) {
-			$result = ($num / 1000).toFixed(0).replace('/.0$/', '') + ',000';
+			$result = sprintf("%1.f ,000", ($num / 1000));
 		}
 	}
 	return $result;
