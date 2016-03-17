@@ -72,6 +72,8 @@ class HTMLFieldRenderer extends FieldRenderer
 		global $tiny_mce_application_plugins;
 		global $tiny_mce_application_toolbar_section;
 		global $tiny_mce_application_context_menu_section;
+		global $tiny_mce_content_css;
+		global $tiny_mce_body_class;
 		
 		$plugins = "advlist,code,visualblocks,table,charmap,paste,contextmenu,searchreplace,fullscreen";
 		if ($tiny_mce_application_plugins) $plugins .= ",".$tiny_mce_application_plugins;
@@ -143,6 +145,8 @@ class HTMLFieldRenderer extends FieldRenderer
 			plugins: '<?echo $plugins?>',
 			contextmenu: "<?echo $contextMenu?>",
 			skin: 'fakoli',
+			content_css: '<?echo $tiny_mce_content_class?>',
+			body_class: '<?echo $tiny_css_body_class?>',
 			relative_urls: false,
 			convert_urls: <?echo $convertURLs?>,
 			document_base_url: '<?echo $baseURL?>',
