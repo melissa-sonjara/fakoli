@@ -39,7 +39,7 @@ class HtmlEditorManager
 		$tiny_mce_application_toolbar_section = implode(" ", array_keys(HtmlEditorManager::$plugins)) . " |";
 		$tiny_mce_application_context_menu_section = implode(" ", array_keys(HtmlEditorManager::$plugins)) . " |";
 		$tiny_mce_content_css = Settings::getValue("html_editor", "content_css");
-		$tiny_mce_body_class Settings::getValue("html_editor", "body_class");
+		$tiny_mce_body_class = Settings::getValue("html_editor", "body_class");
 	}
 }
 
