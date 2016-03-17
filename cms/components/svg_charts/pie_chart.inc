@@ -133,6 +133,7 @@ class PieChart
 		$emboss = $this->emboss ? "true" : "false";
 		$legend = $this->legend ? "true" : "false";
 		$percentages = $this->showPercentages ? "true" : "false";
+		$download = $this->enableDownload ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
@@ -165,7 +166,8 @@ window.addEvent('domready', function ()
 		onSectorOut: {$this->onSectorOut},
 		onSectorClick: {$this->onSectorClick},
 		onLegendOver: {$this->onLegendOver},
-		onLegendOut: {$this->onLegendOut}
+		onLegendOut: {$this->onLegendOut},
+		enableDownload: {$download}
 		
 	});
 	{$this->id}.values = [ $values ];
