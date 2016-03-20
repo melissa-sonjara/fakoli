@@ -115,7 +115,7 @@ var DraggableColumnTable = new Class({
 		
 		this.elements.each(function(element)
 		{
-			element.addEvent('mousedown', function(e) { new Event(e).stop(); this.mouseDown = true; this.startDrag.delay(this.options.dragDelay, this, [element, e]); }.bind(this));
+			element.addEvent('mousedown', function(e) { new DOMEvent(e).stop(); this.mouseDown = true; this.startDrag.delay(this.options.dragDelay, this, [element, e]); }.bind(this));
 			element.addEvent('mouseup', function(e) { this.mouseDown = false; }.bind(this));
 		}.bind(this));	
 	},

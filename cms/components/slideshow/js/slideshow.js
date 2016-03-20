@@ -96,12 +96,12 @@ var Slideshow = (function()
 	
 			this.gallery.addEvent('mouseover',	function()	{ if (!this.playing) this.zoomOverlay.setStyle('opacity', 1); }.bind(this));
 			this.gallery.addEvent('mouseout', 	function()	{ this.zoomOverlay.setStyle('opacity', 0); }.bind(this));
-			this.gallery.addEvent('wheelup',	function(e) { e = new Event(e).stop(); if (!this.playing) this.alterZoomLevel(-10); }.bind(this));
-			this.gallery.addEvent('wheeldown', 	function(e) { e = new Event(e).stop(); if (!this.playing) this.alterZoomLevel(10); }.bind(this));
+			this.gallery.addEvent('wheelup',	function(e) { e = new DOMEvent(e).stop(); if (!this.playing) this.alterZoomLevel(-10); }.bind(this));
+			this.gallery.addEvent('wheeldown', 	function(e) { e = new DOMEvent(e).stop(); if (!this.playing) this.alterZoomLevel(10); }.bind(this));
 			
 			this.gallery.addEvent('mousewheel', function(e) 
 			{ 
-				e = new Event(e).stop(); if (!this.playing) this.alterZoomLevel((e.wheel < 0) ? 10 : -10);
+				e = new DOMEvent(e).stop(); if (!this.playing) this.alterZoomLevel((e.wheel < 0) ? 10 : -10);
 			}.bind(this));
 			
 			this.playButton.addEvent('click', function() { this.togglePlay(); }.bind(this));
@@ -203,7 +203,7 @@ var Slideshow = (function()
 						preventDefault: true,
 						onDrag:function(element, event) 
 						{
-							new Event(event).stop(); 
+							new DOMEvent(event).stop(); 
 						}
 					});
 					
@@ -587,7 +587,7 @@ var Slideshow = (function()
 										preventDefault: true,
 										onDrag: function(element, event)
 										{
-											new Event(event).stop();
+											new DOMEvent(event).stop();
 										}
 									});
 												

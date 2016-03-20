@@ -30,10 +30,10 @@
 
 *****************************************************************/
 
-Selectors.Pseudo.checked = function()
-{
-    return ('input' == this.get('tag') && ('radio' == this.get('type') || 'checkbox' == this.get('type')) && this.checked);
-};
+//Selectors.Pseudo.checked = function()
+//{
+//    return ('input' == this.get('tag') && ('radio' == this.get('type') || 'checkbox' == this.get('type')) && this.checked);
+//};
   
 var Tree = new Class({
 	

@@ -122,7 +122,7 @@ class TabBar
 			
 			a.addEvent('click', function(e) 
 			{
-				new Event(e).stop();
+				new DOMEvent(e).stop();
 				var url = a.href;
 				var parent = a.getParent();
 				document.id('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });

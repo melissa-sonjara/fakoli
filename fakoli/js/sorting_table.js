@@ -60,7 +60,7 @@ var SortingTable = new Class(
 		details: false,
 		paginator: false,
 		filter: false,
-		onSorted: $empty,
+		onSorted: function(){},
 		dont_sort_class: 'nosort',
 		forward_sort_class: 'forward_sort',
 		reverse_sort_class: 'reverse_sort'
@@ -219,7 +219,7 @@ var SortingTable = new Class(
  
 	load_conversions: function() 
 	{
-		this.conversions = $A([
+		this.conversions = Array.convert([
 		// 1.75 MB, 301 GB, 34 KB, 8 TB
 		{ 
 			matcher: /([0-9.]{1,8}).*([KMGT]{1})B/,

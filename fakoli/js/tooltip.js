@@ -55,7 +55,7 @@ var ToolTip = new Class(
 	{
 		ToolTip.currentLink = document.id(link);
 		
-		var event = new Event(evt).stop();
+		var event = new DOMEvent(evt).stop();
 		
 		loadTooltip = function (link, event, tip, handlerURL)
 		{
@@ -103,7 +103,7 @@ var ToolTip = new Class(
 	{
 		ToolTip.currentLink = document.id(link);
 		
-		var event = new Event(evt).stop();
+		var event = new DOMEvent(evt).stop();
 		
 		textTooltip = function(link, event, tip, text)
 		{

@@ -31,7 +31,7 @@ var ContextMenu = new Class(
 				elt.addEvent(trigger, function(e)
 				{
 					ContextMenu.root = elt;
-					var event = new Event(e).stop();
+					var event = new DOMEvent(e).stop();
 					me.show(event);
 				});
 			});

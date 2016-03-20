@@ -50,7 +50,7 @@ var MultiSelect = new Class(
 			
 		this.dropdown.addEvent('click', function(e)
 		{
-			//new Event(e).stop();
+			//new DOMEvent(e).stop();
 			if (this.container.getStyle('display') == 'none' || this.container.getStyle('opacity') == 0)
 			{
 				$$('.multi_select_dropdown_list').each(function(elt) { elt.setStyle('display', 'none');});

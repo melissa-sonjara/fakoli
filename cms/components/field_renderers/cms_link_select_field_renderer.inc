@@ -115,7 +115,7 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 <script type="text/javascript">
 function {$this->parent->id}_{$field}_showTree(e)
 {
-	new Event(e).stop();
+	new DOMEvent(e).stop();
 	var popup = document.id('{$this->parent->id}_{$field}_tree_popup');
 	var txt = document.id('{$this->parent->id}_{$field}');
 	var coords = txt.getCoordinates();
@@ -142,7 +142,7 @@ function {$this->parent->id}_{$field}_selectItem(url)
 window.addEvent('domready', function()
 {
 	var popup = document.id('{$this->parent->id}_{$field}_tree_popup');
-	popup.addEvent('click', function(e) { new Event(e).stop(); });
+	popup.addEvent('click', function(e) { new DOMEvent(e).stop(); });
 });
 </script>
 ENDSCRIPT;

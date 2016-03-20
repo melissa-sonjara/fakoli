@@ -27,7 +27,7 @@ var ColorPicker = new Class(
 
 		this.buildPanel();
 	
-		this.button.addEvent(this.options.trigger, function(e) { new Event(e).stop(); this.showPanel(); }.bind(this));		
+		this.button.addEvent(this.options.trigger, function(e) { new DOMEvent(e).stop(); this.showPanel(); }.bind(this));		
 	},
 	
 	buildPanel: function()
@@ -101,7 +101,7 @@ var ColorPicker = new Class(
 			td.setStyle('background-color', color);
 			td.addEvents({'mouseenter': function(e) { td.addClass('hover'); },
 						  'mouseleave': function(e) { td.removeClass('hover'); },
-						  'click': function(e) { new Event(e).stop(); me.selectColor(td.getStyle('background-color')); }
+						  'click': function(e) { new DOMEvent(e).stop(); me.selectColor(td.getStyle('background-color')); }
 						  });			
 			tr.adopt(td);
 		});

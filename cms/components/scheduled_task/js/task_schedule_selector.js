@@ -18,8 +18,8 @@ var TaskScheduleSelector = new Class(
 		this.table.getElements('td.period').each(function(period)
 		{
 			period.addEvent('click', function() { this.togglePeriod(period); }.bind(this));
-			period.addEvent('touchstart', function(e) { new Event(e).stop(); this.startTouch(period); }.bind(this));
-			period.addEvent('touchmove', function(e) { new Event(e).stop(); this.continueTouch(period, e); }.bind(this));
+			period.addEvent('touchstart', function(e) { new DOMEvent(e).stop(); this.startTouch(period); }.bind(this));
+			period.addEvent('touchmove', function(e) { new DOMEvent(e).stop(); this.continueTouch(period, e); }.bind(this));
 		}.bind(this));
 	},
 	

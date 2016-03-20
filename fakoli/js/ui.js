@@ -296,7 +296,7 @@ var AbstractDialog = new Class(
     	
     	if (this.options.closeLink)
     	{
-    		document.id(this.options.closeLink).addEvent('click', function(e) { new Event(e).stop(); this.hide(); if (this.disposeOnExit) { this.options.body.set('text', ''); } }.bind(this));
+    		document.id(this.options.closeLink).addEvent('click', function(e) { new DOMEvent(e).stop(); this.hide(); if (this.disposeOnExit) { this.options.body.set('text', ''); } }.bind(this));
     	}
     	
     	if (this.options.title)	this.setTitle(this.options.title);
@@ -430,7 +430,7 @@ var ModalDialog = new Class(
     			preventDefault: true, 
     			onDrag: function(element, event) 
     			{ 
-    				new Event(event).stop(); 
+    				new DOMEvent(event).stop(); 
     			} 
     		};
     		
@@ -568,7 +568,7 @@ var FloatingDialog = new Class(
     			preventDefault: true, 
     			onDrag: function(element, event) 
     			{ 
-    				new Event(event).stop(); 
+    				new DOMEvent(event).stop(); 
     			} 
     		};
     		
@@ -791,7 +791,7 @@ var Notification = new Class({
 		{
 			var button = new Element('a', {'class': this.options.buttonClass});
 			button.set('html', this.options.buttonText);
-			button.addEvent('click', function(e) { new Event(e).stop(); this.hide(); }.bind(this));
+			button.addEvent('click', function(e) { new DOMEvent(e).stop(); this.hide(); }.bind(this));
 			
 			div.adopt(button);
 		}
@@ -893,7 +893,7 @@ var ProgressiveSearch = new Class({
 		{
 			this.browseButton = new Element('a', {'href': '#', 'class': 'button', 'text': 'Browse'});
 			this.browseButton.setStyle('margin-left', 5);
-			this.browseButton.addEvent('click', function(e) { new Event(e).stop(); this.element.focus(); this.browse();}.bind(this));
+			this.browseButton.addEvent('click', function(e) { new DOMEvent(e).stop(); this.element.focus(); this.browse();}.bind(this));
 			this.browseButton.inject(this.element, 'after');
 		}
 	},
@@ -1024,7 +1024,7 @@ var PaginatingList = new Class(
 		this.paginator.empty();
 	    this.createPaginationNode( '&#60;&#60;&#32;&#80;&#114;&#101;&#118;', function(evt)
 	    {
-	        var evt = new Event( evt );
+	        var evt = new DOMEvent( evt );
 	        this.toPrevPage();
 	        evt.stop();
 	        return false;
@@ -1037,7 +1037,7 @@ var PaginatingList = new Class(
 	    
 	    this.createPaginationNode( '&#78;&#101;&#120;&#116;&#32;&#62;&#62;', function(evt)
 	    {
-	        var evt = new Event( evt );
+	        var evt = new DOMEvent( evt );
 	        this.toNextPage();
 	        evt.stop();
 	        return false;
@@ -1214,7 +1214,7 @@ var Splitter = new Class({
 		
 		this.panes.each(function(elt) { elt.setStyles({"overflow-y": "auto", "float": "left"}); });
 		
-		this.splitter.addEvent('mousedown', function(e) { this.startResize(new Event(e)); }.bind(this));
+		this.splitter.addEvent('mousedown', function(e) { this.startResize(new DOMEvent(e)); }.bind(this));
 		this.calculateLayout();
 	},
 	
@@ -1458,7 +1458,7 @@ var FocusWatcher = new Class({
 	
     options: {
             elementTypes : ['textarea','input','select','button','a'],
-            onFocusChanged: $empty 
+            onFocusChanged: function(){} 
     }, 
     
 	focus: null,
@@ -1738,7 +1738,7 @@ var ToggleManager = new Class(
 		{
 			toggle.addEvent(this.options.event, function(event)
 			{
-				var elt = new Event(event).target;
+				var elt = new DOMEvent(event).target;
 				
 				var target = elt.get('target');
 				if (!target) elt.get('data-target');

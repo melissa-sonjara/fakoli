@@ -67,7 +67,7 @@ var iFrameFormRequest = new Class({
 							if (doc.location.href == 'about:blank') {
 								self.options.onFailure();
 							}
-							if ($type(self.options.onComplete) == 'function') {
+							if (typeOf(self.options.onComplete) == 'function') {
 								self.options.onComplete(doc.body.innerHTML);
 							}
 						} else {

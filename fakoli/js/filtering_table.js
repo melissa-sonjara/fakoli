@@ -117,7 +117,7 @@ var FilteringTable = new Class({
 		var headers = this.thead.getElements('th');
 		var text = headers[this.options.column].textContent;
 		this.filterLabel = new Element( 'label' ).set( 'html', "Filter by&nbsp;");
-		this.filterLabel.injectInside(this.filterElement);
+		this.filterLabel.inject(this.filterElement);
 		
 		this.filterSelect = new Element('select', {id: this.table.id + "_filterselect"});
 		var self = this;
@@ -130,17 +130,17 @@ var FilteringTable = new Class({
 		}
 		.bind(this));
 		
-		this.filterSelect.injectInside(this.filterElement);
+		this.filterSelect.inject(this.filterElement);
 		
 		this.filterControl = new Element( 'input', 
 								{
 									'type': 'text',
 									'events':	
 									{
-										'keyup': function(e) { new Event(e).stop(); this.filter(); }.bind(this)
+										'keyup': function(e) { new DOMEvent(e).stop(); this.filter(); }.bind(this)
 									}
 								});
 		
-		this.filterControl.injectInside(this.filterElement);
+		this.filterControl.inject(this.filterElement);
 	}
 });

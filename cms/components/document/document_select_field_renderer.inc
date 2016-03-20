@@ -59,7 +59,7 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 <script type="text/javascript">
 function {$this->parent->id}_{$field}_showList(e)
 {
-	new Event(e).stop();
+	new DOMEvent(e).stop();
 	var popup = document.id('{$this->parent->id}_{$field}_list_popup');
 	var txt = document.id('{$this->parent->id}_{$field}');
 	var coords = txt.getCoordinates();
@@ -94,7 +94,7 @@ function {$this->parent->id}_{$field}_selectItem(elt, id)
 window.addEvent('domready', function()
 {
 	var popup = document.id('{$this->parent->id}_{$field}_list_popup');
-	popup.addEvent('click', function(e) { new Event(e).stop(); });
+	popup.addEvent('click', function(e) { new DOMEvent(e).stop(); });
 });
 </script>
 ENDSCRIPT;

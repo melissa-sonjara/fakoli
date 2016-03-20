@@ -20,9 +20,9 @@ var FeedbackPanel = (function()
 			this.textarea = document.id('feedback_textarea');
 			this.thanks = document.id('feedback_thanks');
 			
-			this.closePanelLink.addEvent('click', function(e) { new Event(e).stop(); this.closeFeedback(); }.bind(this));
-			this.closedPanel.addEvent('click', function(e) { new Event(e).stop(); this.openFeedback(); }.bind(this));
-			this.sendLink.addEvent('click', function(e) { new Event(e).stop(); this.sendFeedback(); }.bind(this));
+			this.closePanelLink.addEvent('click', function(e) { new DOMEvent(e).stop(); this.closeFeedback(); }.bind(this));
+			this.closedPanel.addEvent('click', function(e) { new DOMEvent(e).stop(); this.openFeedback(); }.bind(this));
+			this.sendLink.addEvent('click', function(e) { new DOMEvent(e).stop(); this.sendFeedback(); }.bind(this));
 		},
 		
 		closeFeedback: function()

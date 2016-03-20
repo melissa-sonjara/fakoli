@@ -28,7 +28,7 @@ var GroupingTable = new Class({
 		
 		var self = this;
 		
-		this.subheadings.each(function(h) { h.addEvent('click', function(e) { new Event(e).stop(); self.handleClick(h); }); });
+		this.subheadings.each(function(h) { h.addEvent('click', function(e) { new DOMEvent(e).stop(); self.handleClick(h); }); });
 		this.update();
 	},
 	

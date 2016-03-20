@@ -19,7 +19,7 @@ var VideoGallery = new Class(
 		{
 			'mouseover': function(e) { this.scrollLeft.src = "/components/video/images/scroll_left_hover.png"; }.bind(this),
 			'mouseout': function(e) { this.scrollLeft.src = "/components/video/images/scroll_left.png"; }.bind(this),
-			'click': function(e) { new Event(e).stop(); this.scroll(-1); }.bind(this)
+			'click': function(e) { new DOMEvent(e).stop(); this.scroll(-1); }.bind(this)
 		});
 		
 		this.scrollRight.setStyle('cursor', 'pointer');
@@ -27,7 +27,7 @@ var VideoGallery = new Class(
 		{
 			'mouseover': function(e) { this.scrollRight.src = "/components/video/images/scroll_right_hover.png"; }.bind(this),
 			'mouseout': function(e) { this.scrollRight.src = "/components/video/images/scroll_right.png"; }.bind(this),
-			'click': function(e) { new Event(e).stop(); this.scroll(1); }.bind(this)
+			'click': function(e) { new DOMEvent(e).stop(); this.scroll(1); }.bind(this)
 		});
 		
 		this.gallery = document.id(id);

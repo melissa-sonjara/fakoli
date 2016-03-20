@@ -71,7 +71,7 @@ var PaginatingTable = new Class({
     if (this.options.cutoff_el)
       this.options.cutoff_el = document.id(this.options.cutoff_el);
  
-    this.paginators = ($type(ids) == 'array') ? ids.map($) : [document.id(ids)];
+    this.paginators = (typeOf(ids) == 'array') ? ids.map(document.id) : [document.id(ids)];
  
     if (this.options.details) {
       this.options.per_page = this.options.per_page * 2;
@@ -142,23 +142,23 @@ var PaginatingTable = new Class({
     this.paginators.each(function(paginator){
       paginator.empty();
       this.create_pagination_node( '&#60;&#60;&#32;&#80;&#114;&#101;&#118;', function(evt){
-        var evt = new Event( evt );
+        var evt = new DOMEvent( evt );
         this.to_prev_page();
         evt.stop();
         return false;
-      }).injectInside( paginator );
+      }).inject( paginator );
       
       var li = new Element('li', {'class': 'pager'} );
       var a = new Element('a', {'href': "#", 'class': 'goto-page', 'html': 'Page ' + (this.current_page || 1) + " of " + this.pages});
-      a.injectInside(li);
-      li.injectInside(paginator);
+      a.inject(li);
+      li.inject(paginator);
       
      this.create_pagination_node( '&#78;&#101;&#120;&#116;&#32;&#62;&#62;', function(evt){
-        var evt = new Event( evt );
+        var evt = new DOMEvent( evt );
         this.to_next_page();
         evt.stop();
         return false;
-      }).injectInside( paginator );
+      }).inject( paginator );
      
      if (this.pages < 2)
      {
@@ -181,7 +181,7 @@ var PaginatingTable = new Class({
       var a = new Element( 'a', { 'href': '#'}).addEvent( 'click', evt.bind( this ) );
     }
     var li = new Element( 'li' );
-    span.injectInside( a.injectInside( li ) );
+    span.inject( a.inject( li ) );
     return li;
   },
   

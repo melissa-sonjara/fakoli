@@ -71,9 +71,9 @@ var ScrollingTabs = new Class(
 		
 		leftButton.addEvents(
 		{
-			'mouseenter': function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_left_button_active.gif');},
-			'mouseleave':  function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_left_button.gif');},
-			'click': 	 function(e) { new Event(e).stop(); this.scroll(-1);}.bind(this)
+			'mouseenter': function(e) { new DOMEvent(e).stop(); this.set('src', '/fakoli/images/tab_left_button_active.gif');},
+			'mouseleave':  function(e) { new DOMEvent(e).stop(); this.set('src', '/fakoli/images/tab_left_button.gif');},
+			'click': 	 function(e) { new DOMEvent(e).stop(); this.scroll(-1);}.bind(this)
 		});
 		
 		var rightButton = new Element('img', {'src': '/fakoli/images/tab_right_button.gif'});
@@ -81,9 +81,9 @@ var ScrollingTabs = new Class(
 		
 		rightButton.addEvents(
 		{
-			'mouseenter': function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_right_button_active.gif');},
-			'mouseleave':  function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_right_button.gif');},
-			'click': 	 function(e) { new Event(e).stop(); this.scroll(1);}.bind(this)
+			'mouseenter': function(e) { new DOMEvent(e).stop(); this.set('src', '/fakoli/images/tab_right_button_active.gif');},
+			'mouseleave':  function(e) { new DOMEvent(e).stop(); this.set('src', '/fakoli/images/tab_right_button.gif');},
+			'click': 	 function(e) { new DOMEvent(e).stop(); this.scroll(1);}.bind(this)
 		});
 
 		leftButton.inject(div);
@@ -96,9 +96,9 @@ var ScrollingTabs = new Class(
 			
 			this.dropdownButton.addEvents(
 			{
-				'mouseenter': function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_dropdown_button_active.gif');},
-				'mouseleave':  function(e) { new Event(e).stop(); this.set('src', '/fakoli/images/tab_dropdown_button.gif');},
-				'click': 	 function(e) { new Event(e).stop(); this.toggleDropdown();}.bind(this)
+				'mouseenter': function(e) { new DOMEvent(e).stop(); this.set('src', '/fakoli/images/tab_dropdown_button_active.gif');},
+				'mouseleave':  function(e) { new DOMEvent(e).stop(); this.set('src', '/fakoli/images/tab_dropdown_button.gif');},
+				'click': 	 function(e) { new DOMEvent(e).stop(); this.toggleDropdown();}.bind(this)
 			});
 			
 			this.dropdownButton.inject(div);

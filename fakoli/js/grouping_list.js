@@ -32,7 +32,7 @@ var GroupingList = new Class({
 		{ 
 			h.addEvent('click', function(e) 
 			{ 
-				new Event(e).stop(); 
+				new DOMEvent(e).stop(); 
 				self.handleClick(h); 
 			}); 
 		});

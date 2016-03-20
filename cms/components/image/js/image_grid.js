@@ -12,8 +12,8 @@ var ImageGrid = new Class({
 		
 		this.grid.getElements('li').each(function(elt)
 		{
-			elt.addEvent('mouseover', function(e) { new Event(e).stop(); this.puff(elt); }.bind(me));
-			elt.addEvent('mouseout', function(e) { new Event(e).stop(); this.unpuff(elt); }.bind(me));
+			elt.addEvent('mouseover', function(e) { new DOMEvent(e).stop(); this.puff(elt); }.bind(me));
+			elt.addEvent('mouseout', function(e) { new DOMEvent(e).stop(); this.unpuff(elt); }.bind(me));
 		});
 		
 		if (this.grid.facetManager)

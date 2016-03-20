@@ -88,18 +88,18 @@ var FakoliMenu = new Class({
 				{
 					'touchstart': function(event)
 					{
-						new Event(event).stop();
+						new DOMEvent(event).stop();
 						
 						menu.clearFocus();
 						menu.showMenu(parent);
 						if (!parent.blockClick)
 						{
-							parent.blockClick = function(event) { new Event(event).stop(); return false; };
+							parent.blockClick = function(event) { new DOMEvent(event).stop(); return false; };
 							parent.addEvent('click', elt.blockClick.bind(elt));
 							
 							ul.getElements('a').each(function(child)
 							{
-								child.addEvent('touchend', function(event) { new Event(event).stop(); this.clearFocus(); go(child.href);}.bind(menu));
+								child.addEvent('touchend', function(event) { new DOMEvent(event).stop(); this.clearFocus(); go(child.href);}.bind(menu));
 							});
 						}							
 					},

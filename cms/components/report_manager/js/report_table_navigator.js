@@ -61,7 +61,7 @@ var ReportTableNavigator = new Class(
 			filter.filterForm = filter.getElement(".filter");
 			var heading = filter.getElement('h3');
 			
-			heading.addEvent('click', function(e) { new Event(e).stop(); this.toggleFilter(filter); }.bind(this));			
+			heading.addEvent('click', function(e) { new DOMEvent(e).stop(); this.toggleFilter(filter); }.bind(this));			
 		}.bind(this));
 	},
 	
