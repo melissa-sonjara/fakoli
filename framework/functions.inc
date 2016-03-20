@@ -1140,7 +1140,7 @@ function roundFormat($num,$abbrev = false)
 		} elseif ($num >= 1000000) {
 			$result = sprintf("%.1f million", ($num / 1000000));;
 		} elseif ($num >= 1000) {
-			$result = sprintf("%.0f ,000", ($num / 1000));;
+			$result = sprintf("%.0f,000", ($num / 1000));;
 		}
 	} else {
 		if ($num >= 1000000000) {
@@ -1148,7 +1148,7 @@ function roundFormat($num,$abbrev = false)
 		} elseif ($num >= 1000000) {
 			$result = sprintf("%.1f m", ($num / 1000000));;
 		} elseif ($num >= 1000) {
-			$result = sprintf("%.0f ,000", ($num / 1000));
+			$result = sprintf("%.0f,000", ($num / 1000));
 		}
 	}
 	return $result;
