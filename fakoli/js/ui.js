@@ -134,7 +134,7 @@ var Curtain = new Class(
 	
 	lower: function(onComplete)
 	{
-		var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+		var noFixed = (Browser.name == 'ie' && Browser.version < 7);
 		
 		var opacity = this.curtain.get('opacity');
 		var display = this.curtain.getStyle('display');
@@ -377,7 +377,7 @@ var ModalDialog = new Class(
     	
     center: function()
     {
-    	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+    	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
     	
     	
     	if (this.options.body)
@@ -527,7 +527,7 @@ var FloatingDialog = new Class(
     position: function()
     {
 		var x, y;
-    	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+    	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
     			
 		if (this.top && this.left)
 		{
@@ -666,7 +666,7 @@ var Interstitial = new Class({
 	
 	center: function()
 	{
-	   	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+	   	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
 	   	
 	   	var size = window.size();
 	   	var coords = this.interstitial.getCoordinates();
@@ -800,7 +800,7 @@ var Notification = new Class({
 	
 	center: function()
 	{
-	   	var noFixed = (Browser.Engine.trident && Browser.Engine.version <= 4);
+	   	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
 	   	
 	   	var size = window.size();
 	   	var coords = this.notification.getCoordinates();
@@ -1028,12 +1028,12 @@ var PaginatingList = new Class(
 	        this.toPrevPage();
 	        evt.stop();
 	        return false;
-	    }).injectInside( this.paginator );
+	    }).inject( this.paginator );
 	      
 	    var li = new Element('li', {'class': 'pager'} );
 	    var a = new Element('a', {'href': "#", 'class': 'goto-page', 'html': 'Page ' + (this.current_page || 1) + " of " + this.pages});
-	    a.injectInside(li);
-	    li.injectInside(this.paginator);
+	    a.inject(li);
+	    li.inject(this.paginator);
 	    
 	    this.createPaginationNode( '&#78;&#101;&#120;&#116;&#32;&#62;&#62;', function(evt)
 	    {
@@ -1041,7 +1041,7 @@ var PaginatingList = new Class(
 	        this.toNextPage();
 	        evt.stop();
 	        return false;
-	    }).injectInside( this.paginator );
+	    }).inject( this.paginator );
 	    
 	    if (this.pages <= 1)
 	    {
@@ -1060,7 +1060,7 @@ var PaginatingList = new Class(
 	       var a = new Element( 'a', { 'href': '#'}).addEvent( 'click', evt.bind( this ) );
 	     }
 	     var li = new Element( 'li' );
-	     span.injectInside( a.injectInside( li ) );
+	     span.inject( a.inject( li ) );
 	     return li;	    
 	},
 	
