@@ -132,7 +132,7 @@ var Slideshow = (function()
 			{
 				onload:	function()
 				{
-					this.spinner.injectInside(this.gallery);					
+					this.spinner.inject(this.gallery);					
 					this.spinner.setStyle('display', 'none');
 				}.bind(this)
 			});

@@ -53,7 +53,7 @@ var ImagePicker =  (function()
 		    			onSuccess: function(tree, elements, html, script) 
 		    			{ 
 		    				document.id('image_list').set('html', html);
-		    				$exec(script);
+		    				Browser.exec(script);
 		    			}.bind(this)
 		    		});
 		    		request.send();

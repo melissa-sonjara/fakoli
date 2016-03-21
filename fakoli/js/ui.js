@@ -459,7 +459,7 @@ var ModalDialog = new Class(
     			{ 
     				this.options.body.set('text', '');
     				this.options.body.set('html', html);
-    				$exec(script);
+    				Browser.exec(script);
     				this.element.fade('show');
     				this.center();
     				new Curtain().normalCursor();
@@ -598,7 +598,7 @@ var FloatingDialog = new Class(
     			{ 
     				this.options.body.set('text', '');
     				this.options.body.set('html', html);
-    				$exec(script);
+    				Browser.exec(script);
     				this.position();
     			}.bind(this)
     		});
@@ -1573,7 +1573,7 @@ function addReloadHandlers(container)
 				onSuccess: function(tree, elements, html, script) 
 				{ 
 					elt.set('html', html);
-					$exec(script);
+					Browser.exec(script);
 					
 					if (typeof onComplete != "undefined")
 					{

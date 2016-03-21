@@ -82,7 +82,7 @@ Tree.loadOnDemand = function(id, fragmentURL, force)
 				div.set('text', '');
 				div.adopt(tree);
 				link.setStyle('cursor', cursor);
-				$exec(script);
+				Browser.exec(script);
 			}
 		});
 		request.send();

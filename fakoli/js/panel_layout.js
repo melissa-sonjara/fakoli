@@ -259,7 +259,7 @@ var Panel = new Class(
 				this.body = this.div.getElements('.panel_body')[0];
 				this.stretch();
 
-				$exec(script);
+				Browser.exec(script);
 				
 				this.fireEvent('load');
 			}.bind(this)
@@ -355,7 +355,7 @@ var Panel = new Class(
 				this.body = this.div.getElements('.panel_body')[0];
 				this.stretch();
 
-				$exec(script);
+				Browser.exec(script);
 				
 				this.fireEvent('load');
 			}.bind(this)

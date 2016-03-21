@@ -112,7 +112,7 @@ class TabBar
 						container.set('text', '');
 						container.adopt(tree);
 		
-						\$exec(script);
+						Browser.exec(script);
 
 					}.bind(this)
 				});

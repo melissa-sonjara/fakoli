@@ -90,7 +90,7 @@ var ToolTip = new Class(
 					tip.div.adopt(tree);
 					tip.position(event);
 					link.setStyle('cursor', cursor);
-					$exec(script);
+					Browser.exec(script);
 				}
 			});
 			request.send();
