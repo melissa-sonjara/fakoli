@@ -36,7 +36,7 @@ var Palette = new Class(
 		var background = new Color(this.getColor(color));
 		
 		var intensity = background.rgb[0] *  0.299 + background.rgb[1] * 0.587 + background.rgb[2] * 0.114;
-		return (intensity < 96) ? dark : light;
+		return (intensity < 96) ? light : dark;
 	}
 });
 
