@@ -63,13 +63,13 @@ var PieChart = new Class(
 			
 			if (!this.options.legend)
 			{
-				var t = this.label(center, this.labels[idx]);
+				var t = this.label(center, this.labels[idx], idx);
 			}
 			
 			var p = Class.Empty;
 			if (val != 0 && this.options.percentages)
 			{
-				p = this.percentage(center, val * 100 / total);
+				p = this.percentage(center, val * 100 / total, idx);
 			}
 			var animatePercentages = this.options.animatePercentages;
 			
@@ -136,18 +136,20 @@ var PieChart = new Class(
         return this.paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > Math.PI), 0, x2, y2, "z"]).attr(params);
 	},
 	
-	label: function (angle, text)
+	label: function (angle, text, idx)
 	{
 		var cx = this.options.cx;
 		var cy = this.options.cy;
 		var r  = this.options.radius;
 
-		var params = {fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.labelSize};
+		var color = this.palette.getFontColor(idx);
+		
+		var params = {fill: color, stroke: "none" , opacity: 1, "font-size": this.options.labelSize};
 		var t = this.paper.text(cx + (r * 1.2) * Math.cos(-angle), cy + (r * 1.2) * Math.sin(-angle), text).attr(params);
 		return t;
 	},
 	
-	percentage: function(angle, value)
+	percentage: function(angle, value, idx)
 	{
 		var cx = this.options.cx;
 		var cy = this.options.cy;
@@ -155,8 +157,10 @@ var PieChart = new Class(
 	
 		var text = value.toFixed(1) + "%";
 		var o = this.options.animatePercentages ? 0 : 1;
+
+		var color = this.palette.getFontColor(idx);
 		
-		var params = {fill: this.palette.strokeColor, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize};
+		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize};
 		var t = this.paper.text(cx + (r * this.options.percentagesDistance) * Math.cos(-angle), cy + (r * this.options.percentagesDistance) * Math.sin(-angle), text).attr(params);
 		
 		return t;
