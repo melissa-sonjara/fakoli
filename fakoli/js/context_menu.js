@@ -23,7 +23,7 @@ var ContextMenu = new Class(
 		
 		var me = this;
 		
-		elementSelector = $splat(elementSelector);
+		elementSelector = Array.convert(elementSelector);
 		elementSelector.each(function(selector)
 		{
 			$$(selector).each(function(elt)
