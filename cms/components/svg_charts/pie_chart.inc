@@ -62,6 +62,7 @@ class PieChart
 	var $onSectorClick = "null";
 	var $onLegendOver = "null";
 	var $onLegendOut = "null";
+	var $scaleToFit = false;
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -177,7 +178,17 @@ window.addEvent('domready', function ()
 });
 </script>
 ENDSCRIPT;
-		echo "<div id='{$this->id}' style='width: {$containerWidth}; height: {$containerHeight}'></div>";
+
+	if ($this->scaleToFit)
+	{
+		$dimensions = "width: 100%; height: auto";
+	}
+	else
+	{
+		$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
+	}
+	
+		echo "<div id='{$this->id}' style='$dimensions'></div>";
 	}	
 }
 ?>
