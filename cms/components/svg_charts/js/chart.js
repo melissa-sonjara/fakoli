@@ -67,13 +67,16 @@ var Chart = new Class(
 			var s = this.options.legendSwatchSize || 20;
 			var h = this.options.legendLineHeight || 30;
 			
+			var font = this.options.fontFamily;
+			if (!font) font = "Arial";
+			
 			this.labels.each(function(text, index)
 			{
 				var rect = this.paper.rect(x, y, s, s, 3);
 				rect.attr({fill:this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth});
 				
 				var text = this.paper.text(x + h, y + 10, text);
-				text.attr({"text-anchor": "start", fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.labelSize});
+				text.attr({"text-anchor": "start", fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.labelSize, "font-family": font});
 					
 				rect.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				rect.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
