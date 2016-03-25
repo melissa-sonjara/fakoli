@@ -14,6 +14,13 @@ var Chart = new Class(
 		this.container.chart = this;
 	},
 	
+	getFont: function()
+	{
+		var font = this.options.fontFamily;
+		if (!font) font = "Arial";
+		return font;
+	},
+	
 	createChart: function()
 	{
 		var ratio = this.options.height / this.options.width;
@@ -67,8 +74,7 @@ var Chart = new Class(
 			var s = this.options.legendSwatchSize || 20;
 			var h = this.options.legendLineHeight || 30;
 			
-			var font = this.options.fontFamily;
-			if (!font) font = "Arial";
+			var font = this.getFont();
 			
 			this.labels.each(function(text, index)
 			{
