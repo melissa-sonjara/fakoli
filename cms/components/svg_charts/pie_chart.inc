@@ -63,6 +63,7 @@ class PieChart
 	var $onLegendOver = "null";
 	var $onLegendOut = "null";
 	var $scaleToFit = false;
+	var $fontFamily = 'Arial, Helvetica';
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -152,6 +153,7 @@ window.addEvent('domready', function ()
 		radius: {$this->radius}, 
 		palette: '{$this->palette}',
 		labelSize: {$this->labelSize},
+		fontFamily: '{$this->fontFamily}',
 		strokeWidth: {$this->strokeWidth},
 		animate: {$animate},
 		shadow: {$shadow},

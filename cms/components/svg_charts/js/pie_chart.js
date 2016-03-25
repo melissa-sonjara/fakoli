@@ -17,6 +17,7 @@ var PieChart = new Class(
 		cy: 300,
 		radius: 280,
 		labelSize: 12,
+		fontFamily: 'Arial',
 		strokeWidth: 2,
 		animate: true,
 		shadow: false,
@@ -144,7 +145,7 @@ var PieChart = new Class(
 
 		var color = this.palette.getFontColor(idx);
 		
-		var params = {fill: color, stroke: "none" , opacity: 1, "font-size": this.options.labelSize};
+		var params = {fill: color, stroke: "none" , opacity: 1, "font-size": this.options.labelSize, "font-family": this.options.fontFamily};
 		var t = this.paper.text(cx + (r * 1.2) * Math.cos(-angle), cy + (r * 1.2) * Math.sin(-angle), text).attr(params);
 		return t;
 	},
@@ -160,7 +161,7 @@ var PieChart = new Class(
 
 		var color = this.palette.getFontColor(idx);
 		
-		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize};
+		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize, "font-family": this.options.fontFamily};
 		var t = this.paper.text(cx + (r * this.options.percentagesDistance) * Math.cos(-angle), cy + (r * this.options.percentagesDistance) * Math.sin(-angle), text).attr(params);
 		
 		return t;
