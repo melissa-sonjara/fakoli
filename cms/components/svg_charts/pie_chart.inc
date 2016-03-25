@@ -111,6 +111,11 @@ class PieChart
 		$this->strokeWidth = $s;
 	}
 	
+	function setFontFamily($font)
+	{
+		$this->fontFamily = $font;
+	}
+	
 	function showLegend($show, $x = 0, $y = 0)
 	{
 		$this->legend = $show;
