@@ -28,7 +28,7 @@ class PhonegapManager
 		Settings::setDefaultValue("phonegap", "enable_phonegap_debugging", false, Boolean, "Enables PhoneGap debugging mode - append phonegap=1 to any URL in your desktop browser to turn on PhoneGap mode");		
 		Settings::setDefaultValue("phonegap", "phonegap_debug_version", "2.4.0", String, "The version of Phonegap that is assumed in debugging mode");
 		Settings::setDefaultValue("phonegap", "phonegap_debug_os", "android", String, "The OS of Phonegap that is assumed in debugging mode");
-		
+		Settings::setDefaultValue("phonegap", "use_local_phonegap_files", false, Boolean, "Check this box to pull the local cordova files in the packaged app, instead of pulling them from the server (EXPERIMENTAL)");
 	}
 
 	/**
@@ -37,6 +37,7 @@ class PhonegapManager
 	static function detectPhonegap()
 	{
 		global $script;
+		
 		trace("Detecting PhoneGap", 4);
 		
 		if ($_SESSION["phonegap"]) 
@@ -113,6 +114,7 @@ class PhonegapManager
 	static function addScript($script)
 	{
 		global $phonegap;
+		global $phonegap_csp;
 		
 		if (PhonegapManager::hasPhonegap())
 		{
@@ -134,9 +136,17 @@ class PhonegapManager
 			{
 				$phonegap = "<script type='text/javascript' src='{$app}'></script>\n".$phonegap;
 			}
-			
-			$phonegap = "<script type='text/javascript' src='{$file}'></script>\n".$phonegap;
-			
+
+			if (Settings::getValue("phonegap", "use_local_phonegap_files"))
+			{
+				$phonegap_csp = "gap: cdvfile:";
+				$phonegap = "<script type='text/javascript' src='cdvfile://localhost/bundle/www/cordova.js'></script>".$phonegap;
+			}
+			else
+			{
+				$phonegap_csp = "gap:";
+				$phonegap = "<script type='text/javascript' src='{$file}'></script>\n".$phonegap;
+			}		
 			foreach(PhonegapManager::$supportScripts as $supportScript => $dummy)
 			{
 				$phonegap .= "<script type='text/javascript' src='{$supportScript}'></script>\n";
