@@ -62,6 +62,8 @@ var MultiSelect = new Class(
 			{
 				this.container.fade('out');
 			}
+			
+			return false;
 		}.bind(this));
 
 		this.connectCheckboxes();
