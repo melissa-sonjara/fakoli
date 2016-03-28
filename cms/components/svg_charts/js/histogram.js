@@ -175,8 +175,8 @@ var VerticalBlockSeriesRenderer = new Class(
 				this.chart.paper.text(x + columnWidth / 2, y - 8, val + this.chart.options.units);
 			}
 			
-			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
-			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]); }.bind(this));
+			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
+			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
 			column.click(function() { this.series.fireEvent('click', i); }.bind(this));
 			
 			this.series.columns.push(column);
@@ -269,8 +269,8 @@ var HorizontalBlockSeriesRenderer = new Class(
 				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val + this.chart.options.units).attr({'text-anchor': 'start'});
 			}
 			
-			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); }.bind(this));
-			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]); }.bind(this));
+			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]);  this.series.showToolTip(e, i); }.bind(this));
+			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
 			column.click(function() { this.series.fireEvent('click', i); }.bind(this));
 			
 			this.series.columns.push(column);
