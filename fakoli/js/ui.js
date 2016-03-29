@@ -136,7 +136,7 @@ var Curtain = new Class(
 	{
 		var noFixed = (Browser.name == 'ie' && Browser.version < 7);
 		
-		var opacity = this.curtain.get('opacity');
+		var opacity = this.curtain.getStyle('opacity');
 		var display = this.curtain.getStyle('display');
 		if (opacity > 0 && display == 'block')
 		{
