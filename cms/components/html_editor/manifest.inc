@@ -36,6 +36,7 @@ class HtmlEditorManifest
 		return array("upgradeComponent" 			=> 	array(HtmlEditorManager, upgradeComponent),
 					 "ComponentScanComplete"		=>	array(HtmlEditorManager, setDefaults),
 					 "Initialize"					=>	array(HtmlEditorManager, onInitialize),
+					 "RegisterSerializationHandler"	=>	array(HtmlEditorManager, registerSerializationHandler),
 					 "RegisterHTMLEditorPlugins"	=>	array(HtmlEditorManifest, registerPlugins)
 					//TODO: Add Event Registrations here
 		);

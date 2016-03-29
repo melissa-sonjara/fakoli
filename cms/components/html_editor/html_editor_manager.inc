@@ -31,6 +31,12 @@ class HtmlEditorManager
 		Settings::setDefaultValue("html_editor", "body_class", "", String, "Body class to be applied to content within the editor - use this to override inappropriate styles", "Appearance");
 	}
 
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("snippets", "Snippets", new SimpleSerializationHandler(Snippet));
+		return true;
+	}
+	
 	static function onInitialize()
 	{
 		global $tiny_mce_application_plugins;
