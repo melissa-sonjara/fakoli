@@ -1,0 +1,10 @@
+.snippet_preview div, .snippet_preview td, .snippet_preview th {
+    border: dashed 1px #eee;
+}
+.snippet_preview {
+    border: solid 1px #666;
+    padding: 4px;
+    margin-bottom: 15px;
+    height: 150px;
+    overflow-y: scroll;
+}

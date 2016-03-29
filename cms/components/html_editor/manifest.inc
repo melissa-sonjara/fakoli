@@ -14,11 +14,29 @@ class HtmlEditorManifest
 		return $component;
 	}
 
+	static function getScripts()
+	{
+		return array("/components/html_editor/js/snippet_manager.js",
+					 "/components/html_editor/js/snippet_tinymce_plugin.js"
+		);
+	}
+	
+	static function getStyles()
+	{
+		return array("/components/html_editor/css/html_editor.css");
+	}
+	
+	static function registerPlugins()
+	{
+		HtmlEditorManager::registerPlugin("Insert Snippet", "snippet");
+	}
+	
 	static function subscribeToEvents()
 	{
-		return array(
-					"ComponentScanComplete"	=>	array(HtmlEditorManager, setDefaults),
-					"Initialize"			=>	array(HtmlEditorManager, onInitialize)
+		return array("upgradeComponent" 			=> 	array(HtmlEditorManager, upgradeComponent),
+					 "ComponentScanComplete"		=>	array(HtmlEditorManager, setDefaults),
+					 "Initialize"					=>	array(HtmlEditorManager, onInitialize),
+					 "RegisterHTMLEditorPlugins"	=>	array(HtmlEditorManifest, registerPlugins)
 					//TODO: Add Event Registrations here
 		);
 	}

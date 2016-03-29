@@ -18,6 +18,12 @@ class HtmlEditorManager
 	{
 		HtmlEditorManager::$plugins[$plugin] = $title;	
 	}
+
+	static function upgradeComponent($version)
+	{
+		$mgr = new HtmlEditorUpgradeManager();
+		$mgr->upgrade($version);
+	}
 	
 	static function setDefaults()
 	{
