@@ -51,6 +51,8 @@ class ExpandingList
 	var $dynamicLoad = false;					///< Flag indicating whether list should load content on demand. If set to true, bodyFormat should provide the URL for each item
 	var $titleIDFormat = null;					///< Format template for title ID field
 	var $bodyIDFormat = null;					///< Format template for body ID field
+	var $scrollOnExpand = false;				///< Flag indicating whether to scroll the expanding item to the top of the screen
+	var $scrollOffset = 0;						///< Offset from top of element when scrolling (to take into account fixed navigation bars, etc)
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -101,12 +103,28 @@ class ExpandingList
 					body.reveal();
 					elt.addClass("expanded");
 					elt.setStyle('cursor', cursor);
+<?php 
+			if ($this->scrollOnExpand)
+			{
+?>
+					window.scrollToElement(elt, <?php echo $this->scrollOffset?>);
+<?php 
+			}
+?>
 				});
 			}
 			else
 			{
 				body.reveal();
 				elt.addClass("expanded");
+			<?php 
+			if ($this->scrollOnExpand)
+			{
+			?>
+				window.scrollToElement(elt, <?php echo $this->scrollOffset?>);
+			<?php 
+			}
+			?>
 			}
 		}		
 	}
