@@ -124,7 +124,7 @@ function <?echo $fn?>(element)
 		$this->_endField($field);
 	}
 
-	function renderButtons($field, $mode = null)
+	function renderButtons($field, $mode = null, $readonly = false)
 	{
 		$current = $this->parent->data->get($field);
 		
@@ -185,9 +185,11 @@ function <?echo $fn?>(element)
 			$position = "";
 			if ($count == 0) $position .= " first";
 			if ($count == $max) $position .= " last";
-				
+		
+			$handler = $readonly ? "" : "{$this->parent->id}_{$field}_update(this);{$onChange}";
+			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' data-value='{$value}' onclick='{$this->parent->id}_{$field}_update(this);{$onChange}return false' {$disable}/>{$name}</a>";
+			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' data-value='{$value}' onclick='return false' {$disable}/>{$name}</a>";
 	
 			$count++;
 		}
@@ -213,17 +215,11 @@ function <?echo $fn?>(element)
 	
 	
 	function renderReadOnly($field)
-	{
+	{		
 		$this->_startField($field);
-
-		if (array_key_exists($this->parent->data->get($field), $this->options))
-		{
-			echo $this->options[$this->parent->data->get($field)];
-		}
-		else
-		{
-			echo "Not specified";
-		}
+		
+		$this->renderButtons($field, null, true);	
+		
 		$this->_endField($field);
 	}
 }
