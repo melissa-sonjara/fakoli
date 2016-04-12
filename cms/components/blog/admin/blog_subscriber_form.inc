@@ -41,7 +41,7 @@ $page->page_title = "Subscribe to Updates";
 $form = new AutoForm($blogSubscriber);
 $form->required("blog_id", "subscriber_email");
 
-$form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b", "Please supply a valid email address containing a domain name.");
+$form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,8}\b", "Please supply a valid email address containing a domain name.");
 
 $blogSelect = new RelatedItemSelectFieldRenderer($form, "blog_id", "Select a Blog to Subscribe", Blog, "ORDER BY title", "title", "blog_id");
 $blogSelect->allowNone = true;

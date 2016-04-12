@@ -45,7 +45,7 @@ $page->page_title = "Subscribe to Updates";
 
 $form = new AutoForm($blogSubscriber);
 $form->hide("blog_id");
-$form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b", "Please supply a valid email address containing a domain name.");
+$form->regexp("subscriber_email", "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,8}\b", "Please supply a valid email address containing a domain name.");
 $form->required("subscriber_email");
 
 if(Settings::getValue("blog", "allow_subscription_options"))
