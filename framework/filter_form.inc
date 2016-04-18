@@ -1222,7 +1222,6 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 		echo "<div>\n";
 		$this->_printLabel($field);
 		echo "<select name='{$field}'$onchange $style>\n";
-		echo "<option value=''></option>\n";
 		//trace("valueField: $valueField", 3);
 		
 		$value = $this->parent->data->get($field);
