@@ -1219,9 +1219,9 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 		if($this->width)
 			$style = "style='width: {$this->width}'";
 		
-		echo "<tr>\n";
+		echo "<div>\n";
 		$this->_printLabel($field);
-		echo "<td><select name='{$field}'$onchange $style>\n";
+		echo "<select name='{$field}'$onchange $style>\n";
 		echo "<option value=''></option>\n";
 		//trace("valueField: $valueField", 3);
 		
@@ -1237,6 +1237,7 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 			echo ">".ellipsis($name, $this->max_chars)."</option>\n";			
 		}
 		echo "</select>&nbsp;";
+		echo "</div>";
 	}
 }
 ?>
