@@ -73,7 +73,7 @@ class OptimizeManager
 						
 						$cachedScripts .= file_get_contents($resource);
 						$cachedScripts .= "\r\n";
-						trace("Script Optimizer: Added $resource", 3);
+						trace("Added $script", 3);
 					}
 					else
 					{
