@@ -37,6 +37,5 @@ if (!$noChange)
 		header("Content-Length: ".strlen($content));
 	}
 	
-	echo $content;
 }
 ?>
