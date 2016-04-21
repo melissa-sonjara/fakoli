@@ -1371,8 +1371,8 @@ var CrossFader = new Class(
 			
 				console.log("Element: ");
 				
-				var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
-				var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+				var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationPreviousClass});
+				var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationNextClass});
 				
 				leftArrow.set('html', '&nbsp;');
 				rightArrow.set('html', '&nbsp;');
