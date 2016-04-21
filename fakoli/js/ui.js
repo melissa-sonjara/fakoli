@@ -1368,36 +1368,28 @@ var CrossFader = new Class(
 		
 		if (this.options.navigationType == 'prevNext') // left & right arrows
 		{
-			this.elements[0](function(elt, idx)
-			{
-				console.log("Element: " + idx);
+			
+				console.log("Element: ");
 				
 				var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
 				var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
 				
-				if (this.options.navigationShowNumbers) 
-				{
-					leftArrow.set('text', idx);
-					rightArrow.set('text', idx + 2);
-				}
-				else
-				{
-					leftArrow.set('html', '&nbsp;');
-					rightArrow.set('html', '&nbsp;');
-				}
+				leftArrow.set('html', '&nbsp;');
+				rightArrow.set('html', '&nbsp;');
+				
 				leftArrow.addEvent('mouseenter', function(e) { leftArrow.addClass(this.options.navigationPreviousClass);}.bind(this));
 				leftArrow.addEvent('mouseleave', function(e) { leftArrow.removeClass(this.options.navigationPreviousClass);}.bind(this));
-				leftArrow.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
+				leftArrow.addEvent('click', function(e) { this.goToPrevious(); return false; }.bind(this));
 				leftArrow.inject(this.navigationContainer);
 				
 				rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
 				rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
-				rightArrow.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
+				rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
 				rightArrow.inject(this.navigationContainer);
 				
 				this.navigationLinks.push(leftArrow);
 				this.navigationLinks.push(rightArrow);
-			}.bind(this));
+			
 		}
 		else if (this.options.navigationType == 'byItem') // bubbles for each item
 		{
@@ -1488,7 +1480,22 @@ var CrossFader = new Class(
 		{
 			this.navigationLinks[this.idx].addClass(this.options.navigationCurrentClass);
 		}
+	},
+	
+	goToPrevious: function()
+	{
+		var idx = this.idx - 1;
+		if (idx < 0) idx = this.elements.length - 1;
+		this.goTo(idx);
+	},
+	
+	goToNext: function()
+	{
+		var idx = this.idx + 1;
+		if (idx >= this.elements.length) idx = 0;
+		this.goTo(idx);
 	}
+	
 });
 
 var FocusWatcher = new Class({
