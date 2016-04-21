@@ -505,10 +505,10 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 	
 	/**
 	 * 
-	 * @param $parent
-	 * @param $field
-	 * @param $label
-	 * @param $default - whether the checkbox should be check or unchecked as the default
+	 * @param FilterForm $parent the parent FilterForm
+	 * @param string $field the name of the field
+	 * @param string $label label to display for the field
+	 * @param bool $default whether the checkbox should be check or unchecked as the default
 	 */
 	function BooleanFilterFieldRenderer(&$parent, $field = "", $label = "", $default = 0)
 	{
@@ -550,16 +550,6 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 
 function <? echo $selChanged ?>(elt)
 {
-  	var value_field = document.id('<?php echo $field ?>');
-  	var new_value = "0";
-
-  	if(value_field && elt)
-  	{
- 	  	if(elt.checked == true)
-  	  		new_value = "1";
-   	 	
-   	  	value_field.set("value", new_value);
-  	}
   	if (<?php echo $onSubmit?>(elt.form)) elt.form.manager.submit();
 }
 </script>
@@ -570,7 +560,7 @@ function <? echo $selChanged ?>(elt)
 	{
 		$this->_startField($field, $this->styles);
 			
-		echo "<input type='checkbox' value='1' name='{$field}_box'";
+		echo "<input id='{$this->parent->id}_{$field}' type='checkbox' value='1' name='{$field}'";
 
 		$value = $this->parent->data->get($field);
 	
@@ -579,9 +569,6 @@ function <? echo $selChanged ?>(elt)
 			echo " checked='checked'";
 		}
 		echo " onclick='selChanged_{$field}_box(this);'/>\n";
-				
-		if(!$value) $value = 0;
-		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
 		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label>";
 		
 		$this->_endField($field);
