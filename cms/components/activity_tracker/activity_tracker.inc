@@ -347,7 +347,7 @@ class ActivityReportFilterHelper
 	function setup()
 	{
 		$session = new UserActivitySession();
-		$session->filter = new InclusionFilter("session_start", "session_end", "feedback_user");
+		$session->filter = new InclusionFilter("session_start", "feedback_user");
 		$session->overrideFieldType("feedback_user", Boolean);
 		$session->fromGET();
 		
