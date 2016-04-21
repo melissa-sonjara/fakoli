@@ -1322,12 +1322,15 @@ var CrossFader = new Class(
 		duration: 5000,
 		transition: 1000,
 		navigation: false,
+		navigationType: 'byItem', // alternative: 'prevNext' (bubbles vs left/right arrows)
 		navigationPosition: 'bottomLeft',
 		navigationEdge: 'bottomLeft',
 		navigationContainerClass: 'crossfader_nav',
 		navigationClass: 'crossfader_nav_item',
 		navigationCurrentClass: 'crossfader_current',
 		navigationHighlightClass: 'crossfader_highlight',
+		navigationPreviousClass: 'crossfader_previous',
+		navigationNextClass: 'crossfader_next',
 		navigationShowNumbers: false,
 		firstElementPosition: 'absolute'
 	},
@@ -1363,28 +1366,64 @@ var CrossFader = new Class(
 		this.navigationContainer = new Element('div', {'class': 'crossfader_nav'});
 		this.navigationContainer.setStyles({'position': 'absolute'});
 		
-		this.elements.each(function(elt, idx)
+		if (this.options.navigationType == 'prevNext') // left & right arrows
 		{
-			console.log("Element: " + idx);
-			
-			var blob = new Element('a', {href: '#', 'class': this.options.navigationClass});
-			
-			if (this.options.navigationShowNumbers) 
+			this.elements(function(elt, idx)
 			{
-				blob.set('text', idx + 1);
-			}
-			else
+				console.log("Element: " + idx);
+				
+				var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+				var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+				
+				if (this.options.navigationShowNumbers) 
+				{
+					leftArrow.set('text', idx);
+					rightArrow.set('text', idx + 2);
+				}
+				else
+				{
+					leftArrow.set('html', '&nbsp;');
+					rightArrow.set('html', '&nbsp;');
+				}
+				leftArrow.addEvent('mouseenter', function(e) { leftArrow.addClass(this.options.navigationPreviousClass);}.bind(this));
+				leftArrow.addEvent('mouseleave', function(e) { leftArrow.removeClass(this.options.navigationPreviousClass);}.bind(this));
+				leftArrow.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
+				leftArrow.inject(this.navigationContainer);
+				
+				rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
+				rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
+				rightArrow.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
+				rightArrow.inject(this.navigationContainer);
+				
+				this.navigationLinks.push(leftArrow);
+				this.navigationLinks.push(rightArrow);
+			}.bind(this));
+		}
+		else if (this.options.navigationType == 'byItem') // bubbles for each item
+		{
+			this.elements.each(function(elt, idx)
 			{
-				blob.set('html', '&nbsp;');
-			}
-			blob.addEvent('mouseenter', function(e) { blob.addClass(this.options.navigationHighlightClass);}.bind(this));
-			blob.addEvent('mouseleave', function(e) { blob.removeClass(this.options.navigationHighlightClass);}.bind(this));
-			blob.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
-			blob.inject(this.navigationContainer);
-			
-			this.navigationLinks.push(blob);
-			
-		}.bind(this));
+				console.log("Element: " + idx);
+				
+				var blob = new Element('a', {href: '#', 'class': this.options.navigationClass});
+				
+				if (this.options.navigationShowNumbers) 
+				{
+					blob.set('text', idx + 1);
+				}
+				else
+				{
+					blob.set('html', '&nbsp;');
+				}
+				blob.addEvent('mouseenter', function(e) { blob.addClass(this.options.navigationHighlightClass);}.bind(this));
+				blob.addEvent('mouseleave', function(e) { blob.removeClass(this.options.navigationHighlightClass);}.bind(this));
+				blob.addEvent('click', function(e) { this.goTo(idx); return false; }.bind(this));
+				blob.inject(this.navigationContainer);
+				
+				this.navigationLinks.push(blob);
+				
+			}.bind(this));
+		}
 		
 		this.navigationContainer.inject(document.body);
 		this.navigationContainer.position({	relativeTo: this.container, 
