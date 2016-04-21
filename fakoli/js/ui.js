@@ -1368,7 +1368,7 @@ var CrossFader = new Class(
 		
 		if (this.options.navigationType == 'prevNext') // left & right arrows
 		{
-			this.elements(function(elt, idx)
+			this.elements[0](function(elt, idx)
 			{
 				console.log("Element: " + idx);
 				
