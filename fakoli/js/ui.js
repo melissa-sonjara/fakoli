@@ -1369,28 +1369,28 @@ var CrossFader = new Class(
 		if (this.options.navigationType == 'prevNext') // left & right arrows
 		{
 			
-				console.log("Element: ");
+			console.log("Element: ");
 				
-				var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
-				leftArrow.addClass(this.options.navigationPreviousClass);
-				var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
-				rightArrow.addClass(this.options.navigationNextClass);
+			var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass, width: '250px'});
+			leftArrow.addClass(this.options.navigationPreviousClass);
+			var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+			rightArrow.addClass(this.options.navigationNextClass);
 				
-				leftArrow.set('html', '&nbsp;');
-				rightArrow.set('html', '&nbsp;');
+			leftArrow.set('html', '&nbsp;');
+			rightArrow.set('html', '&nbsp;');
 				
-				//leftArrow.addEvent('mouseenter', function(e) { leftArrow.addClass(this.options.navigationPreviousClass);}.bind(this));
-				//leftArrow.addEvent('mouseleave', function(e) { leftArrow.removeClass(this.options.navigationPreviousClass);}.bind(this));
-				leftArrow.addEvent('click', function(e) { this.goToPrevious(); return false; }.bind(this));
-				leftArrow.inject(this.navigationContainer);
+			//leftArrow.addEvent('mouseenter', function(e) { leftArrow.addClass(this.options.navigationPreviousClass);}.bind(this));
+			//leftArrow.addEvent('mouseleave', function(e) { leftArrow.removeClass(this.options.navigationPreviousClass);}.bind(this));
+			leftArrow.addEvent('click', function(e) { this.goToPrevious(); return false; }.bind(this));
+			leftArrow.inject(this.navigationContainer);
 				
-				//rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
-				//rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
-				rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
-				rightArrow.inject(this.navigationContainer);
+			//rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
+			//rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
+			rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
+			rightArrow.inject(this.navigationContainer);
 				
-				this.navigationLinks.push(leftArrow);
-				this.navigationLinks.push(rightArrow);
+			this.navigationLinks.push(leftArrow);
+			this.navigationLinks.push(rightArrow);
 			
 		}
 		else if (this.options.navigationType == 'byItem') // bubbles for each item
