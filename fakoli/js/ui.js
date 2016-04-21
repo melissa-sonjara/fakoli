@@ -1326,7 +1326,7 @@ var CrossFader = new Class(
 		navigationPosition: 'bottomLeft',
 		navigationEdge: 'bottomLeft',
 		navigationContainerClass: 'crossfader_nav',
-		navigationClass: 'crossfader_nav_item',
+		navigationClass: 'crossfader_nav_item', //alternative: 'crossfader_nav_arrow' (bubbles vs left/right arrows)
 		navigationCurrentClass: 'crossfader_current',
 		navigationHighlightClass: 'crossfader_highlight',
 		navigationPreviousClass: 'crossfader_previous',
