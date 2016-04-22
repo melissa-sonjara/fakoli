@@ -1331,6 +1331,10 @@ var CrossFader = new Class(
 		navigationHighlightClass: 'crossfader_highlight',
 		navigationPreviousClass: 'crossfader_previous',
 		navigationNextClass: 'crossfader_next',
+		prevLinkPosition: 'centerLeft',
+		prevLinkEdge: 'centerLeft',
+		nextLinkPosition: 'centerRight',
+		nextLinkEdge: 'centerRight',
 		navigationShowNumbers: false,
 		firstElementPosition: 'absolute'
 	},
@@ -1366,18 +1370,18 @@ var CrossFader = new Class(
 		this.navigationContainer = new Element('div', {'class': 'crossfader_nav'});
 		this.navigationContainer.setStyles({'position': 'absolute'});
 		
-		if (this.options.navigationType == 'Prev') // left arrow
+		if (this.options.navigationType == 'PrevNext')
 		{
 			
 			console.log("Element: ");
 				
 			var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
 			leftArrow.addClass(this.options.navigationPreviousClass);
-			//var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
-			//rightArrow.addClass(this.options.navigationNextClass);
+			var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+			rightArrow.addClass(this.options.navigationNextClass);
 				
 			leftArrow.set('html', '&nbsp;');
-			//rightArrow.set('html', '&nbsp;');
+			rightArrow.set('html', '&nbsp;');
 				
 			//leftArrow.addEvent('mouseenter', function(e) { leftArrow.addClass(this.options.navigationPreviousClass);}.bind(this));
 			//leftArrow.addEvent('mouseleave', function(e) { leftArrow.removeClass(this.options.navigationPreviousClass);}.bind(this));
@@ -1386,30 +1390,11 @@ var CrossFader = new Class(
 				
 			//rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
 			//rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
-			//rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
-			//rightArrow.inject(this.navigationContainer);
-				
-			this.navigationLinks.push(leftArrow);
-			//this.navigationLinks.push(rightArrow);
-			
-		}
-		else if (this.options.navigationType == 'Next') // right arrow
-		{
-			
-			console.log("Element: ");
-				
-			var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
-			rightArrow.addClass(this.options.navigationNextClass);
-				
-			rightArrow.set('html', '&nbsp;');
-				
-			//rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
-			//rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
 			rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
 			rightArrow.inject(this.navigationContainer);
 				
-			this.navigationLinks.push(rightArrow);
-			
+			this.navigationLinks.push(leftArrow);
+			this.navigationLinks.push(rightArrow);			
 		}
 		else if (this.options.navigationType == 'byItem') // bubbles for each item
 		{
@@ -1471,8 +1456,6 @@ var CrossFader = new Class(
 		
 		++this.idx;
 		if (this.idx >= this.elements.length) this.idx = 0;
-		var idx_el = document.getElementById("index");
-		idx_el.value = this.idx;
 		
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
@@ -1497,8 +1480,6 @@ var CrossFader = new Class(
 		this.idx = idx;
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
-		var idx_el = document.getElementById("index");
-		idx_el.value = idx;
 		
 		if (this.options.navigation && this.options.navigationType == "byItem")
 		{
@@ -1508,27 +1489,21 @@ var CrossFader = new Class(
 	
 	goToPrevious: function()
 	{	
-		var idx_el = document.getElementById("index");
-		var idx = +idx_el.value - 1;
-		//var idx = this.idx - 1;
+		var idx = this.idx - 1;
 		if (idx < 0)
 		{
 			idx = this.elements.length - 1;	
 		}
-		idx_el.value = idx;
 		this.goTo(idx);
 	},
 	
 	goToNext: function()
 	{
-		var idx_el = document.getElementById("index");
-		var idx = +idx_el.value + 1;
-		//var idx = this.idx + 1;
+		var idx = this.idx + 1;
 		if (idx >= this.elements.length) 
 		{
 			idx = 0;
 		}
-		idx_el.value = idx;
 		this.goTo(idx);
 	}
 	
