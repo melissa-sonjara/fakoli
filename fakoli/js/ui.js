@@ -1400,7 +1400,7 @@ var CrossFader = new Class(
 			
 			var size = this.container.getSize();
 			this.navigationContainer.position({ relativeTo: this.container, position: 'topLeft', edge: 'topLeft'});
-			this.navigationContainer.setStyles({width: size.width, height: size.height});
+			this.navigationContainer.setStyles({width: size.x, height: size.y});
 			
 		}
 		else if (this.options.navigationType == 'byItem') // bubbles for each item
