@@ -1395,6 +1395,13 @@ var CrossFader = new Class(
 				
 			this.navigationLinks.push(leftArrow);
 			this.navigationLinks.push(rightArrow);			
+
+			this.navigationContainer.inject(document.body);
+			
+			var size = this.container.getSize();
+			this.navigationContainer.position({ relativeTo: this.container, position: 'topLeft', edge: 'topLeft'});
+			this.navigationContainer.setStyles({width: size.width, height: size.height});
+			
 		}
 		else if (this.options.navigationType == 'byItem') // bubbles for each item
 		{
@@ -1419,20 +1426,20 @@ var CrossFader = new Class(
 				
 				this.navigationLinks.push(blob);
 				
+				this.navigationContainer.inject(document.body);
+				this.navigationContainer.position({	relativeTo: this.container, 
+					position: this.options.navigationPosition, 
+					edge: this.options.navigationEdge});
+				
+				window.addEvent('resize', function()
+				{	
+					this.navigationContainer.position({	relativeTo: this.container, 
+						position: this.options.navigationPosition, 
+						edge: this.options.navigationEdge});
+				}.bind(this));
 			}.bind(this));
 		}
 		
-		this.navigationContainer.inject(document.body);
-		this.navigationContainer.position({	relativeTo: this.container, 
-			position: this.options.navigationPosition, 
-			edge: this.options.navigationEdge});
-		
-		window.addEvent('resize', function()
-		{	
-			this.navigationContainer.position({	relativeTo: this.container, 
-				position: this.options.navigationPosition, 
-				edge: this.options.navigationEdge});
-		}.bind(this));
 	},
 	
 	start: function()
