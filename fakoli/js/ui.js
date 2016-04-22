@@ -1509,7 +1509,7 @@ var CrossFader = new Class(
 	goToPrevious: function()
 	{	
 		var idx_el = document.getElementById("index");
-		var idx = idx_el.value - 1;
+		var idx = +idx_el.value - 1;
 		//var idx = this.idx - 1;
 		if (idx < 0)
 		{
@@ -1523,7 +1523,7 @@ var CrossFader = new Class(
 	goToNext: function()
 	{
 		var idx_el = document.getElementById("index");
-		var idx = idx_el.value + 1;
+		var idx = +idx_el.value + 1;
 		//var idx = this.idx + 1;
 		if (idx >= this.elements.length) 
 		{
