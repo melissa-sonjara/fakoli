@@ -1472,7 +1472,7 @@ var CrossFader = new Class(
 		++this.idx;
 		if (this.idx >= this.elements.length) this.idx = 0;
 		var idx_el = document.getElementById("idx");
-		idx_el.value = idx;
+		idx_el.value = this.idx;
 		
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
@@ -1509,9 +1509,13 @@ var CrossFader = new Class(
 	goToPrevious: function()
 	{	
 		var idx_el = document.getElementById("idx");
-		var idx =idx_el.value - 1;
+		var idx = idx_el.value - 1;
 		//var idx = this.idx - 1;
-		if (idx < 0) idx = this.elements.length - 1;
+		if (idx < 0)
+		{
+			idx = this.elements.length - 1;
+			idx_el.value = idx;
+		}
 		this.goTo(idx);
 	},
 	
@@ -1520,7 +1524,11 @@ var CrossFader = new Class(
 		var idx_el = document.getElementById("idx");
 		var idx = idx_el.value + 1;
 		//var idx = this.idx + 1;
-		if (idx >= this.elements.length) idx = 0;
+		if (idx >= this.elements.length) 
+		{
+			idx = 0;
+			idx_el.value = idx;
+		}
 		this.goTo(idx);
 	}
 	
