@@ -1339,10 +1339,9 @@ var CrossFader = new Class(
 	navigationContainer: Class.Empty,
 	navigationLinks: [],
 	
-	initialize: function(container, index, options)
+	initialize: function(container, options)
 	{
 		this.container = document.id(container);
-		this.index = document.id(index);
 		this.setOptions(options);
 		
 		if (!this.container) return;
@@ -1472,7 +1471,8 @@ var CrossFader = new Class(
 		
 		++this.idx;
 		if (this.idx >= this.elements.length) this.idx = 0;
-		this.index.value = this.idx;
+		var idx_el = document.getElementById("index");
+		idx_el.value = this.idx;
 		
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
@@ -1484,7 +1484,6 @@ var CrossFader = new Class(
 	
 	goTo: function(idx)
 	{
-		this.index = document.id("index");
 		this.paused = true;
 		
 		if (this.idx == idx) return;
@@ -1495,9 +1494,11 @@ var CrossFader = new Class(
 		}
 
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('out');
-		this.idx.value = idx;
+		this.idx = idx;
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
+		var idx_el = document.getElementById("index");
+		idx_el.value = idx;
 		
 		if (this.options.navigation && this.options.navigationType == "byItem")
 		{
@@ -1507,27 +1508,27 @@ var CrossFader = new Class(
 	
 	goToPrevious: function()
 	{	
-		this.index = document.id("index");
-		var idx = this.index.value - 1;
+		var idx_el = document.getElementById("index");
+		var idx = +idx_el.value - 1;
 		//var idx = this.idx - 1;
 		if (idx < 0)
 		{
 			idx = this.elements.length - 1;	
 		}
-		this.index.value = idx;
+		idx_el.value = idx;
 		this.goTo(idx);
 	},
 	
 	goToNext: function()
 	{
-		this.index = document.id("index");
-		var idx = +this.index.value + 1;
+		var idx_el = document.getElementById("index");
+		var idx = +idx_el.value + 1;
 		//var idx = this.idx + 1;
 		if (idx >= this.elements.length) 
 		{
 			idx = 0;
 		}
-		this.index.value = idx;
+		idx_el.value = idx;
 		this.goTo(idx);
 	}
 	
