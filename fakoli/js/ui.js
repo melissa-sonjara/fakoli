@@ -1334,7 +1334,7 @@ var CrossFader = new Class(
 		navigationShowNumbers: false,
 		firstElementPosition: 'absolute'
 	},
-	idx: 0,
+	idx: '0',
 	elements: Class.Empty,
 	navigationContainer: Class.Empty,
 	navigationLinks: [],
