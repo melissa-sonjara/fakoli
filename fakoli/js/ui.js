@@ -1484,6 +1484,7 @@ var CrossFader = new Class(
 	
 	goTo: function(idx)
 	{
+		this.index = document.id("index");
 		this.paused = true;
 		
 		if (this.idx == idx) return;
@@ -1506,7 +1507,7 @@ var CrossFader = new Class(
 	
 	goToPrevious: function()
 	{	
-		
+		this.index = document.id("index");
 		var idx = this.index.value - 1;
 		//var idx = this.idx - 1;
 		if (idx < 0)
@@ -1519,6 +1520,7 @@ var CrossFader = new Class(
 	
 	goToNext: function()
 	{
+		this.index = document.id("index");
 		var idx = +this.index.value + 1;
 		//var idx = this.idx + 1;
 		if (idx >= this.elements.length) 
