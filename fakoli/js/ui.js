@@ -1334,7 +1334,7 @@ var CrossFader = new Class(
 		navigationShowNumbers: false,
 		firstElementPosition: 'absolute'
 	},
-	idx: '0',
+	idx: 0,
 	elements: Class.Empty,
 	navigationContainer: Class.Empty,
 	navigationLinks: [],
@@ -1509,7 +1509,7 @@ var CrossFader = new Class(
 	goToPrevious: function()
 	{	
 		var idx_el = document.getElementById("index");
-		var idx = +idx_el.value - 1;
+		var idx = idx_el.value - 1;
 		//var idx = this.idx - 1;
 		if (idx < 0)
 		{
@@ -1522,7 +1522,7 @@ var CrossFader = new Class(
 	goToNext: function()
 	{
 		var idx_el = document.getElementById("index");
-		var idx = +idx_el.value + 1;
+		var idx = idx_el.value + 1;
 		//var idx = this.idx + 1;
 		if (idx >= this.elements.length) 
 		{
