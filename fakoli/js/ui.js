@@ -1516,7 +1516,6 @@ var CrossFader = new Class(
 			idx = this.elements.length - 1;	
 		}
 		idx_el.value = idx;
-		alert(idx);
 		this.goTo(idx);
 	},
 	
@@ -1530,7 +1529,6 @@ var CrossFader = new Class(
 			idx = 0;
 		}
 		idx_el.value = idx;
-		alert(idx);
 		this.goTo(idx);
 	}
 	
