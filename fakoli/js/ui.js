@@ -1513,9 +1513,9 @@ var CrossFader = new Class(
 		//var idx = this.idx - 1;
 		if (idx < 0)
 		{
-			idx = this.elements.length - 1;
-			idx_el.value = idx;
+			idx = this.elements.length - 1;	
 		}
+		idx_el.value = idx;
 		this.goTo(idx);
 	},
 	
@@ -1527,8 +1527,8 @@ var CrossFader = new Class(
 		if (idx >= this.elements.length) 
 		{
 			idx = 0;
-			idx_el.value = idx;
 		}
+		idx_el.value = idx;
 		this.goTo(idx);
 	}
 	
