@@ -1447,7 +1447,7 @@ var CrossFader = new Class(
 	
 	start: function()
 	{
-		if (this.duration == 0) return;
+		if (this.options.duration == 0) return;
 		this.timer = this.next.periodical(this.options.duration, this);
 	},
 	
