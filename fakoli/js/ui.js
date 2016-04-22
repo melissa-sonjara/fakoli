@@ -1322,7 +1322,7 @@ var CrossFader = new Class(
 		duration: 5000,
 		transition: 1000,
 		navigation: false,
-		navigationType: 'byItem', // alternative: 'prevNext' (bubbles vs left/right arrows)
+		navigationType: 'byItem', // alternatives: 'Prev' & 'Next' (bubbles vs left/right arrows)
 		navigationPosition: 'bottomLeft',
 		navigationEdge: 'bottomLeft',
 		navigationContainerClass: 'crossfader_nav',
@@ -1366,18 +1366,18 @@ var CrossFader = new Class(
 		this.navigationContainer = new Element('div', {'class': 'crossfader_nav'});
 		this.navigationContainer.setStyles({'position': 'absolute'});
 		
-		if (this.options.navigationType == 'prevNext') // left & right arrows
+		if (this.options.navigationType == 'Prev') // left & right arrows
 		{
 			
 			console.log("Element: ");
 				
 			var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass, width: '250px'});
 			leftArrow.addClass(this.options.navigationPreviousClass);
-			var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
-			rightArrow.addClass(this.options.navigationNextClass);
+			//var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+			//rightArrow.addClass(this.options.navigationNextClass);
 				
 			leftArrow.set('html', '&nbsp;');
-			rightArrow.set('html', '&nbsp;');
+			//rightArrow.set('html', '&nbsp;');
 				
 			//leftArrow.addEvent('mouseenter', function(e) { leftArrow.addClass(this.options.navigationPreviousClass);}.bind(this));
 			//leftArrow.addEvent('mouseleave', function(e) { leftArrow.removeClass(this.options.navigationPreviousClass);}.bind(this));
@@ -1386,10 +1386,28 @@ var CrossFader = new Class(
 				
 			//rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
 			//rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
+			//rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
+			//rightArrow.inject(this.navigationContainer);
+				
+			this.navigationLinks.push(leftArrow);
+			//this.navigationLinks.push(rightArrow);
+			
+		}
+		else if (this.options.navigationType == 'Next') // bubbles for each item
+		{
+			
+			console.log("Element: ");
+				
+			var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
+			rightArrow.addClass(this.options.navigationNextClass);
+				
+			rightArrow.set('html', '&nbsp;');
+				
+			//rightArrow.addEvent('mouseenter', function(e) { rightArrow.addClass(this.options.navigationNextClass);}.bind(this));
+			//rightArrow.addEvent('mouseleave', function(e) { rightArrow.removeClass(this.options.navigationNextClass);}.bind(this));
 			rightArrow.addEvent('click', function(e) { this.goToNext(); return false; }.bind(this));
 			rightArrow.inject(this.navigationContainer);
 				
-			this.navigationLinks.push(leftArrow);
 			this.navigationLinks.push(rightArrow);
 			
 		}
