@@ -1366,12 +1366,12 @@ var CrossFader = new Class(
 		this.navigationContainer = new Element('div', {'class': 'crossfader_nav'});
 		this.navigationContainer.setStyles({'position': 'absolute'});
 		
-		if (this.options.navigationType == 'Prev') // left & right arrows
+		if (this.options.navigationType == 'Prev') // left arrow
 		{
 			
 			console.log("Element: ");
 				
-			var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass, width: '250px'});
+			var leftArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
 			leftArrow.addClass(this.options.navigationPreviousClass);
 			//var rightArrow = new Element('a', {href: '#', 'class': this.options.navigationClass});
 			//rightArrow.addClass(this.options.navigationNextClass);
@@ -1393,7 +1393,7 @@ var CrossFader = new Class(
 			//this.navigationLinks.push(rightArrow);
 			
 		}
-		else if (this.options.navigationType == 'Next') // bubbles for each item
+		else if (this.options.navigationType == 'Next') // right arrow
 		{
 			
 			console.log("Element: ");
