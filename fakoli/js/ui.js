@@ -1463,7 +1463,7 @@ var CrossFader = new Class(
 		if (this.idx >= 0)
 		{
 			this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('out');
-			if (this.options.navigation)
+			if (this.options.navigation && this.options.navigationType == "byItem")
 			{
 				this.navigationLinks[this.idx].removeClass(this.options.navigationCurrentClass);
 			}
@@ -1474,7 +1474,7 @@ var CrossFader = new Class(
 		
 		this.elements[this.idx].setStyles({'opacity': 0});
 		this.elements[this.idx].set('tween', {duration: this.options.transition}).fade('in');
-		if (this.options.navigation)
+		if (this.options.navigation && this.options.navigationType == "byItem")
 		{
 			this.navigationLinks[this.idx].addClass(this.options.navigationCurrentClass);
 		}
