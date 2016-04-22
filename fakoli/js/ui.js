@@ -1405,6 +1405,18 @@ var CrossFader = new Class(
 			leftArrow.position({ relativeTo: this.navigationContainer, position: this.options.prevLinkPosition, edge: this.options.prevLinkEdge});
 			rightArrow.position({ relativeTo: this.navigationContainer, position: this.options.nextLinkPosition, edge: this.options.nextLinkEdge});
 			
+
+			window.addEvent('resize', function()
+			{	
+				var size = this.container.getSize();
+				this.navigationContainer.position({ relativeTo: this.container, position: 'topLeft', edge: 'topLeft'});
+				this.navigationContainer.setStyles({width: size.x, height: size.y});
+				
+				leftArrow.position({ relativeTo: this.navigationContainer, position: this.options.prevLinkPosition, edge: this.options.prevLinkEdge});
+				rightArrow.position({ relativeTo: this.navigationContainer, position: this.options.nextLinkPosition, edge: this.options.nextLinkEdge});
+				
+			}.bind(this));
+			
 		}
 		else if (this.options.navigationType == 'byItem') // bubbles for each item
 		{
