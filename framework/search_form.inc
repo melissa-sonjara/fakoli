@@ -167,6 +167,16 @@ class SearchParameterHandler
 	{
 		
 	}
+	
+	/**
+	 * Generate the constraint expresssion for matching boolean
+	 * only when the UI element is selected.
+	 * @param string $name
+	 * @param mixed $value
+	 */
+	function checked($name, $value)
+	{
+	}
 }
 
 /**
@@ -498,6 +508,22 @@ class CrossReferenceSearchParameterHandler extends SearchParameterHandler
 	}
 }
 
+class BooleanSearchParameterHandler extends SearchParameterHandler
+{
+	function equal($name, $value)
+	{
+		checkNumeric($value);
+	
+		return "$name=$value";
+	}
+	
+	function checked($name, $value)
+	{
+		checkNumeric($value);
+		return ($value) ? "$name=$value" : "";
+	}
+}
+
 /**
  * The SearchParameters class interprets the set of input parameters for a search
  * and generates the corresponding SQL constraints to perform the search against
@@ -531,7 +557,7 @@ class SearchParameters
 		$this->handlers[Timestamp]	= new DateSearchParameterHandler();
 		$this->handlers[Number]		= new NumberSearchParameterHandler();
 		$this->handlers[Currency]	= new NumberSearchParameterHandler();
-		$this->handlers[Boolean]	= new NumberSearchParameterHandler();		
+		$this->handlers[Boolean]	= new BooleanSearchParameterHandler();		
 	}
 	
 	function get($field, $mode)
@@ -808,6 +834,11 @@ class SearchParameters
 			case "fullName":
 				
 				$clause = $handler->fullName($field, $value);
+				break;
+				
+			case "checked":
+				
+				$clause = $handler->checked($field, $value);
 				break;
 				
 			default:
