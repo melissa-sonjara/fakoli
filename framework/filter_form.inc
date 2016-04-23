@@ -534,7 +534,7 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 		}
 		
 		// The search parameter value is used for the constraint
-		$this->parent->params->setParam($field, "equal", $this->parent->data->get($field));
+		$this->parent->params->setParam($field, "checked", $this->parent->data->get($field));
 	}
 	
 	/*
