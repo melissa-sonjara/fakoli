@@ -636,7 +636,7 @@ class SearchParameters
 		foreach($this->params as $name => $value)
 		{
 			list($f, $mode) = explode(":", $name);
-			if ($f == $field) unset($this->params["$name:$mode"]);
+			if ($f == $field) unset($this->params["$f:$mode"]);
 		}
 	}
 		
