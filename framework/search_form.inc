@@ -627,6 +627,19 @@ class SearchParameters
 		$this->params["{$field}:{$mode}"] = $value;
 	}
 	
+	/**
+	 * Clear any parameters set for the specified field
+	 * @param string $field the name of the field
+	 */
+	function clearParam($field)
+	{
+		foreach($this->params as $name => $value)
+		{
+			list($f, $mode) = explode(":", $name);
+			if ($f == $field) unset($this->params["$name:$mode"]);
+		}
+	}
+		
 	function set($field, $mode, $value)
 	{
 		$this->setParam($field, $mode, $value);
