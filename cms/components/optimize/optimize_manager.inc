@@ -34,9 +34,23 @@
 Fakoli::using("settings", "optimize");
 Fakoli::usingFeature("cache");
 
+interface IMinify
+{
+
+	function minifyJavascript($js);	
+	function minifyCSS($css);
+}
+
 class OptimizeManager
 {
 	static $zipped = false;
+	
+	static $minifier = null;
+	
+	function registerMinifier($minifier)
+	{
+		OptimizeManager::$minifier = $minifier;
+	}
 	
 	static function clearCache()
 	{
@@ -44,18 +58,25 @@ class OptimizeManager
 		Cache::invalidate("script_cache_timestamp");
 		Cache::invalidate("css_cache");
 		Cache::invalidate("css_cache_timestamp");
-		Settings::setDefaultValue("optimize", "optimize_scripts", "", Boolean);
-		Settings::setDefaultValue("optimize", "optimize_styles", "", Boolean);
-		Settings::setDefaultValue("optimize", "compress_javascript", "", Boolean);
-		Settings::setDefaultValue("optimize", "compress_styles", "", Boolean);
-		Settings::setDefaultValue("optimize", "compress_page_content", "", Boolean);
-		Settings::setDefaultValue("optimize", "append_timestamp", false, Boolean, "Specifies whether to include a timestamp in the generated link for optimized scripts and styles");
+		Settings::setDefaultValue("optimize", "optimize_scripts", "", Boolean, "Combine site Javascript into a single file", "Javascript", null, 1);
+		Settings::setDefaultValue("optimize", "optimize_styles", "", Boolean, "Combine site CSS into a single file", "CSS", null, 1);
+		
+		Settings::setDefaultValue("optimize", "compress_javascript", "", Boolean, "Enable zip compression when serving Javascript", "Javascript", null, 2);
+		Settings::setDefaultValue("optimize", "compress_styles", "", Boolean, "Enable zip compression when serving CSS", "CSS", null, 2);
+		
+		Settings::setDefaultValue("optimize", "compress_page_content", "", Boolean, "Enable zip compression when serving page content", "Page Content", null, 1);
+		Settings::setDefaultValue("optimize", "append_timestamp", false, Boolean, "Specifies whether to include a timestamp in the generated link for optimized scripts and styles", "Page Content", null, 2);
 	}
 	
 	static function preprocessScripts($scripts)
 	{
 		if (Settings::getValue("optimize", "optimize_scripts"))
 		{
+			if (!OptimizeManager::$minifier)
+			{
+				ComponentManager::fireEvent("RegisterMinifier");
+			}
+			
 			$cachedScripts = Cache::get("script_cache");
 			
 			if (!$cachedScripts)
@@ -79,6 +100,11 @@ class OptimizeManager
 					{
 						trace("Could not resolve script $script", 2);
 					}
+				}
+				
+				if (OptimizeManager::$minifier && Settings::getValue("optimize", "minify_javascript"))
+				{
+					$cachedScripts = OptimizeManager::$minifier->minifyJavascript($cachedScripts);
 				}
 				
 				Cache::put("script_cache", $cachedScripts);
@@ -108,6 +134,11 @@ class OptimizeManager
 	
 	static function preProcessStyles($styles)
 	{
+		if (!OptimizeManager::$minifier)
+		{
+			ComponentManager::fireEvent("RegisterMinifier");
+		}
+		
 		if (Settings::getValue("optimize", "optimize_styles"))
 		{
 			$cachedStyles = Cache::get("css_cache");
@@ -133,6 +164,11 @@ class OptimizeManager
 				$cachedStyles = preg_replace("/^@CHARSET.*$/mi", "", $cachedStyles);
 				$cachedStyles = str_replace("\r\n", "\n", $cachedStyles);	
 				$cachedStyles = str_replace("\n", "\r\n", $cachedStyles);	
+				
+				if (OptimizeManager::$minifier && Settings::getValue("optimize", "minify_styles"))
+				{
+					$cachedStyles = OptimizeManager::$minifier->minifyCSS($cachedStyles);
+				}
 				
 				Cache::put("css_cache", $cachedStyles);
 				Cache::put("css_cache_timestamp", $last_modified);
