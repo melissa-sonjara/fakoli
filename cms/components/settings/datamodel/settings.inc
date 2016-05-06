@@ -306,8 +306,8 @@ class Settings extends DataItem
 }
 
 
-/*
- * Dummy data model to render a component's settinsg
+/**
+ * Dummy data model to render a component's settings
  * as a form, using the "type" field of the setting
  * record to determine the renderer.
  * 
@@ -318,15 +318,8 @@ class ComponentSettings extends DataItem
 {
 	var $fields = array();
 
-	function ComponentSettings()
-	{
-		$this->primary_key = "settings_id";
-		$this->table = "settings";
-		
-		$this->DataItem(func_get_args());
-	}
-	
-	
+	var $primary_key = "settings_id";
+	var $table = "settings";	
 }
 
 ?>
