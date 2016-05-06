@@ -472,7 +472,7 @@ class DataItem extends AbstractDataItem
 	{
 		if ($this->cacheLookup($id)) return;
 		 
-		$fields = $this->getfieldList();
+		$fields = $this->getFieldList();
 		$query = "SELECT $fields FROM {$this->table} WHERE {$this->primary_key}=$id ".$this->getIdentityConstraint();
 		trace("DataItem::load($id): $query", 3);
 		
