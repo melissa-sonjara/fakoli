@@ -96,10 +96,12 @@ class SearchManager
 		
 		if ($searchHandler)
 		{
+			trace("Search Handler: ".get_class($searchHandler), 3);
 			$this->searchResults = $searchHandler->search($params);
 		}
 		else
 		{		
+			trace("Search Handler: Using built-in SearchManager", 3);
 			$this->doSearch($params);
 		}
 		
