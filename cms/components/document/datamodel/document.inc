@@ -156,6 +156,25 @@ class Document extends DataItem implements Searchable
 		
 		if (is_object($params))
 		{
+			$search = clone $params;
+			$search->target = $this;
+			
+			if (!$search->get("text", "like"))
+			{
+				$search->secondaryFields("author", "notes", "publication");
+			}
+			else
+			{
+				$search->remapField("text", "notes");
+			}
+			
+			$constraint = $search->generateConstraint();
+			$constraint .= $constraint ? " AND public=1" : " WHERE public=1";
+			
+			$constraint .= $range;
+			
+			$articles = Query::create(Document, $constraint)
+						  ->execute();
 		}
 		else
 		{
