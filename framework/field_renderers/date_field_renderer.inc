@@ -92,7 +92,7 @@ class DateFieldRenderer extends FieldRenderer
 		$date = $obj->format("{{$field}:m/d/Y}");
 		
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' style='width: auto' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' style='width: auto' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
 		$this->_endField($field);
 	}
 	
@@ -137,15 +137,15 @@ class DateFieldRenderer extends FieldRenderer
 			
 			$date_from = $this->parent->params->get($field, "from");
 			$date_to = $this->parent->params->get($field, "to");
-			echo "<input type='text' name='$field:from' value='$date_from' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)'>";
+			echo "<input type='text' name='$field:from' value='$date_from' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_from.toggle(this)'>";
 			echo "&nbsp;<label for='date_to'>$toLabel</label>&nbsp;";
-			echo "<input type='text' name='$field:to' value='$date_to' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'>\n";
+			echo "<input type='text' name='$field:to' value='$date_to' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_to.toggle(this)'>\n";
 		}
 		else
 		{
 			$date = $this->parent->params->get($field, $mode);
 
-			echo "<input type='text' name='$field:$mode' value='$date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_{$mode}.toggle(this)'>\n";
+			echo "<input type='text' name='$field:$mode' value='$date' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar_{$mode}.toggle(this)'>\n";
 		}
 		
 		$this->_endField($field);
