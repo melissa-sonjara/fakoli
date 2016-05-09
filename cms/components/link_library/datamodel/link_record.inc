@@ -90,14 +90,29 @@ class LinkRecord extends DataItem // implements Searchable
 		
 		if (is_object($params))
 		{
+			$search = clone $params;
+			$search->target = $this;
+			
+			if (!$range)
+			{
+				$search->remapField("text", "description");
+			}
+			
+			$constraint = $search->generateConstraint();
+			$constraint .= $constraint ? " AND published=1" : " WHERE published=1";
+			
+			$constraint .= $range;
+			
+			$links = Query::create(LinkRecord, $constraint)
+						  ->execute();
 		}
 		else
 		{
 			$params = preg_replace('/[^\w]+/', ' ', $params);
 			$params = "%$params%";
 			$links = Query::create(LinkRecord, "WHERE (title like :a OR description Like :b) and published=1 $range")
-			->bind(":a", $params, ":b", $params)
-			->execute();
+						  ->bind(":a", $params, ":b", $params)
+						  ->execute();
 		}
 			
 		return SearchManager::wrap($links, LinkSearchResult);
