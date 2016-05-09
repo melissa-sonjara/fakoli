@@ -159,13 +159,16 @@ class Document extends DataItem implements Searchable
 			$search = clone $params;
 			$search->target = $this;
 			
-			if (!$search->get("text", "like"))
+			if (!$range)
 			{
-				$search->secondaryFields("author", "notes", "publication");
-			}
-			else
-			{
-				$search->remapField("text", "notes");
+				if (!$search->get("text", "like"))
+				{
+					$search->secondaryFields("author", "notes", "publication");
+				}
+				else
+				{
+					$search->remapField("text", "notes");
+				}
 			}
 			
 			$constraint = $search->generateConstraint();
