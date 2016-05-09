@@ -176,8 +176,8 @@ class Document extends DataItem implements Searchable
 			
 			$constraint .= $range;
 			
-			$articles = Query::create(Document, $constraint)
-						  ->execute();
+			$documents = Query::create(Document, $constraint)
+							  ->execute();
 		}
 		else
 		{
