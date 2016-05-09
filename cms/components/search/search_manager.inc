@@ -97,7 +97,7 @@ class SearchManager
 		if ($searchHandler)
 		{
 			trace("Search Handler: ".get_class($searchHandler), 3);
-			$this->searchResults = $searchHandler->search($params);
+			$this->searchResults = $searchHandler->search($params, $this);
 		}
 		else
 		{		
