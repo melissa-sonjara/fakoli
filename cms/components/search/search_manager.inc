@@ -163,6 +163,8 @@ class SearchManager
 		}
 		else
 		{
+			trace(print_r(SearchManager::$map, true), 3);
+			
 			foreach(SearchManager::$map as $component => $searchables)
 			{
 				//Fakoli::using($component);
