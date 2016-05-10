@@ -1013,14 +1013,17 @@ class DateRangeFilterRenderer extends FieldRenderer
 			return call_user_func($this->handler, $this);
 		}
 		
+		//AJG: Cope with date rounding
+		$to = $this->to . " 23:59:59.999";
+		
 		if($this->field == $this->endDateField)
 		{
 			$name = $this->field;
-			$constraint = "$name BETWEEN '{$this->from}' AND '{$this->to}'";
+			$constraint = "$name BETWEEN '{$this->from}' AND '{$to}'";
 		}
 		else
 		{
-			$constraint = "{$this->endDateField} <= '{$this->to}' AND {$this->field} >= '{$this->from}' ";
+			$constraint = "{$this->endDateField} <= '{$to}' AND {$this->field} >= '{$this->from}' ";
 		}
 	
 		return $constraint;
