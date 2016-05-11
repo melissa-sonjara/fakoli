@@ -524,6 +524,8 @@ input.button
     margin-bottom: 6px;
     cursor: pointer;
     margin: 0;
+	font-weight:300;
+	letter-spacing:1px;
 }
 
 #menu .adminmenuitem:hover
