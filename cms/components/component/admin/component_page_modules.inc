@@ -75,7 +75,7 @@ $tabs->page = "/admin/component_page_modules";
 
 $tabs->writeHTML();
 ?>
-<div id="form" style="clear:left;border:solid 1px #000; padding: 4px;">
+<div id="form" class="tab_border">
 <form method="POST" action="?component_page_id=<?echo $page_id?>">
 <table class="list">
  <tr>
