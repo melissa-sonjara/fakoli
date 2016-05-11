@@ -192,11 +192,13 @@ a, a:active
 }
 
 #leftnav {
-    position: absolute;
-    padding: 0;
-    width: 192px;
-    background: #FFFFFF;
+    background: #383836 none repeat scroll 0 0;
+    border-left: 5px solid #1992d4;
+    color: #fff;
     min-height: 400px;
+    padding: 0;
+    position: absolute;
+    width: 210px;
 }
 
 #login
@@ -511,11 +513,11 @@ input.button
     font-family: 'Source Sans Pro', Verdana, sans-serif;
     display: block;
     font-size: 100%;
-    color: #000;
+    color: #FFF;
     border: none;
     border-bottom: solid 1px #aaa;
     -moz-border-radius: 4px;
-    background: #f0f0f0;
+    background: #000;
     padding-left: 20px;
     padding-top: 8px;
     padding-bottom: 10px;
@@ -527,8 +529,8 @@ input.button
 
 #menu .adminmenuitem:hover
 {
-	color: #000;
-	background-color: #ddd;
+	color: #FFF;
+	background-color: #1992D4;
 	min-width: 4px;
 }
 
