@@ -3,6 +3,7 @@
  <head>
   <meta name="description" content="Sonjara CMS Administrative Site">
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,300italic,400italic,600italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800' rel='stylesheet' type='text/css'>
   <title>{var:title}</title>
   {var:styles}
   <link href="/fakoli/css/admin.css" rel="stylesheet"/>
