@@ -193,7 +193,6 @@ a, a:active
 
 #leftnav {
     background: #383836 none repeat scroll 0 0;
-    border-left: 5px solid #1992d4;
     color: #fff;
     min-height: 400px;
     padding: 0;
@@ -547,6 +546,8 @@ input.button
 	text-decoration: none;	
 	color: #FFF;
 	text-align: left;
+	font-weight:300;
+	letter-spacing: 1px;
 }
 
 #menu .selectedadminitem {
@@ -564,6 +565,8 @@ input.button
     text-align: left;
     color: #fff;
     background-color: #1992D4;
+	font-weight:300;
+	letter-spacing: 1px;
 }
 
 #tabs,
