@@ -224,7 +224,7 @@ a, a:active
 #content  
 {	
 	font-size: 14px;
-	font-family: 'Source Sans Pro', Verdana, Arial, Helvetica, sans-serif;
+	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
 	font-style: normal;
 	line-height: 16px;
 	font-weight: normal;
@@ -247,7 +247,6 @@ a, a:active
 .menuitem, .menuitem:link
 {
 	font-family: 'Source Sans Pro', Verdana, sans-serif;
-	FONT-SIZE: 100%;
 	display: block;
 	height: 30px;
 	padding-right: 10px;
@@ -266,7 +265,6 @@ a, a:active
 .selecteditem
 {
 	font-family: 'Source Sans Pro', Verdana, sans-serif;
-	FONT-SIZE: 10pt;
 	display: block;
 	height: 30px;
 	padding-right: 10px;
@@ -288,7 +286,6 @@ a, a:active
 	border-left: solid 1px #ccc;
 	vertical-align: top;
 	/*height: 550px;*/
-	font-size: 12px;	
 }
 
 
@@ -326,7 +323,6 @@ h3
 
 label
 {
-	font-size: 10pt;
 	color: #222;
 	font-weight: 700;
 }
@@ -364,7 +360,7 @@ td.label
 	font-weight: bold;
 	text-align: left;
 	vertical-align: top;
-	font-size: 10pt;
+	font-size: 100%;
 	color: #ooo;
 	border-bottom: 0;
 }
@@ -382,47 +378,6 @@ table.list th
 	background: linear-gradient(to bottom,  #f8f8f8 24%,#bbbbbb 93%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#bbbbbb',GradientType=0 ); /* IE6-8 */		
 }
-/*table.list
-{
-	background-color: #ffffff;
-	border: solid 1px #ddd;
-	border-collapse: collapse;
-	font-size: 10pt;
-}
-
-table.list th
-{
-	background-color: #ddd;
-	color: #fff;
-	font-weight: bold;
-	text-align: left;
-	padding: 4px;
-}
-
-table.list td
-{
-	padding: 4px;
-	border: solid 1px #ccc;
-}
-
-table.list td.subheading
-{
-	padding: 4px;
-	border: solid 1px #ccc;
-	background-color: #ccc;
-	font-weight: bold;
-	font-style: oblique;
-}
-
-table.list td.subtotal
-{
-	padding: 4px;
-	border: solid 1px #ccc;
-	background-color: #ccc;
-	font-weight: bold;
-	font-style: normal;
-}
-*/
 
 table.list
 {
@@ -486,11 +441,9 @@ input.checkbox
 	font-family: 'Source Sans Pro', Verdana, Arial, Helvetica, sans-serif;
 	color: #000;
 	font-weight: bold;
-	font-size: 12px;
 }
 #calloutbox P {
 	color: #000;
-	font-size: 12px;
 	font-family: 'Source Sans Pro', Verdana, Arial, Helvetica, sans-serif;
 	font-style: normal;
 	line-height: 16px;
@@ -501,12 +454,10 @@ input.checkbox
 
 	color: #000;
 	font-weight: bold;
-	font-size: 12px;
 }
 
 .button, .approve 
 {
-	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
 	font-size: 110%;
 	color: #454545;
 	padding: 7px 13px;
@@ -565,7 +516,6 @@ input.button
 {
 	font-family: 'Source Sans Pro', Verdana, sans-serif;
 	display: block;
-	font-size: 12px;
 	color: #000;
 	border: solid 1px #666;
 	border-radius: 4px;
@@ -653,13 +603,10 @@ input.button
   margin:0 2px 0 0;
   padding: 0;
   padding-left: 10px;
-  font-size: 9pt;
   text-align: center;
-  
   border-top: 1px solid #B2B2EE;
   border-left: 1px solid #B2B2EE;
   border-right: 1px solid #B2B2EE;
-  
   border-radius: 5px 5px 0 0;
 }
   
