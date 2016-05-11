@@ -901,11 +901,8 @@ warning
 #tab_border, .tab_border
 {
 	clear: left;
-	border: solid 1px #1992D4; 
-	padding-left: 4px;
-	padding-right: 4px;
-	padding-top: 10px;
-	padding-bottom: 4px;
+	border: solid 1px #aaa; 
+	padding: 10px;
 	background-color: #fff;
 	border-radius: 0;
 }
