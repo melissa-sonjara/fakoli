@@ -601,9 +601,9 @@ input.button
   padding: 0;
   padding-left: 10px;
   text-align: center;
-  border-top: 1px solid #B2B2EE;
-  border-left: 1px solid #B2B2EE;
-  border-right: 1px solid #B2B2EE;
+  border-top: 1px solid #aaa;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
   border-radius: 5px 5px 0 0;
 }
   
@@ -1146,8 +1146,9 @@ td.label
 
 table.list
 {
-	font-size: 85%;
+	font-size: 90%;
 	box-shadow: 1px 1px 5px #aaa;
+	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
 }
 
 table.list td
