@@ -595,7 +595,7 @@ input.button
 #popup_tabs li 
 {
   float:left;
-  background-color: #CFCFEE;
+  background-color: #EEE;
   background-image: none;
   margin:0 2px 0 0;
   padding: 0;
@@ -609,7 +609,7 @@ input.button
   
 #tabs a, #popup_tabs a 
 {
-  background-color: #CFCFEE;
+  background-color: #EEE;
   background-image: none;
   border-radius: 0 5px 0 0;
   color: #000000;
@@ -635,7 +635,7 @@ input.button
 #tabs a:hover,
 #popup_tabs a:hover
 {
-  background-color: #CFCFEE;
+  background-color: #EEE;
   text-decoration: underline;
 }
 
