@@ -214,11 +214,11 @@ window.addEvent('domready', function() {
 		initialDisplayFx: false,
 		display: $selectedMenuSectionIdx,
 		onActive: function(toggler, element){
-			toggler.setStyles({'background-image': 'url(/fakoli/images/section_open.png)'});
+			toggler.addClass("active");
 		},
 	 
 		onBackground: function(toggler, element){
-			toggler.setStyles({'background-image': 'url(/fakoli/images/section_closed.png)'});
+			toggler.removeClass("active");
 		}
 	}, document.id('accordion'));
 
