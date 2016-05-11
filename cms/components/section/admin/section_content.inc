@@ -163,7 +163,7 @@ $tabs = sectionTabs($section_id);
 
 $tabs->writeHTML();
 ?>
-<div id="form"  style="clear:left;border:solid 1px #000; padding: 4px;">
+<div id="form"  class="tab_border">
 <br/>
 <form method="POST" action="?section_id=<?echo $section_id?>">
 <div style="float: left; width: 315px; margin-left: 10px">

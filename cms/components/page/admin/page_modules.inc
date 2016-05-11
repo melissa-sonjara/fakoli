@@ -76,7 +76,7 @@ if ($method == "POST")
 
 $tabs->writeHTML();
 ?>
-<div id="form" style="clear:left;border:solid 1px #000; padding: 4px;">
+<div class="tab_border">
 <form method="POST" action="?page_id=<?echo $page_id?>">
 <table class="list">
  <tr>
