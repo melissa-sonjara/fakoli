@@ -1165,7 +1165,7 @@ table.list td.subtotal
 table.list td a
 {
 	color: #424e18;
-	display: inline-block;
+	display: block;
 	text-decoration: none;
 	border: solid 1px none;
 	border-radius: 3px;
