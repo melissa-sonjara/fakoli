@@ -52,7 +52,7 @@ dd
   padding: 1px 0 2px;
   vertical-align: top;
   width: 100%;
-  font-color: #fff;
+  color: #fff;
 }
 
 #nav a:link, 
@@ -285,20 +285,18 @@ a, a:active
 }
 
 
-#content-admin
 
-{
-	float: left;
-	margin-left: 180px;
-	width: 760px;
-	margin: 0;
-	padding: 0;
-	min-height: 400px;
+#content-admin {
+    float: left;
+    margin: 0;
+    min-height: 400px;
+    padding: 20px;
+    width: 1100px;
 }
 
 #content-admin h2 
 {
-  color: #322E69;
+  color: #455a64;
   font-size: 24px;
   margin-bottom: 4px;
   margin-top: 4px;
@@ -309,13 +307,13 @@ a, a:active
 
 h2
 {
-	color: #322E69;
+	color: #455a64;
 }
 
 h3
 {
-	color: #322E69;
-	font-size: 18px;
+	color: #455a64;
+	font-size: 130%;
 }
 
 
