@@ -46,19 +46,20 @@ dd
 }
 
 #nav {
-  background-color: #CFCEEF;
+  background-color: #222;
   height: 23px;
   line-height: 22px;
   padding: 1px 0 2px;
   vertical-align: top;
   width: 100%;
+  font-color: #fff;
 }
 
 #nav a:link, 
 #nav a:visited
 {
 	display: inline-block;
-	color: #000;
+	color: #FFF;
 	text-decoration: none;
 	border: solid 1px transparent;
 	padding: 0px;
@@ -67,6 +68,7 @@ dd
 	margin: 0 20px;
 	border-radius: 3px;
 	line-height: 18px;
+	
 }
 
 #nav a:hover,
