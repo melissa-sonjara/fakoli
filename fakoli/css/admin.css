@@ -492,7 +492,7 @@ table.list a.button
 	width: auto;
 	outline: none;
 	cursor: pointer;
-	font-weight: normal;
+	font-weight: lighter;
 	white-space: nowrap;
 }
 
