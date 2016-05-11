@@ -462,6 +462,7 @@ input.checkbox
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	border: 1px solid #b5b5b5;
+	font-weight: lighter;
 }
 
 .button, .approve {
