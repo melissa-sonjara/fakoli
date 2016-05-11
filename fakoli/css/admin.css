@@ -1,11 +1,17 @@
 @charset "utf-8";
+
+*
+{
+	box-sizing: border-box;
+}
+
 body  
 {
 	margin: 0;
 	padding: 0;
 	text-align: left;
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 12pt;
 	font-style: normal;
 	line-height: normal;
 	background-color: #EEE;
@@ -129,7 +135,7 @@ a, a:active
 	background-color: #fff;
 	width: 100%;
 	border-collapse: collapse;
-	margin: 5px auto;
+	margin: 0;
 }
 
 #header
@@ -179,17 +185,13 @@ a, a:active
 	background-color: #2B6926;
 }
 
-#leftnav
-{
-	float: left;
-	vertical-align: top;
-	padding-top: 5px;
-	padding-left: 6px;
-	padding-right: 6px;
-	padding-bottom: 12px;
-	width: 180px;
-	background: #FFFFFF;
-	min-height: 400px;
+#leftnav {
+    float: left;
+    vertical-align: top;
+    padding: 0;
+    width: 192px;
+    background: #FFFFFF;
+    min-height: 400px;
 }
 
 #login
@@ -223,7 +225,7 @@ a, a:active
 
 #content  
 {	
-	font-size: 14px;
+	font-size: 100%;
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
 	font-style: normal;
 	line-height: 16px;
@@ -286,6 +288,7 @@ a, a:active
 	border-left: solid 1px #ccc;
 	vertical-align: top;
 	/*height: 550px;*/
+	font-size: 90%;	
 }
 
 
@@ -301,7 +304,7 @@ a, a:active
 #content-admin h2 
 {
   color: #455a64;
-  font-size: 24px;
+  font-size: 175%;
   margin-bottom: 4px;
   margin-top: 4px;
   padding-bottom: 4px;
@@ -330,14 +333,14 @@ label
 h4 
 {
   color: #1992D4;
-  font-size: 16px;
+  font-size: 115%;
   margin: 4px 0;
 }
 
 table.form
 {
 	background-color: #fffff;
-	line-height: 18px;
+	line-height: 1.1;
 }
 
 table.form th
@@ -512,20 +515,22 @@ input.button
 	cursor: pointer;
 }
 
-#menu h4
-{
-	font-family: 'Source Sans Pro', Verdana, sans-serif;
-	display: block;
-	color: #000;
-	border: solid 1px #666;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	background: url(/fakoli/images/table-header.png) top left repeat-x transparent;
-	padding-left: 20px;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	margin-bottom: 6px;
-	cursor: pointer;
+#menu h4 {
+    font-family: 'Source Sans Pro', Verdana, sans-serif;
+    display: block;
+    font-size: 100%;
+    color: #000;
+    border: none;
+    border-bottom: solid 1px #aaa;
+    -moz-border-radius: 4px;
+    background: #f0f0f0;
+    padding-left: 20px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    cursor: pointer;
+    margin: 0;
 }
 
 #menu .adminmenuitem:hover
@@ -538,36 +543,33 @@ input.button
 #menu .adminmenuitem
 {
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 85%;
 	display: block;
-	padding-top: 4px;
-	padding-bottom: 4px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	padding-right: 10px;
 	padding-left: 20px;
-	border: solid 1px #fff;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
+	border: none;
 	text-decoration: none;	
 	color: #333;
 	text-align: left;
 }
 
-#menu .selectedadminitem
-{
-	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	display: block;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	padding-right: 10px;
-	padding-left: 20px;
-	border: solid 1px #fff;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	text-decoration: none;	
-	text-align: left;
-	color: #fff;
-	background-color: #1992D4;
+#menu .selectedadminitem {
+    font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+    font-size: 85%;
+    display: block;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 10px;
+    padding-left: 20px;
+    /* border: solid 1px #fff; */
+    -moz-border-radius: 4px;
+    /* border-radius: 4px; */
+    text-decoration: none;
+    text-align: left;
+    color: #fff;
+    background-color: #1992D4;
 }
 
 #tabs,
@@ -623,6 +625,7 @@ input.button
   outline: medium none;
   padding: 3px 15px 3px 3px;
   text-decoration: none;
+  font-size:120%;
 }
 
 /* Commented Backslash Hack
@@ -1148,7 +1151,7 @@ td.label
 
 table.list
 {
-	font-size: 110%;
+	font-size: 85%;
 	box-shadow: 1px 1px 5px #aaa;
 }
 
