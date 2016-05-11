@@ -12,7 +12,9 @@
   <div id="curtain"></div>
   {var:dialogs}
   <div id="frame">
-   <div id="header"><a href="http://www.sonjara.com/" alt="Sonjara, Inc"><h2 style="display: none">Fakoli/CMS Site Administration - a Product of Sonjara, Inc</h2></a></div>
+   <div id="header"><a href="http://www.sonjara.com/" alt="A product of Sonjara, Inc">
+   Fakoli</a><br>
+	Rich Data Architecture for Rich PHP Applications</div>
     <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'>{config:sitename}</span><div style='float: right'>{help}</div></div>   
     <div id="layout">
      <div id="leftnav">{var:menu}</div>

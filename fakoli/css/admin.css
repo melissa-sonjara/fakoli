@@ -8,8 +8,8 @@ body
 	font-size: 14px;
 	font-style: normal;
 	line-height: normal;
-	background-color: #b8c5d9;
-	color: #00000;
+	background-color: #EEE;
+	color: #222;
 }
  
 img
@@ -139,15 +139,20 @@ a, a:active
 	padding: 0;
     border-bottom: solid 1px #000;
     position: relative;
-    background: url(/fakoli/images/fakoli_cms_banner.jpg) top left no-repeat #1992D4;
+    background: #1992D4;
     
 }
 
 #header a
 {
 	display: block;
-	height: 60px;
-	width: 50px;
+	height: 55px;
+	width: 80px;
+	padding-left: 20px;
+	padding-top: 0px;
+	font-size: 300%;
+	color: #fff;
+	text-decoration:none;
 }
 
 #layout
@@ -500,59 +505,26 @@ input.checkbox
 .button, .approve 
 {
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 110%;
 	color: #454545;
 	padding: 7px 13px;
-	background-color: #e5e5e5l
-	background: -moz-linear-gradient(
-		top,
-		#ffffff 0%,
-		#d6d6d6);
-	background: -webkit-gradient(
-		linear, left top, left bottom,
-		from(#ffffff),
-		to(#d6d6d6));
+	background-color: #1992D4;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	border: 1px solid #b5b5b5;
-	-moz-box-shadow:
-		0px 0px 0px rgba(000,000,000,0),
-		inset 0px 0px 0px rgba(255,255,255,0);
-	-webkit-box-shadow:
-		0px 0px 0px rgba(000,000,000,0),
-		inset 0px 0px 0px rgba(255,255,255,0);
-	box-shadow:
-		0px 0px 0px rgba(000,000,000,0),
-		inset 0px 0px 0px rgba(255,255,255,0);
-	text-shadow:
-		0px 1px 0px rgba(204,204,204,0),
-		-1px -1px 0px rgba(255,255,255,0);
 }
 
 .button, .approve {
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 110%;
 	color: #050505;
 	padding: 4px 10px;
-	background: #f8f8f8; /* Old browsers */
-	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIyNCUiIHN0b3AtY29sb3I9IiNmOGY4ZjgiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI5MyUiIHN0b3AtY29sb3I9IiNiYmJiYmIiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-	background: -moz-linear-gradient(top,  #f8f8f8 24%, #bbbbbb 93%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(24%,#f8f8f8), color-stop(93%,#bbbbbb)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #f8f8f8 24%,#bbbbbb 93%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #f8f8f8 24%,#bbbbbb 93%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #f8f8f8 24%,#bbbbbb 93%); /* IE10+ */
-	background: linear-gradient(to bottom,  #f8f8f8 24%,#bbbbbb 93%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#bbbbbb',GradientType=0 ); /* IE6-8 */		
-
+	background-color: #1992D4;	
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px solid #888888;
-	text-shadow:
-		0px -1px 0px rgba(000,000,000,0),
-		0px 1px 0px rgba(255,255,255,0.3);
 }
 
 body.ie7 .button,
@@ -578,18 +550,8 @@ table.list a.button
 .button:hover,
 table.list .button:hover
 {
-	color: #000;
-	background: #f8f8f8; /* Old browsers */
-	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIxMyUiIHN0b3AtY29sb3I9IiNmOGY4ZjgiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI2MyUiIHN0b3AtY29sb3I9IiNjZmNlZWYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-	background: -moz-linear-gradient(top,  #f8f8f8 13%, #cfceef 63%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(13%,#f8f8f8), color-stop(63%,#cfceef)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #f8f8f8 13%,#cfceef 63%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #f8f8f8 13%,#cfceef 63%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #f8f8f8 13%,#cfceef 63%); /* IE10+ */
-	background: linear-gradient(to bottom,  #f8f8f8 13%,#cfceef 63%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#cfceef',GradientType=0 ); /* IE6-8 */
-	
+color: #000;
+background-color: #1992D4;
 }
 
 input.button
@@ -1223,9 +1185,7 @@ table.setup_form
     background: -moz-linear-gradient(center top , #E3E3E3 0%, #FFFFFF 50%, #DDDDDD) repeat scroll 0 0 transparent;
     border: 1px solid #000000;
     border-radius: 14px 14px 14px 14px;
-    box-shadow: 0 1px 5px #000000, 0 0 5px #FFFFFF inset;
     color: #050505;
-    font-family: Arial,Helvetica,sans-serif;
     font-size: 14px;
     padding: 10px 20px;
     width: 620px;
@@ -1240,8 +1200,7 @@ td.label
 
 table.list
 {
-	font-family: 'Lato', Arial, Helvetical, sans-serif;
-	font-size: 85%;
+	font-size: 110%;
 	box-shadow: 1px 1px 5px #aaa;
 }
 
@@ -1261,7 +1220,6 @@ table.list td.subtotal
 
 
 
-
 table.list td a
 {
 	color: #424e18;
@@ -1276,7 +1234,6 @@ table.list td a
 table.list td a:hover
 {
 	color: #fff;
-	background-color: #302738;
 }
 
 input.checkbox
@@ -1293,8 +1250,6 @@ table.list td a.button, table.list td a.button:visited table.list td a.button:ho
 input, textarea, select {
     border: 1px solid #999999;
     border-radius: 3px;
-    font-family: "Lato",Arial,Helvetica,sans-serif;
-    font-size: 85%;
     padding: 4px;
     max-width: 100%;
 }
@@ -1311,8 +1266,7 @@ input:focus, text-area:focus, select:focus
   border-radius: 4px;
   color: #fff!important;
   cursor: pointer;
-  font-family: "Lato",Arial,Helvetica,sans-serif;
-  font-size: 80%;
+  font-size: 110%;
   font-weight: normal;
   outline: medium none;
   padding: 4px 10px;
@@ -1321,13 +1275,12 @@ input:focus, text-area:focus, select:focus
   letter-spacing:1px;
 }
 .button {
-  background: #7a8eb4; 
-  border-bottom: 2px solid #406080;
+  background: #1992D4; 
+  border-bottom: 2px solid #222;
   border-radius: 4px;
   color: #fff!important;
   cursor: pointer;
-  font-family: "Lato",Arial,Helvetica,sans-serif;
-  font-size: 80%;
+  font-size: 110%;
   font-weight: normal;
   outline: medium none;
   padding: 4px 10px;
@@ -1337,7 +1290,7 @@ input:focus, text-area:focus, select:focus
 }
 
 table.list a.button {
-  font-size: 80%;
+  font-size: 110%;
   padding: 0 6px;
   text-decoration: none;
   width: auto;
