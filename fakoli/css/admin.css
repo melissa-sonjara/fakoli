@@ -74,7 +74,7 @@ dd
 #nav a:hover,
 #nav a:focus
 {
-	background-color: #322E69;
+	background-color: #1992D4;
 	color: #fff;
 }
 
@@ -275,7 +275,7 @@ a, a:active
 	color: #fff;
 	text-align: right;
 	COLOR: #504c31;
-	background-color: #322E69;
+	background-color: #1992D4;
 }
 
 
@@ -333,7 +333,7 @@ label
 
 h4 
 {
-  color: #322E69;
+  color: #1992D4;
   font-size: 16px;
   margin: 4px 0;
 }
@@ -445,7 +445,7 @@ table.list td a
 table.list td a:hover
 {
 	color: #fff;
-	background-color: #322E69;
+	background-color: #1992D4;
 }
 
 input, textarea, select
@@ -617,7 +617,7 @@ input.button
 	text-decoration: none;	
 	text-align: left;
 	color: #fff;
-	background-color: #322E69;
+	background-color: #1992D4;
 }
 
 #tabs,
@@ -710,7 +710,7 @@ input.button
 #tabs .current,
 #popup_tabs .current 
 {
-  	background-color: #322E69;
+  	background-color: #1992D4;
   	background-image: none;
     color: #fff;
     border-color: #666;
@@ -719,7 +719,7 @@ input.button
 #tabs .current a,
 #popup_tabs .current a
 {
-	background-color: #322E69;
+	background-color: #1992D4;
 	background-image: none;
 	padding-bottom:3px;
 	color: #fff;
@@ -956,7 +956,7 @@ warning
 #tab_border, .tab_border
 {
 	clear: left;
-	border: solid 1px #322E69; 
+	border: solid 1px #1992D4; 
 	padding-left: 4px;
 	padding-right: 4px;
 	padding-top: 10px;
