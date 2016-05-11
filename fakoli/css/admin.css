@@ -175,8 +175,8 @@ a, a:active
 	margin: 0;
 	padding: 0;
 	background: url(/fakoli/images/divider.png)  192px 0px repeat-y #ffffff;
-	display: table-cell;
-	min-height: 400px;
+	display: block;
+	min-height: 100%;
 }
 
 #container
