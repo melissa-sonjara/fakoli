@@ -5,7 +5,7 @@ body
 	padding: 0;
 	text-align: left;
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	font-style: normal;
 	line-height: normal;
 	background-color: #b8c5d9;
@@ -81,7 +81,7 @@ dd
 	display: inline-block;
 	font-weight: bold;
 	margin: 0 0 0 80px;
-	font-size: 9.5pt;
+	font-size: 100%;
 }
 
 #footer
@@ -104,7 +104,7 @@ dd
 	color: #ffffff;
 	margin: 0px;
 	padding: 0px;
-	font-size: 11pt;
+	font-size: 90%;
 	font-weight: bold;
 	text-decoration: none;
 	background: #336600; 
@@ -144,8 +144,8 @@ a, a:active
 #header a
 {
 	display: block;
-	height: 120px;
-	width: 960px;
+	height: 60px;
+	width: 50px;
 }
 
 #layout
@@ -160,7 +160,7 @@ a, a:active
 
 #container
 {
-	padding: 10px;
+	padding: 0px;
 }
 
 #header_divider
@@ -214,7 +214,7 @@ a, a:active
 
 #content  
 {	
-	font-size: 12px;
+	font-size: 14px;
 	font-family: 'Source Sans Pro', Verdana, Arial, Helvetica, sans-serif;
 	font-style: normal;
 	line-height: 16px;
@@ -238,11 +238,10 @@ a, a:active
 .menuitem, .menuitem:link
 {
 	font-family: 'Source Sans Pro', Verdana, sans-serif;
-	FONT-SIZE: 10pt;
+	FONT-SIZE: 100%;
 	display: block;
 	height: 30px;
 	padding-right: 10px;
-	FONT-FAMILY: arial;
 	TEXT-DECORATION: none;
 	color: #fff;
 	text-align: right;
@@ -251,7 +250,7 @@ a, a:active
 
 .menuitem:hover 
 {
-	COLOR: #504c31;
+	COLOR: #222;
 	background-color: #8bad51;
 }
 
@@ -1122,15 +1121,6 @@ h4.expanding_list_group {
   padding: 0;
 }
 
-#sproinger
-{
-	position: absolute;
-	top: -2px;
-	right: 0;
-	outline: none;
-	cursor: pointer;
-	margin: 8px 6px;
-}
 
 fieldset {
     background:#EEEEEE;
@@ -1143,7 +1133,6 @@ fieldset {
 }
 legend {
     color: #002A6C;
-    font-size: 12pt;
     font-weight: bold;
     padding-top: 5px;
     position: absolute;
@@ -1204,4 +1193,152 @@ p.version_info a.approve:hover
 	background: linear-gradient(to bottom,  #f8f8f8 13%,#cfceef 63%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#cfceef',GradientType=0 ); /* IE6-8 */
 	
+}
+table.form
+{
+	border: none;
+}
+
+table.form th
+{
+	color: #000000;
+	font-weight: bold;
+	text-align: left;
+	padding: 4px;
+	font-size: 95%;
+}
+
+table.form td
+{
+	padding: 4px;
+	font-size: 85%;
+}
+
+table.form td.submit {
+    font-size: 100%;
+}
+
+table.setup_form
+{
+    background: -moz-linear-gradient(center top , #E3E3E3 0%, #FFFFFF 50%, #DDDDDD) repeat scroll 0 0 transparent;
+    border: 1px solid #000000;
+    border-radius: 14px 14px 14px 14px;
+    box-shadow: 0 1px 5px #000000, 0 0 5px #FFFFFF inset;
+    color: #050505;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    padding: 10px 20px;
+    width: 620px;
+}
+
+td.label
+{
+	font-weight: bold;
+	text-align: left;
+	vertical-align: top;
+}
+
+table.list
+{
+	font-family: 'Lato', Arial, Helvetical, sans-serif;
+	font-size: 85%;
+	box-shadow: 1px 1px 5px #aaa;
+}
+
+table.list td
+{
+	border: solid 1px #aaa;
+	
+}
+table.list td.subtotal
+{
+	padding: 4px;
+	border: solid 1px #aaa;
+	background-color: #eee;
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+
+
+table.list td a
+{
+	color: #424e18;
+	display: inline-block;
+	text-decoration: none;
+	border: solid 1px none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 2px;
+}
+
+table.list td a:hover
+{
+	color: #fff;
+	background-color: #302738;
+}
+
+input.checkbox
+{
+	border: none;
+}
+
+table.list td a.button, table.list td a.button:visited table.list td a.button:hover 
+{
+  color: #fff;
+  font-weight: normal;
+}	
+
+input, textarea, select {
+    border: 1px solid #999999;
+    border-radius: 3px;
+    font-family: "Lato",Arial,Helvetica,sans-serif;
+    font-size: 85%;
+    padding: 4px;
+    max-width: 100%;
+}
+
+input:focus, text-area:focus, select:focus
+{
+	background-color: #eee;
+}
+
+
+.help_link {
+  background: #e04448 linear-gradient(to bottom, #e04448, #b81d21) repeat scroll 0 0;
+  border-bottom: 4px solid #891111;
+  border-radius: 4px;
+  color: #fff!important;
+  cursor: pointer;
+  font-family: "Lato",Arial,Helvetica,sans-serif;
+  font-size: 80%;
+  font-weight: normal;
+  outline: medium none;
+  padding: 4px 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing:1px;
+}
+.button {
+  background: #7a8eb4; 
+  border-bottom: 2px solid #406080;
+  border-radius: 4px;
+  color: #fff!important;
+  cursor: pointer;
+  font-family: "Lato",Arial,Helvetica,sans-serif;
+  font-size: 80%;
+  font-weight: normal;
+  outline: medium none;
+  padding: 4px 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing:1px;
+}
+
+table.list a.button {
+  font-size: 80%;
+  padding: 0 6px;
+  text-decoration: none;
+  width: auto;
 }
