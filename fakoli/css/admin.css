@@ -209,9 +209,6 @@ a, a:active
 	margin-right: auto;
 	background-color: #cfceef;
 	padding: 5px;
-	-moz-box-shadow: 2px 2px 12px #888;
-	-webkit-box-shadow: 2px 2px 12px #888;
-	box-shadow: 2px 2px 12px #888;
 }
 
 #login input
@@ -317,6 +314,7 @@ a, a:active
   vertical-align: top;
  text-transform: uppercase;
  letter-spacing:1px;
+ font-weight: 300;
 }
 
 h2
@@ -936,7 +934,7 @@ warning
 {
   background: none repeat scroll 0 0 #FFFFFF;
   border: 1px solid #000000;
-  box-shadow: 1px 1px 3px #333333;
+  box-shadow: none;
   display: none;
   height: 200px;
   left: 0;
@@ -1031,7 +1029,7 @@ fieldset {
     background:#EEEEEE;
     border: 1px solid #666;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px #aaa;
+    box-shadow: none;
     margin: 0 0 10px;
     padding: 35px 10px 15px;
     position: relative;
@@ -1144,7 +1142,7 @@ td.label
 table.list
 {
 	font-size: 90%;
-	box-shadow: 1px 1px 5px #aaa;
+	box-shadow: none;
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
 }
 
