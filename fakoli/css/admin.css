@@ -379,6 +379,7 @@ table.list th
 	{
 	background: #e3f2fd none repeat scroll 0 0;
 	text-transform: uppercase;
+	border: 1px solid #aaa;
 }		
 
 table.list td a
