@@ -156,7 +156,7 @@ a, a:active
 	width: 160px;
 	padding-left: 20px;
 	padding-top: 0px;
-	font-size: 300%;
+	font-size: 265%;
 	font-family: 'Open Sans', sans-serif;
 	font-weight:800;
 	color: #fff;
@@ -410,7 +410,7 @@ input, textarea, select
 {
 	border: solid 1px #666;
 	border-radius: 3px;
-	background: #eef;
+	background: #e3f2fd;
 	padding: 2px;
 }
 
