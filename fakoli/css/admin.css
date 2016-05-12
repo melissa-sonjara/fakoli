@@ -147,15 +147,15 @@ a, a:active
 	margin: 0;
 }
 
-#header
-{
-	height: 60px;
-	margin: 0;
-	padding: 0;
+#header {
+    height: 60px;
+    margin: 0;
+    padding: 0;
     border-bottom: solid 1px #000;
     position: relative;
     background: #1992D4;
-    
+    background-image: url(/fakoli/images/baobab.jpg);
+    background-size: cover;
 }
 
 #header a
