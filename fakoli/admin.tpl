@@ -12,6 +12,7 @@
  <body>
   <div id="curtain"></div>
   {var:dialogs}
+  <div id="leftbar"></div>
   <div id="frame">
    <div id="header"><a href="http://www.sonjara.com/" alt="A product of Sonjara, Inc">
    Fakoli</a>
