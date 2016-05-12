@@ -63,7 +63,7 @@ class SectionSerializationHandler
  */
 class SectionManager
 {
-	static function addToSection($section_folder, $identifier, $role = "", $template = "", $use_SSL = false)
+	static function addToSection($section_folder, $identifier, $role = "", $template = "", $use_SSL = false, $permissions = "")
 	{
 		trace("Adding '$identifier' to section '$section_folder'", 3);
 
@@ -74,6 +74,7 @@ class SectionManager
 		$content->section_id = $section->section_id;
 		$content->identifier = $identifier;
 		$content->role = $role;
+		$content->permissions = $permissions;
 		$content->template = $template;
 		$conent->use_SSL = $use_SSL;
 		$content->save();
