@@ -359,7 +359,7 @@ var Calendar = new Class(
 		this.bindDate();
 		this.onDateChanged(date);
 		// Hide calendar after select on touch screen devices
-		if (Browser.Platform.ios || Browser.Platform.android || Browser.Platform.webos)
+		if (Browser.platform == "ios" || Browser.platform == "android" || Browser.platform == "webos")
 		{
 			this.hide();
 		}
