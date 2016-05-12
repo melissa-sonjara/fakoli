@@ -690,19 +690,17 @@ input.button
 	color: #fff;
 }  
 
-#subtabs
-{
-	background-color: #1c5892;
-	clear: left;
-	padding: 0;
-	margin: 0;
-	border-left: solid 1px #000;
-	border-top: solid 1px #000;
-	border-right: solid 1px #000;
-	text-decoration: none;
-	width: 100%;
+#subtabs {
+    background-color: #1c5892;
+    clear: left;
+    padding: 0;
+    margin: 0;
+    border-left: solid 1px #aaa;
+    border-top: solid 1px #aaa;
+    border-right: solid 1px #aaa;
+    text-decoration: none;
+    width: 100%;
 }
-
 
 #subtabs ul  
 {
@@ -715,30 +713,30 @@ input.button
   width: 100%;
 }
 
-#subtabs li 
-{
-  float: left;
-  background-color: #E0E0E0;
-  border-right: solid 1px #000;
-  margin:0;
-  padding: 0;
-  font-size: 11px;
-  text-align: center;
-  text-decoration: none ;
+#subtabs li {
+    float: left;
+    background-color: #E0E0E0;
+    border-right: solid 1px #aaa;
+    margin: 0;
+    padding: 0;
+    font-size: 85%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: lighter;
 }
   
-#subtabs a
-{
-  float:left;
-  display:block;
-  background-color: #a9cded;
-  padding: 3px 15px 3px 15px;
-  font-weight:normal;
-  color: #000;
-  height: 18px;
-  outline: none;
-  border: none !important;
-}  
+#subtabs a {
+    float: left;
+    display: block;
+    background-color: #a9cded;
+    padding: 3px 15px 3px 15px;
+    font-weight: normal;
+    color: #000;
+    height: 24px;
+    outline: none;
+    border: none !important;
+    font-weight: lighter;
+} 
 
 #subtabs li a:hover {
 	background-color: #aaa;	
@@ -750,8 +748,7 @@ input.button
 #subtabs li.current a,
 #subtabs li.current a:hover
 {
-	font-weight: bold;
-	background-color: #325E9E;
+	background-color: #337AB7;
 	color: #ffffff;
 	text-decoration: none;
 }
