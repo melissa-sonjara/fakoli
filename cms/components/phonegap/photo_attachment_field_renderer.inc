@@ -92,7 +92,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	<a href="#" onclick="new PhotoAttachmentUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
 	</div>
 	<script type="text/javascript">
-	window.addEvent('load', function()
+	window.addEvent('domready', function()
 	{
 		new PhotoAttachmentUploader().setup('<?echo $this->parent->id?>_<?echo $this->field?>_list', '<?echo $this->parent->id?>_<?echo $this->field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
 	});
