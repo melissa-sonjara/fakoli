@@ -65,6 +65,8 @@ dd
     width: 100%;
     color: #fff;
     border-bottom: solid 1px #000;
+    position: relative;
+    font-weight: lighter;
 }
 
 #nav a:link, 
@@ -175,9 +177,7 @@ a, a:active
 	position: relative;
 	margin: 0;
 	padding: 0;
-	background: url(/fakoli/images/divider.png)  192px 0px repeat-y #ffffff;
 	display: block;
-	min-height: 100%;
 }
 
 #container
@@ -190,6 +190,16 @@ a, a:active
 	height: 6px;
 	font-size: 1pt;
 	background-color: #2B6926;
+}
+
+#leftbar
+{
+	position: fixed;
+	width: 210px;
+	background-color: #383836;
+	height: 100%;
+	top: 0;
+	left: 0;
 }
 
 #leftnav {
@@ -326,8 +336,10 @@ h2
 
 h3
 {
-	color: #455a64;
+    color: #000;
 	font-size: 130%;
+    font-weight: lighter;
+    text-transform: uppercase;
 }
 
 
@@ -337,11 +349,12 @@ label
 	font-weight: 700;
 }
 
-h4 
-{
-  color: #1992D4;
-  font-size: 115%;
-  margin: 4px 0;
+h4 {
+    color: #000;
+    font-size: 115%;
+    margin: 4px 0;
+    font-weight: lighter;
+    text-transform: uppercase;
 }
 
 table.form
@@ -626,7 +639,8 @@ input.button
   outline: medium none;
   padding: 3px 15px 3px 3px;
   text-decoration: none;
-  font-size:120%;
+  font-size:133%;
+  font-weight: lighter;
 }
 
 /* Commented Backslash Hack
@@ -909,7 +923,7 @@ warning
 	clear: left;
 	border: solid 1px #aaa; 
 	padding: 10px;
-	background-color: #fff;
+	background-color: #f5f5f5;
 	border-radius: 0;
 }
 
@@ -1034,20 +1048,22 @@ h4.expanding_list_group {
 
 
 fieldset {
-    background:#EEEEEE;
-    border: 1px solid #666;
-    border-radius: 5px;
-    box-shadow: none;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 1px;
+    box-shadow: 1px 1px 3px #888;
     margin: 0 0 10px;
     padding: 35px 10px 15px;
     position: relative;
 }
+
 legend {
     color: #002A6C;
     font-weight: bold;
     padding-top: 5px;
     position: absolute;
     top: 2px;
+    font-weight: normal;
 }
 
 fieldset.collapsed
@@ -1119,10 +1135,11 @@ table.form th
 	font-size: 95%;
 }
 
-table.form td
-{
-	padding: 4px;
-	font-size: 85%;
+table.form td {
+    padding: 4px;
+    font-size: 85%;
+    font-weight: lighter;
+    line-height: 1.3;
 }
 
 table.form td.submit {
@@ -1186,6 +1203,10 @@ table.list td a:hover
 	color: #fff;
 }
 
+.sortable th.nosort {
+    background: #e3f2fd none repeat scroll 0 0;
+}
+
 input.checkbox
 {
 	border: none;
@@ -1237,6 +1258,7 @@ input:focus, text-area:focus, select:focus
   text-decoration: none;
   white-space: nowrap;
   letter-spacing:1px;
+  font-weight: lighter;
 }
 
 table.list a.button {
