@@ -12,12 +12,12 @@
  <body>
   <div id="curtain"></div>
   {var:dialogs}
-  <div id="leftbar"></div>
   <div id="frame">
+  <div id="leftbar"></div>
    <div id="header"><a href="http://www.sonjara.com/" alt="A product of Sonjara, Inc">
    Fakoli</a>
    </div>
-    <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'> WEBSITE URL: {config:sitename}</span>
+    <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'> WEBSITE: {config:sitename}</span>
     <div style='float: right'>{help}</div></div>   
     <div id="layout">
      <div id="leftnav">{var:menu}</div>
