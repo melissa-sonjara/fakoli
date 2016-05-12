@@ -54,24 +54,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	
 	function renderScript($field)
 	{
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($this->field) || array_key_exists($field, $this->parent->hidden)) return "";	
-
-		global $phonegap;
-		
-		ob_start();
-		
-?>
-	<script type="text/javascript" src="/components/phonegap/js/photo_attachment_uploader.js"></script>
-	<script type="text/javascript">
-	window.addEvent('load', function()
-	{
-		new PhotoAttachmentUploader().setup('<?echo $this->parent->id?>_<?echo $this->field?>_list', '<?echo $this->parent->id?>_<?echo $this->field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
-	});
-	</script>
-<?
-		$phonegap .= ob_get_contents();
-		ob_end_clean();
-		
+		return "";
 	}
 	
 	function renderField($field = "")
@@ -108,6 +91,12 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	<a href="#" onclick="new PhotoAttachmentUploader().capturePhoto(); return false" class="button"> Take a Photo </a>&nbsp;&nbsp;
 	<a href="#" onclick="new PhotoAttachmentUploader().choosePhoto(); return false" class="button">Upload a Photo</a>
 	</div>
+	<script type="text/javascript">
+	window.addEvent('load', function()
+	{
+		new PhotoAttachmentUploader().setup('<?echo $this->parent->id?>_<?echo $this->field?>_list', '<?echo $this->parent->id?>_<?echo $this->field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
+	});
+	</script>
 <?
 		$this->_endField($field);
 	}
