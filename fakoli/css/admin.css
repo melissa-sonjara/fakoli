@@ -211,16 +211,15 @@ a, a:active
     width: 210px;
 }
 
-#login
-{
-	margin-top: 100px;
-	border: solid 1px #000;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	margin-left: auto;
-	margin-right: auto;
-	background-color: #cfceef;
-	padding: 5px;
+#login {
+    margin-top: 100px;
+    border: solid 1px #ccc;
+    /* box-shadow: 1px 1px 5px #ccc; */
+    border-radius: 6px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #f5f5f5;
+    padding: 35px;
 }
 
 #login input
@@ -541,6 +540,7 @@ input.button
     margin: 0;
 	font-weight:300;
 	letter-spacing:1px;
+	text-transform: none;
 }
 
 #menu .adminmenuitem:hover
