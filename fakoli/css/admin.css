@@ -57,13 +57,14 @@ dd
 }
 
 #nav {
-  background-color: #222;
-  height: 23px;
-  line-height: 22px;
-  padding: 1px 0 2px;
-  vertical-align: top;
-  width: 100%;
-  color: #fff;
+    background-color: #383836;
+    height: 26px;
+    line-height: 22px;
+    padding: 1px 0 2px;
+    vertical-align: top;
+    width: 100%;
+    color: #fff;
+    border-bottom: solid 1px #000;
 }
 
 #nav a:link, 
