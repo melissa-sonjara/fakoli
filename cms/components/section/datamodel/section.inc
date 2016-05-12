@@ -355,6 +355,33 @@ class SectionContent extends DataItem
 	{
 		return $this->body_class ? $this->body_class : $this->Section()->default_body_class;
 	}
+	
+	/**
+	 * Add this SectionContent to the specified Section. This is intended for newly
+	 * created SectionContent and will throw an exception if the section_id field is already
+	 * populated, or if there is already a SectionContent item with the same identifier mapped to the
+	 * the target section
+	 * 
+	 * @param string $section_folder the folder identifying the target Section
+	 */
+	function addToSection($section_folder)
+	{
+		if ($this->section_id)
+		{
+			throw new FakoliException("Attempt to map section content that is already mapped to a section");
+		}
+		
+		$section = Section::findSection($section_folder);
+		if (!$section)
+		{
+			throw new FakoliException("Unrecognized section '$section_folder'");
+		}
+		
+		if (SectionManager::isInSection($section_folder, $this->identifier)) return;
+		
+		$this->section_id = $section->section_id;
+		$this->save();
+	}
 }
 
 
