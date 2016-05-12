@@ -159,5 +159,17 @@ var AutoFormManager = new Class(
 	{
 		var dosubmit = this.form.fireEvent('submit', this.form);
 		if (dosubmit) this.form.submit();
+	},
+	
+	showError: function(error)
+	{
+		document.id(this.form.id + "__error").set('html', error).setStyle('display', 'table-cell');
 	}
 });
+
+AutoFormManager.getManager = function(id)
+{
+	var form = document.id(id);
+	if (form) return form.manager;
+	return null;
+};
