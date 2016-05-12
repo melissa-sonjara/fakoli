@@ -748,6 +748,7 @@ input.button
 #subtabs li.current a,
 #subtabs li.current a:hover
 {
+	font-weight: normal;
 	background-color: #1992D4;
 	color: #ffffff;
 	text-decoration: none;
