@@ -49,7 +49,16 @@ class Attachment extends DataItem
 		$mgr = new UserManager();
 		return $this->getRelated($mgr->getUserClass());
 	}
-		
+	
+	/**
+	 * Get the associated document icon for this attachment
+	 * @return string path for the document icon
+	 */
+	function getIcon()
+	{
+		return getDocIcon($this->filename);
+	}
+	
 	function Attachment()
 	{
 		$this->table = "attachment";
