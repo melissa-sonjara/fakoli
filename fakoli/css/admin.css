@@ -1266,3 +1266,50 @@ table.list a.button {
   text-decoration: none;
   width: auto;
 }
+
+#section_content_buttons
+{
+	float: left; 
+	width: 80px; 
+	height: 400px; 
+	margin: 10px;
+}
+
+#section_move_left {
+	margin-top: 160px;
+    width: 80px;
+    height: 40px;
+    background-image: url(/fakoli/images/move_left.png);
+    background-size: 50px 25px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+#section_move_right {
+	margin-top: 10px;
+    width: 80px;
+    height: 40px;
+    background-image: url(/fakoli/images/move_right.png);
+    background-size: 50px 25px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+table.tree {
+    border: solid 1px #aaa;
+    font-size: 100%;
+    font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    border-radius: 4px;
+    box-shadow: none;
+    -moz-box-shadow: none;
+}
+
+table.tree th {
+    border-radius: 3px 3px 0 0;
+    padding: 4px 8px;
+    font-weight: lighter;
+    background-color: #888;
+}

@@ -83,12 +83,12 @@ $types = categorizeItemTypes($itemsByType);
  
 $contentTree  = new TreeControl("section_content_tree", "Section Content");
 $contentTree->scroll = true;
-$contentTree->width = 310;
+$contentTree->width = 360;
 $contentTree->height = 430;
 
 $availableTree = new TreeControl("available_content_tree", "Available Content");
 $availableTree->scroll = true;
-$availableTree->width = 310;
+$availableTree->width = 360;
 $availableTree->height = 430;
 
 $categories = array();
@@ -166,14 +166,14 @@ $tabs->writeHTML();
 <div id="form"  class="tab_border">
 <br/>
 <form method="POST" action="?section_id=<?echo $section_id?>">
-<div style="float: left; width: 315px; margin-left: 10px">
+<div style="float: left; width: 365px; margin-left: 10px">
 <? $contentTree->writeHTML()?>
 </div>
-<div style="float: left; width: 50px; height: 400px; margin: 10px;">
-<button class="button" style="width: 50px; height: 25px; text-align: center; margin-top: 160px;"><img src="/fakoli/images/move_left.png" alt="Add"/></button>
-<button class="button" style="width: 50px; height: 25px; text-align: center; margin-top: 30px;"><img src="/fakoli/images/move_right.png" alt="Remove"/></button>
+<div id="section_content_buttons">
+<button class="button" id="section_move_left" title="Add"></button>
+<button class="button" id="section_move_right" title="Remove"></button>
 </div>
-<div style="float: left; width: 315px">
+<div style="float: left; width: 365px">
 <? $availableTree->writeHTML()?>
 </div>
 <div style="clear: left"><br/></div>
