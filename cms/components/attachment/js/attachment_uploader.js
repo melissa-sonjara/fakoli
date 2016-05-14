@@ -40,12 +40,53 @@ var AttachmentUploader = (function()
 		list: Class.Empty,
 		cssClass: "",
 		deleteIcon: "",
+		useCamera: false,
 		
 		initialize: function()
 		{
 		},
 	
-		setup: function(form, list, control, cssClass, deleteIcon)
+		setup: function(form, list, control, cssClass, deleteIcon, useCamera)
+		{
+			this.list = document.id(list);
+			this.control = document.id(control);
+			this.cssClass = cssClass;
+			this.deleteIcon = deleteIcon;
+			this.useCamera = useCamera;
+			
+			var attachmentDialog = document.id("attachmentDialog");
+			if (!attachmentDialog)
+			{
+				this.loadDialog(form);
+			}
+			else
+			{
+				this.configureForm(form);
+				this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
+			}
+		},
+		
+		loadDialog: function(form)
+		{
+			var request = new Request(
+			{
+				url:	'/action/attachment/dialog?use_camera=' + ((this.useCamera) ? '1' : '0'),
+				method: 'get',
+				onSuccess: function(response)
+				{
+					var els = Elements.from(response);
+					els.each(function(paragraph){
+					});
+					els.inject(document.body);
+					this.configureForm(form);
+					this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
+				}.bind(this)
+			});
+			
+			request.send();
+		},
+		
+		configureForm: function(form)
 		{
 			form = document.id(form);
 			
@@ -55,18 +96,13 @@ var AttachmentUploader = (function()
 				'onComplete': function(response) { this.postComplete(response);}.bind(this)
 			});
 			
-			this.form = form;
-			this.list = document.id(list);
-			this.control = document.id(control);
-			this.cssClass = cssClass;
-			this.deleteIcon = deleteIcon;
-			
-			this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
+			this.form = form;			
 		},
 		
 		addAttachment: function()
 		{
 			this.form.reset();
+			document.id('attachmentDialogMessage').innerHTML = "";
 			this.uploadDialog.show();
 		},
 		

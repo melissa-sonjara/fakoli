@@ -70,13 +70,8 @@ class AttachmentFieldRenderer extends FieldRenderer
 		throw new DataItemException("No matching foreign key in xref table");
 	}
 
-	function renderScript($field)
+	static function renderDialog($useCamera)
 	{
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-		
-		global $dialogs;
-		if (!$field) $field = $this->field;
-		
 		ob_start();
 ?>
 <div class="dialog" id="attachmentDialog" style="width: 260px">
@@ -91,15 +86,26 @@ class AttachmentFieldRenderer extends FieldRenderer
   <form id="attachmentForm" method="POST" enctype="multipart/form-data" action="/action/attachment/upload" >
    <br/>
    <label>Attachment File</label><br/>
-   <input type="file" name="attachmentFile"<?if ($this->useCamera) { echo ' accept="image/*" capture="camera"'; }?>/>
+   <input type="file" name="attachmentFile"<?if ($useCamera) { echo ' accept="image/*" capture="camera"'; }?>/>
    <br/>
    <br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"/>
   </form>
  </div>
 </div>
-<?
-		$dialogs .= ob_get_contents();
+<?		
+		$dialog = ob_get_contents();
 		ob_end_clean();
+		return $dialog;
+	}
+	
+	function renderScript($field)
+	{
+		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
+		
+		global $dialogs;
+		if (!$field) $field = $this->field;
+				
+		$dialogs .= AttachmentFieldRenderer::renderDialog($this->useCamera);
 ?>
 	<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
 	<script type="text/javascript" src="/components/attachment/js/attachment_uploader.js"></script>
