@@ -162,7 +162,6 @@ a, a:active
 {
 	display: block;
 	height: 55px;
-	width: 160px;
 	padding-left: 20px;
 	padding-top: 0px;
 	font-size: 265%;
@@ -170,6 +169,12 @@ a, a:active
 	font-weight:800;
 	color: #fff;
 	text-decoration:none;
+}
+
+#fakoli_logo {
+    height: 35px;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
 #layout
