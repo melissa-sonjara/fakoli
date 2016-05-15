@@ -14,7 +14,7 @@
   {var:dialogs}
   <div id="frame">
   <div id="leftbar"></div>
-   <div id="header"><a href="http://fakoli.org/" alt="A product of Sonjara, Inc"><img src="/fakoli/images/fakoli_logo.svg" id='fakoli_logo'/></a>
+   <div id="header"><a href="http://fakoli.org/" target="_blank" alt="A product of Sonjara, Inc"><img src="/fakoli/images/fakoli_logo.svg" id='fakoli_logo'/></a>
    </div>
     <div id="nav"><a href="/admin/index">Admin Home</a><span class='sitename'> WEBSITE: {config:sitename}</span>
     <div style='float: right'>{help}</div></div>   
