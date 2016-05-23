@@ -48,7 +48,7 @@ $table->column("Role", "<a href='role_form?role_id={role_id}'>{role}</a>", true,
 	  ->column("Home Page", "{home_page}", true, "width: 40%; vertical-align: top");
 $table->sortable = true;
 $table->filter = true;
-$table->pageSize = 5;
+$table->pageSize = 10;
 $table->emptyMessage = "No Site User Roles have been defined.";
 
 $script = $table->writeScript();
