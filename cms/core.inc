@@ -471,6 +471,8 @@ class Fakoli
 			}
 		}
 		
+		trace("###Role: $role", 3);
+		
 		$pageRoles = Fakoli::getAdminPageRoles();
 		if ($pageRoles[$identifier])
 		{
