@@ -476,6 +476,7 @@ class Fakoli
 			$role = $pageRoles[$identifier];
 		}
 		
+		trace("###ADMIN PAGE ROLE: $identifier $role", 3);
 		return $role;		
 	}	
 	
