@@ -459,7 +459,7 @@ class Fakoli
 		{
 			foreach($items as $item)
 			{
-				if ($item->page == $identifier)
+				if ($item->page == "/admin/$identifier")
 				{
 					if ($item->role) 
 					{
