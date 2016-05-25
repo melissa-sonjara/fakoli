@@ -428,7 +428,7 @@ class Fakoli
 		
 			if (method_exists($manifest, "getAdminPageRoles"))
 			{
-				array_merge($pageRoles, $manifest->getAdminPageRoles();
+				array_merge($pageRoles, $manifest->getAdminPageRoles());
 			}
 		}
 
