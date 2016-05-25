@@ -459,12 +459,11 @@ class Fakoli
 		{
 			foreach($items as $item)
 			{
-				trace(print_r($item, true), 3);
-				if ($item->page == "/admin/$identifier")
+				if ($item["page"] == "/admin/$identifier")
 				{
-					if ($item->role) 
+					if ($item["role"]) 
 					{
-						$role = $item->role;
+						$role = $item["role"];
 						break;
 					}
 				}
