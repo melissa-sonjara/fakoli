@@ -415,6 +415,70 @@ class Fakoli
 		return $menu;
 	}
 	
+	function getAdminPageRoles()
+	{
+		$pageRoles = Cache::get("fakoli_admin_page_roles");
+		if ($pageRoles) return $pageRoles;
+		
+		$pageRoles = array();
+		$components = Fakoli::getComponents();
+		foreach($components as $name => $component)
+		{
+			$manifest = $component->loadManifest();
+		
+			if (method_exists($manifest, "getAdminPageRoles"))
+			{
+				array_merge($pageRoles, $manifest->getAdminPageRoles();
+			}
+		}
+
+		Cache::put("fakoli_admin_page_roles", $pageRoles);
+		
+		return $pageRoles;
+	}
+	
+	/**
+	 * Get the applicable access roles for a given admin page, based on information
+	 * supplied by components in their manifests. The rules to determine access roles
+	 * for an admin page are:
+	 * - By default ALL pages are accessible only to the admin role
+	 * - Pages mentioned with explicit roles in the admin menu structure give access to those roles
+	 * - If a component needs to grant access to an additional role for pages that are
+	 *   not menitoned in the admin menu (such as sub-pages within tabbed workflows) must list
+	 *   these by exposing a method named getAdminPageRoles() and returning an associative array
+	 *   of admin page identifiers to their allowed roles.
+	 * - Only roles defined in the $config['admin_access_roles'] property have any 
+	 *   level of access to admin
+	 *  @param string $identifier the identifier of the admin page to be checked
+	 */
+	function getAdminPageRole($identifier)
+	{
+		$role = "admin";
+		$menu = Fakoli::getAdminMenu();
+		foreach($menu as $heading => $items)
+		{
+			foreach($items as $item)
+			{
+				if ($item->page == $identifier)
+				{
+					if ($item->role) 
+					{
+						$role = $item->role;
+						break;
+					}
+				}
+			}
+		}
+		
+		$pageRoles = Fakoli::getAdminPageRoles();
+		if ($pageRoles[$identifier])
+		{
+			$role = $pageRoles[$identifier];
+		}
+		
+		return $role;		
+	}	
+	
 	/**
 	 * Returns the HTML scripts tags for Javascript files specified by
 	 * the registered components in their manifest files.
@@ -895,9 +959,12 @@ class Fakoli
 		$adminAccess = $config["admin_access_roles"];
 		if (!$adminAccess) $adminAccess = "admin";
 		
+		$pageRole = Fakoli::getAdminPageRole($identifier);
+		
 		if ($identifier != "login" && $identifier != "password_help") 
 		{
 			Fakoli::assertRole($adminAccess, "/admin/login");
+			Fakoli::assertRole($pageRole, "/admin/login");
 		}
 		
 		$https = $_SERVER['HTTPS'];
