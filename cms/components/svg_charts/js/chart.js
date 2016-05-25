@@ -46,7 +46,7 @@ var Chart = new Class(
 		this.container.set('html', '<svg id="' + this.svgid() + '" width="100%" height="100%"></svg>');
 		
 		this.paper = Snap("#" + this.svgid());
-		this.paper.attr({viewbox: "0 0 " +this.options.width + " " + this.options.height});
+		this.paper.attr({viewBox: "0 0 " +this.options.width + " " + this.options.height});
 		this.palette = Palette.palettes[this.options.palette];
 	},
 	
