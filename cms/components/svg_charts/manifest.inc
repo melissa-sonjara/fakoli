@@ -20,9 +20,10 @@ class SvgChartsManifest
 	{
 		return array(
 				"/fakoli/js/tooltip.js",
-				"/components/svg_charts/js/raphael.js",
-				"/components/svg_charts/js/raphael.dropshadow.js",
-				"/components/svg_charts/js/raphael.emboss.js",
+				//"/components/svg_charts/js/raphael.js",
+				//"/components/svg_charts/js/raphael.dropshadow.js",
+				//"/components/svg_charts/js/raphael.emboss.js",
+				"/components/svg_charts/js/snap.svg.js",
 				"/components/svg_charts/js/canvg.js",
 				"/components/svg_charts/js/rgbcolor.js",
 				"/components/svg_charts/js/palette.js",

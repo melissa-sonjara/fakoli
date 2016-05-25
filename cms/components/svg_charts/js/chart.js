@@ -14,6 +14,11 @@ var Chart = new Class(
 		this.container.chart = this;
 	},
 	
+	svgid: function()
+	{
+		return this.id + "_svg";
+	},
+	
 	getFont: function()
 	{
 		var font = this.options.fontFamily;
@@ -28,18 +33,20 @@ var Chart = new Class(
 		if (size.y == 0)
 		{
 			size.y = size.x * ratio;
-			this.container.set('height', size.y);
+			this.container.setStyle('height', size.y);
 			window.addEvent('resize', function(e)
 			{
 				var size = this.container.getSize();
 				size.y = size.x * ratio;
-				this.container.set('height', size.y);
-				this.paper.setSize(size.x, size.y);
+				this.container.setStyle('height', size.y);
+				this.paper.attr({width: size.x, height: size.y});
 			}.bind(this));
 		}
-
-		this.paper = Raphael(this.container.id, size.x, size.y);
-		this.paper.setViewBox(0, 0, this.options.width, this.options.height, true);
+		
+		this.container.set('html', '<svg id="' + this.svgid() + '" width="100%" height="100%"></svg>');
+		
+		this.paper = Snap("#" + this.svgid());
+		this.paper.attr({viewbox: "0 0 " +this.options.width + " " + this.options.height});
 		this.palette = Palette.palettes[this.options.palette];
 	},
 	
@@ -136,6 +143,19 @@ var Chart = new Class(
 		var img = document.getElementById(this.id + "_canvas").toDataURL("image/png");
 	    this.form["img"].value = img;
 	    this.form.submit();
+	},
+	
+	path: function()
+	{
+		var d = [];
+		for(var step in arguments)
+		{
+			if (arguments[step] == '') continue;
+			step = (typeOf(arguments[step]) == "array") ? arguments[step] : [arguments[step]];
+			params = step.slice(1);
+			d.push(step[0] + params.join(','));
+		}
+		return d.join(' ');
 	}
 
 });

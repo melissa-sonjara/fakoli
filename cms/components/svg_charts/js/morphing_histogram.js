@@ -30,12 +30,14 @@ var MorphingHistogram = new Class({
         
 		var prevleft = this.options.chartLeft + 8;
 		
-        this.prevButton = this.paper.circle(prevleft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none", 'cursor': 'pointer'}).dropShadow(2, 1, 1, 0.1);
+		buttonShadow = this.paper.filter(Snap.filter.shadow(1, 1, 2, 0.1));
+		
+        this.prevButton = this.paper.circle(prevleft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none", 'cursor': 'pointer', filter: buttonShadow});
         this.prevArrow = this.paper.path("M" + (prevleft + 5) + ",14l-12,6 12,6z").attr({fill: this.palette.strokeColor, 'cursor': 'pointer'});
 
         var nextLeft = this.options.chartLeft + this.options.chartWidth - 12;
 
-        this.nextButton = this.paper.circle(nextLeft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none", 'cursor': 'pointer'}).dropShadow(2, 1, 1, 0.1);
+        this.nextButton = this.paper.circle(nextLeft, 20, 16).attr({fill: this.palette.buttonColor, stroke: "none", 'cursor': 'pointer', filter: buttonShadow});
         this.nextArrow = this.paper.path("M" + (nextLeft - 4) + ",14l12,6 -12,6z").attr({fill: this.palette.strokeColor, 'cursor': 'pointer'});
 
         this.prevButton.click(function() { this.prev(); }.bind(this))
@@ -57,7 +59,7 @@ var MorphingHistogram = new Class({
         this.series.each(function(s, i)
    		{
         	this.titles[i] = this.paper.text(this.options.chartWidth / 2 + this.options.chartLeft, this.options.chartTop - 30, s.title);
-        	this.titles[i].attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize, "opacity": i == this.index ? 1 : 0});
+        	this.titles[i].attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize, "text-anchor": "middle", "opacity": i == this.index ? 1 : 0});
    		}.bind(this));
 	},
 	
@@ -108,9 +110,9 @@ var MorphingHistogram = new Class({
 	{
 		if (this.index < this.series.length - 1)
 		{
-			this.titles[this.index].animate({'opacity': 0}, 1000, '<>');
+			this.titles[this.index].animate({'opacity': 0}, 1000, mina.easeinout);
 			this.index++;
-			this.titles[this.index].animate({'opacity': 1}, 1000, '<>');
+			this.titles[this.index].animate({'opacity': 1}, 1000, mina.easeinout);
 			this.morphColumns();
 		}
 	},
@@ -119,9 +121,9 @@ var MorphingHistogram = new Class({
 	{
 		if (this.index > 0)
 		{
-			this.titles[this.index].animate({'opacity': 0}, 1000, '<>');
+			this.titles[this.index].animate({'opacity': 0}, 1000, mina.easeinout);
 			this.index--;
-			this.titles[this.index].animate({'opacity': 1}, 1000, '<>');
+			this.titles[this.index].animate({'opacity': 1}, 1000, mina.easeinout);
 			this.morphColumns();
 		}
 	},
@@ -130,9 +132,9 @@ var MorphingHistogram = new Class({
 	{
 		if (this.index == idx) return;
 		
-		this.titles[this.index].animate({'opacity': 0}, 1000, '<>');
+		this.titles[this.index].animate({'opacity': 0}, 1000, mina.easeinout);
 		this.index = idx;
-		this.titles[this.index].animate({'opacity': 1}, 1000, '<>');
+		this.titles[this.index].animate({'opacity': 1}, 1000, mina.easeinout);
 		this.morphColumns();
 	},
 		

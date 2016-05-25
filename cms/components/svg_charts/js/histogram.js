@@ -122,12 +122,22 @@ var VerticalBlockSeriesRenderer = new Class(
 	chart: Class.Empty,
 	series: Class.Empty,
 	index: 0,
+	dropShadow: null,
 	
 	initialize: function(chart, series, index)
 	{
 		this.chart = chart;
 		this.series = series;
 		this.index = index;
+	},
+	
+	addShadow: function(shape)
+	{
+		if (!this.dropShadow)
+		{
+			this.dropShadow = this.chart.paper.filter(Snap.filter.shadow(1, 1, 5, 0.1));
+		}
+		shape.attr({filter: this.dropShadow});
 	},
 	
 	getColor: function(i)
@@ -145,7 +155,7 @@ var VerticalBlockSeriesRenderer = new Class(
 			var columnWidth = this.chart.blockWidth;
 
 			var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth);
-			if (this.series.applyOffset)
+			if (this.series.options.applyOffset)
 			{
 				columnOffset += this.chart.blockSeriesDrawn * columnWidth;
 			}
@@ -165,7 +175,7 @@ var VerticalBlockSeriesRenderer = new Class(
 
 			if (this.series.options.shadow)
 			{
-				column.dropShadow(5, 1, 1, 0.1);
+				this.addShadow(column);
 			}
 			
 			if (this.series.options.showValues)
@@ -202,7 +212,7 @@ var VerticalBlockSeriesRenderer = new Class(
 			var columnHeight = this.chart.options.chartHeight * val / this.chart.range() + this.chart.xAxisOffset;
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 
-			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, "<>");
+			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, mina.easeinout);
 		}.bind(this));
 	}
 });
@@ -213,12 +223,22 @@ var HorizontalBlockSeriesRenderer = new Class(
 	chart: Class.Empty,
 	series: Class.Empty,
 	index: 0,
+	dropShadow: null,
 	
 	initialize: function(chart, series, index)
 	{
 		this.chart = chart;
 		this.series = series;
 		this.index = index;
+	},
+
+	addShadow: function(shape)
+	{
+		if (!this.dropShadow)
+		{
+			this.dropShadow = this.chart.paper.filter(Snap.filter.shadow(1, 1, 5, 0.1));
+		}
+		shape.attr({filter: this.dropShadow});
 	},
 	
 	getColor: function(i)
@@ -259,7 +279,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 
 			if (this.series.options.shadow)
 			{
-				column.dropShadow(5, 1, 1, 0.1);
+				this.addShadow(column);
 			}
 			
 			if (this.series.options.showValues)
@@ -296,7 +316,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 		{
 			var columnHeight = this.chart.options.chartWidth * val / this.chart.range();
 
-			this.series.columns[i].animate({'width': columnHeight}, 1000, "<>");
+			this.series.columns[i].animate({'width': columnHeight}, 1000, mina.easeinout);
 		}.bind(this));
 	}
 });
@@ -338,7 +358,7 @@ var LineSeriesRenderer = new Class(
 		var p = this.calculatePath(this.series, false);
 
 		
-		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor});
+		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: 'none'});
 		
 	},
 	
@@ -350,8 +370,8 @@ var LineSeriesRenderer = new Class(
 			if (c !== null)
 			{
 				var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor, 'cursor': 'pointer'});
-				dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, "backout"); this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
-				dot.mouseout(function(e) {dot.animate({'r': this.series.options.symbolSize}, 250, "backout");  this.series.fireEvent('mouseOut', [e, i]); this.series.hideToolTip();}.bind(this));
+				dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, mina.easein); this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
+				dot.mouseout(function(e) {dot.animate({'r': this.series.options.symbolSize}, 250, mina.easeout);  this.series.fireEvent('mouseOut', [e, i]); this.series.hideToolTip();}.bind(this));
 				dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
 				this.dots.push(dot);
 			}
@@ -451,7 +471,7 @@ var LineSeriesRenderer = new Class(
 		var lineColor =  this.getColor(series.index);
 		
 		var fillColor = this.chart.options.chartBackground;
-		this.path.animate({'path': p, 'stroke': lineColor}, 1000, "<>");
+		this.path.animate({'path': p, 'stroke': lineColor}, 1000, mina.easeinout);
 		
 		if (this.series.options.areaFill)
 		{
@@ -462,7 +482,7 @@ var LineSeriesRenderer = new Class(
 			else
 			{
 				var f = this.calculatePath(series, true);
-				this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, "<>");
+				this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, mina.easeinout);
 			}
 		}
 		
@@ -470,7 +490,7 @@ var LineSeriesRenderer = new Class(
 		{
 			if (this.coords[i] !== null)
 			{
-				dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, "<>");
+				dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, mina.easeinout);
 			}
 		}.bind(this));
 	}		
@@ -499,7 +519,7 @@ var VerticalHistogramAxisRenderer = new Class(
 			var y = this.options.chartTop + this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
 			
 			var label = this.paper.text(x, y, text);
-			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize});
+			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "middle"});
 		}.bind(this.chart));
 	},
 	
@@ -537,18 +557,19 @@ var VerticalHistogramAxisRenderer = new Class(
 	drawGrid: function(x, y, w, h, wv, hv, color) 
 	{
 	    color = color || "#000";
-	    var path = ["M", Math.round(x) + .5, Math.round(y) + .5, "L", Math.round(x + w) + .5, Math.round(y) + .5, Math.round(x + w) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y) + .5],
+	    var path = '',
 	        rowHeight = h / hv,
-	        columnWidth = w / wv;
+	        columnWidth = w / wv,
+	        chart = this.chart;
 	    for (var i = 1; i < hv; i++) 
 	    {
-	        path = path.concat(["M", Math.round(x) + .5, Math.round(y + i * rowHeight) + .5, "H", Math.round(x + w) + .5]);
+	        path = chart.path(path, ["M", (Math.round(x) + .5), (Math.round(y + i * rowHeight) + .5)], ["H", (Math.round(x + w) + .5)]);
 	    }
 	    for (i = 1; i < wv; i++) 
 	    {
-	        path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
+	        path = chart.path(path, ["M", (Math.round(x + i * columnWidth) + .5), (Math.round(y) + .5)], ["V", (Math.round(y + h) + .5)]);
 	    }
-	    return this.chart.paper.path(path.join(",")).attr({stroke: color});
+	    return this.chart.paper.path({d: path, stroke: color});
 	},
 });
 
@@ -614,18 +635,19 @@ var HorizontalHistogramAxisRenderer = new Class(
 	drawGrid: function(x, y, w, h, hv, wv, color) 
 	{
 	    color = color || "#000";
-	    var path = ["M", Math.round(x) + .5, Math.round(y) + .5, "L", Math.round(x + w) + .5, Math.round(y) + .5, Math.round(x + w) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y) + .5],
+	    var path = '',
 	        rowHeight = h / hv,
-	        columnWidth = w / wv;
+	        columnWidth = w / wv,
+	        chart = this.chart;
 	    for (var i = 1; i < hv; i++) 
 	    {
-	        path = path.concat(["M", Math.round(x) + .5, Math.round(y + i * rowHeight) + .5, "H", Math.round(x + w) + .5]);
+	        path = chart.path(path, ["M", Math.round(x) + .5, Math.round(y + i * rowHeight) + .5], ["H", Math.round(x + w) + .5]);
 	    }
 	    for (i = 1; i < wv; i++) 
 	    {
-	        path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
+	        path = chart.path(path, ["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5], ["V", Math.round(y + h) + .5]);
 	    }
-	    return this.chart.paper.path(path.join(",")).attr({stroke: color});
+	    return this.chart.paper.path({d: path, stroke: color});
 	},
 
 });
@@ -641,6 +663,7 @@ var Histogram = new Class(
 	min: 0,
 	xAxisOffset: 0,
 	linearOnly: true,
+	dropShadow: null,
 	
 	options:
 	{
@@ -673,6 +696,15 @@ var Histogram = new Class(
 		this.setOptions(options);
 		this.labels = labels;
 		this.createAxisRenderer();	
+	},
+
+	addShadow: function(shape)
+	{
+		if (!this.dropShadow)
+		{
+			this.dropShadow = this.paper.filter(Snap.filter.shadow(1, 1, 7, 0.2));
+		}
+		shape.attr({filter: this.dropShadow});
 	},
 	
 	addSeries: function(series)
@@ -776,7 +808,7 @@ var Histogram = new Class(
 		grid.attr({"stroke-width": this.options.strokeWidth, stroke: this.palette.strokeColor, fill: this.options.chartBackground});
 		if (this.options.shadow)
 		{
-			grid.dropShadow(7, 1, 1, 0.2);
+			this.addShadow(grid);
 		}
 		
 		var count = this.labels.length;
@@ -831,7 +863,7 @@ var Histogram = new Class(
 	    {
 	        path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
 	    }
-	    return this.paper.path(path.join(",")).attr({stroke: color});
+	    return this.paper.path(path.join(" ")).attr({stroke: color});
 	},
 	
 	drawTitle: function()

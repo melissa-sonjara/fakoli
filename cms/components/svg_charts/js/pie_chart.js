@@ -78,8 +78,8 @@ var PieChart = new Class(
 			{
 				s.mouseover(function (event) 
 				{
-	                s.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, "elastic");
-	                if (p && animatePercentages) p.stop().animate({opacity: 1}, 500, "elastic");
+	                s.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, mina.elastic);
+	                if (p && animatePercentages) p.stop().animate({opacity: 1}, 500, mina.elastic);
 	                this.fireEvent('sectorOver', [event, idx]);
 	            }.bind(this));
 				
@@ -87,8 +87,8 @@ var PieChart = new Class(
 				
 				s.mouseout(function (event) 
 				{
-	                s.stop().animate({transform: ""}, 500, "elastic");
-	                if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, "elastic");
+	                s.stop().animate({transform: ""}, 500, mina.elastic);
+	                if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, mina.elastic);
 	                this.fireEvent('sectorOut', [event, idx]);
 	            }.bind(this));				
 			}
@@ -105,7 +105,7 @@ var PieChart = new Class(
 		
 		if (this.options.emboss)
 		{
-			this.sectors.each(function(e) {e.emboss(); });
+			//this.sectors.each(function(e) {e.emboss(); });
 		}
 		
 		if (this.options.shadow)
@@ -134,7 +134,8 @@ var PieChart = new Class(
         	return this.paper.circle(cx, cy, r).attr(params);
         }
         
-        return this.paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > Math.PI), 0, x2, y2, "z"]).attr(params);
+        var sector = this.path(['M', cx, cy], ['L', x1, y1], ['A', r, r, 0, +(endAngle - startAngle > Math.PI), 0, x2, y2], 'z');
+        return this.paper.path({d: sector}).attr(params);
 	},
 	
 	label: function (angle, text, idx)
