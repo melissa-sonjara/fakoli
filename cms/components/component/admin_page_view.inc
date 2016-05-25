@@ -190,11 +190,13 @@ class AdminPageView
 				}
 			}
 			
-			++$menuSectionIdx;
-			
 			$submenu .= "</div>";
 			
-			if ($found) echo $submenu;
+			if ($found) 
+			{
+				++$menuSectionIdx;
+				echo $submenu;
+			}
 		}
 ?>
 </div>
