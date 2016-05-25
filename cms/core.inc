@@ -892,10 +892,12 @@ class Fakoli
 	static function sendAdminPage($identifier)
 	{
 		global $config;
+		$adminAccess = $config["admin_access_roles"];
+		if (!$adminAccess) $adminAccess = "admin";
 		
 		if ($identifier != "login" && $identifier != "password_help") 
 		{
-			Fakoli::assertRole("admin", "/admin/login");
+			Fakoli::assertRole($adminAccess, "/admin/login");
 		}
 		
 		$https = $_SERVER['HTTPS'];
