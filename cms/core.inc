@@ -475,6 +475,8 @@ class Fakoli
 		trace("###Role: $role", 3);
 		
 		$pageRoles = Fakoli::getAdminPageRoles();
+		trace(print_r($pageRoles, true), 3);
+		
 		if ($pageRoles[$uri])
 		{
 			$role = $pageRoles[$uri];
