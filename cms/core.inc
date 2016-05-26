@@ -453,13 +453,15 @@ class Fakoli
 	 */
 	function getAdminPageRole($identifier)
 	{
+		$uri = "/admin/$identifier";
+		
 		$role = "admin";
 		$menu = Fakoli::getAdminMenu();
 		foreach($menu as $heading => $items)
 		{
 			foreach($items as $item)
 			{
-				if ($item["page"] == "/admin/$identifier")
+				if ($item["page"] == $uri)
 				{
 					if ($item["role"]) 
 					{
@@ -473,9 +475,9 @@ class Fakoli
 		trace("###Role: $role", 3);
 		
 		$pageRoles = Fakoli::getAdminPageRoles();
-		if ($pageRoles[$identifier])
+		if ($pageRoles[$uri])
 		{
-			$role = $pageRoles[$identifier];
+			$role = $pageRoles[$uri];
 		}
 		
 		trace("###ADMIN PAGE ROLE: $identifier $role", 3);
