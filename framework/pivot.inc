@@ -676,9 +676,13 @@ class PivotTableHelper
 		{
 			foreach($this->columnSpecs as $spec => $details)
 			{
-				if (preg_match("/{$spec}/", $field))
+				$matches = array();
+				if (preg_match("/{$spec}/", $field, $matches))
 				{
 					$format = str_replace("%FIELD%", $field, $details["format"]);
+					
+					if ($matches[1]) $format = str_replace("%KEY%", $matches[1], $format);
+					
 					$this->table->column($item->prettifyFieldName($field), $format, $details["sortable"], $details["style"], 
 										 $details["typeHint"], $details["onExport"], $details["sortFormat"]);
 					if ($details["footerTotal"])
