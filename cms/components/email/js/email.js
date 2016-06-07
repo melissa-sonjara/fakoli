@@ -131,6 +131,11 @@ var EmailManager =  (function()
 			this.dialog = modalPopup('Send an Email', '/action/email/mail_to?to=' + to + "&subject=" + subject + "&message=" + message, '520px', 'auto', true);
 		},
 		
+		showMessageLog: function(email_log_id)
+		{
+			modalPopup("Message Details", "/action/email/email_log_message?email_log_id=" + email_log_id, '800px', 'auto', false);
+		},
+		
 		closeDialog: function()
 		{
 			if(this.popup)
