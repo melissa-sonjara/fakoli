@@ -20,6 +20,7 @@ $table = new DataListView($logs, "EmailLogs");
 $table->column("Recipient", "{recipient_name} &lt;{recipient_email}&gt;", true)
 	  ->column("Sender", "{sender_name} &lt;{sender_email}&gt;", true)
 	  ->column("Subject", "{subject}", true)
+	  ->column("Body", "<a href='#' onclick='new EmailManager.showMessageLog({email_log_id})'><img src='/fakoli/images/documents.gif' alt='Show Message Body'/></a>", false, "text-align: center; width: 10%")
 	  ->column("Date Sent", "{date_sent:short}", true);
 
 $table->filter = true;
