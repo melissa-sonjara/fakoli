@@ -15,4 +15,4 @@ if (!$email_log_id)
 
 $msg = new EmailLog($email_log_id);
 
-echo $msg->format("<pre>{message:xml}</pre>");
+echo $msg->format("{message}");
