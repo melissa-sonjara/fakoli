@@ -109,3 +109,22 @@ ALTER TABLE contact_us ADD COLUMN date_sent DATETIME NULL;
 
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+CREATE TABLE email_log
+(
+	email_log_id	int(10) not null auto_increment,
+	sender_name		varchar(255) not null default '',
+	sender_email	varchar(255) not null default '',
+	recipient_name	varchar(255) not null default '',
+	recipient_email	varchar(255) not null default '',
+	subject			varchar(1000) not null default '',
+	message			longtext,
+	date_sent		timestamp,
+	PRIMARY KEY(email_log_id)
+) ENGINE=InnoDB;
+
+ALTER TABLE email_log ADD INDEX date_idx (date_sent);
+
+-- END Version 1.3

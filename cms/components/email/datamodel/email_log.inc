@@ -1,5 +1,5 @@
 <?php
-/*
+
 class EmailLog extends DataItem
 {
 	var $table = "email_log";
@@ -23,21 +23,23 @@ class EmailLog extends DataItem
 	 * @param string $toAddr
 	 * @param boolean $rtn
 	 */
-/*	static function emailManagerSendComplete($mgr, $toAddr, $rtn)
+	static function logEmail($mgr, $toAddr, $rtn)
 	{
-		// don't save log if email no sent.
+		// don't save log if email not sent.
 		if(!$rtn) return;
 		
-		$item = $mgr->item;
-				
-		$log = new EmailLog();
-		$log->recipient_name = "";
-		$log->recipient_email = $toAddr;
-		$log->sender_email = $mgr->emailFrom;
-		$log->sender_name = $mgr->emailName;
-		$log->subject = $mgr->subject;
-		$log->message = $mgr->message;
-		$log->save();
-	}
-	
-}*/
+		if (Settings::getValue("email", "log_messages"))
+		{
+			$item = $mgr->item;
+					
+			$log = new EmailLog();
+			$log->recipient_name = "";
+			$log->recipient_email = $toAddr;
+			$log->sender_email = $mgr->emailFrom;
+			$log->sender_name = $mgr->emailName;
+			$log->subject = $mgr->subject;
+			$log->message = Settings::getValue("email", "log_message_bodies") ? $mgr->message : "";
+			$log->save();
+		}
+	}	
+}

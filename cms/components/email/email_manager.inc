@@ -366,6 +366,7 @@ class EmailManager
 			call_user_func($this->onSendComplete, $this, $recipient, $rtn);
 		}			
 		
+		EmailLog::logEmail($this, $recipient, $rtn);
 		return $rtn;
 	}
 	
@@ -410,6 +411,9 @@ class EmailManager
 		Settings::setDefaultValue("email", "username", "", String, "SMTP Account username (if authentication is required)", "Server Settings", "", 3);
 		Settings::setDefaultValue("email", "password", "", String, "SMTP Account password (if authentication is required)", "Server Settings", "", 4);
 		
+		Settings::setDefaultValue("email", "log_messages", false, Boolean, "Log messages in the database after sending", "Message Logging", "", 1);
+		Settings::setDefaultValue("email", "log_message_bodies", false, Boolean, "Specifies whether to store the message text when logging an email message. ".
+																				 "It is recommended to leave this unchecked to conserve space in the database.", "Message Logging", "", 2);
 	}	
 	
 	static function upgradeComponent($version)

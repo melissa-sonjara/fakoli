@@ -1,7 +1,7 @@
 <?php
 Fakoli::using("email");
 Fakoli::usingFeature("filter_form");
-/*
+
 $menu_item = "Email Logs";
 
 $emailLog = new EmailLog();
@@ -17,12 +17,10 @@ $title = "Email Logs for ". $dateRangeRenderer->subTitle;
 $logs = Query::create(EmailLog, "ORDER BY date_sent DESC")->execute();
 
 $table = new DataListView($logs, "EmailLogs");
-$table->column("Recipient", "{recipient_name} {recipient_email}", true)
-	->column("Reply To Name", "{sender_name} {sender_email}", true)
-	->column("Subject", "{subject}", true)
-	->column("Message", "{message}", true)
-	->column("Date Sent", "{date_sent:short}", true)
-	;
+$table->column("Recipient", "{recipient_name} &lt;{recipient_email}&gt;", true)
+	  ->column("Sender", "{sender_name} &lt;{sender_email}&gt;", true)
+	  ->column("Subject", "{subject}", true)
+	  ->column("Date Sent", "{date_sent:short}", true);
 
 $table->filter = true;
 $table->pageSize = 10;
@@ -35,5 +33,5 @@ $script .= $table->writeScript();
 
 $filterForm->drawForm();
 $table->drawView();
-*/
+
 ?>
