@@ -17,8 +17,10 @@ $title = "Email Logs for ". $dateRangeRenderer->subTitle;
 $logs = Query::create(EmailLog, "ORDER BY date_sent DESC")->execute();
 
 $table = new DataListView($logs, "EmailLogs");
-$table->column("Recipient", "{recipient_name} &lt;{recipient_email}&gt;", true)
-	  ->column("Sender", "{sender_name} &lt;{sender_email}&gt;", true)
+$table->column("Recipient", "{recipient_name}", true)
+	  ->column("Recipient Email", "{recipient_email}", true)
+	  ->column("Sender", "{sender_name}", true)
+	  ->column("Sender Email", "{sender_email}", true)
 	  ->column("Subject", "{subject}", true)
 	  ->column("Body", "<a href='#' onclick='new EmailManager.showMessageLog({email_log_id})'><img src='/fakoli/images/documents.gif' alt='Show Message Body'/></a>", false, "text-align: center; width: 10%")
 	  ->column("Date Sent", "{date_sent:short}", true);
