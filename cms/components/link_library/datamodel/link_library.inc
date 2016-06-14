@@ -36,6 +36,7 @@ class LinkLibrary extends DataItem
 {
 	var $table = "link_library";
 	var $primary_key = "link_library_id";
+	var $default_format = "{name}";
 	
 	// Fields
 	
