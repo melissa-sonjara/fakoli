@@ -496,8 +496,11 @@ abstract class UpgradeManager
 			$items = array($items);
 			
 		if(count($items) == 0)
+		{
+			trace("No items found to add to section", 2);
 			return true;
-					
+		}
+		
 		$sections = Query::create(Section, "WHERE section=:section")
 		->bind(":section", $section_name)
 		->execute();
