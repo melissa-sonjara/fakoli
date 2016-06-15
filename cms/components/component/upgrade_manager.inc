@@ -515,21 +515,18 @@ abstract class UpgradeManager
 			
 		foreach($items as $item)
 		{
-			if(!is_object($item))
+			if (is_object($item))
 			{
-				$page = $this->searchByIdentifier($item);
-				if(!$page)
-				{
-					trace("UpgradeManager::addSectionContent - page $page not found", 3);
-					return false;
-				}
+				$ident = $item->identifier;
 			}
 			else
-				$page = $item;
+			{
+				$ident = $item;
+			}
 			
 			// should be only one or none
 			$contents = Query::create(SectionContent, "WHERE identifier=:identifier AND section_id=:section_id")
-				->bind(":identifier", $page->identifier, ":section_id", $section->section_id)
+				->bind(":identifier", $ident, ":section_id", $section->section_id)
 				->execute();
 				
 			$content = (count($contents) > 0) ? $contents[0] : null;
@@ -538,7 +535,7 @@ abstract class UpgradeManager
 			{
 				$content = new SectionContent();
 				$content->section_id = $section->section_id;
-				$content->identifier = $page->identifier;
+				$content->identifier = $ident;
 			}
 			else
 			{
@@ -551,6 +548,8 @@ abstract class UpgradeManager
 				$content->role = $role;
 							
 			$content->save();
+			
+			trace("Added $item to $section_name", 3);
 		}
 		
 		return true;
