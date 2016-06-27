@@ -37,7 +37,8 @@ class OnlineHelpUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added additional_css_files field"
+			"1.1"		=>	"sql:Added additional_css_files field",
+			"1.2"		=>	"sql:Added searchable flag to help_book table"
 	);
 	
 	function OnlineHelpUpgradeManager()

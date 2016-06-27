@@ -34,3 +34,9 @@ ENGINE=InnoDB;
 ALTER TABLE `help_book` ADD COLUMN `additional_css_files` VARCHAR(1000) NOT NULL DEFAULT '';
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE help_book ADD COLUMN searchable TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.3

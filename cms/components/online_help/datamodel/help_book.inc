@@ -38,6 +38,7 @@ class HelpBook extends DataItem
 						"title"					=>	String,
 						"identifier"			=>	String,
 						"description"			=>	HTML,
+						"searchable"			=>	Boolean,
 						"remote"				=>	Boolean,
 						"url"					=>	String,
 						"additional_css_files"	=>	String);
