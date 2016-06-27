@@ -47,7 +47,7 @@ $helppages = Query::create(HelpPage, "WHERE help_book_id=:id AND public=1 ORDER 
 
 $helpTree = new TreeControl("help_tree");
 $helpTree->scroll = false;
-$helpTree->width = 0;
+$helpTree->width = "100%";
 $helpTree->style = "help_tree";
 
 if (count($helppages) > 0)
