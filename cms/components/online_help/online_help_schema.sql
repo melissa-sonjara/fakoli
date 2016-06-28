@@ -33,6 +33,9 @@ ENGINE=InnoDB;
 
 ALTER TABLE `help_book` ADD COLUMN `additional_css_files` VARCHAR(1000) NOT NULL DEFAULT '';
 
+-- END Version 1.1
+
+-- START Version 1.2
 -- END Version 1.2
 
 -- START Version 1.3
