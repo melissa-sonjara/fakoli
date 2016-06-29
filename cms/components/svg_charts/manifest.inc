@@ -31,7 +31,8 @@ class SvgChartsManifest
 				"/components/svg_charts/js/shape.js",
 				"/components/svg_charts/js/pie_chart.js",
 				"/components/svg_charts/js/histogram.js",
-				"/components/svg_charts/js/morphing_histogram.js"
+				"/components/svg_charts/js/morphing_histogram.js",
+				"/components/svg_vhstyd/js/radar_chart.js"
 		);
 	}
 

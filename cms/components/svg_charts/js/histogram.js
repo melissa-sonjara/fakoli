@@ -46,20 +46,7 @@ var HistogramSeries = new Class(
 	{
 		if (!this.renderer)
 		{
-			switch(this.type)
-			{
-			case 'block':
-				
-				this.renderer = (chart.options.orientation == 'horizontal') ? 
-						new HorizontalBlockSeriesRenderer(chart, this, index) : 
-						new VerticalBlockSeriesRenderer(chart, this, index);
-				break;
-				
-			case 'line':
-				
-				this.renderer = new LineSeriesRenderer(chart, this, index);
-				break;
-			}
+			this.renderer = chart.getSeriesRenderer(this, indexx);
 		}
 		
 		return this.renderer;
@@ -698,6 +685,29 @@ var Histogram = new Class(
 		this.createAxisRenderer();	
 	},
 
+	getSeriesRenderer: function(series, index)
+	{
+		var renderer = null;
+		
+		switch(series.type)
+		{
+		case 'block':
+			
+			renderer = (this.options.orientation == 'horizontal') ? 
+					new HorizontalBlockSeriesRenderer(this, series, index) : 
+					new VerticalBlockSeriesRenderer(this, series, index);
+			break;
+			
+		case 'line':
+		default:
+			
+			renderer = new LineSeriesRenderer(this, series, index);
+			break;
+		}
+		
+		return renderer;
+	},
+	
 	addShadow: function(shape)
 	{
 		if (!this.dropShadow)
