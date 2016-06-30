@@ -88,6 +88,7 @@ var StraightRadarSeriesRenderer = new Class({
 
 var SmoothedRadarSeriesRenderer = new Class({
 
+	Extends: StraightRadarSeriesRenderer,
 	chart: Class.Empty,
 	series: Class.Empty,
 	index: 0,
@@ -100,41 +101,42 @@ var SmoothedRadarSeriesRenderer = new Class({
 		this.index = index;
 	},
 	
-	addShadow: function(shape)
-	{
-		if (!this.dropShadow)
-		{
-			this.dropShadow = this.chart.paper.filter(Snap.filter.shadow(1, 1, 5, 0.1));
-		}
-		shape.attr({filter: this.dropShadow});
-	},
-	
-	getColor: function(i)
-	{
-		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
-	},
-	
 	draw: function()
 	{
 		var chart = this.chart;
 		var cmd = 'M';
-
+		var tension = 0.25;
+		
 		var path = [];
 		this.coords = [];
 		
-		this.series.values.each(function(val, i)
-		{
-			var angle = chart.arcStep * i;
-			
-			var magnitude = chart.options.radius * val / chart.max;
+		var magnitude = chart.options.radius * this.series.values[0] / chart.max;
+		var point = chart.calculatePoint(0, magnitude);
 		
-			var point = chart.calculatePoint(angle, magnitude);
-			path = chart.path(path, [cmd, point.x, point.y]);	
-			cmd = 'L';
+		path = chart.path(path, ['M', point.x, point.y]);
+
+		this.coords.push(point);
+		
+		for(var i = 1; i < this.series.values.length + 1; ++i)
+		{
+			var idx = i % this.series.values.length;
 			
-			this.coords.push(point);
-		}.bind(this));
+			var angle = chart.arcStep * i;
+			var s1angle = (chart.arcStep * (i - 1 + tension));
+			var s2angle = (chart.arcStep * (i - tension));
+		
+			var prevmag = chart.options.radius * this.series.values[i - 1] / chart.max;
+			var magnitude = chart.options.radius * this.series.values[idx] / chart.max;
+			
+			var s1 = chart.calculatePoint(s1angle, prevmag);
+			var s2 = chart.calculatePoint(s2angle, magnitude);
+			
+			var point = chart.calculatePoint(angle, magnitude);
+			
+			path = chart.path(path, ['C', s1.x, s1.y], ['', s2.x, s2.y], ['', point.x, point.y]);
+			
+			if (idx) this.coords.push(point);
+		}
 		
 		path = chart.path(path, ['z']);
 		
@@ -335,7 +337,12 @@ var RadarChart = new Class(
 	
 	drawLabels: function()
 	{
-		//this.axisRenderer.drawLabels();
+		this.labels.each(function(label, i)
+		{
+			var angle = i * this.arcStep;
+			var point = this.calculatePoint(angle, this.options.radius + 20);
+			this.paper.text(point.x, point.y, label).attr({'font-size': this.options.labelSize, "font-family": this.options.fontFamily, 'text-anchor': 'middle'});
+		}.bind(this));
 	},
 	
 //	drawGrid: function(x, y, w, h, wv, hv, color) 

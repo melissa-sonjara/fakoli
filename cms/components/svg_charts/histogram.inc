@@ -59,6 +59,18 @@ class HistogramSeries
 		$out = "new HistogramSeries('{$this->type}', '" . jsSafe($this->title) . "', [{$values}], $options)";
 		return $out;
 	}
+	
+	function showTooltips($tooltips = null)
+	{
+		if ($tooltips)
+		{
+			$this->tooltips = $tooltips;
+		}
+		else
+		{
+			$this->tooltips = $this->values;
+		}
+	}
 }
 
 class GroupedHistogramSeries
