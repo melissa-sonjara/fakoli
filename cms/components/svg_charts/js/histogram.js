@@ -46,7 +46,7 @@ var HistogramSeries = new Class(
 	{
 		if (!this.renderer)
 		{
-			this.renderer = chart.getSeriesRenderer(this, indexx);
+			this.renderer = chart.getSeriesRenderer(this, index);
 		}
 		
 		return this.renderer;

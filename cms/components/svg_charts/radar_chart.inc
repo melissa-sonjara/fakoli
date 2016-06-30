@@ -41,6 +41,7 @@ class RadarChart
 	var $containerHeight;
 	var $cx;
 	var $cy;
+	var $radius;
 	var $values;
 	var $labels;
 	var $palette;
@@ -52,17 +53,19 @@ class RadarChart
 	var $legend = false;
 	var $legendX = 0;
 	var $legendY = 0;
+	var $titleSize = 20;
 	var $legendSwatchSize = 20;
 	var $legendLineHeight = 30;
+	var $onLegendOver = "null";
+	var $onLegendOut = "null";
 	var $scaleToFit = false;
 	var $fontFamily = 'Arial, Helvetica';
 
-	function __construct($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
+	function __construct($id, $width = 300, $height = 300, $labels = null, $palette = "standard")
 	{
 		$this->id = $id;
 		$this->setSize($width, $height);
 		$this->setContainerSize($width, $height);
-		$this->values = $values;
 		$this->labels = $labels;
 		$this->palette = $palette;
 	}
@@ -108,6 +111,10 @@ class RadarChart
 		$this->fontFamily = $font;
 	}
 
+	function setLabels($labels)
+	{
+		$this->labels = $labels;
+	}
 	function showLegend($show, $x = 0, $y = 0)
 	{
 		$this->legend = $show;
@@ -118,13 +125,6 @@ class RadarChart
 	function setPalette($palette)
 	{
 		$this->palette = $palette;
-	}
-	
-	function showLegend($show, $x = 0, $y = 0)
-	{
-		$this->legend = $show;
-		$this->legendX = $x;
-		$this->legendY = $y;
 	}
 	
 	function addSeries($series)
@@ -158,7 +158,7 @@ class RadarChart
 <script type="text/javascript">
 window.addEvent('domready', function ()
 {
-	var {$this->id} = new PieChart('{$this->id}',
+	var {$this->id} = new RadarChart('{$this->id}',
 	{
 		width: {$this->width},
 		height: {$this->height},

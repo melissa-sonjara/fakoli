@@ -37,26 +37,53 @@ var StraightRadarSeriesRenderer = new Class({
 		var cmd = 'M';
 
 		var path = [];
-
+		this.coords = [];
+		
 		this.series.values.each(function(val, i)
 		{
 			var angle = chart.arcStep * i;
 			
 			var magnitude = chart.options.radius * val / chart.max;
 		
-			var x = chart.options.cx - (Math.sin(angle) * magnitude);
-			var y = chart.options.cy + (Math.cos(angle) * magnitude);
-			path = chart.path(path, [cmd, x, y]);			
-		});
+			var point = chart.calculatePoint(angle, magnitude);
+			path = chart.path(path, [cmd, point.x, point.y]);	
+			cmd = 'L';
+			
+			this.coords.push(point);
+		}.bind(this));
 		
-		path = chart.path['z'];
+		path = chart.path(path, ['z']);
 		
 		var lineColor = this.getColor(this.index);
 		var f = this.series.options.areaFill ? lineColor : 'none';
 		
 		this.path = chart.paper.path(path).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, 
 												 fill: f, 'fill-opacity': this.series.options.areaFillOpacity});
-	}		
+		
+		this.drawDots();
+	},
+	
+	drawDots: function()
+	{
+		this.dots = [];
+		
+		var lineColor = this.getColor(this.index);
+		var fillColor = this.chart.options.chartBackground;
+		this.coords.each(function(c, i) {
+			if (c !== null)
+			{
+				var dot = this.chart.paper.circle(c.x, c.y, this.series.options.symbolSize).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor, 'cursor': 'pointer'});
+				dot.mouseover(function(e) {dot.animate({'r': this.series.options.symbolSize * 2}, 250, mina.easein); this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
+				dot.mouseout(function(e) {dot.animate({'r': this.series.options.symbolSize}, 250, mina.easeout);  this.series.fireEvent('mouseOut', [e, i]); this.series.hideToolTip();}.bind(this));
+				dot.click(function() { this.series.fireEvent('click', i); }.bind(this));
+				this.dots.push(dot);
+			}
+			else
+			{
+				this.dots.push(null);
+			}
+		}.bind(this));	
+	}
 });
 
 var SmoothedRadarSeriesRenderer = new Class({
@@ -90,8 +117,34 @@ var SmoothedRadarSeriesRenderer = new Class({
 	
 	draw: function()
 	{
+		var chart = this.chart;
+		var cmd = 'M';
+
+		var path = [];
+		this.coords = [];
+		
 		this.series.values.each(function(val, i)
-		{});
+		{
+			var angle = chart.arcStep * i;
+			
+			var magnitude = chart.options.radius * val / chart.max;
+		
+			var point = chart.calculatePoint(angle, magnitude);
+			path = chart.path(path, [cmd, point.x, point.y]);	
+			cmd = 'L';
+			
+			this.coords.push(point);
+		}.bind(this));
+		
+		path = chart.path(path, ['z']);
+		
+		var lineColor = this.getColor(this.index);
+		var f = this.series.options.areaFill ? lineColor : 'none';
+		
+		this.path = chart.paper.path(path).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, 
+												 fill: f, 'fill-opacity': this.series.options.areaFillOpacity});
+		
+		this.drawDots();
 	}		
 });
 
@@ -199,6 +252,12 @@ var RadarChart = new Class(
 		this.drawRadarChart();
 	},
 	
+	calculatePoint: function(angle, magnitude)
+	{
+		return {x: this.options.cx + (Math.sin(angle) * magnitude),
+				y: this.options.cy - (Math.cos(angle) * magnitude)};
+	},
+	
 	createAxisRenderer: function()
 	{
 		switch(this.options.orientation)
@@ -216,9 +275,9 @@ var RadarChart = new Class(
 	
 	drawRadarChart: function()
 	{
-		this.drawPlots();
+		this.drawTicks();
+		this.drawRadarPlots();
 		this.drawLabels();
-		//this.drawTicks();
 		this.drawLegend();
 		this.drawTitle();
 	},
@@ -243,9 +302,26 @@ var RadarChart = new Class(
 			if (s.min < this.min) this.min = s.min;
 		}.bind(this));
 
-		this.arcStep = 2 * Math.PI / this.label.count;
+		this.arcStep = 2 * Math.PI / this.labels.length;
 
 		//this.axisRenderer.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
+	},
+	
+	drawTicks: function()
+	{
+		for(i = 0; i < this.options.ticks; ++i)
+		{
+			this.paper.circle(this.options.cx, this.options.cy, 
+							  this.options.radius * (i + 1) / this.options.ticks)
+							  .attr({'fill': 'none', 'stroke-width': 1, stroke: '#666', 'stroke-dasharray': '2,2'});
+		}
+		
+		for(i = 0; i < this.labels.length; ++i)
+		{
+			var angle = i * this.arcStep;
+			var point = this.calculatePoint(angle, this.options.radius);
+			this.paper.line(this.options.cx, this.options.cy, point.x, point.y).attr({'stroke-width': 1, stroke: '#666'});
+		}
 	},
 	
 	drawRadarPlots: function()
