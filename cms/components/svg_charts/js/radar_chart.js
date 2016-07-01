@@ -102,7 +102,39 @@ var StraightRadarSeriesRenderer = new Class({
 				this.dots.push(null);
 			}
 		}.bind(this));	
-	}
+	},
+	
+
+	// Morph this series to match the values of the supplied series
+	morph: function(series)
+	{
+		var p = this.calculatePath(series);
+		var lineColor =  this.getColor(series.index);
+		
+		var fillColor = this.chart.options.chartBackground;
+		this.path.animate({'path': p, 'stroke': lineColor}, 1000, mina.easeinout);
+		
+		if (this.series.options.areaFill)
+		{
+			if (!this.fill) 
+			{
+				this.drawFill();
+			}
+			else
+			{
+				var f = this.calculatePath(series, true);
+				this.fill.animate({'path': f, stroke: lineColor, fill: lineColor}, 1000, mina.easeinout);
+			}
+		}
+		
+		this.dots.each(function(dot, i) 
+		{
+			if (this.coords[i] !== null)
+			{
+				dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, mina.easeinout);
+			}
+		}.bind(this));
+	}		
 });
 
 var SmoothedRadarSeriesRenderer = new Class({
