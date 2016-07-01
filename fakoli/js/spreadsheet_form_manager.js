@@ -24,7 +24,7 @@ var SpreadsheetFormManager = new Class({
 		//TODO: parse out into records
 		
 		var data = [];
-		var regex = new RegExp(this.id + '_(\d+)__(.*)');
+		var regex = new RegExp(this.id + '_(\\d+)__(.*)');
 		Object.keys(rawData).each(function(key)
 		{
 			var match = regex.exec(key);
