@@ -46,7 +46,7 @@ class SliderFieldRenderer extends FieldRenderer
 		$this->editable = $editable;
 		$this->FieldRenderer($form);
 		
-		if ($field && !$parent->data->hasField($field))
+		if ($field && !$form->data->hasField($field))
 		{
 			$parent->add($this, $field);
 		}
