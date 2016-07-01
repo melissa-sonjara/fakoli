@@ -127,14 +127,14 @@ class ComponentPageView
 			include $page->server_path;
 			$output = ob_get_contents();
 			ob_end_clean();
+		
+			$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		} 
 		catch (DataNotFoundException $e) 
 		{
 			// AJG: Wrap DataNotFoundExceptions so they don't show a 'this resource is disabled error
 			throw new FakoliException($e->toString());
 		}
-		
-		$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		
 		$this->page->description .= $output;
 
