@@ -54,6 +54,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	var $rowLabelTitle = null;
 	var $rowLabelDefaultText = "";
 	var $emptyMessage = "The spreadsheet is empty"; ///< The message to display if the item list is empty and the number of blank rows is set to zero
+	var $onFormChanged = null; ///< Javascript function to be called when any value is changed within the spreadsheet
 	
 	/**
 	 * Creates a new SpreadsheetForm
@@ -209,11 +210,13 @@ class SpreadsheetForm extends CompositeAutoForm
 		
 		$id = $this->id ? $this->id : "composite_auto_form";
 		
+		if ($this->onFormChanged) $options = "onFormChanged: {$this->onFormChanged}";
+		
 		$script .= <<<ENDSCRIPT
 		<script type='text/javascript'>
 		window.addEvent('domready', function()
 		{
-			document.id('{$id}').manager = new SpreadsheetFormManager('{$id}', {});			
+			document.id('{$id}').manager = new SpreadsheetFormManager('{$id}', {{$options}});			
 		});
 		</script>
 ENDSCRIPT;
