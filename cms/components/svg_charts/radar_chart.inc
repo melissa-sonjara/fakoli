@@ -45,6 +45,7 @@ class RadarChart
 	var $values;
 	var $labels;
 	var $palette;
+	var $ticks = 10;
 	var $labelSize = 12;
 	var $strokeWidth = 1;
 	var $animate = true;
@@ -169,6 +170,7 @@ window.addEvent('domready', function ()
 		labelSize: {$this->labelSize},
 		fontFamily: '{$this->fontFamily}',
 		strokeWidth: {$this->strokeWidth},
+		ticks: {$this->ticks},
 		animate: {$animate},
 		shadow: {$shadow},
 		emboss: {$emboss},

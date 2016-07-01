@@ -31,7 +31,7 @@ var StraightRadarSeriesRenderer = new Class({
 		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
 	},
 	
-	draw: function()
+	calculatePath: function(series)
 	{
 		var chart = this.chart;
 		var cmd = 'M';
@@ -39,7 +39,7 @@ var StraightRadarSeriesRenderer = new Class({
 		var path = [];
 		this.coords = [];
 		
-		this.series.values.each(function(val, i)
+		series.values.each(function(val, i)
 		{
 			var angle = chart.arcStep * i;
 			
@@ -53,14 +53,33 @@ var StraightRadarSeriesRenderer = new Class({
 		}.bind(this));
 		
 		path = chart.path(path, ['z']);
+		return path;
+	},
+	
+	draw: function()
+	{
+		var chart = this.chart;
+		
+		var path = this.calculatePath(this.series);
 		
 		var lineColor = this.getColor(this.index);
 		var f = this.series.options.areaFill ? lineColor : 'none';
 		
 		this.path = chart.paper.path(path).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, 
-												 fill: f, 'fill-opacity': this.series.options.areaFillOpacity});
+												 fill: 'none'});
+	},
+	
+	drawFill: function()
+	{
+		if (!this.series.options.areaFill) return;
+		var chart = this.chart;
 		
-		this.drawDots();
+		var path = this.calculatePath(this.series);
+		
+		var lineColor = this.getColor(this.index);
+		
+		this.fill = chart.paper.path(path).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, 
+												 fill: lineColor, 'fill-opacity': this.series.options.areaFillOpacity});
 	},
 	
 	drawDots: function()
@@ -101,7 +120,7 @@ var SmoothedRadarSeriesRenderer = new Class({
 		this.index = index;
 	},
 	
-	draw: function()
+	calculatePath: function(series)
 	{
 		var chart = this.chart;
 		var cmd = 'M';
@@ -110,23 +129,23 @@ var SmoothedRadarSeriesRenderer = new Class({
 		var path = [];
 		this.coords = [];
 		
-		var magnitude = chart.options.radius * this.series.values[0] / chart.max;
+		var magnitude = chart.options.radius * series.values[0] / chart.max;
 		var point = chart.calculatePoint(0, magnitude);
 		
 		path = chart.path(path, ['M', point.x, point.y]);
 
 		this.coords.push(point);
 		
-		for(var i = 1; i < this.series.values.length + 1; ++i)
+		for(var i = 1; i < series.values.length + 1; ++i)
 		{
-			var idx = i % this.series.values.length;
+			var idx = i % series.values.length;
 			
 			var angle = chart.arcStep * i;
 			var s1angle = (chart.arcStep * (i - 1 + tension));
 			var s2angle = (chart.arcStep * (i - tension));
 		
-			var prevmag = chart.options.radius * this.series.values[i - 1] / chart.max;
-			var magnitude = chart.options.radius * this.series.values[idx] / chart.max;
+			var prevmag = chart.options.radius * series.values[i - 1] / chart.max;
+			var magnitude = chart.options.radius * series.values[idx] / chart.max;
 			
 			var s1 = chart.calculatePoint(s1angle, prevmag);
 			var s2 = chart.calculatePoint(s2angle, magnitude);
@@ -139,14 +158,7 @@ var SmoothedRadarSeriesRenderer = new Class({
 		}
 		
 		path = chart.path(path, ['z']);
-		
-		var lineColor = this.getColor(this.index);
-		var f = this.series.options.areaFill ? lineColor : 'none';
-		
-		this.path = chart.paper.path(path).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, 
-												 fill: f, 'fill-opacity': this.series.options.areaFillOpacity});
-		
-		this.drawDots();
+		return path;
 	}		
 });
 
@@ -331,8 +343,15 @@ var RadarChart = new Class(
 		var idx = 0;
 		this.series.each(function(s)
 		{
-			s.draw(this, idx++);
-		}.bind(this));			
+			s.drawFill(this, idx++);
+		}.bind(this));	
+		
+		idx = 0;
+		this.series.each(function(s)
+		{
+			s.draw(this, idx);
+			s.drawDots(this.idx++);
+		}.bind(this));				
 	},
 	
 	drawLabels: function()

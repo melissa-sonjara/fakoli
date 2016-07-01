@@ -4,6 +4,7 @@ Fakoli::using("svg_charts");
 $chart = new RadarChart("radar", 600, 600, "standard");
 $chart->setLabels(array("First", "Second", "Third", "Fourth", "Fifth"));
 
+$chart->ticks = 5;
 $chart->setLabelSize(12);
 $chart->setStrokeWidth(2);
 $chart->showLegend(true, 350, 20);
