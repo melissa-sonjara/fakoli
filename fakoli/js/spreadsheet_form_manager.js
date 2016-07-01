@@ -8,6 +8,7 @@ var SpreadsheetFormManager = new Class({
 
 	options:
 	{
+		onFormChanged: function () {}
 	},
 	
 	initialize: function(id, options)
@@ -15,6 +16,10 @@ var SpreadsheetFormManager = new Class({
 		this.setOptions(options);
 		this.id = id;
 		this.spreadsheet = document.id(id);
+		this.spreadsheet.getElements("input").each(function(elt)
+		{
+			elt.addEvent('change', function() { this.fireEvent('formChanged'); }.bind(this));
+		}.bind(this));
 	},
 	
 	getData: function()
