@@ -62,11 +62,11 @@ class SliderFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{
-		$this->startField($field);
+		$this->_startField($field);
 		$value = $this->parent->data->get($field);
 		
 		echo "<input type='range' id='{$this->parent->id}_{$field}' name='{$field}' min='{$this->min}' max='{$this->max}' value='{$value}' data-displayField='{$this->parent->id}_{field}_display'/>";
-		$this->endField($field);
+		$this->_endField($field);
 	}
 	
 	function renderReadOnly($field)
