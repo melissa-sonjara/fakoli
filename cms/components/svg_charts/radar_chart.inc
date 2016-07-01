@@ -174,7 +174,7 @@ window.addEvent('domready', function ()
 		strokeWidth: {$this->strokeWidth},
 		ticks: {$this->ticks},
 		max: {$this->max},
-		min: ($this->min},
+		min: {$this->min},
 		animate: {$animate},
 		shadow: {$shadow},
 		emboss: {$emboss},
