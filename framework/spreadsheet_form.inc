@@ -199,6 +199,27 @@ class SpreadsheetForm extends CompositeAutoForm
 	}
 
 	/**
+	 * Generates the Javascript for all the subforms, and creates a SpreadsheetFormManager object
+	 */
+	function writeScript()
+	{
+		if (!count($this->forms)) return;
+		
+		parent::$writeScript();
+		
+		$id = $this->id ? $this->id : "composite_auto_form";
+		
+		echo <<<ENDSCRIPT
+		<script type='text/javascript'>
+		window.addEvent('domready', function()
+		{
+			document.id('{$id}').manager = new SpreadsheetFormManager('{$id}', {});			
+		});
+		</script>
+ENDSCRIPT;
+	}
+	
+	/**
 	 * Draws the spreadsheet. Each row is a subordinate form instance with the renderers 
 	 * cloned from the prototype row form supplied in the constructor.
 	 */

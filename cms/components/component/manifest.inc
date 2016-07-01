@@ -119,7 +119,9 @@ class ComponentManifest
 					 "/fakoli/js/facet_manager.js",
 					 "/fakoli/js/subselect_manager.js",
 					 "/fakoli/js/multi_select.js",
-					 "/fakoli/js/auto_form_manager.js");
+					 "/fakoli/js/auto_form_manager.js",
+					 "/fakoli/js/spreadsheet_form_manager.js"
+		);
 	}
 }
 
