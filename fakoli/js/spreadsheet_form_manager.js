@@ -20,5 +20,7 @@ var SpreadsheetFormManager = new Class({
 		var rawData = this.spreadsheet.toQueryString().parseQueryString();
 		
 		//TODO: parse out into records
+		
+		return rawData;
 	}
 });
