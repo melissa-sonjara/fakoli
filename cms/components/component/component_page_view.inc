@@ -133,7 +133,7 @@ class ComponentPageView
 		catch (DataNotFoundException $e) 
 		{
 			// AJG: Wrap DataNotFoundExceptions so they don't show a 'this resource is disabled error
-			throw new FakoliException($e->toString());
+			throw new FakoliException($e->getMessage());
 		}
 		
 		$this->page->description .= $output;
