@@ -48,7 +48,11 @@ class SliderFieldRenderer extends FieldRenderer
 		
 		if ($field && !$form->data->hasField($field))
 		{
-			$parent->add($this, $field);
+			$form->add($this, $field);
+		}
+		else
+		{
+			$form->override($field, $label, $this);
 		}
 	}
 	
