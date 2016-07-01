@@ -41,6 +41,8 @@ class RadarChart
 	var $containerHeight;
 	var $cx;
 	var $cy;
+	var $max = 0;
+	var $min = 0;
 	var $radius;
 	var $values;
 	var $labels;
@@ -171,6 +173,8 @@ window.addEvent('domready', function ()
 		fontFamily: '{$this->fontFamily}',
 		strokeWidth: {$this->strokeWidth},
 		ticks: {$this->ticks},
+		max: {$this->max},
+		min: ($this->min},
 		animate: {$animate},
 		shadow: {$shadow},
 		emboss: {$emboss},
