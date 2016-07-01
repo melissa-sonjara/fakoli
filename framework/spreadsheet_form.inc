@@ -205,11 +205,11 @@ class SpreadsheetForm extends CompositeAutoForm
 	{
 		if (!count($this->forms)) return;
 		
-		parent::writeScript();
+		$script = parent::writeScript();
 		
 		$id = $this->id ? $this->id : "composite_auto_form";
 		
-		echo <<<ENDSCRIPT
+		$script .= <<<ENDSCRIPT
 		<script type='text/javascript'>
 		window.addEvent('domready', function()
 		{
@@ -217,6 +217,8 @@ class SpreadsheetForm extends CompositeAutoForm
 		});
 		</script>
 ENDSCRIPT;
+			
+		return $script;
 	}
 	
 	/**
