@@ -131,7 +131,7 @@ var StraightRadarSeriesRenderer = new Class({
 		{
 			if (this.coords[i] !== null)
 			{
-				dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, mina.easeinout);
+				dot.animate({'cx': this.coords[i].x, 'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, mina.easeinout);
 			}
 		}.bind(this));
 	}		
