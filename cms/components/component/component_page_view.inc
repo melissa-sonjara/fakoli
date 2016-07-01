@@ -117,15 +117,23 @@ class ComponentPageView
 		
 		Fakoli::applicationTraceLevel();
 		
-		$template = ComponentManager::fireEvent("PreProcessPage", $template);
+		try 
+		{
+			$template = ComponentManager::fireEvent("PreProcessPage", $template);
+			
+			// If the page has a PHP code include, execute it and insert the contents
+			
+			ob_start();
+			include $page->server_path;
+			$output = ob_get_contents();
+			ob_end_clean();
+		} 
+		catch (DataNotFoundException $e) 
+		{
+			// AJG: Wrap DataNotFoundExceptions so they don't show a 'this resource is disabled error
+			throw new FakoliException($e->toString());
+		}
 		
-		// If the page has a PHP code include, execute it and insert the contents
-		
-		ob_start();
-		include $page->server_path;
-		$output = ob_get_contents();
-		ob_end_clean();
-
 		$output = ComponentManager::fireEvent("PostProcessContent", $output);
 		
 		$this->page->description .= $output;
