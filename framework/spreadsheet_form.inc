@@ -205,7 +205,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	{
 		if (!count($this->forms)) return;
 		
-		parent::$writeScript();
+		parent::writeScript();
 		
 		$id = $this->id ? $this->id : "composite_auto_form";
 		
