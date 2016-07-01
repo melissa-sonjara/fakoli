@@ -17,7 +17,7 @@ var SpreadsheetFormManager = new Class({
 	
 	getData: function()
 	{
-		var rawData = spreadsheet.toQueryString().parseQueryString();
+		var rawData = this.spreadsheet.toQueryString().parseQueryString();
 		
 		//TODO: parse out into records
 	}
