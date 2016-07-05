@@ -33,11 +33,13 @@
 
 Fakoli::using("blog", "login");
 
-$id = $_GET["blog"];
+$id = checkIdentifier($_GET["blog"]);
 $article_id = checkNumeric($_GET["article_id"]);
 $year = checkNumeric($_GET["year"]);
 $month = checkNumeric($_GET["month"]);
 $term_id = checkNumeric($_GET["term_id"]);
+
+if (!$id) $id = "blog";
 
 $blog = Blog::findByIdentifier($id);
 
