@@ -63,7 +63,7 @@ class BlogManager
 	{
 		try
 		{
-			trace("Searching for blog with identifier '$identifier'", 3);
+			trace("Searching for blog with identifier '$identifier'", 2);
 			$blog = Blog::findByIdentifier($identifier);
 			$page = ComponentPage::findByIdentifier("blog", "WHERE enabled=1");
 			$_GET["blog"] = $identifier;
