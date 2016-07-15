@@ -85,6 +85,16 @@ class ImageManager
 	function renderThumbnail($image_id, $size = 0, $width = 0, $height = 0)
 	{		
 		global $config;
+
+		if ($size > 0)
+		{
+			$path = $this->getCachedFilePath($image_id, "thumbnail", $size);
+			if ($path)
+			{
+				Fakoli::sendFile($path);
+				return;
+			}
+		}
 		
 		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
@@ -208,6 +218,11 @@ class ImageManager
 			imagedestroy($src);
 		}
 
+		if ($size > 0)
+		{
+			$this->cacheFilePath($image_id, "thumbnail", $size, $cacheFile);
+		}
+		
 		Fakoli::sendFile($cacheFile);
 	}
 	
