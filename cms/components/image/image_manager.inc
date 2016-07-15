@@ -342,6 +342,7 @@ class ImageManager
 		if ($path)
 		{
 			Fakoli::sendFile($path);
+			return;
 		}
 		
 		$image = new ImageRecord($image_id);
