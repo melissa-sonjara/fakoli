@@ -322,7 +322,7 @@ class ImageManager
 
 	function getCachedFilePath($image_id, $mode, $size)
 	{
-		if (!Settings::getSetting("image", "cache_file_paths")) return null;
+		if (!Settings::getValue("image", "cache_file_paths")) return null;
 		
 		$path = Cache::get("image_{$mode}_{$image_id}_{$size}");
 		return $path;
@@ -330,7 +330,7 @@ class ImageManager
 	
 	function cacheFilePath($image_id, $mode, $size, $path)
 	{
-		if (!Settings::getSetting("image", "cache_file_paths")) return;
+		if (!Settings::getValue("image", "cache_file_paths")) return;
 		Cache::put("image_{$mode}_{$image_id}_{$size}", $path);
 	}
 
