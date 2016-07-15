@@ -509,11 +509,18 @@ var ModalDialog = new Class(
 });
 
 ModalDialog.activeDialogs = [];
+ModalDialog.getActiveDialog = function()
+{
+	if (ModalDialog.activeDialogs.length == 0) return null;
+	return ModalDialog.activeDialogs[ModalDialog.activeDialogs.length - 1];
+};
+
 ModalDialog.recenterActiveDialog = function()
 {
-	if (ModalDialog.activeDialogs.length == 0) return;
-	ModalDialog.activeDialogs[ModalDialog.activeDialogs.length - 1].center();
+	var dialog = ModalDialog.getActiveDialog();
+	if (dialog) dialog.center();
 };
+
 
 var FloatingDialog = new Class(
 {
