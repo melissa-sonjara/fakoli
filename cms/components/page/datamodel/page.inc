@@ -34,7 +34,7 @@
 Fakoli::usingFile("framework/join.inc");
 Fakoli::using("site", "search");
 
-class Page extends DataItem implements Searchable
+class Page extends DataItem //implements Searchable
 {
 	// Fields
 	var $fields = array("page_id" 				=>	Number,
