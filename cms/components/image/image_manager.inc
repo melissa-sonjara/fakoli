@@ -319,12 +319,31 @@ class ImageManager
 		
 		Fakoli::sendFile($cacheFile);
 	}
+
+	function getCachedFilePath($image_id, $mode, $size)
+	{
+		if (!Settings::getSetting("image", "cache_file_paths")) return null;
+		
+		$path = Cache::get("image_{$mode}_{$image_id}_{$size}");
+		return $path;
+	}
 	
+	function cacheFilePath($image_id, $mode, $size, $path)
+	{
+		if (!Settings::getSetting("image", "cache_file_paths")) return;
+		Cache::put("image_{$mode}_{$image_id}_{$size}", $path);
+	}
 
 	function iconize($image_id, $size)
 	{
 		global $config;
 	
+		$path = $this->getCachedFilePath($image_id, "icon", $size);
+		if ($path)
+		{
+			Fakoli::sendFile($path);
+		}
+		
 		$image = new ImageRecord($image_id);
 		$gallery = $image->Gallery();
 	
@@ -446,6 +465,7 @@ class ImageManager
 			imagedestroy($src);
 		}
 
+		$this->cacheFilePath($image_id, "icon", $size, $cacheFile);
 		Fakoli::sendFile($cacheFile);
 	}
 	
@@ -920,6 +940,7 @@ class ImageManager
 		
 		Settings::setDefaultValue("image", "thumbnail_size", 75, "Number", "");	
 		Settings::setDefaultValue("image", "thumbnail_format", "png", "String", "Use PNG for high quality thumbnails (default) or JPG for fast, low bandwidth thumbnails. JPG files will have lower image quality and do not support transparency", "", "png\njpg");
+		Settings::setDefaultValue("image", "cache_file_paths", false, "Boolean", "Cache image file paths in memory for increased performance");
 	}
 	
 	static function registerTaxonomyClasses($classes)
