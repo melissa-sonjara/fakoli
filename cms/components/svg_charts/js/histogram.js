@@ -506,7 +506,11 @@ var VerticalHistogramAxisRenderer = new Class(
 			var y = this.options.chartTop + this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
 			
 			var label = this.paper.text(x, y, text);
+			var i = "Tooltip";
 			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "middle"});
+			label.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
+			label.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
+			label.click(function() { this.series.fireEvent('click', i); }.bind(this));
 		}.bind(this.chart));
 	},
 	
@@ -584,7 +588,11 @@ var HorizontalHistogramAxisRenderer = new Class(
 			//+ this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
 			
 			var label = this.paper.text(x, y, text);
+			var i = "Tooltip";
 			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "end"});
+			label.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
+			label.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
+			label.click(function() { this.series.fireEvent('click', i); }.bind(this));
 		}.bind(this.chart));
 	},
 	
