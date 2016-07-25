@@ -596,13 +596,13 @@ var HorizontalHistogramAxisRenderer = new Class(
 		}.bind(this.chart));
 	},
 	
-	hasTooltip: function(idx)
+	hasToolTip: function(idx)
 	{
 		var found = false;
 		
 		this.children.each(function(child)
 		{
-			if (child.hasTooltip(idx)) found = true;
+			if (child.hasToolTip(idx)) found = true;
 		});
 		
 		return found;
@@ -612,7 +612,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 	{
 		this.children.each(function(child)
 		{
-			child.showTooltip(evt, idx);
+			child.showToolTip(evt, idx);
 		});
 		if (idx > this.options.toolTips.length) return;
 		},
