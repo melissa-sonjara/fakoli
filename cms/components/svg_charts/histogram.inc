@@ -176,6 +176,10 @@ class Histogram
 	function setLabels($labels)
 	{
 		$this->labels = $labels;
+	
+	function setLabelTooltips($labelTooltips)
+	{
+	    $this->labelTooltips = $labelTooltips;
 	}
 	
 	function setLabelSize($size)
@@ -311,6 +315,7 @@ window.addEvent('domready', function ()
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
+	{$this->id}.labelTooltips = [ {$labelTooltips} ];
 {$yaxis}
 {$data}
 	{$this->id}.draw();
