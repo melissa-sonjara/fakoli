@@ -579,47 +579,36 @@ var HorizontalHistogramAxisRenderer = new Class(
 		return this.chart.options.chartHeight / count;
 	},
 	
-	hasToolTip: function(idx)
-	{
-		var found = false;
-		
-		this.children.each(function(child)
-		{
-			if (child.hasToolTip(idx)) found = true;
-		});
-		
-		return found;
-	},
-	
 	showToolTip: function(evt, idx)
 	{
-		this.children.each(function(child)
-		{
-			child.showToolTip(evt, idx);
-		});
-		if (idx > this.options.toolTips.length) return;
-		},
+		if (idx > this.chart.labelTooltips.length) return;
+		
+		var text = this.chart.labeTooltips[idx];
+		if (text == '') return;
+		
+		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", this.chart.labelTooltips[idx]);		
+	},
 	
 	hideToolTip: function()
 	{
 		hideToolTip(this.chart.id + "_tooltip");
-	},
+	}	
 
 	drawLabels: function()
 	{
 		this.chart.labels.each(function(text, index)
 		{
-			var x = this.options.chartLeft - 5;
-			var y = this.options.chartTop + this.columnWidth * index + (this.getColumnOffset());
+			let chart = this.chart;
+			var x = chart.options.chartLeft - 5;
+			var y = chart.options.chartTop + chart.columnWidth * index + (chart.getColumnOffset());
 			//+ this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
 			
-			var label = this.paper.text(x, y, text);
-			var i = "Tooltip";
-			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "end"});
-			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
-			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
-			label.click(function() { this.fireEvent('click', i); }.bind(this));
-		}.bind(this.chart));
+			var label = chart.paper.text(x, y, text);
+			label.attr({stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "end"});
+			label.mouseover(function(e) { chart.fireEvent('mouseOver', [e, index]); this.showToolTip(e, index);}.bind(this));
+			label.mouseout(function(e) { chart.fireEvent('mouseOut', [e, index]);  this.hideToolTip();}.bind(this));
+			label.click(function() { chart.fireEvent('click', index); }.bind(this));
+		}.bind(this));
 	},
 	
 	drawTicks: function()
@@ -679,6 +668,7 @@ var Histogram = new Class(
 	Implements: [Options],
 	series: [],
 	labels: [],
+	labelTooltips: [],
 	yAxisLabels: [],
 	max: 0,
 	min: 0,
