@@ -578,23 +578,6 @@ var HorizontalHistogramAxisRenderer = new Class(
 	{
 		return this.chart.options.chartHeight / count;
 	},
-
-	drawLabels: function()
-	{
-		this.chart.labels.each(function(text, index)
-		{
-			var x = this.options.chartLeft - 5;
-			var y = this.options.chartTop + this.columnWidth * index + (this.getColumnOffset());
-			//+ this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
-			
-			var label = this.paper.text(x, y, text);
-			var i = "Tooltip";
-			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "end"});
-			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
-			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
-			label.click(function() { this.fireEvent('click', i); }.bind(this));
-		}.bind(this.chart));
-	},
 	
 	hasToolTip: function(idx)
 	{
@@ -620,6 +603,23 @@ var HorizontalHistogramAxisRenderer = new Class(
 	hideToolTip: function()
 	{
 		hideToolTip(this.chart.id + "_tooltip");
+	},
+
+	drawLabels: function()
+	{
+		this.chart.labels.each(function(text, index)
+		{
+			var x = this.options.chartLeft - 5;
+			var y = this.options.chartTop + this.columnWidth * index + (this.getColumnOffset());
+			//+ this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
+			
+			var label = this.paper.text(x, y, text);
+			var i = "Tooltip";
+			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "end"});
+			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
+			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
+			label.click(function() { this.fireEvent('click', i); }.bind(this));
+		}.bind(this.chart));
 	},
 	
 	drawTicks: function()
