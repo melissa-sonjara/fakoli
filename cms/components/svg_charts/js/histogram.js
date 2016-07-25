@@ -590,9 +590,9 @@ var HorizontalHistogramAxisRenderer = new Class(
 			var label = this.paper.text(x, y, text);
 			var i = "Tooltip";
 			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "end"});
-			label.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
-			label.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
-			label.click(function() { this.series.fireEvent('click', i); }.bind(this));
+			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
+			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
+			label.click(function() { this.fireEvent('click', i); }.bind(this));
 		}.bind(this.chart));
 	},
 	
