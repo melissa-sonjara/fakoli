@@ -584,7 +584,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 		if (idx > this.chart.labelTooltips.length) return;
 		
 		var text = this.chart.labelTooltips[idx];
-		if (text == '') return;
+		if (text == '') text = "N/A";
 		
 		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", text);		
 	},
