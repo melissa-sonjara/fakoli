@@ -176,6 +176,7 @@ class Histogram
 	function setLabels($labels)
 	{
 		$this->labels = $labels;
+	}
 	
 	function setLabelTooltips($labelTooltips)
 	{
