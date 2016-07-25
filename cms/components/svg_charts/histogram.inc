@@ -254,7 +254,7 @@ class Histogram
 		global $script;
 		
 		$labels = "'".implode("', '", $this->labels) . "'";
-		$labels = "'".implode("', '", $this->labelTooltips) . "'";
+		$labelTooltips = "'".implode("', '", $this->labelTooltips) . "'";
 		
 		if (count($this->yAxisLabels))
 		{
