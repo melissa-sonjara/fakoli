@@ -592,7 +592,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 	hideToolTip: function()
 	{
 		hideToolTip(this.chart.id + "_tooltip");
-	}	
+	},	
 
 	drawLabels: function()
 	{
