@@ -56,6 +56,8 @@ define("Text", 9);*/
  */
 class DataItem extends AbstractDataItem
 {
+	static $_eventMap = array();
+	
 	var $_tx = null;
 	var $_pkDisabled = false;
 
@@ -143,12 +145,15 @@ class DataItem extends AbstractDataItem
 	 */
 	static function registerEventHandler($class, $event, $handler)
 	{
-		if (!is_array($class::$event))
+		$eventKey = "{$class}_{$key}";
+		
+		if (!array_key_exists($eventKey, DataItem::$_eventMap))
 		{
-			$class::$event = array();
+			
+			DataItem::$_eventMap[$eventKey]= array();
 		}
 		
-		array_push($class::$event, $handler);
+		array_push(DataItem::$_eventMap[$eventKey], $handler);
 	}
 	
 	/**
@@ -158,9 +163,15 @@ class DataItem extends AbstractDataItem
 	 */
 	function fireEvent($event)
 	{
-		if (!property_exists($this, $event)) return;
+		$eventKey = get_class()."_{$key}";
 		
-		$handlers = static::$$event;
+		if (!array_key_exists($eventKey, DataItem::$_eventMap))
+		{
+			return;
+		}
+		
+		$handlers = DataItem::$_eventMap[$eventKey];
+		
 		if (!is_array($handlers)) return;
 		foreach($handlers as $handler)
 		{
