@@ -158,7 +158,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function fireEvent($event)
 	{
-		$handlers = static::$event;
+		$handlers = static::$$event;
 		if (!is_array($handlers)) return;
 		foreach($handlers as $handler)
 		{
