@@ -133,6 +133,47 @@ class DataItem extends AbstractDataItem
 	}
 	
 	/**
+	 * Register an event handler for a specific event and DataItem class.
+	 * DataItem events are fired by DataItems at various points in the data
+	 * lifecycle (such as inserting, updating, deleting, etc.)
+	 * 
+	 * @param string $class the DataItem class to which the event handler is to be attached
+	 * @param string $event the name of the event
+	 * @param callable $handler the event handler (a callable function) 
+	 */
+	static function registerEventHandler($class, $event, $handler)
+	{
+		if (!is_array($class::$event))
+		{
+			$class::$event = array();
+		}
+		
+		array_push($class::$event, $handler);
+	}
+	
+	/**
+	 * Fires the specified event to all registered handlers. The firing object is passed
+	 * as a parameter to all the registered handlers.
+	 * @param string $event the event to be fired
+	 */
+	function fireEvent($event)
+	{
+		$handlers = static::$event;
+		if (!is_array($handlers)) return;
+		foreach($handlers as $handler)
+		{
+			if (!is_callable($handler))
+			{
+				trace(get_class()." {$event} handler is invalid", 2);
+			}
+			else 
+			{
+				call_user_func_array($handler, array($this));
+			}
+		}
+	}
+	
+	/**
 	 * Join the DataItem to the specified DataTransaction.
 	 * @param DataTransaction $tx the transaction to join
 	 */
@@ -263,6 +304,8 @@ class DataItem extends AbstractDataItem
         		}
         	}
         }
+        
+        $this->fireEvent("onPopulate");
 	}
 		
 	/**
@@ -631,6 +674,10 @@ class DataItem extends AbstractDataItem
 			{
 				trace("DataItem::update failed - $query", 2);
 			}
+			else
+			{
+				$this->fireEvent("onUpdate");
+			}
 		}
 		catch(PDOException $e)
 		{
@@ -728,6 +775,7 @@ class DataItem extends AbstractDataItem
 			if ($success !== FALSE)
 			{
 				$this->$pk = $db->lastInsertId();
+				$this->fireEvent("onInsert");
 			}
 			else
 			{
@@ -751,6 +799,7 @@ class DataItem extends AbstractDataItem
 	{
 		if ($constraint == "")
 		{
+			$fire = true;
 			$pk = $this->primary_key;
 			$constraint =  "WHERE $pk={$this->$pk} ".$this->getIdentityConstraint();
 		}
@@ -763,7 +812,9 @@ class DataItem extends AbstractDataItem
 		
 		try
 		{
+			if ($fire) $this->fireEvent("onPreDelete");
 			$db->exec($query);
+			if ($fire) $this->fireEvent("onPostDelete");
 		}
 		catch(PDOException $e)
 		{
@@ -786,6 +837,7 @@ class DataItem extends AbstractDataItem
 		try
 		{
 			$db->exec($query);
+			$this->fireEvent("onDeleteAll");
 		}
 		catch(PDOException $e)
 		{
