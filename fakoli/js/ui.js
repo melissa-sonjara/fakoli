@@ -680,7 +680,7 @@ var Interstitial = new Class({
 	   	var x = (size.width - coords.width) / 2;
 	   	var y = (size.height - coords.height) / 2;
 
-	   	this.interstitial.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});	   	
+	   	this.interstitial.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 10005});	   	
 	},
 	
     addResizeHook: function()
