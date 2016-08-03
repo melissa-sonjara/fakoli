@@ -145,7 +145,7 @@ class DataItem extends AbstractDataItem
 	 */
 	static function registerEventHandler($class, $event, $handler)
 	{
-		$eventKey = "{$class}_{$key}";
+		$eventKey = "{$class}_{$event}";
 		
 		if (!array_key_exists($eventKey, DataItem::$_eventMap))
 		{
@@ -163,8 +163,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function fireEvent($event)
 	{
-		$eventKey = get_class()."_{$key}";
-		
+		$eventKey = get_class()."_{$event}";
+		trace("===== DataItem event key = $eventKey", 3);
 		if (!array_key_exists($eventKey, DataItem::$_eventMap))
 		{
 			return;
