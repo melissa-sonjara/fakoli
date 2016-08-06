@@ -22,17 +22,8 @@ class HistogramSeries
 		return $this;
 	}
 	
-	function toScript()
+	function getOptions()
 	{
-		$v = array();
-		
-		foreach($this->values as $value)
-		{
-			if ($value === "" || !isset($value)) $value = "null";
-			$v[] = $value;
-		}
-		 
-		$values = implode(", ", $v);
 		$options = array();
 		foreach ($this->options as $opt => $val)
 		{
@@ -55,6 +46,21 @@ class HistogramSeries
 		
 		$options = "{".implode(", ", $options)."}";
 		
+		return $options;
+	}
+	
+	function toScript()
+	{
+		$v = array();
+		
+		foreach($this->values as $value)
+		{
+			if ($value === "" || !isset($value)) $value = "null";
+			$v[] = $value;
+		}
+		 
+		$values = implode(", ", $v);
+		$options = $this->getOptions();
 			
 		$out = "new HistogramSeries('{$this->type}', '" . jsSafe($this->title) . "', [{$values}], $options)";
 		return $out;
@@ -73,7 +79,7 @@ class HistogramSeries
 	}
 }
 
-class GroupedHistogramSeries
+class GroupedHistogramSeries extends HistogramSeries
 {
 	var $type;
 	var $title;
@@ -92,7 +98,8 @@ class GroupedHistogramSeries
 	
 	function toScript()
 	{
-		$out = "(new GroupedHistogramSeries('{$this->type}', '". jsSafe($this->title) ."'))";
+		$options = $this->getOptions();
+		$out = "(new GroupedHistogramSeries('{$this->type}', '". jsSafe($this->title) ."', $options))";
 		foreach($this->children as $child)
 		{
 			$kid = $child->toScript();
@@ -102,6 +109,38 @@ class GroupedHistogramSeries
 		return $out;
 	}
 }
+
+class StackedHistogramSeries extends HistogramSeries
+{
+	var $type;
+	var $title;
+	var $children = array();
+
+	function __construct($type, $title)
+	{
+		$this->type = $type;
+		$this->title = $title;
+	}
+
+	function addSeries($series)
+	{
+		$this->children[] = $series;
+	}
+	
+	function toScript()
+	{
+		$options = $this->getOptions();
+		$out = "(new StackedHistogramSeries('{$this->type}', '". jsSafe($this->title) ."', $options))";
+		foreach($this->children as $child)
+		{
+			$kid = $child->toScript();
+			$out .= ".addSeries({$kid})";
+		}
+		
+		return $out;
+	}
+}
+
 
 class Histogram
 {
@@ -118,6 +157,9 @@ class Histogram
 	var $chartBackground = "#ddd";
 	var $palette;
 	var $labelSize = 12;
+	var $labelAngle = 0;
+	var $labelAnchor = "middle";
+	var $labelOffset = 20;
 	var $strokeWidth = 1;
 	var $animate = false;
 	var $shadow = true;
@@ -297,6 +339,9 @@ window.addEvent('domready', function ()
 		chartBackground: '{$this->chartBackground}',
 		palette: '{$this->palette}',
 		labelSize: {$this->labelSize},
+		labelAngle: {$this->labelAngle},
+		labelAnchor: '{$this->labelAnchor}',
+		labelOffset: {$this->labelOffset},
 		strokeWidth: {$this->strokeWidth},
 		animate: {$animate},
 		shadow: {$shadow},

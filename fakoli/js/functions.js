@@ -35,6 +35,19 @@ String.prototype.count=function(s1) {
     return (this.length - this.replace(new RegExp(s1,"g"), '').length) / s1.length;
 }
 
+if (!String.format) 
+{
+  String.format = function(format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number] 
+        : match
+      ;
+    });
+  };
+}
+
 function popup(url, name, width, height)
 {
 	if (arguments.length == 5)

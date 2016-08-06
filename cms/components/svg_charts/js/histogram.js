@@ -11,7 +11,7 @@ var HistogramSeries = new Class(
 		shadow: false,
 		emboss: false,
 		styles: {},
-		strokeWidth: 2,
+		strokeWidth: 1,
 		symbolSize: 4,
 		onClick: Class.Empty,
 		onMouseOver: Class.Empty,
@@ -36,6 +36,7 @@ var HistogramSeries = new Class(
 		this.type = type;
 		this.title = title;
 		this.values = values;
+		
 		this.max = this.values.max();
 		this.min = this.values.min();
 		
@@ -50,6 +51,12 @@ var HistogramSeries = new Class(
 		}
 		
 		return this.renderer;
+	},
+	
+	connectToChart: function(chart, index)
+	{
+		this.chart = chart;
+		this.index = index;
 	},
 	
 	draw: function(chart, index)
@@ -101,7 +108,13 @@ var HistogramSeries = new Class(
 	hideToolTip: function()
 	{
 		hideToolTip(this.chart.id + "_tooltip");
-	}	
+	},
+	
+	collectLegends: function(chart, index, legends)
+	{
+		var renderer = this.getRenderer(chart, index);
+		if (renderer) renderer.collectLegends(legends);
+	}
 });
 
 var VerticalBlockSeriesRenderer = new Class(
@@ -153,7 +166,7 @@ var VerticalBlockSeriesRenderer = new Class(
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight - this.chart.xAxisOffset;
 			
 			var column = this.chart.paper.rect(x, y, columnWidth, columnHeight);
-			column.attr({fill: fillSwatch});
+			column.attr({fill: fillSwatch, 'stroke-width': this.series.options.strokeWidth, 'stroke': this.chart.palette.strokeColor});
 			
 			if (this.series.options.emboss)
 			{
@@ -201,6 +214,11 @@ var VerticalBlockSeriesRenderer = new Class(
 
 			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, mina.easeinout);
 		}.bind(this));
+	},
+	
+	collectLegends: function(legends)
+	{
+		legends.push({title: this.series.title, color: this.getColor(this.index)});
 	}
 });
 
@@ -257,7 +275,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 			this.chart.options.chartHeight - columnHeight - this.chart.xAxisOffset;
 			
 			var column = this.chart.paper.rect(x, y, columnHeight, columnWidth);
-			column.attr({fill: fillSwatch});
+			column.attr({fill: fillSwatch, 'stroke-width': this.series.options.strokeWidth, 'stroke': this.chart.palette.strokeColor});
 			
 			if (this.series.options.emboss)
 			{
@@ -305,6 +323,11 @@ var HorizontalBlockSeriesRenderer = new Class(
 
 			this.series.columns[i].animate({'width': columnHeight}, 1000, mina.easeinout);
 		}.bind(this));
+	},
+	
+	collectLegends: function(legends)
+	{
+		legends.push({title: this.series.title, color: this.getColor(this.index)});
 	}
 });
 
@@ -480,6 +503,11 @@ var LineSeriesRenderer = new Class(
 				dot.animate({'cy': this.coords[i].y, 'stroke': lineColor, fill: (this.series.options.indicateTooltips && this.series.hasTooltip(i) ) ? lineColor : fillColor}, 1000, mina.easeinout);
 			}
 		}.bind(this));
+	},
+	
+	collectLegends: function(legends)
+	{
+		legends.push({title: this.series.title, color: this.getColor(this.index)});
 	}		
 });
 
@@ -503,11 +531,15 @@ var VerticalHistogramAxisRenderer = new Class(
 		this.chart.labels.each(function(text, index)
 		{
 			var x = this.options.chartLeft + this.columnWidth * index + (this.getColumnOffset());
-			var y = this.options.chartTop + this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
+			var y = this.options.chartTop + this.options.chartHeight + this.options.labelOffset + (text.count("\n") * this.options.labelSize / 2);
 			
 			var label = this.paper.text(x, y, text);
 			var i = "Tooltip";
-			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": "middle"});
+			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": this.options.labelAnchor});
+			if (this.options.labelAngle)
+			{
+				label.attr({'transform': "rotate(" + this.options.labelAngle + "," + x + "," + y + ")"});
+			}
 			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
 			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
 			label.click(function() { this.fireEvent('click', i); }.bind(this));
@@ -560,7 +592,7 @@ var VerticalHistogramAxisRenderer = new Class(
 	    {
 	        path = chart.path(path, ["M", (Math.round(x + i * columnWidth) + .5), (Math.round(y) + .5)], ["V", (Math.round(y + h) + .5)]);
 	    }
-	    return this.chart.paper.path({d: path, stroke: color});
+	    return this.chart.paper.path({d: path, stroke: color, 'class': 'grid'});
 	},
 });
 
@@ -657,7 +689,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 	    {
 	        path = chart.path(path, ["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5], ["V", Math.round(y + h) + .5]);
 	    }
-	    return this.chart.paper.path({d: path, stroke: color});
+	    return this.chart.paper.path({d: path, stroke: color, 'class': 'grid'});
 	},
 
 });
@@ -688,11 +720,15 @@ var Histogram = new Class(
 		chartHeight: 300,
 		chartBackground: "#ddd",
 		labelSize: 12,
+		labelAngle: 0,
+		labelAnchor: 'middle',
+		labelOffset: 20,
 		strokeWidth: 2,
 		animate: true,
 		shadow: false,
 		gridStrokeWidth: 1,
 		ticks: 10,
+		units: "",
 		columnMargin: 0.2,
 		titleSize: 20,
 		title: '',
@@ -744,8 +780,7 @@ var Histogram = new Class(
 	addSeries: function(series)
 	{
 		this.series.push(series);
-		series.chart = this;
-		series.index = this.series.length - 1;
+		series.connectToChart(this, this.series.length - 1);
 	},
 	
 	updateSeries: function(index, values)
@@ -885,19 +920,25 @@ var Histogram = new Class(
 	
 	drawGrid: function(x, y, w, h, wv, hv, color) 
 	{
+		var chart = this.chart;
+		
 	    color = color || "#000";
-	    var path = ["M", Math.round(x) + .5, Math.round(y) + .5, "L", Math.round(x + w) + .5, Math.round(y) + .5, Math.round(x + w) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y + h) + .5, Math.round(x) + .5, Math.round(y) + .5],
-	        rowHeight = h / hv,
+	    var path = chart.path(["M", Math.round(x) + .5, Math.round(y) + .5], 
+	    					  ["L", Math.round(x + w) + .5, Math.round(y) + .5, 
+	    					   Math.round(x + w) + .5, Math.round(y + h) + .5, 
+	    					   Math.round(x) + .5, Math.round(y + h) + .5, 
+	    					   Math.round(x) + .5, Math.round(y) + .5]);
+	    var rowHeight = h / hv,
 	        columnWidth = w / wv;
 	    for (var i = 1; i < hv; i++) 
 	    {
-	        path = path.concat(["M", Math.round(x) + .5, Math.round(y + i * rowHeight) + .5, "H", Math.round(x + w) + .5]);
+	        path = chart.path(path, ["M", Math.round(x) + .5, Math.round(y + i * rowHeight) + .5], ["H", Math.round(x + w) + .5]);
 	    }
 	    for (i = 1; i < wv; i++) 
 	    {
-	        path = path.concat(["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5, "V", Math.round(y + h) + .5]);
+	        path = chart.path(path, ["M", Math.round(x + i * columnWidth) + .5, Math.round(y) + .5], ["V", Math.round(y + h) + .5]);
 	    }
-	    return this.paper.path(path.join(" ")).attr({stroke: color});
+	    return this.paper.path({d: path, stroke: color, 'class': 'grid'});
 	},
 	
 	drawTitle: function()
@@ -917,14 +958,18 @@ var Histogram = new Class(
 			var s = this.options.legendSwatchSize || 20;
 			var h = this.options.legendLineHeight || 30;
 			
+			var legends = [];
 			this.series.each(function(series, index)
 			{
-				var title = series.title;
-				
+				series.collectLegends(this, index, legends);
+			}.bind(this));
+			
+			legends.each(function(legend, index)
+			{
 				var rect = this.paper.rect(x, y, s, s, 3);
-				rect.attr({fill:this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth});
+				rect.attr({fill: legend.color, stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth});
 				
-				var text = this.paper.text(x + h, y + h / 2, title);
+				var text = this.paper.text(x + h, y + h / 2, legend.title);
 				
 				text.attr({"text-anchor": "start", fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.labelSize});
 					
@@ -944,14 +989,14 @@ var Histogram = new Class(
 });
 
 var GroupedHistogramSeries = new Class({
+	Extends: HistogramSeries,
 	Implements: [Options, Events],
 	type: 'block',
 	title: '',
-	children: [],
-	max: 0,
-	min: 0,
+	children: [],	
+	min: Infinity,
+	max: -Infinity,
 	
-
 	initialize: function(type, title, options)
 	{
 		this.type = type;
@@ -972,7 +1017,42 @@ var GroupedHistogramSeries = new Class({
 		
 		return this;
 	},
+
+	connectToChart: function(chart, index)
+	{
+		this.chart = chart;
+		this.index = index;
+		this.children.each(function(child, i)
+		{
+			child.connectToChart(chart, index + i);
+		});
+	},
+
+	getRange: function()
+	{
+		var max = -Infiinity;
+		var min = Infinity;
 	
+		var hasRange = false;
+		
+		this.children.each(function(child)
+		{
+			if (child.values.length == 0) continue;
+			
+			child.values.each(function (value)
+			{
+				if (value == null) return;
+				
+				if (value > max) max = value;
+				if (value < min) min = value;
+				
+				hasRange = true;
+			});
+		});
+		
+		return hasRange ? {'max': max, 'min': min} : false;
+	},
+
 	getValue: function(idx)
 	{
 		var value = null;
@@ -1038,10 +1118,371 @@ var GroupedHistogramSeries = new Class({
 			child.showTooltip(evt, idx);
 		});
 		if (idx > this.options.toolTips.length) return;
+	},
+	
+	hideToolTip: function()
+	{
+		hideToolTip(this.chart.id + "_tooltip");
+	},
+	
+	collectLegends: function(chart, index, legends)
+	{
+		this.children.each(function(child, idx)
+		{
+			child.collectLegends(chart, idx, legends);
+		});
+	}
+});
+
+var StackedHistogramSeries = new Class({
+
+	Extends: HistogramSeries,
+	Implements: [Options, Events],
+	type: 'block',
+	title: '',
+	children: [],
+	max: 0,
+	min: 0,
+	totals: [],
+	
+	initialize: function(type, title, options)
+	{
+		this.type = type;
+		this.title = title;
+		
+		this.setOptions(options);
+	},
+	
+	addSeries: function(series)
+	{
+		series.group = this;
+		this.children.push(series);
+		
+		this.calculateTotals();
+		this.min = this.totals.min();
+		this.max = this.totals.max();
+		
+		return this;
+	},
+
+	connectToChart: function(chart, index)
+	{
+		this.chart = chart;
+		this.index = index;
+		this.children.each(function(child, i)
+		{
+			child.connectToChart(chart, index + i);
+		});
+	},
+	
+	calculateTotals: function()
+	{
+		this.totals = [];
+		
+		this.children[0].values.each(function() { this.totals.push(0); }.bind(this));
+		
+		this.children.each(function(child)
+		{
+			child.values.each(function (value, idx)
+			{
+				this.totals[idx] += value;
+			}.bind(this));
+		}.bind(this));
+	},
+	
+	getValue: function(idx)
+	{
+		// Return total value
+		return this.totals[idx];
+	},
+	
+	
+	getRenderer: function(chart, index)
+	{
+		if (!this.renderer)
+		{
+			switch(this.type)
+			{
+			case 'block':
+				
+				this.renderer = (chart.options.orientation == 'horizontal') ? 
+						new StackedHorizontalBlockSeriesRenderer(chart, this, index) : 
+						new StackedVerticalBlockSeriesRenderer(chart, this, index);
+				break;
+				
+			case 'line':
+				
+				this.renderer = new StackedLineSeriesRenderer(chart, this, index);
+				break;
+			}
+		}
+		
+		return this.renderer;
+	},
+	
+	hasTooltip: function(idx)
+	{
+		var found = false;
+		
+		this.children.each(function(child)
+		{
+			if (child.hasTooltip(idx)) found = true;
+		});
+		
+		return found;
+	},
+	
+	showToolTip: function(evt, idx)
+	{
+		this.children.each(function(child)
+		{
+			child.showTooltip(evt, idx);
+		});
+		if (idx > this.options.toolTips.length) return;
 		},
 	
 	hideToolTip: function()
 	{
 		hideToolTip(this.chart.id + "_tooltip");
+	},
+	
+	collectLegends: function(chart, index, legends)
+	{
+		this.children.each(function(child, idx)
+		{
+			child.collectLegends(chart, idx, legends);
+		});
+	}	
+});
+
+
+
+
+
+
+var StackedVerticalBlockSeriesRenderer = new Class(
+{
+	chart: Class.Empty,
+	series: Class.Empty,
+	index: 0,
+	dropShadow: null,
+	
+	initialize: function(chart, series, index)
+	{
+		this.chart = chart;
+		this.series = series;
+		this.index = index;
+	},
+	
+	addShadow: function(shape)
+	{
+		if (!this.dropShadow)
+		{
+			this.dropShadow = this.chart.paper.filter(Snap.filter.shadow(1, 1, 5, 0.1));
+		}
+		shape.attr({filter: this.dropShadow});
+	},
+	
+	getColor: function(i)
+	{
+		if (this.series.children[i].options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.children[i].options.color);
+		return this.chart.palette.getColor(this.index + i);
+	},
+	
+	draw: function()
+	{
+		var runningTotals = [];
+		this.series.children[0].values.each(function() { runningTotals.push(0);});
+		
+		this.series.children.each(function(child, idx)
+		{
+			child.values.each(function(val, i)
+			{
+				var runningTotal = runningTotals[i];
+				if (!runningTotal) runningTotal = 0;
+				
+				var fillSwatch = this.getColor(idx);			
+	
+				var columnWidth = this.chart.blockWidth;
+	
+				var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth);
+				if (this.series.options.applyOffset)
+				{
+					columnOffset += this.chart.blockSeriesDrawn * columnWidth;
+				}
+				var columnLeft = this.chart.columnWidth * i + columnOffset;
+				
+				var x = this.chart.options.chartLeft + columnLeft;
+				var columnHeight = this.chart.options.chartHeight * val / this.chart.range();
+				var columnBottom = this.chart.options.chartHeight * runningTotal / this.chart.range();
+				
+				var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight - columnBottom - this.chart.xAxisOffset;
+				
+				var column = this.chart.paper.rect(x, y, columnWidth, columnHeight);
+				column.attr({fill: fillSwatch, 'stroke-width': this.series.options.strokeWidth, 'stroke': this.chart.palette.strokeColor});
+				
+				runningTotals[i] = val + runningTotal;
+				
+				if (this.series.options.emboss)
+				{
+					column.emboss();
+				}
+	
+				if (this.series.options.shadow)
+				{
+					this.addShadow(column);
+				}
+				
+				if (this.series.options.showValues)
+				{
+					if (!val) val = 0;
+					
+					this.chart.paper.text(x + columnWidth / 2, y - 8, val + this.chart.options.units);
+				}
+				
+				column.mouseover(function(e) { child.fireEvent('mouseOver', [e, i]); child.showToolTip(e, i);}.bind(this));
+				column.mouseout(function(e) { child.fireEvent('mouseOut', [e, i]);  child.hideToolTip();}.bind(this));
+				column.click(function() { child.fireEvent('click', i); }.bind(this));
+				
+				child.columns.push(column);
+				
+			}.bind(this));
+		}.bind(this));
+		
+		this.chart.blockSeriesDrawn++;
+	},
+	
+	drawDots: function()
+	{	
+	},
+	
+	drawFill: function()
+	{
+	},
+	
+	// Morph this series to match the values of the supplied series
+	morph: function(series)
+	{
+		/*series.values.each(function(val, i)
+		{
+			var columnHeight = this.chart.options.chartHeight * val / this.chart.range() + this.chart.xAxisOffset;
+			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
+
+			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, mina.easeinout);
+		}.bind(this));*/
+	}
+});
+
+
+var StackedHorizontalBlockSeriesRenderer = new Class(
+{
+	chart: Class.Empty,
+	series: Class.Empty,
+	index: 0,
+	dropShadow: null,
+	
+	initialize: function(chart, series, index)
+	{
+		this.chart = chart;
+		this.series = series;
+		this.index = index;
+	},
+
+	addShadow: function(shape)
+	{
+		if (!this.dropShadow)
+		{
+			this.dropShadow = this.chart.paper.filter(Snap.filter.shadow(1, 1, 5, 0.1));
+		}
+		shape.attr({filter: this.dropShadow});
+	},
+	
+	getColor: function(i)
+	{
+		if (this.series.children[i].options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.children[i].options.color);
+		return this.chart.palette.getColor(this.index + i);
+	},
+	
+	draw: function()
+	{
+		var runningTotals = [];
+		this.series.children[0].values.each(function() { runningTotals.push(0);});
+		
+		this.series.children.each(function(child, idx)
+		{
+			child.values.each(function(val, i)
+			{
+				var runningTotal = runningTotals[i];
+				if (!runningTotal) runningTotal = 0;
+				var fillSwatch = this.getColor(idx);			
+	
+				var columnWidth = this.chart.blockWidth;
+	
+				var columnOffset = (this.chart.options.columnMargin / 2 * this.chart.columnWidth);
+				if (this.series.options.applyOffset)
+				{
+					columnOffset += this.chart.blockSeriesDrawn * columnWidth;
+				}
+				
+				var columnTop = this.chart.columnWidth * i + columnOffset;
+				
+				var columnLeft = this.chart.options.chartWidth * runningTotal / this.chart.range();
+				
+				var x = this.chart.options.chartLeft + columnLeft;
+				var columnHeight = this.chart.options.chartWidth * val / this.chart.range();
+				var y = this.chart.options.chartTop + columnTop;
+								
+				var column = this.chart.paper.rect(x, y, columnHeight, columnWidth);
+				column.attr({fill: fillSwatch, 'stroke-width': this.series.options.strokeWidth, 'stroke': this.chart.palette.strokeColor});
+				
+				if (this.series.options.emboss)
+				{
+					column.emboss();
+				}
+	
+				if (this.series.options.shadow)
+				{
+					this.addShadow(column);
+				}
+				
+				if (this.series.options.showValues)
+				{
+					if (!val) val = 0;
+					
+					this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val + this.chart.options.units).attr({'text-anchor': 'start'});
+				}
+				
+				column.mouseover(function(e) { child.fireEvent('mouseOver', [e, i]);  child.showToolTip(e, i); }.bind(this));
+				column.mouseout(function(e) { child.fireEvent('mouseOut', [e, i]);  child.hideToolTip();}.bind(this));
+				column.click(function() { child.fireEvent('click', i); }.bind(this));
+				
+				runningTotals[i] = val + runningTotal;
+				
+				child.columns.push(column);
+				
+			}.bind(this));
+		}.bind(this));
+		
+		this.chart.blockSeriesDrawn++;
+	},
+	
+	drawDots: function()
+	{
+		
+	},
+	
+	drawFill: function()
+	{
+	},
+	
+	// Morph this series to match the values of the supplied series
+	morph: function(series)
+	{
+		/*series.values.each(function(val, i)
+		{
+			var columnHeight = this.chart.options.chartWidth * val / this.chart.range();
+
+			this.series.columns[i].animate({'width': columnHeight}, 1000, mina.easeinout);
+		}.bind(this));*/
 	}
 });

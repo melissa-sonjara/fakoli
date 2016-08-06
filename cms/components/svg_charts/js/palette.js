@@ -20,6 +20,8 @@ var Palette = new Class(
 	
 	getColor: function(color)
 	{
+		if (typeof color === 'string' && color.startsWith("#")) return color;
+		
 		if (this.namedColors && color in this.namedColors)
 		{
 			return this.namedColors[color];
