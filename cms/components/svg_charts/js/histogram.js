@@ -1037,7 +1037,7 @@ var GroupedHistogramSeries = new Class({
 		
 		this.children.each(function(child)
 		{
-			if (child.values.length == 0) continue;
+			if (child.values.length == 0) return;
 			
 			child.values.each(function (value)
 			{
