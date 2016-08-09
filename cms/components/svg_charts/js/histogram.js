@@ -630,7 +630,7 @@ var HorizontalHistogramAxisRenderer = new Class(
 	{
 		this.chart.labels.each(function(text, index)
 		{
-			let chart = this.chart;
+			var chart = this.chart;
 			var x = chart.options.chartLeft - 5;
 			var y = chart.options.chartTop + chart.columnWidth * index + (chart.getColumnOffset());
 			//+ this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
