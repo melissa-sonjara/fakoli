@@ -1371,7 +1371,7 @@ ComponentManager::fireEvent("ConfigurationBootstrap");
 
 
 // Automatically import commonly used features
-Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list");
+Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list", "date_utils");
 
 $user = null;
 
