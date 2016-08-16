@@ -207,4 +207,19 @@ class DateUtils
 		    return "$when $y ago";
     	}
     }
+    
+    /**
+     * Return an array of month names in the currently selected locale, indexed by month number.
+     * This is a format suitable for use with a SelectFieldRenderer
+     * @return array month names indexed by month number
+     */
+    static function getMonths()
+    {
+    	$months = array();
+    	for($i = 1; $i < 13; ++$i)
+    	{
+    		$months[$i] = date("F", mktime(0, 0, 0, $i, 10));
+    	}
+    	return $months;
+    }
 }
