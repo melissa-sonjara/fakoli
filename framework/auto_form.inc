@@ -82,7 +82,8 @@ class AutoForm
 	var $onDrawStart = null; 			///< Callback event handler that is fired just prior to drawing the form
 	var $onDrawComplete = null; 		///< Callback event handler that is fired just after the form been drawn
 	
-	var $onSavePreProcess = null; 		///< Callback event handler that is fired after field have been preprocessed, but before the data has been saved to the database.
+	var $onInsertPreProcess = null;		///< Callback event handler that is fired after fields have been preprocessed, but before the data has been saved to the database as a new record.
+	var $onSavePreProcess = null; 		///< Callback event handler that is fired after fields have been preprocessed, but before the data has been saved to the database.
 	var $onSaveComplete = null;			///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
 	var $onDelete = "";					///< delete method name
@@ -1354,13 +1355,27 @@ class AutoForm
 
 		$this->preProcessFields($pk, $filter);
 	
-		if ($this->onSavePreProcess)
+		// Call the onInsertPreProcess callback if the primary key of the target object is not set (i.e. is a new object)
+		
+		if (!$this->data->getPrimaryKeyValue() & $this->onInsertPreProcess)
 		{
-			if (!call_user_func_array($this->onSavePreProcess, array($this))) 
+			if (call_user_func_array($this->onInsertPreProcess, array($this)) === false)
 			{
 				return $this->handlePartialSave(false);
 			}
 		}
+		
+		// Call the onSavePreProcess callback if set
+		
+		if ($this->onSavePreProcess)
+		{
+			if (call_user_func_array($this->onSavePreProcess, array($this)) === false) 
+			{
+				return $this->handlePartialSave(false);
+			}
+		}
+		
+		// Defer to the customSaveHandler if it has been defined, otherwise tell the target object to save itself
 		
 		if ($this->customSaveHandler)
 		{
