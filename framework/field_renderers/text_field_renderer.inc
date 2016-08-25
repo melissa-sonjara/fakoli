@@ -46,7 +46,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class TextFieldRenderer extends FieldRenderer
 {
-	var $rows = 2;			//!< The number of rows to display in the text area
+	var $rows = 4;			//!< The number of rows to display in the text area
 	var $columns = 60;		//!< The number of columns to display in the text area
 	var $colspan = 2;		//!< The number of table columns to display across
 	var $limit = 0;			//!< Optional limit on the number of characters allowed to be entered (enforced by Javascript). Note - make sure you have at least this many characters in your database field!
