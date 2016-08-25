@@ -27,7 +27,7 @@ class HtmlEditorManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("html_editor", "CSS_files", "", String, "Comma-separated list of CSS files to apply within the editor", "Appearance");
+		Settings::setDefaultValue("html_editor", "CSS_files", "", Text, "List of CSS files to apply within the editor. Put each CSS file on a separate line.", "Appearance");
 		Settings::setDefaultValue("html_editor", "body_class", "", String, "Body class to be applied to content within the editor - use this to override inappropriate styles", "Appearance");
 	}
 

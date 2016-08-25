@@ -119,6 +119,16 @@ class HTMLFieldRenderer extends FieldRenderer
 <?		
 			HTMLFieldRenderer::$_includedRTEScript = true;
 		}
+		
+		$cssFiles = explode("\n", str_replace("\r", "", $tiny_mce_content_css));
+		if (count($cssFiles) > 0)
+		{
+			$css = "['".implode("','", $cssFiles)."']";
+		}
+		else
+		{
+			$css = "''";
+		}
 ?>		
 	<script type='text/javascript'>
 		tinymce.init(
@@ -145,7 +155,7 @@ class HTMLFieldRenderer extends FieldRenderer
 			plugins: '<?echo $plugins?>',
 			contextmenu: "<?echo $contextMenu?>",
 			skin: 'fakoli',
-			content_css: '<?echo $tiny_mce_content_css?>',
+			content_css: <?echo $css?>,
 			body_class: '<?echo $tiny_mce_body_class?>',
 			relative_urls: false,
 			convert_urls: <?echo $convertURLs?>,

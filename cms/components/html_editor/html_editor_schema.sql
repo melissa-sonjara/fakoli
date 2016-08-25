@@ -21,3 +21,9 @@ CREATE TABLE snippet
 ALTER TABLE snippet ADD COLUMN description VARCHAR(1000) AFTER snippet_name;
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+UPDATE settings SET field_type='Text', value=REPLACE(value, ',', '\n') WHERE component='html_editor' AND name='CSS_files';
+
+-- END Version 1.3
