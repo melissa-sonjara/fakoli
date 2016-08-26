@@ -1023,10 +1023,11 @@ class Fakoli
 	/**
 	 * Return a DataItem to the client in JSON format
 	 * @param DataItem $object the object to be returned
+	 * @param boolean $sendType true to send the content type
 	 */
-	static function JSONreturn($object)
+	static function JSONreturn($object, $sendType = true)
 	{
-		header("Content-Type: application/json");
+		if ($sendType) header("Content-Type: application/json");
 		throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
 	}
 	
@@ -1035,9 +1036,9 @@ class Fakoli
 	 * with the single property 'error'.
 	 * @param String $error the error message to be converted to an object and returned
 	 */
-	static function JSONerror($error)
+	static function JSONerror($error, $sendType = true)
 	{
-		header("Content-Type: application/json");
+		if ($sendType) header("Content-Type: application/json");
 		
 		$errorObject = (object)array('error' => $error);
 		
