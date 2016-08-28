@@ -589,7 +589,7 @@ class AutoForm
 	 * For instance, calling alias('x1', 'Useful Label') would display the text
 	 * 'Useful Label' as the label for field 'x1' when rendering the form. You can
 	 * alias more than one field with a single call to alias, simply by passing in
-	 * more than one pairs of strings. For instance, you might calll:
+	 * more than one pairs of strings. For instance, you might call:
 	 * alias('x1', 'Field 1', 'x2', 'Field 2', ...)
 	 *
 	 */
