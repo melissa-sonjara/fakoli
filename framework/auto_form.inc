@@ -612,7 +612,7 @@ class AutoForm
 		if (!$format) $format = $obj->default_format;
 		if (!$label) $label = $obj->prettifyClassName();
 		
-		return new RelatedItemSelectFieldRenderer($form, $field, $label, $class, $constraint, $format, $obj->getPrimaryKey());
+		return new RelatedItemSelectFieldRenderer($this, $field, $label, $class, $constraint, $format, $obj->getPrimaryKey());
 	}
 	
 	/**
