@@ -613,9 +613,9 @@ class AutoForm
 		if (!$field) $field = $obj->getPrimaryKey();
 		if (!$label) $label = $obj->prettifyClassName();
 		
-		if (!$form->data->hasField($field))
+		if (!$this->data->hasField($field))
 		{
-			throw new FakoliException(get_class($form->data)." has no field '{$field}'");
+			throw new FakoliException(get_class($this->data)." has no field '{$field}'");
 		}
 		
 		if (!$format)
