@@ -604,6 +604,18 @@ class AutoForm
 	}
 
 	/**
+	 * Utility function to add a RelatedItemSelectFieldRender.
+	 */
+	function related($class, $constraint = "", $format = null, $field = null, $label = null)
+	{
+		$obj = new $class;
+		if (!$format) $format = $obj->default_format;
+		if (!$label) $label = $obj->prettifyClassName();
+		
+		return new RelatedItemSelectFieldRenderer($form, $field, $label, $class, $constraint, $format, $obj->getPrimaryKey());
+	}
+	
+	/**
 	 * Define a field grouping
 	 * @param string $name the legend to use for the group
 	 * 
