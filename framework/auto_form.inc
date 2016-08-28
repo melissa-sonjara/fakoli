@@ -613,6 +613,16 @@ class AutoForm
 		if (!$field) $field = $obj->getPrimaryKey();
 		if (!$label) $label = $obj->prettifyClassName();
 		
+		if (!$form->data->hasField($field))
+		{
+			throw new FakoliException(get_class($form->data)." has no field '{$field}'");
+		}
+		
+		if (!$format)
+		{
+			throw new FakoliException("Format not specified for related $class");
+		}
+		
 		return new RelatedItemSelectFieldRenderer($this, $field, $label, $class, $constraint, $format, $obj->getPrimaryKey());
 	}
 	
