@@ -130,6 +130,14 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		}
 	}
 
+<?
+	if ($this->dropdown)
+	{
+?>
+		document.id('<?echo $this->parent->id?>_<?echo $field?>_container').multiSelect.selectionChanged();
+<?
+	}
+?>
 	link.innerHTML = (value) ? "Deselect All" : "Select All";
 	return false;
 }
