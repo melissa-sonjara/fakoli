@@ -164,12 +164,12 @@ class DataItem extends AbstractDataItem
 	function fireEvent($event)
 	{
 		$eventKey = get_class($this)."_{$event}";
-		trace("===== DataItem event key = $eventKey", 3);
 		if (!array_key_exists($eventKey, DataItem::$_eventMap))
 		{
 			return;
 		}
 		
+		trace("===== DataItem event key = $eventKey", 3);
 		$handlers = DataItem::$_eventMap[$eventKey];
 		
 		if (!is_array($handlers)) return;
