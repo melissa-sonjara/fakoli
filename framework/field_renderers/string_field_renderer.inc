@@ -105,7 +105,7 @@ class StringFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	function renderField($field)
+	function renderField($field, $readonly = false)
 	{
 		$this->_startField($field);
 		

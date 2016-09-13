@@ -1175,6 +1175,16 @@ table.list
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
 }
 
+table.list.small
+{
+	font-size: 75%;
+}
+
+table.list.vsmall
+{
+	font-size: 60%;
+}
+
 table.list td
 {
 	border: solid 1px #aaa;
