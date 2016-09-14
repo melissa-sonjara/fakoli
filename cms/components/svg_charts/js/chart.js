@@ -29,7 +29,7 @@ var Chart = new Class(
 	createChart: function()
 	{
 		var ratio = this.options.height / this.options.width;
-		var size = this.container.getSize();
+		/*var size = this.container.getSize();
 		if (size.y == 0)
 		{
 			size.y = size.x * ratio;
@@ -41,7 +41,7 @@ var Chart = new Class(
 				this.container.setStyle('height', size.y);
 				this.paper.attr({width: size.x, height: size.y});
 			}.bind(this));
-		}
+		}*/
 		
 		this.container.set('html', '<svg id="' + this.svgid() + '" width="100%" height="100%"></svg>');
 		
