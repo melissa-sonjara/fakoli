@@ -755,12 +755,18 @@ class DataItem extends AbstractDataItem
 		
 		$first = true;
 		
+		$timestampField = null;
 		
 		foreach($this->getFields() as $field => $type)
 		{
 			if ($field == $pk && !$this->_disablePK) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
 			if (!isset($this->$field) && $this->getType($field) != Timestamp && $this->getType($field) != Boolean) continue;
+			
+			if ($type == Timestamp)
+			{
+				$timestampField = $field;
+			}
 			
 			if (!$first)
 			{
@@ -788,6 +794,13 @@ class DataItem extends AbstractDataItem
 			if ($success !== FALSE)
 			{
 				$this->$pk = $db->lastInsertId();
+				//AJG - Set the timestamp field value if the insert succeeded
+				if ($timestampField) 
+				{
+					$this->$timestampField = $this->__timestamp;
+					unset($this->__timestamp);
+				}
+				
 				$this->fireEvent("onInsert");
 			}
 			else
