@@ -427,7 +427,8 @@ abstract class AbstractDataItem
 			
 		case Timestamp:
 			
-			$query .= $db->quote(date("Y-m-d H:i:s"));
+			$this->__timestamp = date("Y-m-d H:i:s");
+			$query .= $db->quote($this->__timestamp);
 			break;
 			
 		case Boolean:
