@@ -338,8 +338,10 @@ ENDSCRIPT;
 				)
 			{
 				$value = $obj->get($field);
-				if($value && !is_int($value))
-					$value = urlencode($value);
+				// AJG - Removing this logic as it is incorrectly re-encoding parameters leading to bad side-effects
+				// Application code that breaks as a result of this should be fixed in the application
+				//if($value && !is_int($value))
+				//	$value = urlencode($value);
 				if($value)
 					$this->params->setParam($field, "equal", $value);
 			}
