@@ -80,7 +80,7 @@ class Fakoli
 	static $outputBufferLevel = 0;		///< Records the level at which gzip output buffering began
 	static $rollbackBuffers = true;		///< Specifies whether to rollback output buffers when there is an unhandled exception. 
 	static $storage = array();			///< General storage (volatile). See Fakoli::put and Fakoli::get
-	static $timestamp;		  			///< Microsectond Timestamp for start of request
+	static $timestamp;		  			///< Microsecond Timestamp for start of request
 	static $requestStartTime; 			///< Start of request in DateTime format
 	static $requestURI; 				///< The initial request URI
 	static $bodyClass = "";				///< Override for the body class of the page currently being served
