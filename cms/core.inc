@@ -82,7 +82,7 @@ class Fakoli
 	static $storage = array();			///< General storage (volatile). See Fakoli::put and Fakoli::get
 	static $timestamp;		  			///< Microsectond Timestamp for start of request
 	static $requestStartTime; 			///< Start of request in DateTime format
-	static $requestURI; 				///< The initiali request URI
+	static $requestURI; 				///< The initial request URI
 	static $bodyClass = "";				///< Override for the body class of the page currently being served
 
 	/**
