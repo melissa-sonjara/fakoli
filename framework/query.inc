@@ -328,6 +328,13 @@ class Query extends AbstractQuery
 		return $value;
 	}
 	
+	/**
+	 * Return the count of matching results.
+	 */
+	function count()
+	{
+		return $this->executeValue("COUNT(1)");
+	}
 	
 	/**
 	 * Static factory method to create a new Query. 
