@@ -53,6 +53,7 @@ class NumberFieldRenderer extends FieldRenderer
 	var $onChange = ""; // optional callback on data input change
 	var $units = "";
 	var $unitsPosition = "";
+	var $blankZero = false;
 	
 	function NumberFieldRenderer(&$parent, $field = null)
 	{
@@ -83,8 +84,14 @@ class NumberFieldRenderer extends FieldRenderer
 		
 		if ($this->unitsPosition == "before") echo $this->units." ";
 		
+		$value = $this->parent->data->get($field);
+		if ($value == 0 && $this->blankZero)
+		{
+			$value = "";
+		}
+		
 		echo "<input id='{$this->parent->id}_$field' type='text' style='width: auto' name='$field' 
-		value='".$this->parent->data->get($field)."' $autocomplete
+		value='".$value."' $autocomplete
 		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
 		
 		if ($this->unitsPosition == "after") echo " ".$this->units;
