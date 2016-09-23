@@ -39,6 +39,8 @@ var SnippetManager =  (function()
 		{
 			var snippet = httpRequest('/action/html_editor/snippet?snippet_id=' + snippet_id);
 			
+			snippet = this.substituteParameters(snippet);
+			
 			var selection = this.editor.selection;
 			
 			if (selection.isCollapsed())
@@ -52,6 +54,21 @@ var SnippetManager =  (function()
 			}
 
 			this.hide();
+		},
+		
+		substituteParameters: function(snippet)
+		{
+			var parameters = document.id('snippet_parameters');
+			if (parameters)
+			{
+				var inputs = parameters.getElements('input');
+				inputs.each(function(input)
+				{
+					snippet = snippet.split("{" + input.name + "}").join(input.value);
+				});
+			}
+			
+			return snippet;
 		},
 		
 		selectSnippet: function(snippet_id)

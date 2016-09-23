@@ -53,6 +53,33 @@ class HtmlEditorManager
 		$tiny_mce_content_css = Settings::getValue("html_editor", "CSS_files");
 		$tiny_mce_body_class = Settings::getValue("html_editor", "body_class");
 	}
+	
+	static function formatSnippetParameters($snippet)
+	{
+		$matches = array();
+		if (preg_match_all("/{([^}]+)}/", $snippet->snippet, $matches, PREG_PATTERN_ORDER))
+		{
+			$fields = array_unique($matches[1]);
+			
+			?>
+			<h4>Snippet Parameters</h4>
+			<table class='form' id='snippet_parameters'>
+			 
+			<?
+			foreach($fields as $field)
+			{
+			?>
+			<tr><td class='label'><label><?echo $field?></label></td>
+			<td class='value'><input type='text' name='<?echo $field?>' class='snippet_parameter' id='snippet_parameter_{$i}' value='' size='75'/></td></tr>
+			<?
+			}
+			?>
+			</table>
+			<br/>
+			<?
+		}
+	}
+	
 }
 
 ?>

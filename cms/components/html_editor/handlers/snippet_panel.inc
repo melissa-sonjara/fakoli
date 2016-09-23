@@ -11,6 +11,9 @@ if ($snippet_id)
 	<div class='snippet_preview'>
 	<?echo $snippet->snippet?>
 	</div>
+	<?
+	HtmlEditorManager::formatSnippetParameters($snippet);
+	?>
 	<a class='button' href='#' onclick='new SnippetManager().insertSnippet(<?echo $snippet_id?>); return false;'>Insert Snippet</a>&nbsp;&nbsp;
 	<a class='button' href='#' onclick='new SnippetManager().showSnippetDialog(<?echo $snippet_id?>); return false;'>Edit Snippet</a>&nbsp;&nbsp;
 	<a class='button' href='#' onclick='new SnippetManager().showSnippetDialog(); return false;'>Create a New Snippet</a>&nbsp;&nbsp;
