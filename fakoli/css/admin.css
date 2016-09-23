@@ -1344,3 +1344,13 @@ a.multi_select_dropdown {
     text-overflow: ellipsis;
     vertical-align: middle;
 }
+
+table.list tr.mapped
+{
+	background-color: #ffd;
+}
+
+table.list tr.unmapped
+{
+	color: #aaa;
+}
