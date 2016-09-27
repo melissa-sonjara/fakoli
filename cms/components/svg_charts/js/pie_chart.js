@@ -162,7 +162,7 @@ var PieChart = new Class(
 
 		var color = this.palette.getFontColor(idx);
 		
-		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize, "font-family": this.options.fontFamily};
+		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize, "font-family": this.options.fontFamily, "z-index":100};
 		var t = this.paper.text(cx + (r * this.options.percentagesDistance) * Math.cos(-angle), cy + (r * this.options.percentagesDistance) * Math.sin(-angle), text).attr(params);
 		
 		return t;
