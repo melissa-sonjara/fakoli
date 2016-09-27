@@ -61,7 +61,7 @@ var PieChart = new Class(
 			var s = this.sector(angle, end, idx);
 
 			this.sectors.push(s);
-		});
+		}.bind(this));
 	
 		angle = 0;
 
