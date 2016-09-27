@@ -61,7 +61,16 @@ var PieChart = new Class(
 			var s = this.sector(angle, end, idx);
 
 			this.sectors.push(s);
+		});
+	
+		angle = 0;
+
+		this.values.each(function(val, idx)
+		{
+			var end = angle + val * increment; 
+			var center = angle + (val * increment / 2);
 			
+			var s = this.sectors[idx];
 			if (!this.options.legend)
 			{
 				var t = this.label(center, this.labels[idx], idx);
@@ -162,7 +171,7 @@ var PieChart = new Class(
 
 		var color = this.palette.getFontColor(idx);
 		
-		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize, "font-family": this.options.fontFamily, "z-index":100};
+		var params = {fill: color, stroke: "none" , opacity: o, "font-size": this.options.percentagesSize, "font-family": this.options.fontFamily};
 		var t = this.paper.text(cx + (r * this.options.percentagesDistance) * Math.cos(-angle), cy + (r * this.options.percentagesDistance) * Math.sin(-angle), text).attr(params);
 		
 		return t;
