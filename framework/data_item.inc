@@ -1485,6 +1485,14 @@ class DataItem extends AbstractDataItem
 				$template = str_replace("{".$field."}", $this->$field, $template);			
 			}
 		}
+
+		if (isset($this->_decorations))
+		{
+			foreach($this->_decorations as $field => $value)
+			{
+				$template = str_replace("{".$field."}", $value, $template);			
+			}
+		}
 		
 		// Allow drill-down through relation functions
 		$template = $this->formatThroughRelation($template, $separator);

@@ -158,7 +158,24 @@ abstract class AbstractDataItem
 {
 	var $filter;
 	var $_options = 0;
-	var $_tx = null;
+	var $_tx = null;			///< Tracks the current database transaction for each DataItem
+
+	var $_decorations = null;
+	
+	/**
+	 * Adds a decoration to the DataItem. Decorations are not full fields, but can be referred to in format() calls.
+	 * @param string $name
+	 * @param string $value
+	 */
+	function decorate($name, $value)
+	{
+		if (!$this->_decorations)
+		{
+			$this->_decorations = array();
+		}
+		
+		$this->_decorations[$name] = $value;
+	}
 	
 	/**
 	 * Cast this object to another class. This facility is provided so that
