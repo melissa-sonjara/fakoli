@@ -50,4 +50,19 @@ class TaxonomyHelper
 	
 		return formatItems($terms, "{term}", $separator);
 	}
+	
+	/**
+	 * Decorates the target DataItem with all the associated taxonomy terms
+	 * @param DataItem $item the target DataItem
+	 * @param string $separator the separator to use when formatting multiple taxonomy terms
+	 */
+	static function decorate($item, $separator = ", ")
+	{
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies(get_class($item));
+		
+		foreach($taxonomies as $taxonomy)
+		{
+			$item->decorate($taxonomy->identifier, TaxonomyHelper::formatAssociatedTerms($taxonomy->identifier, $item, $separator));
+		}
+	}
 }
