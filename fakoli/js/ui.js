@@ -113,6 +113,26 @@ window.scrollToElement = function(element, offset)
 	new Fx.Scroll(document.body).start(scroll.x, coords.top + offset);
 };
 
+window.alignHeights = function(selector)
+{
+	if (!selector) selector = ".align_height";
+	$$(selector).each(function(container)
+	{
+		var max = 0;
+		var children = container.getChildren();
+		children.each(function(child)
+		{
+			var height = child.getSize().y;
+			if (height > max) max = height;
+		});
+
+		children.each(function(child)
+		{
+			child.setStyle('height', max);
+		});		
+	});
+};
+
 var Curtain = new Class(
 {
 	curtain: Class.Empty,
