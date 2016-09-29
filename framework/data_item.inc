@@ -1472,7 +1472,11 @@ class DataItem extends AbstractDataItem
 	function format($template = "", $separator = ", ")
 	{
 		if ($template == "") $template = $this->default_format;
-		
+		if (is_array($template) && is_callable($template))
+		{
+			return call_user_func($template, $this);
+		}
+
 		foreach($this->getFields() as $field => $type)
 		{
 			$template = str_replace("{".$field."}", $this->formatFieldValue($field), $template);
