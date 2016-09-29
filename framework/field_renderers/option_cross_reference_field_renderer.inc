@@ -106,7 +106,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 				$classes = implode(" ", $classes);
 				
 				$description = $this->formatName($option, $this->nameField); 
-				echo "<li class='{$classes} data-value='{$val}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
+				echo "<li class='{$classes}' data-value='{$val}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
 			}
 			echo "</ul>";
 		}
