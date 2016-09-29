@@ -98,7 +98,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 				
 				if ($this->onStartOption)
 				{
-					$flag = call_user_function($this->onStartOption, $option);
+					$flag = call_user_func($this->onStartOption, $option);
 					if ($flag === false) continue;
 					if ($flag) $classes[] = $flag;
 				}
