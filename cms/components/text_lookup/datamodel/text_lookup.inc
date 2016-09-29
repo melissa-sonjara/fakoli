@@ -87,8 +87,9 @@ class TextLookup extends DataItem
 			$text = TextTranslation::getTranslation($text);
 			if(isset($obj))
 			{
-				$mgr = new MergeCodeManager($obj, $text->text);
-				return $mgr->searchAndReplace($text->text);
+				$text = $obj->format($text->text);
+				$mgr = new MergeCodeManager($obj, $text);
+				return $mgr->searchAndReplace($text);
 			}
 			else
 				return $text->text;
