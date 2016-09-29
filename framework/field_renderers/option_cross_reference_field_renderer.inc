@@ -7,6 +7,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	var $separator = ", ";
 	var $nameField;
 	var $xrefClass;
+	var $onStartOption = null;
 	
 	function OptionCrossReferenceFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -92,9 +93,20 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			foreach($this->options as $option)
 			{
 				$val = $option->get($option->getPrimaryKey());
-				$selected = array_key_exists($val, $selectedItems) ? " class='selected'" : "";
+				$classes = array();
+				if (array_key_exists($val, $selectedItems)) $classes[] = "selected";
+				
+				if ($this->onStartOption)
+				{
+					$flag = call_user_function($this->onStartOption, $option);
+					if ($flag === false) continue;
+					if ($flag) $classes[] = $flag;
+				}
+				
+				$classes = implode(" ", $classes);
+				
 				$description = $this->formatName($option, $this->nameField); 
-				echo "<li{$selected} data-value='{$val}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
+				echo "<li class='{$classes} data-value='{$val}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
 			}
 			echo "</ul>";
 		}
