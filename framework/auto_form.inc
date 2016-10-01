@@ -629,9 +629,9 @@ class AutoForm
 	/**
 	 * Utility function to add a SelectFieldRenderer
 	 */
-	function dropdown($field, $label, $options)
+	function dropdown($field, $label, $options, $onchange = null, $grouped = false)
 	{
-		return new SelectFieldRenderer($this, $field, $label, $options);
+		return new SelectFieldRenderer($this, $field, $label, $options, $onchange, $grouped);
 	}
 
 	/**
