@@ -628,12 +628,30 @@ class AutoForm
 	
 	/**
 	 * Utility function to add a SelectFieldRenderer
+	 * @param string $field the field name
+	 * @param string $label the label for the field
+	 * @param array $options associative array of grouped options @see SelectFieldRenderer
+	 * @param string $onchange Javascript onchange handler function name (optional)
+	 * @param bool $grouped true if the options are grouped, false otherwise (default)
 	 */
 	function dropdown($field, $label, $options, $onchange = null, $grouped = false)
 	{
 		return new SelectFieldRenderer($this, $field, $label, $options, $onchange, $grouped);
 	}
 
+	/**
+	 * Utility function to add a SelectFieldRenderer with grouped options
+	 * @param string $field the field name
+	 * @param string $label the label for the field
+	 * @param array $options associative array of grouped options @see SelectFieldRenderer
+	 * @param string $onchange Javascript onchange handler function name (optional)
+	 * @return SelectFieldRenderer
+	 */
+	function groupedDropdown($field, $label, $options, $onchange = null)
+	{
+		return $this->dropdown($field, $label, $options, $onchange, true);
+	}
+	
 	/**
 	 * Define a field grouping
 	 * @param string $name the legend to use for the group
