@@ -631,7 +631,7 @@ class AutoForm
 	 */
 	function dropdown($field, $label, $options)
 	{
-		return new SelectFieldRenderer($form, $field, $label, $options);
+		return new SelectFieldRenderer($this, $field, $label, $options);
 	}
 
 	/**
