@@ -627,6 +627,14 @@ class AutoForm
 	}
 	
 	/**
+	 * Utility function to add a SelectFieldRenderer
+	 */
+	function dropdown($field, $label, $options)
+	{
+		return new SelectFieldRenderer($form, $field, $label, $options);
+	}
+
+	/**
 	 * Define a field grouping
 	 * @param string $name the legend to use for the group
 	 * 
