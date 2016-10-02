@@ -37,6 +37,10 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Text Lookup";
 
+$textLookup = new TextLookup();
+$textLookup->filter = new InclusionFilter("text_lookup_id", "category");
+$filterForm = new FilterForm($textLookup);
+
 $texts = Query::create(TextLookup, "ORDER BY code")->execute();
 
 $table = new DataListView($texts, "textLookup");
@@ -53,6 +57,9 @@ $table->pageSize = 10;
 $table->emptyMessage = "No text lookups have been defined.";
 
 $script .= $table->writeScript();
+$script .= $filterForm->writeScript();
+$filterForm->drawForm();
+
 $table->drawView();
 
 function textLookupPlainText($textLookup)
@@ -61,6 +68,7 @@ function textLookupPlainText($textLookup)
 }
 
 ?>
+
 <br/>
 <a class='button' href='/admin/text_lookup_form'>Add a Text Lookup</a>
 <br/>
