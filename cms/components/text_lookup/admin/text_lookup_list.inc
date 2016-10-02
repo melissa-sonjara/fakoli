@@ -43,8 +43,9 @@ $textLookup->fromGET();
 $filterForm = new FilterForm($textLookup);
 $categoryFilter = new FilterFieldRenderer($filterForm, "category", "Filter By Category");
 
-$constraint = $filterForm->getConstraint();
 
+$filterForm->populateFromGET();
+$constraint = $filterForm->getConstraint();
 $texts = Query::create(TextLookup, "{$constraint} ORDER BY code")->execute();
 
 $table = new DataListView($texts, "textLookup");
