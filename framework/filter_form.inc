@@ -381,14 +381,30 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		$this->options = $options;
 		$this->label = ($label) ? $label : prettify($field);
 		$this->FieldRenderer($form);
-		if ($form->data->hasField($field))
+		if ($form->getData()->hasField($field))
 		{
+			// JDG 5/30/11 - don't crash on additiona/psuedo fields
+			// only query if real field
 			$form->override($field, $label, $this);
+			if ($this->options == null)
+			{
+				$opt = $form->getData()->distinctValues($field, true);
+				if (count($opt) > 0)
+				{
+					$this->options = array_combine($opt, $opt);
+				}
+				else
+				{
+					$this->options = array();
+				}
+			}
 		}
 		else
 		{
 			$form->add($this, $field);
-		}		
+			// JDG 7/22/2011 - allow "additional" fields to override label
+			$form->overrides[$field]['label'] = $label;
+		}
 	}
 	
 	function setDefault($title, $value)
