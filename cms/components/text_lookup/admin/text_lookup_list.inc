@@ -39,6 +39,7 @@ $menu_item = "Text Lookup";
 
 $textLookup = new TextLookup();
 $textLookup->filter = new InclusionFilter("text_lookup_id", "category");
+$textLookup->fromGET();
 $filterForm = new FilterForm($textLookup);
 $categoryFilter = new FilterFieldRenderer($filterForm, "category", "Filter By Category");
 
