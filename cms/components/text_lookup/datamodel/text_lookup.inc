@@ -42,6 +42,7 @@ class TextLookup extends DataItem
 			"text_id"	=>	Number,
 			"code"		=>	String,
 			"text"		=>	HTML, // default language English
+			"category"	=>	String,
 			"class_name"	=>	String,
 			"enabled"	=>	Boolean
 	);
