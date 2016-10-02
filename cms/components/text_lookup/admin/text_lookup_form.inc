@@ -67,6 +67,8 @@ $form = new AutoForm($text);
 $form->unique("code", "Text already exists with that code.");
 $form->required("code");
 
+$form->dropdown("category")->allowAddEntry();
+
 $classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
 if (count($classes) > 0)
 	$classNameList = array_combine($classes, $classes);
