@@ -40,7 +40,7 @@ $menu_item = "Text Lookup";
 $textLookup = new TextLookup();
 $textLookup->filter = new InclusionFilter("text_lookup_id", "category");
 $filterForm = new FilterForm($textLookup);
-$categoryFilter = new FilterFieldRenderer($form, "category", "Filter By Category");
+$categoryFilter = new FilterFieldRenderer($filterForm, "category", "Filter By Category");
 
 $constraint = $filterForm->getConstraint();
 
