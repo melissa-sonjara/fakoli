@@ -57,6 +57,7 @@ if ($text_id)
 }
 else
 {
+	$text->category = "General";
 	$text->enabled = true;
 }
 
