@@ -634,7 +634,7 @@ class AutoForm
 	 * @param string $onchange Javascript onchange handler function name (optional)
 	 * @param bool $grouped true if the options are grouped, false otherwise (default)
 	 */
-	function dropdown($field, $label, $options, $onchange = null, $grouped = false)
+	function dropdown($field, $label = "", $options = null, $onchange = null, $grouped = false)
 	{
 		return new SelectFieldRenderer($this, $field, $label, $options, $onchange, $grouped);
 	}
