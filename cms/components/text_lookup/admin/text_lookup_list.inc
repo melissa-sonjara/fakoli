@@ -40,8 +40,11 @@ $menu_item = "Text Lookup";
 $textLookup = new TextLookup();
 $textLookup->filter = new InclusionFilter("text_lookup_id", "category");
 $filterForm = new FilterForm($textLookup);
+$categoryFilter = new FilterFieldRenderer($form, "category", "Filter By Category");
 
-$texts = Query::create(TextLookup, "ORDER BY code")->execute();
+$constraint = $filterForm->getConstraint();
+
+$texts = Query::create(TextLookup, "{$constraint} ORDER BY code")->execute();
 
 $table = new DataListView($texts, "textLookup");
 $table->column("Code", "<a href='/admin/text_lookup_form?text_id={text_id}'>{code}</a>", true)
