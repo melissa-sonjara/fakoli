@@ -60,6 +60,7 @@ class Breadcrumbs
 	var $qs;
 	var $url;
 	
+	static $overrideCurrentPage = null;
 	function __construct()
 	{		
 		$qs = getCleanQueryString();
@@ -104,6 +105,8 @@ class Breadcrumbs
 	 */
 	function findPage()
 	{
+		if (Breadcrumbs::$overrideCurrentPage) return Breadcrumbs::$overrideCurrentPage;
+		
 		$pages = Query::create(SiteMap, "WHERE url =:url")
 			->bind(":url", $this->url)
 			->execute();
