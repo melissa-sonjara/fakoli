@@ -105,10 +105,10 @@ class Breadcrumbs
 	 */
 	function findPage()
 	{
-		if (Breadcrumbs::$overrideCurrentPage) return Breadcrumbs::$overrideCurrentPage;
+		$url = (Breadcrumbs::$overrideCurrentPage) ? Breadcrumbs::$overrideCurrentPage: $this->url;
 		
 		$pages = Query::create(SiteMap, "WHERE url =:url")
-			->bind(":url", $this->url)
+			->bind(":url", $url)
 			->execute();
 		
 		return (count($pages)) ? $pages[0] : null;
