@@ -290,10 +290,6 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		foreach($items as $item)
 		{
 			++$i;
-			if ($i % $colheight == 0)
-			{
-				echo "</td><td>";
-			}
 			
 			$p = $item->$itempk;
 			$v = $mode ? $p : "1";
@@ -308,6 +304,12 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo "/>";
 
 			echo $this->formatName($item, $this->nameField)."</label>";
+			
+
+			if ($i % $colheight == 0)
+			{
+				echo "</td><td>";
+			}
 		}
 
 		if ($this->columns > 1)
