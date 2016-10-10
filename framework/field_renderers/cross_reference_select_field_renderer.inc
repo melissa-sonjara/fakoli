@@ -42,7 +42,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class CrossReferenceSelectFieldRenderer extends FieldRenderer
 {
-	var $relatedClass;
+	var $relatedClass;	
 	var $constraint;
 	var $xrefClass;
 	var $nameField;
@@ -50,12 +50,13 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $label;
 	var $options;
 	var $groupBy;
-	var $resizable = false;
-	var $dropdown;
-	var $dropdownMaxWidth = "340px";
-	var $dropdownMessage = "Click to Select Terms";
-	var $showSelectAll = false;
-	var $disable = false;
+	var $resizable = false;	///< Whether the control is resizable (only relevant when the control has been set to a fixed size)
+	var $dropdown;	///< True to display the control a multi-select dropdown, false (default) to display inline in the form
+	var $dropdownMaxWidth = "340px";	///< Width of the multi-select dropdown (only relevant when the control has been configured to display as a dropdown)
+	var $dropdownMessage = "Click to Select Terms";	///< Text to display on dropdown when no items have been selected
+	var $showSelectAll = false;	///< Set to true to show a "Select All" toggle
+	var $disable = false;	///< Set to true to disable user input for this control
+	var $columns = 1;
 	
 	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
 	{
@@ -279,8 +280,21 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	{
 		$name = $mode ? "$field:$mode" : $field;
 		
+		if ($this->columns > 1)
+		{
+			echo "<table class='layout'><tbody><tr><td>";
+			$colheight = ceil(count($items) / $this->columns);
+		}
+		
+		$i = 0; 
 		foreach($items as $item)
 		{
+			++$i;
+			if ($i % $colheight == 0)
+			{
+				echo "</td><td>";
+			}
+			
 			$p = $item->$itempk;
 			$v = $mode ? $p : "1";
 				
@@ -294,6 +308,12 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo "/>";
 
 			echo $this->formatName($item, $this->nameField)."</label>";
+		}
+
+		if ($this->columns > 1)
+		{
+			echo "</td></tr></tbody></table>\n";
+			$colheight = ceil(count($items) / $this->columns);
 		}
 	}
 
