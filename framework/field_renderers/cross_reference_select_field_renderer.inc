@@ -308,7 +308,11 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 
 			if ($i % $colheight == 0)
 			{
-				echo "</td><td>";
+				echo "</td>";
+				if ($i < count($items))
+				{
+					echo "<td>";
+				}
 			}
 		}
 
