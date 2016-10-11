@@ -306,7 +306,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			echo $this->formatName($item, $this->nameField)."</label>";
 			
 
-			if ($i % $colheight == 0)
+			if ($this->columns > 1 && ($i % $colheight == 0))
 			{
 				echo "</td>";
 				if ($i < count($items))
