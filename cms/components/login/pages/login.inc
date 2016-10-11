@@ -58,6 +58,7 @@ echo TextLookup::getText("login_text", null, true);
 
 $enableCookie = Settings::getValue("login", "enable_username_cookie");
 $rememberText = Settings::getValue("login", "remember_me_text");
+$usernameLabel = Settings::getValue("login", "username_field_label");
 
 if ($enableCookie && !$username)
 {
@@ -80,7 +81,7 @@ if ($enableCookie && !$username)
 	}
 ?>	
   <tr>
-   <td><label for="username">Username:</label></td>
+   <td><label for="username"><?echo $usernameLabel?>:</label></td>
    <td><input name="username" type="text" value="<?=$username?>"/></td>
   </tr>
   <tr>
