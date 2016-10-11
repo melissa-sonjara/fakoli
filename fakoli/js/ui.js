@@ -298,6 +298,10 @@ var AbstractDialog = new Class(
     	{
     		this.element = this.createDialog(element);
     	}
+    	else
+    	{
+    		this.dialog_header = this.element.getElement('.dialog_header');
+    	}
     	
     	if (this.options.class)
     	{
