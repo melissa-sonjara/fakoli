@@ -356,7 +356,7 @@ var AbstractDialog = new Class(
      	
     	if (this.options.draggable)
     	{
-    		this.options.handle = dialog_header;
+    		this.options.handle = this.dialog_header;
     		this.options.handle.setStyle('cursor', 'move');    		
     	}
     	
