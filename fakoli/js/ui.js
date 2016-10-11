@@ -341,7 +341,7 @@ var AbstractDialog = new Class(
     					  'width': this.options.width,
     					  'height': this.options.height});
     	
-    	var dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
+    	this.dialog_header = new Element('div', {'class': 'dialog_header', 'id': id + 'Header'});
     	
     	var padding = new Element('div');
     	padding.setStyles({'padding': '4px'});
@@ -360,8 +360,8 @@ var AbstractDialog = new Class(
     		this.options.handle.setStyle('cursor', 'move');    		
     	}
     	
-    	padding.inject(dialog_header);    	
-    	dialog_header.inject(dialog, 'top');
+    	padding.inject(this.dialog_header);    	
+    	this.dialog_header.inject(dialog, 'top');
     	body.inject(dialog, 'bottom');
 		var doc = document.id(document.body ? document.body : document.documentElement);
 		
@@ -581,6 +581,9 @@ var FloatingDialog = new Class(
 		{
 			pos = (this.draggable || noFixed) ? 'absolute' : 'fixed';
 		}
+		
+		var height = this.element.offsetHeight - this.dialog_header.offsetHeight;
+		this.options.body.setStyles({'max-height': height});
 		
 		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 10000});
     },
