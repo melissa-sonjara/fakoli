@@ -56,7 +56,9 @@ class OptimizeManifest
 					 "PreProcessPage"		 =>	array(OptimizeManager, preProcessPage),
 					 "PreAction"			 =>	array(OptimizeManager, preAction),
 					 "PostAction"			 =>	array(OptimizeManager, postAction),
-					 "ClearCache"			 => array(OptimizeManager, clearCache));	
+					 "ClearCache"			 => array(OptimizeManager, clearCache),
+					 "Initialize"			 =>	array(OptimizeManager, onInitialize)
+		);	
 	}
 }
 

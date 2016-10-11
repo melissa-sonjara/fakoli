@@ -52,6 +52,12 @@ class OptimizeManager
 		OptimizeManager::$minifier = $minifier;
 	}
 	
+	static function onInitialize()
+	{
+		global $css_cache_timestamp;
+		$css_cache_timestamp = Cache::get("css_cache_timestamp");
+	}
+	
 	static function clearCache()
 	{
 		Cache::invalidate("script_cache");
