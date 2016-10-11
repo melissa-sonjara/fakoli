@@ -576,7 +576,7 @@ class LoginManager
 		Settings::setDefaultValue("login", "remember_me_text", "Remember my Username", String, "The text to display next to the 'remember me' checkbox on the default login page", "Username Cookie");
 		Settings::setDefaultValue("login", "remember_me_cookie_expiration", 15, Number, "The number of days for which the username is to be remembered", "Username Cookie");
 		
-		Settings::setDefaultValue("login", "login_field_label", "Username", String, "The label for the username field on the login form", "Labels and Text");
+		Settings::setDefaultValue("login", "username_field_label", "Username", String, "The label for the username field on the login form", "Labels and Text");
 		
 		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users", "Login Redirects");
 		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)", "Login Redirects");
