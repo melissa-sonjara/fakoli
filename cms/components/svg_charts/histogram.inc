@@ -182,6 +182,7 @@ class Histogram
 	var $title = "";
 	var $titleSize = 20;
 	var $enableDownload = true;
+	var $canvasBackground = "#FFFFFF";
 	var $units = "";
 	var $scaleToFit = false;
 	
@@ -359,6 +360,7 @@ window.addEvent('domready', function ()
 		title: '{$this->title}',
 		titleSize: {$this->titleSize},
 		enableDownload: {$enableDownload},
+		canvasBackground: '{$this->canvasBackground}',
 		units: '{$this->units}'
 	});
 	

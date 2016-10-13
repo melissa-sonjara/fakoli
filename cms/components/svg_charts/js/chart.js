@@ -111,11 +111,26 @@ var Chart = new Class(
 	
 	saveImage: function()
 	{	
+		var w = this.container.getWidth();
+		var h = this.container.getHeight();
+		
 		if (!this.canvas)
 		{
 			this.canvas = new Element("canvas", {id: this.id + "_canvas"});
-			this.canvas.setStyles({width: this.container.getWidth(), height: this.container.getHeight(), display: 'none'});
-			document.body.adopt(this.canvas);
+			this.canvas.setStyles({width: w, height: h, display: 'none'});
+			this.canvas.width = w;
+			this.canvas.height = h;
+			this.container.adopt(this.canvas);
+		}
+		
+		var showBg = false;
+		
+		if (this.options.canvasBackground)
+		{
+			var ctx = this.canvas.getContext("2d");
+			ctx.fillStyle = this.options.canvasBackground;
+			ctx.fillRect(0, 0, w, h);
+			showBg = true;
 		}
 		
 		var s = this.container.getElement('svg').clone();
@@ -124,7 +139,13 @@ var Chart = new Class(
 		svg = tmp.get('html');
 		tmp.destroy();
 		
-	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), ignoreMouse: true, ignoreAnimation: true});
+	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
+	    							ignoreMouse: true, 
+	    							ignoreAnimation: true, 
+	    							ignoreDimensions: true,
+	    							offsetX: 0,
+	    							offsetY: 0,
+	    							ignoreClear: showBg});
 	},
 	
 	saveImageCallback: function()

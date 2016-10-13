@@ -64,6 +64,7 @@ class PieChart
 	var $onLegendOut = "null";
 	var $scaleToFit = false;
 	var $fontFamily = 'Arial, Helvetica';
+	var $canvasBackground = "#FFFFFF";
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -175,7 +176,8 @@ window.addEvent('domready', function ()
 		onSectorClick: {$this->onSectorClick},
 		onLegendOver: {$this->onLegendOver},
 		onLegendOut: {$this->onLegendOut},
-		enableDownload: {$download}
+		enableDownload: {$download},
+		canvasBackground: '{$this->canvasBackground}'
 		
 	});
 	{$this->id}.values = [ $values ];
