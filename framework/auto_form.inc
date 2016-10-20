@@ -106,6 +106,7 @@ class AutoForm
     var $groupDescriptions = array();	///< List of group descriptions
     
     var $groupDescriptionCSS = "group_description";	///< CSS class for group description blocks
+    var $groupCSSClasses = array();	///< Additional classes for specific groups
     
     var $readOnlyForm;  ///< Specifies whether the entire form is read-only
     var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
@@ -697,6 +698,26 @@ class AutoForm
 	function makeGroupCollapsible($name, $toggleControl)
 	{
 		$this->collapsibleGroups[$name] = $toggleControl;
+	}
+	
+	/**
+	 * Sets a specific CSS class on the specified CSS group
+	 * @param string $name the name of the group
+	 * @param string $cssClass the CSS class to apply to the group
+	 */
+	function setGroupCSSClass($name, $cssClass)
+	{
+		$this->groupCSSClasses[$name] = $cssClass;
+	}
+	
+	/**
+	 * Gets the CSS class for the specified group, if one has been set
+	 * @param string $name the name of the group
+	 * @return string the CSS class applied to the group
+	 */
+	function getGroupCSSClass($name)
+	{
+		return array_key_exists($name, $this->groupCSSClasses) ? $this->groupCSSClasses[$name] : "";
 	}
 	
 	/**

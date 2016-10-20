@@ -21,6 +21,25 @@ abstract class AutoFormLayout
 		$this->form = $form;
 	}
 	
+	function getGroupClass($name, $collapsible, $collapsed, $additionalClass = "")
+	{
+		$class = $this->form->getGroupCSSClass($name);
+		if ($additionalClass) $class = trim("{$additionalClass} $class");
+		
+		if ($collapsible)
+		{
+			$class = ($class) ? "{$class} collapsible" : "collapsible";
+			$class .= $collapsed ? " collapsed" : " expanded";
+		}
+		
+		if ($class)
+		{
+			$class = " class='$class'";
+		}
+		
+		return $class;
+	}
+	
 	abstract function startGroup($name);
 	abstract function endGroup();
 
@@ -114,14 +133,7 @@ class TableBasedFormLayout extends AutoFormLayout
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
-		$class = "";
-		if ($collapsible)
-		{
-			$class = "collapsible";
-			$class .= $collapsed ? " collapsed" : " expanded";
-			
-			$class = " class='$class'";
-		}
+		$class = $this->getGroupClass($name, $collapsible, $collapsed);
 		
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
@@ -621,14 +633,7 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
-		$class = "";
-		if ($collapsible)
-		{
-			$class = "collapsible";
-			$class .= $collapsed ? " collapsed" : " expanded";
-			
-			$class = " class='$class'";
-		}
+		$class = $this->getGroupClass($name, $collapsible, $collapsed);
 		
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
@@ -758,14 +763,7 @@ class SimpleFormLayout extends AutoFormLayout
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
-		$class = "";
-		if ($collapsible)
-		{
-			$class = "collapsible";
-			$class .= $collapsed ? " collapsed" : " expanded";
-			
-			$class = " class='$class'";
-		}
+		$class = $this->getGroupClass($name, $collapsible, $collapsed);
 		
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
@@ -896,15 +894,8 @@ class FilterFormLayout extends AutoFormLayout
 	}
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
-	{
-		$class = "";
-		if ($collapsible)
-		{
-			$class = "collapsible";
-			$class .= $collapsed ? " collapsed" : " expanded";
-			
-			$class = " class='$class'";
-		}
+	{		
+		$class = $this->getGroupClass($name, $collapsible, $collapsed);
 		
 		$id = $this->form->id . "_" . codify($name) . "_group";
 		
