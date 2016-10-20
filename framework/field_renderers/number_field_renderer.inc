@@ -103,7 +103,11 @@ class NumberFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 
+		if ($this->unitsPosition == "before") echo $this->units." ";
+		
 		echo $this->parent->data->get($field);
+
+		if ($this->unitsPosition == "after") echo " ".$this->units;
 		
 		$this->_endField($field);
 	}
