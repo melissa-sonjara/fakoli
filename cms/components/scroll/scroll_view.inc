@@ -11,6 +11,8 @@ class ScrollView
 
 	function renderPart($part, $partTemplate)
 	{
+		global $script;
+		
 		if ($part->content_type == "Code")
 		{
 			ob_start();
@@ -32,6 +34,6 @@ class ScrollView
 			$out .= $this->renderPart($part, $partTemplate)."\n";
 		}
 		
-		return $out;
+		echo $out;
 	}
 }
