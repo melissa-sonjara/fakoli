@@ -60,8 +60,8 @@ class PageManager
 
 	static function pageTabs($key)
 	{
-		$tabs = array(	"Content"	=>	"/admin/page_form",
-						"Modules"	=>	"/admin/page_modules"
+		$tabs = array(	"Content"	=>	"page_form",
+						"Modules"	=>	"page_modules"
 		);
 	
 		$qs = ($key) ? "page_id=$key" : "";
