@@ -58,6 +58,7 @@ $table->emptyMessage = "No parts have been added to this scroll";
 $table->dragText = "<span style='font-size: 10px'>Click and drag to reorder parts</span>";
 
 $tabs = ScrollManager::scrollTabs($scroll_id);
+$tabs->page = "scroll_parts";
 
 $script .= $table->writeScript();
 
