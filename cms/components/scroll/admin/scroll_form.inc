@@ -47,7 +47,7 @@ $scroll->filter = new ExclusionFilter("menu_id");
 if ($scroll_id)
 {
 	$scroll->load($scroll_id);
-	$title = "Edit Scroll Details for {$scroll->scroll_title}";
+	$title = "Edit Scroll Details for {$scroll->title}";
 }
 else
 {
