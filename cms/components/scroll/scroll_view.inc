@@ -37,6 +37,7 @@ class ScrollView
 		global $identifier;
 		global $section;
 		
+		trace("Rendering part '{$part->title}' with '{$part->php_code_file}'", 3);
 		
 		if ($part->php_code_file)
 		{
