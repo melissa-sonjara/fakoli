@@ -15,15 +15,76 @@ class ScrollView
 		
 		if ($part->content_type == "Code")
 		{
-			ob_start();
-			include $part->php_code_file;
-			$part->content = ob_get_contents();
-			ob_end_clean();
+			$part->content = $this->renderCodePart($part);
 		}
 		
 		return $part->format($partTemplate);
 	}
 	
+	function renderCodePart($part)
+	{
+		global $config;
+		global $method;
+		global $user;
+		global $script;
+		global $styles;
+		global $breadcrumbs;
+		global $dialogs;
+		global $page;
+		global $site;
+		global $section;
+		global $menu_identifier;
+		global $identifier;
+		global $section;
+		
+		
+		if ($part->php_code_file)
+		{
+			ob_start();
+			
+			try
+			{
+				$codePath = explode(",", $part->php_code_file);
+				if (count($codePath) == 2)
+				{
+					$name = $codePath[0];
+					$php_code_file = $codePath[1];
+					$components = Fakoli::getComponents();
+					if (array_key_exists($name, $components))
+					{
+						$path = $components[$name]->component_path;
+						Fakoli::applicationTraceLevel();
+						
+						include $path."/{$php_code_file}";
+	
+						Fakoli::coreTraceLevel();
+					}
+					else
+					{
+						throw new FakoliException("Unknown component");
+					}
+				}
+				else
+				{
+					Fakoli::applicationTraceLevel();
+					
+					include $config['homedir']."/{$this->module->php_code_file}";
+					
+					Fakoli::coreTraceLevel();
+				}
+	    		$output = trim(ob_get_contents());
+			}
+			catch(Exception $e)
+			{
+				$output = $e->__toString();
+			}
+
+			ob_end_clean();
+		}	
+
+		return $output;
+	}
+
 	function drawView()
 	{
 		$out = "";
