@@ -69,7 +69,7 @@ class ScrollView
 				{
 					Fakoli::applicationTraceLevel();
 					
-					include $config['homedir']."/{$this->module->php_code_file}";
+					include $config['homedir']."/{$part->php_code_file}";
 					
 					Fakoli::coreTraceLevel();
 				}
