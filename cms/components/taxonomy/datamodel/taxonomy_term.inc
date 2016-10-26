@@ -40,7 +40,7 @@ class TaxonomyTerm extends DataItem
 	var $fields = array("term_id"		=>	Number,
 						"taxonomy_id"	=>	Number,
 						"term"			=>	String,
-						"definition"	=>	Text,
+						"definition"	=>	HTML,
 						"sort_order"	=>	Number);
 	
 	var $relations = array("Taxonomy"	=>	Taxonomy);
