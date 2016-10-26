@@ -14,7 +14,7 @@ var TaxonomyAdmin = new Class
 	{
 		if (typeof term_id == "undefined") term_id = "";
 		
-		this.dialog = modalPopup((term_id) ? "Term Definition" : "Add a Term", "/action/taxonomy/term_dialog?taxonomy_id=" + this.taxonomy_id + "&term_id=" + term_id, '600px', 'auto', true);		
+		this.dialog = modalPopup((term_id) ? "Term Definition" : "Add a Term", "/action/taxonomy/term_dialog?taxonomy_id=" + this.taxonomy_id + "&term_id=" + term_id, '800px', 'auto', true);		
 	},
 	
 	onSave: function(result)
