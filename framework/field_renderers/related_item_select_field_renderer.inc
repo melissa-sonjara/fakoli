@@ -58,6 +58,9 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $width;					///< Width of the control (in CSS format)
 	var $defaultText;			///< Text to display in the 'no selection' option when allowNone is enabled
 	var $defaultReadOnlyText;	///< Text to display when the control is read-only and the is no selected value;
+	var $toggleAddNew;			///< Use the new UI with an Add New button that toggles the text entry field
+	var $addNewButtonText = "Add New";	///< Text to show on the Add New button
+	var $addNewCancelButtonText = "Cancel"; ///< Text to show on the Add New Cancel button
 	
 	static $optionsCache = array();
 	
@@ -115,6 +118,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->max_chars = $maxChars;
 		$this->templateItem = null;
 		$this->sorted = false;
+		$this->toggleAddNew = false;
 		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
@@ -135,6 +139,76 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->otherField = $field;
 	}
 	
+	/**
+	 * Set the renderer to use the new Add New toggle button UI
+	 * @param string $addNew text for the Add New toggle button
+	 * @param string $cancel text for the Cancel toggle button
+	 */
+	function showAddNewToggle($addNew = "Add New", $cancel = "Cancel")
+	{
+		$this->toggleAddNew = true;
+		$this->addNewButtonText = $addNew;
+		$this->addNewCancelButtonText = $cancel;
+	}
+	
+	function renderScript($field)
+	{
+		$id = "{$this->parent->id}_{$field}";
+?>
+<script type='text/javascript'>
+function <?php echo $id?>_onChange(elt)
+{
+	var addNewButton = document.id('<?echo $id?>_addnew_button');
+	if (addNewButton)
+	{
+		if (elt.value == '')
+		{
+			addNewButton.setStyle('display', 'inline-block');
+		}
+		else
+		{
+			addNewButton.setStyle('display', 'none');
+		}
+	}
+<?
+		if ($this->onChange)
+		{
+?>
+	return <?php echo $this->onChange?>(elt);
+<?php 
+		}
+?>
+}
+<?php 
+		if ($this->toggleAddNew)
+		{
+?>
+function <?php echo $id?>_showAddNew()
+{
+	var addNew = document.id('<?php echo $id?>_addnew');
+	var select = document.id('<?php echo $id?>_select');
+	var text = document.id('<?php echo $id?>_addnew_text');
+	addNew.setStyle('display', 'inline-block');
+	select.setStyle('display', 'none');
+	text.focus();
+}
+
+function <?php echo $id?>_hideAddNew()
+{
+	var addNew = document.id('<?php echo $id?>_addnew');
+	var select = document.id('<?php echo $id?>_select');
+	var elt = document.id('<?php echo $id?>');
+	addNew.setStyle('display', 'none');
+	select.setStyle('display', 'inline-block');
+	elt.focus();
+}
+<?php 
+		}
+?>
+</script>
+<?php 
+	}
+	
 	function renderField($field)
 	{
 		$this->getRelatedItems();
@@ -142,12 +216,17 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		if($this->width)
 				$style = "style='width: {$this->width}'";
 		$this->_startField($field);
-		echo "<select $style id='{$this->parent->id}_{$field}' name='$field'";
 		
-		if ($this->onChange)
+		$id = "{$this->parent->id}_{$field}";
+		
+		if ($this->allowAdd)
 		{
-			echo " onchange='{$this->onChange}(this);'";
+			echo "<span id='{$id}_select'>";
 		}
+		echo "<select $style id='{$id}' name='$field'";
+		
+		echo " onchange='{$id}_onChange(this);'";
+
 		echo ">\n";
 
 		$vals = array();
@@ -194,7 +273,17 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		
 		if ($this->allowAdd)
 		{
-			echo "<span style='white-space: nowrap'> or add new: <input type='text' name='autoform_add_$field' value='' size='30'></span>";
+			if ($this->toggleAddNew)
+			{
+				echo " <a id='{$this->parent->id}_{$field}_addnew_button' href='#' class='button' onclick='{$id}_showAddNew(); return false'>{$this->addNewButtonText}</a></span>";
+				echo "<span id='{$this->parent->id}_{$field}_addnew' style='display: none; white-space: nowrap'><input type='text' id='{$id}_addnew_text' name='autoform_add_$field' value='' size='30'>";
+				echo " <a id='{$this->parent->id}_{$field}_cancel_button' href='#' class='button' onclick='{$id}_hideAddNew(); return false'>{$this->addNewCancelButtonText}</a></span>";
+			}
+			else
+			{
+				echo "</span>";
+				echo "<span id={$this->parent->id}_{$field}_addnew' style='white-space: nowrap'> or add new: <input type='text' name='autoform_add_$field' value='' size='30'></span>";
+			}
 		}
 		else if ($this->otherField)
 		{
