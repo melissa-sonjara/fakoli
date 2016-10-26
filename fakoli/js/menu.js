@@ -230,7 +230,7 @@ var FakoliMenu = new Class({
 		else
 		{
 			this.root.addClass("sfhover");
-			if (this.options.responsePosition != 'fixed')
+			if (this.options.responsivePosition != 'fixed')
 			{
 				this.root.position({'relativeTo': this.toggle, 'position': this.options.responsivePosition, 'edge': this.options.responsiveEdge});
 			}
