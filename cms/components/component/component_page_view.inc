@@ -241,7 +241,7 @@ class ComponentPageView
 		
 		foreach($inclusions as $inclusion)
 		{
-			trace("Substituting include $inclusion[1]",3);
+			trace("Substituting include $inclusion[1]",1);
 			$output = Fakoli::evaluateFile($inclusion[1]);
 			$template = str_replace($inclusion[0], $output, $template);
 		}
