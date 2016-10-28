@@ -18,7 +18,8 @@ class ScrollView
 			$part->content = $this->renderCodePart($part);
 		}
 		
-		return $part->format($partTemplate);
+		$out = $part->format($partTemplate);
+		trace($out,1);
 	}
 	
 	function renderCodePart($part)
