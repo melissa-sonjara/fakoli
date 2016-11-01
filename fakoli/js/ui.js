@@ -586,8 +586,11 @@ var FloatingDialog = new Class(
 			pos = (this.draggable || noFixed) ? 'absolute' : 'fixed';
 		}
 		
-		var height = this.element.offsetHeight - this.dialog_header.offsetHeight;
-		this.options.body.setStyles({'max-height': height, 'overflow': 'auto'});
+		if (this.options.height != 'auto')
+		{
+			var height = this.element.offsetHeight - this.dialog_header.offsetHeight;
+			this.options.body.setStyles({'max-height': height, 'overflow': 'auto'});
+		}
 		
 		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 10000});
     },
