@@ -249,6 +249,19 @@ function findAncestor(element, tag)
 	return null;		
 }
 
+function isHidden(element)
+{
+	element = document.id(element);
+	while(element)
+	{
+		if (element.getStyle('display') == 'none') return true;
+		if (element.getStyle('visible') == 'hidden') return true;
+		element = element.getParent();
+	}
+	
+	return false;
+}
+
 function calculateZIndex(element)
 {
 	var zIndex = element.getComputedStyle('z-index');
