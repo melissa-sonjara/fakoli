@@ -43,12 +43,20 @@ $title = "Component Definition";
 $form = new AutoForm($component);
 $form->readonly("name", "version", "author", "description", "component_path");
 $form->hide("priority");
+
 $form->button("Back to Components", "/admin/components");
 
 if ($method == "POST")
 {
 	if ($form->save())
 	{
+		$mgr = new ComponentManager();
+		$mgr->fireEventTo("upgradeComponent", $form->data->name);
+		
+		$cp = Component::getComponent($form->data->name);
+		
+		Fakoli::notifyOnNextPage($cp->format("{name} updated to version {version}"));
+		
 		redirect("/admin/components");
 	}
 }
