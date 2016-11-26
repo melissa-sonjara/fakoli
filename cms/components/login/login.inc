@@ -556,7 +556,7 @@ class LoginManager
 	?>
 	<br/>
 	<p><?php echo $passwordHelpText ?></p>
-	<form name='form1' method='POST' action='/password_help'>
+	<form name='form1' method='POST' action='<?php echo Fakoli::$requestURI?>'>
 	<p><label for="username"><?php echo $userNameLabel ?>:&nbsp;</label>
 	<input name="username" type="text" value="<?=$username?>"/>
 	</p>
