@@ -31,6 +31,11 @@
 
 *****************************************************************/
 
+/**
+ * Section DataItem, defining the data model for sections within
+ * a site.
+ * @author Andy Green
+ */
 class Section extends DataItem
 {
 	var $primary_key = "section_id";
