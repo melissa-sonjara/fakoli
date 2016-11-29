@@ -1341,6 +1341,11 @@ Fakoli::$timestamp = microtime(true);
 Fakoli::$requestStartTime = now();
 Fakoli::$requestURI = $_SERVER["REQUEST_URI"];
 
+if ($config["default_content_type"])
+{
+	header("Content-Type: {$config['default_content_type']}");
+}
+
 $isAction = (basename($_SERVER["SCRIPT_FILENAME"]) == "action.php" || php_sapi_name == "cli");
 $isResource = basename($_SERVER["SCRIPT_FILENAME"]) == "resource.php";
 
