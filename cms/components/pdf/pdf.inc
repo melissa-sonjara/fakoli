@@ -7,13 +7,15 @@ class PDF
 	var $ssl;
 	var $output;
 	var $footer;
+	var $landscape = false;
 	
-	function PDF($uri, $ssl = false, $useToken = true, $output = null)
+	function PDF($uri, $ssl = false, $useToken = true, $output = null, $landscape = false)
 	{
 		$this->uri = $uri;
 		$this->ssl = $ssl;
 		$this->useToken = $useToken;
 		$this->output = $output;
+		$this->landscape = $landscape;
 	}
 
 	function coverPage($url)
@@ -49,12 +51,18 @@ class PDF
 		
 		$url = "http".($this->ssl?"s":"")."://".$config["http_host"].$uri;
 			
+		$flags = "";
+		if ($this->landscape)
+		{
+			$flags = "-o landscape ";
+		}
+		
 		$tmpName = sha1($url . now()) . ".pdf";
 		
 		$footer = ($this->footer) ?  $this->footer : "";
 	
 		$output = $this->output ? $this->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
-		$cmd = "$exe $footer -q \"$url\" $output";
+		$cmd = "{$exe} {$footer} {$flags}-q \"{$url}\" {$output}";
 		
 		trace($cmd, 3);
 		
