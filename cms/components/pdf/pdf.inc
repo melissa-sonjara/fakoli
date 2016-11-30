@@ -54,7 +54,7 @@ class PDF
 		$flags = "";
 		if ($this->landscape)
 		{
-			$flags = "-o landscape ";
+			$flags = "-O landscape ";
 		}
 		
 		$tmpName = sha1($url . now()) . ".pdf";
