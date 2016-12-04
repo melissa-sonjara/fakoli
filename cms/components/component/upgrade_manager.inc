@@ -466,7 +466,7 @@ abstract class UpgradeManager
 	}
 	
 		
-	/*
+	/**
 	 * Utility function for use by calling classes to
 	 * add an array of items of class Page, ComponentPage,
 	 * Blog, ImageGallery, DocumentLibrary, Calendar 
@@ -490,7 +490,7 @@ abstract class UpgradeManager
 	 * If the page is found, its role and template,
 	 * are updated, if an update is provided.
 	 */
-	function addSectionContent($items, $section_name = "/", $role = "", $template = "")
+	function addSectionContent($items, $section_name = "/", $role = "", $template = "", $permissions = "")
 	{
 		if($items && !is_array($items))
 			$items = array($items);
@@ -546,6 +546,8 @@ abstract class UpgradeManager
 				$content->template = $template;
 			if($section->default_role != $role)
 				$content->role = $role;
+			if ($section->default_permissions != $permissions)
+				$content->permissions = $permissions;
 							
 			$content->save();
 			
@@ -556,7 +558,7 @@ abstract class UpgradeManager
 	}
 	
 	
-	/*
+	/**
 	 * Given an array of either identifiers that must be
 	 * either CMS Page or ComponentPage identifiers or items 
 	 * that are of obj CMSPage, Blog, Calendar, etc., link each
