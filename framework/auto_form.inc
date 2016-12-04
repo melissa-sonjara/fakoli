@@ -54,8 +54,11 @@ class AutoForm
 
 	var $capitalizationMode = "word";	///< Capitalization to be used for labels. Can be 'lower', 'upper', 'first' or 'word'.
 
+	var $submitLabel = "";				///< Text to display on the form's submit button. If not specified defaut text will be generated based on the target DataItem.
 	var $allowDelete = false;			///< If true, the form will display a delete button if editing an existing item.
-
+	var $deleteLabel = "";				///< Text to display on the form's delete button. If not specified defaut text will be generated based on the target DataItem.
+	var $deleteMessage = "";			///< Confirmation message to display when the form's delete button is pressed. If not specified defaut text will be generated based on the target DataItem.
+	
 	var $method = "POST";				///< HTTP method that will be used to submit the form.
 	var $action = "";					///< Action URL for submitting the form. Generally this can be left blank to submit back to the same page.
 
@@ -1140,10 +1143,11 @@ class AutoForm
 		if ($obj->get($pk) && $this->allowDelete)
 		{
 			$deleteLabel = ($this->deleteLabel) ? $this->deleteLabel : "Delete this ".$obj->prettifyClassName();
-				
+			$deleteMessage = ($this->deleteMessage) ? $this->deleteMessage : "Are you sure you want to delete this ".$obj->prettifyClassName();
+			
 			echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='submit' class='{$this->buttonCSS}' name='{$this->id}_delete'
 		      value='$deleteLabel'
-		      onclick='return confirm(\"Are you sure you want to delete this ".$obj->prettifyClassName()."?\");'/>";
+		      onclick='return confirm(\"{$deleteMessage}\");'/>";
 		}	
 	}
 	
