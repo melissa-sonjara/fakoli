@@ -58,6 +58,7 @@ if ($section_id)
 else
 {
 	$section->site_id = $site_id;
+	$section->section_type = "Content";
 }
 
 $form = new AutoForm($section);
@@ -73,6 +74,8 @@ $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site,
 $identifierSelect = new CMSItemSelectFieldRenderer($form, "default_page", "Default Page", null);
 $permissionsList = Settings::createPermissionsFieldRenderer($form, "default_permissions", "Default Permissions");
 
+$types = SectionContentManagerMap::getRegisteredTypes();
+$typeSelect = $form->dropdown("section_type", "Section Type", array_combine($types, $types));
 
 if ($method == "POST")
 {

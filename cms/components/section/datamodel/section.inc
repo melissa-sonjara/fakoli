@@ -52,7 +52,9 @@ class Section extends DataItem
 						"default_page"			=>	String,
 						"default_body_class"	=>	String,
 						"site_id"				=>	Number,
-						"use_SSL"				=>	Boolean);
+						"use_SSL"				=>	Boolean,
+						"section_type"			=>	String
+	);
 	
 	var $relations = array("SectionModuleXrefs"	=>	SectionModuleXref,
 						   "Modules"			=>	Module,
@@ -78,6 +80,11 @@ class Section extends DataItem
 	function Site()
 	{
 		return $this->getRelated(Site);
+	}
+	
+	function getContentManager()
+	{
+		return SectionContentManagerMap::getManager($this);
 	}
 	
 	static function createFromIdentifier($identifier)

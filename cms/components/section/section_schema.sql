@@ -88,3 +88,9 @@ ALTER TABLE section ADD COLUMN default_body_class varchar(200) not null default 
 ALTER TABLE section_content ADD COLUMN body_class varchar(200) not null default '';
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+ALTER TABLE section ADD COLUMN section_type VARCHAR(20) not null default 'Content';
+
+-- END Version 1.6

@@ -865,6 +865,11 @@ class Fakoli
 			redirect("/admin/index");
 		}
 		
+		if (!$identifier && $page_id)
+		{
+			throw new FakoliException("Page ID access has been deprecated.");
+		}
+		
 		global $config;
 		global $section;
 		
@@ -873,81 +878,14 @@ class Fakoli
 			$section = Section::createFromIdentifier($sectionIdentifier);
 
 			ComponentManager::fireEvent("OverrideResource", $identifier);
-					
-			if (!$page_id && !$identifier)
+			
+			if (!$section)
 			{
-				redirect($section->getDefaultPage());
+				throw new FakoliException("The section you were attempting to access could not be found.");
 			}
-			
-			if ($page_id)
-			{
-				$page = new Page($page_id);
-			
-				$page_role = $page->role;
-				
-				if (!checkRole($page->role))
-				{
-					LoginManager::redirectToLogin();	
-				}
-				
-				echo $pageView->drawView();
-				
-			}
-			else
-			{
-				if (!$section)
-				{
-					throw new FakoliException("The section you were attempting to access could not be found.");
-				}
-			
-				$content = $section->getContent($identifier);
-				if (!$content)
-				{
-					ComponentManager::fireEvent("ResourceNotFound", $identifier);
-					
-					throw new FakoliException("The page you were attempting to access could not be found.");
-				}
-				
-				$permissions = $section->getPermissions($content);
-				if ($permissions)
-				{
-					if (!Settings::checkPermissions($section->getPermissions($content)))
-					{
-						LoginManager::redirectToLogin();		
-					}
-				}
-				else if (!checkRole($section->getRole($content)))
-				{
-					LoginManager::redirectToLogin();		
-				}
-				
-				trace("\$_SERVER['HTTPS'] = {$_SERVER['HTTPS']}", 3);
-				trace("\$_SERVER['REQUEST_URI'] = {$_SERVER['REQUEST_URI']}", 3);
-				
-				$https = $_SERVER['HTTPS'];
-				if ($https == "off") $https = false; // For IIS
-			
-				$useSSL = $section->use_SSL || $content->use_SSL;
-				
-				if ($useSSL && !$https )
-				{
-					redirect("https://".$config['http_host'].$_SERVER['REQUEST_URI']);
-				}
-				else if (!$useSSL && $https && $identifier != "login" && !isset($_REQUEST["login"]))
-				{
-					redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
-				}
-			
-				try
-				{
-					ComponentManager::fireEvent("ResolveIdentifier", $identifier, true);
-				}
-				catch(FakoliEventNotConsumed $e)
-				{
-					throw new FakoliException("The resource '$identifier' is disabled");
-				}
-			}
-			
+
+			$contentManager = $section->getContentManager();			
+			$contentManager->sendContent($section, $identifier);
 			ComponentManager::fireEvent("RequestComplete");		
 		}
 		catch(FakoliEarlyExit $exit)

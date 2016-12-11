@@ -54,7 +54,8 @@ class SectionUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Added permissions fields to section and section_content tables",
 			"1.3"		=>	"sql:Added override_page_title to section_content table",
 			"1.4"		=>	"sql:Added section_content_module_xref",
-			"1.5"		=>	"sql:Added default_body_class field to section and body_class field to section_content"
+			"1.5"		=>	"sql:Added default_body_class field to section and body_class field to section_content",
+			"1.6"		=>	"sql:Added section_type field to section table"
 	);
 	
 	function SectionUpgradeManager()

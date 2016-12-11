@@ -31,6 +31,10 @@
 
 *****************************************************************/
 
+/**
+ * Handles serialization of the section map for import/export.
+ * @author andy
+ */
 class SectionSerializationHandler
 {
 	function SectionSerializationHandler()
@@ -55,6 +59,66 @@ class SectionSerializationHandler
 		SerializationManager::unserialize(SectionModuleXref, $doc, $tx);
 	}	
 }
+
+/**
+ * Maintains the map of SectionContentManagers for different Section types.
+ * Components can register a custom SectionManager type by consuming the 
+ * RegisterSectionManagers event and calling SectionManagerMap::registerSectionManager().
+ *  
+ * @author andy
+ *
+ */
+class SectionContentManagerMap
+{
+	private static $map = array();
+	
+	/**
+	 * Registers a SectionContentManager for handling a specified section type.
+	 * @param string $type the type of section to be managed by the registered object
+	 * @param object $manager the section manager object that will resolve content requests for sections
+	 * of the given type.
+	 */
+	static function registerManager($type, $manager)
+	{
+		trace("Section Type '{$type}' will be managed by ".get_class($manager), 2);
+		SectionContentManagerMap::$map[$type] = $manager;
+	}
+	
+	/**
+	 * Retrieves the SectionContentManager object for the specified section
+	 * @param Section $section the Section object for which the manager is to be retrieved
+	 * @return the SectionContentManager object that will resolve content for this section
+	 * @throws FakoliException
+	 */
+	static function getManager($section)
+	{
+		$mgr = SectionContentManagerMap::$map[$section->section_type];
+		if (!$mgr)
+		{
+			throw new FakoliException("Unknown section manager for section '{$section->section}'");
+		}
+		
+		return $mgr;
+	}
+	
+	/**
+	 * Returns the list of registered section content types.
+	 * @return array the list of registered section content types in alphabetical order
+	 */
+	static function getRegisteredTypes()
+	{
+		$types = array_keys(SectionContentManagerMap::$map);
+		sort($types);
+		return $types;
+	}
+	
+	static function onInitialize()
+	{
+		trace("Registering Section Content Managers", 2);
+		ComponentManager::fireEvent('RegisterSectionContentManagers');
+	}
+}
+
 
 /**
  * SectionManager provides simple programmatic interface for managing registration of pages to sections.
@@ -104,6 +168,11 @@ class SectionManager
 		$mgr->upgrade($version);
 	}	
 
+	static function registerSectionContentManager()
+	{
+		SectionContentManagerMap::registerManager("Content", new SectionContentManager());
+	}
+	
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("section", "Sections and Section Content", new SectionSerializationHandler());
