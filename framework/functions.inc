@@ -1614,11 +1614,14 @@ function registerURLRewriteParameters()
 }
 
 /**
- * Generates a query string containg the full set of values
- * passed to this page both as GET and POST parameters.
+ * Generates a query string containing the values passed to this page. 
+ * The default behavior is to include parameters passed both as GET and POST
+ * parameters. To retrieve only the GET parameters, pass false.
+ * 
+ * @param boolean $includePOST true (default) to include POST parameters, false for only GET parameters
  * @return string the full query string for the current page.
  */
-function getFullQueryString()
+function getFullQueryString($includePOST = true)
 {
 	global $__urlRewriteParams;
 	
@@ -1644,23 +1647,26 @@ function getFullQueryString()
 		}
 	}
 	
-	foreach($_POST as $name => $value)
+	if ($includePOST)
 	{
-		if (is_array($value))
+		foreach($_POST as $name => $value)
 		{
-			foreach($value as $key => $val)
+			if (is_array($value))
 			{
-				$qs .= $sep.urlencode($name)."[".urlencode($key)."]=".urlencode($val);
+				foreach($value as $key => $val)
+				{
+					$qs .= $sep.urlencode($name)."[".urlencode($key)."]=".urlencode($val);
+					$sep = "&";
+				}
+			}
+			else
+			{
+				$qs .= $sep.urlencode($name)."=".urlencode($value); 
 				$sep = "&";
 			}
 		}
-		else
-		{
-			$qs .= $sep.urlencode($name)."=".urlencode($value); 
-			$sep = "&";
-		}
 	}
-
+	
 	return $qs;
 }
 		
