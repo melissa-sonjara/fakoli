@@ -746,7 +746,7 @@ function checkNumeric($p)
  */
 function checkIdentifier($p)
 {
-	return preg_match("/^[A-Za-z0-9_\\-]*$/", $p) ? $p : die("Invalid Parameter");
+	return preg_match("/^[A-Za-z0-9_\\-\\.]*$/", $p) ? $p : die("Invalid Parameter");
 }
 
 /**
