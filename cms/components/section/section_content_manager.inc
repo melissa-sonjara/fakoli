@@ -31,60 +31,52 @@
 
 *****************************************************************/
 
+/**
+ * Defines the interface required by a SectionContentManager.
+ * @author andy
+ */
 interface ISectionContentManager
 {
+	/**
+	 * Returns a SectionContent object for the specified section and identifier
+	 * @param Section $section
+	 * @param string $identifier
+	 */
+	function getContent($section, $identifier);
+	
+	/**
+	 * Renders and sends the specified content for the given section
+	 * @param Section $section
+	 * @param string $identifier
+	 */
 	function sendContent($section, $identifier);
+	
+	/**
+	 * Factory method to build the view class for displaying and manipulating
+	 * section content for the specified section.
+	 * @param unknown $section
+	 */
 	function getAdminView($section);
 }
 
 class SectionContentManager implements ISectionContentManager
 {
+	function getContent($section, $identifier)
+	{
+		try
+		{
+			return Query::create(SectionContent, "WHERE section_id=:section_id AND identifier=:identifier")
+						->bind(":section_id", $section->section_id, ":identifier", $identifier)
+						->executeSingle();
+		}
+		catch(DataNotFoundException $e)
+		{
+			return null;
+		}
+	}
 	
 	function sendContent($section, $identifier)
 	{
-		if (!$identifier)
-		{
-			redirect($section->getDefaultPage());
-		}
-				
-		$content = $section->getContent($identifier);
-		if (!$content)
-		{
-			ComponentManager::fireEvent("ResourceNotFound", $identifier);
-			
-			throw new FakoliException("The page you were attempting to access could not be found.");
-		}
-		
-		$permissions = $section->getPermissions($content);
-		if ($permissions)
-		{
-			if (!Settings::checkPermissions($section->getPermissions($content)))
-			{
-				LoginManager::redirectToLogin();		
-			}
-		}
-		else if (!checkRole($section->getRole($content)))
-		{
-			LoginManager::redirectToLogin();		
-		}
-		
-		trace("\$_SERVER['HTTPS'] = {$_SERVER['HTTPS']}", 3);
-		trace("\$_SERVER['REQUEST_URI'] = {$_SERVER['REQUEST_URI']}", 3);
-		
-		$https = $_SERVER['HTTPS'];
-		if ($https == "off") $https = false; // For IIS
-	
-		$useSSL = $section->use_SSL || $content->use_SSL;
-		
-		if ($useSSL && !$https )
-		{
-			redirect("https://".$config['http_host'].$_SERVER['REQUEST_URI']);
-		}
-		else if (!$useSSL && $https && $identifier != "login" && !isset($_REQUEST["login"]))
-		{
-			redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
-		}
-	
 		try
 		{
 			ComponentManager::fireEvent("ResolveIdentifier", $identifier, true);

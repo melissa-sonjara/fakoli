@@ -105,18 +105,13 @@ class Section extends DataItem
 		}		
 	}
 	
+	var $_content = array();
+	
 	function getContent($identifier)
 	{
-		try
-		{
-			return Query::create(SectionContent, "WHERE section_id=:section_id AND identifier=:identifier")
-						->bind(":section_id", $this->section_id, ":identifier", $identifier)
-						->executeSingle();
-		}
-		catch(DataNotFoundException $e)
-		{
-			return null;
-		}
+		if ($this->_content[$identifier]) return $this->_content[$identifier];
+		
+		return SectionContentManagerMap::getManager($this)->getContent($this, $identifier);
 	}
 	
 	function getTemplateFile($identifier)
@@ -280,6 +275,12 @@ class SectionContent extends DataItem
 
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
 	{
+		if (!$this->section_content_id)
+		{
+			// Mocked SectionContent object
+			return array();
+		}
+		
 		$modules = Cache::get("section_content_module_map_{$this->section_content_id}");
 		if (!$modules)
 		{
