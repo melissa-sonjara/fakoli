@@ -7,12 +7,10 @@
 	color: #000;
 	display: block;
 	text-align: center;
-	border:1px solid #ccc;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-moz-box-shadow: 2px 2px 12px #888;
-	-webkit-box-shadow: 2px 2px 12px #888;
-	box-shadow: 2px 2px 12px #888;
+	border: none;
+    border-radius: 5px;
+    box-shadow: none;
+    transition: all .5s;
 }
 
 .imageLink img
@@ -57,7 +55,7 @@ body.ie7 .imageGrid li > div
 
 .imageGrid a 
 {
-	background-color:#eef;
+	background-color:#fff;
 	color:#000000;
 	cursor:pointer;
 	display:block;
@@ -68,6 +66,12 @@ body.ie7 .imageGrid li > div
 body.ie .imageGrid a
 {
 	text-decoration: none !important;
+}
+
+.imageGrid a:hover
+{
+	background-color: #337AB7;
+	color: #fff;
 }
 
 .imageGrid > li .wrapImage 
@@ -87,8 +91,9 @@ body.ie7 .imageGrid > li .wrapImage
 
 .imageGrid img 
 {
-	border:1px solid #666;
+	border: solid 1px #ccc;
 	vertical-align:middle;
+	background-color: #fff;
 }
 
 body.ie7 .imageGrid img
@@ -101,7 +106,7 @@ body.ie7 .imageGrid img
 .imageGrid .caption 
 {
 	display:block;
-	font-size: 0.9em;
+	font-size: 0.75em;
 	line-height:1.1;
 	padding:0.3em 5px;
 	width:135px;

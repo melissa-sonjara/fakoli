@@ -50,30 +50,30 @@ class ImageListView
 	
 	function writeScript()
 	{
-		global $script;
-		$script .= <<<ENDSCRIPT
-	<script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		$$(".imageGrid a").each(function(elt) 
-		{		
-			elt.addEvents(
-			{
-				'mouseover': function()
-				{
-					this.morph({'background-color': '#A9CDED', 'border-color': '#666666'});
-				}.bind(elt),
-				'mouseout': function()
-				{
-					this.morph({'background-color': '#eeeeff', 'border-color': '#cccccc'});
-				}.bind(elt)
-			});
-		});		
-	});
-	</script>
-ENDSCRIPT;
+// 		global $script;
+// 		$script .= <<<ENDSCRIPT
+// 	<script type="text/javascript">
+// 	window.addEvent('domready', function()
+// 	{
+// 		$$(".imageGrid a").each(function(elt) 
+// 		{		
+// 			elt.addEvents(
+// 			{
+// 				'mouseover': function()
+// 				{
+// 					this.morph({'background-color': '#A9CDED', 'border-color': '#666666'});
+// 				}.bind(elt),
+// 				'mouseout': function()
+// 				{
+// 					this.morph({'background-color': '#eeeeff', 'border-color': '#cccccc'});
+// 				}.bind(elt)
+// 			});
+// 		});		
+// 	});
+// 	</script>
+// ENDSCRIPT;
 
-		return $script;
+// 		return $script;
 	}
 	
 	function drawGrid()
@@ -87,7 +87,7 @@ ENDSCRIPT;
 	
 		foreach($this->images as $image)
 		{
-			$thumb = $imgMgr->thumbnailLink($image->get("image_id"), 125);
+			$thumb = $imgMgr->thumbnailLink($image->get("image_id"), 125, true);
 			$link = $image->format($this->linkFormat);
 			
 			if (is_callable($this->titleFormat))
@@ -98,7 +98,7 @@ ENDSCRIPT;
 			?>
 			<li><div class="imageLink"<?if ($this->spacing) echo " style='margin: {$this->spacing}'";?>><a href="<?echo $link?>">
 			<span class="wrapImage"><img src="<?echo $thumb ?> " alt="Small version of image"/></span>
-			<span class="caption"><?echo $caption ?></span></a>
+			<span class="caption"><?echo ellipsis($caption, 40, false) ?></span></a>
 			</div></li>
 			<?
 	    }

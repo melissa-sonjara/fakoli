@@ -55,7 +55,9 @@ class ImageUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added image_link_mode and thumbnail_size parameters to image_gallery",
 			"1.4"		=>	"sql:Added fix_orientation flag to image_gallery",
 			"1.5"		=>	"sql:Added thumbnail_format field to image_gallery",
-			"1.6"		=>	"sql:Added randomize_filenames field to image_gallery"
+			"1.6"		=>	"sql:Added randomize_filenames field to image_gallery",
+			"1.7"		=>	"sql:Increase size of title and ALT_tag fields in image table",
+			"1.8"		=>	"sql:Increase size of credits and caption fields in image table"
 	);
 	
 	function ImageUpgradeManager()

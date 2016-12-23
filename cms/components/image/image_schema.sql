@@ -78,3 +78,17 @@ ALTER TABLE image_gallery ADD COLUMN thumbnail_format VARCHAR(5) DEFAULT '';
 ALTER TABLE image_gallery ADD COLUMN randomize_filenames tinyint(3) not null default 0;
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE image CHANGE COLUMN title title varchar(1000) not null default '';
+ALTER TABLE image CHANGE COLUMN ALT_tag ALT_tag varchar(1000) not null default '';
+
+-- END Version 1.7
+
+-- START Version 1.8
+
+ALTER TABLE image CHANGE COLUMN credits credits varchar(1000) not null default '';
+ALTER TABLE image CHANGE COLUMN caption caption varchar(1000) not null default '';
+
+-- END Version 1.8

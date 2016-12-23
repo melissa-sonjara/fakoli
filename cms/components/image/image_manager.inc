@@ -133,7 +133,11 @@ class ImageManager
  			case ".png":
  				$src = imagecreatefrompng($imageFile);
  				break;
- 			}
+					
+			case ".gif":
+				$src = imagecreatefromgif($imageFile);
+				break;		 	
+		 	}
  			
 			// If the thumbnail hasn't been generated yet, or is out-of-date, create it.
 			$fullWidth = imagesx($src);
@@ -212,6 +216,10 @@ class ImageManager
 				
 				imagepng($dst, $cacheFile);
 				break;
+				
+			case ".gif":
+				imagegif($dst, $cacheFile);
+				break;
 			}
 
 			imagedestroy($dst);
@@ -280,6 +288,10 @@ class ImageManager
 		
 				case ".png":
 					$src = imagecreatefrompng($imageFile);
+					break;
+					
+				case ".gif":
+					$src = imagecreatefromgif($imageFile);
 					break;
 			}
 		
@@ -397,6 +409,10 @@ class ImageManager
  			case ".png":
  				$src = imagecreatefrompng($imageFile);
  				break;
+
+			case ".gif":
+				$src = imagecreatefromgif($imageFile);
+				break;
  			}
  			
 			// If the thumbnail hasn't been generated yet, or is out-of-date, create it.
@@ -520,6 +536,10 @@ class ImageManager
 				case ".png":
 					$src = imagecreatefrompng($imageFile);
 					break;
+
+				case ".gif":
+					$src = imagecreatefromgif($imageFile);
+					break;
 			}
 		}
 		
@@ -534,6 +554,10 @@ class ImageManager
 				imagejpeg($dst, $imageFile, 85);
 				break;
 					
+			case ".gif":
+				$src = imagegif($imageFile);
+				break;
+				
 			case "png":
 			default:
 				imagepng($dst, $imageFile);
