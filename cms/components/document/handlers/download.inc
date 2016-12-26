@@ -68,6 +68,11 @@ $d->document_id = $document_id;
 $d->user_id = ($user) ? $user->user_id : 0;
 $d->save();
 
+if ($document->url && !$document->file)
+{
+	redirect($document->url);
+}
+
 //TODO: Folder level security
 
 trace("Download: document filename to download {$document->file}", 3);

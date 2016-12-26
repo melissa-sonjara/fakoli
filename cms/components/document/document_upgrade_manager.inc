@@ -58,7 +58,8 @@ class DocumentUpgradeManager extends UpgradeManager
 			"1.6"		=>	"sql:Added hidden flag to DocumentLibrary",
 			"1.7"		=>	"sql:Added allow_comments flag to DocumentLibrary",
 			"1.8"		=>	"sql:Added document_comment_xref table",
-			"1.9"		=>	"sql:Added image_id field to Document"
+			"1.9"		=>	"sql:Added image_id field to Document",
+			"2.0"		=>	"sql:Added url field to Document"
 	);
 	
 	function DocumentUpgradeManager()

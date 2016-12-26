@@ -137,3 +137,9 @@ CREATE TABLE document_comment_xref (
 ALTER TABLE document ADD COLUMN image_id int(11) not null default 0 AFTER keywords;
 
 -- END Version 1.9
+
+-- START Version 2.0
+
+ALTER TABLE document ADD COLUMN url varchar(1000) default null;
+
+-- END Version 2.0

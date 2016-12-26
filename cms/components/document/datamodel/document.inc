@@ -41,6 +41,7 @@ class Document extends DataItem implements Searchable
 	var $fields = array("document_id"			=>	Number,
 						"title"					=>	String,
 						"file"					=>	String,
+						"url"					=>	String,
 						"publication_date"		=>	Date,
 						"keywords"				=>  String,
 						"author"				=>	String,
@@ -63,7 +64,8 @@ class Document extends DataItem implements Searchable
 							"Image"				=>	ImageRecord
 	);
 	
-	var $fieldAliases = array("image_id"	=>	"Image");
+	var $fieldAliases = array("image_id"	=>	"Image", 
+							  "url"			=>	"External URL");
 	
 	function Topics($constraint = "")
 	{
