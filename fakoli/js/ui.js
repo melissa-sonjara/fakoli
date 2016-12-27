@@ -106,6 +106,7 @@ window.center = function()
 
 window.scrollToElement = function(element, offset)
 {
+	if (typeof(offset) == "undefined") offset = 0;
 	element = document.id(element);
 	var coords = element.getCoordinates();
 	var scroll = element.getScroll();
