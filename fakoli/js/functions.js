@@ -152,7 +152,7 @@ function popupEvent(event)
 }
 
 
-function maskInput(e)
+function maskInput(e, allowNeg)
 {
 	var key;
 	var keychar;
@@ -170,6 +170,9 @@ function maskInput(e)
 		return true;
 	}
 	
+	if (typeof(allowNeg) == 'undefined') allowNeg = true;
+	var numbers = allowNeg ? "0123456789.,-" : "0123456789.,";
+	
 	keychar = String.fromCharCode(key);
 	
 	// control keys
@@ -179,7 +182,7 @@ function maskInput(e)
 		return true;
 	}
 	// numbers
-	else if ((("0123456789.,-").indexOf(keychar) > -1))
+	else if ((numbers.indexOf(keychar) > -1))
 	{
 		return true;
 	}
