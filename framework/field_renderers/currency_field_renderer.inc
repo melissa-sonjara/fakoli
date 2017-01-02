@@ -40,10 +40,13 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class CurrencyFieldRenderer extends FieldRenderer
 {
-	var $disable = false; // alternative to readonly; field can be reenabled thru javascript
-	var $onChange = ""; // optional callback on data input change
-	var $template = 2; // how to format readonly - 2 decimal places  
-	var $size = 20;
+	var $allowNegative = false;	///< Whether user can enter a negative number
+	var $autocomplete = true;	///< Whether the browser is allowed to show autocomplete for this field
+	var $disable = false; 	///< alternative to readonly; field can be reenabled thru javascript
+	var $onChange = ""; 	///< optional javascript callback on data input change
+	var $onKeyUp; 			///< optional javascript callback on key release within field
+	var $template = 2; 		///< how to format readonly - 2 decimal places  
+	var $size = 20;			///< size of the text field to be displayed (in characters)
 	
 	function CurrencyFieldRenderer(&$parent)
 	{
@@ -63,13 +66,16 @@ class CurrencyFieldRenderer extends FieldRenderer
 		// display with commas between thousands
 		$value = $this->format($field);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
+		$allowneg = ($this->allowNegative) ? 1 : 0;
+		$autocomplete = ($this->autocomplete) ? "" : " autocomplete='off' ";
 		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
+		$onKeyUp = ($this->onKeyUp) ? " onkeyup='{$this->onKeyUp}(this)'" : "";
 		
 		$this->_startField($field);
 
 		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' 
-		type='text' name='$field' value='{$value}' 
-		$onchange $disable size='{$this->size}'/>";
+		type='text' name='$field' value='{$value}' $autocomplete onkeypress='return maskInput(event, $allowneg);'
+		$onchange $onKeyUp $disable size='{$this->size}'/>";
 
 		$this->_endField($field);
 	}
