@@ -45,7 +45,9 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 class DateFieldRenderer extends FieldRenderer
 {
 	var $validator;
-	var $template = ""; // default reaonly format is short style
+	var $onChange = ""; 	///< optional javascript callback for 'change' event on date text field
+	var $onInput = "";		///< optional javascript callback for 'input' event on date text field
+	var $template = ""; 	///< template for date display in readonly mode - default reaonly format is short style
 	
 	function DateFieldRenderer(&$parent)
 	{
@@ -91,8 +93,11 @@ class DateFieldRenderer extends FieldRenderer
 		}
 		$date = $obj->format("{{$field}:m/d/Y}");
 		
+		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";
+		$oninput  = ($this->onInput) ? "oninput='$this->onInput(this)'" : "";
+		
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' style='width: auto' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' $onchange $oninput style='width: auto' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
 		$this->_endField($field);
 	}
 	
