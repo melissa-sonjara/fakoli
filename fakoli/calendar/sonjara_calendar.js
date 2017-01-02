@@ -391,5 +391,9 @@ var Calendar = new Class(
 	
 	onDateChanged: function(date)
 	{
+		if (typeof(this.control.onchange) != 'undefined')
+		{
+			this.control.onchange();
+		}
 	}
 });
