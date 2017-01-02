@@ -44,16 +44,16 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class NumberFieldRenderer extends FieldRenderer
 {
-	// Whether user can enter a negative number
-	var $allowNegative = false;
-	var $autocomplete = true;
-	var $size = 15;
-	var $onKeyUp; // javascript callback function
-	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
-	var $onChange = ""; // optional callback on data input change
-	var $units = "";
-	var $unitsPosition = "";
-	var $blankZero = false;
+	
+	var $allowNegative = false;	///< Whether user can enter a negative number
+	var $autocomplete = true;	///< Whether the browser is allowed to show autocomplete for this field
+	var $size = 15;				///< Size of the displayed control in characters
+	var $onKeyUp; 				///< optional javascript callback function for key up events
+	var $disable = false; 		///< alternative to readonly; field can be reenabled or set thru javascript
+	var $onChange = ""; 		///< optional javascript callback on data input change
+	var $units = "";			///< units text to display
+	var $unitsPosition = "";	///< whether to display units before or after the control
+	var $blankZero = false;		///< Leave field blank if value is zero
 	
 	function NumberFieldRenderer(&$parent, $field = null)
 	{
@@ -64,6 +64,11 @@ class NumberFieldRenderer extends FieldRenderer
 		}
 	}
 	
+	/**
+	 * Sets the displayed units and their position
+	 * @param unknown $units
+	 * @param unknown $position
+	 */
 	function setUnits($units, $position)
 	{
 		$this->units = $units;
@@ -75,7 +80,7 @@ class NumberFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 		
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
-		$onKeyUp = ($this->onKeyUp) ? " onkeyup='{$this->onKeyUp}()'" : "";
+		$onKeyUp = ($this->onKeyUp) ? " onkeyup='{$this->onKeyUp}(this)'" : "";
 		// JDG - maskInput function doesn't recognize boolean var value
 		// translate to 0 or 1
 		$allowneg = ($this->allowNegative) ? 1 : 0;
