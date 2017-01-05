@@ -180,6 +180,7 @@ ENDSCRIPT;
 		{
 			$obj->fromREQUEST();
 		}
+		echo "FILTER!!!!";
 		
 		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		if (!$this->ajaxSubmitHandler) 
@@ -214,10 +215,10 @@ ENDSCRIPT;
 			}
 		}
 
-		echo "<input type='submit' value='Submit'/>";
 		$this->layout->startUngrouped();
 		
 		$this->renderSearchFields();
+		echo "<input type='submit' value='Submit'/>";
 
 		$this->layout->endUngrouped();
 		
