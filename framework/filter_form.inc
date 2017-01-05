@@ -221,7 +221,7 @@ ENDSCRIPT;
 		$this->layout->endUngrouped();
 		
 		$this->layout->finalizeLayout();
-		echo "<inpt type='submit' style='display: none'/>";
+		echo "<input type='submit' style='display: none'/>";
 		echo "</div>\n";
 		echo "</form>\n";
 		echo "<div style=\"clear: both\">\n</div>\n";
