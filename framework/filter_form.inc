@@ -214,6 +214,7 @@ ENDSCRIPT;
 			}
 		}
 
+		echo "<input type='submit' value='Submit'/>";
 		$this->layout->startUngrouped();
 		
 		$this->renderSearchFields();
@@ -221,7 +222,6 @@ ENDSCRIPT;
 		$this->layout->endUngrouped();
 		
 		$this->layout->finalizeLayout();
-		echo "<input type='submit' value='Submit'/>";
 		echo "</div>\n";
 		echo "</form>\n";
 		echo "<div style=\"clear: both\">\n</div>\n";
