@@ -119,6 +119,9 @@ class FilterForm extends SearchForm
 	var $preserveQueryString = false;
  	var $navigationFunction = "go('{url}')";	///< Format specifier for the default javascript navigation function to be used by fields in the FilterForm
  	var $navigationMode = "form"; 				///< Mode used for navigating after filter changed - either "form" or "panel"
+ 	var $showSubmitButton = false;				///< Whether to show the submit button on a filter form
+ 	var $submitButtonLabel = "Filter Results";	///< Text to show on the filter form submit button, if present
+ 	
  	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
@@ -180,7 +183,6 @@ ENDSCRIPT;
 		{
 			$obj->fromREQUEST();
 		}
-		echo "FILTER!!!!";
 		
 		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		if (!$this->ajaxSubmitHandler) 
@@ -218,8 +220,16 @@ ENDSCRIPT;
 		$this->layout->startUngrouped();
 		
 		$this->renderSearchFields();
-		echo "<input type='submit' value='Submit'/>";
-
+		if ($this->showSubmitButton)
+		{
+			echo "<input type='submit' value='{$this->submitButtonLabel}'/>";
+		}
+		else
+		{
+			// Hidden submit button allow filter to be run by hitting enter
+			echo "<input type='submit' style='display: none'/>";
+		}
+		
 		$this->layout->endUngrouped();
 		
 		$this->layout->finalizeLayout();
