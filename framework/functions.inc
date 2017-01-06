@@ -1224,6 +1224,27 @@ function getRemote($url)
 }
 
 /**
+ * Make a simple GET request to a JSON-return RESTful API, passing the supplied parameters
+ * @param string $url the target URL for the API
+ * @param array $params an array of parameters to pass, as key-value pairs
+ */
+function jsonRequest($url, $params = array())
+{
+	$qs = array();
+	foreach($params as $key => $value)
+	{
+		$qs[] = "$key=".urlencode($value);
+	}
+	
+	$qs = implode("&", $qs);
+	
+	$api = "{$url}?{$qs}";
+	trace($api);
+	$response = getRemote($api);
+	return json_decode($response);
+}
+
+/**
  * Retreive the contents of the remote file at the given URL 
  * and save it to the specified location on the local disk.
  * 
