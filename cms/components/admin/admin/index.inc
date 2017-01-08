@@ -49,4 +49,5 @@ $signature = ComponentManager::getComponentSignature();
 <a class="button" href="/action/component/scan"> Scan for Component Updates </a>&nbsp;&nbsp;
 <a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/php_info", "800px"); return false;' class="button">Show PHP Configuration</a>&nbsp;&nbsp;
 <a href='#' onclick='modalPopup("PHP Configuration", "/action/admin/dump_cache", "800px"); return false;' class="button">Examine Cache</a>&nbsp;&nbsp;
+<a class='button' href='/action/optimize/clear'>Clear CSS and Javascript Cache</a>&nbsp;&nbsp;
 <a href='/admin/user_form' class='button'>Create a New User</a>
