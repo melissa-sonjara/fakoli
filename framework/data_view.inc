@@ -85,13 +85,13 @@ class DataListView implements FacetFilterable
 	var $onRowClick = null;				///< Javascript callback function that is triggered with a row is clicked
 	var $onRowHover = null;				///< Javascript callback function that is triggered with a row is hovered over
 	
-	var $dragText = "";				///< Optional text to display above reorderable table
+	var $dragText = "";					///< Optional text to display above reorderable table
 	// Selection and Commands
 	
-	var $selectable  = false;	///< Whether the table provides a selection mechanism
-	var $menu = null;			///< Context menu for selection-based operations
+	var $selectable  = false;			///< Whether the table provides a selection mechanism
+	var $menu = null;					///< Context menu for selection-based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
-	
+	var $toolbarCallback = null; 		///< Override this callback to add toolbar links into the first header cell
 	static $includesWritten = false;
 	
 	/**
@@ -574,6 +574,13 @@ class DataListView implements FacetFilterable
 ?>
 		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
 <?									
+					}
+					
+					if ($this->toolbarCallback)
+					{
+						echo "<div style='display: inline-block; float: left'>";
+						echo call_user_func($this->toolbarCallback, $this);
+						echo "</div>";
 					}
 				}
 				$first = false;
