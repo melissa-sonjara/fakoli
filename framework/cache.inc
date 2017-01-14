@@ -322,7 +322,7 @@ class APCUCache
 	{
 		trace("invalidateMatching: $pattern", 3);
 		//TODO - Not working on zither - investigate
-		/*$iterator = new APCIterator("user", $pattern);
+		/*$iterator = new APCUIterator("user", $pattern);
 		
 		while($key = $iterator->key())
 		{
@@ -343,7 +343,7 @@ class APCUCache
 		
 		$prefix = ConnectionManager::$dsn."_".Cache::$app_name."_";
 			
-		foreach (new APCIterator('user', '/.*/') as $kvp) 
+		foreach (new APCUIterator('user', '/.*/') as $kvp) 
 		{
 			if (!startsWith($kvp['key'], $prefix)) continue;
 			$key = str_replace($prefix, "", $kvp['key']);
