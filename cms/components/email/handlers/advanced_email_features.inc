@@ -44,7 +44,7 @@
 Fakoli::using("email");
 Fakoli::usingFeature("data_view");
 
-$class_name = mysql_escape_string($_REQUEST["class_name"]);
+$class_name = mysqli_escape_string($_REQUEST["class_name"]);
 
 $table = MergeCodeManager::buildMergeCodeTable($class_name);
 

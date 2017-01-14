@@ -44,7 +44,7 @@
 Fakoli::using("email", "text_lookup");
 Fakoli::usingFeature("data_view");
 
-$class_name = mysql_escape_string($_REQUEST["class_name"]);
+$class_name = mysqli_escape_string($_REQUEST["class_name"]);
 
 $page->page_title = "Advanced Features &ndash; Merge Codes";
 

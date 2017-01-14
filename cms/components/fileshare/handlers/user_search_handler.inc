@@ -43,7 +43,7 @@
 Fakoli::using("fileshare", "user");
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
-$field = mysql_escape_string($_GET["field"]);
+$field = mysqli_escape_string($_GET["field"]);
 
 if(!$document_library_id)
 	Fakoli::end("User Search Handler: no document library id");

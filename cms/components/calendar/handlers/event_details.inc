@@ -34,7 +34,7 @@
 Fakoli::using("calendar", "component");
 
 $event_id = checkNumeric($_GET["event_id"]);
-$handler_class = mysql_escape_string($_GET["handler_class"]);
+$handler_class = mysqli_escape_string($_GET["handler_class"]);
 
 if (!$event_id)
 {

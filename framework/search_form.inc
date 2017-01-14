@@ -269,45 +269,45 @@ class StringSearchParameterHandler extends SearchParameterHandler
 {
 	function equal($name, $value)
 	{
-		$txt = mysql_escape_string($value);
+		$txt = mysqli_escape_string($value);
 		return "$name='$txt'";
 	}
 	
 	function like($name, $value)
 	{
-		$txt = mysql_escape_string($value);
+		$txt = mysqli_escape_string($value);
 		return "$name LIKE '%$txt%'";
 	}
 	
 	function startsWith($name, $value)
 	{
-		$txt = mysql_escape_string($value);
+		$txt = mysqli_escape_string($value);
 		return "$name LIKE '$txt%'";
 	}
 	
 	function from($name, $from)
 	{
-		$from = mysql_escape_string($from);
+		$from = mysqli_escape_string($from);
 		return "$name >= '$from'";
 	}
 	
 	function to($name, $to)
 	{
-		$to = mysql_escape_string($to);
+		$to = mysqli_escape_string($to);
 		return "$name <= '$to'";
 	}
 	
 	function range($name, $from, $to)
 	{
-		$from = mysql_escape_string($from);
-		$to = mysql_escape_string($to);
+		$from = mysqli_escape_string($from);
+		$to = mysqli_escape_string($to);
 		
 		return "($name >= '$from' AND $name <= '$to')";
 	}
 	
 	function any($name, $value)
 	{
-		$value = mysql_escape_string($value);
+		$value = mysqli_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
 		$words = explode(" ", $value);
 		
@@ -328,7 +328,7 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	
 	function all($name, $value)
 	{
-		$value = mysql_escape_string($value);
+		$value = mysqli_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
 		
 		$words = explode(" ", $value);
@@ -351,7 +351,7 @@ class StringSearchParameterHandler extends SearchParameterHandler
 
 	function fullName($f_name, $l_name, $value)
 	{
-		$value = mysql_escape_string($value);
+		$value = mysqli_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
 		$words = explode(" ", $value);
 		
@@ -426,7 +426,7 @@ class DateSearchParameterHandler extends SearchParameterHandler
 			$date = $fields[3]."-".$fields[1]."-".$fields[2]." ".$fields[4];
 		}
 	
-		return mysql_escape_string($date);
+		return mysqli_escape_string($date);
 	}
 
 

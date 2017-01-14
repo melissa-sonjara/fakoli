@@ -116,24 +116,6 @@ function filterByRole($items, $field)
  * MIME types allowable for image uploads 
  */
 $image_types = array( "image/jpeg", "image/gif", "image/x-png", "image/pjpeg" );
-/**
- * LEGACY Global function to connect to the database.
- * Uses the parameters defined in the global $conn array. 
- */
-function connect_db()
-{
-	global $usr;
-  	global $db;
-  	global $pwd;
-  	global $host;
-
-  	/* Connecting, selecting database */
-  	$link = mysql_connect($host, $usr, $pwd)
-   		or die("Could not connect to database");
- 	mysql_select_db($db, $link) or die("Could not select database");
-  
-	return $link;
-}
 
 /**
  *  Utility function to nicely format addresses, etc.
@@ -539,65 +521,6 @@ function printMIMETypeList($types)
 }
 
 /**
- *  Uploads a file, stores the URL in the database.
- *  @param string  $input     the name of the <INPUT> tag for the file upload
- *  @param array   $types     the list of acceptable MIME types
- *  @param string  $table     the name of the database table associated with this file
- *  @param string  $field     the name of the field in the table
- *  @param string  $idfield   the name of the primary key field for the table
- *  @param integer $id        the primary key value for the row the upload is associated with
- *  @param string  $mimefield the field in the table that will store the MIME type of the file.
- *  
- *  Deprecated
- */
-function uploadFile($input, $types, $table, $field, $idfield, $id, $mimefield)
-{
-	global $HTTP_POST_FILES;
-	global $config;
-
-	if (!$HTTP_POST_FILES[$input]) return;
-	if ($HTTP_POST_FILES[$input]["name"]=="") return;
-
-	$fileType = $HTTP_POST_FILES[$input]["type"];
-
-	$matchingType = "";
-	foreach($types as $t)
-	{
-		if (is_integer(strpos($fileType, $t)))
-    	{
-			$matchingType = $t;
-      		break;
-		}
-	}
-
-	if ($matchingType == "") die("No matching MIME type found for ".$fileType);
-
-  	/* Copy across the uploaded file */
-
-	$dir = $config["uploaddir"]."/$id";
-	$name = $HTTP_POST_FILES[$input]["name"];
-	$file = "$dir/$name";
-	
-	if (!file_exists("$dir"))
-	{
-		// If the directory does not exist, create it 
-		mkdir("$dir");
-	}
-	else if (file_exists("$file"))
-	{
-		// If a previous copy of the file already exists, remove it
-		unlink("$file");
-	}
-	
-  	move_uploaded_file($HTTP_POST_FILES[$input]["tmp_name"], $file);
-  	chmod($file, 0755);
- 
- 	$query = "update $table set $field='$file', $mimefield='$matchingType' where $idfield=$id";
- 	
- 	mysql_query($query) or die("Failed to update $table - $query");
-}
-
-/**
  * Returns a human-readable type name for a document, 
  * based on the file extension of the supplied file name.
  * 
@@ -698,30 +621,6 @@ function getDocIcon($doc)
 	if (!$icon) $icon = "/fakoli/images/file_icon.png";
 	return $icon;
 }
-
-/**
- * Counts the number of rows in the specified table.
- * Constraints can be passed in as part of the table string if required
- * 
- * @param string $table the table to count
- */
-function countRows($table, $fn="COUNT(1)")
-{
-	$sql = "SELECT $fn FROM $table";
-	$result = mysql_query($sql) or die("countRows failed - $sql");
-	
-	$count = 0;
-	
-	if ($line = mysql_fetch_row($result))
-	{
-		$count = $line[0];
-	}
-	
-	mysql_free_result($result);
-	
-	return $count;
-}
-
 
 /**
  * Security helper function. Check that the given parameter is a numeric value.

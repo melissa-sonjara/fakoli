@@ -267,9 +267,9 @@ class ComponentPageView
 		{		
 			$expr = $var[0];
 			$name = $var[1];
-			global $$name;
+			global ${$name};
 				
-			$template = str_replace($expr, $$name, $template);
+			$template = str_replace($expr, ${$name}, $template);
 		}
 		
 		if ($config['prettyURLs'] === false)

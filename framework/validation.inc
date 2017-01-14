@@ -684,7 +684,7 @@ class UniqueValidator extends AbstractValidator
 		{			
 			trace("UniqueValidator::validate: ".get_class($this->item), 3);
 			
-			$value = mysql_escape_string($value);
+			$value = mysqli_escape_string($value);
 			
 			$pk = $this->item->primary_key;
 			
