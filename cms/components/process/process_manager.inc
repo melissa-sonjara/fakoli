@@ -70,7 +70,9 @@ class ProcessManager
 		$this->id = sha1(now() . $action);
 		$launch  = stristr(PHP_OS, "WIN") ? "start " : "";
 		$bg = stristr(PHP_OS, "WIN") ? "" : " &";
-		$run = Settings::getValue("process", "PHP_executable")." ".sanitizePath(Fakoli::getComponent("process")->component_path) . DIRECTORY_SEPARATOR . "run.php";
+		$run = Settings::getValue("process", "PHP_executable")." -d include_path='".
+			get_include_path()."' ".
+			sanitizePath(Fakoli::getComponent("process")->component_path) . DIRECTORY_SEPARATOR . "run.php";
 		$home = $config['homedir'];
 		
 		$userPK = $user ? $user->get($user->primary_key) : "";
