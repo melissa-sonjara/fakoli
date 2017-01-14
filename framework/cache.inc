@@ -57,7 +57,14 @@ class Cache
 		}
 		else if (ini_get("apc.enabled") && PHP_SAPI !== 'cli')
 		{
-			Cache::$instance = new APCCache();
+			if (PHP_MAJOR_VERSION >= 7)
+			{
+				Cache::$instance = new APCUCache();
+			}
+			else
+			{
+				Cache::$instance = new APCCache();
+			}
 		}
 		else if (ini_get("wincache.ucenabled") && PHP_SAPI !== 'cli')
 		{
@@ -257,6 +264,77 @@ class APCCache
 	function clear()
 	{
 		apc_clear_cache('user');
+	}
+	
+	function dump()
+	{
+		echo "<table class='list'><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>\n";
+		
+		$prefix = ConnectionManager::$dsn."_".Cache::$app_name."_";
+			
+		foreach (new APCIterator('user', '/.*/') as $kvp) 
+		{
+			if (!startsWith($kvp['key'], $prefix)) continue;
+			$key = str_replace($prefix, "", $kvp['key']);
+			$value = htmlSafe($kvp['value']);
+			
+			echo "<tr><td><b>$key</b></td><td>{$value}</td></tr>\n";
+		}
+		echo "</tbody></table>";
+	}
+}
+
+
+
+/**
+ * Provides a simple cacheing mechanism using the Alternative PHP Cache extension.
+ * 
+ * @author Andy Green
+ */
+class APCUCache
+{	
+	function __construct()
+	{
+		trace("Creating APCU Cache", 4);
+	}
+	
+	function get($key)
+	{
+		$success = true;
+		
+		$s = apcu_fetch($key, $success);
+		if (!$success) return null;
+		
+		return unserialize($s);
+	}
+	
+	function put($key, $obj, $ttl = 0)
+	{
+		return apcu_store($key, serialize($obj), $ttl);
+	}
+	
+	function invalidate($key)
+	{
+		return apcu_delete($key);
+	}
+
+	function invalidateMatching($pattern)
+	{
+		trace("invalidateMatching: $pattern", 3);
+		//TODO - Not working on zither - investigate
+		/*$iterator = new APCIterator("user", $pattern);
+		
+		while($key = $iterator->key())
+		{
+			trace($key, 3);
+			Cache::invalidate($key);
+			$iterator->next();
+		}*/
+	}	
+	
+	function clear()
+	{
+		apcu_clear_cache('user');
 	}
 	
 	function dump()
