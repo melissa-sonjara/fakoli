@@ -38,8 +38,6 @@ $user_id = $argv[4];
 
 set_include_path($home . PATH_SEPARATOR . get_include_path());
 
-echo get_include_path();
-
 require_once "include/config.inc";
 require_once "cms/core.inc";
 
