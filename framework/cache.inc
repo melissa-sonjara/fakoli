@@ -343,7 +343,7 @@ class APCUCache
 		
 		$prefix = ConnectionManager::$dsn."_".Cache::$app_name."_";
 			
-		foreach (new APCUIterator('user', '/.*/') as $kvp) 
+		foreach (new APCUIterator('/.*/') as $kvp) 
 		{
 			if (!startsWith($kvp['key'], $prefix)) continue;
 			$key = str_replace($prefix, "", $kvp['key']);
