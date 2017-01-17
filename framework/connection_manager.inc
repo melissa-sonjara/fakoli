@@ -105,4 +105,30 @@ class ConnectionManager
 	{
 		ConnectionManager::$conn = null;
 	}
+	
+	/**
+	 * Quote a string value based on the character set of the global connection
+	 * 
+	 * @param string $str the string to quote
+	 * @return the string, wrapped in quotes, with other quote characters escaped
+	 */
+	static function quote($str)
+	{
+		return ConnectionManager::getConnection()->quote($str);
+	}
+	
+	/**
+	 * Escapes a string based on the character set of the global connection.
+	 * This is a kludge - try not to use it. I'm adding it for backward compatibility
+	 * only when migrating to PHP 7 where mysql_escape_string() is no longer available.
+	 * @param string the string to escape
+	 * @return the string with quote characters escaped
+	 */
+	static function escape($str)
+	{
+		$quoted = ConnectionManager::getConnection()->quote($str);
+		$escaped = preg_replace("/^'(.*)'$/", "$1", $quoted);
+		trace("ESCAPE: $str -> $quoted -> $escaped", 1);
+		return $escaped;
+	}
 }

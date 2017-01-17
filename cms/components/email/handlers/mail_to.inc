@@ -44,9 +44,9 @@
 Fakoli::using("email");
 Fakoli::usingFeature("auto_form");
 
-$to = mysqli_escape_string($_GET["to"]);
-$subject = mysqli_escape_string($_GET["subject"]);
-$message = mysqli_escape_string($_GET["message"]);
+$to = ConnectionManager::escape($_GET["to"]);
+$subject = ConnectionManager::escape($_GET["subject"]);
+$message = ConnectionManager::escape($_GET["message"]);
 
 $email = new EmailTemplate();
 

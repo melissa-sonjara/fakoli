@@ -41,7 +41,7 @@
 Fakoli::using("email");
 Fakoli::usingFeature("tree");
 
-$class_name = mysqli_escape_string($_GET["class_name"]);
+$class_name = ConnectionManager::escape($_GET["class_name"]);
 
 if(!$class_name)
 	die("");

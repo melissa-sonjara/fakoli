@@ -44,7 +44,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 Fakoli::using("survey", "questionnaire");
 
 $survey_id = checkNumeric($_GET["survey_id"]);
-$token = mysqli_escape_string($_GET["token"]);
+$token = ConnectionManager::escape($_GET["token"]);
 $msg = checkNumeric($_GET["msg"]);
 
 if(!$survey_id)

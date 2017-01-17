@@ -38,7 +38,7 @@ if (!checkRole("admin"))
 	throw new FakoliException("Permission Denied");
 }
 
-$filename = mysqli_escape_string($_GET["filename"]);
+$filename = ConnectionManager::escape($_GET["filename"]);
 
 $dir = Settings::getValue("email", "debugging_mode_output_path") . DIRECTORY_SEPARATOR;
 

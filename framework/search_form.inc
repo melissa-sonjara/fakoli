@@ -269,45 +269,44 @@ class StringSearchParameterHandler extends SearchParameterHandler
 {
 	function equal($name, $value)
 	{
-		$txt = mysqli_escape_string($value);
-		return "$name='$txt'";
+		$txt = ConnectionManager::quote($value);
+		return "$name=$txt";
 	}
 	
 	function like($name, $value)
 	{
-		$txt = mysqli_escape_string($value);
-		return "$name LIKE '%$txt%'";
+		$txt = ConnectionManager::quote("%{$value}%");
+		return "$name LIKE $txt";
 	}
 	
 	function startsWith($name, $value)
 	{
-		$txt = mysqli_escape_string($value);
-		return "$name LIKE '$txt%'";
+		$txt = ConnectionManager::quote("{$value}%");
+		return "$name LIKE $txt";
 	}
 	
 	function from($name, $from)
 	{
-		$from = mysqli_escape_string($from);
-		return "$name >= '$from'";
+		$txt = ConnectionManager::quote($from);
+		return "$name >= $txt";
 	}
 	
 	function to($name, $to)
 	{
-		$to = mysqli_escape_string($to);
-		return "$name <= '$to'";
+		$txt = ConnectionManager::quote($to);
+		return "$name <= $txt";
 	}
 	
 	function range($name, $from, $to)
 	{
-		$from = mysqli_escape_string($from);
-		$to = mysqli_escape_string($to);
+		$from = ConnectionManager::quote($from);
+		$to = ConnectionManager::quote($to);
 		
-		return "($name >= '$from' AND $name <= '$to')";
+		return "($name >= $from AND $name <= $to)";
 	}
 	
 	function any($name, $value)
 	{
-		$value = mysqli_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
 		$words = explode(" ", $value);
 		
@@ -317,8 +316,9 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		$first = true;
 		foreach($words as $word)
 		{
+			$txt = ConnectionManager::quote("%{$word}%");
 			if (!$first) $query .= " OR ";
-			$query .= "$name LIKE '%$word%'";
+			$query .= "$name LIKE $txt";
 			$first = false;
 		}
 		$query .= ")";	
@@ -328,7 +328,6 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	
 	function all($name, $value)
 	{
-		$value = mysqli_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
 		
 		$words = explode(" ", $value);
@@ -339,8 +338,9 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		$first = true;
 		foreach($words as $word)
 		{
+			$txt = ConnectionManager::quote("%{$word}%");
 			if (!$first) $query .= " AND ";
-			$query .= "$name LIKE '%$word%'";
+			$query .= "$name LIKE $txt";
 			$first = false;
 		}
 		$query .= ")";	
@@ -351,7 +351,6 @@ class StringSearchParameterHandler extends SearchParameterHandler
 
 	function fullName($f_name, $l_name, $value)
 	{
-		$value = mysqli_escape_string($value);
 		$value = preg_replace("/\\s+/", " ", $value);
 		$words = explode(" ", $value);
 		
@@ -365,8 +364,9 @@ class StringSearchParameterHandler extends SearchParameterHandler
 		{
 			if (!$first) $query .= " OR (";
 					
-			$query .= "{$f_name} LIKE '{$words[$idx]}%' 
-			AND {$l_name} LIKE '{$words[$idx+1]}%'";
+			$txt1 = ConnectionManager::quote("%{$words[$idx]}%");
+			$txt2 = ConnectionManager::quote("%{$words[$idx+1]}%"); 
+			$query .= "{$f_name} LIKE $txt1 AND {$l_name} LIKE $txt2";
 
 			$idx += 1;
 			$query .= ") ";
@@ -426,7 +426,7 @@ class DateSearchParameterHandler extends SearchParameterHandler
 			$date = $fields[3]."-".$fields[1]."-".$fields[2]." ".$fields[4];
 		}
 	
-		return mysqli_escape_string($date);
+		return ConnectionManager::escape($date);
 	}
 
 

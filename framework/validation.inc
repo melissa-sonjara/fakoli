@@ -684,11 +684,11 @@ class UniqueValidator extends AbstractValidator
 		{			
 			trace("UniqueValidator::validate: ".get_class($this->item), 3);
 			
-			$value = mysqli_escape_string($value);
+			$value = ConnectionManager::quote($value);
 			
 			$pk = $this->item->primary_key;
 			
-			$constraint = "WHERE {$this->field}='$value'";
+			$constraint = "WHERE {$this->field}=$value";
 			
 			if ($this->extraConstraint) $constraint .= " AND {$this->extraConstraint}";
 			

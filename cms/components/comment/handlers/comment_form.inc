@@ -9,10 +9,10 @@ Fakoli::using("comment", "settings", "email", "captcha");
 Fakoli::usingFeature("auto_form");
 
 $comment_id = checkNumeric($_GET["comment_id"]);
-$xref_class = mysqli_escape_string($_GET["xref_class"]);
-$key_name = mysqli_escape_string($_GET["key_name"]);
+$xref_class = ConnectionManager::escape($_GET["xref_class"]);
+$key_name = ConnectionManager::escape($_GET["key_name"]);
 $key_value = checkNumeric($_GET["key_value"]);
-$xref_component = mysqli_escape_string($_GET["xref_component"]);
+$xref_component = ConnectionManager::escape($_GET["xref_component"]);
 global $user;
 
 if ($xref_component) Fakoli::using($xref_component);

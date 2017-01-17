@@ -58,7 +58,7 @@ foreach($component_page_ids as $component_page_id)
 	if (isset($_GET["role"]))
 	{
 		$filter->add("role");
-		$page->role = mysqli_escape_string($_GET["role"]);
+		$page->role = ConnectionManager::escape($_GET["role"]);
 	}
 
 	if (isset($_GET["site_id"]))
@@ -70,7 +70,7 @@ foreach($component_page_ids as $component_page_id)
 	if (isset($_GET["template"]))
 	{
 		$filter->add("template");
-		$page->template = mysqli_escape_string($_GET["template"]);
+		$page->template = ConnectionManager::escape($_GET["template"]);
 	}
 	
 		

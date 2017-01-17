@@ -35,7 +35,7 @@ Fakoli::using("blog");
 Fakoli::usingFeature("auto_form");
 
 $blog_subscriber_id = checkNumeric($_GET["blog_subscriber_id"]);
-$subscription_type = mysqli_escape_string($_GET["subscription_type"]);
+$subscription_type = $_GET["subscription_type"]; // This will be escaped when saved to the database
 
 if(!$blog_subscriber_id)
 {

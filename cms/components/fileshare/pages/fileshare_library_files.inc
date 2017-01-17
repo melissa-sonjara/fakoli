@@ -35,7 +35,7 @@ Fakoli::using("document", "fileshare");
 Fakoli::usingFeature("data_view", "facet_manager", "tab_bar");
 
 $document_library_id = checkNumeric($_GET["document_library_id"]);
-$keyword = mysqli_escape_string($_GET["keyword"]);
+$keyword = ConnectionManager::escape($_GET["keyword"]);
 
 if (!$document_library_id)
 {

@@ -15,10 +15,10 @@ if (!($u->hasField("first_name") && $u->hasField("last_name")))
 
 $pk = $u->getPrimaryKey();
 $table = $u->table;
-$text = mysqli_escape_string($text);
+$text = "%{$text}%";
 
-$messages = Query::create(ForumMessage, "WHERE deleted=0 AND forum_id=:f AND author_id IN (SELECT $pk FROM $table WHERE concat(first_name, ' ', last_name) LIKE '%{$text}%') ORDER BY date_posted DESC")
-				 ->bind(":f", $forum_id)
+$messages = Query::create(ForumMessage, "WHERE deleted=0 AND forum_id=:f AND author_id IN (SELECT $pk FROM $table WHERE concat(first_name, ' ', last_name) LIKE :t) ORDER BY date_posted DESC")
+				 ->bind(":f", $forum_id, ":t", $text)
     			 ->execute();
 		
 $view = new ForumSearchResultsView($messages, $_GET["author"]);
