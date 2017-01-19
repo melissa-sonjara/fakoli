@@ -14,7 +14,9 @@ $filterForm->hide("startDate");
 $dateRangeRenderer = new DateRangeFilterRenderer($filterForm, "date_sent", "date_sent");
 $title = "Email Logs for ". $dateRangeRenderer->subTitle;
 
-$logs = Query::create(EmailLog, "ORDER BY date_sent DESC")->execute();
+$constraint = $filterForm->getConstraint();
+
+$logs = Query::create(EmailLog, "$constraint ORDER BY date_sent DESC")->execute();
 
 $table = new DataListView($logs, "EmailLogs");
 $table->column("Recipient Email", "{recipient_email}", true)
