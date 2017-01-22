@@ -180,5 +180,4 @@ class SectionManager
 	}
 }
 
-SectionManager::registerSectionContentManager();
 ?>
