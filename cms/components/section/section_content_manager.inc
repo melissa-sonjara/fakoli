@@ -263,6 +263,3 @@ ENDSCRIPT;
 		return $types;
 	}
 }
-
-
-SectionManager::registerSectionContentManager();
