@@ -144,6 +144,7 @@ class StackedHistogramSeries extends HistogramSeries
 
 class Histogram
 {
+	var $cssClass;
 	var $width;
 	var $height;
 	var $orientation = "vertical";
@@ -401,7 +402,9 @@ ENDSCRIPT;
 			$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
 		}
 		
-		echo "<div id='{$this->id}' style='{$this->cssStyles}'></div>";
+		$cssClass = ($this->cssClass) ? " class='{$this->cssClass}'" : "";
+		
+		echo "<div id='{$this->id}'{$cssClass} style='{$this->cssStyles}'></div>";
 	}	
 }
 ?>
