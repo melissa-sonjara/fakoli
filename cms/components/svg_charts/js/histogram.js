@@ -533,13 +533,19 @@ var VerticalHistogramAxisRenderer = new Class(
 			var x = this.options.chartLeft + this.columnWidth * index + (this.getColumnOffset());
 			var y = this.options.chartTop + this.options.chartHeight + this.options.labelOffset + (text.count("\n") * this.options.labelSize / 2);
 			
-			var label = this.paper.text(x, y, text);
-			var i = "Tooltip";
-			label.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": this.options.labelAnchor});
+			var decorations = this.chart.labelDecorations[index];
+			var attrs = {stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": this.options.labelAnchor};
+			Object.append(attrs, decorations);
+
 			if (this.options.labelAngle)
 			{
-				label.attr({'transform': "rotate(" + this.options.labelAngle + "," + x + "," + y + ")"});
+				attrs.transform = "rotate(" + this.options.labelAngle + "," + x + "," + y + ")";
 			}
+			
+			var label = this.paper.text(x, y, text);
+			var i = "Tooltip";
+			label.attr(attrs);
+
 			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
 			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
 			label.click(function() { this.fireEvent('click', i); }.bind(this));
@@ -631,12 +637,17 @@ var HorizontalHistogramAxisRenderer = new Class(
 		this.chart.labels.each(function(text, index)
 		{
 			var chart = this.chart;
+			var decorations = this.chart.labelDecorations[index];
 			var x = chart.options.chartLeft - 5;
 			var y = chart.options.chartTop + chart.columnWidth * index + (chart.getColumnOffset());
 			//+ this.options.chartHeight + 20 + (text.count("\n") * this.options.labelSize / 2);
 			
 			var label = chart.paper.text(x, y, text);
-			label.attr({stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "end"});
+			
+			var attrs = {stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": "end"};
+			Object.append(attrs, decorations);
+			
+			label.attr(attrs);
 			label.mouseover(function(e) { chart.fireEvent('mouseOver', [e, index]); this.showToolTip(e, index);}.bind(this));
 			label.mouseout(function(e) { chart.fireEvent('mouseOut', [e, index]);  this.hideToolTip();}.bind(this));
 			label.click(function() { chart.fireEvent('click', index); }.bind(this));
@@ -701,6 +712,7 @@ var Histogram = new Class(
 	series: [],
 	labels: [],
 	labelTooltips: [],
+	labelDecorations: [],
 	yAxisLabels: [],
 	max: 0,
 	min: 0,
