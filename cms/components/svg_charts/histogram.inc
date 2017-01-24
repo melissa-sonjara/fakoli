@@ -226,6 +226,11 @@ class Histogram
 	    $this->labelTooltips = $labelTooltips;
 	}
 	
+	function setLabelDecorations($labelDecorations)
+	{
+		$this->labelDecorations = $labelDecorations;
+	}
+	
 	function setLabelSize($size)
 	{
 		$this->labelSize = $size;
@@ -298,6 +303,18 @@ class Histogram
 		
 		$labels = "'".implode("', '", $this->labels) . "'";
 		$labelTooltips = "'".implode("', '", $this->labelTooltips) . "'";
+		
+		if ($this->labelDecorations)
+		{
+			$decorations = array();
+			foreach($this->labelDecorations as $decoration)
+			{
+				$decorations[] = json_encode($decoration);
+			}
+
+			$labelDecorations = implode(",", $decorations);
+		}
+				
 		//$labelTooltips = $labels;
 		
 		if (count($this->yAxisLabels))
@@ -366,6 +383,8 @@ window.addEvent('domready', function ()
 	
 	{$this->id}.labels = [ {$labels} ];
 	{$this->id}.labelTooltips = [ {$labelTooltips} ];
+	{$this->id}.labelDecorations = [ {$labelDecorations} ];
+	
 {$yaxis}
 {$data}
 	{$this->id}.draw();
