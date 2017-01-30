@@ -95,6 +95,9 @@ class TextTypeRenderer extends AbstractTypeRenderer
 		case "xml":
 			return xmlEntities($value);
 			
+		case "firstSentence":
+			return firstSentence($value);
+			
 		default:
 			
 			if (is_numeric($template))
