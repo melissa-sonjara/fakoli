@@ -17,7 +17,7 @@ class RssFeedManifest
 	static function getAdminMenu()
 	{
 		return array(
-			"Classification"	=> array
+			"Collaboration"	=> array
 			(
 
 				"RSS Feeds"	=>	array("page"	=>	"/admin/rss_feed",
