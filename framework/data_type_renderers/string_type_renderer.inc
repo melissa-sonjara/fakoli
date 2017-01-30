@@ -100,6 +100,9 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "phone":
 			return StringTypeRenderer::phone($value);
 			
+		case "firstSentence":
+			return firstSentence($value);
+			
 		default:
 			
 			if (is_numeric($template))
