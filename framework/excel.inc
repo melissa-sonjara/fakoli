@@ -98,6 +98,38 @@ interface IExcelFile
 	function writeCurrency($row, $col, $value);
 	
 	/**
+	 * Write text with column heading styles
+	 * @param integer $row
+	 * @param integer $col
+	 * @param string $value
+	 */
+	function writeHeading($row, $col, $value);
+	
+	/**
+	 * Write text with column sub-heading styles
+	 * @param integer $row
+	 * @param integer $col
+	 * @param string $value
+	 */
+	function writeSubheading($row, $col, $value);
+	
+	/**
+	 * Write text with column footer styles
+	 * @param integer $row
+	 * @param integer $col
+	 * @param string $value
+	 */
+	function writeFooter($row, $col, $value);
+	
+	/**
+	 * Write number with column footer styles
+	 * @param integer $row
+	 * @param integer $col
+	 * @param string $value
+	 */	
+	function writeFooterNumber($row, $col, $value);
+	
+	/**
 	 * Set the title of the currently active worksheet.
 	 * @param string $title the title text.
 	 */
@@ -186,6 +218,26 @@ class ExcelFile implements IExcelFile
     	$len = strlen($value);
     	echo pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len);
     	echo $value;
+	}
+	
+	function writeHeading($row, $col, $value)
+	{
+		return $this->writeText($row, $col, $value);
+	}
+	
+	function writeSubheading($row, $col, $value)
+	{
+		return $this->writeText($row, $col, $value);
+	}
+	
+	function writeFooter($row, $col, $value)
+	{
+		return $this->writeText($row, $col, $value);
+	}
+	
+	function writeFooterNumber($row, $col, $value)
+	{
+		return $this->writeNumber($row, $col, $value);
 	}
 	
 	function writePercentage($row, $col, $value)

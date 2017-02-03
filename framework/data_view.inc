@@ -765,7 +765,7 @@ class DataListView implements FacetFilterable
 		$c = 0;
 		foreach($this->columns as $column)
 		{
-			$x->writeText(0, $c, stripHTMLTags(stripHTML($column->title)));
+			$x->writeHeading(0, $c, stripHTMLTags(stripHTML($column->title)));
 			++$c;
 		}
 		
@@ -845,12 +845,12 @@ class DataListView implements FacetFilterable
 				if (preg_match("/^[\\d\\,\\.]+$/", $val))
 				{
 					$val = str_replace(",", "", $val);
-					$x->writeNumber($r, $c, $val);
+					$x->writeFooterNumber($r, $c, $val);
 				}
 				else
 				{
 					// No HTML required in Excel output
-					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
+					$x->writeFooter($r, $c, stripHTMLTags(stripHTML($val)));
 				}
 				$c += $column->colspan;
 			}

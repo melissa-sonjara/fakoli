@@ -657,7 +657,7 @@ class GroupedDataListView
 			{
 				foreach($this->columns as $column)
 				{
-					$x->writeText(0, $c, $column->title);
+					$x->writeHeading(0, $c, $column->title);
 					++$c;
 				}
 				
@@ -669,7 +669,7 @@ class GroupedDataListView
 			{
 				if (!$this->groupAsWorksheets)
 				{				
-					$x->writeText($r, 0, stripHTML($group->title));
+					$x->writeSubheading($r, 0, stripHTML($group->title));
 					$r++;
 				}
 				
@@ -743,12 +743,12 @@ class GroupedDataListView
 				$val = $column->format();
 				if (preg_match("/^[\\d\\.]+$/", $val))
 				{
-					$x->writeNumber($r, $c, $val);
+					$x->writeFooterNumber($r, $c, $val);
 				}
 				else
 				{
 					// No HTML required in Excel output
-					$x->writeText($r, $c, stripHTML($val));
+					$x->writeFooter($r, $c, stripHTML($val));
 				}
 				$c += $column->colspan;
 			}
