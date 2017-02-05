@@ -102,6 +102,16 @@ class SectionContentManagerMap
 	}
 	
 	/**
+	 * Check whether a SectionContentManager has been registered for the specified type.
+	 * @param string $section_type the type of Section
+	 * @return boolen true if a SectionContentManager has been registered for this type, false otherwise
+	 */
+	static function isSectionTypeRegistered($section_type)
+	{
+		return array_key_exists($section_type, SectionContentManagerMap::$map);
+	}
+	
+	/**
 	 * Returns the list of registered section content types.
 	 * @return array the list of registered section content types in alphabetical order
 	 */
@@ -127,10 +137,20 @@ class SectionContentManagerMap
  */
 class SectionManager
 {
+	private static function ensureContentManager()
+	{
+		if (!SectionContentManagerMap::isSectionTypeRegistered("Content"))
+		{
+			SectionContentManagerMap::registerManager("Content", new SectionContentManager());
+		}
+	}
+	
 	static function addToSection($section_folder, $identifier, $role = "", $template = "", $use_SSL = false, $permissions = "")
 	{
 		trace("Adding '$identifier' to section '$section_folder'", 3);
 
+		SectionManager::ensureContentManager();
+		
 		if (SectionManager::isInSection($section_folder, $identifier)) return;
 		$section = Section::createFromIdentifier($section_folder);
 		
@@ -148,6 +168,8 @@ class SectionManager
 	{
 		trace("Removing '$identifier' from section '$section_folder'", 3);
 		
+		SectionManager::ensureContentManager();
+		
 		$section = Section::createFromIdentifier($section_folder);
 		
 		$content = new SectionContent();
@@ -156,6 +178,7 @@ class SectionManager
 	
 	static function isInSection($section_folder, $identifier)
 	{
+		SectionManager::ensureContentManager();
 		$section = Section::createFromIdentifier($section_folder);
 
 		$content = new SectionContent();
@@ -170,7 +193,7 @@ class SectionManager
 
 	static function registerSectionContentManager()
 	{
-		SectionContentManagerMap::registerManager("Content", new SectionContentManager());
+		SectionManager::ensureContentManager();
 	}
 	
 	static function registerSerializationHandler()
