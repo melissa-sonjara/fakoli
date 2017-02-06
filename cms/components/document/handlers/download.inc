@@ -85,8 +85,11 @@ trace("Download: opening document with filepath {$filepath} and mimeType {$mimeT
 
 trace("Download: opened document {$document_id}", 3);
 
+$overrideDisposition = Settings::getValue("document", "always_display_PDFs_in_browser");
+$disposition = ($overrideDisposition && $mimeType == 'application/pdf') ? "inline" : "attachment";
+
 header("Pragma: private");
-header("Content-Disposition: attachment;filename=\"" . basename($document->file) . "\"");
+header("Content-Disposition: {$disposition};filename=\"" . basename($document->file) . "\"");
 header("Cache-Control: must-revalidate");
 header("Content-Type: $mimeType");
 
