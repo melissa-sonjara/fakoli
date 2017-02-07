@@ -178,6 +178,15 @@ abstract class AbstractDataItem
 	}
 	
 	/**
+	 * Retrieve the value of a decoration on the current DataItem
+	 * @param string $name the name of the decoration to retrieve
+	 */
+	function getDecoration($name)
+	{
+		return $this->_decorations[$name];
+	}
+	
+	/**
 	 * Cast this object to another class. This facility is provided so that
 	 * it is possible to cast from a CompositeDataItem to one of its constituents
 	 * to provide support for polymorphism in those cases. 
