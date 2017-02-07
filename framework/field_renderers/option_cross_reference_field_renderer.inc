@@ -53,7 +53,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 		
 		var values = [];
 		
-		$$('#<?echo $id?>_list > li').each(function(elt) 
+		$$('.<?echo $id?>_list > li').each(function(elt) 
 		{ 
 			if (elt.hasClass('selected'))
 			{
@@ -137,7 +137,9 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	
 	function renderOptions($field, $options, $selectedItems)
 	{
-		echo "<ul id='{$id}_list' class='{$this->cssClass}'>";
+		$id = "{$this->parent->id}_{$field}";
+
+		echo "<ul class='{$id}_list {$this->cssClass}'>";
 		foreach($this->options as $option)
 		{
 			$val = $option->get($option->getPrimaryKey());
