@@ -200,13 +200,22 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	function postProcess($field = "")
 	{
 		if (count($this->options) == 0) return;
-	
+
 		$xref = new $this->xrefClass;
-	
+		
 		$obj = $this->parent->data;
 		$pk =  $this->getMatchingPK($xref, $obj);
-		$rc = $this->options[0];
-	
+		
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
+		{
+			$keys = array_keys($this->options);
+			$rc = $this->options[$keys[0]][0];
+		}
+		else
+		{
+			$rc = $this->options[0];
+		}
+		
 		$optpk = $this->getMatchingPK($xref, $rc);
 	
 		$tx = new DataTransaction();
