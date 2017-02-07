@@ -140,7 +140,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 		$id = "{$this->parent->id}_{$field}";
 
 		echo "<ul class='{$id}_list {$this->cssClass}'>";
-		foreach($this->options as $option)
+		foreach($options as $option)
 		{
 			$val = $option->get($option->getPrimaryKey());
 			$classes = array();
