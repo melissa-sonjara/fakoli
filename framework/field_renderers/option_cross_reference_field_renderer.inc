@@ -28,6 +28,12 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	}
 
 
+	function groupBy($groupBy, $format = "")
+	{
+		$this->groupBy = $groupBy;
+		$this->groupByFormat = $format;
+	}
+	
 	function renderScript($field)
 	{
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)) return;
@@ -78,7 +84,15 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 
 			$obj = $this->parent->data;
 
-			$rc = $this->options[0];
+			if (is_array($this->groupBy) && count($this->groupBy) > 0)
+			{
+				$keys = array_keys($this->options);
+				$rc = $this->options[$keys[0]][0];
+			}
+			else
+			{
+				$rc = $this->options[0];
+			}
 			$pk = $obj->getPrimaryKey();
 			
 			$selectedItems = $this->getSelected($obj, $rc, $pk);
@@ -89,28 +103,60 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			$id = "{$this->parent->id}_{$field}";
 			
 			echo "<input type='hidden' id='{$id}' name='{$field}' value='{$value}'/>";
-			echo "<ul id='{$id}_list' class='{$this->cssClass}'>";
-			foreach($this->options as $option)
+					
+			if (is_array($this->groupBy) && count($this->groupBy) > 0)
 			{
-				$val = $option->get($option->getPrimaryKey());
-				$classes = array();
-				if (array_key_exists($val, $selectedItems)) $classes[] = "selected";
-				
-				if ($this->onStartOption)
+				$gpk = $this->groupBy[0]->getPrimaryKey();
+							
+				foreach($this->groupBy as $group)
 				{
-					$flag = call_user_func($this->onStartOption, $option);
-					if ($flag === false) continue;
-					if ($flag) $classes[] = $flag;
+					if (array_key_exists($group->get($gpk), $this->options))
+					{
+						echo $group->format($this->groupByFormat);
+						$this->renderOptions($field, $this->options[$group->get($gpk)], $selected); 
+					}
 				}
-				
-				$classes = implode(" ", $classes);
-				
-				$description = $this->formatName($option, $this->nameField); 
-				echo "<li class='{$classes}' data-value='{$val}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
 			}
-			echo "</ul>";
+			else if (is_string($this->groupBy))
+			{
+				$options = regroupList($this->options, $this->groupBy);
+	
+				foreach($options as $group => $choices)
+				{
+					echo "<br/><h4>$group</h4>";
+					$this->renderOptions($field, $choices, $selected);
+				}
+			}
+			else
+			{
+				$this->renderOptions($this->options);
+			}
 		}
 		$this->_endField($field);
+	}
+	
+	function renderOptions($field, $options, $selectedItems)
+	{
+		echo "<ul id='{$id}_list' class='{$this->cssClass}'>";
+		foreach($this->options as $option)
+		{
+			$val = $option->get($option->getPrimaryKey());
+			$classes = array();
+			if (array_key_exists($val, $selectedItems)) $classes[] = "selected";
+		
+			if ($this->onStartOption)
+			{
+				$flag = call_user_func($this->onStartOption, $option);
+				if ($flag === false) continue;
+				if ($flag) $classes[] = $flag;
+			}
+		
+			$classes = implode(" ", $classes);
+		
+			$description = $this->formatName($option, $this->nameField);
+			echo "<li class='{$classes}' data-value='{$val}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";
+		}
+		echo "</ul>";
 	}
 	
 	function renderReadOnly($field)

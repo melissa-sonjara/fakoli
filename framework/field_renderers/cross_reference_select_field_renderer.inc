@@ -49,7 +49,8 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $field;
 	var $label;
 	var $options;
-	var $groupBy;
+	var $groupBy;	///< Group the checkboxes when displaying. Either contains a field name or an array of grouping DataItems
+	var $groupByFormat; ///< Format string to use when generating group headings from grouping objects
 	var $resizable = false;	///< Whether the control is resizable (only relevant when the control has been set to a fixed size)
 	var $dropdown;	///< True to display the control a multi-select dropdown, false (default) to display inline in the form
 	var $dropdownMaxWidth = "340px";	///< Width of the multi-select dropdown (only relevant when the control has been configured to display as a dropdown)
