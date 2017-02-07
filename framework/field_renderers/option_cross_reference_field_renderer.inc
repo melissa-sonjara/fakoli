@@ -129,7 +129,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			}
 			else
 			{
-				$this->renderOptions($this->options);
+				$this->renderOptions($field, $this->options, $selected);
 			}
 		}
 		$this->_endField($field);
