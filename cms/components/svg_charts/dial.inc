@@ -58,6 +58,9 @@ class Dial
 	var $minColor = '#f00';
 	var $maxColor = '#0f0';
 	var $colorMode = 'fixed';
+	var $showTarget = false;
+	var $target = 0;
+	var $targetLabel = "";
 	
 	function __construct($id, $width = 300, $height = 300, $value = 0, $label = '', $palette = "standard")
 	{
@@ -142,6 +145,13 @@ class Dial
 		$this->fontFamily = $font;
 	}
 
+	function showTarget($target, $targetLabel)
+	{
+		$this->showTarget = true;
+		$this->target = $target;
+		$this->targetLabel = $targetLabel;
+	}
+	
 	function draw()
 	{
 		global $script;
@@ -150,7 +160,9 @@ class Dial
 		$legend = $this->legend ? "true" : "false";
 		$percentages = $this->showPercentages ? "true" : "false";
 		$download = $this->enableDownload ? "true" : "false";
-
+		$showTarget = $this->showTarget ? "true" : "false";
+		$targetLabel = jsSafe($this->targetLabel);
+		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
 
@@ -178,7 +190,10 @@ window.addEvent('domready', function ()
 		max: {$this->max},
 		minColor: '{$this->minColor}',
 		maxColor: '{$this->maxColor}',
-		colorMode: '{$this->colorMode}'
+		colorMode: '{$this->colorMode}',
+		showTarget: {$showTarget},
+		target: {$target},
+		targetLabel: '{$targetLabel}'
 	});
 
 	{$this->id}.draw();

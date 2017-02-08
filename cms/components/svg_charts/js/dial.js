@@ -13,6 +13,9 @@ var Dial = new Class(
 	sector: null,
 	legend: null,
 	
+	targetSector: null,
+	targetLegend: null,
+	
 	options:
 	{
 		palette: 'standard',
@@ -34,7 +37,10 @@ var Dial = new Class(
 		max: 100,
 		minColor: '#f00',
 		maxColor: '#0f0',
-		colorMode: 'fixed' // fixed or interpolated
+		colorMode: 'fixed', // fixed or interpolated,
+		showTarget: false,
+		target: 0,
+		targetLabel: ''
 	},
 	
 	sectors: [],
@@ -57,6 +63,20 @@ var Dial = new Class(
 		shape.attr({filter: this.dropShadow});
 	},
 	
+	drawSector: function(value, color)
+	{
+		if (this.options.colorMode == 'interpolated')
+		{
+			color = this.interpolateColor(value);
+		}
+		
+		var path = this.sectorPath(value);
+        var params = { fill: color, stroke: color, "stroke-width": this.options.strokeWidth};
+
+        var sector = this.paper.path({d: path}).attr(params);
+        return sector;
+	},
+	
 	drawChart: function()
 	{
 		this.createChart();
@@ -71,18 +91,17 @@ var Dial = new Class(
 			this.addShadow(this.dial);
 		}
 		
-		var color = this.options.minColor;
-		if (this.options.colorMode == 'interpolated')
+		if (this.options.showTarget)
 		{
-			color = this.interpolateColor(this.value);
+			if (this.options.target > this.options.min)
+			{
+				this.targetSector = this.drawSection(this.options.target, this.options.maxColor);
+			}
 		}
-
-		var path = this.sectorPath(this.value);
-        var params = { fill: color, stroke: color, "stroke-width": this.options.strokeWidth};
-
+		
         if (this.value > this.options.min)
         {
-        	this.sector = this.paper.path({d: path}).attr(params);
+        	this.sector = this.drawSector(this.value, this.options.minColor);
         }
         
 		if (this.label != '')
