@@ -137,7 +137,7 @@ class SectionContentManagerMap
  */
 class SectionManager
 {
-	private static function ensureContentManager()
+	static function ensureContentManager()
 	{
 		if (!SectionContentManagerMap::isSectionTypeRegistered("Content"))
 		{
