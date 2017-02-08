@@ -110,6 +110,7 @@ class Section extends DataItem
 	function getContent($identifier)
 	{
 		if ($this->_content[$identifier]) return $this->_content[$identifier];
+		SectionManager::ensureContentManager();
 		
 		return SectionContentManagerMap::getManager($this)->getContent($this, $identifier);
 	}
