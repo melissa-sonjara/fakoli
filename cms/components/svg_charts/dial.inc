@@ -192,7 +192,7 @@ window.addEvent('domready', function ()
 		maxColor: '{$this->maxColor}',
 		colorMode: '{$this->colorMode}',
 		showTarget: {$showTarget},
-		target: {$target},
+		target: {$this->target},
 		targetLabel: '{$targetLabel}'
 	});
 
