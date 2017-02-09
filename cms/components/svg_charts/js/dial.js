@@ -97,13 +97,13 @@ var Dial = new Class(
 			if (this.options.target > this.options.min)
 			{
 				this.targetSector = this.drawSector(this.options.target, this.options.maxColor);
-				this.legend = this.paper.text(this.options.labelx, this.options.labely, this.label)
-				.attr({fill: color, 
-					   'stroke-width': 0, 
-					   'font-family': this.options.fontFamily,
-					   "font-size": this.options.labelSize,
-					   "text-anchor": 'middle',
-					   'display': 'none'});
+				this.targetLegend = this.paper.text(this.options.labelx, this.options.labely, this.label)
+									.attr({fill: color, 
+										   'stroke-width': 0, 
+										   'font-family': this.options.fontFamily,
+										   "font-size": this.options.labelSize,
+										   "text-anchor": 'middle',
+										   'display': 'none'});
 			}
 		}
 		
@@ -145,6 +145,8 @@ var Dial = new Class(
 		this.animation = Snap.animate(this.value, this.options.target, function(value)
 		{
 			this.sector.attr({d: this.sectorPath(value)});		
+			this.legend.attr({'display': 'none'});
+			this.targetLegend.attr({'display': 'block'});
 		}.bind(this), 500);
 	},
 	
@@ -153,6 +155,8 @@ var Dial = new Class(
 		this.animation = Snap.animate(this.options.target, this.value, function(value)
 		{
 			this.sector.attr({d: this.sectorPath(value)});		
+			this.legend.attr({'display': 'block'});
+			this.targetLegend.attr({'display': 'none'});
 		}.bind(this), 500);
 	},
 	
