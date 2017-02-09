@@ -138,7 +138,7 @@ var Dial = new Class(
 		this.animation = Snap.animate(this.value, this.options.target, function(value)
 		{
 			this.sector.attr({d: this.sectorPath(value)});		
-		}.bind(this), 1000);
+		}.bind(this), 500);
 	},
 	
 	hideTarget: function()
@@ -146,7 +146,7 @@ var Dial = new Class(
 		this.animation = Snap.animate(this.options.target, this.value, function(value)
 		{
 			this.sector.attr({d: this.sectorPath(value)});		
-		}.bind(this), 1000);
+		}.bind(this), 500);
 	},
 	
     sectorPath: function(value) 
