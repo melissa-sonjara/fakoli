@@ -95,7 +95,7 @@ var Dial = new Class(
 		{
 			if (this.options.target > this.options.min)
 			{
-				this.targetSector = this.drawSection(this.options.target, this.options.maxColor);
+				this.targetSector = this.drawSector(this.options.target, this.options.maxColor);
 			}
 		}
 		
