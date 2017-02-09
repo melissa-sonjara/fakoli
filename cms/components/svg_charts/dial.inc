@@ -162,6 +162,7 @@ class Dial
 		$download = $this->enableDownload ? "true" : "false";
 		$showTarget = $this->showTarget ? "true" : "false";
 		$targetLabel = jsSafe($this->targetLabel);
+		$target = ($this->target == '') ? 0 : $this->target;
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
@@ -192,7 +193,7 @@ window.addEvent('domready', function ()
 		maxColor: '{$this->maxColor}',
 		colorMode: '{$this->colorMode}',
 		showTarget: {$showTarget},
-		target: {$this->target},
+		target: {$target},
 		targetLabel: '{$targetLabel}'
 	});
 
