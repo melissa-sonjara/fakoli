@@ -109,7 +109,7 @@ var Dial = new Class(
 			var color = this.options.minColor;
 			if (this.options.colorMode == 'interpolated')
 			{
-				color = this.interpolateColor(value);
+				color = this.interpolateColor(this.value);
 			}
 			
 			this.legend = this.paper.text(this.options.labelx, this.options.labely, this.label)
