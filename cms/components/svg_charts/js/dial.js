@@ -15,6 +15,7 @@ var Dial = new Class(
 	
 	targetSector: null,
 	targetLegend: null,
+	animation: null,
 	
 	options:
 	{
@@ -119,6 +120,33 @@ var Dial = new Class(
 										   "font-size": this.options.labelSize,
 										   "text-anchor": 'middle'});
 		}
+		
+		this.dial.mouseover(function(event) 
+		{
+			this.displayTarget();
+		}.bind(this));
+		
+		this.dial.mouseout(function(event)
+		{
+			this.hideTarget();
+			
+		}.bind(this));
+	},
+	
+	displayTarget: function()
+	{
+		this.animation = Snap.animate(this.value, this.options.targetValue, function(value)
+		{
+			this.sector.attr({d: this.sectorPath(value)});		
+		}.bind(this), 1000);
+	},
+	
+	hideTarget: function()
+	{
+		this.animation = Snap.animate(this.options.targetValue, this.value, function(value)
+		{
+			this.sector.attr({d: this.sectorPath(value)});		
+		}.bind(this), 1000);
 	},
 	
     sectorPath: function(value) 
