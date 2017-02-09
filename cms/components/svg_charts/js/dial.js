@@ -97,7 +97,7 @@ var Dial = new Class(
 			if (this.options.target > this.options.min)
 			{
 				this.targetSector = this.drawSector(this.options.target, this.options.maxColor);
-				this.targetLegend = this.paper.text(this.options.labelx, this.options.labely, this.label)
+				this.targetLegend = this.paper.text(this.options.labelx, this.options.labely, this.options.targetLabel)
 									.attr({fill: color, 
 										   'stroke-width': 0, 
 										   'font-family': this.options.fontFamily,
