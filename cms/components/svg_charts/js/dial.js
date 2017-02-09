@@ -125,7 +125,7 @@ var Dial = new Class(
 	{
 		var cx = this.options.cx;
 		var cy = this.options.cy;
-		var r  = this.options.radius - (this.options.strokeWidth / 2);
+		var r  = this.options.radius - this.options.strokeWidth;
 		
 		if (value > this.options.max) value = this.options.max;
 		if (value < this.options.min) value = this.options.min;
