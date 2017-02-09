@@ -97,6 +97,13 @@ var Dial = new Class(
 			if (this.options.target > this.options.min)
 			{
 				this.targetSector = this.drawSector(this.options.target, this.options.maxColor);
+				this.legend = this.paper.text(this.options.labelx, this.options.labely, this.label)
+				.attr({fill: color, 
+					   'stroke-width': 0, 
+					   'font-family': this.options.fontFamily,
+					   "font-size": this.options.labelSize,
+					   "text-anchor": 'middle',
+					   'display': 'none'});
 			}
 		}
 		
