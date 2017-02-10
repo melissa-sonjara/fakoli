@@ -173,7 +173,7 @@ var Dial = new Class(
             y1 = cy - r,
             y2 = cy - r * Math.cos(angle);
         
-        var sweep = (angle > Math.PI) ? 1:0;
+        var sweep = (angle > Math.PI || value == this.options.max) ? 1:0;
         
         var path = this.path(['M', cx, cy], ['L', x1, y1], ['A', r, r, 0, sweep, 1, x2, y2], 'z');
         return path;
