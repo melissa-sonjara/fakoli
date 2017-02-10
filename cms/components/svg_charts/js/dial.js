@@ -128,16 +128,13 @@ var Dial = new Class(
 										   "text-anchor": 'middle'});
 		}
 		
-		this.dial.mouseover(function(event) 
-		{
-			this.displayTarget();
-		}.bind(this));
-		
-		this.dial.mouseout(function(event)
-		{
-			this.hideTarget();
-			
-		}.bind(this));
+		if (this.options.showTarget && this.options.animate)
+		{		
+			this.dial.mouseover(function(event) { this.displayTarget();	}.bind(this));
+			this.dial.mouseout(function(event)	{ this.hideTarget(); }.bind(this));
+			this.sector.mouseover(function(event) {	this.displayTarget();}.bind(this));			
+			this.sector.mouseout(function(event)  {	this.hideTarget();}.bind(this));
+		}
 	},
 	
 	displayTarget: function()
