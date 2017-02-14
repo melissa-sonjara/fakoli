@@ -533,7 +533,7 @@ var VerticalHistogramAxisRenderer = new Class(
 			var x = this.options.chartLeft + this.columnWidth * index + (this.getColumnOffset());
 			var y = this.options.chartTop + this.options.chartHeight + this.options.labelOffset + (text.count("\n") * this.options.labelSize / 2);
 			
-			var decorations = this.chart.labelDecorations[index];
+			var decorations = this.labelDecorations[index];
 			var attrs = {stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": this.options.labelAnchor};
 			Object.append(attrs, decorations);
 
