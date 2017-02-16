@@ -220,7 +220,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		if ($this->showSelectAll)
 		{
-			echo "<a href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			echo "<a class='select_toggle' href='#' onclick='return {$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		if ($this->width && $this->height)
 		{			
