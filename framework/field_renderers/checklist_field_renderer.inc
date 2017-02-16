@@ -146,7 +146,7 @@ class CheckListFieldRenderer extends FieldRenderer
 		
 		if ($this->showSelectAll)
 		{
-			echo "<a href='#' onclick='return {$this->parent->id}_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
+			echo "<a class='select_toggle' href='#' onclick='return {$this->parent->id}_{$field}_toggleSelectAll(this);'>Select All</a><br/>";
 		}
 		
 		if ($this->width && $this->height && $this->getOptionCount() > $this->scrollAfter)
