@@ -122,6 +122,9 @@ class AdminPageView
 			$template = str_replace($expr, $$name, $template);
 		}
 		
+		$charset = strtolower(ini_get("default_charset"));
+		$template = str_replace("{default_charset}", $charset, $template);
+		
 		preg_match_all("/\{config:(.*?)\}/", $template, $vars, PREG_SET_ORDER);
 		
 		foreach($vars as $var)
