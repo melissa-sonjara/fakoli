@@ -95,6 +95,12 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			}
 			$pk = $obj->getPrimaryKey();
 			
+			if (!$rc)
+			{
+				$this->_endField($field);
+				return;
+			}
+			
 			$selectedItems = $this->getSelected($obj, $rc, $pk);
 
 			
