@@ -22,7 +22,7 @@ CREATE TABLE content_version
 	approved_date		datetime,
 	approved_by			int(10) not null default 0,
 	PRIMARY KEY(content_version_id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 ALTER TABLE content_version ADD INDEX content_version_idx (content_class, content_id);
 

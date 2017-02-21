@@ -21,7 +21,7 @@ CREATE TABLE error_log (
   timestamp DATETIME NOT NULL,
   PRIMARY KEY (error_log_id)
 )
-ENGINE = InnoDB;
+ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 -- END Version 1.0
 

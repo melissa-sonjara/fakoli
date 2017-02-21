@@ -10,7 +10,7 @@ CREATE TABLE  `user_activity` (
   `referer` varchar(2000) DEFAULT NULL,
   `activity_time` datetime NOT NULL,
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 ALTER TABLE `user_activity` ADD INDEX `activity_by_session`(`session_id`, `activity_time`);
 

@@ -105,7 +105,7 @@ CREATE TABLE binding
 	class  varchar(200) NOT NULL,
 	id int(10) unsigned NOT NULL,
 	PRIMARY KEY(binding_id)
-) Engine=InnoDB;
+) Engine=InnoDB ROW_FORMAT=DYNAMIC;
 
 -- END Version 1.8
 

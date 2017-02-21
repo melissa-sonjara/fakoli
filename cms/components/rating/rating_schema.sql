@@ -18,7 +18,7 @@ CREATE TABLE rating
 	rating		float not null default 0.0,
 	rating_date	datetime not null,
 	PRIMARY KEY(rating_id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE OR REPLACE VIEW rating_statistics AS
 SELECT 	url,

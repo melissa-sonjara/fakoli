@@ -18,7 +18,7 @@ CREATE TABLE connection_record
 	target_class	varchar(200) not null,
 	target_id		int(11) not null,
 	PRIMARY KEY(connection_id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE INDEX connectable_source_idx ON connection_record (source_class, source_id);
 CREATE INDEX connectable_target_idx ON connection_record (target_class, target_id);

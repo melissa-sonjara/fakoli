@@ -15,6 +15,6 @@ CREATE TABLE `php_session` (
   `id` varchar(200) NOT NULL,
   PRIMARY KEY (`session_id`),
   KEY `session_idx` (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 -- END Version 1.0

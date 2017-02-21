@@ -17,7 +17,7 @@ CREATE TABLE rss_feed (
   last_updated timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   feed_status tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (rss_feed_id)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE rss_feed_articles (
   rss_article_id int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -27,7 +27,7 @@ CREATE TABLE rss_feed_articles (
   rss_article_newsStory varchar(60) NOT NULL DEFAULT '0',
   date_added timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (rss_article_id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 -- END Version 1.0
 
