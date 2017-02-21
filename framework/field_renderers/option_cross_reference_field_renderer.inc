@@ -119,7 +119,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 					if (array_key_exists($group->get($gpk), $this->options))
 					{
 						echo $group->format($this->groupByFormat);
-						$this->renderOptions($field, $this->options[$group->get($gpk)], $selected); 
+						$this->renderOptions($field, $this->options[$group->get($gpk)], $selectedItems); 
 					}
 				}
 			}
@@ -130,12 +130,12 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 				foreach($options as $group => $choices)
 				{
 					echo "<br/><h4>$group</h4>";
-					$this->renderOptions($field, $choices, $selected);
+					$this->renderOptions($field, $choices, $selectedItems);
 				}
 			}
 			else
 			{
-				$this->renderOptions($field, $this->options, $selected);
+				$this->renderOptions($field, $this->options, $selectedItems);
 			}
 		}
 		$this->_endField($field);
