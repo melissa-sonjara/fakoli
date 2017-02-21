@@ -164,6 +164,11 @@ var AutoFormManager = new Class(
 	showError: function(error)
 	{
 		document.id(this.form.id + "__error").set('html', error).setStyle('display', 'table-cell');
+	},
+	
+	clearError: function()
+	{
+		document.id(this.form.id + "__error").set('html', '').setStyle('display', 'none');
 	}
 });
 
