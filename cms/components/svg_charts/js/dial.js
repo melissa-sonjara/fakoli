@@ -81,7 +81,7 @@ var Dial = new Class(
 	drawChart: function()
 	{
 		this.createChart();
-		
+	
 		this.dial = this.paper.circle(this.options.cx, this.options.cy, this.options.radius)
 				  			  .attr({'stroke-width': this.options.strokeWidth, 
 				  				  	 'fill': this.options.fill, 
@@ -92,6 +92,11 @@ var Dial = new Class(
 			this.addShadow(this.dial);
 		}
 		
+		this.drawSegments();
+	},
+	
+	drawSegments: function()
+	{
 		if (this.options.showTarget)
 		{
 			if (this.options.target > this.options.min)
@@ -137,6 +142,33 @@ var Dial = new Class(
 		}
 	},
 	
+	removeSegments: function()
+	{
+		if (this.targetSector)
+		{
+			this.targetSector.remove();
+			this.targetSector = null;
+		}
+		
+		if (this.targetLegend)
+		{
+			this.targetLegend.remove();
+			this.targetLegend = null;
+		}
+		
+		if (this.sector)
+		{
+			this.sector.remove();
+			this.sector = null;
+		}
+		
+		if (this.legend)
+		{
+			this.legend.remove();
+			this.legend = null;
+		}
+	},
+	
 	displayTarget: function()
 	{
 		this.animation = Snap.animate(this.value, this.options.target, function(value)
@@ -155,6 +187,15 @@ var Dial = new Class(
 			this.legend.attr({'display': 'block'});
 			this.targetLegend.attr({'display': 'none'});
 		}.bind(this), 500);
+	},
+	
+	updateTarget: function(showTarget, target, targetLabel)
+	{
+		this.options.showTarget = showTarget;
+		this.options.target = target;
+		this.options.targetLabel = targetLabel;
+		this.removeSegments();
+		this.drawSegments();
 	},
 	
     sectorPath: function(value) 

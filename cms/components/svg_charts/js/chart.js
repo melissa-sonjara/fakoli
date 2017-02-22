@@ -48,6 +48,7 @@ var Chart = new Class(
 		this.paper = Snap("#" + this.svgid());
 		this.paper.attr({viewBox: "0 0 " +this.options.width + " " + this.options.height});
 		this.palette = Palette.palettes[this.options.palette];
+		this.container.chart = this;
 	},
 	
 	draw: function()
