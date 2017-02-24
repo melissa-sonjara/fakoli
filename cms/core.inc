@@ -927,7 +927,8 @@ class Fakoli
 				redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
 			}
 			
-			$contentManager = $section->getContentManager();			
+			$contentManager = $section->getContentManager();	
+			ComponentManager::fireEvent("StartPage");
 			$contentManager->sendContent($section, $identifier);
 			ComponentManager::fireEvent("RequestComplete");		
 		}
