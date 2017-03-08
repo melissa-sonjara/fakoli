@@ -1563,7 +1563,7 @@ class DataItem extends AbstractDataItem
 			case "^":
 				if (!$this->get($field))
 				{
-					$sub = $this->formatField("{".$fieldFormat."}");
+					$sub = $this->format("{".$fieldFormat."}");
 				}
 				else
 				{
