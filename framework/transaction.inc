@@ -79,7 +79,7 @@ class DataTransaction
 	{
 		if (!$this->conn)
 		{
-			throw new DataItemException("Attempt to rollback a previously completed transaction");
+			throw new DataItemException("Attempt to commit a previously completed transaction");
 		}	
 		
 		$this->conn->commit();
