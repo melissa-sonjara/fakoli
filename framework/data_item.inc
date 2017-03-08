@@ -1534,7 +1534,7 @@ class DataItem extends AbstractDataItem
 	{
 		$matches = array();
 		
-		preg_match_all("/\\{([\\w\\d_]+)(::?|\\(\\)|\\|)?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)(::?|\\^|\\(\\)|\\|)?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 
 		foreach($matches as $match)
 		{
@@ -1553,6 +1553,17 @@ class DataItem extends AbstractDataItem
 				if (!$this->get($field)) 
 				{
 					$sub = $fieldFormat;
+				}
+				else
+				{
+					$sub = $this->formatFieldValue($field);
+				}
+				break;
+				
+			case "^":
+				if (!$this->get($field))
+				{
+					$sub = $this->formatField("{".$fieldFormat."}");
 				}
 				else
 				{
