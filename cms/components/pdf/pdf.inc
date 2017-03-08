@@ -73,7 +73,7 @@ class PDF
 		trace(implode("\n", $out), 3);
 		
 		$content = file_get_contents($output);
-		//unlink($output);
+		unlink($output);
 		
 		return $content;
 	}
