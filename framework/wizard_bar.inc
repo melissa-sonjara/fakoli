@@ -46,7 +46,8 @@ class WizardBar extends TabBar
 	var $spacer = "&nbsp;&raquo;&nbsp;";  	///< Spacer that appears between wizard steps
 	var $strict = false; 					///< When strict is set to true, navigation to future steps is always disabled
 	var $rootSteps = 1;						///< The number of steps that can be reached without a query string when useQueryString is true
-		
+	var $scriptLinks = false;				///< True to specify that destinations are javascript and should be place in onclick attributes
+	
 	/**
 	 * Construct a new WizardBar control.
 	 * 
@@ -124,6 +125,19 @@ class WizardBar extends TabBar
          		$dest = ($dest != "#") ? "$dest#{$this->anchor}" : "#{$this->anchor}";
          	}
          	
+         	if ($this->scriptLinks)
+         	{
+         		$link = "href=\"#\"";
+         		if ($dest != '#')
+         		{
+         			$link .= " onclick=\"$dest; return false\"";
+         		}
+         	}
+         	else
+         	{
+         		$link = "href=\"$dest\"";
+         	}
+         	
          	if ($this->showStates)
          	{
 	         	if (array_key_exists($url, $this->flags))
@@ -136,7 +150,7 @@ class WizardBar extends TabBar
 	         	}
          	}
          	
-             echo "<li class='$style'>$spacer<a href=\"$dest\"$active>$text</a></li>";
+             echo "<li class='$style'>$spacer<a {$link}{$active}>{$text}</a></li>";
         	}	
 			
     	// close wizard div
