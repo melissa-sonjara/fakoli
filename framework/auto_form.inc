@@ -610,7 +610,7 @@ class AutoForm
 	/**
 	 * Utility function to add a RelatedItemSelectFieldRender.
 	 */
-	function related($class, $constraint = "", $format = null, $field = null, $label = null)
+	function related($class, $constraint = "", $format = null, $field = null, $label = null, $allowAdd = false, $allowNone = false)
 	{
 		$obj = new $class;
 		if (!$format) $format = $obj->default_format;
@@ -627,7 +627,7 @@ class AutoForm
 			throw new FakoliException("Format not specified for related $class");
 		}
 		
-		return new RelatedItemSelectFieldRenderer($this, $field, $label, $class, $constraint, $format, $obj->getPrimaryKey());
+		return new RelatedItemSelectFieldRenderer($this, $field, $label, $class, $constraint, $format, $obj->getPrimaryKey(), $allowAdd, $allowNone);
 	}
 	
 	/**
