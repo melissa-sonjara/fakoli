@@ -69,7 +69,7 @@ class DataGroup
 	function draw()
 	{
 		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : ($this->expanded) ? "expanded" : "collapsed";
-		$select = ($this->parent->selectable) ? "<a href='#' class='button' style='float: right' onclick='new DOMEvent(event).stop(); GroupingTable.toggleGroup(this, \"{$this->parent->groupClass}\"); return false;'>Select All</a>" : "";		
+		$select = ($this->parent->selectable && $this->parent->showSelectAll) ? "<a href='#' class='button' style='float: right' onclick='new DOMEvent(event).stop(); GroupingTable.toggleGroup(this, \"{$this->parent->groupClass}\"); return false;'>Select All</a>" : "";		
 ?>
 	<tr class="<?echo $this->parent->groupClass?> <?echo $cssClass?>">
 	 <td colspan="<?echo $this->parent->columnCount?>"><?echo $select?><?echo $this->title?></td>
@@ -111,6 +111,7 @@ class GroupedDataListView
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
 	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
+	var $showSelectAll = true;	///< Show Select All buttons for selectable tables
 	var $rowId = false; // whether to include an id tag for each tr row
 	var $groupFooterColumns = array(); // subtotal footer for group
 	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
