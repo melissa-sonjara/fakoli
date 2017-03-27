@@ -556,7 +556,7 @@ class GroupedDataListView
 <?
 				foreach($this->footerColumns as $column)
 				{
-					$attr = $this->getFooterColumnFormatting($column);
+					$attrs = $this->getFooterColumnFormatting($column);
 					?>
 			<td<?echo $attrs?>><?echo $column->format()?></td>								
 <?
