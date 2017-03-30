@@ -77,6 +77,12 @@ class TextTypeRenderer extends AbstractTypeRenderer
 		case "lower":
 			return strtolower($value);
 			
+		case "ucfirst":
+			return ucfirst($value);
+			
+		case "lcfirst":
+			return lcfirst($value);
+			
 		case "ucwords":
 			return ucwords(strtolower($value));
 			
