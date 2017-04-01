@@ -1119,7 +1119,7 @@ ENDSCRIPT;
 	 */
 	function scrollToOnNextPage($element, $offset = 0)
 	{
-		$_SESSION["scrollto_pending"] = $message;
+		$_SESSION["scrollto_pending"] = $element;
 		$_SESSION["scrollto_offset"] = $offset;
 	}
 	
