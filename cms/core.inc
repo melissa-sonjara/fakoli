@@ -1103,7 +1103,7 @@ ENDSCRIPT;
 		$script .=
 <<<ENDSCRIPT
 	<script type='text/javascript'>
-	window.addEvent('load', function()
+	window.addEvent('domready', function()
 	{
 		window.scrollToElement('{$element}', $offset);
 	});
