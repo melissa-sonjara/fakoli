@@ -198,6 +198,17 @@ var Dial = new Class(
 		this.drawSegments();
 	},
 	
+	updateColorRange: function(min, max, redraw)
+	{
+		this.options.minColor = min;
+		this.options.maxColor = max;
+		if (redraw)
+		{		
+			this.removeSegments();
+			this.drawSegments();
+		}
+	},
+	
     sectorPath: function(value) 
 	{
 		var cx = this.options.cx;
