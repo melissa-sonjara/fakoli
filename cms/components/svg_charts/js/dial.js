@@ -204,7 +204,7 @@ var Dial = new Class(
 		this.options.maxColor = max;
 		if (redraw)
 		{		
-			this.dial.attr({'stroke-color': this.options.minColor});
+			this.dial.attr({'stroke': this.options.minColor});
 			this.removeSegments();
 			this.drawSegments();
 		}
