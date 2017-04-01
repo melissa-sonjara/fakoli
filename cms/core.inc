@@ -1033,15 +1033,16 @@ class Fakoli
 	 * been saved, etc.
 	 * @param string $message the notification message to be displayed
 	 * @param boolean $blocking (optional) true if the user has to dismiss the message manually, false (default) if it should disappear automatically
-	 * @param string $button  (optional) button text to show for blocking notifications
+	 * @param string $button  (optional) button text to show for blocking notifications,
+	 * @param string $onClick (optional) Javascript code to execute when the OK button is clicked
 	 */
-	static function notify($message, $blocking = false, $button = "OK")
+	static function notify($message, $blocking = false, $button = "OK", $onClick = "null")
 	{
 		$message = jsSafe($message);
 		
 		if ($blocking)
 		{
-			$options = ", {blocking: true, buttonText: '$button'}";
+			$options = ", {blocking: true, buttonText: '$button', onClick: $onClick}";
 		}
 		global $script;
 		$script .= 
@@ -1060,11 +1061,12 @@ ENDSCRIPT;
 	 * Use this when you need to display a notification after a redirect.
 	 * @param string $message
 	 */
-	static function notifyOnNextPage($message, $blocking = false, $button = "OK")
+	static function notifyOnNextPage($message, $blocking = false, $button = "OK", $onClick = "null")
 	{
 		$_SESSION["notification_pending"] = $message;
 		$_SESSION["notification_pending_blocking"] = $blocking;
 		$_SESSION["notification_pending_button"] = $button;
+		$_SESSION["notification_pending_onclick"] = $onClick;
 	}
 	
 	/**
@@ -1078,10 +1080,14 @@ ENDSCRIPT;
 		if (!$isAction &&  !$isResource && isset($_SESSION["notification_pending"]))
 		{
 			trace("Pending Notification: Blocking? ". $_SESSION["notification_pending_blocking"], 3);
-			Fakoli::notify($_SESSION["notification_pending"], $_SESSION["notification_pending_blocking"], $_SESSION["notification_pending_button"]);
+			Fakoli::notify($_SESSION["notification_pending"], 
+						   $_SESSION["notification_pending_blocking"], 
+						   $_SESSION["notification_pending_button"],
+						   $_SESSION["notification_pending_onclick"]);
 			unset($_SESSION["notification_pending"]);
 			unset($_SESSION["notification_pending_blocking"]);
 			unset($_SESSION["notification_pending_button"]);
+			unset($_SESSION["notification_pending_onclick"]);
 		}
 	}
 	
