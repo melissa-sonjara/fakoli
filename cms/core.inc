@@ -1100,7 +1100,7 @@ ENDSCRIPT;
 	function scrollTo($element, $offset = 0)
 	{
 		global $script;
-		$script =
+		$script .=
 <<<ENDSCRIPT
 	<script type='text/javascript'>
 	window.addEvent('load', function()
