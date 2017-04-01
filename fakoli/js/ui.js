@@ -788,6 +788,7 @@ var Notification = new Class({
 		height:			'auto',
 		wait:			3000,
 		onHide:			function () {},
+		onClick:		null,
 		blocking:		false,
 		buttonClass:	'button',
 		buttonText:		'OK'
@@ -830,7 +831,12 @@ var Notification = new Class({
 		{
 			var button = new Element('a', {'class': this.options.buttonClass});
 			button.set('html', this.options.buttonText);
-			button.addEvent('click', function(e) { new DOMEvent(e).stop(); this.hide(); }.bind(this));
+			button.addEvent('click', function(e) 
+			{ 
+				new DOMEvent(e).stop(); 
+				this.hide();
+				this.fireEvent('click');
+			}.bind(this));
 			
 			div.adopt(button);
 		}
