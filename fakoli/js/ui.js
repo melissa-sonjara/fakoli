@@ -485,6 +485,7 @@ var ModalDialog = new Class(
     				this.options.body.set('text', '');
     				this.options.body.set('html', html);
     				Browser.exec(script);
+    				addReloadHandlers(this.options.body);
     				this.element.fade('show');
     				this.center();
     				new Curtain().normalCursor();
