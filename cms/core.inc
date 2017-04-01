@@ -1077,7 +1077,7 @@ ENDSCRIPT;
 		
 		if (!$isAction &&  !$isResource && isset($_SESSION["notification_pending"]))
 		{
-			Fakoli::notify($_SESSION["notification_pending"], $_SESSION["notification_pending_block"], $_SESSION["notification_pending_button"]);
+			Fakoli::notify($_SESSION["notification_pending"], $_SESSION["notification_pending_blocking"], $_SESSION["notification_pending_button"]);
 			unset($_SESSION["notification_pending"]);
 			unset($_SESSION["notification_pending_blocking"]);
 			unset($_SESSION["notification_pending_button"]);
