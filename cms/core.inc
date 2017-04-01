@@ -1079,7 +1079,6 @@ ENDSCRIPT;
 		
 		if (!$isAction &&  !$isResource && isset($_SESSION["notification_pending"]))
 		{
-			trace("Pending Notification: Blocking? ". $_SESSION["notification_pending_blocking"], 3);
 			Fakoli::notify($_SESSION["notification_pending"], 
 						   $_SESSION["notification_pending_blocking"], 
 						   $_SESSION["notification_pending_button"],
@@ -1088,6 +1087,55 @@ ENDSCRIPT;
 			unset($_SESSION["notification_pending_blocking"]);
 			unset($_SESSION["notification_pending_button"]);
 			unset($_SESSION["notification_pending_onclick"]);
+		}
+	}
+	
+	/**
+	 * Automatically scroll the page to the specified element (by DOM ID) when the page loads.
+	 * An optional offset can be specified to account for headers, etc.
+	 * 
+	 * @param string $element the DOM ID of the element to scroll to
+	 * @param integer $offset (optional) offset in pixels
+	 */
+	function scrollTo($element, $offset = 0)
+	{
+		global $script;
+		$script =
+<<<ENDSCRIPT
+	<script type='text/javascript'>
+	window.addEvent('load', function()
+	{
+		window.scrollToElement('{$element}', $offset);
+	});
+	</script>
+ENDSCRIPT;
+	}
+	
+	/**
+	 * Schedules a scrollTo event when the next page is loaded.
+	 * 
+	 * @param string $element the DOM ID of the element to scroll to
+	 * @param integer $offset (optional) offset in pixels
+	 */
+	function scrollToOnNextPage($element, $offset = 0)
+	{
+		$_SESSION["scrollto_pending"] = $message;
+		$_SESSION["scrollto_offset"] = $offset;
+	}
+	
+	/**
+	 * Display any previously scheduled scrollto event.
+	 */
+	static function showPendingScrollTo()
+	{
+		global $isAction;
+		global $isResource;
+		
+		if (!$isAction &&  !$isResource && isset($_SESSION["scrollto_pending"]))
+		{
+			Fakoli::scrollTo($_SESSION["scrollto_pending"], $_SESSION["scrollto_offset"]);
+			unset($_SESSION["scrollto_pending"]);
+			unset($_SESSION["scrollto_offset"]);
 		}
 	}
 	
@@ -1404,6 +1452,7 @@ else
 	}
 }
 
+Fakoli::showPendingScrollTo();
 Fakoli::showPendingNotification();
 ComponentManager::fireEvent("Initialize");
 
