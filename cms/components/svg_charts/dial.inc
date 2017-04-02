@@ -61,6 +61,7 @@ class Dial
 	var $showTarget = false;
 	var $target = 0;
 	var $targetLabel = "";
+	var $cssClass = null;
 	
 	function __construct($id, $width = 300, $height = 300, $value = 0, $label = '', $palette = "standard")
 	{
@@ -211,7 +212,8 @@ ENDSCRIPT;
 		$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
 	}
 
-	echo "<div id='{$this->id}' style='$dimensions'></div>";
+	$cssClass = ($this->cssClass) ? " class='{$this->cssClass}'" : "";
+	echo "<div id='{$this->id}'{$cssClass} style='$dimensions'></div>";
 	}
 }
 ?>
