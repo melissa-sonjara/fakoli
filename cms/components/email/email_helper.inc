@@ -74,8 +74,12 @@ class EmailHelper
 		$email = new EmailTemplate();
 		$email->sender_email = $contactUs->email;
 		
-		$email->recipients = Settings::getValue('email', 'email_from');
-			
+		$email->recipients = Settings::getValue('email', 'default_contact_us_recipients');
+		if (!$email->recipients)
+		{
+			$email->recipients = Settings::getValue('email', 'email_from');
+		}
+		
 		$contactTopic = $contactUs->ContactTopic();
 		if($contactTopic && $contactTopic->recipients)
 		{

@@ -402,9 +402,10 @@ class EmailManager
 		if (!file_exists($defaultPath)) mkdir($defaultPath);
 		
 		Settings::setDefaultValue("email", "debugging_mode_output_path", $defaultPath, "String", "Folder that will store the logged emails in debugging mode", "Debugging Mode", null, 1);
-		Settings::setDefaultValue("email", "email_from", "andy@sonjara.com", "String", "Default From address for generated emails", "Contact Details");
-		Settings::setDefaultValue("email", "email_contact", "andy@sonjara.com", "String", "Default To address for generated emails", "Contact Details");
-		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Default Name of email contact for generated emails", "Contact Details");
+		Settings::setDefaultValue("email", "email_from", "andy@sonjara.com", "String", "Default From address for generated emails", "Contact Details", null, 1);
+		Settings::setDefaultValue("email", "email_contact", "andy@sonjara.com", "String", "Default To address for generated emails", "Contact Details", null, 2);
+		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Default Name of email contact for generated emails", "Contact Details", null, 3);
+		Settings::setDefaultValue("email", "default_contact_us_recipient", "", "String", "Default email address(es) that will receive messages from the Contact Us form. These are used if no Contact Topics are defined", "Contact_Details", null, 4);
 		Settings::setDefaultValue("email", "override_PHP_settings", false, Boolean, "Use these server settings instead of the global settings in your php.ini file", "Server Settings", 0);
 		Settings::setDefaultValue("email", "mail_server", "localhost", "String", "Host name or IP address of your upstream SMTP server", "Server Settings", "", 1);
 		Settings::setDefaultValue("email", "mail_server_port", 25, Number, "Port to use on the upstream SMTP server", "Server Settings", "", 2);
