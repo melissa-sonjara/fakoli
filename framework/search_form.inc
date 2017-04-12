@@ -749,7 +749,7 @@ class SearchParameters
 			else
 			{
 				$handler = $this->paramHandlers[$field];
-				if(is_array($handler) && method_exists($handler[0], $handler[1]))
+				if(is_callable($handler))
 					$clause = call_user_func($handler, $field, $value);
 				elseif(method_exists($handler, $modifier))
 					$clause = $handler->$modifier($field, $value);
