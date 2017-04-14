@@ -626,7 +626,7 @@ interface IDataSyncHelper
 						$item->save();
 						if (method_exists($helper, 'postProcess'))
 						{
-							$helper->postProcess($item);
+							$helper->postProcess($item, $record);
 						}
 						$imported++;
 						$lastItem = $item;
