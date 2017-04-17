@@ -1479,6 +1479,7 @@ else
 
 Fakoli::showPendingScrollTo();
 Fakoli::showPendingNotification();
+Fakoli::writePendingScripts();
 ComponentManager::fireEvent("Initialize");
 
 ?>
