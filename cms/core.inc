@@ -1140,6 +1140,31 @@ ENDSCRIPT;
 	}
 	
 	/**
+	 * Schedules the provided script fragment to be output when the next page is loaded.
+	 * @param string $s the script to be executed (including the enclosing <script> tags)
+	 */
+	function scriptOnNextPage($s)
+	{
+		$_SESSION["script_pending"] .= $s;
+	}
+	
+	/**
+	 * Outputs any pending scripts submitted by Fakoli::scriptOnNextPage()
+	 */
+	static function writePendingScripts()
+	{
+		global $isAction;
+		global $isResource;
+		global $script;
+		
+		if (!$isAction && !$isResource && isset($_SESSION["script_pending"]))
+		{
+			$script .= $_SESSION["script_pending"];
+			unset($_SESSION["script_pending"]);
+		}
+	}
+	
+	/**
 	 * Set the trace log level. 
 	 */
 	static function setTraceLevel($level)
