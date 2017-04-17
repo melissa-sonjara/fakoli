@@ -57,3 +57,9 @@ ALTER TABLE data_import_profile ADD COLUMN class VARCHAR(255) NOT NULL AFTER pro
 ALTER TABLE data_import_field_mapping ADD COLUMN notes VARCHAR(255) NOT NULL;
 
 -- END Version 1.5
+
+-- START Version 1.6
+
+ALTER TABLE data_import_field_mapping CHANGE COLUMN notes notes VARCHAR(255) NULL DEFAULT '';
+
+-- END Version 1.6
