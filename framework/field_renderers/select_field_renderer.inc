@@ -203,6 +203,8 @@ class SelectFieldRenderer extends FieldRenderer
 						else
 							$selected = "";
 						
+						trace("$current == $value ".($current==$value)." $selected", 3);
+						
 						$optionTitle = ($name != $trunced) ? " title='$name'" : "";
 						
 						echo "<option$optionTitle value='".htmlSafe($value)."'$selected>$trunced</option>\n";
