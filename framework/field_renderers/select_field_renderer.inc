@@ -176,6 +176,15 @@ class SelectFieldRenderer extends FieldRenderer
 			$othEntry = true;
 			$current = $this->parent->data->get($field);
 			
+			if ($this->parent->data->getType($field) == 'String')
+			{
+				$comparator = function($a, $b) { return (strcmp($a, $b) == 0);	};
+			}
+			else
+			{
+				$comparator = function($a, $b) { return $a == $b; };
+			}
+			
 			if ($this->grouped)
 			{
 				$this->addDefaultOption($field);	
@@ -195,7 +204,7 @@ class SelectFieldRenderer extends FieldRenderer
 						$name = ($this->stripHTML) ? stripHTML($name) : htmlSafe($name);
 						$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 						
-						if($current == $value)
+						if ($comparator($current, $value))
 						{
 							$selected = " selected";
 							$othEntry = false;
@@ -233,7 +242,7 @@ class SelectFieldRenderer extends FieldRenderer
 					$name = ($this->stripHTML) ? stripHTML($name) : htmlSafe($name);
 					$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 					
-					if($current == $value)
+					if($comparator($current, $value))
 					{
 						$selected = " selected";
 					}
