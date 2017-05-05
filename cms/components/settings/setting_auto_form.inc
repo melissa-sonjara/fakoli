@@ -162,6 +162,13 @@ class SettingAutoForm extends AutoForm
 		Cache::invalidate("auto_form_defaults");
 		Cache::invalidate("config");
 		
+		// onComplete event is fired once all processing has been completed
+
+		if ($this->onSaveComplete)
+		{
+			call_user_func_array($this->onSaveComplete, array($this));
+		}
+		
 		trace("Settings auto form returning true", 3);
 		
 		ComponentManager::fireEventTo($this->component->name, "ClearCache");
