@@ -58,6 +58,20 @@ class Menu extends DataItem
 		return $this->getRelatedList(MenuItem, "", $constraint);
 	}
 	
+	static function findByIdentifier($identifier)
+	{
+		return Query::create(Menu, "WHERE identifier=:i")
+					->bind(":i", $identifier)
+					->executeSingle();
+	}
+	
+	function getMenuItem($title)
+	{
+		return Query::create(MenuItem, "WHERE menu_id=:m AND title=:t")
+					->bind(":m", $this->menu_id, ":t", $title)
+					->executeSingle();
+	}
+	
 	// Constructor
 	function Menu()
 	{
