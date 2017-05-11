@@ -72,6 +72,8 @@ class SelectFieldRenderer extends FieldRenderer
 	var $defaultBlank = false; 		 	///< Whether the drop down includes an empty line as the default, indicating no selection has been made
 	var $defaultText = "Choose One";	///< Text to display when no selection has been made.
 	var $defaultValue = "";				///< The value for the default item - usually blank but might need to be zero for numeric fields
+	var $allowDeselect = false;			///< If set to true, allows users to deselect the value for a field, returning it to the default 'blank' state
+	
 	var $CSSclass;		///< Additional CSS class(es) to apply to the select box
 	var $stripHTML = false; ///< Set to true to strip HTML from option text
 	
@@ -137,7 +139,7 @@ class SelectFieldRenderer extends FieldRenderer
 	 */
 	function addDefaultOption($field)
 	{
-		if(!$this->defaultBlank || $this->parent->data->get($field)) return;
+		if(!$this->defaultBlank || ($this->parent->data->get($field) && !$this->allowDeselect)) return;
 		
 		if(count($this->options) && !array_search("", $this->options))
 		{
