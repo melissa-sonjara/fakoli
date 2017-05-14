@@ -31,7 +31,7 @@ $table->column("Identifier", "<strong>{identifier}</strong>", true, "width: 20%"
 
 foreach($sections as $section)
 {
-	$table->group(($section->section == '/') ? "Top-Level" : $section->section, $section->section_id);
+	$table->group(($section->section == '/') ? "Top Level" : $section->section, $section->section_id);
 }
 
 $table->mode = "tree";
