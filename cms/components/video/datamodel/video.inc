@@ -65,6 +65,12 @@ class Video extends DataItem
 		return $this->getRelated(VideoGallery);
 	}
 	
+	function getFormat()
+	{
+		$extension = substr($this->video_file, strrpos($this->video_file, ".") + 1);
+		return strtoupper($extension);
+	}
+	
 	function Video()
 	{
 		$this->table = "video";
