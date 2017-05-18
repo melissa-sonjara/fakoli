@@ -5,16 +5,14 @@ window.addEvent('load', function()
 
 function installVideoPlayer()
 {
-	if (typeof flowplayerPath != 'undefined' && flowplayerPath) 
-	{
-		installFlowplayer();
-		return;
-	}
-	
 	if (typeof videojs == 'function')
 	{
 		installVideoJS();
-		return;
+	}
+	
+	if (typeof flowplayerPath != 'undefined' && flowplayerPath) 
+	{
+		installFlowplayer();
 	}
 }
 
@@ -33,8 +31,12 @@ function installFlowplayer()
 			v.id = 'video_' + Math.floor(Math.random()*1E8);
 		}
 
+		var isMP4 =- v.hasClass('MP4');
+		
 		var play = v.hasClass("autoplay");
 		var isLive = v.hasClass("live");
+
+		if (isMP4) return;
 		
 		if (v.href.indexOf("rtmp:") == 0)
 		{
@@ -73,6 +75,9 @@ function installVideoJS()
 	{
 		var videoElt = v.getElement('video');
 		if (videoElt != null) return;
+		
+		var isMP4 = v.hasClass('MP4');
+		if (!isMP4) return;
 		
 		videoElt = new Element('video');
 		videoElt.addClass('video-js').addClass('vjs-default-skin');

@@ -39,6 +39,7 @@ var VideoPicker =  (function()
 		selectedVideoTitle: "",
 		selectedVideoWidth: 0,
 		selectedVideoHeight: 0,
+		selectedVideoFormat: "",
 		selectedImageID: 0,
 		
 		initialize: function()
@@ -69,12 +70,13 @@ var VideoPicker =  (function()
 			this.selectedImageID = tr.getElement("span.image_id").get("text");	
 			this.selectedVideo = video;
 			this.selectedVideoImage = image;
+			this.selectedVideoFormat = tr.getChildren()[2].get('text');
 		},
 		
 		show: function(editor)
 		{
 			this.editor = editor;
-			this.dialog = modalPopup("Insert Video", "/action/video/video_picker?Editor=" + this.editor.name, 600, 620, true, false); 
+			this.dialog = modalPopup("Insert Video", "/action/video/video_picker?Editor=" + this.editor.name, 800, 'auto', true, false); 
 		},
 		
 		hide: function()
@@ -124,7 +126,7 @@ var VideoPicker =  (function()
 				
 			case "embed":
 				
-				insertion = "<a class='video' href='" + this.selectedVideo + "' style='display: block; width:" + this.selectedVideoWidth + "px; height: " + this.selectedVideoHeight +"px; background-image: url(" + this.selectedVideoImage + ")'></a>";
+				insertion = "<a class='video " + this.selectedVideoFormat +"' href='" + this.selectedVideo + "' style='display: block; width:" + this.selectedVideoWidth + "px; height: " + this.selectedVideoHeight +"px; background-image: url(" + this.selectedVideoImage + ")'></a>";
 				break;
 				
 			case "download":

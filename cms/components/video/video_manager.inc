@@ -48,9 +48,10 @@ class VideoManager
 								  "If you do not have mod_xsendfile installed, then Web Folder is strongly recommended", 
 								  "Video Uploads", "Web Folder\nDocument Upload Folder\nOther");
 		Settings::setDefaultValue("video","video_upload_other_location", "", String, "Full path to alternate video location", "Video Uploads");
-		Settings::setDefaultValue("video", "use_HTML5_video", false, Boolean, "Check to use HTML5 video, leave unchecked for old-style FLV (requires Flowplayer Flash)", "Video Player", null, 1);
-		Settings::setDefaultValue("video", "flowplayer_script", "", String, "URI for the Flowplayer script", "Video Player", null, 2);
-		Settings::setDefaultValue("video", "flowplayer_player", "", String, "URI for the Flowplayer SWF file", "Video Player", null, 3);
+		Settings::setDefaultValue("video", "use_HTML5_video", false, Boolean, "Check to enable support for HTML5 video", "Video Player", null, 1);
+		Settings::setDefaultValue("video", "use_flash_video", true, Boolean, "Check to enable support for old-style FLV (requires Flowplayer Flash)", "Video Player", null, 2);
+		Settings::setDefaultValue("video", "flowplayer_script", "", String, "URI for the Flowplayer script", "Video Player", null, 3);
+		Settings::setDefaultValue("video", "flowplayer_player", "", String, "URI for the Flowplayer SWF file", "Video Player", null, 4);
 		Settings::setDefaultValue("video", "ffmpeg_path", "", String, "Directory containing the ffmpeg binary executables", "Video Transcoder");
 	}
 	
@@ -70,6 +71,7 @@ class VideoManager
 					  "handler"	=>	"videoPicker");
 			
 		$useHTML5 = Settings::getValue("video", "use_HTML5_video");
+		$useFlash = Settings::getValue("video", "use_flash_video");
 		$flowPlayerScript = Settings::getValue("video", "flowplayer_script");
 		
 		if ($isAction || $isResource) return;
@@ -79,17 +81,15 @@ class VideoManager
 			$styles = "<link href='//vjs.zencdn.net/4.12/video-js.css' rel='stylesheet'>" . $styles;
 			$script = "<script src='//vjs.zencdn.net/4.12/video.js'></script>" . $script;		
 		}
-		else
-		{		
-			if ($flowPlayerScript)
-			{
-				$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";
-			}
-			
-			$flowPlayer = Settings::getValue("video", "flowplayer_player");
-			
-			$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
+		
+		if ($useFlash && $flowPlayerScript)
+		{
+			$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";
 		}
+		
+		$flowPlayer = Settings::getValue("video", "flowplayer_player");
+		
+		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
 	}
 	
 	static function getVideoFolder()
