@@ -60,6 +60,10 @@ class NumberTypeRenderer extends AbstractTypeRenderer
 				$places =  substr($template, 10);
 				$text = number_format($value, $places, ".", "");
 			}
+			else
+			{
+				$text = $value;
+			}
 		}
 		
 		else if ($template == "numeric")
