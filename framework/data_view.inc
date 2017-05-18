@@ -91,7 +91,7 @@ class DataListView implements FacetFilterable
 	var $selectable  = false;			///< Whether the table provides a selection mechanism
 	var $menu = null;					///< Context menu for selection-based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
-	var $toolbarCallback = null; 		///< Override this callback to add toolbar links into the first header cell
+	var $toolbarCallbacks = array(); 		///< Override this callback to add toolbar links into the first header cell
 	static $includesWritten = false;
 	
 	/**
@@ -251,6 +251,17 @@ class DataListView implements FacetFilterable
 		$this->menu->position = "element";
 		
 		return $this->menu;
+	}
+	
+	/**
+	 * Registers a toolbar callback. These can be used to add custom controls into the first header cell of the table, next
+	 * to the Excel export icon or command menu dropdown icon.
+	 * 
+	 * @param callable $callback the callback function or method
+	 */
+	function addToolbarCallback($callback)
+	{
+		$this->toolbarCallbacks[] = $callback;
 	}
 	
 	/**
@@ -576,10 +587,10 @@ class DataListView implements FacetFilterable
 <?									
 					}
 					
-					if ($this->toolbarCallback)
+					foreach($this->toolbarCallbacks as $callback)
 					{
 						echo "<div style='display: inline-block; float: left'>";
-						echo call_user_func($this->toolbarCallback, $this);
+						echo call_user_func($callback, $this);
 						echo "</div>";
 					}
 				}
