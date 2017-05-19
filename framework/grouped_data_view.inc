@@ -657,13 +657,16 @@ class GroupedDataListView
 		{
 			if ($this->groupAsWorksheets)
 			{
+				//AJG: Excel can't cope with slashes in worksheet names
+				$title = str_replace("/", " ", $group->title);
+				
 				if ($firstGroup)
 				{
-					$x->setWorksheetTitle($group->title);
+					$x->setWorksheetTitle($title);
 				}
 				else
 				{
-					$x->addWorksheet($group->title);
+					$x->addWorksheet($title);
 				}
 				
 				$writeColumnHeadings = true;
