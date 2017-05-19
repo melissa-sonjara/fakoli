@@ -171,6 +171,14 @@ class GroupedDataListView
 		} 
 	}
 
+	function autoGroup()
+	{
+		$categories = array_keys($this->items);
+		foreach($categories as $category)
+		{
+			$this->group($category, $category);
+		}
+	}
 	
 	/**
 	 * Outputs the text for the groupedBy title bar using the given group dataitem
@@ -418,6 +426,11 @@ class GroupedDataListView
 	{
 		if (count($this->items) > 0)
 		{
+			if (count($this->groups) == 0) 
+			{
+				$this->autoGroup();
+			}
+			
 			$this->autoPopulate($this->items[0]); // Autopopulate the column list from the first object, if not specified
 			$attrs = "";
 			if ($this->id)
