@@ -645,6 +645,11 @@ class GroupedDataListView
 	{
 		$x = ExcelFileWriter::create($file);
 
+		if (count($this->groups) == 0)
+		{
+			$this->autoGroup();
+		}
+		
 		$writeColumnHeadings = true;
 		$firstGroup = true;
 		
