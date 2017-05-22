@@ -1102,10 +1102,12 @@ function includeRemote($host, $file)
 
 /**
  * Retrieve the contents of the remote file at the given URL
- * @param $url the URL to retrieve
+ * @param string $url the URL to retrieve
+ * @param string $username (optional) username for basic authentication
+ * @param string $password (optional) password for basic authentication 
  * @return string the contents of the file at that URL
  */
-function getRemote($url)
+function getRemote($url, $username = "", $password = "")
 {
 	$url = canonicalizeURL($url);
 	trace("Retrieving $url", 3);
@@ -1113,6 +1115,13 @@ function getRemote($url)
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	
+	if ($username)
+	{
+		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+	}
+	
 	$html = curl_exec($ch);
 	
 	if ($html === FALSE) throw new Exception(curl_error($ch));
