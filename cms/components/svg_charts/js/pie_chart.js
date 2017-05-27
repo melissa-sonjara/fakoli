@@ -177,6 +177,33 @@ var PieChart = new Class(
 		var t = this.paper.text(cx + (r * this.options.percentagesDistance) * Math.cos(-angle), cy + (r * this.options.percentagesDistance) * Math.sin(-angle), text).attr(params);
 		
 		return t;
-	}
+	},
 	
+	addSectorClass: function(idx, cl)
+	{
+		var sector = this.sectors[idx];
+		if (sector)
+		{
+			sector.addClass(cl);
+		}
+	},
+	
+	removeSectorClass: function(idx, cl)
+	{
+		var sector = this.sectors[idx];
+		if (sector)
+		{
+			sector.removeClass(cl);
+		}
+	},
+	
+	disableSector: function(idx)
+	{
+		this.addSectorClass(idx, 'disabled');
+	},
+	
+	enableSector: function(idx)
+	{
+		this.removeSectorClass(idx, 'disabled');
+	}
 });
