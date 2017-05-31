@@ -1461,7 +1461,8 @@ var StackedHorizontalBlockSeriesRenderer = new Class(
 				{
 					if (!val) val = 0;
 					
-					this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val + this.chart.options.units).attr({'text-anchor': 'start'});
+					this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val + this.chart.options.units)
+						.attr({'text-anchor': 'start', 'font-size': this.chart.options.labelSize});
 				}
 				
 				column.mouseover(function(e) { child.fireEvent('mouseOver', [e, i]);  child.showToolTip(e, i); }.bind(this));
