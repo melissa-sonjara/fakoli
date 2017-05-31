@@ -182,7 +182,8 @@ var VerticalBlockSeriesRenderer = new Class(
 			{
 				if (!val) val = 0;
 				
-				this.chart.paper.text(x + columnWidth / 2, y - 8, val + this.chart.options.units).attr({"text-anchor": "middle"});
+				this.chart.paper.text(x + columnWidth / 2, y - 8, val + this.chart.options.units)
+					.attr({"text-anchor": "middle", 'font-size': this.chart.options.labelSize});
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]); this.series.showToolTip(e, i);}.bind(this));
