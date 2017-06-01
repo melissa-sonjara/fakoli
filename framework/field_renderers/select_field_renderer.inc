@@ -152,6 +152,27 @@ class SelectFieldRenderer extends FieldRenderer
 			$this->options = $options;
 		}
 	}
+
+	/**
+	 * Extends the options using the specified array. Use this to provide
+	 * a default set of options for SelectFieldRenderers that auto-populate
+	 * based on field content.
+	 */
+	function extendOptions($options)
+	{
+		if ($this->grouped)
+		{
+			throw new FakoliException("SelectFieldRenderer::extendOptions() not supported in grouped mode");
+		}
+		
+		foreach($options as $value => $text)
+		{
+			if (!array_key_exists($value, $this->options))
+			{
+				$this->options[$value] = $text;
+			}
+		}
+	}
 	
 	function renderField($field)
 	{
@@ -382,7 +403,7 @@ class SelectFieldRenderer extends FieldRenderer
 		$fn = "{$this->parent->id}_$field";
 		$addEntry = $field . "_addEntry";
 		
-		if(!$this->onChange AND $this->addEntry)
+		if(!$this->onChange && $this->addEntry)
 		{
 ?>
 <script type="text/javascript">
