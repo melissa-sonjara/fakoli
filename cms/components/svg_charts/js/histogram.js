@@ -529,10 +529,10 @@ var VerticalHistogramAxisRenderer = new Class(
 	
 	showToolTip: function(evt, idx)
 	{
-		//if (idx > this.chart.labelTooltips.length) return;
+		if (idx > this.chart.labelTooltips.length) return;
 		
 		var text = this.chart.labelTooltips[idx];
-		if (text == '') text = "N/A";
+		if (text == '') return;
 		
 		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", text);		
 	},
