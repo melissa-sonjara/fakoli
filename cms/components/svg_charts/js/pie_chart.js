@@ -261,7 +261,7 @@ var PieChart = new Class(
 		{
 			if (s.hasClass('selected'))
 			{
-                s.stop().animate({transform: "s1.15 1.1 " + cx + " " + cy}, 500, mina.elastic);	
+                s.stop().animate({transform: "s1.15 1.15 " + cx + " " + cy}, 500, mina.elastic);	
 			}
 			else
 			{
