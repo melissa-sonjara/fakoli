@@ -28,6 +28,7 @@ var PieChart = new Class(
 		onSectorOver: Class.Empty,
 		onSectorOut: Class.Empty,
 		onSectorClick: Class.Empty,
+		onSelectionChanged: Class.Empty,
 		enableDownload: true,
 		selectable: false,
 		animateSelection: false
@@ -257,6 +258,7 @@ var PieChart = new Class(
 		}
 		
 		this.showSelected();
+		this.fireEvent('selectionChanged', [this, idx]);
 	},
 	
 	showSelected: function()
