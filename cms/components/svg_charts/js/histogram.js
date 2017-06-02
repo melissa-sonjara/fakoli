@@ -546,26 +546,27 @@ var VerticalHistogramAxisRenderer = new Class(
 	{
 		this.chart.labels.each(function(text, index)
 		{
-			var x = this.options.chartLeft + this.columnWidth * index + (this.getColumnOffset());
-			var y = this.options.chartTop + this.options.chartHeight + this.options.labelOffset + (text.count("\n") * this.options.labelSize / 2);
+			var chart = this.chart;
+			var x = chart.options.chartLeft + chart.columnWidth * index + (chart.getColumnOffset());
+			var y = chart.options.chartTop + thchartis.options.chartHeight + chart.options.labelOffset + (text.count("\n") * chart.options.labelSize / 2);
 			
-			var decorations = this.labelDecorations[index];
-			var attrs = {stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.labelSize, "text-anchor": this.options.labelAnchor};
+			var decorations = chart.labelDecorations[index];
+			var attrs = {stroke: 'none', fill: chart.palette.strokeColor, "font-size": chart.options.labelSize, "text-anchor": chart.options.labelAnchor};
 			Object.append(attrs, decorations);
 
-			if (this.options.labelAngle)
+			if (chart.options.labelAngle)
 			{
-				attrs.transform = "rotate(" + this.options.labelAngle + "," + x + "," + y + ")";
+				attrs.transform = "rotate(" + chart.options.labelAngle + "," + x + "," + y + ")";
 			}
 			
-			var label = this.paper.text(x, y, text);
+			var label = chart.paper.text(x, y, text);
 			var i = "Tooltip";
 			label.attr(attrs);
 
-			label.mouseover(function(e) { this.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
-			label.mouseout(function(e) { this.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
-			label.click(function() { this.fireEvent('click', i); }.bind(this));
-		}.bind(this.chart));
+			label.mouseover(function(e) { chart.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
+			label.mouseout(function(e) { chart.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
+			label.click(function() { chart.fireEvent('click', i); }.bind(this));
+		}.bind(this));
 	},
 	
 	drawTicks: function()
