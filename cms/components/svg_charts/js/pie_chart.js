@@ -265,6 +265,6 @@ var PieChart = new Class(
 			{
 				s.stop().animate({transform: ""}, 500, mina.elastic);	
 			}
-		}
+		});
 	}
 });
