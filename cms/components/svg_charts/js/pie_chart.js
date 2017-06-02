@@ -256,6 +256,9 @@ var PieChart = new Class(
 	showSelected: function()
 	{
 		if (!this.options.animateSelection) return;
+
+		var cx = this.options.cx;
+		var cy = this.options.cy;
 		
 		this.sectors.each(function(s)
 		{
