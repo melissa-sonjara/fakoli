@@ -527,6 +527,21 @@ var VerticalHistogramAxisRenderer = new Class(
 		return this.chart.options.chartWidth / count;
 	},
 	
+	showToolTip: function(evt, idx)
+	{
+		//if (idx > this.chart.labelTooltips.length) return;
+		
+		var text = this.chart.labelTooltips[idx];
+		if (text == '') text = "N/A";
+		
+		showTextToolTip(this.chart.container, evt, this.chart.id + "_tooltip", text);		
+	},
+	
+	hideToolTip: function()
+	{
+		hideToolTip(this.chart.id + "_tooltip");
+	},	
+	
 	drawLabels: function()
 	{
 		this.chart.labels.each(function(text, index)
