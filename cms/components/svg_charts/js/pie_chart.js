@@ -29,7 +29,8 @@ var PieChart = new Class(
 		onSectorOut: Class.Empty,
 		onSectorClick: Class.Empty,
 		enableDownload: true,
-		selectable: false
+		selectable: false,
+		animateSelection: false
 	},
 	
 	sectors: [],
