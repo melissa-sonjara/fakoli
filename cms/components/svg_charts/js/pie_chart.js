@@ -91,9 +91,11 @@ var PieChart = new Class(
 			{
 				s.mouseover(function (event) 
 				{
-					if (s.hasClass('selected') && this.options.animateSelection) return;
-	                s.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, mina.elastic);
-	                if (p && animatePercentages) p.stop().animate({opacity: 1}, 500, mina.elastic);
+					if (!s.hasClass('selected') || !this.options.animateSelection)
+					{
+		                s.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, 500, mina.elastic);
+		                if (p && animatePercentages) p.stop().animate({opacity: 1}, 500, mina.elastic);
+					}
 	                this.fireEvent('sectorOver', [event, idx]);
 	            }.bind(this));
 				
@@ -101,9 +103,11 @@ var PieChart = new Class(
 				
 				s.mouseout(function (event) 
 				{
-					if (s.hasClass('selected') && this.options.animateSelection) return;
-	                s.stop().animate({transform: ""}, 500, mina.elastic);
-	                if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, mina.elastic);
+					if (!s.hasClass('selected') || !this.options.animateSelection)
+					{
+						s.stop().animate({transform: ""}, 500, mina.elastic);
+						if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, mina.elastic);
+					}
 	                this.fireEvent('sectorOut', [event, idx]);
 	            }.bind(this));				
 			}
