@@ -563,7 +563,7 @@ var VerticalHistogramAxisRenderer = new Class(
 			var i = "Tooltip";
 			label.attr(attrs);
 
-			label.mouseover(function(e) { chart.fireEvent('mouseOver', [e, i]); this.showToolTip(e, i);}.bind(this));
+			label.mouseover(function(e) { chart.fireEvent('mouseOver', [e, i]); this.showToolTip(e, index);}.bind(this));
 			label.mouseout(function(e) { chart.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
 			label.click(function() { chart.fireEvent('click', i); }.bind(this));
 		}.bind(this));
