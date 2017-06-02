@@ -28,7 +28,8 @@ var PieChart = new Class(
 		onSectorOver: Class.Empty,
 		onSectorOut: Class.Empty,
 		onSectorClick: Class.Empty,
-		enableDownload: true
+		enableDownload: true,
+		selectable: false
 	},
 	
 	sectors: [],
@@ -103,6 +104,8 @@ var PieChart = new Class(
 	                this.fireEvent('sectorOut', [event, idx]);
 	            }.bind(this));				
 			}
+			
+			s.click(function(event) { this.sectorSelect(idx); }.bind(this));
 			
 			if (this.$events.sectorClick)
 			{
@@ -205,5 +208,23 @@ var PieChart = new Class(
 	enableSector: function(idx)
 	{
 		this.removeSectorClass(idx, 'disabled');
+	},
+	
+	sectorSelect: function(idx)
+	{
+		if (!this.options.selectable)
+		{
+			return;
+		}
+		
+		var sector = this.sectors[idx];
+		if (sector.hasClass('selected'))
+		{
+			sector.removeClass('selected');
+		}
+		else
+		{
+			sector.addClass('selected');
+		}
 	}
 });
