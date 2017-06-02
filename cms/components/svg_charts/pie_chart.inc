@@ -66,6 +66,7 @@ class PieChart
 	var $fontFamily = 'Arial, Helvetica';
 	var $canvasBackground = "#FFFFFF";
 	var $selectable = false;
+	var $animateSelection = false;
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -144,6 +145,7 @@ class PieChart
 		$percentages = $this->showPercentages ? "true" : "false";
 		$download = $this->enableDownload ? "true" : "false";
 		$selectable = $this->selectable ? "true": "false";
+		$animateSelection = $this->animateSelection ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
@@ -180,7 +182,8 @@ window.addEvent('domready', function ()
 		onLegendOut: {$this->onLegendOut},
 		enableDownload: {$download},
 		canvasBackground: '{$this->canvasBackground}',
-		selectable: {$selectable}
+		selectable: {$selectable},
+		animateSelection: {$animateSelection}
 	});
 	{$this->id}.values = [ $values ];
 	{$this->id}.labels = [ $labels ];
