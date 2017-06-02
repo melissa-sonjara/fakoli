@@ -210,6 +210,24 @@ var PieChart = new Class(
 		this.removeSectorClass(idx, 'disabled');
 	},
 	
+	selectSector: function(idx)
+	{
+		this.addSectorClass(idx, 'selected');		
+	},
+	
+	deselectSector: function(idx)
+	{
+		this.removeSectorClass(idx, 'selected');		
+	},
+	
+	clearSelection: function()
+	{
+		this.sectors.each(function(sector)
+		{
+			sector.removeClass('selected');
+		});
+	},
+	
 	sectorSelect: function(idx)
 	{
 		if (!this.options.selectable)
