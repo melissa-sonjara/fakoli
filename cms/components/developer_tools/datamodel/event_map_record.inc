@@ -24,11 +24,11 @@ class EventMapRecord extends DataItem
 	
 		if (is_array($obj["handler"]))
 		{
-			$this->exists = method_exists($obj["handler"][0], $obj["handler"][1]);
+			$record->exists = method_exists($obj["handler"][0], $obj["handler"][1]);
 		}
 		else
 		{
-			$this->exists = function_exists($obj["handler"]);
+			$record->exists = function_exists($obj["handler"]);
 		}
 		return $record;
 	}
