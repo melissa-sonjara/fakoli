@@ -12,7 +12,8 @@ $eventMap = EventMapRecord::convertMap(ComponentManager::getEventHandlers());
 $table = new GroupedDataListView($eventMap, "event_map");
 $table->column("Component", "{component}", true, "width: 20%")
 	  ->column("Priority", "{priority}", true, "width: 10%; text-align: right")
-	  ->column("Handler", "{handler}", true, "width: 70%");
+	  ->column("Handler", "{handler}", true, "width: 60%")
+	  ->column("Exists?", "<img src='/fakoli/images/{exists:on/off}.png alt='{exists:Yes/No}'/>", true, "text-align: center");
 
 foreach(array_keys($eventMap) as $event)
 {

@@ -8,7 +8,9 @@ class EventMapRecord extends DataItem
 {
 	var $fields = array("component"	=>	String,
 						"priority"	=>	Number,
-						"handler"	=>	String);
+						"handler"	=>	String,
+						"exists"	=>	Boolean
+	);
 	
 	/**
 	 * Converts an Event Map record entry to a DataItem
@@ -20,6 +22,14 @@ class EventMapRecord extends DataItem
 		$record->priority = $obj["priority"];
 		$record->handler = is_array($obj["handler"]) ? implode("::", $obj["handler"]) : $obj["handler"];
 	
+		if (is_array($obj["handler"]))
+		{
+			$this->exists = method_exists($obj["handler"][0], $obj["handler"][1]);
+		}
+		else
+		{
+			$this->exists = function_exists($obj["handler"]);
+		}
 		return $record;
 	}
 	
