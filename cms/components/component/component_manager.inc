@@ -98,10 +98,18 @@ class ComponentManager
 		    {
 		    	$f = $path . DIRECTORY_SEPARATOR . $file;
 		    	$m = $f . DIRECTORY_SEPARATOR . "manifest.inc";
+		    	$d = $f . DIRECTORY_SEPARATOR . "DEPRECATED";
 		    	
 		    	if (is_dir($f))
 		    	{
 		    		ComponentManager::scanTrace("== Found component '$file'", 3);
+		    		if (is_file($d))
+		    		{
+		    			ComponentManager::scanTrace("**** Deprecated component - ignoring", 3);
+		    			Cache::invalidate("fakoli_includes_$file");
+		    			continue;
+		    		}
+		    		
 		    		if ($this->found[$file])
 		    		{
 		    			ComponentManager::scanTrace("---- already defined - skipping", 3);
@@ -333,11 +341,17 @@ class ComponentManager
 
 			$path = $root . DIRECTORY_SEPARATOR . "cms" . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . $name;
 			
-			if (file_exists($path)) return $path;
+			if (file_exists($path))
+			{
+				if (!file_exists($path.DIRECTORY_SEPARATOR."DEPRECATED")) return $path;
+			}
 			
 			$path = $root . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . $name;
 			
-			if (file_exists($path)) return $path;
+			if (file_exists($path)) 
+			{
+				if (!file_exists($path.DIRECTORY_SEPARATOR."DEPRECATED")) return $path;
+			}
 		}
 		
 		return null;
