@@ -185,7 +185,7 @@ ENDSCRIPT;
         		}
         		else
         		{
-        			$url = $entry->getPage(0);
+        			$url = $entry->getPage(0, false);
         		}
         	}
         	
@@ -306,7 +306,7 @@ ENDSCRIPT;
 	 * 
 	 * @param string $idx the index of the tab for which we require the URL 
 	 */
-	function getPage($idx)
+	function getPage($idx, $appendQueryString = true)
 	{
 		$i = 0;
 		
@@ -336,7 +336,7 @@ ENDSCRIPT;
 			$i++;
 		}
 		
-		$dest = ($this->queryString!="") ? $this->appendQueryString($url, $this->queryString) : $url;
+		$dest = ($appendQueryString && $this->queryString!="") ? $this->appendQueryString($url, $this->queryString) : $url;
 		return $dest;	
 	}
 	
