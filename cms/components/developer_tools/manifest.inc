@@ -31,9 +31,13 @@ class DeveloperToolsManifest
 											  "role"	=>	"admin",
 											  "weight"	=>	3),
 				
+				"Permissions Map"	=>	array("page"	=>	"/admin/permissions_map",
+											  "role"	=>	"admin",
+											  "weight"	=>	4),
+					
 				"Test PHP CLI"		=>	array("page"	=>	"/admin/test_php_cli",
 											  "role"	=>	"admin",
-											  "weight"	=>	4)
+											  "weight"	=>	99)
 			)
 		);
 	}
