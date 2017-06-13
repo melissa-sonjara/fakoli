@@ -173,6 +173,9 @@ ENDSCRIPT;
         	$active = "";
         	$style = "";
         	
+        	//AJG - make it easier to have conditional tabs. 
+        	if ($entry === null) continue;
+        	
         	if (is_string($entry))
         	{
         		$url = $entry;
