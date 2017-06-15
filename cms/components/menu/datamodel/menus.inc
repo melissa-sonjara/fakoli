@@ -72,6 +72,13 @@ class Menu extends DataItem
 					->executeSingle();
 	}
 	
+	function menuItemExists($title)
+	{
+		return Query::create(MenuItem, "WHERE menu_id=:m AND title=:t")
+					->bind(":m", $this->menu_id, ":t", $title)
+					->exists();
+	}
+	
 	// Constructor
 	function Menu()
 	{
