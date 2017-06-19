@@ -62,6 +62,7 @@ class PieChart
 	var $onSectorClick = "null";
 	var $onLegendOver = "null";
 	var $onLegendOut = "null";
+	var $onSelectionChanged = "null";
 	var $scaleToFit = false;
 	var $fontFamily = 'Arial, Helvetica';
 	var $canvasBackground = "#FFFFFF";
@@ -180,6 +181,7 @@ window.addEvent('domready', function ()
 		onSectorClick: {$this->onSectorClick},
 		onLegendOver: {$this->onLegendOver},
 		onLegendOut: {$this->onLegendOut},
+		onSelectionChanged: {$this->onSelectionChanged},
 		enableDownload: {$download},
 		canvasBackground: '{$this->canvasBackground}',
 		selectable: {$selectable},
