@@ -290,7 +290,9 @@ class VideoManager
 				$newWidth = $fullWidth;
 				$newHeight = $fullHeight;
 			}
-						
+			
+			trace("Rendering $cacheFile @ $newWidth x $newHeight", 3);
+			
 			$dst = imagecreatetruecolor($newWidth, $newHeight);
 			imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $fullWidth, $fullHeight);
 
