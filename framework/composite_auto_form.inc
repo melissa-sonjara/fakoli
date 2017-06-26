@@ -61,11 +61,11 @@ class CompositeAutoForm
 	 * Add a sub-form to this form.
 	 * @param $form the form to be added
 	 */
-	function addForm($form)
+	function addForm($form, $enableValidation = false)
 	{
 		$form->makeSubordinate();
 		$this->forms[] = $form;
-		$form->getValidationEngine()->generateScript = false;
+		$form->getValidationEngine()->generateScript = $enableValidation;
 	}
 
 	/**
