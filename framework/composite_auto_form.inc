@@ -76,7 +76,13 @@ class CompositeAutoForm
 		$script = "";
 		foreach($this->forms as $form)
 		{
-			$script .= $form->writeScript();
+			$s = $form->writeScript();
+			if ($form->getValidationEngine()->generateScript)
+			{
+				// Remap form control ids
+				$s= preg_replace("/\\bform\\[(['\"])([^'\"]*?)['\"]\\]/", "form[$1{$form->id}__$2$1]", $s);
+			}
+			$script .= $s;
 		}
 
 		ob_start();
