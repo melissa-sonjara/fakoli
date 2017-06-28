@@ -35,6 +35,8 @@ require_once realpath(dirname(__FILE__))."/../../../framework/field_renderers.in
 
 class TermsAndConditionsFieldRenderer extends FieldRenderer
 {
+	var $containerFormID = null;
+	
 	function TermsAndConditionsFieldRenderer(&$parent, $field)
 	{
 		global $isAdmin;
@@ -48,7 +50,7 @@ class TermsAndConditionsFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
-		$formId = $this->parent->id;
+		$formId = ($this->containerFormID) ? $this->containerFormID : $this->parent->id;
 		$id = $this->parent->id."_".$field;
 		$title = Settings::getValue("terms_and_conditions", "title");
 ?>
