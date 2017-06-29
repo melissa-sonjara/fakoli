@@ -228,11 +228,11 @@ class Settings extends DataItem
 	 * @param string $name the unique name of the permission
 	 * @param string $redirect URL to redirect to on failure
 	 */
-	static function assertPermission($component, $name, $redirect = "")
+	static function assertPermission($component, $name, $redirect = "", $message = "")
 	{
 		$roles = Settings::getValue($component, $name);
 		
-		Fakoli::assertRole($roles, $redirect);
+		Fakoli::assertRole($roles, $redirect, $message);
 	}
 
 	/**

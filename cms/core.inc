@@ -277,20 +277,38 @@ class Fakoli
 	 * Assert that the user has one of the specified roles.
 	 * @param string $role comma-separated list of acceptable roles
 	 * @param string $redirect the page to which the user is to be redirected on failure
+	 * @param string $message a message to display if redirect is empty
 	 */
-	static function assertRole($role, $redirect = "/index")
+	static function assertRole($role, $redirect = "", $message = "")
 	{
 		global $user;
+		global $isAction;
+		
+		if (!$redirect && !$message) $redirect = "/index";
 		
 		if (!checkRole($role))
 		{
-			if (!$user)
+			if ($redirect)
 			{
-				$mgr = new LoginManager();
-				$mgr->storeRedirectPage();
+				if (!$user)
+				{
+					$mgr = new LoginManager();
+					$mgr->storeRedirectPage();
+				}
+	
+				redirect($redirect);
 			}
-
-			redirect($redirect);
+			else
+			{
+				if ($isAction)
+				{
+					Fakoli::end($message);
+				}
+				else
+				{
+					throw new FakoliException($message);
+				}
+			}
 		}
 	}
 	
