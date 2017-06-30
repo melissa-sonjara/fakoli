@@ -84,6 +84,8 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $showSelectAll = false;
 	var $separator = ", "; 				///< The separator between values in read only list
 	
+	var $fixedOptions = array();
+	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
 		$this->options = $options;
@@ -114,6 +116,11 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->scrollAfter = $scrollAfter;
 	}
 
+	function addFixedOption($value)
+	{
+		$this->fixedOptions[$value] = $value;
+	}
+	
 	function getOptionCount()
 	{
 		if (!$this->grouped) return count($this->options);
@@ -192,9 +199,19 @@ class CheckListFieldRenderer extends FieldRenderer
 			{
 				foreach($this->options as $value => $text)
 				{
-					$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+					$disabled = "";
+					
+					if ($this->fixedOptions[$value])
+					{
+						$disabled = " disabled";
+						$checked = " checked";
+					}
+					else
+					{
+						$checked = (array_search($value, $values) !== FALSE) ? " checked" : "";
+					}
 					if ($this->nobr) { $text = str_replace(" ", "&nbsp;", $text); }
-					echo "<label for='{$this->parent->id}_{$field}[$idx]'$layout><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked/>$text</label>$divider";
+					echo "<label for='{$this->parent->id}_{$field}[$idx]'$layout><input type='checkbox' class='checkbox' id='{$this->parent->id}_{$field}[$idx]' name='{$field}[$idx]' value='$value'$checked$disabled/>$text</label>$divider";
 					$idx++;
 				}
 
