@@ -565,6 +565,27 @@ class AutoForm
 			$this->hidden[$hidden] = true;
 		}
 	}
+	
+	/**
+	 * Call this method to hide all the fields in the form's user interface EXCEPT
+	 * the fields specified. For instance, calling hide("field1", "field3") would remove
+	 * all the fields other than field1 and field3 when the form is rendered.  
+	 * Note that the values for the hidden fields are still carried around with the form 
+	 * and saved to the database when the AutoForm saves the target DataItem. To prevent a 
+	 * field on the DataItem from being processed by the AutoForm at all, you should use an 
+	 * InclusionFilter or ExclusionFilter on the target DataItem.
+	 */
+	function hideExcept()
+	{
+		$exceptions = array_combine(func_get_args(), func_get_args());
+		foreach($this->data->getFields() as $name => $type)
+		{
+			if (!array_key_exists($name, $exceptions))
+			{
+				$this->hidden[$name] = true;
+			}
+		}
+	}
 
 	/**
 	 * Check whether the specified field is hidden in the form.
