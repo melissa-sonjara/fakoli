@@ -135,7 +135,7 @@ class ExpandingList
 	{
 		document.getElements("dl.expanding_list dd.expanded[data-url!='']").each(function(panel)
 		{
-			panel.load();
+			panel.reload();
 			panel.removeClass('expanded');
 		});
 	});	
