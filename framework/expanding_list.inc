@@ -128,9 +128,17 @@ class ExpandingList
 			}
 			?>
 			}
-		}		
+		}	
 	}
-	
+
+	window.addEvent('domready', function()
+	{
+		document.getElements("dl.expanding_list dd.expanded[data-url!='']").each(function(panel)
+		{
+			panel.load();
+			panel.removeClass('expanded');
+		});
+	});	
 	</script>
 <?
 		$script = ob_get_contents();
@@ -208,7 +216,7 @@ class ExpandingList
 			
 			if ($this->dynamicLoad)
 			{
-				echo "<dd{$bodyID} {$ddState} data-url='{$body}'></dd>";
+				echo "<dd{$bodyID} {$dtState} {$ddState} data-url='{$body}'></dd>";
 			}
 			else
 			{
@@ -284,7 +292,7 @@ class ExpandingList
 				
 				if ($this->dynamicLoad)
 				{
-					echo "<dd{$bodyID} {$ddState} data-url='{$body}'></dd>";
+					echo "<dd{$bodyID} {$dtState} {$ddState} data-url='{$body}'></dd>";
 				}
 				else
 				{
