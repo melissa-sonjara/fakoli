@@ -53,6 +53,8 @@ class ExpandingList
 	var $bodyIDFormat = null;					///< Format template for body ID field
 	var $scrollOnExpand = false;				///< Flag indicating whether to scroll the expanding item to the top of the screen
 	var $scrollOffset = 0;						///< Offset from top of element when scrolling (to take into account fixed navigation bars, etc)
+	var $isItemExpanded = null;					///< Callback hook to determine if an item should be shown expanded by default. Callback is passed the item and current index. Return true for expanded, false for collapsed.
+	var $onItemStart = null;					///< Callback hook called when starting to display each item. Return false to skip the item.
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -159,12 +161,36 @@ class ExpandingList
 ?>
 			<dl id="<?echo $this->id?>"<?echo $attrs?>>
 <?
+		$idx = 0;
+		
 		foreach($this->items as $item)
 		{
+			if (is_callable($this->onItemStart))
+			{
+				if (call_user_func($this->onItemStart, $item) === false) continue;
+			}
+			
 			$titleID = ($this->titleIDFormat) ? $item->format(" id='{$this->titleIDFormat}'") : "";
 			$bodyID =  ($this->bodyIDFormat) ? $item->format(" id='{$this->bodyIDFormat}'") : "";
+		
+			$expanded = false;
+			if (is_callable($this->isItemExpanded))
+			{
+				$expanded = call_user_func($this->isItemExpanded, $item, $idx);
+			}
 			
-			echo "<dt{$titleID} onclick='return {$this->id}_toggleDD(this);'>";
+			if ($expanded)
+			{
+				$dtState = "class='expanded'";
+				$ddState = "style=''";
+			}
+			else
+			{
+				$dtState = "";
+				$ddState = "style='display: none'";
+			}
+			
+			echo "<dt{$titleID} {$dtState} onclick='return {$this->id}_toggleDD(this);'>";
 			
 			if (is_callable($this->titleFormat))
 			{
@@ -182,12 +208,14 @@ class ExpandingList
 			
 			if ($this->dynamicLoad)
 			{
-				echo "<dd{$bodyID} style='display: none' data-url='{$body}'></dd>";
+				echo "<dd{$bodyID} {$ddState} data-url='{$body}'></dd>";
 			}
 			else
 			{
-				echo "<dd{$bodyID} style='display: none'>{$body}</dd>";				
+				echo "<dd{$bodyID} {$ddState}>{$body}</dd>";				
 			}	
+			
+			++$idx;
 		}
 		echo "</dl>\n";
 	}
@@ -201,18 +229,44 @@ class ExpandingList
 		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
 		
+		$groupIdx = 0;
+		
 		foreach($this->items as $group => $items)
 		{
 ?>
 		<<?echo $this->groupTag?> class='expanding_list_group'><?echo $group?></<?echo $this->groupTag?>>		
 			<dl id="<?echo $this->id?>_<?echo codify($group)?>"<?echo $attrs?>>
 <?
+			$idx = 0;
+			
 			foreach($items as $item)
 			{
+				if (is_callable($this->onItemStart))
+				{
+					if (call_user_func($this->onItemStart, $item) === false) continue;
+				}
+				
 				$titleID = ($this->titleIDFormat) ? $item->format(" id='{$this->titleIDFormat}'") : "";
 				$bodyID =  ($this->bodyIDFormat) ? $item->format(" id='{$this->bodyIDFormat}'") : "";
-					
-				echo "<dt{$titleID} onclick='return {$this->id}_toggleDD(this);'>";
+		
+				$expanded = false;
+				if (is_callable($this->isItemExpanded))
+				{
+					$expanded = call_user_func($this->isItemExpanded, $item, $idx, $groupIdx);
+				}
+				
+				if ($expanded)
+				{
+					$dtState = "class='expanded'";
+					$ddState = "style=''";
+				}
+				else
+				{
+					$dtState = "";
+					$ddState = "style='display: none'";
+				}
+				
+				echo "<dt{$titleID} {$dtState} onclick='return {$this->id}_toggleDD(this);'>";
 				
 				if (is_callable($this->titleFormat))
 				{
@@ -230,14 +284,17 @@ class ExpandingList
 				
 				if ($this->dynamicLoad)
 				{
-					echo "<dd{$bodyID} style='display: none' data-url='{$body}'></dd>";
+					echo "<dd{$bodyID} {$ddState} data-url='{$body}'></dd>";
 				}
 				else
 				{
-					echo "<dd{$bodyID} style='display: none'>{$body}</dd>";				
-				}	
+					echo "<dd{$bodyID} {$ddState}>{$body}</dd>";				
+				}
+				
+				++$idx;
 			}
 			echo "</dl>\n";
+			++$groupIdx;
 		}
 	}
 }
