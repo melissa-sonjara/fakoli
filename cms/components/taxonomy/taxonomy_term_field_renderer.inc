@@ -297,6 +297,26 @@ window.addEvent('domready', function()
 		$this->_endField($field);
 	}
 	
+	function preProcess($field = "")
+	{
+		if (count($this->options) == 0) return;
+		
+		$obj = $this->parent->data;
+		if ($obj->hasField($this->field) && is_array($_POST[$this->field]))
+		{
+			// If overriding a field, unpack the terms
+			$terms = array();
+			foreach($_POST[$this->field] as $term_id => $dummy)
+			{
+				$terms[] = new TaxonomyTerm($term_id);
+			}
+			
+			$obj->set($this->field, formatItems($terms, "{term}", ","));
+		}
+		
+		return true;
+	}
+	
 	function postProcess($field = "")
 	{
 		if (count($this->options) == 0) return;
