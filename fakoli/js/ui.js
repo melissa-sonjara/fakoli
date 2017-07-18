@@ -1680,42 +1680,45 @@ window.addEvent('domready', function()
 	document.scrollWatcher = new ScrollWatcher(); 
 });
 
+
+function addReloadHandler(elt)
+{
+	elt.reload = function(onComplete)
+	{
+		var handler = elt.get('data-url');
+		
+		var request = new Request.HTML(
+		{
+			url: handler,
+			evalScripts: false,
+			evalResponse: false,
+			method: 'get', 
+			onSuccess: function(tree, elements, html, script) 
+			{ 
+				elt.set('html', html);
+				Browser.exec(script);
+				
+				if (typeof onComplete != "undefined")
+				{
+					onComplete();
+				}
+			}
+		});
+		request.send();			
+	};
+	
+	elt.load = function(url, onComplete)
+	{
+		elt.set('data-url', url);
+		elt.reload(onComplete);
+	};
+}
+
 function addReloadHandlers(container)
 {
-	container.getElements('[data-url]').each(function(elt)
-	{
-		elt.reload = function(onComplete)
-		{
-			var handler = elt.get('data-url');
-			
-			var request = new Request.HTML(
-			{
-				url: handler,
-				evalScripts: false,
-				evalResponse: false,
-				method: 'get', 
-				onSuccess: function(tree, elements, html, script) 
-				{ 
-					elt.set('html', html);
-					Browser.exec(script);
-					
-					if (typeof onComplete != "undefined")
-					{
-						onComplete();
-					}
-				}
-			});
-			request.send();			
-		};
-		
-		elt.load = function(url, onComplete)
-		{
-			elt.set('data-url', url);
-			elt.reload(onComplete);
-		};
-	});
-
+	container.getElements('[data-url]').each(addReloadHandler);
 }
+
 // Implement reload() for page elements that supply data-url
 window.addEvent('domready', function()
 {
