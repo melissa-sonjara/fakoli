@@ -68,7 +68,7 @@ var iFrameFormRequest = new Class({
 								self.options.onFailure();
 							}
 							if (typeOf(self.options.onComplete) == 'function') {
-								self.options.onComplete(doc.body.innerHTML);
+								self.options.onComplete(doc.body.innerHTML.stripTags("embed"));
 							}
 						} else {
 							self.options.onFailure();
