@@ -66,8 +66,9 @@ class DocumentFileView
 		
 		$table = new DataListView($documents, $this->id);
 		$table->column("Title", "<b><a href='#' onclick='editFile({document_id});return false'>{title}</b></a>", true, "width: 40%")
-		->column("Author", "{author}", true, "width: 35%");
-		
+			  ->column("Author", "{author}", true, "width: 35%")
+			  ->column("Last Modified", "{last_modified}", true, "width: 25%;text-align: center");
+			  
 		$table->filter = true;
 		$table->sortable = true;
 		$table->pageSize = 20;
