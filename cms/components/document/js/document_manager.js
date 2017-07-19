@@ -18,6 +18,8 @@ var DocumentManager =  new Class
 	
 	editResult: function(result)
 	{
+		// Deal with browser extension that inject embed tabs, such as Nok Nok MFAC
+		result = result.stripTags("embed");
 		if (result == "1")
 		{
 			this.closeDialog();
@@ -49,10 +51,12 @@ var DocumentManager =  new Class
 					  'method': 	'get',
 					 'onSuccess': function(response) 
 				{ 
-				if (response == "1") 
-				{
-					window.location.reload();
-				}
+					// Deal with browser extension that inject embed tabs, such as Nok Nok MFAC
+					response = response.stripTags("embed");
+					if (response == "1") 
+					{
+						window.location.reload();
+					}
 			 },
 			
 			 'onFailure':	function() { alert("Failed to communicate with server");}});
@@ -69,6 +73,7 @@ var DocumentManager =  new Class
 	
 	uploadResult: function(responseText)
 	{
+		// Deal with browser extension that inject embed tabs, such as Nok Nok MFAC
 		responseText = responseText.stripTags("embed");
 		if (responseText == "1") 
 		{
@@ -89,14 +94,16 @@ var DocumentManager =  new Class
 			'method': 	'get',
 			'onSuccess': function(response) 
 			{ 
-			if (response == "OK") 
-			{
-				window.location.reload();
-			}
-			else
-			{
-				alert(result);
-			}	
+				// Deal with browser extension that inject embed tabs, such as Nok Nok MFAC
+				responseText = responseText.stripTags("embed");
+				if (response == "OK") 
+				{
+					window.location.reload();
+				}
+				else
+				{
+					alert(result);
+				}	
 		 },
 		
 		 'onFailure':	function() { alert("Failed to communicate with server");}});
