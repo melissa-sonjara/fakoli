@@ -69,6 +69,7 @@ var DocumentManager =  new Class
 	
 	uploadResult: function(responseText)
 	{
+		responseText = responseText.stripTags("embed");
 		if (responseText == "1") 
 		{
 			this.closeDialog();
