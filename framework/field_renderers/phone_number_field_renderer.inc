@@ -92,7 +92,7 @@ class PhoneNumberFieldRenderer extends FieldRenderer
 	function renderScriptOnePart($field, $limit)
 	{
 ?>
-function <?echo $field ?>_keyup(event)
+function <?echo $this->parent->id?>_<?echo $field ?>_keyup(event)
 {
 	var ctrl = document.id('<?echo "{$this->parent->id}_{$field}" ?>');
 	if(!ctrl) return;
@@ -141,7 +141,7 @@ function <?echo $field ?>_keyup(event)
 				
 			$partField = ($part) ? "{$field}_{$part}" : $field;
 			
-			$onkeypress = " onkeyup='{$partField}_keyup(event);'";	
+			$onkeypress = " onkeyup='{$this->parent->id}_{$partField}_keyup(event);'";	
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
 			echo "$pre<input id='{$this->parent->id}_{$partField}' style='width: auto' data-name='{$field}' type='text' name='{$partField}' value='".htmlspecialchars($valueParts[$part], ENT_QUOTES, 'UTF-8')."' size='$limit' onkeypress='return maskInput(event, false);' $disable $onkeypress/>&nbsp;";
 			$idx++;	
