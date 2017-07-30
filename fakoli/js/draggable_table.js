@@ -30,6 +30,58 @@
 
 *****************************************************************/
 
+var DraggableList = new Class({
+
+	sortables: Class.Empty,
+	options: {clone: true, revert: true, opacity: 1},
+	handler: "",
+	key: "",
+	list: null,
+	
+	initialize: function(list, handler, key)
+	{
+		this.handler = handler;
+		this.key = key;
+		this.list = document.id(list);
+		
+		this.options.onStart = function(element, clone)
+		{
+			clone.addClass('dragRow');
+		},
+		
+		this.options.onComplete = function()
+		{
+			var items = this.list.getChildren("li");
+			var qs = (this.handler.indexOf("?") < 0) ? "?" : "&";
+				
+			var c = 1;
+			
+			items.each(function(item, i)
+			{
+				pk = item.get('data-pk');
+				
+				if (pk)
+				{
+					qs += this.key + "[" + pk + "]=" + c + "&";
+					++c;
+				}
+			}.bind(this));
+			
+    		var request = new Request.HTML(
+    		{
+    			evalScripts: false,
+    			evalResponse: false,
+    			method: 'get', 
+    			url: handler + qs
+    		});
+    		request.send();
+    		
+    		return true;
+		}.bind(this);
+		
+		this.sortables = new Sortables(list, this.options);
+	}		
+});
  
 var DraggableTable = new Class({
 		

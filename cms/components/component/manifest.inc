@@ -91,7 +91,8 @@ class ComponentManifest
 					 "/fakoli/calendar/sonjara_calendar.css",
 					 "/fakoli/css/multi_select.css",
 				     "/fakoli/css/options_list.css",
-					 "/fakoli/css/pushbutton.css"
+					 "/fakoli/css/pushbutton.css",
+					 "/fakoli/css/draggable_list.css"
 		);
 	}
 	
