@@ -282,7 +282,10 @@ function onCompositeFormSubmit(form)
 				}
 			}
 			
-			if (!$form->save()) $valid = false;
+			if (!$form->save()) 
+			{
+				$valid = false;
+			}
 		}
 		
 		return $valid;
