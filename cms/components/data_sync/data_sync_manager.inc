@@ -414,7 +414,7 @@ interface IDataSyncHelper
 			}
 		
 			$item->set($field, $value);
-			$item->set($field, $item->formatFieldValue($field));
+			//$item->set($field, $item->formatFieldValue($field));
 		}
 		
 		return $skip;
