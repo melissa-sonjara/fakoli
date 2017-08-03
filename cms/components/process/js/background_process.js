@@ -51,7 +51,7 @@ var BackgroundProcess = new Class(
 				this.container.adopt(this.progressBar);
 				
 				this.dialog.options.body.adopt(this.container);
-				this.dialog.show();
+				//this.dialog.show();
 				
 				this.timer = this.updateProgress.periodical(this.options.period, this);
 				
