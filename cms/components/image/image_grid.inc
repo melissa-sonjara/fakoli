@@ -38,7 +38,7 @@ class ImageGridItem
 		
 		if ($this->grid->useBackgroundImages)
 		{
-			$styles = $this->grid->inlineSizing ? "width: <?echo $size + 10?>px; height: <?echo $size + 40?>px; margin: 10px'" : "";
+			$styles = $this->grid->inlineSizing ? "width: {$size}px; height: {$size}px; margin: 10px'" : "";
 ?>
 		<li <?echo $cssClass?>data-details='<?echo $this->id?>' style='background-image: url(<?echo $src?>);background-size: cover center;<?echo $styles?>' onclick='<?echo $this->onclick?>'><div class='title'><?echo $this->title?></div></li>
 <?
