@@ -11,7 +11,7 @@ var ImageGrid = new Class({
 	initialize: function(grid, size, options)
 	{
 		var me = this;
-		this.setOptions(this);
+		this.setOptions(options);
 		
 		this.size = size;
 		this.grid = document.id(grid);
