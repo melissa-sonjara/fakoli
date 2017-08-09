@@ -40,7 +40,7 @@ class ImageGridItem
 		{
 			$styles = $this->grid->inlineSizing ? "width: {$size}px; height: {$size}px; margin: 10px'" : "";
 ?>
-		<li <?echo $cssClass?>data-details='<?echo $this->id?>' style='background-image: url(<?echo $src?>);background-size: cover center;<?echo $styles?>' onclick='<?echo $this->onclick?>'><div class='title'><?echo $this->title?></div></li>
+		<li <?echo $cssClass?>data-details='<?echo $this->id?>' style='background-image: url(<?echo $src?>);background-size: cover;<?echo $styles?>' onclick='<?echo $this->onclick?>'><div class='title'><?echo $this->title?></div></li>
 <?
 		}
 		else
