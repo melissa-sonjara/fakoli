@@ -1,20 +1,31 @@
 var ImageGrid = new Class({
 	
+	Implements: Options,
 	grid: Class.Empty,
 	size: 200,
-	initialize: function(grid, size)
+	options:
+	{
+		puff: true,		
+	},
+	
+	initialize: function(grid, size, options)
 	{
 		var me = this;
+		this.setOptions(this);
+		
 		this.size = size;
 		this.grid = document.id(grid);
 		
 		if (!this.grid) return;
 		
-		this.grid.getElements('li').each(function(elt)
+		if (this.options.puff)
 		{
-			elt.addEvent('mouseover', function(e) { new DOMEvent(e).stop(); this.puff(elt); }.bind(me));
-			elt.addEvent('mouseout', function(e) { new DOMEvent(e).stop(); this.unpuff(elt); }.bind(me));
-		});
+			this.grid.getElements('li').each(function(elt)
+			{
+				elt.addEvent('mouseover', function(e) { new DOMEvent(e).stop(); this.puff(elt); }.bind(me));
+				elt.addEvent('mouseout', function(e) { new DOMEvent(e).stop(); this.unpuff(elt); }.bind(me));
+			});
+		}
 		
 		if (this.grid.facetManager)
 		{

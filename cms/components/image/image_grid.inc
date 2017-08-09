@@ -3,15 +3,18 @@ Fakoli::usingFeature("facet_manager");
 
 class ImageGridItem
 {
+	var $grid;
 	var $item;
 	var $id;
 	var $image_id;
 	var $title;
 	var $text;
 	var $onclick;
+	var $cssClass = null;
 	
-	function __construct($image_id, $title, $text, $onclick = "return false;")
+	function __construct($grid, $image_id, $title, $text, $onclick = "return false;")
 	{
+		$this->grid = $grid;
 		$this->image_id = $image_id;
 		$this->title = $title;
 		$this->text = $text;
@@ -20,16 +23,32 @@ class ImageGridItem
 	
 	function draw($size, $attrs)
 	{
-		$src = $this->image_id ? "/action/image/iconize?image_id={$this->image_id}&size=$size" : "/fakoli/images/noimage.gif";
+		$imageSize = $this->grid->retinaMode ? $size * 2 : $size;
+		$mode = $this->grid->useBackgroundImages ? "thumbnail" : "iconize";
+		
+		$src = $this->image_id ? "/action/image/{$mode}?image_id={$this->image_id}&size={$imageSize}" : "/fakoli/images/noimage.gif";
 		
 		$dataAttrs = "";
 		foreach($attrs as $name => $value)
 		{
 			$dataAttrs .= "$name='$value' ";
-		}		
+		}	
+		
+		$cssClass = $this->cssClass ? "class='{$this->cssClass}' " : "";
+		
+		if ($this->grid->useBackgroundImages)
+		{
+			$styles = $this->grid->inlineSizing ? "width: <?echo $size + 10?>px; height: <?echo $size + 40?>px; margin: 10px'" : "";
 ?>
-		<li data-details='<?echo $this->id?>' <?echo $dataAttrs?>style='width: <?echo $size + 10?>px; height: <?echo $size + 40?>px; margin: 10px'><div onclick='<?echo $this->onclick?>' style='width: <?echo $size ?>px; height: <?echo $size + 40?>px'><img src="<?echo $src?>" alt="<?echo $this->title?>" style='width: <?echo $size?>px; height: <?echo $size?>px'></img><br/><?echo $this->title?></div></li>
+		<li <?echo $cssClass?>data-details='<?echo $this->id?>' style='background-image: url(<?echo $src?>);background-size: cover center;<?echo $styles?>' onclick='<?echo $this->onclick?>'><div class='title'><?echo $this->title?></div></li>
 <?
+		}
+		else
+		{
+?>
+		<li <?echo $cssClass?>data-details='<?echo $this->id?>' <?echo $dataAttrs?>style='width: <?echo $size + 10?>px; height: <?echo $size + 40?>px; margin: 10px'><div onclick='<?echo $this->onclick?>' style='width: <?echo $size ?>px; height: <?echo $size + 40?>px'><img src="<?echo $src?>" alt="<?echo $this->title?>" style='width: <?echo $size?>px; height: <?echo $size?>px'></img><br/><?echo $this->title?></div></li>
+<?
+		}
 	}
 }
 
@@ -39,12 +58,20 @@ class ImageGrid implements FacetFilterable
 	var $items;
 	var $size;
 	var $tagItemCallbacks = array();
+	var $puff;
+	var $useBackgroundImages = false;
+	var $retinaMode = false;
+	var $cssClass = null;
+	var $inlineSizing = true;
 	
-	function __construct($id, $size = 200)
+	function __construct($id, $size = 200, $puff = true, $useBackgroundImages = false)
 	{
 		$this->id = $id;
 		$this->items = array();
 		$this->size = $size;
+		$this->puff = $puff;
+		$this->useBackgroundImages = $useBackgroundImages;
+		$this->retinaMode = Settings::getValue("image", "retina_mode");
 	}
 	
 	function getID()
@@ -54,7 +81,9 @@ class ImageGrid implements FacetFilterable
 	
 	function addItem($image_id, $title, $text, $onclick = "return false;")
 	{
-		$this->items[] = new ImageGridItem($image_id, $title, $text, $onclick);
+		$item = new ImageGridItem($this, $image_id, $title, $text, $onclick);
+		$this->items[] = $item;
+		return $item;
 	}
 	
 	/**
@@ -70,11 +99,13 @@ class ImageGrid implements FacetFilterable
 	function writeScript()
 	{
 		ob_start();
+		
+		$puff = $this->puff ? 'true' : 'false';
 ?>
 <script type="text/javascript">
 window.addEvent('domready', function() 
 {
-	new ImageGrid('<?echo $this->id?>', <?echo $this->size?>);
+	new ImageGrid('<?echo $this->id?>', <?echo $this->size?>, {puff: <?echo $puff?>});
 });
 </script>
 <?
@@ -85,8 +116,9 @@ window.addEvent('domready', function()
 	
 	function drawView()
 	{
+		$cssClass = $this->cssClass ? "image_grid $cssClass" : "image_grid";
 ?>
-		<ul id="<?echo $this->id?>" class='image_grid'>
+		<ul id="<?echo $this->id?>" class='<?echo $cssClass?>'>
 <?
 		foreach($this->items as $item)
 		{

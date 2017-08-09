@@ -981,6 +981,7 @@ class ImageManager
 		Settings::setDefaultValue("image", "thumbnail_size", 75, "Number", "");	
 		Settings::setDefaultValue("image", "thumbnail_format", "png", "String", "Use PNG for high quality thumbnails (default) or JPG for fast, low bandwidth thumbnails. JPG files will have lower image quality and do not support transparency", "", "png\njpg");
 		Settings::setDefaultValue("image", "cache_file_paths", false, "Boolean", "Cache image file paths in memory for increased performance");
+		Settings::setDefaultValue("image", "retina_mode", false, "Boolean", "Double the resolution of images in image grids to provide better quality on high-DPI displays");
 	}
 	
 	static function registerTaxonomyClasses($classes)
