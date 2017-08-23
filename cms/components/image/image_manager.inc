@@ -440,7 +440,7 @@ class ImageManager
 			
 			imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
 			
-			imagecopyresampled($dst, $src, 0, 0, $offsetX, $offsetY, $width, $height, $fullWidth, $srcHeight);
+			imagecopyresampled($dst, $src, 0, 0, $offsetX, $offsetY, $width, $height, $fullWidth, $fullHeight);
 			
 			if (!file_exists($cacheDir))
 			{
