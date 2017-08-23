@@ -346,6 +346,133 @@ class ImageManager
 		
 		Fakoli::sendFile($cacheFile);
 	}
+	
+	
+	
+	function resizeAndCropToCover($image_id, $width, $height)
+	{
+		global $config;
+		
+		$image = new ImageRecord($image_id);
+		$gallery = $image->Gallery();
+		
+		trace("resizeAndCropToCover:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
+		//TODO: Fix this
+		//if (!checkRole($gallery->read_access))
+		//{
+		//	throw new FakoliException("Access Denied");
+		//}
+		
+		if (!$width || !$height) 
+		{
+			$size = $config['thumbnail_size'];
+		}
+		else
+		{	
+			$size = max($width, $height);
+		}
+		
+		$suffix = "cover_{$width}x{$height}";
+		
+		$nameParts = explode(".",$image->image_file);
+		$ext = ".".strtolower($nameParts[count($nameParts) - 1]);
+		
+		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
+		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
+		$cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $image->image_id . "_" . $suffix . "." . $gallery->getThumbnailFormat();
+		trace("renderThumbnail:: imageFile {$imageFile} and cacheDir {$cacheDir} and cacheFile {$cacheFile}", 3);
+		
+		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
+		{
+			switch($ext)
+			{
+				case ".jpg":
+					$src = imagecreatefromjpeg($imageFile);
+					break;
+					
+				case ".jpeg":
+					$src = imagecreatefromjpeg($imageFile);
+					break;
+					
+				case ".png":
+					$src = imagecreatefrompng($imageFile);
+					break;
+					
+				case ".gif":
+					$src = imagecreatefromgif($imageFile);
+					break;
+			}
+			
+			// If the thumbnail hasn't been generated yet, or is out-of-date, create it.
+			$fullWidth = imagesx($src);
+			$fullHeight = imagesy($src);
+
+			
+			if ($size)
+			{
+				if ($fullWidth > $fullHeight)
+				{
+					$newHeight = $size;
+					$newWidth = intval(($fullWidth * $size) / $fullHeight);
+					$offsetX = ($size - $newWidth) / 2;
+					$offsetY = 0;
+				}
+				else
+				{
+					$newWidth = $size;
+					$newHeight = intval(($fullHeight * $size) / $fullWidth);
+					$offsetY = ($size - $newHeight) / 2;
+					$offsetX = 0;
+				}
+			}
+			
+			$aspect = $width / $height;
+			
+			$srcHeight = $fullWidth / $aspect;
+			$offset = ($fullHeight - $srcHeight) / 2;
+			
+			$dst = imagecreatetruecolor($width, $height);
+			imagealphablending($dst, false);
+			imagesavealpha($dst, true);
+			
+			$trans = imagecolorallocatealpha($dst, 255, 255, 255, 127);
+			imagecolortransparent($dst, $trans);
+			
+			imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
+			
+			imagecopyresampled($dst, $src, 0, 0, $offsetX, $offsetY, $width, $height, $fullWidth, $srcHeight);
+			
+			if (!file_exists($cacheDir))
+			{
+				trace("renderThumbnail:: creating cachedir", 3);
+				mkdir($cacheDir);
+			}
+			
+			if (file_exists($cacheFile))
+			{
+				// If a previous copy of the file already exists, remove it
+				trace("renderThumbnail:: unlinking cachefile", 3);
+				unlink($cacheFile);
+			}
+			
+			switch($gallery->getThumbnailFormat())
+			{
+				case "jpg":
+					
+					imagejpeg($dst, $cacheFile, 85);
+					break;
+					
+				case "png":
+				default:
+					imagepng($dst, $cacheFile);
+			}
+			
+			imagedestroy($dst);
+			imagedestroy($src);
+		}
+		
+		Fakoli::sendFile($cacheFile);
+	}
 
 	function getCachedFilePath($image_id, $mode, $size)
 	{
