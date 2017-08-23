@@ -426,11 +426,6 @@ class ImageManager
 				}
 			}
 			
-			$aspect = $width / $height;
-			
-			$srcHeight = $fullWidth / $aspect;
-			$offset = ($fullHeight - $srcHeight) / 2;
-			
 			$dst = imagecreatetruecolor($width, $height);
 			imagealphablending($dst, false);
 			imagesavealpha($dst, true);
@@ -440,7 +435,7 @@ class ImageManager
 			
 			imagefilledrectangle($dst, 0, 0, $width, $height, $trans);
 			
-			imagecopyresampled($dst, $src, 0, 0, $offsetX, $offsetY, $width, $height, $fullWidth, $fullHeight);
+			imagecopyresampled($dst, $src, $offsetX, $offsetY, 0, 0, $width, $height, $fullWidth, $fullHeight);
 			
 			if (!file_exists($cacheDir))
 			{
