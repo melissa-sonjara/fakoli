@@ -1213,7 +1213,7 @@ class DataItem extends AbstractDataItem
 			while ($line = $result->fetch())
 			{
 				$obj = new $class;
-				$obj->populate($line);
+				$obj->populate($line, "a0");
 				$list[] = $obj;
 			}
 			
