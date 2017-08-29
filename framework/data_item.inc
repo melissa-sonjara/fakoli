@@ -1196,7 +1196,9 @@ class DataItem extends AbstractDataItem
 		$pkField = ($pkField != "") ? $pkField : $this->primary_key;
 		$pk = $this->primary_key;
 		
-		$query = "SELECT a.* FROM {$obj->table} a, $xt x WHERE a.{$obj->primary_key}=x.{$xp} AND x.{$pkField}={$this->$pk} $orderBy";
+		$fieldList = $obj->getFieldList("a");
+		
+		$query = "SELECT {$fieldList} FROM {$obj->table} a, $xt x WHERE a.{$obj->primary_key}=x.{$xp} AND x.{$pkField}={$this->$pk} $orderBy";
 		
 		trace($query, 3);
 		
