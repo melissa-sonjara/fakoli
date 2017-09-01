@@ -1184,7 +1184,7 @@ class DataItem extends AbstractDataItem
 		{
 			foreach($obj->getFields() as $field => $type)
 			{
-				$orderBy = preg_replace("/\\b".$field."\\b/i", "a.$field", $orderBy);
+				$orderBy = preg_replace("/\\b".$field."\\b/i", "a0.$field", $orderBy);
 			}
 		}
 		
