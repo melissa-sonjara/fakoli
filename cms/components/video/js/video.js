@@ -31,7 +31,7 @@ function installFlowplayer()
 			v.id = 'video_' + Math.floor(Math.random()*1E8);
 		}
 
-		var isMP4 =- v.hasClass('MP4');
+		var isMP4 = v.hasClass('MP4');
 		
 		var play = v.hasClass("autoplay");
 		var isLive = v.hasClass("live");
