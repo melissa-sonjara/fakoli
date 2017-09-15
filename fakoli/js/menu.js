@@ -84,7 +84,7 @@ var FakoliMenu = new Class({
 				
 				var parent = ul.getParent();
 				var sub = (parent.getParent().getParent().id == menu.root.id);
-				parent.addClass(subsub ? "submenu" : "subsubmenu");
+				parent.addClass(sub ? "submenu" : "subsubmenu");
 				if (!sub && menu.options.inlineSubSubMenus) return;
 				
 				parent.addEvents(
