@@ -46,7 +46,8 @@ var FakoliMenu = new Class({
 		responsiveToggle: '',
 		responsivePosition: 'bottomRight',
 		responsiveEdge: 'topRight',
-		mode: 'pulldown'
+		mode: 'pulldown',
+		inlineSubSubMenus: false
 	},
 	
 	initialize: function(elt, options)
@@ -72,7 +73,7 @@ var FakoliMenu = new Class({
 		
 		$$("#" + this.root.id + " > ul > li").each(function (elt)
 		{
-			var uls = elt.getElements('ul');
+			var uls = (menu.options.inlineSubSubMenus) ? elt.getChildren('ul') : elt.getElements('ul');
 			
 			uls.each(function(ul)
 			{
