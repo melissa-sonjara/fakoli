@@ -73,7 +73,7 @@ var FakoliMenu = new Class({
 		
 		$$("#" + this.root.id + " > ul > li").each(function (elt)
 		{
-			var uls = (menu.options.inlineSubSubMenus) ? elt.getChildren('ul') : elt.getElements('ul');
+			var uls = elt.getElements('ul');
 			
 			uls.each(function(ul)
 			{
@@ -83,7 +83,9 @@ var FakoliMenu = new Class({
 				}
 				
 				var parent = ul.getParent();
-				parent.addClass(parent.getParent().getParent().id == menu.root.id ? "submenu" : "subsubmenu");
+				var subsub = parent.getParent().getParent().id == menu.root.id
+				parent.addClass(subsub ? "submenu" : "subsubmenu");
+				if (subsub && menu.options.inlineSubSubMenus) return;
 				
 				parent.addEvents(
 				{
