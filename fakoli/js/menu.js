@@ -157,6 +157,8 @@ var FakoliMenu = new Class({
 	
 	showMenu: function(elt)
 	{
+		if (elt.hasClass('subsubmenu') && this.options.inlineSubSubMenus) return;
+		
 		var ul = elt.getElement('ul');
 		elt.addClass("sfhover"); 
 		
@@ -189,6 +191,8 @@ var FakoliMenu = new Class({
 	
 	hideMenu: function(elt)
 	{
+		if (elt.hasClass('subsubmenu') && this.options.inlineSubSubMenus) return;
+
 		var ul = elt.getElement('ul');
 		elt.removeClass("sfhover");  
 		if (ul)
