@@ -18,7 +18,7 @@ class ActivityTracker
 		$activity->user_id = is_object($user) ? $user->get($user->primary_key) : 0;
 		
 		$response_time = number_format(microtime(true) - Fakoli::$timestamp, 3);
-		trace("Request completed in {$response_time}s");
+		trace("Request completed in {$response_time}s", 3);
 		$activity->uri = Fakoli::$requestURI;
 		$activity->method = $_SERVER['REQUEST_METHOD'];
 		$activity->referer = $_SERVER['HTTP_REFERER'];
