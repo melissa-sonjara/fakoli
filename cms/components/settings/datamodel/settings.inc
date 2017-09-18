@@ -130,7 +130,7 @@ class Settings extends DataItem
 	 * @param number $weight a weighting factor to control display order on the Application Settings form. Controls
 	 *               are sorted (within categories) first by weight, then alphabetically (optional).
 	 */
-	static function setValue($component, $name, $value, $field_type, $annotation, $category, $options, $weight = 0)
+	static function setValue($component, $name, $value, $field_type, $annotation = "", $category = "", $options = "", $weight = 0)
 	{
 		$setting = Settings::getSetting($component, $name);
 		if (!$setting)
