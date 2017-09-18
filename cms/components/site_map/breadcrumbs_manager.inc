@@ -176,11 +176,11 @@ class Breadcrumbs
 		return $breadcrumbs;
 	}
 	
-	function getLink($identifier)
+	function getLink($identifier = null)
 	{
 		global $section;
 		
-		$identifier = $_REQUEST["identifier"];
+		if (!$identifier) $identifier = $_REQUEST["identifier"];
 		
 		if ($section->section == "/")
 			$url = "/$identifier";
