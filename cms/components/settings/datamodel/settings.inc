@@ -192,7 +192,7 @@ class Settings extends DataItem
 	 */
 	static function setPermission($component, $name, $annotation, $value, $weight)
 	{
-		Settings::setValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions", $weight);		
+		Settings::setValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions", $weight = 0);		
 	}
 	
 	/**
@@ -203,7 +203,7 @@ class Settings extends DataItem
 	 * @param string $value comma-separated list of roles that have the permission
 	 * @param int $weight optional weight parameter to control display order
 	 */
-	static function setDefaultPermission($component, $name, $annotation, $value, $weight)
+	static function setDefaultPermission($component, $name, $annotation, $value, $weight = 0)
 	{
 		Settings::setDefaultValue($component, $name, $value, "String", $annotation, "Permissions", "Permissions", $weight);		
 	} 
