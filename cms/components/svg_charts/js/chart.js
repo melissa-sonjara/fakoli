@@ -27,22 +27,7 @@ var Chart = new Class(
 	},
 	
 	createChart: function()
-	{
-		var ratio = this.options.height / this.options.width;
-		/*var size = this.container.getSize();
-		if (size.y == 0)
-		{
-			size.y = size.x * ratio;
-			this.container.setStyle('height', size.y);
-			window.addEvent('resize', function(e)
-			{
-				var size = this.container.getSize();
-				size.y = size.x * ratio;
-				this.container.setStyle('height', size.y);
-				this.paper.attr({width: size.x, height: size.y});
-			}.bind(this));
-		}*/
-		
+	{		
 		this.container.set('html', '<svg id="' + this.svgid() + '" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%"></svg>');
 		
 		this.paper = Snap("#" + this.svgid());
@@ -53,7 +38,9 @@ var Chart = new Class(
 	
 	draw: function()
 	{
+		this.fireEvent('drawChart', this);
 		this.drawChart();		
+		this.fireEvent('drawChartComplete', this);
 		
 		if (this.testSVG() && this.options.enableDownload)
 		{
@@ -75,8 +62,12 @@ var Chart = new Class(
 	
 	drawLegend: function()
 	{
+		this.fireEvent('drawLegend', this);
+		
 		if (this.options.legend)
 		{
+			this.fireEvent('drawLegend', this);
+			
 			var x = this.options.legendX;
 			var y = this.options.legendY;
 			var s = this.options.legendSwatchSize || 20;
@@ -95,13 +86,17 @@ var Chart = new Class(
 				rect.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				rect.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				rect.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
+				rect.click(function(e) { this.fireEvent('legendClick', [e, index]; }.bind(this));
 				
 				text.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				text.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				text.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
-
+				text.click(function(e) { this.fireEvent('legendClick', [e, index]; }.bind(this));
+				
 				y+= h;
 			}.bind(this));
+			
+			this.fireEvent('drawLegendComplete', this);
 		}
 	},
 	

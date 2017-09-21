@@ -62,7 +62,12 @@ class PieChart
 	var $onSectorClick = "null";
 	var $onLegendOver = "null";
 	var $onLegendOut = "null";
+	var $onLegendClick = "null";
 	var $onSelectionChanged = "null";
+	var $onDrawChart = "null";
+	var $onDrawChartComplete = "null";
+	var $onDrawLegend = "null";
+	var $onDrawLegendComplete = "null";
 	var $scaleToFit = false;
 	var $fontFamily = 'Arial, Helvetica';
 	var $canvasBackground = "#FFFFFF";
@@ -181,6 +186,11 @@ window.addEvent('domready', function ()
 		onSectorClick: {$this->onSectorClick},
 		onLegendOver: {$this->onLegendOver},
 		onLegendOut: {$this->onLegendOut},
+	    onLegendClick: {$this->onLegendClick},
+		onDrawChart: {$this->onDrawChart},
+	    onDrawChartComplete: {$this->onDrawChartComplete},
+	    onDrawLegend: {$this->onDrawLegend},
+		onDrawLegendComplete: {$this->onDrawLegendComplete},
 		onSelectionChanged: {$this->onSelectionChanged},
 		enableDownload: {$download},
 		canvasBackground: '{$this->canvasBackground}',

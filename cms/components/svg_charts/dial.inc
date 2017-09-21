@@ -62,6 +62,10 @@ class Dial
 	var $target = 0;
 	var $targetLabel = "";
 	var $cssClass = null;
+	var $onDrawChart = "null";
+	var $onDrawChartComplete = "null";
+	var $onDrawLegend = "null";
+	var $onDrawLegendComplete = "null";
 	
 	function __construct($id, $width = 300, $height = 300, $value = 0, $label = '', $palette = "standard")
 	{
@@ -195,7 +199,11 @@ window.addEvent('domready', function ()
 		colorMode: '{$this->colorMode}',
 		showTarget: {$showTarget},
 		target: {$target},
-		targetLabel: '{$targetLabel}'
+		targetLabel: '{$targetLabel}',
+		onDrawChart: {$this->onDrawChart},
+	    onDrawChartComplete: {$this->onDrawChartComplete},
+	    onDrawLegend: {$this->onDrawLegend},
+		onDrawLegendComplete: {$this->onDrawLegendComplete}
 	});
 
 	{$this->id}.draw();

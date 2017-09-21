@@ -61,6 +61,7 @@ class RadarChart
 	var $legendLineHeight = 30;
 	var $onLegendOver = "null";
 	var $onLegendOut = "null";
+	var $onLegendClick = "null";
 	var $scaleToFit = false;
 	var $fontFamily = 'Arial, Helvetica';
 
@@ -185,6 +186,7 @@ window.addEvent('domready', function ()
 		legendLineHeight: {$this->legendLineHeight},
 		onLegendOver: {$this->onLegendOver},
 		onLegendOut: {$this->onLegendOut},
+		onLegendClick: {$this->onLegendClick},
 		title: '{$this->title}',
 		titleSize: {$this->titleSize},
 		enableDownload: {$download},

@@ -186,6 +186,10 @@ class Histogram
 	var $canvasBackground = "#FFFFFF";
 	var $units = "";
 	var $scaleToFit = false;
+	var $onDrawChart = "null";
+	var $onDrawChartComplete = "null";
+	var $onDrawLegend = "null";
+	var $onDrawLegendComplete = "null";
 	
 	function __construct($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
@@ -380,6 +384,10 @@ window.addEvent('domready', function ()
 		enableDownload: {$enableDownload},
 		canvasBackground: '{$this->canvasBackground}',
 		units: '{$this->units}'
+		onDrawChart: {$this->onDrawChart},
+	    onDrawChartComplete: {$this->onDrawChartComplete},
+	    onDrawLegend: {$this->onDrawLegend},
+		onDrawLegendComplete: {$this->onDrawLegendComplete}
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
