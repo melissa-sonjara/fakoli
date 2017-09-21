@@ -86,12 +86,12 @@ var Chart = new Class(
 				rect.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				rect.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				rect.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
-				rect.click(function(e) { this.fireEvent('legendClick', [e, index]; }.bind(this));
+				rect.click(function(e) { this.fireEvent('legendClick', [e, index]); }.bind(this));
 				
 				text.mouseover(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				text.mousemove(function(e) { this.fireEvent('legendOver', [e, index]); }.bind(this));
 				text.mouseout(function(e) { this.fireEvent('legendOut', [e, index]); }.bind(this));
-				text.click(function(e) { this.fireEvent('legendClick', [e, index]; }.bind(this));
+				text.click(function(e) { this.fireEvent('legendClick', [e, index]); }.bind(this));
 				
 				y+= h;
 			}.bind(this));
