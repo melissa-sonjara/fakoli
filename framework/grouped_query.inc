@@ -79,6 +79,8 @@ class GroupedQuery extends AbstractQuery
 		
 		$field = $this->groupBy;
 		
+		$useFormat = preg_match("/^[A-Za-z0-9_]*$/", $p) ? false : true;
+		
 		try
 		{
 			$db = ConnectionManager::getConnection();
@@ -90,7 +92,9 @@ class GroupedQuery extends AbstractQuery
 			{
 				$item = new $this->class;	//Hack to work around PHP's stupid implementation of get_class()
 				$item->populate($line);
-				$items[$item->$field][] = $item;
+				$val = ($useFormat) ? $item->format($field) : $item->get($field);
+				
+				$items[$val][] = $item;
 			}
 		
 			unset($result);

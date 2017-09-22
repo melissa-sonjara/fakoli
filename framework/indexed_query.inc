@@ -78,6 +78,8 @@ class IndexedQuery extends AbstractQuery
 		
 		$field = $this->indexBy;
 		
+		$useFormat = preg_match("/^[A-Za-z0-9_]*$/", $p) ? false : true;
+		
 		try
 		{
 			$db = ConnectionManager::getConnection();
@@ -89,7 +91,8 @@ class IndexedQuery extends AbstractQuery
 			{
 				$item = new $this->class;
 				$item->populate($line);
-				$val = $item->get($field);
+		
+				$val = ($useFormat) ? $item->format($field) : $item->get($field);
 				
 				if (array_key_exists($val, $items))
 				{	
