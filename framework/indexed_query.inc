@@ -78,7 +78,7 @@ class IndexedQuery extends AbstractQuery
 		
 		$field = $this->indexBy;
 		
-		$useFormat = preg_match("/^[A-Za-z0-9_]*$/", $p) ? false : true;
+		$useFormat = preg_match("/^[A-Za-z0-9_]*$/", $field) ? false : true;
 		
 		try
 		{

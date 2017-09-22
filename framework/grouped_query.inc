@@ -79,7 +79,7 @@ class GroupedQuery extends AbstractQuery
 		
 		$field = $this->groupBy;
 		
-		$useFormat = preg_match("/^[A-Za-z0-9_]*$/", $p) ? false : true;
+		$useFormat = preg_match("/^[A-Za-z0-9_]*$/", $field) ? false : true;
 		
 		try
 		{
