@@ -40,6 +40,14 @@ var PieChart = new Class(
 	{
 		this.parent(id);
 		this.setOptions(options);
+		
+		if (this.options.selectable)
+		{
+			this.addEvent('legendClick', function(e, idx)
+			{
+				this.sectorSelect(idx);
+			}.bind(this));
+		}
 	},
 	
 	drawChart: function()
