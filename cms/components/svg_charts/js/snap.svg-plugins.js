@@ -9,7 +9,7 @@ Snap.plugin(function (Snap, Element, Paper, glob)
     var letter_width = temp.getBBox().width / abc.length;
     svg.remove();
 	
-    var words = txt.split(" ");
+    var words = txt.split(/\s+/);
     var width_so_far = 0, current_line=0, lines=[''];
     for (var i = 0; i < words.length; i++) 
     {
