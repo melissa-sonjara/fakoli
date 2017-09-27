@@ -21,6 +21,7 @@ class SvgChartsManifest
 		return array(
 				"/fakoli/js/tooltip.js",
 				"/components/svg_charts/js/snap.svg.js",
+				"/components/svg_charts/js/snap.svg-plugins.js",
 				"/components/svg_charts/js/canvg.js",
 				"/components/svg_charts/js/rgbcolor.js",
 				"/components/svg_charts/js/palette.js",

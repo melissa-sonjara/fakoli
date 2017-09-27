@@ -557,11 +557,15 @@ var VerticalHistogramAxisRenderer = new Class(
 			if (chart.options.labelAngle)
 			{
 				attrs.transform = "rotate(" + chart.options.labelAngle + "," + x + "," + y + ")";
+				var label = chart.paper.text(x, y, text);
+				label.attr(attrs);
+			}
+			else
+			{
+				chart.paper.multitext(x, y, text, chart.columnWidth, attrs);
 			}
 			
-			var label = chart.paper.text(x, y, text);
 			var i = "Tooltip";
-			label.attr(attrs);
 
 			label.mouseover(function(e) { chart.fireEvent('mouseOver', [e, i]); this.showToolTip(e, index);}.bind(this));
 			label.mouseout(function(e) { chart.fireEvent('mouseOut', [e, i]);  this.hideToolTip();}.bind(this));
