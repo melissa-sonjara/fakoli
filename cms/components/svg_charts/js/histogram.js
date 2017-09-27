@@ -562,7 +562,7 @@ var VerticalHistogramAxisRenderer = new Class(
 			}
 			else
 			{
-				chart.paper.multitext(x, y, text, chart.columnWidth, attrs);
+				var label = chart.paper.multitext(x, y, text, chart.columnWidth, attrs);
 			}
 			
 			var i = "Tooltip";
