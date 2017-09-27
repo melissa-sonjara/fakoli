@@ -383,7 +383,7 @@ window.addEvent('domready', function ()
 		titleSize: {$this->titleSize},
 		enableDownload: {$enableDownload},
 		canvasBackground: '{$this->canvasBackground}',
-		units: '{$this->units}'
+		units: '{$this->units}',
 		onDrawChart: {$this->onDrawChart},
 	    onDrawChartComplete: {$this->onDrawChartComplete},
 	    onDrawLegend: {$this->onDrawLegend},
