@@ -159,6 +159,11 @@ var PieChart = new Class(
 
         var params = { fill: this.palette.swatches[index], stroke: this.palette.strokeColor, "stroke-width": this.options.strokeWidth};
 
+        if (this.options.selectable)
+        {
+        	params["class"] = "selectable";
+        }
+        
         if (Math.abs(x1 - x2) < 1 && Math.abs(y1 - y2) < 1 && Math.round(startAngle) != Math.round(endAngle))
         {
         	return this.paper.circle(cx, cy, r).attr(params);
