@@ -326,6 +326,7 @@ var AbstractDialog = new Class(
     	
     	if (this.options.title)	this.setTitle(this.options.title);
     	this.element.setStyles({'width': this.options.width, 'height': this.options.height});
+    	this.element.dialog = this;
     },
     
     setTitle: function(title)
@@ -389,6 +390,16 @@ AbstractDialog.onClose = function(dialog)
 	}
 };
 
+AbstractDialog.findDialog = function(element)
+{
+	while(element)
+	{
+		if (element.dialog) return element.dialog;
+		element = element.getParent();
+	}
+	
+	return null;
+};
 
 var ModalDialog = new Class(
 {
