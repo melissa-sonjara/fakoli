@@ -16,7 +16,9 @@ var HistogramSeries = new Class(
 		onClick: Class.Empty,
 		onMouseOver: Class.Empty,
 		onMouseOut: Class.Empty,
+		onItemDrawn: Class.Empty,
 		colorMode: 'series',
+		colorFunction: Class.Empty,
 		toolTips: [],
 		indicateTooltips: false,
 		areaFill: false,
@@ -51,6 +53,16 @@ var HistogramSeries = new Class(
 		}
 		
 		return this.renderer;
+	},
+	
+	getColor: function(i)
+	{
+		if (this.options.colorMode == 'function' && typeof(this.options.colorFunction) == 'function')
+		{
+			return this.options.colorFunction(this, i);
+		}
+		if (this.options.colorMode == 'fixed') return this.chart.palette.getColor(this.options.color);
+		return this.chart.palette.getColor((this.options.colorMode == 'series') ? this.index : i);
 	},
 	
 	connectToChart: function(chart, index)
@@ -142,8 +154,7 @@ var VerticalBlockSeriesRenderer = new Class(
 	
 	getColor: function(i)
 	{
-		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
+		return this.series.getColor(i);
 	},
 	
 	draw: function()
@@ -190,6 +201,8 @@ var VerticalBlockSeriesRenderer = new Class(
 			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
 			column.click(function() { this.series.fireEvent('click', i); }.bind(this));
 			
+			this.series.fireEvent('itemDrawn', [this.series, column, i]);
+			
 			this.series.columns.push(column);
 			
 		}.bind(this));
@@ -210,10 +223,11 @@ var VerticalBlockSeriesRenderer = new Class(
 	{
 		series.values.each(function(val, i)
 		{
+			var fillSwatch = this.getColor(i);
 			var columnHeight = this.chart.options.chartHeight * val / this.chart.range() + this.chart.xAxisOffset;
 			var y = this.chart.options.chartTop + this.chart.options.chartHeight - columnHeight;
 
-			this.series.columns[i].animate({'y' :y, 'height': columnHeight}, 1000, mina.easeinout);
+			this.series.columns[i].animate({'y' :y, 'height': columnHeight, fill: fillSwatch}, 1000, mina.easeinout);
 		}.bind(this));
 	},
 	
@@ -249,8 +263,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 	
 	getColor: function(i)
 	{
-		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
+		return this.series.getColor(i);
 	},
 	
 	draw: function()
@@ -298,6 +311,8 @@ var HorizontalBlockSeriesRenderer = new Class(
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]);  this.series.showToolTip(e, i); }.bind(this));
 			column.mouseout(function(e) { this.series.fireEvent('mouseOut', [e, i]);  this.series.hideToolTip();}.bind(this));
 			column.click(function() { this.series.fireEvent('click', i); }.bind(this));
+
+			this.series.fireEvent('itemDrawn', [this.series, column, i]);
 			
 			this.series.columns.push(column);
 			
@@ -320,9 +335,10 @@ var HorizontalBlockSeriesRenderer = new Class(
 	{
 		series.values.each(function(val, i)
 		{
+			var fillSwatch = this.getColor(i);		
 			var columnHeight = this.chart.options.chartWidth * val / this.chart.range();
 
-			this.series.columns[i].animate({'width': columnHeight}, 1000, mina.easeinout);
+			this.series.columns[i].animate({'width': columnHeight, fill: fillSwatch}, 1000, mina.easeinout);
 		}.bind(this));
 	},
 	
@@ -349,8 +365,7 @@ var LineSeriesRenderer = new Class(
 	
 	getColor: function(i)
 	{
-		if (this.series.options.colorMode == 'fixed') return this.chart.palette.getColor(this.series.options.color);
-		return this.chart.palette.getColor((this.series.options.colorMode == 'series') ? this.index : i);
+		return this.series.getColor(i);
 	},
 	
 	draw: function()
@@ -370,7 +385,8 @@ var LineSeriesRenderer = new Class(
 
 		
 		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: 'none'});
-		
+
+		this.series.fireEvent('itemDrawn', [this.series, this.path, i]);
 	},
 	
 	drawDots: function()
