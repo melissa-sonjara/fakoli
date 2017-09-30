@@ -624,6 +624,8 @@ function getDocIcon($doc)
 
 /**
  * Security helper function. Check that the given parameter is a numeric value.
+ * @param string $p the parameter to check
+ * @return the value of the parameter if it matches the required format
  */
 function checkNumeric($p)
 {
@@ -638,6 +640,24 @@ function checkNumeric($p)
 	return $p;
 }
 
+/**
+ * Security helper function. Check that the given parameter contains a list of numeric values with the given separator.
+ * @param string $p the parameter to check
+ * @param string $separator the list separator (default to comma)
+ * @return the value of the parameter if it matches the required format
+ */
+function checkNumericList($p, $separator = ",")
+{
+	if (is_array($p))
+	{
+		foreach($p as $v)
+		{
+			if ($v != "" & !preg_match("/^[0-9\\.{$separator}]*$/", $v)) die("Invalid Parameter");
+		}
+	}
+	else if ($p!="" && !preg_match("/^[0-9\\.{$separator}]*$/", $p)) die("Invalid Parameter");
+	return $p;
+}
 
 /**
  * Security helper function. Check that the given parameter is a valid identifier
