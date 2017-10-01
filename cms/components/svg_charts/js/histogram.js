@@ -429,7 +429,7 @@ var LineSeriesRenderer = new Class(
 		var lastX = -999;
 		
 		var values = Array.clone(series.values);
-		if (series.group !== null && series.options.joinPrevious)
+		if (typeof(series.group) != 'undefined' && series.group !== null && series.options.joinPrevious)
 		{
 			for(var i = 0; i < values.length; ++i)
 			{
