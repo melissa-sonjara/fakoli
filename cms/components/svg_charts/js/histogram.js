@@ -26,7 +26,8 @@ var HistogramSeries = new Class(
 		showValues: false,
 		color: 0,
 		applyOffset: true,
-		joinPrevious: false
+		joinPrevious: false,
+		joinBlanks: false
 	},
 	columns: [],
 	renderer: Class.Empty,
@@ -477,7 +478,7 @@ var LineSeriesRenderer = new Class(
 			else
 			{
 				this.coords.push(null);
-				if (!series.options.joinPrevious) cmd = "M";
+				if (!series.options.joinBlanks) cmd = "M";
 			}		
 			
 			if (i == series.values.length - 1 && closed)
