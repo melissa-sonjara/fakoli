@@ -47,6 +47,7 @@ class SectionSerializationHandler
 		$xml .= SerializationManager::serialize(Section, "ORDER BY section_id");
 		$xml .= SerializationManager::serialize(SectionContent, "ORDER BY section_content_id");
 		$xml .= SerializationManager::serialize(SectionModuleXref);
+		$xml .= SerializationManager::serialize(SectionContentModuleXref);
 		$xml .= "</SectionMap>";
 		
 		return $xml;
@@ -57,6 +58,7 @@ class SectionSerializationHandler
 		SerializationManager::unserialize(Section, $doc, $tx);
 		SerializationManager::unserialize(SectionContent, $doc, $tx);
 		SerializationManager::unserialize(SectionModuleXref, $doc, $tx);
+		SerializationManager::unserialize(SectionContentModuleXref, $doc, $tx);
 	}	
 }
 
