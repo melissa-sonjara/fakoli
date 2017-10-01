@@ -477,7 +477,7 @@ var LineSeriesRenderer = new Class(
 			else
 			{
 				this.coords.push(null);
-				if (!this.options.joinPrevious) cmd = "M";
+				if (!series.options.joinPrevious) cmd = "M";
 			}		
 			
 			if (i == series.values.length - 1 && closed)
