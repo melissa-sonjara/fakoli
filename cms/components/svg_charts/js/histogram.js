@@ -386,7 +386,7 @@ var LineSeriesRenderer = new Class(
 		
 		this.path = this.chart.paper.path(p).attr({"stroke-width": this.series.options.strokeWidth, stroke: lineColor, fill: 'none'});
 
-		this.series.fireEvent('itemDrawn', [this.series, this.path, i]);
+		this.series.fireEvent('itemDrawn', [this.series, this.path, this.index]);
 	},
 	
 	drawDots: function()
