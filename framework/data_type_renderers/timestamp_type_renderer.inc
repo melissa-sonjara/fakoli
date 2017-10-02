@@ -73,6 +73,14 @@ class TimestampTypeRenderer extends AbstractTypeRenderer
 
 		$template = AbstractTypeRenderer::translationDateTemplate($template);
 			
+		if($timestamp)
+		{
+			$dateObj = new DateTime($timestamp);
+			$text = $dateObj->format($template);
+
+		}
+		return $text;
+		/*
 		if (preg_match("/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/", $timestamp))
 		{
 			$timestamp = preg_replace("/\\D/", "", $timestamp);
@@ -96,7 +104,7 @@ class TimestampTypeRenderer extends AbstractTypeRenderer
 		else
 		{
 			$text = date($template, strftime($timestamp));
-		}
+		}*/
 							
 		return $text; 
 	}
