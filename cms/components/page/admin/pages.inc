@@ -61,6 +61,8 @@ $pageTable->column("Title", "<a href='/admin/page_form?page_id={page_id}'>{page_
 $pageTable->sortable = true;
 $pageTable->filter = true;
 $pageTable->cssStyle = "width: 100%";
+$pageTable->excelFile = "pages.xls";
+$pageTable->emptyMessage = "There are no pages for this site.";
 
 $script = $pageTable->writeScript();
 
