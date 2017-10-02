@@ -52,13 +52,12 @@ $pagesBySite = Query::create(Page, "WHERE site_id=:site ORDER BY page_title")
 					->bind(":site", $site_id)
 					->execute();
 
-
 $pageTable = new DataListView($pagesBySite, "pages");
 $pageTable->column("Title", "<a href='/admin/page_form?page_id={page_id}'>{page_title}</a>", true, "width: 40%")
 		  ->column("Page Identifier", "{identifier}", true, "width: 10%")
 		  ->column("Code File", "{php_code_file}", true, "width: 30%")
 		  ->column("Created Date", "{created_date:m/d/Y}", true, "width: 10%;text-align: center")
-		  ->column("Last Edited", "{edited_date}", true, "width:10%;text-align: center");
+		  ->column("Last Edited", "{edited_date:m/d/Y}", true, "width:10%;text-align: center");
 		  
 $pageTable->sortable = true;
 $pageTable->filter = true;
