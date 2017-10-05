@@ -201,6 +201,16 @@ class AutoForm
 			}
 		}
 		
+		$annotations = $this->data->getFieldAnnotations();
+		// Read in default annotations from DataItem
+		if ($annotations)
+		{
+			foreach($annotations as $field => $annotation)
+			{
+				$this->annotate($field, $annotation);
+			}
+		}
+		
 		$pks = $this->data->getPrimaryKeyList();
 		foreach($pks as $p)
 		{

@@ -520,6 +520,15 @@ class DataItem extends AbstractDataItem
 	}
 	
 	/**
+	 * Retrieve the list of field annotations
+	 * @return array the annotation list for this object
+	 */
+	function getFieldAnnotations()
+	{
+		return $this->fieldAnnotations;
+	}
+	
+	/**
 	 * Load the object with the specified primary key
 	 * 
 	 * @param int id the primary key value to instantiate from

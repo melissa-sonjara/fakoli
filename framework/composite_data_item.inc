@@ -357,6 +357,28 @@ class CompositeDataItem extends AbstractDataItem
 	}
 	
 	/**
+	 * Retrieve the list of field annotations
+	 * @return array the annotation list for this object
+	 */
+	function getFieldAnnotations()
+	{
+		$aliases = array();
+		
+		// Create a composite field list from the inside out.
+		$num = count($this->__objects);
+		for($i = $num - 1; $i >= 0; --$i)
+		{
+			$of = $this->__objects[$i]->getFieldAnnotations();
+			if ($of)
+			{
+				$aliases = array_merge($aliases, $of);
+			}
+		}
+		
+		return $aliases;
+	}
+	
+	/**
 	 * Load the object with the specified primary key
 	 * 
 	 * @param int id the primary key value to instantiate from

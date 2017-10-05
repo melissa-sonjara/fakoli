@@ -363,6 +363,11 @@ abstract class AbstractDataItem
 	 */
 	abstract function getFieldAliases();
 	
+	/** Retrieve the list of field annotations
+	 * @return array the annotation list for this object
+	 */
+	abstract function getFieldAnnotations();
+	
 	/**
 	 * Load the object with the specified primary key
 	 * 
