@@ -668,6 +668,8 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 			}
 		}
 				
+		//AJG - Make sure there is no pre-existing parameter that would cause a duplicate
+		$this->parent->params->clearParam($field);
 		// The search parameter's value is used in the constraint and must contain "'" around each string value
 		$this->parent->params->setParam($field, "member", $value);
 	}
