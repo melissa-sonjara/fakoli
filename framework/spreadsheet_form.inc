@@ -171,6 +171,26 @@ class SpreadsheetForm extends CompositeAutoForm
 				$row->override($field, "", $renderer);
 			}		
 		}
+		
+		$additional = array();
+		foreach($row->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			// JDG 5/24/11 - fix get field name
+			$r2 = clone($renderer);
+			$r2->parent = &$row;
+			$r['renderer'] = $r2;
+			
+			$additional[] = $r;
+			
+			trace("#@#@#@ ID: {$r2->parent->id}", 3);
+			$row->override($r['field'], $r['label'], $r2);
+		}
+		
+		$row->additional = $additional;
+				
+		trace(print_r($row->additional, true), 3);
+		
 		//$form = SubordinateAutoForm::create($this, $row, true);
 		$subform = new SubordinateAutoForm($this, $row, true);
 
@@ -302,6 +322,26 @@ ENDSCRIPT;
 			}
 		}	
 
+		foreach($form->additional as $r)
+		{
+			$renderer = $r['renderer'];
+			// JDG 5/24/11 - fix get field name
+			$field = $r['field'];
+			if(!$field)
+				$field = $renderer->field;
+		
+			if(array_key_exists($field, $form->hidden))
+				continue;
+					
+			$styles = "text-align: center;";
+			if(array_key_exists($field, $this->columnWidths))
+			{
+				$width = $this->columnWidths[$field];
+				$styles .= " width: {$width}px";
+			}
+			$renderer->_printLabel($field, 1, $styles);
+			$this->colCount++;
+		}		
 		echo "</tr></thead>\n";		
 		
 		foreach($this->forms as $form)
