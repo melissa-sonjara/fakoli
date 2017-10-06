@@ -222,7 +222,7 @@ ENDSCRIPT;
 		$this->renderSearchFields();
 		if ($this->showSubmitButton)
 		{
-			echo "<input type='submit' value='{$this->submitButtonLabel}'/>";
+			echo "<input type='submit' class='button' value='{$this->submitButtonLabel}'/>";
 		}
 		else
 		{
