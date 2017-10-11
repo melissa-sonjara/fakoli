@@ -29,6 +29,9 @@ class HtmlEditorManager
 	{
 		Settings::setDefaultValue("html_editor", "CSS_files", "", Text, "List of CSS files to apply within the editor. Put each CSS file on a separate line.", "Appearance");
 		Settings::setDefaultValue("html_editor", "body_class", "", String, "Body class to be applied to content within the editor - use this to override inappropriate styles", "Appearance");
+
+		Settings::setDefaultValue("html_editor", "enable_custom_CSS", false, Boolean, "", "Custom CSS", null, 1);
+		Settings::setDefaultValue("html_editor", "custom_CSS", "", Text, "This setting can be used to provide custom CSS styles, configurable from the HTML editor. A link tag to /action/html_editor/custom_styles must be added to your site's template files.", "Custom CSS", null, 2);
 	}
 
 	static function registerSerializationHandler()

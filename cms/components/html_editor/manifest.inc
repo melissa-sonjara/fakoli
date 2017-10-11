@@ -17,7 +17,9 @@ class HtmlEditorManifest
 	static function getScripts()
 	{
 		return array("/components/html_editor/js/snippet_manager.js",
-					 "/components/html_editor/js/snippet_tinymce_plugin.js"
+					 "/components/html_editor/js/snippet_tinymce_plugin.js",
+					 "/components/html_editor/js/custom_css_manager.js",
+					 "/components/html_editor/js/custom_css_tinymce_plugin.js"
 		);
 	}
 	
@@ -29,6 +31,10 @@ class HtmlEditorManifest
 	static function registerPlugins()
 	{
 		HtmlEditorManager::registerPlugin("Insert Snippet", "snippet");
+		if (Settings::getValue("html_editor", "enable_custom_CSS") && checkRole("admin"))
+		{
+			HtmlEditorManager::registerPlugin("Edit Custom CSS", "custom_css");
+		}
 	}
 	
 	static function subscribeToEvents()
