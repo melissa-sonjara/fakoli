@@ -1354,3 +1354,8 @@ table.list tr.unmapped
 {
 	color: #aaa;
 }
+
+.dialog_body label
+{
+	white-space: nowrap;
+}
