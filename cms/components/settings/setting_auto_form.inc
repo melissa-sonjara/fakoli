@@ -37,9 +37,11 @@ class SettingAutoForm extends AutoForm
 {
 	var $settings;
 	var $customSettings = array();
-	
-	function SettingAutoForm($component)
+	var $filter = null;
+	function SettingAutoForm($component, $filter = null)
 	{
+		$this->filter = $filter;
+		
 		ComponentManager::fireEvent("RegisterSettingsFormExtension");
 		
 		$this->component = $component;
@@ -60,6 +62,8 @@ class SettingAutoForm extends AutoForm
 		
 		foreach($this->settings as $setting)
 		{
+			if ($this->filter && $this->filter->isExcluded($setting->name)) continue;
+			
 			$fields[$setting->name] = ($setting->field_type) ? $setting->field_type : "String";
 			if ($setting->category) $this->group($setting->category, $setting->name);
 		}
@@ -69,6 +73,8 @@ class SettingAutoForm extends AutoForm
 
 		foreach($this->settings as $setting)
 		{
+			if ($this->filter && $this->filter->isExcluded($setting->name)) continue;
+			
 			$this->data->set($setting->name, $setting->value);
 			if($setting->annotation)
 				$this->annotate($setting->name, $setting->annotation);
