@@ -149,7 +149,7 @@ window.scaleToFit = function(selector)
 		}
 		if (element.tagName == 'IMG')
 		{
-			element.setStyles({'width': parentSize.x, 'height': parentSize.y * scale});
+			element.setStyles({'width': parentSize.x, 'height': size.y * scale});
 		}
 		else
 		{
