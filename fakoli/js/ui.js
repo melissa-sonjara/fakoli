@@ -158,6 +158,8 @@ window.scaleToFit = function(selector)
 	});
 };
 
+window.addEvent('domready', function() { window.scaleToFit(); });
+
 var Curtain = new Class(
 {
 	curtain: Class.Empty,
