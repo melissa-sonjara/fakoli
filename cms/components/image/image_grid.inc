@@ -116,7 +116,7 @@ window.addEvent('domready', function()
 	
 	function drawView()
 	{
-		$cssClass = $this->cssClass ? "image_grid ($this->cssClass}" : "image_grid";
+		$cssClass = $this->cssClass ? "image_grid {$this->cssClass}" : "image_grid";
 ?>
 		<ul id="<?echo $this->id?>" class='<?echo $cssClass?>'>
 <?
