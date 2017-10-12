@@ -147,7 +147,7 @@ window.scaleToFit = function(selector)
 		{
 			var scale = parentSize.x / size.x;
 		}
-		this.container.setStyles({'transform-origin': 'top left', 'transform': 'scale('+scale+')'});
+		element.setStyles({'transform-origin': 'top left', 'transform': 'scale('+scale+')'});
 	});
 };
 
