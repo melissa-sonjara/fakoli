@@ -147,7 +147,7 @@ window.scaleToFit = function(selector)
 		{
 			var scale = parentSize.x / size.x;
 		}
-		if (element.tagName == 'img')
+		if (element.tagName == 'IMG')
 		{
 			element.setStyles({'width': parentsize.x, 'height': parentsize.y * scale});
 		}
