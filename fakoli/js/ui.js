@@ -136,7 +136,7 @@ window.alignHeights = function(selector)
 
 window.scaleToFit = function(selector)
 {
-	if (!selector) selector = "scaleToFit";
+	if (!selector) selector = ".scale_to_fit";
 	
 	$$(selector).each(function(element)
 	{
