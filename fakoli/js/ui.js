@@ -134,6 +134,23 @@ window.alignHeights = function(selector)
 	});
 };
 
+window.scaleToFit = function(selector)
+{
+	if (!selector) selector = "scaleToFit";
+	
+	$$(selector).each(function(element)
+	{
+		var parent = element.getParent();
+		var size = element.getSize();		
+		var parentSize = parent.getSize(); 
+		if (size.x != parentSize.x)
+		{
+			var scale = parentSize.x / size.x;
+		}
+		this.container.setStyles({'transform-origin': 'top left', 'transform': 'scale('+scale+')'});
+	});
+};
+
 var Curtain = new Class(
 {
 	curtain: Class.Empty,
