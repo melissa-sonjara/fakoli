@@ -159,6 +159,7 @@ window.scaleToFit = function(selector)
 };
 
 window.addEvent('domready', function() { window.scaleToFit(); });
+window.addEvent('resize', function() { window.scaleToFit(); });
 
 var Curtain = new Class(
 {
