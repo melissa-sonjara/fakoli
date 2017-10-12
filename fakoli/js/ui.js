@@ -147,7 +147,14 @@ window.scaleToFit = function(selector)
 		{
 			var scale = parentSize.x / size.x;
 		}
-		element.setStyles({'transform-origin': 'top left', 'transform': 'scale('+scale+')'});
+		if (element.tagName == 'img')
+		{
+			element.setStyles({'width': parentsize.x, 'height': parentsize.y * scale});
+		}
+		else
+		{
+			element.setStyles({'transform-origin': 'top left', 'transform': 'scale('+scale+')'});
+		}
 	});
 };
 
