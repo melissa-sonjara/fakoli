@@ -246,8 +246,11 @@ class OptimizeManager
 		{
 			if (extension_loaded("zlib") && (ini_get("output_handler") != "ob_gzhandler"))
 			{
+				trace("Setting zlib.output_compression to On", 3);
+				
 				@ob_end_clean();
 				@ini_set("zlib.output_compression", 1);
+				@ini_set("zlib.output_compression_level", 9);
 			}
 			
 // 			ob_start();
