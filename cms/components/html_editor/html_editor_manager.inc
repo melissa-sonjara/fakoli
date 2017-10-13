@@ -57,6 +57,15 @@ class HtmlEditorManager
 		$tiny_mce_body_class = Settings::getValue("html_editor", "body_class");
 	}
 	
+	static function applyCustomCSS($template)
+	{
+		if (Settings::getValue("html_editor", "enable_custom_css"))
+		{
+			$template = str_replace("</head>", "  <link href='/action/html_editor/custom_css' rel='stylesheet'/>\n</head>", $template);
+		}	
+		return $template;
+	}
+	
 	static function formatSnippetParameters($snippet)
 	{
 		$matches = array();

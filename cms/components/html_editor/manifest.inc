@@ -46,7 +46,8 @@ class HtmlEditorManifest
 					 "ComponentScanComplete"		=>	array(HtmlEditorManager, setDefaults),
 					 "Initialize"					=>	array(HtmlEditorManager, onInitialize),
 					 "RegisterSerializationHandler"	=>	array(HtmlEditorManager, registerSerializationHandler),
-					 "RegisterHTMLEditorPlugins"	=>	array(HtmlEditorManifest, registerPlugins)
+					 "RegisterHTMLEditorPlugins"	=>	array(HtmlEditorManifest, registerPlugins),
+					 "PreProcessPage"				=>	array(HtmlEditorManager, applyCustomCSS)
 					//TODO: Add Event Registrations here
 		);
 	}
