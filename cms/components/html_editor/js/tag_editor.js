@@ -9,7 +9,7 @@ var TagEditor =  (function()
 		{
 		},
 		
-		showCSSEditor: function(editor)
+		showTagEditor: function(editor)
 		{			
 			this.editor = editor;
 			this.dialog = modalPopup("Edit HTML Tag", "/action/html_editor/tag_editor?editor=" + this.editor.name, 600, "auto", true, false); 
