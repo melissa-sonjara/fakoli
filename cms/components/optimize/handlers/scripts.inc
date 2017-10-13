@@ -19,6 +19,11 @@ if(array_key_exists("HTTP_IF_MODIFIED_SINCE",$_SERVER))
 }
 
 
+if (!$noChange)
+{
+	OptimizeManager::startZip();
+}
+
 header("Last-Modified: ".date('r', $last_modified));
 header("Cache-Control: max-age=300, must-revalidate");
 header("Content-Type: text/javascript");
@@ -26,8 +31,7 @@ header("Pragma: private");
 header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
 
 if (!$noChange)
-{	
-	OptimizeManager::startZip();
+{
 	$content = OptimizeManager::getScriptsContent();
 	echo $content;
 	OptimizeManager::flushZip();
