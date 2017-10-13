@@ -106,7 +106,7 @@ class FieldRenderer
 	}
 	
 	/**
-	 * Interneal method to generate the closing HTML for the field.
+	 * Internal method to generate the closing HTML for the field.
 	 *
 	 * @param string $field the field name
 	 */
