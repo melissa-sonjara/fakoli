@@ -20,7 +20,7 @@ class HtmlEditorManifest
 					 "/components/html_editor/js/snippet_tinymce_plugin.js",
 					 "/components/html_editor/js/custom_css_manager.js",
 					 "/components/html_editor/js/custom_css_tinymce_plugin.js",
-					 "/components/html_editor/js/tag_editor_manager.js",
+					 "/components/html_editor/js/tag_editor.js",
 					 "/components/html_editor/js/tag_editor_tinymce_plugin.js"
 		);
 	}
