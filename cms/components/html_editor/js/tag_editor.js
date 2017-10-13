@@ -33,10 +33,11 @@ var TagEditor =  (function()
 			var elt = this.editor.selection.getNode();
 			if (!elt) return;
 			
+			elt = document.id(elt);
 			this.elements = [];
 			while(elt.tagName != 'BODY')
 			{
-				this.elements.push(document.id(elt));	
+				this.elements.push(elt);
 				elt = elt.getParent();
 			}
 			
