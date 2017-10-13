@@ -256,6 +256,8 @@ class OptimizeManager
 // 				trace("Zip handler ignored", 3);
 // 			}
 		}
+		
+		trace("zlib.output_compression = ".ini_get("zlip.output_compression"), 3);
 	}
 	
 	static function flushZip()
