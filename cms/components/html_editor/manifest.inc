@@ -35,7 +35,7 @@ class HtmlEditorManifest
 		{
 			HtmlEditorManager::registerPlugin("Edit Custom CSS", "custom_css");
 		}
-		HtmlEditManager::registerPlug("Edit HTML Tag", "tag_editor");
+		HtmlEditorManager::registerPlug("Edit HTML Tag", "tag_editor");
 	}
 	
 	static function subscribeToEvents()
