@@ -244,25 +244,31 @@ class OptimizeManager
 	{
 		if (OptimizeManager::$zipped)
 		{
-			ob_start();
-			if (!ob_start("ob_gzhandler"))
+			if (extension_loaded("zlib") && (ini_get("output_handler") != "ob_gzhandler"))
 			{
-				trace("Zip handler ignored", 3);
+				@ob_end_clean();
+				@ini_set("zlib.output_compression", 1);
 			}
+			
+// 			ob_start();
+// 			if (!ob_start("ob_gzhandler"))
+// 			{
+// 				trace("Zip handler ignored", 3);
+// 			}
 		}
 	}
 	
 	static function flushZip()
 	{
-		if (OptimizeManager::$zipped)
-		{
-			trace("Flushing zipped content", 3);
-			trace(print_r(ob_list_handlers(), true), 3);
-			ob_end_flush();
-			header("Content-Length: ".ob_get_length());
-			ob_end_flush();
-			trace(print_r(ob_list_handlers(), true), 3);
-		}
+//		if (OptimizeManager::$zipped)
+//		{
+// 			trace("Flushing zipped content", 3);
+// 			trace(print_r(ob_list_handlers(), true), 3);
+// 			ob_end_flush();
+// 			header("Content-Length: ".ob_get_length());
+// 			ob_end_flush();
+// 			trace(print_r(ob_list_handlers(), true), 3);
+//		}
 	}
 	
 	static function postAction($action)
