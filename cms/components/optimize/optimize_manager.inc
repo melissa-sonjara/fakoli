@@ -249,7 +249,7 @@ class OptimizeManager
 				trace("Setting zlib.output_compression to On", 3);
 				
 				@ob_end_clean();
-				@ini_set("zlib.output_compression", 1);
+				@ini_set("zlib.output_compression", 'On');
 				@ini_set("zlib.output_compression_level", 9);
 			}
 			
