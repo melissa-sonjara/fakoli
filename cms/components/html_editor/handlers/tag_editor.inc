@@ -12,11 +12,11 @@ Fakoli::using("html_editor");
  </tr>
  <tr>
   <td class='label'><label>Class</label></td>
-  <td class='field'><input id='tag_editor_class' value='' type='text'/></td>
+  <td class='field'><input id='tag_editor_class' value='' type='text' size='60'/></td>
  </tr>
  <tr>
   <td class='label'><label>Style</label></td>
-  <td class='field'><input id='tag_editor_style' value='' type='text'/></td>
+  <td class='field'><input id='tag_editor_style' value='' type='text' size='60'/></td>
  </tr>
 </table>
 <br/>
