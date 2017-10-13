@@ -25,5 +25,5 @@ Fakoli::using("html_editor");
 window.addEvent('domready', function()
 {
 	new TagEditor().initializeDialog();
-}	
+});
 </script>
