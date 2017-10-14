@@ -18,6 +18,14 @@ Fakoli::using("html_editor");
   <td class='label'><label>Style</label></td>
   <td class='field'><input id='tag_editor_style' value='' type='text' size='60'/></td>
  </tr>
+ <tr id='tag_editor_href_row' style='display: none'>
+  <td class='label'><Label>HREF</Label></td>
+  <td class='field'><input id='tag_editor_href' value='' type='text' size='60'/></td>
+ </tr>
+ <tr id='tag_editor_target_row' style='display: none'>
+  <td class='label'><Label>Target</Label></td>
+  <td class='field'><input id='tag_editor_target' value='' type='text' size='60'/></td>
+ </tr>
 </table>
 <br/>
 <a class='button' href='#' onclick="ModalDialog.getActiveDialog().hide();">Done</a>
