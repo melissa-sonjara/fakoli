@@ -29,6 +29,10 @@ var TagEditor =  (function()
 			this.idControl = document.id("tag_editor_id");
 			this.classControl = document.id("tag_editor_class");
 			this.styleControl = document.id("tag_editor_style");
+		
+			this.idControl.addEvent('keypress', function(e) { this.updateElement(); }.bind(this));
+			this.classControl.addEvent('keypress', function(e) { this.updateElement(); }.bind(this));
+			this.styleControl.addEvent('keypress', function(e) { this.updateElement(); }.bind(this));
 			
 			var elt = this.editor.selection.getNode();
 			if (!elt) return;
@@ -56,6 +60,16 @@ var TagEditor =  (function()
 			this.idControl.set('value', element.id);
 			this.classControl.set('value', this.editor.dom.getAttrib(element, 'class'));
 			this.styleControl.set('value', this.editor.dom.getAttrib(element, 'style'));
+		},
+		
+		updateElement: function()
+		{
+			var element = this.elements[this.level];
+
+			this.tagNameControl.set('html', element.nodeName);
+			this.editor.dom.setAttrib(element, 'id', this.idControl.value);
+			this.editor.dom.setAttrib(element, 'class', this.classControl.value);
+			this.editor.dom.setAttrib(element, 'style', this.styleControl.value);
 		},
 		
 		up: function()
