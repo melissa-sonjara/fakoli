@@ -145,9 +145,9 @@ var TagEditor =  (function()
 		up: function()
 		{
 			this.level++;
-			if (this.level > this.elements.length)
+			if (this.level >= this.elements.length)
 			{
-				this.level = this.elements.length;
+				this.level = this.elements.length - 1;
 			}
 			this.bindDialog();
 		},
