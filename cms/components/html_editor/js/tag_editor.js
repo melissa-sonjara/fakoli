@@ -161,7 +161,8 @@ var TagEditor =  (function()
 		
 		prev: function()
 		{
-			var elt = this.element.getPrev();
+			var element = this.elements[this.level];
+			var elt = element.getPrev();
 			if (elt)
 			{
 				this.selectElement(elt);
@@ -171,7 +172,8 @@ var TagEditor =  (function()
 		
 		next: function()
 		{
-			var elt = this.element.getNext();
+			var element = this.elements[this.level];
+			var elt = element.getNext();
 			if (elt)
 			{
 				this.selectElement(elt);
