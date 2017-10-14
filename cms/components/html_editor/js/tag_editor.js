@@ -12,6 +12,10 @@ var TagEditor =  (function()
 		idControl: null,
 		classControl: null,
 		styleControl: null,
+		hrefControl: null,
+		targetControl: null,
+		hrefRow: null,
+		targetRow: null,
 		
 		initialize: function()
 		{
@@ -30,6 +34,12 @@ var TagEditor =  (function()
 			this.classControl = document.id("tag_editor_class");
 			this.styleControl = document.id("tag_editor_style");
 		
+			this.hrefRow = document.id("tag_editor_href_row");
+			this.hrefControl = document.id("tag_editor_href");
+			
+			this.targetRow = document.id("tag_editor_target_row");
+			this.targetControl = document.id("tag_editor_target");
+			
 			this.idControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
 			this.classControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
 			this.styleControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
@@ -60,6 +70,19 @@ var TagEditor =  (function()
 			this.idControl.set('value', element.id);
 			this.classControl.set('value', this.editor.dom.getAttrib(element, 'class'));
 			this.styleControl.set('value', this.editor.dom.getAttrib(element, 'style'));
+			
+			if (element.tagName == "A")
+			{
+				this.hrefRow.setStyle('display', 'table-row');
+				this.targetRow.setStyle('display', 'table-row');
+				this.hrefControl.set('value', this.editor.dom.getAttrib(element, 'href'));
+				this.targetControl.set('value', this.editor.dom.getAttrib(element, 'target'));
+			}
+			else
+			{
+				this.hrefRow.setStyle('display', 'none');
+				this.targetRow.setStyle('display', 'none');				
+			}
 		},
 		
 		updateElement: function()
@@ -70,6 +93,12 @@ var TagEditor =  (function()
 			this.editor.dom.setAttrib(element, 'id', this.idControl.value);
 			this.editor.dom.setAttrib(element, 'class', this.classControl.value);
 			this.editor.dom.setAttrib(element, 'style', this.styleControl.value);
+			
+			if (element.tagName == "A")
+			{
+				this.editor.dom.setAttrib(element, 'href', this.hrefControl.value);
+				this.editor.dom.setAttrib(element, 'target', this.targetControl.value);
+			}
 		},
 		
 		up: function()
