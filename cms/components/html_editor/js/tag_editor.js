@@ -53,6 +53,23 @@ var TagEditor =  (function()
 			this.tagNameControl.set('html', element.tagName);
 			this.idControl.set('value', element.id);
 			this.idControl.set('class', element.getClass());
+		},
+		
+		up: function()
+		{
+			this.level++;
+			if (this.level > this.elements.length)
+			{
+				this.level = this.elements.length;
+			}
+			this.bindDialog();
+		},
+		
+		down: function()
+		{
+			this.level--;
+			if (this.level < 0) this.level = 0;
+			this.bindDialog();
 		}
 	});
 
