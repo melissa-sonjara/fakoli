@@ -155,7 +155,15 @@ var TagEditor =  (function()
 		down: function()
 		{
 			this.level--;
-			if (this.level < 0) this.level = 0;
+			if (this.level < 0) 
+			{
+				this.level = 0;
+				var elt = this.elements[this.level];
+				if (elt.childElementCount > 0)
+				{
+					this.selectElement(elt.children[0]);
+				}
+			}
 			this.bindDialog();
 		},
 		
