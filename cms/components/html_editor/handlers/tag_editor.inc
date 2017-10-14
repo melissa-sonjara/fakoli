@@ -4,7 +4,7 @@ Fakoli::using("html_editor");
 <table class='form'>
  <tr>
   <td class='label'><label>Current HTML Tag</label>
-  <td class='field'><span id='tag_editor_tagName' style='display: inline-block; width: 100px;border: solid 1px #ccc; color: #333; border-radius: 4px;margin-right:5px;'></span><a id='tag_editor_upButton' class='button' style='margin-right: 4px;font-weight: bold' href='#' onclick='new TagEditor().up();return false'>&uarr;</a><a id='tag_editor_downButton' class='button' style='font-weight: bold' href='#' onclick='new TagEditor().down(); return false'>&darr;</a></td>
+  <td class='field'><span id='tag_editor_tagName' style='display: inline-block; width: 100px;border: solid 1px #bbb; color: #333; padding: 2px; border-radius: 4px;margin-right:5px;'></span><a id='tag_editor_upButton' class='button' style='margin-right: 4px' href='#' onclick='new TagEditor().up();return false'>&uarr;</a><a id='tag_editor_downButton' class='button' style='font-weight: bold' href='#' onclick='new TagEditor().down(); return false'>&darr;</a></td>
  </tr>
  <tr>
   <td class='label'><label>ID</label></td>
