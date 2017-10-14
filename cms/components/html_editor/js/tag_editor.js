@@ -30,9 +30,9 @@ var TagEditor =  (function()
 			this.classControl = document.id("tag_editor_class");
 			this.styleControl = document.id("tag_editor_style");
 		
-			this.idControl.addEvent('keypress', function(e) { this.updateElement(); }.bind(this));
-			this.classControl.addEvent('keypress', function(e) { this.updateElement(); }.bind(this));
-			this.styleControl.addEvent('keypress', function(e) { this.updateElement(); }.bind(this));
+			this.idControl.addEvent('change', function(e) { this.updateElement(); }.bind(this));
+			this.classControl.addEvent('change', function(e) { this.updateElement(); }.bind(this));
+			this.styleControl.addEvent('change', function(e) { this.updateElement(); }.bind(this));
 			
 			var elt = this.editor.selection.getNode();
 			if (!elt) return;
