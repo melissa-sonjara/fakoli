@@ -50,7 +50,7 @@ var TagEditor =  (function()
 		{
 			var element = this.elements[this.level];
 			
-			var attribs = element.getAttribs();
+			var attribs = this.editor.dom.getAttribs(element);
 			
 			this.tagNameControl.set('html', element.nodeName);
 			this.idControl.set('value', element.id);
