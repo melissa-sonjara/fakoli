@@ -54,8 +54,8 @@ var TagEditor =  (function()
 			
 			this.tagNameControl.set('html', element.nodeName);
 			this.idControl.set('value', element.id);
-			this.classControl.set('class', this.editor.dom.getAttrib(element, 'class'));
-			this.styleControl.set('style', this.editor.dom.getAttrib(element, 'style'));
+			this.classControl.set('value', this.editor.dom.getAttrib(element, 'class'));
+			this.styleControl.set('value', this.editor.dom.getAttrib(element, 'style'));
 		},
 		
 		up: function()
