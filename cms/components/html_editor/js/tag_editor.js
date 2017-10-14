@@ -61,6 +61,13 @@ var TagEditor =  (function()
 			this.srcControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
 			
 			var elt = this.editor.selection.getNode();
+			this.selectElement(elt);
+			
+			this.bindDialog();
+		},
+		
+		selectElement: function(elt)
+		{
 			if (!elt) return;
 			
 			//elt = document.id(elt);
@@ -73,7 +80,6 @@ var TagEditor =  (function()
 			
 			this.level = 0;
 			
-			this.bindDialog();
 		},
 		
 		bindDialog: function()
@@ -151,6 +157,26 @@ var TagEditor =  (function()
 			this.level--;
 			if (this.level < 0) this.level = 0;
 			this.bindDialog();
+		},
+		
+		prev: function()
+		{
+			var elt = this.element.getPrev();
+			if (elt)
+			{
+				this.selectElement(elt);
+				this.bindDialog();
+			}
+		},
+		
+		next: function()
+		{
+			var elt = this.element.getNext();
+			if (elt)
+			{
+				this.selectElement(elt);
+				this.bindDialog();
+			}
 		}
 	});
 
