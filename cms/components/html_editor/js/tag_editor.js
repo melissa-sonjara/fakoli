@@ -38,7 +38,7 @@ var TagEditor =  (function()
 			while(elt.tagName != 'BODY')
 			{
 				this.elements.push(elt);
-				elt = elt.getParent();
+				elt = elt.parentElement;
 			}
 			
 			this.level = 0;
