@@ -33,7 +33,7 @@ var TagEditor =  (function()
 			var elt = this.editor.selection.getNode();
 			if (!elt) return;
 			
-			elt = document.id(elt);
+			//elt = document.id(elt);
 			this.elements = [];
 			while(elt.tagName != 'BODY')
 			{
@@ -50,7 +50,9 @@ var TagEditor =  (function()
 		{
 			var element = this.elements[this.level];
 			
-			this.tagNameControl.set('html', element.tagName);
+			var attribs = element.getAttribs();
+			
+			this.tagNameControl.set('html', element.nodeName);
 			this.idControl.set('value', element.id);
 			this.idControl.set('class', this.editor.dom.getAttrib(element, 'class'));
 			this.idControl.set('style', this.editor.dom.getAttrib(element, 'style'));
