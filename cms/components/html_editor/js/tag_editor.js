@@ -52,7 +52,8 @@ var TagEditor =  (function()
 			
 			this.tagNameControl.set('html', element.tagName);
 			this.idControl.set('value', element.id);
-			this.idControl.set('class', element.getClass());
+			this.idControl.set('class', this.editor.getAttrib(element, 'class'));
+			this.idControl.set('style', this.editor.getAttrib(element, 'style'));
 		},
 		
 		up: function()
