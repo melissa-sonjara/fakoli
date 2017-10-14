@@ -20,7 +20,7 @@ Fakoli::using("html_editor");
  </tr>
 </table>
 <br/>
-<a class='button' href='#'>Done</a>
+<a class='button' href='#' onclick="ModalDialog.getActiveDialog().hide();">Done</a>
 <script type='text/javascript'>
 window.addEvent('domready', function()
 {
