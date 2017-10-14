@@ -26,6 +26,14 @@ Fakoli::using("html_editor");
   <td class='label'><Label>Target</Label></td>
   <td class='field'><input id='tag_editor_target' value='' type='text' size='60'/></td>
  </tr>
+ <tr id='tag_editor_src_row' style='display: none'>
+  <td class='label'><Label>SRC</Label></td>
+  <td class='field'><input id='tag_editor_src' value='' type='text' size='60'/></td>
+ </tr>
+ <tr id='tag_editor_alt_row' style='display: none'>
+  <td class='label'><Label>ALT</Label></td>
+  <td class='field'><input id='tag_editor_alt' value='' type='text' size='60'/></td>
+ </tr>
 </table>
 <br/>
 <a class='button' href='#' onclick="ModalDialog.getActiveDialog().hide();">Done</a>
