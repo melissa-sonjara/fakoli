@@ -16,7 +16,12 @@ var TagEditor =  (function()
 		targetControl: null,
 		hrefRow: null,
 		targetRow: null,
-		
+	
+		srcRow: null,
+		srcControl: null,
+		altRow: null,
+		altControl: null,
+	
 		initialize: function()
 		{
 		},
@@ -40,9 +45,20 @@ var TagEditor =  (function()
 			this.targetRow = document.id("tag_editor_target_row");
 			this.targetControl = document.id("tag_editor_target");
 			
+			this.altRow = document.id("tag_editor_alt_row");
+			this.altControl = document.id("tag_editor_alt");
+			this.srcRow = document.id("tag_editor_src_row");
+			this.srcControl = document.id("tag_editor_src");
+			
 			this.idControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
 			this.classControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
 			this.styleControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
+			
+			this.hrefControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
+			this.targetControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
+			
+			this.altControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
+			this.srcControl.addEvent('keyup', function(e) { this.updateElement(); }.bind(this));
 			
 			var elt = this.editor.selection.getNode();
 			if (!elt) return;
@@ -83,6 +99,19 @@ var TagEditor =  (function()
 				this.hrefRow.setStyle('display', 'none');
 				this.targetRow.setStyle('display', 'none');				
 			}
+			
+			if (element.tagName == "IMG")
+			{
+				this.srcRow.setStyle('display', 'table-row');
+				this.srcControl.set('value', this.editor.dom.getAttrib(element, 'src'));
+				this.altRow.setStyle('display', 'table-row');
+				this.altControl.set('value', this.editor.dom.getAttrib(element, 'alt'));
+			}
+			else
+			{
+				this.srcRow.setStyle('display', 'none');
+				this.altRow.setStyle('display', 'none');
+			}
 		},
 		
 		updateElement: function()
@@ -98,6 +127,12 @@ var TagEditor =  (function()
 			{
 				this.editor.dom.setAttrib(element, 'href', this.hrefControl.value);
 				this.editor.dom.setAttrib(element, 'target', this.targetControl.value);
+			}
+			
+			if (element.tagName == "IMG")
+			{
+				this.editor.dom.setAttrib(element, 'src', this.srcControl.value);
+				this.editor.dom.setAttrib(element, 'alt', this.altControl.value);				
 			}
 		},
 		
