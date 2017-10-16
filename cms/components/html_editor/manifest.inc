@@ -40,7 +40,7 @@ class HtmlEditorManifest
 		HtmlEditorManager::registerPlugin("Edit HTML Tag", "tag_editor");
 	}
 	
-	static $allow_sessionless_handlers = array("custom_css");
+	var $allow_sessionless_handlers = array("custom_css");
 	
 	static function subscribeToEvents()
 	{
