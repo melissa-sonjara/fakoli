@@ -81,7 +81,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 		
 		$calendar = "{$field}_calendar";
 		echo "<script type='text/javascript'>\n";
-		echo "var $calendar = new Calendar('$calendar', '{$this->parent->id}', '$field');\n";
+		echo "var $calendar = new Calendar('$calendar', '', '{$this->parent->id}_{$field}');\n";
 		echo "</script>\n";
 	}
 

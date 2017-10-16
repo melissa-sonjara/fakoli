@@ -78,9 +78,9 @@ class DateFieldRenderer extends FieldRenderer
 //			$this->_includedDateScript = true;
 //		}
 		
-		$calendar = "{$field}_calendar";
+		$calendar = "{$this->parent->id}_{$field}_calendar";
 		echo "<script type='text/javascript'>\n";
-		echo "var $calendar = new Calendar('$calendar', '{$this->parent->id}', '$field');\n";
+		echo "var $calendar = new Calendar('$calendar', '', '{$this->parent->id}_{$field}');\n";
 		echo "</script>\n";
 	}
 
@@ -97,7 +97,7 @@ class DateFieldRenderer extends FieldRenderer
 		$oninput  = ($this->onInput) ? "oninput='$this->onInput(this)'" : "";
 		
 		$this->_startField($field);
-		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' $onchange $oninput style='width: auto' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$field}_calendar.toggle(this)'>\n";
+		echo "<input id='{$this->parent->id}_{$field}' type='text' name='$field' value='$date' $onchange $oninput style='width: auto' class='date' size='12'>&nbsp;<img src='{$this->parent->componentPath}/calendar/calendar.gif' alt='Popup Calendar' align='absmiddle' border='0' onclick='{$this->parent->id}_{$field}_calendar.toggle(this)'>\n";
 		$this->_endField($field);
 	}
 	

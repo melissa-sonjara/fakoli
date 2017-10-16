@@ -126,7 +126,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 	for(var i = 0; i < inputs.length; ++i)
 	{
 		var input = inputs[i];
-		if (input.attributes['id'] && input.attributes['id'].value.indexOf('checkbox_<?echo $this->field?>') == 0)
+		if (input.attributes['id'] && input.attributes['id'].value.indexOf('<?php echo $this->parent->id?>_checkbox_<?echo $this->field?>') == 0)
 		{
 			input.checked = value;
 		}
@@ -296,8 +296,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			$v = $mode ? $p : "1";
 				
 			$disable = ($this->disable) ? "disabled='disabled'" : "";
-			echo "<label for='checkbox_{$field}_$p'>";
-			echo "<input type='checkbox' class='checkbox' name='{$name}[$p]' id='checkbox_{$field}_$p' $disable value='{$v}'";
+			echo "<label for='{$this->parent->id}_checkbox_{$field}_$p'>";
+			echo "<input type='checkbox' class='checkbox' name='{$name}[$p]' id='{$this->parent->id}_checkbox_{$field}_$p' $disable value='{$v}'";
 			if (array_key_exists($item->$itempk, $selected))
 			{
 				echo " checked";
