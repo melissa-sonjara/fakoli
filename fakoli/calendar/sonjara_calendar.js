@@ -72,10 +72,18 @@ var Calendar = new Class(
 	initialize: function(varName, formName, ctrlName)
 	{
 		this.varName = varName;
-		this.formName = formName;
-		this.ctrlName = ctrlName;
-		this.divID    = varName + "_" + formName + "_" + ctrlName;
-	
+		if (formName)
+		{
+			this.formName = formName;
+			this.ctrlName = ctrlName;
+			this.divID    = varName + "_" + formName + "_" + ctrlName;
+		}
+		else
+		{
+			this.ctrlName = ctrlName;
+			this.divID = varName + "_" + ctrlName;
+		}
+		
 		this.calendar = new Element('div', {id: this.divID});
 		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'display': 'none', 'opacity': 0});
 		this.calendar.addEvent('mouseout', function(e) {this.onMouseOut(e);}.bind(this));
@@ -241,21 +249,32 @@ var Calendar = new Class(
 	
 	bindControl: function()
 	{
-		this.form = document.forms[this.formName];
-		
-		if (!this.form)
+		if (this.formName)
 		{
-			alert("Cannot find form");
-			return;
-		}
+			this.form = document.forms[this.formName];
 			
-		this.control = document.forms[this.formName][this.ctrlName];
-		
-		if (!this.control)
-		{
-			alert("Cannot find control");
+			if (!this.form)
+			{
+				alert("Cannot find form");
+				return;
+			}
+				
+			this.control = document.forms[this.formName][this.ctrlName];
+			
+			if (!this.control)
+			{
+				alert("Cannot find control");
+			}
 		}
-	
+		else
+		{
+			this.control = document.getElementById(this.ctrlName);
+			if (!this.control)
+			{
+				alert("Cannot find control");
+			}
+			this.form = this.control.form;
+		}
 		this.bindDate();
 	},
 	
