@@ -34,8 +34,10 @@ var CustomCSSManager =  (function()
 				this.hideCSSEditor();
 				
 				var doc = this.editor.getDoc();
-				for (var link of doc.querySelectorAll("link[rel=stylesheet]")) 
+				var sheets =  doc.querySelectorAll("link[rel=stylesheet]");
+				for (var i = 0; i < sheets.length; ++i) 
 				{
+					var link = sheets[i];
 					if (link.href.includes("/action/html_editor/custom_css"))
 					{
 						link.href = link.href.replace(/\?.*|$/, "?ts=" + new Date().getTime());
