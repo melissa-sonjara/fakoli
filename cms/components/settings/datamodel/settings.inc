@@ -268,7 +268,17 @@ class Settings extends DataItem
 		$optionList = array();
 		foreach($options as $option)
 		{
-			$optionList[$option] = $option;
+			if (strpos($option, "=>") !== false)
+			{
+				list($val, $text) = explode("=>", $option);
+				$val = trim($val);
+				$text = trim($text);
+				$optionList[$val] = $text;
+			}
+			else
+			{
+				$optionList[$option] = $option;
+			}
 		}
 		
 		return $optionList;
