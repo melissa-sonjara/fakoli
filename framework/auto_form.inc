@@ -709,18 +709,22 @@ class AutoForm
 	 * after then title (if displayed) but before any fields.
 	 * @param string $name the name of the group
 	 * @param string $description the description to display for that group
+	 * @param string $position whether the description should appear at the 'start' or 'end' of the group
 	 */
-	function groupDescription($name, $description)
+	function groupDescription($name, $description, $position = 'start')
 	{
-		$this->groupDescriptions[$name] = $description;
+		$this->groupDescriptions["{$name}:{$position}"] = $description;
 	}
 	
 	/**
 	 * Retrieves the group description for the specified group.
+	 * @param string $name the name of the group
+	 * @param $position whether the description should appear at the 'start' or 'end' of the group
 	 */
-	function getGroupDescription($name)
+	function getGroupDescription($name, $position = 'start')
 	{
-		if (array_key_exists($name, $this->groupDescriptions)) return $this->groupDescriptions[$name];
+		$key = "{$name}:{$position}";
+		if (array_key_exists($key, $this->groupDescriptions)) return $this->groupDescriptions[$key];
 		return "";
 	}
 	

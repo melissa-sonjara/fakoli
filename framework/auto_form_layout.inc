@@ -139,17 +139,30 @@ class TableBasedFormLayout extends AutoFormLayout
 		
 		echo "<fieldset id='$id'$class><legend>$name</legend>";
 		
-		$desc = $this->form->getGroupDescription($name);
+		$desc = $this->form->getGroupDescription($name, "start");
 		if ($desc)
 		{
 			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
 		}
+		$this->groupName = $name;
 		$this->startUngrouped();
 	}
 	
 	function endGroup()
 	{
 		$this->endUngrouped();
+		
+		$name = $this->groupName;
+		
+		$desc = $this->form->getGroupDescription($name, "end");
+		if ($desc)
+		{
+			$id = $this->form->id . "_" . codify($name) . "_group";
+			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
+		}
+	
+		unset($this->groupName);
+		
 		echo "</fieldset>";
 	}
 	
@@ -639,12 +652,12 @@ class MobileFormLayout extends AutoFormLayout
 		
 		echo "<fieldset id='$id'$class><legend>$name</legend>";
 		
-		$desc = $this->form->getGroupDescription($name);
+		$desc = $this->form->getGroupDescription($name, "start");
 		if ($desc)
 		{
 			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
 		}
-		$this->startUngrouped();
+		$this->groupName = $name;
 		
 		$this->startUngrouped();
 	}
@@ -652,6 +665,16 @@ class MobileFormLayout extends AutoFormLayout
 	function endGroup()
 	{
 		$this->endUngrouped();
+		$name = $this->groupName;
+		
+		$desc = $this->form->getGroupDescription($name, "end");
+		if ($desc)
+		{
+			$id = $this->form->id . "_" . codify($name) . "_group";
+			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
+		}
+	
+		unset($this->groupName);	
 		echo "</fieldset>";
 	}
 	
@@ -769,12 +792,12 @@ class SimpleFormLayout extends AutoFormLayout
 		
 		echo "<fieldset id='$id'$class><legend>$name</legend>";
 
-		$desc = $this->form->getGroupDescription($name);
+		$desc = $this->form->getGroupDescription($name, "start");
 		if ($desc)
 		{
 			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
 		}
-		$this->startUngrouped();
+		$this->groupName = $name;
 		
 		$this->startUngrouped();
 	}
@@ -782,6 +805,16 @@ class SimpleFormLayout extends AutoFormLayout
 	function endGroup()
 	{
 		$this->endUngrouped();
+		$name = $this->groupName;
+		
+		$desc = $this->form->getGroupDescription($name, "end");
+		if ($desc)
+		{
+			$id = $this->form->id . "_" . codify($name) . "_group";
+			echo "<div id='{$id}_description' class='{$this->form->groupDescriptionCSS}'>{$desc}</div>";
+		}
+	
+		unset($this->groupName);
 		echo "</fieldset>";
 	}
 	
