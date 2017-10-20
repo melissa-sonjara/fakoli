@@ -367,16 +367,32 @@ abstract class UpgradeManager
 		if(count($lines) == 0)
 			return;
 			
+		$delimiter = ";";
 		foreach($lines as $line)
 		{
+			$d = array();
+
 			ComponentManager::scanTrace("UpgradeManager:: processing update schema line $line", 4);
-			$sqlStatement .= $line;
-			if(preg_match("/;\s*$/", $line))
+			if (preg_match("/^\s*DELIMITER\s+(.*?)$/i", $line, $d))
 			{
-				$sqlStatements[] = $sqlStatement;
-				$sqlStatement = "";
+				$delimiter = preg_quote($d[1]);
+				//$sqlStatement .= $line."\n";
+			}
+			else
+			{
+				if(preg_match("/{$delimiter}\s*$/", $line))
+				{
+					$sqlStatement .= preg_replace("/{$delimiter}\s*$/", "", $line);
+					$sqlStatements[] = $sqlStatement;
+					$sqlStatement = "";
+				}
+				else
+				{
+					$sqlStatement .= $line;				
+				}
 			}
 		}
+		trace(print_r($sqlStatements, true), 3);
 		return $sqlStatements;		
 	}
 	
