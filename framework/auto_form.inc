@@ -1442,6 +1442,7 @@ class AutoForm
 
 		if (!isset($_POST["#SESSIONTIE#"]) || $_POST["#SESSIONTIE#"] != $_SESSION["csrfToken"])
 		{
+			trace("Invalid Session Token - {$_POST["#SESSIONTIE#"]} vs {$_SESSION["csrfToken"]}", 3);
 			throw new FakoliException("Invalid Session Token");
 		}
 		
