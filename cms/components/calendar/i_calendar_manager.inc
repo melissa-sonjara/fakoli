@@ -325,7 +325,7 @@ class iCalendarEventManager
 		$filter = $this->data->getFilter();
 		if(!$filter)
 		{
-			$filter = new ExlcusionFilter();
+			$filter = new ExclusionFilter();
 		}
 			
 		$fields = $this->data->getFields();
