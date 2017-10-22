@@ -113,6 +113,7 @@ class GroupedDataListView
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
 	var $showSelectAll = true;	///< Show Select All buttons for selectable tables
 	var $rowId = false; // whether to include an id tag for each tr row
+	var $rowIdFormat = null;				///< Optionally specify a custom row ID format
 	var $groupFooterColumns = array(); // subtotal footer for group
 	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
 	var $groupAsWorksheets = false; ///< Format groups as separate worksheets when exporting to Excel (requires PHPExcel)
@@ -265,15 +266,20 @@ class GroupedDataListView
 	
 	function formatRowId($item)
 	{
+		if ($this->rowIdFormat)
+		{
+			return $item->format($this->rowIdFormat);
+		}
+		
 		$pk = $item->getPrimaryKey();
 		return "id='{$pk}_" . $item->$pk . "'";
 	}	
 	
 	/**
 	 * Adds a text column to the table footer.
-	 * @param $text the text to display
-	 * @param $style any CSS classes or inline styles to apply
-	 * @param $colspan the colspan for the column
+	 * @param $text string the text to display
+	 * @param $style string any CSS classes or inline styles to apply
+	 * @param $colspan int the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
 	function footerText($text = "", $style = "", $colspan = 1)
@@ -284,9 +290,9 @@ class GroupedDataListView
 	
 	/**
 	 * Adds a value column to the table footer.
-	 * @param $callback Callback function or object method used to calculate the value for this column.
-	 * @param $style any CSS classes or inline styles to apply
-	 * @param $colspan the colspan for the column
+	 * @param $callback callable Callback function or object method used to calculate the value for this column.
+	 * @param $style string any CSS classes or inline styles to apply
+	 * @param $colspan int the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
 	function footerValue($callback, $style = "", $colspan = 1)
@@ -297,9 +303,9 @@ class GroupedDataListView
 	
 	/**
 	 * Sums the total for a column
-	 * @param $field the field to total in the format "{field}"
-	 * @param $style any CSS classes or inline styles to apply
-	 * @param $colspan the colspan for the column
+	 * @param $field string the field to total in the format "{field}"
+	 * @param $style string any CSS classes or inline styles to apply
+	 * @param $colspan int the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
 	function footerTotal($field, $style = "text-align: right", $colspan = 1)

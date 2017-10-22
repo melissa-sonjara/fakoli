@@ -77,6 +77,7 @@ class DataListView implements FacetFilterable
 	// Javascript interaction parameters
 	
 	var $rowId = false;					///< whether to include an id tag for each tr row
+	var $rowIdFormat = null;				///< Optionally specify a custom row ID format
 	var $dragReorder = false; 			///< Enabled drag & drop reordering
 	var $reorderHandler = null;			///< Handler script that implements reordering records
 	var $dragColumnReorder = false;		///< Enable drag & drop column reordering and show/hide capabilities
@@ -240,6 +241,11 @@ class DataListView implements FacetFilterable
 	
 	function formatRowId($item)
 	{
+		if ($this->rowIdFormat)
+		{
+			return $item->format($this->rowIdFormat);
+		}
+		
 		$pk = $item->getPrimaryKey();
 		return "{$pk}_" . $item->$pk;
 	}	
