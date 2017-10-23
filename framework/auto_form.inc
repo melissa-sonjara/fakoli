@@ -114,6 +114,7 @@ class AutoForm
     var $readOnlyForm;  ///< Specifies whether the entire form is read-only
     var $subordinate;	///< Specifies whether this form is a subordinate member of a composite form
     var $hideEmptyFields = false; ///< Specifies whether to hide empty fields when displaying a read-only form
+    var $showAnnotations = true; ///< Set to false to hide field annotations
     
     var $layout; ///< Layout handler object
     var $default_layout = "table";

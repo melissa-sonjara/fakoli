@@ -183,7 +183,7 @@ class TableBasedFormLayout extends AutoFormLayout
 		if ($renderer->parent->valueCSS) echo " class='{$renderer->parent->valueCSS}'";
 		echo ">";
 		
-		if ($renderer->annotateBefore && $renderer->parent->annotations[$field] && $renderer->colspan == 1)
+		if ($renderer->parent->showAnnotations && $renderer->annotateBefore && $renderer->parent->annotations[$field] && $renderer->colspan == 1)
 		{
 			echo $renderer->parent->annotations[$field]."<br/>";
 		}
@@ -191,7 +191,7 @@ class TableBasedFormLayout extends AutoFormLayout
 	
 	function endField($field, $renderer)
 	{
-		if (!$renderer->annotateBefore && $renderer->parent->annotations[$field])
+		if ($renderer->parent->showAnnotations && !$renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			if ($renderer->annotateNextLine)
 			{
@@ -686,7 +686,7 @@ class MobileFormLayout extends AutoFormLayout
 		
 		if (!$renderer->hideLabel) echo "<br/>\n";
 		
-		if ($renderer->annotateBefore && $renderer->parent->annotations[$field])
+		if ($renderer->parent->showAnnotations && $renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			echo $renderer->parent->annotations[$field]."<br/>";
 		}
@@ -694,7 +694,7 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function endField($field, $renderer)
 	{
-		if (!$renderer->annotateBefore && $renderer->parent->annotations[$field])
+		if ($renderer->parent->showAnnotations && !$renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			if ($renderer->annotateNextLine)
 			{
@@ -824,7 +824,7 @@ class SimpleFormLayout extends AutoFormLayout
 		
 		$this->printLabel($field, $renderer, $styles, $this->parent->annotations[$field]);
 		
-		if ($renderer->annotateBefore && $renderer->parent->annotations[$field])
+		if ($renderer->parent->showAnnotations && $renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			echo $renderer->parent->annotations[$field]." ";
 		}
@@ -834,7 +834,7 @@ class SimpleFormLayout extends AutoFormLayout
 	
 	function endField($field, $renderer)
 	{
-		if (!$renderer->annotateBefore && $renderer->parent->annotations[$field])
+		if ($renderer->parent->showAnnotations && !$renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			if ($renderer->annotateNextLine)
 			{
@@ -1030,7 +1030,7 @@ class TemplateFormLayout extends AutoFormLayout
 
 	function startField($field, $renderer, $colspan = 1, $styles = "")
 	{
-		$annotations = $renderer->annotateBefore ? $renderer->parent->annotations[$field] : "";
+		$annotations = ($renderer->parent->showAnnotations && $renderer->annotateBefore) ? $renderer->parent->annotations[$field] : "";
 		$this->printLabel($field, $renderer, $styles, $annotations);
 		
 		ob_start();
@@ -1042,7 +1042,7 @@ class TemplateFormLayout extends AutoFormLayout
 		
 		ob_end_clean();
 		
-		if (!$renderer->annotateBefore && $renderer->parent->annotations[$field])
+		if ($renderer->parent->showAnnotations && !$renderer->annotateBefore && $renderer->parent->annotations[$field])
 		{
 			if ($renderer->annotateNextLine)
 			{

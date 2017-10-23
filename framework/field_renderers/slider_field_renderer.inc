@@ -38,6 +38,8 @@ class SliderFieldRenderer extends FieldRenderer
 	var $min = 0;
 	var $max = 10;
 	var $editable = true;
+	var $thresholds = null;
+	var $displayValue = true;
 	
 	function __construct(&$form, $field, $min = 0, $max = 10, $editable = true)
 	{
@@ -56,16 +58,74 @@ class SliderFieldRenderer extends FieldRenderer
 		}
 	}
 	
-	function writeScript($field)
+	function setThresholds($thresholds)
 	{
+		$this->thresholds = $thresholds;
 	}
 	
+	function renderScript($field)
+	{
+		if (isset($this->thresholds))
+		{
+			krsort($this->thresholds, SORT_NUMERIC);
+			$thresholds = json_encode($this->thresholds);
+		}
+		else
+		{
+			$thresholds = "null";
+		}
+		
+		$id = "{$this->parent->id}_{$field}";
+			
+		$script = <<<ENDSCRIPT
+<script type='text/javascript'>
+var {$id}_thresholds = {$thresholds};
+window.addEvent('domready', function()
+{
+	var range = document.id('{$id}');
+	var display = document.id('{$id}_display');
+
+	if (display != null)
+	{
+		range.addEvent('input', function(elt)
+		{
+			if ({$id}_thresholds != null)
+			{
+				for(var score in {$id}_thresholds)
+				{
+					if (range.value == score)
+					{
+						display.set('html', ${id}_thresholds[score]);
+					}
+				}
+			}
+			else
+			{
+				display.set('text', range.value);
+			}
+		});
+	}
+});
+</script>
+ENDSCRIPT;
+		
+		echo $script;
+	}
+		
 	function renderField($field)
 	{
 		$this->_startField($field);
 		$value = $this->parent->data->get($field);
+		if (!$value) $value = $this->min;
 		
-		echo "<input type='range' id='{$this->parent->id}_{$field}' name='{$field}' min='{$this->min}' max='{$this->max}' value='{$value}' data-displayField='{$this->parent->id}_{field}_display'/>";
+		echo "<input type='range' id='{$this->parent->id}_{$field}' name='{$field}' min='{$this->min}' max='{$this->max}' value='{$value}' data-displayField='{$this->parent->id}_{$field}_display'/>";
+		
+		if ($this->displayValue)
+		{
+			$threshold = ($this->thresholds) ? $this->thresholds[$value] : "";
+			echo "<span class='range_display' id='{$this->parent->id}_{$field}_display'>{$threshold}</span>";
+		}
+		
 		$this->_endField($field);
 	}
 	
