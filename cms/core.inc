@@ -1022,13 +1022,20 @@ class Fakoli
 	
 	/**
 	 * Return a DataItem to the client in JSON format
-	 * @param DataItem $object the object to be returned
+	 * @param mixed $object the object to be returned
 	 * @param boolean $sendType true to send the content type
 	 */
 	static function JSONreturn($object, $sendType = true)
 	{
 		if ($sendType) header("Content-Type: application/json");
-		throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
+		if (method_exists($object))
+		{
+			throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
+		}
+		else 
+		{			
+			throw new FakoliEarlyExit('{"result": '.json_encode($object).'}');
+		}
 	}
 	
 	/**
