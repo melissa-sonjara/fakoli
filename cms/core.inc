@@ -1028,7 +1028,7 @@ class Fakoli
 	static function JSONreturn($object, $sendType = true)
 	{
 		if ($sendType) header("Content-Type: application/json");
-		if (method_exists($object))
+		if (method_exists($object, "toJSON"))
 		{
 			throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
 		}
