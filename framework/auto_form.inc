@@ -563,7 +563,7 @@ class AutoForm
 		{
 			if (array_key_exists($renderer, AutoForm::$fieldRendererMap))
 			{
-				return new AutoForm::$fieldRendererMap[$type]($this, $field);
+				return new AutoForm::$fieldRendererMap[$renderer]($this, $field);
 			}
 			else
 			{
