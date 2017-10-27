@@ -561,7 +561,14 @@ class AutoForm
 	{
 		if (is_string($renderer))
 		{
-			$renderer = $this->createRenderer($renderer, $field);
+			if (array_key_exists($renderer, AutoForm::$fieldRendererMap))
+			{
+				return new AutoForm::$fieldRendererMap[$type]($this, $field);
+			}
+			else
+			{
+				throw new FakoliException("Unknown Type - {$renderer}");
+			}
 		}
 		
 		array_push($this->additional, array('renderer' => $renderer, 'field' => $field));
