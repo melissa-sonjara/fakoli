@@ -126,25 +126,25 @@ class AutoForm
     // When adding new renderers, must also update
     // DataItem $dataTypeRendererMap
     static $fieldRendererMap = array (
-    	String			 =>	StringFieldRenderer,
-    	HTML			 =>	HTMLFieldRenderer,
-		Date			 =>	DateFieldRenderer,
-    	DateTime		 =>	DateTimeFieldRenderer,
-    	Number			 =>	NumberFieldRenderer,
-    	Currency		 =>	CurrencyFieldRenderer,
-    	Currency3		 =>	Currency3FieldRenderer,
+    		String			 =>	StringFieldRenderer,
+    		HTML			 	 =>	HTMLFieldRenderer,
+		Date			 	 =>	DateFieldRenderer,
+    		DateTime		 	 =>	DateTimeFieldRenderer,
+    		Number			 =>	NumberFieldRenderer,
+    		Currency		 	 =>	CurrencyFieldRenderer,
+    		Currency3		 =>	Currency3FieldRenderer,
 		Boolean			 =>	BooleanFieldRenderer,
-		TimeZone		 =>	TimezoneFieldRenderer,
-		Password		 =>	PasswordFieldRenderer,
-		Text			 =>	TextFieldRenderer,
-		Time			 =>	TimeFieldRenderer,
+		TimeZone		 	 =>	TimezoneFieldRenderer,
+		Password		 	 =>	PasswordFieldRenderer,
+		Text				 =>	TextFieldRenderer,
+		Time				 =>	TimeFieldRenderer,
 		Rating		 	 =>	RatingFieldRenderer,
 		ZipCode			 =>	ZipCodeFieldRenderer,
 		PhoneNumber		 =>	PhoneNumberFieldRenderer,
-    	URL				 =>	URLFieldRenderer,
-    	DateOfBirth		 =>	DateOfBirthFieldRenderer,
-    	CreditCardNumber => CreditCardNumberFieldRenderer,
-    	Signature		 =>	SignatureFieldRenderer
+    		URL				 =>	URLFieldRenderer,
+    		DateOfBirth		 =>	DateOfBirthFieldRenderer,
+    		CreditCardNumber => CreditCardNumberFieldRenderer,
+    		Signature		 =>	SignatureFieldRenderer
 		);	///< Provides the mapping from Type identifier to FieldRenderer
 	/**
 	 * Creates a new AutoForm, based on the supplied target DataItem.
@@ -552,11 +552,16 @@ class AutoForm
 	 * fields in the underlying DataItem (for instance, to provide a checkbox list for
 	 * many-to-one relationships, etc)
 	 *
-	 * @param FieldRenderer $renderer the FieldRenderer-derived object to use for the
+	 * @param mixed $renderer either a mapped type (String, Number, etc), or a FieldRenderer-derived object to use for the
 	 * additional field.
 	 */
 	function add($renderer, $field = "")
 	{
+		if (is_string($renderer))
+		{
+			$renderer = $this->createRenderer($renderer, $field);
+		}
+		
 		array_push($this->additional, array('renderer' => $renderer, 'field' => $field));
 	}
 
