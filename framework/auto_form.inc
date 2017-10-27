@@ -554,8 +554,10 @@ class AutoForm
 	 *
 	 * @param mixed $renderer either a mapped type (String, Number, etc), or a FieldRenderer-derived object to use for the
 	 * additional field.
+	 * @param string $field the name of the additional field
+	 * @param string $label (optional) label for the additional field
 	 */
-	function add($renderer, $field = "")
+	function add($renderer, $field = "", $label = "")
 	{
 		if (is_string($renderer))
 		{
@@ -563,6 +565,10 @@ class AutoForm
 		}
 		
 		array_push($this->additional, array('renderer' => $renderer, 'field' => $field));
+		if ($field && $label)
+		{
+			$this->alias($field, $label);
+		}
 	}
 
 	/**
