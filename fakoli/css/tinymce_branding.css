@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+.mce-branding {
+    float: right !important;
+    padding: 8px 4px !important;
+    color: #888 !important;
+}
+
+.mce-branding a,
+.mce-branding a:link,
+.mce-branding a:visited
+{
+	color: #888 !important;
+}
