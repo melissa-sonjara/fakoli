@@ -75,7 +75,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		global $tiny_mce_content_css;
 		global $tiny_mce_body_class;
 		
-		$plugins = "advlist,code,visualblocks,table,charmap,paste,contextmenu,searchreplace,fullscreen";
+		$plugins = "advlist,lists,code,visualblocks,table,charmap,paste,contextmenu,searchreplace,fullscreen";
 		if ($tiny_mce_application_plugins) $plugins .= ",".$tiny_mce_application_plugins;
 		$contextMenu = "cut copy paste pastetext searchreplace removeformat | {$tiny_mce_application_context_menu_section} inserttable cell row column deletetable";
 		$toolbar = "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | {$tiny_mce_application_toolbar_section} code visualblocks fullscreen";
