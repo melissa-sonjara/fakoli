@@ -132,7 +132,7 @@ var ToolTip = new Class(
 	
 	position: function(event)
 	{
-		var z = window.getZIndex(ToolTip.urrentLink);
+		var z = window.getZIndex(ToolTip.currentLink);
 		++z;
 		
 		if (!this.options.position)
