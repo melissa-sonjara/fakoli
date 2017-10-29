@@ -265,6 +265,16 @@ Window.implement(
 
 });
 
+Window.implement({
+
+	getZIndex: function(element)
+	{
+		var z = window.document.defaultView.getComputedStyle(e).getPropertyValue('z-index');
+		if (isNaN(z)) return window.getZIndex(e.parentNode);
+		return z; 
+	}
+});
+
 function modalPopup(title, url, width, height, returnPopup, draggable, clazz)
 {
 	var popup = new ModalDialog('modalPopup_' + String.uniqueID(), {'title': title, 'width': width, 'height': height, 'draggable': draggable, 'class': clazz, 'maximized': (width=='100%' && height=='100%')});
