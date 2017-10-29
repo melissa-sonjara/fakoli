@@ -139,8 +139,8 @@ var ToolTip = new Class(
 		{
 			this.div.setStyles({'display':  	'block',
 								'opacity':		0,
-							    'left':	   		event.page.x + 4,
-							    'top':      	event.page.y,
+							    'left':	   		event.page.x + 10,
+							    'bottom':      	event.page.y,
 							    'position':		'absolute',
 							    'width':		this.options.width,
 							    'z-index':		z});
