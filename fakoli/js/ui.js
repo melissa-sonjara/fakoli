@@ -269,8 +269,8 @@ Window.implement({
 
 	getZIndex: function(element)
 	{
-		var z = window.document.defaultView.getComputedStyle(e).getPropertyValue('z-index');
-		if (isNaN(z)) return window.getZIndex(e.parentNode);
+		var z = window.document.defaultView.getComputedStyle(element).getPropertyValue('z-index');
+		if (isNaN(z)) return window.getZIndex(element.parentNode);
 		return z; 
 	}
 });
