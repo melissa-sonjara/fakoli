@@ -38,7 +38,8 @@ var ToolTip = new Class(
 		'css': 		'tooltip_box',
 		'width':	'auto',
 		'loading':	"Loading...",
-		'delay':	250
+		'delay':	0,
+		'fade':		false
 	},
 	
 	id:			'',
@@ -131,6 +132,9 @@ var ToolTip = new Class(
 	
 	position: function(event)
 	{
+		var z = window.getZIndex(ToolTip.urrentLink);
+		++z;
+		
 		if (!this.options.position)
 		{
 			this.div.setStyles({'display':  	'block',
@@ -138,7 +142,8 @@ var ToolTip = new Class(
 							    'left':	   		event.page.x + 4,
 							    'top':      	event.page.y,
 							    'position':		'absolute',
-							    'width':		this.options.width});
+							    'width':		this.options.width,
+							    'z-index':		z});
 		}
 		else
 		{
@@ -146,10 +151,18 @@ var ToolTip = new Class(
 			this.div.setStyles({'display':  	'block',
 								'opacity':		0,
 							    'position':		'absolute',
-							    'width':		this.options.width});
+							    'width':		this.options.width,
+							    'z-index':		z});
 		}
 		
-		this.div.fade('in');
+		if (this.options.fade)
+		{
+			this.div.fade('in');
+		}
+		else
+		{
+			this.div.setStyles({'display': 'block', 'visibility': 'visible', 'opacity': 1});
+		}
 	},
 
 	hide: function()
@@ -157,7 +170,14 @@ var ToolTip = new Class(
 		ToolTip.currentLink = null;
 		if (this.div == null) return;
 		
-		this.div.fade('out');
+		if (this.options.fade)
+		{
+			this.div.fade('out');
+		}
+		else
+		{
+			this.div.setStyles({'display': 'none', 'visibility': 'hidden', 'opacity': 0});
+		}
 	}
 });
 
