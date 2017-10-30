@@ -269,7 +269,7 @@ Window.implement({
 
 	getZIndex: function(element)
 	{
-		if (typeOf(element) == "Window") return 0;
+		if (typeOf(element) != "element") return 0;
 		var z = window.document.defaultView.getComputedStyle(element).getPropertyValue('z-index');
 		if (isNaN(z)) return window.getZIndex(element.parentNode);
 		return z; 
