@@ -186,6 +186,8 @@ class Histogram
 	var $canvasBackground = "#FFFFFF";
 	var $units = "";
 	var $scaleToFit = false;
+	var $onDrawGrid = "null";
+	var $onDrawGridComplete = "null";
 	var $onDrawChart = "null";
 	var $onDrawChartComplete = "null";
 	var $onDrawLegend = "null";
@@ -384,6 +386,8 @@ window.addEvent('domready', function ()
 		enableDownload: {$enableDownload},
 		canvasBackground: '{$this->canvasBackground}',
 		units: '{$this->units}',
+		onDrawChart: {$this->onDrawGrid},
+	    onDrawChartComplete: {$this->onDrawGridComplete},
 		onDrawChart: {$this->onDrawChart},
 	    onDrawChartComplete: {$this->onDrawChartComplete},
 	    onDrawLegend: {$this->onDrawLegend},

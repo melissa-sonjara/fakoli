@@ -934,8 +934,10 @@ var Histogram = new Class(
 		if (this.linearOnly) count -= 1;
 		
 		this.columnWidth = this.axisRenderer.calculateColumnWidth(count);
-		
+
+		this.fireEvent('drawGrid', this);
 		this.axisRenderer.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
+		this.fireEvent('drawGridComplete', this);
 	},
 	
 	getColumnOffset: function()
