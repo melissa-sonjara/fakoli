@@ -191,7 +191,7 @@ class ExpandingList
 			if ($expanded)
 			{
 				$dtState = "class='expanded {$ret}'";
-				$ddState = "style='' class='{$ret}";
+				$ddState = "style='' class='{$ret}'";
 			}
 			else
 			{
