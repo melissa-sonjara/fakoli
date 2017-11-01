@@ -175,7 +175,7 @@ class ExpandingList
 		{
 			if (is_callable($this->onItemStart))
 			{
-				$ret =call_user_func($this->onItemStart, $item);
+				$ret = call_user_func($this->onItemStart, $item);
 				if ($ret === false) continue;
 			}
 			
@@ -191,12 +191,12 @@ class ExpandingList
 			if ($expanded)
 			{
 				$dtState = "class='expanded {$ret}'";
-				$ddState = "style=''";
+				$ddState = "style='' class='{$ret}";
 			}
 			else
 			{
 				$dtState = "class='{$ret}'";
-				$ddState = "style='display: none'";
+				$ddState = "style='display: none' class='{$ret}";
 			}
 			
 			echo "<dt{$titleID} {$dtState} onclick='return {$this->id}_toggleDD(this);'>";
