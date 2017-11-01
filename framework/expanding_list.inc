@@ -196,7 +196,7 @@ class ExpandingList
 			else
 			{
 				$dtState = "class='{$ret}'";
-				$ddState = "style='display: none' class='{$ret}";
+				$ddState = "style='display: none' class='{$ret}'";
 			}
 			
 			echo "<dt{$titleID} {$dtState} onclick='return {$this->id}_toggleDD(this);'>";
