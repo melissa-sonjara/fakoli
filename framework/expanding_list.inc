@@ -175,7 +175,8 @@ class ExpandingList
 		{
 			if (is_callable($this->onItemStart))
 			{
-				if (call_user_func($this->onItemStart, $item) === false) continue;
+				$ret =call_user_func($this->onItemStart, $item);
+				if ($ret === false) continue;
 			}
 			
 			$titleID = ($this->titleIDFormat) ? $item->format(" id='{$this->titleIDFormat}'") : "";
@@ -189,12 +190,12 @@ class ExpandingList
 			
 			if ($expanded)
 			{
-				$dtState = "class='expanded'";
+				$dtState = "class='expanded {$ret}'";
 				$ddState = "style=''";
 			}
 			else
 			{
-				$dtState = "";
+				$dtState = "class='{$ret}'";
 				$ddState = "style='display: none'";
 			}
 			
