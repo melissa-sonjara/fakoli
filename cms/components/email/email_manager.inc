@@ -370,12 +370,33 @@ class EmailManager
 		return $rtn;
 	}
 	
-	static function send($sendingItem, $name, $onSendComplete = "")
+	/**
+	 * Sends an email template, based on the supplied DataItem (or array of DataItems)
+	 * @param mixed $source either a single DataItem, or an array of DataItems
+	 * @param string $name the identifier of the email template 
+	 * @param callable $onSendComplete callback handler to be called after all generated emails have been sent
+	 * @return number|boolean
+	 */
+	static function send($source, $name, $onSendComplete = "")
 	{
 		$emailTemplate = EmailTemplate::getEmailTemplate($name);
 
 		if($emailTemplate)
 		{
+			if (is_array($sendingItem))
+			{
+				$sendingItem = new JoinResult();
+				foreach($source as $item)
+				{
+					$cl = get_class($item);
+					$sendingItem->$cl = $item;
+				}
+			}
+			else
+			{
+				$sendingItem = $source;
+			}
+			
 			trace("Sending email '$name'", 3);
 			$emailManager = new EmailManager($sendingItem, $emailTemplate, $onSendComplete);
 			$rtn = $emailManager->sendEmail();
