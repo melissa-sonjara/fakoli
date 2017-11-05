@@ -35,3 +35,9 @@ ALTER TABLE redirect ADD COLUMN exemption_flag varchar(50) not null default '';
 ALTER TABLE redirect ADD COLUMN exempt_roles varchar(1000) not null default '';
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE redirect ADD COLUMN preserve_query_string TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.3

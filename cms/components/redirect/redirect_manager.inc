@@ -40,7 +40,17 @@ class RedirectManager
 							 ->bind(":p", $path)
 							 ->executeSingle();
 			
-			redirect($redirect->redirect_to);
+			if ($redirect->preserve_query_string)
+			{
+				$redirect = (strpos($redirect->redirect_to, "?") !== false) ?
+								$redirect->redirect_to."?".getCleanQueryString() : 
+								$redirect->redirect_to."&".getCleanQueryString();
+				redirect($redirect);
+			}
+			else
+			{
+				redirect($redirect->redirect_to);
+			}
 		}
 		catch(DataNotFoundException $e)
 		{
@@ -74,7 +84,17 @@ class RedirectManager
 			if ($redirect->exempt_roles && checkRole($redirect->exempt_roles)) return;
 			if ($redirect->exemption_flag && $_SESSION[$redirect->exemption_flag]) return;
 			
-			redirect($redirect->redirect_to);
+			if ($redirect->preserve_query_string)
+			{
+				$redirect = (strpos($redirect->redirect_to, "?") !== false) ?
+				$redirect->redirect_to."?".getCleanQueryString() :
+				$redirect->redirect_to."&".getCleanQueryString();
+				redirect($redirect);
+			}
+			else
+			{
+				redirect($redirect->redirect_to);
+			}
 		}
 	}
 	
