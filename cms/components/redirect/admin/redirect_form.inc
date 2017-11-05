@@ -21,7 +21,7 @@ $form->annotate("exemption_flag", "Specifies the name of a flag that can be set 
 $roleSelect = new CheckListFieldRenderer($form, "exempt_roles", "Exempt Roles", SiteRole::getRolesArray());
 $roleSelect->setSize(350, 150, 10);
 
-$form->group("Redirect Settings", "redirect_from", "redirect_to", "user_id", "active", "override");
+$form->group("Redirect Settings", "redirect_from", "redirect_to", "user_id", "active", "override", "preserve_query_string");
 $form->group("Exemptions", "exemption_flag", "exempt_roles");
 $form->makeGroupCollapsible("Exemptions", "override");
 
