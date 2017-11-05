@@ -383,7 +383,7 @@ class EmailManager
 
 		if($emailTemplate)
 		{
-			if (is_array($sendingItem))
+			if (is_array($source))
 			{
 				$sendingItem = new JoinResult();
 				foreach($source as $item)
