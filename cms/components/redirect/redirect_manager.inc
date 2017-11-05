@@ -42,7 +42,7 @@ class RedirectManager
 			
 			if ($redirect->preserve_query_string)
 			{
-				$redirect = (strpos($redirect->redirect_to, "?") !== false) ?
+				$redirect = (strpos($redirect->redirect_to, "?") === false) ?
 								$redirect->redirect_to."?".getCleanQueryString() : 
 								$redirect->redirect_to."&".getCleanQueryString();
 				redirect($redirect);
@@ -86,7 +86,7 @@ class RedirectManager
 			
 			if ($redirect->preserve_query_string)
 			{
-				$redirect = (strpos($redirect->redirect_to, "?") !== false) ?
+				$redirect = (strpos($redirect->redirect_to, "?") === false) ?
 				$redirect->redirect_to."?".getCleanQueryString() :
 				$redirect->redirect_to."&".getCleanQueryString();
 				redirect($redirect);
