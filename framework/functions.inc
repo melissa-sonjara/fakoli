@@ -1527,7 +1527,7 @@ function baseURI($uri = null)
  * Appends the specified parameters to the supplied query string.
  * @param string $qs the query string
  * @param string $params parameters to append in query string format
- * @return combined string
+ * @return string combined string
  */
 function appendToQueryString($qs, $params)
 {
