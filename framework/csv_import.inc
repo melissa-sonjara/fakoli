@@ -83,6 +83,7 @@ class CSVImport
 	var $onPostImport = null;
 	var $lines = 0;
 	var $imported = 0;
+	var $limit = -1;
 	var $tx;
 	
 	function __construct($class)
@@ -160,6 +161,8 @@ class CSVImport
 			while($values = fgetcsv($fp))
 			{
 				$this->lines++;
+				
+				if ($this->limit > -1 && $this->imported >= $this->limit) continue;
 				
 				$item = new $this->class;
 				$item->joinTransaction($tx);
