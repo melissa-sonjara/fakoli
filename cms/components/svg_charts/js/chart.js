@@ -141,8 +141,7 @@ var Chart = new Class(
 		var DOMURL = window.URL || window.webkitURL || window;
 
 		var img = new Image();
-		var svg = 'data:image/svg+xml;"' +
-			encodeURIComponent('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'+ data);
+		var svg = 'data:image/svg+xml;' + encodeURIComponent(/*'<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'+*/ data);
 
 		img.onload = function() {
 		  ctx.drawImage(img, 0, 0);
