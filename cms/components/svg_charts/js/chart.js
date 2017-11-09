@@ -134,8 +134,39 @@ var Chart = new Class(
 		var s = this.container.getElement('svg').clone();
 		var tmp = new Element('div');
 		tmp.adopt(s);
-		svg = tmp.get('html');
+		var data = tmp.get('html');
 		tmp.destroy();
+		
+		
+		var ctx = this.canvas.getContext('2d');
+
+		var DOMURL = window.URL || window.webkitURL || window;
+
+		var img = new Image();
+		var svg = new Blob([data], {type: 'image/svg+xml'});
+		var url = DOMURL.createObjectURL(svg);
+
+		img.onload = function() {
+		  ctx.drawImage(img, 0, 0);
+		  DOMURL.revokeObjectURL(url);
+		  
+		  if (!this.form)
+  		  {
+				this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_image', display: 'none'});
+				var input = new Element("input", {type: 'hidden', name: 'img', value: ''});
+				var filename = new Element("input", {type: 'hidden', name: 'filename', value: this.id});
+				
+				this.form.adopt(input);
+				this.form.adopt(filename);
+				document.body.adopt(this.form);
+			}
+			
+			var img = document.getElementById(this.id + "_canvas").toDataURL("image/png");
+		    this.form["img"].value = img;
+		    this.form.submit();
+		};
+
+		img.src = url;
 		
 	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
 	    							ignoreMouse: true, 
