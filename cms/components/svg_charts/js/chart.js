@@ -187,34 +187,7 @@ var Chart = new Class(
 		    this.form.submit();
 		}.bind(this);
 
-		//this.container.adopt(img);
 		img.src = svg;
-
-//	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
-//	    							ignoreMouse: true, 
-//	    							ignoreAnimation: true, 
-//	    							ignoreDimensions: true,
-//	    							offsetX: 0,
-//	    							offsetY: 0,
-//	    							ignoreClear: showBg});
-	},
-	
-	saveImageCallback: function()
-	{
-		if (!this.form)
-		{
-			this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_image', display: 'none'});
-			var input = new Element("input", {type: 'hidden', name: 'img', value: ''});
-			var filename = new Element("input", {type: 'hidden', name: 'filename', value: this.id});
-			
-			this.form.adopt(input);
-			this.form.adopt(filename);
-			document.body.adopt(this.form);
-		}
-		
-		var img = document.getElementById(this.id + "_canvas").toDataURL("image/png");
-	    this.form["img"].value = img;
-	    this.form.submit();
 	},
 	
 	path: function()
