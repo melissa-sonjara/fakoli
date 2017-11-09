@@ -10,7 +10,7 @@ Snap.plugin(function (Snap, Element, Paper, glob)
     svg.remove();
 	
     var words = txt.split(/\s+/);
-    var width_so_far = 0, current_line=0, lines=[''];
+    var width_so_far = 0, current_line=0, lines=[];
     for (var i = 0; i < words.length; i++) 
     {
        var l = words[i].length;
