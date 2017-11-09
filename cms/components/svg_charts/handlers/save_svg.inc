@@ -1,6 +1,6 @@
 <?php
 
-$image = $_POST["svg"];
+$image = $_POST["img"];
 $filename = checkIdentifier($_POST["filename"]);
 
 trace($image, 3);
