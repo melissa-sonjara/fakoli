@@ -125,17 +125,15 @@ var Chart = new Class(
 		var svg = this.generateSVGDataURL();
 		if (!this.form)
  		{
-			this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_image', display: 'none'});
-			var input = new Element("input", {type: 'hidden', name: 'img', value: ''});
+			this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_svg', display: 'none'});
+			var input = new Element("input", {type: 'hidden', name: 'svg', value: svg});
 			var filename = new Element("input", {type: 'hidden', name: 'filename', value: this.id});
 				
 			this.form.adopt(input);
 			this.form.adopt(filename);
 			document.body.adopt(this.form);
 		}
-			
-		var output = document.getElementById(this.id + "_canvas").toDataURL("image/png");
-		this.form["img"].value = output;
+		
 		this.form.submit();
 	},
 
