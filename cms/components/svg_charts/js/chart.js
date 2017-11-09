@@ -164,7 +164,7 @@ var Chart = new Class(
 		    this.form.submit();
 		}.bind(this);
 
-		this.container.adopt(img);
+		//this.container.adopt(img);
 		img.src = svg;
 
 //	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
