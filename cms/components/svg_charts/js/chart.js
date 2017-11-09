@@ -126,7 +126,7 @@ var Chart = new Class(
 		if (!this.form)
  		{
 			this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_svg', display: 'none'});
-			var input = new Element("input", {type: 'hidden', name: 'svg', value: svg});
+			var input = new Element("input", {type: 'hidden', name: 'img', value: svg});
 			var filename = new Element("input", {type: 'hidden', name: 'filename', value: this.id});
 				
 			this.form.adopt(input);
