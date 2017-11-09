@@ -141,12 +141,10 @@ var Chart = new Class(
 		var DOMURL = window.URL || window.webkitURL || window;
 
 		var img = new Image();
-		var svg = new Blob([data], {type: 'image/svg+xml'});
-		var url = DOMURL.createObjectURL(svg);
+		var svg = "data:image/svg+xml;"+ data;
 
 		img.onload = function() {
 		  ctx.drawImage(img, 0, 0);
-		  DOMURL.revokeObjectURL(url);
 		  
 		  if (!this.form)
   		  {
@@ -165,7 +163,7 @@ var Chart = new Class(
 		};
 
 		this.container.adopt(img);
-		img.src = url;
+		img.src = svg;
 
 //	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
 //	    							ignoreMouse: true, 
