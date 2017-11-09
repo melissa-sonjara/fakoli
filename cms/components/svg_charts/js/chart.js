@@ -137,6 +137,7 @@ var Chart = new Class(
 		tmp.adopt(s);
 		var data = tmp.get('html');
 		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+		data = data.replace("</defs>", "</defs><style>* { font-family: 'Arial'}</style>");
 		tmp.destroy();
 		
 		var DOMURL = window.URL || window.webkitURL || window;
