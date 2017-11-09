@@ -166,13 +166,13 @@ var Chart = new Class(
 
 		img.src = url;
 		
-	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
-	    							ignoreMouse: true, 
-	    							ignoreAnimation: true, 
-	    							ignoreDimensions: true,
-	    							offsetX: 0,
-	    							offsetY: 0,
-	    							ignoreClear: showBg});
+//	    canvg(this.canvas.id, svg, {renderCallback: this.saveImageCallback.bind(this), 
+//	    							ignoreMouse: true, 
+//	    							ignoreAnimation: true, 
+//	    							ignoreDimensions: true,
+//	    							offsetX: 0,
+//	    							offsetY: 0,
+//	    							ignoreClear: showBg});
 	},
 	
 	saveImageCallback: function()
