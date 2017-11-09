@@ -122,10 +122,11 @@ var Chart = new Class(
 		}
 		
 		var showBg = false;
+
+		var ctx = this.canvas.getContext("2d");
 		
 		if (this.options.canvasBackground)
 		{
-			var ctx = this.canvas.getContext("2d");
 			ctx.fillStyle = this.options.canvasBackground;
 			ctx.fillRect(0, 0, w, h);
 			showBg = true;
@@ -137,9 +138,6 @@ var Chart = new Class(
 		var data = tmp.get('html');
 		tmp.destroy();
 		
-		
-		var ctx = this.canvas.getContext('2d');
-
 		var DOMURL = window.URL || window.webkitURL || window;
 
 		var img = new Image();
