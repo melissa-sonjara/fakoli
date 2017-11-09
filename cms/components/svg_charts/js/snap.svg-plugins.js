@@ -14,7 +14,7 @@ Snap.plugin(function (Snap, Element, Paper, glob)
     for (var i = 0; i < words.length; i++) 
     {
        var l = words[i].length;
-       if (width_so_far + (l * letter_width) > max_width) 
+       if (i != 0 && width_so_far + (l * letter_width) > max_width) 
        {
           lines.push('');
           current_line++;
