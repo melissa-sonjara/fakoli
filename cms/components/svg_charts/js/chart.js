@@ -106,7 +106,39 @@ var Chart = new Class(
 	{
 	    return !!document.createElementNS && !! document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
 	},
+
+	generateSVGDataURL: function()
+	{
+		var s = this.container.getElement('svg').clone();
+		var tmp = new Element('div');
+		tmp.adopt(s);
+		var data = tmp.get('html');
+		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+		data = data.replace("</defs>", "</defs><style>* { font-family: 'Arial'}</style>");
+		tmp.destroy();
+		var svg = 'data:image/svg+xml;base64,' + btoa(data);
+		return svg;
+	},
 	
+	saveSVG: function()
+	{
+		var svg = this.generateSVGDataURL();
+		if (!this.form)
+ 		{
+			this.form = new Element("form", {method: 'post', action: '/action/svg_charts/save_image', display: 'none'});
+			var input = new Element("input", {type: 'hidden', name: 'img', value: ''});
+			var filename = new Element("input", {type: 'hidden', name: 'filename', value: this.id});
+				
+			this.form.adopt(input);
+			this.form.adopt(filename);
+			document.body.adopt(this.form);
+		}
+			
+		var output = document.getElementById(this.id + "_canvas").toDataURL("image/png");
+		this.form["img"].value = output;
+		this.form.submit();
+	},
+
 	saveImage: function()
 	{	
 		var w = this.container.getWidth();
@@ -132,18 +164,11 @@ var Chart = new Class(
 			showBg = true;
 		}
 		
-		var s = this.container.getElement('svg').clone();
-		var tmp = new Element('div');
-		tmp.adopt(s);
-		var data = tmp.get('html');
-		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
-		data = data.replace("</defs>", "</defs><style>* { font-family: 'Arial'}</style>");
-		tmp.destroy();
+		var svg = this.generateSVGDataURL();
 		
 		var DOMURL = window.URL || window.webkitURL || window;
 
 		var img = new Image();
-		var svg = 'data:image/svg+xml;base64,' + btoa(data);
 
 		img.onload = function() {
 		  ctx.drawImage(img, 0, 0);
