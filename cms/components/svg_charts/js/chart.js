@@ -136,7 +136,7 @@ var Chart = new Class(
 		var tmp = new Element('div');
 		tmp.adopt(s);
 		var data = tmp.get('html');
-		data = data.replace('xmlns:xlink= "http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"');
+		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
 		tmp.destroy();
 		
 		var DOMURL = window.URL || window.webkitURL || window;
