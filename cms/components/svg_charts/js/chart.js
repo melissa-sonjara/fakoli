@@ -162,7 +162,7 @@ var Chart = new Class(
 			var output = document.getElementById(this.id + "_canvas").toDataURL("image/png");
 		    this.form["img"].value = output;
 		    this.form.submit();
-		};
+		}.bind(this);
 
 		this.container.adopt(img);
 		img.src = svg;
