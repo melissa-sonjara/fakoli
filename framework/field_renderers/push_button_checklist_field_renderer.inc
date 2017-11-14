@@ -189,7 +189,7 @@ function <?echo $fn?>(element)
 			$handler = $readonly ? "" : "{$this->parent->id}_{$field}_update(this);{$onChange}";
 			
 			// JDG 3/34/10, add border: none to correct IE8 display issue
-			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' data-value='{$value}' onclick='return false' {$disable}/>{$name}</a>";
+			$out[] = "<a class='pushbutton{$position}{$selected}'{$widthStyle} href='#' data-value='{$value}' onclick='{$handler}return false' {$disable}/>{$name}</a>";
 	
 			$count++;
 		}
