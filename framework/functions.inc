@@ -669,6 +669,16 @@ function checkIdentifier($p)
 }
 
 /**
+ * Security helper function. Check that the given parameter is a valid email. Empty string is valid
+ * @param string $e the parameter to check
+ * @return string the value of the parameter if it matches the required format
+ */
+function checkValidEmail($e)
+{
+	return (filter_var($e, FILTER_VALIDATE_EMAIL)) ? $e : die("Invalid Parameter");
+}
+
+/**
  * Utility function to nicely format addresses, etc.                 
  * (skips blank entries, places all other entries on separate lines) 
  *
@@ -688,9 +698,10 @@ return $color;
  * Truncate the supplied text at the given maximum length. If the
  * string is truncated then an ellipsis is added.
  * 
- * @param unknown_type $txt the text to truncate
- * @param unknown_type $max the maximum allowed length
- * @param unknown_type $wholeWord true to truncate to whole words only 
+ * @param string $txt the text to truncate
+ * @param integer $max the maximum allowed length
+ * @param boolean $wholeWord true to truncate to whole words only 
+ * @return string the truncated string
  */
 function ellipsis($txt, $max, $wholeWord = false)
 {
