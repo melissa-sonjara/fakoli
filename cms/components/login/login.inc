@@ -271,6 +271,8 @@ class LoginManager
 			return LoginManager::$error = "Incorrect user name or password.";			
 		}
 		
+		ComponentManager::fireEvent("OnLoginSubmit");
+		
 		$user = $mgr->validatePassword($username, $password);
 
 		if ($user && LoginManager::$extension)
@@ -305,6 +307,9 @@ class LoginManager
 			}
 				
 			LoginManager::recordLoginAttempt($username, "login", null, "success");
+			
+			ComponentManager::fireEvent("OnLoginSuccess");
+			
 			$mgr->loadDefaultSession($user);
 			$mgr->loginRedirect($user);
 		}
@@ -324,6 +329,7 @@ class LoginManager
 			{	
 				LoginManager::recordLoginAttempt($username, "login", null, "failure");
 				LoginManager::$error = "Incorrect user name or password.";
+				ComponentManager::fireEvent("OnLoginFailure");
 			}
 		}
 	}
