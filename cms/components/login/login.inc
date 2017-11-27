@@ -262,7 +262,7 @@ class LoginManager
 		}
 		
 		trace("Fakoli LoginManager validateLogin username $username", 3);
-		trace(print_r($_POST, true), 3);
+		//trace(print_r($_POST, true), 3);
 		
 		// JDG - guard against data not found exception
 		if(!$username OR !$password)
@@ -291,7 +291,7 @@ class LoginManager
 			
 			$_SESSION["user"] = $user;
 
-			trace("USER: ".serialize($user), 1);
+			//trace("USER: ".serialize($user), 1);
 
 			if (Settings::getValue("login", "enable_username_cookie") && $remember)
 			{
@@ -348,7 +348,9 @@ class LoginManager
 		{
 			LoginManager::$error = "Incorrect user name or password.";
 			return "ERROR|".LoginManager::$error;
-		}			
+		}
+		
+		ComponentManager::fireEvent("OnLoginSubmit");
 	
 		$user = $mgr->validatePassword($username, $password);
 
@@ -359,6 +361,8 @@ class LoginManager
 			$_SESSION["user"] = $user;
 
 			LoginManager::recordLoginAttempt($username, "ajax", null, "success");
+			
+			ComponentManager::fireEvent("OnLoginSuccess");
 			
 			$mgr->loadDefaultSession($user);
 			return "OK|".$mgr->getLoginRedirect($user);
@@ -378,6 +382,9 @@ class LoginManager
 			{	
 				LoginManager::$error = "Incorrect user name or password.";
 				LoginManager::recordLoginAttempt($username, "ajax", null, "failure");
+				
+				ComponentManager::fireEvent("OnLoginFailure");
+				
 				return "ERROR|".LoginManager::$error;
 			}
 		}
@@ -388,7 +395,7 @@ class LoginManager
 	 *
 	 * Delete any records in this component that have dependencies on user object.
 	 *
-	 * @param obj $user - class SiteUser or custom user class
+	 * @param SiteUser $user - class SiteUser or custom user class
 	 */
 	static function deleteUser($user)
 	{
