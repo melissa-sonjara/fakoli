@@ -1280,11 +1280,11 @@ ENDSCRIPT;
 				}
 			}
 					
-			$msg = "<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
+			$msg = $exception->getMessage()."<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
 			
 			if ($isAction)
 			{
-				echo $exception->getMessage().$msg;
+				echo $msg;
 			}
 			else
 			{
