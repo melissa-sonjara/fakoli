@@ -112,6 +112,8 @@ class Fakoli
 	 */
 	static function using()
 	{
+		global $config;
+		
 		$num = func_num_args();
 		for($i = 0; $i < $num; ++$i)
 		{
@@ -124,10 +126,20 @@ class Fakoli
 			$includes = Cache::get("fakoli_includes_$component");
 			if ($includes)
 			{
-				foreach($includes as $include)
+				if ($config['strict_includes'])
 				{
-					require_once $include;
+					foreach ($includes as $include)
+					{
+						require_once $include;
+					}
 				}
+				else
+				{
+					foreach ($includes as $include)
+					{
+						include_once $include;
+					}
+				}				
 				continue;
 			}
 	
