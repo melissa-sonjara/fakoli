@@ -31,6 +31,11 @@
 
 *****************************************************************/
 
+if (php_sapi_name() != "cli")
+{
+	Fakoli::end("Remote processing disabled");
+}
+
 $home    = $argv[1];
 $id      = $argv[2];
 $action  = $argv[3];
