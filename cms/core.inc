@@ -1185,7 +1185,7 @@ ENDSCRIPT;
 	
 	/**
 	 * Schedules the provided script fragment to be output when the next page is loaded.
-	 * @param string $s the script to be executed (including the enclosing <script> tags)
+	 * @param string $s the script to be executed (including the enclosing script tags)
 	 */
 	function scriptOnNextPage($s)
 	{
