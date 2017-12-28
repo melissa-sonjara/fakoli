@@ -114,7 +114,26 @@ var Chart = new Class(
 		tmp.adopt(s);
 		var data = tmp.get('html');
 		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
-		data = data.replace("</defs>", "</defs><style>* { font-family: 'Arial'}</style>");
+		data = data.replace("</defs>", "</defs><style type='text/css'>* { font-family: 'Arial'}</style>");
+		tmp.destroy();
+		var svg = 'data:image/svg+xml;base64,' + btoa(data);
+		return svg;
+	},
+
+	generateSVGDataURLFixedSize: function(w, h)
+	{
+		var s = this.container.getElement('svg').clone();
+		var tmp = new Element('div');
+		tmp.adopt(s);
+		var data = tmp.get('html');
+		
+		var tag = data.match(/<svg.*>/m);
+		var fixed = tag[0].replace('width="100%"', 'width="' + w + 'px"');
+		fixed = fixed.replace('height="100%"', 'height="' + h + 'px"');
+		data = data.replace(tag[0], fixed);
+		
+		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+		data = data.replace("</defs>", "</defs><style type='text/css'>* { font-family: 'Arial'}</style>");
 		tmp.destroy();
 		var svg = 'data:image/svg+xml;base64,' + btoa(data);
 		return svg;
@@ -141,6 +160,9 @@ var Chart = new Class(
 	{	
 		var w = this.container.getWidth();
 		var h = this.container.getHeight();
+
+		w = Math.floor(w+.5);
+		h = Math.floor(h+.5);
 		
 		if (!this.canvas)
 		{
@@ -162,11 +184,11 @@ var Chart = new Class(
 			showBg = true;
 		}
 		
-		var svg = this.generateSVGDataURL();
+		var svg = this.generateSVGDataURLFixedSize(w, h);
 		
 		var DOMURL = window.URL || window.webkitURL || window;
 
-		var img = new Image();
+		var img = new Image(w, h);
 
 		img.onload = function() 
 		{
