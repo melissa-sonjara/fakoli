@@ -20,6 +20,10 @@ var HistogramSeries = new Class(
 		colorMode: 'series',
 		colorFunction: Class.Empty,
 		toolTips: [],
+		labels: [],
+		labelSize: 24,
+		labelColor: '#000',
+		labelClass: 'value-label',
 		indicateTooltips: false,
 		areaFill: false,
 		areaFillOpacity: 0,
@@ -86,6 +90,13 @@ var HistogramSeries = new Class(
 	
 	drawDots: function(chart, index)
 	{
+		var renderer = this.getRenderer(chart, index);
+		if (renderer) renderer.drawDots();
+	},
+	
+	drawLabels: function(chart, index)
+	{
+		if (this.options.labels.length == 0) return;
 		var renderer = this.getRenderer(chart, index);
 		if (renderer) renderer.drawDots();
 	},
@@ -219,6 +230,10 @@ var VerticalBlockSeriesRenderer = new Class(
 	{
 	},
 	
+	drawLabels: function()
+	{		
+	},
+	
 	// Morph this series to match the values of the supplied series
 	morph: function(series)
 	{
@@ -331,6 +346,10 @@ var HorizontalBlockSeriesRenderer = new Class(
 	{
 	},
 	
+	drawLabels: function()
+	{		
+	},
+	
 	// Morph this series to match the values of the supplied series
 	morph: function(series)
 	{
@@ -356,6 +375,7 @@ var LineSeriesRenderer = new Class(
 	index: 0,
 	path: Class.Empty,
 	dots: [],
+	labels: [],
 	
 	initialize: function(chart, series, index)
 	{
@@ -374,7 +394,8 @@ var LineSeriesRenderer = new Class(
 		this.drawLine();
 		if (this.series.group === null || this.series.group === undefined) 
 		{
-			this.drawDots();	
+			this.drawDots();
+			this.drawLabels();
 		}
 	},
 	
@@ -419,6 +440,21 @@ var LineSeriesRenderer = new Class(
 			var f = this.calculatePath(this.series, true);
 			this.fill = this.chart.paper.path(f).attr({"stroke-width": 0, stroke: lineColor, fill: lineColor, 'fill-opacity': this.series.options.areaFillOpacity});
 		}
+	},
+	
+	drawLabels: function()
+	{		
+		this.coords.each(function(c, i) 
+		{
+			if (c !== null)
+			{
+				var label = this.chart.paper.text(c.x, c.y - 20, this.series.options.labels[i])
+												.attr({"text-anchor": "middle", 
+													   "font-size": this.series.options.labelSize, 
+													   "fill": this.series.options.labelColor,
+													   "class": this.series.options.labelClass});
+			}
+		}.bind(this));
 	},
 	
 	calculatePath: function(series, closed)
