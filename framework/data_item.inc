@@ -689,6 +689,8 @@ class DataItem extends AbstractDataItem
 		
 		try
 		{
+			$this->fireEvent("beforeUpdate");
+			
 			$db = $this->getConnection();
 			
 			$success = $db->exec($query);
@@ -796,7 +798,9 @@ class DataItem extends AbstractDataItem
 		$success = false;
 		
 		try
-		{
+		{			
+			$this->fireEvent("beforeInsert");
+
 			$db = $this->getConnection();
 			$success = $db->exec($query);
 			
