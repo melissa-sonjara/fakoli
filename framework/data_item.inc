@@ -565,6 +565,28 @@ class DataItem extends AbstractDataItem
 		
 
 	/**
+	 * Retrieves the currently stored state of the DataItem from the database
+	 * and returns it as a new object. This can be used for comparisons when updating
+	 * a DataItem, for instance to trigger related updates when a field value is changed. 
+	 * 
+	 * @return DataItem a DataItem populated from the database based on the current item's 
+	 * primary key. The returned DataItem has the same filter and DataTransaction as the 
+	 * parent item.
+	 */
+	function old()
+	{
+		$pk = $this->getPrimaryKeyValue();
+		if (!$pk) return null;
+		
+		$cl = get_class($this);
+		$n = new $cl;
+		$n->filter = $this->filter;
+		$n->joinTransaction($this->getTransaction());
+		$n->load($pk);
+		return $n;	
+	}
+	
+	/**
 	 * Creates an outer CompositeDataItem from its base component. In order
 	 * for this method to succeed, the base component table must have a 'composite_class' 
 	 * field that is populated with the class name of the correct CompositeDataItem class.
