@@ -590,7 +590,7 @@ class DataItem extends AbstractDataItem
 	 * Creates an outer CompositeDataItem from its base component. In order
 	 * for this method to succeed, the base component table must have a 'composite_class' 
 	 * field that is populated with the class name of the correct CompositeDataItem class.
-	 * @return the containing CompositeDataItem for this base component.
+	 * @return CompositeDataItem the containing CompositeDataItem for this base component.
 	 */
 	function loadComposite()
 	{
