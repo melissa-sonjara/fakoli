@@ -526,7 +526,7 @@ abstract class AbstractDataItem
 			}
 			else
 			{
-				$v = htmlentities($data, ENT_COMPAT | ENT_XHTML);
+				$v = htmlentities($data, ENT_COMPAT | ENT_XML1);
 				break;
 			}
 			
@@ -537,7 +537,7 @@ abstract class AbstractDataItem
 		case Text:
 		default:
 		
-			$v = htmlentities($data, ENT_COMPAT | ENT_XHTML);
+			$v = htmlentities($data, ENT_COMPAT | ENT_XML1);
 			break;
 		}
 		
