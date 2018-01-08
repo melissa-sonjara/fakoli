@@ -1,7 +1,5 @@
 <?php
 /** @mainpage Fakoli - A Rapid Application Development Framework
- *  
- * @image html tree_logo_large.jpg
  * 
  * @authors Sonjara, Inc (Andy Green, Janice Gallant, Reshma Joshi, Siobhan Green)
  * 
@@ -15,4 +13,5 @@
  * @see DataItem based classes that represent database tables and the relations between them. These classes
  * can then be used to navigate the data model and display forms and data in a variety of ways.
  *
+ * For more information, including programming tutorials and installation help, visit http://www.fakoli.org/
  */
