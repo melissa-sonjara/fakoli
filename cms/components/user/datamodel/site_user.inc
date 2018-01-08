@@ -67,11 +67,6 @@ class SiteUser extends DataItem
 	{
 		return $this->format("{first_name} {last_name}");
 	}
-	
-	function getAdminForm()
-	{		
-		return "user_form.php";
-	}
 }
 
 ?>
