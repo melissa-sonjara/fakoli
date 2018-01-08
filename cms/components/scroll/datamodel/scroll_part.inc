@@ -11,12 +11,24 @@ class ScrollPart extends DataItem
 						"content"			=>	HTML,
 						"php_code_file"		=>	String,
 						"css_class"			=>	String,
+						"styles"			=>	String,
+						"image_id"			=>	Image,
 						"sort_order"		=>	Number);
 						
-	var $relations = array("Scroll"	=>	Scroll);
+	var $relations = array(	"Scroll"			=>	Scroll,
+							"BackgroundImage"	=>	ImageRecord
+	);
 	
+	var $field_aliases = array(	"css_class"	=>	"CSS Class",
+								"styles"	=>	"Inline CSS Styles",
+								"image_id"	=>	"Background Image");
 	function Scroll()
 	{
 		return $this->getRelated(Scroll);
+	}
+	
+	function BackgroundImage()
+	{
+		return $this->getRelated(ImageRecord);
 	}
 }

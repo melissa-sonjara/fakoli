@@ -39,3 +39,10 @@ CREATE TABLE scroll_part
 ) ENGINE=InnoDB;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE scroll_part ADD COLUMN styles varchar(1000) not null default '';
+ALTER TABLE scroll_part ADD COLUMN image_id int(10) not null default 0;
+
+-- END Version 1.1

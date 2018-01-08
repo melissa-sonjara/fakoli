@@ -18,6 +18,12 @@ class ScrollView
 			$part->content = $this->renderCodePart($part);
 		}
 		
+		if ($part->image_id)
+		{
+			$imageStyle = $part->format('background-image: url(/action/image/show?image_id={image_id})');
+			$part->styles = ($part->styles) ? "; $imageStyle" : $imageStyle;
+		}
+		
 		$out = $part->format($partTemplate);
 		$out = preg_replace("/\\[((?:include|position):.*?)\\]/i", "{\$1}", $out);
 		return $out;

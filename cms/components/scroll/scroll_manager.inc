@@ -14,7 +14,7 @@ class ScrollManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("scroll", "scroll_part_template", "<a name='{title:codify}'></a>\n<div id='{title:codify}' class='part {css_class}'>\n<div class='content'>{content}</div>\n</div>", Text);
+		Settings::setDefaultValue("scroll", "scroll_part_template", "<a name='{title:codify}'></a>\n<div id='{title:codify}' class='part {css_class}' style='{styles}'>\n<div class='content'>{content}</div>\n</div>", Text);
 	}
 
 	static function scrollTabs($key)
