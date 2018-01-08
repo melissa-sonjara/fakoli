@@ -21,7 +21,7 @@ class ScrollView
 		if ($part->image_id)
 		{
 			$imageStyle = $part->format('background-image: url(/action/image/show?image_id={image_id})');
-			$part->styles = ($part->styles) ? "; $imageStyle" : $imageStyle;
+			$part->styles = ($part->styles) ? "{$part->styles}; $imageStyle" : $imageStyle;
 		}
 		
 		$out = $part->format($partTemplate);
