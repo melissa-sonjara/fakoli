@@ -19,7 +19,7 @@ class ScrollPart extends DataItem
 							"BackgroundImage"	=>	ImageRecord
 	);
 	
-	var $field_aliases = array(	"css_class"	=>	"CSS Class",
+	var $fieldAliases = array(	"css_class"	=>	"CSS Class",
 								"styles"	=>	"Inline CSS Styles",
 								"image_id"	=>	"Background Image");
 	function Scroll()
