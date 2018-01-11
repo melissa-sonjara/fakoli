@@ -130,12 +130,18 @@ var Chart = new Class(
 		var tag = data.match(/<svg.*>/m);
 		var fixed = tag[0].replace('width="100%"', 'width="' + w + 'px"');
 		fixed = fixed.replace('height="100%"', 'height="' + h + 'px"');
+		if (!fixed.includes("xmlns"))
+		{
+			fixed = fixed.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
+		}
+		
+		if (!fixed.includes("xmlns:xlink"))
+		{
+			fixed = fixed.replace("<svg", '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+		}
+		
 		data = data.replace(tag[0], fixed);
 		
-		if (!data.includes("xmlns="))
-		{
-			data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
-		}
 		data = data.replace("</defs>", "</defs><style type='text/css'>* { font-family: 'Arial'}</style>");
 		tmp.destroy();
 		var svg = 'data:image/svg+xml;base64,' + btoa(data);
