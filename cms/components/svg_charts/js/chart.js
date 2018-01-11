@@ -132,7 +132,7 @@ var Chart = new Class(
 		fixed = fixed.replace('height="100%"', 'height="' + h + 'px"');
 		data = data.replace(tag[0], fixed);
 		
-		if (!data.contains("xmlns="))
+		if (!data.includes("xmlns="))
 		{
 			data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
 		}
