@@ -132,7 +132,10 @@ var Chart = new Class(
 		fixed = fixed.replace('height="100%"', 'height="' + h + 'px"');
 		data = data.replace(tag[0], fixed);
 		
-		data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+		if (!data.contains("xmlns="))
+		{
+			data = data.replace('xmlns:xlink="http://www.w3.org/1999/xlink"', 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+		}
 		data = data.replace("</defs>", "</defs><style type='text/css'>* { font-family: 'Arial'}</style>");
 		tmp.destroy();
 		var svg = 'data:image/svg+xml;base64,' + btoa(data);
