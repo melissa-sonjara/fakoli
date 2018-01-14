@@ -52,6 +52,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $max_chars;				///< The maximum number of characters to display in the select choices (0 for no limit)
 	var $allowNone;				///< Set to true to provide an option for no selection
 	var $templateItem;			///< The template of a DataItem to use when adding items is enabled in the form via the allowAdd parameter
+	var $onItemAdded;			///< PHP callback function that is called after a new item was added by the user.
 	var $sorted;				///< Set to true to sort the items alphabetically (independent of any sort order in the constraint field)
 	var $otherField;			///< Name of a field in the form to allow the user to specify specific "Other" value that is not in the item list
 	var $onChange;				///< Name of a Javascript handler function to be called when the selection changes
@@ -480,6 +481,12 @@ function <?php echo $id?>_hideAddNew()
 			
 			$obj->set($nameField, $val);
 			$obj->save();
+			
+			if ($this->onItemAdded)
+			{
+				call_user_func($this->onItemAdded, $this->parent, $obj);
+			}
+			
 			$this->parent->data->set($valueField, $obj->get($pk));
 		}
 	}
