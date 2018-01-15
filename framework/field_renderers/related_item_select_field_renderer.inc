@@ -62,6 +62,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $toggleAddNew;			///< Use the new UI with an Add New button that toggles the text entry field
 	var $addNewButtonText = "Add New";	///< Text to show on the Add New button
 	var $addNewCancelButtonText = "Cancel"; ///< Text to show on the Add New Cancel button
+	var $onPostProcess;			///< PHP Callback that is fired when post-processing the field after the form data has been saved
 	
 	static $optionsCache = array();
 	
@@ -458,7 +459,7 @@ function <?php echo $id?>_hideAddNew()
 		
 		if (!$this->allowAdd) return;
 		$valueField = $valueField ? $this->valueField : $item->getPrimaryKey();
-		$field = "autoform_add_$valueField";
+		$field = "autoform_add_{$this->field}";
 		$val = $_POST[$field];
 		
 		trace("Checking for value '$val' in field $field", 3);
@@ -487,7 +488,17 @@ function <?php echo $id?>_hideAddNew()
 				call_user_func($this->onItemAdded, $this->parent, $obj);
 			}
 			
-			$this->parent->data->set($valueField, $obj->get($pk));
+			$this->parent->data->set($this->field, $obj->get($pk));
+		}
+	}
+	
+	
+	function postProcess($field = "")
+	{
+		if (is_callable($this->onPostProcess))
+		{
+			trace("*** Calling RelatedItemSelectFieldRenderer::\$onPostProcess", 3);
+			call_user_func($this->onPostProcess, $this->parent);
 		}
 	}
 }
