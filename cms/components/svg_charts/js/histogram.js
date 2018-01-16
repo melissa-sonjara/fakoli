@@ -1036,7 +1036,6 @@ var Histogram = new Class(
     	this.title.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize, 'text-anchor': 'middle', 'class': 'title'});
 	},
 	
-	
 	drawLegend: function()
 	{
 		if (this.options.legend)

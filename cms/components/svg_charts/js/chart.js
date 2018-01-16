@@ -7,6 +7,16 @@ var Chart = new Class(
 	palette:	Class.Empty,
 	saveIcon:	Class.Empty,
 	
+	options:
+	{
+		caption: '',
+		captionTop: 400,
+		captionLeft: 10,
+		captionWidth: 580,
+		captionAttributes: {},
+		exportStyles: []
+	},
+
 	initialize: function(id)
 	{
 		this.id = id;
@@ -39,7 +49,8 @@ var Chart = new Class(
 	draw: function()
 	{
 		this.fireEvent('drawChart', this);
-		this.drawChart();		
+		this.drawChart();
+		this.drawCaption();
 		this.fireEvent('drawChartComplete', this);
 		
 		if (this.testSVG() && this.options.enableDownload)
@@ -58,6 +69,13 @@ var Chart = new Class(
 			this.container.addEvent('mouseover', function() { this.saveIcon.position({relativeTo: this.container, position: 'topRight', edge: 'topRight'}); this.saveIcon.fade('in');}.bind(this));
 			this.container.addEvent('mouseout', function() { this.saveIcon.fade('out');}.bind(this));
 		}
+	},
+	
+	drawCaption: function()
+	{
+		if (this.options.caption == '') return;
+		this.caption = this.paper.multitext(this.options.captionX, this.options.captionY, this.options.caption, 
+											this.options.captionWidth, this.options.captionAttributes);
 	},
 	
 	drawLegend: function()
@@ -106,16 +124,25 @@ var Chart = new Class(
 	{
 	    return !!document.createElementNS && !! document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
 	},
-
-	generateSVGDataURL: function()
+	
+	svgDocType: '<?xml version="1.0" encoding="utf-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+	   
+	inlineStyles: 
+	[
+		"* { font-family: 'Arial', 'Helvetica', 'sans-serif'}"
+	],
+		
+	massageSVG: function(data)
 	{
-		var s = this.container.getElement('svg').clone();
-		var tmp = new Element('div');
-		tmp.adopt(s);
-		var data = tmp.get('html');
-		var tag = data.match(/<svg.*>/m);
+		var tag = data.match(/<svg.*?>/m);
 		var fixed = tag[0];
-		if (!fixed.includes("xmlns"))
+		
+		if (!fixed.includes("version"))
+		{
+			fixed = fixed.replace("<svg", "<svg version='1.1'");
+		}
+
+		if (!fixed.includes("xmlns="))
 		{
 			fixed = fixed.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
 		}
@@ -127,8 +154,24 @@ var Chart = new Class(
 
 		data = data.replace(tag[0], fixed);
 		
-		data = data.replace("</defs>", "</defs><style type='text/css'>* { font-family: 'Arial'}</style>");
+		var inlineStyles = this.inlineStyles.concat(this.options.exportStyles);
+		
+		data = data.replace("</defs>", "</defs><style type='text/css'>" + inlineStyles.join("\r\n") + "</style>");
+
+		data = this.svgDocType + data;
+		return data;
+	},
+	
+	generateSVGDataURL: function()
+	{
+		var s = this.container.getElement('svg').clone();
+		var tmp = new Element('div');
+		tmp.adopt(s);
+		var data = tmp.get('html');
 		tmp.destroy();
+		
+		data = this.massageSVG(data);
+		
 		var svg = 'data:image/svg+xml;base64,' + btoa(data);
 		return svg;
 	},
@@ -139,24 +182,14 @@ var Chart = new Class(
 		var tmp = new Element('div');
 		tmp.adopt(s);
 		var data = tmp.get('html');
-		
-		var tag = data.match(/<svg.*>/m);
-		var fixed = tag[0].replace('width="100%"', 'width="' + w + 'px"');
-		fixed = fixed.replace('height="100%"', 'height="' + h + 'px"');
-		if (!fixed.includes("xmlns"))
-		{
-			fixed = fixed.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
-		}
-		
-		if (!fixed.includes("xmlns:xlink"))
-		{
-			fixed = fixed.replace("<svg", '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-		}
-		
-		data = data.replace(tag[0], fixed);
-		
-		data = data.replace("</defs>", "</defs><style type='text/css'>* { font-family: 'Arial'}</style>");
 		tmp.destroy();
+		
+		var tag = data.match(/<svg.*?>/m);
+		var fixed = tag[0].replace('width="100%"', 'width="' + w + '"');
+		fixed = fixed.replace('height="100%"', 'height="' + h + '"');
+		data = data.replace(tag[0], fixed);
+
+		data = this.massageSVG(data);
 		var svg = 'data:image/svg+xml;base64,' + btoa(data);
 		return svg;
 	},
@@ -207,6 +240,7 @@ var Chart = new Class(
 		}
 		
 		var svg = this.generateSVGDataURLFixedSize(w, h);
+		//var svg = this.generateSVGDataURL();
 		
 		var DOMURL = window.URL || window.webkitURL || window;
 
@@ -231,6 +265,11 @@ var Chart = new Class(
 		    this.form.submit();
 		}.bind(this);
 
+		img.onerror = function() 
+		{ 
+			alert("PNG export failed");
+		};
+		
 		img.src = svg;
 	},
 	

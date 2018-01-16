@@ -193,6 +193,12 @@ class Histogram
 	var $onDrawLegend = "null";
 	var $onDrawLegendComplete = "null";
 	
+	var $caption = "";
+	var $captionX = 10;
+	var $captionY = 300;
+	var $captionWidth = 280;
+	var $captionAttributes = array();
+	
 	function __construct($id, $width = 300, $height = 300, $chartLeft = 25, $chartTop = 25, $chartWidth = 250, $chartHeight = 250, $palette = "standard")
 	{
 		$this->id = $id;
@@ -347,7 +353,21 @@ class Histogram
 		}
 		
 		$jsClass = $this->morphing ? "MorphingHistogram" : "Histogram";
-		
+	
+		if ($this->caption)
+		{
+			$caption = jsSafe($this->caption);
+			$captionAttrs = json_encode($this->captionAttributes);
+			$captionBlock = <<<ENDSCRIPT
+,
+		caption: '{$caption}',
+		captionX: {$this->captionX},
+		captionY: {$this->captionY},
+		captionWidth: {$this->captionWidth},
+		captionAttributes: {$captionAttrs}
+ENDSCRIPT;
+		}
+			
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function ()
@@ -391,7 +411,7 @@ window.addEvent('domready', function ()
 		onDrawChart: {$this->onDrawChart},
 	    onDrawChartComplete: {$this->onDrawChartComplete},
 	    onDrawLegend: {$this->onDrawLegend},
-		onDrawLegendComplete: {$this->onDrawLegendComplete}
+		onDrawLegendComplete: {$this->onDrawLegendComplete}{$captionBlock}
 	});
 	
 	{$this->id}.labels = [ {$labels} ];
