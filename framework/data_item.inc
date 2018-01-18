@@ -263,43 +263,43 @@ class DataItem extends AbstractDataItem
 		
 		$fields = $this->getFields();
 		
-    	if ($alias)
+    		if ($alias)
         {
-        	$offset = strlen($alias) + 1;
-        	
-	    	foreach ($line as $field => $value)
-	        {
-        		if (!startsWith($field, $alias)) continue;
-        		$field = substr($field, $offset);
-        	
-	        	if (!array_key_exists($field, $fields)) continue;
-	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+	        	$offset = strlen($alias) + 1;
 	        	
-	        	if ($config["no_charset_conversions"])
-	        	{
-	        		$this->$field = $value;
-	        	}
-	        	else
-	        	{
-	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
-	        	} 
+		    	foreach ($line as $field => $value)
+	        {
+	        		if (!startsWith($field, $alias)) continue;
+	        		$field = substr($field, $offset);
+	        	
+		        	if (!array_key_exists($field, $fields)) continue;
+		        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+		        	
+		        	if (!isset($config["no_charset_conversions"]) || $config["no_charset_conversions"])
+		        	{
+		        		$this->$field = $value;
+		        	}
+		        	else
+		        	{
+		            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+		        	} 
 	       	}
         }
         else
         {
 			foreach ($line as $field => $value)
 	        {
-	        	if (!array_key_exists($field, $fields)) continue;
-	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
-	        	
-	        	if ($config["no_charset_conversions"])
-	        	{
-	        		$this->$field = $value;
-	        	}
-	        	else
-	        	{
-	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
-	        	} 
+		        	if (!array_key_exists($field, $fields)) continue;
+		        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+		        	
+		        	if (!isset($config["no_charset_conversions"]) || $config["no_charset_conversions"])
+		        	{
+		        		$this->$field = $value;
+		        	}
+		        	else
+		        	{
+		            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+		        	} 
 	        } 
         }
         
