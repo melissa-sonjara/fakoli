@@ -56,11 +56,12 @@ class EmailManifest
 				"Email Templates"	=>	array("page"	=>	"/admin/email_template_list",
 											  "role"	=>	"admin",
 											  "weight"	=>	20,
-											  "icon"	=>	"at"),
+											  "icon"	=>	"envelope-square"),
 			
 				"Merge Codes"	=>	array("page"	=>	"/admin/merge_code_list",
 										  "role"	=>	"admin",
-										  "weight"	=>	21),
+										  "weight"	=>	21,
+										  "icon"	=>	"at"),
 				
 				"Email Logs"	=>	array("page"	=>	"/admin/email_logs",
 										  "role"	=>	"admin",
@@ -86,11 +87,13 @@ class EmailManifest
 			(
 				"Send Test Email"	=>	array("page"	=>	"/admin/test_email_form",
 											  "role"	=>	"admin",
-											  "weight"	=>	4),
+											  "weight"	=>	4,
+											  "icon"	=>	"share-square"),
 
 				"Email Debug Logs"	=>	array("page"	=>	"/admin/email_debug_logs",
-									  "role"	=>	"admin",
-									  "weight"	=>	5)
+											  "role"	=>	"admin",
+											  "weight"	=>	5,
+											  "icon"	=>	"archive")
 			)	
 		);
 	}
