@@ -54,28 +54,32 @@ class EmailManifest
 			(
 
 				"Email Templates"	=>	array("page"	=>	"/admin/email_template_list",
-									  "role"	=>	"admin",
-									  "weight"	=>	20),
+											  "role"	=>	"admin",
+											  "weight"	=>	20,
+											  "icon"	=>	"at"),
 			
 				"Merge Codes"	=>	array("page"	=>	"/admin/merge_code_list",
-									  "role"	=>	"admin",
-									  "weight"	=>	21),
+										  "role"	=>	"admin",
+										  "weight"	=>	21),
 				
 				"Email Logs"	=>	array("page"	=>	"/admin/email_logs",
 										  "role"	=>	"admin",
-										  "weight"	=>	22),
+										  "weight"	=>	22,
+										  "icon"	=>	"archive"),
 			
 			),
 			
 			"Collaboration"	=> array
 			(
 				"Contact Topics"	=>	array("page"	=>	"/admin/contact_topics",
-									  "role"	=>	"admin",
-									  "weight"	=>	25),
+											  "role"	=>	"admin",
+											  "weight"	=>	25,
+											  "icon"	=>	"comment"),
 				
 				"Contact Us Log"	=>	array("page"	=>	"/admin/contact_us_log",
 											  "role"	=>	"admin",
-											  "weight"	=>	26)
+											  "weight"	=>	26,
+											  "icon"	=>	"archive")
 			),
 				
 			"Developer Tools"	=>	array
