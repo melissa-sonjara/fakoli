@@ -55,9 +55,10 @@ class ForumManifest
 			"Collaboration"	=> array
 			(
 
-				"Forums"	=>	array("page"	=>	"/admin/forums",
-									  "role"	=>	"admin,editor",
-								  	  "weight"	=>	2)
+				"Forums"	=>	array("page"		=>	"/admin/forums",
+								  "role"		=>	"admin,editor",
+								  "weight"	=>	1,
+								  "icon"		=>	"comment-alt")
 			)
 		);		
 	}
