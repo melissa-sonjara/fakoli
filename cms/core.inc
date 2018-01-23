@@ -445,6 +445,31 @@ class Fakoli
 		return $menu;
 	}
 	
+	/**
+	 * Builds the admin icon map. Components can subscribe to the RegisterAdminIcons event
+	 * to specify icons for their own admin menu items.
+	 * @return array Array of icon names, indexed by menu item
+	 */
+	static function getAdminIcons()
+	{
+		$icons = Cache::get("fakoli_admin_icons");
+		if ($icons) return $icons;
+		
+		$icons = array("Site Content"		=> "file-alt",
+					   "Site Configuration"	=> "cogs",
+					   "Collaboration"		=> "comments",	
+					   "Classification"		=> "tags",
+					   "Email Management"	=> "envelope",
+					   "User Management"		=> "users",
+					   "Public Site"			=> "home"
+		);
+		
+		$icons = ComponentManager::fireEvent("RegisterAdminIcons", $icons);
+		
+		Cache::put("fakoli_admin_icons", $icons);
+		return $icons;
+	}
+	
 	private static function getAdminPageRoles()
 	{
 		$pageRoles = Cache::get("fakoli_admin_page_roles");

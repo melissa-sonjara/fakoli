@@ -97,8 +97,9 @@ class AdminPageView
 		//$content = ComponentManager::fireEvent("PostProcessContent", $content);
 		
 		$admin_menu = Fakoli::getAdminMenu();
+		$icons = Fakoli::getAdminIcons();
 		
-		$menu = $this->formatMenu($admin_menu);
+		$menu = $this->formatMenu($admin_menu, $icons);
 		
 		// If the script didn't provide a title, guess a reasonable default.
 		
@@ -156,7 +157,7 @@ class AdminPageView
 		ComponentManager::fireEvent("RequestComplete");	
 	}
 
-	function formatMenu($admin_menu)
+	function formatMenu($admin_menu, $icons)
 	{	
 		global $menu_item;
 		
@@ -173,7 +174,18 @@ class AdminPageView
 		foreach($admin_menu as $section => $items)
 		{
 			$found = false;
-			$submenu = " <h4 class=\"toggler atStart\">{$section}</h4>\n <div class=\"atStart\">\n";
+			
+			$icon = $icons[$section];
+			if ($icon)
+			{
+				$icon = "<i class='fas fa-{$icon} fa-fw'></i>";
+			}
+			else
+			{
+				$icon = "<i class='fas fa-fw'></i>";
+			}
+			
+			$submenu = " <h4 class=\"toggler atStart\">{$icon} {$section}</h4>\n <div class=\"atStart\">\n";
 
 			foreach($items as $item => $properties)
 			{
@@ -186,9 +198,16 @@ class AdminPageView
 				{
 					$class = 'adminmenuitem';
 				}
+				
+				$icon = $icons[$item];
+				if ($icon)
+				{
+					$icon = "<i class='fas fa-{$icon} fa-fw'></i>";
+				}
+				
 				if (checkRole($properties["role"]))
 				{
-					$submenu .= "<a class='$class' href='{$properties['page']}{$menu_params}'>{$item}</a>\n";
+					$submenu .= "<a class='$class' href='{$properties['page']}{$menu_params}'>{$icon} {$item}</a>\n";
 					$found = true;
 				}
 			}

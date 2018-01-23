@@ -45,7 +45,8 @@ class DeveloperToolsManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(DeveloperToolsManager, setDefaults)
+					"ComponentScanComplete"	=>	array(DeveloperToolsManager, setDefaults),
+					"RegisterAdminIcons"		=>	array(DeveloperToolsManager, registerIcons)
 					//TODO: Add Event Registrations here
 		);
 	}

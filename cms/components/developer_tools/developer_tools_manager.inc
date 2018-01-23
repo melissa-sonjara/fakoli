@@ -17,6 +17,12 @@ class DeveloperToolsManager
 		//TODO: Set default configuration parameters here
 	}
 
+	static function registerIcons($icons)
+	{
+		$icons["Developer Tools"] = "code";
+		return $icons;
+	}
+	
 	static function formatDefault($item)
 	{
 		return $item->format();
