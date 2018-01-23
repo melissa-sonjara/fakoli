@@ -60,7 +60,8 @@ class BlogManifest
 			(
 				"Blog Subscribers"	=>	array("page"	=>	"/admin/blog_subscribers",
 											  "role"	=>	"admin",
-											  "weight"	=>	10)
+											  "weight"	=>	10,
+											  "icon"	=>	"user-circle")
 			)
 		);
 	}	
