@@ -21,8 +21,9 @@ class RssFeedManifest
 			(
 
 				"RSS Feeds"	=>	array("page"	=>	"/admin/rss_feed",
-							"role"	=>	"admin,editor",
-							"weight"	=>	10)
+									  "role"	=>	"admin,editor",
+									  "weight"	=>	10,
+									  "icon"	=>	"rss-square")
 			)
 		);
 	}
