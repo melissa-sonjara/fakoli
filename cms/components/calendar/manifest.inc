@@ -64,17 +64,20 @@ class CalendarManifest
 		return array
 		(
 			"Collaboration" => array(
-					"Calendars"	=>	array("page"	=>	"/admin/calendars",
-					 							   "role"	=>	"admin,editor",
-					 							   "weight"	=>	2),
+					"Calendars"	=>	array("page"		=>	"/admin/calendars",
+					 					  "role"		=>	"admin,editor",
+					 					  "weight"	=>	2,
+										  "icon"		=>	"calendar-alt"),
 					
 					"Calendar Events"	=>	array("page"	=>	"/admin/events",
-							"role"	=>	"admin,editor",
-							"weight"	=>	3),
-					
-					"Time Zones"	=>	array("page"	=>	"/admin/time_zones",
-							"role"	=>	"admin,editor",
-							"weight"	=>	5)
+										  "role"		=>	"admin,editor",
+										  "weight"	=>	3,
+										  "icon"		=>	"calendar-check"),
+								
+					"Time Zones"	=>	array("page"		=>	"/admin/time_zones",
+										  "role"		=>	"admin,editor",
+										  "weight"	=>	5,
+										  "icon"		=>	"globe")
 					
 					),
 					
