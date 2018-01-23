@@ -21,9 +21,10 @@ class RedirectManifest
 			"Site Configuration"	=> array
 			(
 
-				"Redirects"	=>	array("page"	=>	"/admin/redirects",
-									  "role"	=>	"admin",
-								 	  "weight"	=>	11)
+				"Redirects"	=>	array("page"		=>	"/admin/redirects",
+									  "role"		=>	"admin",
+								 	  "weight"	=>	11,
+									  "icon"		=>	"redo-alt")
 			)
 		);	
 	}

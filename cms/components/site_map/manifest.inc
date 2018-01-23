@@ -53,9 +53,10 @@ class SiteMapManifest
 			"Site Configuration"	=> array
 			(
 
-				"Site Map"	=>	array("page"	=>	"/admin/site_map",
-								  "role"	=>	"admin",
-								  "weight"	=>	10)
+				"Site Map"	=>	array("page"		=>	"/admin/site_map",
+								 	  "role"		=>	"admin",
+								  	  "weight"	=>	10,
+									  "icon"		=>	"sitemap")
 			)
 		);		
 	}

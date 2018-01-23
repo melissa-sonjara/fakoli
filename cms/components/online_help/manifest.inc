@@ -58,9 +58,10 @@ class OnlineHelpManifest
 			"Site Configuration"	=> array
 			(
 
-				"Online Help"	=>	array("page"	=>	"/admin/help_books",
-									  	  "role"	=>	"admin",
-								  	  	  "weight"	=>	4)
+				"Online Help"	=>	array("page"		=>	"/admin/help_books",
+									  	  "role"		=>	"admin",
+								  	  	  "weight"	=>	4,
+										  "icon"		=>	"question")
 			)
 		);		
 	}

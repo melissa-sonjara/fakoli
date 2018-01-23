@@ -157,6 +157,18 @@ class AdminPageView
 		ComponentManager::fireEvent("RequestComplete");	
 	}
 
+	private function formatIcon($icon)
+	{
+		if (!$icon) return "<i class='fas fa-fw'></i>";
+		if (endsWith($icon, ".svg"))
+		{
+			return "<i class='fas fa-fw' style='background: url({$icon}) center center no-repeat; background-size: contain; height:1em'></i>";
+		}
+		else
+		{
+			return "<i class='fas fa-{$icon} fa-fw'></i>";
+		}
+	}
 	function formatMenu($admin_menu, $icons)
 	{	
 		global $menu_item;
@@ -175,15 +187,7 @@ class AdminPageView
 		{
 			$found = false;
 			
-			$icon = $icons[$section];
-			if ($icon)
-			{
-				$icon = "<i class='fas fa-{$icon} fa-fw'></i>";
-			}
-			else
-			{
-				$icon = "<i class='fas fa-fw'></i>";
-			}
+			$icon = $this->formatIcon($icons[$section]);
 			
 			$submenu = " <h4 class=\"toggler atStart\">{$icon} {$section}</h4>\n <div class=\"atStart\">\n";
 
@@ -200,10 +204,9 @@ class AdminPageView
 				}
 				
 				$icon = $icons[$item];
-				if ($icon)
-				{
-					$icon = "<i class='fas fa-{$icon} fa-fw'></i>";
-				}
+				if (!$icon) $icon = $properties["icon"];
+				
+				$icon = $this->formatIcon($icon);
 				
 				if (checkRole($properties["role"]))
 				{

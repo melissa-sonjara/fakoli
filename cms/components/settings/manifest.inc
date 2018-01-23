@@ -53,9 +53,10 @@ class SettingsManifest
 			"Site Configuration"	=> array
 			(
 
-				"Application Settings"	=>	array("page"	=>	"/admin/settings",
-									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	12)			
+				"Application Settings"	=>	array("page"		=>	"/admin/settings",
+									 			  "role"		=>	"admin",
+								  	  			  "weight"	=>	12,
+												  "icon"		=>	"sliders-h")			
 			),
 			
 			"Classification"	=> array

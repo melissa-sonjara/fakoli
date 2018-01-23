@@ -53,9 +53,10 @@ class TextLookupManifest
 			"Site Content"	=> array
 			(
 
-				"Text Lookup"	=>	array("page"	=>	"/admin/text_lookup_list",
-								  "role"	=>	"admin",
-								  "weight"	=>	10)
+				"Text Lookup"	=>	array("page"		=>	"/admin/text_lookup_list",
+								  		  "role"		=>	"admin",
+								  		  "weight"	=>	10,
+										  "icon"		=>	"font")
 			)
 		);		
 	}

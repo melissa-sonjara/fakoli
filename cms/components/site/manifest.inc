@@ -53,9 +53,10 @@ class SiteManifest
 			"Site Configuration"	=> array
 			(
 
-				"Sites"	=>	array("page"	=>	"/admin/sites",
-								  "role"	=>	"admin",
-								  "weight"	=>	1)
+				"Sites"	=>	array("page"		=>	"/admin/sites",
+								  "role"		=>	"admin",
+								  "weight"	=>	1,
+								  "icon"		=>	"server")
 			)
 		);		
 	}

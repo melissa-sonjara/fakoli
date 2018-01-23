@@ -51,9 +51,10 @@ class BlogManifest
 		return array("Site Content"	=> array
 			(
 
-				"Blogs"	=>	array("page"	=>	"/admin/blogs",
-										  "role"	=>	"admin,editor",
-								  		  "weight"	=>	9)
+				"Blogs"	=>	array("page"		=>	"/admin/blogs",
+								  "role"		=>	"admin,editor",
+								  "weight"	=>	5,
+								  "icon"		=>	"/components/blog/images/blog.svg")
 			),
 					 "Email Management"	=>	array
 			(

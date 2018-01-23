@@ -55,7 +55,8 @@ class TemplateManifest
 
 				"Templates"	=>	array(	"page"	=>	"/admin/templates",
 								  		"role"	=>	"admin",
-								  		"weight"	=>	10)
+								  		"weight"	=>	10,
+										"icon"	=>	"file-code")
 			)
 		);		
 	}	

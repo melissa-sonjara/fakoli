@@ -53,9 +53,10 @@ class PageManifest
 			"Site Content"	=> array
 			(
 
-				"Pages"	=>	array("page"	=>	"/admin/pages",
-										  "role"	=>	"admin,editor",
-								  		  "weight"	=>	3)
+				"Pages"	=>	array("page"		=>	"/admin/pages",
+								  "role"		=>	"admin,editor",
+								  "weight"	=>	3,
+								  "icon"		=>	"file")
 			)
 		);		
 	}	

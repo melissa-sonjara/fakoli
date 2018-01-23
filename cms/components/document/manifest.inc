@@ -74,7 +74,8 @@ class DocumentManifest
 
 				"Documents"	=>	array("page"	=>	"/admin/document_libraries",
 									  "role"	=>	"admin,editor",
-									  "weight"	=>	3)
+									  "weight"	=>	7,
+									  "icon"		=>	"copy")
 			)
 		);
 	}	

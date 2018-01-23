@@ -20,9 +20,10 @@ class ScrollManifest
 		(
 			"Site Content"	=> array
 			(
-				"Scrolls"	=>	array("page"	=>	"/admin/scrolls",
-									  "role"	=>	"admin,editor",
-								  	  "weight"	=>	3)
+				"Scrolls"	=>	array("page"		=>	"/admin/scrolls",
+									  "role"		=>	"admin,editor",
+								  	  "weight"	=>	4,
+									  "icon"		=>	"/components/scroll/images/scroll.svg")
 			)
 		);		
 	}	

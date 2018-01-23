@@ -63,9 +63,10 @@ class ContextHelpManifest
 		(
 			"Site Configuration"	=> array(
 
-				"Context Help"			=>	array("page"	=>	"/admin/context_help_list",
-											  "role"	=>	"admin",
-											  "weight"	=>	3))	
+				"Context Help"			=>	array("page"		=>	"/admin/context_help_list",
+											      "role"		=>	"admin",
+											      "weight"	=>	3,
+												  "icon"		=>	"question-circle"))	
 		);		
 				
 	}	

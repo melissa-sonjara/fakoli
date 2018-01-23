@@ -52,9 +52,10 @@ class ToolHintsManifest
 			"Site Content"	=> array
 			(
 
-				"Tool Hints"	=>	array("page"	=>	"/admin/tool_hints",
-										  "role"	=>	"admin",
-										  "weight"	=>	11)
+				"Tool Hints"	=>	array("page"		=>	"/admin/tool_hints",
+									  "role"		=>	"admin",
+									  "weight"	=>	11,
+									  "icon"		=>	"info-circle")
 			)
 		);
 	}

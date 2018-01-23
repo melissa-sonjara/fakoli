@@ -29,7 +29,8 @@ class ScheduledTaskManifest
 
 				"Scheduled Tasks"	=>	array("page"	=>	"/admin/scheduled_tasks",
 											  "role"	=>	"admin",
-								  			  "weight"	=>	13)
+								  			  "weight"	=>	13,
+											  "icon"		=>	"clock")
 			)
 		);
 	}

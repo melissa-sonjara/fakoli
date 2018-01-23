@@ -55,17 +55,20 @@ class ComponentManifest
 			"Site Configuration"	=> array
 			(
 
-				"Components"	=>	array("page"	=>	"/admin/components",
-										  "role"	=>	"admin",
-								  		  "weight"	=>	0),
+				"Components"	=>	array("page"		=>	"/admin/components",
+									  "role"		=>	"admin",
+								  	  "weight"	=>	0,
+									  "icon"		=> 	"wrench"),
 			
 				"Import Configuration" => array("page"		=>	"/admin/import",
 												"role"		=>	"admin",
-												"weight"	=>	98),
+												"weight"		=>	98,
+												"icon"		=>	"upload"),
 			
-				"Export Configuration"	=>	array("page"	=>	"/admin/export",
-												  "role"	=>	"admin",
-												  "weight"	=>	99)
+				"Export Configuration"	=>	array("page"		=>	"/admin/export",
+												  "role"		=>	"admin",
+												  "weight"	=>	99,
+												  "icon"		=>	"download")
 			)
 		);		
 	}	

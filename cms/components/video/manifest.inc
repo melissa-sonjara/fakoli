@@ -55,9 +55,10 @@ class VideoManifest
 			"Site Content"	=> array
 			(
 
-				"Videos"	=>	array("page"	=>	"/admin/video_galleries",
-									  "role"	=>	"admin,editor",
-								  	  "weight"	=>	9)
+				"Videos"	=>	array("page"		=>	"/admin/video_galleries",
+								  "role"		=>	"admin,editor",
+								  "weight"	=>	9,
+								  "icon"		=>	"video")
 			)
 		);		
 	}	

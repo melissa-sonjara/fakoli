@@ -34,9 +34,10 @@ class DataSyncManifest
 		(
 				"Site Configuration"	=> array
 				(
-						"Data Import"	=>	array("page"	=>	"/admin/data_import",
-								"role"	=>	"admin",
-								"weight"	=>	100)
+						"Data Import"	=>	array("page"		=>	"/admin/data_import",
+												  "role"		=>	"admin",
+												  "weight"	=>	100,
+												  "icon"		=>	"database")
 				)
 		);
 	}

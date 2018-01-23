@@ -55,7 +55,8 @@ class SectionManifest
 
 				"Sections"	=>	array("page"	=>	"/admin/sections",
 									  "role"	=>	"admin",
-								  	  "weight"	=>	2)
+								  	  "weight"	=>	2,
+									  "icon"		=>	"folder-open")
 			)
 		);		
 	}

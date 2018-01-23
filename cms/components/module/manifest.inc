@@ -53,9 +53,10 @@ class ModuleManifest
 			"Site Content"	=> array
 			(
 
-				"Modules"	=>	array("page"	=>	"/admin/modules",
-									  "role"	=>	"admin,editor",
-									  "weight"	=>	2)
+				"Modules"	=>	array("page"		=>	"/admin/modules",
+									  "role"		=>	"admin,editor",
+									  "weight"	=>	2,
+									  "icon"		=>	"columns")
 			)
 		);		
 	}	

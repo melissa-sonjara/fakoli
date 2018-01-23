@@ -53,9 +53,10 @@ class MenuManifest
 			"Site Content"	=> array
 			(
 
-				"Menus"	=>	array("page"	=>	"/admin/menus",
-								  "role"	=>	"admin",
-								  "weight"	=>	2)
+				"Menus"	=>	array("page"		=>	"/admin/menus",
+								  "role"		=>	"admin",
+								  "weight"	=>	1,
+								  "icon"		=>	"bars")
 			)
 		);		
 	}

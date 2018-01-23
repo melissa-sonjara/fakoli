@@ -55,9 +55,10 @@ class ImageManifest
 			"Site Content"	=> array
 			(
 
-				"Images"	=>	array("page"	=>	"/admin/image_galleries",
-									  "role"	=>	"admin,editor",
-								  	  "weight"	=>	4)
+				"Images"	=>	array("page"		=>	"/admin/image_galleries",
+								  "role"		=>	"admin,editor",
+								  "weight"	=>	8,
+								  "icon"		=>	"images")
 			)
 		);		
 	}

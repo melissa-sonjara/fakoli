@@ -53,9 +53,10 @@ class ArticleManifest
 			"Site Content"	=> array
 			(
 
-				"Articles"	=>	array("page"	=>	"/admin/articles",
-								  	  "role"	=>	"admin,editor",
-								  	  "weight"	=>	5)
+				"Articles"	=>	array("page"		=>	"/admin/articles",
+								  	  "role"		=>	"admin,editor",
+								  	  "weight"	=>	6,
+									  "icon"		=>	"/components/article/images/article.svg")
 			)
 		);		
 	}

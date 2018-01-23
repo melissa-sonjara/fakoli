@@ -21,9 +21,10 @@ class LinkLibraryManifest
 			"Site Content"	=> array
 			(
 
-				"Links"	=>	array("page"	=>	"/admin/link_libraries",
-								  "role"	=>	"admin,editor",
-								  "weight"	=>	4)
+				"Links"	=>	array("page"		=>	"/admin/link_libraries",
+								  "role"		=>	"admin,editor",
+								  "weight"	=>	10,
+								  "icon"		=>	"link")
 			)
 		);
 	}
