@@ -24,8 +24,9 @@ class AutoLoginManifest
 			(
 
 				"Authentication Tokens"=>	array("page"	=>	"/admin/authentication_tokens",
-										  "role"	=>	"admin",
-								  		  "weight"	=>	1
+										  		  "role"	=>	"admin",
+								  		  		  "weight"	=>	1,
+												  "icon"	=>	"token"
 										)
 			)
 		);		
