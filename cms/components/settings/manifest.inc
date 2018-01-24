@@ -59,12 +59,13 @@ class SettingsManifest
 												  "icon"		=>	"sliders-h")			
 			),
 			
-			"Classification"	=> array
+			"Developer Tools"	=> array
 			(
 
 				"Define Settings Options"	=>	array("page"	=>	"/admin/setting_list",
-									 			  "role"	=>	"admin",
-								  	  			  "weight"	=>	30)			
+									 			  	  "role"	=>	"admin",
+								  	  			 	  "weight"	=>	30,
+													  "icon"	=>	"cog")			
 			)
 		);		
 	}	
