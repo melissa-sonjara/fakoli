@@ -31,8 +31,8 @@ class DeveloperToolsManifest
 					
 				"Event Map"			=>	array("page"	=>	"/admin/event_map",
 											  "role"	=>	"admin",
-											  "weight"	=>	3),
-											  "icon"	=>	"map-signs",
+											  "weight"	=>	3,
+											  "icon"	=>	"map-signs"),
 				
 				"Permissions Map"	=>	array("page"	=>	"/admin/permissions_map",
 											  "role"	=>	"admin",
