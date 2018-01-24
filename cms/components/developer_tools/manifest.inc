@@ -21,23 +21,28 @@ class DeveloperToolsManifest
 			(
 				"Content Inventory"	=>	array("page"	=>	"/admin/content_inventory",
 										  	  "role"	=>	"admin",
-										  	  "weight"	=>	1),
+										  	  "weight"	=>	1,
+											  "icon"	=>	"list-alt"),
 					
 				"Section Map"		=>	array("page"	=>	"/admin/section_map",
 											  "role"	=>	"admin",
-											  "weight"	=>	2),
+											  "weight"	=>	2,
+											  "icon"	=>	"map"),
 					
 				"Event Map"			=>	array("page"	=>	"/admin/event_map",
 											  "role"	=>	"admin",
 											  "weight"	=>	3),
+											  "icon"	=>	"map-signs",
 				
 				"Permissions Map"	=>	array("page"	=>	"/admin/permissions_map",
 											  "role"	=>	"admin",
-											  "weight"	=>	4),
+											  "weight"	=>	4,
+											  "icon"	=>	"unlock"),
 					
 				"Test PHP CLI"		=>	array("page"	=>	"/admin/test_php_cli",
 											  "role"	=>	"admin",
-											  "weight"	=>	99)
+											  "weight"	=>	99,
+											  "icon"	=>	"terminal")
 			)
 		);
 	}
