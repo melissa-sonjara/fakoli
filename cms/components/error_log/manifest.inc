@@ -56,7 +56,8 @@ class ErrorLogManifest
 
 				"Error Log"	=>	array("page"	=>	"/admin/error_log",
 									  "role"	=>	"admin",
-									  "weight"	=>	25)
+									  "weight"	=>	25,
+									  "icon"	=>	"exclamation-circle")
 			)
 		);
 	}	
