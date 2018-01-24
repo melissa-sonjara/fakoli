@@ -74,18 +74,16 @@ class CalendarManifest
 										  "weight"	=>	3,
 										  "icon"		=>	"calendar-check"),
 								
+					"Event Types"	=>	array("page"	=>	"/admin/event_types",
+											  "role"	=>	"admin",
+											  "weight"	=>	4,
+											  "icon"	=>	"calendar"),
+					
 					"Time Zones"	=>	array("page"		=>	"/admin/time_zones",
 										  "role"		=>	"admin,editor",
 										  "weight"	=>	5,
 										  "icon"		=>	"globe")
-					
-					),
-					
-				
-			"Classification" => array("Event Types"	=>	array("page"	=>	"/admin/event_types",
-					 							      "role"	=>	"admin",
-					  								  "weight"	=>	10)
-												     )
+					)
 		);
 	}
 
