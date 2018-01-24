@@ -164,7 +164,7 @@ class AdminPageView
 		{
 			return "<i class='fas fa-fw' style='background: url({$icon}) center center no-repeat; background-size: contain; height:1em'></i>";
 		}
-		else if (preg_match('/$fa.?\s/', $icon))
+		else if (preg_match('/^fa.?\s/', $icon))
 		{
 			return  "<i class='{$icon} fa-fw'></i>";
 		}
