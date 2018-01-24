@@ -45,19 +45,6 @@ class QuestionnaireManifest
 		
 		return $component;
 	}
-		
-	static function getAdminMenu()
-	{
-		return array
-		(
-			"Classification"	=> array
-			(
-
-				"Questionnaire Question Types"	=>	array("page"	=>	"/admin/question_types",
-								  "role"	=>	"admin",
-								  "weight"	=>	50)
-			)		);		
-	}
 
 	static function subscribeToEvents()
 	{
