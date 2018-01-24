@@ -137,7 +137,7 @@ class CalendarManager
 											  		'Calendar', 'Event', 'EventCommentXref', 
 											  		'EventSiteXref', 'EventType',
 											  		'CalendarEventTypeXref'));
-		SerializationManager::registerHandler("timezones", "Timezones", new SimpleSerializationHandler('TimeZone'));
+		SerializationManager::registerHandler("timezones", "Time Zones", new SimpleSerializationHandler('TimeZone'));
 		return true;
 	}
 	
