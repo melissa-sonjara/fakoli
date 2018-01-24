@@ -460,8 +460,9 @@ class Fakoli
 					   "Collaboration"		=> "comments",	
 					   "Classification"		=> "tags",
 					   "Email Management"	=> "envelope",
-					   "User Management"		=> "users",
-					   "Public Site"			=> "home"
+					   "User Management"	=> "users",
+					   "Users"				=> "user",
+					   "Public Site"		=> "home"
 		);
 		
 		$icons = ComponentManager::fireEvent("RegisterAdminIcons", $icons);
