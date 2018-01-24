@@ -54,11 +54,13 @@ class TaxonomyManifest
 
 				"Taxonomies"		=>	array("page"	=>	"/admin/taxonomies",
 											  "role"	=>	"admin",
-											  "weight"	=>	3),
+											  "weight"	=>	3,
+											  "icon"	=>	"book"),
 				
 				"Bindings"			=>	array("page"	=>	"/admin/bindings",
 											  "role"	=>	"admin",
-											  "weight"	=>	4))
+											  "weight"	=>	4,
+											  "icon"	=>	"/components/taxonomy/images/binding.svg"))
 		);		
 	}
 
