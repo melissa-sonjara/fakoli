@@ -54,8 +54,9 @@ class RoleManifest
 			(
 
 				"Roles"	=>	array("page"	=>	"/admin/roles",
-										  "role"	=>	"admin",
-								  		  "weight"	=>	2)
+								  "role"	=>	"admin",
+								  "weight"	=>	2,
+								  "icon"	=>	"user-secret")
 			)
 		);		
 	}
