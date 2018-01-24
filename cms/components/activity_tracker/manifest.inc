@@ -65,7 +65,8 @@ class ActivityTrackerManifest
 
 				"Activity Report"	=>	array("page"	=>	"/admin/activity_report",
 											  "role"	=>	"admin",
-									  		  "weight"	=>	10
+									  		  "weight"	=>	10,
+											  "icon"	=>	"flag-checkered"
 											),
 											
 				"Feedback"			=>	array("page"	=>	"/admin/feedback",
