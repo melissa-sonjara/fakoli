@@ -70,7 +70,8 @@ class ActivityTrackerManifest
 											
 				"Feedback"			=>	array("page"	=>	"/admin/feedback",
 										  	  "role"	=>	"admin",
-									  	  	  "weight"	=>	11
+									  	  	  "weight"	=>	11,
+											  "icon"	=>	"far fa-comment-alt"
 											)
 			)
 		);		
