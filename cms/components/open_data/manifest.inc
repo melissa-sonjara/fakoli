@@ -55,8 +55,9 @@ class OpenDataManifest
 			(
 
 				"Open Data"	=>	array("page"	=>	"/admin/open_data_items",
-									  	  "role"	=>	"admin",
-								  	  	  "weight"	=>	4)
+									  "role"	=>	"admin",
+								  	  "weight"	=>	4,
+									  "icon"	=>	"/components/open_data/images/open_data.svg")
 			)
 		);		
 	}
