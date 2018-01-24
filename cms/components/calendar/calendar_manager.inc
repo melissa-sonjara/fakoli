@@ -130,6 +130,17 @@ class CalendarManager
 		CommentManager::registerAdapter("calendar", Event, EventCommentXref);
 	}
 	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("calendar", "Calendars, Calendar Events and Event Types", 
+											  new CompoundSerializationHandler("CalendarMap", 
+											  		'Calendar', 'Event', 'EventCommentXref', 
+											  		'EventSiteXref', 'EventType',
+											  		'CalendarEventTypeXref'));
+		SerializationManager::registerHandler("timezones", "Timezones", new SimpleSerializationHandler('TimeZone'));
+		return true;
+	}
+	
 	/**
 	 * params to setDefaultValue: component, name, value, field_type, annotation, category, options
 	 */
