@@ -521,6 +521,9 @@ var ModalDialog = new Class(
     	{
     		new Curtain().loadingCursor();
     		
+    		this.options.body.set('data-url', fragmentURL);
+    		addReloadHandler(this.options.body);
+    		
     		this.disposeOnExit = true;
     		if (!reload) this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
@@ -674,6 +677,9 @@ var FloatingDialog = new Class(
 
     	if (fragmentURL && this.options.body)
     	{
+    		this.options.body.set('data-url', fragmentURL);
+    		addReloadHandler(this.options.body);
+    		
        		this.disposeOnExit = true;
        	 	this.options.body.set('text', "Loading...");
     		var request = new Request.HTML(
