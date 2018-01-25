@@ -907,7 +907,7 @@ var Notification = new Class({
 	   		x = size.width * 0.1;
 	   	}
 	   	
-	   	this.notification.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 150});	   	
+	   	this.notification.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 15000});	   	
 	},
 	
 	show: function()
