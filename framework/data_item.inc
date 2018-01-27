@@ -941,6 +941,25 @@ class DataItem extends AbstractDataItem
 
 		return $exists;
 	}	
+	
+	/**
+	 * Persists a duplicate of the DataItem to the database under a new primary key.
+	 * Foreign keys are not updated. Use this as a way to create a quick copy of an existing
+	 * object, or to import a serialized object into the data store under a new primary key.
+	 * For utility, the previous value of the primary key is returned.
+	 * 
+	 * @return int the previous value of the primary key
+	 */
+	function duplicate()
+	{
+		$pk = $this->primary_key;
+		$old = $this->get($pk);
+		
+		unset($this->$pk);
+		$this->save();
+		return $old;
+	}
+	
 	/**
 	 * Retrieves the distinct values in the database for the specified field 
 	 * across the specified set of records.
