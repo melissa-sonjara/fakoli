@@ -1982,6 +1982,27 @@ function printIncludes($html = true, $return = false)
 		return $out;
 	}
 }
+
+/**
+ * Given an array of pairs of old and new values, replace all instances of old values with new values
+ * in the target string.
+ * @param array $substitutions array of old and new values
+ * @param string $target the target string to update
+ * @return string the updated string
+ */
+function replaceValues($substitutions, $target)
+{
+	foreach($substitutions as $old => $new)
+	{
+		$expr = "/\\b{$old}\\b/";
+		trace("{$expr} => $new", 3);
+		$target = preg_replace($expr, $new, $target);
+		trace($target, 3);
+	}
+	
+	return $target;
+}
+
 /**
  * @}
  */
