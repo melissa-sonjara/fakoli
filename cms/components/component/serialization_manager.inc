@@ -154,8 +154,9 @@ class SerializationManager
 	 * @param string $class the target DataItem class
 	 * @param DOMDocument $doc the source XML document
 	 * @param DataTransaction $tx The database transaction to join when creating imported objects
+	 * @param bool $save true to save to the database, false to just return the reconstituted objects
 	 */
-	static function unserialize($class, $doc, $tx)
+	static function unserialize($class, $doc, $tx, $save = true)
 	{
 		trace("== Instantiating $class Records", 3);
 		
@@ -179,19 +180,21 @@ class SerializationManager
 			$objects[] = $object;
 		}
 				
-		$o = new $class;
-		$o->joinTransaction();
-		$o->deleteAll();
-		//$o->disablePrimaryKey();
-		
-		foreach($objects as $object)
+		if ($save)
 		{
-			$object->_disablePK = true;
-			$object->joinTransaction($tx);
-			$object->save();
-		}
+			$o = new $class;
+			$o->joinTransaction();
+			$o->deleteAll();
 			
-		//$o->enablePrimaryKey();
+			foreach($objects as $object)
+			{
+				$object->_disablePK = true;
+				$object->joinTransaction($tx);
+				$object->save();
+			}
+		}
+		
+		return $objects;
 	}
 	
 	/**
@@ -413,6 +416,18 @@ class CompoundSerializationHandler
 		{
 			SerializationManager::unserialize($class[0], $doc, $tx);
 		}
+	}
+	
+	/**
+	 * Retrieves serialized objects from the provided XML document, but does not store them in the database.
+	 * Instead they are returned as an array so that further processing can be carried out.
+	 * @param DOMDocument $doc The document to be used as the source of the retrieval
+	 * @param string $class The class of objects to retrieve
+	 * @return array an array of DataItems
+	 */
+	function retrieve($doc, $class)
+	{
+		return SerializationManager::unserialize($class, $doc, null, false);
 	}
 }
 ?>
