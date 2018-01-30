@@ -490,29 +490,7 @@ ENDSCRIPT;
 	}
 	
 	function createEventDialog()
-	{
-		global $script;
-		$script .= <<<ENDSCRIPT
-<script type="text/javascript" src="/components/calendar/js/calendar.js"></script>
-ENDSCRIPT;
-
-		global $dialogs;
-		ob_start();
-?>
-<div class="dialog" id="eventDetailDlg" style="width: 500px">
- <div class="dialog_header" id="eventDetailDlgHeader">
-  <div style="padding: 4px;">
-   <div style="float: right">&nbsp;<a id='closeEventDetailDlg' href="javascript:eventDialog.hide();">Close &times;</a></div>
-   <span style="font-weight: bold" id="eventDetailDlgTitle">Event Detail</span>
-  </div>	
- </div>
- <div id="eventDetailDlgBody" class="dialog_body">
- </div>
-</div>
-
-<?
-		$dialogs .= ob_get_contents();
-		ob_end_clean();
+ 	{
 	}
 	
 	function drawMonth()

@@ -45,28 +45,19 @@ function hideEventBubble(id)
 
 var eventDialog;
 
-window.addEvent('domready', function()
-{
-	var eventDetailDlg = document.id('eventDetailDlg');
-	if (eventDetailDlg)
-	{	
-		eventDialog = new ModalDialog(eventDetailDlg, {handle: document.id('eventDetailDlgHeader'), draggable: true, body: document.id('eventDetailDlgBody')});
-	}
-});	
-
 function showEventDetail(id, handler_class)
 {
-	eventDialog.show(null, '/action/calendar/event_details?event_id=' + id + '&handler_class=' + handler_class);
+	eventDialog = modalPopup("Event Details", '/action/calendar/event_details?event_id=' + id + '&handler_class=' + handler_class, '600px', 'auto', true, true);
 }
 
 function editEvent(id)
 {
-	eventDialog.show(null, '/action/calendar/event_edit?event_id=' + id);
+	eventDialog = modalPopup("Edit Event", '/action/calendar/event_edit?event_id=' + id, '600px', 'auto', true, true);
 }
 
 function newEvent(calendar_id)
 {
-	eventDialog.show(null, '/action/calendar/event_edit?calendar_id=' + calendar_id);
+	eventDialog = modalPopup("Add Event", '/action/calendar/event_edit?calendar_id=' + calendar_id, '600px', 'auto', true, true);
 }
 
 function editEventResult(result)
@@ -76,6 +67,6 @@ function editEventResult(result)
 
 function showEventList(event_ids, handler_class)
 {
-	eventDialog.show(null, '/action/calendar/event_list?event_ids=' +event_ids + '&handler_class=' + handler_class);	
+	eventDialog = modalPopup("List of Events", '/action/calendar/event_list?event_ids=' +event_ids + '&handler_class=' + handler_class, '600px', 'auto', true, true);
 }
 
