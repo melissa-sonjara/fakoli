@@ -100,25 +100,33 @@ class Blog extends DataItem // implements Searchable
 		return $articles > 0 ? false : true;
 	}
 	
+	function getSortOrderConstraint()
+	{
+		$constraint = "";
+		switch($this->default_article_order)
+		{
+			case "DESC":
+				$constraint = " ORDER BY publish_date DESC";
+				break;
+				
+			case "ASC":
+				$constraint = " ORDER BY publish_date ASC";
+				break;
+				
+			case "SORT":
+			default:
+				$constraint = " ORDER BY sort_order";
+				break;
+		}
+		
+		return $constraint;
+	}
+	
 	function Articles($constraint = "")
 	{
 		if (!$constraint || stripos($constraint, "ORDER") === false)
 		{
-			switch($this->default_article_order)
-			{
-				case "DESC":
-					$constraint .= " ORDER BY publish_date DESC";
-					break;	
-								
-				case "ASC":
-					$constraint .= " ORDER BY publish_date ASC";
-					break;
-					
-				case "SORT":
-				default: 
-					$constraint .= " ORDER BY sort_order";
-					break;
-			}
+			$constraint .= $this->getSortOrderConstraint();
 		}
 
 		$constraint = preg_replace("/^\s*WHERE\s+/i", "AND ", $constraint);

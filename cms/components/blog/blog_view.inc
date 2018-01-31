@@ -513,7 +513,7 @@ class BlogArticlesView
 	{
 		$this->blog = $blog;
 		
-		$articles = $blog->Articles("ORDER BY sort_order, last_modified DESC");
+		$articles = $blog->Articles();
 
 		$this->table = $this->buildTable($articles);	
 	}
@@ -576,8 +576,12 @@ class AdminBlogArticlesView extends BlogArticlesView
 	function buildTable($articles)
 	{
 		$table = parent::buildTable($articles);
-		$table->enableDragReorder("/action/blog/reorder_articles?blog_id={$this->blog->blog_id}");
-		$table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the articles</span>";
+		if ($this->blog->default_article_order == "SORT")
+		{
+			$table->enableDragReorder("/action/blog/reorder_articles?blog_id={$this->blog->blog_id}");
+			$table->dragText = "<span style='font-size: 10px'>Click and drag to change the order of the articles</span>";
+		}
+		
 		return $table;
 	}
 	
