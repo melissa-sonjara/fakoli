@@ -547,6 +547,27 @@ class AutoForm
 	}
 
 	/**
+	 * Override the default type for the specified form field, providing a FieldRenderer based on the supplied type
+	 * (and optionally also override the field label)
+	 * @param string $field the name of the field that is to be overridden
+	 * @param string $type the field type to use as the override
+	 * @param string $label the new text to use for the label for the specified field (null or "" to use the default label).
+	 */
+	function overrideType($field, $type, $label = "")
+	{
+		if ($type == "Timestamp") return; // No field renderer required for this type
+		
+		if (array_key_exists($type, AutoForm::$fieldRendererMap))
+		{
+			$renderer = new AutoForm::$fieldRendererMap[$type]($this, $field);
+			$this->override($field, $label, $renderer);
+			return;
+		}
+		
+		throw new FakoliException("AutoForm::createRenderer(): Unknown type '$type'");
+	}
+
+	/**
 	 * Adds an additional (pseudo) field to the form. This can be used to render
 	 * additional fields in the user interface that are not directly tied to single
 	 * fields in the underlying DataItem (for instance, to provide a checkbox list for
