@@ -31,7 +31,8 @@ var PieChart = new Class(
 		onSelectionChanged: Class.Empty,
 		enableDownload: true,
 		selectable: false,
-		animateSelection: false
+		animateSelection: false,
+		preselected: []
 	},
 	
 	sectors: [],
@@ -48,6 +49,7 @@ var PieChart = new Class(
 				this.sectorSelect(idx);
 			}.bind(this));
 		}
+
 	},
 	
 	drawChart: function()
@@ -132,6 +134,8 @@ var PieChart = new Class(
 			angle = end; 
 		
 		}.bind(this));
+
+		this.selectSectors(this.options.preselected);
 		
 		if (this.options.emboss)
 		{
@@ -237,6 +241,12 @@ var PieChart = new Class(
 		this.showSelected();
 	},
 	
+	selectSectors: function(indices)
+	{
+		indices.each(function(idx) { this.addSectorClass(idx, 'selected');}.bind(this) );
+		this.showSelected();
+	},
+	
 	deselectSector: function(idx)
 	{
 		this.removeSectorClass(idx, 'selected');		
@@ -276,21 +286,36 @@ var PieChart = new Class(
 	
 	showSelected: function()
 	{
-		if (!this.options.animateSelection) return;
-
 		var cx = this.options.cx;
 		var cy = this.options.cy;
-		
-		this.sectors.each(function(s)
+	
+		if (this.options.animateSelection)
 		{
-			if (s.hasClass('selected'))
+			this.sectors.each(function(s)
 			{
-                s.stop().animate({transform: "s1.15 1.15 " + cx + " " + cy}, 500, mina.elastic);	
-			}
-			else
+				if (s.hasClass('selected'))
+				{
+	                s.stop().animate({transform: "s1.15 1.15 " + cx + " " + cy}, 500, mina.elastic);	
+				}
+				else
+				{
+					s.stop().animate({transform: ""}, 500, mina.elastic);	
+				}
+			});
+		}
+		else
+		{
+			this.sectors.each(function(s)
 			{
-				s.stop().animate({transform: ""}, 500, mina.elastic);	
-			}
-		});
+				if (s.hasClass('selected'))
+				{
+					s.attr({transform: "s1.15 1.15 " + cx + " " + cy});
+				}
+				else
+				{
+					s.attr({transform: ""});
+				}
+			});
+		}
 	}
 });

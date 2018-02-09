@@ -73,6 +73,7 @@ class PieChart
 	var $canvasBackground = "#FFFFFF";
 	var $selectable = false;
 	var $animateSelection = false;
+	var $preselected = null;
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -153,6 +154,15 @@ class PieChart
 		$selectable = $this->selectable ? "true": "false";
 		$animateSelection = $this->animateSelection ? "true" : "false";
 		
+		if (is_array($this->preselected))
+		{
+			$preselected = ",\n\t\tpreselected: [".implode(",", $this->preselected)."]";
+		}
+		else
+		{
+			$preselected = "";
+		}
+		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
 		
@@ -194,7 +204,7 @@ window.addEvent('domready', function ()
 		onSelectionChanged: {$this->onSelectionChanged},
 		enableDownload: {$download},
 		canvasBackground: '{$this->canvasBackground}',
-		selectable: {$selectable},
+		selectable: {$selectable}{$preselected},
 		animateSelection: {$animateSelection}
 	});
 	{$this->id}.values = [ $values ];
