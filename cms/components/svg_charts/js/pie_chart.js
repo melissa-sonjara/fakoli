@@ -174,6 +174,7 @@ var PieChart = new Class(
         }
         
         var sector = this.path(['M', cx, cy], ['L', x1, y1], ['A', r, r, 0, +(endAngle - startAngle > Math.PI), 0, x2, y2], 'z');
+        console.log(sector);
         return this.paper.path(sector).attr(params);
 	},
 	
