@@ -276,11 +276,11 @@ var Chart = new Class(
 	path: function()
 	{
 		var d = [];
-		var step = 0;
-		for(step = 0; step < arguments.length; ++step)
+		var i = 0;
+		for(i = 0; i < arguments.length; ++i)
 		{
-			if (arguments[step] == '') continue;
-			step = (typeOf(arguments[step]) == "array") ? arguments[step] : [arguments[step]];
+			if (arguments[i] == '') continue;
+			step = (typeOf(arguments[i]) == "array") ? arguments[i] : [arguments[i]];
 			params = step.slice(1);
 			d.push(step[0] + params.join(','));
 		}
