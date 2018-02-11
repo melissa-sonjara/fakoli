@@ -276,7 +276,7 @@ var Chart = new Class(
 	path: function()
 	{
 		var d = [];
-		for(var step in arguments)
+		for(var step = 0; step < arguments.length; ++step)
 		{
 			if (arguments[step] == '') continue;
 			step = (typeOf(arguments[step]) == "array") ? arguments[step] : [arguments[step]];
