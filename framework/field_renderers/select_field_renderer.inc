@@ -132,6 +132,17 @@ class SelectFieldRenderer extends FieldRenderer
 	}
 	
 	/**
+	 * Allow default blank selections.
+	 * @param string $text the option text for the default blank selection.
+	 */
+	function allowBlank($text = "Choose One", $value = "")
+	{
+		$this->defaultBlank = true;
+		$this->defaultText = $text;
+		$this->defaultValue = $value;
+	}
+	
+	/**
 	 * If no blank exists in the options and the user has not already
 	 * saved a value, add a blank as the first option.
 	 * 
