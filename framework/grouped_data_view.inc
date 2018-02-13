@@ -117,6 +117,9 @@ class GroupedDataListView
 	var $groupFooterColumns = array(); // subtotal footer for group
 	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
 	var $groupAsWorksheets = false; ///< Format groups as separate worksheets when exporting to Excel (requires PHPExcel)
+	var $menu = null;					///< Context menu for selection-based operations
+	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
+	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
 	
 	/**
 	 * Creates a new GroupedDataListView object.
@@ -376,6 +379,20 @@ class GroupedDataListView
 	}
 	
 	/**
+	 * Adds a ContextMenu to the table that can contain a list of operations that
+	 * can be performed on subselections of the table's contents.
+	 * @return ContextMenu
+	 */
+	function commandMenu()
+	{
+		$this->menu = new ContextMenu($this->id . "_menu", "#{$this->id}_menu_button");
+		$this->menu->trigger = "click";
+		$this->menu->position = "element";
+		
+		return $this->menu;
+	}
+	
+	/**
 	 * Get the Excel Link
 	 */
 	function getExcelLink()
@@ -422,6 +439,8 @@ class GroupedDataListView
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
+		if ($this->menu) $script .= $this->menu->writeScript();
+		
 		return $script;
 	}
 	
@@ -495,15 +514,32 @@ class GroupedDataListView
 ?>
 			<th<?echo $attrs?>>
 <?
-				if ($this->excelFile && $first)
+				if ($first)
 				{
-					$qs = $this->getExcelLink();
+					if ($this->excelFile)
+					{	
+						$qs = $this->getExcelLink();
+					}
+
+					if ($this->excelFile && !$this->menu && !$this->hideExcelIcon)
+					{
 ?>
 		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
-<?			
+<?									
+					}
+					else if ($this->menu)
+					{
+						if ($this->excelFile)
+						{
+							$this->menu->command($this->id."_excel", "Save as Excel...", $qs, true, "/fakoli/images/msexcel_icon_small.png");
+						}
+?>
+		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
+<?									
+					}
+
+					$first = false;
 				}
-				
-				$first = false;
 ?>			
 <?echo $column->title?></th>
 <?
@@ -588,6 +624,7 @@ class GroupedDataListView
 ?>  		
 		</table>
 <?
+			if ($this->menu) echo $this->menu->writeMenu();
 		}
 		else
 		{
