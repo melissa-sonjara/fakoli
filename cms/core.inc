@@ -542,6 +542,8 @@ class Fakoli
 		return $role;		
 	}	
 	
+	private static $includedScripts = array();
+	
 	/**
 	 * Returns the HTML scripts tags for Javascript files specified by
 	 * the registered components in their manifest files.
@@ -552,7 +554,11 @@ class Fakoli
 		if ($scripts) return $scripts;
 		
 		$scriptArray = Fakoli::loadScripts();
-
+		foreach($scriptArray as $s)
+		{
+			Fakoli::$includedScripts[$s] = true;
+		}
+		
 		$scriptArray = ComponentManager::fireEvent("PreProcessScripts", $scriptArray);
 		
 		$scripts = "";
@@ -691,7 +697,11 @@ class Fakoli
 	{
 		global $isResource;
 		global $script;
-		$script .= "<script type='text/javascript' src='$src'></script>\n";		
+		if (!array_key_exists($src, Fakoli::$includedScripts))
+		{
+			$script .= "<script type='text/javascript' src='$src'></script>\n";
+			Fakoli::$includedScripts[$src] = true;
+		}
 	}
 	
 	/**
