@@ -250,6 +250,11 @@ class DataListView implements FacetFilterable
 		return "{$pk}_" . $item->$pk;
 	}	
 	
+	/**
+	 * Adds a ContextMenu to the table that can contain a list of operations that
+	 * can be performed on subselections of the table's contents.
+	 * @return ContextMenu
+	 */
 	function commandMenu()
 	{
 		$this->menu = new ContextMenu($this->id . "_menu", "#{$this->id}_menu_button");
@@ -586,7 +591,7 @@ class DataListView implements FacetFilterable
 					{
 						if ($this->excelFile)
 						{
-							$this->menu->command($this->id."_excel", "Save as Excel...", $qs, "/fakoli/images/msexcel_icon_small.png");
+							$this->menu->command($this->id."_excel", "Save as Excel...", $qs, true, "/fakoli/images/msexcel_icon_small.png");
 						}
 ?>
 		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
