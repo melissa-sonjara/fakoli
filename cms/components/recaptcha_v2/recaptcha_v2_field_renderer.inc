@@ -65,7 +65,7 @@ class RecaptchaV2Validator extends AbstractValidator
 	{
 		if ($this->readOnly) return "";
 		
-		$secret_key = Settings::getValue("captcha", "recaptcha_v2_secret_key");
+		$secret_key = Settings::getValue("captcha", "recaptcha_secret_key");
 		
 		if (!isset($_POST["g-recaptcha-response"]) || $_POST["g-recaptcha-response"] === $this->empty)
 		{
@@ -96,8 +96,8 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 		$this->field = "captcha";
 		$form->add($this);
 		
-		$site_key = Settings::getValue("captcha", "recaptcha_v2_site_key");
-		$secret_key = Settings::getValue("captcha", "recaptcha_v2_secret_key");
+		$site_key = Settings::getValue("captcha", "recaptcha_site_key");
+		$secret_key = Settings::getValue("captcha", "recaptcha_secret_key");
 		
 		if(!$site_key || !$secret_key)
 		{
@@ -118,7 +118,7 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 	
 	function renderField($field = "")
 	{
-		$site_key = Settings::getValue("captcha", "recaptcha_v2_site_key");
+		$site_key = Settings::getValue("captcha", "recaptcha_site_key");
 		
 		if (!$field) $field = $this->field;
 		
