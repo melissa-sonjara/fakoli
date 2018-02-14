@@ -352,3 +352,18 @@ SortingTable.stripe_table = function ( tr_elements ) {
     if (counter % 2) tr.addClass( 'alt' );
   });
 };
+
+SortingTable.toggleSelect = function(button, table)
+{
+	button = document.id(button);
+	var table = document.id(table);
+	var state = (button.get('text') == "Select All");
+	
+	table.getElements('tr').each(function(tr)
+	{
+		var checkbox = tr.getElement("input[type=checkbox]");
+		if (checkbox) checkbox.checked = state;		
+	});
+	
+	button.set('text', state ? "Deselect All" : "Select All");
+};

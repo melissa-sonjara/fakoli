@@ -90,6 +90,7 @@ class DataListView implements FacetFilterable
 	// Selection and Commands
 	
 	var $selectable  = false;			///< Whether the table provides a selection mechanism
+	var $showSelectAll = false;			///< Show Select All button for selectable tables
 	var $menu = null;					///< Context menu for selection-based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	var $toolbarCallbacks = array(); 		///< Override this callback to add toolbar links into the first header cell
@@ -261,6 +262,10 @@ class DataListView implements FacetFilterable
 		$this->menu->trigger = "click";
 		$this->menu->position = "element";
 		
+		if ($this->showSelectAll)
+		{
+			$this->menu->command("toggle_select_all", "Select All", "new DOMEvent(event).stop(); SortingTable.toggleSelect(this, '{$this->id}');", false);
+		}
 		return $this->menu;
 	}
 	
