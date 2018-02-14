@@ -1,5 +1,5 @@
 <?php
-Fakoli::using("email");
+Fakoli::using("email", "captcha");
 
 class EmailHelper
 {
@@ -51,6 +51,13 @@ class EmailHelper
 		else 
 		{
 			$form->hide("contact_topic_id");
+		}
+		
+		$captchaMode = Settings::getValue("email", "use_captcha");
+		if ($captchaMode == "Always" || ($captchaMode == "Anonymous Only" && !$user))
+		{
+			$captchaMgr = new CaptchaManager();
+			$captchaMgr->addCaptchaToForm($form);
 		}
 		
 		$form->customSaveHandler = array(EmailHelper, sendContactUs);
