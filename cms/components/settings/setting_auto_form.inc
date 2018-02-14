@@ -65,7 +65,9 @@ class SettingAutoForm extends AutoForm
 			if ($this->filter && $this->filter->isExcluded($setting->name)) continue;
 			
 			$fields[$setting->name] = ($setting->field_type) ? $setting->field_type : "String";
+			if ($setting->weight < 0) $this->hide($setting->name);
 			if ($setting->category) $this->group($setting->category, $setting->name);
+		
 		}
 
 		$componentSettings->fields = $fields;
