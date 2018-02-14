@@ -29,7 +29,7 @@ class CaptchaManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("captcha", "captcha_provider", "", String, "Select the Captcha provider to use on your site", "", "CAPTCHA Provider");
+		Settings::setDefaultValue("captcha", "captcha_provider", "", String, "Select the Captcha provider to use on your site", "CAPTCHA Provider");
 	}
 	
 	static function registerSettingsFormExtension()
