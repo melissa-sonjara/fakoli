@@ -85,7 +85,7 @@ function installVideoJS()
 		var ch = cw / w * h;
 		
 		v.player.width(cw).height(ch);
-		videoElt.setStyles({'width': cw, 'height': ch});
+		//videoElt.setStyles({'width': cw, 'height': ch});
 	};
 	
 	var videos = $$('a.video');
@@ -120,7 +120,7 @@ function installVideoJS()
 			ch = v / getHeight();
 		}
 		
-		videoElt.setStyles({'width': cw, 'height': ch});
+		//videoElt.setStyles({'width': cw, 'height': ch});
 		
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
