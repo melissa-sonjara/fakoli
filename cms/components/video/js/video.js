@@ -86,10 +86,10 @@ function installVideoJS()
 		var h = v.getHeight();
 		var auto = v.hasClass('autoplay');
 		
-		if (!w) w = v.get('data-width');
-		if (!h) h = v.get('data-height');
+		//if (!w) w = v.get('data-width');
+		//if (!h) h = v.get('data-height');
 		
-		videoElt.setStyles({'width': w, 'height': h});
+		//videoElt.setStyles({'width': w, 'height': h});
 		
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
