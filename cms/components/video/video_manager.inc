@@ -35,6 +35,8 @@ Fakoli::using("video", "settings");
 
 class VideoManager
 {
+	var $movieFile = null;
+	
 	function VideoManager()
 	{
 		trace("Creating VideoManager", 3);
@@ -159,44 +161,107 @@ class VideoManager
 		$mgr->upgrade($version);
 	}
 	
+	private function getExecutablePath($exe)
+	{
+		$path = Settings::getValue("video", "ffmpeg_path");
+		$cmd = $path . DIRECTORY_SEPARATOR . $exe;
+		if (Fakoli::detectWindowsOS())
+		{
+			$cmd .= ".exe";
+		}
+	}
+	
+	private function execute($exe, $args)
+	{
+		if ($exe != "ffmpeg" && $exe != "ffprobe")
+		{
+			throw new Exception("Invalid FFMPEG executable");
+		}
+	
+		$cmd = $this->getExecutablePath($exe);
+		
+		if (!file_exists($cmd))
+		{
+			throw new FakoliException("FFMPEG executable not found");
+		}
+		
+		ob_start();
+		passthru("$cmd $args");
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
+
 	function hasFFMPEG()
 	{
-		return (extension_loaded("ffmpeg") && Settings::getValue("video", "ffmpeg_path"));
+		$path = Settings::getValue("video", "ffmpeg_path");
+		
+		if (!$path) return false;
+		
+		$ffmpeg = $this->getExecutablePath("ffmpeg");
+		if (!file_exists($ffmpeg)) return false;
+		
+		$ffprobe = $this->getExecutablePath("ffprobe");
+		if (!file_exists($ffprobe)) return false;
+		
+		return true;
 	}
 	
 	function open($file)
 	{
 		trace("Opening video '$file'", 3);
-		$this->ffmpeg = new ffmpeg_movie($file);
+		
+		if (!file_exists($file))
+		{
+			throw new FakoliException("File not found");
+		}
+
+		$this->movieFile = $file;
+		$this->movieInfo = json_decode($this->execute("ffprobe", "-v quiet -print_format json -show_format -show_streams {$this->movieFile}"));
 	}
 	
 	function getFrameWidth()
 	{
-		$width = $this->makeMultipleTwo($this->ffmpeg->getFrameWidth());
-		trace("Width: $width", 3);
-		return $width;	
+		foreach($this->movieInfo->streams as $stream)
+		{
+			if ($stream->codec_type == "video") return $stream->width;
+		}
+		
+		throw new FakoliException("Failed to locate video stream in file");
 	}
 	
 	function getFrameHeight()
 	{
-		$height = $this->makeMultipleTwo($this->ffmpeg->getFrameHeight());
-		trace("Height: $height", 3);
-		return $height;	
+		foreach($this->movieInfo->streams as $stream)
+		{
+			if ($stream->codec_type == "video") return $stream->height;
+		}
+		
+		throw new FakoliException("Failed to locate video stream in file");	
 	}
 	
 	function getFrameRate()
 	{
-		return $this->ffmpeg->getFrameRate();
-	}
-	
-	function getNextKeyFrame()
-	{
-		return $this->ffmpeg->getNextKeyFrame();
+		foreach($this->movieInfo->streams as $stream)
+		{
+			if ($stream->codec_type == "video") return $stream->r_frame_rate;
+		}
+		
+		throw new FakoliException("Failed to locate video stream in file");	
 	}
 
 	function getFrame($idx)
 	{
 		return $this->ffmpeg->getFrame($idx);
+	}
+	
+	function saveFrame($offset, $out)
+	{
+		if (!$this->movieFile) throw new FakoliException("Movie File not loaded");
+		$width = $this->getFrameWidth();
+		$height = $this->getFrameHeight();
+		
+		$this->execute("ffmpeg", "-ss {$offset} -i {$this->movieFile} -t 1 -s {$width}x{$height} -f image2 {$out}");
 	}
 	
 	function makeMultipleTwo($value)
