@@ -80,16 +80,16 @@ function installVideoJS()
 		if (!isMP4) return;
 		
 		videoElt = new Element('video');
-		videoElt.addClass('video-js').addClass("vjs-fluid").addClass('vjs-default-skin').addClass('vjs-big-play-centered');
+		videoElt.addClass('video-js').addClass('vjs-default-skin').addClass('vjs-big-play-centered');
 		
 		var w = v.getWidth();
 		var h = v.getHeight();
 		var auto = v.hasClass('autoplay');
 		
 		if (!w) w = v.get('data-width');
-		//if (!h) h = v.get('data-height');
+		if (!h) h = v.get('data-height');
 		
-		videoElt.setStyles({'width': w, 'height': 'auto', 'max-width': '100%'});
+		videoElt.setStyles({'width': w, 'height': h});
 		
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
