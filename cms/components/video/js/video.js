@@ -80,7 +80,7 @@ function installVideoJS()
 		if (!isMP4) return;
 		
 		videoElt = new Element('video');
-		videoElt.addClass('video-js').addClass('vjs-default-skin').addClass('vjs-big-play-centered');
+		videoElt.addClass('video-js').addClass("vjs-fluid").addClass('vjs-default-skin').addClass('vjs-big-play-centered');
 		
 		var w = v.getWidth();
 		var h = v.getHeight();
