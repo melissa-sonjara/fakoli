@@ -73,7 +73,7 @@ function installVideoJS()
 	{
 		if (!v.player) return;
 		var videoElt = v.getElement('video');
-		if (videoElt != null) return;
+		if (videoElt == null) return;
 		
 		var cw = v.getWidth();
 		//var h = v.getHeight();
