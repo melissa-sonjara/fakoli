@@ -140,8 +140,19 @@ var VideoPicker =  (function()
 			{
 				insertion = "<span>" + insertion + "<br/><a href='#' onclick='videoTranscript(" + this.selectedVideoId + "); return false;'>View Transcript</a></span>";
 			}
+
+			var selection = this.editor.selection;
 			
-		    this.editor.insertContent(insertion);
+			if (selection.isCollapsed())
+			{
+				this.editor.insertContent(insertion);
+			}
+			else
+			{
+				content = selection.getContent();
+				selection.setContent(insertion);
+			}
+
 		    this.hide();
 		}
 	});
@@ -155,7 +166,7 @@ var VideoPicker =  (function()
 })();
 
 
-function videoLightbox(element, id)
+function videoLightbox(element, id, w, h)
 {
 	var title = "";
 	var tag = element.tagName.toUpperCase();
