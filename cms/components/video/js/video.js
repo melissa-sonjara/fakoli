@@ -82,14 +82,16 @@ function installVideoJS()
 		videoElt = new Element('video');
 		videoElt.addClass('video-js').addClass('vjs-default-skin').addClass('vjs-big-play-centered');
 		
-		var w = v.getWidth();
-		var h = v.getHeight();
+		var cw = v.getWidth();
+		//var h = v.getHeight();
 		var auto = v.hasClass('autoplay');
 		
 		if (!w) w = v.get('data-width');
 		if (!h) h = v.get('data-height');
 		
-		videoElt.setStyles({'width': w, 'height': h});
+		var ch = w / h * cw;
+		
+		videoElt.setStyles({'width': cw, 'height': ch});
 		
 		srcElt = new Element('source');
 		srcElt.set('src', v.href);
@@ -100,7 +102,7 @@ function installVideoJS()
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
 		
-		videojs(videoElt, {controls: true, width: w, height: h, autoplay: auto}, function() {});
+		videojs(videoElt, {controls: true, width: cw, height: ch, autoplay: auto}, function() {});
 		
 	});
 }
