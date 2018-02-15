@@ -218,6 +218,8 @@ class VideoManager
 			return false;
 		}
 		
+		trace("FFMPEG: executables detected in correct location", 3);
+		
 		return true;
 	}
 	
