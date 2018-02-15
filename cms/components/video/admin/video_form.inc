@@ -181,7 +181,7 @@ function uploadFLV($field, $video)
 			unlink($target);
 		}
 		
-		$video->saveFrame(0.5, $target);
+		$videoMgr->saveFrame(0.5, $target);
 		
 		$video->image_file = basename($target);
 	}
