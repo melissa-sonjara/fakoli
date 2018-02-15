@@ -200,7 +200,7 @@ function videoLightbox(element, id)
 		w = Number(dimensions[0]);
 		h = Number(dimensions[1]);
 	}
-	modalPopup(title, "/action/video/video?video_id=" + id, (w + 16),(h + 52));
+	modalPopup(title, "/action/video/video?video_id=" + id, (w + 16), (h + 52));
 }
 
 function videoTranscript(id)
