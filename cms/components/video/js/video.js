@@ -1,8 +1,3 @@
-window.addEvent('load', function()
-{
-	installVideoPlayer();	
-});
-
 function installVideoPlayer()
 {
 	if (typeof videojs == 'function')
@@ -151,3 +146,8 @@ function installVideoJS()
 	});
 	
 }
+
+window.addEvent('load', function()
+{
+	installVideoPlayer();	
+});
