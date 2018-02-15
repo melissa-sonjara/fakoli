@@ -79,7 +79,7 @@ function installVideoJS()
 		if (!w) w = v.get('data-width');
 		if (!h) h = v.get('data-height');
 		
-		var ch = w / cw * h;
+		var ch = cw / w * h;
 		
 		v.player.width(cw).height(ch);
 		
@@ -110,7 +110,7 @@ function installVideoJS()
 		
 		if (responsive)
 		{
-			ch = w / cw * h;
+			ch = cw / w * h;
 		}
 		else
 		{
