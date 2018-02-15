@@ -169,6 +169,8 @@ class VideoManager
 		{
 			$cmd .= ".exe";
 		}
+		
+		return $cmd;
 	}
 	
 	private function execute($exe, $args)
@@ -196,13 +198,25 @@ class VideoManager
 	{
 		$path = Settings::getValue("video", "ffmpeg_path");
 		
-		if (!$path) return false;
+		if (!$path) 
+		{
+			trace("FFMPEG: path not set", 3);
+			return false;
+		}
 		
 		$ffmpeg = $this->getExecutablePath("ffmpeg");
-		if (!file_exists($ffmpeg)) return false;
+		if (!file_exists($ffmpeg)) 
+		{
+			trace("FFMPEG: no executable at $ffmpeg", 3);
+			return false;
+		}
 		
 		$ffprobe = $this->getExecutablePath("ffprobe");
-		if (!file_exists($ffprobe)) return false;
+		if (!file_exists($ffprobe)) 
+		{
+			trace("FFMPEG: no executable at $ffprobe", 3);
+			return false;
+		}
 		
 		return true;
 	}
