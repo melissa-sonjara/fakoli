@@ -132,7 +132,12 @@ function installVideoJS()
 		v.adopt(videoElt);
 		
 		v.player = videojs(videoElt, {controls: true, width: cw, height: ch, autoplay: auto}, function() {});
-		resizeVideoJS.delay(10, this, v);
+		var dialog = AbstractDialog.findDialog(v);
+		if (dialog)
+		{
+			dialog.addEvent('resize', function() { resizeVideoJS(v); });
+		}
+		//resizeVideoJS.delay(10, this, v);
 	});
 	
 	window.addEvent('resize', function()
