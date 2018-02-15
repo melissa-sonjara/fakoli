@@ -143,17 +143,8 @@ var VideoPicker =  (function()
 				insertion = "<span>" + insertion + "<br/><a href='#' onclick='videoTranscript(" + this.selectedVideoId + "); return false;'>View Transcript</a></span>";
 			}
 
-			var selection = this.editor.selection;
-			
-			if (selection.isCollapsed())
-			{
-				this.editor.insertContent(insertion);
-			}
-			else
-			{
-				content = selection.getContent();
-				selection.setContent(insertion);
-			}
+			var selection = this.editor.selection;			
+			selection.setContent(insertion);
 
 		    this.hide();
 		}
