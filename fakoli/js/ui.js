@@ -489,101 +489,100 @@ var ModalDialog = new Class(
     
     show: function(onComplete, fragmentURL)
     {
-    	var reload = this.element.getStyle('display') != 'none';
+	    	var reload = this.element.getStyle('display') != 'none';
+	    	
+	    	this.remoteURL = fragmentURL;
+	
+	    	if (!reload)
+	    	{
+	    		ModalDialog.activeDialogs.push(this);
+	    	}
+	    	
+	    	if (this.options.draggable)
+	    	{
+	    		var options = 
+	    		{
+	    			preventDefault: true, 
+	    			onDrag: function(element, event) 
+	    			{ 
+	    				new DOMEvent(event).stop(); 
+	    			} 
+	    		};
+	    		
+	    		if (this.options.handle)
+	    		{
+	    			options.handle = this.options.handle;
+	    		}
+	    		
+	    		var drag = new Drag.Move(this.element, options);
+	    	}
     	
-    	this.remoteURL = fragmentURL;
-
-    	if (!reload)
-    	{
-    		ModalDialog.activeDialogs.push(this);
-    	}
-    	
-    	if (this.options.draggable)
-    	{
-    		var options = 
-    		{
-    			preventDefault: true, 
-    			onDrag: function(element, event) 
-    			{ 
-    				new DOMEvent(event).stop(); 
-    			} 
-    		};
-    		
-    		if (this.options.handle)
-    		{
-    			options.handle = this.options.handle;
-    		}
-    		
-    		var drag = new Drag.Move(this.element, options);
-    	}
-    	
-    	
-    	if (fragmentURL && this.options.body)
-    	{
-    		new Curtain().loadingCursor();
-    		
-    		this.options.body.set('data-url', fragmentURL);
-    		addReloadHandler(this.options.body);
-    		
-    		this.disposeOnExit = true;
-    		if (!reload) this.options.body.set('text', "Loading...");
-    		var request = new Request.HTML(
-    		{
-    			evalScripts: false,
-    			evalResponse: false,
-    			method: 'get', 
-    			url: fragmentURL, 
-    			onSuccess: function(tree, elements, html, script) 
-    			{ 
-    				this.options.body.set('text', '');
-    				this.options.body.set('html', html);
-    				Browser.exec(script);
-    				addReloadHandlers(this.options.body);
-    				this.element.fade('show');
-    				this.center();
-    				new Curtain().normalCursor();
-    			}.bind(this)
-    		});
-    		request.send();
-    	}
-    	else
-    	{
-    		this.element.fade('show');
-    	}
-    	
-    	window.lowerCurtain(function() {
-    		this.element.setStyle('display', 'block');
-    		this.center();
-    		this.addResizeHook();
-    		if (onComplete) onComplete(this);
-    	}.bind(this));
+	    	if (fragmentURL && this.options.body)
+	    	{
+	    		new Curtain().loadingCursor();
+	    		
+	    		this.options.body.set('data-url', fragmentURL);
+	    		addReloadHandler(this.options.body);
+	    		
+	    		this.disposeOnExit = true;
+	    		if (!reload) this.options.body.set('text', "Loading...");
+	    		var request = new Request.HTML(
+	    		{
+	    			evalScripts: false,
+	    			evalResponse: false,
+	    			method: 'get', 
+	    			url: fragmentURL, 
+	    			onSuccess: function(tree, elements, html, script) 
+	    			{ 
+	    				this.options.body.set('text', '');
+	    				this.options.body.set('html', html);
+	    				Browser.exec(script);
+	    				addReloadHandlers(this.options.body);
+	    				this.element.fade('show');
+	    				this.center();
+	    				new Curtain().normalCursor();
+	    			}.bind(this)
+	    		});
+	    		request.send();
+	    	}
+	    	else
+	    	{
+	    		this.element.fade('show');
+	    	}
+	    	
+	    	window.lowerCurtain(function() {
+	    		this.element.setStyle('display', 'block');
+	    		this.center();
+	    		this.addResizeHook();
+	    		if (onComplete) onComplete(this);
+	    	}.bind(this));
     },
     
     addResizeHook: function()
     {
-    	this.resizeHook = function() { this.center(); }.bind(this);
-    	window.addEvent('resize', this.resizeHook);
+    		this.resizeHook = function() { this.center(); }.bind(this);
+    		window.addEvent('resize', this.resizeHook);
     },
     
     removeResizeHook: function()
     {
-    	if (this.resizeHook)
-    	{
-    		window.removeEvent('resize', this.resizeHook);
-    		this.resizeHook = null;
-    	}
+	    	if (this.resizeHook)
+	    	{
+	    		window.removeEvent('resize', this.resizeHook);
+	    		this.resizeHook = null;
+	    	}
     },
     
     hide: function(whenDone)
     {
-    	this.fireEvent('hide', this);
-    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
-    	ModalDialog.activeDialogs.pop();
-    	if (ModalDialog.activeDialogs.length == 0) window.raiseCurtain();
-    	this.element.setStyle('display', 'none');
-    	if (this.remoteURL) this.element.dispose();
-    	this.removeResizeHook();
-    	if (whenDone) whenDone();
+	    	this.fireEvent('hide', this);
+	    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
+	    	ModalDialog.activeDialogs.pop();
+	    	if (ModalDialog.activeDialogs.length == 0) window.raiseCurtain();
+	    	this.element.setStyle('display', 'none');
+	    	if (this.remoteURL) this.element.dispose();
+	    	this.removeResizeHook();
+	    	if (whenDone) whenDone();
     }
 });
 
@@ -613,7 +612,7 @@ var FloatingDialog = new Class(
     position: function()
     {
 		var x, y;
-    	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
+		var noFixed = (Browser.name == 'ie' && Browser.version < 7);
     			
 		if (this.top && this.left)
 		{
@@ -648,67 +647,68 @@ var FloatingDialog = new Class(
 		}
 		
 		this.element.setStyles({position: pos , top: y, left: x, 'z-index': 10000});
+		this.fireEvent('resize');
     },
     
     
     show: function(onComplete, fragmentURL)
     {
-    	if (this.options.draggable)
-    	{
-    		var options = 
-    		{
-    			preventDefault: true, 
-    			onDrag: function(element, event) 
-    			{ 
-    				new DOMEvent(event).stop(); 
-    			} 
-    		};
-    		
-    		if (this.options.handle)
-    		{
-    			options.handle = this.options.handle;
-    		}
-    		
-    		var drag = new Drag.Move(this.element, options);
-    	}
-    	
-    	this.position();
+	    	if (this.options.draggable)
+	    	{
+	    		var options = 
+	    		{
+	    			preventDefault: true, 
+	    			onDrag: function(element, event) 
+	    			{ 
+	    				new DOMEvent(event).stop(); 
+	    			} 
+	    		};
+	    		
+	    		if (this.options.handle)
+	    		{
+	    			options.handle = this.options.handle;
+	    		}
+	    		
+	    		var drag = new Drag.Move(this.element, options);
+	    	}
+	    	
+	    	this.position();
     	 	
-    	this.remoteURL = fragmentURL;
-
-    	if (fragmentURL && this.options.body)
-    	{
-    		this.options.body.set('data-url', fragmentURL);
-    		addReloadHandler(this.options.body);
-    		
-       		this.disposeOnExit = true;
-       	 	this.options.body.set('text', "Loading...");
-    		var request = new Request.HTML(
-    		{
-    			evalScripts: false,
-    			evalResponse: false,
-    			method: 'get', 
-    			url: fragmentURL, 
-    			onSuccess: function(tree, elements, html, script) 
-    			{ 
-    				this.options.body.set('text', '');
-    				this.options.body.set('html', html);
-    				Browser.exec(script);
-    				this.position();
-    			}.bind(this)
-    		});
-    		request.send();
-    	}
-    	
-    	this.element.setStyles({'display': 'block', 'opacity': 0});
-    	new Fx.Tween(this.element).start('opacity', 1).chain(onComplete);
+	    	this.remoteURL = fragmentURL;
+	
+	    	if (fragmentURL && this.options.body)
+	    	{
+	    		this.options.body.set('data-url', fragmentURL);
+	    		addReloadHandler(this.options.body);
+	    		
+	       		this.disposeOnExit = true;
+	       	 	this.options.body.set('text', "Loading...");
+	    		var request = new Request.HTML(
+	    		{
+	    			evalScripts: false,
+	    			evalResponse: false,
+	    			method: 'get', 
+	    			url: fragmentURL, 
+	    			onSuccess: function(tree, elements, html, script) 
+	    			{ 
+	    				this.options.body.set('text', '');
+	    				this.options.body.set('html', html);
+	    				Browser.exec(script);
+	    				this.position();
+	    			}.bind(this)
+	    		});
+	    		request.send();
+	    	}
+	    	
+	    	this.element.setStyles({'display': 'block', 'opacity': 0});
+	    	new Fx.Tween(this.element).start('opacity', 1).chain(onComplete);
     },
     
     hide: function()
     {
-    	this.fireEvent('hide', this);
-    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
-    	new Fx.Tween(this.element).start('opacity', 0).chain(function() {  this.element.setStyle('display', 'none');}.bind(this));
+	    	this.fireEvent('hide', this);
+	    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
+	    	new Fx.Tween(this.element).start('opacity', 0).chain(function() {  this.element.setStyle('display', 'none');}.bind(this));
     }
 });
 
