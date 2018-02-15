@@ -69,6 +69,22 @@ function installFlowplayer()
 
 function installVideoJS()
 {
+	var resizeVideoJS = function(v)
+	{
+		if (!v.player) return;
+		var cw = v.getWidth();
+		//var h = v.getHeight();
+		var auto = v.hasClass('autoplay');
+		
+		if (!w) w = v.get('data-width');
+		if (!h) h = v.get('data-height');
+		
+		var ch = w / h * cw;
+		
+		v.player.width(cw).height(ch);
+		
+	};
+	
 	var videos = $$('a.video');
 	
 	videos.each(function(v)
@@ -102,7 +118,18 @@ function installVideoJS()
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
 		
-		videojs(videoElt, {controls: true, width: cw, height: ch, autoplay: auto}, function() {});
-		
+		v.player = videojs(videoElt, {controls: true, width: cw, height: ch, autoplay: auto}, function() {});
+		resizeVideoJS.delay(100, this, v);
 	});
+	
+	window.addEvent('resize', function()
+	{
+		var videos = $$('a.video.responsive');
+		
+		videos.each(function(v)
+		{
+			resizeVideoJS(v);
+		});
+	});
+	
 }
