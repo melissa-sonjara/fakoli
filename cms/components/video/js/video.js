@@ -81,6 +81,7 @@ function installVideoJS()
 		
 		v.player.width(cw).height(ch);
 		//videoElt.setStyles({'width': cw, 'height': ch});
+		v.setStyle('height', ch);
 	};
 	
 	var videos = $$('a.video');
