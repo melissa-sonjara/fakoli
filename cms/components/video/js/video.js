@@ -123,6 +123,8 @@ function installVideoJS()
 		srcElt.set('type', 'video/mp4');
 		v.href='#';
 		v.addEvent('click', function() { return true; });
+
+		v.setStyle('height', ch);
 		
 		videoElt.adopt(srcElt);
 		v.adopt(videoElt);
