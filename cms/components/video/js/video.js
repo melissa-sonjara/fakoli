@@ -80,7 +80,7 @@ function installVideoJS()
 		var auto = v.hasClass('autoplay');
 		
 		w = v.get('data-width');
-		v.get('data-height');
+		h = v.get('data-height');
 		
 		var ch = cw / w * h;
 		
