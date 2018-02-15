@@ -126,7 +126,9 @@ var VideoPicker =  (function()
 				
 			case "embed":
 				
-				insertion = "<a class='video " + this.selectedVideoFormat +"' href='" + this.selectedVideo + "' style='display: block; width:" + this.selectedVideoWidth + "px; height: " + this.selectedVideoHeight +"px; background-image: url(" + this.selectedVideoImage + ")'></a>";
+				insertion = "<a class='video " + this.selectedVideoFormat +"' href='" + this.selectedVideo + 
+							"' style='display: block; width:" + this.selectedVideoWidth + "px; height: " + this.selectedVideoHeight + 
+							"px; background-image: url(" + this.selectedVideoImage + ")' data-width='" + this.selectedVideoWidth + "' data-height='" + this.selectedVideoHeight + "'></a>";
 				break;
 				
 			case "download":
@@ -166,8 +168,10 @@ var VideoPicker =  (function()
 })();
 
 
-function videoLightbox(element, id, w, h)
+function videoLightbox(element, id)
 {
+	element = document.id(element);
+	
 	var title = "";
 	var tag = element.tagName.toUpperCase();
 	switch(tag)
@@ -187,9 +191,16 @@ function videoLightbox(element, id, w, h)
 
 	if (!title) title = "Video";
 
-	var size = httpRequest('/action/video/video_size?video_id=' + id);
-	var dimensions = size.split('x');
-	modalPopup(title, "/action/video/video?video_id=" + id, (Number(dimensions[0]) + 16),(Number(dimensions[1]) + 52));
+	var w = element.get('data-width');
+	var h = element.get('data-height');
+	if (!w && !h)
+	{
+		var size = httpRequest('/action/video/video_size?video_id=' + id);
+		var dimensions = size.split('x');
+		w = Number(dimensions[0]);
+		h = Number(dimensions[1]);
+	}
+	modalPopup(title, "/action/video/video?video_id=" + id, (w + 16),(h + 52));
 }
 
 function videoTranscript(id)
