@@ -79,7 +79,7 @@ function installVideoJS()
 		if (!w) w = v.get('data-width');
 		if (!h) h = v.get('data-height');
 		
-		var ch = w / h * cw;
+		var ch = w / cw * h;
 		
 		v.player.width(cw).height(ch);
 		
@@ -119,7 +119,7 @@ function installVideoJS()
 		v.adopt(videoElt);
 		
 		v.player = videojs(videoElt, {controls: true, width: cw, height: ch, autoplay: auto}, function() {});
-		resizeVideoJS.delay(100, this, v);
+		resizeVideoJS.delay(10, this, v);
 	});
 	
 	window.addEvent('resize', function()
