@@ -101,8 +101,8 @@ function installVideoJS()
 		var auto = v.hasClass('autoplay');
 		var responsive = v.hasClass('responsive');
 		
-		if (!w) w = v.get('data-width');
-		if (!h) h = v.get('data-height');
+		w = v.get('data-width');
+		h = v.get('data-height');
 		
 		var ch;
 		
@@ -112,7 +112,7 @@ function installVideoJS()
 		}
 		else
 		{
-			ch = v / getHeight();
+			ch = v.getHeight();
 		}
 		
 		//videoElt.setStyles({'width': cw, 'height': ch});
