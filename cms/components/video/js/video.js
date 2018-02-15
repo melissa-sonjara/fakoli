@@ -101,11 +101,21 @@ function installVideoJS()
 		var cw = v.getWidth();
 		//var h = v.getHeight();
 		var auto = v.hasClass('autoplay');
+		var responsive = v.hasClass('responsive');
 		
 		if (!w) w = v.get('data-width');
 		if (!h) h = v.get('data-height');
 		
-		var ch = w / h * cw;
+		var ch;
+		
+		if (responsive)
+		{
+			ch = w / cw * h;
+		}
+		else
+		{
+			ch = v / getHeight();
+		}
 		
 		videoElt.setStyles({'width': cw, 'height': ch});
 		
