@@ -72,6 +72,9 @@ function installVideoJS()
 	var resizeVideoJS = function(v)
 	{
 		if (!v.player) return;
+		var videoElt = v.getElement('video');
+		if (videoElt != null) return;
+		
 		var cw = v.getWidth();
 		//var h = v.getHeight();
 		var auto = v.hasClass('autoplay');
@@ -82,7 +85,7 @@ function installVideoJS()
 		var ch = cw / w * h;
 		
 		v.player.width(cw).height(ch);
-		
+		videoElt.setStyles({'width': cw, 'height': ch});
 	};
 	
 	var videos = $$('a.video');
