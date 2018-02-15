@@ -39,7 +39,7 @@ $height = $video->height;
 $swf = VideoManager::getVideoURI($video);
 $format = $video->getFormat();
 ?>
-<a class='video autoplay <?echo $format?>' href='<?echo $swf?>' style='display: block; max-width: 100%; width: <?echo $width?>px; height: auto' data-width='<?echo $width?>' data-height='<?echo $height?>'></a>
+<a class='video autoplay responsive <?echo $format?>' href='<?echo $swf?>' style='display: block; max-width: 100%; width: <?echo $width?>px; height: <?php echo $height?>' data-width='<?echo $width?>' data-height='<?echo $height?>'></a>
 <script type='text/javascript'>
 window.addEvent('domready', function() {
 installVideoPlayer();
