@@ -451,39 +451,40 @@ var ModalDialog = new Class(
     	
     center: function()
     {
-    	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
-    	
-    	
-    	if (this.options.body)
-    	{
-    		this.options.body.setStyle('height', 'auto');
-    	}
-
-    	if (this.options.maximized)
-    	{
-    		this.element.addClass('maximized');
-    		this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: 0, left: 0, width: '100%', height: '100%', 'z-index': 10000});
-    		return;
-    	}
-    	
-    	this.element.removeClass('maximized');
-    	
-    	var curtain = document.id('curtain');
-    	var windowSize = window.size();
-    	
-    	if (this.element.offsetWidth > windowSize.width)
-    	{
-    		this.element.setStyle('width', windowSize.width * 0.9);
-    	}
-    	
-    	if (this.element.offsetHeight > windowSize.height && this.options.body)
-    	{
-    		this.options.body.setStyles({'height': windowSize.height * 0.9, 'overflow-y': 'auto'});
-    	}
-    	
-    	var x = (windowSize.width - this.element.offsetWidth) / 2;
-    	var y = (windowSize.height - this.element.offsetHeight) / 2;
-    	this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 10000});
+	    	var noFixed = (Browser.name == 'ie' && Browser.version < 7);
+	    	
+	    	
+	    	if (this.options.body)
+	    	{
+	    		this.options.body.setStyle('height', 'auto');
+	    	}
+	
+	    	if (this.options.maximized)
+	    	{
+	    		this.element.addClass('maximized');
+	    		this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: 0, left: 0, width: '100%', height: '100%', 'z-index': 10000});
+	    		return;
+	    	}
+	    	
+	    	this.element.removeClass('maximized');
+	    	
+	    	var curtain = document.id('curtain');
+	    	var windowSize = window.size();
+	    	
+	    	if (this.element.offsetWidth > windowSize.width)
+	    	{
+	    		this.element.setStyle('width', windowSize.width * 0.9);
+	    	}
+	    	
+	    	if (this.element.offsetHeight > windowSize.height && this.options.body)
+	    	{
+	    		this.options.body.setStyles({'height': windowSize.height * 0.9, 'overflow-y': 'auto'});
+	    	}
+	    	
+	    	var x = (windowSize.width - this.element.offsetWidth) / 2;
+	    	var y = (windowSize.height - this.element.offsetHeight) / 2;
+	    	this.element.setStyles({position: (this.draggable || noFixed) ? 'absolute' : 'fixed', top: y, left: x, 'z-index': 10000});
+	    	this.fireEvent('resize');
     },
     
     show: function(onComplete, fragmentURL)
