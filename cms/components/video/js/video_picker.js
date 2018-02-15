@@ -128,7 +128,7 @@ var VideoPicker =  (function()
 				
 				insertion = "<a class='video " + this.selectedVideoFormat +"' href='" + this.selectedVideo + 
 							"' style='display: block; width:" + this.selectedVideoWidth + "px; height: " + this.selectedVideoHeight + 
-							"px; background-image: url(" + this.selectedVideoImage + ")' data-width='" + this.selectedVideoWidth + "' data-height='" + this.selectedVideoHeight + "'></a>";
+							"px; background-image: url(" + this.selectedVideoImage + "); background-size: cover;' data-width='" + this.selectedVideoWidth + "' data-height='" + this.selectedVideoHeight + "'></a>";
 				break;
 				
 			case "download":
