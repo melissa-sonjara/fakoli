@@ -1364,8 +1364,16 @@ ENDSCRIPT;
 		list ($s, $qs) = explode("?", $_SERVER['REQUEST_URI']);
 		return $s;		
 	}
-	
-	/**
+    
+    /**
+     * Returns true if running on Windows, false otherwise
+     */
+    static function detectWindowsOS()
+    {
+    		return (strtolower(substr(PHP_OS, 0, 3)) == "win");
+    }
+    
+    /**
 	 * Retrieves information about the Server CPU load. For Windows systems
 	 * this is reported as percentage CPU. For Linux/UNIX systems the load 
 	 * information is returned in uptime format.
@@ -1378,7 +1386,7 @@ ENDSCRIPT;
 	{
 		$out = "";
 		
-		if (stristr(PHP_OS, 'win')) 
+		if (Fakoli::detectWindowsOS()) 
 		{			
 			if (class_exists("COM"))
 			{
@@ -1419,7 +1427,7 @@ ENDSCRIPT;
     	{
     		$fs = explode(",", $config['filesystems']);
     	}
-    	else if (strtolower(substr(PHP_OS, 0, 3)) == "win")
+    	else if (Fakoli::detectWindowsOS())
     	{
     		$fs = array("C:");
     	}
