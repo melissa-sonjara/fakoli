@@ -84,7 +84,7 @@ var Calendar = new Class(
 			this.divID = varName + "_" + ctrlName;
 		}
 		
-		this.calendar = new Element('div', {id: this.divID});
+		this.calendar = new Element('div', {id: this.divID, 'class': 'calendarPopup'});
 		this.calendar.setStyles({'position': 'absolute', 'z-index': 255, 'display': 'none', 'opacity': 0});
 		this.calendar.addEvent('mouseout', function(e) {this.onMouseOut(e);}.bind(this));
 
@@ -147,10 +147,7 @@ var Calendar = new Class(
 	drawCalendar: function()
 	{
 		var doc;
-		
-		doc  = "<table class='calendar' cellpadding='2'>";
-		doc += "<tr>";
-		doc += "<td colspan='7'><table border='0' width='100%'>";
+		doc = "<table class='calnav'>";
 		doc += "<td class='calnav'><a href=\"javascript:" + this.varName + ".prevMonth()\">&nbsp;&laquo;&nbsp;</a></td>";
 		doc += "<td class='calmonth'>";
 		switch(this.monthSelect)
@@ -181,6 +178,9 @@ var Calendar = new Class(
 		doc += "<td class='calnav'><a href=\"javascript:" + this.varName + ".nextMonth()\">&nbsp;&raquo;&nbsp;</a></td>";
 		doc += "</tr></table>";
 		
+		doc += "<table class='calendar' cellpadding='2'>";
+		doc += "<tr>";
+		
 		doc += "<tr>";
 		
 		for(i = 0; i < 7; ++i)
@@ -205,7 +205,7 @@ var Calendar = new Class(
 		
 		for(i = 0; i < startDay; ++i)
 		{
-			doc += "<td class='calday'>&nbsp;</td>";
+			doc += "<td class='calday empty'>&nbsp;</td>";
 			++counter;
 		}
 		
@@ -237,10 +237,15 @@ var Calendar = new Class(
 			
 			++counter;
 			doc  += "<td class='" + cellStyle + "'><a href=\"javascript:" + 
-					this.varName + ".select('" + this.getDateForDay(day) + "')\">" + day + "</a></td>";
+					this.varName + ".select('" + this.getDateForDay(day) + "', this)\">" + day + "</a></td>";
 			++day;
 		}
 		
+		while((counter % 7) != 0)
+		{
+			doc += "<td class='calday empty'>&nbsp;</td>";
+			++counter;
+		}
 		doc += "</tr></table>";
 				
 		//alert(doc);
@@ -410,7 +415,7 @@ var Calendar = new Class(
 	
 	onDateChanged: function(date)
 	{
-		if (typeof(this.control.onchange) != 'undefined')
+		if (this.control.onchange != null && typeof(this.control.onchange) != 'undefined')
 		{
 			this.control.onchange();
 		}

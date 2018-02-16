@@ -1,23 +1,39 @@
 
-DIV.calendarPopup
+div.calendarPopup
 {
 	position: absolute;
 	visibility: hidden;
+    border: solid 1px #999;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 1px 1px 10px #888;
 }
 
-TABLE.calendar
+TABLE.calendar {
+    font-size: 8pt;
+    font-weight: normal;
+    background-color: #eeeeee;
+    border-radius: 10px;
+    width: 240px;
+    border-collapse: collapse;
+    border-radius: 7px;
+}
+
+table.calendar th
 {
-	border: solid 1px black;
-	font-family: verdana;
-	font-size: 8pt;
+	text-align: center;
 	font-weight: normal;
-	background-color: #eeeeee;
-	width: 200px;
+}
+
+table.calnav {
+    width: 240px;
+    border-collapse: collapse;
 }
 
 TD.calnav
 {
-	border: solid 1px #aaaaaa;
+	border: none;
+	border-bottom: solid 1px #aaaaaa;
 	text-align: center;
 	vertical-align: top;
 }
@@ -25,43 +41,46 @@ TD.calnav
 TD.calmonth
 {
 	border: solid 1px #aaaaaa;
+	border-top: none;
 	background-color: white;
-	font-weight: bold;
+	font-weight: normal;
 	text-align: center;
-	font-size: 8pt;
+	font-size: 10pt;
 	width: 100%;
 }
 
 TD.calday
 {
 	border: solid 1px #cccccc;
+	border-bottom: none;
 	text-align: right;
 	font-size: 8pt;
 	width: 13%;
-	height: 20px;
+	height: 24px;
 	background-color: white;
 }
 
 TD.caltoday
 {
 	border: solid 1px #cccccc;
+	border-bottom: none;
 	text-align: right;
 	font-size: 8pt;
 	width: 13%;
-	height: 20px;
+	height: 24px;
 	background-color: yellow;
 }
 
-TD.calnav A
+TD.calnav A 
 {
-  border-style: none;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 1px;  
-  display: block;
-  width: 100%;
-  height: 12pt;
-  width: 30pt;
+    border-style: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 1px;
+    display: block;
+    width: 100%;
+    font-size: 10pt;
+    width: 30pt;
 }
 
 TD.calnav A:link
@@ -80,10 +99,6 @@ TD.calnav A:active
 TD.calnav A:hover
 {
   border-style: none;
-  border-width: 1px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 1px;  
   color: #0000aa;
   background-color: white;
 }
@@ -97,12 +112,12 @@ TD.calnav A:visited
 TD.calday A
 {
   border-style: none;
-  padding-top: 1px;
+  padding-top: 4px;
   padding-bottom: 1px;
   padding-left: 1px;  
   display: block;
   width: 100%;
-  height: 20px;
+  height: 24px;
 }
 
 TD.calday A:link
@@ -120,11 +135,6 @@ TD.calday A:active
 
 TD.calday A:hover
 {
-  border-style: none;
-  border-width: 1px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 1px;  
   color: #0000aa;
   text-decoration: underline;
 }
@@ -138,10 +148,23 @@ TD.calday A:visited
 TD.calselday
 {
 	border: solid 1px #cccccc;
+	border-bottom: none;
 	background-color: #ddddff;
 	text-align: right;
 	font-size: 8pt;
 	width: 13%;
-	height: 20px;	
+	height: 24px;	
 }
 
+TD.calselday A
+{
+  border-style: none;
+  padding-top: 4px;
+  padding-bottom: 1px;
+  padding-left: 1px;  
+  display: block;
+  width: 100%;
+  height: 24px;
+  text-decoration: none;
+  font-weight: bold;
+}
