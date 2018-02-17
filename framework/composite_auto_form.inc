@@ -33,7 +33,8 @@ class CompositeAutoForm
 	var $containerClass;
 	var $buttonAlignment = "left";
 	var $preset = array();
-	var $readOnlyForm;  ///< Specifies whether the entire form is read-only
+	var $readOnlyForm;  			///< Specifies whether the entire form is read-only
+	var $onSaveComplete = null;		///< Callback event handler that is fired after all the subordinate AutoForms have finished saving data to the database.
 	
 	
 	/**
@@ -59,7 +60,7 @@ class CompositeAutoForm
 	
 	/**
 	 * Add a sub-form to this form.
-	 * @param $form the form to be added
+	 * @param AutoForm $form the form to be added
 	 */
 	function addForm($form, $enableValidation = false)
 	{
@@ -285,6 +286,16 @@ function onCompositeFormSubmit(form)
 			if (!$form->save()) 
 			{
 				$valid = false;
+			}
+		}
+		
+		if ($valid)
+		{
+			// onComplete event is fired once all processing has been completed
+			
+			if ($this->onSaveComplete)
+			{
+				call_user_func_array($this->onSaveComplete, array($this));
 			}
 		}
 		
