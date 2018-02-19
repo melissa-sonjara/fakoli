@@ -681,7 +681,7 @@ class AutoForm
 	/**
 	 * Utility function to add a RelatedItemSelectFieldRender.
 	 */
-	function related($class, $constraint = "", $format = null, $field = null, $label = null, $allowAdd = false, $allowNone = false)
+	function related($class, $constraint = "", $format = null, $field = null, $label = null, $allowAdd = false, $allowNone = true)
 	{
 		$obj = new $class;
 		if (!$format) $format = $obj->default_format;
