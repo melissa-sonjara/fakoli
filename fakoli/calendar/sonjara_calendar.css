@@ -16,7 +16,7 @@ TABLE.calendar {
     border-radius: 10px;
     width: 240px;
     border-collapse: collapse;
-    border-radius: 7px;
+    border-radius: 0 0 7px 7px;
 }
 
 table.calendar th
@@ -81,6 +81,7 @@ TD.calnav A
     width: 100%;
     font-size: 10pt;
     width: 30pt;
+    background-color: #fefefe;
 }
 
 TD.calnav A:link
