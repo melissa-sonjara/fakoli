@@ -36,6 +36,7 @@ TD.calnav
 	border-bottom: solid 1px #aaaaaa;
 	text-align: center;
 	vertical-align: top;
+	background-color: #ddf;
 }
 
 TD.calmonth
@@ -81,7 +82,6 @@ TD.calnav A
     width: 100%;
     font-size: 10pt;
     width: 30pt;
-    background-color: #fefefe;
 }
 
 TD.calnav A:link
@@ -101,7 +101,7 @@ TD.calnav A:hover
 {
   border-style: none;
   color: #0000aa;
-  background-color: white;
+  background-color: #eef;
 }
 
 TD.calnav A:visited
