@@ -57,7 +57,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 	var $otherField;			///< Name of a field in the form to allow the user to specify specific "Other" value that is not in the item list
 	var $onChange;				///< Name of a Javascript handler function to be called when the selection changes
 	var $width;					///< Width of the control (in CSS format)
-	var $defaultText;			///< Text to display in the 'no selection' option when allowNone is enabled
+	var $defaultText = "";		///< Text to display in the 'no selection' option when allowNone is enabled
 	var $defaultReadOnlyText;	///< Text to display when the control is read-only and the is no selected value;
 	var $toggleAddNew;			///< Use the new UI with an Add New button that toggles the text entry field
 	var $addNewButtonText = "Add New";	///< Text to show on the Add New button
@@ -237,6 +237,7 @@ function <?php echo $id?>_hideAddNew()
 			$name = $this->formatName($item, $this->nameField);
 			$valueField = ($this->valueField != "") ? $this->valueField : $item->getPrimaryKey();
 			$value = $item->get($valueField);
+			if (!$value) $name = $this->defaultText;
 			
 			$vals[$name] = $value;
 		}
