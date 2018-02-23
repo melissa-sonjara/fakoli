@@ -124,7 +124,10 @@ class TreeNode
 			{
 				$title .= "{$_activeTree->onSelect}(\"{$this->value}\");";
 			}
-			
+			else if ($_activeTree->selectMode != 'navigation')
+			{
+				$title .= "new DOMEvent(event).stop(); Tree.toggleCheckbox(this, \"{$_activeTree->id}\", \"{$_activeTree->selectMode}\")";
+			}
 			$title .= "; return false'>{$this->title}</a>{$this->extras}";
 		}
 		

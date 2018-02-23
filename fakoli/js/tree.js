@@ -101,7 +101,15 @@ Tree.clearCheckBoxes = function(id, except)
 		}
 	});
 	
-	except.form[id].value = except.value;
+	document.id(id).value = except.value;
+};
+
+Tree.toggleCheckbox = function(link, id, mode)
+{
+	var parent = link.getParent();
+	var cbx = parent.getElement("input[type=checkbox]");
+	if (mode == 'single') Tree.clearCheckBoxes(id, cbx);
+	if (cbx) cbx.checked = !cbx.checked;
 };
 
 Tree.selectedValues = function(id)
