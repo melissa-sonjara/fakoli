@@ -128,7 +128,14 @@ class TreeNode
 			{
 				$title .= "new DOMEvent(event).stop(); Tree.toggleCheckbox(this, \"{$_activeTree->id}\", \"{$_activeTree->selectMode}\")";
 			}
-			$title .= "; return false'>{$this->title}</a>{$this->extras}";
+			$title .= "; return false'";
+			
+			if ($_activeTree->selectOnRightClick)
+			{
+				$title .= " oncontextmenu='Tree.selectCheckbox(this, \"{$_activeTree->id}\", \"{$_activeTree->selectMode}\");'";
+			}
+			
+			$title .= ">{$this->title}</a>{$this->extras}";
 		}
 		
 		if ($c == 0 && !$this->onDemand)
@@ -320,6 +327,7 @@ class TreeControl
 	var $value;
 	var $indent = "16px";
 	var $children;
+	var $selectOnRightClick = false;
 	
 	/**
 	 * Create a new TreeControl.

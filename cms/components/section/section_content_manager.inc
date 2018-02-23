@@ -157,6 +157,7 @@ class SectionContentAdminView extends AbstractSectionContentAdminView
 		$contentTree->scroll = true;
 		$contentTree->width = 360;
 		$contentTree->height = 430;
+		$contentTree->selectOnRightClick = true;
 		
 		$availableTree = new TreeControl("available_content_tree", "Available Content");
 		$availableTree->scroll = true;

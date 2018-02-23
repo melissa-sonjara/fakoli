@@ -112,6 +112,14 @@ Tree.toggleCheckbox = function(link, id, mode)
 	if (cbx) cbx.checked = !cbx.checked;
 };
 
+Tree.selectCheckbox = function(link, id, mode)
+{
+	var parent = link.getParent();
+	var cbx = parent.getElement("input[type=checkbox]");
+	if (mode == 'single') Tree.clearCheckBoxes(id, cbx);
+	if (cbx) cbx.checked = true;
+};
+
 Tree.selectedValues = function(id)
 {
 	var values = [];
