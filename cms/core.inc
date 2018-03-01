@@ -1543,6 +1543,7 @@ Fakoli::usingFeature("data_item", "auto_form", "field_renderers", "cache", "data
 
 $config["trace_level"] = Settings::getValue("debug", "trace_level");
 					
+ComponentManager::fireEvent("RegisterErrorHandler");
 ComponentManager::fireEvent("RegisterSessionPersistance");
 ComponentManager::fireEvent("RegisterLoginExtension");
 
