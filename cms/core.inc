@@ -1307,6 +1307,7 @@ ENDSCRIPT;
 	static function exceptionHandler($exception)
 	{
 		global $isAction;
+		global $config;
 		
 		try 
 		{
@@ -1328,7 +1329,11 @@ ENDSCRIPT;
 				}
 			}
 					
-			$msg = $exception->getMessage()."<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
+			$msg = $exception->getMessage();
+			if ($config["bootstrap_error_stack_trace"])
+			{
+				$msg .= "<br/><b>Stack trace:</b><br/>".$exception->getTraceAsString();
+			}
 			
 			if ($isAction)
 			{
