@@ -14,7 +14,8 @@ var Chart = new Class(
 		captionLeft: 10,
 		captionWidth: 580,
 		captionAttributes: {},
-		exportStyles: []
+		exportStyles: [],
+		imageOutputScale: 2
 	},
 
 	initialize: function(id)
@@ -216,8 +217,8 @@ var Chart = new Class(
 		var w = this.container.getWidth();
 		var h = this.container.getHeight();
 
-		w = Math.floor(w+.5);
-		h = Math.floor(h+.5);
+		w = Math.floor(w+.5) * this.options.imageOutputScale;
+		h = Math.floor(h+.5) * this.options.imageOutputScale;
 		
 		if (!this.canvas)
 		{
