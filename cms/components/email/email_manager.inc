@@ -283,8 +283,8 @@ class EmailManager
 		$this->item = clone($item);
 		$this->item->filter = null;
 		$this->emailTemplate = $emailTemplate;
-		$this->emailTemplateName = $emailTemplate->name;
-		$this->emailFrom = $emailTemplate->sender_email;
+		$this->emailTemplateName = ($this->item) ? $this->item->format($emailTemplate->name) : $emailTemplate->name;
+		$this->emailFrom = ($this->item) ? $this->item->format($emailTemplate->sender_email) : $emailTemplate->sender_email;
 		$this->mergeEmail();
 		$this->onSendComplete = $onSendComplete;
 	}
