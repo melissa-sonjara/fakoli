@@ -14,8 +14,9 @@ class TableSelectFieldRenderer extends FieldRenderer
 	
 	var $handler = null;
 	var $processor = null;
+	var $data = null;
 	
-	function __construct($form, $field, $label, $handler, $processor = null, $mode = "single" )
+	function __construct($form, $field, $label, $handler, $processor = null, $mode = "single", $data = null )
 	{
 		$this->FieldRenderer($form);
 
@@ -24,6 +25,7 @@ class TableSelectFieldRenderer extends FieldRenderer
 		$this->handler = $handler;
 		$this->processor = $processor;
 		$this->mode = $mode;
+		$this->data = $data;
 		
 		if ($form->data->hasField($field))
 		{
@@ -40,7 +42,7 @@ class TableSelectFieldRenderer extends FieldRenderer
 
 	function buildTable($field)
 	{
-		$this->table = new DataListView(null, "{$field}_table");
+		$this->table = new DataListView($this->data, "{$field}_table");
 		$this->table->rowId = true;
 
 		$this->table->pageSize = 5;
@@ -98,7 +100,11 @@ class TableSelectFieldRenderer extends FieldRenderer
 			$this->buildTable($field);
 		}
 		
+		$this->_startField($field);
+		
 		echo $this->table->drawView();
+		
+		$this->_endField($field);
 	}
 
 	function postProcess($field = "")
@@ -107,7 +113,7 @@ class TableSelectFieldRenderer extends FieldRenderer
 
 		if ($this->processor)
 		{
-			$this->processor($field);
+			call_user_func_array($this->processor, array($field));
 		}
 
 		return true;
