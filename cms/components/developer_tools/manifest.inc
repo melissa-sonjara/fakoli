@@ -39,6 +39,11 @@ class DeveloperToolsManifest
 											  "weight"	=>	4,
 											  "icon"	=>	"unlock"),
 					
+				"Table Information"	=>	array("page"	=>	"/admin/table_information",
+											  "role"	=>	"admin",
+											  "weight"	=>	5,
+											  "icon"	=>	"database"),
+				
 				"Test PHP CLI"		=>	array("page"	=>	"/admin/test_php_cli",
 											  "role"	=>	"admin",
 											  "weight"	=>	99,
