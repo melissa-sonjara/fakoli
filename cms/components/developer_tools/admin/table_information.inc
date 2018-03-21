@@ -1,6 +1,8 @@
 <?php
 Fakoli::using("developer_tools");
 
+$menu_item = "Table Information";
+
 $tables = Query::create(TableInformation, "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_TYPE='BASE TABLE' ORDER BY TABLE_TYPE, TABLE_NAME")->execute();
 
 $charset = new TableCharacterSet();
