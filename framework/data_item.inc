@@ -263,43 +263,43 @@ class DataItem extends AbstractDataItem
 		
 		$fields = $this->getFields();
 		
-    		if ($alias)
+    	if ($alias)
         {
-	        	$offset = strlen($alias) + 1;
-	        	
-		    	foreach ($line as $field => $value)
+        	$offset = strlen($alias) + 1;
+        	
+	    	foreach ($line as $field => $value)
 	        {
-	        		if (!startsWith($field, $alias)) continue;
-	        		$field = substr($field, $offset);
+        		if (!startsWith($field, $alias)) continue;
+        		$field = substr($field, $offset);
+        	
+	        	if (!array_key_exists($field, $fields)) continue;
+	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
 	        	
-		        	if (!array_key_exists($field, $fields)) continue;
-		        	if ($this->filter && $this->filter->isExcluded($field)) continue;
-		        	
-		        	if (!isset($config["no_charset_conversions"]) || $config["no_charset_conversions"])
-		        	{
-		        		$this->$field = $value;
-		        	}
-		        	else
-		        	{
-		            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
-		        	} 
+	        	if (!isset($config["no_charset_conversions"]) || $config["no_charset_conversions"])
+	        	{
+	        		$this->$field = $value;
+	        	}
+	        	else
+	        	{
+	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	} 
 	       	}
         }
         else
         {
 			foreach ($line as $field => $value)
 	        {
-		        	if (!array_key_exists($field, $fields)) continue;
-		        	if ($this->filter && $this->filter->isExcluded($field)) continue;
-		        	
-		        	if (!isset($config["no_charset_conversions"]) || $config["no_charset_conversions"])
-		        	{
-		        		$this->$field = $value;
-		        	}
-		        	else
-		        	{
-		            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
-		        	} 
+	        	if (!array_key_exists($field, $fields)) continue;
+	        	if ($this->filter && $this->filter->isExcluded($field)) continue;
+	        	
+	        	if (!isset($config["no_charset_conversions"]) || $config["no_charset_conversions"])
+	        	{
+	        		$this->$field = $value;
+	        	}
+	        	else
+	        	{
+	            	$this->$field = iconv("UTF-8", "CP1252//IGNORE", $value);
+	        	} 
 	        } 
         }
         
@@ -318,6 +318,7 @@ class DataItem extends AbstractDataItem
         	}
         }
         
+        $this->unpack();
         $this->fireEvent("onPopulate");
 	}
 		
@@ -528,6 +529,25 @@ class DataItem extends AbstractDataItem
 		return $this->fieldAnnotations;
 	}
 	
+	
+	/**
+	 * The pack() method is called prior to persisting a DataItem to storage.
+	 * It can be used to perform a preprocessing step prior to storage, such as
+	 * formatting sub-objects into a JSON, XML or other serialized format and storing them in a field.
+	 */
+	function pack()
+	{
+	}
+	
+	/**
+	 * The unpack() method is called after populating a DataItem.
+	 * It can be used to unpack serialized sub-object representations so they are can
+	 * be used directly by your application.
+	 */
+	function unpack()
+	{
+	}
+	
 	/**
 	 * Load the object with the specified primary key
 	 * 
@@ -681,6 +701,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function update()
 	{
+		$this->pack();
+		
 		$pk = $this->primary_key;
 
 		$query = "UPDATE {$this->table} SET ";
@@ -784,6 +806,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function insert()
 	{
+		$this->pack();
+		
 		$pk = $this->primary_key;
 		
 		$first = true;
@@ -1019,6 +1043,8 @@ class DataItem extends AbstractDataItem
 				$this->set($field, $_GET[$field]);
 			}
 		}
+		
+		$this->unpack();
 	}
 	
 	/**
@@ -1041,6 +1067,8 @@ class DataItem extends AbstractDataItem
 				$this->$field = 0;
 			}
 		}
+		
+		$this->unpack();
 	}
 	
 	/**
@@ -1079,6 +1107,8 @@ class DataItem extends AbstractDataItem
 				$this->$field = 0;
 			}
 		}
+		
+		$this->unpack();
 	}
 	
 	/**
@@ -1114,14 +1144,14 @@ class DataItem extends AbstractDataItem
 		foreach($this->getFields() as $field => $type)
 		{
 			if ($this->filter && $this->filter->isExcluded($field)) continue;
-			$this->$field = $from->$field;
+			$this->set($field, $from->$field);
 		}
 		
 		if (is_array($this->calculatedFields))
 		{
 			foreach($this->calculatedFields as $field => $expr)
 			{
-				$this->$field = $from->$field;
+				$this->set($field, $from->$field);
 			}
 		}	
 	}
@@ -2058,6 +2088,31 @@ function toJSONGrouped($items)
 	}
 	
 	return "{".implode(", ", $out)."}";
+}
+
+function fromJSON($class, $json)
+{
+	$data = json_decode($json);
+	
+	if (is_object($data))
+	{
+		$obj = new $class;
+		$obj->copy($data);
+		return $obj;
+	}
+	else if (is_array($data))
+	{
+		foreach($data as $datum)
+		{
+			$obj = new $class;
+			$obj->copy($datum);
+			$out[] = $obj;
+		}
+		
+		return $out;
+	}
+	
+	return null;
 }
 
 function displayFieldAsList($items, $field, $separator = ", ")
