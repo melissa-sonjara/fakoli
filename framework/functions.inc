@@ -679,6 +679,23 @@ function checkValidEmail($e)
 }
 
 /**
+ * Security helper function. Check that the given parameter is a valid date.
+ * @param string $d the date
+ * @return string the value of the parameter if it is in a valid date format
+ */
+function checkValidDate($d)
+{
+	if (!$d) return $d;
+	$formats = array("Y-m-d", "Y/m/d", "m/d/Y");
+	foreach($formats as $format)
+	{
+		if ($d == date($format, strtotime($d))) return $d;
+	}
+	
+	die("Invalid Parameter");
+}
+
+/**
  * Utility function to nicely format addresses, etc.                 
  * (skips blank entries, places all other entries on separate lines) 
  *
