@@ -649,15 +649,26 @@ abstract class AbstractDataItem
 	
 	/**
 	 * Populate from the supplied JSON object 
-	 * @param unknown $json
+	 * @param mixed $json either a decoded JSON object, or the string representation
 	 */
 	function fromJSON($json)
 	{
-		$obj = json_decode($json, true);
-		$fields = $this->getFields();
-		foreach($fields as $field => $type)
+		if (is_object($json))
 		{
-			$this->set($field, $obj[$field]);
+			$fields = $this->getFields();
+			foreach($fields as $field => $type)
+			{
+				$this->set($field, $json->$field);
+			}	
+		}
+		else
+		{
+			$obj = json_decode($json, true);
+			$fields = $this->getFields();
+			foreach($fields as $field => $type)
+			{
+				$this->set($field, $obj[$field]);
+			}
 		}
 	}
 	
