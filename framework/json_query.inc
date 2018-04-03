@@ -105,6 +105,8 @@ class JSONQuery extends AbstractQuery
 			trace($query, 1);
 			
 			$line = $result->fetch();
+			trace(print_r($line, true), 1);
+			
 			if ($line)
 			{
 				$json = $line[0];
