@@ -37,6 +37,7 @@ require_once realpath(dirname(__FILE__)."/query.inc");
 require_once realpath(dirname(__FILE__)."/indexed_query.inc");
 require_once realpath(dirname(__FILE__)."/grouped_query.inc");
 require_once realpath(dirname(__FILE__)."/iterated_query.inc");
+require_once realpath(dirname(__FILE__)."/json_query.inc");
 
 /*define("String", 1);	
 define("Number", 2);
