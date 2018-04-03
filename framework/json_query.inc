@@ -74,6 +74,7 @@ class JSONQuery extends AbstractQuery
 	function executeSingle()
 	{
 		$json = $this->executeRaw();
+		trace(print_r($json), 1);
 		if (!$json) return null;
 		
 		if (is_array($json))
