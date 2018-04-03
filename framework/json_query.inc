@@ -86,6 +86,8 @@ class JSONQuery extends AbstractQuery
 		$item->filter = $this->filter;
 		$item->fromJSON($json);
 	
+		trace(print_r($item, true), 1);
+		
 		return $item;
 	}
 	
