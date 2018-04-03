@@ -83,7 +83,7 @@ class JSONQuery extends AbstractQuery
 	
 		$item = new $this->class;
 		$item->filter = $this->filter;
-		$item->fromJSON($jsonItem);
+		$item->fromJSON($json);
 	
 		return $item;
 	}
@@ -102,6 +102,8 @@ class JSONQuery extends AbstractQuery
 			$result = $db->prepare($query);
 			$result->execute($this->params);
 
+			trace($query, 1);
+			
 			$line = $result->fetch();
 			if ($line)
 			{
