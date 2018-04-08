@@ -1323,7 +1323,7 @@ ENDSCRIPT;
 			
 			if (Fakoli::$rollbackBuffers)
 			{
-				while(ob_get_level() > Fakoli::$outputBufferLevel); // Clear all output buffers.
+				while(ob_get_level() > Fakoli::$outputBufferLevel) // Clear all output buffers.
 				{
 					ob_end_clean();
 				}
