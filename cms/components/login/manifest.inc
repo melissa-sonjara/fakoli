@@ -50,7 +50,7 @@ class LoginManifest
 	
 	static function getScripts()
 	{
-		return array("/components/login/js/ajax_login_manager.js");
+		return array("/components/login/js/ajax_login_manager.js", "/components/login/js/password_complexity_verifier.js");
 	}
 	
 	static function getAdminMenu()

@@ -28,8 +28,8 @@ class PasswordComplexityFieldRenderer extends PasswordFieldRenderer
 		$requireUppercase = Settings::getValue("login", "require_uppercase") ? 'true' : 'false';
 		$requireSpecial = Settings::getValue("login", "require_special") ? 'true' : 'false';
 		$id = "{$this->parent->id}_{$field}";
+		//		<script type='text/javascript' src='/components/login/js/password_complexity_verifier.js'></script>
 ?>
-<script type='text/javascript' src='/components/login/js/password_complexity_verifier.js'></script>
 <script type='text/javascript'>
 window.addEvent('domready', function()
 {
