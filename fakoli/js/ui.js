@@ -1815,6 +1815,24 @@ Element.implement('loadPanel', function(url, onComplete)
 	go(url);
 });
 
+Element.implement('getPanel', function()
+{
+	var element = document.id(this);
+	do
+	{
+		if (element.match('[data-url]') && element.load) 
+		{
+			element.load(url, onComplete);
+			return;
+		}
+		element = element.getParent();
+	}
+	while(element);
+	
+	// No panels present
+	return null;
+});
+
 function loadPanel(elt, url, onComplete)
 {
 	new Element(elt).loadPanel(url, onComplete);
