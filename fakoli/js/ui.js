@@ -1822,8 +1822,7 @@ Element.implement('getPanel', function()
 	{
 		if (element.match('[data-url]') && element.load) 
 		{
-			element.load(url, onComplete);
-			return;
+			return element;
 		}
 		element = element.getParent();
 	}
