@@ -216,16 +216,11 @@ var Curtain = new Class(
 		this.shim.position();
 		this.shim.show();
 		
-		document.body.addClass('curtain_lowered');
-		
-		if (onComplete)
+		new Fx.Tween(this.curtain).start('opacity', 0.7).chain(function()
 		{
-			new Fx.Tween(this.curtain).start('opacity', 0.5).chain(onComplete);
-		}
-		else
-		{
-			this.curtain.fade(0.7);
-		}
+			document.body.addClass('curtain_lowered');
+			if (onComplete) onComplete();
+		});
 	},
 	
 	raise: function(onComplete)
