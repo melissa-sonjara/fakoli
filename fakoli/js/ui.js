@@ -216,6 +216,8 @@ var Curtain = new Class(
 		this.shim.position();
 		this.shim.show();
 		
+		document.body.addClass('curtain_lowered');
+		
 		if (onComplete)
 		{
 			new Fx.Tween(this.curtain).start('opacity', 0.5).chain(onComplete);
@@ -229,6 +231,8 @@ var Curtain = new Class(
 	raise: function(onComplete)
 	{
 		this.shim.hide();
+
+		document.body.removeClass('curtain_lowered');
 		
 		if (onComplete)
 		{
