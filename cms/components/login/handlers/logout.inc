@@ -32,6 +32,7 @@
 *****************************************************************/
 
 session_destroy();
+ComponentManager::fireEvent("OnLogout");
 
 if ($_SERVER['HTTP_REFERER']) 
 {
