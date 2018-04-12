@@ -252,7 +252,10 @@ var Curtain = new Class(
 	}
 });
 
-window.curtain = new Curtain();
+window.addEvent('domready', function()
+{
+	window.curtain = new Curtain();
+});
 
 Window.implement(
 {
