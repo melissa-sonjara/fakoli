@@ -228,12 +228,14 @@ var Curtain = new Class(
 
 		document.body.removeClass('curtain_lowered');
 
-		function()
+		var closer = function()
 		{
 			this.curtain.setStyles({display: 'none'});
 			if (onComplete) onComplete();
 			
-		}.delay(500, this);
+		};
+		
+		closer.delay(500, this);
 		
 //		if (onComplete)
 //		{
