@@ -215,10 +215,10 @@ var Curtain = new Class(
 		
 		this.shim.position();
 		this.shim.show();
-		
+
+		document.body.addClass('curtain_lowered');
 		new Fx.Tween(this.curtain).start('opacity', 0.7).chain(function()
 		{
-			document.body.addClass('curtain_lowered');
 			if (onComplete) onComplete();
 		});
 	},
