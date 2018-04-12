@@ -209,11 +209,10 @@ var Curtain = new Class(
 								width: w,
 								height: h,
 								display: 'block',
-								position: (noFixed) ? 'absolute' : 'fixed',
-								visibility: 'visible'});
+								position: (noFixed) ? 'absolute' : 'fixed'});
 		
-		this.shim.position();
-		this.shim.show();
+		//this.shim.position();
+		//this.shim.show();
 
 		document.body.addClass('curtain_lowered');
 		if (onComplete) onComplete.delay(500);
