@@ -219,7 +219,7 @@ var Curtain = new Class(
 		document.body.addClass('curtain_lowered');
 		//new Fx.Tween(this.curtain).start('opacity', 0.7).chain(function()
 		//{
-			if (onComplete) onComplete();
+			if (onComplete) onComplete.delay(1000);
 		//});
 	},
 	
