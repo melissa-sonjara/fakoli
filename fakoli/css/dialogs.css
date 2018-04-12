@@ -12,7 +12,7 @@
 
 body.curtain_lowered #curtain 
 {
-	opacity: 0.7 !important;
+	opacity: 0.7;
     transition: opacity .5s ease-in;
 }
 
