@@ -209,7 +209,6 @@ var Curtain = new Class(
 								width: w,
 								height: h,
 								display: 'block',
-								opacity: 0,
 								position: (noFixed) ? 'absolute' : 'fixed',
 								visibility: 'visible'});
 		
@@ -219,7 +218,7 @@ var Curtain = new Class(
 		document.body.addClass('curtain_lowered');
 		//new Fx.Tween(this.curtain).start('opacity', 0.7).chain(function()
 		//{
-			if (onComplete) onComplete.delay(1000);
+			if (onComplete) onComplete.delay(500);
 		//});
 	},
 	
@@ -364,6 +363,12 @@ var AbstractDialog = new Class(
     	if (this.options.title)	this.setTitle(this.options.title);
     	this.element.setStyles({'width': this.options.width, 'height': this.options.height});
     	this.element.dialog = this;
+    },
+    
+    resize: function(width, height)
+    {
+    	this.element.setStyles({'width': width, 'height': height});
+    	return this;
     },
     
     setTitle: function(title)
