@@ -252,16 +252,18 @@ var Curtain = new Class(
 	}
 });
 
+window.curtain = new Curtain();
+
 Window.implement(
 {
 	raiseCurtain: function(onComplete)
 	{
-		new Curtain().raise(onComplete);
+		window.curtain.raise(onComplete);
 	},
 	
 	lowerCurtain: function(onComplete)
 	{
-		new Curtain().lower(onComplete);
+		window.curtain.lower(onComplete);
 	}		
 
 });
