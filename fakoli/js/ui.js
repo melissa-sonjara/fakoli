@@ -228,8 +228,12 @@ var Curtain = new Class(
 
 		document.body.removeClass('curtain_lowered');
 
-
-		if (onComplete) onComplete.delay(500);
+		function()
+		{
+			this.curtain.setStyles({display: 'none'});
+			if (onComplete) onComplete();
+			
+		}.delay(500, this);
 		
 //		if (onComplete)
 //		{
