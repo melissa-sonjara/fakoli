@@ -44,12 +44,13 @@ class ScrollManifest
 
 	static function subscribeToEvents()
 	{
-		return array("upgradeComponent"			=> array(ScrollManager, upgradeComponent),
-					 "ComponentScanComplete"	=> array(ScrollManager, setDefaults),
-					 "ResolveIdentifier" 		=> array(ScrollManager, displayScroll),
-					 "EnumerateItems"			=> array(ScrollManager, enumerateScrolls),
+		return array("upgradeComponent"				=> array(ScrollManager, upgradeComponent),
+					 "ComponentScanComplete"		=> array(ScrollManager, setDefaults),
+					 "ResolveIdentifier" 			=> array(ScrollManager, displayScroll),
+					 "EnumerateItems"				=> array(ScrollManager, enumerateScrolls),
 					 //"RegisterSearchables"			=> array(PageManager, registerSearchables),
-					 "RegisterTaxonomyClasses"	=> array(ScrollManager, registerTaxonomyClasses),
+					 "RegisterTaxonomyClasses"		=> array(ScrollManager, registerTaxonomyClasses),
+					 "RegisterSerializationHandler" => array(ScrollManager, registerSerializationHandler)
 				
 					//TODO: Add Event Registrations here
 		);

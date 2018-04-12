@@ -17,6 +17,12 @@ class ScrollManager
 		Settings::setDefaultValue("scroll", "scroll_part_template", "<a name='{title:codify}'></a>\n<div id='{title:codify}' class='part {css_class}' style='{styles}'>\n<div class='content'>{content}</div>\n</div>", Text);
 	}
 
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("scroll", "Scrolls and Parts", new CompoundSerializationHandler("ScrollMap", 'Scroll', 'ScrollPart'));
+	}
+	
 	static function scrollTabs($key)
 	{
 		$tabs = array(	"Definition"	=>	"scroll_form",
