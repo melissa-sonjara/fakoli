@@ -227,15 +227,18 @@ var Curtain = new Class(
 		this.shim.hide();
 
 		document.body.removeClass('curtain_lowered');
+
+
+		if (onComplete) onComplete.delay(500);
 		
-		if (onComplete)
-		{
-			new Fx.Tween(this.curtain).start('opacity', 0.0).chain(onComplete);
-		}
-		else
-		{
-			this.curtain.fade(0.0);
-		}
+//		if (onComplete)
+//		{
+//			new Fx.Tween(this.curtain).start('opacity', 0.0).chain(onComplete);
+//		}
+//		else
+//		{
+//			this.curtain.fade(0.0);
+//		}
 	},
 	
 	loadingCursor: function()
