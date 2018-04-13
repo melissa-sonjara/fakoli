@@ -214,6 +214,8 @@ var Curtain = new Class(
 		this.shim.show();
 
 		document.body.addClass('curtain_lowered');
+		void document.body.offsetWidth;
+		
 		if (onComplete) onComplete.delay(500);
 	},
 	
@@ -222,10 +224,11 @@ var Curtain = new Class(
 		this.shim.hide();
 
 		document.body.removeClass('curtain_lowered');
-
+		void document.body.offsetWidth;
+		
 		var closer = function()
 		{
-			this.curtain.setStyles({display: 'none'});
+			this.curtain.setStyles({width: null, height: null});
 			if (onComplete) onComplete();
 			
 		};
@@ -523,7 +526,7 @@ var ModalDialog = new Class(
     	
 	    	if (fragmentURL && this.options.body)
 	    	{
-	    		new Curtain().loadingCursor();
+	    		window.curtain.loadingCursor();
 	    		
 	    		this.options.body.set('data-url', fragmentURL);
 	    		addReloadHandler(this.options.body);
@@ -544,7 +547,7 @@ var ModalDialog = new Class(
 	    				addReloadHandlers(this.options.body);
 	    				this.element.fade('show');
 	    				this.center();
-	    				new Curtain().normalCursor();
+	    				window.curtain.normalCursor();
 	    			}.bind(this)
 	    		});
 	    		request.send();
