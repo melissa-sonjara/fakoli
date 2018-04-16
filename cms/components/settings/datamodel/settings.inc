@@ -258,6 +258,22 @@ class Settings extends DataItem
 		return false;
 	}
 
+	function permitsRole($role)
+	{
+		if (!$role)
+		{
+			throw new FakoliException("Missing role");
+		}
+		
+		if ($this->options != 'Permissions')
+		{
+			throw new FakoliException("Role check on non-permissions settings");
+		}
+		
+		$expr = "/\\b{$role}\\b/";
+		return (preg_match($expr, $this->value) > 0) ? true : false;
+	}
+	
 	function formatOptionList()
 	{
 		if(!$this->options)
