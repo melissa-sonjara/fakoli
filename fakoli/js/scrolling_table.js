@@ -4,7 +4,7 @@ var ScrollingTable = new Class(
 	
 	initialize: function(table)
 	{
-		table = document.id('table');
+		table = document.id(table);
 		if (!table) return;
 		
 		this.table = table;
@@ -19,14 +19,35 @@ var ScrollingTable = new Class(
 		tbody = this.table.getElement('tbody');
 		
 		ths = thead.getElements('th');
+		var widths = [];
 		
-		tds = tbody.getElement('tr').getElements('td');
-		
-		for(var i = 0; i < ths.length; ++i)
+		ths.each(function(th)
 		{
-			ths[i].set('width', tds[i].getWidth());
-			ths[i].set('height', 23);
-		}
+			widths.push(th.getWidth());
+		});
 		
+		thead.setStyle('display', 'block');
+		thead.getElement('tr').setStyles({'display': 'block', 'width': '100%'});
+		ths.each(function(th, idx)
+		{
+			th.setStyle('width', widths[idx] + 'px');
+		});
+		
+		trs = tbody.getElements('tr');
+		trs.each(function(tr)
+		{
+			var tds = tr.getElements('td');
+			var idx = 0;
+			tds.each(function(td)
+			{
+				var w = 0;
+				var colspan = td.colSpan;
+				while(colspan--)
+				{
+					w += widths[idx++];
+				}
+				td.setStyle('width', w+'px');
+			});
+		});
 	}
 });

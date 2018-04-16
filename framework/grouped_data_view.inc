@@ -121,6 +121,12 @@ class GroupedDataListView
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
 	
+	// Scrolling Table parameters
+	
+	var $height;
+	var $scrollable = false;
+	var $resizable  = true;
+	
 	/**
 	 * Creates a new GroupedDataListView object.
 	 * 
@@ -198,6 +204,13 @@ class GroupedDataListView
 			return $group->format($template);
 		else
 			return call_user_func($template, $group);
+	}
+		
+	function scrollable($height = 300, $resizable = true)
+	{
+		$this->scrollable = true;
+		$this->height = $height;
+		$this->resizable = $resizable;
 	}
 	
 	/**
@@ -431,6 +444,10 @@ class GroupedDataListView
 			$constructor .= "\n\t\tdocument.id('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
 		}
 
+		if ($this->scrollable) 
+		{
+			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
+		}
 
 		if ($constructor)
 		{
@@ -467,6 +484,7 @@ class GroupedDataListView
 			{
 				$attrs .= " class='{$this->cssClass}";
 				if ($this->sortable) $attrs .=" sortable";
+				if ($this->scrollable) $attrs.= " scroll";
 				$attrs .= "'";
 			}
 			
@@ -481,6 +499,12 @@ class GroupedDataListView
 			}
 
 			$this->columnCount = count($this->columns);
+		
+			if ($this->scrollable)
+			{	
+				$tbodyAttrs = " style='height: ".($this->height - 24)."px'";
+				echo "<div class='scrollContainer' style='height: {$this->height}px'>";
+			}			
 		
 ?>
 		<table<?echo $attrs?>>
@@ -547,7 +571,7 @@ class GroupedDataListView
 ?>
 		  </tr>	
 		 </thead>
-		 <tbody>
+		 <tbody<?php echo $tbodyAttrs?>>
 <?
 			foreach($this->groups as $group)
 			{
@@ -624,6 +648,7 @@ class GroupedDataListView
 ?>  		
 		</table>
 <?
+			if ($this->scrollable) echo "</div>\n";
 			if ($this->menu) echo $this->menu->writeMenu();
 		}
 		else

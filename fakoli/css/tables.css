@@ -333,6 +333,7 @@ table.scroll tbody
 {
 	overflow-y: auto;
 	overflow-x: hidden;
+	display: block;
 }
 
 /* Scrolling tables for IE8 and below */
