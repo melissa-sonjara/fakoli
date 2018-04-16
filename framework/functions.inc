@@ -669,6 +669,15 @@ function checkIdentifier($p)
 }
 
 /**
+ * Security helper function. Check that the given parameter is a comma-separated list of valid identifiers
+ * (alphanumeric, _ and digits only with no spaces). Empty string is valid
+ */
+function checkIdentifierList($p)
+{
+	return preg_match("/^[A-Za-z0-9_\\-\\.,]*$/", $p) ? $p : die("Invalid Parameter");
+}
+
+/**
  * Security helper function. Check that the given parameter is a valid email. Empty string is valid
  * @param string $e the parameter to check
  * @return string the value of the parameter if it matches the required format
