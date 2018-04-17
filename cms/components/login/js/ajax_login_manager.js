@@ -1,12 +1,19 @@
 var AjaxLoginManager = new Class({
 	
+	Implements: [Options, Events],
 	form: null,
 	error: null,
 	
-	initialize: function(form, error)
+	options:
+	{
+		onSuccess: function(redirect) { return true; }
+	},
+	
+	initialize: function(form, error, options)
 	{
 		this.form = document.id(form);
 		this.error = document.id(error);
+		this.setOptions(options);
 		
 		this.form.iFrameFormRequest(
 		{
@@ -21,7 +28,10 @@ var AjaxLoginManager = new Class({
 		var params = response.split('|');
 		if (params[0] == "OK")
 		{
-			go(params[1]);
+			if (this.fireEvent('success', params[1]))
+			{
+				go(params[1]);
+			}
 		}
 		else
 		{
