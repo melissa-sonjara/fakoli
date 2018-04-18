@@ -66,7 +66,7 @@ function popup(url, name, width, height)
 
 function go(url)
 {
-	document.location.href = url;
+	location.href = url;
 }
 
 
