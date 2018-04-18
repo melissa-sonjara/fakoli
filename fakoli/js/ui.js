@@ -399,7 +399,7 @@ var AbstractDialog = new Class(
     	
     	var body = new Element('div', {'id': id + 'Body', 'class': 'dialog_body'});
     	
-    	padding.set('html', "<div style='float: right'>&nbsp;<a id='close" + id + "' href=''>" + AbstractDialog.closeButtonHTML + "</a></div>" +
+    	padding.set('html', "<div style='float: right'>&nbsp;<a id='close" + id + "' class='dialog_close' href=''>" + AbstractDialog.closeButtonHTML + "</a></div>" +
     						"<span style='font-weight: bold' id='" + id + "Title'>" + this.options.title + "</span>");
     	
     	this.options.closeLink = "close" + id;

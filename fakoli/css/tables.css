@@ -423,3 +423,8 @@ table.spreadsheet td
   cursor: pointer;
   pointer-events:none;
 }
+
+.required_text
+{
+	font-weight: bold;
+}

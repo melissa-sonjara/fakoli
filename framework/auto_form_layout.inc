@@ -263,7 +263,7 @@ class TableBasedFormLayout extends AutoFormLayout
 	
 	function requiredFields($text)
 	{
-		echo "<tr>\n <td colspan='2'><b>{$text}</b></td></tr>\n";
+		echo "<tr>\n <td colspan='2'><span class='required_text'>{$text}</span></td></tr>\n";
 	}
 }
 
@@ -591,7 +591,7 @@ class SpreadsheetFormLayout extends AutoFormLayout
 	
 	function requiredFields($text)
 	{
-		echo "<p><b>$text</b></p>";	
+		echo "<p><span class='required_text'>$text</span></p>";	
 	}	
 	
 	function printLabel($field, $renderer, $styles = "", $annotation = "")
@@ -767,7 +767,7 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function requiredFields($text)
 	{
-		echo "<p style='font-weight: bold'>{$text}</p>\n";
+		echo "<p class='required_text'>{$text}</p>\n";
 	}
 }
 
@@ -908,7 +908,7 @@ class SimpleFormLayout extends AutoFormLayout
 	
 	function requiredFields($text)
 	{
-		echo "<p style='font-weight: bold'>{$text}</p>\n";
+		echo "<p class='required_text'>{$text}</p>\n";
 	}
 }
 
@@ -1129,7 +1129,7 @@ class TemplateFormLayout extends AutoFormLayout
 	
 	function requiredFields($text)
 	{
-		$this->output .=  "<p style='font-weight: bold'>{$text}</p>\n";
+		$this->output .=  "<p class='required_text'>{$text}</p>\n";
 	}
 	
 	function finalizeLayout()
