@@ -28,7 +28,7 @@ var AjaxLoginManager = new Class({
 		var params = response.split('|');
 		if (params[0] == "OK")
 		{
-			if (!this.options.onSuccess.attempt(params[1]))
+			if (this.options.onSuccess.attempt(params[1]))
 			{
 				go(params[1]);
 			}
