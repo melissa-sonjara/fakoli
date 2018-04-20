@@ -81,6 +81,24 @@ class TabBar
 		trace("PAGE: **** {$this->page}", 4);
 	}
 	
+	/**
+	 * Preserve the current query string in tab links
+	 */
+	function preserveQueryString()
+	{
+		$qs = getCleanQueryString();
+		if ($qs)
+		{
+			$this->queryString = $qs;
+			$this->useQueryString = true;
+		}
+		else
+		{
+			$this->queryString = null;
+			$this->useQueryString = false;
+		}
+	}
+	
 	function dynamicLoad($container)
 	{
 		$this->container = $container;
