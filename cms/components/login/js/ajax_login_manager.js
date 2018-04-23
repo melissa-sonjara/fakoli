@@ -6,7 +6,8 @@ var AjaxLoginManager = new Class({
 	
 	options:
 	{
-		onSuccess: function(redirect) { return true; }
+		onSuccess: function(redirect) { return true; },
+		onError: function(error) { return true; }
 	},
 	
 	initialize: function(form, error, options)
@@ -35,7 +36,10 @@ var AjaxLoginManager = new Class({
 		}
 		else
 		{
-			this.error.set('html', params[1]).setStyle('display', 'block');
+			if (this.options.onError.attempt(params[1]))
+			{
+				this.error.set('html', params[1]).setStyle('display', 'block');
+			}
 		}
 	}
 });
