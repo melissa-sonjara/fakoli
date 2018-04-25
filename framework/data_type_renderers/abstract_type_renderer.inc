@@ -40,6 +40,7 @@ require_once realpath(dirname(__FILE__)."/number_type_renderer.inc");
 require_once realpath(dirname(__FILE__)."/phone_number_type_renderer.inc");
 require_once realpath(dirname(__FILE__)."/string_type_renderer.inc");
 require_once realpath(dirname(__FILE__)."/text_type_renderer.inc");
+require_once realpath(dirname(__FILE__)."/time_type_renderer.inc");
 require_once realpath(dirname(__FILE__)."/timestamp_type_renderer.inc");
 require_once realpath(dirname(__FILE__)."/timezone_type_renderer.inc");
 

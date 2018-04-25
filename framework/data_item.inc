@@ -70,6 +70,7 @@ class DataItem extends AbstractDataItem
 		"Currency3"		=>	CurrencyTypeRenderer,
 		"Date"			=>	DateTypeRenderer,
 		"DateTime"		=>	DateTimeTypeRenderer,
+		"Time"			=>	TimeTypeRenderer,
 		"Number"		=>	NumberTypeRenderer,	
 		"String"		=>	StringTypeRenderer,
 		"Text"			=>	TextTypeRenderer,
