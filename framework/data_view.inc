@@ -160,13 +160,13 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Adds a column definition to the DataListView.
-	 * @param $title the title of the column
-	 * @param $format the formatter for the column, either as a formatting string or callback function.
+	 * @param string $title the title of the column
+	 * @param string $format the formatter for the column, either as a formatting string or callback function.
 	 * (For details on format template specifications, see comments above class DataItem function format.)
-	 * @param $sortable whether this column is sortable
-	 * @param $style any inline styles specific to this column
-	 * @param $typeHint hint for cell type to use when exporting to Excel
-	 * @param $onExport optional callback function to format value for Excel
+	 * @param boolean $sortable whether this column is sortable
+	 * @param string $style any inline styles specific to this column
+	 * @param string $typeHint hint for cell type to use when exporting to Excel
+	 * @param callable $onExport optional callback function to format value for Excel
 	 * @param string $sortFormat Optional explicit format to use as the basis for sorting
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
@@ -180,13 +180,13 @@ class DataListView implements FacetFilterable
 	 * Adds a column definition to the DataListView that is only output when exporting the table to Excel.
 	 * Use this method for extended detail columns when space is constrained on the page but more details might
 	 * be useful in an exported spreadsheet
-	 * @param $title the title of the column
-	 * @param $format the formatter for the column, either as a formatting string or callback function.
+	 * @param string $title the title of the column
+	 * @param string $format the formatter for the column, either as a formatting string or callback function.
 	 * (For details on format template specifications, see comments above class DataItem function format.)
-	 * @param $sortable whether this column is sortable
-	 * @param $style any inline styles specific to this column
-	 * @param $typeHint hint for cell type to use when exporting to Excel
-	 * @param $onExport optional callback function to format value for Excel
+	 * @param boolean $sortable whether this column is sortable
+	 * @param string $style any inline styles specific to this column
+	 * @param string $typeHint hint for cell type to use when exporting to Excel
+	 * @param callable $onExport optional callback function to format value for Excel
 	 * @param string $sortFormat Optional explicit format to use as the basis for sorting
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
@@ -220,7 +220,7 @@ class DataListView implements FacetFilterable
 	/**
 	 * Adds a selector column to the DataListView. If no format is specified
 	 * then selection is handled via a checklist box for the list objects' primary keys.
-	 * @param $format (optional) format to use for the selector
+	 * @param string $format (optional) format to use for the selector
 	 */ 
 	function selector($format = "")
 	{
@@ -325,7 +325,7 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Sets the client-side ID for this DataListView. 
-	 * @param $id the ID to use. Passing in null will generate a random ID string.
+	 * @param $id string the ID to use. Passing in null will generate a random ID string.
 	 */
 	function setID($id = null)
 	{
@@ -360,7 +360,7 @@ class DataListView implements FacetFilterable
 	/**
 	 * Automatically build the table columns from the given DataItem. Not recommended except for quick and dirty
 	 * pages. This method is called automatically if no columns have been defined before drawing the view.
-	 * @param $item the item to use as a template for the columns.
+	 * @param $item DataItem the item to use as a template for the columns.
 	 */
 	function autoPopulate($item)
 	{
