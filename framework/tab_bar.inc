@@ -219,9 +219,10 @@ ENDSCRIPT;
             	$first = false;
         	}
          
+        	$isMatch = $this->comparePaths($url, $this->page);
         	// JDG 12/01/09, get the basename of the url, in case we need a
         	// longer path in the tab include file, as with digital movies
-          	if ($url == $this->page)
+        	if ($isMatch)
 	        {
 	        	$style = " class='current'";
 	        }
@@ -239,7 +240,7 @@ ENDSCRIPT;
          	}
          	else
          	{
-         		$dest = ($url == $this->page) ? "#" : $url;
+         		$dest = ($isMatch) ? "#" : $url;
          	}
         
          	if ($this->anchor)
@@ -312,7 +313,7 @@ ENDSCRIPT;
 				trace("getNextPage::found; dest is$dest", 3);
 				return $dest;
 			}
-			else if ($url == $this->page)
+			else if ($this->comparePaths($url, $this->page))
 			{
 				$found = true;
 				trace("getNextPage::url is this page", 3);	
@@ -361,6 +362,21 @@ ENDSCRIPT;
 		return $dest;	
 	}
 	
+	private function comparePaths($url, $page)
+	{
+		trace("COMPARE PATHS: $url, $page", 2);
+		
+		if (strpos($url, "/") === false)
+		{
+			trace("COMPARING PATHS: $url, ".basename($page)." == " . (basename($page) == $url), 2);
+			return basename($page) == $url;
+		}
+		else
+		{
+			return $page == $url;
+		}
+	}
+	
 	/**
 	 * Finds the tab containing the specified URL
 	 * @param $page The page to find
@@ -370,7 +386,7 @@ ENDSCRIPT;
 	{
 		foreach($this->tabs as $text => $url)
 		{
-			if ($url == $page)
+			if ($this->comparePaths($url, $page))
 			{
 				return $text;
 			}
