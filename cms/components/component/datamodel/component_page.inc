@@ -35,6 +35,11 @@ require_once realpath(dirname(__FILE__)."/../../../../framework/data_item.inc");
 
 class ComponentPage extends DataItem
 {
+	var $primary_key = "component_page_id";
+	var $table = "component_page";
+	
+	var $default_format = "{identifier}";
+	
 	// Fields
 	var $fields = array("component_page_id"	=>	Number,
 						"identifier"		=>	String,
@@ -228,16 +233,6 @@ class ComponentPage extends DataItem
 					  ->executeSingle();
 
 		return $match;
-	}
-	
-	function ComponentPage()
-	{
-		$this->primary_key = "component_page_id";
-		$this->table = "component_page";
-		
-		$this->default_format = "{identifier}";
-		
-		$this->DataItem(func_get_args());
 	}
 }
 

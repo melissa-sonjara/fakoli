@@ -35,6 +35,9 @@ require_once realpath(dirname(__FILE__)."/../../../../framework/data_item.inc");
 
 class AdminPage extends DataItem
 {
+	var $primary_key = "admin_page_id";
+	var $table = "admin_page";
+	
 	// Fields
 	var $fields = array("admin_page_id"	=>	Number,
 						"identifier"	=>	String,
@@ -49,11 +52,12 @@ class AdminPage extends DataItem
 		return $this->getRelated(Component);
 	}
 	
-	function AdminPage()
+	static function fromIdentifier($identifier)
 	{
-		$this->primary_key = "admin_page_id";
-		$this->table = "admin_page";
+		$page = Query::create(AdminPage, "WHERE identifier=:i")
+					 ->bind(":i", $identifier)
+					 ->executeSingle();
 		
-		$this->DataItem(func_get_args());
+		return $page;
 	}
 }
