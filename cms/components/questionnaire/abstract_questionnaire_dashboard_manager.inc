@@ -236,7 +236,7 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 		$itemPk = $item->getPrimaryKey();
 		$title_field = $this->getTitleField();
 
-		return $item->format("<a href=\"/{$form_id}?$itemPk={$item->$itemPk}\">{{$title_field}}</a>\n");
+		return $item->format("<a href=\"{$form_id}?$itemPk={$item->$itemPk}\">{{$title_field}}</a>\n");
 	}
 	
 	/**
