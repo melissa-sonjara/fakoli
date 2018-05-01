@@ -176,6 +176,13 @@ var FakoliMenu = new Class({
 			if (!this.reduced && this.options.mode == 'pulldown')
 			{
 				ul.position({'relativeTo': elt, 'position': offset, 'edge': edge});
+				var size = window.size();
+				var coords = ul.getCoordinates();
+				if (coords.right > size.width)
+				{
+					var sbarWidth = window.scrollbars.visible ? 17 : 0;
+					ul.setStyle('left', coords.left - (coords.right - size.width) - sbarWidth);
+				}
 			}
 			
 			if (this.options.effect == 'fade')
