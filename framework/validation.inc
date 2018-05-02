@@ -378,6 +378,47 @@ ENDSCRIPT;
 	}
 }
 
+/**
+ * AgeRangeValidator can be used with DateOfBirth fields.
+ * @author andy
+ *
+ */
+class MinimumAgeValidator extends AbstractValidator
+{
+	var $min = 0;
+	var $message;
+	
+	function MinimumAgeValidator($field, $title, $min, $message = null)
+	{
+		$this->AbstractValidator($field, $title);
+		$this->min = $min;
+		$this->message = $message;
+		
+	}
+	
+	function validate()
+	{
+		$mm = checkNumeric($_POST["{$this->field}_mm"]);
+		$dd = checkNumeric($_POST["{$this->field}_dd"]);
+		$yy = checkNumeric($_POST["{$this->field}_yy"]);
+		
+		if (!$mm || !$dd || !$yy)
+		{
+			return "Incomplete date of birth - $mm/$dd/$yy";
+		}
+		
+		$dob = new DateTime("$mm/$dd/$yy");
+		$today = new DateTime();
+		
+		$age = $dob->diff($today);
+		if ($age->y < $this->min)
+		{
+			return $this->message;
+		}
+
+		return "";
+	}
+}
 
 /**
  * @param string $field

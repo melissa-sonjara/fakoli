@@ -79,8 +79,9 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		trace("** Month: $month, Day: $day, Year: $year, Field: {$obj->$field}", 3);
 		
 		$this->_startField($field);
+		$default = !$month ? " selected" : "";
 		
-		echo "<select id='{$this->parent_id}_{$field}_mm' type='text' name='{$field}_mm'><option value=''></option>";
+		echo "<select id='{$this->parent_id}_{$field}_mm' type='text' name='{$field}_mm'><option value='' disabled {$default}>Month</option>";
 		
 		for($i = 1; $i <= 12; ++$i)
 		{
@@ -88,17 +89,19 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 			$monthName = $mm->format("M");
 			option($i, $monthName, $month);
 		}	
-
-		echo "</select> / <select id='{$this->parent_id}_{$field}_dd' type='text' name='{$field}_dd'><option value=''></option>";
+		
+		$default = !$day ? " selected" : "";
+		echo "</select> / <select id='{$this->parent_id}_{$field}_dd' type='text' name='{$field}_dd'><option value='' disabled {$default}>Day</option>";
 		
 		for($i = 1; $i < 32; ++$i)
 		{
 			option($i, $i, $day);
 		}
 		
-		echo "</select> / <select id='{$this->parent_id}_{$field}_yy' type='text' name='{$field}_yy'><option value=''></option>";
+		$default = !$year ? " selected" : "";
+		echo "</select> / <select id='{$this->parent_id}_{$field}_yy' type='text' name='{$field}_yy'><option value='' disabled {$default}>Year</option>";
 		
-		for($i = 1900; $i <= date('Y'); ++$i)
+		for($i = date('Y'); $i >= 1900; --$i)
 		{
 			option($i, $i, $year);
 		}
