@@ -916,7 +916,8 @@ class DataItem extends AbstractDataItem
 	 */
 	function deleteAll()
 	{
-		$query = "TRUNCATE TABLE {$this->table}";
+		//$query = "TRUNCATE TABLE {$this->table}";
+		$query = "DELETE FROM {$this->table}; ALTER TABLE {$this->table} AUTO_INCREMENT=1";
 		$db = $this->getConnection();
 				
 		trace($query, 3);
