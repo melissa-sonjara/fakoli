@@ -75,9 +75,14 @@ class SerializationManager
 	 */
 	function export($components)
 	{
-		$components = explode(",", $components);
+		global $config;
 		
-		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>";
+		$components = explode(",", $components);
+
+		$default_charset = $config["default_charset"];
+		if (!$default_charset) $default_charset = "iso-8859-1";
+		
+		$xml = "<?xml version=\"1.0\" encoding=\"{$default_charset}\"?>";
 		$xml .= "\n<Fakoli>";
 		
 		foreach($components as $component)
