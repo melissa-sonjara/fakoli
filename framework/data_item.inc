@@ -2055,8 +2055,17 @@ function updateSortOrder($class, $field = "sort_order", $params = null)
 	}
 }
 
-function toXML($tag, $objects, $header = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>")
+function toXML($tag, $objects, $header = null)
 {
+	global $config;
+	
+	if ($header === null)
+	{
+		$default_charset = $config["default_charset"];
+		if (!$default_charset) $default_charset = "iso-8859-1";
+		$header = "<?xml version=\"1.0\" encoding=\"{$default_charset}\"?>";
+	}
+	
 	$xml = "$header\n<$tag>\n";
 	
 	foreach($objects as $obj)
