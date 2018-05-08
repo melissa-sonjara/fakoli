@@ -254,6 +254,10 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 
 			foreach($options as $group => $choices)
 			{
+				if (is_callable($this->groupByFormat))
+				{
+					$group = call_user_func($this->groupByFormat, $group);
+				}
 				echo "<br/><h4>$group</h4>";
 				$this->renderCheckboxes($field, $choices, $itempk, $selected);
 			}
