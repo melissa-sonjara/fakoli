@@ -38,8 +38,7 @@ class MergeCode extends DataItem
 			"merge_code_id"		=>	Number,
 			"name"				=>	String,
 			"description"		=>	Text,
-			"map"				=>	String,
-			"function"			=>	Boolean // deprecated
+			"map"				=>	String
 	);
 
 	/**
