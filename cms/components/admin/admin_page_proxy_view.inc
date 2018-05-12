@@ -99,7 +99,7 @@ class AdminPageProxyView
 		$adminAccess = $config["admin_access_roles"];
 		if (!$adminAccess) $adminAccess = "admin";
 		
-		if (!checkRole("adminAccess"))
+		if (!checkRole($adminAccess))
 		{
 			throw new FakoliException("Insufficiently privileged");
 		}
