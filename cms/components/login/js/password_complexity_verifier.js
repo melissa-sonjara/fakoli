@@ -47,16 +47,9 @@ var PasswordComplexityVerifier = new Class(
  		this.control.addEvent('keyup', function(event) { this.checkPassword();}.bind(this));
  	},
  	
- 	getPassFailImage: function(pass)
+ 	getPassFail: function(pass)
  	{
- 		if (pass)
- 		{
- 			return "<img src='/fakoli/images/on.png' alt='Pass'/>";
- 		}
- 		else
- 		{
- 			return "<img src='/fakoli/images/off.png' alt='Fail'/>";
- 		}
+ 		return (pass) ? "pass" : "fail";
  	},
  	
  	updatePanel: function()
@@ -65,22 +58,22 @@ var PasswordComplexityVerifier = new Class(
  		
  		if (this.options.minimum_password_length || this.options.maximum_password_length)
  		{
- 			msg += this.getPassFailImage(this.passLength) + " " + this.lengthMessage + "<br/>";
+ 			msg += "<span class='" + this.getPassFail(this.passLength) + "'>" + this.lengthMessage + "</span>";
  		}
  		
  		if (this.options.require_digits)
  		{
- 			msg += this.getPassFailImage(this.passDigits) + " " + this.options.require_digits_message + "<br/>";
+ 			msg += "<span class='" + this.getPassFail(this.passDigits) + "'>" + this.options.require_digits_message + "</span>";
  		}
  		
  		if (this.options.require_uppercase)
  		{
- 			msg += this.getPassFailImage(this.passUppercase) + " " + this.options.require_uppercase_message + "<br/>";
+ 			msg += "<span class='" + this.getPassFail(this.passUppercase) + "'>" + this.options.require_uppercase_message + "</span>";
  		} 	
  		
  		if (this.options.require_special)
  		{
- 			msg += this.getPassFailImage(this.passSpecial) + " " + this.options.require_special_message + "<br/>";
+ 			msg += "<span class='" + this.getPassFail(this.passSpecial) + "'>" + this.options.require_special_message + "</span>";
  		}
  		
  		this.panel.set('html', msg);

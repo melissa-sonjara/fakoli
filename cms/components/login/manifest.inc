@@ -53,6 +53,11 @@ class LoginManifest
 		return array("/components/login/js/ajax_login_manager.js", "/components/login/js/password_complexity_verifier.js");
 	}
 	
+	static function getStyles()
+	{
+		return array("/components/login/css/login.css");
+	}
+	
 	static function getAdminMenu()
 	{
 		return null;	
