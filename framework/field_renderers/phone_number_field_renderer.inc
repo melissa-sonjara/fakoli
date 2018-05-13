@@ -97,6 +97,8 @@ function <?echo $this->parent->id?>_<?echo $field ?>_keyup(event)
 	var ctrl = document.id('<?echo "{$this->parent->id}_{$field}" ?>');
 	if(!ctrl) return;
 		
+	if (event.key == "Tab" || event.key == "Shift") return;
+	
 	if(ctrl.value.length == <?php echo $limit ?>)
 	{
 		var next = ctrl.getNext("input");
