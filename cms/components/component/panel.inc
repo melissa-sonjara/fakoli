@@ -48,6 +48,12 @@ class Panel
 	var $handler;
 	var $attrs;
 	
+	/**
+	 * Creates a new panel
+	 * @param string $id the DOM ID for the panel
+	 * @param string $handler the URL for the handler that will generate the panel contents
+	 * @param string $attrs any extra HTML attributes that should be added to the panel (such as CSS styles/class)
+	 */
 	function __construct($id, $handler, $attrs="")
 	{
 		$this->id = $id;
@@ -55,11 +61,18 @@ class Panel
 		$this->attrs = $attrs;
 	}
 	
+	/**
+	 * Returns the DOM ID for the panel
+	 * @return string the DOM ID
+	 */
 	function getID()
 	{
 		return $this->id;
 	}
 	
+	/**
+	 * Draws the panel.
+	 */
 	function draw()
 	{
 		$mgr = new ComponentManager();
