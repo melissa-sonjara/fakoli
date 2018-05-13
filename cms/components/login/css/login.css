@@ -1,14 +1,14 @@
 @charset "ISO-8859-1";
 
 .password_complexity_panel .pass {
-    display: inline-block;
+    display: block;
     color: #008800;
     background: url(/fakoli/images/on.png) 0 0 no-repeat;
     padding-left: 25px;
 }
 
 .password_complexity_panel .fail {
-    display: inline-block;
+    display: block;
     color: #880000;
     background: url(/fakoli/images/off.png) 0 0 no-repeat;
     padding-left: 25px;
