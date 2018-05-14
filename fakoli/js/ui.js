@@ -418,7 +418,7 @@ var AbstractDialog = new Class(
 		
 		doc.adopt(dialog);
 		return dialog;
-    }    
+    }
 });
 
 AbstractDialog.closeButtonHTML = "Close &times;";
@@ -590,6 +590,17 @@ var ModalDialog = new Class(
 	    	if (this.remoteURL) this.element.dispose();
 	    	this.removeResizeHook();
 	    	if (whenDone) whenDone();
+    },
+    
+    reload: function()
+    {
+    	if (this.options.body)
+    	{
+    		this.options.body.reload(function()
+    		{
+    			this.center();
+    		}.bind(this));
+    	}
     }
 });
 
