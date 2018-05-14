@@ -783,41 +783,6 @@ function rteSafe($strText) {
 }
 
 /**
- * 
- * @param unknown_type $strText
- * @param unknown_type $css
- * 
- * Deprecated
- */
-function rtePrepare($strText, $css)
-{
-    global $_SERVER;    
-    return rteSafe($strText);
-}
-
-/**
- * 
- * @param unknown_type $strText
- * 
- * Deprecated
- */
-function rteClean($strText)
-{
-	$patterns = array(	"|<\\!\\-\\-\\s+HEADERS\\s+\\-\\->.*<\\!\\-\\-\\s+/HEADERS\\s+\\-\\->|i",
-						"/_base_href=\\\?\".*?\"/i",
-						"|href=\\\?\"http://www.sonjara.com/ictinedtoolkit|i",
-						"|src=\\\?\"http://www.sonjara.com\\/ictinedtoolkit|i",
-						"|href=\\\?\"http://www.ictinedtoolkit.org|i",
-						"|src=\\\?\"http://www.ictinedtoolkit.org|i");
-						
-	$subs = array( "", "", "href=\\\"..", "src=\\\"..", "href=\\\"..", "src=\\\"..");
-						
-    $strText = preg_replace($patterns, $subs, $strText);
-    
-    return $strText; 
-}
-
-/**
  * Returns the first sentence of the supplied text. HTML formatting is removed. The first sentence
  * is defined as the text up to the first occurrence of the substring ". ". If this substring does
  * not appear, the whole (HTML-stripped) text is returned. 
@@ -979,8 +944,8 @@ $traceLevels = array(1	=>	"FATAL",
 					 5  =>  "NOTE*");	
 /**
  * Send output to the trace log
- * @param $msg the message to output
- * @param $lvl the severity level (0-5) of this message
+ * @param string $msg the message to output
+ * @param int $lvl the severity level (0-5) of this message
  */
 function trace($msg, $lvl, $callStack = null)
 {
