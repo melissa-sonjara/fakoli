@@ -870,7 +870,7 @@ function str_option($value, $text, $sel = "")
 
 /**
  * Simplified redirect.
- * @param $page the page to redirect to
+ * @param string $page the page to redirect to
  */
 function redirect($page)
 {
