@@ -1352,8 +1352,7 @@ ENDSCRIPT;
 /**
  * RequiredCurrencyField Validator.
  *
- * Currency formats as 0.00; if required, then make 
- * sure the value is not 0.00
+ * Check whether is a valid number, including 0.00
  */
 class RequiredCurrencyValidator extends RequiredValidator
 {
@@ -1371,11 +1370,11 @@ class RequiredCurrencyValidator extends RequiredValidator
 		
 		var num =  parseFloat(form["{$this->field}"].value);
 					
-	if (num == $this->empty)
-	{
-		alert("{$this->title} is a required field. Please supply a value.");
-		return false;
-	}
+		if (isNaN(num))
+		{
+			alert("{$this->title} is a required field. Please supply a value.");
+			return false;
+		}
 		
 ENDSCRIPT;
 
@@ -1388,7 +1387,7 @@ ENDSCRIPT;
 		
 		if ($this->readOnly) return "";
 		
-		if (!isset($_POST[$this->field]) OR floatval($_POST[$this->field]) == $this->empty)
+		if (!isset($_POST[$this->field]) || trim($_POST[$this->field]) === "")
 		{
 			return "{$this->title} is a required field.";
 		}
