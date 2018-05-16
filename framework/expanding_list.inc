@@ -51,10 +51,11 @@ class ExpandingList
 	var $dynamicLoad = false;					///< Flag indicating whether list should load content on demand. If set to true, bodyFormat should provide the URL for each item
 	var $titleIDFormat = null;					///< Format template for title ID field
 	var $bodyIDFormat = null;					///< Format template for body ID field
-	var $scrollOnExpand = false;				///< Flag indicating whether to scroll the expanding item to the top of the screen
+	var $scrollOnExpand = false;					///< Flag indicating whether to scroll the expanding item to the top of the screen
 	var $scrollOffset = 0;						///< Offset from top of element when scrolling (to take into account fixed navigation bars, etc)
 	var $isItemExpanded = null;					///< Callback hook to determine if an item should be shown expanded by default. Callback is passed the item and current index. Return true for expanded, false for collapsed.
 	var $onItemStart = null;					///< Callback hook called when starting to display each item. Return false to skip the item.
+	var $mode = "tree";							///< The expansion mode for the list - set to "accordion" to have only one item open at a time
 	
 	/**
 	 * Creates a new ExpandingList control.
@@ -94,6 +95,14 @@ class ExpandingList
 		}
 		else
 		{
+<?php 
+			if ($this->mode == "accordion")
+			{
+?>
+			elt.getParent().getChildren("dt.expanded").each(function(e) { var b = e.getNext("dd"); b.dissolve(); e.removeClass("expanded"); });
+<?php
+			}
+?>
 			if (body.get('data-url') && body.get('html') == '')
 			{
 				var cursor = elt.getStyle('cursor');
