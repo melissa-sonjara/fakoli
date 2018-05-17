@@ -56,12 +56,20 @@ else
 
 $form = new AutoForm($image, "POST", "/action/image_picker/image_upload?gallery_id=$gallery_id");
 $form->allowDelete = true;
+$form->onSavePreProcess = function($form)
+{
+	global $user;
+	if ($user)
+	{
+		$form->data->owner_id = $user->getPrimaryKeyValue();
+	}
+};
 
 $imageUpload = new FileUploadFieldRenderer($form, "image_file", "Image File", array(ImageManager, imageUploadHandler));
 $imageUpload->size = 60;
 
 $form->required( "title");
-$form->hide("thumbnail", "gallery_id");
+$form->hide("thumbnail", "gallery_id", "owner_id");
 
 $imageTypeSelect = new SelectFieldRenderer($form, "image_type", "Image Type");
 $imageTypeSelect->allowAddEntry();
