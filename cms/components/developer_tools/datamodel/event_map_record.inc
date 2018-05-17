@@ -28,7 +28,8 @@ class EventMapRecord extends DataItem
 		}
 		else
 		{
-			$record->exists = function_exists($obj["handler"]);
+			list($cl, $method) = explode("::", $obj["handler"]);
+			$record->exists = method_exist($cl, $method);
 		}
 		return $record;
 	}
