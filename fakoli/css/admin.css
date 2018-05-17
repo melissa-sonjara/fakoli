@@ -512,6 +512,7 @@ table.list a.button
 	cursor: pointer;
 	font-weight: lighter;
 	white-space: nowrap;
+	display: inline-block;
 }
 
 .button:hover,
