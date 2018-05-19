@@ -1331,13 +1331,14 @@ table.tree th {
 }
 
 a.multi_select_dropdown {
+    font-weight: normal !important;
     display: inline-block;
     border: solid 1px #aaa;
-    border-radius: 5px;
-    /* box-shadow: inset -2px -2px 8px #ccc; */
-    padding: 2px 20px 2px 5px;
+    /* border-radius: 5px; */
+    box-shadow: none;
+    padding: 2px 20px 2px 5px !important;
     color: #000;
-    text-decoration: none;
+    /* text-decoration: none; */
     background: url(/fakoli/images/open.gif) right 5px center no-repeat #fff;
     margin-right: 5px;
     overflow: hidden;
