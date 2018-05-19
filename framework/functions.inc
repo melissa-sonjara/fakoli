@@ -1995,6 +1995,52 @@ function replaceValues($substitutions, $target)
 }
 
 /**
+ * Opens a text file, detects the encoding, inteprets the BOM if present, attaches a stream
+ * filter to convert to UTF-8
+ * 
+ * Thanks to the author of this article:
+ * http://www.practicalweb.co.uk/blog/2008/05/18/reading-a-unicode-excel-file-in-php/
+ * 
+ * @param string $filename the file to be opened for reading
+ */
+function fopen_utf8($filename){
+	$encoding='';
+	$handle = fopen($filename, 'r');
+	$bom = fread($handle, 2);
+	//	fclose($handle);
+	rewind($handle);
+	
+	
+	if($bom === chr(0xff).chr(0xfe)  || $bom === chr(0xfe).chr(0xff)){
+		// UTF16 Byte Order Mark present
+		$encoding = 'UTF-16';
+	} else {
+		$file_sample = fread($handle, 1000) + 'e'; //read first 1000 bytes
+		// + e is a workaround for mb_string bug
+		rewind($handle);
+		
+		$encoding = mb_detect_encoding($file_sample , 'UTF-8, UTF-7, ASCII, EUC-JP,SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP');
+	}
+	if ($encoding){
+		stream_filter_append($handle, 'convert.iconv.'.$encoding.'/UTF-8');
+	}
+	return  ($handle);
+}
+
+function fgetcsv_noBOM($fp)
+{
+	$fields = fgetcsv($fp);
+	if (is_array($fields))
+	{
+		$bom = pack('CCC', 0xEF, 0xBB, 0xBF);
+		if (substr($fields[0], 0, 3) === $bom)
+		{
+			$fields[0] = substr($fields[0], 3);
+		}
+	}
+	return $fields;
+}
+/**
  * @}
  */
 ?>
