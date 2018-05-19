@@ -112,8 +112,8 @@ interface IDataSyncHelper
 			$file = $_SESSION["data_import_file"];
 		}
 		
-		$fp = fopen($file, "r");
-
+		//$fp = fopen($file, "r");
+		$fp = fopen_utf8($file);
 		$counter = -1;
 		while(fgetcsv($fp))
 		{
@@ -157,9 +157,10 @@ interface IDataSyncHelper
 			$file = $_SESSION["data_import_file"];
 		}
 	
-		$fp = fopen($file, "r");
-	
-		$fields = fgetcsv($fp);
+		//$fp = fopen($file, "r");
+		$fp = fopen_utf8($file);
+		
+		$fields = fgetcsv_noBOM($fp);
 	
 		fclose($fp);
 	
@@ -347,9 +348,10 @@ interface IDataSyncHelper
 		
 		trace("Opening import file $file", 3);
 		
-		$fp = fopen($file, "r");
+		//$fp = fopen($file, "r");
+		$fp = fopen_utf8($file);
 		
-		$fields = fgetcsv($fp);
+		$fields = fgetcsv_noBOM($fp);
 		
 		foreach($fields as $field)
 		{
@@ -400,7 +402,7 @@ interface IDataSyncHelper
 		
 			$value = trim(implode($separator, $vals));
 		
-			if (!$value && $mapping->grouping && $lastItem)
+			if (!$value && $mapping->grouped && $lastItem)
 			{
 				$value = $lastItem->get($field);
 			}

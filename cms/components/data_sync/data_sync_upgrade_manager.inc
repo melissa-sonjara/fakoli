@@ -20,7 +20,8 @@ class DataSyncUpgradeManager extends UpgradeManager
 		"1.3"	=>	"sql:Added data_import_profile table",
 		"1.4"	=>	"sql:Added class field to data_import_profile",
 		"1.5"	=>	"sql:Added notes field to data_import_field_mapping",
-		"1.6"	=>	"sql:Fixed missing default value for notes field on data_import_field_mapping table"
+		"1.6"	=>	"sql:Fixed missing default value for notes field on data_import_field_mapping table",
+		"1.7"	=>	"sql:Changed grouping field to grouped to fix compatibility issue with MySQL 8"
 	);
 
 	function DataSyncUpgradeManager()

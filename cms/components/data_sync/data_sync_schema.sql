@@ -28,7 +28,7 @@ ALTER TABLE data_import_field_mapping ADD COLUMN required TINYINT(3) UNSIGNED NO
 
 -- START Version 1.2
 
-ALTER TABLE data_import_field_mapping ADD COLUMN grouping TINYINT(3) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE data_import_field_mapping ADD COLUMN `grouping` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0;
 
 -- END Version 1.2
 
@@ -63,3 +63,9 @@ ALTER TABLE data_import_field_mapping ADD COLUMN notes VARCHAR(255) NOT NULL;
 ALTER TABLE data_import_field_mapping CHANGE COLUMN notes notes VARCHAR(255) NULL DEFAULT '';
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE data_import_field_mapping CHANGE COLUMN `grouping` grouped TINYINT(3) UNSIGNED NOT NULL DEFAULT 0;
+
+-- END Version 1.7

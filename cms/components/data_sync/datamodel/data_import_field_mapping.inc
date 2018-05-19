@@ -12,7 +12,7 @@ class DataImportFieldMapping extends DataItem
 						"import_column"		=>	String,
 						"matching"			=>	Boolean,
 						"required"			=>	Boolean,
-						"grouping"			=>	Boolean,
+						"grouped"			=>	Boolean,
 						"import_profile_id"	=>	String,
 						"notes"				=>	String);
 	
