@@ -673,7 +673,7 @@ interface IDataSyncHelper
 		$targets = ComponentManager::fireEvent("RegisterSyncTargets", $targets);
 
 		$syncTargets = array();
-		foreach($targets as $classes)
+		foreach($targets as $index => $classes)
 		{
 			if (!is_array($classes))
 			{
