@@ -82,7 +82,7 @@ class SectionContentManagerMap
 	 */
 	static function registerManager($type, $manager)
 	{
-		trace("Section Type '{$type}' will be managed by ".get_class($manager), 3);
+		trace("Section Type '{$type}' will be managed by ".get_class($manager), 4);
 		SectionContentManagerMap::$map[$type] = $manager;
 	}
 	
