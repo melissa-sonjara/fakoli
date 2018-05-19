@@ -126,7 +126,7 @@ class SectionContentManagerMap
 	
 	static function onInitialize()
 	{
-		trace("Registering Section Content Managers", 2);
+		trace("Registering Section Content Managers", 4);
 		ComponentManager::fireEvent('RegisterSectionContentManagers');
 	}
 }
