@@ -673,9 +673,8 @@ interface IDataSyncHelper
 		$targets = ComponentManager::fireEvent("RegisterSyncTargets", $targets);
 
 		$syncTargets = array();
-		foreach($targets as $component => $classes)
+		foreach($targets as $classes)
 		{
-			Fakoli::using($component);
 			if (!is_array($classes))
 			{
 				$syncTargets[] = $classes;
