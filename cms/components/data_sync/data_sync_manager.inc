@@ -382,6 +382,9 @@ interface IDataSyncHelper
 	{
 		$skip = false;
 		
+		//AJG - a bit of a hack to allow SyncHelpers to specify that particular records should be skipped
+		if ($record["__skip__"] === true) return true;
+		
 		foreach($fieldMapping as $field => $mapping)
 		{
 			if (!$mapping->import_column) continue;
