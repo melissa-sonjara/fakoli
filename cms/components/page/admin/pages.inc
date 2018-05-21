@@ -48,13 +48,13 @@ $sites = query(Site, "ORDER BY site_name");
 if (!$site_id) $site_id = $sites[0]->site_id;
 
 $tabs = new DataItemTabBar("tabs", $sites);
-$pagesBySite = Query::create(Page, "WHERE site_id=:site ORDER BY page_title")
+$pagesBySite = Query::create(Page, "WHERE site_id=:site ORDER BY identifier")
 					->bind(":site", $site_id)
 					->execute();
 
 $pageTable = new DataListView($pagesBySite, "pages");
-$pageTable->column("Title", "<a href='/admin/page_form?page_id={page_id}'>{page_title}</a>", true, "width: 40%")
-		  ->column("Page Identifier", "{identifier}", true, "width: 10%")
+$pageTable->column("Page Identifier", "<a href='/admin/page_form?page_id={page_id}'>{identifier}</a>", true, "width: 10%")
+		  ->column("Title", "{page_title}", true, "width: 40%")
 		  ->column("Code File", "{php_code_file}", true, "width: 30%")
 		  ->column("Created Date", "{created_date:m/d/Y}", true, "width: 10%;text-align: center")
 		  ->column("Last Edited", "{edited_date:m/d/Y}", true, "width:10%;text-align: center");
