@@ -422,6 +422,8 @@ interface IDataSyncHelper
 			//$item->set($field, $item->formatFieldValue($field));
 		}
 		
+		if (!$skip) $item->unpack();
+		
 		return $skip;
 	}
 	
