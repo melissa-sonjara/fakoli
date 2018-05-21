@@ -121,7 +121,7 @@ class FilterForm extends SearchForm
  	var $navigationMode = "form"; 				///< Mode used for navigating after filter changed - either "form" or "panel"
  	var $showSubmitButton = false;				///< Whether to show the submit button on a filter form
  	var $submitButtonLabel = "Filter Results";	///< Text to show on the filter form submit button, if present
- 	
+ 	var $formLabel = null;						///< Text to display before the start of the form (such as 'Filter By')
  	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
@@ -219,6 +219,7 @@ ENDSCRIPT;
 
 		$this->layout->startUngrouped();
 		
+		if ($this->formLabel) echo "<div class='filter_form_label'><label>{$this->formLabel}</label></div>";
 		$this->renderSearchFields();
 		if ($this->showSubmitButton)
 		{
