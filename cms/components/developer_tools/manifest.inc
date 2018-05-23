@@ -39,9 +39,14 @@ class DeveloperToolsManifest
 											  "weight"	=>	4,
 											  "icon"	=>	"unlock"),
 					
+				"Permissions Checker" => array("page"	=>	"/admin/permissions_checker",
+											   "role"	=>	"admin",
+											   "weight"	=>	5,
+											   "icon"	=>	"/components/developer_tools/images/permissions.svg"),
+					
 				"Table Information"	=>	array("page"	=>	"/admin/table_information",
 											  "role"	=>	"admin",
-											  "weight"	=>	5,
+											  "weight"	=>	6,
 											  "icon"	=>	"database"),
 				
 				"Test PHP CLI"		=>	array("page"	=>	"/admin/test_php_cli",
