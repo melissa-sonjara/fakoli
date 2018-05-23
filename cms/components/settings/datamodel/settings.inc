@@ -42,6 +42,9 @@ Fakoli::usingFeature("cache", "field_renderers");
  */
 class Settings extends DataItem
 {
+	var $primary_key = "settings_id";
+	var	$table = "settings";
+	
 	// Fields
 	var $fields = array("settings_id"	=>	Number,
 						"component"		=>	String,
@@ -66,13 +69,10 @@ class Settings extends DataItem
 				"Text"		=>	"Text"
 	); 
 	
-	
-	function Settings()
+	function save()
 	{
-		$this->primary_key = "settings_id";
-		$this->table = "settings";
-		
-		$this->DataItem(func_get_args());
+		Cache::invalidate("setting_{$this->component}_{$this->name}");
+		parent::save();
 	}
 	
 	static function getSetting($component, $name)
