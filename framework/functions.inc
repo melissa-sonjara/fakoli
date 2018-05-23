@@ -55,7 +55,7 @@ function checkRole($role, $account = null)
 	
 	if (!$account) $account = $user;
 	
-	if ($role == "" || $account->role == "super" || $account->role == "admin") return true;
+	if ($role == "" || $account->role == "admin") return true;
 	if (!$account) return false;
 	
 	if ($role != "" && $account->role == "") return false;
@@ -63,7 +63,7 @@ function checkRole($role, $account = null)
 	$userRoles = explode(",", $account->role);
 	foreach($userRoles as $ur)
 	{
-		if ($ur == "super" || $ur == "admin") return true;
+		if ($ur == "admin") return true;
 		$expr = "/\\b{$ur}\\b/";
 		$allowed = (preg_match($expr, $role) > 0) ? true : false;
 		if ($allowed) break;
