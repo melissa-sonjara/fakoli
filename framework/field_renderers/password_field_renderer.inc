@@ -70,7 +70,7 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 {
 	var link = document.getElementById("<?echo $this->parent->id?>_<?echo $field?>_link");
 	var block = document.getElementById("<?echo $this->parent->id?>_<?echo $field?>_block");
-	document.forms['<?echo $this->parent->id ?>'].<?echo $this->parent->id ?>_<?echo $field?>_reset_password.value = 1;
+	document.id("<?echo $this->parent->id ?>_<?echo $field?>_reset_password").value = 1;
 	
 	link.style.display = "none";
 	block.style.display = "block";
@@ -111,7 +111,7 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 		{
 			echo "<a id='{$this->parent->id}_{$field}_link' href='#' onclick='{$this->parent->id}_{$field}_showPassword();return false;'>Click to reset password</a>\n";
 			$this->renderPasswordBlock($field, "none");
-			echo "<input type='hidden' name='{$this->parent->id}_{$field}_reset_password' value=''/>\n";
+			echo "<input type='hidden' id='{$this->parent->id}_{$field}_reset_password' name='{$this->parent->id}_{$field}_reset_password' value=''/>\n";
 		}
 		else
 		{
