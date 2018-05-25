@@ -44,25 +44,7 @@ window.addEvent('domready', function()
 });	
 </script>
 <?
-		if (!$this->_includedPasswordScript)
-		{
-			?>
-	<script type='text/javascript'>
-	<!--
-	function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
-	{
-		var link = document.getElementById("<?echo $this->parent->id?>_<?echo $field?>_link");
-		var block = document.getElementById("<?echo $this->parent->id?>_<?echo $field?>_block");
-		document.forms['<?echo $this->parent->id ?>'].<?echo $this->parent->id ?>_<?echo $field?>_reset_password.value = 1;
-		
-		link.style.display = "none";
-		block.style.display = "block";
-	}
-	//-->
-	</script>
-	<?
-			$this->_includedPasswordScript = true;
-		}		
+		parent::renderScript($field);
 	}
 
 	function renderPasswordBlock($field, $display = "block")
