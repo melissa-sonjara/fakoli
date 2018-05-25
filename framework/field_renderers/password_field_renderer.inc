@@ -116,7 +116,7 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 		else
 		{
 			$this->renderPasswordBlock($field);
-			echo "<input type='hidden' name='{$this->parent->id}_{$field}_reset_password' value='1'/>\n";
+			echo "<input type='hidden' id='{$this->parent->id}_{$field}_reset_password' name='{$this->parent->id}_{$field}_reset_password' value='1'/>\n";
 		}
 		
 		$this->_endField($field);
