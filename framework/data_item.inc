@@ -368,7 +368,7 @@ class DataItem extends AbstractDataItem
 			{
 				$list .= "$alias.";
 			}
-			$list .= $field;
+			$list .= "`".$field."`";
 			if ($alias)
 			{
 				$list .= " as `$alias.$field`";
@@ -723,7 +723,7 @@ class DataItem extends AbstractDataItem
 			$first = false;
 			$found = true;
 			
-			$query .= "$field=";
+			$query .= "`$field`=";
 			$query .= $this->quoteFieldValue($field, $type);
     	}
 
@@ -833,7 +833,7 @@ class DataItem extends AbstractDataItem
 				$values .= ", ";
 			}
 			
-			$fields .= $field;
+			$fields .= "`".$field."`";
 			$values .= $this->quoteFieldValue($field, $type);
 
 			$first = false;
