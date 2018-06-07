@@ -41,20 +41,30 @@ abstract class AbstractQuery
 	public function __construct($class, $constraints = "")
 	{
 		$this->class = $class;
-		$this->constraints = $constraints;
+		$this->constraints = $this->massageSQL($constraints);
 		
 		$this->filter = null;
 		$this->params = array();
 	}
 	
+	private function massageSQL($sql)
+	{
+		$version = ConnectionManager::getVersion();
+		if (!startsWith($version, "5."))
+		{
+			$sql = str_replace(array("[[:<:]]", "[[:>:]]"), array('\\\\b', '\\\\b'), $sql);
+		}
+		return $sql;
+	}
+	
 	/**
 	 * Sets the constraint clause for the Query
-	 * @param $constraints the constraint clause;
+	 * @param string $constraints the constraint clause;
 	 * @return Query reference to the Query object, to allow for call chaining.
 	 */
 	function constraints($constraints)
 	{
-		$this->constraints = $constraints;
+		$this->constraints = $this->massageSQL($constraints);
 		return $this;
 	}
 	
