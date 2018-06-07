@@ -66,7 +66,7 @@ class AutoForm
 	var $overrides = array();			///< The field overrides collection
 	var $hidden = array();				///< The hidden fields collection
 	var $additional = array();			///< The additional (pseudo) fields collection
-	var $additional_at_top = false;		// whether additional fields are rendered above the datamodel's field list; if false, then rendered below
+	var $additional_at_top = false;		///< whether additional fields are rendered above the datamodel's field list; if false, then rendered below
 	var $readonly = array();			///< The read-only fields collection
 	var $annotations = array();			///< The field annotations collection
 	var $buttons = array();				///< The custom buttons collection
