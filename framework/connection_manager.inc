@@ -31,6 +31,8 @@
 
 *****************************************************************/
 
+require_once realpath(dirname(__FILE__)."/cache.inc");
+
 /**
  * 
  * 
@@ -130,5 +132,22 @@ class ConnectionManager
 		$escaped = preg_replace("/^'(.*)'$/", "$1", $quoted);
 		trace("ESCAPE: $str -> $quoted -> $escaped", 1);
 		return $escaped;
+	}
+	
+	/**
+	 * Determine the version of the connected database.
+	 * @return string the version of the connected database.
+	 */
+	static function getVersion()
+	{
+		$version = Cache::get("sql_version");
+		if (!$version)
+		{
+			$conn = ConnectionManager::getConnection();
+			$version = $conn->query('select version()')->fetchColumn();
+			Cache::put("sql_version", $version);
+		}
+		
+		return $version;
 	}
 }
