@@ -852,6 +852,11 @@ abstract class UpgradeManager
 		return $this->executeSQLStatements($sqlStatements);
 	}
 	
+	function dependsOn($component, $version)
+	{
+		UpgradeManager::upgradeComponentToVersion($component, $version);	
+	}
+	
 	static function upgradeComponentToVersion($component, $version)
 	{
 		trace("Firing upgrade event to $component, target version $version", 3);
