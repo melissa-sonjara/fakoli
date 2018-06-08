@@ -187,7 +187,7 @@ class PageView
 		
 		foreach($inclusions as $inclusion)
 		{
-			$output = Fakoli::evaluateFile($inclusion);
+			$output = Fakoli::evaluateFile($inclusion[1]);
 			$template = str_replace($inclusion[0], $output, $template);
 		}
 		
