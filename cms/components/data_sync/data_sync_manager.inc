@@ -157,11 +157,11 @@ interface IDataSyncHelper
 			$file = $_SESSION["data_import_file"];
 		}
 	
+		trace("Reading columns for $file", 3);
 		//$fp = fopen($file, "r");
 		$fp = fopen_utf8($file);
 		
 		$fields = fgetcsv_noBOM($fp);
-	
 		fclose($fp);
 	
 		$columns = array();
