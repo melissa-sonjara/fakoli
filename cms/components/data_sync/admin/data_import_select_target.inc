@@ -51,5 +51,8 @@ $form->drawForm();
 function selectImportTarget($form)
 {
 	$_SESSION["data_import_class"] = $_POST["target"];
+	//AJG: Make sure that the import_profile_id is reset so that it isn't brought over from a previous import
+	unset($_SESSION["import_profile_id"]);
+	
 	return true;
 }
