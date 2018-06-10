@@ -433,8 +433,6 @@ class CheckListFieldRenderer extends FieldRenderer
 		$value = ($this->parent->method == "POST") ? $_POST[$field] : $_GET[$field];
 		$addEntry = ($this->parent->method == "POST") ? $_POST["{$field}_addEntry"] : $_GET["{$field}_addEntry"];
 
-		trace("CheckListFieldRenderer: $field = ".print_r($value), true), 3);
-		
 		if (is_array($value))
 		{
 			$this->parent->data->set($field, implode(",",  array_values($value)));
