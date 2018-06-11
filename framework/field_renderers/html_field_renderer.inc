@@ -49,7 +49,7 @@ class HTMLFieldRenderer extends FieldRenderer
 	var $featureButtons;
 	var $rootBlock = "p";
 	var $baseURL = null;
-	var $convertURLs = true;
+	var $convertURLs = false;
 	
 	static $_includedRTEScript = false;
 	
