@@ -81,7 +81,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 		$default = !$month ? " selected" : "";
 		
-		echo "<select id='{$this->parent_id}_{$field}_mm' type='text' name='{$field}_mm'><option value='' disabled {$default}>Month</option>";
+		echo "<select id='{$this->parent->id}_{$field}_mm' type='text' name='{$field}_mm'><option value='' disabled {$default}>Month</option>";
 		
 		for($i = 1; $i <= 12; ++$i)
 		{
@@ -91,7 +91,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		}	
 		
 		$default = !$day ? " selected" : "";
-		echo "</select> / <select id='{$this->parent_id}_{$field}_dd' type='text' name='{$field}_dd'><option value='' disabled {$default}>Day</option>";
+		echo "</select> / <select id='{$this->parent->id}_{$field}_dd' type='text' name='{$field}_dd'><option value='' disabled {$default}>Day</option>";
 		
 		for($i = 1; $i < 32; ++$i)
 		{
@@ -99,7 +99,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		}
 		
 		$default = !$year ? " selected" : "";
-		echo "</select> / <select id='{$this->parent_id}_{$field}_yy' type='text' name='{$field}_yy'><option value='' disabled {$default}>Year</option>";
+		echo "</select> / <select id='{$this->parent->id}_{$field}_yy' type='text' name='{$field}_yy'><option value='' disabled {$default}>Year</option>";
 		
 		for($i = date('Y'); $i >= 1900; --$i)
 		{
@@ -135,6 +135,8 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 	
 	function preProcess($field = "")
 	{
+		trace("Preprocessing data of birth", 3);
+	
 		$mm = checkNumeric($_POST["{$field}_mm"]);
 		$dd = checkNumeric($_POST["{$field}_dd"]);
 		$yy = checkNumeric($_POST["{$field}_yy"]);
