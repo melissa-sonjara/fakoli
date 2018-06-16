@@ -35,15 +35,19 @@ require_once realpath(dirname(__FILE__)."/../../../../framework/data_item.inc");
 
 class Component extends DataItem
 {
+	var $table = "component";
+	var $primary_key = "component_id";
+	var	$default_format = "{getPrettyName()}";
+		
 	// Fields
 	var $fields = array("component_id"		=>	Number,
 						"name"				=>	String,
 						"version"			=>	String,
-						"author"			=>	String,
+						"author"				=>	String,
 						"description"		=>	Text,
 						"priority"			=>	Number,
 						"enabled"			=>	Boolean,
-						"component_path"	=>	String,
+						"component_path"		=>	String,
 						"last_modified"		=>	Timestamp);
 	
 	// Relations
@@ -52,8 +56,8 @@ class Component extends DataItem
 	function ComponentPages()
 	{
 		$pages = Query::create(ComponentPage, "WHERE component=:i ORDER BY identifier")
-					->bind(":i", $this->name)
-					->execute();
+					  ->bind(":i", $this->name)
+					  ->execute();
 					
 		return $pages;
 	}
@@ -82,15 +86,6 @@ class Component extends DataItem
 	static function getComponent($name)
 	{
 		return Query::create(Component, "WHERE name=:n")->bind(":n", $name)->executeSingle();
-	}
-	
-	function Component()
-	{
-		$this->table = "component";
-		$this->primary_key = "component_id";
-		$this->default_format = "{getPrettyName()}";
-		
-		$this->DataItem(func_get_args());
 	}
 	
 	function loadManifest()
