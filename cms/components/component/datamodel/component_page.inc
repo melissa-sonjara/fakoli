@@ -239,7 +239,10 @@ class ComponentPage extends DataItem
 
 
 class ComponentPageModuleXref extends DataItem
-{
+{	
+	var $table = "component_page_module_xref";
+	var $primary_key = "join_id";
+		
 	// Fields
 	var $fields = array("join_id"			=>	Number,
 						"component_page_id"	=>	Number,
@@ -260,13 +263,5 @@ class ComponentPageModuleXref extends DataItem
 	function Module()
 	{
 		return $this->getRelated(Module);
-	}
-	
-	function ComponentPageModuleXref()
-	{
-		$this->table = "component_page_module_xref";
-		$this->primary_key = "join_id";
-		
-		$this->DataItem(func_get_args());
 	}
 }
