@@ -3,6 +3,9 @@
 
 class ComponentUpdateLog extends DataItem
 {
+	var $table = "component_update_log";
+	var $primary_key = "component_update_log_id";
+	
 	var $fields = array(
 			"component_update_log_id"	=>	Number,
 			"component"					=>	String,
@@ -37,13 +40,5 @@ class ComponentUpdateLog extends DataItem
 		return Query::create(ComponentUpdateLog, "WHERE component=:component_name ORDER BY version_number")
 			->bind(":component_name", $component_name)
 			->execute();
-	}
-	
-	function ComponentUpdateLog()
-	{
-		$this->table = "component_update_log";
-		$this->primary_key = "component_update_log_id";
-		
-		$this->DataItem(func_get_args());		
 	}
 }
