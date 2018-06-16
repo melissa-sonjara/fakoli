@@ -2,6 +2,9 @@
 
 class UserFeedback extends DataItem
 {
+	var $table = "feedback";
+	var $primary_key = "feedback_id";
+	
 	// Fields
 	
 	var $fields = array("feedback_id"	=>	Number,
@@ -22,16 +25,13 @@ class UserFeedback extends DataItem
 	}
 	
 	
-	function UserFeedback()
+	function __construct()
 	{
-		$this->table = "feedback";
-		$this->primary_key = "feedback_id";
-
 		// Patch in the user class, since this can be overridden by the application
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass(); 	
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

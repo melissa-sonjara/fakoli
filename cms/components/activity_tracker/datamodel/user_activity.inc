@@ -2,6 +2,9 @@
 
 class UserActivity extends DataItem
 {
+	var $table = "user_activity";
+	var $primary_key = "activity_id";
+		
 	// Fields
 	
 	var $fields = array("activity_id"	=>	Number,
@@ -24,18 +27,18 @@ class UserActivity extends DataItem
 	
 	function __construct()
 	{
-		$this->table = "user_activity";
-		$this->primary_key = "activity_id";
-		
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass();
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
 class UserActivitySession extends DataItem
 {
+	var $table = "user_activity_session";
+	var $primary_key = "session_id";
+	
 	// Fields
 	
 	var $fields = array("session_id"			=>	Number,
@@ -60,13 +63,10 @@ class UserActivitySession extends DataItem
 
 	function __construct()
 	{
-		$this->table = "user_activity_session";
-		$this->primary_key = "session_id";
-	
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass();
 	
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 	
 	static function fromIdentifier($identifier)
@@ -91,6 +91,11 @@ class UserActivitySession extends DataItem
 // view
 class ActivitySession extends DataItem
 {
+	// view
+
+	var	$table = "activity_sessions";
+	var $primary_key = "session_id";
+	
 	// Fields
 	
 	var $fields = array("session_id"	=>	String,
@@ -116,14 +121,10 @@ class ActivitySession extends DataItem
 
 	function __construct()
 	{
-		// view
-		$this->table = "activity_sessions";
-		$this->primary_key = "session_id";
-		
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass();
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 	
