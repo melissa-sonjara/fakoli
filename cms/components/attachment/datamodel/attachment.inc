@@ -33,6 +33,9 @@
 
 class Attachment extends DataItem
 {
+	var $table = "attachment";
+	var $primary_key = "attachment_id";
+		
 	// Fields
 	var $fields = array("attachment_id"		=>	Number,
 						"user_id"			=>	Number,
@@ -58,14 +61,6 @@ class Attachment extends DataItem
 	{
 		return getDocIcon($this->filename);
 	}
-	
-	function Attachment()
-	{
-		$this->table = "attachment";
-		$this->primary_key = "attachment_id";
-		
-		$this->DataItem(func_get_args());
-	}		
 }
  
 ?>
