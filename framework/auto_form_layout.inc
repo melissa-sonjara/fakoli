@@ -16,7 +16,7 @@ abstract class AutoFormLayout
 
 	var $externalErrorBox = false; ///< Flag indicating whether the error box should be rendered inside the form grouping
 	
-	function AutoFormLayout($form)
+	function __construct($form)
 	{
 		$this->form = $form;
 	}
@@ -40,7 +40,7 @@ abstract class AutoFormLayout
 		return $class;
 	}
 	
-	abstract function startGroup($name);
+	abstract function startGroup($name, $collapsible = false, $collapsed = false);
 	abstract function endGroup();
 
 	abstract function startField($field, $renderer, $colspan = 1, $styles = "");
@@ -126,9 +126,9 @@ abstract class AutoFormLayout
  */
 class TableBasedFormLayout extends AutoFormLayout
 {
-	function TableBasedFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
@@ -273,12 +273,12 @@ class TableBasedFormLayout extends AutoFormLayout
  */
 class UngroupedFormLayout extends TableBasedFormLayout
 {
-	function UngroupedFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
-	function startGroup($name)
+	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
 		$this->startUngrouped();
 	}
@@ -294,12 +294,12 @@ class UngroupedFormLayout extends TableBasedFormLayout
  */
 class MobileUngroupedFormLayout extends MobileFormLayout
 {
-	function MobileUngroupedFormLayout($form)
+	function __construct($form)
 	{
-		$this->MobileFormLayout($form);
+		parent::__construct($form);
 	}
 	
-	function startGroup($name)
+	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
 		//$this->startUngrouped();
 	}
@@ -315,12 +315,12 @@ class MobileUngroupedFormLayout extends MobileFormLayout
  */
 class TableHeaderFormLayout extends AutoFormLayout
 {
-	function TableHeaderFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 
-	function startGroup($name)
+	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
 		$this->startUngrouped();
 	}
@@ -433,9 +433,9 @@ class TableHeaderFormLayout extends AutoFormLayout
  */
 class SelectableTableHeaderFormLayout extends TableHeaderFormLayout
 {
-	function SelectableTableHeaderFormLayout($form)
+	function __construct($form)
 	{
-		$this->TableHeaderFormLayout($form);
+		parent::__construct($form);
 	}
 
 	function startUngrouped()
@@ -455,12 +455,12 @@ class TableRowFormLayout extends AutoFormLayout
 {
 	var $externalErrorBox = true;
 	
-	function TableRowFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
-	function startGroup($name)
+	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
 		$this->startUngrouped();
 	}
@@ -544,9 +544,9 @@ class TableRowFormLayout extends AutoFormLayout
  */
 class SelectableTableRowFormLayout extends TableRowFormLayout
 {
-	function SelectableTableRowFormLayout($form)
+	function __construct($form)
 	{
-		$this->TableRowFormLayout($form);
+		parent::__construct($form);
 	}
 	
 	function startUngrouped()
@@ -564,12 +564,12 @@ class SelectableTableRowFormLayout extends TableRowFormLayout
  */
 class SpreadsheetFormLayout extends AutoFormLayout
 {
-	function SpreadsheetFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
-	function startGroup($name)
+	function startGroup($name, $collapsible = false, $collapsed = false)
 	{
 		$this->startUngrouped();
 	}
@@ -639,9 +639,9 @@ class SpreadsheetFormLayout extends AutoFormLayout
  */
 class MobileFormLayout extends AutoFormLayout
 {
-	function MobileFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
@@ -779,9 +779,9 @@ class MobileFormLayout extends AutoFormLayout
  */
 class SimpleFormLayout extends AutoFormLayout
 {
-	function MobileFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
@@ -921,9 +921,9 @@ class SimpleFormLayout extends AutoFormLayout
  */
 class FilterFormLayout extends AutoFormLayout
 {
-	function FilterFormLayout($form)
+	function __construct($form)
 	{
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 	
 	function startGroup($name, $collapsible = false, $collapsed = false)
@@ -1009,12 +1009,12 @@ class TemplateFormLayout extends AutoFormLayout
 	var $output;
 	var $showButtons = true;
 	
-	function TemplateFormLayout($form, $template, $showButtons = true)
+	function __construct($form, $template, $showButtons = true)
 	{
 		trace("Using form template {$template}", 3);
 		$this->template = file_get_contents($template);
 		$this->showButtons = $showButtons;
-		$this->AutoFormLayout($form);
+		parent::__construct($form);
 	}
 
 	function startGroup($name, $collapsible = false, $collapsed = false)
