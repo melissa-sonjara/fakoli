@@ -420,7 +420,7 @@ abstract class AbstractDataItem
 	 * @param string $field the field to return
 	 * @param string $type the type of the field.
 	 */
-	function quoteFieldValue($field, $type)
+	function quoteFieldValue($field, $type = null)
 	{
 		if (!$type) $type = $this->getType($field);
 		
