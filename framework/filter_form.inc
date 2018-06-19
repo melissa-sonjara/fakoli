@@ -721,7 +721,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		$this->_endField($field);	
 	}
 	
-	function _startField($field, $styles)
+	function _startField($field, $styles = "")
 	{
 		echo "<div class='{$this->cssClass}'>\n";
 		echo "<ul>\n";		
@@ -730,10 +730,10 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 		echo "</li>\n";	
 	}
 	
-	function _endField($field, $styles)
+	function _endField($field, $styles = "")
 	{
 		echo "</ul>\n";
-		$this->parent->layout->endField($field);	
+		$this->parent->layout->endField($field, $this);	
 		echo "<div style='clear: both'></div>\n";
 	}
 }
@@ -767,7 +767,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 		$this->_endField($field);
 	}
 
-	function _startField($field, $styles)
+	function _startField($field, $styles = "")
 	{
 		echo "<div class='{$this->cssClass}'>\n";
 		$this->parent->layout->printLabel($field, $this, $styles, "");
@@ -775,10 +775,10 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 		
 	}
 
-	function _endField($field, $styles)
+	function _endField($field, $styles = "")
 	{
 		echo "</ul>\n";
-		$this->parent->layout->endField($field);	
+		$this->parent->layout->endField($field, $this);	
 		echo "<div style='clear: both'></div>\n";
 	}	
 }
