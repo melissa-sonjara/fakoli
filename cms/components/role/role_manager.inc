@@ -40,7 +40,8 @@ class RoleManager
 		
 	}
 	
-	/*
+	/**
+	 * @deprecated
 	 * Called by ComponentManager, PageManager, UserManager, and
 	 * MenuItemManager
 	 */
@@ -74,6 +75,95 @@ class RoleManager
 			$item->$field = $newRole;
 			$item->filter = new InclusionFilter($field);
 			$item->save();
+		}
+	}
+	
+	/**
+	 * Adds the specified role to the access list field in each of the supplied DataItems.
+	 * 
+	 * @param mixed $items the DataItem or array of DataItems to be updated
+	 * @param string $role the role to add to the access list field
+	 * @param string $field the name of the field (default is 'role')
+	 */
+	static function addRoleToAccessList($items, $role,  $field = "role")
+	{
+		if (count($items) == 0) return;
+		if (is_object($items))
+		{
+			if (!$items instanceof DataItem) return;
+			$items = [ $items ];
+		}
+		
+		foreach($items as $item)
+		{
+			if (!$item->hasField($field)) continue;
+						
+			$roles = explode(",", $item->get($field));
+			$found = false;
+			foreach($roles as $r)
+			{
+				if ($r == $role)
+				{
+					$found = true;
+					break;
+				}
+			}
+			
+			if (!$found)
+			{
+				$roles[] = $role;
+				$oldFilter = $item->filter;
+				$item->filter = new InclusionFilter($field);
+				$item->set($field, implode(",", $roles));
+				$item->save();
+				$item->filter = $oldFilter;
+			}
+		}
+	}
+	
+	/**
+	 * Removes the specified role from the access list field in each of the supplied DataItems
+	 * 
+	 * @param mixed $items the DataItem or array of DataItems to be updated
+	 * @param string $role the role to add to the access list field
+	 * @param string $field the name of the field (default is 'role')
+	 */
+	static function removeRoleFromAccessList($items, $role, $field = "role")
+	{
+		if (count($items) == 0) return;
+		if (is_object($items))
+		{
+			if (!$items instanceof DataItem) return;
+			$items = [ $items ];
+		}
+		
+		foreach($items as $item)
+		{
+			if (!$item->hasField($field)) continue;
+			
+			$roles = explode(",", $item->get($field));
+			$newRoles = [];
+			$found = false;
+			foreach($roles as $r)
+			{
+				if ($r == $role)
+				{
+					$found = true;
+				}
+				else
+				{
+					$newRoles[] = $r;
+				}
+			}
+			
+			if ($found)
+			{
+				$oldFilter = $item->filter;
+				$item->filter = new InclusionFilter($field);
+				$item->set($field, implode(",", $newRoles));
+				$item->save();
+				$item->filter = $oldFilter;
+			}
 		}
 	}
 	
