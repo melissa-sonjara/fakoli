@@ -27,7 +27,7 @@ img
 {
 	border: none;
 }
-
+`
 a
 {
 	outline: none;
@@ -1360,4 +1360,13 @@ table.list tr.unmapped
 .dialog_body label
 {
 	white-space: nowrap;
+}
+
+.context_menu li a:link, .context_menu li a:visited {
+    padding: 5px 10px 5px 24px;
+}
+
+.context_menu li img {
+    padding-top: 4px !important;
+    width: 16px;
 }
