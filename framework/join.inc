@@ -840,6 +840,8 @@ class LeftOuterJoin extends AbstractJoin
 		
 		trace(print_r($this->constraints, true), 3);
 		
+		$tableConstraints = array();
+				
 		for($i = 0; $i < count($this->classes); ++$i)
 		{
 			$class =  $this->classes[$i];
@@ -861,8 +863,17 @@ class LeftOuterJoin extends AbstractJoin
 				}
 
 				$c = "(".preg_replace("/^\\s*(WHERE\\s+|AND\\s+|OR\\s+)/i", "", $c).")";
-				
-				$this->constraints[$class] = $c;			
+	
+				if ($i == 0)
+				{
+					// Constraint on first (anchor) class goes into where clause
+					$this->constraints[$class] = $c;			
+				}
+				else
+				{
+					// Constraints on other classes go into join clauses
+					$this->tableConstraints[$class] = $c;
+				}
 			}
 
 			$f = $proto->getFieldList($alias); 
@@ -941,6 +952,10 @@ class LeftOuterJoin extends AbstractJoin
 					else
 					{
 						$join .= " LEFT OUTER JOIN {$q->table} t$j ON t$i.{$p->primary_key}=t$j.{$p->primary_key}";
+						if ($this->tableConstraints[$d])
+						{
+							$join .= " AND ".$this->tableConstraints[$d];
+						}
 					}
 					
 					$joined[$j] = true;
