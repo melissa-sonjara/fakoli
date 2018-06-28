@@ -841,7 +841,8 @@ class LeftOuterJoin extends AbstractJoin
 		trace(print_r($this->constraints, true), 3);
 		
 		$tableConstraints = array();
-				
+		$whereConstraints = array();
+		
 		for($i = 0; $i < count($this->classes); ++$i)
 		{
 			$class =  $this->classes[$i];
@@ -867,7 +868,7 @@ class LeftOuterJoin extends AbstractJoin
 				if ($i == 0)
 				{
 					// Constraint on first (anchor) class goes into where clause
-					$this->constraints[$class] = $c;			
+					$this->whereConstraints[$class] = $c;			
 				}
 				else
 				{
@@ -894,7 +895,7 @@ class LeftOuterJoin extends AbstractJoin
 		
 		if ($this->unique) $fields = "DISTINCT $fields";
 		
-		$classConstraints = implode(" AND ", array_values($this->constraints));
+		$classConstraints = implode(" AND ", array_values($this->whereConstraints));
 
 		if (strncmp($constraints, "WHERE", 5))
 		{
