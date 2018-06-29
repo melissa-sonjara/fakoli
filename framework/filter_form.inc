@@ -388,7 +388,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	var $width = "";
 	var $cssClass = 'select';
 	
-	function FilterFieldRenderer(&$form, $field, $label = "", $options)
+	function FilterFieldRenderer(&$form, $field, $label = "", $options = null)
 	{
 		$this->options = $options;
 		$this->label = ($label) ? $label : prettify($field);
