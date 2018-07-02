@@ -188,7 +188,7 @@ class SerializationManager
 		if ($save)
 		{
 			$o = new $class;
-			$o->joinTransaction();
+			$o->joinTransaction($tx);
 			$o->deleteAll();
 			
 			foreach($objects as $object)
