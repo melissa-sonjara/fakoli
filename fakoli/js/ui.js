@@ -971,6 +971,7 @@ var ProgressiveSearch = new Class({
 	list: 		Class.Empty,
 	container:	Class.Empty,
 	allowHide:	true,
+	sequence: 0,
 	
 	initialize: function(element, options)
 	{
@@ -1029,11 +1030,13 @@ var ProgressiveSearch = new Class({
 			return;
 		}
 		
+		this.sequence++;
+		
 		var name = this.options.parameter ? this.options.parameter : this.element.id;
 		var request = new Request(
 	    		{
 	    			method: 'get', 
-	    			url: appendQueryString(this.options.search, name + "=" + encodeURIComponent(val)), 
+	    			url: appendQueryString(this.options.search, name + "=" + encodeURIComponent(val) + "&sequence=" + this.sequence), 
 	    			onSuccess: function(html) 
 	    			{ 
 	    				this.showList(html);
@@ -1064,6 +1067,11 @@ var ProgressiveSearch = new Class({
 	
 	showList: function(html)
 	{
+		//Filter out responses that are not for the most recent request if sequence is present in response
+		var regexp = /data-sequence=['"](\d+)['"]/i;
+		var match = regexp.exec(html);
+		if (match && match[1] != this.sequence) return;
+		
 		this.container.set('html', html);
 		var coords = this.element.getCoordinates();
 		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'max-height': this.options.height, 'display': 'block'});
