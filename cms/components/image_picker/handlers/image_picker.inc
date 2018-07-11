@@ -68,7 +68,7 @@ else
 	$images = array();
 }
 
-$view = new ImageListView($images, "javascript:new ImagePicker().selectImage({image_id}, '{title}')");
+$view = new ImageListView($images, "javascript:new ImagePicker().selectImage({image_id}, '{title:jsSafe}')");
 
 ?>
 <div class='image_picker_header'>
