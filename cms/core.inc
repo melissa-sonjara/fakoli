@@ -919,6 +919,22 @@ class Fakoli
 	}
 	
 	/**
+	 * Format the target DataItem or JoinResult using the specified template file. The template file
+	 * can use any of the standard Fakoli DataItem formatting tags.
+	 * 
+	 * @param mixed $target the DataItem or JoinResult to be formatted
+	 * @param string $templateFile path to the template file
+	 * @param string optional component to search for the template file
+	 * 
+	 * @return string formatted output of the target with the template applied
+	 */
+	static function applyTemplate($target, $templateFile, $component = "")
+	{
+		$template = Fakoli::loadResource($templateFile, $component);
+		return $target->format($template);
+	}
+	
+	/**
 	 * Serves the page with the specified section and identifier.
 	 * 
 	 * @param string $sectionIdentifier the identifier of the section
