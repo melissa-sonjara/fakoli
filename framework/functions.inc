@@ -947,7 +947,7 @@ $traceLevels = array(1	=>	"FATAL",
  * @param string $msg the message to output
  * @param int $lvl the severity level (0-5) of this message
  */
-function trace($msg, $lvl, $callStack = null)
+function trace($msg, $lvl = 3, $callStack = null)
 {
 	global $config;
 	global $traceLevels;
