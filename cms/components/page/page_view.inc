@@ -65,6 +65,7 @@ class PageView
 		global $identifier;
 		global $section;
 		global $css_cache_timestamp;
+		global $fontawesome;
 		
 		$page = $this->page; // Pass through to code include
 		$site = $page->Site();

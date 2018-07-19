@@ -70,6 +70,7 @@ class AdminPageView
 		global $page;
 		global $menu_item;
 		global $isAdmin;
+		global $fontawesome;
 		
 		global $auto_form_defaults;
 		$auto_form_defaults["default_layout"] = "table";

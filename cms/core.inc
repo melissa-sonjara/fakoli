@@ -41,6 +41,9 @@ require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../framework/cache.inc");
 require_once realpath(dirname(__FILE__)."/components/component/datamodel/component.inc");
 
+// Default Font Awesome URL - free CDN version
+$fontawesome = "https://use.fontawesome.com/releases/v5.1.1/css/all.css";
+
 /**
  * FakoliException is the base exception class for all
  * Fakoli errors.

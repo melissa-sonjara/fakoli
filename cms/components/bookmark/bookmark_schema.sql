@@ -15,8 +15,14 @@ CREATE TABLE bookmark (
 	category 	VARCHAR(200) NOT NULL DEFAULT '',
 	title	 	VARCHAR(500) NOT NULL,
 	url			VARCHAR(2000) NOT NULL,
-	user_id		INT(1) UNSIGNED NOT NULL,
+	user_id		INT(10) UNSIGNED NOT NULL,
 	PRIMARY KEY(bookmark_id)
 ) ENGINE=InnoDB;
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+ALTER TABLE bookmark ADD COLUMN last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- END Version 1.1

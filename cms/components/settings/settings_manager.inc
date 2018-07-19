@@ -130,6 +130,8 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "buttons_at_top", false, "Boolean", "Whether the form's save/cancel buttons appear at the top of the form in addition to the bottom.", "AutoForm");
 		Settings::setDefaultValue("settings", "default_layout", "table", String, "Specifies the default layout manager to use when rendering forms", "AutoForm", "table\nsimple\nmobile");
 		Settings::setDefaultValue("settings", "interstitialSpinner", "/fakoli/images/spinner.gif", String, "Specifies the default spinner animation to use with interstitials", "AutoForm");
+
+		Settings::setDefaultValue("settings", "font_awesome_URL", "", 'String', "If you want to use a specific version of Font Awesome (for instance if you have a Pro subscription) enter the URL here", "Font Awesome");	
 	}
 	
 	/**
@@ -144,6 +146,7 @@ class SettingsManager
 	static function configurationBootstrap()
 	{
 		global $auto_form_defaults;
+		global $fontawesome;
 		
 		$afDefaults = Cache::get("auto_form_defaults");
 		if (!$afDefaults)
@@ -165,6 +168,16 @@ class SettingsManager
 		{
 			if (!isset($auto_form_defaults[$name])) $auto_form_defaults[$name] = $value;
 		}
+		
+		$fontawesomeURL = Cache::get("font_awesome_URL");
+		if (!$fontawesomeURL)
+		{
+			$fontawesomeURL = Settings::getValue("settings", "font_awesome_URL");
+			if (!$fontawesomeURL) $fontawesomeURL = $fontawesome;
+			Cache::put("font_awesome_URL", $fontawesomeURL);
+		}
+		
+		$fontawesome = $fontawesomeURL;
 	}
 	
 	static function getSubTabs($component)
