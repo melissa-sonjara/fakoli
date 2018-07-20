@@ -29,6 +29,12 @@ $obj = new $class;
 $name = $obj->prettifyClassName(true);
 
 $fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
+
+if (!DataSyncManager::fieldMappingHasMatchField($fieldMapping))
+{
+	redirect("data_import_field_mapping?import_profile_id={$import_profile_id}");
+}
+
 $filter = DataSyncManager::generateFilter($fieldMapping);
 $filter->add($obj->primary_key);
 

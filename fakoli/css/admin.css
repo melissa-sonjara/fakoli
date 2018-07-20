@@ -921,6 +921,14 @@ warning
 	background-repeat: no-repeat;
 }
 
+p.warning
+{
+    background: #ffe;
+    border: solid 1px #aaa;
+    padding: 10px 10px 10px 10px;
+    border-radius: 4px;
+    color: #a00;
+}
 
 /* box border under tab bar */
 #tab_border, .tab_border

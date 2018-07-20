@@ -105,6 +105,12 @@ $tabs->writeHTML();
 ?>
 <div class="tab_border">
 <?
+if (count($fieldMappings) > 0 && !DataSyncManager::fieldMappingHasMatchField($fieldMappings))
+{
+?>
+<p class='warning'><i class='fa-fw fas fa-exclamation-triangle'></i> You need to set the <b>Matching</b> flag for at least one field.</p>
+<?
+}
 
 if ($multiProfile)
 {

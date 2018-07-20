@@ -317,6 +317,16 @@ interface IDataSyncHelper
 		return DataSyncManager::$fieldMappings[$import_profile_id];
 	}
 
+	static function fieldMappingHasMatchField($fieldMappings)
+	{
+		foreach($fieldMappings as $fieldMapping)
+		{
+			if ($fieldMapping->matching) return true;
+		}
+		
+		return false;
+	}
+	
 	static function getActiveFieldMapping($class)
 	{
 		return DataSyncManager::getFieldMapping($class, DataSyncManager::$import_profile_id);	
