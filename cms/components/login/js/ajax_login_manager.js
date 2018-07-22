@@ -34,6 +34,10 @@ var AjaxLoginManager = new Class({
 				go(params[1]);
 			}
 		}
+		else if (params[0] == "REDIRECT")
+		{
+			go(params[1]);
+		}
 		else
 		{
 			if (this.options.onError.attempt(params[1]))

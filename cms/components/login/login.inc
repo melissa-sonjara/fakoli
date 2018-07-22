@@ -90,6 +90,7 @@ class LoginManager
 {
 	static $error;
 	static $extension = null;
+	static $intercept = null;
 	
 	/**
 	 * Registers an extension to the application's login form
@@ -264,11 +265,22 @@ class LoginManager
 		trace("Fakoli LoginManager validateLogin username $username", 3);
 		//trace(print_r($_POST, true), 3);
 		
-		// JDG - guard against data not found exception
-		if(!$username OR !$password)
+		if (Settings::getValue("login", "reject_all_blank_passwords"))
 		{
-			LoginManager::recordLoginAttempt($username, "login", null, "failure");
-			return LoginManager::$error = "Incorrect user name or password.";			
+			// JDG - guard against data not found exception
+			if(!$username OR !$password)
+			{
+				LoginManager::recordLoginAttempt($username, "login", null, "failure");
+				return LoginManager::$error = "Incorrect user name or password.";			
+			}
+		}
+		else
+		{
+			if(!$username)
+			{
+				LoginManager::recordLoginAttempt($username, "login", null, "failure");
+				return LoginManager::$error = "Incorrect user name or password.";			
+			}			
 		}
 		
 		ComponentManager::fireEvent("OnLoginSubmit");
@@ -343,13 +355,26 @@ class LoginManager
 		$username = $_POST[$mgr->getUsernameField()];
 		$password = $_POST["password"];
 		
-		// JDG - guard against data not found exception
-		if(!$username OR !$password)
+		if (Settings::getValue("login", "reject_all_blank_passwords"))
 		{
-			LoginManager::$error = "Incorrect user name or password.";
-			return "ERROR|".LoginManager::$error;
+			// JDG - guard against data not found exception
+			if(!$username OR !$password)
+			{
+				LoginManager::recordLoginAttempt($username, "login", null, "failure");
+				LoginManager::$error = "Incorrect user name or password.";
+				return "ERROR|".LoginManager::$error;			
+			}
 		}
-		
+		else
+		{
+			if(!$username)
+			{
+				LoginManager::recordLoginAttempt($username, "login", null, "failure");
+				LoginManager::$error = "Incorrect user name or password.";
+				return "ERROR|".LoginManager::$error;			
+			}			
+		}
+				
 		ComponentManager::fireEvent("OnLoginSubmit");
 	
 		$user = $mgr->validatePassword($username, $password);
@@ -369,6 +394,11 @@ class LoginManager
 		}
 		else
 		{
+			if (LoginManager::$intercept)
+			{
+				return "REDIRECT|".LoginManager::$intercept;
+			}
+			
 			$user = $this->validateTokenLogin($username, $password);
 			
 			if ($user)
@@ -585,6 +615,8 @@ class LoginManager
 		trace("Setting Login defaults", 4);
 		
 		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean", "Turns on or off user authentication. When turned off, no users can access the site except for admins", "Access Control");
+		Settings::setDefaultValue("login", "reject_all_blank_passwords", true, "Boolean", "Automatically reject all login attempts with a blank password. Disable this only if you have custom business logic related to new user accounts with blank passwords", "Blank Password Login Attempts");
+	
 		Settings::setDefaultValue("login", "enable_username_cookie", false, Boolean, "Enables or disables the 'Remember my username' option on the default login page", "Username Cookie");
 		Settings::setDefaultValue("login", "remember_me_text", "Remember my Username", String, "The text to display next to the 'remember me' checkbox on the default login page", "Username Cookie");
 		Settings::setDefaultValue("login", "remember_me_cookie_expiration", 15, Number, "The number of days for which the username is to be remembered", "Username Cookie");
