@@ -286,6 +286,24 @@ function appendQueryString(url, params)
 	return url;
 }
 
+function codify(name)
+{
+	name = name.replace(/[\s\W]+/, "_");
+	name = name.replace("&", "and");
+	return name;
+}
+
+function prettify(name)
+{
+	name = name.replace(/([a-z])([A-Z0-9])/, "$1 $2");
+	name = name.replace("_", " ");
+	name = name.replace(/^(.)|\s+(.)/g, function ($1) 
+	{
+      return $1.toUpperCase()
+    });
+	
+	return $name;
+}
 
 function number_format (number, decimals, dec_point, thousands_sep) {
     // Formats a number with grouped thousands  

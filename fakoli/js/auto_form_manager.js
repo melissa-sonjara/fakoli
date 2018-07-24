@@ -49,6 +49,25 @@ var AutoFormManager = new Class(
 		});
 	},
 	
+	getGroupID: function(groupName)
+	{
+		return this.form.id + "_" + codify(groupName) + "_group";
+	},
+	
+	addGroupClass: function(group, cssClass)
+	{
+		var gid = this.getGroupID(group);
+		var g = document.id(gid);
+		g.addClass(cssClass);
+	},
+	
+	removeGroupClass: function(group, cssClass)
+	{
+		var gid = this.getGroupID(group);
+		var g = document.id(gid);
+		g.removeClass(cssClass);		
+	},
+	
 	setLabel: function(field, text)
 	{
 		var id = this.form.id + "_" + field + "_label";
