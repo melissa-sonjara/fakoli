@@ -62,7 +62,7 @@ class RedirectManager
 		
 	static function handleSectionRedirects()
 	{
-		$redirects = Query::create(Redirect, "WHERE active=1 AND path=:p")
+		$redirects = Query::create(Redirect, "WHERE active=1 AND redirect_from=:p")
 						 ->bind(":p", Fakoli::$requestURI)
 						 ->execute();
 		if (count($redirects) > 0)
