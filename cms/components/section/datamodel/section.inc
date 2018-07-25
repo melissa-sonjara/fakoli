@@ -101,6 +101,7 @@ class Section extends DataItem
 		}
 		catch(Exception $e)
 		{
+			ComponentManager::fireEvent("SectionNotFound", $identifier);
 			throw new FakoliException("Unknown or ambiguous section '$identifier'");
 		}		
 	}

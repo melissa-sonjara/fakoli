@@ -35,6 +35,7 @@ class RedirectManifest
 					"upgradeComponent"		=>	array(RedirectManager, upgradeComponent),
 					"ComponentScanComplete"	=>	array(RedirectManager, setDefaults),
 					"ResourceNotFound"	 	=>	array(RedirectManager, handleRedirects),
+					"SectionNotFound"		=>	array(RedirectManager, handleSectionRedirects),
 					"OverrideResource"		=>	array(RedirectManager, handleOverrides),
 					"RegisterSerializationHandler"	=>	array(RedirectManager, registerSerializationHandler)
 		);

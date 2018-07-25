@@ -60,6 +60,17 @@ class RedirectManager
 		return $identifier;
 	}
 		
+	static function handleSectionRedirects()
+	{
+		$redirects = Query::create(Redirect, "WHERE active=1 AND path=:p")
+						 ->bind(":p", Fakoli::$requestURI)
+						 ->execute();
+		if (count($redirects) > 0)
+		{
+			redirect($redirects[0]->redirect_to);
+		}
+	}
+	
 	static function handleOverrides($identifier)
 	{
 		global $section;
