@@ -180,7 +180,7 @@ var FakoliMenu = new Class({
 				var coords = ul.getCoordinates();
 				if (coords.right > size.width)
 				{
-					var sbarWidth = (window.scrollbars.visible && Browser.platform != "mac") ? 17 : 0;
+					var sbarWidth = (window.scrollbars && window.scrollbars.visible && Browser.platform != "mac") ? 17 : 0;
 					ul.setStyle('left', coords.left - (coords.right - size.width) - sbarWidth);
 				}
 			}
