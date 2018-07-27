@@ -91,7 +91,7 @@ class RoleManager
 		if (is_object($items))
 		{
 			if (!$items instanceof DataItem) return;
-			$items = [ $items ];
+			$items = array( $items );
 		}
 		
 		foreach($items as $item)
