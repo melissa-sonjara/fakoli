@@ -142,7 +142,7 @@ class RoleManager
 			if (!$item->hasField($field)) continue;
 			
 			$roles = explode(",", $item->get($field));
-			$newRoles = [];
+			$newRoles =array();
 			$found = false;
 			foreach($roles as $r)
 			{
