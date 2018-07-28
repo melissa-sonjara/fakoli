@@ -1261,6 +1261,10 @@ class DataItem extends AbstractDataItem
 	 * @param string $class the name of the related class
 	 * @param string $xref the name of the cross-reference table
 	 * @param string $orderBy (optional) a sort order clause for the results.
+	 * @param string $pkField (optional) the field in the cross-reference table that maps 
+	 * 						  to the primary key of the source object.
+	 * @param string xrefField (optional) the field in the cross-refence table that maps 
+	 *                        to the primary key of the cross-referenced objects.
 	 */
 	function crossReference($class, $xref, $orderBy = "", $pkField = "", $xrefField = "")
 	{

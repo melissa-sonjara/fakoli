@@ -58,6 +58,12 @@ class Menu extends DataItem
 		return $this->getRelatedList(MenuItem, "", $constraint);
 	}
 	
+	/**
+	 * Returns the Menu object that matches the specified identifier
+	 * @param string $identifier the identifier of the menu
+	 * @return Menu the matching menu item
+	 * @throws DataNotFoundException
+	 */
 	static function findByIdentifier($identifier)
 	{
 		return Query::create(Menu, "WHERE identifier=:i")
@@ -65,6 +71,11 @@ class Menu extends DataItem
 					->executeSingle();
 	}
 	
+	/**
+	 * Finds the specified MenuItem within the menu, by title
+	 * @param string $title the title of the menu item
+	 * @return MenuItem the matching menu item
+	 */
 	function getMenuItem($title)
 	{
 		return Query::create(MenuItem, "WHERE menu_id=:m AND title=:t")
@@ -72,6 +83,11 @@ class Menu extends DataItem
 					->executeSingle();
 	}
 	
+	/**
+	 * Checks whether the specified menu item exists within the menu
+	 * @param string $title the title of the menu item
+	 * @return boolean true if a matching menu item exists, false otherwise
+	 */
 	function menuItemExists($title)
 	{
 		return Query::create(MenuItem, "WHERE menu_id=:m AND title=:t")
