@@ -135,8 +135,9 @@ class SelectFieldRenderer extends FieldRenderer
 	 * Allow default blank selections.
 	 * @param string $text the option text for the default blank selection.
 	 */
-	function allowBlank($text = "Choose One", $value = "")
+	function allowBlank($text = "", $value = "")
 	{
+		if (!$this->grouped && !$text) $text = "Choose One";
 		$this->defaultBlank = true;
 		$this->defaultText = $text;
 		$this->defaultValue = $value;
@@ -227,7 +228,7 @@ class SelectFieldRenderer extends FieldRenderer
 				{
 					if ($groupName == "")
 					{
-						echo "<option value=''></option>\n";
+						echo "<option value=''>{$this->defaultText}</option>\n";
 						continue;
 					}
 					
