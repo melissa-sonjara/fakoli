@@ -664,7 +664,7 @@ interface IDataSyncHelper
 			
 			fclose($fp);
 	
-			$process->setProgress("Completed", "$imported records imported, $skipped records skipped");
+			$process->setProgress("Completed", "$imported records imported, $skipped records skipped", 100);
 			
 		}
 		catch(Exception $e)
