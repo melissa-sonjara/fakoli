@@ -347,17 +347,37 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->_startField($field);
 
 		$value = $this->parent->data->get($field);
-		if (array_key_exists($value, $this->options))
+		if ($this->grouped)
 		{
-			echo $this->options[$value];
-		}
-		elseif($value)
-		{
-			echo $value;
+			$found = false;
+			foreach($this->options as $group => $options)
+			{
+				if (array_key_exists($value, $options))
+				{
+					echo $options[$value];
+					$found = true;
+					break;
+				}
+			}
+			if (!$found)
+			{
+				echo "Not specified";
+			}
 		}
 		else
 		{
-			echo "Not specified";
+			if (array_key_exists($value, $this->options))
+			{
+				echo $this->options[$value];
+			}
+			elseif($value)
+			{
+				echo $value;
+			}
+			else
+			{
+				echo "Not specified";
+			}
 		}
 		
 		$this->_endField($field);
