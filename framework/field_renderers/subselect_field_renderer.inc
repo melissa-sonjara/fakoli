@@ -95,7 +95,7 @@ class SubSelectFieldRenderer extends FieldRenderer
 		echo ">\n";			
 		echo "</select>\n";
 		
-		$this->extraControls();
+		$this->extraControls($field);
 		
 		echo "</span>";
 		
