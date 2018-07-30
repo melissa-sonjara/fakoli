@@ -105,7 +105,7 @@ class TextFieldRenderer extends FieldRenderer
 		}
 		$disable = ($this->disable) ? "disabled='disabled'" : "";	
 		
-		if ($style) $style = "style='$style'";
+		if ($this->style) $style = "style='{$this->style}'";
 		
 		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $style $disable $onkeypress>";
 		echo cleanHTMLTags($this->parent->data->get($field));
