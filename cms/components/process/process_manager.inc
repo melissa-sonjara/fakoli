@@ -67,9 +67,10 @@ class ProcessManager
 		global $config;
 		global $user;
 		
+		$isWindows = Fakoli::detectWindowsOS();
 		$this->id = sha1(now() . $action);
-		$launch  = stristr(PHP_OS, "WIN") ? "start " : "";
-		$bg = stristr(PHP_OS, "WIN") ? "" : " &";
+		$launch  = $isWindows ? "start " : "";
+		$bg = $isWindows ? "" : " &";
 		$run = Settings::getValue("process", "PHP_executable")." -d include_path='".
 			get_include_path()."' ".
 			sanitizePath(Fakoli::getComponent("process")->component_path) . DIRECTORY_SEPARATOR . "run.php";
