@@ -117,6 +117,7 @@ class SelectFieldRenderer extends FieldRenderer
 	function setMaxChars($max)
 	{
 		$this->max_chars = $max;
+		return $this;
 	}
 	
 	/**
@@ -129,6 +130,7 @@ class SelectFieldRenderer extends FieldRenderer
 		$this->addEntry = true;
 		$this->addEntryText = $text;
 		$this->addOtherOption();
+		return $this;
 	}
 	
 	/**
@@ -140,7 +142,8 @@ class SelectFieldRenderer extends FieldRenderer
 		if (!$this->grouped && !$text) $text = "Choose One";
 		$this->defaultBlank = true;
 		$this->defaultText = $text;
-		$this->defaultValue = $value;
+		$this->defaultValue = $value
+		return $this;
 	}
 	
 	/**
