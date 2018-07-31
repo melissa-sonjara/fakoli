@@ -142,7 +142,7 @@ class SelectFieldRenderer extends FieldRenderer
 		if (!$this->grouped && !$text) $text = "Choose One";
 		$this->defaultBlank = true;
 		$this->defaultText = $text;
-		$this->defaultValue = $value
+		$this->defaultValue = $value;
 		return $this;
 	}
 	
