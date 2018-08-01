@@ -394,11 +394,6 @@ class LoginManager
 		}
 		else
 		{
-			if (LoginManager::$intercept)
-			{
-				return "REDIRECT|".LoginManager::$intercept;
-			}
-			
 			$user = $this->validateTokenLogin($username, $password);
 			
 			if ($user)
@@ -410,6 +405,11 @@ class LoginManager
 			}
 			else
 			{	
+				if (LoginManager::$intercept)
+				{
+					return "REDIRECT|".LoginManager::$intercept;
+				}
+			
 				LoginManager::$error = "Incorrect user name or password.";
 				LoginManager::recordLoginAttempt($username, "ajax", null, "failure");
 				
