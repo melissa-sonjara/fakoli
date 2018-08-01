@@ -50,6 +50,8 @@ class TermsAndConditionsFieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
+		if (!Settings::getValue("terms_and_conditions", "require_acceptance")) return;
+		
 		$formId = ($this->containerFormID) ? $this->containerFormID : $this->parent->id;
 		$id = $this->parent->id."_".$field;
 		$title = Settings::getValue("terms_and_conditions", "title");
