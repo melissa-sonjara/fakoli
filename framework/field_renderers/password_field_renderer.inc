@@ -45,6 +45,7 @@ class PasswordFieldRenderer extends FieldRenderer
 	var $encryptor;	//< Custom encryptor
 	var $forceReset = false; ///< true if user logged in with a temporary token
 	var $numeric = false; //< numeric code (PIN)
+	var $allowEmpty = false;
 	
 	function PasswordFieldRenderer(&$parent)
 	{
@@ -107,9 +108,11 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 	
 		$this->_startField($field);
 		
-		if ($this->parent->data->get($pk) && !$this->forceReset)
+		if (($this->parent->data->get($pk) && !$this->forceReset) || $this->allowEmpty)
 		{
-			echo "<a id='{$this->parent->id}_{$field}_link' href='#' onclick='{$this->parent->id}_{$field}_showPassword();return false;'>Click to reset password</a>\n";
+			$verb = ($this->allowEmpty && !$this->parent->data->get($pk)) ? "set" : "reset";
+			
+			echo "<a id='{$this->parent->id}_{$field}_link' href='#' onclick='{$this->parent->id}_{$field}_showPassword();return false;'>Click to {$verb} password</a>\n";
 			$this->renderPasswordBlock($field, "none");
 			echo "<input type='hidden' id='{$this->parent->id}_{$field}_reset_password' name='{$this->parent->id}_{$field}_reset_password' value=''/>\n";
 		}
@@ -159,20 +162,27 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 			}
 		}
 		
-		$encryptor = $this->parent->passwordEncryptor;
-		
-		trace("Encryptor: $encryptor", 3);
-		
-		if ($encryptor)
+		if ($this->allowEmpty && !$password)
 		{
-			$password = $this->parent->data->$encryptor($password);
+			$this->parent->data->set($field, "");
 		}
 		else
 		{
-			$password = crypt($password);
+			$encryptor = $this->parent->passwordEncryptor;
+			
+			trace("Encryptor: $encryptor", 3);
+			
+			if ($encryptor)
+			{
+				$password = $this->parent->data->$encryptor($password);
+			}
+			else
+			{
+				$password = crypt($password);
+			}
+			
+			$this->parent->data->set($field, $password);
 		}
-		
-		$this->parent->data->set($field, $password);
 	}	
 }
 
