@@ -304,7 +304,10 @@ class EmailManager
 		{
 			$this->emailTemplate->message = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate->message);
 		}
+		
+		$this->emailTemplate->message = "XXXXXX";
 	}
+	
 	/**	
 	 * Use MergeCodeManager, which shares functionality
 	 * with TextLookup.  
