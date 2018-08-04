@@ -1696,29 +1696,29 @@ class DataItem extends AbstractDataItem
 	function formatThroughRelation($template, $separator = ", ")
 	{
 		$matches = array();
-		preg_match_all("/\\{([\\w\\d_]+)\\.([\\w\\d_\\.\\(\\)]+):?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
+		preg_match_all("/\\{([\\w\\d_]+)\\.([\\w\\d_\\.\\(\\)]+)([:\\|\\^])?([^}]*)}/", $template, $matches, PREG_SET_ORDER);
 		
 		foreach($matches as $match)
 		{
 			$relation = $match[1];
 			$field = $match[2];
-			
-			if(count($match) == 4 && preg_match("/^where|order/i", $match[3]))
-				$constraint = $match[3];
-			elseif(count($match) == 4)
-				$fieldTemplate = $match[3];
+			$divider = $match[3];
+			if(count($match) == 5 && preg_match("/^where|order/i", $match[4]))
+				$constraint = $match[4];
+			elseif(count($match) == 5)
+				$fieldTemplate = $match[4];
 
 			trace("function format: formatThroughRelations template $template field $field relation $relation constraint $constraint", 5);
 			
 			if ($constraint)
 			{
 				$relations = $this->$relation($constraint);
-				$format = "{".$relation.".".$field.":".$constraint."}";
+				$format = "{".$relation.".".$field.$divider.$constraint."}";
 			}
 			elseif($fieldTemplate)
 			{
 				$relations = $this->$relation();
-				$format = "{".$relation.".".$field.":".$fieldTemplate."}";
+				$format = "{".$relation.".".$field.$divider.$fieldTemplate."}";
 			}
 			else
 			{
