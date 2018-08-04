@@ -285,11 +285,26 @@ class EmailManager
 		$this->emailTemplate = $emailTemplate;
 		$this->emailTemplateName = ($this->item) ? $this->item->format($emailTemplate->name) : $emailTemplate->name;
 		$this->emailFrom = ($this->item) ? $this->item->format($emailTemplate->sender_email) : $emailTemplate->sender_email;
+		$this->cleanupTemplate();
 		$this->mergeEmail();
 		$this->onSendComplete = $onSendComplete;
 	}
 
-
+	/**
+	 * Fixes up some common issues introduced by the TinyMCE HTML editor, and provides
+	 * a base href tag for the message if a full HTML document is found.
+	 */
+	private function cleanupTemplate()
+	{
+		$this->emailTemplate = str_replace("<p><!DOCTYPE", "<!DOCTYPE", $this->emailTemplate);
+		$this->emailTemplate = str_replace("<p><html", "<html", $this->emailTemplate);
+		$this->emailTemplate = str_replace("</html></p>", "</html>",  $this->emailTemplate);
+		$baseURL = Settings::getValue("email", "HTML_email_base_url");
+		if ($baseURL && stripos($this->emailTemplate, "<head>"))
+		{
+			$this->emailTemplate = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate);
+		}
+	}
 	/**	
 	 * Use MergeCodeManager, which shares functionality
 	 * with TextLookup.  
@@ -428,6 +443,7 @@ class EmailManager
 		Settings::setDefaultValue("email", "email_name", "Andy Green", "String", "Default Name of email contact for generated emails", "Contact Details", null, 3);
 		Settings::setDefaultValue("email", "default_contact_us_recipient", "", "String", "Default email address(es) that will receive messages from the Contact Us form. These are used if no Contact Topics are defined", "Contact Details", null, 4);
 		Settings::setDefaultValue("email", "use_captcha", "Never", String, "Specify when to use a Captcha to verify the user", "Contact Details", "Never\nAnonymous Only\nAlways", 5);
+		Settings::setDefaultValue("email", "HTML_email_base_url", "", String, "", "Contact Details", null, 6);
 		
 		Settings::setDefaultValue("email", "override_PHP_settings", false, Boolean, "Use these server settings instead of the global settings in your php.ini file", "Server Settings", 0);
 		Settings::setDefaultValue("email", "mail_server", "localhost", "String", "Host name or IP address of your upstream SMTP server", "Server Settings", "", 1);
