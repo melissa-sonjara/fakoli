@@ -298,7 +298,7 @@ class EmailManager
 	{
 		$this->emailTemplate->message = str_replace("<p><!DOCTYPE", "<!DOCTYPE", $this->emailTemplate->message);
 		$this->emailTemplate->message = str_replace("<p><html", "<html", $this->emailTemplate->message);
-		$this->emailTemplate = str_replace("</html></p>", "</html>",  $this->emailTemplate->message);
+		$this->emailTemplate->message = str_replace("</html></p>", "</html>",  $this->emailTemplate->message);
 		$baseURL = Settings::getValue("email", "HTML_email_base_url");
 		if ($baseURL && stripos($this->emailTemplate->message, "<head>"))
 		{
