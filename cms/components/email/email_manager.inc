@@ -296,13 +296,13 @@ class EmailManager
 	 */
 	private function cleanupTemplate()
 	{
-		$this->emailTemplate = str_replace("<p><!DOCTYPE", "<!DOCTYPE", $this->emailTemplate);
-		$this->emailTemplate = str_replace("<p><html", "<html", $this->emailTemplate);
-		$this->emailTemplate = str_replace("</html></p>", "</html>",  $this->emailTemplate);
+		$this->emailTemplate->message = str_replace("<p><!DOCTYPE", "<!DOCTYPE", $this->emailTemplate->message);
+		$this->emailTemplate->message = str_replace("<p><html", "<html", $this->emailTemplate->message);
+		$this->emailTemplate = str_replace("</html></p>", "</html>",  $this->emailTemplate->message);
 		$baseURL = Settings::getValue("email", "HTML_email_base_url");
-		if ($baseURL && stripos($this->emailTemplate, "<head>"))
+		if ($baseURL && stripos($this->emailTemplate->message, "<head>"))
 		{
-			$this->emailTemplate = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate);
+			$this->emailTemplate->message = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate->message);
 		}
 	}
 	/**	
