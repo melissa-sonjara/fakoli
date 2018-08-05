@@ -285,7 +285,6 @@ class EmailManager
 		$this->emailTemplate = $emailTemplate;
 		$this->emailTemplateName = ($this->item) ? $this->item->format($emailTemplate->name) : $emailTemplate->name;
 		$this->emailFrom = ($this->item) ? $this->item->format($emailTemplate->sender_email) : $emailTemplate->sender_email;
-		$this->cleanupTemplate();
 		$this->mergeEmail();
 		$this->onSendComplete = $onSendComplete;
 	}
@@ -294,22 +293,22 @@ class EmailManager
 	 * Fixes up some common issues introduced by the TinyMCE HTML editor, and provides
 	 * a base href tag for the message if a full HTML document is found.
 	 */
-	private function cleanupTemplate()
+	private function cleanupTemplateOutput($output)
 	{
-		trace("** Cleaning Up Email Template HTML", 3);
+		trace("** Cleaning Up Email Template Output HTML", 3);
 		
-		$this->emailTemplate->message = preg_replace("/<p>\s*<\!DOCTYPE/s", "<!DOCTYPE", $this->emailTemplate->message);
-		$this->emailTemplate->message = preg_replace("/<p>\s*<html/s", "<html", $this->emailTemplate->message);
-		$this->emailTemplate->message = preg_replace("/<\\/html>\\s*<\\/p>/s", "</html>",  $this->emailTemplate->message);
+		$output = preg_replace("/<p>\s*<\!DOCTYPE/s", "<!DOCTYPE", $output);
+		$output = preg_replace("/<p>\s*<html/s", "<html", $output);
+		$output = preg_replace("/<\\/html>\\s*<\\/p>/s", "</html>",  $output);
 		$baseURL = Settings::getValue("email", "HTML_email_base_url");
 		trace("Base URL: $baseURL", 3);
 		
 		if ($baseURL)
 		{
-			$this->emailTemplate->message = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate->message);
+			$output = str_replace("<head>", "<head><base href='{$baseURL}'>", $output);
 		}
 		
-		trace(print_r($this->emailTemplate, true), 3);
+		return $output;
 	}
 	
 	/**	
@@ -323,7 +322,9 @@ class EmailManager
 	
 		$fields = array("recipients", "subject", "message");
 		foreach($fields as $field)
-			$this->$field = $mgr->searchAndReplace($this->emailTemplate->$field);			
+			$this->$field = $mgr->searchAndReplace($this->emailTemplate->$field);	
+		
+		$this->message = $this->cleanupTemplateOutput($this->message);
 	}	
 
 	function getRecipients()
