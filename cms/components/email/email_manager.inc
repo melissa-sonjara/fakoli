@@ -296,6 +296,8 @@ class EmailManager
 	 */
 	private function cleanupTemplate()
 	{
+		trace("** Cleaning Up Email Template HTML", 3);
+		
 		$this->emailTemplate->message = str_replace("<p><!DOCTYPE", "<!DOCTYPE", $this->emailTemplate->message);
 		$this->emailTemplate->message = str_replace("<p><html", "<html", $this->emailTemplate->message);
 		$this->emailTemplate->message = str_replace("</html></p>", "</html>",  $this->emailTemplate->message);
