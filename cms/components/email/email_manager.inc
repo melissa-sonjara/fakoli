@@ -302,7 +302,7 @@ class EmailManager
 		$this->emailTemplate->message = preg_replace("/<p>\s*<html/s", "<html", $this->emailTemplate->message);
 		$this->emailTemplate->message = preg_replace("/<\\/html>\\s*<\\/p>/s", "</html>",  $this->emailTemplate->message);
 		$baseURL = Settings::getValue("email", "HTML_email_base_url");
-		if ($baseURL && stripos($this->emailTemplate->message, "<head>"))
+		if ($baseURL)
 		{
 			$this->emailTemplate->message = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate->message);
 		}
