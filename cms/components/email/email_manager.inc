@@ -308,6 +308,8 @@ class EmailManager
 		{
 			$this->emailTemplate->message = str_replace("<head>", "<head><base href='{$baseURL}'>", $this->emailTemplate->message);
 		}
+		
+		trace(print_r($this->emailTemplate, true), 3);
 	}
 	
 	/**	
