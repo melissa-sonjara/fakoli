@@ -1075,6 +1075,13 @@ var ProgressiveSearch = new Class({
 		this.container.set('html', html);
 		var coords = this.element.getCoordinates();
 		this.list.setStyles({'top': coords.bottom, 'left': coords.left, 'width': this.options.width ? this.options.width : coords.width, 'max-height': this.options.height, 'display': 'block'});
+		
+		// Automatically override Z-index to play nicely inside of dialogs
+		var zIndex = calculateZIndex(this.element);
+		if (zIndex != 0)
+		{
+			this.list.setStyle('z-index', zIndex + 1);
+		}
 	},
 	
 	hideList: function(override)
