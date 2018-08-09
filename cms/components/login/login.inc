@@ -206,6 +206,12 @@ class LoginManager
 		if(is_callable(array($mgr, emailToken)))
 			return $mgr->emailToken($siteUser);
 		
+		if (EmailTemplate::templateExists("email_login_token"))
+		{
+			EmailManager::send($lt, "email_login_token");
+			return;
+		}
+		
 		$subject = "Password help for ".$config["sitename"];
 		
 		$userNameField = $mgr->getUsernameField();
