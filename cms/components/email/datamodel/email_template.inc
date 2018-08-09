@@ -44,14 +44,30 @@ class EmailTemplate extends DataItem
 				"message"				=>	HTML
 	);
 		
-	
+	/**
+	 * Retrieves the named email templated
+	 * @param string $name the identifier for the email template
+	 * @return EmailTemplate the matching email template (null if not matched)
+	 */
 	static function getEmailTemplate($name)
 	{
-		$emailTemplates = query(EmailTemplate, "WHERE name='$name'");
+		$emailTemplates = Query::create(EmailTemplate, "WHERE name=:n")
+							   ->bind(":n", $name)
+							   ->execute();
 
-		if(count($emailTemplates) > 0)
-			return $emailTemplates[0];
-		
+		return (count($emailTemplates) > 0) ? $emailTemplates[0] : null;
+	}
+	
+	/**
+	 * Checks whether the named EmailTemplate exists
+	 * @param string $name the identifier for the email template
+	 * @return boolean
+	 */
+	static function templateExists($name)
+	{
+		return Query::create('EmailTemplate', "WHERE name=:n")
+					->bind(":n", $name)
+					->count() > 0;
 	}
 	
 	/**
