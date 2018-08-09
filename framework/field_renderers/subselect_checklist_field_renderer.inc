@@ -47,17 +47,26 @@ class SubSelectCheckListFieldRenderer extends CheckListFieldRenderer
 		$this->CheckListFieldRenderer($form, $field, $label, $options, true);
 	}
 	
-	function renderScript($field = null)
+	function renderScript($field)
 	{
-		Fakoli::includeScript("/fakoli/js/subselect_checklist_manager.js");
+		$id = "{$this->parent->id}_{$field}_container";
+		$superId = "{$this->parent->id}_{$this->super}";
 		
+		Fakoli::includeScript("/fakoli/js/subselect_checklist_manager.js");
+?>
+		<script>
+		window.addEvent('domready', function()
+		{
+			new SubSelectChecklistManager('<?php echo $superId?>', '<?php echo $id?>');
+		});	
+		</script>
+<?php
 	}
 	
-	function renderField($field = "")
+	function renderField($field)
 	{
 		$this->_startField($field);
 		
-		echo "<pre>".print_r($this->options, true)."</pre>";
 		$rawValue = $this->parent->data->get($field);
 		if (is_array($rawValue))
 		{
@@ -87,7 +96,7 @@ class SubSelectCheckListFieldRenderer extends CheckListFieldRenderer
 		}
 		else
 		{
-			echo "<div class='selectbox'>";
+			echo "<div id='{$this->parent->id}_{$field}_container' class='selectbox'>";
 		}
 		
 		$idx = 0;
@@ -98,7 +107,15 @@ class SubSelectCheckListFieldRenderer extends CheckListFieldRenderer
 			{
 				$disabled = "";
 				
-				$text = ($this->format) ? $item->format($this->format) : $item;
+				if ($this->format)
+				{
+					$text = $item->format($this->format);
+					$value = $item->getPrimaryKeyValue();
+				}
+				else
+				{
+					$text = $item;
+				}
 				
 				if ($this->fixedOptions[$value])
 				{
