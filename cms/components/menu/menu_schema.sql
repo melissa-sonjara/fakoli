@@ -73,3 +73,9 @@ ALTER TABLE menu_item ADD COLUMN custom_format varchar(500) not null default '';
 ALTER TABLE menu_item ADD COLUMN display_flags varchar(200) not null default '';
 
 -- END Version 1.4
+
+-- START Version 1.5
+
+ALTER TABLE `menu_item` CHANGE COLUMN `page_id` `page_id` INT(10) UNSIGNED NOT NULL DEFAULT 0 ;
+
+-- END Version 1.5
