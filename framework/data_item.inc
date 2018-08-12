@@ -2205,6 +2205,22 @@ function extractIndexedFieldValues($items, $field)
 	return $out;
 }
 
+/**
+ * Utility method to test for the existence of a DataItem record in the database.
+ * @param string $class the class of the DataItem
+ * @param integer $key the primary key value for the DataItem
+ * @return boolean true if a record for the object exists in the database, false otherwise
+ */
+function itemExists($class, $key)
+{
+	$obj = new $class;
+	if (!$obj instanceof DataItem)
+	{
+		return false;		
+	}
+	$obj->set($obj->getPrimaryKey(), $key);
+	return $obj->exists();
+}
 
 /**
  * Find the first item in the array that matches the supplied value for the specified field.
