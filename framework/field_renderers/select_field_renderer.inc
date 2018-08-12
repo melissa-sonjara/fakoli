@@ -484,7 +484,9 @@ function onChange_<?echo "{$fn}_addEntry" ?>(elt)
 		if(!array_key_exists("", $this->options))
 		{
 			$this->options[""] = $text;
-		}		
+		}	
+
+		return $this;
 	}
 
 	
