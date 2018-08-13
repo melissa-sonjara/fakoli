@@ -39,9 +39,10 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class DateOfBirthFieldRenderer extends FieldRenderer
 {
-	var $validator;
 	var $template = ""; // default reaonly format is short style
-
+	var $minimumAge = 0;
+	var $minimumAgeMessage = "";
+	
 	function DateFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
@@ -58,8 +59,18 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 			$this->parent->validator->add(new RequiredValidator("{$field}_yy", "$label Year"));
 		}
 
+		if ($this->minimumAge)
+		{
+			$this->parent->validator->add(new MinimumAgeValidator($field, $label, $this->minimumAge, $this->minimumAgeMessage));
+		}
 	}
 
+	function setMinimumAge($min, $message = "")
+	{
+		$this->minimumAge = $min;
+		$this->minimumAgeMessage = $message ? $message : "You must be at least {$min} years of age";
+	}
+	
 	function renderScript($field)
 	{
 	}
