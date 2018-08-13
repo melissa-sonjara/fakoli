@@ -69,6 +69,7 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 	{
 		$this->minimumAge = $min;
 		$this->minimumAgeMessage = $message ? $message : "You must be at least {$min} years of age";
+		return $this;
 	}
 	
 	function renderScript($field)
