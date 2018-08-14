@@ -47,7 +47,7 @@ $tree->selectMode = "single";
 
 foreach($itemsByType as $type => $items)
 {
-	$typeNode = new TreeNode($type, $type, null, false, "tree_node_closed", "tree_node_open");
+	$typeNode = new TreeNode("section_{$type}", $type, null, false, "tree_node_closed", "tree_node_open");
 	
 	foreach($items as $item)
 	{
