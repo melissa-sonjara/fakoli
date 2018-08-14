@@ -49,13 +49,13 @@ Tree.toggleFolder = function(id, openStyle, closedStyle)
 
 	if (div.style.display == "none" || div.style.display == "")
 	{
-		div.style.display = "block";
-		link.className = openStyle;
+		div.setStyle('display', "block");
+		link.set('class', openStyle);
 	}
 	else
 	{
-		div.style.display="none";
-		link.className = closedStyle;
+		div.setStyle('display', "none");
+		link.set('class', closedStyle);
 	}
 };
 
