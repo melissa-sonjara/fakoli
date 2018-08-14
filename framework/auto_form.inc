@@ -432,7 +432,7 @@ class AutoForm
 		
 		echo "\twindow.addEvent('domready', function() {\n";
 
-		if ($this->allowPartialSave)
+		if ($this->allowPartialSave && $this->partialSaveContainerID)
 		{
 			$managerOptions = "{partialSaveContainer: '{$this->partialSaveContainerID}', partialSaveLabel: '{$this->partialSaveLabel}'}";
 		}

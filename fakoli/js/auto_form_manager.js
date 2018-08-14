@@ -110,9 +110,9 @@ var AutoFormManager = new Class(
 	partialSave: function()
 	{
 		var uri = new URI();
-		var action = uri.toString();
+		var action = this.form.action ? this.form.action : uri.toString();
 		
-		this.partialSaveButton.removeClass('error').addClass('saving');
+		if (this.partialSaveButton) this.partialSaveButton.removeClass('error').addClass('saving');
 		
 		var request = new Request.JSON(
 		{
@@ -123,8 +123,11 @@ var AutoFormManager = new Class(
 			{
 				if (responseJSON.status == 'success')
 				{
-					this.partialSaveButton.removeClass('dirty').removeClass('saving');
-					this.partialSaveButton.addClass('saved');
+					if (this.partialSaveButton) 
+					{
+						this.partialSaveButton.removeClass('dirty').removeClass('saving');
+						this.partialSaveButton.addClass('saved');
+					}
 					
 					var pkfield = this.form.getElement("input[name='" + responseJSON.primary_key + "']");
 					if (pkfield && pkfield.value == '') 
@@ -134,8 +137,11 @@ var AutoFormManager = new Class(
 				}
 				else
 				{
-					this.partialSaveButton.removeClass('saving');
-					this.partialSaveButton.addClass('error');
+					if (this.partialSaveButton) 
+					{
+						this.partialSaveButton.removeClass('saving');
+						this.partialSaveButton.addClass('error');
+					}
 					notification(responseJSON.error);
 				}
 			}.bind(this),
