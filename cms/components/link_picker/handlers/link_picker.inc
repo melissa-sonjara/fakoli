@@ -48,7 +48,7 @@ $sections = Query::create(Section, "ORDER BY section")->execute();
 
 foreach($sections as $section)
 {
-	$sectionNode = new TreeNode($section->section, $section->section, null, false, "tree_node_closed", "tree_node_open");
+	$sectionNode = new TreeNode("section_{$section->section}", $section->section, null, false, "tree_node_closed", "tree_node_open");
 	
 	$content = $section->Content("ORDER BY identifier");
 	$contentByIdentifier = reindexList($content, "identifier");
