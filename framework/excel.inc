@@ -76,8 +76,9 @@ interface IExcelFile
 	 * @param integer $row the cell row number
 	 * @param integer $col the cell column number
 	 * @param string $value the string to insert
+	 * @param boolean $wrap whether to allow text wrapping
 	 */
-	function writeText($row, $col, $value );
+	function writeText($row, $col, $value, $wrap = false);
 		
 	/**
 	 * Write a number to the cell at the specified row and column
@@ -212,8 +213,9 @@ class ExcelFile implements IExcelFile
 	 * @param integer $row the cell row number
 	 * @param integer $col the cell column number
 	 * @param string $value the string to insert
+	 * @param boolean $wrap whether to allow text wrapping
 	 */
-	function writeText($row, $col, $value ) 
+	function writeText($row, $col, $value, $wrap = false) 
 	{
     	$len = strlen($value);
     	echo pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len);
