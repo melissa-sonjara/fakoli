@@ -541,6 +541,7 @@ class SearchParameters
 	var $paramHandlers = array(); // custom search handlers
 	var $secondaryFields = array();
 	var $additional = array();
+	var $empty = true; ///< true if no search parameters were specified, false if any parameter was found
 	
 	function SearchParameters($target, $form = null)
 	{
@@ -590,6 +591,9 @@ class SearchParameters
 		
 	function fromArray($array)
 	{
+		$this->empty = true;
+		$this->isDefaultState = true;
+		
 		$fields = array_keys($this->target->getFields());
 		foreach($array as $field => $value)
 		{
@@ -603,9 +607,12 @@ class SearchParameters
 					trace("## Skipping $fieldname", 4);
 					continue;
 			}
-			if (!$mode) continue;
+		
+			$this->isDefaultState = false;
+			//if (!$mode) continue;
 			if ($value != "")
 			{
+				$this->empty = false;
 				if (is_array($value))
 				{
 					$this->params[$field] = implode(",", array_values($value));
@@ -995,7 +1002,7 @@ class SearchForm extends AutoForm
 	
 	/**
 	 * Sets the matching mode for the specified fields.
-	 * @param $mode the matching mode, which can be one of "equal", "like", "startsWith", "from" or "to"
+	 * @param string $mode the matching mode, which can be one of "equal", "like", "startsWith", "from" or "to"
 	 */
 	function setMatchingMode($mode)
 	{
@@ -1009,7 +1016,7 @@ class SearchForm extends AutoForm
 	
 	/**
 	 * Retrieve the matching mode that was set for the specified field.
-	 * @param $field the field to query
+	 * @param string $field the field to query
 	 * @return string the matching mode set for that field.
 	 */
 	function getMatchingMode($field)
