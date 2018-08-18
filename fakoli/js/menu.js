@@ -92,7 +92,12 @@ var FakoliMenu = new Class({
 					'touchstart': function(event)
 					{
 						new DOMEvent(event).stop();
-						
+	
+						if (menu.reduced && menu.isShown(parent))
+						{
+							menu.hideMenu(parent);
+							return;
+						}
 						menu.clearFocus();
 						menu.showMenu(parent);
 						if (!parent.blockClick)
@@ -153,6 +158,11 @@ var FakoliMenu = new Class({
 			});
 		});
 
+	},
+	
+	isShown: function(elt)
+	{
+		return elt.hasClass("sfhover");
 	},
 	
 	showMenu: function(elt)
