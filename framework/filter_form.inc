@@ -122,6 +122,7 @@ class FilterForm extends SearchForm
  	var $showSubmitButton = false;				///< Whether to show the submit button on a filter form
  	var $submitButtonLabel = "Filter Results";	///< Text to show on the filter form submit button, if present
  	var $formLabel = null;						///< Text to display before the start of the form (such as 'Filter By')
+ 	var $rememberFilter = false;					///< Set to true to remember the chosen filter parameters and re-apply them if none are set (when returning to a page)
  	
 	function FilterForm($target, $method="GET", $action="", $id="")
 	{
@@ -175,6 +176,33 @@ ENDSCRIPT;
 		return $script . parent::writeScript();	
 	}
 		
+	private function sessionKey()
+	{
+		$base = preg_replace("/\\?.*/", "", $_SERVER["REQUEST_URI"]);
+		return "filter:{$this->id}:{$base}";
+	}
+	
+	private function loadFilterFromSession()
+	{
+		if (isset($_SESSION[$this->sessionKey()]))
+		{
+			$this->params = unserialize($_SESSION[$this->sessionKey()]);
+			$this->data =& $this->params->target;
+		}
+	}
+	
+	private function saveFilterToSession()
+	{
+		if (!$this->params->isDefaultState)
+		{
+			$_SESSION[$this->sessionKey()] = serialize($this->params);
+		}
+		else
+		{
+			unset($_SESSION[$this->sessionKey()]);
+		}
+	}
+	
 	function drawForm()
 	{
 		$obj =& $this->data;
@@ -183,7 +211,11 @@ ENDSCRIPT;
 		{
 			$obj->fromREQUEST();
 		}
-		
+
+// 		echo "<p>Empty: {$this->params->empty}</p>";
+// 		echo "<p>Default State: {$this->params->isDefaultState}</p>";
+// 		echo "<p>".$this->sessionKey()."</p>";
+// 		echo "<pre>".$_SESSION[$this->sessionKey()]."</pre>";
 		echo "<form id='{$this->id}' method='{$this->method}' action='{$this->action}' enctype='multipart/form-data'";
 		if (!$this->ajaxSubmitHandler) 
 		{
@@ -362,6 +394,18 @@ ENDSCRIPT;
 	
 	function getConstraint($first = true, $firstText = "WHERE")
 	{
+		if ($this->rememberFilter)
+		{
+			if ($this->params->isDefaultState)
+			{
+				$this->loadFilterFromSession();
+			}
+			else
+			{
+				$this->saveFilterToSession();
+			}
+		}
+		
 		return $this->params->generateConstraint($first, $firstText);
 	}
 	
