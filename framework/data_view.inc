@@ -825,6 +825,11 @@ class DataListView implements FacetFilterable
 					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
 					break;
 					
+				case Text:
+					
+					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)), true);
+					break;
+					
 				case Number:
 					
 					$x->writeNumber($r, $c, $val);
