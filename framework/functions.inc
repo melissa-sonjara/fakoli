@@ -705,6 +705,23 @@ function checkValidDate($d)
 }
 
 /**
+ * Security helper function. Check that the given parameter is a valid date time.
+ * @param string $d the date time
+ * @return string the value of the parameter if it is in a valid date time format
+ */
+function checkValidDateTime($d)
+{
+	if (!$d) return $d;
+	$formats = array("Y-m-d H:i:s", "Y/m/d H:i:s", "m/d/Y H:i:s", "Y-m-d g:i:sa", "Y/m/d g:i:sa", "m/d/Y g:i:sa");
+	foreach($formats as $format)
+	{
+		if ($d == date($format, strtotime($d))) return $d;
+	}
+	
+	die("Invalid Parameter");
+}
+
+/**
  * Utility function to nicely format addresses, etc.                 
  * (skips blank entries, places all other entries on separate lines) 
  *
