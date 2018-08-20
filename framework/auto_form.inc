@@ -742,6 +742,17 @@ class AutoForm
 	}
 	
 	/**
+	 * Utility function to add a CheckListFieldRenderer
+	 * @param string $label the label for the field
+	 * @param array $options associative array of grouped options @see CheckListFieldRenderer
+	 * @param bool $grouped true if the options are grouped, false otherwise (default)
+	 */
+	function checklist($field, $label, $options, $grouped = false)
+	{
+		return new CheckListFieldRenderer($this, $field, $label, $options, $grouped);
+	}
+	
+	/**
 	 * Define a field grouping
 	 * @param string $name the legend to use for the group
 	 * 
