@@ -107,6 +107,8 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->addEntry = true;
 		$this->addEntryText = $text;
 		$this->addEntrySize = $size;
+		
+		return $this;
 	}
 	
 	function setSize($width, $height, $scrollAfter = 0)
@@ -114,11 +116,15 @@ class CheckListFieldRenderer extends FieldRenderer
 		$this->width = $width;
 		$this->height = $height;
 		$this->scrollAfter = $scrollAfter;
+		
+		return $this;
 	}
 
 	function addFixedOption($value)
 	{
 		$this->fixedOptions[$value] = $value;
+		
+		return $this;
 	}
 	
 	function getOptionCount()
