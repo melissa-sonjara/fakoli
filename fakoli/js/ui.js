@@ -617,6 +617,11 @@ ModalDialog.recenterActiveDialog = function()
 	if (dialog) dialog.center();
 };
 
+ModalDialog.closeAllDialogs = function()
+{
+	ModalDialog.activeDialogs.each(function(dialog) { dialog.hide(); });
+	ModalDialog.activeDialogs = [];
+};
 
 var FloatingDialog = new Class(
 {
