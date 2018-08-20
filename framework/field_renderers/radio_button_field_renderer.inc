@@ -48,10 +48,11 @@ class RadioButtonFieldRenderer extends FieldRenderer
 	var $tabular = false; // Horizontal table-based layout
 	var $regular = false;
 	
-	function RadioButtonFieldRenderer(&$form, $field, $label, $options)
+	function RadioButtonFieldRenderer(&$form, $field, $label, $options, $onchange = "")
 	{
 		$this->options = $options;
-				
+		$this->onChange = $onchange;
+		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
