@@ -421,13 +421,13 @@ class MinimumAgeValidator extends AbstractValidator
 }
 
 /**
- * AgeRangeValidator can be used with DateOfBirth fields.
+ * MaximumAgeValidator can be used with DateOfBirth fields.
  * @author jacob
  *
  */
 class MaximumAgeValidator extends AbstractValidator
 {
-	var $min = 0;
+	var $max = 0;
 	var $message;
 	
 	function MaximumAgeValidator($field, $title, $max, $message = null)
