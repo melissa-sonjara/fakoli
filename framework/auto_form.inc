@@ -729,6 +729,19 @@ class AutoForm
 	}
 	
 	/**
+	 * Utility function to add a RadioButtonFieldRenderer
+	 * @param string $field the field name
+	 * @param string $label the label for the field
+	 * @param array $options associative array of grouped options @see RadioButtonFieldRenderer
+	 * @param string $onchange Javascript onchange handler function name (optional)
+	 * @return RadioButtonFieldRenderer
+	 */
+	function radio($field, $label, $options, $onchange = null)
+	{
+		return new RadioButtonFieldRenderer($this, $field, $label, $options);
+	}
+	
+	/**
 	 * Define a field grouping
 	 * @param string $name the legend to use for the group
 	 * 
