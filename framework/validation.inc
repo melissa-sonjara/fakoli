@@ -402,6 +402,11 @@ class MinimumAgeValidator extends AbstractValidator
 		$dd = checkNumeric($_POST["{$this->field}_dd"]);
 		$yy = checkNumeric($_POST["{$this->field}_yy"]);
 		
+		if (!$mm && !$dd && !$yy)
+		{
+			return "";
+		}
+		
 		if (!$mm || !$dd || !$yy)
 		{
 			return "Incomplete date of birth - $mm/$dd/$yy";
@@ -443,6 +448,11 @@ class MaximumAgeValidator extends AbstractValidator
 		$mm = checkNumeric($_POST["{$this->field}_mm"]);
 		$dd = checkNumeric($_POST["{$this->field}_dd"]);
 		$yy = checkNumeric($_POST["{$this->field}_yy"]);
+	
+		if (!$mm && !$dd && !$yy)
+		{
+			return "";
+		}
 		
 		if (!$mm || !$dd || !$yy)
 		{
