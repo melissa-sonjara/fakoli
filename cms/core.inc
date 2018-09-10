@@ -35,7 +35,7 @@
 // Ensure that short open tags are enabled.
 ini_set("short_open_tag", 1);
 
-register_shutdown_function(array(Fakoli, shutdownHandler));
+register_shutdown_function(array('Fakoli', 'shutdownHandler'));
 
 require_once realpath(dirname(__FILE__)."/../framework/data_item.inc");
 require_once realpath(dirname(__FILE__)."/../framework/cache.inc");
@@ -1521,7 +1521,7 @@ if ($config["default_content_type"])
 	header("Content-Type: {$config['default_content_type']}");
 }
 
-$isAction = (basename($_SERVER["SCRIPT_FILENAME"]) == "action.php" || php_sapi_name == "cli");
+$isAction = (basename($_SERVER["SCRIPT_FILENAME"]) == "action.php" || php_sapi_name() == "cli");
 $isResource = basename($_SERVER["SCRIPT_FILENAME"]) == "resource.php";
 
 if ($isAction)
