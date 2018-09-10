@@ -38,10 +38,14 @@ class OptionListFieldRenderer extends FieldRenderer
 {
 	var $options = array();
 	var $cssClass = "options_list";
+	var $grouped = false;
+	var $groupTag = "h6";
 	
-	function OptionListFieldRenderer(&$form, $field, $label, $options)
+	function OptionListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
 		$this->options = $options;
+		$this->grouped = $grouped;
+		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
 		{
@@ -65,7 +69,7 @@ class OptionListFieldRenderer extends FieldRenderer
 	{
 		value = sel.get('data-value');
 		
-		$$('#<?echo $id?>_list > li').each(function(elt) 
+		$$('#<?echo $id?>_list li[data-value]').each(function(elt) 
 		{ 
 			var v = elt.get('data-value');
 			if (v == value)
@@ -100,13 +104,35 @@ class OptionListFieldRenderer extends FieldRenderer
 		$id = "{$this->parent->id}_{$field}";
 		
 		echo "<input type='hidden' id='{$id}' name='{$field}' value='{$value}'/>";
-		echo "<ul id='{$id}_list' class='{$this->cssClass}'>";
-		foreach($this->options as $option => $description)
+		if (!$this->grouped)
 		{
-			$selected = ($value == $option) ? " class='selected'" : "";
-			echo "<li{$selected} data-value='{$option}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
+			echo "<ul id='{$id}_list' class='{$this->cssClass}'>";
+			foreach($this->options as $option => $description)
+			{
+				$selected = ($value == $option) ? " class='selected'" : "";
+				echo "<li{$selected} data-value='{$option}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";	
+			}
+			echo "</ul>";
 		}
-		echo "</ul>";
+		else
+		{
+			echo "<div id='{$id}_list' class='{$this->cssClass}'>";
+			
+			foreach($this->options as $group => $options)
+			{
+				echo "<{$this->groupTag}>{$group}</{$this->groupTag}>\n";
+				echo "<ul class='{$this->cssClass}'>";
+				foreach($options as $option => $description)
+				{
+					$selected = ($value == $option) ? " class='selected'" : "";
+					echo "<li{$selected} data-value='{$option}' onclick='{$id}_update(this); return false;'>{$description}</li>\n";
+				}
+				echo "</ul>";
+			}
+			
+			echo "</div>";
+		}
+		
 		$this->_endField($field);
 	}
 	
