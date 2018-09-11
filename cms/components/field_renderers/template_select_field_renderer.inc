@@ -114,7 +114,7 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 		return $map;
 	}
 		
-	function readFiles($home, $dir)
+	function readFiles($home, $dir = "")
 	{
 		trace("Scanning Templates", 3);
 		 
