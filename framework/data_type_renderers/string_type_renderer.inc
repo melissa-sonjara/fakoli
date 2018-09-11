@@ -109,6 +109,8 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "firstSentence":
 			return firstSentence($value);
 			
+		case "pluralize":
+			return pluralize($value);
 		default:
 			
 			if (is_numeric($template))
