@@ -20,7 +20,7 @@ $table = new DataListView($errors, "error_log");
 $table->column("Date", "<a href='error_details?error_log_id={error_log_id}'>{timestamp}</a>", true)
 	  ->column("User", "{getUserFullName()}", true)
 	  ->column("URI", "{uri}", true)
-	  ->column("Message", "{message}", true);
+	  ->column("Message", "{message:htmlSafe}", true);
 	  
 $table->filter = true;
 $table->sortable = true;
