@@ -94,6 +94,9 @@ class StringTypeRenderer extends AbstractTypeRenderer
 		case "html":
 			return formatAsHTML($value);
 			
+		case "htmlSafe":
+			return htmlsafe($value);
+			
 		case "xml":
 			return xmlEntities($value);
 			
