@@ -326,7 +326,6 @@ function <?php echo $id?>_hideAddNew()
 		if($this->width)
 			$style = "style='width: {$this->width}'";
 		
-		$this->_printLabel($field);
 		echo "<select name='{$field}:$mode' $style>\n";
 		
 		//AJG: Don't add double empty slots when allowNone is true
