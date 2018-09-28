@@ -601,11 +601,17 @@ class SearchParameters
 
 			$skip = false;
 			
-			if ($this->target->filter && $this->target->filter->isExcluded($fieldname) &&
+			if ($this->target->filter && $this->target->filter->isExcluded($fieldname))
+			{
+				trace("## Skipping $fieldname", 4);
+				continue;
+			}
+			
+			if (!$this->target->hasField($fieldname) &&
 				(!$this->form || !$this->form->hasAdditional($fieldname))) 
 			{
-					trace("## Skipping $fieldname", 4);
-					continue;
+				trace("### Skipping $fieldname", 4);
+				continue;
 			}
 		
 			$this->isDefaultState = false;
