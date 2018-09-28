@@ -94,12 +94,18 @@ class TextTypeRenderer extends AbstractTypeRenderer
 		
 		case "html":
 			return formatAsHTML($value);
-
+			
+		case "htmlSafe":
+			return htmlsafe($value);
+			
 		case "HTML":
 			return formatAsHtml($value);
 
 		case "xml":
 			return xmlEntities($value);
+			
+		case "xmlSafe":
+			return xmlEntities(stripHTML($value));
 			
 		case "firstSentence":
 			return firstSentence($value);
