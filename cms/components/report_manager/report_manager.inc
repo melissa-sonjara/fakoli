@@ -112,13 +112,13 @@ class XXReportManager extends ReportManager
  */
 class ReportManager
 {
-	var $report_id;			///< ID of the saved report as persisted in the database
-	var $title;				///< Title of the report
-	var $description;		///< Longer description of the report
-	var $resultsPage = "";	///< The page used to display the search results
-	var $editorPage = "";	///< The page used to display the report editor
-	var $target;			///< The target window for the form results
-	var $columnOrder;		///< Override the default column order
+	var $report_id;								///< ID of the saved report as persisted in the database
+	var $title;									///< Title of the report
+	var $description;							///< Longer description of the report
+	var $resultsPage = "custom_report_results";	///< The page used to display the search results
+	var $editorPage = "custom_report";			///< The page used to display the report editor
+	var $target;								///< The target window for the form results
+	var $columnOrder;							///< Override the default column order
 	var $tables;
 	var $join;
 	var $report;
@@ -203,8 +203,9 @@ class ReportManager
 		$target = $this->target ? " target='{$this->target}'" : "";
 		
 		$interstitial = $this->interstitialMessage ? " onsubmit='interstitial(\"".jsSafe($this->interstitialMessage).".\"); return true;'" : "";
+		$targetClass = CustomReportManager::getTarget($this);
 		
-		echo "<form method='POST' action='$action?report_id={$_GET['report_id']}'$target id='custom_report'$interstitial>";
+		echo "<form method='POST' action='$action?report_id={$_GET['report_id']}&target={$targetClass}'$target id='custom_report'$interstitial>";
 		echo "<input type='hidden' name='report_id' value='{$this->report_id}'/>";
 		echo "<input type='hidden' name='custom_report_mode' value='search' id='custom_report_mode'/>";
 		echo "<input type='hidden' name='custom_report_title' value='' id='custom_report_title'/>";
@@ -300,16 +301,20 @@ class ReportManager
 	 */
 	function generateConstraint()
 	{
+		$first = true;
 		foreach($this->tables as $table)
 		if ($this->selected["table_{$table->class}"])
 		{
 			$this->constraint .= $table->getConstraint($first, $this->request);
+			$first = false;
 		}
 		
 		if($this->limit && is_numeric($this->limit))
 		{
 			$this->constraint .= " LIMIT {$this->limit}";
 		}
+		
+		//var_dump($this->request);
 	}
 	
 	function generateReport($inlineScript = false)
@@ -426,10 +431,10 @@ class ReportManager
 	function writeResultsFormButtons($excel)
 	{
 		$url = $this->editorPage;
-		echo "<p><a class='button' href='#' onclick='go(\"{$url}?report_id={$this->report_id}&edit=1\"); return false;'>&laquo; Edit Report Settings</a></p>";
-		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport(\"{$this->report_id}\"); return false;'>Save Report</a>\n";
-		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'>Export to Excel</a>";		
-		echo "\n&nbsp;&nbsp;<a class='button' href='$url'>Create a New Report</a></p>\n";
+		echo "<p><a class='button' href='#' onclick='go(\"{$url}?report_id={$this->report_id}&edit=1\"); return false;'><i class='fa-fw fas fa-pencil-alt'></i> Edit Report Settings</a></p>";
+		echo "<p><a class='button' href='#' onclick='ReportManager.updateReport(\"{$this->report_id}\"); return false;'><i class='fa-fw far fa-save'></i> Save Report</a>\n";
+		echo "&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.exportToExcel(\"$excel\"); return false;'><i class='fa-fw far fa-file-excel'></i> Export to Excel</a>";		
+		echo "\n&nbsp;&nbsp;<a class='button' href='#' onclick='ReportManager.createReportDialog();return false;'><i class='fa-fw fas fa-plus'></i> Create a New Report</a></p>\n";
 	}
 	
 	/**
@@ -484,7 +489,7 @@ class ReportManager
 			}
 			
 			$instance = new $cl;
-			$instance->request = ($mode == "save") ? $_REQUEST : $proto->request;
+			$instance->request = ($mode == "save" || $mode == "post") ? $_REQUEST : $proto->request;
 			
 			$instance->populateSelected();
 			$instance->columnOrder = $report->column_order;
@@ -507,6 +512,12 @@ class ReportManager
 			throw new FakoliException("Invalid report id");
 		}
 	}
+	
+	function fromRequest()
+	{
+		$this->request = $_REQUEST;
+		$this->populateSelected();
+	}
 }
 
 class ReportTable
@@ -525,7 +536,7 @@ class ReportTable
 	var $totalCallbacks = array();
 	var $outputFilter = null;
 	
-	function ReportTable($class, $title = "", $request = null, $outputFilter = false)
+	function __construct($class, $title = "", $request = null, $outputFilter = false)
 	{
 		$this->class = $class;
 		$this->proto = new $class;
@@ -546,7 +557,7 @@ class ReportTable
 		$this->form->id = "custom_report";
 		// JDG 2/2012 - set params here to allow additional parameters
 		// to be set by the calling class
-		$this->params = new SearchParameters($this->proto);
+		$this->params = $this->form->params; //new SearchParameters($this->proto);
 		
 		$this->excludedKeys = array();
 		$this->help = "";
@@ -656,6 +667,11 @@ class ReportTable
 		}
 		
 		return $constraint;
+	}
+	
+	function configureForm($configurator = null)
+	{
+		if ($configurator) $configurator($this->form);
 	}
 	
 	/**

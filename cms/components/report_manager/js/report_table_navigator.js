@@ -123,8 +123,7 @@ var ReportTableNavigator = new Class(
 		
 		if (checked.length > 0)
 		{
-			table.tween('background-color', '#002a6c');
-			columns.morph({'background-color': '#d7dee7', 'color': '#000000'});
+			table.addClass('selected_table');
 			table.selectedCheckbox.checked = true;
 			
 			this.filters.each(function (f)
@@ -143,8 +142,7 @@ var ReportTableNavigator = new Class(
 		}
 		else
 		{
-			table.tween('background-color', '#AEBFDA');
-			columns.morph({'background-color': '#ffffff', 'color': '#666666'});
+			table.removeClass('selected_table');
 			table.selectedCheckbox.checked = false;
 			fade = new Fx.Tween(table.filter, {property: 'opacity'});
 			fade.start(0).chain(function() { table.filter.setStyle('display', 'none'); });

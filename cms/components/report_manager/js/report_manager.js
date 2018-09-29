@@ -111,3 +111,85 @@ ReportManager.exportToExcel = function(url)
 	
 	go(url);	
 };
+
+ReportManager.createReportDialog = function()
+{
+	modalPopup("Select Report Target", "/action/report_manager/select_report_target", "500px", "auto");
+};
+
+ReportManager.createReportSelect = function()
+{
+	var target_type = document.id('target_type');
+	if (!target_type) return;
+	var target = target_type.value;
+	if (!target) return;
+	go('custom_report?target=' + target);
+};
+
+ReportManager.shareReport = function(report_id)
+{
+	var request = new Request(
+	{
+		url: "/action/report_manager/share?report_id=" + report_id + "&shared=1",
+		method: 'get',
+		onSuccess: function(response)
+		{
+			if (response == "OK")
+			{
+				location.reload();
+			}
+			else
+			{
+				notification(response);
+			}
+		}
+	});
+	
+	request.send();
+};
+
+ReportManager.unshareReport = function(report_id)
+{
+	var request = new Request(
+	{
+		url: "/action/report_manager/share?report_id=" + report_id + "&shared=0",
+		method: 'get',
+		onSuccess: function(response)
+		{
+			if (response == "OK")
+			{
+				location.reload();
+			}
+			else
+			{
+				notification(response);
+			}
+		}
+	});
+	
+	request.send();
+};
+
+ReportManager.deleteReport = function(report_id)
+{
+	if (!confirm("Are you sure you want to delete this report?")) return;
+	
+	var request = new Request(
+	{
+		url: "/action/report_manager/delete?report_id=" + report_id,
+		method: 'get',
+		onSuccess: function(response)
+		{
+			if (response == "OK")
+			{
+				location.reload();
+			}
+			else
+			{
+				notification(response);
+			}
+		}
+	});
+	
+	request.send();
+};
