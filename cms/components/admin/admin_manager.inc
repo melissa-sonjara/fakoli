@@ -2,6 +2,30 @@
 
 class AdminManager
 {
+	private static $proxyShims = null;
+	
+	static function registerAdminProxyShim($id, $shim)
+	{
+		if (!AdminManager::$proxyShims)
+		{
+			AdminManager::$proxyShims = array();
+		}
+		
+		AdminManager::$proxyShims[$id] = $shim;
+	}
+	
+	static function getAdminProxyShim()
+	{
+ 		global $identifier;
+
+ 		if (!AdminManager::$proxyShims)
+ 		{
+ 			ComponentManager::fireEvent("RegisterAdminProxyShims");
+ 		}
+ 		
+ 		return AdminManager::$proxyShims[$identifier];
+	}
+	
 	static function startFrame($class)
 	{
 		global $script;

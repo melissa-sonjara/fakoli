@@ -103,6 +103,9 @@ class AdminPageProxyView
 		{
 			throw new FakoliException("Insufficiently privileged");
 		}
+		
+		$shim = AdminManager::getAdminProxyShim();
+		if (is_callable($shim)) $shim();
 	}
 	
 	function drawView()
