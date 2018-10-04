@@ -29,7 +29,7 @@ var ReportBackgroundLoader = new Class(
 				{ 
 					this.element.set('text', '');
 					this.element.set('html', html);
-					$exec(request.scripts);
+					Browser.exec(request.scripts);
 				}.bind(this)
 			});
 		}
@@ -45,7 +45,7 @@ var ReportBackgroundLoader = new Class(
 				{ 
 					this.element.set('text', '');
 					this.element.set('html', html);
-					$exec(script);
+					Browser.exec(script);
 				}.bind(this)
 			});
 		}
@@ -81,7 +81,7 @@ var ReportBackgroundLoader = new Class(
 				{ 
 					this.element.set('text', '');
 					this.element.set('html', html);
-					$exec(request.scripts);
+					Browser.exec(request.scripts);
 				}.bind(this)
 			});
 		}
@@ -98,7 +98,7 @@ var ReportBackgroundLoader = new Class(
 				{ 
 					this.element.set('text', '');
 					this.element.set('html', html);
-					$exec(script);
+					Browser.exec(script);
 				}.bind(this)
 			});
 		}
