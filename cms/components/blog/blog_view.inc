@@ -417,7 +417,7 @@ class BlogView
 		{
 			$article = new Article($article_id);
 			$versioningControls = ComponentManager::fireEvent("RenderVersioningControls", $article);
-			echo "<p id='inline_editing'><a href='#' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a>$versioningControls</p>";
+			echo "<p id='inline_editing' class='inline_editor_toolbar'><a href='#' class='edit' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a>$versioningControls</p>";
 		}
 
 		$this->drawSubscribeButton();

@@ -68,7 +68,8 @@
 	margin-top: 8px;
 }
 
-#inline_editing {
+#inline_editing,
+.inline_editor_toolbar {
   background-color: #F5F5F5;
   border: 1px solid #DDDDDD;
   border-radius: 4px;
@@ -78,7 +79,9 @@
 
 
 #inline_editing a,
-#inline_editing a:visited 
+#inline_editing a:visited,
+.inline_editor_toolbar a,
+.inline_editor_toolbar a:visited
 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 9pt;
@@ -106,26 +109,36 @@
 }
 
 #inline_editing a:hover,
-#inline_editing a:active
+#inline_editing a:active,
+.inline_editor_toolbar a:hover,
+.inline_editor_toolbar a:active
 {
 	border: solid 1px #888;
 }
 
-#inline_editing a.pushbutton.first {
+#inline_editing a.pushbutton.first,
+.inline_editor_toolbar a.pushbutton.first
+{
     border-left: 1px solid #888;
     border-radius: 5px 0 0 5px;
 }
 
-#inline_editing a.pushbutton.last {
+#inline_editing a.pushbutton.last,
+.inline_editor_toolbar a.pushbutton.last 
+{
     border-radius: 0 5px 5px 0;
 }
 
-#inline_editing a.pushbutton.selected {
+#inline_editing a.pushbutton.selected,
+.inline_editor_toolbar a.pushbutton.selected 
+{
     background: #316b14;
     color: #fff;
 }
 
-#inline_editing span.version {
+#inline_editing span.version,
+.inline_editor_toolbar span.version 
+{
   display: inline-block;
   font-size: 10pt;
   margin: 0 10px;

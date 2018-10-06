@@ -98,7 +98,7 @@ class PageView
 			$versioningControls = ComponentManager::fireEvent("RenderVersioningControls", $this->page);
 			$versioningEnabled = Settings::getValue("settings", "enable_content_versioning") ? "1" : "0";
 			
-			$this->page->description .= "<p id='inline_editing'><a href='#' onclick='new PageManager().editPage({$this->page->page_id}, $versioningEnabled); return false;'>Edit</a>{$versioningControls}</p>";
+			$this->page->description .= "<p id='inline_editing' class='inline_editor_toolbar'><a href='#' class='edit' onclick='new PageManager().editPage({$this->page->page_id}, $versioningEnabled); return false;'>Edit</a>{$versioningControls}</p>";
 		}
 		
 		// Populate template fields from the Page object.

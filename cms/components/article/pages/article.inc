@@ -74,7 +74,7 @@ if ($article->image_id)
 
 if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
 {
-	echo "<p id='inline_editing'><a href='#' onclick='new ArticleManager().editArticle({$article->article_id}); return false;'>Edit</a></p>";
+	echo "<p id='inline_editing' class='inline_editor_toolbar'><a href='#' class='edit' onclick='new ArticleManager().editArticle({$article->article_id}); return false;'>Edit</a></p>";
 }
 
 if($view) 
