@@ -24,6 +24,16 @@ class ScrollView
 			$part->styles = ($part->styles) ? "{$part->styles}; $imageStyle" : $imageStyle;
 		}
 		
+		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
+		{
+			$versioningControls = ComponentManager::fireEvent("RenderVersioningControls", $part);
+			//$versioningEnabled = Settings::getValue("settings", "enable_content_versioning") ? "1" : "0";
+			
+			$part->content .= $part->format("<p id='inline_editing_{scroll_part_id}' class='inline_editor_toolbar'>".
+											"<a href='#' class='edit' onclick='ScrollPartManager.editPart({scroll_id}, {scroll_part_id}); return false;'>Edit</a>".
+											"{$versioningControls}</p>");
+		}
+		
 		$out = $part->format($partTemplate);
 		$out = preg_replace("/\\[((?:include|position):.*?)\\]/i", "{\$1}", $out);
 		return $out;

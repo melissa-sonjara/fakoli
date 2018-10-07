@@ -78,6 +78,11 @@ class ScrollManager
 		return $classes;
 	}
 	
+	static function registerVersionedContent()
+	{
+		VersionedContentManager::registerVersionedContent(ScrollPart);
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new ScrollUpgradeManager();

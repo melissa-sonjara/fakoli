@@ -9,6 +9,8 @@ if (!$class || !$itemID)
 	Fakoli::end("Missing Parameter");
 }
 
+$target = new $class;
+$target->load($itemID);
 $adminAccess = Fakoli::getAdminAccessRoles();
 
 if (!checkRole($adminAccess))
@@ -16,14 +18,12 @@ if (!checkRole($adminAccess))
 	Fakoli::end("Permission Denied");
 }
 
-$target = new $class;
-$target->load($itemID);
-
 try
 {
-	VersionedContentManager::approve($target);
+	VersionedContentManager::revert($target);
+	ContentVersion::deleteDraft($target);
 	
-	Fakoli::notifyOnNextPage($target->prettifyClassName()." Approved");
+	Fakoli::notifyOnNextPage("Draft changes discarded");
 	Fakoli::end("OK");
 }
 catch(Exception $e)

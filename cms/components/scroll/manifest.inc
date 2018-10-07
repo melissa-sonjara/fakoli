@@ -38,7 +38,7 @@ class ScrollManifest
 	static function getScripts()
 	{
 		return array(
-				//TODO: Add Javascript File References "/components/scroll/js/..."
+				"/components/scroll/js/scroll_part_manager.js"
 		);
 	}
 
@@ -50,7 +50,8 @@ class ScrollManifest
 					 "EnumerateItems"				=> array(ScrollManager, enumerateScrolls),
 					 //"RegisterSearchables"			=> array(PageManager, registerSearchables),
 					 "RegisterTaxonomyClasses"		=> array(ScrollManager, registerTaxonomyClasses),
-					 "RegisterSerializationHandler" => array(ScrollManager, registerSerializationHandler)
+					 "RegisterSerializationHandler" => array(ScrollManager, registerSerializationHandler),
+					 "RegisterVersionedContent"		=> array(ScrollManager, registerVersionedContent)
 				
 					//TODO: Add Event Registrations here
 		);

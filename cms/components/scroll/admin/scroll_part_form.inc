@@ -39,6 +39,8 @@ $scrollSelect = $form->related(Scroll, "", "{title}", "scroll_id", "Scroll");
 $form->alias("css_class", "CSS Class");
 $form->readonly("content_type", "scroll_id");
 
+VersionedContentManager::enableVersioning($form);
+
 $form->onInsertPreProcess = function($form)
 {
 	$form->data->sort_order = Query::create(ScrollPart, "WHERE scroll_id=:s")

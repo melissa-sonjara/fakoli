@@ -19,6 +19,9 @@ class ScrollPart extends DataItem
 							"BackgroundImage"	=>	ImageRecord
 	);
 	
+	var $versioned_fields = array("title", "content", "php_code_file", "css_class", "styles", "image_id");
+	
+	
 	var $fieldAliases = array(	"css_class"	=>	"CSS Class",
 								"styles"	=>	"Inline CSS Styles",
 								"image_id"	=>	"Background Image");

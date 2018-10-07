@@ -28,6 +28,11 @@ class VersionedContentManifest
 		);
 	}
 
+	static function getStyles()
+	{
+		return array("/components/versioned_content/css/versioned_content.css");
+	}
+	
 	static function subscribeToEvents()
 	{
 		return array("Initialize"				 =>	array(VersionedContentManager, onInitialize),

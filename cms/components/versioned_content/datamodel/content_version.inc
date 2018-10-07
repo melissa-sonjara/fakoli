@@ -96,6 +96,27 @@ class ContentVersion extends DataItem
 	}
 	
 	/**
+	 * Delete the current draft changes for the specified target (if they exist)
+	 * @param DataItem $target
+	 */
+	static function deleteDraft($target)
+	{
+		try
+		{
+			$doomed = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=0")
+							->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
+							->executeSingle();
+			$doomed->delete();
+		}
+		catch(DataNotFoundException $e)
+		{
+			trace("Draft not found", 3);
+			// Nothing to do
+		}
+		
+	}
+	
+	/**
 	 * Returns an array of previously approved versions of this content item
 	 * @param DataItem $target the target content item
  	 * @param boolean $includeContent true to return the content from previous versions, false to exclude content

@@ -71,10 +71,11 @@
 #inline_editing,
 .inline_editor_toolbar {
   background-color: #F5F5F5;
-  border: 1px solid #DDDDDD;
-  border-radius: 4px;
+  border: 1px solid #666;
+  border-radius: 0;
   box-shadow: 1px 1px 3px #888888;
   padding: 4px;
+  margin: 0;
 }
 
 
@@ -106,6 +107,7 @@
 		0px -1px 0px rgba(000,000,000,0),
 		0px 1px 0px rgba(255,255,255,0.3);
 	text-decoration: none;
+	display: inline-block;
 }
 
 #inline_editing a:hover,
@@ -121,6 +123,14 @@
 {
     border-left: 1px solid #888;
     border-radius: 5px 0 0 5px;
+}
+
+.inline_border_shim
+{
+	display: none;
+	position: absolute;
+	border: dashed 1px #666;
+	pointer-events: none;
 }
 
 #inline_editing a.pushbutton.last,

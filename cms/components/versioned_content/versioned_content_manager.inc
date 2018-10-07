@@ -167,6 +167,7 @@ class VersionedContentManager
 			$class = get_class($item);
 			$pkval = $item->getPrimaryKeyValue();
 			$out .= "<a class='approve' href='#' onclick='VersionedContentManager.approve(\"{$class}\", {$pkval}); return false'>Approve</a>";
+			$out .= "&nbsp;<a class='revert' href='#' onclick='VersionedContentManager.revert(\"{$class}\", {$pkval}); return false'>Discard Changes</a>";
 		}
 		return $out;
 	}
