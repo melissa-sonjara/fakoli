@@ -1031,14 +1031,23 @@ class Fakoli
 	}
 	
 	/**
+	 * Returns the user roles that have access to the admin section
+	 */
+	static function getAdminAccessRoles()
+	{
+		global $config;
+		$adminAccess = $config["admin_access_roles"];
+		if (!$adminAccess) $adminAccess = "admin";
+		return $adminAccess;
+	}
+	
+	/**
 	 * Send the admin page for the given identifier
 	 * @param string $identifier the admin page to be sent to the client
 	 */
 	static function sendAdminPage($identifier)
 	{
-		global $config;
-		$adminAccess = $config["admin_access_roles"];
-		if (!$adminAccess) $adminAccess = "admin";
+		$adminAccess = Fakoli::getAdminAccessRoles();
 		
 		$pageRole = Fakoli::getAdminPageRole($identifier);
 		
