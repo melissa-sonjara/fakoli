@@ -416,6 +416,9 @@ class BlogView
 		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
 		{
 			$article = new Article($article_id);
+			
+			VersionedContentManager::selectDisplayVersion($article);
+			
 			$versioningControls = ComponentManager::fireEvent("RenderVersioningControls", $article);
 			echo "<p id='inline_editing' class='inline_editor_toolbar'><a href='#' class='edit' onclick='new ArticleManager().editArticle({$article_id}, {$this->blog->blog_id}); return false;'>Edit</a>$versioningControls</p>";
 		}
