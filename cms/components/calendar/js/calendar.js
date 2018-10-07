@@ -47,17 +47,17 @@ var eventDialog;
 
 function showEventDetail(id, handler_class)
 {
-	eventDialog = modalPopup("Event Details", '/action/calendar/event_details?event_id=' + id + '&handler_class=' + handler_class, '600px', 'auto', true, true);
+	eventDialog = modalPopup("Event Details", '/action/calendar/event_details?event_id=' + id + '&handler_class=' + handler_class, '800px', 'auto', true, true);
 }
 
 function editEvent(id)
 {
-	eventDialog = modalPopup("Edit Event", '/action/calendar/event_edit?event_id=' + id, '600px', 'auto', true, true);
+	eventDialog = modalPopup("Edit Event", '/action/calendar/event_edit?event_id=' + id, '800px', 'auto', true, true);
 }
 
 function newEvent(calendar_id)
 {
-	eventDialog = modalPopup("Add Event", '/action/calendar/event_edit?calendar_id=' + calendar_id, '600px', 'auto', true, true);
+	eventDialog = modalPopup("Add Event", '/action/calendar/event_edit?calendar_id=' + calendar_id, '800px', 'auto', true, true);
 }
 
 function editEventResult(result)
@@ -67,6 +67,6 @@ function editEventResult(result)
 
 function showEventList(event_ids, handler_class)
 {
-	eventDialog = modalPopup("List of Events", '/action/calendar/event_list?event_ids=' +event_ids + '&handler_class=' + handler_class, '600px', 'auto', true, true);
+	eventDialog = modalPopup("List of Events", '/action/calendar/event_list?event_ids=' +event_ids + '&handler_class=' + handler_class, '800px', 'auto', true, true);
 }
 
