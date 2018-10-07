@@ -13,6 +13,8 @@ class ScrollView
 	{
 		global $script;
 		
+		VersionedContentManager::selectDisplayVersion($part);
+		
 		if ($part->content_type == "Code")
 		{
 			$part->content = $this->renderCodePart($part);
