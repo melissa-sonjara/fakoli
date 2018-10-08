@@ -123,7 +123,7 @@ class GroupedQuery extends AbstractQuery
 		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
 		$this->constraints .= " ".$prototype->getIdentityConstraint();
 		
-		$query = "SELECT {$this->groupBy}, $func as result FROM {$prototype->table} {$this->tableAlias} {$this->constraints} GROUPED BY {$this->groupBy}";
+		$query = "SELECT {$this->groupBy}, $func as result FROM {$prototype->table} {$this->tableAlias} {$this->constraints} GROUP BY {$this->groupBy}";
 		
 		trace($query, 3);
 		
