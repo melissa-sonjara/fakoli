@@ -109,6 +109,50 @@ class GroupedQuery extends AbstractQuery
 		return $items;
 	}
 	
+	
+	/**
+	 * Query the database to calculate aggregate values by grouping. The database table associated with
+	 * the specified class is used as the source for the data.
+	 * @param string $func the value or function to retrieve
+	 * @return array an associative array of group values to calculated aggregate values
+	 */
+	function executeValue($func)
+	{
+		$prototype = new $this->class;
+		
+		if ($this->constraints == "") $this->constraints = "WHERE 1=1"; //TODO - tidy this up some day
+		$this->constraints .= " ".$prototype->getIdentityConstraint();
+		
+		$query = "SELECT {$this->groupBy}, $func as result FROM {$prototype->table} {$this->tableAlias} {$this->constraints} GROUPED BY {$this->groupBy}";
+		
+		trace($query, 3);
+		
+		$values = array();
+		
+		try
+		{
+			$db = ConnectionManager::getConnection();
+			
+			$result = $db->prepare($query);
+			$result->execute($this->params);
+			
+			while ($row = $result->fetch())
+			{
+				$values[$row[$this->groupBy]] = $row['result'];
+			}
+			
+			unset($result);
+		}
+		catch(PDOException $e)
+		{
+			$err = "Query::executeValue() failed - " . $e->getMessage();
+			trace($err, 2);
+			throw new DataItemException($err);
+		}
+		
+		return $values;
+	}
+	
 	static function create($class, $constraints = "", $groupBy = "")
 	{
 		return new GroupedQuery($class, $constraints, $groupBy);
