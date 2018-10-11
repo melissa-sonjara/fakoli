@@ -51,7 +51,8 @@ class TextLookupUpgradeManager extends UpgradeManager
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
 			"1.1"		=>	"sql:Added enabled flag to text_lookup table",
-			"1.2"		=>	"sql:Added category field to text_lookup table"
+			"1.2"		=>	"sql:Added category field to text_lookup table",
+			"1.3"		=>	"sql:Added editable flag to text_lookup table"
 	);
 	
 	function TextLookupUpgradeManager()

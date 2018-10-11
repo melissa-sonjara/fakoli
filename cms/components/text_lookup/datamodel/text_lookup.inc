@@ -42,11 +42,13 @@ class TextLookup extends DataItem
 			"text_id"	=>	Number,
 			"code"		=>	String,
 			"text"		=>	HTML, // default language English
+			"editable"	=>	Boolean,
 			"category"	=>	String,
 			"class_name"	=>	String,
 			"enabled"	=>	Boolean
 	);
 	
+	var $versioned_fields = array("code", "text", "editable", "enabled");
 
 	var $relations = array(
 			"Translations"	=>	TextTranslation	
@@ -84,16 +86,35 @@ class TextLookup extends DataItem
 		if(count($texts) > 0)
 		{
 			$text = $texts[0];
-
+			
+			VersionedContentManager::selectDisplayVersion($text);
+			
 			$text = TextTranslation::getTranslation($text);
 			if(isset($obj))
 			{
 				$text = $obj->format($text->text);
 				$mgr = new MergeCodeManager($obj, $text);
-				return $mgr->searchAndReplace($text);
+				$out = $mgr->searchAndReplace($text);
+				
 			}
 			else
-				return $text->text;
+			{
+				$out = $text->text;
+			}
+			
+			if ($text->editable && Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
+			{
+				$versioningControls = ComponentManager::fireEvent("RenderVersioningControls", $text);
+				//$versioningEnabled = Settings::getValue("settings", "enable_content_versioning") ? "1" : "0";
+				
+				$out .= $text->format("<p id='inline_editing_{code}' class='inline_editor_toolbar'>".
+						"<a href='#' class='edit' onclick='TextLookupManager.editText({text_id}); return false;'>Edit</a>".
+						"{$versioningControls}</p>");
+				//AJG - must wrap text output if inline editing is enabled
+				$out = "<div>{$out}</div>";
+			}
+			
+			return $out;
 		}
 		else if($blank = false) // return the code to signal that no value was found.
 		{

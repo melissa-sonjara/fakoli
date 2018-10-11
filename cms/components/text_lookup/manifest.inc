@@ -63,7 +63,7 @@ class TextLookupManifest
 	
 	static function getScripts()
 	{
-		return array("/fakoli/js/text_lookup.js");
+		return array("/fakoli/js/text_lookup.js", "/components/text_lookup/js/text_lookup_manager.js");
 	} 	
 	
 			
@@ -71,7 +71,8 @@ class TextLookupManifest
 	{
 		return array("ComponentScanComplete" 		=>	array(TextLookupManager, setDefaults),
 					 "upgradeComponent"				=>	array(TextLookupManager, upgradeComponent),
-					 "RegisterSerializationHandler"	=>	array(TextLookupManager, registerSerializationHandler)
+					 "RegisterSerializationHandler"	=>	array(TextLookupManager, registerSerializationHandler),
+					"RegisterVersionedContent"		=> 	array(TextLookupManager, registerVersionedContent)
 		
 		);
 	}	

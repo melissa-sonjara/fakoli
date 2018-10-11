@@ -108,5 +108,11 @@ class TextLookupManager
 	{
 		SerializationManager::registerHandler("text_lookup", "Text Lookups and Translations", new TextLookupSerializationHandler());
 		return true;
-	}			
+	}		
+	
+	static function registerVersionedContent()
+	{
+		VersionedContentManager::registerVersionedContent(TextLookup);
+	}
+	
 }

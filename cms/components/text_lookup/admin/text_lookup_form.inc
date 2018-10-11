@@ -81,18 +81,21 @@ $form->button("Cancel", $redirect);
 $form->allowDelete = true;
 $form->onDelete = onDeleteCascade;
 
+VersionedContentManager::enableVersioning($form);
+
 if($text_id)
 	$form->annotate("code", "Code field changes will require changes to existing lookups in the code base.");
 else
 	$form->annotate("code", "Please provide the code as all lowercase letters and link words with an underscore (e.g., my_code)");
-
+	
+	
 $tabs = TextLookupManager::getTabs($text_id);
 	
 if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("/admin/text_translations?text_id={$form->data->text_id}");
+		Fakoli::notify("Changes Saved");
 	}
 }
 

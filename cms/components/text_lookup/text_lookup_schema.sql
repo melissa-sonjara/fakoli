@@ -38,3 +38,9 @@ ALTER TABLE text_lookup ADD COLUMN enabled TINYINT(3) NOT NULL DEFAULT 1;
 ALTER TABLE text_lookup ADD COLUMN category VARCHAR(100) NOT NULL DEFAULT 'General';
 
 -- END Version 1.2
+
+-- START Version 1.3
+
+ALTER TABLE text_lookup ADD COLUMN editable TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.3
