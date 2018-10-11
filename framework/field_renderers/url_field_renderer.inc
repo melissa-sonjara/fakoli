@@ -36,9 +36,10 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
 class URLFieldRenderer extends StringFieldRenderer
 {
-	static $urlExpression = "/^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%\$#_]*)?$/";
+	static $urlExpression = "/^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%\$#_=]*)?$/";
 	
 	var $checkSyntax = false;	///< Set to true to force users to only enter valid URLs
+	var $target = "_blank";
 	
 	function URLFieldRenderer(&$parent)
 	{
@@ -75,7 +76,7 @@ class URLFieldRenderer extends StringFieldRenderer
 		
 		if (preg_match(URLFieldRenderer::$urlExpression, $value))
 		{
-			echo "<a href='$value'>$safe</a>";
+			echo "<a target='{$this->target}' href='$value'>$safe</a>";
 		}
 		else
 		{
