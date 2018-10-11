@@ -16,7 +16,10 @@ ScrollPartManager.editPartResponse = function(response)
 {
 	if (response == "OK")
 	{
-		ScrollPartManager.dialog.hide(function() { location.reload(); });
+		var dest = new URI();
+		dest.setData({'version': 'draft'}, true);
+		
+		ScrollPartManager.dialog.hide(function() { go(dest); });
 	}
 	else
 	{
