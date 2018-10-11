@@ -40,6 +40,7 @@ class URLFieldRenderer extends StringFieldRenderer
 	
 	var $checkSyntax = false;	///< Set to true to force users to only enter valid URLs
 	var $target = "_blank";
+	var $displayLength = 0;
 	
 	function URLFieldRenderer(&$parent)
 	{
@@ -69,6 +70,11 @@ class URLFieldRenderer extends StringFieldRenderer
 		$escaped = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 		$safe = htmlSafe($value);
 		
+		if ($this->displayLength > 0)
+		{
+			$safe = ellipsis($safe, $this->displayLength);
+		}
+		
 		if (!$this->parent->readOnlyForm)
 		{
 			echo "<input id='{$this->parent->id}_{$field}' type='hidden' name='$field' value='".$escaped."'/>";
@@ -76,6 +82,7 @@ class URLFieldRenderer extends StringFieldRenderer
 		
 		if (preg_match(URLFieldRenderer::$urlExpression, $value))
 		{
+			
 			echo "<a target='{$this->target}' href='$value'>$safe</a>";
 		}
 		else
