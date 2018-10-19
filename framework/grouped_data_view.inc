@@ -166,18 +166,23 @@ class GroupedDataListView
 	
 	/**
 	 * Add groups based on the supplied list of DataItems.
-	 * @param $groups list of DataItems
-	 * @param $format format template for the group titles
-	 * @param $field the field to use for the key (defaults to the primary key of the group items if not specified)
+	 * @param $groups array list of DataItems
+	 * @param $format string format template for the group titles
+	 * @param $field string the field to use for the key (defaults to the primary key of the group items if not specified)
+	 * @param $expandedFn callable optional function that can be used to determine if each group should be expanded or collapsed
+	 * @param $fixedFn callable optional function that can be used to determine if each group should be fixed
 	 */
-	function groupBy($groups, $format = null, $field = "")
+	function groupBy($groups, $format = null, $field = "", $expandedFn = null, $fixedFn = null)
 	{
 		if (count($groups) == 0) return;
 		if (!$field) $field = $groups[0]->primary_key;
 		
 		foreach($groups as $group)
 		{
-			$this->group($this->format($group, $format), $group->$field);
+			$expanded = ($expandedFn) ? $expandedFn($group) : false;
+			$fixed = ($fixedFn) ? $fixedFn($group) : false;
+			
+			$this->group($this->format($group, $format), $group->$field, $expanded, $fixed);
 		} 
 	}
 
