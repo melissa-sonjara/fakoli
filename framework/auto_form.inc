@@ -89,6 +89,7 @@ class AutoForm
 	var $onSavePreProcess = null; 		///< Callback event handler that is fired after fields have been preprocessed, but before the data has been saved to the database.
 	var $onSaveComplete = null;			///< Callback event handler that is fired after the AutoForm has finished saving data to the database.
 
+	var $confirmPrompt = null;			///< Specify a confirmation message. This will be shown to the user to have them confirm the form submission after the submit button is pressed.
 	var $onDelete = "";					///< delete method name
     var $customSaveHandler = null;		///< Use this field to override the default save behavior of your form.
 	var $markRequiredFields = false;	///< Set to true to add an asterisk after required field labels.
@@ -417,10 +418,15 @@ class AutoForm
 		{
 			$r['renderer']->renderOnSubmitHandler($r['field']);
 		}
-
+	
 		if ($this->onSubmitHandler)
 		{
 			echo "\t if (!{$this->onSubmitHandler}(form)) return false;\n;";
+		}
+
+		if ($this->confirmPrompt)
+		{
+			echo "\t if (!confirm(\"".jsSafe($this->confirmPrompt)."\")) return false;\n";
 		}
 		
 		if ($this->interstitialMessage)
