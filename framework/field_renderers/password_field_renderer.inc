@@ -75,6 +75,7 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 	
 	link.style.display = "none";
 	block.style.display = "block";
+	ModalDialog.recenterActiveDialog();
 }
 //-->
 </script>
