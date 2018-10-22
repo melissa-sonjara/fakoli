@@ -23,29 +23,45 @@ var EmailAttachmentManager =  new Class
 		this.idTagName = "attachment";
 		this.classVarName = "emailAttachmentMgr";
 	
-		// empty for document library
-		if(this.form)
-		{
-			this.formSetup();
-		}
+		//this.formSetup();
 	},
 	
 	formSetup: function()
+	{	
+		var attachmentDialog = document.id("attachmentDialog");
+		if (!attachmentDialog)
+		{
+			this.loadDialog(this.form);
+		}
+		else
+		{
+			this.configureForm(this.form);
+			this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
+		}
+	},
+	
+	loadDialog: function(form)
 	{
-		this.form.iFrameFormRequest(
+		this.uploadDialog = new ModalDialog("attachmentDialog", {title: "Add Attachment", draggable: false, closeLink: 'closeAttachmentDialog'});
+		this.uploadDialog.show(function() { this.configureForm(this.uploadDialog.options.body.getElement('form'));}.bind(this), '/action/attachment/dialog');
+	},
+	
+	configureForm: function(form)
+	{
+		form = document.id(form);
+		
+		form.iFrameFormRequest(
 		{
 			'onRequest': function() { this.postStart(); return true; }.bind(this),
 			'onComplete': function(response) { this.postComplete(response);}.bind(this)
-		});	
+		});
 		
-		this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});	
+		this.form = form;			
 	},
 	
 	showAddAttachmentDialog: function()
 	{
-		this.form.reset();
-		document.id('attachmentDialogMessage').innerHTML = "";
-		this.uploadDialog.show();
+		this.loadDialog();
 	},
 	
 	postStart: function()

@@ -110,7 +110,7 @@ class EmailManifest
 	
 	static function getScripts()
 	{
-		return array("/components/email/js/email.js");
+		return array("/components/email/js/email.js", "/components/email/js/email_attachment_manager.js");
 	} 	
 	
 	static function getStyles()

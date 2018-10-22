@@ -111,15 +111,12 @@ class EmailAttachmentFieldRenderer extends FieldRenderer
 	 </div>
 	</div>
 	<?
-			$dialogs .= ob_get_contents();
-			ob_end_clean();
-	?>
-		<script type="text/javascript" src="/fakoli/js/iFrameFormRequest.js"></script>
-	<?
-		echo "<script type='text/javascript' src='/components/email/js/email_attachment_manager.js'></script>\n";
+		$dialogs .= ob_get_contents();
+		ob_end_clean();
+
 		echo "<script type='text/javascript'>\n";
 		echo "var emailAttachmentMgr;\n";
-		echo "window.addEvent('load', function()\n";
+		echo "window.addEvent('domready', function()\n";
 		echo "{\n";
 		echo "\temailAttachmentMgr = new EmailAttachmentManager('{$this->parent->id}_{$field}_list', '{$this->parent->id}_{$field}', '{$this->cssClass}', '{$this->deleteIcon}');\n";
 		echo "});\n";
