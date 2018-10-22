@@ -548,6 +548,7 @@ var ModalDialog = new Class(
 	    				this.element.fade('show');
 	    				this.center();
 	    				window.curtain.normalCursor();
+	    	    		if (onComplete) onComplete(this);
 	    			}.bind(this)
 	    		});
 	    		request.send();
@@ -561,7 +562,7 @@ var ModalDialog = new Class(
 	    		this.element.setStyle('display', 'block');
 	    		this.center();
 	    		this.addResizeHook();
-	    		if (onComplete) onComplete(this);
+	    		if (onComplete && !fragmentURL) onComplete(this);
 	    	}.bind(this));
     },
     
