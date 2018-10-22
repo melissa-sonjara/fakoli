@@ -68,22 +68,14 @@ var AttachmentUploader = (function()
 		
 		loadDialog: function(form)
 		{
-			var request = new Request(
-			{
-				url:	'/action/attachment/dialog?use_camera=' + ((this.useCamera) ? '1' : '0'),
-				method: 'get',
-				onSuccess: function(response)
-				{
-					var els = Elements.from(response);
-					els.each(function(paragraph){
-					});
-					els.inject(document.body);
-					this.configureForm(form);
-					this.uploadDialog = new ModalDialog(document.id("attachmentDialog"), {draggable: false, closeLink: 'closeAttachmentDialog'});
-				}.bind(this)
-			});
+			var url = '/action/attachment/dialog?use_camera=' + ((this.useCamera) ? '1' : '0');
 			
-			request.send();
+			this.uploadDialog = new ModalDialog('attachmentDialog_' + String.uniqueID(), {'title': "Add an Attachment", 'width': '500px', 'height': 'auto'});
+			this.uploadDialog.show(function() 
+			{
+				this.form = this.uploadDialog.options.body.getElement('form');
+				this.configureForm(this.form);
+			}.bind(this), url);
 		},
 		
 		configureForm: function(form)
