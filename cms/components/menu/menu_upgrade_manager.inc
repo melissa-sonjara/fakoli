@@ -54,7 +54,8 @@ class MenuUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Added required_parameters field to menu_item",
 			"1.3"		=>	"sql:Added custom_format field to menu_item",
 			"1.4"		=>	"sql:Added display_flags field to menu_item",
-			"1.5"		=>	"sql:MenuItem page_id field defaults to zero now"
+			"1.5"		=>	"sql:MenuItem page_id field defaults to zero now",
+	        "1.6"		=>	"sql:MenuItem permissions field increased to Varchar(500)"
 	);
 	
 	function MenuUpgradeManager()
