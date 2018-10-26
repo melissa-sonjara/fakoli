@@ -44,4 +44,4 @@ $script .= $view->writeScript();
 $view->drawView();
 ?>
 <br/>
-<a href="/document_library_form" class="button">Create a Document Library</a>
+<a href="document_library_form" class="button">Create a Document Library</a>
