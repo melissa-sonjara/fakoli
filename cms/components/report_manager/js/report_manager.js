@@ -119,8 +119,12 @@ ReportManager.createReportDialog = function()
 
 ReportManager.createReportSelect = function()
 {
-	var target_type = $$('input[name=target_type]:checked').getFirst();
+	var checked = document.body.getElements("input[name='target_type']:checked");
+	if (!checked.length) return;
+	
+	var target_type = checked[0];
 	if (!target_type) return;
+	
 	var target = target_type.value;
 	if (!target) return;
 	go('custom_report?target=' + target);
