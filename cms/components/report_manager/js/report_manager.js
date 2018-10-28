@@ -119,7 +119,7 @@ ReportManager.createReportDialog = function()
 
 ReportManager.createReportSelect = function()
 {
-	var target_type = document.id('target_type');
+	var target_type = $$('input[name=target_type]:checked').getFirst();
 	if (!target_type) return;
 	var target = target_type.value;
 	if (!target) return;
