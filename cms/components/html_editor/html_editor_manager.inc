@@ -4,10 +4,10 @@
  * Provides a central management class for event handlers and 
  * common functionality for the html_editor component.
  */
-
 class HtmlEditorManager
 {
-	static $plugins = array();
+	static $plugins = array();			
+	static $additionalPlugins = array();
 	
 	function HtmlEditorManager()
 	{
@@ -17,6 +17,11 @@ class HtmlEditorManager
 	static function registerPlugin($title, $plugin)
 	{
 		HtmlEditorManager::$plugins[$plugin] = $title;	
+	}
+	
+	static function registerAdditionalPlugin($title, $plugin)
+	{
+		HTMLEditorManager::$additionalPlugins[$plugin] = $title;
 	}
 
 	static function upgradeComponent($version)

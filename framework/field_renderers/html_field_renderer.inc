@@ -53,6 +53,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	static $_includedRTEScript = false;
 	
+	var $rteParams= array();
+	
 	function HTMLFieldRenderer(&$parent)
 	{
 		$this->FieldRenderer($parent);
@@ -60,6 +62,16 @@ class HTMLFieldRenderer extends FieldRenderer
 		$this->width = $parent->HTMLEditorDefaultWidth;
 		$this->height = $parent->HTMLEditorDefaultHeight;
 		$this->annotateBefore = true;
+	}
+	
+	function setRTEParam($key, $value)
+	{
+		$this->rteParams[$key] = $value;
+	}
+	
+	function getRTEParam($key)
+	{
+		return $this->rteParams[$key];
 	}
 	
 	function renderScript($field)
@@ -91,22 +103,22 @@ class HTMLFieldRenderer extends FieldRenderer
 		{
 			if (!$this->rootBlock) 
 			{ 
-				$rootBlock = "forced_root_block: false,\n"; 
+				$this->setRTEParam("forced_root_block", false);
 			}
 			else
 			{
-				$rootBlock = "forced_root_block: '{$this->rootBlock}',\n";
+				$this->setRTEParam("forced_root_block", $this->rootBlock);
 			}
 		}
 
 		$baseURL = ($this->baseURL !== null) ? $this->baseURL : "{$protocol}://{$config['http_host']}";
 		if (isset($config["convertURLs"]))
 		{
-			$convertURLs = $config["convertURLs"] ? "true" : "false";
+			$convertURLs = $config["convertURLs"] ? true : false;
 		}
 		else
 		{			
-			$convertURLs = ($this->convertURLs) ? "true" : "false";
+			$convertURLs = ($this->convertURLs) ? true : false;
 		}
 		
 		if (!HTMLFieldRenderer::$_includedRTEScript)
@@ -123,49 +135,78 @@ class HTMLFieldRenderer extends FieldRenderer
 		$cssFiles = explode("\n", str_replace("\r", "", $tiny_mce_content_css));
 		if (count($cssFiles) > 0)
 		{
-			$css = "['".implode("','", $cssFiles)."']";
+			$this->setRTEParam("content_css", $cssFiles);
 		}
 		else
 		{
-			$css = "''";
+			$this->setRTEParam("content_css", "");
 		}
+
+		if (endsWith($this->width, "px"))
+		{
+			$w = substr($this->width, 0, -2);
+
+			$this->setRTEParam("width", $w);
+		}
+			
+		if (endsWith($this->height, "px"))
+		{
+			$h = substr($this->height, 0, -2);
+			$this->setRTEParam("height", $h);
+		}
+
+		$this->setRTEParam("valid_elements", '*[*]');
+		$this->setRTEParam("selector", "#{$this->parent->id}_{$field}");
+		$this->setRTEParam("plugins", $plugins);
+		$this->setRTEParam("contextmenu", $contextMenu);
+		$this->setRTEParam("skin", 'fakoli');
+		$this->setRTEParam("body_class", $tiny_mce_body_class);
+		$this->setRTEParam("relative_urls", false);
+		$this->setRTEParam("convert_urls", $convertURLs);
+		$this->setRTEParam("document_base_url", $baseURL);
+		$this->setRTEParam("menubar", false);
+		$this->setRTEParam("toolbar", $toolbar);
+		$this->setRTEParam("tools", 'inserttable');
+		
+		if ($this->customConfig) call_user_func($this->customConfig, $this);
 ?>		
 	<script type='text/javascript'>
 		tinymce.init(
 		{
 <?
-			if (endsWith($this->width, "px"))
-			{
-				$w = substr($this->width, 0, -2);
+		echo $this->renderParameters();
 ?>
-			width: <?echo $w?>,
-<?
-			}
-			
-			if (endsWith($this->height, "px"))
-			{
-				$h = substr($this->height, 0, -2);
-?>
-			height: <?echo $h?>,
-<?
-			}
-?>
-			valid_elements: '*[*]',
-			selector: '#<?echo "{$this->parent->id}_{$field}"?>',
-			plugins: '<?echo $plugins?>',
-			contextmenu: "<?echo $contextMenu?>",
-			skin: 'fakoli',
-			content_css: <?echo $css?>,
-			body_class: '<?echo $tiny_mce_body_class?>',
-			relative_urls: false,
-			convert_urls: <?echo $convertURLs?>,
-			document_base_url: '<?echo $baseURL?>',
-			menubar: false,
-			<?echo $rootBlock?>
-			toolbar: "<?echo $toolbar?>",
-			tools: 'inserttable' });
+ });
 	</script>
 <?		
+	}
+	
+	private function renderParameters()
+	{	
+		$params = array();
+		foreach($this->rteParams as $key => $value)
+		{
+			if (is_array($value))
+			{
+				$v = "['".implode("','", $value)."']";
+				$params[] = "\t\t\t$key: $v";
+			} 
+			else if (is_bool($value))
+			{
+				$v = $value ? "true" : "false";
+				$params[] = "\t\t\t$key: $v";
+			}
+			else if (is_numeric($value))
+			{
+				$params[] = "\t\t\t$key: $value";
+			}
+			else
+			{
+				$params[] = "\t\t\t$key: '$value'";
+			}
+		}
+	
+		return implode(",\n", $params);
 	}
 	
 	function addEditorButton($editor, $button)
