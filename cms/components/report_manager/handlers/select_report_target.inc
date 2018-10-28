@@ -14,7 +14,7 @@ if (count($targets) == 0)
 foreach($targets as $target)
 {
 	$obj = new $target;
-	echo "<input type='radio' id='target_type' value='{$target}'> ".$obj->prettifyClassName(true)."<br>";
+	echo "<input type='radio' name='target_type' value='{$target}'> ".$obj->prettifyClassName(true)."<br>";
 }
 ?>
 </p>
