@@ -53,6 +53,7 @@ class TextFieldRenderer extends FieldRenderer
 	var $disable = false; 	//!< Alternative to readonly; field can be reenabled thru javascript
 	var $encoding = "UTF-8";//!< Overrides the default text encoding.
 	var $style;				//!< Inline styles for the text area element
+	var $placeholder = null;	///<  Placeholder text to display when field is empty
 	
 	/**
 	 * Constructs a new TextFieldRenderer object.
@@ -107,7 +108,9 @@ class TextFieldRenderer extends FieldRenderer
 		
 		if ($this->style) $style = "style='{$this->style}'";
 		
-		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}' $style $disable $onkeypress>";
+		$placeholder = ($this->placeholder) ? " placeholder='".htmlSafe($this->placeholder)."'" : "";
+		
+		echo "<textarea id='{$this->parent->id}_$field' name='$field' rows='{$this->rows}' cols='{$this->columns}'{$placeholder} $style $disable $onkeypress>";
 		echo cleanHTMLTags($this->parent->data->get($field));
 		//echo htmlspecialchars($this->parent->data->get($field), ENT_QUOTES | ENT_IGNORE, $this->encoding);
 		echo "</textarea>";
@@ -153,7 +156,9 @@ class TextFieldRenderer extends FieldRenderer
 			$value =  htmlspecialchars($this->parent->params->get($field, $mode), ENT_QUOTES, 'UTF-8');
 			echo "<tr>\n";
 			$this->_printLabel($field);
-			echo "<td><input type='text' name='$field:$mode' value='{$value}' size='50'></td>\n";		
+			
+			$placeholder = ($this->placeholder) ? " placeholder='".htmlSafe($this->placeholder)."'" : "";
+			echo "<td><input type='text' name='$field:$mode' value='{$value}'{$placeholder} size='50'></td>\n";		
 			echo "</tr>\n";
 		}		
 	}	

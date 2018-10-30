@@ -1239,7 +1239,7 @@ class RequiredCheckListValidator extends AbstractValidator
 		$this->AbstractValidator($field, $title);
 		$this->addEntry = $addEntry;
 		if($min > 1)
-			$this->msgText = pluralize($msgText);
+			$this->msgText = pluralize($this->msgText);
 	}
 	
 	function writeClient()

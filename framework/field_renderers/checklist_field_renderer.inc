@@ -85,6 +85,7 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $separator = ", "; 				///< The separator between values in read only list
 	
 	var $fixedOptions = array();
+	var $defaultOptions = array();
 	
 	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
@@ -123,6 +124,13 @@ class CheckListFieldRenderer extends FieldRenderer
 	function addFixedOption($value)
 	{
 		$this->fixedOptions[$value] = $value;
+		
+		return $this;
+	}
+	
+	function addDefaultOption($value)
+	{	
+		$this->defaultOptions[$value] = $value;
 		
 		return $this;
 	}
@@ -211,6 +219,10 @@ class CheckListFieldRenderer extends FieldRenderer
 					{
 						$disabled = " disabled";
 						$checked = " checked";
+					}
+					else if ($this->defaultOptions[$value])
+					{
+						$checked = "checked";
 					}
 					else
 					{

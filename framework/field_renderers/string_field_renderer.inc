@@ -69,6 +69,7 @@ class StringFieldRenderer extends FieldRenderer
 	var $CSSclass = "";			///< Optionally specify a CSS class for the field
 	var $numeric = false;		///< Restrict to numeric input
 	var $onKeyPress = null;		///< Optional key press javascript callback. Note that if $limit is set, it will override this.
+	var $placeholder = null;	///<  Placeholder text to display when field is empty
 	
 	function StringFieldRenderer(&$parent)
 	{
@@ -130,7 +131,9 @@ class StringFieldRenderer extends FieldRenderer
 		
 		$keyPress = $this->numeric ? "onkeypress='return maskInput(event, false);'" : "";
 		
-		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $keyPress $onchange $autocomplete $class $style value='$value' size='{$this->size}' $disable $onkeypress/>";
+		$placeholder = ($this->placeholder) ? " placeholder='".htmlSafe($this->placeholder)."'" : "";
+		
+		echo "<input id='{$this->parent->id}_{$field}' type='$inputType' name='$field' $placeholder $keyPress $onchange $autocomplete $class $style value='$value' size='{$this->size}' $disable $onkeypress/>";
 
 		if ($this->limit)
 		{
@@ -182,7 +185,8 @@ class StringFieldRenderer extends FieldRenderer
 		{
 			$value =  htmlspecialchars($this->parent->params->get($field, $mode), ENT_QUOTES, 'UTF-8');
 			$this->_startField($field);
-			echo "<input type='text' id='$field' name='$field:$mode' value='{$value}' size='{$this->size}' >\n";		
+			$placeholder = ($this->placeholder) ? " placeholder='".htmlSafe($this->placeholder)."'" : "";
+			echo "<input type='text' id='$field' name='$field:$mode' {$placeholder} value='{$value}' size='{$this->size}' >\n";		
 			$this->_endField($field);
 		}		
 	}
