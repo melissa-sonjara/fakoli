@@ -132,7 +132,7 @@ class TreeNode
 			
 			if ($_activeTree->selectOnRightClick)
 			{
-				$title .= " oncontextmenu='Tree.selectCheckbox(this, \"{$_activeTree->id}\", \"{$_activeTree->selectMode}\");'";
+				$title .= " oncontextmenu='Tree.selectCheckbox(this, \"{$_activeTree->id}\", \"{$_activeTree->selectOnRightClickMode}\");'";
 			}
 			
 			$title .= ">{$this->title}</a>{$this->extras}";
@@ -328,6 +328,7 @@ class TreeControl
 	var $indent = "16px";
 	var $children;
 	var $selectOnRightClick = false;
+	var $selectOnRightClickMode = "context";
 	
 	/**
 	 * Create a new TreeControl.
