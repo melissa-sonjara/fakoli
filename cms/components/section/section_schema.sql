@@ -94,3 +94,10 @@ ALTER TABLE section_content ADD COLUMN body_class varchar(200) not null default 
 ALTER TABLE section ADD COLUMN section_type VARCHAR(20) not null default 'Content';
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE section_content CHANGE COLUMN permissions permissions VARCHAR(1000) NOT NULL DEFAULT '';
+ALTER TABLE section CHANGE COLUMN default_permissions default_permissions VARCHAR(1000) NOT NULL DEFAULT '';
+
+-- END Version 1.7

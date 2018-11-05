@@ -183,6 +183,25 @@ class Settings extends DataItem
 	}
 	
 	/**
+	 * Delete the specified value from the settings table.
+	 * @param string $component the name of the component that owns the setting
+	 * @param string $name the name of the setting to be deleted
+	 */
+	static function deleteValue($component, $name)
+	{
+		$settings = Query::create(Settings, "WHERE component=:c and name=:n")
+						 ->bind(":c", $component, ":n", $name)
+						 ->execute();
+		
+		foreach($settings as $s)
+		{
+			$s->delete();
+		}
+		
+		Cache::invalidate("setting_{$component}_{$name}");
+	}
+	
+	/**
 	 * Set a Permission value indicating which SiteRoles have the given permission
 	 * @param string $component the name of the component that owns the permission
 	 * @param string $name the unique name of the permission
@@ -258,6 +277,17 @@ class Settings extends DataItem
 		return false;
 	}
 
+	/**
+	 * Deletes the specified permissions.
+	 * @param string $component the name of the component to which the permission belongs
+	 * @param string $name the name of the permission to be deleted
+	 */
+	static function deletePermission($component, $name)
+	{
+		Settings::deleteValue($component, $name);
+		ComponentManager::fireEvent('PermissionDeleted', "{$component}:{$name}");
+	}
+	
 	function permitsRole($role)
 	{
 		if (!$role)

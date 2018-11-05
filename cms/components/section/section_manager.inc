@@ -187,6 +187,27 @@ class SectionManager
 		return $content->exists("WHERE section_id={$section->section_id} AND identifier='$identifier'");
 	}
 	
+	static function permissionDeleted($permission)
+	{
+		$affected = Query::create(SectionContent, "WHERE permissions REGEXP '[[:<:]]{$permission}[[:>:]]'")
+						  ->execute();
+		
+		foreach($affected as $a)
+		{
+			$p = array();
+			$perms = explode(",", $a->permissions);
+			foreach($perms as $q)
+			{
+				if ($q != $a) $p[] = $q;
+			}
+	
+			$a->permissions = implode(",", $p);
+			$a->filter = new InclusionFilter("permissions");
+			$a->save();
+			
+		}
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new SectionUpgradeManager();

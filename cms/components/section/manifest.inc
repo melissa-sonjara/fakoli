@@ -67,7 +67,8 @@ class SectionManifest
 				"upgradeComponent"					=>	array(SectionManager, upgradeComponent),
 				"Initialize"						=>	array(SectionContentManagerMap, onInitialize),
 				"RegisterSectionContentManagers"	=>	array(SectionManager, registerSectionContentManager),
-				"RegisterSerializationHandler"		=>	array(SectionManager, registerSerializationHandler)
+				"RegisterSerializationHandler"		=>	array(SectionManager, registerSerializationHandler),
+				"PermissionDeleted"					=>	array(SectionManager, permissionDeleted)
 			);
 	}		
 }
