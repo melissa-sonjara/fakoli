@@ -208,7 +208,7 @@ class LoginManager
 		
 		if (EmailTemplate::templateExists("email_login_token"))
 		{
-			EmailManager::send($lt, "email_login_token");
+			EmailManager::send($token, "email_login_token");
 			return;
 		}
 		
