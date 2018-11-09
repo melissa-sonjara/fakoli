@@ -209,7 +209,7 @@ class LoginManager
 		if (EmailTemplate::templateExists("email_login_token"))
 		{
 			EmailManager::send($token, "email_login_token");
-			return;
+			return true;
 		}
 		
 		$subject = "Password help for ".$config["sitename"];
