@@ -39,7 +39,7 @@ $document_library_id = checkNumeric($_GET["document_library_id"]);
 
 if (!$document_library_id)
 {
-	redirect("/document_libraries");
+	redirect("document_libraries");
 }
 
 $library = new DocumentLibrary($document_library_id);
@@ -53,7 +53,7 @@ $script .= $mgr->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div class="tab_border">
 <h3>Files in <?echo $library->name?></h3>
 <?
 $mgr->drawView();
