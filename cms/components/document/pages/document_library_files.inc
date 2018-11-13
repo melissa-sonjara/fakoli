@@ -47,7 +47,7 @@ $library = new DocumentLibrary($document_library_id);
 $mgr = new DocumentManager($library);
 
 $tabs = DocumentManager::documentLibraryTabs($document_library_id);
-$styles .= DocumentManager::getStyles();
+//$styles .= DocumentManager::getStyles();
 
 $script .= $mgr->writeScript();
 
