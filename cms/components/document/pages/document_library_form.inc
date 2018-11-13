@@ -47,7 +47,7 @@ else
 }
 
 $tabs = DocumentManager::documentLibraryTabs($document_library_id);
-$styles .= DocumentManager::getStyles();
+//$styles .= DocumentManager::getStyles();
 
 $form = DocumentManager::buildDocumentLibraryForm($library);
 
@@ -67,7 +67,7 @@ $script .= $form->writeScript();
 
 $tabs->writeHTML();
 ?>
-<div id="tab_border">
+<div class="tab_border">
 <?
 $form->drawForm();
 
