@@ -187,7 +187,7 @@ class DocumentLibraryListView
 	
 	function formatTitleLink($library)
 	{
-		return $library->format("<a href='/document_library_form?document_library_id={document_library_id}'>{name}</a>{description}");	
+		return $library->format("<a href='document_library_form?document_library_id={document_library_id}'>{name}</a>{description}");	
 	}
 	
 	function writeScript()
