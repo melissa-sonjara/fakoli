@@ -543,6 +543,21 @@ class SearchParameters
 	var $additional = array();
 	var $empty = true; ///< true if no search parameters were specified, false if any parameter was found
 	
+	private static $serializedFields = array("params", "handlers", "joinWith", "secondaryFields", "additional", "empty");
+	function __sleep()
+	{
+		return SearchParameters::$serializedFields;
+	}
+	
+	function copy($src)
+	{
+		$this->params = $src->params;
+		foreach(SearchParameters::$serializedFields as $field)
+		{
+			$this->$field = $src->$field;
+		}
+	}
+	
 	function SearchParameters($target, $form = null)
 	{
 		$this->target = $target;

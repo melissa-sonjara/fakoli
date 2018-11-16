@@ -186,7 +186,7 @@ ENDSCRIPT;
 	{
 		if (isset($_SESSION[$this->sessionKey()]))
 		{
-			$this->params = unserialize($_SESSION[$this->sessionKey()]);
+			$this->params->copy(unserialize($_SESSION[$this->sessionKey()]));
 			$this->data =& $this->params->target;
 		}
 	}
@@ -576,6 +576,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 {
 	var $cssClass = "boolean";
+	var $default;
 	
 	/**
 	 * 
@@ -587,6 +588,8 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 	function BooleanFilterFieldRenderer(&$parent, $field = "", $label = "", $default = 0)
 	{
 		$this->label = ($label) ? $label : prettify($field);
+	
+		$this->default = $default;
 		
 		$this->FieldRenderer($parent);
 		if ($parent->data->hasField($field))
@@ -599,17 +602,33 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 			$parent->overrides[$field]['label'] = $this->label;
 		}
 
-		$value = $this->parent->data->get($field);
-		if(!$value && !is_numeric($value))
-		{
-			// The form's data value is used to set the checkbox
-			$this->parent->data->set($field, $default);
-			$value = $default;
-		}
-		
+		$value = $this->getValue($field);
 		// The search parameter value is used for the constraint
 		$this->parent->params->clearParam($field);
-		$this->parent->params->setParam($field, "checked", $this->parent->data->get($field));
+		$this->parent->params->setParam($field, "checked", $value);
+	}
+	
+	private function getValue($field)
+	{
+		if ($this->parent->data->hasField($field))
+		{
+			$value = $this->parent->data->get($field);
+			if(!$value && !is_numeric($value))
+			{
+				return  $this->default;
+			}
+			else
+			{
+				return $this->value;
+			}
+		}
+		
+		if (isset($_REQUEST[$field]))
+		{
+			return checkNumeric($_REQUEST[$field]);
+		}
+		
+		return $this->default;
 	}
 	
 	/*
@@ -647,7 +666,7 @@ function <? echo $selChanged ?>(elt)
 			
 		echo "<input type='checkbox' value='1' name='{$field}_box'";
 
-		$value = $this->parent->data->get($field);
+		$value = $this->getValue($field);
 	
 		if ($value)
 		{
