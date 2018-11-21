@@ -1700,8 +1700,11 @@ var FocusWatcher = new Class({
     	
 var ScrollWatcher = new Class(
 {
-	initialize: function()
+	scroller: null,
+	
+	initialize: function(scroller)
 	{
+		this.scroller = (scroller) ? scroller : window;
 	},
 	
 	watch: function(position, element, above, below)
@@ -1709,15 +1712,21 @@ var ScrollWatcher = new Class(
 		element = document.id(element);
 		if (!element) return this;
 		
-		window.addEvent('scroll', function() { this.onScroll(position, element, above, below);}.bind(this));
+		this.scroller.addEvent('scroll', function() { this.onScroll(position, element, above, below);}.bind(this));
 		return this;
+	},
+	
+	clear: function()
+	{
+		this.scroller.removeEvents('scroll');
 	},
 	
 	onScroll: function(position, element, above, below)
 	{
+		element.set('data-offset', this.scroller.getScroll().y);
 		if (position >= 0)
 		{
-			if (window.getScroll().y > position)
+			if (this.scroller.getScroll().y > position)
 			{
 				if (typeof below === "function")
 				{
@@ -1743,7 +1752,7 @@ var ScrollWatcher = new Class(
 		else
 		{
 			// Negative positions are relative to the bottom of the page
-			if (window.getScroll().y > (window.getScrollSize().y + position - element.getHeight()))
+			if (this.scroller.getScroll().y > (this.scroller.getScrollSize().y + position - element.getHeight()))
 			{
 				if (typeof below === "function")
 				{
