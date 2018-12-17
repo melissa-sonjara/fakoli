@@ -759,6 +759,18 @@ class AutoForm
 	}
 	
 	/**
+	 * Utility function to create a ToggleFieldRenderer
+	 * @param string $field the field name
+	 * @param string $label the label for the field
+	 */
+	function toggle($field, $label = "")
+	{
+		$renderer = new ToggleFieldRenderer($this);
+		$this->override($field, $label, $renderer);
+		return $renderer;
+	}
+	
+	/**
 	 * Define a field grouping
 	 * @param string $name the legend to use for the group
 	 * 
