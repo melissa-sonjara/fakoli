@@ -42,13 +42,22 @@ class ToggleFieldRenderer extends FieldRenderer
 	var $template = "Yes/No"; ///< How to format read only
 	var $onClick = null; ///< Name of Javascript function to be called when checkbox is toggled
 	var $style = "round";
+	var $ragged = false;
+	
 	/**
 	 * Create a new BooleanFieldRenderer
 	 * @param AutoForm $parent the parent form
 	 */
-	function ToggleFieldRenderer(&$parent)
+	function ToggleFieldRenderer(&$parent, $ragged)
 	{
 		$this->FieldRenderer($parent);
+		
+		$this->ragged = $ragged;
+		if ($this->ragged)
+		{
+			$this->hideLabel = true;
+			$this->colspan = 2;
+		}
 	}
 	
 	function addValidatorsToForm($field, $required = false)
@@ -65,9 +74,16 @@ class ToggleFieldRenderer extends FieldRenderer
 	
 	function renderField($field)
 	{
+
+		
 		$this->_startField($field);
 		$disable = ($this->disable) ? " disabled" : "";
 		$onClick = ($this->onClick) ? " onclick='return {$this->onClick}(this.checked);'" : "";
+		
+		if ($this->ragged)
+		{
+			echo "<label for='{$this->parent->id}_{$field}'>".$this->_getLabel($field, false)."</label>\n";
+		}
 		
 		echo "<label class='switch{$disable}'>";
 		echo "<input id='{$this->parent->id}_{$field}' type='checkbox' class='checkbox' value='1' name='$field'";

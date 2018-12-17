@@ -763,9 +763,9 @@ class AutoForm
 	 * @param string $field the field name
 	 * @param string $label the label for the field
 	 */
-	function toggle($field, $label = "")
+	function toggle($field, $label = "", $ragged = false)
 	{
-		$renderer = new ToggleFieldRenderer($this);
+		$renderer = new ToggleFieldRenderer($this, $ragged);
 		$this->override($field, $label, $renderer);
 		return $renderer;
 	}
