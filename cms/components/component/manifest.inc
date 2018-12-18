@@ -96,7 +96,8 @@ class ComponentManifest
 				     "/fakoli/css/options_list.css",
 					 "/fakoli/css/pushbutton.css",
 					 "/fakoli/css/draggable_list.css",
-					"/fakoli/css/tinymce_branding.css"
+					 "/fakoli/css/tinymce_branding.css",
+					 "/fakoli/css/toggle.css"
 		);
 	}
 	
