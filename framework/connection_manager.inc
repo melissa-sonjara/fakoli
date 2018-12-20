@@ -112,7 +112,7 @@ class ConnectionManager
 	 * Quote a string value based on the character set of the global connection
 	 * 
 	 * @param string $str the string to quote
-	 * @return the string, wrapped in quotes, with other quote characters escaped
+	 * @return string the string, wrapped in quotes, with other quote characters escaped
 	 */
 	static function quote($str)
 	{
@@ -124,7 +124,7 @@ class ConnectionManager
 	 * This is a kludge - try not to use it. I'm adding it for backward compatibility
 	 * only when migrating to PHP 7 where mysql_escape_string() is no longer available.
 	 * @param string the string to escape
-	 * @return the string with quote characters escaped
+	 * @return string the string with quote characters escaped
 	 */
 	static function escape($str)
 	{
