@@ -26,7 +26,7 @@ a.pushbutton.last
 	border-radius: 0 5px 5px 0;
 }
 
-a.pushbutton.selected
+a.pushbutton.selected, a.pushbutton.selected:visited
 {
 	color: #fff;
 	background-color: #002a6c;
