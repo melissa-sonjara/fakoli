@@ -722,6 +722,36 @@ function checkValidDateTime($d)
 }
 
 /**
+ * Checkes whether the provided string is an undecorated GUID (i.e. a string of 32 hex characters)
+ * @param string $guid the GUID candidate
+ * @return string the value of the parameter if it is a valid undecorated GUID
+ */
+function checkPlainGUID($guid)
+{
+	if (preg_match('/^[A-F0-9]{32}$/i', $guid))
+	{
+		return $guid;
+	}
+
+	die("Invalid Parameter");
+}
+
+/**
+ * Checks whether the provided string is in a valid form for a GUID
+ * @param string $guid the GUID candidate
+ * @return string the value of the parameter if it is a valid GUID
+ */
+function checkGUID($guid)
+{
+	if (preg_match('/^\{?[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}\}?$/i', $guid))
+	{
+		return $guid;
+	}
+	
+	die("Invalid Parameter");
+}
+
+/**
  * Utility function to nicely format addresses, etc.                 
  * (skips blank entries, places all other entries on separate lines) 
  *
