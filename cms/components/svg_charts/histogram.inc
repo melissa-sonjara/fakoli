@@ -192,6 +192,8 @@ class Histogram
 	var $onDrawChartComplete = "null";
 	var $onDrawLegend = "null";
 	var $onDrawLegendComplete = "null";
+	var $gridStrokeWidth = 1;
+	var $showGrid = true;
 	
 	var $caption = "";
 	var $captionX = 10;
@@ -341,6 +343,7 @@ class Histogram
 		$emboss = $this->emboss? "true" : "false";
 		$legend = $this->legend ? "true" : "false";
 		$enableDownload = $this->enableDownload ? "true" : "false";
+		$showGrid = $this->showGrid ? "true" : "false";
 		
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
@@ -388,6 +391,8 @@ window.addEvent('domready', function ()
 		labelAnchor: '{$this->labelAnchor}',
 		labelOffset: {$this->labelOffset},
 		strokeWidth: {$this->strokeWidth},
+		gridStrokeWidth: {$this->gridStrokeWidth},
+		showGrid: {$showGrid},
 		animate: {$animate},
 		shadow: {$shadow},
 		emboss: {$emboss},
