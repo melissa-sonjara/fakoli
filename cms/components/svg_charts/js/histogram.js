@@ -670,6 +670,7 @@ var VerticalHistogramAxisRenderer = new Class(
 	    }
 	    for (i = 1; i < wv; i++) 
 	    {
+	    	if (chart.labels[i] == "") continue;
 	        path = chart.path(path, ["M", (Math.round(x + i * columnWidth) + .5), (Math.round(y) + .5)], ["V", (Math.round(y + h) + .5)]);
 	    }
 	    return this.chart.paper.path({d: path, stroke: color, 'class': 'grid'});
@@ -812,6 +813,7 @@ var Histogram = new Class(
 		strokeWidth: 2,
 		animate: true,
 		shadow: false,
+		showGrid: true,
 		gridStrokeWidth: 1,
 		ticks: 10,
 		units: "",
@@ -959,21 +961,26 @@ var Histogram = new Class(
 			}
 		}.bind(this));	
 	
-		var grid = this.paper.rect(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight);
-		grid.attr({"stroke-width": this.options.strokeWidth, stroke: this.palette.strokeColor, fill: this.options.chartBackground});
-		if (this.options.shadow)
-		{
-			this.addShadow(grid);
-		}
-		
+
 		var count = this.labels.length;
 		if (this.linearOnly) count -= 1;
 		
 		this.columnWidth = this.axisRenderer.calculateColumnWidth(count);
 
-		this.fireEvent('drawGrid', this);
-		this.axisRenderer.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
-		this.fireEvent('drawGridComplete', this);
+		if (this.options.showGrid)
+		{
+			var grid = this.paper.rect(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight);
+			grid.attr({"stroke-width": this.options.strokeWidth, stroke: this.palette.strokeColor, fill: this.options.chartBackground});
+		
+			if (this.options.shadow)
+			{
+				this.addShadow(grid);
+			}
+			
+			this.fireEvent('drawGrid', this);
+			this.axisRenderer.drawGrid(this.options.chartLeft, this.options.chartTop, this.options.chartWidth, this.options.chartHeight, count, this.options.ticks, this.palette.strokeColor);
+			this.fireEvent('drawGridComplete', this);
+		}
 	},
 	
 	getColumnOffset: function()
