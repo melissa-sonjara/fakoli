@@ -75,7 +75,7 @@ class AutoLoginManager
 				$match = false;
 				foreach($ips as $ip)
 				{
-					trace("Testing IP: ".trim($ip)." vs ". $_SERVER["REMOTE_ADDR"]), 3);
+					trace("Testing IP: ".trim($ip)." vs ". $_SERVER["REMOTE_ADDR"], 3);
 					if (preg_match(trim($ip), $_SERVER["REMOTE_ADDR"])) 
 					{
 						$match = true;
