@@ -1583,13 +1583,10 @@ function appendToQueryString($qs, $params)
 	if (strpos($qs, "?") === false) 
 	{
 		$qs .= "?$params";
+		return;
 	}
-	else
-	{
-		$qs .= "&$params";
-	}
-	
-	if ($qs[0] != "?") $qs = "?$qs";
+
+	$qs .= "&$params";
 	$qs = preg_replace("/&&+/", "&", $qs);
 	
 	return $qs;
