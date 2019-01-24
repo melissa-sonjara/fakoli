@@ -196,7 +196,7 @@ class ChromePDFConvertor implements PDFConvertor
 		
 		$url = "http".($this->pdf->ssl?"s":"")."://".$config["http_host"].$uri;
 		
-		$flags = "--headless --disable-gpu --no-margins ";
+		$flags = "--headless --disable-gpu --no-margins --virtual-time-budget 2000";
 		
 		$tmpName = sha1($url . now()) . ".png";
 		
