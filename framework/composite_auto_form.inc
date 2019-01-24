@@ -283,6 +283,25 @@ function onCompositeFormSubmit(form)
 				}
 			}
 			
+			foreach($_FILES as $name => $value)
+			{
+				if (strpos($name, "__") === false)
+				{
+					unset($_FILES[$name]);
+				}
+			}
+			
+			$prefix = $form->id."__";
+			$len = strlen($prefix);
+			
+			foreach($_FILES as $name => $value)
+			{
+				if (!strncmp($name, $prefix, $len))
+				{
+					$_FILES[substr($name, $len)] = $value;
+				}
+			}
+			
 			if (!$form->save()) 
 			{
 				$valid = false;
