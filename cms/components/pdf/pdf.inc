@@ -174,7 +174,7 @@ class ChromePDFConvertor implements PDFConvertor
 		$layout = ($_GET["__pdflayout"] == "landscape") ? " @page { size: landscape; }" : "";
 		$styles = "<style type='text/css' media='print'>{$layout} @page {margin:0;} body { margin: 1.5cm }</style></head>";
 		
-		$template = preg_replace("/<\\/head>/i", $styles);
+		$template = preg_replace("/<\\/head>/i", $styles, $template);
 		return $template;
 	}
 }
