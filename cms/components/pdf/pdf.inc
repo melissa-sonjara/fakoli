@@ -134,7 +134,7 @@ class ChromePDFConvertor implements PDFConvertor
 		
 		if ($this->pdf->useToken)
 		{
-			$token = AutoLoginManager::createOneTimeToken($this->pdf->uri);
+			$token = AutoLoginManager::createOneTimeToken($uri);
 			$uri = "/action/auto_login/authenticate?token=$token";
 		}
 		
