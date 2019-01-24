@@ -17,7 +17,8 @@ class PdfManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(PdfManager, setDefaults)
+					"ComponentScanComplete"	=>	array(PdfManager, setDefaults),
+					"PreProcessPage"		=>	array(PdfManager, preProcessTemplate)
 					//TODO: Add Event Registrations here
 		);
 	}

@@ -35,6 +35,28 @@ class PdfManager
 
 		return $dir;
 	}
+	
+	static function preprocessTemplate($template)
+	{
+		$convertor = PdfManager::createConvertor(null);
+		return $convertor->preProcessTemplate($template);
+	}
+	
+	static function createConvertor($pdf)
+	{
+		$mode = Settings::getValue("pdf", "PDF_convertor");
+		switch($mode)
+		{
+			
+			case "chrome":
+				return new ChromePDFConvertor($pdf);
+				
+			case "whtmktopdf":
+			default:
+				return new WkhtmltoPDFConvertor($pdf);
+		}
+	}
+	
 }
 
 ?>

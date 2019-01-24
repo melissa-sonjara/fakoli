@@ -6,6 +6,7 @@ interface PDFConvertor
 	function coverPage($url);
 	function footer($text, $position = "center", $size = 11);
 	function generate();
+	function preprocessTemplate();
 };
 	
 class WkhtmltoPDFConvertor implements PDFConvertor
@@ -82,6 +83,11 @@ class WkhtmltoPDFConvertor implements PDFConvertor
 		if (!$this->pdf->output) unlink($output);
 		
 		return $content;
+	}
+	
+	function preProcessTemplate($template)
+	{
+		return $template;
 	}
 }
 
@@ -160,6 +166,17 @@ class ChromePDFConvertor implements PDFConvertor
 		
 		return $content;
 	}
+	
+	
+	function preProcessTemplate($template)
+	{
+		if (!isset($_GET["__pdfoutput"])) return $template;
+		$layout = ($_GET["__pdflayout"] == "landscape") ? " @page { size: landscape; }" : "";
+		$styles = "<style type='text/css' media='print'>{$layout} @page {margin:0;} body { margin: 1.5cm }</style></head>";
+		
+		$template = preg_replace("/<\\/head>/i", $styles);
+		return $template;
+	}
 }
 
 class PDF
@@ -186,23 +203,9 @@ class PDF
 		$this->useToken = $useToken;
 		$this->output = $output;
 		$this->landscape = $landscape;
-		$this->convertor = $this->createConvertor();
+		$this->convertor = PdfManager::createConvertor($this);
 	}
 
-	private function createConvertor()
-	{
-		$mode = Settings::getValue("pdf", "PDF_convertor");
-		switch($mode)
-		{
-			
-		case "chrome":
-			return new ChromePDFConvertor($this);
-			
-		case "whtmktopdf":
-		default:
-			return new WkhtmltoPDFConvertor($this);
-		}
-	}
 	
 	/**
 	 * Provides a separate URL to use as the cover page of the PDF
