@@ -6,7 +6,7 @@ interface PDFConvertor
 	function coverPage($url);
 	function footer($text, $position = "center", $size = 11);
 	function generate();
-	function preprocessTemplate();
+	function preprocessTemplate($template);
 };
 	
 class WkhtmltoPDFConvertor implements PDFConvertor
