@@ -1,6 +1,167 @@
 <?php
 Fakoli::using("settings", "auto_login");
 
+interface PDFConvertor
+{
+	function coverPage($url);
+	function footer($text, $position = "center", $size = 11);
+	function generate();
+};
+	
+class WkhtmltoPDFConvertor implements PDFConvertor
+{
+	private $pdf;
+	private $footer;
+	
+	function __construct($pdf)
+	{
+		$this->pdf = $pdf;
+	}
+	
+	/**
+	 * Provides a separate URL to use as the cover page of the PDF
+	 * @param string $url the URL used to generate the cover page
+	 * @return PDF
+	 */
+	function coverPage($url)
+	{
+		$this->cover = $url;
+		return $this;
+	}
+	
+	/**
+	 *
+	 * @param $text - text of the footer
+	 * @param $position - valid positions are left, right, and center
+	 * @param $size - font size for the footer ?? doesn't work
+	 */
+	function footer($text, $position = "center", $size = 11)
+	{
+		$this->footer = "--footer-font-size {$size} --footer-{$position} \"{$text}\"";
+	}
+	
+	function generate()
+	{
+		global $config;
+		
+		$exe = Settings::getValue("pdf", "wkhtmltopdf_path");
+		if (!$exe) throw new FakoliException("Convertor path not specified");
+		
+		$uri = $this->pdf->uri;
+		
+		if ($this->pdf->useToken)
+		{
+			$token = AutoLoginManager::createOneTimeToken($this->pdf->uri);
+			$uri = "/action/auto_login/authenticate?token=$token";
+		}
+		
+		$url = "http".($this->pdf->ssl?"s":"")."://".$config["http_host"].$uri;
+		
+		$flags = "";
+		if ($this->pdf->landscape)
+		{
+			$flags = "-O landscape ";
+		}
+		
+		$tmpName = sha1($url . now()) . ".pdf";
+		
+		$footer = ($this->footer) ?  $this->footer : "";
+		
+		$output = $this->pdf->output ? $this->pdf->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
+		$cmd = "{$exe} {$footer} {$flags}-q \"{$url}\" {$output}";
+		
+		trace($cmd, 3);
+		
+		$out = [];
+		
+		exec($cmd, $out);
+		
+		trace(implode("\n", $out), 3);
+		
+		$content = file_get_contents($output);
+		if (!$this->pdf->output) unlink($output);
+		
+		return $content;
+	}
+}
+
+class ChromePDFConvertor implements PDFConvertor
+{
+	private $pdf;
+	private $footer;
+	
+	function __construct($pdf)
+	{
+		$this->pdf = $pdf;
+	}
+	
+	/**
+	 * Provides a separate URL to use as the cover page of the PDF
+	 * @param string $url the URL used to generate the cover page
+	 * @return PDF
+	 */
+	function coverPage($url)
+	{
+		$this->cover = $url;
+		return $this;
+	}
+	
+	/**
+	 *
+	 * @param $text - text of the footer
+	 * @param $position - valid positions are left, right, and center
+	 * @param $size - font size for the footer ?? doesn't work
+	 */
+	function footer($text, $position = "center", $size = 11)
+	{
+		$this->footer = "--footer-font-size {$size} --footer-{$position} \"{$text}\"";
+	}
+	
+	function generate()
+	{
+		global $config;
+		
+		$exe = Settings::getValue("pdf", "chrome_path");
+		
+		if (!$exe) throw new FakoliException("Convertor path not specified");
+		
+		$uri = $this->pdf->uri;
+		$uri = appendToQueryString($uri, "__pdfoutput=1");
+		if ($this->pdf->landscape)
+		{
+			$uri = appendToQueryString($uri, "__pdflayout=landscape");
+		}
+		
+		if ($this->pdf->useToken)
+		{
+			$token = AutoLoginManager::createOneTimeToken($this->pdf->uri);
+			$uri = "/action/auto_login/authenticate?token=$token";
+		}
+		
+		$url = "http".($this->pdf->ssl?"s":"")."://".$config["http_host"].$uri;
+		
+		$flags = "--headless --disable-gpu --no-margins ";
+		
+		$tmpName = sha1($url . now()) . ".pdf";
+				
+		$output = $this->pdf->output ? $this->pdf->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
+		$cmd = "{$exe} {$flags} {$url} --print-to-pdf={$output}";
+		
+		trace($cmd, 3);
+		
+		$out = [];
+		
+		exec($cmd, $out);
+		
+		trace(implode("\n", $out), 3);
+		
+		$content = file_get_contents($output);
+		if (!$this->pdf->output) unlink($output);
+		
+		return $content;
+	}
+}
+
 class PDF
 {
 	var $uri;
@@ -25,8 +186,24 @@ class PDF
 		$this->useToken = $useToken;
 		$this->output = $output;
 		$this->landscape = $landscape;
+		$this->convertor = $this->createConvertor();
 	}
 
+	private function createConvertor()
+	{
+		$mode = Settings::getValue("pdf", "PDF_convertor");
+		switch($mode)
+		{
+			
+		case "chrome":
+			return new ChromePDFConvertor($this);
+			
+		case "whtmktopdf":
+		default:
+			return new WkhtmltoPDFConvertor($this);
+		}
+	}
+	
 	/**
 	 * Provides a separate URL to use as the cover page of the PDF
 	 * @param string $url the URL used to generate the cover page
@@ -34,8 +211,7 @@ class PDF
 	 */
 	function coverPage($url)
 	{
-		$this->cover = $url;
-		return $this;
+		$this->convertor->corverPage($url);
 	}
 	
 	/**
@@ -46,50 +222,12 @@ class PDF
 	 */
 	function footer($text, $position = "center", $size = 11)
 	{
-		$this->footer = "--footer-font-size {$size} --footer-{$position} \"{$text}\"";
+		$this->convertor->footer($text, $position, $size);
 	}
 	
 	function generate()
 	{
-		global $config;
-		
-		$exe = Settings::getValue("pdf", "wkhtmltopdf_path");
-		
-		$uri = $this->uri;
-		
-		if ($this->useToken)
-		{
-			$token = AutoLoginManager::createOneTimeToken($this->uri);
-			$uri = "/action/auto_login/authenticate?token=$token";
-		}
-		
-		$url = "http".($this->ssl?"s":"")."://".$config["http_host"].$uri;
-			
-		$flags = "";
-		if ($this->landscape)
-		{
-			$flags = "-O landscape ";
-		}
-		
-		$tmpName = sha1($url . now()) . ".pdf";
-		
-		$footer = ($this->footer) ?  $this->footer : "";
-	
-		$output = $this->output ? $this->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
-		$cmd = "{$exe} {$footer} {$flags}-q \"{$url}\" {$output}";
-		
-		trace($cmd, 3);
-		
-		array($out);
-		
-		exec($cmd, $out);
-		
-		trace(implode("\n", $out), 3);
-		
-		$content = file_get_contents($output);
-		if (!$this->output) unlink($output);
-		
-		return $content;
+		return $this->convertor->generate();
 	}
 }
 
