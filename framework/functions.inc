@@ -1580,9 +1580,9 @@ function baseURI($uri = null)
  */
 function appendToQueryString($qs, $params)
 {
-	if (!$qs) 
+	if (strpos($qs, "?") === false) 
 	{
-		$qs = "?$params";
+		$qs .= "?$params";
 	}
 	else
 	{
