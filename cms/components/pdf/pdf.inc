@@ -214,7 +214,7 @@ class PDF
 	 */
 	function coverPage($url)
 	{
-		$this->convertor->corverPage($url);
+		$this->convertor->coverPage($url);
 	}
 	
 	/**
