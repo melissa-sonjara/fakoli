@@ -19,6 +19,7 @@ class PdfManager
 		Settings::setDefaultValue("pdf", "wkhtmltopdf_path", "wkhtmltopdf", String, "The path to the wkhtmltopdf executable on your system.", "PDF Settings", null, 2);
 		Settings::setDefaultValue("pdf", "PDF_convertor", "wkhtmltopdf", String, "Specifies the method used to convert HTML to PDF", "PDF Settings", "wkhtmltopdf\nchrome", 1);
 		Settings::setDefaultValue("pdf", "chrome_path", "chrome", String, "The path to the chrome (or chromium) executable on your system", "PDF Settings", null, 3);
+		Settings::setDefaultValue("pdf", "chrome_screenshot_path", "", String, "Path to the screenshot script on your system", "PDF Settings", null, 4);
 	}
 
 	static function getTempDirectory()
