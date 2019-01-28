@@ -1583,7 +1583,7 @@ function appendToQueryString($qs, $params)
 	if (strpos($qs, "?") === false) 
 	{
 		$qs .= "?$params";
-		return;
+		return $qs;
 	}
 
 	$qs .= "&$params";
@@ -1662,6 +1662,7 @@ function getFullQueryString($includePOST = true)
 		}
 	}
 	
+	trace("Full Query String: $qs", 3);
 	return $qs;
 }
 		
