@@ -1785,7 +1785,7 @@ class DataItem extends AbstractDataItem
 
 /**
  * Performs a query against the database and returns a matching singleton object. If the query
- * returns more than one object, and error is thrown.
+ * returns more than one object, an error is thrown.
  * 
  * @param string $class the class name of the object to query
  * @param string $constraints optional constraint clause to apply to the query in the form "WHERE ... [ORDER BY ...]"

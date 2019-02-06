@@ -55,7 +55,7 @@ class ExpandingList
 	var $scrollOffset = 0;						///< Offset from top of element when scrolling (to take into account fixed navigation bars, etc)
 	var $isItemExpanded = null;					///< Callback hook to determine if an item should be shown expanded by default. Callback is passed the item and current index. Return true for expanded, false for collapsed.
 	var $onItemStart = null;					///< Callback hook called when starting to display each item. Return false to skip the item.
-	var $mode = "tree";							///< The expansion mode for the list - set to "accordion" to have only one item open at a time
+	var $mode = "accordion";							///< The expansion mode for the list - set to "accordion" to have only one item open at a time
 	
 	/**
 	 * Creates a new ExpandingList control.
