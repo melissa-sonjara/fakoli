@@ -419,17 +419,40 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 		
 		if ($obj->get($pk) == "") return;
 		
-		$optpk = $this->getMatchingPK($xref, $this->options[0]);
-		
-		$items = indexedQuery($this->xrefClass, "WHERE {$pk}=".$obj->get($pk), $optpk);
-		
+			
 		$this->_startField($field);
 	
-		foreach($this->options as $item)
+		if (is_array($this->groupBy) && count($this->groupBy) > 0)
 		{
-			if (array_key_exists($item->$optpk, $items))
+			$gpk = $this->groupBy[0]->getPrimaryKey();
+			
+			foreach($this->groupBy as $group)
 			{
-				echo $this->formatName($item, $this->nameField)."<br/>";
+				if (array_key_exists($group->get($gpk), $this->options))
+				{
+					echo "<span class='cross_reference_group'>".$group->format($this->groupByFormat)."</span>";
+					foreach($this->options[$group->get($gpk)] as $item)
+					{
+						if (array_key_exists($item->$optpk, $items))
+						{
+							echo $this->formatName($item, $this->nameField)."<br/>";
+						}
+					}
+				}
+			}
+		}
+		else
+		{					
+			$optpk = $this->getMatchingPK($xref, $this->options[0]);
+			
+			$items = indexedQuery($this->xrefClass, "WHERE {$pk}=".$obj->get($pk), $optpk);
+			
+			foreach($this->options as $item)
+			{
+				if (array_key_exists($item->$optpk, $items))
+				{
+					echo $this->formatName($item, $this->nameField)."<br/>";
+				}
 			}
 		}
 		
