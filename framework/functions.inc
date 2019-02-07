@@ -1580,7 +1580,8 @@ function baseURI($uri = null)
  */
 function appendToQueryString($qs, $params)
 {
-	if (strpos($qs, "?") === false) 
+	trace ("QS: $qs PARAMS: $params", 3);
+	if (strpos($qs, "?") === false && strpos($qs, "&") === false) 
 	{
 		$qs .= "?$params";
 		return $qs;
@@ -1588,6 +1589,7 @@ function appendToQueryString($qs, $params)
 
 	$qs .= "&$params";
 	$qs = preg_replace("/&&+/", "&", $qs);
+	if (strpos($qs, "?") === false) $qs = "?".$qs;
 	
 	return $qs;
 }
