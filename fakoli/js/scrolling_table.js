@@ -27,8 +27,8 @@ var ScrollingTable = new Class(
 		});
 		
 		// Adjust for scrollbar
-		widths[0] -= 17;
-		widths[widths.length-1] += 17;
+		widths[0] -= (Browser.platform != "mac") ? 17 : 0;
+		widths[widths.length-1] += (Browser.platform != "mac") ? 17 : 0;
 		
 		thead.setStyle('display', 'block');
 		thead.getElement('tr').setStyles({'display': 'block', 'width': '100%'});
