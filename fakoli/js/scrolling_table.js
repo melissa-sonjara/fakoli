@@ -9,6 +9,7 @@ var ScrollingTable = new Class(
 		
 		this.table = table;
 		window.addEvent('resize', function(e) { this.resize(); }.bind(this));
+		window.addEvent('load', function(e) { this.resize(); }.bind(this));
 		
 		this.resize();
 	},
