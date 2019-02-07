@@ -29,13 +29,17 @@ var ScrollingTable = new Class(
 		
 		// Adjust for scrollbar
 		widths[0] -= (Browser.platform != "mac") ? 17 : 0;
-		widths[widths.length-1] += (Browser.platform != "mac") ? 17 : 0;
 		
 		thead.setStyle('display', 'block');
 		thead.getElement('tr').setStyles({'display': 'block', 'width': '100%'});
 		ths.each(function(th, idx)
 		{
-			th.setStyle('width', widths[idx] + 'px');
+			var w = widths[idx];
+			if (idx == widths.length -1)
+			{
+				 w += (Browser.platform != "mac") ? 17 : 0;
+			}
+			th.setStyle('width', w + 'px');
 		});
 		
 		trs = tbody.getElements('tr');
