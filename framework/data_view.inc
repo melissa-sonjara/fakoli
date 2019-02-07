@@ -282,9 +282,9 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Adds a text column to the table footer.
-	 * @param $text the text to display
-	 * @param $style any CSS classes or inline styles to apply
-	 * @param $colspan the colspan for the column
+	 * @param string $text the text to display
+	 * @param string $style any CSS classes or inline styles to apply
+	 * @param int $colspan the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
 	function footerText($text = "", $style = "", $colspan = 1)
@@ -295,9 +295,9 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Adds a value column to the table footer.
-	 * @param $callback Callback function or object method used to calculate the value for this column.
-	 * @param $style any CSS classes or inline styles to apply
-	 * @param $colspan the colspan for the column
+	 * @param callable $callback Callback function or object method used to calculate the value for this column.
+	 * @param string $style any CSS classes or inline styles to apply
+	 * @param int $colspan the colspan for the column
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
 	function footerValue($callback, $style = "", $colspan = 1)
@@ -308,10 +308,10 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Sums the total for a column
-	 * @param $field the field to total in the format "{field}"
-	 * @param $style any CSS classes or inline styles to apply
-	 * @param $colspan the colspan for the column
-	 * @param $typeHint type hint for formatting the output
+	 * @param string $field the field to total in the format "{field}"
+	 * @param string $style any CSS classes or inline styles to apply
+	 * @param int $colspan the colspan for the column
+	 * @param string $typeHint type hint for formatting the output
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
 	function footerTotal($field, $style = "text-align: right", $colspan = 1, $typeHint = Number)
