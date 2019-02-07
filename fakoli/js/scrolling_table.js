@@ -26,6 +26,10 @@ var ScrollingTable = new Class(
 			widths.push(th.getWidth());
 		});
 		
+		// Adjust for scrollbar
+		widths[0] -= 17;
+		widths[widths.length-1] += 17;
+		
 		thead.setStyle('display', 'block');
 		thead.getElement('tr').setStyles({'display': 'block', 'width': '100%'});
 		ths.each(function(th, idx)
