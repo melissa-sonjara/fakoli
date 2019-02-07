@@ -1903,11 +1903,17 @@ function encode7bit($text)
 }
 
 /**
- * Generates a version 4 GUID
+ * Generates a version 4 GUID. Where random_int is available (PHP > 7.0) it is used to ensure 
+ * cryptographically secure random numbers. 
  * @return string
  */
 function GUID()
 {
+	if (function_exists('random_int') === true)
+	{
+		return '{'.sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', random_int(0, 65535), random_int(0, 65535), random_int(0, 65535), random_int(16384, 20479), random_int(32768, 49151), random_int(0, 65535), random_int(0, 65535), random_int(0, 65535)).'}';
+	}
+	
 	if (function_exists('com_create_guid') === true)
 	{
 		return trim(com_create_guid(), '{}');
