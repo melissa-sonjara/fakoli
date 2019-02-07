@@ -1215,7 +1215,7 @@ ENDSCRIPT;
 		
 		if (!$this->calculated) $this->calculateDateRange();
 		
-		$queryString = $_SERVER["QUERY_STRING"];
+		$queryString = "?".$_SERVER["QUERY_STRING"];
 		
 		$queryString = preg_replace("/identifier=\\w+\\&?/", "", $queryString);
 		$queryString = preg_replace("/year=\\d+\\&?/", "", $queryString);
