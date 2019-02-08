@@ -157,7 +157,7 @@ class ChromePDFConvertor implements PDFConvertor
 		$tmpName = sha1($url . now()) . ".pdf";
 				
 		$output = $this->pdf->output ? $this->pdf->output : (PdfManager::getTempDirectory() . DIRECTORY_SEPARATOR . $tmpName);
-		$cmd = "{$exe} {$flags} {$url} --print-to-pdf={$output}";
+		$cmd = "{$exe} {$flags} "{$url}" --print-to-pdf={$output}";
 		
 		trace($cmd, 3);
 		
