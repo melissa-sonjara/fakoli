@@ -1098,7 +1098,7 @@ class Fakoli
 	 * of using the php keywords exit() or die().
 	 * @param string $message a message or return code to emit before exiting
 	 */
-	static function end($message)
+	static function end($message = "")
 	{
 		throw new FakoliEarlyExit($message);
 	}
