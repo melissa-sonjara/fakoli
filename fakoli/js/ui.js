@@ -620,8 +620,10 @@ ModalDialog.recenterActiveDialog = function()
 
 ModalDialog.closeAllDialogs = function()
 {
-	ModalDialog.activeDialogs.each(function(dialog) { dialog.hide(); });
-	ModalDialog.activeDialogs = [];
+	while(ModalDialog.activeDialogs.length)
+	{
+		ModalDialog.getActiveDialog().hide();
+	}
 };
 
 var FloatingDialog = new Class(
