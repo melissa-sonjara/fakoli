@@ -24,6 +24,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	var $onStartOption = null;
 	var $grouped = false;
 	var $groupTag = "h4";
+	var $containerClass = "";
 	
 	function OptionCrossReferenceFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass, $grouped = false)
 	{
@@ -96,12 +97,19 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 				
+		
 		if (count($this->options))
 		{
-
+			if ($this->containerClass) { echo "<div class='{$this->containerClass}'>\n"; }
+			
 			$obj = $this->parent->data;
 
 			if (is_array($this->groupBy) && count($this->groupBy) > 0)
+			{
+				$keys = array_keys($this->options);
+				$rc = $this->options[$keys[0]][0];
+			}
+			else if ($this->grouped)
 			{
 				$keys = array_keys($this->options);
 				$rc = $this->options[$keys[0]][0];
@@ -146,15 +154,15 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	
 				foreach($options as $group => $choices)
 				{
-					echo "<br/><{$this->groupTag}>$group</{$this->groupTag}>";
+					echo "<{$this->groupTag}>$group</{$this->groupTag}>";
 					$this->renderOptions($field, $choices, $selectedItems);
 				}
 			}
 			else if ($this->grouped)
 			{
-				foreach($options as $group => $choices)
+				foreach($this->options as $group => $choices)
 				{
-					echo "<br/><{$this->groupTag}>$group</{$this->groupTag}>";
+					echo "<{$this->groupTag}>$group</{$this->groupTag}>";
 					$this->renderOptions($field, $choices, $selectedItems);
 				}
 			}			
@@ -162,6 +170,8 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			{
 				$this->renderOptions($field, $this->options, $selectedItems);
 			}
+			
+			if ($this->containerClass) { echo "</div>\n"; }
 		}
 		$this->_endField($field);
 	}
