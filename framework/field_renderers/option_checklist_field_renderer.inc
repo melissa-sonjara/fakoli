@@ -34,6 +34,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
+/**
+ * Displays a control that provides a highly styleable set of options from which the user can select a number of items.
+ * The optons are provided as an array of value-description pairs, and are rendered as an unordered
+ * list in HTML, with javascript to provide the selection interaction. Clicking on one of the items
+ * will select the associated value. The currently selected list item is given the "selected" CSS class.
+ *
+ * @author Andy
+ */
 class OptionCheckListFieldRenderer extends FieldRenderer
 {
 	var $options = array();

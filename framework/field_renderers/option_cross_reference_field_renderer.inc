@@ -1,5 +1,19 @@
 <?php
-
+/**
+ * Displays a control that provides a highly styleable set of options from which the user can select a number of items.
+ * The options are provided as an array of DataItems that are associated with the target item of the form via a cross-reference table
+ * that contains foreign keys to both. The options are rendered as an unordered
+ * list in HTML, with javascript to provide the selection interaction. Clicking on one of the items
+ * will select the associated value. The currently selected list item is given the "selected" CSS class.
+ *
+ * Options can be grouped by three distinct mechanisms. Firstly, the array of items passed in can be an associative array with
+ * the group headings as the keys. Secondly the options can be automatically grouped by the values in a specified field by calling
+ * the groupBy() method with the name of the field and a formatting string for the group heading. Finally the options can be grouped
+ * by a secondary list of DataItems by passing an array to the groupBy() method. In this case the options will be grouped by the primary
+ * key values of the supplied objects, and must contain a matching foreign key.
+ * 
+ * @author Andy
+ */
 class OptionCrossReferenceFieldRenderer extends FieldRenderer
 {
 	var $options = array();
@@ -8,12 +22,15 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	var $nameField;
 	var $xrefClass;
 	var $onStartOption = null;
+	var $grouped = false;
+	var $groupTag = "h4";
 	
-	function OptionCrossReferenceFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
+	function OptionCrossReferenceFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass, $grouped = false)
 	{
 		$this->options = $options;
 		$this->nameField = $nameField;
 		$this->xrefClass = $xrefClass;
+		$this->grouped = $grouped;
 		
 		$this->FieldRenderer($form);
 		if ($form->data->hasField($field))
@@ -129,10 +146,18 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	
 				foreach($options as $group => $choices)
 				{
-					echo "<br/><h4>$group</h4>";
+					echo "<br/><{$this->groupTag}>$group</{$this->groupTag}>";
 					$this->renderOptions($field, $choices, $selectedItems);
 				}
 			}
+			else if ($this->grouped)
+			{
+				foreach($options as $group => $choices)
+				{
+					echo "<br/><{$this->groupTag}>$group</{$this->groupTag}>";
+					$this->renderOptions($field, $choices, $selectedItems);
+				}
+			}			
 			else
 			{
 				$this->renderOptions($field, $this->options, $selectedItems);

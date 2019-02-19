@@ -34,12 +34,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
+/**
+ * Displays a control that provides a highly styleable set of options from which the user can select a single item.
+ * The optons are provided as an array of value-description pairs, and are rendered as an unordered 
+ * list in HTML, with javascript to provide the selection interaction. Clicking on one of the items
+ * will select the associated value. The currently selected list item is given the "selected" CSS class.
+ * Options can also be provided grouped as an associative array with the group headings as the keys.
+ * 
+ * @author Andy
+ */
 class OptionListFieldRenderer extends FieldRenderer
 {
-	var $options = array();
-	var $cssClass = "options_list";
-	var $grouped = false;
-	var $groupTag = "h6";
+	var $options = array();			///< The array of options for the control to display, as value=>description pairs.
+	var $cssClass = "options_list";	///< CSS class for the generated list of options. Use this to override the look and feel
+	var $grouped = false;			///< True if the $options array is grouped by headings, false if not
+	var $groupTag = "h6";			///< The tag to use when displaying the groups.
 	
 	function OptionListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
 	{
