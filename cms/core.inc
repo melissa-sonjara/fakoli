@@ -685,6 +685,7 @@ class Fakoli
 		else
 		{
 			$matches = [];
+			trace("FilePath: $filePath", 3);
 			if (preg_match("^\/components\/([\w_]+)\/", $filePath, $matches))
 			{
 				$c = $matches[1];
