@@ -686,7 +686,7 @@ class Fakoli
 		{
 			$matches = [];
 			trace("FilePath: $filePath", 3);
-			if (preg_match("^\/components\/(.*?+)\/", $filePath, $matches))
+			if (preg_match("/^\/components\/(.*?+)\//", $filePath, $matches))
 			{
 				trace("FilePath: MATCH", 3);
 				$c = $matches[1];
