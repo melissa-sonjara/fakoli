@@ -684,7 +684,22 @@ class Fakoli
 		}
 		else
 		{
-			include $config['homedir']."/{$filePath}";
+			$matches = [];
+			if (preg_match("/\\/components\\/(\w+)\\//", $filePath))
+			{
+				$c = $matches[1];
+				$path = str_replace("/components/{$c}", "", $filePath);
+				$component = Fakoli::getComponent($c);
+				if ($component)
+				{
+					$path = $component->component_path . $path;
+					include $path;
+				}
+			}
+			else
+			{
+				include $config['homedir']."/{$filePath}";
+			}
 		}
 		$output = ob_get_contents();
 		ob_end_clean();		
