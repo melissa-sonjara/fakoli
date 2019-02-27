@@ -619,7 +619,7 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 			}
 			else
 			{
-				return $this->value;
+				return $value;
 			}
 		}
 		

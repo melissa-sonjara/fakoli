@@ -48,8 +48,8 @@ class SearchParameterHandler
 {
 	/**
 	 * Generates the constraint expression for equality matching parameters.
-	 * @param $name the name of the field
-	 * @param $value the value to match
+	 * @param string $name the name of the field
+	 * @param mixed $value the value to match
 	 * @return string a SQL expression to perform the match
 	 */
 	function equal($name, $value)
@@ -59,8 +59,8 @@ class SearchParameterHandler
 	/**
 	 * Generates the constraint expression for 'like' matching parameters, i.e.
 	 * matching a substring or partial match.
-	 * @param $name the name of the field
-	 * @param $value the value to match
+	 * @param string $name the name of the field
+	 * @param mixed $value the value to match
 	 * @return string a SQL expression to perform the match
 	 */
 	function like($name, $value)
@@ -70,8 +70,8 @@ class SearchParameterHandler
 	/**
 	 * Generates the constraint expression for 'startsWith' matching parameters, i.e.
 	 * matching a substring or partial match at the start of the field only.
-	 * @param $name the name of the field
-	 * @param $value the value to match
+	 * @param string $name the name of the field
+	 * @param string $value the value to match
 	 * @return string a SQL expression to perform the match
 	 */	
 	function startsWith($name, $value)
@@ -82,8 +82,8 @@ class SearchParameterHandler
 	/**
 	 * Generates the constraint expression for 'from' matching parameters, i.e.
 	 * matching values that are greater than or equal to the specified value.
-	 * @param $name the name of the field
-	 * @param $from the lower bound
+	 * @param string $name the name of the field
+	 * @param mixed $from the lower bound
 	 * @return string a SQL expression to perform the match
 	 */
 	function from($name, $from)
@@ -94,8 +94,8 @@ class SearchParameterHandler
 	/**
 	 * Generates the constraint expression for 'to' matching parameters, i.e.
 	 * matching values that are less than or equal to the specified value.
-	 * @param $name the name of the field
-	 * @param $to the upper bound
+	 * @param string $name the name of the field
+	 * @param mixed $to the upper bound
 	 * @return string a SQL expression to perform the match
 	 */
 	function to($name, $to)
@@ -106,9 +106,9 @@ class SearchParameterHandler
 	/**
 	 * Generates the constraint expression for 'range' matching parameters, i.e.
 	 * matching values that within the range of the two specified values.
-	 * @param $name the name of the field
-	 * @param $from the lower bound
-	 * @param $to the value to match
+	 * @param string $name the name of the field
+	 * @param string $from the lower bound
+	 * @param mixed $to the value to match
 	 * @return string a SQL expression to perform the match
 	 */
 	function range($name, $from, $to)
@@ -120,8 +120,8 @@ class SearchParameterHandler
 	 * Generate the constraint expression for set membership matching
 	 * paramters, matching values in a comma delimite set.
 	 * 
-	 * @param $name the name of the field
-	 * @param $set a comma delimited set of values to match
+	 * @param string $name the name of the field
+	 * @param string $set a comma delimited set of values to match
 	 * @return string a SQL expression to peform the match
 	 */
 	function member($name, $set)
@@ -133,8 +133,8 @@ class SearchParameterHandler
 	 * Generate the constraint expression for matching any
 	 * word in a group of words.
 	 * 
-	 * @param $name the name of the field
-	 * @param $value a string that may contain multiple words
+	 * @param string $name the name of the field
+	 * @param string $value a string that may contain multiple words
 	 * @return string a SQL expression to peform the match
 	 */
 	function any($name, $value)
@@ -146,8 +146,8 @@ class SearchParameterHandler
 	 * words in a group of words but allowing other words
 	 * in between.
 	 * 
-	 * @param $name the name of the field
-	 * @param $value a string that may contain multiple words
+	 * @param string $name the name of the field
+	 * @param string $value a string that may contain multiple words
 	 * @return string a SQL expression to peform the match
 	 */
 	function all($name, $value)
@@ -158,9 +158,9 @@ class SearchParameterHandler
 	 * Generate the constraint expression for matching
 	 * the f_name and l_name fields to a given value.
 	 * 
-	 * @param $f_name the name of the first name field
-	 * @param $l_name the name of the last name field
-	 * @param $value a string that may contain multiple words
+	 * @param string $f_name the name of the first name field
+	 * @param string $l_name the name of the last name field
+	 * @param string $value a string that may contain multiple words
 	 * @return string a SQL expression to perform the match
 	 */
 	function fullName($f_name, $l_name, $value)
@@ -512,6 +512,7 @@ class BooleanSearchParameterHandler extends SearchParameterHandler
 {
 	function equal($name, $value)
 	{
+		trace("FILTER: equal $name $value", 3);
 		checkNumeric($value);
 	
 		return "$name=$value";
@@ -519,8 +520,23 @@ class BooleanSearchParameterHandler extends SearchParameterHandler
 	
 	function checked($name, $value)
 	{
+		trace("FILTER: checked $name $value", 3);
 		checkNumeric($value);
-		return ($value) ? "$name=$value" : "";
+		$out = ($value) ? "$name=$value" : "";
+		trace("FILTER: out $out", 3);
+		return $out;
+	}
+}
+
+class SearchParameterValue
+{
+	var $mode;
+	var $value;
+	
+	function __construct($mode, $value)
+	{
+		$this->mode = $mode;
+		$this->value = $value;
 	}
 }
 
@@ -576,9 +592,29 @@ class SearchParameters
 		$this->handlers[Boolean]	= new BooleanSearchParameterHandler();		
 	}
 	
-	function get($field, $mode)
+	function get($field, $mode = null)
 	{
-		$value = $this->params["{$field}:$mode"];
+		if (!isset($this->params[$field])) return null;
+		
+		$val = $this->params[$field];
+		if ($val->mode == "range")
+		{
+			if ($mode == "from")
+			{
+				$value = $val->from;
+			}
+			else if ($mode == "to")
+			{
+				$value = $val->to;
+			}
+			else return null;
+		}
+		else
+		{
+			if ($mode !== null && $val->mode != $mode) return null;
+		}
+		
+		$value = $val->value;
 		trace("SearchParameters::get({$field}:$mode): $value", 3);
 		return $value;
 	}
@@ -634,14 +670,8 @@ class SearchParameters
 			if ($value != "")
 			{
 				$this->empty = false;
-				if (is_array($value))
-				{
-					$this->params[$field] = implode(",", array_values($value));
-				}
-				else
-				{
-					$this->params[$field] = $value;
-				}
+				
+				$this->setParam($fieldname, $mode, $value);
 			}
 		}
 	}
@@ -650,9 +680,44 @@ class SearchParameters
 	 * Set additional parameters that don't come from search
 	 * form input.
 	 */
-	function setParam($field, $mode, $value)
+	function setParam($fieldname, $mode, $value)
 	{
-		$this->params["{$field}:{$mode}"] = $value;
+		if (is_array($value)) $value = implode(",", array_values($value));
+		
+		if (isset($this->params[$fieldname]))
+		{
+			$p = $this->params[$fieldname];
+			if ($mode)
+			{
+				if ($mode == "from" && $p->mode == "to")
+				{
+					$p->mode = "range";
+					$p->to = $p->value;
+					$p->from = $value;
+					$p->value = null;
+				}
+				else if ($mode == "to" && $p->mode == "from")
+				{
+					$p->mode = "range";
+					$p->to = $value;
+					$p->from = $p->value;
+					$p->value = null;
+				}
+				else
+				{
+					$p->mode = $mode;
+					$p->value = $value;
+				}
+			}
+			else
+			{
+				$p->value = $value;
+			}
+		}
+		else
+		{
+			$this->params[$fieldname] = new SearchParameterValue($mode, $value);
+		}
 	}
 	
 	/**
@@ -750,19 +815,24 @@ class SearchParameters
 	{
 		$constraint = "";
 					
-		foreach($this->params as $param => $value)
+		trace(print_r($this->params, true), 3);
+		
+		foreach($this->params as $field => $param)
 		{
 			$joinWith = (!$first) ? $this->joinWith : "";
 			 
-			if (strpos($param, ':') > 0)
-			{
-				list($field, $modifier) = explode(":", $param);
-			}
-			else
-			{
-				$field = $param;
-				$modifier = "equal";
-			}
+			$modifier = $param->mode;
+			$value = $param->value;
+			
+// 			if (strpos($param, ':') > 0)
+// 			{
+// 				list($field, $modifier) = explode(":", $param);
+// 			}
+// 			else
+// 			{
+// 				$field = $param;
+// 				$modifier = "equal";
+// 			}
 			
 			// JDG 10/25/2011 - allow callback function for clauses
 			if(!array_key_exists($field, $this->paramHandlers))
@@ -840,8 +910,6 @@ class SearchParameters
 				if (array_key_exists("{$field}:to", $this->params))
 				{
 					trace("date range", 3);
-					$to = $this->params["{$field}:to"];
-					$clause = $handler->range($field, $value, $to);
 				}
 				else
 				{
@@ -851,10 +919,13 @@ class SearchParameters
 				
 			case "to":
 				
-				if (!array_key_exists("{$field}:from", $this->params))
-				{
-					$clause = $handler->to($field, $value);
-				}
+				$clause = $handler->to($field, $value);
+				break;
+			
+			case "range":
+				
+				$param = $this->params[$field];
+				$clause = $handler->range($field, $param->from, $param->to);
 				break;
 				
 			case "member":
@@ -1005,10 +1076,10 @@ class SearchForm extends AutoForm
 								 "any"	=>	"match any words");	
 	/**
 	 * Create a new Search Form.
-	 * @param $target the target DataItem object
-	 * @param $method (optional) the HTTP method to use for submitting the search request
-	 * @param $action (optional) the URL of the recipient script for the search request
-	 * @param $id (optional) the DOM ID for the generated search form
+	 * @param DataItem $target the target DataItem object
+	 * @param string $method (optional) the HTTP method to use for submitting the search request
+	 * @param string $action (optional) the URL of the recipient script for the search request
+	 * @param string $id (optional) the DOM ID for the generated search form
 	 * @return SearchForm
 	 */
 	function SearchForm($target, $method="POST", $action="", $id="")
