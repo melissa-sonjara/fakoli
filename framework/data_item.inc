@@ -2106,6 +2106,18 @@ function toJSONGrouped($items)
 	return "{".implode(", ", $out)."}";
 }
 
+function toJSONIndexed($items)
+{
+	$out = array();
+	
+	foreach($items as $key => $item)
+	{
+		$out[] = "\"$key\": ".$item->toJSON();
+	}
+	
+	return "{".implode(", ", $out)."}";
+}
+
 function fromJSON($class, $json)
 {
 	$data = json_decode($json);
