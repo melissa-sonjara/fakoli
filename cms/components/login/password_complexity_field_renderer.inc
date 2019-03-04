@@ -58,7 +58,7 @@ window.addEvent('domready', function()
 				 <table border="0" cellspacing="0" cellpadding="0">
 				  <tr>
 	  				<td style="vertical-align: top; text-align: left"><?echo $enter?>&nbsp;</td>
-	  				<td style="padding-bottom: 2px"><input type="password" autocomplete="off" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
+	  				<td style="padding-bottom: 2px"><input type="password" autocomplete="new-password" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>" size="<?echo $size?>"<?echo $onKeyPress?> value=""/></td>
 	 			  </tr>
 	 			  <tr>
 	  				<td style="vertical-align: top; text-align: left"><?echo $confirm?>&nbsp;</td>
