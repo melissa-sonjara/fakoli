@@ -144,14 +144,6 @@ function dirname(str)
 	return str.substring(0, idx);
 }
 
-// script used for popup events
-function popupEvent(event)
-{
-  var url = 'http://admin.spring-mar.org/calendar/cal_popup.php?op=view&id='+event+'&uname=' ;
-  window.open(url,'Calendar','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=800,height=400');
-}
-
-
 function maskInput(e, allowNeg)
 {
 	var key;
