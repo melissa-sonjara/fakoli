@@ -3,6 +3,11 @@ Fakoli::using("settings");
 
 class ActivityTracker
 {
+	static function registerActivityTracker()
+	{
+		registerRedirectLogCallback(array(ActivityTracker, logActivity));
+	}
+	
 	static function logActivity()
 	{
 		global $user;

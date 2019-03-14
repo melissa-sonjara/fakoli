@@ -915,13 +915,21 @@ function str_option($value, $text, $sel = "")
 	return $opt;
 }
 
+$_redirectLogCallback = null;
+
+function registerRedirectLogCallback($callback)
+{
+	global $_redirectLogCallback;
+	$_redirectLogCallback = $callback;
+}
+
 /**
  * Simplified redirect.
  * @param string $page the page to redirect to
  */
 function redirect($page)
 {
-	global $_SERVER;
+	global $_redirectLogCallback;
 	global $config;
   
 	if ($config['prettyURLs'] === false)
@@ -962,6 +970,7 @@ function redirect($page)
 	}
 		
   	header("Location: $location");
+  	if ($_redirectLogCallback) $_redirectLogCallback();
   	session_write_close();
   	exit;
 }

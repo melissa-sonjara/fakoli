@@ -50,7 +50,8 @@ class ActivityTrackerManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("RequestComplete" 			=> array(ActivityTracker, logActivity),
+		return array("RegisterActivityTracker"	=>	array(ActivityTracker, registerActivityTracker),
+					 "RequestComplete" 			=> array(ActivityTracker, logActivity),
 					 "ComponentScanComplete"	=> array(ActivityTracker, setDefaults),
 					 "upgradeComponent"			=> array(ActivityTracker, upgradeComponent),
 					 "PostProcessContent"		=> array(ActivityTracker, postProcessContent),
