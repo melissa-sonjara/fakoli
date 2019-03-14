@@ -1713,6 +1713,15 @@ function toJSArray($items, $field = "")
 }
 
 /**
+ * Format the JSON in the supplied string to be more human-readable
+ * @param string $json the JSON to pretty-print
+ */
+function prettyPrintJSON($json)
+{
+	return json_encode(json_decode($json), JSON_PRETTY_PRINT);
+}
+
+/**
  * Creates a randomized string of characters. This is not cryptographically secure
  * and should not be used for cryptographic operations.
  * 
