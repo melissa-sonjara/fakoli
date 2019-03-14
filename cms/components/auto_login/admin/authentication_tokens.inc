@@ -47,9 +47,10 @@ function formatEnabled($token)
 }
 	
 $table = new DataListView($tokens, "tokens");
-$table->column("User", "<a href='/admin/authentication_token_form?authentication_token_id={authentication_token_id}'>{User.username} ({User.first_name} {User.last_name})</a>", true, "width: 30%")
+$table->column("User", "<a href='/admin/authentication_token_form?authentication_token_id={authentication_token_id}'>{User.username} ({User.first_name} {User.last_name})</a>", true, "width: 25%")
 	  ->column("Role", "{User.role}", "width: 15%")
-	  ->column("Token", "{token}", true, "width: 50%")
+	  ->column("Token", "{token}", true, "width: 40%")
+	  ->column("Last Access", "{last_access:m/d/Y g:ia}", true, "width: 15%")
 	  ->column("Enabled", formatEnabled, false, "text-align: center");
 	  
 $table->emptyMessage = "No authentication tokens have been generated.";
