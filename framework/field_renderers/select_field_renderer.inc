@@ -225,13 +225,18 @@ class SelectFieldRenderer extends FieldRenderer
 			
 			if ($this->grouped)
 			{
-				$this->addDefaultOption($field);	
+				if ($this->defaultBlank)
+				{
+					echo "<option value=''>{$this->defaultText}</option>\n";
+				}
+				
+				//$this->addDefaultOption($field);	
 				
 				foreach($this->options as $groupName => $group)
 				{
 					if ($groupName == "")
 					{
-						echo "<option value=''>{$this->defaultText}</option>\n";
+						//echo "<option value=''>{$this->defaultText}</option>\n";
 						continue;
 					}
 					
