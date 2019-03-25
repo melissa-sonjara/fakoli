@@ -60,7 +60,17 @@ class LoginManifest
 	
 	static function getAdminMenu()
 	{
-		return null;	
+		return array
+		(
+				"User Management"	=> array
+				(
+						
+						"Login Attempts"	=>	array("page"	=>	"/admin/login_attempts",
+													  "role"	=>	"admin",
+													  "weight"	=>	27,
+													  "icon"	=>	"user-shield")
+				)
+		);
 	}
 
 	static function subscribeToEvents()
