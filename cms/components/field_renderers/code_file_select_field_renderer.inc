@@ -59,6 +59,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 		}
 		
 		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange, true);
+		$this->allowBlank();
 	}
 	
 	function readFiles($home, $dir, $prefix = null)
