@@ -154,12 +154,13 @@ class SelectFieldRenderer extends FieldRenderer
 	 */
 	function addDefaultOption($field)
 	{
-		if(!$this->defaultBlank || ($this->parent->data->get($field) && !$this->allowDeselect)) return;
+		$val = $this->parent->data->get($field);
+		if(!$this->defaultBlank || ($val && !$this->allowDeselect)) return;
 		
 		if(count($this->options) && !array_search("", $this->options))
 		{
 			// want the blank at the top - array_merge causes issues; copy array instead
-			$options[$this->defaultValue] = $this->defaultText;
+			$options[$this->defaultValue] = $val ? "" : $this->defaultText;
 			foreach($this->options as $key => $value)
 			{
 				$options[$key] = $value;
