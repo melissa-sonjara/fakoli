@@ -54,6 +54,7 @@ class NumberFieldRenderer extends FieldRenderer
 	var $units = "";			///< units text to display
 	var $unitsPosition = "";	///< whether to display units before or after the control
 	var $blankZero = false;		///< Leave field blank if value is zero
+	var $control = "text";		///< The HTML control type to use when rendering. This gets set to "number" if a range is specified.
 	
 	function NumberFieldRenderer(&$parent, $field = null)
 	{
@@ -64,15 +65,45 @@ class NumberFieldRenderer extends FieldRenderer
 		}
 	}
 	
+	function addValidatorsToForm($field, $required = false)
+	{
+		parent::addValidatorsToForm($field);
+		
+		if ($this->control == "number")
+		{
+			$label = isset($this->label) ? $this->label : $this->parent->prettifyFieldName($field);
+		
+			$this->parent->validator->add(new RangeValidator($field, $label, $this->min, $this->max));
+		}
+	}
+	
 	/**
 	 * Sets the displayed units and their position
-	 * @param unknown $units
-	 * @param unknown $position
+	 * @param string $units
+	 * @param string $position
 	 */
 	function setUnits($units, $position)
 	{
 		$this->units = $units;
 		$this->unitsPosition = $position;
+		return $this;
+	}
+	
+	/**
+	 * Specifies that the field should be rendered with a "number" HTML control with the supplied range and step.
+	 * 
+	 * @param mixed $min the minimum value for the field
+	 * @param mixed $max the maximum value for the field
+	 * @param mixed $step the amount to step when the spinner up/down buttons are clicked
+	 */
+	function setRange($min, $max, $step = 1)
+	{
+		$this->min = min($max, $min);
+		$this->max = max($max, $min);
+		$this->step = $step;
+		$this->control = "number";
+		
+		return $this;
 	}
 	
 	function renderField($field)
@@ -95,8 +126,18 @@ class NumberFieldRenderer extends FieldRenderer
 			$value = "";
 		}
 		
-		echo "<input id='{$this->parent->id}_$field' type='text' style='width: auto' name='$field' 
-		value='".$value."' $autocomplete
+		if ($this->control == "number")
+		{
+			$control = "number";
+			$rangeAttrs = " min='{$this->min}' max='{$this->max}' step='{$this->step}'";
+		}
+		else 
+		{
+			$control = "text";
+			$rangeAttrs = "";
+		}
+		echo "<input id='{$this->parent->id}_$field' type='{$control}' style='width: auto' name='$field' 
+		value='".$value."' $rangeAttrs $autocomplete 
 		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
 		
 		if ($this->unitsPosition == "after") echo " ".$this->units;
