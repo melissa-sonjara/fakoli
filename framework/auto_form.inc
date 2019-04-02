@@ -480,11 +480,11 @@ class AutoForm
 				$renderer = $this->getRenderer($toggle);
 				if ($renderer instanceof BooleanFieldRenderer)
 				{
-					echo "\tdocument.id('$toggleID').addEvent('click', function(e) { if (this.checked) {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+					echo "\tdocument.id('$toggleID').addEvent('click', function(e) { AutoFormManager.toggleGroup('$groupID', this.checked); });\n";
 				}
 				else
 				{
-					echo "\tdocument.id('$toggleID').addEvent('change', function(e) { if (this.value != '0') {  document.id('$groupID').setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); } else { document.id('$groupID').removeClass('expanded').addClass('collapsed'); } });\n";
+					echo "\tdocument.id('$toggleID').addEvent('change', function(e) { AutoFormManager.toggleGroup('$groupID', (this.value != '0')); });\n";
 				}
 			}
 		}
@@ -1300,7 +1300,7 @@ class AutoForm
 				{
 					$cf = $this->collapsibleGroups[$legend];
 					//AJG: Allow direct specification of boolean for collapsed group state
-					$collapsed = is_bool($cf) ? $cf : !$this->data->$cf;
+					$collapsed = is_bool($cf) ? $cf : !$this->data->get($cf);
 				}
 				
 				$this->layout->startGroup($legend, $collapsible, $collapsed);

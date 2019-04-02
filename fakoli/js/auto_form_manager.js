@@ -203,3 +203,17 @@ AutoFormManager.getManager = function(id)
 	if (form) return form.manager;
 	return null;
 };
+
+AutoFormManager.toggleGroup = function(group, state)
+{
+	if (state) 
+	{  
+		document.id(group).setStyle('opacity', 0).removeClass('collapsed').addClass('expanded').fade('in'); 
+	} 
+	else 
+	{ 
+		document.id(group).removeClass('expanded').addClass('collapsed'); 
+	} 
+	
+	ModalDialog.recenterActiveDialog();
+};
