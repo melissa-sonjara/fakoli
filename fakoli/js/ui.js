@@ -418,6 +418,11 @@ var AbstractDialog = new Class(
 		
 		doc.adopt(dialog);
 		return dialog;
+    },
+    
+    deleteDialog: function()
+    {
+    	if (this.element) this.element.dispose();
     }
 });
 
@@ -593,6 +598,11 @@ var ModalDialog = new Class(
 	    	if (whenDone) whenDone();
     },
     
+    dispose: function()
+    {
+    	this.hide(this.deleteDialog);
+    },
+  
     reload: function()
     {
     	if (this.options.body)
@@ -735,7 +745,14 @@ var FloatingDialog = new Class(
 	    	this.fireEvent('hide', this);
 	    	if (AbstractDialog.onClose) { AbstractDialog.onClose(this); }
 	    	new Fx.Tween(this.element).start('opacity', 0).chain(function() {  this.element.setStyle('display', 'none');}.bind(this));
-    }
+    },
+    
+    
+    dispose: function()
+    {
+    	this.hide(this.deleteDialog);
+    },
+
 });
 
 var Interstitial = new Class({
