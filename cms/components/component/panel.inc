@@ -47,6 +47,7 @@ class Panel
 	var $id;
 	var $handler;
 	var $attrs;
+	var $preRender = true;
 	
 	/**
 	 * Creates a new panel
@@ -77,7 +78,7 @@ class Panel
 	{
 		$mgr = new ComponentManager();
 		echo "<div id='{$this->id}' $this->attrs data-url='{$this->handler}'>";
-		if ($this->handler) echo $mgr->dispatchLocalAction($this->handler);
+		if ($this->handler && $this->preRender) echo $mgr->dispatchLocalAction($this->handler);
 		echo "</div>";
 	}
 }
