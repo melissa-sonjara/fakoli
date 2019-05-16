@@ -709,6 +709,21 @@ class AutoForm
 	}
 	
 	/**
+	 * Utility function to add a CrossReferenceSelectFieldRenderer
+	 * @param string $xrefClass the name of the cross-reference DataItem class
+	 * @param array $options array of possible target DataItems
+	 * @param string $format the format specifier to use when outputting the optio0ns
+	 * @param string $field field name for use during form submission (should not be an actual field name)
+	 * @param string $label the label text to display
+	 * @return CrossReferenceSelectFieldRenderer
+	 */
+	function crossReference($xrefClass, $options, $format, $field, $label = null)
+	{
+		if (!$label) $label = prettify($field);
+		return new CrossReferenceSelectFieldRenderer($this, $field, $label, $options, $format, $xrefClass);
+	}
+	
+	/**
 	 * Utility function to add a SelectFieldRenderer
 	 * @param string $field the field name
 	 * @param string $label the label for the field
