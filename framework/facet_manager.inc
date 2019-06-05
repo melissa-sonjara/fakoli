@@ -435,3 +435,81 @@ class CrossReferenceFacetFilter extends AbstractFacetFilter
 		}		
 	}	
 }
+
+class CheckListFacetFilter extends AbstractFacetFilter
+{
+	var $id;
+	var $options;
+	var $related;
+	
+	var $width = "200px";
+	var $height = "100px";
+	var $dropdown = true;
+	var $dropdownMaxWidth = "200px";
+	var $dropdownMessage = "Click to Select Terms";
+	
+	function __construct($id, $options)
+	{
+		$this->id = $id;
+		$this->options = $options;
+		$this->related = [];
+	}
+	
+	function getID()
+	{
+		return $this->id;
+	}
+	
+	function onTagItem($item, $attrs)
+	{
+		$cl = get_class($item);
+		
+		$value = $item->get($this->id);
+		if ($value)
+		{
+			$attrs["data-{$this->id}"] = $value;
+		}
+		
+		return $attrs;
+	}
+	
+	function writeScript()
+	{
+		ob_start();
+		
+		if ($this->dropdown)
+		{
+			?>
+			var <?echo $this->id?>_select =  new MultiSelect('<?echo $this->id?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+			var <?echo $this->id?>_handler = new CheckListFacetHandler('<?echo $this->id?>', <?echo $this->id?>_select, <?echo $this->manager->target->getID()?>_facet_manager);
+		<?
+		}
+		
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
+		
+	}
+	
+	function renderCheckboxes()
+	{
+		foreach($this->options as $id => $option)
+		{
+			echo "<label for='checkbox_{$this->id}_{$id}'><input type='checkbox' class='checkbox' name='checkbox_{$this->id}_{$id}' id='checkbox_{$this->id}_{$id}' value='{$id}'";
+			echo ">".$option."</label>";
+		}
+	}
+	
+	function drawFacet()
+	{
+		if ($this->width && $this->height)
+		{
+			$resizable = (!$this->dropdown && $this->resizable) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->id}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}; height: {$this->height}; overflow: auto'>";
+			echo $this->renderCheckboxes();
+			echo"</div>\n";
+		}		
+	}	
+}
+
