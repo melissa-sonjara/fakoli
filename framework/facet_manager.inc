@@ -338,3 +338,100 @@ class MultiSelectFacetFilter extends AbstractFacetFilter
 		}		
 	}	
 }
+
+class CrossReferenceFacetFilter extends AbstractFacetFilter
+{
+	var $id;
+	var $format;
+	var $xrefAdapters;
+	var $related;
+	
+	var $width = "200px";
+	var $height = "100px";
+	var $dropdown = true;
+	var $dropdownMaxWidth = "200px";
+	var $dropdownMessage = "Click to Select Terms";
+	
+	function __construct($id, $xrefAdapters, $format)
+	{
+		$this->id = $id;
+		$this->xrefAdapters = $xrefAdapters;
+		$this->format = $format;
+		$this->related = [];
+	}
+	
+	function getID()
+	{
+		return $this->id;
+	}
+	
+	function onTagItem($item, $attrs)
+	{
+		$cl = get_class($item);
+		
+		if (array_key_exists($cl, $this->xrefAdapters))
+		{
+			$adapter = $this->xrefAdapters[$cl];
+			$related = $adapter($item);
+			$value = formatItems($related, "{getPrimaryKeyValue()}", ",");
+			foreach($related as $r)
+			{
+				$this->related[$r->getPrimaryKeyValue()] = $r;
+			}
+		}
+		
+		if ($value)
+		{
+			$attrs["data-{$this->id}"] = $value;
+		}
+		
+		return $attrs;
+	}
+	
+	function writeScript()
+	{
+		ob_start();
+		
+		if ($this->dropdown)
+		{
+			?>
+			var <?echo $this->id?>_select =  new MultiSelect('<?echo $this->id?>_container', {maxWidth: '<?echo $this->dropdownMaxWidth?>', message: '<?echo jsSafe($this->dropdownMessage)?>'});
+			var <?echo $this->id?>_handler = new CrossReferenceFacetHandler('<?echo $this->id?>', <?echo $this->id?>_select, <?echo $this->manager->target->getID()?>_facet_manager);
+		<?
+		}
+		
+		$script = ob_get_contents();
+		ob_end_clean();
+		return $script;
+		
+	}
+	
+	function renderCheckboxes()
+	{
+		$options = [];
+		foreach($this->related as $pk => $r)
+		{
+			$options[$pk] = $r->format($this->format);
+		}
+		
+		asort($options);
+		
+		foreach($options as $id => $option)
+		{
+			echo "<label for='checkbox_{$this->id}_{$id}'><input type='checkbox' class='checkbox' name='checkbox_{$this->id}_{$id}' id='checkbox_{$this->id}_{$id}' value='{$id}'";
+			echo ">".$option."</label>";
+		}
+	}
+	
+	function drawFacet()
+	{
+		if ($this->width && $this->height)
+		{
+			$resizable = (!$this->dropdown && $this->resizable) ? " resizable": "";
+			$dropdown = $this->dropdown ? " multi_select_dropdown_list" : "";
+			echo "<div id='{$this->id}_container' class='scrollbox{$resizable}{$dropdown}' style='width: {$this->width}; height: {$this->height}; overflow: auto'>";
+			echo $this->renderCheckboxes();
+			echo"</div>\n";
+		}		
+	}	
+}
