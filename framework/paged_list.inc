@@ -168,6 +168,21 @@ class PagedList implements FacetFilterable
 		$pk = $item->getPrimaryKey();
 		return "{$pk}_{$item->get($pk)}";
 	}
+	
+	/**
+	 * Helpful utility function - generates the list HTML in an output buffer and
+	 * returns the string representation. This is useful for resolving issues in 
+	 * rendering order that can occur when working with facets.
+	 * @return string the HTML output for the list
+	 */
+	function drawListToString()
+	{
+		ob_start();
+		$this->drawList();
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
 }
 
 /**
