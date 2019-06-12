@@ -1493,9 +1493,9 @@ class DataItem extends AbstractDataItem
 				continue;
 			}
 			
-			$val = str_replace("\\'", "'", jsSafe($this->get($field)));
+			$val = str_replace("\\'", "'", json_encode((string)$this->get($field)));
 			
-			$out[] = "\"{$field}\": \"".$val."\"";			
+			$out[] = "\"{$field}\": ".$val;			
 		}	
 		
 		return "{".implode(", ", $out)."}";		
