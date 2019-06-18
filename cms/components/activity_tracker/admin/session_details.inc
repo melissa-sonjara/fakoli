@@ -26,7 +26,7 @@ else if ($sessionIdentifier)
 $activity = ActivityTracker::loadSession($session);
 
 $table = new DataListView($activity, "activity_table");
-$table->column("Date", "{activity_time}", true, "width: 20%")
+$table->column("Date", "{activity_time:m/d/Y g:i:s}", true, "width: 20%")
 	  ->column("Method", "{method}", true, "width: 10%; text-align: center")
 	  ->column("URI", "{uri}", true, "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 40%")
 	  ->column("Response Time (s)", "{response_time}", true, "text-align: right")
