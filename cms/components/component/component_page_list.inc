@@ -73,7 +73,7 @@ class ComponentPageListView
 		$this->table->filter = true;
 		$this->table->pageSize = 20;		
 		
-		$this->templates = $this->readTemplates();
+		//$this->templates = $this->readTemplates();
 	}	
 	
 	function formatComponent($page)
@@ -209,10 +209,7 @@ foreach($roles as $role => $name)
 	{
 		global $config;
 		
-		$site = Site::getSite();
-		$directory = $site->getThemeDirectory();
-		
-		$home = $directory . DIRECTORY_SEPARATOR . "templates";
+		$home = $config["homedir"] . DIRECTORY_SEPARATOR . "templates";
 		
 		trace("Scanning Templates", 3);
 		 
@@ -227,9 +224,15 @@ foreach($roles as $role => $name)
 			trace("Reading $path", 3);
 
 			$handle = opendir($path);
+			if (!$handle)
+			{
+				trace("Directory read failed for $path", 3);
+				continue;
+			}
+			
 			while(false !== ($file = readdir($handle))) 
 	    	{
-	    		trace("Checking $file", 3);
+	    		trace("Checking $file", 4);
 	    		
 	    		if ($file != "." && 
 	    			$file != ".." && 
