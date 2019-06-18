@@ -209,7 +209,10 @@ foreach($roles as $role => $name)
 	{
 		global $config;
 		
-		$home = $config["homedir"] . DIRECTORY_SEPARATOR . "templates";
+		$site = Site::getSite();
+		$directory = $site->getThemeDirectory();
+		
+		$home = $directory . DIRECTORY_SEPARATOR . "templates";
 		
 		trace("Scanning Templates", 3);
 		 
