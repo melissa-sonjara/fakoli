@@ -53,7 +53,7 @@ if (!$image_id)
 		}
 		else
 		{
-			throw new FakoliException("Unknown Image");
+			Fakoli::sendResource("/fakoli/images/blank.gif");
 		}
 	}
 }
