@@ -229,7 +229,7 @@ foreach($roles as $role => $name)
 			$handle = opendir($path);
 			while(false !== ($file = readdir($handle))) 
 	    	{
-	    		trace("Checking $file", 4);
+	    		trace("Checking $file", 3);
 	    		
 	    		if ($file != "." && 
 	    			$file != ".." && 
