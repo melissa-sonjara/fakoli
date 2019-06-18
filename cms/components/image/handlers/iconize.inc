@@ -51,10 +51,11 @@ if (!$image_id)
 		{
 			$image_id = $image->image_id;
 		}
-		else
-		{
-			Fakoli::sendResource("/fakoli/images/blank.gif");
-		}
+	}
+	
+	if (!$image_id)
+	{
+		Fakoli::sendResource("/fakoli/images/blank.gif");
 	}
 }
 $mgr = new ImageManager();
