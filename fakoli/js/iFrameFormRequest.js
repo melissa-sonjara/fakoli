@@ -52,7 +52,8 @@ var iFrameFormRequest = new Class({
 				}
 				this.loading = true;
 			}.bind(this));	
-
+		this.formElmt.setLoading = function(val) { this.loading = val; }.bind(this);
+		
 		this.iframe = new IFrame({
 			name: this.frameId,
 			styles: {
