@@ -186,6 +186,12 @@ var AutoFormManager = new Class(
 		if (dosubmit) this.form.submit();
 	},
 	
+	rawSubmit: function()
+	{
+		if (this.form.iFrameFormRequest) this.form.iFrameFormRequest.loading = true;
+		this.form.submit();
+	},
+	
 	showError: function(error)
 	{
 		document.id(this.form.id + "__error").set('html', error).setStyle('display', 'table-cell');
