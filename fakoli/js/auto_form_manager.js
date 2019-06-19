@@ -188,7 +188,8 @@ var AutoFormManager = new Class(
 	
 	rawSubmit: function()
 	{
-		if (this.form.iFrameFormRequest) this.form.iFrameFormRequest.loading = true;
+		var iFrameRequest = this.form.retrieve("iFrameFormRequest");
+		if (iFrameRequest.iFrameFormRequest) iFrameRequest.loading = true;
 		this.form.submit();
 	},
 	
