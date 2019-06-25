@@ -20,35 +20,47 @@ var GroupingList = new Class({
 	
 	initialize: function(div, options) 
 	{
-		this.div = document.id('grouped_list');
+		this.div = document.id(div);
 		this.setOptions(options);
 
-		this.subheadings = this.div.getElements("h2");
-		this.content_divs = this.div.getChildren('div');
-	
-		var self = this;
-	
-		this.subheadings.each(function(h) 
-		{ 
-			h.addEvent('click', function(e) 
-			{ 
-				new DOMEvent(e).stop(); 
-				self.handleClick(h); 
-			}); 
-		});
-	
-		this.subheadings.each(function(r) 
-		{ 
-			r.addClass('collapsed');
-		});
-		
-		// Default Set first to open
-		if(this.openFirst)
+		if (this.options.mode != "fixed")
 		{
-			var subheadings = this.content_divs[0].getChildren('h2');
-			subheadings[0].removeClass('collapsed'); 
-			subheadings[0].addClass('expanded');
+			this.subheadings = this.div.getElements("h2");
+			this.content_divs = this.div.getChildren('div');
+		
+			var self = this;
+		
+			this.subheadings.each(function(h) 
+			{ 
+				h.addEvent('click', function(e) 
+				{ 
+					new DOMEvent(e).stop(); 
+					self.handleClick(h); 
+				}); 
+			});
+		
+			this.subheadings.each(function(r) 
+			{ 
+				r.addClass('collapsed');
+			});
+			
+			// Default Set first to open
+			if(this.openFirst)
+			{
+				var subheadings = this.content_divs[0].getChildren('h2');
+				subheadings[0].removeClass('collapsed'); 
+				subheadings[0].addClass('expanded');
+			}
 		}
+		
+
+		if (this.div.facetManager)
+		{
+			this.div.facetManager.addEvent('filterChanged', function() { this.filterChanged()}.bind(this));
+			this.div.facetManager.addEvent('filterCleared', function() { this.filterCleared()}.bind(this));
+			this.preprocessFacets();
+		}
+		
 		this.update();
 	},
 	
@@ -126,5 +138,52 @@ var GroupingList = new Class({
 				}.bind(elt)
 			});
 		});
-	}	
+	},
+
+	preprocessFacets: function()
+	{
+		this.div.getElements('li').each(function(elt)
+		{
+			this.div.facetManager.preprocess(elt);
+		}.bind(this));
+		
+		this.div.facetManager.preprocessComplete();
+	},
+	
+	filterChanged: function()
+	{
+		this.div.getElements('li').each(function(elt)
+		{
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+			
+			var match = this.div.facetManager.filter(elt);
+			
+			if (match)
+			{
+				elt.addClass('filtermatch');
+				elt.show();
+			}
+			else
+			{
+				elt.addClass('filtered');
+				elt.hide();
+			}
+		}.bind(this));
+		
+ 	    this.updatePageCount();
+	},
+	
+	filterCleared: function()
+	{
+		this.div.getElements('li').each(function(elt)
+		{
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+			elt.show();
+		});
+		
+  	    this.updatePageCount();
+	}
+	
 });

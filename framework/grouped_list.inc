@@ -64,7 +64,7 @@ class GroupedListGroup extends DataGroup
 	function draw()
 	{
 		$attrs = "";
-		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
+		if ($this->cssClass) $attrs .= " class='{$this->cssClass}'";
 		if ($this->groupStyles) $attrs .= " style='{$this->groupStyles}'";
 		
 		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : ($this->expanded) ? "expanded" : "collapsed";
@@ -77,19 +77,20 @@ class GroupedListGroup extends DataGroup
 }
 
 
-class GroupedList
+class GroupedList implements FacetFilterable
 {
 	var $items;
 	var $id;
 	var $format;
 	var $mode;			///< The display mode for the table: fixed, tree, or accordian
 	var $groups;		///< The group definitions.
-	var $CSSclass = null;
+	var $cssClass = null;
 	var $styles = null;
-	var $groupStyles = ""; // Styles for the group headings
-	var $groupClass = "subheading"; // Class for the ul that links the li list
-	var $groupedListClass; // The css class for the entire grouped list div
+	var $groupStyles = ""; ///< Styles for the group headings
+	var $groupClass = "subheading"; ///< Class for the ul that links the li list
+	var $groupedListClass; ///< The css class for the entire grouped list div
 	var $group_id;
+	var $tagRowCallbacks;  ///< Array of callbacks for adding extra attributes to each row
 	
 	function GroupedList($items, $id = "grouped_list", $format, $cssClass = "article_list", $groupClass = "subheading")
 	{
@@ -100,9 +101,10 @@ class GroupedList
 		$this->groupClass = $groupClass;
 		$this->cssStyle = null;
 		$this->mode = "accordian";
+		$this->tagRowCallbacks = array();
 	}
 	
-		/**
+	/**
 	 * Adds a group to the view.
 	 * @param unknown_type $title the title text for the group.
 	 * @param unknown_type $key the key value for the group.
@@ -134,6 +136,20 @@ class GroupedList
 		} 
 	}
 
+	function getID()
+	{
+		return $this->id;
+	}
+	
+	/**
+	 * Adds a row tagging handler. This function will receive the data item
+	 * for each row and can add custom attributes to the row tag.
+	 */
+	function addFacetTaggingHandler($handler)
+	{
+		$this->tagRowCallbacks[] = $handler;
+	}
+	
 	/**
 	 * Outputs the text for the groupedBy title bar using the given group dataitem
 	 * object. This function should not be invoked directly, but is invoked as 
@@ -157,10 +173,7 @@ class GroupedList
 				
 		$script = "<script type='text/javascript' src='/fakoli/js/grouping_list.js'></script>\n";
 		
-		if ($this->mode != 'fixed')
-		{
-			$constructor .= "\n\t\tvar {$this->id} = new GroupingList('{$this->id}', {mode: '{$this->mode}'});";
-		}
+		$constructor .= "\n\t\tvar {$this->id} = new GroupingList('{$this->id}', {mode: '{$this->mode}'});";
 		
 		if ($constructor)
 		{
@@ -175,10 +188,10 @@ class GroupedList
 	function drawList()
 	{
 		$attrs = "";
-		if ($this->CSSclass) $attrs .= " class='{$this->CSSclass}'";
+		if ($this->cssClass) $attrs .= " class='{$this->cssClass}'";
 		if ($this->styles) $attrs .= " style='{$this->styles}'";
 
-		echo "<div id='grouped_list' class='{$this->groupedListClass}'>\n";
+		echo "<div id='{$this->id}' class='{$this->groupedListClass}'>\n";
 		
 		if(count($this->groups) == 0) return;
 		
@@ -192,11 +205,33 @@ class GroupedList
 					
 				$itemsInGroup = $this->items[$group->key];
 
-				echo "<ul id=\"subheading[{$group->key}]\" class=\"subheading\" $attrs>\n";
+				echo "<ul id=\"subheading[{$group->key}]\" class=\"{$this->groupClass}\" $attrs>\n";
 	
 				foreach($itemsInGroup as $item)
 				{
-					echo "<li style='display: list-item;'>";
+					$css = "";
+					
+					if ($this->onStartRow)
+					{
+						$css = call_user_func($this->onStartRow, $item);
+						if ($css === false) continue; // Skip this record if false returned
+					}
+					
+					if ($css) $css = " class='$css'";
+					
+					$dataAttrs = array();
+					foreach($this->tagRowCallbacks as $cb)
+					{
+						$dataAttrs = call_user_func($cb, $item, $dataAttrs);
+					}
+					
+					$rowAttrs = "";
+					foreach($dataAttrs as $name => $value)
+					{
+						$rowAttrs .= " ".$name."='".$value."'";
+					}
+					
+					echo "<li {$css}{$rowAttrs}>";
 		
 					if (is_callable($this->format))
 					{
@@ -213,4 +248,20 @@ class GroupedList
 
 		echo "</div>\n";
 	}
+	
+	/**
+	 * Helpful utility function - generates the list HTML in an output buffer and
+	 * returns the string representation. This is useful for resolving issues in
+	 * rendering order that can occur when working with facets.
+	 * @return string the HTML output for the list
+	 */
+	function drawListToString()
+	{
+		ob_start();
+		$this->drawList();
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
+	
 }
