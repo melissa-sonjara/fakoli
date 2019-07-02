@@ -371,6 +371,8 @@ class Histogram
 ENDSCRIPT;
 		}
 			
+		$title = jsSafe($this->title);
+			
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function ()
@@ -406,7 +408,7 @@ window.addEvent('domready', function ()
 		min: {$this->min},
 		startIndex: {$this->startIndex},
 		columnMargin: {$this->columnMargin},
-		title: '{$this->title}',
+		title: '{$title}',
 		titleSize: {$this->titleSize},
 		enableDownload: {$enableDownload},
 		canvasBackground: '{$this->canvasBackground}',
