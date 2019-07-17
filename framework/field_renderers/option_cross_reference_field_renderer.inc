@@ -151,6 +151,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			}
 			else if (is_string($this->groupBy))
 			{
+				trace("Rendering grouped by", 3);
 				$options = regroupList($this->options, $this->groupBy);
 	
 				foreach($options as $group => $choices)
@@ -161,6 +162,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			}
 			else if ($this->grouped)
 			{
+				trace("Rendering grouped", 3);
 				foreach($this->options as $group => $choices)
 				{
 					echo "<{$this->groupTag}>$group</{$this->groupTag}>";
@@ -169,6 +171,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 			}			
 			else
 			{
+				trace("Rendering simple", 3);
 				$this->renderOptions($field, $this->options, $selectedItems);
 			}
 			
