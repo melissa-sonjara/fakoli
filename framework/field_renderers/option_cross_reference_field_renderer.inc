@@ -97,6 +97,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 				
+		trace("# of Options: ".count($this->options), 3);
 		
 		if (count($this->options))
 		{
