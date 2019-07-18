@@ -16,6 +16,11 @@ class TermsAndConditionsManifest
 
 	var $allow_sessionless_handlers = true;
 	
+	static function getStyles()
+	{
+		return array("/components/terms_and_conditions/css/terms_and_conditions.css");
+	}
+	
 	static function getScripts()
 	{
 		return array(
