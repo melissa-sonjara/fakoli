@@ -89,6 +89,7 @@ $doc_mime_types = array(
 	    ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 		".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		".mp3" => "audio/mpeg",
+		".m4a" => "audio/mpeg",
 		".flv"	=>	"video/x-flv",
 		".wav"	=>	"audio/wav",
 		".csv"	=>	"text/csv"
