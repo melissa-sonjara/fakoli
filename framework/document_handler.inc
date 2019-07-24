@@ -256,7 +256,8 @@ class DocumentHandler
        		'qt' => 'video/quicktime',
        		'mov' => 'video/quicktime',
 			'mp4' => 'video/mp4',
-
+			'm4a' => 'audio/m4a',
+				
        		// adobe
        		'pdf' => 'application/pdf',
         	'psd' => 'image/vnd.adobe.photoshop',
