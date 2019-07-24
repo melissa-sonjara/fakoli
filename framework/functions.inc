@@ -1831,6 +1831,7 @@ function getMIMEType($filename)
 
         // audio/video
         'mp3' => 'audio/mpeg',
+		'm4a' => 'video/mp4',
         'qt' => 'video/quicktime',
         'mov' => 'video/quicktime',
 
