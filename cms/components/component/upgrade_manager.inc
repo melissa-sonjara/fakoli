@@ -322,7 +322,7 @@ abstract class UpgradeManager
 			while(($buffer = fgets($fp)) !== false && !preg_match("/^--\s*END\s*$version_id/i", $buffer))
 			{
 				$depends = array();
-				if (preg_match("/^--\s*Depends\s+On\s+(\w+)\s+(.*)/i", $buffer, $depends))
+				if (preg_match('/^--\s*Depends\s+On\s+([\w_]+)\s+(.*)/i', $buffer, $depends))
 				{
 					ComponentManager::scanTrace("{$this->component_name} $version_id is dependent on {$depends[1]} {$depends[2]}", 2);
 					
