@@ -91,7 +91,8 @@ class DataListView implements FacetFilterable
 	
 	var $selectable  = false;			///< Whether the table provides a selection mechanism
 	var $showSelectAll = false;			///< Show Select All button for selectable tables
-	var $menu = null;					///< Context menu for selection-based operations
+	var $menu = null;					///< Command menu for selection-based operations
+	var $contextMenu = null;			///< Right-click context menu for selection based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	var $toolbarCallbacks = array(); 		///< Override this callback to add toolbar links into the first header cell
 	static $includesWritten = false;
@@ -252,12 +253,16 @@ class DataListView implements FacetFilterable
 	}	
 	
 	/**
-	 * Adds a ContextMenu to the table that can contain a list of operations that
-	 * can be performed on subselections of the table's contents.
+	 * Adds a command menu to the table that can contain a list of operations that
+	 * can be performed on subselections of the table's contents. A dropdown control
+	 * is automatically attached to the top left of the table. If Excel exporting has
+	 * been enabled, it will be added to the command menu.
 	 * @return ContextMenu
 	 */
 	function commandMenu()
 	{
+		if ($this->menu) return $this->menu;
+		
 		$this->menu = new ContextMenu($this->id . "_menu", "#{$this->id}_menu_button");
 		$this->menu->trigger = "click";
 		$this->menu->position = "element";
@@ -267,6 +272,27 @@ class DataListView implements FacetFilterable
 			$this->menu->command("toggle_select_all", "Select All", "new DOMEvent(event).stop(); SortingTable.toggleSelect(this, '{$this->id}');", false);
 		}
 		return $this->menu;
+	}
+	
+	/**
+	 * Adds a right-click context  menu to the table that can contain a list of operations that
+	 * can be performed on subselections of the table's contents.  If Excel exporting has
+	 * been enabled, it will be added to the context menu.
+	 * @return ContextMenu
+	 */
+	function contextMenu()
+	{
+		if ($this->contextMenu) return $this->contextMenu;
+		
+		$this->contextMenu = new ContextMenu($this->id . "_context_menu", "#{$this->id}");
+		$this->contextMenu->trigger = "contextmenu";
+		$this->contextMenu->position = "pointer";
+		
+		if ($this->showSelectAll)
+		{
+			$this->contextMenu->command("toggle_select_all", "Select All", "new DOMEvent(event).stop(); SortingTable.toggleSelect(this, '{$this->id}');", false);
+		}
+		return $this->contextMenu;
 	}
 	
 	/**
@@ -467,7 +493,9 @@ class DataListView implements FacetFilterable
 		}
 
 		
-		if ($this->menu) $script .= $this->menu->writeScript();
+		if ($this->menu)		$script .= $this->menu->writeScript();
+		if ($this->contextMenu) $script .= $this->contextMenu->writeScript();
+		
 		return $script;
 	}
 	
@@ -601,6 +629,11 @@ class DataListView implements FacetFilterable
 ?>
 		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
 <?									
+					}
+					
+					if ($this->contextMenu && $this->excelFile)
+					{
+						$this->menu->command($this->id."_context_excel", "Save as Excel...", $qs, true, "/fakoli/images/msexcel_icon_small.png");
 					}
 					
 					foreach($this->toolbarCallbacks as $callback)
@@ -771,6 +804,7 @@ class DataListView implements FacetFilterable
 			if ($this->scrollable) echo "</div>";
 			
 			if ($this->menu) echo $this->menu->writeMenu();
+			if ($this->contextMenu) echo $this->contextMenu->writeMenu();
 		}
 		else
 		{
