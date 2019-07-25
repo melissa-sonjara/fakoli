@@ -97,6 +97,12 @@ class ImageManager
 		}
 		
 		$image = new ImageRecord($image_id);
+		
+		if ($image->isSVG())
+		{
+			return $this->renderImage($image_id);
+		}
+		
 		$gallery = $image->Gallery();
 
 		trace("renderThumbnail:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
@@ -253,6 +259,12 @@ class ImageManager
 		global $config;
 		
 		$image = new ImageRecord($image_id);
+		
+		if ($image->isSVG())
+		{
+			return $this->renderImage($image_id);
+		}
+		
 		$gallery = $image->Gallery();
 		
 		trace("resizeAndCropToFit:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
@@ -354,6 +366,12 @@ class ImageManager
 		global $config;
 		
 		$image = new ImageRecord($image_id);
+		
+		if ($image->isSVG())
+		{
+			return $this->renderImage($image_id);
+		}
+		
 		$gallery = $image->Gallery();
 		
 		trace("resizeAndCropToCover:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
@@ -495,6 +513,12 @@ class ImageManager
 		}
 		
 		$image = new ImageRecord($image_id);
+
+		if ($image->isSVG())
+		{
+			return $this->renderImage($image_id);
+		}
+		
 		$gallery = $image->Gallery();
 	
 		trace("iconize:: image = {$image->image_id} and gallery = {$gallery->gallery_id}", 3);
@@ -639,6 +663,12 @@ class ImageManager
 		trace("Cropping image $id, starting at ($x, $y) dimensions ($w, $h)", 3);
 		 
 		$image = new ImageRecord($id);
+		
+		if ($image->isSVG())
+		{
+			return $this->renderImage($id);
+		}
+		
 		$gallery = $image->Gallery();
 				
 		$imageFile = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . $image->image_file;
@@ -927,7 +957,7 @@ class ImageManager
 		
 		trace("Image format: $ext", 3);
 		
-		if ($ext != ".jpg" && $ext != ".png") 
+		if ($ext != ".jpg" && $ext != ".png" && $ext != ".svg") 
 		{
 			throw new FakoliException("Unsupported image format");
 		}

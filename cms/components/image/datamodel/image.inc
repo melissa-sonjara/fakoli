@@ -119,6 +119,11 @@ class ImageRecord extends DataItem
 		return $img;
 	}
 	
+	function isSVG()
+	{
+		return endsWith($this->image_file, ".svg");
+	}
+	
 	function getThumbnail($size = 0, $iconize = false)
 	{
 		$mgr = new ImageManager();
