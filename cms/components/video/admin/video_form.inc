@@ -217,7 +217,7 @@ function uploadImage($field, $video)
 	$filename = $_FILES[$field]['name'];
 	$ext = strtolower(substr($filename, -4));
 
-	if ($ext != ".png" && $ext != ".jpg") 
+	if ($ext != ".png" && $ext != ".jpg" && $ext != ".svg") 
 	{
 		throw new FakoliException("Unsupported image format");
 	}
