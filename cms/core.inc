@@ -995,7 +995,8 @@ class Fakoli
 			
 			if (!$identifier)
 			{
-				redirect($contentManager->getDefaultPage($section));
+				$url = $section->getSectionURL();
+				redirect($url.$contentManager->getDefaultPage($section));
 			}
 			
 			$content = $section->getContent($identifier);
