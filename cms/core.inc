@@ -990,10 +990,12 @@ class Fakoli
 			{
 				throw new FakoliException("The section you were attempting to access could not be found.");
 			}
-
+			
+			$contentManager = $section->getContentManager();
+			
 			if (!$identifier)
 			{
-				redirect($section->getDefaultPage());
+				redirect($contentManager->getDefaultPage($section));
 			}
 			
 			$content = $section->getContent($identifier);
@@ -1034,7 +1036,6 @@ class Fakoli
 				redirect("http://".$config['http_host'].$_SERVER['REQUEST_URI']);
 			}
 			
-			$contentManager = $section->getContentManager();	
 			ComponentManager::fireEvent("StartPage");
 			$contentManager->sendContent($section, $identifier);
 			ComponentManager::fireEvent("RequestComplete");		

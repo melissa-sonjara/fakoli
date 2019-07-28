@@ -38,6 +38,12 @@
 interface ISectionContentManager
 {
 	/**
+	 * Returns the identifier for the default page in the section (i.e. the page that 
+	 * should be served when no identifier is specified).
+	 */
+	function getDefaultPage($section);
+	
+	/**
 	 * Returns a SectionContent object for the specified section and identifier
 	 * @param Section $section
 	 * @param string $identifier
@@ -61,6 +67,8 @@ interface ISectionContentManager
 
 class SectionContentManager implements ISectionContentManager
 {
+	function getDefaultPage($section) { return $section->default_page; }
+	
 	function getContent($section, $identifier)
 	{
 		try
