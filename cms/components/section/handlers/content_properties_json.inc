@@ -4,19 +4,14 @@ Fakoli::usingFeature("auto_form");
 
 Fakoli::assertRole("admin");
 
-if ($method != "POST")
-{
-	Fakoli::end("Protocol Error");
-}
-
-$save = checkNumeric($_GET["save"]);
-
 $sectionContent = new SectionContent();
-$sectionContent->fromJSON($_POST["data"]);
+$sectionContent->fromJSON($_REQUEST["data"]);
 
 $form = new AutoForm($sectionContent, "POST", "/action/section/content_properties_json?save=1", "SectionContent_form");
-$form->ajaxSubmit("function(result) {sectionContentManager.propertiesChanged(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
-$form->button("Cancel", "sectionContentManager.cancel()", null, true);
+$form->ajaxSubmit("function(result) {sectionContentPropertyManager.propertiesChanged(result);}");
+$form->button("Cancel", "sectionContentPropertyManager.cancel()", null, true);
+
+$form->hide("section_id", "identifier");
 
 $form->customSaveHandler = function($form)
 {
@@ -31,15 +26,15 @@ if ($permissionsList) $permissionsList->colspan = 2;
 
 $form->submitLabel = "Update Properties";
 
-if ($save)
+if ($method == "POST")
 {
 	if ($form->save())
 	{
-		Fakoli::JSONreturn($form->data);
+		Fakoli::JSONreturn($form->data, false);
 	}
 	else
 	{
-		Fakoli::JSONerror($form->msg);
+		Fakoli::JSONerror($form->msg, false);
 	}
 }
 

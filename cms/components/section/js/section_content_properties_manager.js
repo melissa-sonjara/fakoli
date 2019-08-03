@@ -34,9 +34,27 @@ var SectionContentPropertiesManager = new Class({
 				cbox.checked = true;
 			}
 			
-			button.addEvent('click', function(e) { new DOMEvent(e).stop(); this.showPropertiesDialog(section_id); return false; });
+			button.addEvent('click', function(e) { new DOMEvent(e).stop(); this.showPropertiesDialog(section_id); return false; }.bind(this));
 			
 		}.bind(this));
+	},
+
+	updateIdentifier: function(identifier)
+	{
+		this.identifier = identifier;
+		this.updateValue();
+	},
+	
+	updateValue: function()
+	{
+		var flattened = [];
+
+		Object.keys(this.data).each(function(key) 
+		{
+			this.data[key].identifier = this.identifier;
+			flattened.push(this.data[key]);
+		}.bind(this));
+		this.ctrl.value = JSON.stringify(flattened);
 	},
 	
 	showPropertiesDialog: function(section_id)
@@ -51,5 +69,35 @@ var SectionContentPropertiesManager = new Class({
 		{
 			data = {'section_id': section_id, 'identifier': this.identifier};
 		}
+		
+		var json = encodeURIComponent(JSON.stringify(data));
+		
+		this.dialog = modalPopup("Content Properties", "/action/section/content_properties_json?data=" + json, '650px', 'auto', true);		
+
+	},
+	
+	propertiesChanged: function(response)
+	{
+		var data = JSON.parse(response);
+		if (data.result)
+		{
+			var section_id = data.result.section_id;
+			
+			if (section_id)
+			{
+				this.data[section_id] = data.result;
+			}
+		}
+		
+		this.updateValue();
+
+		this.dialog.hide();
+		this.dialog = null;
+	},
+	
+	cancel: function()
+	{
+		this.dialog.hide();
+		this.dialog = null;
 	}
 });

@@ -80,6 +80,16 @@ $siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site,
 
 $sectionContentField = new SectionContentPropertiesFieldRenderer($form);
 
+$script .= <<<ENDSCRIPT
+<script>
+function onPageIdentifierUpdated(field)
+{
+	sectionContentPropertyManager.updateIdentifier(field.value);
+}
+</script>
+ENDSCRIPT;
+$form->getRenderer("identifier")->onChange = "onPageIdentifierUpdated";
+
 VersionedContentManager::enableVersioning($form);
 
 

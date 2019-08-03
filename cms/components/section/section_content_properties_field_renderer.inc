@@ -31,9 +31,11 @@ class SectionContentPropertiesFieldRenderer extends FieldRenderer
 		$id = $this->parent->id."_".$field;
 ?>
 <script>
+var sectionContentPropertyManager;
+
 window.addEvent('domready', function()
 {
-	new SectionContentPropertiesManager('<?php echo $id?>');
+	sectionContentPropertyManager = new SectionContentPropertiesManager('<?php echo $id?>');
 });
 </script>
 <?
@@ -82,8 +84,7 @@ window.addEvent('domready', function()
 			{
 ?>
 	<tr data-section_id='<?echo $s->section_id?>'>
-	 <td><input type='checkbox'></td>
-	 <td><? echo $s->section?></td>
+	 <td><label><input type='checkbox'><? echo $s->section?></label></td>
 	 <td><a class='button' href='#'><i class='fa-fw fas fa-ellipsis-h'></i></a></td>
 	</tr>
 <?
@@ -94,5 +95,35 @@ window.addEvent('domready', function()
 	</table>
 	<?
 		$this->_endField($field);
+	}
+	
+	function postProcess($field = "")
+	{
+		
+		$id = $this->parent->id."_".$field;
+		$json = $_POST[$id];
+		
+		trace("JSON: $json", 3);
+		$items = fromJSON('SectionContent', $json);
+		
+		$tx = new DataTransaction();
+		try 
+		{
+			foreach($items as $item)
+			{
+				if ($item->section_id && $item->identifier) 
+				{
+					$item->joinTransaction($tx);
+					$item->save();
+				}
+			}
+			
+			$tx->commit();
+		} 
+		catch (Exception $e) 
+		{
+			$tx->rollback();
+			throw $e;
+		}
 	}
 }
