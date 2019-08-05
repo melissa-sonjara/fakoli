@@ -715,12 +715,14 @@ class AutoForm
 	 * @param string $format the format specifier to use when outputting the optio0ns
 	 * @param string $field field name for use during form submission (should not be an actual field name)
 	 * @param string $label the label text to display
+	 * @param string $xrefField the name of the field mapping the primary key of the target DataItems 
+	 * (only specify this if the field name is different from the primary key)
 	 * @return CrossReferenceSelectFieldRenderer
 	 */
-	function crossReference($xrefClass, $options, $format, $field, $label = null)
+	function crossReference($xrefClass, $options, $format, $field, $label = null, $xrefField = null)
 	{
 		if (!$label) $label = prettify($field);
-		return new CrossReferenceSelectFieldRenderer($this, $field, $label, $options, $format, $xrefClass);
+		return new CrossReferenceSelectFieldRenderer($this, $field, $label, $options, $format, $xrefClass, $xrefField);
 	}
 	
 	/**

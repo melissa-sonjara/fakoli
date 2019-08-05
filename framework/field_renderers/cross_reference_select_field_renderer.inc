@@ -45,6 +45,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $relatedClass;	
 	var $constraint;
 	var $xrefClass;
+	var $xrefField;
 	var $nameField;
 	var $field;
 	var $label;
@@ -59,7 +60,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $disable = false;	///< Set to true to disable user input for this control
 	var $columns = 1;
 	
-	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass)
+	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass, $xrefField = null)
 	{
 		$this->field = $field;
 		$this->label = ($label) ? $label : $form->overrides[$field]['label'];
@@ -67,6 +68,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		$this->options = $options;
 		$this->nameField = $nameField;
 		$this->xrefClass = $xrefClass;
+		$this->xrefField = $xrefField;
 		$this->showSelectAll = false;
 		
 		$this->FieldRenderer($form);
@@ -86,7 +88,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		{
 			if (count($options))
 			{
-				$foreignKey = $options[0]->getPrimaryKey();
+				$foreignKey = $this->xrefField ? $this->xrefField : $options[0]->getPrimaryKey();
 			
 				$class = get_class($form->data);
 	
@@ -277,7 +279,8 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 
 	function getSelected($obj, $rc, $pk)
 	{
-		return ($obj->get($pk) != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->get($pk)}", $rc->getPrimaryKey()) : array();
+		$itempk = $this->xrefField ? $this->xrefField: $rc->getPrimaryKey();
+		return ($obj->get($pk) != "") ? indexedQuery($this->xrefClass, "WHERE {$pk}={$obj->get($pk)}", $itempk) : array();
 	}	
 	
 	
@@ -478,7 +481,7 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 			$rc = $this->options[0];
 		}
 		
-		$optpk = $this->getMatchingPK($xref, $rc);
+		$optpk = $this->xrefField ? $this->xrefField : $this->getMatchingPK($xref, $rc);
 		
 		$this->clearOutRelations($obj, $pk);
 		
