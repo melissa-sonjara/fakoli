@@ -1973,7 +1973,10 @@ var CountIndicator = new Class(
 			}
 			
 			element.countDisplay.position({relativeTo: element, position: this.options.position, edge: this.options.edge, offset: this.options.offset});
-			
+			if (this.options.fixed)
+			{
+				element.countDisplay.setStyle('position', 'fixed');
+			}
 		}.bind(this));
 	}
 });
