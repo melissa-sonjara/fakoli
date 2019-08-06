@@ -1942,7 +1942,8 @@ var CountIndicator = new Class(
 		edge:	  	'bottomRight',
 		showZero:	false,
 		maximum:	99,
-		fixed:	  	false
+		fixed:	  	false,
+		offset:		{0, 0}
 	},
 	
 	initialize: function(container, options)
@@ -1959,7 +1960,7 @@ var CountIndicator = new Class(
 			if (!element.countDisplay)
 			{
 				var div = new Element('div', {'class': this.options.cssClass});
-				div.setStyles({display: 'block', width: 'auto', position: (this.options.fixed) ? 'fixed' : 'absolute'});
+				div.setStyles({display: 'block', width: 'auto', position: (this.options.fixed) ? 'fixed' : 'absolute', offset: this.options.offset});
 				document.body.adopt(div);
 				element.countDisplay = div;
 			}
