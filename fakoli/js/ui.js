@@ -1960,7 +1960,7 @@ var CountIndicator = new Class(
 			if (!element.countDisplay)
 			{
 				var div = new Element('div', {'class': this.options.cssClass});
-				div.setStyles({display: 'block', width: 'auto', position: (this.options.fixed) ? 'fixed' : 'absolute', offset: this.options.offset});
+				div.setStyles({display: 'block', width: 'auto', position: (this.options.fixed) ? 'fixed' : 'absolute'});
 				document.body.adopt(div);
 				element.countDisplay = div;
 			}
@@ -1972,7 +1972,7 @@ var CountIndicator = new Class(
 				element.countDisplay.setStyle('display', 'none');
 			}
 			
-			element.countDisplay.position({relativeTo: element, position: this.options.position, edge: this.options.edge});
+			element.countDisplay.position({relativeTo: element, position: this.options.position, edge: this.options.edge, offset: this.options.offset});
 			
 		}.bind(this));
 	}
