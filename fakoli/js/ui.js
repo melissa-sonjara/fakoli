@@ -1972,7 +1972,15 @@ var CountIndicator = new Class(
 				element.countDisplay.setStyle('display', 'none');
 			}
 			
-			element.countDisplay.position({relativeTo: element, position: this.options.position, edge: this.options.edge, offset: this.options.offset});
+			element.countDisplay.position(
+			{
+				relativeTo: element, 
+				position: this.options.position, 
+				edge: this.options.edge, 
+				offset: this.options.offset,
+				relFixedPosition: this.options.fixed
+			});
+			
 			if (this.options.fixed)
 			{
 				element.countDisplay.setStyle('position', 'fixed');
