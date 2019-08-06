@@ -1943,7 +1943,7 @@ var CountIndicator = new Class(
 		showZero:	false,
 		maximum:	99,
 		fixed:	  	false,
-		offset:		{0, 0}
+		offset:		{X: 0, y: 0}
 	},
 	
 	initialize: function(container, options)
