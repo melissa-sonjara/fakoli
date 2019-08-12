@@ -143,20 +143,27 @@ class MenuView
 		global $identifier;
 		global $section;
 		
+		$classes = array();
+		
 		if ($this->m->highlight_current_item)
 		{
 			if ($m->identifier == $identifier || ($menu_identifier && $m->identifier == $menu_identifier))
 			{
-				return " class='current'";
+				$classes[]  = "current";
 			}
 		}
 					
 		if	($this->m->highlight_current_section && $m->identifier == $section->default_page)
 		{
-			return " class='current'";
+			$classes[]  = "current";
 		}
 		
-		return "";
+		if ($m->css_class)
+		{
+			$classes[] = $m->css_class;
+		}
+		
+		return count($classes) > 0 ? implode(" ", $classes) : "";
 	}
 	
 	function drawView()

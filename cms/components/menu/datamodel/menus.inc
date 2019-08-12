@@ -34,6 +34,12 @@
 
 class Menu extends DataItem
 {
+	var $primary_key = "menu_id";
+	var $table = "menu";
+	
+	var $default_format = "{name}";
+	var $pretty_class_name = "Menu";
+	
 	// Fields
 	var $fields = array("menu_id"					=>	Number,
 						"site_id"					=>	Number,
@@ -94,21 +100,16 @@ class Menu extends DataItem
 					->bind(":m", $this->menu_id, ":t", $title)
 					->exists();
 	}
-	
-	// Constructor
-	function Menu()
-	{
-		$this->primary_key = "menu_id";
-		$this->table = "menu";
-		
-		$this->default_format = "{name}";
-		$this->pretty_class_name = "Menu";
-		$this->DataItem(func_get_args());
-	}
 }
 
 class MenuItem extends DataItem
 {
+	var $primary_key = "menu_item_id";
+	var $table = "menu_item";
+	
+	var $default_format = "{title}";
+	var $pretty_class_name = "Menu Item";
+	
 	// Fields
 	var $fields = array("menu_item_id"	=> Number,
 						"title"			=> String,
@@ -118,12 +119,15 @@ class MenuItem extends DataItem
 						"identifier"	=> String,
 						"page_id"   	=> Number,
 						"url"       	=> String,
+						"css_class"		=> String,
 						"sort_order"	=> Number,
 						"role"		 	=> String,
 						"permissions"	=> String,
 						"published"		=> Boolean,
 						"required_parameters"	=>	String,
 						"display_flags"			=>	String);
+	
+	var $fieldAliases = array("css_class" => "CSS Class");
 	
 	// Relations
 	
@@ -168,17 +172,6 @@ class MenuItem extends DataItem
 	function Children($constraint = "ORDER BY sort_order, title")
 	{
 		return query(MenuItem, "WHERE parent_id={$this->menu_item_id} $constraint");
-	}
-
-	// Constructor
-	function MenuItem()
-	{
-		$this->primary_key = "menu_item_id";
-		$this->table = "menu_item";
-		
-		$this->default_format = "{title}";
-		$this->pretty_class_name = "Menu Item";
-		$this->DataItem(func_get_args());
 	}
 }
 ?>

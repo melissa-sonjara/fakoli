@@ -84,3 +84,9 @@ ALTER TABLE `menu_item` CHANGE COLUMN `page_id` `page_id` INT(10) UNSIGNED NOT N
 ALTER TABLE menu_item CHANGE COLUMN permissions permissions VARCHAR(500) NOT NULL DEFAULT '' ;
 
 -- END Version 1.6
+
+-- START Version 1.7
+
+ALTER TABLE menu_item ADD COLUMN css_class VARCHAR(200) not null default '';
+
+-- END Version 1.7
