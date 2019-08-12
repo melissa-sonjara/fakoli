@@ -163,7 +163,7 @@ class MenuView
 			$classes[] = $m->css_class;
 		}
 		
-		return count($classes) > 0 ? implode(" ", $classes) : "";
+		return count($classes) > 0 ? " class='".implode(" ", $classes)."'" : "";
 	}
 	
 	function drawView()
