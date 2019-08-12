@@ -72,7 +72,7 @@ class DataListFieldRenderer extends FieldRenderer
 		else
 		{
 			$parent->add($this, $this->field);	
-			$form->overrides[$this->field]['label'] = $this->label;
+			$parent->overrides[$this->field]['label'] = $this->label;
 		}
 		$this->colspan = 2;
 	}
