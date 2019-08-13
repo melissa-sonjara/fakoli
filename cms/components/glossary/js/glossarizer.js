@@ -37,8 +37,8 @@ var Glossarizer = new Class({
 			onError: function(text, error)
 			{
 				notification(error);
-			}
-		}.bind(this));
+			}.bind(this)
+		});
 		request.send();
 	},
 	
