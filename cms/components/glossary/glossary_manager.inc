@@ -14,7 +14,11 @@ class GlossaryManager
 
 	static function setDefaults()
 	{
-		//TODO: Set default configuration parameters here
+		Settings::setDefaultValue("glossary", "glossarize_terms", false, "Boolean", "Adds definition tooltips to matching terms within page content", null, null, 1);
+		Settings::setDefaultValue("glossary", "container_element", "body", "String", "DOM ID of the element to substitute within.", null, null, 2);
+		Settings::setDefaultValue("glossary", "target_elements", "p,div,li", "String", "CSS Selector for the elements for which content can be glossarized", null, null, 3);
+		Settings::setDefaultValue("glossary", "only_first_match", true, "String", "Only attach the tooltip to the first matching term within the content area", null, null, 4);
+		Settings::setDefaultValue("glossary", "tooltip_class", "glossary_tooltip", "String", "CSS class to use for the generated tooltips", null, null, 5);
 	}
 
 
