@@ -14,6 +14,7 @@ if($glossary_id){
 
 $form = new AutoForm($glossary);
 $form->required("term");
+$form->allowDelete = true;
 
 if($method=="POST")
 {
