@@ -1,5 +1,5 @@
 var Glossarizer = new Class({
-	implements: [Options],
+	Implements: Options,
 	
 	container: null,
 	url: null,
