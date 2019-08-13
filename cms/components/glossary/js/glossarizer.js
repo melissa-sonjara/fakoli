@@ -92,6 +92,9 @@ var Glossarizer = new Class({
 	    else if (node.nodeType === 1) 
 	    { 
 	    	// Node.ELEMENT_NODE
+	    	
+	    	if (node.className == this.options.termClass) return;
+	    	
 	        for (var i = 0; i < node.childNodes.length; i++) 
 	        {
 	            this.iterateNode(node.childNodes[i], expr, val); // run recursive on DOM
