@@ -30,7 +30,7 @@ class GlossaryManifest
 	static function getStyles()
 	{
 		return array(
-				//TODO: Add CSS File References "/components/glossary/css/..."
+				"/components/glossary/css/glossary.css"
 		);
 	}
 

@@ -1,0 +1,20 @@
+span.glossary_term {
+    display: inline-block;
+    border-bottom: dashed;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.glossary_tooltip > p {
+    margin: 0;
+}
+
+.glossary_tooltip {
+    display: none;
+    position: absolute;
+    background: #ffe;
+    border: solid 1px #666;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: normal;
+}

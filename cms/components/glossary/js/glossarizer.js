@@ -82,18 +82,9 @@ var Glossarizer = new Class({
 	    		var next = node.nextSibling;
 	    		
 	    		node.data = node.data.substring(0, match.index);
-	    		//node.appendChild(span);
 	    		span.inject(node, 'after');
-	    		
 	    		parent.insertBefore(after, next);
 	    	}
-//	        var text = node.data.replace(expr, val);
-//	        if (text != node.data)
-//	        {
-//	        	// there's a Safari bug
-//	            node.data = text;
-//	        }
-
 	    } 
 	    else if (node.nodeType === 1) 
 	    { 
