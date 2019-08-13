@@ -37,7 +37,7 @@ class GlossaryManifest
 	static function getScripts()
 	{
 		return array(
-				//TODO: Add Javascript File References "/components/glossary/js/..."
+				"/components/glossary/js/glossarizer.js"
 		);
 	}
 
