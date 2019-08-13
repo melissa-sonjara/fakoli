@@ -41,6 +41,8 @@ class GlossaryManifest
 		);
 	}
 
+	var $allow_sessionless_handlers = array("glossary_list");
+	
 	static function subscribeToEvents()
 	{
 		return array(
