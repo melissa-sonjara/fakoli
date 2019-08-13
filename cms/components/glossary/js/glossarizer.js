@@ -70,6 +70,8 @@ var Glossarizer = new Class({
 	    if (node.nodeType === 3) 
 	    {
 	    	// Node.TEXT_NODE
+	    	var match = expr.exec(node.data);
+	    	
 	        var text = node.data.replace(expr, val);
 	        if (text != node.data)
 	        {
