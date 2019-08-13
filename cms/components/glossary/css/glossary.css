@@ -18,3 +18,9 @@ span.glossary_term {
     border-radius: 8px;
     font-weight: normal;
 }
+
+span.glossary_term:hover .glossary_tooltip,
+span.glossary_term.tapped .glossary_tooltip
+{
+	display: block;
+}
