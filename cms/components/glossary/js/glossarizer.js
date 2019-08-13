@@ -62,7 +62,7 @@ var Glossarizer = new Class({
 				if (this.terms[i].regex == null) continue;
 				this.iterateNode(elt, this.terms[i].regex, this.terms[i].replace);
 			}
-		});
+		}.bind(this));
 	},
 	
 	iterateNode: function(node, expr, val) 
