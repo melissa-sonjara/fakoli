@@ -50,9 +50,8 @@ var Glossarizer = new Class({
 		for(var i = 0; i < this.terms.length; ++i)
 		{
 			this.terms[i].regex = new RegExp('(?:^|\\b)' + this.terms[i].term + '\\b', flags);
-			this.terms[i].replace = "<span class='" + this.options.termClass + "'>" + 
-									this.terms[i].term + "<div class='" + this.options.tooltipClass + "'>" + 
-									this.terms[i].definition + "</div></span>";
+			this.terms[i].replace = this.terms[i].term + "<div class='" + this.options.tooltipClass + "'>" + 
+									this.terms[i].definition + "</div>";
 		}
 		
 		this.container.getElements(this.options.selector).each(function(elt)
@@ -72,12 +71,19 @@ var Glossarizer = new Class({
 	    	// Node.TEXT_NODE
 	    	var match = expr.exec(node.data);
 	    	
-	        var text = node.data.replace(expr, val);
-	        if (text != node.data)
-	        {
-	        	// there's a Safari bug
-	            node.data = text;
-	        }
+	    	if (match != null)
+	    	{
+	    		var span = new Element('span', {'class': this.options.termClass})
+	    		span.set('html', val);
+	    		node.data = node.data.substring(0, match.index);
+	    		node.appendChild(span);
+	    	}
+//	        var text = node.data.replace(expr, val);
+//	        if (text != node.data)
+//	        {
+//	        	// there's a Safari bug
+//	            node.data = text;
+//	        }
 
 	    } 
 	    else if (node.nodeType === 1) 
