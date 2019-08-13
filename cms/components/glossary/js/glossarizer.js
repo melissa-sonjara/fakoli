@@ -50,7 +50,9 @@ var Glossarizer = new Class({
 		for(var i = 0; i < this.terms.length; ++i)
 		{
 			this.terms[i].regex = new RegExp('(?:^|\\b)(' + this.terms[i].term + '\\b', flags);
-			this.terms[i].replace = "<span class='" + this.options.termClass + "'>" + this.terms[i].term + "<div class='" this.options.tooltipClass + "'>" + this.terms[i].definition + "</div></span>";
+			this.terms[i].replace = "<span class='" + this.options.termClass + "'>" + 
+									this.terms[i].term + "<div class='" + this.options.tooltipClass + "'>" + 
+									this.terms[i].definition + "</div></span>";
 		}
 		
 		this.container.getElements(this.options.selector).each(function(elt)
