@@ -73,10 +73,13 @@ var Glossarizer = new Class({
 	    	
 	    	if (match != null)
 	    	{
+	    		var parent = document.id(node.parentElement);
+	    		
 	    		var span = new Element('span', {'class': this.options.termClass})
 	    		span.set('html', val);
 	    		node.data = node.data.substring(0, match.index);
-	    		node.appendChild(span);
+	    		//node.appendChild(span);
+	    		span.inject(node, 'after');
 	    	}
 //	        var text = node.data.replace(expr, val);
 //	        if (text != node.data)
