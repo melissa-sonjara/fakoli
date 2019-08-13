@@ -11,5 +11,6 @@ class Glossary extends DataItem
         "display"    =>Boolean
     ];
     
+    var $pretty_class_name = "Glossary Term";
 }
 ?>
