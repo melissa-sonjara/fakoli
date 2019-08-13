@@ -46,6 +46,7 @@ window.addEvent('domready', function()
 		tooltipClass: 	'{$tooltipClass}'
 	});
 });
+</script>
 ENDSCRIPT;
 	}
 
