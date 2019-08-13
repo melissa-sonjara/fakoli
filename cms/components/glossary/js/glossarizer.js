@@ -63,6 +63,18 @@ var Glossarizer = new Class({
 				this.iterateNode(elt, this.terms[i].regex, this.terms[i].replace, this.terms[i].strlen);
 			}
 		}.bind(this));
+		
+		document.getElements("span.glossary_term").each(function(span) 
+		{
+			span.addEvent('tap', 
+			function(e) 
+			{ 
+				if (span.hasClass('tapped')) 
+					span.removeClass('tapped');
+				else 
+					span.addClass('tapped');
+			})
+		});
 	},
 	
 	iterateNode: function(node, expr, val, offset) 
