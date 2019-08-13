@@ -25,6 +25,6 @@ class GlossaryView{
     function glossaryJsonFormat()
     {
        $glossary = $this->glossary;
-       echo toJSON($terms);
+       echo toJSON($glossary);
     }
 }
