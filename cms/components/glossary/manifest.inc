@@ -44,8 +44,9 @@ class GlossaryManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(GlossaryManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(GlossaryManager, setDefaults)
+					"upgradeComponent"		=>	array(GlossaryManager, upgradeComponent),
+					"ComponentScanComplete"	=>	array(GlossaryManager, setDefaults),
+					"StartPage"				=>	array(GlossaryManager, glossarizeContent)
 					//TODO: Add Event Registrations here
 		);
 	}

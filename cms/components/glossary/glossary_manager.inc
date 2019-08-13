@@ -22,7 +22,32 @@ class GlossaryManager
 		Settings::setDefaultValue("glossary", "term_class", "glossary_term", "String", "CSS class to use to wrap glossarized terms", null, null, 6);
 	}
 
-
+	static function glossarizeContent()
+	{
+		global $script;
+		
+		if (!Settings::getValue("glossary", "glossarize_terms")) return;
+		
+		var $container = Settings::getValue("glossary", "container_element");
+		var $targets = Settings::getValue("glossary", "target_elements");
+		var $onlyFirst = Settings::getValue("glossary", "only_first_match") ? "true" : "false";
+		var $tooltipClass = Settings::getValue("glossary", "tooltip_class");
+		var $termClass = Settings::getValue("glossary", "term_class");
+		
+		$script .= <<<ENDSCRIPT
+<script>
+window.addEvent('domready', function()
+{
+	new Glossarizer('{$container}', '/action/glossary/glossary_list', 
+	{
+		selector: 		'{$targets}',
+		firstOnly: 		{$onlyFirst},
+		termClass:		'{$termClass}',
+		tooltipClass: 	'{$tooltipClass}'
+	});
+});
+ENDSCRIPT;
+	}
 
 	static function upgradeComponent($version)
 	{

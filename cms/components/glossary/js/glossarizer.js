@@ -18,7 +18,7 @@ var Glossarizer = new Class({
 		this.container = document.id(container);
 		this.url = url;
 		
-		this.setOptions();
+		this.setOptions(options);
 		this.loadTerms();
 	},
 	
