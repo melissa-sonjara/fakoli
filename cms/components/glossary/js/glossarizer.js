@@ -66,7 +66,7 @@ var Glossarizer = new Class({
 		
 		document.getElements("span.glossary_term").each(function(span) 
 		{
-			span.addEvent('tap', 
+			span.addEvent('click', 
 			function(e) 
 			{ 
 				if (span.hasClass('tapped')) 
