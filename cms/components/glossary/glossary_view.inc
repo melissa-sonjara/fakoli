@@ -25,11 +25,6 @@ class GlossaryView{
     function glossaryJsonFormat()
     {
        $glossary = $this->glossary;
-       $terms = [];
-       foreach ($glossary as $term)
-       {
-           $terms[] = $terms;
-       }
        echo toJSON($terms);
     }
 }
