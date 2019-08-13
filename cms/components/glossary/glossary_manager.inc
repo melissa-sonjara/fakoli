@@ -28,11 +28,11 @@ class GlossaryManager
 		
 		if (!Settings::getValue("glossary", "glossarize_terms")) return;
 		
-		var $container = Settings::getValue("glossary", "container_element");
-		var $targets = Settings::getValue("glossary", "target_elements");
-		var $onlyFirst = Settings::getValue("glossary", "only_first_match") ? "true" : "false";
-		var $tooltipClass = Settings::getValue("glossary", "tooltip_class");
-		var $termClass = Settings::getValue("glossary", "term_class");
+		$container = Settings::getValue("glossary", "container_element");
+		$targets = Settings::getValue("glossary", "target_elements");
+		$onlyFirst = Settings::getValue("glossary", "only_first_match") ? "true" : "false";
+		$tooltipClass = Settings::getValue("glossary", "tooltip_class");
+		$termClass = Settings::getValue("glossary", "term_class");
 		
 		$script .= <<<ENDSCRIPT
 <script>
