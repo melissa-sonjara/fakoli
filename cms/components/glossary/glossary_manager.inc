@@ -20,6 +20,7 @@ class GlossaryManager
 		Settings::setDefaultValue("glossary", "only_first_match", true, "Boolean", "Only attach the tooltip to the first matching term within the content area", null, null, 4);
 		Settings::setDefaultValue("glossary", "tooltip_class", "glossary_tooltip", "String", "CSS class to use for the generated tooltips", null, null, 5);
 		Settings::setDefaultValue("glossary", "term_class", "glossary_term", "String", "CSS class to use to wrap glossarized terms", null, null, 6);
+		Settings::setDefaultValue("glossary", "exclude_class", "no_glossarize", "String", "CSS class used to indicate not to glossarize a page or element", null, null, 7);
 	}
 
 	static function glossarizeContent()

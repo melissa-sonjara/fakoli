@@ -10,7 +10,8 @@ var Glossarizer = new Class({
 		selector: 		'p,div,li',
 		firstOnly: 		true,
 		termClass:		'glossary_term',
-		tooltipClass: 	'glossary_tooltip'
+		tooltipClass: 	'glossary_tooltip',
+		excludeClass:	'no_glossarize'
 	},
 
 	initialize: function(container, url, options)
@@ -19,6 +20,12 @@ var Glossarizer = new Class({
 		this.url = url;
 		
 		this.setOptions(options);
+
+		if (document.body.hasClass(this.options.excludeClass))
+		{
+			return;
+		}		
+		
 		this.loadTerms();
 	},
 	
@@ -113,8 +120,9 @@ var Glossarizer = new Class({
 	    else if (node.nodeType === 1) 
 	    { 
 	    	// Node.ELEMENT_NODE
+	    	var elt = document.id(node);
 	    	
-	    	if (node.className == this.options.termClass) return;
+	    	if (elt.hasClass(this.options.termClass) || elt.hasClass(this.options.excludeClass)) return;
 	    	
 	        for (var i = 0; i < node.childNodes.length; i++) 
 	        {
