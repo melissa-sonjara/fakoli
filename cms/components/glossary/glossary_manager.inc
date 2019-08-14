@@ -34,6 +34,7 @@ class GlossaryManager
 		$onlyFirst = Settings::getValue("glossary", "only_first_match") ? "true" : "false";
 		$tooltipClass = Settings::getValue("glossary", "tooltip_class");
 		$termClass = Settings::getValue("glossary", "term_class");
+		$excludeClass = Settings::getValue("glossary", "exclude_class");
 		
 		$script .= <<<ENDSCRIPT
 <script>
@@ -44,7 +45,8 @@ window.addEvent('domready', function()
 		selector: 		'{$targets}',
 		firstOnly: 		{$onlyFirst},
 		termClass:		'{$termClass}',
-		tooltipClass: 	'{$tooltipClass}'
+		tooltipClass: 	'{$tooltipClass}',
+		excludeClass:	'{$excludeClass}'
 	});
 });
 </script>
