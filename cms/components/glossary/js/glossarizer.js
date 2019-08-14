@@ -53,6 +53,7 @@ var Glossarizer = new Class({
 			this.terms[i].replace = this.terms[i].term + "<div class='" + this.options.tooltipClass + "'>" + 
 									this.terms[i].definition + "</div>";
 			this.terms[i].strlen = this.terms[i].term.length;
+			this.terms[i].matched = false;
 		}
 		
 		this.container.getElements(this.options.selector).each(function(elt)
@@ -60,7 +61,7 @@ var Glossarizer = new Class({
 			for(var i = 0; i < this.terms.length; ++i)
 			{
 				if (this.terms[i].regex == null) continue;
-				this.iterateNode(elt, this.terms[i].regex, this.terms[i].replace, this.terms[i].strlen);
+				this.iterateNode(elt, this.terms[i]);
 			}
 		}.bind(this));
 		
@@ -77,8 +78,14 @@ var Glossarizer = new Class({
 		});
 	},
 	
-	iterateNode: function(node, expr, val, offset) 
+	iterateNode: function(node, term) 
 	{
+		if (term.matched) return;
+
+		var expr = term.regex;
+		var val = term.replace;
+		var offset = term.strlen;
+		
 	    if (node.nodeType === 3) 
 	    {
 	    	// Node.TEXT_NODE
@@ -96,6 +103,11 @@ var Glossarizer = new Class({
 	    		node.data = node.data.substring(0, match.index);
 	    		span.inject(node, 'after');
 	    		parent.insertBefore(after, next);
+	    		
+	    		if (this.options.firstOnly)
+	    		{
+	    			term.matched = true;
+	    		}
 	    	}
 	    } 
 	    else if (node.nodeType === 1) 
@@ -106,7 +118,7 @@ var Glossarizer = new Class({
 	    	
 	        for (var i = 0; i < node.childNodes.length; i++) 
 	        {
-	            this.iterateNode(node.childNodes[i], expr, val, offset); // run recursive on DOM
+	            this.iterateNode(node.childNodes[i], term); // run recursive on DOM
 	        }
 	    }
 	}
