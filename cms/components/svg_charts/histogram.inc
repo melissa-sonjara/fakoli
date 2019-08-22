@@ -393,7 +393,7 @@ window.addEvent('domready', function ()
 		labelAngle: {$this->labelAngle},
 		labelAnchor: '{$this->labelAnchor}',
 		labelOffset: {$this->labelOffset},
-		emptyValueLabel: '{$this->emptyLabelValue}',
+		emptyValueLabel: '{$this->emptyValueLabel}',
 		strokeWidth: {$this->strokeWidth},
 		gridStrokeWidth: {$this->gridStrokeWidth},
 		showGrid: {$showGrid},
