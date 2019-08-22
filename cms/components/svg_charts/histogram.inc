@@ -194,6 +194,7 @@ class Histogram
 	var $onDrawLegendComplete = "null";
 	var $gridStrokeWidth = 1;
 	var $showGrid = true;
+	var $emptyValueLabel = "";
 	
 	var $caption = "";
 	var $captionX = 10;
@@ -392,6 +393,7 @@ window.addEvent('domready', function ()
 		labelAngle: {$this->labelAngle},
 		labelAnchor: '{$this->labelAnchor}',
 		labelOffset: {$this->labelOffset},
+		emptyValueLabel: '{$this->emptyLabelValue}',
 		strokeWidth: {$this->strokeWidth},
 		gridStrokeWidth: {$this->gridStrokeWidth},
 		showGrid: {$showGrid},
