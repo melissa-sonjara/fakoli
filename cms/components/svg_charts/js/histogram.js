@@ -203,9 +203,19 @@ var VerticalBlockSeriesRenderer = new Class(
 			
 			if (this.series.options.showValues)
 			{
-				if (!val) val = 0;
+				var label;
 				
-				this.chart.paper.text(x + columnWidth / 2, y - 8, val + this.chart.options.units)
+				if (val === null)
+				{
+					label = this.chart.options.emptyValueLabel;
+				}
+				else
+				{
+					if (!val) val = 0;
+					label = val + this.chart.options.units;
+				}
+				
+				this.chart.paper.text(x + columnWidth / 2, y - 8, label)
 					.attr({"text-anchor": "middle", 'font-size': this.chart.options.labelSize});
 			}
 			
@@ -319,9 +329,19 @@ var HorizontalBlockSeriesRenderer = new Class(
 			
 			if (this.series.options.showValues)
 			{
-				if (!val) val = 0;
+				var label;
 				
-				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, val + this.chart.options.units).attr({'text-anchor': 'start'});
+				if (val === null)
+				{
+					label = this.chart.options.emptyValueLabel;
+				}
+				else
+				{
+					if (!val) val = 0;
+					label = val + this.chart.options.units;
+				}
+					
+				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, label).attr({'text-anchor': 'start'});
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]);  this.series.showToolTip(e, i); }.bind(this));
@@ -822,7 +842,8 @@ var Histogram = new Class(
 		title: '',
 		max: 0,
 		min: 0,
-		enableDownload: true
+		enableDownload: true,
+		emptyValueLabel: ""
 	},
 	
 	initialize: function(id, options, labels)
