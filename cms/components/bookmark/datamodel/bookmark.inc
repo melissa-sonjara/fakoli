@@ -42,7 +42,7 @@ class Bookmark extends DataItem
 						"url"			=>	String,
 						"user_id"		=>	Number);
 	
-	static function findBookmark($page)
+	static function findBookmark($page = "")
 	{
 		global $user;
 		if (!$page)
