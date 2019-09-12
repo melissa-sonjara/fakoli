@@ -385,7 +385,7 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	 */
 	function member($name, $set)
 	{
-		trace("## STRINGSEARCHPARAMETERHANDLER", 3);
+		trace("## STRINGSEARCHPARAMETERHANDLER", 1);
 		if(!$set || !isset($set)) return "";
 		
 		$values = $set;
