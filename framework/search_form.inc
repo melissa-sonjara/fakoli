@@ -252,6 +252,8 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 	 */
 	function member($name, $set)
 	{
+		trace("## NUMBERSEARCHPARAMETERHANDLER", 3);
+		
 		$values = $set;
 		if(is_array($set))
 			$values = implode(",", array_keys($set));
@@ -383,6 +385,7 @@ class StringSearchParameterHandler extends SearchParameterHandler
 	 */
 	function member($name, $set)
 	{
+		trace("## STRINGSEARCHPARAMETERHANDLER", 3);
 		if(!$set || !isset($set)) return "";
 		
 		$values = $set;
