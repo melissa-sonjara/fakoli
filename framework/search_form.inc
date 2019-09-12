@@ -850,7 +850,6 @@ class SearchParameters
 			else
 			{
 				$handler = $this->paramHandlers[$field];
-				trace("$field: ".print_r($handler, true), 2);
 				
 				if(is_callable($handler))
 					$clause = call_user_func($handler, $field, $value);
