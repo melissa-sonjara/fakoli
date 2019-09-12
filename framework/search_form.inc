@@ -849,9 +849,9 @@ class SearchParameters
 			}
 			else
 			{
-				trace("$field: ".get_class($this->params[$field]), 2);
-				
 				$handler = $this->paramHandlers[$field];
+				trace("$field: ".get_class($handler), 2);
+				
 				if(is_callable($handler))
 					$clause = call_user_func($handler, $field, $value);
 				elseif(method_exists($handler, $modifier))
