@@ -252,7 +252,7 @@ class NumberSearchParameterHandler extends SearchParameterHandler
 	 */
 	function member($name, $set)
 	{
-		trace("## NUMBERSEARCHPARAMETERHANDLER", 3);
+		trace("## NUMBERSEARCHPARAMETERHANDLER", 1);
 		
 		$values = $set;
 		if(is_array($set))
