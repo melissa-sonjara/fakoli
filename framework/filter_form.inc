@@ -767,7 +767,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 				echo "<li>\n";
 				$onchange = " onchange='if ({$onSubmitFunction}(this.form)) this.form.manager.submit();'";
 				$checked = (array_search($value, $searchValues) !== FALSE) ? " checked" : "";
-				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='1'$checked$onchange/>&nbsp;$text$divider";
+				echo "<input type='checkbox' class='checkbox' name='{$field}[$value]' value='{$value}'$checked$onchange/>&nbsp;$text$divider";
 				$idx++;
 				echo "</li>\n";
 			}
