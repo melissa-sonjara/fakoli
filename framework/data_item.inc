@@ -703,6 +703,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function update()
 	{
+		$this->fireEvent("beforeUpdate");
 		$this->pack();
 		
 		$pk = $this->primary_key;
@@ -735,7 +736,6 @@ class DataItem extends AbstractDataItem
 		
 		try
 		{
-			$this->fireEvent("beforeUpdate");
 			
 			$db = $this->getConnection();
 			
@@ -810,6 +810,8 @@ class DataItem extends AbstractDataItem
 	{
 		$this->pack();
 		
+		$this->fireEvent("beforeInsert");
+		
 		$pk = $this->primary_key;
 		
 		$first = true;
@@ -847,8 +849,6 @@ class DataItem extends AbstractDataItem
 		
 		try
 		{			
-			$this->fireEvent("beforeInsert");
-
 			$db = $this->getConnection();
 			$success = $db->exec($query);
 			
