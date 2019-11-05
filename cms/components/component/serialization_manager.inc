@@ -211,7 +211,7 @@ class SerializationManager
 	 */
 	static function serialize($class, $constraint = "")
 	{
-		$objects = Query::create($class, $constraint)->execute();
+		$objects = IteratedQuery::create($class, $constraint)->execute();
 		return toXML($class."List", $objects, "");
 	}
 	
