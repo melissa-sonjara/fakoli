@@ -205,16 +205,25 @@ class SerializationManager
 		
 		if ($process)
 		{
-			$process->setProgress("Running", pluralize("Reading $count files {$class}", $count), 0);
+			$process->setProgress("Running", pluralize("Reading $count {$class}", $count), 0);
 		}
 		
 		$objects = array();
+		
+		$c = 0;
 		
 		foreach($nodes as $node)
 		{
 			$object = new $class;
 			$object->fromXML($node);
 			$objects[] = $object;
+			++$c;
+			
+			if ($process)
+			{
+				$process->setProgress("Running", pluralize("Reading $c of $count {$class}", $count), intval($c/$count));
+			}
+			
 		}
 				
 		if ($save)
@@ -230,6 +239,7 @@ class SerializationManager
 				$object->_disablePK = true;
 				$object->joinTransaction($tx);
 				$object->save();
+				++$c;
 				if ($process)
 				{
 					$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval($c/$count));
@@ -238,6 +248,50 @@ class SerializationManager
 		}
 		
 		return $objects;
+	}
+	
+	
+	static function store($class, $doc, $tx)
+	{
+		global $process;
+		trace("== Instantiating $class Records", 3);
+		
+		// Check to see if there are any list tags for the class present.
+		// If not, the class was not serialized in this document, so return
+		// without processing. If there is a list tag (even if it is empty)
+		// we continue processing. This allows for correct deletion of items
+		// as part of the import process.
+		
+		$lists = $doc->getElementsByTagName($class . "List");
+		if ($lists->length == 0) return;
+		
+		$nodes = $doc->getElementsByTagName($class);
+		
+		$count = count($nodes);	
+		
+		if ($process)
+		{
+			$process->setProgress("Running", pluralize("Reading $count {$class}", $count), 0);
+		}
+		
+		$objects = array();
+		
+		$c = 0;
+		
+		$object = new $class;
+		
+		foreach($nodes as $node)
+		{
+			$object->fromXML($node);
+			$object->_disablePK = true;
+			$object->joinTransaction($tx);
+			$object->save();
+			++$c;
+			if ($process)
+			{
+				$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval($c/$count));
+			}
+		}		
 	}
 	
 	/**
@@ -446,7 +500,7 @@ class CompoundSerializationHandler
 		$xml  = "\n<{$this->groupTag}>";
 		foreach($this->classes as $class)
 		{
-			$xml.= SerializationManager::serialize($class[0], $class[1]);
+			$xml.= SerializationManager::store($class[0], $class[1]);
 		}
 		
 		$xml .= "\n</{$this->groupTag}>";
@@ -464,7 +518,7 @@ class CompoundSerializationHandler
 		
 		foreach($this->classes as $class)
 		{
-			SerializationManager::unserialize($class[0], $doc, $tx);
+			SerializationManager::store($class[0], $doc, $tx);
 		}
 		
 		if ($process)
