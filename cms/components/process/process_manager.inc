@@ -62,6 +62,12 @@ class ProcessManager
 		}
 	}
 
+	/**
+	 * Spawns the specified action as a background process under the current user's credentials
+	 * @param string $action the action handler to use to handle the request
+	 * @param array $params (optional) array of parameters to pass to the spawned process
+	 * @return string unique ID for the spawned process
+	 */
 	function run($action, $params = [])
 	{
 		global $config;
