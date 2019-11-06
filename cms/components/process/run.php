@@ -46,7 +46,7 @@ set_include_path($home . PATH_SEPARATOR . get_include_path());
 require_once "include/config.inc";
 require_once "cms/core.inc";
 
-Fakoli::using("process");
+Fakoli::using("process", "settings");
 
 $mgr = new UserManager();
 if ($user_id) $user = $mgr->getUser($user_id);
@@ -54,5 +54,12 @@ if ($user_id) $user = $mgr->getUser($user_id);
 $process = new ProcessManager($id);
 
 $mgr = new ComponentManager();
+
+$customLog = Settings::getValue("process", "background_process_log_file");
+if ($customLog)
+{
+	$config["trace_path"] = $customLog;
+}
+
 $mgr->dispatchLocalAction($action, $process);
 ?>
