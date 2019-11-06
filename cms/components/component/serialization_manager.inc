@@ -117,20 +117,49 @@ class SerializationManager
 	{
 		$components = explode(",", $components);
 		
+		if (filesize($xml) > 10 * 1024 * 1024)
+		{
+			$_SESSION["xml_import_batch_path"] = $xml;
+			$_SESSION["xml_import_components" = $components;
+			redirect("/admin/import_background");
+		}
+		
 		$doc = new DOMDocument();
 		if (!$doc->loadXML($xml))
 		{
 		 	throw new FakoliException("Failed to load XML data file");
 		};
 		
+		$this->processImport($xml, $components);		
+	}
+	
+	function importBackground()
+	{
+		global $process;
+		if (!$process)
+		{
+			throw new FakoliException("Not running as a background process");
+		}
+		
+		$xml = $_SESSION["xml_import_file_path"];
+		$components = $_SESSION["xml_import_components"];
+		
+		$process->setProgress("Running", "Starting import", 0);
+	
+		$this->processImport($xml, $components);
+		
+	}
+	
+	private function processImport($xml, $components)
+	{
 		$tx = new DataTransaction();
-
+		
 		try
 		{
 			foreach($components as $component)
 			{
 				$handler = SerializationManager::$map[$component]['handler'];
-				$xml .= $handler->import($doc, $tx);				
+				$xml .= $handler->import($doc, $tx);
 			}
 			
 			$tx->commit();
@@ -163,6 +192,7 @@ class SerializationManager
 	 */
 	static function unserialize($class, $doc, $tx, $save = true)
 	{
+		global $process;
 		trace("== Instantiating $class Records", 3);
 		
 		// Check to see if there are any list tags for the class present.
@@ -176,6 +206,14 @@ class SerializationManager
 		
 		$nodes = $doc->getElementsByTagName($class);
 	
+		$count = count($nodes);
+		
+		
+		if ($process)
+		{
+			$process->setProgress("Running", pluralize("Reading $count files {$class}", $count), 0);
+		}
+		
 		$objects = array();
 		
 		foreach($nodes as $node)
@@ -191,11 +229,17 @@ class SerializationManager
 			$o->joinTransaction($tx);
 			$o->deleteAll();
 			
+			$c = 0;
+			
 			foreach($objects as $object)
 			{
 				$object->_disablePK = true;
 				$object->joinTransaction($tx);
 				$object->save();
+				if ($process)
+				{
+					$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval($c/$count));
+				}
 			}
 		}
 		
@@ -332,7 +376,12 @@ class SimpleSerializationHandler
 	 */
 	function import($doc, $tx)
 	{
+		global $process;
 		SerializationManager::unserialize($this->class, $doc, $tx);
+		if ($process)
+		{
+			$process->setProgress("Completed", "Import successful", 100);
+		}
 	}		
 }
 
@@ -417,9 +466,16 @@ class CompoundSerializationHandler
 	 */
 	function import($doc, $tx)
 	{
+		global $process;
+		
 		foreach($this->classes as $class)
 		{
 			SerializationManager::unserialize($class[0], $doc, $tx);
+		}
+		
+		if ($process)
+		{
+			$process->setProgress("Completed", "Import successful", 100);
 		}
 	}
 	
