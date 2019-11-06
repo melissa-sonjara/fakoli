@@ -120,7 +120,7 @@ class SerializationManager
 		if (filesize($xml) > 10 * 1024 * 1024)
 		{
 			$_SESSION["xml_import_batch_path"] = $xml;
-			$_SESSION["xml_import_components" = $components;
+			$_SESSION["xml_import_components"] = $components;
 			redirect("/admin/import_background");
 		}
 		
