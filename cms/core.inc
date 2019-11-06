@@ -1059,6 +1059,15 @@ class Fakoli
 	}
 	
 	/**
+	 * Returns the number of active user sessions.
+	 */
+	static function countActiveSessions()
+	{
+		$number_of_users = count(scandir(ini_get("session.save_path"))) - 2;
+		return $number_of_users;
+	}
+	
+	/**
 	 * Send the admin page for the given identifier
 	 * @param string $identifier the admin page to be sent to the client
 	 */
