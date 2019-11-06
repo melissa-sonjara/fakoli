@@ -20,6 +20,7 @@ if ($method == "POST")
 	move_uploaded_file($tmp, $file);
 	
 	$fs = filesize($file);
+	trace("Import File Path: $file", 3);
 	trace("Import File Size: $fs bytes", 3);
 	
 	if ($fs > 10 * 1024 * 1024)
