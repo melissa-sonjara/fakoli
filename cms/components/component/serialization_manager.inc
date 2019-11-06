@@ -130,8 +130,10 @@ class SerializationManager
 		$xml = file_get_contents($process->get("xml_import_file_path"));
 		$components = $process->get("xml_import_components");
 		
+		trace("Importing $components from $xml", 3);
 		$process->setProgress("Running", "Starting import", 0);
-	
+		
+		$components = explode(",", $components);
 		$this->processImport($xml, $components);
 	}
 	
