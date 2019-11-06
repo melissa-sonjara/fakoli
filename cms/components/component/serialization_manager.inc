@@ -123,13 +123,7 @@ class SerializationManager
 			$_SESSION["xml_import_components"] = $components;
 			redirect("/admin/import_background");
 		}
-		
-		$doc = new DOMDocument();
-		if (!$doc->loadXML($xml))
-		{
-		 	throw new FakoliException("Failed to load XML data file");
-		};
-		
+
 		$this->processImport($xml, $components);		
 	}
 	
@@ -152,6 +146,13 @@ class SerializationManager
 	
 	private function processImport($xml, $components)
 	{
+		$doc = new DOMDocument();
+		if (!$doc->loadXML($xml))
+		{
+			throw new FakoliException("Failed to load XML data file");
+		};
+		
+		
 		$tx = new DataTransaction();
 		
 		try
