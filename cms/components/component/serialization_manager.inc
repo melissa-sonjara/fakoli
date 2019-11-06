@@ -116,18 +116,6 @@ class SerializationManager
 	function import($xml, $components)
 	{
 		$components = explode(",", $components);
-		
-		$fs = filesize($xml);
-		trace("Import File Size: $fs bytes", 3);
-		
-		if ($fs > 10 * 1024 * 1024)
-		{
-			trace("Large Import File detected - launching background process", 3 );
-			$_SESSION["xml_import_batch_path"] = $xml;
-			$_SESSION["xml_import_components"] = $components;
-			redirect("/admin/import_background");
-		}
-
 		$this->processImport($xml, $components);		
 	}
 	
@@ -139,13 +127,20 @@ class SerializationManager
 			throw new FakoliException("Not running as a background process");
 		}
 		
-		$xml = $_SESSION["xml_import_file_path"];
+		if (!isset($_SESSION["xml_import_file_path"]))
+		{
+			throw new FakoliException("No import file detected");
+		}
+		
+		$xml = file_get_contents($_SESSION["xml_import_file_path"]);
 		$components = $_SESSION["xml_import_components"];
 		
 		$process->setProgress("Running", "Starting import", 0);
 	
 		$this->processImport($xml, $components);
 		
+		unset($_SESSION["xml_import_file_path"]);
+		unset($_SESSION["xml_import_components"]);
 	}
 	
 	private function processImport($xml, $components)
