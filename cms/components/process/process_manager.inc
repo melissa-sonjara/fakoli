@@ -62,13 +62,18 @@ class ProcessManager
 		}
 	}
 
-	function run($action)
+	function run($action, $params = [])
 	{
 		global $config;
 		global $user;
 		
 		$isWindows = Fakoli::detectWindowsOS();
 		$this->id = sha1(now() . $action);
+		foreach($params as $key => $value)
+		{
+			$this->put($key, $value);
+		}
+		
 		$launch  = $isWindows ? "start " : "";
 		$bg = $isWindows ? "" : " &";
 		$run = Settings::getValue("process", "PHP_executable")." -d include_path='".
