@@ -1,6 +1,8 @@
 <?php
 Fakoli::using("component");
 
+global $config;
+
 $menu_item = "Import Configuration";
 $title = "Select Site Content to be Imported";
 
@@ -15,7 +17,7 @@ if ($method == "POST")
 	
 	$tmp = $_FILES["import_file"]["tmp_name"];
 	$base = basename($_FILES["import_file"]["name"]);
-	$file = $config["upload_dir"].FILE_SEPARATOR.$base;
+	$file = $config["uploadbase"].DIRECTORY_SEPARATOR.$base;
 	
 	move_uploaded_file($tmp, $file);
 	
