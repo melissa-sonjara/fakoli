@@ -13,13 +13,19 @@ if ($method == "POST")
 	$components = $form->getSelected();
 	trace("*** Importing $components", 3);
 	
-	$file = $_FILES["import_file"]["tmp_name"];
+	$tmp = $_FILES["import_file"]["tmp_name"];
+	$base = basename($_FILES["import_file"]["name"]);
+	$file = $config["upload_dir"].FILE_SEPARATOR.$base;
+	
+	move_uploaded_file($tmp, $file);
+	
 	$fs = filesize($file);
 	trace("Import File Size: $fs bytes", 3);
 	
 	if ($fs > 10 * 1024 * 1024)
 	{
 		trace("Large Import File detected - launching background process", 3 );
+		move_uploaded_file(
 		$_SESSION["xml_import_file_path"] = $file;
 		$_SESSION["xml_import_components"] = $components;
 		redirect("/admin/import_background");
