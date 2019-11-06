@@ -221,7 +221,7 @@ class SerializationManager
 			
 			if ($process)
 			{
-				$process->setProgress("Running", pluralize("Reading $c of $count {$class}", $count), intval($c/$count));
+				$process->setProgress("Running", pluralize("Reading $c of $count {$class}", $count), intval((100*$c)/$count));
 			}
 			
 		}
@@ -242,7 +242,7 @@ class SerializationManager
 				++$c;
 				if ($process)
 				{
-					$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval($c/$count));
+					$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval((100*$c)/$count));
 				}
 			}
 		}
@@ -289,7 +289,7 @@ class SerializationManager
 			++$c;
 			if ($process)
 			{
-				$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval($c/$count));
+				$process->setProgress("Running", pluralize("Imported $c of $count {$class}", $count), intval((100*$c)/$count));
 			}
 		}		
 	}
