@@ -25,7 +25,6 @@ if ($method == "POST")
 	if ($fs > 10 * 1024 * 1024)
 	{
 		trace("Large Import File detected - launching background process", 3 );
-		move_uploaded_file(
 		$_SESSION["xml_import_file_path"] = $file;
 		$_SESSION["xml_import_components"] = $components;
 		redirect("/admin/import_background");
@@ -34,6 +33,8 @@ if ($method == "POST")
 	$xml = file_get_contents($file);
 	
 	$form->mgr->import($xml, $components);
+	
+	unlink($file);
 	redirect("index");
 }
 
