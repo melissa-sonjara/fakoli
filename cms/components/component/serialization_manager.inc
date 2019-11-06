@@ -117,8 +117,12 @@ class SerializationManager
 	{
 		$components = explode(",", $components);
 		
-		if (filesize($xml) > 10 * 1024 * 1024)
+		$fs = filesize($xml);
+		trace("Import File Size: $fs bytes", 3);
+		
+		if ($fs > 10 * 1024 * 1024)
 		{
+			trace("Large Import File detected - launching background process", 3 );
 			$_SESSION["xml_import_batch_path"] = $xml;
 			$_SESSION["xml_import_components"] = $components;
 			redirect("/admin/import_background");
