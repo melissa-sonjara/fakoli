@@ -127,20 +127,12 @@ class SerializationManager
 			throw new FakoliException("Not running as a background process");
 		}
 		
-		if (!isset($_SESSION["xml_import_file_path"]))
-		{
-			throw new FakoliException("No import file detected");
-		}
-		
-		$xml = file_get_contents($_SESSION["xml_import_file_path"]);
-		$components = $_SESSION["xml_import_components"];
+		$xml = file_get_contents($process->get("xml_import_file_path"));
+		$components = $process->get("xml_import_components");
 		
 		$process->setProgress("Running", "Starting import", 0);
 	
 		$this->processImport($xml, $components);
-		
-		unset($_SESSION["xml_import_file_path"]);
-		unset($_SESSION["xml_import_components"]);
 	}
 	
 	private function processImport($xml, $components)
