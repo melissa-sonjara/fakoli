@@ -1063,7 +1063,9 @@ class Fakoli
 	 */
 	static function countActiveSessions()
 	{
-		$number_of_users = count(scandir(ini_get("session.save_path"))) - 2;
+		$sessions = scandir(ini_get("session.save_path"));
+		trace("SESSIONS: ".print_r($session, true), 1);
+		$number_of_users = count($sessions) - 2;
 		return $number_of_users;
 	}
 	
