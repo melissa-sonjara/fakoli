@@ -48,7 +48,7 @@ class ComponentPageView
 	 * 
 	 * @param string $identifier the identifier of the component page
 	 */
-	static function renderPage()
+	static function renderPage($identifier)
 	{
 		$page = ComponentPage::findByIdentifier($identifier, "WHERE enabled=1");
 
