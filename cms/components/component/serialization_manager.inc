@@ -500,7 +500,7 @@ class CompoundSerializationHandler
 		$xml  = "\n<{$this->groupTag}>";
 		foreach($this->classes as $class)
 		{
-			$xml.= SerializationManager::store($class[0], $class[1]);
+			$xml.= SerializationManager::serialize($class[0], $class[1]);
 		}
 		
 		$xml .= "\n</{$this->groupTag}>";
