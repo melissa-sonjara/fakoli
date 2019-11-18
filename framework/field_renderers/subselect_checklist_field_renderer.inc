@@ -68,7 +68,7 @@ class SubSelectCheckListFieldRenderer extends CheckListFieldRenderer
 		$this->_startField($field);
 		
 		$rawValue = $this->parent->data->get($field);
-		if (!isset($rawValue)) $rawValue = $this->parent->getDecoration($field);
+		if (!isset($rawValue)) $rawValue = $this->parent->data->getDecoration($field);
 		
 		if (is_array($rawValue))
 		{
