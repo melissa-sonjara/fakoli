@@ -277,7 +277,7 @@ class ComponentPageView
 		
 		$gets = array();
 		
-		preg_match_all("/\{get:(.*?)\}", $template, $gets, PREG_SET_ORDER);
+		preg_match_all("/\{get:(.*?)\}/", $template, $gets, PREG_SET_ORDER);
 		foreach($gets as $get)
 		{
 			$expr = $get[0];
