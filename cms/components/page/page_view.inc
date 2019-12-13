@@ -212,7 +212,22 @@ class PageView
 			$name = $var[1];	
 			$template = str_replace($expr, $$name, $template);
 		}
+		
+		// Populate stored value references
+		
+		$gets = array();
 				
+		preg_match_all("/\\{_\\{_\\[get:(.*?)\\]_\\}_\\}/", $template, $gets, PREG_SET_ORDER);
+		foreach($gets as $get)
+		{
+			$expr = $get[0];
+			$name = $get[1];
+			$value = Fakoli::get($name);
+			
+			$template = str_replace($expr, $value, $template);
+		}
+		
+		
 		$template = str_replace("{_{_[", "{", $template);
 		$template = str_replace("]_}_}", "}", $template);
 		
