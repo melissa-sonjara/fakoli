@@ -674,7 +674,6 @@ function checkIdentifier($p)
  */
 function checkIdentifierList($p)
 {
-	trace("CheckIdentifierList ($p)", 3);
 	return preg_match("/^[A-Za-z0-9_\\-\\.,]*$/", $p) ? $p : die("Invalid Parameter");
 }
 
