@@ -68,7 +68,7 @@ class ProcessManager
 	 * @param array $params (optional) array of parameters to pass to the spawned process
 	 * @return string unique ID for the spawned process
 	 */
-	function run($action, $params = [])
+	function run($action, $params = array())
 	{
 		global $config;
 		global $user;

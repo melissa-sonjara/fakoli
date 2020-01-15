@@ -74,7 +74,7 @@ class WkhtmltoPDFConvertor implements PDFConvertor
 		
 		trace($cmd, 3);
 		
-		$out = [];
+		$out = array();
 		
 		exec($cmd, $out);
 		
@@ -161,7 +161,7 @@ class ChromePDFConvertor implements PDFConvertor
 		
 		trace($cmd, 3);
 		
-		$out = [];
+		$out = array();
 		
 		exec($cmd, $out);
 		
@@ -205,7 +205,7 @@ class ChromePDFConvertor implements PDFConvertor
 		
 		trace($cmd, 3);
 		
-		$out = [];
+		$out = array();
 		
 		exec($cmd, $out);
 		
