@@ -357,7 +357,7 @@ class CrossReferenceFacetFilter extends AbstractFacetFilter
 		$this->id = $id;
 		$this->xrefAdapters = $xrefAdapters;
 		$this->format = $format;
-		$this->related = [];
+		$this->related = array();
 	}
 	
 	function getID()
@@ -452,7 +452,7 @@ class CheckListFacetFilter extends AbstractFacetFilter
 	{
 		$this->id = $id;
 		$this->options = $options;
-		$this->related = [];
+		$this->related = array();
 	}
 	
 	function getID()
