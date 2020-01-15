@@ -408,7 +408,7 @@ class CrossReferenceFacetFilter extends AbstractFacetFilter
 	
 	function renderCheckboxes()
 	{
-		$options = [];
+		$options = array();
 		foreach($this->related as $pk => $r)
 		{
 			$options[$pk] = $r->format($this->format);
