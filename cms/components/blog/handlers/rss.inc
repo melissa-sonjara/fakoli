@@ -62,7 +62,7 @@ $constraint = ($blog->max_rss_articles) ? "LIMIT {$blog->max_rss_articles}" : ""
 $articles = $blog->Articles();
 $timestamp = date("r");
 
-$xmlArticles = formatItems($articles, "<item>\n\t<title>{title:xml}</title>\n\t<description>{message:xml}</description>\n\t<link>{$url}?article_id={article_id}</link>\n\t<author>{author}</author>\n\t<guid>{$url}?article_id={article_id}</guid>\n\t<pubDate>{publish_date:r}</pubDate>\n</item>","\n");
+$xmlArticles = formatItems($articles, "<item>\n\t<title>{title:xml}</title>\n\t<description>{message:xml}</description>\n\t<link>{$url}?article_id={article_id}</link>\n\t<author>{author:xml}</author>\n\t<guid>{$url}?article_id={article_id}</guid>\n\t<pubDate>{publish_date:r}</pubDate>\n</item>","\n");
 
 header("Content-Type: text/xml");
 
