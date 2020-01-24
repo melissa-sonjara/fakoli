@@ -193,7 +193,9 @@ class ComponentPageView
 				$menuBody = $view->drawView();
 				if ($menuBody)
 				{
-					$output .= "<div id='$position[1]'>";					
+					$menuCSSClass = $menus[$position[1]]->container_css_class;;
+					$menuCSSClass = $menuCSSClass ? " class='{$menuCSSClass}'" : "";
+					$output .= "<div id='$position[1]'{$menuCSSClass}>";					
 					$output .= $menuBody; 
 					$output .= "</div>";
 				}			

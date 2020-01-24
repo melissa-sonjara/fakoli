@@ -90,3 +90,15 @@ ALTER TABLE menu_item CHANGE COLUMN permissions permissions VARCHAR(500) NOT NUL
 ALTER TABLE menu_item ADD COLUMN css_class VARCHAR(200) not null default '';
 
 -- END Version 1.7
+
+-- START Version 1.8
+
+ALTER TABLE menu ADD COLUMN `container_css_class` VARCHAR(200) NOT NULL DEFAULT '';
+
+-- END Version 1.8
+
+-- START Version 1.9
+
+ALTER TABLE menu ADD COLUMN `wrap_menu_items` TINYINT(3) NOT NULL DEFAULT 0;
+
+-- END Version 1.9

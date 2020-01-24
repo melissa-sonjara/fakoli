@@ -47,6 +47,8 @@ class Menu extends DataItem
 						"identifier"				=>	String,
 						"description"				=>	Text,
 						"css_class"					=>	String,
+						"container_css_class"		=>	String,
+						"wrap_menu_items"			=>	Boolean,
 						"highlight_current_item"	=>	Boolean,
 						"highlight_current_section"	=>	Boolean);
 	
