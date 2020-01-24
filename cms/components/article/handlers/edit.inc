@@ -62,7 +62,7 @@ if ($blog_id)
 
 $form = ArticleManager::buildArticleForm($article);
 $form->getRenderer("message")->height = "160px";
-	
+
 $form->ajaxSubmit("function(result) {new ArticleManager().editResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->action = "/action/article/edit?article_id={$article_id}";
 

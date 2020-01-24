@@ -42,6 +42,7 @@ class Article extends DataItem implements Searchable
 						"title"			=>	String,
 						"message"		=>	HTML,
 						"article_type"	=>	String,
+						"identifier"	=>	String,
 						"image_id"		=>	Number,
 						"teaser"		=>	HTML,
 						"created_date"	=>	Date,
@@ -123,6 +124,15 @@ class Article extends DataItem implements Searchable
 					 ->execute();
 					 
 		return count($blogs) ? $blogs[0] : null;
+	}
+	
+	static function fromIdentifier($identifier)
+	{
+		$articles = Query::create(Article, "WHERE identifier=:i")
+						 ->bind(":i", $identifier)
+						 ->execute();
+		
+		return count($articles) > 0 ? $articles[0] : null;
 	}
 	
 	function getURL()
