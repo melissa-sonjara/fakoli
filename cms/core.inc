@@ -998,6 +998,11 @@ class Fakoli
 				$url = $section->getSectionURL();
 				redirect($url.$contentManager->getDefaultPage($section));
 			}
+			else
+			{
+				$alias = ComponentManager::fireEvent("PreprocessURI", $identifier);
+				if ($alias) $identifier = $alias;
+			}
 			
 			$content = $section->getContent($identifier);
 			if (!$content)
