@@ -28,6 +28,8 @@ class ArticleManager
 		$articleTypeSelect = new SelectFieldRenderer($form, "article_type", "Article Type", Blog::getArticleTypeOptions());
 		//$articleTypeSelect->allowAddEntry();
 
+		$form->annotate("identifier", "(Optional) identifier for this article for friendlier URLs");
+		
 		$form->annotate("post_date", "The date that will be displayed in the article's tagline.");
 		$form->annotate("publish_date", "The date the article will be published on the site.");
 		$form->annotate("archive_date", "The date the article will be archived from the site.");
@@ -151,6 +153,23 @@ class ArticleManager
 		$article->delete("WHERE author_id={$user_id}");
 		
 		return $user;
+	}
+	
+	static function preprocessURI($identifier)
+	{
+		global $section;
+		
+		$article = Article::fromIdentifier($identifier);
+		if (!$article) return null;
+		$blog = $article->getBlog();
+		if (SectionManager::isInSection($section->section, $blog->identifier))
+		{
+			$_GET["article_id"] = $article->article_id;
+			$_POST["article_id"] = $article->article-id;
+			return $blog->identifier;
+		}
+		
+		return null;
 	}
 	
 	static function upgradeComponent($version)

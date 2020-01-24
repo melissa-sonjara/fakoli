@@ -75,7 +75,8 @@ class ArticleManifest
 				"RegisterTaxonomyClasses"	=>	array(ArticleManager, registerTaxonomyClasses),
 				"DeleteUser"				=>	array(ArticleManager, deleteUser),
 				"RegisterSolrAdapters"		=>	array(ArticleManager, registerSolrAdapter),
-				"RegisterVersionedContent"	=>	array(ArticleManager, registerVersionedContent)
+				"RegisterVersionedContent"	=>	array(ArticleManager, registerVersionedContent),
+				"PreprocessURI"				=>	array(ArticleManager, preprocessURI)
 		);
 	}		
 	

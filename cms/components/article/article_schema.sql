@@ -82,3 +82,7 @@ ALTER TABLE `article` ADD COLUMN `publication` VARCHAR(200) AFTER `author`;
 ALTER TABLE article ADD COLUMN post_date DATE DEFAULT NULL;
 
 -- END Version 1.4
+
+-- START Version 1.5
+ALTER TABLE article ADD COLUMN identifier VARCHAR(1000) NOT NULL DEFAULT '';
+-- END Version 1.5

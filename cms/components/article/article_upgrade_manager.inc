@@ -20,7 +20,8 @@ class ArticleUpgradeManager extends UpgradeManager
 			"1.1"		=>	"sql:Added sort_order field to article table",
 			"1.2"		=>	"sql:Added publish_date field to article table and set publish_date equal to create_date",
 			"1.3"		=>	"sql:Added publication field to article table",
-			"1.4"		=>	"sql:Added post_date field to article table"
+			"1.4"		=>	"sql:Added post_date field to article table",
+			"1.5"		=>	"sql:Added identifier field to article table"
 	);
 	
 	function ArticleUpgradeManager()
