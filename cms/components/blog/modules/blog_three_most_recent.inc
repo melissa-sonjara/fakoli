@@ -33,11 +33,8 @@
 
 Fakoli::using("blog");
 
-/*
-$identifier = $_GET["blog"];
-*/
 
-$identifier = "itpf_blog";
+$identifier = $_GET["blog"];
 
 $blog = Blog::findByIdentifier($identifier);
 
