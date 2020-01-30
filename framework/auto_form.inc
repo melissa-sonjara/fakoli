@@ -45,6 +45,7 @@ class AutoForm
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $valueCSS = "";					///< CSS Class to use for field/value cells
 	var $buttonCSS = "";				///< CSS Class to use for buttons
+	var $buttonLineCSS = "submit";		///< CSS Class to use for the button line (container for form buttons)
 	var $inputCSS = "";					///< CSS Class to use for input fields
 	var $checkboxCSS = "";				///< CSS Class to use for checkbox fields
 	var $style = "";

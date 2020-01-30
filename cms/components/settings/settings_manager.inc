@@ -116,7 +116,8 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "valueCSS", "value", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "buttonCSS", "button", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "buttonAlignment", "left", "String", "", "AutoForm");
-	
+		Settings::setDefaultValue("settings", "buttonLineCSS", "submit", "String", "", "AutoForm");
+		
 		Settings::setDefaultValue("settings", "componentPath", "/fakoli", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "HTMLEditorHideStyleBar", true, "Boolean", "", "AutoForm");
 		Settings::setDefaultValue("settings", "HTMLEditorDefaultWidth", "540px", "String", "", "AutoForm");

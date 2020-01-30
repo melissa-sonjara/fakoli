@@ -248,7 +248,7 @@ class TableBasedFormLayout extends AutoFormLayout
 	function startButtonLine()
 	{
 		echo "<tr>\n";
-		echo " <td colspan='2' class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
+		echo " <td colspan='2' class='{$this->form->buttonLineCSS}' style='text-align: {$this->form->buttonAlignment}'><br/>";	
 	}
 	
 	function endButtonLine()
@@ -620,7 +620,7 @@ class SpreadsheetFormLayout extends AutoFormLayout
 	function startButtonLine()
 	{
 		echo "<tr>\n";
-		echo " <td colspan='{$this->form->colCount}' class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
+		echo " <td colspan='{$this->form->colCount}' class='{$this->form->buttonLineCSS}' style='text-align: {$this->form->buttonAlignment}'><br/>";	
 	}
 	
 	function endButtonLine()
@@ -752,7 +752,7 @@ class MobileFormLayout extends AutoFormLayout
 	
 	function startButtonLine()
 	{
-		echo " <div class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
+		echo " <div class='{$this->form->buttonLineCSS}' style='text-align: {$this->form->buttonAlignment}'><br/>";	
 	}
 	
 	function endButtonLine()
@@ -893,7 +893,7 @@ class SimpleFormLayout extends AutoFormLayout
 	function startButtonLine()
 	{
 		echo "<br/>\n";
-		echo " <div class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";	
+		echo " <div class='{$this->form->buttonLineCSS}' style='text-align: {$this->form->buttonAlignment}'><br/>";	
 	}
 	
 	function endButtonLine()
@@ -1105,7 +1105,7 @@ class TemplateFormLayout extends AutoFormLayout
 	function startButtonLine()
 	{
 		$this->output .= "<br/>\n";
-		$this->output .= " <div class='submit' style='text-align: {$this->form->buttonAlignment}'><br/>";
+		$this->output .= " <div class='{$this->form->buttonLineCSS}' style='text-align: {$this->form->buttonAlignment}'><br/>";
 		
 		ob_start();
 		
