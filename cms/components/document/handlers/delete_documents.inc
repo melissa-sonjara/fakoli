@@ -1,0 +1,3 @@
+<?php
+Fakoli::using("document");
+
