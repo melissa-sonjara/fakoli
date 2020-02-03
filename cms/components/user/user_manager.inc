@@ -229,6 +229,19 @@ class UserManager
 		return $del_role;
 	}		
 	
+	static function onInitialize()
+	{
+		global $user;
+		if ($user)
+		{
+			MenuManager::setDisplayFlag('logged_in', true);
+		}
+		else
+		{
+			MenuManager::setDisplayFlag('logged_in', false);
+		}
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new UserUpgradeManager();

@@ -64,7 +64,8 @@ class UserManifest
 	{
 		return array(
 					"DeleteRole"			=>	array(UserManager, deleteRole),
-					"upgradeComponent"		=>	array(UserManager, upgradeComponent)
+					"upgradeComponent"		=>	array(UserManager, upgradeComponent),
+					"Initialize"			=>	array(UserManager, onInitialize)
 				);
 	}	
 }
