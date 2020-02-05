@@ -625,6 +625,8 @@ class BlogSubscriberListView
 		
 		$this->table->column("Remove", array(BlogSubscriberListView, formatUnsubscribeLink), true, "width: 40%; text-align: center");
 			
+		$this->table->filter = true;
+		$this->table->sortable = true;
 		$this->table->excelFile = "blog_subscribers.xls";
 		$this->table->emptyMessage = "Currently there are no subscribers to this blog.";
 		$this->table->zebra = 1;
