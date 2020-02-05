@@ -36,24 +36,35 @@ Fakoli::usingFeature("auto_form");
 
 
 $token = checkIdentifier($_GET["subscription_token"]);
-if(!$token)
-{
-	throw new FakoliException("Missing Token");
-}
-
 $blog_subscriber_id = checkNumeric($_GET["blog_subscriber_id"]);
 
-try
+if(!$token)
 {
-	$blogSubscriber = BlogSubscriber::fromToken($token);
+	if (!checkRole("admin") || !$blog_subscriber_id)
+	{
+		throw new FakoliException("Missing Token");	
+	}
+	
+	$blogSubscriber = new BlogSubscriber($blog_subscriber_id);
+	
 	$blogSubscriber->delete();
+	EmailManager::send($blogSubscriber, 'blog_unsubscribe_confirmation');
+	Fakoli::notifyOnNextPage("Subscriber removed");
+	redirect("blog_subscribers");
 }
-catch(DataNotFoundException $e)
+else
 {
-	// Previously unsubscribed? Nothing to do.
+	try
+	{
+		$blogSubscriber = BlogSubscriber::fromToken($token);
+		$blogSubscriber->delete();
+		EmailManager::send($blogSubscriber, 'blog_unsubscribe_confirmation');
+		
+		redirect("/blog_unsubscription_successful");
+	}
+	catch(DataNotFoundException $e)
+	{
+		Fakoli::end("");
+	}
 }
-
-EmailManager::send($blogSubscriber, 'blog_unsubscribe_confirmation');
-
-redirect("/blog_unsubscription_successful");
 ?>
