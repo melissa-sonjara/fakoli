@@ -50,7 +50,7 @@ if(!$token)
 	$blogSubscriber->delete();
 	EmailManager::send($blogSubscriber, 'blog_unsubscribe_confirmation');
 	Fakoli::notifyOnNextPage("Subscriber removed");
-	redirect("blog_subscribers");
+	redirect("/admin/blog_subscribers");
 }
 else
 {
