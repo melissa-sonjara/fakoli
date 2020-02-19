@@ -166,6 +166,7 @@ class ArticleManager
 		{
 			$_GET["article_id"] = $article->article_id;
 			$_POST["article_id"] = $article->article_id;
+			$_GET["blog"] = $blog->identifier;
 			return $blog->identifier;
 		}
 		
