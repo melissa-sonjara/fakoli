@@ -411,7 +411,7 @@ class BlogView
 		$type = $this->blog->blog_type;
 		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
 		
-		trace("** Rendering article with blog view handler '{$type}'", 3);
+		trace("** Rendering article for blog '{$this->blog->identifier}' with blog view handler '{$type}'", 3);
 
 		$this->handlers[$type]->drawArticle($this->blog, $article_id);
 
