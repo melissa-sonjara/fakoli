@@ -165,7 +165,7 @@ class ArticleManager
 		if (SectionManager::isInSection($section->section, $blog->identifier))
 		{
 			$_GET["article_id"] = $article->article_id;
-			$_POST["article_id"] = $article->article-id;
+			$_POST["article_id"] = $article->article_id;
 			return $blog->identifier;
 		}
 		
