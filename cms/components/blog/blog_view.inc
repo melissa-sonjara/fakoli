@@ -411,6 +411,8 @@ class BlogView
 		$type = $this->blog->blog_type;
 		if (!array_key_exists($type, $this->handlers)) $type = "Standard";
 		
+		trace("** Rendering article with blog view handler '{$type}'", 3);
+
 		$this->handlers[$type]->drawArticle($this->blog, $article_id);
 
 		if (Settings::getValue("settings", "enable_inline_editing") && Settings::checkPermission("settings", "editor_roles"))
