@@ -202,7 +202,7 @@ window.addEvent('domready', function ()
 		showTarget: {$showTarget},
 		target: {$target},
 		targetLabel: '{$targetLabel}',
-		targetLabelSize: '$this->targetLabelSize}',
+		targetLabelSize: '{$this->targetLabelSize}',
 		onDrawChart: {$this->onDrawChart},
 	    onDrawChartComplete: {$this->onDrawChartComplete},
 	    onDrawLegend: {$this->onDrawLegend},
