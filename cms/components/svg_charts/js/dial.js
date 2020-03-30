@@ -41,7 +41,8 @@ var Dial = new Class(
 		colorMode: 'fixed', // fixed or interpolated,
 		showTarget: false,
 		target: 0,
-		targetLabel: ''
+		targetLabel: '',
+		targetLabelSize: 'inherit'
 	},
 	
 	sectors: [],
@@ -102,11 +103,13 @@ var Dial = new Class(
 			if (this.options.target > this.options.min)
 			{
 				this.targetSector = this.drawSector(this.options.target, this.options.maxColor);
+				var labelSize = (this.options.targetLabelSize == 'inherit') ? this.options.labelSize : this.options.targetLabelSize;
+				
 				this.targetLegend = this.paper.text(this.options.labelx, this.options.labely, this.options.targetLabel)
 									.attr({fill: color, 
 										   'stroke-width': 0, 
 										   'font-family': this.options.fontFamily,
-										   "font-size": this.options.labelSize,
+										   "font-size": labelSize,
 										   "text-anchor": 'middle',
 										   'display': 'none'});
 			}

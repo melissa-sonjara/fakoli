@@ -61,6 +61,7 @@ class Dial
 	var $showTarget = false;
 	var $target = 0;
 	var $targetLabel = "";
+	var $targetLabelSize = "inherit";
 	var $cssClass = null;
 	var $onDrawChart = "null";
 	var $onDrawChartComplete = "null";
@@ -200,6 +201,7 @@ window.addEvent('domready', function ()
 		showTarget: {$showTarget},
 		target: {$target},
 		targetLabel: '{$targetLabel}',
+		targetLabelSize: '$this->targetLabelSize}',
 		onDrawChart: {$this->onDrawChart},
 	    onDrawChartComplete: {$this->onDrawChartComplete},
 	    onDrawLegend: {$this->onDrawLegend},
@@ -211,17 +213,17 @@ window.addEvent('domready', function ()
 </script>
 ENDSCRIPT;
 
-	if ($this->scaleToFit)
-	{
-		$dimensions = "width: 100%; height: auto";
-	}
-	else
-	{
-		$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
-	}
-
-	$cssClass = ($this->cssClass) ? " class='{$this->cssClass}'" : "";
-	echo "<div id='{$this->id}'{$cssClass} style='$dimensions'></div>";
+		if ($this->scaleToFit)
+		{
+			$dimensions = "width: 100%; height: auto";
+		}
+		else
+		{
+			$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
+		}
+	
+		$cssClass = ($this->cssClass) ? " class='{$this->cssClass}'" : "";
+		echo "<div id='{$this->id}'{$cssClass} style='$dimensions'></div>";
 	}
 }
 ?>
