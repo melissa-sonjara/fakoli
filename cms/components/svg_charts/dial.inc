@@ -104,9 +104,10 @@ class Dial
 		$this->radius = $r;
 	}
 
-	function setLabelSize($size)
+	function setLabelSize($size, $targetLabelSize = "inherit")
 	{
 		$this->labelSize = $size;
+		$this->targetLabelSize = $targetLabelSize;
 	}
 
 	function setLabelPosition($lx, $ly)
