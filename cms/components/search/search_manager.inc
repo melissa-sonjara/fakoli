@@ -182,6 +182,7 @@ class SearchManager
 			$this->searchResults = $searchResults;
 		}
 		
+		trace("SEARCH: ".count($searchResults)." results found", 3);
 		return $searchResults;
 	}
 		
