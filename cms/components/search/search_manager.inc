@@ -157,6 +157,7 @@ class SearchManager
 			$params = trim($params);
 		}
 		
+		$searchResults = array();
 		if (!$params)
 		{
 			$this->searchResults = array();
