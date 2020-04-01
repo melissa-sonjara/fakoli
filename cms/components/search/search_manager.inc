@@ -167,7 +167,7 @@ class SearchManager
 			
 			foreach(SearchManager::$map as $component => $searchables)
 			{
-				//Fakoli::using($component);
+				Fakoli::using($component);
 				
 				foreach($searchables as $searchable)
 				{
