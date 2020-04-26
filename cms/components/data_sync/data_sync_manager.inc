@@ -750,6 +750,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 						
 					foreach($matchingFields as $mf)
 					{
+						trace("Matching: {$mf->client_field} = ".$item->get($mf->client_field), 3);
 						$matchingQuery->bind(":{$c}", $item->get($mf->client_field));
 						$c++;
 					}
