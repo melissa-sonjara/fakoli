@@ -40,6 +40,134 @@ interface IDataSyncHelper
 	function extendForm($form);
 }
 
+interface IDataSyncAdapter
+{
+	function uploadDataImportFile($field);
+	function countRecords($file);
+	function getImportColumns($file);
+	function openImportFile($file, &$columns);	
+	function skipToOffset($fp, $offset = -1);	
+	function getRecord($fp, $columns);
+	function closeImportFile($fp);
+}
+
+class DataSyncCSVAdapter implements IDataSyncAdapter
+{
+	
+	function uploadDataImportFile($field)
+	{
+		global $config;
+		
+		$file = $_FILES[$field]["tmp_name"];
+		
+		$fullpath = $config["uploadbase"] . DIRECTORY_SEPARATOR . basename($file);
+		
+		if (file_exists($fullpath))
+		{
+			unlink($fullpath);
+		}
+		
+		trace("Uploading $file to $fullpath", 3);
+		
+		move_uploaded_file($file, $fullpath);
+		chmod($fullpath, 0755);
+		
+		return $fullpath;
+//		$_SESSION["data_import_file"] = $fullpath;
+	}
+	
+	function countRecords($file)
+	{
+		//$fp = fopen($file, "r");
+		$fp = fopen_utf8($file);
+		$counter = -1;
+		while(fgetcsv($fp))
+		{
+			$counter++;
+		}
+		
+		fclose($fp);
+		
+		return $counter;
+	}
+	
+	function getImportColumns($file)
+	{	
+		trace("Reading columns for $file", 3);
+		//$fp = fopen($file, "r");
+		$fp = fopen_utf8($file);
+		
+		$fields = fgetcsv_noBOM($fp);
+		fclose($fp);
+		
+		$columns = array();
+		
+		foreach($fields as $field)
+		{
+			if ($field) $columns[] = $field;
+		}
+		
+		return $columns;
+	}
+	
+	function skipToOffset($fp, $offset = -1)
+	{
+		if ($offset == -1)
+		{
+			$offset = checkNumeric($_GET["offset"]);
+		}
+		
+		while($offset-- > 0)
+		{
+			fgetcsv($fp);
+		}
+	}
+	
+	function openImportFile($file, &$columns)
+	{
+		if (!$file)
+		{
+			$file = $_SESSION["data_import_file"];
+		}
+		
+		if (!file_exists($file))
+		{
+			throw new FakoliException("Data Import File does not exist");
+		}
+		
+		trace("Opening import file $file", 3);
+		
+		//$fp = fopen($file, "r");
+		$fp = fopen_utf8($file);
+		
+		$fields = fgetcsv_noBOM($fp);
+		
+		foreach($fields as $field)
+		{
+			$columns[] = $field;
+		}
+		
+		return $fp;
+	}
+	
+	function getRecord($fp, $columns)
+	{
+		$record = fgetcsv($fp);
+		
+		if ($record)
+		{
+			$record = array_combine($columns, $record);
+		}
+		
+		return $record;
+	}
+	
+	function closeImportFile($fp)
+	{
+		fclose($fp);
+	}
+}
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -53,6 +181,8 @@ interface IDataSyncHelper
 	
 	static $import_profile_id = 0;
 	
+	static $adapters = null;
+	
 	function DataSyncManager()
 	{
 	}
@@ -60,6 +190,46 @@ interface IDataSyncHelper
 	static function registerSyncHelper($class, $helper)
 	{
 		DataSyncManager::$helpers[$class] = $helper;
+	}
+	
+	static function registerDataSyncAdapter($format, $adapter)
+	{
+		DataSyncManager::$adapters[$format] = $adapter;
+	}
+	
+	static function registerCSVAdapter()
+	{
+		DataSyncManager::registerDataSyncAdapter("CSV", new DataSyncCSVAdapter());
+	}
+	
+	static function getDataAdapter($format = null)
+	{
+		if (!$format)
+		{
+			$format = $_SESSION["data_import_format"];
+			if (!$format) $format = "CSV";
+		}
+		
+		if (DataSyncManager::$adapters == null)
+		{
+			ComponentManager::fireEvent("RegisterDataSyncAdapter");
+		}
+		
+		if (!array_key_exists($format, DataSyncManager::$adapters))
+		{
+			throw new FakoliException("Unknown Data Format");
+		}
+		
+		return DataSyncManager::$adapters[$format];
+	}
+	
+	static function getAvailableDataAdapters()
+	{
+		if (DataSyncManager::$adapters == null)
+		{
+			ComponentManager::fireEvent("RegisterDataSyncAdapter");
+		}
+		return array_keys(DataSyncManager::$adapters);
 	}
 	
 	static function setDefaults()
@@ -105,24 +275,15 @@ interface IDataSyncHelper
 	
 	}
 	
-	static function countRecords($file = "")
+	static function countRecords($file = "", $format = null)
 	{
 		if (!$file)
 		{
 			$file = $_SESSION["data_import_file"];
 		}
 		
-		//$fp = fopen($file, "r");
-		$fp = fopen_utf8($file);
-		$counter = -1;
-		while(fgetcsv($fp))
-		{
-			$counter++;
-		}
-		
-		fclose($fp);
-		
-		return $counter;
+		$adapter = DataSyncManager::getDataAdapter($format);
+		return $adapter->countRecords($file);
 	}
 	
 	static function skipToOffset($fp, $offset = -1)
@@ -148,28 +309,17 @@ interface IDataSyncHelper
 		return $helper;
 	}
 	
-	static function getImportColumns($class, $file = "")
+	static function getImportColumns($class, $file = "", $format = null)
 	{
 		ComponentManager::fireEvent("RegisterSyncHelpers");
+		$adapter = DataSyncManager::getDataAdapter($format);
 		
 		if (!$file)
 		{
 			$file = $_SESSION["data_import_file"];
 		}
 	
-		trace("Reading columns for $file", 3);
-		//$fp = fopen($file, "r");
-		$fp = fopen_utf8($file);
-		
-		$fields = fgetcsv_noBOM($fp);
-		fclose($fp);
-	
-		$columns = array();
-	
-		foreach($fields as $field)
-		{
-			if ($field) $columns[] = $field;
-		}
+		$columns = $adapter->getImportColumns($file);
 	
 		$helper = DataSyncManager::getHelper($class);
 		if ($helper)
@@ -344,41 +494,21 @@ interface IDataSyncHelper
 		return $filter;
 	}
 			
-	private static function openImportFile($file, &$columns)
+	private static function openImportFile($file, &$columns, $format = null)
 	{
-		if (!$file)
-		{
-			$file = $_SESSION["data_import_file"];
-		}
-		
-		if (!file_exists($file))
-		{
-			throw new FakoliException("Data Import File does not exist");
-		}
-		
-		trace("Opening import file $file", 3);
-		
-		//$fp = fopen($file, "r");
-		$fp = fopen_utf8($file);
-		
-		$fields = fgetcsv_noBOM($fp);
-		
-		foreach($fields as $field)
-		{
-			$columns[] = $field;
-		}
+		$adapter = DataSyncManager::getDataAdapter($format);
+		$fp = $adapter->openImportFile($file, $columns);
 		
 		return $fp;
 	}
 		
-	private static function getRecord($fp, $columns, $helper = null, $performLookups = true)
+	private static function getRecord($adapter, $fp, $columns, $helper = null, $performLookups = true)
 	{
-		$record = fgetcsv($fp);
+		
+		$record = $adapter->getRecord($fp, $columns);
 
 		if ($record)
 		{
-			$record = array_combine($columns, $record);
-				
 			if ($helper)
 			{
 				$record = $helper->processRecord($record, $performLookups);
@@ -437,7 +567,7 @@ interface IDataSyncHelper
 		return $skip;
 	}
 	
-	static function createImportItems($class, $import_profile_id = 0, $file = "")
+	static function createImportItems($class, $import_profile_id = 0, $file = "", $format = null)
 	{
 		global $user;
 
@@ -449,12 +579,14 @@ interface IDataSyncHelper
 
 		$helper = DataSyncManager::getHelper($class);
 
+		$adapter = DataSyncManager::getDataAdapter($format);
+		
 		$columns = array();
 		
 		$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
 		$filter = DataSyncManager::generateFilter($fieldMapping);
 		
-		$fp = DataSyncManager::openImportFile($file, $columns);
+		$fp = $adapter->openImportFile($file, $columns);
 		
 		$items = array();
 	
@@ -482,7 +614,7 @@ interface IDataSyncHelper
 		$matchingQuery = Query::create($class, "WHERE $matchingConstraint");
 		$matchingQuery->filter = new InclusionFilter($item->getPrimaryKey());
 			
-		while($record = DataSyncManager::getRecord($fp, $columns, $helper, ((!$isChunked) || $counter >= 0)))
+		while($record = DataSyncManager::getRecord($adapter, $fp, $columns, $helper, ((!$isChunked) || $counter >= 0)))
 		{	
 			$item = new $class();
 			$skip = false;
@@ -526,7 +658,10 @@ interface IDataSyncHelper
 				catch(DataNotFoundException $e)
 				{
 				}
-											
+				catch(FakoliException $e)
+				{
+				}
+				
 				$items[] = $item;
 				$lastItem = $item;
 				$counter--;
@@ -540,13 +675,14 @@ interface IDataSyncHelper
 	}
 	
 	
-	static function batchImportItems($class, $import_profile_id, $file, $importMatching, $importNew, $process)
+	static function batchImportItems($class, $import_profile_id, $file, $importMatching, $importNew, $process, $format = null)
 	{
 		trace("Batching importing $class profile $import_profile_id from $file", 3);
 		
 		global $user;
 		
 		DataSyncManager::$import_profile_id = $import_profile_id;
+		$adapter = DataSyncManager::getDataAdapter($format);
 		
 		if (!$process)
 		{
@@ -588,7 +724,7 @@ interface IDataSyncHelper
 			
 			$item = new $class();
 			
-			$fp = DataSyncManager::openImportFile($file, $columns);
+			$fp = $adapter->openImportFile($file, $columns);
 			
 			$lastItem = null;
 			
@@ -598,7 +734,7 @@ interface IDataSyncHelper
 			$matchingQuery = Query::create($class, "WHERE $matchingConstraint");
 			$matchingQuery->filter = new InclusionFilter($item->getPrimaryKey());
 			
-			while($record = DataSyncManager::getRecord($fp, $columns, $helper))
+			while($record = DataSyncManager::getRecord($adapter, $fp, $columns, $helper))
 			{
 				
 				$item = new $class();

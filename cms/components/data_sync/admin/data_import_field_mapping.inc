@@ -3,6 +3,8 @@ Fakoli::using("data_sync");
 Fakoli::usingFeature("spreadsheet_form");
 
 $class = $_SESSION["data_import_class"];
+$format = $_SESSION["data_file_format"];
+$file = $_SESSION["data_import_file"];
 
 $menu_item = "Data Import";
 $page_title = "Choose Fields to Import";
@@ -47,7 +49,8 @@ else
 }
 
 
-$columns = DataSyncManager::getImportColumns($class);
+$columns = DataSyncManager::getImportColumns($class, $file, $format);
+var_dump($columns);
 $fieldMappings = DataSyncManager::getFieldMappings($class, $profile_id);
 
 $options = array_combine($columns, $columns);

@@ -7,6 +7,8 @@ $menu_item = "Data Import";
 DataSyncManager::getSyncTargets();
 
 $class = $_SESSION["data_import_class"];
+$format = $_SESSION["data_file_format"];
+$file = $_SESSION["data_import_file"];
 
 $import_profile_id = $_SESSION["import_profile_id"];
 
@@ -42,7 +44,7 @@ $obj->filter = $filter;
 
 $page_title = "Select $name to Import";
 
-$items = DataSyncManager::createImportItems($class, $import_profile_id);
+$items = DataSyncManager::createImportItems($class, $import_profile_id, $file, $format);
 
 trace("Mapping ".count($items)." items", 3);
 $form = new AutoForm($obj);

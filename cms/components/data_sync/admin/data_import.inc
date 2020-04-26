@@ -12,7 +12,20 @@ $form = new AutoForm($dummy);
 $form->submitLabel = "Upload Data";
 $form->customSaveHandler = dataImportDummySave;
 
-$upload = new FileUploadFieldRenderer($form, "csv_file", "CSV File", uploadDataImportFile);
+$adapters = DataSyncManager::getAvailableDataAdapters();
+$adapters = array_combine($adapters, $adapters);
+$form->dropdown("file_format", "Data File Format", $adapters);
+
+$upload = new FileUploadFieldRenderer($form, "data_file", "Data File", function($field)
+{
+	$format = $_POST["file_format"];
+	$adapter = DataSyncManager::getDataAdapter($format);
+	$file = $adapter->uploadDataImportFile($field);
+	$_SESSION["data_import_file"] = $file;
+	$_SESSION["data_file_format"] = $format;
+	
+	trace(print_r($_SESSION, true), 3);
+});
 
 $tabs = DataSyncManager::getAdminImportTabs();
 
@@ -37,26 +50,5 @@ $form->drawForm();
 function dataImportDummySave($form)
 {
 	return true;
-}
-
-function uploadDataImportFile($field)
-{
-	global $config;
-	
-	$file = $_FILES[$field]["tmp_name"];
-	
-	$fullpath = $config["uploadbase"] . DIRECTORY_SEPARATOR . basename($file);
-	
-	if (file_exists($fullpath))
-	{
-		unlink($fullpath);
-	}
-	
-	trace("Uploading $file to $fullpath", 3);
-	
-	move_uploaded_file($file, $fullpath);
-	chmod($fullpath, 0755);
-
-	$_SESSION["data_import_file"] = $fullpath;
 }
 ?>
