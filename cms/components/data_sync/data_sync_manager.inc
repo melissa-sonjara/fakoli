@@ -805,7 +805,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 		}
 		catch(Exception $e)
 		{
-			$process->setProgress("Error", $exception->getMessage());
+			$process->setProgress("Error", $e->getMessage());
 		}
 	}
 	
