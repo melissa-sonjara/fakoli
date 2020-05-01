@@ -55,6 +55,8 @@ class SpreadsheetForm extends CompositeAutoForm
 	var $rowLabelDefaultText = "";
 	var $emptyMessage = "The spreadsheet is empty"; ///< The message to display if the item list is empty and the number of blank rows is set to zero
 	var $onFormChanged = null; ///< Javascript function to be called when any value is changed within the spreadsheet
+	var $ajaxSubmitHandler = false;		///< JavaScript Callback for AJAX Submit mode - called on success
+	var $ajaxFailureHandler = false;	///< JavaScript Callback for AJAX Submit mode - called on failure
 	
 	/**
 	 * Creates a new SpreadsheetForm
@@ -220,6 +222,24 @@ class SpreadsheetForm extends CompositeAutoForm
 	}
 
 	/**
+	 * Put the form into AJAX submission mode. You must supply a Javascript function to call
+	 * once the submission is complete.
+	 * @param string $success the Javascript callback function for success
+	 * @param string $failure the Javascript callback function for failure
+	 */
+	function ajaxSubmit($success, $failure = null)
+	{
+		$id = $this->id ? $this->id : "composite_auto_form";
+		if ($failure == null)
+		{
+			$failure = "function() {document.id('{$id}_error').set('text','Failed to communicate with server'); }";
+		}
+		
+		$this->ajaxSubmitHandler = $success;
+		$this->ajaxFailureHandler = $failure;
+	}
+	
+	/**
 	 * Generates the Javascript for all the subforms, and creates a SpreadsheetFormManager object
 	 */
 	function writeScript()
@@ -240,6 +260,20 @@ class SpreadsheetForm extends CompositeAutoForm
 		});
 		</script>
 ENDSCRIPT;
+			
+		if ($this->ajaxSubmitHandler && !$this->readOnlyForm)
+		{
+			$script .= <<<ENDSCRIPT
+	<script>
+	document.id('{$id}').iFrameFormRequest(
+	{
+		'onRequest': function() { return onCompositeFormSubmit(document.id('{$id}')); }, 
+		'onComplete': {$this->ajaxSubmitHandler}, 
+		'onFailure': {$this->ajaxFailureHandler}
+	});
+	</script>
+ENDSCRIPT;
+		}
 			
 		return $script;
 	}
