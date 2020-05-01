@@ -348,7 +348,17 @@ ENDSCRIPT;
 					if(array_key_exists($field, $this->columnWidths))
 					{
 						$width = $this->columnWidths[$field];
-						$styles .= " width: {$width}px";
+						if ($width)
+						{
+							if (is_numeric($width))
+							{
+								$styles .= " width: {$width}px";
+							}
+							else
+							{
+								$styles .= "width: {$width}";
+							}
+						}
 					}
 					$renderer->_printLabel($field, 1, $styles);
 					$this->colCount++;
@@ -371,7 +381,17 @@ ENDSCRIPT;
 			if(array_key_exists($field, $this->columnWidths))
 			{
 				$width = $this->columnWidths[$field];
-				$styles .= " width: {$width}px";
+				if ($width)
+				{
+					if (is_numeric($width))
+					{
+						$styles .= " width: {$width}px";
+					}
+					else
+					{
+						$styles .= "width: {$width}";
+					}
+				}
 			}
 			$renderer->_printLabel($field, 1, $styles);
 			$this->colCount++;
