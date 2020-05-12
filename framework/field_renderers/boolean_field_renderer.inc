@@ -47,11 +47,15 @@ class BooleanFieldRenderer extends FieldRenderer
 	 * Create a new BooleanFieldRenderer
 	 * @param AutoForm $parent the parent form
 	 */
-	function BooleanFieldRenderer(&$parent)
+	function BooleanFieldRenderer(&$parent, $field = null, $label = null)
 	{
 		$this->FieldRenderer($parent);	
 		$this->colspan = 2;	
 		$this->hideLabel = true;
+		if ($field && !$parent->data->hasField($field))
+		{
+			$parent->add($this, $field, $label);
+		}
 	}
 	
 	function addValidatorsToForm($field, $required = false)
