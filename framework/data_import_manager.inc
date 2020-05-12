@@ -88,6 +88,7 @@ class DataImportManager
 	var $field = "csv_file";
 	var $cssClass = "";
 	var $table;
+	var $quiet = false;	///< Quiet mode - generate no output to the HTML stream
 	
 	/**
 	 * 
@@ -192,8 +193,11 @@ class DataImportManager
 		if($this->loadData($fp))
 		{
 			$this->save();
-			$this->drawButtons();
-			$this->writeLog();	
+			if (!$this->quiet)
+			{
+				$this->drawButtons();
+				$this->writeLog();
+			}
 		}
 	}
 	
@@ -217,12 +221,16 @@ class DataImportManager
 	 */
 	function loadData($fp)
 	{
+		trace("Loading Data...", 3);
+		
 		// Use for indexing warnings
 		$row_number = 1;
 		$first = true;
+		$read = 0;
 		
 		while (($row = fgetcsv($fp)) !== FALSE)
 		{
+			$read++;
 			if($first && $this->validateDataFile && !call_user_func($this->validateDataFile, $row))
 			{
 				return false;
@@ -236,6 +244,7 @@ class DataImportManager
 			}
 		}	
 		
+		trace("Read {$row_number} objects from {$read} rows", 3);
 		return true;
 	}
 		
@@ -254,7 +263,7 @@ class DataImportManager
 	 */
 	function writeLog()
 	{
-		echo $this->log;
+		if (!$this->quiet) echo $this->log;
 	}
 	
 	/**
