@@ -21,7 +21,7 @@ $sessions = IteratedQuery::create(UserActivitySession, "$constraint ORDER BY ses
 
 $table = new DataListView($sessions, "session");
 $table->column("User", "<a href='/admin/session_details?session_id={session_id}'>{User.first_name} {User.last_name}</a>", true, "width: 20%")
-	  ->column("Email", "<a href='/admin/user_form?user_id={user_id}'>{email}</a>", true, "width: 20%")
+	  ->column("Email", "<a href='/admin/user_form?user_id={user_id}'>{User.email}</a>", true, "width: 20%")
 	  ->column("Session #", "<a href='/admin/session_details?session_id={session_id}'>{session_id}</a>", true, "text-align: right; width: 5%")
 	  ->column("Start", "{session_start}", true)
 	  ->column("End", "{session_end}", true)
