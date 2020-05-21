@@ -1056,7 +1056,12 @@ var ProgressiveSearch = new Class({
 			this.list.setStyle('display', 'none');
 			return;
 		}
-		
+	
+		this.handleSearch();
+	},
+	
+	handleSearch: function()
+	{
 		this.sequence++;
 		
 		var name = this.options.parameter ? this.options.parameter : this.element.id;
@@ -1074,6 +1079,12 @@ var ProgressiveSearch = new Class({
 	
 	browse: function()
 	{
+		if (this.element.value)
+		{
+			this.handleSearch();
+			return;
+		}
+		
 		var request = new Request(
 	    		{
 	    			method: 'get', 
