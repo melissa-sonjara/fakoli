@@ -51,6 +51,8 @@ var Glossarizer = new Class({
 	
 	applyTerms: function()
 	{
+		if (!this.container) return;
+		
 		var flags = "i";
 		if (!this.options.firstOnly) flags += "g";
 		
