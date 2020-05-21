@@ -42,6 +42,10 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 	var $scrollBoxWidth = "300px";	///< width of progressive search results
 	var $size = 20;					///< size of the input field for entering search string
 	
+	var $browse = false;
+	var $browseLabel = "Browse";
+	var $browseCss = "button";
+	
 	/**
 	 * 
 	 * 
@@ -68,12 +72,20 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 		$this->autocomplete = false;
 	}
 	
+	function allowBrowse($text = "", $css = "")
+	{
+		$this->browse = true;
+		if ($text) $this->browseText = jsSafe($text);
+		if ($css) $this->browseCss = jsSafe($css);
+		return $this;
+	}
+	
 	function renderScript($field)
 	{	
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)
 			|| array_key_exists($field, $this->parent->hidden)) return "";
 		
-		$searchOptions = "{'search': '{$this->handler}', minimumLength: {$this->minimumLength}, 'cssClass': '{$this->cssClass}', 'width': '{$this->scrollBoxWidth}', 'parameter': '{$field}'}";
+		$searchOptions = "{'search': '{$this->handler}', minimumLength: {$this->minimumLength}, 'cssClass': '{$this->cssClass}', 'width': '{$this->scrollBoxWidth}', 'parameter': '{$field}', 'browse': {$browse}, 'browseText': '{$this->browseText}', 'browseCssClass': '{$this->browseCss}'";
 		
 		echo "<script type='text/javascript'>\n";
 		echo "var {$field}_progressiveSearch;\n";
