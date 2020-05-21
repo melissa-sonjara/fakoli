@@ -85,6 +85,8 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field)
 			|| array_key_exists($field, $this->parent->hidden)) return "";
 		
+		$browse = $this->browse ? "true": "false";
+		
 		$searchOptions = "{'search': '{$this->handler}', minimumLength: {$this->minimumLength}, 'cssClass': '{$this->cssClass}', 'width': '{$this->scrollBoxWidth}', 'parameter': '{$field}', 'browse': {$browse}, 'browseText': '{$this->browseText}', 'browseCssClass': '{$this->browseCss}'";
 		
 		echo "<script type='text/javascript'>\n";
