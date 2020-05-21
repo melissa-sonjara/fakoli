@@ -87,7 +87,7 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 		
 		$browse = $this->browse ? "true": "false";
 		
-		$searchOptions = "{'search': '{$this->handler}', minimumLength: {$this->minimumLength}, 'cssClass': '{$this->cssClass}', 'width': '{$this->scrollBoxWidth}', 'parameter': '{$field}', 'browse': {$browse}, 'browseText': '{$this->browseText}', 'browseCssClass': '{$this->browseCss}'";
+		$searchOptions = "{'search': '{$this->handler}', minimumLength: {$this->minimumLength}, 'cssClass': '{$this->cssClass}', 'width': '{$this->scrollBoxWidth}', 'parameter': '{$field}', 'browse': {$browse}, 'browseText': '{$this->browseText}', 'browseCssClass': '{$this->browseCss}'}";
 		
 		echo "<script type='text/javascript'>\n";
 		echo "var {$field}_progressiveSearch;\n";
