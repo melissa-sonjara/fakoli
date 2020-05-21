@@ -989,7 +989,9 @@ var ProgressiveSearch = new Class({
 		cssClass:		'',
 		parameter:		'',
 		defaultSearch:	Class.Empty,
-		browse:			false
+		browse:			false,
+		browseText:		'Browse',
+		browseCssClass:	'button'
 	},
   
 	element:	Class.Empty,
@@ -1036,7 +1038,7 @@ var ProgressiveSearch = new Class({
 		
 		if (this.options.browse)
 		{
-			this.browseButton = new Element('a', {'href': '#', 'class': 'button', 'text': 'Browse'});
+			this.browseButton = new Element('a', {'href': '#', 'class': this.options.browseCssClass, 'text': this.options.browseText});
 			this.browseButton.setStyle('margin-left', 5);
 			this.browseButton.addEvent('click', function(e) { new DOMEvent(e).stop(); this.element.focus(); this.browse();}.bind(this));
 			this.browseButton.inject(this.element, 'after');
