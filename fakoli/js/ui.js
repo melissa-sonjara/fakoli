@@ -1024,6 +1024,11 @@ var ProgressiveSearch = new Class({
 			return this;
 		}.bind(this);
 		
+		this.container.hide = function()
+		{
+			this.hideList();		
+		}.bind(this);
+		
 		if (this.options.cssClass) this.list.addClass(this.options.cssClass);
 		
 		var body = document.id(document.body ? document.body : document.documentElement);
