@@ -1057,10 +1057,10 @@ var ProgressiveSearch = new Class({
 			return;
 		}
 	
-		this.handleSearch();
+		this.handleSearch(val);
 	},
 	
-	handleSearch: function()
+	handleSearch: function(val)
 	{
 		this.sequence++;
 		
@@ -1081,7 +1081,7 @@ var ProgressiveSearch = new Class({
 	{
 		if (this.element.value)
 		{
-			this.handleSearch();
+			this.handleSearch(this.element.value);
 			return;
 		}
 		
