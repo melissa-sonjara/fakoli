@@ -1026,7 +1026,7 @@ var ProgressiveSearch = new Class({
 		
 		this.container.hide = function()
 		{
-			this.hideList();		
+			this.hideList(true);		
 		}.bind(this);
 		
 		if (this.options.cssClass) this.list.addClass(this.options.cssClass);
