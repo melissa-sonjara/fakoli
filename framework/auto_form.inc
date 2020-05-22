@@ -53,6 +53,7 @@ class AutoForm
 	var $buttonAlignment = "left";		///< Default Form button alignment
 	var $passwordEncryptor = "";		///< Password Encryption method name
 
+	var $hideButtons = false;			///< Set to true to hide form submission button line(s)
 	var $capitalizationMode = "word";	///< Capitalization to be used for labels. Can be 'lower', 'upper', 'first' or 'word'.
 
 	var $submitLabel = "";				///< Text to display on the form's submit button. If not specified defaut text will be generated based on the target DataItem.
@@ -1215,7 +1216,7 @@ class AutoForm
 		
 		$this->layout->startUngrouped();
 		
-		if ($this->buttons_at_top && !$this->subordinate) 
+		if ($this->buttons_at_top && !$this->subordinate && !$this->hideButtons) 
 		{
 			$this->layout->startButtonLine();
 			
@@ -1235,7 +1236,7 @@ class AutoForm
 
 		$this->renderAllFields($obj);
 					
-		if (!$this->subordinate)
+		if (!$this->subordinate && !$this->hideButtons)
 		{		
 			$this->layout->startButtonLine();
 
