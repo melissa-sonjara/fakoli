@@ -47,6 +47,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 	var $onKeyUp; 			///< optional javascript callback on key release within field
 	var $template = 2; 		///< how to format readonly - 2 decimal places  
 	var $size = 20;			///< size of the text field to be displayed (in characters)
+	var $static = false;		///< Render the field as a static (readonly) value, that is visible, non-editable and the value is submitted when the form is submitted.
 	
 	function CurrencyFieldRenderer(&$parent)
 	{
@@ -66,6 +67,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 		// display with commas between thousands
 		$value = $this->format($field);
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
+		$readonly = ($this->static) ? " readonly='readonly'" : "";
 		$allowneg = ($this->allowNegative) ? 1 : 0;
 		$autocomplete = ($this->autocomplete) ? "" : " autocomplete='off' ";
 		$onchange = ($this->onChange) ? "onchange='$this->onChange(this)'" : "";		
@@ -75,7 +77,7 @@ class CurrencyFieldRenderer extends FieldRenderer
 
 		echo "$&nbsp;<input id='{$this->parent->id}_{$field}' 
 		type='text' name='$field' value='{$value}' $autocomplete onkeypress='return maskInput(event, $allowneg);'
-		$onchange $onKeyUp $disable size='{$this->size}'/>";
+		$onchange $onKeyUp $disable $readonly size='{$this->size}'/>";
 
 		$this->_endField($field);
 	}

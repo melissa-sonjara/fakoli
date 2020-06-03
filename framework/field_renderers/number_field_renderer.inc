@@ -55,6 +55,7 @@ class NumberFieldRenderer extends FieldRenderer
 	var $unitsPosition = "";	///< whether to display units before or after the control
 	var $blankZero = false;		///< Leave field blank if value is zero
 	var $control = "text";		///< The HTML control type to use when rendering. This gets set to "number" if a range is specified.
+	var $static = false;		///< Render the field as a static (readonly) value, that is visible, non-editable and the value is submitted when the form is submitted.
 	
 	function NumberFieldRenderer(&$parent, $field = null)
 	{
@@ -110,6 +111,7 @@ class NumberFieldRenderer extends FieldRenderer
 	{
 		$this->_startField($field);
 		
+		$readonly = ($this->static) ? " readonly='readonly'" : "";
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
 		$onKeyUp = ($this->onKeyUp) ? " onkeyup='{$this->onKeyUp}(this)'" : "";
 		// JDG - maskInput function doesn't recognize boolean var value
@@ -138,7 +140,7 @@ class NumberFieldRenderer extends FieldRenderer
 		}
 		echo "<input id='{$this->parent->id}_$field' type='{$control}' style='width: auto' name='$field' 
 		value='".$value."' $rangeAttrs $autocomplete 
-		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $onchange $onKeyUp/>";
+		size='{$this->size}' onkeypress='return maskInput(event, $allowneg);' $disable $static $onchange $onKeyUp/>";
 		
 		if ($this->unitsPosition == "after") echo " ".$this->units;
 		
