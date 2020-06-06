@@ -57,6 +57,7 @@ if ($method == "POST")
 	}
 }
 
+echo TextLookup::getText("contact_us_form_intro");
 $script .= $form->writeScript();
 
 if(!$msg)
