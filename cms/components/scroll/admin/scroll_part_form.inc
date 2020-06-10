@@ -65,7 +65,7 @@ if ($method == "POST")
 {
 	if ($form->save())
 	{
-		redirect("scroll_parts?scroll_id={$scroll_id}");
+		Fakoli::notify("Changes Saved");
 	}
 }
 
