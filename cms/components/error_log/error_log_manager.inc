@@ -76,8 +76,6 @@ class ErrorLogManager
 			
 			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
 			
-			while(ob_end_clean()); // Clear all output buffers.
-			
 			$log = new ErrorLog();
 			$log->code = $errLevel;
 			$log->message = $errMsg;
