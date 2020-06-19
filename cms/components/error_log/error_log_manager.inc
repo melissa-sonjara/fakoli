@@ -54,6 +54,80 @@ class ErrorLogManager
 		
 	}
 
+	/**
+	 * Manually log an exception in the error log. Use this to record an internal error
+	 * where processing needs to continue without redirection to an error page.
+	 * 
+	 * @param Exception $exception
+	 */
+	static function logError($exception)
+	{
+		global $user;
+		
+		try
+		{
+			//Getting exception information
+			$errMsg = $exception->getMessage();
+			$errLevel = $exception->getCode();
+			$errFile = $exception->getFile();
+			$errLine = $exception->getLine();
+			$uri = $_SERVER['REQUEST_URI'];
+			$referer = $_SERVER['HTTP_REFERER'];
+			
+			if ($errLevel & (E_NOTICE | E_WARNING | E_USER_WARNING | E_STRICT)) return;
+			
+			while(ob_end_clean()); // Clear all output buffers.
+			
+			$log = new ErrorLog();
+			$log->code = $errLevel;
+			$log->message = $errMsg;
+			$log->file = $errFile;
+			$log->line = $errLine;
+			$log->details = $exception->getTraceAsString();
+			$log->user_id = $user ? $user->get($user->getPrimaryKey()) : 0;
+			$log->uri = $uri;
+			$log->referer = $referer;
+			$log->session = session_id();
+			
+			if (ErrorLogManager::$enableLogging)
+			{
+				try
+				{
+					switch(ErrorLogManager::$loggingDestination)
+					{
+						case "Database":
+							
+							
+							$log->save();
+							
+							break;
+							
+						case "Log File":
+							
+							trace($errMsg, 2, $exception->getTrace());
+							break;
+							
+						default:
+							
+							break;
+					}
+				}
+				catch(Exception $e)
+				{
+					//echo $e->getMessage();
+				}
+				
+			}
+		}
+		catch (Exception $ex)
+		{
+			echo $ex->getMessage();
+			//Do nothing.
+			//Avoiding error from error handling...
+		}
+		
+	}
+	
 	static function exceptionHandler($exception)
 	{
 		global $user;
