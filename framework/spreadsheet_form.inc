@@ -305,17 +305,17 @@ ENDSCRIPT;
 		$filter = $obj->getFilter();
 		$fields = $obj->getFields();
 
+		
+		if ($this->layout->externalErrorBox) $this->layout->errorBox();
+		
 		if ($this->buttons_at_top) 
 		{
 			echo "<p>";
 			$this->drawButtons();
 			echo "</p>";
 		}
-			
-		if($this->msg)
-		{
-			echo $this->msg;
-		}
+		
+		if (!$this->layout->externalErrorBox) $this->layout->errorBox();
 		
 		if ($form->markRequiredFields && $form->validator->hasRequiredFields())
 		{
