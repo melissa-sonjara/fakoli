@@ -50,6 +50,6 @@ var SpreadsheetFormManager = new Class({
 	
 	showError: function(error)
 	{
-		document.id(this.form.id + "__error").set('html', error).setStyle('display', 'table-cell');
+		document.id(this.id + "__error").set('html', error).setStyle('display', 'table-cell');
 	},
 });
