@@ -46,5 +46,10 @@ var SpreadsheetFormManager = new Class({
 		});
 		
 		return data;	
-	}
+	},
+	
+	showError: function(error)
+	{
+		document.id(this.form.id + "__error").set('html', error).setStyle('display', 'table-cell');
+	},
 });
