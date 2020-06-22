@@ -630,8 +630,8 @@ class SpreadsheetFormLayout extends AutoFormLayout
 	
 	function errorBox()
 	{
-		// nothing to do
-	}	
+		echo "<div id='{$this->form->id}__error' class='error' style='display: ".($this->form->msg ? 'table-cell' : 'none')."'>{$this->form->msg}</div>\n";
+	}
 }
 
 /**
