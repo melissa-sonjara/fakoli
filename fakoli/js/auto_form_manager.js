@@ -223,3 +223,25 @@ AutoFormManager.toggleGroup = function(group, state)
 	
 	ModalDialog.recenterActiveDialog();
 };
+
+AutoFormManager.showErrorActiveDialog(error)
+{
+	var dialog = ModalDialog.getActiveDialog();
+	if (!dialog)
+	{
+		notification(error);
+	}
+	var form = dialog.options.body.getElement("form");
+	if (!form)
+	{
+		notification(error);
+	}
+	
+	var manager = form.manager;
+	if (!manager)
+	{
+		notification(error);
+	}
+	
+	manager.showError(error);
+};
