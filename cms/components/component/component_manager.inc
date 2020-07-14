@@ -588,6 +588,9 @@ class ComponentManager
 		}
 		
 		$manifest = $component->loadManifest();
+		trace(print_r($manifest, true), 3);
+		trace("isset(\$user)". isset($user), 3);
+		
 		if (!isset($user) && !$process && (!$manifest->allow_sessionless_handlers || 
 				(is_array($manifest->allow_sessionless_handlers) && array_search($action, $manifest->allow_sessionless_handlers) === FALSE)))
 		{
