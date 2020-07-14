@@ -587,6 +587,7 @@ class ComponentManager
 			throw new FakoliException("Invalid action");
 		}
 		
+		trace(print_r($component, true), 3);
 		$manifest = $component->loadManifest();
 		trace(print_r($manifest, true), 3);
 		trace("isset(\$user)". isset($user), 3);
