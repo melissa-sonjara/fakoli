@@ -1168,7 +1168,7 @@ class DataItem extends AbstractDataItem
 	 */
 	function clone($from)
 	{
-		$this->copy($form);
+		$this->copy($from);
 		$pk = $this->primary_key;
 		unset($this->$pk);
 	}
