@@ -1159,6 +1159,20 @@ class DataItem extends AbstractDataItem
 		}	
 	}
 	
+	/**
+	 * Copies values from another object, field by field, excluding the primary key.
+	 * This works the same as DataItem::copy(), but should be used in preference when
+	 * you are wanting to create a duplicate row in the database.
+	 * 
+	 * @param object from the object from which data is to be copied
+	 */
+	function clone($from)
+	{
+		$this->copy($form);
+		$pk = $this->primary_key;
+		unset($this->$pk);
+	}
+	
 	function cacheLookup($id)
 	{
 		if ($this->cacheLocal)
