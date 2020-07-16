@@ -12,6 +12,8 @@ class BlogSubscriptionManager
 	{
 		$this->subscribers = Query::create(BlogSubscriber, "WHERE subscription_type IN ('daily', 'weekly') AND blog_id IN (SELECT blog_id FROM blog WHERE published=true)")->execute();
 		
+		$numSubscribers = count($this->subscribers);
+		trace(pluralize($numSubscribers." blog subscriber", $numSubscribers)." found", 3);
 		$this->daily_digest = $this->getDailyDigest();
 		$this->weekly_digest = $this->getWeeklyDigest();	
 	}
