@@ -108,6 +108,9 @@ class BlogSubscriptionManager
 		{
 			return;
 		}
+		
+		echo $subscriber->format("Sending {subscription_type} digest to {subscriber_email}\n");
+		
 		$articles = ($subscriber->subscription_type == "daily") ? $this->daily_digest[$blog_id] : $this->weekly_digest[$blog_id];
 	
 		$sitename = Settings::getValue("settings", "sitename");
