@@ -1166,7 +1166,7 @@ class DataItem extends AbstractDataItem
 	 * 
 	 * @param object from the object from which data is to be copied
 	 */
-	function clone($from)
+	function cloneFrom($from)
 	{
 		$this->copy($from);
 		$pk = $this->primary_key;
