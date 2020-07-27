@@ -31,7 +31,7 @@ class ScheduledTaskManager
 	
 	static function setDefaults()
 	{
-		//TODO: Set default configuration parameters here
+		Settings::setDefaultValue('scheduled_task', 'test_email', '', 'String', 'Comma-separated list of recipients for the test task');
 	}
 
 	/**
@@ -151,8 +151,12 @@ class ScheduledTaskManager
 		
 		trace("Running Validation Configuration task", 3);
 		
-		$email = Settings::getValue("settings", "system_notification_email");
-
+		$email = Settings::getValue('scheduled_task', 'test_email');
+		if (!$email) 
+		{
+			$email = Settings::getValue("settings", "system_notification_email");
+		}
+		
 		$site_email_from =  Settings::getValue('email', 'email_from');
 		$site_email_name =  Settings::getValue('email', 'email_name');
 		
@@ -162,7 +166,7 @@ class ScheduledTaskManager
 		
 		$mail = new EmailHandler($email, "Scheduled Task Notification from {$config['site_name']}", 
 								"This message confirms that the Validate Configuration schedule task worker was triggered at ".now(), 
-								$site_email_form, 
+								$site_email_from, 
 								$site_email_name);
 		$mail->send();
  			
