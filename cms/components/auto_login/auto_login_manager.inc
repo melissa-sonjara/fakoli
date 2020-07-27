@@ -38,6 +38,7 @@ class AutoLoginManager
 	static function authenticate()
 	{
 		$token = $_GET["token"];
+		$username = '';
 		
 		global $user;
 		
@@ -62,7 +63,11 @@ class AutoLoginManager
 			}
 				
 			$user = $authToken->User();
-		
+			
+			$mgr = new UserManager();
+			$usernameField = $mgr->getUsernameField();
+			$username = $user->get($usernameField);
+			
 			if (!Fakoli::isUserActive($user)) return false;
 			
 			if ($authToken->ip_address)
@@ -85,6 +90,7 @@ class AutoLoginManager
 				
 				if (!$match) 
 				{
+					LoginManager::recordLoginAttempt($username, 'auto', $token, 'failure');
 					trace("Unauthorized IP Address: {$_SERVER["REMOTE_ADDR"]}", 1);
 					throw new FakoliException("Access Denied");
 				}
@@ -107,11 +113,14 @@ class AutoLoginManager
 			$uri = $authToken->redirect_on_success;
 			if (!$uri) $uri = "/index";
 			
+			LoginManager::recordLoginAttempt($username, 'auto', $token, 'success');
 			redirect($uri);
 		}
 		catch(Exception $e)
 		{
 			trace("Authentication Failed: ".$e->getMessage(), 1);
+			
+			LoginManager::recordLoginAttempt($username, 'auto', $token, 'failure');
 			throw new FakoliException("Authentication Failed");
 		}
 	}
