@@ -59,7 +59,8 @@ class TreeSelectFieldRenderer extends FieldRenderer
 		}
 		else
 		{
-			$form->add($this, $field);	
+			$form->add($this, $field);
+			if ($label) $form->alias($field, $label);
 		}
 	}
 	
