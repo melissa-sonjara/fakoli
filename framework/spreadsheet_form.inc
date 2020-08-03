@@ -45,11 +45,12 @@ require_once realpath(dirname(__FILE__)."/composite_auto_form.inc");
 class SpreadsheetForm extends CompositeAutoForm
 {	
 	var $colCount = 0;
-	var $subform;	///< The prototype subform used to model each row in the spreadsheet.
-	var $columnWidths = array(); ///< Array of column widths, used to control relative cell sizes in the table output.
-	var $msg;		///< Text to appear below buttons at top and above table
-	var $onStartRow; ///< Callback hook to determine row style or suppression of row.
-	var $isRowSelected;  ///< Callback hook to determine whether a given row is selected. Assigning a callback to this hook turns on selection mode. Only selected sub-forms are saved.
+	var $subform;					///< The prototype subform used to model each row in the spreadsheet.
+	var $columnWidths = array(); 	///< Array of column widths, used to control relative cell sizes in the table output.
+	var $msg;						///< Text to appear below buttons at top and above table
+	var $onStartRow = null; 		///< Callback hook to determine row style or suppression of row.
+	var $isRowSelected = null;  	///< Callback hook to determine whether a given row is selected. Assigning a callback to this hook turns on selection mode. Only selected sub-forms are saved.
+	var $isRowEmpty = null;			///< Callback hook to determine if a given row should be saved, or skipped because it is an empty row
 	var $rowLabelFormat = null;
 	var $rowLabelTitle = null;
 	var $rowLabelDefaultText = "";
@@ -454,6 +455,11 @@ ENDSCRIPT;
 				{
 					unset($_POST[$name]);
 				}
+			}
+			
+			if ($this->isRowEmpty !== null)
+			{
+				if ($this->isRowEmpty()) continue;
 			}
 				
 			$prefix = $form->id."__";
