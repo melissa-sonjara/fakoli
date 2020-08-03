@@ -46,7 +46,7 @@ class TreeSelectFieldRenderer extends FieldRenderer
 	var $onPreProcess;
 	var $onPostProcess;
 	
-	function TreeSelectFieldRenderer(&$form, $field, &$tree)
+	function TreeSelectFieldRenderer(&$form, $field, &$tree, $label = null)
 	{
 		$this->tree = $tree;
 		$this->onPreProcess = null;
