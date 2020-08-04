@@ -457,8 +457,10 @@ ENDSCRIPT;
 				}
 			}
 			
-			if ($this->isRowEmpty !== null)
+			if (is_callable($this->isRowEmpty))
 			{
+				trace("CALLING isRowEmpty", 3);
+				
 				if (($this->isRowEmpty)()) continue;
 			}
 				
