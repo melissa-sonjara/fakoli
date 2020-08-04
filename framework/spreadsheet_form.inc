@@ -467,13 +467,10 @@ ENDSCRIPT;
 					$_POST[substr($name, $len)] = $value;
 				}
 			}
-				
 			
 			if (is_callable($this->isRowEmpty))
 			{
-				trace("CALLING isRowEmpty", 3);
-				
-				if (($this->isRowEmpty)()) continue;
+				if (call_user_func($this->isRowEmpty)) continue;
 			}
 			
 			if (!$form->save()) $valid = false;
