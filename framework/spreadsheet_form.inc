@@ -459,7 +459,7 @@ ENDSCRIPT;
 			
 			if ($this->isRowEmpty !== null)
 			{
-				if ($this->isRowEmpty()) continue;
+				if (($this->isRowEmpty)()) continue;
 			}
 				
 			$prefix = $form->id."__";
