@@ -456,14 +456,7 @@ ENDSCRIPT;
 					unset($_POST[$name]);
 				}
 			}
-			
-			if (is_callable($this->isRowEmpty))
-			{
-				trace("CALLING isRowEmpty", 3);
-				
-				if (($this->isRowEmpty)()) continue;
-			}
-				
+
 			$prefix = $form->id."__";
 			$len = strlen($prefix);
 				
@@ -475,6 +468,14 @@ ENDSCRIPT;
 				}
 			}
 				
+			
+			if (is_callable($this->isRowEmpty))
+			{
+				trace("CALLING isRowEmpty", 3);
+				
+				if (($this->isRowEmpty)()) continue;
+			}
+			
 			if (!$form->save()) $valid = false;
 		}
 	
