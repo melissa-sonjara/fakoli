@@ -145,6 +145,12 @@ function uploadFLV($field, $video)
 
 	trace("Upload Base: {$dir}", 3);
     
+	if (!file_exists($dir))
+	{
+		mkdir($dir);
+		chmod($dir, 0755);
+	}
+	
 	$filename = $_FILES[$field]['name'];
 	$ext = strtolower(substr($filename, -4));
 	
