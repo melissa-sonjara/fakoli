@@ -51,8 +51,9 @@ class TabBar
 	var $defaultStateImage;		///< Image to show in the default tab state
 	var $showStates = true;		///< true to show tab states, false to ignore them
 	
-	var $dynamic = false;		///< true to indicate dynamic (AJAX-based) loading
-	var $container = "";		///< The DOM ID of the container that will contain dynamically loaded content
+	var $dynamic = false;			///< true to indicate dynamic (AJAX-based) loading
+	var $container = "";			///< The DOM ID of the container that will contain dynamically loaded content
+	var $dynamicLoadHandler = null;	///< Javascript function to call to handle dynamic content load (optional)
 	
 	var $disabled = false;		///< Set to true to generate disabled tab navigation
 	
@@ -117,6 +118,19 @@ class TabBar
 		document.id('{$this->id}').getElements("a").each(function(a)
 		{
 			a.loadTab = function(override)
+ENDSCRIPT;
+		if ($this->dynamicLoadHandler)
+		{
+			$script .= <<<ENDSCRIPT
+			{
+				var url = override ? override : this.href;
+				{$this->dynamicLoadHandler}(url);
+			};	
+ENDSCRIPT;
+		}
+		else
+		{
+			$script .= <<<ENDSCRIPT
 			{
 				var request = new Request.HTML(
 				{
@@ -137,7 +151,11 @@ class TabBar
 				
 				request.send();
 			};
-			
+ENDSCRIPT;
+		}
+
+		$script .= <<<ENDSCRIPT
+
 			a.addEvent('click', function(e) 
 			{
 				new DOMEvent(e).stop();
