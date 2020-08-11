@@ -51,9 +51,10 @@ class TabBar
 	var $defaultStateImage;		///< Image to show in the default tab state
 	var $showStates = true;		///< true to show tab states, false to ignore them
 	
-	var $dynamic = false;			///< true to indicate dynamic (AJAX-based) loading
-	var $container = "";			///< The DOM ID of the container that will contain dynamically loaded content
-	var $dynamicLoadHandler = null;	///< Javascript function to call to handle dynamic content load (optional)
+	var $dynamic = false;				///< true to indicate dynamic (AJAX-based) loading
+	var $container = "";				///< The DOM ID of the container that will contain dynamically loaded content
+	var $dynamicLoadHandler = null;		///< Javascript function to call to handle dynamic content load (optional)
+	var $dynamicLoadFirstTab = true;	///< By default, dynamically loaded tab bars will do a request for the content of the first tab on page load. Set to false to disable this.
 	
 	var $disabled = false;		///< Set to true to generate disabled tab navigation
 	
@@ -167,15 +168,22 @@ ENDSCRIPT;
 				a.loadTab();			
 			});
 		});
-		
+ENDSCRIPT;
+
+		if ($this->dynamicLoadFirstTab)
+		{
+			$script .= <<<ENDSCRIPT
 		document.id('{$this->id}').getElements("li.current a").each(function(a)
 		{
 			a.loadTab();
 		});
+ENDSCRIPT;
+		}
+
+		$script .= <<<ENDSCRIPT
 	});
 	</script>	
 ENDSCRIPT;
-
 		return $script;
 	}
 	/**
