@@ -266,7 +266,7 @@ ENDSCRIPT;
          	}
          	else
          	{
-         		$dest = ($isMatch) ? "#" : $url;
+         		$dest = ($isMatch && !$this->dynamic) ? "#" : $url;
          	}
         
          	if ($this->anchor)
