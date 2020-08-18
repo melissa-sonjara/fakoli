@@ -1015,7 +1015,8 @@ class Fakoli
 			$permissions = $section->getPermissions($content);
 			if ($permissions)
 			{
-				if (!Settings::checkPermissions($section->getPermissions($content)))
+				trace("Checking Permissions: [{$permissions}]", 4);
+				if (!Settings::checkPermissions($permissions))
 				{
 					LoginManager::redirectToLogin();
 				}
