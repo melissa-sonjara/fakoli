@@ -107,18 +107,20 @@ class SubSelectFieldRenderer extends FieldRenderer
 		if ($mode != "equal") $mode = "equal";
 		
 		$searchValue = (!$value) ? $this->parent->params->get($field, $mode) : $value;
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td><select id='$field' name='$field:$mode'><option value=''></option>\n";
+		
+		$this->_startField($field);
+		
+		echo "<select id='$field' name='$field:$mode'><option value=''></option>\n";
 		foreach($this->options as $value => $name)
 		{
 			$selected = ($searchValue == $value) ? " selected" : "";
 			
 			echo "<option value='".htmlSafe($value)."'$selected>$name</option>";
 		}
-		echo "</select></td></tr>\n";
 		
 		echo "</select>";
+		
+		$this->_endField($field);
 	}
 	
 	
@@ -128,11 +130,7 @@ class SubSelectFieldRenderer extends FieldRenderer
 		
 		if (!array_key_exists($super_id, $this->options)) return;
 		
-		echo "<tr>\n";
-		$this->_printLabel($field);
-		echo "<td";
-		if ($this->parent->valueCSS) echo " class='{$this->parent->valueCSS}'";
-		echo ">";
+		$this->_startField($field);
 		
 		$item = findItem($this->options[$super_id], $field, $this->parent->data->get($field));
 		
@@ -144,7 +142,8 @@ class SubSelectFieldRenderer extends FieldRenderer
 		{
 			echo "Not specified";
 		}
-		echo "</td></tr>\n";
+		
+		$this->_endField($field);
 	}
 
 	function renderScript($field)
