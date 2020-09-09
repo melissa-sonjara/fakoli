@@ -178,7 +178,7 @@ var Dial = new Class(
 		{
 			this.sector.attr({d: this.sectorPath(value)});		
 			this.legend.attr({'display': 'none'});
-			this.targetLegend.attr({'display': 'block'});
+			if (this.targetLegend) this.targetLegend.attr({'display': 'block'});
 		}.bind(this), 500);
 	},
 	
@@ -188,7 +188,7 @@ var Dial = new Class(
 		{
 			this.sector.attr({d: this.sectorPath(value)});		
 			this.legend.attr({'display': 'block'});
-			this.targetLegend.attr({'display': 'none'});
+			if (this.targetLegend) this.targetLegend.attr({'display': 'none'});
 		}.bind(this), 500);
 	},
 	
