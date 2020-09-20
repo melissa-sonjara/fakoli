@@ -813,6 +813,19 @@ class DataListView implements FacetFilterable
 	}
 	
 	/**
+	 * Render the table view and return the generated HTML as a string
+	 * @return string the generated HTML for the table
+	 */
+	function drawViewToString()
+	{
+		ob_start();
+		$this->drawView();
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
+	
+	/**
 	 * Writes the data table out as an Excel File. The file is output
 	 * with an 'attachment' disposition, which will prompt a save dialog in
 	 * the client browser.
