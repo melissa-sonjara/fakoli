@@ -29,7 +29,63 @@ var GroupingTable = new Class({
 		var self = this;
 		
 		this.subheadings.each(function(h) { h.addEvent('click', function(e) { new DOMEvent(e).stop(); self.handleClick(h); }); });
+		
+		if (this.table.facetManager)
+		{
+			this.table.facetManager.addEvent('filterChanged', function() { this.filterChanged(); }.bind(this));
+			this.table.facetManager.addEvent('filterCleared', function() { this.filterCleared(); }.bind(this));
+			this.preprocessFacets();
+		}
+		
 		this.update();
+	},
+	
+	preprocessFacets: function()
+	{
+		this.tbody.getChildren('tr').each(function(elt)
+		{
+			if (elt.hasClass('subheading')) return;
+			this.table.facetManager.preprocess(elt);
+		}.bind(this));
+		
+		this.table.facetManager.preprocessComplete();
+	},
+	
+	filterChanged: function()
+	{
+		this.tbody.getChildren('tr').each(function(elt)
+		{
+			if (elt.hasClass('subheading')) return;
+
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+			
+			var match = this.table.facetManager.filter(elt);
+			
+			if (match)
+			{
+				elt.addClass('filtermatch');
+			}
+			else
+			{
+				elt.addClass('filtered');
+			}
+		}.bind(this));
+		
+ 	    this.update();
+	},
+	
+	filterCleared: function()
+	{
+		this.tbody.getChildren('tr').each(function(elt)
+		{
+			if (elt.hasClass('subheading')) return;
+
+			elt.removeClass("filtered");
+			elt.removeClass("filtermatch");
+		});
+		
+  	    this.update();
 	},
 	
 	update: function()
