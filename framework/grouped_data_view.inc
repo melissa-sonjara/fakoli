@@ -120,7 +120,7 @@ class GroupedDataListView
 	var $menu = null;					///< Context menu for selection-based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
-	
+	var $tagRowCallbacks = array();	 ///< Array of callbacks for adding extra attributes to each row
 	// Scrolling Table parameters
 	
 	var $height;
@@ -150,7 +150,21 @@ class GroupedDataListView
 		$this->mode = "fixed";
 		$this->excelFile = null;
 	}
-
+	
+	function getID()
+	{
+		return $this->id;
+	}
+	
+	/**
+	 * Adds a row tagging handler. This function will receive the data item
+	 * for each row and can add custom attributes to the row tag.
+	 */
+	function addFacetTaggingHandler($handler)
+	{
+		$this->tagRowCallbacks[] = $handler;
+	}
+	
 	/**
 	 * Adds a group to the view.
 	 * @param unknown_type $title the title text for the group.
@@ -437,12 +451,8 @@ class GroupedDataListView
 		$script = "<script type='text/javascript' src='/fakoli/js/grouping_table.js'></script>\n";
 		
 		$constructor = "";
-
 			
-		if ($this->mode != 'fixed')
-		{
-			$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";
-		}
+		$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";
 
 		if ($this->selectable)
 		{
@@ -598,6 +608,18 @@ class GroupedDataListView
 							if ($retval) $cl = $retval; // return a string to indicate a css class for the row
 						}
 						
+						$dataAttrs = array();
+						foreach($this->tagRowCallbacks as $cb)
+						{
+							$dataAttrs = call_user_func($cb, $item, $dataAttrs);
+						}
+						
+						$rowAttrs = "";
+						foreach($dataAttrs as $name => $value)
+						{
+							$rowAttrs .= " ".$name."='".$value."'";
+						}
+						
 						foreach($this->totalCallbacks as $cb)
 						{
 							call_user_func($cb, $item);
@@ -605,7 +627,7 @@ class GroupedDataListView
 						
 						if ($cl) $cl = "class='$cl' ";
 ?>
-          <tr <?php echo $cl.$rowId ?>>
+          <tr<?echo $rowAttrs?> <?php echo $cl.$rowId ?>>
 <?
 						foreach($this->columns as $column)
 						{
@@ -661,6 +683,20 @@ class GroupedDataListView
 			echo "<p><em>{$this->emptyMessage}</em></p>";
 		}
 	}
+	
+	/**
+	 * Render the table view and return the generated HTML as a string
+	 * @return string the generated HTML for the table
+	 */
+	function drawViewToString()
+	{
+		ob_start();
+		$this->drawView();
+		$out = ob_get_contents();
+		ob_end_clean();
+		return $out;
+	}
+	
 	
 	function getFooterColumnFormatting($column)
 	{
