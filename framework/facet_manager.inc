@@ -373,6 +373,7 @@ class CrossReferenceFacetFilter extends AbstractFacetFilter
 		{
 			$adapter = $this->xrefAdapters[$cl];
 			$related = $adapter($item);
+			if (!is_array($related)) $related = array($related);
 			$value = formatItems($related, "{getPrimaryKeyValue()}", ",");
 			foreach($related as $r)
 			{
