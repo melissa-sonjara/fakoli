@@ -807,6 +807,23 @@ class AutoForm
 	}
 	
 	/**
+	 * Add more fields to the specified group.
+	 * @param string $name the name of the group
+	 */
+	function addToGroup($name)
+	{
+		if (!array_key_exists($name, $this->groups))
+		{
+			$this->groups[$name] = array();
+		}
+		
+		for($i = 1; $i < func_num_args(); ++$i)
+		{
+			$tihs->groups[$name][] = func_get_arg($i);
+		}
+	}
+	
+	/**
 	 * Add a description block to a group. This will be displayed within the group,
 	 * after then title (if displayed) but before any fields.
 	 * @param string $name the name of the group
