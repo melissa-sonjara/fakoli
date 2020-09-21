@@ -1384,7 +1384,7 @@ class AutoForm
 		{
 			if ($this->readonly[$field] || $this->readOnlyForm)
 			{
-				if (!$this->hideEmptyFields || $this->data->get($field))
+				if (!$this->hideEmptyFields || !$this->data->hasField($field) ||  $this->data->get($field))
 				{
 					$renderer->renderReadOnly($field);
 				}
