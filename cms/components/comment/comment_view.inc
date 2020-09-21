@@ -81,9 +81,12 @@ class CommentView
 		}
 	}
 
-	static function addCommentPanel()
+	static function addCommentPanel($qs = null)
 	{
-		$qs = getCleanQueryString();
+		if (!$qs)
+		{
+			$qs = getCleanQueryString();
+		}
 		$panel = new Panel("comment_panel", "/action/comment/comment_panel?$qs");
 		$panel->draw();		
 	}
