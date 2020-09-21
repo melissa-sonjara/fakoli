@@ -819,7 +819,7 @@ class AutoForm
 		
 		for($i = 1; $i < func_num_args(); ++$i)
 		{
-			$tihs->groups[$name][] = func_get_arg($i);
+			$this->groups[$name][] = func_get_arg($i);
 		}
 	}
 	
