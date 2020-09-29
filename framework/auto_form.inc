@@ -147,7 +147,8 @@ class AutoForm
     	'URL'				=>	URLFieldRenderer,
     	'DateOfBirth'		=>	DateOfBirthFieldRenderer,
     	'CreditCardNumber'	=> CreditCardNumberFieldRenderer,
-    	'Signature'		 	=>	SignatureFieldRenderer
+    	'Signature'		 	=>	SignatureFieldRenderer,
+    	'Color'				=>	ColorFieldRenderer
 	);	///< Provides the mapping from Type identifier to FieldRenderer
 	
 	/**
