@@ -37,7 +37,7 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 /**
  * Field renderer for boolean data fields. Renders as a checkbox.
  */
-class BooleanFieldRenderer extends FieldRenderer
+class ColorFieldRenderer extends FieldRenderer
 {
 	var $disable = false; ///, alternative to readonly; field can be reenabled thru javascript
 	var $onChange = null; ///< Name of Javascript function to be called when checkbox is toggled
