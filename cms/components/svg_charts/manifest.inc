@@ -16,6 +16,21 @@ class SvgChartsManifest
 
 	var $allow_sessionless_handlers = true;
 	
+	static function getAdminMenu()
+	{
+		return array
+		(
+				"Site Configuration"	=> array
+				(
+						
+						"Color Palettes"	=>	array(	"page"	=>	"/admin/color_palettes",
+								"role"	=>	"admin",
+								"weight"	=>	11,
+								"icon"	=>	"palette")
+				)
+		);
+	}	
+	
 	static function getScripts()
 	{
 		return array(
@@ -37,8 +52,8 @@ class SvgChartsManifest
 
 	static function subscribeToEvents()
 	{
-		return array(
-					"ComponentScanComplete"	=>	array(SvgChartsManager, setDefaults)
+		return array("upgradeComponent"			=>	array(SvgChartsManager, upgradeComponent),
+					 "ComponentScanComplete"	=>	array(SvgChartsManager, setDefaults)
 		);
 	}
 }
