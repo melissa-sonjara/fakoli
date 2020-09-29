@@ -1,4 +1,6 @@
 <?php
+Fakoli::using("color_picker");
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -16,7 +18,19 @@ class SvgChartsManager
 	{
 		//TODO: Set default configuration parameters here
 	}
-
+	
+	static function upgradeComponent($version)
+	{
+		$mgr = new SvgChartsUpgradeManager();
+		$mgr->upgrade($version);
+	}
+	
+	static function registerSerializationHandler()
+	{
+		SerializationManager::registerHandler("svg_charts", "Color Palettes", new SimpleSerializationHandler(ColorPalette));
+		return true;
+	}
+	
 
 }
 
