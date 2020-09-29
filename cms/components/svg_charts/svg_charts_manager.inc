@@ -30,7 +30,10 @@ class SvgChartsManager
 		return true;
 	}
 	
-
+	static function outputColorPalettes($script)
+	{
+		$script .= ColorPalette::generatePalettes();
+	}
 }
 
 ?>

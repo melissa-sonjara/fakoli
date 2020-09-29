@@ -11,6 +11,10 @@ if ($palette_id)
 
 $form = new AutoForm($palette);
 $form->required("name");
+$form->onSaveComplete = function($form)
+{
+	Cache::invalidate("palette_script");
+};
 
 if ($method == "POST")
 {

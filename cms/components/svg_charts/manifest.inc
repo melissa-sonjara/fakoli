@@ -53,7 +53,8 @@ class SvgChartsManifest
 	static function subscribeToEvents()
 	{
 		return array("upgradeComponent"			=>	array(SvgChartsManager, upgradeComponent),
-					 "ComponentScanComplete"	=>	array(SvgChartsManager, setDefaults)
+					 "ComponentScanComplete"	=>	array(SvgChartsManager, setDefaults),
+					 "PostProcessScript"		=>	array(SvgChartsManager, outputColorPalettes)
 		);
 	}
 }
