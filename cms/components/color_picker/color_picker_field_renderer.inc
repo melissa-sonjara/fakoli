@@ -66,5 +66,5 @@ window.addEvent('domready', function()
 }
 
 // Register the field renderer
-AutoForm::registerFieldRendererClass(Color, ColorPickerFieldRenderer);
+//AutoForm::registerFieldRendererClass(Color, ColorPickerFieldRenderer);
 ?>
