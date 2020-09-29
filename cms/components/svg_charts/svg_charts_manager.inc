@@ -33,6 +33,7 @@ class SvgChartsManager
 	static function outputColorPalettes($script)
 	{
 		$script .= ColorPalette::generatePalettes();
+		return $script;
 	}
 }
 
