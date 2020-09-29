@@ -12,10 +12,10 @@ for($i = 1; $i < 16; ++$i)
 
 $table = new DataListView($palettes, "color_palettes");
 $table->column("Palette Name", "<a href='color_palette_form?palette_id={palette_id}'>{name}</a>")
-	  ->column("Background", "<span class='swatch' style='background-color: {background}'></span> {background}")
-	  ->column("Stroke", "<span class='swatch' style='background-color: {stroke}'></span> {stroke}")
-	  ->column("Button", "<span class='swatch' style='background-color: {stroke}'></span> {stroke}")
-	  ->column("Data Series Colors", $colorsTemplate);
+	  ->column("Background", "<span class='swatch' style='background-color: {background}'></span> {background}", false, "text-align: center")
+	  ->column("Stroke", "<span class='swatch' style='background-color: {stroke}'></span> {stroke}", false, "text-align: center")
+	  ->column("Button", "<span class='swatch' style='background-color: {stroke}'></span> {stroke}", false, "text-align: center")
+	  ->column("Data Series Colors", $colorsTemplate, false, "text-align: center");
 
 $table->paginate = false;
 $table->sortable = false;
