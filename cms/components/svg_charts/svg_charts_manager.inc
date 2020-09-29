@@ -1,5 +1,4 @@
 <?php
-Fakoli::using("color_picker");
 
 /**
  *
