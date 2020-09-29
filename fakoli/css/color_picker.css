@@ -39,3 +39,12 @@
 {
 	border: solid 1px yellow;
 }
+
+span.swatch {
+    border: solid 1px #ccc;
+    display: inline-block;
+    margin: 0 2px 0 0;
+    width: 14px;
+    height: 14px;
+    vertical-align: inherit;
+}
