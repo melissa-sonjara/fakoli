@@ -80,7 +80,7 @@ class BooleanFieldRenderer extends FieldRenderer
 		{
 			echo " checked";
 		}
-		echo " {$disable}{$onClick}>&nbsp;<label for='{$this->parent->id}_{$field}'>";
+		echo " {$disable}{$onClick}>&nbsp;<label for='{$this->parent->id}_{$field}' class='label'>";
 		echo $this->_getLabel($field, false);
 		echo "</label>";
 
