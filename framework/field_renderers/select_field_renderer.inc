@@ -315,7 +315,7 @@ class SelectFieldRenderer extends FieldRenderer
 			$onChange = " onchange='onChange_{$this->parent->id}_{$field}_addEntry(this)'";
 			
 		}	
-		echo "<input type='$type' name='{$field}_addEntry' id='{$field}_addEntry' value='{$addEntryValue}' size='20' $onChange/>";
+		echo "<input type='$type' name='{$field}_addEntry' class='add_entry' id='{$field}_addEntry' value='{$addEntryValue}' size='20' $onChange/>";
 		
 		$this->_endField($field);
 	}
