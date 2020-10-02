@@ -197,7 +197,7 @@ class GroupedList implements FacetFilterable
 		{
 			foreach(array_keys($this->items) as $group)
 			{
-				$this->groupBy($group, $group);
+				$this->group($group, $group);
 			}
 		}
 
