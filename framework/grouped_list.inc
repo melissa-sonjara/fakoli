@@ -193,8 +193,16 @@ class GroupedList implements FacetFilterable
 
 		echo "<div id='{$this->id}' class='{$this->groupedListClass}'>\n";
 		
+		if(count($this->groups) == 0)
+		{
+			foreach(array_keys($this->items) as $group)
+			{
+				$this->groupBy($group, $group);
+			}
+		}
+
 		if(count($this->groups) == 0) return;
-		
+			
 		foreach($this->groups as $group)
 		{
 			if (array_key_exists($group->key, $this->items))
