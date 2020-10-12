@@ -815,10 +815,18 @@ class GroupedDataListView
 					foreach($this->columns as $column)
 					{
 						
-						if ($column->onExport)
+						if (is_callable($column->onExport))
+						{
 							$val = call_user_func($column->onExport, $item, $column);
+						}
+						else if ($column->onExport)
+						{
+							$val = $item->format($item, $column->onExport);
+						}
 						else
+						{							
 							$val = $column->format($item);
+						}
 						
 						switch($column->typeHint)
 						{
