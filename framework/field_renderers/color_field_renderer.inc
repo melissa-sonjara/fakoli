@@ -85,9 +85,8 @@ ENDSCRIPT;
 		
 		$f = "{$this->parent->id}_{$field}";
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
-		$onChange = ($this->onChange) ? " onchange='return {$this->onChange}(this);'" : "";
 		
-		echo "<input id='{$f}' class='color' type='text' size='7' value='{$val}' name='$field' {$disable} onchange='return {$f}_onChange(this);'>&nbsp;";
+		echo "<input id='{$f}' class='color' type='text' size='7' value='{$val}' name='$field' {$disable} onkeypress='return {$f}_onChange(this);'>&nbsp;";
 		echo "<input id='{$f}_color' type='color' value='{$val}' name='{$field}' {$disable} onchange='return {$f}_color_onChange(this);'>";
 		
 		$this->_endField($field);
