@@ -1,6 +1,8 @@
 <?php
 Fakoli::using("svg_charts");
 
+$menu_item = "Color Palettes";
+
 $palette_id = checkNumeric($_GET["palette_id"]);
 
 $palette = new ColorPalette();
