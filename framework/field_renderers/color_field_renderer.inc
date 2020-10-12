@@ -55,15 +55,40 @@ class ColorFieldRenderer extends FieldRenderer
 		}
 	}	
 	
+	function renderScript($field)
+	{
+		$f = "{$this->parent->id}_{$field}";
+		$onChange = ($this->onChange) ? " {$this->onChange}(elt);" : ";";
+		
+		echo <<<ENDSCRIPT
+	<script type='text/javascript'>
+	function {$f}_onChange(elt)
+	{
+		document.id('{$f}_color').value = elt.value;
+		return{$onChange}
+	}
+		
+	function {$f}_color_onChange(elt)
+	{
+		document.id('{$f}').value = elt.value;
+		return{$onChange}
+	}
+	</script>
+ENDSCRIPT;
+	}
+	
 	function renderField($field)
 	{
 		$this->_startField($field);
 		
 		$val = $this->parent->data->get($field);
 		
+		$f = "{$this->parent->id}_{$field}";
 		$disable = ($this->disable) ? "disabled='disabled'" : "";
 		$onChange = ($this->onChange) ? " onchange='return {$this->onChange}(this);'" : "";
-		echo "<input id='{$this->parent->id}_{$field}' type='color' value='{$val}' name='$field' {$disable}{$onChange}>";
+		
+		echo "<input id='{$f}' type='text' size='7' value='{$val}' name='$field' {$disable} onchange='return {$f}_onChange(this);'>&nbsp;";
+		echo "<input id='{$f}_color' type='color' value='{$val}' name='{$field}' {$disable} onchange='return {$f}_color_onChange(this);'>";
 		
 		$this->_endField($field);
 	}
