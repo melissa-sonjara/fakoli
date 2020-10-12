@@ -49,7 +49,7 @@ class FacetManager
 	var $id;
 	var $target;
 	var $facets;
-	
+
 	function __construct($id, $target)
 	{
 		$this->id = $id;
@@ -103,7 +103,7 @@ class FacetManager
 		foreach($this->facets as $title => $facet)
 		{
 ?>
-<span style='display: inline-block'><label for='<?echo $facet->getID()?>'><?echo $title?></label>&nbsp;
+<span style='display: inline-block'><label for='<?echo $facet->getID()?>'><?echo $title?></label> 
 <?
 			$facet->drawFacet();
 ?>
