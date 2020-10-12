@@ -866,7 +866,7 @@ class DataListView implements FacetFilterable
 				}
 				else if ($column->onExport)
 				{
-					$val = $item->format($item, $column->onExport);
+					$val = $item->format($column->onExport);
 				}
 				else
 				{
