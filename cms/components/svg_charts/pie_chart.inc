@@ -69,6 +69,7 @@ class PieChart
 	var $onDrawLegend = "null";
 	var $onDrawLegendComplete = "null";
 	var $scaleToFit = false;
+	var $fixedSize = true;
 	var $fontFamily = 'Arial, Helvetica';
 	var $canvasBackground = "#FFFFFF";
 	var $selectable = false;
@@ -215,15 +216,19 @@ window.addEvent('domready', function ()
 </script>
 ENDSCRIPT;
 
-	if ($this->scaleToFit)
-	{
-		$dimensions = "width: 100%; height: auto";
-	}
-	else
-	{
-		$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
-	}
-	
+		if ($this->scaleToFit)
+		{
+			$dimensions = "width: 100%; height: auto";
+		}
+		else if ($this->fixedSize)
+		{
+			$dimensions = "width: {$containerWidth}; height: {$containerHeight};";
+		}
+		else
+		{
+			$dimensions = "";
+		}
+
 		echo "<div id='{$this->id}' style='$dimensions'></div>";
 	}	
 }
