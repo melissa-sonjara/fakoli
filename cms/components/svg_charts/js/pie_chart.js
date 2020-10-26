@@ -153,8 +153,8 @@ var PieChart = new Class(
 		
 		if (this.options.title)
 		{
-			this.paper.text(this.options.titlex, this.options.titley, this.options.title)
-					  .attr({fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.titleSize, "font-family": this.options.fontFamily, "text-anchor": "middle"});
+			this.paper.multitext(this.options.titlex, this.options.titley, this.options.title, this.options.width, 
+								 {fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.titleSize, "font-family": this.options.fontFamily, "text-anchor": "middle"});
 		}
 
 		this.drawLegend();
