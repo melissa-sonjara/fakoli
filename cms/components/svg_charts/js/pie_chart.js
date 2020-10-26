@@ -154,7 +154,7 @@ var PieChart = new Class(
 		if (this.options.title)
 		{
 			this.paper.text(this.options.titlex, this.options.titley, this.options.title)
-					  .attrs({fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.titleSize, "font-family": this.options.fontFamily});
+					  .attr({fill: this.palette.strokeColor, stroke: "none" , opacity: 1, "font-size": this.options.titleSize, "font-family": this.options.fontFamily});
 		}
 
 		this.drawLegend();
