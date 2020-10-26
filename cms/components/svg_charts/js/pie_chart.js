@@ -32,7 +32,11 @@ var PieChart = new Class(
 		enableDownload: true,
 		selectable: false,
 		animateSelection: false,
-		preselected: []
+		preselected: [],
+		title: "",
+		titlex: 300,
+		titley: 25,
+		titleSize: 14
 	},
 	
 	sectors: [],
@@ -147,6 +151,12 @@ var PieChart = new Class(
 			this.sectors.each(function(e) { e.dropShadow(5, 1, 1, 0.2); });
 		}
 		
+		if (this.options.title)
+		{
+			this.paper.text(this.options.titlex, this.options.titley, this.options.title)
+					  .attrs({fill: color, stroke: "none" , opacity: 1, "font-size": this.options.titleSize, "font-family": this.options.fontFamily});
+		}
+
 		this.drawLegend();
 	},
 	

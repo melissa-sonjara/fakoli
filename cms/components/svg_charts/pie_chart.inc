@@ -75,6 +75,10 @@ class PieChart
 	var $selectable = false;
 	var $animateSelection = false;
 	var $preselected = null;
+	var $title = "";
+	var $titleX = 300;
+	var $titleY = 25;
+	var $titleSize = 14;
 	
 	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
@@ -141,6 +145,14 @@ class PieChart
 		$this->percentagesDistance = $distance;
 	}
 	
+	function setTitle($title, $x = 300, $y = 25, $size = 14)
+	{
+		$this->title = $title;
+		$this->titleX = $x;
+		$this->titleY = $y;
+		$this->titleSize = $size;
+	}
+	
 	function draw()
 	{
 		global $script;
@@ -167,12 +179,17 @@ class PieChart
 		$containerWidth = is_numeric($this->containerWidth) ? $this->containerWidth . "px" : $this->containerWidth;
 		$containerHeight = is_numeric($this->containerHeight) ? $this->containerHeight . "px" : $this->containerHeight;
 		
+		if ($this->title)
+		{
+			$titleOptions = "\n\t\ttitle: '".jsSafe($this->title)."',\n\t\t\titlex: {$this->titleX},\n\t\ttitley: {$this->titleY},\n\t\ttitleSize: {$this->titleSize},\n";
+		}
+		
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
 window.addEvent('domready', function ()
 {
 	var {$this->id} = new PieChart('{$this->id}', 
-	{
+	{{$titleOptions}
 		width: {$this->width}, 
 		height: {$this->height}, 
 		cx: {$this->cx}, 
