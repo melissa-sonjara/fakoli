@@ -1060,8 +1060,8 @@ var Histogram = new Class(
 	drawTitle: function()
 	{
 		if (this.options.title == '') return;
-		this.title = this.paper.text(this.options.chartWidth / 2 + this.options.chartLeft, this.options.chartTop - 30, this.options.title);
-    	this.title.attr({stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize, 'text-anchor': 'middle', 'class': 'title'});
+		this.title = this.paper.multitext(this.options.chartWidth / 2 + this.options.chartLeft, this.options.chartTop - 60, this.options.title, this.options.width, 
+										  {stroke: 'none', fill: this.palette.strokeColor, "font-size": this.options.titleSize, 'text-anchor': 'middle', 'class': 'title'});
 	},
 	
 	drawLegend: function()
