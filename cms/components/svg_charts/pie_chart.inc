@@ -181,7 +181,7 @@ class PieChart
 		
 		if ($this->title)
 		{
-			$titleOptions = "\n\t\ttitle: '".jsSafe($this->title)."',\n\t\t\titlex: {$this->titleX},\n\t\ttitley: {$this->titleY},\n\t\ttitleSize: {$this->titleSize},\n";
+			$titleOptions = "\n\t\ttitle: '".jsSafe($this->title)."',\n\t\ttitlex: {$this->titleX},\n\t\ttitley: {$this->titleY},\n\t\ttitleSize: {$this->titleSize},\n";
 		}
 		
 		$script .= <<<ENDSCRIPT
