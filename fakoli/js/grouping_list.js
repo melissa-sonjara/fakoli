@@ -67,6 +67,8 @@ var GroupingList = new Class({
 
 	update: function()
 	{
+		if (!this.content_divs) return;
+		
 		var subheadings;
 		var subheading;
 		var lists;
