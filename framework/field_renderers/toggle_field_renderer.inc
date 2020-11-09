@@ -82,7 +82,7 @@ class ToggleFieldRenderer extends FieldRenderer
 		
 		if ($this->ragged)
 		{
-			echo "<label for='{$this->parent->id}_{$field}'>".$this->_getLabel($field, false)."</label>\n";
+			echo "<label class='label' for='{$this->parent->id}_{$field}'>".$this->_getLabel($field, false)."</label>\n";
 		}
 		
 		echo "<label class='switch{$disable}'>";
