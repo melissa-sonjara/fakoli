@@ -124,15 +124,15 @@ var PieChart = new Class(
 						if (p && animatePercentages) p.stop().animate({opacity: 0}, 500, mina.elastic);
 					}
 	                this.fireEvent('sectorOut', [event, idx]);
-	            }.bind(this));				
-			}
-			
-			s.click(function(event) { this.sectorSelect(idx); }.bind(this));
-			
-			if (this.$events.sectorClick)
-			{
-				s.attr({cursor: "pointer"});
-				s.click(function(event) { this.fireEvent('sectorClick', [event, idx]); }.bind(this));
+	            }.bind(this));		
+				
+				s.click(function(event) { this.sectorSelect(idx); }.bind(this));
+				
+				if (this.$events.sectorClick)
+				{
+					s.attr({cursor: "pointer"});
+					s.click(function(event) { this.fireEvent('sectorClick', [event, idx]); }.bind(this));
+				}
 			}
 			
 			angle = end; 
