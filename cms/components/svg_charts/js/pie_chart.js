@@ -271,7 +271,7 @@ var PieChart = new Class(
 	{
 		this.sectors.each(function(sector)
 		{
-			sector.removeClass('selected');
+			if (sector != null) sector.removeClass('selected');
 		});
 		
 		this.showSelected();
@@ -285,13 +285,17 @@ var PieChart = new Class(
 		}
 		
 		var sector = this.sectors[idx];
-		if (sector.hasClass('selected'))
+		
+		if (sector != null)
 		{
-			sector.removeClass('selected');
-		}
-		else
-		{
-			sector.addClass('selected');
+			if (sector.hasClass('selected'))
+			{
+				sector.removeClass('selected');
+			}
+			else
+			{
+				sector.addClass('selected');
+			}
 		}
 		
 		this.showSelected();
@@ -307,6 +311,7 @@ var PieChart = new Class(
 		{
 			this.sectors.each(function(s)
 			{
+				if (s == null) return;
 				if (s.hasClass('selected'))
 				{
 	                s.stop().animate({transform: "s1.15 1.15 " + cx + " " + cy}, 500, mina.elastic);	
@@ -321,6 +326,7 @@ var PieChart = new Class(
 		{
 			this.sectors.each(function(s)
 			{
+				if (s == null) return;
 				if (s.hasClass('selected'))
 				{
 					s.attr({transform: "s1.15 1.15 " + cx + " " + cy});
