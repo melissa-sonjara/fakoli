@@ -102,7 +102,7 @@ var PieChart = new Class(
 			}
 			var animatePercentages = this.options.animatePercentages;
 			
-			if (this.options.animate)
+			if (this.options.animate && val != 0)
 			{
 				s.mouseover(function (event) 
 				{
