@@ -48,7 +48,7 @@ class ToggleFieldRenderer extends FieldRenderer
 	 * Create a new BooleanFieldRenderer
 	 * @param AutoForm $parent the parent form
 	 */
-	function ToggleFieldRenderer(&$parent, $ragged)
+	function ToggleFieldRenderer(&$parent, $ragged, $field = null, $label = null)
 	{
 		$this->FieldRenderer($parent);
 		
@@ -57,6 +57,18 @@ class ToggleFieldRenderer extends FieldRenderer
 		{
 			$this->hideLabel = true;
 			$this->colspan = 2;
+		}
+		
+		if ($field)
+		{
+			if (!$parent->data->hasField($field))
+			{
+				$parent->add($this, $field, $label);
+			}
+			else
+			{
+				$parent->override($field, $label, $this);
+			}
 		}
 	}
 	
