@@ -50,7 +50,7 @@ class ConnectionManager
 	static $user;
 	static $password;
 	static $conn;
-	
+	static $options = array();
 	/**
 	 * Retrieves a reference to the global database connection. If no connection
 	 * to the database has yet been made, one will be created as a result of this
@@ -63,7 +63,7 @@ class ConnectionManager
 			if (!ConnectionManager::$conn)
 			{
 				$startTime = microtime(true);
-				ConnectionManager::$conn = new PDO(ConnectionManager::$dsn, ConnectionManager::$user, ConnectionManager::$password);
+				ConnectionManager::$conn = new PDO(ConnectionManager::$dsn, ConnectionManager::$user, ConnectionManager::$password, ConnectionManager::$options);
 				ConnectionManager::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$endTime = microtime(true);
 				trace("Connection opened in ".number_format($endTime-$startTime, 3)." seconds", 3);
