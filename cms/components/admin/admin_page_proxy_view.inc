@@ -66,8 +66,7 @@ class AdminPageProxyView
 		$adminComponent = $this->adminPage->Component();
 		$hostComponent = $page->Component();
 		
-		$https = $_SERVER['HTTPS'];
-		if ($https == "off") $https = false; // For IIS
+		$https = Fakoli::checkSSL();
 		
 		// #0
 		if ($isAction || $isResource || $isAdmin)

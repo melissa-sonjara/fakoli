@@ -953,6 +953,22 @@ class Fakoli
 	}
 	
 	/**
+	 * Checks if SSL is enabled on the current request
+	 */
+	static function checkSSL()
+	{
+		$https = false;
+		$https = $_SERVER['HTTPS'];
+		if ($https == "off") $https = false;
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') 
+		{
+			$https = true;
+		}
+		
+		return $https;
+	}
+	
+	/**
 	 * Serves the page with the specified section and identifier.
 	 * 
 	 * @param string $sectionIdentifier the identifier of the section
@@ -1029,8 +1045,7 @@ class Fakoli
 			trace("\$_SERVER['HTTPS'] = {$_SERVER['HTTPS']}", 3);
 			trace("\$_SERVER['REQUEST_URI'] = {$_SERVER['REQUEST_URI']}", 3);
 			
-			$https = $_SERVER['HTTPS'];
-			if ($https == "off") $https = false; // For IIS
+			$https = Fakoli::checkSSL();
 			
 			$useSSL = $section->use_SSL || $content->use_SSL;
 			
@@ -1091,8 +1106,7 @@ class Fakoli
 			Fakoli::assertRole($pageRole, "/admin/login");
 		}
 		
-		$https = $_SERVER['HTTPS'];
-		if ($https == "off") $https = false; // For IIS
+		$https = Fakoli::checkSSL();
 		
 		if ($config['admin_SSL'] && !$https )
 		{

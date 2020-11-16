@@ -946,6 +946,10 @@ function redirect($page)
 	
 	$https = $_SERVER['HTTPS'];
 	if ($https == "off") $https = false;
+	if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+	{
+		$https = true;
+	}
 	
 	$protocol = $https ? "https" : "http";
 	

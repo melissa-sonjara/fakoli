@@ -92,8 +92,7 @@ class HTMLFieldRenderer extends FieldRenderer
 		$contextMenu = "cut copy paste pastetext searchreplace removeformat | {$tiny_mce_application_context_menu_section} inserttable cell row column deletetable";
 		$toolbar = "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | {$tiny_mce_application_toolbar_section} code visualblocks fullscreen";
 		
-		$https = $_SERVER['HTTPS'];
-		if ($https == "off") $https = false;
+		$https = Fakoli::checkSSL();
 		
 		$protocol = $https ? "https" : "http";
 		
