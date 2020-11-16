@@ -50,7 +50,7 @@ class ConnectionManager
 	static $user;
 	static $password;
 	static $conn;
-	static $options = array();
+	static $options = null;
 	/**
 	 * Retrieves a reference to the global database connection. If no connection
 	 * to the database has yet been made, one will be created as a result of this
