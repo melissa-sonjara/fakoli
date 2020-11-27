@@ -45,10 +45,124 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("settings");
 
+abstract class AbstractEmailTransport
+{
+	var $to = null;
+	var $subject = "No Subject";
+	var $htmlMessage = "";
+	var $plainMessage = "";
+	var $emailFrom = "";
+	var $emailName = "";
+	var $replyTo = "";
+	var $replyToName = "";
+	var $returnPath = "";
+	var $attachments = array();
+	var $ical = null;
+	var $icalMethod = null;
+	
+	function setTo($to) 							{ $this->to = $to; }
+	function setSubject($subject)					{ $this->subject = $subject; }
+	function setHTMLMessage($message)				{ $this->htmlMessage = $message; }
+	function setPlainMessage($message)				{ $this->plainMessage; }
+	function setFrom($email, $name = "")			{ $this->emailFrom = $email; $this->emailName = $name; }
+	function setReplyTo($email, $name)				{ $this->replyTo = $email; $this->replyToName = $name; }
+	function setReturnPath($path) 					{ $this->returnPath = $path; }
+	function addAttachment($filename, $attachment)	{ $this->attachments[$filename] = $attachment; }
+	function setICalAttachment($ical, $method)		{ $this->ical = $ical; $this->icalMethod = $method; }
+	abstract function send();
+}
+	
+class SMTPEmailTransport extends AbstractEmailTransport
+{
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+	function send()
+	{
+		$returnPath = $this->returnPath ? $this->returnPath : $this->emailFrom;
+		$replyTo = $this->replyTo ? "{$this->replyName} <{$this->replyTo}>" : "{$this->emailName} <{$this->emailFrom}>";
+		// Use the MD5 algorithm to generate a random hash
+		$from = $this->emailName . " <" . $this->emailFrom . ">";
+		
+		$headers = "Return-Path: ". $returnPath . "\r\n";
+		$headers .= "Reply-To: ". $replyTo ."\r\n";
+		$headers .= "MIME-Version: 1.0\r\n";
+		
+		$random_hash = md5(date('r', time()));
+		
+		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
+		
+		$message = "";
+	
+		if (!$this->plainMessage) $this->plainMessage = HTMLToText($this->htmlMessage);
+		
+		$message .= <<<ENDMESSAGE
+----PHP-alt-{$random_hash}
+Content-Type: text/plain
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+{$this->plainMessage}
+
+
+----PHP-alt-{$random_hash}
+Content-Type: text/html
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+{$this->htmlMessage}
+ENDMESSAGE;
+
+		foreach($this->attachments as $filename => $attachment)
+		{
+			$message .= "----PHP-alt-{$random_hash}\r\n";
+			$message .= $this->writeAttachment($filename, $attachment);
+		}
+		
+		if ($this->ical)
+		{
+			$message .= <<<ENDMESSAGE
+----PHP-alt-{$random_hash}
+Content-Type: text/calendar; charset=utf-8;method={$this->icalMethod}
+Content-Disposition: inline; filename=meeting.ics
+Content-Transfer-Encoding: 8bit
+				
+ENDMESSAGE;
+		}
+		$this->mail = new Mail($from, $this->to, $this->subject, $message, $headers, $from);
+
+		$rtn = $this->mail->send();
+		
+		return $rtn;
+	}
+	
+	function writeAttachment($filename, $attachment)
+	{
+		$fileAttachments = "";
+		if(is_file($attachment))
+		{
+			$base_filename = basename($attachment);
+			
+			$fileAttachments .= "----PHP-alt-{$random_hash}\n";
+			$fp =  @fopen($attachment, "rb");
+			$fileContents = @fread($fp, filesize($attachment));
+			@fclose($fp);
+			$fileContents = chunk_split(base64_encode($fileContents));
+			$fileAttachments .= "Content-Type: application/octet-stream; name=\"". $base_filename ."\"\n" .
+					"Content-Description: ".$base_filename."\n" .
+					"Content-Disposition: attachment;\n" . " filename=\"". $base_filename ."\"; size=".filesize($attachment).";\n" .
+					"Content-Transfer-Encoding: base64\n\n" . $fileContents . "\n\n";
+		}
+		
+		return $fileAttachments;
+	}
+}
 
 class EmailHandler
 {
-	var $mail;
+	var $transport;
 	var $onSendComplete; // optional user callback function after mail is sent
 	
 	/**
@@ -85,28 +199,43 @@ class EmailHandler
 		
 		$toAddr = trim($toAddr);
 		
-		// Use the MD5 algorithm to generate a random hash
-		$random_hash = md5(date('r', time()));
-		$from = $site_email_name . " <" . $site_email_from . ">";
-		$headers .= "Return-Path: ". $site_email_from . "\r\n";
-		$headers .= "Reply-To: ". $replyToName . " <" . $replyTo  . ">\r\n";
-		$headers .= "MIME-Version: 1.0\r\n";
+		if ($config['html_email_template'])
+		{
+			$file = $config['homedir'] . $config['html_email_template'];
+			trace("Loading email template '$file'", 3);
+			$template = file_get_contents($file);
+			$template = str_replace("{var:styles}", Fakoli::getStyles(), $template);
+			$message = str_replace("{message}", $message, $template);
+		}
+		
+		$this->transport = EmailManager::createTransport();
 
-		$headers .= "Content-Type: multipart/alternative; boundary=\"--PHP-alt-".$random_hash."\"\r\n";
-
-		if($attachments && !is_array($attachments)) 
+		$this->transport->setTo($toAddr);
+		$this->transport->setFrom($site_email_from, $site_email_name);
+		$this->transport->setReplyTo($replyTo, $replyToName);
+		$this->transport->setReturnPAth($site_email_from);
+		$this->transport->setSubject($subject);
+		$this->transport->setHTMLMessage($message);
+		$this->transport->setPlainMessage(HTMLToText($message));
+		
+		if($attachments && !is_array($attachments))
 		{
 			$attachments = array_combine(basename($attachments), $attachments);
+		}
+		
+		foreach($attachments as $filename => $attachment)
+		{
+			$this->transport->addAttachment($filename, $attachment);
 		}
 		
 		if($iCalMgr)
 		{
 			$iCalMgr->setOrganizer($replyTo, $replyToName);
 			$iCalMgr->setAttendee($toAddr);
+			
+			$this->transport->setICalAttachment($iCalMgr->format(), $iCalMgr->data->get("method"));
 		}
-		$message = $this->getMessageScript($message, $random_hash, $attachments, $iCalMgr);
 		
-		$this->mail = new Mail($site_email_from, $toAddr, $subject, $message, $headers, $from);
 	}
 
 	/*
@@ -117,18 +246,6 @@ class EmailHandler
 	{
 		global $config;
 		
-		if ($config['html_email_template'])
-		{
-			$file = $config['homedir'] . $config['html_email_template'];
-			trace("Loading email template '$file'", 3);
-			$template = file_get_contents($file);
-			$template = str_replace("{var:styles}", Fakoli::getStyles(), $template);
-			$html = str_replace("{message}", $msg, $template);
-		}
-		else
-		{
-			$html = $msg;
-		}
 
 		$fileAttachments = $this->formatAttachments($attachments, $random_hash);
 		
@@ -222,14 +339,14 @@ Content-Transfer-Encoding: 8bit
 
 	function send()
 	{
-		$rtn = $this->mail->send();
+		$rtn = $this->transport->send();
 		
 		trace("EmailHandler send rtn $rtn", 3);
 		// Call the callback whether successful or not; calling script
 		// decides how to handle either way. 
 		if ($this->onSendComplete AND is_callable($this->onSendComplete))
 		{
-			call_user_func($this->onSendComplete, $mail, $rtn);
+			call_user_func($this->onSendComplete, $rtn);
 		}			
 		return $rtn;
 	}
@@ -267,6 +384,71 @@ Content-Transfer-Encoding: 8bit
  */
 class EmailManager
 {
+	static $transports = null;
+	
+	/**
+	 * Registers an email transport handler
+	 * @param string $mode identifying mode name for the transport handler
+	 * @param string $class name of the class providing the transport. This must derive from AbstractEmailTransport
+	 */
+	static function registerTransport($mode, $class)
+	{
+		if (!EmailManager::$transports)
+		{
+			EmailManager::$transports = array();
+		}
+		
+		EmailManager::$transports[$mode] = $class;
+	}
+	
+	/**
+	 * 
+	 * @param string $mode (optional) the specific email transport required. Defaults to the selected email transport.
+	 * @return AbstractEmailTransport
+	 */
+	static function createTransport($mode = null)
+	{
+		if (EmailManager::$transports == null)
+		{
+			ComponentManager::fireEvent("RegisterEmailTransport");
+		}
+		
+		if (!$mode)
+		{
+			$mode = Settings::getValue("email", "transport_mode");
+		}
+		
+		$class = EmailManager::$transports[$mode];
+		return new $class;
+	}
+	
+	static function getTransportModes()
+	{
+		if (EmailManager::$transports == null)
+		{
+			ComponentManager::fireEvent("RegisterEmailTransport");
+		}
+		
+		return array_keys(EmailManager::$transports);
+	}
+	
+	static function registerSMTPTransport()
+	{
+		EmailManager::registerTransport("SMTP", 'SMTPEmailTransport');
+	}
+	
+	static function registerSettingsFormExtension()
+	{
+		SettingsManager::registerExtension("email", array(EmailManager, settingsExtension));
+	}
+	
+	static function settingsExtension($form)
+	{
+		$transports = EmailManager::getTransportModes();
+		$options = array_combine($transports, $transports);
+		$form->dropdown("transport_mode", "Selected Transport Mode", $options);
+	}
+	
 	var $emailTemplate;
 	var $item; // dataitem object of the base class sending the emails
 	var $recipients;
@@ -438,6 +620,8 @@ class EmailManager
 		trace("EmailManager::setDefaults", 3);
 		
 		global $config;
+		
+		Settings::setDefaultValue("email", "transport_mode", "SMTP", "String", "Specifies the mail transport for system generated emails", "Mail Transport", null, 0);
 		
 		Settings::setDefaultValue("email", "use_debugging_mode", false, "Boolean", "Enable local logging of generated emails (instead of sending via SMTP)", "Debugging Mode", null, 0);
 		
