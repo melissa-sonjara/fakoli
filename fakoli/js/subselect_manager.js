@@ -13,6 +13,8 @@ var SubSelectManager = new Class(
 		this.subSelect = document.id(subSelect);
 		this.subSelectLabel = document.id(subSelect + "_label");
 		
+		this.select.manager = this;
+		
 		var container = this.subSelect.getParent();
 		
 		this.subselectVisibility = container.hasClass('subselect_container') ? container : this.subSelect;
@@ -65,5 +67,16 @@ var SubSelectManager = new Class(
 	addOptions: function(selectValue, options)
 	{
 		this.selectOptions[selectValue] = options;
+	},
+	
+	validateRequired: function()
+	{
+		var selected = this.select.value;
+		var subSelected = this.subSelect.value;
+		
+		
+		if (!selected) return false;
+		if (!subSelected && (typeof opts === 'undefined' || !isArray(opts))) return false;
+		return true;
 	}
 });

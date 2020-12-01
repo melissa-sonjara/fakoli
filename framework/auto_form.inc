@@ -982,6 +982,24 @@ class AutoForm
 	}
 	
 	/**
+	 * Make a subselect field required. The main option must always be selected. If there is a sub-select
+	 * option, that must also be selected.
+	 * @param string $field the field to be validated
+	 * @param string $fieldTitle custom human-readable name for the field
+	 * @param string $subFieldTitle custom human-readable name for the sub-field
+	 * @param string $message the message to display if validation fails.
+	 */
+	function requiredSubSelect($field, $fieldTitle, $subFieldTitle = "", $message = "")
+	{
+		if ($this->data->hasField($field))
+		{
+			$this->validator->add(new SubSelectFieldRequiredValidator($field, 
+																	  $fieldTitle ? $fieldTitle : $this->prettifyFieldName($field),  
+																	  $subFieldTitle, $message));
+		}
+	}
+	
+	/**
 	 * Validate the user input for the specified field against a regular expression, outputting
 	 * the supplied message if the entered value does not match. This can be used to provide general
 	 * format-based validation for fields.

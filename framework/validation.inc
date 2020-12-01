@@ -1117,7 +1117,60 @@ ENDSCRIPT;
 	
 }
 
-
+class SubSelectFieldRequiredValidator extends AbstractValidator
+{
+	var $subtitle = "";
+	
+	function __construct($field, $title, $subtitle)
+	{
+		$this->AbstractValidator($field, $title, $subtitle);
+		
+		$this->subtitle = $subtitle ? $subtitle : $this->title;
+	}
+	
+	function writeClient()
+	{
+		if ($this->readOnly) return "";
+		
+		$script = <<<ENDSCRIPT
+		
+		if (form["{$this->field}"].style.display != "none")
+		{ 
+			if (form["{$this->field}"].value == "")
+			{
+				alert("{$this->title} is a required field. Please supply a value.");
+				return false;
+			}
+			else if (!form["{$this->field}"].manager.validateRequired())
+			{
+				alert("{$this->subtitle} is a required field. Please supply a value.");
+				return false;
+			}
+		}
+		
+ENDSCRIPT;
+		
+		return $script;
+		
+	}
+	
+	function validate()
+	{
+		global $_POST;
+		
+		if ($this->readOnly) return "";
+		
+		if (!isset($_POST[$this->field]))
+		{
+			return "{$this->title} is a required field.";
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+}
 /**
  * RequiredStringValidator.
  * 
