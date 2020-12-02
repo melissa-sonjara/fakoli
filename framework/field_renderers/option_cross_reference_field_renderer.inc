@@ -220,7 +220,14 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 				
 			$selectedItems = $this->getSelected($obj, $rc, $pk);
 			
-			echo formatItems($selectedItems, "{".$this->nameField."}", $this->separator);
+			$selected = array();
+			foreach($this->options as $option)
+			{
+				$val = $option->get($option->getPrimaryKey());
+				if (array_key_exists($val, $selectedItems)) $selected[] = $option;
+			}
+			
+			echo formatItems($selected, $this->nameField, $this->separator);
 		}
 		
 		$this->_endField($field);
