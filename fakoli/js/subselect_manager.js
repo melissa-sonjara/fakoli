@@ -76,7 +76,10 @@ var SubSelectManager = new Class(
 		
 		
 		if (!selected) return false;
-		if (!subSelected && (typeof opts === 'undefined' || !isArray(opts))) return false;
+
+		var opts = this.selectOptions[selected];
+		
+		if ((!subSelected || subSelected === "0") && (typeof opts !== 'undefined')) return false;
 		return true;
 	}
 });
