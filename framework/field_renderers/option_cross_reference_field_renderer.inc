@@ -227,7 +227,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 				if (array_key_exists($val, $selectedItems)) $selected[] = $option;
 			}
 			
-			echo formatItems($selected, $this->nameField, $this->separator);
+			echo formatItems($selected, "{".$this->nameField."}", $this->separator);
 		}
 		
 		$this->_endField($field);
