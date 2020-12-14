@@ -76,7 +76,6 @@ class SMTPEmailTransport extends AbstractEmailTransport
 {
 	function __construct()
 	{
-		parent::__construct();
 	}
 	
 	function send()
