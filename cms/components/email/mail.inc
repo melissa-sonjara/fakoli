@@ -132,12 +132,14 @@ class Mail
 	    
 	    # send the message including headers (headers must be followed by an
 	    # empty newline
-	    $smtp->Data("From: $this->fullFrom\n".
-	                "To: $this->to\n".
-	                $this->headers.
-	                "Subject: $this->subject\n".
-	                "\n".
-	                "$this->body\n");
+	    $data = "From: $this->fullFrom\n".
+	 	    "To: $this->to\n".
+	 	    $this->headers.
+	 	    "Subject: $this->subject\n".
+	 	    "\n".
+	 	    "$this->body\n";
+	    trace($data, 3);
+	    $smtp->Data($data);
 	
 	    # the mail either been sent or failed either way we are done
 	    $smtp->quit();
