@@ -141,6 +141,8 @@ class Mail
 	    trace($data, 3);
 	    $smtp->Data($data);
 	
+	    if ($smtp->error) trace($smtp->error, 2);
+	    
 	    # the mail either been sent or failed either way we are done
 	    $smtp->quit();
 	    
