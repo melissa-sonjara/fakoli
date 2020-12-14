@@ -130,6 +130,8 @@ Content-Transfer-Encoding: 8bit
 				
 ENDMESSAGE;
 		}
+			
+		trace("Sending Mail from {$from} to {$this->to}: {$this->subject}", 3);
 		$this->mail = new Mail($from, $this->to, $this->subject, $message, $headers, $from);
 
 		$rtn = $this->mail->send();
