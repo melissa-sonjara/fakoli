@@ -80,6 +80,8 @@ class SMTPEmailTransport extends AbstractEmailTransport
 	
 	function send()
 	{
+		$site_email_from =  Settings::getValue('email', 'email_from');
+		
 		$returnPath = $this->returnPath ? $this->returnPath : $this->emailFrom;
 		$replyTo = $this->replyTo ? "{$this->replyName} <{$this->replyTo}>" : "{$this->emailName} <{$this->emailFrom}>";
 		// Use the MD5 algorithm to generate a random hash
@@ -132,7 +134,7 @@ ENDMESSAGE;
 		}
 			
 		trace("Sending Mail from {$from} to {$this->to}: {$this->subject}", 3);
-		$this->mail = new Mail($from, $this->to, $this->subject, $message, $headers, $from);
+		$this->mail = new Mail($site_email_from, $this->to, $this->subject, $message, $headers, $from);
 
 		$rtn = $this->mail->send();
 		
