@@ -124,14 +124,14 @@ class Mail
 	    # start the mail transaction with with the return path address
 	    $smtp->Mail($this->from);
 	    
-	    if ($smtp->error) trace(print_r($smtp->error, true), 2);
+	    if ($smtp->error) trace("FROM: ".print_r($smtp->error, true), 2);
 	    
 	    # state each recipient
 	    # NOTE: this does _not_ add to: or cc: headers to the email
 	    $smtp->Recipient($this->to);
 	    
 	    
-	    if ($smtp->error) trace(print_r($smtp->error, true), 2);
+	    if ($smtp->error) trace("RCPT: ".print_r($smtp->error, true), 2);
 	
 	    if (!$this->fullFrom) $this->fullFrom = $this->from;
 	    
