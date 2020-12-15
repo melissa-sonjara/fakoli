@@ -143,8 +143,8 @@ class Mail
 	 	    "Subject: $this->subject\n".
 	 	    "\n".
 	 	    "$this->body\n";
-	    trace($data, 3);
-	    $smtp->Data($data);
+	    
+	 	$smtp->Data($data);
 	
 	    if ($smtp->error) trace(print_r($smtp->error, true), 2);
 	    
