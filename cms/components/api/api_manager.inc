@@ -319,7 +319,7 @@ class APIManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("api", "token_lifetime", "String", "30 days", "Specifies how long API authorization tokens stay valid. Leave blank to have tokens never expire");
+		Settings::setDefaultValue("api", "token_lifetime", "30 days", "String",  "Specifies how long API authorization tokens stay valid. Leave blank to have tokens never expire");
 	}
 
 	static function registerSectionContentManager()
