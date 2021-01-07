@@ -283,7 +283,7 @@ class APIManager
 			{
 				$expiryDate = new DateTime();
 				$expiryDate->modify("+".$tokenLifetime);
-				$token->expiry_date = $expiryDate->format("Y-m-d H:i:s e");
+				$token->expiry_date = $expiryDate->format("Y-m-d H:i:s T");
 			}
 			
 			LoginManager::recordLoginAttempt($username, "api", null, "success");
@@ -306,7 +306,7 @@ class APIManager
 		{
 			$expiryDate = new DateTime();
 			$expiryDate->modify("+".$tokenLifetime);
-			$token->expiry_date = $expiryDate->format("Y-m-d H:i:s e");
+			$token->expiry_date = $expiryDate->format("Y-m-d H:i:s T");
 			$token->save();
 		}
 	}
