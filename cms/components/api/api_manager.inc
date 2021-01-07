@@ -64,6 +64,25 @@ class AuthenticateAPIEndPoint extends APIEndPoint
 	}
 }
 
+class ExtendTokenAPIEndPoint extends APIEndPoint
+{
+	function get()
+	{
+		Fakoli::JSONreturn(APIManager::extendToken());
+	}
+	
+	function post()
+	{
+		Fakoli::JSONreturn(APIManager::extendToken());
+	}
+	
+	function allowAnonymous()
+	{
+		return true;
+	}
+}
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -259,6 +278,14 @@ class APIManager
 				$token->save();
 			}
 			
+			$tokenLifetime = Settings::getValue("api", "token_lifetime");
+			if ($tokenLifetime)
+			{
+				$expiryDate = new DateTime();
+				$expiryDate->modify("+".$tokenLifetime);
+				$token->expiry_date = $expiryDate->format("Y-m-d H:i:s e");
+			}
+			
 			LoginManager::recordLoginAttempt($username, "api", null, "success");
 			Fakoli::JSONReturn($token, true);
 		}
@@ -268,14 +295,31 @@ class APIManager
 		}
 	}
 	
+	function extendToken()
+	{
+		$t = checkIdentifier($_GET["token"]);
+		
+		$token = APIToken::getToken($t);
+		
+		$tokenLifetime = Settings::getValue("api", "token_lifetime");
+		if ($tokenLifetime)
+		{
+			$expiryDate = new DateTime();
+			$expiryDate->modify("+".$tokenLifetime);
+			$token->expiry_date = $expiryDate->format("Y-m-d H:i:s e");
+			$token->save();
+		}
+	}
+	
 	static function registerAPIEndPoints()
 	{
 		APIManager::registerEndPoint("authenticate", new AuthenticateAPIEndPoint());
+		APIManager::registerEndPoint("extend", new AuthenticateAPIEndPoint());
 	}
 	
 	static function setDefaults()
 	{
-		//TODO: Set default configuration parameters here
+		Settings::setDefaultValue("api", "token_lifetime", "String", "30 days", "Specifies how long API authorization tokens stay valid. Leave blank to have tokens never expire");
 	}
 
 	static function registerSectionContentManager()
