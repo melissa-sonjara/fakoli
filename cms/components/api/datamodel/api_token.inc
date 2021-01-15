@@ -40,4 +40,14 @@ class APIToken extends DataItem
 		if (count($tokens)) return $tokens[0];
 		return null;
 	}
+	
+	static function getToken($token)
+	{
+		$tokens = Query::create('APIToken', "WHERE token=:t AND active=1 AND (expiry_date IS NULL OR expiry_date > NOW()) ORDER BY created_date DESC LIMIT 1")
+					   ->bind(":t", $token)
+					   ->execute();
+		
+		if (count($tokens)) return $tokens[0];
+		return null;
+	}
 }
