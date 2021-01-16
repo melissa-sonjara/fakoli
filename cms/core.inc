@@ -1155,18 +1155,21 @@ class Fakoli
 	 * Return a DataItem to the client in JSON format
 	 * @param mixed $object the object to be returned
 	 * @param boolean $sendType true to send the content type
+	 * @param boolean $wrap true to wrap the returned output into a result field, false to send unwrapped
 	 */
-	static function JSONreturn($object, $sendType = true)
+	static function JSONreturn($object, $sendType = true, $wrap = true)
 	{
 		if ($sendType) header("Content-Type: application/json");
 		if (method_exists($object, "toJSON"))
 		{
-			throw new FakoliEarlyExit('{"result": '.$object->toJSON().'}');
+			$out = ($wrap) ? '{"result": '.$object->toJSON().'}' : $object->toJSON();
 		}
 		else 
-		{			
-			throw new FakoliEarlyExit('{"result": '.json_encode($object).'}');
+		{		
+			$out = ($wrap) ? '{"result": '.json_encode($object).'}' : json_encode($object);
 		}
+		
+		throw new FakoliEarlyExit($out);		
 	}
 	
 	/**
