@@ -1,5 +1,6 @@
 <?php
 Fakoli::usingFeature("api_helper");
+Fakoli::using("section");
 
 class APIEndPoint
 {
