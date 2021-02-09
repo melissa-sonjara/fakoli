@@ -70,7 +70,7 @@ class HtmlEditorManager
 		
 		if (count(HtmlEditorManager::$actionFilters) > 0)
 		{
-			HtmlEditorManager::$actionFilter = 'HTMLEditorManager::handleActionFilters';
+			HTMLFieldRenderer::$actionFilter = 'HTMLEditorManager::handleActionFilters';
 		}
 	}
 	
