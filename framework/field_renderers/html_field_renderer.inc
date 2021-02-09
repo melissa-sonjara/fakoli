@@ -53,6 +53,8 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	static $_includedRTEScript = false;
 	
+	public static $actionFilter = null;
+	
 	var $rteParams= array();
 	
 	function HTMLFieldRenderer(&$parent)
@@ -91,6 +93,12 @@ class HTMLFieldRenderer extends FieldRenderer
 		if ($tiny_mce_application_plugins) $plugins .= ",".$tiny_mce_application_plugins;
 		$contextMenu = "cut copy paste pastetext searchreplace removeformat | {$tiny_mce_application_context_menu_section} inserttable cell row column deletetable";
 		$toolbar = "undo redo | cut copy paste pastetext searchreplace | styleselect | bold italic removeformat | bullist numlist outdent indent | table charmap | {$tiny_mce_application_toolbar_section} code visualblocks fullscreen";
+		
+		if (is_callable(HTMLFieldRenderer::$actionFilter))
+		{
+			$contextMenu = HTMLFieldRenderer::$actionFilter($contextMenu);
+			$toolbar = HTMLFieldRenderer::$actionFilter($toolbar);
+		}
 		
 		$https = Fakoli::checkSSL();
 		

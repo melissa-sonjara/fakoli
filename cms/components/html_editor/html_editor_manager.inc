@@ -8,6 +8,7 @@ class HtmlEditorManager
 {
 	static $plugins = array();			
 	static $additionalPlugins = array();
+	static $actionFilters = array();
 	
 	function HtmlEditorManager()
 	{
@@ -21,9 +22,14 @@ class HtmlEditorManager
 	
 	static function registerAdditionalPlugin($title, $plugin)
 	{
-		HTMLEditorManager::$additionalPlugins[$plugin] = $title;
+		HtmlEditorManager::$additionalPlugins[$plugin] = $title;
 	}
 
+	static function registerActionFilter($filter)
+	{
+		HtmlEditorManager::$actionFilters[] = $filter; 
+	}
+	
 	static function upgradeComponent($version)
 	{
 		$mgr = new HtmlEditorUpgradeManager();
@@ -54,12 +60,27 @@ class HtmlEditorManager
 		global $tiny_mce_body_class;
 		
 		ComponentManager::fireEvent("RegisterHTMLEditorPlugins");
+		ComponentManager::fireEvent("RegisterHTMLEditorActionFilters");
 		
 		$tiny_mce_application_plugins = implode(",", array_keys(HtmlEditorManager::$plugins));
 		$tiny_mce_application_toolbar_section = implode(" ", array_keys(HtmlEditorManager::$plugins)) . " |";
 		$tiny_mce_application_context_menu_section = implode(" ", array_keys(HtmlEditorManager::$plugins)) . " |";
 		$tiny_mce_content_css = Settings::getValue("html_editor", "CSS_files");
 		$tiny_mce_body_class = Settings::getValue("html_editor", "body_class");
+		
+		if (count(HtmlEditorManager::$actionFilters) > 0)
+		{
+			HtmlEditorManager::$actionFilter = 'HTMLEditorManager::handleActionFilters';
+		}
+	}
+	
+	static function handleActionFilters($context)
+	{
+		foreach(HTMLEditorManager::$actionFilters as $filter)
+		{
+			$context = $filter($context);
+		}
+		return $context;
 	}
 	
 	static function applyCustomCSS($template)
