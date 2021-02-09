@@ -96,8 +96,8 @@ class HTMLFieldRenderer extends FieldRenderer
 		
 		if (is_callable(HTMLFieldRenderer::$actionFilter))
 		{
-			$contextMenu = HTMLFieldRenderer::$actionFilter($contextMenu);
-			$toolbar = HTMLFieldRenderer::$actionFilter($toolbar);
+			$contextMenu = (HTMLFieldRenderer::$actionFilter)($contextMenu);
+			$toolbar = (HTMLFieldRenderer::$actionFilter)($toolbar);
 		}
 		
 		$https = Fakoli::checkSSL();
