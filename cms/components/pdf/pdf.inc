@@ -228,6 +228,128 @@ class ChromePDFConvertor implements PDFConvertor
 	}
 }
 
+class ExternalPDFConvertor
+{
+	private $pdf;
+	private $footer;
+	
+	function __construct($pdf)
+	{
+		$this->pdf = $pdf;
+	}
+	
+	/**
+	 * Provides a separate URL to use as the cover page of the PDF
+	 * @param string $url the URL used to generate the cover page
+	 * @return PDF
+	 */
+	function coverPage($url)
+	{
+		//NOTE: Not available with external processor
+		$this->cover = $url;
+		return $this;
+	}
+	
+	/**
+	 *
+	 * @param $text - text of the footer
+	 * @param $position - valid positions are left, right, and center
+	 * @param $size - font size for the footer ?? doesn't work
+	 */
+	function footer($text, $position = "center", $size = 11)
+	{
+		//TODO: Implement support for this
+	}
+	
+	function generate()
+	{
+		global $config;
+		
+		$handler = Settings::getValue("pdf", "external_PDF_url");
+		if (!$handler)
+		{
+			$handler = $config["external_pdf_url"];
+		}
+		
+		if (!$handler) throw new FakoliException("External PDF convertor URL not specified");
+		
+		$uri = $this->pdf->uri;
+		$uri = appendToQueryString($uri, "__pdfoutput=1");
+		if ($this->pdf->landscape)
+		{
+			$uri = appendToQueryString($uri, "__pdflayout=landscape");
+		}
+		
+		if ($this->pdf->useToken)
+		{
+			$token = AutoLoginManager::createOneTimeToken($uri);
+			$uri = "/action/auto_login/authenticate?token=$token";
+		}
+		
+		$urlparam = "http".($this->pdf->ssl?"s":"")."://".$config["http_host"].$uri;
+		
+		$url = $handler."?url=".urlencode($urlparam);
+		
+		$content = getRemote($url);
+		
+		if ($this->pdf->output)
+		{
+			file_put_contents($this->pdf->output, $content);
+		}
+
+		return $content;
+	}
+	
+	function screenshot()
+	{
+		global $config;
+		
+		$handler = Settings::getValue("pdf", "external_PNG_url");
+		if (!$handler)
+		{
+			$handler = $config["external_png_url"];
+		}
+		
+		if (!$handler) throw new FakoliException("External PDF convertor URL not specified");
+		
+		$uri = $this->pdf->uri;
+		$uri = appendToQueryString($uri, "__pdfoutput=1");
+		if ($this->pdf->landscape)
+		{
+			$uri = appendToQueryString($uri, "__pdflayout=landscape");
+		}
+		
+		if ($this->pdf->useToken)
+		{
+			$token = AutoLoginManager::createOneTimeToken($uri);
+			$uri = "/action/auto_login/authenticate?token=$token";
+		}
+		
+		$urlparam = "http".($this->pdf->ssl?"s":"")."://".$config["http_host"].$uri;
+		
+		$url = $handler."?url=".urlencode($urlparam);
+		
+		$content = getRemote($url);
+		
+		if ($this->pdf->output)
+		{
+			file_put_contents($this->pdf->output, $content);
+		}
+		
+		return $content;
+	}
+	
+	function preProcessTemplate($template)
+	{
+		if (!isset($_GET["__pdfoutput"])) return $template;
+		$layout = ($_GET["__pdflayout"] == "landscape") ? " @page { size: landscape; }" : "";
+		$styles = "<style type='text/css' media='print'>{$layout} @page {margin:0;} body { margin: 1.5cm }</style></head>";
+		
+		$template = preg_replace("/<\\/head>/i", $styles, $template);
+		return $template;
+	}
+}
+
 class PDF
 {
 	var $uri;
