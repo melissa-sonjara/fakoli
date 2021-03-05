@@ -51,7 +51,7 @@ class PdfManager
 		switch($mode)
 		{
 			case "external":
-				return new ExternalPDFConvertor();
+				return new ExternalPDFConvertor($pdf);
 				
 			case "chrome":
 				return new ChromePDFConvertor($pdf);
