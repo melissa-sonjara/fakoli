@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
 
 /**
@@ -110,3 +114,5 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		}
 	}
 }
+
+/**@}*/

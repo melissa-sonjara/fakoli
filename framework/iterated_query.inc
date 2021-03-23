@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup orm
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2012 Sonjara, Inc
@@ -249,4 +252,4 @@ function iteratedQuery($class)
 
 	return $query->execute();
 }
-?>
+/**@}*/?>

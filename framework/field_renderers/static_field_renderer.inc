@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 class StaticFieldRenderer extends FieldRenderer
 {
 	function __construct($form, $field, $label)
@@ -36,3 +40,5 @@ class StaticFieldRenderer extends FieldRenderer
 		$this->renderField($field);
 	}
 }
+
+/**@}*/

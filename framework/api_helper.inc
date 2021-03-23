@@ -1,4 +1,8 @@
 <?php
+/**\defgroup api API Support Utilities
+ * @{
+ */
+
 /**************************************************************
 
 Copyright (c) 2007-2010 Sonjara, Inc
@@ -295,4 +299,4 @@ class APIHelper
 		$this->formatterMap[$name] = $formatter;
 	}
 }
-?>
+/**@}*/?>

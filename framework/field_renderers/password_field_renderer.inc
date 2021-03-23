@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -187,4 +190,4 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 	}	
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
 Copyright (c) 2007-2018 Sonjara, Inc
@@ -139,3 +143,5 @@ class ToggleFieldRenderer extends FieldRenderer
 		return BooleanTypeRenderer::format($this->parent->data->get($field), $this->template);
 	}
 }
+
+/**@}*/

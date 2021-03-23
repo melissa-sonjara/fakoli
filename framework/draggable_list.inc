@@ -1,4 +1,8 @@
 <?php
+/**\defgroup datadisplay Data Display Controls
+ * @{
+ */
+
 /**************************************************************
 
 Copyright (c) 2017 Sonjara, Inc
@@ -122,4 +126,4 @@ ENDSCRIPT;
 		echo "</{$this->listTag}>\n";
 	}
 }
-?>
+/**@}*/?>

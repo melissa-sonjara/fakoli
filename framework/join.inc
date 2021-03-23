@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup orm
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -1105,4 +1108,4 @@ function extractGroupedJoinResults($class, $results)
 	
 	return $arr;
 }
-?>
+/**@}*/?>

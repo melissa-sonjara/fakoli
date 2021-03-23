@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -120,3 +123,5 @@ class DataListFieldRenderer extends FieldRenderer
 		}
 	}	
 }
+
+/**@}*/?>

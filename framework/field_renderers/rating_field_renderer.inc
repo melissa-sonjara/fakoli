@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -96,4 +99,5 @@ class RatingFieldRenderer extends FieldRenderer
 		$this->renderField($field);
 	}
 }	
-?>
+
+/**@}*/?>

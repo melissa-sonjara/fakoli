@@ -1,5 +1,7 @@
 <?php
-
+/**\addtogroup autoform
+ * @{
+ */
 /**
  * AutoFormLayout provides the abstract base class for form layout engine classes. When a form is constructed
  * as an AutoForm object, the layout engine provides the HTML structure that the form fields are rendered within.
@@ -1144,3 +1146,5 @@ class TemplateFormLayout extends AutoFormLayout
 		echo $this->output;
 	}
 }
+
+/**@}*/

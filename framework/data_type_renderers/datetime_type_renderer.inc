@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datatyperenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -92,3 +95,5 @@ class DateTimeTypeRenderer extends AbstractTypeRenderer
 		return $text; 
 	}
 }
+
+/**@}*/

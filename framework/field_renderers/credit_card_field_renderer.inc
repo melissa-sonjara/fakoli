@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -109,3 +112,5 @@ function <?echo $id?>_checkValid(input)
 		$this->_endField($field);
 	}	
 }
+
+/**@}*/?>

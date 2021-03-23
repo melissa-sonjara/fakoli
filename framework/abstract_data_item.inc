@@ -1,4 +1,7 @@
 <?php
+/**\defgroup orm Object-Relational Mapping
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -704,4 +707,4 @@ abstract class AbstractDataItem
 	 */
 	abstract function relateTo($target, $field = "");
 }
-?>
+/**@}*/?>

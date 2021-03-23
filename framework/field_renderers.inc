@@ -1,4 +1,7 @@
 <?php
+/**\defgroup fieldrenderers	AutoForm Field Renderers
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -329,4 +332,4 @@ require_once realpath(dirname(__FILE__))."/field_renderers/option_cross_referenc
 require_once realpath(dirname(__FILE__))."/field_renderers/toggle_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/color_field_renderer.inc";
 require_once realpath(dirname(__FILE__))."/field_renderers/static_field_renderer.inc";
-?>
+/**@}*/?>

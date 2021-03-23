@@ -1,5 +1,7 @@
 <?php
-
+/**\addtogroup datatyperenderers
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -69,3 +71,5 @@ class BooleanTypeRenderer extends AbstractTypeRenderer
 		return $text; 
 	}
 }
+
+/**@}*/

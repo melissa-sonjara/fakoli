@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datatyperenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -121,3 +124,5 @@ class TextTypeRenderer extends AbstractTypeRenderer
 		return $value; 
 	}
 }
+
+/**@}*/

@@ -1,4 +1,8 @@
 <?php
+/**\defgroup datadisplay Data Display Controls
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -949,4 +953,4 @@ class DataListView implements FacetFilterable
 		exit();
 	}
 }
-?>
+/**@}&/?>

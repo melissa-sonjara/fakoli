@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup autoform
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -1338,4 +1341,4 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 		echo "</div>";
 	}
 }
-?>
+/**@}*/?>

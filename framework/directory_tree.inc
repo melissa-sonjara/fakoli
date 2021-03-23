@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup datadisplay
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -491,4 +495,4 @@ function <?echo $this->id?>_onDoubleClick(itemID, itemValue)
 	}
 }
 
-?>
+/**!}*/?>

@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -213,4 +217,4 @@ window.addEvent('domready', function()
 	
 } // end class SubSelectFieldRenderer
 
-?>
+/**@}*/?>

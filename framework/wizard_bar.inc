@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup ui
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -157,4 +161,4 @@ class WizardBar extends TabBar
     	echo "</ul></div>\n";
  	}
 }
-?>
+/**@}*/?>

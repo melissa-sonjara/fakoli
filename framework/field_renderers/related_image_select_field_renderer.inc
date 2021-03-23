@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -243,4 +246,4 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 Fakoli::usingFeature("field_renderers");
 
 class TableSelectFieldRenderer extends FieldRenderer
@@ -119,3 +123,5 @@ class TableSelectFieldRenderer extends FieldRenderer
 		return true;
 	}
 }
+
+/**@}*/

@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -511,4 +514,4 @@ function <?echo $this->field ?>_toggleSelectAll(link)
 }
 
 
-?>
+/**@}*/?>

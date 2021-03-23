@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -234,3 +238,5 @@ function <?echo $this->parent->id?>_<?echo $field ?>_keyup(event)
 	}
 		
 }
+
+/**@}*/

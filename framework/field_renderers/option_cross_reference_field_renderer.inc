@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**
  * Displays a control that provides a highly styleable set of options from which the user can select a number of items.
  * The options are provided as an array of DataItems that are associated with the target item of the form via a cross-reference table
@@ -311,3 +315,5 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 		$xref->delete("WHERE {$pk}=".$obj->get($pk));
 	}	
 }
+
+/**@}*/

@@ -1,5 +1,7 @@
 <?php
-
+/**\addtogroup autoform
+ * @{
+ */
 require_once realpath(dirname(__FILE__)."/auto_form.inc");
 
 /**
@@ -460,3 +462,4 @@ class SubordinateAutoForm extends AutoForm
 		return $empty;
 	}
 }
+/**@}*/

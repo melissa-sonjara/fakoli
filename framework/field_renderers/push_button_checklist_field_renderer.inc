@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -225,4 +229,4 @@ function <?echo $fn?>(element)
 }
 
 
-?>
+/**@}*/?>

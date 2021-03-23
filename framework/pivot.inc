@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup orm
+ * @{
+ */
 /**************************************************************
 
 Copyright (c) 2013 Sonjara, Inc
@@ -695,3 +698,5 @@ class PivotTableHelper
 		}
 	}
 }
+
+/**@}*/?>

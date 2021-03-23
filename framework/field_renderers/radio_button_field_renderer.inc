@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -179,4 +182,4 @@ class RadioButtonFieldRenderer extends FieldRenderer
 }
 
 
-?>
+/**@}*/?>

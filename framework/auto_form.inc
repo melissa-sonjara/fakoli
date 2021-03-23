@@ -1,4 +1,7 @@
 <?php
+/**\defgroup autoform AutoForms
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -1777,4 +1780,4 @@ class AutoForm
 
 
 
-?>
+/**@}*/?>

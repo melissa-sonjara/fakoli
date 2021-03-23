@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -108,4 +111,4 @@ class TreeSelectFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

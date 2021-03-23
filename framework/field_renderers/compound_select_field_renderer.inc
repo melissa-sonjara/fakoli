@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -188,3 +191,5 @@ class CompoundSelectFieldRenderer extends FieldRenderer
 		}
 	}
 }
+
+/**@}*/?>

@@ -1,5 +1,7 @@
 <?php
-
+/**\defgroup datatyperenderers ORM Data Type Renderers
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -81,3 +83,4 @@ class AbstractTypeRenderer
 		return $template;	
 	}
 }
+/**@}*/

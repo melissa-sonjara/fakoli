@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
 Copyright (c) 2014 Sonjara, Inc
@@ -165,4 +169,4 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 	
 }
 
-?>
+/**@}*/?>

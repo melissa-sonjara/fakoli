@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup ui
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -725,4 +729,4 @@ class TwoLevelTabBar extends TabBar
 }
 
 
-?>
+/**@}*/?>

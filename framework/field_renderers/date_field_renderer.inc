@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -195,4 +198,4 @@ class DateFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datatyperenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -45,3 +48,5 @@ class TimezoneTypeRenderer extends AbstractTypeRenderer
 		return $value; 
 	}
 }
+
+/**@}*/

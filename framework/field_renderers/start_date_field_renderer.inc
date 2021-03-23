@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -111,4 +115,4 @@ class StartDateTimeFieldRenderer extends DateTimeFieldRenderer
 }
 
 
-?>
+/**@}*/?>

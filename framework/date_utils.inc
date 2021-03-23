@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup util
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -223,3 +227,4 @@ class DateUtils
     	return $months;
     }
 }
+/**@}*/

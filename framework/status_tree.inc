@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datadisplay
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -324,4 +327,4 @@ abstract class StatusBlockView
 } // end class StatusBlockView
 
 
-?>
+/**@}*/?>

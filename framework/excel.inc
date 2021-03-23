@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datadisplay
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -293,3 +296,5 @@ class ExcelFile implements IExcelFile
 		echo $this->content;
 	}
 } 
+
+/**@}*/

@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup orm
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -2326,3 +2329,4 @@ function dumpCSV($class, $items, $filepath, $filter = null, $append = false)
 	}
 	fclose($fp);
 }
+/**@}*/?>

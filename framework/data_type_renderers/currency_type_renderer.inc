@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datatyperenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -89,3 +92,5 @@ class CurrencyTypeRenderer extends AbstractTypeRenderer
 		return $text; 
 	}
 }
+
+/**@}*/

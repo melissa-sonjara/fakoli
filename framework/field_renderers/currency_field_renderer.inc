@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -163,3 +166,5 @@ class Currency3FieldRenderer extends CurrencyFieldRenderer
 		$this->template = 3;
 	}
 }
+
+/**@}*/?>

@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -277,3 +280,5 @@ class RelatedItemCheckListFieldRenderer extends FieldRenderer
 		}
 	}	
 }
+
+/**@}*/

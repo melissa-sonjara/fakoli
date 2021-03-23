@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
 Copyright (c) 2015 Sonjara, Inc
@@ -133,3 +137,5 @@ ENDSCRIPT;
 	{
 	}
 }
+
+/**@}*/

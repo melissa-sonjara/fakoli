@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -145,3 +148,5 @@ class OptionCheckListFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 }
+
+/**@}*/?>

@@ -1,4 +1,7 @@
 <?php
+/**defgroup ui Miscellaneous UI Controls
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -187,3 +190,4 @@ class ContextMenuManager
 		return $menus;
 	}	
 }
+/**@}*/

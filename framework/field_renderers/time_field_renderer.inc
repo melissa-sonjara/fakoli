@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -130,4 +133,4 @@ class TimeFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

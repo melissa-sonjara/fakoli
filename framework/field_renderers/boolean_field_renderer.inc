@@ -1,5 +1,7 @@
 <?php
-
+/**\addtogroup fieldrenderers
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -118,4 +120,4 @@ class BooleanFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

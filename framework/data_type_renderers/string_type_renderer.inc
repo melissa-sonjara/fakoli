@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datatyperenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -152,3 +155,5 @@ class StringTypeRenderer extends AbstractTypeRenderer
 			return $phone;
 	}	
 }
+
+/**@}*/

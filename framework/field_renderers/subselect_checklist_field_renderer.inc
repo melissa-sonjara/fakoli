@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -143,3 +146,5 @@ class SubSelectCheckListFieldRenderer extends CheckListFieldRenderer
 		$this->_endField($field);
 	}
 }
+
+/**@}*/

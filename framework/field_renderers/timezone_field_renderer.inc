@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -180,3 +183,5 @@ class TimezoneFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}	
 }
+
+/**@}*/

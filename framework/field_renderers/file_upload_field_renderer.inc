@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -97,4 +100,4 @@ class FileUploadFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

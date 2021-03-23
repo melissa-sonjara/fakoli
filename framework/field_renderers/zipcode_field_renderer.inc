@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -176,4 +179,4 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	
 }
 
-?>
+/**@}*/?>

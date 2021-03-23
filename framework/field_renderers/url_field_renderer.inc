@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -95,4 +98,4 @@ class URLFieldRenderer extends StringFieldRenderer
 	
 }
 
-?>
+/**@}*/?>

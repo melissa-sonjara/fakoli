@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -478,4 +481,4 @@ class CheckListFieldRenderer extends FieldRenderer
 	}
 	
 }
-?>
+/**@}*/?>

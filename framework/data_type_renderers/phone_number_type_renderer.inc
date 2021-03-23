@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datatyperenderers
+ * @{
+ */
 
 /**************************************************************
 
@@ -115,3 +118,5 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 		return $valueParts;
 	}
 }
+
+/**@}*/

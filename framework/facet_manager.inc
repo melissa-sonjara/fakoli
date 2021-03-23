@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup datadisplay
+ * @{
+ */
 /**************************************************************
 
 Copyright (c) 2007-2013 Sonjara, Inc
@@ -514,3 +517,4 @@ class CheckListFacetFilter extends AbstractFacetFilter
 	}	
 }
 
+/**@}*/

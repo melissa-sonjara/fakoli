@@ -1,4 +1,8 @@
 <?php
+/**\addtogroup fieldrenderers
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -498,4 +502,4 @@ function onChange_<?echo "{$fn}_addEntry" ?>(elt)
 	
 } // end class SelectFieldRenderer
 
-?>
+/**@}*/?>

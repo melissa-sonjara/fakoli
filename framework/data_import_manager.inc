@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup util
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -1103,3 +1106,5 @@ class DataImportColumn extends DataItem
 		$obj->$field = $value;
 	}
 }
+
+/**@}*/
