@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup scroll Scroll
+ * @{
+ */
+
+
 class ScrollManifest
 {
 	static function getComponentDefinition()
@@ -58,4 +63,4 @@ class ScrollManifest
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2007,2008 Sonjara, Inc
@@ -299,4 +304,4 @@ class MergeCodeManager
 	}
 }
 
-?>
+/**@}*/?>

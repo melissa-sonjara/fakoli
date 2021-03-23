@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup section
+ * @{
+ */
+
+
 Fakoli::using("site", "section");
 
 class SectionContentPropertiesFieldRenderer extends FieldRenderer
@@ -127,3 +132,5 @@ window.addEvent('domready', function()
 		}
 	}
 }
+
+/**@}*/?>

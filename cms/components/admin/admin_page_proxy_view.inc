@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup admin
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -122,3 +127,4 @@ class AdminPageProxyView
 		require_once $this->adminPage->server_path;
 	}
 }
+/**@}*/?>

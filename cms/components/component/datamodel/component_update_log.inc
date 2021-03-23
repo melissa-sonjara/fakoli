@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup component
+ * @{
+ */
+
+
 
 
 class ComponentUpdateLog extends DataItem
@@ -42,3 +47,5 @@ class ComponentUpdateLog extends DataItem
 			->execute();
 	}
 }
+
+/**@}*/?>

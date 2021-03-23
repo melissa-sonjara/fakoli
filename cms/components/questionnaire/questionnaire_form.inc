@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2007,2008 Sonjara, Inc
@@ -590,4 +595,4 @@ class QuestionnaireResponseView extends QuestionnaireForm
 		echo "</dl>";
 	}
 }
-?>
+/**@}*/?>

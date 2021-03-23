@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup bookmark
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -26,4 +31,4 @@ class BookmarkManager
 	}
 }
 
-?>
+/**@}*/?>

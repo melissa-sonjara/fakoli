@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup settings
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -225,3 +230,4 @@ class SettingsManager
 		return true;
 	}		
 }
+/**@}*/?>

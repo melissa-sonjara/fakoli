@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup developer_tools
+ * @{
+ */
+
+
 Fakoli::using("developer_tools", "section");
 
 class ContentInventoryHelper
@@ -24,3 +29,4 @@ class ContentInventoryHelper
 		return ($map != "<em>Not mapped</em>") ? "mapped" : "unmapped";
 	}
 }
+/**@}*/?>

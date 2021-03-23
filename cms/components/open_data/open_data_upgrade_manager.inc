@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup open_data
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the open_data component.
  *
@@ -29,4 +34,4 @@ class OpenDataUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup report_manager
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -98,3 +103,4 @@ class ReportListView
 		echo "<p><a class='button' href='{$this->identifier}'>Create a New Report</a></p>\n";
 	}
 }
+/**@}*/?>

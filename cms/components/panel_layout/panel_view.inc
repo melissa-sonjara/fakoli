@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup panel_layout
+ * @{
+ */
+
+
 
 interface PanelControl
 {
@@ -267,4 +272,4 @@ ENDSCRIPT;
 }
 
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup open_data
+ * @{
+ */
+
+
 
 class OpenData extends DataItem
 {
@@ -26,3 +31,4 @@ class OpenData extends DataItem
 									"Admin"				=> 	"Admin"	);
 
 }
+/**@}*/?>

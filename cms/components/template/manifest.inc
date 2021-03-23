@@ -1,4 +1,9 @@
 <?php
+/**\defgroup template Template
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -62,4 +67,4 @@ class TemplateManifest
 	}	
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup site_map
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -145,3 +150,5 @@ class SiteMap extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
+
+/**@}*/?>

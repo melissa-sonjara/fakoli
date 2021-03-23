@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup svg_charts
+ * @{
+ */
+
+
 
 /**
  *
@@ -37,4 +42,4 @@ class SvgChartsManager
 	}
 }
 
-?>
+/**@}*/?>

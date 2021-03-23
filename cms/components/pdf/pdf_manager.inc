@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup pdf
+ * @{
+ */
+
+
 Fakoli::using("settings");
 
 /**
@@ -64,4 +69,4 @@ class PdfManager
 	
 }
 
-?>
+/**@}*/?>

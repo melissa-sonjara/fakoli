@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup developer_tools
+ * @{
+ */
+
+
 class TableInformation extends DataItem
 {
 	var $table = "INFORMATION_SCHEMA.tables";
@@ -27,3 +32,4 @@ class TableInformation extends DataItem
 	}
 	
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup blog
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -346,4 +351,4 @@ class BlogSolrAdapter // Implements ISolrAdapter
 		return new BlogSearchResult($item);
 	}
 }
-?>
+/**@}*/?>

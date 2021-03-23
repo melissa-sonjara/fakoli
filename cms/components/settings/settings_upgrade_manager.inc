@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup settings
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -65,3 +70,4 @@ class SettingsUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

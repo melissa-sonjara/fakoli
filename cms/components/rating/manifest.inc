@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup rating Rating
+ * @{
+ */
+
+
 class RatingManifest
 {
 	static function getComponentDefinition()
@@ -45,4 +50,4 @@ class RatingManifest
 	}
 }
 
-?>
+/**@}*/?>

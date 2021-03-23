@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup connectable
+ * @{
+ */
+
+
 Fakoli::using("connectable");
 
 class ConnectableSummary
@@ -46,3 +51,4 @@ class ConnectableSummary
 <?
 	}
 }
+/**@}*/?>

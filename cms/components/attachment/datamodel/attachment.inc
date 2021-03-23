@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup attachment
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -63,4 +68,4 @@ class Attachment extends DataItem
 	}
 }
  
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup survey
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -294,3 +299,5 @@ class Survey extends AbstractQuestionnaire
 }
 
 
+
+/**@}*/?>

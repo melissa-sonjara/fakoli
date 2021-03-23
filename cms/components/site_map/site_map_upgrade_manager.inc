@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup site_map
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -61,3 +66,4 @@ class SiteMapUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

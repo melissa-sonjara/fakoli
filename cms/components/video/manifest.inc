@@ -1,4 +1,9 @@
 <?php
+/**\defgroup video Video
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -95,4 +100,4 @@ class VideoManifest
 	}
 }
 
-?>
+/**@}*/?>

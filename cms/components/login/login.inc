@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup login
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -663,3 +668,4 @@ class LoginManager
 		$mgr->upgrade($version);
 	}	
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup dashboard
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -130,4 +135,4 @@ class DashboardView
 <?		 
 	}
 }
-?>
+/**@}*/?>

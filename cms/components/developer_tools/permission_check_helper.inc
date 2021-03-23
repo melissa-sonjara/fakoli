@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup developer_tools
+ * @{
+ */
+
+
 Fakoli::using("developer_tools");
 
 class PermissionsCheckHelper
@@ -43,3 +48,4 @@ class PermissionsCheckHelper
 		return $canAccess ? "<img src='/fakoli/images/on.png' alt='Yes'/>" : "<img src='/fakoli/images/off.png' alt='No'/>";
 	}
 }
+/**@}*/?>

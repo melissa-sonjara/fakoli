@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup module
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -242,4 +247,4 @@ class MenuModuleView extends ModuleView
 		return $this->wrap($menuView->drawView());
 	}
 }
-?>
+/**@}*/?>

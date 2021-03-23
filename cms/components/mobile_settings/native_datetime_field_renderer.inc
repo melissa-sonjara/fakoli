@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup mobile_settings
+ * @{
+ */
+
+
 Fakoli::usingFeature("field_renderers");
 
 class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
@@ -124,3 +129,4 @@ window.addEvent('domready', function()
 		trace("DateTime: ".$this->parent->data->get($field), 1);
 	}
 }
+/**@}*/?>

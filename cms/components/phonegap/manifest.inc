@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup phonegap Phonegap
+ * @{
+ */
+
+
 class PhonegapManifest
 {
 	static function getComponentDefinition()
@@ -32,4 +37,4 @@ class PhonegapManifest
 	}
 }
 
-?>
+/**@}*/?>

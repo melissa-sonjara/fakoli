@@ -1,4 +1,9 @@
-<?
+<?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 Fakoli::using("questionnaire");
 Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
 Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_dashboard_manager.inc");
@@ -237,4 +242,4 @@ class QuestionnaireResultsManager extends AbstractQuestionnaireResultsManager
 		return 0;
 	}
 }
-?>
+/**@}*/?>

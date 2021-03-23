@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup text_lookup
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -277,3 +282,4 @@ class TextTranslation extends DataItem
 		return $text;
 	}
 }
+/**@}*/?>

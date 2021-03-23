@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup taxonomy Taxonomy
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2014 Sonjara, Inc
@@ -79,4 +84,4 @@ class TaxonomyManifest
 	}
 }
 
-?>
+/**@}*/?>

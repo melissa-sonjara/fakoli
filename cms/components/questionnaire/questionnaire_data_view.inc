@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 
 /*
  *
@@ -401,3 +406,5 @@ class QuestionnaireDataView
 	}
 }
 
+
+/**@}*/?>

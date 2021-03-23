@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rss_feed
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the rss_feed component.
  *
@@ -31,4 +36,4 @@ class RssFeedUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

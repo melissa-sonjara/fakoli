@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup versioned_content
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the versioned_content component.
  *
@@ -26,4 +31,4 @@ class VersionedContentUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 
 class TimeZone extends DataItem
 {
@@ -17,3 +22,4 @@ class TimeZone extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
+/**@}*/?>

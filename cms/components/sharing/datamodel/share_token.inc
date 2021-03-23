@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup sharing
+ * @{
+ */
+
+
 class ShareToken extends DataItem
 {
 	var $table = "share_token";
@@ -100,3 +105,4 @@ class ShareAccess extends DataItem
 		return $this->User()->getFullName();
 	}
 }
+/**@}*/?>

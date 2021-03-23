@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup process
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the process component.
  *
@@ -26,4 +31,4 @@ class ProcessUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

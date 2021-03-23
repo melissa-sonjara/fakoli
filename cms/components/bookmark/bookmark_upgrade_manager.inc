@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup bookmark
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the bookmark component.
  *
@@ -26,4 +31,4 @@ class BookmarkUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rss_feed
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -64,4 +69,4 @@ class RssFeedManager
 	}
 }
 
-?>
+/**@}*/?>

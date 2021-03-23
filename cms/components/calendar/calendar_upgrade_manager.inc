@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -68,3 +73,4 @@ class CalendarUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

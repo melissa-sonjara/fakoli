@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup optimize
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -280,3 +285,5 @@ class OptimizeManager
 	{
 	}
 }
+
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rss_feed
+ * @{
+ */
+
+
 class RSSFeed extends DataItem
 {
 	var $table = "rss_feed";
@@ -48,3 +53,4 @@ class RSSFeed extends DataItem
 					->executeSingle();}
 		
 }
+/**@}*/?>

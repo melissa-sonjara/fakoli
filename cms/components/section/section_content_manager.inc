@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup section
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -272,3 +277,5 @@ ENDSCRIPT;
 		return $types;
 	}
 }
+
+/**@}*/?>

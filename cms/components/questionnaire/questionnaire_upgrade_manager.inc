@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -63,3 +68,4 @@ class QuestionnaireUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

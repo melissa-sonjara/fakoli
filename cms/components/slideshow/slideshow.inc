@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup slideshow
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -230,4 +235,4 @@ foreach($this->items as $item)
 <?
 	}
 }
-?>
+/**@}*/?>

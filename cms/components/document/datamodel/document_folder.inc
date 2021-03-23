@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -56,4 +61,4 @@ class DocumentFolder extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
-?>
+/**@}*/?>

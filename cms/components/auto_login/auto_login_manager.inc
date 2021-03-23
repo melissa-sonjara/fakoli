@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup auto_login
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -179,4 +184,4 @@ class AutoLoginManager
 		$mgr->upgrade($version);
 	}	
 }
-?>
+/**@}*/?>

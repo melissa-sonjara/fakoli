@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup developer_tools Developer Tools
+ * @{
+ */
+
+
 class DeveloperToolsManifest
 {
 	static function getComponentDefinition()
@@ -67,4 +72,4 @@ class DeveloperToolsManifest
 	}
 }
 
-?>
+/**@}*/?>

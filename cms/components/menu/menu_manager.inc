@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup menu
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -110,3 +115,4 @@ class MenuManager
 		return true;
 	}
 }
+/**@}*/?>

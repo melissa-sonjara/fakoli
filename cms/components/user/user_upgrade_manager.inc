@@ -1,4 +1,8 @@
 <?php
+/**
+ * \addtogroup user
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -60,3 +64,5 @@ class UserUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+
+/**@}*/?>

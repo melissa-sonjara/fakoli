@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 Fakoli::using("document");
 
 class DocumentFileView
@@ -138,3 +143,4 @@ class DocumentFileView
 <?		
 	}
 }
+/**@}*/?>

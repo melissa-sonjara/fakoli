@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -69,4 +74,4 @@ class QuestionType extends DataItem
 		$this->DataItem(func_get_args());
 	}	
 }
-?>
+/**@}*/?>

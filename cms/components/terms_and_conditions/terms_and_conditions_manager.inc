@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup terms_and_conditions
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -21,4 +26,4 @@ class TermsAndConditionsManager
 	}
 }
 
-?>
+/**@}*/?>

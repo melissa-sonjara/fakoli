@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup date_picker Date Picker
+ * @{
+ */
+
+
 class DatePickerManifest
 {
 	static function getComponentDefinition()
@@ -40,4 +45,4 @@ class DatePickerManifest
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup field_renderers
+ * @{
+ */
+
+
 Fakoli::using("section", "component");
 Fakoli::usingFeature("field_renderers", "tree");
 
@@ -189,4 +194,4 @@ ENDSCRIPT;
 	}
 }
 
-?>
+/**@}*/?>

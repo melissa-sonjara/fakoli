@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 Fakoli::using("email", "captcha");
 
 class EmailHelper
@@ -116,3 +121,4 @@ class EmailHelper
 		return $rtn;		
 	}
 }
+/**@}*/?>

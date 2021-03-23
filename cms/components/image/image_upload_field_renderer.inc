@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup image
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2007-2014 Sonjara, Inc
@@ -130,4 +135,4 @@ class ImageUploadFieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

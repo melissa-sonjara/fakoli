@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup section
+ * @{
+ */
+
+
 
 /**
  * DataItem pseudo-object to handle section XML imports.
@@ -21,4 +26,4 @@ class SectionImportFile extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

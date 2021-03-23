@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup process
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -133,4 +138,4 @@ class ProcessManager
 	}
 }
 
-?>
+/**@}*/?>

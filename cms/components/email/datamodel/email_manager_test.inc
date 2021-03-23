@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -112,3 +117,4 @@ function emailManagerCallbackFunction($obj)
 {
 	return "EmailManager: emailManagerCallbackFunction " . $obj->string;
 }
+/**@}*/?>

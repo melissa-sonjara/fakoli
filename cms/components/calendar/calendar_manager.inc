@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -154,4 +159,4 @@ class CalendarManager
 	}
 }
 
-?>
+/**@}*/?>

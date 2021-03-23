@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup field_renderers
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -127,4 +132,4 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
     	return $folders;
 	}
 }
-?>
+/**@}*/?>

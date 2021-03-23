@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup fileshare
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -60,3 +65,4 @@ class FileshareUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

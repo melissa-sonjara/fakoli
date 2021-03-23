@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup tool_hints Tool Hints
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2014 Sonjara, Inc
@@ -79,4 +84,4 @@ class ToolHintsManifest
 	}
 }
 
-?>
+/**@}*/?>

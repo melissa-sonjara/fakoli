@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup image_picker
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -132,4 +137,4 @@ class ImageSelectFieldRenderer extends FieldRenderer
 
 // Register the field renderer
 AutoForm::registerFieldRendererClass(Image, ImageSelectFieldRenderer);
-?>
+/**@}*/?>

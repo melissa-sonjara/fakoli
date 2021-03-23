@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup recaptcha_v2 Recaptcha V 2
+ * @{
+ */
+
+
 class RecaptchaV2Manifest
 {
 	static function getComponentDefinition()
@@ -24,4 +29,4 @@ class RecaptchaV2Manifest
 	}
 }
 
-?>
+/**@}*/?>

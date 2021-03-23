@@ -1,4 +1,9 @@
-<?
+<?php
+/**\addtogroup survey
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -502,3 +507,5 @@ class SurveyAggregatedResultsManager //extends AbstractQuestionnaireAggregatedRe
 		return $answers;	
 	}
 }
+
+/**@}*/?>

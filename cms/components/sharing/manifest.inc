@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup sharing Sharing
+ * @{
+ */
+
+
 class SharingManifest
 {
 	static function getComponentDefinition()
@@ -26,4 +31,4 @@ class SharingManifest
 	}
 }
 
-?>
+/**@}*/?>

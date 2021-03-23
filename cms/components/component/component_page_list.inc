@@ -31,6 +31,10 @@
 
 *****************************************************************/
 
+/** \addtogroup component
+ * @{
+ */
+
 Fakoli::using("role");
 Fakoli::usingFeature("data_view", "context_menu");
 
@@ -258,4 +262,6 @@ foreach($roles as $role => $name)
 	}
 	
 }
+
+/**@}*/
 ?>

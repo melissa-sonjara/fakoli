@@ -1,4 +1,9 @@
 <?php
+/**\defgroup menu Menu
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -71,4 +76,4 @@ class MenuManifest
 	}		
 }
 
-?>
+/**@}*/?>

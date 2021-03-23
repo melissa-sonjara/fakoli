@@ -1,4 +1,9 @@
 <?php
+/**\defgroup site Site
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -72,4 +77,4 @@ class SiteManifest
 	}		
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup terms_and_conditions Terms And Conditions
+ * @{
+ */
+
+
 class TermsAndConditionsManifest
 {
 	static function getComponentDefinition()
@@ -37,4 +42,4 @@ class TermsAndConditionsManifest
 	}
 }
 
-?>
+/**@}*/?>

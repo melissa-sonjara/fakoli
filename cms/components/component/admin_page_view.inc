@@ -31,6 +31,9 @@
 
 *****************************************************************/
 
+/** \addtogroup component
+ * @{
+ */
 
 class AdminPageView
 {
@@ -262,3 +265,5 @@ ENDSCRIPT;
 		return $menu;
 	}
 }
+
+/**@}*/

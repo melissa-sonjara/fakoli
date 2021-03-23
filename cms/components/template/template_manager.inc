@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup template
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -342,3 +347,5 @@ function deleteFolderResult(result)
 		return true;
 	}
 }
+
+/**@}*/?>

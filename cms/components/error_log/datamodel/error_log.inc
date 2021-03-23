@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup error_log
+ * @{
+ */
+
+
 
 class ErrorLog extends DataItem
 {
@@ -45,4 +50,4 @@ class ErrorLog extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

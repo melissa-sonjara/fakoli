@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup developer_tools
+ * @{
+ */
+
+
 class CharacterSet extends DataItem
 {
 	var $table = "information_schema.character_sets";
@@ -34,3 +39,4 @@ class TableCharacterSet extends DataItem
 		$db->exec($stmt);
 	}
 }
+/**@}*/?>

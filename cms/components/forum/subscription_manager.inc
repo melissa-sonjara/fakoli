@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup forum
+ * @{
+ */
+
+
 Fakoli::using("forum", "email");
 
 class SubscriptionManager
@@ -547,3 +552,4 @@ class ForumTopicSubscriptionHelper extends ForumSubscriptionHelper
 	
 	
 }
+/**@}*/?>

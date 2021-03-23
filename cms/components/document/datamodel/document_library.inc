@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -263,4 +268,4 @@ class DocumentLibrary extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
-?>
+/**@}*/?>

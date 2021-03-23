@@ -1,4 +1,9 @@
 <?php
+/**\defgroup color_picker Color Picker
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -57,4 +62,4 @@ class ColorPickerManifest
 	}
 }
 
-?>
+/**@}*/?>

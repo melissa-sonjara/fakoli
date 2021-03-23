@@ -1,4 +1,9 @@
 <?php
+/**\defgroup calendar Calendar
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -102,4 +107,4 @@ class CalendarManifest
 	}
 }
 
-?>
+/**@}*/?>

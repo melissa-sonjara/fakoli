@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup forum
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -328,4 +333,4 @@ class ForumSummary extends DataItem
 		return (count($messages) > 0) ? $messages[0] : null;
 	}
 }
-?>
+/**@}*/?>

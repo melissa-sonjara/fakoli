@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 
 /**
  * Dummy datamodel to helper manage the calendar data values.
@@ -509,3 +514,4 @@ class iCalendarEventManager
 		return $out;
 	}
 }
+/**@}*/?>

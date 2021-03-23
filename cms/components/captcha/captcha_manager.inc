@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup captcha
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -45,4 +50,4 @@ class CaptchaManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup glossary
+ * @{
+ */
+
+
 class Glossary extends DataItem
 {
     var $table ="glossary";
@@ -13,4 +18,4 @@ class Glossary extends DataItem
     
     var $pretty_class_name = "Glossary Term";
 }
-?>
+/**@}*/?>

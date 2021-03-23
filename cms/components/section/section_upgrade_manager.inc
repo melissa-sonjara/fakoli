@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup section
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -67,3 +72,4 @@ class SectionUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

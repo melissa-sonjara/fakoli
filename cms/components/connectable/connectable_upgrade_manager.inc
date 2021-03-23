@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup connectable
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the connectable component.
  *
@@ -26,4 +31,4 @@ class ConnectableUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

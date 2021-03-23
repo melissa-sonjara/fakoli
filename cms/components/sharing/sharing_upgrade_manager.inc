@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup sharing
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the sharing component.
  *
@@ -27,4 +32,4 @@ class SharingUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup svg Svg
+ * @{
+ */
+
+
 class SvgManifest
 {
 	static function getComponentDefinition()
@@ -31,4 +36,4 @@ class SvgManifest
 	}
 }
 
-?>
+/**@}*/?>

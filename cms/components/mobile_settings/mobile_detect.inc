@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup mobile_settings
+ * @{
+ */
+
+
 /**
  * Mobile Detect
  * $Id: Mobile_Detect.php 39 2012-04-15 14:53:13Z serbanghita@gmail.com $
@@ -241,3 +246,4 @@ class MobileDetect
     
     
 }
+/**@}*/?>

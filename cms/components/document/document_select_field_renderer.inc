@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 Fakoli::using("document");
 Fakoli::usingFeature("field_renderers", "document_handler");
 
@@ -167,4 +172,4 @@ ENDSCRIPT;
 	}
 }
 	
-?>
+/**@}*/?>

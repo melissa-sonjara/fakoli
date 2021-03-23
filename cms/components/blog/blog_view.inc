@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup blog
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -651,3 +656,4 @@ class BlogSubscriberListView
 		$this->table->drawView();
 	}
 }
+/**@}*/?>

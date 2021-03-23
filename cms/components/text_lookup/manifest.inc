@@ -1,4 +1,9 @@
 <?php
+/**\defgroup text_lookup Text Lookup
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -79,4 +84,4 @@ class TextLookupManifest
 		
 }
 
-?>
+/**@}*/?>

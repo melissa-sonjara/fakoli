@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup svg_charts Svg Charts
+ * @{
+ */
+
+
 class SvgChartsManifest
 {
 	static function getComponentDefinition()
@@ -59,4 +64,4 @@ class SvgChartsManifest
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup component
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -265,3 +270,4 @@ class ComponentPageModuleXref extends DataItem
 		return $this->getRelated(Module);
 	}
 }
+/**@}*/?>

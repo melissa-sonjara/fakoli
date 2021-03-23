@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup mobile_settings
+ * @{
+ */
+
+
 Fakoli::usingFeature("field_renderers");
 
 class NativeDateFieldRenderer extends DateFieldRenderer
@@ -95,3 +100,4 @@ class NativeDateFieldRenderer extends DateFieldRenderer
 		//TODO
 	}
 }
+/**@}*/?>

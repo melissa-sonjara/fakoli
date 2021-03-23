@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup pdf Pdf
+ * @{
+ */
+
+
 class PdfManifest
 {
 	static function getComponentDefinition()
@@ -24,4 +29,4 @@ class PdfManifest
 	}
 }
 
-?>
+/**@}*/?>

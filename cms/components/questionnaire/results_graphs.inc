@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -340,4 +345,4 @@ class QuestionnaireResultsGraph
 		return $optionText;
 	}	
 }
-?>
+/**@}*/?>

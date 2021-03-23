@@ -1,4 +1,9 @@
 <?php
+/**\defgroup survey Survey
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -73,4 +78,4 @@ class SurveyManifest
 
 }
 
-?>
+/**@}*/?>

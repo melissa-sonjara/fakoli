@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup page
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -392,4 +397,4 @@ class PageSolrAdapter // Implements ISolrAdapter
 		return new PageSearchResult($item);
 	}
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup html_editor
+ * @{
+ */
+
+
 
 class Snippet extends DataItem
 {
@@ -19,3 +24,4 @@ class Snippet extends DataItem
 		return $mgr->getUser($this->user_id);
 	}
 }
+/**@}*/?>

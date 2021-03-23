@@ -1,4 +1,9 @@
 <?php
+/**\defgroup optimize Optimize
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -62,4 +67,4 @@ class OptimizeManifest
 	}
 }
 
-?>
+/**@}*/?>

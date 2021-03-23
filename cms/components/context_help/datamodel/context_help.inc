@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup context_help
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -61,4 +66,4 @@ class ContextHelp extends DataItem
 	
 }
 
-?>
+/**@}*/?>

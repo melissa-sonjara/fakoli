@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup menu
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -176,4 +181,4 @@ class MenuItem extends DataItem
 		return query(MenuItem, "WHERE parent_id={$this->menu_item_id} $constraint");
 	}
 }
-?>
+/**@}*/?>

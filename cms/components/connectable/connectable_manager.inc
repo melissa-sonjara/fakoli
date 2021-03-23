@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup connectable
+ * @{
+ */
+
+
 
 interface Connectable
 {
@@ -305,4 +310,4 @@ class ConnectableManager
 	}
 }
 
-?>
+/**@}*/?>

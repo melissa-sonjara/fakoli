@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 
 class EmailLog extends DataItem
 {
@@ -43,3 +48,4 @@ class EmailLog extends DataItem
 		}
 	}	
 }
+/**@}*/?>

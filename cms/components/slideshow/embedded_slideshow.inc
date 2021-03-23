@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup slideshow
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -76,4 +81,4 @@ class EmbeddedSlideshowHandler
 }
 
 
-?>
+/**@}*/?>

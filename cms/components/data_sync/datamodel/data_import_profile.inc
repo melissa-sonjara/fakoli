@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup data_sync
+ * @{
+ */
+
+
 class DataImportProfile extends DataItem
 {
 	var $table = "data_import_profile";
@@ -10,3 +15,5 @@ class DataImportProfile extends DataItem
 						"notes"				=>	Text);
 	
 }
+
+/**@}*/?>

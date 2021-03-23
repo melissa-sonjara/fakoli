@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup html_editor Html Editor
+ * @{
+ */
+
+
 class HtmlEditorManifest
 {
 	static function getComponentDefinition()
@@ -55,4 +60,4 @@ class HtmlEditorManifest
 	}
 }
 
-?>
+/**@}*/?>

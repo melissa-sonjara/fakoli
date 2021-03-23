@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup link_library Link Library
+ * @{
+ */
+
+
 class LinkLibraryManifest
 {
 	static function getComponentDefinition()
@@ -58,4 +63,4 @@ class LinkLibraryManifest
 	}
 }
 
-?>
+/**@}*/?>

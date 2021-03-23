@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup color_picker
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -67,4 +72,4 @@ window.addEvent('domready', function()
 
 // Register the field renderer
 //AutoForm::registerFieldRendererClass(Color, ColorPickerFieldRenderer);
-?>
+/**@}*/?>

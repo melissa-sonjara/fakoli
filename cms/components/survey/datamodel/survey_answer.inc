@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup survey
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2007,2008 Sonjara, Inc
@@ -65,4 +70,4 @@ class SurveyAnswer extends AbstractQuestionnaireAnswer
 		$this->DataItem(func_get_args());
 	}
 }
-?>
+/**@}*/?>

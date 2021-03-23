@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup html_editor
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -120,4 +125,4 @@ class HtmlEditorManager
 	
 }
 
-?>
+/**@}*/?>

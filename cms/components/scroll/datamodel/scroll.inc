@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scroll
+ * @{
+ */
+
+
 class Scroll extends DataItem
 {
 	var $table = "scroll";
@@ -42,3 +47,4 @@ class Scroll extends DataItem
 		return $match;
 	}	
 }
+/**@}*/?>

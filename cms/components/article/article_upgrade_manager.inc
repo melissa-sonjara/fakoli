@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup article
+ * @{
+ */
+
+
 /*
  * Manage Article component upgrades/updates.
  * 
@@ -32,3 +37,4 @@ class ArticleUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();
 	}
 }
+/**@}*/?>

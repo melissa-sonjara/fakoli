@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup taxonomy
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2014 Sonjara, Inc
@@ -124,4 +129,4 @@ class Taxonomy extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

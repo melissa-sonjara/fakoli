@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup component
+ * @{
+ */
+
+
 Fakoli::using("component");
 
 /**
@@ -539,4 +544,4 @@ class CompoundSerializationHandler
 		return SerializationManager::unserialize($class, $doc, null, false);
 	}
 }
-?>
+/**@}*/?>

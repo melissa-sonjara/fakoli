@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rss_feed
+ * @{
+ */
+
+
 class RSSFeedArticles extends DataItem
 {
 	var $table = "rss_feed_articles";
@@ -30,3 +35,4 @@ class RSSFeedArticles extends DataItem
 		return Query::create(RSSFeedArticles, "WHERE publish_status=1 ORDER BY article_date DESC LIMIT $limit")->execute();
 	}		
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rating
+ * @{
+ */
+
+
 
 class PageRating extends DataItem
 {
@@ -62,3 +67,4 @@ class PageRatingStatistics extends DataItem
 		return $stats;
 	}
 }
+/**@}*/?>

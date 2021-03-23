@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup social_media
+ * @{
+ */
+
+
 Fakoli::using("settings");
 
 class SocialMediaManager
@@ -19,4 +24,4 @@ class SocialMediaManager
 	}
 }
 
-?>
+/**@}*/?>

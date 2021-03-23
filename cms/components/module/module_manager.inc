@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup module
+ * @{
+ */
+
+
 
 class ModuleManager
 {
@@ -46,3 +51,4 @@ class ModuleManager
 		return $module;
 	}
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -118,4 +123,4 @@ class DocumentDownloadTotalStats extends DataItem
 	}	
 }
 	
-?>
+/**@}*/?>

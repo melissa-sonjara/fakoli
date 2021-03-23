@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup image
+ * @{
+ */
+
+
 Fakoli::usingFeature("facet_manager");
 
 class ImageGridItem
@@ -136,3 +141,4 @@ window.addEvent('domready', function()
 <?
 	}
 }
+/**@}*/?>

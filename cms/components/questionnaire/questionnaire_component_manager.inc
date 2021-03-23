@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 /**
  * Provides methods for managing the questionniare
  * component.
@@ -17,3 +22,5 @@ class QuestionnaireComponentManager
 		$mgr->upgrade($version);
 	}	
 }
+
+/**@}*/?>

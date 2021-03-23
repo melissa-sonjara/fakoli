@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup session_persistance
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -65,3 +70,4 @@ class PHPSession extends DataItem
 	}
 }
 						
+/**@}*/?>

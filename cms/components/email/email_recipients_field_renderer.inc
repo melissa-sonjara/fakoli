@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -232,3 +237,4 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 		return $recipient->format("<div id='{$pk}_{{$pk}}' class='email_recipient'>{$nameField}{$removeLink}</div>");
 	}
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup login
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -125,4 +130,4 @@ class LoginToken extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

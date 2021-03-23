@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup connectable
+ * @{
+ */
+
+
 class ConnectionRecord extends DataItem
 {
 	var $table = "connection_record";
@@ -21,3 +26,4 @@ class ConnectionRecord extends DataItem
 	}
 }
 						
+/**@}*/?>

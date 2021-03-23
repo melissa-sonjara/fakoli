@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup bookmark
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -57,4 +62,4 @@ class Bookmark extends DataItem
 		return (count($results) > 0) ? $results[0] : null;
 	}
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
-<?php 
+<?php
+/**\addtogroup scroll
+ * @{
+ */
+
+ 
 
 class ScrollView
 {
@@ -119,3 +124,4 @@ class ScrollView
 		echo $out;
 	}
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup link_library
+ * @{
+ */
+
+
 
 class LinkLibraryListView
 {
@@ -186,3 +191,5 @@ class ListLinkLibraryView extends LinkLibraryView
 		$this->view->drawList();
 	}
 }
+
+/**@}*/?>

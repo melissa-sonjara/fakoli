@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup rss_feed Rss Feed
+ * @{
+ */
+
+
 class RssFeedManifest
 {
 	static function getComponentDefinition()
@@ -39,4 +44,4 @@ class RssFeedManifest
 	}
 }
 
-?>
+/**@}*/?>

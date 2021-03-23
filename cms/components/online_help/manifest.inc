@@ -1,4 +1,9 @@
 <?php
+/**\defgroup online_help Online Help
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -81,4 +86,4 @@ class OnlineHelpManifest
 	
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\defgroup forum Forum
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -82,4 +87,4 @@ class ForumManifest
 	
 }
 
-?>
+/**@}*/?>

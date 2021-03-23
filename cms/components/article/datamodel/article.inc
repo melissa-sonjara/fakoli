@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup article
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -421,4 +426,4 @@ class ArticleSolrAdapter // Implements ISolrAdapter
 	}
 }
 
-?>
+/**@}*/?>

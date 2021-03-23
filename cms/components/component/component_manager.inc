@@ -31,6 +31,10 @@
 
 *****************************************************************/
 
+/** \addtogroup component
+ * @{
+ */
+
 /**
  * ComponentManager provides the core functionality for building the 
  * component map describing the application configuration. It also
@@ -835,4 +839,6 @@ class ComponentManager
 	}
 	
 }
+
+/**@}*/
 ?>

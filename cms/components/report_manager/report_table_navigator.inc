@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup report_manager
+ * @{
+ */
+
+
 
 class ReportTableNavigator
 {
@@ -106,4 +111,4 @@ class ReportFilterNavigator
 		echo "</div>";
 	}
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup site
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -65,3 +70,4 @@ class SiteUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

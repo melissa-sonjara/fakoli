@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup developer_tools
+ * @{
+ */
+
+
 /**
  * EventMapRecord is a pseudo-DataItem used to convert the Event Map
  * entries into a format that can be used with our display controls.
@@ -57,3 +62,5 @@ class EventMapRecord extends DataItem
 		return $converted;
 	}
 }
+
+/**@}*/?>

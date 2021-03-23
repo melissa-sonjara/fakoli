@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rating
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the rating component.
  *
@@ -27,4 +32,4 @@ class RatingUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

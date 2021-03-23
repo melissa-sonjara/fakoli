@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup api
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -60,3 +65,4 @@ class APIUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();
 	}
 }
+/**@}*/?>

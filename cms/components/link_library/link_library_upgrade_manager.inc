@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup link_library
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the link_library component.
  *
@@ -29,4 +34,4 @@ class LinkLibraryUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

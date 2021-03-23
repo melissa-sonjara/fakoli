@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup login
+ * @{
+ */
+
+
 class LoginAttempt extends DataItem
 {
 	var $table = "login_attempt";
@@ -12,3 +17,4 @@ class LoginAttempt extends DataItem
 						"login_token"		=>	String,
 						"result"			=>	String);
 }
+/**@}*/?>

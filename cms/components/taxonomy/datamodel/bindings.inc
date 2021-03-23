@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup taxonomy
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2014 Sonjara, Inc
@@ -78,4 +83,4 @@ class BindingSummary extends DataItem
 						"target_class"	=>	String,
 						"target_ids"	=>	String);
 }	
-?>
+/**@}*/?>

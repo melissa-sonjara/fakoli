@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scheduled_task
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the scheduled_task component.
  *
@@ -29,4 +34,4 @@ class ScheduledTaskUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

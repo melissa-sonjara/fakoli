@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup blog
+ * @{
+ */
+
+
 Fakoli::using("blog", "email");
 
 class BlogSubscriptionManager
@@ -260,3 +265,4 @@ class BlogSubscriptionManager
 			return $script;	
 	}
 }
+/**@}*/?>

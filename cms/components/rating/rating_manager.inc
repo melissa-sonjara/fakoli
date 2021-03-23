@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup rating
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -93,4 +98,4 @@ ENDSCRIPT;
 	}
 }
 
-?>
+/**@}*/?>

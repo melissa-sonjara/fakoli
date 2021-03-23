@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -150,4 +155,4 @@ class RelationHelp extends DataItem
 	}
 	
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup taxonomy
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2014 Sonjara, Inc
@@ -581,4 +586,4 @@ window.addEvent('domready', function()
 		}
 	}
 }
-?>
+/**@}*/?>

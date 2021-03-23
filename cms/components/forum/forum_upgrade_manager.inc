@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup forum
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -63,3 +68,4 @@ class ForumUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

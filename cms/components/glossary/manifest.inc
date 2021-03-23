@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup glossary Glossary
+ * @{
+ */
+
+
 class GlossaryManifest
 {
 	static function getComponentDefinition()
@@ -54,4 +59,4 @@ class GlossaryManifest
 	}
 }
 
-?>
+/**@}*/?>

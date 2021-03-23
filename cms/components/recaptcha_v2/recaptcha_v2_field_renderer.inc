@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup recaptcha_v2
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2018 Sonjara, Inc
@@ -132,4 +137,4 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

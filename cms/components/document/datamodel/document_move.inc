@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 class DocumentMove extends DataItem
 {
 	var $primary_key = "move_id";
@@ -7,3 +12,4 @@ class DocumentMove extends DataItem
 					    "from"			=>	Number,
 						"to"			=>	Number);
 }
+/**@}*/?>

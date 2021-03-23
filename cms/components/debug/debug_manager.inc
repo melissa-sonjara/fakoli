@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup debug
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -64,3 +69,4 @@ class DebugManager
 	}
 	
 }
+/**@}*/?>

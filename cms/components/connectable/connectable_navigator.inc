@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup connectable
+ * @{
+ */
+
+
 Fakoli::using("connectable");
 
 class ConnectableNavigator
@@ -122,3 +127,4 @@ ENDSCRIPT;
 		$this->panel->draw();
 	}
 }
+/**@}*/?>

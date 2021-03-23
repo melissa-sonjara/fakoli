@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup fileshare
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -69,3 +74,4 @@ class FileshareUserXref extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
+/**@}*/?>

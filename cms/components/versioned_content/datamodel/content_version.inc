@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup versioned_content
+ * @{
+ */
+
+
 
 class ContentVersion extends DataItem
 {
@@ -269,3 +274,5 @@ class ContentVersion extends DataItem
 		return $mgr->getUser($this->approved_by);
 	}
 }
+
+/**@}*/?>

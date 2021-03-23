@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup field_renderers
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -98,3 +103,4 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 		echo "</script>\n";
 	}
 }
+/**@}*/?>

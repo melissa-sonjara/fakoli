@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup tool_hints
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2014 Sonjara, Inc
@@ -57,3 +62,4 @@ class ToolHintView
 ENDSCRIPT;
 	}
 }
+/**@}*/?>

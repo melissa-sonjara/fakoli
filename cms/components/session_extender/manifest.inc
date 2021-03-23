@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup session_extender Session Extender
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -62,4 +67,4 @@ class SessionExtenderManifest
 	}
 }
 
-?>
+/**@}*/?>

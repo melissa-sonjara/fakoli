@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup sharing
+ * @{
+ */
+
+
 
 interface ShareHandler
 {
@@ -154,4 +159,4 @@ class SharingManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup link_library
+ * @{
+ */
+
+
 
 /**
  * Serialization handler for Link Libraries and Link Records.
@@ -220,4 +225,4 @@ class LinkLibraryManager
 	}		
 }
 
-?>
+/**@}*/?>

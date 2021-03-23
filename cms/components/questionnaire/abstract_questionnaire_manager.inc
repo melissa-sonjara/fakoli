@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 Fakoli::using("questionnaire");
 
 
@@ -246,4 +251,4 @@ class QuestionnaireHelper
 		
 } // end QuestionnaireHelper
 
-?>
+/**@}*/?>

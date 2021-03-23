@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup taxonomy
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2014 Sonjara, Inc
@@ -84,4 +89,4 @@ class TaxonomyTermAssociationSummary extends DataItem
 		return $instance;
 	}
 }
-?>
+/**@}*/?>

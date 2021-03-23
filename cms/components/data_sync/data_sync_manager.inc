@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup data_sync
+ * @{
+ */
+
+
 
 /**
  * Serialization handler for Link Libraries and Link Records.
@@ -858,4 +863,4 @@ class FieldMappingHelper
 	}
 }
 
-?>
+/**@}*/?>

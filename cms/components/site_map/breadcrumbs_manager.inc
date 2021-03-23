@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup site_map
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -192,4 +197,4 @@ class Breadcrumbs
 
 }
 
-?>
+/**@}*/?>

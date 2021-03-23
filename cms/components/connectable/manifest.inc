@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup connectable Connectable
+ * @{
+ */
+
+
 class ConnectableManifest
 {
 	static function getComponentDefinition()
@@ -39,4 +44,4 @@ class ConnectableManifest
 	}
 }
 
-?>
+/**@}*/?>

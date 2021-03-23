@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup captcha Captcha
+ * @{
+ */
+
+
 class CaptchaManifest
 {
 	static function getComponentDefinition()
@@ -23,4 +28,4 @@ class CaptchaManifest
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\defgroup activity_tracker Activity Tracker
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2011 Sonjara, Inc
@@ -90,4 +95,4 @@ class ActivityTrackerManifest
 	}
 }
 
-?>
+/**@}*/?>

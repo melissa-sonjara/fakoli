@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup image
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -123,3 +128,4 @@ class ImageGalleryList
 	}	
 }
 	
+/**@}*/?>

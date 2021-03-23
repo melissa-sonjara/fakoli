@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup section
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -227,4 +232,4 @@ class SectionManager
 }
 
 //SectionManager::registerSectionContentManager();
-?>
+/**@}*/?>

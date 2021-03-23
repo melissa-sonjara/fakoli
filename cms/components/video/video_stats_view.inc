@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup video
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -70,4 +75,4 @@ class VideoTotalDownloadsView
 		$this->table->drawView();
 	}
 }
-?>
+/**@}*/?>

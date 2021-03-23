@@ -1,4 +1,9 @@
 <?php
+/**\defgroup image_picker Image Picker
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -80,4 +85,4 @@ class ImagePickerManifest
 	}
 }
 
-?>
+/**@}*/?>

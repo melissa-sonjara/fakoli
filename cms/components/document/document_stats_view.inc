@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -81,4 +86,4 @@ ENDSCRIPT;
 		$this->table->drawView();
 	}
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 Fakoli::using("questionnaire");
 Fakoli::usingFile("/cms/components/questionnaire/questionnaire_form.inc");
 
@@ -129,3 +134,4 @@ class QuizForm extends QuestionnaireForm
 	}	
 	
 }
+/**@}*/?>

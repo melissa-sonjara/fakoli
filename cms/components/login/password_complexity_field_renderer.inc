@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup login
+ * @{
+ */
+
+
 require_once "framework/field_renderers/password_field_renderer.inc";
 
 Fakoli::usingFeature("auto_form");
@@ -188,3 +193,4 @@ ENDSCRIPT;
 		}
 	}
 }
+/**@}*/?>

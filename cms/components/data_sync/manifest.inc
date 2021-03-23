@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup data_sync Data Sync
+ * @{
+ */
+
+
 class DataSyncManifest
 {
 	static function getComponentDefinition()
@@ -54,4 +59,4 @@ class DataSyncManifest
 	}
 }
 
-?>
+/**@}*/?>

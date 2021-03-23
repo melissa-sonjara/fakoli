@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup versioned_content Versioned Content
+ * @{
+ */
+
+
 class VersionedContentManifest
 {
 	static function getComponentDefinition()
@@ -44,4 +49,4 @@ class VersionedContentManifest
 	}
 }
 
-?>
+/**@}*/?>

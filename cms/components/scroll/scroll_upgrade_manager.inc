@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scroll
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the scroll component.
  *
@@ -27,4 +32,4 @@ class ScrollUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup comment
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -61,3 +66,4 @@ class CommentUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

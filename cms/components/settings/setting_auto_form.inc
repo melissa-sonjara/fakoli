@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup settings
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -246,3 +251,4 @@ class SettingPageAutoForm extends SettingAutoForm
 		$this->buildForm();
 	}	
 }
+/**@}*/?>

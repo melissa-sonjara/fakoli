@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup comment
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -200,3 +205,4 @@ class CommentManager
 		}
 	}
 }
+/**@}*/?>

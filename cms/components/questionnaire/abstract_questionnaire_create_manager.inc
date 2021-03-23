@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 Fakoli::using("questionnaire", "text_lookup");
 Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_manager.inc");
 
@@ -822,4 +827,4 @@ window.addEvent('domready', function()
 	
 } // end AbstractQuestionnaireCreateManager
 
-?>
+/**@}*/?>

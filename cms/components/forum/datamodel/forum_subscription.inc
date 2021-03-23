@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup forum
+ * @{
+ */
+
+
 define("subscription_daily_digest", 1);
 define("subscription_instant_notification", 2);
 define("subscription_unsubscribe", 3);
@@ -75,3 +80,4 @@ class ForumSubscription extends DataItem
 		
 	}
 }
+/**@}*/?>

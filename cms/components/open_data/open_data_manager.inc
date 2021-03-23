@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup open_data
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -37,4 +42,4 @@ class OpenDataManager
 	}
 }
 
-?>
+/**@}*/?>

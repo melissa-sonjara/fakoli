@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup search
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2013 Sonjara, Inc
@@ -113,3 +118,4 @@ class SearchResultTypeFacetFilter extends AbstractFacetFilter
 		}
 	}
 }
+/**@}*/?>

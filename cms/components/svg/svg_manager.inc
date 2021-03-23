@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup svg
+ * @{
+ */
+
+
 /**
  *
  * Provides a central management class for event handlers and 
@@ -35,4 +40,4 @@ class SvgManager
 
 }
 
-?>
+/**@}*/?>

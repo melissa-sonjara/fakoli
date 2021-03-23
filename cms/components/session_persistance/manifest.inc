@@ -1,4 +1,9 @@
 <?php
+/**\defgroup session_persistance Session Persistance
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -56,4 +61,4 @@ class SessionPersistanceManifest
 	}	
 }
 
-?>
+/**@}*/?>

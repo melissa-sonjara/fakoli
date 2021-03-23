@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup login
+ * @{
+ */
+
+
 class LoginAccountLock extends DataItem
 {
 	var $table = "login_account_lock";
@@ -10,3 +15,5 @@ class LoginAccountLock extends DataItem
 						"locked_until"	=>	DateTime,
 						"active"		=>	Boolean);
 }
+
+/**@}*/?>

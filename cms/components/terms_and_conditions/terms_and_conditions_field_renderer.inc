@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup terms_and_conditions
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -75,4 +80,4 @@ TermsAndConditions.title = "<?echo $title?>";
 
 // Register the field renderer
 AutoForm::registerFieldRendererClass(TermsAndConditions, TermsAndConditionsFieldRenderer);
-?>
+/**@}*/?>

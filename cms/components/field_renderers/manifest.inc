@@ -1,4 +1,9 @@
 <?php
+/**\defgroup field_renderers Field Renderers
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -51,4 +56,4 @@ class FieldRenderersManifest
 		return null;
 	}	
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup activity_tracker
+ * @{
+ */
+
+
 
 class UserActivity extends DataItem
 {
@@ -128,3 +133,4 @@ class ActivitySession extends DataItem
 	}	
 }
 	
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\defgroup slideshow Slideshow
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -83,4 +88,4 @@ class SlideshowManifest
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup mobile_settings
+ * @{
+ */
+
+
 Fakoli::using("settings", "section", "menu");
 
 /**
@@ -140,4 +145,4 @@ class MobileSettingsManager
 	}
 }
 
-?>
+/**@}*/?>

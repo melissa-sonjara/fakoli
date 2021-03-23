@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup mobile_settings Mobile Settings
+ * @{
+ */
+
+
 class MobileSettingsManifest
 {
 	static function getComponentDefinition()
@@ -27,4 +32,4 @@ class MobileSettingsManifest
 	}
 }
 
-?>
+/**@}*/?>

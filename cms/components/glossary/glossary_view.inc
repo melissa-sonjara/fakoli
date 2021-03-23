@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup glossary
+ * @{
+ */
+
+
 class GlossaryView{
     
     var $glossary;
@@ -28,3 +33,4 @@ class GlossaryView{
        echo toJSON($glossary);
     }
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup field_renderers
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -254,4 +259,4 @@ window.addEvent('domready', function()
 		return parent::renderScript(field);
 	}
 }
-?>
+/**@}*/?>

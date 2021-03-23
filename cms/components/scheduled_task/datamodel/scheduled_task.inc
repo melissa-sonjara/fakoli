@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scheduled_task
+ * @{
+ */
+
+
 class ScheduledTask extends DataItem
 {
 	var $table = "scheduled_task";
@@ -61,3 +66,5 @@ class ScheduledTaskLogEntry extends DataItem
 		return $this->getRelated(ScheduledTask);
 	}
 }
+
+/**@}*/?>

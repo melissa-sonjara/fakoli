@@ -1,4 +1,9 @@
 <?php
+/**\defgroup social_media Social Media
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -56,4 +61,4 @@ class SocialMediaManifest
 		return array("ComponentScanComplete" 	  => array(SocialMediaManager, setDefaults)	);
 	}	
 }
-?>
+/**@}*/?>

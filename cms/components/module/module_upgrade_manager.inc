@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup module
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -60,3 +65,4 @@ class ModuleUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

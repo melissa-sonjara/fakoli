@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup redirect
+ * @{
+ */
+
+
 class Redirect extends DataItem
 {
 	var $table = "redirect";
@@ -24,3 +29,4 @@ class Redirect extends DataItem
 	}
 }
 						
+/**@}*/?>

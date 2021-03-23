@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup glossary
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the glossary component.
  *
@@ -27,4 +32,4 @@ class GlossaryUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

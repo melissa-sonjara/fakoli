@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup data_sync
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the data_sync component.
  *
@@ -33,4 +38,4 @@ class DataSyncUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

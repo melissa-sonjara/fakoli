@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup report_manager
+ * @{
+ */
+
+
 class CustomReportManager
 {
 	private static $managerClassMap = null;
@@ -58,3 +63,4 @@ class CustomReportManager
 		return "";
 	}
 }
+/**@}*/?>

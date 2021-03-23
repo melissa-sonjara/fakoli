@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup svg_charts
+ * @{
+ */
+
+
 
 class HistogramSeries
 {
@@ -448,4 +453,4 @@ ENDSCRIPT;
 		echo "<div id='{$this->id}'{$cssClass} style='{$this->cssStyles}'></div>";
 	}	
 }
-?>
+/**@}*/?>

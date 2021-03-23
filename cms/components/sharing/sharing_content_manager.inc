@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup sharing
+ * @{
+ */
+
+
 
 class SharingContentManager implements ISectionContentManager
 {
@@ -67,3 +72,5 @@ class SharingContentAdminView extends AbstractSectionContentAdminView
 		$table->drawView();
 	}
 }
+
+/**@}*/?>

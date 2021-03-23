@@ -1,4 +1,9 @@
 <?php
+/**\defgroup questionnaire Questionnaire
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -66,4 +71,4 @@ class QuestionnaireManifest
 	
 }
 
-?>
+/**@}*/?>

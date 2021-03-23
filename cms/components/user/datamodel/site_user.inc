@@ -1,4 +1,9 @@
 <?
+/**
+ * \addtogroup user
+ * @{
+ */
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -69,4 +74,4 @@ class SiteUser extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\defgroup email Email
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -122,4 +127,4 @@ class EmailManifest
 }
 
 
-?>
+/**@}*/?>

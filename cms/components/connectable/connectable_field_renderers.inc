@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup connectable
+ * @{
+ */
+
+
 Fakoli::usingFeature("field_renderers");
 
 class ConnectableTableFieldRenderer extends FieldRenderer
@@ -85,3 +90,4 @@ class ConnectableTableFieldRenderer extends FieldRenderer
 		return true;
 	}
 }
+/**@}*/?>

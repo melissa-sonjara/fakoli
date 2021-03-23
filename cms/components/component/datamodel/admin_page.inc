@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup component
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -61,3 +66,4 @@ class AdminPage extends DataItem
 		return $page;
 	}
 }
+/**@}*/?>

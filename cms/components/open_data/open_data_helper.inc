@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup open_data
+ * @{
+ */
+
+
 
 class OpenDataHelper
 {
@@ -42,3 +47,4 @@ class OpenDataHelper
 		return $items;
 	}
 }
+/**@}*/?>

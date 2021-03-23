@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup report_manager
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -57,4 +62,4 @@ class ReportManagerUpgradeManager extends UpgradeManager
 		$mgr->upgrade($version);
 	}	
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2007,2008 Sonjara, Inc
@@ -807,3 +812,5 @@ class CheckListView extends QuestionField
 		QuestionnaireResultsGraph::drawChecklistGraph($this->question, $mgr, $answers);
 	}
 }
+
+/**@}*/?>

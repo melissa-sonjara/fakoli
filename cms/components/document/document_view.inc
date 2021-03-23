@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 Fakoli::using("document");
 Fakoli::usingFeature("facet_manager");
 
@@ -214,3 +219,4 @@ class AdminDocumentLibraryListView extends DocumentLibraryListView
 	}
 	
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup page
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -160,4 +165,4 @@ class PageManager
 		return true;
 	}
 }
-?>
+/**@}*/?>

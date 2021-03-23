@@ -1,4 +1,9 @@
 <?php
+/**\defgroup fileshare Fileshare
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -79,4 +84,4 @@ class FileshareManifest
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup bookmark Bookmark
+ * @{
+ */
+
+
 class BookmarkManifest
 {
 	static function getComponentDefinition()
@@ -38,4 +43,4 @@ class BookmarkManifest
 	}
 }
 
-?>
+/**@}*/?>

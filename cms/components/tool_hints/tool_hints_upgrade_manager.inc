@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup tool_hints
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the tool_hints component.
  *
@@ -28,4 +33,4 @@ class ToolHintsUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

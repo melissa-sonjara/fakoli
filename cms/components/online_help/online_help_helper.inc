@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup online_help
+ * @{
+ */
+
+
 
 class OnlineHelpHelper
 {
@@ -81,3 +86,4 @@ class OnlineHelpHelper
 		return $table;
 	}
 }
+/**@}*/?>

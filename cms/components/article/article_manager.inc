@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup article
+ * @{
+ */
+
+
 Fakoli::using("component", "comment", "blog", "versioned_content");
 
 class ArticleManager
@@ -179,3 +184,4 @@ class ArticleManager
 		$mgr->upgrade($version);
 	}	
 }
+/**@}*/?>

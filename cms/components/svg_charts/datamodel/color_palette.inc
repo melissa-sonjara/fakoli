@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup svg_charts
+ * @{
+ */
+
+
 
 class ColorPalette extends DataItem
 {
@@ -51,3 +56,4 @@ class ColorPalette extends DataItem
 		return $paletteScript;
 	}
 }
+/**@}*/?>

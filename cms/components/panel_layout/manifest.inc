@@ -1,4 +1,9 @@
 <?php
+/**\defgroup panel_layout Panel Layout
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -56,4 +61,4 @@ class PanelLayoutManifest
 		return array("/fakoli/js/panel_layout.js");
 	}
 }
-?>
+/**@}*/?>

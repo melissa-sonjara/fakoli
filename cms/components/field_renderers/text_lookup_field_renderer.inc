@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup field_renderers
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2017 Sonjara, Inc
@@ -82,3 +87,4 @@ class TextLookupFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 }
+/**@}*/?>

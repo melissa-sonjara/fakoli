@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 Fakoli::using("settings");
 
 class EventInvitation extends DataItem
@@ -54,3 +59,4 @@ class EventInvitation extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
+/**@}*/?>

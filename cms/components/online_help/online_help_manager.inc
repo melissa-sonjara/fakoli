@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup online_help
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -172,4 +177,4 @@ class OnlineHelpManager
 	}
 }
 
-?>
+/**@}*/?>

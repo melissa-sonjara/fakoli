@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup text_lookup
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -63,3 +68,4 @@ class TextLookupUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

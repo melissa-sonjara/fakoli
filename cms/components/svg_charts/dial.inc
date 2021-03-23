@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup svg_charts
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2016 Sonjara, Inc
@@ -227,4 +232,4 @@ ENDSCRIPT;
 		echo "<div id='{$this->id}'{$cssClass} style='$dimensions'></div>";
 	}
 }
-?>
+/**@}*/?>

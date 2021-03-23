@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup taxonomy
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2013 Sonjara, Inc
@@ -236,3 +241,4 @@ class BindingTargetFacetFilter extends AbstractFacetFilter
 		}
 	}
 }
+/**@}*/?>

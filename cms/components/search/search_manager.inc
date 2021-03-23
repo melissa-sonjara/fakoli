@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup search
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2011 Sonjara, Inc
@@ -340,4 +345,4 @@ class SearchManager
 	}
 }
 
-?>
+/**@}*/?>

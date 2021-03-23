@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup open_data Open Data
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2015 Sonjara, Inc
@@ -73,4 +78,4 @@ class OpenDataManifest
 	}
 }
 
-?>
+/**@}*/?>

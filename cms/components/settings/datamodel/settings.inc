@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup settings
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -378,4 +383,4 @@ class ComponentSettings extends DataItem
 	var $table = "settings";	
 }
 
-?>
+/**@}*/?>

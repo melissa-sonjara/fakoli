@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup process
+ * @{
+ */
+
+
 
 class ProgressData extends DataItem
 {
@@ -13,4 +18,4 @@ class ProgressData extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

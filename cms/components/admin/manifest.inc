@@ -1,4 +1,9 @@
 <?php
+/**\defgroup admin Admin
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -52,4 +57,4 @@ class AdminManifest
 	}	
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup pdf
+ * @{
+ */
+
+
 Fakoli::using("settings", "auto_login");
 
 interface PDFConvertor
@@ -460,4 +465,4 @@ class Screenshot
 	}
 }
 
-?>
+/**@}*/?>

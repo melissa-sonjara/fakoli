@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup document
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -1004,3 +1009,5 @@ function deleteFolderResult(result)
 		Settings::setDefaultValue("document", "always_display_PDFs_in_browser", false, Boolean, "When downloading PDF documents, have them display in the browser in a new tab, rather than as a file download");
 	}
 }
+
+/**@}*/?>

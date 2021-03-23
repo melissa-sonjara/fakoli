@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scheduled_task
+ * @{
+ */
+
+
 Fakoli::usingFeature("auto_form");
 
 class TaskScheduleHelper
@@ -104,3 +109,4 @@ class TaskScheduleFieldRenderer extends FieldRenderer
 
 // Register the field renderer
 AutoForm::registerFieldRendererClass(TaskSchedule, TaskScheduleFieldRenderer);
+/**@}*/?>

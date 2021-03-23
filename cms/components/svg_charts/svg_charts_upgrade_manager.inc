@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup svg_charts
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2020 Sonjara, Inc
@@ -56,4 +61,4 @@ class SvgChartsUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

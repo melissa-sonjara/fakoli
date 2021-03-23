@@ -1,4 +1,8 @@
 <?php
+/**
+ * \defgroup user User
+ * @{
+ */
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -70,4 +74,4 @@ class UserManifest
 	}	
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 Fakoli::using("questionnaire", "svg_charts");
 
 /**
@@ -57,3 +62,5 @@ class QuestionnaireGraphicalView
 	}
 }
 
+
+/**@}*/?>

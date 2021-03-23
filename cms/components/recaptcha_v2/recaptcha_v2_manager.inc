@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup recaptcha_v2
+ * @{
+ */
+
+
 Fakoli::using("settings");
 
 /**
@@ -31,4 +36,4 @@ class RecaptchaV2Manager
 
 }
 
-?>
+/**@}*/?>

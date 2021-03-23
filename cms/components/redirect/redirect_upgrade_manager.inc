@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup redirect
+ * @{
+ */
+
+
 /**
  * Manage schema updates for the redirect component.
  *
@@ -29,4 +34,4 @@ class RedirectUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

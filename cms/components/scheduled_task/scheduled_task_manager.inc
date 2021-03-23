@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scheduled_task
+ * @{
+ */
+
+
 Fakoli::using("email");
 
 /**
@@ -183,4 +188,4 @@ class ScheduledTaskManager
 	}
 }
 
-?>
+/**@}*/?>

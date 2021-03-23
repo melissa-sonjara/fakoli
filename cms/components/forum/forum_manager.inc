@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup forum
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -259,3 +264,4 @@ class ForumManager
 		return $classes;
 	}
 }
+/**@}*/?>

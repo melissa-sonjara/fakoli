@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup module
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -141,4 +146,4 @@ class Module extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup phonegap
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -206,4 +211,4 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 	}
 }
 
-?>
+/**@}*/?>

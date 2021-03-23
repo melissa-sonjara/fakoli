@@ -1,4 +1,9 @@
 <?php
+/**\defgroup comment Comment
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -75,4 +80,4 @@ class CommentManifest
 	
 }
 
-?>
+/**@}*/?>

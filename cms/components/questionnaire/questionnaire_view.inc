@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 
 /**
  * Draw a view of the questionnaire from action handler from the
@@ -290,4 +295,4 @@ class QuestionnaireSendView
 } // end QuestionnaireSendView
 
 
-?>
+/**@}*/?>

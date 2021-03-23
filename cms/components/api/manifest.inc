@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup api Api
+ * @{
+ */
+
+
 class ApiManifest
 {
 	static function getComponentDefinition()
@@ -29,4 +34,4 @@ class ApiManifest
 	
 }
 
-?>
+/**@}*/?>

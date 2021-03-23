@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup activity_tracker
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2011 Sonjara, Inc
@@ -64,3 +69,4 @@ class ActivityTrackerUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

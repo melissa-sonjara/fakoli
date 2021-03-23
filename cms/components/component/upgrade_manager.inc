@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup component
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -863,3 +868,4 @@ abstract class UpgradeManager
 		ComponentManager::fireEventTo("upgradeComponent", $component, $version);
 	}
 }
+/**@}*/?>

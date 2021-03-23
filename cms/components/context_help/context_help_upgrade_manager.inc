@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup context_help
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -60,3 +65,4 @@ class ContextHelpUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

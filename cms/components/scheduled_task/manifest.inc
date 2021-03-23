@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup scheduled_task Scheduled Task
+ * @{
+ */
+
+
 class ScheduledTaskManifest
 {
 	static function getComponentDefinition()
@@ -46,4 +51,4 @@ class ScheduledTaskManifest
 	}
 }
 
-?>
+/**@}*/?>

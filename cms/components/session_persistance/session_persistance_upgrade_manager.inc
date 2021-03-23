@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup session_persistance
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -60,3 +65,4 @@ class SessionPersistenceUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup activity_tracker
+ * @{
+ */
+
+
 Fakoli::using("settings");
 
 class ActivityTracker
@@ -395,4 +400,4 @@ class SessionDetailsHelper
 		return "";
 	}
 }
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup site
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -121,3 +126,4 @@ class SiteManager
 		$mgr->upgrade($version);
 	}	
 }
+/**@}*/?>

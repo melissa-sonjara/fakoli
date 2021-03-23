@@ -1,4 +1,9 @@
 <?php
+/**\defgroup error_log Error Log
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -74,4 +79,4 @@ class ErrorLogManifest
 }
 
 
-?>
+/**@}*/?>

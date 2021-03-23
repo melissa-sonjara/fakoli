@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup report_manager
+ * @{
+ */
+
+
 Fakoli::usingFeature("paged_list");
 
 class CustomReportListView
@@ -71,3 +76,4 @@ class CustomReportListView
 		echo "</div></div>";
 	}
 }
+/**@}*/?>

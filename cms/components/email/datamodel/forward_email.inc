@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup email
+ * @{
+ */
+
+
 /**************************************************************
 /*
  * Dummy datamodel to build contact us form. No db table
@@ -36,3 +41,5 @@ class ForwardEmail extends DataItem
 }
 
 
+
+/**@}*/?>

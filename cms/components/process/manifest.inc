@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup process Process
+ * @{
+ */
+
+
 class ProcessManifest
 {
 	static function getComponentDefinition()
@@ -45,4 +50,4 @@ class ProcessManifest
 	}
 }
 
-?>
+/**@}*/?>

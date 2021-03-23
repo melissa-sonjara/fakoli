@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup role
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -178,3 +183,4 @@ class RoleManager
 		$mgr->upgrade($version);
 	}	
 }
+/**@}*/?>

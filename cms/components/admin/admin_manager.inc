@@ -1,4 +1,7 @@
 <?php
+/**\addtogroup admin
+ * @{
+ */
 
 class AdminManager
 {
@@ -56,3 +59,4 @@ class AdminManager
 <?
 	}
 }
+/**@}*/?>

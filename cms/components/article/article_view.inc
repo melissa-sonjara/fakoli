@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup article
+ * @{
+ */
+
+
 
 class ArticleListView
 {
@@ -67,3 +72,4 @@ class AdminArticleListView extends ArticleListView
 		return "<a title=\"{$item->title}\" href=\"/admin/article_form?article_id={$item->article_id}\">". ellipsis($item->title, 80) ."</a>";
 	}		
 }
+/**@}*/?>

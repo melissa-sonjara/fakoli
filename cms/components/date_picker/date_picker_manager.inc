@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup date_picker
+ * @{
+ */
+
+
 Fakoli::usingFeature("auto_form");
 
 /**
@@ -43,4 +48,4 @@ class DatePickerManager
 	}
 }
 
-?>
+/**@}*/?>

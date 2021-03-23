@@ -1,4 +1,9 @@
 <?php
+/**\defgroup dashboard Dashboard
+ * @{
+ */
+
+
 
  
 class DashboardManifest
@@ -24,4 +29,4 @@ class DashboardManifest
 	}	
 }
 
-?>
+/**@}*/?>

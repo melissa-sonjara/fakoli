@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 
 class CalendarHelper
 {
@@ -101,3 +106,5 @@ class CalendarHelper
 	}	
 }
 
+
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup api
+ * @{
+ */
+
+
 
 class APIToken extends DataItem
 {
@@ -51,3 +56,5 @@ class APIToken extends DataItem
 		return null;
 	}
 }
+
+/**@}*/?>

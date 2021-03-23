@@ -1,4 +1,9 @@
-<?
+<?php
+/**\addtogroup calendar
+ * @{
+ */
+
+
 
 /**************************************************************
 
@@ -62,4 +67,4 @@ class CalendarEventTypeXref extends DataItem
 		$this->DataItem(func_get_args());
 	}
 }
-?>
+/**@}*/?>

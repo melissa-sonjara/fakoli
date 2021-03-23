@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup questionnaire
+ * @{
+ */
+
+
 
 /*
  * Show the results for one questionnaire in the format:
@@ -145,4 +150,4 @@ class QuestionnaireSpreadsheetView
 
 
 
-?>
+/**@}*/?>

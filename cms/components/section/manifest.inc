@@ -1,4 +1,9 @@
 <?php
+/**\defgroup section Section
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -73,4 +78,4 @@ class SectionManifest
 	}		
 }
 
-?>
+/**@}*/?>

@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup comment
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -373,3 +378,4 @@ window.addEvent('domready', function()
 		$this->renderField($this->field);
 	}	
 }
+/**@}*/?>

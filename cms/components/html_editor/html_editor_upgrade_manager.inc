@@ -1,4 +1,9 @@
-<?
+<?php
+/**\addtogroup html_editor
+ * @{
+ */
+
+
 Fakoli::using("html_editor", "component");
 
 class HtmlEditorUpgradeManager extends UpgradeManager
@@ -18,4 +23,4 @@ class HtmlEditorUpgradeManager extends UpgradeManager
 	}
 }
 
-?>
+/**@}*/?>

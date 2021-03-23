@@ -31,6 +31,10 @@
 
 *****************************************************************/
 
+/** \defgroup component component
+ * @{
+ */
+
 class ComponentManifest
 {
 	static function getComponentDefinition()
@@ -132,4 +136,5 @@ class ComponentManifest
 	}
 }
 
+/**@}*/
 ?>

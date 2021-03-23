@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup site
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -155,4 +160,4 @@ class Site extends DataItem
 }
 	
 
-?>
+/**@}*/?>

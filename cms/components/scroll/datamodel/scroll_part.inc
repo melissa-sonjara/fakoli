@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup scroll
+ * @{
+ */
+
+
 class ScrollPart extends DataItem
 {
 	var $table = "scroll_part";
@@ -35,3 +40,4 @@ class ScrollPart extends DataItem
 		return $this->getRelated(ImageRecord);
 	}
 }
+/**@}*/?>

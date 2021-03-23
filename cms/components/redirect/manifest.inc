@@ -1,4 +1,9 @@
-<?
+<?php
+/**\defgroup redirect Redirect
+ * @{
+ */
+
+
 class RedirectManifest
 {
 	static function getComponentDefinition()
@@ -42,4 +47,4 @@ class RedirectManifest
 	}
 }
 
-?>
+/**@}*/?>

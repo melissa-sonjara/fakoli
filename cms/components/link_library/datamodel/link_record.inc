@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup link_library
+ * @{
+ */
+
+
 /**************************************************************
 
 Copyright (c) 2010 Sonjara, Inc
@@ -158,4 +163,4 @@ class LinkSearchResult extends AbstractSearchResult
 	}
 }
 
-?>
+/**@}*/?>

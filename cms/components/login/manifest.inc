@@ -1,4 +1,9 @@
 <?php
+/**\defgroup login Login
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -84,4 +89,4 @@ class LoginManifest
 	
 }
 
-?>
+/**@}*/?>

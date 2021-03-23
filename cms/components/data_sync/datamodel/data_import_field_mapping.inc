@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup data_sync
+ * @{
+ */
+
+
 class DataImportFieldMapping extends DataItem
 {
 	var $primary_key = "mapping_id";
@@ -32,3 +37,4 @@ class DataImportFieldMapping extends DataItem
 		return $this->columns;
 	}
 }
+/**@}*/?>

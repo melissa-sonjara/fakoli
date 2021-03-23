@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup activity_tracker
+ * @{
+ */
+
+
 
 class UserFeedback extends DataItem
 {
@@ -35,4 +40,4 @@ class UserFeedback extends DataItem
 	}
 }
 
-?>
+/**@}*/?>

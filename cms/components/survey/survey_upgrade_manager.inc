@@ -1,4 +1,9 @@
 <?php
+/**\addtogroup survey
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2010 Sonjara, Inc
@@ -68,3 +73,4 @@ class SurveyUpgradeManager extends UpgradeManager
 		parent::UpgradeManager();		
 	}
 }
+/**@}*/?>

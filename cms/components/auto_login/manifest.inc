@@ -1,4 +1,9 @@
 <?php
+/**\defgroup auto_login Auto Login
+ * @{
+ */
+
+
 
 
 class AutoLoginManifest
@@ -42,4 +47,4 @@ class AutoLoginManifest
 	
 }
 
-?>
+/**@}*/?>

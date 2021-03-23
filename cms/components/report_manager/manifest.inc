@@ -1,4 +1,9 @@
 <?php
+/**\defgroup report_manager Report Manager
+ * @{
+ */
+
+
 /**************************************************************
 
  Copyright (c) 2007-2010 Sonjara, Inc
@@ -66,4 +71,4 @@ class ReportManagerManifest
 	}	
 }
 
-?>
+/**@}*/?>
