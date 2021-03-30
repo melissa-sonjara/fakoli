@@ -138,11 +138,11 @@ class AutoLoginManager
 		return sha1($id . now());
 	}
 	
-	static function createOneTimeToken($url, $ip_addr = null)
+	static function createOneTimeToken($url, $ip_addr = null, $limit_ip = true)
 	{
 		global $user;
 
-		if (!$ip_addr) $ip_addr = Fakoli::getLocalIP();
+		if (!$ip_addr && $limit_ip) $ip_addr = Fakoli::getLocalIP();
 		
 		$token = new AuthenticationToken();
 		
