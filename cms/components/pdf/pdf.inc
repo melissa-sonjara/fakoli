@@ -287,7 +287,7 @@ class ExternalPDFConvertor
 		
 		if ($this->pdf->useToken)
 		{
-			$token = AutoLoginManager::createOneTimeToken($uri);
+			$token = AutoLoginManager::createOneTimeToken($uri, null, false);
 			$uri = "/action/auto_login/authenticate?token=$token";
 		}
 		
@@ -326,7 +326,7 @@ class ExternalPDFConvertor
 		
 		if ($this->pdf->useToken)
 		{
-			$token = AutoLoginManager::createOneTimeToken($uri);
+			$token = AutoLoginManager::createOneTimeToken($uri, null, false);
 			$uri = "/action/auto_login/authenticate?token=$token";
 		}
 		
