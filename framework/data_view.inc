@@ -953,4 +953,4 @@ class DataListView implements FacetFilterable
 		exit();
 	}
 }
-/**@}&/?>
+/**@}*/?>
