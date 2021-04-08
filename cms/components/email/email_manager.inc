@@ -588,9 +588,10 @@ class EmailManager
 	 * @param mixed $source either a single DataItem, or an array of DataItems
 	 * @param string $name the identifier of the email template 
 	 * @param callable $onSendComplete callback handler to be called after all generated emails have been sent
+	 * @param array $attachments array of files to attach and their file locations
 	 * @return number|boolean
 	 */
-	static function send($source, $name, $onSendComplete = "")
+	static function send($source, $name, $onSendComplete = "", $attachments = null)
 	{
 		$emailTemplate = EmailTemplate::getEmailTemplate($name);
 
@@ -612,6 +613,7 @@ class EmailManager
 			
 			trace("Sending email '$name'", 3);
 			$emailManager = new EmailManager($sendingItem, $emailTemplate, $onSendComplete);
+			$emailManager->attachments = $attachments;
 			$rtn = $emailManager->sendEmail();
 			trace("EmailManager:: rtn code $rtn", 3);
 		}
