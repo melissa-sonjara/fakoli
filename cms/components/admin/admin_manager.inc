@@ -29,7 +29,7 @@ class AdminManager
  		return AdminManager::$proxyShims[$identifier];
 	}
 	
-	static function startFrame($class)
+	static function startFrame($class = "")
 	{
 		global $script;
 		$script = Fakoli::getScripts() . $script;
