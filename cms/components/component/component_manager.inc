@@ -679,12 +679,17 @@ class ComponentManager
 
 		trace(print_r($context, true), 3);
 		
-		foreach($context as $name => $value)
-		{
-			$$name = unserialize($value);
+// 		foreach($context as $name => $value)
+// 		{
+// 			$$name = unserialize($value);
 			
-			trace("$name: ".print_r($$name, true), 3);
-		}
+// 			trace("$name: ".print_r($$name, true), 3);
+// 		}
+		
+		$_GET = unserialize($context["_GET"]);
+		$_GET = unserialize($context["_REQUEST"]);
+		$_GET = unserialize($context["_SERVER"]);
+		$methood = unserialize($context['method']);
 		
 		trace("URI: ".$_SERVER["REQUEST_URI"], 3);
 		return $output;
