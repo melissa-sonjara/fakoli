@@ -915,6 +915,26 @@ class DataItem extends AbstractDataItem
 	}
 		
 	/**
+	 * Delete items with the related classes that have fields matching the primary key of this item.
+	 */
+	function deleteRelated()
+	{
+		$pkv = $this->getPrimaryKeyValue();
+		if (!$pkv) return;
+		
+		for($i = 0; $i < func_num_args(); ++$i)
+		{
+			$target = func_get_arg($i);
+			
+			$doomed = new $target;
+			if ($target->hasField($this->primary_key))
+			{
+				$doomed->delete("WHERE {$this->primary_key}={$pkv}");
+			}
+		}
+	}
+			
+	/**
 	 * Delete all the rows in the database that correspond to this class.
 	 */
 	function deleteAll()
