@@ -687,8 +687,8 @@ class ComponentManager
 // 		}
 		
 		$_GET = unserialize($context["_GET"]);
-		$_GET = unserialize($context["_REQUEST"]);
-		$_GET = unserialize($context["_SERVER"]);
+		$_REQUEST = unserialize($context["_REQUEST"]);
+		$_SERVER = unserialize($context["_SERVER"]);
 		$methood = unserialize($context['method']);
 		
 		trace("URI: ".$_SERVER["REQUEST_URI"], 3);
