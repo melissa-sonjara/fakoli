@@ -686,6 +686,7 @@ class ComponentManager
 			trace("$name: ".print_r($$name, true), 3);
 		}
 		
+		trace("URI: ".$_SERVER["REQUEST_URI"], 3);
 		return $output;
 	}
 	
