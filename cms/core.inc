@@ -1474,13 +1474,20 @@ ENDSCRIPT;
 		{			
 			if (class_exists("COM"))
 			{
-	            $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
-			  	$cpus = $wmi->InstancesOf("Win32_Processor");
-	  
-			  	foreach ($cpus as $cpu) 
-			  	{
-			   		$out .=  $cpu->LoadPercentage."% ";
-			  	}
+				try
+				{
+		            $wmi = new COM("Winmgmts:{impersonationlevel=impersonate}!\\Root\\Cimv2");
+				  	$cpus = $wmi->InstancesOf("Win32_Processor");
+		  
+				  	foreach ($cpus as $cpu) 
+				  	{
+				   		$out .=  $cpu->LoadPercentage."% ";
+				  	}
+				}
+				catch(Exception $e)
+				{
+					$out = "Information not available";
+				}
 			}
 			else
 			{
