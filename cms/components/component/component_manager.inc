@@ -642,10 +642,10 @@ class ComponentManager
 		}
 
 		$context = array(
-			"_GET" 		=> $_GET, 
-			"_REQUEST" 	=> $_REQUEST, 
-			"_SERVER"	=> $_SERVER,
-			"method" 	=> $method
+			"_GET" 		=> serialize($_GET), 
+			"_REQUEST" 	=> serialize($_REQUEST), 
+			"_SERVER"	=> serialize($_SERVER),
+			"method" 	=> serialize($method)
 		);
 		
 		parse_str($queryString, $_GET);
@@ -679,7 +679,7 @@ class ComponentManager
 		
 		foreach($context as $name => $value)
 		{
-			$$name = $value;
+			$$name = unserialize($value);
 		}
 		
 		return $output;
