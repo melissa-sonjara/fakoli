@@ -173,7 +173,7 @@ var Chart = new Class(
 		
 		data = this.massageSVG(data);
 		
-		var svg = 'data:image/svg+xml;base64,' + u_btoa(data);
+		var svg = 'data:image/svg+xml;base64,' + btoa(data);
 		return svg;
 	},
 
@@ -191,7 +191,7 @@ var Chart = new Class(
 		data = data.replace(tag[0], fixed);
 
 		data = this.massageSVG(data);
-		var svg = 'data:image/svg+xml;base64,' + u_btoa(data);
+		var svg = 'data:image/svg+xml;base64,' + btoa(data);
 		return svg;
 	},
 	
