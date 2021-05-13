@@ -405,6 +405,19 @@ if (/msie/i.test (navigator.userAgent)) //only override IE
 	};
 }
 
+function u_atob(ascii) {
+    return Uint8Array.from(atob(ascii), c => c.charCodeAt(0));
+}
+
+function u_btoa(buffer) {
+    var binary = [];
+    var bytes = new Uint8Array(buffer);
+    for (var i = 0, il = bytes.byteLength; i < il; i++) {
+        binary.push(String.fromCharCode(bytes[i]));
+    }
+    return btoa(binary.join(''));
+}
+
 // Mock console object to prevent debugging calls from causing errors in IE.
 // Thanks to http://skysanders.net/subtext/archive/2010/07/10/javascript-console-and-firebug-mocks.aspx
 if ("undefined" === typeof window.console)
