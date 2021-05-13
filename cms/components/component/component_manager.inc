@@ -676,10 +676,14 @@ class ComponentManager
 		ob_end_clean();
 
 		//trace(print_r($context, true), 3);
+
+		trace(print_r($context, true), 3);
 		
 		foreach($context as $name => $value)
 		{
 			$$name = unserialize($value);
+			
+			trace("$name: ".print_r($$name, true), 3);
 		}
 		
 		return $output;
