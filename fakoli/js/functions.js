@@ -418,6 +418,14 @@ function u_btoa(buffer) {
     return btoa(binary.join(''));
 }
 
+function htmlencode(rawStr)
+{
+	var encodedStr = rawStr.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+		   return '&#'+i.charCodeAt(0)+';';
+	});
+	return encodedStr;
+}
+
 // Mock console object to prevent debugging calls from causing errors in IE.
 // Thanks to http://skysanders.net/subtext/archive/2010/07/10/javascript-console-and-firebug-mocks.aspx
 if ("undefined" === typeof window.console)
