@@ -42,8 +42,8 @@ $signature = ComponentManager::getComponentSignature();
 <br/>
 <strong>Server Load: </strong><?echo Fakoli::getServerLoad()?><br/><br/>
 <strong>Disk Usage:</strong><br/><br/><?echo Fakoli::getFileSystemInfo()?><br/><br/>
-<strong># Currently Active Sessions: </strong><?echo Fakoli::countActiveSessions();?><br/><br/>
-<strong>Component Configuration Signature:</strong> <?echo $signature?>
+<!-- <strong># Currently Active Sessions: </strong><?echo Fakoli::countActiveSessions();?><br/><br/>
+<strong>Component Configuration Signature:</strong> <?echo $signature?>-->
 <br/>
 <br/>
 <a class="button" href="/action/component/scan"> Scan for Component Updates </a>&nbsp;&nbsp;
