@@ -925,7 +925,7 @@ class DataItem extends AbstractDataItem
 		for($i = 0; $i < func_num_args(); ++$i)
 		{
 			$target = func_get_arg($i);
-			
+			$target->joinTransaction($this->getTransaction());
 			$doomed = new $target;
 			if ($target->hasField($this->primary_key))
 			{
