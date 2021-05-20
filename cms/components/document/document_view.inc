@@ -133,6 +133,8 @@ class DocumentLibraryView
 	
 	function drawButtons()
 	{
+		global $isAdmin;
+		
 		if(!checkRole("admin") && !checkRole($this->library->upload_files))
 		{
 			return;
@@ -144,7 +146,7 @@ class DocumentLibraryView
 			echo "<button id='upload' class='button' onclick='documentMgr.uploadFile()'>Upload a File...</button>\n";
 		}
 				
-		if (checkRole("admin"))
+		if ($isAdmin && checkRole("admin"))
 		{
 			echo "<button id='rescan' class='button' onclick='documentMgr.rescanLibrary()'>Rescan</button>\n";
 		}
