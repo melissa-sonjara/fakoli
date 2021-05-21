@@ -380,6 +380,7 @@ class CrossReferenceFacetFilter extends AbstractFacetFilter
 			$value = formatItems($related, "{getPrimaryKeyValue()}", ",");
 			foreach($related as $r)
 			{
+				if ($r == null) continue;
 				$this->related[$r->getPrimaryKeyValue()] = $r;
 			}
 		}
