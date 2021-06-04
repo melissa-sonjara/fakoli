@@ -387,7 +387,7 @@ class ArticleCommentXref extends DataItem
 }
 
 
-class ArticleSolrAdapter // Implements ISolrAdapter
+class ArticleSearchAdapter // Implements ISolrAdapter
 {
 
 	function getClass()

@@ -51,6 +51,18 @@ interface Searchable
 	function search($params, $range = null);
 }
 
+interface ISearchAdapter
+{
+	function getClass();
+	function getFilter();
+	
+	function getTitleFormat();
+	function getContentFormat();
+	function getAuthorFormat();
+	function getKeywordFormat();
+	function wrap($item);
+}
+
 
 abstract class AbstractSearchResult
 {

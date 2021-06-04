@@ -313,7 +313,7 @@ class BlogSearchResult extends AbstractSearchResult
 }
 
 
-class BlogSolrAdapter // Implements ISolrAdapter
+class BlogSearchAdapter // Implements ISolrAdapter
 {
 
 	function getClass()

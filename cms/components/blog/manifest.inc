@@ -94,7 +94,7 @@ class BlogManifest
 					 "DeleteUser"					=>	array(BlogManager, deleteUser),
 					 "ComponentScanComplete"		=> array(BlogManager, setDefaults),
 					 "RegisterSearchables"			=>	array(BlogManager, registerSearchables),
-					 "RegisterSolrAdapters"			=>	array(BlogManager, registerSolrAdapter),
+					 "RegisterSearchAdapters"		=>	array(BlogManager, registerSearchAdapter),
 					 "RegisterScheduledTaskWorkers"	=>	array(BlogManager, registerScheduledTaskWorkers),
 					 "RegisterVersionedContent"		=>	array(BlogManager, registerVersionedContent)
 		);

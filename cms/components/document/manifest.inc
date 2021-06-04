@@ -66,7 +66,7 @@ class DocumentManifest
 					"DeleteUser"					=>	array(DocumentManager, deleteUser),
 					"ComponentScanComplete"			=>	array(DocumentManager, setDefaults),
 					"RegisterCommentAdapters" 		=>	array(DocumentManager, registerCommentAdapter),
-					"RegisterSolrAdapters"			=>	array(DocumentManager, registerSolrAdapter)
+					"RegisterSearchAdapters"		=>	array(DocumentManager, registerSearchAdapter)
 		);
 	}
 	

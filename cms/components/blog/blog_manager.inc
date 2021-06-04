@@ -120,9 +120,9 @@ class BlogManager
 		return $searchables;
 	}
 	
-	static function registerSolrAdapter()
+	static function registerSearchAdapter()
 	{
-		SolrManager::registerSolrAdapter(Blog, new BlogSolrAdapter());
+		SolrManager::registerSearchAdapter(Blog, new BlogSearchAdapter());
 	}
 	
 	

@@ -124,9 +124,9 @@ class ArticleManager
 		return $searchables;
 	}
 	
-	static function registerSolrAdapter()
+	static function registerSearchAdapter()
 	{
-		SolrManager::registerSolrAdapter(Article, new ArticleSolrAdapter());
+		SearchManager::registerSearchAdapter(Article, new ArticleSearchAdapter());
 	}
 	
 	static function registerTaxonomyClasses($classes)

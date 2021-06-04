@@ -973,9 +973,9 @@ function deleteFolderResult(result)
 		return $searchables;
 	}
 
-	static function registerSolrAdapter()
+	static function registerSearchAdapter()
 	{
-		SolrManager::registerSolrAdapter(Document, new DocumentSolrAdapter());
+		SearchManager::registerSearchAdapter(Document, new DocumentSearchAdapter());
 	}
 
 	static function upgradeComponent($version)

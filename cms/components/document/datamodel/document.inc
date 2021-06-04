@@ -303,7 +303,7 @@ class DocumentCommentXref extends DataItem
 }
 
 
-class DocumentSolrAdapter // Implements ISolrAdapter
+class DocumentSearchAdapter // Implements ISolrAdapter
 {
 
 	function getClass()

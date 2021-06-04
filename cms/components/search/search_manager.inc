@@ -58,6 +58,32 @@ class SearchManager
 	var $facetWidth = "200px";
 	var $facetHeight = "120px";
 	
+	static function getSearchAdapters()
+	{
+		if (SearchManager::$searchAdapters == null)
+		{
+			SearchManager::$searchAdapters = array();
+			ComponentManager::fireEvent("RegisterSearchAdapters");
+		}
+		
+		return SearchManager::$searchAdapters;
+	}
+	
+	static function getSearchAdapter($class)
+	{
+		$adapters = SearchManager::getSearchAdapters();
+		if (!array_key_exists($class, $adapters)) throw new FakoliException("Search Adapter not registered");
+		
+		return $adapters[$class];
+	}
+	
+	static function registerSearchAdapter($class, $adapter)
+	{
+		trace("Registering Search Adapter for $class", 3);
+		
+		SearchManager::$searchAdapters[$class] = $adapter;
+	}
+	
 	function SearchManager($results = null)
 	{
 		$this->searchResults = $results;
