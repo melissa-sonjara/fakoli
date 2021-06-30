@@ -5,7 +5,7 @@ var PDF = new Class({});
 
 PDF.saveAsPDF = function()
 {
-	go('/action/pdf/generate?url=' + locstion.href);
+	go('/action/pdf/generate?url=' + location.href);
 };
 
 PDF.saveAsPNG = function()
