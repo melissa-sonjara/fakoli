@@ -341,7 +341,7 @@ var HorizontalBlockSeriesRenderer = new Class(
 					label = val + this.chart.options.units;
 				}
 					
-				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, label).attr({'text-anchor': 'start'});
+				this.chart.paper.text(x + columnHeight + 5, y + columnWidth / 2, label).attr({'text-anchor': 'start', 'font-size': this.chart.options.labelSize, 'alignment-baseline': 'middle'});
 			}
 			
 			column.mouseover(function(e) { this.series.fireEvent('mouseOver', [e, i]);  this.series.showToolTip(e, i); }.bind(this));
