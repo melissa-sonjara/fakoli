@@ -18,6 +18,11 @@ class PdfManifest
 
 		return $component;
 	}
+	
+	static functipn getScripts()
+	{
+		return array("/components/pdf/js/pdf.js");
+	}
 
 	static function subscribeToEvents()
 	{

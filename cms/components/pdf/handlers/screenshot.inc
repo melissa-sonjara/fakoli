@@ -3,15 +3,15 @@ Fakoli::using("pdf");
 
 $uri = $_GET["uri"];
 
-$file = basename(preg_replace("/\\?.*/", "", $uri)) . ".pdf";
+$file = basename(preg_replace("/\\?.*/", "", $uri)) . ".png";
 
 $https = Fakoli::checkSSL();
 
-$pdf = new PDF($uri, $https, isset($user));
+$pdf = new Screenshot($uri, $https, isset($user));
 $output = $pdf->generate();
 $size = strlen($output);
 
-header("Content-Type: application/pdf");
+header("Content-Type: image/png");
 header("Content-Disposition: attachment;filename=\"" . $file . "\"");
 header("Content-Length: $size");
 echo $output;
