@@ -19,7 +19,7 @@ class PdfManifest
 		return $component;
 	}
 	
-	static functipn getScripts()
+	static function getScripts()
 	{
 		return array("/components/pdf/js/pdf.js");
 	}
