@@ -27,3 +27,9 @@ CREATE TABLE content_version
 ALTER TABLE content_version ADD INDEX content_version_idx (content_class, content_id);
 
 -- END Version 1.0
+
+-- START Version 1.1
+
+DELETE FROM content_version WHERE content_id=0;
+
+-- END Version 1.1
