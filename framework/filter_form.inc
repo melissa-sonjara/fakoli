@@ -504,7 +504,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 			$name = htmlSafe($name);
 			$trunced = $this->max_chars ? ellipsis($name, $this->max_chars, true) : $name;
 		
-  			$selected = (!strcmp($value, $fieldValue)) ? " selected" : "";
+  			$selected = (strcmp($value, $fieldValue) == 0) ? " selected" : "";
   			$optionTitle = ($name != $trunced) ? " title='$name'" : "";
   			
 			echo "<option value='{$value}' $selected>$trunced</option>\n";
