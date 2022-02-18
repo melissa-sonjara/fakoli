@@ -498,7 +498,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 		<?
     	}
     	
-     	$fieldValue = $this->parent->data->get("$field");
+     	$fieldValue = $this->parent->data->get($field);
      	foreach($this->options as $value => $name)
 		{
 			$name = htmlSafe($name);
