@@ -52,6 +52,9 @@ class VersionedContentManager
 	static function onSavePreProcess($form)
 	{
 		$target = $form->data;
+		
+		if (!$target->get($target->getPrimaryKey())) return;
+		
 		ContentVersion::saveDraft($target);
 		VersionedContentManager::revert($target);
 		return true;
@@ -60,6 +63,9 @@ class VersionedContentManager
 	static function onDrawForm($form)
 	{
 		$target = $form->data;
+		
+		if (!$target->get($target->getPrimaryKey())) return;
+		
 		$versionControls = VersionedContentManager::renderVersioningControls($form->data, true);
 		if ($versionControls)
 		{
