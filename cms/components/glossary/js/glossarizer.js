@@ -70,6 +70,7 @@ var Glossarizer = new Class({
 			for(var i = 0; i < this.terms.length; ++i)
 			{
 				if (this.terms[i].regex == null) continue;
+				if (this.isExcluded(elt)) continue;
 				this.iterateNode(elt, this.terms[i]);
 			}
 		}.bind(this));
@@ -85,6 +86,13 @@ var Glossarizer = new Class({
 					span.addClass('tapped');
 			})
 		});
+	},
+	
+	isExcluded: function(elt)
+	{
+		if (elt.hasClass(this.options.excludeClass)) return true;
+		if (!elt.getParent() || elt == this.container) return false;
+		return this.isExcluded(elt.getParent());
 	},
 	
 	iterateNode: function(node, term) 
