@@ -116,22 +116,27 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 	
 	function renderScript($field)
 	{
-?>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-<?
 		if ($this->parent->ajaxSubmitHandler)
 		{			
 			$site_key = Settings::getValue("captcha", "recaptcha_site_key");			
 ?>
 	<script>
 		var captchaWidgetID = 0;
-		window.addEvent('domready', function()
+		var onloadCaptchaCallback = function()
 		{
 			captchaWidgetID = grecaptcha.render('captcha_container', {'site_key': '<?echo $site_key?>'});	
-		});
+		};
 	</script>
+	<script src='https://www.google.com/recaptcha/api.js?onload=onloadCaptchaCallback&render=explicit' async defer></script>
+	
 <?
 		}
+		else
+		{
+?>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+<?
+		
 	}
 	
 	function renderField($field = "")
