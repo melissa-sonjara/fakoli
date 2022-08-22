@@ -127,7 +127,7 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 			captchaWidgetID = grecaptcha.render('captcha_container', {'site_key': '<?echo $site_key?>'});	
 		};
 	</script>
-	<script src='https://www.google.com/recaptcha/api.js?onload=onloadCaptchaCallback&render=explicit' async defer></script>
+	<script src='https://www.google.com/recaptcha/api.js?onload=onloadCaptchaCallback&render=explicit'></script>
 	
 <?
 		}
