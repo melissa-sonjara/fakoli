@@ -1323,6 +1323,37 @@ ENDSCRIPT;
 		}
 	}
 	
+	private static $blockedIPs = null;
+	
+	static function getBlockedIPs()
+	{
+		if (!Fakoli::$blockedIPs)
+		{
+			Fakoli::$blockedIPs = Cache::get("fakoli_blocked_ips");
+			if (!Fakoli::$blockedIPs)
+			{
+				Fakoli::$blockedIPs = array();
+			}
+		}
+		
+		return Fakoli::$blockedIPs;
+	}
+		
+	static function isIPBlocked($ip = null)
+	{
+		if ($ip == null) $ip = $_SERVER["REMOTE_ADDR"];
+		$blockedIPs = Fakoli:: getBlockedIPs();
+		return array_key_exists($blockedIPs[$ip]);		
+	}
+	
+	static function blockIP($ip = null)
+	{
+		$blockedIPs = Fakoli::getBlockedIPs();
+		if ($ip == null) $ip = $_SERVER["REMOTE_ADDR"];
+		Fakoli::$blockedIPs[$ip] = 1;
+		Cache::put("fakoli_blocked_ips", Fakoli::$blockedIPs);
+	}
+	
 	/**
 	 * Set the trace log level. 
 	 */
@@ -1572,6 +1603,11 @@ ENDSCRIPT;
 	        }
 	    }   
     }
+}
+
+if (Fakoli::isIPBlocked())
+{
+	Fakoli::end();
 }
 
 /**
