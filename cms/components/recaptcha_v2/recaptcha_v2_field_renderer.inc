@@ -136,7 +136,7 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 ?>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 <?
-		
+		}
 	}
 	
 	function renderField($field = "")
