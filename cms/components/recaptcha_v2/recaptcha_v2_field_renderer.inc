@@ -119,6 +119,19 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 ?>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 <?
+		if ($this->parent->ajaxSubmitHandler)
+		{			
+			$site_key = Settings::getValue("captcha", "recaptcha_site_key");			
+?>
+	<script>
+		var captchaWidgetID = 0;
+		window.addEvent('domready', function()
+		{
+			captchaWidgetID = grecaptcha.render('captcha_container', {'site_key': '<?echo $site_key?>'});	
+		});
+	</script>
+<?
+		}
 	}
 	
 	function renderField($field = "")
@@ -129,8 +142,15 @@ class RecaptchaV2FieldRenderer extends FieldRenderer
 		
 		$this->_startField($field);
 ?>
-	<div class='captcha_wrapper'>
+	<div class='captcha_wrapper' id='captcha_container'>
+<?
+		if (!$this->parent->ajaxSubmitHandler)
+		{
+?>
 		<div class="g-recaptcha" data-sitekey="<?echo $site_key?>"></div>
+<?
+		}
+?>
 	</div>
 <?
 		$this->_endField($field);
