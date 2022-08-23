@@ -1605,10 +1605,6 @@ ENDSCRIPT;
     }
 }
 
-if (Fakoli::isIPBlocked())
-{
-	Fakoli::end();
-}
 
 /**
  * Pull out a simple reference to the request method
@@ -1658,6 +1654,12 @@ ComponentManager::fireEvent("ConfigurationBootstrap");
 Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data_view", "join", "search_form", "tab_bar", "paged_list", "expanding_list", "date_utils");
 
 $user = null;
+
+if (Fakoli::isIPBlocked())
+{
+	Fakoli::end();
+}
+
 
 // Import Standard Features
 Fakoli::usingFeature("data_item", "auto_form", "field_renderers", "cache", "data_view", "grouped_data_view", "filter_form", "search_form", 
