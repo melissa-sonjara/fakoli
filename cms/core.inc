@@ -1343,7 +1343,7 @@ ENDSCRIPT;
 	{
 		if ($ip == null) $ip = $_SERVER["REMOTE_ADDR"];
 		$blockedIPs = Fakoli:: getBlockedIPs();
-		return array_key_exists($blockedIPs[$ip]);		
+		return array_key_exists($ip, $blockedIPs);		
 	}
 	
 	static function blockIP($ip = null)
