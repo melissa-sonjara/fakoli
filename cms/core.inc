@@ -1657,7 +1657,7 @@ $user = null;
 
 if (Fakoli::isIPBlocked())
 {
-	Fakoli::end();
+	exit();
 }
 
 
