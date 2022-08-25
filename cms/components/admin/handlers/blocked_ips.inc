@@ -11,5 +11,4 @@ foreach($blockedIPs as $ip => $blocked)
 	echo "{$ip}<br/>\n";
 }
 echo "<p>";
-Cache::dump();
 ?>
