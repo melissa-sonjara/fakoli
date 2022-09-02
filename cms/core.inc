@@ -1327,12 +1327,26 @@ ENDSCRIPT;
 	
 	static function getBlockedIPs()
 	{
+		global $config;
+		
 		if (!Fakoli::$blockedIPs)
 		{
 			Fakoli::$blockedIPs = Cache::get("fakoli_blocked_ips");
 			if (!Fakoli::$blockedIPs)
 			{
 				Fakoli::$blockedIPs = array();
+				
+				if ($config["blocked_ip_file"])
+				{
+					$ips = file_get_contents($config["blocked_ip_file"]);
+					$ips = explode("\n", $ips);
+					foreach($ips as $ip)
+					{
+						Fakoli::$blockedIPs[trim($ip)] = 1;
+					}
+					
+					Cache::put("fakoli_blocked_ips", Fakoli::$blockedIPs);
+				}
 			}
 		}
 		
