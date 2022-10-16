@@ -1669,7 +1669,7 @@ Fakoli::usingFeature("auto_form", "auto_form_layout", "data_view", "grouped_data
 
 $user = null;
 
-if (Fakoli::isIPBlocked())
+if (php_sapi_name() != "cli" && Fakoli::isIPBlocked())
 {
 	exit();
 }
