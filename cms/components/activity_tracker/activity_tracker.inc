@@ -159,7 +159,7 @@ class ActivityTracker
 		Settings::setDefaultValue("activity_tracker", "send_email", false, Boolean, "Send a notification email when feedback is submitted. If you set this to true, configure recipient and message via the 'feedback_notification' email template", "User Feedback", null, 5);
 		  
 		Settings::setDefaultValue("activity_tracker", "google_analytics_tracking_id", "", String, "Leave blank if tracking is not desired.", "Google Analytics");
-		Settings::setDefaultValue("activity_tracker", "google_analytics_version", "Classic", String, "Specifies the API Version of Google Analytics to use. Select this based on your site's analytics configuration on google.com", "Google Analytics", "Classic\nUniversal");
+		Settings::setDefaultValue("activity_tracker", "google_analytics_version", "Classic", String, "Specifies the API Version of Google Analytics to use. Select this based on your site's analytics configuration on google.com", "Google Analytics", "Classic\nUniversal\nGA4");
 		
 		Settings::setDefaultValue("activity_tracker", "logging_directory", $base, String, "Specifies the directory to which user activity logs will be written", "Activity Tracking");		
 		
@@ -233,6 +233,25 @@ class ActivityTracker
 
   ga('create', '<?php echo $id ?>', 'auto');
   ga('send', 'pageview');
+
+</script>
+<?
+		}
+		else if ($trackingMode == "GA4")
+		{
+?>
+<!-- Google tag (gtag.js) -->
+
+<script async src=https://www.googletagmanager.com/gtag/js?id=<?php echo $id?>></script>
+
+<script>
+
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag(){dataLayer.push(arguments);}
+
+  gtag('js', new Date());
+  gtag('config', '<?php echo $id?>');
 
 </script>
 <?
