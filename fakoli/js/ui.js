@@ -787,7 +787,8 @@ var Interstitial = new Class({
 	createInterstitial: function()
 	{
 		var div = new Element('div', {'class': this.options.cssClass, 
-									  'id': this.options.id});
+									  'id': this.options.id,
+									  'role': 'alert'});
 									  
 		div.setStyles({'width': this.options.width, 
 					   'height': this.options.height,
@@ -919,7 +920,7 @@ var Notification = new Class({
 
 	createNotification: function()
 	{
-		var div = new Element('div', {'class': this.options.cssClass});
+		var div = new Element('div', {'class': this.options.cssClass, 'role': 'alert'});
 									  
 		div.setStyles({'max-width': this.options.width, 
 					   'height': this.options.height,
@@ -933,7 +934,7 @@ var Notification = new Class({
 		
 		if (this.options.blocking)
 		{
-			var button = new Element('a', {'class': this.options.buttonClass});
+			var button = new Element('a', {'class': this.options.buttonClass, 'role': 'button'});
 			button.set('html', this.options.buttonText);
 			button.addEvent('click', function(e) 
 			{ 
