@@ -26,3 +26,8 @@ ScrollPartManager.editPartResponse = function(response)
 		ScrollPartManager.dialog.options.body.getElement("form").manager.showError(response);
 	}
 };
+
+ScrollPartManager.copyScrollDialog = function(scroll_id)
+{
+	ScrollPartManager.dialog = modalPopup("Copy Scroll", "/action/scroll/copy_scroll_dialog?scroll_id=" + scroll_id, '700px', 'auto', true);
+};
