@@ -55,7 +55,7 @@ $scrollTable = new DataListView($scrollsBySite, "scrolls");
 $scrollTable->column("Identifier", "<a href='/admin/scroll_form?scroll_id={scroll_id}'>{identifier}</a>", true, "width: 20%")
 			->column("Title", "{title}", true, "width: 55%")
 			->column("# Parts", "{countParts()}", true, "width: 20%; text-align: center")
-			->column("", "<a href='#' onclick='ScrollPartManager.copyScrollDialog({scroll_id}); return true'><i class='far fa-fw fa-copy'></i></a>", true, "width: 5%");
+			->column("", "<a href='#' onclick='ScrollPartManager.copyScrollDialog({scroll_id}); return true'><i class='far fa-fw fa-copy'></i></a>", true, "width: 5%;text-align: center");
 
 		  
 $scrollTable->sortable = true;
