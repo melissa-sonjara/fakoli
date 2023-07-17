@@ -20,6 +20,10 @@ $scroll->filter = new InclusionFilter("identifier");
 
 $form = new AutoForm($scroll, "POST", "/action/scroll/copy_scroll_dialog?scroll_id=$scroll_id");
 $form->unique("identifier");
+$form->submitLabel = "Copy Scroll";
+
+$form->ajaxSubmit("function(result) {ScrollPartManager.onCopyScroll(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
+$form->button("Cancel", "ModalDialog.closeAllDialogs()", null, true);
 
 if ($method == "POST")
 {
