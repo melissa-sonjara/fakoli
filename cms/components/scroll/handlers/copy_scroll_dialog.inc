@@ -25,6 +25,20 @@ $form->submitLabel = "Copy Scroll";
 $form->ajaxSubmit("function(result) {ScrollPartManager.onCopyScroll(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "ModalDialog.closeAllDialogs()", null, true);
 
+$form->customSaveHandler = function($form) use ($from)
+{
+	try 
+	{
+		ScrollManager::copyScroll($from, $form->data->identifier);
+		return true;
+	} 
+	catch (Exception $e) 
+	{
+		$form->msg = $e->getMessage();
+		return false;
+	}
+};
+
 if ($method == "POST")
 {
 	if ($form->save())

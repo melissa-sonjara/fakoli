@@ -93,6 +93,39 @@ class ScrollManager
 		$mgr = new ScrollUpgradeManager();
 		$mgr->upgrade($version);
 	}
+	
+	static function copyScroll($from, $identifier)
+	{
+		$tx = new DataTransaction();
+		
+		try
+		{
+				
+			$scroll = new Scroll();
+			$scroll->cloneFrom($from);
+			$scroll->joinTransaction($tx);
+			$scroll->save();
+			
+			$fromParts = $from->Parts();
+			
+			foreach($fromParts as $fromPart)
+			{
+				$part = new ScrollPart();
+				$part->cloneFrom($fromPart);
+				$part->scroll_id = $scroll->scroll_id;
+				$part->joinTransaction($tx);
+				$part->save();
+			}
+		
+			$tx->commit();
+		}
+		catch(Exception $e)
+		{
+			$tx->rollback();
+			throw $e;
+		}
+	}
+		
 }
 
 /**@}*/?>

@@ -31,3 +31,14 @@ ScrollPartManager.copyScrollDialog = function(scroll_id)
 {
 	ScrollPartManager.dialog = modalPopup("Copy Scroll", "/action/scroll/copy_scroll_dialog?scroll_id=" + scroll_id, '700px', 'auto', true);
 };
+
+ScrollPartManager::onCopyScroll = function(result)
+{
+	if (result == "OK")
+	{
+		location.reload();
+	}
+	else
+	{
+	}
+};
