@@ -103,6 +103,7 @@ class ScrollManager
 				
 			$scroll = new Scroll();
 			$scroll->cloneFrom($from);
+			$scroll->identifier = $identifier;
 			$scroll->joinTransaction($tx);
 			$scroll->save();
 			
