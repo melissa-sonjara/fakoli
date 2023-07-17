@@ -16,7 +16,7 @@ if (!$scroll_id)
 $from = new Scroll($scroll_id);
 
 $scroll = new Scroll();
-$scroll->filter(new InclusionFilter("identifier"));
+$scroll->filter = new InclusionFilter("identifier");
 
 $form = new AutoForm($scroll, "POST", "/action/scroll/copy_scroll_dialog?scroll_id=$scroll_id");
 $form->unique("identifier");
