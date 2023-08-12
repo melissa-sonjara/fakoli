@@ -40,9 +40,9 @@ Fakoli::using("auto_login");
 
 class AutoLoginManager
 {
-	static function authenticate()
+	static function authenticate($token = null)
 	{
-		$token = $_GET["token"];
+		if ($token == null) $token = $_GET["token"];
 		$username = '';
 		
 		global $user;
