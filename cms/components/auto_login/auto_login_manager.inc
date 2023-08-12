@@ -119,7 +119,7 @@ class AutoLoginManager
 			if (!$uri) $uri = "/index";
 			
 			LoginManager::recordLoginAttempt($username, 'auto', $token, 'success');
-			redirect($uri);
+			if ($uri != "#") redirect($uri);
 		}
 		catch(Exception $e)
 		{
