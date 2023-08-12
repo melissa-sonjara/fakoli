@@ -157,6 +157,26 @@ class AutoLoginManager
 		
 		return $token->token;
 	}
+	
+	static function createPersistentToken($url, $ip_addr = null, $limit_ip = true)
+	{
+		global $user;
+		
+		if (!$ip_addr && $limit_ip) $ip_addr = Fakoli::getLocalIP();
+		
+		$token = new AuthenticationToken();
+		
+		$token->token = AutoLoginManager::generateToken();
+		$token->user_id = $user->get($user->getPrimaryKey());
+		$token->ip_address = $ip_addr;
+		$token->enabled = true;
+		$token->single_use = false;
+		$token->redirect_on_success = $url;
+		
+		$token->save();
+		
+		return $token->token;
+	}
 
 	/**
 	 * Respond to fired event DeleteUser
