@@ -294,6 +294,16 @@ class ComponentPageView
 			$template = str_replace($expr, $value, $template);
 		}
 		
+		preg_match_all("/\{cache:(.*?)\}/", $template, $gets, PREG_SET_ORDER);
+		foreach($gets as $get)
+		{
+			$expr = $get[0];
+			$name = $get[1];
+			$value = Cache::get($name);
+			
+			$template = str_replace($expr, $value, $template);
+		}
+		
 		if ($config['prettyURLs'] === false)
 		{
 			$template = preg_replace("/(href|src|action)=(['\"])\\/?([\\w\\d_]+?)\\?/i", "$1=$2/page.php?identifier=$3&", $template);
