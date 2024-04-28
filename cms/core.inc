@@ -590,8 +590,7 @@ class Fakoli
 			{
 				trace("** No manifest file found for {$component->name}", 1);
 			}
-			
-			if (method_exists($manifest, getScripts))
+			else if (method_exists($manifest, getScripts))
 			{
 				// Calculate union of scripts
 				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts(), $scriptArray));
@@ -635,7 +634,11 @@ class Fakoli
 		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();
-			if (method_exists($manifest, getStyles))
+			if (!$manifest)
+			{
+				trace("** No manifest file found for {$component->name}", 1);
+			}
+			else if (method_exists($manifest, getStyles))
 			{
 				// Calculate union of styles
 				$styleArray = array_merge($styleArray, array_diff($manifest->getStyles(), $styleArray));
