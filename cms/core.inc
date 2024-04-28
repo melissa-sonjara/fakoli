@@ -586,6 +586,11 @@ class Fakoli
 		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();
+			if (!$manifest)
+			{
+				trace("** No manifest file found for {$component->name}", 1);
+			}
+			
 			if (method_exists($manifest, getScripts))
 			{
 				// Calculate union of scripts
