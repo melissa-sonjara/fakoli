@@ -640,6 +640,7 @@ class Fakoli
 			}
 			else if (method_exists($manifest, getStyles))
 			{
+				trace("Adding styles for {$component->name}", 1);
 				// Calculate union of styles
 				$styleArray = array_merge($styleArray, array_diff($manifest->getStyles(), $styleArray));
 			}
