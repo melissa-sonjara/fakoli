@@ -158,9 +158,11 @@ class OptimizeManager
 			{
 				foreach($styles as $style)
 				{
+					
 					$resource = Fakoli::resolveResource($style);
 					if ($resource)
 					{
+						trace("Loading {$resource}", 1);
 						$file_modified = filemtime($resource);
 						if ($file_modified > $last_modified)
 						{
