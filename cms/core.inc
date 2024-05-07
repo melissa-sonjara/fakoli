@@ -592,6 +592,7 @@ class Fakoli
 			}
 			else if (method_exists($manifest, getScripts))
 			{
+				trace("Adding scripts for {$component->name}", 1);
 				// Calculate union of scripts
 				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts(), $scriptArray));
 			}
