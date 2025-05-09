@@ -465,7 +465,7 @@ class FileBackedCache
 	{
 		return $this->cacheDir . DIRECTORY_SEPARATOR . $key . ".txt";
 	}
-	
+
 	function get($key)
 	{
 		if (array_key_exists($key, $this->cache)) return $this->cache[$key];
@@ -478,7 +478,25 @@ class FileBackedCache
 		}
 		else return null;
 	}
-	
+
+    function dump()
+    {
+        echo "<table class='list'><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>\n";
+
+        $prefix = ConnectionManager::$dsn."_".Cache::$app_name."_";
+
+        foreach (new DirectoryIterator($this->cacheDir) as $file)
+        {
+            if (!startsWith($file->getFilename(), $prefix)) continue;
+            $key = str_replace($prefix, "", $file->getFilename());
+            $key = substr($key, 0,-4);
+            $value = file_get_contents($file->getPathname());
+
+            echo "<tr><td><b>$key</b></td><td>{$value}</td></tr>\n";
+        }
+        echo "</tbody></table>";
+    }
+
 	function put($key, $obj, $ttl = 0)
 	{
 		$this->cache[$key] = $obj;
