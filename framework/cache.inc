@@ -49,9 +49,7 @@ class Cache
 	static function getInstance()
 	{
 		global $config;
-		
-		trace(get_class(Cache::$instance), 5);
-		
+				
 		if (Cache::$instance) return Cache::$instance;
 		
 		if (array_key_exists("file_backed_cache_directory", $config))
@@ -225,7 +223,7 @@ class SimpleMemoryCache
  */
 class APCCache
 {	
-	function APCCache()
+	function __construct()
 	{
 		trace("Creating APC Cache", 4);
 	}
@@ -363,7 +361,7 @@ class APCUCache
  */
 class WCCache
 {
-	function WCCache()
+	function __construct()
 	{
 		trace("Creating WinCache cache", 4);
 	}
@@ -449,7 +447,7 @@ class FileBackedCache
 	var $cache;
 	var $cacheDir;
 	
-	function FileBackedCache()
+	function __construct()
 	{
 		global $config;
 		
