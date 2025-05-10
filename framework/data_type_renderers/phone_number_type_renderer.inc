@@ -53,7 +53,7 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 			);
 	
 	
-	function PhoneNumberTypeRenderer()
+	function __construct()
 	{
 	}
 	

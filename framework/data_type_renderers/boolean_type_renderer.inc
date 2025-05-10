@@ -39,7 +39,7 @@ require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
 class BooleanTypeRenderer extends AbstractTypeRenderer
 {
-	function BooleanTypeRenderer()
+	function __construct()
 	{
 	}
 	

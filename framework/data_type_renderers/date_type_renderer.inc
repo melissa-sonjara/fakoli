@@ -40,7 +40,7 @@ require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 class DateTypeRenderer extends AbstractTypeRenderer
 {
 	
-	function DateTypeRenderer()
+	function __construct()
 	{
 	}
 	

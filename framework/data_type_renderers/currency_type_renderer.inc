@@ -40,7 +40,7 @@ require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 class CurrencyTypeRenderer extends AbstractTypeRenderer
 {
 	
-	function CurrencyTypeRenderer()
+	function __construct()
 	{
 	}
 	

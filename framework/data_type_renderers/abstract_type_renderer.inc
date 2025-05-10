@@ -48,7 +48,7 @@ require_once realpath(dirname(__FILE__)."/timezone_type_renderer.inc");
 
 class AbstractTypeRenderer
 {		
-	function AbstractTypeRenderer()
+	function __construct()
 	{
 		
 	}

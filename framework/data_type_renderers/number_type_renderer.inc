@@ -39,7 +39,7 @@ require_once realpath(dirname(__FILE__)."/abstract_type_renderer.inc");
 
 class NumberTypeRenderer extends AbstractTypeRenderer
 {	
-	function NumberTypeRenderer()
+	function __construct()
 	{
 	}
 	
