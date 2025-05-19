@@ -53,12 +53,12 @@ class OptionListFieldRenderer extends FieldRenderer
 	var $grouped = false;			///< True if the $options array is grouped by headings, false if not
 	var $groupTag = "h6";			///< The tag to use when displaying the groups.
 	
-	function OptionListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
+	function __construct(&$form, $field, $label, $options, $grouped = false)
 	{
 		$this->options = $options;
 		$this->grouped = $grouped;
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

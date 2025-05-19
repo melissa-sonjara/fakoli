@@ -22,7 +22,7 @@ class TableSelectFieldRenderer extends FieldRenderer
 	
 	function __construct($form, $field, $label, $handler, $processor = null, $mode = "single", $data = null )
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 
 		$this->field = $field;
 		$this->label = $label;

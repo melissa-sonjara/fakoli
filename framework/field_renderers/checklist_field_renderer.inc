@@ -90,11 +90,11 @@ class CheckListFieldRenderer extends FieldRenderer
 	var $fixedOptions = array();
 	var $defaultOptions = array();
 	
-	function CheckListFieldRenderer(&$form, $field, $label, $options, $grouped = false)
+	function __construct(&$form, $field, $label, $options, $grouped = false)
 	{
 		$this->options = $options;
 		$this->grouped = $grouped;
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

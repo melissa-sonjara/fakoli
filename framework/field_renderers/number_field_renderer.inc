@@ -60,9 +60,9 @@ class NumberFieldRenderer extends FieldRenderer
 	var $control = "text";		///< The HTML control type to use when rendering. This gets set to "number" if a range is specified.
 	var $static = false;		///< Render the field as a static (readonly) value, that is visible, non-editable and the value is submitted when the form is submitted.
 	
-	function NumberFieldRenderer(&$parent, $field = null)
+	function __construct(&$parent, $field = null)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($field && !$parent->data->hasField($field))
 		{
 			$parent->add($this, $field);

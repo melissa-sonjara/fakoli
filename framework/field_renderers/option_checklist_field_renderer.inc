@@ -51,10 +51,10 @@ class OptionCheckListFieldRenderer extends FieldRenderer
 	var $cssClass = "options_list";
 	var $separator = ", ";
 	
-	function OptionCheckListFieldRenderer(&$form, $field, $label, $options)
+	function __construct(&$form, $field, $label, $options)
 	{
 		$this->options = $options;
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

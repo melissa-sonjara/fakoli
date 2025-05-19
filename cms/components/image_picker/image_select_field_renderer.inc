@@ -50,7 +50,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 	
 	function ImageSelectFieldRenderer(&$form, $field = "", $required = false)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 				
 		if (!$field) return;
 		

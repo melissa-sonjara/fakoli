@@ -60,7 +60,7 @@ class TaskScheduleFieldRenderer extends FieldRenderer
 	
 	function TaskScheduleFieldRenderer($parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		$this->annotateBefore = true;
 	}
 	

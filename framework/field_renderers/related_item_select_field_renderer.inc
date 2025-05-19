@@ -111,7 +111,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
  * 
  * @return RelatedItemSelectFieldRenderer
  */
-	function RelatedItemSelectFieldRenderer(&$form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", $allowAdd = false, $allowNone = false, $maxChars = 80)
+	function __construct(&$form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", $allowAdd = false, $allowNone = false, $maxChars = 80)
 	{	
 		$this->relatedClass = $relatedClass;
 		$this->constraint = $constraint;
@@ -125,7 +125,7 @@ class RelatedItemSelectFieldRenderer extends FieldRenderer
 		$this->sorted = false;
 		$this->toggleAddNew = false;
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

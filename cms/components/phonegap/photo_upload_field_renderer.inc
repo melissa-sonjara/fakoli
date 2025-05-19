@@ -56,7 +56,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	
 	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->gallery_id = $gallery_id;
 		
 		if ($form->data->hasField($field))

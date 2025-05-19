@@ -62,11 +62,11 @@ class TextFieldRenderer extends FieldRenderer
 	 * Constructs a new TextFieldRenderer object.
 	 * @param AutoForm $parent the parent AutoForm
 	 */
-	function TextFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
 		global $config;
 		
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		
 		$this->annotateBefore = true;
 		if ($config["encoding"]) $this->encoding = $config["encoding"];

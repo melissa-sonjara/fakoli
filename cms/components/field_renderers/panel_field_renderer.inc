@@ -45,7 +45,7 @@ class PanelFieldRenderer extends FieldRenderer
 		
 	function __construct(&$form, $field, $label, $url, $attrs = "")
 	{		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

@@ -51,7 +51,7 @@ class TextLookupFieldRenderer extends FieldRenderer
 	
 	function __construct(&$form, $field, $label, $identifier, $attrs = "")
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

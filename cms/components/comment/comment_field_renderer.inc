@@ -81,7 +81,7 @@ class CommentFieldRenderer extends FieldRenderer
 
 	function CommentFieldRenderer(&$parent, $field, $xrefClass, $component, $comments = null)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		$this->hideLabel = true;
 		$this->parent->add($this, $field);
 		$this->xrefClass = $xrefClass;

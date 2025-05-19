@@ -14,7 +14,7 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 	
 	function DocumentSelectFieldRenderer(&$form, $field, $label, $libraryIdentifier)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

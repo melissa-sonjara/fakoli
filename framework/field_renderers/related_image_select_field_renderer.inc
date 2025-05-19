@@ -52,7 +52,7 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 	var $constraint;	
 	var $onChange;
 	
-	function RelatedImageSelectFieldRenderer(&$form, $field, $label, $relatedClass, $constraint, $imageField, $valueField = "")
+	function __construct(&$form, $field, $label, $relatedClass, $constraint, $imageField, $valueField = "")
 	{
 		$this->relatedClass = $relatedClass;
 		$this->constraint = $constraint;
@@ -65,7 +65,7 @@ class RelatedImageSelectFieldRenderer extends FieldRenderer
 		
 		$this->getRelatedItems();
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$form->override($field, $label, $this);
 	}
 	

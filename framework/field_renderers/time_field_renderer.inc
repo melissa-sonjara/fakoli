@@ -42,9 +42,9 @@ require_once realpath(dirname(__FILE__))."/../field_renderers.inc";
  */
 class TimeFieldRenderer extends FieldRenderer
 {
-	function TimeFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);		
+		parent::__construct($parent);		
 	}
 	
 	function writeScript($field)

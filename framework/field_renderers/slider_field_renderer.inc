@@ -50,7 +50,7 @@ class SliderFieldRenderer extends FieldRenderer
 		$this->min = $min;
 		$this->max = $max;
 		$this->editable = $editable;
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		
 		if ($field && !$form->data->hasField($field))
 		{

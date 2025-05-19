@@ -60,9 +60,9 @@ class DataListFieldRenderer extends FieldRenderer
 	var $label;
 	var $table;
 	
-	function DataListFieldRenderer(&$parent, $table, $field = "", $label = "")
+	function __construct(&$parent, $table, $field = "", $label = "")
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 
 		$this->field = ($field) ? $field : $table->id;
 		$this->label = ($label) ? $label : prettify($this->field);

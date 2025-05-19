@@ -48,13 +48,13 @@ class RatingFieldRenderer extends FieldRenderer
 	var $minLabel;
 	var $maxLabel;
 	
-	function RatingFieldRenderer(&$form)
+	function __construct(&$form)
 	{
 		$this->ranks = 5;
 		$this->minLabel = "(little)";
 		$this->maxLabel = "(very)";
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->colspan = 2;
 		
 		//$form->override($field, $label, $this);

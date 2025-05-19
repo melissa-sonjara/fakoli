@@ -61,7 +61,7 @@ class EmailAttachmentFieldRenderer extends FieldRenderer
 	{
 		$this->field = $field;
 	
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->label = ($label) ? $label : $form->prettifyFieldName($field);
 
 		if($form->hasAdditional($field))
@@ -221,7 +221,7 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 	{
 		$this->field = $field;
 	
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->label = ($label) ? $label : $form->prettifyFieldName($field);
 
 		if($form->hasAdditional($field))

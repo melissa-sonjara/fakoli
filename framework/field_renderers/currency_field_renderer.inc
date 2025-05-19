@@ -52,9 +52,9 @@ class CurrencyFieldRenderer extends FieldRenderer
 	var $size = 20;			///< size of the text field to be displayed (in characters)
 	var $static = false;		///< Render the field as a static (readonly) value, that is visible, non-editable and the value is submitted when the form is submitted.
 	
-	function CurrencyFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function renderScript($field)

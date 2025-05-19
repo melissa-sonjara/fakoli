@@ -52,9 +52,9 @@ class ToggleFieldRenderer extends FieldRenderer
 	 * Create a new BooleanFieldRenderer
 	 * @param AutoForm $parent the parent form
 	 */
-	function ToggleFieldRenderer(&$parent, $ragged, $field = null, $label = null)
+	function __construct(&$parent, $ragged, $field = null, $label = null)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		
 		$this->ragged = $ragged;
 		if ($this->ragged)

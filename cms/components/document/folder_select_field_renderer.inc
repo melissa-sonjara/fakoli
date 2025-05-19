@@ -70,7 +70,7 @@ class FolderSelectFieldRenderer extends FieldRenderer
 		$this->onPreProcess = null;
 		$this->onPostProcess = null;	
 			
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->field = $field;
 		if ($form->data->hasField($field))
 		{

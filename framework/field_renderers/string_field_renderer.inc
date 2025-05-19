@@ -74,9 +74,9 @@ class StringFieldRenderer extends FieldRenderer
 	var $onKeyPress = null;		///< Optional key press javascript callback. Note that if $limit is set, it will override this.
 	var $placeholder = null;	///<  Placeholder text to display when field is empty
 	
-	function StringFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function renderScript($field)

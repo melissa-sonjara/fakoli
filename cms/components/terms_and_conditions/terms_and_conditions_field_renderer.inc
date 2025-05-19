@@ -46,7 +46,7 @@ class TermsAndConditionsFieldRenderer extends FieldRenderer
 	{
 		global $isAdmin;
 		
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if (!$isAdmin && Settings::getValue("terms_and_conditions", "require_acceptance"))
 		{
 			$this->parent->onSubmitHandler = "TermsAndConditions.showTerms";

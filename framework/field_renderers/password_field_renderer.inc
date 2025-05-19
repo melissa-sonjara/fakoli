@@ -50,9 +50,9 @@ class PasswordFieldRenderer extends FieldRenderer
 	var $numeric = false; //< numeric code (PIN)
 	var $allowEmpty = false;
 	
-	function PasswordFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		
 	}
 	

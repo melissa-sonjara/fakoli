@@ -55,7 +55,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		$this->xrefClass = $xrefClass;
 		$this->field = $field;	
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->label = $form->prettifyFieldName($field);
 		$form->add($this);
 		

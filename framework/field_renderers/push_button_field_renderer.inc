@@ -51,12 +51,12 @@ class PushButtonFieldRenderer extends FieldRenderer
 	var $tabular = false; // Horizontal table-based layout
 	var $regular = false;
 	
-	function PushButtonFieldRenderer(&$form, $field, $label, $options, $onChange = "")
+	function __construct(&$form, $field, $label, $options, $onChange = "")
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

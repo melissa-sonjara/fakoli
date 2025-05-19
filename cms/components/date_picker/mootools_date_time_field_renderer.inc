@@ -55,7 +55,7 @@ class MooToolsDateTimeFieldRenderer extends FieldRenderer
 	
 	function MooToolsDateTimeFieldRenderer(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function addValidatorsToForm($field, $required = false)

@@ -51,7 +51,7 @@ class ColorFieldRenderer extends FieldRenderer
 	 */
 	function __construct(&$parent, $field = null, $label = null)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($field && !$parent->data->hasField($field))
 		{
 			$parent->add($this, $field, $label);

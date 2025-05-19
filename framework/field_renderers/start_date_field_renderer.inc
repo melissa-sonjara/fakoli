@@ -58,7 +58,7 @@ class StartDateTimeFieldRenderer extends DateTimeFieldRenderer
 	 */
 	function __construct($parent, $field, $label = "", $endDateField = "end_date")
 	{		
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($parent->data->hasField($field))
 		{
 			$parent->override($field, $label, $this);

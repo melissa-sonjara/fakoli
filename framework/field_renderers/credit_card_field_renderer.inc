@@ -44,9 +44,9 @@ class CreditCardNumberFieldRenderer extends FieldRenderer
 	var $disable = false; // alternative to readonly; field can be reenabled or set thru javascript
 	var $onChange = ""; // optional callback on data input change
 	
-	function CreditCardNumberFieldRenderer(&$parent, $field = null)
+	function __construct(&$parent, $field = null)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($field && !$parent->data->hasField($field))
 		{
 			$parent->add($this, $field);

@@ -60,9 +60,9 @@ class HTMLFieldRenderer extends FieldRenderer
 	
 	var $rteParams= array();
 	
-	function HTMLFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		$this->hideStyleBar = $parent->HTMLEditorHideStyleBar;
 		$this->width = $parent->HTMLEditorDefaultWidth;
 		$this->height = $parent->HTMLEditorDefaultHeight;

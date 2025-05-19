@@ -42,7 +42,7 @@ class ColorPickerFieldRenderer extends FieldRenderer
 {
 	function ColorPickerFieldRenderer(&$parent)
 	{
-		$this->FieldRenderer($parent);		
+		parent::__construct($parent);		
 	}
 	
 	function renderScript($field)

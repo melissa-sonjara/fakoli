@@ -55,7 +55,7 @@ class ImageUploadFieldRenderer extends FieldRenderer
 	
 	function ImageUploadFieldRenderer(&$form, $field, $label, $gallery, $imageRecordHandler = null)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 
 		$this->gallery = $gallery;
 		$this->field = $field;

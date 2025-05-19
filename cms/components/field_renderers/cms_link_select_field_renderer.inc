@@ -14,7 +14,7 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 	
 	function CMSLinkSelectFieldRenderer(&$form, $field, $label)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

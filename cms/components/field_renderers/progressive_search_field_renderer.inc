@@ -62,7 +62,7 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 	 */
 	function ProgressiveSearchFieldRenderer(&$parent, $field, $label = "", $handler)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($field && !$parent->data->hasField($field))
 		{
 			$parent->add($this, $field);

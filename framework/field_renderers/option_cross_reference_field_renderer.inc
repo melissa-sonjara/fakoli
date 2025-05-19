@@ -30,14 +30,14 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	var $groupTag = "h4";
 	var $containerClass = "";
 	
-	function OptionCrossReferenceFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass, $grouped = false)
+	function _construct(&$form, $field, $label, $options, $nameField, $xrefClass, $grouped = false)
 	{
 		$this->options = $options;
 		$this->nameField = $nameField;
 		$this->xrefClass = $xrefClass;
 		$this->grouped = $grouped;
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			$form->override($field, $label, $this);

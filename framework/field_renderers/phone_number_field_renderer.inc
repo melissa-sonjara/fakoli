@@ -69,9 +69,9 @@ class PhoneNumberFieldRenderer extends FieldRenderer
 	var $template = "standard"; // PhoneNumberTypeRenderer template for reaonly format (e.g., "(123) 456-7890 ext 123")
 	var $extension = false;
 		
-	function PhoneNumberFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function renderScript($field)

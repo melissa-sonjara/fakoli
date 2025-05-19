@@ -49,12 +49,12 @@ class TreeSelectFieldRenderer extends FieldRenderer
 	var $onPreProcess;
 	var $onPostProcess;
 	
-	function TreeSelectFieldRenderer(&$form, $field, &$tree, $label = null)
+	function __construct(&$form, $field, &$tree, $label = null)
 	{
 		$this->tree = $tree;
 		$this->onPreProcess = null;
 		$this->onPostProcess = null;		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$this->field = $field;
 		if ($form->data->hasField($field))
 		{

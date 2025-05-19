@@ -12,7 +12,7 @@ class SectionContentPropertiesFieldRenderer extends FieldRenderer
 	
 	function __construct($form, $field = "section_mapping", $label = "Section Mapping", $identifierField = "identifier")
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 	
 		$this->identifierField = $identifierField;
 		

@@ -49,9 +49,9 @@ class BooleanFieldRenderer extends FieldRenderer
 	 * Create a new BooleanFieldRenderer
 	 * @param AutoForm $parent the parent form
 	 */
-	function BooleanFieldRenderer(&$parent, $field = null, $label = null)
+	function __construct(&$parent, $field = null, $label = null)
 	{
-		$this->FieldRenderer($parent);	
+		parent::__construct($parent);	
 		$this->colspan = 2;	
 		$this->hideLabel = true;
 		if ($field && !$parent->data->hasField($field))

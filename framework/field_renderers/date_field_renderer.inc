@@ -52,9 +52,9 @@ class DateFieldRenderer extends FieldRenderer
 	var $onInput = "";		///< optional javascript callback for 'input' event on date text field
 	var $template = ""; 	///< template for date display in readonly mode - default reaonly format is short style
 	
-	function DateFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function addValidatorsToForm($field, $required = false)

@@ -435,11 +435,11 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	var $width = "";
 	var $cssClass = 'select';
 	
-	function FilterFieldRenderer(&$form, $field, $label = "", $options = null)
+	function __construct(&$form, $field, $label = "", $options = null)
 	{
 		$this->options = $options;
 		$this->label = ($label) ? $label : prettify($field);
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->getData()->hasField($field))
 		{
 			// JDG 5/30/11 - don't crash on additiona/psuedo fields
@@ -588,13 +588,13 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 	 * @param string $label label to display for the field
 	 * @param bool $default whether the checkbox should be check or unchecked as the default
 	 */
-	function BooleanFilterFieldRenderer(&$parent, $field = "", $label = "", $default = 0)
+	function __construct(&$parent, $field = "", $label = "", $default = 0)
 	{
 		$this->label = ($label) ? $label : prettify($field);
 	
 		$this->default = $default;
 		
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($parent->data->hasField($field))
 		{
 			$parent->override($field, $label, $this);
@@ -939,7 +939,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 		{
 			$parent->add($this, $field);
 		}		
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		
 		// Needs to have a value so that it is included in the constraint
 		$parent->setParam($this->startParam, "to", $this->to);
@@ -1257,9 +1257,9 @@ class ProgressiveSearchFilterFieldRenderer extends FieldRenderer
 	 * @param $searchOptions - ProgressiveSearch options, e.g., 
 	 * 'search': '/action/task/task_search_handler?$qs', minimumLength: 1, 'cssClass': 'scrollbox', 'width': '300px'
 	 */
-	function ProgressiveSearchFilterFieldRenderer(&$parent, $field, $label = "", $searchOptions)
+	function __construct(&$parent, $field, $label = "", $searchOptions)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 		if ($field && !$parent->data->hasField($field))
 		{
 			$parent->add($this, $field);

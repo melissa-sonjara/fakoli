@@ -63,7 +63,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 	var $disable = false;	///< Set to true to disable user input for this control
 	var $columns = 1;
 	
-	function CrossReferenceSelectFieldRenderer(&$form, $field, $label, $options, $nameField, $xrefClass, $xrefField = null)
+	function __construct(&$form, $field, $label, $options, $nameField, $xrefClass, $xrefField = null)
 	{
 		$this->field = $field;
 		$this->label = ($label) ? $label : $form->overrides[$field]['label'];
@@ -74,7 +74,7 @@ class CrossReferenceSelectFieldRenderer extends FieldRenderer
 		$this->xrefField = $xrefField;
 		$this->showSelectAll = false;
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		
 		// JDG 7/31/2011 - allow override
 		if ($form->data->hasField($field))

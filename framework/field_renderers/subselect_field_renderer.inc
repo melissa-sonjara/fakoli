@@ -49,12 +49,12 @@ class SubSelectFieldRenderer extends FieldRenderer
 	var $options;
 	var $format;
 	
-	function SubSelectFieldRenderer(&$form, $field, $label, $super, $options, $format)
+	function __construct(&$form, $field, $label, $super, $options, $format)
 	{
 		$this->options = $options;
 		$this->super = $super;
 		$this->format = $format;
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->data->hasField($field))
 		{
 			// JDG 5/30/11 - don't crash on additiona/psuedo fields

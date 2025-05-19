@@ -47,9 +47,9 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 	var $minimumAge = 0;
 	var $minimumAgeMessage = "";
 	
-	function DateFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 
 	function addValidatorsToForm($field, $required = false)

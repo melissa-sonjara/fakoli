@@ -131,9 +131,9 @@ $abbreviatedTimezones = array(
 
 class TimezoneFieldRenderer extends FieldRenderer
 {
-	function TimezoneFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->FieldRenderer($parent);		
+		parent::__construct($parent);		
 	}
 	
 	function renderField($field)

@@ -21,7 +21,7 @@ class ConnectableTableFieldRenderer extends FieldRenderer
 
 	function __construct($form, $field, $label, $targetClass)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 
 		$this->field = $field;
 		$this->label = $label;

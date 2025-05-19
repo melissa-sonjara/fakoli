@@ -354,7 +354,7 @@ class RatingQuestionFieldRenderer extends StringFieldRenderer
 {
 	function RatingQuestionFieldRenderer(&$parent)
 	{
-		$this->FieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function preProcess($field = "")

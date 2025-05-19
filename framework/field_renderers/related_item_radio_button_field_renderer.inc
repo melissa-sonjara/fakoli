@@ -52,7 +52,7 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 	var $constraint;
 	var $horizontal;
 	
-	function RelatedItemRadioButtonFieldRenderer(&$form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "")
+	function __construct(&$form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "")
 	{
 		$this->relatedClass = $relatedClass;
 		$this->constraint = $constraint;
@@ -63,7 +63,7 @@ class RelatedItemRadioButtonFieldRenderer extends FieldRenderer
 		
 		$this->getRelatedItems();
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		$form->override($field, $label, $this);
 	}
 	

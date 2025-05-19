@@ -67,7 +67,7 @@ class RelatedItemCheckListFieldRenderer extends FieldRenderer
 		$this->constraint = $constraint;
 		$this->options = $this->getRelatedItems();
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		
 		if ($form->data->hasField($field))
 		{

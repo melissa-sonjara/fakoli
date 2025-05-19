@@ -65,7 +65,7 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 		
 		$this->showSelectAll = true;
 		
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		
 		// JDG 7/31/2011 - allow override
 		if ($form->data->hasField($this->field))
@@ -386,7 +386,7 @@ class BindingTargetFieldRenderer extends FieldRenderer
 
 		$this->showSelectAll = true;
 
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 
 		$field = $this->field;
 		$label = $this->label;

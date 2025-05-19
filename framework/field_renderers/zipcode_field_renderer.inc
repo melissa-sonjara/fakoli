@@ -63,9 +63,9 @@ class ZipCodeFieldRenderer extends FieldRenderer
 	var $international = false;
 	var $internationalLabel = "Postal Code";
 	
-	function ZipCodeFieldRenderer(&$form)
+	function __construct(&$form)
 	{	
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 	}
 
 	function setInternational($label = "Postal Code")

@@ -51,9 +51,9 @@ class FileUploadFieldRenderer extends FieldRenderer
 	var $field;
 	var $accept;
 	
-	function FileUploadFieldRenderer(&$form, $field, $label, $handler)
+	function __construct(&$form, $field, $label, $handler)
 	{
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		
 		$this->handler = $handler;
 		$this->field = $field;

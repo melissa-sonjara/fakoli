@@ -81,12 +81,12 @@ class SelectFieldRenderer extends FieldRenderer
 	var $CSSclass;		///< Additional CSS class(es) to apply to the select box
 	var $stripHTML = false; ///< Set to true to strip HTML from option text
 	
-	function SelectFieldRenderer(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
+	function __construct(&$form, $field, $label, $options = null, $onChange="", $grouped = false)
 	{
 		$this->options = $options;
 		$this->onChange = $onChange;
 		$this->grouped = $grouped;
-		$this->FieldRenderer($form);
+		parent::__construct($form);
 		if ($form->getData()->hasField($field))
 		{
 			// JDG 5/30/11 - don't crash on additiona/psuedo fields
