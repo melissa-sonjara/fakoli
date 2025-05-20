@@ -62,12 +62,12 @@ class DocumentDownload extends DataItem
 		return $mgr->getUser($this->user_id);
 	}
 
-	function DocumentDownload()
+	function __construct()
 	{
 		$this->primary_key = "download_id";
 		$this->table = "document_download";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
@@ -90,11 +90,11 @@ class DocumentDownloadDailyStats extends DataItem
 		return $this->getRelated(DocumentLibrary);
 	}
 	
-	function DocumentDownloadDailyStats()
+	function __construct()
 	{
 		$this->table = "document_download_daily_stats";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 
@@ -115,11 +115,11 @@ class DocumentDownloadTotalStats extends DataItem
 		return $this->getRelated(DocumentLibrary);
 	}
 	
-	function DocumentDownloadTotalStats()
+	function __construct()
 	{
 		$this->table = "document_download_total_stats";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 	

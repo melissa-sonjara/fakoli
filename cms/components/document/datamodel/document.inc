@@ -137,7 +137,7 @@ class Document extends DataItem implements Searchable
 		return $this->getRelated(DocumentLibrary);
 	}
 	
-	function Document()
+	function __construct()
 	{
 		$this->primary_key = "document_id";
 		$this->table = "document";
@@ -148,7 +148,7 @@ class Document extends DataItem implements Searchable
 		
 		$this->default_format = "{title}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
 	function search($params, $range = null)
@@ -203,7 +203,7 @@ class DocumentSearchResult extends AbstractSearchResult
 {
 	var $item;
 	
-	function DocumentSearchResult($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

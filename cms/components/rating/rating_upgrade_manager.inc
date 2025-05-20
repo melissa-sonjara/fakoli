@@ -23,12 +23,12 @@ class RatingUpgradeManager extends UpgradeManager
 		"1.1"	=>	"sql:Added an index to rating table to improve performance"
 	);
 
-	function RatingUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "rating";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

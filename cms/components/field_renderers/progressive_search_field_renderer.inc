@@ -60,7 +60,7 @@ class ProgressiveSearchFieldRenderer extends StringFieldRenderer
 	 * @param $handler - the path to the action handler that retrieves the results
 	 * and displays them in the scrollbox (e.g., '/action/task/task_search_handler'
 	 */
-	function ProgressiveSearchFieldRenderer(&$parent, $field, $label = "", $handler)
+	function __construct(&$parent, $field, $label = "", $handler)
 	{
 		parent::__construct($parent);
 		if ($field && !$parent->data->hasField($field))

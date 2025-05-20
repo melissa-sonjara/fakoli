@@ -116,7 +116,7 @@ $doc_icons = array(	".doc"		=>	"/fakoli/images/msword_icon.png",
 
 class DocumentHandler
 {
-	function DocumentHandler()
+	function __construct()
 	{
 		
 	}

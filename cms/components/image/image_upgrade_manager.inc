@@ -65,12 +65,12 @@ class ImageUpgradeManager extends UpgradeManager
 			"1.8"		=>	"sql:Increase size of credits and caption fields in image table"
 	);
 	
-	function ImageUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "image";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -70,9 +70,9 @@ else
  * 
 class XXReportManager extends ReportManager
 {
-	function XXReportManager()
+	function __construct()
 	{
-		$this->ReportManager();
+		parent::__construct();
 
 		$this->table(MyDataItemClass, "MyTitle")			
 			->column("My Field Label", "{my_field}", true, "")
@@ -134,7 +134,7 @@ class ReportManager
 	/**
 	 * Creates a new ReportManager instance.
 	 */
-	function ReportManager()
+	function __construct()
 	{
 		$this->selected = null;
 		
@@ -789,7 +789,7 @@ class ReportColumn
 	var $type;
 	var $outputFields;
 	
-	function ReportColumn($title, $format,  $sortable = true, $style = "", $type = null, $outputFields = null)
+	function __construct($title, $format,  $sortable = true, $style = "", $type = null, $outputFields = null)
 	{
 		$this->title = $title;
 		$this->format = $format;

@@ -52,7 +52,7 @@
 /* Installation Note:
    The user datamodel must have the following relation:
  
-function LoginToken()
+function __construct()
 {
 	$token = querySingle(LoginToken, "WHERE user_id={$this->user_id}");
 	return $token;
@@ -117,7 +117,7 @@ class LoginToken extends DataItem
 	}
 	
 	
-	function LoginToken()
+	function __construct()
 	{
 		$this->table = "login_token";
 		$this->primary_key = "token_id";
@@ -126,7 +126,7 @@ class LoginToken extends DataItem
 		$mgr = new UserManager();
 		$this->relations["SiteUser"] = $mgr->getUserClass(); 
 		
-		$this->DataItem(func_get_args());	
+		parent::__construct(func_get_args());	
 	}
 }
 

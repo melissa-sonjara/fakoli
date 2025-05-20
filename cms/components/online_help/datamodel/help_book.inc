@@ -75,12 +75,12 @@ class HelpBook extends DataItem
 		return null;
 	}
 	
-	function HelpBook()
+	function __construct()
 	{
 		$this->table = "help_book";
 		$this->primary_key = "help_book_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 	

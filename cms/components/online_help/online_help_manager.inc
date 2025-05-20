@@ -40,7 +40,7 @@ Fakoli::using("settings");
 
 class OnlineHelpSerializationHandler
 {
-	function OnlineHelpSerializationHandler()
+	function __construct()
 	{
 	}
 
@@ -61,7 +61,7 @@ class OnlineHelpManager
 {	
 	var $book;
 	
-	function OnlineHelpManager($book)
+	function __construct($book)
 	{
 		$this->book = $book;
 	}

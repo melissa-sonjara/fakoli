@@ -40,7 +40,7 @@ Fakoli::using("component");
 
 class RoleManager
 {
-	function RoleManager()
+	function __construct()
 	{
 		
 	}

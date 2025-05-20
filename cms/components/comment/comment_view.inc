@@ -70,7 +70,7 @@ class CommentView
 	 * @param String $component
 	 * @param String $title
 	 */
-	function CommentView($obj, $xrefClass, $component, $title = "")
+	function __construct($obj, $xrefClass, $component, $title = "")
 	{
 		$this->obj = $obj;
 		$this->xrefClass = $xrefClass;

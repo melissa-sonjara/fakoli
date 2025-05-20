@@ -39,7 +39,7 @@
 
 class ForumManager
 {
-	function ForumManager()
+	function __construct()
 	{
 		
 	}

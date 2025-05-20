@@ -43,7 +43,7 @@ class VideoTotalDownloadsView
 	var $gallery;
 	var $table;
 	
-	function VideoTotalDownloadsView($gallery)
+	function __construct($gallery)
 	{
 		$this->gallery = $gallery;
 

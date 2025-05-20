@@ -80,13 +80,13 @@ class Calendar extends DataItem
 	}
 	
 	
-	function Calendar()
+	function __construct()
 	{
 		$this->table = "calendar";
 		$this->primary_key = "calendar_id";
 		$this->default_format = "{name}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 	

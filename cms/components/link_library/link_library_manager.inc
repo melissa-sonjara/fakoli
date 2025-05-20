@@ -40,7 +40,7 @@ class LinkLibrarySerializationHandler
  */
 class LinkLibraryManager
 {
-	function LinkLibraryManager()
+	function __construct()
 	{
 
 	}

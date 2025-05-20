@@ -62,12 +62,12 @@ class Email extends DataItem
 	);
 		
 	
-	function Email()
+	function __construct()
 	{
 		$this->table = "email";
 		$this->primary_key = "email_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

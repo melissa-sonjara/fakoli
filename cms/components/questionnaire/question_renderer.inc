@@ -66,7 +66,7 @@ class QuestionField
 	var $answer;					///< The answer to the question obj
 	var $answerSeparator = "<br>"; ///<  for list of answers in checklist renderer
 
-	function QuestionField($parent, $question)
+	function __construct($parent, $question)
 	{
 		$this->parent = $parent;
 		$this->question = $question;
@@ -224,9 +224,9 @@ class HeadingView extends QuestionField
 {
 	var $skipNumbering = true;
 	
-	function MultipleChoiceView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}	
 	
 
@@ -253,9 +253,9 @@ class HeadingView extends QuestionField
  */
 class MultipleChoiceView extends QuestionField
 {
-	function MultipleChoiceView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}
 
 
@@ -346,9 +346,9 @@ class MultipleChoiceView extends QuestionField
  */
 class SelectFieldView extends QuestionField
 {
-	function SelectFieldView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}
 
 
@@ -410,9 +410,9 @@ class SelectFieldView extends QuestionField
 
 class RatingView extends QuestionField
 {
-	function RatingView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}
 
 	function writeHTML()
@@ -508,9 +508,9 @@ class RatingView extends QuestionField
 // JDG 8/4/2011 - change to String rendering
 class ShortTextView extends QuestionField
 {
-	function ShortTextView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}
 
 	function writeHTML()
@@ -580,9 +580,9 @@ class ShortTextView extends QuestionField
 class FreeTextView extends QuestionField
 {
 
-	function FreeTextView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}
 
 	function writeScript()
@@ -668,9 +668,9 @@ class FreeTextView extends QuestionField
 
 class CheckListView extends QuestionField
 {
-	function CheckListView($parent, $question)
+	function __construct($parent, $question)
 	{
-		$this->QuestionField($parent, $question);
+		parent::__construct($parent, $question);
 	}
 
 	function getValues()

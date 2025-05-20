@@ -60,12 +60,12 @@ class TextLookupUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added editable flag to text_lookup table"
 	);
 	
-	function TextLookupUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "text_lookup";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

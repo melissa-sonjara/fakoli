@@ -69,7 +69,7 @@ interface IBlogViewHandler
  */
 class DefaultBlogViewHandler implements IBlogViewHandler
 {
-	function DefaultBlogViewHandler()
+	function __construct()
 	{
 	}
 	
@@ -175,7 +175,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
  */
 class NewsBlogViewHandler implements IBlogViewHandler
 {
-	function NewsBlogViewHandler()
+	function __construct()
 	{
 	}
 	
@@ -259,7 +259,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 
 class BookBlogViewHandler implements IBlogViewHandler
 {
-	function DefaultBlogViewHandler()
+	function __construct()
 	{
 	}
 	
@@ -372,7 +372,7 @@ class BlogView
 	var $blog;
 	var $handlers;
 	
-	function BlogView($blog)
+	function __construct($blog)
 	{
 		$this->blog = $blog;
 		ComponentManager::fireEvent("RegisterBlogViewHandlers", $this);
@@ -452,7 +452,7 @@ class BlogListView
 {
 	var $table;
 	
-	function BlogListView()
+	function __construct()
 	{
 		$blogs = Query::create(Blog, "ORDER BY title")->execute();
 		
@@ -503,9 +503,9 @@ class BlogListView
 
 class AdminBlogListView extends BlogListView
 {
-	function AdminBlogListView()
+	function __construct()
 	{
-		parent::BlogListView();
+		parent::__construct();
 	}
 	
 	function formatTitleLink($blog)
@@ -519,7 +519,7 @@ class BlogArticlesView
 	var $blog;
 	var $table;
 	
-	function BlogArticlesView($blog)	
+	function __construct($blog)	
 	{
 		$this->blog = $blog;
 		
@@ -578,9 +578,9 @@ class BlogArticlesView
 
 class AdminBlogArticlesView extends BlogArticlesView
 {
-	function AdminBlogArticlesView($blog)
+	function __construct($blog)
 	{
-		parent::BlogArticlesView($blog);
+		parent::__construct($blog);
 	}
 
 	function buildTable($articles)
@@ -612,7 +612,7 @@ class BlogSubscriberListView
 	var $blog;
 	var $table;
 	
-	function BlogSubscriberListView ($blog_id)
+	function __construct ($blog_id)
 	{
 		$blog = new Blog ($blog_id);
 		

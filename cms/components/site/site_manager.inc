@@ -42,7 +42,7 @@ class SiteManager
 {
 	static $themes = null;
 	
-	function SiteManager()
+	function __construct()
 	{
 		
 	}

@@ -58,12 +58,12 @@ class CommentUpgradeManager extends UpgradeManager
 			"1.1"		=>  "sql: added published field"
 	);
 	
-	function CommentUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "comment";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

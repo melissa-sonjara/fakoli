@@ -40,7 +40,7 @@ Fakoli::usingFile("framework/directory_tree.inc");
 
 class DocumentSerializationHandler
 {
-	function DocumentSerializationHandler()
+	function __construct()
 	{
 	}
 
@@ -79,7 +79,7 @@ class DocumentManager
 	 * Creates a new DocumentManager for the specified library
 	 * @param DocumentLibrary $library the library to be managed
 	 */
-	function DocumentManager($library)
+	function __construct($library)
 	{		
 		$this->library = $library;
 		if ($this->library->document_library_id) 

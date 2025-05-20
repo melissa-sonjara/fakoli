@@ -25,12 +25,12 @@ class ScheduledTaskUpgradeManager extends UpgradeManager
 		"1.3"	=>	"sql:Added run_every_hour flag to scheduled_task table"
 	);
 
-	function ScheduledTaskUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "scheduled_task";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

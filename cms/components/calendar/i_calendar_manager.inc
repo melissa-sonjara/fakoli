@@ -100,7 +100,7 @@ class iCalendarData extends DataItem
 		$this->primary_key = "icalendar_uid";
 		$this->table = "icalendar";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

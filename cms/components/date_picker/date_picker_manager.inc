@@ -13,7 +13,7 @@ Fakoli::usingFeature("auto_form");
  */
 class DatePickerManager
 {
-	function DatePickerManager()
+	function __construct()
 	{
 
 	}

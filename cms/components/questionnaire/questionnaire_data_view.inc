@@ -47,7 +47,7 @@ class QuestionnaireDataView
 	var $textAnswers;
 	var $responseCount;
 
-	function QuestionnaireDataView($mgr)
+	function __construct($mgr)
 	{
 		$this->mgr = $mgr;
 		$this->survey = $this->mgr->item;

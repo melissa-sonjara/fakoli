@@ -9,7 +9,7 @@ class ArticleListView
 {
 	var $table;
 	
-	function ArticleListView()
+	function __construct()
 	{
 
 		$articles = query(Article, "ORDER BY last_modified DESC");
@@ -62,9 +62,9 @@ class ArticleListView
 
 class AdminArticleListView extends ArticleListView
 {
-	function AdminArticleListView()
+	function __construct()
 	{
-		parent::ArticleListView();
+		parent::__construct();
 	}	
 	
 	function formatTitle($item)

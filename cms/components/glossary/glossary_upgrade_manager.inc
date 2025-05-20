@@ -23,12 +23,12 @@ class GlossaryUpgradeManager extends UpgradeManager
 	    "1.1"	=>	"sql:Created glossary table"
 	);
 
-	function GlossaryUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "glossary";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

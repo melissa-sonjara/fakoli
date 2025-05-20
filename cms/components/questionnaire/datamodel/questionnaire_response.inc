@@ -135,12 +135,12 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 		$this->save();
 	}
 
-	function QuestionnaireResponse()
+	function __construct()
 	{
 		$this->table = "questionnaire_response";
 		$this->primary_key = "response_id";
 	
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 		
 		$this->default_format = "{Respondent.first_name} {Respondent.last_name}";
 	}
@@ -161,7 +161,7 @@ class OptionAnswer extends DataItem
 					"count"				=>	Number
 	);
 
-	function OptionAnswer($question_id, $option_number, $option, $count)
+	function __construct($question_id, $option_number, $option, $count)
 	{
 		$this->table = "option_answer";
 		$this->primary_key = "question_id";
@@ -184,14 +184,14 @@ class SpreadsheetResponse extends DataItem
 			//question/answer fields built at run time
 	);
 
-	function SpreadsheetResponse()
+	function __construct()
 	{
 		$this->table = "spreadsheet_response";
 		
 		// pk value does not need to match questionnaire item
 		$this->primary_key = "questionnaire_id";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

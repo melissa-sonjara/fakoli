@@ -69,7 +69,7 @@ class ImageRecord extends DataItem
 		return $this->getRelated(ImageGallery);
 	}
 	
-	function ImageRecord()
+	function __construct()
 	{
 		$this->table = "image";
 		$this->primary_key = "image_id";
@@ -77,7 +77,7 @@ class ImageRecord extends DataItem
 		$this->default_format = "{title}";
 		$this->pretty_class_name = "Image";		
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
    function formatThumbnail($width = 75, $height = 0)

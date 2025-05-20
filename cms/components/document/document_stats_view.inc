@@ -43,7 +43,7 @@ class DocumentTotalDownloadsView
 	var $library;
 	var $table;
 	
-	function DocumentTotalDownloadsView($library)
+	function __construct($library)
 	{
 		$this->library = $library;
 

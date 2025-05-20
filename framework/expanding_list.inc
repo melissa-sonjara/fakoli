@@ -68,7 +68,7 @@ class ExpandingList
 	 * @param mixes $bodyFormat The formatter used to display the list item bodies (either a format string or a callback function or method)
 	 * @param boolean $dynamicLoad Specifies whether to load the contents of each list element on demand. If set to true, the $bodyFormat parameter should provide the URL for each item
 	 */
-	function ExpandingList($items, $id = "expanding_list", $titleFormat = null, $bodyFormat = null, $dynamicLoad = false)
+	function __construct($items, $id = "expanding_list", $titleFormat = null, $bodyFormat = null, $dynamicLoad = false)
 	{
 		$this->items = $items;
 		$this->id = $id;

@@ -40,7 +40,7 @@ Fakoli::usingFeature("auto_form");
 
 class ColorPickerFieldRenderer extends FieldRenderer
 {
-	function ColorPickerFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
 		parent::__construct($parent);		
 	}

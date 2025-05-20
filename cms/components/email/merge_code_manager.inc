@@ -62,7 +62,7 @@ class MergeCodeManager
 	var $replacements;
 	var $class_name;
 
-	function MergeCodeManager($item, $inText, $class_name = "")
+	function __construct($item, $inText, $class_name = "")
 	{
 		$this->item = clone($item);
 		$this->item->filter = null;

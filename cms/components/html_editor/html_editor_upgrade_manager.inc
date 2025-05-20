@@ -19,7 +19,7 @@ class HtmlEditorUpgradeManager extends UpgradeManager
 	{
 		$this->component_name = "html_editor";
 		
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

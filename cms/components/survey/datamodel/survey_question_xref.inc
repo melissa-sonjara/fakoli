@@ -87,12 +87,12 @@ class SurveyQuestionXref extends DataItem
 		$this->save();
 	}
 
-	function SurveyQuestionXref()
+	function __construct()
 	{
 		$this->table = "survey_question_xref";
 		$this->primary_key = "survey_question_xref_id";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 
 	}
 }

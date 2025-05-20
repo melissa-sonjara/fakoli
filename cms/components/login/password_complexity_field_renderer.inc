@@ -11,9 +11,9 @@ Fakoli::usingFeature("auto_form");
 class PasswordComplexityFieldRenderer extends PasswordFieldRenderer
 {
 	
-	function PasswordComplexityFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->PasswordFieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function addValidatorsToForm($field, $required = false)
@@ -78,9 +78,9 @@ window.addEvent('domready', function()
 
 class PasswordComplexityValidator extends PasswordValidator
 {
-	function PasswordComplexityValidator($field, $title, $form_id = "", $empty = "")
+	function __construct($field, $title, $form_id = "", $empty = "")
 	{
-		$this->PasswordValidator($field, $title, $form_id, $empty);
+		parent::__construct($field, $title, $form_id, $empty);
 	}
 	
 	function writeClient()

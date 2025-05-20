@@ -57,12 +57,12 @@ class SessionPersistenceUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function SessionPersistenceUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "session_persistance";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

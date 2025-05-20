@@ -23,12 +23,12 @@ class VersionedContentUpgradeManager extends UpgradeManager
 		"1.1"	=>	"sql:Delete content_version records with 0 value primary keys that resulted from a bug"
 	);
 
-	function VersionedContentUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "versioned_content";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

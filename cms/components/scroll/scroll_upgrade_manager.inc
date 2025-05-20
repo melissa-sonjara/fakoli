@@ -23,12 +23,12 @@ class ScrollUpgradeManager extends UpgradeManager
 		"1.1"	=>	"sql:Added styles and image_id fields to scroll_part table"
 	);
 
-	function ScrollUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "scroll";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

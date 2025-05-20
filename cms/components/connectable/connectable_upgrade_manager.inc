@@ -22,12 +22,12 @@ class ConnectableUpgradeManager extends UpgradeManager
 		"1.0"	=>	"sql:Created connection_record table and associated indices"
 	);
 
-	function ConnectableUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "connectable";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

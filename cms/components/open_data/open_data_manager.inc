@@ -12,7 +12,7 @@
 
 class OpenDataManager
 {
-	function OpenDataManager()
+	function __construct()
 	{
 
 	}

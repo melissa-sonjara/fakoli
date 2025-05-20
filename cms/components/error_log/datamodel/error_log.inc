@@ -36,7 +36,7 @@ class ErrorLog extends DataItem
 		if ($u) { return "$u->first_name $u->last_name"; }
 	}
 	
-	function ErrorLog()
+	function __construct()
 	{
 		$this->primary_key = "error_log_id";
 		$this->table = "error_log";	
@@ -46,7 +46,7 @@ class ErrorLog extends DataItem
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass(); 
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

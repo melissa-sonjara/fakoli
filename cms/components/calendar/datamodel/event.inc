@@ -121,12 +121,12 @@ class Event extends DataItem
 		return $this->getRelated(TimeZone);
 	}
 	
-	function Event()
+	function __construct()
 	{
 		$this->table = "event";
 		$this->primary_key = "event_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
@@ -151,12 +151,12 @@ class EventSiteXref extends DataItem
 		return $this->getRelated(Site);
 	}
 	
-	function EventSiteXref()
+	function __construct()
 	{
 		$this->primary_key = "event_site_xref_id";
 		$this->table = "event_site_xref";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

@@ -63,10 +63,10 @@ class EmailListValidator extends AbstractValidator
 {
 	var $empty = "";
 	
-	function EmailListValidator($field, $title)
+	function __construct($field, $title)
 	{
 		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()

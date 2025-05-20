@@ -45,9 +45,9 @@ class URLFieldRenderer extends StringFieldRenderer
 	var $target = "_blank";
 	var $displayLength = 0;
 	
-	function URLFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->StringFieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function addValidatorsToForm($field, $required = false)

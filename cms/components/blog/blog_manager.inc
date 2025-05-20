@@ -40,7 +40,7 @@ Fakoli::using("component", "versioned_content");
 
 class BlogSerializationHandler
 {
-	function BlogSerializationHandler()
+	function __construct()
 	{
 	}
 	

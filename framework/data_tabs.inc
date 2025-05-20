@@ -52,7 +52,7 @@ class DataItemTabBar
 	var $primary_key;
 	var $spacer;
 	
-	function DataItemTabBar($id, $items, $format = null, $uri = "")
+	function __construct($id, $items, $format = null, $uri = "")
 	{
 		$this->id = $id;
 		$this->items = $items;

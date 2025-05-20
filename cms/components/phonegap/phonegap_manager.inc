@@ -22,7 +22,7 @@ class PhonegapManager
 	static $appScripts = array();
 	static $supportScripts = array();
 	
-	function PhonegapManager()
+	function __construct()
 	{
 
 	}

@@ -86,7 +86,7 @@ class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 	// javascript function that opens the popup e.g., openMyDialog or new MyClass().openMyDialog
 	var $callback;
 
-	function SelectFieldViewSourceRenderer(&$form, $field, $label, $options, $callback)
+	function __construct(&$form, $field, $label, $options, $callback)
 	{
 		$onChange = "selChanged_{$field}";
 		$this->field = $field;
@@ -100,7 +100,7 @@ class SelectFieldViewSourceRenderer extends SelectFieldRenderer
 		if ($options == null)
 			$options[0] = "";
 		
-		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
+		parent::__construct($form, $field, $label, $options, $onChange);
 		$this->buttonLabel = $label;
 	}	
 	

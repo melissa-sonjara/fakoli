@@ -198,12 +198,12 @@ class Question extends AbstractQuestion
 		return ($count > 0) ? false : true;
 	}
 					
-	function Question()
+	function __construct()
 	{
 		$this->table = "question";
 		$this->primary_key = "question_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

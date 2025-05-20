@@ -58,7 +58,7 @@ class Slideshow
 	var $autoPlay;
 	var $preload;
 
-	function Slideshow($items, $width=500, $height=400)
+	function __construct($items, $width=500, $height=400)
 	{
 		// If we were passed a single item, wrap it in an array
 		if (!is_array($items))

@@ -45,7 +45,7 @@ class ImageListView
 	var $styles;
 	var $titleFormat = "{title}";
 	
-	function ImageListView($images, $linkFormat, $id = "images", $titleFormat = "")
+	function __construct($images, $linkFormat, $id = "images", $titleFormat = "")
 	{
 		$this->id = $id;
 		$this->images = $images;
@@ -133,7 +133,7 @@ class ImageGalleryListView
 	var $table;
 	var $link;
 	
-	function ImageGalleryListView($gallery, $link = "image_form?image_id={image_id}")
+	function __construct($gallery, $link = "image_form?image_id={image_id}")
 	{
 		$images = $gallery->Images("ORDER BY title");
 		$this->link = $link;
@@ -171,7 +171,7 @@ class ImageGalleriesView
 {
 	var $table;
 	
-	function ImageGalleriesView($showHidden = false)
+	function __construct($showHidden = false)
 	{
 		if (!$showHidden) $constraint = "WHERE hidden=0";
 		
@@ -223,9 +223,9 @@ class ImageGalleriesView
 
 class AdminImageGalleriesView extends ImageGalleriesView
 {
-	function AdminImageGalleriesView($showHidden = false)
+	function __construct($showHidden = false)
 	{
-		parent::ImageGalleriesView($showHidden);	
+		parent::__construct($showHidden);	
 	}
 	
 	function formatTitleLink($gallery)

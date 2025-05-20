@@ -121,7 +121,7 @@ class ImageGallery extends DataItem
 		return $match;
 	}
 	
-	function ImageGallery()
+	function __construct()
 	{
 		$this->primary_key = "gallery_id";
 		$this->table = "image_gallery";
@@ -132,7 +132,7 @@ class ImageGallery extends DataItem
 		
 		$this->default_format = "{gallery_name}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

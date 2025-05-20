@@ -25,12 +25,12 @@ class LinkLibraryUpgradeManager extends UpgradeManager
 		"1.4" => "sql:Added sort_order to link_record"
 	);
 
-	function LinkLibraryUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "link_library";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

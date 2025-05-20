@@ -62,7 +62,7 @@ class SurveyAnswer extends AbstractQuestionnaireAnswer
 		return $this->getRelated(SurveyResponse);
 	}
 	
-	function SurveyAnswer()
+	function __construct()
 	{
 		$this->table = "survey_answer";
 		$this->primary_key = "survey_answer_id";

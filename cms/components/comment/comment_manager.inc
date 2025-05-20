@@ -82,7 +82,7 @@ class CommentManager
 {	
 	static $adapters = array();
 	
-	function CommentManager()
+	function __construct()
 	{
 		
 	}

@@ -72,12 +72,12 @@ class QuestionnaireAnswer extends AbstractQuestionnaireAnswer
 		return $this->getRelated(QuestionnaireResponse);
 	}
 	
-	function QuestionnaireAnswer()
+	function __construct()
 	{
 		$this->table = "questionnaire_answer";
 		$this->primary_key = "answer_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

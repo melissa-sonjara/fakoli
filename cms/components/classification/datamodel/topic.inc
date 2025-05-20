@@ -65,14 +65,14 @@ class Topic extends DataItem
 		return $tarr;
 	}
 		
-	function Topic()
+	function __construct()
 	{
 		$this->primary_key = "topic_id";
 		$this->table = "topic";
 		
 		$this->default_format = "{topic}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
@@ -98,12 +98,12 @@ class DocumentTopicXref extends DataItem
 		return $this->getRelated(Topic);
 	}
 	
-	function DocumentTopicXref()
+	function __construct()
 	{
 		$this->primary_key = "document_topic_xref_id";
 		$this->table = "document_topic_xref";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
@@ -129,12 +129,12 @@ class GroupTopicXref extends DataItem
 		return $this->getRelated(Topic);
 	}
 	
-	function GroupTopicXref()
+	function __construct()
 	{
 		$this->primary_key = "group_topic_id";
 		$this->table = "grp_topic_xref";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 ?>

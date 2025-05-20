@@ -27,12 +27,12 @@ class RssFeedUpgradeManager extends UpgradeManager
 		"1.5"	=>	"sql:Added column on rss_feed_article rss_thumbnail field to save images from the feeds"
 	);
 
-	function RssFeedUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "rss_feed";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

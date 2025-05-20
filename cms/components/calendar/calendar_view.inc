@@ -241,7 +241,7 @@ class CalendarView implements FacetFilterable
 	var $maxEventsPerDay = null; ///< The maximum number of events to display per day on monthly view
 	var $tagRowCallbacks; ///< Array of callbacks for adding extra attributes to each row
 	
-	function CalendarView($events, $id = null)
+	function __construct($events, $id = null)
 	{
 		$this->events = $events;
 		$this->id = $id;

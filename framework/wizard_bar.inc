@@ -62,9 +62,9 @@ class WizardBar extends TabBar
 	 *               If so, and none is provided, then all tabs except the first are disabled.
 	 * @param bool   $showNumber flag to indicate whether to display step numbers
 	 */
-	function WizardBar($id, $tabs = array(), $queryString = "", $useQueryString = true, $showNumber = false)
+	function __construct($id, $tabs = array(), $queryString = "", $useQueryString = true, $showNumber = false)
 	{
-		parent::TabBar($id, $tabs, $queryString, $useQueryString, $showNumber);
+		parent::__construct($id, $tabs, $queryString, $useQueryString, $showNumber);
 	}
 	
 	/**

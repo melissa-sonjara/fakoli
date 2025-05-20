@@ -9,7 +9,7 @@ class ReportTableNavigator
 {
 	var $tables;
 	
-	function ReportTableNavigator($tables)
+	function __construct($tables)
 	{
 		$this->tables = $tables;
 	}
@@ -73,7 +73,7 @@ class ReportFilterNavigator
 {
 	var $tables;
 	
-	function ReportFilterNavigator($tables)
+	function __construct($tables)
 	{
 		$this->tables = $tables;
 	}

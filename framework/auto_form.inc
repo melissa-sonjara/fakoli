@@ -163,7 +163,7 @@ class AutoForm
 	 * @param string $id DOM element ID to use for the form when rendering to HTML. Useful for pages with more than one form.
 	 * @return AutoForm
 	 */
-	function AutoForm($target, $method="POST", $action="", $id="")
+	function __construct($target, $method="POST", $action="", $id="")
 	{
 		global $auto_form_defaults;
 

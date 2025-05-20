@@ -88,7 +88,7 @@ class TreeNode
 	 * @param string $link optional hyperlink URL for the node.
 	 * @param string $target optional target to load the URL.
 	 */
-	function TreeNode($id, $title, $value = "", $checked = false, $closedStyle = "tree_node_closed", $openStyle = "tree_node_open", $link = null, $target="")
+	function __construct($id, $title, $value = "", $checked = false, $closedStyle = "tree_node_closed", $openStyle = "tree_node_open", $link = null, $target="")
 	{
 		$this->id          = $id;
 		$this->title       = $title;
@@ -344,7 +344,7 @@ class TreeControl
 	 * @param integer $width width of the control in pixels
 	 * @param integer $height height of the control in pixels
 	 */
-	function TreeControl($id, $title = "", $style="tree", $scroll=true,$width=500,$height=400)
+	function __construct($id, $title = "", $style="tree", $scroll=true,$width=500,$height=400)
 	{
 		$this->id = $id;
 		$this->title = $title;

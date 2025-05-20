@@ -14,7 +14,7 @@ class CaptchaManager
 {
 	static $providers = array();
 	
-	function CaptchaManager()
+	function __construct()
 	{
 		ComponentManager::fireEvent("RegisterCaptchaProvider");
 	}

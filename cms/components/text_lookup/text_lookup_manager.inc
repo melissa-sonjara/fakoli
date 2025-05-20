@@ -41,7 +41,7 @@ Fakoli::using("text_lookup");
 
 class TextLookupSerializationHandler
 {
-	function TextLookupSerializationHandler()
+	function __construct()
 	{
 	}
 
@@ -66,7 +66,7 @@ class TextLookupSerializationHandler
 class TextLookupManager
 {
 	
-	function TextLookupManager()
+	function __construct()
 	{
 	}
 

@@ -58,12 +58,12 @@ class SiteMapUpgradeManager extends UpgradeManager
 			"1.1"		=>	"sql:Update site_map to work with sections",
 	);
 	
-	function SiteMapUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "site_map";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

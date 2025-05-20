@@ -47,7 +47,7 @@ class SubSelectCheckListFieldRenderer extends CheckListFieldRenderer
 		$this->super = $super;
 		$this->format = $format;
 		
-		$this->CheckListFieldRenderer($form, $field, $label, $options, true);
+		parent::__construct($form, $field, $label, $options, true);
 	}
 	
 	function renderScript($field)

@@ -65,12 +65,12 @@ class SurveyUpgradeManager extends UpgradeManager
 			"1.8"		=>	"sql:Change survey field status to varchar for sites setup prior to upgrade manager",
 			);
 	
-	function SurveyUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "survey";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

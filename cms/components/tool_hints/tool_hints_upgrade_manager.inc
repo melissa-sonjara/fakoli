@@ -24,12 +24,12 @@ class ToolHintsUpgradeManager extends UpgradeManager
 		"1.2"	=>	"sql:Added read_access parameter to tool_hint table"
 	);
 
-	function ToolHintsUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "tool_hints";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

@@ -12,7 +12,7 @@
 
 class VersionedContentManager
 {
-	function VersionedContentManager()
+	function __construct()
 	{
 
 	}

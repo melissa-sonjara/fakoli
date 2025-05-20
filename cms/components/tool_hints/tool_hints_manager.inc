@@ -43,7 +43,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 class ToolHintsManager
 {
-	function ToolHintsManager()
+	function __construct()
 	{
 
 	}

@@ -219,7 +219,7 @@ class Blog extends DataItem // implements Searchable
 		return $links;
 	}
 	
-	function Blog()
+	function __construct()
 	{
 		$this->primary_key = "blog_id";
 		$this->table = "blog";
@@ -230,7 +230,7 @@ class Blog extends DataItem // implements Searchable
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 		
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 
 	// Searchable
@@ -274,7 +274,7 @@ class BlogSearchResult extends AbstractSearchResult
 {
 	var $item;
 	
-	function BlogSearchResult($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

@@ -28,7 +28,7 @@ class ConnectableManager
 	static $classLookup = array();	///< Look-up table of connectable classes from their primary keys
 	static $contextRouter = "";
 	
-	function ConnectableManager()
+	function __construct()
 	{
 
 	}

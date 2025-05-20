@@ -58,14 +58,14 @@ class SiteUser extends DataItem
 						
 	// Relations
 
-	function SiteUser()
+	function __construct()
 	{
 		$this->primary_key = "user_id";
 		$this->table = "site_user";
 		
 		$this->default_format = "{first_name} {last_name}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
 	function getFullName()

@@ -115,7 +115,7 @@ class SurveyQuestion extends AbstractQuestion
 		return ($count > 1) ? false : true;
 	}
 
-	function SurveyQuestion()
+	function __construct()
 	{
 		$this->table = "survey_question";
 		$this->primary_key = "survey_question_id";

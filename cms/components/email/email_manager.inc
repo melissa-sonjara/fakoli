@@ -185,7 +185,7 @@ class EmailHandler
 	 * 				If a string is received, it will be conerted to an array with the key the basename of the path
 	 * @param iCalendarEventManager obj $iCalMgr
 	 */
-	function EmailHandler($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "", $attachments = array(), $iCalMgr = null)
+	function __construct($toAddr, $subject, $message = "", $emailFrom = "", $emailName = "", $attachments = array(), $iCalMgr = null)
 	{
 		global $config;
 
@@ -468,7 +468,7 @@ class EmailManager
 	var $onSendComplete; // optional user-defined callback function after send is successful
 	var $attachments; ///< optional - array of files to attach to the email
 	
-	function EmailManager($item, $emailTemplate, $onSendComplete = "")
+	function __construct($item, $emailTemplate, $onSendComplete = "")
 	{
 		$this->item = clone($item);
 		$this->item->filter = null;

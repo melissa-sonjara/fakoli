@@ -50,7 +50,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	var $addLabel = "Add an Attachment";
 	var $emptyMessage = "No files have been attached";
 	
-	function AttachmentFieldRenderer(&$form, $field, $xrefClass)
+	function __construct(&$form, $field, $xrefClass)
 	{
 		$this->xrefClass = $xrefClass;
 		$this->field = $field;	

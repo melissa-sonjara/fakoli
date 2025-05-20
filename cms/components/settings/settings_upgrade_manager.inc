@@ -62,12 +62,12 @@ class SettingsUpgradeManager extends UpgradeManager
 	);
 	
 	
-	function SettingsUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "settings";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

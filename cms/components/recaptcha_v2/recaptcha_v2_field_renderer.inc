@@ -56,7 +56,7 @@ class RecaptchaV2Validator extends AbstractValidator
 		$this->compareField = "recaptcha_response_field";
 		$this->title = "Captcha";
 		// Pass the field  name hello captcha creators give to the user input to compare against the test
-		$this->AbstractValidator("recaptcha_user_answer", "Captcha");
+		parent::__construct("recaptcha_user_answer", "Captcha");
 	}
 	
 	function writeClient()

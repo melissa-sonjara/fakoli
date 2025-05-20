@@ -85,12 +85,12 @@ class EventType extends DataItem
 		return $eventTypeList;
 	}
 	
-	function EventType()
+	function __construct()
 	{
 		$this->table = "event_type";
 		$this->primary_key = "event_type_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

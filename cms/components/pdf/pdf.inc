@@ -372,7 +372,7 @@ class PDF
 	 * @param string $output (optional) a local output file path if the PDF output is to be saved to disk (for caching, or as an intermeediate step)
 	 * @param boolean $landscape true for landscape orientated output, false for portrait oriented output (the default)
 	 */
-	function PDF($uri, $ssl = false, $useToken = true, $output = null, $landscape = false)
+	function __construct($uri, $ssl = false, $useToken = true, $output = null, $landscape = false)
 	{
 		$this->uri = $uri;
 		$this->ssl = $ssl;

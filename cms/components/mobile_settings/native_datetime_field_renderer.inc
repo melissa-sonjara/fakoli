@@ -10,10 +10,10 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 {
 	var $pushToSet = false;
 	
-	function NativeDateTimeFieldRenderer(&$parent, $field)
+	function __construct(&$parent, $field)
 	{
 		trace("Instantiating NativeDateTimeFieldRenderer for $field", 3);
-		$this->DateTimeFieldRenderer($parent);
+		parent::__construct($parent);
 	}
 	
 	function renderScript($field)

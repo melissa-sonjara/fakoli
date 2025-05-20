@@ -14,7 +14,7 @@ Fakoli::usingFile("/cms/components/questionnaire/abstract_questionnaire_results_
 
 class QuestionnaireDashboardManager extends AbstractQuestionnaireDashboardManager
 {
-	function QuestionnaireDashboardManager($item)
+	function __construct($item)
 	{
 		$this->item = $item; // can be empty instance
 	}
@@ -61,7 +61,7 @@ class QuestionnaireCreateManager extends AbstractQuestionnaireCreateManager
 	/**
 	 * Creates a new QuestionnaireCreateManager object.
 	 */
-	function QuestionnaireCreateManager($questionnaire)
+	function __construct($questionnaire)
 	{
 		$this->item = $questionnaire;
 	}
@@ -131,7 +131,7 @@ class QuestionnaireResponseManager extends AbstractQuestionnaireResponseManager
 {
 	var $item;
 	
-	function QuestionnaireResponseManager($response)
+	function __construct($response)
 	{
 		$this->item = $response;	
 	}
@@ -184,7 +184,7 @@ class QuestionnaireResponseManager extends AbstractQuestionnaireResponseManager
  */
 class QuestionnaireResultsManager extends AbstractQuestionnaireResultsManager
 {
-	function QuestionnaireResultsManager($questionnaire)
+	function __construct($questionnaire)
 	{
 		$this->item = $questionnaire;
 	}

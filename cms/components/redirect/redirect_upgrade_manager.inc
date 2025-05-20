@@ -25,12 +25,12 @@ class RedirectUpgradeManager extends UpgradeManager
 		"1.3"	=>	"sql:Added preserve_query_string flag to redirect table"
 	);
 
-	function RedirectUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "redirect";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

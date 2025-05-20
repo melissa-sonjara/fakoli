@@ -65,12 +65,12 @@ class CalendarUpgradeManager extends UpgradeManager
 			"1.8"		=>	"sql:Added event_comment_xref table"
 	);
 	
-	function CalendarUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "calendar";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

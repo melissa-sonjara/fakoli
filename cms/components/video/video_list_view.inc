@@ -46,7 +46,7 @@ class VideoListView
 	var $titleFormat = "{title}";
 	var $onClick;
 	
-	function VideoListView($videos, $linkFormat, $id = "videos", $titleFormat = "", $onClick = "")
+	function __construct($videos, $linkFormat, $id = "videos", $titleFormat = "", $onClick = "")
 	{
 		$this->id = $id;
 		$this->videos = $videos;
@@ -136,7 +136,7 @@ class VideoGalleryListView
 	var $table;
 	var $link;
 	
-	function VideoGalleryListView($gallery, $link = "video_form?video_id={video_id}")
+	function __construct($gallery, $link = "video_form?video_id={video_id}")
 	{
 		$videos = $gallery->Videos("ORDER BY title");
 		$this->link = $link;

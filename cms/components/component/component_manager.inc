@@ -77,7 +77,7 @@ class ComponentManager
 	/**
 	 * Creates a new ComponentManager object
 	 */
-	function ComponentManager()
+	function __construct()
 	{
 	}
 	

@@ -60,12 +60,12 @@ class VideoUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added hidden flasg to video_gallery"
 	);
 	
-	function VideoUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "video";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

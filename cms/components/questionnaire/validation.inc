@@ -59,11 +59,11 @@ class RequiredQuestionValidator extends AbstractValidator
 	var $empty = "";
 	var $answer; // value of answer object, if view
 	
-	function RequiredQuestionValidator($field, $title, $empty = "", $answer = "")
+	function __construct($field, $title, $empty = "", $answer = "")
 	{
 		$this->empty = $empty;
 		$this->answer = $answer;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -119,11 +119,11 @@ class RequiredCheckListQuestionValidator extends RequiredValidator
 	var $answer;
 	var $text;
 	
-	function RequiredCheckListQuestionValidator($field, $title, $min = 0, $answer = "")
+	function __construct($field, $title, $min = 0, $answer = "")
 	{
 		$this->min = $min;
 		$this->answer = $answer;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		
 		$this->text = ($min < 2) ? "checkbox" : "checkboxes";
 	}
@@ -199,10 +199,10 @@ class RequiredRadioButtonQuestionValidator extends RequiredValidator
 {
 	var $answer;
 	
-	function RequiredRadioButtonQuestionValidator($field, $title, $answer = "")
+	function __construct($field, $title, $answer = "")
 	{
 		$this->answer = $answer;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 		
 	function writeClient()
@@ -273,7 +273,7 @@ class RequiredQuestionnaireMessageValidator extends RequiredValidator
 	
 	function __construct($form, $field, $title = "", $message = "")
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->conditionalFields[] = "recipients";
 		
 		if($form->data->hasField("additional_recipients"))

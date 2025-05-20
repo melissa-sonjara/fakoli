@@ -16,7 +16,7 @@ class RecaptchaV2Manager
 {
 	static $verificationURL = 'https://www.google.com/recaptcha/api/siteverify';
 	
-	function RecaptchaV2Manager()
+	function __construct()
 	{
 
 	}

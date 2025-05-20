@@ -127,9 +127,9 @@ class FilterForm extends SearchForm
  	var $formLabel = null;						///< Text to display before the start of the form (such as 'Filter By')
  	var $rememberFilter = false;					///< Set to true to remember the chosen filter parameters and re-apply them if none are set (when returning to a page)
  	
-	function FilterForm($target, $method="GET", $action="", $id="")
+	function __construct($target, $method="GET", $action="", $id="")
 	{
-		parent::SearchForm($target, $method, $action, $id);
+		parent::__construct($target, $method, $action, $id);
 		$this->layout = new FilterFormLayout($this);
 		$this->formCSS = "filter";
 		$this->setFilterParameters();
@@ -711,9 +711,9 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 	 * @param array $options - array of checklist options
 	 * @param string $defaults - list of defaults to be checked in comma delimited string
 	 */
-	function CheckListFilterFieldRenderer(&$form, $field, $label, $options, $defaults = "")
+	function __construct(&$form, $field, $label, $options, $defaults = "")
 	{
-		parent::CheckListFieldRenderer($form, $field, $label, $options);
+		parent::__construct($form, $field, $label, $options);
 		$this->horizontal = true;
 		
 		$value = $this->parent->data->get($field);
@@ -810,7 +810,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 	
 	function RadioButtonFieldRenderer(&$parent, $field, $label, $options)
 	{
-		parent::RadioButtonFieldRenderer($parent, $field, $label, $options);
+		parent::__construct($parent, $field, $label, $options);
 		$this->horizontal = true;
 	}
 	
@@ -1307,7 +1307,7 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 {
 	function __construct(&$form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", $maxChars = 80)
 	{	
-		$this->RelatedItemSelectFieldRenderer($form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", false, true, $maxChars);
+		parent::__construct($form, $field, $label, $relatedClass, $constraint, $nameField, $valueField = "", false, true, $maxChars);
 	}	
 	
 	

@@ -72,7 +72,7 @@ class TabBar
 	 *               If so, and none is provided, then all tabs except the first are disabled.
 	 * @param bool   $showNumber flag to indicate whether to display step numbers
 	 */
-	function TabBar($id, $tabs, $queryString = "", $useQueryString = true, $showNumber = false)
+	function __construct($id, $tabs, $queryString = "", $useQueryString = true, $showNumber = false)
 	{
 		global $config;
 		global $isAdmin;
@@ -550,7 +550,7 @@ ENDSCRIPT;
 
 class TwoLevelTabBar extends TabBar
 {
-	function TwoLevelTabBar($tabs, $qs)
+	function __construct($tabs, $qs)
 	{
 		foreach($tabs as $text => $entry)
 		{
@@ -560,7 +560,7 @@ class TwoLevelTabBar extends TabBar
 			}
 		}
 		
-		$this->TabBar("tabs", $tabs, $qs);
+		parent::__construct("tabs", $tabs, $qs);
 		$this->showStates = false;
 	}
 	

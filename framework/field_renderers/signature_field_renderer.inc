@@ -19,9 +19,9 @@ class SignatureFieldRenderer extends StringFieldRenderer
 	var $autocomplete = false; 			///< Whether to allow autocomplete
 	var $signatureField = "password";	///< The field to check for a match when signing
 	
-	function SignatureFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->StringFieldRenderer($parent);
+		parent::__construct($parent);
 		$this->password = true;
 		$this->autocomplete = false;
 	}
@@ -48,7 +48,7 @@ class SignatureFieldRenderer extends StringFieldRenderer
 		$this->errorMessage = $errorMessage;
 	}
 	
-	function renderField($field = "")
+	function renderField($field, $readonly = false)
 	{
 		if ($this->parent->msg)
 		{

@@ -12,7 +12,7 @@
 
 class RatingManager
 {
-	function RatingManager()
+	function __construct()
 	{
 
 	}

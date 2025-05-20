@@ -40,7 +40,7 @@ class VideoGalleriesView
 {
 	var $table;
 	
-	function VideoGalleriesView($showHidden = false)
+	function __construct($showHidden = false)
 	{
 		if (!$showHidden) $constraint = "WHERE hidden=0";
 		
@@ -92,9 +92,9 @@ class VideoGalleriesView
 
 class AdminVideoGalleriesView extends VideoGalleriesView
 {
-	function AdminVideoGalleriesView($showHidden = false)
+	function __construct($showHidden = false)
 	{
-		parent::VideoGalleriesView($showHidden);	
+		parent::__construct($showHidden);	
 	}
 	
 	function formatTitleLink($gallery)

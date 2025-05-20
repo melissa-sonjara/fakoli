@@ -79,7 +79,7 @@ class CommentFieldRenderer extends FieldRenderer
 	var $publishedFormat = "published/unpublished";
 	var $publishRoles = "admin";
 
-	function CommentFieldRenderer(&$parent, $field, $xrefClass, $component, $comments = null)
+	function __construct(&$parent, $field, $xrefClass, $component, $comments = null)
 	{
 		parent::__construct($parent);
 		$this->hideLabel = true;

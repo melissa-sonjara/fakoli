@@ -85,7 +85,7 @@ class PieChart
 	var $titleY = 25;
 	var $titleSize = 14;
 	
-	function PieChart($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
+	function __construct($id, $width = 300, $height = 300, $values = null, $labels = null, $palette = "standard")
 	{
 		$this->id = $id;
 		$this->setSize($width, $height);

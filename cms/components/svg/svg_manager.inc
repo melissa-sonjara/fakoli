@@ -12,7 +12,7 @@
 
 class SvgManager
 {
-	function SvgManager()
+	function __construct()
 	{
 
 	}

@@ -45,7 +45,7 @@ class CompositeAutoForm
 	 * @param string $action the URL to submit to
 	 * @param string $containerClass CSS class to use for the container for each sub-form
 	 */
-	function CompositeAutoForm($method = "POST", $action = "", $containerClass = "")
+	function __construct($method = "POST", $action = "", $containerClass = "")
 	{
 		global $auto_form_defaults;
 
@@ -349,7 +349,7 @@ class SubordinateAutoForm extends AutoForm
 	var $msg;
 	var $allowEmpty; // whether we want to show an error message if entire subform is empty
 	
-	function SubordinateAutoForm($parent, $form, $allowEmpty  = false)
+	function __construct($parent, $form, $allowEmpty  = false)
 	{
 		$this->parent = $parent;
 		$this->form = $form;

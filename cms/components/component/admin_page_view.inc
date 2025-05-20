@@ -40,7 +40,7 @@ class AdminPageView
 	var $identifier;
 	var $page;
 	
-	function AdminPageView($identifier)
+	function __construct($identifier)
 	{
 		if (!$identifier) $identifier = "index";
 		$this->identifier = $identifier;

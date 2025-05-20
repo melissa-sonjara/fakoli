@@ -66,12 +66,12 @@ class FileshareUserXref extends DataItem
 	}
 	
 	
-	function FileshareUserXref()
+	function __construct()
 	{
 		$this->primary_key = "fileshare_user_xref_id";
 		$this->table = "fileshare_user_xref";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

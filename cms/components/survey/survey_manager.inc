@@ -42,7 +42,7 @@ Fakoli::usingFile("/cms/components/questionnaire/results_graphs.inc");
 
 class SurveyManager
 {
-	function SurveyManager()
+	function __construct()
 	{
 		
 	}
@@ -97,9 +97,9 @@ class SurveyManager
 
 class SurveySendManager extends AbstractQuestionnaireSendManager
 {
-	function SurveySendManager($survey)
+	function __construct($survey)
 	{
-		parent::AbstractQuestionnaireSendManager($survey);
+		parent::__construct($survey);
 	}
 	
 	function getComponentName()
@@ -144,7 +144,7 @@ class SurveyCreateManager extends AbstractQuestionnaireCreateManager
 	/**
 	 * Creates a new SurveyCreateManager object.
 	 */
-	function SurveyCreateManager($survey)
+	function __construct($survey)
 	{
 		$this->item = $survey;
 	}
@@ -286,7 +286,7 @@ class SurveyDashboardManager extends AbstractQuestionnaireDashboardManager
 
 class SurveyResponseManager extends AbstractQuestionnaireResponseManager
 {
-	function SurveyResponseManager($response)
+	function __construct($response)
 	{
 		$this->item = $response;
 	}
@@ -384,7 +384,7 @@ class SurveyResponseManager extends AbstractQuestionnaireResponseManager
  */
 class SurveyResultsManager extends AbstractQuestionnaireResultsManager
 {
-	function SurveyResultsManager($survey)
+	function __construct($survey)
 	{
 		$this->item = $survey;
 	}
@@ -479,7 +479,7 @@ class SurveyResultsManager extends AbstractQuestionnaireResultsManager
 
 class SurveyAggregatedResultsManager //extends AbstractQuestionnaireAggregatedResultsManager
 {
-	function SurveyAggregatedResultsManager($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

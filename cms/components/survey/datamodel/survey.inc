@@ -286,7 +286,7 @@ class Survey extends AbstractQuestionnaire
 		return ($this->status != "open") ? true : false;
 	}
 
-	function Survey()
+	function __construct()
 	{
 		$this->table = "survey";
 		$this->primary_key = "survey_id";

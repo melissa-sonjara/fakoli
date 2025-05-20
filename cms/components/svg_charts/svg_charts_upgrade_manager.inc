@@ -52,12 +52,12 @@ class SvgChartsUpgradeManager extends UpgradeManager
 			"1.1"	=>	"sql:Create color_palette table"
 	);
 	
-	function SvgChartsUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "svg_charts";
 		
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

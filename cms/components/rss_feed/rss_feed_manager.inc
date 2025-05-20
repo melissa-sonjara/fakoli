@@ -14,7 +14,7 @@ Fakoli::usingFeature("data_view");
 
 class RssFeedManager
 {
-	function RssFeedManager()
+	function __construct()
 	{
 
 	}

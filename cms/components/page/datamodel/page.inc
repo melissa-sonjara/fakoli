@@ -229,14 +229,14 @@ class Page extends DataItem implements Searchable
 	}*/
 	
 	// Constructor
-	function Page()
+	function __construct()
 	{
 		$this->primary_key = "page_id";
 		$this->table = "page";
 		
 		$this->default_format = "{page_title}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
 	function search($params, $range = null)
@@ -285,7 +285,7 @@ class PageSearchResult extends AbstractSearchResult
 {
 	var $item;
 	
-	function PageSearchResult($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}
@@ -350,12 +350,12 @@ class PageModuleXref extends DataItem
 		return $this->getRelated(Module);
 	}
 	
-	function PageModuleXref()
+	function __construct()
 	{
 		$this->table = "page_module_xref";
 		$this->primary_key = "join_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

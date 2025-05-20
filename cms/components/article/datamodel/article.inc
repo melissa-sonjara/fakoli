@@ -196,7 +196,7 @@ class Article extends DataItem implements Searchable
 		return $this->format("{created_date:daylong}");
 	}
 	
-	function Article()
+	function __construct()
 	{
 		$this->table = "article";
 		$this->primary_key = "article_id";
@@ -206,7 +206,7 @@ class Article extends DataItem implements Searchable
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 		
 				
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
 	function search($params, $range = null)
@@ -264,7 +264,7 @@ class ArticleSearchResult extends AbstractSearchResult
 {
 	var $item;
 	
-	function ArticleSearchResult($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}
@@ -324,11 +324,11 @@ class ArticleSiteXref extends DataItem
 		return $this->getRelated(Site);
 	}
 	
-	function ArticleSiteXref()
+	function __construct()
 	{
 		$this->table = "article_site_xref";
 		$this->primary_key = "article_site_xref_id";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
@@ -378,11 +378,11 @@ class ArticleCommentXref extends DataItem
 		return $this->getRelated(Comment);
 	}
 	
-	function ArticleCommentXref()
+	function __construct()
 	{
 		$this->table = "article_comment_xref";
 		$this->primary_key = "article_comment_xref_id";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

@@ -41,7 +41,7 @@ Fakoli::usingFeature("data_tabs");
 
 class SettingsSerializationHandler
 {
-	function SettingsSerializationHandler()
+	function __construct()
 	{
 	}
 
@@ -70,7 +70,7 @@ class SettingsManager
 		return isset(SettingsManager::$extensionMap[$component]) ? SettingsManager::$extensionMap[$component] : null;
 	}
 	
-	function SettingsManager()
+	function __construct()
 	{
 		
 	}

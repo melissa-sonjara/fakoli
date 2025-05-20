@@ -39,7 +39,7 @@
 
 class AttachmentManager
 {
-	function AttachmentManager()
+	function __construct()
 	{
 		
 	}

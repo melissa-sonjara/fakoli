@@ -21,7 +21,7 @@ class SharingManager
 {
 	static $shareHandlerMap = null;
 	
-	function SharingManager()
+	function __construct()
 	{
 
 	}

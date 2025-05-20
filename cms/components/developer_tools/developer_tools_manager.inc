@@ -12,7 +12,7 @@
 
 class DeveloperToolsManager
 {
-	function DeveloperToolsManager()
+	function __construct()
 	{
 
 	}

@@ -38,7 +38,7 @@ class QuestionnaireSpreadsheetView
 	var $table;
 	var $spreadsheetResponses; // save this var in case needed for a custom output
 
-	function QuestionnaireSpreadsheetView($mgr)
+	function __construct($mgr)
 	{
 		$this->mgr = $mgr;
 		$this->spreadsheetResponses = $this->getSpreadsheetResponses($mgr->Responses(), $mgr->getAnswers(), $mgr->getQuestionKey());

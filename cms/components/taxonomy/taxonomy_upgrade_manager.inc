@@ -64,12 +64,12 @@ class TaxonomyUpgradeManager extends UpgradeManager
 		"2.2"	=>	"sql:Added sort_order to taxonomy_term table"
 	);
 
-	function TaxonomyUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "taxonomy";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

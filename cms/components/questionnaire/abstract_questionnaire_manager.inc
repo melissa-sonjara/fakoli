@@ -70,7 +70,7 @@ Fakoli::using("questionnaire");
  */
 class AbstractQuestionnaireManager
 {
-	function AbstractQuestionnaireManager()
+	function __construct()
 	{
 	}
 	
@@ -182,7 +182,7 @@ class AbstractQuestionnaireManager
  */
 class QuestionnaireHelper
 {
-	function QuestionnaireHelper()
+	function __construct()
 	{
 		
 	}

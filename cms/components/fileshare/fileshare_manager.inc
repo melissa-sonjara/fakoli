@@ -46,7 +46,7 @@ class FileshareManager extends DocumentManager
 	var $library;
 	var $docs;
 	
-	function FileshareManager($library, $keyword = "")
+	function __construct($library, $keyword = "")
 	{	
 		$this->library = $library;
 		

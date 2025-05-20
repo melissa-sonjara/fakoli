@@ -59,13 +59,13 @@ class SiteRole extends DataItem
 		return $this->getRelated(Site);
 	}
 	
-	function SiteRole()
+	function __construct()
 	{
 		$this->table = "site_role";
 		$this->primary_key = "role_id";
 		$this->default_format = "{name}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 
 	/**

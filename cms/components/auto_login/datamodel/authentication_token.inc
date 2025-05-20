@@ -57,7 +57,7 @@ class AuthenticationToken extends DataItem
 		return $mgr->getUser($this->user_id);
 	}
 
-	function AuthenticationToken()
+	function __construct()
 	{
 		$this->primary_key = "authentication_token_id";
 		$this->table = "authentication_token";
@@ -66,7 +66,7 @@ class AuthenticationToken extends DataItem
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass(); 	
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 

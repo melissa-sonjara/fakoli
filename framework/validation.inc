@@ -50,7 +50,7 @@ class AbstractValidator
 	var $field;
 	var $title;
 	
-	function AbstractValidator($field, $title)
+	function __construct($field, $title)
 	{
 		$this->field = $field;
 		$this->title = $title;
@@ -77,10 +77,10 @@ class RequiredValidator extends AbstractValidator
 	var $empty = "";
 	var $checkDisplayNone = true;
 
-	function RequiredValidator($field, $title, $empty = "", $checkDisplayNone = true)
+	function __construct($field, $title, $empty = "", $checkDisplayNone = true)
 	{
 		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->checkDisplayNone = $checkDisplayNone;
 	}
 	
@@ -132,10 +132,10 @@ class RequiredTreeValidator extends AbstractValidator
 {
 	var $empty = "";
 
-	function RequiredTreeValidator($field, $title, $empty = "")
+	function __construct($field, $title, $empty = "")
 	{
 		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -192,10 +192,10 @@ class RequiredRadioButtonValidator extends RequiredValidator
 {
 	var $empty = "";
 
-	function RequiredRadioButtonValidator($field, $title, $empty = "")
+	function __construct($field, $title, $empty = "")
 	{
 		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -234,9 +234,9 @@ class RequiredFileValidator extends AbstractValidator
 {
 	var $message;
 		
-	function RequiredFileValidator($field, $title, $message = "")
+	function __construct($field, $title, $message = "")
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->message = $message ? $message : "{$title} is a required field. Please browse for a file using the 'Browse' button";
 
 		trace("RequiredValidator($field,$title,$message)", 3);
@@ -280,9 +280,9 @@ class RequiredIfCheckedValidator extends AbstractValidator
 	var $message;
 	var $checkbox;
 	
-	function RequiredIfCheckedValidator($field, $checkbox, $title, $checkboxTitle, $message = "")
+	function __construct($field, $checkbox, $title, $checkboxTitle, $message = "")
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->checkbox = $checkbox;
 		
 		$this->message = $message ? $message : "{$title} is a required field. Please supply a value or uncheck {$checkboxTitle}.";
@@ -336,9 +336,9 @@ ENDSCRIPT;
  */
 class DateValidator extends AbstractValidator
 {
-	function DateValidator($field, $title)
+	function __construct($field, $title)
 	{
-		$this->AbstractValidator($field, $title);		
+		parent::__construct($field, $title);		
 	}
 	
 	function writeClient()
@@ -391,9 +391,9 @@ class MinimumAgeValidator extends AbstractValidator
 	var $min = 0;
 	var $message;
 	
-	function MinimumAgeValidator($field, $title, $min, $message = null)
+	function __construct($field, $title, $min, $message = null)
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->min = $min;
 		$this->message = $message;
 		
@@ -438,9 +438,9 @@ class MaximumAgeValidator extends AbstractValidator
 	var $max = 0;
 	var $message;
 	
-	function MaximumAgeValidator($field, $title, $max, $message = null)
+	function __construct($field, $title, $max, $message = null)
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->max = $max;
 		$this->message = $message;
 		
@@ -494,7 +494,7 @@ class MaximumAgeValidator extends AbstractValidator
  */
 class DateRangeValidator extends AbstractValidator
 {
-	function DateRangeValidator($field, $title, $min, $max, $message = null)
+	function __construct($field, $title, $min, $max, $message = null)
 	{
 		$this->min = $min;
 		$this->max = $max;
@@ -535,7 +535,7 @@ class DateRangeValidator extends AbstractValidator
 			}
 		}
 
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	/**
@@ -658,9 +658,9 @@ class TimeValidator extends AbstractValidator
 {
 	var $message;
 	
-	function TimeValidator($field, $title)
+	function __construct($field, $title)
 	{
-		$this->AbstractValidator($field, $title);	
+		parent::__construct($field, $title);	
 	}
 		
 	function writeClient()
@@ -702,10 +702,10 @@ class RequiredTimeValidator extends AbstractValidator
 {
 	var $empty = "";
 
-	function RequiredTimeValidator($field, $title, $empty = "")
+	function __construct($field, $title, $empty = "")
 	{
 		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -743,7 +743,7 @@ class UniqueValidator extends AbstractValidator
 	var $item;
 	var $message;
 	
-	function UniqueValidator($field, $title, $item, $message, $extraConstraint = "")
+	function __construct($field, $title, $item, $message, $extraConstraint = "")
 	{
 		$this->class = $item->table;
 		
@@ -758,7 +758,7 @@ class UniqueValidator extends AbstractValidator
 		$this->item =& $item;
 		$this->extraConstraint = $extraConstraint;
 			
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 
 	function writeClient()
@@ -816,13 +816,13 @@ class MatchValidator extends AbstractValidator
 	var $confirmTitle;
 	var $caseSensitive = true;
 	
-	function MatchValidator($field, $title, $confirm, $confirmTitle, $caseSensitive = true)
+	function __construct($field, $title, $confirm, $confirmTitle, $caseSensitive = true)
 	{
 		$this->confirm = $confirm;
 		$this->confirmTitle = $confirmTitle;
 		$this->caseSensitive = $caseSensitive;
 		
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -894,11 +894,11 @@ class PasswordValidator extends RequiredValidator
 	var $empty = "";
 	var $form_id;
 	
-	function PasswordValidator($field, $title, $form_id = "", $empty = "")
+	function __construct($field, $title, $form_id = "", $empty = "")
 	{
 		$this->empty = $empty;
 		$this->form_id = $form_id;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 
 	function writeClient()
@@ -951,13 +951,13 @@ class RegularExpressionValidator extends AbstractValidator
 	var $regexp;
 	var $message;
 	
-	function RegularExpressionValidator($field, $title, $regexp, $message)
+	function __construct($field, $title, $regexp, $message)
 	{
 		$this->regexp = $regexp;
 		$this->message = $message;
 		$this->item =& $item;
 		
-		$this->AbstractValidator($field, $title);	
+		parent::__construct($field, $title);	
 	}
 	
 	function writeClient()
@@ -1006,7 +1006,7 @@ class RangeValidator extends AbstractValidator
 	var $max;
 	var $message;
 	
-	function RangeValidator($field, $title, $min, $max, $message = null)
+	function __construct($field, $title, $min, $max, $message = null)
 	{
 		$this->min = $min;
 		$this->max = $max;
@@ -1017,7 +1017,7 @@ class RangeValidator extends AbstractValidator
 			$this->message = "$title must be in the range $min to $max";
 		}
 		
-		$this->AbstractValidator($field, $title);	
+		parent::__construct($field, $title);	
 	}
 	
 	function writeClient()
@@ -1077,10 +1077,10 @@ class SelectFieldRequiredValidator extends AbstractValidator
 {
 	var $empty = "";
 	
-	function SelectFieldRequiredValidator($field, $title, $empty="")
+	function __construct($field, $title, $empty="")
 	{
 		$this->empty = $empty;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -1126,7 +1126,7 @@ class SubSelectFieldRequiredValidator extends AbstractValidator
 	
 	function __construct($field, $title, $subtitle)
 	{
-		$this->AbstractValidator($field, $title, $subtitle);
+		parent::__construct($field, $title, $subtitle);
 		
 		$this->subtitle = $subtitle ? $subtitle : $this->title;
 	}
@@ -1188,10 +1188,10 @@ class RequiredStringValidator extends AbstractValidator
 {
 	var $min = 0;
 
-	function RequiredStringValidator($field, $title, $min = 0)
+	function __construct($field, $title, $min = 0)
 	{
 		$this->min = $min;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -1245,9 +1245,9 @@ class RequiredBooleanValidator extends RequiredValidator
 {
 	var $msg;
 	
-	function RequiredBooleanValidator($field, $title, $msg = "")
+	function __construct($field, $title, $msg = "")
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->msg = ($msg) ? $msg : $title . " is a required field.";
 	}
 	
@@ -1289,10 +1289,10 @@ class RequiredCheckListValidator extends AbstractValidator
 	var $addEntry = false;
 	var $msgText = "checkbox";
 	
-	function RequiredCheckListValidator($field, $title, $min = 1, $addEntry = true)
+	function __construct($field, $title, $min = 1, $addEntry = true)
 	{
 		$this->min = $min;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->addEntry = $addEntry;
 		if($min > 1)
 			$this->msgText = pluralize($this->msgText);
@@ -1390,10 +1390,10 @@ class RequiredCrossReferenceSelectValidator extends AbstractValidator
 	var $addEntry = false;
 	var $msgText = "checkbox";
 	
-	function RequiredCrossReferenceSelectValidator($field, $title, $min = 1)
+	function __construct($field, $title, $min = 1)
 	{
 		$this->min = $min;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->addEntry = $addEntry;
 		if($min > 1)
 			$this->msgText = pluralize($msgText);
@@ -1464,10 +1464,10 @@ ENDSCRIPT;
  */
 class RequiredCurrencyValidator extends RequiredValidator
 {
-	function RequiredCurrencyValidator($field, $title)
+	function __construct($field, $title)
 	{
 		$this->empty = 0;
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -1509,9 +1509,9 @@ ENDSCRIPT;
 
 class CreditCardNumberValidator extends AbstractValidator
 {
-	function CreditCardNumberValidator($field, $title)
+	function __construct($field, $title)
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 	}
 	
 	function writeClient()
@@ -1564,7 +1564,7 @@ class ValidationEngine
 	/**
 	 * Create a new ValidationEngine.
 	 */
-	function ValidationEngine()
+	function __construct()
 	{
 		$this->validators = func_get_args();
 	}
@@ -1824,9 +1824,9 @@ class SignatureValidator extends AbstractValidator
 	 * @param string $title
 	 * @param string $msg
 	 */
-	function SignatureValidator($field, $title, $msg, $test = "password")
+	function __construct($field, $title, $msg, $test = "password")
 	{
-		$this->AbstractValidator($field, $title);
+		parent::__construct($field, $title);
 		$this->msg = $msg;
 		$this->test = $test;
 	}

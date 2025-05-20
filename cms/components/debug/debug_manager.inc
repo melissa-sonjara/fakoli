@@ -38,7 +38,7 @@
 
 class DebugManager
 {
-	function DebugManager()
+	function __construct()
 	{
 		
 	}

@@ -56,7 +56,7 @@ class EventInvitation extends DataItem
 	{
 		$this->table = "event_invitation";
 		$this->primary_key = "event_invitation_id";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

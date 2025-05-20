@@ -76,7 +76,7 @@ class Video extends DataItem
 		return strtoupper($extension);
 	}
 	
-	function Video()
+	function __construct()
 	{
 		$this->table = "video";
 		$this->primary_key = "video_id";
@@ -84,7 +84,7 @@ class Video extends DataItem
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass(); 		
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

@@ -42,7 +42,7 @@ class ContextMenuItem
 	var $action;
 	var $isURL;
 	
-	function ContextMenuItem($command_id, $text, $action, $icon = "", $isURL = true)
+	function __construct($command_id, $text, $action, $icon = "", $isURL = true)
 	{
 		$this->command_id = $command_id;
 		$this->icon = $icon;
@@ -76,7 +76,7 @@ class ContextMenuItem
 
 class ContextMenuSeparator
 {
-	function ContextMenuSeparator()
+	function __construct()
 	{
 	}
 	
@@ -95,7 +95,7 @@ class ContextMenu
 	var $trigger = "contextmenu";
 	var $position = "pointer";
 	
-	function ContextMenu($id, $targets, $cssClass = "context_menu", $trigger = "contextmenu", $position = "pointer")
+	function __construct($id, $targets, $cssClass = "context_menu", $trigger = "contextmenu", $position = "pointer")
 	{
 		$this->id = $id;
 		$this->targets = $targets;
@@ -154,7 +154,7 @@ class ContextMenuManager
 {
 	var $menus;
 	
-	function ContextMenuManager()
+	function __construct()
 	{
 		$this->menus = array();
 	}

@@ -66,12 +66,12 @@ class MenuUpgradeManager extends UpgradeManager
 			"1.9"		=>	"sql:Added wrap_menu_items flag to menu"
 	);
 	
-	function MenuUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "menu";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

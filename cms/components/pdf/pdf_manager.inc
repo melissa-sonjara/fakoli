@@ -14,7 +14,7 @@ Fakoli::using("settings");
 
 class PdfManager
 {
-	function PdfManager()
+	function __construct()
 	{
 
 	}

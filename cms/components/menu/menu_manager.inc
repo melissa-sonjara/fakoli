@@ -40,7 +40,7 @@ Fakoli::using("component");
 
 class MenuSerializationHandler
 {
-	function MenuSerializationHandler()
+	function __construct()
 	{
 	}
 	
@@ -65,7 +65,7 @@ class MenuManager
 {
 	static $displayFlags = array();
 	
-	function MenuManager()
+	function __construct()
 	{
 		
 	}

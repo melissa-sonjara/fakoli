@@ -87,9 +87,9 @@ abstract class ModuleView
 
 class QueryModuleView extends ModuleView
 {
-	function QueryModuleView($module)
+	function __construct($module)
 	{
-		$this->ModuleView($module);
+		parent::__construct($module);
 	}
 
 	function drawView($cssClass = "")
@@ -130,9 +130,9 @@ class QueryModuleView extends ModuleView
 
 class CodeModuleView extends ModuleView
 {
-	function CodeModuleView($module)
+	function __construct($module)
 	{
-		$this->ModuleView($module);
+		parent::__construct($module);
 	}
 	
 	function drawView($cssClass = "")
@@ -203,9 +203,9 @@ class CodeModuleView extends ModuleView
 
 class HTMLModuleView extends ModuleView
 {
-	function HTMLModuleView($module)
+	function __construct($module)
 	{
-		$this->ModuleView($module);
+		parent::__construct($module);
 	}
 	
 	function drawView($cssClass = "")
@@ -216,9 +216,9 @@ class HTMLModuleView extends ModuleView
 
 class MenuModuleView extends ModuleView
 {
-	function MenuModuleView($module)
+	function __construct($module)
 	{
-		$this->ModuleView($module);
+		parent::__construct($module);
 	}
 	
 	function drawView($cssClass = "")

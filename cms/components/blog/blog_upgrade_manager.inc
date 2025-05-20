@@ -64,12 +64,12 @@ class BlogUpgradeManager extends UpgradeManager
 			"1.7"		=>	"sql:Added first_name, last_name and organization to blog_subscriber table"
 	);
 	
-	function BlogUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "blog";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

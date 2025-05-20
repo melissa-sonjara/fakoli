@@ -8,7 +8,7 @@ Fakoli::using("component", "comment", "blog", "versioned_content");
 
 class ArticleManager
 {
-	function ArticleManager()
+	function __construct()
 	{
 		
 	}

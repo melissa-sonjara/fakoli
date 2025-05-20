@@ -102,7 +102,7 @@ class VideoGallery extends DataItem
 		return $match;
 	}
 	
-	function VideoGallery()
+	function __construct()
 	{
 		$this->primary_key = "video_gallery_id";
 		$this->table = "video_gallery";
@@ -113,7 +113,7 @@ class VideoGallery extends DataItem
 		
 		$this->default_format = "{gallery_name}";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

@@ -58,12 +58,12 @@ class AutoLoginUpgradeManager extends UpgradeManager
 			"1.1"		=>	"sql:Added support for single use authentication tokens"
 	);
 	
-	function AutoLoginUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "auto_login";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

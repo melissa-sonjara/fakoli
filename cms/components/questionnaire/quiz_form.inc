@@ -14,9 +14,9 @@ class QuizForm extends QuestionnaireForm
 	var $correctCount = 0;
 	var $questionCount;
 	
-	function QuizForm($mgr)
+	function __construct($mgr)
 	{
-		parent::QuestionnaireForm($mgr);
+		parent::__construct($mgr);
 		$this->id = "Quiz_form";
 		$this->checkCompleted();
 		$this->questionCount = count($this->questions);

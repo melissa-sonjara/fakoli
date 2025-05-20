@@ -580,7 +580,7 @@ class SearchParameters
 		}
 	}
 	
-	function SearchParameters($target, $form = null)
+	function __construct($target, $form = null)
 	{
 		$this->target = $target;
 		$this->form = $form;
@@ -1089,9 +1089,9 @@ class SearchForm extends AutoForm
 	 * @param string $id (optional) the DOM ID for the generated search form
 	 * @return SearchForm
 	 */
-	function SearchForm($target, $method="POST", $action="", $id="")
+	function __construct($target, $method="POST", $action="", $id="")
 	{
-		$this->AutoForm($target, $method, $action, $id);
+		parent::__construct($target, $method, $action, $id);
 		$this->modifiers = array();
 		$this->params = new SearchParameters($target, $this);
 		

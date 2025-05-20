@@ -66,12 +66,12 @@ class QuestionType extends DataItem
 		return $qList;	
 	}
 	
-	function QuestionType()
+	function __construct()
 	{
 		$this->table = "question_type";
 		$this->primary_key = "question_type_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 /**@}*/?>

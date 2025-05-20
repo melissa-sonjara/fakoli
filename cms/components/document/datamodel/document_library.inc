@@ -253,7 +253,7 @@ class DocumentLibrary extends DataItem
 		return "";
 	}
 	
-	function DocumentLibrary()
+	function __construct()
 	{
 		$this->primary_key = "document_library_id";
 		$this->table = "document_library";
@@ -265,7 +265,7 @@ class DocumentLibrary extends DataItem
 		$mgr = new UserManager();
 		$this->relations["Owner"] = $mgr->getUserClass(); 
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

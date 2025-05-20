@@ -48,12 +48,12 @@ class ReportManagerUpgradeManager extends UpgradeManager
 			"1.4"		=>	"sql:Added 'column_order' field to custom reports to allow custom column reordering"
 	);
 	
-	function ReportManagerUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "report_manager";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 		
 	static function upgradeComponent($version)

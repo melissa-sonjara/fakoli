@@ -12,7 +12,7 @@
 
 class RedirectManager
 {
-	function RedirectManager()
+	function __construct()
 	{
 
 	}

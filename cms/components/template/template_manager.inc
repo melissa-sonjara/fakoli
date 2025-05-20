@@ -44,7 +44,7 @@ class TemplateManager
 	var $folder;
 	var $tree;
 	
-	function TemplateManager($base, $folder)
+	function __construct($base, $folder)
 	{		
 		$this->base = $base;
 		$this->folder = $folder;		

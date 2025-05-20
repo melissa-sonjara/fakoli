@@ -60,11 +60,11 @@ class CalendarEventTypeXref extends DataItem
 		return $this->getRelated(EventType);
 	}
 	
-	function CalendarEventTypeXref()
+	function __construct()
 	{
 		$this->table = "calendar_event_type_xref";
 		$this->primary_key = "calendar_event_type_xref_id";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

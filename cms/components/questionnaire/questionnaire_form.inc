@@ -98,7 +98,7 @@ class QuestionnaireForm
 	var $buttons = array();				///< The custom buttons collection
 	var $allowIncompleteSave = true;	///< Allows users to save partially completed forms
 	
-	function QuestionnaireForm($mgr, $readOnlyForm = false)
+	function __construct($mgr, $readOnlyForm = false)
 	{
 		global $auto_form_defaults;
 
@@ -503,7 +503,7 @@ class QuestionnairePreview extends QuestionnaireForm
 {
 	var $mgr;
 
-	function QuestionnairePreview($mgr)
+	function __construct($mgr)
 	{
 		$this->mgr = $mgr;
 		$this->readOnlyForm = true;
@@ -572,9 +572,9 @@ class QuestionnairePreview extends QuestionnaireForm
 
 class QuestionnaireResponseView extends QuestionnaireForm
 {
-	function QuestionnaireResponseView($mgr)
+	function __construct($mgr)
 	{
-		parent::QuestionnaireForm($mgr, true);
+		parent::__construct($mgr, true);
 	}
 
 	function writeOneQuestion($question)

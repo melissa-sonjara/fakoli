@@ -15,7 +15,7 @@ class HtmlEditorManager
 	static $additionalPlugins = array();
 	static $actionFilters = array();
 	
-	function HtmlEditorManager()
+	function __construct()
 	{
 
 	}

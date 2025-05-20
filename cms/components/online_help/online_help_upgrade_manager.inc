@@ -47,12 +47,12 @@ class OnlineHelpUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added searchable flag to help_book table",
 	);
 	
-	function OnlineHelpUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "online_help";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 

@@ -60,12 +60,12 @@ class EmailUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added email_log table"
 	);
 	
-	function EmailUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "email";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

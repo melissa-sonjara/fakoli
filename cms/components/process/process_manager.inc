@@ -47,7 +47,7 @@ class ProcessManager
 	var $id;
 	var $cache;
 		
-	function ProcessManager($id = "")
+	function __construct($id = "")
 	{
 		global $config;
 		

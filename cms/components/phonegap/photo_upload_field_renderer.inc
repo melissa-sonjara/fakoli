@@ -54,7 +54,7 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 	var $uploadPhotoLabel = "Choose a Photo";
 	var $uploadRedirect = false;
 	
-	function PhotoUploadFieldRenderer($form, $field, $label, $gallery_id)
+	function __construct($form, $field, $label, $gallery_id)
 	{
 		parent::__construct($form);
 		$this->gallery_id = $gallery_id;

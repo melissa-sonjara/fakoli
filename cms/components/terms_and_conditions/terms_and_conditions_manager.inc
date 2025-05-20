@@ -12,7 +12,7 @@
 
 class TermsAndConditionsManager
 {
-	function TermsAndConditionsManager()
+	function __construct()
 	{
 
 	}

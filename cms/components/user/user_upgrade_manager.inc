@@ -56,12 +56,12 @@ class UserUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function UserUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "user";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 

@@ -61,12 +61,12 @@ class PHPSession extends DataItem
 		return null;
 	}
 
-	function PHPSession()
+	function __construct()
 	{
 		$this->table = "php_session";
 		$this->primary_key = "session_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 						

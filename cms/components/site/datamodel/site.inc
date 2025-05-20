@@ -149,13 +149,13 @@ class Site extends DataItem
 	}
 	
 	// Constructor
-	function Site()
+	function __construct()
 	{
 		$this->primary_key = "site_id";
 		$this->table = "site";
 		
 		$this->default_format = "{site_name}";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 	

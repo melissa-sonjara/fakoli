@@ -12,7 +12,7 @@
 
 class GlossaryManager
 {
-	function GlossaryManager()
+	function __construct()
 	{
 
 	}

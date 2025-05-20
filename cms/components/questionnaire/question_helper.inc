@@ -40,7 +40,7 @@ Fakoli::usingFile("framework/field_renderers/string_field_renderer.inc");
 
 class QuestionTableHelper
 {
-	function QuestionTableHelper()
+	function __construct()
 	{
 		
 	}
@@ -165,7 +165,7 @@ class QuestionTableHelper
 
 class QuizQuestionTableHelper extends QuestionTableHelper
 {
-	function QuizQuestionTableHelper()
+	function __construct()
 	{
 		
 	}
@@ -222,7 +222,7 @@ class QuizQuestionTableHelper extends QuestionTableHelper
 class QuestionFormHelper
 {
 	
-	function QuestionFormHelper()
+	function __construct()
 	{
 	}
 
@@ -352,7 +352,7 @@ class QuestionFormHelper
  */
 class RatingQuestionFieldRenderer extends StringFieldRenderer
 {
-	function RatingQuestionFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
 		parent::__construct($parent);
 	}

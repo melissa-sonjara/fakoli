@@ -18,7 +18,7 @@ class QuestionnaireView
 	var $form;				///< obj of class AutoForm		
 	var $questionnaireView;
 	
-	function QuestionnaireView($mgr)
+	function __construct($mgr)
 	{
 		$this->mgr = $mgr;
 

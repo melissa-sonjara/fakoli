@@ -163,12 +163,12 @@ class Questionnaire extends AbstractQuestionnaire
 	}	
 	
 	
-	function Questionnaire()
+	function __construct()
 	{
 		$this->table = "questionnaire";
 		$this->primary_key = "questionnaire_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 		
 	}
 }

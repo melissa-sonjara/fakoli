@@ -94,12 +94,12 @@ class HelpPage extends DataItem
 		return $child;
 	}
 		
-	function HelpPage()
+	function __construct()
 	{
 		$this->table = "help_page";
 		$this->primary_key = "help_page_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 	

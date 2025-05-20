@@ -42,7 +42,7 @@ class VideoManager
 {
 	var $movieFile = null;
 	
-	function VideoManager()
+	function __construct()
 	{
 		trace("Creating VideoManager", 3);
 	}

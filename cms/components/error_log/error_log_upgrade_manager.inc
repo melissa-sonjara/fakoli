@@ -59,12 +59,12 @@ class ErrorLogUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Added indexes to error_log table"
 	);
 	
-	function ErrorLogUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "error_log";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

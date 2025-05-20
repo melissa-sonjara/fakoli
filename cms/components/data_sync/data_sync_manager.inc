@@ -188,7 +188,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 	
 	static $adapters = null;
 	
-	function DataSyncManager()
+	function __construct()
 	{
 	}
 

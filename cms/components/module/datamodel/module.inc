@@ -72,12 +72,12 @@ class Module extends DataItem
 						
 	var $relations = array("Menu"	=>	Menu);
 	
-	function Module()
+	function __construct()
 	{
 		$this->table = "module";
 		$this->primary_key = "module_id";
 		$this->default_format = "{title}";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
 	function Menu()

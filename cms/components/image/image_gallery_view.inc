@@ -47,7 +47,7 @@ class ImageGalleryView
 	var $styles;
 	var $titleFormat = "{title}";
 	
-	function ImageGalleryView($images, $linkFormat, $id = "images", $size = 125)
+	function __construct($images, $linkFormat, $id = "images", $size = 125)
 	{
 		$this->id = $id;
 		$this->grid = new ImageGrid($id . "_gallery", $size);
@@ -77,7 +77,7 @@ class ImageGalleryList
 	var $id;
 	var $galleryView;
 	
-	function ImageGalleryList($galleries, $linkFormat, $id = "galleries")
+	function __construct($galleries, $linkFormat, $id = "galleries")
 	{
 		$this->galleries = $galleries;
 		$this->linkFormat = $linkFormat;

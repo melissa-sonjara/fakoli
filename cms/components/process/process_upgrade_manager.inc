@@ -22,12 +22,12 @@ class ProcessUpgradeManager extends UpgradeManager
 		//"x.x"	=>	"description"
 	);
 
-	function ProcessUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "process";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

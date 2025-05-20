@@ -12,7 +12,7 @@
 
 class ScrollManager
 {
-	function ScrollManager()
+	function __construct()
 	{
 
 	}

@@ -8,7 +8,7 @@ Fakoli::using("forum", "email");
 
 class SubscriptionManager
 {
-	function SubscriptionManager()
+	function __construct()
 	{
 		
 	}

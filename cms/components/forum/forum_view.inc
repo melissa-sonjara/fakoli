@@ -47,7 +47,7 @@ class ForumListView
 	var $messageLink;
 	var $reorder;
 	
-	function ForumListView($fora, $forumLink, $messageLink, $id = "forum_list", $reorder = false)
+	function __construct($fora, $forumLink, $messageLink, $id = "forum_list", $reorder = false)
 	{
 		$this->fora = $fora;
 		$this->id = $id;
@@ -122,7 +122,7 @@ class ForumDetailsView
 	var $width;
 	var $subscriptionView;
 	
-	function ForumDetailsView($forum, $topicLink)
+	function __construct($forum, $topicLink)
 	{
 		$this->forum = $forum;
 		$this->topicLink = $topicLink;

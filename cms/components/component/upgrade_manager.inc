@@ -103,12 +103,12 @@ class MyComponentUpgradeManager extends UpgradeManager
 		"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function MyComponentUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "mycomponent";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 -------

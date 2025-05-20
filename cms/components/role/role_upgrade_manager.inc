@@ -60,12 +60,12 @@ class RoleUpgradeManager extends UpgradeManager
 			"1.1"		=>	"sql:Added priority and home_page fields to site_role table"
 	);
 	
-	function RoleUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "role";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

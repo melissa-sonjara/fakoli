@@ -42,7 +42,7 @@ class ForumTopicView
 	var $topic;
 	var $subscriptionView;
 	
-	function ForumTopicView($topic, $id = "topic_view")
+	function __construct($topic, $id = "topic_view")
 	{
 		$this->topic = $topic;
 		$this->forum = $topic->Forum();

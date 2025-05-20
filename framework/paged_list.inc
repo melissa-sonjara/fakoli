@@ -62,7 +62,7 @@ class PagedList implements FacetFilterable
 	 * @param string $id the HTML id of the list
 	 * @param mixed $format The formatter used to display the list items (either a format string or a callback function or method)
 	 */
-	function PagedList($items, $id = "paged_list", $format = null)
+	function __construct($items, $id = "paged_list", $format = null)
 	{
 		$this->items = $items;
 		$this->id = $id;

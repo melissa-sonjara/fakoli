@@ -38,7 +38,7 @@
 
 class ImageSerializationHandler
 {
-	function ImageSerializationHandler()
+	function __construct()
 	{
 	}
 
@@ -71,7 +71,7 @@ class ImageManager
 	/**
 	 * Creates a new ImageManager
 	 */
-	function ImageManager()
+	function __construct()
 	{
 	}
 	

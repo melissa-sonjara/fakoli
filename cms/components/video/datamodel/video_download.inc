@@ -62,12 +62,12 @@ class VideoDownload extends DataItem
 		return $mgr->getUser($this->user_id);
 	}
 
-	function VideoDownload()
+	function __construct()
 	{
 		$this->primary_key = "download_id";
 		$this->table = "video_download";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 
@@ -97,11 +97,11 @@ class VideoDownloadDailyStats extends DataItem
 		return $this->getRelated(VideoGallery);
 	}
 	
-	function VideoDownloadDailyStats()
+	function __construct()
 	{
 		$this->table = "video_download_daily_stats";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 
@@ -123,11 +123,11 @@ class VideoDownloadTotalStats extends DataItem
 		return $this->getRelated(VideoGallery);
 	}
 	
-	function VideoDownloadTotalStats()
+	function __construct()
 	{
 		$this->table = "video_download_total_stats";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 	

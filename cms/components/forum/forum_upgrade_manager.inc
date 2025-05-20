@@ -60,12 +60,12 @@ class ForumUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Added sort_order to forum_summary view"
 	);
 	
-	function ForumUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "forum";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

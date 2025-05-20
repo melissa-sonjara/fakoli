@@ -44,7 +44,7 @@ class ComponentPageListView
 	var $pages;
 	var $templates;
 	
-	function ComponentPageListView($component = null)
+	function __construct($component = null)
 	{
 		if ($component)
 		{

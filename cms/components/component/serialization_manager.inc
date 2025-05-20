@@ -324,7 +324,7 @@ class SerializationForm
 	var $mode;
 	var $action;
 	
-	function SerializationForm($mode, $action = "")
+	function __construct($mode, $action = "")
 	{
 		$this->mode = $mode;
 		$this->action = $action;

@@ -64,12 +64,12 @@ class SectionUpgradeManager extends UpgradeManager
 			"1.7"		=>	"sql:Increased size of permissions and default_permissions fields on section and section_content tables"
 	);
 	
-	function SectionUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "section";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -48,9 +48,9 @@ class EmailListFieldRenderer extends TextFieldRenderer
 {
 	var $removeDuplicates = false;
 	
-	function EmailListFieldRenderer(&$form, $field, $label = "")
+	function __construct(&$form, $field, $label = "")
 	{
-		parent::TextFieldRenderer($form);
+		parent::__construct($form);
 		
 		$label = ($label) ? $label : prettify($field);
 		
@@ -135,13 +135,13 @@ class EmailRecipientScrollBoxFieldRenderer extends FieldRenderer
 	var $delete_all_fn;			///< js function to delete all recipients
 	var $deleteLabel = "Clear All";
 	
-	function EmailRecipientScrollBoxFieldRenderer(&$form, $field, $label = "",  $recipients, $nameField, $delete_fn = "", $delete_all_fn)
+	function __construct(&$form, $field, $label = "",  $recipients, $nameField, $delete_fn = "", $delete_all_fn)
 	{
 		$this->recipients = $recipients;
 		$this->field = $field;
 		$this->nameField = $nameField;
 		
-		parent::FieldRenderer($form);
+		parent::__construct($form);
 		
 		$label = ($label) ? $label : prettify($field);
 		

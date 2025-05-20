@@ -52,7 +52,7 @@ class DataTransaction
 	/**
 	 * Creates a new DataTransaciton.
 	 */
-	function DataTransaction()
+	function __construct()
 	{
 		$this->conn = ConnectionManager::newConnection();
 		if (!$this->conn->beginTransaction())

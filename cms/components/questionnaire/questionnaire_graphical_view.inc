@@ -22,7 +22,7 @@ class QuestionnaireGraphicalView
 	 * getQuestions
 	 * getAnswers - aggregated
 	 */
-	function QuestionnaireGraphicalView($mgr)
+	function __construct($mgr)
 	{
 		$this->mgr = $mgr;
 	}

@@ -63,12 +63,12 @@ class EmailManagerTest extends DataItem
 		return $this->getRelated(EmailManagerTestRelation);
 	}
 	
-	function EmailManagerTest()
+	function __construct()
 	{
 		$this->table = "email_manager_test";
 		$this->primary_key = "test_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 		
 	}
 }
@@ -86,12 +86,12 @@ class EmailManagerTestRelation extends DataItem
 		return "this is the text returned from the function 'TestRelationFunction' in the EmailManagerTestRelation datamodel.";
 	}
 	
-	function EmailManagerTestRelation()
+	function __construct()
 	{
 		$this->table = "email_manager_test_relation";
 		$this->primary_key = "relation_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 		
 	}
 }
@@ -101,7 +101,7 @@ class EmailManagerTestRelation extends DataItem
  */
 class EmailManagerTestClass
 {
-	function EmailManagerTestClass()
+	function __construct()
 	{
 		
 	}

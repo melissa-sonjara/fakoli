@@ -128,7 +128,7 @@ class LinkSearchResult extends AbstractSearchResult
 {
 	var $item;
 	
-	function LinkSearchResult($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

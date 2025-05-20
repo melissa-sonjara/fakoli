@@ -62,12 +62,12 @@ class SiteUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Added theme field to site table"
 	);
 	
-	function SiteUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "site";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

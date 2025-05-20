@@ -9,7 +9,7 @@ class CalendarHelper
 {
 	var $handlerMap = array();
 	
-	function CalendarHelper()
+	function __construct()
 	{
 		ComponentManager::fireEvent("RegisterCalendarEventHandlers", $this);
 	}

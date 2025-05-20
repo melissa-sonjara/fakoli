@@ -84,7 +84,7 @@ class SearchManager
 		SearchManager::$searchAdapters[$class] = $adapter;
 	}
 	
-	function SearchManager($results = null)
+	function __construct($results = null)
 	{
 		$this->searchResults = $results;
 	}

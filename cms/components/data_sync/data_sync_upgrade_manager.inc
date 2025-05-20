@@ -29,12 +29,12 @@ class DataSyncUpgradeManager extends UpgradeManager
 		"1.7"	=>	"sql:Changed grouping field to grouped to fix compatibility issue with MySQL 8"
 	);
 
-	function DataSyncUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "data_sync";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

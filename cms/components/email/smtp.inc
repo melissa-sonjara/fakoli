@@ -66,7 +66,7 @@
          *
          * Initialize the class so that the data is in a known state.
          */
-        function SMTP() {
+        function __construct() {
             $this->smtp_conn = 0;
             $this->error = null;
             $this->helo_rply = null;

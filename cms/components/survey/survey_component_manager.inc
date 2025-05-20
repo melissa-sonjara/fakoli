@@ -45,7 +45,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 class SurveyComponentManager
 {
-	function SurveyComponentManager()
+	function __construct()
 	{
 		
 	}

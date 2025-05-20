@@ -69,7 +69,7 @@ class FieldRenderer
 	 * @param AutoForm $parent - the parent form for this FieldRenderer object
 	 * @return FieldRenderer
 	 */
-	function FieldRenderer($parent)
+	function __construct($parent)
 	{
 		global $auto_form_defaults;
 		$this->parent =& $parent;

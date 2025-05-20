@@ -164,7 +164,7 @@ class SimpleMemoryCache
 {
 	var $cache;
 	
-	function SimpleMemoryCache()
+	function __construct()
 	{
 		trace("Creating Simple In-memory Cache", 4);
 		$this->cache = array();

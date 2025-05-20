@@ -53,7 +53,7 @@ class MooToolsDateTimeFieldRenderer extends FieldRenderer
 	var $requireTime = true; // whether the time component of the field is also required
 	var $template = ""; // default reaonly format is short style
 	
-	function MooToolsDateTimeFieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
 		parent::__construct($parent);
 	}

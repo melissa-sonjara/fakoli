@@ -9,7 +9,7 @@ class LinkLibraryListView
 {
 	var $table;
 	
-	function LinkLibraryListView($libraries)
+	function __construct($libraries)
 	{
 		$this->table = $this->buildTable($libraries);
 	}
@@ -47,9 +47,9 @@ class LinkLibraryListView
 
 class AdminLinkLibraryListView extends LinkLibraryListView
 {
-	function AdminLinkLibraryListView($libraries)
+	function __construct($libraries)
 	{
-		parent::LinkLibraryListView($libraries);
+		parent::__construct($libraries);
 	}
 	
 	function formatTitleLink($library)

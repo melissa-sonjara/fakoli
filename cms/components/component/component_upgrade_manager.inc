@@ -59,12 +59,12 @@ class ComponentUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Increased size of component description field"
 	);
 	
-	function ComponentUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "component";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 	
 	function bootstrap()

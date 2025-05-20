@@ -63,7 +63,7 @@ class DataColumn
 	 *
 	 * @return DataColumn a new DataColumn instance
 	 */
-	function DataColumn($title, $template, $sortable = true, $style = null, $typeHint = null, $onExport = null, $sortFormat = null)
+	function __construct($title, $template, $sortable = true, $style = null, $typeHint = null, $onExport = null, $sortFormat = null)
 	{
 		$this->template = $template;
 		$this->sortable = $sortable;
@@ -126,10 +126,10 @@ class FooterTextColumn extends FooterColumn
 	 * @param $style any CSS classes or inline styles to apply
 	 * @param $colspan the colspan for the column
 	 */
-	function FooterTextColumn($text = "", $style = "", $colspan = 1)
+	function __construct($text = "", $style = "", $colspan = 1)
 	{
 		$this->text = $text;
-		$this->FooterColumn($style, $colspan);
+		parent::__construct($style, $colspan);
 	}
 	
 	/**
@@ -156,10 +156,10 @@ class FooterValueColumn extends FooterColumn
 	 * @param $style any CSS classes or inline styles to apply
 	 * @param $colspan the colspan for the column
 	 */
-	function FooterValueColumn($callback, $style = "", $colspan = 1)
+	function __construct($callback, $style = "", $colspan = 1)
 	{
 		$this->callback = $callback;		
-		$this->FooterColumn($style, $colspan);
+		parent::__construct($style, $colspan);
 	}
 	
 	/**
@@ -185,7 +185,7 @@ class FooterTotalColumn extends FooterColumn
 	 * @param string $style 
 	 * @param number $colspan 
 	 */
-	function FooterTotalColumn($field, $template = "", $style = "", $colspan = 1, $typeHint = Number)
+	function __construct($field, $template = "", $style = "", $colspan = 1, $typeHint = Number)
 	{
 		$this->field = $field;
 		$this->typeHint = $typeHint;
@@ -214,7 +214,7 @@ class FooterTotalColumn extends FooterColumn
 			$this->field = str_replace($matches[1], "", $this->field);
 		} 
 		
-		$this->FooterColumn($style, $colspan);
+		parent::__construct($style, $colspan);
 	}
 	
 	function onStartRow($item)

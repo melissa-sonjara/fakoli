@@ -59,12 +59,12 @@ class LoginUpgradeManager extends UpgradeManager
 			"1.2"		=>	"sql:Added login_account_lock table to provide account locking"
 	);
 	
-	function LoginUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "login";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -12,7 +12,7 @@
 
 class BookmarkManager
 {
-	function BookmarkManager()
+	function __construct()
 	{
 
 	}

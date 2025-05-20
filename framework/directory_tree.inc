@@ -43,7 +43,7 @@ class FileNode
 	var $title;
 	var $value;
 	
-	function FileNode($id, $title, $value)
+	function __construct($id, $title, $value)
 	{
 		$this->id = $id;
 		$this->title = $title;
@@ -79,7 +79,7 @@ class FolderNode
 	var $openStyle;
 	var $open;
 	
-	function FolderNode($id, $title, $value = "", $checked = false, $closedStyle = "tree_node_closed", $openStyle = "tree_node_open", $leafStyle = "tree_node_plain")
+	function __construct($id, $title, $value = "", $checked = false, $closedStyle = "tree_node_closed", $openStyle = "tree_node_open", $leafStyle = "tree_node_plain")
 	{
 		$this->id          = $id;
 		$this->title       = $title;
@@ -265,7 +265,7 @@ class DirectoryTreeControl
 						"default"	=>	"/fakoli/images/file_icon.png");
 						
 	
-	function DirectoryTreeControl($id, $title = "", $showFiles = true, $style="tree", $scroll=true,$width=500,$height=400)
+	function __construct($id, $title = "", $showFiles = true, $style="tree", $scroll=true,$width=500,$height=400)
 	{
 		$this->id = $id;
 		$this->title = $title;

@@ -38,7 +38,7 @@
 
 class ContextHelpSerializationHandler
 {
-	function ContextHelpSerializationHandler()
+	function __construct()
 	{
 	}
 
@@ -77,7 +77,7 @@ class ContextHelpManager
 		Settings::setDefaultValue("context_help", "show_title", true, Boolean, "Show the title heading in context help popups");
 	}
 	
-	function ContextHelpManager()
+	function __construct()
 	{
 		$this->classes = array();
 		$this->nonmatches = array();	

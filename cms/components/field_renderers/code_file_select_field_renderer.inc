@@ -41,7 +41,7 @@ Fakoli::using("component");
 
 class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 {
-	function CodeFileSelectFieldRenderer(&$form, $field, $label, $directory, $onChange="")
+	function __construct(&$form, $field, $label, $directory, $onChange="")
 	{
 		trace("Scanning Modules", 3);
 		
@@ -63,7 +63,7 @@ class CodeFileSelectFieldRenderer extends SelectFieldRenderer
 			}
 		}
 		
-		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange, true);
+		parent::__construct($form, $field, $label, $options, $onChange, true);
 		$this->allowBlank();
 	}
 	

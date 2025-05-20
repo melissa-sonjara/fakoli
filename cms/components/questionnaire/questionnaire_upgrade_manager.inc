@@ -60,12 +60,12 @@ class QuestionnaireUpgradeManager extends UpgradeManager
 			"1.3"		=>	"sql:Add tables questionnaire_response and questionnaire_answer",
 	);
 	
-	function QuestionnaireUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "questionnaire";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

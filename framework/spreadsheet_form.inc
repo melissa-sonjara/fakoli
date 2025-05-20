@@ -87,7 +87,7 @@ class SpreadsheetForm extends CompositeAutoForm
 	 * @param string $onStartRow callback to be called before generating each row
 	 * @param string $isRowSelected callback to determine the selection status for each row
 	 */
-	function SpreadsheetForm($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null, $isRowSelected = null)
+	function __construct($subform, $items = array(), $blanks = 5, $method="POST", $action="", $id="", $onStartRow = null, $isRowSelected = null)
 	{
 		$this->subform = $subform;
 		$this->onStartRow = $onStartRow;
@@ -95,7 +95,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		
 		// Create one instance of AutoForm to apply certain setting
 		// for all forms, e.g., aliases and hiddens
-		parent::CompositeAutoForm($method, $action);
+		parent::__construct($method, $action);
 		$this->formCSS = "list spreadsheet";
 		$this->layout = AutoFormLayout::create("spreadsheet", $this);
 

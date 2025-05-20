@@ -67,12 +67,12 @@ class DocumentUpgradeManager extends UpgradeManager
 			"2.0"		=>	"sql:Added url field to Document"
 	);
 	
-	function DocumentUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "document";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

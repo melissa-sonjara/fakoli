@@ -180,7 +180,7 @@ class ExcelFile implements IExcelFile
 	 * Create a new ExcelFile object
 	 * @param string $filename the name of the file to generate
 	 */
-	function ExcelFile($filename)
+	function __construct($filename)
 	{
 		$this->filename = $filename;
 		ob_start();

@@ -13,7 +13,7 @@
 
 class SvgChartsManager
 {
-	function SvgChartsManager()
+	function __construct()
 	{
 
 	}

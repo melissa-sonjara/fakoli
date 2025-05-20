@@ -52,7 +52,7 @@ class ExclusionFilter
 	var $fields = array();
 	var $type = "ExclusionFilter";
 	
-	function ExclusionFilter()
+	function __construct()
 	{
 		$args = func_get_args();
 		for($i = 0; $i < count($args); ++$i)
@@ -105,7 +105,7 @@ class InclusionFilter
 	var $fields = array();
 	var $type = "InclusionFilter";
 	
-	function InclusionFilter()
+	function __construct()
 	{
 		$args = func_get_args();
 		for($i = 0; $i < count($args); ++$i)

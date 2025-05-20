@@ -42,7 +42,7 @@ class CompositeDataItem extends AbstractDataItem
 	var $__objects;
 	var $__tx = null;
 	
-	function CompositeDataItem()
+	function __construct()
 	{
 		$__objects = array();	
 	}

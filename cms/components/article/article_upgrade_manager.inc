@@ -29,12 +29,12 @@ class ArticleUpgradeManager extends UpgradeManager
 			"1.5"		=>	"sql:Added identifier field to article table"
 	);
 	
-	function ArticleUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "article";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 /**@}*/?>

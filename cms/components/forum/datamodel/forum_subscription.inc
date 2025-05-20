@@ -71,12 +71,12 @@ class ForumSubscription extends DataItem
 			->execute();
 	}
 	
-	function ForumSubscription()
+	function __construct()
 	{
 		$this->primary_key = "forum_subscription_id";
 		$this->table = "forum_subscription";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 		
 	}
 }

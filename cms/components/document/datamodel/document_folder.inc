@@ -53,12 +53,12 @@ class DocumentFolder extends DataItem
 		return $this->getRelated(DocumentLibrary);
 	}
 	
-	function DocumentFolder()
+	function __construct()
 	{
 		$this->primary_key = "folder_id";
 		$this->table = "document_folder";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

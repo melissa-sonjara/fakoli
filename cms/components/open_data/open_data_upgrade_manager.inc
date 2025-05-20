@@ -25,12 +25,12 @@ class OpenDataUpgradeManager extends UpgradeManager
 			"1.2"	=>	"sql:added ignore item to the open_data table to ignore item from data dictionary"
 	);
 
-	function OpenDataUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "open_data";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

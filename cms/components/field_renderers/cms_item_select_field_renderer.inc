@@ -41,7 +41,7 @@ Fakoli::using("component");
 
 class CMSItemSelectFieldRenderer extends SelectFieldRenderer
 {
-	function CMSItemSelectFieldRenderer($form, $field, $label, $onChange = "")
+	function __construct($form, $field, $label, $onChange = "")
 	{
 				
 		$itemsByType = array();
@@ -60,7 +60,7 @@ class CMSItemSelectFieldRenderer extends SelectFieldRenderer
 			}
 		}
 		
-		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange, true);		
+		parent::__construct($form, $field, $label, $options, $onChange, true);		
 	}
 }
 

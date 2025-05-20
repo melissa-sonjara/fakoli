@@ -55,12 +55,12 @@ class Answer extends DataItem
 		return $this->getRelated(Question, "question_id");
 	}
 	
-	function Answer()
+	function __construct()
 	{
 		$this->table = "answer";
 		$this->primary_key = "answer_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

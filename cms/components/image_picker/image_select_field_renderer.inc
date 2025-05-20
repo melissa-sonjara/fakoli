@@ -48,7 +48,7 @@ class ImageSelectFieldRenderer extends FieldRenderer
 	var $onPostProcess;
 	var $size = 120;
 	
-	function ImageSelectFieldRenderer(&$form, $field = "", $required = false)
+	function __construct(&$form, $field = "", $required = false)
 	{
 		parent::__construct($form);
 				

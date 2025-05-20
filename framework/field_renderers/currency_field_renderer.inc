@@ -160,9 +160,9 @@ class CurrencyFieldRenderer extends FieldRenderer
  */
 class Currency3FieldRenderer extends CurrencyFieldRenderer
 {
-	function Currency3FieldRenderer(&$parent)
+	function __construct(&$parent)
 	{
-		$this->CurrencyFieldRenderer($parent);
+		parent::__construct($parent);
 		$this->template = 3;
 	}
 }

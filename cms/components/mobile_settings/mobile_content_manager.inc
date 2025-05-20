@@ -13,7 +13,7 @@ Fakoli::using("settings", "section", "menu");
  */
 class MobileSettingsManager
 {
-	function MobileSettingsManager()
+	function __construct()
 	{
 
 	}

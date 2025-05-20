@@ -72,7 +72,7 @@ class StatusTrees
 	var $statusBlockView; // class that inherits from StatusBlockView and displays the status block contents
 	var $statusBlockHandler; // if not using callback class above, set to call action handler for view
 	
-	function StatusTrees($items, $statusCategories, $statusBlock)
+	function __construct($items, $statusCategories, $statusBlock)
 	{
 		$this->items = $items;
 		$this->statusCategories = $statusCategories;

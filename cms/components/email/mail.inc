@@ -48,7 +48,7 @@ class Mail
 	var $body;
 	var $headers;
 	
-	function Mail($from, $to, $subject, $body = "", $headers = "", $fullFrom = "")
+	function __construct($from, $to, $subject, $body = "", $headers = "", $fullFrom = "")
 	{
 		if (Settings::getValue("email", "override_PHP_settings"))
 		{

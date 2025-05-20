@@ -61,7 +61,7 @@ class GroupedListGroup extends DataGroup
 {
 	function GroupListGroup($parent, $title, $key, $expanded = false, $fixed = false)
 	{
-		parent::DataGroup($parent, $title, $key, $expanded, $fixed);
+		parent::__construct($parent, $title, $key, $expanded, $fixed);
 	}
 
 	function draw()
@@ -95,7 +95,7 @@ class GroupedList implements FacetFilterable
 	var $group_id;
 	var $tagRowCallbacks;  ///< Array of callbacks for adding extra attributes to each row
 	
-	function GroupedList($items, $id = "grouped_list", $format, $cssClass = "article_list", $groupClass = "subheading")
+	function __construct($items, $id = "grouped_list", $format, $cssClass = "article_list", $groupClass = "subheading")
 	{
 		$this->items = $items;
 		$this->id = $id;

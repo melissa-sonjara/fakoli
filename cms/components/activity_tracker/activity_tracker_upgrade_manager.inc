@@ -61,12 +61,12 @@ class ActivityTrackerUpgradeManager extends UpgradeManager
 			"1.4"		=>	"sql:Added indexes to user_activity_session"
 	);
 	
-	function ActivityTrackerUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "activity_tracker";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

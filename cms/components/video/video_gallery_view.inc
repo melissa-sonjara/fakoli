@@ -47,7 +47,7 @@ class VideoGalleryView
 	var $styles;
 	var $onClick;
 	
-	function VideoGalleryView($videos, $linkFormat, $id = "videos", $onClick)
+	function __construct($videos, $linkFormat, $id = "videos", $onClick)
 	{
 		$this->id = $id;
 		$this->listView = new VideoListView($videos, $linkFormat, $id . "_listView", "", $onClick);
@@ -94,7 +94,7 @@ class VideoGalleryList
 	var $id;
 	var $galleryView;
 	
-	function VideoGalleryList($galleries, $linkFormat, $id = "galleries")
+	function __construct($galleries, $linkFormat, $id = "galleries")
 	{
 		$this->galleries = $galleries;
 		$this->linkFormat = $linkFormat;

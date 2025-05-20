@@ -89,7 +89,7 @@ class ShareAccess extends DataItem
 	var $relations = array(	"ShareToken"	=>	"ShareToken",
 							"User"			=>	"SiteUser");
 	
-	function ShareToken()
+	function __construct()
 	{
 		return $this->getRelated('ShareToken');
 	}

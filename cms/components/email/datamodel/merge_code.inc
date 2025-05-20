@@ -74,12 +74,12 @@ class MergeCode extends DataItem
 		$mergeCode->save();
 	}
 	
-	function MergeCode()
+	function __construct()
 	{
 		$this->table = "merge_code";
 		$this->primary_key = "merge_code_id";
 		
-		$this->DataItem(func_get_args());		
+		parent::__construct(func_get_args());		
 	}
 }
 
@@ -95,7 +95,7 @@ class MergeCodeHelp extends DataItem
 			"example"	=>	String
 	);
 	
-	function MergeCodeHelp()
+	function __construct()
 	{
 		$this->table = "merge_code";
 		$this->primary_key = "help_id";	
@@ -148,7 +148,7 @@ class RelationHelp extends DataItem
 			"class_name"	=>	String
 	);
 	
-	function RelationHelp()
+	function __construct()
 	{
 		$this->table = "relation";
 		$this->primary_key = "relation_id";	

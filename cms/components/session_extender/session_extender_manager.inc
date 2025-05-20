@@ -44,7 +44,7 @@
 
 class SessionExtenderManager
 {
-	function SessionExtenderManager()
+	function __construct()
 	{
 
 	}

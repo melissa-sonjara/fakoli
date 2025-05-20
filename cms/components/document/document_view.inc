@@ -171,7 +171,7 @@ class DocumentLibraryListView
 {
 	var $table;
 	
-	function DocumentLibraryListView($libraries)
+	function __construct($libraries)
 	{
 		$this->table = $this->buildTable($libraries);
 	}
@@ -210,9 +210,9 @@ class DocumentLibraryListView
 
 class AdminDocumentLibraryListView extends DocumentLibraryListView
 {
-	function AdminDocumentLibraryListView($libraries)
+	function __construct($libraries)
 	{
-		parent::DocumentLibraryListView($libraries);
+		parent::__construct($libraries);
 	}
 	
 	function formatTitleLink($library)

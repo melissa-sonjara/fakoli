@@ -51,7 +51,7 @@ class UserManager
 	/**
 	 * Creates a new UserManager object.
 	 */
-	function UserManager()
+	function __construct()
 	{
 	}
 	

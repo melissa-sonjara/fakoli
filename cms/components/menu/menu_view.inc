@@ -56,7 +56,7 @@ class MenuView
 	var $pages;
 	var $componentPages;
 	
-	function MenuView($m)
+	function __construct($m)
 	{
 		$this->m = $m;
 

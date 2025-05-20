@@ -47,7 +47,7 @@ class JoinResult
 	var $_xmlTagName = "join";
 	var $_classes;
 	
-	function JoinResult($tag = "join")
+	function __construct($tag = "join")
 	{
 		$this->_xmlTagName = $tag;
 		$this->_classes = array();
@@ -650,7 +650,7 @@ class InnerJoin extends AbstractJoin
 	/**
 	 * Create a new InnerJoin object.
 	 */
-	function InnerJoin($tag = "join")
+	function __construct($tag = "join")
 	{
 		$this->tag = $tag;
 	}
@@ -830,7 +830,7 @@ class LeftOuterJoin extends AbstractJoin
 	/**
 	 * Create a new LeftOuterJoin object.
 	 */
-	function LeftOuterJoin($tag = "join")
+	function __construct($tag = "join")
 	{
 		$this->tag = $tag;
 	}

@@ -19,7 +19,7 @@ class PanelButton implements PanelControl
 	var $tooltip;
 	var $action;
 	
-	function PanelButton($icon, $text, $tooltip, $action)
+	function __construct($icon, $text, $tooltip, $action)
 	{
 		$this->icon = $icon;
 		$this->text = $text;
@@ -44,7 +44,7 @@ class PanelSeparator implements PanelControl
 {
 	var $width;
 	
-	function PanelSeparator($width)
+	function __construct($width)
 	{
 		$this->width = $width;
 	}
@@ -63,7 +63,7 @@ class PanelToolbar
 {
 	var $controls;
 
-	function PanelToolbar()
+	function __construct()
 	{
 		$this->controls = array();		
 	}
@@ -122,7 +122,7 @@ class PanelView
 	var $controls;
 	var $toolbars;
 	
-	function PanelView($id, $title)
+	function __construct($id, $title)
 	{
 		$this->id = $id;
 		$this->title = $title;

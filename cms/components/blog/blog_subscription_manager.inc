@@ -13,7 +13,7 @@ class BlogSubscriptionManager
 	var $subscribers;
 	var $blogs;
 	
-	function BlogSubscriptionManager()
+	function __construct()
 	{
 		$this->subscribers = Query::create(BlogSubscriber, "WHERE subscription_type IN ('daily', 'weekly') AND blog_id IN (SELECT blog_id FROM blog WHERE published=true)")->execute();
 		

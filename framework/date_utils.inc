@@ -41,7 +41,7 @@
 
 class DateUtils
 {
-	function DateUtils()
+	function __construct()
 	{
 		
 	}

@@ -42,7 +42,7 @@ class VideoBlogHandler implements IBlogViewHandler
 {
 	var $blog;
 	
-	function VideoBlogHandler()
+	function __construct()
 	{
 	}
 	

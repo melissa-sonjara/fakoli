@@ -43,7 +43,7 @@ class SettingAutoForm extends AutoForm
 	var $settings;
 	var $customSettings = array();
 	var $filter = null;
-	function SettingAutoForm($component, $filter = null)
+	function __construct($component, $filter = null)
 	{
 		$this->filter = $filter;
 		
@@ -76,7 +76,7 @@ class SettingAutoForm extends AutoForm
 		}
 
 		$componentSettings->fields = $fields;
-		parent::AutoForm($componentSettings, "POST", "?component_id={$component_id}");
+		parent::__construct($componentSettings, "POST", "?component_id={$component_id}");
 
 		foreach($this->settings as $setting)
 		{
@@ -245,7 +245,7 @@ function uploadSettingFile($field, $setting)
  */
 class SettingPageAutoForm extends SettingAutoForm
 {
-	function SettingPageAutoForm($settings)
+	function __construct($settings)
 	{
 		$this->settings = $settings;
 		$this->buildForm();

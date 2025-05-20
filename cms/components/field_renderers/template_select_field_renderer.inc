@@ -46,14 +46,14 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 	var $mode = "site"; ///< Dynamic update mode, either 'site', 'theme' or 'none'
 	var $site_id = 0;
 	
-	function TemplateSelectFieldRenderer(&$form, $field, $label, $mode = "site", $onChange = "")
+	function __construct(&$form, $field, $label, $mode = "site", $onChange = "")
 	{
 		$this->mode = $mode;
 		$this->site_id = $site_id;
 			
 		$options = $this->getInitialOptions($form);
 			
-		$this->SelectFieldRenderer($form, $field, $label, $options, $onChange);
+		parent::__construct($form, $field, $label, $options, $onChange);
 	}
 	
 	private function getInitialOptions($form)

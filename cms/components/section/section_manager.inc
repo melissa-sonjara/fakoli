@@ -42,7 +42,7 @@
  */
 class SectionSerializationHandler
 {
-	function SectionSerializationHandler()
+	function __construct()
 	{
 	}
 	

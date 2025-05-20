@@ -142,12 +142,12 @@ class SiteMap extends DataItem
 		return $pageList;
 	}
 		
-	function SiteMap()
+	function __construct()
 	{
 		$this->table = "site_map";
 		$this->primary_key = "site_map_id";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

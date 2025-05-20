@@ -52,11 +52,11 @@ class ClassificationUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function ClassificationUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "classification";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }

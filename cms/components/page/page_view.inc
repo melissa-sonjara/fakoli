@@ -49,7 +49,7 @@ class PageView
 	var $page; 		///< The Page object that we are viewing
 	var $template; 	///< The layout template used to render the page.
 	
-	function PageView($page, $template)
+	function __construct($page, $template)
 	{
 		$this->page = $page;
 		$this->template = $template;	

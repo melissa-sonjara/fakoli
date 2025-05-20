@@ -12,9 +12,9 @@ class ProgressData extends DataItem
 						"message"		=>	String,
 						"percentage"	=>	Number);
 	
-	function ProgressData()
+	function __construct()
 	{
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

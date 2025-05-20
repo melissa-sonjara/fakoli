@@ -52,9 +52,9 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 		}
 	}
 	
-	function PhotoAttachmentFieldRenderer($form, $field, $xrefClass)
+	function __construct($form, $field, $xrefClass)
 	{
-		$this->AttachmentFieldRenderer($form, $field, $xrefClass);
+		parent::__construct($form, $field, $xrefClass);
 	}
 	
 	function renderScript($field)

@@ -42,7 +42,7 @@ class TermsAndConditionsFieldRenderer extends FieldRenderer
 {
 	var $containerFormID = null;
 	
-	function TermsAndConditionsFieldRenderer(&$parent, $field)
+	function __construct(&$parent, $field)
 	{
 		global $isAdmin;
 		

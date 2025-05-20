@@ -31,12 +31,12 @@ class ForwardEmail extends DataItem
 	);
 		
 	
-	function ForwardEmail()
+	function __construct()
 	{
 		$this->table = "email";
 		$this->primary_key = "email_template_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

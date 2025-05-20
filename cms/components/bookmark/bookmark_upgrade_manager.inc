@@ -22,12 +22,12 @@ class BookmarkUpgradeManager extends UpgradeManager
 		"1.0"	=>	"sql:Initial Version"
 	);
 
-	function BookmarkUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "bookmark";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

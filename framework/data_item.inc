@@ -68,20 +68,20 @@ class DataItem extends AbstractDataItem
    // When adding new renderers, must also update
     // AutoForm $fieldRendererMap	
 	static $dataTypeRendererMap = array(
-		"Boolean"		=>	BooleanTypeRenderer,	
-		"Currency"		=>	CurrencyTypeRenderer,
-		"Currency3"		=>	CurrencyTypeRenderer,
-		"Date"			=>	DateTypeRenderer,
-		"DateTime"		=>	DateTimeTypeRenderer,
-		"Time"			=>	TimeTypeRenderer,
-		"Number"		=>	NumberTypeRenderer,	
-		"String"		=>	StringTypeRenderer,
-		"Text"			=>	TextTypeRenderer,
-		"HTML"			=>	TextTypeRenderer,
-		"Timestamp"		=>	TimestampTypeRenderer,
-		"Timezone"		=>	TimezoneTypeRenderer,
-		"PhoneNumber"	=>	PhoneNumberTypeRenderer,
-		"DateOfBirth"	=>	DateTypeRenderer
+		"Boolean"		=>	'BooleanTypeRenderer',	
+		"Currency"		=>	'CurrencyTypeRenderer',
+		"Currency3"		=>	'CurrencyTypeRenderer',
+		"Date"			=>	'DateTypeRenderer',
+		"DateTime"		=>	'DateTimeTypeRenderer',
+		"Time"			=>	'TimeTypeRenderer',
+		"Number"		=>	'NumberTypeRenderer',	
+		"String"		=>	'StringTypeRenderer',
+		"Text"			=>	'TextTypeRenderer',
+		"HTML"			=>	'TextTypeRenderer',
+		"Timestamp"		=>	'TimestampTypeRenderer',
+		"Timezone"		=>	'TimezoneTypeRenderer',
+		"PhoneNumber"	=>	'PhoneNumberTypeRenderer',
+		"DateOfBirth"	=>	'DateTypeRenderer'
 	);
 	
 	
@@ -94,7 +94,7 @@ class DataItem extends AbstractDataItem
 	 *      as those returned from mysql_fetch_assoc()]</li>
 	 * </ol>
 	 */
-	function DataItem()
+	function __construct()
 	{
 		if (func_num_args() > 0)
 		{

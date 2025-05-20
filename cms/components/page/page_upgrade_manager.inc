@@ -61,12 +61,12 @@ class PageUpgradeManager extends UpgradeManager
 			"1.1"		=>	"sql:Added exclude_from_search flag to page table"
 	);
 	
-	function PageUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "page";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -106,12 +106,12 @@ class EmailTemplate extends DataItem
 		$emailTemplate->save();
 	}
 		
-	function EmailTemplate()
+	function __construct()
 	{
 		$this->table = "email_template";
 		$this->primary_key = "email_template_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

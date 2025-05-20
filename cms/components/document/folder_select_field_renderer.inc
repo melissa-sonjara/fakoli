@@ -50,7 +50,7 @@ class FolderSelectFieldRenderer extends FieldRenderer
 	var $onPreProcess;
 	var $onPostProcess;
 	
-	function FolderSelectFieldRenderer(&$form, $field, $label, $library)
+	function __construct(&$form, $field, $label, $library)
 	{
 		global $config;
 		

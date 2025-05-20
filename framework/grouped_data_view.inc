@@ -58,7 +58,7 @@ class DataGroup
 	 * @param $expanded Boolean indicating whether this group should initially be expanded.
 	 * @param $fixed Specifies whether this group should be fixed (i.e. exempt from expand/collapse toggling).
 	 */
-	function DataGroup($parent, $title, $key, $expanded = false, $fixed = false)
+	function __construct($parent, $title, $key, $expanded = false, $fixed = false)
 	{
 		$this->parent = $parent;
 		$this->title = $title;
@@ -140,7 +140,7 @@ class GroupedDataListView
 	 * @param integer $pageSize Specifies the number of items per page - set to zero for unpaginated
 	 * @param boolean $filter Specifies whether to enable client-side filtering for this table. 
 	 */
-	function GroupedDataListView($items, $id, $cssClass = "list", $groupClass = "subheading")
+	function __construct($items, $id, $cssClass = "list", $groupClass = "subheading")
 	{
 		$this->items = $items;
 		$this->id = $id;

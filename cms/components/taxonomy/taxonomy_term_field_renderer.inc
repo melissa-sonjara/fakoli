@@ -55,7 +55,7 @@ class TaxonomyTermFieldRenderer extends FieldRenderer
 	
 	static $readOnlyTermSeparator = "<br>";
 	
-	function TaxonomyTermFieldRenderer(&$form, $taxonomy)
+	function __construct(&$form, $taxonomy)
 	{
 		$this->taxonomy = $taxonomy;
 		$this->field = $taxonomy->identifier;
@@ -368,7 +368,7 @@ class BindingTargetFieldRenderer extends FieldRenderer
 
 	static $readOnlyTermSeparator = "<br>";
 
-	function BindingTargetFieldRenderer(&$form, $bindingTarget)
+	function __construct(&$form, $bindingTarget)
 	{
 		trace("## Creating BindingTargetFieldRenderer for {$bindingTarget->target_class}", 3);
 		

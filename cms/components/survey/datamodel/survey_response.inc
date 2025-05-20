@@ -187,7 +187,7 @@ class SurveyResponse extends AbstractQuestionnaireResponse
 	}
 	
 
-	function SurveyResponse()
+	function __construct()
 	{
 		$this->table = "survey_response";
 		$this->primary_key = "response_id";

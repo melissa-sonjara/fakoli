@@ -40,7 +40,7 @@ Fakoli::using("page", "versioned_content");
 
 class PageSerializationHandler
 {
-	function PageSerializationHandler()
+	function __construct()
 	{
 	}
 	

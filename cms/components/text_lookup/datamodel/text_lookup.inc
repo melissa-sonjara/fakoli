@@ -240,12 +240,12 @@ class TextTranslation extends DataItem
 		return $this->getRelated(TextLookup);
 	}
 	
-	function TextTranslation()
+	function __construct()
 	{
 		$this->primary_key = "text_translation_id";
 		$this->table = "text_translation";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 	
 	/*

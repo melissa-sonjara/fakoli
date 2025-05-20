@@ -17,12 +17,12 @@ class SectionImportFile extends DataItem
 	var $fields = array("import_file_id"	=>	Number,
 						"import_file"	=>	String);
 	
-	function SectionImportFile()
+	function __construct()
 	{
 		$this->table = "";
 		$this->primary_key = "import_file_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

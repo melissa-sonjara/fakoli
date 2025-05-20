@@ -57,12 +57,12 @@ class FileshareUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function FileshareUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "fileshare";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -54,14 +54,14 @@ class Group extends DataItem
 	}
 	
 	// Constructor
-	function Group()
+	function __construct()
 	{
 		$this->primary_key = "group_id";
 		$this->table = "grp";
 		
 		$this->default_format = "{title}";
 		$this->pretty_class_name = "Group";
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 	

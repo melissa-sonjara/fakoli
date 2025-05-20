@@ -35,7 +35,7 @@ Fakoli::using("classification");
 
 class ClassificationManager
 {
-	function ClassificationManager()
+	function __construct()
 	{
 		
 	}

@@ -50,7 +50,7 @@ class DashboardView
 	var $bottomWidgets;
 	var $id;
 		
-	function DashboardView($id)
+	function __construct($id)
 	{
 		$this->id = $id;
 		$this->topWidgets = array();

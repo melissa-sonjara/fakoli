@@ -57,12 +57,12 @@ class APIUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function APIUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "api";
 		
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 /**@}*/?>

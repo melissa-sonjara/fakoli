@@ -23,12 +23,12 @@ class SharingUpgradeManager extends UpgradeManager
 		"1.2"	=>	"sql:Added last_updated and last_updated_by_id field to share_token table"
 	);
 
-	function SharingUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "sharing";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();
+		parent::__construct();
 	}
 }
 

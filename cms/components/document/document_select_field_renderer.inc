@@ -12,7 +12,7 @@ class DocumentSelectFieldRenderer extends FieldRenderer
 	var $library;
 	var $emptyMessage = "No Document Selected";
 	
-	function DocumentSelectFieldRenderer(&$form, $field, $label, $libraryIdentifier)
+	function __construct(&$form, $field, $label, $libraryIdentifier)
 	{
 		parent::__construct($form);
 		if ($form->data->hasField($field))

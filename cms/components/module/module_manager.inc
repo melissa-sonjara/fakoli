@@ -7,7 +7,7 @@
 
 class ModuleManager
 {
-	function ModuleManager()
+	function __construct()
 	{
 		
 	}

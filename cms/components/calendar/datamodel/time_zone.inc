@@ -14,12 +14,12 @@ class TimeZone extends DataItem
 		"daylight_offset"			=>	Number
 		);
 	
-	function TimeZone()
+	function __construct()
 	{
 		$this->table = "time_zone";
 		$this->primary_key = "time_zone_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

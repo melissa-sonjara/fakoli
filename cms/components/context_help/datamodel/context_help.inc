@@ -56,12 +56,12 @@ class ContextHelp extends DataItem
 	var $relations = array();
 	
 	
-	function ContextHelp()
+	function __construct()
 	{
 		$this->primary_key = "help_id";
 		$this->table = "context_help";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 	
 }
