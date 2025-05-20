@@ -52,12 +52,12 @@
 class Email extends DataItem
 {
 	var $fields = array(
-				"email_id"		=>	Number,
-				"sender_name"	=>	String,
-				"sender_email"	=>	String,
-				"recipient"		=>	Text,
-				"subject"		=>	String,
-				"message"		=>	Text,
+				"email_id"		=>	'Number',
+				"sender_name"	=>	'String',
+				"sender_email"	=>	'String',
+				"recipient"		=>	'Text',
+				"subject"		=>	'String',
+				"message"		=>	'Text',
 				
 	);
 		

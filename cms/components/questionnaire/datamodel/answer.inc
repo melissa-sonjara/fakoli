@@ -40,19 +40,19 @@
 
 class Answer extends DataItem
 {
-	var $fields = array (	"answer_id"				=>	Number,
-							"question_id"			=>	Number,
-							"value"					=>	String,
-							"composite_class"		=>	Number
+	var $fields = array (	"answer_id"				=>	'Number',
+							"question_id"			=>	'Number',
+							"value"					=>	'String',
+							"composite_class"		=>	'Number'
 					);
 						
 						
-	var $relations = array ("Question"	=>	Question
+	var $relations = array ("Question"	=>	'Question'
 							);
 
 	function Question()
 	{
-		return $this->getRelated(Question, "question_id");
+		return $this->getRelated('Question', "question_id");
 	}
 	
 	function __construct()

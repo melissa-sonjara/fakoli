@@ -9,19 +9,19 @@ class ScheduledTask extends DataItem
 	var $table = "scheduled_task";
 	var $primary_key = "task_id";
 	
-	var $fields = array("task_id"			=>	Number,
-						"component"			=>	String,
-						"task_name"			=>	String,
-						"run_every_hour"	=>	Boolean,
-						"schedule"			=>	TaskSchedule,
-						"active"			=>	Boolean);
+	var $fields = array("task_id"			=>	'Number',
+						"component"			=>	'String',
+						"task_name"			=>	'String',
+						"run_every_hour"	=>	'Boolean',
+						"schedule"			=>	'TaskSchedule',
+						"active"			=>	'Boolean');
 	
-	var $relations = array("LogEntries"	=>	ScheduledTaskLogEntry,
-						   "LastRun"	=>	ScheduledTaskLogEntry);
+	var $relations = array("LogEntries"	=>	'ScheduledTaskLogEntry',
+						   "LastRun"	=>	'ScheduledTaskLogEntry');
 	
 	function LogEntries($constraint = "")
 	{
-		return $this->getRelatedList(ScheduledTaskLogEntry, "", $constraint);
+		return $this->getRelatedList('ScheduledTaskLogEntry', "", $constraint);
 	}
 	
 	static function getInstance($component, $task_name)
@@ -53,17 +53,17 @@ class ScheduledTaskLogEntry extends DataItem
 	var $primary_key = "log_entry_id";
 	
 	
-	var $fields = array("log_entry_id"	=>	Number,
-						"task_id"		=>	Number,
-						"log_date"		=>	DateTime,
-						"log"			=>	Text,
-						"status"		=>	String);
+	var $fields = array("log_entry_id"	=>	'Number',
+						"task_id"		=>	'Number',
+						"log_date"		=>	'DateTime',
+						"log"			=>	'Text',
+						"status"		=>	'String');
 	
-	var $relations = array("Task"	=>	ScheduledTask);
+	var $relations = array("Task"	=>	'ScheduledTask');
 	
 	function Task()
 	{
-		return $this->getRelated(ScheduledTask);
+		return $this->getRelated('ScheduledTask');
 	}
 }
 

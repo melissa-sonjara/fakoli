@@ -52,29 +52,29 @@ Fakoli::using("questionnaire");
 class Survey extends AbstractQuestionnaire
 {
 	var $fields = array(
-				"survey_id"							=>	Number,
-				"title"								=>	String,
-				"introduction"						=>	Text,
-				"start_date"						=>	Date,
-				"end_date"							=>	Date,
-				"instructions"						=>	HTML,
-				"user_id"							=>	Number,
-				"sender_email"						=>	String,
-				"recipients"						=>	Text,
-				"cc_recipients"						=>	Text,
-				"additional_recipients"				=>	Text,
-				"allow_anonymous_responses"			=>	Boolean,
-				"show_preview_before_submitting"	=>	Boolean,
-				"message"							=>	Text,
-				"confirmation_message"				=>	HTML,
-				"status"							=>	String,
-				"deleted"							=>	Boolean
+				"survey_id"							=>	'Number',
+				"title"								=>	'String',
+				"introduction"						=>	'Text',
+				"start_date"						=>	'Date',
+				"end_date"							=>	'Date',
+				"instructions"						=>	'HTML',
+				"user_id"							=>	'Number',
+				"sender_email"						=>	'String',
+				"recipients"						=>	'Text',
+				"cc_recipients"						=>	'Text',
+				"additional_recipients"				=>	'Text',
+				"allow_anonymous_responses"			=>	'Boolean',
+				"show_preview_before_submitting"	=>	'Boolean',
+				"message"							=>	'Text',
+				"confirmation_message"				=>	'HTML',
+				"status"							=>	'String',
+				"deleted"							=>	'Boolean'
 	);
 
 	var $relations = array(
-				"Responses"				=>	SurveyResponse,
-				"Questions"				=>	SurveyQuestion,
-				"SurveyQuestionXrefs"	=>	SurveyQuestionXref,
+				"Responses"				=>	'SurveyResponse',
+				"Questions"				=>	'SurveyQuestion',
+				"SurveyQuestionXrefs"	=>	'SurveyQuestionXref',
 				"User"					=>	"",
 				"Author"				=>	"",
 				);
@@ -112,18 +112,18 @@ class Survey extends AbstractQuestionnaire
 
 	function SurveyQuestionXrefs($constraint = "ORDER BY sort_order")
 	{
-		return $this->getRelatedList(SurveyQuestionXref, "survey_id", $constraint);
+		return $this->getRelatedList('SurveyQuestionXref', "survey_id", $constraint);
 	}
 
 	function Questions($constraint = "ORDER BY sort_order")
 	{
 		if($this->survey_id)
-			return $this->crossReference(SurveyQuestion, SurveyQuestionXref, $constraint);
+			return $this->crossReference('SurveyQuestion', 'SurveyQuestionXref', $constraint);
 	}
 
 	function Responses($constraint = "")
 	{
-		return $this->getRelatedList(SurveyResponse);
+		return $this->getRelatedList('SurveyResponse');
 	}
 
 	/* for results aggregation */

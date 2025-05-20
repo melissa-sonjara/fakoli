@@ -44,17 +44,17 @@ class AdminPage extends DataItem
 	var $table = "admin_page";
 	
 	// Fields
-	var $fields = array("admin_page_id"	=>	Number,
-						"identifier"	=>	String,
-						"server_path"	=>	String,
-						"component_id"	=>	Number);
+	var $fields = array("admin_page_id"	=>	'Number',
+						"identifier"	=>	'String',
+						"server_path"	=>	'String',
+						"component_id"	=>	'Number');
 	
 	// Relations
-	var $relations = array("Component"	=>	Component);
+	var $relations = array("Component"	=>	'Component');
 	
 	function Component()
 	{
-		return $this->getRelated(Component);
+		return $this->getRelated('Component');
 	}
 	
 	static function fromIdentifier($identifier)

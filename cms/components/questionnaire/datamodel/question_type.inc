@@ -42,13 +42,13 @@
 class QuestionType extends DataItem
 {
 	var $fields = array(
-			"question_type_id"	=>	Number,
-			"name"	=>	String,
-			"class_name"		=>	String,
-			"sort_order"		=>	Number,
-			"options"			=>	Boolean,
-			"char_limit"		=>	Number,
-			"num_rows"			=>	Number
+			"question_type_id"	=>	'Number',
+			"name"	=>	'String',
+			"class_name"		=>	'String',
+			"sort_order"		=>	'Number',
+			"options"			=>	'Boolean',
+			"char_limit"		=>	'Number',
+			"num_rows"			=>	'Number'
 	);
 	
 	static function getQuestionTypeList()

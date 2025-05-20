@@ -50,13 +50,13 @@
 class SiteMap extends DataItem
 {
 	var $fields = array(
-					"site_map_id"			=>	Number,
-					"url"					=>	String,
-					"page_title"			=>	String,
-					"sort_order"			=>	String,
-					"role"					=>	String,
-					"parent_url"			=>	String,
-					"published"				=>	Boolean
+					"site_map_id"			=>	'Number',
+					"url"					=>	'String',
+					"page_title"			=>	'String',
+					"sort_order"			=>	'String',
+					"role"					=>	'String',
+					"parent_url"			=>	'String',
+					"published"				=>	'Boolean'
 	);
 	
 	function Parent()

@@ -41,11 +41,11 @@ class Bookmark extends DataItem
 	var $table = "bookmark";
 	var $primary_key = "bookmark_id";
 	
-	var $fields = array("bookmark_id"	=>	Number,
-						"category"		=>	String,
-						"title"			=>	String,
-						"url"			=>	String,
-						"user_id"		=>	Number);
+	var $fields = array("bookmark_id"	=>	'Number',
+						"category"		=>	'String',
+						"title"			=>	'String',
+						"url"			=>	'String',
+						"user_id"		=>	'Number');
 	
 	static function findBookmark($page = "")
 	{

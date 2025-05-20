@@ -41,13 +41,13 @@ Fakoli::using("questionnaire");
 class SurveyResponse extends AbstractQuestionnaireResponse
 {
 	var $fields = array (
-				"response_id"			=>	Number,
-				"survey_id"				=>	Number,
-				"token"					=>	String,
-				"email"					=>	String,
-				"last_modified"			=>	Date,
-				"status"				=>	String,
-				"include_in_results"	=>	Boolean,
+				"response_id"			=>	'Number',
+				"survey_id"				=>	'Number',
+				"token"					=>	'String',
+				"email"					=>	'String',
+				"last_modified"			=>	'Date',
+				"status"				=>	'String',
+				"include_in_results"	=>	'Boolean',
 	);
 	
 	var $fieldAliases = array(
@@ -55,9 +55,9 @@ class SurveyResponse extends AbstractQuestionnaireResponse
 	);
 
 	var $relations = array (
-				"Questions"				=>	Questions,
-				"Answers"				=>	SurveyAnswer,
-				"Survey"				=>	Survey,
+				"Questions"				=>	'Questions',
+				"Answers"				=>	'SurveyAnswer',
+				"Survey"				=>	'Survey',
 	);
 
 	var $statusTypes = array(
@@ -78,7 +78,7 @@ class SurveyResponse extends AbstractQuestionnaireResponse
 
 	function Survey()
 	{
-		return $this->getRelated(Survey);
+		return $this->getRelated('Survey');
 	}
 
 	function Answers($constraint = "")

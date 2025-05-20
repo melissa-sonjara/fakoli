@@ -9,29 +9,29 @@ Fakoli::using("settings");
 class EventInvitation extends DataItem
 {
 	var $fields = array(
-		"event_invitation_id"	=>	Number,
-		"event_id"				=>	Number,
-		"sender_email"			=>	String,
-		"sender_name"			=>	String,
-		"subject"				=>	String,
-		"message"				=>	HTML,
-		"sequence_id"			=>	Number,
+		"event_invitation_id"	=>	'Number',
+		"event_id"				=>	'Number',
+		"sender_email"			=>	'String',
+		"sender_name"			=>	'String',
+		"subject"				=>	'String',
+		"message"				=>	'HTML',
+		"sequence_id"			=>	'Number',
 	);
 	
 	var $relations = array(
-			"Event"				=>	Event,
-			"Recipients"		=>	EventRecipient,
+			"Event"				=>	'Event',
+			"Recipients"		=>	'EventRecipient',
 			);
 	
 	
 	function Event()
 	{
-		return $this->getRelated(Event);
+		return $this->getRelated('Event');
 	}
 	
 	function Recipients($constraint = "")
 	{
-		return $this->getRelatedList(EventRecipient, "", $constraint);
+		return $this->getRelatedList('EventRecipient', "", $constraint);
 	}
 	
 	static function create(&$event)

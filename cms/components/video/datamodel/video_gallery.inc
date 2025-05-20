@@ -40,27 +40,27 @@ class VideoGallery extends DataItem
 {
 	// Fields
 	
-	var $fields = array("video_gallery_id"	=>	Number,
-						"gallery_name"	=>	String,
-						"identifier"	=>	String,
-						"description"	=>	HTML,
-						"keywords"		=>	String,
-						"hidden"		=>	Boolean,
-						"owner_id"		=>	Number,
-						"read_access"	=>	String,
-						"write_access"	=>	String,
-						"published"		=>	Boolean,
-						"last_modified"	=>	Timestamp);
+	var $fields = array("video_gallery_id"	=>	'Number',
+						"gallery_name"	=>	'String',
+						"identifier"	=>	'String',
+						"description"	=>	'HTML',
+						"keywords"		=>	'String',
+						"hidden"		=>	'Boolean',
+						"owner_id"		=>	'Number',
+						"read_access"	=>	'String',
+						"write_access"	=>	'String',
+						"published"		=>	'Boolean',
+						"last_modified"	=>	'Timestamp');
 	
 	// Relations
 	
-	var $relations = array(	"Videos"	=>	Video,
+	var $relations = array(	"Videos"	=>	'Video',
 							"Owner"		=>	"");
 
 	
 	function Videos($constraint = "")
 	{
-		return $this->getRelatedList(Video, "", $constraint);
+		return $this->getRelatedList('Video', "", $constraint);
 	}
 	
 	function Owner()

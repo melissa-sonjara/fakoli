@@ -40,12 +40,12 @@ class ContextHelp extends DataItem
 {
 	// Fields
 	var $fields = array(
-				"help_id"		=>	Number,
-				"class_name"	=>	String,
-				"field"			=>	String,
-				"title"			=>	String,
-				"help"			=>	Text,
-				"criteria"		=>	Text
+				"help_id"		=>	'Number',
+				"class_name"	=>	'String',
+				"field"			=>	'String',
+				"title"			=>	'String',
+				"help"			=>	'Text',
+				"criteria"		=>	'Text'
 			);
 	
 	// additional

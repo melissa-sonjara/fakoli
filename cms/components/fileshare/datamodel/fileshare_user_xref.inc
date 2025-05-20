@@ -43,20 +43,20 @@ define("fileshare_all_visitors_read", 2);
 class FileshareUserXref extends DataItem
 {
 	var $fields = array(
-		"fileshare_user_xref_id"	=>	Number,
-		"document_library_id"		=>	Number,
-		"user_id"					=>	Number
+		"fileshare_user_xref_id"	=>	'Number',
+		"document_library_id"		=>	'Number',
+		"user_id"					=>	'Number'
 	);
 	
 	var $relations = array(
-		"DocumentLibrary"		=>	DocumentLibrary,
+		"DocumentLibrary"		=>	'DocumentLibrary',
 		"User"					=>	""
 	);
 	
 	
 	function DocumentLibrary()
 	{
-		return $this->getRelated(DocumentLibrary);
+		return $this->getRelated('DocumentLibrary');
 	}
 	
 	function User()

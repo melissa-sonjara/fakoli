@@ -45,18 +45,18 @@ class Component extends DataItem
 	var	$default_format = "{getPrettyName()}";
 		
 	// Fields
-	var $fields = array("component_id"		=>	Number,
-						"name"				=>	String,
-						"version"			=>	String,
-						"author"				=>	String,
-						"description"		=>	Text,
-						"priority"			=>	Number,
-						"enabled"			=>	Boolean,
-						"component_path"		=>	String,
-						"last_modified"		=>	Timestamp);
+	var $fields = array("component_id"		=>	'Number',
+						"name"				=>	'String',
+						"version"			=>	'String',
+						"author"				=>	'String',
+						"description"		=>	'Text',
+						"priority"			=>	'Number',
+						"enabled"			=>	'Boolean',
+						"component_path"		=>	'String',
+						"last_modified"		=>	'Timestamp');
 	
 	// Relations
-	var $relations = array("ComponentPages"	=>	ComponentPage);
+	var $relations = array("ComponentPages"	=>	'ComponentPage');
 	
 	function ComponentPages()
 	{

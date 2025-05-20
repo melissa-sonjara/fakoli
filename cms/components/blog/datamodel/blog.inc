@@ -40,24 +40,24 @@ Fakoli::using("search");
 class Blog extends DataItem // implements Searchable
 {
 	// Fields
-	var $fields = array("blog_id"				=>	Number,
-						"title"					=>	String,
-						"identifier"			=>	String,
-						"image_id"				=>	Number,
-						"description"			=>	HTML,
-						"owner_id"				=>	Number,
-						"read_access"			=>	String,
-						"write_access"			=>	String,					
-						"default_article_order"	=>	String,
-						"articles_per_page"		=>	Number,
-						"blog_type"				=>	String,
-						"allow_comments"		=>	Boolean,
-						"comment_moderators"	=>	String,
-						"published"				=>	Boolean,
-						"created_date"			=>	DateTime,
-					    "allow_subscriptions"	=>	Boolean,
-						"enable_rss_feed"		=>	Boolean,
-						"max_rss_articles"		=>	Number);
+	var $fields = array("blog_id"				=>	'Number',
+						"title"					=>	'String',
+						"identifier"			=>	'String',
+						"image_id"				=>	'Number',
+						"description"			=>	'HTML',
+						"owner_id"				=>	'Number',
+						"read_access"			=>	'String',
+						"write_access"			=>	'String',					
+						"default_article_order"	=>	'String',
+						"articles_per_page"		=>	'Number',
+						"blog_type"				=>	'String',
+						"allow_comments"		=>	'Boolean',
+						"comment_moderators"	=>	'String',
+						"published"				=>	'Boolean',
+						"created_date"			=>	'DateTime',
+					    "allow_subscriptions"	=>	'Boolean',
+						"enable_rss_feed"		=>	'Boolean',
+						"max_rss_articles"		=>	'Number');
 	
 	var $versioned_fields = array("title", "description", "image_id");
 	
@@ -65,9 +65,9 @@ class Blog extends DataItem // implements Searchable
 	
 	var $relations = array(
 			"Owner"			=>	"",
-			"Articles"		=>	Article,
-			"Image"			=>	ImageRecord,
-			"Subscribers"	=>	BlogSubscriber
+			"Articles"		=>	'Article',
+			"Image"			=>	'ImageRecord',
+			"Subscribers"	=>	'BlogSubscriber'
 			);
 					
 	function Owner()
@@ -83,12 +83,12 @@ class Blog extends DataItem // implements Searchable
 		
 	function Image()
 	{
-		return $this->getRelated(ImageRecord);
+		return $this->getRelated('ImageRecord');
 	}
 	
 	function Subscribers($constraint = "")
 	{
-		return $this->getRelatedList(BlogSubscriber, "", $constraint);
+		return $this->getRelatedList('BlogSubscriber', "", $constraint);
 	}
 	
 	function allowDelete()

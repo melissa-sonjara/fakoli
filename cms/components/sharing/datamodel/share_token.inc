@@ -9,15 +9,15 @@ class ShareToken extends DataItem
 	var $table = "share_token";
 	var $primary_key = "share_id";
 	
-	var $fields = array("share_id"				=>	Number,
-						"token"					=>	String,
-						"item_type"				=>	String,
-						"item_key"				=>	Number,
-						"active"				=>	Boolean,
-						"user_id"				=>	Number,
-						"created_date"			=>	DateTime,
-						"last_updated"			=>	DateTime,
-						"last_updated_by_id"	=>	Number
+	var $fields = array("share_id"				=>	'Number',
+						"token"					=>	'String',
+						"item_type"				=>	'String',
+						"item_key"				=>	'Number',
+						"active"				=>	'Boolean',
+						"user_id"				=>	'Number',
+						"created_date"			=>	'DateTime',
+						"last_updated"			=>	'DateTime',
+						"last_updated_by_id"	=>	'Number'
 	);
 	
 	var $relations = array(	"User"		=>	'SiteUser',

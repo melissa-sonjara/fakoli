@@ -55,22 +55,22 @@ $ord_by = array
  */
 class Module extends DataItem
 {
-	var $fields = array("module_id"			=> Number,
-						"title"				=> String,
-						"group_id"			=> Number,
-						"content_type"		=> String,
-						"num_items"			=> Number,
-						"query_constraint"  => String,
-						"ord_by"    		=> String,
-						"template"			=> Text,
-						"php_code_file"		=> String,
-						"menu_id"			=> Number,
-						"menu_parameters"	=> String,
-						"css_class"			=> String,
-						"global"			=> Boolean,
-						"global_position"	=> String);
+	var $fields = array("module_id"			=> 'Number',
+						"title"				=> 'String',
+						"group_id"			=> 'Number',
+						"content_type"		=> 'String',
+						"num_items"			=> 'Number',
+						"query_constraint"  => 'String',
+						"ord_by"    		=> 'String',
+						"template"			=> 'Text',
+						"php_code_file"		=> 'String',
+						"menu_id"			=> 'Number',
+						"menu_parameters"	=> 'String',
+						"css_class"			=> 'String',
+						"global"			=> 'Boolean',
+						"global_position"	=> 'String');
 						
-	var $relations = array("Menu"	=>	Menu);
+	var $relations = array("Menu"	=>	'Menu');
 	
 	function __construct()
 	{
@@ -82,7 +82,7 @@ class Module extends DataItem
 	
 	function Menu()
 	{
-		return $this->getRelated(Menu);
+		return $this->getRelated('Menu');
 	}
 	
 	function getTitle()

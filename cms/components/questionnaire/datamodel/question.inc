@@ -135,39 +135,39 @@ abstract class AbstractQuestion extends DataItem
 
 class Question extends AbstractQuestion
 {
-	var $fields = array (	"question_id"			=>	Number,
-							"questionnaire_id"		=>	Number,
-							"question_number"		=>	Number,
-							"question_type_id"		=>	Number,
-							"question"				=>	HTML,
-							"question_name"			=>	String,
-							"options"				=>	Text,
-							"required"				=>	Number,
-							"char_limit"			=>	Number,
-							"num_rows"				=>	Number,
-							"context_help"			=>	Text
+	var $fields = array (	"question_id"			=>	'Number',
+							"questionnaire_id"		=>	'Number',
+							"question_number"		=>	'Number',
+							"question_type_id"		=>	'Number',
+							"question"				=>	'HTML',
+							"question_name"			=>	'String',
+							"options"				=>	'Text',
+							"required"				=>	'Number',
+							"char_limit"			=>	'Number',
+							"num_rows"				=>	'Number',
+							"context_help"			=>	'Text'
 						);
 						
 	var $relations = array (	
-					"Questionnaire"		=>	Questionnaire,
-					"QuestionType"		=>	QuestionType,
-					"Answers"			=>	QuestionnaireAnswer,
+					"Questionnaire"		=>	'Questionnaire',
+					"QuestionType"		=>	'QuestionType',
+					"Answers"			=>	'QuestionnaireAnswer',
 	);
 	
 		
 	function Questionnaire()
 	{
-		return $this->getRelated(Questionnaire);
+		return $this->getRelated('Questionnaire');
 	}
 	
 	function QuestionType()
 	{
-		return $this->getRelated(QuestionType);
+		return $this->getRelated('QuestionType');
 	}
 	
 	function Answers($constraint = "")
 	{
-		return $this->getRelatedList(QuestionnaireAnswer, "question_id", $constraint);
+		return $this->getRelatedList('QuestionnaireAnswer', "question_id", $constraint);
 	}	
 		
 	function isEditable()

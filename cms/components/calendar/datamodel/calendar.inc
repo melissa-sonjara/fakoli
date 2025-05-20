@@ -41,27 +41,27 @@
  */
 class Calendar extends DataItem
 {
-	var $fields = array("calendar_id"	=>	Number,
-						"name"			=>	String,
-						"identifier"	=>	String,
-						"description"	=>	HTML,
-						"owner_id"		=>	Number,
-						"read_access"	=>	String,
-						"write_access"	=>	String,
-						"last_modified"	=>	Timestamp);
+	var $fields = array("calendar_id"	=>	'Number',
+						"name"			=>	'String',
+						"identifier"	=>	'String',
+						"description"	=>	'HTML',
+						"owner_id"		=>	'Number',
+						"read_access"	=>	'String',
+						"write_access"	=>	'String',
+						"last_modified"	=>	'Timestamp');
 	
-	var $relations = array("Events"	=>	Event,
+	var $relations = array("Events"	=>	'Event',
 						   "Owner"	=>	"",
-							"EventTypes" => EventType);
+							"EventTypes" => 'EventType');
 	
 	function Events($constraint = "")
 	{
-		return $this->getRelatedList(Event, "", $constraint);
+		return $this->getRelatedList('Event', "", $constraint);
 	}
 	
 	function EventTypes($constraint = "")
 	{
-		return $this->crossReference(EventType, CalendarEventTypeXref, $constraint);
+		return $this->crossReference('EventType', 'CalendarEventTypeXref', $constraint);
 	}
 	
 	function Owner()

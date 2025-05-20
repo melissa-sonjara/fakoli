@@ -45,26 +45,26 @@ OTHER DEALINGS IN THE SOFTWARE.
 class SurveyQuestionXref extends DataItem
 {
 	var $fields = array(
-				"survey_question_xref_id"	=>	Number,
-				"survey_id"					=>	Number,
-				"survey_question_id"		=>	Number,
-				"sort_order"				=>	Number
+				"survey_question_xref_id"	=>	'Number',
+				"survey_id"					=>	'Number',
+				"survey_question_id"		=>	'Number',
+				"sort_order"				=>	'Number'
 	);
 
 	var $relations = array(
-				"Survey"			=>	Survey,
-				"Question"			=>	SurveyQuestion
+				"Survey"			=>	'Survey',
+				"Question"			=>	'SurveyQuestion'
 	);
 
 	function Question()
 	{
-		return $this->getRelated(SurveyQuestion);
+		return $this->getRelated('SurveyQuestion');
 	}
 
 	function Survey()
 	{
 		if($this->survey_id)
-			return $this->getRelated(Survey);
+			return $this->getRelated('Survey');
 	}
 
 	/*

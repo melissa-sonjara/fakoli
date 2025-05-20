@@ -51,15 +51,15 @@ class Settings extends DataItem
 	var	$table = "settings";
 	
 	// Fields
-	var $fields = array("settings_id"	=>	Number,
-						"component"		=>	String,
-						"category"		=>	String,
-						"name"			=>	String,
-						"annotation"	=>	Text,
-						"options"		=>	Text,
-						"value"			=>	String,
-						"field_type"	=>	String,
-						"weight"		=>	Number
+	var $fields = array("settings_id"	=>	'Number',
+						"component"		=>	'String',
+						"category"		=>	'String',
+						"name"			=>	'String',
+						"annotation"	=>	'Text',
+						"options"		=>	'Text',
+						"value"			=>	'String',
+						"field_type"	=>	'String',
+						"weight"		=>	'Number'
 					);
 	
 	// relationships

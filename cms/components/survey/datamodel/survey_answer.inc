@@ -41,25 +41,25 @@ Fakoli::using("questionnaire");
 
 class SurveyAnswer extends AbstractQuestionnaireAnswer
 {
-	var $fields = array (	"survey_answer_id"		=>	Number,
-							"response_id"			=>	Number, 
-							"survey_question_id"	=>	Number,
-							"value"					=>	String
+	var $fields = array (	"survey_answer_id"		=>	'Number',
+							"response_id"			=>	'Number', 
+							"survey_question_id"	=>	'Number',
+							"value"					=>	'String'
 						);
 						
 	var $relations = array (
-			"Question"	=>	SurveyQuestion,
-			"Response"	=>	QuestionnaireResponse
+			"Question"	=>	'SurveyQuestion',
+			"Response"	=>	'QuestionnaireResponse'
 		);
 
 	function Question()
 	{
-		return $this->getRelated(SurveyQuestion, "survey_question_id");
+		return $this->getRelated('SurveyQuestion', "survey_question_id");
 	}
 	
 	function Response()
 	{
-		return $this->getRelated(SurveyResponse);
+		return $this->getRelated('SurveyResponse');
 	}
 	
 	function __construct()

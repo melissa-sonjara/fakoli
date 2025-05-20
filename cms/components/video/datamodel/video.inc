@@ -42,22 +42,22 @@ class Video extends DataItem
 {
 	// Fields
 
-	var $fields = array("video_id"			=>	Number,
-						"title"				=>	String,
-						"description"		=>	HTML,
-						"video_file"		=>	String,
-						"width"				=>	Number,
-						"height"			=>	Number,
-						"image_file"		=>	String,
-						"user_id"			=>	Number,
-						"last_modified"		=>	Timestamp,
-						"sort_order"		=>	Number,
-						"video_gallery_id"	=>	Number);
+	var $fields = array("video_id"			=>	'Number',
+						"title"				=>	'String',
+						"description"		=>	'HTML',
+						"video_file"		=>	'String',
+						"width"				=>	'Number',
+						"height"			=>	'Number',
+						"image_file"		=>	'String',
+						"user_id"			=>	'Number',
+						"last_modified"		=>	'Timestamp',
+						"sort_order"		=>	'Number',
+						"video_gallery_id"	=>	'Number');
 	
 	// Relationships
 	
 	var $relations = array("User"			=>	"",
-						   "VideoGallery"	=>	VideoGallery);
+						   "VideoGallery"	=>	'VideoGallery');
 	
 	function User()
 	{
@@ -67,7 +67,7 @@ class Video extends DataItem
 	
 	function VideoGallery()
 	{
-		return $this->getRelated(VideoGallery);
+		return $this->getRelated('VideoGallery');
 	}
 	
 	function getFormat()

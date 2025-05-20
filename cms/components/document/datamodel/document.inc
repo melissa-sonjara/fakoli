@@ -43,30 +43,30 @@ class Document extends DataItem implements Searchable
 {
 	// Fields
 	
-	var $fields = array("document_id"			=>	Number,
-						"title"					=>	String,
-						"file"					=>	String,
-						"url"					=>	String,
-						"publication_date"		=>	Date,
-						"keywords"				=>  String,
-						"author"				=>	String,
-						"publication"			=>	String,
-						"image_id"				=>	Image,
-						"notes"					=>	HTML,
-						"public"				=>	Boolean,
-						"last_modified"			=>	Timestamp,
-						"document_library_id"	=>	Number,
-						"owner_id"				=>	Number,
-						"allow_access"			=>	String
+	var $fields = array("document_id"			=>	'Number',
+						"title"					=>	'String',
+						"file"					=>	'String',
+						"url"					=>	'String',
+						"publication_date"		=>	'Date',
+						"keywords"				=>  'String',
+						"author"				=>	'String',
+						"publication"			=>	'String',
+						"image_id"				=>	'Image',
+						"notes"					=>	'HTML',
+						"public"				=>	'Boolean',
+						"last_modified"			=>	'Timestamp',
+						"document_library_id"	=>	'Number',
+						"owner_id"				=>	'Number',
+						"allow_access"			=>	'String'
 	);
 						
 	// Relations
 	
-	var $relations = array(	"Topics"			=>	Topic,
+	var $relations = array(	"Topics"			=>	'Topic',
 							"Owner"				=>	"",
-							"DocumentLibrary"	=>	DocumentLibrary,
-							"Comments"			=>	Comment,
-							"Image"				=>	ImageRecord
+							"DocumentLibrary"	=>	'DocumentLibrary',
+							"Comments"			=>	'Comment',
+							"Image"				=>	'ImageRecord'
 	);
 	
 	var $fieldAliases = array("image_id"	=>	"Image", 
@@ -74,17 +74,17 @@ class Document extends DataItem implements Searchable
 	
 	function Topics($constraint = "")
 	{
-		return $this->crossReference(Topic, DocumentTopicXref, $constraint);
+		return $this->crossReference('Topic', 'DocumentTopicXref', $constraint);
 	}
 
 	function Comments($constraint = "")
 	{
-		return $this->crossReference(Comment, DocumentCommentXref, $constraint);
+		return $this->crossReference('Comment', 'DocumentCommentXref', $constraint);
 	}
 
 	function Image()
 	{
-		return $this->getRelated(ImageRecord);
+		return $this->getRelated('ImageRecord');
 	}
 	
 	function Owner()
@@ -134,7 +134,7 @@ class Document extends DataItem implements Searchable
 
 	function DocumentLibrary()
 	{
-		return $this->getRelated(DocumentLibrary);
+		return $this->getRelated('DocumentLibrary');
 	}
 	
 	function __construct()
@@ -258,12 +258,12 @@ class DocumentCommentXref extends DataItem
 	var $table = "document_comment_xref";
 	var $primary_key = "document_comment_id";
 	
-	var $fields = array("document_comment_id"	=>	Number,
-						"document_id"				=>	Number,
-						"comment_id"				=>	Number);
+	var $fields = array("document_comment_id"	=>	'Number',
+						"document_id"				=>	'Number',
+						"comment_id"				=>	'Number');
 
-	var $relations = array(	"Document"	=>	Document,
-							"Comment"	=>	Comment);
+	var $relations = array(	"Document"	=>	'Document',
+							"Comment"	=>	'Comment');
 
 	function verifyEnabled($document_id)
 	{
@@ -292,12 +292,12 @@ class DocumentCommentXref extends DataItem
 
 	function Document()
 	{
-		return $this->getRelated(Document);
+		return $this->getRelated('Document');
 	}
 
 	function Comment()
 	{
-		return $this->getRelated(Comment);
+		return $this->getRelated('Comment');
 	}
 
 }

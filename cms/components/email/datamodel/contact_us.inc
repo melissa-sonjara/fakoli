@@ -43,23 +43,23 @@ class ContactUs extends DataItem
 	var $pretty_class_name = "Contact Us Message";
 	
 	var $fields = array(
-					"contact_us_id"		=>	Number,
-					"full_name"			=>	String,
-					"email"				=>	String,
-					"contact_topic_id"	=>	String,
-					"subject"			=>	String,
-					"message"			=>	Text,
-					"date_sent"			=>	Timestamp
+					"contact_us_id"		=>	'Number',
+					"full_name"			=>	'String',
+					"email"				=>	'String',
+					"contact_topic_id"	=>	'String',
+					"subject"			=>	'String',
+					"message"			=>	'Text',
+					"date_sent"			=>	'Timestamp'
 	);
 	
 	var $relations = array(
-				"ContactTopic"	=>	ContactTopic
+				"ContactTopic"	=>	'ContactTopic'
 	);
 	
 	function ContactTopic()
 	{
 		if($this->contact_topic_id)
-			return $this->getRelated(ContactTopic);
+			return $this->getRelated('ContactTopic');
 	}
 	
 }
@@ -71,14 +71,14 @@ class ContactTopic extends DataItem
 	var $table = "contact_topic";
 	
 	var $fields = array(
-					"contact_topic_id"	=>	Number,
-					"topic"				=>	String,
-					"recipients"		=>	Text,
-					"sort_order"		=>	Number
+					"contact_topic_id"	=>	'Number',
+					"topic"				=>	'String',
+					"recipients"		=>	'Text',
+					"sort_order"		=>	'Number'
 	);
 	
 	var $relations = array(
-					"Sites"		=>	Site
+					"Sites"		=>	'Site'
 	);
 	
 	static function formatList()
@@ -118,7 +118,7 @@ class ContactTopic extends DataItem
 
 	function Sites()
 	{
-		return $this->crossReference(Site, ContactTopicSiteXref);
+		return $this->crossReference('Site', 'ContactTopicSiteXref');
 	}
 }
 
@@ -128,9 +128,9 @@ class ContactTopicSiteXref extends DataItem
 	var $table = "contact_topic_site_xref";
 	
 	var $fields = array(
-			"contact_topic_site_xref_id"	=>	Number,
-			"contact_topic_id"				=>	Number,
-			"site_id"						=> 	Number
+			"contact_topic_site_xref_id"	=>	'Number',
+			"contact_topic_id"				=>	'Number',
+			"site_id"						=> 	'Number'
 	);	
 }
 

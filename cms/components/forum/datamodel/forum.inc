@@ -46,33 +46,33 @@ class Forum extends DataItem
 	
 	// Fields
 	
-	var $fields = array("forum_id"		=>	Number,
-						"identifier"	=>	String,
-						"title"			=>	String,
-						"teaser"		=>	Text,
-						"description"	=>	HTML,
-						"created_date"	=>	Date,
-						"last_modified"	=>	Timestamp,
-						"owner_id"		=>	Number,
-						"published"		=>	Boolean,
-						"sort_order"	=>	Number);
+	var $fields = array("forum_id"		=>	'Number',
+						"identifier"	=>	'String',
+						"title"			=>	'String',
+						"teaser"		=>	'Text',
+						"description"	=>	'HTML',
+						"created_date"	=>	'Date',
+						"last_modified"	=>	'Timestamp',
+						"owner_id"		=>	'Number',
+						"published"		=>	'Boolean',
+						"sort_order"	=>	'Number');
 	
 	// Relations
 	
 	var $relations = array(
-			"Sites"			=>	Site,
+			"Sites"			=>	'Site',
 			"Owner"			=>	"",
-			"Messages"		=>	ForumMessage,
-			"Topics"		=>	ForumTopic,
-			"LastPost"		=>	ForumMessage,
-			"Summary"		=>	ForumSummary,
-			"Subscriptions"	=>	ForumSubscription,
-			"UserSubscriptions"	=>	ForumSubscription,
+			"Messages"		=>	'ForumMessage',
+			"Topics"		=>	'ForumTopic',
+			"LastPost"		=>	'ForumMessage',
+			"Summary"		=>	'ForumSummary',
+			"Subscriptions"	=>	'ForumSubscription',
+			"UserSubscriptions"	=>	'ForumSubscription',
 						);
 	
 	function Sites($constraint = "")
 	{
-		return $this->crossReference(Site, ForumSiteXref, $constraint);
+		return $this->crossReference('Site', 'ForumSiteXref', $constraint);
 	}
 	
 	function Owner()
@@ -83,12 +83,12 @@ class Forum extends DataItem
 	
 	function Topics($constraint = "")
 	{
-		return $this->getRelatedList(ForumTopic, "", $constraint);
+		return $this->getRelatedList('ForumTopic', "", $constraint);
 	}
 	
 	function Messages($constraint = "")
 	{
-		return $this->getRelatedList(ForumMessage, "", $constraint);
+		return $this->getRelatedList('ForumMessage', "", $constraint);
 	}
 	
 	function LastPost()
@@ -99,12 +99,12 @@ class Forum extends DataItem
 
 	function Summary()
 	{
-		return $this->getRelated(ForumSummary);
+		return $this->getRelated('ForumSummary');
 	}
 	
 	function Subscriptions($constraint = "")
 	{
-		return $this->getRelatedList(ForumSubscription, "", $constraint);
+		return $this->getRelatedList('ForumSubscription', "", $constraint);
 	}
 	
 	/**
@@ -144,23 +144,23 @@ class ForumSiteXref extends DataItem
 	
 	// Fields
 	
-	var $fields = array("forum_site_xref_id"	=>	Number,
-						"forum_id"				=>	Number,
-						"site_id"				=>	Number);
+	var $fields = array("forum_site_xref_id"	=>	'Number',
+						"forum_id"				=>	'Number',
+						"site_id"				=>	'Number');
 	
 	// Relations
 	
-	var $relations = array(	"Forum"	=>	Forum,
-							"Site"	=>	Site);
+	var $relations = array(	"Forum"	=>	'Forum',
+							"Site"	=>	'Site');
 	
 	function Forum()
 	{
-		return $this->getRelated(Forum);
+		return $this->getRelated('Forum');
 	}
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 }
 
@@ -172,38 +172,38 @@ class ForumMessage extends DataItem
 	
 	// Fields
 
-	var $fields = array("message_id"		=>	Number,
-						"title"				=>	String,
-						"message"			=>	HTML,
-						"parent_id"			=>	Number,
-						"topic_id"			=>	Number,
-						"author_id"			=>	Number,
-						"date_posted"		=>	Date,
-						"last_modified"		=>	Timestamp,
-						"forum_id"			=>	Number,
-						"deleted"			=>	Boolean);
+	var $fields = array("message_id"		=>	'Number',
+						"title"				=>	'String',
+						"message"			=>	'HTML',
+						"parent_id"			=>	'Number',
+						"topic_id"			=>	'Number',
+						"author_id"			=>	'Number',
+						"date_posted"		=>	'Date',
+						"last_modified"		=>	'Timestamp',
+						"forum_id"			=>	'Number',
+						"deleted"			=>	'Boolean');
 	
 	// Relations
 	
-	var $relations = array(	"Forum"			=>	Forum,
-							"Parent"		=>	ForumMessage,
-							"Topic"			=>	ForumTopic,
+	var $relations = array(	"Forum"			=>	'Forum',
+							"Parent"		=>	'ForumMessage',
+							"Topic"			=>	'ForumTopic',
 							"Author"		=>	"",
-							"Attachments"	=>	Attachment);
+							"Attachments"	=>	'Attachment');
 	
 	function Forum()
 	{
-		return $this->getRelated(Forum);
+		return $this->getRelated('Forum');
 	}
 	
 	function Parent()
 	{
-		return $this->getRelated(ForumMessage, "parent_id");
+		return $this->getRelated('ForumMessage', "parent_id");
 	}
 	
 	function Topic()
 	{
-		return $this->getRelated(ForumTopic);
+		return $this->getRelated('ForumTopic');
 	}
 	
 	function Author()
@@ -214,7 +214,7 @@ class ForumMessage extends DataItem
 	
 	function Attachments($constraint = "")
 	{
-		return $this->crossReference(Attachment, ForumMessageAttachmentXref, $constraint);
+		return $this->crossReference('Attachment', 'ForumMessageAttachmentXref', $constraint);
 	}
 }
 
@@ -225,22 +225,22 @@ class ForumMessageAttachmentXref extends DataItem
 	var	$table = "forum_message_attachment_xref";
 	
 	// Fields
-	var $fields = array("forum_message_attachment_xref_id"	=>	Number,
-						"message_id"						=>	Number,
-						"attachment_id"						=>	Number);
+	var $fields = array("forum_message_attachment_xref_id"	=>	'Number',
+						"message_id"						=>	'Number',
+						"attachment_id"						=>	'Number');
 	
 	// Relations
-	var $relations = array(	"Message"		=>	ForumMessage,
-							"Attachment"	=>	Attachment);
+	var $relations = array(	"Message"		=>	'ForumMessage',
+							"Attachment"	=>	'Attachment');
 	
 	function Message()
 	{
-		return $this->getRelated(ForumMessage);
+		return $this->getRelated('ForumMessage');
 	}
 	
 	function Attachment()
 	{
-		return $this->getRelated(Attachment);
+		return $this->getRelated('Attachment');
 	}
 }
 
@@ -251,22 +251,22 @@ class ForumTopic extends DataItem
 	var	$table = "forum_topic";
 	
 	// Fields
-	var $fields = array("topic_id"		=>	Number,
-						"message_id"	=>	Number,
-						"forum_id"		=>	Number,
-						"views"			=>	Number,
-						"replies"		=>	Number,
-						"date_created"	=>	Date);
+	var $fields = array("topic_id"		=>	'Number',
+						"message_id"	=>	'Number',
+						"forum_id"		=>	'Number',
+						"views"			=>	'Number',
+						"replies"		=>	'Number',
+						"date_created"	=>	'Date');
 
 	// Relations
-	var $relations = array(	"FirstPost"	=>	ForumMessage,
-							"Forum"		=>	Forum,
-							"LastPost"	=>	ForumMessage,
-							"Messages"	=>	ForumMessage);
+	var $relations = array(	"FirstPost"	=>	'ForumMessage',
+							"Forum"		=>	'Forum',
+							"LastPost"	=>	'ForumMessage',
+							"Messages"	=>	'ForumMessage');
 	
 	function FirstPost()
 	{
-		return $this->getRelated(ForumMessage);
+		return $this->getRelated('ForumMessage');
 	}
 	 
 	function LastPost()
@@ -277,7 +277,7 @@ class ForumTopic extends DataItem
 	
 	function Forum()
 	{
-		return $this->getRelated(Forum);
+		return $this->getRelated('Forum');
 	}
 	
 	function getTitle()
@@ -287,7 +287,7 @@ class ForumTopic extends DataItem
 	
 	function Messages($constraint = "")
 	{
-		return $this->getRelatedList(ForumMessage, "", $constraint);
+		return $this->getRelatedList('ForumMessage', "", $constraint);
 	}
 	
 	/**
@@ -310,26 +310,26 @@ class ForumSummary extends DataItem
 	var	$table = "forum_summary";
 		
 	// Fields
-	var $fields = array("forum_id"		=>	Number,
-						"title"			=>	String,
-						"teaser"		=>	String,
-						"topics"		=>	Number,
-						"posts"			=>	Number,
-						"published"		=>	Boolean,
-						"sort_order"	=>	Number);
+	var $fields = array("forum_id"		=>	'Number',
+						"title"			=>	'String',
+						"teaser"		=>	'String',
+						"topics"		=>	'Number',
+						"posts"			=>	'Number',
+						"published"		=>	'Boolean',
+						"sort_order"	=>	'Number');
 	
 	// Relations
-	var $relations = array("Forum"		=>	Forum,
-						   "LastPost"	=>	ForumMessage);
+	var $relations = array("Forum"		=>	'Forum',
+						   "LastPost"	=>	'ForumMessage');
 
 	function Forum()
 	{
-		return $this->getRelated(Forum);
+		return $this->getRelated('Forum');
 	}
 	
 	function LastPost()
 	{
-		$messages = $this->getRelatedList(ForumMessage, "", "WHERE deleted!=1 ORDER BY date_posted DESC LIMIT 1");
+		$messages = $this->getRelatedList('ForumMessage', "", "WHERE deleted!=1 ORDER BY date_posted DESC LIMIT 1");
 		return (count($messages) > 0) ? $messages[0] : null;
 	}
 }

@@ -14,8 +14,8 @@
 class SectionImportFile extends DataItem
 {
 	// Fields
-	var $fields = array("import_file_id"	=>	Number,
-						"import_file"	=>	String);
+	var $fields = array("import_file_id"	=>	'Number',
+						"import_file"	=>	'String');
 	
 	function __construct()
 	{

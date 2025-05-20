@@ -43,18 +43,18 @@ class SiteUser extends DataItem
 {
 	// Fields
 	
-	var $fields = array("user_id"			=>	Number,
-						"first_name"		=>	String,
-						"last_name"			=>	String,
-						"role"				=>	String,
-						"title"				=>	String,
-						"username"			=>	String,
-						"password"			=>	Password,
-						"email"				=>	String,
-						"active"			=>	Boolean,
-						"notes"				=>	Text,
-						"language"			=>	String,
-						"composite_class"	=>	String);
+	var $fields = array("user_id"			=>	'Number',
+						"first_name"		=>	'String',
+						"last_name"			=>	'String',
+						"role"				=>	'String',
+						"title"				=>	'String',
+						"username"			=>	'String',
+						"password"			=>	'Password',
+						"email"				=>	'String',
+						"active"			=>	'Boolean',
+						"notes"				=>	'Text',
+						"language"			=>	'String',
+						"composite_class"	=>	'String');
 						
 	// Relations
 

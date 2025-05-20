@@ -51,25 +51,25 @@ abstract class AbstractQuestionnaireAnswer extends DataItem
 
 class QuestionnaireAnswer extends AbstractQuestionnaireAnswer
 {
-	var $fields = array (	"answer_id"				=>	Number,
-							"response_id"			=>	Number,
-							"question_id"			=>	Number,
-							"value"					=>	String,
+	var $fields = array (	"answer_id"				=>	'Number',
+							"response_id"			=>	'Number',
+							"question_id"			=>	'Number',
+							"value"					=>	'String',
 					);
 						
 						
-	var $relations = array ("Question"	=>	Question,
-							"Response"	=>	QuestionnaireResponse,
+	var $relations = array ("Question"	=>	'Question',
+							"Response"	=>	'QuestionnaireResponse',
 							);
 
 	function Question()
 	{
-		return $this->getRelated(Question, "question_id");
+		return $this->getRelated('Question', "question_id");
 	}
 	
 	function Response()
 	{
-		return $this->getRelated(QuestionnaireResponse);
+		return $this->getRelated('QuestionnaireResponse');
 	}
 	
 	function __construct()

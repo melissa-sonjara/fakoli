@@ -42,17 +42,17 @@ class TaxonomyTerm extends DataItem
 	var $primary_key = "term_id";
 	var $cacheLocal = true;
 	
-	var $fields = array("term_id"		=>	Number,
-						"taxonomy_id"	=>	Number,
-						"term"			=>	String,
-						"definition"	=>	HTML,
-						"sort_order"	=>	Number);
+	var $fields = array("term_id"		=>	'Number',
+						"taxonomy_id"	=>	'Number',
+						"term"			=>	'String',
+						"definition"	=>	'HTML',
+						"sort_order"	=>	'Number');
 	
-	var $relations = array("Taxonomy"	=>	Taxonomy);
+	var $relations = array("Taxonomy"	=>	'Taxonomy');
 	
 	function Taxonomy()
 	{
-		return $this->getRelated(Taxonomy);
+		return $this->getRelated('Taxonomy');
 	}
 	
 	function getAssociatedItems($class, $constraint = "")

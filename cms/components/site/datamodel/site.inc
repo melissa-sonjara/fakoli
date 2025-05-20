@@ -41,58 +41,58 @@ class Site extends DataItem
 	private static $currentSite = null;
 	
 	// Fields
-	var $fields = array("site_id"				=> Number,
-						"site_name"				=> String,
-						"domain"				=> String,
-						"home_page"				=> String,
-						"description"			=> Text,
-						"meta_tag_description"	=> Text,
-						"meta_tag_keyword"		=> String,				
-						"theme"					=> String,
-						"default_template"		=> String,
-						"print_template"		=> String,
-						"popup_template"		=> String,
-						"mobile_template"		=> String,
-						"enabled"				=> Boolean,
-						"default_site"			=> Boolean);
+	var $fields = array("site_id"				=> 'Number',
+						"site_name"				=> 'String',
+						"domain"				=> 'String',
+						"home_page"				=> 'String',
+						"description"			=> 'Text',
+						"meta_tag_description"	=> 'Text',
+						"meta_tag_keyword"		=> 'String',				
+						"theme"					=> 'String',
+						"default_template"		=> 'String',
+						"print_template"		=> 'String',
+						"popup_template"		=> 'String',
+						"mobile_template"		=> 'String',
+						"enabled"				=> 'Boolean',
+						"default_site"			=> 'Boolean');
 	
 // Relations
 	
-	var $relations = array(	"Pages"				=>	Page,
-							"Articles"			=>	Article,
-							"Events"			=>	Event,
-							"Fora"				=>	Forum,
-							"ForumSummaries"	=>	ForumSummary,
-							"Sections"			=>	Section);
+	var $relations = array(	"Pages"				=>	'Page',
+							"Articles"			=>	'Article',
+							"Events"			=>	'Event',
+							"Fora"				=>	'Forum',
+							"ForumSummaries"	=>	'ForumSummary',
+							"Sections"			=>	'Section');
 	
 	function Pages($constraint = "")
 	{
-		return $this->getRelatedList(Page, "", $constraint);
+		return $this->getRelatedList('Page', "", $constraint);
 	}
 	
 	function Articles($constraint = "")
 	{
-		return $this->crossReference(Article, ArticleSiteXref, $constraint);
+		return $this->crossReference('Article', 'ArticleSiteXref', $constraint);
 	}
 	
 	function Events($constraint = "")
 	{
-		return $this->crossReference(Event, EventSiteXref, $constraint);
+		return $this->crossReference('Event', 'EventSiteXref', $constraint);
 	}
 	
 	function Fora($constraint = "")
 	{
-		return $this->crossReference(Forum, ForumSiteXref, $constraint);
+		return $this->crossReference('Forum', 'ForumSiteXref', $constraint);
 	}
 	
 	function ForumSummaries($constraint = "")
 	{
-		return $this->crossReference(ForumSummary, ForumSiteXref, $constraint);
+		return $this->crossReference('ForumSummary', 'ForumSiteXref', $constraint);
 	}
 	
 	function Sections($constraint = "")
 	{
-		return $this->getRelatedList(Section, "", $constraint);
+		return $this->getRelatedList('Section', "", $constraint);
 	}
 	
 	/**

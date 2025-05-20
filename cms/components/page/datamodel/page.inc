@@ -42,44 +42,44 @@ Fakoli::using("site", "search");
 class Page extends DataItem implements Searchable
 {
 	// Fields
-	var $fields = array("page_id" 				=>	Number,
-						"identifier"			=>	String,
-						"page_title"			=>	String,
-						"description"	 		=>	HTML,
-						"site_id"				=>  Number,
-						"template"				=>	String,
-						"meta_tag_description"	=>	Text,
-						"meta_tag_keyword"		=>	String,
-						"php_code_file"			=>	String,
-						"role"  				=> 	String,
-						"published"				=> 	Boolean,
-						"exclude_from_search"	=>	Boolean,
-						"created_date" 			=>	Date,
-						"edited_date"			=>	Timestamp,
-						"author" 				=>  String
+	var $fields = array("page_id" 				=>	'Number',
+						"identifier"			=>	'String',
+						"page_title"			=>	'String',
+						"description"	 		=>	'HTML',
+						"site_id"				=>  'Number',
+						"template"				=>	'String',
+						"meta_tag_description"	=>	'Text',
+						"meta_tag_keyword"		=>	'String',
+						"php_code_file"			=>	'String',
+						"role"  				=> 	'String',
+						"published"				=> 	'Boolean',
+						"exclude_from_search"	=>	'Boolean',
+						"created_date" 			=>	'Date',
+						"edited_date"			=>	'Timestamp',
+						"author" 				=>  'String'
 	);
 	
 	// Relations
 	
-	var $relations = array("PageModuleXrefs"	=>	PageModuleXref,
-						   "Modules"			=>	Module,
-						   "Site"				=>	Site);
+	var $relations = array("PageModuleXrefs"	=>	'PageModuleXref',
+						   "Modules"			=>	'Module',
+						   "Site"				=>	'Site');
 	
 	var $versioned_fields = array("page_title", "description", "meta_tag_description", "meta_tag_keyword", "author");
 	
 	function PageModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->getRelatedList(PageModuleXref, "", $constraint);
+		return $this->getRelatedList('PageModuleXref', "", $constraint);
 	}
 	
 	function Modules($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->crossReference(Module, PageModuleXref, $constraint);
+		return $this->crossReference('Module', 'PageModuleXref', $constraint);
 	}
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 	
 	static function findByIdentifier($identifier)
@@ -215,18 +215,7 @@ class Page extends DataItem implements Searchable
 		return "";
 	}
 		
-	/*var $relations = array(	"Region"	=> 	Region,
-							"Users"		=>	SiteUser);
-	
-	function Region()
-	{
-		return $this->getRelated(Clinic);
-	}
 
-	function Users()
-	{
-		return $this->getRelatedList(SiteUser);
-	}*/
 	
 	// Constructor
 	function __construct()
@@ -329,25 +318,25 @@ class PageSearchResult extends AbstractSearchResult
 class PageModuleXref extends DataItem
 {
 	// Fields
-	var $fields = array("join_id"		=>	Number,
-						"page_id"		=>	Number,
-						"module_id"		=>	Number,
-						"position"		=>	String,
-						"sort_order"	=>	Number);
+	var $fields = array("join_id"		=>	'Number',
+						"page_id"		=>	'Number',
+						"module_id"		=>	'Number',
+						"position"		=>	'String',
+						"sort_order"	=>	'Number');
 	
 	// Relations
 	
-	var $relations = array(	"Page"		=>	Page,
-							"Module"	=>	Module);
+	var $relations = array(	"Page"		=>	'Page',
+							"Module"	=>	'Module');
 	
 	function Page()
 	{
-		return $this->getRelated(Page);
+		return $this->getRelated('Page');
 	}
 	
 	function Module()
 	{
-		return $this->getRelated(Module);
+		return $this->getRelated('Module');
 	}
 	
 	function __construct()

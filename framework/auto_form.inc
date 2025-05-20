@@ -132,26 +132,26 @@ class AutoForm
     // When adding new renderers, must also update
     // DataItem $dataTypeRendererMap
     static $fieldRendererMap = array (
-    	'String'		 	=>	StringFieldRenderer,
-    	'HTML'				=>	HTMLFieldRenderer,
-		'Date'				=>	DateFieldRenderer,
-    	'DateTime'			=>	DateTimeFieldRenderer,
-    	'Number'			=>	NumberFieldRenderer,
-    	'Currency'			=>	CurrencyFieldRenderer,
-    	'Currency3'			=>	Currency3FieldRenderer,
-		'Boolean'			=>	BooleanFieldRenderer,
-		'TimeZone'			=>	TimezoneFieldRenderer,
-		'Password'			=>	PasswordFieldRenderer,
-		'Text'				=>	TextFieldRenderer,
-		'Time'				=>	TimeFieldRenderer,
-		'Rating'			=>	RatingFieldRenderer,
-		'ZipCode'			=>	ZipCodeFieldRenderer,
-		'PhoneNumber'		=>	PhoneNumberFieldRenderer,
-    	'URL'				=>	URLFieldRenderer,
-    	'DateOfBirth'		=>	DateOfBirthFieldRenderer,
-    	'CreditCardNumber'	=> CreditCardNumberFieldRenderer,
-    	'Signature'		 	=>	SignatureFieldRenderer,
-    	'Color'				=>	ColorFieldRenderer
+    	'String'		 	=>	'StringFieldRenderer',
+    	'HTML'				=>	'HTMLFieldRenderer',
+		'Date'				=>	'DateFieldRenderer',
+    	'DateTime'			=>	'DateTimeFieldRenderer',
+    	'Number'			=>	'NumberFieldRenderer',
+    	'Currency'			=>	'CurrencyFieldRenderer',
+    	'Currency3'			=>	'Currency3FieldRenderer',
+		'Boolean'			=>	'BooleanFieldRenderer',
+		'TimeZone'			=>	'TimezoneFieldRenderer',
+		'Password'			=>	'PasswordFieldRenderer',
+		'Text'				=>	'TextFieldRenderer',
+		'Time'				=>	'TimeFieldRenderer',
+		'Rating'			=>	'RatingFieldRenderer',
+		'ZipCode'			=>	'ZipCodeFieldRenderer',
+		'PhoneNumber'		=>	'PhoneNumberFieldRenderer',
+    	'URL'				=>	'URLFieldRenderer',
+    	'DateOfBirth'		=>	'DateOfBirthFieldRenderer',
+    	'CreditCardNumber'	=> 'CreditCardNumberFieldRenderer',
+    	'Signature'		 	=>	'SignatureFieldRenderer',
+    	'Color'				=>	'ColorFieldRenderer'
 	);	///< Provides the mapping from Type identifier to FieldRenderer
 	
 	/**

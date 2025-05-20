@@ -40,24 +40,24 @@
 class CalendarEventTypeXref extends DataItem
 {
 	var $fields = array(
-			"calendar_event_type_xref_id"		=>	Number,
-			"calendar_id"				=>	Number,
-			"event_type_id"		=>	Number
+			"calendar_event_type_xref_id"		=>	'Number',
+			"calendar_id"				=>	'Number',
+			"event_type_id"		=>	'Number'
 	);
 	
 	var $relations  = array(
-			"Calendar"		=>	Calendar,
-			"EventType"	=>	EventType
+			"Calendar"		=>	'Calendar',
+			"EventType"	=>	'EventType'
 	);
 	
 	function Calendar()
 	{
-		return $this->getRelated(Calendar);
+		return $this->getRelated('Calendar');
 	}
 	
 	function EventType()
 	{
-		return $this->getRelated(EventType);
+		return $this->getRelated('EventType');
 	}
 	
 	function __construct()

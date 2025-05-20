@@ -10,16 +10,16 @@ class ContentVersion extends DataItem
 	var $table = "content_version";
 	var $primary_key = "content_version_id";
 	
-	var $fields = array("content_version_id"	=>	Number,
-						"content_class"			=>	String,
-						"content_id"			=>	Number,
-						"version_number"		=>	Number,
-						"content"				=>	Text,
-						"last_modified"			=>	DateTime,
-						"last_modified_by"		=>	Number,
-						"approved"				=>	Boolean,
-						"approved_date"			=>	DateTime,
-						"approved_by"			=>	Number);
+	var $fields = array("content_version_id"	=>	'Number',
+						"content_class"			=>	'String',
+						"content_id"			=>	'Number',
+						"version_number"		=>	'Number',
+						"content"				=>	'Text',
+						"last_modified"			=>	'DateTime',
+						"last_modified_by"		=>	'Number',
+						"approved"				=>	'Boolean',
+						"approved_date"			=>	'DateTime',
+						"approved_by"			=>	'Number');
 
 	/**
 	 * Saves a draft version of the target object to the content version table

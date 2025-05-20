@@ -9,17 +9,17 @@ class ErrorLog extends DataItem
 {
 	// Fields
 	
-	var $fields = array("error_log_id"	=>	Number,
-						"code"			=>	Number,
-						"message"		=>	HTML,
-						"file"			=>	String,
-						"line"			=>	Number,
-						"details"		=>	HTML,
-						"user_id"		=>	Number,
-						"uri"			=>	String,
-						"referer"		=>	String,
-						"session"		=>	String,
-						"timestamp"		=>	Timestamp);
+	var $fields = array("error_log_id"	=>	'Number',
+						"code"			=>	'Number',
+						"message"		=>	'HTML',
+						"file"			=>	'String',
+						"line"			=>	'Number',
+						"details"		=>	'HTML',
+						"user_id"		=>	'Number',
+						"uri"			=>	'String',
+						"referer"		=>	'String',
+						"session"		=>	'String',
+						"timestamp"		=>	'Timestamp');
 	
 	var $relations = array("User"	=>	 "");
 	

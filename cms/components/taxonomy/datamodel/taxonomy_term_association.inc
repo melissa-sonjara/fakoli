@@ -41,17 +41,17 @@ class TaxonomyTermAssociation extends DataItem
 	var $table = "taxonomy_term_association";
 	var $primary_key = "term_association_id";
 	
-	var $fields = array("term_association_id"	=>	Number,
-						"taxonomy_id"			=>	Number,
-						"term_id"				=>	Number,
-						"class"					=>	String,
-						"id"					=>	Number);
+	var $fields = array("term_association_id"	=>	'Number',
+						"taxonomy_id"			=>	'Number',
+						"term_id"				=>	'Number',
+						"class"					=>	'String',
+						"id"					=>	'Number');
 	
-	var $relations = array("Term"	=>	TaxonomyTerm);
+	var $relations = array("Term"	=>	'TaxonomyTerm');
 	
 	function Term()
 	{
-		return $this->getRelated(TaxonomyTerm);
+		return $this->getRelated('TaxonomyTerm');
 	}
 	
 	function getAssociatedItem()
@@ -67,12 +67,12 @@ class TaxonomyTermAssociationSummary extends DataItem
 	var $table = "taxonomy_term_association_summary";
 	
 	var $fields = array(
-			"taxonomy_id"			=>	Number,
-			"term_ids"				=>	String,
-			"class"					=>	String,
-			"id"					=>	Number);
+			"taxonomy_id"			=>	'Number',
+			"term_ids"				=>	'String',
+			"class"					=>	'String',
+			"id"					=>	'Number');
 	
-	var $relations = array("Terms"	=>	TaxonomyTerm);
+	var $relations = array("Terms"	=>	'TaxonomyTerm');
 
 			
 	function Terms()

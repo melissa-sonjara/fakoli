@@ -41,22 +41,22 @@ Fakoli::using("questionnaire");
 
 class SurveyQuestion extends AbstractQuestion
 {
-	var $fields = array (	"survey_question_id"	=>	Number,
-							"question_type_id"		=>	Number,
-							"question"				=>	HTML,
-							"question_name"			=>	String,
-							"options"				=>	Text,
-							"required"				=>	Number,
-							"char_limit"			=>	Number,
-							"num_rows"				=>	Number,
-							"context_help"			=>	Text
+	var $fields = array (	"survey_question_id"	=>	'Number',
+							"question_type_id"		=>	'Number',
+							"question"				=>	'HTML',
+							"question_name"			=>	'String',
+							"options"				=>	'Text',
+							"required"				=>	'Number',
+							"char_limit"			=>	'Number',
+							"num_rows"				=>	'Number',
+							"context_help"			=>	'Text'
 	);
 
 	var $relations = array (
-					"Answer"				=>	Answer,
-					"Survey"				=>	Survey,
-					"SurveyQuestionXref"	=>	SurveyQuestionXref,
-					"QuestionType"			=>	QuestionType
+					"Answer"				=>	'Answer',
+					"Survey"				=>	'Survey',
+					"SurveyQuestionXref"	=>	'SurveyQuestionXref',
+					"QuestionType"			=>	'QuestionType'
 	);
 
 	// Answer to one object's survey question
@@ -71,12 +71,12 @@ class SurveyQuestion extends AbstractQuestion
 
 	function Survey()
 	{
-		return $this->crossReference(Survey, SurveyQuestionXref);
+		return $this->crossReference('Survey', 'SurveyQuestionXref');
 	}
 
 	function QuestionType()
 	{
-		return $this->getRelated(QuestionType);
+		return $this->getRelated('QuestionType');
 	}
 		
 	function SurveyQuestionXref($survey_id)

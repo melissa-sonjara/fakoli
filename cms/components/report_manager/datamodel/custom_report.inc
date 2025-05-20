@@ -43,14 +43,14 @@ class CustomReport extends DataItem
 	
 	// Fields
 	
-	var $fields = array("report_id"		=>	Number,
-						"manager_class"	=>	String,
-						"title"			=>	String,
-						"description"	=>	Text,
-						"configuration"	=>	Text,
-						"column_order"	=>	String,
-						"user_id"		=>	Number,
-						"shared"		=>	Boolean);
+	var $fields = array("report_id"		=>	'Number',
+						"manager_class"	=>	'String',
+						"title"			=>	'String',
+						"description"	=>	'Text',
+						"configuration"	=>	'Text',
+						"column_order"	=>	'String',
+						"user_id"		=>	'Number',
+						"shared"		=>	'Boolean');
 	
 	var $relations = array(
 			"User"		=>	"",

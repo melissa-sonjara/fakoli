@@ -48,43 +48,43 @@ class Section extends DataItem
 	
 	// Fields
 	
-	var $fields = array("section_id"			=>	Number,
-						"section"				=>	String,
-						"section_title"			=>	String,
-						"default_template"		=>	String,
-						"default_role"			=>	String,
-						"default_permissions"	=>	String,
-						"default_page"			=>	String,
-						"default_body_class"	=>	String,
-						"site_id"				=>	Number,
-						"use_SSL"				=>	Boolean,
-						"section_type"			=>	String
+	var $fields = array("section_id"			=>	'Number',
+						"section"				=>	'String',
+						"section_title"			=>	'String',
+						"default_template"		=>	'String',
+						"default_role"			=>	'String',
+						"default_permissions"	=>	'String',
+						"default_page"			=>	'String',
+						"default_body_class"	=>	'String',
+						"site_id"				=>	'Number',
+						"use_SSL"				=>	'Boolean',
+						"section_type"			=>	'String'
 	);
 	
-	var $relations = array("SectionModuleXrefs"	=>	SectionModuleXref,
-						   "Modules"			=>	Module,
-						   "Content"			=>	SectionContent,
-						   "Site"				=>	Site
+	var $relations = array("SectionModuleXrefs"	=>	'SectionModuleXref',
+						   "Modules"			=>	'Module',
+						   "Content"			=>	'SectionContent',
+						   "Site"				=>	'Site'
 							);
 	
 	function SectionModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->getRelatedList(SectionModuleXref, "", $constraint);
+		return $this->getRelatedList('SectionModuleXref', "", $constraint);
 	}
 	
 	function Modules($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->crossReference(Module, SectionModuleXref, $constraint);
+		return $this->crossReference('Module', 'SectionModuleXref', $constraint);
 	}
 	
 	function Content($constraint = "")
 	{
-		return $this->getRelatedList(SectionContent, "", $constraint);
+		return $this->getRelatedList('SectionContent', "", $constraint);
 	}
 		
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 	
 	function getContentManager()
@@ -254,30 +254,30 @@ class SectionContent extends DataItem
 	
 	// Fields
 	
-	var $fields = array("section_content_id"	=>	Number,
-						"section_id"			=>	String,
-						"identifier"			=>	String,
-						"role"					=>	String,
-						"permissions"			=>	String,
-						"template"				=>	String,
-						"body_class"			=>	String,
-						"override_page_title"	=>  String,
-						"use_SSL"				=>	Boolean);
+	var $fields = array("section_content_id"	=>	'Number',
+						"section_id"			=>	'String',
+						"identifier"			=>	'String',
+						"role"					=>	'String',
+						"permissions"			=>	'String',
+						"template"				=>	'String',
+						"body_class"			=>	'String',
+						"override_page_title"	=>  'String',
+						"use_SSL"				=>	'Boolean');
 	
 	var $relations = array(
-						"Section"					=>	Section,
-						"SectionContentModuleXrefs"	=>	SectionContentModuleXref
+						"Section"					=>	'Section',
+						"SectionContentModuleXrefs"	=>	'SectionContentModuleXref'
 	);
 
 	function Section()
 	{
-		return $this->getRelated(Section);
+		return $this->getRelated('Section');
 	}
 	
 
 	function SectionContentModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->getRelatedList(SectionContentModuleXref, "", $constraint);
+		return $this->getRelatedList('SectionContentModuleXref', "", $constraint);
 	}
 
 	function getModulesByPosition($constraint = "ORDER BY position, sort_order")
@@ -411,25 +411,25 @@ class SectionModuleXref extends DataItem
 	var $primary_key = "join_id";
 	
 	// Fields
-	var $fields = array("join_id"		=>	Number,
-						"section_id"	=>	Number,
-						"module_id"		=>	Number,
-						"position"		=>	String,
-						"sort_order"	=>	Number);
+	var $fields = array("join_id"		=>	'Number',
+						"section_id"	=>	'Number',
+						"module_id"		=>	'Number',
+						"position"		=>	'String',
+						"sort_order"	=>	'Number');
 	
 	// Relations
 	
-	var $relations = array(	"Section"	=>	Section,
-							"Module"	=>	Module);
+	var $relations = array(	"Section"	=>	'Section',
+							"Module"	=>	'Module');
 	
 	function Section()
 	{
-		return $this->getRelated(Section);
+		return $this->getRelated('Section');
 	}
 	
 	function Module()
 	{
-		return $this->getRelated(Module);
+		return $this->getRelated('Module');
 	}
 }
 
@@ -441,25 +441,25 @@ class SectionContentModuleXref extends DataItem
 	var $primary_key = "join_id";
 	
 	// Fields
-	var $fields = array("join_id"		=>	Number,
-						"section_content_id"	=>	Number,
-						"module_id"		=>	Number,
-						"position"		=>	String,
-						"sort_order"	=>	Number);
+	var $fields = array("join_id"		=>	'Number',
+						"section_content_id"	=>	'Number',
+						"module_id"		=>	'Number',
+						"position"		=>	'String',
+						"sort_order"	=>	'Number');
 
 	// Relations
 
-	var $relations = array(	"SectionContent"	=>	SectionContent,
-							"Module"			=>	Module);
+	var $relations = array(	"SectionContent"	=>	'SectionContent',
+							"Module"			=>	'Module');
 
 	function SectionContent()
 	{
-		return $this->getRelated(SectionContent);
+		return $this->getRelated('SectionContent');
 	}
 
 	function Module()
 	{
-		return $this->getRelated(Module);
+		return $this->getRelated('Module');
 	}
 }
 

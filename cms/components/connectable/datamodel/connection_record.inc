@@ -9,11 +9,11 @@ class ConnectionRecord extends DataItem
 	var $table = "connection_record";
 	var $primary_key = "connection_id";
 	
-	var $fields = array("connection_id"	=>	Number,
-						"source_class"	=>	String,
-						"source_id"		=>	Number,
-						"target_class"	=>	String,
-						"target_id"		=>	Number);
+	var $fields = array("connection_id"	=>	'Number',
+						"source_class"	=>	'String',
+						"source_id"		=>	'Number',
+						"target_class"	=>	'String',
+						"target_id"		=>	'Number');
 	
 	function Source()
 	{

@@ -40,33 +40,33 @@
 class ImageRecord extends DataItem
 {
 	// Fields
-	var $fields = array("image_id"				=> Number,
-						"title"					=> String,
-						"image_file" 			=> String,
-						"ALT_tag"				=> String,
-						"date_taken"		 	=> Date,
-						"credits" 				=> String,
-						"caption" 				=> String,
-						"keywords" 				=> String,
-						"related_resource"		=> String,
-						"published"				=> Boolean,
-						"include_in_slideshow"	=> Boolean,
-						"sort_order"			=> Number,
-						"image_type"			=> String,
-						"gallery_id"			=> Number,
-						"owner_id"				=> Number
+	var $fields = array("image_id"				=> 'Number',
+						"title"					=> 'String',
+						"image_file" 			=> 'String',
+						"ALT_tag"				=> 'String',
+						"date_taken"		 	=> 'Date',
+						"credits" 				=> 'String',
+						"caption" 				=> 'String',
+						"keywords" 				=> 'String',
+						"related_resource"		=> 'String',
+						"published"				=> 'Boolean',
+						"include_in_slideshow"	=> 'Boolean',
+						"sort_order"			=> 'Number',
+						"image_type"			=> 'String',
+						"gallery_id"			=> 'Number',
+						"owner_id"				=> 'Number'
 			);
 	
 	// Relations
 	
 	var $relations = array(
-			"Gallery"	=>	ImageGallery,
+			"Gallery"	=>	'ImageGallery',
 			"Owner"				=>	"",			
 			);
 	
 	function Gallery()
 	{
-		return $this->getRelated(ImageGallery);
+		return $this->getRelated('ImageGallery');
 	}
 	
 	function __construct()

@@ -10,16 +10,16 @@ class RSSFeed extends DataItem
 	var $primary_key = "rss_feed_id";
 	
 	var $fields = array(
-		"rss_feed_id"	=>	Number,
-		"rss_title"		=>	String,
-		"rss_url"		=>	String,
-		"rss_trusted"	=>	Boolean,
-		"last_updated"	=>	Timestamp,
-		"feed_status"	=>	Boolean
+		"rss_feed_id"	=>	'Number',
+		"rss_title"		=>	'String',
+		"rss_url"		=>	'String',
+		"rss_trusted"	=>	'Boolean',
+		"last_updated"	=>	'Timestamp',
+		"feed_status"	=>	'Boolean'
 		);
 	
 	var $relations = array(
-			"Articles"	=> RSSFeedArticles
+			"Articles"	=> 'RSSFeedArticles'
 			);
 	
 	var $fieldAliases = array(
@@ -29,7 +29,7 @@ class RSSFeed extends DataItem
 	
 	function Articles($constraint = "")
 	{
-		return $this->getRelatedList(RSSFeedArticles, "", $constraint);
+		return $this->getRelatedList('RSSFeedArticles', "", $constraint);
 	}
 
 	static function getrssFeedsForUser($user_id)

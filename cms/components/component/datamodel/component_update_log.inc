@@ -12,12 +12,12 @@ class ComponentUpdateLog extends DataItem
 	var $primary_key = "component_update_log_id";
 	
 	var $fields = array(
-			"component_update_log_id"	=>	Number,
-			"component"					=>	String,
-			"version_number"			=>	Number,
-			"date_updated"				=>	DateTime,
-			"description"				=>	Text,
-			"filename"					=>	String
+			"component_update_log_id"	=>	'Number',
+			"component"					=>	'String',
+			"version_number"			=>	'Number',
+			"date_updated"				=>	'DateTime',
+			"description"				=>	'Text',
+			"filename"					=>	'String'
 	);
 	
 	

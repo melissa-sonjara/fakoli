@@ -11,16 +11,16 @@ define("subscription_unsubscribe", 3);
 class ForumSubscription extends DataItem
 {
 	var $fields = array(
-			"forum_subscription_id"	=>	Number,
-			"forum_id"				=>	Number,
-			"topic_id"				=>	Number,
-			"user_id"				=>	Number,
-			"subscription_type"		=>	Number
+			"forum_subscription_id"	=>	'Number',
+			"forum_id"				=>	'Number',
+			"topic_id"				=>	'Number',
+			"user_id"				=>	'Number',
+			"subscription_type"		=>	'Number'
 	);
 	
 	var $relations = array(
-			"Forum"			=>	Forum,
-			"ForumTopic"	=>	ForumTopic,
+			"Forum"			=>	'Forum',
+			"ForumTopic"	=>	'ForumTopic',
 			"User"			=>	""
 	);
 	
@@ -31,12 +31,12 @@ class ForumSubscription extends DataItem
 	
 	function Forum()
 	{
-		return $this->getRelated(Forum);
+		return $this->getRelated('Forum');
 	}
 	
 	function ForumTopic()
 	{
-		return $this->getRelated(ForumTopic);
+		return $this->getRelated('ForumTopic');
 	}
 	
 	function User()

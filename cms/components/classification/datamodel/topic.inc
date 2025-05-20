@@ -38,17 +38,17 @@ class Topic extends DataItem
 {
 	// Fields
 	
-	var $fields = array("topic_id"	=>	Number,
-						"topic"		=>	String
+	var $fields = array("topic_id"	=>	'Number',
+						"topic"		=>	'String'
 						);
 						
 	// Relations
 	
-	var $relations = array(	"Documents"	=>	Document);
+	var $relations = array(	"Documents"	=>	'Document');
 							
 	function Documents($constraints = "")
 	{
-		return $this->crossReference(Document, DocumentTopicXref, $constraints);
+		return $this->crossReference('Document', 'DocumentTopicXref', $constraints);
 	}
 	
 	static function getTopicsArray()
@@ -79,23 +79,23 @@ class Topic extends DataItem
 class DocumentTopicXref extends DataItem
 {
 	// Fields
-	var $fields = array("document_topic_xref_id"	=>	Number,
-						"document_id"				=>	Number,
-						"topic_id"					=>	Number);
+	var $fields = array("document_topic_xref_id"	=>	'Number',
+						"document_id"				=>	'Number',
+						"topic_id"					=>	'Number');
 						
 	// Relations
 	
-	var $relations = array(	"Document"		=>	Document,
-							"Topic"			=>	Topic);
+	var $relations = array(	"Document"		=>	'Document',
+							"Topic"			=>	'Topic');
 							
 	function Document()
 	{
-		return $this->getRelated(Document);
+		return $this->getRelated('Document');
 	}
 	
 	function Topic()
 	{
-		return $this->getRelated(Topic);
+		return $this->getRelated('Topic');
 	}
 	
 	function __construct()
@@ -110,23 +110,23 @@ class DocumentTopicXref extends DataItem
 class GroupTopicXref extends DataItem
 {
 	// Fields
-	var $fields = array("group_topic_id"	=>	Number,
-						"group_id"			=>	Number,
-						"topic_id"			=>	Number);
+	var $fields = array("group_topic_id"	=>	'Number',
+						"group_id"			=>	'Number',
+						"topic_id"			=>	'Number');
 						
 	// Relations
 	
-	var $relations = array(	"Group"	=>	Group,
-							"Topic"	=>	Topic);
+	var $relations = array(	"Group"	=>	'Group',
+							"Topic"	=>	'Topic');
 							
 	function Grp()
 	{
-		return $this->getRelated(Group);
+		return $this->getRelated('Group');
 	}
 	
 	function Topic()
 	{
-		return $this->getRelated(Topic);
+		return $this->getRelated('Topic');
 	}
 	
 	function __construct()

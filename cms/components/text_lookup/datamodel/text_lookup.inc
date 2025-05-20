@@ -44,25 +44,25 @@ class TextLookup extends DataItem
 	var $table = "text_lookup";
 	
 	var $fields = array(
-			"text_id"	=>	Number,
-			"code"		=>	String,
-			"text"		=>	HTML, // default language English
-			"editable"	=>	Boolean,
-			"category"	=>	String,
-			"class_name"	=>	String,
-			"enabled"	=>	Boolean
+			"text_id"	=>	'Number',
+			"code"		=>	'String',
+			"text"		=>	'HTML', // default language English
+			"editable"	=>	'Boolean',
+			"category"	=>	'String',
+			"class_name"	=>	'String',
+			"enabled"	=>	'Boolean'
 	);
 	
 	var $versioned_fields = array("code", "text", "editable", "enabled");
 
 	var $relations = array(
-			"Translations"	=>	TextTranslation	
+			"Translations"	=>	'TextTranslation'	
 	);
 	
 	
 	function Translations($constraint = "")
 	{
-		return $this->getRelatedList(TextTranslation, "", $constraint);
+		return $this->getRelatedList('TextTranslation', "", $constraint);
 	}
 	
 	/**
@@ -211,19 +211,19 @@ class TextLookup extends DataItem
 class TextTranslation extends DataItem
 {
 	var $fields = array(
-			"text_translation_id"	=>	Number,
-			"text_id"				=>	String,
-			"language"				=>	String,
-			"text"					=>	HTML
+			"text_translation_id"	=>	'Number',
+			"text_id"				=>	'String',
+			"language"				=>	'String',
+			"text"					=>	'HTML'
 	);
 	
 	var $relations = array(
-			"TextLookup"			=>	TextLookup
+			"TextLookup"			=>	'TextLookup'
 	);
 	
 	/*
 	 * Used by both user form, for users to specify their
-	 * language and in Application Settings => Text Lookup
+	 * language and in Application Settings => 'Text' Lookup
 	 * to set the application default.
 	 */
 	static $languageOptions = array(
@@ -237,7 +237,7 @@ class TextTranslation extends DataItem
 	
 	function TextLookup()
 	{
-		return $this->getRelated(TextLookup);
+		return $this->getRelated('TextLookup');
 	}
 	
 	function __construct()

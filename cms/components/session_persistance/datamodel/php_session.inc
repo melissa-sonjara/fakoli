@@ -39,10 +39,10 @@
 class PHPSession extends DataItem
 {
 	// Fields
-	var $fields = array("session_id"	=>	Number,
-						"id"			=>	String,
-						"data"			=>	Text,
-						"expires"		=>	Number);
+	var $fields = array("session_id"	=>	'Number',
+						"id"			=>	'String',
+						"data"			=>	'Text',
+						"expires"		=>	'Number');
 	
 	var $relations = array();
 

@@ -9,19 +9,19 @@ class ScrollPart extends DataItem
 	var $table = "scroll_part";
 	var $primary_key = "scroll_part_id";
 	
-	var $fields = array("scroll_part_id"	=>	Number,
-						"scroll_id"			=>	Number,
-						"title"				=>	String,
-						"content_type"		=> 	String,
-						"content"			=>	HTML,
-						"php_code_file"		=>	String,
-						"css_class"			=>	String,
-						"styles"			=>	String,
-						"image_id"			=>	Image,
-						"sort_order"		=>	Number);
+	var $fields = array("scroll_part_id"	=>	'Number',
+						"scroll_id"			=>	'Number',
+						"title"				=>	'String',
+						"content_type"		=> 	'String',
+						"content"			=>	'HTML',
+						"php_code_file"		=>	'String',
+						"css_class"			=>	'String',
+						"styles"			=>	'String',
+						"image_id"			=>	'Image',
+						"sort_order"		=>	'Number');
 						
-	var $relations = array(	"Scroll"			=>	Scroll,
-							"BackgroundImage"	=>	ImageRecord
+	var $relations = array(	"Scroll"			=>	'Scroll',
+							"BackgroundImage"	=>	'ImageRecord'
 	);
 	
 	var $versioned_fields = array("title", "content", "php_code_file", "css_class", "styles", "image_id");
@@ -32,12 +32,12 @@ class ScrollPart extends DataItem
 								"image_id"	=>	"Background Image");
 	function Scroll()
 	{
-		return $this->getRelated(Scroll);
+		return $this->getRelated('Scroll');
 	}
 	
 	function BackgroundImage()
 	{
-		return $this->getRelated(ImageRecord);
+		return $this->getRelated('ImageRecord');
 	}
 }
 /**@}*/?>

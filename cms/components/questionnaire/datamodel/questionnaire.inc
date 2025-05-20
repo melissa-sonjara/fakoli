@@ -74,20 +74,20 @@ abstract class AbstractQuestionnaire extends DataItem
 
 class Questionnaire extends AbstractQuestionnaire
 {
-	var $fields = array("questionnaire_id"			=>	Number,
-						"title"						=>	String,
-						"composite_class"			=>	String
+	var $fields = array("questionnaire_id"			=>	'Number',
+						"title"						=>	'String',
+						"composite_class"			=>	'String'
 	);
 	
 	var $relations = array(
-			"Questions"				=>	Question,
-			"Answers"				=>	QuestionnaireAnswer,
+			"Questions"				=>	'Question',
+			"Answers"				=>	'QuestionnaireAnswer',
 	);
 	
 		
 	function Questions($constraint = "")
 	{
-		return $this->getRelatedList(Question, "questionnaire_id", $constraint);
+		return $this->getRelatedList('Question', "questionnaire_id", $constraint);
 	}
 	
 	/**
@@ -113,7 +113,7 @@ class Questionnaire extends AbstractQuestionnaire
 	 */
 	function Responses($constraint = "")
 	{
-		return $this->getRelatedList(QuestionnaireResponse, "", $constraint);
+		return $this->getRelatedList('QuestionnaireResponse', "", $constraint);
 	}
 			
 	function isEditable()

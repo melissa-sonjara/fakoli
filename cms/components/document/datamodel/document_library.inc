@@ -42,24 +42,24 @@ class DocumentLibrary extends DataItem
 {
 	// Fields
 	
-	var $fields = array("document_library_id"	=>	Number,
-						"name"					=>	String,
-						"identifier"			=>	String,
-						"description"			=>	Text,
-						"hidden"				=>	Boolean,
-						"allow_comments"		=>	Boolean,
-						"owner_id"				=>	Number,
-						"allow_access"			=>	String,
-						"manage_folders"		=>	String,
-						"upload_files"			=>	String,
-						"delete_files"			=>	String,
-						"create_date"			=>	Timestamp,
-						"last_modified"			=>	Timestamp);
+	var $fields = array("document_library_id"	=>	'Number',
+						"name"					=>	'String',
+						"identifier"			=>	'String',
+						"description"			=>	'Text',
+						"hidden"				=>	'Boolean',
+						"allow_comments"		=>	'Boolean',
+						"owner_id"				=>	'Number',
+						"allow_access"			=>	'String',
+						"manage_folders"		=>	'String',
+						"upload_files"			=>	'String',
+						"delete_files"			=>	'String',
+						"create_date"			=>	'Timestamp',
+						"last_modified"			=>	'Timestamp');
 
 	var $relations = array(	"Owner"		=> "",
-							"Documents"	=>	Document,
-							"Folders"	=>	DocumentFolder,
-							"FileshareUsers"	=>	FileshareUserXref	
+							"Documents"	=>	'Document',
+							"Folders"	=>	'DocumentFolder',
+							"FileshareUsers"	=>	'FileshareUserXref'	
 	
 	);
 							
@@ -88,12 +88,12 @@ class DocumentLibrary extends DataItem
 	
 	function Documents($constraint = "")
 	{
-		return $this->getRelatedList(Document, "", $constraint);
+		return $this->getRelatedList('Document', "", $constraint);
 	}
 	
 	function Folders($constraint = "")
 	{
-		return $this->getRelatedList(DocumentFolder, "", $constraint);
+		return $this->getRelatedList('DocumentFolder', "", $constraint);
 	}
 		
 	function getOwnerName()
@@ -141,7 +141,7 @@ class DocumentLibrary extends DataItem
 	
 	function FileshareUsers($constraint = "")
 	{
-		return $this->getRelatedList(FileshareUserXref, "document_library_id", $constraint);	
+		return $this->getRelatedList('FileshareUserXref', "document_library_id", $constraint);	
 	}
 	
 	function getFileshareUser($user_id)

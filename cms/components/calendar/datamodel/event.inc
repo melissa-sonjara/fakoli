@@ -41,41 +41,41 @@
  */
 class Event extends DataItem
 {
-	var $fields = array("event_id"				=>	Number,
-						"title"					=>	String,
-						"calendar_id"			=>	Number,
-						"start_date"			=>	DateTime,
-						"end_date"				=>	DateTime,
-						"time_zone_id"			=>	Number,
-						"location"				=>	String,
-						"event_type"			=>	String,
-						"description"			=>	HTML,
-						"published"				=>	Boolean,
-						"allow_access"			=>	String,
-						"owner_id"				=>	Number,			
-						"last_modified"			=>	Timestamp,
-						"event_invitation_id"	=>	Number,
-						"composite_class"		=>	String,);
+	var $fields = array("event_id"				=>	'Number',
+						"title"					=>	'String',
+						"calendar_id"			=>	'Number',
+						"start_date"			=>	'DateTime',
+						"end_date"				=>	'DateTime',
+						"time_zone_id"			=>	'Number',
+						"location"				=>	'String',
+						"event_type"			=>	'String',
+						"description"			=>	'HTML',
+						"published"				=>	'Boolean',
+						"allow_access"			=>	'String',
+						"owner_id"				=>	'Number',			
+						"last_modified"			=>	'Timestamp',
+						"event_invitation_id"	=>	'Number',
+						"composite_class"		=>	'String',);
 						
 	// Relations
 	
 	var $relations = array(
-			"Sites"			=>	Site,
-			"Calendar"		=>	Calendar,
-			"Invitation"	=>	EventInvitation,
-			"TimeZone"		=>	TimeZone,
-			"Comments"		=>	Comment,
+			"Sites"			=>	'Site',
+			"Calendar"		=>	'Calendar',
+			"Invitation"	=>	'EventInvitation',
+			"TimeZone"		=>	'TimeZone',
+			"Comments"		=>	'Comment',
 			"Owner"			=>	"", 		// person who created the event
 				);
 
 	function Sites($constraint = "")
 	{
-		return $this->crossReference(Site, EventSiteXref, $constraint);
+		return $this->crossReference('Site', 'EventSiteXref', $constraint);
 	}
 	
 	function Calendar()
 	{
-		return $this->getRelated(Calendar);
+		return $this->getRelated('Calendar');
 	}
 	
 	function Owner()
@@ -86,7 +86,7 @@ class Event extends DataItem
 
 	function Comments($constraint = "")
 	{
-		return $this->crossReference(Comment, EventCommentXref, $constraint);
+		return $this->crossReference('Comment', 'EventCommentXref', $constraint);
 	}
 	
 	function setOwner()
@@ -111,14 +111,14 @@ class Event extends DataItem
 	{
 		if(!$this->event_invitation_id) return null;
 		
-		return $this->getRelated(EventInvitation);
+		return $this->getRelated('EventInvitation');
 	}
 	
 	function TimeZone()
 	{
 		if(!$this->time_zone_id) return null;
 		
-		return $this->getRelated(TimeZone);
+		return $this->getRelated('TimeZone');
 	}
 	
 	function __construct()
@@ -132,23 +132,23 @@ class Event extends DataItem
 
 class EventSiteXref extends DataItem
 {
-	var $fields = array("event_site_xref_id"	=>	Number,
-						"event_id"				=>	Number,
-						"site_id"				=>	Number);
+	var $fields = array("event_site_xref_id"	=>	'Number',
+						"event_id"				=>	'Number',
+						"site_id"				=>	'Number');
 	
 	// Relations
 	
-	var $relations = array(	"Event"	=>	Event,
-							"Site"	=>	Site);
+	var $relations = array(	"Event"	=>	'Event',
+							"Site"	=>	'Site');
 	
 	function Event()
 	{
-		return $this->getRelated(Event);
+		return $this->getRelated('Event');
 	}
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 	
 	function __construct()
@@ -166,12 +166,12 @@ class EventCommentXref extends DataItem
 	var $table = "event_comment_xref";
 	var $primary_key = "event_comment_id";
 
-	var $fields = array("event_comment_id"	=>	Number,
-						"event_id"			=>	Number,
-						"comment_id"		=>	Number);
+	var $fields = array("event_comment_id"	=>	'Number',
+						"event_id"			=>	'Number',
+						"comment_id"		=>	'Number');
 
-	var $relations = array(	"Event"	=>	Event,
-							"Comment"	=>	Comment);
+	var $relations = array(	"Event"	=>	'Event',
+							"Comment"	=>	'Comment');
 
 	function verifyEnabled($event_id)
 	{
@@ -188,12 +188,12 @@ class EventCommentXref extends DataItem
 
 	function Event()
 	{
-		return $this->getRelated(Event);
+		return $this->getRelated('Event');
 	}
 
 	function Comment()
 	{
-		return $this->getRelated(Comment);
+		return $this->getRelated('Comment');
 	}
 
 }

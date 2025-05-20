@@ -42,15 +42,15 @@
 class EmailManagerTest extends DataItem
 {
 	var $fields = array(
-				"test_id"		=>	Number,
-				"string"		=>	String,
-				"email"			=>	String,
-				"date"			=>	Date,
-				"relation_id"	=>	Number
+				"test_id"		=>	'Number',
+				"string"		=>	'String',
+				"email"			=>	'String',
+				"date"			=>	'Date',
+				"relation_id"	=>	'Number'
 	);
 	
 	var $relations = array(
-				"EmailManagerTestRelation"	=>	EmailManagerTestRelation
+				"EmailManagerTestRelation"	=>	'EmailManagerTestRelation'
 	);
 	
 	function TestFunction()
@@ -60,7 +60,7 @@ class EmailManagerTest extends DataItem
 	
 	function EmailManagerTestRelation()
 	{
-		return $this->getRelated(EmailManagerTestRelation);
+		return $this->getRelated('EmailManagerTestRelation');
 	}
 	
 	function __construct()
@@ -77,8 +77,8 @@ class EmailManagerTest extends DataItem
 class EmailManagerTestRelation extends DataItem
 {
 	var $fields = array(
-			"relation_id"	=>	Number,
-			"string"		=>	String
+			"relation_id"	=>	'Number',
+			"string"		=>	'String'
 	);
 	
 	function TestRelationFunction()

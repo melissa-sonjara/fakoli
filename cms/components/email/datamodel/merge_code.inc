@@ -39,11 +39,11 @@
 class MergeCode extends DataItem
 {
 	var $fields = array(
-			"class_name"		=>	String,
-			"merge_code_id"		=>	Number,
-			"name"				=>	String,
-			"description"		=>	Text,
-			"map"				=>	String
+			"class_name"		=>	'String',
+			"merge_code_id"		=>	'Number',
+			"name"				=>	'String',
+			"description"		=>	'Text',
+			"map"				=>	'String'
 	);
 
 	/**
@@ -90,9 +90,9 @@ class MergeCode extends DataItem
 class MergeCodeHelp extends DataItem
 {
 	var $fields = array(
-			"help_id"	=>	Number,
-			"usage"		=>	String,
-			"example"	=>	String
+			"help_id"	=>	'Number',
+			"usage"		=>	'String',
+			"example"	=>	'String'
 	);
 	
 	function __construct()
@@ -143,9 +143,9 @@ class MergeCodeHelp extends DataItem
 class RelationHelp extends DataItem
 {
 	var $fields = array(
-			"relation_id"	=>	Number,
-			"name"			=>	String,
-			"class_name"	=>	String
+			"relation_id"	=>	'Number',
+			"name"			=>	'String',
+			"class_name"	=>	'String'
 	);
 	
 	function __construct()

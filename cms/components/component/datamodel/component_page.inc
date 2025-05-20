@@ -46,22 +46,22 @@ class ComponentPage extends DataItem
 	var $default_format = "{identifier}";
 	
 	// Fields
-	var $fields = array("component_page_id"	=>	Number,
-						"identifier"		=>	String,
-						"server_path"		=>	String,
-						"component"			=>	String,
-						"page_title"		=>	String,
-						"template"			=>	String,
-						"role"				=>	String,
-						"enabled"			=>	Boolean,
-						"scanned"			=>	Boolean,
-						"site_id"			=>	Number
+	var $fields = array("component_page_id"	=>	'Number',
+						"identifier"		=>	'String',
+						"server_path"		=>	'String',
+						"component"			=>	'String',
+						"page_title"		=>	'String',
+						"template"			=>	'String',
+						"role"				=>	'String',
+						"enabled"			=>	'Boolean',
+						"scanned"			=>	'Boolean',
+						"site_id"			=>	'Number'
 	);
 	
 	// Relations
 	var $relations = array(
-							"Component"	=>	Component,
-							"Site"		=>	Site
+							"Component"	=>	'Component',
+							"Site"		=>	'Site'
 						);
 	
 	function Component()
@@ -71,17 +71,17 @@ class ComponentPage extends DataItem
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 	
 	function ComponentPageModuleXrefs($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->getRelatedList(ComponentPageModuleXref, "", $constraint);
+		return $this->getRelatedList('ComponentPageModuleXref', "", $constraint);
 	}
 	
 	function Modules($constraint = "ORDER BY position, sort_order")
 	{
-		return $this->crossReference(Module, ComponentPageModuleXref, $constraint);
+		return $this->crossReference('Module', 'ComponentPageModuleXref', $constraint);
 	}
 	
 	
@@ -249,25 +249,25 @@ class ComponentPageModuleXref extends DataItem
 	var $primary_key = "join_id";
 		
 	// Fields
-	var $fields = array("join_id"			=>	Number,
-						"component_page_id"	=>	Number,
-						"module_id"			=>	Number,
-						"position"			=>	String,
-						"sort_order"		=>	Number);
+	var $fields = array("join_id"			=>	'Number',
+						"component_page_id"	=>	'Number',
+						"module_id"			=>	'Number',
+						"position"			=>	'String',
+						"sort_order"		=>	'Number');
 	
 	// Relations
 	
-	var $relations = array(	"Page"			=>	ComponentPage,
-							"Module"		=>	Module);
+	var $relations = array(	"Page"			=>	'ComponentPage',
+							"Module"		=>	'Module');
 	
 	function Page()
 	{
-		return $this->getRelated(Page);
+		return $this->getRelated('Page');
 	}
 	
 	function Module()
 	{
-		return $this->getRelated(Module);
+		return $this->getRelated('Module');
 	}
 }
 /**@}*/?>

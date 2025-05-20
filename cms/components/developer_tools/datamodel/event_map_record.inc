@@ -11,10 +11,10 @@
  */
 class EventMapRecord extends DataItem
 {
-	var $fields = array("component"	=>	String,
-						"priority"	=>	Number,
-						"handler"	=>	String,
-						"exists"	=>	Boolean
+	var $fields = array("component"	=>	'String',
+						"priority"	=>	'Number',
+						"handler"	=>	'String',
+						"exists"	=>	'Boolean'
 	);
 	
 	/**

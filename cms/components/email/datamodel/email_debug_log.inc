@@ -40,9 +40,9 @@
 class EmailDebugLog extends DataItem
 {
 	var $fields = array(
-			"log_id"	=>	Number,
-			"filename"	=>	String,
-			"date"		=>	DateTime,
+			"log_id"	=>	'Number',
+			"filename"	=>	'String',
+			"date"		=>	'DateTime',
 	);
 	
 	function __construct()

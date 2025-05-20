@@ -46,29 +46,29 @@ class Menu extends DataItem
 	var $pretty_class_name = "Menu";
 	
 	// Fields
-	var $fields = array("menu_id"					=>	Number,
-						"site_id"					=>	Number,
-						"name"						=>	String,
-						"identifier"				=>	String,
-						"description"				=>	Text,
-						"css_class"					=>	String,
-						"container_css_class"		=>	String,
-						"wrap_menu_items"			=>	Boolean,
-						"highlight_current_item"	=>	Boolean,
-						"highlight_current_section"	=>	Boolean);
+	var $fields = array("menu_id"					=>	'Number',
+						"site_id"					=>	'Number',
+						"name"						=>	'String',
+						"identifier"				=>	'String',
+						"description"				=>	'Text',
+						"css_class"					=>	'String',
+						"container_css_class"		=>	'String',
+						"wrap_menu_items"			=>	'Boolean',
+						"highlight_current_item"	=>	'Boolean',
+						"highlight_current_section"	=>	'Boolean');
 	
 	// Relations
-	var $relations = array(	"Site"		=>	Site,
-							"MenuItems"	=>	MenuItem);
+	var $relations = array(	"Site"		=>	'Site',
+							"MenuItems"	=>	'MenuItem');
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 
 	function MenuItems($constraint = "")
 	{
-		return $this->getRelatedList(MenuItem, "", $constraint);
+		return $this->getRelatedList('MenuItem', "", $constraint);
 	}
 	
 	/**
@@ -118,30 +118,30 @@ class MenuItem extends DataItem
 	var $pretty_class_name = "Menu Item";
 	
 	// Fields
-	var $fields = array("menu_item_id"	=> Number,
-						"title"			=> String,
-						"custom_format"	=> String,
-						"menu_id"		=> Number,
-						"parent_id" 	=> Number,
-						"identifier"	=> String,
-						"page_id"   	=> Number,
-						"url"       	=> String,
-						"css_class"		=> String,
-						"sort_order"	=> Number,
-						"role"		 	=> String,
-						"permissions"	=> String,
-						"published"		=> Boolean,
-						"required_parameters"	=>	String,
-						"display_flags"			=>	String);
+	var $fields = array("menu_item_id"	=> 'Number',
+						"title"			=> 'String',
+						"custom_format"	=> 'String',
+						"menu_id"		=> 'Number',
+						"parent_id" 	=> 'Number',
+						"identifier"	=> 'String',
+						"page_id"   	=> 'Number',
+						"url"       	=> 'String',
+						"css_class"		=> 'String',
+						"sort_order"	=> 'Number',
+						"role"		 	=> 'String',
+						"permissions"	=> 'String',
+						"published"		=> 'Boolean',
+						"required_parameters"	=>	'String',
+						"display_flags"			=>	'String');
 	
 	var $fieldAliases = array("css_class" => "CSS Class");
 	
 	// Relations
 	
-	var $relations = array(	"Page"		=> 	Page,
-							"Menu"		=>	Menu,
-							"Parent"	=>	MenuItem,
-							"Children"	=>	MenuItem);
+	var $relations = array(	"Page"		=> 	'Page',
+							"Menu"		=>	'Menu',
+							"Parent"	=>	'MenuItem',
+							"Children"	=>	'MenuItem');
 	
 	function Page()
 	{
@@ -166,14 +166,14 @@ class MenuItem extends DataItem
 	
 	function Menu()
 	{
-		return $this->getRelated(Menu);
+		return $this->getRelated('Menu');
 	}
 	
 	function Parent()
 	{
 		if (!$this->parent_id) return null;
 		
-		return $this->getRelated(MenuItem, "parent_id");
+		return $this->getRelated('MenuItem', "parent_id");
 	}
 	
 	function Children($constraint = "ORDER BY sort_order, title")

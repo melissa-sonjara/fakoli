@@ -39,14 +39,14 @@
 class AuthenticationToken extends DataItem
 {
 	// Fields
-	var $fields = array("authentication_token_id"	=>	Number,
-						"token"						=>	String,
-						"user_id"					=>	Number,
-						"ip_address"				=>	String,
-						"enabled"					=>	Boolean,
-						"single_use"				=>	Boolean,
-						"last_access"				=>	Timestamp,
-						"redirect_on_success"		=>	String);
+	var $fields = array("authentication_token_id"	=>	'Number',
+						"token"						=>	'String',
+						"user_id"					=>	'Number',
+						"ip_address"				=>	'String',
+						"enabled"					=>	'Boolean',
+						"single_use"				=>	'Boolean',
+						"last_access"				=>	'Timestamp',
+						"redirect_on_success"		=>	'String');
 	
 	// Relations
 	var $relations = array("User"	=>	"");

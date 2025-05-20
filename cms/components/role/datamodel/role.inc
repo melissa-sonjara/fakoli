@@ -43,20 +43,20 @@ class SiteRole extends DataItem
 {
 	// Fields
 	
-	var $fields = array("role_id"		=>	Number,
-						"role"			=>	String,
-						"name"			=>	String,
-						"description"	=>	Text,
-						"priority"		=>	Number,
-						"home_page"		=>	String);
+	var $fields = array("role_id"		=>	'Number',
+						"role"			=>	'String',
+						"name"			=>	'String',
+						"description"	=>	'Text',
+						"priority"		=>	'Number',
+						"home_page"		=>	'String');
 	
 	
 	// Relations
-	var $relations = array("Site"	=>	Site);
+	var $relations = array("Site"	=>	'Site');
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 	
 	function __construct()

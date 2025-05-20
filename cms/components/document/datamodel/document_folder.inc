@@ -40,17 +40,17 @@ class DocumentFolder extends DataItem
 {
 	// Fields
 	
-	var $fields = array("folder_id"		=>	Number,
-						"path"			=>	String,
-						"permissions"	=>	String);
+	var $fields = array("folder_id"		=>	'Number',
+						"path"			=>	'String',
+						"permissions"	=>	'String');
 
 	// Relations
 	
-	var $relations = array("DocumentLibrary"	=>	DocumentLibrary);
+	var $relations = array("DocumentLibrary"	=>	'DocumentLibrary');
 	
 	function DocumentLibrary()
 	{
-		return $this->getRelated(DocumentLibrary);
+		return $this->getRelated('DocumentLibrary');
 	}
 	
 	function __construct()

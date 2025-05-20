@@ -42,14 +42,14 @@ class BlogSubscriber extends DataItem
 	var $primary_key = "blog_subscriber_id";
 	
 	// Fields
-	var $fields = array("blog_subscriber_id"	=>  Number,
-						"blog_id"				=>	Number,
-						"subscriber_email"		=>  String,
-						"first_name"			=>	String,
-						"last_name"				=>	String,
-						"organization"			=>	String,
-						"subscription_type"		=>	String,
-						"subscription_token"	=>	String
+	var $fields = array("blog_subscriber_id"	=>  'Number',
+						"blog_id"				=>	'Number',
+						"subscriber_email"		=>  'String',
+						"first_name"			=>	'String',
+						"last_name"				=>	'String',
+						"organization"			=>	'String',
+						"subscription_type"		=>	'String',
+						"subscription_token"	=>	'String'
 			);
 	
 	// Hidden Fields
@@ -82,7 +82,7 @@ class BlogSubscriber extends DataItem
 	
 	function Blog()
 	{
-		return $this->getRelated(Blog);
+		return $this->getRelated('Blog');
 	}
 	
 	/**

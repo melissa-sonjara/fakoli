@@ -45,20 +45,20 @@ class LinkLibrary extends DataItem
 	
 	// Fields
 	
-	var $fields = array("link_library_id"	=>	Number,
-						"name"				=>	String,
-						"identifier"		=>	String,
-						"description"		=>	HTML,
-						"hidden"			=>	Boolean,
-						"owner_id"			=>	Number,
-						"read_access"		=>	String,
-						"write_access"		=>	String,
-						"create_date"		=>	DateTime,
-						"last_modified"		=>	Timestamp,
-						"enabled"			=>	Boolean);
+	var $fields = array("link_library_id"	=>	'Number',
+						"name"				=>	'String',
+						"identifier"		=>	'String',
+						"description"		=>	'HTML',
+						"hidden"			=>	'Boolean',
+						"owner_id"			=>	'Number',
+						"read_access"		=>	'String',
+						"write_access"		=>	'String',
+						"create_date"		=>	'DateTime',
+						"last_modified"		=>	'Timestamp',
+						"enabled"			=>	'Boolean');
 
 	var $relations = array(	"Owner"		=> "",
-							"Links"	=>	LinkRecord);
+							"Links"	=>	'LinkRecord');
 							
 	
 	function Owner()
@@ -85,7 +85,7 @@ class LinkLibrary extends DataItem
 	
 	function Links($constraint = "")
 	{
-		return $this->getRelatedList(LinkRecord, "", $constraint);
+		return $this->getRelatedList('LinkRecord', "", $constraint);
 	}
 
 	function getOwnerName()

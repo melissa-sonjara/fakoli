@@ -34,23 +34,23 @@
 class Group extends DataItem
 {
 	// Fields
-	var $fields = array("group_id"		=> Number,
-						"title"			=> String,
-						"description"	=> HTML,
-						"active"		=> Boolean);
+	var $fields = array("group_id"		=> 'Number',
+						"title"			=> 'String',
+						"description"	=> 'HTML',
+						"active"		=> 'Boolean');
 	
 // Relations
 	
-	var $relations = array(	"Topic"	=>	Topic);
+	var $relations = array(	"Topic"	=>	'Topic');
 							
 	function Topic()
 	{
-		return $this->getRelated(Topic);
+		return $this->getRelated('Topic');
 	}
 	
 	function Topics($constraint = "")
 	{
-		return $this->crossReference(Topic, GrpTopicXref, $constraint);
+		return $this->crossReference('Topic', 'GrpTopicXref', $constraint);
 	}
 	
 	// Constructor

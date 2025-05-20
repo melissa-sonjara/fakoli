@@ -40,26 +40,26 @@ class ImageGallery extends DataItem
 {
 	// Fields
 	
-	var $fields = array("gallery_id"			=>	Number,
-						"gallery_name"			=>	String,
-						"identifier"			=>	String,
-						"description"			=>	HTML,
-						"keywords"				=>	String,
-						"thumbnail_size" 		=>  Number,
-						"thumbnail_format"		=>	String,
-					  	"image_link_mode"		=>	String,
-						"fix_orientation"		=>	Boolean,
-						"randomize_filenames"	=>	Boolean,
-						"hidden"				=>	Boolean,
-						"owner_id"				=>	Number,
-						"read_access"			=>	String,
-						"write_access"			=>	String,
-						"published"				=>	Boolean,
-						"last_modified"			=>	Timestamp);
+	var $fields = array("gallery_id"			=>	'Number',
+						"gallery_name"			=>	'String',
+						"identifier"			=>	'String',
+						"description"			=>	'HTML',
+						"keywords"				=>	'String',
+						"thumbnail_size" 		=>  'Number',
+						"thumbnail_format"		=>	'String',
+					  	"image_link_mode"		=>	'String',
+						"fix_orientation"		=>	'Boolean',
+						"randomize_filenames"	=>	'Boolean',
+						"hidden"				=>	'Boolean',
+						"owner_id"				=>	'Number',
+						"read_access"			=>	'String',
+						"write_access"			=>	'String',
+						"published"				=>	'Boolean',
+						"last_modified"			=>	'Timestamp');
 	
 	// Relations
 	
-	var $relations = array(	"Images"	=>	ImageRecord,
+	var $relations = array(	"Images"	=>	'ImageRecord',
 							"Owner"		=>	"");
 
 	static $imageLinkModes = array("None"		=>	"No Resource Link",
@@ -72,7 +72,7 @@ class ImageGallery extends DataItem
 	
 	function Images($constraint = "")
 	{
-		return $this->getRelatedList(ImageRecord, "", $constraint);
+		return $this->getRelatedList('ImageRecord', "", $constraint);
 	}
 	
 	function Owner()

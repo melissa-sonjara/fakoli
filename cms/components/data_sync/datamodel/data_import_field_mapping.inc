@@ -11,19 +11,19 @@ class DataImportFieldMapping extends DataItem
 	
 	var $columns = null;
 	
-	var $fields = array("mapping_id"		=>	Number,
-			            "class"				=>	String,
-						"client_field"		=>	String,
-						"import_column"		=>	String,
-						"matching"			=>	Boolean,
-						"required"			=>	Boolean,
-						"grouped"			=>	Boolean,
-						"import_profile_id"	=>	String,
-						"notes"				=>	String);
+	var $fields = array("mapping_id"		=>	'Number',
+			            "class"				=>	'String',
+						"client_field"		=>	'String',
+						"import_column"		=>	'String',
+						"matching"			=>	'Boolean',
+						"required"			=>	'Boolean',
+						"grouped"			=>	'Boolean',
+						"import_profile_id"	=>	'String',
+						"notes"				=>	'String');
 	
 	function ImportProfile()
 	{
-		return $this->getRelated(DataImportProfile);
+		return $this->getRelated('DataImportProfile');
 	}
 	
 	function getColumns()

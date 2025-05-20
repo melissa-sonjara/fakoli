@@ -9,12 +9,12 @@ class TableInformation extends DataItem
 	var $table = "INFORMATION_SCHEMA.tables";
 	var $primary_key = "TABLE_NAME";
 	
-	var $fields = array("TABLE_SCHEMA"		=>	String,
-						"TABLE_NAME"		=>	String,
-						"TABLE_TYPE"		=>	String,
-						"ENGINE"			=>	String,
-						"TABLE_ROWS"		=>	Number,
-						"TABLE_COLLATION"	=>	String);
+	var $fields = array("TABLE_SCHEMA"		=>	'String',
+						"TABLE_NAME"		=>	'String',
+						"TABLE_TYPE"		=>	'String',
+						"ENGINE"			=>	'String',
+						"TABLE_ROWS"		=>	'Number',
+						"TABLE_COLLATION"	=>	'String');
 	
 	function save()
 	{

@@ -39,30 +39,30 @@
 class HelpPage extends DataItem
 {
 	// Fields
-	var $fields = array("help_page_id"	=>	Number,
-						"help_book_id"	=>	Number,
-						"parent_id"		=>	Number,
-						"title"			=>	String,
-						"identifier"	=>	String,
-						"content"		=>	HTML,
-						"sort_order"	=>	Number,
-						"public"		=>	Boolean);
+	var $fields = array("help_page_id"	=>	'Number',
+						"help_book_id"	=>	'Number',
+						"parent_id"		=>	'Number',
+						"title"			=>	'String',
+						"identifier"	=>	'String',
+						"content"		=>	'HTML',
+						"sort_order"	=>	'Number',
+						"public"		=>	'Boolean');
 	
-	var $relations = array("HelpBook"	=> 	HelpBook,
-						   "Parent"		=>	HelpPage,
-						   "Children"	=>	HelpPage);
+	var $relations = array("HelpBook"	=> 	'HelpBook',
+						   "Parent"		=>	'HelpPage',
+						   "Children"	=>	'HelpPage');
 	
 	
 	function HelpBook()
 	{
-		return $this->getRelated(HelpBook);
+		return $this->getRelated('HelpBook');
 	}
 	
 	function Parent()
 	{
 		if (!$this->parent_id) return null;
 		
-		return $this->getRelated(HelpPage, "parent_id");
+		return $this->getRelated('HelpPage', "parent_id");
 	}
 	
 	function Children($constraint = "ORDER BY sort_order, title")

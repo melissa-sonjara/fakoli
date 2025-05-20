@@ -41,12 +41,12 @@ class ToolHint extends DataItem
 	var $table = "tool_hint";
 	var $primary_key = "hint_id";
 	
-	var $fields = array("hint_id"		=>	Number,
-						"code"			=>	String,
-						"title"			=>	String,
-						"hint"			=>	HTML,
-						"can_be_hidden"	=>	Boolean,
-						"read_access"	=>	String);
+	var $fields = array("hint_id"		=>	'Number',
+						"code"			=>	'String',
+						"title"			=>	'String',
+						"hint"			=>	'HTML',
+						"can_be_hidden"	=>	'Boolean',
+						"read_access"	=>	'String');
 
 	static function findToolHint($code)
 	{
@@ -101,14 +101,14 @@ class ToolHintUserStatus extends DataItem
 	var $table = "tool_hint_user_status";
 	var $primary_key = "status_id";
 	
-	var $fields = array("status_id"	=>	Number,
-						"hint_id"	=>	Number,
-						"user_id"	=>	Number,
-						"hidden"	=>	Boolean);
+	var $fields = array("status_id"	=>	'Number',
+						"hint_id"	=>	'Number',
+						"user_id"	=>	'Number',
+						"hidden"	=>	'Boolean');
 	
 	function Hint()
 	{
-		return $this->getRelated(ToolHint);
+		return $this->getRelated('ToolHint');
 	}
 }
 	

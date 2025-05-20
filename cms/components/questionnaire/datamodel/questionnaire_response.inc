@@ -68,17 +68,17 @@ abstract class AbstractQuestionnaireResponse extends DataItem
 class QuestionnaireResponse extends AbstractQuestionnaireResponse
 {
 	var $fields = array (
-				"response_id"		=>	Number,
-				"questionnaire_id"	=>	Number,
-				"user_id"			=>	Number,
-				"date_submitted"	=>	DateTime,
-				"status"			=>	String,
+				"response_id"		=>	'Number',
+				"questionnaire_id"	=>	'Number',
+				"user_id"			=>	'Number',
+				"date_submitted"	=>	'DateTime',
+				"status"			=>	'String',
 	);
 
 	var $relations = array (
-				"Questions"				=>	Questions,
-				"Answers"				=>	QuestionnaireAnswer,
-				"Questionnaire"			=>	Questionnaire,
+				"Questions"				=>	'Questions',
+				"Answers"				=>	'QuestionnaireAnswer',
+				"Questionnaire"			=>	'Questionnaire',
 	);
 
 	var $statusTypes = array(
@@ -100,7 +100,7 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 
 	function Questionnaire()
 	{
-		return $this->getRelated(Questionnaire);
+		return $this->getRelated('Questionnaire');
 	}
 	
 	function Answers($constraint = "")
@@ -109,7 +109,7 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 		{
 			return null;
 		}
-		return $this->getRelatedList(QuestionnaireAnswer, "response_id", $constraint);
+		return $this->getRelatedList('QuestionnaireAnswer', "response_id", $constraint);
 	}
 	
 	function isSubmitted()
@@ -155,10 +155,10 @@ class QuestionnaireResponse extends AbstractQuestionnaireResponse
 class OptionAnswer extends DataItem
 {
 	var $fields = array(
-					"question_id"		=>	Number,
-					"option_number"		=>	Number, // position in list
-					"option"			=>	String,
-					"count"				=>	Number
+					"question_id"		=>	'Number',
+					"option_number"		=>	'Number', // position in list
+					"option"			=>	'String',
+					"count"				=>	'Number'
 	);
 
 	function __construct($question_id, $option_number, $option, $count)
@@ -180,7 +180,7 @@ class OptionAnswer extends DataItem
 class SpreadsheetResponse extends DataItem
 {
 	var $fields = array(
-			"name"		=>	String,
+			"name"		=>	'String',
 			//question/answer fields built at run time
 	);
 

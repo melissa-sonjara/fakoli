@@ -67,10 +67,10 @@ function __construct()
 class LoginToken extends DataItem
 {
 	var $fields = array(
-				"token_id"			=>	Number,
-				"token"				=>	String,
-				"expire_date"		=>	Date,
-				"user_id"			=>	Number
+				"token_id"			=>	'Number',
+				"token"				=>	'String',
+				"expire_date"		=>	'Date',
+				"user_id"			=>	'Number'
 	);
 	
 	var $relations = array(

@@ -874,10 +874,10 @@ class DataImportManager
 class DataImportColumn extends DataItem
 {
 		var $fields = array(
-		"field"		=>	String,
-		"label"		=>	String,
-		"position"	=>	Number,
-		"update_empty"	=>	Boolean,
+		"field"		=>	'String',
+		"label"		=>	'String',
+		"position"	=>	'Number',
+		"update_empty"	=>	'Boolean',
 	);
 	
 	var $options = array();		///< optional - from related table or DataItem array whose value must match imported value

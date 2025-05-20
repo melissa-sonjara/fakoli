@@ -43,33 +43,33 @@ Fakoli::using("blog", "user");
  */
 class Article extends DataItem implements Searchable
 {
-	var $fields = array("article_id"	=>	Number,
-						"title"			=>	String,
-						"message"		=>	HTML,
-						"article_type"	=>	String,
-						"identifier"	=>	String,
-						"image_id"		=>	Number,
-						"teaser"		=>	HTML,
-						"created_date"	=>	Date,
-						"post_date"		=>	Date,
-						"archive_date"  =>  Date,
-						"publish_date"  =>  Date,
-						"last_modified"	=>	Timestamp,
-						"published"		=>	Boolean,
-						"allow_comment" =>	Boolean,
-						"headline"		=>	Boolean,
-						"tags"			=>	String,
-						"author_id"		=>	Number,
-						"author"		=>	String,
-						"publication"	=>	String,
-						"sort_order"	=>	Number
+	var $fields = array("article_id"	=>	'Number',
+						"title"			=>	'String',
+						"message"		=>	'HTML',
+						"article_type"	=>	'String',
+						"identifier"	=>	'String',
+						"image_id"		=>	'Number',
+						"teaser"		=>	'HTML',
+						"created_date"	=>	'Date',
+						"post_date"		=>	'Date',
+						"archive_date"  =>  'Date',
+						"publish_date"  =>  'Date',
+						"last_modified"	=>	'Timestamp',
+						"published"		=>	'Boolean',
+						"allow_comment" =>	'Boolean',
+						"headline"		=>	'Boolean',
+						"tags"			=>	'String',
+						"author_id"		=>	'Number',
+						"author"		=>	'String',
+						"publication"	=>	'String',
+						"sort_order"	=>	'Number'
 			);
 
-	var $relations = array(	"Image" 	=> ImageRecord,
-							"Sites"		=> Site,
-							"Comments"	=> Comment,
+	var $relations = array(	"Image" 	=> 'ImageRecord',
+							"Sites"		=> 'Site',
+							"Comments"	=> 'Comment',
 							"Author"	=> "",
-							"Blog"		=>	Blog,
+							"Blog"		=>	'Blog',
 			);
 	
 	var $fieldAliases = array("message"	=>	"Article Content");
@@ -78,17 +78,17 @@ class Article extends DataItem implements Searchable
 	
 	function Image()
 	{
-		return $this->getRelated(ImageRecord);
+		return $this->getRelated('ImageRecord');
 	}
 	
 	function Sites($constraint = "")
 	{
-		return $this->crossReference(Site, ArticleSiteXref, $constraint);
+		return $this->crossReference('Site', 'ArticleSiteXref', $constraint);
 	}
 	
 	function Comments($constraint = "")
 	{
-		return $this->crossReference(Comment, ArticleCommentXref, $constraint);
+		return $this->crossReference('Comment', 'ArticleCommentXref', $constraint);
 	}
 	
 	/**
@@ -307,21 +307,21 @@ class ArticleSearchResult extends AbstractSearchResult
 
 class ArticleSiteXref extends DataItem
 {
-	var $fields = array("article_site_xref_id"	=>	Number,
-						"article_id"				=>	Number,
-						"site_id"					=>	Number);
+	var $fields = array("article_site_xref_id"	=>	'Number',
+						"article_id"				=>	'Number',
+						"site_id"					=>	'Number');
 	
-	var $relations = array(	"Article"	=>	Article,
-							"Site"		=>	Site);
+	var $relations = array(	"Article"	=>	'Article',
+							"Site"		=>	'Site');
 	
 	function Article()
 	{
-		return $this->getRelated(Article);
+		return $this->getRelated('Article');
 	}
 	
 	function Site()
 	{
-		return $this->getRelated(Site);
+		return $this->getRelated('Site');
 	}
 	
 	function __construct()
@@ -334,12 +334,12 @@ class ArticleSiteXref extends DataItem
 
 class ArticleCommentXref extends DataItem
 {
-	var $fields = array("article_comment_xref_id"	=>	Number,
-						"article_id"				=>	Number,
-						"comment_id"				=>	Number);
+	var $fields = array("article_comment_xref_id"	=>	'Number',
+						"article_id"				=>	'Number',
+						"comment_id"				=>	'Number');
 	
-	var $relations = array(	"Article"	=>	Article,
-							"Comment"		=>	Comment);
+	var $relations = array(	"Article"	=>	'Article',
+							"Comment"		=>	'Comment');
 	
 	function verifyEnabled($article_id)
 	{
@@ -370,12 +370,12 @@ class ArticleCommentXref extends DataItem
 	
 	function Article()
 	{
-		return $this->getRelated(Article);
+		return $this->getRelated('Article');
 	}
 	
 	function Comment()
 	{
-		return $this->getRelated(Comment);
+		return $this->getRelated('Comment');
 	}
 	
 	function __construct()

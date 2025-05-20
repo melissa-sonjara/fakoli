@@ -38,21 +38,21 @@
 
 class VideoDownload extends DataItem
 {
-	var $fields = array("download_id"	=>	Number,
-						"video_id"	=>	Number,
-						"download_date"	=>	Timestamp,
-						"user_id"		=>	Number);
+	var $fields = array("download_id"	=>	'Number',
+						"video_id"	=>	'Number',
+						"download_date"	=>	'Timestamp',
+						"user_id"		=>	'Number');
 	
 						
 	// Relations
 	
-	var $relations = array(	"Video"	=>	Video,
+	var $relations = array(	"Video"	=>	'Video',
 							"User"		=>	"");
 
 	
 	function Video()
 	{
-		return $this->getRelated(Video);
+		return $this->getRelated('Video');
 	}
 	
 	function User()
@@ -76,25 +76,25 @@ class VideoDownloadDailyStats extends DataItem
 {
 	// Fields
 	
-	var $fields = array("video_id"			=>	Number,
-						"video_gallery_id"	=>	Number,
-						"download_date"			=>	Date,
-						"download_count"		=>	Number);
+	var $fields = array("video_id"			=>	'Number',
+						"video_gallery_id"	=>	'Number',
+						"download_date"			=>	'Date',
+						"download_count"		=>	'Number');
 
 	// Relations
 	
-	var $relations = array("VideoGallery"	=>	VideoGallery,
-						"Video"				=>	Video,
+	var $relations = array("VideoGallery"	=>	'VideoGallery',
+						"Video"				=>	'Video',
 			);
 	
 	function Video()
 	{
-		return $this->getRelated(Video);
+		return $this->getRelated('Video');
 	}
 	
 	function VideoGallery()
 	{
-		return $this->getRelated(VideoGallery);
+		return $this->getRelated('VideoGallery');
 	}
 	
 	function __construct()
@@ -110,17 +110,17 @@ class VideoDownloadTotalStats extends DataItem
 {
 	// Fields
 	
-	var $fields = array("video_id"			=>	Number,
-						"video_gallery_id"	=>	Number,
-						"download_count"		=>	Number);
+	var $fields = array("video_id"			=>	'Number',
+						"video_gallery_id"	=>	'Number',
+						"download_count"		=>	'Number');
 
 	// Relations
 	
-	var $relations = array("VideoGallery"	=>	VideoGallery);
+	var $relations = array("VideoGallery"	=>	'VideoGallery');
 	
 	function VideoGallery()
 	{
-		return $this->getRelated(VideoGallery);
+		return $this->getRelated('VideoGallery');
 	}
 	
 	function __construct()

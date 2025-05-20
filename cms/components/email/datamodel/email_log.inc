@@ -11,14 +11,14 @@ class EmailLog extends DataItem
 	var $primary_key = "email_log_id";
 	
 	var $fields = array(
-			"email_log_id"		=>	Number,
-			"sender_name"		=>	String,
-			"sender_email"		=>	String,
-			"recipient_name"	=>	String,
-			"recipient_email"	=>	String,
-			"subject"			=>	String,
-			"message"			=>	HTML,
-			"date_sent"			=>	Timestamp,
+			"email_log_id"		=>	'Number',
+			"sender_name"		=>	'String',
+			"sender_email"		=>	'String',
+			"recipient_name"	=>	'String',
+			"recipient_email"	=>	'String',
+			"subject"			=>	'String',
+			"message"			=>	'HTML',
+			"date_sent"			=>	'Timestamp',
 			);
 	
 	/**

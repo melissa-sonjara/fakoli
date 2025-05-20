@@ -12,12 +12,12 @@ class UserFeedback extends DataItem
 	
 	// Fields
 	
-	var $fields = array("feedback_id"	=>	Number,
-						"user_id"		=>	Number,
-						"session"		=>	String,
-						"feedback"		=>	Text,
-						"referer"		=>	String,
-						"created_date"	=>	DateTime);
+	var $fields = array("feedback_id"	=>	'Number',
+						"user_id"		=>	'Number',
+						"session"		=>	'String',
+						"feedback"		=>	'Text',
+						"referer"		=>	'String',
+						"created_date"	=>	'DateTime');
 	
 	// Relations
 	

@@ -41,8 +41,8 @@ class EventType extends DataItem
 {
 	// Fields
 	
-	var $fields = array("event_type_id"	=>	Number,
-						"name"			=>	String,
+	var $fields = array("event_type_id"	=>	'Number',
+						"name"			=>	'String',
 						);
 
 	// Relations

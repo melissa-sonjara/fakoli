@@ -41,10 +41,10 @@ class BindingTarget extends DataItem
 	var $table = "binding_target";
 	var $primary_key = "binding_target_id";
 	
-	var $fields = array("binding_target_id"		=>	Number,
-						"target_class"			=>	String,
-						"associated_classes"	=>	String,
-						"enable_facet_filter"	=>	Boolean);	
+	var $fields = array("binding_target_id"		=>	'Number',
+						"target_class"			=>	'String',
+						"associated_classes"	=>	'String',
+						"enable_facet_filter"	=>	'Boolean');	
 	
 	function getBoundItemIds($item)
 	{
@@ -67,20 +67,20 @@ class BindingRecord extends DataItem
 	var $table = "binding";
 	var $primary_key = "binding_id";
 	
-	var $fields = array("binding_id"	=>	Number,
-						"target_class"	=>	String,
-						"target_id"		=>	Number,
-						"class"			=>	String,
-						"id"			=>	Number);
+	var $fields = array("binding_id"	=>	'Number',
+						"target_class"	=>	'String',
+						"target_id"		=>	'Number',
+						"class"			=>	'String',
+						"id"			=>	'Number');
 }
 
 class BindingSummary extends DataItem
 {
 	var $table = "binding_summary";
 	
-	var $fields = array("class" 		=>	String,
-						"id"			=>	Number,
-						"target_class"	=>	String,
-						"target_ids"	=>	String);
+	var $fields = array("class" 		=>	'String',
+						"id"			=>	'Number',
+						"target_class"	=>	'String',
+						"target_ids"	=>	'String');
 }	
 /**@}*/?>

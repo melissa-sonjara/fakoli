@@ -8,9 +8,9 @@
 class ProgressData extends DataItem
 {
 	// Fields
-	var $fields = array("status"		=>	String,
-						"message"		=>	String,
-						"percentage"	=>	Number);
+	var $fields = array("status"		=>	'String',
+						"message"		=>	'String',
+						"percentage"	=>	'Number');
 	
 	function __construct()
 	{

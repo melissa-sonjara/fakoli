@@ -39,22 +39,22 @@
 class HelpBook extends DataItem
 {
 	// Fields
-	var $fields = array("help_book_id"			=>	Number,
-						"title"					=>	String,
-						"identifier"			=>	String,
-						"description"			=>	HTML,
-						"searchable"			=>	Boolean,
-						"remote"				=>	Boolean,
-						"url"					=>	String,
-						"additional_css_files"	=>	String);
+	var $fields = array("help_book_id"			=>	'Number',
+						"title"					=>	'String',
+						"identifier"			=>	'String',
+						"description"			=>	'HTML',
+						"searchable"			=>	'Boolean',
+						"remote"				=>	'Boolean',
+						"url"					=>	'String',
+						"additional_css_files"	=>	'String');
 	
-	var $relations = array("Pages"		=>	HelpPage,
+	var $relations = array("Pages"		=>	'HelpPage',
 			);
 	
 	
 	function Pages($constraint = "ORDER BY sort_order")
 	{
-		return $this->getRelatedList(HelpPage, "", $constraint);	
+		return $this->getRelatedList('HelpPage', "", $constraint);	
 	}
 	
 	static function findByIdentifier($identifier)

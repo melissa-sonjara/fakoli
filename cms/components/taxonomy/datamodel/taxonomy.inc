@@ -44,15 +44,15 @@ class Taxonomy extends DataItem
 	
 	var $_termCache = array();
 	
-	var $fields = array("taxonomy_id"			=>	Number,
-						"identifier"			=>	String,
-						"taxonomy_name"			=>	String,
-						"description"			=>	HTML,
-						"associated_classes"	=>	String,
-						"published"				=>	Boolean,
-						"enable_facet_filter"	=>	Boolean);
+	var $fields = array("taxonomy_id"			=>	'Number',
+						"identifier"			=>	'String',
+						"taxonomy_name"			=>	'String',
+						"description"			=>	'HTML',
+						"associated_classes"	=>	'String',
+						"published"				=>	'Boolean',
+						"enable_facet_filter"	=>	'Boolean');
 	
-	var $relations = array("Terms"			=>	TaxonomyTerm);
+	var $relations = array("Terms"			=>	'TaxonomyTerm');
 	
 	static function fromIdentifier($identifier)
 	{
@@ -63,12 +63,12 @@ class Taxonomy extends DataItem
 		
 	function Associations($constraint = "")
 	{
-		return $this->getRelatedList(TaxonomyAssociation, "", $constraint);
+		return $this->getRelatedList('TaxonomyAssociation', "", $constraint);
 	}
 	
 	function Terms($constraint = "")
 	{
-		return $this->getRelatedList(TaxonomyTerm, "", $constraint);
+		return $this->getRelatedList('TaxonomyTerm', "", $constraint);
 	}
 	
 	function getTerm($term)

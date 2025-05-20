@@ -43,13 +43,13 @@ class Comment extends DataItem
 	var $default_format = "{title}";
 	
 	// Fields
-	var $fields = array("comment_id"	=> Number,
-						"title"			=> String,
-						"user_id"  		=> Number,
-						"author"  		=> String,
-						"date_posted"	=> Timestamp,
-						"description"	=> Text,
-						"published"		=> Boolean
+	var $fields = array("comment_id"	=> 'Number',
+						"title"			=> 'String',
+						"user_id"  		=> 'Number',
+						"author"  		=> 'String',
+						"date_posted"	=> 'Timestamp',
+						"description"	=> 'Text',
+						"published"		=> 'Boolean'
 				);
 	
 	var $fieldAliases = array("description" => "Comment");

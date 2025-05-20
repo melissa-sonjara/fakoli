@@ -38,21 +38,21 @@
 
 class DocumentDownload extends DataItem
 {
-	var $fields = array("download_id"	=>	Number,
-						"document_id"	=>	Number,
-						"download_date"	=>	Timestamp,
-						"user_id"		=>	Number);
+	var $fields = array("download_id"	=>	'Number',
+						"document_id"	=>	'Number',
+						"download_date"	=>	'Timestamp',
+						"user_id"		=>	'Number');
 	
 						
 	// Relations
 	
-	var $relations = array(	"Document"	=>	Topic,
+	var $relations = array(	"Document"	=>	'Topic',
 							"User"		=>	"");
 
 	
 	function Document()
 	{
-		return $this->getRelated(Document);
+		return $this->getRelated('Document');
 	}
 	
 	function User()
@@ -76,18 +76,18 @@ class DocumentDownloadDailyStats extends DataItem
 {
 	// Fields
 	
-	var $fields = array("document_id"			=>	Number,
-						"document_library_id"	=>	Number,
-						"download_date"			=>	Date,
-						"download_count"		=>	Number);
+	var $fields = array("document_id"			=>	'Number',
+						"document_library_id"	=>	'Number',
+						"download_date"			=>	'Date',
+						"download_count"		=>	'Number');
 
 	// Relations
 	
-	var $relations = array("Library"	=>	DocumentLibrary);
+	var $relations = array("Library"	=>	'DocumentLibrary');
 	
 	function Library()
 	{
-		return $this->getRelated(DocumentLibrary);
+		return $this->getRelated('DocumentLibrary');
 	}
 	
 	function __construct()
@@ -102,17 +102,17 @@ class DocumentDownloadTotalStats extends DataItem
 {
 	// Fields
 	
-	var $fields = array("document_id"			=>	Number,
-						"document_library_id"	=>	Number,
-						"download_count"		=>	Number);
+	var $fields = array("document_id"			=>	'Number',
+						"document_library_id"	=>	'Number',
+						"download_count"		=>	'Number');
 
 	// Relations
 	
-	var $relations = array("Library"	=>	DocumentLibrary);
+	var $relations = array("Library"	=>	'DocumentLibrary');
 	
 	function Lbrary()
 	{
-		return $this->getRelated(DocumentLibrary);
+		return $this->getRelated('DocumentLibrary');
 	}
 	
 	function __construct()

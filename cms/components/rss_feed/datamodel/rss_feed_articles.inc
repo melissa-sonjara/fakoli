@@ -10,24 +10,24 @@ class RSSFeedArticles extends DataItem
 	var $primary_key = "rss_article_id";
 	
 	var $fields = array(
-		"rss_article_id"		=>	Number,
-		"rss_title"				=>	Text,
-		"rss_feed_id"			=>	Number,
-		"rss_article_author"	=>	String,
-		"rss_article_newsStory"	=>	Text,
-		"rss_article_content"	=>	Text,
-		"rss_article_URL"		=>	String,
-		"rss_thumbnail"			=>	String,
-		"article_date"			=>	DateTime,
-		"publish_status"		=>	Boolean,
-		"date_added"			=>	Timestamp
+		"rss_article_id"		=>	'Number',
+		"rss_title"				=>	'Text',
+		"rss_feed_id"			=>	'Number',
+		"rss_article_author"	=>	'String',
+		"rss_article_newsStory"	=>	'Text',
+		"rss_article_content"	=>	'Text',
+		"rss_article_URL"		=>	'String',
+		"rss_thumbnail"			=>	'String',
+		"article_date"			=>	'DateTime',
+		"publish_status"		=>	'Boolean',
+		"date_added"			=>	'Timestamp'
 		);
 	
-	var $relations = array("RSSFeed"	=>	RSSFeed);
+	var $relations = array("RSSFeed"	=>	'RSSFeed');
 
 	function RSSFeed()
 	{
-		return $this->getRelated(RSSFeed);
+		return $this->getRelated('RSSFeed');
 	}
 	
 	static function getPublishedArticles($limit = 10)

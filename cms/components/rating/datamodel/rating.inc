@@ -10,11 +10,11 @@ class PageRating extends DataItem
 	var $table = "rating";
 	var $primary_key = "rating_id";
 	
-	var $fields = array("rating_id"		=>	Number,
-						"url"			=>	String,
-						"user_id"		=>	Number,
-						"rating"		=>	Number,
-						"rating_date"	=>	Timestamp);
+	var $fields = array("rating_id"		=>	'Number',
+						"url"			=>	'String',
+						"user_id"		=>	'Number',
+						"rating"		=>	'Number',
+						"rating_date"	=>	'Timestamp');
 	
 	static function fromURL($url, $user_id = 0)
 	{
@@ -44,9 +44,9 @@ class PageRatingStatistics extends DataItem
 {
 	var $table = "rating_statistics";
 	
-	var $fields = array("url"				=>	String,
-						"average_rating"	=>	Number,
-						"number_of_ratings"	=>	Number);
+	var $fields = array("url"				=>	'String',
+						"average_rating"	=>	'Number',
+						"number_of_ratings"	=>	'Number');
 	
 	static function fromURL($url)
 	{

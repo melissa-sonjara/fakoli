@@ -49,20 +49,20 @@ class LinkRecord extends DataItem // implements Searchable
 	
 	// Fields
 
-	var $fields = array("link_id"			=>	Number,
-						"title"				=>	String,
-						"url"				=>	String,
-						"description"		=>	HTML,
-						"published"			=>	Boolean,
-						"last_modified"		=>	Timestamp,
-						"link_library_id"	=>	Number,
-						"owner_id"			=>	Number,
-						"sort_order"		=>	Number);
+	var $fields = array("link_id"			=>	'Number',
+						"title"				=>	'String',
+						"url"				=>	'String',
+						"description"		=>	'HTML',
+						"published"			=>	'Boolean',
+						"last_modified"		=>	'Timestamp',
+						"link_library_id"	=>	'Number',
+						"owner_id"			=>	'Number',
+						"sort_order"		=>	'Number');
 
 	// Relations
 
 	var $relations = array("Owner"			=>	"",
-						   "LinkLibrary"	=>	LinkLibrary
+						   "LinkLibrary"	=>	'LinkLibrary'
 	);
 
 	function Owner()
@@ -81,7 +81,7 @@ class LinkRecord extends DataItem // implements Searchable
 	
 	function LinkLibrary()
 	{
-		return $this->getRelated(LinkLibrary);
+		return $this->getRelated('LinkLibrary');
 	}
 	
 	function search($params, $range = null)
