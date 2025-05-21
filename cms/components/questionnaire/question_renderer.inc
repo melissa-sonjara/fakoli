@@ -89,7 +89,7 @@ class QuestionField
 		return "";
 	}
 	
-	function drawGraph()
+	function drawGraph($mgr, $answers)
 	{
 		
 	}
