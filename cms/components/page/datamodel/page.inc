@@ -97,11 +97,11 @@ class Page extends DataItem implements Searchable
 		global $identifier;
 		
 		$join = new InnerJoin();
-		$join->add(Module);
-		$join->add(PageModuleXref);
+		$join->add('Module');
+		$join->add('PageModuleXref');
 		
 		$result = $join->groupedQuery("WHERE page_id={$this->page_id} $constraint", "PageModuleXref.position");
-		$modules = extractGroupedJoinResults(Module, $result);
+		$modules = extractGroupedJoinResults('Module', $result);
 
 		// If no modules have been set, use the section defaults
 		if (count($modules) == 0 && $section)

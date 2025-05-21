@@ -48,8 +48,8 @@ class DocumentTotalDownloadsView
 		$this->library = $library;
 
 		$join = new InnerJoin();
-		$join->add(Document);
-		$join->add(DocumentDownloadTotalStats);
+		$join->add('Document');
+		$join->add('DocumentDownloadTotalStats');
 		$results = $join->query("WHERE document_library_id={$this->library->document_library_id} ORDER BY title");
 		
 		$this->table = new DataListView($results, "document_download_stats_total");

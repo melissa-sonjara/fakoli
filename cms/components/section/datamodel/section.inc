@@ -159,11 +159,11 @@ class Section extends DataItem
 		if (!$modules)
 		{
 			$join = new InnerJoin();
-			$join->add(Module);
-			$join->add(SectionModuleXref);
+			$join->add('Module');
+			$join->add('SectionModuleXref');
 			
 			$result = $join->groupedQuery("WHERE section_id={$this->section_id} $constraint", "SectionModuleXref.position");
-			$modules = extractGroupedJoinResults(Module, $result);
+			$modules = extractGroupedJoinResults('Module', $result);
 			
 			// Merge in global modules
 			$globals = groupedQuery('Module', "WHERE global=1", "global_position");
@@ -292,11 +292,11 @@ class SectionContent extends DataItem
 		if (!$modules)
 		{
 			$join = new InnerJoin();
-			$join->add(Module);
-			$join->add(SectionContentModuleXref);
+			$join->add('Module');
+			$join->add('SectionContentModuleXref');
 				
 			$result = $join->groupedQuery("WHERE section_content_id={$this->section_content_id} $constraint", "SectionContentModuleXref.position");
-			$modules = extractGroupedJoinResults(Module, $result);
+			$modules = extractGroupedJoinResults('Module', $result);
 				
 			if (count($modules) > 0)
 			{

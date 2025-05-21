@@ -91,11 +91,11 @@ class ComponentPage extends DataItem
 		global $identifier;
 		
 		$join = new InnerJoin();
-		$join->add(Module);
-		$join->add(ComponentPageModuleXref);
+		$join->add('Module');
+		$join->add('ComponentPageModuleXref');
 		
 		$result = $join->groupedQuery("WHERE component_page_id={$this->component_page_id} $constraint", "ComponentPageModuleXref.position");
-		$modules = extractGroupedJoinResults(Module, $result);
+		$modules = extractGroupedJoinResults('Module', $result);
 		
 		// If no modules have been set, use the section defaults
 		if (count($modules) == 0 && $section)

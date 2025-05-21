@@ -48,8 +48,8 @@ class VideoTotalDownloadsView
 		$this->gallery = $gallery;
 
 		$join = new InnerJoin();
-		$join->add(Video);
-		$join->add(VideoDownloadTotalStats);
+		$join->add('Video');
+		$join->add('VideoDownloadTotalStats');
 		$results = $join->query("WHERE video_gallery_id={$this->gallery->video_gallery_id} ORDER BY title");
 		
 		$this->table = new DataListView($results, "video_download_stats_total");
