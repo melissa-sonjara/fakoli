@@ -43,7 +43,7 @@
  */
 class ExcelFileWriter
 {
-	static $handler = ExcelFile;
+	static $handler = 'ExcelFile';
 	
 	static function create($filename)
 	{
