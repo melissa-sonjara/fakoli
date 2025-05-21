@@ -62,7 +62,7 @@ class ConnectableTableFieldRenderer extends FieldRenderer
 		return $item->format("<input type='checkbox' class='checkbox' name='{$pk}[]' id='{$pk}_{{$pk}}' value='{{$pk}}'{$checked}/>");
 	}
 	
-	function renderScript()
+	function renderScript($field = "")
 	{
 		echo $this->table->writeScript();
 	}
