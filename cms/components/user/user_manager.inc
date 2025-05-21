@@ -79,7 +79,7 @@ class UserManager
 	 */
 	function getUserClass()
 	{
-		return SiteUser;
+		return 'SiteUser';
 	}
 	
 	/**
