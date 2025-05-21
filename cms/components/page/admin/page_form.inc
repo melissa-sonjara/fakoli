@@ -56,7 +56,6 @@ else
 
 $cmspage->created_date = date("Y-m-d");
 
-$cmspage->archive_date = strftime('%Y-%m-%d', '0000-00-00');
 $form = new AutoForm($cmspage);
 $form->alias("menu_id", "Menu");
 $form->markRequiredFields = true;
