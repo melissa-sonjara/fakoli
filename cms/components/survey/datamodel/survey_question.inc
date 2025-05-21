@@ -82,7 +82,7 @@ class SurveyQuestion extends AbstractQuestion
 	function SurveyQuestionXref($survey_id)
 	{
 		if($this->survey_question_id)
-			return querySingle(SurveyQuestionXref, "WHERE survey_question_id = {$this->survey_question_id} AND survey_id = $survey_id");
+			return querySingle('SurveyQuestionXref', "WHERE survey_question_id = {$this->survey_question_id} AND survey_id = $survey_id");
 	}
 
 	function isEditable()

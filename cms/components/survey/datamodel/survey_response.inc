@@ -87,7 +87,7 @@ class SurveyResponse extends AbstractQuestionnaireResponse
 		$questions = $this->Questions();
 		foreach($questions as $question)
 		{
-			$answer = querySingle(SurveyAnswer, "WHERE response_id = {$this->response_id} AND survey_question_id = $question->survey_question_id");
+			$answer = querySingle('SurveyAnswer', "WHERE response_id = {$this->response_id} AND survey_question_id = $question->survey_question_id");
 			if($answer)
 				array_push($answers, $answer);
 		}

@@ -54,7 +54,7 @@
  
 function __construct()
 {
-	$token = querySingle(LoginToken, "WHERE user_id={$this->user_id}");
+	$token = querySingle('LoginToken', "WHERE user_id={$this->user_id}");
 	return $token;
 }
 

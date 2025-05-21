@@ -152,7 +152,7 @@ class UserManager
 	 */
 	function validatePassword($username, $password)
 	{
-		$user = querySingle(SiteUser, "WHERE username='{$username}' and active=1");
+		$user = querySingle('SiteUser', "WHERE username='{$username}' and active=1");
 			
 		if ($user && crypt($_POST["password"], $user->password) === $user->password)
 		{
