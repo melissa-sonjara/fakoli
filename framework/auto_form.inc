@@ -1047,7 +1047,7 @@ class AutoForm
 	 */
 	function unique()
 	{
-		for($i = 0; $i < func_num_args(); $i += 2)
+		for($i = 0; $i < func_num_args() - 1; $i += 2)
 		{
 			$field = func_get_arg($i);
 			$message = func_get_arg($i + 1);
