@@ -461,7 +461,7 @@ class FileBackedCache
 
 	function keyToFile($key)
 	{
-		return $this->cacheDir . DIRECTORY_SEPARATOR . $key . ".txt";
+		return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('/', '^', $key) . ".txt";
 	}
 
 	function get($key)
@@ -527,8 +527,9 @@ class FileBackedCache
 			{
 			    echo "Couldn't get the lock!";
 			}
+			
+			if ($fp !== false) fclose($fp);
 		}
-		fclose($fp);
 		
 		return true;
 		// NOTE - ttl is ignored if using in-memory caching.
