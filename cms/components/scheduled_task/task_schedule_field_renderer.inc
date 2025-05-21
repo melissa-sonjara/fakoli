@@ -108,5 +108,5 @@ class TaskScheduleFieldRenderer extends FieldRenderer
 
 
 // Register the field renderer
-AutoForm::registerFieldRendererClass(TaskSchedule, TaskScheduleFieldRenderer);
+AutoForm::registerFieldRendererClass('TaskSchedule', 'TaskScheduleFieldRenderer');
 /**@}*/?>

@@ -31,7 +31,7 @@ class DatePickerManager
 		
 		if (Settings::getValue("date_picker", "use_mooTools_date_picker"))
 		{
-			AutoForm::registerFieldRendererClass(DateTime, MooToolsDateTimeFieldRenderer);
+			AutoForm::registerFieldRendererClass('DateTime', 'MooToolsDateTimeFieldRenderer');
 		}
 	}
 	

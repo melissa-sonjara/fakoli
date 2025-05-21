@@ -79,5 +79,5 @@ TermsAndConditions.title = "<?echo $title?>";
 
 
 // Register the field renderer
-AutoForm::registerFieldRendererClass(TermsAndConditions, TermsAndConditionsFieldRenderer);
+AutoForm::registerFieldRendererClass('TermsAndConditions', 'TermsAndConditionsFieldRenderer');
 /**@}*/?>
