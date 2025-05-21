@@ -22,7 +22,7 @@ class CustomReportListView
 		$this->reports = Query::create('CustomReport', "WHERE title != '' AND $constraints")->execute();
 		
 		$this->id = $id;
-		$this->list = new PagedList($this->reports, "{$id}_list", array($this, formatReport));
+		$this->list = new PagedList($this->reports, "{$id}_list", array($this, 'formatReport'));
 		$this->list->pageSize = $pageSize;
 		$this->list->emptyList = "<em>No reports found.</em>";
 	}

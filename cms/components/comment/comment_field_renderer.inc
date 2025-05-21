@@ -211,7 +211,7 @@ class CommentFieldRenderer extends FieldRenderer
 		}
 
 		$field = $this->field;
-		$list = new PagedList($comments, "{$this->parent->id}_{$field}", array($this, formatComment));
+		$list = new PagedList($comments, "{$this->parent->id}_{$field}", array($this, 'formatComment'));
 		$list->styles = "clear: both";
 		$list->CSSclass = "comment";
 		$list->paginate = false;

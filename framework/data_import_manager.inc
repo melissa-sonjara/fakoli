@@ -758,7 +758,7 @@ class DataImportManager
 
 		$pk = $this->getPrimaryKey();
 		$table = new DataListView($pObjs, $this->id);
-		$table->column("Row", array($this, formatRowIndex));
+		$table->column("Row", array($this, 'formatRowIndex'));
 		$table->column(prettify($pk), "{{$pk}}");
 		
 		foreach($this->columns as $column)
@@ -767,7 +767,7 @@ class DataImportManager
 			$table->column($column->label, "{{$field}}");
 		}
 		
-		$table->onStartRow = array($this, previewRowStyle);		
+		$table->onStartRow = array($this, 'previewRowStyle');		
 		$table->emptyMessage = "No data to be imported.";
 		$table->sortable = false;
 		$table->paginate = false;
@@ -910,16 +910,16 @@ class DataImportColumn extends DataItem
 		
 		if($this->options && !$importer)
 		{
-			$this->importer = array($this, importOption);
+			$this->importer = array($this, 'importOption');
 		}
 		
 		if($this->options)
 		{
-			$this->preview_template = array($this, formatOptionPreview);	
+			$this->preview_template = array($this, 'formatOptionPreview');	
 		}
 		else
 		{
-			$this->preview_template = array($this, formatPreview);
+			$this->preview_template = array($this, 'formatPreview');
 		}
 		
 		$this->template = "{{$field}}";

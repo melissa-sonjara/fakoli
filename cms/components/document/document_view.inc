@@ -36,7 +36,7 @@ class DocumentLibraryView
 		$docWidth = $showUploadDetails ? "40%" : "80%";
 		
 		$table = new DataListView($this->mgr->documents, "document_library");
-		$table->column("Document", array($this, formatDocumentTitle), true, "width: {$docWidth}", String, null, "{title:lower}")
+		$table->column("Document", array($this, 'formatDocumentTitle'), true, "width: {$docWidth}", String, null, "{title:lower}")
 			  ->column("Author", "{author}", true, "width: 20%");
 		
 		if ($showUploadDetails)
@@ -179,7 +179,7 @@ class DocumentLibraryListView
 	function buildTable($libraries)
 	{
 		$table = new DataListView($libraries, "libraries");
-		$table->column("Library", array($this, formatTitleLink), true, "width: 50%")
+		$table->column("Library", array($this, 'formatTitleLink'), true, "width: 50%")
 			  ->column("Identifier", "{identifier}", true, "width: 15%")
 	  		->column("Owner", "{getOwnerName()}", true, "width: 20%")
 	  		->column("# Docs", "{countDocuments()}", true, "width: 15%;text-align: right");

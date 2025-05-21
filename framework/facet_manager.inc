@@ -59,7 +59,7 @@ class FacetManager
 		$this->target = $target;
 		$this->facets = array();
 		
-		$this->target->addFacetTaggingHandler(array($this, onTagItem));
+		$this->target->addFacetTaggingHandler(array($this, 'onTagItem'));
 	}
 	
 	function addFacet($title, $facet)

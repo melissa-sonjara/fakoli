@@ -20,11 +20,11 @@ class ArticleListView
 	function buildTable($articles)
 	{
 		$table = new DataListView($articles, "articles");
-		$table->column("Title", array($this, formatTitle), true)
+		$table->column("Title", array($this, 'formatTitle'), true)
 	  		->column("Article Type", "{article_type}", true)
 	  		->column("Author", "{getAuthorName()}", true)
 	  		->column("Date Created", "{created_date}", true)
-	  		->column("Published", array($this, showPublished), false, "text-align: center");
+	  		->column("Published", array($this, 'showPublished'), false, "text-align: center");
 	  
 		$table->sortable = true;
 		$table->filter = true;

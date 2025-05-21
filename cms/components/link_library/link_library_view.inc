@@ -17,7 +17,7 @@ class LinkLibraryListView
 	function buildTable($libraries)
 	{
 		$table = new DataListView($libraries, "libraries");
-		$table->column("Library", array($this, formatTitleLink), true, "width: 55%")
+		$table->column("Library", array($this, 'formatTitleLink'), true, "width: 55%")
 	  		->column("Owner", "{getOwnerName()}", true, "width: 30%")
 	  		->column("# Links", "{countLinks()}", true, "width: 15%;text-align: right");
 	  
@@ -106,7 +106,7 @@ class TabularLinkLibraryView extends LinkLibraryView
 	function buildView()
 	{
 		$table = new DataListView($this->links, "library_link_list");
-		$table->column("Link", array($this, formatLinkTitle), true, "width: 40%", String, null, "{title:lower}")
+		$table->column("Link", array($this, 'formatLinkTitle'), true, "width: 40%", String, null, "{title:lower}")
 			  ->column("Description", "{description}", true, "width: 40%");
 			//  ->column("Last Modified", "{last_modified:short}", false, "width: 20%; text-align: center"); fk: 
 				

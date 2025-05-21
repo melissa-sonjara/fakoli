@@ -253,14 +253,14 @@ function deleteFolderResult(result)
 		$tree->height = 400;
 		$tree->onSelectionChanged = "selectionChanged";
 		$tree->onDoubleClick = "editFile";
-		$tree->permissionCallback = array($this, excludeVersionControl);
+		$tree->permissionCallback = array($this, 'excludeVersionControl');
 		$tree->icons[".tpl"] = "/fakoli/images/tpl_icon.png";
 		$tree->icons[".css"] = "/fakoli/images/css_icon.png";
 		
 		$tree->selectMode = "both";
 		
 		$tree->buildFolderTree($this->folder, $this->base);
-		$tree->addFiles($this->folder, $this->base, array($this, fileFilter));
+		$tree->addFiles($this->folder, $this->base, array($this, 'fileFilter'));
 				
 		$tree->children[$this->folder]->open = true;
 		$tree->writeHTML();

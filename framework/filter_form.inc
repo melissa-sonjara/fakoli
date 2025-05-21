@@ -944,7 +944,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 		// Needs to have a value so that it is included in the constraint
 		$parent->setParam($this->startParam, "to", $this->to);
 		// override default search constraint generation
-		$parent->setHandler($this->startParam, array($this, getConstraint));
+		$parent->setHandler($this->startParam, array($this, 'getConstraint'));
 	}
 	
 	function calculateDateRange()

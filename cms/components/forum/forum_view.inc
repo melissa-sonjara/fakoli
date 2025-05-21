@@ -58,8 +58,8 @@ class ForumListView
 		$this->table = new DataListView($fora, $id);
 		
 		
-		$this->table->column("Title", array($this, formatTitle), true, "width: 40%")
-			 		->column("Last Post", array($this, formatLastPost), true, "width: 40%")
+		$this->table->column("Title", array($this, 'formatTitle'), true, "width: 40%")
+			 		->column("Last Post", array($this, 'formatLastPost'), true, "width: 40%")
 			 		->column("Topics", "{topics}", true, "width: 10%;text-align: center")
 			 		->column("Posts", "{posts}", true, "width: 10%;text-align: center");
 			 		
@@ -132,8 +132,8 @@ class ForumDetailsView
 		$this->messages = indexedQuery('ForumMessage', "WHERE forum_id={$forum->forum_id} AND deleted=false AND parent_id=0", "topic_id");
 		
 		$this->table = new DataListView($this->topics, "topic_list");
-		$this->table->column("Title", array($this, formatTitle), true, "width: 40%")
-					->column("Last Post", array($this, formatLastPost), true, "width: 40%")
+		$this->table->column("Title", array($this, 'formatTitle'), true, "width: 40%")
+					->column("Last Post", array($this, 'formatLastPost'), true, "width: 40%")
 					->column("Views", "{views}", true, "width: 10%; text-align: center")
 					->column("Replies", "{countReplies()}", true, "width: 10%; text-align: center");
 		$this->table->emptyMessage = "No topics have been started in this discussion forum";

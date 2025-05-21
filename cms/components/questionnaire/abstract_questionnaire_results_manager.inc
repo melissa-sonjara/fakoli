@@ -223,7 +223,7 @@ abstract class AbstractQuestionnaireResultsManager extends AbstractQuestionnaire
 		$questionSelect = new DataListFieldRenderer($form, $table, "questionnaire_questions");
 		$questionSelect->hideLabel = true;
 		$form->submitLabel = "Save Question Names";
-		$questionSelect->onPostProcess = array($this, saveQuestionNames);
+		$questionSelect->onPostProcess = array($this, 'saveQuestionNames');
 
 		if(count($questions) == 0)
 		{

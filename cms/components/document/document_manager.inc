@@ -296,7 +296,7 @@ function deleteFolderResult(result)
 		$tree->onDoubleClick = "downloadFile";
 		
 		$tree->selectMode = "file";
-		$tree->permissionCallback = array($this, folderPermission);
+		$tree->permissionCallback = array($this, 'folderPermission');
 		
 		$root = $this->library->getLibraryDirectory();
 		
@@ -518,7 +518,7 @@ function deleteFolderResult(result)
 		$tree->onDoubleClick = $doubleClick;
 		
 		$tree->selectMode = "file";
-		$tree->permissionCallback = array($this, folderPermission);
+		$tree->permissionCallback = array($this, 'folderPermission');
 		
 		if ($this->documents)
 		{

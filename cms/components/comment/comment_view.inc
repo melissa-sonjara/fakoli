@@ -119,7 +119,7 @@ class CommentView
 		{
 			$comments = $obj->Comments("Where published=1 ORDER BY date_posted DESC");
 		}
-		$list = new PagedList($comments, "comment_list", array($this, formatComment));
+		$list = new PagedList($comments, "comment_list", array($this, 'formatComment'));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		$list->paginate = false;
@@ -252,7 +252,7 @@ class CommentView
 		$form->alias("title", "Subject", "author", "Your Name");
 		$form->alias("description", "Comment");
 		$form->hide(user_id, published);
-		$form->onSaveComplete = array($this, addXrefRecord);
+		$form->onSaveComplete = array($this, 'addXrefRecord');
 		
 		if ($user)
 		{

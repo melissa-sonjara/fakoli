@@ -332,7 +332,7 @@ class QuestionnaireDataView
 		$dataView = new GroupedDataListView($this->optionAnswers, "OptionDataList");
 		$dataView->column("Option", "{option}", false, "width: 90%")
 		->column("Count", "{count}", false, "width: 10%");
-		$dataView->groupBy($this->questions, array($this, getGroupTitle));
+		$dataView->groupBy($this->questions, array($this, 'getGroupTitle'));
 		$dataView->mode = 'tree';
 		$dataView->emptyMessage = "There are no aggregated data results.";
 		$dataView->excelFile = "option_surveyData.xls";

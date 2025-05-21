@@ -580,7 +580,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 			$form->readOnlyForm = true;
 		}
 
-		$questionSelect->onPostProcess = array($this, saveSelectedQuestions);
+		$questionSelect->onPostProcess = array($this, 'saveSelectedQuestions');
 
 		return $form;
 	}

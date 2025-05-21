@@ -385,7 +385,7 @@ class ActivityReportFilterHelper
 		$filterForm->hide("session_end");
 		$dateRangeFilter = new DateRangeFilterRenderer($filterForm, "session_start", "session_end", "month");
 		$userCheckBox = new BooleanFilterFieldRenderer($filterForm, "feedback_user", "Show only users that provided feedback", 1);
-		$filterForm->setHandler("feedback_user", array($this, getFeedbackUserClause));
+		$filterForm->setHandler("feedback_user", array($this, 'getFeedbackUserClause'));
 		
 		return $filterForm;
 	}

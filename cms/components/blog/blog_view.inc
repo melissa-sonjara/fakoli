@@ -110,7 +110,7 @@ class DefaultBlogViewHandler implements IBlogViewHandler
 		
 		BlogManager::inlineEditingControls($blog);
 		
-		$list = new ServerPagedList($articles, "article_list", array($this, formatArticle));
+		$list = new ServerPagedList($articles, "article_list", array($this, 'formatArticle'));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		
@@ -216,7 +216,7 @@ class NewsBlogViewHandler implements IBlogViewHandler
 	
 		BlogManager::inlineEditingControls($blog);
 				
-		$list = new ServerPagedList($articles, "article_list", array($this, formatArticle));
+		$list = new ServerPagedList($articles, "article_list", array($this, 'formatArticle'));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both";
 		$list->pageSize = $blog->articles_per_page;
@@ -300,7 +300,7 @@ class BookBlogViewHandler implements IBlogViewHandler
 
 		BlogManager::inlineEditingControls($blog);
 		
-		$list = new PagedList($articles, "article_list", array($this, formatArticle));
+		$list = new PagedList($articles, "article_list", array($this, 'formatArticle'));
 		$list->CSSclass = "Standard";
 		$list->styles = "clear: both; width: 100%";
 		$list->pageSize = $blog->articles_per_page;
@@ -462,11 +462,11 @@ class BlogListView
 	function buildTable($blogs)
 	{
 		$table = new DataListView($blogs, "blogs");
-		$table->column("Title", array($this, formatTitleLink), true, "width: 40%")
+		$table->column("Title", array($this, 'formatTitleLink'), true, "width: 40%")
 	  		->column("Identifier", "{identifier}", true, "width: 30%")
 	  		->column("Owner", "{getOwnerName()}", true, "width: 20%")
 	  		->column("# Articles", "{countArticles()}", true, "width: 10%; text-align: center")
-	  		->column("Published", array($this, showPublished), true, "width: 10%; text-align: center");
+	  		->column("Published", array($this, 'showPublished'), true, "width: 10%; text-align: center");
 	  
 		$table->sortable = true;
 		$table->filter = true;
@@ -531,10 +531,10 @@ class BlogArticlesView
 	function buildTable($articles)
 	{
 		$table = new DataListView($articles, "articles");
-		$table->column("Title", array($this, formatTitle), true)
+		$table->column("Title", array($this, 'formatTitle'), true)
 	  		->column("Author", "{getAuthorName()}", true)
 	  		->column("Date Published", "{publish_date}", true)
-	  		->column("Published", array($this, showPublished), false, "text-align: center");
+	  		->column("Published", array($this, 'showPublished'), false, "text-align: center");
 	  
 		$table->sortable = true;
 		$table->filter = true;

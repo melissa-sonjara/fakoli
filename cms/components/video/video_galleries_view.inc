@@ -52,10 +52,10 @@ class VideoGalleriesView
 	function buildTable($galleries)
 	{
 		$table = new DataListView($galleries, "galleries");
-		$table->column("Video Gallery", array($this, formatTitleLink), true, "width: 55%")
+		$table->column("Video Gallery", array($this, 'formatTitleLink'), true, "width: 55%")
 	  		->column("Owner", "{getOwnerName()}", true, "width: 30%")
 	  		->column("# Videos", "{countVideos()}", true, "width: 15%;text-align: right")
-	  		->column("Published", array($this, showPublished), false, "text-align: center");
+	  		->column("Published", array($this, 'showPublished'), false, "text-align: center");
 	  
 		$table->sortable = true;
 		$table->filter = true;

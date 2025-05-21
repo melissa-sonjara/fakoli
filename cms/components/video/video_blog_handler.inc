@@ -87,7 +87,7 @@ ENDSCRIPT;
 
 		echo "<div id='blog_description' class='Video'>{$blog->description}</div>";
 		
-		$list = new PagedList($articles, "article_list", array($this, formatArticle));
+		$list = new PagedList($articles, "article_list", array($this, 'formatArticle'));
 		$list->CSSclass = "Video";
 		$list->styles = "clear: both";
 		$list->pageSize = 5;

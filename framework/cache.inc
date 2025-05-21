@@ -191,7 +191,7 @@ class SimpleMemoryCache
 	function invalidateMatching($pattern)
 	{
 		$this->pattern = $pattern;
-		$this->cache = arrayFilterKey($this->cache, array($this, filterKey));
+		$this->cache = arrayFilterKey($this->cache, array($this, 'filterKey'));
 		unset($this->pattern);
 	}
 	
@@ -396,7 +396,7 @@ class WCCache
 		{
 			$keys[] = $entry['key_name'];
 		}
-		$doomedKeys = array_filter($keys, array($this, filterKey));
+		$doomedKeys = array_filter($keys, array($this, 'filterKey'));
 		
 		foreach($doomedKeys as $key)
 		{
