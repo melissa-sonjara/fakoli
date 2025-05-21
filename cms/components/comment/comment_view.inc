@@ -251,7 +251,7 @@ class CommentView
 		$form->required("description");
 		$form->alias("title", "Subject", "author", "Your Name");
 		$form->alias("description", "Comment");
-		$form->hide(user_id, published);
+		$form->hide("user_id", "published");
 		$form->onSaveComplete = array($this, 'addXrefRecord');
 		
 		if ($user)
