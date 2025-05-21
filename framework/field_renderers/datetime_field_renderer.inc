@@ -53,7 +53,7 @@ class DateTimeFieldRenderer extends FieldRenderer
 	
 	function __construct(&$parent)
 	{
-		$this->__construct($parent);
+		parent::__construct($parent);
 	}
 	
 	function addValidatorsToForm($field, $required = false)
