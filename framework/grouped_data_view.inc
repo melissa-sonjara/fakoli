@@ -99,8 +99,8 @@ class DataGroup
  */
 class GroupedDataListView
 {
-	var $columns;		///< The column definitions for the table.
-	var $footerColumns;	///< The footer column definitions for the table.
+	var $columns = [];		///< The column definitions for the table.
+	var $footerColumns = [];	///< The footer column definitions for the table.
 	var $cssClass;		///< Optional CSS class to apply to the table
 	var $groupClass;	///< The CSS class to apply to the group subheading rows.
 	var $id;			///< ID of the table in the output script.
@@ -117,13 +117,13 @@ class GroupedDataListView
 	var $showSelectAll = true;	///< Show Select All buttons for selectable tables
 	var $rowId = false; // whether to include an id tag for each tr row
 	var $rowIdFormat = null;				///< Optionally specify a custom row ID format
-	var $groupFooterColumns = array(); // subtotal footer for group
-	var $totalCallbacks = array(); // the onStartRow callbacks for totalling
+	var $groupFooterColumns = []; // subtotal footer for group
+	var $totalCallbacks = []; // the onStartRow callbacks for totalling
 	var $groupAsWorksheets = false; ///< Format groups as separate worksheets when exporting to Excel (requires PHPExcel)
 	var $menu = null;					///< Context menu for selection-based operations
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	var $hideExcelIcon = false;			///< Suppress the automatic Excel icon if you want an external link
-	var $tagRowCallbacks = array();	 ///< Array of callbacks for adding extra attributes to each row
+	var $tagRowCallbacks = [];	 ///< Array of callbacks for adding extra attributes to each row
 	// Scrolling Table parameters
 	
 	var $height;

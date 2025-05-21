@@ -125,9 +125,9 @@ class DataListView implements FacetFilterable
 		$this->excelFile = null;
 		$this->summary = null;
 		$this->zebra = true;
-		$this->totalCallbacks = array();
-		$this->tagRowCallbacks = array();
-		
+		$this->totalCallbacks = [];
+		$this->tagRowCallbacks = [];
+		$this->footerColumns = [];
 		return $this;
 	}
 
