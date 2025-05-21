@@ -515,7 +515,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
   		$this->_endField($field);
   	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode, $value = '')
 	{
 		$this->renderField($field);
 	}
@@ -638,7 +638,7 @@ class BooleanFilterFieldRenderer extends BooleanFieldRenderer
 	 * When the checkbox is checked or unchecked,
 	 * update the value of the hidden field.
 	 */
-	function renderSearchScript($field)
+	function renderSearchScript($field, $mode = 'match')
 	{
 		$selChanged = "selChanged_" . $field . "_box";
 		$onSubmit = $this->parent->getOnSubmitFunction();
@@ -663,7 +663,7 @@ function <? echo $selChanged ?>(elt)
 <?	
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode = 'match')
 	{
 		$this->_startField($field, $this->styles);
 			
@@ -744,7 +744,7 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 	/*
 	 * Draws a horizontal line of checkboxes.
 	 */
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 		$this->_startField($field, $this->styles);
 		
@@ -814,7 +814,7 @@ class RadioButtonFilterFieldRenderer extends RadioButtonFieldRenderer
 		$this->horizontal = true;
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 		$this->_startField($field, $this->styles);
 		
@@ -1132,7 +1132,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 		$this->handler = $handler;
 	}
 	
-	function renderSearchScript($field)
+	function renderSearchScript($field, $mode)
 	{
 		if (array_key_exists($field, $this->parent->hidden)) return "";
 		
@@ -1158,7 +1158,7 @@ ENDSCRIPT;
 	 * then write them as hidden fields so the values are in
 	 * $_GET.
 	 */
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 
 		$this->_startField($field);
@@ -1273,7 +1273,7 @@ class ProgressiveSearchFilterFieldRenderer extends FieldRenderer
 		$this->searchOptions = $searchOptions;
 	}
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 		$this->_startField($field, $this->styles);
 				
@@ -1284,7 +1284,7 @@ class ProgressiveSearchFilterFieldRenderer extends FieldRenderer
 		$this->_endField($field);
 	}
 	
-	function renderSearchScript($field)
+	function renderSearchScript($field, $mode)
 	{
 ?>
 <script type="text/javascript">
@@ -1311,7 +1311,7 @@ class RelatedItemSelectFilterFieldRenderer extends RelatedItemSelectFieldRendere
 	}	
 	
 	
-	function renderSearchField($field)
+	function renderSearchField($field, $mode)
 	{
 		$onSubmit = $this->parent->getOnSubmitFunction();
 		$onchange = " onchange='if ({$onSubmit}(this.form)) this.form.manager.submit();'";
