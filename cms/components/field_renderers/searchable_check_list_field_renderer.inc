@@ -88,7 +88,7 @@ class SearchableCheckListFieldRenderer extends CheckListFieldRenderer
 		}
 	}
 
-	function renderSearchField($field)
+	function renderSearchField($field, $mode = "")
 	{
 		if (!$this->parent->params->get($field, ""))
 		{

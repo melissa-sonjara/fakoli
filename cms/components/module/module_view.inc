@@ -54,7 +54,7 @@ abstract class ModuleView
 {
 	var $module;
 	
-	function ModuleView($module)
+	function __construct($module)
 	{
 		$this->module = $module;
 	}
