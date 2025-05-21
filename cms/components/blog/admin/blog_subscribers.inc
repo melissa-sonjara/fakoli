@@ -7,7 +7,7 @@ $menu_item = "Blog Subscribers";
 
 $blog_id = checkNumeric($_GET["blog_id"]);
 
-$blogs = query(Blog, " WHERE published=1 ORDER BY title");
+$blogs = query('Blog', " WHERE published=1 ORDER BY title");
 
 if (!count($blogs))
 {

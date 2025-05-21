@@ -39,7 +39,7 @@ Fakoli::assertRole("admin");
 $menu_item = "Topics";
 $title = "Manage Topics";
 
-$topics = query(Topic, "ORDER BY topic_id");
+$topics = query('Topic', "ORDER BY topic_id");
 
 $table = new DataListView($topics, "topics");
 $table->column("Topic", "<a href='topic_form?topic_id={topic_id}'>{topic}</a>", true);

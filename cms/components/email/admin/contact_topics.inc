@@ -48,14 +48,14 @@ $menu_item = "Contact Topics";
 
 $title = "Contact Topics";
 
-$topics = query(ContactTopic, "ORDER BY sort_order");
+$topics = query('ContactTopic', "ORDER BY sort_order");
 
 $table = new DataListView($topics, "contactTopics");
 $table->column("Code Name", "<a href=\"/admin/contact_topic_form?contact_topic_id={contact_topic_id}\">{topic}</a>")
 		->column("Topic", "{topic}")
 	  	->column("Recipients", "{recipients}");
 	  	
-$sites = query(Site);
+$sites = query('Site');
 if(count($sites) > 1)
 	$table->column("Sites", formatSiteList);
 	  	
@@ -116,7 +116,7 @@ function reorderContactTopics()
 		}
 	}
 	// renumber
-	$contactTopics = query(ContactTopic, "ORDER BY sort_order");
+	$contactTopics = query('ContactTopic', "ORDER BY sort_order");
 	$value = 1;
 	
 	foreach($contactTopics as $contactTopic)

@@ -44,7 +44,7 @@
 Fakoli::using("questionnaire");
 Fakoli::usingFeature("data_view");
 
-$questionnaires = Query::create(Questionnaire, "ORDER BY title DESC")->execute();
+$questionnaires = Query::create('Questionnaire', "ORDER BY title DESC")->execute();
 
 // instance can be empty - script instantiates js class QuestionnaireDashboardManager
 $mgr = new QuestionnaireDashboardManager(new Questionnaire());

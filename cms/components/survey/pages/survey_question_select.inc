@@ -46,7 +46,7 @@ $page->page_title .= " for {$survey->title}";
 
 $mgr = new SurveyCreateManager($survey);
 
-$surveys = IndexedQuery::create(Survey, "WHERE deleted=false", "survey_id")->execute();
+$surveys = IndexedQuery::create('Survey', "WHERE deleted=false", "survey_id")->execute();
 
 $form = $mgr->buildQuestionSelectForm($surveys);
 

@@ -35,8 +35,8 @@ Fakoli::using("section", "component");
 
 Fakoli::assertRole("admin");
 
-$sections = Query::create(Section, "ORDER BY section_id")->execute();
-$content  = Query::create(SectionContent, "ORDER BY section_content_id")->execute();
+$sections = Query::create('Section', "ORDER BY section_id")->execute();
+$content  = Query::create('SectionContent', "ORDER BY section_content_id")->execute();
 
 $file = codify($config["sitename"]."_sections_".date("Ymd")).".xml";
 	

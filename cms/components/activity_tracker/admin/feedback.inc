@@ -4,7 +4,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Feedback";
 
-$feedback = Query::create(UserFeedback, "ORDER BY created_date DESC")->execute();
+$feedback = Query::create('UserFeedback', "ORDER BY created_date DESC")->execute();
 
 $table = new DataListView($feedback, "feedback_table");
 $table->column("Date", "{created_date}", true, "width: 15%")

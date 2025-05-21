@@ -36,7 +36,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Contact Us Log";
 
-$messages = Query::create(ContactUs, "ORDER BY date_sent DESC")->execute();
+$messages = Query::create('ContactUs', "ORDER BY date_sent DESC")->execute();
 
 $table = new DataListView($messages, "contact_us_messages");
 $table->column("Subject", "<a href='contact_us_message?contact_us_id={contact_us_id}'>{subject|<em>No Subject</em>}", true, 'width: 25%')

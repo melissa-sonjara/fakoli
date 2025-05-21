@@ -47,7 +47,7 @@ Fakoli::usingFeature("data_view");
 $class_name = ConnectionManager::escape($_REQUEST["class_name"]);
 
 $page->page_title = "Advanced Features &ndash; Merge Codes";
-$mergeCodes = query(MergeCode, "WHERE class_name='$class_name'");
+$mergeCodes = query('MergeCode', "WHERE class_name='$class_name'");
 $table = new DataListView($mergeCodes, "mergeCodes");
 $table->column("Code Name", "{name}", false, "width: 30%")
 		->column("Description", "{description}", false, "width: 70%");

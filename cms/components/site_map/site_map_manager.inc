@@ -87,7 +87,7 @@ class SiteMapManager
 	 */
 	function __construct()
 	{
-		$this->map = IndexedQuery::create(SiteMap, "", "url")->execute();
+		$this->map = IndexedQuery::create('SiteMap', "", "url")->execute();
 		
 		if(!is_array($this->map))
 		{
@@ -147,7 +147,7 @@ class SiteMapManager
 	{
 		$indexedMap = $this->map;
 		
-		$menuItems = GroupedQuery::create(MenuItem, "WHERE menu_id IN (SELECT menu_id FROM menu WHERE identifier='global')", "url")
+		$menuItems = GroupedQuery::create('MenuItem', "WHERE menu_id IN (SELECT menu_id FROM menu WHERE identifier='global')", "url")
 			->execute();
 		
 		if(!count($menuItems)) return;
@@ -227,7 +227,7 @@ class SiteMapManager
 		$itemsByType = array();
 		$itemsByType = ComponentManager::fireEvent("EnumerateItems", $itemsByType);
 	
-		$sections = Query::create(Section, "ORDER BY section")->execute();
+		$sections = Query::create('Section', "ORDER BY section")->execute();
 		
 		foreach($sections as $section)
 		{

@@ -78,7 +78,7 @@ class SectionContentManager implements ISectionContentManager
 	{
 		try
 		{
-			return Query::create(SectionContent, "WHERE section_id=:section_id AND identifier=:identifier")
+			return Query::create('SectionContent', "WHERE section_id=:section_id AND identifier=:identifier")
 						->bind(":section_id", $section->section_id, ":identifier", $identifier)
 						->executeSingle();
 		}

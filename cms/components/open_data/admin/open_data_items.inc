@@ -38,7 +38,7 @@ $menu_item = "Open Data";
 
 $classes = OpenDataManager::getOpenDataClasses();
 
-$savedOpenData = GroupedQuery::create(OpenData, "ORDER BY field", "class")->execute();
+$savedOpenData = GroupedQuery::create('OpenData', "ORDER BY field", "class")->execute();
 
 $openData = array();
 

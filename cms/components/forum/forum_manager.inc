@@ -105,7 +105,7 @@ class ForumManager
 	
 	static function enumerateFora($items)
 	{
-		$pages = Query::create(Forum, "WHERE identifier IS NOT NULL AND identifier != '' ORDER BY title")->execute();
+		$pages = Query::create('Forum', "WHERE identifier IS NOT NULL AND identifier != '' ORDER BY title")->execute();
 		
 		$items["Discussion Forums"] = $pages;
 		return $items;
@@ -136,7 +136,7 @@ class ForumManager
 		
 		try
 		{
-			$forums = Query::create(Forum, "WHERE owner_id=:owner_id")
+			$forums = Query::create('Forum', "WHERE owner_id=:owner_id")
 					->bind(":owner_id", $user_id)
 					->execute();
 			
@@ -149,7 +149,7 @@ class ForumManager
 				}
 			}
 			
-			$messages = Query::create(ForumMessage, "WHERE author_id=:author_id")
+			$messages = Query::create('ForumMessage', "WHERE author_id=:author_id")
 				->bind(":author_id", $user_id)
 				->execute();
 			

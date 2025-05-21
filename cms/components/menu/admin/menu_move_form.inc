@@ -76,7 +76,7 @@ $form->button("Cancel", $redirect);
 if($parent_id)
 	$form->submitLabel = "Move Page";
 
-$menuItems = Query::create(MenuItem, "WHERE menu_id=:m ORDER BY sort_order")
+$menuItems = Query::create('MenuItem', "WHERE menu_id=:m ORDER BY sort_order")
 				  ->bind(":m", $menuItem->menu_id)
 			      ->execute();
 

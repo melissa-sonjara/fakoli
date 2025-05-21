@@ -121,7 +121,7 @@ class SurveyResponse extends AbstractQuestionnaireResponse
 	
 	static function findResponseByToken($survey_id, $token)
 	{
-		$responses = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND token=:token")
+		$responses = Query::create('SurveyResponse', "WHERE survey_id=:survey_id AND token=:token")
 		->bind(":survey_id", $survey_id, ":token", $token)
 		->execute();
 			

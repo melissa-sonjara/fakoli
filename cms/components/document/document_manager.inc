@@ -390,7 +390,7 @@ function deleteFolderResult(result)
 		
 		try
 		{
-			$libraries = Query::create(DocumentLibrary, "WHERE owner_id=:owner_id")
+			$libraries = Query::create('DocumentLibrary', "WHERE owner_id=:owner_id")
 			->bind(":owner_id", $user_id)
 			->execute();
 				
@@ -567,7 +567,7 @@ function deleteFolderResult(result)
 	 */
 	static function enumerateItems($items)
 	{
-		$documents = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+		$documents = Query::create('DocumentLibrary', "ORDER BY name")->execute();
 		
 		$items["Document Libraries"] = $documents;
 		return $items;
@@ -670,7 +670,7 @@ function deleteFolderResult(result)
 		$roleFields = array("upload_files", "delete_files", "manage_folders", "allow_access");
 		foreach($roleFields as $field)
 		{
-			$libraries = Query::create(DocumentLibrary, "WHERE $field like '%$del_role%'")->execute();
+			$libraries = Query::create('DocumentLibrary', "WHERE $field like '%$del_role%'")->execute();
 			RoleManager::deleteRoleFromString($libraries, $del_role, $field);
 		}
 		
@@ -738,7 +738,7 @@ function deleteFolderResult(result)
 	function rescan()
 	{
 		$this->indexedDocuments = reindexList($this->documents, "file");
-		$this->indexedFolders = IndexedQuery::create(DocumentFolder, "WHERE document_library_id=:id", "path")
+		$this->indexedFolders = IndexedQuery::create('DocumentFolder', "WHERE document_library_id=:id", "path")
 											->bind(":id", $this->library->document_library_id)
 											->execute();
 											

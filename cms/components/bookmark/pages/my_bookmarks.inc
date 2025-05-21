@@ -2,7 +2,7 @@
 Fakoli::using("bookmark");
 $page->page_title = "My Bookmarks";
 
-$bookmarks = GroupedQuery::create(Bookmark, "WHERE user_id=:u ORDER BY category, title", "category")
+$bookmarks = GroupedQuery::create('Bookmark', "WHERE user_id=:u ORDER BY category, title", "category")
 						 ->bind(":u", $user->get($user->getPrimaryKey()))
 						 ->execute();
 

@@ -145,7 +145,7 @@ class ContextHelpManager
 			return $this->classes[$cl];
 		}
 		
-		$records = indexedQuery(ContextHelp, "WHERE class_name='$cl'", "field");
+		$records = indexedQuery('ContextHelp', "WHERE class_name='$cl'", "field");
 		if ($records)
 		{
 			$this->classes[$cl] = $records;

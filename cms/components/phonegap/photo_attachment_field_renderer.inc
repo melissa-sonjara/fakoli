@@ -154,7 +154,7 @@ class PhotoAttachmentFieldRenderer extends AttachmentFieldRenderer
 		
 		if ($pkv)
 		{
-			$attachments = query(Attachment, "WHERE attachment_id in (select attachment_id from {$xref->table} where $pk=$pkv) ORDER BY attachment_id");
+			$attachments = query('Attachment', "WHERE attachment_id in (select attachment_id from {$xref->table} where $pk=$pkv) ORDER BY attachment_id");
 		}
 		else
 		{

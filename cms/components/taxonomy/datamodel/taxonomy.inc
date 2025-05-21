@@ -56,7 +56,7 @@ class Taxonomy extends DataItem
 	
 	static function fromIdentifier($identifier)
 	{
-		return Query::create(Taxonomy, "WHERE identifier=:i")
+		return Query::create('Taxonomy', "WHERE identifier=:i")
 					->bind(":i", $identifier)
 					->executeSingle();
 	}
@@ -73,7 +73,7 @@ class Taxonomy extends DataItem
 	
 	function getTerm($term)
 	{
-		return Query::create(TaxonomyTerm, "WHERE taxonomy_id=:taxonomy AND term=:term")
+		return Query::create('TaxonomyTerm', "WHERE taxonomy_id=:taxonomy AND term=:term")
 					->bind(":taxonomy", $this->taxonomy_id,
 						   ":term", $term)
 					->executeSingle();
@@ -81,7 +81,7 @@ class Taxonomy extends DataItem
 	
 	function countTerms()
 	{
-		return Query::create(TaxonomyTerm, "WHERE taxonomy_id=:taxonomy")
+		return Query::create('TaxonomyTerm', "WHERE taxonomy_id=:taxonomy")
 				    ->bind(":taxonomy", $this->taxonomy_id)
 				    ->executeValue("COUNT(1)");
 	}
@@ -99,7 +99,7 @@ class Taxonomy extends DataItem
 	
 	function getAssociatedTerms($item)
 	{
-		return Query::create(TaxonomyTerm, "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:t and class=:c and id=:i)")
+		return Query::create('TaxonomyTerm', "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:t and class=:c and id=:i)")
 					 ->bind(":t", $this->taxonomy_id,
 					 		":c", get_class($item),
 					 		":i", $item->get($item->getPrimaryKey()))
@@ -112,7 +112,7 @@ class Taxonomy extends DataItem
 		
 		if (!isset($this->_termCache[$cl]))
 		{
-			$this->_termCache[$cl] = IndexedQuery::create(TaxonomyTermAssociationSummary, "WHERE taxonomy_id=:t and class=:c", "id")
+			$this->_termCache[$cl] = IndexedQuery::create('TaxonomyTermAssociationSummary', "WHERE taxonomy_id=:t and class=:c", "id")
 												 ->bind(":t", $this->taxonomy_id,
 												 		":c", get_class($item))
 												 ->execute();
@@ -123,7 +123,7 @@ class Taxonomy extends DataItem
 	
 	function getAssociatedTermsByClass($class)
 	{
-		return Query::create(TaxonomyTerm, "WHERE term_id in (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:id AND class=:cl) ORDER BY sort_order, term")
+		return Query::create('TaxonomyTerm', "WHERE term_id in (SELECT term_id FROM taxonomy_term_association where taxonomy_id=:id AND class=:cl) ORDER BY sort_order, term")
 					->bind(":id", $this->taxonomy_id, ":cl", $class)
 					->execute();
 	}

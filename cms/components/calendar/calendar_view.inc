@@ -197,7 +197,7 @@ class StandardEventHandler extends EventHandler
 		
 		$form->allowDelete = true;
 		
-		$sites = query(Site, "ORDER BY site_name");
+		$sites = query('Site', "ORDER BY site_name");
 		if (count($sites) > 1)
 		{
 			$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);

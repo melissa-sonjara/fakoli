@@ -40,7 +40,7 @@ $menu_item = "Modules";
 
 $title = "Manage Modules";
 
-$modules = query(Module, "ORDER BY title");
+$modules = query('Module', "ORDER BY title");
 
 $count = 0;
 

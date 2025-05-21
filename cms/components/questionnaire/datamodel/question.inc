@@ -75,7 +75,7 @@ abstract class AbstractQuestion extends DataItem
 		$this->num_rows = 3;
 		$this->required = 0; 
 			
-		$qTypes = Query::create(QuestionType, "ORDER BY sort_order")
+		$qTypes = Query::create('QuestionType', "ORDER BY sort_order")
 			->execute();
 			
 		if(count($qTypes) > 0)
@@ -177,7 +177,7 @@ class Question extends AbstractQuestion
 			return true;
 		}
 		
-		$count = Query::create(QuestionnaireAnswer, "WHERE question_id=:question_id")
+		$count = Query::create('QuestionnaireAnswer', "WHERE question_id=:question_id")
 			->bind(":question_id", $this->question_id)
 			->executeValue("COUNT(1)");
 

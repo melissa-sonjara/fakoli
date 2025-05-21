@@ -43,7 +43,7 @@ VersionedContentManager::enableVersioning($form);
 
 $form->onInsertPreProcess = function($form)
 {
-	$form->data->sort_order = Query::create(ScrollPart, "WHERE scroll_id=:s")
+	$form->data->sort_order = Query::create('ScrollPart', "WHERE scroll_id=:s")
 								   ->bind(":s", $form->data->scroll_id)
 								   ->executeValue("MAX(sort_order) + 1");	
 };

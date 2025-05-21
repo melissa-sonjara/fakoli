@@ -530,7 +530,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 	 * may have criteria to include/exclude certain records; array must beindexed
 	 * by primary key
 	 * 
-	 * ex: $items = IndexedQuery::create(Survey, "WHERE deleted=false", "survey_id")->execute();
+	 * ex: $items = IndexedQuery::create('Survey', "WHERE deleted=false", "survey_id")->execute();
 	 * 
 	 * Implementations may also restrict based on survey ownership.
 	 *

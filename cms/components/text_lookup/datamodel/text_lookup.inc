@@ -84,7 +84,7 @@ class TextLookup extends DataItem
 	 */
 	static function getText($code, $obj = null, $blank = false)
 	{
-		$texts = Query::create(TextLookup, "WHERE code=:c AND enabled=1")
+		$texts = Query::create('TextLookup', "WHERE code=:c AND enabled=1")
 			->bind(":c", $code)
 			->execute();
 			
@@ -181,7 +181,7 @@ class TextLookup extends DataItem
 	 */
 	static function setDefaultValue($code, $value, $class_name = "")
 	{
-		$texts = Query::create(TextLookup, "WHERE code=:c")
+		$texts = Query::create('TextLookup', "WHERE code=:c")
 			->bind(":c", $code)
 			->execute();
 		
@@ -269,7 +269,7 @@ class TextTranslation extends DataItem
 			return $text;
 		else
 		{
-			$translations = Query::create(TextTranslation, "WHERE text_id=:text_id AND language=:language")
+			$translations = Query::create('TextTranslation', "WHERE text_id=:text_id AND language=:language")
 				->bind(":text_id", $text->text_id, ":language", $language)
 				->execute();
 				

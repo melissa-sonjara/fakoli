@@ -74,7 +74,7 @@ class BlogSubscriber extends DataItem
 	 */
 	static function fromToken($token)
 	{
-		$subscriber = Query::create(BlogSubscriber, "WHERE subscription_token=:s")
+		$subscriber = Query::create('BlogSubscriber', "WHERE subscription_token=:s")
 						   ->bind(":s", $token)
 						   ->executeSingle();
 		return $subscriber;

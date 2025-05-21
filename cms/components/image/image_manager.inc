@@ -800,7 +800,7 @@ class ImageManager
 	{
 		try
 		{
-			$gallery = Query::create(ImageGallery, "WHERE identifier=:i")
+			$gallery = Query::create('ImageGallery', "WHERE identifier=:i")
 							->bind(":i", $identifier)
 							->executeSingle();
 							
@@ -835,7 +835,7 @@ class ImageManager
 	 */
 	static function enumerateItems($items)
 	{
-		$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
+		$galleries = Query::create('ImageGallery', "ORDER BY gallery_name")->execute();
 		
 		$items["Image Galleries"] = $galleries;
 		return $items;

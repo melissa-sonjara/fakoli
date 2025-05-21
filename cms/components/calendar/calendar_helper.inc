@@ -79,7 +79,7 @@ class CalendarHelper
 		$filterForm = new FilterForm($event, "GET");
 		$filterForm->hide("end_date");
 		
-		$calendars = Query::create(Calendar, "ORDER BY name")->execute();
+		$calendars = Query::create('Calendar', "ORDER BY name")->execute();
 		if(count($calendars) > 0)
 		{
 			$calendarSelect = new FilterFieldRenderer($filterForm, "calendar_id", "Calendar", FilterFieldRenderer::formatOptions($calendars, "{name}"));

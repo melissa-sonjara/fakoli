@@ -75,7 +75,7 @@ class SurveyQuestionXref extends DataItem
 		if(!$this->survey_id)
 			return 1;
 			
-		return Query::create(SurveyQuestionXref, "WHERE survey_id=:survey_id")
+		return Query::create('SurveyQuestionXref', "WHERE survey_id=:survey_id")
 			->bind(":survey_id", $this->survey_id)
 			->executeValue("MAX(sort_order)") + 1;
 	}

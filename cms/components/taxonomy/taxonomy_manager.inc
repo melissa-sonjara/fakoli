@@ -220,7 +220,7 @@ class TaxonomyManager
 		
 		$class = get_class($form->data);
 		
-		$taxonomies = Query::create(Taxonomy, "")->execute();
+		$taxonomies = Query::create('Taxonomy', "")->execute();
 		
 		foreach($taxonomies as $taxonomy)
 		{
@@ -262,7 +262,7 @@ class TaxonomyManager
 		
 		$class = get_class($form->data);
 		
-		$targets = Query::create(BindingTarget, "")->execute();
+		$targets = Query::create('BindingTarget', "")->execute();
 		
 		trace("### Found ".count($targets)." binding targets", 3);
 		$renderers = array();
@@ -304,7 +304,7 @@ class TaxonomyManager
 		
 		$matched = array();
 		
-		$taxonomies = Query::create(Taxonomy, "")->execute();
+		$taxonomies = Query::create('Taxonomy', "")->execute();
 		
 		foreach($taxonomies as $taxonomy)
 		{
@@ -333,7 +333,7 @@ class TaxonomyManager
 		
 		$matched = array();
 		
-		$bindingTargets = Query::create(BindingTarget, "")->execute();
+		$bindingTargets = Query::create('BindingTarget', "")->execute();
 		
 		foreach($bindingTargets as $bindingTarget)
 		{
@@ -465,7 +465,7 @@ class TaxonomyManager
 		if (count($ids) == 0) return array();
 		$idString = implode(", ", $ids);
 		
-		return Query::create(TaxonomyTerm, "WHERE term_id IN ($idString)")->execute();
+		return Query::create('TaxonomyTerm', "WHERE term_id IN ($idString)")->execute();
 	}
 	
 	static function getRequestFilterConstraint($class)

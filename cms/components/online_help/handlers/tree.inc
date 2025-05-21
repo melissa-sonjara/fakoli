@@ -41,7 +41,7 @@ $page = $_GET["page"];
 $helpBook = HelpBook::findByIdentifier($book);
 $page = $helpBook->findPage($page);
 
-$helppages = Query::create(HelpPage, "WHERE help_book_id=:id AND public=1 ORDER BY sort_order")
+$helppages = Query::create('HelpPage', "WHERE help_book_id=:id AND public=1 ORDER BY sort_order")
 				  ->bind(":id", $helpBook->help_book_id)
 				  ->execute();
 

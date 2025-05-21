@@ -37,7 +37,7 @@ Fakoli::usingFeature("data_view", "tab_bar");
 $menu_item = "Videos";
 
 $video_gallery_id = checkNumeric($_GET["video_gallery_id"]);
-$videos = Query::create(Video, "WHERE video_gallery_id=:g ORDER BY title")
+$videos = Query::create('Video', "WHERE video_gallery_id=:g ORDER BY title")
 			   ->bind(":g", $video_gallery_id)
 			   ->execute();
 

@@ -37,7 +37,7 @@ require_once "include/link_picker_tabs.inc";
 $editor = $_GET["Editor"];
 $document_library_id = checkNumeric($_GET["document_library_id"]);
 
-$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+$libraries = Query::create('DocumentLibrary', "ORDER BY name")->execute();
 
 if (!$document_library_id && count($libraries) > 0)
 {

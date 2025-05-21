@@ -34,7 +34,7 @@ class ContentVersion extends DataItem
 		{
 			try 
 			{
-				$contentVersion = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=0")
+				$contentVersion = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=0")
 									   ->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 									   ->executeSingle();
 			} 
@@ -74,7 +74,7 @@ class ContentVersion extends DataItem
 		{
 			trace(print_r($target, true), 3);
 			
-			$contentVersion = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=0")
+			$contentVersion = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=0")
 								   ->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 								   ->executeSingle();
 			
@@ -95,7 +95,7 @@ class ContentVersion extends DataItem
 	 */
 	static function hasDraft($target)
 	{
-		return Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=0")
+		return Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=0")
 					->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 					->exists();
 	}
@@ -108,7 +108,7 @@ class ContentVersion extends DataItem
 	{
 		try
 		{
-			$doomed = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=0")
+			$doomed = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=0")
 							->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 							->executeSingle();
 			$doomed->delete();
@@ -128,7 +128,7 @@ class ContentVersion extends DataItem
 	 */
 	static function approvedVersions($target, $includeContent = false)
 	{
-		$query = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=1 ORDER BY version_number DESC")
+		$query = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=1 ORDER BY version_number DESC")
 					  ->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue());
 		
 		if (!$includeContent)
@@ -146,7 +146,7 @@ class ContentVersion extends DataItem
 			// Get current draft
 			try
 			{
-				$contentVersion = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=0")
+				$contentVersion = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=0")
 									   ->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 									   ->executeSingle();
 			}
@@ -159,7 +159,7 @@ class ContentVersion extends DataItem
 		{
 			try
 			{
-				$contentVersion = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND approved=1 ORDER BY version_number DESC LIMIT 1")
+				$contentVersion = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND approved=1 ORDER BY version_number DESC LIMIT 1")
 									   ->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 									   ->executeSingle();
 			}
@@ -172,7 +172,7 @@ class ContentVersion extends DataItem
 		{
 			try
 			{
-				$contentVersion = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND version_number=:v AND approved=1")
+				$contentVersion = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND version_number=:v AND approved=1")
 										->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue(), ":v", $version)
 										->executeSingle();
 			}
@@ -220,7 +220,7 @@ class ContentVersion extends DataItem
 		checkNumeric($version);
 		try
 		{
-			$contentVersion = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i AND version_number=:v")
+			$contentVersion = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i AND version_number=:v")
 								   ->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue(), ":v", $version)
 								   ->executeSingle();
 			
@@ -255,7 +255,7 @@ class ContentVersion extends DataItem
 		
 	private static function nextVersion($target, $tx)
 	{
-		$version = Query::create(ContentVersion, "WHERE content_class=:c AND content_id=:i")
+		$version = Query::create('ContentVersion', "WHERE content_class=:c AND content_id=:i")
 						->bind(":c", get_class($target), ":i", $target->getPrimaryKeyValue())
 						->executeValue("MAX(version_number)");
 		

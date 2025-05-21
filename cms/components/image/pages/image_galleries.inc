@@ -33,7 +33,7 @@
  
 Fakoli::using("image");
 
-$galleries = Query::create(ImageGallery, "WHERE published=1 ORDER BY gallery_name")
+$galleries = Query::create('ImageGallery', "WHERE published=1 ORDER BY gallery_name")
 				->execute();
 
 $view = new ImageGalleryList($images, "{Gallery.identifier}', 'auto', 'auto');");

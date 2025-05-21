@@ -36,7 +36,7 @@ Fakoli::usingFile("framework/data_view.inc");
 
 $title = "Calendars";
 
-$calendars = query(Calendar, "ORDER BY name");
+$calendars = query('Calendar', "ORDER BY name");
 
 $menu_item = "Calendars";
 

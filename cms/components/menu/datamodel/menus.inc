@@ -79,7 +79,7 @@ class Menu extends DataItem
 	 */
 	static function findByIdentifier($identifier)
 	{
-		return Query::create(Menu, "WHERE identifier=:i")
+		return Query::create('Menu', "WHERE identifier=:i")
 					->bind(":i", $identifier)
 					->executeSingle();
 	}
@@ -91,7 +91,7 @@ class Menu extends DataItem
 	 */
 	function getMenuItem($title)
 	{
-		return Query::create(MenuItem, "WHERE menu_id=:m AND title=:t")
+		return Query::create('MenuItem', "WHERE menu_id=:m AND title=:t")
 					->bind(":m", $this->menu_id, ":t", $title)
 					->executeSingle();
 	}
@@ -103,7 +103,7 @@ class Menu extends DataItem
 	 */
 	function menuItemExists($title)
 	{
-		return Query::create(MenuItem, "WHERE menu_id=:m AND title=:t")
+		return Query::create('MenuItem', "WHERE menu_id=:m AND title=:t")
 					->bind(":m", $this->menu_id, ":t", $title)
 					->exists();
 	}
@@ -145,7 +145,7 @@ class MenuItem extends DataItem
 	
 	function Page()
 	{
-		$pages = Query::create(Page, "WHERE identifier=:i")
+		$pages = Query::create('Page', "WHERE identifier=:i")
 					->bind(":i", $this->identifier)
 					->execute();
 		if (count($pages) > 0)
@@ -153,7 +153,7 @@ class MenuItem extends DataItem
 			return $pages[0];
 		}
 
-		$pages = Query::create(ComponentPage, "WHERE identifier=:i")
+		$pages = Query::create('ComponentPage', "WHERE identifier=:i")
 					->bind(":i", $this->identifier)
 					->execute();
 		if (count($pages) > 0)
@@ -178,7 +178,7 @@ class MenuItem extends DataItem
 	
 	function Children($constraint = "ORDER BY sort_order, title")
 	{
-		return query(MenuItem, "WHERE parent_id={$this->menu_item_id} $constraint");
+		return query('MenuItem', "WHERE parent_id={$this->menu_item_id} $constraint");
 	}
 }
 /**@}*/?>

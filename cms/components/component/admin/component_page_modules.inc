@@ -48,7 +48,7 @@ $tabs->page = "component_page_modules";
 $title = "Position Modules for {$page->page_title}";
 
 $modulePositions = reindexList($page->ComponentPageModuleXrefs(), "module_id");
-$modules = query(Module, "ORDER BY title");
+$modules = query('Module', "ORDER BY title");
 
 if ($method == "POST")
 {

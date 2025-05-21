@@ -94,7 +94,7 @@ require_once realpath(dirname(__FILE__)."/field_renderers/checklist_field_render
  *  $roundSelect = new FilterFieldRenderer($filterForm, "round_id", "Round", FundingRound::getRoundList());
  *  $countrySelect = new FilterFieldRenderer($filterForm, "country_id", "Country", Country::getList("WHERE country_id in (SELECT country_id FROM application)"));
  *  
- *  $applications = query(Application, $filterForm->getConstraint()." ORDER BY round_key DESC");
+ *  $applications = query('Application', $filterForm->getConstraint()." ORDER BY round_key DESC");
  *	
  *  $filterForm->drawForm();
  *  

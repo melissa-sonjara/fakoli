@@ -112,7 +112,7 @@ class Site extends DataItem
 		$domain = $_SERVER['HTTP_HOST'];
 		trace("Accessed via domain: $domain", 3);
 		
-		$sites = Query::create(Site, "WHERE domain=:d and enabled=1 ORDER BY default_site DESC")
+		$sites = Query::create('Site', "WHERE domain=:d and enabled=1 ORDER BY default_site DESC")
 				->bind(":d", $domain)
 				->execute();
 		if (count($sites) > 0) 
@@ -126,7 +126,7 @@ class Site extends DataItem
 			return Site::$currentSite;
 		}
 		
-		$sites = Query::create(Site, "WHERE enabled=1 ORDER BY default_site DESC, site_name ASC")->execute();
+		$sites = Query::create('Site', "WHERE enabled=1 ORDER BY default_site DESC, site_name ASC")->execute();
 		
 		if (count($sites) > 0) 
 		{
@@ -140,7 +140,7 @@ class Site extends DataItem
 	
 	static function getSites()
 	{
-		return Query::create(Site, "ORDER BY site_name")->execute();
+		return Query::create('Site', "ORDER BY site_name")->execute();
 	}
 	
 	function getThemeDirectory()

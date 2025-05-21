@@ -37,7 +37,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Tool Hints";
 
-$texts = Query::create(ToolHint, "ORDER BY code")->execute();
+$texts = Query::create('ToolHint', "ORDER BY code")->execute();
 
 $table = new DataListView($texts, "toolHints");
 $table->column("Code", "<a href='/admin/tool_hint_form?hint_id={hint_id}'>{code}</a>", true)

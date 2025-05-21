@@ -52,7 +52,7 @@ class BindingTarget extends DataItem
 	
 		if (!isset($this->_termCache[$cl]))
 		{
-			$this->_termCache[$cl] = IndexedQuery::create(BindingSummary, "WHERE target_class=:t and class=:c", "id")
+			$this->_termCache[$cl] = IndexedQuery::create('BindingSummary', "WHERE target_class=:t and class=:c", "id")
 												 ->bind(":t", $this->target_class,
 													    ":c", get_class($item))
 												 ->execute();

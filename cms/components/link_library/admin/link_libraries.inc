@@ -48,7 +48,7 @@ else
 	$checked = "checked='checked'";
 }
 
-$libraries = Query::create(LinkLibrary, "$constraint ORDER BY name")->execute();
+$libraries = Query::create('LinkLibrary', "$constraint ORDER BY name")->execute();
 
 $view = new AdminLinkLibraryListView($libraries);
 

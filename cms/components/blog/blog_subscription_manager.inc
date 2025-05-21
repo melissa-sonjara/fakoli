@@ -15,7 +15,7 @@ class BlogSubscriptionManager
 	
 	function __construct()
 	{
-		$this->subscribers = Query::create(BlogSubscriber, "WHERE subscription_type IN ('daily', 'weekly') AND blog_id IN (SELECT blog_id FROM blog WHERE published=true)")->execute();
+		$this->subscribers = Query::create('BlogSubscriber', "WHERE subscription_type IN ('daily', 'weekly') AND blog_id IN (SELECT blog_id FROM blog WHERE published=true)")->execute();
 		
 		$numSubscribers = count($this->subscribers);
 		trace(pluralize($numSubscribers." blog subscriber", $numSubscribers)." found", 3);
@@ -34,7 +34,7 @@ class BlogSubscriptionManager
 		$yesterday = clone($today);
 		$yesterday->modify("-1 days");
 		
-		$articles = Query::create(Article, "WHERE published=true AND publish_date=:yesterday")
+		$articles = Query::create('Article', "WHERE published=true AND publish_date=:yesterday")
 			->bind(":yesterday", $yesterday->format("Y-m-d H:i:s"))
 			->execute();
 	
@@ -70,7 +70,7 @@ class BlogSubscriptionManager
 		$last_week = clone $today;
 		$last_week->modify("-7 days");
 	
-		$articles = Query::create(Article, "WHERE published=true AND publish_date BETWEEN :last_week AND :today")
+		$articles = Query::create('Article', "WHERE published=true AND publish_date BETWEEN :last_week AND :today")
 			->bind(":last_week", $last_week->format("Y-m-d"), ":today", $today->format("Y-m-d"))
 			->execute();
 	

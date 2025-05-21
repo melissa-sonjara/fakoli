@@ -56,7 +56,7 @@ $search = strtolower($_GET["{$field}"]);
 
 $library = new DocumentLibrary($document_library_id);
 
-$documents = Query::create(Document, "WHERE document_library_id=:l and lower(keywords) like :s")
+$documents = Query::create('Document', "WHERE document_library_id=:l and lower(keywords) like :s")
 	->bind(":l", $document_library_id, ":s", "%".$search . "%") 
 	->execute();
 

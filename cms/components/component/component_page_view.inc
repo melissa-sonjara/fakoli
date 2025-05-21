@@ -184,7 +184,7 @@ class ComponentPageView
 		
 		preg_match_all("/\{menu:(.*?)\}/", $template, $menuPositions, PREG_SET_ORDER);
 		
-		$menus = indexedQuery(Menu, "WHERE site_id={$site->site_id}", "identifier");
+		$menus = indexedQuery('Menu', "WHERE site_id={$site->site_id}", "identifier");
 		
 		foreach($menuPositions as $position)
 		{

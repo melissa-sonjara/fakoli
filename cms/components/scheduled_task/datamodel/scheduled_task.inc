@@ -26,7 +26,7 @@ class ScheduledTask extends DataItem
 	
 	static function getInstance($component, $task_name)
 	{
-		return Query::create(ScheduledTask, "WHERE component=:c AND task_name=:t")
+		return Query::create('ScheduledTask', "WHERE component=:c AND task_name=:t")
 				    ->bind(":c", $component, ":t", $task_name)
 				    ->executeSingle();
 	}

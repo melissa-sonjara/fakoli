@@ -62,7 +62,7 @@ class SurveyQuestion extends AbstractQuestion
 	// Answer to one object's survey question
 	function Answer($response_id)
 	{
-		$answer = Query::create(SurveyAnswer, "WHERE response_id=:response_id AND survey_question_id=:survey_question_id")
+		$answer = Query::create('SurveyAnswer', "WHERE response_id=:response_id AND survey_question_id=:survey_question_id")
 			->bind(":response_id", $response_id, ":survey_question_id", $this->survey_question_id)
 			->executeSingle();
 

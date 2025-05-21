@@ -44,7 +44,7 @@ Fakoli::usingFeature("data_view");
 
 if(!$user) return;
 
-$subscriptions = query(ForumSubscription, "WHERE user_id = {$user->user_id}");
+$subscriptions = query('ForumSubscription', "WHERE user_id = {$user->user_id}");
 
 $table = new DataListView($subscriptions, "forumSubscriptions");
 $table->column("Forum Title", "{Forum.title}", true, "width: 40%")

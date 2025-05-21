@@ -35,7 +35,7 @@ Fakoli::using("page");
 
 Fakoli::assertRole("admin");
 
-$pages = Query::create(Page, "ORDER BY page_id")->execute();
+$pages = Query::create('Page', "ORDER BY page_id")->execute();
 
 foreach($pages as $page)
 {

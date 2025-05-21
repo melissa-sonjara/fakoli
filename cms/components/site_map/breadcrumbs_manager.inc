@@ -112,7 +112,7 @@ class Breadcrumbs
 	{
 		$url = (Breadcrumbs::$overrideCurrentPage) ? Breadcrumbs::$overrideCurrentPage: $this->url;
 		
-		$pages = Query::create(SiteMap, "WHERE url =:url")
+		$pages = Query::create('SiteMap', "WHERE url =:url")
 			->bind(":url", $url)
 			->execute();
 		

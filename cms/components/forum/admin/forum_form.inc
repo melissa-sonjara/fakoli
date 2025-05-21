@@ -57,7 +57,7 @@ TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if (!$site)
 {
-	$sites = query(Site, "ORDER BY site_name");
+	$sites = query('Site', "ORDER BY site_name");
 	
 	$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish on Sites", $sites, "{site_name}", ForumSiteXref);
 }

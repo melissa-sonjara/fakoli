@@ -46,7 +46,7 @@ Fakoli::usingFeature("data_view");
 $title = "Settings Options";
 $menu_item = "Define Settings Options";
 
-$settings = Query::create(Settings, "ORDER BY component, name")->execute();
+$settings = Query::create('Settings', "ORDER BY component, name")->execute();
 
 $table = new DataListView($settings, "settings");
 $table->column("Component", "{component}", true)

@@ -46,7 +46,7 @@ $categoryFilter = new FilterFieldRenderer($filterForm, "category", "Filter By Ca
 
 $filterForm->populateFromGET();
 $constraint = $filterForm->getConstraint();
-$texts = Query::create(TextLookup, "{$constraint} ORDER BY code")->execute();
+$texts = Query::create('TextLookup', "{$constraint} ORDER BY code")->execute();
 
 $table = new DataListView($texts, "textLookup");
 $table->column("Code", "<a href='/admin/text_lookup_form?text_id={text_id}'>{code}</a>", true)

@@ -61,7 +61,7 @@ class ReportListView
 	function __construct($manager_class, $identifier)
 	{
 		// blank title means throw-away record presaved on generate page
-		$this->reports = Query::create(CustomReport, "WHERE manager_class=:manager_class AND title != '' ORDER BY title")
+		$this->reports = Query::create('CustomReport', "WHERE manager_class=:manager_class AND title != '' ORDER BY title")
 			->bind(":manager_class", $manager_class)
 			->execute();
 			

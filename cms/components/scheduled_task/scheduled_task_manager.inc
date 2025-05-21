@@ -82,7 +82,7 @@ class ScheduledTaskManager
 	 */
 	function getTasks()
 	{
-		return Query::create(ScheduledTask, "ORDER BY component, task_name")->execute();
+		return Query::create('ScheduledTask', "ORDER BY component, task_name")->execute();
 	}
 	
 	/**

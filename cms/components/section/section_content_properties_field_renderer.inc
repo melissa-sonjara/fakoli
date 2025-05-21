@@ -53,7 +53,7 @@ window.addEvent('domready', function()
 		$this->_startField($field);
 		
 		$sites = Site::getSites();
-		$sections = GroupedQuery::create(Section, "WHERE section_type='Content' ORDER BY section", "site_id")
+		$sections = GroupedQuery::create('Section', "WHERE section_type='Content' ORDER BY section", "site_id")
 								->execute();
 		
 		$id = $this->parent->id."_".$field;
@@ -61,7 +61,7 @@ window.addEvent('domready', function()
 		$identifier = $obj->get($this->identifierField);
 		if ($identifier)
 		{
-			$sectionContent = IndexedQuery::create(SectionContent, "WHERE identifier=:i", "section_id")
+			$sectionContent = IndexedQuery::create('SectionContent', "WHERE identifier=:i", "section_id")
 								   ->bind(":i", $identifier)
 								   ->execute();
 		}

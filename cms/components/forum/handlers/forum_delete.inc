@@ -51,14 +51,14 @@ $forum = new Forum($forum_id);
  */
 if($forum->allowDelete())
 {
-	$xrefs = query(ForumSiteXref, "WHERE forum_id={$forum_id}");
+	$xrefs = query('ForumSiteXref', "WHERE forum_id={$forum_id}");
 	if(count($xrefs) > 0)
 	{
 		foreach($xrefs as $xref)
 			$xref->delete();
 	}
 	
-	$topics = query(ForumTopic, "WHERE forum_id={$forum_id}");
+	$topics = query('ForumTopic', "WHERE forum_id={$forum_id}");
 	trace(" ForumID: $forum_id");
 	if(count($topics) > 0)
 	{
@@ -68,7 +68,7 @@ if($forum->allowDelete())
 		}
 	}
 	
-	$subscriptions = query(ForumSubscription, "WHERE forum_id={$forum_id}");
+	$subscriptions = query('ForumSubscription', "WHERE forum_id={$forum_id}");
 	if(count($subscriptions) > 0)
 	{
 		foreach($subscriptions as $subscription)

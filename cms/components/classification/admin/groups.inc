@@ -39,7 +39,7 @@ $menu_item = "Groups";
 $title = "Manage Groups";
 
 
-$groups = query(Group, "ORDER BY group_id");
+$groups = query('Group', "ORDER BY group_id");
 
 
 

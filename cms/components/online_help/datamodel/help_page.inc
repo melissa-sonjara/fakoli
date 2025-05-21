@@ -67,7 +67,7 @@ class HelpPage extends DataItem
 	
 	function Children($constraint = "ORDER BY sort_order, title")
 	{
-		return Query::create(HelpPage, "WHERE parent_id=:id $constraint")
+		return Query::create('HelpPage', "WHERE parent_id=:id $constraint")
 					->bind(":id", $this->help_page_id)
 					->execute();
 	}

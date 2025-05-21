@@ -29,7 +29,7 @@ Fakoli::using("forum", "email", "user");
 $today = now();
 $yesterday = date('Y/m/d H:i:s', mktime(date("H"), date("i"), date("s"), date("m"), date("d")-1, date("y")));
 
-$messages = groupedQuery(ForumMessage, "WHERE last_modified BETWEEN '$yesterday' AND '$today' ORDER BY last_modified", "topic_id");
+$messages = groupedQuery('ForumMessage', "WHERE last_modified BETWEEN '$yesterday' AND '$today' ORDER BY last_modified", "topic_id");
 
 if(count($messages) == 0)
 {
@@ -37,7 +37,7 @@ if(count($messages) == 0)
 	return;
 }
 	
-$topics = indexedQuery(ForumTopic, "", "topic_id");
+$topics = indexedQuery('ForumTopic', "", "topic_id");
 
 global $config;
 
@@ -77,8 +77,8 @@ if(count($messages) > 0)
 
 
 $forumKeys = implode(",", array_keys(reindexList($messages, "forum_id")));
-$forums = indexedQuery(Forum, "WHERE forum_id IN ($forumKeys)", "forum_id");
-$forumSubscribers = groupedQuery(ForumSubscription, "WHERE forum_id IN ($forumKeys) AND subscription_type = ".subscription_daily_digest, "forum_id");
+$forums = indexedQuery('Forum', "WHERE forum_id IN ($forumKeys)", "forum_id");
+$forumSubscribers = groupedQuery('ForumSubscription', "WHERE forum_id IN ($forumKeys) AND subscription_type = ".subscription_daily_digest, "forum_id");
 
 $forumTopics = reindexList($topics, "forum_id");
 

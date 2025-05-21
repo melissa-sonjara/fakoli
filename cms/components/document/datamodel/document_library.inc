@@ -132,7 +132,7 @@ class DocumentLibrary extends DataItem
 
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(DocumentLibrary, "WHERE identifier=:id")
+		$match = Query::create('DocumentLibrary', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 
@@ -233,7 +233,7 @@ class DocumentLibrary extends DataItem
 		else
 			$constraint = "WHERE role like 'admin%'";
 	
-		$roles = Query::create(SiteRole, $constraint)->execute();
+		$roles = Query::create('SiteRole', $constraint)->execute();
 
 		if(count($roles) > 0)
 			$role = formatItems($roles, "{role}", ",");

@@ -61,7 +61,7 @@ class SiteMap extends DataItem
 	
 	function Parent()
 	{
-		$parents = Query::create(SiteMap, "WHERE url=:parent_url")
+		$parents = Query::create('SiteMap', "WHERE url=:parent_url")
 			->bind("parent_url", $this->parent_url)
 			->execute();	
 		
@@ -75,7 +75,7 @@ class SiteMap extends DataItem
 		{
 			$query .= preg_replace("/^WHERE/i", " AND", $constraint);
 		}
-		return Query::create(SiteMap, $query)
+		return Query::create('SiteMap', $query)
 			->bind(":url", $this->url)
 			->execute();
 	}
@@ -101,7 +101,7 @@ class SiteMap extends DataItem
 	static function findSiteMapPage($url)
 	{
 		if(!$url) return null;
-		$siteMaps = Query::create(SiteMap, "WHERE url=:url")
+		$siteMaps = Query::create('SiteMap', "WHERE url=:url")
 			->bind(":url", $url)
 			->execute();
 		
@@ -111,7 +111,7 @@ class SiteMap extends DataItem
 	// allow delete if the page has no sub or child pages
 	function allowDelete()
 	{
-		$count = Query::create(SiteMap, "WHERE parent_url=:url")
+		$count = Query::create('SiteMap', "WHERE parent_url=:url")
 			->bind(":url", $this->url)
 			->executeValue("COUNT(1)");
 		
@@ -128,7 +128,7 @@ class SiteMap extends DataItem
 	 */
 	static function getSiteMapPageList()
 	{
-		$siteMapPages = query(SiteMap, "ORDER BY url");
+		$siteMapPages = query('SiteMap', "ORDER BY url");
 				
 		if(count($siteMapPages) > 0)
 		{

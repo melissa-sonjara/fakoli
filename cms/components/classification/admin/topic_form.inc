@@ -47,7 +47,7 @@ $form->allowDelete = true;
 $redirect = "/admin/topics";
 $form->button("Cancel", $redirect);
 
-$groups = query(Group, "ORDER BY group_id"); 
+$groups = query('Group', "ORDER BY group_id"); 
 
 $grpList = new CrossReferenceSelectFieldRenderer($form, "groups", "Associate Groups", $groups, "{title}", GroupTopicXref);
 $grpList->colspan = 2;

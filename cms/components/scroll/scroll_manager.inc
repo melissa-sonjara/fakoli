@@ -71,7 +71,7 @@ class ScrollManager
 
 	static function enumerateScrolls($items)
 	{
-		$scrolls = Query::create(Scroll, "ORDER BY identifier")->execute();
+		$scrolls = Query::create('Scroll', "ORDER BY identifier")->execute();
 		
 		$items["Scrolls"] = $scrolls;
 		return $items;

@@ -49,7 +49,7 @@ class TaxonomyHelper
 	{
 		$pk = $obj->getPrimaryKey();
 		
-		$terms = Query::create(TaxonomyTerm, "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association WHERE class=:class AND id=:obj_id AND taxonomy_id IN (SELECT taxonomy_id FROM taxonomy WHERE identifier=:identifier)) AND taxonomy_id IN (SELECT taxonomy_id FROM taxonomy WHERE identifier=:identifier) ORDER BY term")
+		$terms = Query::create('TaxonomyTerm', "WHERE term_id IN (SELECT term_id FROM taxonomy_term_association WHERE class=:class AND id=:obj_id AND taxonomy_id IN (SELECT taxonomy_id FROM taxonomy WHERE identifier=:identifier)) AND taxonomy_id IN (SELECT taxonomy_id FROM taxonomy WHERE identifier=:identifier) ORDER BY term")
 			->bind(":class", get_class($obj), ":obj_id", $obj->get($pk), ":identifier", $taxonomy_identifier)
 			->execute();
 	

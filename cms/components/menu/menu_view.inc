@@ -60,14 +60,14 @@ class MenuView
 	{
 		$this->m = $m;
 
-		$this->pages = IndexedQuery::create(Page)
+		$this->pages = IndexedQuery::create('Page')
 									->constraints("WHERE site_id=:s")
 									->indexBy("identifier")
 									->filter(new InclusionFilter("page_id", "identifier", "published", "role"))
 									->bind(":s", $this->m->site_id)
 									->execute();
 		
-		$this->componentPages = IndexedQuery::create(ComponentPage)
+		$this->componentPages = IndexedQuery::create('ComponentPage')
 									->indexBy("identifier")
 									->execute();
 	}

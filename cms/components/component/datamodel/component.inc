@@ -60,7 +60,7 @@ class Component extends DataItem
 	
 	function ComponentPages()
 	{
-		$pages = Query::create(ComponentPage, "WHERE component=:i ORDER BY identifier")
+		$pages = Query::create('ComponentPage', "WHERE component=:i ORDER BY identifier")
 					  ->bind(":i", $this->name)
 					  ->execute();
 					
@@ -76,7 +76,7 @@ class Component extends DataItem
 	{
 		$options = array();
 		
-		$components = removeDuplicates(Query::create(Component, "ORDER BY name")->execute(), "name");
+		$components = removeDuplicates(Query::create('Component', "ORDER BY name")->execute(), "name");
 		if(count($components) > 0)
 		{
 			foreach($components as $component)
@@ -90,7 +90,7 @@ class Component extends DataItem
 	
 	static function getComponent($name)
 	{
-		return Query::create(Component, "WHERE name=:n")->bind(":n", $name)->executeSingle();
+		return Query::create('Component', "WHERE name=:n")->bind(":n", $name)->executeSingle();
 	}
 	
 	function loadManifest()

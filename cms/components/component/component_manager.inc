@@ -212,7 +212,7 @@ class ComponentManager
 				
 				try
 				{
-					$page = Query::create(ComponentPage, "WHERE component=:c AND identifier=:i")
+					$page = Query::create('ComponentPage', "WHERE component=:c AND identifier=:i")
 							->bind(":c", $component->name, ":i", $identifier)
 							->executeSingle();
 							
@@ -296,7 +296,7 @@ class ComponentManager
 			$this->tx->commit();
 			unset($this->tx);
 		
-			$components = indexedQuery(Component, "WHERE enabled=1", "name");			
+			$components = indexedQuery('Component', "WHERE enabled=1", "name");			
 			Cache::put("fakoli_components", $components);
 			
 			ComponentManager::fireEvent("upgradeComponent");
@@ -389,7 +389,7 @@ class ComponentManager
 		if ($eventMap) return $eventMap;
 		
 		ComponentManager::scanTrace("Mapping Event Handlers", 3);
-		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		$components = Query::create('Component', "WHERE enabled=1 ORDER BY priority")->execute();
 		
 		$eventMap = array();
 		
@@ -731,7 +731,7 @@ class ComponentManager
 	
 	static function enumerateComponentPages($items)
 	{
-		$pages = Query::create(ComponentPage, "ORDER BY identifier")->execute();
+		$pages = Query::create('ComponentPage', "ORDER BY identifier")->execute();
 		
 		$items["Component Pages"] = $pages;
 		return $items;
@@ -740,7 +740,7 @@ class ComponentManager
 	static function deleteRole($del_role)
 	{
 		$constraint = "WHERE role like '%$del_role%'";
-		$componentPages = Query::create(ComponentPage, $constraint)->execute();
+		$componentPages = Query::create('ComponentPage', $constraint)->execute();
 		
 		RoleManager::deleteRoleFromString($componentPages, $del_role);
 
@@ -750,7 +750,7 @@ class ComponentManager
 	
 	static function setComponentVersion($component_name)
 	{
-		$components = Query::create(Component, "WHERE name=:component_name")
+		$components = Query::create('Component', "WHERE name=:component_name")
 			->bind(":component_name", $component_name)
 			->execute();
 		

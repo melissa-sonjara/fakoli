@@ -504,6 +504,12 @@ class FileBackedCache
 		if (!file_exists($file))
 		{
 			$fp = fopen($file, "w");
+			if ($fp === false)
+			{
+				// fail quietly
+				trace("Failed to open file $file for writing", 2);
+				return true;
+			}
 			fwrite($fp, serialize($obj));
 			fclose($fp);
 		}

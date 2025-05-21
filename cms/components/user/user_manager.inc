@@ -116,7 +116,7 @@ class UserManager
 	{
 		$usernameField = $this->getUsernameField();
 		
-		$matches = Query::create(SiteUser, "WHERE $usernameField=:username")
+		$matches = Query::create('SiteUser', "WHERE $usernameField=:username")
 				->bind(":username", $username)
 				->execute();
 		
@@ -128,7 +128,7 @@ class UserManager
 	{
 		$emailField = $this->getEmailField();
 		
-		$matches = Query::create(SiteUser, "WHERE $emailField=:email")
+		$matches = Query::create('SiteUser', "WHERE $emailField=:email")
 				->bind(":email", $email)
 				->execute();
 		

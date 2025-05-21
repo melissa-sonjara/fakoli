@@ -142,10 +142,10 @@ class MyComponentUpgradeManager extends UpgradeManager
 		if(!$this->executeVersionSql($version_number))
 			return false;
 		
-		$pages = Query::create(Page, "WHERE published=1")->execute();
+		$pages = Query::create('Page', "WHERE published=1")->execute();
 		$pageList = formatItems($pages, "'{identifier}'", ",");	
 			
-		$cPages = Query::create(ComponentPage, "WHERE enabled=1 AND identifier NOT IN ($pageList)")->execute();
+		$cPages = Query::create('ComponentPage', "WHERE enabled=1 AND identifier NOT IN ($pageList)")->execute();
 			
 		$this->addSectionContent($cPages);	
 		
@@ -522,7 +522,7 @@ abstract class UpgradeManager
 			return true;
 		}
 		
-		$sections = Query::create(Section, "WHERE section=:section")
+		$sections = Query::create('Section', "WHERE section=:section")
 		->bind(":section", $section_name)
 		->execute();
 			
@@ -546,7 +546,7 @@ abstract class UpgradeManager
 			}
 			
 			// should be only one or none
-			$contents = Query::create(SectionContent, "WHERE identifier=:identifier AND section_id=:section_id")
+			$contents = Query::create('SectionContent', "WHERE identifier=:identifier AND section_id=:section_id")
 				->bind(":identifier", $ident, ":section_id", $section->section_id)
 				->execute();
 				
@@ -593,7 +593,7 @@ abstract class UpgradeManager
 		if(count($items) == 0)
 			return true;
 			
-		$modules = Query::create(Module, "WHERE title=:title")
+		$modules = Query::create('Module', "WHERE title=:title")
 		->bind(":title", $module_name)
 		->execute();
 			
@@ -644,13 +644,13 @@ abstract class UpgradeManager
 	 */
 	function searchByIdentifier($identifier)
 	{
-		$pages = Query::create(Page, "WHERE identifier=:identifier")
+		$pages = Query::create('Page', "WHERE identifier=:identifier")
 				->bind(":identifier", $identifier)
 				->execute();
 				
 		if(count($pages) == 0)
 		{
-			$pages = Query::create(ComponentPage, "WHERE identifier=:identifier")
+			$pages = Query::create('ComponentPage', "WHERE identifier=:identifier")
 			->bind(":identifier", $identifier)
 			->execute();
 		}
@@ -693,7 +693,7 @@ abstract class UpgradeManager
 	function addMenuItem($item, $menu_identifier, $parent_identifier = "", $title = "", $section_name = "", $sort_order = 0)
 	{				
 		// Find the menu
-		$menus = Query::create(Menu, "WHERE identifier=:identifier")
+		$menus = Query::create('Menu', "WHERE identifier=:identifier")
 			->bind(":identifier", $menu_identifier)
 			->execute();
 			
@@ -710,7 +710,7 @@ abstract class UpgradeManager
 		else
 			$page = $item;
 						
-		$found = Query::create(MenuItem, "WHERE (identifier=:identifier OR url like '%{$page->identifier}') AND menu_id=:menu_id")
+		$found = Query::create('MenuItem', "WHERE (identifier=:identifier OR url like '%{$page->identifier}') AND menu_id=:menu_id")
 			->bind(":identifier", $page->identifier, ":menu_id", $menu->menu_id)
 			->executeValue("COUNT(1)");
 
@@ -724,7 +724,7 @@ abstract class UpgradeManager
 		
 		if($parent_identifier)
 		{
-			$parents = Query::create(MenuItem, "WHERE identifier=:identifier")
+			$parents = Query::create('MenuItem', "WHERE identifier=:identifier")
 				->bind(":identifier", $parent_identifier)
 				->execute();
 
@@ -734,14 +734,14 @@ abstract class UpgradeManager
 		
 		if(!$sort_order)
 		{
-			$sort_order = (Query::create(MenuItem, "WHERE menu_id=:menu_id AND parent_id=:parent_id")
+			$sort_order = (Query::create('MenuItem', "WHERE menu_id=:menu_id AND parent_id=:parent_id")
 				->bind(":menu_id", $menu->menu_id, ":parent_id", $parent_id)
 				->executeValue("MAX(sort_order)") + 1);
 		}
 		
 		if(!$section_name)
 		{
-			$sections = Query::create(SectionContent, "WHERE identifier=:identifier")
+			$sections = Query::create('SectionContent', "WHERE identifier=:identifier")
 				->bind(":identifier", $page->identifier)
 				->execute();
 

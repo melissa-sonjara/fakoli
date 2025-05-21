@@ -57,7 +57,7 @@ $forum = new Forum($forum_id);
 $forumSubscription = new ForumSubscription();
 
 $pk = $user->getPrimaryKey();
-$forumSubscriptions = Query::create(ForumSubscription, "WHERE user_id=:user_id AND forum_id=:forum_id")
+$forumSubscriptions = Query::create('ForumSubscription', "WHERE user_id=:user_id AND forum_id=:forum_id")
 	->bind(":user_id", $user->$pk, ":forum_id", $forum_id)
 	->execute();
 

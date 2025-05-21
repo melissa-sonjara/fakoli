@@ -496,14 +496,14 @@ class SurveyAggregatedResultsManager //extends AbstractQuestionnaireAggregatedRe
 	
 	function Responses()
 	{
-		return Query::create(SurveyResponse, "WHERE status='submitted'")->execute();
+		return Query::create('SurveyResponse', "WHERE status='submitted'")->execute();
 	}
 	
 	function getAnswers()
 	{
 		$constraint = "WHERE response_id IN (SELECT response_id FROM survey_response WHERE status = 'submitted')";
 	
-		$answers = Query::create(SurveyAnswer, $constraint)->execute();
+		$answers = Query::create('SurveyAnswer', $constraint)->execute();
 		return $answers;	
 	}
 }

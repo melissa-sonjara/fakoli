@@ -10,7 +10,7 @@ $menu_item = "Activity Report";
 
 $constraint = "WHERE user_id={$user_id}";
 
-$sessions = IteratedQuery::create(UserActivitySession, "$constraint ORDER BY session_start DESC")->execute();
+$sessions = IteratedQuery::create('UserActivitySession', "$constraint ORDER BY session_start DESC")->execute();
 
 $table = new DataListView($sessions, "session");
 $table->column("User", "<a href='/admin/session_details?session_id={session_id}'>{User.first_name} {User.last_name}</a>", true, "width: 25%")
@@ -30,7 +30,7 @@ $script .= $table->writeScript();
 
 $table->drawView();
 
-$count = Query::create(UserActivity, "")->executeValue("COUNT(1)");
+$count = Query::create('UserActivity', "")->executeValue("COUNT(1)");
 
 if ($count > 0)
 {

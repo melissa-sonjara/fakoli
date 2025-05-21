@@ -50,7 +50,7 @@ $tabs->section = "section_modules";
 $title = "Position Modules for {$section->section_title}";
 
 $modulePositions = reindexList($section->SectionModuleXrefs(), "module_id");
-$modules = query(Module, "ORDER BY title");
+$modules = query('Module', "ORDER BY title");
 $positions = $section->getPositions();
 
 if ($method == "POST")

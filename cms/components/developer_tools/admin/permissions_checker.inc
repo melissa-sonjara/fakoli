@@ -16,7 +16,7 @@ ENDSTYLES;
 
 $site_id = checkNumeric($_GET["site_id"]);
 
-$sites = query(Site, "ORDER BY site_name");
+$sites = query('Site', "ORDER BY site_name");
 
 if (!$site_id) $site_id = $sites[0]->site_id;
 
@@ -34,7 +34,7 @@ $subject->load($user_id);
 
 $tabs = new DataItemTabBar("tabs", $sites);
 
-$permissions = Query::create(Settings, "WHERE options='Permissions' ORDER BY component")->execute();
+$permissions = Query::create('Settings', "WHERE options='Permissions' ORDER BY component")->execute();
 
 $userPermissions = array();
 foreach($permissions as $p)
@@ -47,11 +47,11 @@ foreach($permissions as $p)
 
 $permissionsList = formatItems($userPermissions, "{component}:{name}", ", ");
 
-$sectionContent = GroupedQuery::create(SectionContent, "WHERE section_id IN (SELECT section_id FROM section WHERE site_id=:s) ORDER BY identifier", "section_id")
+$sectionContent = GroupedQuery::create('SectionContent', "WHERE section_id IN (SELECT section_id FROM section WHERE site_id=:s) ORDER BY identifier", "section_id")
 					   ->bind(":s", $site_id)
 				 	   ->execute();
 
-$sections = Query::create(Section, "WHERE site_id=:s")
+$sections = Query::create('Section', "WHERE site_id=:s")
 				 ->bind(":s", $site_id)
 				 ->execute();
 

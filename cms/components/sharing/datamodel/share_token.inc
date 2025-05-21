@@ -51,7 +51,7 @@ class ShareToken extends DataItem
 		
 		try
 		{
-			return Query::create(ShareToken, "WHERE token=:t")
+			return Query::create('ShareToken', "WHERE token=:t")
 						->bind(":t", $token)
 						->executeSingle();
 		}
@@ -66,7 +66,7 @@ class ShareToken extends DataItem
 		$type = get_class($obj);
 		$key = $obj->getPrimaryKeyValue();
 		
-		$matches = Query::create(ShareToken, "WHERE item_type=:t AND item_key=:k")
+		$matches = Query::create('ShareToken', "WHERE item_type=:t AND item_key=:k")
 						->bind(":t", $type, ":k", $key)
 						->execute();
 		

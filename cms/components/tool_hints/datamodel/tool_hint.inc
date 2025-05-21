@@ -50,7 +50,7 @@ class ToolHint extends DataItem
 
 	static function findToolHint($code)
 	{
-		return Query::create(ToolHint, "WHERE code=:c")
+		return Query::create('ToolHint', "WHERE code=:c")
 					->bind(":c", $code)
 					->executeSingle();
 	}
@@ -61,7 +61,7 @@ class ToolHint extends DataItem
 		
 		try
 		{
-			$status = Query::create(ToolHintUserStatus, "WHERE hint_id=:h AND user_id=:u")
+			$status = Query::create('ToolHintUserStatus', "WHERE hint_id=:h AND user_id=:u")
 					       ->bind(":h", $this->hint_id, ":u", $user->get($user->getPrimaryKey()))
 					       ->executeSingle();
 			
@@ -80,7 +80,7 @@ class ToolHint extends DataItem
 		
 		try
 		{
-			$status = Query::create(ToolHintUserStatus, "WHERE hint_id=:h AND user_id=:u")
+			$status = Query::create('ToolHintUserStatus', "WHERE hint_id=:h AND user_id=:u")
 			->bind(":h", $this->hint_id, ":u", $user->get($user->getPrimaryKey()))
 			->executeSingle();
 		}

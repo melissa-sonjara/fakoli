@@ -175,7 +175,7 @@ class ImageGalleriesView
 	{
 		if (!$showHidden) $constraint = "WHERE hidden=0";
 		
-		$galleries = Query::create(ImageGallery, "$constraint ORDER BY gallery_name")->execute();
+		$galleries = Query::create('ImageGallery', "$constraint ORDER BY gallery_name")->execute();
 		
 		$this->table = $this->buildTable($galleries);
 	}

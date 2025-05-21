@@ -32,7 +32,7 @@ class RSSFeedArticles extends DataItem
 	
 	static function getPublishedArticles($limit = 10)
 	{
-		return Query::create(RSSFeedArticles, "WHERE publish_status=1 ORDER BY article_date DESC LIMIT $limit")->execute();
+		return Query::create('RSSFeedArticles', "WHERE publish_status=1 ORDER BY article_date DESC LIMIT $limit")->execute();
 	}		
 }
 /**@}*/?>

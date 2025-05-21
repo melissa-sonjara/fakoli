@@ -35,7 +35,7 @@ Fakoli::using("document");
 Fakoli::usingFile("framework/data_view.inc");
 
 
-$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+$libraries = Query::create('DocumentLibrary', "ORDER BY name")->execute();
 
 $view = new DocumentLibraryListView($libraries);
 

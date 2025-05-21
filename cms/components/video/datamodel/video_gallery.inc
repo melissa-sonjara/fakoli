@@ -95,7 +95,7 @@ class VideoGallery extends DataItem
 	
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(VideoGallery, "WHERE identifier=:id")
+		$match = Query::create('VideoGallery', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 

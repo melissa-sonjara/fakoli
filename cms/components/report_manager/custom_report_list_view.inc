@@ -19,7 +19,7 @@ class CustomReportListView
 		$this->title = $title;
 		
 		// blank title means throw-away record presaved on generate page
-		$this->reports = Query::create(CustomReport, "WHERE title != '' AND $constraints")->execute();
+		$this->reports = Query::create('CustomReport', "WHERE title != '' AND $constraints")->execute();
 		
 		$this->id = $id;
 		$this->list = new PagedList($this->reports, "{$id}_list", array($this, formatReport));

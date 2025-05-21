@@ -183,14 +183,14 @@ class Document extends DataItem implements Searchable
 			
 			$constraint .= $range;
 			
-			$documents = Query::create(Document, $constraint)
+			$documents = Query::create('Document', $constraint)
 							  ->execute();
 		}
 		else
 		{
 			$params = preg_replace('/[^\w]+/', ' ', $params);
 			$params = "%$params%";
-			$documents = Query::create(Document, "WHERE (title like :a OR keywords LIKE :b OR notes Like :c) and public=1 $range")
+			$documents = Query::create('Document', "WHERE (title like :a OR keywords LIKE :b OR notes Like :c) and public=1 $range")
 						  ->bind(":a", $params, ":b", $params, ":c", $params)
 						  ->execute();
 		}

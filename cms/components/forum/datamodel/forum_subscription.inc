@@ -53,7 +53,7 @@ class ForumSubscription extends DataItem
 		$pk = $user->getPrimaryKey();
 		
 		trace("***************findUserSubscription user id {$user->$pk} forum_id $forum_id topic_id $topic_id", 3);
-		$subscriptions = Query::create(ForumSubscription, "WHERE user_id=:user_id AND forum_id=:forum_id AND topic_id=:topic_id")
+		$subscriptions = Query::create('ForumSubscription', "WHERE user_id=:user_id AND forum_id=:forum_id AND topic_id=:topic_id")
 			->bind(":user_id",  $user->$pk, ":forum_id", $forum_id, ":topic_id", $topic_id)
 			->execute();
 
@@ -66,7 +66,7 @@ class ForumSubscription extends DataItem
 		if(!$user) return null;
 		$pk = $user->getPrimaryKey();
 		
-		return Query::create(ForumSubscription, "WHERE user_id=:user_id AND forum_id=:forum_id AND topic_id > 0")
+		return Query::create('ForumSubscription', "WHERE user_id=:user_id AND forum_id=:forum_id AND topic_id > 0")
 			->bind(":user_id",  $user->$pk, ":forum_id", $forum_id)
 			->execute();
 	}

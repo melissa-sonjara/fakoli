@@ -84,7 +84,7 @@ class Page extends DataItem implements Searchable
 	
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(Page, "WHERE identifier=:id")
+		$match = Query::create('Page', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 
@@ -116,7 +116,7 @@ class Page extends DataItem implements Searchable
 		}
 		
 		// Merge in global modules
-		$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+		$globals = groupedQuery('Module', "WHERE global=1", "global_position");
 		foreach($globals as $position => $modulesAtPosition)
 		{
 			if (array_key_exists($position, $modules))
@@ -255,13 +255,13 @@ class Page extends DataItem implements Searchable
 			$constraint .= $constraint ? " AND published=1 AND exclude_from_search=0" : " WHERE published=1 AND exclude_from_search=0";
 			$constraint .= $range;
 			
-			$pages = Query::create(Page, $constraint)
+			$pages = Query::create('Page', $constraint)
 						  ->execute();
 		}
 		else
 		{
 			$params = "%$params%";
-			$pages = Query::create(Page, "WHERE (page_title like :a OR description LIKE :b) AND published=1 AND exclude_from_search=0 $range")
+			$pages = Query::create('Page', "WHERE (page_title like :a OR description LIKE :b) AND published=1 AND exclude_from_search=0 $range")
 						  ->bind(":a", $params, ":b", $params)
 						  ->execute();
 		}

@@ -310,7 +310,7 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 	 */
 	static function getLibraryOptions()
 	{
-		$libraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+		$libraries = Query::create('DocumentLibrary', "ORDER BY name")->execute();
 		$libraries = filterByRole($libraries, "allow_access");
 	
 		$options = array();
@@ -329,7 +329,7 @@ class EmailLibraryAttachmentFieldRenderer extends FieldRenderer
 	 */
 	static function getDocumentOptions()
 	{
-		$documents = Query::create(Document, "ORDER BY title")->execute();
+		$documents = Query::create('Document', "ORDER BY title")->execute();
 		$documents = filterByRole($documents, "allow_access");
 				
 		if (count($documents) > 0)

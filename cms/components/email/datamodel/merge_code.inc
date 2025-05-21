@@ -57,7 +57,7 @@ class MergeCode extends DataItem
 	 */
 	static function setDefaultMergeCode($name, $map, $class_name, $description = "")
 	{
-		$mergeCodes = Query::create(MergeCode, "WHERE name=:name AND class_name=:class_name")
+		$mergeCodes = Query::create('MergeCode', "WHERE name=:name AND class_name=:class_name")
 			->bind(":name", $name, ":class_name", $class_name)
 			->execute();
 		

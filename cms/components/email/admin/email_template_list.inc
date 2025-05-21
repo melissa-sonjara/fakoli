@@ -45,7 +45,7 @@
 Fakoli::using("email");
 Fakoli::usingFeature("data_view");
 
-$emailTemplates = query(EmailTemplate, "ORDER BY name");
+$emailTemplates = query('EmailTemplate', "ORDER BY name");
 
 $menu_item = "Email Templates";
 

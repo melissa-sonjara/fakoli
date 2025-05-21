@@ -49,7 +49,7 @@ if ($message->author_id == $user->get($user->primary_key) || checkRole("admin,da
 {
 	$attachment = new Attachment($attachment_id);
 	
-	$jns = Query::create(ForumMessageAttachmentXref, "WHERE message_id=:message_id AND attachment_id=:attachment_id")
+	$jns = Query::create('ForumMessageAttachmentXref', "WHERE message_id=:message_id AND attachment_id=:attachment_id")
 				->bind(":message_id", $message_id, ":attachment_id", $attachment_id)
 				->execute();
 	

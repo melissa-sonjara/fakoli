@@ -24,7 +24,7 @@ class PageRating extends DataItem
 		
 		try 
 		{
-			$rating = Query::create(PageRating, "WHERE url=:u AND user_id=:id")
+			$rating = Query::create('PageRating', "WHERE url=:u AND user_id=:id")
 						   ->bind(":u", $url, ":id", $user_id)
 						   ->executeSingle();		
 		} 
@@ -52,7 +52,7 @@ class PageRatingStatistics extends DataItem
 	{
 		try
 		{
-			$stats = Query::create(PageRatingStatistics, "WHERE url=:u")
+			$stats = Query::create('PageRatingStatistics', "WHERE url=:u")
 						  ->bind(":u", $url)
 						  ->executeSingle();
 		}

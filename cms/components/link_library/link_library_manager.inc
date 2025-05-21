@@ -124,7 +124,7 @@ class LinkLibraryManager
 		
 		try
 		{
-			$libraries = Query::create(LinkLibrary, "WHERE owner_id=:owner_id")
+			$libraries = Query::create('LinkLibrary', "WHERE owner_id=:owner_id")
 				->bind(":owner_id", $user_id)
 				->execute();
 			
@@ -158,7 +158,7 @@ class LinkLibraryManager
 	 */
 	static function enumerateItems($items)
 	{
-		$libraries = Query::create(LinkLibrary, "WHERE enabled=1 ORDER BY name")->execute();
+		$libraries = Query::create('LinkLibrary', "WHERE enabled=1 ORDER BY name")->execute();
 	
 		$items["Link Libraries"] = $libraries;
 		return $items;

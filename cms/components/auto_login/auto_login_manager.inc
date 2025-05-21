@@ -51,7 +51,7 @@ class AutoLoginManager
 		
 		try
 		{
-			$authToken = Query::create(AuthenticationToken, "WHERE token=:token AND enabled=1")
+			$authToken = Query::create('AuthenticationToken', "WHERE token=:token AND enabled=1")
 							->bind(":token", $token)
 							->executeSingle();
 

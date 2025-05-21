@@ -39,7 +39,7 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 		$this->tree->selectMode = "navigation";
 		$this->tree->onSelect = "{$this->parent->id}_{$field}_selectItem";
 		
-		$sections = Query::create(Section, "ORDER BY section")->execute();
+		$sections = Query::create('Section', "ORDER BY section")->execute();
 		
 		foreach($sections as $section)
 		{

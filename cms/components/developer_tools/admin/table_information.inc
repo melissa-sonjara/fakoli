@@ -3,13 +3,13 @@ Fakoli::using("developer_tools");
 
 $menu_item = "Table Information";
 
-$tables = Query::create(TableInformation, "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_TYPE='BASE TABLE' ORDER BY TABLE_TYPE, TABLE_NAME")->execute();
+$tables = Query::create('TableInformation', "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_TYPE='BASE TABLE' ORDER BY TABLE_TYPE, TABLE_NAME")->execute();
 
 $charset = new TableCharacterSet();
 
 $form = new AutoForm($charset);
 
-$characterSets = Query::create(CharacterSet, "ORDER BY CHARACTER_SET_NAME")->execute();
+$characterSets = Query::create('CharacterSet', "ORDER BY CHARACTER_SET_NAME")->execute();
 $options = array(""=>"");
 
 foreach($characterSets as $set)
@@ -61,7 +61,7 @@ if ($method == "POST")
 	if ($form->save())
 	{
 		Fakoli::notify("Changes Saved");
-		$tableSelect->data = Query::create(TableInformation, "WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_TYPE, TABLE_NAME")->execute();
+		$tableSelect->data = Query::create('TableInformation', "WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_TYPE, TABLE_NAME")->execute();
 		
 	}
 	else

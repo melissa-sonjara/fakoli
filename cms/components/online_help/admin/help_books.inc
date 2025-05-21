@@ -36,7 +36,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Online Help";
 
-$helpBooks = Query::create(HelpBook, "ORDER BY title")->execute();
+$helpBooks = Query::create('HelpBook', "ORDER BY title")->execute();
 
 $table = new DataListView($helpBooks, "help_books");
 

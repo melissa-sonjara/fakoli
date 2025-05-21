@@ -43,7 +43,7 @@ $survey_question_id = checkNumeric($_GET["survey_question_id"]);
 $question = new SurveyQuestion($survey_question_id);
 
 $constraint = "WHERE survey_question_id=:survey_question_id AND response_id IN (SELECT response_id FROM survey_response WHERE status = 'submitted')";	
-$answers = Query::create(SurveyAnswer, $constraint)
+$answers = Query::create('SurveyAnswer', $constraint)
 	->bind(":survey_question_id", $survey_question_id)
 	->execute();
 

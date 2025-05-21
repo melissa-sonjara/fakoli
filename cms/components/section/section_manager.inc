@@ -194,7 +194,7 @@ class SectionManager
 	
 	static function permissionDeleted($permission)
 	{
-		$affected = Query::create(SectionContent, "WHERE permissions REGEXP '[[:<:]]{$permission}[[:>:]]'")
+		$affected = Query::create('SectionContent', "WHERE permissions REGEXP '[[:<:]]{$permission}[[:>:]]'")
 						  ->execute();
 		
 		foreach($affected as $a)

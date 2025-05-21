@@ -35,14 +35,14 @@ class ComponentUpdateLog extends DataItem
 	
 	static function getLatestVersion($component)
 	{
-		return Query::create(ComponentUpdateLog, "WHERE component=:component")
+		return Query::create('ComponentUpdateLog', "WHERE component=:component")
 			->bind(":component", $component)
 			->executeValue("MAX(version_number)");
 	}
 	
 	static function getLogs($component_name)
 	{
-		return Query::create(ComponentUpdateLog, "WHERE component=:component_name ORDER BY version_number")
+		return Query::create('ComponentUpdateLog', "WHERE component=:component_name ORDER BY version_number")
 			->bind(":component_name", $component_name)
 			->execute();
 	}

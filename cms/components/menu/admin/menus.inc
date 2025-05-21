@@ -37,9 +37,9 @@ Fakoli::assertRole("admin");
 
 $menu_item = "Menus";
 
-$sites = query(Site, "ORDER BY site_name");
+$sites = query('Site', "ORDER BY site_name");
 
-$menusBySite = groupedQuery(Menu, "ORDER BY name", "site_id");
+$menusBySite = groupedQuery('Menu', "ORDER BY name", "site_id");
 
 $title = "Menus";
 

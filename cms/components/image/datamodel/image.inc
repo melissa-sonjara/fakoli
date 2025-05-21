@@ -101,7 +101,7 @@ class ImageRecord extends DataItem
 	
 	static function findByFileName($filename)
 	{
-		$images = Query::create(ImageRecord, "WHERE image_file=:f")
+		$images = Query::create('ImageRecord', "WHERE image_file=:f")
 					->bind(":f", $filename)
 					->execute();
 		

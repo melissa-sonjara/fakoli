@@ -38,11 +38,11 @@ $article_type = $blog->title;
 $published_this_year = " AND (DATE_FORMAT(publish_date,'%Y') = DATE_FORMAT(curdate(),'%Y')) GROUP BY publish_date";
 $published_last_year = " AND (DATE_FORMAT(publish_date,'%Y') < DATE_FORMAT(curdate(),'%Y')) GROUP BY publish_date";
 
-$articlesThisYear = Query::create(Article, "WHERE published=1 AND publish_date <= curdate() AND article_type='{$article_type}'" . $published_this_year . " ORDER BY publish_date DESC")
+$articlesThisYear = Query::create('Article', "WHERE published=1 AND publish_date <= curdate() AND article_type='{$article_type}'" . $published_this_year . " ORDER BY publish_date DESC")
 				->filter(new InclusionFilter(publish_date))
 				->execute();
 
-$articlesBeforeThisYear = Query::create(Article, "WHERE published=1 AND article_type='{$article_type}'" . $published_last_year . " ORDER BY publish_date DESC")
+$articlesBeforeThisYear = Query::create('Article', "WHERE published=1 AND article_type='{$article_type}'" . $published_last_year . " ORDER BY publish_date DESC")
 				->filter(new InclusionFilter(publish_date))
 				->execute();
 				

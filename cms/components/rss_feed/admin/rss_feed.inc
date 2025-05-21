@@ -4,7 +4,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item="RSS Feeds";
 
-$rssFeeds = Query::create(RSSFeed, "ORDER BY rss_feed_id")->execute();
+$rssFeeds = Query::create('RSSFeed', "ORDER BY rss_feed_id")->execute();
 
 $table = new DataListView($rssFeeds, "rss_feeds");
 $table->column("Feed Title", "<a href='/admin/rss_feed_form?rss_feed_id={rss_feed_id}'>{rss_title}</a>", true)

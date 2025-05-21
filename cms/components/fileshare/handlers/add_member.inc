@@ -50,7 +50,7 @@ if(!$document_library_id)
 if(!$user_id)
 	Fakoli::end("Add Member: no user_id");
 
-$count = Query::create(FileshareUserXref, "WHERE user_id=:u and document_library_id=:l")
+$count = Query::create('FileshareUserXref', "WHERE user_id=:u and document_library_id=:l")
 		->bind(":u", $user_id, ":l", $document_library_id)
 		->executeValue("COUNT(1)");
 	

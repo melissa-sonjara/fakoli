@@ -41,7 +41,7 @@ class RedirectManager
 		
 		try
 		{
-			$redirect = Query::create(Redirect, "WHERE redirect_from=:p")
+			$redirect = Query::create('Redirect', "WHERE redirect_from=:p")
 							 ->bind(":p", $path)
 							 ->executeSingle();
 			
@@ -67,7 +67,7 @@ class RedirectManager
 		
 	static function handleSectionRedirects()
 	{
-		$redirects = Query::create(Redirect, "WHERE active=1 AND redirect_from=:p")
+		$redirects = Query::create('Redirect', "WHERE active=1 AND redirect_from=:p")
 						 ->bind(":p", Fakoli::$requestURI)
 						 ->execute();
 		if (count($redirects) > 0)
@@ -89,7 +89,7 @@ class RedirectManager
 		
 		if (!$overrides)
 		{
-			$overrides = IndexedQuery::create(Redirect, "WHERE override=1 and active=1", "redirect_from")->execute();
+			$overrides = IndexedQuery::create('Redirect', "WHERE override=1 and active=1", "redirect_from")->execute();
 			Cache::put("resource_overrides", $overrides);
 		}
 		

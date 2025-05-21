@@ -84,7 +84,7 @@ class Settings extends DataItem
 	{
 		try
 		{
-			$setting = Query::create(Settings, "WHERE component=:component AND name=:name")
+			$setting = Query::create('Settings', "WHERE component=:component AND name=:name")
 							->bind(":component", $component, ":name", $name)
 							->executeSingle();
 			Cache::put("setting_{$component}_{$name}", $setting->value);
@@ -108,7 +108,7 @@ class Settings extends DataItem
 		
 		try 
 		{
-			$setting = Query::create(Settings, "WHERE component=:c and name=:n")
+			$setting = Query::create('Settings', "WHERE component=:c and name=:n")
 						->filter(new InclusionFilter("value"))
 					    ->bind(":c", $component, ":n", $name)
 						->executeSingle();
@@ -194,7 +194,7 @@ class Settings extends DataItem
 	 */
 	static function deleteValue($component, $name)
 	{
-		$settings = Query::create(Settings, "WHERE component=:c and name=:n")
+		$settings = Query::create('Settings', "WHERE component=:c and name=:n")
 						 ->bind(":c", $component, ":n", $name)
 						 ->execute();
 		
@@ -337,12 +337,12 @@ class Settings extends DataItem
 	
 	static function getComponents()
 	{
-		return Query::create(Component, "WHERE name in (SELECT DISTINCT component FROM settings) ORDER BY name")->execute();
+		return Query::create('Component', "WHERE name in (SELECT DISTINCT component FROM settings) ORDER BY name")->execute();
 	}
 
 	static function createPermissionsFieldRenderer($form, $field, $label = "")
 	{
-		$permissions = Query::create(Settings, "WHERE category='Permissions' ORDER BY component, annotation")->execute();
+		$permissions = Query::create('Settings', "WHERE category='Permissions' ORDER BY component, annotation")->execute();
 		
 		if (count($permissions) == 0) 
 		{

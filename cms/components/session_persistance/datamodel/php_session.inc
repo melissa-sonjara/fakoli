@@ -50,7 +50,7 @@ class PHPSession extends DataItem
 	{
 		try
 		{
-			return Query::create(PHPSession, "WHERE id=:id")
+			return Query::create('PHPSession', "WHERE id=:id")
 				 		->bind(":id", $id)
 				 		->executeSingle();
 		}

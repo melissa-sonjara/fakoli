@@ -35,7 +35,7 @@ class DeveloperToolsManager
 	
 	static function formatSections($item)
 	{
-		$sectionContent = Query::create(SectionContent, "WHERE identifier=:i")
+		$sectionContent = Query::create('SectionContent', "WHERE identifier=:i")
 							   ->bind(":i", $item->identifier)
 							   ->execute();
 		

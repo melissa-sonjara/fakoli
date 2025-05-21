@@ -45,7 +45,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Event Types";
 
-$eventTypes = Query::create(EventType, "")->execute();
+$eventTypes = Query::create('EventType', "")->execute();
 
 $table = new DataListView($eventTypes, "eventTypes");
 $table->column("Name", "<a href='/admin/event_type_form?event_type_id={event_type_id}'>{name}</a>", true);

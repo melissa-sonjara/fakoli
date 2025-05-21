@@ -31,7 +31,7 @@ class RatingManager
 		
 		try 
 		{
-			$rating = Query::create(PageRating, "WHERE url=:u and user_id=:id")
+			$rating = Query::create('PageRating', "WHERE url=:u and user_id=:id")
 						   ->bind(":u", $url, ":id", $user->get($user->getPrimaryKey()))
 						   ->executeSingle();
 		} 

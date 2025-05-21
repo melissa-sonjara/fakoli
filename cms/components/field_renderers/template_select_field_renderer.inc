@@ -92,7 +92,7 @@ class TemplateSelectFieldRenderer extends SelectFieldRenderer
 		{
 		case "site":
 
-			$sites = Query::create(Site, "")->execute();
+			$sites = Query::create('Site', "")->execute();
 	
 			foreach($sites as $site)
 			{

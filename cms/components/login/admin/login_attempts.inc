@@ -12,7 +12,7 @@ new DateRangeFilterRenderer($filterForm, "date_received", "", "month");
 
 $constraint = $filterForm->getConstraint();
 
-$attempts = Query::create(LoginAttempt, "$constraint ORDER BY date_received")->execute();
+$attempts = Query::create('LoginAttempt', "$constraint ORDER BY date_received")->execute();
 
 $table = new DataListView($attempts, "login_attempts");
 $table->column("Username", "<b>{username:htmlSafe}</b>", true)

@@ -48,7 +48,7 @@ class AdminPageView
 		$this->page = Cache::get("fakoli_admin_pages_$identifier");
 		if ($this->page) return;
 		
-		$pages = Query::create(AdminPage, "WHERE identifier=:id")
+		$pages = Query::create('AdminPage', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->execute();
 					  

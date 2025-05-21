@@ -110,7 +110,7 @@ class ComponentPage extends DataItem
 		}
 		
 		// Merge in global modules
-		$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+		$globals = groupedQuery('Module', "WHERE global=1", "global_position");
 		foreach($globals as $position => $modulesAtPosition)
 		{
 			if (array_key_exists($position, $modules))
@@ -233,7 +233,7 @@ class ComponentPage extends DataItem
 	{
 		$constraint = preg_replace("/^\s*WHERE\s+/i", "AND ", $constraint);
 		
-		$match = Query::create(ComponentPage, "WHERE identifier=:id $constraint")
+		$match = Query::create('ComponentPage', "WHERE identifier=:id $constraint")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 

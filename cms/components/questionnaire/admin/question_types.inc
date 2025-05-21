@@ -49,7 +49,7 @@ $menu_item = "Questionnaire Question Types";
 $title = "Question Types";
 
 
-$questionTypes = query(QuestionType, "ORDER BY sort_order");
+$questionTypes = query('QuestionType', "ORDER BY sort_order");
 
 $table = new DataListView($questionTypes, "questionTypes");
 $table->column("Name", "<a href=\"/admin/question_type_form?question_type_id={question_type_id}\">{name}</a>")
@@ -112,7 +112,7 @@ function reorderQuestionTypes()
 			}
 		}
 		// renumber
-		$questionTypes = query(QuestionType, "ORDER BY sort_order");
+		$questionTypes = query('QuestionType', "ORDER BY sort_order");
 		$value = 1;
 	
 		foreach($questionTypes as $questionType)

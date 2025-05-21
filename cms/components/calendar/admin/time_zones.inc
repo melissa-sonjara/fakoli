@@ -37,7 +37,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Time Zones";
 
-$zones = Query::create(TimeZone, "ORDER BY time_zone_name")->execute();
+$zones = Query::create('TimeZone', "ORDER BY time_zone_name")->execute();
 
 $table = new DataListView($zones, "time_zones");
 $table->column("Time Zone Name", "<a href='/admin/time_zone_form?time_zone_id={time_zone_id}'>{time_zone_name}</a>", true)

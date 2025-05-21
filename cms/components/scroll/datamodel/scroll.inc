@@ -35,12 +35,12 @@ class Scroll extends DataItem
 	
 	function countParts()
 	{
-		return Query::create(ScrollPart, "WHERE scroll_id=:s")->bind(":s", $this->scroll_id)->count();
+		return Query::create('ScrollPart', "WHERE scroll_id=:s")->bind(":s", $this->scroll_id)->count();
 	}
 	
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(Scroll, "WHERE identifier=:id")
+		$match = Query::create('Scroll', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 

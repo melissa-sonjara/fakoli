@@ -41,12 +41,12 @@ $menu_item = "Scrolls";
 
 $site_id = checkNumeric($_GET["site_id"]);
 
-$sites = query(Site, "ORDER BY site_name");
+$sites = query('Site', "ORDER BY site_name");
 
 if (!$site_id) $site_id = $sites[0]->site_id;
 
 $tabs = new DataItemTabBar("tabs", $sites);
-$scrollsBySite = Query::create(Scroll, "WHERE site_id=:site ORDER BY identifier")
+$scrollsBySite = Query::create('Scroll', "WHERE site_id=:site ORDER BY identifier")
 					->bind(":site", $site_id)
 					->execute();
 

@@ -48,7 +48,7 @@ $tabs->page = "page_modules";
 $title = "Position Modules for {$cmspage->page_title}";
 
 $modulePositions = reindexList($cmspage->PageModuleXrefs(), "module_id");
-$modules = query(Module, "ORDER BY title");
+$modules = query('Module', "ORDER BY title");
 $positions = $cmspage->getPositions();
 
 if ($method == "POST")

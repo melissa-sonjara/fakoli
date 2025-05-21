@@ -98,7 +98,7 @@ class Blog extends DataItem // implements Searchable
 			return false;
 		}
 		
-		$articles = Query::create(Article, "WHERE article_type=:article_type")
+		$articles = Query::create('Article', "WHERE article_type=:article_type")
 			->bind(":article_type", $this->title)
 			->executeValue("COUNT(1)");
 		
@@ -138,7 +138,7 @@ class Blog extends DataItem // implements Searchable
 	
 		$constraint = "WHERE article_type=:a $constraint";
 		
-		$articles = Query::create(Article, $constraint)
+		$articles = Query::create('Article', $constraint)
 					->bind(":a", $this->title)
 					->execute();
 					
@@ -147,14 +147,14 @@ class Blog extends DataItem // implements Searchable
 		
 	function countArticles()
 	{
-		return Query::create(Article, "WHERE article_type=:a")
+		return Query::create('Article', "WHERE article_type=:a")
 					->bind(":a", $this->title)
 					->executeValue("COUNT(1)");
 	}
 
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(Blog, "WHERE identifier=:id")
+		$match = Query::create('Blog', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 
@@ -163,7 +163,7 @@ class Blog extends DataItem // implements Searchable
 	
 	static function findByTitle($title)
 	{
-		$match = Query::create(Blog, "WHERE title=:title")
+		$match = Query::create('Blog', "WHERE title=:title")
 					  ->bind(":title", $title)
 					  ->executeSingle();
 
@@ -196,7 +196,7 @@ class Blog extends DataItem // implements Searchable
 	
 	static function getArticleTypeOptions()
 	{
-		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		$blogs = Query::create('Blog', "ORDER BY title")->execute();
 		$options = array();
 		foreach($blogs as $blog)
 		{
@@ -256,12 +256,12 @@ class Blog extends DataItem // implements Searchable
 			
 			$constraint .= $range;
 			
-			$blogs = Query::create(Blog, $constraint)->execute();
+			$blogs = Query::create('Blog', $constraint)->execute();
 		}
 		else
 		{
 			$params = "%$params%";
-			$blogs = Query::create(Blog, "WHERE (title like :a OR description LIKE :b) AND published=1 $range")
+			$blogs = Query::create('Blog', "WHERE (title like :a OR description LIKE :b) AND published=1 $range")
 						  ->bind(":a", $params, ":b", $params)
 						  ->execute();
 		}

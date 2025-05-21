@@ -60,7 +60,7 @@ else
 	{
 		$helpPage->parent_id = $parent_id;
 	}
-	$helpPage->sort_order = Query::create(HelpPage, "WHERE help_book_id=:help_book_id")
+	$helpPage->sort_order = Query::create('HelpPage', "WHERE help_book_id=:help_book_id")
 		->bind(":help_book_id", $help_book_id)
 		->executeValue("MAX(sort_order)") + 1;
 	$helpPage->help_book_id = $help_book_id;

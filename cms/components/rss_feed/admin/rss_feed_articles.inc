@@ -6,7 +6,7 @@ $menu_item = "RSS Feeds";
 
 $feed_id = checkNumeric($_GET["rss_feed_id"]);
 
-$rssFeeds = Query::create(RSSFeedArticles, "WHERE rss_feed_id=:f")
+$rssFeeds = Query::create('RSSFeedArticles', "WHERE rss_feed_id=:f")
 	->bind(":f",$feed_id)
 	->execute();
 

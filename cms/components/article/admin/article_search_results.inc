@@ -49,7 +49,7 @@ $search->fromGET();
 
 $title = "Results for News Item Search";
 
-$newsitems = query(NewsItem, $search->generateConstraint());
+$newsitems = query('NewsItem', $search->generateConstraint());
 
 
 ?>

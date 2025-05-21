@@ -352,7 +352,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 		
 		DataSyncManager::getSyncTargets();
 		
-		$fieldMappings = IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr", "client_field")
+		$fieldMappings = IndexedQuery::create('DataImportFieldMapping', "WHERE class=:cl AND import_profile_id=:pr", "client_field")
 									 ->bind(":cl", $class, ":pr", $profile_id)
 									 ->execute();
 	
@@ -373,7 +373,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 			$mapping->save();
 		}
 				
-		$fieldMappings = IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr", "client_field")
+		$fieldMappings = IndexedQuery::create('DataImportFieldMapping', "WHERE class=:cl AND import_profile_id=:pr", "client_field")
 						  ->bind(":cl", $class, ":pr", $profile_id)
 						  ->execute();
 		
@@ -403,7 +403,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 
 	private static function getMatchingFields($class, $import_profile_id = 0)
 	{
-		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
+		$matchingFields = Query::create('DataImportFieldMapping', "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
 		->bind(":cl", $class, ":pr", $import_profile_id)
 		->execute();
 	
@@ -465,7 +465,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 		trace("Retrieving field mapping for $class profile $import_profile_id", 3);
 		
 		DataSyncManager::$fieldMappings[$import_profile_id] = 
-						IndexedQuery::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND import_column != ''", "client_field")
+						IndexedQuery::create('DataImportFieldMapping', "WHERE class=:cl AND import_profile_id=:pr AND import_column != ''", "client_field")
 									->bind(":cl", $class, ":pr", $import_profile_id)
 									->execute();
 		
@@ -602,7 +602,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 		
 		$lastItem = null;
 		
-		$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
+		$matchingFields = Query::create('DataImportFieldMapping', "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
 								->bind(":cl", $class, ":pr", $import_profile_id)
 								->execute();
 									
@@ -711,7 +711,7 @@ class DataSyncCSVAdapter implements IDataSyncAdapter
 			$fieldMapping = DataSyncManager::getFieldMapping($class, $import_profile_id);
 			$filter = DataSyncManager::generateFilter($fieldMapping);
 	
-			$matchingFields = Query::create(DataImportFieldMapping, "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
+			$matchingFields = Query::create('DataImportFieldMapping', "WHERE class=:cl AND import_profile_id=:pr AND matching=1")
 									->bind(":cl", $class, ":pr", $import_profile_id)
 									->execute();
 			

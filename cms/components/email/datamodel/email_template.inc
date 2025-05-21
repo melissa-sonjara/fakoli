@@ -56,7 +56,7 @@ class EmailTemplate extends DataItem
 	 */
 	static function getEmailTemplate($name)
 	{
-		$emailTemplates = Query::create(EmailTemplate, "WHERE name=:n")
+		$emailTemplates = Query::create('EmailTemplate', "WHERE name=:n")
 							   ->bind(":n", $name)
 							   ->execute();
 
@@ -88,7 +88,7 @@ class EmailTemplate extends DataItem
 	 */
 	static function setDefaultTemplate($name, $recipients, $subject, $message, $class_name, $sender_email = "")
 	{
-		$emailTemplates = Query::create(EmailTemplate, "WHERE name=:name")
+		$emailTemplates = Query::create('EmailTemplate', "WHERE name=:name")
 			->bind(":name", $name)
 			->execute();
 		

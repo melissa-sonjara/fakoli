@@ -34,7 +34,7 @@
 Fakoli::using("auto_login");
 Fakoli::usingFeature("data_view");
 
-$tokens = Query::create(AuthenticationToken, "")->execute();
+$tokens = Query::create('AuthenticationToken', "")->execute();
 
 $menu_item = "Authentication Tokens";
 

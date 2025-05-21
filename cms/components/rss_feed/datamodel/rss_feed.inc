@@ -34,13 +34,13 @@ class RSSFeed extends DataItem
 
 	static function getrssFeedsForUser($user_id)
 	{
-		$feeds = Query::create(rssFeed, "WHERE rss_feed_id in (SELECT rss_feed_id FROM rss_feed_articles where user_id=:u) ORDER BY sort_order")
+		$feeds = Query::create('rssFeed', "WHERE rss_feed_id in (SELECT rss_feed_id FROM rss_feed_articles where user_id=:u) ORDER BY sort_order")
 		 			  ->bind(":u", $user_id)
 		 			  ->execute();
 		
 		if (count($feeds) == 0)
 		{
-			$feeds = Query::create(rssFeed, "WHERE feed_status=1 ORDER BY sort_order")->execute();
+			$feeds = Query::create('rssFeed', "WHERE feed_status=1 ORDER BY sort_order")->execute();
 		}
 		
 		return $feeds;
@@ -48,7 +48,7 @@ class RSSFeed extends DataItem
 
 	function findArticleByURL($url)
 	{
-		return Query::create(RSSFeedArticles, "WHERE rss_feed_id=:f AND rss_article_URL=:u")
+		return Query::create('RSSFeedArticles', "WHERE rss_feed_id=:f AND rss_article_URL=:u")
 					->bind(":f", $this->rss_feed_id, ":u", $url)
 					->executeSingle();}
 		

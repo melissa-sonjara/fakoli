@@ -55,7 +55,7 @@ class Bookmark extends DataItem
 			$page = $_SERVER['REQUEST_URI'];
 		}
 		
-		$results = Query::create(Bookmark, "WHERE user_id=:u AND url=:p")
+		$results = Query::create('Bookmark', "WHERE user_id=:u AND url=:p")
 					   ->bind(":u", $user->user_id, ":p", $page)
 					   ->execute();
 		

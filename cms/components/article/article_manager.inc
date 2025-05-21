@@ -42,7 +42,7 @@ class ArticleManager
 		$form->getRenderer("message")->height = "480px";
 		$form->getRenderer("teaser")->height = "120px";
 		
-		$sites = query(Site, "ORDER BY site_name");
+		$sites = query('Site', "ORDER BY site_name");
 	
 		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
 

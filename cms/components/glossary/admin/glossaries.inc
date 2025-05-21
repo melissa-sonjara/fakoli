@@ -3,7 +3,7 @@ Fakoli::using("glossary");
 Fakoli::usingFeature("data_view", "filter_form");
 
 $menu_item = "Glossary";
-$glossary = Query::create(Glossary, "ORDER BY term ASC")->execute();
+$glossary = Query::create('Glossary', "ORDER BY term ASC")->execute();
 
 $table = new DataListView($glossary, "Glossaries");
 $table->column("Term", "<a href='/admin/glossary_form?glossary_id={glossary_id}'>{term}</a>")

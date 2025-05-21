@@ -130,7 +130,7 @@ class Forum extends DataItem
 	
 	static function findByIdentifier($identifier)
 	{
-		return Query::create(Forum, "WHERE identifier=:identifier")
+		return Query::create('Forum', "WHERE identifier=:identifier")
 					->bind(":identifier", $identifier)
 					->executeSingle();
 	}
@@ -297,7 +297,7 @@ class ForumTopic extends DataItem
 	 */
 	function countReplies()
 	{
-		return Query::create(ForumMessage, "WHERE topic_id=:topic_id and parent_id > 0 and deleted=0")
+		return Query::create('ForumMessage', "WHERE topic_id=:topic_id and parent_id > 0 and deleted=0")
 			->bind(":topic_id", $this->topic_id)
 			->executeValue("COUNT(1)");
 	}

@@ -47,7 +47,7 @@ $section = $content->Section();
 $title = "Position Modules for {$section->section_title}";
 
 $modulePositions = reindexList($content->SectionContentModuleXrefs(), "module_id");
-$modules = query(Module, "ORDER BY title");
+$modules = query('Module', "ORDER BY title");
 $positions = $content->getPositions();
 
 if ($method == "POST")

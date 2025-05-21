@@ -36,7 +36,7 @@ require_once "include/link_picker_tabs.inc";
 
 $editor = $_GET["Editor"];
 
-$articlesByType = GroupedQuery::create(Article, "ORDER BY title", "article_type")
+$articlesByType = GroupedQuery::create('Article', "ORDER BY title", "article_type")
 						->execute();
 	
 $tree = new TreeControl("articles");

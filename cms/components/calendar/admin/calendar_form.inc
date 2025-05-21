@@ -38,7 +38,7 @@ $menu_item = "Calendars";
 
 $calendar_id = checkNumeric($_GET["calendar_id"]);
 
-$eventTypes = query(EventType, "order by name");
+$eventTypes = query('EventType', "order by name");
 
 if ($calendar_id)
 {

@@ -187,12 +187,12 @@ class FileshareManager extends DocumentManager
 		
 		if(!$user)
 			$user = FileshareManager::setVisitor();
-		$roleLibraries = Query::create(DocumentLibrary, "ORDER BY name")->execute();
+		$roleLibraries = Query::create('DocumentLibrary', "ORDER BY name")->execute();
 		$roleLibraries = filterByRole($roleLibraries, "allow_access");
 		
 		$constraint = "WHERE owner_id=:u or document_library_id in (select document_library_id from {$userXref->table} where user_id=:u)";
 			
-		$libraries = Query::create(DocumentLibrary, "$constraint ORDER BY name")
+		$libraries = Query::create('DocumentLibrary', "$constraint ORDER BY name")
 			->bind(":u", $user->user_id)
 			->execute();
 			
@@ -210,7 +210,7 @@ class FileshareManager extends DocumentManager
 	
 	static function getLibraryLastModified($library)
 	{
-		$documents = Query::create(Document, "WHERE document_library_id=:l ORDER BY last_modified DESC LIMIT 1")
+		$documents = Query::create('Document', "WHERE document_library_id=:l ORDER BY last_modified DESC LIMIT 1")
 			->bind(":l", $library->document_library_id)
 			->execute();
 			
@@ -219,7 +219,7 @@ class FileshareManager extends DocumentManager
 	
 	static function getLibraryLastModifiedBy($library)
 	{
-		$documents = Query::create(Document, "WHERE document_library_id=:l ORDER BY last_modified DESC LIMIT 1")
+		$documents = Query::create('Document', "WHERE document_library_id=:l ORDER BY last_modified DESC LIMIT 1")
 			->bind(":l", $library->document_library_id)
 			->execute();
 			

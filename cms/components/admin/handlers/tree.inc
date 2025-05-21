@@ -38,7 +38,7 @@ Fakoli::usingFeature("tree");
 $src = $_GET["src"];
 $page = $_GET["page"];
 
-$components = Query::create(Component, "WHERE enabled=1 ORDER BY name")->execute();
+$components = Query::create('Component', "WHERE enabled=1 ORDER BY name")->execute();
 
 $helpTree = new TreeControl("help_tree");
 $helpTree->scroll = false;

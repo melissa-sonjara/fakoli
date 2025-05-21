@@ -111,7 +111,7 @@ class VideoGalleryList
 		if (count($this->galleries) == 0) return;
 		
 		$ids = formatItems($this->galleries, "{gallery_id}", ", ");
-		$groupedVideos = GroupedQuery::create(Video, "WHERE gallery_id IN (". $ids .") AND published=1", "gallery_id")
+		$groupedVideos = GroupedQuery::create('Video', "WHERE gallery_id IN (". $ids .") AND published=1", "gallery_id")
 						->execute();
 						
 		foreach($groupedVideos as $gallery_id => $videos)

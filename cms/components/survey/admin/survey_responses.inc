@@ -39,7 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 Fakoli::using("questionnaire", "survey");
 Fakoli::usingFeature("data_view");
 
-$responses = Query::create(SurveyResponse, "WHERE status='submitted' AND survey_id NOT IN (SELECT survey_id FROM survey WHERE deleted=true)")->execute();
+$responses = Query::create('SurveyResponse', "WHERE status='submitted' AND survey_id NOT IN (SELECT survey_id FROM survey WHERE deleted=true)")->execute();
 
 $table = new DataListView($responses, "surveyResponses");
 $table->column("Token", "{token}", true)

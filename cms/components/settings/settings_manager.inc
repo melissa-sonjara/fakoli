@@ -158,7 +158,7 @@ class SettingsManager
 		if (!$afDefaults)
 		{
 			$afDefaults = array();
-			$autoFormSettings = Query::create(Settings, "WHERE component='settings' AND category='AutoForm'")
+			$autoFormSettings = Query::create('Settings', "WHERE component='settings' AND category='AutoForm'")
 									 ->filter(new InclusionFilter("name", "value"))
 									 ->execute();
 			
@@ -191,7 +191,7 @@ class SettingsManager
 		$tabs = null;
 		$settingCategories = array();
 		
-		$categories = Query::create(Settings, "WHERE component = :component && (category != '' OR category != null)")
+		$categories = Query::create('Settings', "WHERE component = :component && (category != '' OR category != null)")
 			->bind("component", $component->name)
 			->execute();
 			

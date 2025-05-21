@@ -12,7 +12,7 @@ $err->filter = new InclusionFilter("timestamp");
 $filterForm = new FilterForm($err);
 $range = new DateRangeFilterRenderer($filterForm, "timestamp", "timestamp");
 
-$errors = Query::create(ErrorLog, $filterForm->getConstraint()." ORDER BY timestamp DESC")->execute();
+$errors = Query::create('ErrorLog', $filterForm->getConstraint()." ORDER BY timestamp DESC")->execute();
 
 $filterForm->drawForm();
 

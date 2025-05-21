@@ -44,7 +44,7 @@ $tree->width = "100%";
 $tree->height = "300";
 $tree->selectMode = "navigation";
 
-$sections = Query::create(Section, "ORDER BY section")->execute();
+$sections = Query::create('Section', "ORDER BY section")->execute();
 
 foreach($sections as $section)
 {

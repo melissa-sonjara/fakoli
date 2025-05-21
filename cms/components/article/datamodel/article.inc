@@ -100,7 +100,7 @@ class Article extends DataItem implements Searchable
 	 */
 	function Blog()
 	{
-		$blogs = Query::create(Blog, "WHERE title=:article_type")
+		$blogs = Query::create('Blog', "WHERE title=:article_type")
 			->bind(":article_type", $this->article_type)
 			->execute();
 				
@@ -124,7 +124,7 @@ class Article extends DataItem implements Searchable
 	
 	function getBlog()
 	{
-		$blogs = Query::create(Blog, "WHERE title=:type")
+		$blogs = Query::create('Blog', "WHERE title=:type")
 					 ->bind(":type", $this->article_type)
 					 ->execute();
 					 
@@ -133,7 +133,7 @@ class Article extends DataItem implements Searchable
 	
 	static function fromIdentifier($identifier)
 	{
-		$articles = Query::create(Article, "WHERE identifier=:i")
+		$articles = Query::create('Article', "WHERE identifier=:i")
 						 ->bind(":i", $identifier)
 						 ->execute();
 		
@@ -155,7 +155,7 @@ class Article extends DataItem implements Searchable
 	
 	function getBlogSubscribers()
 	{
-		$blogSubscribers = Query::create(BlogSubscriber, "where blog_id=:blog_id")
+		$blogSubscribers = Query::create('BlogSubscriber', "where blog_id=:blog_id")
 								->bind(":blog_id", $this->getBlog()->blog_id)
 								->execute();
 		$email_list_array = array();
@@ -245,13 +245,13 @@ class Article extends DataItem implements Searchable
 			
 			$constraint .= $range;
 			
-			$articles = Query::create(Article, $constraint)
+			$articles = Query::create('Article', $constraint)
 						  ->execute();
 		}
 		else
 		{
 			$params = "%$params%";
-			$articles = Query::create(Article, "WHERE (title like :a OR teaser LIKE :b OR message like :c) AND published=1 $range")
+			$articles = Query::create('Article', "WHERE (title like :a OR teaser LIKE :b OR message like :c) AND published=1 $range")
 						  ->bind(":a", $params, ":b", $params, ":c", $params)
 						  ->execute();
 		}

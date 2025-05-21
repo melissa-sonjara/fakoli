@@ -59,14 +59,14 @@ class HelpBook extends DataItem
 	
 	static function findByIdentifier($identifier)
 	{
-		return Query::create(HelpBook, "WHERE identifier=:id")
+		return Query::create('HelpBook', "WHERE identifier=:id")
 					->bind(":id", $identifier)
 					->executeSingle();
 	}
 	
 	function findPage($identifier)
 	{
-		$pages = Query::create(HelpPage, "WHERE help_book_id=:book_id AND identifier=:id")
+		$pages = Query::create('HelpPage', "WHERE help_book_id=:book_id AND identifier=:id")
 					  ->bind(":book_id", $this->help_book_id, ":id", $identifier)
 					  ->execute();
 					  

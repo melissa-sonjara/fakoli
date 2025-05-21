@@ -88,7 +88,7 @@ $menu_item = "Context Help";
 $classes = array();
 $classes = ComponentManager::fireEvent("EnumerateContextHelpClasses", $classes);
 
-$savedHelp = groupedQuery(ContextHelp, "", "class_name");
+$savedHelp = groupedQuery('ContextHelp', "", "class_name");
 $contextHelps = array();
 
 /*

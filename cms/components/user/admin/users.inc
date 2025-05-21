@@ -43,7 +43,7 @@ $all = checkNumeric($_GET['all']);
 
 $constraint = $all ? "ORDER BY role, email" : "WHERE active=1 ORDER BY role, email";
 
-$site_users = query(SiteUser, $constraint);
+$site_users = query('SiteUser', $constraint);
 
 
 $table = new DataListView($site_users, "site_users");

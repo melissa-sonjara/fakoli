@@ -5,7 +5,7 @@ Fakoli::usingFeature("data_view");
 
 $editor = $_GET["Editor"];
 
-$galleries = Query::create(ImageGallery, "ORDER BY gallery_name")->execute();
+$galleries = Query::create('ImageGallery', "ORDER BY gallery_name")->execute();
 
 $table = new DataListView($galleries, "galleries");
 
@@ -39,7 +39,7 @@ $table->drawView();
 
 function countPhotos($gallery)
 {
-	return Query::create(ImageRecord, "WHERE gallery_id=:id AND include_in_slideshow=1")
+	return Query::create('ImageRecord', "WHERE gallery_id=:id AND include_in_slideshow=1")
 				->bind(":id", $gallery->gallery_id)
 				->executeValue("COUNT(1)");
 }

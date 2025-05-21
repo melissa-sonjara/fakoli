@@ -44,7 +44,7 @@
 Fakoli::using("questionnaire");
 Fakoli::usingFeature("data_view");
 
-$questionnaires = query(Questionnaire, "ORDER BY questionnaire_id DESC");
+$questionnaires = query('Questionnaire', "ORDER BY questionnaire_id DESC");
 
 $table = new DataListView($questionnaires, "questionnaires");
 $table->column("Title", "<a href=\"/questionnaire_form?questionnaire_id={questionnaire_id}\">{title}</a>", false)

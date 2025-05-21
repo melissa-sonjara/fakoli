@@ -41,10 +41,10 @@
 
 Fakoli::using("forum");
 		
-$topics = Query::create(ForumTopic, "WHERE message_id not in (select message_id from forum_message where deleted=true) ORDER BY date_created LIMIT 5")
+$topics = Query::create('ForumTopic', "WHERE message_id not in (select message_id from forum_message where deleted=true) ORDER BY date_created LIMIT 5")
 		->execute();
 			
-$messages = indexedQuery(ForumMessage, "WHERE deleted=false AND parent_id=0 ORDER BY date_posted", "topic_id");		
+$messages = indexedQuery('ForumMessage', "WHERE deleted=false AND parent_id=0 ORDER BY date_posted", "topic_id");		
 
 echo "<div class=\"module_header\">Recent Forum Posts</div>\n";
 echo "<div class=\"module_list\">\n";	

@@ -132,7 +132,7 @@ class PageView
 		
 		preg_match_all("/\\{_\\{_\\[menu:(.*?)\\]_\\}_\\}/", $template, $menuPositions, PREG_SET_ORDER);
 		
-		$menus = indexedQuery(Menu, "WHERE site_id={$this->page->site_id}", "identifier");
+		$menus = indexedQuery('Menu', "WHERE site_id={$this->page->site_id}", "identifier");
 		
 		foreach($menuPositions as $position)
 		{

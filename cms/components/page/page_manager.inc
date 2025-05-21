@@ -79,7 +79,7 @@ class PageManager
 		
 		try
 		{
-			$page = Query::create(Page, "WHERE identifier=:i")
+			$page = Query::create('Page', "WHERE identifier=:i")
 						->bind(":i", $identifier)
 						->executeSingle();
 			
@@ -114,7 +114,7 @@ class PageManager
 	
 	static function enumeratePages($items)
 	{
-		$pages = Query::create(Page, "ORDER BY page_title")->execute();
+		$pages = Query::create('Page', "ORDER BY page_title")->execute();
 		
 		$items["Pages"] = $pages;
 		return $items;
@@ -123,7 +123,7 @@ class PageManager
 	static function deleteRole($del_role)
 	{
 		$constraint = "WHERE role like '%$del_role%'";
-		$pages = Query::create(Page, $constraint)->execute();
+		$pages = Query::create('Page', $constraint)->execute();
 		
 		RoleManager::deleteRoleFromString($pages, $del_role);
 		

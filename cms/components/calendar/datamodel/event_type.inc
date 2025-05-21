@@ -58,7 +58,7 @@ class EventType extends DataItem
 	{
 		$eventTypeList = array();
 		
-		$eventTypes = Query::create(EventType, "ORDER BY name")->execute();
+		$eventTypes = Query::create('EventType', "ORDER BY name")->execute();
 		if(count($eventTypes) > 0)
 		{
 			foreach($eventTypes as $eventType)

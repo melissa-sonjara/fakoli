@@ -34,7 +34,7 @@
 Fakoli::using("video");
 Fakoli::usingFeature("data_view");
 
-$videos = Query::create(Video, "ORDER BY title")->execute();
+$videos = Query::create('Video', "ORDER BY title")->execute();
 
 $table = new DataListView($videos, "videos");
 

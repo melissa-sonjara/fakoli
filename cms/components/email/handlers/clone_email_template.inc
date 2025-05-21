@@ -59,7 +59,7 @@ redirect("/admin/email_template_form?email_template_id={$clone->email_template_i
 
 function isUnique($name)
 {
-	$count = Query::create(EmailTemplate, "WHERE name = :n")
+	$count = Query::create('EmailTemplate', "WHERE name = :n")
 		->bind(":n", $name)
 		->executeValue("COUNT(1)");
 

@@ -48,7 +48,7 @@ else
 
 $menu_item = "Documents";
 
-$libraries = Query::create(DocumentLibrary, "$constraint ORDER BY name")->execute();
+$libraries = Query::create('DocumentLibrary', "$constraint ORDER BY name")->execute();
 
 $view = new AdminDocumentLibraryListView($libraries);
 

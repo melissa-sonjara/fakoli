@@ -53,7 +53,7 @@ class QuestionType extends DataItem
 	
 	static function getQuestionTypeList()
 	{
-		$qTypes = query(QuestionType, "ORDER BY sort_order");
+		$qTypes = query('QuestionType', "ORDER BY sort_order");
 		
 		if(count($qTypes) > 0)
 		{

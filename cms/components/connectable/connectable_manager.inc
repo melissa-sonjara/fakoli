@@ -126,7 +126,7 @@ class ConnectableManager
 	 */
 	static function connectionExists($source, $target)
 	{
-		return Query::create(ConnectionRecord, "WHERE source_class=:sc AND source_id=:si AND target_class=:tc AND target_id=:ti")
+		return Query::create('ConnectionRecord', "WHERE source_class=:sc AND source_id=:si AND target_class=:tc AND target_id=:ti")
 					 ->bind(":sc", get_class($source),
 					 		":si", $source->get($source->getPrimaryKey()),
 					 		":tc", get_class($target),

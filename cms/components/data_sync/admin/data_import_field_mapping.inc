@@ -32,7 +32,7 @@ if ($multiProfile)
 		}
 	}
 		
-	$profiles = Query::create(DataImportProfile, "WHERE class=:c ORDER BY profile")
+	$profiles = Query::create('DataImportProfile', "WHERE class=:c ORDER BY profile")
 					 ->bind(":c", $class)
 					 ->execute();
 

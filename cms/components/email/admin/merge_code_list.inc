@@ -49,10 +49,10 @@ Fakoli::usingFeature("grouped_data_view");
 
 $menu_item = "Merge Codes";
 
-$mergeCodes = groupedQuery(MergeCode, "ORDER BY name", "class_name");
+$mergeCodes = groupedQuery('MergeCode', "ORDER BY name", "class_name");
 
 
-$classes = indexedQuery(MergeCode, "ORDER BY class_name", "class_name");
+$classes = indexedQuery('MergeCode', "ORDER BY class_name", "class_name");
 
 $table = new GroupedDataListView($mergeCodes, "mergeCodes");
 $table->column("Code Name", "<a href=\"/admin/merge_code_form?merge_code_id={merge_code_id}\">{name}</a>")

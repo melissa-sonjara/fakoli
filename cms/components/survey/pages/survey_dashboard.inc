@@ -58,7 +58,7 @@ if(!checkRole("admin"))
 // instance can be empty - script instantiates js class QuestionnaireDashboardManager
 $mgr = new SurveyDashboardManager(new Survey());
 
-$surveys = Query::create(Survey, "$constraint  ORDER BY status, start_date DESC")
+$surveys = Query::create('Survey', "$constraint  ORDER BY status, start_date DESC")
 	->execute();
 
 $table = new DataListView($surveys, "surveys");

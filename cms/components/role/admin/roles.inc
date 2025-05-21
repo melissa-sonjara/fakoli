@@ -38,7 +38,7 @@ Fakoli::assertRole("admin");
 $menu_item = "Roles";
 $title = "Manage User Roles";
 
-$roles = query(SiteRole, "ORDER BY name");
+$roles = query('SiteRole', "ORDER BY name");
 
 
 $table = new DataListView($roles, "roles");

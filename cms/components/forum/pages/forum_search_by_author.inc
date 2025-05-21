@@ -17,7 +17,7 @@ $pk = $u->getPrimaryKey();
 $table = $u->table;
 $text = "%{$text}%";
 
-$messages = Query::create(ForumMessage, "WHERE deleted=0 AND forum_id=:f AND author_id IN (SELECT $pk FROM $table WHERE concat(first_name, ' ', last_name) LIKE :t) ORDER BY date_posted DESC")
+$messages = Query::create('ForumMessage', "WHERE deleted=0 AND forum_id=:f AND author_id IN (SELECT $pk FROM $table WHERE concat(first_name, ' ', last_name) LIKE :t) ORDER BY date_posted DESC")
 				 ->bind(":f", $forum_id, ":t", $text)
     			 ->execute();
 		

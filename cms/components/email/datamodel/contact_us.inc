@@ -88,7 +88,7 @@ class ContactTopic extends DataItem
 		$siteCount = queryValue(Site, "COUNT(1)", "");
 		if($siteCount == 1)
 		{		
-			$topics = query(ContactTopic, "ORDER BY sort_order");
+			$topics = query('ContactTopic', "ORDER BY sort_order");
 		}
 		else
 		{
@@ -96,14 +96,14 @@ class ContactTopic extends DataItem
 			if(!$site) $site = Site::getSite();
 			if($site)
 			{
-				$siteTopics = Query::create(ContactTopicSiteXref, "WHERE site_id=:s")
+				$siteTopics = Query::create('ContactTopicSiteXref', "WHERE site_id=:s")
 					->bind(":s", $site->site_id)
 					->execute();
 					
 				if(count($siteTopics) > 0)
 				{
 					$topicKeyList = formatItems($siteTopics, "{contact_topic_id}", ",");	
-					$topics = query(ContactTopic, "WHERE contact_topic_id IN ($topicKeyList) ORDER BY sort_order");
+					$topics = query('ContactTopic', "WHERE contact_topic_id IN ($topicKeyList) ORDER BY sort_order");
 				}
 			}
 		}

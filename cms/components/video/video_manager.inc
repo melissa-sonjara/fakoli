@@ -410,7 +410,7 @@ class VideoManager
 	{
 		try
 		{
-			$gallery = Query::create(VideoGallery, "WHERE identifier=:i")
+			$gallery = Query::create('VideoGallery', "WHERE identifier=:i")
 							->bind(":i", $identifier)
 							->executeSingle();
 							
@@ -457,7 +457,7 @@ class VideoManager
 		
 		try
 		{
-			$galleries = Query::create(VideoGallery, "WHERE owner_id=:owner_id")
+			$galleries = Query::create('VideoGallery', "WHERE owner_id=:owner_id")
 				->bind(":owner_id", $user_id)
 				->execute();
 			
@@ -541,7 +541,7 @@ class VideoManager
 	 */
 	static function enumerateItems($items)
 	{
-		$galleries = Query::create(VideoGallery, "ORDER BY gallery_name")->execute();
+		$galleries = Query::create('VideoGallery', "ORDER BY gallery_name")->execute();
 		
 		$items["Video Galleries"] = $galleries;
 		return $items;

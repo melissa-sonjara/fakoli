@@ -48,7 +48,7 @@ if ($section_id)
 {
 	$section->load($section_id);
 	
-	$contentCount = Query::create(SectionContent, "WHERE section_id=:id")
+	$contentCount = Query::create('SectionContent', "WHERE section_id=:id")
 						->bind(":id", $section_id)
 						->executeValue("COUNT(1)");
 

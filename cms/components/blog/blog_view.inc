@@ -454,7 +454,7 @@ class BlogListView
 	
 	function __construct()
 	{
-		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		$blogs = Query::create('Blog', "ORDER BY title")->execute();
 		
 		$this->table = $this->buildTable($blogs);
 	}
@@ -618,7 +618,7 @@ class BlogSubscriberListView
 		
 		$constraint = " WHERE blog_id = {$blog_id}";
 		
-		$blog_subscribers = query(BlogSubscriber, $constraint);
+		$blog_subscribers = query('BlogSubscriber', $constraint);
 		
 		$this->table = new DataListView($blog_subscribers, "blogSubscribers");
 		$this->table->column("Subscriber Email", "{subscriber_email}", true);

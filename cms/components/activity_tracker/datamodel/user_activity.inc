@@ -76,7 +76,7 @@ class UserActivitySession extends DataItem
 	
 	static function fromIdentifier($identifier)
 	{
-		return Query::create(UserActivitySession, "WHERE session_identifier=:i")
+		return Query::create('UserActivitySession', "WHERE session_identifier=:i")
 					->bind(":i", $identifier)
 					->executeSingle();
 	}
@@ -86,7 +86,7 @@ class UserActivitySession extends DataItem
 	
 	static function getSessions($identifier)
 	{
-		return Query::create(UserActivitySession, "WHERE session_identifier=:i")
+		return Query::create('UserActivitySession', "WHERE session_identifier=:i")
 					->bind(":i", $identifier)
 					->execute();
 	}

@@ -59,7 +59,7 @@ class AdminPage extends DataItem
 	
 	static function fromIdentifier($identifier)
 	{
-		$page = Query::create(AdminPage, "WHERE identifier=:i")
+		$page = Query::create('AdminPage', "WHERE identifier=:i")
 					 ->bind(":i", $identifier)
 					 ->executeSingle();
 		

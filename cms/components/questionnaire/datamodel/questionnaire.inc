@@ -103,7 +103,7 @@ class Questionnaire extends AbstractQuestionnaire
 			$query .= preg_replace("/WHERE/i", " AND", $constraint);
 		}
 		
-		return Query::create(QuestionnaireAnswer, $query)
+		return Query::create('QuestionnaireAnswer', $query)
 			->bind(":questionnaire_id", $this->questionnaire_id)
 			->execute();
 	}

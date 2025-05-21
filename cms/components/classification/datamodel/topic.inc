@@ -53,7 +53,7 @@ class Topic extends DataItem
 	
 	static function getTopicsArray()
 	{
-		$topics = query(Topic, "ORDER BY topic");
+		$topics = query('Topic', "ORDER BY topic");
 		
 		$tarr = array();
 		

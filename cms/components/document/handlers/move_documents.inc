@@ -30,7 +30,7 @@ $form->customSaveHandler = function($form) use ($library, $document_ids)
 {
 	$to = new DocumentLibrary($form->data->to);
 	
-	$docs = Query::create(Document, "WHERE document_id IN ($document_ids)")->execute();
+	$docs = Query::create('Document', "WHERE document_id IN ($document_ids)")->execute();
 	
 	foreach($docs as $doc)
 	{

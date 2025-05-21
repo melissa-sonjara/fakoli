@@ -34,7 +34,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 Fakoli::using("survey");
 Fakoli::usingFeature("data_view", "auto_form");
 
-$surveys = Query::create(Survey, "WHERE message != ''")->execute();
+$surveys = Query::create('Survey', "WHERE message != ''")->execute();
 $surveys = removeDuplicates($surveys, "message");
 
 $table = new DataListView($surveys, "surveys");

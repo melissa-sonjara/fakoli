@@ -53,7 +53,7 @@ if(!$document_library_id)
 $library = new DocumentLibrary($document_library_id);
 $library->filter = new InclusionFilter("");
 
-$roles = Query::create(SiteRole, "ORDER BY name")->execute();
+$roles = Query::create('SiteRole', "ORDER BY name")->execute();
 
 if(count($roles) > 0)
 	$allRoles = implode(",", array_keys(reindexList($roles, "role")));

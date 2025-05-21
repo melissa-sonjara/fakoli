@@ -212,7 +212,7 @@ class Fakoli
 			$component = new Component();
 			if (!$component->tableExists()) Fakoli::bootstrap();
 		
-			$components = indexedQuery(Component, "WHERE enabled=1", "name");
+			$components = indexedQuery('Component', "WHERE enabled=1", "name");
 			if (count($components) == 0)
 			{
 				Fakoli::initialComponentScan();
@@ -582,7 +582,7 @@ class Fakoli
 	{
 		$scriptArray = array();
 		
-		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		$components = Query::create('Component', "WHERE enabled=1 ORDER BY priority")->execute();
 		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();
@@ -631,7 +631,7 @@ class Fakoli
 	{
 		$styleArray = array();
 		
-		$components = Query::create(Component, "WHERE enabled=1 ORDER BY priority")->execute();
+		$components = Query::create('Component', "WHERE enabled=1 ORDER BY priority")->execute();
 		foreach($components as $component)
 		{
 			$manifest = $component->loadManifest();

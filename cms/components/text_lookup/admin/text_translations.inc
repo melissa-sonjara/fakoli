@@ -56,7 +56,7 @@ $menu_item = "Text Lookup";
 $text = new TextLookup($text_id);
 $title = "Text Translations for " . $text->code;
 
-$texts = Query::create(TextTranslation, "WHERE text_id=:text_id ORDER BY language")
+$texts = Query::create('TextTranslation', "WHERE text_id=:text_id ORDER BY language")
 	->bind(":text_id", $text_id)
 	->execute();
 

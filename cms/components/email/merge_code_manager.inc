@@ -102,7 +102,7 @@ class MergeCodeManager
 		{
 			$used = strip_tags("'". implode("','", array_values($usedMergeCodes)) . "'");
 		
-			$mergeCodes = Query::create(MergeCode, "WHERE class_name = :cn and name in ($used)")
+			$mergeCodes = Query::create('MergeCode', "WHERE class_name = :cn and name in ($used)")
 				->bind(":cn", $this->class_name)
 				->execute();
 		}
@@ -254,7 +254,7 @@ class MergeCodeManager
 		$classes = array();
 		$classes = ComponentManager::fireEvent("EnumerateDataItemClasses", $classes);
 
-		$mergeCodes = Query::create(MergeCode, "WHERE class_name=:cn")
+		$mergeCodes = Query::create('MergeCode', "WHERE class_name=:cn")
 			->bind(":cn", $class_name)
 			->execute();
 

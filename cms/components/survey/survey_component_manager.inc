@@ -105,7 +105,7 @@ class SurveyComponentManager
 		
 		try
 		{
-			$surveys = Query::create(Survey, "WHERE user_id=:user_id")
+			$surveys = Query::create('Survey', "WHERE user_id=:user_id")
 				->bind(":user_id", $user_id)
 				->execute();
 			
@@ -161,7 +161,7 @@ class SurveyComponentManager
 		// Delete any questions that are now not linked to any survey
 		foreach($questions as $question)
 		{
-			$count = Query::create(SurveyQuestionXref, "WHERE survey_question_id=:survey_question_id")
+			$count = Query::create('SurveyQuestionXref', "WHERE survey_question_id=:survey_question_id")
 			->bind(":survey_question_id", $question->survey_question_id)
 			->executeValue("COUNT(1)");
 			

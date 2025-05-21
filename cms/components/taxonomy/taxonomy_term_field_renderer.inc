@@ -189,7 +189,7 @@ window.addEvent('domready', function()
 		$class = get_class($obj);
 		$pk = $obj->get($obj->getPrimaryKey());
 		
-		$selected = IndexedQuery::create(TaxonomyTermAssociation, "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
+		$selected = IndexedQuery::create('TaxonomyTermAssociation', "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
 								->bind(":id", $this->taxonomy->taxonomy_id, ":class", $class, ":pk", $pk)
 								->execute();
 								
@@ -236,7 +236,7 @@ window.addEvent('domready', function()
 		$class = get_class($obj);
 		$pk = $obj->get($obj->getPrimaryKey());
 		
-		$selected = IndexedQuery::create(TaxonomyTermAssociation, "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
+		$selected = IndexedQuery::create('TaxonomyTermAssociation', "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
 								->bind(":id", $this->taxonomy->taxonomy_id, ":class", $class, ":pk", $pk)
 								->execute();
 								
@@ -285,7 +285,7 @@ window.addEvent('domready', function()
 		$class = get_class($obj);
 		$pk = $obj->get($obj->getPrimaryKey());
 		
-		$selected = IndexedQuery::create(TaxonomyTermAssociation, "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
+		$selected = IndexedQuery::create('TaxonomyTermAssociation', "WHERE taxonomy_id=:id AND class=:class AND id=:pk", "term_id")
 								->bind(":id", $this->taxonomy->taxonomy_id, ":class", $class, ":pk", $pk)
 								->execute();
 		
@@ -492,7 +492,7 @@ window.addEvent('domready', function()
 		$class = get_class($obj);
 		$pk = $obj->get($obj->getPrimaryKey());
 		
-		$selected = IndexedQuery::create(BindingRecord, "WHERE target_class=:tc AND class=:class AND id=:pk", "target_id")
+		$selected = IndexedQuery::create('BindingRecord', "WHERE target_class=:tc AND class=:class AND id=:pk", "target_id")
 								->bind(":tc", $this->bindingTarget->target_class, ":class", $class, ":pk", $pk)
 								->execute();
 								
@@ -536,7 +536,7 @@ window.addEvent('domready', function()
 		$class = get_class($obj);
 		$pk = $obj->get($obj->getPrimaryKey());
 		
-		$selected = IndexedQuery::create(BindingRecord, "WHERE target_class=:tc AND class=:class AND id=:pk", "target_id")
+		$selected = IndexedQuery::create('BindingRecord', "WHERE target_class=:tc AND class=:class AND id=:pk", "target_id")
 								->bind(":tc", $this->bindingTarget->target_class, ":class", $class, ":pk", $pk)
 								->execute();
 								

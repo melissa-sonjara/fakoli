@@ -3,7 +3,7 @@ Fakoli::using("redirect");
 
 $menu_item = "Redirects";
 
-$redirects = Query::create(Redirect, "ORDER BY redirect_from")->execute();
+$redirects = Query::create('Redirect', "ORDER BY redirect_from")->execute();
 
 $table = new DataListView($redirects, "redirects");
 $table->column("Redirect From", "<a href='redirect_form?redirect_id={redirect_id}'>{redirect_from}</a>", true, "width: 30%")

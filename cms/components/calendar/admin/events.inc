@@ -46,7 +46,7 @@ $title = "Events";
 $filter = CalendarHelper::eventFilterSetup();
 $constraint .= $filter->getConstraint();
 
-$events = query(Event, "$constraint ORDER BY start_date");
+$events = query('Event', "$constraint ORDER BY start_date");
 $lastUpdated = "";
 
 $table = new DataListView($events, "events");

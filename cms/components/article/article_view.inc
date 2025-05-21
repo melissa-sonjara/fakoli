@@ -12,7 +12,7 @@ class ArticleListView
 	function __construct()
 	{
 
-		$articles = query(Article, "ORDER BY last_modified DESC");
+		$articles = query('Article', "ORDER BY last_modified DESC");
 	
 		$this->table = $this->buildTable($articles);
 	}

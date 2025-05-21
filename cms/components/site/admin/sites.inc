@@ -40,7 +40,7 @@ $menu_item = "Sites";
 $title = "Manage Sites";
 
 
-$sites = query(Site, "ORDER BY site_id");
+$sites = query('Site', "ORDER BY site_id");
 
 $table = new DataListView($sites, "sites");
 $table->column("Title", "<a href='/admin/site_form?site_id={site_id}'>{site_name}</a>", true)

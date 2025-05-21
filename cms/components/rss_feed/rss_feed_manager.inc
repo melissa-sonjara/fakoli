@@ -31,7 +31,7 @@ class RssFeedManager
 	}
 	
 	function pullFeed(){
-		$rssFeeds = Query::create(RSSFeed, "ORDER BY rss_feed_id")->execute();
+		$rssFeeds = Query::create('RSSFeed', "ORDER BY rss_feed_id")->execute();
 		echo "The following feed content have been updated:</br>";
 		
 		foreach($rssFeeds as $feed)

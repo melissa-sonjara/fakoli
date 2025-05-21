@@ -21,7 +21,7 @@ class SubscriptionManager
 		if($message->topic_id)
 		{
 			$constraint = "WHERE forum_id = {$message->forum_id} AND subscription_type = ". subscription_instant_notification ." AND (topic_id = 0 OR topic_id = {$message->topic_id})";
-			$subscribers = query(ForumSubscription, $constraint);
+			$subscribers = query('ForumSubscription', $constraint);
 		}
 
 		if(count($subscribers) > 0)

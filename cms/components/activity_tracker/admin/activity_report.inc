@@ -17,7 +17,7 @@ if ($user_id)
 	$constraint .= " AND user_id={$user_id}";
 }
 
-$sessions = IteratedQuery::create(UserActivitySession, "$constraint ORDER BY session_start DESC")->execute();
+$sessions = IteratedQuery::create('UserActivitySession', "$constraint ORDER BY session_start DESC")->execute();
 
 $table = new DataListView($sessions, "session");
 $table->column("User", "<a href='/admin/session_details?session_id={session_id}'>{User.first_name} {User.last_name}</a>", true, "width: 20%")
@@ -41,7 +41,7 @@ $filterForm->drawForm();
 echo "<strong>" . $filterForm->getRenderer("session_start")->subTitle . "</strong>";
 $table->drawView();
 
-$count = Query::create(UserActivity, "")->executeValue("COUNT(1)");
+$count = Query::create('UserActivity', "")->executeValue("COUNT(1)");
 
 if ($count > 0)
 {

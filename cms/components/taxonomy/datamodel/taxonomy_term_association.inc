@@ -79,7 +79,7 @@ class TaxonomyTermAssociationSummary extends DataItem
 	{
 		if (!$this->term_ids) return array();
 		
-		return Query::create(TaxonomyTerm, "WHERE term_id in ({$this->term_ids})")->execute();
+		return Query::create('TaxonomyTerm', "WHERE term_id in ({$this->term_ids})")->execute();
 	}
 	
 	function getAssociatedItem()

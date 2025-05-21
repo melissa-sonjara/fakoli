@@ -38,14 +38,14 @@ $menu_item = "Sections";
 
 $site_id = checkNumeric($_GET["site_id"]);
 
-$sites = query(Site, "ORDER BY site_name");
+$sites = query('Site', "ORDER BY site_name");
 
 
 if (!$site_id) $site_id = $sites[0]->site_id;
 
 $tabs = new DataItemTabBar("tabs", $sites);
 
-$sections = Query::create(Section, "WHERE site_id=:s ORDER BY section")
+$sections = Query::create('Section', "WHERE site_id=:s ORDER BY section")
 				 ->bind(":s", $site_id)
 				 ->execute();
 

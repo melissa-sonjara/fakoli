@@ -50,7 +50,7 @@ if(!$token)
 
 $subscriber = BlogSubscriber::fromToken($token);
 
-$subscriptions = Query::create(BlogSubscriber, "WHERE subscriber_email=:email")
+$subscriptions = Query::create('BlogSubscriber', "WHERE subscriber_email=:email")
 	->bind(":email", $subscriber->subscriber_email)
 	->execute();
 

@@ -143,11 +143,11 @@ class Survey extends AbstractQuestionnaire
 		}
 		
 		trace("Email survey answers constraint ". $query, 3);
-		return Query::create(SurveyAnswer, $query)
+		return Query::create('SurveyAnswer', $query)
 		->bind(":survey_id", $this->survey_id)
 		->execute();
 		
-		$answers = query(SurveyAnswer, $query);
+		$answers = query('SurveyAnswer', $query);
 		return $answers;
 	}
 
@@ -241,7 +241,7 @@ class Survey extends AbstractQuestionnaire
 	 */
 	function getRecipientCount()
 	{
-		$count = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND include_in_results=true")
+		$count = Query::create('SurveyResponse', "WHERE survey_id=:survey_id AND include_in_results=true")
 			->bind(":survey_id", $this->survey_id)
 			->executeValue("COUNT(1)");
 			
@@ -257,7 +257,7 @@ class Survey extends AbstractQuestionnaire
 	 */
 	function getResponseCount()
 	{
-		$count = Query::create(SurveyResponse, "WHERE status = 'submitted' AND survey_id=:survey_id AND include_in_results=true")	
+		$count = Query::create('SurveyResponse', "WHERE status = 'submitted' AND survey_id=:survey_id AND include_in_results=true")	
 			->bind(":survey_id", $this->survey_id)
 			->executeValue("COUNT(1)");
 						
@@ -271,7 +271,7 @@ class Survey extends AbstractQuestionnaire
 	 */
 	function getNonResponders()
 	{
-		$nonResponders = Query::create(SurveyResponse, "WHERE survey_id=:survey_id AND status != 'submitted' AND include_in_results=true")
+		$nonResponders = Query::create('SurveyResponse', "WHERE survey_id=:survey_id AND status != 'submitted' AND include_in_results=true")
 			->bind(":survey_id", $this->survey_id)
 			->execute();
 

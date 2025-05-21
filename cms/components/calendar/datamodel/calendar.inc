@@ -72,7 +72,7 @@ class Calendar extends DataItem
 	
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(Calendar, "WHERE identifier=:id")
+		$match = Query::create('Calendar', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 

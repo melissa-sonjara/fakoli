@@ -14,7 +14,7 @@ if ($rss_feed_id)
 }
 else
 {
-	//$rssFeed->sort_order = Query::create(rssFeed, "")->executeValue("MAX(sort_order)") + 1;
+	//$rssFeed->sort_order = Query::create('rssFeed', "")->executeValue("MAX(sort_order)") + 1;
 }
 
 $form = new AutoForm($rssFeed);

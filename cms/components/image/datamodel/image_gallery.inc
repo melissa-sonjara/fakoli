@@ -114,7 +114,7 @@ class ImageGallery extends DataItem
 	
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(ImageGallery, "WHERE identifier=:id")
+		$match = Query::create('ImageGallery', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 

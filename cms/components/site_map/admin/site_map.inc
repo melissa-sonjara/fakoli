@@ -48,7 +48,7 @@ $menu_item = "Site Map";
 
 $title = "Site Map";
 
-$siteMapPages = Query::create(SiteMap, "ORDER BY url")->execute();
+$siteMapPages = Query::create('SiteMap', "ORDER BY url")->execute();
 
 $siteTree = new TreeControl("site_tree");
 

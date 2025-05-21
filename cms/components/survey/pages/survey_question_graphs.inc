@@ -38,7 +38,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Fakoli::using("questionnaire", "survey");
 
-$questions = Query::create(SurveyQuestion, "WHERE question_type_id != 7 AND survey_question_id IN (SELECT survey_question_id FROM survey_question_xref WHERE survey_id IN (SELECT survey_id FROM survey where deleted=false))")->execute();
+$questions = Query::create('SurveyQuestion', "WHERE question_type_id != 7 AND survey_question_id IN (SELECT survey_question_id FROM survey_question_xref WHERE survey_id IN (SELECT survey_id FROM survey where deleted=false))")->execute();
 
 $table = new DataListView($xrefs, "SurveyQuestions");
 $table->column("Question", "{Question.question}")

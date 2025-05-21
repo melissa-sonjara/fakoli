@@ -80,7 +80,7 @@ if(!checkRole("admin"))
 $form->allowDelete = true;
 $form->ajaxSubmit("function(result) {editEventResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 
-$sites = query(Site, "ORDER BY site_name");
+$sites = query('Site', "ORDER BY site_name");
 
 $event_types = $calendar->EventTypes();
 

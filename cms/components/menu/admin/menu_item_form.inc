@@ -68,12 +68,12 @@ $form->hide("parent_id", "menu_id", "page_id", "identifier");
 /*
 $pageChoices = array("Content Pages" => array(), "Component Pages" => array());
 
-$contentPages = Query::create(Page, "ORDER BY page_title")->execute();
+$contentPages = Query::create('Page', "ORDER BY page_title")->execute();
 foreach($contentPages as $page)
 {
 	$pageChoices["Content Pages"][$page->identifier] = $page->page_title;
 }
-$componentPages = Query::create(ComponentPage, "ORDER BY component, page_title")->execute();
+$componentPages = Query::create('ComponentPage', "ORDER BY component, page_title")->execute();
 foreach($componentPages as $page)
 {
 	$pageChoices["Component Pages"][$page->identifier] = "$page->component: $page->page_title";

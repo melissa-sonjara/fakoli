@@ -100,7 +100,7 @@ class Section extends DataItem
 		
 		try
 		{
-			return Query::create(Section, "WHERE section=:identifier AND site_id=:site")
+			return Query::create('Section', "WHERE section=:identifier AND site_id=:site")
 						->bind(":identifier", $identifier, ":site", $site->site_id)
 						->executeSingle();
 		}
@@ -146,7 +146,7 @@ class Section extends DataItem
 	{
 		$site = Site::getSite();
 		
-		$sections = Query::create(Section, "WHERE section=:section AND site_id=:site")
+		$sections = Query::create('Section', "WHERE section=:section AND site_id=:site")
 			->bind(":section", $section_name, ":site", $site->site_id)
 			->execute();
 		
@@ -166,7 +166,7 @@ class Section extends DataItem
 			$modules = extractGroupedJoinResults(Module, $result);
 			
 			// Merge in global modules
-			$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+			$globals = groupedQuery('Module', "WHERE global=1", "global_position");
 			foreach($globals as $position => $modulesAtPosition)
 			{
 				if (array_key_exists($position, $modules))
@@ -301,7 +301,7 @@ class SectionContent extends DataItem
 			if (count($modules) > 0)
 			{
 				// Merge in global modules
-				$globals = groupedQuery(Module, "WHERE global=1", "global_position");
+				$globals = groupedQuery('Module', "WHERE global=1", "global_position");
 				foreach($globals as $position => $modulesAtPosition)
 				{
 					if (array_key_exists($position, $modules))
@@ -323,7 +323,7 @@ class SectionContent extends DataItem
 	
 	static function getMappedContent($identifier)
 	{
-		$content = Query::create(SectionContent, "WHERE identifier=:i")
+		$content = Query::create('SectionContent', "WHERE identifier=:i")
 						->bind(":i", $identifier)
 						->execute();
 		

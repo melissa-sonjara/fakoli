@@ -3,7 +3,7 @@ Fakoli::using("html_editor");
 
 $snippet_id = checkNumeric($_GET["snippet_id"]);
 
-$snippets = Query::create(Snippet, "WHERE user_id=:u OR shared=1 ORDER BY snippet_name")
+$snippets = Query::create('Snippet', "WHERE user_id=:u OR shared=1 ORDER BY snippet_name")
 				 ->bind(":u", $user->getPrimaryKeyValue())
 				 ->execute();
 

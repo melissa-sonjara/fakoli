@@ -135,7 +135,7 @@ class LoginManager
 				$from->modify("-{$window} minutes");
 				$fromStr = $from->format("Y-m-d H:i:s");
 				
-				$failed = Query::create(LoginAttempt, "WHERE username=:u AND date_received > :f and result='failure'")
+				$failed = Query::create('LoginAttempt', "WHERE username=:u AND date_received > :f and result='failure'")
 							   ->bind(":u", $username, ":f", $fromStr)
 							   ->executeValue("COUNT(1)");
 				
@@ -177,7 +177,7 @@ class LoginManager
 	{
 		try
 		{
-			$lock = Query::create(LoginAccountLock, "WHERE username=:u AND locked_until > :c AND active=1 ORDER BY locked_until DESC LIMIT 1")
+			$lock = Query::create('LoginAccountLock', "WHERE username=:u AND locked_until > :c AND active=1 ORDER BY locked_until DESC LIMIT 1")
 						  ->bind(":u", $username, ":c", now())
 						  ->executeSingle();
 			
@@ -464,7 +464,7 @@ class LoginManager
 			$user = $mgr->getUserByName($username);
 			if (!$user) return null;
 			
-			$token = Query::create(LoginToken, "WHERE user_id=:id")
+			$token = Query::create('LoginToken', "WHERE user_id=:id")
 							->bind(":id", $user->get($user->primary_key))
 							->executeSingle();
 							

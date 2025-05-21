@@ -139,7 +139,7 @@ class APIContentAdminView extends AbstractSectionContentAdminView
 		global $script;
 		
 		/*
-		$tokens = Query::create(ShareToken, "ORDER BY created_date")->execute();
+		$tokens = Query::create('ShareToken', "ORDER BY created_date")->execute();
 		$table = new DataListView($tokens, "share_tokens");
 		$table->column("Token", "<a href=''>{token}</a>", true)
 		->column("Type", "{item_type}", true)

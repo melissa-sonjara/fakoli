@@ -106,7 +106,7 @@ class BlogManager
 	
 	static function enumerateItems($items)
 	{
-		$blogs = Query::create(Blog, "ORDER BY title")->execute();
+		$blogs = Query::create('Blog', "ORDER BY title")->execute();
 		
 		$items["Blogs"] = $blogs;
 		return $items;
@@ -178,7 +178,7 @@ class BlogManager
 		$form->hide("author_id"); //TODO - allow author selection/re-assignment?
 		$form->hide("article_type");
 		
-		$sites = query(Site, "ORDER BY site_name");
+		$sites = query('Site', "ORDER BY site_name");
 		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
 
 		$form->getRenderer("archive_date")->validator->required = false;
@@ -292,7 +292,7 @@ class BlogManager
 	{
 		$blogSubscriber = &$form->data;
 		
-		$subscriptions = Query::create(BlogSubscriber, "WHERE subscriber_email=:email AND blog_id=:blog_id")
+		$subscriptions = Query::create('BlogSubscriber', "WHERE subscriber_email=:email AND blog_id=:blog_id")
 			->bind(":email", $blogSubscriber->subscriber_email, ":blog_id", $blogSubscriber->blog_id)
 			->execute();
 		

@@ -74,7 +74,7 @@ class SiteRole extends DataItem
 	 */
 	static function getRolesArray()
 	{
-		$roles = query(SiteRole, "WHERE role!='super' ORDER BY priority, name");
+		$roles = query('SiteRole', "WHERE role!='super' ORDER BY priority, name");
 		
 		$rarr = array();
 		
@@ -89,14 +89,14 @@ class SiteRole extends DataItem
 	// Given a role code, return the record
 	static function getRole($role)
 	{
-		$names = query(SiteRole, "WHERE role='$role'");
+		$names = query('SiteRole', "WHERE role='$role'");
 		if(count($names) > 0)
 			return $names[0];
 	}
 	
 	static function getRoleLookup()
 	{
-		return IndexedQuery::create(SiteRole, "ORDER by priority, name", "role")->execute();
+		return IndexedQuery::create('SiteRole', "ORDER by priority, name", "role")->execute();
 	}
 	
 	static function getHomePage($account = null)

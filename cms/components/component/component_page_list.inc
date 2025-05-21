@@ -52,7 +52,7 @@ class ComponentPageListView
 		}
 		else
 		{
-			$this->pages = Query::create(ComponentPage, "ORDER BY component, identifier")->execute();
+			$this->pages = Query::create('ComponentPage', "ORDER BY component, identifier")->execute();
 		}
 		
 		$this->table = new DataListView($this->pages, "component_pages");

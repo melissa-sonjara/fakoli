@@ -42,10 +42,10 @@ require_once "../datamodel/sample.inc";
 require_once "../datamodel/grp.inc";
 require_once "../../framework/tree.inc";
 
-$regions = query(Region, "ORDER BY region_id");
-$topics = query(Topic, "ORDER BY topic");
-$groups = query(Grp, "ORDER BY title");
-$grpTopics=	groupedQuery(GrpTopicXref, "WHERE 1=1", "grp_id");
+$regions = query('Region', "ORDER BY region_id");
+$topics = query('Topic', "ORDER BY topic");
+$groups = query('Grp', "ORDER BY title");
+$grpTopics=	groupedQuery('GrpTopicXref', "WHERE 1=1", "grp_id");
  
 $gpTree = new TreeControl("grp_id");
 $gpTree->width = 500;
@@ -74,9 +74,9 @@ $script = $gpTree->writeScript();
 $script .= "<link type='text/css' rel='stylesheet' href='/css/tree.css'/>";
 
 		
-$settings = query(Setting, "ORDER BY setting_id");
-$samples = query(Sample, "ORDER BY sample_id");
-$journals = query(Journal, "ORDER BY title");
+$settings = query('Setting', "ORDER BY setting_id");
+$samples = query('Sample', "ORDER BY sample_id");
+$journals = query('Journal', "ORDER BY title");
 
 $menu_item = "Publications";
 $title = "Search Publications";

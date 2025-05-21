@@ -104,7 +104,7 @@ class LinkLibrary extends DataItem
 
 	static function findByIdentifier($identifier)
 	{
-		$match = Query::create(LinkLibrary, "WHERE identifier=:id")
+		$match = Query::create('LinkLibrary', "WHERE identifier=:id")
 					  ->bind(":id", $identifier)
 					  ->executeSingle();
 
