@@ -70,7 +70,7 @@ class GroupedListGroup extends DataGroup
 		if ($this->cssClass) $attrs .= " class='{$this->cssClass}'";
 		if ($this->groupStyles) $attrs .= " style='{$this->groupStyles}'";
 		
-		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : ($this->expanded) ? "expanded" : "collapsed";
+		$cssClass = ($this->fixed || $this->parent->mode == 'fixed') ? "fixed" : (($this->expanded) ? "expanded" : "collapsed");
 
 		echo "<h2 id=\"{$this->parent->group_id}[{$this->key}]\" $attrs>\n";
 		// Output the section title
