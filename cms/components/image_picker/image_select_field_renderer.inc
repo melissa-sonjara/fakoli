@@ -136,5 +136,5 @@ class ImageSelectFieldRenderer extends FieldRenderer
 }
 
 // Register the field renderer
-AutoForm::registerFieldRendererClass(Image, ImageSelectFieldRenderer);
+AutoForm::registerFieldRendererClass('Image', 'ImageSelectFieldRenderer');
 /**@}*/?>

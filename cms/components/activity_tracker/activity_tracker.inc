@@ -11,7 +11,7 @@ class ActivityTracker
 	static function registerActivityTracker()
 	{
 		trace("Registering Redirect Log Callback", 1);
-		registerRedirectLogCallback(array(ActivityTracker, logActivity));
+		registerRedirectLogCallback(array('ActivityTracker', 'logActivity'));
 	}
 	
 	static function logActivity()

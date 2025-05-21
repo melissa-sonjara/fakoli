@@ -658,7 +658,7 @@ class LoginManager
 	
 		if (Settings::getValue("login", "enable_password_complexity_rules"))
 		{
-			AutoForm::registerFieldRendererClass(Password, PasswordComplexityFieldRenderer);
+			AutoForm::registerFieldRendererClass('Password', 'PasswordComplexityFieldRenderer');
 		}
 	}
 	
