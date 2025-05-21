@@ -35,20 +35,6 @@
  OTHER DEALINGS IN THE SOFTWARE.
 
 *****************************************************************/
-
-$mod_type = array
-(
-	NewsItem  =>	 "News Item",
-	Program 	=>	 "Program",
-	HTML => 		 "HTML" 
-);
-	
-$ord_by = array
-(
-	created_date	 =>	"created_date", 
-	name			 =>	"name",
-	last_modified => "last_modified"
-	);	
 	
 /**
  * Defines the Module class.
