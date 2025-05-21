@@ -720,7 +720,7 @@ class DataItem extends AbstractDataItem
 		{			
 			if ($field == $this->primary_key) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
-			if (!isset($this->$field) && $this->getType($field) != Timestamp && $this->getType($field) != Boolean) continue;
+			if (!isset($this->$field) && $this->getType($field) != 'Timestamp' && $this->getType($field) != 'Boolean') continue;
 			
 			if (!$first) $query .= ", ";
 			
@@ -825,9 +825,9 @@ class DataItem extends AbstractDataItem
 		{
 			if ($field == $pk && !$this->_disablePK) continue;
         	if ($this->filter && $this->filter->isExcluded($field)) continue;
-			if (!isset($this->$field) && $this->getType($field) != Timestamp && $this->getType($field) != Boolean) continue;
+			if (!isset($this->$field) && $this->getType($field) != 'Timestamp' && $this->getType($field) != 'Boolean') continue;
 			
-			if ($type == Timestamp)
+			if ($type == 'Timestamp')
 			{
 				$timestampField = $field;
 			}

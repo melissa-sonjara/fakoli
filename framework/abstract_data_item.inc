@@ -440,8 +440,8 @@ abstract class AbstractDataItem
 		
 		switch($type)
 		{
-		case Number:
-		case Currency:
+		case 'Number':
+		case 'Currency':
 		
 			if ($val == "" || !is_numeric($val))
 			{
@@ -453,26 +453,26 @@ abstract class AbstractDataItem
 			}
 			break;
 	
-		case Date:
-		case DateTime:
+		case 'Date':
+		case 'DateTime':
 			
 			$query .= ($val) ? $db->quote($this->reformatToSQLDate($val)) : "NULL";
 			break;
 			
-		case Timestamp:
+		case 'Timestamp':
 			
 			$this->__timestamp = date("Y-m-d H:i:s");
 			$query .= $db->quote($this->__timestamp);
 			break;
 			
-		case Boolean:
+		case 'Boolean':
 			
 			$query .= ($val) ? "1" : "0";
 			break;
 			
-		case String:
-		case Text:
-		case TimeZone:
+		case 'String':
+		case 'Text':
+		case 'TimeZone':
 			
 		default:
 		
@@ -520,7 +520,7 @@ abstract class AbstractDataItem
 		$v = "";
 		switch($type)
 		{
-		case HTML:
+		case 'HTML':
 			
 			if ($this->_options & ProtectHTML)
 			{
@@ -533,11 +533,11 @@ abstract class AbstractDataItem
 				break;
 			}
 			
-		case Number:
-		case Date:
-		case Timestamp:
-		case String:
-		case Text:
+		case 'Number':
+		case 'Date':
+		case 'Timestamp':
+		case 'String':
+		case 'Text':
 		default:
 		
 			$v = htmlentities($data, ENT_COMPAT | ENT_XML1);
