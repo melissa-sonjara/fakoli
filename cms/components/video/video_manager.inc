@@ -549,7 +549,7 @@ class VideoManager
 
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Video;
+		$classes[] = 'Video';
 		return $classes;
 	}
 		

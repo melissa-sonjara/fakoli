@@ -260,7 +260,7 @@ class ForumManager
 
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Forum;
+		$classes[] = 'Forum';
 		return $classes;
 	}
 }

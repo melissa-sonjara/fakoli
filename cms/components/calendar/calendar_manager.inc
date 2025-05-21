@@ -126,13 +126,13 @@ class CalendarManager
 	
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Event;
+		$classes[] = 'Event';
 		return $classes;
 	}
 
 	static function registerCommentAdapter()
 	{
-		CommentManager::registerAdapter("calendar", Event, EventCommentXref);
+		CommentManager::registerAdapter("calendar", 'Event', 'EventCommentXref');
 	}
 	
 	static function registerSerializationHandler()

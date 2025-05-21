@@ -133,24 +133,24 @@ class PageManager
 	static function registerSearchables($searchables)
 	{
 		trace("PageManager registerSearchables", 3);
-		$searchables["page"] = array(Page);
+		$searchables["page"] = array('Page');
 		return $searchables;
 	}
 	
 	static function registerSolrAdapter()
 	{
-		SolrManager::registerSolrAdapter(Page, new PageSolrAdapter());
+		SolrManager::registerSolrAdapter('Page', new PageSolrAdapter());
 	}
 	
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Page;
+		$classes[] = 'Page';
 		return $classes;
 	}
 
 	static function registerVersionedContent()
 	{
-		VersionedContentManager::registerVersionedContent(Page);
+		VersionedContentManager::registerVersionedContent('Page');
 	}
 	
 	static function upgradeComponent($version)

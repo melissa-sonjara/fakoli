@@ -1143,7 +1143,7 @@ class ImageManager
 	
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = ImageRecord;
+		$classes[] = 'ImageRecord';
 		return $classes;
 	}	
 	

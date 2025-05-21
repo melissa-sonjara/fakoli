@@ -204,7 +204,7 @@ class LinkLibraryManager
 	
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = LinkRecord;
+		$classes[] = 'LinkRecord';
 		return $classes;
 	}
 

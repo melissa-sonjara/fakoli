@@ -114,30 +114,30 @@ class ArticleManager
 	
 	static function registerCommentAdapter()
 	{
-		CommentManager::registerAdapter("article", Article, ArticleCommentXref);
+		CommentManager::registerAdapter("article", 'Article', 'ArticleCommentXref');
 	}
 	
 	static function registerSearchables($searchables)
 	{
 		trace("ArticleManager registerSearchables", 3);
-		$searchables["article"] = array(Article);
+		$searchables["article"] = ['Article'];
 		return $searchables;
 	}
 	
 	static function registerSearchAdapter()
 	{
-		SearchManager::registerSearchAdapter(Article, new ArticleSearchAdapter());
+		SearchManager::registerSearchAdapter('Article', new ArticleSearchAdapter());
 	}
 	
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Article;
+		$classes[] = 'Article';
 		return $classes;
 	}
 
 	static function registerVersionedContent()
 	{
-		VersionedContentManager::registerVersionedContent(Article);
+		VersionedContentManager::registerVersionedContent('Article');
 	}
 	
 	/**

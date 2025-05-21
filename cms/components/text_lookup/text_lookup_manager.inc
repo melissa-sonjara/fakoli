@@ -117,7 +117,7 @@ class TextLookupManager
 	
 	static function registerVersionedContent()
 	{
-		VersionedContentManager::registerVersionedContent(TextLookup);
+		VersionedContentManager::registerVersionedContent('TextLookup');
 	}
 	
 }

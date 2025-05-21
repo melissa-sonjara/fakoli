@@ -975,7 +975,7 @@ function deleteFolderResult(result)
 
 	static function registerSearchAdapter()
 	{
-		SearchManager::registerSearchAdapter(Document, new DocumentSearchAdapter());
+		SearchManager::registerSearchAdapter('Document', new DocumentSearchAdapter());
 	}
 
 	static function upgradeComponent($version)
@@ -986,12 +986,12 @@ function deleteFolderResult(result)
 	
 	static function registerCommentAdapter()
 	{
-		CommentManager::registerAdapter("document", Document, DocumentCommentXref);
+		CommentManager::registerAdapter("document", 'Document', 'DocumentCommentXref');
 	}
 	
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Document;
+		$classes[] = 'Document';
 		return $classes;
 	}
 	

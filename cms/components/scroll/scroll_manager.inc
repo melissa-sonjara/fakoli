@@ -79,13 +79,13 @@ class ScrollManager
 
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Scroll;
+		$classes[] = 'Scroll';
 		return $classes;
 	}
 	
 	static function registerVersionedContent()
 	{
-		VersionedContentManager::registerVersionedContent(ScrollPart);
+		VersionedContentManager::registerVersionedContent('ScrollPart');
 	}
 	
 	static function upgradeComponent($version)

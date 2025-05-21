@@ -122,7 +122,7 @@ class BlogManager
 	
 	static function registerSearchAdapter()
 	{
-		SolrManager::registerSearchAdapter(Blog, new BlogSearchAdapter());
+		SolrManager::registerSearchAdapter('Blog', new BlogSearchAdapter());
 	}
 	
 	
@@ -253,13 +253,13 @@ class BlogManager
 
 	static function registerTaxonomyClasses($classes)
 	{
-		$classes[] = Blog;
+		$classes[] = 'Blog';
 		return $classes;
 	}
 	
 	static function registerVersionedContent()
 	{
-		VersionedContentManager::registerVersionedContent(Blog);
+		VersionedContentManager::registerVersionedContent('Blog');
 	}
 	
 	/**

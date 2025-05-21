@@ -77,7 +77,7 @@
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(MyComponentManager, upgradeComponent)
+				"upgradeComponent"		=>	'MyComponentManager::upgradeComponent'
 			);
 	} 
 ------------- 
