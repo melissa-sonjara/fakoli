@@ -89,7 +89,7 @@ if (count($sites) > 1)
 	$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Publish to Sites", $sites, "site_name", EventSiteXref);
 }
 
-$calendarSelect = new RelatedItemSelectFieldRenderer($form, "calendar_id", "Calendar", Calendar, "ORDER BY name", "{name}", "calendar_id", false, false, 80);
+$calendarSelect = new RelatedItemSelectFieldRenderer($form, "calendar_id", "Calendar", 'Calendar', "ORDER BY name", "{name}", "calendar_id", false, false, 80);
 
 $eventTypes = $calendar->EventTypes();
 

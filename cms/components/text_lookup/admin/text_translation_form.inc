@@ -75,7 +75,7 @@ $redirect = "/admin/text_translations?text_id={$text_id}";
 $form->button("Cancel", $redirect);
 $form->alias("text", "Translated Text");
 $languageSelect = new SelectFieldRenderer($form, "language", "Language", $text->getTranslationOptions());
-$textSelect = new RelatedItemSelectFieldRenderer($form, "text_id", "Text", TextLookup, "WHERE text_id={$text_id}", "text", "text_id");
+$textSelect = new RelatedItemSelectFieldRenderer($form, "text_id", "Text", 'TextLookup', "WHERE text_id={$text_id}", "text", "text_id");
 $form->readonly("text_id");
 
 

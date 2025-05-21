@@ -50,7 +50,7 @@ $form->allowDelete = true;
 $redirect = "/admin/modules";
 $form->button("Cancel", $redirect);
 
-$menuSelect = new RelatedItemSelectFieldRenderer($form, "menu_id", "Menu", Menu, "ORDER BY name", "name", "menu_id");
+$menuSelect = new RelatedItemSelectFieldRenderer($form, "menu_id", "Menu", 'Menu', "ORDER BY name", "name", "menu_id");
 
 if ($method == "POST")
 {	

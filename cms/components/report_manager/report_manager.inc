@@ -93,7 +93,7 @@ class XXReportManager extends ReportManager
  * a RelatedItemSelectFieldRenderer for the search filter
  * Example:	
  * 
- * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "affiliation_id", "Primary Program Type", Affiliation, "ORDER BY sort_order, affiliation", "affiliation", "affiliation_id");
+ * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "affiliation_id", "Primary Program Type", 'Affiliation', "ORDER BY sort_order, affiliation", "affiliation", "affiliation_id");
  * 
  * If the field has a set of options defined in the
  * DataItem class, create SelectFieldRenderer.
@@ -107,7 +107,7 @@ class XXReportManager extends ReportManager
  * create the RelatedItemSelectFieldRenderer but set an 
  * additional or custom callback parameter handler:
  * 
- * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "state", "State", State, "ORDER BY name", "name", "state_id");	
+ * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "state", "State", 'State', "ORDER BY name", "name", "state_id");	
  * 
  * $this->getTable(Program)->params->setParam("state", "equal", $_REQUEST["state:equal"]);
  * $this->getTable(Program)->params->setHandler("state", array(ProgramReportManager, getStateConstraint));

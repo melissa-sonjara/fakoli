@@ -55,7 +55,7 @@ $form = new AutoForm($document);
 $form->data->set("file", DocumentManager::formatDocumentLink($document));
 $form->alias("file", "Download");
 
-new RelatedItemSelectFieldRenderer($form, "document_library_id", "Document Library", DocumentLibrary, "WHERE document_library_id={$document->document_library_id}", "<a href='{$library->identifier}'>{name}</a>", "document_library_id");
+new RelatedItemSelectFieldRenderer($form, "document_library_id", "Document Library", 'DocumentLibrary', "WHERE document_library_id={$document->document_library_id}", "<a href='{$library->identifier}'>{name}</a>", "document_library_id");
 
 $form->readOnlyForm = true;
 $form->hideEmptyFields = true;

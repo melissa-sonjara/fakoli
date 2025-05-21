@@ -42,7 +42,7 @@ if (!$contact_us_id)
 $contactUs = new ContactUS($contact_us_id);
 
 $form = new AutoForm($contactUs);
-$topicSelect = new RelatedItemSelectFieldRenderer($form, "contact_topic_id", "Topic", ContactTopic, "", "{topic}", "contact_topic_id");
+$topicSelect = new RelatedItemSelectFieldRenderer($form, "contact_topic_id", "Topic", 'ContactTopic', "", "{topic}", "contact_topic_id");
 $form->alias("full_name", "Sender Name");
 $form->alias("email", "Sender Email");
 

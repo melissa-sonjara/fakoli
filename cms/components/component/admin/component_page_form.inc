@@ -56,7 +56,7 @@ $templateSelect = new TemplateSelectFieldRenderer($form, "template", "Template",
 $form->annotate("template", "Fakoli 3 projects use Section Content to set template");
 
 $roleList = new CheckListFieldRenderer($form, "role", "Role", SiteRole::getRolesArray());
-$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", 'Site', "ORDER BY site_name", "site_name", "site_id");
 
 if ($method == "POST")
 {

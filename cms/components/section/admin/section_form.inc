@@ -70,7 +70,7 @@ $templateSelect = new TemplateSelectFieldRenderer($form, "default_template", "De
 
 $roleList = new CheckListFieldRenderer($form, "default_role", "Default Role", SiteRole::getRolesArray());
 
-$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", 'Site', "ORDER BY site_name", "site_name", "site_id");
 $identifierSelect = new CMSItemSelectFieldRenderer($form, "default_page", "Default Page", null);
 $permissionsList = Settings::createPermissionsFieldRenderer($form, "default_permissions", "Default Permissions");
 

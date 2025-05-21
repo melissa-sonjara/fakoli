@@ -65,7 +65,7 @@ $form->required("title");
 $form->allowDelete = true;
 $redirect = "menus";
 $form->button("Cancel", $redirect);
-$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "order by site_name", "site_name", "site_id");
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", 'Site', "order by site_name", "site_name", "site_id");
 if ($method == "POST")
 {
 

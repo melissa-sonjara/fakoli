@@ -1679,7 +1679,7 @@ ENDSCRIPT;
 	{
 		foreach($this->validators as $v)
 		{
-			if ($v->field == $field && get_class($v) == RequiredValidator) return true;
+			if ($v->field == $field && get_class($v) == 'RequiredValidator') return true;
 		}
 		
 		return false;
@@ -1693,7 +1693,7 @@ ENDSCRIPT;
 	{
 		foreach($this->validators as $v)
 		{
-			if (get_class($v) == RequiredValidator) return true;
+			if (get_class($v) == 'RequiredValidator') return true;
 		}
 		
 		return false;

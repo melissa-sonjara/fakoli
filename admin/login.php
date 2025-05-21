@@ -5,7 +5,7 @@ $hideMenu = true;
 if ($method == "POST")
 {
 	
-	$user = querySingle(SiteUser, "WHERE username='{$_POST["username"]}' and active=1 and role='admin'");
+	$user = querySingle('SiteUser', "WHERE username='{$_POST["username"]}' and active=1 and role='admin'");
 	
 	if ($user && crypt($_POST["password"], $user->password) === $user->password)
 	{

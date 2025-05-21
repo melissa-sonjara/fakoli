@@ -67,7 +67,7 @@ $form->allowDelete = ($scroll_id && $scroll->countParts());
 
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
-$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", Site, "ORDER BY site_name", "site_name", "site_id");
+$siteSelect = new RelatedItemSelectFieldRenderer($form, "site_id", "Site", 'Site', "ORDER BY site_name", "site_name", "site_id");
 
 //VersionedContentManager::enableVersioning($form);
 
