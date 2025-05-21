@@ -35,7 +35,7 @@ else
 $form = new AutoForm($part);
 $form->allowDelete = true;
 
-$scrollSelect = $form->related(Scroll, "", "{title}", "scroll_id", "Scroll");
+$scrollSelect = $form->related('Scroll', "", "{title}", "scroll_id", "Scroll");
 $form->alias("css_class", "CSS Class");
 $form->readonly("content_type", "scroll_id");
 

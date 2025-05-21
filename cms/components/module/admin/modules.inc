@@ -51,7 +51,7 @@ function getModuleType($module)
 
 $table = new DataListView($modules, "modules");
 $table->column("Title", "<a href='{getAdminForm()}?module_id={module_id}'>{title}</a>", true, 'width: 40%')
-	  ->column("Type", getModuleType, true, 'width: 10%')
+	  ->column("Type", 'getModuleType', true, 'width: 10%')
 	  ->column("Code File", "{php_code_file}", true, "width: 50%");
 $table->sortable = true;
 $table->filter = true;

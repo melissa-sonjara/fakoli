@@ -40,7 +40,7 @@ $menu_item = "Modules";
 $module_id = checkNumeric($_GET["module_id"]);
 
 $module = new Module();
-$module->content_type = HTML;
+$module->content_type = 'HTML';
 
 $form = new AutoForm($module);
 //$form->override("template", $label = "HTML", $renderer = "HTML");
@@ -64,7 +64,7 @@ if ($method == "POST")
 if ($module_id)
 {
 	$module->load($module_id);
-	$module->content_type = HTML;
+	$module->content_type = 'HTML';
 	$title = "Edit Module: {$module->title}";
 	$form->override("template", $label = "HTML", new HTMLFieldRenderer($form));
 	$form->button("Run the Module", "/admin/module_preview?module_id=$module_id");

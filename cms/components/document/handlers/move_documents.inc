@@ -20,8 +20,8 @@ $documentMove->from = $document_library_id;
 $form = new AutoForm($documentMove, "POST", "/action/document/move_documents?document_library_id={$document_library_id}&document_ids={$document_ids}");
 $form->ajaxSubmit("function(response) { moveDocumentsResponse(response); }");
 
-$form->related(DocumentLibrary, "WHERE document_library_id={$document_library_id}", "{name}", "from", "Move From", false, false);
-$form->related(DocumentLibrary, "WHERE document_library_id!={$document_library_id} ORDER BY name", "{name}", "to", "Move To", false, false);
+$form->related('DocumentLibrary', "WHERE document_library_id={$document_library_id}", "{name}", "from", "Move From", false, false);
+$form->related('DocumentLibrary', "WHERE document_library_id!={$document_library_id} ORDER BY name", "{name}", "to", "Move To", false, false);
 $form->readonly("from");
 $form->submitLabel = "Move Documents";
 $form->button("Cancel", "ModalDialog.closeAllDialogs(); return true", null, true);
