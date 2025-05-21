@@ -510,7 +510,7 @@ class Fakoli
 	 *   level of access to admin
 	 *  @param string $identifier the identifier of the admin page to be checked
 	 */
-	function getAdminPageRole($identifier)
+	static function getAdminPageRole($identifier)
 	{
 		$uri = "/admin/$identifier";
 		
