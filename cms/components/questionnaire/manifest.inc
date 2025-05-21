@@ -54,7 +54,7 @@ class QuestionnaireManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(QuestionnaireComponentManager, upgradeComponent)
+				"upgradeComponent"		=>	'QuestionnaireComponentManager::upgradeComponent'
 			);
 	}	
 	

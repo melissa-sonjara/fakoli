@@ -64,7 +64,7 @@ class AttachmentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(AttachmentManager, upgradeComponent)
+				"upgradeComponent"		=>	'AttachmentManager::upgradeComponent'
 			);
 	}		
 	

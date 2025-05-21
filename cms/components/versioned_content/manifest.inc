@@ -40,10 +40,10 @@ class VersionedContentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("Initialize"				 =>	array(VersionedContentManager, onInitialize),
-					 "upgradeComponent"			=>	array(VersionedContentManager, upgradeComponent),
-					 "ComponentScanComplete"	=>	array(VersionedContentManager, setDefaults),
-					 "RenderVersioningControls"	=>	array(VersionedContentManager, onDrawInlineControls)
+		return array("Initialize"				 =>	'VersionedContentManager::onInitialize',
+					 "upgradeComponent"			=>	'VersionedContentManager::upgradeComponent',
+					 "ComponentScanComplete"	=>	'VersionedContentManager::setDefaults',
+					 "RenderVersioningControls"	=>	'VersionedContentManager::onDrawInlineControls'
 					//TODO: Add Event Registrations here
 		);
 	}

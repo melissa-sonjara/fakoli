@@ -77,9 +77,9 @@ class TaxonomyManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(TaxonomyManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(TaxonomyManager, setDefaults),
-					 "RegisterSerializationHandler"	=> array(TaxonomyManager, registerSerializationHandler)
+					"upgradeComponent"	=>	'TaxonomyManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'TaxonomyManager::setDefaults',
+					 "RegisterSerializationHandler"	=> 'TaxonomyManager::registerSerializationHandler'
 		);
 	}
 }

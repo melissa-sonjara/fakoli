@@ -36,9 +36,9 @@ class RssFeedManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(RssFeedManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(RssFeedManager, setDefaults),
-					"RegisterScheduledTaskWorkers"	=> array(RssFeedManager, registerScheduledRSSWorkers)
+					"upgradeComponent"	=>	'RssFeedManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'RssFeedManager::setDefaults',
+					"RegisterScheduledTaskWorkers"	=> 'RssFeedManager::registerScheduledRSSWorkers'
 					//TODO: Add Event Registrations here
 		);
 	}

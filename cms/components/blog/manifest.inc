@@ -85,18 +85,18 @@ class BlogManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier"			=> array(BlogManager, displayBlog),
-					 "EnumerateItems"				=> array(BlogManager, enumerateItems),
-					 "RegisterBlogViewHandlers"		=> array(BlogView, registerStandardHandlers),
-					 "upgradeComponent"				=>	array(BlogManager, upgradeComponent),
-					 "RegisterSerializationHandler"	=>	array(BlogManager, registerSerializationHandler),
-					 "RegisterTaxonomyClasses"		=>	array(BlogManager, registerTaxonomyClasses),
-					 "DeleteUser"					=>	array(BlogManager, deleteUser),
-					 "ComponentScanComplete"		=> array(BlogManager, setDefaults),
-					 "RegisterSearchables"			=>	array(BlogManager, registerSearchables),
-					 "RegisterSearchAdapters"		=>	array(BlogManager, registerSearchAdapter),
-					 "RegisterScheduledTaskWorkers"	=>	array(BlogManager, registerScheduledTaskWorkers),
-					 "RegisterVersionedContent"		=>	array(BlogManager, registerVersionedContent)
+		return array("ResolveIdentifier"			=> 'BlogManager::displayBlog',
+					 "EnumerateItems"				=> 'BlogManager::enumerateItems',
+					 "RegisterBlogViewHandlers"		=> 'BlogView::registerStandardHandlers',
+					 "upgradeComponent"				=>	'BlogManager::upgradeComponent',
+					 "RegisterSerializationHandler"	=>	'BlogManager::registerSerializationHandler',
+					 "RegisterTaxonomyClasses"		=>	'BlogManager::registerTaxonomyClasses',
+					 "DeleteUser"					=>	'BlogManager::deleteUser',
+					 "ComponentScanComplete"		=> 'BlogManager::setDefaults',
+					 "RegisterSearchables"			=>	'BlogManager::registerSearchables',
+					 "RegisterSearchAdapters"		=>	'BlogManager::registerSearchAdapter',
+					 "RegisterScheduledTaskWorkers"	=>	'BlogManager::registerScheduledTaskWorkers',
+					 "RegisterVersionedContent"		=>	'BlogManager::registerVersionedContent'
 		);
 	}
 }

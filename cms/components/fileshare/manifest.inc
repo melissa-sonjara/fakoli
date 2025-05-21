@@ -60,8 +60,8 @@ class FileshareManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(FileshareManager, upgradeComponent),
-				"DeleteUser"			=>	array(FileshareManager, deleteUser),
+				"upgradeComponent"		=>	'FileshareManager::upgradeComponent',
+				"DeleteUser"			=>	'FileshareManager::deleteUser',
 			);
 	}
 			

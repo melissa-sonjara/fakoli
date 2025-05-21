@@ -94,15 +94,15 @@ class CalendarManifest
 
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" 			=> array(CalendarManager, displayCalendar),
-					 "EnumerateItems"	 			=> array(CalendarManager, enumerateItems),
-					 "EnumerateContextHelpClasses"	=> array(CalendarManager, enumerateContextHelpClasses),		
-					 "upgradeComponent"				=>	array(CalendarManager, upgradeComponent),
-					 "RegisterTaxonomyClasses"		=>	array(CalendarManager, registerTaxonomyClasses),
-					 "ComponentScanComplete" 		=> array(CalendarManager, setDefaults),
-					 "DeleteUser"					=>	array(CalendarManager, deleteUser),
-					 "RegisterCommentAdapters" 		=>	array(CalendarManager, registerCommentAdapter),
-					 "RegisterSerializationHandler" =>	array(CalendarManager, registerSerializationHandler)
+		return array("ResolveIdentifier" 			=> 'CalendarManager::displayCalendar',
+					 "EnumerateItems"	 			=> 'CalendarManager::enumerateItems',
+					 "EnumerateContextHelpClasses"	=> 'CalendarManager::enumerateContextHelpClasses',		
+					 "upgradeComponent"				=>	'CalendarManager::upgradeComponent',
+					 "RegisterTaxonomyClasses"		=>	'CalendarManager::registerTaxonomyClasses',
+					 "ComponentScanComplete" 		=> 'CalendarManager::setDefaults',
+					 "DeleteUser"					=>	'CalendarManager::deleteUser',
+					 "RegisterCommentAdapters" 		=>	'CalendarManager::registerCommentAdapter',
+					 "RegisterSerializationHandler" =>	'CalendarManager::registerSerializationHandler'
 		);
 	}
 }

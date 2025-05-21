@@ -79,10 +79,10 @@ class ContextHelpManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"				=>	array(ContextHelpManager, upgradeComponent),
-					"Initialize"					=>	array(ContextHelpManager, onInitialize),
-					"RegisterSerializationHandler"	=>	array(ContextHelpManager, registerSerializationHandler),
-					"ComponentScanComplete"			=>	array(ContextHelpManager, setDefaults)
+					"upgradeComponent"				=>	'ContextHelpManager::upgradeComponent',
+					"Initialize"					=>	'ContextHelpManager::onInitialize',
+					"RegisterSerializationHandler"	=>	'ContextHelpManager::registerSerializationHandler',
+					"ComponentScanComplete"			=>	'ContextHelpManager::setDefaults'
 			);
 	}		
 }

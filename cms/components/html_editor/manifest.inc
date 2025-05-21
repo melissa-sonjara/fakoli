@@ -49,12 +49,12 @@ class HtmlEditorManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("upgradeComponent" 			=> 	array(HtmlEditorManager, upgradeComponent),
-					 "ComponentScanComplete"		=>	array(HtmlEditorManager, setDefaults),
-					 "Initialize"					=>	array(HtmlEditorManager, onInitialize),
-					 "RegisterSerializationHandler"	=>	array(HtmlEditorManager, registerSerializationHandler),
-					 "RegisterHTMLEditorPlugins"	=>	array(HtmlEditorManifest, registerPlugins),
-					 "PreProcessPage"				=>	array(HtmlEditorManager, applyCustomCSS)
+		return array("upgradeComponent" 			=> 	'HtmlEditorManager::upgradeComponent',
+					 "ComponentScanComplete"		=>	'HtmlEditorManager::setDefaults',
+					 "Initialize"					=>	'HtmlEditorManager::onInitialize',
+					 "RegisterSerializationHandler"	=>	'HtmlEditorManager::registerSerializationHandler',
+					 "RegisterHTMLEditorPlugins"	=>	'HtmlEditorManifest::registerPlugins',
+					 "PreProcessPage"				=>	'HtmlEditorManager::applyCustomCSS'
 					//TODO: Add Event Registrations here
 		);
 	}

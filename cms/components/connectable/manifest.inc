@@ -36,9 +36,9 @@ class ConnectableManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"		=>	array(ConnectableManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(ConnectableManager, setDefaults),
-					"Initialize"			=>	array(ConnectableManager, onInitialize)
+					"upgradeComponent"		=>	'ConnectableManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'ConnectableManager::setDefaults',
+					"Initialize"			=>	'ConnectableManager::onInitialize'
 					//TODO: Add Event Registrations here
 		);
 	}

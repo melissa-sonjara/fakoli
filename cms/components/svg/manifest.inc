@@ -29,8 +29,8 @@ class SvgManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(SvgManager, setDefaults),
-					"PostProcessContent"	=>	array(SvgManager, substituteTags)
+					"ComponentScanComplete"	=>	'SvgManager::setDefaults',
+					"PostProcessContent"	=>	'SvgManager::substituteTags'
 					//TODO: Add Event Registrations here
 		);
 	}

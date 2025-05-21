@@ -43,9 +43,9 @@ class ScheduledTaskManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(ScheduledTaskManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(ScheduledTaskManager, setDefaults),
-					 "RegisterScheduledTaskWorkers"	=>	array(ScheduledTaskManager, registerScheduledTaskWorkers)
+					"upgradeComponent"	=>	'ScheduledTaskManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'ScheduledTaskManager::setDefaults',
+					 "RegisterScheduledTaskWorkers"	=>	'ScheduledTaskManager::registerScheduledTaskWorkers'
 					//TODO: Add Event Registrations here
 		);
 	}

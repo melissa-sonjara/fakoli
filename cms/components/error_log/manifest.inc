@@ -70,9 +70,9 @@ class ErrorLogManifest
 			
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" =>	array(ErrorLogManager, setDefaults),
-					 "RegisterErrorHandler"	=>	array(ErrorLogManager, enableLogging),
-					 "upgradeComponent"		=>	array(ErrorLogManager, upgradeComponent)
+		return array("ComponentScanComplete" =>	'ErrorLogManager::setDefaults',
+					 "RegisterErrorHandler"	=>	'ErrorLogManager::enableLogging',
+					 "upgradeComponent"		=>	'ErrorLogManager::upgradeComponent'
 		
 		);
 	}	

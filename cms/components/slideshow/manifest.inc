@@ -69,8 +69,8 @@ class SlideshowManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("PostProcessContent"	=> array(EmbeddedSlideshowHandler, postProcessContent),
-					 "Initialize"			=> array(SlideshowManifest, onInitialize));
+		return array("PostProcessContent"	=> 'EmbeddedSlideshowHandler::postProcessContent',
+					 "Initialize"			=> 'SlideshowManifest::onInitialize');
 	}	
 
 	

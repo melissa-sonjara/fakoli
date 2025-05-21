@@ -69,11 +69,11 @@ class SectionManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"					=>	array(SectionManager, upgradeComponent),
-				"Initialize"						=>	array(SectionContentManagerMap, onInitialize),
-				"RegisterSectionContentManagers"	=>	array(SectionManager, registerSectionContentManager),
-				"RegisterSerializationHandler"		=>	array(SectionManager, registerSerializationHandler),
-				"PermissionDeleted"					=>	array(SectionManager, permissionDeleted)
+				"upgradeComponent"					=>	'SectionManager::upgradeComponent',
+				"Initialize"						=>	'SectionContentManagerMap::onInitialize',
+				"RegisterSectionContentManagers"	=>	'SectionManager::registerSectionContentManager',
+				"RegisterSerializationHandler"		=>	'SectionManager::registerSerializationHandler',
+				"PermissionDeleted"					=>	'SectionManager::permissionDeleted'
 			);
 	}		
 }

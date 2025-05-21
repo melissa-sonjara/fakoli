@@ -68,9 +68,9 @@ class SiteMapManifest
 
 	static function subscribeToEvents()
 	{
-		return array("upgradeComponent"	=>	array(SiteMapManager, upgradeComponent),
-				"ComponentScanComplete"	=>	array(SiteMapManager, updateSiteMap),
-				"RegisterSerializationHandler"	=> array(SiteMapManager, registerSerializationHandler)
+		return array("upgradeComponent"	=>	'SiteMapManager::upgradeComponent',
+				"ComponentScanComplete"	=>	'SiteMapManager::updateSiteMap',
+				"RegisterSerializationHandler"	=> 'SiteMapManager::registerSerializationHandler'
 				
 		);
 	}	

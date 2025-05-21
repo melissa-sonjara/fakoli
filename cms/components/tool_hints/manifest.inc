@@ -76,9 +76,9 @@ class ToolHintsManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(ToolHintsManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(ToolHintsManager, setDefaults),
-					"RegisterSerializationHandler"	=>	array(ToolHintsManager, registerSerializationHandler)
+					"upgradeComponent"	=>	'ToolHintsManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'ToolHintsManager::setDefaults',
+					"RegisterSerializationHandler"	=>	'ToolHintsManager::registerSerializationHandler'
 					//TODO: Add Event Registrations here
 		);
 	}

@@ -53,9 +53,9 @@ class SessionPersistanceManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" 	  => array(SessionManager, createDefaultSettings),
-					 "RegisterSessionPersistance" => array(SessionManager, onInitialize),
-					"upgradeComponent"		=>	array(SessionManager, upgradeComponent)
+		return array("ComponentScanComplete" 	  => 'SessionManager::createDefaultSettings',
+					 "RegisterSessionPersistance" => 'SessionManager::onInitialize',
+					"upgradeComponent"		=>	'SessionManager::upgradeComponent'
 		
 		);
 	}	

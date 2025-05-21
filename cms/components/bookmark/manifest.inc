@@ -36,8 +36,8 @@ class BookmarkManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(BookmarkManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(BookmarkManager, setDefaults)
+					"upgradeComponent"	=>	'BookmarkManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'BookmarkManager::setDefaults'
 					//TODO: Add Event Registrations here
 		);
 	}

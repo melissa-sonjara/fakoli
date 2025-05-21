@@ -43,8 +43,8 @@ class ProcessManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(ProcessManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(ProcessManager, setDefaults)
+					"upgradeComponent"	=>	'ProcessManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'ProcessManager::setDefaults'
 					//TODO: Add Event Registrations here
 		);
 	}

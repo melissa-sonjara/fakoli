@@ -62,7 +62,7 @@ class DebugManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(DebugManager, setDefaults));
+		return array("ComponentScanComplete" => 'DebugManager::setDefaults');
 					 
 	}
 }

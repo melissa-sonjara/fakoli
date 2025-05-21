@@ -56,17 +56,17 @@ class DocumentManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"EnumerateItems"	 			=> 	array(DocumentManager, enumerateItems),
-					"ResolveIdentifier"	 			=>	array(DocumentManager, displayLibrary),
-					"DeleteRole"					=>	array(DocumentManager, deleteRole),
-					"RegisterSearchables"			=>	array(DocumentManager, registerSearchables),
-					"upgradeComponent"				=>	array(DocumentManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(DocumentManager, registerSerializationHandler),
-					"RegisterTaxonomyClasses"		=>	array(DocumentManager, registerTaxonomyClasses),
-					"DeleteUser"					=>	array(DocumentManager, deleteUser),
-					"ComponentScanComplete"			=>	array(DocumentManager, setDefaults),
-					"RegisterCommentAdapters" 		=>	array(DocumentManager, registerCommentAdapter),
-					"RegisterSearchAdapters"		=>	array(DocumentManager, registerSearchAdapter)
+					"EnumerateItems"	 			=> 	'DocumentManager::enumerateItems',
+					"ResolveIdentifier"	 			=>	'DocumentManager::displayLibrary',
+					"DeleteRole"					=>	'DocumentManager::deleteRole',
+					"RegisterSearchables"			=>	'DocumentManager::registerSearchables',
+					"upgradeComponent"				=>	'DocumentManager::upgradeComponent',
+					"RegisterSerializationHandler"	=>	'DocumentManager::registerSerializationHandler',
+					"RegisterTaxonomyClasses"		=>	'DocumentManager::registerTaxonomyClasses',
+					"DeleteUser"					=>	'DocumentManager::deleteUser',
+					"ComponentScanComplete"			=>	'DocumentManager::setDefaults',
+					"RegisterCommentAdapters" 		=>	'DocumentManager::registerCommentAdapter',
+					"RegisterSearchAdapters"		=>	'DocumentManager::registerSearchAdapter'
 		);
 	}
 	

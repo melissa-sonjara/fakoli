@@ -65,8 +65,8 @@ class ReportManagerManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(ReportManagerUpgradeManager, upgradeComponent),
-				"DeleteUser"			=>	array(ReportManager, deleteUser),
+				"upgradeComponent"		=>	'ReportManagerUpgradeManager::upgradeComponent',
+				"DeleteUser"			=>	'ReportManager::deleteUser',
 			);
 	}	
 }

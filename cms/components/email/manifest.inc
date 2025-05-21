@@ -106,11 +106,11 @@ class EmailManifest
 			
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" 		=>	array(EmailManager, setDefaults),
-					"upgradeComponent"				=>	array(EmailManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(EmailManager, registerSerializationHandler),
-					"RegisterEmailTransport"			=>	array(EmailManager, registerSMTPTransport),
-					"RegisterSettingsFormExtension"	=>	array(EmailManager, registerSettingsFormExtension)
+		return array("ComponentScanComplete" 		=>	'EmailManager::setDefaults',
+					"upgradeComponent"				=>	'EmailManager::upgradeComponent',
+					"RegisterSerializationHandler"	=>	'EmailManager::registerSerializationHandler',
+					"RegisterEmailTransport"			=>	'EmailManager::registerSMTPTransport',
+					"RegisterSettingsFormExtension"	=>	'EmailManager::registerSettingsFormExtension'
 		
 		);
 	}

@@ -76,12 +76,12 @@ class ForumManifest
 	static function subscribeToEvents()
 	{
 		return array(
-			"ComponentScanComplete" 	=>  array(ForumManager, setDefaults),
-			"ResolveIdentifier" 		=> 	array(ForumManager, displayForum),
-			"EnumerateItems"			=> 	array(ForumManager, enumerateFora),
-			"upgradeComponent"			=>	array(ForumManager, upgradeComponent),
-			"DeleteUser"				=>	array(ForumManager, deleteUser),
-			"RegisterTaxonomyClasses"	=>	array(ForumManager, registerTaxonomyClasses)
+			"ComponentScanComplete" 	=>  'ForumManager::setDefaults',
+			"ResolveIdentifier" 		=> 	'ForumManager::displayForum',
+			"EnumerateItems"			=> 	'ForumManager::enumerateFora',
+			"upgradeComponent"			=>	'ForumManager::upgradeComponent',
+			"DeleteUser"				=>	'ForumManager::deleteUser',
+			"RegisterTaxonomyClasses"	=>	'ForumManager::registerTaxonomyClasses'
 			);
 	}
 	

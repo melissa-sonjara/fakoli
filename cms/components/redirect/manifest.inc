@@ -37,12 +37,12 @@ class RedirectManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"		=>	array(RedirectManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(RedirectManager, setDefaults),
-					"ResourceNotFound"	 	=>	array(RedirectManager, handleRedirects),
-					"SectionNotFound"		=>	array(RedirectManager, handleSectionRedirects),
-					"OverrideResource"		=>	array(RedirectManager, handleOverrides),
-					"RegisterSerializationHandler"	=>	array(RedirectManager, registerSerializationHandler)
+					"upgradeComponent"		=>	'RedirectManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'RedirectManager::setDefaults',
+					"ResourceNotFound"	 	=>	'RedirectManager::handleRedirects',
+					"SectionNotFound"		=>	'RedirectManager::handleSectionRedirects',
+					"OverrideResource"		=>	'RedirectManager::handleOverrides',
+					"RegisterSerializationHandler"	=>	'RedirectManager::registerSerializationHandler'
 		);
 	}
 }

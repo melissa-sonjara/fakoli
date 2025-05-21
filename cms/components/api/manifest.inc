@@ -22,11 +22,11 @@ class ApiManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"				=>	array(APIManager, setDefaults),
-					"RegisterSectionContentManagers"	=>	array(APIManager, registerSectionContentManager),
-					"upgradeComponent"					=>	array(APIManager, upgradeComponent),
-					"DeleteUser"						=>	array(APIManager, deleteUser),
-					"RegisterAPIEndPoints"				=>	array(APIManager, registerAPIEndPoints)
+					"ComponentScanComplete"				=>	'APIManager::setDefaults',
+					"RegisterSectionContentManagers"	=>	'APIManager::registerSectionContentManager',
+					"upgradeComponent"					=>	'APIManager::upgradeComponent',
+					"DeleteUser"						=>	'APIManager::deleteUser',
+					"RegisterAPIEndPoints"				=>	'APIManager::registerAPIEndPoints'
 					//TODO: Add Event Registrations here
 		);
 	}

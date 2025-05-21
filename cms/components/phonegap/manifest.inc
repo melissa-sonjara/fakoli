@@ -29,10 +29,10 @@ class PhonegapManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(PhonegapManager, setDefaults),
-					"Initialize"			=>	array(PhonegapManager, detectPhonegap),
-					"PostProcessScript"		=>	array(PhonegapManager, addScript),
-					"RegisterPhonegapSupportScripts"	=>	array(PhonegapManager, defaultSupportScripts)
+					"ComponentScanComplete"	=>	'PhonegapManager::setDefaults',
+					"Initialize"			=>	'PhonegapManager::detectPhonegap',
+					"PostProcessScript"		=>	'PhonegapManager::addScript',
+					"RegisterPhonegapSupportScripts"	=>	'PhonegapManager::defaultSupportScripts'
 		);
 	}
 }

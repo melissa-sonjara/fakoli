@@ -51,14 +51,14 @@ class LinkLibraryManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"EnumerateItems"	 => array(LinkLibraryManager, enumerateItems),
-					"ResolveIdentifier"	 =>	array(LinkLibraryManager, displayLibrary),
-					"RegisterSearchables"	=>	array(LinkLibraryManager, registerSearchables),
-					"upgradeComponent"	=>	array(LinkLibraryManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(LinkLibraryManager, setDefaults),
-					"RegisterSerializationHandler"	=>	array(LinkLibraryManager, registerSerializationHandler),
-					"RegisterTaxonomyClasses"	=>	array(LinkLibraryManager, registerTaxonomyClasses),
-					"DeleteUser"			=>	array(LinkLibraryManager, deleteUser),
+					"EnumerateItems"	 => 'LinkLibraryManager::enumerateItems',
+					"ResolveIdentifier"	 =>	'LinkLibraryManager::displayLibrary',
+					"RegisterSearchables"	=>	'LinkLibraryManager::registerSearchables',
+					"upgradeComponent"	=>	'LinkLibraryManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'LinkLibraryManager::setDefaults',
+					"RegisterSerializationHandler"	=>	'LinkLibraryManager::registerSerializationHandler',
+					"RegisterTaxonomyClasses"	=>	'LinkLibraryManager::registerTaxonomyClasses',
+					"DeleteUser"			=>	'LinkLibraryManager::deleteUser',
 		);
 	}
 }

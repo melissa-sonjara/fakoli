@@ -22,8 +22,8 @@ class RecaptchaV2Manifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"ComponentScanComplete"		=>	array(RecaptchaV2Manager, setDefaults),
-				"RegisterCaptchaProvider"	=>	array(RecaptchaV2Manager, registerCaptchaProvider)
+				"ComponentScanComplete"		=>	'RecaptchaV2Manager::setDefaults',
+				"RegisterCaptchaProvider"	=>	'RecaptchaV2Manager::registerCaptchaProvider'
 					//TODO: Add Event Registrations here
 		);
 	}

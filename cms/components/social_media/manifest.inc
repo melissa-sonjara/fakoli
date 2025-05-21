@@ -58,7 +58,7 @@ class SocialMediaManifest
 		
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" 	  => array(SocialMediaManager, setDefaults)	);
+		return array("ComponentScanComplete" 	  => 'SocialMediaManager::setDefaults'	);
 	}	
 }
 /**@}*/?>

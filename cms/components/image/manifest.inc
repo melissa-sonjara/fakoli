@@ -83,13 +83,13 @@ class ImageManifest
 	static function subscribeToEvents()
 	{
 		return array(
-			"ResolveIdentifier" 			=>	array(ImageManager, displayImageGallery),
-			"EnumerateItems"	 			=>	array(ImageManager, enumerateItems),
-			"ComponentScanComplete"			=>	array(ImageManager, setDefaults),
-			"upgradeComponent"				=>	array(ImageManager, upgradeComponent),
-			"RegisterSerializationHandler"	=>	array(ImageManager, registerSerializationHandler),
-			"RegisterTaxonomyClasses"		=>	array(ImageManager, registerTaxonomyClasses),
-			"DeleteUser"					=>	array(ImageManager, deleteUser),
+			"ResolveIdentifier" 			=>	'ImageManager::displayImageGallery',
+			"EnumerateItems"	 			=>	'ImageManager::enumerateItems',
+			"ComponentScanComplete"			=>	'ImageManager::setDefaults',
+			"upgradeComponent"				=>	'ImageManager::upgradeComponent',
+			"RegisterSerializationHandler"	=>	'ImageManager::registerSerializationHandler',
+			"RegisterTaxonomyClasses"		=>	'ImageManager::registerTaxonomyClasses',
+			"DeleteUser"					=>	'ImageManager::deleteUser',
 		);
 		
 	}

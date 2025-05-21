@@ -69,9 +69,9 @@ class MenuManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"DeleteRole"			=>	array(MenuManager, deleteRole),
-					"upgradeComponent"		=>	array(MenuManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(MenuManager, registerSerializationHandler)
+					"DeleteRole"			=>	'MenuManager::deleteRole',
+					"upgradeComponent"		=>	'MenuManager::upgradeComponent',
+					"RegisterSerializationHandler"	=>	'MenuManager::registerSerializationHandler'
 		);
 	}		
 }

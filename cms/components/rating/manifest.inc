@@ -43,8 +43,8 @@ class RatingManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"	=>	array(RatingManager, upgradeComponent),
-					"ComponentScanComplete"	=>	array(RatingManager, setDefaults)
+					"upgradeComponent"	=>	'RatingManager::upgradeComponent',
+					"ComponentScanComplete"	=>	'RatingManager::setDefaults'
 					//TODO: Add Event Registrations here
 		);
 	}

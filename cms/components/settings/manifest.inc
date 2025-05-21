@@ -78,10 +78,10 @@ class SettingsManifest
 			
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" 		=>	array(SettingsManager, setDefaults),
-					 "upgradeComponent"				=>	array(SettingsManager, upgradeComponent),
-					 "RegisterSerializationHandler"	=>	array(SettingsManager, registerSerializationHandler),
-					 "ConfigurationBootstrap"		=>	array(SettingsManager, configurationBootstrap)
+		return array("ComponentScanComplete" 		=>	'SettingsManager::setDefaults',
+					 "upgradeComponent"				=>	'SettingsManager::upgradeComponent',
+					 "RegisterSerializationHandler"	=>	'SettingsManager::registerSerializationHandler',
+					 "ConfigurationBootstrap"		=>	'SettingsManager::configurationBootstrap'
 		);
 	}
 		

@@ -38,9 +38,9 @@ class DatePickerManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(DatePickerManager, setDefaults),
-					"Initialize"			=>	array(DatePickerManager, registerFieldRenderers),
-					"PreProcessPage"		=>	array(DatePickerManager, addTheme)
+					"ComponentScanComplete"	=>	'DatePickerManager::setDefaults',
+					"Initialize"			=>	'DatePickerManager::registerFieldRenderers',
+					"PreProcessPage"		=>	'DatePickerManager::addTheme'
 		);
 	}
 }

@@ -79,11 +79,11 @@ class ComponentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" 	=> array(ComponentManager, displayPage),
-					 "EnumerateItems"		=> array(ComponentManager, enumerateComponentPages),
-					 "DeleteRole"			=> array(ComponentManager, deleteRole),
-					"upgradeComponent"		=>	array(ComponentManager, upgradeComponent),
-					"ComponentScanComplete" => array(ComponentManager, setDefaults)	
+		return array("ResolveIdentifier" 	=> 'ComponentManager::displayPage',
+					 "EnumerateItems"		=> 'ComponentManager::enumerateComponentPages',
+					 "DeleteRole"			=> 'ComponentManager::deleteRole',
+					"upgradeComponent"		=>	'ComponentManager::upgradeComponent',
+					"ComponentScanComplete" => 'ComponentManager::setDefaults'	
 					);
 					 
 	}

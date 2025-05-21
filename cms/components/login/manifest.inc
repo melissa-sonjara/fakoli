@@ -80,10 +80,10 @@ class LoginManifest
 
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(LoginManager, setDefaults),
-					"upgradeComponent"		=>	array(LoginManager, upgradeComponent),
-					"DeleteUser"			=>	array(LoginManager, deleteUser),
-					"Initialize"			=>	array(LoginManager, registerFieldRenderers)
+		return array("ComponentScanComplete" => 'LoginManager::setDefaults',
+					"upgradeComponent"		=>	'LoginManager::upgradeComponent',
+					"DeleteUser"			=>	'LoginManager::deleteUser',
+					"Initialize"			=>	'LoginManager::registerFieldRenderers'
 		);
 	}
 	

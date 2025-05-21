@@ -22,8 +22,8 @@ class CaptchaManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(CaptchaManager, setDefaults),
-					"RegisterSettingsFormExtension"	=>	array(CaptchaManager, registerSettingsFormExtension)
+					"ComponentScanComplete"	=>	'CaptchaManager::setDefaults',
+					"RegisterSettingsFormExtension"	=>	'CaptchaManager::registerSettingsFormExtension'
 		);
 	}
 }

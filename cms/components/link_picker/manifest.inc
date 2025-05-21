@@ -48,8 +48,8 @@ class LinkPickerManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("Initialize" => array(LinkPickerManifest, onInitialize),
-					 "RegisterHTMLEditorPlugins" => array(LinkPickerManifest, registerPlugins)
+		return array("Initialize" => 'LinkPickerManifest::onInitialize',
+					 "RegisterHTMLEditorPlugins" => 'LinkPickerManifest::registerPlugins'
 		);
 	}	
 

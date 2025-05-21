@@ -55,8 +55,8 @@ class SearchManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"ComponentScanComplete"	=>	array(SearchManager, setDefaults),
-				"upgradeComponent"		=>	array(SearchManager, upgradeComponent)
+				"ComponentScanComplete"	=>	'SearchManager::setDefaults',
+				"upgradeComponent"		=>	'SearchManager::upgradeComponent'
 			);
 	}	
 

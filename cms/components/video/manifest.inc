@@ -87,15 +87,15 @@ class VideoManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ResolveIdentifier" 		 => array(VideoManager, displayVideoGallery),
-					 "EnumerateItems"	 		 => array(VideoManager, enumerateItems),
-					 "ComponentScanComplete"	 => array(VideoManager, setDefaults),
-					 "Initialize" 				 => array(VideoManager, onInitialize),
-					 "RegisterBlogViewHandlers"	 => array(VideoBlogHandler, register),
-					 "upgradeComponent"			 => array(VideoManager, upgradeComponent),
-					 "RegisterTaxonomyClasses"	 =>	array(VideoManager, registerTaxonomyClasses),
-					 "DeleteUser"				 =>	array(VideoManager, deleteUser),
-					 "RegisterHTMLEditorPlugins" => array(VideoManifest, registerPlugins)
+		return array("ResolveIdentifier" 		 => 'VideoManager::displayVideoGallery',
+					 "EnumerateItems"	 		 => 'VideoManager::enumerateItems',
+					 "ComponentScanComplete"	 => 'VideoManager::setDefaults',
+					 "Initialize" 				 => 'VideoManager::onInitialize',
+					 "RegisterBlogViewHandlers"	 => 'VideoBlogHandler::register',
+					 "upgradeComponent"			 => 'VideoManager::upgradeComponent',
+					 "RegisterTaxonomyClasses"	 =>	'VideoManager::registerTaxonomyClasses',
+					 "DeleteUser"				 =>	'VideoManager::deleteUser',
+					 "RegisterHTMLEditorPlugins" => 'VideoManifest::registerPlugins'
 			);
 	}
 }

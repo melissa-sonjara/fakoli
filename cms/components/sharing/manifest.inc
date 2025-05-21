@@ -22,10 +22,10 @@ class SharingManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"					=>	array(SharingManager, upgradeComponent),
-					"ComponentScanComplete"				=>	array(SharingManager, setDefaults),
-					"RegisterSectionContentManagers"	=>	array(SharingManager, registerSectionContentManager),
-					"PostProcessContent"				=>	array(SharingManager, embedSharedItem)
+					"upgradeComponent"					=>	'SharingManager::upgradeComponent',
+					"ComponentScanComplete"				=>	'SharingManager::setDefaults',
+					"RegisterSectionContentManagers"	=>	'SharingManager::registerSectionContentManager',
+					"PostProcessContent"				=>	'SharingManager::embedSharedItem'
 					//TODO: Add Event Registrations here
 		);
 	}

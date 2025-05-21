@@ -55,14 +55,14 @@ class OptimizeManifest
 	
 	static function subscribeToEvents()
 	{
-		return array("ComponentScanComplete" => array(OptimizeManager, clearCache),
-					 "PreProcessScripts"	 =>	array(OptimizeManager, preProcessScripts),
-					 "PreProcessStyles"		 =>	array(OptimizeManager, preProcessStyles),
-					 "PreProcessPage"		 =>	array(OptimizeManager, preProcessPage),
-					 "PreAction"			 =>	array(OptimizeManager, preAction),
-					 "PostAction"			 =>	array(OptimizeManager, postAction),
-					 "ClearCache"			 => array(OptimizeManager, clearCache),
-					 "Initialize"			 =>	array(OptimizeManager, onInitialize)
+		return array("ComponentScanComplete" => 'OptimizeManager::clearCache',
+					 "PreProcessScripts"	 =>	'OptimizeManager::preProcessScripts',
+					 "PreProcessStyles"		 =>	'OptimizeManager::preProcessStyles',
+					 "PreProcessPage"		 =>	'OptimizeManager::preProcessPage',
+					 "PreAction"			 =>	'OptimizeManager::preAction',
+					 "PostAction"			 =>	'OptimizeManager::postAction',
+					 "ClearCache"			 => 'OptimizeManager::clearCache',
+					 "Initialize"			 =>	'OptimizeManager::onInitialize'
 		);	
 	}
 }

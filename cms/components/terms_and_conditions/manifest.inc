@@ -36,7 +36,7 @@ class TermsAndConditionsManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(TermsAndConditionsManager, setDefaults)
+					"ComponentScanComplete"	=>	'TermsAndConditionsManager::setDefaults'
 					//TODO: Add Event Registrations here
 		);
 	}

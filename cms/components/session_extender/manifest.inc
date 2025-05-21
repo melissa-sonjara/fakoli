@@ -61,7 +61,7 @@ class SessionExtenderManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(SessionExtenderManager, setDefaults)
+					"ComponentScanComplete"	=>	'SessionExtenderManager::setDefaults'
 					//TODO: Add Event Registrations here
 		);
 	}

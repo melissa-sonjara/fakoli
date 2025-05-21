@@ -74,14 +74,14 @@ class ArticleManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"RegisterCommentAdapters" 	=>	array(ArticleManager, registerCommentAdapter),
-				"RegisterSearchables"		=>	array(ArticleManager, registerSearchables),
-				"upgradeComponent"			=>	array(ArticleManager, upgradeComponent),
-				"RegisterTaxonomyClasses"	=>	array(ArticleManager, registerTaxonomyClasses),
-				"DeleteUser"				=>	array(ArticleManager, deleteUser),
-				"RegisterSearchAdapters"	=>	array(ArticleManager, registerSearchAdapter),
-				"RegisterVersionedContent"	=>	array(ArticleManager, registerVersionedContent),
-				"PreprocessURI"				=>	array(ArticleManager, preprocessURI)
+				"RegisterCommentAdapters" 	=>	'ArticleManager::registerCommentAdapter',
+				"RegisterSearchables"		=>	'ArticleManager::registerSearchables',
+				"upgradeComponent"			=>	'ArticleManager::upgradeComponent',
+				"RegisterTaxonomyClasses"	=>	'ArticleManager::registerTaxonomyClasses',
+				"DeleteUser"				=>	'ArticleManager::deleteUser',
+				"RegisterSearchAdapters"	=>	'ArticleManager::registerSearchAdapter',
+				"RegisterVersionedContent"	=>	'ArticleManager::registerVersionedContent',
+				"PreprocessURI"				=>	'ArticleManager::preprocessURI'
 		);
 	}		
 	

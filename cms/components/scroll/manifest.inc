@@ -49,14 +49,14 @@ class ScrollManifest
 
 	static function subscribeToEvents()
 	{
-		return array("upgradeComponent"				=> array(ScrollManager, upgradeComponent),
-					 "ComponentScanComplete"		=> array(ScrollManager, setDefaults),
-					 "ResolveIdentifier" 			=> array(ScrollManager, displayScroll),
-					 "EnumerateItems"				=> array(ScrollManager, enumerateScrolls),
-					 //"RegisterSearchables"			=> array(PageManager, registerSearchables),
-					 "RegisterTaxonomyClasses"		=> array(ScrollManager, registerTaxonomyClasses),
-					 "RegisterSerializationHandler" => array(ScrollManager, registerSerializationHandler),
-					 "RegisterVersionedContent"		=> array(ScrollManager, registerVersionedContent)
+		return array("upgradeComponent"				=> 'ScrollManager::upgradeComponent',
+					 "ComponentScanComplete"		=> 'ScrollManager::setDefaults',
+					 "ResolveIdentifier" 			=> 'ScrollManager::displayScroll',
+					 "EnumerateItems"				=> 'ScrollManager::enumerateScrolls',
+					 //"RegisterSearchables"			=> 'PageManager::registerSearchables',
+					 "RegisterTaxonomyClasses"		=> 'ScrollManager::registerTaxonomyClasses',
+					 "RegisterSerializationHandler" => 'ScrollManager::registerSerializationHandler',
+					 "RegisterVersionedContent"		=> 'ScrollManager::registerVersionedContent'
 				
 					//TODO: Add Event Registrations here
 		);

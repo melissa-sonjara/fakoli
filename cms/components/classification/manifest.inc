@@ -66,7 +66,7 @@ class ClassificationManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"upgradeComponent"		=>	array(ClassificationManager, upgradeComponent)
+				"upgradeComponent"		=>	'ClassificationManager::upgradeComponent'
 			);
 	}		
 		

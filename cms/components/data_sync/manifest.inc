@@ -50,10 +50,10 @@ class DataSyncManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"upgradeComponent"				=>	array(DataSyncManager, upgradeComponent),
-					"RegisterSerializationHandler"	=>	array(DataSyncManager, registerSerializationHandler),
-					"ComponentScanComplete"			=>	array(DataSyncManager, setDefaults),
-					"RegisterDataSyncAdapter"		=>	array(DataSyncManager, registerCSVAdapter)
+					"upgradeComponent"				=>	'DataSyncManager::upgradeComponent',
+					"RegisterSerializationHandler"	=>	'DataSyncManager::registerSerializationHandler',
+					"ComponentScanComplete"			=>	'DataSyncManager::setDefaults',
+					"RegisterDataSyncAdapter"		=>	'DataSyncManager::registerCSVAdapter'
 					//TODO: Add Event Registrations here
 		);
 	}

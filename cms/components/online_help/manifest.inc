@@ -76,11 +76,11 @@ class OnlineHelpManifest
 	static function subscribeToEvents()
 	{
 		return array(
-				"ComponentScanComplete"	=>	array(OnlineHelpManager, setDefaults),
-				"upgradeComponent"		=>	array(OnlineHelpManager, upgradeComponent),
-				"Initialize"			=>	array(OnlineHelpManager, onInitialize),
-				"PostProcessPage"		=>	array(OnlineHelpManager, substituteHelpLink),
-				"RegisterSerializationHandler"	=>	array(OnlineHelpManager, registerSerializationHandler)
+				"ComponentScanComplete"	=>	'OnlineHelpManager::setDefaults',
+				"upgradeComponent"		=>	'OnlineHelpManager::upgradeComponent',
+				"Initialize"			=>	'OnlineHelpManager::onInitialize',
+				"PostProcessPage"		=>	'OnlineHelpManager::substituteHelpLink',
+				"RegisterSerializationHandler"	=>	'OnlineHelpManager::registerSerializationHandler'
 			);
 	}
 	

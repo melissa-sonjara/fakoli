@@ -67,11 +67,11 @@ class SurveyManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					 "EnumerateContextHelpClasses" => array(SurveyComponentManager, enumerateContextHelpClasses),
-				 	"EnumerateDataItemClasses" => array(SurveyComponentManager, enumerateDataItemClasses),		
-					"ComponentScanComplete" => array(SurveyComponentManager, setDefaults),
-					"upgradeComponent"		=>	array(SurveyComponentManager, upgradeComponent),
-					"DeleteUser"			=>	array(SurveyComponentManager, deleteUser),
+					 "EnumerateContextHelpClasses" => 'SurveyComponentManager::enumerateContextHelpClasses',
+				 	"EnumerateDataItemClasses" => 'SurveyComponentManager::enumerateDataItemClasses',		
+					"ComponentScanComplete" => 'SurveyComponentManager::setDefaults',
+					"upgradeComponent"		=>	'SurveyComponentManager::upgradeComponent',
+					"DeleteUser"			=>	'SurveyComponentManager::deleteUser',
 				
 		);
 	}

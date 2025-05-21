@@ -70,8 +70,8 @@ class SiteManifest
 	{
 
 		return array(
-				"upgradeComponent"		=>	array(SiteManager, upgradeComponent),
-				"ComponentScanComplete"	=>	array(SiteManager, registerThemes)
+				"upgradeComponent"		=>	'SiteManager::upgradeComponent',
+				"ComponentScanComplete"	=>	'SiteManager::registerThemes'
 			);
 		
 	}		

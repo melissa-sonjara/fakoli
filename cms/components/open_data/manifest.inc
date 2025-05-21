@@ -69,10 +69,10 @@ class OpenDataManifest
 
 	static function subscribeToEvents()
 	{
-		return array("EnumerateContextHelpClasses"	=>  array(OpenDataManager, enumerateContextHelpClasses),
-					 "upgradeComponent"				=>	array(OpenDataManager, upgradeComponent),
-					 "ComponentScanComplete"		=>	array(OpenDataManager, setDefaults),
-					"RegisterSerializationHandler"	=>	array(OpenDataManager, registerSerializationHandler)
+		return array("EnumerateContextHelpClasses"	=>  'OpenDataManager::enumerateContextHelpClasses',
+					 "upgradeComponent"				=>	'OpenDataManager::upgradeComponent',
+					 "ComponentScanComplete"		=>	'OpenDataManager::setDefaults',
+					"RegisterSerializationHandler"	=>	'OpenDataManager::registerSerializationHandler'
 					//TODO: Add Event Registrations here
 		);
 	}

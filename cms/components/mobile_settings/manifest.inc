@@ -24,10 +24,10 @@ class MobileSettingsManifest
 	static function subscribeToEvents()
 	{
 		return array(
-					"ComponentScanComplete"	=>	array(MobileSettingsManager, setDefaults),
-					"Initialize"			=>	array(MobileSettingsManager, onInitialize),
-					"OverrideTemplate"		=>	array(MobileSettingsManager, overrideTemplate),
-					"CheckUseMobile"		=>	array(MobileSettingsManager, useMobile)
+					"ComponentScanComplete"	=>	'MobileSettingsManager::setDefaults',
+					"Initialize"			=>	'MobileSettingsManager::onInitialize',
+					"OverrideTemplate"		=>	'MobileSettingsManager::overrideTemplate',
+					"CheckUseMobile"		=>	'MobileSettingsManager::useMobile'
 		);
 	}
 }
