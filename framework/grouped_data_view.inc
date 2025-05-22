@@ -108,9 +108,9 @@ class GroupedDataListView
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
 	var $onDrawFooter;	///< Callback hook that gets called after all rows have been drawn.
-	var $mode;			///< The display mode for the table: fixed or tree
-	var $groups;		///< The group definitions.
-	var $items;			///< The items to be displayed.
+	var $mode;			///< The display mode for the table: fixed, tree or accordion
+	var $groups = [];		///< The group definitions.
+	var $items = [];			///< The items to be displayed.
 	var $excelFile;		///< Name of the Excel file for automatic export to excel
 	var $summary;		///< Human-readable summary of the information contained in the table (for usability/accessiblity purposes)
 	var $selectable  = false;	///< Whether the table provides a selection mechanism
