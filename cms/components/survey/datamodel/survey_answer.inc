@@ -67,7 +67,7 @@ class SurveyAnswer extends AbstractQuestionnaireAnswer
 		$this->table = "survey_answer";
 		$this->primary_key = "survey_answer_id";
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 /**@}*/?>

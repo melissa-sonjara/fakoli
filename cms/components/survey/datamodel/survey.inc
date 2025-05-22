@@ -290,11 +290,11 @@ class Survey extends AbstractQuestionnaire
 	{
 		$this->table = "survey";
 		$this->primary_key = "survey_id";
-		$this->answer_class = SurveyAnswer;
+		$this->answer_class = 'SurveyAnswer';
 
 		$this->pretty_class_name = "Survey";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

@@ -120,7 +120,7 @@ class SurveyQuestion extends AbstractQuestion
 		$this->table = "survey_question";
 		$this->primary_key = "survey_question_id";
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

@@ -191,9 +191,9 @@ class SurveyResponse extends AbstractQuestionnaireResponse
 	{
 		$this->table = "survey_response";
 		$this->primary_key = "response_id";
-		$this->answer_class = SurveyAnswer;
+		$this->answer_class = 'SurveyAnswer';
 
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}
 }
 

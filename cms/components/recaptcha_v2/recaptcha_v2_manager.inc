@@ -30,7 +30,7 @@ class RecaptchaV2Manager
 	
 	static function registerCaptchaProvider()
 	{
-		CaptchaManager::registerCaptchaProvider("reCAPTCHA v2", RecaptchaV2FieldRenderer);
+		CaptchaManager::registerCaptchaProvider("reCAPTCHA v2", 'RecaptchaV2FieldRenderer');
 	}
 
 

@@ -105,7 +105,7 @@ if(count($classes) > 0)
 		$prettyClassName = $classObj->prettifyClassName();
 		$fields = $classObj->getFields();
 		$savedFields = $savedHelp[$class];
-		if(count($savedFields) == 0) $savedFields = array();
+		if(!$savedFields || count($savedFields) == 0) $savedFields = array();
 		if(is_array($classObj->additionalFields))
 			$fields = array_merge($fields, array_combine($classObj->additionalFields, $classObj->additionalFields));
 		
@@ -137,7 +137,7 @@ $contextHelps = sortItems($contextHelps, "compareClasses");
 $groupedHelps = regroupList($contextHelps, "pretty_class_name");
 
 $table = new GroupedDataListView($groupedHelps, "ContextHelp");
-$table->column("Field", formatContextHelpFormLink)
+$table->column("Field", 'formatContextHelpFormLink')
 		  ->column("Title", "{title}", true)
 			->column("Help", "{help}", true)
 			;

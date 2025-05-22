@@ -150,18 +150,18 @@ class ActivityTracker
 		
 		$base = $config['uploadbase'].DIRECTORY_SEPARATOR."user_activity_logs";
 		
-		Settings::setDefaultValue("activity_tracker", "track_activity", "", Boolean, "Track user activity. Use this for usage statistics and troubleshooting. For better performance, disable this on sites with heavy traffic.", "Activity Tracking");
-		Settings::setDefaultValue("activity_tracker", "enable_feedback", "", Boolean, "Enable the user feedback feature. You will also need to assign the feedback module to a position in your template.", "User Feedback", null, 1);
-		Settings::setDefaultValue("activity_tracker", "feedback_title", "Provide Feedback", String, "Title text for the user feedback module", "User Feedback", null, 3);
-		Settings::setDefaultValue("activity_tracker", "require_login", false, Boolean, "Whether the feedback feature is available to guest users (those who haven't yet logged in)", "User Feedback", null, 2);
-		Settings::setDefaultValue("activity_tracker", "confirmation_message", "Thank you, your feedback is appreciated!", String, "The message to display after the user submits feedback", "User Feedback", null, 4);
+		Settings::setDefaultValue("activity_tracker", "track_activity", "", 'Boolean', "Track user activity. Use this for usage statistics and troubleshooting. For better performance, disable this on sites with heavy traffic.", "Activity Tracking");
+		Settings::setDefaultValue("activity_tracker", "enable_feedback", "", 'Boolean', "Enable the user feedback feature. You will also need to assign the feedback module to a position in your template.", "User Feedback", null, 1);
+		Settings::setDefaultValue("activity_tracker", "feedback_title", "Provide Feedback", 'String', "Title text for the user feedback module", "User Feedback", null, 3);
+		Settings::setDefaultValue("activity_tracker", "require_login", false, 'Boolean', "Whether the feedback feature is available to guest users (those who haven't yet logged in)", "User Feedback", null, 2);
+		Settings::setDefaultValue("activity_tracker", "confirmation_message", "Thank you, your feedback is appreciated!", 'String', "The message to display after the user submits feedback", "User Feedback", null, 4);
 		
-		Settings::setDefaultValue("activity_tracker", "send_email", false, Boolean, "Send a notification email when feedback is submitted. If you set this to true, configure recipient and message via the 'feedback_notification' email template", "User Feedback", null, 5);
+		Settings::setDefaultValue("activity_tracker", "send_email", false, 'Boolean', "Send a notification email when feedback is submitted. If you set this to true, configure recipient and message via the 'feedback_notification' email template", "User Feedback", null, 5);
 		  
-		Settings::setDefaultValue("activity_tracker", "google_analytics_tracking_id", "", String, "Leave blank if tracking is not desired.", "Google Analytics");
-		Settings::setDefaultValue("activity_tracker", "google_analytics_version", "Classic", String, "Specifies the API Version of Google Analytics to use. Select this based on your site's analytics configuration on google.com", "Google Analytics", "Classic\nUniversal\nGA4");
+		Settings::setDefaultValue("activity_tracker", "google_analytics_tracking_id", "", 'String', "Leave blank if tracking is not desired.", "Google Analytics");
+		Settings::setDefaultValue("activity_tracker", "google_analytics_version", "Classic", 'String', "Specifies the API Version of Google Analytics to use. Select this based on your site's analytics configuration on google.com", "Google Analytics", "Classic\nUniversal\nGA4");
 		
-		Settings::setDefaultValue("activity_tracker", "logging_directory", $base, String, "Specifies the directory to which user activity logs will be written", "Activity Tracking");		
+		Settings::setDefaultValue("activity_tracker", "logging_directory", $base, 'String', "Specifies the directory to which user activity logs will be written", "Activity Tracking");		
 		
 		ActivityTracker::createLogDirectory();
 	}
@@ -378,7 +378,7 @@ class ActivityReportFilterHelper
 	{
 		$session = new UserActivitySession();
 		$session->filter = new InclusionFilter("session_start", "feedback_user");
-		$session->overrideFieldType("feedback_user", Boolean);
+		$session->overrideFieldType("feedback_user", 'Boolean');
 		$session->fromGET();
 		
 		$filterForm = new FilterForm($session);
@@ -393,8 +393,8 @@ class ActivityReportFilterHelper
 	/**
 	 * For activity report filter
 	 *
-	 * @param String $name
-	 * @param Boolean $value
+	 * @param 'String' $name
+	 * @param 'Boolean' $value
 	 * @return string
 	 */
 	static function getFeedbackUserClause($name, $value)
