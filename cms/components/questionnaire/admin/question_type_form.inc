@@ -24,7 +24,7 @@ if($question_type_id)
 }
 else
 {
-	$questionType->sort_order = queryValue(QuestionType, "MAX(sort_order)") + 1;
+	$questionType->sort_order = queryValue('QuestionType', "MAX(sort_order)") + 1;
 }
 
 $redirect = "/admin/question_types";

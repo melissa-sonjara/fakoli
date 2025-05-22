@@ -55,7 +55,7 @@ if ($contact_topic_id)
 else
 {
 	$contactTopic->recipients = $config["email_from"];
-	$contactTopic->sort_order = queryValue(ContactTopic, "MAX(sort_order)") + 1;
+	$contactTopic->sort_order = queryValue('ContactTopic', "MAX(sort_order)") + 1;
 }
 
 if(!$contactTopic->recipients)

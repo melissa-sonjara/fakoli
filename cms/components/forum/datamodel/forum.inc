@@ -124,7 +124,7 @@ class Forum extends DataItem
 	
 	function allowDelete()
 	{
-		$count = queryValue(ForumMessage, "COUNT(1)", "WHERE forum_id={$this->forum_id} AND message != '' AND deleted=0");
+		$count = queryValue('ForumMessage', "COUNT(1)", "WHERE forum_id={$this->forum_id} AND message != '' AND deleted=0");
 		return ($count > 0) ? false : true;
 	}
 	

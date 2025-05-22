@@ -85,7 +85,7 @@ class ContactTopic extends DataItem
 	{
 		global $page;
 		$topicList = array();
-		$siteCount = queryValue(Site, "COUNT(1)", "");
+		$siteCount = queryValue('Site', "COUNT(1)", "");
 		if($siteCount == 1)
 		{		
 			$topics = query('ContactTopic', "ORDER BY sort_order");

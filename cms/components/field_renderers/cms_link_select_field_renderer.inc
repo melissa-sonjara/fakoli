@@ -59,7 +59,7 @@ class CMSLinkSelectFieldRenderer extends FieldRenderer
 					if (!array_key_exists($item->identifier, $contentByIdentifier)) continue;
 					
 					
-					if (method_exists($item, enumerateContentLinks))
+					if (method_exists($item, 'enumerateContentLinks'))
 					{
 						$child = new TreeNode("available[{$item->identifier}]", $item->identifier, $this->getLink($section, $item->identifier), false, "tree_node_closed", "tree_node_open");
 						

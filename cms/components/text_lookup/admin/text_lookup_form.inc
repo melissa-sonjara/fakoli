@@ -79,7 +79,7 @@ $classSelect->allowAddEntry();
 $form->annotate("class_name", "If merge codes are used, identify the class name that can access the values.");
 $form->button("Cancel", $redirect);
 $form->allowDelete = true;
-$form->onDelete = onDeleteCascade;
+$form->onDelete = 'onDeleteCascade';
 
 VersionedContentManager::enableVersioning($form);
 

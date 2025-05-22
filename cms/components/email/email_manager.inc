@@ -447,7 +447,7 @@ class EmailManager
 	
 	static function registerSettingsFormExtension()
 	{
-		SettingsManager::registerExtension("email", array(EmailManager, settingsExtension));
+		SettingsManager::registerExtension("email", array('EmailManager', 'settingsExtension'));
 	}
 	
 	static function settingsExtension($form)

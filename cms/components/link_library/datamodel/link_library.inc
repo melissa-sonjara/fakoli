@@ -99,7 +99,7 @@ class LinkLibrary extends DataItem
 	{
 		$constraint = $published ? " AND published=1" : "";
 		
-		return queryValue(LinkRecord, "COUNT(1)", "WHERE link_library_id={$this->link_library_id}$constraint");
+		return queryValue('LinkRecord', "COUNT(1)", "WHERE link_library_id={$this->link_library_id}$constraint");
 	}
 
 	static function findByIdentifier($identifier)

@@ -51,7 +51,7 @@ $texts = Query::create('TextLookup', "{$constraint} ORDER BY code")->execute();
 $table = new DataListView($texts, "textLookup");
 $table->column("Code", "<a href='/admin/text_lookup_form?text_id={text_id}'>{code}</a>", true)
 	->column("Category", "{category}", true)
-	->column("Text", textLookupPlainText, true)
+	->column("Text", 'textLookupPlainText', true)
 	->column("Class Name", "{class_name}", true)
 	->column("", "<a href='/admin/text_translations?text_id={text_id}'>Translations</a>", true)
 	;

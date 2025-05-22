@@ -90,7 +90,7 @@ class SurveyQuestion extends AbstractQuestion
 		if(!$this->survey_question_id)
 			return true;
 
-		$count = queryValue(SurveyAnswer, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
+		$count = queryValue('SurveyAnswer', "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
 
 		return ($count > 0) ? false : true;
 	}
@@ -110,7 +110,7 @@ class SurveyQuestion extends AbstractQuestion
 		if(!$this->isEditable())
 			return false;
 				
-		$count = queryValue(SurveyQuestionXref, "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
+		$count = queryValue('SurveyQuestionXref', "COUNT(1)", "WHERE survey_question_id={$this->survey_question_id}");
 
 		return ($count > 1) ? false : true;
 	}

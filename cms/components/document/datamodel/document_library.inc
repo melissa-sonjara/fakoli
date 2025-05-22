@@ -127,7 +127,7 @@ class DocumentLibrary extends DataItem
 			
 	function countDocuments()
 	{
-		return queryValue(Document, "COUNT(1)", "WHERE document_library_id={$this->document_library_id}");
+		return queryValue('Document', "COUNT(1)", "WHERE document_library_id={$this->document_library_id}");
 	}
 
 	static function findByIdentifier($identifier)

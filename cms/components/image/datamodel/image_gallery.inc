@@ -102,7 +102,7 @@ class ImageGallery extends DataItem
 			$constraint = "WHERE ";
 		}
 		$constraint .= "gallery_id={$this->gallery_id}";
-		return queryValue(ImageRecord, "COUNT(1)", $constraint);
+		return queryValue('ImageRecord', "COUNT(1)", $constraint);
 	}
 	
 	function getGalleryDirectory()
