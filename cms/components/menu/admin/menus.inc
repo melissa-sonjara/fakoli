@@ -39,7 +39,7 @@ $menu_item = "Menus";
 
 $sites = query('Site', "ORDER BY site_name");
 
-$menusBySite = groupedQuery('Menu', "ORDER BY name", "site_id");
+$menusBySite = GroupedQuery::create('Menu', "ORDER BY name", "site_id")->execute();
 
 $title = "Menus";
 
@@ -50,6 +50,7 @@ $table->column("Menu", "<a href='menu_form?menu_id={menu_id}'>{name}</a>{descrip
 
 $table->groupBy($sites, "{site_name}");
 $table->emptyMessage = "No menus have been defined";
+$table->mode = "tree";
 
 $script .= $table->writeScript();
 $table->drawView();
