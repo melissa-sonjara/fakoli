@@ -256,7 +256,7 @@ window.addEvent('domready', function()
 			break;
 		}
 		
-		return parent::renderScript(field);
+		return parent::renderScript($field);
 	}
 }
 /**@}*/?>
