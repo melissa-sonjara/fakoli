@@ -37,7 +37,7 @@ class OpenDataManager
 
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("open_data", "Open Data Definitions", new SimpleSerializationHandler(OpenData));
+		SerializationManager::registerHandler("open_data", "Open Data Definitions", new SimpleSerializationHandler('OpenData'));
 		return true;
 	}
 }

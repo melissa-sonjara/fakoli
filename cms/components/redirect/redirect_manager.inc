@@ -117,7 +117,7 @@ class RedirectManager
 
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("redirect", "Redirect Rules", new SimpleSerializationHandler(Redirect));
+		SerializationManager::registerHandler("redirect", "Redirect Rules", new SimpleSerializationHandler('Redirect'));
 		return true;
 	}
 }

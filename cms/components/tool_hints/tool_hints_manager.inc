@@ -63,7 +63,7 @@ class ToolHintsManager
 	
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("tool_hints", "Tool Hints", new SimpleSerializationHandler(ToolHint));
+		SerializationManager::registerHandler("tool_hints", "Tool Hints", new SimpleSerializationHandler('ToolHint'));
 		return true;
 	}
 }

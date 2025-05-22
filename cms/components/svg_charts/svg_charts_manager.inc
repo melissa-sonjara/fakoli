@@ -31,7 +31,7 @@ class SvgChartsManager
 	
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("svg_charts", "Color Palettes", new SimpleSerializationHandler(ColorPalette));
+		SerializationManager::registerHandler("svg_charts", "Color Palettes", new SimpleSerializationHandler('ColorPalette'));
 		return true;
 	}
 	

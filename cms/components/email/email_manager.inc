@@ -703,8 +703,8 @@ class EmailManager
 	
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("email_templates", "Email Templates", new SimpleSerializationHandler(EmailTemplate));
-		SerializationManager::registerHandler("merge_codes", "Merge Codes", new SimpleSerializationHandler(MergeCode));
+		SerializationManager::registerHandler("email_templates", "Email Templates", new SimpleSerializationHandler('EmailTemplate'));
+		SerializationManager::registerHandler("merge_codes", "Merge Codes", new SimpleSerializationHandler('MergeCode'));
 		return true;		
 	}
 }

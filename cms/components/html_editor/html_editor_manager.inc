@@ -52,7 +52,7 @@ class HtmlEditorManager
 
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("snippets", "Snippets", new SimpleSerializationHandler(Snippet));
+		SerializationManager::registerHandler("snippets", "Snippets", new SimpleSerializationHandler('Snippet'));
 		return true;
 	}
 	

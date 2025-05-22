@@ -51,7 +51,7 @@ $table = new DataListView($logs, "component_logs");
 $table->column("Version", "{version_number}", true)
 			 ->column("Date Updated", "{date_updated:long}", true)
 			->column("Description", "{description}", true)
-			->column("Log File", drawLogFile, true)
+			->column("Log File", 'drawLogFile', true)
 			;
 			
 $table->sortable = true;

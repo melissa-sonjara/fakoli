@@ -20,7 +20,7 @@ class ModuleManager
 	
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("module", "Modules", new SimpleSerializationHandler(Module));
+		SerializationManager::registerHandler("module", "Modules", new SimpleSerializationHandler('Module'));
 		return true;
 	}
 	

@@ -174,7 +174,7 @@ class RoleManager
 	
 	static function registerSerializationHandler()
 	{
-		SerializationManager::registerHandler("role", "Roles", new SimpleSerializationHandler(SiteRole));
+		SerializationManager::registerHandler("role", "Roles", new SimpleSerializationHandler('SiteRole'));
 	}
 	
 	static function upgradeComponent($version)

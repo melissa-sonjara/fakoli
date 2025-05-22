@@ -658,7 +658,7 @@ class TaxonomyManager
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("taxonomy", "Taxonomies and Terms", new TaxonomySerializationHandler());
-		SerializationManager::registerHandler("taxonomy_associations", "Taxonomy Term Associations", new SimpleSerializationHandler(TaxonomyTermAssociation));
+		SerializationManager::registerHandler("taxonomy_associations", "Taxonomy Term Associations", new SimpleSerializationHandler('TaxonomyTermAssociation'));
 		return true;
 	}
 }

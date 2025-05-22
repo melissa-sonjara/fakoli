@@ -68,7 +68,7 @@ class SerializationManager
 	 * @param string $title the display title describing the data that is serialized for this component (i.e. "Blogs and Articles")
 	 * @param SerializationHandler $handler the serialization handler object providing the implementation
 	 */
-	function registerHandler($component, $title, $handler)
+	static function registerHandler($component, $title, $handler)
 	{
 		SerializationManager::$map[$component] = array('title' => $title, 'handler' => $handler);
 	}
