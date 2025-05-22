@@ -555,8 +555,8 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		$table->mode = "fixed";
 		$table->selector();
 		$table->column("Question", "{Question.question}", false)
-			->column("Options", array(QuestionTableHelper, formatOptions), false)
-			->column("Required", array(QuestionTableHelper, formatRequired), false, "text-align: center")
+			->column("Options", array('QuestionTableHelper', 'formatOptions'), false)
+			->column("Required", array('QuestionTableHelper', 'formatRequired'), false, "text-align: center")
 			;
 		
 		$table->emptyMessage = "There are no $class questions to select.";

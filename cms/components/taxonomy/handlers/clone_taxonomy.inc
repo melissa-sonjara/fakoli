@@ -53,7 +53,7 @@ $form->required("taxonomy_name", "identifier");
 
 $form->ajaxSubmit("function(result) {TaxonomyAdmin.cloneTaxonomyResponse(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->button("Cancel", "TaxonomyAdmin.closeCloneDialog()", null, true);
-$form->customSaveHandler = array(TaxonomyManager, cloneTaxonomy);
+$form->customSaveHandler = array('TaxonomyManager', 'cloneTaxonomy');
 
 if ($method == "POST")
 {

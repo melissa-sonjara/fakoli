@@ -566,7 +566,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
  * generate the clause for this field. E.g:
  * 
 	// Set custom callback handler to generate the constraint for ledger_id
-	$filterForm->setHandler("ledger_id", array(ProjectManager, getLedgerClause));
+	$filterForm->setHandler("ledger_id", array('ProjectManager', 'getLedgerClause'));
 	
 	function getLedgerClause($name, $value)
 	{

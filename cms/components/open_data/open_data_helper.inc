@@ -42,7 +42,7 @@ class OpenDataHelper
 	{
 		if(is_array($items))
 		{
-			usort($items, array(OpenDataHelper, compareClasses));
+			usort($items, array('OpenDataHelper', 'compareClasses'));
 		}
 		return $items;
 	}

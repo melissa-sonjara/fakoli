@@ -50,7 +50,7 @@ class ForumManager
 	{
 		if (!ForumManager::$userProfileHandler)
 		{
-			ForumManager::$userProfileHandler = array(ForumManager, defaultUserProfileHandler);
+			ForumManager::$userProfileHandler = array('ForumManager', 'defaultUserProfileHandler');
 			ComponentManager::fireEvent("RegisterForumUserProfileHandler");
 		}
 	}

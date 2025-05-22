@@ -49,7 +49,7 @@ $subscriptions = query('ForumSubscription', "WHERE user_id = {$user->user_id}");
 $table = new DataListView($subscriptions, "forumSubscriptions");
 $table->column("Forum Title", "{Forum.title}", true, "width: 40%")
 		->column("Topic Title", getTopicTitle, true, "width: 35%")
-		->column("Subscription Type", array(SubscriptionManager, renderSubscriptionType), false, "width: 25%");
+		->column("Subscription Type", array('SubscriptionManager', 'renderSubscriptionType'), false, "width: 25%");
 	
 $table->emptyMessage = "You are not subscribed to any forums or topics.";
 $table->sortable = true;

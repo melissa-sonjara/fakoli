@@ -57,10 +57,10 @@ $questions = $questionnaire->Questions("ORDER BY question_number");
 $table = new DataListView($questions, "QuestionnaireQuestions");
 $table->column("Question", array($mgr, formatQuestionLink))
 	->column("Question Type", "{QuestionType.name}", false, "width: 15%")
-	->column("Options", array(QuestionTableHelper, formatOptions))
-	->column("Required", array(QuestionTableHelper, formatRequired))
+	->column("Options", array('QuestionTableHelper', 'formatOptions'))
+	->column("Required", array('QuestionTableHelper', 'formatRequired'))
 	// For implementations with question xref, use "formatRemove"
-	->column("Delete", array(QuestionTableHelper, formatDelete), false, "text-align: center")
+	->column("Delete", array('QuestionTableHelper', 'formatDelete'), false, "text-align: center")
 ;
 
 $table->emptyMessage = "There are no questions defined.";

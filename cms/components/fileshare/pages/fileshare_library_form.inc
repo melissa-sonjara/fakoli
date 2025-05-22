@@ -53,7 +53,7 @@ $form->hide("owner_id", "allow_access", "manage_folders", "upload_files", "delet
 $form->required("name");
 $form->onSaveComplete = setLibraryIdentifier;
 $form->allowDelete = $library->allowDelete();
-$form->onDelete = array(FileshareManager, onDeleteFileshareLibary);
+$form->onDelete = array('FileshareManager', 'onDeleteFileshareLibary');
 
 $form->unique("name", "A library already exists with that name. Please choose a different name.");
 

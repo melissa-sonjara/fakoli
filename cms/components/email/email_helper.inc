@@ -65,7 +65,7 @@ class EmailHelper
 			$captchaMgr->addCaptchaToForm($form);
 		}
 		
-		$form->customSaveHandler = array(EmailHelper, sendContactUs);
+		$form->customSaveHandler = array('EmailHelper', 'sendContactUs');
 		
 		return $form;
 	}

@@ -350,8 +350,8 @@ class QuestionnaireDataView
 	function buildTextDataView()
 	{
 		$table = new GroupedDataListView($this->textAnswers, "AnswerTextList");
-		$table->column("Answer Text", array(QuestionnaireDataView, formatAnswer));
-		$table->groupBy($this->questions, array(QuestionnaireDataView, formatQuestion));
+		$table->column("Answer Text", array('QuestionnaireDataView', 'formatAnswer'));
+		$table->groupBy($this->questions, array('QuestionnaireDataView', 'formatQuestion'));
 		$table->mode = 'tree';
 		$table->emptyMessage = "There are no text results.";
 		$table->excelFile = "text_surveyData.xls";

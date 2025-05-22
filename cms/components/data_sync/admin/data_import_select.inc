@@ -69,7 +69,7 @@ if ($offset == '') $offset = 0;
 if ($pageSize == '') $pageSize = 0;
 if ($totalRecords == '') $totalRecords = 0;
 
-$spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array(DataSyncManager, onItemRow), array(DataSyncManager, isRowSelected));
+$spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array('DataSyncManager', 'onItemRow'), array('DataSyncManager', 'isRowSelected'));
 $spreadsheet->formCSS = "list spreadsheet small";
 
 $spreadsheet->submitLabel = "Import $name";
@@ -83,7 +83,7 @@ if ($method == "POST")
 	{
 		Fakoli::notify("Records imported");
 
-		$spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array(DataSyncManager, onItemRow), array(DataSyncManager, isRowSelected));
+		$spreadsheet = new SpreadsheetForm($form, $items, 0, "POST", "", "", array('DataSyncManager', 'onItemRow'), array('DataSyncManager', 'isRowSelected'));
 		$spreadsheet->formCSS = "list spreadsheet small";
 		
 		$spreadsheet->submitLabel = "Import $name";

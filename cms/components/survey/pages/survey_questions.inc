@@ -62,9 +62,9 @@ $mgr = new SurveyCreateManager($survey);
 
 $table = new DataListView($xrefs, "SurveyQuestions");
 $table->column("Question", "<a href='survey_question_form?survey_id={survey_id}&survey_question_id={survey_question_id}'>{Question.question}</a>")
-	->column("Options", array(QuestionTableHelper, formatOptions))
-	->column("Required", array(QuestionTableHelper, formatRequired))
-	->column("Remove", array(QuestionTableHelper, formatRemove), false, "text-align: center")
+	->column("Options", array('QuestionTableHelper', 'formatOptions'))
+	->column("Required", array('QuestionTableHelper', 'formatRequired'))
+	->column("Remove", array('QuestionTableHelper', 'formatRemove'), false, "text-align: center")
 ;
 
 $table->emptyMessage = "There are no questions defined.";

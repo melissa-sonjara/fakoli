@@ -65,7 +65,7 @@ class RssFeedManager
 	}
 	
 	static function registerScheduledRSSWorkers(){
-		ScheduledTaskManager::registerWorker("RSS", "RSS Updates", array(RssFeedManager, pullFeed));
+		ScheduledTaskManager::registerWorker("RSS", "RSS Updates", array('RssFeedManager', 'pullFeed'));
 	}
 }
 

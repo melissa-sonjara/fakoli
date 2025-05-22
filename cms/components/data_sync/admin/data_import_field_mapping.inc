@@ -66,7 +66,7 @@ $columnSelect->dropdownMessage = "Click to Select Columns";
 $form->readonly("client_field");
 $form->getRenderer("client_field")->template = "prettify";
 
-$spreadsheet = new SpreadsheetForm($form, $fieldMappings, 0, "POST", "", "", array(FieldMappingHelper, onItemRow));
+$spreadsheet = new SpreadsheetForm($form, $fieldMappings, 0, "POST", "", "", array('FieldMappingHelper', 'onItemRow'));
 $spreadsheet->formCSS = "list spreadsheet small";
 
 $spreadsheet->submitLabel = "Save Field Mapping";

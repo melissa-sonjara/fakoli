@@ -75,7 +75,7 @@ $subpages = $siteMapPage->Children("ORDER BY sort_order");
 if(count($subpages) > 1)
 {
 	$table = new DataListView($subpages, "site_map_subpages");
-	$table->column("URL", array(SiteMapHelper, formatURL), false);
+	$table->column("URL", array('SiteMapHelper', 'formatURL'), false);
 	
 	$table->filter = false;
 	$table->sortable = false;

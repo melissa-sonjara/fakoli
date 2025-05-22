@@ -39,7 +39,7 @@ class CaptchaManager
 	
 	static function registerSettingsFormExtension()
 	{
-		SettingsManager::registerExtension("captcha", array(CaptchaManager, settingsExtension));		
+		SettingsManager::registerExtension("captcha", array('CaptchaManager', 'settingsExtension'));		
 	}
 		
 	static function settingsExtension($form)

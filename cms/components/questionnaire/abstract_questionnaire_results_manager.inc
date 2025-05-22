@@ -213,7 +213,7 @@ abstract class AbstractQuestionnaireResultsManager extends AbstractQuestionnaire
 		$questions = $this->getQuestions();
 		$table = new DataListView($questions, "QuestionnaireQuestions");
 		$table->column("Question", "{question}")
-			->column("Question Name", array(QuestionnaireHelper, formatQuestionNameInputField), false)
+			->column("Question Name", array('QuestionnaireHelper', 'formatQuestionNameInputField'), false)
 			;
 
 		$table->emptyMessage = "There are no questions defined.";

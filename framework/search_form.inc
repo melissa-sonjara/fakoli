@@ -632,7 +632,7 @@ class SearchParameters
 	 * 
 	 * @param $field - the field name in the obj to be queried
 	 * 
-	 * @handler - callback function such as array(MyClass, MyFunction)
+	 * @handler - callback function such as array('MyClass', 'MyFunction')
 	 * 
 	 * When the function is called, it is given the 
 	 * parameters $name and $value

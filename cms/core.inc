@@ -440,7 +440,7 @@ class Fakoli
 		
 		foreach($menu as $category => $items)
 		{
-			uasort($menu[$category], array(Fakoli, compareByWeight));
+			uasort($menu[$category], array('Fakoli', 'compareByWeight'));
 		}
 		
 		Cache::put("fakoli_admin_menu", $menu);

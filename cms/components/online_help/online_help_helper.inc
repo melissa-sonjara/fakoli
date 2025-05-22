@@ -69,8 +69,8 @@ class OnlineHelpHelper
 		$table = new DataListView($pages, "help_pages");
 		$table->column("Help Page", "<a href='help_page_form?help_page_id={help_page_id}&help_book_id={help_book_id}'>{title}</a>")
 			->column("Identifier", "{identifier}", false, "width: 25%")
-			->column("Content", array(OnlineHelpHelper, formatHelpPageContent), false, "width: 30%")
-			->column("Subpages", array(OnlineHelpHelper, formatSubPages), false, "width: 20%")
+			->column("Content", array('OnlineHelpHelper', 'formatHelpPageContent'), false, "width: 30%")
+			->column("Subpages", array('OnlineHelpHelper', 'formatSubPages'), false, "width: 20%")
 			->column("Public", "{public:Yes/No}", false, "text-align: center; width: 15%")
 			;
 		

@@ -630,7 +630,7 @@ class BlogSubscriberListView
 			$this->table->column("Organization", "{organization}", true);
 		}
 		
-		$this->table->column("Remove", array(BlogSubscriberListView, formatUnsubscribeLink), true, "width: 40%; text-align: center");
+		$this->table->column("Remove", array('BlogSubscriberListView', 'formatUnsubscribeLink'), true, "width: 40%; text-align: center");
 			
 		$this->table->filter = true;
 		$this->table->sortable = true;

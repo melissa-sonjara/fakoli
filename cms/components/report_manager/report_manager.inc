@@ -110,7 +110,7 @@ class XXReportManager extends ReportManager
  * new RelatedItemSelectFieldRenderer($this->getTable(Program)->form, "state", "State", 'State', "ORDER BY name", "name", "state_id");	
  * 
  * $this->getTable(Program)->params->setParam("state", "equal", $_REQUEST["state:equal"]);
- * $this->getTable(Program)->params->setHandler("state", array(ProgramReportManager, getStateConstraint));
+ * $this->getTable(Program)->params->setHandler("state", array('ProgramReportManager', 'getStateConstraint'));
  * 
  * @author andy
  *

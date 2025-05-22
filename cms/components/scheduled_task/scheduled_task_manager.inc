@@ -31,7 +31,7 @@ class ScheduledTaskManager
 	 */
 	static function registerScheduledTaskWorkers()
 	{
-		ScheduledTaskManager::registerWorker("scheduled_task", "Validate Configuration", array(ScheduledTaskManager, testTask));
+		ScheduledTaskManager::registerWorker("scheduled_task", "Validate Configuration", array('ScheduledTaskManager', 'testTask'));
 	}
 	
 	static function setDefaults()

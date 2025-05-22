@@ -65,7 +65,7 @@ $form->onSavePreProcess = function($form)
 	}
 };
 
-$imageUpload = new FileUploadFieldRenderer($form, "image_file", "Image File", array(ImageManager, imageUploadHandler));
+$imageUpload = new FileUploadFieldRenderer($form, "image_file", "Image File", array('ImageManager', 'imageUploadHandler'));
 $imageUpload->size = 60;
 
 $form->required( "title");

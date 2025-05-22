@@ -43,7 +43,7 @@ $questions = Query::create('SurveyQuestion', "WHERE question_type_id != 7 AND su
 $table = new DataListView($xrefs, "SurveyQuestions");
 $table->column("Question", "{Question.question}")
 	->column("Question Type", "{QuestionType.name}", false, "width: 15%")
-	->column("Options", array(QuestionTableHelper, formatOptions))
+	->column("Options", array('QuestionTableHelper', 'formatOptions'))
 	->column("Answers", "")
 	->column("Graph", "")
 	;

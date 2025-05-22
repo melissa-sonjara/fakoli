@@ -333,7 +333,7 @@ class BlogManager
 	
 	static function registerScheduledTaskWorkers()
 	{
-		ScheduledTaskManager::registerWorker("blog", "Send Digests", array(BlogManager, sendDigests));
+		ScheduledTaskManager::registerWorker("blog", "Send Digests", array('BlogManager', 'sendDigests'));
 	}
 }
 

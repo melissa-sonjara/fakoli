@@ -1567,7 +1567,7 @@ class DataItem extends AbstractDataItem
 	 * 3. Inline static method call:
 	 * syntax:  {class::method}
 	 * example: {MyHelper::getComplicatedOutput}
-	 * This works the same as passing array(MyHelper, getComplicatedOutput)
+	 * This works the same as passing array('MyHelper', 'getComplicatedOutput')
 	 * to a DataListView. It calls the static method getComplicatedOutput()
 	 * on the MyHelper class, passing the current object in as a parameter.
 	 * The new inline format means that you can use it as part of more
