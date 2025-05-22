@@ -85,7 +85,7 @@ class VideoGallery extends DataItem
 			$constraint = "WHERE ";
 		}
 		$constraint .= "video_gallery_id={$this->video_gallery_id}";
-		return queryValue(Video, "COUNT(1)", $constraint);
+		return queryValue('Video', "COUNT(1)", $constraint);
 	}
 	
 	function getGalleryDirectory()

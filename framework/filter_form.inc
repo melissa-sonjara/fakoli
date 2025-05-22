@@ -318,7 +318,7 @@ ENDSCRIPT;
 			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
-				if(get_class($renderer) == DateRangeFilterRenderer)
+				if(get_class($renderer) == 'DateRangeFilterRenderer')
 				{
 					$dateRangeField = $field;
 					continue;
@@ -439,7 +439,7 @@ class FilterFieldRenderer extends SelectFieldRenderer
 	{
 		$this->options = $options;
 		$this->label = ($label) ? $label : prettify($field);
-		parent::__construct($form);
+		parent::__construct($form, $field, $this->label, $options);
 		if ($form->getData()->hasField($field))
 		{
 			// JDG 5/30/11 - don't crash on additiona/psuedo fields
