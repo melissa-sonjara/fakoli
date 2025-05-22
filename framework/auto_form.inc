@@ -108,8 +108,10 @@ class AutoForm
 	var $interstitialMessage = null;	///< Specifies the message to display in an interstitial while the form is being submitted
 	var $interstitialSpinner = '/fakoli/images/loader.gif'; ///< Set this property to override the default interstitial spinner animation
 	
-    var $fields;	///< Local field cache
+    var $fields = array();	///< Local field cache
 
+	var $renderedFields = array(); ///< List of fields that have been rendered
+	
     var $groups = array(); 				///< List of field groups
     var $collapsibleGroups = array(); 	///< List of collapsible groups and their default states
     var $groupDescriptions = array();	///< List of group descriptions
