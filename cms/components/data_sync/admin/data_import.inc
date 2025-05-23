@@ -10,7 +10,10 @@ $dummy->filter = new InclusionFilter("mapping_id");
 $form = new AutoForm($dummy);
 
 $form->submitLabel = "Upload Data";
-$form->customSaveHandler = dataImportDummySave;
+$form->customSaveHandler = function ($form)
+{
+	return true;
+};
 
 $adapters = DataSyncManager::getAvailableDataAdapters();
 $adapters = array_combine($adapters, $adapters);
@@ -47,8 +50,5 @@ $form->drawForm();
 ?>
 </div>
 <?
-function dataImportDummySave($form)
-{
-	return true;
-}
+
 ?>

@@ -50,7 +50,7 @@ $events = query('Event', "$constraint ORDER BY start_date");
 $lastUpdated = "";
 
 $table = new DataListView($events, "events");
-$table->column("Event", formatEvent, true, "width: 30%")
+$table->column("Event", 'formatEvent', true, "width: 30%")
 	  ->column("Calendar", "{Calendar.name}", true, "width: 15%")
 	  ->column("Location", "{location}", true, "width: 25%")
 	  ->column("Start Date", "{start_date}", true, "width: 15%")
@@ -62,7 +62,7 @@ $table->pageSize = 20;
 $table->emptyMessage = "No Events defined";
 
 $facetManager = new FacetManager('facet_manager', $table);
-TaxonomyManager::addFacets($facetManager, Event, true, "160px", "200px", "200px");
+TaxonomyManager::addFacets($facetManager, 'Event', true, "160px", "200px", "200px");
 
 $script .= $facetManager->writeScript();
 $script .= $filter->writeScript();

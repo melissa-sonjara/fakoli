@@ -52,7 +52,12 @@ $form->annotate("name", "The display name for the role (shown in forms and table
 $homePageSelect = new CMSLinkSelectFieldRenderer($form, "home_page", "Home Page");
 
 $form->allowDelete = true;
-$form->onDelete = deleteRole;
+$form->onDelete = function ($role)
+{
+	ComponentManager::fireEvent("DeleteRole", $role->role);	
+	$role->delete();
+	redirect("/admin/roles");
+};
 
 $form->button("Cancel", $redirect);
 
@@ -78,10 +83,4 @@ $script .= $form->writeScript();
 
 $form->drawForm();
 
-function deleteRole($role)
-{
-	ComponentManager::fireEvent("DeleteRole", $role->role);	
-	$role->delete();
-	redirect("/admin/roles");
-}
 ?>

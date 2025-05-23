@@ -51,7 +51,7 @@ $table->column("User", "<a href='/admin/authentication_token_form?authentication
 	  ->column("Role", "{User.role}", "width: 15%")
 	  ->column("Token", "{token}", true, "width: 40%")
 	  ->column("Last Access", "{last_access:m/d/Y g:ia}", true, "width: 15%")
-	  ->column("Enabled", formatEnabled, false, "text-align: center");
+	  ->column("Enabled", 'formatEnabled', false, "text-align: center");
 	  
 $table->emptyMessage = "No authentication tokens have been generated.";
 $table->pageSize = 10;
