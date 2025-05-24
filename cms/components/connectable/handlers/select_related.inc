@@ -29,7 +29,7 @@ $from = get_class($source).":".$source->get($source->getPrimaryKey());
 $createURL = ConnectableManager::$contextRouter . "?from=$from&to=$to";
 $isScript = false;;
 
-if (method_exists($target, getConnectableCreateHandler))
+if (method_exists($target, 'getConnectableCreateHandler'))
 {
 	$createHandler = $target->getConnectableCreateHandler();
 	$createURL = "{$createHandler}('{$createURL}'); return false;";

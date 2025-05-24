@@ -20,7 +20,7 @@ class ArticleManager
 			global $user;
 			
 			$mgr = new UserManager();
-			$article->author = (method_exists($mgr, getUserFullName)) ? $mgr->getUserFullName($user) : "";
+			$article->author = (method_exists($mgr, 'getUserFullName')) ? $mgr->getUserFullName($user) : "";
 		}
 
 		$form = new AutoForm($article);

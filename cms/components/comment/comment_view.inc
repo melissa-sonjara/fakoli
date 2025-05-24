@@ -326,7 +326,7 @@ class CommentView
 		$xref->set($key_name, $key_value);
 		$xref->set("comment_id", $obj->get("comment_id"));
 		
-		if (method_exists($xref, verifyEnabled))
+		if (method_exists($xref, 'verifyEnabled'))
 		{
 			if (!$xref->verifyEnabled($key_value))
 			{

@@ -418,7 +418,7 @@ class Fakoli
 		foreach($components as $name => $component)
 		{
 			$manifest = $component->loadManifest();
-			if (method_exists($manifest, getAdminMenu))
+			if (method_exists($manifest, 'getAdminMenu'))
 			{
 				$componentMenuItems = $manifest->getAdminMenu();
 				if ($componentMenuItems)
@@ -590,7 +590,7 @@ class Fakoli
 			{
 				trace("** No manifest file found for {$component->name}", 1);
 			}
-			else if (method_exists($manifest, getScripts))
+			else if (method_exists($manifest, 'getScripts'))
 			{
 				trace("Adding scripts for {$component->name}", 1);
 				// Calculate union of scripts
@@ -639,7 +639,7 @@ class Fakoli
 			{
 				trace("** No manifest file found for {$component->name}", 1);
 			}
-			else if (method_exists($manifest, getStyles))
+			else if (method_exists($manifest, 'getStyles'))
 			{
 				trace("Adding styles for {$component->name}", 1);
 				// Calculate union of styles

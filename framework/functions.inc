@@ -1016,7 +1016,7 @@ function trace($msg, $lvl = 3, $callStack = null)
 	{
 		switch($config["trace_detail"])
 		{
-		case TraceDetailFull:
+		case 'TraceDetailFull':
 			
 			$callStack = $callStack ? $callStack : debug_backtrace();
 			if (count($callStack) > 1)
@@ -1039,7 +1039,7 @@ function trace($msg, $lvl = 3, $callStack = null)
 			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s")." : ".$_SERVER['REQUEST_URI']." : ".$ref." ".$msg."\r\n", 3, $config["trace_path"]);
 			break;
 
-		case TraceDetailHigh:
+		case 'TraceDetailHigh':
 			
 			$callStack = $callStack ? $callStack : debug_backtrace();
 
@@ -1065,11 +1065,11 @@ function trace($msg, $lvl = 3, $callStack = null)
 			break;
 			
 				
-		case TraceDetailMedium:
+		case 'TraceDetailMedium':
 			error_log("[".$traceLevels[$lvl]."] ".date("Y-m-d H:i:s : ").$msg."\r\n", 3, $config["trace_path"]);
 			break;
 
-		case TraceDetailNormal:
+		case 'TraceDetailNormal':
 		default:
 			
 			error_log("[".$traceLevels[$lvl]."] ".$msg."\r\n", 3, $config["trace_path"]);

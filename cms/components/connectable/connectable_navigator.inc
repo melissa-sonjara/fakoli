@@ -88,7 +88,7 @@ ENDSCRIPT;
 		$createURL = ConnectableManager::$contextRouter . "?from=$from&to=$target";
 		$createHandler = "";
 		
-		if (method_exists($obj, getConnectableCreateHandler))
+		if (method_exists($obj, 'getConnectableCreateHandler'))
 		{
 			$createHandler = $obj->getConnectableCreateHandler();
 			$createHandler = " onclick='{$createHandler}(\"{$createURL}\"); return false;'";

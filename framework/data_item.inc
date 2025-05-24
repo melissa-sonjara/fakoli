@@ -213,7 +213,7 @@ class DataItem extends AbstractDataItem
 	 * is the same as the supplied class and returns a reference if so. If not an exception is
 	 * thrown.
 	 * @param string $class
-	 * @return instance of the specified class, if compatible
+	 * @return object instance of the specified class, if compatible
 	 * @throws DataItemException
 	 */
 	function cast($class)
