@@ -52,7 +52,7 @@ class OptimizeManager
 	
 	static $minifier = null;
 	
-	function registerMinifier($minifier)
+	static function registerMinifier($minifier)
 	{
 		OptimizeManager::$minifier = $minifier;
 	}
