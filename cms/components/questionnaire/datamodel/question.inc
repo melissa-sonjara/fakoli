@@ -127,7 +127,7 @@ abstract class AbstractQuestion extends DataItem
 		}
 	}
 	
-	function AbstractQuestion()
+	function __construct()
 	{
 	}
 

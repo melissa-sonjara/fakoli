@@ -38,7 +38,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 abstract class AbstractQuestionnaireResponse extends DataItem
 {
-	function AbstractQuestionnaireResponse()
+	function __construct()
 	{
 		
 	}

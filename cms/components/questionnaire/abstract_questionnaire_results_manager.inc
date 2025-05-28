@@ -23,7 +23,7 @@ abstract class AbstractQuestionnaireResultsManager extends AbstractQuestionnaire
 {
 	var $item;
 
-	function AbstractQuestionnaireResultsManager($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

@@ -201,7 +201,7 @@ abstract class UpgradeManager
 	 * Fakoli. Custom components take precedence over
 	 * Fakoli (e.g., custom user component over Fakoli's user component.
 	 */
-	function UpgradeManager()
+	function __construct()
 	{
 		global $config;
 	

@@ -39,7 +39,7 @@
 abstract class AbstractQuestionnaireAnswer extends DataItem
 {
 	
-	function AbstractQuestionnaireAnswer()
+	function __construct()
 	{
 		
 	}

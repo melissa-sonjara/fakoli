@@ -46,7 +46,7 @@
 abstract class AbstractQuestionnaire extends DataItem
 {
 	
-	function AbstractQuestionnaire()
+	function __construct()
 	{
 		
 	}

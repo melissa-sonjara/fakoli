@@ -25,7 +25,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 	var $item;				//<	The questionnaire or survey object
 	var $validation_msg;
 
-	function AbstractQuestionnaireCreateManager($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

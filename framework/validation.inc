@@ -1727,7 +1727,7 @@ abstract class ValidateTabSet
 {
 	var $msg;
 	
-	function ValidateTabSet()
+	function __construct()
 	{	
 	}
 	

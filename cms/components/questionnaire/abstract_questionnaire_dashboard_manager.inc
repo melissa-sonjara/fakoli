@@ -17,7 +17,7 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 {
 	var $item;
 
-	function AbstractQuestionnaireDashboardManager($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

@@ -52,7 +52,7 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 	var $excludes = array();			///< Array of emails to be set to excluded from results
 	var $addl_recipients = array();		///< Array of additional recipients after duplicates have been removed
 
-	function AbstractQuestionnaireSendManager($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 

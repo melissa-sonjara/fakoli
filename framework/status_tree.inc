@@ -190,7 +190,7 @@ abstract class StatusBlockView
 	var $activityName;
 	var $deleteUrl;
 		
-	function StatusBlockView($item)
+	function __construct($item)
 	{
 		$this->item = $item;
 	}

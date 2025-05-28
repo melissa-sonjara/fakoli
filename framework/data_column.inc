@@ -99,7 +99,7 @@ abstract class FooterColumn
 	var $colspan;	///< The colspan for this column
 	var $style;		///< Any CSS styles to be applied to this column
 	
-	function FooterColumn($style = "", $colspan = 1)
+	function __construct($style = "", $colspan = 1)
 	{
 		$this->colspan = $colspan;
 		$this->style = $style;
