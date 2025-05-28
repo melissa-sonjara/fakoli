@@ -1090,7 +1090,7 @@ class DataItem extends AbstractDataItem
 			{
 				$this->set($field, $_POST[$field]);
 			}
-			elseif (!array_key_exists($field, $_POST) AND ($type == Boolean))
+			elseif (!array_key_exists($field, $_POST) AND ($type == 'Boolean'))
 			{
 				$this->$field = 0;
 			}
@@ -1130,7 +1130,7 @@ class DataItem extends AbstractDataItem
 			{
 				$this->$field = $params[$field];
 			}
-			elseif (!array_key_exists($field, $params) AND ($type == Boolean))
+			elseif (!array_key_exists($field, $params) AND ($type == 'Boolean'))
 			{
 				$this->$field = 0;
 			}

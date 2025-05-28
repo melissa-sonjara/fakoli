@@ -55,7 +55,7 @@ class ActivityTracker
 			$sessionLog = new UserActivitySession();
 			$sessionLog->session_id = $sessionLogID;
 			
-			$update = "SET user_id=".$activity->user_id.", session_end = ".$activity->quoteFieldValue('activity_time', DateTime).", request_count = request_count + 1";
+			$update = "SET user_id=".$activity->user_id.", session_end = ".$activity->quoteFieldValue('activity_time', 'DateTime').", request_count = request_count + 1";
 			if (startsWith($activity->uri, "/action/activity_tracker/save"))
 			{
 				$update .= ", feedback_count = feedback_count + 1";
