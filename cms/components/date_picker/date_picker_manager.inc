@@ -20,7 +20,7 @@ class DatePickerManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("date_picker", "use_mooTools_date_picker", false, Boolean);
+		Settings::setDefaultValue("date_picker", "use_mooTools_date_picker", false, 'Boolean');
 		Settings::setDefaultValue("date_picker", "date_picker_theme", "Dashboard", 'String', "", "", "Bootstrap\nDashboard\njqui\nMinimal\nVista");
 	}
 
