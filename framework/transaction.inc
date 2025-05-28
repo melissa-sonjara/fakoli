@@ -70,8 +70,17 @@ class DataTransaction
 		{
 			throw new DataItemException("Attempt to rollback a previously completed transaction");
 		}			
-		
-		$this->conn->rollback();
+
+		try
+		{
+			$this->conn->rollback();
+		}
+		catch(PDOException $e)
+		{
+			// If the transaction is already closed, we ignore the error
+			trace($e, 2);		
+		}
+
 		$this->conn = null;
 	}
 	
@@ -85,7 +94,16 @@ class DataTransaction
 			throw new DataItemException("Attempt to commit a previously completed transaction");
 		}	
 		
-		$this->conn->commit();
+		try
+		{
+			$this->conn->commit();
+		}
+		catch(PDOException $e)
+		{
+			// If the transaction is already closed, we ignore the error
+			trace($e, 2);
+		}
+
 		$this->conn = null;
 	}
 	
