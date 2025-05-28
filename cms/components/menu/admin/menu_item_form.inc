@@ -65,23 +65,6 @@ $form = new AutoForm($menuItem);
 $form->required("title");
 //$form->allowDelete = true;
 $form->hide("parent_id", "menu_id", "page_id", "identifier");
-/*
-$pageChoices = array("Content Pages" => array(), "Component Pages" => array());
-
-$contentPages = Query::create('Page', "ORDER BY page_title")->execute();
-foreach($contentPages as $page)
-{
-	$pageChoices["Content Pages"][$page->identifier] = $page->page_title;
-}
-$componentPages = Query::create('ComponentPage', "ORDER BY component, page_title")->execute();
-foreach($componentPages as $page)
-{
-	$pageChoices["Component Pages"][$page->identifier] = "$page->component: $page->page_title";
-}
-
-$identifierSelect = new SelectFieldRenderer($form, "identifier", "Page", $pageChoices, null, true);
-$identifierSelect = new CMSItemSelectFieldRenderer($form, "identifier", "Page", null);
-*/
 
 $urlSelect = new CMSLinkSelectFieldRenderer($form, "url", "Link");
 
@@ -105,17 +88,7 @@ if ($method == "POST")
 		}		
 	}
 	else 
-	{
-		// Set up the page template for pages added via "or add new"
-		$pageTemplate = new Page();
-		$pageTemplate->identifier = codify(strtolower($_POST['autoform_add_page_id']));
-		$pageTemplate->author = "{$user->first_name} {$user->last_name}";
-		$pageTemplate->created_date = now();
-		$pageTemplate->site_id = $site->site_id;
-		$pageTemplate->template = $site->default_template;
-		
-		$pageSelect->templateItem = $pageTemplate;
-		
+	{	
 		$form->save();
 		if ($form->deleted)
 		{
