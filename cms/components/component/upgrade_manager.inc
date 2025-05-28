@@ -343,6 +343,8 @@ abstract class UpgradeManager
 			trace("** Upgrade has ".count($lines)." lines", 3);
 		}
 		
+		fclose($fp);
+
 		$sqlStatements = $this->parseSQLStatements($lines);
 
 		if(count($sqlStatements) == 0)
@@ -354,7 +356,7 @@ abstract class UpgradeManager
 		try
 		{
 			$rtn = $this->executeSQLStatements($sqlStatements);
-			return rtn;
+			return $rtn;
 		}
 		catch(Exception $e)
 		{
@@ -408,7 +410,9 @@ abstract class UpgradeManager
 			trace("Executing SQL Statements", 2);
 			
 			$db = ConnectionManager::getConnection();
-			$db->beginTransaction();
+			// Transactions get automatically committed when running DDL
+			// statements, so we cannot use transactions here as of PHP 8.
+			//$db->beginTransaction();
 	
 			foreach($sqlStatements as $sqlStatement)
 			{
@@ -416,13 +420,11 @@ abstract class UpgradeManager
 				$db->exec($sqlStatement);	
 			}
 
-			$db->commit();
-			fclose($fp);	
+			//$db->commit();
 		}
 		catch(PDOException $e)
 		{
-			$db->rollBack();
-			fclose($fp);
+			//$db->rollBack();
 			throw $e;	
 		}
 
