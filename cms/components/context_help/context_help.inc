@@ -44,12 +44,12 @@ class ContextHelpSerializationHandler
 
 	function export()
 	{
-		return SerializationManager::serialize(ContextHelp, "ORDER BY help_id");
+		return SerializationManager::serialize('ContextHelp', "ORDER BY help_id");
 	}
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(ContextHelp, $doc, $tx);
+		SerializationManager::unserialize('ContextHelp', $doc, $tx);
 	}	
 }
 

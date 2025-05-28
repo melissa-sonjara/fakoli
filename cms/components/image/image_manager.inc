@@ -46,8 +46,8 @@ class ImageSerializationHandler
 	function export()
 	{
 		$xml  = "\n<ImageMap>";
-		$xml .= SerializationManager::serialize(ImageGallery, "ORDER BY gallery_id");
-		$xml .= SerializationManager::serialize(ImageRecord, "ORDER BY image_id");
+		$xml .= SerializationManager::serialize('ImageGallery', "ORDER BY gallery_id");
+		$xml .= SerializationManager::serialize('ImageRecord', "ORDER BY image_id");
 		$xml .= "</ImageMap>";
 
 		return $xml;
@@ -55,8 +55,8 @@ class ImageSerializationHandler
 
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(ImageGallery, $doc, $tx);
-		SerializationManager::unserialize(ImageRecord, $doc, $tx);
+		SerializationManager::unserialize('ImageGallery', $doc, $tx);
+		SerializationManager::unserialize('ImageRecord', $doc, $tx);
 	}
 }
 

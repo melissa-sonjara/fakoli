@@ -46,14 +46,14 @@ class OnlineHelpSerializationHandler
 
 	function export()
 	{
-		return SerializationManager::serialize(HelpBook, "ORDER BY help_book_id");
-		return SerializationManager::serialize(HelpPage, "ORDER BY help_page_id");
+		return SerializationManager::serialize('HelpBook', "ORDER BY help_book_id");
+		return SerializationManager::serialize('HelpPage', "ORDER BY help_page_id");
 	}
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(HelpBook, $doc, $tx);
-		SerializationManager::unserialize(HelpPage, $doc, $tx);
+		SerializationManager::unserialize('HelpBook', $doc, $tx);
+		SerializationManager::unserialize('HelpPage', $doc, $tx);
 	}	
 }
 

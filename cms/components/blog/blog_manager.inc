@@ -48,8 +48,8 @@ class BlogSerializationHandler
 	function export()
 	{
 		$xml  = "\n<ArticleMap>";
-		$xml .= SerializationManager::serialize(Article, "ORDER BY article_id");
-		$xml .= SerializationManager::serialize(Blog, "ORDER BY blog_id");
+		$xml .= SerializationManager::serialize('Article', "ORDER BY article_id");
+		$xml .= SerializationManager::serialize('Blog', "ORDER BY blog_id");
 		$xml .= "</ArticleMap>";
 		
 		return $xml;
@@ -57,8 +57,8 @@ class BlogSerializationHandler
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(Article, $doc, $tx);
-		SerializationManager::unserialize(Blog, $doc, $tx);		
+		SerializationManager::unserialize('Article', $doc, $tx);
+		SerializationManager::unserialize('Blog', $doc, $tx);		
 	}		
 }
 
@@ -116,7 +116,7 @@ class BlogManager
 	static function registerSearchables($searchables)
 	{
 		trace("BlogManager registerSearchables", 3);
-		$searchables["blog"] = array(Blog);
+		$searchables["blog"] = array('Blog');
 		return $searchables;
 	}
 	

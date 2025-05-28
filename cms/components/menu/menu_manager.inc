@@ -47,8 +47,8 @@ class MenuSerializationHandler
 	function export()
 	{
 		$xml  = "\n<MenuMap>";
-		$xml .= SerializationManager::serialize(Menu, "ORDER BY menu_id");
-		$xml .= SerializationManager::serialize(MenuItem, "ORDER BY menu_item_id");
+		$xml .= SerializationManager::serialize('Menu', "ORDER BY menu_id");
+		$xml .= SerializationManager::serialize('MenuItem', "ORDER BY menu_item_id");
 		$xml .= "</MenuMap>";
 		
 		return $xml;
@@ -56,8 +56,8 @@ class MenuSerializationHandler
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(Menu, $doc, $tx);
-		SerializationManager::unserialize(MenuItem, $doc, $tx);		
+		SerializationManager::unserialize('Menu', $doc, $tx);
+		SerializationManager::unserialize('MenuItem', $doc, $tx);		
 	}	
 }
 

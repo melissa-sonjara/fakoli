@@ -47,12 +47,12 @@ class SettingsSerializationHandler
 
 	function export()
 	{
-		return SerializationManager::serialize(Settings, "ORDER BY settings_id");
+		return SerializationManager::serialize('Settings', "ORDER BY settings_id");
 	}
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(Settings, $doc, $tx);
+		SerializationManager::unserialize('Settings', $doc, $tx);
 	}	
 }
 

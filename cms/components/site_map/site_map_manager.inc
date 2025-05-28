@@ -322,14 +322,14 @@ class SiteMapSerializationHandler
 	function export()
 	{
 		$xml .= "\n<SiteMapMap>";
-		$xml .= SerializationManager::serialize(SiteMap, "ORDER BY site_map_id");
+		$xml .= SerializationManager::serialize('SiteMap', "ORDER BY site_map_id");
 		$xml .= "\n</SiteMapMap>";
 		return $xml;
 	}
 
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(SiteMap, $doc, $tx);
+		SerializationManager::unserialize('SiteMap', $doc, $tx);
 	}
 }
 

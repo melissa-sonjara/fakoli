@@ -48,8 +48,8 @@ class DocumentSerializationHandler
 	function export()
 	{
 		$xml  = "\n<DocumentMap>";
-		$xml .= SerializationManager::serialize(DocumentLibrary, "ORDER BY document_library_id");
-		$xml .= SerializationManager::serialize(Document, "ORDER BY document_id");
+		$xml .= SerializationManager::serialize('DocumentLibrary', "ORDER BY document_library_id");
+		$xml .= SerializationManager::serialize('Document', "ORDER BY document_id");
 		$xml .= "</DocumentMap>";
 		
 		return $xml;
@@ -57,8 +57,8 @@ class DocumentSerializationHandler
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(DocumentLibrary, $doc, $tx);
-		SerializationManager::unserialize(Document, $doc, $tx);		
+		SerializationManager::unserialize('DocumentLibrary', $doc, $tx);
+		SerializationManager::unserialize('Document', $doc, $tx);		
 	}			
 }
 	
@@ -968,7 +968,7 @@ function deleteFolderResult(result)
 		trace("DocumentManager registerSearchables", 3);
 		if (!Settings::getValue("solr", "enabled"))
 		{
-			$searchables["document"] = array(Document);
+			$searchables["document"] = array('Document');
 		}
 		return $searchables;
 	}

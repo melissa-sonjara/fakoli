@@ -19,8 +19,8 @@ class LinkLibrarySerializationHandler
 	function export()
 	{
 		$xml  = "\n<LinkLibraryMap>";
-		$xml .= SerializationManager::serialize(LinkLibrary, "ORDER BY link_library_id");
-		$xml .= SerializationManager::serialize(LinkRecord, "ORDER BY link_id");
+		$xml .= SerializationManager::serialize('LinkLibrary', "ORDER BY link_library_id");
+		$xml .= SerializationManager::serialize('LinkRecord', "ORDER BY link_id");
 		$xml .= "</LinkLibraryMap>";
 
 		return $xml;
@@ -28,8 +28,8 @@ class LinkLibrarySerializationHandler
 
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(LinkLibrary, $doc, $tx);
-		SerializationManager::unserialize(LinkRecord, $doc, $tx);
+		SerializationManager::unserialize('LinkLibrary', $doc, $tx);
+		SerializationManager::unserialize('LinkRecord', $doc, $tx);
 	}
 }
 
@@ -198,7 +198,7 @@ class LinkLibraryManager
 	static function registerSearchables($searchables)
 	{
 		trace("LinkLibraryManager registerSearchables", 3);
-		$searchables["link_library"] = array(LinkRecord);
+		$searchables["link_library"] = array('LinkRecord');
 		return $searchables;
 	}
 	

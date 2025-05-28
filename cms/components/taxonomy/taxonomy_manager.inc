@@ -43,8 +43,8 @@ class TaxonomySerializationHandler
 	function export()
 	{
 		$xml  = "\n<TaxonomyMap>";
-		$xml .= SerializationManager::serialize(Taxonomy, "ORDER BY taxonomy_id");
-		$xml .= SerializationManager::serialize(TaxonomyTerm, "ORDER BY term_id");
+		$xml .= SerializationManager::serialize('Taxonomy', "ORDER BY taxonomy_id");
+		$xml .= SerializationManager::serialize('TaxonomyTerm', "ORDER BY term_id");
 		$xml .= "</TaxonomyMap>";
 		
 		return $xml;
@@ -52,8 +52,8 @@ class TaxonomySerializationHandler
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(Taxonomy, $doc, $tx);
-		SerializationManager::unserialize(TaxonomyTerm, $doc, $tx);		
+		SerializationManager::unserialize('Taxonomy', $doc, $tx);
+		SerializationManager::unserialize('TaxonomyTerm', $doc, $tx);		
 	}		
 }
 

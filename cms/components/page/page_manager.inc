@@ -47,16 +47,16 @@ class PageSerializationHandler
 	function export()
 	{
 		$xml .= "\n<PageMap>";
-		$xml .= SerializationManager::serialize(Page, "ORDER BY page_id");
-		$xml .= SerializationManager::serialize(PageModuleXref);
+		$xml .= SerializationManager::serialize('Page', "ORDER BY page_id");
+		$xml .= SerializationManager::serialize('PageModuleXref');
 		$xml .= "\n</PageMap>";
 		return $xml;
 	}
 	
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(Page, $doc, $tx);
-		SerializationManager::unserialize(PageModuleXref, $doc, $tx);
+		SerializationManager::unserialize('Page', $doc, $tx);
+		SerializationManager::unserialize('PageModuleXref', $doc, $tx);
 	}	
 }
 

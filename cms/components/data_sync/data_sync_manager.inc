@@ -19,8 +19,8 @@ class DataSyncSerializationHandler
 	function export()
 	{
 		$xml  = "\n<DataSyncMap>";
-		$xml .= SerializationManager::serialize(DataImportProfile, "ORDER BY import_profile_id");
-		$xml .= SerializationManager::serialize(DataImportFieldMapping, "ORDER BY mapping_id");
+		$xml .= SerializationManager::serialize('DataImportProfile', "ORDER BY import_profile_id");
+		$xml .= SerializationManager::serialize('DataImportFieldMapping', "ORDER BY mapping_id");
 		$xml .= "</DataSyncMap>";
 
 		return $xml;
@@ -28,8 +28,8 @@ class DataSyncSerializationHandler
 
 	function import($doc, $tx)
 	{
-		SerializationManager::unserialize(DataImportProfile, $doc, $tx);
-		SerializationManager::unserialize(DataImportFieldMapping, $doc, $tx);
+		SerializationManager::unserialize('DataImportProfile', $doc, $tx);
+		SerializationManager::unserialize('DataImportFieldMapping', $doc, $tx);
 	}
 }
 
