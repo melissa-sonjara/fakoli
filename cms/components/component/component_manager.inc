@@ -307,6 +307,7 @@ class ComponentManager
 		}
 		catch(Exception $e)
 		{
+			trace("Component scan failed: " . $e, 1);
 			// JDG 6/1/2011 - if fails on ComponentScanComplete
 			if(isset($this->tx))
 				$this->tx->rollback();
@@ -617,7 +618,12 @@ class ComponentManager
 		{
 			echo $exit->getMessage();
 		}		
-
+		catch(Exception $e)
+		{
+			echo $e->getMessage();
+			trace("ComponentManager::dispatchAction: Exception caught in handler $handler: " . $e->getMessage(), 2);
+			throw $e;	
+		}
 		Fakoli::coreTraceLevel();
 		
 	}
