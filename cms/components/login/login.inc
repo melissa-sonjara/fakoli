@@ -628,28 +628,28 @@ class LoginManager
 		Settings::setDefaultValue("login", "enable_user_login", true, "Boolean", "Turns on or off user authentication. When turned off, no users can access the site except for admins", "Access Control");
 		Settings::setDefaultValue("login", "reject_all_blank_passwords", true, "Boolean", "Automatically reject all login attempts with a blank password. Disable this only if you have custom business logic related to new user accounts with blank passwords", "Blank Password Login Attempts");
 	
-		Settings::setDefaultValue("login", "enable_username_cookie", false, Boolean, "Enables or disables the 'Remember my username' option on the default login page", "Username Cookie");
-		Settings::setDefaultValue("login", "remember_me_text", "Remember my Username", String, "The text to display next to the 'remember me' checkbox on the default login page", "Username Cookie");
-		Settings::setDefaultValue("login", "remember_me_cookie_expiration", 15, Number, "The number of days for which the username is to be remembered", "Username Cookie");
+		Settings::setDefaultValue("login", "enable_username_cookie", false, 'Boolean', "Enables or disables the 'Remember my username' option on the default login page", "Username Cookie");
+		Settings::setDefaultValue("login", "remember_me_text", "Remember my Username", 'String', "The text to display next to the 'remember me' checkbox on the default login page", "Username Cookie");
+		Settings::setDefaultValue("login", "remember_me_cookie_expiration", 15, 'Number', "The number of days for which the username is to be remembered", "Username Cookie");
 		
-		Settings::setDefaultValue("login", "username_field_label", "Username", String, "The label for the username field on the login form", "Labels and Text", null, 1);
+		Settings::setDefaultValue("login", "username_field_label", "Username", 'String', "The label for the username field on the login form", "Labels and Text", null, 1);
 		Settings::SetDefaultValue("login", "password_help_submit_label", "  Email Me  ", String, "The text for the password help submit button", "Labels and Text", null, 2);
 		
-		Settings::setDefaultValue("login", "main_login_page", "/login", String, "Login page for desktop users", "Login Redirects");
-		Settings::setDefaultValue("login", "mobile_login_page", "", String, "Login page for mobile users (if blank, the main login page is used)", "Login Redirects");
-		Settings::setDefaultValue("login", "default_login_redirect", "", String, "The page to which users are redirected when they attempt to access the login page when logged in", "Login Redirects");
+		Settings::setDefaultValue("login", "main_login_page", "/login", 'String', "Login page for desktop users", "Login Redirects");
+		Settings::setDefaultValue("login", "mobile_login_page", "", 'String', "Login page for mobile users (if blank, the main login page is used)", "Login Redirects");
+		Settings::setDefaultValue("login", "default_login_redirect", "", 'String', "The page to which users are redirected when they attempt to access the login page when logged in", "Login Redirects");
 
-		Settings::setDefaultValue("login", "enable_account_locking", false, Boolean, "Turns on or off automatic account locking after a given number of failed login attempts", "Account Locking", null, 1);
-		Settings::setDefaultValue("login", "maximum_failed_attempts", 3, Number, "The maximum number of failed attempts before the account is locked", "Account Locking", null, 2);
-		Settings::setDefaultValue("login", "login_attempt_window", 20, Number, "The window within which the number of failed login attempts is counted (in minutes)", "Account Locking", null, 3);
-		Settings::setDefaultValue("login", "lockout_duration", 60, Number, "The duration for which the account will be locked (in minutes)", "Account Locking", null, 4);
+		Settings::setDefaultValue("login", "enable_account_locking", false, 'Boolean', "Turns on or off automatic account locking after a given number of failed login attempts", "Account Locking", null, 1);
+		Settings::setDefaultValue("login", "maximum_failed_attempts", 3, 'Number', "The maximum number of failed attempts before the account is locked", "Account Locking", null, 2);
+		Settings::setDefaultValue("login", "login_attempt_window", 20, 'Number', "The window within which the number of failed login attempts is counted (in minutes)", "Account Locking", null, 3);
+		Settings::setDefaultValue("login", "lockout_duration", 60, 'Number', "The duration for which the account will be locked (in minutes)", "Account Locking", null, 4);
 		
-		Settings::setDefaultValue("login", "enable_password_complexity_rules", true, Boolean, "", "Password Complexity", null, 1);
-		Settings::setDefaultValue("login", "minimum_password_length", 6, Number, "", "Password Complexity", null, 2);
-		Settings::setDefaultValue("login", "maximum_password_length", 128, Number, "", "Password Complexity", null, 3);
-		Settings::setDefaultValue("login", "require_digits", true, Boolean, "Require at least one numeric character", "Password Complexity", null, 4);
-		Settings::setDefaultValue("login", "require_uppercase", true, Boolean, "Require at least one uppercase character", "Password Complexity", null, 5);
-		Settings::setDefaultValue("login", "require_special", true, Boolean, "Require at least one special (punctuation or whitespace) character", "Password Complexity", null, 6);
+		Settings::setDefaultValue("login", "enable_password_complexity_rules", true, 'Boolean', "", "Password Complexity", null, 1);
+		Settings::setDefaultValue("login", "minimum_password_length", 6, 'Number', "", "Password Complexity", null, 2);
+		Settings::setDefaultValue("login", "maximum_password_length", 128, 'Number', "", "Password Complexity", null, 3);
+		Settings::setDefaultValue("login", "require_digits", true, 'Boolean', "Require at least one numeric character", "Password Complexity", null, 4);
+		Settings::setDefaultValue("login", "require_uppercase", true, 'Boolean', "Require at least one uppercase character", "Password Complexity", null, 5);
+		Settings::setDefaultValue("login", "require_special", true, 'Boolean', "Require at least one special (punctuation or whitespace) character", "Password Complexity", null, 6);
 	}
 	
 	static function registerFieldRenderers()

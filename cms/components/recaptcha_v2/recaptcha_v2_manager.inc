@@ -24,8 +24,8 @@ class RecaptchaV2Manager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("captcha", "recaptcha_site_key", "", String, "", "reCAPTCHA v2", "", 1);
-		Settings::setDefaultValue("captcha", "recaptcha_secret_key", "", String, "", "reCAPTCHA v2", "", 2);
+		Settings::setDefaultValue("captcha", "recaptcha_site_key", "", 'String', "", "reCAPTCHA v2", "", 1);
+		Settings::setDefaultValue("captcha", "recaptcha_secret_key", "", 'String', "", "reCAPTCHA v2", "", 2);
 	}
 	
 	static function registerCaptchaProvider()

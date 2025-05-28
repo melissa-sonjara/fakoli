@@ -89,21 +89,21 @@ class CommentManager
 	
 	static function setDefaults()
 	{		
-		Settings::setDefaultValue("comment", "allow_anonymous_commenting", false, Boolean, "", "Commenting Rules");
-		Settings::setDefaultValue("comment", "publish_automatically", true, Boolean, "", "Commenting Rules");
-		Settings::setDefaultValue("comment", "use_captcha", "Never", String, "Specify when to use a Captcha to verify the user", "Commenting Rules", "Never\nAnonymous Only\nAlways");
+		Settings::setDefaultValue("comment", "allow_anonymous_commenting", false, 'Boolean', "", "Commenting Rules");
+		Settings::setDefaultValue("comment", "publish_automatically", true, 'Boolean', "", "Commenting Rules");
+		Settings::setDefaultValue("comment", "use_captcha", "Never", 'String', "Specify when to use a Captcha to verify the user", "Commenting Rules", "Never\nAnonymous Only\nAlways");
 		
-		Settings::setDefaultValue("comment", "enable_item_rating", false, Boolean, "Specifies whether to display the rating control", "Comment Configuration", null, 2);
-		Settings::setDefaultValue("comment", "show_subject_field", true, Boolean, "Specifies whether users can have a title as part of their comment", "Comment Configuration", null, 1);
+		Settings::setDefaultValue("comment", "enable_item_rating", false, 'Boolean', "Specifies whether to display the rating control", "Comment Configuration", null, 2);
+		Settings::setDefaultValue("comment", "show_subject_field", true, 'Boolean', "Specifies whether users can have a title as part of their comment", "Comment Configuration", null, 1);
 		
-		Settings::setDefaultValue("comment", "username_format", "Full Name", String, 
+		Settings::setDefaultValue("comment", "username_format", "Full Name", 'String', 
 			"Specifies whether to display the full name or username (handle) of logged in commenters", "Comment Configuration", "Full Name\nUsername", 3);
 		
-		Settings::setDefaultValue("comment", "anonymous_preamble_text", "", String, 
+		Settings::setDefaultValue("comment", "anonymous_preamble_text", "", 'String', 
 					"Identifier of a Text Lookup item containing preamble text that appears at the top of the comment panel for anonymous users", 
 					"Comment Configuration", null, 4);
 		
-		Settings::setDefaultValue("comment", "logged_in_preamble_text", "", String,
+		Settings::setDefaultValue("comment", "logged_in_preamble_text", "", 'String',
 					"Identifier of a Text Lookup item containing preamble text that appears at the top of the comment panel for logged in users",
 					"Comment Configuration", null, 5);
 		

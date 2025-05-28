@@ -127,8 +127,8 @@ class ProcessManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("process", "PHP_executable", "/usr/bin/php", String, "This is the path to the PHP command line executable");
-		Settings::setDefaultValue("process", "background_process_log_file", "", String, "Optionally specify a separate log file for background processes");
+		Settings::setDefaultValue("process", "PHP_executable", "/usr/bin/php", 'String', "This is the path to the PHP command line executable");
+		Settings::setDefaultValue("process", "background_process_log_file", "", 'String', "Optionally specify a separate log file for background processes");
 	}
 
 	static function upgradeComponent($version)

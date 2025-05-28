@@ -20,10 +20,10 @@ class MobileSettingsManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("mobile_settings", "mobile_content_mode", "Deliver Full Content", String, "Sets the content delivery mode for mobile content", "", "Deliver Full Content\nUse Mobile Template\nDedicated Mobile Section");
-		Settings::setDefaultValue("mobile_settings", "mobile_content_section", "", String, "The identifier of the section providing dedicated mobile content");
+		Settings::setDefaultValue("mobile_settings", "mobile_content_mode", "Deliver Full Content", 'String', "Sets the content delivery mode for mobile content", "", "Deliver Full Content\nUse Mobile Template\nDedicated Mobile Section");
+		Settings::setDefaultValue("mobile_settings", "mobile_content_section", "", 'String', "The identifier of the section providing dedicated mobile content");
 		Settings::setDefaultValue("mobile_settings", "send_mobile_content_to_tablets", false, Boolean);
-		Settings::setDefaultValue("mobile_settings", "use_native_form_controls", false, Boolean, "Use native HTML 5 controls for date and time fields (when available on mobile device)");
+		Settings::setDefaultValue("mobile_settings", "use_native_form_controls", false, 'Boolean', "Use native HTML 5 controls for date and time fields (when available on mobile device)");
 	}
 
 	static function onInitialize()

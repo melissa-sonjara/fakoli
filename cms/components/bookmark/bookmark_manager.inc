@@ -19,7 +19,7 @@ class BookmarkManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("bookmark", "show_url", true, Boolean, "Specifies whether to show the URL in the bookmark popup window");
+		Settings::setDefaultValue("bookmark", "show_url", true, 'Boolean', "Specifies whether to show the URL in the bookmark popup window");
 	}
 
 

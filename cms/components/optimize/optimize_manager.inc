@@ -69,14 +69,14 @@ class OptimizeManager
 		Cache::invalidate("script_cache_timestamp");
 		Cache::invalidate("css_cache");
 		Cache::invalidate("css_cache_timestamp");
-		Settings::setDefaultValue("optimize", "optimize_scripts", "", Boolean, "Combine site Javascript into a single file", "Javascript", null, 1);
-		Settings::setDefaultValue("optimize", "optimize_styles", "", Boolean, "Combine site CSS into a single file", "CSS", null, 1);
+		Settings::setDefaultValue("optimize", "optimize_scripts", "", 'Boolean', "Combine site Javascript into a single file", "Javascript", null, 1);
+		Settings::setDefaultValue("optimize", "optimize_styles", "", 'Boolean', "Combine site CSS into a single file", "CSS", null, 1);
 		
-		Settings::setDefaultValue("optimize", "compress_javascript", "", Boolean, "Enable zip compression when serving Javascript", "Javascript", null, 2);
-		Settings::setDefaultValue("optimize", "compress_styles", "", Boolean, "Enable zip compression when serving CSS", "CSS", null, 2);
+		Settings::setDefaultValue("optimize", "compress_javascript", "", 'Boolean', "Enable zip compression when serving Javascript", "Javascript", null, 2);
+		Settings::setDefaultValue("optimize", "compress_styles", "", 'Boolean', "Enable zip compression when serving CSS", "CSS", null, 2);
 		
-		Settings::setDefaultValue("optimize", "compress_page_content", "", Boolean, "Enable zip compression when serving page content", "Page Content", null, 1);
-		Settings::setDefaultValue("optimize", "append_timestamp", false, Boolean, "Specifies whether to include a timestamp in the generated link for optimized scripts and styles", "Page Content", null, 2);
+		Settings::setDefaultValue("optimize", "compress_page_content", "", 'Boolean', "Enable zip compression when serving page content", "Page Content", null, 1);
+		Settings::setDefaultValue("optimize", "append_timestamp", false, 'Boolean', "Specifies whether to include a timestamp in the generated link for optimized scripts and styles", "Page Content", null, 2);
 	}
 	
 	static function preprocessScripts($scripts)

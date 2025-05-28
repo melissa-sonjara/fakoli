@@ -26,7 +26,7 @@ class VersionedContentManager
 	
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("settings", "enable_content_versioning", false, Boolean, "Enables content versioning for supported content items", "Content Versioning");
+		Settings::setDefaultValue("settings", "enable_content_versioning", false, 'Boolean', "Enables content versioning for supported content items", "Content Versioning");
 	}
 
 	static function enableVersioning($form)

@@ -45,8 +45,8 @@ class ErrorLogManager
 	static function setDefaults()
 	{
 		Settings::setDefaultValue("error_log", "enable_logging", 0, Boolean);
-		Settings::setDefaultValue("error_log", "logging_destination", "Database", String, "", "", "Database\nLog File");
-		Settings::setDefaultValue("error_log", "error_page_template",  "/fakoli/error.tpl", String,"Specify the file name of your custom error page template, if you are using one. Leave this blank to use the default error reporting template");
+		Settings::setDefaultValue("error_log", "logging_destination", "Database", 'String', "", "", "Database\nLog File");
+		Settings::setDefaultValue("error_log", "error_page_template",  "/fakoli/error.tpl", 'String',"Specify the file name of your custom error page template, if you are using one. Leave this blank to use the default error reporting template");
 	}
 	
 	static function enableLogging()

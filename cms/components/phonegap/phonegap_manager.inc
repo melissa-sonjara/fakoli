@@ -29,11 +29,11 @@ class PhonegapManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("phonegap", "enable_phonegap", true, Boolean, "Enables support for Phonegap/Cordova applications");
-		Settings::setDefaultValue("phonegap", "enable_phonegap_debugging", false, Boolean, "Enables PhoneGap debugging mode - append phonegap=1 to any URL in your desktop browser to turn on PhoneGap mode");		
-		Settings::setDefaultValue("phonegap", "phonegap_debug_version", "2.4.0", String, "The version of Phonegap that is assumed in debugging mode");
-		Settings::setDefaultValue("phonegap", "phonegap_debug_os", "android", String, "The OS of Phonegap that is assumed in debugging mode");
-		Settings::setDefaultValue("phonegap", "use_local_phonegap_files", false, Boolean, "Check this box to pull the local cordova files in the packaged app, instead of pulling them from the server (EXPERIMENTAL)");
+		Settings::setDefaultValue("phonegap", "enable_phonegap", true, 'Boolean', "Enables support for Phonegap/Cordova applications");
+		Settings::setDefaultValue("phonegap", "enable_phonegap_debugging", false, 'Boolean', "Enables PhoneGap debugging mode - append phonegap=1 to any URL in your desktop browser to turn on PhoneGap mode");		
+		Settings::setDefaultValue("phonegap", "phonegap_debug_version", "2.4.0", 'String', "The version of Phonegap that is assumed in debugging mode");
+		Settings::setDefaultValue("phonegap", "phonegap_debug_os", "android", 'String', "The OS of Phonegap that is assumed in debugging mode");
+		Settings::setDefaultValue("phonegap", "use_local_phonegap_files", false, 'Boolean', "Check this box to pull the local cordova files in the packaged app, instead of pulling them from the server (EXPERIMENTAL)");
 	}
 
 	/**

@@ -72,9 +72,9 @@ class ContextHelpManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("context_help", "context_help_label", "(?)", String, "Text to display for context help links (HTML is ok)");
-		Settings::setDefaultValue("context_help", "criteria_help_label", "(criteria)", String, "Text to display for criteria help links (HTML is ok)");
-		Settings::setDefaultValue("context_help", "show_title", true, Boolean, "Show the title heading in context help popups");
+		Settings::setDefaultValue("context_help", "context_help_label", "(?)", 'String', "Text to display for context help links (HTML is ok)");
+		Settings::setDefaultValue("context_help", "criteria_help_label", "(criteria)", 'String', "Text to display for criteria help links (HTML is ok)");
+		Settings::setDefaultValue("context_help", "show_title", true, 'Boolean', "Show the title heading in context help popups");
 	}
 	
 	function __construct()

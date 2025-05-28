@@ -72,7 +72,7 @@ class SurveyComponentManager
 			message in all surveys, providing users with a link to response. 
 			The text within brackets represent codes that will be filled in with data 
 			from the survey record when the survey is sent.", "Survey Emails");
-		Settings::setDefaultValue("survey", "interactive_graphs", false, Boolean, "Show interactive SVG graphs on the report screens, rather than static images");
+		Settings::setDefaultValue("survey", "interactive_graphs", false, 'Boolean', "Show interactive SVG graphs on the report screens, rather than static images");
 
 	}
 	

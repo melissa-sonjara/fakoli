@@ -19,7 +19,7 @@ class SvgManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("svg", "svg_directory", "/templates/svg/", String, "The directory that contains your SVG assets");
+		Settings::setDefaultValue("svg", "svg_directory", "/templates/svg/", 'String', "The directory that contains your SVG assets");
 	}
 
 	static function substituteTags($content)

@@ -68,10 +68,10 @@ class OnlineHelpManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("online_help", "default_book", "", String, "Specify the default help book to which the help link will connect");
-		Settings::setDefaultValue("online_help", "use_page_identifiers", "", Boolean, "Use page identifiers as the default help identifier");
-		Settings::setDefaultValue("online_help", "help_text", "Help", String, "The text to display on the help link");
-		Settings::setDefaultValue("online_help", "help_css", "/components/online_help/css/online_help.css", String, "CSS Files defining the help popup look and feel (comma separated)");	
+		Settings::setDefaultValue("online_help", "default_book", "", 'String', "Specify the default help book to which the help link will connect");
+		Settings::setDefaultValue("online_help", "use_page_identifiers", "", 'Boolean', "Use page identifiers as the default help identifier");
+		Settings::setDefaultValue("online_help", "help_text", "Help", 'String', "The text to display on the help link");
+		Settings::setDefaultValue("online_help", "help_css", "/components/online_help/css/online_help.css", 'String', "CSS Files defining the help popup look and feel (comma separated)");	
 	}
 	
 	static function onInitialize()

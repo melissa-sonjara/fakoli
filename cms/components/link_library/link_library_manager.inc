@@ -47,7 +47,7 @@ class LinkLibraryManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("link_library", "display_format", "Paged List", String, "Specify the format used to display link libraries.", "", "Paged List\nTabular");
+		Settings::setDefaultValue("link_library", "display_format", "Paged List", 'String', "Specify the format used to display link libraries.", "", "Paged List\nTabular");
 	}
 
 	function getTabs($key)

@@ -65,7 +65,7 @@ class DebugManager
 		Settings::setDefaultValue("debug", "trace_detail", "TraceDetailHigh", "String", "The level of detail to be output", "Trace File", "TraceDetailFull\nTraceDetailHigh\nTraceDetailMedium\nTraceDetailNormal", 2);	
 		Settings::setDefaultValue("debug", "application_trace_level", 3, "Number", "Trace Level for application code (component pages, handlers, modules).Lowest to output only the most serious errors; highest for all", "Trace Levels", "1\n2\n3\n4\n5", 2);	
 		Settings::setDefaultValue("debug", "scheduled_task_trace_level", 3, "Number", "Trace Level for scheduled task workers",  "Trace Levels", "1\n2\n3\n4\n5", 3 );
-		Settings::setDefaultValue("debug", "enable_trace_file_downloads", false, Boolean, "Enables remote access for trace files. Leave this disabled for production sites, and only enable if you need to gain access to the trace log but do not have access to SSH", "Trace File", null, 3);
+		Settings::setDefaultValue("debug", "enable_trace_file_downloads", false, 'Boolean', "Enables remote access for trace files. Leave this disabled for production sites, and only enable if you need to gain access to the trace log but do not have access to SSH", "Trace File", null, 3);
 	}
 	
 }

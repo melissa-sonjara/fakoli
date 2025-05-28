@@ -112,9 +112,9 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "prettyUrls", true, "Boolean", "Whether urls are translated to CMS identifiers", "General");		
 		Settings::setDefaultValue("settings", "allow_pdf_download", true, "Boolean", "", "General");
 		Settings::setDefaultValue("settings", "sitename", $sitename, "String", "", "General");
-		Settings::setDefaultValue("settings", "wrap_modules", true, Boolean, "Specifies whether to wrap module output in a div tag, or render them bare", "General");
-		Settings::setDefaultValue("settings", "system_notification_email", $config["email_contact"], String, "The email address to which system notifications should be sent", "General");
-		Settings::setDefaultValue("settings", "local_IP_address", "", String, "Specifies the server's local IP address for environments (such as Microsoft Azure) where this cannot be determined automatically", "General");
+		Settings::setDefaultValue("settings", "wrap_modules", true, 'Boolean', "Specifies whether to wrap module output in a div tag, or render them bare", "General");
+		Settings::setDefaultValue("settings", "system_notification_email", $config["email_contact"], 'String', "The email address to which system notifications should be sent", "General");
+		Settings::setDefaultValue("settings", "local_IP_address", "", 'String', "Specifies the server's local IP address for environments (such as Microsoft Azure) where this cannot be determined automatically", "General");
 		
 		Settings::setDefaultValue("settings", "formCSS", "form", "String", "", "AutoForm");
 		Settings::setDefaultValue("settings", "labelCSS", "label", "String", "", "AutoForm");
@@ -134,8 +134,8 @@ class SettingsManager
 		Settings::setDefaultValue("settings", "passwordEnterLabel", "Enter", "String", "The text of the password entry field label", "AutoForm");
 		Settings::setDefaultValue("settings", "passwordEnterLabel", "Confirm", "String", "The text of the password confirmation field label", "AutoForm");
 		Settings::setDefaultValue("settings", "buttons_at_top", false, "Boolean", "Whether the form's save/cancel buttons appear at the top of the form in addition to the bottom.", "AutoForm");
-		Settings::setDefaultValue("settings", "default_layout", "table", String, "Specifies the default layout manager to use when rendering forms", "AutoForm", "table\nsimple\nmobile");
-		Settings::setDefaultValue("settings", "interstitialSpinner", "/fakoli/images/spinner.gif", String, "Specifies the default spinner animation to use with interstitials", "AutoForm");
+		Settings::setDefaultValue("settings", "default_layout", "table", 'String', "Specifies the default layout manager to use when rendering forms", "AutoForm", "table\nsimple\nmobile");
+		Settings::setDefaultValue("settings", "interstitialSpinner", "/fakoli/images/spinner.gif", 'String', "Specifies the default spinner animation to use with interstitials", "AutoForm");
 
 		Settings::setDefaultValue("settings", "font_awesome_URL", "", 'String', "If you want to use a specific version of Font Awesome (for instance if you have a Pro subscription) enter the URL here", "Font Awesome");	
 	}

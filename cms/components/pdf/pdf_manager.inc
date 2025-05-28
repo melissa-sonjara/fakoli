@@ -21,12 +21,12 @@ class PdfManager
 
 	static function setDefaults()
 	{
-		Settings::setDefaultValue("pdf", "wkhtmltopdf_path", "wkhtmltopdf", String, "The path to the wkhtmltopdf executable on your system.", "PDF Settings", null, 2);
-		Settings::setDefaultValue("pdf", "PDF_convertor", "wkhtmltopdf", String, "Specifies the method used to convert HTML to PDF", "PDF Settings", "wkhtmltopdf\nchrome\nexternal", 1);
-		Settings::setDefaultValue("pdf", "chrome_path", "chrome", String, "The path to the chrome (or chromium) executable on your system", "PDF Settings", null, 3);
-		Settings::setDefaultValue("pdf", "chrome_screenshot_path", "", String, "Path to the screenshot script on your system", "PDF Settings", null, 4);
-		Settings::setDefaultValue("pdf", "external_PDF_url", "", String, "External URL to web-based PDF generator", "PDF Settings", null, 5);
-		Settings::setDefaultValue("pdf", "external_PNG_url", "", String, "External URL to web-based PNG generator", "PDF Settings", null, 5);
+		Settings::setDefaultValue("pdf", "wkhtmltopdf_path", "wkhtmltopdf", 'String', "The path to the wkhtmltopdf executable on your system.", "PDF Settings", null, 2);
+		Settings::setDefaultValue("pdf", "PDF_convertor", "wkhtmltopdf", 'String', "Specifies the method used to convert HTML to PDF", "PDF Settings", "wkhtmltopdf\nchrome\nexternal", 1);
+		Settings::setDefaultValue("pdf", "chrome_path", "chrome", 'String', "The path to the chrome (or chromium) executable on your system", "PDF Settings", null, 3);
+		Settings::setDefaultValue("pdf", "chrome_screenshot_path", "", 'String', "Path to the screenshot script on your system", "PDF Settings", null, 4);
+		Settings::setDefaultValue("pdf", "external_PDF_url", "", 'String', "External URL to web-based PDF generator", "PDF Settings", null, 5);
+		Settings::setDefaultValue("pdf", "external_PNG_url", "", 'String', "External URL to web-based PNG generator", "PDF Settings", null, 5);
 	}
 
 	static function getTempDirectory()
