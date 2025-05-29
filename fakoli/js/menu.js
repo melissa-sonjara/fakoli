@@ -191,7 +191,7 @@ var FakoliMenu = new Class({
 				if (coords.right > size.width)
 				{
 					var sbarWidth = (window.scrollbars && window.scrollbars.visible && Browser.platform != "mac") ? 17 : 0;
-					ul.setStyle('left', coords.left - (coords.right - size.width) - sbarWidth);
+					ul.setStyle('left', ul.offsetLeft - (coords.right - size.width) - sbarWidth);
 				}
 			}
 			
