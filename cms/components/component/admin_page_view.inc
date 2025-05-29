@@ -164,7 +164,7 @@ class AdminPageView
 	private function formatIcon($icon)
 	{
 		if (!$icon) return "<i class='fas fa-fw'></i>";
-		if (endsWith($icon, ".svg"))
+		if (endsWith($icon, ".svg") || endsWith($icon, ".png"))
 		{
 			return "<i class='fas fa-fw' style='background: url({$icon}) center center no-repeat; background-size: contain; height:1em'></i>";
 		}
