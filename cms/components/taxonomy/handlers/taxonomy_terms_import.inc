@@ -48,7 +48,11 @@ $form->ajaxSubmit("function(result) {taxonomyAdmin.onSave(result);}", "function(
 
 $form->submitLabel = "Import Taxonomy Terms";
 
-$upload = new FileUploadFieldRenderer($form, "terms", "Taxonomy Terms File", uploadTerms);
+$upload = new FileUploadFieldRenderer($form, "terms", "Taxonomy Terms File", function ($field, $taxonomy)
+{
+	$file = $_FILES[$field]["tmp_name"];
+	TaxonomyManager::importTerms($taxonomy, $file);
+});
 
 if ($method == "POST")
 {
@@ -66,10 +70,6 @@ if ($method == "POST")
 echo $form->writeScript();
 $form->drawForm();
 
-function uploadTerms($field, $taxonomy)
-{
-	$file = $_FILES[$field]["tmp_name"];
-	TaxonomyManager::importTerms($taxonomy, $file);
-}
+
 
 ?>
