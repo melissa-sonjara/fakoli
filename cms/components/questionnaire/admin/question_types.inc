@@ -53,7 +53,7 @@ $questionTypes = query('QuestionType', "ORDER BY sort_order");
 
 $table = new DataListView($questionTypes, "questionTypes");
 $table->column("Name", "<a href=\"/admin/question_type_form?question_type_id={question_type_id}\">{name}</a>")
-		->column("Sort Order", formatSortOrderInputField, false, "width: 5%")
+		->column("Sort Order", 'formatSortOrderInputField', false, "width: 5%")
 		->column("Class Name", "{class_name}")
 		;
 	  	

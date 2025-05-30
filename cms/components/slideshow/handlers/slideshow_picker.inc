@@ -10,7 +10,7 @@ $galleries = Query::create('ImageGallery', "ORDER BY gallery_name")->execute();
 $table = new DataListView($galleries, "galleries");
 
 $table->column("Gallery", "<a href='#' onclick='picker.selectSlideshow(this, {gallery_id})'>{gallery_name}</a>", true, "width: 80%")
-	  ->column("# of Photos", countPhotos, true, "width: 20%");
+	  ->column("# of Photos", 'countPhotos', true, "width: 20%");
 	  
 $table->sortable = true;
 $table->emptyMessage = "No image galleries have been created";

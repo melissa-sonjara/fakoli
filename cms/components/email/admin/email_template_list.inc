@@ -50,10 +50,10 @@ $emailTemplates = query('EmailTemplate', "ORDER BY name");
 $menu_item = "Email Templates";
 
 $table = new DataListView($emailTemplates, "templates");
-$table->column("Name", formatEmailTemplateLink, true)
-	  ->column("Recipients", formatEmailTemplateRecipients, true)
-	  ->column("Subject", formatEmailTemplateSubject, true)
-	  ->column("Message", formatEmailMessage, true)
+$table->column("Name", 'formatEmailTemplateLink', true)
+	  ->column("Recipients", 'formatEmailTemplateRecipients', true)
+	  ->column("Subject", 'formatEmailTemplateSubject', true)
+	  ->column("Message", 'formatEmailMessage', true)
 	  ->column("Class Name", "{class_name}", true)
 	;
 
