@@ -1610,7 +1610,7 @@ class AutoForm
 	
 		// Call the onInsertPreProcess callback if the primary key of the target object is not set (i.e. is a new object)
 		
-		if (!$this->data->getPrimaryKeyValue() & $this->onInsertPreProcess)
+		if (!$this->data->getPrimaryKeyValue() & $this->onInsertPreProcess != null)
 		{
 			if (call_user_func_array($this->onInsertPreProcess, array($this)) === false)
 			{
