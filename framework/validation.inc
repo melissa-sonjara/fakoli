@@ -794,7 +794,7 @@ class UniqueValidator extends AbstractValidator
 			}
 			
 			$matches = $this->item->queryValue("COUNT(1)", $constraint);
-			trace("***************count matches ". count($matches), 3);
+			trace("***************count matches ". $matches, 3);
 			if ($matches > 0)
 			{
 				trace("UniqueValidator::validate - found $matches match(es), raising error", 3);
