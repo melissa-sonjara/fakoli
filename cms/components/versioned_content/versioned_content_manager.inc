@@ -36,8 +36,8 @@ class VersionedContentManager
 		$target = &$form->data;
 		
 		ContentVersion::loadDraft($target);
-		$form->onDrawStart = array(VersionedContentManager, "onDrawForm");
-		$form->onSavePreProcess = array(VersionedContentManager, 'onSavePreProcess');
+		$form->onDrawStart = 'VersionedContentManager::onDrawForm';
+		$form->onSavePreProcess = 'VersionedContentManager::onSavePreProcess';
 		
 	}
 	
