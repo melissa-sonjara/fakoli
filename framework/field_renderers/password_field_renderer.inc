@@ -182,7 +182,7 @@ function <?echo $this->parent->id?>_<?echo $field?>_showPassword()
 			}
 			else
 			{
-				$password = crypt($password);
+				$password = password_hash($password, PASSWORD_DEFAULT);
 			}
 			
 			$this->parent->data->set($field, $password);

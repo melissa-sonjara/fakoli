@@ -154,7 +154,7 @@ class UserManager
 	{
 		$user = querySingle('SiteUser', "WHERE username='{$username}' and active=1");
 			
-		if ($user && crypt($_POST["password"], $user->password) === $user->password)
+		if ($user && password_verify($_POST["password"], $user->password) === $user->password)
 		{
 			return $user;
 		}
