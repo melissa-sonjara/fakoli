@@ -144,9 +144,9 @@ class VersionedContentManager
 			unset($params[$param]);
 		}
 		
-		$liveQs = http_build_query($params);
+		$liveQs = ($params == null) ? "" : http_build_query($params);
 		$params[$param] = "draft";
-		$draftQs = http_build_query($params);
+		$draftQs = ($params == null) ? "" : http_build_query($params);
 		$hasDraft = ContentVersion::hasDraft($item);
 		
 		if (!$hasDraft && $formMode)
