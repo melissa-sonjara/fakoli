@@ -29,7 +29,8 @@ var PasswordComplexityVerifier = new Class(
  	{
  		this.control = document.id(control);
  		this.panel = document.id(panel);
- 		
+ 		this.setOptions(options);
+		
  		if (this.options.mininum_password_length == 0 && this.options.maximum_password_length > 0)
  		{
  			this.lengthMessage = "up to " + this.options.maximum_password_length + " characters";
