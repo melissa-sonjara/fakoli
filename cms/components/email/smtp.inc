@@ -419,7 +419,7 @@
                 $host = "localhost";
             }
 
-            $this->put("HELO " . $host . $this->CRLF);
+            $this->put("EHLO " . $host . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
