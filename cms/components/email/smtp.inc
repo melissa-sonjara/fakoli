@@ -61,6 +61,9 @@
 
         var $do_debug;       # the level of debug to perform
 
+        var $convo;         # the complete conversation log
+        var $log_convo = false; # flag to turn logging on/off
+
         /*
          * SMTP()
          *
@@ -72,6 +75,7 @@
             $this->helo_rply = null;
 
             $this->do_debug = 0;
+            $this->convo = "";
         }
 
         /************************************************************
@@ -184,8 +188,12 @@
                 fclose($this->smtp_conn);
                 $this->smtp_conn = 0;
             }
-        }
 
+            if ($this->log_convo)
+            {
+                echo "<pre>".$this->convo."</pre>";
+            }
+        }
 
         /**************************************************************
          *                        SMTP COMMANDS                       *
@@ -219,7 +227,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"DATA" . $this->CRLF);
+            $this->put("DATA" . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -298,13 +306,13 @@
                     if(!empty($line_out) && $line_out[0] == ".") {
                         $line_out = "." . $line_out;
                     }
-                    fputs($this->smtp_conn,$line_out . $this->CRLF);
+                    $this->put($line_out . $this->CRLF);
                 }
             }
 
             # ok all the message data has been sent so lets get this
             # over with aleady
-            fputs($this->smtp_conn, $this->CRLF . "." . $this->CRLF);
+            $this->put( $this->CRLF . "." . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -352,7 +360,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"EXPN " . $name . $this->CRLF);
+            $this->put("EXPN " . $name . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -411,7 +419,7 @@
                 $host = "localhost";
             }
 
-            fputs($this->smtp_conn,"HELO " . $host . $this->CRLF);
+            $this->put("HELO " . $host . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -466,7 +474,7 @@
                 $extra = " " . $keyword;
             }
 
-            fputs($this->smtp_conn,"HELP" . $extra . $this->CRLF);
+            $this->put("HELP" . $extra . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -513,7 +521,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"MAIL FROM:" . $from . $this->CRLF);
+            $this->put("MAIL FROM:" . $from . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -555,7 +563,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"NOOP" . $this->CRLF);
+            $this->put("NOOP" . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -599,7 +607,7 @@
             }
 
             # send the quit command to the server
-            fputs($this->smtp_conn,"quit" . $this->CRLF);
+            $this->put("quit" . $this->CRLF);
 
             # get any good-bye messages
             $byemsg = $this->get_lines();
@@ -652,7 +660,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"RCPT TO:" . $to . $this->CRLF);
+            $this->put("RCPT TO:" . $to . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -696,7 +704,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"RSET" . $this->CRLF);
+            $this->put("RSET" . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -745,7 +753,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"SEND FROM:" . $from . $this->CRLF);
+            $this->put("SEND FROM:" . $from . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -793,7 +801,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"SAML FROM:" . $from . $this->CRLF);
+            $this->put("SAML FROM:" . $from . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -841,7 +849,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"SOML FROM:" . $from . $this->CRLF);
+            $this->put("SOML FROM:" . $from . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -908,7 +916,7 @@
                 return false;
             }
 
-            fputs($this->smtp_conn,"VRFY " . $name . $this->CRLF);
+            $this->put("VRFY " . $name . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -961,9 +969,22 @@
                 # so just break the loop
                 if(substr($str,3,1) == " ") { break; }
             }
+
+            if ($this->log_convo)
+            {
+                $this->convo .= $data;
+            }
             return $data;
         }
-
+        
+        function put($msg)
+        {
+            if ($this->log_convo)
+            {
+                $this->convo .= $msg;
+            }
+            fputs($this->smtp_conn, $msg);
+        }
 
         /******************************************************************
          *                     EXTENDED FUNCTIONALITY                     *
@@ -979,7 +1000,7 @@
          */
         function Authenticate($username, $password) {
             // Start authentication
-            fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
+            $this->put("AUTH LOGIN" . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -997,7 +1018,7 @@
             }
 
             // Send encoded username
-            fputs($this->smtp_conn, base64_encode($username) . $this->CRLF);
+            $this->put( base64_encode($username) . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -1015,7 +1036,7 @@
             }
 
             // Send encoded password
-            fputs($this->smtp_conn, base64_encode($password) . $this->CRLF);
+            $this->put( base64_encode($password) . $this->CRLF);
 
             $rply = $this->get_lines();
             $code = substr($rply,0,3);
@@ -1036,7 +1057,7 @@
         }
 
 
-
+    
 
     }
 
