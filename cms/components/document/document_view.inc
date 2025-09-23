@@ -21,7 +21,7 @@ class DocumentLibraryView
 		$this->table = $this->buildDocumentTable();
 		
 		$this->facetManager = new FacetManager('facet_manager', $this->table);
-		TaxonomyManager::addFacets($this->facetManager, Document, true, "160px", "200px", "200px");
+		TaxonomyManager::addFacets($this->facetManager, 'Document', true, "160px", "200px", "200px");
 		
 		if (Settings::getValue("document", "show_upload_details"))
 		{
@@ -36,7 +36,7 @@ class DocumentLibraryView
 		$docWidth = $showUploadDetails ? "40%" : "80%";
 		
 		$table = new DataListView($this->mgr->documents, "document_library");
-		$table->column("Document", array($this, formatDocumentTitle), true, "width: {$docWidth}", String, null, "{title:lower}")
+		$table->column("Document", array($this, formatDocumentTitle), true, "width: {$docWidth}", 'String', null, "{title:lower}")
 			  ->column("Author", "{author}", true, "width: 20%");
 		
 		if ($showUploadDetails)
