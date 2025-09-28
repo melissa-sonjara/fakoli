@@ -1015,7 +1015,7 @@ class ImageManager
 	{
 		trace("Checking Photo Orientation", 3);
 		
-		$exif = read_exif_data($photo);
+		$exif = exif_read_data($photo);
 
 		switch($exif['Orientation'])
 		{
