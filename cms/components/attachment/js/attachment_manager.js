@@ -77,7 +77,7 @@ var AttachmentManager = new Class({
             let icon = result.icon;
 
             this.list.innerHTML += 
-                "<li data-attachment_id='" + attachmentId + "' id='attachment_" + attachmentId + "' class='" + this.cssClass + "'><span><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
+                "<li data-attachment_id='" + attachmentId + "' id='attachment_" + attachmentId + "' class='attachment'><span><img src='" + icon + "' alt='Icon' style='display: inline-block;vertical-align: middle'/>&nbsp;" +
                 "<a href='/action/attachment/download?attachment_id=" + attachmentId + "'>" + name + "</a>&nbsp;(" + size + ")&nbsp;" +
                 "<a class='attachment_delete_link' id='delete_attachment_" + attachmentId + "' href='#' onclick='this.attachmentManager.deleteAttachment(\"" + name + "\", " + attachmentId + "); return false' title='Delete this Attachment'>" +
                 "<i class='fas fa-times'></i></a></span></li>";
