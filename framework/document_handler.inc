@@ -179,7 +179,7 @@ class DocumentHandler
 	 * 
 	 * @param $name
 	 */
-	function getDocMimeType($name)
+	static function getDocMimeType($name)
 	{
 		global $doc_mime_types;
 	
