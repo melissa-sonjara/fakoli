@@ -289,6 +289,33 @@ class Fakoli
 	}	
 		
 	/**
+	 * Retrieves the user ID of the currently logged-in user.
+	 * If no user is logged in, it returns null.
+	 * 
+	 * @return int|null the user ID of the currently logged-in user, or null if no user is logged in
+	 */
+	static function getUserId() : ?int
+	{
+		global $user;
+		
+		if (!$user) return null;
+		
+		return $user->getPrimaryKeyValue();
+	}
+	
+	/**
+	 * Returns the user object for the currently logged-in user.
+	 * If no user is logged in, it returns null.
+	 * 
+	 * @return User|null the user object of the currently logged-in user, or null if no user is logged in
+	 */
+	static function getUser() : ?DataItem
+	{
+		global $user;
+		return $user;
+	}
+	
+	/**
 	 * Assert that the user has one of the specified roles.
 	 * @param string $role comma-separated list of acceptable roles
 	 * @param string $redirect the page to which the user is to be redirected on failure
