@@ -57,12 +57,12 @@ class AttachmentUpgradeManager extends UpgradeManager
 			"1.0"		=>	"sql:Initial Installation"
 	);
 	
-	function AttachmentUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "attachment";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -6,7 +6,7 @@
 
 /**************************************************************
 
- Copyright (c) 2010 Sonjara, Inc
+ Copyright (c) 2025 Sonjara, Inc
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -36,9 +36,7 @@
 
 *****************************************************************/
 
-Fakoli::usingFile("framework/field_renderers.inc");
-
-class AttachmentFieldRenderer extends FieldRenderer
+class AttachmentV2FieldRenderer extends FieldRenderer
 {
 	var $colspan = 2;
 	var $xrefClass;
@@ -48,22 +46,120 @@ class AttachmentFieldRenderer extends FieldRenderer
 	var $deleteIcon = "/fakoli/images/delete.gif";
 	var $useCamera = false;
 	var $addLabel = "Add an Attachment";
+    var $dialogTitle = "Upload Attachment";
 	var $emptyMessage = "No files have been attached";
+    var $dialogWidth = "480px";
+    var $dialogHeight = "auto";
 	
-	function __construct(&$form, $field, $xrefClass)
+	function __construct(&$form, $field, $xrefClass, $label = "")
 	{
 		$this->xrefClass = $xrefClass;
 		$this->field = $field;	
 		
 		parent::__construct($form);
-		$this->label = $form->prettifyFieldName($field);
-		$form->add($this);
-		
+		$this->label = $label ? $label : $form->prettifyFieldName($field);
+		if ($form->data->hasField($field))
+		{
+			$form->override($field, $label, $this);
+		}
+		else
+		{
+			$form->add($this, $field);
+			$form->overrides[$field]['label'] = $label;
+		}
+	
 		if (isset($form->attachment_css_class)) $this->cssClass = $form->attachment_css_class;
 		if (isset($form->attachment_delete_icon)) $this->deleteIcon = $form->attachment_delete_icon;
 	} 
 
-	
+    private function getJSManager($field)
+    {
+        if (!$field) $field = $this->field;
+
+        $id = "{$this->parent->id}_{$field}";
+        return "document.{$id}AttachmentMgr";
+    }
+
+    function renderScript($field = "")
+    {
+        if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return;
+		
+        $id = $this->parent->id."_".$field;	
+
+        $jsMgr = $this->getJSManager($field);
+?>
+<script type='text/javascript'>
+window.addEvent('domready', function() 
+{
+	<?php echo $jsMgr?> = new AttachmentManager('<?echo $id?>', "<?echo $id?>_list", {
+        title: "<?echo $this->dialogTitle?>",
+        width: "<?echo $this->dialogWidth?>",
+        height: "<?echo $this->dialogHeight?>",
+        useCamera: <?echo $this->useCamera ? "true" : "false"?>
+    });
+});
+</script>
+<?
+	}
+
+    function renderField($field = "")
+    {
+        if (!$field) $field = $this->field;
+
+        $id = "{$this->parent->id}_{$field}";        
+        $jsMgr = $this->getJSManager($field);
+        
+        $this->_startField($field);
+        
+        $attachments = $this->getAttachments();
+                    
+        $attachmentIds = displayFieldAsList($attachments, "attachment_id");
+?>
+	<input type="hidden" value="<?echo $attachmentIds?>" name="<?echo $field?>" id="<?php echo $id?>"/>
+	<ul id="<?echo $id?>_list" class="<?echo $this->cssClass?>">
+	<?
+
+ 		foreach($attachments as $attachment)
+ 		{
+ ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'><span>
+ <?php		
+ 			$this->drawOneAttachment($attachment);
+ ?>
+	&nbsp;
+	<a href="#" onclick='<?php echo $jsMgr?>.deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><i class='fas fa-times'></i></a>
+	</span></li>
+<?	
+		}
+	?>
+	</ul>
+	<a class='add_attachment_label' href="#" onclick="<?php echo $jsMgr?>.addAttachment(); return false"> <?echo $this->addLabel?> </a>
+<?
+
+        $this->_endField($field);
+    }
+
+    function renderReadOnly($field = "")
+    {
+        if (!$field) $field = $this->field;
+    
+        $attachments = $this->getAttachments();
+        
+        $this->_startField($field);
+                
+        if (count($attachments) == 0)
+        {
+            echo "<p>{$this->emptyMessage}</p>";
+        }
+        else 
+        {
+            // Omit ul li list if only one
+                        
+            $this->drawOneAttachment($attachments[0]);
+        }
+
+        $this->_endField($field);
+    }
+    	
 	function getMatchingPK($xref, $obj)
 	{
 		$pks = $obj->getPrimaryKeyList();
@@ -75,140 +171,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 		throw new DataItemException("No matching foreign key in xref table");
 	}
 
-	static function renderDialog($useCamera)
-	{
-		ob_start();
-?>
-<div class="dialog" id="attachmentDialog" style="width: 260px">
- <div class="dialog_header" id="attachmentDialogHeader">
-  <div style="padding: 4px;">
-   <div style="float: right">&nbsp;<a id='closeAttachmentDialog'>Close &times;</a></div>
-   <span style="font-weight: bold" id="attachmentDialogTitle">Add an Attachment</span>
-  </div>	
- </div>
- <div class="dialog_body">
-<?
-		echo AttachmentFieldRenderer::renderDialogBody($useCamera);
-?>
-  </form>
- </div>
-</div>
-<?		
-		$dialog = ob_get_contents();
-		ob_end_clean();
-		return $dialog;
-	}
-	
-	static function renderDialogBody($useCamera)
-	{
-		ob_start();
-?>
-		<p id="attachmentDialogMessage"></p>
-		<form id="attachmentForm" method="POST" enctype="multipart/form-data" action="/action/attachment/upload" >
-		<br/>
-		<label>Attachment File</label><br/>
-		<input type="file" name="attachmentFile"<?if ($useCamera) { echo ' accept="image/*" capture="camera"'; }?>/>
-   		<br/>
-   		<br/><input type="submit" class="button" name="submit" value="Upload Attachment" style="float: right; margin-bottom: 4px"/>
-<?			
-		$body = ob_get_contents();
-		ob_end_clean();
-		return $body;
-	}
-	
-	function renderScript($field)
-	{
-		if ($this->parent->readOnlyForm || $this->parent->isReadOnly($field) || array_key_exists($field, $this->parent->hidden)) return "";
-		
-		global $dialogs;
-		if (!$field) $field = $this->field;
-				
-		$dialogs .= AttachmentFieldRenderer::renderDialog($this->useCamera);
-?>
-	<script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		new AttachmentUploader().setup('attachmentForm', '<?echo $this->parent->id?>_<?echo $field?>_list', '<?echo $this->parent->id?>_<?echo $field?>', '<?echo $this->cssClass?>', '<?echo $this->deleteIcon?>');
-	});
-	</script>
-<?
-	}
-	
-	function renderField($field = "")
-	{
-		if (!$field) $field = $this->field;
-		
-		$xref = new $this->xrefClass;
-	
-		$this->_startField($field);
-		
-		$attachments = $this->getAttachments();
-					
-		$ids = displayFieldAsList($attachments, "attachment_id");
-?>
-	<input type="hidden" value="<?echo $ids?>" name="<?echo $field?>" id="<?echo $this->parent->id?>_<?echo $field?>"/>
-	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>" style='display: table-cell'>
-	<?
-
- 		foreach($attachments as $attachment)
- 		{
- ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'><span>
- <?php		
- 			$this->drawOneAttachment($attachment);
- ?>
-	&nbsp;
-	<a href="#" onclick='new AttachmentUploader().deleteAttachment("<?echo $attachment->filename?>", <?echo $attachment->attachment_id?>); return false' title='Delete this Attachment'><img src='<?echo $this->deleteIcon?>' style='display:inline-block; vertical-align: middle' alt='Delete this Attachment'/></a>
-	</span></li>
-<?	
-		}
-	?>
-	</ul>
-	<a class='add_attachment_label' href="#" onclick="new AttachmentUploader().addAttachment(); return false"> <?echo $this->addLabel?> </a>
-<?
-		$this->_endField($field);
-	}
-	
-	// JDG 5/24/11 - add readonly handling
-	function renderReadOnly($field = "")
-	{
-		if (!$field) $field = $this->field;
-	
-		$attachments = $this->getAttachments();
-		if(count($attachments) < 2) $this->colspan = 1;
-		
-		$this->_startField($field);
-				
-		if (count($attachments) == 0)
-		{
-			echo "<p>{$this->emptyMessage}</p>";
-		}
-		else if(count($attachments) == 1)
-		{
-			// Omit ul li list if only one
-					
-			$this->drawOneAttachment($attachments[0]);
-		}
-		else if(count($attachments) > 0)
-		{
-?>	
-	<ul id="<?echo $this->parent->id?>_<?echo $field?>_list" class="<?echo $this->cssClass?>">
-<?	
-		foreach($attachments as $attachment)
-		{
- ?>	<li id='attachment_<?echo $attachment->attachment_id?>' class='<?echo $this->cssClass?>'><span>
- <?php
- 			$this->drawOneAttachment($attachment);
- ?>
-	 </span></li>
-<?
-		}
-?></ul><?php			
-		}
-
-		$this->_endField($field);
-	}
-	
-	function getAttachments()
+    function getAttachments()
 	{
 		$xref = new $this->xrefClass;
 		
@@ -239,7 +202,7 @@ class AttachmentFieldRenderer extends FieldRenderer
 	
 	static function formatAttachment($attachment)
 	{
-		$icon = getDocIcon($attachment->filename);
+		$icon = DocumentHandler::getDocIcon($attachment->filename);
 	
 		return $attachment->format("<img src='{$icon}' alt='Icon' style='display:inline-block;vertical-align:middle'/>&nbsp;<a href='/action/attachment/download?attachment_id={attachment_id}'>{filename}</a>&nbsp;({file_size})");
 	}
@@ -280,5 +243,3 @@ class AttachmentFieldRenderer extends FieldRenderer
 		}	
 	}
 }
-
-/**@}*/?>

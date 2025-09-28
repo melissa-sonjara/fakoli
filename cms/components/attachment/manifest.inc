@@ -53,7 +53,11 @@ class AttachmentManifest
 	
 	static function getScripts()
 	{
-		return array("/components/attachment/js/attachment_uploader.js");
+		return 
+		[
+			"/components/attachment/js/attachment_uploader.js",
+			"/components/attachment/js/attachment_manager.js"
+		];
 	}
 	
 	static function getAdminMenu()
@@ -63,9 +67,10 @@ class AttachmentManifest
 	
 	static function subscribeToEvents()
 	{
-		return array(
-				"upgradeComponent"		=>	array(AttachmentManager, upgradeComponent)
-			);
+		return
+		[
+			"upgradeComponent"	=>	"AttachmentManager::upgradeComponent"
+		];
 	}		
 	
 }

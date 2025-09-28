@@ -42,12 +42,12 @@ class Attachment extends DataItem
 	var $primary_key = "attachment_id";
 		
 	// Fields
-	var $fields = array("attachment_id"		=>	Number,
-						"user_id"			=>	Number,
-						"filename"			=>	String,
-						"local_filename"	=>	String,
-						"last_modified"		=>	Timestamp,
-						"file_size"			=>	String);
+	var $fields = array("attachment_id"		=>	'Number',
+						"user_id"			=>	'Number',
+						"filename"			=>	'String',
+						"local_filename"	=>	'String',
+						"last_modified"		=>	'Timestamp',
+						"file_size"			=>	'String');
 	
 	//Relations
 	var $relations = array("User"	=>	"");
