@@ -653,6 +653,30 @@ class ImageManager
 	}
 	
 	/**
+	 * Delete any generated cached thumbnail images - useful when the image changes due to a crop.
+	 * 
+	 * @param integer $id the ID of the image
+	 */
+	function clearThumbnailCache($image_id)
+	{
+		trace("Clearing thumbnail cache for image $image_id", 3);
+
+		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
+
+		while($file = readdir($cacheDir))
+		{
+			if (preg_match("|^{$image_id}_.*|", $file))
+			{
+				$doomed = $cacheDir . DIRECTORY_SEPARATOR . $file;
+				trace("Deleting cached thumbnail $doomed", 3);
+				unlink($doomed);
+			}
+		}
+
+		trace("Cleared thumbnail cache for image $image_id", 3);
+	}
+
+	/**
 	 * Crop the image to the specified dimensions. This operation is destructive - it overwrites the 
 	 * source file with the resulting crop.
 	 * @param integer $id the ID of the image to be cropped
@@ -681,47 +705,51 @@ class ImageManager
 		$nameParts = explode(".",$image->image_file);
 		$ext = ".".strtolower($nameParts[1]);
 		
-		if (!file_exists($cacheFile) || (filemtime($cacheFile) < filemtime($imageFile)))
+		switch($ext)
 		{
-			switch($ext)
-			{
-				case ".jpg":
-				case ".jpeg":
-					$src = imagecreatefromjpeg($imageFile);
-					break;
-		
-				case ".png":
-					$src = imagecreatefrompng($imageFile);
-					break;
+			case ".jpg":
+			case ".jpeg":
+				$src = imagecreatefromjpeg($imageFile);
+				break;
+	
+			case ".png":
+				$src = imagecreatefrompng($imageFile);
+				break;
 
-				case ".gif":
-					$src = imagecreatefromgif($imageFile);
-					break;
-			}
+			case ".gif":
+				$src = imagecreatefromgif($imageFile);
+				break;
 		}
 		
 		$dst = ImageCreateTrueColor( $w, $h );
 		
 		imagecopy($dst, $src, 0, 0, $x, $y, $w, $h);
 		
+		imagedestroy($src);
+
+		trace("Writing cropped image to $imageFile", 3);
+
 		switch($ext)
 		{
 			case ".jpg":
 			case ".jpeg":
-				imagejpeg($dst, $imageFile, 85);
+				$result = imagejpeg($dst, $imageFile, 85);
 				break;
 					
 			case ".gif":
-				$src = imagegif($imageFile);
+				$result = imagegif($imageFile);
 				break;
 				
 			case "png":
 			default:
-				imagepng($dst, $imageFile);
+				$result = imagepng($dst, $imageFile);
 		}
 			
+		trace(($result) ? "Write successful" : "Write failed", 3);
+
 		imagedestroy($dst);
-		imagedestroy($src);
+
+		$this->clearThumbnailCache($id);
 	}
 	
 	/**
