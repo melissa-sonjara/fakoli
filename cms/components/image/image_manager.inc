@@ -660,7 +660,10 @@ class ImageManager
 	function clearThumbnailCache($image_id)
 	{
 		trace("Clearing thumbnail cache for image $image_id", 3);
-
+		
+		$image = new ImageRecord($image_id);
+		
+		$gallery = $image->Gallery();
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
 
 		while($file = readdir($cacheDir))
