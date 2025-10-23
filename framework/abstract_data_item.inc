@@ -329,14 +329,14 @@ abstract class AbstractDataItem
 	
 	/**
 	 * Set the value of the specified field
-	 * @param $field the field to set
+	 * @param string $field the field to set
 	 * @param $value the value to which the field is to be set
 	 */
 	abstract function set($field, $value);
 	
 	/**
 	 * Retrieves the data type of the specified field
-	 * @param $field the field in question
+	 * @param string $field the field in question
 	 * @return string the data type of the specified field
 	 */
 	abstract function getType($field);
