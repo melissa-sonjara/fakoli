@@ -356,7 +356,7 @@ abstract class AbstractDataItem
 
 	/**
 	 * Sets the filter on this object.
-	 * @param $filter the filter
+	 * @param object $filter the filter
 	 */
 	abstract function setFilter($filter);
 
