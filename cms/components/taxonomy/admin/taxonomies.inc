@@ -36,7 +36,7 @@ Fakoli::usingFeature("data_view");
 
 $menu_item = "Taxonomies";
 
-$taxonomies = Query::create('Taxonomy', "ORDER BY taxonomy_name")->execute();
+$taxonomies = Query::create('Taxonomy', "ORDER BY sort_order, taxonomy_name")->execute();
 
 $table = new DataListView($taxonomies, "taxonomies");
 
@@ -49,7 +49,8 @@ $table->pageSize = 20;
 $table->sortable = true;
 $table->filter = true;
 $table->emptyMessage = "No taxonomies have been created yet.";
-
+$table->enableDragReorder("/action/taxonomy/reorder_taxonomies");
+$table->dragText = "<span style='font-size: 10px'>Click and drag to reorder taxonomies</span>";
 $script .= $table->writeScript();
 
 $table->drawView();

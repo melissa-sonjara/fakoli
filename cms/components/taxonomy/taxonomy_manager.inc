@@ -220,7 +220,7 @@ class TaxonomyManager
 		
 		$class = get_class($form->data);
 		
-		$taxonomies = Query::create('Taxonomy', "")->execute();
+		$taxonomies = Query::create('Taxonomy', "ORDER BY sort_order")->execute();
 		
 		foreach($taxonomies as $taxonomy)
 		{
@@ -304,7 +304,7 @@ class TaxonomyManager
 		
 		$matched = array();
 		
-		$taxonomies = Query::create('Taxonomy', "")->execute();
+		$taxonomies = Query::create('Taxonomy', "ORDER BY sort_order")->execute();
 		
 		foreach($taxonomies as $taxonomy)
 		{

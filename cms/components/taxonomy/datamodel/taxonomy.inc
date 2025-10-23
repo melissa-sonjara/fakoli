@@ -50,7 +50,8 @@ class Taxonomy extends DataItem
 						"description"			=>	'HTML',
 						"associated_classes"	=>	'String',
 						"published"				=>	'Boolean',
-						"enable_facet_filter"	=>	'Boolean');
+						"enable_facet_filter"	=>	'Boolean',
+						"sort_order"			=>	'Number');
 	
 	var $relations = array("Terms"			=>	'TaxonomyTerm');
 	
