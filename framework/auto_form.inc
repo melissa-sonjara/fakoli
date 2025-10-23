@@ -47,6 +47,7 @@ class AutoForm
 	var $formCSS = "";					///< CSS Class to use for the table containing the form
 	var $labelCSS = "";					///< CSS Class to use for label cells
 	var $valueCSS = "";					///< CSS Class to use for field/value cells
+	var $annotationCSS = "";			///< CSS Class to use for annotations
 	var $buttonCSS = "";				///< CSS Class to use for buttons
 	var $buttonLineCSS = "submit";		///< CSS Class to use for the button line (container for form buttons)
 	var $inputCSS = "";					///< CSS Class to use for input fields
@@ -669,6 +670,10 @@ class AutoForm
 	 */
 	function annotate($field, $text)
 	{
+		if ($this->annotationCSS)
+		{
+			$text = "<span class='{$this->annotationCSS}'>".$text."</span>";
+		}
 		$this->annotations[$field] = $text;
 	}
 
