@@ -237,6 +237,7 @@ class TaxonomyManager
 				$renderer->setSize(400, 125);
 				$renderer->resizable = true;
 				$renderer->showSelectAll = $showSelectAll;
+				$renderer->annotateBefore = true;
 				
 				if ($group)
 				{
@@ -247,6 +248,11 @@ class TaxonomyManager
 				{
 					$form->params->setHandler($taxonomy->identifier, new TaxonomySearchParameterHandler($class));
 					$form->setMatchingMode("member", $taxonomy->identifier);
+				}
+
+				if ($taxonomy->context_help)
+				{
+					$form->annotate($taxonomy->identifier, $taxonomy->context_help);
 				}
 				
 				$renderers[] = $renderer;

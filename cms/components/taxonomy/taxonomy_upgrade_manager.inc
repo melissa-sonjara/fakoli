@@ -62,7 +62,8 @@ class TaxonomyUpgradeManager extends UpgradeManager
 		"2.0"	=>	"sql:Added binding_summary view",
 		"2.1"	=>	"sql:Additional index on taxonomy_term_association to improve performance",
 		"2.2"	=>	"sql:Added sort_order to taxonomy_term table",
-		"2.3"	=>	"sql:Added sort_order to taxonomy table"
+		"2.3"	=>	"sql:Added sort_order to taxonomy table",
+		"2.4"	=>	"sql:Added context_help field to taxonomy table"
 	);
 
 	function __construct()
