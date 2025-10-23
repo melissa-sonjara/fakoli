@@ -140,3 +140,9 @@ ALTER TABLE taxonomy_term ADD COLUMN sort_order int(11) not null default 0;
 ALTER TABLE taxonomy ADD COLUMN sort_order int(11) not null default 0;
 
 -- END Version 2.3
+
+-- START Version 2.4
+
+ALTER TABLE taxonomy ADD COLUMN context_help TEXT AFTER description;
+
+-- END Version 2.4

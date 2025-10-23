@@ -48,6 +48,7 @@ class Taxonomy extends DataItem
 						"identifier"			=>	'String',
 						"taxonomy_name"			=>	'String',
 						"description"			=>	'HTML',
+						"context_help"			=>	'Text',
 						"associated_classes"	=>	'String',
 						"published"				=>	'Boolean',
 						"enable_facet_filter"	=>	'Boolean',
