@@ -75,6 +75,7 @@ class ContextHelpManager
 		Settings::setDefaultValue("context_help", "context_help_label", "(?)", 'String', "Text to display for context help links (HTML is ok)");
 		Settings::setDefaultValue("context_help", "criteria_help_label", "(criteria)", 'String', "Text to display for criteria help links (HTML is ok)");
 		Settings::setDefaultValue("context_help", "show_title", true, 'Boolean', "Show the title heading in context help popups");
+		Settings::setDefaultValue("context_help", "display_mode", "Tooltip", 'String', "How to display context help (as a tooltip or as an annotation)", null, "Tooltip\nAnnotation");
 	}
 	
 	function __construct()
@@ -100,6 +101,15 @@ class ContextHelpManager
 		return null;
 	}
 	
+	function annotate($form, $field)
+	{
+		$help = $this->getHelp($form, $field);
+		if ($help)
+		{
+			$form->annotate($field, $help);
+		}	
+	}
+
 	function getCriteria($form, $field)
 	{
 		$obj = $form->data;
@@ -216,8 +226,15 @@ class ContextHelpManager
 function addContextHelp($form, $field, $label)
 {
 	$contextHelpMgr = ContextHelpManager::getInstance();
-	$label .= "&nbsp;".$contextHelpMgr->formatLinks($form, $field);
-	
+
+	if (Settings::getValue("context_help", "display_mode") == "Annotation")
+	{
+		$contextHelpMgr->annotate($form, $field);
+	}
+	else
+	{
+		$label .= "&nbsp;".$contextHelpMgr->formatLinks($form, $field);
+	}
 	return $label;
 }
 /**@}*/?>
