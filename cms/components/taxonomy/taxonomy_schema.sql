@@ -134,3 +134,9 @@ ALTER TABLE taxonomy_term_association ADD INDEX class_idx (class ASC, id ASC, te
 ALTER TABLE taxonomy_term ADD COLUMN sort_order int(11) not null default 0;
 
 -- END Version 2.2
+
+-- START Version 2.3
+
+ALTER TABLE taxonomy ADD COLUMN sort_order int(11) not null default 0;
+
+-- END Version 2.3
