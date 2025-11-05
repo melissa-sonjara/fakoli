@@ -66,7 +66,13 @@ class DateTimeTypeRenderer extends AbstractTypeRenderer
 	static function format($datetime, $template = "")
 	{
 		trace("DateTimeTypeRenderer template is $template and value is $datetime", 5);
-			
+		
+		// handle zero date / datetime
+		if ($datetime == "0000-00-00 00:00:00" || $datetime == "0000-00-00")
+		{
+			$datetime = null;
+		}
+
 		$text = "";
 			
 		if($datetime && !$template)
