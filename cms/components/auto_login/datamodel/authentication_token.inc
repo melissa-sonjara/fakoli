@@ -45,11 +45,38 @@ class AuthenticationToken extends DataItem
 						"ip_address"				=>	'String',
 						"enabled"					=>	'Boolean',
 						"single_use"				=>	'Boolean',
+						"expiry_date"				=>	'DateTime',
 						"last_access"				=>	'Timestamp',
 						"redirect_on_success"		=>	'String');
 	
 	// Relations
 	var $relations = array("User"	=>	"");
+
+	/**
+	 * explicitly set the expiry date
+	 * @param mixed $date DateTime object or string date
+	 */
+	function setExpiryDate($date)
+	{
+		if ($date instanceof DateTime)
+		{
+			$this->expiry_date = $date->format("Y-m-d H:i:s");
+		}
+		else
+		{
+			$this->expiry_date = $date;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	function setExpiryDuration($duration)
+	{
+		$date = new DateTime();
+		$date->modify("+".$duration);
+		$this->expiry_date = $date->format("Y-m-d H:i:s");
+	}
 
 	function User()
 	{

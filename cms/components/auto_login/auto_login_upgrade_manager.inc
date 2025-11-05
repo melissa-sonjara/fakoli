@@ -55,7 +55,8 @@ class AutoLoginUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added support for single use authentication tokens"
+			"1.1"		=>	"sql:Added support for single use authentication tokens",
+			"1.2"		=>	"sql:Added expiry_date field to authentication_token table"
 	);
 	
 	function __construct()

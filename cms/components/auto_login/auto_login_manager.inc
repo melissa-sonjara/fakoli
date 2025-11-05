@@ -101,6 +101,19 @@ class AutoLoginManager
 				}
 			}
 			
+			if ($authToken->expiry_date)
+			{
+				$now = new DateTime();
+				$expiry = new DateTime($authToken->expiry_date);
+				
+				if ($now > $expiry)
+				{
+					LoginManager::recordLoginAttempt($username, 'auto', $token, 'failure');
+					trace("Authentication Token Expired: {$authToken->expiry_date}", 1);
+					throw new FakoliException("Authentication Token Expired");
+				}
+			}	
+			
 			if ($authToken->single_use)
 			{
 				$authToken->enabled = false;

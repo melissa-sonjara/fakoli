@@ -50,6 +50,8 @@ $table = new DataListView($tokens, "tokens");
 $table->column("User", "<a href='/admin/authentication_token_form?authentication_token_id={authentication_token_id}'>{User.username} ({User.first_name} {User.last_name})</a>", true, "width: 25%")
 	  ->column("Role", "{User.role}", "width: 15%")
 	  ->column("Token", "{token}", true, "width: 40%")
+	  ->column("IP Address", "{ip_address}", true, "width: 15%")
+	  ->column("Expiry Date", "{expiry_date:m/d/Y g:ia}", true, "width: 15%")
 	  ->column("Last Access", "{last_access:m/d/Y g:ia}", true, "width: 15%")
 	  ->column("Enabled", 'formatEnabled', false, "text-align: center");
 	  
