@@ -55,15 +55,16 @@ class AutoLoginUpgradeManager extends UpgradeManager
 {
 	var $updateMap = array(
 			"1.0"		=>	"sql:Initial Installation",
-			"1.1"		=>	"sql:Added support for single use authentication tokens"
+			"1.1"		=>	"sql:Added support for single use authentication tokens",
+			"1.2"		=>	"sql:Added expiry_date field to authentication_token table"
 	);
 	
-	function AutoLoginUpgradeManager()
+	function __construct()
 	{
 		$this->component_name = "auto_login";
 
 		// sets the sqlFile name according to default
-		parent::UpgradeManager();		
+		parent::__construct();		
 	}
 }
 /**@}*/?>

@@ -26,3 +26,9 @@ ALTER TABLE `authentication_token` ADD COLUMN `last_access` DATETIME NULL;
 ALTER TABLE `authentication_token` ADD COLUMN `redirect_on_success` VARCHAR(255) NULL;
 
 -- END Version 1.1
+
+-- START Version 1.2
+
+ALTER TABLE `authentication_token` ADD COLUMN `expiry_date` DATETIME NULL;
+
+-- END Version 1.2

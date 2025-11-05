@@ -39,17 +39,44 @@
 class AuthenticationToken extends DataItem
 {
 	// Fields
-	var $fields = array("authentication_token_id"	=>	Number,
-						"token"						=>	String,
-						"user_id"					=>	Number,
-						"ip_address"				=>	String,
-						"enabled"					=>	Boolean,
-						"single_use"				=>	Boolean,
-						"last_access"				=>	Timestamp,
-						"redirect_on_success"		=>	String);
+	var $fields = array("authentication_token_id"	=>	'Number',
+						"token"						=>	'String',
+						"user_id"					=>	'Number',
+						"ip_address"				=>	'String',
+						"enabled"					=>	'Boolean',
+						"single_use"				=>	'Boolean',
+						"expiry_date"				=>	'DateTime',
+						"last_access"				=>	'Timestamp',
+						"redirect_on_success"		=>	'String');
 	
 	// Relations
 	var $relations = array("User"	=>	"");
+
+	/**
+	 * explicitly set the expiry date
+	 * @param mixed $date DateTime object or string date
+	 */
+	function setExpiryDate($date)
+	{
+		if ($date instanceof DateTime)
+		{
+			$this->expiry_date = $date->format("Y-m-d H:i:s");
+		}
+		else
+		{
+			$this->expiry_date = $date;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	function setExpiryDuration($duration)
+	{
+		$date = new DateTime();
+		$date->modify("+".$duration);
+		$this->expiry_date = $date->format("Y-m-d H:i:s");
+	}
 
 	function User()
 	{
@@ -57,7 +84,7 @@ class AuthenticationToken extends DataItem
 		return $mgr->getUser($this->user_id);
 	}
 
-	function AuthenticationToken()
+	function __construct()
 	{
 		$this->primary_key = "authentication_token_id";
 		$this->table = "authentication_token";
@@ -66,7 +93,7 @@ class AuthenticationToken extends DataItem
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass(); 	
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 }
 

@@ -51,7 +51,7 @@ class AutoLoginManager
 		
 		try
 		{
-			$authToken = Query::create(AuthenticationToken, "WHERE token=:token AND enabled=1")
+			$authToken = Query::create('AuthenticationToken', "WHERE token=:token AND enabled=1")
 							->bind(":token", $token)
 							->executeSingle();
 
@@ -100,6 +100,19 @@ class AutoLoginManager
 					throw new FakoliException("Access Denied");
 				}
 			}
+			
+			if ($authToken->expiry_date)
+			{
+				$now = new DateTime();
+				$expiry = new DateTime($authToken->expiry_date);
+				
+				if ($now > $expiry)
+				{
+					LoginManager::recordLoginAttempt($username, 'auto', $token, 'failure');
+					trace("Authentication Token Expired: {$authToken->expiry_date}", 1);
+					throw new FakoliException("Authentication Token Expired");
+				}
+			}	
 			
 			if ($authToken->single_use)
 			{
