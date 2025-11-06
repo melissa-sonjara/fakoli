@@ -4,7 +4,7 @@
  */
 
 
-class RecaptchaV2Manifest
+class RecaptchaV3Manifest
 {
 	static function getComponentDefinition()
 	{
