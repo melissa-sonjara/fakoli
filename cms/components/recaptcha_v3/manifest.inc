@@ -9,7 +9,7 @@ class RecaptchaV3Manifest
 	static function getComponentDefinition()
 	{
 		$component = new Component();
-		$component->name = "recaptcha_v2";
+		$component->name = "recaptcha_v3";
 		$component->description = "Captcha Provider for reCAPTCHA version 3";
 		$component->author = "Melissa Green";
 		$component->version = "1.0";
