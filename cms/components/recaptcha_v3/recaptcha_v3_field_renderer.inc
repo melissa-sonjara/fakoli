@@ -135,7 +135,7 @@ class RecaptchaV3FieldRenderer extends FieldRenderer
 		else
 		{
 ?>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<script src='https://www.google.com/recaptcha/api.js?render=<?php echo $site_key?>'></script>
 	<script>
 		window.addEvent('domready, function() {
 			document.id('<?php echo $this->parent->id?>').addEvent('submit', function(event) 
