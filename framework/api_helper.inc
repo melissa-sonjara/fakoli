@@ -61,6 +61,13 @@ abstract class APIFormatter
 	 * @param array $items the list of DataItems to be formatted
 	 */
 	public abstract function format($items);
+
+    /**
+     * Override this function to format single items for output
+     * @param DataItem $item the DataItem to be formatted
+     * @return mixed
+     */
+    public abstract function formatItem($item, $relationships = "");
 }
 
 /**
@@ -73,6 +80,12 @@ class APIJSONFormatter extends APIFormatter
 		header("Content-Type: text/json");
 		echo toJSON($items);
 	}
+
+    public function formatItem($item, $relationships = "")
+    {
+        header("Content-Type: text/json");
+        echo $item->toJSON($relationships);
+    }
 }	
 
 /**
@@ -86,6 +99,12 @@ class APICanonicalXMLFormatter extends APIFormatter
 		header("Content-Type: text/xml");
 		echo toXML($this->getClass()."List", $items);
 	}
+
+    public function formatItem($item, $relationships = "")
+    {
+        header("Content-Type: text/xml");
+        echo $item->toXML();
+    }
 }
 
 /**
@@ -110,6 +129,11 @@ class APIExcelFormatter extends APIFormatter
 		
 		$view->writeExcelFile($this->getClass()."Results.xls");
 	}
+
+    public function formatItem($item, $relationships = "")
+    {
+        return $this->format([$item]);
+    }
 }
 
 /**
@@ -154,6 +178,11 @@ class APICSVFormatter extends APIFormatter
 			echo $output;
 		}
 	}
+
+    public function formatItem($item, $relationships = "")
+    {
+        return $this->format([$item]);
+    }
 }
 
 /**
@@ -189,12 +218,14 @@ class APITemplate extends APIFormatter
 		$this->mimeType = $mimeType;	
 	}	
 	
-	function format($items)
+	function format($items, $relationships = "")
 	{
 		$class = $this->getClass();
 		$template = file_get_contents($this->file);
 		
 		$expr = "\{".$class."\}(.*?)\{\/".$class."\}";
+
+		// TODO: handle relationships in template rendering
 		
 		$matches = array();
 
@@ -211,6 +242,12 @@ class APITemplate extends APIFormatter
 		
 		header("Content-Type: $this->mimeType");
 		echo $out;
+	}
+
+	function formatItem($item, $relationships = "")
+	{
+		//TODO: implement single item formatting
+		return $this->format([$item], $relationships);
 	}
 }
 
@@ -286,7 +323,46 @@ class APIHelper
 
 		return $this->formatterMap[$this->format]->format($results);
 	}
-	
+
+    /**
+     * Process an API get request for a single item
+     * @throws FakoliException
+     */
+    function get($id, $relationships = "")
+    {
+        $target = new $this->class;
+        // $id = isset($_GET[$target->getPrimaryKey()]) ? $_GET[$target->getPrimaryKey()] : null;
+        // if (!$id)
+        // {
+        //     $id = isset($_GET["id"]) ? $_GET["id"] : null;
+        // }
+
+        if (!$id)
+        {
+            throw new FakoliException("No identifier specified");
+        }
+
+        $target->load($id);
+        $target->filter = $this->outputFilter;
+
+        if (!array_key_exists($this->format, $this->formatterMap))
+        {
+            throw new FakoliException("Unknown format");
+        }
+
+        return $this->formatterMap[$this->format]->formatItem($target, $relationships);
+    }
+
+    function post()
+    {
+        throw new FakoliException("Not implemented");
+    }
+
+    function put()
+    {
+        throw new FakoliException("Not implemented");
+    }
+
 	/**
 	 * Register a format and its associated formatter
 	 * @param string $name the name of the format.

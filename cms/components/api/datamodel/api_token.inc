@@ -33,7 +33,7 @@ class APIToken extends DataItem
 		$mgr = new UserManager();
 		$this->relations["User"] = $mgr->getUserClass();
 		
-		$this->DataItem(func_get_args());
+		parent::__construct(func_get_args());
 	}	
 	
 	static function getUserToken($user_id)

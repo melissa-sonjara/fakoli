@@ -1521,7 +1521,7 @@ class DataItem extends AbstractDataItem
 		}
 	}
 	
-	function toJSON()
+	function toJSON($relations = "")
 	{
 		$out = array();
 				
@@ -1532,10 +1532,38 @@ class DataItem extends AbstractDataItem
 				continue;
 			}
 			
+			//Always redact password fields unless NoRedactions option is set
+			if ($this->getType(($field)) == 'Password' && !($this->_options & NoRedactions)) continue;
+
 			$val = str_replace("\\'", "'", json_encode((string)$this->get($field)));
 			
 			$out[] = "\"{$field}\": ".$val;			
 		}	
+
+		$traverseAll = ($relations == "*") ? true : false;
+
+		$relations = explode(",", $relations);
+		
+		foreach($this->relations as $rel => $relType)
+		{
+			if (in_array($rel, $relations) || $traverseAll)
+			{
+				$related = $this->$rel();
+				if (is_array($related))
+				{
+					$items = array();
+					foreach($related as $item)
+					{
+						$items[] = $item->toJSON();
+					}
+					$out[] = "\"{$rel}\": [".implode(", ", $items)."]";
+				}
+				else
+				{
+					$out[] = "\"{$rel}\": ".$related->toJSON();
+				}
+			}
+		}
 		
 		return "{".implode(", ", $out)."}";		
 	}
