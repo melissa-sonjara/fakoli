@@ -97,7 +97,7 @@ var GroupingTable = new Class({
 		{
 			if (rows[r].hasClass('subheading')) 
 			{
-				expanded = rows[r].hasClass('expanded');
+				expanded = rows[r].hasClass('expanded') || this.options.mode == 'fixed';
 			}
 			else
 			{
