@@ -81,7 +81,7 @@ class PhoneNumberTypeRenderer extends AbstractTypeRenderer
 		
 		$valueParts = PhoneNumberTypeRenderer::getValueParts($value);
 		
-		$phone = implode($valueParts, "-");
+		$phone = implode("-", $valueParts);
 		
 		$area_code = $valueParts["area_code"];
 		$ext = $valueParts["extension"];
