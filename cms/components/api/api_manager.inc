@@ -22,6 +22,10 @@ class APIEndPoint
 	{
 		return false;
 	}
+
+	function dispatch()
+	{
+	}
 }
 
 class SimpleQueryAPIEndPoint extends APIEndPoint
@@ -50,6 +54,13 @@ class SimpleQueryAPIEndPoint extends APIEndPoint
 	{
 		return ($this->roles == "");
 	}
+
+	function dispatch()
+	{
+		global $method;
+		if ($method == "GET") return $this->get();
+		throw new FakoliException("Unsupported HTTP Verb");
+	}
 }
 
 class AuthenticateAPIEndPoint extends APIEndPoint
@@ -67,6 +78,14 @@ class AuthenticateAPIEndPoint extends APIEndPoint
 	function allowAnonymous()
 	{
 		return true;
+	}
+
+	function dispatch()
+	{
+		global $method;
+		if ($method == "GET") return $this->get();
+		if ($method == "POST") return $this->post();
+		throw new FakoliException("Unsupported HTTP Verb");
 	}
 }
 
@@ -86,8 +105,67 @@ class ExtendTokenAPIEndPoint extends APIEndPoint
 	{
 		return true;
 	}
+
+	function dispatch()
+	{
+		global $method;
+		if ($method == "GET") return $this->get();
+		if ($method == "POST") return $this->post();
+		throw new FakoliException("Unsupported HTTP Verb");
+	}
 }
 
+
+class ScriptEndPoint extends APIEndPoint
+{
+    protected $component;
+    protected $script;
+    protected $roles;
+    
+    function __construct($component, $script, $roles = "")
+    {
+        $this->component = $component;
+        $this->script = $script;
+        $this->roles = $roles;
+
+        parent::__construct();
+    }
+    
+    function checkAccess()
+	{
+		return checkRole($this->roles);
+	}
+	
+	function allowAnonymous()
+	{
+		return ($this->roles == "");
+	}
+
+    function query()
+    {
+        return $this->dispatch();
+    }
+    
+    function get($id, $relationships = "")
+    {
+        return $this->dispatch();
+    }
+    
+    function post()
+    {
+        return $this->dispatch(); 
+    }
+    
+    function put()
+    {
+        return $this->dispatch();
+    }
+
+    function dispatch()
+    {
+        echo Fakoli::evaluateFile("{$this->component},{$this->script}");
+    }
+}
 
 /**
  *
@@ -138,41 +216,26 @@ class APIContentAdminView extends AbstractSectionContentAdminView
 	{
 		global $script;
 		
-		/*
-		$tokens = Query::create('ShareToken', "ORDER BY created_date")->execute();
-		$table = new DataListView($tokens, "share_tokens");
-		$table->column("Token", "<a href=''>{token}</a>", true)
-		->column("Type", "{item_type}", true)
-		->column("Shared By", "{User.getFullName()}", true)
-		->column("Active", "<i class='fa-fw fas fa-{active:check/times}'></i>", true, "text-align: center")
-		->column("# Accesses", "{countAccesses()}", true, "text-align: right");
-		
-		$table->pageSize = 20;
-		$table->filter = true;
-		$table->sortable = true;
-		$table->emptyMessage = "No items have been shared";
-		$table->excelFile = "share_tokens.xls";
-		
-		$script .= $table->writeScript();
-		
-		echo "<h3>Share Tokens</h3>";
-
-		$table->drawView();
-		*/
+		echo "<h2>Registered API Endpoints</h2>";
+		echo "<p>The following API endpoints have been registered in the system.</p>";
+		APIManager::writeAPIEndPointList();
 	}
 }
 class APIManager
 {
 	private static $endpoints = null;
-	
+	private static $endpointVerbs = null;
+
 	function ApiManager()
 	{
 
 	}
 	
-	static function registerEndPoint($endpoint, $handler)
+	static function registerEndPoint($endpoint, $handler, $verbs = "GET")
 	{
 		APIManager::$endpoints[$endpoint] = $handler;
+		$verbs = explode(",", strtoupper($verbs));
+		APIManager::$endpointVerbs[$endpoint] = array_combine($verbs, $verbs);
 	}
 
 	static function getEndPoint($endpoint)
@@ -180,61 +243,96 @@ class APIManager
 		if (!APIManager::$endpoints)
 		{
 			APIManager::$endpoints = array();
+			APIManager::$endpointVerbs = array();
 			ComponentManager::fireEvent('RegisterAPIEndPoints');
 		}
 		
 		return APIManager::$endpoints[$endpoint];
 	}
 	
+	static function verbSupported($endpoint, $verb)
+	{
+		$verb = strtoupper($verb);
+		return array_key_exists($verb, APIManager::$endpointVerbs[$endpoint]);
+	}
+
+	static function writeAPIEndPointList()
+	{
+		if (!APIManager::$endpoints)
+		{
+			APIManager::$endpoints = array();
+			APIManager::$endpointVerbs = array();
+			ComponentManager::fireEvent('RegisterAPIEndPoints');
+		}
+		
+		echo "<table class='list'><thead><th>Endpoint</th><th>Handler Class</th><th>Allowed Verbs</th></thead><tbody>";
+		
+		foreach(APIManager::$endpoints as $endpoint => $handler)
+		{
+			$verbs = implode(", ", array_keys(APIManager::$endpointVerbs[$endpoint]));
+			echo "<tr><td>{$endpoint}</td><td>".get_class($handler)."</td><td>{$verbs}</td></tr>";
+		}
+
+		echo "</tbody></table>";
+
+	}
+
 	static function dispatch($endpoint)
 	{
 		global $method;
 		global $user;
 		
+		trace("APIManager::dispatch endpoint $endpoint method $method", 3);
+
 		$handler = APIManager::getEndPoint($endpoint);
 		if (!$handler)
 		{
 			throw new FakoliException("API Endpoint not found");
 		}
 		
-		$m = strtolower($method);
-		if (!method_exists($handler, $m))
+		
+		if (!APIManager::verbSupported($endpoint, $method))
 		{
 			throw new FakoliException("Unsupported HTTP Verb");
 		}
 		
 		if ($handler->allowAnonymous())
 		{
-			$handler->$m();
+			$handler->dispatch();
 			return;
 		}
-		
-		$t = checkIdentifier($_GET["token"]);
-		
-		if (!$t)
+
+		if (!$user)
 		{
-			throw new FakoliException("No Authentication Token Provided");
+
+			
+			$t = checkIdentifier($_GET["token"]);
+			
+			if (!$t)
+			{
+				throw new FakoliException("No Authentication Token Provided");
+			}
+			
+			$token = APIToken::getToken($t);
+			if (!$token)
+			{
+				throw new FakoliException("Authentication Token Not Found");
+			}
+			
+			if (!$token->active)
+			{
+				throw new FakoliException("Invalid Token");
+			}
+			
+			$user = $token->User();
 		}
-		
-		$token = APIToken::getToken($t);
-		if (!$token)
-		{
-			throw new FakoliException("Authentication Token Not Found");
-		}
-		
-		if (!$token->active)
-		{
-			throw new FakoliException("Invalid Token");
-		}
-		
-		$user = $token->User();
-		
+
 		if (!$handler->checkAccess())
 		{
 			throw new FakoliException("Permission Denied");
 		}
 		
-		$handler->$m();
+		$handler->dispatch();
 	}
 	
 	function validateAPILogin()
