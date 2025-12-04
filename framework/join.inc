@@ -897,9 +897,15 @@ class LeftOuterJoin extends AbstractJoin
 		}
 		
 		if ($this->unique) $fields = "DISTINCT $fields";
+		if (is_array($this->whereConstraints))
+		{
+			$classConstraints = implode(" AND ", array_values($this->whereConstraints));
+		}
+		else
+		{
+			$classConstraints = $this->whereConstraints ? $this->whereConstraints : "";
+		}
 		
-		$classConstraints = implode(" AND ", array_values($this->whereConstraints));
-
 		if (strncmp($constraints, "WHERE", 5))
 		{
 			if ($classConstraints) $classConstraints = " AND ".$classConstraints;
