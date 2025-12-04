@@ -344,11 +344,11 @@ class DataListView implements FacetFilterable
 	 * @param string $typeHint type hint for formatting the output
 	 * @return DataListView returns the current instance, allowing function call chaining for the column definitions.
 	 */
-	function footerTotal($field, $style = "text-align: right", $colspan = 1, $typeHint = Number)
+	function footerTotal($field, $style = "text-align: right", $colspan = 1, $typeHint = 'Number')
 	{
 		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan, $typeHint);
 		$this->footerColumns[] = $column;
-		$this->totalCallbacks[] = array($column, onStartRow);
+		$this->totalCallbacks[] = array($column, 'onStartRow');
 		
 		return $this;
 	}
@@ -879,28 +879,28 @@ class DataListView implements FacetFilterable
 				
 				switch($column->typeHint)
 				{
-				case String:
+				case 'String':
 
 					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
 					break;
 					
-				case Text:
+				case 'Text':
 					
 					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)), true);
 					break;
 					
-				case Number:
+				case 'Number':
 					
 					$x->writeNumber($r, $c, $val);
 					break;
 					
-				case Currency:
+				case 'Currency':
 					
 					$val = str_replace(array("$", ","), array("", ""), $val);
 					$x->writeCurrency($r, $c, $val);
 					break;
 					
-				case Percentage:
+				case 'Percentage':
 					
 					$x->writePercentage($r, $c, $val);
 					break;

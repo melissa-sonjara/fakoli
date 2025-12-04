@@ -598,10 +598,10 @@ ENDSCRIPT;
 			return $script;
 	}
 	
-	function header($alt = event_display)
+	function header($alt = 'event_display')
 	{
 		$link = $this->rewriteQueryString($this->year, $this->month, $alt);
-		$altTitle = ($alt == event_display) ? "List of Events" : "Calendar";
+		$altTitle = ($alt == 'event_display') ? "List of Events" : "Calendar";
 ?>		
 <table style='width: 100%' class="layout">
  <tr>

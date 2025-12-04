@@ -84,37 +84,37 @@ class QuestionnaireDataView
 
 		switch($questionType->class_name)
 		{
-			case MultipleChoiceView:
+			case 'MultipleChoiceView':
 					
 				$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 				break;
 					
-			case RatingView:
+			case 'RatingView':
 
 				$this->optionAnswers[$question->$qPk] = $this->getRatingsQuestionResultData($question, $answers);
 				break;
 					
-			case ShortTextView:
+			case 'ShortTextView':
 
 				$this->textAnswers[$question->$qPk] = $answers;
 				break;
 					
-			case FreeTextView:
+			case 'FreeTextView':
 
 				$this->textAnswers[$question->$qPk] = $answers;
 				break;
 					
-			case CheckListView:
+			case 'CheckListView':
 
 				$this->optionAnswers[$question->$qPk] = $this->getCheckListQuestionResultData($question, $answers);
 				break;
 					
-			case SelectFieldView:
+			case 'SelectFieldView':
 
 				$this->optionAnswers[$question->$qPk] = $this->getSingleSelectQuestionResultData($question, $answers);
 				break;
 
-			case HeadingView:
+			case 'HeadingView':
 				break;
 				
 			default:

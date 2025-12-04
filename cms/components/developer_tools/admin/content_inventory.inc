@@ -17,7 +17,7 @@ $table = new GroupedDataListView($itemsByType, "items_by_type");
 $table->column("Identifier", "<strong>{identifier}</strong>", true, "width: 20%")
 	  ->column("Title", "{DeveloperToolsManager::formatDefault}", true, "width: 40%")
 	  ->column("Used in Section(s)", "{DeveloperToolsManager::formatSections}", true, "width: 40%");
-$table->onStartRow = array($helper, onStartRow);
+$table->onStartRow = array($helper, 'onStartRow');
 
 foreach(array_keys($itemsByType) as $group)
 {

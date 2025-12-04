@@ -236,11 +236,11 @@ class FooterTotalColumn extends FooterColumn
 	
 	function format()
 	{
-		if(!$this->typeHint || $this->typeHint == Number)
+		if(!$this->typeHint || $this->typeHint == 'Number')
 		{
 			$renderer = new NumberTypeRenderer();
 		}
-		elseif($this->typeHint == Currency)
+		elseif($this->typeHint == 'Currency')
 		{
 			$renderer = new CurrencyTypeRenderer();
 			$out = "$";

@@ -290,7 +290,7 @@ class MergeCodeManager
 			foreach($fields as $name => $type)
 			{
 				if(preg_match("/_id/", $name) || preg_match("/composite/", $name) 
-					|| preg_match("/password/", $name) || $type == Boolean)
+					|| preg_match("/password/", $name) || $type == 'Boolean')
 					continue;
 			
 				$mCode = new MergeCode();

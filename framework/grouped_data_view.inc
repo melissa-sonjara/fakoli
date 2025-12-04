@@ -833,23 +833,23 @@ class GroupedDataListView
 						
 						switch($column->typeHint)
 						{
-						case String:
+						case 'String':
 		
 							$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
 							break;
 							
-						case Number:
+						case 'Number':
 							
 							$x->writeNumber($r, $c, $val);
 							break;
 							
-						case Currency:
+						case 'Currency':
 							
 							$val = str_replace(array("$", ","), array("", ""), $val);
 							$x->writeCurrency($r, $c, $val);
 							break;
 							
-						case Percentage:
+						case 'Percentage':
 							
 							$x->writePercentage($r, $c, $val);
 							break;

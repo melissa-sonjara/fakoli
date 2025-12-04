@@ -247,7 +247,7 @@ ENDSCRIPT;
 		{
 			foreach($_GET as $key => $value)
 			{
-				if ($key == "identifier" || $key == "section" || $key == "submit" || array_key_exists($this->hidden, $key) || $obj->hasField($key)) continue;
+				if ($key == "identifier" || $key == "section" || $key == "submit" || array_key_exists($key, $this->hidden) || $obj->hasField($key)) continue;
 				echo "<input id='{$this->id}_{$key}' type='hidden' name='$key' value='".htmlSafe($value)."'/>\n";
 			}
 		}
@@ -335,7 +335,7 @@ ENDSCRIPT;
 				$field = $renderer->field;
 			if (!array_key_exists($field, $this->renderedFields))
 			{
-				if(get_class($renderer) == DateRangeFilterRenderer)
+				if(get_class($renderer) == 'DateRangeFilterRenderer')
 				{
 					$dateRangeField = $field;
 					continue;
