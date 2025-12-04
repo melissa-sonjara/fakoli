@@ -2,6 +2,8 @@
 Fakoli::using("error_log", "user", "activity_tracker");
 Fakoli::usingFeature("auto_form");
 
+$menu_item = "Error Log";
+
 $error_log_id = checkNumeric($_GET["error_log_id"]);
 
 $error = new ErrorLog($error_log_id);
