@@ -151,6 +151,7 @@ class InclusionFilter
 define("SerializeRelations", 1);
 define("SerializeDirectRelations", 2);
 define("ProtectHTML", 4);
+define("OverrideRedaction", 8);
 
 /**
  * Abstract base class for all DataItem implementations. 
