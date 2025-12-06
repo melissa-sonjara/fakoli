@@ -636,7 +636,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		if(!count($actions)) return;
 		$item = $this->item;
 
-		if(!is_callable(array($item, isAuthor))) return;
+		if(!is_callable(array($item, 'isAuthor'))) return;
 
 		if(!$item->isAuthor())
 		{

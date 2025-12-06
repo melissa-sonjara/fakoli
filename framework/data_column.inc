@@ -185,7 +185,7 @@ class FooterTotalColumn extends FooterColumn
 	 * @param string $style 
 	 * @param number $colspan 
 	 */
-	function __construct($field, $template = "", $style = "", $colspan = 1, $typeHint = Number)
+	function __construct($field, $template = "", $style = "", $colspan = 1, $typeHint = 'Number')
 	{
 		$this->field = $field;
 		$this->typeHint = $typeHint;
@@ -197,7 +197,7 @@ class FooterTotalColumn extends FooterColumn
 		 */
 		if (!is_callable($this->field) && strpos($this->field, "$", 0) !== FALSE)
 		{
-			$this->typeHint = Currency;
+			$this->typeHint = 'Currency';
 			$this->field = substr($this->field, 1); 
 		}
 			

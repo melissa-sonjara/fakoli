@@ -62,12 +62,12 @@ $surveys = Query::create('Survey', "$constraint  ORDER BY status, start_date DES
 	->execute();
 
 $table = new DataListView($surveys, "surveys");
-$table->column("Survey Title", array($mgr, formatTitleLink), true, "width: 15%")
+$table->column("Survey Title", array($mgr, 'formatTitleLink'), true, "width: 15%")
 	->column("Author", "{User.first_name} {User.last_name}", true, "width: 10%")
 	->column("Status", "<span id='status_{survey_id}'>{status:prettify}</span>", true, "width: 10%")
 	->column("Date Sent", "{start_date|-- / -- / ----}", true, "width: 12%")
-	->column("Percentage of Surveys Received", array($mgr, getProgressBar), true, "width: 20%")
- 	->column("Actions", array($mgr, formatActions), true, "width: 20%");
+	->column("Percentage of Surveys Received", array($mgr, 'getProgressBar'), true, "width: 20%")
+ 	->column("Actions", array($mgr, 'formatActions'), true, "width: 20%");
 	;
  	
 $table->emptyMessage = "There are no surveys.";

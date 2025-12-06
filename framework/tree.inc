@@ -421,6 +421,7 @@ class TreeControl
 	
 	function writeNodes()
 	{
+		if (!$this->children) return;
 		$c = count($this->children);
 		
 		for($i = 0; $i < $c; ++$i)

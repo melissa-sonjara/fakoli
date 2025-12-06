@@ -328,7 +328,7 @@ function deleteFolderResult(result)
 				
 			$tree->children["documents"]->open = true;
 		
-			$page->page_title = "Documents";
+			if ($page) $page->page_title = "Documents";
 	
 			$tree->writeHTML(); 
 
@@ -696,7 +696,7 @@ function deleteFolderResult(result)
 		$form->annotate("allow_comments", "Allow users to comment on documents from the document details page (if commenting is enabled).");
 		
 		$form->allowDelete = true;
-		$form->onDelete = deleteDocumentLibary;
+		$form->onDelete = 'deleteDocumentLibrary';
 		
 		return $form;
 	}	

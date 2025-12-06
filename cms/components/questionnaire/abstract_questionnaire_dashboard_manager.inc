@@ -207,7 +207,7 @@ abstract class AbstractQuestionnaireDashboardManager extends AbstractQuestionnai
 		if($sendMgr)
 		{
 			$sendActions = $sendMgr->getSendActions();
-			if(count($sendActions))
+			if($sendActions != null && count($sendActions))
 			{
 				foreach($sendActions as $code => $name)
 				{
