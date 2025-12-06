@@ -86,7 +86,7 @@ else
 	$tree = new DirectoryTreeControl("folder");
 	$tree->width = 320;
 	$tree->height = 150;
-	$tree->permissionCallback = array($mgr, excludeVersionControl);
+	$tree->permissionCallback = array($mgr, 'excludeVersionControl');
 		
 	$tree->buildFolderTree("templates", $config['homedir']);
 

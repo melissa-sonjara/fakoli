@@ -768,7 +768,7 @@ class ReportTable
 					$report->footerColumns[] = $footer;
 					if(get_class($footer) == FooterTotalColumn)
 					{
-						$report->totalCallbacks[] = array($footer, onStartRow);
+						$report->totalCallbacks[] = array($footer, 'onStartRow');
 					}
 				}
 				else 

@@ -67,7 +67,7 @@ if(($survey->isEditable() && $sendMgr->isValid()))
 	$form->submitLabel = "Send Survey Emails";
 	$form->button("Send Test Email to {$user->email}", "questionnaireSendMgr.sendTestEmail()", null, true);
 	$form->submitLabel = $sendMgr->getSendSubmitLabel();
-	$form->customSaveHandler = array($sendMgr, sendRequests);
+	$form->customSaveHandler = array($sendMgr, 'sendRequests');
 }
 
 $page->page_title = (!$survey->isSent()) ? "Preview " : "Manage ";

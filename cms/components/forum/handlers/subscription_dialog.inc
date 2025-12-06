@@ -106,7 +106,7 @@ $typeSelect = new RadioButtonFieldRenderer($form, "subscription_type", "", $help
 $typeSelect->hideLabel = true;
 
 $form->button("Cancel", "forumSubscriptionMgr.closeDialog()", null, true);
-$form->customSaveHandler = array($helper, saveForumSubscription);
+$form->customSaveHandler = array($helper, 'saveForumSubscription');
 $form->labelCSS = "forum_subscription_label";
 
 if ($method == "POST")

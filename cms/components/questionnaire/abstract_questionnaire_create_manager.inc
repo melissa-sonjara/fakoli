@@ -152,7 +152,7 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 		$itemClass = get_class($src);
 		$dst = new $itemClass();
 
-		if(is_callable(array($dst, setDefaults)))
+		if(is_callable(array($dst, 'setDefaults')))
 		{
 			$dst->setDefaults();
 		}

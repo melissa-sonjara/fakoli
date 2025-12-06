@@ -51,7 +51,7 @@ $docMgr = new DocumentManager($library);
 
 $table = new DataListView($docMgr->documents, "library_documents");
 
-$table->column("Title", array($docMgr, formatLinkPickerTitle), false, "width: 60%")
+$table->column("Title", array($docMgr, 'formatLinkPickerTitle'), false, "width: 60%")
 ->column("Author", "{author}", false, "width: 20%; text-align: center")
 ->column("Uploaded By", "{Owner.first_name} {Owner.last_name}", false, "width: 20%; text-align: center")
 ->column("Last Modified", "{last_modified:short}", false, "width: 20%; text-align: center")

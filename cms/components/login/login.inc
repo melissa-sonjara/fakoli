@@ -208,7 +208,7 @@ class LoginManager
 		
 		$mgr = new UserManager();
 		
-		if(is_callable(array($mgr, emailToken)))
+		if(is_callable(array($mgr, 'emailToken')))
 			return $mgr->emailToken($siteUser);
 		
 		if (EmailTemplate::templateExists("email_login_token"))

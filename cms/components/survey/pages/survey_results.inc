@@ -59,10 +59,10 @@ $mgr = new SurveyResultsManager($survey);
 $sendMgr = new SurveySendManager($survey);
 
 $table = new DataListView($responses, "surveyResponses");
-$table->column("Token", array($mgr, formatResponseLink), true)
+$table->column("Token", array($mgr, 'formatResponseLink'), true)
 	->column("Status", "{status:prettify}", true)
 	->column("Date Submitted", "{last_modified|N/A}", true)
-	->column("Include In Results", array($mgr, formatIncludeInResultsLink), true, "text-align: center; width: 20px");
+	->column("Include In Results", array($mgr, 'formatIncludeInResultsLink'), true, "text-align: center; width: 20px");
 ;
 
 $table->emptyMessage = "There are no responses to this survey.";

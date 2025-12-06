@@ -62,7 +62,7 @@ $class_name = $mgr->getUserClass();
 $libraryMember = new FileshareUserXref();
 
 $clause = "";
-if(is_callable(array($mgr, getActiveClause)))
+if(is_callable(array($mgr, 'getActiveClause')))
 {
 	$clause = $mgr->getActiveClause();
 	if($clause) $clause .= " AND";

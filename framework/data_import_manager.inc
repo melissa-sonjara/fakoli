@@ -55,8 +55,8 @@ $mgr->column("role", 4);
 
 $mgr->match("email");
 
-$mgr->onPreProcessRow = array($helper, preProcessRow);
-$mgr->onSaveComplete = array($helper, sendEmail);
+$mgr->onPreProcessRow = array($helper, 'preProcessRow');
+$mgr->onSaveComplete = array($helper, 'sendEmail');
 
 $script .= $mgr->writeScript();
 $mgr->drawView();

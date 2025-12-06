@@ -47,7 +47,7 @@ $mgr = new QuestionnaireResultsManager($questionnaire);
 $responses = $questionnaire->Responses("ORDER BY date_submitted");
 
 $table = new DataListView($responses, "questionnaireResponses");
-$table->column("Respondent", array($mgr, formatResponseLink), true)
+$table->column("Respondent", array($mgr, 'formatResponseLink'), true)
 	->column("Status", "{status:prettify}", true)
 	->column("Date Submitted", "{date_submitted|N/A}", true)
 ;

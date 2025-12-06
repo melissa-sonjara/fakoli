@@ -350,7 +350,7 @@ class GroupedDataListView
 	{
 		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
 		$this->footerColumns[] = $column;
-		$this->totalCallbacks[] = array($column, onStartRow);
+		$this->totalCallbacks[] = array($column, 'onStartRow');
 		
 		return $this;
 	}
@@ -373,7 +373,7 @@ class GroupedDataListView
 	{
 		$column =  new FooterTotalColumn($field, $template = "", $style, $colspan);
 		$this->groupFooterColumns[] = $column;
-		$this->totalCallbacks[] = array($column, onStartRow);
+		$this->totalCallbacks[] = array($column, 'onStartRow');
 		
 		return $this;
 	}

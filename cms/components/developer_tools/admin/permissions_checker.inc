@@ -61,7 +61,7 @@ $table = new GroupedDataListView($sectionContent, "content_by_section");
 $table->column("Identifier", "<strong>{identifier}</strong>", true, "width: 20%")
 	  ->column("Roles", "{role:/,/, /}", true, "width: 30%")
 	  ->column("Permissions", "{permissions:/,/, /}", true, "width:30%")
-	  ->column("User Can Access?", array($helper, formatAccess), true, "text-align: center");
+	  ->column("User Can Access?", array($helper, 'formatAccess'), true, "text-align: center");
 
 $table->groupBy($sections, "{section}", "section_id");
 
@@ -70,7 +70,7 @@ $table->groupAsWorksheets = false;
 $table->filter = true;
 $table->sortable = true;
 $table->excelFile = codify($config['sitename']."_permissions_{$subject->username}").".xls";
-$table->onStartRow = array($helper, onStartRow);
+$table->onStartRow = array($helper, 'onStartRow');
 
 $script .= $table->writeScript();
 

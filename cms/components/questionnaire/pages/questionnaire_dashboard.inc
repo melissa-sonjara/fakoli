@@ -50,8 +50,8 @@ $questionnaires = Query::create('Questionnaire', "ORDER BY title DESC")->execute
 $mgr = new QuestionnaireDashboardManager(new Questionnaire());
 
 $table = new DataListView($questionnaires, "questionnaires");
-$table->column("Title", array($mgr, formatTitleLink), true)
-	->column("Actions", array($mgr, formatActions), true, "width: 20%");
+$table->column("Title", array($mgr, 'formatTitleLink'), true)
+	->column("Actions", array($mgr, 'formatActions'), true, "width: 20%");
 
 $table->emptyMessage = "There are no questionnaires defined.";
 $table->sortable = false;

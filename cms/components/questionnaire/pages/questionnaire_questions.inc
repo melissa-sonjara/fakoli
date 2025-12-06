@@ -55,7 +55,7 @@ $mgr = new QuestionnaireCreateManager($questionnaire);
 $questions = $questionnaire->Questions("ORDER BY question_number");
 
 $table = new DataListView($questions, "QuestionnaireQuestions");
-$table->column("Question", array($mgr, formatQuestionLink))
+$table->column("Question", array($mgr, 'formatQuestionLink'))
 	->column("Question Type", "{QuestionType.name}", false, "width: 15%")
 	->column("Options", array('QuestionTableHelper', 'formatOptions'))
 	->column("Required", array('QuestionTableHelper', 'formatRequired'))

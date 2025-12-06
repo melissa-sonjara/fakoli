@@ -100,7 +100,7 @@ else
 	$tree = new DirectoryTreeControl("folder");
 	$tree->width = 320;
 	$tree->height = 150;
-	$tree->permissionCallback = array($docMgr, folderPermission);
+	$tree->permissionCallback = array($docMgr, 'folderPermission');
 	$root = $library->getLibraryDirectory();
 		
 	$tree->buildFolderTree($config["uploaddir"], $root);
