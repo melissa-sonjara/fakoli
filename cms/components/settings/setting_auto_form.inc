@@ -93,7 +93,7 @@ class SettingAutoForm extends AutoForm
 		 	*/
 			if($setting->options == "FileUploadFieldRenderer")
 			{
-				$renderers[$setting->settings_id] = new FileUploadFieldRenderer($this, $setting->name, prettify($setting->name), uploadSettingFile);
+				$renderers[$setting->settings_id] = new FileUploadFieldRenderer($this, $setting->name, prettify($setting->name), 'uploadSettingFile');
 				$this->annotate($setting->name, "<a href='/action/settings/download?setting_id={$setting->settings_id}'>{$setting->value}</a>");
 				
 			}

@@ -76,7 +76,7 @@ if($folder_select)
 {
 	$folderSelect = new FolderSelectFieldRenderer($form, "folder", "Folder", $library);
 }
-$fileUpload = new FileUploadFieldRenderer($form, "file", "File", uploadLibraryFile);
+$fileUpload = new FileUploadFieldRenderer($form, "file", "File", 'uploadLibraryFile');
 $allowAccessList = new CheckListFieldRenderer($form, "allow_access", "Allow Access", DocumentManager::getRoleOptions());
 
 if ($method == "POST")

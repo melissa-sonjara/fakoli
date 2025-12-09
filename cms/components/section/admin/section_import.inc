@@ -42,7 +42,7 @@ $menu_item = "Sections";
 $form = new AutoForm($file);
 $form->submitLabel = "Import Section Map";
 
-$fileUpload = new FileUploadFieldRenderer($form, "import_file", "Import File", importSectionMap);
+$fileUpload = new FileUploadFieldRenderer($form, "import_file", "Import File", 'importSectionMap');
 
 if ($method == "POST")
 {

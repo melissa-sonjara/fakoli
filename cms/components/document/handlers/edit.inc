@@ -51,7 +51,7 @@ if (!checkRole($library->allow_access) && !$library->allowAccess())
 $document->filter = new InclusionFilter("document_id", "title", "notes", "keywords", "image_id", "author", "file", "url", "allow_access", "publication_date", "publication");
 
 $form = new AutoForm($document, "POST", "/action/document/edit?document_id=$document_id");
-$fileUpload = new FileUploadFieldRenderer($form, "file_upload", "Replace File", replaceLibraryFile);
+$fileUpload = new FileUploadFieldRenderer($form, "file_upload", "Replace File", 'replaceLibraryFile');
 
 $form->annotate("file_upload", "The maximum allowed file size is ".DocumentManager::getMaxUploadSize());
 
@@ -59,7 +59,7 @@ $form->readonly("file");
 $form->annotate("keywords", "Separate keywords with a comma");
 $form->ajaxSubmit("function(result) {editResult(result);}", "function() {document.id('{$form->id}_error').set('text','Failed to communicate with server'); }");
 $form->allowDelete = true;
-$form->onDelete = onDeleteDocument;
+$form->onDelete = 'onDeleteDocument';
 
 $notes = $form->getRenderer("notes");
 $notes->colspan = 1;

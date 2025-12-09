@@ -59,7 +59,7 @@ $form = new AutoForm($library);
 
 $form->submitLabel = "Import Metadata";
 
-$upload = new FileUploadFieldRenderer($form, "metadata", "Metadata File", uploadMetaData);
+$upload = new FileUploadFieldRenderer($form, "metadata", "Metadata File", 'uploadMetaData');
 
 if ($method == "POST")
 {

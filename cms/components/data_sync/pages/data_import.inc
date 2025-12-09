@@ -12,7 +12,7 @@ $form = new AutoForm($dummy);
 $form->submitLabel = "Upload Data";
 $form->customSaveHandler = dataImportDummySave;
 
-$upload = new FileUploadFieldRenderer($form, "csv_file", "CSV File", uploadDataImportFile);
+$upload = new FileUploadFieldRenderer($form, "csv_file", "CSV File", 'uploadDataImportFile');
 
 $tabs = DataSyncManager::getImportTabs();
 
