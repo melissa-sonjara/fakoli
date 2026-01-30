@@ -2176,6 +2176,7 @@ function tempdir($dir = null, $prefix = 'tmp_', $mode = 0700, $maxAttempts = 100
 	
 	return $path;
 }
+
 /**
  * @}
  */

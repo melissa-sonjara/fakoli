@@ -107,7 +107,7 @@ class MergeCodeManager
 				->execute();
 		}
 		
-		if(count($mergeCodes) > 0)
+		if($mergeCodes != null && count($mergeCodes) > 0)
 			$indexed = reindexList($mergeCodes, "name");
 		else
 			$indexed = array();
@@ -243,7 +243,7 @@ class MergeCodeManager
 	{
 		$text = $this->item->format($text);
 		
-		if(count($this->patterns) == 0)
+		if($this->patterns == null || count($this->patterns) == 0)
 			return $text;
 		else	
 			return str_replace($this->patterns, $this->replacements, $text);

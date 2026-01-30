@@ -1013,6 +1013,9 @@ class LeftOuterJoin extends AbstractJoin
 			foreach($p->getFields() as $field => $type)
 			{
 				$constraints = preg_replace("/([\s\(])(".$field.")\\b/", "$1t$i.$2", $constraints);
+
+				// handle class-delimited constraints
+				$constraints = preg_replace("/\\b{$c}\.({$field})\\b/", "t$i.$1", $constraints);
 			}
 										
 			foreach($p->calculatedFields as $field => $expr)

@@ -113,7 +113,7 @@ class DataListView implements FacetFilterable
 	 */
 	function __construct($items, $id, $cssClass = "list", $sortable = true, $pageSize = 0, $filter = false)
 	{
-		$this->items = $items;
+		$this->items = $items ? $items : [];
 		$this->id = $id;
 		$this->cssClass = $cssClass;
 		$this->sortable = $sortable;
@@ -423,7 +423,7 @@ class DataListView implements FacetFilterable
 			$this->writeExcelFile($this->excelFile);	
 		}
 		
-		if (count($this->items) == 0) return;
+		if ($this->items == null || count($this->items) == 0) return;
 		
 		if (!DataListView::$includesWritten)
 		{
@@ -508,7 +508,7 @@ class DataListView implements FacetFilterable
 	 */
 	function drawView()
 	{
-		trace("Number of Items: ".count($this->items), 3);
+		//trace("Number of Items: ".count($this->items), 3);
 		
 		if (count($this->items) > 0)
 		{
