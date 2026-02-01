@@ -1127,6 +1127,7 @@ class Fakoli
 			return 0;
 		}
 		$sessions = scandir($path);
+		if (!$sessions) return 0;
 		trace("SESSIONS: ".print_r($session, true), 1);
 		$number_of_users = count($sessions) - 2;
 		return $number_of_users;
