@@ -1187,15 +1187,23 @@ function includeRemote($host, $file)
  * @param string $url the URL to retrieve
  * @param string $username (optional) username for basic authentication
  * @param string $password (optional) password for basic authentication 
+ * @param string $token (optional) token for bearer authentication
  * @return string the contents of the file at that URL
  */
-function getRemote($url, $username = "", $password = "")
+function getRemote($url, $username = "", $password = "", $token = "")
 {
 	$url = canonicalizeURL($url);
 	trace("Retrieving $url", 3);
 	$ch = curl_init("$url");
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
+	if ($token)
+	{
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $token"]);
+	}
+	else
+	{
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+	}
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	
 	if ($username)
