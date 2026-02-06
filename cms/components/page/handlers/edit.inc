@@ -45,7 +45,6 @@ $page_id = checkNumeric($_GET["page_id"]);
 $cmspage = new Page();
 $cmspage->filter = new ExclusionFilter("menu_id", "identifier", "site_id", "template", "php_code_file");
 $cmspage->created_date = date("Y-m-d");
-$cmspage->archive_date = strftime('%Y-%m-%d', '0000-00-00');
 
 if ($page_id)
 {
