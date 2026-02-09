@@ -19,7 +19,7 @@ class CaptchaManager
 		ComponentManager::fireEvent("RegisterCaptchaProvider");
 	}
 
-	function addCaptchaToForm($form)
+	static function addCaptchaToForm($form)
 	{
 		$provider = Settings::getValue("captcha", "captcha_provider");
 		if (!$provider) return;
