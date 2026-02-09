@@ -200,7 +200,7 @@ function <?echo $this->parent->id?>_<?echo $field ?>_keyup(event)
 			$partValues[] = $_POST[$partField];
 		}
 
-		$value = implode($partValues, "");
+		$value = implode("", $partValues);
 		$this->parent->data->set($field, $value);
 	}
 		
