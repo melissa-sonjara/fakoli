@@ -157,6 +157,12 @@ class DateOfBirthFieldRenderer extends FieldRenderer
 		$dd = checkNumeric($_POST["{$field}_dd"]);
 		$yy = checkNumeric($_POST["{$field}_yy"]);
 
+		if (!$mm && !$dd & !$yy)
+		{
+			$this->parent->data->set($field, null);
+			return;
+		}
+		
 		if ($mm < 10) $mm = "0{$mm}";
 		if ($dd < 10) $dd = "0{$dd}";
 		
