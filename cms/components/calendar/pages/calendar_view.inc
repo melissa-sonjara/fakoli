@@ -85,7 +85,7 @@ $view->year = $year;
 $view->month = $month;
 
 $facetManager = new FacetManager('facet_manager', $view);
-TaxonomyManager::addFacets($facetManager, Event, true, "160px", "200px", "200px");
+TaxonomyManager::addFacets($facetManager, 'Event', true, "160px", "200px", "200px");
 
 $script .= $facetManager->writeScript();
 $script .= $view->writeScript();
