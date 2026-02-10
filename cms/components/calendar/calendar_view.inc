@@ -248,7 +248,7 @@ class CalendarView implements FacetFilterable
 		$this->month = date("n");
 		$this->year = date("Y");
 		$this->tagRowCallbacks = array();
-		$this->addHandler(Event, new StandardEventHandler());
+		$this->addHandler('Event', new StandardEventHandler());
 		ComponentManager::fireEvent("RegisterCalendarEventHandlers", $this);
 		
 		$max = Settings::getValue("calendar", "max_events_per_day");
