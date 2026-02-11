@@ -1790,7 +1790,7 @@ function arrayFilterKey( $input, $callback )
  */
 function ajaxReturn($msg = null)
 {
-	if (class_exists(FakoliEarlyExit))
+	if (class_exists('FakoliEarlyExit'))
 	{
 		throw new FakoliEarlyExit($msg);
 	}
