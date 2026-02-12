@@ -268,7 +268,8 @@ class FileshareManager extends DocumentManager
 	
 	static function setVisitor()
 	{
-		$userClass = UserManager::getUserClass();
+		$mgr = new UserManager();
+		$userClass = $mgr->getUserClass();
 		$user = new $userClass();
 		$user->user_id = 0;
 		$user->role = "visitor";
