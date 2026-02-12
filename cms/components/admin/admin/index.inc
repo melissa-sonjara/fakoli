@@ -40,7 +40,8 @@ $signature = ComponentManager::getComponentSignature();
 <b>Welcome <?echo $user->getFullName()?>!</b>
 <br/>
 <br/>
-<strong>Server Time: </strong><?echo date("Y-m-d H:i:s T P")?><br/><br/>
+<strong>Server Time: </strong><?echo date("Y-m-d H:i:s T P")?><br/>
+<strong>Server Timezone: </strong><?echo date_default_timezone_get()?><br/><br/>
 <strong>Server Load: </strong><?echo Fakoli::getServerLoad()?><br/><br/>
 <strong>Disk Usage:</strong><br/><br/><?echo Fakoli::getFileSystemInfo()?><br/><br/>
 <!-- <strong># Currently Active Sessions: </strong><?echo Fakoli::countActiveSessions();?><br/><br/>
