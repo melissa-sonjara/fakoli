@@ -92,11 +92,11 @@ class VideoManager
 		if ($useFlash && $flowPlayerScript)
 		{
 			$script .= "<script type='text/javascript' src='$flowPlayerScript'></script>\n";
+
+			$flowPlayer = Settings::getValue("video", "flowplayer_player");
+			
+			$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
 		}
-		
-		$flowPlayer = Settings::getValue("video", "flowplayer_player");
-		
-		$script .= "<script type='text/javascript'>\nvar flowplayerPath = '$flowPlayer';\n</script>\n";
 	}
 	
 	static function getVideoFolder()
