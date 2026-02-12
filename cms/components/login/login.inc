@@ -541,7 +541,7 @@ class LoginManager
 		else redirect($mainLogin);
 	}
 	
-	function passwordHelp($username = "")
+	static function passwordHelp($username = "")
 	{
 		$mgr = new UserManager();
 
