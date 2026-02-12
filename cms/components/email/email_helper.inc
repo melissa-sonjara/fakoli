@@ -79,7 +79,7 @@ class EmailHelper
 	 * @param obj $form
 	 * @return boolean
 	 */
-	function sendContactUs($form)
+	static function sendContactUs($form)
 	{	
 		$contactUs =& $form->data;
 		
