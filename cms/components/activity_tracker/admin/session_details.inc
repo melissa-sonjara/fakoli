@@ -35,7 +35,7 @@ $table->column("Date", "{activity_time:m/d/Y g:i:s}", true, "width: 20%")
 $table->filter = true;
 $table->pageSize = 50;
 $table->sortable = true;
-$table->onStartRow = array(new SessionDetailsHelper(), filterImages);
+$table->onStartRow = array(new SessionDetailsHelper(), 'filterImages');
 $table->excelFile = "session_{$session_id}.xls";
 
 $script .= $table->writeScript();
