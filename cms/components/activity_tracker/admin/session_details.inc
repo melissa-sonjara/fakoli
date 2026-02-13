@@ -30,7 +30,7 @@ $table->column("Date", "{activity_time:m/d/Y g:i:s}", true, "width: 20%")
 	  ->column("Method", "{method}", true, "width: 10%; text-align: center")
 	  ->column("URI", "{uri}", true, "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 40%")
 	  ->column("Response Time (s)", "{response_time}", true, "text-align: right")
-	  ->column("Memory Usage", "{ActivityTracker::formatMemoryUsage}", true, "text-align:right", Number, null, "{memory_usage}");
+	  ->column("Memory Usage", "{ActivityTracker::formatMemoryUsage}", true, "text-align:right", 'Number', null, "{memory_usage}");
 	  
 $table->filter = true;
 $table->pageSize = 50;
