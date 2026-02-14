@@ -1035,12 +1035,31 @@ class Fakoli
 		
 		try
 		{
-			$section = Section::createFromIdentifier($sectionIdentifier);
+			try
+			{
+				$section = Section::createFromIdentifier($sectionIdentifier);
+			}
+			catch(SectionNotFoundException $e)
+			{
+				$section = null;
+			}
 
 			ComponentManager::fireEvent("OverrideResource", $identifier);
 			
 			if (!$section)
 			{
+				// If no section was found, and this is a request for a top-level page, 
+				// then check if the page exists as content in the root section. 
+				// If so, redirect to the URL for that page.
+				if (!$identifier)
+				{
+					$rootSection = Section::createFromIdentifier("/");
+					$content = $rootSection->getContent($sectionIdentifier);
+					if ($content)
+					{
+						redirect("/$sectionIdentifier");
+					}
+				}
 				throw new FakoliException("The section you were attempting to access could not be found.");
 			}
 			
@@ -1299,7 +1318,7 @@ ENDSCRIPT;
 	 * @param string $element the DOM ID of the element to scroll to
 	 * @param integer $offset (optional) offset in pixels
 	 */
-	function scrollTo($element, $offset = 0)
+	static function scrollTo($element, $offset = 0)
 	{
 		global $script;
 		$script .=
@@ -1319,7 +1338,7 @@ ENDSCRIPT;
 	 * @param string $element the DOM ID of the element to scroll to
 	 * @param integer $offset (optional) offset in pixels
 	 */
-	function scrollToOnNextPage($element, $offset = 0)
+	static function scrollToOnNextPage($element, $offset = 0)
 	{
 		$_SESSION["scrollto_pending"] = $element;
 		$_SESSION["scrollto_offset"] = $offset;
@@ -1345,7 +1364,7 @@ ENDSCRIPT;
 	 * Schedules the provided script fragment to be output when the next page is loaded.
 	 * @param string $s the script to be executed (including the enclosing script tags)
 	 */
-	function scriptOnNextPage($s)
+	static function scriptOnNextPage($s)
 	{
 		$_SESSION["script_pending"] .= $s;
 	}

@@ -36,6 +36,14 @@
 
 *****************************************************************/
 
+class SectionNotFoundException extends FakoliException
+{
+	function __construct()
+	{
+		parent::__construct("Unknown or ambiguous section '$identifier'");
+	}
+}
+
 /**
  * Section DataItem, defining the data model for sections within
  * a site.
@@ -107,7 +115,7 @@ class Section extends DataItem
 		catch(Exception $e)
 		{
 			ComponentManager::fireEvent("SectionNotFound", $identifier);
-			throw new FakoliException("Unknown or ambiguous section '$identifier'");
+			throw new SectionNotFoundException($identifier);
 		}		
 	}
 	
