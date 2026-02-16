@@ -42,7 +42,7 @@ class ScrollView
 		}
 		
 		$out = $part->format($partTemplate);
-		$out = preg_replace("/\\[((?:include|position):.*?)\\]/i", "{\$1}", $out);
+		$out = preg_replace("/\\[((?:include|position|get|var):.*?)\\]/i", "{\$1}", $out);
 		return $out;
 	}
 	
