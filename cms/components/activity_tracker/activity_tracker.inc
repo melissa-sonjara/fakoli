@@ -393,8 +393,8 @@ class ActivityReportFilterHelper
 	/**
 	 * For activity report filter
 	 *
-	 * @param 'String' $name
-	 * @param 'Boolean' $value
+	 * @param String $name
+	 * @param Boolean $value
 	 * @return string
 	 */
 	static function getFeedbackUserClause($name, $value)

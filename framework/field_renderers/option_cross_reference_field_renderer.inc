@@ -30,7 +30,7 @@ class OptionCrossReferenceFieldRenderer extends FieldRenderer
 	var $groupTag = "h4";
 	var $containerClass = "";
 	
-	function _construct(&$form, $field, $label, $options, $nameField, $xrefClass, $grouped = false)
+	function __construct(&$form, $field, $label, $options, $nameField, $xrefClass, $grouped = false)
 	{
 		$this->options = $options;
 		$this->nameField = $nameField;

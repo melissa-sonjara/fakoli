@@ -49,9 +49,13 @@ class Cache
 	static function getInstance()
 	{
 		global $config;
-				
-		if (Cache::$instance) return Cache::$instance;
 		
+		if (Cache::$instance)
+		{
+			trace(get_class(Cache::$instance), 5);
+			return Cache::$instance;
+		}
+
 		if (array_key_exists("file_backed_cache_directory", $config))
 		{
 			Cache::$instance = new FileBackedCache();
