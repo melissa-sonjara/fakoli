@@ -912,8 +912,8 @@ class DataListView implements FacetFilterable
 					{
 						try
 						{
-							$val = str_replace(array("$", ","), array("", ""), $val);
-							$x->writeNumber($r, $c, $val);
+							$v = str_replace(array("$", ","), array("", ""), $val);
+							$x->writeNumber($r, $c, $v);
 						}
 						catch(Exception $e)
 						{
