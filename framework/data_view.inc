@@ -910,8 +910,16 @@ class DataListView implements FacetFilterable
 					/* JDG 5/11/10 currency export fix */
 					if (preg_match("/^[\\d\\,\\.\\$]+$/", $val))
 					{
-						$val = str_replace(array("$", ","), array("", ""), $val);
-						$x->writeNumber($r, $c, $val);
+						try
+						{
+							$val = str_replace(array("$", ","), array("", ""), $val);
+							$x->writeNumber($r, $c, $val);
+						}
+						catch(Exception $e)
+						{
+							// If it doesn't work as a number, just write it as text
+							$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
+						}
 					}
 					else
 					{
