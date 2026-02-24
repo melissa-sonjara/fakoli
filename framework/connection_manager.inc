@@ -153,5 +153,22 @@ class ConnectionManager
 		
 		return $version;
 	}
+
+	/**
+	 * Populate the connection manager with database connection information passed from environment variables.
+	 * Use this method instead of manually setting the variables in connection.inc to improve security
+	 * by keeping database credentials out of the codebase.
+	 */
+	static function initFromEnvironment($dsnVariable = "FAKOLI_DB_DSN", $userVariable = "FAKOLI_DB_USER", $passwordVariable = "FAKOLI_DB_PASSWORD")
+	{
+		ConnectionManager::$dsn = getenv($dsnVariable);
+		ConnectionManager::$user = getenv($userVariable);
+		ConnectionManager::$password = getenv($passwordVariable);
+
+		if (!ConnectionManager::$dsn || !ConnectionManager::$user)
+		{
+			die("Database connection information not found");
+		}
+	}
 }
 /**@}*/
