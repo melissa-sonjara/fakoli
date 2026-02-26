@@ -65,7 +65,7 @@ function checkRole($role, $account = null)
 	{
 		if ($ur == "admin") return true;
 		$expr = "/\\b{$ur}\\b/";
-		$allowed = (preg_match($expr, $role) > 0) ? true : false;
+		$allowed = preg_match($expr, $role) > 0;
 		if ($allowed) break;
 	}
 	
@@ -94,7 +94,7 @@ function hasRole($role, $account = null)
  * Filter the given list, retaining only the objects that match the current
  * user's role profile in the given parameter.
  * 
- * @param string $items the array of items to be filtered
+ * @param array $items the array of items to be filtered
  * @param string $field the name of the field defining the role restriction
  * @return array the filtered array
  */
@@ -162,7 +162,7 @@ function formatDate($date)
 	
 /**
  * 
- * @param $date
+ * @param string $date
  * 
  * Deprecated
  */
@@ -196,7 +196,7 @@ function formatDateShort($date)
 
 /**
  * 
- * @param $date
+ * @param string $date
  * 
  * Deprecated
  */
@@ -237,12 +237,14 @@ function formatTimestamp($ts)
 	return date("F d, Y", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
 }
 
-/*
+/**
  * Format timestamp with date in short format
  * e.g., 1/2/2011 and include time in 12 hour format
  *  e.g., 10:15am
  *  
- *  Deprecated
+ * @param string $ts
+ * 
+ * Deprecated
  */
 function formatTimestampShort($ts)
 {
@@ -306,6 +308,8 @@ function getMonthWeekDays($month, $year)
 /**
  * Format a time in 12 hour clock, no seconds
  * 
+ * @param string $time
+ * 
  * Deprecated
  */
 function formatTime12($time)
@@ -315,6 +319,8 @@ function formatTime12($time)
 
 /**
  * Format a date and time in 12 hour clock, no seconds
+ * 
+ * @param string $time
  * 
  * Deprecated
  */
@@ -328,6 +334,8 @@ function formatDateTime12($time)
  * with hours on 12 hour clock, no seconds.
  * If time component is 00:00:00, then
  * don't return time.
+ * 
+ * @param string $datetime
  * 
  * Deprecated
  */
@@ -347,14 +355,14 @@ function formatDateTime12Hr($datetime)
 		return date("m/d/Y g:ia", mktime($hh,$mi,$ss,$mm,$dd,$yyyy));
 }
 
-/*
+/**
  * If start and end dates are the same date 
  * then show the date followed by start and end time.
  * Otherwise, show start date and time to end date
  * and time. 
  * 
- * $start - datetime
- * $end - datetime
+ * @param string $start
+ * @param string $end
  * 
  * Deprecated
  */
@@ -383,7 +391,7 @@ function formatStartDateToEndDate($start, $end)
 	}	
 }
 
-/*
+/**
  * Given a phone number containing various
  * separator characters between the numbers,
  * clear out the separators and standardize
@@ -392,6 +400,8 @@ function formatStartDateToEndDate($start, $end)
  * 
  * tylerhall on 11/30/-1
  * http://snipplr.com/view/25/format-phone-number/
+ * 
+ * @param string $phone
  * 
  * Deprecated
  */
@@ -448,16 +458,25 @@ function jsSafe($str, $escapeEntities = false)
 	return $str;
 }
 
+/**
+ * @param string $str
+ */
 function htmlsafe($str)
 {
 	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
+/**
+ * @param string $str
+ */
 function cleanHTMLTags($str)
 {
 	return str_replace(array("<", ">"), array("&lt;", "&gt;"), $str);
 }
 
+/**
+ * @param string $html
+ */
 function HTMLToText($html)
 {
 	$patterns = array("/<br>/", "/&nbsp;/", "/<p>/", "/<BR>/", "/<P>/");
@@ -467,6 +486,9 @@ function HTMLToText($html)
 	return $text;
 }
 
+/**
+ * @param string $str
+ */
 function cleanQuotes($str)
 {
 	$chr_map = array(
@@ -505,6 +527,8 @@ function cleanQuotes($str)
  * Outputs the MIME type list based on an array of MIME types.
  * Use this function to generate the contents of ACCEPT= attributes
  * for <INPUT TYPE="file" ...> tags.    
+ * 
+ * @param array $types
  * 
  * Deprecated
  */
@@ -579,7 +603,7 @@ function getDocSize($doc)
 // Doesn't seem to work. 
 /**
  * 
- * @param $name
+ * @param string $name
  * 
  * Deprecated
  */
@@ -608,7 +632,7 @@ function getDocMimeType($name)
 
 /**
  * 
- * @param unknown_type $doc
+ * @param string $doc
  * 
  * Deprecated
  */
@@ -624,8 +648,8 @@ function getDocIcon($doc)
 
 /**
  * Security helper function. Check that the given parameter is a numeric value.
- * @param string $p the parameter to check
- * @return the value of the parameter if it matches the required format
+ * @param string|array $p the parameter to check
+ * @return string|array the value of the parameter if it matches the required format
  */
 function checkNumeric($p)
 {
@@ -642,9 +666,9 @@ function checkNumeric($p)
 
 /**
  * Security helper function. Check that the given parameter contains a list of numeric values with the given separator.
- * @param string $p the parameter to check
+ * @param string|array $p the parameter to check
  * @param string $separator the list separator (default to comma)
- * @return the value of the parameter if it matches the required format
+ * @return string|array the value of the parameter if it matches the required format
  */
 function checkNumericList($p, $separator = ",")
 {
@@ -662,6 +686,8 @@ function checkNumericList($p, $separator = ",")
 /**
  * Security helper function. Check that the given parameter is a valid identifier
  * (alphanumeric, _ and digits only with no spaces). Empty string is valid
+ * 
+ * @param string $p
  */
 function checkIdentifier($p)
 {
@@ -671,6 +697,8 @@ function checkIdentifier($p)
 /**
  * Security helper function. Check that the given parameter is a comma-separated list of valid identifiers
  * (alphanumeric, _ and digits only with no spaces). Empty string is valid
+ * 
+ * @param string $p
  */
 function checkIdentifierList($p)
 {
@@ -804,7 +832,7 @@ function ellipsis($txt, $max, $wholeWord = false)
 
 /**
  * 
- * @param unknown_type $strText
+ * @param string $strText
  * 
  * Deprecated
  */
@@ -844,6 +872,9 @@ function firstSentence($text)
 	return ($pos) ? substr($text, 0, $pos + 1) : $text;
 }
 
+/**
+ * @param string $text
+ */
 function stripHTML($text)
 {
 	/*$text = preg_replace("/<.*?>/", "", $text);*/
@@ -917,6 +948,9 @@ function str_option($value, $text, $sel = "")
 
 $_redirectLogCallback = null;
 
+/**
+ * @param callback $callback
+ */
 function registerRedirectLogCallback($callback)
 {
 	global $_redirectLogCallback;
@@ -1081,8 +1115,8 @@ function trace($msg, $lvl = 3, $callStack = null)
 
 /**
  * Get human-readable file size from raw number of bytes
- * @param $size the size of the file in bytes
- * @param $decimal_places the number of decimal places in the output (default is 1)
+ * @param int $size the size of the file in bytes
+ * @param int $decimal_places the number of decimal places in the output (default is 1)
  * @return string human-readable file size in appropriate units
  */	
 function getScaledSize($size, $decimal_places = 1)
@@ -1110,6 +1144,10 @@ function getScaledSize($size, $decimal_places = 1)
 	return $result;
 }
 
+/**
+ * @param int $num
+ * @param boolean $abbrev
+ */
 function roundFormat($num,$abbrev = false)
 {
 	if (!$num) return "";
@@ -1143,7 +1181,7 @@ $_icons = array(".doc"		=>	"/images/msword_icon.png",
 
 /**
  * Retrieves a graphic icon appropriate for the given file
- * @param $file the name of the file
+ * @param string $file the name of the file
  * @return string URL of the graphic icon for the file
  */
 function getIcon($file)
@@ -1167,8 +1205,8 @@ function getIcon($file)
  * Includes the contents of the given remote file, with any relative
  * src or href references converted to absolute references. The included
  * file is echoed directly to the output stream.
- * @param $host the host to retrieve the file from
- * @param $file the URI of the file on the host
+ * @param string $host the host to retrieve the file from
+ * @param string $file the URI of the file on the host
  */
 function includeRemote($host, $file)
 {
@@ -1226,7 +1264,7 @@ function getRemote($url, $username = "", $password = "", $token = "")
  * @param string $url the target URL for the API
  * @param array $params an array of parameters to pass, as key-value pairs
  */
-function jsonRequest($url, $params = array())
+function jsonRequest(string $url, array $params = [])
 {
 	$qs = array();
 	foreach($params as $key => $value)
@@ -1246,10 +1284,10 @@ function jsonRequest($url, $params = array())
  * Retreive the contents of the remote file at the given URL 
  * and save it to the specified location on the local disk.
  * 
- * @param $url the URL to retrieve
- * @param $saveAs the path and file name where the downloaded file should be stored.
+ * @param string $url the URL to retrieve
+ * @param string $saveAs the path and file name where the downloaded file should be stored.
  * 
- * @return returns the content type of the retrieved file as specified by the server
+ * @return string the content type of the retrieved file as specified by the server
  */
 function saveRemote($url, $saveAs)
 {
@@ -1325,9 +1363,9 @@ function sanitizePath($path)
 	
 /**
  * Make a POST request to a remote URL, returning the results.
- * @param $url the URL of the page to submit the POST request to
- * @param $data the POST parameters, passed as an array of key => value pairs 
- * @param $timeout the amount of time to wait for the POST to complete
+ * @param string $url the URL of the page to submit the POST request to
+ * @param array $data the POST parameters, passed as an array of key => value pairs 
+ * @param int $timeout the amount of time to wait for the POST to complete
  * @return string the results of the POST request
  */
 function postRemote($url, $data = null, $timeout = 30)
@@ -1344,6 +1382,11 @@ function postRemote($url, $data = null, $timeout = 30)
 	return $result;
 }
 
+/**
+ * @param string $url
+ * @param string $xml
+ * @param int $timeout
+ */
 function postRemoteXML($url, $xml, $timeout = 30)
 {
 	$ch = curl_init($url);
@@ -1382,8 +1425,8 @@ function getRemoteHeaders($url)
 /**
  * Break a URL at a given string position. This can help prevent long URLs from
  * messing up your page layout.
- * @param $url the URL to break
- * @param $width the maximum line length (in characters)
+ * @param string $url the URL to break
+ * @param int $width the maximum line length (in characters)
  * @return string the URL, wrapped for display
  */
 function wrapURL($url, $width = 120)
@@ -1401,7 +1444,7 @@ function wrapURL($url, $width = 120)
  * for use as a variable name or identifier. Principally this involved replacing
  * all whitespace and sequences of non-word characters (such as punctuation) with
  * underscores.
- * @param $name the name to codify
+ * @param string $name the name to codify
  * @return the code-ish version of the name
  */
 function codify($name)
@@ -1415,7 +1458,7 @@ function codify($name)
  * Takes a variable or field name and converts it into a human-readable version
  * (assuming that the original contains human-readable words, of course). It handles
  * CamelCase and underscores. Individual words in the output are capitalized.
- * @param $name the string to prettify
+ * @param string $name the string to prettify
  * @return string the prettified version of the string
  */
 function prettify($name)
@@ -1429,7 +1472,7 @@ function prettify($name)
 
 /**
  * Takes a singular string and makes it plural.
- * @param $text the string to make plural
+ * @param string $text the string to make plural
  * @param $count integer (optional) the number of items, to determine whether to pluralize or not
  * @return string the plural version
  */
@@ -1458,7 +1501,7 @@ function pluralize($text, $count = 0)
 /**
  * Takes a string and formats it for display as HTML, removing any 
  * HTML tags it contains, and converting carriage returns to br tags.
- * @param $text the text to format
+ * @param string $text the text to format
  * @return string the formatted text
  */
 function formatAsHTML($text)
@@ -1471,8 +1514,8 @@ function formatAsHTML($text)
 
 /**
  * Tests whether a string starts with a given sub-string
- * @param $text the string to test
- * @param $start the sub-string to look for at the start
+ * @param string $text the string to test
+ * @param string $start the sub-string to look for at the start
  * @return boolean true if the string starts with the sub-string, false otherwise
  */
 function startsWith($text, $start)
@@ -1482,8 +1525,8 @@ function startsWith($text, $start)
 
 /**
  * Tests whether a string ends with the given sub-string
- * @param $text the string to test
- * @param $end the sub-string to look for at the end
+ * @param string $text the string to test
+ * @param string $end the sub-string to look for at the end
  * @return boolean true if the string ends with the sub-string, false otherwise
  */
 function endsWith($text, $end)
@@ -1493,7 +1536,7 @@ function endsWith($text, $end)
 
 /**
  * Removes all HTML tags from the specified string
- * @param $text the string from which tags are to be removed
+ * @param string $text the string from which tags are to be removed
  * @return string the cleaned text.
  */
 function stripHTMLTags($text)
@@ -1504,8 +1547,8 @@ function stripHTMLTags($text)
 /**
  * Adds the english ordinal suffix to a number. If the value passed is not purely numeric,
  * it will be returned unchanged.
- * @param $n the value for the ordinal suffix
- * @param $sup true to add HTML superscript tag, false for plain text
+ * @param int $n the value for the ordinal suffix
+ * @param boolean $sup true to add HTML superscript tag, false for plain text
  * @return string the value with the appropriate ordinal suffix appended.
  */
 function ordinalSuffix($n, $sup = false)
@@ -1558,6 +1601,9 @@ function makeURL($uri)
  * To do: add handling of grouped checkboxes and
  * provide parameter for delimiter between items
  *
+ * @param array $options
+ * @param string $items
+ * 
  * Deprecated
  */
 function formatCheckListItemsforView($options, $items)
@@ -1584,7 +1630,7 @@ function formatCheckListItemsforView($options, $items)
 
 /**
  * Returns the base URI for the current script, with the query string removed.
- * string @param $uri (optional) the URI to truncate - if not specified, the URI
+ * @param string $uri (optional) the URI to truncate - if not specified, the URI
  * for the currently executing script is used.
  */
 function baseURI($uri = null)
@@ -1689,15 +1735,12 @@ function getFullQueryString($includePOST = true)
 	return $qs;
 }
 		
-/*
+/**
  * Convert a php array to a javascript array.
  * 
- * @items - array of objects or simple array
- * 
- * @field - if items is array of objects, the field
- * in the object to use to create the javascript array
- * 
- * returns javascript array in the format "[cat, dog, spider]";
+ * @param array $items array of objects or simple array
+ * @param string $field if items is array of objects, the field in the object to use to create the javascript array
+ * @return string javascript array in the format "[cat, dog, spider]";
  */
 function toJSArray($items, $field = "")
 {
@@ -1803,7 +1846,7 @@ function ajaxReturn($msg = null)
 
 /**
  * 
- * @param String $filename
+ * @param string $filename
  * 
  * Deprecated
  */
@@ -1966,6 +2009,7 @@ function plainGUID()
 
 /**
  * Returns a formatted backtrace suitable for debugging output.
+ * @param int $ignore
  */
 function getBacktrace($ignore = 2)
 {
@@ -2111,6 +2155,9 @@ function fopen_utf8($filename){
 	return  ($handle);
 }
 
+/**
+ * @param resource $fp
+ */
 function fgetcsv_noBOM($fp)
 {
 	$fields = fgetcsv($fp);
