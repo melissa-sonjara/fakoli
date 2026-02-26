@@ -179,7 +179,6 @@ class FacetManager
 		foreach ($this->facets as $title => $facet)
 		{
 			$show = $facet->filterItem($item);
-			trace("FACET FILTER {$title} for ".$item->format()."=> ".($show ? "SHOW" : "HIDE"), 2);
 			if (!$show)
 			{
 				return false;

@@ -69,8 +69,6 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
             $this->selected = explode(",", $_REQUEST[$this->taxonomy->identifier]);
             $this->selected = array_combine($this->selected, $this->selected);
         }
-
-        trace("FACET FILTER {$this->taxonomy->identifier} = {$_REQUEST[$this->taxonomy->identifier]}", 1);
     }
 
 	function onTagItem($item, $attrs)
