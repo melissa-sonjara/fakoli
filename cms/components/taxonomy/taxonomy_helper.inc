@@ -70,5 +70,37 @@ class TaxonomyHelper
 			$item->decorate($taxonomy->identifier, TaxonomyHelper::formatAssociatedTerms($taxonomy->identifier, $item, $separator));
 		}
 	}
+
+	static function addTaxonomyColumns($table, $class, $separator = ", ")
+	{
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($class);
+		
+		foreach($taxonomies as $taxonomy)
+		{
+			$table->column($taxonomy->taxonomy_name, "{".$taxonomy->identifier."}", true);
+		}
+
+		$table->onStartRow = function($item) use ($separator)
+		{
+			TaxonomyHelper::decorate($item, $separator);
+			return "";	
+		};
+	}
+
+	static function addTaxonomyExportColumns($table, $class, $separator = ", ")
+	{
+		$taxonomies = TaxonomyManager::getAssociatedTaxonomies($class);
+		
+		foreach($taxonomies as $taxonomy)
+		{
+			$table->exportColumn($taxonomy->taxonomy_name, "{".$taxonomy->identifier."}", true);
+		}
+
+		$table->onStartRow = function($item) use ($separator)
+		{
+			TaxonomyHelper::decorate($item, $separator);
+			return "";	
+		};
+	}
 }
 /**@}*/?>
