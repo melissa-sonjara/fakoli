@@ -156,7 +156,7 @@ class DocumentLibraryView
 	
 	function createUploadedByFacet()
 	{
-		$facet = new MultiSelectFacetFilter("owner_id", array(Document	=>	"{Owner.first_name} {Owner.last_name}"));
+		$facet = new MultiSelectFacetFilter("owner_id", array('Document'	=>	"{Owner.first_name} {Owner.last_name}"));
 	
 		$facet->dropdownMaxWidth = "160px";
 		$facet->width = "200px";
