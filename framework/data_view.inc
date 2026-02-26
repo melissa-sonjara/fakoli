@@ -63,8 +63,9 @@ class DataListView implements FacetFilterable
 	var $cssStyle;		///< Optional additional inline styles to apply to the table
 	var $emptyMessage;	///< Message to display when no items are present in the data set.
 	var $onStartRow;	///< Callback hook that gets called at the start of each row.
-	var $onDrawfooter;	///< Callback hook that gets called after all rows have been drawn.
+	var $onDrawFooter;	///< Callback hook that gets called after all rows have been drawn.
 	var $tagRowCallbacks; ///< Array of callbacks for adding extra attributes to each row
+	var $filterRowCallbacks; ///< Array of callbacks for server-side filtering of rows (for Excel output)
 	var $totalCallbacks;///< Array of callbacks for totalling columns
 	var $filter;		///< Specifies whether to enable client-side filtering for this table. 
 	var $excelFile;		///< Filename for automatic Excel export
@@ -100,7 +101,9 @@ class DataListView implements FacetFilterable
 	var $commandMenuIcon = "/fakoli/images/data_view_menu.png"; ///< Icon to use for the command menu dropdown
 	var $toolbarCallbacks = array(); 		///< Override this callback to add toolbar links into the first header cell
 	static $includesWritten = false;
-	
+
+    var $items = []; ///< List of DataItems to be displayed
+
 	/**
 	 * Creates a new DataListView object.
 	 * 
@@ -111,9 +114,9 @@ class DataListView implements FacetFilterable
 	 * @param integer $pageSize Specifies the number of items per page - set to zero for unpaginated
 	 * @param boolean $filter Specifies whether to enable client-side filtering for this table. 
 	 */
-	function __construct($items, $id, $cssClass = "list", $sortable = true, $pageSize = 0, $filter = false)
+	function __construct(array $items, string $id, string $cssClass = "list", $sortable = true, int $pageSize = 0, bool $filter = false)
 	{
-		$this->items = $items ? $items : [];
+		$this->items = $items ?: [];
 		$this->id = $id;
 		$this->cssClass = $cssClass;
 		$this->sortable = $sortable;
@@ -127,6 +130,7 @@ class DataListView implements FacetFilterable
 		$this->zebra = true;
 		$this->totalCallbacks = [];
 		$this->tagRowCallbacks = [];
+		$this->filterRowCallbacks = [];
 		$this->footerColumns = [];
 		return $this;
 	}
@@ -136,8 +140,15 @@ class DataListView implements FacetFilterable
 	{
 		return $this->id;
 	}
-	
-	function scrollable($height = 300, $resizable = true)
+
+    /**
+     * Make the table display with a specified height and scrollable content
+     * @param int $height the display height, in px
+     * @param bool $resizable whether to provide a resize handle and allow for the
+     * table to be expanded or contracted by the user
+     * @return void
+     */
+    function scrollable($height = 300, $resizable = true)
 	{
 		$this->scrollable = true;
 		$this->height = $height;
@@ -355,7 +366,7 @@ class DataListView implements FacetFilterable
 	
 	/**
 	 * Sets the client-side ID for this DataListView. 
-	 * @param $id string the ID to use. Passing in null will generate a random ID string.
+	 * @param string|null $id the ID to use. Passing in null will generate a random ID string.
 	 */
 	function setID($id = null)
 	{
@@ -365,32 +376,48 @@ class DataListView implements FacetFilterable
 			$this->id = $id;
 			return;
 		}
-		
+
 		$this->id = makeRandomString(6);
 	}
-	
+
 	/**
 	 * Adds a row tagging handler. This function will receive the data item
 	 * for each row and can add custom attributes to the row tag.
+     *
+     * @param callable $handler a function or method that provides row tagging
 	 */
 	function addFacetTaggingHandler($handler)
 	{
 		$this->tagRowCallbacks[] = $handler;
 	}
-	
+
+	/**
+	 * Adds a row filtering handler. This function will receive the data item
+	 * for each row and should return true if the row should be included in the output or 
+	 * false if it should be excluded.
+	 *
+	 * @param callable $handler a function or method that provides row filtering
+	 */
+	function addFilterRowHandler($handler)
+	{
+		$this->filterRowCallbacks[] = $handler;
+	}
+
 	/**
 	 * Get the Excel Link
+     * @return string a relative URI including magic params that cause the DataListView to
+     * render as a downloadable spreadsheet
 	 */
 	function getExcelLink()
 	{
 		$qs = appendToQueryString(getFullQueryString(), "__excel={$this->id}");
 		return baseURI().$qs;
 	}
-	
+
 	/**
 	 * Automatically build the table columns from the given DataItem. Not recommended except for quick and dirty
 	 * pages. This method is called automatically if no columns have been defined before drawing the view.
-	 * @param $item DataItem the item to use as a template for the columns.
+	 * @param DataItem $item the item to use as a template for the columns.
 	 */
 	function autoPopulate($item)
 	{
@@ -400,11 +427,11 @@ class DataListView implements FacetFilterable
 		foreach($fields as $field)
 		{
 			if ($item->primary_key == $field) continue;
-			
-			$this->column($item->prettifyFieldName($field), "{".$field."}", $true);
+
+			$this->column($item->prettifyFieldName($field), "{".$field."}", true);
 		}
 	}
-	
+
 	/**
 	 * Write the Javascript to implement the table output.
 	 * @return string containing the required Javascript.
@@ -412,30 +439,30 @@ class DataListView implements FacetFilterable
 	function writeScript()
 	{
 		$this->setID(); // Set to a default ID if none was specified.
-		
+
 		if ($_REQUEST["__column_order"])
 		{
 			$this->setColumnOrder(explode("|", $_REQUEST["__column_order"]));
 		}
-		
+
 		if ($this->excelFile && $_REQUEST["__excel"] == $this->id)
 		{
-			$this->writeExcelFile($this->excelFile);	
+			$this->writeExcelFile($this->excelFile);
 		}
-		
-		if ($this->items == null || count($this->items) == 0) return;
-		
+
+		if ($this->items == null || count($this->items) == 0) return "";
+
 		if (!DataListView::$includesWritten)
 		{
-			$script = 
+			$script =
 			"\t<script type='text/javascript' src='/fakoli/js/sorting_table.js'></script>\n".
-		   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".  
+		   	"\t<script type='text/javascript' src='/fakoli/js/paginating_table.js'></script>\n".
 			"\t<script type='text/javascript' src='/fakoli/js/filtering_table.js'></script>\n".
 			"\t<script type='text/javascript' src='/fakoli/js/scrolling_table.js'></script>\n";
-			
+
 			DataListView::$includesWritten = true;
 		}
-				
+
 		$constructor = "";
 		if (!$this->sortable && $this->pageSize <= 0 && !$this->filter && !$this->dragReorder)
 		{
@@ -443,7 +470,7 @@ class DataListView implements FacetFilterable
 		}
 
 		$zebra = $this->zebra ? "true" : "false";
-		
+
 		if ($this->pageSize > 0 AND $this->paginate)
 		{
 			$constructor = "\n\t\tvar {$this->id}_paginator = new PaginatingTable('{$this->id}', '{$this->id}_paginator', {per_page: {$this->pageSize}, zebra: $zebra});";
@@ -455,7 +482,7 @@ class DataListView implements FacetFilterable
 
 		if ($this->filter !== false)
 		{
-			$constructor .= "\n\t\tvar {$this->id}_filter = new FilteringTable('{$this->id}', '{$this->id}_filter', {column: {$this->filter}, paginator: {$this->id}_paginator});";		
+			$constructor .= "\n\t\tvar {$this->id}_filter = new FilteringTable('{$this->id}', '{$this->id}_filter', {column: {$this->filter}, paginator: {$this->id}_paginator});";
 		}
 		else
 		{
@@ -466,50 +493,50 @@ class DataListView implements FacetFilterable
 		{
 			$constructor .= "\n\t\tvar {$this->id}_sort = new SortingTable('{$this->id}', { paginator: {$this->id}_paginator, filter: {$this->id}_filter, zebra: $zebra});";
 		}
-		
+
 		if ($this->selectable)
 		{
 			$constructor .= "\n\t\tdocument.id('{$this->id}').getSelectedValues = function() { var values = [];	this.getElements(\"input[type='checkbox']\").each(function(e) { if (e.checked) values.push(e.value); }); return values; };";
 		}
 
-		if ($this->scrollable) 
+		if ($this->scrollable)
 		{
 			$constructor .= "\n\t\tnew ScrollingTable('{$this->id}');";
 		}
-		
+
 		if ($constructor || $this->dragReorder || $this->dragColumnReorder)
 		{
 			$script .=  "\t<script type='text/javascript'>\n\twindow.addEvent('domready', function()\n{";
 			$script .= $constructor;
-			
+
 			if ($this->dragReorder)
 			{
 				$script .= "\n\t\tnew DraggableTable('#{$this->id} tbody', '{$this->reorderHandler}', '{$this->items[0]->primary_key}');";
 			}
-			
+
 			if ($this->dragColumnReorder)
 			{
 				$options = ($this->columnReorderCallback) ? ", {onColumnsReordered: $this->columnReorderCallback}" : "";
 				$script .= "\n\tnew DraggableColumnTable('{$this->id}'$options);";
 			}
-				
+
 			$script .= "\n\t});\n\t</script>\n";
 		}
 
-		
+
 		if ($this->menu)		$script .= $this->menu->writeScript();
 		if ($this->contextMenu) $script .= $this->contextMenu->writeScript();
-		
+
 		return $script;
 	}
-	
+
 	/**
 	 * Writes the HTML for the data table to the output buffer.
 	 */
 	function drawView()
 	{
 		//trace("Number of Items: ".count($this->items), 3);
-		
+
 		if (count($this->items) > 0)
 		{
 			if (!count($this->columns)) $this->autoPopulate($this->items[0]); // Autopopulate the column list from the first object, if not specified
@@ -518,7 +545,7 @@ class DataListView implements FacetFilterable
 			{
 				$attrs .= " id='{$this->id}'";
 			}
-			
+
 			if ($this->cssClass)
 			{
 				$attrs .= " class='{$this->cssClass}";
@@ -527,7 +554,7 @@ class DataListView implements FacetFilterable
 				if ($this->dragReorder) $attrs .= " reorder";
 				$attrs .= "'";
 			}
-			
+
 			if ($this->cssStyle)
 			{
 				$attrs .= " style='{$this->cssStyle}'";
@@ -537,57 +564,57 @@ class DataListView implements FacetFilterable
 			{
 				$attrs .= " summary='".htmlSafe($this->summary)."'";
 			}
-			
-			/* 
+
+			/*
 			 * JDG 6/15/2010 - if the cssStyle has a width setting, either px or
-			 * &, apply that width style to the filter and paginator to avoid 
-			 * formatting problems. 
+			 * &, apply that width style to the filter and paginator to avoid
+			 * formatting problems.
 			 */
 			$width = 'width: 100%';
 			if (preg_match("/^\\width:.*?\\d{1,5}px|width:.*?\\d{1,3}%/", $this->cssStyle, $matches))
-				$width = $matches[0]; 
-		
-?>			
+				$width = $matches[0];
+
+?>
 		<div style="<?echo $width ?>">
-		<?php 
+		<?php
 		if($this->pageSize)
 		{
 			?>
 			<div style="float: right;" class="paginator"><ul id="<?echo $this->id?>_paginator"></ul></div>
 			<?php
 		}
-		
+
 		if($this->filter)
 		{
 		?>
 			<div style="float: left" class="filter" id="<?echo $this->id?>_filter"></div>
-		<?php 
+		<?php
 		}
-		
+
 		if ($this->dragReorder)
 		{
 			echo $this->dragText;
 		}
 		?>
 		</div>
-		
+
 		<?php
 			if ($this->scrollable)
-			{	
+			{
 				$tbodyAttrs = " style='height: ".($this->height - 24)."px'";
 				echo "<div class='scrollContainer' style='height: {$this->height}px'>";
-			}			
+			}
 		?>
 		<table border="0" cellpadding="0" cellspacing="0"<?echo $attrs?>>
 		 <thead>
 		  <tr>
 <?php
 			$first = true;
-			
+
 			foreach($this->columns as $column)
 			{
 				if ($column->exportOnly) continue;
-				
+
 				$attrs = "";
 				$cssClass = "";
 
@@ -600,29 +627,29 @@ class DataListView implements FacetFilterable
 				{
 					$attrs .= " class='$cssClass'";
 				}
-				
+
 				if (preg_match("/^\\width:.*?\\d{1,3}px|width:.*?\\d{1,3}%/", $column->style, $matches))
 				{
 					$attrs .= " style='{$matches[0]}'";
-				} 
-					
+				}
+
 				if ($column->sortFormat) $attrs .= " data-sort='true'";
 ?>
 			<th<?echo $attrs?>>
 <?php
-			
+
 				if ($first)
 				{
 					if ($this->excelFile)
-					{	
+					{
 						$qs = $this->getExcelLink();
 					}
 
 					if ($this->excelFile && !$this->menu && !$this->hideExcelIcon)
 					{
 ?>
-		<a href='<?echo $qs?>' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
-<?									
+		<a href='<?echo $qs?>' id='<?echo $this->id?>_excel' style="float: left"><img src="/fakoli/images/msexcel_icon_small.png" alt="Excel" style="border: none; display:inline-block;vertical-align: middle"/></a>
+<?
 					}
 					else if ($this->menu)
 					{
@@ -632,14 +659,14 @@ class DataListView implements FacetFilterable
 						}
 ?>
 		<img id="<?echo $this->id?>_menu_button" src="<?echo $this->commandMenuIcon?>" alt="Table Menu" style="border: none; display:inline-block;vertical-align: middle"/>
-<?									
+<?
 					}
-					
+
 					if ($this->contextMenu && $this->excelFile)
 					{
 						$this->menu->command($this->id."_context_excel", "Save as Excel...", $qs, true, "/fakoli/images/msexcel_icon_small.png");
 					}
-					
+
 					foreach($this->toolbarCallbacks as $callback)
 					{
 						echo "<div style='display: inline-block; float: left'>";
@@ -653,7 +680,7 @@ class DataListView implements FacetFilterable
 <?
 			}
 ?>
-		  </tr>	
+		  </tr>
 		 </thead>
 		 <tbody<?echo $tbodyAttrs?>>
 <?
@@ -662,33 +689,33 @@ class DataListView implements FacetFilterable
 				$cl = array();
 				if($this->rowId)
 					$rowId = $this->formatRowId($item);
-					
+
 				if ($this->onStartRow)
 				{
 					$retval = call_user_func($this->onStartRow, $item);
 					if ($retval === false) continue; // return false to indicate row should be skipped
 					if ($retval) $cl[] = $retval; // return a string to indicate a css class for the row
 				}
-				
+
 				$dataAttrs = array();
 				foreach($this->tagRowCallbacks as $cb)
 				{
 					$dataAttrs = call_user_func($cb, $item, $dataAttrs);
 				}
-				
+
 				$rowAttrs = "";
 				foreach($dataAttrs as $name => $value)
 				{
 					$rowAttrs .= " ".$name."='".$value."'";
 				}
-				
+
 				foreach($this->totalCallbacks as $cb)
 				{
 					call_user_func($cb, $item);
 				}
-				
+
 				$onclick = "";
-				
+
 				if ($this->onRowClick)
 				{
 					$onclick =  " onclick=\"" . $item->format($this->onRowClick) . "\" onmouseover=\"this.addClass('hover');";
@@ -696,7 +723,7 @@ class DataListView implements FacetFilterable
 					$onclick .=" return false;\" onmouseout=\"this.removeClass('hover'); return false;\"";
 					$cl[] = "clickable";
 				}
-				
+
 				$cl = implode(" ", $cl);
 				if ($cl) $cl = "class='$cl'";
 				if ($rowId) $rowId = "id='$rowId' ";
@@ -706,10 +733,10 @@ class DataListView implements FacetFilterable
 				foreach($this->columns as $column)
 				{
 					if ($column->exportOnly) continue;
-				
+
 					$attrs = "";
 					$cssClass = "";
-					
+
 					if (preg_match("/^[\\w_]*$/", $column->style))
 					{
 						$cssClass = $column->style;
@@ -718,12 +745,12 @@ class DataListView implements FacetFilterable
 					{
 						$attrs .= " style='{$column->style}'";
 					}
-									
+
 					if ($cssClass)
 					{
 						$attrs .= " class='$cssClass'";
 					}
-					
+
 					if ($column->sortFormat) $attrs .= " data-sort='".htmlentities($item->format($column->sortFormat))."'";
 ?>
 		    <td<?echo $attrs?>><?echo $column->format($item)?></td>
@@ -737,12 +764,12 @@ class DataListView implements FacetFilterable
 		</tbody>
 <?php
 			if ($this->onDrawFooter) call_user_func($this->onDrawFooter);
-			
+
 			if (count($this->footerColumns) > 0)
 			{
 ?>
 		<tfoot>
-		  <tr>		
+		  <tr>
 <?php
 				foreach($this->footerColumns as $column)
 				{
@@ -766,7 +793,7 @@ class DataListView implements FacetFilterable
 						{
 							$attrs .= " colspan='{$column->colspan}'";
 					?>
-			<td<?echo $attrs?>><?echo $column->format()?></td>								
+			<td<?echo $attrs?>><?echo $column->format()?></td>
 <?php
 						}
 						else if (preg_match("/text-align:\\s*right/i", $column->style))
@@ -796,17 +823,17 @@ class DataListView implements FacetFilterable
 <td<?echo $attrs?>><?echo $column->format()?></td>
 <?
 					}
-				}						
+				}
 ?>
 		  </tr>
-		</tfoot>	
+		</tfoot>
 <?php
 			}
-?>  		
+?>
 		</table>
 <?php
 			if ($this->scrollable) echo "</div>";
-			
+
 			if ($this->menu) echo $this->menu->writeMenu();
 			if ($this->contextMenu) echo $this->contextMenu->writeMenu();
 		}
@@ -815,7 +842,7 @@ class DataListView implements FacetFilterable
 			echo "<p><em>{$this->emptyMessage}</em></p>";
 		}
 	}
-	
+
 	/**
 	 * Render the table view and return the generated HTML as a string
 	 * @return string the generated HTML for the table
@@ -828,25 +855,25 @@ class DataListView implements FacetFilterable
 		ob_end_clean();
 		return $out;
 	}
-	
+
 	/**
 	 * Writes the data table out as an Excel File. The file is output
 	 * with an 'attachment' disposition, which will prompt a save dialog in
 	 * the client browser.
-	 * @param $file the name of the file to be output.
-	 * @return Does not return - exits script on completion to prevent corruption of the output file.
+	 * @param string $file the name of the file to be output.
+	 * @return void Does not return - exits script on completion to prevent corruption of the output file.
 	 */
 	function writeExcelFile($file)
 	{
 		$x = ExcelFileWriter::create($file);
-		
+
 		$c = 0;
 		foreach($this->columns as $column)
 		{
 			$x->writeHeading(0, $c, stripHTMLTags(stripHTML($column->title)));
 			++$c;
 		}
-		
+
 		$r = 1;
 		foreach($this->items as $item)
 		{
@@ -856,7 +883,19 @@ class DataListView implements FacetFilterable
 				$retval = call_user_func($this->onStartRow, $item);
 				if ($retval === false) continue;
 			}
-						
+
+			$show = true;
+			foreach($this->filterRowCallbacks as $cb)
+			{
+				if (!call_user_func($cb, $item)) 
+				{
+					$show = false;
+					break;
+				}
+			}
+
+			if (!$show) continue;
+			
 			foreach($this->totalCallbacks as $cb)
 			{
 				call_user_func($cb, $item);
@@ -876,37 +915,37 @@ class DataListView implements FacetFilterable
 				{
 					$val = $column->format($item);
 				}
-				
+
 				switch($column->typeHint)
 				{
 				case 'String':
 
 					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
 					break;
-					
+
 				case 'Text':
-					
+
 					$x->writeText($r, $c, stripHTMLTags(stripHTML($val)), true);
 					break;
-					
+
 				case 'Number':
-					
+
 					$x->writeNumber($r, $c, $val);
 					break;
-					
+
 				case 'Currency':
-					
+
 					$val = str_replace(array("$", ","), array("", ""), $val);
 					$x->writeCurrency($r, $c, $val);
 					break;
-					
+
 				case 'Percentage':
-					
+
 					$x->writePercentage($r, $c, $val);
 					break;
-						
+
 				default:
-					
+
 					/* JDG 5/11/10 currency export fix */
 					if (preg_match("/^[\\d\\,\\.\\$]+$/", $val))
 					{
@@ -927,14 +966,14 @@ class DataListView implements FacetFilterable
 						$x->writeText($r, $c, stripHTMLTags(stripHTML($val)));
 					}
 				}
-				
+
 				++$c;
 			}
 			++$r;
 		}
-		
+
 		$c = 0;
-		
+
 		if ($this->footerColumns)
 		{
 			foreach($this->footerColumns as $column)
@@ -954,9 +993,9 @@ class DataListView implements FacetFilterable
 				$c += $column->colspan;
 			}
 		}
-				
+
 		$x->send();
-		
+
 		session_write_close();
 		exit();
 	}

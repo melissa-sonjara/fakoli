@@ -59,11 +59,16 @@ var PaginatingTable = new Class({
     link_count: 10,
     zebra: false
   },
-  
+   excelLink: null,
+   excelQS: null,
+
   initialize: function( table, ids, options ) {
     this.table = document.id(table);
     this.setOptions(options);
     
+    this.excelLink = document.id(this.table.id + "_excel");
+    this.excelQS = this.excelLink ? this.excelLink.get('href') : null;
+
     this.tbody = this.table.getElement('tbody');
     
     if (this.options.offset_el)
@@ -77,15 +82,17 @@ var PaginatingTable = new Class({
       this.options.per_page = this.options.per_page * 2;
     }
  
-
-	if (this.table.facetManager)
-	{
-		this.table.facetManager.addEvent('filterChanged', function() { this.filterChanged(); }.bind(this));
-		this.table.facetManager.addEvent('filterCleared', function() { this.filterCleared(); }.bind(this));
-		this.preprocessFacets();
-	}
-
-    this.update_pages();
+    if (this.table.facetManager)
+    {
+      this.table.facetManager.addEvent('filterChanged', function() { this.filterChanged(); }.bind(this));
+      this.table.facetManager.addEvent('filterCleared', function() { this.filterCleared(); }.bind(this));
+      this.preprocessFacets();
+      this.filterChanged();
+    }
+    else
+    {
+      this.update_pages();
+    }
   },
  
   countRows: function()
@@ -231,6 +238,12 @@ var PaginatingTable = new Class({
 		}.bind(this));
 		
  	    this.update_pages();
+
+      if (this.excelLink)
+      {
+        var newQS = this.excelQS + "&" + this.table.facetManager.getQueryString();
+        this.excelLink.set('href', newQS);
+      }
 	},
 	
 	filterCleared: function()
@@ -241,7 +254,12 @@ var PaginatingTable = new Class({
 			elt.removeClass("filtermatch");
 		});
 		
-  	    this.update_pages();
+  	this.update_pages();
+
+    if (this.excelLink)
+    {
+      this.excelLink.set('href', this.excelQS);
+    }
 	}
  
 });

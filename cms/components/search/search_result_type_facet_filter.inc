@@ -117,5 +117,11 @@ class SearchResultTypeFacetFilter extends AbstractFacetFilter
 			echo "<br/>";
 		}
 	}
+
+	function filterItem($item)
+	{
+		$className = $item->prettifyClassName(true);
+		return array_key_exists($className, $this->classes);
+	}
 }
 /**@}*/?>

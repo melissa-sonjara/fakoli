@@ -47,17 +47,32 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 	var $dropdown = true;
 	var $dropdownMaxWidth = "200px";
 	var $dropdownMessage = "Click to Select Terms";
-	
+
+    var $selected = [];
+
 	function __construct($taxonomy)
 	{
 		$this->taxonomy = $taxonomy;
+        $this->populateSelected();
 	}
 
 	function getID()
 	{
 		return $this->taxonomy->identifier;
 	}
-	
+
+    function populateSelected()
+    {
+        if (array_key_exists($this->taxonomy->identifier, $_REQUEST) &&
+            $_REQUEST[$this->taxonomy->identifier])
+        {
+            $this->selected = explode(",", $_REQUEST[$this->taxonomy->identifier]);
+            $this->selected = array_combine($this->selected, $this->selected);
+        }
+
+        trace("FACET FILTER {$this->taxonomy->identifier} = {$_REQUEST[$this->taxonomy->identifier]}", 1);
+    }
+
 	function onTagItem($item, $attrs)
 	{
 		// Need to work with underlying object if passed is a search result container
@@ -126,15 +141,33 @@ class TaxonomyFacetFilter extends AbstractFacetFilter
 		foreach($items as $item)
 		{
 			$p = $item->term_id;
-			
+
 			echo "<label for='checkbox_{$this->taxonomy->identifier}_$p'><input type='checkbox' class='checkbox' name='{$this->taxonomy->identifier}[$p]' id='checkbox_{$this->taxonomy->identifier}_$p' value='$p'";
-			if ($selected && array_key_exists($p, $selected))
+			if ($this->selected && array_key_exists($p, $this->selected))
 			{
 				echo " checked";
 			}
 			echo ">".$item->term."";
 			echo "</label>";
 		}
+	}
+
+	function filterItem($item)
+	{
+		if ($this->selected == null || count($this->selected) == 0) return true;
+
+		// Need to work with underlying object if passed is a search result container
+		if ($item instanceof AbstractSearchResult) $item = $item->item;
+		$term_ids = explode(",", $this->taxonomy->getAssociatedTermIds($item));
+
+		foreach($term_ids as $term_id)
+		{
+			if (array_key_exists($term_id, $this->selected))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
 
@@ -239,6 +272,12 @@ class BindingTargetFacetFilter extends AbstractFacetFilter
 			echo ">".$item->format($format)."";
 			echo "</label>";
 		}
+	}
+
+	function filterItem($item)
+	{
+		//TODO: Implement server-side filtering for bound facets
+		return true;
 	}
 }
 /**@}*/?>
