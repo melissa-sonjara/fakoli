@@ -870,6 +870,7 @@ class DataListView implements FacetFilterable
 		$c = 0;
 		foreach($this->columns as $column)
 		{
+			if ($column->typeHint == 'NoExport') continue;
 			$x->writeHeading(0, $c, stripHTMLTags(stripHTML($column->title)));
 			++$c;
 		}
@@ -895,7 +896,7 @@ class DataListView implements FacetFilterable
 			}
 
 			if (!$show) continue;
-			
+
 			foreach($this->totalCallbacks as $cb)
 			{
 				call_user_func($cb, $item);
@@ -903,6 +904,8 @@ class DataListView implements FacetFilterable
 
 			foreach($this->columns as $column)
 			{
+				if ($column->typeHint == 'NoExport') continue;
+
 				if (is_callable($column->onExport))
 				{
 					$val = call_user_func($column->onExport, $item, $column);
