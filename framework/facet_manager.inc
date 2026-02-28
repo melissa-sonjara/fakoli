@@ -119,7 +119,11 @@ class FacetManager
 		$this->facets = array();
 		
 		$this->target->addFacetTaggingHandler(array($this, 'onTagItem'));
-		$this->target->addFilterRowHandler(array($this, 'onFilterItem'));
+
+		if (method_exists($target, 'addFilterRowHandler'))
+		{
+			$this->target->addFilterRowHandler(array($this, 'onFilterItem'));
+		}
 	}
 	
 	/**
