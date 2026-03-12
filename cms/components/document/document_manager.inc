@@ -974,7 +974,13 @@ function deleteFolderResult(result)
 			if ($img !== null)
 			{
 				$document->image_id = $img->image_id;
-				$document->save();
+				if ($document->getPrimaryKeyValue())
+				{
+					$filter = $document->filter;
+					$document->filter = new InclusionFilter("image_id");
+					$document->save();
+					$document->filter = $filter;
+				}
 			}
 		}
 		else
