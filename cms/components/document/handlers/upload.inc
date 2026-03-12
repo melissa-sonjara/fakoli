@@ -70,6 +70,18 @@ $notes = $form->getRenderer("notes");
 $notes->colspan = 1;
 $notes->columns = 38;
 
+$form->onSaveComplete = function($form) use ($library)
+{
+	$document = $form->data;
+	$mgr = new DocumentManager($library);
+	
+	$mgr->generateThumbnail($document);
+
+	$document->save();
+
+	return true;
+};
+
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 if($folder_select)
@@ -105,7 +117,5 @@ function uploadLibraryFile($field, $document)
 	
 	$mgr = new DocumentManager($library);
 	$document->file = $mgr->uploadFile($field, $_POST["folder_value"]);
-
-	$mgr->generateThumbnail($document);
 }
 ?>
