@@ -974,6 +974,7 @@ function deleteFolderResult(result)
 			if ($img !== null)
 			{
 				$document->image_id = $img->image_id;
+				$document->save();
 			}
 		}
 		else
