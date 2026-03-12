@@ -101,6 +101,12 @@ class Document extends DataItem implements Searchable
 		return ($owner->user_id == $user->user_id) ? true : false;
 	}
 	
+	function getFilePath()
+	{
+		$library = $this->DocumentLibrary();
+		return sanitizePath($library->getLibraryDirectory() . DIRECTORY_SEPARATOR . $this->file);
+	}
+
 	/*
 	 * For fileshare space, role-based permissions must be anything
 	 * in addition or other than just "allow_access" to get edit

@@ -962,6 +962,25 @@ function deleteFolderResult(result)
 	{
 		return getScaledSize(DocumentManager::getMaxUploadBytes(), 0);
 	}
+
+	static function generateThumbnail($document)
+	{
+		$handler = DocumentManager::getThumbnailProvider($document);
+		if ($handler)
+		{
+			trace("Rendering thumbnail for {$document->file} using handler $handler", 3);
+			$img = $handler($document);
+
+			if ($img !== null)
+			{
+				$document->image_id = $img->image_id;
+			}
+		}
+		else
+		{
+			trace("No thumbnail provider found for document {$document->file}", 3);
+		}
+	}
 	
 	static function registerSearchables($searchables)
 	{
@@ -995,6 +1014,32 @@ function deleteFolderResult(result)
 		return $classes;
 	}
 	
+	static $thumbnailProviders = [];
+
+	static function registerThumbnailProvider($documentType, $handler)
+	{
+		DocumentManager::$thumbnailProviders[$documentType] = $handler;
+	}
+	
+	static function getThumbnailProvider($document)
+	{
+		if (count(DocumentManager::$thumbnailProviders) == 0)
+		{
+			ComponentManager::fireEvent("RegisterThumbnailProviders");
+		}
+
+		$type = getDocMimeType($document->file);
+		trace("Looking for thumbnail provider for type $type", 3);
+		trace(print_r(DocumentManager::$thumbnailProviders, true), 3);
+
+		if (DocumentManager::$thumbnailProviders[$type])
+		{
+			return DocumentManager::$thumbnailProviders[$type];
+		}
+		
+		return null;
+	}
+
 	static function registerSerializationHandler()
 	{
 		SerializationManager::registerHandler("document_libraries", "Document Libraries &amp; Document Records (files need to be transferred manually)", new DocumentSerializationHandler());

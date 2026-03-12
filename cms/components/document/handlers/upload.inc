@@ -105,5 +105,7 @@ function uploadLibraryFile($field, $document)
 	
 	$mgr = new DocumentManager($library);
 	$document->file = $mgr->uploadFile($field, $_POST["folder_value"]);
+
+	$mgr->generateThumbnail($document);
 }
 ?>
