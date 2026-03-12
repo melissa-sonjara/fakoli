@@ -666,7 +666,8 @@ class ImageManager
 		$gallery = $image->Gallery();
 		$cacheDir = $gallery->getGalleryDirectory() . DIRECTORY_SEPARATOR . "thumbnail-cache";
 
-		while($file = readdir($cacheDir))
+		$dir = opendir($cacheDir);
+		while($file = readdir($dir))
 		{
 			if (preg_match("|^{$image_id}_.*|", $file))
 			{
@@ -675,6 +676,8 @@ class ImageManager
 				unlink($doomed);
 			}
 		}
+
+		closedir($dir);
 
 		trace("Cleared thumbnail cache for image $image_id", 3);
 	}
