@@ -49,7 +49,7 @@ class SiteManager
 	
 	static function registerTheme($component, $name, $description)
 	{
-		$component = ComponentManager::getComponent($component);
+		$component = Fakoli::getComponent($component);
 		
 		SiteManager::$themes[$component->name] = array("name" => $name, 
 													   "description" => $description, 
@@ -68,7 +68,7 @@ class SiteManager
 	{
 		$themes = Cache::get("registered_themes");
 		
-		if (!$themes)
+		if (!$themes || count($themes) == 0)
 		{
 			$themes = SiteManager::registerThemes();
 		}
