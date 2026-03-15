@@ -318,7 +318,7 @@ ENDSCRIPT;
 			if ($field != $pk && !array_key_exists($field, $this->hidden) && !array_key_exists($field, $this->renderedFields) && !($filter && $filter->isExcluded($field)))
 			{
 				$renderer = $this->getRenderer($field);
-				if(get_class($renderer) == 'DateRangeFilterRenderer')
+				if($renderer && get_class($renderer) == 'DateRangeFilterRenderer')
 				{
 					$dateRangeField = $field;
 					continue;
