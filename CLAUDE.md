@@ -43,6 +43,8 @@ Each component lives in `cms/components/<name>/` and typically contains:
 - `datamodel/` — `DataItem` subclasses
 - `admin/` — admin views
 - `handlers/` — event handler registrations
+- `js/` — component JavaScript, served via `RewriteComponentResources`
+- `css/` — component stylesheets, served via `RewriteComponentResources`
 - `<name>_schema.sql` — database schema
 - `<name>_upgrade_manager.inc` — schema migration logic
 
@@ -64,6 +66,16 @@ IIS rules are in `web.config`; Apache rules live in `.htaccess`. Both servers su
 | `/components/<name>/<path>` | `resource.php?component=$1&path=$2` (component assets) |
 
 `.svn/` and `.git/` paths are blocked (403) by Apache rules.
+
+## Line Endings
+
+All files should use LF (`\n`) line endings. CRLF files are encountered occasionally (a legacy of Windows editing) and should be converted to LF when touched. When editing a CRLF file, convert it in the same commit using:
+
+```bash
+perl -i -pe 's/\r\n/\n/g' <file>
+```
+
+Note: CRLF endings will cause string-based search/replace tools (including the Edit tool) to fail to match multi-line patterns, so conversion is also a practical necessity when editing.
 
 ## PHP 8 Compatibility Notes
 
