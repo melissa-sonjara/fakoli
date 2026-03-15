@@ -94,7 +94,7 @@ class QuestionnaireResultsGraph
 		$total = 0;
 		foreach($options as $option)
 		{
-			$count = count($answerValues[$idx]);
+			$count = count($answerValues[$idx] ?? []);
 
 			$total += $count;
 			$idx++;
@@ -105,7 +105,7 @@ class QuestionnaireResultsGraph
 		{				
 			foreach($options as $option)
 			{
-				$count = count($answerValues[$idx]);
+				$count = count($answerValues[$idx] ?? []);
 				$optionAnswers[] = $count;
 				
 				if ($total > 0)
@@ -208,7 +208,7 @@ class QuestionnaireResultsGraph
 		{
 			//echo "idx is $idx<br/>";
 			// store for calculating mean and median
-			$counts[$idx] = count($answerValues[$idx]);
+			$counts[$idx] = count($answerValues[$idx] ?? []);
 			$totalValue += $idx * $counts[$idx];
 			$totalCount += $counts[$idx];
 			$datay[] = $counts[$idx];

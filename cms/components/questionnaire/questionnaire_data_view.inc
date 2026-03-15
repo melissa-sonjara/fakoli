@@ -137,15 +137,12 @@ class QuestionnaireDataView
 
 		if(count($options) > 0)
 		{
-			if(count($answers) > 0)
-			$answerValues = regroupList($answers, "value");
-			else
-			$answerValues = array();
+			$answerValues = count($answers) > 0 ? regroupList($answers, "value") : [];
 			$optionAnswers = array();
 
 			foreach($options as $option)
 			{
-				$count = count($answerValues[$idx]);
+				$count = count($answerValues[$idx] ?? []);
 				$optionAnswer = new OptionAnswer($question->$qPk, $idx, $option, $count);
 				array_push($optionAnswers, $optionAnswer);
 				$idx++;
@@ -163,8 +160,7 @@ class QuestionnaireDataView
 	function getRatingsQuestionResultData($question, $answers)
 	{
 		$qPk = $this->mgr->getQuestionKey();
-		if(count($answers) > 0)
-			$answerValues = regroupList($answers, "value");
+		$answerValues = count($answers) > 0 ? regroupList($answers, "value") : [];
 			
 		$optionAnswers = array();
 		$count = array();
@@ -175,7 +171,7 @@ class QuestionnaireDataView
 		{
 			//echo "idx is $idx<br/>";
 			// store for calculating mean and median
-			$counts[$idx] = count($answerValues[$idx]);
+			$counts[$idx] = count($answerValues[$idx] ?? []);
 			$optionAnswer = new OptionAnswer($question->$qPk, $idx, $optionText[$idx], $counts[$idx]);
 			array_push($optionAnswers, $optionAnswer);
 		}
