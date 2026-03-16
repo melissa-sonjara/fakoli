@@ -218,7 +218,7 @@ abstract class AbstractPivotQuery extends AbstractQuery
 				$expression = $defn["expression"];
 				$alias = $defn["alias"];
 	
-				$empty = ($defn["type"] == String) ? "''" : 0;
+				$empty = ($defn["type"] == 'String') ? "''" : 0;
 				
 				$expressionMap[$fieldName] = "$expression(IF (p.{$pivot}=".$item->quoteFieldValue($pivot).", IFNULL(p.{$value}, {$empty}), {$empty}))";
 				$this->fields[$fieldName] = $defn["type"];
