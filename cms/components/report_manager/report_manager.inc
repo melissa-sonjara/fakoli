@@ -343,7 +343,7 @@ class ReportManager
 			return;
 		}
 		
-		$joinClass = ($this->request['__include_incomplete'] == "1") ? LeftOuterJoin : InnerJoin;
+		$joinClass = ($this->request['__include_incomplete'] == "1") ? 'LeftOuterJoin' : 'InnerJoin';
 		
 		$this->join = new $joinClass;
 		$this->join->unique = true;
