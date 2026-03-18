@@ -114,7 +114,7 @@ class DataListView implements FacetFilterable
 	 * @param integer $pageSize Specifies the number of items per page - set to zero for unpaginated
 	 * @param boolean $filter Specifies whether to enable client-side filtering for this table. 
 	 */
-	function __construct(array $items, string $id, string $cssClass = "list", $sortable = true, int $pageSize = 0, bool $filter = false)
+	function __construct(mixed $items, string $id, string $cssClass = "list", $sortable = true, int $pageSize = 0, bool $filter = false)
 	{
 		$this->items = $items ?: [];
 		$this->id = $id;
