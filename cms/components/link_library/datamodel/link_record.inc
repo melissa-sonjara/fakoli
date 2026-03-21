@@ -120,7 +120,7 @@ class LinkRecord extends DataItem // implements Searchable
 						  ->execute();
 		}
 			
-		return SearchManager::wrap($links, LinkSearchResult);
+		return SearchManager::wrap($links, 'LinkSearchResult');
 	}
 }
 

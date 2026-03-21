@@ -256,7 +256,7 @@ class Article extends DataItem implements Searchable
 						  ->execute();
 		}
 							  
-		return SearchManager::wrap($articles, ArticleSearchResult);
+		return SearchManager::wrap($articles, 'ArticleSearchResult');
 	}
 }
 

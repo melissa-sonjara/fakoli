@@ -266,7 +266,7 @@ class Page extends DataItem implements Searchable
 						  ->execute();
 		}
 							  
-		return SearchManager::wrap($pages, PageSearchResult);
+		return SearchManager::wrap($pages, 'PageSearchResult');
 	}
 }
 

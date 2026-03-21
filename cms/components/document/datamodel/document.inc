@@ -201,7 +201,7 @@ class Document extends DataItem implements Searchable
 						  ->execute();
 		}
 							  
-		return SearchManager::wrap($documents, DocumentSearchResult);
+		return SearchManager::wrap($documents, 'DocumentSearchResult');
 	}
 }
 

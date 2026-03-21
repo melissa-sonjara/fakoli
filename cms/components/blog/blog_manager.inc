@@ -179,7 +179,7 @@ class BlogManager
 		$form->hide("article_type");
 		
 		$sites = query('Site', "ORDER BY site_name");
-		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", ArticleSiteXref);
+		$siteSelect = new CrossReferenceSelectFieldRenderer($form, "sites", "Sites", $sites, "site_name", 'ArticleSiteXref');
 
 		$form->getRenderer("archive_date")->validator->required = false;
 		

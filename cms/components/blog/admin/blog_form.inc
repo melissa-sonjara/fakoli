@@ -66,7 +66,11 @@ $form->unique("identifier");
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
 $form->allowDelete = $blog->allowDelete();
-$form->onDelete = onDeleteCascade;
+$form->onDelete = function ($blog)
+{
+	$blog->delete();
+	redirect("/admin/blogs");
+};
 
 if ($method == "POST")
 {
@@ -83,12 +87,6 @@ $tabs->writeHTML();
 <div id="tab_border">
 <?
 $form->drawForm();
-
-function onDeleteCascade($blog)
-{
-	$blog->delete();
-	redirect("/admin/blogs");
-}
 ?>
 <br/>
 </div>
