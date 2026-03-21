@@ -1773,6 +1773,8 @@ else
 	}
 }
 
+DataListView::$includesWritten = true;
+
 Fakoli::showPendingScrollTo();
 Fakoli::showPendingNotification();
 Fakoli::writePendingScripts();
