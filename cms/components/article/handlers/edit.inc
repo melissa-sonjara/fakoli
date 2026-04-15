@@ -75,7 +75,10 @@ $form->hide("sort_order");
 
 if(!$article_id || !$article->published)
 {
-	$form->onSaveComplete = onPublishArticle;
+	$form->onSaveComplete = function ($form)
+	{
+		ArticleManager::onPublishArticle($form->data);
+	};
 }
 TaxonomyManager::addTaxonomyFieldRenderers($form);
 
@@ -111,8 +114,4 @@ $script .= $form->writeScript();
 
 $form->drawForm();
 
-function onPublishArticle($form)
-{
-	ArticleManager::onPublishArticle($form->data);
-}
 ?>
