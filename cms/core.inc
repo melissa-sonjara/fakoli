@@ -607,8 +607,11 @@ class Fakoli
 	 */
 	static function loadScripts()
 	{
+		global $config;
 		$scriptArray = array();
 		
+		$ecmascript = $config["use_ecmascript"] ?? false;
+
 		$components = Query::create('Component', "WHERE enabled=1 ORDER BY priority")->execute();
 		foreach($components as $component)
 		{
@@ -621,7 +624,7 @@ class Fakoli
 			{
 				trace("Adding scripts for {$component->name}", 1);
 				// Calculate union of scripts
-				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts(), $scriptArray));
+				$scriptArray = array_merge($scriptArray, array_diff($manifest->getScripts($ecmascript), $scriptArray));
 			}
 		}
 		
@@ -752,6 +755,13 @@ class Fakoli
 	{
 		global $isResource;
 		global $script;
+		global $config;
+
+		if ($config["use_ecmascript"])
+		{
+			$src = str_replace("/js/", "/ecmascript/", $src);
+		}
+		
 		if (!array_key_exists($src, Fakoli::$includedScripts))
 		{
 			$script .= "<script type='text/javascript' src='$src'></script>\n";
