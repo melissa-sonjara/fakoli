@@ -116,75 +116,20 @@ class TabBar
 		$script = "";
 		if (!$this->dynamic) return $script;
 		
+		$options[] = "loadFirstTabOnLoad: " . ($this->dynamicLoadFirstTab ? "true" : "false");
+
+		if ($this->dynamicLoadHandler)
+		{
+			$options[] = "loadHandler: $this->dynamicLoadHandler";
+		}
+
+		$optionStr = "{" . implode(", ", $options) . "}";
+
 		$script .= <<<ENDSCRIPT
 	<script type="text/javascript">
 	window.addEvent('domready', function()
 	{
-		document.id('{$this->id}').getElements("a").each(function(a)
-		{
-			a.loadTab = function(override)
-ENDSCRIPT;
-		if ($this->dynamicLoadHandler)
-		{
-			$script .= <<<ENDSCRIPT
-			{
-				var url = override ? override : this.href;
-				{$this->dynamicLoadHandler}(url);
-			};	
-ENDSCRIPT;
-		}
-		else
-		{
-			$script .= <<<ENDSCRIPT
-			{
-				var request = new Request.HTML(
-				{
-					evalScripts: false,
-					evalResponse: false,
-					method: 'get', 
-					url: override ? override : this.href, 
-					onSuccess: function(tree, elements, html, script) 
-					{ 
-						var container = document.id('{$this->container}');
-						container.set('text', '');
-						container.adopt(tree);
-		
-						Browser.exec(script);
-
-					}.bind(this)
-				});
-				
-				request.send();
-			};
-ENDSCRIPT;
-		}
-
-		$script .= <<<ENDSCRIPT
-
-			a.addEvent('click', function(e) 
-			{
-				new DOMEvent(e).stop();
-				var url = a.href;
-				var parent = a.getParent();
-				document.id('{$this->id}').getElements("li").each(function(l) { l.removeClass("current"); });
-				parent.addClass('current');
-				
-				a.loadTab();			
-			});
-		});
-ENDSCRIPT;
-
-		if ($this->dynamicLoadFirstTab)
-		{
-			$script .= <<<ENDSCRIPT
-		document.id('{$this->id}').getElements("li.current a").each(function(a)
-		{
-			a.loadTab();
-		});
-ENDSCRIPT;
-		}
-
-		$script .= <<<ENDSCRIPT
+		new DynamicTabBar('{$this->id}', '{$this->container}', {$optionStr});
 	});
 	</script>	
 ENDSCRIPT;
