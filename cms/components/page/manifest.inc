@@ -66,9 +66,20 @@ class PageManifest
 		);		
 	}	
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/page/js/page_manager.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/page/ecmascript/page_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/page/js/page_manager.js"
+			);
+		}
 	}
 	
 	static function subscribeToEvents()

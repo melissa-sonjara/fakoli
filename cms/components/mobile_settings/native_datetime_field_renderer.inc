@@ -24,7 +24,7 @@ class NativeDateTimeFieldRenderer extends DateTimeFieldRenderer
 <script type='text/javascript'>
 window.addEvent('domready', function()
 {
-	document.id('<?echo $this->parent->id?>_<?echo $field?>_button').addEvent('click', function()
+	document.id('<?echo $this->parent->id?>_<?echo $field?>_button').addEventListener('click', function()
 	{
 		var now = new Date();
 		var date = now.toISOString().split("T")[0];

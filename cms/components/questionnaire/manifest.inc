@@ -58,9 +58,32 @@ class QuestionnaireManifest
 			);
 	}	
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/questionnaire/js/question.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/questionnaire/ecmascript/question.js",
+				"/components/questionnaire/ecmascript/questionnaire.js",
+				"/components/questionnaire/ecmascript/questionnaire_create.js",
+				"/components/questionnaire/ecmascript/questionnaire_dashboard.js",
+				"/components/questionnaire/ecmascript/questionnaire_response.js",
+				"/components/questionnaire/ecmascript/questionnaire_results.js",
+				"/components/questionnaire/ecmascript/questionnaire_send.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/questionnaire/js/question.js",
+				"/components/questionnaire/js/questionnaire.js",
+				"/components/questionnaire/js/questionnaire_create.js",
+				"/components/questionnaire/js/questionnaire_dashboard.js",
+				"/components/questionnaire/js/questionnaire_response.js",
+				"/components/questionnaire/js/questionnaire_results.js",
+				"/components/questionnaire/js/questionnaire_send.js"
+			);
+		}
 	}	
 	
 

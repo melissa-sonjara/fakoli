@@ -53,6 +53,22 @@ class DocumentManifest
 	
 	var $allow_sessionless_handlers = true;
 	
+	static function getScripts($ecmascript = false)
+	{
+		if ($ecmascript)
+		{
+			return array(
+				"/components/document/ecmascript/document_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/document/js/document_manager.js"
+			);
+		}
+	}
+
 	static function subscribeToEvents()
 	{
 		return array(

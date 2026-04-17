@@ -73,10 +73,22 @@ class ImagePickerManifest
 					  "handler"	=>	"imagePicker");
 	}
 		
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/image_picker/js/image_picker.js",
-					 "/components/image_picker/js/image_picker_tinymce_plugin.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/image_picker/ecmascript/image_picker.js",
+				"/components/image_picker/ecmascript/image_picker_tinymce_plugin.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/image_picker/js/image_picker.js",
+				"/components/image_picker/js/image_picker_tinymce_plugin.js"
+			);
+		}
 	}
 	
 	static function getStyles()

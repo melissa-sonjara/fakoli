@@ -56,9 +56,20 @@ class ContextHelpManifest
 		return array("/fakoli/css/contexthelp.css");
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/fakoli/js/script.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/fakoli/ecmascript/script.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/fakoli/js/script.js"
+			);
+		}
 	}
 	
 	

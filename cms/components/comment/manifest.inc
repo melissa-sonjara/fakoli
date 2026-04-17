@@ -68,9 +68,22 @@ class CommentManifest
 	}	
 
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/comment/js/comment.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/comment/ecmascript/comment.js",
+				"/components/comment/ecmascript/comment_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/comment/js/comment.js",
+				"/components/comment/js/comment_manager.js"
+			);
+		}
 	} 	
 
 	static function getStyles()

@@ -184,7 +184,7 @@ var TemplateSelectFieldRenderer_templateMap = <?echo json_encode($this->buildTem
 window.addEvent('domready', function()
 {
 	var siteSelect = document.id("<?echo $this->parent->id?>_site_id");
-	siteSelect.addEvent('change', function()
+	siteSelect.addEventListener('change', function()
 	{
 		var site_id = siteSelect.value;
 		var templateSelect = document.id("<?echo $this->parent->id?>_<?echo $field?>");

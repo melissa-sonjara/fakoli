@@ -66,9 +66,22 @@ class TextLookupManifest
 		);		
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/fakoli/js/text_lookup.js", "/components/text_lookup/js/text_lookup_manager.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/fakoli/ecmascript/text_lookup.js",
+				"/components/text_lookup/ecmascript/text_lookup_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/fakoli/js/text_lookup.js",
+				"/components/text_lookup/js/text_lookup_manager.js"
+			);
+		}
 	} 	
 	
 			

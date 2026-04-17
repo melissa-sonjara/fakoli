@@ -231,7 +231,6 @@ abstract class AbstractQuestionnaireResponseManager extends AbstractQuestionnair
 
 		ob_start();
 		?>
-<script type="text/javascript" src="/components/questionnaire/js/questionnaire_response.js"></script>
 <script type="text/javascript">
 var questionnaireMgr;
 

@@ -19,9 +19,20 @@ class PdfManifest
 		return $component;
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/pdf/js/pdf.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/pdf/ecmascript/pdf.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/pdf/js/pdf.js"
+			);
+		}
 	}
 
 	static function subscribeToEvents()

@@ -215,8 +215,9 @@ class SectionContentAdminView extends AbstractSectionContentAdminView
 			$contentTree->add($category);
 		}
 
+		Fakoli::includeScript("/components/section/js/section_content_manager.js");
+
 		$script .= <<<ENDSCRIPT
-	<script src="/fakoli/js/section_content_manager.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	
 	var sectionContentManager;

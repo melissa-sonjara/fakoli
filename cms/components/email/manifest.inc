@@ -115,10 +115,23 @@ class EmailManifest
 		);
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/email/js/email.js", "/components/email/js/email_attachment_manager.js");
-	} 	
+		if ($ecmascript)
+		{
+			return array(
+				"/components/email/ecmascript/email.js",
+				"/components/email/ecmascript/email_attachment_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/email/js/email.js",
+				"/components/email/js/email_attachment_manager.js"
+			);
+		}
+	}
 	
 	static function getStyles()
 	{

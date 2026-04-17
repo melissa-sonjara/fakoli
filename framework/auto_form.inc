@@ -478,7 +478,7 @@ class AutoForm
 			if (is_bool($toggle))
 			{
 				$groupID = $this->id . "_" . codify($group) . "_group";
-				echo "\tdocument.id('$groupID').getElement('legend').addEvent('click', function(e) { var g = document.id('$groupID'); if (g.hasClass('collapsed')) { g.removeClass('collapsed'); g.addClass('expanded'); } else { g.removeClass('expanded'); g.addClass('collapsed'); } });\n";
+				echo "\tdocument.id('$groupID').getElement('legend').addEventListener('click', function(e) { var g = document.id('$groupID'); if (g.hasClass('collapsed')) { g.removeClass('collapsed'); g.addClass('expanded'); } else { g.removeClass('expanded'); g.addClass('collapsed'); } });\n";
 				echo "\tdocument.id('$groupID').addClass('toggleSelf');\n";
 			}
 			else
@@ -489,7 +489,7 @@ class AutoForm
 				$renderer = $this->getRenderer($toggle);
 				if ($renderer instanceof BooleanFieldRenderer)
 				{
-					echo "\tdocument.id('$toggleID').addEvent('click', function(e) { AutoFormManager.toggleGroup('$groupID', this.checked); });\n";
+					echo "\tdocument.id('$toggleID').addEventListener('click', function(e) { AutoFormManager.toggleGroup('$groupID', this.checked); });\n";
 				}
 				else
 				{

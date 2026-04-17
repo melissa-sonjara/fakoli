@@ -56,9 +56,20 @@ class ColorPickerManifest
 		return array("/fakoli/css/color_picker.css");
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/fakoli/color_picker/color_picker.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/color_picker/ecmascript/color_picker.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/color_picker/js/color_picker.js"
+			);
+		}
 	}
 }
 

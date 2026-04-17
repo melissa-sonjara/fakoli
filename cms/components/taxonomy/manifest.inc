@@ -69,9 +69,20 @@ class TaxonomyManifest
 		);		
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/taxonomy/js/taxonomy_facet_handler.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/taxonomy/ecmascript/taxonomy_facet_handler.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/taxonomy/js/taxonomy_facet_handler.js"
+			);
+		}
 	}
 	
 	static function subscribeToEvents()

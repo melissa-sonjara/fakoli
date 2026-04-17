@@ -323,7 +323,6 @@ class QuestionFormHelper
 		
 		ob_start();
 ?>
-<script type="text/javascript" src="/components/questionnaire/js/question.js"></script>
 <script type="text/javascript">
 
 	var questionMgr;

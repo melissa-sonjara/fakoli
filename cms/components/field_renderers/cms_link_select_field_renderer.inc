@@ -126,7 +126,7 @@ function {$this->parent->id}_{$field}_showTree(e)
 	var coords = txt.getCoordinates();
 	popup.setStyles({'display': 'block'});
 	var doc = document.id(document.body ? document.body : document.documentElement);
-	doc.addEvent('click', {$this->parent->id}_{$field}_hideTree);
+	doc.addEventListener('click', {$this->parent->id}_{$field}_hideTree);
 }	
 
 function {$this->parent->id}_{$field}_hideTree()
@@ -147,7 +147,7 @@ function {$this->parent->id}_{$field}_selectItem(url)
 window.addEvent('domready', function()
 {
 	var popup = document.id('{$this->parent->id}_{$field}_tree_popup');
-	popup.addEvent('click', function(e) { new DOMEvent(e).stop(); });
+	popup.addEventListener('click', function(e) { new DOMEvent(e).stop(); });
 });
 </script>
 ENDSCRIPT;

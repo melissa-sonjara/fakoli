@@ -78,9 +78,22 @@ class BlogManifest
 		return array("/fakoli/css/blog.css");
 	}
 	 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/blog/js/blog_manager.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/blog/ecmascript/blog_manager.js",
+				"/components/blog/ecmascript/blog_subscriber_preference_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/blog/js/blog_manager.js",
+				"/components/blog/js/blog_subscriber_preference_manager.js"
+			);
+		}
 	}
 	
 	static function subscribeToEvents()

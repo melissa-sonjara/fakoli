@@ -40,6 +40,22 @@ class ScheduledTaskManifest
 		);
 	}
 
+	static function getScripts($ecmascript = false)
+	{
+		if ($ecmascript)
+		{
+			return array(
+				"/components/scheduled_task/ecmascript/task_schedule_selector.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/scheduled_task/js/task_schedule_selector.js"
+			);
+		}
+	}
+
 	static function subscribeToEvents()
 	{
 		return array(

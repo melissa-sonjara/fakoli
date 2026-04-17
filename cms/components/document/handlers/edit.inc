@@ -100,5 +100,7 @@ function replaceLibraryFile($field, $document)
 	
 	$mgr = new DocumentManager($library);
 	$document->file = $mgr->uploadFile($field, dirname($document->file));
+
+	$mgr->generateThumbnail($document);
 }
 ?>

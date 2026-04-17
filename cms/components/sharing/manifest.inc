@@ -19,6 +19,18 @@ class SharingManifest
 		return $component;
 	}
 
+	static function getScripts($ecmascript = false)
+	{
+		if ($ecmascript)
+		{
+			return array();
+		}
+		else
+		{
+			return array();
+		}
+	}
+
 	static function subscribeToEvents()
 	{
 		return array(

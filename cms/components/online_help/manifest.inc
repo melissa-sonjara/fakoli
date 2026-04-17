@@ -51,9 +51,20 @@ class OnlineHelpManifest
 		return $component;
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/online_help/js/online_help.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/online_help/ecmascript/online_help.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/online_help/js/online_help.js"
+			);
+		}
 	}
 	
 	static function getAdminMenu()

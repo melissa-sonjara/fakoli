@@ -83,7 +83,6 @@ class PhotoUploadFieldRenderer extends FieldRenderer
 		
 		$redirect = $this->uploadRedirect ? "'{$this->uploadRedirect}'" : "false";
 ?>
-	<script type="text/javascript" src="/components/phonegap/js/photo_uploader.js"></script>
 	<script type="text/javascript">
 	window.addEvent('load', function()
 	{

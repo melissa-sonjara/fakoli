@@ -51,13 +51,22 @@ class AttachmentManifest
 		return $component;
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return 
-		[
-			"/components/attachment/js/attachment_uploader.js",
-			"/components/attachment/js/attachment_manager.js"
-		];
+		if ($ecmascript)
+		{
+			return array(
+				"/components/attachment/ecmascript/attachment_uploader.js",
+				"/components/attachment/ecmascript/attachment_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/attachment/js/attachment_uploader.js",
+				"/components/attachment/js/attachment_manager.js"
+			);
+		}
 	}
 	
 	static function getAdminMenu()

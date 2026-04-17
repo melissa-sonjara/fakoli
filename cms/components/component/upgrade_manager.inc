@@ -347,7 +347,7 @@ abstract class UpgradeManager
 
 		$sqlStatements = $this->parseSQLStatements($lines);
 
-		if(count($sqlStatements) == 0)
+		if(count($sqlStatements ?? []) == 0)
 		{
 			ComponentManager::scanTrace("UpgradeManager:: no query statements found for version $version_number", 3);
 			return true;

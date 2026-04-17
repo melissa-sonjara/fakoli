@@ -1428,7 +1428,6 @@ abstract class AbstractQuestionnaireSendManager extends AbstractQuestionnaireMan
 
 		ob_start();
 			?>
-<script type="text/javascript" src="/components/questionnaire/js/questionnaire_send.js"></script>
 <script type="text/javascript">
 var questionnaireSendMgr;
 

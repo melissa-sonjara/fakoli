@@ -68,11 +68,26 @@ class VideoManifest
 		);		
 	}	
 		
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/video/js/video_picker.js",
-					 "/components/video/js/video.js",
-					 "/components/video/js/video_picker_tinymce_plugin.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/video/ecmascript/video_picker.js",
+				"/components/video/ecmascript/video.js",
+				"/components/video/ecmascript/video_gallery.js",
+				"/components/video/ecmascript/video_picker_tinymce_plugin.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/video/js/video_picker.js",
+				"/components/video/js/video.js",
+				"/components/video/js/video_gallery.js",
+				"/components/video/js/video_picker_tinymce_plugin.js"
+			);
+		}
 	}
 	
 	static function getStyles()

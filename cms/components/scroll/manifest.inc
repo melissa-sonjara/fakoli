@@ -40,11 +40,20 @@ class ScrollManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/scroll/ecmascript/scroll_part_manager.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/scroll/js/scroll_part_manager.js"
-		);
+			);
+		}
 	}
 
 	static function subscribeToEvents()

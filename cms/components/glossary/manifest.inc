@@ -39,11 +39,20 @@ class GlossaryManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/glossary/ecmascript/glossarizer.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/glossary/js/glossarizer.js"
-		);
+			);
+		}
 	}
 
 	var $allow_sessionless_handlers = array("glossary_list");

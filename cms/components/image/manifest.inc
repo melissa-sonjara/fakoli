@@ -68,11 +68,24 @@ class ImageManifest
 		);		
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/image/js/image_grid.js",
-				"/components/image/js/image_manager.js"
-				);
+		if ($ecmascript)
+		{
+			return array(
+				"/components/image/ecmascript/image_grid.js",
+				"/components/image/ecmascript/image_manager.js",
+				"/components/image/ecmascript/image_gallery.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/image/js/image_grid.js",
+				"/components/image/js/image_manager.js",
+				"/components/image/js/image_gallery.js"
+			);
+		}
 	}
 	
 	static function getStyles()

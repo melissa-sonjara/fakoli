@@ -90,7 +90,6 @@ if ($multiProfile)
 	if (!$profile_id) $profile_id = 0;
 	
 	$script .= <<<ENDSCRIPT
-	<script type="text/javascript" src="/components/data_sync/js/data_sync_profile_manager.js"></script>
 	<script type="text/javascript">
 			
 	var importProfileManager;

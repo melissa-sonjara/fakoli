@@ -41,11 +41,20 @@ class LinkLibraryManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/link_library/ecmascript/link_library.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/link_library/js/link_library.js"
-		);
+			);
+		}
 	}
 
 	static function subscribeToEvents()

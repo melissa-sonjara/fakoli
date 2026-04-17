@@ -72,7 +72,23 @@ class ForumManifest
 	{
 		return array("/fakoli/css/forum.css");
 	}
-	
+
+	static function getScripts($ecmascript = false)
+	{
+		if ($ecmascript)
+		{
+			return array(
+				"/components/forum/ecmascript/forum_subscription_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/forum/js/forum_subscription_manager.js"
+			);
+		}
+	}
+
 	static function subscribeToEvents()
 	{
 		return array(

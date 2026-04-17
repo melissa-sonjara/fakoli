@@ -67,9 +67,20 @@ class ToolHintsManifest
 	
 	var $allow_sessionless_handlers = true;
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/tool_hints/js/tool_hint.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/tool_hints/ecmascript/tool_hint.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/tool_hints/js/tool_hint.js"
+			);
+		}
 	}
 	
 

@@ -69,7 +69,6 @@ class DocumentTotalDownloadsView
 	{
 		$script = $this->table->writeScript();
 		$script .= <<<ENDSCRIPT
-<script type='text/javascript' src='/components/document/js/document_manager.js'></script>
 <script type='text/javascript'>
 var docManager;
 window.addEvent('domready', function()

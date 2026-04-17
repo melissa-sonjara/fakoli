@@ -288,7 +288,6 @@ class CommentFieldRenderer extends FieldRenderer
 		$commentDialog = $this->getCommentDialog();
 
 ?>
-<script type="text/javascript" src="/components/comment/js/comment_manager.js"></script>
 <script type="text/javascript">
 var commentMgr;
 

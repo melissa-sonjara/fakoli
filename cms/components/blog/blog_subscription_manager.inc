@@ -248,7 +248,6 @@ class BlogSubscriptionManager
 	{
 			ob_start();
 			?>
-		<script type="text/javascript" src="/components/blog/js/blog_subscriber_preference_manager.js"></script>
 		<script type="text/javascript">
 		var blogSubscriberMgr;
 		

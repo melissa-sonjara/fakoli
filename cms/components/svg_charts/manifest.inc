@@ -36,9 +36,29 @@ class SvgChartsManifest
 		);
 	}	
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/fakoli/ecmascript/tooltip.js",
+				"/components/svg_charts/ecmascript/snap.svg.js",
+				"/components/svg_charts/ecmascript/snap.svg-plugins.js",
+				"/components/svg_charts/ecmascript/canvg.js",
+				"/components/svg_charts/ecmascript/rgbcolor.js",
+				"/components/svg_charts/ecmascript/palette.js",
+				"/components/svg_charts/ecmascript/chart.js",
+				"/components/svg_charts/ecmascript/shape.js",
+				"/components/svg_charts/ecmascript/pie_chart.js",
+				"/components/svg_charts/ecmascript/histogram.js",
+				"/components/svg_charts/ecmascript/morphing_histogram.js",
+				"/components/svg_charts/ecmascript/radar_chart.js",
+				"/components/svg_charts/ecmascript/dial.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/fakoli/js/tooltip.js",
 				"/components/svg_charts/js/snap.svg.js",
 				"/components/svg_charts/js/snap.svg-plugins.js",
@@ -52,7 +72,8 @@ class SvgChartsManifest
 				"/components/svg_charts/js/morphing_histogram.js",
 				"/components/svg_charts/js/radar_chart.js",
 				"/components/svg_charts/js/dial.js"
-		);
+			);
+		}
 	}
 
 	static function subscribeToEvents()

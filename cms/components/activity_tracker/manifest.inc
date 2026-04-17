@@ -84,9 +84,20 @@ class ActivityTrackerManifest
 		);		
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/activity_tracker/js/feedback.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/activity_tracker/ecmascript/feedback.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/activity_tracker/js/feedback.js"
+			);
+		}
 	}
 	
 	static function getStyles()

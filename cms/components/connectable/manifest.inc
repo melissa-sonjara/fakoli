@@ -26,11 +26,20 @@ class ConnectableManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
-				//TODO: Add Javascript File References "/components/connectable/js/..."
-		);
+		if ($ecmascript)
+		{
+			return array(
+				"/components/connectable/ecmascript/connectable_navigator.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/connectable/js/connectable_navigator.js"
+			);
+		}
 	}
 
 	static function subscribeToEvents()

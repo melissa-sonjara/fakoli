@@ -51,11 +51,20 @@ class SessionExtenderManifest
 		return $component;
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
-				//TODO: Add Javascript File References "/components/session_extender/js/..."
-		);
+		if ($ecmascript)
+		{
+			return array(
+				"/components/session_extender/ecmascript/session_timer.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/session_extender/js/session_timer.js"
+			);
+		}
 	}
 
 	static function subscribeToEvents()

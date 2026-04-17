@@ -26,11 +26,22 @@ class DataSyncManifest
 		);
 	}
 		
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
-				"/components/data_sync/js/data_sync_manager.js"
-		);
+		if ($ecmascript)
+		{
+			return array(
+				"/components/data_sync/ecmascript/data_sync_manager.js",
+				"/components/data_sync/ecmascript/data_sync_profile_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/data_sync/js/data_sync_manager.js",
+				"/components/data_sync/js/data_sync_profile_manager.js"
+			);
+		}
 	}
 	
 	static function getAdminMenu()

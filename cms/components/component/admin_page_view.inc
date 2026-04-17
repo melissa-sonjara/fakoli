@@ -245,6 +245,7 @@ window.addEvent('domready', function() {
 
 	var accordion = new Accordion('h4.atStart', 'div.atStart', {
 
+		duration: 300,
 		opacity: false,
 		initialDisplayFx: false,
 		display: $selectedMenuSectionIdx,

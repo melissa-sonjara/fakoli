@@ -266,7 +266,7 @@ class Blog extends DataItem // implements Searchable
 						  ->execute();
 		}
 							  
-		return SearchManager::wrap($blogs, BlogSearchResult);
+		return SearchManager::wrap($blogs, 'BlogSearchResult');
 	}
 }
 

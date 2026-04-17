@@ -1,6 +1,5 @@
 <?php
 Fakoli::using("report");
-Fakoli::includeScript("/components/report_manager/js/report_background_loader.js");
 
 $report_id = $_GET["report_id"];
 $excel = $_GET["__excel"];

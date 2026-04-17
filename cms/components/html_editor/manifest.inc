@@ -19,15 +19,30 @@ class HtmlEditorManifest
 		return $component;
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/html_editor/js/snippet_manager.js",
-					 "/components/html_editor/js/snippet_tinymce_plugin.js",
-					 "/components/html_editor/js/custom_css_manager.js",
-					 "/components/html_editor/js/custom_css_tinymce_plugin.js",
-					 "/components/html_editor/js/tag_editor.js",
-					 "/components/html_editor/js/tag_editor_tinymce_plugin.js"
-		);
+		if ($ecmascript)
+		{
+			return array(
+				"/components/html_editor/ecmascript/snippet_manager.js",
+				"/components/html_editor/ecmascript/snippet_tinymce_plugin.js",
+				"/components/html_editor/ecmascript/custom_css_manager.js",
+				"/components/html_editor/ecmascript/custom_css_tinymce_plugin.js",
+				"/components/html_editor/ecmascript/tag_editor.js",
+				"/components/html_editor/ecmascript/tag_editor_tinymce_plugin.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/html_editor/js/snippet_manager.js",
+				"/components/html_editor/js/snippet_tinymce_plugin.js",
+				"/components/html_editor/js/custom_css_manager.js",
+				"/components/html_editor/js/custom_css_tinymce_plugin.js",
+				"/components/html_editor/js/tag_editor.js",
+				"/components/html_editor/js/tag_editor_tinymce_plugin.js"
+			);
+		}
 	}
 	
 	static function getStyles()

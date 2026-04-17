@@ -33,11 +33,20 @@ class RatingManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/rating/ecmascript/page_rating.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/rating/js/page_rating.js"
-		);
+			);
+		}
 	}
 
 	static function subscribeToEvents()

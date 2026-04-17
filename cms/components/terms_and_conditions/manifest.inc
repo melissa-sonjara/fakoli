@@ -26,11 +26,20 @@ class TermsAndConditionsManifest
 		return array("/components/terms_and_conditions/css/terms_and_conditions.css");
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/terms_and_conditions/ecmascript/terms_and_conditions.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/terms_and_conditions/js/terms_and_conditions.js"
-		);
+			);
+		}
 	}
 
 	static function subscribeToEvents()

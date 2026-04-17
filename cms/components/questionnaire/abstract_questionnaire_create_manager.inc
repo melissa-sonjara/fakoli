@@ -799,7 +799,6 @@ abstract class AbstractQuestionnaireCreateManager  extends AbstractQuestionnaire
 
 		ob_start();
 		?>
-<script type="text/javascript" src="/components/questionnaire/js/questionnaire_create.js"></script>
 <script type="text/javascript">
 var <?php echo $mgrName ?>;
 

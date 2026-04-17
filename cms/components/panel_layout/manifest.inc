@@ -56,9 +56,20 @@ class PanelLayoutManifest
 		return array();
 	}	
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/fakoli/js/panel_layout.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/fakoli/ecmascript/panel_layout.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/fakoli/js/panel_layout.js"
+			);
+		}
 	}
 }
 /**@}*/?>

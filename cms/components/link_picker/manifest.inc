@@ -54,10 +54,22 @@ class LinkPickerManifest
 	}	
 
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/link_picker/js/link_picker.js",
-					 "/components/link_picker/js/link_picker_tinymce_plugin.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/link_picker/ecmascript/link_picker.js",
+				"/components/link_picker/ecmascript/link_picker_tinymce_plugin.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/link_picker/js/link_picker.js",
+				"/components/link_picker/js/link_picker_tinymce_plugin.js"
+			);
+		}
 	}
 	
 	static function getStyles()

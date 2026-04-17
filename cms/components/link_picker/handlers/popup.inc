@@ -61,7 +61,7 @@ ENDSCRIPT;
 
 $script .= $tabs->writeScript();
 
-echo $script;
+//echo $script;
 ?>
 <label>Open Link in </label>
 <select id='target'>

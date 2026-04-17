@@ -19,11 +19,16 @@ class PhonegapManifest
 		return $component;
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
-				//TODO: Add Javascript File References "/components/phonegap/js/..."
-		);
+		if ($ecmascript)
+		{
+			return array();
+		}
+		else
+		{
+			return array();
+		}
 	}
 
 	static function subscribeToEvents()

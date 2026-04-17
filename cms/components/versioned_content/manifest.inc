@@ -26,11 +26,20 @@ class VersionedContentManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
-			"/components/versioned_content/js/versioned_content_manager.js"
-		);
+		if ($ecmascript)
+		{
+			return array(
+				"/components/versioned_content/ecmascript/versioned_content_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/versioned_content/js/versioned_content_manager.js"
+			);
+		}
 	}
 
 	static function getStyles()

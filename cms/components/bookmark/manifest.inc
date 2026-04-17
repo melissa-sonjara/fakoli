@@ -26,11 +26,20 @@ class BookmarkManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/bookmark/ecmascript/bookmark_manager.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/bookmark/js/bookmark_manager.js"
-		);
+			);
+		}
 	}
 
 	static function subscribeToEvents()

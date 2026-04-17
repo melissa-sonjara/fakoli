@@ -59,9 +59,22 @@ class CalendarManifest
 		return array("/components/calendar/css/calendar.css");
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/calendar/js/calendar.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/calendar/ecmascript/calendar.js",
+				"/components/calendar/ecmascript/filtering_calendar.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/calendar/js/calendar.js",
+				"/components/calendar/js/filtering_calendar.js"
+			);
+		}
 	}
 	
 	static function getAdminMenu()

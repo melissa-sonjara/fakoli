@@ -26,11 +26,20 @@ class ProcessManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array(
+		if ($ecmascript)
+		{
+			return array(
+				"/components/process/ecmascript/background_process.js"
+			);
+		}
+		else
+		{
+			return array(
 				"/components/process/js/background_process.js"
-		);
+			);
+		}
 	}
 
 	static function getStyles()

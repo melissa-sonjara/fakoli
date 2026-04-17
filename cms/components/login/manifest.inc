@@ -53,9 +53,22 @@ class LoginManifest
 	
 	var $allow_sessionless_handlers = true;
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/login/js/ajax_login_manager.js", "/components/login/js/password_complexity_verifier.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/login/ecmascript/ajax_login_manager.js",
+				"/components/login/ecmascript/password_complexity_verifier.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/login/js/ajax_login_manager.js",
+				"/components/login/js/password_complexity_verifier.js"
+			);
+		}
 	}
 	
 	static function getStyles()

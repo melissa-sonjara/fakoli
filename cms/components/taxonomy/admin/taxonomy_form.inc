@@ -77,7 +77,7 @@ if ($method == "POST")
 }
 
 $script .= <<<ENDSCRIPT
-<script type='text/javascript' src='/components/taxonomy/js/taxonomy_admin.js'></script>
+<script type='text/javascript' src='/components/taxonomy/ecmascript/taxonomy_admin.js'></script>
 ENDSCRIPT;
 
 $script .= $form->writeScript();

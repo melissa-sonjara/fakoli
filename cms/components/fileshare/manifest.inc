@@ -73,10 +73,21 @@ class FileshareManifest
 		);
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/fileshare/js/library.js");
-	} 		
+		if ($ecmascript)
+		{
+			return array(
+				"/components/fileshare/ecmascript/library.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/fileshare/js/library.js"
+			);
+		}
+	}
 	
 	static function getStyles()
 	{

@@ -70,7 +70,7 @@ function {$this->parent->id}_{$field}_showList(e)
 	var coords = txt.getCoordinates();
 	popup.setStyles({'display': 'block'});
 	var doc = document.id(document.body ? document.body : document.documentElement);
-	doc.addEvent('click', {$this->parent->id}_{$field}_hideList);
+	doc.addEventListener('click', {$this->parent->id}_{$field}_hideList);
 }
 	
 function {$this->parent->id}_{$field}_hideList()
@@ -99,7 +99,7 @@ function {$this->parent->id}_{$field}_selectItem(elt, id)
 window.addEvent('domready', function()
 {
 	var popup = document.id('{$this->parent->id}_{$field}_list_popup');
-	popup.addEvent('click', function(e) { new DOMEvent(e).stop(); });
+	popup.addEventListener('click', function(e) { new DOMEvent(e).stop(); });
 });
 </script>
 ENDSCRIPT;

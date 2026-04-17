@@ -51,10 +51,24 @@ class ReportManagerManifest
 		return $component;
 	}
 	
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/report_manager/js/report_manager.js",
-					 "/components/report_manager/js/report_table_navigator.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/report_manager/ecmascript/report_manager.js",
+				"/components/report_manager/ecmascript/report_table_navigator.js",
+				"/components/report_manager/ecmascript/report_background_loader.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/report_manager/js/report_manager.js",
+				"/components/report_manager/js/report_table_navigator.js",
+				"/components/report_manager/js/report_background_loader.js"
+			);
+		}
 	}
 	
 	static function getStyles()

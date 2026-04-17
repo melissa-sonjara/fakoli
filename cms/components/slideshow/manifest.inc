@@ -56,9 +56,20 @@ class SlideshowManifest
 		return null;
 	}	
 	
-	function getScripts()
+	function getScripts($ecmascript = false)
 	{
-		return array("/components/slideshow/js/slideshow.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/slideshow/ecmascript/slideshow.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/slideshow/js/slideshow.js"
+			);
+		}
 	}
 	
 	

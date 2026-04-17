@@ -95,7 +95,6 @@ class DocumentLibraryView
 		
 		ob_start();
 		?>
-		<script type="text/javascript" src="/components/document/js/document_manager.js"></script>
 		<script type="text/javascript">
 		var documentMgr;
 		

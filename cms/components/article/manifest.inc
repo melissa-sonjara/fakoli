@@ -66,9 +66,20 @@ class ArticleManifest
 		);		
 	}
 
-	static function getScripts()
+	static function getScripts($ecmascript = false)
 	{
-		return array("/components/article/js/article_manager.js");
+		if ($ecmascript)
+		{
+			return array(
+				"/components/article/ecmascript/article_manager.js"
+			);
+		}
+		else
+		{
+			return array(
+				"/components/article/js/article_manager.js"
+			);
+		}
 	}
 	
 	static function subscribeToEvents()

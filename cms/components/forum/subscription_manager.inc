@@ -457,7 +457,6 @@ class ForumSubscriptionHelper
 	
 		?>
 	
-		<script type="text/javascript" src="/components/forum/js/forum_subscription_manager.js"></script>
 		<script type="text/javascript">
 				
 		var forumSubscriptionMgr;
