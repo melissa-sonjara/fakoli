@@ -22,11 +22,13 @@ Document.prototype.id = $el;
 Element.prototype.addClass = function(className)
 {
 	this.classList.add(className);
+	return this;
 };
 
 Element.prototype.removeClass = function(className)
 {
 	this.classList.remove(className);
+	return this;
 };
 
 Element.prototype.hasClass = function(className)
@@ -37,11 +39,23 @@ Element.prototype.hasClass = function(className)
 Element.prototype.toggleClass = function(className)
 {
 	this.classList.toggle(className);
+	return this;
 };
 
 Element.prototype.getParent = function()
 {
 	return this.parentElement;
+};
+
+Element.prototype.set = function(attr, value)
+{
+	this.setAttribute(attr, value);
+	return this;
+};
+
+Element.prototype.get = function(attr)
+{
+	return this.getAttribute(attr);
 };
 
 // Unique ID generator replacing String.uniqueID()
