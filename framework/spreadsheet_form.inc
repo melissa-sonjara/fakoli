@@ -129,7 +129,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		foreach($fields as $field => $type)
 		{
 			$renderer = $subform->getRenderer($field);
-			if(get_class($renderer) == "HTMLFieldRenderer")
+			if(is_object($renderer) && get_class($renderer) == "HTMLFieldRenderer")
 			{
 				$subform->override($field, "", new TextFieldRenderer($subform));
 			}		

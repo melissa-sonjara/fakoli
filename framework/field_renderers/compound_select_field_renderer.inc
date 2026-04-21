@@ -55,7 +55,7 @@ class CompoundSelectFieldRenderer extends FieldRenderer
 	var $defaultText = "Choose One";
 	var $emptyValue = 0; ///< The value to which the non-selected fields should be set
 	
-	function __construct(&$form, $field, $label, $onChange)
+	function __construct(&$form, $field, $label, $onChange = "")
 	{
 		$this->options = array();
 		$this->onChange = $onChange;

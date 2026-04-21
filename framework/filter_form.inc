@@ -725,13 +725,16 @@ class CheckListFilterFieldRenderer extends CheckListFieldRenderer
 			// The form's data value is used to set the selected checkboxes and cannot contain the "'" around the string values
 			$this->parent->data->set($field, $defaults);
 			
-			if(!is_numeric(array_flip($defaults[0])))
+			if ($defaults && count($defaults) > 0)
 			{
-				$value = "'" . implode("','", array_keys($defaults)) . "'";
-			}
-			else
-			{
-				$value = implode(",", array_keys($defaults));
+				if(!is_numeric(array_flip($defaults)[0]))
+				{
+					$value = "'" . implode("','", array_keys($defaults)) . "'";
+				}
+				else
+				{
+					$value = implode(",", array_keys($defaults));
+				}
 			}
 		}
 				
