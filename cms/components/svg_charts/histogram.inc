@@ -45,7 +45,7 @@ class HistogramSeries
 
 		if (count($this->tooltips))
 		{
-			$tooltips = "['".implode("', '", array_map(jsSafe, $this->tooltips))."']";
+			$tooltips = "['".implode("', '", array_map('jsSafe', $this->tooltips))."']";
 			$options[] = "'toolTips': $tooltips";
 		}
 		
@@ -323,7 +323,7 @@ class Histogram
 		global $script;
 		
 		$labels = "'".implode("', '", $this->labels) . "'";
-		$labelTooltips = "'".implode("', '", $this->labelTooltips) . "'";
+		$labelTooltips = $this->labelTooltips ? "'".implode("', '", $this->labelTooltips) . "'" : "";
 		
 		if ($this->labelDecorations)
 		{
