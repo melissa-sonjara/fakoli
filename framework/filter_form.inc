@@ -679,7 +679,7 @@ function <? echo $selChanged ?>(elt)
 				
 		if(!$value) $value = 0;
 		echo "<input id='{$field}' type='hidden' name='{$field}' value='$value'/>\n";
-		echo "&nbsp;&nbsp;<label for='{$field}'>{$label}</label>";
+		echo "&nbsp;<label for='{$field}'>{$this->label}</label>";
 		
 		$this->_endField($field);
 	}
@@ -961,21 +961,21 @@ class DateRangeFilterRenderer extends FieldRenderer
 			$validator->required = false;
 			$this->msg = $validator->validate();
 			
-			if ($this->msg) 
-			{
-				$startDate = null;
-			}
-			
-			$validator = new DateValidator($this->endParam, "To");
-			$validator->required = false;
-			
-			$this->msg = $validator->validate();
-		
 			if ($this->msg)
 			{
-				$endDate = null;
+				$this->startDate = null;
 			}
-		
+
+			$validator = new DateValidator($this->endParam, "To");
+			$validator->required = false;
+
+			$this->msg = $validator->validate();
+
+			if ($this->msg)
+			{
+				$this->endDate = null;
+			}
+
 			if ($this->startDate) $this->startDate = new DateTime($this->startDate);
 			if ($this->endDate) $this->endDate = new DateTime($this->endDate);
 			
