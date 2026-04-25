@@ -111,7 +111,7 @@ class SpreadsheetForm extends CompositeAutoForm
 		$this->createSpreadsheetRowForms($items, $subform);
 	}	
 	
-	function showRowLabels($columnTitle, $format, $defaultText)
+	function showRowLabels($columnTitle, $format, $defaultText = "")
 	{
 		$this->rowLabelTitle = $columnTitle;
 		$this->rowLabelFormat = $format;
