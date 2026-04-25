@@ -17,7 +17,8 @@ $errors = Query::create('ErrorLog', $filterForm->getConstraint()." ORDER BY time
 $filterForm->drawForm();
 
 $table = new DataListView($errors, "error_log");
-$table->column("Date", "<a href='error_details?error_log_id={error_log_id}'>{timestamp}</a>", true)
+$table->column("ID", "{error_log_id}", true)
+	  ->column("Date", "<a href='error_details?error_log_id={error_log_id}'>{timestamp}</a>", true)
 	  ->column("User", "{getUserFullName()}", true)
 	  ->column("URI", "{uri:htmlSafe}", true)
 	  ->column("Message", "{message:htmlSafe}", true);
