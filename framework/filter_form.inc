@@ -1077,6 +1077,7 @@ class DateRangeFilterRenderer extends FieldRenderer
 			$this->endDate->modify("-1 days");
 		}
 
+		trace("DATE RANGE CALCULATED start date {$this->startDate->format("Y-m-d")} end date {$this->endDate->format("Y-m-d")}", 1);
 		if(!$this->subTitle)
 		{
 			$this->subTitle = $this->startDate->format("F Y");	
