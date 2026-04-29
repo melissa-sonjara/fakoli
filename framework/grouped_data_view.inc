@@ -451,8 +451,6 @@ class GroupedDataListView
 				
 		if (count($this->items) == 0) return;
 		
-		$script = "<script type='text/javascript' src='/fakoli/js/grouping_table.js'></script>\n";
-		
 		$constructor = "";
 			
 		$constructor = "\n\t\tvar {$this->id} = new GroupingTable('{$this->id}', {mode: '{$this->mode}'});";

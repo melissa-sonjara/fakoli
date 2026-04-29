@@ -1141,9 +1141,6 @@ class DateRangeFilterRenderer extends FieldRenderer
 		if (array_key_exists($field, $this->parent->hidden)) return "";
 		
 		$script .= <<<ENDSCRIPT
-
-<script src='/fakoli/calendar/sonjara_calendar.js' type='text/javascript'></script>
-<link href='/fakoli/calendar/sonjara_calendar.css' type='text/css' rel='stylesheet'></link>
 <script type="text/javascript">
 var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}', '{$this->startParam}');
 var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}', '{$this->endParam}');
