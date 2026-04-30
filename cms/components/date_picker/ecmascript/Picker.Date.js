@@ -9,9 +9,6 @@ provides: Picker.Date
 */
 
 
-(function()
-{
-
 class PickerDate extends PickerAttach
 {
 	constructor(attachTo, options)
@@ -951,4 +948,3 @@ function isValidDate(date)
 // Expose on global scope
 window.DatePicker = Picker.Date = PickerDate;
 
-})();
