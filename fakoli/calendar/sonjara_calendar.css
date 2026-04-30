@@ -2,21 +2,20 @@
 div.calendarPopup
 {
 	position: absolute;
-	visibility: hidden;
-    border: solid 1px #999;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 1px 1px 10px #888;
+  border: solid 1px #999;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 1px 1px 10px #888;
 }
 
 TABLE.calendar {
-    font-size: 8pt;
-    font-weight: normal;
-    background-color: #eeeeee;
-    border-radius: 10px;
-    width: 240px;
-    border-collapse: collapse;
-    border-radius: 0 0 7px 7px;
+  font-size: 8pt;
+  font-weight: normal;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  width: 240px;
+  border-collapse: collapse;
+  border-radius: 0 0 7px 7px;
 }
 
 table.calendar th

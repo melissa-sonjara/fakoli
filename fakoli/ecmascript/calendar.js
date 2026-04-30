@@ -264,42 +264,23 @@ class Calendar
 	{
 		parent = (typeof parent === 'string') ? document.getElementById(parent) : parent;
 
-		var zIndex = (typeof calculateZIndex === 'function' ? calculateZIndex(parent) : 200) + 1;
-
+		parent = document.id(parent);
+		
+		var zIndex = calculateZIndex(parent) + 1;
+		
 		if (!this.form) this.bindControl();
 		this.draw();
-
-		var cal    = this.calendar;
-		var rect   = parent.getBoundingClientRect();
-		var scrollX = window.scrollX || window.pageXOffset;
-		var scrollY = window.scrollY || window.pageYOffset;
-
-		cal.style.zIndex  = zIndex;
-		cal.style.display = 'block';
-		cal.style.opacity = '0';
-		cal.style.left    = (rect.right + scrollX) + 'px';
-		cal.style.top     = (rect.top  + scrollY)  + 'px';
-
-		// Fade in
-		cal.style.transition = 'opacity 200ms ease-in-out';
-		requestAnimationFrame(function() { cal.style.opacity = '1'; });
+		
+		this.calendar.setStyles({position: "absolute", display: 'block', 'opacity': 0, 'z-index': zIndex});
+		this.calendar.position({'relativeTo': parent, 'position': 'topRight', 'offset': {'x': 0, 'y': 0} });
+		this.calendar.fade('in');
+		
 	}
 
 	hide()
 	{
-		var cal  = this.calendar;
-		var self = this;
-
-		cal.style.transition = 'opacity 200ms ease-in-out';
-		cal.style.opacity    = '0';
-
-		var finish = function()
-		{
-			cal.removeEventListener('transitionend', finish);
-			cal.style.display    = 'none';
-			cal.style.transition = '';
-		};
-		cal.addEventListener('transitionend', finish);
+		if (!this.form) this.bindControl();
+		this.calendar.fade('out');
 	}
 
 	toggle(parent)

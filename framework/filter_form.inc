@@ -1142,8 +1142,13 @@ class DateRangeFilterRenderer extends FieldRenderer
 		
 		$script .= <<<ENDSCRIPT
 <script type="text/javascript">
-var startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}', '{$this->startParam}');
-var endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}', '{$this->endParam}');
+var startDateCalendar, endDateCalendar;
+
+window.addEvent('domready', function()
+{
+	startDateCalendar = new Calendar('startDateCalendar', '{$this->parent->id}', '{$this->startParam}');
+	endDateCalendar = new Calendar('endDateCalendar', '{$this->parent->id}', '{$this->endParam}');
+});
 </script>
 
 ENDSCRIPT;
