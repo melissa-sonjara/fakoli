@@ -130,13 +130,7 @@ function positionElement(element, options)
 		var parentOffset = measureElement(offsetParent, function()
 		{
 			var rect = this.getBoundingClientRect();
-			var pos  = { x: rect.left + scrollX, y: rect.top + scrollY };
-			if (window.getComputedStyle(this).position === 'fixed')
-			{
-				pos.x += scrollX;
-				pos.y += scrollY;
-			}
-			return pos;
+			return { x: rect.left + scrollX, y: rect.top + scrollY };
 		});
 
 		offsetX -= parentOffset.x - parentScroll.x;
