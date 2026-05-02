@@ -165,6 +165,7 @@ class ComponentManifest
 				"/fakoli/ecmascript/multi_select.js",
 				"/fakoli/ecmascript/auto_form_manager.js",
 				"/fakoli/ecmascript/spreadsheet_form_manager.js",
+				"/fakoli/ecmascript/expanding_list.js",
 				"/fakoli/ecmascript/inline_editing.js",
 				"/components/component/ecmascript/component_page_list.js"
 			);
@@ -196,6 +197,7 @@ class ComponentManifest
 				"/fakoli/js/multi_select.js",
 				"/fakoli/js/auto_form_manager.js",
 				"/fakoli/js/spreadsheet_form_manager.js",
+				"/fakoli/js/expanding_list.js",
 				"/fakoli/js/inline_editing.js",
 				"/fakoli/js/dynamic_tab_bar.js",
 				"/components/component/js/component_page_list.js"

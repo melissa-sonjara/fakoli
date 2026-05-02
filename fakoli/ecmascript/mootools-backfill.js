@@ -58,6 +58,17 @@ Element.prototype.get = function(attr)
 	return this.getAttribute(attr);
 };
 
+Element.prototype.getNext = function(selector)
+{
+	var sibling = this.nextElementSibling;
+	while (sibling)
+	{
+		if (!selector || sibling.matches(selector)) return sibling;
+		sibling = sibling.nextElementSibling;
+	}
+	return null;
+};
+
 // Unique ID generator replacing String.uniqueID()
 var _uniqueIDCounter = 0;
 function uniqueID()
@@ -162,6 +173,12 @@ Element.prototype.setStyles = function(styles)
 {
     setStyles(this, styles);
     return this;
+};
+
+Element.prototype.setStyle = function(prop, value)
+{
+	this.setStyles({ prop: value });
+	return this;
 };
 
 // Get computed style value, replacing element.getStyle()

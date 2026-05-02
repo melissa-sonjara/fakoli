@@ -84,73 +84,23 @@ class ExpandingList
 	function writeScript()
 	{
 		ob_start();
+		$options = [
+			"mode" => "'{$this->mode}'",
+			"scrollOnExpand" => $this->scrollOnExpand ? "true" : "false",
+			"scrollOffset" => $this->scrollOffset
+		];
+
+		$options = implode(", ", array_map(
+			function($key, $value) { return "{$key}: {$value}"; },
+			array_keys($options),
+			$options
+		));
 ?>
 	<script type="text/javascript">
-	function <?echo $this->id?>_toggleDD(elt)
-	{
-		elt = document.id(elt);
-		var body = elt.getNext("dd");
-		
-		if (elt.hasClass("expanded"))
-		{
-			body.dissolve();
-			elt.removeClass("expanded");
-		}
-		else
-		{
-<?php 
-			if ($this->mode == "accordion")
-			{
-?>
-			elt.getParent().getChildren("dt.expanded").each(function(e) { var b = e.getNext("dd"); b.dissolve(); e.removeClass("expanded"); });
-<?php
-			}
-?>
-			if (body.get('data-url') && body.get('html') == '')
-			{
-				var cursor = elt.getStyle('cursor');
-
-				elt.setStyle('cursor', 'progress');
-				
-				body.reload(function() 
-				{ 
-					body.reveal();
-					elt.addClass("expanded");
-					elt.setStyle('cursor', cursor);
-<?php 
-			if ($this->scrollOnExpand)
-			{
-?>
-					window.scrollToElement(elt, <?php echo $this->scrollOffset?>);
-<?php 
-			}
-?>
-				});
-			}
-			else
-			{
-				body.reveal();
-				elt.addClass("expanded");
-			<?php 
-			if ($this->scrollOnExpand)
-			{
-			?>
-				window.scrollToElement(elt, <?php echo $this->scrollOffset?>);
-			<?php 
-			}
-			?>
-			}
-		}	
-	}
-
 	window.addEvent('domready', function()
 	{
-		document.getElements("dl.expanding_list dd.expanded[data-url!='']").each(function(panel)
-		{
-			panel.reload();
-			panel.removeClass('expanded');
-		});
-	});	
+		new ExpandingList("<?echo $this->id?>", {<?echo $options?>});
+	});
 	</script>
 <?
 		$script = ob_get_contents();
@@ -211,7 +161,7 @@ class ExpandingList
 				$ddState = "style='display: none' class='{$ret}'";
 			}
 			
-			echo "<dt{$titleID} {$dtState} onclick='return {$this->id}_toggleDD(this);'>";
+			echo "<dt{$titleID} {$dtState}>";
 			
 			if (is_callable($this->titleFormat))
 			{
