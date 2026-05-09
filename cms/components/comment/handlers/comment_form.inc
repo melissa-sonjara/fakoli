@@ -52,7 +52,9 @@ $form->readOnly("date_posted");
 
 if(!$comment_id)
 {
-	$form->onSaveComplete = saveNewComment;
+	$form->onSaveComplete = function($form) {
+		CommentView::onSaveNewComment($form);	
+	};
 	$form->data->set("xref_class", $xref_class);
 	$form->data->set("key_name", $key_name);
 	$form->data->set("key_value", $key_value);
@@ -100,7 +102,3 @@ echo $form->writeScript();
 
 $form->drawForm();
 
-function saveNewComment($form)
-{
-	CommentView::onSaveNewComment($form);	
-}
